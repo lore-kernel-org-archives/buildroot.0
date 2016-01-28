@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2016 23:05:53 +0100
-Subject: [Buildroot] [PATCH v2 04/17] pulseaudio: remove
- BR2_ARCH_HAS_ATOMICS dependency
-In-Reply-To: <1453934861-26364-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 28 Jan 2016 23:08:50 +0100
+Subject: [Buildroot] [PATCH v2 05/17] apache, apr: fix atomic handling
+In-Reply-To: <1453934861-26364-6-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453934861-26364-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160128220553.GC7523@free.fr>
+ <1453934861-26364-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160128220850.GD7523@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,42 +14,77 @@ To: buildroot@busybox.net
 Thomas, All,
 
 On 2016-01-27 23:47 +0100, Thomas Petazzoni spake thusly:
-> pulseaudio is able to either use the atomic __sync builtins from the
-> compiler, or to rely on libatomic_ops for atomic operations. However,
-> since it anyway selects json-c which requires the __sync built-ins, it
-> means using libatomic_ops is useless: even if you use libatomic_ops
-> for pulseaudio, you'd still get a link error in pulseaudio due to the
-> missing __sync built-in for the json-c library.
+> Since the apache package was introduced,
+> --enable-nonportable-atomics=yes was passed when
+> BR2_ARCH_HAS_ATOMICS. However, Apache doesn't take this option: it
+> only passes it down when building the APR library. But since we're
+> building APR separately, this statement had no effect.
 > 
-> Also, since pulseaudio now inherits the BR2_TOOLCHAIN_HAS_SYNC_4 from
-> json-c, which matches the __sync built-in from pulseaudio, this
-> commit:
-> 
->  - Drops the BR2_ARCH_HAS_ATOMICS dependency
->  - Forces pulseaudio to not detect libatomic_ops
->  - Propagates the removal of BR2_ARCH_HAS_ATOMICS dependency to
->    pulseaudio's reverse dependencies.
+> So this commit removes the useless code from the Apache package, and
+> instead adds the appropriate logic to the apr package, using the new
+> BR2_TOOLCHAIN_HAS_SYNC_x symbols rather than BR2_ARCH_HAS_ATOMICS.
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[--SNIP--]
-> diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-> index c2ec5b0..36ab6cb 100644
-> --- a/package/gstreamer/gst-plugins-good/Config.in
-> +++ b/package/gstreamer/gst-plugins-good/Config.in
-> @@ -212,7 +211,7 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
->  
->  comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
->  	depends on BR2_USE_MMU
-> -	depends on BR2_ARCH_HAS_ATOMICS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-EWhen you move the 'depends on _SYNC_4' to the previous patch (ditto for
-the other comments), you can add my:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/apache/apache.mk |  4 ----
+>  package/apr/apr.mk       | 15 +++++++++++++++
+>  2 files changed, 15 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+> index 8e7b6be..e752fcc 100644
+> --- a/package/apache/apache.mk
+> +++ b/package/apache/apache.mk
+> @@ -35,10 +35,6 @@ APACHE_CONF_OPTS = \
+>  	--disable-lua \
+>  	--disable-luajit
+>  
+> -ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
+> -APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_LIBXML2),y)
+>  APACHE_DEPENDENCIES += libxml2
+>  # Apache wants the path to the header file, where it can find
+> diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+> index 0fed19c..361a79f 100644
+> --- a/package/apr/apr.mk
+> +++ b/package/apr/apr.mk
+> @@ -35,6 +35,21 @@ endif
+>  # Fix lfs detection when cross compiling
+>  APR_CONF_ENV += apr_cv_use_lfs64=yes
+>  
+> +# Use non-portable atomics when available: 8 bytes atomics are used on
+> +# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
+> +# have to override ap_cv_atomic_builtins because the test used to
+> +# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
+> +# cross-compiling.
+> +ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_8),y:y)
+> +APR_CONF_OPTS += --enable-nonportable-atomics
+> +APR_CONF_ENV += ap_cv_atomic_builtins=yes
+> +else ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
+> +APR_CONF_OPTS += --enable-nonportable-atomics
+> +APR_CONF_ENV += ap_cv_atomic_builtins=yes
+> +else
+> +APR_CONF_OPTS += --disable-nonportable-atomics
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+>  APR_DEPENDENCIES += util-linux
+>  endif
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
