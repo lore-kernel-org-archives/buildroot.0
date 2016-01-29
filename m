@@ -1,72 +1,45 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Fri, 29 Jan 2016 19:34:42 +0100
-Subject: [Buildroot] [PATCH v2 15/17] openal: add missing
- BR2_TOOLCHAIN_HAS_SYNC_4 dependency
-In-Reply-To: <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56ABB0C2.9070203@dawncrow.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 29 Jan 2016 21:17:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump version to 6.500.4
+Message-ID: <1454098625-9166-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This patch also fixes the broken download of the current package
+version because upstream removed version 5.100.2.
 
-Isn't openal looking for the atomic functions and not for the sync ones?
-As seen in the URL you provided:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/armadillo/armadillo.hash | 5 ++++-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-libopenal.so.1.17.1: undefined reference to `__atomic_fetch_sub_4'
-libopenal.so.1.17.1: undefined reference to `__atomic_compare_exchange_4'
-libopenal.so.1.17.1: undefined reference to `__atomic_fetch_add_4'
-
-
-Am 27.01.2016 um 23:47 schrieb Thomas Petazzoni:
-> Fixes:
-> 
->   http://autobuild.buildroot.org/results/314fb8da3ca87984e9240d67ff233e2f999ae89e/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in | 2 ++
->  package/openal/Config.in                      | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index f02be34..0dc217e 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -566,9 +566,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL
->  	bool "openal"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	select BR2_PACKAGE_OPENAL
->  
->  comment "openal plugin needs a toolchain w/ NPTL, C++"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
->  		|| !BR2_INSTALL_LIBSTDCPP
->  
-> diff --git a/package/openal/Config.in b/package/openal/Config.in
-> index 4a73f45..b497e26 100644
-> --- a/package/openal/Config.in
-> +++ b/package/openal/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENAL
->  	bool "openal"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	help
->  	  OpenAL provides capabilities for playing audio in a virtual
->  	  3D environment. Distance attenuation, doppler shift, and
-> @@ -11,5 +12,6 @@ config BR2_PACKAGE_OPENAL
->  	  http://kcat.strangesoft.net/openal.html
->  
->  comment "openal needs a toolchain w/ NPTL, C++"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
->  		|| !BR2_INSTALL_LIBSTDCPP
-> 
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 0046c56..4149a77 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,2 +1,5 @@
++# From http://sourceforge.net/projects/arma/files/?source=navbar
++md5	a39f27197d24b3d25437fab6bb1d118f		armadillo-6.500.4.tar.gz
++sha1	68166e67521a720c72917d196b0807bc6cab8b2e	armadillo-6.500.4.tar.gz
+ # Locally computed:
+-sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
++sha256	813de85fa61ba5077ed871d801ba7070d369e7e9742002e4c11474c75ff6d1c6	armadillo-6.500.4.tar.gz
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 8341ff6..813a41b 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION = 5.100.2
++ARMADILLO_VERSION = 6.500.4
+ ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
+-- 
+2.7.0.rc3
