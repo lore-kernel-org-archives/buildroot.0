@@ -1,57 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 29 Jan 2016 15:16:55 +0100
-Subject: [Buildroot] [PATCH 1/1] gstreamer1: use a relative symlink to
- gstconfig.h
-In-Reply-To: <CAHXCMMJPDbJCDFGoT958z+52j=zXjxy0ZUQFafvMr8u9YpuneQ@mail.gmail.com>
-References: <1453987198-26052-1-git-send-email-phil@zankapfel.net>
- <871t91prte.fsf@dell.be.48ers.dk>
- <CAPiYbRKfZ6w-ih6A1EyZegvcU01uee9Wk=7uK8-bj7A88su9jQ@mail.gmail.com>
- <CAHXCMMJPDbJCDFGoT958z+52j=zXjxy0ZUQFafvMr8u9YpuneQ@mail.gmail.com>
-Message-ID: <20160129151655.529f1cd1@free-electrons.com>
+From: Eelco Chaudron <echaudron@xiot.nl>
+Date: Fri, 29 Jan 2016 15:27:48 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/orangepi: Changing Linux kernel to
+	v4.5-rc1
+Message-ID: <1454077668-1021-1-git-send-email-echaudron@xiot.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Samuel,
+Signed-off-by: Eelco Chaudron <echaudron@xiot.nl>
+---
+ board/orangepi/orangepipc/post-image.sh | 8 +++++++-
+ board/orangepi/orangepipc/readme.txt    | 4 ----
+ configs/orangepipc_defconfig            | 8 ++++----
+ 3 files changed, 11 insertions(+), 9 deletions(-)
 
-On Fri, 29 Jan 2016 14:33:23 +0100, Samuel Martin wrote:
-
-> I'm working on making the SDK (host dir. and staging dir.) relocatable.
-> You can check the current state of my branch [1].
-> I hope to submit a first step before the 2016.02 RC month, but this is
-> not yet ready :-/
-> 
-> Anyway, I'm really interested in gathering all that have to be done
-> for the relocatable SDK. ;-)
-
-Glad to hear you are working on making the SDK relocatable !
-
-However, if I may have a suggestion, I believe you shouldn't submit all
-the changes needed in one big patch series.
-
-Instead, what I would suggest is that you:
-
- 1/ Write up a web-page or Wiki-page with a list of things that need to
-    be fixed.
-
- 2/ Send one patch series for each thing that needs to be fixed. And
-    maybe not send all patch series at the same time: handle one or two
-    topics at a time.
-
- 3/ Keep your Wiki page updated with the things that have been merged,
-    and things that remain to be merged, that remain to be submitted,
-    etc.
-
-Moving to a relocatable SDK is a big change that requires lots of
-smaller changes. We have to handle it progressively, otherwise it will
-never be merged due to the amount of required changes.
-
-Thanks!
-
-Thomas
+diff --git a/board/orangepi/orangepipc/post-image.sh b/board/orangepi/orangepipc/post-image.sh
+index 9cca1b1..dbe1516 100755
+--- a/board/orangepi/orangepipc/post-image.sh
++++ b/board/orangepi/orangepipc/post-image.sh
+@@ -6,7 +6,13 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ 
+ rm -rf "${GENIMAGE_TMP}"
+ 
+-genimage                           \
++# As we now use the Linux v4.5-RC1 kernel no orangepi-pc dtb exists yet.
++# However the orangepi-plus dtb has not much content, only mmc0 and uart
++# which are equal to the pc version of the board, so we use it here.
++mv ${BINARIES_DIR}/sun8i-h3-orangepi-plus.dtb ${BINARIES_DIR}/sun8i-h3-orangepi-pc.dtb
++
++
++genimage                               \
+ 	--rootpath "${TARGET_DIR}"     \
+ 	--tmppath "${GENIMAGE_TMP}"    \
+ 	--inputpath "${BINARIES_DIR}"  \
+diff --git a/board/orangepi/orangepipc/readme.txt b/board/orangepi/orangepipc/readme.txt
+index 00845a4..f12c867 100644
+--- a/board/orangepi/orangepipc/readme.txt
++++ b/board/orangepi/orangepipc/readme.txt
+@@ -7,10 +7,6 @@ This default configuration will allow you to start experimenting with the
+ buildroot environment for the OrangePi PC. With the current configuration
+ it will bring-up the board, and allow access through the serial console.
+ 
+-Unfortunately this boards processor is not yet supported by the
+-mainline kernel, and therefore this default configuration is using a
+-private Linux kernel repository based on 4.4-rc.
+-
+ How to build it
+ ===============
+ 
+diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
+index 34358fb..79a7bd4 100644
+--- a/configs/orangepipc_defconfig
++++ b/configs/orangepipc_defconfig
+@@ -10,20 +10,20 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/jwrdegoede/linux-sunxi.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="a516ac6dda21e6f5edceecd08b475b16e360656b"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="v4.5-rc1"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-plus"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
