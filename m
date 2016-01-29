@@ -1,57 +1,57 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 29 Jan 2016 14:33:23 +0100
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 29 Jan 2016 15:16:55 +0100
 Subject: [Buildroot] [PATCH 1/1] gstreamer1: use a relative symlink to
-	gstconfig.h
-In-Reply-To: <CAPiYbRKfZ6w-ih6A1EyZegvcU01uee9Wk=7uK8-bj7A88su9jQ@mail.gmail.com>
+ gstconfig.h
+In-Reply-To: <CAHXCMMJPDbJCDFGoT958z+52j=zXjxy0ZUQFafvMr8u9YpuneQ@mail.gmail.com>
 References: <1453987198-26052-1-git-send-email-phil@zankapfel.net>
  <871t91prte.fsf@dell.be.48ers.dk>
  <CAPiYbRKfZ6w-ih6A1EyZegvcU01uee9Wk=7uK8-bj7A88su9jQ@mail.gmail.com>
-Message-ID: <CAHXCMMJPDbJCDFGoT958z+52j=zXjxy0ZUQFafvMr8u9YpuneQ@mail.gmail.com>
+ <CAHXCMMJPDbJCDFGoT958z+52j=zXjxy0ZUQFafvMr8u9YpuneQ@mail.gmail.com>
+Message-ID: <20160129151655.529f1cd1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Phil,
+Hello Samuel,
 
-On Fri, Jan 29, 2016 at 2:10 PM, Phil Eichinger
-<phil.eichinger@gmail.com> wrote:
-> On 28 January 2016 at 17:55, Peter Korsgaard <peter@korsgaard.com> wrote:
->>
->> >>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
->>
->>  > Signed-off-by: Phil Eichinger <phil@zankapfel.net>
->>
->> Why? Does that fix anything or is it just "prettier"? I get it that we
->> would need it for a relocatable host dir, but we're not there yet.
->>
->> A bit more detailed commit message would be good.
->
->
-> Yes, it is for relocation, sorry for not being more elaborate on that, will
-> do better in the future.
->
-> I actually relocate the host dir with some tricks, that aren't upstreamable
-> yet because they are not generally usable for buildroot.
-> This patch just eases the relocation and I didn't see any harm in using a
-> relative symlink instead of an absolute one.
-> So it actually fixes something, it's not just "prettier"
+On Fri, 29 Jan 2016 14:33:23 +0100, Samuel Martin wrote:
 
-Could you share the tricks you are doing so far?
+> I'm working on making the SDK (host dir. and staging dir.) relocatable.
+> You can check the current state of my branch [1].
+> I hope to submit a first step before the 2016.02 RC month, but this is
+> not yet ready :-/
+> 
+> Anyway, I'm really interested in gathering all that have to be done
+> for the relocatable SDK. ;-)
 
-I'm working on making the SDK (host dir. and staging dir.) relocatable.
-You can check the current state of my branch [1].
-I hope to submit a first step before the 2016.02 RC month, but this is
-not yet ready :-/
+Glad to hear you are working on making the SDK relocatable !
 
-Anyway, I'm really interested in gathering all that have to be done
-for the relocatable SDK. ;-)
+However, if I may have a suggestion, I believe you shouldn't submit all
+the changes needed in one big patch series.
 
-[1] https://github.com/tSed/buildroot/tree/sma/host-pkg-rpath/wip
+Instead, what I would suggest is that you:
 
+ 1/ Write up a web-page or Wiki-page with a list of things that need to
+    be fixed.
 
-Regards,
+ 2/ Send one patch series for each thing that needs to be fixed. And
+    maybe not send all patch series at the same time: handle one or two
+    topics at a time.
 
+ 3/ Keep your Wiki page updated with the things that have been merged,
+    and things that remain to be merged, that remain to be submitted,
+    etc.
+
+Moving to a relocatable SDK is a big change that requires lots of
+smaller changes. We have to handle it progressively, otherwise it will
+never be merged due to the amount of required changes.
+
+Thanks!
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
