@@ -1,94 +1,72 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@intel.com>
-Date: Fri, 29 Jan 2016 18:11:05 +0100
-Subject: [Buildroot] [PATCH] msr-tools: new package
-Message-ID: <1454087465-23445-1-git-send-email-vincent.stehle@intel.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Fri, 29 Jan 2016 19:34:42 +0100
+Subject: [Buildroot] [PATCH v2 15/17] openal: add missing
+ BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+In-Reply-To: <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56ABB0C2.9070203@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The MSR Tools project provides utilities to access x86 processor MSRs
-and CPU ID directly.
+Hi Thomas,
 
-https://01.org/msr-tools
+Isn't openal looking for the atomic functions and not for the sync ones?
+As seen in the URL you provided:
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@intel.com>
----
- package/Config.in                |  1 +
- package/msr-tools/Config.in      | 12 ++++++++++++
- package/msr-tools/msr-tools.hash |  2 ++
- package/msr-tools/msr-tools.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/msr-tools/Config.in
- create mode 100644 package/msr-tools/msr-tools.hash
- create mode 100644 package/msr-tools/msr-tools.mk
+libopenal.so.1.17.1: undefined reference to `__atomic_fetch_sub_4'
+libopenal.so.1.17.1: undefined reference to `__atomic_compare_exchange_4'
+libopenal.so.1.17.1: undefined reference to `__atomic_fetch_add_4'
 
-diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..5e2451c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -402,6 +402,7 @@ endif
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
- 	source "package/minicom/Config.in"
-+	source "package/msr-tools/Config.in"
- 	source "package/nanocom/Config.in"
- 	source "package/neard/Config.in"
- 	source "package/nvidia-driver/Config.in"
-diff --git a/package/msr-tools/Config.in b/package/msr-tools/Config.in
-new file mode 100644
-index 0000000..cc7ac2d
---- /dev/null
-+++ b/package/msr-tools/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_MSR_TOOLS
-+	bool "msr-tools"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  The MSR Tools project provides utilities to access x86 processor MSRs
-+	  and CPU ID directly.
-+
-+	  Those tools access the hardware through the /dev/cpu/<cpu#>/msr and
-+	  /dev/cpu/<cpu#>/cpuid devices. This necessitates msr and cpuid
-+	  support in the kernel.
-+
-+	  https://01.org/msr-tools
-diff --git a/package/msr-tools/msr-tools.hash b/package/msr-tools/msr-tools.hash
-new file mode 100644
-index 0000000..18146df
---- /dev/null
-+++ b/package/msr-tools/msr-tools.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 9b87245ee091a798184e447066e9e0d7709b7c81f5e6ad55f2b958c1aa50c4a3 msr-tools-1.3.tar.gz
-diff --git a/package/msr-tools/msr-tools.mk b/package/msr-tools/msr-tools.mk
-new file mode 100644
-index 0000000..91a783a
---- /dev/null
-+++ b/package/msr-tools/msr-tools.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# msr-tools
-+#
-+################################################################################
-+
-+MSR_TOOLS_VERSION = 1.3
-+MSR_TOOLS_SITE = $(call github,01org,msr-tools,msr-tools-$(MSR_TOOLS_VERSION))
-+MSR_TOOLS_SOURCE = msr-tools-$(MSR_TOOLS_VERSION).tar.gz
-+MSR_TOOLS_LICENSE = GPLv2+
-+
-+define MSR_TOOLS_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) CC="$(CCACHE) $(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-+endef
-+
-+define MSR_TOOLS_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) install sbindir="$(TARGET_DIR)/usr/sbin"
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.7.0.rc3
+
+Am 27.01.2016 um 23:47 schrieb Thomas Petazzoni:
+> Fixes:
+> 
+>   http://autobuild.buildroot.org/results/314fb8da3ca87984e9240d67ff233e2f999ae89e/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in | 2 ++
+>  package/openal/Config.in                      | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index f02be34..0dc217e 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -566,9 +566,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENAL
+>  	bool "openal"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	select BR2_PACKAGE_OPENAL
+>  
+>  comment "openal plugin needs a toolchain w/ NPTL, C++"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+>  		|| !BR2_INSTALL_LIBSTDCPP
+>  
+> diff --git a/package/openal/Config.in b/package/openal/Config.in
+> index 4a73f45..b497e26 100644
+> --- a/package/openal/Config.in
+> +++ b/package/openal/Config.in
+> @@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENAL
+>  	bool "openal"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	help
+>  	  OpenAL provides capabilities for playing audio in a virtual
+>  	  3D environment. Distance attenuation, doppler shift, and
+> @@ -11,5 +12,6 @@ config BR2_PACKAGE_OPENAL
+>  	  http://kcat.strangesoft.net/openal.html
+>  
+>  comment "openal needs a toolchain w/ NPTL, C++"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+>  		|| !BR2_INSTALL_LIBSTDCPP
+> 
