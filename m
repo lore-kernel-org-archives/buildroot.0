@@ -1,77 +1,44 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Fri, 29 Jan 2016 11:13:33 +0100
-Subject: [Buildroot] crontab: can't change directory to
- '/var/spool/cron/crontabs': No such file or directory
-In-Reply-To: <87twlxmkfn.fsf@dell.be.48ers.dk>
-References: <1454000577.4304.27.camel@synopsys.com>
- <87twlxmkfn.fsf@dell.be.48ers.dk>
-Message-ID: <56AB3B4D.1010004@lucaceresoli.net>
+From: jerry at chordia.co.uk <jerry@chordia.co.uk>
+Date: Fri, 29 Jan 2016 12:53:07 -0000
+Subject: [Buildroot] Xenomai 3.0.1?
+In-Reply-To: <20160129093635.3e265ab2@free-electrons.com>
+References: <0eb901d159ee$a8a7e900$f9f7bb00$@chordia.co.uk>
+ <20160129093635.3e265ab2@free-electrons.com>
+Message-ID: <11c001d15a94$00a0e8a0$01e2b9e0$@chordia.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexey, Peter,
+Hello Thomas,
 
-Peter Korsgaard wrote:
->>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
->
->   > Hello,
->   > Just noticed this:
->   ------------------> 8-------------------
->   > # crontab -e
->   > crontab: can't change directory to '/var/spool/cron/crontabs': No such file or directory
->   ------------------> 8-------------------
->
->   > Obvious solution is:
->   ------------------> 8-------------------
->   > # mkdir -p /var/spool/cron/crontabs
->   ------------------> 8-------------------
->
->   > But the question is if we want that to be done automatically and if
->   > we do want how (read "where") to do it properly?
->
-> Yes, the problem is also how should this work together with a readonly
-> rootfs? Our default skeleton has /var/spool as a symlink to /tmp/, so we
-> cannot add /var/spool/cron/crontabs at build time (unless we change the
-> skeleton).
+> 
+> You need to adapt the Xenomai package in package/xenomai/ and also
+> probably the Xenomai Linux extension logic in linux/linux-ext-xenomai.mk.
+> 
+> Note however that there is a *big* difference between Xenomai 2 and
+> Xenomai 3, and therefore this update is certainly not the easiest
+Buildroot
+> modification that you can imagine. Xenomai 3 can run on top of PREEMPT_RT
+> kernels, without the Xenomai co-kernel and Adeos interrupt pipeline. This
+> probably requires some fairly significant changes in the Xenomai
+packaging.
+> 
+> In addition, since Xenomai 3 is rather new and so different from Xenomai
+2,
+> we probably want to keep support for Xenomai 2 for a while, which adds
+> even more challenge to the task.
 
-Yeah, changing the skeleton looks like a clean solution at first, but
-it would potentially break existing configurations using /var/spool
-with a readonly rootfs, and quietly change the behaviour of those with
-a rw rootfs... Not good.
+Somehow this is exactly what I expected :)
+ 
+> In fact, I didn't notice that Xenomai 3 was officially released, last time
+I looked
+> they were at the 3.0-rc stage, so I didn't bother doing the Buildroot
+> packaging. I might have a look some day, but that's pretty far away on my
+> TODO list, so if someone else wants to look at it, it would definitely be
+great!
 
-Another option, specific for crond and crontab, would be to change
-CONFIG_FEATURE_CROND_DIR in the Busybox config so it points to
-non-volatile storage. A candidate might be /var/cron, but according to
-hier(7):
+I will be taking a look soonish I hope. Let us see how it progresses.
 
-  - /var/cron: Reserved for historical reasons.
-  - /var/spool/cron: Spooled jobs for cron(8).
-
-A variant on this might be:
-  - store crontab files in /var/cron (or wherever in the rootfs)
-  - add a boot script that creates a symlink
-    /var/spool/cron -> /var/cron
-  - _not_ change the Busybox config.
-
->
-> What I have done in the past is simply to do it in an init script,
-> E.G. something like:
->
->
-> # /var/spool is link to /tmp => crontabs are not persistent over boot
-> mkdir -p /var/spool/cron/crontabs
-> cp /root/crontab /var/spool/cron/crontabs/root
-> start-stop-daemon -S -q -p /var/run/crond.pid --exec /usr/sbin/crond -- -l 9
->
-> But that isn't very generic.
-
-And it does not save /var/spool/cron/crontabs/root to /root/crontab
-after edits, which is the worst drawback IMHO.
-
-This is a topic we may discuss during the Developer Days next week.
-
--- 
-Luca
+BR.
