@@ -1,45 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 29 Jan 2016 21:17:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump version to 6.500.4
-Message-ID: <1454098625-9166-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 29 Jan 2016 21:25:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
+	version to 2.17
+Message-ID: <1454099148-31333-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch also fixes the broken download of the current package
-version because upstream removed version 5.100.2.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/armadillo/armadillo.hash | 5 ++++-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 0046c56..4149a77 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,2 +1,5 @@
-+# From http://sourceforge.net/projects/arma/files/?source=navbar
-+md5	a39f27197d24b3d25437fab6bb1d118f		armadillo-6.500.4.tar.gz
-+sha1	68166e67521a720c72917d196b0807bc6cab8b2e	armadillo-6.500.4.tar.gz
- # Locally computed:
--sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
-+sha256	813de85fa61ba5077ed871d801ba7070d369e7e9742002e4c11474c75ff6d1c6	armadillo-6.500.4.tar.gz
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 8341ff6..813a41b 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 7b67d0c..fad76ed 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-October/002642.html
+-sha256	1e8a1f212c96b7f71ca0b05da361cac1816d27baae1d8e03e7b53049b58d1d58	xkeyboard-config-2.16.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2016-January/002671.html
++sha256	dec6be44bd31775cdc1ab95bfd75d5f2c0055613eeca8b4e9c6480b183430701	xkeyboard-config-2.17.tar.bz2
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 1ab9350..352c55d 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARMADILLO_VERSION = 5.100.2
-+ARMADILLO_VERSION = 6.500.4
- ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
- ARMADILLO_DEPENDENCIES = clapack
- ARMADILLO_INSTALL_STAGING = YES
+-XKEYBOARD_CONFIG_VERSION = 2.16
++XKEYBOARD_CONFIG_VERSION = 2.17
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 -- 
 2.7.0.rc3
