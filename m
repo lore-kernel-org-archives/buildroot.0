@@ -1,43 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:16:08 +0100
-Subject: [Buildroot] [git commit] package/libhdhomerun: fix header install
-	path
-Message-ID: <20160201224702.00B6D7F9DB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Jan 2016 17:51:09 +0100
+Subject: [Buildroot] [git commit] php: drop useless PHP_VERSION_MAJOR
+	variable
+Message-ID: <20160201224702.0D9897F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca7c9d459752b799eda13e86ba9241c06b056635
+commit: https://git.buildroot.net/buildroot/commit/?id=f6332ebcce5ab1e7ea212ccb94a9d9c49851fd30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Header files are expected to be installed in usr/include/libhdhomerun/
+~/buildroot$ grep -R PHP_VERSION_MAJOR .
+./package/php/php.mk:PHP_VERSION_MAJOR = 5.6
+./package/php/php.mk:PHP_VERSION = $(PHP_VERSION_MAJOR).17
 
-https://packages.debian.org/sid/i386/libhdhomerun-dev/filelist
-https://github.com/tvheadend/tvheadend/blob/master/src/input/mpegts/tvhdhomerun/tvhdhomerun_private.h#L27
-
-This patch will fix a build error with hdhomerun support enabled in
-tvheadend.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libhdhomerun/libhdhomerun.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/php/php.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index e3e5f06..16e34c2 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
-@@ -19,8 +19,9 @@ endef
- define LIBHDHOMERUN_INSTALL_STAGING_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/libhdhomerun.so \
- 		$(STAGING_DIR)/usr/lib/libhdhomerun.so
-+	mkdir -p $(STAGING_DIR)/usr/include/libhdhomerun/
- 	$(INSTALL) -m 0644 $(@D)/*.h \
--		$(STAGING_DIR)/usr/include/
-+		$(STAGING_DIR)/usr/include/libhdhomerun/
- endef
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ed391c0..84443a1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
  
- define LIBHDHOMERUN_INSTALL_TARGET_CMDS
+-PHP_VERSION_MAJOR = 5.6
+-PHP_VERSION = $(PHP_VERSION_MAJOR).17
++PHP_VERSION = 5.6.17
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
