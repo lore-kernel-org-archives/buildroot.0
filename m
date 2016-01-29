@@ -1,40 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 29 Jan 2016 22:16:18 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lm-sensors: fix download URL
-Message-ID: <1454102179-26118-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 29 Jan 2016 18:19:53 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10, 14}.x series
+Message-ID: <1454102393-644-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-According to http://www.lm-sensors.org/
-"the previous hosting for lm-sensors.org has been discontinued and the
- former website maintainers can't be reached. For now, please refer to
- the Internet Archive of the old site until a replacement is created:
- https://web.archive.org/web/20150905145034/http://www.lm-sensors.org/"
-
-This site points to ftp://ftp.netroedge.com/pub/lm-sensors/ as a mirror
-site for this package, so let's use it until upstream can fix its web
-site.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/lm-sensors/lm-sensors.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index c26f919..cc05ef4 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -6,7 +6,7 @@
- 
- LM_SENSORS_VERSION = 3.3.5
- LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
--LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
-+LM_SENSORS_SITE = ftp://ftp.netroedge.com/pub/lm-sensors
- LM_SENSORS_INSTALL_STAGING = YES
- LM_SENSORS_DEPENDENCIES = host-bison host-flex
- LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 013b1f2..bdc7ef0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -204,9 +204,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.76"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.95"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.96"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.53"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.60"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
 -- 
-2.7.0.rc3
+2.4.10
