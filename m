@@ -1,33 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 29 Jan 2016 18:19:53 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10, 14}.x series
-Message-ID: <1454102393-644-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 29 Jan 2016 22:38:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/memtest86: bump to version 5.01
+Message-ID: <1454103523-30518-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/memtest86/memtest86.hash | 2 +-
+ package/memtest86/memtest86.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 013b1f2..bdc7ef0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -204,9 +204,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.76"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.95"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.96"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.53"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.60"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+diff --git a/package/memtest86/memtest86.hash b/package/memtest86/memtest86.hash
+index cac0be7..81ad98e 100644
+--- a/package/memtest86/memtest86.hash
++++ b/package/memtest86/memtest86.hash
+@@ -1,2 +1,2 @@
+ # locally computed using sha256sum
+-sha256	5630ce978d0e6b671891df4253fc5c54659764d0cdfc7515ac0df3d8dd9e8737  memtest86+-4.20.tar.gz
++sha256	142127b7953fbd829b1057fb64a78d3340c2b771484230a7347e94530a0d9039	memtest86+-5.01.tar.gz
+diff --git a/package/memtest86/memtest86.mk b/package/memtest86/memtest86.mk
+index ef98f61..d2ec1a7 100644
+--- a/package/memtest86/memtest86.mk
++++ b/package/memtest86/memtest86.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MEMTEST86_VERSION = 4.20
++MEMTEST86_VERSION = 5.01
+ MEMTEST86_SOURCE = memtest86+-$(MEMTEST86_VERSION).tar.gz
+ MEMTEST86_SITE = http://www.memtest.org/download/$(MEMTEST86_VERSION)
+ MEMTEST86_LICENSE = GPLv2
+@@ -16,4 +16,3 @@ define MEMTEST86_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
+-
 -- 
-2.4.10
+2.7.0.rc3
