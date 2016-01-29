@@ -1,139 +1,215 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 00:24:50 +0100
-Subject: [Buildroot] [PATCH] package,
-	toolchain: remove BR2_TOOLCHAIN_HAS_GCC_BUG_* options
-Message-ID: <1454109890-19470-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 30 Jan 2016 00:41:51 +0100
+Subject: [Buildroot] [PATCH v2] board: add support for Freescale i.MX6UL
+	Evaluation Kit
+Message-ID: <1454110911-28705-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quite some time ago, we added the options
-BR2_TOOLCHAIN_HAS_GCC_BUG_58595 and BR2_TOOLCHAIN_HAS_GCC_BUG_58854 to
-indicate if the toolchain was affected by those gcc bugs, which were
-causing build failure with a number of packages.
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-With the recent change in the external toolchain logic to provide only
-the latest version of each toolchain "family", all the toolchains
-which were affected by those issues disappeared from Buildroot. Those
-options are no longer being selected anywhere, and being blind
-options, it means their value is always going to be "disabled".
-
-Conquently, this commit removes those options completely, and updates
-all the packages where they were used.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 ---
- package/liburcu/Config.in      | 5 -----
- package/lttng-libust/Config.in | 6 ------
- package/lttng-tools/Config.in  | 8 --------
- package/netsniff-ng/Config.in  | 6 ------
- toolchain/toolchain-common.in  | 6 ------
- 5 files changed, 31 deletions(-)
+ Changes since v1:
+ * took Thomas remarks into account:
+ ** default to cortex-a7 FPU BR settings (EABIHF/VFPUv4-D16)
+ ** use genimage to generate microSD image instead of custom script
 
-diff --git a/package/liburcu/Config.in b/package/liburcu/Config.in
-index 36d5353..49510da 100644
---- a/package/liburcu/Config.in
-+++ b/package/liburcu/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBURCU
- 	bool "liburcu"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Userspace implementation of the Read-Copy-Update (RCU)
-@@ -24,8 +23,4 @@ config BR2_PACKAGE_LIBURCU
- 
- comment "liburcu needs a toolchain w/ threads"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--comment "liburcu needs a toolchain not affected by GCC bug 58854"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-diff --git a/package/lttng-libust/Config.in b/package/lttng-libust/Config.in
-index 26838bb..ce60599 100644
---- a/package/lttng-libust/Config.in
-+++ b/package/lttng-libust/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_LTTNG_LIBUST
- 	depends on BR2_USE_WCHAR # util-linux
- 	# liburcu only works on some architectures and requires threads support"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	help
-@@ -20,8 +19,3 @@ config BR2_PACKAGE_LTTNG_LIBUST
- comment "lttng-libust needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
--
--comment "lttng-libust needs a toolchain not affected by GCC bug 58854"
--	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-diff --git a/package/lttng-tools/Config.in b/package/lttng-tools/Config.in
-index b758d32..dd72cc6 100644
---- a/package/lttng-tools/Config.in
-+++ b/package/lttng-tools/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_LTTNG_TOOLS
- 	bool "lttng-tools"
- 	# liburcu only works on some architectures and requires thread support
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn
-@@ -33,9 +31,3 @@ config BR2_PACKAGE_LTTNG_TOOLS
- comment "lttng-tools needs a toolchain w/ threads, wchar, dynamic library"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58595 # lttng-tools/gcc-4.{7,8}.x bug
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu/gcc-4.8.x bug
--
--comment "lttng-tools needs a toolchain not affected by GCC bug 58854 and 58595"
--	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854 || BR2_TOOLCHAIN_HAS_GCC_BUG_58595
-diff --git a/package/netsniff-ng/Config.in b/package/netsniff-ng/Config.in
-index a2494a9..5d2f5df 100644
---- a/package/netsniff-ng/Config.in
-+++ b/package/netsniff-ng/Config.in
-@@ -11,7 +11,6 @@ config BR2_PACKAGE_NETSNIFF_NG
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854 # liburcu
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	help
- 	  netsniff-ng is a free, performant Linux network analyzer and
-@@ -22,8 +21,3 @@ comment "netsniff-ng needs an (e)glibc toolchain w/ threads, headers >= 3.0"
- 	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC \
- 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_58854
--
--comment "netsniff-ng needs a toolchain not affected by GCC bug 58854"
--	depends on BR2_PACKAGE_LIBURCU_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_58854
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 014a23d..8408852 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -5,12 +5,6 @@
- # so put it here instead
- source "package/gdb/Config.in.host"
- 
--config BR2_TOOLCHAIN_HAS_GCC_BUG_58595
--	bool
--
--config BR2_TOOLCHAIN_HAS_GCC_BUG_58854
--	bool
--
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
- 
+ board/freescale/imx6ulevk/genimage.cfg  | 41 +++++++++++++++++++++
+ board/freescale/imx6ulevk/post-image.sh | 16 +++++++++
+ board/freescale/imx6ulevk/readme.txt    | 64 +++++++++++++++++++++++++++++++++
+ configs/freescale_imx6ulevk_defconfig   | 38 ++++++++++++++++++++
+ 4 files changed, 159 insertions(+)
+ create mode 100644 board/freescale/imx6ulevk/genimage.cfg
+ create mode 100755 board/freescale/imx6ulevk/post-image.sh
+ create mode 100644 board/freescale/imx6ulevk/readme.txt
+ create mode 100644 configs/freescale_imx6ulevk_defconfig
+
+diff --git a/board/freescale/imx6ulevk/genimage.cfg b/board/freescale/imx6ulevk/genimage.cfg
+new file mode 100644
+index 0000000..36ede1c
+--- /dev/null
++++ b/board/freescale/imx6ulevk/genimage.cfg
+@@ -0,0 +1,41 @@
++# Minimal microSD card image for the Freescale's i.MX6UL EVK board
++#
++# We mimic the .sdcard Freescale's image format for i.MX6UL:
++# * the microSD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 8 MB is containing zImage and dtbs,
++# * a single root filesystem partition is required (Ext2 in this case).
++#
++
++image boot.vfat {
++  vfat {
++    files = {
++      "imx6ul-14x14-evk.dtb",
++      "zImage"
++    }
++  }
++  size = 16M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "u-boot.imx"
++    offset = 1024
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/freescale/imx6ulevk/post-image.sh b/board/freescale/imx6ulevk/post-image.sh
+new file mode 100755
+index 0000000..3740d75
+--- /dev/null
++++ b/board/freescale/imx6ulevk/post-image.sh
+@@ -0,0 +1,16 @@
++#!/usr/bin/env bash
++
++GENIMAGE_CFG="board/freescale/imx6ulevk/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++  --rootpath "${TARGET_DIR}" \
++  --tmppath "${GENIMAGE_TMP}" \
++  --inputpath "${BINARIES_DIR}" \
++  --outputpath "${BINARIES_DIR}" \
++  --config "${GENIMAGE_CFG}"
++
++RET=${?}
++exit ${RET}
+diff --git a/board/freescale/imx6ulevk/readme.txt b/board/freescale/imx6ulevk/readme.txt
+new file mode 100644
+index 0000000..b8243dc
+--- /dev/null
++++ b/board/freescale/imx6ulevk/readme.txt
+@@ -0,0 +1,64 @@
++***************************
++Freescale i.MX6UL EVK board
++***************************
++
++This file documents the Buildroot support for the Freescale i.MX6UL EVK board.
++
++Please read the i.MX6UL Evaluation Kit Quick Start Guide [1] for an
++introduction to the board.
++
++Build
++=====
++
++First, configure Buildroot for your i.MX6UL EVK board:
++
++  make freescale_imx6ulevk_defconfig
++
++Build all components:
++
++  make
++
++You will find in ./output/images/ the following files:
++  - imx6ul-14x14-evk.dtb
++  - rootfs.ext2
++  - rootfs.tar
++  - sdcard.img
++  - u-boot.imx
++  - zImage
++
++Create a bootable microSD card
++==============================
++
++To determine the device associated to the microSD card have a look in the
++/proc/partitions file:
++
++  cat /proc/partitions
++
++Buildroot prepares a bootable "sdcard.img" image in the output/images/
++directory, ready to be dumped on a microSD card. Launch the following
++command as root:
++
++  dd if=./output/images/sdcard.img of=/dev/<your-microsd-device>
++
++*** WARNING! This will destroy all the card content. Use with care! ***
++
++For details about the medium image layout, see the definition in
++board/freescale/imx6ulevk/genimage.cfg.
++
++Boot the i.MX6UL EVK board
++=========================
++
++To boot your newly created system (refer to the i.MX6UL EVK Quick Start Guide
++[1] for guidance):
++- insert the microSD card in the microSD slot of the board;
++- verify that your i.MX6UL EVK board jumpers and switches are set as mentioned
++  in the i.MX6UL EVK Quick Start Guide [1];
++- put a micro USB cable into the Debug USB Port and connect using a terminal
++  emulator at 115200 bps, 8n1;
++- power on the board.
++
++Enjoy!
++
++References
++==========
++[1] http://cache.freescale.com/files/32bit/doc/quick_start_guide/IMX6ULTRALITEQSG.pdf
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+new file mode 100644
+index 0000000..b739ff4
+--- /dev/null
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -0,0 +1,38 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a7=y
++
++# toolchain
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.28"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="imx_3.14.38_6ul_ga"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
++
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="imx_v2015.04_3.14.38_6ul_ga"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++
++# required tools to create the microSD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# filesystem / image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/imx6ulevk/post-image.sh"
++BR2_TARGET_ROOTFS_EXT2=y
 -- 
-2.6.4
+2.1.4
