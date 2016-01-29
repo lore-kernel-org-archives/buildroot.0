@@ -1,41 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 29 Jan 2016 21:25:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
-	version to 2.17
-Message-ID: <1454099148-31333-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Fri, 29 Jan 2016 21:51:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/live555: bump version to 2016.01.29
+Message-ID: <1454100672-17356-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This patch also fixes the broken download of the current package
+version because upstream removed the previous version.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 4 ++--
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 7b67d0c..fad76ed 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002642.html
--sha256	1e8a1f212c96b7f71ca0b05da361cac1816d27baae1d8e03e7b53049b58d1d58	xkeyboard-config-2.16.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-January/002671.html
-+sha256	dec6be44bd31775cdc1ab95bfd75d5f2c0055613eeca8b4e9c6480b183430701	xkeyboard-config-2.17.tar.bz2
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 1ab9350..352c55d 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index e6d9f53..813a5b4 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,4 +1,4 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5 7c13d58c020efa42369b5f23a839be0c live.2015.06.25.tar.gz
++md5	6275484ab763673ad3144648bf1015cb	live.2016.01.29.tar.gz
+ # Locally generated
+-sha256 c769542f930840ac246155558e163cd94b119f4f6b9e102b6b5b063f9f055875 live.2015.06.25.tar.gz
++sha256	44243a962adae64703c00264dd2333cfee15d7edbd79de4e5b47fd486df9ecd1	live.2016.01.29.tar.gz
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index ab80fb1..d40cbaa 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.16
-+XKEYBOARD_CONFIG_VERSION = 2.17
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
+-LIVE555_VERSION = 2015.06.25
++LIVE555_VERSION = 2016.01.29
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPLv2.1+
 -- 
 2.7.0.rc3
