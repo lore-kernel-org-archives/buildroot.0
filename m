@@ -1,43 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2016 22:25:07 +0100
-Subject: [Buildroot] [git commit] directfb: add help text to Config.in,
-	note broken URL
-Message-ID: <20160201224659.72BBC80AD4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Jan 2016 08:37:54 +0100
+Subject: [Buildroot] [git commit] bonnie: Expand description in config help
+	text.
+Message-ID: <20160201224700.1459E7FAE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6722723a9554d9828bdae38ab82adca718e4f83f
+commit: https://git.buildroot.net/buildroot/commit/?id=996b4d99626f1ebc5ebcc46ce7b3320a1997d58e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adds descriptive help text to Config.in based on content from elinux.org and
-Wikipedia. Notes that http://www.directfb.org/ has been broken for more than
-five months and suggests using http://elinux.org/DirectFB instead.
+The description "Filesystem tester" is rather unhelpful. Take the
+description from the referenced web site to make it a bit clearer what
+bonnie++ actually is.
 
-Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Thomas: rewrap Config.in help text.]
+
+Signed-off-by: Cam Hutchison <camh@xdna.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/directfb/Config.in | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/bonnie/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/directfb/Config.in b/package/directfb/Config.in
-index 73425d3..638e4e1 100644
---- a/package/directfb/Config.in
-+++ b/package/directfb/Config.in
-@@ -8,7 +8,13 @@ config BR2_PACKAGE_DIRECTFB
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_ZLIB
+diff --git a/package/bonnie/Config.in b/package/bonnie/Config.in
+index 6dbd06d..4b0adda 100644
+--- a/package/bonnie/Config.in
++++ b/package/bonnie/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_BONNIE
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # fork()
  	help
--	  http://www.directfb.org/
-+	  DirectFB (Direct Frame Buffer) is a set of graphics APIs implemented
-+	  on top of the Linux Frame Buffer (fbdev) abstraction layer. It is an
-+	  alternative to X11 with a smaller memory footprint that still has an
-+	  integrated windowing system. As of 4 October 2015, DirectFB's website
-+	  http://www.directfb.org/ is down. See alternative site listed below.
-+
-+	  http://elinux.org/DirectFB
+-	  Filesystem tester
++	  A benchmark suite that is aimed at performing a number of
++	  simple tests of hard drive and file system performance.
  
- if BR2_PACKAGE_DIRECTFB
+ 	  http://www.coker.com.au/bonnie++/
  
