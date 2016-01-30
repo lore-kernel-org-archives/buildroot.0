@@ -1,87 +1,86 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Sat, 30 Jan 2016 23:46:10 +0100
-Subject: [Buildroot] [PATCH v2 2/2] crudini: new package
-In-Reply-To: <1454193970-22544-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1454193970-22544-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <1454193970-22544-2-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 23:51:33 +0100
+Subject: [Buildroot] [PATCH 1/1] RFC: musl: Fix gettext support
+Message-ID: <1454194293-17572-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
----
-Changes v1 -> v2:
-  - add sha256 hash
-  - whitespace and line length fixes
-  - indicate in comment that python-configobj is runtime dependency
----
- package/Config.in            |  1 +
- package/crudini/Config.in    | 10 ++++++++++
- package/crudini/crudini.hash |  3 +++
- package/crudini/crudini.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/crudini/Config.in
- create mode 100644 package/crudini/crudini.hash
- create mode 100644 package/crudini/crudini.mk
+The issue is discussed here:
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/127196
 
-diff --git a/package/Config.in b/package/Config.in
-index a339161..22f5dcb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1525,6 +1525,7 @@ endif
- comment "Utilities"
- 	source "package/at/Config.in"
- 	source "package/ccrypt/Config.in"
-+	source "package/crudini/Config.in"
- 	source "package/dialog/Config.in"
- 	source "package/dtach/Config.in"
- 	source "package/file/Config.in"
-diff --git a/package/crudini/Config.in b/package/crudini/Config.in
-new file mode 100644
-index 0000000..8a70016
---- /dev/null
-+++ b/package/crudini/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CRUDINI
-+	bool "crudini"
-+	depends on BR2_PACKAGE_PYTHON
-+	# runtime dependency:
-+	select BR2_PACKAGE_PYTHON_INIPARSE
-+	help
-+	  A utility for handling ini files from the command line and
-+	  shell scripts
+I consider this patch an ugly hack but I could compile ~900 packages
+without a gettext-related error, so I put this patch up for discussion.
+
+Fixes
+http://autobuild.buildroot.net/results/911/9115ddb411ec15eb8bfa1d4f03a804f48e77ff76/
+and many similar errors
+
+To test use the defconfig mentioned above, then
+
+make clean
+make dos2unix (build will succeed either with or without this patch)
+
+make clean
+make gettext
+make dos2unix (build fails because gettext replaced musl's libintl.h)
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Makefile.in        |  6 ++++++
+ package/gettext/gettext.mk | 14 ++++++++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c5652af..16ab17f 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -340,6 +340,11 @@ else
+ BR2_AC_CV_C_BIGENDIAN = ac_cv_c_bigendian=no
+ endif
+ 
++# configure script misdetects musl gettext support
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++BR2_GT_CV_FUNC_GNUGETTEXT1_LIBC = gt_cv_func_gnugettext1_libc=yes
++endif
 +
-+	  https://pypi.python.org/pypi/crudini
-diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
-new file mode 100644
-index 0000000..b9aaecf
---- /dev/null
-+++ b/package/crudini/crudini.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d1313f1bb9800db9cbceaa518bcf212, sha256 locally computed
-+md5    7d1313f1bb9800db9cbceaa518bcf212 crudini-0.7.tar.gz
-+sha256 5d493ae6600e54f9e0296b12d3adba99b88a439d8c4b2ebf9bc6f9c0613a03d7  crudini-0.7.tar.gz
-diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
-new file mode 100644
-index 0000000..d797efc
---- /dev/null
-+++ b/package/crudini/crudini.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# crudini
-+#
-+################################################################################
+ TARGET_CONFIGURE_ARGS = \
+ 	$(BR2_AC_CV_TRAP_CHECK) \
+ 	ac_cv_func_mmap_fixed_mapped=yes \
+@@ -350,6 +355,7 @@ TARGET_CONFIGURE_ARGS = \
+ 	ac_cv_func_calloc_0_nonnull=yes \
+ 	ac_cv_func_realloc_0_nonnull=yes \
+ 	lt_cv_sys_lib_search_path_spec="" \
++	$(BR2_GT_CV_FUNC_GNUGETTEXT1_LIBC) \
+ 	$(BR2_AC_CV_C_BIGENDIAN)
+ 
+ ################################################################################
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index 0b4e5dd..f388ea8 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -27,6 +27,20 @@ GETTEXT_CONF_OPTS += \
+ 	--disable-relocatable \
+ 	--without-emacs
+ 
++# musl provides a gettext implementation, but gettext does not
++# recognize it as being a valid implementation.
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++GETTEXT_CONF_ENV += \
++	ac_cv_gnu_library_2_1=yes \
++	ac_cv_gnu_library_2=yes
 +
-+CRUDINI_VERSION = 0.7
-+CRUDINI_SOURCE = crudini-$(CRUDINI_VERSION).tar.gz
-+CRUDINI_SITE = https://pypi.python.org/packages/source/c/crudini
-+CRUDINI_SETUP_TYPE = setuptools
-+CRUDINI_LICENSE = GPLv2
-+CRUDINI_LICENSE_FILES = COPYING
++# prevent gettext overwriting musl's libintl.h
++define GETTEXT_DO_NOT_INSTALL_LIBINTL_H
++	$(SED) '/\$$(INSTALL_DATA) libintl.h/d' $(@D)/gettext-runtime/intl/Makefile.in
++endef
++GETTEXT_POST_PATCH_HOOKS = GETTEXT_DO_NOT_INSTALL_LIBINTL_H
++endif
 +
-+$(eval $(python-package))
+ HOST_GETTEXT_CONF_OPTS = \
+ 	--disable-libasprintf \
+ 	--disable-acl \
 -- 
-1.9.1
+2.7.0.rc3
