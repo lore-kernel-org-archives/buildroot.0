@@ -1,25 +1,30 @@
-From: Tim Michals <tcmichals@gmail.com>
-Date: Sat, 30 Jan 2016 11:56:56 -0600
-Subject: [Buildroot] Loading modules with device tree after rootfs is mounted
-Message-ID: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 19:01:58 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libseccomp: bump version to 2.2.3
+Message-ID: <1454176919-12144-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I've created new buildroot defconfig for Udoo Neo board, u-boot, linux
-kernel boots and busybox prompt is active and accepts commands.  The issue
-is several drivers (wifi, camera, etc) are built as kernel modules and
-stored on ext4 rootfs.  How can the kernel load these modules via the
-device tree from the rootfs?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libseccomp/libseccomp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Udoo team has a lubuntu image, and the drivers are loaded after rootfs is
-mounted, so I'm confused how this works.
-
-
-
-Thank your for help.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160130/d3a1f1fc/attachment.html>
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index a188298..69559f7 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSECCOMP_VERSION = v2.2.0
++LIBSECCOMP_VERSION = v2.2.3
+ LIBSECCOMP_SITE = $(call github,seccomp,libseccomp,$(LIBSECCOMP_VERSION))
+ LIBSECCOMP_LICENSE = LGPLv2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
+-- 
+2.7.0.rc3
