@@ -1,31 +1,41 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 30 Jan 2016 16:02:02 +0100
-Subject: [Buildroot] [PATCH 05/16 v3] core/pkg-generic: reorder
- variables definitions for legal-info
-In-Reply-To: <db15f4ae0ec3cf941ddbb5f156288ed60f49d60f.1454004518.git.yann.morin.1998@free.fr>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <db15f4ae0ec3cf941ddbb5f156288ed60f49d60f.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <56ACD06A.6000404@lucaceresoli.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 16:13:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/liblinear: bump version to 2.1
+Message-ID: <1454166799-31564-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+This bump also fixes the broken download of the previous version.
 
-Yann E. MORIN wrote:
-> Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
-> that they are close to where _SOURCE and _SITE are handled.
->
-> This looks so far like a purely cosmetic change, but makes more sense
-> with the follow-up patch, where we'll need them earlier in the file.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/liblinear/liblinear.hash | 2 +-
+ package/liblinear/liblinear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Not sure in which patch you need this... but it's nice to have
-$(2)_SOURCE and $(2)_ACTUAL_SOURCE_* defined at the same place, thus:
-
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 1c5b184..4f03fa4 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	ebc71999224f5779574b11e248f1e2ef647b5d839c0380c1c5a4ac8789aa95a9  liblinear-2.01.tar.gz
++sha256	fa5c12dedc76ffca12f1681de7073b03af68163c4e4be65194217c99e55a7d68	liblinear-2.1.tar.gz
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index 80ba489..a9524e3 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLINEAR_VERSION = 2.01
++LIBLINEAR_VERSION = 2.1
+ LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
+ LIBLINEAR_LICENSE = BSD-3c
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
 -- 
-Luca
+2.7.0.rc3
