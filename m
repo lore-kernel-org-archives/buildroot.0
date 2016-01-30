@@ -1,36 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 08:38:35 +0100
-Subject: [Buildroot] [git commit] flot: add hash file
-References: <20150728204046.4BDD17F9DF@busybox.osuosl.org>
-Message-ID: <rs5uncx00j.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Jan 2016 08:40:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/live555: bump version to
+ 2016.01.29
+In-Reply-To: <1454100672-17356-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454100672-17356-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160130084048.7984dd2b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 28 Jul 2015 22:32:55 +0200 schrieb Thomas Petazzoni:
+Dear Bernd Kuhls,
 
-> diff --git a/package/flot/flot.hash b/package/flot/flot.hash new file
-> mode 100644 index 0000000..9bf348a --- /dev/null +++
-> b/package/flot/flot.hash @@ -0,0 +1,2 @@
-> +# Locally calculated +sha256
-> d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952
-> flot-0.8.3.tar.gz
+On Fri, 29 Jan 2016 21:51:12 +0100, Bernd Kuhls wrote:
+> This patch also fixes the broken download of the current package
+> version because upstream removed the previous version.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/live555/live555.hash | 4 ++--
+>  package/live555/live555.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi Thomas,
+Applied, thanks.
 
-I downloaded the tarball
-http://www.flotcharts.org/downloads/flot-0.8.3.tar.gz
-today and got a different sha256 checksum:
-
-ERROR: flot-0.8.3.tar.gz has wrong sha256 hash:
-ERROR: expected: 
-d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952
-ERROR: got     : 
-ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Shall I send a patch?
-
-Regards, Bernd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
