@@ -1,23 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:36:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/memtest86: bump to version 5.01
-In-Reply-To: <1454103523-30518-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454103523-30518-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160130083601.1ae688f2@free-electrons.com>
+Date: Sat, 30 Jan 2016 08:36:27 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.{10, 14}.x series
+In-Reply-To: <1454102393-644-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1454102393-644-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160130083627.4c1d6bfb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Gustavo Zacarias,
 
-On Fri, 29 Jan 2016 22:38:43 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Fri, 29 Jan 2016 18:19:53 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/memtest86/memtest86.hash | 2 +-
->  package/memtest86/memtest86.mk   | 3 +--
->  2 files changed, 2 insertions(+), 3 deletions(-)
+>  package/linux-headers/Config.in.host | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
