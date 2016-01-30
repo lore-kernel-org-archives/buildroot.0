@@ -1,218 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 09:37:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer/gst-plugins-ugly: Fix
-	cdio-related build errors
-Message-ID: <1454143077-25201-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 09:45:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openal: bump version to 1.17.2
+Message-ID: <1454143507-28427-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/530/53003be0dc2cb76d497a167023c5c45666fd00b4/
-http://autobuild.buildroot.net/results/b23/b2393cd50c20da919d6111e15b78d12cc784841f/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../gst-plugins-ugly/0001-cdio-cd-text-api.patch   | 189 +++++++++++++++++++++
- 1 file changed, 189 insertions(+)
- create mode 100644 package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch b/package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch
-new file mode 100644
-index 0000000..e9ff43e
---- /dev/null
-+++ b/package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch
-@@ -0,0 +1,189 @@
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/tree/main/gst-plugins-ugly0.10/cdio-cd-text-api.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From 649bd92cd2600719862ad5189899212409dd0a67 Mon Sep 17 00:00:00 2001
-+From: Leon Merten Lohse <leon@green-side.de>
-+Date: Thu, 03 May 2012 22:50:30 +0000
-+Subject: cdio: compensate for libcdio's recent cd-text api changes
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=675112
-+
-+Conflicts:
-+
-+	ext/cdio/gstcdiocddasrc.c
-+---
-+diff --git a/ext/cdio/gstcdio.c b/ext/cdio/gstcdio.c
-+index 2f58d18..483ebf5 100644
-+--- a/ext/cdio/gstcdio.c
-++++ b/ext/cdio/gstcdio.c
-+@@ -30,12 +30,16 @@
-+ GST_DEBUG_CATEGORY (gst_cdio_debug);
-+ 
-+ void
-+-gst_cdio_add_cdtext_field (GstObject * src, cdtext_t * cdtext,
-++gst_cdio_add_cdtext_field (GstObject * src, cdtext_t * cdtext, track_t track,
-+     cdtext_field_t field, const gchar * gst_tag, GstTagList ** p_tags)
-+ {
-+   const gchar *txt;
-+ 
-++#if LIBCDIO_VERSION_NUM > 83
-++  txt = cdtext_get_const (cdtext, field, track);
-++#else
-+   txt = cdtext_get_const (field, cdtext);
-++#endif
-+   if (txt == NULL || *txt == '\0') {
-+     GST_DEBUG_OBJECT (src, "empty CD-TEXT field %u (%s)", field, gst_tag);
-+     return;
-+@@ -57,6 +61,12 @@ gst_cdio_add_cdtext_field (GstObject * src, cdtext_t * cdtext,
-+ }
-+ 
-+ GstTagList *
-++#if LIBCDIO_VERSION_NUM > 83
-++gst_cdio_get_cdtext (GstObject * src, cdtext_t * t, track_t track)
-++{
-++  GstTagList *tags = NULL;
-++
-++#else
-+ gst_cdio_get_cdtext (GstObject * src, CdIo * cdio, track_t track)
-+ {
-+   GstTagList *tags = NULL;
-+@@ -67,14 +77,22 @@ gst_cdio_get_cdtext (GstObject * src, CdIo * cdio, track_t track)
-+     GST_DEBUG_OBJECT (src, "no CD-TEXT for track %u", track);
-+     return NULL;
-+   }
-++#endif
-+ 
-+-  gst_cdio_add_cdtext_field (src, t, CDTEXT_PERFORMER, GST_TAG_ARTIST, &tags);
-+-  gst_cdio_add_cdtext_field (src, t, CDTEXT_TITLE, GST_TAG_TITLE, &tags);
-++  gst_cdio_add_cdtext_field (src, t, track, CDTEXT_FIELD_PERFORMER,
-++      GST_TAG_ARTIST, &tags);
-++  gst_cdio_add_cdtext_field (src, t, track, CDTEXT_FIELD_TITLE, GST_TAG_TITLE,
-++      &tags);
-+ 
-+   return tags;
-+ }
-+ 
-+ void
-++#if LIBCDIO_VERSION_NUM > 83
-++gst_cdio_add_cdtext_album_tags (GstObject * src, cdtext_t * t,
-++    GstTagList * tags)
-++{
-++#else
-+ gst_cdio_add_cdtext_album_tags (GstObject * src, CdIo * cdio, GstTagList * tags)
-+ {
-+   cdtext_t *t;
-+@@ -84,11 +102,14 @@ gst_cdio_add_cdtext_album_tags (GstObject * src, CdIo * cdio, GstTagList * tags)
-+     GST_DEBUG_OBJECT (src, "no CD-TEXT for album");
-+     return;
-+   }
-++#endif
-+ 
-+-  /* FIXME: map CDTEXT_PERFORMER to GST_TAG_ALBUM_ARTIST once we have that */
-+-  gst_cdio_add_cdtext_field (src, t, CDTEXT_TITLE, GST_TAG_ALBUM, &tags);
-+-  gst_cdio_add_cdtext_field (src, t, CDTEXT_GENRE, GST_TAG_GENRE, &tags);
-+-
-++  gst_cdio_add_cdtext_field (src, t, 0, CDTEXT_FIELD_PERFORMER,
-++      GST_TAG_ALBUM_ARTIST, &tags);
-++  gst_cdio_add_cdtext_field (src, t, 0, CDTEXT_FIELD_TITLE, GST_TAG_ALBUM,
-++      &tags);
-++  gst_cdio_add_cdtext_field (src, t, 0, CDTEXT_FIELD_GENRE, GST_TAG_GENRE,
-++      &tags);
-+   GST_DEBUG ("CD-TEXT album tags: %" GST_PTR_FORMAT, tags);
-+ }
-+ 
-+diff --git a/ext/cdio/gstcdio.h b/ext/cdio/gstcdio.h
-+index ef31ed0..c6da580 100644
-+--- a/ext/cdio/gstcdio.h
-++++ b/ext/cdio/gstcdio.h
-+@@ -24,22 +24,38 @@
-+ #include <gst/gst.h>
-+ #include <cdio/cdio.h>
-+ #include <cdio/cdtext.h>
-++#include <cdio/version.h>
-++
-++#if LIBCDIO_VERSION_NUM <= 83
-++  #define CDTEXT_FIELD_PERFORMER CDTEXT_PERFORMER
-++  #define CDTEXT_FIELD_GENRE     CDTEXT_GENRE
-++  #define CDTEXT_FIELD_TITLE     CDTEXT_TITLE
-++#endif
-+ 
-+ GST_DEBUG_CATEGORY_EXTERN (gst_cdio_debug);
-+ #define GST_CAT_DEFAULT gst_cdio_debug
-+ 
-+ void     gst_cdio_add_cdtext_field (GstObject      * src,
-+                                     cdtext_t       * cdtext,
-++                                    track_t          track,
-+                                     cdtext_field_t   field,
-+                                     const gchar    * gst_tag,
-+                                     GstTagList    ** p_tags);
-+ 
-+ GstTagList  * gst_cdio_get_cdtext  (GstObject      * src,
-++#if LIBCDIO_VERSION_NUM > 83
-++                                    cdtext_t       * t,
-++#else
-+                                     CdIo           * cdio,
-++#endif
-+                                     track_t          track);
-+ 
-+ void      gst_cdio_add_cdtext_album_tags (GstObject  * src,
-++#if LIBCDIO_VERSION_NUM > 83
-++                                          cdtext_t   * t,
-++#else
-+                                           CdIo       * cdio,
-++#endif
-+                                           GstTagList * tags);
-+ 
-+ #endif /* __GST_CDIO_H__ */
-+diff --git a/ext/cdio/gstcdiocddasrc.c b/ext/cdio/gstcdiocddasrc.c
-+index 615a0c8..830839e 100644
-+--- a/ext/cdio/gstcdiocddasrc.c
-++++ b/ext/cdio/gstcdiocddasrc.c
-+@@ -206,6 +206,9 @@ gst_cdio_cdda_src_open (GstAudioCdSrc * audiocdsrc, const gchar * device)
-+   GstCdioCddaSrc *src;
-+   discmode_t discmode;
-+   gint first_track, num_tracks, i;
-++#if LIBCDIO_VERSION_NUM > 83
-++  cdtext_t *cdtext;
-++#endif
-+ 
-+   src = GST_CDIO_CDDA_SRC (audiocdsrc);
-+ 
-+@@ -232,8 +235,18 @@ gst_cdio_cdda_src_open (GstAudioCdSrc * audiocdsrc, const gchar * device)
-+   if (src->read_speed != -1)
-+     cdio_set_speed (src->cdio, src->read_speed);
-+ 
-++#if LIBCDIO_VERSION_NUM > 83
-++  cdtext = cdio_get_cdtext (src->cdio);
-++
-++  if (NULL == cdtext)
-++    GST_DEBUG_OBJECT (src, "no CD-TEXT on disc");
-++  else
-++    gst_cdio_add_cdtext_album_tags (GST_OBJECT_CAST (src), cdtext,
-++        cddabasesrc->tags);
-++#else
-+   gst_cdio_add_cdtext_album_tags (GST_OBJECT_CAST (src), src->cdio,
-+       cddabasesrc->tags);
-++#endif
-+ 
-+   GST_LOG_OBJECT (src, "%u tracks, first track: %d", num_tracks, first_track);
-+ 
-+@@ -250,8 +263,14 @@ gst_cdio_cdda_src_open (GstAudioCdSrc * audiocdsrc, const gchar * device)
-+      * the right thing here (for cddb id calculations etc. as well) */
-+     track.start = cdio_get_track_lsn (src->cdio, i + first_track);
-+     track.end = track.start + len_sectors - 1;  /* -1? */
-++#if LIBCDIO_VERSION_NUM > 83
-++    if (NULL != cdtext)
-++      track.tags = gst_cdio_get_cdtext (GST_OBJECT (src), cdtext,
-++          i + first_track);
-++#else
-+     track.tags = gst_cdio_get_cdtext (GST_OBJECT (src), src->cdio,
-+         i + first_track);
-++#endif
-+ 
-+     gst_audio_cd_src_add_track (GST_AUDIO_CD_SRC (src), &track);
-+   }
-+--
-+cgit v0.9.0.2-2-gbebe
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index c614180..260f1b7 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 087153baab375c23d7aa7e9f3237c0a1d02e336537b485aee56d9ac312baf6f8 openal-soft-1.17.1.tar.bz2
++sha256	a341f8542f1f0b8c65241a17da13d073f18ec06658e1a1606a8ecc8bbc2b3314	openal-soft-1.17.2.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index 42871fb..4c9a2b6 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENAL_VERSION = 1.17.1
++OPENAL_VERSION = 1.17.2
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPLv2+
 -- 
 2.7.0.rc3
