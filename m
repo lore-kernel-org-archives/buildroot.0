@@ -1,91 +1,37 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sat, 30 Jan 2016 12:29:58 +0100
-Subject: [Buildroot] [PATCH 03/16 v3] core/pkg-utils: add macro to
- hardlink-or-copy
-In-Reply-To: <496a4dbb0c7e2bfd0be8726e3d8a2aab4f1d830d.1454004518.git.yann.morin.1998@free.fr>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <496a4dbb0c7e2bfd0be8726e3d8a2aab4f1d830d.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <56AC9EB6.2000907@lucaceresoli.net>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 30 Jan 2016 12:30:11 +0100
+Subject: [Buildroot] [PATCH v2 15/17] openal: add missing
+ BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+In-Reply-To: <20160130000635.018f59fa@free-electrons.com>
+References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56ABB0C2.9070203@dawncrow.de> <20160130000635.018f59fa@free-electrons.com>
+Message-ID: <56AC9EC3.9030706@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
+Hi,
 
-Yann E. MORIN wrote:
-> This macro will try to copy a source file into a destination fdirectory,
+Am 30.01.2016 um 00:06 schrieb Thomas Petazzoni:
+> Andr?,
+> 
+> On Fri, 29 Jan 2016 19:34:42 +0100, Andr? Hentschel wrote:
+>> Hi Thomas,
+>>
+>> Isn't openal looking for the atomic functions and not for the sync ones?
+>> As seen in the URL you provided:
+>>
+>> libopenal.so.1.17.1: undefined reference to `__atomic_fetch_sub_4'
+>> libopenal.so.1.17.1: undefined reference to `__atomic_compare_exchange_4'
+>> libopenal.so.1.17.1: undefined reference to `__atomic_fetch_add_4'
+> 
+> Hum, you are right indeed. I will look into this again, but if it's a
+> dependency on __atomic functions, then it should depend on gcc >= 4.7
+> *and* link with libatomic.
 
-fdirectory -> directory
-
-> by first atempting a hard-link, and falling back to a plain copy.
-
-atempting a -> attempting to
-
->
-> In some situations, it will be necessary that the destination file is
-> named differently than the source (e.g. due to a re-numbering), so if a
-> third argument is specified, it is treated as the basename of the
-> destination file.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->
-> ---
-> Changes v2 -> v3;
->    - use "ln" instead of "cp -l"
->    - accept third argument, as the basename of the destination file
->    - drop reviewed-by and tested-by tags given in v2, due to the above
->      two changes
->
-> Changes RFC -> v1:
->    - move to pkg-utils  (Luca)
-> ---
->   package/pkg-utils.mk | 25 +++++++++++++++++++++++++
->   1 file changed, 25 insertions(+)
->
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 44bd2c9..6479cd8 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -113,6 +113,31 @@ $$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
->   endif
->   endef
->
-> +################################################################################
-> +# hardlink-copy -- hardlink source and destination if possible, otherwise
-> +# do a simple copy
-> +#
-> +# argument 1 is the source *file*
-> +# argument 2 is the destination *directory*
-> +# argument 3 is the basename of the destination file (optional, defaults to
-> +#            the basename of the source file.
-> +#
-> +# examples:
-> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir/)
-> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir/,new-name)
-> +#
-> +# Note: we make that a single command, so se can:
-
-se can -> we can
-
-> +#  - use '$(Q)' in front of it and properly silence the whole macro,
-> +#  - use '|| exit 1' after it, so we can exit on error in compound commands.
-> +################################################################################
-> +define hardlink-copy
-> +	{ mkdir -p $(2) && \
-> +		{ ln $(1) $(2)$(if $(3),/$(strip $(3))) 2>/dev/null || \
-> +		  cp $(1) $(2)$(if $(3),/$(strip $(3))); \
-> +		} \
-> +	}
-> +endef
-
-With typos fixed:
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-[Ran 'make legal-info' with output dir on {the same,another} fs]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
--- 
-Luca
+I looked a bit closer and openal has its own checks for availability of sync/atomic functions...
+So the dependecy is something like (gcc >= 4.7 || has_sync_4)
+Not sure how to make it link to libatomic without patching...
