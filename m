@@ -1,240 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 30 Jan 2016 13:58:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer/gst-plugins-ugly: Fix
- cdio-related build errors
-In-Reply-To: <1454143077-25201-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454143077-25201-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56ACB36A.3060408@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 14:17:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/leafpad: bump version to 0.8.18.1
+Message-ID: <1454159823-23541-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-01-16 09:37, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/530/53003be0dc2cb76d497a167023c5c45666fd00b4/
-> http://autobuild.buildroot.net/results/b23/b2393cd50c20da919d6111e15b78d12cc784841f/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../gst-plugins-ugly/0001-cdio-cd-text-api.patch   | 189 +++++++++++++++++++++
->  1 file changed, 189 insertions(+)
->  create mode 100644 package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch
-> 
-> diff --git a/package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch b/package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch
-> new file mode 100644
-> index 0000000..e9ff43e
-> --- /dev/null
-> +++ b/package/gstreamer/gst-plugins-ugly/0001-cdio-cd-text-api.patch
-> @@ -0,0 +1,189 @@
-> +Downloaded from
-> +http://git.alpinelinux.org/cgit/aports/tree/main/gst-plugins-ugly0.10/cdio-cd-text-api.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/leafpad/leafpad.hash | 2 +-
+ package/leafpad/leafpad.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- I think if it's just a downloaded patch that can be applied unmodified, that we
-prefer to add it to <PKG>_PATCH.
-
- And we also prefer to be based on the upstream commit
-6700410efb1786e5a40f45515574a1bf713ba011 rather than an Alpine derivative
-(though in that case it's probably not possible to use <PKG>_PATCH).
-
- Regards,
- Arnout
-
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +
-> +From 649bd92cd2600719862ad5189899212409dd0a67 Mon Sep 17 00:00:00 2001
-> +From: Leon Merten Lohse <leon@green-side.de>
-> +Date: Thu, 03 May 2012 22:50:30 +0000
-> +Subject: cdio: compensate for libcdio's recent cd-text api changes
-> +
-> +https://bugzilla.gnome.org/show_bug.cgi?id=675112
-> +
-> +Conflicts:
-> +
-> +	ext/cdio/gstcdiocddasrc.c
-> +---
-> +diff --git a/ext/cdio/gstcdio.c b/ext/cdio/gstcdio.c
-> +index 2f58d18..483ebf5 100644
-> +--- a/ext/cdio/gstcdio.c
-> ++++ b/ext/cdio/gstcdio.c
-> +@@ -30,12 +30,16 @@
-> + GST_DEBUG_CATEGORY (gst_cdio_debug);
-> + 
-> + void
-> +-gst_cdio_add_cdtext_field (GstObject * src, cdtext_t * cdtext,
-> ++gst_cdio_add_cdtext_field (GstObject * src, cdtext_t * cdtext, track_t track,
-> +     cdtext_field_t field, const gchar * gst_tag, GstTagList ** p_tags)
-> + {
-> +   const gchar *txt;
-> + 
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++  txt = cdtext_get_const (cdtext, field, track);
-> ++#else
-> +   txt = cdtext_get_const (field, cdtext);
-> ++#endif
-> +   if (txt == NULL || *txt == '\0') {
-> +     GST_DEBUG_OBJECT (src, "empty CD-TEXT field %u (%s)", field, gst_tag);
-> +     return;
-> +@@ -57,6 +61,12 @@ gst_cdio_add_cdtext_field (GstObject * src, cdtext_t * cdtext,
-> + }
-> + 
-> + GstTagList *
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++gst_cdio_get_cdtext (GstObject * src, cdtext_t * t, track_t track)
-> ++{
-> ++  GstTagList *tags = NULL;
-> ++
-> ++#else
-> + gst_cdio_get_cdtext (GstObject * src, CdIo * cdio, track_t track)
-> + {
-> +   GstTagList *tags = NULL;
-> +@@ -67,14 +77,22 @@ gst_cdio_get_cdtext (GstObject * src, CdIo * cdio, track_t track)
-> +     GST_DEBUG_OBJECT (src, "no CD-TEXT for track %u", track);
-> +     return NULL;
-> +   }
-> ++#endif
-> + 
-> +-  gst_cdio_add_cdtext_field (src, t, CDTEXT_PERFORMER, GST_TAG_ARTIST, &tags);
-> +-  gst_cdio_add_cdtext_field (src, t, CDTEXT_TITLE, GST_TAG_TITLE, &tags);
-> ++  gst_cdio_add_cdtext_field (src, t, track, CDTEXT_FIELD_PERFORMER,
-> ++      GST_TAG_ARTIST, &tags);
-> ++  gst_cdio_add_cdtext_field (src, t, track, CDTEXT_FIELD_TITLE, GST_TAG_TITLE,
-> ++      &tags);
-> + 
-> +   return tags;
-> + }
-> + 
-> + void
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++gst_cdio_add_cdtext_album_tags (GstObject * src, cdtext_t * t,
-> ++    GstTagList * tags)
-> ++{
-> ++#else
-> + gst_cdio_add_cdtext_album_tags (GstObject * src, CdIo * cdio, GstTagList * tags)
-> + {
-> +   cdtext_t *t;
-> +@@ -84,11 +102,14 @@ gst_cdio_add_cdtext_album_tags (GstObject * src, CdIo * cdio, GstTagList * tags)
-> +     GST_DEBUG_OBJECT (src, "no CD-TEXT for album");
-> +     return;
-> +   }
-> ++#endif
-> + 
-> +-  /* FIXME: map CDTEXT_PERFORMER to GST_TAG_ALBUM_ARTIST once we have that */
-> +-  gst_cdio_add_cdtext_field (src, t, CDTEXT_TITLE, GST_TAG_ALBUM, &tags);
-> +-  gst_cdio_add_cdtext_field (src, t, CDTEXT_GENRE, GST_TAG_GENRE, &tags);
-> +-
-> ++  gst_cdio_add_cdtext_field (src, t, 0, CDTEXT_FIELD_PERFORMER,
-> ++      GST_TAG_ALBUM_ARTIST, &tags);
-> ++  gst_cdio_add_cdtext_field (src, t, 0, CDTEXT_FIELD_TITLE, GST_TAG_ALBUM,
-> ++      &tags);
-> ++  gst_cdio_add_cdtext_field (src, t, 0, CDTEXT_FIELD_GENRE, GST_TAG_GENRE,
-> ++      &tags);
-> +   GST_DEBUG ("CD-TEXT album tags: %" GST_PTR_FORMAT, tags);
-> + }
-> + 
-> +diff --git a/ext/cdio/gstcdio.h b/ext/cdio/gstcdio.h
-> +index ef31ed0..c6da580 100644
-> +--- a/ext/cdio/gstcdio.h
-> ++++ b/ext/cdio/gstcdio.h
-> +@@ -24,22 +24,38 @@
-> + #include <gst/gst.h>
-> + #include <cdio/cdio.h>
-> + #include <cdio/cdtext.h>
-> ++#include <cdio/version.h>
-> ++
-> ++#if LIBCDIO_VERSION_NUM <= 83
-> ++  #define CDTEXT_FIELD_PERFORMER CDTEXT_PERFORMER
-> ++  #define CDTEXT_FIELD_GENRE     CDTEXT_GENRE
-> ++  #define CDTEXT_FIELD_TITLE     CDTEXT_TITLE
-> ++#endif
-> + 
-> + GST_DEBUG_CATEGORY_EXTERN (gst_cdio_debug);
-> + #define GST_CAT_DEFAULT gst_cdio_debug
-> + 
-> + void     gst_cdio_add_cdtext_field (GstObject      * src,
-> +                                     cdtext_t       * cdtext,
-> ++                                    track_t          track,
-> +                                     cdtext_field_t   field,
-> +                                     const gchar    * gst_tag,
-> +                                     GstTagList    ** p_tags);
-> + 
-> + GstTagList  * gst_cdio_get_cdtext  (GstObject      * src,
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++                                    cdtext_t       * t,
-> ++#else
-> +                                     CdIo           * cdio,
-> ++#endif
-> +                                     track_t          track);
-> + 
-> + void      gst_cdio_add_cdtext_album_tags (GstObject  * src,
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++                                          cdtext_t   * t,
-> ++#else
-> +                                           CdIo       * cdio,
-> ++#endif
-> +                                           GstTagList * tags);
-> + 
-> + #endif /* __GST_CDIO_H__ */
-> +diff --git a/ext/cdio/gstcdiocddasrc.c b/ext/cdio/gstcdiocddasrc.c
-> +index 615a0c8..830839e 100644
-> +--- a/ext/cdio/gstcdiocddasrc.c
-> ++++ b/ext/cdio/gstcdiocddasrc.c
-> +@@ -206,6 +206,9 @@ gst_cdio_cdda_src_open (GstAudioCdSrc * audiocdsrc, const gchar * device)
-> +   GstCdioCddaSrc *src;
-> +   discmode_t discmode;
-> +   gint first_track, num_tracks, i;
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++  cdtext_t *cdtext;
-> ++#endif
-> + 
-> +   src = GST_CDIO_CDDA_SRC (audiocdsrc);
-> + 
-> +@@ -232,8 +235,18 @@ gst_cdio_cdda_src_open (GstAudioCdSrc * audiocdsrc, const gchar * device)
-> +   if (src->read_speed != -1)
-> +     cdio_set_speed (src->cdio, src->read_speed);
-> + 
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++  cdtext = cdio_get_cdtext (src->cdio);
-> ++
-> ++  if (NULL == cdtext)
-> ++    GST_DEBUG_OBJECT (src, "no CD-TEXT on disc");
-> ++  else
-> ++    gst_cdio_add_cdtext_album_tags (GST_OBJECT_CAST (src), cdtext,
-> ++        cddabasesrc->tags);
-> ++#else
-> +   gst_cdio_add_cdtext_album_tags (GST_OBJECT_CAST (src), src->cdio,
-> +       cddabasesrc->tags);
-> ++#endif
-> + 
-> +   GST_LOG_OBJECT (src, "%u tracks, first track: %d", num_tracks, first_track);
-> + 
-> +@@ -250,8 +263,14 @@ gst_cdio_cdda_src_open (GstAudioCdSrc * audiocdsrc, const gchar * device)
-> +      * the right thing here (for cddb id calculations etc. as well) */
-> +     track.start = cdio_get_track_lsn (src->cdio, i + first_track);
-> +     track.end = track.start + len_sectors - 1;  /* -1? */
-> ++#if LIBCDIO_VERSION_NUM > 83
-> ++    if (NULL != cdtext)
-> ++      track.tags = gst_cdio_get_cdtext (GST_OBJECT (src), cdtext,
-> ++          i + first_track);
-> ++#else
-> +     track.tags = gst_cdio_get_cdtext (GST_OBJECT (src), src->cdio,
-> +         i + first_track);
-> ++#endif
-> + 
-> +     gst_audio_cd_src_add_track (GST_AUDIO_CD_SRC (src), &track);
-> +   }
-> +--
-> +cgit v0.9.0.2-2-gbebe
-> 
-
-
+diff --git a/package/leafpad/leafpad.hash b/package/leafpad/leafpad.hash
+index 5c4cd78..be56d41 100644
+--- a/package/leafpad/leafpad.hash
++++ b/package/leafpad/leafpad.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	a047d2f82fb88b361ae7f382b4cae8ce1a30bef5ead503a68ae886d19be5fec0	leafpad-0.8.18.tar.gz
++sha256	959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c	leafpad-0.8.18.1.tar.gz
+diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
+index 6366cab..9551a75 100644
+--- a/package/leafpad/leafpad.mk
++++ b/package/leafpad/leafpad.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LEAFPAD_VERSION = 0.8.18
++LEAFPAD_VERSION = 0.8.18.1
+ LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
+ LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
+ LEAFPAD_LICENSE = GPLv2+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0.rc3
