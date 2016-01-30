@@ -1,39 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 14:17:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/leafpad: bump version to 0.8.18.1
-Message-ID: <1454159823-23541-1-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 30 Jan 2016 10:24:23 -0300
+Subject: [Buildroot] [PATCH] nettle: bump to version 3.2
+Message-ID: <1454160263-14576-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/leafpad/leafpad.hash | 2 +-
- package/leafpad/leafpad.mk   | 2 +-
+ package/nettle/nettle.hash | 2 +-
+ package/nettle/nettle.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/leafpad/leafpad.hash b/package/leafpad/leafpad.hash
-index 5c4cd78..be56d41 100644
---- a/package/leafpad/leafpad.hash
-+++ b/package/leafpad/leafpad.hash
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index f506992..6332e13 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	a047d2f82fb88b361ae7f382b4cae8ce1a30bef5ead503a68ae886d19be5fec0	leafpad-0.8.18.tar.gz
-+sha256	959d22ae07f22803bc66ff40d373a854532a6e4732680bf8a96a3fbcb9f80a2c	leafpad-0.8.18.1.tar.gz
-diff --git a/package/leafpad/leafpad.mk b/package/leafpad/leafpad.mk
-index 6366cab..9551a75 100644
---- a/package/leafpad/leafpad.mk
-+++ b/package/leafpad/leafpad.mk
+-sha256	5fd4d25d64d8ddcb85d0d897572af73b05b4d163c6cc49438a5bfbb8ff293d4c	nettle-3.1.1.tar.gz
++sha256	ea4283def236413edab5a4cf9cf32adf540c8df1b9b67641cfc2302fca849d97	nettle-3.2.tar.gz
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 67ae0a1..c133839 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEAFPAD_VERSION = 0.8.18
-+LEAFPAD_VERSION = 0.8.18.1
- LEAFPAD_SITE = http://savannah.nongnu.org/download/leafpad
- LEAFPAD_DEPENDENCIES = libgtk2 host-intltool
- LEAFPAD_LICENSE = GPLv2+
+-NETTLE_VERSION = 3.1.1
++NETTLE_VERSION = 3.2
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
 -- 
-2.7.0.rc3
+2.4.10
