@@ -1,127 +1,68 @@
-From: FrAnKenStEiN MC <chfakht@gmail.com>
-Date: Sat, 30 Jan 2016 21:42:28 +0000
-Subject: [Buildroot] Error while Generating root filesystem image
-	rootfs.ext2
-In-Reply-To: <alpine.DEB.2.11.1601302011320.27555@tanhuma.tkos.co.il>
-References: <CABi8WTz9OL9BKNMCcd87k74q2QGh4XmetxjPu+pZCjo5nF03hw@mail.gmail.com>
- <alpine.DEB.2.11.1601302011320.27555@tanhuma.tkos.co.il>
-Message-ID: <CABi8WTwGkpz3s3q=W5EGrYTPLunhSTDj8XcB_VXKMYLBE+x4Tw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 23:02:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/boost: fix build with uClibc-ng
+Message-ID: <1454191379-2800-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes you're right :
-/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
-/usr/local/games
-but why ? How can i remove the extra spaces ?
+Fixes
+http://autobuild.buildroot.net/results/fde/fdefe50f4a1ff0888105feedbabab186ab6294cb/
+http://autobuild.buildroot.net/results/f49/f49dc42d81a3abf5515ef68940037e34caee6a1e/
+and others
 
-2016-01-30 18:18 GMT+00:00 Jonathan Ben Avraham <yba@tkos.co.il>:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/boost/0006-uclibc-no-fenv.patch | 39 +++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/boost/0006-uclibc-no-fenv.patch
 
-> Dearest FrAnKenStEiN MC,
-> It appears that your PATH environment variable might be misconfigured.
-> More specifically, it appears that there are extra spaces between the last
-> two elements of PATH, "/usr/games:   /usr/local/games":
->
-> PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
-> /usr/local/games"
->
-> Do
->
-> echo $PATH
->
-> from the command line to check if this is the case. If so, then the
-> problem is in your /etc/profile or ~/.bashrc. YOu need to remove the extra
-> spaces.
->
-> Good luck,
->
->  - yba
->
->
-> On Sat, 30 Jan 2016, FrAnKenStEiN MC wrote:
->
-> Date: Sat, 30 Jan 2016 16:50:35 +0000
->> From: FrAnKenStEiN MC <chfakht@gmail.com>
->> To: buildroot at buildroot.org
->> Subject: [Buildroot] Error while Generating root filesystem image
->> rootfs.ext2
->>
->>
->> Hi , i'm getting some errors when trying to run make
->>
->> rm -f
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> rm -f
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
->> rm -f
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_users_table.txt
->> echo "set -e" >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> echo "chown -h -R 0:0
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target" >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> cat system/device_table.txt >
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt
->> printf '        /bin/busybox                     f 4755 0  0 - - - - -\n
->> /dev/console c 622 0 0 5 1 - - -\n' >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt
->> echo
->> "/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/bin/makedevs
->> -d
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target" >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> printf '' >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_users_table.txt
->>
->> PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/
->> usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
->> /usr/local/games"
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/support/scripts/mkusers
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_users_table.txt
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> echo
->> " PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/
->> usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
->> /usr/local/games" mke2img -d
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target -G 4 -R 1 -o
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/images/rootfs.ext2" >>
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> chmod a+x
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->>
->> PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/
->> usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
->> /usr/local/games"
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/bin/fakeroot
->> -- /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
->> rootdir=/media/larbi/eDisque/pfa/buildRoot/buildroot/output/target
->>
->> table='/media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt'
->> /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs:
->> line 4: /usr/local/games: Is a directory
->> make[1]: ***
->> [/media/larbi/eDisque/pfa/buildRoot/buildroot/output/images/rootfs.ext2]
->> Error 126
->> make: *** [_all] Error 2
->>
->> can someone help !!! thanks a lot
->>
->>
->>
-> --
->  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
-> =}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
-> mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il
-> skype:benavrhm
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160130/4cf9b32b/attachment.html>
+diff --git a/package/boost/0006-uclibc-no-fenv.patch b/package/boost/0006-uclibc-no-fenv.patch
+new file mode 100644
+index 0000000..88cd440
+--- /dev/null
++++ b/package/boost/0006-uclibc-no-fenv.patch
+@@ -0,0 +1,39 @@
++Fix build with uClibc
++
++Our config does not enable UCLIBC_HAS_FENV which breaks the build.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr boost_1_60_0.org/boost/test/execution_monitor.hpp boost_1_60_0/boost/test/execution_monitor.hpp
++--- boost_1_60_0.org/boost/test/execution_monitor.hpp	2015-12-06 09:50:28.000000000 +0100
+++++ boost_1_60_0/boost/test/execution_monitor.hpp	2016-01-30 22:55:36.000000000 +0100
++@@ -484,7 +484,7 @@
++     BOOST_FPE_UNDERFLOW = EM_UNDERFLOW|EM_DENORMAL,
++ 
++     BOOST_FPE_ALL       = MCW_EM,
++-#elif defined(BOOST_NO_FENV_H) || defined(BOOST_CLANG)
+++#elif defined(BOOST_NO_FENV_H) || defined(BOOST_CLANG) || defined(__UCLIBC__)
++     BOOST_FPE_ALL       = 1,
++ #else
++     BOOST_FPE_DIVBYZERO = FE_DIVBYZERO,
++diff -uNr boost_1_60_0.org/boost/test/impl/execution_monitor.ipp boost_1_60_0/boost/test/impl/execution_monitor.ipp
++--- boost_1_60_0.org/boost/test/impl/execution_monitor.ipp	2015-12-06 09:50:28.000000000 +0100
+++++ boost_1_60_0/boost/test/impl/execution_monitor.ipp	2016-01-30 22:56:53.000000000 +0100
++@@ -1379,7 +1379,7 @@
++ #endif
++ 
++     return ~old_cw & BOOST_FPE_ALL;
++-#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H)
+++#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H) && !defined(__UCLIBC__)
++     ::feclearexcept(BOOST_FPE_ALL);
++     int res = ::feenableexcept( mask );
++     return res == -1 ? (unsigned)BOOST_FPE_INV : (unsigned)res;
++@@ -1416,7 +1416,7 @@
++ #endif
++ 
++     return ~old_cw & BOOST_FPE_ALL;
++-#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H)
+++#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H) && !defined(__UCLIBC__)
++     ::feclearexcept(BOOST_FPE_ALL);
++     int res = ::fedisableexcept( mask );
++     return res == -1 ? (unsigned)BOOST_FPE_INV : (unsigned)res;
+-- 
+2.7.0.rc3
