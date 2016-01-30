@@ -1,48 +1,70 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jan 2016 16:46:20 +0100
-Subject: [Buildroot] [PATCH 05/16 v3] core/pkg-generic: reorder
- variables definitions for legal-info
-In-Reply-To: <56ACD06A.6000404@lucaceresoli.net>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <db15f4ae0ec3cf941ddbb5f156288ed60f49d60f.1454004518.git.yann.morin.1998@free.fr>
- <56ACD06A.6000404@lucaceresoli.net>
-Message-ID: <20160130154619.GF12587@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 16:48:05 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/kodi: not available using a
+	musl-based toolchain
+Message-ID: <1454168886-30961-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+The build stops with
+configure: error: unsupported host (i586-buildroot-linux-musl)
+due to musl not being supported in
+https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
 
-On 2016-01-30 16:02 +0100, Luca Ceresoli spake thusly:
-> Yann E. MORIN wrote:
-> >Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
-> >that they are close to where _SOURCE and _SITE are handled.
-> >
-> >This looks so far like a purely cosmetic change, but makes more sense
-> >with the follow-up patch, where we'll need them earlier in the file.
-> 
-> Not sure in which patch you need this...
+Removing this obstacle will show that musl is really not being
+supported, the build will fail:
 
-In patch 6, since we use _ACTUAL_SOURCE_TARBALL on line 725 (in an
-ifeq-block) while it was declared on line 771.
+In file included from emu_msvcrt.cpp:64:0:
+emu_msvcrt.h:93:3: error: ?__off64_t? does not name a type
+   __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
+   ^
+emu_msvcrt.h:94:3: error: ?__off_t? does not name a type
+   __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
+   ^
 
-> but it's nice to have
-> $(2)_SOURCE and $(2)_ACTUAL_SOURCE_* defined at the same place, thus:
-> 
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+I know these problems are fixable and the voidlinux projects seems to
+have done it already for 15.2-Isengard:
+https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
 
-Thanks! :-)
+Since Kodi 16.0-Jarvis is already at rc1 stage and the 15.x-branch
+being closed upstream as "final"[1] version I will put no effort
+providing a musl-compilable package for the current Kodi package.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: added explanation for Kodi not being available for musl (Thomas)
 
+ package/kodi/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index e697b52..ed90ed6 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+-comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
++comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
++		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -89,6 +90,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0.rc3
