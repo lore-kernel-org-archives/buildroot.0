@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 17:17:15 +0100
-Subject: [Buildroot] [PATCH 4/5] package/libraw: add optional support for
-	jpeg
+Date: Sat, 30 Jan 2016 17:17:16 +0100
+Subject: [Buildroot] [PATCH 5/5] package/libraw: add optional support for
+	lcms2
 In-Reply-To: <1454170636-9427-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454170636-9427-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454170636-9427-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454170636-9427-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libraw/libraw.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libraw/libraw.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 106c52c..5ebc4a2 100644
+index 5ebc4a2..e261e2b 100644
 --- a/package/libraw/libraw.mk
 +++ b/package/libraw/libraw.mk
-@@ -26,4 +26,11 @@ else
- LIBRAW_CONF_OPTS += --disable-jasper
+@@ -12,7 +12,6 @@ LIBRAW_INSTALL_STAGING = YES
+ LIBRAW_AUTORECONF = YES
+ LIBRAW_CONF_OPTS += \
+ 	--disable-examples \
+-	--disable-lcms \
+ 	--disable-openmp \
+ 	--disable-demosaic-pack-gpl2 \
+ 	--disable-demosaic-pack-gpl3
+@@ -33,4 +32,11 @@ else
+ LIBRAW_CONF_OPTS += --disable-jpeg
  endif
  
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+LIBRAW_CONF_OPTS += --enable-jpeg
-+LIBRAW_DEPENDENCIES += jpeg
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++LIBRAW_CONF_OPTS += --enable-lcms
++LIBRAW_DEPENDENCIES += lcms2
 +else
-+LIBRAW_CONF_OPTS += --disable-jpeg
++LIBRAW_CONF_OPTS += --disable-lcms
 +endif
 +
  $(eval $(autotools-package))
