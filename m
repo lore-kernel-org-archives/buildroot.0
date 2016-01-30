@@ -1,60 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:11:24 +0100
-Subject: [Buildroot] [git commit] package/libsigrok: bump version to 0.4.0
-Message-ID: <20160201224703.18B3D7F90D@busybox.osuosl.org>
+Date: Sat, 30 Jan 2016 08:41:32 +0100
+Subject: [Buildroot] [git commit] package/armadillo: bump version to 6.500.4
+Message-ID: <20160201224703.2B3867F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b428801934ac78c49af574e8a2195278602e1c44
+commit: https://git.buildroot.net/buildroot/commit/?id=209cf5c6dfe0efb542537ab88b134e5fd2b07475
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch to upstream tarball, remove autoreconf, add hash.
+This patch also fixes the broken download of the current package
+version because upstream removed version 5.100.2.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libsigrok/libsigrok.hash |  2 ++
- package/libsigrok/libsigrok.mk   | 13 ++-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
+ package/armadillo/armadillo.hash | 5 ++++-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
-new file mode 100644
-index 0000000..999cef5
---- /dev/null
-+++ b/package/libsigrok/libsigrok.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	5f291f3fee36e6dab1336f1c78596e50588831bc5ebd7cddc2a95fe8c71d669e	libsigrok-0.4.0.tar.gz
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 54d0482..e4e079d 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -4,23 +4,14 @@
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 0046c56..4149a77 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,2 +1,5 @@
++# From http://sourceforge.net/projects/arma/files/?source=navbar
++md5	a39f27197d24b3d25437fab6bb1d118f		armadillo-6.500.4.tar.gz
++sha1	68166e67521a720c72917d196b0807bc6cab8b2e	armadillo-6.500.4.tar.gz
+ # Locally computed:
+-sha256  63150f12bf7c7c598ea55b7271d99fce349ff386a3dc2cae3904b244f6e35320  armadillo-5.100.2.tar.gz
++sha256	813de85fa61ba5077ed871d801ba7070d369e7e9742002e4c11474c75ff6d1c6	armadillo-6.500.4.tar.gz
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 8341ff6..813a41b 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSIGROK_VERSION = fe473123ba836445d477149f2e2c0ae372fc0c4c
--# No https access on upstream git
--LIBSIGROK_SITE = git://sigrok.org/libsigrok
-+LIBSIGROK_VERSION = 0.4.0
-+LIBSIGROK_SITE = http://sigrok.org/download/source/libsigrok
- LIBSIGROK_LICENSE = GPLv3+
- LIBSIGROK_LICENSE_FILES = COPYING
--# Git checkout has no configure script
--LIBSIGROK_AUTORECONF = YES
- LIBSIGROK_INSTALL_STAGING = YES
- LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
- LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
- 
--define LIBSIGROK_ADD_MISSING
--	mkdir -p $(@D)/autostuff
--endef
--
--LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
--
- ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
- LIBSIGROK_CONF_OPTS += --enable-libserialport
- LIBSIGROK_DEPENDENCIES += libserialport
+-ARMADILLO_VERSION = 5.100.2
++ARMADILLO_VERSION = 6.500.4
+ ARMADILLO_SITE = http://downloads.sourceforge.net/project/arma
+ ARMADILLO_DEPENDENCIES = clapack
+ ARMADILLO_INSTALL_STAGING = YES
