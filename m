@@ -1,55 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 26 Jan 2016 23:05:40 +0100
-Subject: [Buildroot] [git commit] bind: security bump to version 9.10.3-P3
-Message-ID: <20160201224704.721787F892@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 30 Jan 2016 08:36:56 +0100
+Subject: [Buildroot] [git commit] package/lm-sensors: fix download URL
+Message-ID: <20160201224706.1F2797F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a7cea9b80cffc0c0c16f5b59980518362b7b154
+commit: https://git.buildroot.net/buildroot/commit/?id=2b93183b8ec56e314877ad1168ad312f32d1a121
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+According to http://www.lm-sensors.org/
+"the previous hosting for lm-sensors.org has been discontinued and the
+ former website maintainers can't be reached. For now, please refer to
+ the Internet Archive of the old site until a replacement is created:
+ https://web.archive.org/web/20150905145034/http://www.lm-sensors.org/"
 
-CVE-2015-8704 - apl_42.c in ISC BIND 9.x before 9.9.8-P3 and 9.9.x and
-9.10.x before 9.10.3-P3 allows remote authenticated users to cause a
-denial of service (INSIST assertion failure and daemon exit) via a
-malformed Address Prefix List (APL) record.
+This site points to ftp://ftp.netroedge.com/pub/lm-sensors/ as a mirror
+site for this package, so let's use it until upstream can fix its web
+site.
 
-CVE-2015-8705 - buffer.c in named in ISC BIND 9.10.x before 9.10.3-P3,
-when debug logging is enabled, allows remote attackers to cause a denial
-of service (REQUIRE assertion failure and daemon exit, or daemon crash)
-or possibly have unspecified other impact via (1) OPT data or (2) an ECS
-option.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lm-sensors/lm-sensors.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index ae71bd1..fea800c 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P2/bind-9.10.3-P2.tar.gz.sha256.asc
--sha256	4a6c1911ac0d4b6be635b63de3429b6c168ea244043f12bbc8a4eb3368fd6ecd	bind-9.10.3-P2.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P3/bind-9.10.3-P3.tar.gz.sha256.asc
-+sha256	690810d1fbb72afa629e74638d19cd44e28d2b2e5eb63f55c705ad85d1a4cb83	bind-9.10.3-P3.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 2a06599..9d8d16c 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index c26f919..cc05ef4 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -6,7 +6,7 @@
  
--BIND_VERSION = 9.10.3-P2
-+BIND_VERSION = 9.10.3-P3
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
- BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
+ LM_SENSORS_VERSION = 3.3.5
+ LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
+-LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
++LM_SENSORS_SITE = ftp://ftp.netroedge.com/pub/lm-sensors
+ LM_SENSORS_INSTALL_STAGING = YES
+ LM_SENSORS_DEPENDENCIES = host-bison host-flex
+ LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
