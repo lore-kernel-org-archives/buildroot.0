@@ -1,42 +1,90 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 30 Jan 2016 14:52:23 +0000
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2016a
-In-Reply-To: <1454165543-32439-1-git-send-email-martin@barkynet.com>
-References: <1454165543-32439-1-git-send-email-martin@barkynet.com>
-Message-ID: <1454165543-32439-2-git-send-email-martin@barkynet.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sat, 30 Jan 2016 15:56:29 +0100
+Subject: [Buildroot] [PATCH 06/16 v3] core/legal-info: ensure legal-info
+ works in off-line mode
+In-Reply-To: <bd9e70a4286f01ccd6612f19ee541aad9350ac79.1454004518.git.yann.morin.1998@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <bd9e70a4286f01ccd6612f19ee541aad9350ac79.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <56ACCF1D.5090103@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Yann,
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 1ab8334..80c5812 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# From: http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html
--sha512  ad7de0e3e8753861d260f0fcbcbca327516a4dc826f7659370a7fb979e6154f1a26b23d2609acf6e1790c8c59da0b76c42f4a94bf361409c1460f6a8ffa6f879  tzdata2015g.tar.gz
-+# From: http://mm.icann.org/pipermail/tz-announce/2016-January/000035.html
-+sha512  9aa5f61a73afa5070dfb1d1982945d268ea8215663d0cd594216500aff14797ea5591ccfd488dc2280902fa1820bf782623624912b669873728431258fe10ec1  tzdata2016a.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 39fc262..bd3cb67 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDATA_VERSION = 2015g
-+TZDATA_VERSION = 2016a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
+Yann E. MORIN wrote:
+> Almost all packages which are saved for legal-info have their source
+> archives downloaded as part of 'make source', which makes an off-line
+> build completely possible [0].
+>
+> However, for the pre-configured external toolchains, the source tarball
+> is different, as the main tarball is a binary package. And that source
+> tarball is only downloaded during the legal-info phase, which makes it
+> inconvenient for full off-line builds.
+>
+> We fix that by adding a new rule, $(1)-legal-source which only
+> $(1)-all-source depends on, so that we only download it for a top-level
+> 'make source', not as part of the standard download mechanism (i.e. only
+> what is really needed to build).
+>
+> This way, we can do a complete [0] off-line build and are still able to
+> generate legal-info, while at the same time we do not incur any download
+> overhead during a simple build.
+>
+> Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
+> not empty. However, since _ACTUAL_SOURCE_TARBALL defaults to the value
+> of _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
+> spurious report of a missing hash for the tarball, since it was not in
+> a standard package rule (configure, build, install..) and thus would
+> miss the PKG and PKGDIR variables to find the .hash file.
+>
+> We fix that in this commit as well, by:
+>
+>    - setting PKG and PKGDIR just for the -legal-source rule;
+>
+>    - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
+>      the same as _SOURCE (to avoid a second report about the hash).
+>
+> [0] Save for nodejs which invarriably wants to download stuff at build
+> time. Sigh... :-( Fixing that is work for another time...
+
+Thanks for the detailed comment!
+I didn't even find any typo... :) but I have a note below.
+
+> @@ -771,6 +775,20 @@ endif
+>   endif
+>   endif
+>
+> +# Download actual sources if they differ from the extracted sources
+> +# (e.g. for external toolchains)
+> +#
+> +# We need to provide PKG and PKGDIR, because there's no .stamp file for
+> +# the legal-info step.
+> +$(1)-legal-source:	PKG=$(2)
+> +$(1)-legal-source:	PKGDIR=$(pkgdir)
+> +$(1)-legal-source:
+> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
+> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+> +	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+> +endif # actual sources != sources
+> +endif # actual sources != ""
+
+This created a side effect that is harmless, but a bit unpleasant.
+
+Before this patch, running 'make source' with all sources already
+fetched did not produce any output. Now, when using a package that 
+defines _ACTUAL_SOURCE_SITE, it does:
+
+$ make source
+arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2: OK (sha256: [...])
+$
+
+This is caused by not having a stamp file for the actual source
+tarball. I suppose we should create a .stamp_actual_downloaded.
+
+For the rest the patch looks good and it works.
+
 -- 
-2.5.0
+Luca
