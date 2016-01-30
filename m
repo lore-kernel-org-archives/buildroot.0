@@ -1,14 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jan 2016 16:43:58 +0100
-Subject: [Buildroot] [PATCH 06/16 v3] core/legal-info: ensure legal-info
- works in off-line mode
-In-Reply-To: <56ACD739.8050205@lucaceresoli.net>
+Date: Sat, 30 Jan 2016 16:46:20 +0100
+Subject: [Buildroot] [PATCH 05/16 v3] core/pkg-generic: reorder
+ variables definitions for legal-info
+In-Reply-To: <56ACD06A.6000404@lucaceresoli.net>
 References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <bd9e70a4286f01ccd6612f19ee541aad9350ac79.1454004518.git.yann.morin.1998@free.fr>
- <56ACCF1D.5090103@lucaceresoli.net>
- <20160130152414.GC12587@free.fr>
- <56ACD739.8050205@lucaceresoli.net>
-Message-ID: <20160130154358.GE12587@free.fr>
+ <db15f4ae0ec3cf941ddbb5f156288ed60f49d60f.1454004518.git.yann.morin.1998@free.fr>
+ <56ACD06A.6000404@lucaceresoli.net>
+Message-ID: <20160130154619.GF12587@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,22 +15,26 @@ To: buildroot@busybox.net
 
 Luca, All,
 
-On 2016-01-30 16:31 +0100, Luca Ceresoli spake thusly:
+On 2016-01-30 16:02 +0100, Luca Ceresoli spake thusly:
 > Yann E. MORIN wrote:
-[--SNIP--]
-> >Side note in this respect: is _ACTUAL_SOURCE supposed to support
-> >multiple archives in there? If yes, then the current code (before that
-> >patch) is not correct, as it does not treat _ACTUAL_SOURCE as a list and
-> >does not iterate over it when calling the DOWNLOAD macro.
+> >Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
+> >that they are close to where _SOURCE and _SITE are handled.
 > >
-> >I think it would make sense to support to support a list in there, but
-> >that is work for a separate patch.
+> >This looks so far like a purely cosmetic change, but makes more sense
+> >with the follow-up patch, where we'll need them earlier in the file.
 > 
-> It would be nice, but I don't think there is any actual use case in the
-> foreseeable future.
+> Not sure in which patch you need this...
 
-Except I can very easily see separate archvies for pre-built toolchains'
-actual sources, one for each of gcc, binutils, glibc and so on...
+In patch 6, since we use _ACTUAL_SOURCE_TARBALL on line 725 (in an
+ifeq-block) while it was declared on line 771.
+
+> but it's nice to have
+> $(2)_SOURCE and $(2)_ACTUAL_SOURCE_* defined at the same place, thus:
+> 
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
