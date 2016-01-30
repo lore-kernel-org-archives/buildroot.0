@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:37:13 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lm-sensors: fix download URL
-In-Reply-To: <1454102179-26118-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454102179-26118-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160130083713.02ac5475@free-electrons.com>
+Date: Sat, 30 Jan 2016 08:38:35 +0100
+Subject: [Buildroot] [PATCH 1/1] bonnie: Expand description in config
+ help text.
+In-Reply-To: <1454101564-19545-1-git-send-email-camh@xdna.net>
+References: <1454101564-19545-1-git-send-email-camh@xdna.net>
+Message-ID: <20160130083835.13920efd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Cam Hutchison,
 
-On Fri, 29 Jan 2016 22:16:18 +0100, Bernd Kuhls wrote:
-> According to http://www.lm-sensors.org/
-> "the previous hosting for lm-sensors.org has been discontinued and the
->  former website maintainers can't be reached. For now, please refer to
->  the Internet Archive of the old site until a replacement is created:
->  https://web.archive.org/web/20150905145034/http://www.lm-sensors.org/"
+On Sat, 30 Jan 2016 08:06:04 +1100, Cam Hutchison wrote:
+> The description "Filesystem tester" is rather unhelpful. Take the
+> description from the referenced web site to make it a bit clearer what
+> bonnie++ actually is.
 > 
-> This site points to ftp://ftp.netroedge.com/pub/lm-sensors/ as a mirror
-> site for this package, so let's use it until upstream can fix its web
-> site.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Cam Hutchison <camh@xdna.net>
 > ---
->  package/lm-sensors/lm-sensors.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/bonnie/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Both patches applied, thanks!
+I've applied, after rewrapping your proposed Config.in help text since
+the lines were too long (longer than 72 characters).
+
+Thanks!
 
 Thomas
 -- 
