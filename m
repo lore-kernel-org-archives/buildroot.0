@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 21:08:44 +0100
-Subject: [Buildroot] [git commit] package/openswan: bump version to 2.6.46
-Message-ID: <20160201224709.BFE727F8C1@busybox.osuosl.org>
+Date: Sat, 30 Jan 2016 08:43:04 +0100
+Subject: [Buildroot] [git commit] mosquitto: bump to version 1.4.7
+Message-ID: <20160201224704.C75227F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cefcb852cfaac99cdba3d202ff1ad0618a3a5cad
+commit: https://git.buildroot.net/buildroot/commit/?id=f16d42a002d406d6b031acaeea628c9e14889645
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openswan/openswan.hash | 4 ++--
- package/openswan/openswan.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mosquitto/mosquitto.hash | 2 +-
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openswan/openswan.hash b/package/openswan/openswan.hash
-index ef4e18b..5929f8d 100644
---- a/package/openswan/openswan.hash
-+++ b/package/openswan/openswan.hash
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 31c5061..a8de658 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
 @@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	b657b4a3828fc6e9830aabeabec047a71993daeb9dd2607f321e355bc5a53e1e	openswan-2.6.45.tar.gz
-+# Locally calculated
-+sha256	c1605c96d3c3cf357cefea7622f3acbc7a02d6a3cebfb76979327b566084a5ea	openswan-2.6.46.tar.gz
-diff --git a/package/openswan/openswan.mk b/package/openswan/openswan.mk
-index 7fa945f..54bd4b3 100644
---- a/package/openswan/openswan.mk
-+++ b/package/openswan/openswan.mk
+ # Locally calculated after checking pgp signature
+-sha256  b432e19fee0c549f4a0fb0e866d1b6a897b38dbf1ddfda92bb43e2a24f01df66  mosquitto-1.4.5.tar.gz
++sha256  71a1cb37893403e00b7db85c5db4af50b40d055ce61e5d21092c2594f2023b8b  mosquitto-1.4.7.tar.gz
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 2db3173..d6a5fb2 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSWAN_VERSION = 2.6.45
-+OPENSWAN_VERSION = 2.6.46
- OPENSWAN_SITE = http://download.openswan.org/openswan
- OPENSWAN_LICENSE = GPLv2+, BSD-3c
- OPENSWAN_LICENSE_FILES = COPYING LICENSE
+-MOSQUITTO_VERSION = 1.4.5
++MOSQUITTO_VERSION = 1.4.7
+ MOSQUITTO_SITE = http://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPLv1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
