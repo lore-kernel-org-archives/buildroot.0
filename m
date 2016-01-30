@@ -1,81 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 19:27:56 +0100
-Subject: [Buildroot] [PATCH v2] package/iperf3: fix musl build
-Message-ID: <1454178476-3057-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 21:52:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix musl build
+Message-ID: <1454187166-2348-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ported -D_GNU_SOURCE from https://dev.openwrt.org/changeset/45103
+Fixes
+http://autobuild.buildroot.net/results/a15/a1586717154efb6495dfcdb5c7ce11a047dd68db/
+http://autobuild.buildroot.net/results/363/3636ddcc0efa974c674f36d3c65eea5beb32af52/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../iperf3/0002-Fix-build-using-musl-libc.patch    | 43 ++++++++++++++++++++++
- package/iperf3/iperf3.mk                           |  2 +
- 2 files changed, 45 insertions(+)
- create mode 100644 package/iperf3/0002-Fix-build-using-musl-libc.patch
+ ...Invert-conditional-for-defining-QT_SOCKLE.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
 
-diff --git a/package/iperf3/0002-Fix-build-using-musl-libc.patch b/package/iperf3/0002-Fix-build-using-musl-libc.patch
+diff --git a/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
 new file mode 100644
-index 0000000..f220360
+index 0000000..55cf480
 --- /dev/null
-+++ b/package/iperf3/0002-Fix-build-using-musl-libc.patch
-@@ -0,0 +1,43 @@
-+From 1fe02385b60c9dcd8a04b8bd3ff5cff120ec35a6 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 30 Jan 2016 19:23:20 +0100
-+Subject: [PATCH 1/1] Fix build using musl libc
++++ b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+@@ -0,0 +1,44 @@
++Fix musl build
 +
-+Fixes https://github.com/esnet/iperf/issues/331
++Downloaded from
++https://github.com/meta-qt5/meta-qt5/blob/d9d1d04760430cd0e5edd1764d832860715e7b83/recipes-qt/qt5/qtbase/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
++and adjusted path.
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++From 8f09897de948cea8861ca95e182f442cf15a339e Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Mon, 8 Jun 2015 13:59:25 -0700
++Subject: [PATCH] linux-oe-g++: Invert conditional for defining QT_SOCKLEN_T
++
++This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
++only when its glibc < 2 and not also for the libraries which may define
++it as per standards but are not glibc, e.g. musl
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +---
-+Patch sent upstream: https://github.com/esnet/iperf/pull/344
++ mkspecs/linux-oe-g++/qplatformdefs.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+ src/cjson.h | 2 ++
-+ src/timer.h | 1 +
-+ 2 files changed, 3 insertions(+)
-+
-+diff --git a/src/cjson.h b/src/cjson.h
-+index d4449e6..7af19a9 100644
-+--- a/src/cjson.h
-++++ b/src/cjson.h
-+@@ -23,6 +23,8 @@
-+ #ifndef cJSON__h
-+ #define cJSON__h
++diff --git a/mkspecs/linux-oe-g++/qplatformdefs.h b/mkspecs/linux-oe-g++/qplatformdefs.h
++index dd12003..8623651 100644
++--- a/mkspecs/linux-g++/qplatformdefs.h
+++++ b/mkspecs/linux-g++/qplatformdefs.h
++@@ -86,10 +86,10 @@
 + 
-++#include <stdint.h>
-++
-+ #ifdef __cplusplus
-+ extern "C"
-+ {
-+diff --git a/src/timer.h b/src/timer.h
-+index 0f9c5eb..9b22b7f 100644
-+--- a/src/timer.h
-++++ b/src/timer.h
-+@@ -30,6 +30,7 @@
-+ #ifndef __TIMER_H
-+ #define __TIMER_H
++ #undef QT_SOCKLEN_T
 + 
-++#include <stdint.h>
-+ #include <sys/time.h>
++-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
++-#define QT_SOCKLEN_T            socklen_t
++-#else
+++#if defined(__GLIBC__) && (__GLIBC__ < 2)
++ #define QT_SOCKLEN_T            int
+++#else
+++#define QT_SOCKLEN_T            socklen_t
++ #endif
 + 
-+ /* TimerClientData is an opaque value that tags along with a timer.  The
++ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
 +-- 
-+2.7.0.rc3
++2.1.4
 +
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 885a599..74d6cce 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -9,4 +9,6 @@ IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
- IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
- IPERF3_LICENSE_FILES = LICENSE
- 
-+IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+
- $(eval $(autotools-package))
 -- 
 2.7.0.rc3
