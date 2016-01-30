@@ -1,68 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 23:02:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: fix build with uClibc-ng
-Message-ID: <1454191379-2800-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 23:20:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lirc-tools: fix musl build
+Message-ID: <1454192444-26265-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Inspired by
+https://bug.tasktools.org/secure/attachment/10271/0001-Fix-build-with-musl-libc.patch
+
 Fixes
-http://autobuild.buildroot.net/results/fde/fdefe50f4a1ff0888105feedbabab186ab6294cb/
-http://autobuild.buildroot.net/results/f49/f49dc42d81a3abf5515ef68940037e34caee6a1e/
-and others
+http://autobuild.buildroot.net/results/603/603c4426c47220808305a416f3d60fec2d8c02a3/
+http://autobuild.buildroot.net/results/c08/c08abddeb5f0d0d1adec63ab4390562e3cfe1087/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/boost/0006-uclibc-no-fenv.patch | 39 +++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/boost/0006-uclibc-no-fenv.patch
+ package/lirc-tools/0004-musl.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/lirc-tools/0004-musl.patch
 
-diff --git a/package/boost/0006-uclibc-no-fenv.patch b/package/boost/0006-uclibc-no-fenv.patch
+diff --git a/package/lirc-tools/0004-musl.patch b/package/lirc-tools/0004-musl.patch
 new file mode 100644
-index 0000000..88cd440
+index 0000000..e5eddba
 --- /dev/null
-+++ b/package/boost/0006-uclibc-no-fenv.patch
-@@ -0,0 +1,39 @@
-+Fix build with uClibc
-+
-+Our config does not enable UCLIBC_HAS_FENV which breaks the build.
++++ b/package/lirc-tools/0004-musl.patch
+@@ -0,0 +1,19 @@
++Fix musl build
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+diff -uNr boost_1_60_0.org/boost/test/execution_monitor.hpp boost_1_60_0/boost/test/execution_monitor.hpp
-+--- boost_1_60_0.org/boost/test/execution_monitor.hpp	2015-12-06 09:50:28.000000000 +0100
-++++ boost_1_60_0/boost/test/execution_monitor.hpp	2016-01-30 22:55:36.000000000 +0100
-+@@ -484,7 +484,7 @@
-+     BOOST_FPE_UNDERFLOW = EM_UNDERFLOW|EM_DENORMAL,
++diff -uNr lirc-0.9.2.org/tools/lirc-lsremotes.c lirc-0.9.2/tools/lirc-lsremotes.c
++--- lirc-0.9.2.org/tools/lirc-lsremotes.c	2014-11-23 18:42:09.000000000 +0100
+++++ lirc-0.9.2/tools/lirc-lsremotes.c	2016-01-30 23:17:54.365815328 +0100
++@@ -28,6 +28,11 @@
++ #include "lirc_private.h"
++ #include "lirc_client.h"
 + 
-+     BOOST_FPE_ALL       = MCW_EM,
-+-#elif defined(BOOST_NO_FENV_H) || defined(BOOST_CLANG)
-++#elif defined(BOOST_NO_FENV_H) || defined(BOOST_CLANG) || defined(__UCLIBC__)
-+     BOOST_FPE_ALL       = 1,
-+ #else
-+     BOOST_FPE_DIVBYZERO = FE_DIVBYZERO,
-+diff -uNr boost_1_60_0.org/boost/test/impl/execution_monitor.ipp boost_1_60_0/boost/test/impl/execution_monitor.ipp
-+--- boost_1_60_0.org/boost/test/impl/execution_monitor.ipp	2015-12-06 09:50:28.000000000 +0100
-++++ boost_1_60_0/boost/test/impl/execution_monitor.ipp	2016-01-30 22:56:53.000000000 +0100
-+@@ -1379,7 +1379,7 @@
-+ #endif
+++/* fixes build with musl libc */
+++#ifndef GLOB_BRACE
+++#define GLOB_BRACE 0
+++#endif
+++
++ static int opt_silent = 0;
++ static int opt_dump = 0;
 + 
-+     return ~old_cw & BOOST_FPE_ALL;
-+-#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H)
-++#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H) && !defined(__UCLIBC__)
-+     ::feclearexcept(BOOST_FPE_ALL);
-+     int res = ::feenableexcept( mask );
-+     return res == -1 ? (unsigned)BOOST_FPE_INV : (unsigned)res;
-+@@ -1416,7 +1416,7 @@
-+ #endif
-+ 
-+     return ~old_cw & BOOST_FPE_ALL;
-+-#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H)
-++#elif defined(__GLIBC__) && defined(__USE_GNU) && !defined(BOOST_CLANG) && !defined(BOOST_NO_FENV_H) && !defined(__UCLIBC__)
-+     ::feclearexcept(BOOST_FPE_ALL);
-+     int res = ::fedisableexcept( mask );
-+     return res == -1 ? (unsigned)BOOST_FPE_INV : (unsigned)res;
 -- 
 2.7.0.rc3
