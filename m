@@ -1,70 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 10:05:07 +0100
-Subject: [Buildroot] [PATCH 2/2] package/alsa-lib: fix musl-related openal
-	build error
-In-Reply-To: <1454144707-26838-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454144707-26838-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454144707-26838-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 10:05:06 +0100
+Subject: [Buildroot] [PATCH 1/2] package/openal: bump version to 1.17.2
+Message-ID: <1454144707-26838-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openal will fail to build without this patch when using pcm.h
-
-In file included from /home/bernd/buildroot/br3/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/alsa/asoundlib.h:54:0,
-                 from /home/bernd/buildroot/br3/output/build/openal-1.17.2/Alc/backends/alsa.c:34:
-/home/bernd/buildroot/br3/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/alsa/pcm.h:1111:1: error: unknown type name ?u_int8_t?
- u_int8_t snd_pcm_format_silence(snd_pcm_format_t format);
- ^
-
-It seems that this problem was not yet caught by the autobuilders.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/alsa-lib/0005-musl-pcm-h.patch | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/alsa-lib/0005-musl-pcm-h.patch
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/alsa-lib/0005-musl-pcm-h.patch b/package/alsa-lib/0005-musl-pcm-h.patch
-new file mode 100644
-index 0000000..ce1528c
---- /dev/null
-+++ b/package/alsa-lib/0005-musl-pcm-h.patch
-@@ -0,0 +1,33 @@
-+Fix musl-related build errors in packages depending on alsa, in our case
-+this fixes openal.
-+
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/tree/main/alsa-lib/alsa-lib_pcm_h.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- alsa-lib-1.0.25/include/pcm.h
-++++ alsa-lib-1.0.25.patched/include/pcm.h
-+@@ -33,6 +33,7 @@
-+ extern "C" {
-+ #endif
-+ 
-++#include <stdint.h>
-+ /**
-+  *  \defgroup PCM PCM Interface
-+  *  See the \ref pcm page for more details.
-+@@ -941,10 +942,10 @@
-+ int snd_pcm_format_physical_width(snd_pcm_format_t format);		/* in bits */
-+ snd_pcm_format_t snd_pcm_build_linear_format(int width, int pwidth, int unsignd, int big_endian);
-+ ssize_t snd_pcm_format_size(snd_pcm_format_t format, size_t samples);
-+-u_int8_t snd_pcm_format_silence(snd_pcm_format_t format);
-+-u_int16_t snd_pcm_format_silence_16(snd_pcm_format_t format);
-+-u_int32_t snd_pcm_format_silence_32(snd_pcm_format_t format);
-+-u_int64_t snd_pcm_format_silence_64(snd_pcm_format_t format);
-++uint8_t snd_pcm_format_silence(snd_pcm_format_t format);
-++uint16_t snd_pcm_format_silence_16(snd_pcm_format_t format);
-++uint32_t snd_pcm_format_silence_32(snd_pcm_format_t format);
-++uint64_t snd_pcm_format_silence_64(snd_pcm_format_t format);
-+ int snd_pcm_format_set_silence(snd_pcm_format_t format, void *buf, unsigned int samples);
-+ 
-+ snd_pcm_sframes_t snd_pcm_bytes_to_frames(snd_pcm_t *pcm, ssize_t bytes);
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index c614180..260f1b7 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 087153baab375c23d7aa7e9f3237c0a1d02e336537b485aee56d9ac312baf6f8 openal-soft-1.17.1.tar.bz2
++sha256	a341f8542f1f0b8c65241a17da13d073f18ec06658e1a1606a8ecc8bbc2b3314	openal-soft-1.17.2.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index 42871fb..4c9a2b6 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENAL_VERSION = 1.17.1
++OPENAL_VERSION = 1.17.2
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPLv2+
 -- 
 2.7.0.rc3
