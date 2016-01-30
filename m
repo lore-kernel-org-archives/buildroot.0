@@ -1,42 +1,148 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 00:24:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/knock: bump version
-Message-ID: <1454196253-15434-1-git-send-email-bernd.kuhls@t-online.de>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 31 Jan 2016 00:55:36 +0100
+Subject: [Buildroot] Error while Generating root filesystem image
+ rootfs.ext2
+In-Reply-To: <CABi8WTwGkpz3s3q=W5EGrYTPLunhSTDj8XcB_VXKMYLBE+x4Tw@mail.gmail.com>
+References: <CABi8WTz9OL9BKNMCcd87k74q2QGh4XmetxjPu+pZCjo5nF03hw@mail.gmail.com>
+ <alpine.DEB.2.11.1601302011320.27555@tanhuma.tkos.co.il>
+ <CABi8WTwGkpz3s3q=W5EGrYTPLunhSTDj8XcB_VXKMYLBE+x4Tw@mail.gmail.com>
+Message-ID: <56AD4D78.2090805@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/knock/knock.hash | 2 +-
- package/knock/knock.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/knock/knock.hash b/package/knock/knock.hash
-index ae152db..3599e43 100644
---- a/package/knock/knock.hash
-+++ b/package/knock/knock.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 9938479c321066424f74c61f6bee46dfd355a828263dc89561a1ece3f56578a4 knock-0.7.tar.gz
-+sha256	940a8de61b4b3530560805c3b9310a077c28c99173c2ccb07ff96720b0e93c58	knock-258a27e5a47809f97c2b9f2751a88c2f94aae891.tar.gz
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 28db1eb..2ab8d1b 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--KNOCK_VERSION = 0.7
--KNOCK_SITE = http://www.zeroflux.org/proj/knock/files
-+KNOCK_VERSION = 258a27e5a47809f97c2b9f2751a88c2f94aae891
-+KNOCK_SITE = $(call github,jvinet,knock,$(KNOCK_VERSION))
-+KNOCK_AUTORECONF = YES
- KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
- KNOCK_DEPENDENCIES = libpcap
+FrAnKenStEiN MC wrote:
+> Yes you're right :
+> /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+> /usr/local/games
+> but why ? How can i remove the extra spaces ?
+
+Most likely they are in your path, independently from Buildroot.
+
+To verify, issue 'echo $PATH' and see if they are present.
+
+>
+> 2016-01-30 18:18 GMT+00:00 Jonathan Ben Avraham <yba@tkos.co.il
+> <mailto:yba@tkos.co.il>>:
+>
+>     Dearest FrAnKenStEiN MC,
+>     It appears that your PATH environment variable might be
+>     misconfigured. More specifically, it appears that there are extra
+>     spaces between the last two elements of PATH, "/usr/games:
+>     /usr/local/games":
+>
+>     PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+>     /usr/local/games"
+>
+>     Do
+>
+>     echo $PATH
+>
+>     from the command line to check if this is the case. If so, then the
+>     problem is in your /etc/profile or ~/.bashrc. YOu need to remove the
+>     extra spaces.
+>
+>     Good luck,
+>
+>       - yba
+>
+>
+>     On Sat, 30 Jan 2016, FrAnKenStEiN MC wrote:
+>
+>         Date: Sat, 30 Jan 2016 16:50:35 +0000
+>         From: FrAnKenStEiN MC <chfakht at gmail.com <mailto:chfakht@gmail.com>>
+>         To: buildroot at buildroot.org <mailto:buildroot@buildroot.org>
+>         Subject: [Buildroot] Error while Generating root filesystem
+>         image rootfs.ext2
+>
+>
+>         Hi , i'm getting some errors when trying to run make
+>
+>         rm -f
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         rm -f
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target/THIS_IS_NOT_YOUR_ROOT_FILESYSTEM
+>         rm -f
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_users_table.txt
+>         echo "set -e" >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         echo "chown -h -R 0:0
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target" >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         cat system/device_table.txt >
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt
+>         printf '        /bin/busybox                     f 4755 0  0 - -
+>         - - -\n /dev/console c 622 0 0 5 1 - - -\n' >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt
+>         echo
+>         "/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/bin/makedevs
+>         -d
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target" >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         printf '' >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_users_table.txt
+>         PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/
+>         usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+>         /usr/local/games"
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/support/scripts/mkusers
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_users_table.txt
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         echo
+>         " PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/
+>         usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+>         /usr/local/games" mke2img -d
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/target -G 4
+>         -R 1 -o
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/images/rootfs.ext2"
+>          >>
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         chmod a+x
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         PATH="/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/sbin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/
+>         usr/bin:/media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+>         /usr/local/games"
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/host/usr/bin/fakeroot
+>         --
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs
+>         rootdir=/media/larbi/eDisque/pfa/buildRoot/buildroot/output/target
+>         table='/media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_device_table.txt'
+>         /media/larbi/eDisque/pfa/buildRoot/buildroot/output/build/_fakeroot.fs:
+>         line 4: /usr/local/games: Is a directory
+>         make[1]: ***
+>         [/media/larbi/eDisque/pfa/buildRoot/buildroot/output/images/rootfs.ext2]
+>         Error 126
+>         make: *** [_all] Error 2
+>
+>         can someone help !!! thanks a lot
+>
+>
+>
+>     --
+>       9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open
+>     Systems
+>     =}-------- Jonathan Ben-Avraham ("yba")
+>     ----------ooO--U--Ooo------------{=
+>     mailto:yba at tkos.co.il <mailto:yba@tkos.co.il> tel:+972.52.486.3386
+>     http://tkos.co.il skype:benavrhm
+>     _______________________________________________
+>     buildroot mailing list
+>     buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
 -- 
-2.7.0.rc3
+Luca
