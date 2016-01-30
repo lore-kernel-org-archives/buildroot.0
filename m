@@ -1,32 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 22:33:04 +0100
-Subject: [Buildroot] [git commit] package/setools: add homepage to Config.in
-Message-ID: <20160201224703.5C43D7F8C1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Jan 2016 11:03:46 +0100
+Subject: [Buildroot] [git commit] package/openal: bump version to 1.17.2
+Message-ID: <20160201224703.74B897F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6201e08f8201c19b53c6d383f3ed8e02c4e0c7f7
+commit: https://git.buildroot.net/buildroot/commit/?id=9a9cd34e93036eced518619d2947c5b7e6ee648c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/setools/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/openal/openal.hash | 2 +-
+ package/openal/openal.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/setools/Config.in b/package/setools/Config.in
-index 7bab789..c291b21 100644
---- a/package/setools/Config.in
-+++ b/package/setools/Config.in
-@@ -26,6 +26,8 @@ config BR2_PACKAGE_SETOOLS
- 	   * secmds - command-line tools to analyze and search SELinux
- 	     policy.
+diff --git a/package/openal/openal.hash b/package/openal/openal.hash
+index c614180..260f1b7 100644
+--- a/package/openal/openal.hash
++++ b/package/openal/openal.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 087153baab375c23d7aa7e9f3237c0a1d02e336537b485aee56d9ac312baf6f8 openal-soft-1.17.1.tar.bz2
++sha256	a341f8542f1f0b8c65241a17da13d073f18ec06658e1a1606a8ecc8bbc2b3314	openal-soft-1.17.2.tar.bz2
+diff --git a/package/openal/openal.mk b/package/openal/openal.mk
+index 42871fb..4c9a2b6 100644
+--- a/package/openal/openal.mk
++++ b/package/openal/openal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+	  https://github.com/TresysTechnology/setools3/wiki
-+
- comment "setools needs a toolchain w/ threads, C++, wchar, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
- 		|| !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+-OPENAL_VERSION = 1.17.1
++OPENAL_VERSION = 1.17.2
+ OPENAL_SOURCE = openal-soft-$(OPENAL_VERSION).tar.bz2
+ OPENAL_SITE = http://kcat.strangesoft.net/openal-releases
+ OPENAL_LICENSE = LGPLv2+
