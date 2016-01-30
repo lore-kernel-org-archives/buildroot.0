@@ -1,140 +1,77 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Sat, 30 Jan 2016 14:51:00 +0000
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: remove version choice
-In-Reply-To: <1454165460-32174-1-git-send-email-martin@barkynet.com>
-References: <1454165460-32174-1-git-send-email-martin@barkynet.com>
-Message-ID: <1454165460-32174-2-git-send-email-martin@barkynet.com>
+Date: Sat, 30 Jan 2016 14:52:22 +0000
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2016a
+Message-ID: <1454165543-32439-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the choice of nodejs version.  Now automatically pick nodejs 0.10.x
-for armv5 architectures only and the latest nodejs for all other
-supported architectures.
-
-Note that the removal of BR2_PACKAGE_NODEJS_5_X is not handled in
-Config.in.legacy because buildroot has never been released with this
-option included.
+Removed 0001-fix-dependencies.patch as this has now been fixed upstream
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
-Apologies for not submitting an updated patch for a while.
+ package/zic/0001-fix-dependencies.patch | 27 ---------------------------
+ package/zic/zic.hash                    |  4 ++--
+ package/zic/zic.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 30 deletions(-)
+ delete mode 100644 package/zic/0001-fix-dependencies.patch
 
-I've reworked the patch based on your comments from my previous patch
-(http://patchwork.ozlabs.org/patch/560487/).  Hopefully it is now
-acceptable.
-
-Thanks, Martin
----
- Config.in.legacy         |  8 +++++---
- package/nodejs/Config.in | 38 ++++++++++----------------------------
- package/nodejs/nodejs.mk |  2 +-
- 3 files changed, 16 insertions(+), 32 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 793b116..1e92467 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -281,12 +281,14 @@ config BR2_PACKAGE_INFOZIP
- 	  in the unzip package.
- 
- config BR2_BR2_PACKAGE_NODEJS_0_10_X
--	bool "nodejs 0.10.x option renamed"
-+	bool "nodejs 0.10.x option removed"
- 	select BR2_LEGACY
- 	select BR2_PACKAGE_NODEJS
- 	help
--	  nodejs 0.10.x option was named incorrectly and has been renamed
--	  to BR2_PACKAGE_NODEJS_0_10_X.
-+	  nodejs 0.10.x option has been removed.  0.10.x is now
-+	  automatically chosen for ARMv5 architectures only and the latest
-+	  nodejs for all other supported architectures. The correct nodejs
-+	  version has been automatically selected in your configuration.
- 
- config BR2_BR2_PACKAGE_NODEJS_0_12_X
- 	bool "nodejs version 0.12.x has been removed"
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 4385646..cdf7705 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -1,9 +1,10 @@
--comment "nodejs needs a toolchain w/ C++, dynamic library, threads"
-+comment "nodejs needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.8, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_arm || BR2_i386 || BR2_x86_64 || BR2_mipsel
- 	depends on !BR2_MIPS_SOFT_FLOAT
- 	depends on !BR2_ARM_CPU_ARMV4
--	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_NODEJS
- 	bool "nodejs"
-@@ -13,6 +14,11 @@ config BR2_PACKAGE_NODEJS
- 	depends on !BR2_MIPS_SOFT_FLOAT
- 	# ARM needs BLX, so v5t+
- 	depends on !BR2_ARM_CPU_ARMV4
-+	# 0.10.x could be built without the following toolchain dependencies but
-+	# simplify things by requiring these basic dependencies for all versions.
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_USE_WCHAR
- 	# uses fork()
- 	depends on BR2_USE_MMU
- 	# uses dlopen(). On ARMv5, we could technically support static
-@@ -35,34 +41,10 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	# On ARM, at least ARMv6+ with VFPv2+ is needed
- 	default y if !BR2_ARM_CPU_ARMV5 && BR2_ARM_CPU_HAS_VFPV2
- 
--choice
--	prompt "Node.js version"
--	default BR2_PACKAGE_NODEJS_0_10_X if BR2_ARM_CPU_ARMV5
--	default BR2_PACKAGE_NODEJS_5_X
--	help
--	  Select the version of Node.js you wish to use.
+diff --git a/package/zic/0001-fix-dependencies.patch b/package/zic/0001-fix-dependencies.patch
+deleted file mode 100644
+index e1cbc12..0000000
+--- a/package/zic/0001-fix-dependencies.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From 4a2a55a640dd9316dac5f31832064f28f59ab0ae Mon Sep 17 00:00:00 2001
+-From: Richard Braun <rbraun@sceen.net>
+-Date: Fri, 4 Jan 2013 10:57:24 +0100
+-Subject: [PATCH] zic: fix dependencies
 -
--config BR2_PACKAGE_NODEJS_0_10_X
--	bool "v0.10.41"
+-The yearistype script is provided by the tzdata package, and is required
+-at runtime only.
+----
+- Makefile |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
 -
--config BR2_PACKAGE_NODEJS_5_X
--	bool "v5.5.0"
--	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
--	depends on BR2_HOST_GCC_AT_LEAST_4_8
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--	depends on BR2_USE_WCHAR
+-diff --git a/Makefile b/Makefile
+-index d76a81e..30df7dc 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -349,7 +349,7 @@ version.h:
+- zdump:		$(TZDOBJS)
+- 		$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(TZDOBJS) $(LDLIBS)
+- 
+--zic:		$(TZCOBJS) yearistype
+-+zic:		$(TZCOBJS)
+- 		$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $(TZCOBJS) $(LDLIBS)
+- 
+- yearistype:	yearistype.sh
+--- 
+-1.7.2.5
 -
--comment "v5.5.0 needs a toolchain w/ gcc >= 4.8, wchar"
--	depends on BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR
--	depends on BR2_HOST_GCC_AT_LEAST_4_8
--
--endchoice
--
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "0.10.41"	if BR2_PACKAGE_NODEJS_0_10_X
--	default "5.5.0"		if BR2_PACKAGE_NODEJS_5_X
-+	default "5.5.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "0.10.41"
- 
- menu "Module Selection"
- 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index af47b26..37de331 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 714b00c..290cfdb 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From: http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html
+-sha512  44da833da3afdb82636a953785372bb4c765e61e40d700da40b46ab70007ebdbde4d480e10b87cbb36c45eaaffcaa6b9894375e2f553b7d16655dc167cd4a11f  tzcode2015g.tar.gz
++# From: http://mm.icann.org/pipermail/tz-announce/2016-January/000035.html
++sha512  33a1078ba16aef19048aa97ce1816fc5368061bfe40eddc0e7e246ca57c4a535eaf2f03847128e971a6d959f34ea77224bf33fd53dc6a0c006450dde35222223  tzcode2016a.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index fcc0288..6f5d160 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NODEJS_VERSION = $(call qstrip,$(BR2_PACKAGE_NODEJS_VERSION_STRING))
--ifeq ($(BR2_PACKAGE_NODEJS_5_X),y)
-+ifeq ($(findstring 0.10.,$(NODEJS_VERSION)),)
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- else
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.gz
+-ZIC_VERSION = 2015g
++ZIC_VERSION = 2016a
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
 -- 
 2.5.0
