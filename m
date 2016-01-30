@@ -1,59 +1,30 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 16:40:07 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libndp: fix musl build
-In-Reply-To: <1454168407-3108-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454168407-3108-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454168407-3108-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 16:40:06 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libndp: bump version to 1.5
+Message-ID: <1454168407-3108-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/d42/d42bebe51bbec38f131840b6bbefdc162f0ad194/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libndp/0001-ndptool.c-Fix-musl-build.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/libndp/0001-ndptool.c-Fix-musl-build.patch
+ package/libndp/libndp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libndp/0001-ndptool.c-Fix-musl-build.patch b/package/libndp/0001-ndptool.c-Fix-musl-build.patch
-new file mode 100644
-index 0000000..547598c
---- /dev/null
-+++ b/package/libndp/0001-ndptool.c-Fix-musl-build.patch
-@@ -0,0 +1,30 @@
-+From 561f80b9a848be923f37bf1afedbecf92da3b2e7 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 30 Jan 2016 16:36:39 +0100
-+Subject: [PATCH 1/1] ndptool.c: Fix musl build
-+
-+Fixes a build issue with the musl C library
-+http://autobuild.buildroot.net/results/d42/d42bebe51bbec38f131840b6bbefdc162f0ad194/build-end.log
-+
-+Patch sent upstream: https://github.com/jpirko/libndp/pull/7
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ utils/ndptool.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/utils/ndptool.c b/utils/ndptool.c
-+index 04ec4e1..c6ef48c 100644
-+--- a/utils/ndptool.c
-++++ b/utils/ndptool.c
-+@@ -27,6 +27,7 @@
-+ #include <netinet/in.h>
-+ #include <arpa/inet.h>
-+ #include <errno.h>
-++#include <sys/select.h>
-+ #include <ndp.h>
-+ 
-+ enum verbosity_level {
-+-- 
-+2.7.0.rc3
-+
+diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
+index c40a017..c880b7e 100644
+--- a/package/libndp/libndp.mk
++++ b/package/libndp/libndp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNDP_VERSION = v1.4
++LIBNDP_VERSION = v1.5
+ LIBNDP_SITE = $(call github,jpirko,libndp,$(LIBNDP_VERSION))
+ LIBNDP_LICENSE = LGPLv2.1+
+ LIBNDP_LICENSE_FILES = COPYING
 -- 
 2.7.0.rc3
