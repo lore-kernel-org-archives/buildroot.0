@@ -1,53 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jan 2016 12:55:46 +0100
-Subject: [Buildroot] [PATCH 03/16 v3] core/pkg-utils: add macro to
- hardlink-or-copy
-In-Reply-To: <56AC9EB6.2000907@lucaceresoli.net>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <496a4dbb0c7e2bfd0be8726e3d8a2aab4f1d830d.1454004518.git.yann.morin.1998@free.fr>
- <56AC9EB6.2000907@lucaceresoli.net>
-Message-ID: <20160130115545.GB12587@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 30 Jan 2016 08:59:02 +0100
+Subject: [Buildroot] Xenomai 3.0.1?
+In-Reply-To: <20160129093635.3e265ab2@free-electrons.com>
+References: <0eb901d159ee$a8a7e900$f9f7bb00$@chordia.co.uk>
+ <20160129093635.3e265ab2@free-electrons.com>
+Message-ID: <56AC6D46.9090908@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
-
-On 2016-01-30 12:29 +0100, Luca Ceresoli spake thusly:
-> Yann E. MORIN wrote:
-> >This macro will try to copy a source file into a destination fdirectory,
+On 29-01-16 09:36, Thomas Petazzoni wrote:
+> Hello Jerry,
 > 
-> fdirectory -> directory
+> On Thu, 28 Jan 2016 17:09:33 -0000, jerry at chordia.co.uk wrote:
+>> Running the xenomai prepare-kernel script against an externally sourced
+>> 3.18.26 kernel. Buildroot builds a bootable kernel and working FS but the
+>> Xenomai userland tools appear to be related to 2.X. 
+>>
+>> How do I best get BR to install the latest stuff?
 > 
-> >by first atempting a hard-link, and falling back to a plain copy.
+> You need to adapt the Xenomai package in package/xenomai/ and also
+> probably the Xenomai Linux extension logic in
+> linux/linux-ext-xenomai.mk.
 > 
-> atempting a -> attempting to
-
-No matter how many times I'll try to proof-read my prose, I'll always
-leave typoes lying here and there... Seems like it is easier to
-proff-read others'...
-
-[--SNIP--]
-> With typos fixed:
-
-Done.
-
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Note however that there is a *big* difference between Xenomai 2 and
+> Xenomai 3, and therefore this update is certainly not the easiest
+> Buildroot modification that you can imagine. Xenomai 3 can run on top
+> of PREEMPT_RT kernels, without the Xenomai co-kernel and Adeos
+> interrupt pipeline. This probably requires some fairly significant
+> changes in the Xenomai packaging.
 > 
-> [Ran 'make legal-info' with output dir on {the same,another} fs]
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+> In addition, since Xenomai 3 is rather new and so different from
+> Xenomai 2, we probably want to keep support for Xenomai 2 for a while,
+> which adds even more challenge to the task.
 
-Thanks! :-)
+ Begging to differ here. As far as I know, API-wise, Xenomai 3 is compatible
+with Xenomai 2 (except maybe a few deprecated functions that have been removed).
+For sure, nothing internal in Buildroot depends on it.
 
-Regards,
-Yann E. MORIN.
+ In addition, running on top of PREEMPT_RT is optional.
+
+ Therefore, I think the bump can be done in the "simple" way first, that there
+is no need to offer a Xenomai 2 version, and that a new feature of offering the
+single-kernel implementation can be added later.
+
+ Regards,
+ Arnout
+
+
+> 
+> In fact, I didn't notice that Xenomai 3 was officially released, last
+> time I looked they were at the 3.0-rc stage, so I didn't bother doing
+> the Buildroot packaging. I might have a look some day, but that's
+> pretty far away on my TODO list, so if someone else wants to look at
+> it, it would definitely be great!
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
