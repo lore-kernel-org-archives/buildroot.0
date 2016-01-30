@@ -1,63 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 19:01:59 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libseccomp: fix musl build
-In-Reply-To: <1454176919-12144-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454176919-12144-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454176919-12144-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jan 2016 19:18:47 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/gstreamer/gst-plugins-base: Fix
+	build on x86 if emmintrin.h is available but can't be used
+Message-ID: <1454177927-13601-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/0cd/0cd47d7e6a49c268b57981ae8bb9abe4c4a183c7/
-http://autobuild.buildroot.net/results/34b/34b0bea52bd7e65a927142dc0e1f28f85629c634/
+I stumbled across this error using a musl-based allyesconfig but I
+doubt it is related to musl. The autobuilders did not catch this
+problem yet but the patch I found fits my config (BR2_i386=y,
+BR2_x86_i586=y) and it solved the problem right away.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libseccomp/0002-musl.patch | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/libseccomp/0002-musl.patch
+v2: used GST_PLUGINS_BASE_PATCH instead of including the patch file
+    (Thomas)
 
-diff --git a/package/libseccomp/0002-musl.patch b/package/libseccomp/0002-musl.patch
-new file mode 100644
-index 0000000..c3affba
---- /dev/null
-+++ b/package/libseccomp/0002-musl.patch
-@@ -0,0 +1,33 @@
-+Fix musl build
-+
-+Downloaded from upstream PR:
-+https://github.com/seccomp/libseccomp/pull/23
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From eb5382287cd25235e760b5da4939510b11bbf2a1 Mon Sep 17 00:00:00 2001
-+From: Kylie McClain <somasis@exherbo.org>
-+Date: Fri, 1 Jan 2016 13:12:59 -0500
-+Subject: [PATCH] system.h: Remove conflicting kernel header include
-+
-+This fixes building on musl libc, since musl does not include kernel
-+headers. I've tested this as working on both glibc and musl.
-+
-+Signed-off-by: Kylie McClain <somasis@exherbo.org>
-+---
-+ src/system.h | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/src/system.h b/src/system.h
-+index 4660679..e84b0a0 100644
-+--- a/src/system.h
-++++ b/src/system.h
-+@@ -23,7 +23,6 @@
-+ #define _SYSTEM_H
-+ 
-+ #include <linux/filter.h>
-+-#include <linux/prctl.h>
-+ 
-+ #include "configure.h"
-+ 
+ package/gstreamer/gst-plugins-base/gst-plugins-base.hash | 2 ++
+ package/gstreamer/gst-plugins-base/gst-plugins-base.mk   | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.hash b/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
+index 77eba71..7c691f3 100644
+--- a/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
++++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
+@@ -1,2 +1,4 @@
+ # From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-0.10.36.tar.xz.md5
+ md5	3d2337841b132fe996e5eb2396ac9438	gst-plugins-base-0.10.36.tar.xz
++# Locally computed
++sha256	2c509252f103847a85c4a64d1d4519ab521d8f0021400cc7ebcf725fc5584a0d	sse.patch
+diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+index e1374ed..902ee05 100644
+--- a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
++++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+@@ -7,6 +7,8 @@
+ GST_PLUGINS_BASE_VERSION = 0.10.36
+ GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.xz
+ GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
++GST_PLUGINS_BASE_PATCH = \
++	http://git.alpinelinux.org/cgit/aports/plain/main/gst-plugins-base0.10/sse.patch
+ GST_PLUGINS_BASE_INSTALL_STAGING = YES
+ GST_PLUGINS_BASE_LICENSE = GPLv2+, LGPLv2+
+ GST_PLUGINS_BASE_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.7.0.rc3
