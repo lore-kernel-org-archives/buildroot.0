@@ -1,132 +1,114 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jan 2016 16:16:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lcdproc: fix musl build
-Message-ID: <1454167019-24428-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Jan 2016 16:24:15 +0100
+Subject: [Buildroot] [PATCH 06/16 v3] core/legal-info: ensure legal-info
+ works in off-line mode
+In-Reply-To: <56ACCF1D.5090103@lucaceresoli.net>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <bd9e70a4286f01ccd6612f19ee541aad9350ac79.1454004518.git.yann.morin.1998@free.fr>
+ <56ACCF1D.5090103@lucaceresoli.net>
+Message-ID: <20160130152414.GC12587@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/9ce/9cec3bea99f2aa10313da38c1e81655666c774f7/
-http://autobuild.buildroot.net/results/b3d/b3d09286d018e53a6d57f8dd5616010a3b212731/
-http://autobuild.buildroot.net/results/aa2/aa27b150a79b14fe1dda74a56371b4ee35b3ac15/
-and others
+Luca, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/lcdproc/0002-musl.patch | 102 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 102 insertions(+)
- create mode 100644 package/lcdproc/0002-musl.patch
+On 2016-01-30 15:56 +0100, Luca Ceresoli spake thusly:
+> Yann E. MORIN wrote:
+> >Almost all packages which are saved for legal-info have their source
+> >archives downloaded as part of 'make source', which makes an off-line
+> >build completely possible [0].
+> >
+> >However, for the pre-configured external toolchains, the source tarball
+> >is different, as the main tarball is a binary package. And that source
+> >tarball is only downloaded during the legal-info phase, which makes it
+> >inconvenient for full off-line builds.
+> >
+> >We fix that by adding a new rule, $(1)-legal-source which only
+> >$(1)-all-source depends on, so that we only download it for a top-level
+> >'make source', not as part of the standard download mechanism (i.e. only
+> >what is really needed to build).
+> >
+> >This way, we can do a complete [0] off-line build and are still able to
+> >generate legal-info, while at the same time we do not incur any download
+> >overhead during a simple build.
+> >
+> >Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
+> >not empty. However, since _ACTUAL_SOURCE_TARBALL defaults to the value
+> >of _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
+> >spurious report of a missing hash for the tarball, since it was not in
+> >a standard package rule (configure, build, install..) and thus would
+> >miss the PKG and PKGDIR variables to find the .hash file.
+> >
+> >We fix that in this commit as well, by:
+> >
+> >   - setting PKG and PKGDIR just for the -legal-source rule;
+> >
+> >   - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
+> >     the same as _SOURCE (to avoid a second report about the hash).
+> >
+> >[0] Save for nodejs which invarriably wants to download stuff at build
+> >time. Sigh... :-( Fixing that is work for another time...
+> 
+> Thanks for the detailed comment!
+> I didn't even find any typo... :) but I have a note below.
 
-diff --git a/package/lcdproc/0002-musl.patch b/package/lcdproc/0002-musl.patch
-new file mode 100644
-index 0000000..d0425fd
---- /dev/null
-+++ b/package/lcdproc/0002-musl.patch
-@@ -0,0 +1,102 @@
-+Fix musl build
-+
-+Partly downloaded from
-+http://lists.omnipotent.net/pipermail/lcdproc/2015-November/014291.html
-+http://lists.omnipotent.net/pipermail/lcdproc/2015-November/014281.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr lcdproc-0.5.7.org/clients/lcdproc/machine.h lcdproc-0.5.7/clients/lcdproc/machine.h
-+--- lcdproc-0.5.7.org/clients/lcdproc/machine.h	2012-08-19 16:29:07.000000000 +0200
-++++ lcdproc-0.5.7/clients/lcdproc/machine.h	2016-01-30 14:07:33.641802847 +0100
-+@@ -12,6 +12,7 @@
-+ #ifndef _lcdproc_machine_h_
-+ #define _lcdproc_machine_h_
-+ 
-++#include <time.h>
-+ #include "shared/LL.h"
-+ 
-+ #ifndef LOADAVG_NSTATS
-+diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-pifacecad.c lcdproc-0.5.7/server/drivers/hd44780-pifacecad.c
-+--- lcdproc-0.5.7.org/server/drivers/hd44780-pifacecad.c	2014-03-23 11:22:09.000000000 +0100
-++++ lcdproc-0.5.7/server/drivers/hd44780-pifacecad.c	2016-01-30 14:12:03.521279729 +0100
-+@@ -54,6 +54,7 @@
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ #include <stdint.h>
-+ #include <linux/spi/spidev.h>
-+ 
-+diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-rpi.c lcdproc-0.5.7/server/drivers/hd44780-rpi.c
-+--- lcdproc-0.5.7.org/server/drivers/hd44780-rpi.c	2014-03-23 11:22:09.000000000 +0100
-++++ lcdproc-0.5.7/server/drivers/hd44780-rpi.c	2016-01-30 14:04:10.288112853 +0100
-+@@ -285,7 +285,7 @@
-+ 
-+ 	/* Unmap and free memory */
-+ 	if (gpio_map != NULL)
-+-		munmap((caddr_t) gpio_map, GPIO_BLOCK_SIZE);
-++		munmap((void *) gpio_map, GPIO_BLOCK_SIZE);
-+ 	if (p->rpi_gpio != NULL)
-+ 		free(p->rpi_gpio);
-+ 	p->rpi_gpio = NULL;
-+diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-spi.c lcdproc-0.5.7/server/drivers/hd44780-spi.c
-+--- lcdproc-0.5.7.org/server/drivers/hd44780-spi.c	2014-03-23 11:22:09.000000000 +0100
-++++ lcdproc-0.5.7/server/drivers/hd44780-spi.c	2016-01-30 14:11:11.604763500 +0100
-+@@ -29,6 +29,7 @@
-+ #include <unistd.h>
-+ #include <fcntl.h>
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ #include <stdint.h>
-+ #include <linux/spi/spidev.h>
-+ 
-+diff -uNr lcdproc-0.5.7.org/server/drivers/mtc_s16209x.c lcdproc-0.5.7/server/drivers/mtc_s16209x.c
-+--- lcdproc-0.5.7.org/server/drivers/mtc_s16209x.c	2011-08-14 14:29:16.000000000 +0200
-++++ lcdproc-0.5.7/server/drivers/mtc_s16209x.c	2016-01-30 14:13:10.691122839 +0100
-+@@ -49,6 +49,7 @@
-+ #include <fcntl.h>
-+ #include <string.h>
-+ #include <errno.h>
-++#include <sys/file.h>
-+ 
-+ #ifdef HAVE_CONFIG_H
-+ # include "config.h"
-+diff -uNr lcdproc-0.5.7.org/server/drivers/rawserial.c lcdproc-0.5.7/server/drivers/rawserial.c
-+--- lcdproc-0.5.7.org/server/drivers/rawserial.c	2014-03-23 11:22:10.000000000 +0100
-++++ lcdproc-0.5.7/server/drivers/rawserial.c	2016-01-30 14:03:43.465779507 +0100
-+@@ -60,13 +60,13 @@
-+ 	/** \name Event loop timing. refresh_time and refresh_delta form the
-+ 	 * event loop timing mechanism for configurable update rates.
-+ 	 *@{*/
-+-	uint refresh_time;		/**< time at the last screen update */
-+-	uint refresh_delta;		/**< time step to next screen update */
-++	unsigned int refresh_time;		/**< time@the last screen update */
-++	unsigned int refresh_delta;		/**< time step to next screen update */
-+ 	/**@}*/
-+ } PrivateData;
-+ 
-+ /* Local prototypes */
-+-static uint get_millisecond_time(void);
-++static unsigned int get_millisecond_time(void);
-+ 
-+ 
-+ /* Vars for the server core */
-+@@ -303,7 +303,7 @@
-+ 	PrivateData *p = drvthis->private_data;
-+ 	char out[LCD_MAX_WIDTH * LCD_MAX_HEIGHT];
-+ 
-+-	uint currentTime = get_millisecond_time();
-++	unsigned int currentTime = get_millisecond_time();
-+ 	int t_delta = currentTime - p->refresh_time;
-+ 
-+ 	/*
-+@@ -415,7 +415,7 @@
-+  *
-+  * \return  int with current millisecond time.
-+  */
-+-static uint
-++static unsigned int
-+ get_millisecond_time(void)
-+ {
-+ 	struct timeval ts;
+Hehe! ;-)
+
+> >@@ -771,6 +775,20 @@ endif
+> >  endif
+> >  endif
+> >
+> >+# Download actual sources if they differ from the extracted sources
+> >+# (e.g. for external toolchains)
+> >+#
+> >+# We need to provide PKG and PKGDIR, because there's no .stamp file for
+> >+# the legal-info step.
+> >+$(1)-legal-source:	PKG=$(2)
+> >+$(1)-legal-source:	PKGDIR=$(pkgdir)
+> >+$(1)-legal-source:
+> >+ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
+> >+ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+> >+	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+> >+endif # actual sources != sources
+> >+endif # actual sources != ""
+> 
+> This created a side effect that is harmless, but a bit unpleasant.
+> 
+> Before this patch, running 'make source' with all sources already
+> fetched did not produce any output. Now, when using a package that defines
+> _ACTUAL_SOURCE_SITE, it does:
+> 
+> $ make source
+> arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2: OK (sha256: [...])
+> $
+> 
+> This is caused by not having a stamp file for the actual source
+> tarball. I suppose we should create a .stamp_actual_downloaded.
+
+Hmmm.. Indeed, that's not very nice... :-( I'll see to use a stamp file.
+
+Side note in this respect: is _ACTUAL_SOURCE supposed to support
+multiple archives in there? If yes, then the current code (before that
+patch) is not correct, as it does not treat _ACTUAL_SOURCE as a list and
+does not iterate over it when calling the DOWNLOAD macro.
+
+I think it would make sense to support to support a list in there, but
+that is work for a separate patch.
+
+> For the rest the patch looks good and it works.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.0.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
