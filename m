@@ -1,35 +1,53 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sat, 30 Jan 2016 12:45:56 +0100
-Subject: [Buildroot] [PATCH 09/10] gst1-plugins-bad: add install to staging
-	directory
-In-Reply-To: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1454154357-31625-10-git-send-email-gary.bisson@boundarydevices.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Jan 2016 12:55:46 +0100
+Subject: [Buildroot] [PATCH 03/16 v3] core/pkg-utils: add macro to
+ hardlink-or-copy
+In-Reply-To: <56AC9EB6.2000907@lucaceresoli.net>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <496a4dbb0c7e2bfd0be8726e3d8a2aab4f1d830d.1454004518.git.yann.morin.1998@free.fr>
+ <56AC9EB6.2000907@lucaceresoli.net>
+Message-ID: <20160130115545.GB12587@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gst1-imx package links against libgstphotography for its imxv4l2src
-plugin.
+Luca, All,
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 1 +
- 1 file changed, 1 insertion(+)
+On 2016-01-30 12:29 +0100, Luca Ceresoli spake thusly:
+> Yann E. MORIN wrote:
+> >This macro will try to copy a source file into a destination fdirectory,
+> 
+> fdirectory -> directory
+> 
+> >by first atempting a hard-link, and falling back to a plain copy.
+> 
+> atempting a -> attempting to
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index f9f8558..3a097e8 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -7,6 +7,7 @@
- GST1_PLUGINS_BAD_VERSION = 1.6.3
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-bad
-+GST1_PLUGINS_BAD_INSTALL_STAGING = YES
- GST1_PLUGINS_BAD_LICENSE_FILES = COPYING COPYING.LIB
- # Unknown and GPL licensed plugins will append to GST1_PLUGINS_BAD_LICENSE if
- # enabled.
+No matter how many times I'll try to proof-read my prose, I'll always
+leave typoes lying here and there... Seems like it is easier to
+proff-read others'...
+
+[--SNIP--]
+> With typos fixed:
+
+Done.
+
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> 
+> [Ran 'make legal-info' with output dir on {the same,another} fs]
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.6.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
