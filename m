@@ -1,40 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 Jan 2016 22:44:05 +0100
-Subject: [Buildroot] [PATCH 15/16 v3] core/legal-info: allow ignoring
- packages from the legal-info
-In-Reply-To: <56AE6A6E.7040106@lucaceresoli.net>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <882f1002db3ce40f210893921c23728ca796d20e.1454004518.git.yann.morin.1998@free.fr>
- <56AE6A6E.7040106@lucaceresoli.net>
-Message-ID: <20160131214404.GE14626@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 22:56:17 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/gpsd: bump version to 3.16
+In-Reply-To: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131225617.4c85600a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Dear Bernd Kuhls,
 
-On 2016-01-31 21:11 +0100, Luca Ceresoli spake thusly:
-> Yann E. MORIN wrote:
-> >It might be necessary to not even mention a package in the output of
-> >legal-info:
-[--SNIP--]
+On Sun, 31 Jan 2016 21:04:50 +0100, Bernd Kuhls wrote:
+> Removed patch applied upstream:
+> http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=3e25e2167beb3936de3986fad9b6c9bdec82b81f
+> 
+> 0001-Fix-build-against-musl-libc.patch is also not needed anymore after
+> this commit:
+> http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=95c99f69e026e8c57aecba545e51c97f3b284e75
+> 
+> The upstream commit included in this version bump
+> http://git.savannah.gnu.org/cgit/gpsd.git/commit/libgps.pc.in?id=772eedf8a13c2c0468b1fd94beb5406dbfcb3b6e
+> fixes a build error with the location module of the updated
+> sconeserver package included in this patch series:
+> 
+> ../libtool: line 7486: cd: lib: No such file or directory
+> libtool:   error: cannot determine absolute directory name of 'lib'
+> Makefile:428: recipe for target 'location.la' failed
+> make[3]: *** [location.la] Error 1
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v3: also removed 0001-Fix-build-against-musl-libc.patch (Baruch)
+> v2: no changes
 
-Tyopes fixed.
+Applied, thanks.
 
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
