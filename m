@@ -1,44 +1,60 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 31 Jan 2016 09:05:47 +0100
-Subject: [Buildroot] [PATCH] olimex_a20_olinuxino_lime: bump kernel to 4.4
-Message-ID: <1454227547-30046-1-git-send-email-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 09:08:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mtdev2tuio: fix musl build
+Message-ID: <1454227703-26416-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Fixes
+http://autobuild.buildroot.net/results/aee/aee411047265bf205f8990a3d0d2310decb5fd19/
+http://autobuild.buildroot.net/results/9a9/9a96fdd2b52a75b348b46696c7f8b427f2d987c2/
+http://autobuild.buildroot.net/results/2e1/2e155f2f57fd035362ad1b414f42e1c2b5de844b/
+http://autobuild.buildroot.net/results/f62/f62d3830c594d9169fa9b9df5212f190d676fab9/
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 19e665b..241518a 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -3,10 +3,10 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- 
--# Lock to 4.1 headers to avoid breaking with newer kernels
-+# Lock to 4.4 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.1.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_DEFAULT_KERNEL_VERSION="4.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -19,7 +19,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_ZIMAGE=y
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../mtdev2tuio/0001-Fix-build-with-musl-libc.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch
+
+diff --git a/package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch b/package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000..810b66c
+--- /dev/null
++++ b/package/mtdev2tuio/0001-Fix-build-with-musl-libc.patch
+@@ -0,0 +1,30 @@
++From f974bb1f92603973711bea36a7869dfa8358aae0 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 31 Jan 2016 09:04:46 +0100
++Subject: [PATCH 1/1] Fix build with musl libc
++
++Include missing header to prevent build error detected by buildroot:
++http://autobuild.buildroot.net/results/aee/aee411047265bf205f8990a3d0d2310decb5fd19/build-end.log
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++Patch sent upstream: https://github.com/olivopaolo/mtdev2tuio/pull/2
++
++ mtdev2tuio.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/mtdev2tuio.c b/mtdev2tuio.c
++index 3a9174f..f2c98d5 100644
++--- a/mtdev2tuio.c
+++++ b/mtdev2tuio.c
++@@ -41,6 +41,7 @@
++ #include <getopt.h>
++ #include <signal.h>
++ #include <sys/utsname.h>
+++#include <sys/file.h>
++ 
++ #define NSEC_PER_USEC   1000L
++ #define NSEC_PER_SEC    1000000000L
++-- 
++2.7.0.rc3
++
 -- 
-2.5.0
+2.7.0.rc3
