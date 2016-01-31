@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:45:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qpdf: bump version to 6.0.0
-In-Reply-To: <1454250808-1586-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454250808-1586-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131234526.6eca7c53@free-electrons.com>
+Date: Sun, 31 Jan 2016 23:46:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qhull: bump version to 7.2.0,
+ add hash
+In-Reply-To: <1454249899-6525-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454249899-6525-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131234603.3b4fdc5d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +13,15 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 31 Jan 2016 15:33:28 +0100, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> https://github.com/qpdf/qpdf/commit/857bb208d338e117f2a864407e34de76da360d8a
+On Sun, 31 Jan 2016 15:18:19 +0100, Bernd Kuhls wrote:
+> Updated _SITE after closure of gitorious.org.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...0001-QUtil.hh-time_t-needs-include-time.h.patch | 29 ----------------------
->  package/qpdf/qpdf.hash                             |  6 +++--
->  package/qpdf/qpdf.mk                               |  2 +-
->  3 files changed, 5 insertions(+), 32 deletions(-)
->  delete mode 100644 package/qpdf/0001-QUtil.hh-time_t-needs-include-time.h.patch
+>  package/qhull/qhull.hash | 4 ++++
+>  package/qhull/qhull.mk   | 5 +++--
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+>  create mode 100644 package/qhull/qhull.hash
 
 Applied, thanks.
 
