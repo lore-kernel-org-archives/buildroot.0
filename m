@@ -1,33 +1,82 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:47:07 +0100
-Subject: [Buildroot] [PATCH 1/2] package/oprofile: bump version to 1.1.0
-In-Reply-To: <1454235289-1353-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454235289-1353-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131234707.28416ebe@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 31 Jan 2016 23:47:25 +0100
+Subject: [Buildroot] [PATCH 05/16 v3] core/pkg-generic: reorder
+ variables definitions for legal-info
+In-Reply-To: <db15f4ae0ec3cf941ddbb5f156288ed60f49d60f.1454004518.git.yann.morin.1998@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <db15f4ae0ec3cf941ddbb5f156288ed60f49d60f.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <56AE8EFD.9060204@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
-
-On Sun, 31 Jan 2016 11:14:48 +0100, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> http://sourceforge.net/p/oprofile/oprofile/ci/f357d40c9f64f3ea2dccf5f9abdff84b2ac62e6f/
+On 28-01-16 19:15, Yann E. MORIN wrote:
+> Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
+> that they are close to where _SOURCE and _SITE are handled.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> This looks so far like a purely cosmetic change, but makes more sense
+> with the follow-up patch, where we'll need them earlier in the file.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+ Regards,
+ Arnout
+
+> 
 > ---
->  .../0001-Include-time.h-for-nanosleep.patch        | 44 ----------------------
->  package/oprofile/oprofile.hash                     |  5 ++-
->  package/oprofile/oprofile.mk                       |  2 +-
->  3 files changed, 4 insertions(+), 47 deletions(-)
->  delete mode 100644 package/oprofile/0001-Include-time.h-for-nanosleep.patch
+> Changes v2 -> v3:
+>   - move that to its own patch  (Arnout)
+> ---
+>  package/pkg-generic.mk | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 893ee07..5958029 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -427,6 +427,14 @@ ifndef $(2)_SOURCE
+>   endif
+>  endif
+>  
+> +# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
+> +# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
+> +# point to the actual sources tarball. Use the actual sources for legal-info.
+> +# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
+> +# so these are the defaults for FOO_ACTUAL_*.
+> +$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
+> +$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
+> +
+>  ifndef $(2)_PATCH
+>   ifdef $(3)_PATCH
+>    $(2)_PATCH = $$($(3)_PATCH)
+> @@ -763,14 +771,6 @@ endif
+>  endif
+>  endif
+>  
+> -# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
+> -# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
+> -# point to the actual sources tarball. Use the actual sources for legal-info.
+> -# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
+> -# so these are the defaults for FOO_ACTUAL_*.
+> -$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
+> -$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
+> -
+>  # legal-info: produce legally relevant info.
+>  $(1)-legal-info:
+>  # Packages without a source are assumed to be part of Buildroot, skip them.
+> 
 
-Applied, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
