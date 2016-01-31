@@ -1,68 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:27:08 +0100
-Subject: [Buildroot] [git commit] package/libsigrok: fix musl build
-Message-ID: <20160201224700.1F36A7F8D4@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 08:28:51 +0100
+Subject: [Buildroot] [git commit] package/lshw: fix musl build
+Message-ID: <20160201224700.3B0997FAE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=776aeef6d82e4973018dda5c80d58bd7285cda4a
+commit: https://git.buildroot.net/buildroot/commit/?id=0be67b6f717414718e6931c970b5ab4d926f42e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes
-http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
-http://autobuild.buildroot.net/results/a4d/a4dab61fb39dd642f85fad20972a0a4572af9a73/
-and others
+http://autobuild.buildroot.net/results/aa3/aa3abc215b7a4e95b60be9a635758d8448e4959f/
+http://autobuild.buildroot.net/results/075/075423a70b9bb80b2f13cac4fb95502180e68b43/
+http://autobuild.buildroot.net/results/61f/61fb9b93af41b565fd44bab95955ab6f63c1f1ad/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...01-beaglelogic.h-fix-build-with-musl-libc.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/lshw/lshw.hash | 2 ++
+ package/lshw/lshw.mk   | 3 +++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
-new file mode 100644
-index 0000000..e9ecf85
---- /dev/null
-+++ b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
-@@ -0,0 +1,38 @@
-+From 1b9ca481b2447154d12a7a94fe90c5b968ddf41c Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 30 Jan 2016 20:01:05 +0100
-+Subject: [PATCH 1/1] beaglelogic.h: fix build with musl libc
-+
-+This patch fixes a build error seen on the buildroot project:
-+http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
-+
-+Patch taken from
-+https://github.com/dx9/ceph/commit/4f7bcabca7737c3f48f07ca2b4b1296c29e3358b
-+which solved a similar problem.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+Patch sent upstream:
-+http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1948
-+
-+ src/hardware/beaglelogic/beaglelogic.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/hardware/beaglelogic/beaglelogic.h b/src/hardware/beaglelogic/beaglelogic.h
-+index 9015c61..165b386 100644
-+--- a/src/hardware/beaglelogic/beaglelogic.h
-++++ b/src/hardware/beaglelogic/beaglelogic.h
-+@@ -28,6 +28,10 @@
-+ #include <stdlib.h>
-+ #include <unistd.h>
-+ 
-++#ifndef __STRING
-++# define __STRING(x) #x
-++#endif
-++
-+ /* BeagleLogic device node name */
-+ #define BEAGLELOGIC_DEV_NODE        "/dev/beaglelogic"
-+ #define BEAGLELOGIC_SYSFS_ATTR(a)   "/sys/devices/virtual/misc/beaglelogic/"\
-+-- 
-+2.7.0.rc3
-+
+diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
+index 4f3a2e8..416d496 100644
+--- a/package/lshw/lshw.hash
++++ b/package/lshw/lshw.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256	eb9cc053fa0f1e78685cb695596e73931bfb55d2377e3bc3b8b94aff4c5a489c	lshw-B.02.17.tar.gz
++sha256	2e5a3d63da8475db17fd90969bcb1930cf19d2b8da7be41edeea5c2a53878382	no-private-uint.patch
++sha256	c8365f7ac8fc7a751c78d89ab446111bb1a235bc977a1b21e1b826c2e62361d1	basename-limits-long-bits.patch
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index f516933..a4a2603 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -6,6 +6,9 @@
+ 
+ LSHW_VERSION = B.02.17
+ LSHW_SITE = http://ezix.org/software/files
++LSHW_PATCH = \
++	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/basename-limits-long-bits.patch \
++	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/no-private-uint.patch
+ LSHW_LICENSE = GPLv2
+ LSHW_LICENSE_FILES = COPYING
+ 
