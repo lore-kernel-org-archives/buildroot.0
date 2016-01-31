@@ -1,47 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 16:28:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix musl buil
-Message-ID: <1454254080-11795-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 16:39:25 +0100
+Subject: [Buildroot] [PATCH] Revert "package/openvpn: bump version to
+	2.3.10"
+In-Reply-To: <1454246790-8381-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 31 Jan 2016 10:26:30 -0300")
+References: <1454246790-8381-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87twlthi6q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build error was not yet being found by the autobuilders:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-omfile.c: In function ?prepareFile?:
-omfile.c:580:3: error: implicit declaration of function ?open? [-Werror=implicit-function-declaration]
-   fd = open((char*) newFileName, O_WRONLY|O_APPEND|O_CREAT|O_NOCTTY|O_CLOEXEC,
-   ^
+ > openvpn 2.3.10 doesn't work with polarssl 1.2.x, hence this bump breaks
+ > builds for the polarssl backend.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/rsyslog/rsyslog.hash | 2 ++
- package/rsyslog/rsyslog.mk   | 2 ++
- 2 files changed, 4 insertions(+)
+ > This reverts commit 06f3e7904f13ec08492fcc7f6e7287a90eac6347.
 
-diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
-index 5f9e0ed..9d96edf 100644
---- a/package/rsyslog/rsyslog.hash
-+++ b/package/rsyslog/rsyslog.hash
-@@ -1,2 +1,4 @@
- # From http://www.rsyslog.com/downloads/download-v8-stable/
- sha256	eab00e8e758cd9dd33b3e2cf6af80297d1951dc7db37bd723a6488a35d577adc	rsyslog-8.9.0.tar.gz
-+# Locally computed
-+sha256	feda2d9ca6c788e375116b6c43b6c4ac5debe83dab0efcfc9a47216c9af36599	musl-fix.patch
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 5dde924..68b75a5 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -6,6 +6,8 @@
- 
- RSYSLOG_VERSION = 8.9.0
- RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
-+RSYSLOG_PATCH = \
-+	http://git.alpinelinux.org/cgit/aports/plain/main/rsyslog/musl-fix.patch
- RSYSLOG_LICENSE = GPLv3, LGPLv3, Apache-2.0
- RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.7.0
+Bye, Peter Korsgaard
