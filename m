@@ -1,58 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:37:11 +0100
-Subject: [Buildroot] [git commit] nginx: security bump to version 1.8.1
-Message-ID: <20160201224701.337017F8D4@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 11:26:56 +0100
+Subject: [Buildroot] [git commit] package/opkg: bump version to v0.3.1 to
+	fix musl build
+Message-ID: <20160201224700.948197F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=77dd34bc795cad4163476426db0e3fda51d1c67d
+commit: https://git.buildroot.net/buildroot/commit/?id=42699e397e4ff0a6dd73e74fd3955f9c58a1356e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Upstream included a fix for musl in the current release:
+http://git.yoctoproject.org/cgit/cgit.cgi/opkg/commit/?id=f9a2febe724a514a89046c8cd92c2342e4383846
 
-CVE-2016-0742 - invalid pointer dereference might occur during DNS
-server response processing if the "resolver" directive was used,
-allowing anattacker who is able to forge UDP packets from the DNS server
-to cause segmentation fault in a worker process.
+Fixes
+http://autobuild.buildroot.net/results/7e0/7e02c7d81bb83fef22554590521b848acd4fc38c/
+http://autobuild.buildroot.net/results/4e0/4e01abdc8cace71802e527273b47dcc49c9bd4ce/
 
-CVE-2016-0746 - use-after-free condition might occur during CNAME
-response processing if the "resolver" directive was used, allowing an
-attacker who is able to trigger name resolution to cause segmentation
-fault in a worker process, or might have potential other impact.
-
-CVE-2016-0747 - CNAME resolution was insufficiently limited if the
-"resolver" directive was used, allowing an attacker who is able to
-trigger arbitrary name resolution to cause excessive resource
-consumption in worker processes.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/opkg/opkg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 7e0dc5e..fe4d6b2 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	23cca1239990c818d8f6da118320c4979aadf5386deda691b1b7c2c96b9df3d5	nginx-1.8.0.tar.gz
-+sha256	8f4b3c630966c044ec72715754334d1fdf741caa1d5795fb4646c27d09f797b7	nginx-1.8.1.tar.gz
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 8e23bd8..7348e48 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index bcf3f78..6e4d4ff 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.8.0
-+NGINX_VERSION = 1.8.1
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2c
- NGINX_LICENSE_FILES = LICENSE
+-OPKG_VERSION = v0.3.0
++OPKG_VERSION = v0.3.1
+ OPKG_SITE = http://git.yoctoproject.org/git/opkg
+ OPKG_SITE_METHOD = git
+ # Uses PKG_CHECK_MODULES() in configure.ac
