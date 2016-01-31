@@ -1,39 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 17:32:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/snowball-init: use github helper
-Message-ID: <1454257933-24422-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 17:38:17 +0100
+Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
+References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
+ <vjiikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220135412.652a8344@free-electrons.com>
+ <20151220130054.GC3677@free.fr>
+ <20151220141613.22b22bdc@free-electrons.com>
+ <j6oikcxh6u.ln2@ID-313208.user.individual.net>
+ <20151220145152.GE3677@free.fr>
+ <l4gjkcx7k7.ln2@ID-313208.user.individual.net>
+ <v21fncxsj2.ln2@ID-313208.user.individual.net>
+Message-ID: <psp1ocx40l.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise download is broken:
+Am Sun, 24 Jan 2016 14:44:31 +0100 schrieb Bernd Kuhls:
 
->>> snowball-init b064be21de25729039e5e54037bbdd2e25cfd5b7 Downloading
---2016-01-31 17:31:27--  https://github.com/igloocommunity/snowball-init/snowball-init-b064be21de25729039e5e54037bbdd2e25cfd5b7.tar.gz
-Resolving github.com (github.com)... 192.30.252.128
-Connecting to github.com (github.com)|192.30.252.128|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2016-01-31 17:31:27 ERROR 404: Not Found.
+> Am Sun, 20 Dec 2015 21:37:09 +0100 schrieb Bernd Kuhls:
+> 
+>> Am Sun, 20 Dec 2015 15:51:53 +0100 schrieb Yann E. MORIN:
+>> 
+>>> As long as it is only a mechanical bump, without change to the .mk
+>>> files, and with n/removed patches (i.e. only the _VERSION variables
+>>> are changed), then yes, a single commit.
+>> 
+>> Hi Yann,
+>> 
+>> done: https://github.com/bkuhls/buildroot/commits/kodi16
+>> 
+>> Regards, Bernd
+> 
+> Hi @all:
+> 
+> Kodi 16.0-rc1 was released this week, I updated my github repo.
+> 
+> Regards, Bernd
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/snowball-init/snowball-init.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi @all:
 
-diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
-index 40acdd6..f06b032 100644
---- a/package/snowball-init/snowball-init.mk
-+++ b/package/snowball-init/snowball-init.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
--SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
-+SNOWBALL_INIT_SITE = $(call github,igloocommunity,snowball-init,$(SNOWBALL_INIT_VERSION))
- SNOWBALL_INIT_LICENSE = BSD-4c
- SNOWBALL_INIT_LICENSE_FILES = debian/copyright
- 
--- 
-2.7.0
+Kodi 16.0-rc2 was released this week, I updated my github repo.
+http://kodi.tv/kodi-16-0-jarvis-release-candidate-2/
+
+Regards, Bernd
