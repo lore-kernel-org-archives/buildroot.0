@@ -1,41 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 23:49:15 +0100
-Subject: [Buildroot] [git commit] pixman: bump version to 0.33.6
-Message-ID: <20160201224702.8E70F7F87D@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 23:49:34 +0100
+Subject: [Buildroot] [git commit] package/flot: update hash
+Message-ID: <20160201224704.CF1007F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d20a907fb00254b5b660272790a00d73bbcdbfee
+commit: https://git.buildroot.net/buildroot/commit/?id=1fcf1a6d0c3b75d0bc5e5864fd66aef2d7f1d430
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Upstream apparently updated their tarball
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/122226/focus=138335
+
+Issue reported upstream: https://github.com/flot/flot/issues/1484
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pixman/pixman.hash | 4 ++--
- package/pixman/pixman.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/flot/flot.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
-index 66decf6..7a37220 100644
---- a/package/pixman/pixman.hash
-+++ b/package/pixman/pixman.hash
+diff --git a/package/flot/flot.hash b/package/flot/flot.hash
+index 9bf348a..cb9f9ec 100644
+--- a/package/flot/flot.hash
++++ b/package/flot/flot.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002644.html
--sha1	dff77cd08412b33ab0294057ade93e401c8a9302	pixman-0.33.4.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2015-December/002666.html
-+sha1   11e93fed35deb9c89347e7a7da3060e5e5c89412	pixman-0.33.6.tar.bz2
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index a130af9..fc43140 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIXMAN_VERSION = 0.33.4
-+PIXMAN_VERSION = 0.33.6
- PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.bz2
- PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_LICENSE = MIT
+ # Locally calculated
+-sha256	d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952	flot-0.8.3.tar.gz
++sha256	ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21	flot-0.8.3.tar.gz
