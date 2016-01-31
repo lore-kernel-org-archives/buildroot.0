@@ -1,51 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 31 Jan 2016 21:22:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/flot: update hash
-In-Reply-To: <1454235889-11021-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454235889-11021-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56AE6D1E.6030109@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 21:44:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wipe: fix musl build
+Message-ID: <1454273054-8087-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 11:24, Bernd Kuhls wrote:
-> Upstream apparently updated their tarball
-> http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/122226/focus=138335
-> 
-> Issue reported upstream: https://github.com/flot/flot/issues/1484
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The build error was not yet found by the autobuilders:
 
- Looks like it's just the OS-X metadata junk that has been modified, so this
-change is indeed harmless. I verified the new hash as well so
+In file included from main.c:46:0:
+rand.h:31:9: error: unknown type name ?u_int32_t?
+ typedef u_int32_t u_rand_t;
+         ^
+<builtin>: recipe for target 'main.o' failed
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/wipe/0001-musl.patch | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/wipe/0001-musl.patch
 
-
- Regards,
- Arnout
-
-> ---
->  package/flot/flot.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/flot/flot.hash b/package/flot/flot.hash
-> index 9bf348a..cb9f9ec 100644
-> --- a/package/flot/flot.hash
-> +++ b/package/flot/flot.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256	d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952	flot-0.8.3.tar.gz
-> +sha256	ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21	flot-0.8.3.tar.gz
-> 
-
-
+diff --git a/package/wipe/0001-musl.patch b/package/wipe/0001-musl.patch
+new file mode 100644
+index 0000000..35b3af8
+--- /dev/null
++++ b/package/wipe/0001-musl.patch
+@@ -0,0 +1,28 @@
++Fix musl build
++
++In file included from main.c:46:0:
++rand.h:31:9: error: unknown type name ?u_int32_t?
++ typedef u_int32_t u_rand_t;
++         ^
++<builtin>: recipe for target 'main.o' failed
++
++Patch sent upstream: https://sourceforge.net/p/wipe/patches/4/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr wipe-2.3.1.org/rand.h wipe-2.3.1/rand.h
++--- wipe-2.3.1.org/rand.h	2003-12-03 04:01:02.000000000 +0100
+++++ wipe-2.3.1/rand.h	2016-01-31 21:39:54.000000000 +0100
++@@ -22,10 +22,9 @@
++ 
++ #ifdef HAVE_STDINT_H
++ # include "stdint.h"
++-#else
++-# ifndef LINUX
+++#endif
+++#if !defined(u_int32_t)
++ #  define u_int32_t uint32_t
++-# endif
++ #endif
++ 
++ typedef u_int32_t u_rand_t;
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0
