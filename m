@@ -1,63 +1,65 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sun, 31 Jan 2016 11:48:33 +1100
-Subject: [Buildroot] [PATCH 1/1] uboot: Support multiple environment source
-	files
-Message-ID: <1454201313-17766-1-git-send-email-camh@xdna.net>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Sun, 31 Jan 2016 07:51:52 +0200 (IST)
+Subject: [Buildroot] Error while Generating root filesystem image
+ rootfs.ext2
+In-Reply-To: <CABi8WTwGkpz3s3q=W5EGrYTPLunhSTDj8XcB_VXKMYLBE+x4Tw@mail.gmail.com>
+References: <CABi8WTz9OL9BKNMCcd87k74q2QGh4XmetxjPu+pZCjo5nF03hw@mail.gmail.com>
+ <alpine.DEB.2.11.1601302011320.27555@tanhuma.tkos.co.il>
+ <CABi8WTwGkpz3s3q=W5EGrYTPLunhSTDj8XcB_VXKMYLBE+x4Tw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.11.1601310731560.6542@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow multiple file names to be listed in
-BR2_TARGET_UBOOT_ENVIMAGE_SOURCE, concatenating them in the order
-listed.
+On Sat, 30 Jan 2016, FrAnKenStEiN MC wrote:
 
-This allows the bulk of the environment to be shared across multiple
-boards using a common environment file with board-specific values
-supplied in a secondary environment source file.
+> Date: Sat, 30 Jan 2016 21:42:28 +0000
+> From: FrAnKenStEiN MC <chfakht@gmail.com>
+> To: Jonathan Ben Avraham <yba@tkos.co.il>, buildroot at buildroot.org
+> Subject: Re: [Buildroot] Error while Generating root filesystem image
+>     rootfs.ext2
+> 
+> Yes you're right : /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games: /usr/local/games
+> but why ? How can i remove the extra spaces ?
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
----
- boot/uboot/Config.in | 8 ++++++--
- boot/uboot/uboot.mk  | 3 ++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+[snip]
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index dde4710..04c36bc 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -349,9 +349,13 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- if BR2_TARGET_UBOOT_ENVIMAGE
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
--	string "Source file for environment"
-+	string "Source files for environment"
- 	help
--	  Text file describing the environment.
-+	  Text files describing the environment. Files should have
-+	  lines of the form var=value, one per line. Blank lines
-+	  and lines starting with a # are ignored.
-+
-+	  Multiple source files are concatenated in the order listed.
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
- 	string "Size of environment"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d539b31..515b1ea 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -171,9 +171,10 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 	$(if $(BR2_TARGET_UBOOT_SPL),
- 		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
- 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
-+		cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) | \
- 		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
--		-o $(BINARIES_DIR)/uboot-env.bin $(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
-+		-o $(BINARIES_DIR)/uboot-env.bin -)
- endef
- 
- define UBOOT_INSTALL_OMAP_IFT_IMAGE
+Hi FrAnKenStEiN MC,
+Here's how you can find where the extra white characters come from:
+
+1. Open a new terminal window or console and do "echo $PATH". If you do 
+not see the extra whitespace characters then they were probably added in 
+the other shell by something that you did or some script that you ran in 
+that shell after you opened it.
+
+2. If you do see the whitespace characters when you do "echo $PATH" in a 
+newly opened shell, then do "cat ~/.bashrc" and "cat ~/.bash_profile" to 
+see if something in one of those files adds the whitespace. Not everyone 
+uses .bash_profile, so you might not have it in your home directory. Be 
+sure to check any files that might be sourced (either "source <some file>" 
+or ". <some file>" in your .bashrc or .bash_profile files.
+
+3. If you do not see the extra whitespace characters in  ~/.bashrc" 
+~/.bashrc" or ~/.bash_profile then do "cat /etc/profile" to see if the 
+PATH variable set there adds the extra characters.
+
+4. If you do not see the extra whitespace characters in /etc/profile the 
+check each of the files in /etc/profile.d.
+
+When you check the files, be sure to cat the files in a terminal window 
+that is more than 80 characters wide so that the line wrapping or 
+chopping does not confuse your eye. It could be that someone edited 
+/etc/profile using an editor that wraps lines and adds whitespace 
+characters such as pico.
+
+Good luck,
+
+  - yba
+
+
 -- 
-2.1.4
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
