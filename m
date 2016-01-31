@@ -1,35 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 27 Jan 2016 21:38:00 +0100
-Subject: [Buildroot] [git commit] ptpd2: explicitly point to pcap-config
-Message-ID: <20160201224700.50D4C7F8D4@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 14:20:47 +0100
+Subject: [Buildroot] [git commit] package/libraw: add optional support for
+	jasper
+Message-ID: <20160201224707.6BB977F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8371990ed3fbfab9d3e40cb637aa34810ba0bfe8
+commit: https://git.buildroot.net/buildroot/commit/?id=e712000dbeb97c336802b6ee8c0fbba1a0836029
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise it will search in the usual places, and if the host has
-it it will try to build against that one, resulting in failure. Fixes:
-http://autobuild.buildroot.net/results/b39/b399ee830de587e3302f86ac0caadd2607c6c43c/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ptpd2/ptpd2.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libraw/libraw.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/ptpd2/ptpd2.mk b/package/ptpd2/ptpd2.mk
-index c86db7e..da6a106 100644
---- a/package/ptpd2/ptpd2.mk
-+++ b/package/ptpd2/ptpd2.mk
-@@ -7,6 +7,7 @@
- PTPD2_VERSION = ptpd-2.3.1
- PTPD2_SITE = $(call github,ptpd,ptpd,$(PTPD2_VERSION))
- PTPD2_DEPENDENCIES = libpcap
-+PTPD2_CONF_OPTS = --with-pcap-config=$(STAGING_DIR)/usr/bin/pcap-config
- # configure not shipped
- PTPD2_AUTORECONF = YES
- PTPD2_LICENSE = BSD-2c
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index a4ab92f..106c52c 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -19,4 +19,11 @@ LIBRAW_CONF_OPTS += \
+ LIBRAW_LICENSE = LGPLv2.1 or CDDL 1.0 or LibRaw Software License 27032010
+ LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL LICENSE.LibRaw.pdf README
+ 
++ifeq ($(BR2_PACKAGE_JASPER),y)
++LIBRAW_CONF_OPTS += --enable-jasper
++LIBRAW_DEPENDENCIES += jasper
++else
++LIBRAW_CONF_OPTS += --disable-jasper
++endif
++
+ $(eval $(autotools-package))
