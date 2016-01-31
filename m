@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2016 22:31:31 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: bump version to
-	6.9.3-2
-Message-ID: <20160201224701.16C3A7F8D4@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 10:09:08 +0100
+Subject: [Buildroot] [git commit] nettle: bump to version 3.2
+Message-ID: <20160201224702.4EB2D7F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bea9d6c52140a4e65285abef2e7691ef72c4836
+commit: https://git.buildroot.net/buildroot/commit/?id=3f1581661c72f2f3bd2148c0f0fd681556641886
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
+ package/nettle/nettle.hash | 2 +-
+ package/nettle/nettle.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 75ad035..1d5794f 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index f506992..6332e13 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
 @@ -1,2 +1,2 @@
- # From http://www.imagemagick.org/download/releases/digest.rdf
--sha256 da2f6fba43d69f20ddb11783f13f77782b0b57783dde9cda39c9e5e733c2013c ImageMagick-6.9.2-10.tar.xz
-+sha256	78a9bfc581c81fb8376c00d06431b49f218d3900690905dc985459cbf5e41c4d	ImageMagick-6.9.3-2.tar.xz
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index b3d6a83..76061fa 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+ # Locally calculated after checking pgp signature
+-sha256	5fd4d25d64d8ddcb85d0d897572af73b05b4d163c6cc49438a5bfbb8ff293d4c	nettle-3.1.1.tar.gz
++sha256	ea4283def236413edab5a4cf9cf32adf540c8df1b9b67641cfc2302fca849d97	nettle-3.2.tar.gz
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 67ae0a1..c133839 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 6.9.2-10
-+IMAGEMAGICK_VERSION = 6.9.3-2
- IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
- IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
- IMAGEMAGICK_LICENSE = Apache-2.0
+-NETTLE_VERSION = 3.1.1
++NETTLE_VERSION = 3.2
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
