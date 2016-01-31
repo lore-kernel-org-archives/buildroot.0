@@ -1,70 +1,121 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 11:17:09 +0100
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix musl build
-Message-ID: <1454235429-6713-1-git-send-email-bernd.kuhls@t-online.de>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 31 Jan 2016 11:18:03 +0100
+Subject: [Buildroot] [PATCH 11/16 v3] core/legal-info: also save patches
+In-Reply-To: <415acb524afa715f0b51d6f1b3344a63e90301ee.1454004518.git.yann.morin.1998@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <415acb524afa715f0b51d6f1b3344a63e90301ee.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <56ADDF5B.9040300@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/a15/a1586717154efb6495dfcdb5c7ce11a047dd68db/
-http://autobuild.buildroot.net/results/363/3636ddcc0efa974c674f36d3c65eea5beb32af52/
+Hi Yann,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: hopefully fixed patch comment (Thomas)
+Yann E. MORIN wrote:
+> Currently, the legal-info infra only saves the source archive of a
+> package. However, that's not enough as we may apply some patches on
+> packages sources.
+>
+> We do suggest users to also redistribute the Buildroot sources as part
+> of their compliance distribution, so the patches bundled in Buildroot
+> would indeed be included in the compliance distribution.
+>
+> However, that's still not enough, since we may download some patches, or
+> the user may use a global patch directory. Patches in there might not
+> end up in the compliance distribution, and there are risks of
+> non-conformity.
+>
+> So, always include patches alongside the source archive.
+>
+> To ensure reproducibility, we also generate a series file, so patches
+> can be re-applied in the correct order.
+>
+> We get the list of patches to include from the list of patches that were
+> applied by the package infrastructure (via the apply-patches support
+> script). So, we need to get packages properly extracted and patched
+> before we can save their legal-info, not just in the case they define
+> _LICENSE_FILES.
+>
+> Update the legal-info header accordingly.
+>
+> Note: this means that, when a package is not patched and defines no
+> LICENSE_FILES, we will extract and patch it for nothing. There is no
+> easy way to know whether we have to patch a package or not. We can only
+> either duplicate the logic to detect patches (bad) or rely on the infra
+> actually patching the package. Also, a vast majority of packages are
+> either patched, or define _LICENSE_FILES, so it is best and easiest to
+> always extract and patch them prior to legal-info.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+>
+> ---
+> Changes v2 -> v3:
+>    - also mention that patches have been saved  (Luca)
+>
+> Changes v1 -> v2:
+>    - don't recompute rawname-version needlessly  (Luca)
+> ---
+>   package/pkg-generic.mk           | 13 ++++++++-----
+>   support/legal-info/README.header |  9 +++++----
+>   2 files changed, 13 insertions(+), 9 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 7ad3bc3..c5b66db 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -759,12 +759,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+>   endif
+>   $(2)_MANIFEST_LICENSE_FILES ?= not saved
+>
+> -# If the package declares _LICENSE_FILES, we need to extract it,
+> -# for overriden, local or normal remote packages alike, whether
+> -# we want to redistribute it or not.
+> -ifneq ($$($(2)_LICENSE_FILES),)
+> +# We need to extract and patch a package to be able to retrieve its
+> +# license files (if any) and the list of patches applied to it (if
+> +# any).
+>   $(1)-legal-info: $(1)-patch
+> -endif
+>
+>   # We only save the sources of packages we want to redistribute, that are
+>   # non-local, and non-overriden. So only store, in the manifest, the tarball
+> @@ -826,6 +824,11 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+>   	$$(Q)$$(call hardlink-copy,\
+>   		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+>   		     $$($(2)_REDIST_SOURCES_DIR))
+> +# Copy patches and generate the series file
+> +	$$(Q)while read f; do \
+> +		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
+> +		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
+> +	done <$$($(2)_DIR)/.applied_patches_list
+>   endif # redistribute
+>
+>   endif # other packages
+> diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+> index d07c45d..0b5aa66 100644
+> --- a/support/legal-info/README.header
+> +++ b/support/legal-info/README.header
+> @@ -14,10 +14,11 @@ This material is composed of the following items.
+>      compiled programs.
+>      Note: this may have not been saved due to technical limitations, you may
+>      need to collect it manually.
+> - * The source code for all packages; this has been saved in the sources/
+> -   subdirectory (except for the non-redistributable packages, which have not
+> -   been saved); patches applied to some packages by Buildroot are included in
+> -   the Buildroot sources and were not duplicated in the sources/ subdirectory.
+> + * The original source code for all packages; this has been saved in theo
 
- ...Invert-conditional-for-defining-QT_SOCKLE.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+theo -> the
 
-diff --git a/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-new file mode 100644
-index 0000000..97be739
---- /dev/null
-+++ b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-@@ -0,0 +1,40 @@
-+From 8f09897de948cea8861ca95e182f442cf15a339e Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Mon, 8 Jun 2015 13:59:25 -0700
-+Subject: [PATCH] linux-oe-g++: Invert conditional for defining QT_SOCKLEN_T
-+
-+This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
-+only when its glibc < 2 and not also for the libraries which may define
-+it as per standards but are not glibc, e.g. musl
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Bernd: Downloaded from
-+https://github.com/meta-qt5/meta-qt5/blob/d9d1d04760430cd0e5edd1764d832860715e7b83/recipes-qt/qt5/qtbase/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-+and adjusted path.]
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ mkspecs/linux-oe-g++/qplatformdefs.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/mkspecs/linux-oe-g++/qplatformdefs.h b/mkspecs/linux-oe-g++/qplatformdefs.h
-+index dd12003..8623651 100644
-+--- a/mkspecs/linux-g++/qplatformdefs.h
-++++ b/mkspecs/linux-g++/qplatformdefs.h
-+@@ -86,10 +86,10 @@
-+ 
-+ #undef QT_SOCKLEN_T
-+ 
-+-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
-+-#define QT_SOCKLEN_T            socklen_t
-+-#else
-++#if defined(__GLIBC__) && (__GLIBC__ < 2)
-+ #define QT_SOCKLEN_T            int
-++#else
-++#define QT_SOCKLEN_T            socklen_t
-+ #endif
-+ 
-+ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
-+-- 
-+2.1.4
-+
+With that fixed:
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+You already carried my Tested-by tag, I re-tested this and it works
+fine.
+
 -- 
-2.7.0
+Luca
