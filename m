@@ -1,59 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 22:57:15 +0100
-Subject: [Buildroot] [git commit] package/iperf3: bump version to 3.1.1,
-	switch upstream to github
-Message-ID: <20160201224714.07B607F8C2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 14:12:54 +0100
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2016a
+Message-ID: <20160201224714.134167F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1271415cf52bde9af4d0d2036c0ae4df8f14c74
+commit: https://git.buildroot.net/buildroot/commit/?id=214f356351be730c0eabd0bb3b018ab28e277885
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iperf3/Config.in   | 2 +-
- package/iperf3/iperf3.hash | 2 +-
- package/iperf3/iperf3.mk   | 5 ++---
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/iperf3/Config.in b/package/iperf3/Config.in
-index 18c3612..074c1d3 100644
---- a/package/iperf3/Config.in
-+++ b/package/iperf3/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_IPERF3
- 	  It's a redesign of the NLANR/DAST iperf(2) and is not
- 	  backward compatible.
- 
--	  https://iperf.fr
-+	  http://software.es.net/iperf/index.html
- 
- comment "iperf3 needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 9fb2cba..4b9332d 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 1ab8334..80c5812 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	94fef2c3a51d01f0b1ee899bf02c87ff392423fb8c8d0af34fd59c1462c8bbb0	iperf-3.1-source.tar.gz
-+sha256	86f292e554d42d1bddbd5f587e594005f4ca202c284e4da45ed8cfbe935a5be8	iperf3-3.1.1.tar.gz
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index d1338e6..885a599 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,9 +4,8 @@
+-# From: http://mm.icann.org/pipermail/tz-announce/2015-October/000034.html
+-sha512  ad7de0e3e8753861d260f0fcbcbca327516a4dc826f7659370a7fb979e6154f1a26b23d2609acf6e1790c8c59da0b76c42f4a94bf361409c1460f6a8ffa6f879  tzdata2015g.tar.gz
++# From: http://mm.icann.org/pipermail/tz-announce/2016-January/000035.html
++sha512  9aa5f61a73afa5070dfb1d1982945d268ea8215663d0cd594216500aff14797ea5591ccfd488dc2280902fa1820bf782623624912b669873728431258fe10ec1  tzdata2016a.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 39fc262..bd3cb67 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPERF3_VERSION = 3.1
--IPERF3_SITE = https://iperf.fr/download/iperf_$(IPERF3_VERSION)
--IPERF3_SOURCE = iperf-$(IPERF3_VERSION)-source.tar.gz
-+IPERF3_VERSION = 3.1.1
-+IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
- IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
- IPERF3_LICENSE_FILES = LICENSE
- 
+-TZDATA_VERSION = 2015g
++TZDATA_VERSION = 2016a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
