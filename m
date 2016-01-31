@@ -1,29 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 11:27:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/opkg: bump version to v0.3.1 to
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 11:30:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pax-utils: bump version to 1.1.4 to
 	fix musl build
-In-Reply-To: <1454234207-5214-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sun, 31 Jan 2016 10:56:47 +0100")
-References: <1454234207-5214-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87a8nmjb7p.fsf@dell.be.48ers.dk>
+Message-ID: <1454236206-28318-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+The build error has not yet been found by the autobuilders:
 
- > Upstream included a fix for musl in the current release:
- > http://git.yoctoproject.org/cgit/cgit.cgi/opkg/commit/?id=f9a2febe724a514a89046c8cd92c2342e4383846
+elf.h:31:1: error: expected ?=?, ?,?, ?;?, ?asm? or ?__attribute__? before ?typedef?
+ typedef uint16_t Elf32_Half;
+ ^
+elf.h:59:9: error: unknown type name ?Elf32_Half?
+ typedef Elf32_Half Elf32_Versym;
+         ^
+[...]
 
- > Fixes
- > http://autobuild.buildroot.net/results/7e0/7e02c7d81bb83fef22554590521b848acd4fc38c/
- > http://autobuild.buildroot.net/results/4e0/4e01abdc8cace71802e527273b47dcc49c9bd4ce/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/pax-utils/pax-utils.hash | 2 +-
+ package/pax-utils/pax-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
+diff --git a/package/pax-utils/pax-utils.hash b/package/pax-utils/pax-utils.hash
+index 54013c9..399bae4 100644
+--- a/package/pax-utils/pax-utils.hash
++++ b/package/pax-utils/pax-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	844ff25b1a11bcef92ef34b22f576f226a772b67196818656f8874513438f5b9	pax-utils-0.8.1.tar.xz
++sha256	796860fbd48c5f811e699e8492dc1110459bad0a62efa8d346b74a4f6f556414	pax-utils-1.1.4.tar.xz
+diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
+index fc0589f..fc2e0ca 100644
+--- a/package/pax-utils/pax-utils.mk
++++ b/package/pax-utils/pax-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PAX_UTILS_VERSION = 0.8.1
++PAX_UTILS_VERSION = 1.1.4
+ PAX_UTILS_SITE = http://distfiles.gentoo.org/distfiles
+ PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
+ PAX_UTILS_LICENSE = GPLv2
 -- 
-Bye, Peter Korsgaard
+2.7.0
