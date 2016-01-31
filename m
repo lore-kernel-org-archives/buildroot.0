@@ -1,53 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 19:23:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/subversion: security version bump
-	to 1.9.3
-Message-ID: <1454264630-10916-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 19:41:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: fix musl build
+Message-ID: <1454265678-11022-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release announcement:
-http://mail-archives.apache.org/mod_mbox/subversion-dev/201512.mbox/%3CCAP_GPNj_GCA869VQeJUrp5ngXsgN7pQQHSS=sqoXm8_6hHTTxg at mail.gmail.com%3E
+The build error was not yet found by the autobuilders:
 
-CVE-2015-5259:
-Remotely triggerable heap overflow and out-of-bounds read caused by
-integer overflow in the svn:// protocol parser.
-http://subversion.apache.org/security/CVE-2015-5259-advisory.txt
-
-CVE-2015-5343:
-Remotely triggerable heap overflow and out-of-bounds read in mod_dav_svn
-caused by integer overflow when parsing skel-encoded request bodies.
-http://subversion.apache.org/security/CVE-2015-5343-advisory.txt
+In file included from klogd.c:266:0:
+/home/bernd/buildroot/br3/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/time.h:9:8: error: redefinition of ?struct timespec?
+ struct timespec {
+        ^
+and many others
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/subversion/subversion.hash | 2 +-
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sysklogd/sysklogd.hash | 1 +
+ package/sysklogd/sysklogd.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index 7806374..4f0a446 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,2 +1,2 @@
- # From http://subversion.apache.org/download.cgi#recommended-release
--sha1 fb9db3b7ddf48ae37aa8785872301b59bfcc7017 subversion-1.9.2.tar.bz2
-+sha1	27e8df191c92095f48314a415194ec37c682cbcf	subversion-1.9.3.tar.bz2
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 2f6a249..e9aa0ae 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index dd5b89a..aa3bc24 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated from download (no sig, hash)
+ sha256	5166c185ae23c92e8b9feee66a6e3d0bc944bf673112f53e3ecf62e08ce7c201	sysklogd-1.5.1.tar.gz
++sha256	fd235a445a2fb0100cd84e201b7a0a14e515517b74106cf4dcfd8d820af7bc21	fix-includes.patch
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index de2edf4..a4730b7 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -6,6 +6,8 @@
  
--SUBVERSION_VERSION = 1.9.2
-+SUBVERSION_VERSION = 1.9.3
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
- SUBVERSION_LICENSE = Apache-2.0
+ SYSKLOGD_VERSION = 1.5.1
+ SYSKLOGD_SITE = http://www.infodrom.org/projects/sysklogd/download
++SYSKLOGD_PATCH = \
++	http://git.alpinelinux.org/cgit/aports/plain/main/sysklogd/fix-includes.patch
+ SYSKLOGD_LICENSE = GPLv2+
+ SYSKLOGD_LICENSE_FILES = COPYING
+ 
 -- 
 2.7.0
