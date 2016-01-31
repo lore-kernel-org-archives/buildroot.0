@@ -1,64 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 10:40:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openobex: fix broken download URL,
-	add hash
-Message-ID: <1454233253-22601-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 10:43:13 +0100
+Subject: [Buildroot] [git commit] flot: add hash file
+In-Reply-To: <rs5uncx00j.ln2@ID-313208.user.individual.net>
+References: <20150728204046.4BDD17F9DF@busybox.osuosl.org>
+ <rs5uncx00j.ln2@ID-313208.user.individual.net>
+Message-ID: <20160131104313.1c5fdd0a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream only provides a zip file for version 1.5.0.
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/openobex/Config.in   |  2 +-
- package/openobex/openobex.mk | 12 ++++++++++--
- 2 files changed, 11 insertions(+), 3 deletions(-)
+On Sat, 30 Jan 2016 08:38:35 +0100, Bernd Kuhls wrote:
 
-diff --git a/package/openobex/Config.in b/package/openobex/Config.in
-index 5f606fe..2b8cf38 100644
---- a/package/openobex/Config.in
-+++ b/package/openobex/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_OPENOBEX
- 	  Free open source implementation of the Object Exchange (OBEX)
- 	  protocol.
- 
--	  http://www.openobex.org
-+	  http://sourceforge.net/projects/openobex
- 
- if BR2_PACKAGE_OPENOBEX
- 
-diff --git a/package/openobex/openobex.mk b/package/openobex/openobex.mk
-index 82bfd43..b50dbb7 100644
---- a/package/openobex/openobex.mk
-+++ b/package/openobex/openobex.mk
-@@ -4,8 +4,10 @@
- #
- ################################################################################
- 
--OPENOBEX_VERSION = 1.5
--OPENOBEX_SITE = http://ftp.osuosl.org/pub/linux/bluetooth
-+OPENOBEX_VERSION_MAJOR = 1.5
-+OPENOBEX_VERSION = $(OPENOBEX_VERSION_MAJOR).0
-+OPENOBEX_SITE = http://downloads.sourceforge.net/project/openobex/openobex/$(OPENOBEX_VERSION_MAJOR)
-+OPENOBEX_SOURCE = openobex-$(OPENOBEX_VERSION)-Source.zip
- # Libraries seems to be released under LGPLv2.1+,
- # while other material is under GPLv2+.
- OPENOBEX_LICENSE = GPLv2+/LGPLv2.1+
-@@ -15,6 +17,12 @@ OPENOBEX_DEPENDENCIES = host-pkgconf
- OPENOBEX_AUTORECONF = YES
- OPENOBEX_INSTALL_STAGING = YES
- 
-+define OPENOBEX_EXTRACT_CMDS
-+	$(UNZIP) -d $(@D) $(DL_DIR)/$(OPENOBEX_SOURCE)
-+	mv $(@D)/openobex-$(OPENOBEX_VERSION)-Source/* $(@D)
-+	$(RM) -r $(@D)/openobex-$(OPENOBEX_VERSION)-Source
-+endef
-+
- OPENOBEX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_OPENOBEX_APPS),--enable-apps) \
- 	$(if $(BR2_PACKAGE_OPENOBEX_SYSLOG),--enable-syslog) \
+> I downloaded the tarball
+> http://www.flotcharts.org/downloads/flot-0.8.3.tar.gz
+> today and got a different sha256 checksum:
+> 
+> ERROR: flot-0.8.3.tar.gz has wrong sha256 hash:
+> ERROR: expected: 
+> d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952
+> ERROR: got     : 
+> ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+I checked locally, and in my BR2_DL_DIR, I still have a tarball that
+has the
+d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952 hash,
+but indeed if I re-download it, I get a tarball with the
+ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21 hash.
+
+> Shall I send a patch?
+
+Yes, please do. It would also be great to notify upstream that they
+shouldn't change their tarballs.
+
+Thanks!
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
