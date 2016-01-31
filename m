@@ -1,18 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 15:07:27 +0100
-Subject: [Buildroot] [PATCH] Revert "package/openvpn: bump version to
-	2.3.10"
-References: <1454246790-8381-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <v1h1ocx40l.ln2@ID-313208.user.individual.net>
+Date: Sun, 31 Jan 2016 15:09:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-spidev: fix musl build
+Message-ID: <1454249378-439-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 31 Jan 2016 10:26:30 -0300 schrieb Gustavo Zacarias:
+The build error was not yet being found by the autobuilders.
 
-> openvpn 2.3.10 doesn't work with polarssl 1.2.x, hence this bump breaks
-> builds for the polarssl backend.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0001-Fix-build-with-musl-libc.patch            | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/python-spidev/0001-Fix-build-with-musl-libc.patch
 
-Reviewed-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+diff --git a/package/python-spidev/0001-Fix-build-with-musl-libc.patch b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000..b22a73a
+--- /dev/null
++++ b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
+@@ -0,0 +1,43 @@
++From 3d6e59bff088783f249a60a5f1c900c7f99f933b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 31 Jan 2016 15:03:50 +0100
++Subject: [PATCH 1/1] Fix build with musl libc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Include missing header to prevent build error:
++
++spidev_module.c: In function ?SpiDev_xfer?:
++spidev_module.c:330:27: error: ?_IOC_SIZEBITS? undeclared (first use in this function)
++  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
++                           ^
++spidev_module.c:330:27: note: each undeclared identifier is reported only once for each function it appears in
++spidev_module.c: In function ?SpiDev_xfer2?:
++spidev_module.c:421:27: error: ?_IOC_SIZEBITS? undeclared (first use in this function)
++  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
++                           ^
++
++Signed-off-by: Bernd Kuhls bernd.kuhls at t-online.de
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++Patch sent upstream: https://github.com/doceme/py-spidev/pull/39
++
++ spidev_module.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/spidev_module.c b/spidev_module.c
++index d58ef07..bccaacf 100644
++--- a/spidev_module.c
+++++ b/spidev_module.c
++@@ -25,6 +25,7 @@
++ #include <linux/spi/spidev.h>
++ #include <linux/types.h>
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ 
++ #define SPIDEV_MAXPATH 4096
++ 
++-- 
++2.7.0
++
+-- 
+2.7.0
