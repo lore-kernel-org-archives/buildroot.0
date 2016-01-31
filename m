@@ -1,28 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 31 Jan 2016 21:34:38 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gpsd: bump version to 3.16
-In-Reply-To: <1454256656-9253-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454256656-9253-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131193438.GA2442@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 20:35:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/snowball-init: use github helper
+In-Reply-To: <1454257933-24422-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454257933-24422-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131203506.7932d55c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Dear Bernd Kuhls,
 
-On Sun, Jan 31, 2016 at 05:10:55PM +0100, Bernd Kuhls wrote:
-> Removed patch applied upstream:
-> http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=3e25e2167beb3936de3986fad9b6c9bdec82b81f
+On Sun, 31 Jan 2016 17:32:13 +0100, Bernd Kuhls wrote:
+> Otherwise download is broken:
+> 
+> >>> snowball-init b064be21de25729039e5e54037bbdd2e25cfd5b7 Downloading
+> --2016-01-31 17:31:27--  https://github.com/igloocommunity/snowball-init/snowball-init-b064be21de25729039e5e54037bbdd2e25cfd5b7.tar.gz
+> Resolving github.com (github.com)... 192.30.252.128
+> Connecting to github.com (github.com)|192.30.252.128|:443... connected.
+> HTTP request sent, awaiting response... 404 Not Found
+> 2016-01-31 17:31:27 ERROR 404: Not Found.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/snowball-init/snowball-init.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-The patch 0001-Fix-build-against-musl-libc.patch is also not needed anymore. 
-Upstream commit 95c99f69e026 (Remove a BSD-ism., 2015-06-23) fixed this issue 
-in a better way.
+Applied, thanks.
 
-baruch
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
