@@ -1,69 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 15:09:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-spidev: fix musl build
-Message-ID: <1454249378-439-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 15:18:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qhull: bump version to 7.2.0,
+	add hash
+Message-ID: <1454249899-6525-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build error was not yet being found by the autobuilders.
+Updated _SITE after closure of gitorious.org.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Fix-build-with-musl-libc.patch            | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/python-spidev/0001-Fix-build-with-musl-libc.patch
+ package/qhull/qhull.hash | 4 ++++
+ package/qhull/qhull.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+ create mode 100644 package/qhull/qhull.hash
 
-diff --git a/package/python-spidev/0001-Fix-build-with-musl-libc.patch b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
+diff --git a/package/qhull/qhull.hash b/package/qhull/qhull.hash
 new file mode 100644
-index 0000000..b22a73a
+index 0000000..4f059f2
 --- /dev/null
-+++ b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
-@@ -0,0 +1,43 @@
-+From 3d6e59bff088783f249a60a5f1c900c7f99f933b Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 31 Jan 2016 15:03:50 +0100
-+Subject: [PATCH 1/1] Fix build with musl libc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Include missing header to prevent build error:
-+
-+spidev_module.c: In function ?SpiDev_xfer?:
-+spidev_module.c:330:27: error: ?_IOC_SIZEBITS? undeclared (first use in this function)
-+  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
-+                           ^
-+spidev_module.c:330:27: note: each undeclared identifier is reported only once for each function it appears in
-+spidev_module.c: In function ?SpiDev_xfer2?:
-+spidev_module.c:421:27: error: ?_IOC_SIZEBITS? undeclared (first use in this function)
-+  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
-+                           ^
-+
-+Signed-off-by: Bernd Kuhls bernd.kuhls at t-online.de
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+Patch sent upstream: https://github.com/doceme/py-spidev/pull/39
-+
-+ spidev_module.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/spidev_module.c b/spidev_module.c
-+index d58ef07..bccaacf 100644
-+--- a/spidev_module.c
-++++ b/spidev_module.c
-+@@ -25,6 +25,7 @@
-+ #include <linux/spi/spidev.h>
-+ #include <linux/types.h>
-+ #include <sys/ioctl.h>
-++#include <linux/ioctl.h>
-+ 
-+ #define SPIDEV_MAXPATH 4096
-+ 
-+-- 
-+2.7.0
-+
++++ b/package/qhull/qhull.hash
+@@ -0,0 +1,4 @@
++# From http://www.qhull.org/download/qhull-2015.2.md5sum
++md5	e6270733a826a6a7c32b796e005ec3dc	qhull-2015-src-7.2.0.tgz
++# Locally computed
++sha256	78b010925c3b577adc3d58278787d7df08f7c8fb02c3490e375eab91bb58a436	qhull-2015-src-7.2.0.tgz
+diff --git a/package/qhull/qhull.mk b/package/qhull/qhull.mk
+index 6992d71..8ea38f0 100644
+--- a/package/qhull/qhull.mk
++++ b/package/qhull/qhull.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-QHULL_VERSION = 60d55819729d7b49391dde0271e15a56c70992b9
+-QHULL_SITE = git://gitorious.org/qhull/qhull.git
++QHULL_VERSION = 7.2.0
++QHULL_SITE = http://www.qhull.org/download
++QHULL_SOURCE = qhull-2015-src-$(QHULL_VERSION).tgz
+ QHULL_INSTALL_STAGING = YES
+ QHULL_LICENSE = BSD-Style
+ QHULL_LICENSE_FILES = COPYING.txt
 -- 
 2.7.0
