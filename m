@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:46:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qhull: bump version to 7.2.0,
- add hash
-In-Reply-To: <1454249899-6525-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454249899-6525-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131234603.3b4fdc5d@free-electrons.com>
+Date: Sun, 31 Jan 2016 23:47:07 +0100
+Subject: [Buildroot] [PATCH 1/2] package/oprofile: bump version to 1.1.0
+In-Reply-To: <1454235289-1353-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454235289-1353-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131234707.28416ebe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,17 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 31 Jan 2016 15:18:19 +0100, Bernd Kuhls wrote:
-> Updated _SITE after closure of gitorious.org.
+On Sun, 31 Jan 2016 11:14:48 +0100, Bernd Kuhls wrote:
+> Removed patch applied upstream:
+> http://sourceforge.net/p/oprofile/oprofile/ci/f357d40c9f64f3ea2dccf5f9abdff84b2ac62e6f/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/qhull/qhull.hash | 4 ++++
->  package/qhull/qhull.mk   | 5 +++--
->  2 files changed, 7 insertions(+), 2 deletions(-)
->  create mode 100644 package/qhull/qhull.hash
+>  .../0001-Include-time.h-for-nanosleep.patch        | 44 ----------------------
+>  package/oprofile/oprofile.hash                     |  5 ++-
+>  package/oprofile/oprofile.mk                       |  2 +-
+>  3 files changed, 4 insertions(+), 47 deletions(-)
+>  delete mode 100644 package/oprofile/0001-Include-time.h-for-nanosleep.patch
 
 Applied, thanks.
 
