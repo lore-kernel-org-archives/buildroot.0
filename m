@@ -1,40 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 10:52:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.3.10
-Message-ID: <1454233968-22662-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 10:56:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/opkg: bump version to v0.3.1 to fix
+	musl build
+Message-ID: <1454234207-5214-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Upstream included a fix for musl in the current release:
+http://git.yoctoproject.org/cgit/cgit.cgi/opkg/commit/?id=f9a2febe724a514a89046c8cd92c2342e4383846
+
+Fixes
+http://autobuild.buildroot.net/results/7e0/7e02c7d81bb83fef22554590521b848acd4fc38c/
+http://autobuild.buildroot.net/results/4e0/4e01abdc8cace71802e527273b47dcc49c9bd4ce/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/openvpn/openvpn.hash | 4 ++--
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/opkg/opkg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 4ab916e..7197258 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	52f16bef3a02369682f1464fbd2821070c98d0bd993f4c46c764e87375abdcc1 	openvpn-2.3.9.tar.xz
-+# Locally calculated
-+sha256	c54dbf91d47b9533fac3b94d2b5719bdbe0d081fe8245184f91ef8a871d22003	openvpn-2.3.10.tar.xz
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 8f02792..5d838ee 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
+diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+index bcf3f78..6e4d4ff 100644
+--- a/package/opkg/opkg.mk
++++ b/package/opkg/opkg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENVPN_VERSION = 2.3.9
-+OPENVPN_VERSION = 2.3.10
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
+-OPKG_VERSION = v0.3.0
++OPKG_VERSION = v0.3.1
+ OPKG_SITE = http://git.yoctoproject.org/git/opkg
+ OPKG_SITE_METHOD = git
+ # Uses PKG_CHECK_MODULES() in configure.ac
 -- 
 2.7.0
