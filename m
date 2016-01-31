@@ -1,65 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 18:44:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/squeezelite: fix musl build
-Message-ID: <1454262247-30214-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 19:01:43 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sredird: bump version to 2.2.2,
+	add hash
+Message-ID: <1454263304-17588-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build error was not yet found by the autobuilders:
+While Debian still uses version 2.2.1 the bump to 2.2.2 was committed to
+FreeBSD ports back in 2005:
+https://www.freshports.org/commit.php?category=comms&port=sredird&files=yes&message_id=200512291935.jBTJZfff072190 at repoman.freebsd.org
 
-output_alsa.c: In function ?output_init_alsa?:
-output_alsa.c:865:10: error: ?M_TRIM_THRESHOLD? undeclared (first use in this function)
-  mallopt(M_TRIM_THRESHOLD, -1);
-          ^
-output_alsa.c:865:10: note: each undeclared identifier is reported only once for each function it appears in
-output_alsa.c:866:10: error: ?M_MMAP_MAX? undeclared (first use in this function)
-  mallopt(M_MMAP_MAX, 0);
-          ^
+FreeBSD ports lists the new upstream URL as no. 12:
+https://www.freshports.org/comms/sredird/
+and http://freecode.com/projects/sredird also links to it.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...02-only-run-glibc-specific-hacks-on-glibc.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
+ package/sredird/Config.in    | 2 ++
+ package/sredird/sredird.hash | 2 ++
+ package/sredird/sredird.mk   | 5 ++---
+ 3 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 package/sredird/sredird.hash
 
-diff --git a/package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch b/package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
+diff --git a/package/sredird/Config.in b/package/sredird/Config.in
+index 463269a..d8c5ef9 100644
+--- a/package/sredird/Config.in
++++ b/package/sredird/Config.in
+@@ -4,3 +4,5 @@ config BR2_PACKAGE_SREDIRD
+ 	  Sredird is a serial port redirector that is compliant with
+ 	  the RFC 2217 "Telnet Com Port Control Option" protocol. This
+ 	  protocol lets you share a serial port through the network.
++
++	  http://freecode.com/projects/sredird
+diff --git a/package/sredird/sredird.hash b/package/sredird/sredird.hash
 new file mode 100644
-index 0000000..12237e4
+index 0000000..63a419f
 --- /dev/null
-+++ b/package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
-@@ -0,0 +1,30 @@
-+From d898fac929cd093bb39af3f517158777c21c06ef Mon Sep 17 00:00:00 2001
-+From: Carlo Landmeter <clandmeter@gmail.com>
-+Date: Tue, 31 Mar 2015 10:07:14 +0000
-+Subject: [PATCH] only run glibc specific hacks on glibc
-+
-+---
-+Patch downloaded from upstream PR:
-+https://github.com/robadenshi/squeezelite/issues/97
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+ output_alsa.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/output_alsa.c b/output_alsa.c
-+index aa01560..c1b5435 100644
-+--- a/output_alsa.c
-++++ b/output_alsa.c
-+@@ -853,7 +853,7 @@ void output_init_alsa(log_level level, const char *device, unsigned output_buf_s
-+ 		set_mixer(output.device, volume_mixer_name, volume_mixer_index ? atoi(volume_mixer_index) : 0, true, 0, 0);
-+ 	}
-+ 
-+-#if LINUX
-++#if defined(__GLIBC__)
-+ 	// RT linux - aim to avoid pagefaults by locking memory: 
-+ 	// https://rt.wiki.kernel.org/index.php/Threaded_RT-application_with_memory_locking_and_stack_handling_example
-+ 	if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
-+-- 
-+2.3.4
-+
++++ b/package/sredird/sredird.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	640c47dcd84b3b90640165a38eb336a675fdab06c14c09cae2f4a604cae560d3	sredird-2.2.2.tar.gz
+diff --git a/package/sredird/sredird.mk b/package/sredird/sredird.mk
+index ebd7122..b564f1a 100644
+--- a/package/sredird/sredird.mk
++++ b/package/sredird/sredird.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-SREDIRD_VERSION = 2.2.1-1.1
+-SREDIRD_SOURCE = sredird_$(SREDIRD_VERSION).tar.gz
+-SREDIRD_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/sredird
++SREDIRD_VERSION = 2.2.2
++SREDIRD_SITE = http://www.ibiblio.org/pub/Linux/system/serial
+ SREDIRD_LICENSE = GPLv2+
+ SREDIRD_LICENSE_FILES = COPYING
+ 
 -- 
 2.7.0
