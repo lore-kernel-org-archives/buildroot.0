@@ -1,30 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 17:26:20 +0100
-Subject: [Buildroot] [PATCH 1/2] package/smack: bump version to 1.1.0
-Message-ID: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 17:32:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/snowball-init: use github helper
+Message-ID: <1454257933-24422-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Otherwise download is broken:
+
+>>> snowball-init b064be21de25729039e5e54037bbdd2e25cfd5b7 Downloading
+--2016-01-31 17:31:27--  https://github.com/igloocommunity/snowball-init/snowball-init-b064be21de25729039e5e54037bbdd2e25cfd5b7.tar.gz
+Resolving github.com (github.com)... 192.30.252.128
+Connecting to github.com (github.com)|192.30.252.128|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2016-01-31 17:31:27 ERROR 404: Not Found.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/smack/smack.mk | 2 +-
+ package/snowball-init/snowball-init.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/smack/smack.mk b/package/smack/smack.mk
-index 7e0a362..3ef4d47 100644
---- a/package/smack/smack.mk
-+++ b/package/smack/smack.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+index 40acdd6..f06b032 100644
+--- a/package/snowball-init/snowball-init.mk
++++ b/package/snowball-init/snowball-init.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SMACK_VERSION = v1.0.4
-+SMACK_VERSION = v1.1.0
- SMACK_SITE = $(call github,smack-team,smack,$(SMACK_VERSION))
- SMACK_LICENSE = LGPLv2.1
- SMACK_LICENSE_FILES = COPYING
+ SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
+-SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
++SNOWBALL_INIT_SITE = $(call github,igloocommunity,snowball-init,$(SNOWBALL_INIT_VERSION))
+ SNOWBALL_INIT_LICENSE = BSD-4c
+ SNOWBALL_INIT_LICENSE_FILES = debian/copyright
+ 
 -- 
 2.7.0
