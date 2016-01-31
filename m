@@ -1,21 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 14:17:57 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libndp: bump version to 1.5
-In-Reply-To: <1454168407-3108-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sat, 30 Jan 2016 16:40:06 +0100")
-References: <1454168407-3108-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <8737tdj3ay.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 31 Jan 2016 10:25:32 -0300
+Subject: [Buildroot] [PATCH] redis: bump to version 3.0.7
+Message-ID: <1454246732-8306-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/redis/redis.hash | 4 ++--
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 4d2f3b7..07783f5 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha1	4b1c7b1201984bca8f7f9c6c58862f6928cf0a25 	redis-3.0.6.tar.gz
++sha1	e56b4b7e033ae8dbf311f9191cf6fdf3ae974d1c 	redis-3.0.7.tar.gz
+ # Calculated based on the hash above
+-sha256	6f1e1523194558480c3782d84d88c2decf08a8e4b930c56d4df038e565b75624	redis-3.0.6.tar.gz
++sha256	b2a791c4ea3bb7268795c45c6321ea5abcc24457178373e6a6e3be6372737f23	redis-3.0.7.tar.gz
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 1edcf6e..6a3dd01 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 3.0.6
++REDIS_VERSION = 3.0.7
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3c (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.4.10
