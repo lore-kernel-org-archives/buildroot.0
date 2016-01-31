@@ -1,30 +1,40 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 31 Jan 2016 15:40:42 +0100
-Subject: [Buildroot] [PATCH 14/16 v3] core/legal-info: generate a hash
- of all saved files
-In-Reply-To: <61fe7a163615adb37ddc79e46e00430a7ff67f16.1454004518.git.yann.morin.1998@free.fr>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <61fe7a163615adb37ddc79e46e00430a7ff67f16.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <56AE1CEA.3080208@lucaceresoli.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 16:10:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pixman: bump version to 0.34.0
+Message-ID: <1454253039-23829-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/pixman/pixman.hash | 4 ++--
+ package/pixman/pixman.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Yann E. MORIN wrote:
-> Having a hash of the saved files can be interesting for the recipient to
-> verify the integrity of the files.
->
-> We remove the warning file earlier, to exclude it from the hash list.
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
+index 7a37220..d5b8934 100644
+--- a/package/pixman/pixman.hash
++++ b/package/pixman/pixman.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-December/002666.html
+-sha1   11e93fed35deb9c89347e7a7da3060e5e5c89412	pixman-0.33.6.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2016-January/002672.html
++sha1	367698744e74d6d4f363041482965b9ea7fbe4a5	pixman-0.34.0.tar.bz2
+diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
+index fc43140..06070f0 100644
+--- a/package/pixman/pixman.mk
++++ b/package/pixman/pixman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PIXMAN_VERSION = 0.33.6
++PIXMAN_VERSION = 0.34.0
+ PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.bz2
+ PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ PIXMAN_LICENSE = MIT
 -- 
-Luca
+2.7.0
