@@ -1,64 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 20:37:11 +0100
-Subject: [Buildroot] [git commit] package/sredird: bump version to 2.2.2,
-	add hash
-Message-ID: <20160201224705.6D5667F8C1@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 23:27:08 +0100
+Subject: [Buildroot] [git commit] package/libsigrok: fix musl build
+Message-ID: <20160201224700.1F36A7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33433e1b2bca5c282cfd81b46d8c1b1ff49bf091
+commit: https://git.buildroot.net/buildroot/commit/?id=776aeef6d82e4973018dda5c80d58bd7285cda4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While Debian still uses version 2.2.1 the bump to 2.2.2 was committed to
-FreeBSD ports back in 2005:
-https://www.freshports.org/commit.php?category=comms&port=sredird&files=yes&message_id=200512291935.jBTJZfff072190 at repoman.freebsd.org
-
-FreeBSD ports lists the new upstream URL as no. 12:
-https://www.freshports.org/comms/sredird/
-and http://freecode.com/projects/sredird also links to it.
+Fixes
+http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
+http://autobuild.buildroot.net/results/a4d/a4dab61fb39dd642f85fad20972a0a4572af9a73/
+and others
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sredird/Config.in    | 2 ++
- package/sredird/sredird.hash | 2 ++
- package/sredird/sredird.mk   | 5 ++---
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ ...01-beaglelogic.h-fix-build-with-musl-libc.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/sredird/Config.in b/package/sredird/Config.in
-index 463269a..d8c5ef9 100644
---- a/package/sredird/Config.in
-+++ b/package/sredird/Config.in
-@@ -4,3 +4,5 @@ config BR2_PACKAGE_SREDIRD
- 	  Sredird is a serial port redirector that is compliant with
- 	  the RFC 2217 "Telnet Com Port Control Option" protocol. This
- 	  protocol lets you share a serial port through the network.
-+
-+	  http://freecode.com/projects/sredird
-diff --git a/package/sredird/sredird.hash b/package/sredird/sredird.hash
+diff --git a/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
 new file mode 100644
-index 0000000..63a419f
+index 0000000..e9ecf85
 --- /dev/null
-+++ b/package/sredird/sredird.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	640c47dcd84b3b90640165a38eb336a675fdab06c14c09cae2f4a604cae560d3	sredird-2.2.2.tar.gz
-diff --git a/package/sredird/sredird.mk b/package/sredird/sredird.mk
-index ebd7122..b564f1a 100644
---- a/package/sredird/sredird.mk
-+++ b/package/sredird/sredird.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--SREDIRD_VERSION = 2.2.1-1.1
--SREDIRD_SOURCE = sredird_$(SREDIRD_VERSION).tar.gz
--SREDIRD_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/sredird
-+SREDIRD_VERSION = 2.2.2
-+SREDIRD_SITE = http://www.ibiblio.org/pub/Linux/system/serial
- SREDIRD_LICENSE = GPLv2+
- SREDIRD_LICENSE_FILES = COPYING
- 
++++ b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
+@@ -0,0 +1,38 @@
++From 1b9ca481b2447154d12a7a94fe90c5b968ddf41c Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 30 Jan 2016 20:01:05 +0100
++Subject: [PATCH 1/1] beaglelogic.h: fix build with musl libc
++
++This patch fixes a build error seen on the buildroot project:
++http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
++
++Patch taken from
++https://github.com/dx9/ceph/commit/4f7bcabca7737c3f48f07ca2b4b1296c29e3358b
++which solved a similar problem.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++Patch sent upstream:
++http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1948
++
++ src/hardware/beaglelogic/beaglelogic.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/hardware/beaglelogic/beaglelogic.h b/src/hardware/beaglelogic/beaglelogic.h
++index 9015c61..165b386 100644
++--- a/src/hardware/beaglelogic/beaglelogic.h
+++++ b/src/hardware/beaglelogic/beaglelogic.h
++@@ -28,6 +28,10 @@
++ #include <stdlib.h>
++ #include <unistd.h>
++ 
+++#ifndef __STRING
+++# define __STRING(x) #x
+++#endif
+++
++ /* BeagleLogic device node name */
++ #define BEAGLELOGIC_DEV_NODE        "/dev/beaglelogic"
++ #define BEAGLELOGIC_SYSFS_ATTR(a)   "/sys/devices/virtual/misc/beaglelogic/"\
++-- 
++2.7.0.rc3
++
