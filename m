@@ -1,41 +1,70 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 09:22:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/net-tools: bump version to fix musl
-	build
-Message-ID: <1454228543-8101-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 09:55:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix musl build
+In-Reply-To: <1454187166-2348-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454187166-2348-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131095508.6c277724@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-git head includes this commit
-http://sourceforge.net/p/net-tools/code/ci/c35607eae8243851dd80a0181554f3a0e9e50aa8/
+Bernd,
 
-Due to the gettext problems the package-specific build errors were not
-yet found by the autobuilders:
+Thanks for this patch, but see below.
 
-slattach.c:85:11: error: ?B50? undeclared here (not in a function)
-   { "50", B50 }, { "75", B75   },
-(and many more)
+On Sat, 30 Jan 2016 21:52:46 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/a15/a1586717154efb6495dfcdb5c7ce11a047dd68db/
+> http://autobuild.buildroot.net/results/363/3636ddcc0efa974c674f36d3c65eea5beb32af52/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...Invert-conditional-for-defining-QT_SOCKLE.patch | 44 ++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> 
+> diff --git a/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> new file mode 100644
+> index 0000000..55cf480
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> @@ -0,0 +1,44 @@
+> +Fix musl build
+> +
+> +Downloaded from
+> +https://github.com/meta-qt5/meta-qt5/blob/d9d1d04760430cd0e5edd1764d832860715e7b83/recipes-qt/qt5/qtbase/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> +and adjusted path.
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/net-tools/net-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Have you read my review of some of your previous patches? I already
+said that this should go inside the Git commit log of the patch, so
+that the patch remains a proper Git formatted patch.
 
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index ab0dd7c..184c50e 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NET_TOOLS_VERSION = 3eb367aedf1280f35105ede465c350a39b55fa91
-+NET_TOOLS_VERSION = 3f170bff115303e92319791cbd56371e33dcbf6d
- NET_TOOLS_SITE = git://git.code.sf.net/p/net-tools/code
- NET_TOOLS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- NET_TOOLS_LDFLAGS = $(TARGET_LDFLAGS) \
+> +From 8f09897de948cea8861ca95e182f442cf15a339e Mon Sep 17 00:00:00 2001
+> +From: Khem Raj <raj.khem@gmail.com>
+> +Date: Mon, 8 Jun 2015 13:59:25 -0700
+> +Subject: [PATCH] linux-oe-g++: Invert conditional for defining QT_SOCKLEN_T
+> +
+> +This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
+> +only when its glibc < 2 and not also for the libraries which may define
+> +it as per standards but are not glibc, e.g. musl
+> +
+> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+
+I.e, add here:
+
+[Bernd: downloaded from .... and adjusted path.]
+Signed-off-by: ...
+
+Can you adjust to this convention ?
+
+Thanks,
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
