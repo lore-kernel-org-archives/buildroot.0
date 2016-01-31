@@ -1,163 +1,137 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 31 Jan 2016 20:57:57 +0100
-Subject: [Buildroot] [PATCH v12 3/3] toolchain-external: create symlink
- ARCH_LIB_DIR->lib
-In-Reply-To: <1453984366-12393-3-git-send-email-patrickdepinguin@gmail.com>
-References: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
- <1453984366-12393-3-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <56AE6745.8040100@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 21:04:51 +0100
+Subject: [Buildroot] [PATCH v3 2/2] package/sconeserver: bump version to fix
+	musl build
+In-Reply-To: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454270691-21900-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes this musl build error:
+TermBuffer.cpp: In member function ?virtual scx::Condition scx::TermBuffer::read(void*, int, int&)?:
+TermBuffer.cpp:83:10: error: ?CEOT? was not declared in this scope
+     case CEOT:
+          ^
+TermBuffer.cpp:123:10: error: ?CERASE? was not declared in this scope
+     case CERASE: // Backspace
+          ^
+The autobuilders did not catch this specific error yet because they
+failed earlier with other packages, but I am continuing the build based
+on the defconfig from:
+http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
 
-Le 28/01/2016 13:32, Thomas De Schampheleire a ?crit :
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> Currently, following symbolic links are created in both target and
-> staging directories:
-> - lib(32|64) --> lib
-> - usr/lib(32|64) --> lib
-> 
-> The decision for lib32 or lib64 is based on the target architecture
-> configuration in buildroot (BR2_ARCH_IS_64).
-> 
-> In at least one case this is not correct: when building for a Cavium Octeon
-> III processor using the toolchain from the Cavium Networks SDK, and
-> specifying -march=octeon3 in BR2_TARGET_OPTIMIZATION, libraries are expected
-> in directory 'lib32-fp' rather than 'lib32' (ABI=n32; likewise for
-> lib64-fp in case of ABI=n64)
-> 
-> More generally the correct symbolic link is from (usr/)${ARCH_LIB_DIR}->lib.
-> However, feedback from Arnout Vandecappelle is that there are packages that
-> do depend on the lib32/lib64 symlink, even if ARCH_LIB_DIR is different.
-> Hence, these links must be kept.
-> 
-> Fix the problem as follows:
-> - For internal toolchains: no change
-> - For external toolchains: create a symlink ARCH_LIB_DIR->lib if
->   (usr/)ARCH_LIB_DIR does not exist yet.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: "Yann E. Morin" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+- added hash
+- removed 0001-fix-ssl-libs-ordering.patch, applied upstream:
+  https://github.com/sconemad/sconeserver/commit/ffb69ca18fd03d0dc976696144d215b3a8555155
+- disabled markdown module because its git submodule cmark
+  ( https://github.com/sconemad/sconeserver/tree/master/markdown )
+  has no cross-compile support provided by the sconeserver build system:
 
-Thanks for this new version!
+make[4]: Entering directory '/home/bernd/buildroot/br3/output/build/sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd/markdown/cmark'
+mkdir -p build; \
+cd build; \
+cmake .. \
+	-G "Unix Makefiles" \
+	-DCMAKE_BUILD_TYPE= \
+	-DCMAKE_INSTALL_PREFIX=/usr/local
+-- The C compiler identification is GNU 5.3.1
+-- The CXX compiler identification is GNU 5.3.1
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+[...]
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-Tested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: no changes
+v2: updated comments in sconeserver.mk (Arnout)
 
-Best regards,
-Romain
+ .../sconeserver/0001-fix-ssl-libs-ordering.patch   | 36 ----------------------
+ package/sconeserver/sconeserver.hash               |  2 ++
+ package/sconeserver/sconeserver.mk                 | 11 ++++---
+ 3 files changed, 8 insertions(+), 41 deletions(-)
+ delete mode 100644 package/sconeserver/0001-fix-ssl-libs-ordering.patch
+ create mode 100644 package/sconeserver/sconeserver.hash
 
-> 
-> ---
-> v12:
-> - 'test -e' instead of 'test -f' to avoid broken symlinks lib->lib
->   (noticed by Romain)
-> v11:
-> - check for existence of destination instead of explicitly checking on the
->   known values lib/lib32/lib64. (ThomasP)
-> v10:
-> - simplify after realization that skeleton symlink creation can be kept
->   (thanks Thomas Petazzoni for noticing this)
-> v9:
-> - remove redundant mkdir's (handled by skeleton) (Yann)
-> v8:
-> - use helper only for external toolchain and incorporate ARCH_LIB_DIR
->   definition (Arnout)
-> - keep lib32/lib64->lib symlink anyway
-> v7: rebase
-> v6: rebase only
-> v5:
-> - move internal toolchain logic into gcc-initial.mk
-> - also silence the internal toolchain link steps with $(Q)
-> v4:
-> - merge both helpers into one
-> - remove the separate target for the internal toolchain and hook into
->   gcc-initial
-> - re-add deleted comment about MIPS64/n32
-> v3:
-> - update commit message wrapping
-> - change dependency on $(BUILD_DIR) to a order-only dependency
-> v2:
-> - fix 'lib32-fp' leftover in toolchain-buildroot
-> - silence commands creating symlink with $(Q)
-> - fix case where ARCH_LIB_DIR is 'lib'
-> 
-> Note: in output/staging/usr/ there would still be more directories than I
-> think are really necessary. This behavior is not changed by this patch, it
-> was already present before.
-> For example, with the mentioned Octeon III toolchain, output/staging/usr/
-> contains:
->     bin      bin32      bin32-fp      bin64-fp,
->     lib      lib32      lib32-fp      lib64-fp
->     libexec  libexec32  libexec32-fp  libexec64-fp
->     sbin     sbin32     sbin32-fp     sbin64-fp
-> 
-> where bin/lib/libexec/sbin seem to be the 64-bit equivalents of
-> bin32/lib32/libexec32/sbin32.
-> This is related to the behavior of copy_toolchain_sysroot in
-> toolchain/helpers.mk. It already attempts to filter out the unnecessary lib*
-> directories, but does not care about any bin/sbin/libexec directories.
-> As this poses no known problem and is not impacted by this patch, I make no
-> attempt to change it.
-> 
->  toolchain/toolchain-external/toolchain-external.mk | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index ddefd01..518afd6 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -517,6 +517,27 @@ endef
->  TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_MUSL_LD_LINK
->  endif
->  
-> +# Create a symlink from (usr/)$(ARCH_LIB_DIR) to lib.
-> +# Note: the skeleton package additionally creates lib32->lib or lib64->lib
-> +# (as appropriate)
-> +#
-> +# $1: destination directory (TARGET_DIR / STAGING_DIR)
-> +create_lib_symlinks = \
-> +       $(Q)DESTDIR="$(strip $1)" ; \
-> +       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> +       if [ ! -e "$${DESTDIR}/$${ARCH_LIB_DIR}" -a ! -e "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ]; then \
-> +               ln -snf lib "$${DESTDIR}/$${ARCH_LIB_DIR}" ; \
-> +               ln -snf lib "$${DESTDIR}/usr/$${ARCH_LIB_DIR}" ; \
-> +       fi
-> +
-> +define TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK
-> +       $(call create_lib_symlinks,$(STAGING_DIR))
-> +endef
-> +
-> +define TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK
-> +       $(call create_lib_symlinks,$(TARGET_DIR))
-> +endef
-> +
->  # Integration of the toolchain into Buildroot: find the main sysroot
->  # and the variant-specific sysroot, then copy the needed libraries to
->  # the $(TARGET_DIR) and copy the whole sysroot (libraries and headers)
-> @@ -732,6 +753,7 @@ endef
->  TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
->  
->  define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
-> +	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
-> @@ -741,6 +763,7 @@ endef
->  # and the target directory, we do everything within the
->  # install-staging step, arbitrarily.
->  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
-> +	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
->  	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
-> 
+diff --git a/package/sconeserver/0001-fix-ssl-libs-ordering.patch b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+deleted file mode 100644
+index f1f25b9..0000000
+--- a/package/sconeserver/0001-fix-ssl-libs-ordering.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-configure: re-order SSL libs when linking
+-
+-When doing static builds, the ordering of libs is important, as the
+-linker does not back-pedal to previous libraries specified on the
+-command line to find missing symbols, and only searches for those
+-missing symbols in the following libs.
+-
+-Thus, as -lssl needs symbols from -lcrypto, it needs to come before
+--lcrypto.
+-
+-And globally, we do *not* append new libraries, we prepend them.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+-diff -durN a/configure.in b/configure.in
+---- a/configure.in	2014-10-16 11:12:08.000000000 +0200
+-+++ b/configure.in	2015-05-30 15:44:25.540329788 +0200
+-@@ -133,12 +133,14 @@
+-     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
+-   )
+-   AC_CHECK_LIB([crypto],[CRYPTO_new_ex_data],
+--    [SSL_LIBADD="$SSL_LIBADD -lcrypto"],
+--    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])]
+-+    [SSL_LIBADD="-lcrypto $SSL_LIBADD"],
+-+    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])],
+-+    [$SSL_LIBADD]
+-   )
+-   AC_CHECK_LIB([ssl],[SSL_library_init],
+--    [SSL_LIBADD="$SSL_LIBADD -lssl"],
+--    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])]
+-+    [SSL_LIBADD="-lssl $SSL_LIBADD"],
+-+    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])],
+-+    [$SSL_LIBADD]
+-   )
+-   AC_SUBST(SSL_LIBADD)
+- fi
+diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
+new file mode 100644
+index 0000000..2e1fe84
+--- /dev/null
++++ b/package/sconeserver/sconeserver.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	442c29ae93f615b610983187023ba6c1a9ca69526cb07f69576efba1d29d9daf	sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd.tar.gz
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index 2072142..0a8158e 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -4,16 +4,17 @@
+ #
+ ################################################################################
+ 
+-# Release 0.6.0 doesn't build cleanly, so use a recent
+-# Git commit.
+-SCONESERVER_VERSION = 3b886c3dda6eda39bcb27472d29ed7fd3185ba1d
++SCONESERVER_VERSION = c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd
+ SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
+ SCONESERVER_LICENSE = GPLv2+
+ SCONESERVER_LICENSE_FILES = COPYING
+-# For 0001-fix-ssl-libs-ordering.patch and configure isn't up to date
++# upstream tarball does not contain a configure script
+ SCONESERVER_AUTORECONF = YES
+ SCONESERVER_DEPENDENCIES += pcre
+-SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6
++# disable markdown module because its git submodule cmark
++# https://github.com/sconemad/sconeserver/tree/master/markdown
++# has no cross-compile support provided by the sconeserver build system
++SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6 --without-markdown
+ 
+ # Sconeserver configure script fails to find the libxml2 headers.
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+-- 
+2.7.0
