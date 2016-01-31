@@ -1,68 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:43:04 +0100
-Subject: [Buildroot] [git commit] package/libpciaccess: fix musl build
-Message-ID: <20160201224709.2E3607F892@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 20:33:39 +0100
+Subject: [Buildroot] [git commit] package/subversion: security version bump
+	to 1.9.3
+Message-ID: <20160201224712.BB4437F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6514c83e7999d642de320f0162884742877ab00
+commit: https://git.buildroot.net/buildroot/commit/?id=544949e4987c177ebcfa76244c5383a2267ac240
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also added note about upstream commit to patch 0001.
+Release announcement:
+http://mail-archives.apache.org/mod_mbox/subversion-dev/201512.mbox/%3CCAP_GPNj_GCA869VQeJUrp5ngXsgN7pQQHSS=sqoXm8_6hHTTxg at mail.gmail.com%3E
 
-Fixes
-http://autobuild.buildroot.net/results/e86/e869e08779626ac578017e6b34a82adf156d12f8/
-http://autobuild.buildroot.net/results/0bf/0bf803654e7298d5cd0b31fc55b1babdcd2f8765/
-http://autobuild.buildroot.net/results/f5a/f5a516cf6c25af89000019b6789d5a003099cdff/
+CVE-2015-5259:
+Remotely triggerable heap overflow and out-of-bounds read caused by
+integer overflow in the svn:// protocol parser.
+http://subversion.apache.org/security/CVE-2015-5259-advisory.txt
+
+CVE-2015-5343:
+Remotely triggerable heap overflow and out-of-bounds read in mod_dav_svn
+caused by integer overflow when parsing skel-encoded request bodies.
+http://subversion.apache.org/security/CVE-2015-5343-advisory.txt
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpciaccess/0001-limits_h.patch |  4 ++--
- package/libpciaccess/0002-musl-arm.patch | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+), 2 deletions(-)
+ package/subversion/subversion.hash | 2 +-
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpciaccess/0001-limits_h.patch b/package/libpciaccess/0001-limits_h.patch
-index 9afa203..c5c8444 100644
---- a/package/libpciaccess/0001-limits_h.patch
-+++ b/package/libpciaccess/0001-limits_h.patch
-@@ -3,8 +3,8 @@ Fix compilation error with musl-based toolchain
- linux_sysfs.c:751:15: error: 'PATH_MAX' undeclared (first use in this function)
-      char name[PATH_MAX];
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index 7806374..4f0a446 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,2 +1,2 @@
+ # From http://subversion.apache.org/download.cgi#recommended-release
+-sha1 fb9db3b7ddf48ae37aa8785872301b59bfcc7017 subversion-1.9.2.tar.bz2
++sha1	27e8df191c92095f48314a415194ec37c682cbcf	subversion-1.9.3.tar.bz2
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index 2f6a249..e9aa0ae 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--Patch already sent upstream by Felix Janda
--http://lists.x.org/archives/xorg-devel/2014-December/044723.html
-+Patch applied upstream:
-+http://cgit.freedesktop.org/xorg/lib/libpciaccess/commit/?id=8ea3af620a2d4ad5648917b4a0ef2b23ff566774
- 
- Signed-off-by: Felix Janda <felix.janda@posteo.de>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-diff --git a/package/libpciaccess/0002-musl-arm.patch b/package/libpciaccess/0002-musl-arm.patch
-new file mode 100644
-index 0000000..0077f45
---- /dev/null
-+++ b/package/libpciaccess/0002-musl-arm.patch
-@@ -0,0 +1,20 @@
-+Fix musl build
-+
-+Inspired by http://patchwork.openembedded.org/patch/111661/
-+"inb/outb are implemented for ARM on glibc but not on linux in general
-+therefore the conditional has to reflect that"
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr libpciaccess-0.13.4.org/src/linux_sysfs.c libpciaccess-0.13.4/src/linux_sysfs.c
-+--- libpciaccess-0.13.4.org/src/linux_sysfs.c	2015-05-01 06:44:47.000000000 +0200
-++++ libpciaccess-0.13.4/src/linux_sysfs.c	2016-01-24 15:27:57.141562678 +0100
-+@@ -49,7 +49,7 @@
-+ #include <dirent.h>
-+ #include <errno.h>
-+ 
-+-#if defined(__i386__) || defined(__x86_64__) || defined(__arm__)
-++#if defined(__i386__) || defined(__x86_64__)
-+ #include <sys/io.h>
-+ #else
-+ #define inb(x) -1
+-SUBVERSION_VERSION = 1.9.2
++SUBVERSION_VERSION = 1.9.3
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
+ SUBVERSION_LICENSE = Apache-2.0
