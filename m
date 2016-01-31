@@ -1,61 +1,73 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 14:58:54 +0100
-Subject: [Buildroot] [PATCH 2/6] package/libsigrok: bump version to 0.4.0
+Date: Sun, 31 Jan 2016 14:58:56 +0100
+Subject: [Buildroot] [PATCH 4/6] package/libsigrokdecode: bump version to
+	0.4.0
 In-Reply-To: <1454248738-12371-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454248738-12371-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454248738-12371-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454248738-12371-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to upstream tarball, remove autoreconf, add hash.
+Switch to upstream tarball, remove autoreconf, add hash, fix typo.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libsigrok/libsigrok.hash |  2 ++
- package/libsigrok/libsigrok.mk   | 13 ++-----------
- 2 files changed, 4 insertions(+), 11 deletions(-)
- create mode 100644 package/libsigrok/libsigrok.hash
+ package/libsigrokdecode/Config.in            |  2 +-
+ package/libsigrokdecode/libsigrokdecode.hash |  2 ++
+ package/libsigrokdecode/libsigrokdecode.mk   | 13 ++-----------
+ 3 files changed, 5 insertions(+), 12 deletions(-)
+ create mode 100644 package/libsigrokdecode/libsigrokdecode.hash
 
-diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
+diff --git a/package/libsigrokdecode/Config.in b/package/libsigrokdecode/Config.in
+index a8f4e85..70f86ce 100644
+--- a/package/libsigrokdecode/Config.in
++++ b/package/libsigrokdecode/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_LIBSIGROKDECODE
+ 
+ 	  http://sigrok.org/wiki/Libsigrokdecode
+ 
+-comment "libsigrokecode needs a toolchain w/ wchar, threads, dynamic library"
++comment "libsigrokdecode needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_PYTHON
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/libsigrokdecode/libsigrokdecode.hash b/package/libsigrokdecode/libsigrokdecode.hash
 new file mode 100644
-index 0000000..999cef5
+index 0000000..3ac8a76
 --- /dev/null
-+++ b/package/libsigrok/libsigrok.hash
++++ b/package/libsigrokdecode/libsigrokdecode.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256	5f291f3fee36e6dab1336f1c78596e50588831bc5ebd7cddc2a95fe8c71d669e	libsigrok-0.4.0.tar.gz
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 54d0482..e4e079d 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -4,23 +4,14 @@
++sha256	fd7e9d1b73245e844ead97a16d5321c766196f946c9b28a8646cab2e98ec3537	libsigrokdecode-0.4.0.tar.gz
+diff --git a/package/libsigrokdecode/libsigrokdecode.mk b/package/libsigrokdecode/libsigrokdecode.mk
+index c0a4017..b8b3c59 100644
+--- a/package/libsigrokdecode/libsigrokdecode.mk
++++ b/package/libsigrokdecode/libsigrokdecode.mk
+@@ -4,20 +4,11 @@
  #
  ################################################################################
  
--LIBSIGROK_VERSION = fe473123ba836445d477149f2e2c0ae372fc0c4c
+-LIBSIGROKDECODE_VERSION = 9177963de41c2d003d417049470eea3c98eeb2ef
 -# No https access on upstream git
--LIBSIGROK_SITE = git://sigrok.org/libsigrok
-+LIBSIGROK_VERSION = 0.4.0
-+LIBSIGROK_SITE = http://sigrok.org/download/source/libsigrok
- LIBSIGROK_LICENSE = GPLv3+
- LIBSIGROK_LICENSE_FILES = COPYING
+-LIBSIGROKDECODE_SITE = git://sigrok.org/libsigrokdecode
++LIBSIGROKDECODE_VERSION = 0.4.0
++LIBSIGROKDECODE_SITE = http://sigrok.org/download/source/libsigrokdecode
+ LIBSIGROKDECODE_LICENSE = GPLv3+
+ LIBSIGROKDECODE_LICENSE_FILES = COPYING
 -# Git checkout has no configure script
--LIBSIGROK_AUTORECONF = YES
- LIBSIGROK_INSTALL_STAGING = YES
- LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
- LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
+-LIBSIGROKDECODE_AUTORECONF = YES
+ LIBSIGROKDECODE_INSTALL_STAGING = YES
+ LIBSIGROKDECODE_DEPENDENCIES = host-pkgconf libglib2 python3
  
--define LIBSIGROK_ADD_MISSING
+-define LIBSIGROKDECODE_ADD_MISSING
 -	mkdir -p $(@D)/autostuff
 -endef
 -
--LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
+-LIBSIGROKDECODE_PRE_CONFIGURE_HOOKS += LIBSIGROKDECODE_ADD_MISSING
 -
- ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
- LIBSIGROK_CONF_OPTS += --enable-libserialport
- LIBSIGROK_DEPENDENCIES += libserialport
+ $(eval $(autotools-package))
 -- 
 2.7.0
