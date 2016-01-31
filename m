@@ -1,47 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 10:28:13 +0100
-Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: bump kernel to
-	4.4
-Message-ID: <20160201224703.B9C357F90D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 21:06:14 +0100
+Subject: [Buildroot] [git commit] package/smack: bump version to 1.1.0
+Message-ID: <20160201224704.0E65D7F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6bc4b6e1275d9eb57cc15cc4e9e4b15e7210993
+commit: https://git.buildroot.net/buildroot/commit/?id=5bb7ad75830ed0499be41cbcea36bb905f67c815
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/olimex_a20_olinuxino_lime_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/smack/smack.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 19e665b..241518a 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -3,10 +3,10 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
+diff --git a/package/smack/smack.mk b/package/smack/smack.mk
+index 7e0a362..3ef4d47 100644
+--- a/package/smack/smack.mk
++++ b/package/smack/smack.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Lock to 4.1 headers to avoid breaking with newer kernels
-+# Lock to 4.4 headers to avoid breaking with newer kernels
- BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.1.3"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_DEFAULT_KERNEL_VERSION="4.4"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -19,7 +19,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.3"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_ZIMAGE=y
+-SMACK_VERSION = v1.0.4
++SMACK_VERSION = v1.1.0
+ SMACK_SITE = $(call github,smack-team,smack,$(SMACK_VERSION))
+ SMACK_LICENSE = LGPLv2.1
+ SMACK_LICENSE_FILES = COPYING
