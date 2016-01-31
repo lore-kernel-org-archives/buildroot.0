@@ -1,46 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 21:20:05 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: fix musl build
-Message-ID: <20160201224702.44CE17F8D4@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 20:43:09 +0100
+Subject: [Buildroot] [git commit] package/sredird: fix musl build
+Message-ID: <20160201224659.E11227FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca108a803e8b265c975fd5bd4e09d8953ba61481
+commit: https://git.buildroot.net/buildroot/commit/?id=82c16061c344faf0adf76d8ac07ac3ba1b8ccb5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Compile error occured using an allyesconfig, it seems it has not been
-caught by the autobuilders yet.
+Fixes
+http://autobuild.buildroot.net/results/4bc/4bc77733d235ba12f70432be4ead921666f5121d/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mesa3d/0003-musl.patch | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/sredird/0001-termio.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/package/mesa3d/0003-musl.patch b/package/mesa3d/0003-musl.patch
+diff --git a/package/sredird/0001-termio.patch b/package/sredird/0001-termio.patch
 new file mode 100644
-index 0000000..8f7ba77
+index 0000000..7c7c67f
 --- /dev/null
-+++ b/package/mesa3d/0003-musl.patch
-@@ -0,0 +1,18 @@
++++ b/package/sredird/0001-termio.patch
+@@ -0,0 +1,20 @@
 +Fix musl build
 +
-+Downloaded from
-+http://git.alpinelinux.org/cgit/aports/plain/main/mesa/musl-fixes.patch
++Patch was inspired by
++http://svnweb.freebsd.org/ports/head/comms/sredird/files/patch-sredird.c?revision=363168&view=markup
++http://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/sysutils/sredird/patches/patch-aa
++https://github.com/bitrig/bitrig-ports/blob/master/comms/sredird/patches/patch-sredird_c
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+--- ./src/gallium/winsys/svga/drm/vmw_screen.h.orig
-++++ ./src/gallium/winsys/svga/drm/vmw_screen.h
-+@@ -34,7 +34,7 @@
-+ #ifndef VMW_SCREEN_H_
-+ #define VMW_SCREEN_H_
-+ 
-+-
-++#include <sys/stat.h>
-+ #include "pipe/p_compiler.h"
-+ #include "pipe/p_state.h"
-+ 
++diff -uNr sredird-2.2.2.org/sredird.c sredird-2.2.2/sredird.c
++--- sredird-2.2.2.org/sredird.c	2005-08-12 16:10:46.000000000 +0200
+++++ sredird-2.2.2/sredird.c	2016-01-31 18:53:08.000000000 +0100
++@@ -110,7 +110,6 @@
++ #include <fcntl.h>
++ #include <syslog.h>
++ #include <termios.h>
++-#include <termio.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++ #include <netinet/ip.h>
