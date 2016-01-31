@@ -1,42 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:36:56 +0100
-Subject: [Buildroot] [git commit] package/lm-sensors: fix download URL
-Message-ID: <20160201224706.1F2797F90D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 13:59:13 +0100
+Subject: [Buildroot] [git commit] package/python-alsaaudio: bump version to
+	0.8.2
+Message-ID: <20160201224704.E8EAB7F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b93183b8ec56e314877ad1168ad312f32d1a121
+commit: https://git.buildroot.net/buildroot/commit/?id=9ebb7f600381c1f88b7f5e093bd51a38cf5f68c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-According to http://www.lm-sensors.org/
-"the previous hosting for lm-sensors.org has been discontinued and the
- former website maintainers can't be reached. For now, please refer to
- the Internet Archive of the old site until a replacement is created:
- https://web.archive.org/web/20150905145034/http://www.lm-sensors.org/"
-
-This site points to ftp://ftp.netroedge.com/pub/lm-sensors/ as a mirror
-site for this package, so let's use it until upstream can fix its web
-site.
+Upstream moved to github, the old project site now redirects to the URL
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lm-sensors/lm-sensors.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-alsaaudio/Config.in             | 2 +-
+ package/python-alsaaudio/python-alsaaudio.hash | 4 +++-
+ package/python-alsaaudio/python-alsaaudio.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index c26f919..cc05ef4 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/python-alsaaudio/Config.in b/package/python-alsaaudio/Config.in
+index 22a7e87..60523bf 100644
+--- a/package/python-alsaaudio/Config.in
++++ b/package/python-alsaaudio/Config.in
+@@ -11,4 +11,4 @@ config BR2_PACKAGE_PYTHON_ALSAAUDIO
+ 	  The PyAlsaAudio package contains bindings for the ALSA sound
+ 	  API.
  
- LM_SENSORS_VERSION = 3.3.5
- LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
--LM_SENSORS_SITE = http://dl.lm-sensors.org/lm-sensors/releases
-+LM_SENSORS_SITE = ftp://ftp.netroedge.com/pub/lm-sensors
- LM_SENSORS_INSTALL_STAGING = YES
- LM_SENSORS_DEPENDENCIES = host-bison host-flex
- LM_SENSORS_LICENSE = libsensors LGPLv2.1+, programs GPLv2+
+-	  http://pyalsaaudio.sourceforge.net/
++	  http://larsimmisch.github.io/pyalsaaudio/
+diff --git a/package/python-alsaaudio/python-alsaaudio.hash b/package/python-alsaaudio/python-alsaaudio.hash
+index d805710..92277ec 100644
+--- a/package/python-alsaaudio/python-alsaaudio.hash
++++ b/package/python-alsaaudio/python-alsaaudio.hash
+@@ -1,2 +1,4 @@
++# From https://pypi.python.org/pypi?:action=show_md5&digest=1f22415a3d8da4b303182ad81c2d062e
++md5	1f22415a3d8da4b303182ad81c2d062e	pyalsaaudio-0.8.2.tar.gz
+ # Locally calculated
+-sha256	bbd5a9eb351def673800707f48e64680685f397e29da72ea4c9355e1a2b2a0fd  pyalsaaudio-0.7.tar.gz
++sha256	b6df486f1c4035041a5f3800496b86c64e48e4a7d47f94dcbca11b0187aa3a15	pyalsaaudio-0.8.2.tar.gz
+diff --git a/package/python-alsaaudio/python-alsaaudio.mk b/package/python-alsaaudio/python-alsaaudio.mk
+index e64ddb4..92c354e 100644
+--- a/package/python-alsaaudio/python-alsaaudio.mk
++++ b/package/python-alsaaudio/python-alsaaudio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ALSAAUDIO_VERSION = 0.7
++PYTHON_ALSAAUDIO_VERSION = 0.8.2
+ PYTHON_ALSAAUDIO_SOURCE = pyalsaaudio-$(PYTHON_ALSAAUDIO_VERSION).tar.gz
+-PYTHON_ALSAAUDIO_SITE = http://downloads.sourceforge.net/project/pyalsaaudio
++PYTHON_ALSAAUDIO_SITE = https://pypi.python.org/packages/source/p/pyalsaaudio
+ PYTHON_ALSAAUDIO_SETUP_TYPE = distutils
+ PYTHON_ALSAAUDIO_LICENSE = Python software foundation license v2
+ PYTHON_ALSAAUDIO_LICENSE_FILES = LICENSE
