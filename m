@@ -1,112 +1,39 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 31 Jan 2016 20:42:23 +0100
-Subject: [Buildroot] [PATCH 12/16 v3] core/legal-info: renumber saved
- patches
-In-Reply-To: <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
-Message-ID: <56AE639F.3080304@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 20:44:08 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sredird: bump version to 2.2.2,
+ add hash
+In-Reply-To: <1454263304-17588-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454263304-17588-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131204408.61841b1f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Dear Bernd Kuhls,
 
-Yann E. MORIN wrote:
-> Patches we save can come from various locations;
->    - bundled with Buildroot
->    - downloaded
->    - from one or more global-patch-dir
->
-> It is possible that two patches lying into different locations have the
-> same basename, like so (first is bundled, second is from an hypothetical
-> global-patch-dir):
->      package/foo/0001-fix-Makefile.patch
->      /path/to/my/patches/foo/0001-fix-Makefile.patch
->
-> In that case, we'd save onlt the second patch, overwriting the first.
-
-onlt -> only
-
-Indeed for legal-info it would be a serious issue if we silently
-overwrite a patch, resulting in _silently_ missing a patch. Thus this
-must be fixed somehow, and I would not merge the previous patch without
-this one (or any variation we come up with).
-
-As an alternative solution, Arnout proposed to error out if two patches
-have the same basename. Even though if would avoid the ugly prefixing,
-it would unnecessarily break builds without a need (as far as the
-development is concerned).
-
-Thus, I moderately prefer Yann's solution. It could be improved by
-renaming only files that have identical names, but that might be
-overkill, and can definitely be done later.
-
->
-> We fix that by forcibly prefixing saved patches with a new numbering, to
-> guarantee the unicity of saved files.
->
-> The unfortunate side-effects are that:
->    - most saved patches will be twice-numbered,
->    - the series file is now redundant.
->
-> While the former is mostly not nice-looking, we shouldn't try to strip
-> any leading numbering, as that might not be a numbering (e.g.
-> 42-retries.patch which is a patch add 42 retries).
->
-> The latter is not really problematic. A lot of tools (and people) can
-> work with, and prefer to have a series file.
-
-I agree, leaving the series file may be useful to somebody, and it
-doesn't hurt anyway.
-
->
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
->
+On Sun, 31 Jan 2016 19:01:43 +0100, Bernd Kuhls wrote:
+> While Debian still uses version 2.2.1 the bump to 2.2.2 was committed to
+> FreeBSD ports back in 2005:
+> https://www.freshports.org/commit.php?category=comms&port=sredird&files=yes&message_id=200512291935.jBTJZfff072190 at repoman.freebsd.org
+> 
+> FreeBSD ports lists the new upstream URL as no. 12:
+> https://www.freshports.org/comms/sredird/
+> and http://freecode.com/projects/sredird also links to it.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> Note that I've made this a separate change, not because the patch would
-> be too complex if squahed with the previous, but rather to have a more
-> detailed commit log about the reason for the renumbering; squashing the
-> two changes together would make for a really long commit log, at the
-> risk of being more difficult to follow.
-> ---
->   package/pkg-generic.mk | 13 ++++++++++---
->   1 file changed, 10 insertions(+), 3 deletions(-)
->
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index c5b66db..f6132b3 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -825,9 +825,16 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
->   		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
->   		     $$($(2)_REDIST_SOURCES_DIR))
->   # Copy patches and generate the series file
-> -	$$(Q)while read f; do \
-> -		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
-> -		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-> +# Because patches may come from various places (bundled in Buildroot,
-> +# from one or more global-patch-dir), there might be collisions on the
-> +# basenames of those files.
-> +# We add a new numbering to each patch to ensure unicity of the filenames.
-> +	$$(Q)cpt=1; while read f; do \
-> +		_c=$$$$(printf "%04d" $$$${cpt}); \
-> +		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR),\
-> +			$$$${_c}-$$$${f##*/}) || exit 1; \
-> +		printf "%s\n" "$$$${_c}-$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
-> +		: $$$$((cpt++)); \
+>  package/sredird/Config.in    | 2 ++
+>  package/sredird/sredird.hash | 2 ++
+>  package/sredird/sredird.mk   | 5 ++---
+>  3 files changed, 6 insertions(+), 3 deletions(-)
+>  create mode 100644 package/sredird/sredird.hash
 
-I must admit this is not the most readable piece of code I have seen so
-far... ;) I cannot do anything about the '$$$$'s, but at least I can
-suggest to rename the variables:
+Both applied, thanks!
 
-  - cpt -> patch_num
-  - _c -> prefix_num
-
-But it works fine, thus:
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
