@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:09:08 +0100
-Subject: [Buildroot] [git commit] package/imx-lib: fix legal-info
-Message-ID: <20160201224715.008227F8C2@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 20:34:35 +0100
+Subject: [Buildroot] [git commit] package/snowball-init: use github helper
+Message-ID: <20160201224701.5A7537FA6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7a634e6fdeae659b853f928f4bdae0ce8480975
+commit: https://git.buildroot.net/buildroot/commit/?id=7aecb34cbf4c9eeda5a1012b1a588de510506f60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The new version of imx-lib no longer bears the EULA file, and has no
-other license file.
+Otherwise download is broken:
 
-So, we pick a small header as the license file.
+>>> snowball-init b064be21de25729039e5e54037bbdd2e25cfd5b7 Downloading
+--2016-01-31 17:31:27--  https://github.com/igloocommunity/snowball-init/snowball-init-b064be21de25729039e5e54037bbdd2e25cfd5b7.tar.gz
+Resolving github.com (github.com)... 192.30.252.128
+Connecting to github.com (github.com)|192.30.252.128|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2016-01-31 17:31:27 ERROR 404: Not Found.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Acked-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freescale-imx/imx-lib/imx-lib.mk | 2 +-
+ package/snowball-init/snowball-init.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index 7046580..e160cca 100644
---- a/package/freescale-imx/imx-lib/imx-lib.mk
-+++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -7,7 +7,7 @@
- IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
- IMX_LIB_SITE = $(FREESCALE_IMX_SITE)
- IMX_LIB_LICENSE = LGPLv2.1+
--IMX_LIB_LICENSE_FILES = EULA
-+IMX_LIB_LICENSE_FILES = pxp/pxp_lib.h
+diff --git a/package/snowball-init/snowball-init.mk b/package/snowball-init/snowball-init.mk
+index 40acdd6..f06b032 100644
+--- a/package/snowball-init/snowball-init.mk
++++ b/package/snowball-init/snowball-init.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- IMX_LIB_INSTALL_STAGING = YES
+ SNOWBALL_INIT_VERSION = b064be21de25729039e5e54037bbdd2e25cfd5b7
+-SNOWBALL_INIT_SITE = https://github.com/igloocommunity/snowball-init
++SNOWBALL_INIT_SITE = $(call github,igloocommunity,snowball-init,$(SNOWBALL_INIT_VERSION))
+ SNOWBALL_INIT_LICENSE = BSD-4c
+ SNOWBALL_INIT_LICENSE_FILES = debian/copyright
  
