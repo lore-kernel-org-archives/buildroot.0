@@ -1,96 +1,70 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 11:14:48 +0100
-Subject: [Buildroot] [PATCH 1/2] package/oprofile: bump version to 1.1.0
-Message-ID: <1454235289-1353-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 11:17:09 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix musl build
+Message-ID: <1454235429-6713-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-http://sourceforge.net/p/oprofile/oprofile/ci/f357d40c9f64f3ea2dccf5f9abdff84b2ac62e6f/
+Fixes
+http://autobuild.buildroot.net/results/a15/a1586717154efb6495dfcdb5c7ce11a047dd68db/
+http://autobuild.buildroot.net/results/363/3636ddcc0efa974c674f36d3c65eea5beb32af52/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Include-time.h-for-nanosleep.patch        | 44 ----------------------
- package/oprofile/oprofile.hash                     |  5 ++-
- package/oprofile/oprofile.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 47 deletions(-)
- delete mode 100644 package/oprofile/0001-Include-time.h-for-nanosleep.patch
+v2: hopefully fixed patch comment (Thomas)
 
-diff --git a/package/oprofile/0001-Include-time.h-for-nanosleep.patch b/package/oprofile/0001-Include-time.h-for-nanosleep.patch
-deleted file mode 100644
-index d4a9ca2..0000000
---- a/package/oprofile/0001-Include-time.h-for-nanosleep.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From c5b93c33a81d7c52dc6089387e415f2d653f758f Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Mon, 29 Dec 2014 11:43:51 +0100
--Subject: [PATCH] Include <time.h> for nanosleep()
--
--The nanosleep() function prototype is in <time.h>, so this header file
--should be included whenever nanosleep() is used. Not including it
--causes some issues when building OProfile against a non-thread capable
--version of the uClibc C library, probably because in such situation,
--<time.h> does not get included by another header.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- pe_counting/ocount.cpp | 1 +
-- pe_profiling/operf.cpp | 1 +
-- 2 files changed, 2 insertions(+)
--
--diff --git a/pe_counting/ocount.cpp b/pe_counting/ocount.cpp
--index 07dfd0c..fba29eb 100644
----- a/pe_counting/ocount.cpp
--+++ b/pe_counting/ocount.cpp
--@@ -28,6 +28,7 @@
-- #include <getopt.h>
-- #include <sys/time.h>
-- #include <math.h>
--+#include <time.h>
-- 
-- #include "op_pe_utils.h"
-- #include "ocount_counter.h"
--diff --git a/pe_profiling/operf.cpp b/pe_profiling/operf.cpp
--index 04a25d9..4238754 100644
----- a/pe_profiling/operf.cpp
--+++ b/pe_profiling/operf.cpp
--@@ -33,6 +33,7 @@
-- #include <sys/wait.h>
-- #include <ftw.h>
-- #include <getopt.h>
--+#include <time.h>
-- #include <iostream>
-- #include "operf_utils.h"
-- #include "op_pe_utils.h"
---- 
--2.1.0
--
-diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
-index b6ab3ba..cc15ed1 100644
---- a/package/oprofile/oprofile.hash
-+++ b/package/oprofile/oprofile.hash
-@@ -1,2 +1,3 @@
--# Locally computed:
--sha256  847110b4ecdcf8c8353cd38f94c1b704aad4bfcd9453e38b88d112cfb7e3c45a  oprofile-1.0.0.tar.gz
-+# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.1.0/
-+sha1	38c0d8812fe605f6ddd1cd183a482aa7605c0e81	oprofile-1.1.0.tar.gz
-+md5	248c4c069f9476f427fa7195563f9867		oprofile-1.1.0.tar.gz
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index f27e06e..d91ddab 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPROFILE_VERSION = 1.0.0
-+OPROFILE_VERSION = 1.1.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPLv2+
- OPROFILE_LICENSE_FILES = COPYING
+ ...Invert-conditional-for-defining-QT_SOCKLE.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+
+diff --git a/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+new file mode 100644
+index 0000000..97be739
+--- /dev/null
++++ b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+@@ -0,0 +1,40 @@
++From 8f09897de948cea8861ca95e182f442cf15a339e Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Mon, 8 Jun 2015 13:59:25 -0700
++Subject: [PATCH] linux-oe-g++: Invert conditional for defining QT_SOCKLEN_T
++
++This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
++only when its glibc < 2 and not also for the libraries which may define
++it as per standards but are not glibc, e.g. musl
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++[Bernd: Downloaded from
++https://github.com/meta-qt5/meta-qt5/blob/d9d1d04760430cd0e5edd1764d832860715e7b83/recipes-qt/qt5/qtbase/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
++and adjusted path.]
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ mkspecs/linux-oe-g++/qplatformdefs.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/mkspecs/linux-oe-g++/qplatformdefs.h b/mkspecs/linux-oe-g++/qplatformdefs.h
++index dd12003..8623651 100644
++--- a/mkspecs/linux-g++/qplatformdefs.h
+++++ b/mkspecs/linux-g++/qplatformdefs.h
++@@ -86,10 +86,10 @@
++ 
++ #undef QT_SOCKLEN_T
++ 
++-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
++-#define QT_SOCKLEN_T            socklen_t
++-#else
+++#if defined(__GLIBC__) && (__GLIBC__ < 2)
++ #define QT_SOCKLEN_T            int
+++#else
+++#define QT_SOCKLEN_T            socklen_t
++ #endif
++ 
++ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
++-- 
++2.1.4
++
 -- 
 2.7.0
