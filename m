@@ -1,54 +1,132 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 31 Jan 2016 21:08:03 +0100
-Subject: [Buildroot] [git commit] flot: add hash file
-In-Reply-To: <20160131104313.1c5fdd0a@free-electrons.com>
-References: <20150728204046.4BDD17F9DF@busybox.osuosl.org>
- <rs5uncx00j.ln2@ID-313208.user.individual.net>
- <20160131104313.1c5fdd0a@free-electrons.com>
-Message-ID: <56AE69A3.3050807@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 31 Jan 2016 21:11:26 +0100
+Subject: [Buildroot] [PATCH 15/16 v3] core/legal-info: allow ignoring
+ packages from the legal-info
+In-Reply-To: <882f1002db3ce40f210893921c23728ca796d20e.1454004518.git.yann.morin.1998@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <882f1002db3ce40f210893921c23728ca796d20e.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <56AE6A6E.7040106@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 10:43, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sat, 30 Jan 2016 08:38:35 +0100, Bernd Kuhls wrote:
-> 
->> I downloaded the tarball
->> http://www.flotcharts.org/downloads/flot-0.8.3.tar.gz
->> today and got a different sha256 checksum:
->>
->> ERROR: flot-0.8.3.tar.gz has wrong sha256 hash:
->> ERROR: expected: 
->> d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952
->> ERROR: got     : 
->> ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21
->> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-> 
-> I checked locally, and in my BR2_DL_DIR, I still have a tarball that
-> has the
-> d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952 hash,
-> but indeed if I re-download it, I get a tarball with the
-> ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21 hash.
-> 
->> Shall I send a patch?
-> 
-> Yes, please do. It would also be great to notify upstream that they
-> shouldn't change their tarballs.
+Hi Yann,
 
- Perhaps we should first check what is different?
+Yann E. MORIN wrote:
+> It might be necessary to not even mention a package in the output of
+> legal-info:
+>
+>    - virtual package have virtually nothing to save in the legal-info
 
- Regards,
- Arnout
+package -> packages
+
+>      output;
+>
+>    - for Buildroot itself, host-gcc-initial and host-gcc-final are
+>      not real packages, they are just two different steps of the same
+>      package, gcc;
+>
+>    - for proprietary packages, it might not even be legal to even
+>      mention them, being under NDA or some other such restrictive
+>      conditions.
+>
+> Introduce the new FOO_LEGAL_INGORE variable that a package can set
+> to 'YES' (default to 'NO') to indicate that the package should be
+> completely ignored from the legal-info output, in which case the
+> package is not metionned in the maniufest, its source archive,
+
+metionned in the maniufest -> mentioned in the manifest
+
+> patches and license files are not saved into legal-info/ .
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+>
+> ---
+> Changes v1 -> v2:
+>    - introduce a new variable, instead of making _REDISTRIBUTE a
+>      tri-state  (Thomas, Peter, Luca)
+> ---
+>   docs/manual/adding-packages-generic.txt |  9 +++++++++
+>   package/pkg-generic.mk                  | 15 +++++++++++++++
+>   2 files changed, 24 insertions(+)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 1f9c7bb..1b07a14 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -421,6 +421,15 @@ information is (assuming the package name is +libfoo+) :
+>     non-opensource packages: Buildroot will not save the source code for this
+>     package when collecting the +legal-info+.
+>
+> +* +LIBFOO_LEGAL_IGNORE+ can be set to +YES+ or +NO+ (the default) to indicate
+> +  that this package should be completely ignored when saving the licensing
+> +  information. If set to +YES+, then the package is not listed in the manifest,
+> +  its source archive and its license files are not saved. You probably do not
+> +  want to set it to +YES+, unless under very specific conditions (e.g. when
+> +  you use the `legal-info/` output directory as-is to provide a compliance
+> +  delivery, and do not want your proprietary, non-redistributable packages to
+> +  even be mentionned in the manifest).
+
+mentionned -> mentioned
+
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index b59af9e..9c02372 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -490,6 +490,14 @@ endif
+>
+>   $(2)_REDISTRIBUTE		?= YES
+>
+> +ifndef $(2)_LEGAL_IGNORE
+> + ifdef $(3)_LEGAL_IGNORE
+> +  $(2)_LEGAL_IGNORE = $$($(3)_LEGAL_IGNORE)
+> + endif
+> +endif
+> +
+> +$(2)_LEGAL_IGNORE		?= NO
+> +
+>   $(2)_REDIST_SOURCES_DIR = $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))/$$($(2)_RAWNAME_VERSION)
+>
+>   # When a target package is a toolchain dependency set this variable to
+> @@ -762,7 +770,10 @@ $(2)_MANIFEST_LICENSE_FILES ?= not saved
+>   # We need to extract and patch a package to be able to retrieve its
+>   # license files (if any) and the list of patches applied to it (if
+>   # any).
+> +# But not if we want to ignore that package completely.
+> +ifneq ($$($(2)_LEGAL_IGNORE),YES)
+>   $(1)-legal-info: $(1)-patch
+> +endif
+>
+>   # We only save the sources of packages we want to redistribute, that are
+>   # non-local, and non-overriden. So only store, in the manifest, the tarball
+> @@ -792,6 +803,8 @@ endif # actual sources != ""
+>
+>   # legal-info: produce legally relevant info.
+>   $(1)-legal-info:
+> +ifneq ($$($(2)_LEGAL_IGNORE),YES)
+> +
+>   # Packages without a source are assumed to be part of Buildroot, skip them.
+>   	$$(foreach hook,$$($(2)_PRE_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+>   ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+> @@ -845,6 +858,8 @@ endif # other packages
+>   endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>   	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+>
+> +endif # $(2)_LEGAL_IGNORE != YES
+> +
+>   # add package to the general list of targets if requested by the buildroot
+>   # configuration
+>   ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+>
+
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Luca
