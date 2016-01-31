@@ -1,23 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 13:59:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-alsaaudio: bump version
-	to 0.8.2
-In-Reply-To: <1454243062-27686-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 31 Jan 2016 13:24:22 +0100")
-References: <1454243062-27686-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <87oac1j45g.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Jan 2016 14:13:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2016a
+In-Reply-To: <1454165543-32439-1-git-send-email-martin@barkynet.com> (Martin
+ Bark's message of "Sat, 30 Jan 2016 14:52:22 +0000")
+References: <1454165543-32439-1-git-send-email-martin@barkynet.com>
+Message-ID: <87k2mpj3ip.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
- > Upstream moved to github, the old project site now redirects to the URL
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Removed 0001-fix-dependencies.patch as this has now been fixed upstream
+ > Signed-off-by: Martin Bark <martin@barkynet.com>
 
-Committed, thanks.
+Committed both, thanks.
 
 -- 
 Bye, Peter Korsgaard
