@@ -1,62 +1,30 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 17:26:21 +0100
-Subject: [Buildroot] [PATCH 2/2] package/smack: fix musl build
-In-Reply-To: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454257581-22383-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 17:26:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/smack: bump version to 1.1.0
+Message-ID: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build error was not yet found by the autobuilders:
-
-common.c: In function ?clear?:
-common.c:36:12: error: ?PATH_MAX? undeclared (first use in this function)
-  char path[PATH_MAX];
-            ^
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...ck-common.c-Include-limits.h-for-PATH_MAX.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
+ package/smack/smack.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-new file mode 100644
-index 0000000..0e30ef5
---- /dev/null
-+++ b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-@@ -0,0 +1,29 @@
-+From 316c911aa741b14513622a4206ed6d324e951fa0 Mon Sep 17 00:00:00 2001
-+From: Felix Janda <felix.janda@posteo.de>
-+Date: Wed, 20 May 2015 21:25:22 +0200
-+Subject: [PATCH 1/1] libsmack/common.c: Include <limits.h> for PATH_MAX
-+
-+Signed-off-by: Felix Janda <felix.janda@posteo.de>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+Downloaded from upstream commit
-+https://github.com/smack-team/smack/commit/316c911aa741b14513622a4206ed6d324e951fa0
-+
-+ libsmack/common.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsmack/common.c b/libsmack/common.c
-+index 55fee1a..55b59e3 100644
-+--- a/libsmack/common.c
-++++ b/libsmack/common.c
-+@@ -22,6 +22,7 @@
-+ #include <dirent.h>
-+ #include <errno.h>
-+ #include <fcntl.h>
-++#include <limits.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <unistd.h>
-+-- 
-+2.7.0
-+
+diff --git a/package/smack/smack.mk b/package/smack/smack.mk
+index 7e0a362..3ef4d47 100644
+--- a/package/smack/smack.mk
++++ b/package/smack/smack.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SMACK_VERSION = v1.0.4
++SMACK_VERSION = v1.1.0
+ SMACK_SITE = $(call github,smack-team,smack,$(SMACK_VERSION))
+ SMACK_LICENSE = LGPLv2.1
+ SMACK_LICENSE_FILES = COPYING
 -- 
 2.7.0
