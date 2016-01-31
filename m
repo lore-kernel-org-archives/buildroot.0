@@ -1,24 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 21:05:50 +0100
-Subject: [Buildroot] [PATCH] configs/nitrogen6*: update to use genimage
-In-Reply-To: <1454269313-27878-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1454269313-27878-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160131210550.7e1ff510@free-electrons.com>
+Date: Sun, 31 Jan 2016 21:06:40 +0100
+Subject: [Buildroot] [PATCH 1/2] package/smack: bump version to 1.1.0
+In-Reply-To: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131210640.2d7a6dbb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+Dear Bernd Kuhls,
 
-On Sun, 31 Jan 2016 20:41:53 +0100, Gary Bisson wrote:
-> Also updating the documentation with the dd instruction to flash the
-> bootbale media.
+On Sun, 31 Jan 2016 17:26:20 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/smack/smack.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Small typo here -> bootbale -> bootable. I've fixed that and applied.
-
-Thanks!
+Both applied, thanks!
 
 Thomas
 -- 
