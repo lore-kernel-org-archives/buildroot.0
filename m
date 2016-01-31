@@ -1,65 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 25 Jan 2016 23:13:47 +0100
-Subject: [Buildroot] [git commit] package/ecryptfs-utils: fix musl build
-Message-ID: <20160201224703.06A1D7F8C1@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 23:11:24 +0100
+Subject: [Buildroot] [git commit] package/libsigrok: bump version to 0.4.0
+Message-ID: <20160201224703.18B3D7F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b89cf7eb0a2907a1ba449ff0c57f092180d33816
+commit: https://git.buildroot.net/buildroot/commit/?id=b428801934ac78c49af574e8a2195278602e1c44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The autobuilders did not catch the error yet because they failed
-earlier with other packages, but I am continuing the build based
-on the defconfig from:
-http://autobuild.buildroot.net/results/6fb/6fbe96af007803acfe9deacf26399cb19e5f2b47/defconfig
+Switch to upstream tarball, remove autoreconf, add hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ecryptfs-utils/0001-musl.patch | 35 ++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/libsigrok/libsigrok.hash |  2 ++
+ package/libsigrok/libsigrok.mk   | 13 ++-----------
+ 2 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/ecryptfs-utils/0001-musl.patch b/package/ecryptfs-utils/0001-musl.patch
+diff --git a/package/libsigrok/libsigrok.hash b/package/libsigrok/libsigrok.hash
 new file mode 100644
-index 0000000..4a3b8a7
+index 0000000..999cef5
 --- /dev/null
-+++ b/package/ecryptfs-utils/0001-musl.patch
-@@ -0,0 +1,35 @@
-+fix musl build
-+
-+Patch inspired by
-+https://github.com/kraj/meta-musl/blob/master/recipes-core/util-linux/util-linux-2.25/0001-switch_root-use-typeof-instead-of-__SWORD_TYPE-for-s.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -uNr ecryptfs-utils-109.org/src/utils/mount.ecryptfs_private.c ecryptfs-utils-109/src/utils/mount.ecryptfs_private.c
-+--- ecryptfs-utils-109.org/src/utils/mount.ecryptfs_private.c	2016-01-22 17:04:52.000000000 +0100
-++++ ecryptfs-utils-109/src/utils/mount.ecryptfs_private.c	2016-01-24 16:52:37.000000000 +0100
-+@@ -224,6 +224,7 @@
-+ 
-+ static int check_cwd_f_type()
-+ {
-++	struct statfs buf;
-+ 	/**
-+ 	 * This is *not* a list of compatible lower filesystems list for
-+ 	 * eCryptfs. This is a list of filesystems that we reasonably expect to
-+@@ -235,7 +236,7 @@
-+ 	 * deceive other programs with a crafted /proc/self/*. See
-+ 	 * https://launchpad.net/bugs/1530566 for more details.
-+ 	 */
-+-	__SWORD_TYPE f_type_whitelist[] = {
-++	typeof(buf.f_type) f_type_whitelist[] = {
-+ 		0x61756673 /* AUFS_SUPER_MAGIC */,
-+ 		0x9123683E /* BTRFS_SUPER_MAGIC */,
-+ 		0x00C36400 /* CEPH_SUPER_MAGIC */,
-+@@ -259,7 +260,6 @@
-+ 		0x58465342 /* XFS_SB_MAGIC */,
-+ 		0x2FC12FC1 /* ZFS_SUPER_MAGIC */,
-+ 	};
-+-	struct statfs buf;
-+ 	size_t i, whitelist_len;
-+ 
-+ 	if (statfs(".", &buf) != 0) {
++++ b/package/libsigrok/libsigrok.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	5f291f3fee36e6dab1336f1c78596e50588831bc5ebd7cddc2a95fe8c71d669e	libsigrok-0.4.0.tar.gz
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 54d0482..e4e079d 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -4,23 +4,14 @@
+ #
+ ################################################################################
+ 
+-LIBSIGROK_VERSION = fe473123ba836445d477149f2e2c0ae372fc0c4c
+-# No https access on upstream git
+-LIBSIGROK_SITE = git://sigrok.org/libsigrok
++LIBSIGROK_VERSION = 0.4.0
++LIBSIGROK_SITE = http://sigrok.org/download/source/libsigrok
+ LIBSIGROK_LICENSE = GPLv3+
+ LIBSIGROK_LICENSE_FILES = COPYING
+-# Git checkout has no configure script
+-LIBSIGROK_AUTORECONF = YES
+ LIBSIGROK_INSTALL_STAGING = YES
+ LIBSIGROK_DEPENDENCIES = libglib2 libzip host-pkgconf
+ LIBSIGROK_CONF_OPTS = --disable-glibtest --disable-java --disable-python
+ 
+-define LIBSIGROK_ADD_MISSING
+-	mkdir -p $(@D)/autostuff
+-endef
+-
+-LIBSIGROK_PRE_CONFIGURE_HOOKS += LIBSIGROK_ADD_MISSING
+-
+ ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
+ LIBSIGROK_CONF_OPTS += --enable-libserialport
+ LIBSIGROK_DEPENDENCIES += libserialport
