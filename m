@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 30 Jan 2016 08:37:03 +0100
-Subject: [Buildroot] [git commit] package/lm-sensors: bump version to 3.4.0
-Message-ID: <20160201224703.82A297F8C1@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 23:50:30 +0100
+Subject: [Buildroot] [git commit] package/libraw1394: fix musl build
+Message-ID: <20160201224705.25E347F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47a142f6662eb983d0325ccabea4dcda4fdd667f
+commit: https://git.buildroot.net/buildroot/commit/?id=1b0933f201952bd7a933659335c9226842f28b18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes
+http://autobuild.buildroot.net/results/33c/33cac2bda4890b6050c71734b2c36a77db3d3a09/
+http://autobuild.buildroot.net/results/9b5/9b56c1eb7a790d6df6665e8592004f20ed3f0693/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lm-sensors/lm-sensors.hash | 4 ++--
- package/lm-sensors/lm-sensors.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libraw1394/libraw1394.hash | 2 ++
+ package/libraw1394/libraw1394.mk   | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/lm-sensors/lm-sensors.hash b/package/lm-sensors/lm-sensors.hash
-index 05fd5ca..8cbd3d1 100644
---- a/package/lm-sensors/lm-sensors.hash
-+++ b/package/lm-sensors/lm-sensors.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	5dae6a665e1150159a93743c4ff1943a7efe02cd9d3bb12c4805e7d7adcf4fcf	lm_sensors-3.3.5.tar.bz2
-+# Locally calculated
-+sha256	e0579016081a262dd23eafe1d22b41ebde78921e73a1dcef71e05e424340061f	lm_sensors-3.4.0.tar.bz2
-diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
-index cc05ef4..d2080d8 100644
---- a/package/lm-sensors/lm-sensors.mk
-+++ b/package/lm-sensors/lm-sensors.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LM_SENSORS_VERSION = 3.3.5
-+LM_SENSORS_VERSION = 3.4.0
- LM_SENSORS_SOURCE = lm_sensors-$(LM_SENSORS_VERSION).tar.bz2
- LM_SENSORS_SITE = ftp://ftp.netroedge.com/pub/lm-sensors
- LM_SENSORS_INSTALL_STAGING = YES
+diff --git a/package/libraw1394/libraw1394.hash b/package/libraw1394/libraw1394.hash
+index 3674ad7..b785995 100644
+--- a/package/libraw1394/libraw1394.hash
++++ b/package/libraw1394/libraw1394.hash
+@@ -1,2 +1,4 @@
+ # From https://www.kernel.org/pub/linux/libs/ieee1394/sha256sums.asc
+ sha256	1bab9780189f9d1eb4e973df12679c04f979c21e024240fc98e536ff5b680ee9	libraw1394-2.1.1.tar.xz
++# Locally computed
++sha256	39369c65fbed7fccc2e6d8e645f258f101c414107d67238f10996e6c2009f20d	fix-types.patch
+diff --git a/package/libraw1394/libraw1394.mk b/package/libraw1394/libraw1394.mk
+index c9bc0b1..7123ac7 100644
+--- a/package/libraw1394/libraw1394.mk
++++ b/package/libraw1394/libraw1394.mk
+@@ -7,6 +7,7 @@
+ LIBRAW1394_VERSION = 2.1.1
+ LIBRAW1394_SOURCE = libraw1394-$(LIBRAW1394_VERSION).tar.xz
+ LIBRAW1394_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ieee1394
++LIBRAW1394_PATCH = http://git.alpinelinux.org/cgit/aports/plain/main/libraw1394/fix-types.patch
+ LIBRAW1394_INSTALL_STAGING = YES
+ LIBRAW1394_LICENSE = LGPLv2.1+
+ LIBRAW1394_LICENSE_FILES = COPYING.LIB
