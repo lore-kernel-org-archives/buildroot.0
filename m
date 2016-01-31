@@ -1,27 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 21:08:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/open-plc-utils: bump version
-In-Reply-To: <1453563890-6361-1-git-send-email-bernd.kuhls@t-online.de> (Bernd
- Kuhls's message of "Sat, 23 Jan 2016 16:44:50 +0100")
-References: <1453563890-6361-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <8737tdh5q3.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 31 Jan 2016 21:08:03 +0100
+Subject: [Buildroot] [git commit] flot: add hash file
+In-Reply-To: <20160131104313.1c5fdd0a@free-electrons.com>
+References: <20150728204046.4BDD17F9DF@busybox.osuosl.org>
+ <rs5uncx00j.ln2@ID-313208.user.individual.net>
+ <20160131104313.1c5fdd0a@free-electrons.com>
+Message-ID: <56AE69A3.3050807@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+On 31-01-16 10:43, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sat, 30 Jan 2016 08:38:35 +0100, Bernd Kuhls wrote:
+> 
+>> I downloaded the tarball
+>> http://www.flotcharts.org/downloads/flot-0.8.3.tar.gz
+>> today and got a different sha256 checksum:
+>>
+>> ERROR: flot-0.8.3.tar.gz has wrong sha256 hash:
+>> ERROR: expected: 
+>> d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952
+>> ERROR: got     : 
+>> ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21
+>> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+> 
+> I checked locally, and in my BR2_DL_DIR, I still have a tarball that
+> has the
+> d6bddb781ce8ab8bba82c535a0767c22e606cabd9dbb484027b8ff375a193952 hash,
+> but indeed if I re-download it, I get a tarball with the
+> ef9a873befe3ff5ea42ebf1c3657887265a1717744ca8ed0c2bd3dd736d16b21 hash.
+> 
+>> Shall I send a patch?
+> 
+> Yes, please do. It would also be great to notify upstream that they
+> shouldn't change their tarballs.
 
- > Remove patch for scripts/Makefile because the file was removed upstream:
- > https://github.com/qca/open-plc-utils/commit/3682e7be80b76490360b655c6217da41bfb90a8e
+ Perhaps we should first check what is different?
 
- > Fixes musl build error:
- > http://autobuild.buildroot.net/results/582/5824f101d21698d562e9836c571ceab6fdfadc29//
+ Regards,
+ Arnout
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
