@@ -1,70 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 09:55:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix musl build
-In-Reply-To: <1454187166-2348-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454187166-2348-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131095508.6c277724@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 10:03:03 +0100
+Subject: [Buildroot] [PATCH 1/1] merge_config.sh: create temporary files
+ in /tmp
+In-Reply-To: <1449497325-5148-1-git-send-email-casantos@datacom.ind.br>
+References: <1449497325-5148-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <CACXmViadN49zyo_PjRQvVGWspfTyKHMZb8Ta6ctQnNNZm74smg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+On Mon, Dec 7, 2015 at 3:08 PM, Carlos Santos <casantos@datacom.ind.br> wrote:
+> From: Henrique Marks <henrique.marks@datacom.ind.br>
+>
+> Creating temporary files in /tmp (or the path pointed by $TMPDIR) allows the
+> buildroot top directory to be read-only and shareable between multible builds.
+> This follows what other scripts do, e.g. check-kernel-headers.sh.
+>
+> Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 
-Thanks for this patch, but see below.
-
-On Sat, 30 Jan 2016 21:52:46 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/a15/a1586717154efb6495dfcdb5c7ce11a047dd68db/
-> http://autobuild.buildroot.net/results/363/3636ddcc0efa974c674f36d3c65eea5beb32af52/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...Invert-conditional-for-defining-QT_SOCKLE.patch | 44 ++++++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-> 
-> diff --git a/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-> new file mode 100644
-> index 0000000..55cf480
-> --- /dev/null
-> +++ b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-> @@ -0,0 +1,44 @@
-> +Fix musl build
-> +
-> +Downloaded from
-> +https://github.com/meta-qt5/meta-qt5/blob/d9d1d04760430cd0e5edd1764d832860715e7b83/recipes-qt/qt5/qtbase/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
-> +and adjusted path.
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Have you read my review of some of your previous patches? I already
-said that this should go inside the Git commit log of the patch, so
-that the patch remains a proper Git formatted patch.
-
-> +From 8f09897de948cea8861ca95e182f442cf15a339e Mon Sep 17 00:00:00 2001
-> +From: Khem Raj <raj.khem@gmail.com>
-> +Date: Mon, 8 Jun 2015 13:59:25 -0700
-> +Subject: [PATCH] linux-oe-g++: Invert conditional for defining QT_SOCKLEN_T
-> +
-> +This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
-> +only when its glibc < 2 and not also for the libraries which may define
-> +it as per standards but are not glibc, e.g. musl
-> +
-> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
-
-I.e, add here:
-
-[Bernd: downloaded from .... and adjusted path.]
-Signed-off-by: ...
-
-Can you adjust to this convention ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Committed, thanks.
