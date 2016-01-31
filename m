@@ -1,40 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 16:10:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pixman: bump version to 0.34.0
-Message-ID: <1454253039-23829-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 16:28:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix musl buil
+Message-ID: <1454254080-11795-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The build error was not yet being found by the autobuilders:
+
+omfile.c: In function ?prepareFile?:
+omfile.c:580:3: error: implicit declaration of function ?open? [-Werror=implicit-function-declaration]
+   fd = open((char*) newFileName, O_WRONLY|O_APPEND|O_CREAT|O_NOCTTY|O_CLOEXEC,
+   ^
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pixman/pixman.hash | 4 ++--
- package/pixman/pixman.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rsyslog/rsyslog.hash | 2 ++
+ package/rsyslog/rsyslog.mk   | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
-index 7a37220..d5b8934 100644
---- a/package/pixman/pixman.hash
-+++ b/package/pixman/pixman.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-December/002666.html
--sha1   11e93fed35deb9c89347e7a7da3060e5e5c89412	pixman-0.33.6.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-January/002672.html
-+sha1	367698744e74d6d4f363041482965b9ea7fbe4a5	pixman-0.34.0.tar.bz2
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index fc43140..06070f0 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index 5f9e0ed..9d96edf 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,2 +1,4 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+ sha256	eab00e8e758cd9dd33b3e2cf6af80297d1951dc7db37bd723a6488a35d577adc	rsyslog-8.9.0.tar.gz
++# Locally computed
++sha256	feda2d9ca6c788e375116b6c43b6c4ac5debe83dab0efcfc9a47216c9af36599	musl-fix.patch
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 5dde924..68b75a5 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -6,6 +6,8 @@
  
--PIXMAN_VERSION = 0.33.6
-+PIXMAN_VERSION = 0.34.0
- PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.bz2
- PIXMAN_SITE = http://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_LICENSE = MIT
+ RSYSLOG_VERSION = 8.9.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
++RSYSLOG_PATCH = \
++	http://git.alpinelinux.org/cgit/aports/plain/main/rsyslog/musl-fix.patch
+ RSYSLOG_LICENSE = GPLv3, LGPLv3, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+ RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
 -- 
 2.7.0
