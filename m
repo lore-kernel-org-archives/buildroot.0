@@ -1,90 +1,102 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 31 Jan 2016 20:56:51 +0100
-Subject: [Buildroot] [PATCH v12 1/3] toolchain-external: don't exclude
- too much lib in sysroot rsync
-In-Reply-To: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <56AE6703.5030700@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 Jan 2016 21:02:27 +0100
+Subject: [Buildroot] [PATCH 12/16 v3] core/legal-info: renumber saved
+ patches
+In-Reply-To: <56AE639F.3080304@lucaceresoli.net>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
+ <56AE639F.3080304@lucaceresoli.net>
+Message-ID: <20160131200227.GD14626@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Luca, All,
 
-Le 28/01/2016 13:32, Thomas De Schampheleire a ?crit :
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 2016-01-31 20:42 +0100, Luca Ceresoli spake thusly:
+> Yann E. MORIN wrote:
+> >Patches we save can come from various locations;
+> >   - bundled with Buildroot
+> >   - downloaded
+> >   - from one or more global-patch-dir
+> >
+> >It is possible that two patches lying into different locations have the
+> >same basename, like so (first is bundled, second is from an hypothetical
+> >global-patch-dir):
+> >     package/foo/0001-fix-Makefile.patch
+> >     /path/to/my/patches/foo/0001-fix-Makefile.patch
+> >
+> >In that case, we'd save onlt the second patch, overwriting the first.
 > 
-> The copy_toolchain_sysroot helper in toolchain/helpers.mk performs an
-> rsync of various directories from the extracted external toolchain to the
-> corresponding directory in staging.
-> 
-> The relevant (simplified) snippet is:
->     for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
->             rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
->                     --exclude lib --exclude lib32 --exclude lib64 \
->                     $${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
->     done ; \
-> 
-> The exclusion logic of lib/lib32/lib64 has been added by commit
-> 5628776c4a4d29d0715633ea463b64cc19e19c5a with the purpose of only copying
-> the relevant usr/lib* directory from the toolchain to staging, instead of
-> all. For example, if ARCH_LIB_DIR is 'lib64', then only usr/lib64 would be
-> copied and usr/lib and usr/lib32 are ignored. It works by ignoring any
-> lib/lib32/lib64 subdirectory on the rsync of 'usr' and then separately
-> copying usr/{lib,lib32,lib64} as appropriate. (The exclusion rules only have
-> impact on the files beneath the main source directory.)
-> 
-> However, on the rsync of 'usr', ANY of the following directories AND files
-> would be excluded:
->     lib/
->     lib
->     lib32/
->     foobar/something/lib/
->     something-else/lib64/
-> 
-> while it is only the intention to skip directories directly under usr.
-> 
-> Therefore, add a leading (to restrict the scope to first-level) and trailing
-> (to restrict to directories) slash to the exclude pattern. From 'man rsync':
-> 
->     - if the pattern starts with a / then it is anchored to [..] the root of
->       the transfer.
->     - if the pattern ends with a / then it will only match a directory, not
->       a regular file, symlink, or device.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> Cc: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
+> onlt -> only
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Damned... ;-)
 
-Best regards,
-Romain
+> Indeed for legal-info it would be a serious issue if we silently
+> overwrite a patch, resulting in _silently_ missing a patch.
 
-> ---
-> v12: unchanged
-> v11: unchanged
-> v10: new patch
+It's not only about missing a patch (althigh that is the worst
+outocome), it's also about having dependent patches, like:
+
+    /path/to/buildroot/package/foo/0001-fix-Makefile.patch
+    /path/to/global/patch/dir/foo/0001-fix-Makefile.patch
+
+with the second patch furhter changing the *same* part of the Makefile,
+so it would overwrite the previous one, but fail to apply.
+
+So, two issues;
+  - patches faling to apply (bad, because technically incorrect)
+  - missign patches (the worst, because legally incorrect)
+
+> As an alternative solution, Arnout proposed to error out if two patches
+> have the same basename. Even though if would avoid the ugly prefixing,
+> it would unnecessarily break builds without a need (as far as the
+> development is concerned).
+
+I'm not very much in favour of erroring out either... The resulting file
+names may _look_ ugly, but I don't care: they are for legal people. ;-)
+
+Seriously, I have the same point of view as Luca here.
+
+[--SNIP--]
+> >+# Because patches may come from various places (bundled in Buildroot,
+> >+# from one or more global-patch-dir), there might be collisions on the
+> >+# basenames of those files.
+> >+# We add a new numbering to each patch to ensure unicity of the filenames.
+> >+	$$(Q)cpt=1; while read f; do \
+> >+		_c=$$$$(printf "%04d" $$$${cpt}); \
+> >+		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR),\
+> >+			$$$${_c}-$$$${f##*/}) || exit 1; \
+> >+		printf "%s\n" "$$$${_c}-$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
+> >+		: $$$$((cpt++)); \
 > 
->  toolchain/helpers.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> I must admit this is not the most readable piece of code I have seen so
+> far... ;)
+
+Hehe! ;-]
+
+> I cannot do anything about the '$$$$'s, but at least I can
+> suggest to rename the variables:
 > 
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 70695ee..906993d 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -154,7 +154,8 @@ copy_toolchain_sysroot = \
->  	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
->  		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
->  			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
-> -				--exclude lib --exclude lib32 --exclude lib64 \
-> +				--exclude '/lib/' --exclude '/lib32/' \
-> +				--exclude '/lib64/' \
->  				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
->  		fi ; \
->  	done ; \
-> 
+>  - cpt -> patch_num
+>  - _c -> prefix_num
+
+OK, workd for me.
+
+> But it works fine, thus:
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
+Thanks.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
