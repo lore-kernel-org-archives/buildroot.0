@@ -1,65 +1,160 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 21:08:44 +0100
-Subject: [Buildroot] [git commit] package/open-plc-utils: bump version
-Message-ID: <20160201224714.529A87F8C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 31 Jan 2016 23:49:00 +0100
+Subject: [Buildroot] [git commit] package/lightning: bump version to 2.1.0
+Message-ID: <20160201224714.4942D7F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=247cc9ef70c710742c4aa130d27d445be0708a3f
+commit: https://git.buildroot.net/buildroot/commit/?id=4334f7da108ce994618abf07f008cd8c894431d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch for scripts/Makefile because the file was removed upstream:
-https://github.com/qca/open-plc-utils/commit/3682e7be80b76490360b655c6217da41bfb90a8e
-
-Fixes musl build error:
-http://autobuild.buildroot.net/results/582/5824f101d21698d562e9836c571ceab6fdfadc29//
+Removed autoreconf and both patches after upstream commits:
+http://git.savannah.gnu.org/cgit/lightning.git/commit/configure.ac?id=e98640e1ac160034fe65346f68c5ade90d6b2032
+http://git.savannah.gnu.org/cgit/lightning.git/commit/?id=361caf28545aa0c2b2ab8d1cbd334fbdd952f373
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...01-Remove-OWNER-and-GROUPS-parameters-to-install.patch | 15 ---------------
- package/open-plc-utils/open-plc-utils.mk                  |  2 +-
- 2 files changed, 1 insertion(+), 16 deletions(-)
+ .../0001-cross-compilation-configure-fixes.patch   | 40 ----------------
+ .../0002-ppc-disassembler-build-fix.patch          | 53 ----------------------
+ package/lightning/lightning.hash                   |  2 +-
+ package/lightning/lightning.mk                     |  5 +-
+ 4 files changed, 2 insertions(+), 98 deletions(-)
 
-diff --git a/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch b/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
-index 061b3a6..9fc30a9 100644
---- a/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
-+++ b/package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch
-@@ -237,21 +237,6 @@ index 60b9bb3..c951218 100755
-  uninstall:
-  	cd ${BIN}; rm -f ${TOOLS}
-  	cd ${MAN}; rm -f ${PAGES}
--diff --git a/scripts/Makefile b/scripts/Makefile
--index c9a785a..022e5f9 100755
----- a/scripts/Makefile
--+++ b/scripts/Makefile
--@@ -30,8 +30,8 @@ all compile:
-- install:
-- scripts:
-- manuals:
---	test -d ${MAN} || install -m ${DIR_PERM} -o ${OWNER} -g ${GROUP} -d ${MAN}
---	install -m ${MAN_PERM} -o ${OWNER} -g ${GROUP} ${PAGES} ${MAN}
--+	test -d ${MAN} || install -m ${DIR_PERM} -d ${MAN}
--+	install -m ${MAN_PERM} ${PAGES} ${MAN}
-- library:
-- uninstall:
-- clean:
- diff --git a/serial/Makefile b/serial/Makefile
- index c25f1a6..6420d4a 100755
- --- a/serial/Makefile
-diff --git a/package/open-plc-utils/open-plc-utils.mk b/package/open-plc-utils/open-plc-utils.mk
-index 61badcd..a674372 100644
---- a/package/open-plc-utils/open-plc-utils.mk
-+++ b/package/open-plc-utils/open-plc-utils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/lightning/0001-cross-compilation-configure-fixes.patch b/package/lightning/0001-cross-compilation-configure-fixes.patch
+deleted file mode 100644
+index 6ced202..0000000
+--- a/package/lightning/0001-cross-compilation-configure-fixes.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-Assume that the functionality is not present
+-
+-Patch written by Holger Hans Peter Freyther, and fetched from
+-http://lists.gnu.org/archive/html/lightning/2014-11/msg00002.html.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 031279d..a36bed6 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -184,7 +184,7 @@ elif test $cpu = x86; then
+-                          : "0" (1));
+-        return (edx & 1 << 26) ? 0 : 1;
+-     }
+--    ]])],[ac_cv_test_x86_x87=yes],[][])
+-+    ]])],[ac_cv_test_x86_x87=yes],[],[ac_cv_test_x86_x87=no])
+- elif test $cpu = arm; then
+-     AC_RUN_IFELSE([AC_LANG_SOURCE([[
+-     #include <stdio.h>
+-@@ -207,7 +207,7 @@ elif test $cpu = arm; then
+-     #endif
+-        return 1;
+-     }
+--    ]])],[ac_cv_test_arm_arm=yes],[][])
+-+    ]])],[ac_cv_test_arm_arm=yes],[],[ac_cv_test_arm_arm=no])
+-     AC_RUN_IFELSE([AC_LANG_SOURCE([[
+-     #include <stdio.h>
+-     int main(void) {
+-@@ -229,7 +229,7 @@ elif test $cpu = arm; then
+-     #endif
+-        return 1;
+-     }
+--    ]])],[ac_cv_test_arm_swf=yes],[][])
+-+    ]])],[ac_cv_test_arm_swf=yes],[],[ac_cv_test_arm_swf=no])
+- fi
+- CFLAGS=$save_CFLAGS
+diff --git a/package/lightning/0002-ppc-disassembler-build-fix.patch b/package/lightning/0002-ppc-disassembler-build-fix.patch
+deleted file mode 100644
+index 4c812b3..0000000
+--- a/package/lightning/0002-ppc-disassembler-build-fix.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 361caf28545aa0c2b2ab8d1cbd334fbdd952f373 Mon Sep 17 00:00:00 2001
+-From: Paulo Andrade <pcpa@gnu.org>
+-Date: Thu, 15 Jan 2015 14:56:38 -0200
+-Subject: [PATCH 4/4] PPC: Only call binutils function if it is available
+-
+-	* configure.ac, lib/jit_disasm.c: Rewrite workaround
+-	to apparent problem to initialize powerpc disassembler.
+----
+-diff --git a/configure.ac b/configure.ac
+-index 749659b..d26e777 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -230,6 +230,13 @@ elif test $cpu = arm; then
+- 	return 1;
+-     }
+-     ]])],[ac_cv_test_arm_swf=yes],[],[ac_cv_test_arm_swf=no])
+-+elif test $cpu = ppc; then
+-+    if test "x$DISASSEMBLER" != "xno"; then
+-+	save_LIBS="$LIBS"
+-+	LIBS="$LIBS $SHLIB"
+-+	AC_CHECK_FUNCS(disassemble_init_for_target disassemble_init_powerpc)
+-+	LIBS="$save_LIBS"
+-+    fi
+- fi
+- CFLAGS=$save_CFLAGS
+- 
+-diff --git a/lib/jit_disasm.c b/lib/jit_disasm.c
+-index 01158de..86e5441 100644
+---- a/lib/jit_disasm.c
+-+++ b/lib/jit_disasm.c
+-@@ -91,11 +91,19 @@ jit_init_debug(const char *progname)
+- #  if defined(__powerpc__)
+-     disasm_info.arch = bfd_arch_powerpc;
+-     disasm_info.mach = bfd_mach_ppc64;
+-+#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
+-+    disassemble_init_for_target(&disasm_info);
+-+#    elif HAVE_DISASSEMBLE_INIT_POWERPC
+-     disassemble_init_powerpc(&disasm_info);
+-+#    endif
+- #    if defined(__powerpc64__)
+-     disasm_info.disassembler_options = "64";
+- #    endif
+-+#    if HAVE_DISASSEMBLE_INIT_FOR_TARGET
+-+    disassemble_init_for_target(&disasm_info);
+-+#    elif HAVE_DISASSEMBLE_INIT_POWERPC
+-     disassemble_init_powerpc(&disasm_info);
+-+#    endif
+- #  endif
+- #  if defined(__sparc__)
+-     disasm_info.endian = disasm_info.display_endian = BFD_ENDIAN_BIG;
+--- 
+-2.1.4
+-
+diff --git a/package/lightning/lightning.hash b/package/lightning/lightning.hash
+index 7e61d61..4805686 100644
+--- a/package/lightning/lightning.hash
++++ b/package/lightning/lightning.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 65b66a86aef8772e8c6813868da5174c4977c65b9e6cff3d4c3bb0de1a52a94a lightning-2.0.5.tar.gz
++sha256	1fa3a2421852598b3162d6765645bb3cd0fccb5f0c105d0800c64c8428b749a6	lightning-2.1.0.tar.gz
+diff --git a/package/lightning/lightning.mk b/package/lightning/lightning.mk
+index 9095cba..b74147a 100644
+--- a/package/lightning/lightning.mk
++++ b/package/lightning/lightning.mk
+@@ -4,15 +4,12 @@
  #
  ################################################################################
  
--OPEN_PLC_UTILS_VERSION = 1f6e7e372b313cf570aa63314037588ed01ec0de
-+OPEN_PLC_UTILS_VERSION = 05ef40c0a2949cfaf1c3230e10679fbcf912d174
- OPEN_PLC_UTILS_SITE = $(call github,qca,open-plc-utils,$(OPEN_PLC_UTILS_VERSION))
- OPEN_PLC_UTILS_LICENSE = BSD-3c
- OPEN_PLC_UTILS_LICENSE_FILES = LICENSE
+-LIGHTNING_VERSION = 2.0.5
++LIGHTNING_VERSION = 2.1.0
+ LIGHTNING_SITE = http://ftp.gnu.org/gnu/lightning
+ LIGHTNING_LICENSE = LGPLv3+
+ LIGHTNING_LICENSE_FILES = COPYING.LESSER
+ LIGHTNING_INSTALL_STAGING = YES
+ 
+-# We're patching configure.ac
+-LIGHTNING_AUTORECONF = YES
+-
+ ifeq ($(BR2_PACKAGE_LIGHTNING_DISASSEMBLER),y)
+ LIGHTNING_DEPENDENCIES += binutils zlib
+ LIGHTNING_CONF_OPTS += --enable-disassembler
