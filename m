@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 10:28:49 +0100
-Subject: [Buildroot] [git commit] package/net-tools: bump version to fix
-	musl build
-Message-ID: <20160201224705.B80167F8C1@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 09:09:52 +0100
+Subject: [Buildroot] [git commit] merge_config.sh: create temporary files in
+	/tmp
+Message-ID: <20160201224705.AD4387F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9301e192019849f7f2fb91ab0baf2a89a533aa38
+commit: https://git.buildroot.net/buildroot/commit/?id=0f56304521db42bd2c05867fd78a247104a4ad95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-git head includes this commit
-http://sourceforge.net/p/net-tools/code/ci/c35607eae8243851dd80a0181554f3a0e9e50aa8/
+Creating temporary files in /tmp (or the path pointed by $TMPDIR) allows the
+buildroot top directory to be read-only and shareable between multible builds.
+This follows what other scripts do, e.g. check-kernel-headers.sh.
 
-Due to the gettext problems the package-specific build errors were not
-yet found by the autobuilders:
-
-slattach.c:85:11: error: ???B50??? undeclared here (not in a function)
-   { "50", B50 }, { "75", B75   },
-(and many more)
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/net-tools/net-tools.mk | 2 +-
+ support/kconfig/merge_config.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index ab0dd7c..184c50e 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
+index 81b0c61..8a1708b 100755
+--- a/support/kconfig/merge_config.sh
++++ b/support/kconfig/merge_config.sh
+@@ -82,7 +82,7 @@ shift;
  
--NET_TOOLS_VERSION = 3eb367aedf1280f35105ede465c350a39b55fa91
-+NET_TOOLS_VERSION = 3f170bff115303e92319791cbd56371e33dcbf6d
- NET_TOOLS_SITE = git://git.code.sf.net/p/net-tools/code
- NET_TOOLS_DEPENDENCIES = $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
- NET_TOOLS_LDFLAGS = $(TARGET_LDFLAGS) \
+ MERGE_LIST=$*
+ SED_CONFIG_EXP="s/^\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
+-TMP_FILE=$(mktemp ./.tmp.config.XXXXXXXXXX)
++TMP_FILE=$(mktemp -t .tmp.config.XXXXXXXXXX)
+ 
+ echo "Using $INITFILE as base"
+ cat $INITFILE > $TMP_FILE
