@@ -1,127 +1,112 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Sun, 31 Jan 2016 20:41:53 +0100
-Subject: [Buildroot] [PATCH] configs/nitrogen6*: update to use genimage
-Message-ID: <1454269313-27878-1-git-send-email-gary.bisson@boundarydevices.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 31 Jan 2016 20:42:23 +0100
+Subject: [Buildroot] [PATCH 12/16 v3] core/legal-info: renumber saved
+ patches
+In-Reply-To: <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <89835259941b9067e4482d51ab2f45fa5e373262.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <56AE639F.3080304@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also updating the documentation with the dd instruction to flash the
-bootbale media.
+Hi Yann,
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- board/boundarydevices/nitrogen6x/genimage.cfg  | 16 ++++++++++++++++
- board/boundarydevices/nitrogen6x/post-image.sh | 16 ++++++++++++++++
- board/boundarydevices/nitrogen6x/readme.txt    |  6 +++---
- configs/nitrogen6sx_defconfig                  |  4 +++-
- configs/nitrogen6x_defconfig                   |  4 +++-
- 5 files changed, 41 insertions(+), 5 deletions(-)
- create mode 100644 board/boundarydevices/nitrogen6x/genimage.cfg
- create mode 100755 board/boundarydevices/nitrogen6x/post-image.sh
+Yann E. MORIN wrote:
+> Patches we save can come from various locations;
+>    - bundled with Buildroot
+>    - downloaded
+>    - from one or more global-patch-dir
+>
+> It is possible that two patches lying into different locations have the
+> same basename, like so (first is bundled, second is from an hypothetical
+> global-patch-dir):
+>      package/foo/0001-fix-Makefile.patch
+>      /path/to/my/patches/foo/0001-fix-Makefile.patch
+>
+> In that case, we'd save onlt the second patch, overwriting the first.
 
-diff --git a/board/boundarydevices/nitrogen6x/genimage.cfg b/board/boundarydevices/nitrogen6x/genimage.cfg
-new file mode 100644
-index 0000000..7a5e71e
---- /dev/null
-+++ b/board/boundarydevices/nitrogen6x/genimage.cfg
-@@ -0,0 +1,16 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot.imx"
-+		offset = 1024
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/boundarydevices/nitrogen6x/post-image.sh b/board/boundarydevices/nitrogen6x/post-image.sh
-new file mode 100755
-index 0000000..9cca1b1
---- /dev/null
-+++ b/board/boundarydevices/nitrogen6x/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/board/boundarydevices/nitrogen6x/readme.txt b/board/boundarydevices/nitrogen6x/readme.txt
-index 8657be8..6c723f1 100644
---- a/board/boundarydevices/nitrogen6x/readme.txt
-+++ b/board/boundarydevices/nitrogen6x/readme.txt
-@@ -2,11 +2,11 @@ Buildroot for Boundary Devices Nitrogen6X:
- 
- http://boundarydevices.com/products/nitrogen6x-board-imx6-arm-cortex-a9-sbc/
- 
--To install, simply write rootfs.ext2 to the first partition of a uSD card:
-+To install, simply copy the image to a uSD card:
- 
--sudo dd if=output/images/rootfs.ext2 of=/dev/sdX1
-+sudo dd if=output/images/sdcard.img of=/dev/sdX
- 
--Where 'sdX1' is the device node of the uSD partition.
-+Where 'sdX' is the device node of the uSD partition.
- 
- To upgrade u-boot, cancel autoboot and type:
- 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 3670798..70e6376 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -6,11 +6,13 @@ BR2_cortex_a9=y
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- 
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_2r1=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- 
- # Lock headers to match kernel
- BR2_KERNEL_HEADERS_VERSION=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 979bf09..af4a187 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -6,11 +6,13 @@ BR2_cortex_a9=y
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- 
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
--BR2_TARGET_ROOTFS_EXT2_2r1=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- 
- # Lock headers to match kernel
- BR2_KERNEL_HEADERS_VERSION=y
+onlt -> only
+
+Indeed for legal-info it would be a serious issue if we silently
+overwrite a patch, resulting in _silently_ missing a patch. Thus this
+must be fixed somehow, and I would not merge the previous patch without
+this one (or any variation we come up with).
+
+As an alternative solution, Arnout proposed to error out if two patches
+have the same basename. Even though if would avoid the ugly prefixing,
+it would unnecessarily break builds without a need (as far as the
+development is concerned).
+
+Thus, I moderately prefer Yann's solution. It could be improved by
+renaming only files that have identical names, but that might be
+overkill, and can definitely be done later.
+
+>
+> We fix that by forcibly prefixing saved patches with a new numbering, to
+> guarantee the unicity of saved files.
+>
+> The unfortunate side-effects are that:
+>    - most saved patches will be twice-numbered,
+>    - the series file is now redundant.
+>
+> While the former is mostly not nice-looking, we shouldn't try to strip
+> any leading numbering, as that might not be a numbering (e.g.
+> 42-retries.patch which is a patch add 42 retries).
+>
+> The latter is not really problematic. A lot of tools (and people) can
+> work with, and prefer to have a series file.
+
+I agree, leaving the series file may be useful to somebody, and it
+doesn't hurt anyway.
+
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+>
+> ---
+> Note that I've made this a separate change, not because the patch would
+> be too complex if squahed with the previous, but rather to have a more
+> detailed commit log about the reason for the renumbering; squashing the
+> two changes together would make for a really long commit log, at the
+> risk of being more difficult to follow.
+> ---
+>   package/pkg-generic.mk | 13 ++++++++++---
+>   1 file changed, 10 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index c5b66db..f6132b3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -825,9 +825,16 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+>   		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+>   		     $$($(2)_REDIST_SOURCES_DIR))
+>   # Copy patches and generate the series file
+> -	$$(Q)while read f; do \
+> -		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR)) || exit 1; \
+> -		printf "%s\n" "$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
+> +# Because patches may come from various places (bundled in Buildroot,
+> +# from one or more global-patch-dir), there might be collisions on the
+> +# basenames of those files.
+> +# We add a new numbering to each patch to ensure unicity of the filenames.
+> +	$$(Q)cpt=1; while read f; do \
+> +		_c=$$$$(printf "%04d" $$$${cpt}); \
+> +		$$(call hardlink-copy,$$$${f},$$($(2)_REDIST_SOURCES_DIR),\
+> +			$$$${_c}-$$$${f##*/}) || exit 1; \
+> +		printf "%s\n" "$$$${_c}-$$$${f##*/}" >>$$($(2)_REDIST_SOURCES_DIR)/series || exit 1; \
+> +		: $$$$((cpt++)); \
+
+I must admit this is not the most readable piece of code I have seen so
+far... ;) I cannot do anything about the '$$$$'s, but at least I can
+suggest to rename the variables:
+
+  - cpt -> patch_num
+  - _c -> prefix_num
+
+But it works fine, thus:
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+
 -- 
-2.7.0
+Luca
