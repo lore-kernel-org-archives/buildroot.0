@@ -1,63 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 19:01:43 +0100
-Subject: [Buildroot] [PATCH 1/2] package/sredird: bump version to 2.2.2,
-	add hash
-Message-ID: <1454263304-17588-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 19:01:44 +0100
+Subject: [Buildroot] [PATCH 2/2] package/sredird: fix musl build
+In-Reply-To: <1454263304-17588-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454263304-17588-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454263304-17588-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While Debian still uses version 2.2.1 the bump to 2.2.2 was committed to
-FreeBSD ports back in 2005:
-https://www.freshports.org/commit.php?category=comms&port=sredird&files=yes&message_id=200512291935.jBTJZfff072190 at repoman.freebsd.org
-
-FreeBSD ports lists the new upstream URL as no. 12:
-https://www.freshports.org/comms/sredird/
-and http://freecode.com/projects/sredird also links to it.
+Fixes
+http://autobuild.buildroot.net/results/4bc/4bc77733d235ba12f70432be4ead921666f5121d/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sredird/Config.in    | 2 ++
- package/sredird/sredird.hash | 2 ++
- package/sredird/sredird.mk   | 5 ++---
- 3 files changed, 6 insertions(+), 3 deletions(-)
- create mode 100644 package/sredird/sredird.hash
+ package/sredird/0001-termio.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/sredird/0001-termio.patch
 
-diff --git a/package/sredird/Config.in b/package/sredird/Config.in
-index 463269a..d8c5ef9 100644
---- a/package/sredird/Config.in
-+++ b/package/sredird/Config.in
-@@ -4,3 +4,5 @@ config BR2_PACKAGE_SREDIRD
- 	  Sredird is a serial port redirector that is compliant with
- 	  the RFC 2217 "Telnet Com Port Control Option" protocol. This
- 	  protocol lets you share a serial port through the network.
-+
-+	  http://freecode.com/projects/sredird
-diff --git a/package/sredird/sredird.hash b/package/sredird/sredird.hash
+diff --git a/package/sredird/0001-termio.patch b/package/sredird/0001-termio.patch
 new file mode 100644
-index 0000000..63a419f
+index 0000000..7c7c67f
 --- /dev/null
-+++ b/package/sredird/sredird.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	640c47dcd84b3b90640165a38eb336a675fdab06c14c09cae2f4a604cae560d3	sredird-2.2.2.tar.gz
-diff --git a/package/sredird/sredird.mk b/package/sredird/sredird.mk
-index ebd7122..b564f1a 100644
---- a/package/sredird/sredird.mk
-+++ b/package/sredird/sredird.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
- 
--SREDIRD_VERSION = 2.2.1-1.1
--SREDIRD_SOURCE = sredird_$(SREDIRD_VERSION).tar.gz
--SREDIRD_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/sredird
-+SREDIRD_VERSION = 2.2.2
-+SREDIRD_SITE = http://www.ibiblio.org/pub/Linux/system/serial
- SREDIRD_LICENSE = GPLv2+
- SREDIRD_LICENSE_FILES = COPYING
- 
++++ b/package/sredird/0001-termio.patch
+@@ -0,0 +1,20 @@
++Fix musl build
++
++Patch was inspired by
++http://svnweb.freebsd.org/ports/head/comms/sredird/files/patch-sredird.c?revision=363168&view=markup
++http://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/sysutils/sredird/patches/patch-aa
++https://github.com/bitrig/bitrig-ports/blob/master/comms/sredird/patches/patch-sredird_c
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr sredird-2.2.2.org/sredird.c sredird-2.2.2/sredird.c
++--- sredird-2.2.2.org/sredird.c	2005-08-12 16:10:46.000000000 +0200
+++++ sredird-2.2.2/sredird.c	2016-01-31 18:53:08.000000000 +0100
++@@ -110,7 +110,6 @@
++ #include <fcntl.h>
++ #include <syslog.h>
++ #include <termios.h>
++-#include <termio.h>
++ #include <sys/socket.h>
++ #include <netinet/in.h>
++ #include <netinet/ip.h>
 -- 
 2.7.0
