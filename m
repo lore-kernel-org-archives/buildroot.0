@@ -1,137 +1,668 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 31 Jan 2016 21:04:51 +0100
-Subject: [Buildroot] [PATCH v3 2/2] package/sconeserver: bump version to fix
-	musl build
-In-Reply-To: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454270691-21900-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 31 Jan 2016 21:04:50 +0100
+Subject: [Buildroot] [PATCH v3 1/2] package/gpsd: bump version to 3.16
+Message-ID: <1454270691-21900-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes this musl build error:
-TermBuffer.cpp: In member function ?virtual scx::Condition scx::TermBuffer::read(void*, int, int&)?:
-TermBuffer.cpp:83:10: error: ?CEOT? was not declared in this scope
-     case CEOT:
-          ^
-TermBuffer.cpp:123:10: error: ?CERASE? was not declared in this scope
-     case CERASE: // Backspace
-          ^
-The autobuilders did not catch this specific error yet because they
-failed earlier with other packages, but I am continuing the build based
-on the defconfig from:
-http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
+Removed patch applied upstream:
+http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=3e25e2167beb3936de3986fad9b6c9bdec82b81f
 
-- added hash
-- removed 0001-fix-ssl-libs-ordering.patch, applied upstream:
-  https://github.com/sconemad/sconeserver/commit/ffb69ca18fd03d0dc976696144d215b3a8555155
-- disabled markdown module because its git submodule cmark
-  ( https://github.com/sconemad/sconeserver/tree/master/markdown )
-  has no cross-compile support provided by the sconeserver build system:
+0001-Fix-build-against-musl-libc.patch is also not needed anymore after
+this commit:
+http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=95c99f69e026e8c57aecba545e51c97f3b284e75
 
-make[4]: Entering directory '/home/bernd/buildroot/br3/output/build/sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd/markdown/cmark'
-mkdir -p build; \
-cd build; \
-cmake .. \
-	-G "Unix Makefiles" \
-	-DCMAKE_BUILD_TYPE= \
-	-DCMAKE_INSTALL_PREFIX=/usr/local
--- The C compiler identification is GNU 5.3.1
--- The CXX compiler identification is GNU 5.3.1
--- Check for working C compiler: /usr/bin/cc
--- Check for working C compiler: /usr/bin/cc -- works
-[...]
+The upstream commit included in this version bump
+http://git.savannah.gnu.org/cgit/gpsd.git/commit/libgps.pc.in?id=772eedf8a13c2c0468b1fd94beb5406dbfcb3b6e
+fixes a build error with the location module of the updated
+sconeserver package included in this patch series:
+
+../libtool: line 7486: cd: lib: No such file or directory
+libtool:   error: cannot determine absolute directory name of 'lib'
+Makefile:428: recipe for target 'location.la' failed
+make[3]: *** [location.la] Error 1
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: no changes
-v2: updated comments in sconeserver.mk (Arnout)
+v3: also removed 0001-Fix-build-against-musl-libc.patch (Baruch)
+v2: no changes
 
- .../sconeserver/0001-fix-ssl-libs-ordering.patch   | 36 ----------------------
- package/sconeserver/sconeserver.hash               |  2 ++
- package/sconeserver/sconeserver.mk                 | 11 ++++---
- 3 files changed, 8 insertions(+), 41 deletions(-)
- delete mode 100644 package/sconeserver/0001-fix-ssl-libs-ordering.patch
- create mode 100644 package/sconeserver/sconeserver.hash
+ .../gpsd/0001-Fix-build-against-musl-libc.patch    |  36 --
+ package/gpsd/0002-Address-Savannah-bug-46082.patch | 556 ---------------------
+ package/gpsd/gpsd.hash                             |   4 +-
+ package/gpsd/gpsd.mk                               |   2 +-
+ 4 files changed, 3 insertions(+), 595 deletions(-)
+ delete mode 100644 package/gpsd/0001-Fix-build-against-musl-libc.patch
+ delete mode 100644 package/gpsd/0002-Address-Savannah-bug-46082.patch
 
-diff --git a/package/sconeserver/0001-fix-ssl-libs-ordering.patch b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+diff --git a/package/gpsd/0001-Fix-build-against-musl-libc.patch b/package/gpsd/0001-Fix-build-against-musl-libc.patch
 deleted file mode 100644
-index f1f25b9..0000000
---- a/package/sconeserver/0001-fix-ssl-libs-ordering.patch
+index c7c5b23..0000000
+--- a/package/gpsd/0001-Fix-build-against-musl-libc.patch
 +++ /dev/null
 @@ -1,36 +0,0 @@
--configure: re-order SSL libs when linking
+-From 2f1b033094df266008d9c4070cd7be33e93a4e12 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Fri, 19 Jun 2015 08:08:32 +0300
+-Subject: [PATCH] Fix build against musl libc
 -
--When doing static builds, the ordering of libs is important, as the
--linker does not back-pedal to previous libraries specified on the
--command line to find missing symbols, and only searches for those
--missing symbols in the following libs.
+-musl does not include sys/ttydefaults.h from sys/termios.h. Include it
+-explicitly.
 -
--Thus, as -lssl needs symbols from -lcrypto, it needs to come before
---lcrypto.
+-Fixes build failures like:
 -
--And globally, we do *not* append new libraries, we prepend them.
+-gpsmon.o: In function `main':
+-gpsmon.c:(.text.startup+0x8f4): undefined reference to `CTRL'
 -
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Upstream status: sent
+-(http://lists.nongnu.org/archive/html/gpsd-dev/2015-06/msg00031.html)
 -
--diff -durN a/configure.in b/configure.in
----- a/configure.in	2014-10-16 11:12:08.000000000 +0200
--+++ b/configure.in	2015-05-30 15:44:25.540329788 +0200
--@@ -133,12 +133,14 @@
--     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
--   )
--   AC_CHECK_LIB([crypto],[CRYPTO_new_ex_data],
---    [SSL_LIBADD="$SSL_LIBADD -lcrypto"],
---    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])]
--+    [SSL_LIBADD="-lcrypto $SSL_LIBADD"],
--+    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])],
--+    [$SSL_LIBADD]
--   )
--   AC_CHECK_LIB([ssl],[SSL_library_init],
---    [SSL_LIBADD="$SSL_LIBADD -lssl"],
---    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])]
--+    [SSL_LIBADD="-lssl $SSL_LIBADD"],
--+    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])],
--+    [$SSL_LIBADD]
--   )
--   AC_SUBST(SSL_LIBADD)
-- fi
-diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
-new file mode 100644
-index 0000000..2e1fe84
---- /dev/null
-+++ b/package/sconeserver/sconeserver.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	442c29ae93f615b610983187023ba6c1a9ca69526cb07f69576efba1d29d9daf	sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd.tar.gz
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 2072142..0a8158e 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -4,16 +4,17 @@
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+- gpsmon.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/gpsmon.c b/gpsmon.c
+-index c3001c865821..0ccf74110b5a 100644
+---- a/gpsmon.c
+-+++ b/gpsmon.c
+-@@ -20,6 +20,7 @@
+- #include <sys/types.h>
+- #include <sys/stat.h>
+- #include <sys/select.h>
+-+#include <sys/ttydefaults.h>
+- #include <fcntl.h>
+- #include <unistd.h>
+- 
+--- 
+-2.1.4
+-
+diff --git a/package/gpsd/0002-Address-Savannah-bug-46082.patch b/package/gpsd/0002-Address-Savannah-bug-46082.patch
+deleted file mode 100644
+index b149f85..0000000
+--- a/package/gpsd/0002-Address-Savannah-bug-46082.patch
++++ /dev/null
+@@ -1,556 +0,0 @@
+-From 3e25e2167beb3936de3986fad9b6c9bdec82b81f Mon Sep 17 00:00:00 2001
+-From: Eric S. Raymond <esr@thyrsus.com>
+-Date: Fri, 02 Oct 2015 00:37:28 +0000
+-Subject: Address  Savannah bug #46082 - Can't explicitly build with NMEA drivers.
+-
+-Upstream: http://git.savannah.gnu.org/cgit/gpsd.git/patch/?id=3e25e2167beb3936de3986fad9b6c9bdec82b81f
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+-diff --git a/driver_evermore.c b/driver_evermore.c
+-index ba10611..be040e8 100644
+---- a/driver_evermore.c
+-+++ b/driver_evermore.c
+-@@ -385,12 +385,12 @@ static gps_mask_t evermore_parse_input(struct gps_device_t *session)
+- 			    session->lexer.outbuflen);
+- 	return st;
+-     }
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     else if (session->lexer.type == NMEA_PACKET) {
+- 	st = nmea_parse((char *)session->lexer.outbuffer, session);
+- 	return st;
+-     }
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     else
+- 	return 0;
+- }
+-diff --git a/driver_italk.c b/driver_italk.c
+-index c24c034..7bd47d1 100644
+---- a/driver_italk.c
+-+++ b/driver_italk.c
+-@@ -384,10 +384,10 @@ static gps_mask_t italk_parse_input(struct gps_device_t *session)
+-     if (session->lexer.type == ITALK_PACKET) {
+- 	return italk_parse(session, session->lexer.outbuffer,
+- 			   session->lexer.outbuflen);;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/driver_navcom.c b/driver_navcom.c
+-index e34a8b8..081cee1 100644
+---- a/driver_navcom.c
+-+++ b/driver_navcom.c
+-@@ -1150,10 +1150,10 @@ static gps_mask_t navcom_parse_input(struct gps_device_t *session)
+-     if (session->lexer.type == NAVCOM_PACKET) {
+- 	return navcom_parse(session, session->lexer.outbuffer,
+- 			  session->lexer.outbuflen);
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/driver_nmea0183.c b/driver_nmea0183.c
+-index 996ddfc..61aaa04 100644
+---- a/driver_nmea0183.c
+-+++ b/driver_nmea0183.c
+-@@ -13,7 +13,7 @@
+- #include "gpsd.h"
+- #include "strfuncs.h"
+- 
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- /**************************************************************************
+-  *
+-  * Parser helpers begin here
+-@@ -1587,7 +1587,7 @@ gps_mask_t nmea_parse(char *sentence, struct gps_device_t * session)
+-     return retval;
+- }
+- 
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 
+- void nmea_add_checksum(char *sentence)
+- /* add NMEA checksum to a possibly  *-terminated sentence */
+-diff --git a/driver_oncore.c b/driver_oncore.c
+-index a023529..f4338b7 100644
+---- a/driver_oncore.c
+-+++ b/driver_oncore.c
+-@@ -468,10 +468,10 @@ static gps_mask_t oncore_parse_input(struct gps_device_t *session)
+-     if (session->lexer.type == ONCORE_PACKET) {
+- 	return oncore_dispatch(session, session->lexer.outbuffer,
+- 			     session->lexer.outbuflen);
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/driver_proto.c b/driver_proto.c
+-index d6c61c8..f42cfcc 100644
+---- a/driver_proto.c
+-+++ b/driver_proto.c
+-@@ -420,10 +420,10 @@ static gps_mask_t _proto__parse_input(struct gps_device_t *session)
+- {
+-     if (session->lexer.type == _PROTO__PACKET) {
+- 	return _proto__dispatch(session, session->lexer.outbuffer, session->lexer.outbuflen);
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/driver_sirf.c b/driver_sirf.c
+-index e3699c8..945f6c1 100644
+---- a/driver_sirf.c
+-+++ b/driver_sirf.c
+-@@ -1367,10 +1367,10 @@ static gps_mask_t sirfbin_parse_input(struct gps_device_t *session)
+-     if (session->lexer.type == SIRF_PACKET) {
+- 	return sirf_parse(session, session->lexer.outbuffer,
+- 			session->lexer.outbuflen);
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/driver_superstar2.c b/driver_superstar2.c
+-index 6e197d3..bd4aab1 100644
+---- a/driver_superstar2.c
+-+++ b/driver_superstar2.c
+-@@ -468,10 +468,10 @@ static gps_mask_t superstar2_parse_input(struct gps_device_t *session)
+-     if (session->lexer.type == SUPERSTAR2_PACKET) {
+- 	return superstar2_dispatch(session, session->lexer.outbuffer,
+- 				   session->lexer.length);;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/driver_ubx.c b/driver_ubx.c
+-index fe50946..41ff709 100644
+---- a/driver_ubx.c
+-+++ b/driver_ubx.c
+-@@ -633,10 +633,10 @@ static gps_mask_t parse_input(struct gps_device_t *session)
+-     if (session->lexer.type == UBX_PACKET) {
+- 	return ubx_parse(session, session->lexer.outbuffer,
+- 			 session->lexer.outbuflen);
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-diff --git a/drivers.c b/drivers.c
+-index edd6a7d..de5ce78 100644
+---- a/drivers.c
+-+++ b/drivers.c
+-@@ -27,7 +27,7 @@ gps_mask_t generic_parse_input(struct gps_device_t *session)
+-     else if (session->lexer.type == COMMENT_PACKET) {
+- 	gpsd_set_century(session);
+- 	return 0;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	const struct gps_type_t **dp;
+- 	gps_mask_t st = 0;
+-@@ -61,7 +61,7 @@ gps_mask_t generic_parse_input(struct gps_device_t *session)
+- 	    }
+- 	}
+- 	return st;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else {
+- 	gpsd_log(&session->context->errout, LOG_SHOUT,
+- 		 "packet type %d fell through (should never happen): %s.\n",
+-@@ -104,7 +104,7 @@ const struct gps_type_t driver_unknown = {
+- };
+- /* *INDENT-ON* */
+- 
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- /**************************************************************************
+-  *
+-  * NMEA 0183
+-@@ -144,14 +144,14 @@ static void nmea_event_hook(struct gps_device_t *session, event_t event)
+- 	 * unless there is actual following data.
+- 	 */
+- 	switch (session->lexer.counter) {
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- 	case 0:
+- 	    /* probe for Garmin serial GPS -- expect $PGRMC followed by data */
+- 	    gpsd_log(&session->context->errout, LOG_PROG,
+- 		     "=> Probing for Garmin NMEA\n");
+- 	    (void)nmea_send(session, "$PGRMCE");
+- 	    break;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #ifdef SIRF_ENABLE
+- 	case 1:
+- 	    /*
+-@@ -181,7 +181,7 @@ static void nmea_event_hook(struct gps_device_t *session, event_t event)
+- 	    session->back_to_nmea = true;
+- 	    break;
+- #endif /* SIRF_ENABLE */
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- 	case 2:
+- 	    /* probe for the FV-18 -- expect $PFEC,GPint followed by data */
+- 	    gpsd_log(&session->context->errout, LOG_PROG,
+-@@ -194,7 +194,7 @@ static void nmea_event_hook(struct gps_device_t *session, event_t event)
+- 		     "=> Probing for Trimble Copernicus\n");
+- 	    (void)nmea_send(session, "$PTNLSNM,0139,01");
+- 	    break;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #ifdef EVERMORE_ENABLE
+- 	case 4:
+- 	    gpsd_log(&session->context->errout, LOG_PROG,
+-@@ -276,7 +276,7 @@ const struct gps_type_t driver_nmea0183 = {
+- };
+- /* *INDENT-ON* */
+- 
+--#if defined(GARMIN_ENABLE) && defined(NMEA_ENABLE)
+-+#if defined(GARMIN_ENABLE) && defined(NMEA0183_ENABLE)
+- /**************************************************************************
+-  *
+-  * Garmin NMEA
+-@@ -377,7 +377,7 @@ const struct gps_type_t driver_garmin = {
+- #endif /* TIMEHINT_ENABLE */
+- };
+- /* *INDENT-ON* */
+--#endif /* GARMIN_ENABLE && NMEA_ENABLE */
+-+#endif /* GARMIN_ENABLE && NMEA0183_ENABLE */
+- 
+- #ifdef ASHTECH_ENABLE
+- /**************************************************************************
+-@@ -641,7 +641,7 @@ static const struct gps_type_t driver_earthmate = {
+- /* *INDENT-ON* */
+- #endif /* EARTHMATE_ENABLE */
+- 
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 
+- #ifdef TNT_ENABLE
+- /**************************************************************************
+-@@ -1351,10 +1351,10 @@ static gps_mask_t aivdm_analyze(struct gps_device_t *session)
+- 	    return ONLINE_SET | AIS_SET;
+- 	} else
+- 	    return ONLINE_SET;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     } else if (session->lexer.type == NMEA_PACKET) {
+- 	return nmea_parse((char *)session->lexer.outbuffer, session);
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     } else
+- 	return 0;
+- }
+-@@ -1548,7 +1548,7 @@ extern const struct gps_type_t driver_zodiac;
+- /* the point of this rigamarole is to not have to export a table size */
+- static const struct gps_type_t *gpsd_driver_array[] = {
+-     &driver_unknown,
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     &driver_nmea0183,
+- #ifdef ASHTECH_ENABLE
+-     &driver_ashtech,
+-@@ -1583,7 +1583,7 @@ static const struct gps_type_t *gpsd_driver_array[] = {
+- #ifdef AIVDM_ENABLE
+-     &driver_aivdm,
+- #endif /* AIVDM_ENABLE */
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 
+- #ifdef EVERMORE_ENABLE
+-     &driver_evermore,
+-diff --git a/gpsd.h-tail b/gpsd.h-tail
+-index 829a86e..b76e7ce 100644
+---- a/gpsd.h-tail
+-+++ b/gpsd.h-tail
+-@@ -46,8 +46,8 @@
+- #if !defined(AIVDM_ENABLE) && defined(NMEA2000_ENABLE)
+- #define AIVDM_ENABLE
+- #endif
+--#if !defined(NMEA_ENABLE) && (defined(FV18_ENABLE) || defined(MTK3301_ENABLE) || defined(TNT_ENABLE) || defined(OCEANSERVER_ENABLE) || defined(GPSCLOCK_ENABLE) || defined(FURY_ENABLE))
+--#define NMEA_ENABLE
+-+#if !defined(NMEA0183_ENABLE) && (defined(FV18_ENABLE) || defined(MTK3301_ENABLE) || defined(TNT_ENABLE) || defined(OCEANSERVER_ENABLE) || defined(GPSCLOCK_ENABLE) || defined(FURY_ENABLE))
+-+#define NMEA0183_ENABLE
+- #endif
+- #ifdef EARTHMATE_ENABLE
+- #define ZODIAC_ENABLE
+-@@ -485,7 +485,7 @@ struct gps_device_t {
+-     int fixcnt;				/* count of fixes from this device */
+-     struct gps_fix_t newdata;		/* where drivers put their data */
+-     struct gps_fix_t oldfix;		/* previous fix for error modeling */
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     struct {
+- 	unsigned short sats_used[MAXCHANNELS];
+- 	int part, await;		/* for tracking GSV parts */
+-@@ -515,7 +515,7 @@ struct gps_device_t {
+- 	unsigned int cycle_enders;
+- 	bool cycle_continue;
+-     } nmea;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-     /*
+-      * The rest of this structure is driver-specific private storage.
+-      * Only put a driver's scratch storage in here if it is never
+-diff --git a/gpsmon.c b/gpsmon.c
+-index 58c8300..3b7a4fb 100644
+---- a/gpsmon.c
+-+++ b/gpsmon.c
+-@@ -39,9 +39,9 @@ extern struct monitor_object_t garmin_mmt, garmin_bin_ser_mmt;
+- extern struct monitor_object_t italk_mmt, ubx_mmt, superstar2_mmt;
+- extern struct monitor_object_t fv18_mmt, gpsclock_mmt, mtk3301_mmt;
+- extern struct monitor_object_t oncore_mmt, tnt_mmt, aivdm_mmt;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- extern const struct gps_type_t driver_nmea0183;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 
+- /* These are public */
+- struct gps_device_t session;
+-@@ -76,11 +76,11 @@ const struct monitor_object_t json_mmt = {
+- #endif /* PASSTHROUGH_ENABLE */
+- 
+- static const struct monitor_object_t *monitor_objects[] = {
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     &nmea_mmt,
+--#if defined(GARMIN_ENABLE) && defined(NMEA_ENABLE)
+-+#if defined(GARMIN_ENABLE) && defined(NMEA0183_ENABLE)
+-     &garmin_mmt,
+--#endif /* GARMIN_ENABLE && NMEA_ENABLE */
+-+#endif /* GARMIN_ENABLE && NMEA0183_ENABLE */
+- #if defined(GARMIN_ENABLE) && defined(BINARY_ENABLE)
+-     &garmin_bin_ser_mmt,
+- #endif /* defined(GARMIN_ENABLE) && defined(BINARY_ENABLE) */
+-@@ -99,7 +99,7 @@ static const struct monitor_object_t *monitor_objects[] = {
+- #ifdef AIVDM_ENABLE
+-     &aivdm_mmt,
+- #endif /* AIVDM_ENABLE */
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #if defined(SIRF_ENABLE) && defined(BINARY_ENABLE)
+-     &sirf_mmt,
+- #endif /* defined(SIRF_ENABLE) && defined(BINARY_ENABLE) */
+-@@ -561,11 +561,11 @@ static void select_packet_monitor(struct gps_device_t *device)
+-      */
+-     if (device->lexer.type != last_type) {
+- 	const struct gps_type_t *active_type = device->device_type;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- 	if (device->lexer.type == NMEA_PACKET
+- 	    && ((device->device_type->flags & DRIVER_STICKY) != 0))
+- 	    active_type = &driver_nmea0183;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 	if (!switch_type(active_type))
+- 	    longjmp(terminate, TERM_DRIVER_SWITCH);
+- 	else {
+-diff --git a/libgpsd_core.c b/libgpsd_core.c
+-index a241e55..31fec2a 100644
+---- a/libgpsd_core.c
+-+++ b/libgpsd_core.c
+-@@ -560,7 +560,7 @@ int gpsd_activate(struct gps_device_t *session, const int mode)
+- 	return session->gpsdata.gps_fd;
+-     }
+- 
+--#ifdef NON_NMEA_ENABLE
+-+#ifdef NON_NMEA0183_ENABLE
+-     /* if it's a sensor, it must be probed */
+-     if ((session->servicetype == service_sensor) &&
+- 	(session->sourcetype != source_can)) {
+-@@ -590,7 +590,7 @@ int gpsd_activate(struct gps_device_t *session, const int mode)
+- 		 "no probe matched...\n");
+-     }
+- foundit:
+--#endif /* NON_NMEA_ENABLE */
+-+#endif /* NON_NMEA0183_ENABLE */
+- 
+-     gpsd_clear(session);
+-     gpsd_log(&session->context->errout, LOG_INF,
+-diff --git a/monitor_nmea0183.c b/monitor_nmea0183.c
+-index e664f9a..be48790 100644
+---- a/monitor_nmea0183.c
+-+++ b/monitor_nmea0183.c
+-@@ -19,7 +19,7 @@
+- #include "gpsdclient.h"
+- #include "strfuncs.h"
+- 
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- extern const struct gps_type_t driver_nmea0183;
+- 
+- static WINDOW *cookedwin, *nmeawin, *satwin, *gprmcwin, *gpggawin, *gpgsawin, *gpgstwin;
+-@@ -390,7 +390,7 @@ static void monitor_nmea_send(const char *fmt, ...)
+-  * display or implement device-specific commands.
+-  */
+- 
+--#if defined(GARMIN_ENABLE) && defined(NMEA_ENABLE)
+-+#if defined(GARMIN_ENABLE) && defined(NMEA0183_ENABLE)
+- extern const struct gps_type_t driver_garmin;
+- 
+- const struct monitor_object_t garmin_mmt = {
+-@@ -401,7 +401,7 @@ const struct monitor_object_t garmin_mmt = {
+-     .min_y = 21,.min_x = 80,
+-     .driver = &driver_garmin,
+- };
+--#endif /* GARMIN_ENABLE && NMEA_ENABLE */
+-+#endif /* GARMIN_ENABLE && NMEA0183_ENABLE */
+- 
+- #ifdef ASHTECH_ENABLE
+- extern const struct gps_type_t driver_ashtech;
+-@@ -524,4 +524,4 @@ const struct monitor_object_t aivdm_mmt = {
+-     .driver = &driver_aivdm,
+- };
+- #endif /* AIVDM_ENABLE */
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+-diff --git a/packet.c b/packet.c
+-index c8b64f5..4ba40e5 100644
+---- a/packet.c
+-+++ b/packet.c
+-@@ -225,7 +225,7 @@ static bool nextstate(struct gps_lexer_t *lexer, unsigned char c)
+- 	    lexer->state = COMMENT_BODY;
+- 	    break;
+- 	}
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- 	if (c == '$') {
+- 	    lexer->state = NMEA_DOLLAR;
+- 	    break;
+-@@ -234,7 +234,7 @@ static bool nextstate(struct gps_lexer_t *lexer, unsigned char c)
+- 	    lexer->state = NMEA_BANG;
+- 	    break;
+- 	}
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #if defined(TNT_ENABLE) || defined(GARMINTXT_ENABLE) || defined(ONCORE_ENABLE)
+- 	if (c == '@') {
+- #ifdef RTCM104V2_ENABLE
+-@@ -345,7 +345,7 @@ static bool nextstate(struct gps_lexer_t *lexer, unsigned char c)
+- 	else if (!isprint(c))
+- 	    return character_pushback(lexer, GROUND_STATE);
+- 	break;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-     case NMEA_DOLLAR:
+- 	if (c == 'G')
+- 	    lexer->state = NMEA_PUB_LEAD;
+-@@ -788,7 +788,7 @@ static bool nextstate(struct gps_lexer_t *lexer, unsigned char c)
+- 	else
+- 	    return character_pushback(lexer, GROUND_STATE);
+- 	break;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #ifdef SIRF_ENABLE
+-     case SIRF_LEADER_1:
+- 	if (c == 0xa2)
+-@@ -1118,10 +1118,10 @@ static bool nextstate(struct gps_lexer_t *lexer, unsigned char c)
+-     case UBX_RECOGNIZED:
+- 	if (c == 0xb5)
+- 	    lexer->state = UBX_LEADER_1;
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- 	else if (c == '$')	/* LEA-5H can and will output NMEA and UBX back to back */
+- 	    lexer->state = NMEA_DOLLAR;
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #ifdef PASSTHROUGH_ENABLE
+- 	else if (c == '{')
+- 	    return character_pushback(lexer, JSON_LEADER);
+-@@ -1526,7 +1526,7 @@ void packet_parse(struct gps_lexer_t *lexer)
+- 	    lexer->state = GROUND_STATE;
+- 	    break;
+- 	}
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- 	else if (lexer->state == NMEA_RECOGNIZED) {
+- 	    /*
+- 	     * $PASHR packets have no checksum. Avoid the possibility
+-@@ -1591,7 +1591,7 @@ void packet_parse(struct gps_lexer_t *lexer)
+- 	    packet_discard(lexer);
+- 	    break;
+- 	}
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- #ifdef SIRF_ENABLE
+- 	else if (lexer->state == SIRF_RECOGNIZED) {
+- 	    unsigned char *trailer = lexer->inbufptr - 4;
+-diff --git a/packet_states.h b/packet_states.h
+-index 22dbccf..8839b98 100644
+---- a/packet_states.h
+-+++ b/packet_states.h
+-@@ -4,7 +4,7 @@
+-    COMMENT_BODY,	/* pound comment for a test load */
+-    COMMENT_RECOGNIZED,	/* comment recognized */
+- 
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+-    NMEA_DOLLAR,		/* we've seen first character of NMEA leader */
+-    NMEA_BANG,		/* we've seen first character of an AIS message '!' */
+-    NMEA_PUB_LEAD,	/* seen second character of NMEA G leader */
+-@@ -37,7 +37,7 @@
+-    TRANSDUCER_LEAD_1,	/* Generic transducer packet leader 'Y' */
+-    BEIDOU_LEAD_1,	/* Beidou leader */
+-    QZSS_LEAD_1,		/* Quasi-Zenith Satellite System leader */
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 
+-    DLE_LEADER,		/* we've seen the TSIP/EverMore leader (DLE) */
+- 
+-diff --git a/timebase.c b/timebase.c
+-index 0b3192e..b2e7939 100644
+---- a/timebase.c
+-+++ b/timebase.c
+-@@ -259,7 +259,7 @@ void gpsd_set_century(struct gps_device_t *session)
+-     }
+- }
+- 
+--#ifdef NMEA_ENABLE
+-+#ifdef NMEA0183_ENABLE
+- timestamp_t gpsd_utc_resolve(struct gps_device_t *session)
+- /* resolve a UTC date, checking for rollovers */
+- {
+-@@ -321,7 +321,7 @@ void gpsd_century_update(struct gps_device_t *session, int century)
+- 	session->context->valid &=~ CENTURY_VALID;
+-     }
+- }
+--#endif /* NMEA_ENABLE */
+-+#endif /* NMEA0183_ENABLE */
+- 
+- timestamp_t gpsd_gpstime_resolve(struct gps_device_t *session,
+- 			 unsigned short week, double tow)
+---
+-cgit v0.9.0.2
+diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+index 8e27ff0..3083af2 100644
+--- a/package/gpsd/gpsd.hash
++++ b/package/gpsd/gpsd.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	81c89e271ae112313e68655ab30d227bc38fe7841ffbff0f1860b12a9d7696ea	gpsd-3.15.tar.gz
++# Locally calculated
++sha256	03579af13a4d3fe0c5b79fa44b5f75c9f3cac6749357f1d99ce5d38c09bc2029	gpsd-3.16.tar.gz
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 9ad19a8..4fe5d18 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# Release 0.6.0 doesn't build cleanly, so use a recent
--# Git commit.
--SCONESERVER_VERSION = 3b886c3dda6eda39bcb27472d29ed7fd3185ba1d
-+SCONESERVER_VERSION = c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd
- SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
- SCONESERVER_LICENSE = GPLv2+
- SCONESERVER_LICENSE_FILES = COPYING
--# For 0001-fix-ssl-libs-ordering.patch and configure isn't up to date
-+# upstream tarball does not contain a configure script
- SCONESERVER_AUTORECONF = YES
- SCONESERVER_DEPENDENCIES += pcre
--SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6
-+# disable markdown module because its git submodule cmark
-+# https://github.com/sconemad/sconeserver/tree/master/markdown
-+# has no cross-compile support provided by the sconeserver build system
-+SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6 --without-markdown
- 
- # Sconeserver configure script fails to find the libxml2 headers.
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
+-GPSD_VERSION = 3.15
++GPSD_VERSION = 3.16
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-3c
+ GPSD_LICENSE_FILES = COPYING
 -- 
 2.7.0
