@@ -1,42 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 20:33:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/subversion: security version
- bump to 1.9.3
-In-Reply-To: <1454264630-10916-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454264630-10916-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131203344.44500673@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 31 Jan 2016 21:34:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/gpsd: bump version to 3.16
+In-Reply-To: <1454256656-9253-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454256656-9253-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160131193438.GA2442@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Bernd,
 
-On Sun, 31 Jan 2016 19:23:50 +0100, Bernd Kuhls wrote:
-> Release announcement:
-> http://mail-archives.apache.org/mod_mbox/subversion-dev/201512.mbox/%3CCAP_GPNj_GCA869VQeJUrp5ngXsgN7pQQHSS=sqoXm8_6hHTTxg at mail.gmail.com%3E
-> 
-> CVE-2015-5259:
-> Remotely triggerable heap overflow and out-of-bounds read caused by
-> integer overflow in the svn:// protocol parser.
-> http://subversion.apache.org/security/CVE-2015-5259-advisory.txt
-> 
-> CVE-2015-5343:
-> Remotely triggerable heap overflow and out-of-bounds read in mod_dav_svn
-> caused by integer overflow when parsing skel-encoded request bodies.
-> http://subversion.apache.org/security/CVE-2015-5343-advisory.txt
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/subversion/subversion.hash | 2 +-
->  package/subversion/subversion.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, Jan 31, 2016 at 05:10:55PM +0100, Bernd Kuhls wrote:
+> Removed patch applied upstream:
+> http://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=3e25e2167beb3936de3986fad9b6c9bdec82b81f
 
-Applied, thanks.
+The patch 0001-Fix-build-against-musl-libc.patch is also not needed anymore. 
+Upstream commit 95c99f69e026 (Remove a BSD-ism., 2015-06-23) fixed this issue 
+in a better way.
 
-Thomas
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
