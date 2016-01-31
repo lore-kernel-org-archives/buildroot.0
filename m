@@ -1,37 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 22:49:23 +0100
-Subject: [Buildroot] [git commit] package/monkey: fix musl build
-Message-ID: <20160201224700.2F6C87FAE2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 10:07:04 +0100
+Subject: [Buildroot] [git commit] package/fio: fix license file
+Message-ID: <20160201224701.986F57F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54871c20bc3ffaee31807f21bb89516a5c84ef26
+commit: https://git.buildroot.net/buildroot/commit/?id=e2daaf9179b43a524c944b15a42b23ef920f4627
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Sorry, I missed the changed filename.
+
 Fixes
-http://autobuild.buildroot.net/results/f69/f690cb1efece8a47fccdf3e782bbde4d1b2cd6b3/
-http://autobuild.buildroot.net/results/21b/21b6fa8b2586f318ff071085f2b204bd555b425b/
-http://autobuild.buildroot.net/results/0bf/0bf7a83a4ccbbcb3ff181ac962e6fdd0099a19f1/
+http://autobuild.buildroot.net/results/a35/a3596283632433831ea24c1d586f2067b034eb32/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/monkey/monkey.mk | 2 +-
+ package/fio/fio.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/monkey/monkey.mk b/package/monkey/monkey.mk
-index 67c8f35..02c26c9 100644
---- a/package/monkey/monkey.mk
-+++ b/package/monkey/monkey.mk
-@@ -30,7 +30,7 @@ MONKEY_CONF_OPTS += --uclib-mode --no-backtrace
- endif
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index 9b14809..08fef5f 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -7,7 +7,7 @@
+ FIO_VERSION = fio-2.6
+ FIO_SITE = git://git.kernel.dk/fio.git
+ FIO_LICENSE = GPLv2 + special obligations
+-FIO_LICENSE_FILES = LICENSE
++FIO_LICENSE_FILES = COPYING
  
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--MONKEY_CONF_OPTS += --musl-mode
-+MONKEY_CONF_OPTS += --musl-mode --no-backtrace
- endif
- 
- ifeq ($(BR2_PACKAGE_MONKEY_SHARED),y)
+ define FIO_CONFIGURE_CMDS
+ 	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
