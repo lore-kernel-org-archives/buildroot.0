@@ -1,47 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 26 Jan 2016 23:00:27 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 10,
-	14}.x and 4.{1, 3}.x series
-Message-ID: <20160201224701.923A77F9DB@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2016 14:20:52 +0100
+Subject: [Buildroot] [git commit] package/libraw: add optional support for
+	jpeg
+Message-ID: <20160201224703.D41757F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9504ccaf7a9b7932ed476897a2782deb29870bd0
+commit: https://git.buildroot.net/buildroot/commit/?id=96f06290a5914eb683d1f4fb40f9ed1d125b294f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/libraw/libraw.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index ade95be..1c19854 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -202,17 +202,17 @@ endchoice
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 106c52c..5ebc4a2 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -26,4 +26,11 @@ else
+ LIBRAW_CONF_OPTS += --disable-jasper
+ endif
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.75"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.76"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.94"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.95"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.52"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.58"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.59"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.25"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.15"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.16"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
--	default "4.3.3"		if BR2_KERNEL_HEADERS_4_3
-+	default "4.3.4"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4"		if BR2_KERNEL_HEADERS_4_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBRAW_CONF_OPTS += --enable-jpeg
++LIBRAW_DEPENDENCIES += jpeg
++else
++LIBRAW_CONF_OPTS += --disable-jpeg
++endif
++
+ $(eval $(autotools-package))
