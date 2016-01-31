@@ -1,32 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2016 21:08:44 +0100
-Subject: [Buildroot] [git commit] package/oprofile: fix typo in comment
-Message-ID: <20160201224701.B95047F8D4@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 14:13:32 +0100
+Subject: [Buildroot] [git commit] package/liblinear: bump version to 2.1
+Message-ID: <20160201224715.48EF97F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e0bcda354ef4c54a7d9c6552b6d65bb48fe74a7
+commit: https://git.buildroot.net/buildroot/commit/?id=4e0fcf25eb563bd4b403dee834fe4d9b98e44ded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This bump also fixes the broken download of the previous version.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/oprofile/oprofile.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/liblinear/liblinear.hash | 2 +-
+ package/liblinear/liblinear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index c73086e..f27e06e 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -41,7 +41,7 @@ ifeq ($(BR2_PACKAGE_LIBPFM4),y)
- OPROFILE_DEPENDENCIES += libpfm4
- endif
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 1c5b184..4f03fa4 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	ebc71999224f5779574b11e248f1e2ef647b5d839c0380c1c5a4ac8789aa95a9  liblinear-2.01.tar.gz
++sha256	fa5c12dedc76ffca12f1681de7073b03af68163c4e4be65194217c99e55a7d68	liblinear-2.1.tar.gz
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index 80ba489..a9524e3 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# When getext is enabled, popt links with -lintl, specifies it in its
-+# When gettext is enabled, popt links with -lintl, specifies it in its
- # popt.pc and has done so for the past 6+ years. But oprofile does not
- # use pkconfig to find popt, so misses -lintl, which is important for
- # a static build. We have to do the call to pkgconfig manually...
+-LIBLINEAR_VERSION = 2.01
++LIBLINEAR_VERSION = 2.1
+ LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
+ LIBLINEAR_LICENSE = BSD-3c
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
