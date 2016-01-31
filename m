@@ -1,30 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 31 Jan 2016 23:51:46 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libraw1394: bump version to
- 2.1.1
-In-Reply-To: <1454171381-4556-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454171381-4556-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160131235146.5e355151@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 31 Jan 2016 23:52:59 +0100
+Subject: [Buildroot] Loading modules with device tree after rootfs is
+ mounted
+In-Reply-To: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
+References: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
+Message-ID: <56AE904B.2030906@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On 30-01-16 18:56, Tim Michals wrote:
+> I've created new buildroot defconfig for Udoo Neo board, u-boot, linux kernel
+> boots and busybox prompt is active and accepts commands.  The issue is several
+> drivers (wifi, camera, etc) are built as kernel modules and stored on ext4
+> rootfs.  How can the kernel load these modules via the device tree from the rootfs? 
 
-On Sat, 30 Jan 2016 17:29:40 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libraw1394/libraw1394.hash | 2 +-
->  package/libraw1394/libraw1394.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ The kernel doesn't automatically load modules, you need a userspace hotplug
+helper to handle that. You have the following options:
 
-Both applied. Please submit the libraw1394 musl compatibility fix
-upstream. Thanks!
+1. modprobe the required drivers in an init script (no hotplugging).
+2. Write a hotplug script that modprobes as required (google it).
+3. Use mdev as the /dev handler and add a modprobe handler in mdev.conf (google it).
+4. Use udev as the /dev handler.
 
-Thomas
+
+ Regards,
+ Arnout
+
+> 
+> Udoo team has a lubuntu image, and the drivers are loaded after rootfs is
+> mounted, so I'm confused how this works.  
+> 
+> 
+> 
+> Thank your for help.
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
