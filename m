@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2016 22:30:15 +0100
-Subject: [Buildroot] [git commit] package/python-mako: bump version to 1.0.3,
-	add hash
-Message-ID: <20160201224700.992677F8D4@busybox.osuosl.org>
+Date: Sun, 31 Jan 2016 14:19:15 +0100
+Subject: [Buildroot] [git commit] package/libraw: bump version to 0.17.1
+Message-ID: <20160201224700.37BF27F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d044efccf9a3f386564e46b20bb7cdb079a6915
+commit: https://git.buildroot.net/buildroot/commit/?id=7d1feadb19fb78dc816b1e1ece46f02c53a0afbe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-mako/python-mako.hash | 4 ++++
- package/python-mako/python-mako.mk   | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/libraw/libraw.hash | 2 +-
+ package/libraw/libraw.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-new file mode 100644
-index 0000000..374be1a
---- /dev/null
-+++ b/package/python-mako/python-mako.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.python.org/pypi/Mako/1.0.3
-+md5	a78f20f6366a8a0659ce5532f8614e53	Mako-1.0.3.tar.gz
-+# Locally computed
-+sha256	7644bc0ee35965d2e146dde31827b8982ed70a58281085fac42869a09764d38c	Mako-1.0.3.tar.gz
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index 398b8d2..52679e0 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
+diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
+index 98d3c12..e23ca9c 100644
+--- a/package/libraw/libraw.hash
++++ b/package/libraw/libraw.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	588caf5324c76240d6370852691e05ac8ef89428ee8d45168f15ce47422bc36b  LibRaw-0.13.4.tar.gz
++sha256	e599651a4cc37e00cfc2d2b56be87c3a4e4dae2c360b680fe9ab3f93d07cdea1	LibRaw-0.17.1.tar.gz
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 9c3522b..2f8643d 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MAKO_VERSION = 1.0.1
-+PYTHON_MAKO_VERSION = 1.0.3
- PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
- PYTHON_MAKO_SITE = https://pypi.python.org/packages/source/M/Mako
- PYTHON_MAKO_SETUP_TYPE = setuptools
+-LIBRAW_VERSION = 0.13.4
++LIBRAW_VERSION = 0.17.1
+ LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
+ LIBRAW_SITE = http://www.libraw.org/data
+ LIBRAW_INSTALL_STAGING = YES
