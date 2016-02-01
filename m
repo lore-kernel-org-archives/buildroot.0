@@ -1,32 +1,41 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  1 Feb 2016 15:52:20 +0100
-Subject: [Buildroot] [PATCH 1/5] Update copyright year
-In-Reply-To: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
-References: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1454338344-24973-2-git-send-email-luca@lucaceresoli.net>
+Date: Mon,  1 Feb 2016 15:52:19 +0100
+Subject: [Buildroot] [PATCH 0/5] Patch file clarification & Co
+Message-ID: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/Makefile b/Makefile
-index c3427ed..1acc2b2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -2,7 +2,7 @@
- #
- # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
- # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
--# Copyright (C) 2014-2015 by the Buildroot developers <buildroot@buildroot.org>
-+# Copyright (C) 2014-2016 by the Buildroot developers <buildroot@buildroot.org>
- #
- # This program is free software; you can redistribute it and/or modify
- # it under the terms of the GNU General Public License as published by
+several Buildroot users reportedly asked details about how the patches
+bundled with Buildroot are licensed.
+
+Following the discussion during the Buildroot Developer Days today,
+this small series is aimed at clarifying patch licensing in the places
+where it makes sense: COPYING, the manual and the legal-info output.
+
+Note that patches are not saved by 'make legal-info' in current
+Buildroot, but there's a patchset by Yann E. Morin to add this
+feature. Patch 5 of the present series applies to legal-info, and it
+only applies on top of Yann's series (it would be useless on amster
+anyway). Patches 1-4 apply also on current master.
+
+Luca Ceresoli (5):
+  Update copyright year
+  docs/manual: slightly clarify patch licensing
+  COPYING: add exception about patch licensing
+  docs/manual: add section about patch licensing
+  legal-info: explicitly state how patches are licensed
+
+ COPYING                          | 10 ++++++++++
+ Makefile                         |  2 +-
+ docs/manual/legal-notice.txt     | 16 ++++++++++++++--
+ docs/manual/patch-policy.txt     |  4 ++--
+ support/legal-info/README.header |  2 +-
+ 5 files changed, 28 insertions(+), 6 deletions(-)
+
 -- 
 1.9.1
