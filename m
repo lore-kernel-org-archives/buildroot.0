@@ -1,74 +1,93 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 1 Feb 2016 15:57:38 +0100
-Subject: [Buildroot] [PATCH v2 1/2] toolchain-external: add a check for
- unsupported toolchains
-In-Reply-To: <20160201153839.6325ebba@free-electrons.com>
-References: <1454334017-12326-1-git-send-email-romain.naour@gmail.com>
- <20160201153839.6325ebba@free-electrons.com>
-Message-ID: <56AF7262.1080002@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 1 Feb 2016 15:58:53 +0100
+Subject: [Buildroot] [PATCH 05/22] package/python-lmdb: new package.
+In-Reply-To: <1454335541-14224-6-git-send-email-mc5686@mclink.it>
+References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
+ <1454335541-14224-6-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kv8DpBbGMN-TDc4RCo0xKjzmQujfp90EDmPgPDpUo+YXw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                    |  1 +
+>  package/python-lmdb/Config.in        |  8 ++++++++
+>  package/python-lmdb/python-lmdb.hash |  3 +++
+>  package/python-lmdb/python-lmdb.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-lmdb/Config.in
+>  create mode 100644 package/python-lmdb/python-lmdb.hash
+>  create mode 100644 package/python-lmdb/python-lmdb.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 3980c00..8dcaef7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -657,6 +657,7 @@ menu "External python modules"
+>         source "package/python-json-schema-validator/Config.in"
+>         source "package/python-keyring/Config.in"
+>         source "package/python-libconfig/Config.in"
+> +       source "package/python-lmdb/Config.in"
+>         source "package/python-lxml/Config.in"
+>         source "package/python-mad/Config.in"
+>         source "package/python-mako/Config.in"
+> diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
+> new file mode 100644
+> index 0000000..2cff7ac
+> --- /dev/null
+> +++ b/package/python-lmdb/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_LMDB
+> +       bool "python-lmdb"
+> +       depends on BR2_PACKAGE_PYTHON
 
-Le 01/02/2016 15:38, Thomas Petazzoni a ?crit :
-> Romain,
-> 
-> On Mon,  1 Feb 2016 14:40:16 +0100, Romain Naour wrote:
-> 
->> Here is the sysroot directory tree for linaro 2015.11:
->> $ ls libc/arm-linux-gnueabihf
->> etc  lib  sbin  usr  var
->>
->> Here is the sysroot directory tree for CodeSourcery standard:
->> $ ls libc/sgxx-glibc
->> etc  lib  lib64  sbin  usr  var
->>
->> Usually the sysroot is located directly under libc directory
->> $ ls libc/
->> etc  lib  sbin  usr  var
-> 
-> I think this is not "usual", for example it's not the case for
-> Buildroot or Crosstool-NG toolchain.
+remove depends and add
 
-Ok, I'll simply remove this comment then. It seems that there is no "usual" case
-with sysroot toolchains.
+select BR2_PACKAGE_PYTHON_CFFI # runtime
 
-> 
->> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
->> index 02cc0bb..fd99efe 100644
->> --- a/toolchain/helpers.mk
->> +++ b/toolchain/helpers.mk
->> @@ -418,6 +418,11 @@ check_unusable_toolchain = \
->>  		echo "and contain a lot of pre-built libraries that would conflict with"; \
->>  		echo "the ones Buildroot wants to build."; \
->>  		exit 1; \
->> +	fi; \
->> +	non_existent_sysroot=`$${__CROSS_CC} -print-file-name=libc.a` ; \
-> 
-> The variable should not be named non_existent_sysroot since it may
-> exist. Also, you could use the existing toolchain_find_libc_a function,
-> no? So maybe:
-> 
-> 	libc_a_path=$(call toolchain_find_libc_a,$${__CROSS_CC}) ; \
-
-ok for the variable naming, but I didn't used toolchain_find_libc_a directly
-because realpath -f is used by this function.
-
-The path returned is $PWD/libc.a when something go wrong with the sysroot.
-So the test would be test -d in this case but I think it's better to test the
-path returned by __CROSS_CC directly against "libc.a".
-
-Thoughts ?
-
-Best regards,
-Romain
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
+> +       help
+> +         Universal Python binding for the LMDB 'Lightning' Database.
+> +
+> +         https://pypi.python.org/pypi/lmdb
+> +
+> diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+> new file mode 100644
+> index 0000000..ba4cc96
+> --- /dev/null
+> +++ b/package/python-lmdb/python-lmdb.hash
+> @@ -0,0 +1,3 @@
+> +# Locally computed.
+> +md5    001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
+> +sha256 37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+> diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+> new file mode 100644
+> index 0000000..7295083
+> --- /dev/null
+> +++ b/package/python-lmdb/python-lmdb.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-lmdb
+> +#
+> +################################################################################
+> +
+> +PYTHON_LMDB_VERSION = 0.88
+> +PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+> +PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
+> +PYTHON_LMDB_LICENSE = BSD
+> +#PYTHON_LMDB_LICENSE_FILES = LICENSE
+> +PYTHON_LMDB_SETUP_TYPE = setuptools
+> +#PYTHON_LMDB_DEPENDENCIES =
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
