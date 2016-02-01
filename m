@@ -1,104 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 22:19:02 +0100
-Subject: [Buildroot] [git commit] package/gstreamer/gst-plugins-base: Fix
-	build on x86 if emmintrin.h is available but can't be used
-Message-ID: <20160201224713.E9ACA7F8C2@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 08:02:38 +0100
+Subject: [Buildroot] [git commit] docs/manual: makedev syntax accepts
+	usernames and group names
+Message-ID: <20160201224714.DCBBA7F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=291c3c77cbc745a953c753651031a4f85e0edc8a
+commit: https://git.buildroot.net/buildroot/commit/?id=1ad97d1ff1324adaf2ccdd04a11e2a12b8ac8dcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I stumbled across this error using a musl-based allyesconfig but I
-doubt it is related to musl. The autobuilders did not catch this
-problem yet but the patch I found fits my config (BR2_i386=y,
-BR2_x86_i586=y) and it solved the problem right away.
-
-[Peter: pick patches from upstream git instead of downloading from alphine]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...le-Fix-build-on-x86-if-emmintrin.h-is-ava.patch | 38 ++++++++++++++++++++++
- ...le-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch | 27 +++++++++++++++
- 2 files changed, 65 insertions(+)
+ docs/manual/adding-packages-generic.txt | 22 +++++++++++-----------
+ docs/manual/makedev-syntax.txt          | 20 ++++++++++++--------
+ 2 files changed, 23 insertions(+), 19 deletions(-)
 
-diff --git a/package/gstreamer/gst-plugins-base/0002-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch b/package/gstreamer/gst-plugins-base/0002-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch
-new file mode 100644
-index 0000000..eabea4f
---- /dev/null
-+++ b/package/gstreamer/gst-plugins-base/0002-audioresample-Fix-build-on-x86-if-emmintrin.h-is-ava.patch
-@@ -0,0 +1,38 @@
-+From daa194b71ea6f9e8ee522ab02e8c56150b7e62b3 Mon Sep 17 00:00:00 2001
-+From: Antoine Jacoutot <ajacoutot@gnome.org>
-+Date: Mon, 20 Jan 2014 15:44:09 +0100
-+Subject: [PATCH] audioresample: Fix build on x86 if emmintrin.h is available
-+ but can't be used
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 1f9c7bb..b7817e3 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -43,16 +43,16 @@ system is based on hand-written Makefiles or shell scripts.
+ 28:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
+ 29: endef
+ 30:
+-31: define LIBFOO_DEVICES
+-32:	/dev/foo  c  666  0  0	42  0  -  -  -
++31: define LIBFOO_USERS
++32:	foo -1 libfoo -1 * - - - LibFoo daemon
+ 33: endef
+ 34:
+-35: define LIBFOO_PERMISSIONS
+-36:	/bin/foo  f  4755  0  0	 -  -  -  -  -
++35: define LIBFOO_DEVICES
++36:	/dev/foo  c  666  0  0	42  0  -  -  -
+ 37: endef
+ 38:
+-39: define LIBFOO_USERS
+-40:	foo -1 libfoo -1 * - - - LibFoo daemon
++39: define LIBFOO_PERMISSIONS
++40:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
+ 41: endef
+ 42:
+ 43: $(eval $(generic-package))
+@@ -142,15 +142,15 @@ All these steps rely on the +$(@D)+ variable, which
+ contains the directory where the source code of the package has been
+ extracted.
+ 
+-On line 31..33, we define a device-node file used by this package
++On lines 31..43, we define a user that is used by this package (e.g.
++to run a daemon as non-root) (+LIBFOO_USERS+).
 +
-+On i386, EMMINTRIN is defined but not usable without SSE so check for
-+__SSE__ and __SSE2__ as well.
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=670690
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gst/audioresample/resample.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gst/audioresample/resample.c b/gst/audioresample/resample.c
-+index 98d006c..481fa01 100644
-+--- a/gst/audioresample/resample.c
-++++ b/gst/audioresample/resample.c
-+@@ -77,13 +77,13 @@
-+ #define EXPORT G_GNUC_INTERNAL
-+ 
-+ #ifdef _USE_SSE
-+-#ifndef HAVE_XMMINTRIN_H
-++#if !defined(__SSE__) || !defined(HAVE_XMMINTRIN_H)
-+ #undef _USE_SSE
-+ #endif
-+ #endif
-+ 
-+ #ifdef _USE_SSE2
-+-#ifndef HAVE_EMMINTRIN_H
-++#if !defined(__SSE2__) || !defined(HAVE_XMMINTRIN_H)
-+ #undef _USE_SSE2
-+ #endif
-+ #endif
-+-- 
-+2.1.4
-+
-diff --git a/package/gstreamer/gst-plugins-base/0003-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch b/package/gstreamer/gst-plugins-base/0003-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch
-new file mode 100644
-index 0000000..e67531d
---- /dev/null
-+++ b/package/gstreamer/gst-plugins-base/0003-audioresample-It-s-HAVE_EMMINTRIN_H-not-HAVE_XMMINTR.patch
-@@ -0,0 +1,27 @@
-+From 4e3d101aa854cfee633a9689efeb75e5001baa5e Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Sebastian=20Dr=C3=B6ge?= <sebastian@centricular.com>
-+Date: Mon, 20 Jan 2014 16:11:04 +0100
-+Subject: [PATCH] audioresample: It's HAVE_EMMINTRIN_H, not HAVE_XMMINTRIN_H
-+ for SSE2
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gst/audioresample/resample.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gst/audioresample/resample.c b/gst/audioresample/resample.c
-+index 481fa01..4410bdd 100644
-+--- a/gst/audioresample/resample.c
-++++ b/gst/audioresample/resample.c
-+@@ -83,7 +83,7 @@
-+ #endif
-+ 
-+ #ifdef _USE_SSE2
-+-#if !defined(__SSE2__) || !defined(HAVE_XMMINTRIN_H)
-++#if !defined(__SSE2__) || !defined(HAVE_EMMINTRIN_H)
-+ #undef _USE_SSE2
-+ #endif
-+ #endif
-+-- 
-+2.1.4
-+
++On line 35..37, we define a device-node file used by this package
+ (+LIBFOO_DEVICES+).
+ 
+-On line 35..37, we define the permissions to set to specific files
++On line 39..41, we define the permissions to set to specific files
+ installed by this package (+LIBFOO_PERMISSIONS+).
+ 
+-On lines 39..41, we define a user that is used by this package (e.g.
+-to run a daemon as non-root) (+LIBFOO_USERS+).
+-
+ Finally, on line 43, we call the +generic-package+ function, which
+ generates, according to the variables defined previously, all the
+ Makefile code necessary to make your package working.
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index cae37f7..0bbc16e 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -28,8 +28,10 @@ There are a few non-trivial blocks:
+   * c: a character device file
+   * b: a block device file
+   * p: a named pipe
+-- +mode+, +uid+ and +gid+ are the usual permissions settings (only
+-  numerical values are allowed)
++- +mode+ are the usual permissions settings (only numerical values
++  are allowed)
++- +uid+ and +gid+ are the UID and GID to set on this file; can be
++  either numerical values or actual names
+ - +major+ and +minor+ are here for device files, set to +-+ for other
+   files
+ - +start+, +inc+ and +count+ are for when you want to create a batch
+@@ -37,19 +39,21 @@ There are a few non-trivial blocks:
+   incrementing its counter by +inc+ until it reaches +count+
+ 
+ Let's say you want to change the permissions of a given file; using
+-this syntax, you will need to put:
++this syntax, you will need to write:
+ 
+ ----
+-/usr/bin/foobar f 644 0 0 - - - - -
++/usr/bin/foo f 755 0 0 - - - - -
++/usr/bin/bar f 755 root root - - - - -
++/data/buz f buz-user buz-group - - - - -
+ ----
+ 
+ Alternatively, if you want to change owner/permission of a directory
+-recursively, you can put (to set UID to 123, GID to 456 and access
++recursively, you can write (to set UID to foo, GID to bar and access
+ rights to rwxr-x--- for the directory /usr/share/myapp and all files
+ and directories below it):
+ 
+ ----
+-/usr/share/myapp r 750 123 456 - - - - -
++/usr/share/myapp r 750 foo bar - - - - -
+ ----
+ 
+ On the other hand, if you want to create the device file +/dev/hda+
+@@ -57,13 +61,13 @@ and the corresponding 15 files for the partitions, you will need for
+ +/dev/hda+:
+ 
+ ----
+-/dev/hda b 640 0 0 3 0 0 0 -
++/dev/hda b 640 root root 3 0 0 0 -
+ ----
+ 
+ and then for device files corresponding to the partitions of
+ +/dev/hda+, +/dev/hdaX+, +X+ ranging from 1 to 15:
+ 
+ ----
+-/dev/hda b 640 0 0 3 1 1 1 15
++/dev/hda b 640 root root 3 1 1 1 15
+ ----
+ 
