@@ -1,49 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 18:34:54 +0100
-Subject: [Buildroot] [PATCH v6 01/13] package/linux-headers: cleanup
- installation
-In-Reply-To: <1454342021-22960-2-git-send-email-s.martin49@gmail.com>
-References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
- <1454342021-22960-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160201183454.55693d2a@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2016 18:36:33 +0100
+Subject: [Buildroot] [PATCH v2 1/8] libunwind: fix C library dependency
+In-Reply-To: <1453929930-18215-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 27 Jan 2016 22:25:23 +0100")
+References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453929930-18215-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87egcwcoym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon,  1 Feb 2016 16:53:29 +0100, Samuel Martin wrote:
-> This patch removes unnecessary files generated during installation.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v5 -> v6:
-> - new patch
-> ---
->  package/linux-headers/linux-headers.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 1b8b81b..872ef8f 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -53,6 +53,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
->  			HOSTCXX="$(HOSTCXX)" \
->  			INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
->  			headers_install)
-> +	find $(STAGING_DIR)/usr \( -name .install -o -name ..install.cmd \) -delete
+ > The libunwind package currently dependency on glibc *or* uclibc
+ > snapshot. However, we are going to remove the support for uclibc
+ > snapshot, and uClibc-ng has equivalent functionality as uclibc
+ > snapshot. Moreover, musl is also capable of building libunwind for
+ > certain architectures.
 
-Why? Are they causing specific problems? Some better justification in
-the commit log would be good, because we generally don't add code to
-clean up things in staging.
+ > Therefore, this commit reworks the architecture dependencies of
+ > libunwind, to make it available on all architectures for which it is
+ > supported, depending on the capabilities of the different C libraries,
+ > and the implementation of libunwind on each architecture.
 
-Thanks!
+ > On some architectures, libunwind uses the C library *context()
+ > functions, which are not provided by musl at all, and not provided by
+ > uClibc on all architectures. But on some other architectures,
+ > libunwind does not use the C library *context() functions, which
+ > explains why it can be built with musl on such architectures.
 
-Thomas
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
