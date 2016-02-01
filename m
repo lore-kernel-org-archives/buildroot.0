@@ -1,10 +1,11 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 1 Feb 2016 16:04:14 +0100
-Subject: [Buildroot] [PATCH 15/22] package/python-treq: new package.
-In-Reply-To: <1454335541-14224-16-git-send-email-mc5686@mclink.it>
+Date: Mon, 1 Feb 2016 16:08:02 +0100
+Subject: [Buildroot] [PATCH 18/22] package/python-pyasn1-modules: new
+	package.
+In-Reply-To: <1454335541-14224-19-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
- <1454335541-14224-16-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kv5wGSyATrLO1V=FHerWrpEzypqKYp7E7RiECgOoHXNCA@mail.gmail.com>
+ <1454335541-14224-19-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ku2fJv6jYdZPK8=fUSnOOQ-UPXMS=QYu78JQfZVXRWh1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,85 +15,72 @@ To: buildroot@busybox.net
 On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                    |  1 +
->  package/python-treq/Config.in        | 13 +++++++++++++
->  package/python-treq/python-treq.hash |  3 +++
->  package/python-treq/python-treq.mk   | 17 +++++++++++++++++
->  4 files changed, 34 insertions(+)
->  create mode 100644 package/python-treq/Config.in
->  create mode 100644 package/python-treq/python-treq.hash
->  create mode 100644 package/python-treq/python-treq.mk
+>  package/Config.in                                        |  1 +
+>  package/python-pyasn1-modules/Config.in                  |  8 ++++++++
+>  package/python-pyasn1-modules/python-pyasn1-modules.hash |  3 +++
+>  package/python-pyasn1-modules/python-pyasn1-modules.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-pyasn1-modules/Config.in
+>  create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.hash
+>  create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index ffdba3b..c581cf8 100644
+> index 606dacc..5221cfe 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -718,6 +718,7 @@ menu "External python modules"
->         source "package/python-spidev/Config.in"
->         source "package/python-thrift/Config.in"
->         source "package/python-tornado/Config.in"
-> +       source "package/python-treq/Config.in"
->         source "package/python-twisted/Config.in"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
-> diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+> @@ -679,6 +679,7 @@ menu "External python modules"
+>         source "package/python-protobuf/Config.in"
+>         source "package/python-psutil/Config.in"
+>         source "package/python-pyasn/Config.in"
+> +       source "package/python-pyasn1-modules/Config.in"
+>         source "package/python-pycli/Config.in"
+>         source "package/python-pycparser/Config.in"
+>         source "package/python-pycrypto/Config.in"
+> diff --git a/package/python-pyasn1-modules/Config.in b/package/python-pyasn1-modules/Config.in
 > new file mode 100644
-> index 0000000..7c0fb14
+> index 0000000..debad96
 > --- /dev/null
-> +++ b/package/python-treq/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PYTHON_TREQ
-> +       bool "python-treq"
+> +++ b/package/python-pyasn1-modules/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_PYASN1_MODULES
+> +       bool "python-pyasn1-modules"
 > +       depends on BR2_PACKAGE_PYTHON
-> +       depends on BR2_PACKAGE_PYTHON_TWISTED
 
-use select instead of depends for twisted
-
-provide select statements for following packages:
-
-"requests >= 2.1.0",
-"service_identity >= 14.0.0",
-"six"
+remove depends and add select for pyasn
 
 > +       help
-> +         treq is an HTTP library inspired by requests but written on top of Twisted's Agents.
-> +         It provides a simple, higher level API for making HTTP requests when using Twisted.
+> +         A collection of ASN.1-based protocols modules.
 > +
-> +         https://github.com/twisted/treq
+> +         https://pypi.python.org/pypi/pyasn1-modules
 > +
-> +comment "python-treq needs python-twisted"
-> +       depends on BR2_PACKAGE_PYTHON
-> +       depends on !BR2_PACKAGE_PYTHON_TWISTED
-> diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+> diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
 > new file mode 100644
-> index 0000000..6c39ba8
+> index 0000000..81690d6
 > --- /dev/null
-> +++ b/package/python-treq/python-treq.hash
+> +++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
 > @@ -0,0 +1,3 @@
 > +# Locally computed.
-> +md5    b1fb60759ad5a885cb8ea562553f2d4c  treq-15.1.0.tar.gz
-> +sha256 425a47d5d52a993d51211028fb6ade252e5fbea094e878bb4b644096a7322de8  treq-15.1.0.tar.gz
-> diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+> +md5    178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
+> +sha256 10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
+> diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
 > new file mode 100644
-> index 0000000..89b5d19
+> index 0000000..69da1ea
 > --- /dev/null
-> +++ b/package/python-treq/python-treq.mk
-> @@ -0,0 +1,17 @@
+> +++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
+> @@ -0,0 +1,15 @@
 > +################################################################################
 > +#
-> +# python-treq
+> +# python-pyasn1-modules
 > +#
 > +################################################################################
 > +
-> +#PYTHON_TREQ_VERSION = master
-> +#PYTHON_TREQ_SITE = $(call github,twisted,treq,$(PYTHON_TREQ_VERSION))
-> +PYTHON_TREQ_VERSION = 15.1.0
-> +PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
-> +PYTHON_TREQ_SITE = http://pypi.python.org/packages/source/t/treq
-> +PYTHON_TREQ_LICENSE = MIT
-> +PYTHON_TREQ_LICENSE_FILES = LICENSE
-> +PYTHON_TREQ_SETUP_TYPE = setuptools
-> +PYTHON_TREQ_DEPENDENCIES = python-twisted
+> +PYTHON_PYASN1_MODULES_VERSION = 0.0.8
+> +PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
+> +PYTHON_PYASN1_MODULES_SITE = http://pypi.python.org/packages/source/p/pyasn1-modules
+> +PYTHON_PYASN1_MODULES_LICENSE = BSD
+> +#PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE
+> +PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
+> +#PYTHON_PYASN1_MODULES_DEPENDENCIES =
 > +
 > +$(eval $(python-package))
 > --
