@@ -1,41 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 23:46:45 +0100
-Subject: [Buildroot] [git commit] binutils: ensure TARGET_CONFIGURE_ARGS is
-	taken into consideration for subdirs
-Message-ID: <20160201224716.068D67F8C1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 23:51:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/faifa: fix musl build
+In-Reply-To: <1454167986-27614-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454167986-27614-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160201235145.5095f8e1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d42d0acca6fbae5fca01024314600369d99995e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Binutils runs the configure scripts of subdirs at make time, so we need a
-custom build command to ensure TARGET_CONFIGURE_ARGS are taken into
-consideration for those (E.G. for musl gettext handling).
+On Sat, 30 Jan 2016 16:33:06 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/dc6/dc6e4d7327d2031ef921cccd814605dec73a0f9c/
+> http://autobuild.buildroot.net/results/868/868642325dbcd581373eaa9e1ef900f8a27f9121/
+> and others
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...do-not-include-linux-if_ether.h-for-musl-.patch | 32 ++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 package/faifa/0002-hpav_cfg.c-do-not-include-linux-if_ether.h-for-musl-.patch
 
-Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/binutils.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Applied, thanks.
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 7c5955e..a3e27be 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -74,6 +74,12 @@ HOST_BINUTILS_CONF_OPTS = \
- 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
- 
-+# binutils run configure script of subdirs at make time, so ensure
-+# our TARGET_CONFIGURE_ARGS are taken into consideration for those
-+define BINUTILS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) -C $(@D)
-+endef
-+
- # We just want libbfd, libiberty and libopcodes,
- # not the full-blown binutils in staging
- define BINUTILS_INSTALL_STAGING_CMDS
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
