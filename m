@@ -1,180 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 11:51:08 +0100
-Subject: [Buildroot] [git commit] support/scripts: drop ancient
-	build-ext3-img script
-Message-ID: <20160201224710.6A5147F892@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 21:46:27 +0100
+Subject: [Buildroot] [git commit] imx-gpu-viv: bump version to 5.0.11 p7.1
+Message-ID: <20160201224713.96DBB7F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53703ee67a645c15cfda837f0b46be2bf813dbfe
+commit: https://git.buildroot.net/buildroot/commit/?id=1db97c0ce65368b205ea17c88293fa7a38fd4135
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It hasn't been updated since it was added in 2008, and nowadays things kind
-of stuff should be handled with genimage.
+Upgrade to 5.0.11 P7.1 for i.MX6 with GPU
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+i.MX6QP qualified graphics driver(5.0.11P7.1).
+Includes many of the bug fixes and stability improvements.
+For more information refer to release notes from
+http://www.freescale.com/imx6qp
+
+libGAL_egl is no longer provided in p7.1.
+
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/b3ef125
+
+This package has been tested with both X11 and Framebuffer backends:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # apitrace trace --api egl ./tutorial7
+ # gmem_info
+ ... display memory use per PID ...
+ #??apitrace replay tutorial7.trace
+ #??eglretrace tutorial7.trace
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/build-ext3-img | 152 -----------------------------------------
- 1 file changed, 152 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  4 ++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 11 +----------
+ 2 files changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/support/scripts/build-ext3-img b/support/scripts/build-ext3-img
-deleted file mode 100755
-index 1cab710..0000000
---- a/support/scripts/build-ext3-img
-+++ /dev/null
-@@ -1,152 +0,0 @@
--#!/bin/sh
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index aa1bdee..149afc2 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256	b5b9c8e216b2bc4281c2443e07eab90547de0abd705614756ed68c7ad2fcf97a  imx-gpu-viv-5.0.11.p4.5-sfp.bin
+-sha256	0591b495cd1c2547ae007d405b90729e2fb90603a5728b39d1a99cb4e1cf1eb4  imx-gpu-viv-5.0.11.p4.5-hfp.bin
++sha256	43fea6ebbb1222e0f594fff3b48147f4bb6173b85f2caa9fa6bf04a1c85ee93a  imx-gpu-viv-5.0.11.p7.1-sfp.bin
++sha256	e49ca1d31ca83bb50f6672325db37ae3754eb9073ad98a37790ab1209ea5cba8  imx-gpu-viv-5.0.11.p7.1-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index a66c82e..133632b 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_GPU_VIV_BASE_VERSION = 5.0.11.p4.5
++IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.1
+ ifeq ($(BR2_ARM_EABIHF),y)
+ IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
+ else
+@@ -26,13 +26,6 @@ define IMX_GPU_VIV_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_VIV_SOURCE))
+ endef
+ 
+-# For some reason libGAL_egl for x11 is called libGAL_egl.dri.so
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+-define IMX_GPU_VIV_FIXUP_SYMLINKS
+-	ln -sf libGAL_egl.dri.so $(@D)/gpu-core/usr/lib/libGAL_egl.so
+-endef
+-endif
 -
--BLOCKSIZE=516096
--WORKING_DIR=`pwd`
--
--echo "This script will create a bootable ext3 image from buildroot."
--
--echo "Enter the path to the image (${WORKING_DIR})"
--read IMG_PATH
--
--if [ "${IMAGE_PATH}" = "" ]; then
--	IMAGE_PATH=${WORKING_DIR}
--fi
--
--echo "Enter the name of the image file (buildroot.img)"
--read IMG_NAME
--
--if [ "${IMAGE_NAME}" = "" ]; then
--	IMAGE_NAME="buildroot.img"
--fi
--
--IMAGE=${IMAGE_PATH}/${IMAGE_NAME}
--
--echo "Enter the path and filename for the root filesystem"
--echo "tarball that you want to install into the image"
--read ROOT_PATH
--
--if [ "${ROOT_PATH}" = "" ]; then
--	echo "Error: you must specify a path."
--	exit 1
--fi
--
--CYLINDERS=`du --summarize --block-size=${BLOCKSIZE} ${ROOT_PATH}`
--BYTE_SIZE=`du --summarize --block-size=${BLOCKSIZE} --human-readable ${ROOT_PATH}`
--
--CYLINDERS=${CYLINDERS%${ROOT_PATH}}
--BYTE_SIZE=${BYTE_SIZE%${ROOT_PATH}}
--
--CYLINDERS=`expr ${CYLINDERS} "*" 2`
--
--echo "Now I will create an ext3 image file"
--echo "using ${CYLINDERS} cylinders, with ${BLOCKSIZE} bytes per block"
--echo "in other words, ${BYTE_SIZE}bytes..." 
--
--	dd if=/dev/zero of=${IMAGE} bs=${BLOCKSIZE}c count=${CYLINDERS} 
--
--# Create file partition and filesystem
--
--    # STEP 1. create partition
--    /sbin/losetup /dev/loop3 ${IMAGE}
--	# probably should figure out how to use GNU parted to do this non-interactively
--    /sbin/fdisk -u -C${CYLINDERS} -S63 -H16 /dev/loop3
--    /sbin/losetup -d /dev/loop3
--
--    # STEP 2. make file system (ext3)
--    /sbin/losetup -o 32256 /dev/loop3 ${IMAGE}
--    /sbin/mkfs.ext3 /dev/loop3
--    /sbin/losetup -d /dev/loop3 
--
--# Install Software to the image
--	mkdir -p ${IMAGE_PATH}/temp
--    mount -o offset=32256,loop ${IMAGE} ${IMAGE_PATH}/temp
--    tar -xvf ${ROOT_PATH} --directory ${IMAGE_PATH}/temp
--    # make sure to unmount the image
--    umount ${IMAGE_PATH}/temp
--	rm -rf ${IMAGE_PATH}/temp
--
--# Create a VMware .vmx file
--cat > ${IMAGE_PATH}/buildroot.vmx <<EOF
--config.version = "8"
--virtualHW.version = "3"
--
--uuid.location = "56 4d 5c cc 3d 4a 43 29-55 89 5c 28 1e 7e 06 58"
--uuid.bios = "56 4d 5c cc 3d 4a 43 29-55 89 5c 28 1e 7e 06 58"
--
--uuid.action = "create"
--checkpoint.vmState = ""
--
--displayName = "Buildroot"
--annotation = ""
--guestinfo.vmware.product.long = ""
--guestinfo.vmware.product.url = "http://dcgrendel.be/vmbuilder/"
--
--guestOS = "linux"
--numvcpus = "1"
--memsize = "256"
--paevm = "FALSE"
--sched.mem.pshare.enable = "TRUE"
--MemAllowAutoScaleDown = "FALSE"
--
--MemTrimRate = "-1"
--
--nvram = "nvram"
--
--mks.enable3d = "FALSE"
--vmmouse.present = "TRUE"
--
--tools.syncTime = "TRUE"
--tools.remindinstall = "FALSE"
--
--isolation.tools.hgfs.disable = "FALSE"
--isolation.tools.dnd.disable = "FALSE"
--isolation.tools.copy.enable = "TRUE"
--isolation.tools.paste.enabled = "TRUE"
--gui.restricted = "FALSE"
--
--ethernet0.present = "TRUE"
--ethernet0.connectionType = "bridged"
--ethernet0.addressType = "generated"
--ethernet0.generatedAddress = "00:0c:29:7e:06:58"
--ethernet0.generatedAddressOffset = "0"
--
--usb.present = "TRUE"
--usb.generic.autoconnect = "FALSE"
--
--sound.present = "TRUE"
--sound.virtualdev = "es1371"
--
--ide0:0.present = "TRUE"
--ide0:0.fileName = "buildroot.vmdk"
--ide0:0.deviceType = "disk"
--ide0:0.mode = ""
--ide0:0.redo = ""
--ide0:0.writeThrough = "FALSE"
--ide0:0.startConnected = "TRUE"
--
--ide1:0.present = "FALSE"
--ide1:0.fileName = ""
--ide1:0.deviceType = "disk"
--ide1:0.mode = ""
--ide1:0.redo = ""
--ide1:0.writeThrough = "FALSE"
--ide1:0.startConnected = "FALSE"
--
--floppy0.present = "FALSE"
--
--serial0.present = "FALSE"
--
--serial1.present = "FALSE"
--
--parallel0.present = "FALSE"
--
--EOF
--
--# Install GRUB
--     /sbin/grub --no-floppy --batch <<EOT 
--     device (hd0) ${IMAGE}
--     geometry (hd0) ${CYLINDERS} 16 63
--     root (hd0,0)
--     setup (hd0)
--     quit
--     EOT
+ # Instead of building, we fix up the inconsistencies that exist
+ # in the upstream archive here.
+ # Make sure these commands are idempotent.
+@@ -49,8 +42,6 @@ define IMX_GPU_VIV_BUILD_CMDS
+ 	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
+ 	ln -sf libVIVANTE-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVIVANTE.so
+ 	ln -sf libGAL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
+-	ln -sf libGAL_egl.$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL_egl.so
+-	$(IMX_GPU_VIV_FIXUP_SYMLINKS)
+ endef
+ 
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
