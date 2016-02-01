@@ -1,55 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 21:52:00 +0100
-Subject: [Buildroot] [git commit] configs/nitrogen6*: bump kernel version
-Message-ID: <20160201224700.D3A057F8D4@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 21:46:08 +0100
+Subject: [Buildroot] [git commit] imx-lib: bump to version 5.1
+Message-ID: <20160201224659.D55A77F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f181872da9c7d23f3f511d079919030c62fc461
+commit: https://git.buildroot.net/buildroot/commit/?id=2a58ad513a1b84b7fe3d0e2a7155f10e1180a984
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to latest boundary-imx_3.14.28_1.0.0_ga commit which brings the
-following additions:
-- Fix cache functions export when !MULTI_CACHE
-https://github.com/Freescale/linux-fslc/commit/6325d57
-  - Mandatory for Vivante kernel module
-- Add TW686x video decoder support
-- Fix OV5642 subdev/capture driver conflict
-- Add GSLX680 touchscreen support
+Change version to be independent of BSP version.  This limits
+confusion on future BSP updates that do not include imx-lib updates.
+
+Changelog since 3.14.28-1.0.0_ga:
+- Add i.MX 7D support.
+- Change LICENSE file.
+- Enable pxp libraries for i.MX 6UltraLite.
+- Fix rng and shara2 to exclude the 6UL platform to avoid build breaks
+
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/b299454
+https://github.com/Freescale/meta-fsl-arm/commit/5f28af0
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/nitrogen6sx_defconfig | 2 +-
- configs/nitrogen6x_defconfig  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-lib/imx-lib.hash | 2 +-
+ package/freescale-imx/imx-lib/imx-lib.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index 70e6376..5155afe 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Last version of branch boundary-imx_3.14.28_1.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index af4a187..62a3007 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- # Last version of branch boundary-imx_3.14.28_1.0.0_ga
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="boundary"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/package/freescale-imx/imx-lib/imx-lib.hash b/package/freescale-imx/imx-lib/imx-lib.hash
+index 85f0a40..8e4bd73 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.hash
++++ b/package/freescale-imx/imx-lib/imx-lib.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256 46022817d25f154b60247fdcbb87216e23e553bd88ec9664b1b5d5911e7aa2a2  imx-lib-3.14.28-1.0.0.tar.gz
++sha256 2b4547ffb1de328cf8997a09a423c6f015d808493efd11a98a5d42c6497e3445  imx-lib-5.1.tar.gz
+diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
+index e160cca..b49357b 100644
+--- a/package/freescale-imx/imx-lib/imx-lib.mk
++++ b/package/freescale-imx/imx-lib/imx-lib.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
++IMX_LIB_VERSION = 5.1
+ IMX_LIB_SITE = $(FREESCALE_IMX_SITE)
+ IMX_LIB_LICENSE = LGPLv2.1+
+-IMX_LIB_LICENSE_FILES = pxp/pxp_lib.h
++IMX_LIB_LICENSE_FILES = COPYING-LGPL-2.1
+ 
+ IMX_LIB_INSTALL_STAGING = YES
+ 
