@@ -1,76 +1,21 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 1 Feb 2016 23:49:27 +0100
-Subject: [Buildroot] [PATCH 10/10] gst1-imx: bump to version 0.12.0
-In-Reply-To: <20160201232711.1e2c85a6@free-electrons.com>
-References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454154357-31625-11-git-send-email-gary.bisson@boundarydevices.com>
- <20160201214437.66ddff9e@free-electrons.com>
- <CAAMH-yufkAQV7p50daw=VYTGeM41RvtpYKsZGzRwZ2K_vKVbxQ@mail.gmail.com>
- <20160201232711.1e2c85a6@free-electrons.com>
-Message-ID: <CAAMH-yvxXLP4SOiZLs9PR2wiFjf7L0-DTk81G9SJvNDLhYzv-Q@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2016 23:59:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 2.8.6
+In-Reply-To: <1454364750-20925-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Mon, 1 Feb 2016 23:12:30 +0100")
+References: <1454364750-20925-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87d1sg9gv9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Mon, Feb 1, 2016 at 11:27 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 1 Feb 2016 22:20:36 +0100, Gary Bisson wrote:
->
->> > So it no longer depends on the GPU stuff ?
->>
->> No, you can build this package without the GPU backend which implies
->> the GPU sinks won't be built. The end goal is for i.MX7 which doesn't
->> have any GPU, right now I have to include the GPU binaries just to
->> build the pxp/v4l plugins.
->
-> ACK, makes sense.
->
->> >> -     depends on BR2_PACKAGE_LIBFSLVPUWRAP
->> >>       select BR2_PACKAGE_GST1_PLUGINS_BASE
->> >> +     select BR2_PACKAGE_GST1_IMX_IPU_PLUGIN
->> >> +     select BR2_PACKAGE_GST1_IMX_PXP_PLUGIN
->> >
->> > This is weird. If you "select" these options here, it means that there
->> > is no way to disable those options. So why are they options in the
->> > first place ?
->>
->> I just wanted to make it explicit that the package will at least build
->> those two plugins. Then leaving it up to the user to select whichever
->> plugin he wants. There actually is no option to disable plugins from
->> the packages, it's all a question of dependency. As soon as the i.MX
->> linux kernel is built, PXP and IPU will be. As soon as the GPU
->> libraries are includes, GPU sink plugins will be built.
->
-> Hum, then it is not good, because it means that even if you disable the
-> GPU sink plugin options, but still have the GPU libraries enabled, the
-> GPU sink plugins will be installed on your target. This is very
-> confusing.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Yes, I understand, is it really a big deal? There's going to be more
-plugins than expected in the rootfs, it's free!
+Committed, thanks.
 
-> I think you should remove the sub-options, and then simply expand the
-> Config.in help text of the main option to say:
->
->  - The IPU and PXP plugins are always built.
->  - The GPU sink plugin is built when ... is enabled.
->  - The ... plugin is built when ... is enabled.
-
-This would be ever more confusing in my opinion. It means that when
-you select gstreamer-imx you have no idea of what is going to be
-built. Then when you realize you need the graphics libraries you have
-to browse to select it yourself.
-
-Wouldn't it be possible to force the option value when the IMX_GPU_VIV
-package is selected? I guess that would bring a circular dependency
-but at least someone wouldn't be able to remove the option without
-removing the graphics binaries.
-
-Regards,
-Gary
+-- 
+Bye, Peter Korsgaard
