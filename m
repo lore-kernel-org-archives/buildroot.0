@@ -1,56 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 15:38:39 +0100
-Subject: [Buildroot] [PATCH v2 1/2] toolchain-external: add a check for
- unsupported toolchains
-In-Reply-To: <1454334017-12326-1-git-send-email-romain.naour@gmail.com>
-References: <1454334017-12326-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160201153839.6325ebba@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 1 Feb 2016 15:39:18 +0100
+Subject: [Buildroot] [PATCH 22/22] package/python-cffi: host-package
+ added (needs host-libffi).
+In-Reply-To: <1454335541-14224-23-git-send-email-mc5686@mclink.it>
+References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
+ <1454335541-14224-23-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kufphaD4XcCfL=eYS8YKpyVKfvrhZKdwOkeHqHXbEayhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/libffi/libffi.mk           | 11 +++++++++++
+>  package/python-cffi/python-cffi.mk |  2 ++
+>  2 files changed, 13 insertions(+)
+>
+> diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+> index 8f0f72d..47de8cd 100644
+> --- a/package/libffi/libffi.mk
+> +++ b/package/libffi/libffi.mk
+> @@ -22,6 +22,17 @@ endef
+>
+>  LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+>
+> +# Move the headers to the usual location, and adjust the .pc file
+> +# accordingly.
+> +define HOST_LIBFFI_MOVE_HOST_HEADERS
+> +       mv $(HOST_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(HOST_DIR)/usr/include/
+> +       $(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
+> +               $(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
+> +       rm -rf $(HOST_DIR)/usr/lib/libffi-*
+> +endef
+> +
+> +HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
+> +
+>  # Remove headers that are not at the usual location from the target
+>  define LIBFFI_REMOVE_TARGET_HEADERS
+>         $(RM) -rf $(TARGET_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)
+> diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+> index 70fbe02..02c969b 100644
+> --- a/package/python-cffi/python-cffi.mk
+> +++ b/package/python-cffi/python-cffi.mk
+> @@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
+>  PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+>  PYTHON_CFFI_LICENSE = MIT
+>  PYTHON_CFFI_LICENSE_FILES = LICENSE
+> +HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser host-libffi
+>
+>  $(eval $(python-package))
+> +$(eval $(host-python-package))
 
-On Mon,  1 Feb 2016 14:40:16 +0100, Romain Naour wrote:
+drop this patch, as my series is already in patchwork.
 
-> Here is the sysroot directory tree for linaro 2015.11:
-> $ ls libc/arm-linux-gnueabihf
-> etc  lib  sbin  usr  var
-> 
-> Here is the sysroot directory tree for CodeSourcery standard:
-> $ ls libc/sgxx-glibc
-> etc  lib  lib64  sbin  usr  var
-> 
-> Usually the sysroot is located directly under libc directory
-> $ ls libc/
-> etc  lib  sbin  usr  var
+http://patchwork.ozlabs.org/patch/562968/
+http://patchwork.ozlabs.org/patch/562969/
+http://patchwork.ozlabs.org/patch/562970/
 
-I think this is not "usual", for example it's not the case for
-Buildroot or Crosstool-NG toolchain.
-
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 02cc0bb..fd99efe 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -418,6 +418,11 @@ check_unusable_toolchain = \
->  		echo "and contain a lot of pre-built libraries that would conflict with"; \
->  		echo "the ones Buildroot wants to build."; \
->  		exit 1; \
-> +	fi; \
-> +	non_existent_sysroot=`$${__CROSS_CC} -print-file-name=libc.a` ; \
-
-The variable should not be named non_existent_sysroot since it may
-exist. Also, you could use the existing toolchain_find_libc_a function,
-no? So maybe:
-
-	libc_a_path=$(call toolchain_find_libc_a,$${__CROSS_CC}) ; \
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yegor
