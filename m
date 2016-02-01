@@ -1,82 +1,171 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:37 +0100
-Subject: [Buildroot] [PATCH 18/22] package/python-pyasn1-modules: new
-	package.
-In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-19-git-send-email-mc5686@mclink.it>
+Date: Mon,  1 Feb 2016 15:05:19 +0100
+Subject: [Buildroot] [PATCH 00/22] changes needed for python-crossbar
+	package (new).
+Message-ID: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/Config.in                                        |  1 +
- package/python-pyasn1-modules/Config.in                  |  8 ++++++++
- package/python-pyasn1-modules/python-pyasn1-modules.hash |  3 +++
- package/python-pyasn1-modules/python-pyasn1-modules.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
+This is the second attempt to produce an acceptable set of patches.
+I hope I got it right, this time.
+
+All these new packages, along with a couple of change in existing ones
+(python-jinja2 & python-cffi) are needed to compile and run crossbar.
+
+Mauro Condarelli (22):
+  package/python-jinja2: bump version to 2.8 (needed by
+    python-crossbar).
+  package/python-characteristic: new package.
+  package/python-cbor: new package.
+  package/python-click: new package.
+  package/python-lmdb: new package.
+  package/python-mistune: new package.
+  package/python-netaddr: new package.
+  package/python-pycparser: new package.
+  package/python-pygments: new package.
+  package/python-pynacl: new package.
+  package/python-pyopenssl: new package.
+  package/python-pytrie: new package.
+  package/python-service-identity: new package.
+  package/python-shutilwhich: new package.
+  package/python-treq: new package.
+  package/python-txaio: new package.
+  package/python-msgpack-python: new package.
+  package/python-pyasn1-modules: new package.
+  package/python-cryptography: new package.
+  package/python-autobahn: new package.
+  package/python-crossbar: new package.
+  package/python-cffi: host-package added (needs host-libffi).
+
+ package/Config.in                                  | 20 +++++++++++++
+ package/libffi/libffi.mk                           | 11 +++++++
+ package/python-autobahn/Config.in                  |  8 +++++
+ package/python-autobahn/python-autobahn.hash       |  3 ++
+ package/python-autobahn/python-autobahn.mk         | 15 ++++++++++
+ package/python-cbor/Config.in                      |  8 +++++
+ package/python-cbor/python-cbor.hash               |  3 ++
+ package/python-cbor/python-cbor.mk                 | 15 ++++++++++
+ package/python-cffi/python-cffi.mk                 |  2 ++
+ package/python-characteristic/Config.in            |  8 +++++
+ .../python-characteristic.hash                     |  3 ++
+ .../python-characteristic/python-characteristic.mk | 15 ++++++++++
+ package/python-click/Config.in                     |  8 +++++
+ package/python-click/python-click.hash             |  3 ++
+ package/python-click/python-click.mk               | 15 ++++++++++
+ package/python-crossbar/Config.in                  | 35 ++++++++++++++++++++++
+ package/python-crossbar/python-crossbar.hash       |  9 ++++++
+ package/python-crossbar/python-crossbar.mk         | 19 ++++++++++++
+ package/python-cryptography/Config.in              | 20 +++++++++++++
+ .../python-cryptography/python-cryptography.hash   |  6 ++++
+ package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++
+ package/python-jinja2/python-jinja2.hash           |  7 +++--
+ package/python-jinja2/python-jinja2.mk             |  2 +-
+ package/python-lmdb/Config.in                      |  8 +++++
+ package/python-lmdb/python-lmdb.hash               |  3 ++
+ package/python-lmdb/python-lmdb.mk                 | 15 ++++++++++
+ package/python-mistune/Config.in                   |  9 ++++++
+ package/python-mistune/python-mistune.hash         |  3 ++
+ package/python-mistune/python-treq.mk              | 15 ++++++++++
+ package/python-msgpack-python/Config.in            |  8 +++++
+ .../python-msgpack-python.hash                     |  3 ++
+ .../python-msgpack-python/python-msgpack-python.mk | 15 ++++++++++
+ package/python-netaddr/Config.in                   |  8 +++++
+ package/python-netaddr/python-netaddr.hash         |  3 ++
+ package/python-netaddr/python-netaddr.mk           | 15 ++++++++++
+ package/python-pyasn1-modules/Config.in            |  8 +++++
+ .../python-pyasn1-modules.hash                     |  3 ++
+ .../python-pyasn1-modules/python-pyasn1-modules.mk | 15 ++++++++++
+ package/python-pycparser/Config.in                 |  6 ++++
+ package/python-pycparser/python-pycparser.hash     |  4 +++
+ package/python-pycparser/python-pycparser.mk       | 15 ++++++++++
+ package/python-pygments/Config.in                  |  8 +++++
+ package/python-pygments/python-pygments.hash       |  3 ++
+ package/python-pygments/python-pygments.mk         | 15 ++++++++++
+ package/python-pynacl/Config.in                    |  9 ++++++
+ package/python-pynacl/python-pynacl.hash           |  3 ++
+ package/python-pynacl/python-pynacl.mk             | 16 ++++++++++
+ package/python-pyopenssl/Config.in                 | 12 ++++++++
+ package/python-pyopenssl/python-pyopenssl.hash     |  3 ++
+ package/python-pyopenssl/python-pyopenssl.mk       | 14 +++++++++
+ package/python-pytrie/Config.in                    |  8 +++++
+ package/python-pytrie/python-pytrie.hash           |  3 ++
+ package/python-pytrie/python-pytrie.mk             | 15 ++++++++++
+ package/python-service-identity/Config.in          |  8 +++++
+ .../python-service-identity.hash                   |  3 ++
+ .../python-service-identity.mk                     | 15 ++++++++++
+ package/python-shutilwhich/Config.in               |  8 +++++
+ package/python-shutilwhich/python-shutilwhich.hash |  3 ++
+ package/python-shutilwhich/python-shutilwhich.mk   | 15 ++++++++++
+ package/python-treq/Config.in                      | 13 ++++++++
+ package/python-treq/python-treq.hash               |  3 ++
+ package/python-treq/python-treq.mk                 | 17 +++++++++++
+ package/python-txaio/Config.in                     |  8 +++++
+ package/python-txaio/python-txaio.hash             |  3 ++
+ package/python-txaio/python-txaio.mk               | 15 ++++++++++
+ 65 files changed, 630 insertions(+), 4 deletions(-)
+ create mode 100644 package/python-autobahn/Config.in
+ create mode 100644 package/python-autobahn/python-autobahn.hash
+ create mode 100644 package/python-autobahn/python-autobahn.mk
+ create mode 100644 package/python-cbor/Config.in
+ create mode 100644 package/python-cbor/python-cbor.hash
+ create mode 100644 package/python-cbor/python-cbor.mk
+ create mode 100644 package/python-characteristic/Config.in
+ create mode 100644 package/python-characteristic/python-characteristic.hash
+ create mode 100644 package/python-characteristic/python-characteristic.mk
+ create mode 100644 package/python-click/Config.in
+ create mode 100644 package/python-click/python-click.hash
+ create mode 100644 package/python-click/python-click.mk
+ create mode 100644 package/python-crossbar/Config.in
+ create mode 100644 package/python-crossbar/python-crossbar.hash
+ create mode 100644 package/python-crossbar/python-crossbar.mk
+ create mode 100644 package/python-cryptography/Config.in
+ create mode 100644 package/python-cryptography/python-cryptography.hash
+ create mode 100644 package/python-cryptography/python-cryptography.mk
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
+ create mode 100644 package/python-mistune/Config.in
+ create mode 100644 package/python-mistune/python-mistune.hash
+ create mode 100644 package/python-mistune/python-treq.mk
+ create mode 100644 package/python-msgpack-python/Config.in
+ create mode 100644 package/python-msgpack-python/python-msgpack-python.hash
+ create mode 100644 package/python-msgpack-python/python-msgpack-python.mk
+ create mode 100644 package/python-netaddr/Config.in
+ create mode 100644 package/python-netaddr/python-netaddr.hash
+ create mode 100644 package/python-netaddr/python-netaddr.mk
  create mode 100644 package/python-pyasn1-modules/Config.in
  create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.hash
  create mode 100644 package/python-pyasn1-modules/python-pyasn1-modules.mk
+ create mode 100644 package/python-pycparser/Config.in
+ create mode 100644 package/python-pycparser/python-pycparser.hash
+ create mode 100644 package/python-pycparser/python-pycparser.mk
+ create mode 100644 package/python-pygments/Config.in
+ create mode 100644 package/python-pygments/python-pygments.hash
+ create mode 100644 package/python-pygments/python-pygments.mk
+ create mode 100644 package/python-pynacl/Config.in
+ create mode 100644 package/python-pynacl/python-pynacl.hash
+ create mode 100644 package/python-pynacl/python-pynacl.mk
+ create mode 100644 package/python-pyopenssl/Config.in
+ create mode 100644 package/python-pyopenssl/python-pyopenssl.hash
+ create mode 100644 package/python-pyopenssl/python-pyopenssl.mk
+ create mode 100644 package/python-pytrie/Config.in
+ create mode 100644 package/python-pytrie/python-pytrie.hash
+ create mode 100644 package/python-pytrie/python-pytrie.mk
+ create mode 100644 package/python-service-identity/Config.in
+ create mode 100644 package/python-service-identity/python-service-identity.hash
+ create mode 100644 package/python-service-identity/python-service-identity.mk
+ create mode 100644 package/python-shutilwhich/Config.in
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
+ create mode 100644 package/python-treq/Config.in
+ create mode 100644 package/python-treq/python-treq.hash
+ create mode 100644 package/python-treq/python-treq.mk
+ create mode 100644 package/python-txaio/Config.in
+ create mode 100644 package/python-txaio/python-txaio.hash
+ create mode 100644 package/python-txaio/python-txaio.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 606dacc..5221cfe 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -679,6 +679,7 @@ menu "External python modules"
- 	source "package/python-protobuf/Config.in"
- 	source "package/python-psutil/Config.in"
- 	source "package/python-pyasn/Config.in"
-+	source "package/python-pyasn1-modules/Config.in"
- 	source "package/python-pycli/Config.in"
- 	source "package/python-pycparser/Config.in"
- 	source "package/python-pycrypto/Config.in"
-diff --git a/package/python-pyasn1-modules/Config.in b/package/python-pyasn1-modules/Config.in
-new file mode 100644
-index 0000000..debad96
---- /dev/null
-+++ b/package/python-pyasn1-modules/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYASN1_MODULES
-+	bool "python-pyasn1-modules"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  A collection of ASN.1-based protocols modules.
-+
-+	  https://pypi.python.org/pypi/pyasn1-modules
-+
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.hash b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-new file mode 100644
-index 0000000..81690d6
---- /dev/null
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.hash
-@@ -0,0 +1,3 @@
-+# Locally computed.
-+md5	178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
-+sha256	10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
-diff --git a/package/python-pyasn1-modules/python-pyasn1-modules.mk b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-new file mode 100644
-index 0000000..69da1ea
---- /dev/null
-+++ b/package/python-pyasn1-modules/python-pyasn1-modules.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pyasn1-modules
-+#
-+################################################################################
-+
-+PYTHON_PYASN1_MODULES_VERSION = 0.0.8
-+PYTHON_PYASN1_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
-+PYTHON_PYASN1_MODULES_SITE = http://pypi.python.org/packages/source/p/pyasn1-modules
-+PYTHON_PYASN1_MODULES_LICENSE = BSD
-+#PYTHON_PYASN1_MODULES_LICENSE_FILES = LICENSE
-+PYTHON_PYASN1_MODULES_SETUP_TYPE = setuptools
-+#PYTHON_PYASN1_MODULES_DEPENDENCIES = 
-+
-+$(eval $(python-package))
 -- 
 2.1.4
