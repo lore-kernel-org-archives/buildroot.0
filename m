@@ -1,43 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 07:19:24 +0100
-Subject: [Buildroot] [git commit] rt-tests: unavailable for static builds
-Message-ID: <20160201224700.52E027FAE2@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 17:07:37 +0100
+Subject: [Buildroot] [git commit] Revert "madplay: fix musl gettext support
+	detection"
+Message-ID: <20160201224701.2C0FC7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1160ba631cf94b5afbea4bfa588298b946340792
+commit: https://git.buildroot.net/buildroot/commit/?id=28fc73efafe917e4a89c0eb6651555922ee0f4df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/a6f/a6f6502e55fd68803f3ff8b4b76cce6601e101db/
+This reverts commit a0a244d26d8e7e7e5465c3e6e9fcd1c31e2c178d.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+As this is now handled globally in TARGET_CONFIGURE_ARGS, this can be
+reverted here.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rt-tests/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/madplay/madplay.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
-index db5e0a0..4c57c0f 100644
---- a/package/rt-tests/Config.in
-+++ b/package/rt-tests/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_RT_TESTS
- 	bool "rt-tests"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen
- 	help
- 	  Set of utilities for testing the real-time behaviour of a
- 	  Linux system.
-@@ -26,6 +27,6 @@ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
- 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
- 	depends on BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+index 65ae4f7..2606ac8 100644
+--- a/package/madplay/madplay.mk
++++ b/package/madplay/madplay.mk
+@@ -11,11 +11,6 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
+ MADPLAY_LIBTOOL_PATCH = NO
+ MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
  
--comment "rt-tests needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "rt-tests needs a toolchain w/ threads, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
+-# configure script misdetects musl gettext support
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-MADPLAY_CONF_ENV += gt_cv_func_gnugettext1_libc=yes
+-endif
+-
+ # Check if ALSA is built, then we should configure after alsa-lib so
+ # ./configure can find alsa-lib.
+ ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
