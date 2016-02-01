@@ -1,9 +1,10 @@
 From: Ludovic Guegan <ludovic.guegan@gmail.com>
-Date: Tue,  2 Feb 2016 00:31:03 +0100
-Subject: [Buildroot]  [PATCH 6/8 RFC] package/rtop: add rtop package in Go
+Date: Tue,  2 Feb 2016 00:31:04 +0100
+Subject: [Buildroot] [PATCH 7/8 RFC] package/embd: add embd package
+	(embedded programming framework)
 In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
 References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <1454369465-4804-7-git-send-email-ludovic.guegan@gmail.com>
+Message-ID: <1454369465-4804-8-git-send-email-ludovic.guegan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,67 +14,67 @@ To: buildroot@busybox.net
 Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
 ---
  package/Config.in      |  1 +
- package/rtop/Config.in |  8 ++++++++
- package/rtop/rtop.hash |  1 +
- package/rtop/rtop.mk   | 16 ++++++++++++++++
+ package/embd/Config.in |  8 ++++++++
+ package/embd/embd.hash |  1 +
+ package/embd/embd.mk   | 16 ++++++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/rtop/Config.in
- create mode 100644 package/rtop/rtop.hash
- create mode 100644 package/rtop/rtop.mk
+ create mode 100644 package/embd/Config.in
+ create mode 100644 package/embd/embd.hash
+ create mode 100644 package/embd/embd.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..d0e5e4e 100644
+index d0e5e4e..017ae97 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -483,6 +483,7 @@ menu "Erlang libraries/modules"
- endmenu
- endif
- 	source "package/gauche/Config.in"
-+	source "package/rtop/Config.in"
- 	source "package/guile/Config.in"
- 	source "package/haserl/Config.in"
- 	source "package/jamvm/Config.in"
-diff --git a/package/rtop/Config.in b/package/rtop/Config.in
+@@ -1152,6 +1152,7 @@ menu "Other"
+ 	source "package/ding-libs/Config.in"
+ 	source "package/eigen/Config.in"
+ 	source "package/elfutils/Config.in"
++	source "package/embd/Config.in"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+ 	source "package/gflags/Config.in"
+diff --git a/package/embd/Config.in b/package/embd/Config.in
 new file mode 100644
-index 0000000..857112a
+index 0000000..36ff68b
 --- /dev/null
-+++ b/package/rtop/Config.in
++++ b/package/embd/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_RTOP
-+	bool "rtop"
++config BR2_PACKAGE_EMBD
++	bool "embd"
 +	depends on BR2_PACKAGE_HOST_GOLANG
 +	help
-+	  rtop is an interactive, remote system monitoring tool based on SSH
++	  Golang Embedded Programming Framework
 +
-+	  https://github.com/rapidloop/rtop
++	  http://embd.io
 +
-diff --git a/package/rtop/rtop.hash b/package/rtop/rtop.hash
+diff --git a/package/embd/embd.hash b/package/embd/embd.hash
 new file mode 100644
-index 0000000..1407231
+index 0000000..cafb76d
 --- /dev/null
-+++ b/package/rtop/rtop.hash
++++ b/package/embd/embd.hash
 @@ -0,0 +1 @@
-+sha256 44ab02299a204befe49d725bdb76a249db419807e13b7ca451ba14ea5d3de1c2  rtop-release_1.0.tar.gz
-diff --git a/package/rtop/rtop.mk b/package/rtop/rtop.mk
++sha256 b3a7885855920fc915ee7075996bd064be20e95381dbe9cf5aa1f82b133dbf82 embd-bfcd1345fe4e3d17ca82475c0c2f3d53120f87a9.tar.gz
+diff --git a/package/embd/embd.mk b/package/embd/embd.mk
 new file mode 100644
-index 0000000..f233ebe
+index 0000000..4be0935
 --- /dev/null
-+++ b/package/rtop/rtop.mk
++++ b/package/embd/embd.mk
 @@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# rtop
++# embd
 +#
 +################################################################################
 +
-+RTOP_LICENSE = MIT
-+RTOP_VERSION = release_1.0
-+RTOP_SITE = $(call github,rapidloop,rtop,$(RTOP_VERSION))
-+RTOP_EXTRACT_DIR = $(@D)/src/github.com/rapidloop/rtop
-+RTOP_BUILD_PACKAGES = github.com/rapidloop/rtop
++EMBD_LICENSE = MIT
++EMBD_VERSION = bfcd1345fe4e3d17ca82475c0c2f3d53120f87a9
++EMBD_SITE = $(call github,kidoman,embd,$(EMBD_VERSION))
++EMBD_EXTRACT_DIR = $(@D)/src/github.com/kidoman/embd
++EMBD_BUILD_PACKAGES = github.com/kidoman/embd/embd
 +
-+RTOP_DEPS += $(call fetch-golang-package, golang.org/x/crypto/curve25519, 1f22c0103821b9390939b6776727195525381532)
-+RTOP_DEPS += $(call fetch-golang-package, golang.org/x/crypto/ssh, 1f22c0103821b9390939b6776727195525381532)
++EMBD_DEPS += $(call fetch-golang-package, github.com/codegangsta/cli, cf1f63a7274872768d4037305d572b70b1199397)
++EMBD_DEPS += $(call fetch-golang-package, github.com/golang/glog, 23def4e6c14b4da8ac2ed8007337bc5eb5007998)
 +
 +$(eval $(golang-package))
 -- 
