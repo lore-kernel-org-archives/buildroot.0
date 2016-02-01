@@ -1,41 +1,32 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  1 Feb 2016 15:52:21 +0100
-Subject: [Buildroot] [PATCH 2/5] docs/manual: slightly clarify patch
-	licensing
+Date: Mon,  1 Feb 2016 15:52:20 +0100
+Subject: [Buildroot] [PATCH 1/5] Update copyright year
 In-Reply-To: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
 References: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1454338344-24973-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1454338344-24973-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adding a patch is a modification to Buildroot. Thus this sentence might be
-interpreted as "Patches are released under the Buildroot license".
-
-Being a legal matter, the last thing we want is to be
-ambiguous. Reword the sentence to avoid any misunderstandings.
-
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- docs/manual/patch-policy.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 0b4604e..cfda5c5 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
- 
- === Format and licensing of the package patches
- 
--Patches are released under the same license as the software that is
--modified.
-+Patches are released under the same license as the software that they
-+modify.
- 
- A message explaining what the patch does, and why it is needed, should
- be added in the header commentary of the patch.
+diff --git a/Makefile b/Makefile
+index c3427ed..1acc2b2 100644
+--- a/Makefile
++++ b/Makefile
+@@ -2,7 +2,7 @@
+ #
+ # Copyright (C) 1999-2005 by Erik Andersen <andersen@codepoet.org>
+ # Copyright (C) 2006-2014 by the Buildroot developers <buildroot@uclibc.org>
+-# Copyright (C) 2014-2015 by the Buildroot developers <buildroot@buildroot.org>
++# Copyright (C) 2014-2016 by the Buildroot developers <buildroot@buildroot.org>
+ #
+ # This program is free software; you can redistribute it and/or modify
+ # it under the terms of the GNU General Public License as published by
 -- 
 1.9.1
