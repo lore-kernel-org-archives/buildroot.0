@@ -1,27 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:20:32 +0100
-Subject: [Buildroot] [PATCH 1/2] configs: qemu_arm_vexpress: enable vfp
-In-Reply-To: <1454348735-6337-1-git-send-email-romain.naour@gmail.com>
-References: <1454348735-6337-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160201192032.62ccf2fd@free-electrons.com>
+Date: Mon, 1 Feb 2016 19:20:37 +0100
+Subject: [Buildroot] [PATCH 1/4] README: add reference to
+ submitting-patches
+In-Reply-To: <1454348717-4711-2-git-send-email-arnout@mind.be>
+References: <1454348717-4711-1-git-send-email-arnout@mind.be>
+ <1454348717-4711-2-git-send-email-arnout@mind.be>
+Message-ID: <20160201192037.6cc70d9d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+Dear Arnout Vandecappelle (Essensium/Mind),
 
-On Mon,  1 Feb 2016 18:45:34 +0100, Romain Naour wrote:
-> In order to be abble to select BR2_ARM_FPU_VFPV3D16, BR2_ARM_ENABLE_VFP
-> must be selected first.
+On Mon, 1 Feb 2016 18:45:14 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> In the hope of improving the quality of patches send by newcomers,
+> add a reference to the submitting-patches section of the manual
+> to the top-level README file.
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
->  configs/qemu_arm_vexpress_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  README | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Both applied, thanks.
+Applied, thanks.
 
 Thomas
 -- 
