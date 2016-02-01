@@ -1,107 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 14:23:57 +0100
-Subject: [Buildroot] [git commit] package/squashfs: fix musl build
-Message-ID: <20160201224708.A8B3C7F8C2@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 08:17:01 +0100
+Subject: [Buildroot] [git commit] package/gstreamer/gst-plugins-ugly: Fix
+	cdio-related build errors
+Message-ID: <20160201224700.4CE1B7F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12a7788820072990c30e94ec4a35746e7b69a953
+commit: https://git.buildroot.net/buildroot/commit/?id=37b45dbcc710beec678ab1453c92d77d5cf70ad0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The build errors were not yet found by the autobuilders:
-
-action.c: In function ???name_fn???:
-action.c:1911:29: error: ???FNM_EXTMATCH??? undeclared (first use in this function)
-     FNM_PATHNAME|FNM_PERIOD|FNM_EXTMATCH) == 0;)
-                             ^
-pseudo.c: In function ???read_pseudo_def???:
-pseudo.c:435:11: error: ???S_IFBLK??? undeclared (first use in this function)
-   mode |= S_IFBLK;
-           ^
+Fixes
+http://autobuild.buildroot.net/results/530/53003be0dc2cb76d497a167023c5c45666fd00b4/
+http://autobuild.buildroot.net/results/b23/b2393cd50c20da919d6111e15b78d12cc784841f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squashfs/0001-musl.patch | 71 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash | 3 +++
+ package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk   | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/squashfs/0001-musl.patch b/package/squashfs/0001-musl.patch
-new file mode 100644
-index 0000000..891b171
---- /dev/null
-+++ b/package/squashfs/0001-musl.patch
-@@ -0,0 +1,71 @@
-+Fix musl build
-+
-+Downloaded from
-+http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-devtools/squashfs-tools/squashfs-tools/fix-compat.patch
-+and adjusted paths.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Define FNM_EXTMATCH if not defined its glibc specific define
-+include missing sys/stat.h for stat* function declarations
-+
-+Upstream-Status: Pending
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+
-+Index: squashfs-tools/action.c
-+===================================================================
-+--- a/squashfs-tools.orig/action.c
-++++ b/squashfs-tools/action.c
-+@@ -44,6 +44,10 @@
-+ #include "action.h"
-+ #include "error.h"
-+ 
-++#if !defined(FNM_EXTMATCH)
-++#define FNM_EXTMATCH 0
-++#endif
-++
-+ /*
-+  * code to parse actions
-+  */
-+Index: squashfs-tools/mksquashfs.c
-+===================================================================
-+--- a/squashfs-tools.orig/mksquashfs.c
-++++ b/squashfs-tools/mksquashfs.c
-+@@ -1286,6 +1286,10 @@ void write_dir(squashfs_inode *inode, st
-+ 		dir_size + 3, directory_block, directory_offset, NULL, NULL,
-+ 		dir, 0);
-+ 
-++#if !defined(FNM_EXTMATCH)
-++#define FNM_EXTMATCH 0
-++#endif
-++
-+ #ifdef SQUASHFS_TRACE
-+ 	{
-+ 		unsigned char *dirp;
-+Index: squashfs-tools/pseudo.c
-+===================================================================
-+--- a/squashfs-tools.orig/pseudo.c
-++++ b/squashfs-tools/pseudo.c
-+@@ -32,6 +32,7 @@
-+ #include <stdlib.h>
-+ #include <sys/types.h>
-+ #include <sys/wait.h>
-++#include <sys/stat.h>
-+ #include <ctype.h>
-+ 
-+ #include "pseudo.h"
-+Index: squashfs-tools/unsquashfs.c
-+===================================================================
-+--- a/squashfs-tools.orig/unsquashfs.c
-++++ b/squashfs-tools/unsquashfs.c
-+@@ -38,6 +38,10 @@
-+ #include <limits.h>
-+ #include <ctype.h>
-+ 
-++#ifndef FNM_EXTMATCH
-++#define FNM_EXTMATCH 0
-++#endif
-++
-+ struct cache *fragment_cache, *data_cache;
-+ struct queue *to_reader, *to_inflate, *to_writer, *from_writer;
-+ pthread_t *thread, *inflator_thread;
+diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
+index ffa0c98..56f2a8c 100644
+--- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
++++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.hash
+@@ -1,2 +1,5 @@
+ # From http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-0.10.19.tar.xz.md5
+ md5	ba26045c8c8c91f0d48d327ccf53ac0c	gst-plugins-ugly-0.10.19.tar.xz
++# Locally computed
++sha256	4934f65ff892637e7efaf1cfe635779189dde429d0706f40c86a3aac476ea873	gst-plugins-ugly-0.10.19.tar.xz
++sha256	2a8aa4cd019fab333f1f8377bf7afa426d3038a033361d90fab70c335e9a53e7	cdio-cd-text-api.patch
+diff --git a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+index b921dc1..0f56164 100644
+--- a/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
++++ b/package/gstreamer/gst-plugins-ugly/gst-plugins-ugly.mk
+@@ -7,6 +7,7 @@
+ GST_PLUGINS_UGLY_VERSION = 0.10.19
+ GST_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST_PLUGINS_UGLY_VERSION).tar.xz
+ GST_PLUGINS_UGLY_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-ugly
++GST_PLUGINS_UGLY_PATCH = http://git.alpinelinux.org/cgit/aports/plain/main/gst-plugins-ugly0.10/cdio-cd-text-api.patch
+ # COPYING is in fact LGPLv2.1, but all of the code is v2+
+ # (except for one test, xingmux)
+ GST_PLUGINS_UGLY_LICENSE = LGPLv2+, GPLv2+ (synaesthesia)
