@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 21:39:03 +0100
-Subject: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.2
-In-Reply-To: <1454154357-31625-2-git-send-email-gary.bisson@boundarydevices.com>
+Date: Mon, 1 Feb 2016 21:39:09 +0100
+Subject: [Buildroot] [PATCH 02/10] imx-kobs: bump to version 5.1
+In-Reply-To: <1454154357-31625-3-git-send-email-gary.bisson@boundarydevices.com>
 References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454154357-31625-2-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160201213903.04cdc5be@free-electrons.com>
+ <1454154357-31625-3-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <20160201213909.2deb7b47@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,29 @@ To: buildroot@busybox.net
 
 Dear Gary Bisson,
 
-On Sat, 30 Jan 2016 12:45:48 +0100, Gary Bisson wrote:
+On Sat, 30 Jan 2016 12:45:49 +0100, Gary Bisson wrote:
+> Use a different versioning schema based on package versioning
+> instead of BSP version. This way, if a new BSP version does
+> not bump this package, we can keep this package unchanged as well.
+> 
+> Changelog since 3.14.28-1.0.0_ga:
+> - Add fixes for maximum ecc strength for each platform.
+> - Add mx7 boot config support.
+> - Add i.MX 6UltraLite support.
+> - Join the ecc with real FCB data when not byte-aligned.
+> - Generalize the encode_bch_ecc function for different configurations.
+> 
+> This patch is based on the Yocto equivalent:
+> https://github.com/Freescale/meta-fsl-arm/commit/8d47a2e
+> https://github.com/Freescale/meta-fsl-arm/commit/70edf16
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+>  package/freescale-imx/imx-kobs/imx-kobs.hash | 2 +-
+>  package/freescale-imx/imx-kobs/imx-kobs.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-> The package adds the EPDC waveforms and the needed changes to properly
-> install those were done in the firmware-imx.inc file.
-
-I guess you wanted to say firmware-imx.mk. Maybe you've done too much
-Yocto :-)
-
-
->  define FIRMWARE_IMX_INSTALL_TARGET_CMDS
-> -	mkdir -p $(TARGET_DIR)/lib/firmware
-> +	mkdir -p $(TARGET_DIR)/lib/firmware/imx
->  	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
->  		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
->  	done
-> +	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx; \
-
-The ; \ is not needed.
-
-> +	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
-> +	   $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw;
-
-The final is not needed.
-
-Also, this rename is a bit weird, maybe a comment would have been good.
-
-I've fixed the typos and applied.
-
-Thanks!
+Applied, thanks.
 
 Thomas
 -- 
