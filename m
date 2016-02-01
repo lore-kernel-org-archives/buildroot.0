@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:23 +0100
-Subject: [Buildroot] [PATCH 04/22] package/python-click: new package.
+Date: Mon,  1 Feb 2016 15:05:24 +0100
+Subject: [Buildroot] [PATCH 05/22] package/python-lmdb: new package.
 In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-5-git-send-email-mc5686@mclink.it>
+Message-ID: <1454335541-14224-6-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                      |  1 +
- package/python-click/Config.in         |  8 ++++++++
- package/python-click/python-click.hash |  3 +++
- package/python-click/python-click.mk   | 15 +++++++++++++++
+ package/Config.in                    |  1 +
+ package/python-lmdb/Config.in        |  8 ++++++++
+ package/python-lmdb/python-lmdb.hash |  3 +++
+ package/python-lmdb/python-lmdb.mk   | 15 +++++++++++++++
  4 files changed, 27 insertions(+)
- create mode 100644 package/python-click/Config.in
- create mode 100644 package/python-click/python-click.hash
- create mode 100644 package/python-click/python-click.mk
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 2a2100a..3980c00 100644
+index 3980c00..8dcaef7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -627,6 +627,7 @@ menu "External python modules"
- 	source "package/python-characteristic/Config.in"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
-+	source "package/python-click/Config.in"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-click/Config.in b/package/python-click/Config.in
+@@ -657,6 +657,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-lmdb/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
 new file mode 100644
-index 0000000..54eb584
+index 0000000..2cff7ac
 --- /dev/null
-+++ b/package/python-click/Config.in
++++ b/package/python-lmdb/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CLICK
-+	bool "python-click"
++config BR2_PACKAGE_PYTHON_LMDB
++	bool "python-lmdb"
 +	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  A simple wrapper around optparse for powerful command line utilities.
++	  Universal Python binding for the LMDB 'Lightning' Database.
 +
-+	  https://pypi.python.org/pypi/click
++	  https://pypi.python.org/pypi/lmdb
 +
-diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
 new file mode 100644
-index 0000000..c0edb8b
+index 0000000..ba4cc96
 --- /dev/null
-+++ b/package/python-click/python-click.hash
++++ b/package/python-lmdb/python-lmdb.hash
 @@ -0,0 +1,3 @@
 +# Locally computed.
-+md5	83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
-+sha256	fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
-diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
++md5	001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
++sha256	37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
 new file mode 100644
-index 0000000..7bc5450
+index 0000000..7295083
 --- /dev/null
-+++ b/package/python-click/python-click.mk
++++ b/package/python-lmdb/python-lmdb.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-click
++# python-lmdb
 +#
 +################################################################################
 +
-+PYTHON_CLICK_VERSION = 6.2
-+PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
-+PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
-+PYTHON_CLICK_LICENSE = BSD
-+#PYTHON_CLICK_LICENSE_FILES = LICENSE
-+PYTHON_CLICK_SETUP_TYPE = setuptools
-+#PYTHON_CLICK_DEPENDENCIES = 
++PYTHON_LMDB_VERSION = 0.88
++PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
++PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
++PYTHON_LMDB_LICENSE = BSD
++#PYTHON_LMDB_LICENSE_FILES = LICENSE
++PYTHON_LMDB_SETUP_TYPE = setuptools
++#PYTHON_LMDB_DEPENDENCIES = 
 +
 +$(eval $(python-package))
 -- 
