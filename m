@@ -1,84 +1,65 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 21:03:25 +0100
-Subject: [Buildroot] [PATCH v6 06/13] core: make host *-config scripts
- relocatable
-In-Reply-To: <1454342021-22960-7-git-send-email-s.martin49@gmail.com>
-References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
- <1454342021-22960-7-git-send-email-s.martin49@gmail.com>
-Message-ID: <56AFBA0D.1060107@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 1 Feb 2016 21:10:50 +0100
+Subject: [Buildroot] [PATCH 01/22] package/python-jinja2: bump version
+ to 2.8 (needed by python-crossbar).
+In-Reply-To: <1454335541-14224-2-git-send-email-mc5686@mclink.it>
+References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
+ <1454335541-14224-2-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ksnVkr37qYUHPFF4LwKpcw6CPeCMpzskvVqOajx8xwE+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-02-16 16:53, Samuel Martin wrote:
-> This change adjusts the _CONFIG_SCRIPTS hook to set add {exec_,}prefix computed
-> relatively to the script location.
-> 
-> This patch only fixes *-config scripts located in the host area, those
-> from the target and staging area are already handled.
-> 
-> This hook is a kind of brute-force sed on all files matching '*-config'
-> in the $(HOST_DIR)/usr/bin directory. This allows correctly handle
-> script whose name may depends on the host system, not the target
-> configuration (e.g. ncurses can be configured for the target to be
-> ncurses6w, so ncurses6w-config ; whereas for the host it will be
-> ncurses5, so ncurses5-config).
-> Since there way less host packages than target ones, it is reasonable to
-> assume that processing all *-config scripts found when a host package
-> (whose target package set the *_CONFIG_SCRIPTS variable) is fairly short
-> and does not add its overhead not even noticeable.
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
+Hi Mauro,
+
+just name the patch as follows:
+
+python-jinja2: bump to 2.8
+
+On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
-> changes v5 -> v6:
-> - new patch
-> ---
->  package/pkg-generic.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 1bf613e..ca79450 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -207,6 +207,18 @@ $(BUILD_DIR)/%/.stamp_host_installed:
->  	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
->  	+$($(PKG)_INSTALL_CMDS)
->  	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
-> +	$(Q)if test -n "$($(RAWNAME)_CONFIG_SCRIPTS)" ; then \
-> +		$(call MESSAGE,"Fixing package configuration files") ;\
-> +			ls $(HOST_DIR)/usr/bin/*-config 2>/dev/null |\
-> +			xargs --no-run-if-empty \
-> +			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
-> +				-e "s,$(HOST_DIR), at HOST_DIR@,g" \
-> +				-e "s,^\(exec_\)\?prefix=.*,\1prefix=\`dirname \$$0\`/../../usr,g" \
-> +				-e "s,-I/usr/,-I at HOST_DIR@/usr/,g" \
-> +				-e "s,-L/usr/,-L at HOST_DIR@/usr/,g" \
+>  package/python-jinja2/python-jinja2.hash | 7 ++++---
+>  package/python-jinja2/python-jinja2.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+> index 6e8c160..b76d5b3 100644
+> --- a/package/python-jinja2/python-jinja2.hash
+> +++ b/package/python-jinja2/python-jinja2.hash
+> @@ -1,3 +1,4 @@
+> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9dffd2f3b43d673802fe857c8445b1a, sha256 locally computed
+> -md5    b9dffd2f3b43d673802fe857c8445b1a  Jinja2-2.7.3.tar.gz
+> -sha256 2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb  Jinja2-2.7.3.tar.gz
+> +# added by MCon: md5 is from site, sha is locally computed.
 
- Is this correct? Host packages are installed with --prefix=$(HOST_DIR), so the
-configure script should already have the correct host dir in there. If it does
-have /usr/something/, it's most likely because it links with a system-installed
-package in a non-standard path. So I think this change will break things.
+just keep the initial format and only change the checksum and URL
 
+> +md5    edb51693fe22c53cee5403775c71a99e  Jinja2-2.8.tar.gz
+> +sha1   4a33c1a0fd585eba2507e8c274a9cd113b1d13ab  Jinja2-2.8.tar.gz
 
- Regards,
- Arnout
+remove sha1 checksum
 
-> +				-e "s, at HOST_DIR@,$(HOST_DIR),g" \
-> +				-e "s, at BASE_DIR@,$(BASE_DIR),g" ;\
-> +	fi
->  	@$(call step_end,install-host)
->  	$(Q)touch $@
->  
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> +sha256 bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4  Jinja2-2.8.tar.gz
+> diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+> index 8440b64..ce6e2b9 100644
+> --- a/package/python-jinja2/python-jinja2.mk
+> +++ b/package/python-jinja2/python-jinja2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -PYTHON_JINJA2_VERSION = 2.7.3
+> +PYTHON_JINJA2_VERSION = 2.8
+>  PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+>  PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+>  PYTHON_JINJA2_SETUP_TYPE = setuptools
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
