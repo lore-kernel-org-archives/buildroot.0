@@ -1,10 +1,10 @@
 From: Ludovic Guegan <ludovic.guegan@gmail.com>
-Date: Tue,  2 Feb 2016 00:30:59 +0100
-Subject: [Buildroot] [PATCH 2/8 RFC] package/golang-gb: create gb package to
-	build and fetch go packages
+Date: Tue,  2 Feb 2016 00:31:00 +0100
+Subject: [Buildroot] [PATCH 3/8 RFC] package/pkg-generic.mk: allow custom
+	extract directory
 In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
 References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <1454369465-4804-3-git-send-email-ludovic.guegan@gmail.com>
+Message-ID: <1454369465-4804-4-git-send-email-ludovic.guegan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,74 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
 ---
- package/Config.in.host           |  1 +
- package/golang-gb/Config.in.host |  8 ++++++++
- package/golang-gb/golang-gb.mk   | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+)
- create mode 100644 package/golang-gb/Config.in.host
- create mode 100644 package/golang-gb/golang-gb.mk
+ docs/manual/adding-packages-generic.txt |  3 +++
+ package/pkg-generic.mk                  | 12 ++++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 0625bd0..2d99d37 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -13,6 +13,7 @@ menu "Host utilities"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
- 	source "package/golang/Config.in.host"
-+	source "package/golang-gb/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jq/Config.in.host"
-diff --git a/package/golang-gb/Config.in.host b/package/golang-gb/Config.in.host
-new file mode 100644
-index 0000000..b84a83f
---- /dev/null
-+++ b/package/golang-gb/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_GOLANG_GB
-+	bool "golang-gb"
-+	depends on BR2_PACKAGE_HOST_GOLANG
-+	help
-+          gb is an alternative build tool for the Go programming language.
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index b7817e3..b7442a7 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -444,6 +444,9 @@ different steps of the build process.
+   tarball with a non-standard organization, this variable allows to
+   override the package infrastructure default behavior.
+ 
++* +LIBFOO_EXTRACT_DIR+ can be set to change the directory where the
++  package is extracted.
 +
-+	  https://getgb.io
+ * +LIBFOO_CONFIGURE_CMDS+ lists the actions to be performed to
+   configure the package before its compilation.
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1e024d3..3051551 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -128,7 +128,7 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ 	@$(call step_start,extract)
+ 	@$(call MESSAGE,"Extracting")
+ 	$(foreach hook,$($(PKG)_PRE_EXTRACT_HOOKS),$(call $(hook))$(sep))
+-	$(Q)mkdir -p $(@D)
++	$(Q)mkdir -p $(@D) $($(PKG)_EXTRACT_DIR)
+ 	$($(PKG)_EXTRACT_CMDS)
+ # some packages have messed up permissions inside
+ 	$(Q)chmod -R +rw $(@D)
+@@ -396,6 +396,14 @@ $(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
+ $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
+ $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
+ 
++ifndef $(2)_EXTRACT_DIR
++ ifdef $(3)_EXTRACT_DIR
++  $(2)_EXTRACT_DIR = $$($(3)_EXTRACT_DIR)
++ else
++  $(2)_EXTRACT_DIR ?= $$($(3)_DIR)
++ endif
++endif
 +
-diff --git a/package/golang-gb/golang-gb.mk b/package/golang-gb/golang-gb.mk
-new file mode 100644
-index 0000000..9ae9da7
---- /dev/null
-+++ b/package/golang-gb/golang-gb.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# golang-gb
-+#
-+################################################################################
-+
-+GOLANG_GB_VERSION = 0.4.0
-+GOLANG_GB_TAG = v$(GOLANG_GB_VERSION)
-+GOLANG_GB_SITE = $(call github,constabulary,gb,$(GOLANG_GB_TAG))
-+GOLANG_GB_LICENSE = MIT
-+
-+GOLANG_GB_ENV = GOPATH=$(@D)
-+
-+define HOST_GOLANG_GB_EXTRACT_CMDS
-+	mkdir -p $(@D)/src/github.com/constabulary
-+	tar xvaf $(DL_DIR)/golang-gb-$(GOLANG_GB_VERSION).tar.gz -C $(@D)
-+	mv $(@D)/gb-$(GOLANG_GB_VERSION) $(@D)/src/github.com/constabulary/gb
-+endef
-+
-+define HOST_GOLANG_GB_BUILD_CMDS
-+	env -i $(GOLANG_GB_ENV) $(GO_HOST_BINARY) install -v github.com/constabulary/gb/cmd/gb
-+	env -i $(GOLANG_GB_ENV) $(GO_HOST_BINARY) install -v github.com/constabulary/gb/cmd/gb-vendor
-+endef
-+
-+define HOST_GOLANG_GB_INSTALL_CMDS
-+	$(INSTALL) -m 755 $(@D)/bin/gb $(HOST_DIR)/usr/bin
-+	$(INSTALL) -m 755 $(@D)/bin/gb-vendor $(HOST_DIR)/usr/bin
-+endef
-+
-+$(eval $(host-generic-package))
+ ifndef $(2)_SUBDIR
+  ifdef $(3)_SUBDIR
+   $(2)_SUBDIR = $$($(3)_SUBDIR)
+@@ -525,7 +533,7 @@ $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
+ $(2)_EXTRACT_CMDS ?= \
+ 	$$(if $$($(2)_SOURCE),$$(INFLATE$$(suffix $$($(2)_SOURCE))) $$(DL_DIR)/$$($(2)_SOURCE) | \
+ 	$$(TAR) --strip-components=$$($(2)_STRIP_COMPONENTS) \
+-		-C $$($(2)_DIR) \
++		-C $$($(2)_EXTRACT_DIR) \
+ 		$$(foreach x,$$($(2)_EXCLUDES),--exclude='$$(x)' ) \
+ 		$$(TAR_OPTIONS) -)
+ 
 -- 
 2.7.0
