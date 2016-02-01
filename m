@@ -1,35 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2016 21:26:12 +0100
-Subject: [Buildroot] [PATCH 3/3] configs/raspberrypi: add CM dtb
-In-Reply-To: <1452197226-15625-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 7 Jan 2016 17:07:06 -0300")
-References: <1452197226-15625-1-git-send-email-gustavo@zacarias.com.ar>
- <1452197226-15625-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87bn80b2jf.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Feb 2016 21:42:40 +0100
+Subject: [Buildroot] CEPH in BR
+In-Reply-To: <56AF618D.3010905@green-communications.fr>
+References: <56AF618D.3010905@green-communications.fr>
+Message-ID: <20160201204240.GF4278@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Sylvain, All,
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On 2016-02-01 14:45 +0100, Sylvain Raybaud spake thusly:
+> I'm considering creating a buildroot package for CEPH. I came across
+> this patch of yours written in 2012:
+> http://lists.busybox.net/pipermail/buildroot/2012-October/060375.html
+> 
+> It doesn't seem to have been applied. Was there a specific reason? If
+> I review and update this patch is there a chance it might be accepted
+> in BR?
 
- 
- >  # Build the DTBs for A/B and A+/B+ from the kernel sources
- >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus"
- > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus bcm2708-rpi-cm"
+Specific reason: lack of time and interest on my part to update and
+resubmit.
 
-It was not clear to me what 'CM' stood for, but some googling shows that
-it is compute module.
+However, I've been constantly rebasing it ever since, so you can get
+the latest version here:
+    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/new-packages
 
-You also didn't adjust the comment just above to match.
+Feel free to adopt this if you need it. ;-)
 
-Committed with an extended description and the comment updated. Please
-try to write a bit more informative commit messages in the future,
-thanks.
+> PS: if you think this message should have been posted to the mailing
+> list I'm willing to resend it there.
+
+Done! ;-)
+
+Yes, you should have sent your mail to the list too.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
