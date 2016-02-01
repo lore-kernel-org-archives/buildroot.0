@@ -1,45 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2016 23:42:07 +0100
-Subject: [Buildroot] [PATCH 1/1] RFC: musl: Fix gettext support
-In-Reply-To: <dtt4ocxf5l.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Mon, 01 Feb 2016 22:05:17 +0100")
-References: <1454194293-17572-1-git-send-email-bernd.kuhls@t-online.de>
- <87mvrkcsvm.fsf@dell.be.48ers.dk>
- <dtt4ocxf5l.ln2@ID-313208.user.individual.net>
-Message-ID: <87lh749hog.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 23:42:39 +0100
+Subject: [Buildroot] [PATCH 01/16 v3] core/legal-info: update the
+ legal-info report header
+In-Reply-To: <fd15db625f6e62e97939d96fb3ad1cf21663e3f5.1454004518.git.yann.morin.1998@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <fd15db625f6e62e97939d96fb3ad1cf21663e3f5.1454004518.git.yann.morin.1998@free.fr>
+Message-ID: <20160201234239.60cc21ad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Dear Yann E. MORIN,
 
-Hi,
+On Thu, 28 Jan 2016 19:14:59 +0100, Yann E. MORIN wrote:
+> In some cases, the toolchain sources are now recovered and available in
+> the legal-info output. So, adapt the header to use conditional instead
+> of an definitive negation.
+> 
+> Also update the part about saving the sources: it's not the license list
+> that defines whether sources are installed, but rather whether the
+> package is redistributable or not.
+> 
+> Update the header accordingly.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> ---
+> Changes v2 -> v3:
+>   - typoes  (Arnout)
 
- > Am Mon, 01 Feb 2016 17:11:57 +0100 schrieb Peter Korsgaard:
- >> I now spent some quality time (!) with gettext.m4 and figured out what
- >> we really going on here with musl and libintl.h, and I've pushed a
- >> simpler / more complete patch fixing the issue.
- >> 
- >> I have therefore marked this patch as superseeded.
- >> 
- >> I've also reverted the madplay fix now that it is handled globally in
- >> TARGET_CONFIGURE_ARGS.
+Applied, thanks.
 
- > Hi Peter,
-
- > there is still a problem left, binutils contains its own intl library 
- > with a GNU libintl.h, similar to the one provided by gettext. It changes 
- > function names in libbfd.so, this leads to a link error at least with 
- > dropwatch:
-
-Thanks. The problem is really that the binutils build system runs
-configure in the sub directories from make, and we only pass
-TARGET_CONFIGURE_ARGS in the environment of the configure step and not
-the make step.
-
-I'll send a fix shortly.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
