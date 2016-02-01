@@ -1,49 +1,49 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 1 Feb 2016 13:34:01 -0300
-Subject: [Buildroot] [PATCH] libcurl: enable mbedtls support
-In-Reply-To: <56AF8788.7090702@lucaceresoli.net>
-References: <1452106417-12097-1-git-send-email-gustavo@zacarias.com.ar>
- <56AF8788.7090702@lucaceresoli.net>
-Message-ID: <56AF88F9.2000904@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 18:34:54 +0100
+Subject: [Buildroot] [PATCH v6 01/13] package/linux-headers: cleanup
+ installation
+In-Reply-To: <1454342021-22960-2-git-send-email-s.martin49@gmail.com>
+References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
+ <1454342021-22960-2-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160201183454.55693d2a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/02/16 13:27, Luca Ceresoli wrote:
+Dear Samuel Martin,
 
-> This is unrelated to your change, it should be a separate patch. But
-> anyway I don't understand why it should be removed: we still package
-> polarssl 1.2.18, so the comment should still apply. Am I missing
-> something?
->
-> With that fixed (or explained):
->   Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
->
-> And:
-> [Built with/without mbedtls, ran on qemu, checked that 'curl -V' shows
-> the SSL only with mbedtls]
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+On Mon,  1 Feb 2016 16:53:29 +0100, Samuel Martin wrote:
+> This patch removes unnecessary files generated during installation.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> changes v5 -> v6:
+> - new patch
+> ---
+>  package/linux-headers/linux-headers.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 1b8b81b..872ef8f 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -53,6 +53,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+>  			HOSTCXX="$(HOSTCXX)" \
+>  			INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
+>  			headers_install)
+> +	find $(STAGING_DIR)/usr \( -name .install -o -name ..install.cmd \) -delete
 
-Hi.
-As you know polarssl was renamed to mbedtls when bought by ARM, this was 
-circa the 1.3.x release.
-Older 1.3.x releases install the library as polarssl alone, newer ones 
-install dual as polarssl with symlinks to mbedtls (might be the other 
-way around, i don't recall at the moment - it doesn't matter anyway), so 
-first the distinction between polarssl and mbedtls is terribly blurred 
-for the 1.3.x series.
-Incidentally this is what makes polarssl 1.2.x being able to live 
-side-by-side with mbedtls (2.x, which doesn't keep legacy handling) (i 
-believe this is more product of branding/accident than careful thinking).
-So now in some cases polarssl means 1.2.x, in other cases it means 
-mbedtls 1.3.x, or the new version because nobody cared to rename everything.
-Basically any explanation given out of context is useless without 
-historical context.
-Making 1.3.x live side-by-side with mbedtls (let's call it that way for 
-2+) is probably possible by ditching the new naming and just keeping 
-compat, i had a look but i think it was a dead end anyway, this requires 
-patching the build of mbedtls/polarssl 1.3.x somewhat and that wouldn't 
-be accepted upstream.
-Regards.
+Why? Are they causing specific problems? Some better justification in
+the commit log would be good, because we generally don't add code to
+clean up things in staging.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
