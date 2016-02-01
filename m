@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:40 +0100
-Subject: [Buildroot] [PATCH 21/22] package/python-crossbar: new package.
+Date: Mon,  1 Feb 2016 15:05:23 +0100
+Subject: [Buildroot] [PATCH 04/22] package/python-click: new package.
 In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-22-git-send-email-mc5686@mclink.it>
+Message-ID: <1454335541-14224-5-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,106 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                            |  1 +
- package/python-crossbar/Config.in            | 35 ++++++++++++++++++++++++++++
- package/python-crossbar/python-crossbar.hash |  9 +++++++
- package/python-crossbar/python-crossbar.mk   | 19 +++++++++++++++
- 4 files changed, 64 insertions(+)
- create mode 100644 package/python-crossbar/Config.in
- create mode 100644 package/python-crossbar/python-crossbar.hash
- create mode 100644 package/python-crossbar/python-crossbar.mk
+ package/Config.in                      |  1 +
+ package/python-click/Config.in         |  8 ++++++++
+ package/python-click/python-click.hash |  3 +++
+ package/python-click/python-click.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-click/Config.in
+ create mode 100644 package/python-click/python-click.hash
+ create mode 100644 package/python-click/python-click.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6e51c9b..ec2dc4f 100644
+index 2a2100a..3980c00 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -633,6 +633,7 @@ menu "External python modules"
+@@ -627,6 +627,7 @@ menu "External python modules"
+ 	source "package/python-characteristic/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
++	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
  	source "package/python-configobj/Config.in"
  	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-crossbar/Config.in"
- 	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
- 	source "package/python-daemon/Config.in"
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+diff --git a/package/python-click/Config.in b/package/python-click/Config.in
 new file mode 100644
-index 0000000..04f2f16
+index 0000000..54eb584
 --- /dev/null
-+++ b/package/python-crossbar/Config.in
-@@ -0,0 +1,35 @@
-+config BR2_PACKAGE_PYTHON_CROSSBAR
-+	bool "python-crossbar"
++++ b/package/python-click/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_CLICK
++	bool "python-click"
 +	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN
-+	select BR2_PACKAGE_PYTHON_CBOR
-+	select BR2_PACKAGE_PYTHON_CLICK
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
-+	select BR2_PACKAGE_PYTHON_JINJA2
-+	select BR2_PACKAGE_PYTHON_LMDB
-+	select BR2_PACKAGE_PYTHON_MISTUNE
-+	select BR2_PACKAGE_PYTHON_MSGPACK
-+	select BR2_PACKAGE_PYTHON_NETADDR
-+	select BR2_PACKAGE_PYTHON_PSUTIL
-+	select BR2_PACKAGE_PYTHON_PTRIE
-+	select BR2_PACKAGE_PYTHON_PYASN
-+	select BR2_PACKAGE_PYTHON_PYASN1_MODULES
-+	select BR2_PACKAGE_PYTHON_PYGMENTS
-+	select BR2_PACKAGE_PYTHON_PYOPENSSL
-+	select BR2_PACKAGE_PYTHON_PYNACL
-+	select BR2_PACKAGE_PYTHON_PYYAML
-+	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	select BR2_PACKAGE_PYTHON_SHURILWHICH
-+	select BR2_PACKAGE_PYTHON_TREQ
-+	select BR2_PACKAGE_PYTHON_TWISTED
 +	help
-+	  Crossbar.io is an open-source WAMP application router 
-+	  that allows to build advanced applications from loosely-coupled
-+	  components that can talk in real-time with each other.
++	  A simple wrapper around optparse for powerful command line utilities.
 +
-+	  https://pypi.python.org/pypi/crossbar
++	  https://pypi.python.org/pypi/click
 +
-+comment "*** Currently Crossbar.io does NOT work without Python sources! ***"
-+        depends on BR2_PACKAGE_PYTHON_PYC_ONLY
-+
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
 new file mode 100644
-index 0000000..b476d9b
+index 0000000..c0edb8b
 --- /dev/null
-+++ b/package/python-crossbar/python-crossbar.hash
-@@ -0,0 +1,9 @@
++++ b/package/python-click/python-click.hash
+@@ -0,0 +1,3 @@
 +# Locally computed.
-+md5	61581d3ce01201a5540bae22721f64e8  crossbar-0.11.2.tar.gz
-+sha256	2b59eda29f9095107c66678a0f48726b917936a1e9e1ffb54df9134049891c14  crossbar-0.11.2.tar.gz
-+# Locally computed.
-+md5	a45f883c3e54ef8929d0c965ef656657  crossbar-v0.11.1.tar.gz
-+sha256	3f008a011427bcaee6ae33facecffd04f80c31c04d86b95eaf7f13a68e614248  crossbar-v0.11.1.tar.gz
-+# Locally computed.
-+md5	1d1f68ee068e4b66a3c04c05fe96b76d  crossbar-v0.11.2.tar.gz
-+sha256	95b80777375e659d04dca33c04414c184537bc2c88bd79d294c249340c0d379d  crossbar-v0.11.2.tar.gz
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
++md5	83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
++sha256	fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
 new file mode 100644
-index 0000000..bd915c4
+index 0000000..7bc5450
 --- /dev/null
-+++ b/package/python-crossbar/python-crossbar.mk
-@@ -0,0 +1,19 @@
++++ b/package/python-click/python-click.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-crossbar
++# python-click
 +#
 +################################################################################
 +
-+PYTHON_CROSSBAR_VERSION = 0.11.2
-+PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
-+PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
-+PYTHON_CROSSBAR_LICENSE = AGPL2
-+PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
-+PYTHON_CROSSBAR_SETUP_TYPE = setuptools
-+PYTHON_CROSSBAR_DEPENDENCIES = python-click python-setuptools python-twisted python-autobahn \
-+	python-netaddr python-pytrie python-jinja2 python-mistune python-pygments python-pyyaml \
-+	python-shutilwhich python-psutil python-lmdb python-msgpack-python python-cbor \
-+	python-cryptography python-pyopenssl python-pyasn python-pyasn1-modules \
-+	python-service-identity python-pynacl python-treq
++PYTHON_CLICK_VERSION = 6.2
++PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
++PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
++PYTHON_CLICK_LICENSE = BSD
++#PYTHON_CLICK_LICENSE_FILES = LICENSE
++PYTHON_CLICK_SETUP_TYPE = setuptools
++#PYTHON_CLICK_DEPENDENCIES = 
 +
 +$(eval $(python-package))
 -- 
