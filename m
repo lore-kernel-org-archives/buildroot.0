@@ -1,10 +1,9 @@
 From: Ludovic Guegan <ludovic.guegan@gmail.com>
-Date: Tue,  2 Feb 2016 00:31:02 +0100
-Subject: [Buildroot] [PATCH 5/8 RFC] docs/manual: documents the
-	golang-package infrastructure
+Date: Tue,  2 Feb 2016 00:31:03 +0100
+Subject: [Buildroot]  [PATCH 6/8 RFC] package/rtop: add rtop package in Go
 In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
 References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <1454369465-4804-6-git-send-email-ludovic.guegan@gmail.com>
+Message-ID: <1454369465-4804-7-git-send-email-ludovic.guegan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,88 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
 ---
- docs/manual/adding-packages-golang.txt | 73 ++++++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 docs/manual/adding-packages-golang.txt
+ package/Config.in      |  1 +
+ package/rtop/Config.in |  8 ++++++++
+ package/rtop/rtop.hash |  1 +
+ package/rtop/rtop.mk   | 16 ++++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/rtop/Config.in
+ create mode 100644 package/rtop/rtop.hash
+ create mode 100644 package/rtop/rtop.mk
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+diff --git a/package/Config.in b/package/Config.in
+index 09c2b40..d0e5e4e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -483,6 +483,7 @@ menu "Erlang libraries/modules"
+ endmenu
+ endif
+ 	source "package/gauche/Config.in"
++	source "package/rtop/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
+ 	source "package/jamvm/Config.in"
+diff --git a/package/rtop/Config.in b/package/rtop/Config.in
 new file mode 100644
-index 0000000..0cb2aa1
+index 0000000..857112a
 --- /dev/null
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -0,0 +1,73 @@
-+// -*- mode:doc; -*-
-+// vim: set syntax=asciidoc:
++++ b/package/rtop/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_RTOP
++	bool "rtop"
++	depends on BR2_PACKAGE_HOST_GOLANG
++	help
++	  rtop is an interactive, remote system monitoring tool based on SSH
 +
-+=== Infrastructure for Go packages
++	  https://github.com/rapidloop/rtop
 +
-+[[golang-package-tutorial]]
+diff --git a/package/rtop/rtop.hash b/package/rtop/rtop.hash
+new file mode 100644
+index 0000000..1407231
+--- /dev/null
++++ b/package/rtop/rtop.hash
+@@ -0,0 +1 @@
++sha256 44ab02299a204befe49d725bdb76a249db419807e13b7ca451ba14ea5d3de1c2  rtop-release_1.0.tar.gz
+diff --git a/package/rtop/rtop.mk b/package/rtop/rtop.mk
+new file mode 100644
+index 0000000..f233ebe
+--- /dev/null
++++ b/package/rtop/rtop.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# rtop
++#
++################################################################################
 +
-+==== +golang-package+ tutorial
++RTOP_LICENSE = MIT
++RTOP_VERSION = release_1.0
++RTOP_SITE = $(call github,rapidloop,rtop,$(RTOP_VERSION))
++RTOP_EXTRACT_DIR = $(@D)/src/github.com/rapidloop/rtop
++RTOP_BUILD_PACKAGES = github.com/rapidloop/rtop
 +
-+First, let's see how to write a +.mk+ file for a Go package, with an
-+example :
++RTOP_DEPS += $(call fetch-golang-package, golang.org/x/crypto/curve25519, 1f22c0103821b9390939b6776727195525381532)
++RTOP_DEPS += $(call fetch-golang-package, golang.org/x/crypto/ssh, 1f22c0103821b9390939b6776727195525381532)
 +
-+------------------------
-+01: ################################################################################
-+02: #
-+03: # foo-bar
-+04: #
-+05: ################################################################################
-+06:
-+07: FOO_LICENSE = MIT
-+08: FOO_VERSION = release_1.0
-+09: FOO_SITE = $(call github,foo,bar,$(FOO_VERSION))
-+10: FOO_EXTRACT_DIR = $(@D)/src/github.com/foo/bar
-+11:
-+12: FOO_DEPS += $(call fetch-golang-package, github.com/other/package, \
-+13: 		1f22c0103821b9390939b6776727195525381532)
-+14:
-+16: FOO_BUILD_PACKAGES = github.com/foo/bar/cmd/foo
-+17:
-+18: $(eval $(golang-package))
-+------------------------
-+
-+On line 7, we declare the license of the package.
-+
-+On line 8 and 9, we declare the version and the method to download the
-+sources.
-+
-+On line 10, we declare where to extract the sources. The GOPATH variable is
-+set to $(@D) when building the package so the Go source files must be placed
-+accordingly into $(@D)/src.
-+
-+On line 11 and 12, we declare the package dependencies to install. All the
-+package dependencies should be added this way.
-+
-+On line 16, we declare the list of packages to build and to install.
-+
-+Finally, on line 18, we invoke the +golang-package+ macro that
-+generates all the Makefile rules that actually allow the package to be
-+built.
-+
-+[[golang-package-reference]]
-+
-+==== +golang-package+ reference
-+
-+As a policy, each Go package declares all its dependencies using the
-+fetch-golang-package macro in order to produce reproducible builds.
-+
-+The main macro of the golang package infrastructure is +golang-package+. It
-+is similar to the +generic-package+ macro. The ability to have target and
-+host packages is also available, with the +host-golang-package+ macro.
-+
-+Just like the generic infrastructure, the golang infrastructure works by
-+defining a number of variables before calling the +golang-package+ macro.
-+
-+First, all the package metadata information variables that exist in the
-+generic infrastructure also exist in the golang infrastructure:
-++FOO_FOO_VERSION+, +FOO_FOO_SOURCE+, +FOO_FOO_PATCH+, +FOO_FOO_SITE+,
-++FOO_FOO_SUBDIR+, +FOO_FOO_DEPENDENCIES+, +FOO_FOO_INSTALL_TARGET+.
-+
-+Note that setting +FOO_INSTALL_STAGING+ to +YES+ has no effect unless a
-++FOO_INSTALL_STAGING_CMDS+ variable is defined. The golang infrastructure
-+doesn't define these commands since Go pakages don't need to be installed to
-+the +staging+ directory.
++$(eval $(golang-package))
 -- 
 2.7.0
