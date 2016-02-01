@@ -1,130 +1,124 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 19:32:43 +0100
-Subject: [Buildroot] [git commit] uclibc: remove version selection
-Message-ID: <20160201224709.25AA47F8C2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 14:20:05 +0100
+Subject: [Buildroot] [git commit] toolchain-external: improve sysroot rsync
+	if ARCH_LIB_DIR != lib/lib32/lib64
+Message-ID: <20160201224710.590557F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=824e303eab3e20bcc21bdd3ec0007817369e87c2
+commit: https://git.buildroot.net/buildroot/commit/?id=fe23cb5d00513bbec1c347166db74943869e2196
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we now only support uClibc-ng, remove the version selection from
-the uclibc package.
+The copy_toolchain_sysroot helper in toolchain/helpers.mk performs an
+rsync of various directories from the extracted external toolchain to the
+corresponding directory in staging.
 
-Note that the BR2_UCLIBC_VERSION_SUPPORTS_* hidden booleans, which
-were only used to allow each uClibc version to specify which thread
-implementation they support and on which architecture are removed. Now
-such architecture dependencies are directly encoded in the "Thread
-library implementation" choice.
+The relevant (simplified) snippet is:
+	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
+		rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
+			--exclude '/lib/' --exclude '/lib32/' \
+			--exclude '/lib64/' \
+			$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+	done ; \
 
+The exclusion logic of lib/lib32/lib64 has originally been added by commit
+5628776c4a4d29d0715633ea463b64cc19e19c5a with the purpose of only copying
+the relevant usr/lib* directory from the toolchain to staging, instead of
+all. For example, if ARCH_LIB_DIR is 'lib64', then only usr/lib64 would be
+copied and usr/lib and usr/lib32 are ignored. It works by ignoring any
+lib/lib32/lib64 subdirectory on the rsync of 'usr' and then separately
+copying usr/{lib,lib32,lib64} as appropriate. (The exclusion rules only have
+impact on the files beneath the main source directory.)
+
+However, ARCH_LIB_DIR can take other values than (lib, lib32, lib64), for
+example lib32-fp or lib64-fp (Octeon III toolchain with -march=octeon3). In
+the existing code, the rsync for 'usr' would then already copy these lib
+directories, and the next rsync for 'usr/$${ARCH_LIB_DIR}' does nothing.
+
+By itself, this is not a very big problem: the staging directory simply has
+some extra directories. However, a subsequent patch will create a staging
+symlink from $${ARCH_LIB_DIR} to lib. The first rsync would then overwrite
+that symlink with the real directory usr/$${ARCH_LIB_DIR} from the
+toolchain, which is not correct.
+
+Assuming the patch that creates the symlink ARCH_LIB_DIR->lib is applied,
+the original situation after 'make clean toolchain' with an
+ARCH_LIB_DIR=lib32-fp is:
+
+$ ls -ld output/staging/{,usr/}lib* output/target/{usr/,}lib*
+drwxr-xr-x 2  4096 May 26  2015 output/staging/lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/staging/lib32 -> lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/staging/lib32-fp -> lib
+drwxr-xr-x 2  4096 Jan 20 13:47 output/staging/usr/lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/staging/usr/lib32 -> lib
+drwxr-xr-x 4  4096 May 26  2015 output/staging/usr/lib32-fp
+drwxr-xr-x 4  4096 May 26  2015 output/staging/usr/lib64-fp
+drwxr-xr-x 4  4096 May 26  2015 output/staging/usr/libexec
+drwxr-xr-x 3  4096 May 26  2015 output/staging/usr/libexec32
+drwxr-xr-x 3  4096 May 26  2015 output/staging/usr/libexec32-fp
+drwxr-xr-x 3  4096 May 26  2015 output/staging/usr/libexec64-fp
+drwxr-xr-x 2  4096 Jan 20 13:48 output/target/lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/target/lib32 -> lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/target/lib32-fp -> lib
+drwxr-xr-x 2  4096 Jan 20 13:48 output/target/usr/lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/target/usr/lib32 -> lib
+lrwxrwxrwx 1     3 Jan 20 13:47 output/target/usr/lib32-fp -> lib
+
+Notice how usr/lib32-fp is not a symlink but a directory, and the presence
+of an unnecessary directory usr/lib64-fp.
+
+This patch improves the rsync exclusion rules by excluding any lib*
+directory on the first rsync. As this would also exclude any
+libexec/libexec32/... directory, explicitly include them first (first match
+takes precedence). This (as is already the case today) results in more
+usr/libexec* directories than needed, but it is not touched by this patch.
+
+With the fix applied, the situation becomes:
+
+drwxr-xr-x 2 4096 May 26  2015 output/staging/lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/lib32 -> lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/lib32-fp -> lib
+drwxr-xr-x 4 4096 May 26  2015 output/staging/usr/lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/usr/lib32 -> lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/staging/usr/lib32-fp -> lib
+drwxr-xr-x 4 4096 May 26  2015 output/staging/usr/libexec
+drwxr-xr-x 3 4096 May 26  2015 output/staging/usr/libexec32
+drwxr-xr-x 3 4096 May 26  2015 output/staging/usr/libexec32-fp
+drwxr-xr-x 3 4096 May 26  2015 output/staging/usr/libexec64-fp
+drwxr-xr-x 2 4096 Jan 20 14:27 output/target/lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/target/lib32 -> lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/target/lib32-fp -> lib
+drwxr-xr-x 2 4096 Jan 20 14:27 output/target/usr/lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/target/usr/lib32 -> lib
+lrwxrwxrwx 1    3 Jan 20 14:27 output/target/usr/lib32-fp -> lib
+
+For cases where ARCH_LIB_DIR is one of lib, lib32 or lib64 this fix
+makes no difference, and likewise for internal toolchains.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/Config.in | 41 +++++------------------------------------
- package/uclibc/uclibc.mk | 11 +++--------
- 2 files changed, 8 insertions(+), 44 deletions(-)
+ toolchain/helpers.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index 452043d..16bf89c 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -7,38 +7,9 @@ config BR2_PACKAGE_UCLIBC
- 
- comment "uClibc Options"
- 
--config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
--	bool
--
--config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
--	bool
--
--config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
--	bool
--
--choice
--	prompt "uClibc C library Version"
--	default BR2_UCLIBC_VERSION_NG
--	help
--	  Select the version of uClibc you wish to use.
--
--	config BR2_UCLIBC_VERSION_NG
--		bool "uClibc-ng"
--		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
--		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
--		       if BR2_m68k || BR2_arm || BR2_armeb
--		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
--		       if !BR2_m68k && !BR2_x86_i386
--
--endchoice
--
--config BR2_UCLIBC_VERSION_STRING
--	string
--	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
--
- config BR2_UCLIBC_CONFIG
- 	string "uClibc configuration file to use?"
--	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
-+	default "package/uclibc/uClibc-ng.config"
- 	help
- 	  Some people may wish to use their own modified uClibc configuration
- 	  file and will specify their config file location with this option.
-@@ -76,9 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 
- choice
- 	prompt "Thread library implementation"
--	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
--	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
--	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+	default BR2_PTHREADS_NATIVE
- 	help
- 	  Use this option to select the thread library implementation
- 	  that should be used in your toolchain.
-@@ -89,18 +58,18 @@ choice
- 	config BR2_PTHREADS
- 		bool "linuxthreads"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
-+		depends on BR2_m68k
- 
- 	config BR2_PTHREADS_OLD
- 		bool "linuxthreads (stable/old)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
-+		depends on BR2_m68k || BR2_arm || BR2_armeb
- 
- 	config BR2_PTHREADS_NATIVE
- 		bool "Native POSIX Threading (NPTL)"
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
-+		depends on !BR2_m68k && !BR2_x86_i386
- endchoice
- 
- config BR2_PTHREAD_DEBUG
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 44b8a97..6b05181 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,16 +4,11 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
--UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
-+UCLIBC_VERSION = 1.0.11
-+UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
-+UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPLv2.1+
- UCLIBC_LICENSE_FILES = COPYING.LIB
--
--ifeq ($(BR2_UCLIBC_VERSION_NG),y)
--UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
--UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
--endif
--
- UCLIBC_INSTALL_STAGING = YES
- 
- # uclibc is part of the toolchain so disable the toolchain dependency
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 906993d..02cc0bb 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -154,8 +154,7 @@ copy_toolchain_sysroot = \
+ 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
+ 		if [ -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
+ 			rsync -au --chmod=u=rwX,go=rX --exclude 'usr/lib/locale' \
+-				--exclude '/lib/' --exclude '/lib32/' \
+-				--exclude '/lib64/' \
++				--include '/libexec*/' --exclude '/lib*/' \
+ 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
+ 		fi ; \
+ 	done ; \
