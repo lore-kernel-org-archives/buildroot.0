@@ -1,118 +1,55 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon,  1 Feb 2016 10:37:02 +0100
-Subject: [Buildroot] [PATCH 3/4] kernel-module-imx-gpu-viv: add new package
+Date: Mon,  1 Feb 2016 10:37:03 +0100
+Subject: [Buildroot] [PATCH 4/4] configs/nitrogen6*: bump kernel version
 In-Reply-To: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1454319423-13913-4-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1454319423-13913-5-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is the Vivante kernel driver split from the kernel source code in
-order to make it possible to be used in any kernel source since 3.10.53.
-
-The driver source code provided by Freescale needs fixes so the
-community forked the code to allow faster development and easier
-integration of fixes from the community.
-
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/32cf391
-https://github.com/Freescale/meta-fsl-arm/commit/4249193
-
-This package has been tested with the following commands:
- # modprobe galcore
- # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
+Update to latest boundary-imx_3.14.28_1.0.0_ga commit which brings the
+following additions:
+- Fix cache functions export when !MULTI_CACHE
+https://github.com/Freescale/linux-fslc/commit/6325d57
+  - Mandatory for Vivante kernel module
+- Add TW686x video decoder support
+- Fix OV5642 subdev/capture driver conflict
+- Add GSLX680 touchscreen support
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-As explained in the cover letter, Yocto has a do_configure_append which
-allows to modify the kernel configuration and remove the built-in Vivante
-driver option.
-https://github.com/Freescale/meta-fsl-arm/blob/master/classes/fsl-vivante-kernel-driver-handler.bbclass#L52
+ configs/nitrogen6sx_defconfig | 2 +-
+ configs/nitrogen6x_defconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-In order to have a similar mechanism the kernel module Vivante package
-includes a LINUX_POST_CONFIGURE_HOOKS which doesn't really feel right.
-
-Indeed, with this hook in place, the kernel and its modules are re-built
-everytime a 'make' is issued. Not sure why it affects the build this way,
-any input is appreciated.
-
-Regards,
-Gary
----
- package/freescale-imx/Config.in                    |  1 +
- .../kernel-module-imx-gpu-viv/Config.in            | 12 ++++++++++
- .../kernel-module-imx-gpu-viv.mk                   | 28 ++++++++++++++++++++++
- 3 files changed, 41 insertions(+)
- create mode 100644 package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
- create mode 100644 package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index a958dbd..dfb6cc4 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -52,6 +52,7 @@ source "package/freescale-imx/libz160/Config.in"
- endif
- if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- source "package/freescale-imx/imx-gpu-viv/Config.in"
-+source "package/freescale-imx/kernel-module-imx-gpu-viv/Config.in"
- endif
- 
- endif
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
-new file mode 100644
-index 0000000..0725a89
---- /dev/null
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
-@@ -0,0 +1,12 @@
-+comment "kernel-module-imx-gpu-viv needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+config BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV
-+	bool "kernel-module-imx-gpu-viv"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Kernel loadable module for Vivante GPU.
-+
-+	  This package uses an exact copy of the GPU kernel driver source code
-+	  of the same version as base and include fixes and improvements
-+	  developed by FSL Community
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-new file mode 100644
-index 0000000..9c45f23
---- /dev/null
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# kernel-module-imx-gpu-viv
-+#
-+################################################################################
-+
-+KERNEL_MODULE_IMX_GPU_VIV_VERSION = eeeb23c0fb1cee01318088d417025263479c44ac
-+KERNEL_MODULE_IMX_GPU_VIV_SITE = \
-+	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
-+KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPLv2
-+KERNEL_MODULE_IMX_GPU_VIV_LICENSE_FILES = COPYING
-+
-+KERNEL_MODULE_IMX_GPU_VIV_MODULE_MAKE_OPTS = \
-+	AQROOT=$(@D)/kernel-module-imx-gpu-viv-src \
-+	KERNEL_DIR=$(LINUX_DIR)
-+
-+KERNEL_MODULE_IMX_GPU_VIV_MODULE_SUBDIRS = kernel-module-imx-gpu-viv-src
-+
-+# Modify Linux configuration in case it includes a built-in version of
-+# the Vivante driver.
-+define LINUX_CONFIGURATION_FIXUP
-+	sed -i "/CONFIG_MXC_GPU_VIV[ =]/d" $(LINUX_DIR)/.config
-+	echo "# CONFIG_MXC_GPU_VIV is not set" >> $(LINUX_DIR)/.config
-+endef
-+LINUX_POST_CONFIGURE_HOOKS += LINUX_CONFIGURATION_FIXUP
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index 70e6376..5155afe 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_3.14.28_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index af4a187..62a3007 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ # Last version of branch boundary-imx_3.14.28_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/d7a412b/linux-imx6-d7a412b.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 2.7.0
