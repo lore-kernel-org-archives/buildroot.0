@@ -1,63 +1,74 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  1 Feb 2016 15:22:27 +0100
-Subject: [Buildroot] [RFC] package/gdb: simplify the disable doc hook
-Message-ID: <1454336547-23655-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 15:25:08 +0100
+Subject: [Buildroot] [PATCH v2 2/2] support/scripts: add
+ size-stats-compare script
+In-Reply-To: <1453207433-32589-2-git-send-email-patrickdepinguin@gmail.com>
+References: <1453207433-32589-1-git-send-email-patrickdepinguin@gmail.com>
+ <1453207433-32589-2-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20160201152508.45575c43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Depending on the gdb version we need to remove the documentation
-build from different place in the gdb source tree.
+Thomas,
 
-From: gdb/Makefile.in
-3aecfbd03dd2a8d49c97f1e68df42b077dbbd396
+On Tue, 19 Jan 2016 13:43:53 +0100, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> Leverage the CSV files produces by size-stats (make graph-size) to allow
+> for a comparison of rootfs size between two different buildroot
+> compilations.
+> 
+> The script takes the file-size CSV files of two compilations as input, and
+> produces a textual report of the differences per package.
+> Using the -d/--detail flag, the report will show the file size changes
+> instead of package size changes.
+> The -t/--threshold option allows to ignore file size differences smaller
+> or equal than the given threshold (in bytes).
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ---
+>  docs/manual/common-usage.txt       |  10 +++
+>  support/scripts/size-stats-compare | 129 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 139 insertions(+)
+>  create mode 100755 support/scripts/size-stats-compare
 
-From: bfd/doc/Makefile.in and gprof/Makefile.in
-1180bafd8e1de2b12db3c7c235b128c9e48d4abb
+I tested your patch, overall looks good to me, but I have two comments:
 
-From: etc/Makefile.in
-as proposed by [1]
+ (1) I find the order of the arguments for the two CSV files to be
+     confusing. If you have a "before" situation, and then an "after"
+     situation you want to compare, you need to call:
 
-The issue come from the commit e30465112ed4c6320dd19107302057a5f7712cf2
-in the gdb tree that update the "missing" script which now return the
-error code 127 when a tool is missing.
+        size-stats-compare after-situation.csv before-situation.csv
 
-The same kind of hook will be needed when the binutils package will be
-updated to 2.26 release.
+     Which isn't very intuitive nor matching what "diff" is doing for
+     example. So I would suggest to invert those two arguments. And in
+     the code, instead of having "sizes" and "other_sizes", use
+     something more explicit like "before_sizes", "after_sizes", or
+     "first_sizes", "second_sizes", etc.
 
-Fixes:
-http://autobuild.buildroot.net/results/55d/55d95d7decc8ff8c451601a38ce2c2818fe23bcc
+ (2) For the output, I would rather see a single table, maybe looking
+     more or less like:
 
-[1] http://patchwork.ozlabs.org/patch/572150/
+     1032987         foobar
+      289792 added   strace
+       65576         busybox
+           0         skeleton
+           0         toolchain-external
+           0         initscripts
+      -68692 removed zlib
+	---- -----   -----
+      292908         TOTAL
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gdb/gdb.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index 3b0f501..65b2e67 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -53,13 +53,8 @@ endif
- 
- # Prevent gdb to build the documentation
- define GDB_DISABLE_DOC
--	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
--	if test -e $(@D)/bfd/doc/Makefile.in ; then \
--		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/bfd/doc/Makefile.in ; \
--	fi
--	if test -e $(@D)/gprof/Makefile.in ; then \
--		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/gprof/Makefile.in ; \
--	fi
-+	echo "#!/bin/sh" > $(@D)/missing
-+	echo "exit 0" >> $(@D)/missing
- endef
- GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
- HOST_GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
+     (Numbers are completely made up)
+
+Thanks!
+
+Thomas
 -- 
-2.4.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
