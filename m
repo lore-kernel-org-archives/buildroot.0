@@ -1,32 +1,59 @@
-From: Jeff Gray <jeff.gray@sato-global.com>
-Date: Mon, 1 Feb 2016 11:02:52 +1100
-Subject: [Buildroot] host-python link fails due to missing readline
-In-Reply-To: <56AE95A3.8070701@mind.be>
-References: <CAHb0ztk2fbycwTbct4gESVMVHuM==GaJsCVe1uVQiHVL5U84tA@mail.gmail.com>
- <56AE95A3.8070701@mind.be>
-Message-ID: <CAHb0ztnG=fD611pxxGfHY6USYt7SjZGcRRSssPhPRk3bkeMcsg@mail.gmail.com>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Mon,  1 Feb 2016 02:25:33 +0100
+Subject: [Buildroot] [PATCH 4/7] croosbar moved to buildroot (2).
+In-Reply-To: <1454289936-10654-1-git-send-email-mc5686@mclink.it>
+References: <1454289936-10654-1-git-send-email-mc5686@mclink.it>
+Message-ID: <1454289936-10654-5-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your reply - that helped push me in the right direction. I
-wasn't sure that buildroot used my local system libraries - I thought maybe
-it just used the files built in output/host/. But it does make sense that
-it does.
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ package/python-crossbar/Config.in          | 10 ++++++++++
+ package/python-crossbar/python-crossbar.mk | 15 +++++++++++++++
+ 2 files changed, 25 insertions(+)
+ create mode 100644 package/python-crossbar/Config.in
+ create mode 100644 package/python-crossbar/python-crossbar.mk
 
-I found that the local /usr/lib/libreadline.so was an ARM executable (the
-only one in any system directory)... This is obviously not a good thing,
-which is why it was telling me incompatible file.
-
-I don't know for sure how this happened, but I suspect one of the previous
-developers who used this system accidentally copied an ARM file to the
-system lib and not his cross development lib & didn't realise it. So this
-file has been sitting there for 2.5 years waiting to go off.
-
-Sorry to waste your time - thanks for the help in finding it. I will now do
-a clean make and see how it goes.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160201/c4320bd6/attachment.html>
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+new file mode 100644
+index 0000000..b8fae30
+--- /dev/null
++++ b/package/python-crossbar/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_CROSSBAR
++	bool "python-crossbar"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Crossbar.io is an open-source WAMP application router 
++	  that allows to build advanced applications from loosely-coupled
++	  components that can talk in real-time with each other.
++
++	  https://pypi.python.org/pypi/crossbar
++
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
+new file mode 100644
+index 0000000..8a64cda
+--- /dev/null
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-crossbar
++#
++################################################################################
++
++PYTHON_CROSSBAR_VERSION = 0.11.2
++PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
++PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
++PYTHON_CROSSBAR_LICENSE = AGPL2
++PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
++PYTHON_CROSSBAR_SETUP_TYPE = setuptools
++#PYTHON_CROSSBAR_DEPENDENCIES = 
++
++$(eval $(python-package))
+-- 
+2.1.4
