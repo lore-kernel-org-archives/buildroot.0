@@ -1,77 +1,46 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  1 Feb 2016 16:53:37 +0100
-Subject: [Buildroot] [PATCH v6 09/13] core: add {TARGET,
-	STAGING}_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+Date: Mon,  1 Feb 2016 16:53:38 +0100
+Subject: [Buildroot] [PATCH v6 10/13] package/speex: remove no longer needed
+	hook
 In-Reply-To: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
 References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1454342021-22960-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <1454342021-22960-11-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch introduces the TARGET_SANITIZE_RPATH_HOOK and
-STAGING_SANITIZE_RPATH_HOOK hooks fixing the ELF files' RPATH of
-binaries from, respectively, the TARGET_DIR and the STAGING_DIR
-locations.
-
-After running this hook, the RPATH from any target ELF files from both
-the target and the staging locations won't contain any occurence of the
-sysroot or some build locations.
+Remove the LIBTOOL_FIXUP hook since RPATH are now sanitized in
+target-finalize hooks.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v5->v6:
-- update for the new script version
-- add debug mode support
+- no change
 
 changes v4->v5:
-- target hook now sanitizes the rpath (Baruch)
-- add verbose support
-- update comment
-
-changes v3->v4:
-- rebase
-- add comment
-
-changes v2->v3:
-- move hook in Makefile (Baruch)
+- new patch (suggested by Baruch)
 ---
- Makefile | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ package/speex/speex.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index b1f4fcf..eb8a037 100644
---- a/Makefile
-+++ b/Makefile
-@@ -641,6 +641,26 @@ endef
+diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+index a34bfac..24782ec 100644
+--- a/package/speex/speex.mk
++++ b/package/speex/speex.mk
+@@ -24,11 +24,6 @@ ifeq ($(BR2_PACKAGE_SPEEX_ARM5E),y)
+ SPEEX_CONF_OPTS += --enable-arm5e-asm
+ endif
  
- TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
+-define SPEEX_LIBTOOL_FIXUP
+-	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
+-	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
+-endef
+-
+ SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
  
-+# Function sanitizing target/staging ELF files' RPATH.
-+# i.e. it removes paths pointing to the staging or build location from the ELF
-+# files' RPATH.
-+define TARGET_SANITIZE_RPATH_HOOK
-+	DEBUG=$(DEBUG_RPATH) \
-+	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
-+	READELF=$(TARGET_READELF) \
-+		$(TOPDIR)/support/scripts/fix-rpath target $(TARGET_DIR)
-+endef
-+
-+define STAGING_SANITIZE_RPATH_HOOK
-+	DEBUG=$(DEBUG_RPATH) \
-+	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
-+	READELF=$(TARGET_READELF) \
-+		$(TOPDIR)/support/scripts/fix-rpath staging $(STAGING_DIR)
-+endef
-+
-+TARGET_FINALIZE_HOOKS += TARGET_SANITIZE_RPATH_HOOK \
-+       STAGING_SANITIZE_RPATH_HOOK
-+
- $(TARGETS_ROOTFS): target-finalize
- 
- target-finalize: $(PACKAGES)
+ define SPEEX_BUILD_CMDS
 -- 
 2.7.0
