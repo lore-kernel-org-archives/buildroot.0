@@ -1,42 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 1 Feb 2016 18:45:15 +0100
-Subject: [Buildroot] [PATCH 2/4] website: add reference to
-	submitting-patches to Contribute tab
+Date: Mon, 1 Feb 2016 18:45:16 +0100
+Subject: [Buildroot] [PATCH 3/4] docs/manual/contribute.txt: add section for
+	preparing patch series
 In-Reply-To: <1454348717-4711-1-git-send-email-arnout@mind.be>
 References: <1454348717-4711-1-git-send-email-arnout@mind.be>
-Message-ID: <1454348717-4711-3-git-send-email-arnout@mind.be>
+Message-ID: <1454348717-4711-4-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the hope of improving the quality of patches send by newcomers,
-add a reference to the submitting-patches section of the manual
-to the Contribute tab of the website.
+In subsequent patches, we will add more explanation about how to
+prepare patches, so it will be worthwhile to have a separate section
+for the series preparation.
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Warning: I haven't been able to test this with the full website js and
-css, just with file:///.../docs/website/contribute.html. But I think it
-should be OK :-)
+Note: for this patch, I started using
+http://dustycloud.org/blog/vcs-friendly-patchable-document-line-wrapping/
+If nobody opposes, I propose to require this formatting for the manual
+from now on. It will be weird for a while, but in the end I think it
+would be A Good Thing (TM). If that formatting had been followed, this
+patch, for example, would have a diffstat of +3 instead of the current
++7-4.
 ---
- docs/website/contribute.html | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ docs/manual/contribute.txt | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/docs/website/contribute.html b/docs/website/contribute.html
-index da5700c..721729b 100644
---- a/docs/website/contribute.html
-+++ b/docs/website/contribute.html
-@@ -22,7 +22,8 @@
- 	    patchwork</a>.</li>
- 	<li>Working on items from the
- 	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
--	<li>Submitting your own patches through the
-+	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
-+	  your own patches</a> through the
- 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	</a></li>
-       </ul>
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index b74897d..e19ba15 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -182,10 +182,13 @@ _Please, do not attach patches to bugs, send them to the mailing list
+ instead_.
+ 
+ If you made some changes to Buildroot and you would like to contribute
+-them to the Buildroot project, proceed as follows. Starting from the
+-changes committed in your local git view, _rebase_ your development
+-branch on top of the upstream tree before generating a patch set. To do
+-so, run:
++  them to the Buildroot project, proceed as follows.
++
++==== Preparing a patch series
++
++Starting from the changes committed in your local git view, _rebase_ your
++  development branch on top of the upstream tree before generating a patch set.
++To do so, run:
+ 
+ ---------------------
+ $ git fetch --all --tags
 -- 
 2.7.0
