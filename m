@@ -1,59 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 15:08:58 +0100
-Subject: [Buildroot] [PATCH 02/16 v3] toolchain/external: add hashes for
- actual sources
-In-Reply-To: <20160201135405.GD4278@free.fr>
-References: <cover.1454004518.git.yann.morin.1998@free.fr>
- <1aaa41e84c4084331e638ac19c10017d6ad30268.1454004518.git.yann.morin.1998@free.fr>
- <56AE8B01.1080205@mind.be> <20160201135405.GD4278@free.fr>
-Message-ID: <56AF66FA.6080409@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  1 Feb 2016 15:22:27 +0100
+Subject: [Buildroot] [RFC] package/gdb: simplify the disable doc hook
+Message-ID: <1454336547-23655-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-02-16 14:54, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2016-01-31 23:30 +0100, Arnout Vandecappelle spake thusly:
->> On 28-01-16 19:15, Yann E. MORIN wrote:
->>> As we currently download the actual sources as part of saving the
->>> legal-info, we do not check the hashes of those downloads.
-> [--SNIP--]
->>> So we just add hashes for those actual external-toolchain sources we may
->>> have to download.
-> [--SNIP--]
->>> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
->>> index dd7073f..22bbe51 100644
->>> --- a/toolchain/toolchain-external/toolchain-external.hash
->>> +++ b/toolchain/toolchain-external/toolchain-external.hash
->>> @@ -12,6 +12,7 @@ sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfi
->>>  # Mentor's Sourcery CodeBench Lite toolchains
->>>  # ARM
->>>  sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
->>> +sha256 e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
->>
->>  Why only this one, and not the six other Sourcery toolchains?
-> 
-> Because I did not add them. ;-)
-> 
-> Seriously, I just forgot. And it takes quite some time to get them all.
-> 
-> I've added hashes for all the CS toolchains now, but maybe there are
-> other toolchains for which we're still missing the hashes for the source
-> tarball. Maybe we can just add them whenever someone stumbles on it?
+Depending on the gdb version we need to remove the documentation
+build from different place in the gdb source tree.
 
- I checked, and we only have source for Sourcery, Arago and Linaro toolchains.
+From: gdb/Makefile.in
+3aecfbd03dd2a8d49c97f1e68df42b077dbbd396
 
- Regards,
- Arnout
+From: bfd/doc/Makefile.in and gprof/Makefile.in
+1180bafd8e1de2b12db3c7c235b128c9e48d4abb
 
+From: etc/Makefile.in
+as proposed by [1]
 
+The issue come from the commit e30465112ed4c6320dd19107302057a5f7712cf2
+in the gdb tree that update the "missing" script which now return the
+error code 127 when a tool is missing.
+
+The same kind of hook will be needed when the binutils package will be
+updated to 2.26 release.
+
+Fixes:
+http://autobuild.buildroot.net/results/55d/55d95d7decc8ff8c451601a38ce2c2818fe23bcc
+
+[1] http://patchwork.ozlabs.org/patch/572150/
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 3b0f501..65b2e67 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -53,13 +53,8 @@ endif
+ 
+ # Prevent gdb to build the documentation
+ define GDB_DISABLE_DOC
+-	$(SED) '/^SUBDIRS =/ s/doc//' $(@D)/gdb/Makefile.in
+-	if test -e $(@D)/bfd/doc/Makefile.in ; then \
+-		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/bfd/doc/Makefile.in ; \
+-	fi
+-	if test -e $(@D)/gprof/Makefile.in ; then \
+-		$(SED) 's/^INFO_DEPS =.*$$/INFO_DEPS =/' $(@D)/gprof/Makefile.in ; \
+-	fi
++	echo "#!/bin/sh" > $(@D)/missing
++	echo "exit 0" >> $(@D)/missing
+ endef
+ GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
+ HOST_GDB_PRE_CONFIGURE_HOOKS += GDB_DISABLE_DOC
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.3
