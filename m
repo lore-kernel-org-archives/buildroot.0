@@ -1,45 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 09:06:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/procps-ng: Fix install,
- procps-ng does not use /usr/bin anymore
-In-Reply-To: <1454304096-22841-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454304096-22841-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160201090622.04980cd3@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2016 09:27:11 +0100
+Subject: [Buildroot] [PATCH v2] package/gstreamer/gst-plugins-ugly: Fix
+	cdio-related build errors
+In-Reply-To: <1454164681-21418-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 30 Jan 2016 15:38:01 +0100")
+References: <1454164681-21418-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87mvrkesyo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Mon,  1 Feb 2016 06:21:36 +0100, Bernd Kuhls wrote:
-> We do not need to move binaries around anymore since this commit:
-> https://gitlab.com/procps-ng/procps/commit/430b559ba2826f80dffa840622ae0fc744000b13
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/ab7/ab7ed83d60823c1b023c7b76fcbe9c20d537ed4c//
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/procps-ng/procps-ng.mk | 12 ------------
->  1 file changed, 12 deletions(-)
+ > Fixes
+ > http://autobuild.buildroot.net/results/530/53003be0dc2cb76d497a167023c5c45666fd00b4/
+ > http://autobuild.buildroot.net/results/b23/b2393cd50c20da919d6111e15b78d12cc784841f/
 
-Does it mean we can remove:
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: Use _PATCH to include the patch file instead of including it into
+ >     the buildroot repository (Arnout)
+ >     Also add sha256 hashes for the patch and the upstream tarball
 
-        --prefix=/usr \
-        --exec-prefix=/ \
-	...
-        --libdir=/usr/lib \
-        --bindir=/bin \
-        --sbindir=/sbin
+My reply didn't seem to make it to the list, so here goes again:
 
-from procps-ng.mk ?
+Committed, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
