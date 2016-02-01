@@ -1,56 +1,97 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 1 Feb 2016 19:57:40 +0100
-Subject: [Buildroot] [PATCH 2/5] docs/manual: slightly clarify patch
- licensing
-In-Reply-To: <20160201195312.09e2d34f@free-electrons.com>
-References: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
- <1454338344-24973-3-git-send-email-luca@lucaceresoli.net>
- <20160201195312.09e2d34f@free-electrons.com>
-Message-ID: <56AFAAA4.6050908@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 1 Feb 2016 19:58:07 +0100
+Subject: [Buildroot] [PATCH v6 03/13] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <1454342021-22960-4-git-send-email-s.martin49@gmail.com>
+References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
+ <1454342021-22960-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <56AFAABF.2070101@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 01-02-16 16:53, Samuel Martin wrote:
+> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
+> they can be resolved differently, depending on each package build-system
+> (whether it uses the given paths or get the absolute canonical ones).
+> 
+> Thus, to make easier tracking down host machine paths leaking into the
+> host, target or staging trees, the CURDIR and O variables are set to
+> their absolute canonical paths.
+> 
+> Note that this change takes care of the makefile wrapper installed in
+> $(O) to avoid unneeded make recursion.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> 
+> ---
+> changes v5 -> v6:
+> - new patch
+> ---
+>  Makefile | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 13c16af..10193ba 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -26,16 +26,30 @@
+>  
+>  # Trick for always running with a fixed umask
+>  UMASK = 0022
+> -ifneq ($(shell umask),$(UMASK))
+> +
+> +# Check if we need to re-enter make for one or several of the following reasons:
+> +# 1- Wrong (too restrictive) umask:
+> +#    This prevents Buildroot and packages from creating files and directories.
+> +# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
+> +#    This makes harder tracking and fixing host machine path leaks.
+> +# 3- Output location (i.e. $(O)) not being the absolute canonical path:
+> +#    This makes harder tracking and fixing host machine path leaks.
+> +#
+> +# Note:
+> +# - remove the trailing '/.' from $(O) as it can be added by the makefile
+> +#   wrapper installed in the $(O).
 
-Thomas Petazzoni wrote:
-> Luca,
->
-> On Mon,  1 Feb 2016 15:52:21 +0100, Luca Ceresoli wrote:
->> Adding a patch is a modification to Buildroot. Thus this sentence might be
->> interpreted as "Patches are released under the Buildroot license".
->>
->> Being a legal matter, the last thing we want is to be
->> ambiguous. Reword the sentence to avoid any misunderstandings.
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> ---
->>   docs/manual/patch-policy.txt | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
->> index 0b4604e..cfda5c5 100644
->> --- a/docs/manual/patch-policy.txt
->> +++ b/docs/manual/patch-policy.txt
->> @@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
->>
->>   === Format and licensing of the package patches
->>
->> -Patches are released under the same license as the software that is
->> -modified.
->> +Patches are released under the same license as the software that they
->> +modify.
->
-> "as the software that they apply to" ?
+ When is the trailing /. added? Can't we avoid that it is added by mkmakefile?
 
-Indeed, they don't modify any file, `patch` does it! :)
+ Otherwise looks good to me.
 
-Seriously, your version is better. We can even ditch "that":
-"as the software they apply to".
+ Regards,
+ Arnout
 
-Will fix and resend.
+> +ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
+>  .PHONY: _all $(MAKECMDGOALS)
+>  
+>  $(MAKECMDGOALS): _all
+>  	@:
+>  
+>  _all:
+> -	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+> +	umask $(UMASK) && \
+> +		$(MAKE) -C $(realpath $(CURDIR)) --no-print-directory \
+> +			$(MAKECMDGOALS) O=$(realpath $(O))
+>  
+> -else # umask
+> +else # umask / $(CURDIR) / $(O)
+>  
+>  # This is our default rule, so must come first
+>  all:
+> @@ -1001,4 +1015,4 @@ include docs/manual/manual.mk
+>  
+>  .PHONY: $(noconfig_targets)
+>  
+> -endif #umask
+> +endif #umask / $(CURDIR) / $(O)
+> 
+
 
 -- 
-Luca
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
