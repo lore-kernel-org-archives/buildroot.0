@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:16:45 +0100
-Subject: [Buildroot] [git commit] website: add reference to
-	submitting-patches to Contribute tab
-Message-ID: <20160201224701.D501E7FA6C@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 19:57:23 +0100
+Subject: [Buildroot] [git commit] package/autoconf-archive: bump to version
+	2015.09.25
+Message-ID: <20160201224703.853837F9EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef2efaff1564879033ad0313d79850187dd6e1b5
+commit: https://git.buildroot.net/buildroot/commit/?id=196eb53ac886b1badc64513061d71efc3b21b066
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In the hope of improving the quality of patches send by newcomers,
-add a reference to the submitting-patches section of the manual
-to the Contribute tab of the website.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/website/contribute.html | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/autoconf-archive/autoconf-archive.hash | 2 +-
+ package/autoconf-archive/autoconf-archive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/contribute.html b/docs/website/contribute.html
-index da5700c..721729b 100644
---- a/docs/website/contribute.html
-+++ b/docs/website/contribute.html
-@@ -22,7 +22,8 @@
- 	    patchwork</a>.</li>
- 	<li>Working on items from the
- 	  <a href="http://www.elinux.org/Buildroot#Todo_list">TODO list</a></li>
--	<li>Submitting your own patches through the
-+	<li><a href="http://buildroot.org/manual.html#submitting-patches">Submitting
-+	  your own patches</a> through the
- 	  <a href="http://lists.buildroot.org/mailman/listinfo/buildroot">mailing list
- 	</a></li>
-       </ul>
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index c310f5a..5576566 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 69715bdd078f552ca85e498a94543e11cb8bcdf0359e659b84d84d19372b0dc5  autoconf-archive-2015.02.24.tar.xz
++sha256 7c0467a5dbd2340153bca5a477bd92fbc951d9ee3cbed92f16f6bf08ac0c350a  autoconf-archive-2015.09.25.tar.xz
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 673a57f..98acba3 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_ARCHIVE_VERSION = 2015.02.24
++AUTOCONF_ARCHIVE_VERSION = 2015.09.25
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
