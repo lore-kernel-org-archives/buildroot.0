@@ -1,10 +1,10 @@
 From: Ludovic Guegan <ludovic.guegan@gmail.com>
-Date: Tue,  2 Feb 2016 00:31:01 +0100
-Subject: [Buildroot] [PATCH 4/8 RFC] package/pkg-golang.mk: infrastructure
-	for Go packages
+Date: Tue,  2 Feb 2016 00:31:02 +0100
+Subject: [Buildroot] [PATCH 5/8 RFC] docs/manual: documents the
+	golang-package infrastructure
 In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
 References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <1454369465-4804-5-git-send-email-ludovic.guegan@gmail.com>
+Message-ID: <1454369465-4804-6-git-send-email-ludovic.guegan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,214 +13,88 @@ To: buildroot@busybox.net
 
 Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
 ---
- package/Makefile.in       |   1 +
- package/pkg-golang.mk     | 156 ++++++++++++++++++++++++++++++++++++++++++++++
- support/scripts/pkg-stats |  11 ++++
- 3 files changed, 168 insertions(+)
- create mode 100644 package/pkg-golang.mk
+ docs/manual/adding-packages-golang.txt | 73 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100644 docs/manual/adding-packages-golang.txt
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dd595e2..067abb6 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -393,6 +393,7 @@ include package/pkg-download.mk
- include package/pkg-autotools.mk
- include package/pkg-cmake.mk
- include package/pkg-luarocks.mk
-+include package/pkg-golang.mk
- include package/pkg-perl.mk
- include package/pkg-python.mk
- include package/pkg-virtual.mk
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
 new file mode 100644
-index 0000000..cff4e9f
+index 0000000..0cb2aa1
 --- /dev/null
-+++ b/package/pkg-golang.mk
-@@ -0,0 +1,156 @@
-+################################################################################
-+# Golang package infrastructure
-+#
-+# This file implements an infrastructure that eases development of package
-+# .mk files for Go packages.
-+#
-+# See the Buildroot documentation for details on the usage of this
-+# infrastructure
-+#
-+#
-+# In terms of implementation, this Go infrastructure requires the .mk file
-+# to only specify metadata information about the package: name, version,
-+# download URL, etc.
-+#
-+# We still allow the package .mk file to override what the different steps
-+# are doing, if needed. For example, if <PKG>_BUILD_CMDS is already defined,
-+# it is used as the list of commands to perform to build the package,
-+# instead of the default golang behaviour. The package can also define some
-+# post operation hooks.
-+#
-+################################################################################
++++ b/docs/manual/adding-packages-golang.txt
+@@ -0,0 +1,73 @@
++// -*- mode:doc; -*-
++// vim: set syntax=asciidoc:
 +
-+GO_ENV = PATH=$(BR_PATH) GOPATH=$($PKGDIR)
++=== Infrastructure for Go packages
 +
-+#
-+# If compiling for the target then set GOARCH accordingly.
-+#
++[[golang-package-tutorial]]
 +
-+ifeq ($(4),target)
++==== +golang-package+ tutorial
 +
-+ifeq ($(BR2_i386),y)
-+GOLANG_ARCH = 386
-+endif # i386
++First, let's see how to write a +.mk+ file for a Go package, with an
++example :
 +
-+ifeq ($(BR2_x86_64),y)
-+GOLANG_ARCH = amd64
-+endif # x86_64
++------------------------
++01: ################################################################################
++02: #
++03: # foo-bar
++04: #
++05: ################################################################################
++06:
++07: FOO_LICENSE = MIT
++08: FOO_VERSION = release_1.0
++09: FOO_SITE = $(call github,foo,bar,$(FOO_VERSION))
++10: FOO_EXTRACT_DIR = $(@D)/src/github.com/foo/bar
++11:
++12: FOO_DEPS += $(call fetch-golang-package, github.com/other/package, \
++13: 		1f22c0103821b9390939b6776727195525381532)
++14:
++16: FOO_BUILD_PACKAGES = github.com/foo/bar/cmd/foo
++17:
++18: $(eval $(golang-package))
++------------------------
 +
-+ifeq ($(BR2_arm),y)
-+GOLANG_ARCH = arm
-+endif # arm
++On line 7, we declare the license of the package.
 +
-+GO_ENV += GOARCH=$(GOLANG_ARCH)
++On line 8 and 9, we declare the version and the method to download the
++sources.
 +
-+endif # ($(4),target)
++On line 10, we declare where to extract the sources. The GOPATH variable is
++set to $(@D) when building the package so the Go source files must be placed
++accordingly into $(@D)/src.
 +
-+################################################################################
-+#
-+# Go packages are normally fetch using "go get", unfortunatly this method
-+# fetch the HEAD reference of the package. We use golang-gb in order to
-+# implement reproducible builds.
-+#
-+#  argument 1 is the package name to fetch as specified in the source code
-+#  argument 2 is the revision reference
-+################################################################################
++On line 11 and 12, we declare the package dependencies to install. All the
++package dependencies should be added this way.
 +
-+define fetch-golang-package
-+	cd $($(PKG)_SRCDIR); \
-+		env -i $(GO_ENV) gb vendor fetch -no-recurse -revision $(2) $(1);
-+endef
++On line 16, we declare the list of packages to build and to install.
 +
-+################################################################################
-+# inner-golang-package -- defines how the configuration, compilation and
-+# installation of a Go package should be done, implements a few hooks to
-+# tune the build process for Go specifities and calls the generic package
-+# infrastructure to generate the necessary make targets
-+#
-+#  argument 1 is the lowercase package name
-+#  argument 2 is the uppercase package name, including a HOST_ prefix
-+#             for host packages
-+#  argument 3 is the uppercase package name, without the HOST_ prefix
-+#             for host packages
-+#  argument 4 is the type (target or host)
-+################################################################################
++Finally, on line 18, we invoke the +golang-package+ macro that
++generates all the Makefile rules that actually allow the package to be
++built.
 +
-+define inner-golang-package
++[[golang-package-reference]]
 +
-+# Target packages need both the Go compiler on the host and the golang-gb
-+# build tool on the host (for reproduable builds).
-+$(2)_DEPENDENCIES += host-golang host-golang-gb
++==== +golang-package+ reference
 +
-+#
-+# Fetch go package if $($(PKG)_DEPS) is defined
-+#
-+ifdef $(2)_DEPS
++As a policy, each Go package declares all its dependencies using the
++fetch-golang-package macro in order to produce reproducible builds.
 +
-+define $(2)_FETCH_DEPS
-+	mkdir -p $$($$(PKG)_DIR)/{src,vendor}
-+	cd $$($$(PKG)_SRCDIR); env -i $(GO_ENV) gb vendor delete --all
-+	$$($$(PKG)_DEPS)
-+endef
++The main macro of the golang package infrastructure is +golang-package+. It
++is similar to the +generic-package+ macro. The ability to have target and
++host packages is also available, with the +host-golang-package+ macro.
 +
-+$(2)_POST_DOWNLOAD_HOOKS += $(2)_FETCH_DEPS
++Just like the generic infrastructure, the golang infrastructure works by
++defining a number of variables before calling the +golang-package+ macro.
 +
-+endif # $(2)_DEPS
++First, all the package metadata information variables that exist in the
++generic infrastructure also exist in the golang infrastructure:
+++FOO_FOO_VERSION+, +FOO_FOO_SOURCE+, +FOO_FOO_PATCH+, +FOO_FOO_SITE+,
+++FOO_FOO_SUBDIR+, +FOO_FOO_DEPENDENCIES+, +FOO_FOO_INSTALL_TARGET+.
 +
-+#
-+# Build step. Only define it if not already defined by the package .mk file.
-+# There is no differences between host and target packages.
-+#
-+ifndef $(2)_BUILD_CMDS
-+define $(2)_BUILD_CMDS
-+	$(foreach p,$$($$(PKG)_BUILD_PACKAGES), cd $$($$(PKG)_SRCDIR); \
-+		env -i $(GO_ENV) gb build $(p))
-+endef
-+endif
-+
-+#
-+# The variable $(2)_INSTALL_BINARIES list the binaries to install. Go programs
-+# are named after the last part of their package. If $(2)_INSTALL_BINARIES is
-+# not define, it is created from $(2)_BUILD_PACKAGES. 
-+#
-+ifndef $(2)_INSTALL_BINARIES
-+ ifdef $(3)_INSTALL_BINARIES
-+  $(2)_INSTALL_BINARIES = $$($(3)_INSTALL_BINARIES)
-+ else
-+  $(2)_INSTALL_BINARIES = $(foreach p, $($(2)_BUILD_PACKAGES), $(lastword $(subst /, ,$(p))))
-+ endif
-+endif
-+
-+#
-+# Host installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_CMDS
-+define $(2)_INSTALL_CMDS
-+	$(foreach p,$$($$(PKG)_INSTALL_BINARIES), \
-+		$(INSTALL) -m 755 $$($$(PKG)_DIR)/bin/$(p) $(HOST_DIR)/usr/bin)
-+endef
-+endif
-+
-+#
-+# Target installation step. Only define it if not already defined by the
-+# package .mk file.
-+#
-+ifndef $(2)_INSTALL_TARGET_CMDS
-+define $(2)_INSTALL_TARGET_CMDS
-+	$(foreach p,$$($$(PKG)_INSTALL_BINARIES), \
-+		$(INSTALL) -m 755 $$($$(PKG)_DIR)/bin/$(p) $(TARGET_DIR)/usr/bin)
-+endef
-+endif
-+
-+# Call the generic package infrastructure to generate the necessary make
-+# targets
-+$(call inner-generic-package,$(1),$(2),$(3),$(4))
-+
-+endef # inner-golang-package
-+
-+################################################################################
-+# golang-package -- the target generator macro for Go packages
-+################################################################################
-+
-+golang-package = $(call inner-golang-package,\
-+	$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-+host-golang-package = $(call inner-golang-package,host-$(pkgname),\
-+	$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index fad7ae9..5e6bc08 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -112,6 +112,7 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	$i = "package/pkg-cmake.mk" -o \
- 	$i = "package/pkg-kconfig.mk" -o \
- 	$i = "package/pkg-luarocks.mk" -o \
-+	$i = "package/pkg-golang.mk" -o \
- 	$i = "package/pkg-perl.mk" -o \
- 	$i = "package/pkg-python.mk" -o \
- 	$i = "package/pkg-rebar.mk" -o \
-@@ -145,6 +146,16 @@ for i in $(find boot/ linux/ package/ -name '*.mk' | sort) ; do
- 	hastarget=1
-     fi
- 
-+    if grep -E "\(host-golang-package\)" $i > /dev/null ; then
-+	infratype="golang"
-+	hashost=1
-+    fi
-+
-+    if grep -E "\(golang-package\)" $i > /dev/null ; then
-+	infratype="golang"
-+	hastarget=1
-+    fi
-+
-     if grep -E "\(host-luarocks-package\)" $i > /dev/null ; then
- 	infratype="luarocks"
- 	hashost=1
++Note that setting +FOO_INSTALL_STAGING+ to +YES+ has no effect unless a
+++FOO_INSTALL_STAGING_CMDS+ variable is defined. The golang infrastructure
++doesn't define these commands since Go pakages don't need to be installed to
++the +staging+ directory.
 -- 
 2.7.0
