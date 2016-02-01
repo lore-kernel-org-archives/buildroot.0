@@ -1,70 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 16:19:26 +0100
-Subject: [Buildroot] [PATCH v2 00/17] Rework atomic handling
-In-Reply-To: <20160201144730.7ca660e9@pcviktorin.fit.vutbr.cz>
-References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160201144730.7ca660e9@pcviktorin.fit.vutbr.cz>
-Message-ID: <20160201161926.3b2488f8@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  1 Feb 2016 16:34:27 +0100
+Subject: [Buildroot] [PATCH v3 1/2] toolchain-external: add a check for
+	unsupported toolchains
+Message-ID: <1454340868-2040-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jan,
+Some toolchain can't be used by Buildroot due to sysroot location
+issue, so the $(ARCH)-linux-gnu-gcc -print-file-name=libc.a command
+return only "libc.a"
 
-On Mon, 1 Feb 2016 14:47:30 +0100, Jan Viktorin wrote:
+This lead to an error during the header check version helper,
+so these toolchains can't be imported into Buildroot.
 
-> recently, I was doing some tests on MicroBlaze and discovered that I
-> am missing the atomic operations there. Then I could see this patch
-> series. Thanks for that, however, I have still issues with this.
+cc1: fatal error: $PWD/libc.a/usr/include/linux/version.h: No such file or directory
+compilation terminated.
+support/scripts/check-kernel-headers.sh: line 38: /tmp/check-headers.4V5PPF: Permission denied
 
-Ah, so you're doing some Microblaze stuff? If so, some help would
-definitely be welcome to maintain this platform.
+This issue happen with the first linaro 2015.11 [1] release and
+CodeSourcery standard edition [2].
 
-> The libatomic_ops claims to not support MicroBlaze in its Config.in.
+Here is the sysroot directory tree for linaro 2015.11:
+$ ls libc/arm-linux-gnueabihf
+etc  lib  sbin  usr  var
 
-Right.
+Here is the sysroot directory tree for CodeSourcery standard:
+$ ls libc/sgxx-glibc
+etc  lib  lib64  sbin  usr  var
 
-> So it is not possible to use either __sync_* ones nor __atomic_* ones.
+Add a check to error out with an explicit error message
 
-This has nothing to do with libatomic_ops or not.
+The check don't use toolchain_find_libc_a function directly since
+"realpath -f" is used internally and return an absolute path.
 
-__sync and __atomic built-ins are provided by gcc, the compiler.
+[1] https://bugs.linaro.org/show_bug.cgi?id=1995#c7
+[2] http://lists.busybox.net/pipermail/buildroot/2014-October/110696.html
 
-They are completely orthogonal to libatomic_ops. Programs/libraries
-using __sync* or __atomic* functions do not need libatomic_ops. 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+v3: rename non_existent_sysroot to libc_a_path (ThomasP)
+v2: move the check to check_unusable_toolchain helper
+    use unsupported toolchain instead of broken toolchains (ThomasP)
+---
+ toolchain/helpers.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> Even if I change this and enable it for BR2_microblaze, I am unable to
-> compile the libatomic_ops properly (with the Buildroot toolchain 4.9.x).
-
-There is no support for Microblaze in libatomic_ops, so this is not
-surprising. See src/atomic_ops/sysdeps/gcc/ in the libatomic_ops
-sources.
-
-Maybe with generic.h / generic-small.h, libatomic_ops can rely on the
-__sync or __atomic built-ins, but I haven't tried this possibility.
-
-> Moreover, I've read somewhere that the new GCC connects the __sync_*
-> interface to the __atomic_* interface internally. Is it true?
-
-I don't know how things are implemented internally in gcc.
-
-> Is this done by the libatomic_ops library? I am confused by this
-> situation... I made some wrappers doing the __sync_* to __atomic_*
-> translation but still with no success.
-
-Are you use you are not confusing libatomic_ops and libatomic ?
-
-libatomic_ops is a separate project, which has nothing to do with gcc.
-
-libatomic is a library part of gcc, which exists since gcc 4.7, and
-provided as part of the gcc runtime on the target.
-
-Best regards,
-
-Thomas
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 02cc0bb..6102371 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -418,6 +418,11 @@ check_unusable_toolchain = \
+ 		echo "and contain a lot of pre-built libraries that would conflict with"; \
+ 		echo "the ones Buildroot wants to build."; \
+ 		exit 1; \
++	fi; \
++	libc_a_path=`$${__CROSS_CC} -print-file-name=libc.a` ; \
++	if test "$${libc_a_path}" = "libc.a" ; then \
++		echo "Unable to detect the toolchain sysroot, Buildroot cannot handle this toolchain." ; \
++		exit 1 ; \
+ 	fi
+ 
+ #
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.3
