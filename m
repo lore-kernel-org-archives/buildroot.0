@@ -1,33 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2016 19:04:59 +0100
-Subject: [Buildroot] [PATCH v2 4/8] vlc: remove dependency on C library
-In-Reply-To: <1453929930-18215-5-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 27 Jan 2016 22:25:26 +0100")
-References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453929930-18215-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <871t8wcnn8.fsf@dell.be.48ers.dk>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 1 Feb 2016 19:07:07 +0100
+Subject: [Buildroot] [PATCH] libcurl: enable mbedtls support
+In-Reply-To: <56AF9DE2.6010809@zacarias.com.ar>
+References: <1452106417-12097-1-git-send-email-gustavo@zacarias.com.ar>
+ <56AF8788.7090702@lucaceresoli.net> <56AF88F9.2000904@zacarias.com.ar>
+ <56AF9B59.4090508@lucaceresoli.net> <56AF9C3D.6020805@zacarias.com.ar>
+ <56AF9DA1.9000806@lucaceresoli.net> <56AF9DE2.6010809@zacarias.com.ar>
+Message-ID: <56AF9ECB.3010702@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi Gustavo,
 
- > vlc uses <spawn.h> which was not available in old uClibc
- > versions. However, since we are removing support for uClibc 0.9.33, we
- > can get rid of such dependency. In addition, <spawn.h> is provided by
- > musl, and therefore VLC can be enabled with this C library.
+Gustavo Zacarias wrote:
+> On 01/02/16 15:02, Luca Ceresoli wrote:
+>
+>> I see, thanks for the additional clarification. Now it makes sense.
+>>
+>> Since it is non-obvious (at least it wasn't to me), it's worth adding a
+>> comment, such as: "mbedtls is a successor or polarssl, thus polarssl
+>> support is useless".
+>>
+>> Care to resend with that?
+>>
+>> Thanks,
+>
+> Does it make any sense?
+> It never had any polarssl/mbedtls support to begin with.
 
- > Consequently, this commit completely removes any C library dependency
- > for the vlc package. The only special case that needs to be handled is
- > the Blackfin external toolchain from Analog Devices, which still uses
- > an old uClibc version that doesn't provide <spawn.h>.
-
-vlc contains several references to fork(), so it should really just
-depend on BR2_USE_MMU.
-
-Committed with that fixed, thanks.
+Well, it makes sense in the commit log IMO. It would have replied my
+doubts immediately.
 
 -- 
-Bye, Peter Korsgaard
+Luca
