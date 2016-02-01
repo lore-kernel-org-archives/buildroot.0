@@ -1,41 +1,34 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  1 Feb 2016 15:52:19 +0100
-Subject: [Buildroot] [PATCH 0/5] Patch file clarification & Co
-Message-ID: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
+Date: Mon,  1 Feb 2016 15:52:24 +0100
+Subject: [Buildroot] [PATCH 5/5] legal-info: explicitly state how patches
+	are licensed
+In-Reply-To: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
+References: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1454338344-24973-6-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ support/legal-info/README.header | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-several Buildroot users reportedly asked details about how the patches
-bundled with Buildroot are licensed.
-
-Following the discussion during the Buildroot Developer Days today,
-this small series is aimed at clarifying patch licensing in the places
-where it makes sense: COPYING, the manual and the legal-info output.
-
-Note that patches are not saved by 'make legal-info' in current
-Buildroot, but there's a patchset by Yann E. Morin to add this
-feature. Patch 5 of the present series applies to legal-info, and it
-only applies on top of Yann's series (it would be useless on amster
-anyway). Patches 1-4 apply also on current master.
-
-Luca Ceresoli (5):
-  Update copyright year
-  docs/manual: slightly clarify patch licensing
-  COPYING: add exception about patch licensing
-  docs/manual: add section about patch licensing
-  legal-info: explicitly state how patches are licensed
-
- COPYING                          | 10 ++++++++++
- Makefile                         |  2 +-
- docs/manual/legal-notice.txt     | 16 ++++++++++++++--
- docs/manual/patch-policy.txt     |  4 ++--
- support/legal-info/README.header |  2 +-
- 5 files changed, 28 insertions(+), 6 deletions(-)
-
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+index 0b5aa66..316f799 100644
+--- a/support/legal-info/README.header
++++ b/support/legal-info/README.header
+@@ -18,7 +18,7 @@ This material is composed of the following items.
+    sources/ subdirectory (except for the non-redistributable packages, which
+    have not been saved). Patches that were applied are also saved, along
+    with a file named 'series' that lists the patches in the order they were
+-   applied.
++   applied. Patches are under the same license as the original package.
+  * A manifest file listing the configured packages and related information.
+  * The license text of the packages; they have been saved in the licenses/
+    subdirectory.
 -- 
 1.9.1
