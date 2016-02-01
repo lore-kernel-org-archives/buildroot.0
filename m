@@ -1,39 +1,84 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon,  1 Feb 2016 14:01:03 +0100
-Subject: [Buildroot] [PATCH] package/shairport-sync: bump to version 2.8.0
-Message-ID: <1454331663-14462-1-git-send-email-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 1 Feb 2016 14:03:39 +0100
+Subject: [Buildroot] [PATCH] toolchain-external: add a check for broken
+	toolchains
+In-Reply-To: <1454326287-2123-1-git-send-email-romain.naour@gmail.com>
+References: <1454326287-2123-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <56AF57AB.7050207@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le 01/02/2016 12:31, Romain Naour a ?crit :
+> Some toolchain release can be broken due to sysroot location issue,
+> so the $(ARCH)-linux-gnu-gcc -print-file-name=libc.a command is
+> broken and return only "libc.a"
+> 
+> This lead to an error during the header check version helper,
+> so these toolchains can't be imported into Buildroot.
+> 
+> cc1: fatal error: $PWD/libc.a/usr/include/linux/version.h: No such file or directory
+> compilation terminated.
+> support/scripts/check-kernel-headers.sh: line 38: /tmp/check-headers.4V5PPF: Permission denied
+> 
+> This issue happen with the first linaro 2015.11 [1] release and
+> CodeSourcery standard edition [2].
+> 
+> Here is the sysroot directory tree for linaro 2015.11:
+> $ ls libc/arm-linux-gnueabihf
+> etc  lib  sbin  usr  var
+> 
+> Here is the sysroot directory tree for CodeSourcery standard:
+> $ ls libc/sgxx-glibc
+> etc  lib  lib64  sbin  usr  var
+> 
+> Usually the sysroot is located directly under libc directory
+> $ ls libc/
+> etc  lib  sbin  usr  var
+> 
+> Add a check to error out with an explicit error message
+> 
+> [1] https://bugs.linaro.org/show_bug.cgi?id=1995#c7
+> [2] http://lists.busybox.net/pipermail/buildroot/2014-October/110696.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index c6f5fc2..e87dacd 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  d04036241e5a811240c43a3ddfb05a119a6043e8c5f1f354872a88e6cbdaef07  shairport-sync-2.6.tar.gz
-+sha256  6f3535012ed25017e4f893f9bad5391c2ea23c64f398caac3f29d8dad5f9e987  shairport-sync-2.8.0.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 4d80f0d..e25a78c 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.6
-+SHAIRPORT_SYNC_VERSION = 2.8.0
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
--- 
-2.7.0
+Please forget this patch, it doesn't work as expected :(
+I'll move the check to check_unusable_toolchain helper instead.
+
+Best regards,
+Romain
+
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 9ebf7bd..303a32a 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -478,6 +478,10 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
+>  		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+>  		exit 1 ; \
+>  	fi ; \
+> +	if test "$${SYSROOT_DIR}" = "libc.a" ; then \
+> +		@echo "External toolchain broken, unable to find the main sysroot. Cannot use." ; \
+> +		exit 1 ; \
+> +	fi ; \
+>  	$(call check_kernel_headers_version,\
+>  		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)),\
+>  		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
+> @@ -571,6 +575,10 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>  		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+>  		exit 1 ; \
+>  	fi ; \
+> +	if test "$${SYSROOT_DIR}" = "libc.a" ; then \
+> +		@echo "External toolchain broken, unable to find the main sysroot. Cannot use." ; \
+> +		exit 1 ; \
+> +	fi ; \
+>  	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>  	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>  	SUPPORT_LIB_DIR="" ; \
+> 
