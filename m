@@ -1,166 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 1 Feb 2016 21:47:57 +0100
-Subject: [Buildroot] [PATCH 01/18] erlang: bump to version 18.2.1
-In-Reply-To: <1453511471-28519-2-git-send-email-fhunleth@troodon-software.com>
-References: <1453511471-28519-1-git-send-email-fhunleth@troodon-software.com>
- <1453511471-28519-2-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <56AFC47D.7030606@gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 1 Feb 2016 21:56:25 +0100
+Subject: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.2
+In-Reply-To: <20160201213903.04cdc5be@free-electrons.com>
+References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1454154357-31625-2-git-send-email-gary.bisson@boundarydevices.com>
+ <20160201213903.04cdc5be@free-electrons.com>
+Message-ID: <CAAMH-yvoH3CgZ7B=EGuP-juf9XLHvYC-4goUE+6moZCDUbbPUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Frank, All,
+Thomas, All,
 
-Le 23/01/2016 02:10, Frank Hunleth a ?crit :
-> This is a major release of Erlang that includes a licensing change from
-> the EPL to the Apache License, significant changes to the timer APIs, better
-> support for large maps, and security improvements.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch | 79 ----------------------
->  package/erlang/erlang.hash                         |  2 +-
->  package/erlang/erlang.mk                           |  8 +--
->  3 files changed, 5 insertions(+), 84 deletions(-)
->  delete mode 100644 package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-> 
-> diff --git a/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch b/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-> deleted file mode 100644
-> index bc08697..0000000
-> --- a/package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
-> +++ /dev/null
-> @@ -1,79 +0,0 @@
-> -Status: upstream
-> -https://github.com/erlang/otp/pull/658
-> -
-> -Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-> -
-> -From 73392fcb6f8fddba57de6fb7ae6eeafa0e444686 Mon Sep 17 00:00:00 2001
-> -From: Johan Oudinet <johan.oudinet@gmail.com>
-> -Date: Tue, 24 Mar 2015 15:54:31 +0100
-> -Subject: [PATCH] erts: Fix incorrect use of AC_EGREP_CPP
-> -
-> -Using 'AC_EGREP_CPP(yes' without restraining the pattern always return
-> -true if it runs from a path containing the string 'yes'.
-> ----
-> - erts/aclocal.m4   |  2 +-
-> - erts/configure.in | 17 +++++++++--------
-> - 2 files changed, 10 insertions(+), 9 deletions(-)
-> -
-> -diff --git a/erts/aclocal.m4 b/erts/aclocal.m4
-> -index 5735cde..70a5b40 100644
-> ---- a/erts/aclocal.m4
-> -+++ b/erts/aclocal.m4
-> -@@ -559,7 +559,7 @@ dnl
-> - 
-> - AC_DEFUN(LM_SYS_MULTICAST,
-> - [AC_CACHE_CHECK([for multicast support], ac_cv_sys_multicast_support,
-> --[AC_EGREP_CPP(yes,
-> -+[AC_EGREP_CPP(^yes$,
-> - [#include <sys/types.h>
-> - #include <sys/socket.h>
-> - #include <netinet/in.h>
-> -diff --git a/erts/configure.in b/erts/configure.in
-> -index b3fe48d..9e19e33 100644
-> ---- a/erts/configure.in
-> -+++ b/erts/configure.in
-> -@@ -1555,10 +1555,11 @@ if test "$have_gethostbyname_r" = yes; then
-> - 				    [Define to flavour of gethostbyname_r]))
-> - 		;;
-> - 		*)
-> --			AC_EGREP_CPP(yes,[#include <stdio.h>
-> --			  #ifdef __GLIBC__
-> --			  yes
-> --			  #endif
-> -+			AC_EGREP_CPP(^yes$,[
-> -+#include <stdio.h>
-> -+#ifdef __GLIBC__
-> -+yes
-> -+#endif
-> - 			  ], AC_DEFINE(HAVE_GETHOSTBYNAME_R, GHBN_R_GLIBC,
-> - 				[Define to flavour of gethostbyname_r]))
-> - 		;;
-> -@@ -4303,10 +4304,10 @@ case "$erl_xcomp_without_sysroot-$with_ssl" in
-> - 			SSL_INCLUDE="-I$dir/include"
-> - 			old_CPPFLAGS=$CPPFLAGS
-> - 			CPPFLAGS=$SSL_INCLUDE
-> --			AC_EGREP_CPP(yes,[
-> -+			AC_EGREP_CPP(^yes$,[
-> - #include <openssl/opensslv.h>
-> - #if OPENSSL_VERSION_NUMBER >= 0x0090700fL
-> --  yes
-> -+yes
-> - #endif
-> - 			],[
-> - 			ssl_found=yes
-> -@@ -4501,10 +4502,10 @@ if test "x$SSL_APP" != "x" ; then
-> -     AC_MSG_CHECKING(for OpenSSL kerberos 5 support)
-> -     old_CPPFLAGS=$CPPFLAGS
-> -     CPPFLAGS=$SSL_INCLUDE
-> --    AC_EGREP_CPP(yes,[
-> -+    AC_EGREP_CPP(^yes$,[
-> - #include <openssl/opensslconf.h>
-> - #ifndef OPENSSL_NO_KRB5
-> --  yes
-> -+yes
-> - #endif
-> -       ],[
-> -       AC_MSG_RESULT([yes])
-> --- 
-> -2.1.0
-> -
-> diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
-> index 2d6a39a..e04893e 100644
-> --- a/package/erlang/erlang.hash
-> +++ b/package/erlang/erlang.hash
-> @@ -1,2 +1,2 @@
->  # From http://www.erlang.org/download/MD5
-> -md5	346dd0136bf1cc28cebc140e505206bb	otp_src_17.5.tar.gz
-> +md5	ebb226d51f89ec54cc83ce5d417ce55e	otp_src_18.2.1.tar.gz
+On Mon, Feb 1, 2016 at 9:39 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Gary Bisson,
+>
+> On Sat, 30 Jan 2016 12:45:48 +0100, Gary Bisson wrote:
+>
+>> The package adds the EPDC waveforms and the needed changes to properly
+>> install those were done in the firmware-imx.inc file.
+>
+> I guess you wanted to say firmware-imx.mk. Maybe you've done too much
+> Yocto :-)
 
-Maybe you should add a stronger hash here.
+Haha, no trust me I try not to. It's just a bad copy/paste from the
+Yocto commit log.
 
-> diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-> index 848d1dd..dfab30d 100644
-> --- a/package/erlang/erlang.mk
-> +++ b/package/erlang/erlang.mk
-> @@ -5,13 +5,13 @@
->  ################################################################################
->  
->  # See note below when updating Erlang
-> -ERLANG_VERSION = 17.5
-> +ERLANG_VERSION = 18.2.1
->  ERLANG_SITE = http://www.erlang.org/download
->  ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
->  ERLANG_DEPENDENCIES = host-erlang
->  
-> -ERLANG_LICENSE = EPL
-> -ERLANG_LICENSE_FILES = EPLICENCE
-> +ERLANG_LICENSE = Apache-2.0
-> +ERLANG_LICENSE_FILES = LICENSE.txt
->  ERLANG_INSTALL_STAGING = YES
->  
->  # Touching erts/configure.in
+>>  define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+>> -     mkdir -p $(TARGET_DIR)/lib/firmware
+>> +     mkdir -p $(TARGET_DIR)/lib/firmware/imx
+>>       for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+>>               cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
+>>       done
+>> +     cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx; \
+>
+> The ; \ is not needed.
+>
+>> +     mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+>> +        $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw;
+>
+> The final is not needed.
+>
+> Also, this rename is a bit weird, maybe a comment would have been good.
 
-Since you removed the patch touching erts/configure.in you should remove/update
-this comment here.
+I agree, my guess is that the driver is looking for the .fw file but
+the package includes this strange .nonrestricted extension. So I just
+copied what was done in the Yocto package.
 
-> @@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
-
-I guess autoreconf is still needed here since erts/aclocal.m4 is patched by
-0002-erts-ethread-instruct-libatomic_ops-we-do-require-CA.patch
-
-Best regards,
-Romain
-
->  
->  # Whenever updating Erlang, this value should be updated as well, to the
->  # value of EI_VSN in the file lib/erl_interface/vsn.mk
-> -ERLANG_EI_VSN = 3.7.20
-> +ERLANG_EI_VSN = 3.8.1
->  
->  # The configure checks for these functions fail incorrectly
->  ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
-> 
+Regards,
+Gary
