@@ -1,50 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 21:26:45 +0100
-Subject: [Buildroot] [git commit] configs/raspberrypi: add dtb for compute
-	module
-Message-ID: <20160201224712.3322E7F8C1@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 19:32:42 +0100
+Subject: [Buildroot] [git commit] libunwind: fix C library dependency
+Message-ID: <20160201224713.117767F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dbc3c30a26aab71ddc10867c81b25efd2dd1e23
+commit: https://git.buildroot.net/buildroot/commit/?id=1da65232ecd211cd3e55adfdc8b2fbf0cf27af90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: describe what 'CM' stands for, update comment]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The libunwind package currently dependency on glibc *or* uclibc
+snapshot. However, we are going to remove the support for uclibc
+snapshot, and uClibc-ng has equivalent functionality as uclibc
+snapshot. Moreover, musl is also capable of building libunwind for
+certain architectures.
+
+Therefore, this commit reworks the architecture dependencies of
+libunwind, to make it available on all architectures for which it is
+supported, depending on the capabilities of the different C libraries,
+and the implementation of libunwind on each architecture.
+
+On some architectures, libunwind uses the C library *context()
+functions, which are not provided by musl at all, and not provided by
+uClibc on all architectures. But on some other architectures,
+libunwind does not use the C library *context() functions, which
+explains why it can be built with musl on such architectures.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage-raspberrypi.cfg | 1 +
- configs/raspberrypi_defconfig              | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libunwind/Config.in | 31 ++++++++++++++++++++++++-------
+ 1 file changed, 24 insertions(+), 7 deletions(-)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi.cfg b/board/raspberrypi/genimage-raspberrypi.cfg
-index 45be4d0..74758f5 100644
---- a/board/raspberrypi/genimage-raspberrypi.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi.cfg
-@@ -3,6 +3,7 @@ image boot.vfat {
-     files = {
-       "bcm2708-rpi-b.dtb",
-       "bcm2708-rpi-b-plus.dtb",
-+      "bcm2708-rpi-cm.dtb",
-       "rpi-firmware/bootcode.bin",
-       "rpi-firmware/cmdline.txt",
-       "rpi-firmware/config.txt",
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 98e6ae3..a6db191 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -19,9 +19,9 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d33d0293e245badc4ca6ede3984d8bb8ea63cb1a"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/package/libunwind/Config.in b/package/libunwind/Config.in
+index 85cb472..593172f 100644
+--- a/package/libunwind/Config.in
++++ b/package/libunwind/Config.in
+@@ -1,15 +1,32 @@
++# libunwind is only available for a certain subset of the
++# architectures (as visible in the list of architectures supported
++# with the glibc C library below).
++#
++# In addition to this, on some architectures libunwind requires the
++# *context() function from the C library, which are only available on
++# certain architectures in uClibc, and not available at all on
++# musl. But on some other architectures, libunwind works without using
++# the *context() functions, which allows it to be built with musl.
++config BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
++	bool
++	default y if BR2_TOOLCHAIN_USES_GLIBC && \
++		(BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
++		 BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64)
++	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || \
++		 BR2_mips64 || BR2_mips64el || BR2_x86_64)
++	default y if BR2_TOOLCHAIN_USES_MUSL && \
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64)
++
+ config BR2_PACKAGE_LIBUNWIND
+ 	bool "libunwind"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on (BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC) # {g,s}etcontext
+-	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
+ 	help
+ 	  C API to determine the call-chain of a program.
  
--# Build the DTBs for A/B and A+/B+ from the kernel sources
-+# Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus bcm2708-rpi-cm"
+ 	  http://www.nongnu.org/libunwind/index.html
  
- BR2_PACKAGE_RPI_FIRMWARE=y
- # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+-comment "libunwind needs a uclibc snapshot or (e)glibc toolchain w/ threads"
+-	depends on BR2_arm || BR2_armeb || BR2_mips || BR2_mipsel || BR2_mips64 || \
+-		BR2_mips64el || BR2_powerpc || BR2_sh || BR2_sh64 || BR2_i386 || BR2_x86_64
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !(BR2_UCLIBC_VERSION_SNAPSHOT || BR2_TOOLCHAIN_USES_GLIBC)
++comment "libunwind needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
