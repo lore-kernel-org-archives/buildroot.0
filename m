@@ -1,44 +1,30 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 19:19:41 +0100
-Subject: [Buildroot] [PATCH] gitignore: ignore vim temporary files
-In-Reply-To: <1454336730-18001-1-git-send-email-s.martin49@gmail.com>
-References: <1454336730-18001-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <56AFA1BD.4000600@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 19:20:32 +0100
+Subject: [Buildroot] [PATCH 1/2] configs: qemu_arm_vexpress: enable vfp
+In-Reply-To: <1454348735-6337-1-git-send-email-romain.naour@gmail.com>
+References: <1454348735-6337-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <20160201192032.62ccf2fd@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-02-16 15:25, Samuel Martin wrote:
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Dear Romain Naour,
+
+On Mon,  1 Feb 2016 18:45:34 +0100, Romain Naour wrote:
+> In order to be abble to select BR2_ARM_FPU_VFPV3D16, BR2_ARM_ENABLE_VFP
+> must be selected first.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  .gitignore | 1 +
+>  configs/qemu_arm_vexpress_defconfig | 1 +
 >  1 file changed, 1 insertion(+)
-> 
-> diff --git a/.gitignore b/.gitignore
-> index bb02d9f..346b5df 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -13,3 +13,4 @@
->  *.rej
->  *~
->  *.pyc
-> +*.swp
-> 
 
- Actually, *.swp and *~ should be in the global excludes file which is
-configured with core.excludesfile. Otherwise there are probably a bunch of other
-patterns we could also add.
+Both applied, thanks.
 
- Regards,
- Arnout
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
