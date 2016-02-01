@@ -1,10 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:36 +0100
-Subject: [Buildroot] [PATCH 17/22] package/python-msgpack-python: new
-	package.
+Date: Mon,  1 Feb 2016 15:05:33 +0100
+Subject: [Buildroot] [PATCH 14/22] package/python-shutilwhich: new package.
 In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-18-git-send-email-mc5686@mclink.it>
+Message-ID: <1454335541-14224-15-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                                        |  1 +
- package/python-msgpack-python/Config.in                  |  8 ++++++++
- package/python-msgpack-python/python-msgpack-python.hash |  3 +++
- package/python-msgpack-python/python-msgpack-python.mk   | 15 +++++++++++++++
+ package/Config.in                                  |  1 +
+ package/python-shutilwhich/Config.in               |  8 ++++++++
+ package/python-shutilwhich/python-shutilwhich.hash |  3 +++
+ package/python-shutilwhich/python-shutilwhich.mk   | 15 +++++++++++++++
  4 files changed, 27 insertions(+)
- create mode 100644 package/python-msgpack-python/Config.in
- create mode 100644 package/python-msgpack-python/python-msgpack-python.hash
- create mode 100644 package/python-msgpack-python/python-msgpack-python.mk
+ create mode 100644 package/python-shutilwhich/Config.in
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 44a65d1..606dacc 100644
+index 8eac814..ffdba3b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -666,6 +666,7 @@ menu "External python modules"
- 	source "package/python-meld3/Config.in"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-msgpack/Config.in"
-+	source "package/python-msgpack-python/Config.in"
- 	source "package/python-netaddr/Config.in"
- 	source "package/python-netifaces/Config.in"
- 	source "package/python-networkmanager/Config.in"
-diff --git a/package/python-msgpack-python/Config.in b/package/python-msgpack-python/Config.in
+@@ -710,6 +710,7 @@ menu "External python modules"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-service-identity/Config.in"
+ 	source "package/python-setuptools/Config.in"
++	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
 new file mode 100644
-index 0000000..d101cee
+index 0000000..d610cfe
 --- /dev/null
-+++ b/package/python-msgpack-python/Config.in
++++ b/package/python-shutilwhich/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_MSGPACK_PYTHON
-+	bool "python-msgpack_python"
++config BR2_PACKAGE_PYTHON_SHUTILWHICH
++	bool "python-shutilwhich"
 +	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  MessagePack (de)serializer.
++	  shutil.which for those not using Python 3.3 yet.
 +
-+	  https://pypi.python.org/pypi/msgpack-python
++	  https://pypi.python.org/pypi/shutilwhich/
 +
-diff --git a/package/python-msgpack-python/python-msgpack-python.hash b/package/python-msgpack-python/python-msgpack-python.hash
+diff --git a/package/python-shutilwhich/python-shutilwhich.hash b/package/python-shutilwhich/python-shutilwhich.hash
 new file mode 100644
-index 0000000..77b8490
+index 0000000..a985b37
 --- /dev/null
-+++ b/package/python-msgpack-python/python-msgpack-python.hash
++++ b/package/python-shutilwhich/python-shutilwhich.hash
 @@ -0,0 +1,3 @@
 +# Locally computed.
-+md5	eb2aad1081534ef3a9f32a0ecd350b9b  msgpack-python-0.4.7.tar.gz
-+sha256	5e001229a54180a02dcdd59db23c9978351af55b1290c27bc549e381f43acd6b  msgpack-python-0.4.7.tar.gz
-diff --git a/package/python-msgpack-python/python-msgpack-python.mk b/package/python-msgpack-python/python-msgpack-python.mk
++md5	915947c5cdae7afd748ac715ee547adb  shutilwhich-1.1.0.tar.gz
++sha256	db1f39c6461e42f630fa617bb8c79090f7711c9ca493e615e43d0610ecb64dc6  shutilwhich-1.1.0.tar.gz
+diff --git a/package/python-shutilwhich/python-shutilwhich.mk b/package/python-shutilwhich/python-shutilwhich.mk
 new file mode 100644
-index 0000000..c05b1c5
+index 0000000..ac141c2
 --- /dev/null
-+++ b/package/python-msgpack-python/python-msgpack-python.mk
++++ b/package/python-shutilwhich/python-shutilwhich.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-msgpack-python
++# python-shutilwhich
 +#
 +################################################################################
 +
-+PYTHON_MSGPACK_PYTHON_VERSION = 0.4.7
-+PYTHON_MSGPACK_PYTHON_SOURCE = msgpack-python-$(PYTHON_MSGPACK_PYTHON_VERSION).tar.gz
-+PYTHON_MSGPACK_PYTHON_SITE = http://pypi.python.org/packages/source/m/msgpack-python
-+PYTHON_MSGPACK_PYTHON_LICENSE = Apache
-+#PYTHON_MSGPACK_PYTHON_LICENSE_FILES = LICENSE
-+PYTHON_MSGPACK_PYTHON_SETUP_TYPE = setuptools
-+#PYTHON_MSGPACK_PYTHON_DEPENDENCIES = 
++PYTHON_SHUTILWHICH_VERSION = 1.1.0
++PYTHON_SHUTILWHICH_SOURCE = shutilwhich-$(PYTHON_SHUTILWHICH_VERSION).tar.gz
++PYTHON_SHUTILWHICH_SITE = http://pypi.python.org/packages/source/s/shutilwhich
++PYTHON_SHUTILWHICH_LICENSE = MIT
++#PYTHON_SHUTILWHICH_LICENSE_FILES = LICENSE
++PYTHON_SHUTILWHICH_SETUP_TYPE = setuptools
++#PYTHON_SHUTILWHICH_DEPENDENCIES = 
 +
 +$(eval $(python-package))
 -- 
