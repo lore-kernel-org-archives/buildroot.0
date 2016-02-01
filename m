@@ -1,56 +1,56 @@
-From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Date: Mon,  1 Feb 2016 12:37:27 -0300
-Subject: [Buildroot] [PATCH] package: aespipe: add host variant
-Message-ID: <1454341047-14412-1-git-send-email-ariel@vanguardiasur.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 16:46:58 +0100
+Subject: [Buildroot] [PATCH v2 00/17] Rework atomic handling
+In-Reply-To: <20160201163806.33d566ba@pcviktorin.fit.vutbr.cz>
+References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160201144730.7ca660e9@pcviktorin.fit.vutbr.cz>
+ <20160201161926.3b2488f8@free-electrons.com>
+ <20160201163806.33d566ba@pcviktorin.fit.vutbr.cz>
+Message-ID: <20160201164658.054a0b8b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
----
- package/Config.in.host         |  1 +
- package/aespipe/Config.in.host | 10 ++++++++++
- package/aespipe/aespipe.mk     |  1 +
- 3 files changed, 12 insertions(+)
- create mode 100644 package/aespipe/Config.in.host
+Dear Jan Viktorin,
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 8e6b870..1c691a3 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+	source "package/aespipe/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/cramfs/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
-diff --git a/package/aespipe/Config.in.host b/package/aespipe/Config.in.host
-new file mode 100644
-index 0000000..29f6232
---- /dev/null
-+++ b/package/aespipe/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_AESPIPE
-+	bool "host aespipe"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  aespipe program is AES encrypting or decrypting pipe. It reads from
-+	  standard input and writes to standard output. It can be used to
-+	  create and restore encrypted tar or cpio archives. It can be used to
-+	  encrypt and decrypt loop-AES compatible encrypted disk images.
-+
-+	  http://koti.tnnet.fi/jari.ruusu/linux/
-diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-index a220688..c567092 100644
---- a/package/aespipe/aespipe.mk
-+++ b/package/aespipe/aespipe.mk
-@@ -10,3 +10,4 @@ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
- AESPIPE_LICENSE = GPL
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+On Mon, 1 Feb 2016 16:38:06 +0100, Jan Viktorin wrote:
+
+> > Ah, so you're doing some Microblaze stuff? If so, some help would
+> > definitely be welcome to maintain this platform.
+> 
+> Unfortunately, this is just a single test on MicroBlaze after quite a
+> long time. We've moved on to Zynq...
+
+Still you are our (only?) Microblaze user, so on you falls the
+responsibility of improving the Microblaze support :-)
+
+> So, this the source of my confusion. Yes, I thought that libatomic and
+> libatomic_ops are related or same as I couldn't find libatomic anywhere in the
+> Buildroot. Thanks for clarification.
+
+OK. However, still you have a point: it seems like libatomic_ops can
+use atomic built-ins from the compiler, so we should be able to enable
+its support on more architectures than what we have today.
+
+> If I have a library that links with __atomic_* calls I just need to
+> link with libatomic when building for MicroBlaze, is that correct?
+
+As long as you have >= gcc 4.7, you can link with -latomic and you'll
+get the __atomic built-ins. See my table in PATCH 1 of this series. For
+Microblaze, it says:
+
+Microblaze     -  -  Y  -    L  L  Y  L   4.9
+
+Which means that the __atomic functions for 4-byte types are built-in
+(no need for -latomic). However, for 1-byte, 2-byte and 8-byte types,
+-latomic is needed.
+
+Best regards,
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
