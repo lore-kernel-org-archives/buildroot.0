@@ -1,81 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 19:32:42 +0100
-Subject: [Buildroot] [git commit] mongrel2: allow using uClibc but only on
-	certain architectures
-Message-ID: <20160201224700.A52CD7F8D4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 21:46:08 +0100
+Subject: [Buildroot] [git commit] firmware-imx: bump to version 5.2
+Message-ID: <20160201224700.E22687FAE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9c26b1ffc0907483d2743b644999d9d505a01a8
+commit: https://git.buildroot.net/buildroot/commit/?id=923155df19718cff1683022aca445ac37399795a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mongrel2 uses the {get,make,swap}context functions:
+Use a different versioning schema based on package versioning
+instead of BSP version. This way, if a new BSP version does
+not bump this package, we can keep this package unchanged as well.
 
- - With glibc, no problem, they are available on all supported
-   architectures
+VPU firmware upgraded to v3.1.1_r46067
+- Low Latency fixes for H.264 encoder
+- Wrong frame number fix for H.264 decoder
+- Decode failure fix for H.264 decoder with multi-SPS/PPS headers
 
- - With uClibc, they are available only on a subset of the
-   architectures. Until now, only BR2_UCLIBC_VERSION_SNAPSHOT
-   configurations were allowed to select mongrel2, but we are going to
-   get rid of the uClibc snapshot version, and uClibc-ng is as capable
-   as the uClibc snapshot. However, only certain architectures have
-   the *context() functions.
+The package adds the EPDC waveforms and the needed changes to properly
+install those were done in the firmware-imx.mk file.
 
- - With musl, there is no *context() support.
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/d869826
+https://github.com/Freescale/meta-fsl-arm/commit/075a5b1
 
-Since this dependency is quite complicated, we introduce a
-BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS hidden boolean to encode which C
-libraries are supported.
+This package has been implicitely tested through gstreamer as the
+plugins rely on them for vpu decoding for instance:
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
 
-Also, listing the supported uClibc architectures would be too long in
-the comment, so we simply indicate that the package needs uClibc or
-glibc.
-
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+[Thomas:
+ - fix typo in commit logs
+ - remove ; \ and ; at the end of commands, since they were not
+   needed.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongrel2/Config.in | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 9 ++++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
-index 1c7b495..49dd6fd 100644
---- a/package/mongrel2/Config.in
-+++ b/package/mongrel2/Config.in
-@@ -1,10 +1,16 @@
--comment "mongrel2 needs a toolchain w/ C++, threads, wchar, dynamic library"
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
--		BR2_TOOLCHAIN_USES_GLIBC || \
--		BR2_arm
-+# mongrel2 uses {get,make,swap}context() functions, which are
-+# available in glibc for all architectures and in uClibc only for a
-+# subset of the architectures
-+config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
-+	bool
-+	default y if BR2_TOOLCHAIN_USES_GLIBC
-+	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
-+		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_x86_64)
-+
-+comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || !BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index 0b89c4b..06d5a54 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256 1f09acd4d605efc78a0672068a658cb16274811d2f444cf3ae7aaa075266746f  firmware-imx-3.14.28-1.0.0.bin
++sha256 8cc2df128c0e2d2f5224d73389fbe6e4d6fa9ede76f8c0a9adaf7ec0986d0f1f  firmware-imx-5.2.bin
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 9cab5c2..7e6f0e9 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MONGREL2
- 	bool "mongrel2"
-@@ -14,11 +20,7 @@ config BR2_PACKAGE_MONGREL2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
- 	depends on BR2_USE_WCHAR # zeromq -> util-linux
- 	depends on !BR2_STATIC_LIBS # uses dlopen()
--	# {get,make,swap}context functions present in
--	# {e,}glibc and in uClibc's master branch. Source has arm workaround
--	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
--		BR2_TOOLCHAIN_USES_GLIBC || \
--		BR2_arm
-+	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
- 	help
- 	  Mongrel2 is an application, language, and network architecture
- 	  agnostic web server that focuses on web applications using
+-FIRMWARE_IMX_VERSION = $(FREESCALE_IMX_VERSION)
++FIRMWARE_IMX_VERSION = 5.2
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
+@@ -13,17 +13,20 @@ FIRMWARE_IMX_LICENSE = Freescale Semiconductor Software License Agreement, \
+ FIRMWARE_IMX_LICENSE_FILES = EULA COPYING
+ FIRMWARE_IMX_REDISTRIBUTE = NO
+ 
+-FIRMWARE_IMX_BLOBS = ath6k sdma vpu
++FIRMWARE_IMX_BLOBS = sdma vpu
+ 
+ define FIRMWARE_IMX_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(FIRMWARE_IMX_SOURCE))
+ endef
+ 
+ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/lib/firmware
++	mkdir -p $(TARGET_DIR)/lib/firmware/imx
+ 	for blobdir in $(FIRMWARE_IMX_BLOBS); do \
+ 		cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
+ 	done
++	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
++	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
++	   $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+ endef
+ 
+ $(eval $(generic-package))
