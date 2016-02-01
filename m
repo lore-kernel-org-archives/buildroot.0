@@ -1,72 +1,38 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 19:17:26 +0100
-Subject: [Buildroot] crontab: can't change directory to
- '/var/spool/cron/crontabs': No such file or directory
-In-Reply-To: <87twlxmkfn.fsf@dell.be.48ers.dk>
-References: <1454000577.4304.27.camel@synopsys.com>
- <87twlxmkfn.fsf@dell.be.48ers.dk>
-Message-ID: <56AFA136.8030707@mind.be>
+Date: Mon, 1 Feb 2016 19:19:41 +0100
+Subject: [Buildroot] [PATCH] gitignore: ignore vim temporary files
+In-Reply-To: <1454336730-18001-1-git-send-email-s.martin49@gmail.com>
+References: <1454336730-18001-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <56AFA1BD.4000600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 28-01-16 23:02, Peter Korsgaard wrote:
->>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+On 01-02-16 15:25, Samuel Martin wrote:
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+>  .gitignore | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->  > Hello,
->  > Just noticed this:
->  ------------------> 8-------------------
->  > # crontab -e
->  > crontab: can't change directory to '/var/spool/cron/crontabs': No such file or directory
->  ------------------> 8-------------------
+> diff --git a/.gitignore b/.gitignore
+> index bb02d9f..346b5df 100644
+> --- a/.gitignore
+> +++ b/.gitignore
+> @@ -13,3 +13,4 @@
+>  *.rej
+>  *~
+>  *.pyc
+> +*.swp
 > 
->  > Obvious solution is:
->  ------------------> 8-------------------
->  > # mkdir -p /var/spool/cron/crontabs
->  ------------------> 8-------------------
-> 
->  > But the question is if we want that to be done automatically and if
->  > we do want how (read "where") to do it properly?
-> 
-> Yes, the problem is also how should this work together with a readonly
-> rootfs? Our default skeleton has /var/spool as a symlink to /tmp/, so we
-> cannot add /var/spool/cron/crontabs at build time (unless we change the
-> skeleton).
 
- I think it's a mistake that we have /var/spool as a symlink to /tmp. /var/spool
-shouldn't contain any files directly. So instead, I think any package that needs
-a /var/spool directory should create it either as a directory or as a symlink.
-In the particular case of crontab, that should probably be a directory, not a
-symlink, since it doesn't make much sense to have crontab files non-persistent.
-
- In fact, dcron does create $(TARGET_DIR)/var/spool/cron/crontabs - which is
-silly of course since it will just create a directory in /tmp and the tmpfs will
-be mounted over it.
-
- Of course, changing this may break other packages, probably at runtime only.
-The following packages are currently referring to /var/spool from buildroot, but
-there are probably a few others (including busybox) that refer to it from their
-own Makefiles:
-at boa busybox dcron dcron exim leafnode2 mutt smstools3
-
+ Actually, *.swp and *~ should be in the global excludes file which is
+configured with core.excludesfile. Otherwise there are probably a bunch of other
+patterns we could also add.
 
  Regards,
  Arnout
-
-> 
-> What I have done in the past is simply to do it in an init script,
-> E.G. something like:
-> 
-> 
-> # /var/spool is link to /tmp => crontabs are not persistent over boot
-> mkdir -p /var/spool/cron/crontabs
-> cp /root/crontab /var/spool/cron/crontabs/root
-> start-stop-daemon -S -q -p /var/run/crond.pid --exec /usr/sbin/crond -- -l 9
-> 
-> But that isn't very generic.
-> 
 
 
 -- 
