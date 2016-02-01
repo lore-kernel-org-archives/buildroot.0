@@ -1,74 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 12:19:02 +0100
-Subject: [Buildroot] [PATCH 3/7] croosbar moved to buildroot.
-In-Reply-To: <56AF1D2B.30202@mclink.it>
-References: <1454289936-10654-1-git-send-email-mc5686@mclink.it>
- <1454289936-10654-4-git-send-email-mc5686@mclink.it>
- <20160201082407.477cff7d@free-electrons.com>
- <56AF1D2B.30202@mclink.it>
-Message-ID: <20160201121902.0c13ce7b@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 1 Feb 2016 12:22:49 +0100
+Subject: [Buildroot] [PATCH 03/16 v3] core/pkg-utils: add macro to
+ hardlink-or-copy
+In-Reply-To: <56AF2FE6.1060206@lucaceresoli.net>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <496a4dbb0c7e2bfd0be8726e3d8a2aab4f1d830d.1454004518.git.yann.morin.1998@free.fr>
+ <56AE8E21.4020904@mind.be> <56AF2FE6.1060206@lucaceresoli.net>
+Message-ID: <56AF4009.1010503@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mauro,
-
-Please don't reply to me directly: keep the list in Cc so that everyone
-can participate to the discussion, and the discussion benefits to
-everyone. Also, please don't top-post, this is considered bad practice.
-
-On Mon, 1 Feb 2016 09:54:03 +0100, Mauro Condarelli wrote:
-
-> I am a bit confused.
-> I tried to follow instructions in manual, but apparently I failed to fully understand them.
-> I currently have a "personal" branch where I'm developing (part of a full installation where I'm developing my RootFilesystem for a real platform).
-> What I sent are the diffs after a rebase and they reflect exactly what I submitted in the past days (of course).
-> How should I prepare patches for the list?
-
-The patches we want to see must be organized in a certain way (one
-patch per new package, one patch for each logical change, etc.). Of
-course, while you're doing your developing, you're probably going back
-and forth between packages, and certainly not committing things
-immediately in a way that is "clean" enough for submission.
-
-So while all developers do for multi-patches series, they rewrite the
-history of commits to produce a "clean" set of commits that is
-appropriate for submission.
-
-To do this, you need to use "interactive rebasing". You can learn about
-it https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History.
-
-> The only way I see to separate in a logical order would be:
+On 01-02-16 11:13, Luca Ceresoli wrote:
+> Hi,
 > 
-> 1) clone a buildroot (master) in a separate subdir.
-> 2) hand apply changes needed for a single package.
-> 3) generate patches.
-> 4) checkout "origin/master" (discarding changes)
-> 5) go back to (2) for next package.
+> Arnout Vandecappelle wrote:
+>> On 28-01-16 19:15, Yann E. MORIN wrote:
+>>> This macro will try to copy a source file into a destination fdirectory,
+>>> by first atempting a hard-link, and falling back to a plain copy.
+>>>
+>>> In some situations, it will be necessary that the destination file is
+>>> named differently than the source (e.g. due to a re-numbering), so if a
+>>> third argument is specified, it is treated as the basename of the
+>>> destination file.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+>>>
+>>> ---
+>>> Changes v2 -> v3;
+>>>    - use "ln" instead of "cp -l"
+>>>    - accept third argument, as the basename of the destination file
+>>>    - drop reviewed-by and tested-by tags given in v2, due to the above
+>>>      two changes
+>>>
+>>> Changes RFC -> v1:
+>>>    - move to pkg-utils  (Luca)
+>>> ---
+>>>   package/pkg-utils.mk | 25 +++++++++++++++++++++++++
+>>>   1 file changed, 25 insertions(+)
+>>>
+>>> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+>>> index 44bd2c9..6479cd8 100644
+>>> --- a/package/pkg-utils.mk
+>>> +++ b/package/pkg-utils.mk
+>>> @@ -113,6 +113,31 @@ $$(error Package error: use $(2) instead of $(1). Please
+>>> fix your .mk file)
+>>>   endif
+>>>   endef
+>>>
+>>> +################################################################################
+>>>
+>>> +# hardlink-copy -- hardlink source and destination if possible, otherwise
+>>> +# do a simple copy
+>>> +#
+>>> +# argument 1 is the source *file*
+>>> +# argument 2 is the destination *directory*
+>>> +# argument 3 is the basename of the destination file (optional, defaults to
+>>> +#            the basename of the source file.
+>>> +#
+>>> +# examples:
+>>> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir/)
+>>> +#   $(call
+>>> hardlink-copy,/path/to/source/file,/path/to/destination/dir/,new-name)
+>>> +#
+>>> +# Note: we make that a single command, so se can:
+>>> +#  - use '$(Q)' in front of it and properly silence the whole macro,
+>>> +#  - use '|| exit 1' after it, so we can exit on error in compound commands.
+>>> +################################################################################
+>>>
+>>> +define hardlink-copy
+>>> +    { mkdir -p $(2) && \
+>>> +        { ln $(1) $(2)$(if $(3),/$(strip $(3))) 2>/dev/null || \
+>>
+>>   Shouldn't this be ln -f (and maybe cp -f) to make sure it behaves the same when
+>> you run it a second time?
 > 
-> Is this the right way or do You have some better advice?
-> Notice that with the above schema  I will not be able to try compiling (at least some) packages
-> as they are not independent (e.g.: crossbar needs  *all* those patches to compile).
+> Indeed it's true. Not an issue for 'make legal-info' since it wipes the
+> output dir before copying file in it, but the macro is generic so it
+> has to handle this case.
+> 
+> This definitely applies to ln. cp normally doesn't need it, but it does
+> not hurt.
 
-See above: use the interactive rebase functionality of Git.
+ With -f, cp will indeed only unlink if it can't write; if the target is a
+symlink, it will still not remove the symlink but instead it will overwrite the
+file pointed to. So an explicit rm -f is probably better.
 
-One hint: for your big patch that adds all the packages, what you want
-to do is:
+ Regards,
+ Arnout
 
- 1/ Mark the patch as "edit" in your interactive rebase session
- 2/ Git will stop at this patch
+> 
 
- 3/ Use "git reset HEAD^" to de-apply the commit and put the changes
-    back into your working tree
 
- 4/ Create new commits.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
