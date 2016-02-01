@@ -1,38 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:20:39 +0100
-Subject: [Buildroot] [PATCH 2/4] website: add reference to
- submitting-patches to Contribute tab
-In-Reply-To: <1454348717-4711-3-git-send-email-arnout@mind.be>
-References: <1454348717-4711-1-git-send-email-arnout@mind.be>
- <1454348717-4711-3-git-send-email-arnout@mind.be>
-Message-ID: <20160201192039.1e2804d7@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2016 19:23:25 +0100
+Subject: [Buildroot] [PATCH v2 0/8] Remove uClibc version selection:
+	always use uClibc-ng
+In-Reply-To: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 27 Jan 2016 22:25:22 +0100")
+References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87wpqob882.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Mon, 1 Feb 2016 18:45:15 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> In the hope of improving the quality of patches send by newcomers,
-> add a reference to the submitting-patches section of the manual
-> to the Contribute tab of the website.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
-> Warning: I haven't been able to test this with the full website js and
-> css, just with file:///.../docs/website/contribute.html. But I think it
-> should be OK :-)
-> ---
->  docs/website/contribute.html | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+ > Hello,
+ > Since April 2015, the uClibc-ng has done very regular releases of the
+ > uClibc C library, and is the de-facto active replacement of the now
+ > defunct uClibc project.
 
-Applied, thanks.
+ > uClibc 0.9.33 is going to be 4 years old in the coming months, and we
+ > already need 50+ patches to make it somewhat usable.
 
-Thomas
+ > It is therefore time to simply offer uClibc-ng as our only supported
+ > uClibc version, and remove the options of using uClibc 0.9.33 and
+ > uClibc-snapshot. To achieve this, this patch series:
+
+Committed entire series, thanks!
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
