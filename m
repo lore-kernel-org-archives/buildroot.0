@@ -1,41 +1,69 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  1 Feb 2016 10:38:47 -0300
-Subject: [Buildroot] [PATCH v2] strongswan: unavailable for static builds
-Message-ID: <1454333927-16439-1-git-send-email-gustavo@zacarias.com.ar>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  1 Feb 2016 14:40:16 +0100
+Subject: [Buildroot] [PATCH v2 1/2] toolchain-external: add a check for
+	unsupported toolchains
+Message-ID: <1454334017-12326-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Uses dlopen in plugin_loader (not optional), fixes:
-http://autobuild.buildroot.net/results/601/601d8dc1654d8733db49b195139e12437663034c/
+Some toolchain can't be used by Buildroot due to sysroot location
+issue, so the $(ARCH)-linux-gnu-gcc -print-file-name=libc.a command
+return only "libc.a"
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This lead to an error during the header check version helper,
+so these toolchains can't be imported into Buildroot.
+
+cc1: fatal error: $PWD/libc.a/usr/include/linux/version.h: No such file or directory
+compilation terminated.
+support/scripts/check-kernel-headers.sh: line 38: /tmp/check-headers.4V5PPF: Permission denied
+
+This issue happen with the first linaro 2015.11 [1] release and
+CodeSourcery standard edition [2].
+
+Here is the sysroot directory tree for linaro 2015.11:
+$ ls libc/arm-linux-gnueabihf
+etc  lib  sbin  usr  var
+
+Here is the sysroot directory tree for CodeSourcery standard:
+$ ls libc/sgxx-glibc
+etc  lib  lib64  sbin  usr  var
+
+Usually the sysroot is located directly under libc directory
+$ ls libc/
+etc  lib  sbin  usr  var
+
+Add a check to error out with an explicit error message
+
+[1] https://bugs.linaro.org/show_bug.cgi?id=1995#c7
+[2] http://lists.busybox.net/pipermail/buildroot/2014-October/110696.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
-v2: rebase on master
+v2: move the check to check_unusable_toolchain helper
+    use unsupported toolchain instead of broken toolchains (ThomasP)
+---
+ toolchain/helpers.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- package/strongswan/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index fca4934..ff8dd06 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -1,11 +1,12 @@
--comment "strongswan needs a toolchain w/ threads"
-+comment "strongswan needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 02cc0bb..fd99efe 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -418,6 +418,11 @@ check_unusable_toolchain = \
+ 		echo "and contain a lot of pre-built libraries that would conflict with"; \
+ 		echo "the ones Buildroot wants to build."; \
+ 		exit 1; \
++	fi; \
++	non_existent_sysroot=`$${__CROSS_CC} -print-file-name=libc.a` ; \
++	if test "$${non_existent_sysroot}" = "libc.a" ; then \
++		echo "Unable to detect the toolchain sysroot, Buildroot cannot handle this toolchain." ; \
++		exit 1 ; \
+ 	fi
  
- menuconfig BR2_PACKAGE_STRONGSWAN
- 	bool "strongswan"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  strongSwan is an OpenSource IPsec implementation for the
- 	  Linux operating system. It is based on the discontinued
+ #
 -- 
-2.4.10
+2.4.3
