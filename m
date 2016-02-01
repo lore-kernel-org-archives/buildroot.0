@@ -1,83 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 22:17:47 +0100
-Subject: [Buildroot] [PATCH 08/10] libimxvpuapi: add new package
-In-Reply-To: <CAAMH-yscefcieOucmeT2ZpuqG44LBYvKha9VV93=wN_KJCBh-A@mail.gmail.com>
-References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454154357-31625-9-git-send-email-gary.bisson@boundarydevices.com>
- <20160201214218.3eb39852@free-electrons.com>
- <CAAMH-yscefcieOucmeT2ZpuqG44LBYvKha9VV93=wN_KJCBh-A@mail.gmail.com>
-Message-ID: <20160201221747.761bb1c0@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2016 22:18:40 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/gstreamer/gst-plugins-base:
+	Fix build on x86 if emmintrin.h is available but can't be used
+In-Reply-To: <1454177927-13601-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 30 Jan 2016 19:18:47 +0100")
+References: <1454177927-13601-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87y4b49ljj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Mon, 1 Feb 2016 22:07:35 +0100, Gary Bisson wrote:
+ > I stumbled across this error using a musl-based allyesconfig but I
+ > doubt it is related to musl. The autobuilders did not catch this
+ > problem yet but the patch I found fits my config (BR2_i386=y,
+ > BR2_x86_i586=y) and it solved the problem right away.
 
-> >> diff --git a/package/Config.in b/package/Config.in
-> >> index 09c2b40..d3e5e30 100644
-> >> --- a/package/Config.in
-> >> +++ b/package/Config.in
-> >> @@ -1033,6 +1033,7 @@ menu "Multimedia"
-> >>       source "package/libfslparser/Config.in"
-> >>       source "package/libfslvpuwrap/Config.in"
-> >>       source "package/libhdhomerun/Config.in"
-> >> +     source "package/libimxvpuapi/Config.in"
-> >
-> > Why isn't it part of the package/freescale/ directory ? Because it
-> > isn't sourced from the same site ?
-> 
-> No actually my thought process was that this package is the equivalent
-> of libfslvpuwrap which, for some reason, isn't part of the
-> freescale-imx folder. Not sure why, I'm sure there's an historical
-> reason behind it.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: used GST_PLUGINS_BASE_PATCH instead of including the patch file
+ >     (Thomas)
 
-The main reason to have a sub-folder is to be able to share variables,
-such as _VERSION and _SITE. So if they are not shared with your
-package, there's indeed little reason to have it under
-package/freescale-imx/.
+ >  package/gstreamer/gst-plugins-base/gst-plugins-base.hash | 2 ++
+ >  package/gstreamer/gst-plugins-base/gst-plugins-base.mk   | 2 ++
+ >  2 files changed, 4 insertions(+)
 
-Now, the question is where it should appear in the menuconfig. I don't
-have a strong opinion here, but if libfslvpuwrap is in Multimedia, then
-I think your choice is OK. And indeed, libfslvpuwrap also selects
-BR2_PACKAGE_FREESCALE_IMX and BR2_PACKAGE_IMX_VPU, so let's do the same
-for your package.
+ > diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.hash b/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
+ > index 77eba71..7c691f3 100644
+ > --- a/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
+ > +++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.hash
+ > @@ -1,2 +1,4 @@
+ >  # From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-0.10.36.tar.xz.md5
+ >  md5	3d2337841b132fe996e5eb2396ac9438	gst-plugins-base-0.10.36.tar.xz
+ > +# Locally computed
+ > +sha256	2c509252f103847a85c4a64d1d4519ab521d8f0021400cc7ebcf725fc5584a0d	sse.patch
+> diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+ > index e1374ed..902ee05 100644
+ > --- a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+ > +++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
+ > @@ -7,6 +7,8 @@
+ >  GST_PLUGINS_BASE_VERSION = 0.10.36
+ >  GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.xz
+ >  GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ > +GST_PLUGINS_BASE_PATCH = \
+ > +	http://git.alpinelinux.org/cgit/aports/plain/main/gst-plugins-base0.10/sse.patch
 
+Thanks, but I'm not too happy about these git.alphinelinux.org
+downloads as:
 
-> >> +LIBIMXVPUAPI_VERSION = 0.10.1
-> >> +LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
-> >> +LIBIMXVPUAPI_LICENSE = LGPLv2.1
-> >
-> > License seems to be LGPLv2.1+.
-> 
-> The LICENSE file says LGPLv2.1 but indeed the source code headers
-> state the LGPLv2.1+. Who wins then?
-> https://github.com/Freescale/libimxvpuapi/blob/master/imxvpuapi/imxvpuapi_jpeg.c#L7
-> https://github.com/Freescale/libimxvpuapi/blob/master/LICENSE
+- We have no guarantees that the URL stays valid (E.G. doesn't specify
+  any git version).
 
-It's not a question of who wins. All software under GPLvX+ or LGPLvX+
-will have the license text of GPLvX or LGPLvX in its COPYING/LICENSE
-file. It doesn't change the fact that the source is distributed under
-GPLvX+ / LGPLvX+, which means that the recipient can chose either GPLvX
-or any later version of the GPL (ditto LGPLvX).
+- The filename is very generic (sse.patch), so we end up with that on
+  sources.buildroot.net and basically have to keep it "forever".
 
-> > Also, you forgot to include a hash file. Could you fix those issues and
-> > send an updated version?
-> 
-> I might have missed an update, are we providing hash even for Github
-> projects now?
+As these patches are very small and already in upstream git I have
+instead picked them (it turned out the alphinelinux patch was a squash
+of two commits) from the upstream git repo and added them in buildroot.
 
-As explained on IRC, Github changed the way they generate tarballs, and
-they now seem to generate stable tarballs (i.e tarballs that have the
-exact same contents for a given tag/commit of a given project).
+Committed with that fixed, thanks.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
