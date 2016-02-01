@@ -1,54 +1,40 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 1 Feb 2016 21:56:25 +0100
-Subject: [Buildroot] [PATCH 01/10] firmware-imx: bump to version 5.2
-In-Reply-To: <20160201213903.04cdc5be@free-electrons.com>
-References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454154357-31625-2-git-send-email-gary.bisson@boundarydevices.com>
- <20160201213903.04cdc5be@free-electrons.com>
-Message-ID: <CAAMH-yvoH3CgZ7B=EGuP-juf9XLHvYC-4goUE+6moZCDUbbPUg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 21:53:20 +0100
+Subject: [Buildroot] [PATCH 0/4] Update Freescale graphics packages
+In-Reply-To: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <20160201215320.243090d9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Gary,
 
-On Mon, Feb 1, 2016 at 9:39 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Gary Bisson,
->
-> On Sat, 30 Jan 2016 12:45:48 +0100, Gary Bisson wrote:
->
->> The package adds the EPDC waveforms and the needed changes to properly
->> install those were done in the firmware-imx.inc file.
->
-> I guess you wanted to say firmware-imx.mk. Maybe you've done too much
-> Yocto :-)
+On Mon,  1 Feb 2016 10:36:59 +0100, Gary Bisson wrote:
 
-Haha, no trust me I try not to. It's just a bad copy/paste from the
-Yocto commit log.
+> Gary Bisson (4):
+>   imx-gpu-viv: bump version to 5.0.11 p7.1
 
->>  define FIRMWARE_IMX_INSTALL_TARGET_CMDS
->> -     mkdir -p $(TARGET_DIR)/lib/firmware
->> +     mkdir -p $(TARGET_DIR)/lib/firmware/imx
->>       for blobdir in $(FIRMWARE_IMX_BLOBS); do \
->>               cp -r $(@D)/firmware/$${blobdir} $(TARGET_DIR)/lib/firmware; \
->>       done
->> +     cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx; \
->
-> The ; \ is not needed.
->
->> +     mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
->> +        $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw;
->
-> The final is not needed.
->
-> Also, this rename is a bit weird, maybe a comment would have been good.
+Applied.
 
-I agree, my guess is that the driver is looking for the .fw file but
-the package includes this strange .nonrestricted extension. So I just
-copied what was done in the Yocto package.
+>   xdriver_xf86-video-imx-viv: bump to version 5.0.11 p7.1
 
-Regards,
-Gary
+Applied.
+
+>   kernel-module-imx-gpu-viv: add new package
+
+I have comments on this one.
+
+>   configs/nitrogen6*: bump kernel version
+
+Applied.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
