@@ -1,40 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 17:07:37 +0100
-Subject: [Buildroot] [git commit] Revert "madplay: fix musl gettext support
-	detection"
-Message-ID: <20160201224701.2C0FC7F8D4@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 19:32:42 +0100
+Subject: [Buildroot] [git commit] mongrel2: allow using uClibc but only on
+	certain architectures
+Message-ID: <20160201224700.A52CD7F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28fc73efafe917e4a89c0eb6651555922ee0f4df
+commit: https://git.buildroot.net/buildroot/commit/?id=d9c26b1ffc0907483d2743b644999d9d505a01a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit a0a244d26d8e7e7e5465c3e6e9fcd1c31e2c178d.
+mongrel2 uses the {get,make,swap}context functions:
 
-As this is now handled globally in TARGET_CONFIGURE_ARGS, this can be
-reverted here.
+ - With glibc, no problem, they are available on all supported
+   architectures
 
+ - With uClibc, they are available only on a subset of the
+   architectures. Until now, only BR2_UCLIBC_VERSION_SNAPSHOT
+   configurations were allowed to select mongrel2, but we are going to
+   get rid of the uClibc snapshot version, and uClibc-ng is as capable
+   as the uClibc snapshot. However, only certain architectures have
+   the *context() functions.
+
+ - With musl, there is no *context() support.
+
+Since this dependency is quite complicated, we introduce a
+BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS hidden boolean to encode which C
+libraries are supported.
+
+Also, listing the supported uClibc architectures would be too long in
+the comment, so we simply indicate that the package needs uClibc or
+glibc.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/madplay/madplay.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/mongrel2/Config.in | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
-index 65ae4f7..2606ac8 100644
---- a/package/madplay/madplay.mk
-+++ b/package/madplay/madplay.mk
-@@ -11,11 +11,6 @@ MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
- MADPLAY_LIBTOOL_PATCH = NO
- MADPLAY_DEPENDENCIES = libmad libid3tag $(if $(BR2_PACKAGE_GETTEXT),gettext)
+diff --git a/package/mongrel2/Config.in b/package/mongrel2/Config.in
+index 1c7b495..49dd6fd 100644
+--- a/package/mongrel2/Config.in
++++ b/package/mongrel2/Config.in
+@@ -1,10 +1,16 @@
+-comment "mongrel2 needs a toolchain w/ C++, threads, wchar, dynamic library"
+-	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+-		BR2_TOOLCHAIN_USES_GLIBC || \
+-		BR2_arm
++# mongrel2 uses {get,make,swap}context() functions, which are
++# available in glibc for all architectures and in uClibc only for a
++# subset of the architectures
++config BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
++	bool
++	default y if BR2_TOOLCHAIN_USES_GLIBC
++	default y if BR2_TOOLCHAIN_USES_UCLIBC && \
++		(BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_x86_64)
++
++comment "mongrel2 needs a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
  
--# configure script misdetects musl gettext support
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--MADPLAY_CONF_ENV += gt_cv_func_gnugettext1_libc=yes
--endif
--
- # Check if ALSA is built, then we should configure after alsa-lib so
- # ./configure can find alsa-lib.
- ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+ config BR2_PACKAGE_MONGREL2
+ 	bool "mongrel2"
+@@ -14,11 +20,7 @@ config BR2_PACKAGE_MONGREL2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
+ 	depends on BR2_USE_WCHAR # zeromq -> util-linux
+ 	depends on !BR2_STATIC_LIBS # uses dlopen()
+-	# {get,make,swap}context functions present in
+-	# {e,}glibc and in uClibc's master branch. Source has arm workaround
+-	depends on BR2_UCLIBC_VERSION_SNAPSHOT || \
+-		BR2_TOOLCHAIN_USES_GLIBC || \
+-		BR2_arm
++	depends on BR2_PACKAGE_MONGREL2_LIBC_SUPPORTS
+ 	help
+ 	  Mongrel2 is an application, language, and network architecture
+ 	  agnostic web server that focuses on web applications using
