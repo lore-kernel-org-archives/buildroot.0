@@ -1,30 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 23:45:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-spidev: fix musl build
-In-Reply-To: <1454249378-439-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454249378-439-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160201234504.28b8824f@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Feb 2016 21:26:45 +0100
+Subject: [Buildroot] [git commit] rpi-firmware: version bump
+Message-ID: <20160201224700.252227F918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=38172747f8a6d2640dcd9290f7c2ef7e5ad8dd3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 31 Jan 2016 15:09:38 +0100, Bernd Kuhls wrote:
-> The build error was not yet being found by the autobuilders.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-Fix-build-with-musl-libc.patch            | 43 ++++++++++++++++++++++
->  1 file changed, 43 insertions(+)
->  create mode 100644 package/python-spidev/0001-Fix-build-with-musl-libc.patch
+To match the previous kernel version bump.
 
-Applied, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rpi-firmware/rpi-firmware.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 2436376..4b92a50 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = 52f65ac4ad1ef1d2838fa2f921d5bc3ece4c777b
++RPI_FIRMWARE_VERSION = 22d8c910f4c53118f9cf85c038d7d8e307efc110
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3c
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
