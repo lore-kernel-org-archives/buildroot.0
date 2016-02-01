@@ -1,73 +1,45 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  1 Feb 2016 23:19:55 +0100
-Subject: [Buildroot] [PATCH v2 4/5] docs/manual: add section about patch
+Date: Mon,  1 Feb 2016 23:19:54 +0100
+Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
 	licensing
 In-Reply-To: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
 References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1454365196-26319-5-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Several people have been asking what is the license of the patches
+provided by Buildroot. COPYING is the authoritative place to state it.
+
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-- "they modify" -> "they apply to" (Thomas).
+ - Rewrite it almost entirely (Arnout, Thomas).
 ---
- docs/manual/legal-notice.txt | 16 ++++++++++++++--
- docs/manual/patch-policy.txt |  2 +-
- 2 files changed, 15 insertions(+), 3 deletions(-)
+ COPYING | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-index 5895224..49c4965 100644
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -131,11 +131,13 @@ Buildroot, with the name used in the manifest files:
-   http://apache.org/licenses/LICENSE-2.0.html[
-   Apache License, version 2.0];
- 
-+[[legal-info-buildroot]]
- === Complying with the Buildroot license
- 
- Buildroot itself is an open source software, released under the
--http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General Public
--License, version 2] or (at your option) any later version.
-+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General
-+Public License, version 2] or (at your option) any later version, with
-+the exception of the package patches detailed below.
- However, being a build system, it is not normally part of the end product:
- if you develop the root filesystem, kernel, bootloader or toolchain for a
- device, the code of Buildroot is only present on the development machine, not
-@@ -156,3 +158,13 @@ material that must be redistributed.
- 
- Keep in mind that this is only the Buildroot developers' opinion, and you
- should consult your legal department or lawyer in case of any doubt.
+diff --git a/COPYING b/COPYING
+index d511905..3596777 100644
+--- a/COPYING
++++ b/COPYING
+@@ -1,3 +1,11 @@
++Except for the patches provided for packages, Buildroot is licensed
++under the GNU General Public License, version 2.
 +
-+==== Patches to packages
++Patches provided by Buildroot for packages are released under the same
++license as the software that they modify.
 +
-+Buildroot is bundled with a set of patches that it applies to packages
-+to fix cross-compilation or other issues. See xref:patch-policy[] for
-+the technical details.
++-----------------------------------------------------------------
 +
-+These patches are effectively a derived work of the upstream package,
-+and they are released under the same license as the software they
-+apply to. They are not distributed under the Buildroot license.
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index d50c971..fe432a7 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -91,7 +91,7 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
- === Format and licensing of the package patches
+ 		    GNU GENERAL PUBLIC LICENSE
+ 		       Version 2, June 1991
  
- Patches are released under the same license as the software they apply
--to.
-+to. (see xref:legal-info-buildroot[]).
- 
- A message explaining what the patch does, and why it is needed, should
- be added in the header commentary of the patch.
 -- 
 1.9.1
