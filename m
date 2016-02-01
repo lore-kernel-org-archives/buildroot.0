@@ -1,93 +1,39 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 1 Feb 2016 15:56:32 +0100
-Subject: [Buildroot] [PATCH 14/22] package/python-shutilwhich: new
-	package.
-In-Reply-To: <1454335541-14224-15-git-send-email-mc5686@mclink.it>
-References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
- <1454335541-14224-15-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kse7EW9CKiKuwcbefudO=f8V7rC9-0+U31N_vucmaJ+PQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  1 Feb 2016 11:57:26 -0300
+Subject: [Buildroot] [PATCH] linux: bump default to version 4.4.1
+Message-ID: <1454338646-30770-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                                  |  1 +
->  package/python-shutilwhich/Config.in               |  8 ++++++++
->  package/python-shutilwhich/python-shutilwhich.hash |  3 +++
->  package/python-shutilwhich/python-shutilwhich.mk   | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-shutilwhich/Config.in
->  create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
->  create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 8eac814..ffdba3b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -710,6 +710,7 @@ menu "External python modules"
->         source "package/python-serial/Config.in"
->         source "package/python-service-identity/Config.in"
->         source "package/python-setuptools/Config.in"
-> +       source "package/python-shutilwhich/Config.in"
->         source "package/python-simplejson/Config.in"
->         source "package/python-singledispatch/Config.in"
->         source "package/python-sip/Config.in"
-> diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
-> new file mode 100644
-> index 0000000..d610cfe
-> --- /dev/null
-> +++ b/package/python-shutilwhich/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_SHUTILWHICH
-> +       bool "python-shutilwhich"
-> +       depends on BR2_PACKAGE_PYTHON
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-this is correct, as it is a backport from Python 3.3. Just handle
-other stuff like MD5 sum, patch title etc.
-
-> +       help
-> +         shutil.which for those not using Python 3.3 yet.
-> +
-> +         https://pypi.python.org/pypi/shutilwhich/
-> +
-> diff --git a/package/python-shutilwhich/python-shutilwhich.hash b/package/python-shutilwhich/python-shutilwhich.hash
-> new file mode 100644
-> index 0000000..a985b37
-> --- /dev/null
-> +++ b/package/python-shutilwhich/python-shutilwhich.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed.
-> +md5    915947c5cdae7afd748ac715ee547adb  shutilwhich-1.1.0.tar.gz
-> +sha256 db1f39c6461e42f630fa617bb8c79090f7711c9ca493e615e43d0610ecb64dc6  shutilwhich-1.1.0.tar.gz
-> diff --git a/package/python-shutilwhich/python-shutilwhich.mk b/package/python-shutilwhich/python-shutilwhich.mk
-> new file mode 100644
-> index 0000000..ac141c2
-> --- /dev/null
-> +++ b/package/python-shutilwhich/python-shutilwhich.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-shutilwhich
-> +#
-> +################################################################################
-> +
-> +PYTHON_SHUTILWHICH_VERSION = 1.1.0
-> +PYTHON_SHUTILWHICH_SOURCE = shutilwhich-$(PYTHON_SHUTILWHICH_VERSION).tar.gz
-> +PYTHON_SHUTILWHICH_SITE = http://pypi.python.org/packages/source/s/shutilwhich
-> +PYTHON_SHUTILWHICH_LICENSE = MIT
-> +#PYTHON_SHUTILWHICH_LICENSE_FILES = LICENSE
-> +PYTHON_SHUTILWHICH_SETUP_TYPE = setuptools
-> +#PYTHON_SHUTILWHICH_DEPENDENCIES =
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/linux/Config.in b/linux/Config.in
+index 263f937..40d7844 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -27,7 +27,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.4"
++	bool "4.4.1"
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
+@@ -115,7 +115,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.4" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.4.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_DEFAULT_KERNEL_HEADERS if BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.4.10
