@@ -1,42 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:59:00 +0100
-Subject: [Buildroot] [git commit] vala: bump to version 0.30.1
-Message-ID: <20160201224700.342117F8D4@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 21:46:08 +0100
+Subject: [Buildroot] [git commit] libfslvpuwrap: bump to version 1.0.61
+Message-ID: <20160201224706.388687F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=093681947f6fe1d79b37f0190c7b914dc8bdae53
+commit: https://git.buildroot.net/buildroot/commit/?id=c353a7f763ad42ef7ca113a6deecec6f5df2379c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Changelog:
+- Enable resolution change for H.263 and VP8
+
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/f11936b
+
+This package has been implicitely tested through gstreamer as the
+plugins rely on it for vpu decoding:
+ # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libfslvpuwrap/libfslvpuwrap.hash | 2 +-
+ package/libfslvpuwrap/libfslvpuwrap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 633dfc0..8b16838 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.hash b/package/libfslvpuwrap/libfslvpuwrap.hash
+index e7ca1a8..8e6ba61 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.hash
++++ b/package/libfslvpuwrap/libfslvpuwrap.hash
 @@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.30/vala-0.#0.0.sha256sum
--sha256	61f0337b000f7ed6ef8c1fea87e0047d9bd7c0f91dd9c5b4eb70fd3fb883dedf	vala-0.30.0.tar.xz
-+# From https://download.gnome.org/sources/vala/0.30/vala-0.30.1.sha256sum
-+sha256	23add78e5c6a5e6df019d4a885c9c79814c9e0b957519ec8a4f4d826c4e5df2c	vala-0.30.1.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index a0a986c..56d4db3 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -5,7 +5,7 @@
+ # locally computed
+-sha256	a278eb18ec24230166ac39e2eadf7b934798f0432654c2e24c4cb69c3ac1cf0f  libfslvpuwrap-1.0.58.bin
++sha256	e4bfe218d17ec66acf8cd97d08fef8ef71ab6762d4c8cf0d0193eca5f599b4c9  libfslvpuwrap-1.0.61.bin
+diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
+index 7669c63..b3d6f0c 100644
+--- a/package/libfslvpuwrap/libfslvpuwrap.mk
++++ b/package/libfslvpuwrap/libfslvpuwrap.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- VALA_VERSION_MAJOR = 0.30
--VALA_VERSION = $(VALA_VERSION_MAJOR).0
-+VALA_VERSION = $(VALA_VERSION_MAJOR).1
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+-LIBFSLVPUWRAP_VERSION = 1.0.58
++LIBFSLVPUWRAP_VERSION = 1.0.61
+ LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
+ LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
