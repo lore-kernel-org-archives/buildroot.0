@@ -1,77 +1,46 @@
-From: Ludovic Guegan <ludovic.guegan@gmail.com>
-Date: Tue,  2 Feb 2016 00:31:05 +0100
-Subject: [Buildroot] [PATCH 8/8 RFC] package/bolt: add bolt package
-	(persistent key-value store)
-In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <1454369465-4804-9-git-send-email-ludovic.guegan@gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 2 Feb 2016 00:33:08 +0100
+Subject: [Buildroot] [PATCH 3/4] kernel-module-imx-gpu-viv: add new
+	package
+In-Reply-To: <87powg9l3e.fsf@dell.be.48ers.dk>
+References: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1454319423-13913-4-git-send-email-gary.bisson@boundarydevices.com>
+ <20160201215644.1e3d3713@free-electrons.com>
+ <87powg9l3e.fsf@dell.be.48ers.dk>
+Message-ID: <CAAMH-yvUWbgc=wPgqGKOeL+GD7joPFmv1v49TpEinE-eAb6nbg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
----
- package/Config.in      |  1 +
- package/bolt/Config.in |  7 +++++++
- package/bolt/bolt.hash |  1 +
- package/bolt/bolt.mk   | 13 +++++++++++++
- 4 files changed, 22 insertions(+)
- create mode 100644 package/bolt/Config.in
- create mode 100644 package/bolt/bolt.hash
- create mode 100644 package/bolt/bolt.mk
+Peter, All,
 
-diff --git a/package/Config.in b/package/Config.in
-index 017ae97..7065034 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -815,6 +815,7 @@ endmenu
- 
- menu "Database"
- 	source "package/berkeleydb/Config.in"
-+	source "package/bolt/Config.in"
- 	source "package/cppdb/Config.in"
- 	source "package/gdbm/Config.in"
- 	source "package/kompexsqlite/Config.in"
-diff --git a/package/bolt/Config.in b/package/bolt/Config.in
-new file mode 100644
-index 0000000..eae6b4c
---- /dev/null
-+++ b/package/bolt/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BOLT
-+	bool "bolt"
-+	depends on BR2_PACKAGE_HOST_GOLANG
-+	help
-+	  An embedded key/value database for Go.
-+
-+	  https://github.com/boltdb/bolt
-diff --git a/package/bolt/bolt.hash b/package/bolt/bolt.hash
-new file mode 100644
-index 0000000..694cac5
---- /dev/null
-+++ b/package/bolt/bolt.hash
-@@ -0,0 +1 @@
-+sha256 f426e649dd7c0838efe7bedff1010dfd047d0f354b264af6a030440543c42bd1  bolt-v1.1.0.tar.gz
-diff --git a/package/bolt/bolt.mk b/package/bolt/bolt.mk
-new file mode 100644
-index 0000000..01e3243
---- /dev/null
-+++ b/package/bolt/bolt.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# bolt
-+#
-+################################################################################
-+
-+BOLT_LICENSE = MIT
-+BOLT_VERSION = v1.1.0
-+BOLT_SITE = $(call github,boltdb,bolt,$(BOLT_VERSION))
-+BOLT_EXTRACT_DIR = $(@D)/src/github.com/boltdb/bolt
-+BOLT_BUILD_PACKAGES = github.com/boltdb/bolt/cmd/bolt
-+
-+$(eval $(golang-package))
--- 
-2.7.0
+On Mon, Feb 1, 2016 at 10:28 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>
+> Hi,
+>
+>  > I really don't like spreading hooks for package A in the code of
+>  > package B. I think here it's better to change linux.mk with:
+>
+>  >         $(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
+>  >                 $(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
+>
+>  > In LINUX_KCONFIG_FIXUP_CMDS.
+>
+>  > Peter, Arnout, Yann, what do you think ?
+>
+> Yes, that matches what we do for the other package related kernel
+> configs.
+
+Ok I'll switch to that.
+
+> Does this theoretically work on a mainline kernel? If so, perhaps it
+> should also disable the recently added DRM_VIVANTE stuff in case it
+> conflicts?
+
+No unfortunately this doesn't work on a mainline kernel.
+
+Regards,
+Gary
