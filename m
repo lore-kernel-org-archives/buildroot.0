@@ -1,33 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 14:27:17 +0100
-Subject: [Buildroot] [PATCH v2 1/2] manual: minor fixes in the
- graph-size documentation
-In-Reply-To: <1453207433-32589-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1453207433-32589-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20160201142717.0df19788@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon,  1 Feb 2016 10:38:47 -0300
+Subject: [Buildroot] [PATCH v2] strongswan: unavailable for static builds
+Message-ID: <1454333927-16439-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Uses dlopen in plugin_loader (not optional), fixes:
+http://autobuild.buildroot.net/results/601/601d8dc1654d8733db49b195139e12437663034c/
 
-On Tue, 19 Jan 2016 13:43:52 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> Fix some typos and references to a size-stats 'target' (the script is called
-> 'size-stats' but the make target is 'graph-size').
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> ---
->  docs/manual/common-usage.txt | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: rebase on master
 
-Applied, thanks.
+ package/strongswan/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index fca4934..ff8dd06 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -1,11 +1,12 @@
+-comment "strongswan needs a toolchain w/ threads"
++comment "strongswan needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ menuconfig BR2_PACKAGE_STRONGSWAN
+ 	bool "strongswan"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  strongSwan is an OpenSource IPsec implementation for the
+ 	  Linux operating system. It is based on the discontinued
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
