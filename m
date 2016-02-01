@@ -1,42 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 14:44:35 +0100
-Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
-	2.8.0
-Message-ID: <20160201224706.D4ACC7F892@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 19:16:08 +0100
+Subject: [Buildroot] [git commit] README: add reference to submitting-patches
+Message-ID: <20160201224705.274DE7F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82fd195a54d54ee000d8407da9bcbe8db4b58df1
+commit: https://git.buildroot.net/buildroot/commit/?id=b084eb38be08c91ca208d79ab03766a309258561
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+In the hope of improving the quality of patches sent by newcomers,
+add a reference to the submitting-patches section of the manual
+to the top-level README file.
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index c6f5fc2..e87dacd 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  d04036241e5a811240c43a3ddfb05a119a6043e8c5f1f354872a88e6cbdaef07  shairport-sync-2.6.tar.gz
-+sha256  6f3535012ed25017e4f893f9bad5391c2ea23c64f398caac3f29d8dad5f9e987  shairport-sync-2.8.0.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 4d80f0d..e25a78c 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 2.6
-+SHAIRPORT_SYNC_VERSION = 2.8.0
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ README | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/README b/README
+index e863f0e..c617252 100644
+--- a/README
++++ b/README
+@@ -21,3 +21,6 @@ Buildroot comes with a basic configuration for a number of boards. Run
+ Please feed suggestions, bug reports, insults, and bribes back to the
+ buildroot mailing list: buildroot at buildroot.org
+ You can also find us on #buildroot on Freenode IRC.
++
++If you would like to contribute patches, please read
++https://buildroot.org/manual.html#submitting-patches
