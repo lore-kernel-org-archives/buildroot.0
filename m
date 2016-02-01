@@ -1,54 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 21:46:08 +0100
-Subject: [Buildroot] [git commit] libfslvpuwrap: bump to version 1.0.61
-Message-ID: <20160201224706.388687F892@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 14:11:33 +0100
+Subject: [Buildroot] [git commit] package/libseccomp: fix musl build
+Message-ID: <20160201224703.41EFF7F90D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c353a7f763ad42ef7ca113a6deecec6f5df2379c
+commit: https://git.buildroot.net/buildroot/commit/?id=e143c2f4d6d95d630e89e45408fdbd6b535b59ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-- Enable resolution change for H.263 and VP8
+Fixes
+http://autobuild.buildroot.net/results/0cd/0cd47d7e6a49c268b57981ae8bb9abe4c4a183c7/
+http://autobuild.buildroot.net/results/34b/34b0bea52bd7e65a927142dc0e1f28f85629c634/
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/f11936b
+[Thomas: adjust patch format.]
 
-This package has been implicitely tested through gstreamer as the
-plugins rely on it for vpu decoding:
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
- # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! imxvpudec ! imxipuvideosink
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libfslvpuwrap/libfslvpuwrap.hash | 2 +-
- package/libfslvpuwrap/libfslvpuwrap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libseccomp/0002-musl.patch | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.hash b/package/libfslvpuwrap/libfslvpuwrap.hash
-index e7ca1a8..8e6ba61 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.hash
-+++ b/package/libfslvpuwrap/libfslvpuwrap.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256	a278eb18ec24230166ac39e2eadf7b934798f0432654c2e24c4cb69c3ac1cf0f  libfslvpuwrap-1.0.58.bin
-+sha256	e4bfe218d17ec66acf8cd97d08fef8ef71ab6762d4c8cf0d0193eca5f599b4c9  libfslvpuwrap-1.0.61.bin
-diff --git a/package/libfslvpuwrap/libfslvpuwrap.mk b/package/libfslvpuwrap/libfslvpuwrap.mk
-index 7669c63..b3d6f0c 100644
---- a/package/libfslvpuwrap/libfslvpuwrap.mk
-+++ b/package/libfslvpuwrap/libfslvpuwrap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFSLVPUWRAP_VERSION = 1.0.58
-+LIBFSLVPUWRAP_VERSION = 1.0.61
- LIBFSLVPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLVPUWRAP_SOURCE = libfslvpuwrap-$(LIBFSLVPUWRAP_VERSION).bin
- LIBFSLVPUWRAP_DEPENDENCIES = imx-vpu
+diff --git a/package/libseccomp/0002-musl.patch b/package/libseccomp/0002-musl.patch
+new file mode 100644
+index 0000000..9858d76
+--- /dev/null
++++ b/package/libseccomp/0002-musl.patch
+@@ -0,0 +1,28 @@
++From eb5382287cd25235e760b5da4939510b11bbf2a1 Mon Sep 17 00:00:00 2001
++From: Kylie McClain <somasis@exherbo.org>
++Date: Fri, 1 Jan 2016 13:12:59 -0500
++Subject: [PATCH] system.h: Remove conflicting kernel header include
++
++This fixes building on musl libc, since musl does not include kernel
++headers. I've tested this as working on both glibc and musl.
++
++Signed-off-by: Kylie McClain <somasis@exherbo.org>
++[Bernd: downloaded from upstream PR:
++ https://github.com/seccomp/libseccomp/pull/23]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/system.h | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/system.h b/src/system.h
++index 4660679..e84b0a0 100644
++--- a/src/system.h
+++++ b/src/system.h
++@@ -23,7 +23,6 @@
++ #define _SYSTEM_H
++ 
++ #include <linux/filter.h>
++-#include <linux/prctl.h>
++ 
++ #include "configure.h"
++ 
