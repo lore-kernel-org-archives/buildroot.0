@@ -1,110 +1,74 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 1 Feb 2016 15:57:20 +0100
-Subject: [Buildroot] [PATCH 19/22] package/python-cryptography: new
-	package.
-In-Reply-To: <1454335541-14224-20-git-send-email-mc5686@mclink.it>
-References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
- <1454335541-14224-20-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kue5LTCSimMmyY5Y2D5xGSjZ_eMLWv3jz7rwF1vKT2L3A@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 1 Feb 2016 15:57:38 +0100
+Subject: [Buildroot] [PATCH v2 1/2] toolchain-external: add a check for
+ unsupported toolchains
+In-Reply-To: <20160201153839.6325ebba@free-electrons.com>
+References: <1454334017-12326-1-git-send-email-romain.naour@gmail.com>
+ <20160201153839.6325ebba@free-electrons.com>
+Message-ID: <56AF7262.1080002@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                                  |  1 +
->  package/python-cryptography/Config.in              | 20 +++++++++++++++++++
->  .../python-cryptography/python-cryptography.hash   |  6 ++++++
->  package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
->  4 files changed, 50 insertions(+)
->  create mode 100644 package/python-cryptography/Config.in
->  create mode 100644 package/python-cryptography/python-cryptography.hash
->  create mode 100644 package/python-cryptography/python-cryptography.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 5221cfe..1cdcbb0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -632,6 +632,7 @@ menu "External python modules"
->         source "package/python-configobj/Config.in"
->         source "package/python-configshell-fb/Config.in"
->         source "package/python-crc16/Config.in"
-> +       source "package/python-cryptography/Config.in"
->         source "package/python-cssselect/Config.in"
->         source "package/python-daemon/Config.in"
->         source "package/python-dialog/Config.in"
-> diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-> new file mode 100644
-> index 0000000..c6d183f
-> --- /dev/null
-> +++ b/package/python-cryptography/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
-> +       bool "python-cryptography"
-> +       depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
-> +       select BR2_PACKAGE_OPENSSL
-> +       select BR2_PACKAGE_PYTHON_CFFI
-> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS
-> +       select BR2_PACKAGE_PYTHON_IDNA
-> +       select BR2_PACKAGE_PYTHON_PYASN
-> +       select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-> +       select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
-> +       select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON
-> +       help
-> +         cryptography is a package designed to expose cryptographic
-> +         primitives and recipes to Python developers.
-> +
-> +         https://cryptography.io
-> +
-> +comment "python-cryptography needs a toolchain w/ C++"
-> +       depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-> new file mode 100644
-> index 0000000..f828fb4
-> --- /dev/null
-> +++ b/package/python-cryptography/python-cryptography.hash
-> @@ -0,0 +1,6 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=15eeba9e31f852bac21155baa3dfbc61, sha256 locally computed
-> +md5     15eeba9e31f852bac21155baa3dfbc61  cryptography-1.1.2.tar.gz
-> +sha256  7f51459f84d670444275e615839f4542c93547a12e938a0a4906dafe5f7de153  cryptography-1.1.2.tar.gz
-> +# Locally computed.
-> +md5    02798acc5e2d5dbcf6e792a24fc05b95  cryptography-1.2.1.tar.gz
-> +sha256 a13217a03a47e743d26edff7299e4be7358c2fd12a223ac5d6de3229690b6ee5  cryptography-1.2.1.tar.gz
-> diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-> new file mode 100644
-> index 0000000..fbd0caf
-> --- /dev/null
-> +++ b/package/python-cryptography/python-cryptography.mk
-> @@ -0,0 +1,23 @@
-> +################################################################################
-> +#
-> +# python-cryptography
-> +#
-> +################################################################################
-> +
-> +PYTHON_CRYPTOGRAPHY_VERSION = 1.1.2
-> +PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-> +PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
-> +PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-> +PYTHON_CRYPTOGRAPHY_LICENSE = Apache
-> +PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE
-> +PYTHON_CRYPTOGRAPHY_DEPENDENCIES = python-six \
-> +                                  python-idna \
-> +                                  python-pyasn \
-> +                                  host-python-cffi \
-> +                                  openssl
-> +
-> +ifeq ($(BR2_PACKAGE_PYTHON),y)
-> +PYTHON_CRYPTOGRAPHY_DEPENDENCIES += python-enum34
-> +endif
-> +
-> +$(eval $(python-package))
-> --
+Hi Thomas,
 
-drop this patch, as it is already in patchwork
+Le 01/02/2016 15:38, Thomas Petazzoni a ?crit :
+> Romain,
+> 
+> On Mon,  1 Feb 2016 14:40:16 +0100, Romain Naour wrote:
+> 
+>> Here is the sysroot directory tree for linaro 2015.11:
+>> $ ls libc/arm-linux-gnueabihf
+>> etc  lib  sbin  usr  var
+>>
+>> Here is the sysroot directory tree for CodeSourcery standard:
+>> $ ls libc/sgxx-glibc
+>> etc  lib  lib64  sbin  usr  var
+>>
+>> Usually the sysroot is located directly under libc directory
+>> $ ls libc/
+>> etc  lib  sbin  usr  var
+> 
+> I think this is not "usual", for example it's not the case for
+> Buildroot or Crosstool-NG toolchain.
 
-Yegor
+Ok, I'll simply remove this comment then. It seems that there is no "usual" case
+with sysroot toolchains.
+
+> 
+>> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+>> index 02cc0bb..fd99efe 100644
+>> --- a/toolchain/helpers.mk
+>> +++ b/toolchain/helpers.mk
+>> @@ -418,6 +418,11 @@ check_unusable_toolchain = \
+>>  		echo "and contain a lot of pre-built libraries that would conflict with"; \
+>>  		echo "the ones Buildroot wants to build."; \
+>>  		exit 1; \
+>> +	fi; \
+>> +	non_existent_sysroot=`$${__CROSS_CC} -print-file-name=libc.a` ; \
+> 
+> The variable should not be named non_existent_sysroot since it may
+> exist. Also, you could use the existing toolchain_find_libc_a function,
+> no? So maybe:
+> 
+> 	libc_a_path=$(call toolchain_find_libc_a,$${__CROSS_CC}) ; \
+
+ok for the variable naming, but I didn't used toolchain_find_libc_a directly
+because realpath -f is used by this function.
+
+The path returned is $PWD/libc.a when something go wrong with the sysroot.
+So the test would be test -d in this case but I think it's better to test the
+path returned by __CROSS_CC directly against "libc.a".
+
+Thoughts ?
+
+Best regards,
+Romain
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
