@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:29 +0100
-Subject: [Buildroot] [PATCH 10/22] package/python-pynacl: new package.
+Date: Mon,  1 Feb 2016 15:05:22 +0100
+Subject: [Buildroot] [PATCH 03/22] package/python-cbor: new package.
 In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-11-git-send-email-mc5686@mclink.it>
+Message-ID: <1454335541-14224-4-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                        |  1 +
- package/python-pynacl/Config.in          |  9 +++++++++
- package/python-pynacl/python-pynacl.hash |  3 +++
- package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-pynacl/Config.in
- create mode 100644 package/python-pynacl/python-pynacl.hash
- create mode 100644 package/python-pynacl/python-pynacl.mk
+ package/Config.in                    |  1 +
+ package/python-cbor/Config.in        |  8 ++++++++
+ package/python-cbor/python-cbor.hash |  3 +++
+ package/python-cbor/python-cbor.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-cbor/Config.in
+ create mode 100644 package/python-cbor/python-cbor.hash
+ create mode 100644 package/python-cbor/python-cbor.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d83095e..320af2b 100644
+index 53734fd..2a2100a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -686,6 +686,7 @@ menu "External python modules"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pygments/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pynacl/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pypcap/Config.in"
- 	source "package/python-pyqt/Config.in"
-diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+@@ -621,6 +621,7 @@ menu "External python modules"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bottle/Config.in"
+ 	source "package/python-can/Config.in"
++	source "package/python-cbor/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
+ 	source "package/python-characteristic/Config.in"
+diff --git a/package/python-cbor/Config.in b/package/python-cbor/Config.in
 new file mode 100644
-index 0000000..88fcad7
+index 0000000..0de84e0
 --- /dev/null
-+++ b/package/python-pynacl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYNACL
-+	bool "python-pynacl"
++++ b/package/python-cbor/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_CBOR
++	bool "python-cbor"
 +	depends on BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_LIBSODIUM
 +	help
-+	  Python binding to the Networking and Cryptography (NaCl) library.
++	  RFC 7049 - Concise Binary Object Representation.
 +
-+	  https://pypi.python.org/pypi/PyNaCl
++	  https://pypi.python.org/pypi/cbor
 +
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
+diff --git a/package/python-cbor/python-cbor.hash b/package/python-cbor/python-cbor.hash
 new file mode 100644
-index 0000000..2c26896
+index 0000000..f456271
 --- /dev/null
-+++ b/package/python-pynacl/python-pynacl.hash
++++ b/package/python-cbor/python-cbor.hash
 @@ -0,0 +1,3 @@
 +# Locally computed.
-+md5	12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
-+sha256	d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
++md5	a8b01920c4139de6256735c4cae75c74  cbor-0.1.24.tar.gz
++sha256	d89bad00785de4b673c5ab5a1464577ec5bda656d1b73900c43e855a51a927cb  cbor-0.1.24.tar.gz
+diff --git a/package/python-cbor/python-cbor.mk b/package/python-cbor/python-cbor.mk
 new file mode 100644
-index 0000000..62b9aa9
+index 0000000..33a9f01
 --- /dev/null
-+++ b/package/python-pynacl/python-pynacl.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-cbor/python-cbor.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-pynacl
++# python-cbor
 +#
 +################################################################################
 +
-+PYTHON_PYNACL_VERSION = 1.0.1
-+PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
-+PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
-+PYTHON_PYNACL_LICENSE = Apache-2.0
-+#PYTHON_PYNACL_LICENSE_FILES = LICENSE
-+PYTHON_PYNACL_SETUP_TYPE = setuptools
-+PYTHON_PYNACL_DEPENDENCIES = libsodium
-+PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
++PYTHON_CBOR_VERSION = 0.1.24
++PYTHON_CBOR_SOURCE = cbor-$(PYTHON_CBOR_VERSION).tar.gz
++PYTHON_CBOR_SITE = http://pypi.python.org/packages/source/c/cbor
++PYTHON_CBOR_LICENSE = Apache
++#PYTHON_CBOR_LICENSE_FILES = LICENSE
++PYTHON_CBOR_SETUP_TYPE = setuptools
++#PYTHON_CBOR_DEPENDENCIES = 
 +
 +$(eval $(python-package))
 -- 
