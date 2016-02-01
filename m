@@ -1,58 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 14:25:15 +0100
-Subject: [Buildroot] [git commit] manual: minor fixes in the graph-size
-	documentation
-Message-ID: <20160201224659.7C61B80431@busybox.osuosl.org>
+Date: Mon, 1 Feb 2016 19:59:00 +0100
+Subject: [Buildroot] [git commit] vala: bump to version 0.30.1
+Message-ID: <20160201224700.342117F8D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcddb9dafed7cc84318838c98ebf8bac38369714
+commit: https://git.buildroot.net/buildroot/commit/?id=093681947f6fe1d79b37f0190c7b914dc8bdae53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix some typos and references to a size-stats 'target' (the script is called
-'size-stats' but the make target is 'graph-size').
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/common-usage.txt | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/vala/vala.hash | 4 ++--
+ package/vala/vala.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index bca99f4..8d0ba63 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -282,7 +282,7 @@ When your target system grows, it is sometimes useful to understand
- how much each Buildroot package is contributing to the overall root
- filesystem size. To help with such an analysis, Buildroot collects
- data about files installed by each package and using this data,
--generates a graph and CSVs files detailing the size contribution of
-+generates a graph and CSV files detailing the size contribution of
- the different packages.
+diff --git a/package/vala/vala.hash b/package/vala/vala.hash
+index 633dfc0..8b16838 100644
+--- a/package/vala/vala.hash
++++ b/package/vala/vala.hash
+@@ -1,2 +1,2 @@
+-# From https://download.gnome.org/sources/vala/0.30/vala-0.#0.0.sha256sum
+-sha256	61f0337b000f7ed6ef8c1fea87e0047d9bd7c0f91dd9c5b4eb70fd3fb883dedf	vala-0.30.0.tar.xz
++# From https://download.gnome.org/sources/vala/0.30/vala-0.30.1.sha256sum
++sha256	23add78e5c6a5e6df019d4a885c9c79814c9e0b957519ec8a4f4d826c4e5df2c	vala-0.30.1.tar.xz
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index a0a986c..56d4db3 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- To generate these data after a build, run:
-@@ -303,9 +303,9 @@ This will generate:
-   contribution of each installed file to the package it belongs, and
-   to the overall filesystem size.
- 
--This +size-stats+ target requires the Python Matplotlib library to be
-+This +graph-size+ target requires the Python Matplotlib library to be
- installed (+python-matplotlib+ on most distributions), and also the
--+argpase+ module if you're using a Python version older than 2.7
-++argparse+ module if you're using a Python version older than 2.7
- (+python-argparse+ on most distributions).
- 
- Just like for the duration graph, a +BR2_GRAPH_OUT+ environment is
-@@ -315,7 +315,7 @@ for details about this environment variable.
- .Note
- The collected filesystem size data is only meaningful after a complete
- clean rebuild. Be sure to run +make clean all+ before using +make
--size-stats+.
-+graph-size+.
- 
- include::eclipse-integration.txt[]
- 
+ VALA_VERSION_MAJOR = 0.30
+-VALA_VERSION = $(VALA_VERSION_MAJOR).0
++VALA_VERSION = $(VALA_VERSION_MAJOR).1
+ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPLv2.1+
