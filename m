@@ -1,63 +1,40 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 1 Feb 2016 15:39:18 +0100
-Subject: [Buildroot] [PATCH 22/22] package/python-cffi: host-package
- added (needs host-libffi).
-In-Reply-To: <1454335541-14224-23-git-send-email-mc5686@mclink.it>
-References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
- <1454335541-14224-23-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kufphaD4XcCfL=eYS8YKpyVKfvrhZKdwOkeHqHXbEayhA@mail.gmail.com>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon,  1 Feb 2016 15:34:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/autoconf-archive: bump to version
+	2015.09.25
+Message-ID: <1454337295-14367-1-git-send-email-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/libffi/libffi.mk           | 11 +++++++++++
->  package/python-cffi/python-cffi.mk |  2 ++
->  2 files changed, 13 insertions(+)
->
-> diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-> index 8f0f72d..47de8cd 100644
-> --- a/package/libffi/libffi.mk
-> +++ b/package/libffi/libffi.mk
-> @@ -22,6 +22,17 @@ endef
->
->  LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
->
-> +# Move the headers to the usual location, and adjust the .pc file
-> +# accordingly.
-> +define HOST_LIBFFI_MOVE_HOST_HEADERS
-> +       mv $(HOST_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(HOST_DIR)/usr/include/
-> +       $(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
-> +               $(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
-> +       rm -rf $(HOST_DIR)/usr/lib/libffi-*
-> +endef
-> +
-> +HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
-> +
->  # Remove headers that are not at the usual location from the target
->  define LIBFFI_REMOVE_TARGET_HEADERS
->         $(RM) -rf $(TARGET_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)
-> diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-> index 70fbe02..02c969b 100644
-> --- a/package/python-cffi/python-cffi.mk
-> +++ b/package/python-cffi/python-cffi.mk
-> @@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
->  PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
->  PYTHON_CFFI_LICENSE = MIT
->  PYTHON_CFFI_LICENSE_FILES = LICENSE
-> +HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser host-libffi
->
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/autoconf-archive/autoconf-archive.hash | 2 +-
+ package/autoconf-archive/autoconf-archive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-drop this patch, as my series is already in patchwork.
-
-http://patchwork.ozlabs.org/patch/562968/
-http://patchwork.ozlabs.org/patch/562969/
-http://patchwork.ozlabs.org/patch/562970/
-
-Yegor
+diff --git a/package/autoconf-archive/autoconf-archive.hash b/package/autoconf-archive/autoconf-archive.hash
+index c310f5a..5576566 100644
+--- a/package/autoconf-archive/autoconf-archive.hash
++++ b/package/autoconf-archive/autoconf-archive.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256 69715bdd078f552ca85e498a94543e11cb8bcdf0359e659b84d84d19372b0dc5  autoconf-archive-2015.02.24.tar.xz
++sha256 7c0467a5dbd2340153bca5a477bd92fbc951d9ee3cbed92f16f6bf08ac0c350a  autoconf-archive-2015.09.25.tar.xz
+diff --git a/package/autoconf-archive/autoconf-archive.mk b/package/autoconf-archive/autoconf-archive.mk
+index 673a57f..98acba3 100644
+--- a/package/autoconf-archive/autoconf-archive.mk
++++ b/package/autoconf-archive/autoconf-archive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOCONF_ARCHIVE_VERSION = 2015.02.24
++AUTOCONF_ARCHIVE_VERSION = 2015.09.25
+ AUTOCONF_ARCHIVE_SOURCE = autoconf-archive-$(AUTOCONF_ARCHIVE_VERSION).tar.xz
+ AUTOCONF_ARCHIVE_SITE = $(BR2_GNU_MIRROR)/autoconf-archive
+ AUTOCONF_ARCHIVE_LICENSE = GPLv3+ with exception
+-- 
+2.7.0
