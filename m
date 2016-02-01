@@ -1,129 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 08:02:38 +0100
-Subject: [Buildroot] [git commit] docs/manual: makedev syntax accepts
-	usernames and group names
-Message-ID: <20160201224714.DCBBA7F90D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 21:46:28 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-imx-viv: bump to
+	version 5.0.11 p7.1
+Message-ID: <20160201224715.BCFE47F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ad97d1ff1324adaf2ccdd04a11e2a12b8ac8dcf
+commit: https://git.buildroot.net/buildroot/commit/?id=972e65805827bc9c2611785bcf1532322524e4e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-generic.txt | 22 +++++++++++-----------
- docs/manual/makedev-syntax.txt          | 20 ++++++++++++--------
- 2 files changed, 23 insertions(+), 19 deletions(-)
+The license is now provided in the package.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 1f9c7bb..b7817e3 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -43,16 +43,16 @@ system is based on hand-written Makefiles or shell scripts.
- 28:	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
- 29: endef
- 30:
--31: define LIBFOO_DEVICES
--32:	/dev/foo  c  666  0  0	42  0  -  -  -
-+31: define LIBFOO_USERS
-+32:	foo -1 libfoo -1 * - - - LibFoo daemon
- 33: endef
- 34:
--35: define LIBFOO_PERMISSIONS
--36:	/bin/foo  f  4755  0  0	 -  -  -  -  -
-+35: define LIBFOO_DEVICES
-+36:	/dev/foo  c  666  0  0	42  0  -  -  -
- 37: endef
- 38:
--39: define LIBFOO_USERS
--40:	foo -1 libfoo -1 * - - - LibFoo daemon
-+39: define LIBFOO_PERMISSIONS
-+40:	/bin/foo  f  4755  foo  libfoo	 -  -  -  -  -
- 41: endef
- 42:
- 43: $(eval $(generic-package))
-@@ -142,15 +142,15 @@ All these steps rely on the +$(@D)+ variable, which
- contains the directory where the source code of the package has been
- extracted.
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/1195b71
+
+The following xorg.conf was used in order to force the use of the
+vivante module:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics
+/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+
+Note that the X server must be started with the "noreset" option to
+avoid crashes when closing X apps.
+ # X -noreset
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash   | 2 +-
+ package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+index 9b3c7d3..72608dd 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	1a0b25a91b493e99dfa94a802290320ea998ebd45d7aab0f73d7c7bb521b7e84  xserver-xorg-video-imx-viv-5.0.11.p4.5.tar.gz
++sha256	ab6a896cafba324105d26f52b7dad2c41d04d75cc9e48b66e8041a95660a04ee  xserver-xorg-video-imx-viv-5.0.11.p7.1.tar.gz
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index a3a3167..884b30e 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
--On line 31..33, we define a device-node file used by this package
-+On lines 31..43, we define a user that is used by this package (e.g.
-+to run a daemon as non-root) (+LIBFOO_USERS+).
-+
-+On line 35..37, we define a device-node file used by this package
- (+LIBFOO_DEVICES+).
- 
--On line 35..37, we define the permissions to set to specific files
-+On line 39..41, we define the permissions to set to specific files
- installed by this package (+LIBFOO_PERMISSIONS+).
- 
--On lines 39..41, we define a user that is used by this package (e.g.
--to run a daemon as non-root) (+LIBFOO_USERS+).
--
- Finally, on line 43, we call the +generic-package+ function, which
- generates, according to the variables defined previously, all the
- Makefile code necessary to make your package working.
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index cae37f7..0bbc16e 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -28,8 +28,10 @@ There are a few non-trivial blocks:
-   * c: a character device file
-   * b: a block device file
-   * p: a named pipe
--- +mode+, +uid+ and +gid+ are the usual permissions settings (only
--  numerical values are allowed)
-+- +mode+ are the usual permissions settings (only numerical values
-+  are allowed)
-+- +uid+ and +gid+ are the UID and GID to set on this file; can be
-+  either numerical values or actual names
- - +major+ and +minor+ are here for device files, set to +-+ for other
-   files
- - +start+, +inc+ and +count+ are for when you want to create a batch
-@@ -37,19 +39,21 @@ There are a few non-trivial blocks:
-   incrementing its counter by +inc+ until it reaches +count+
- 
- Let's say you want to change the permissions of a given file; using
--this syntax, you will need to put:
-+this syntax, you will need to write:
- 
- ----
--/usr/bin/foobar f 644 0 0 - - - - -
-+/usr/bin/foo f 755 0 0 - - - - -
-+/usr/bin/bar f 755 root root - - - - -
-+/data/buz f buz-user buz-group - - - - -
- ----
- 
- Alternatively, if you want to change owner/permission of a directory
--recursively, you can put (to set UID to 123, GID to 456 and access
-+recursively, you can write (to set UID to foo, GID to bar and access
- rights to rwxr-x--- for the directory /usr/share/myapp and all files
- and directories below it):
- 
- ----
--/usr/share/myapp r 750 123 456 - - - - -
-+/usr/share/myapp r 750 foo bar - - - - -
- ----
- 
- On the other hand, if you want to create the device file +/dev/hda+
-@@ -57,13 +61,13 @@ and the corresponding 15 files for the partitions, you will need for
- +/dev/hda+:
- 
- ----
--/dev/hda b 640 0 0 3 0 0 0 -
-+/dev/hda b 640 root root 3 0 0 0 -
- ----
- 
- and then for device files corresponding to the partitions of
- +/dev/hda+, +/dev/hdaX+, +X+ ranging from 1 to 15:
- 
- ----
--/dev/hda b 640 0 0 3 1 1 1 15
-+/dev/hda b 640 root root 3 1 1 1 15
- ----
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p4.5
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p7.1
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
+ 	xproto_xproto xproto_xf86driproto libdrm
+ XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = GPLv2+
++XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-GPL-2
+ XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
+ XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
  
