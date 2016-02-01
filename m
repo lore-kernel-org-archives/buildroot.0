@@ -1,26 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2016 18:37:05 +0100
-Subject: [Buildroot] [PATCH v2 2/8] lttng-babeltrace: make available for
-	all C libraries
-In-Reply-To: <1453929930-18215-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 27 Jan 2016 22:25:24 +0100")
-References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1453929930-18215-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87a8nkcoxq.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon,  1 Feb 2016 18:31:02 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: bump Linaro AArch64 to
+	2015.11-2
+Message-ID: <1454347864-4891-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Runtime tested with Qemu 2.3.1 using qemu_aarch64_virt_defconfig.
 
- > Due to posix_fallocate() being unavailable in uClibc 0.9.33,
- > lttng-babeltrace was marked as available only for uClibc snapshot in
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ toolchain/toolchain-external/Config.in               | 2 +-
+ toolchain/toolchain-external/toolchain-external.hash | 2 +-
+ toolchain/toolchain-external/toolchain-external.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-s/in/and/
-
-Committed with that fixed, thanks.
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 763d728..a873e41 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -543,7 +543,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 
+ # See note about Linar ARM/ARMEB toolchains, above.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+-	bool "Linaro AArch64 2015.08"
++	bool "Linaro AArch64 2015.11"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+index dd7073f..bc913c4 100644
+--- a/toolchain/toolchain-external/toolchain-external.hash
++++ b/toolchain/toolchain-external/toolchain-external.hash
+@@ -36,7 +36,7 @@ sha256 34812c5d0556db86259ac6eb3f8bcf4ce8eca3fa8d7180875958492a42e9853f  gcc-lin
+ sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ sha256 24b86799a6c64380c740bf31a700b46e854fc0a821da2341e9868f0196c864de  gcc-linaro-5.1-2015.08-x86_64_armeb-linux-gnueabihf.tar.xz
+ sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+-sha256 b9137008744d9009877f662dbac7481d673cdcb1798e727e325a37c98a0f63da  gcc-linaro-5.1-2015.08-x86_64_aarch64-linux-gnu.tar.xz
++sha256 b318a1837a54146b0120a13852386576e38355513b4e2cd5e2125f9c26913777  gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
+ 
+ # Codescape toolchains from Imagination Technologies
+ # From: http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05/
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 5ad6309..d6ebdce 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -351,8 +351,8 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ else
+-TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.1-2015.08/aarch64-linux-gnu
+-TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.1-2015.08-x86_64_aarch64-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
++TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
+ endif
+ TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
 -- 
-Bye, Peter Korsgaard
+2.4.3
