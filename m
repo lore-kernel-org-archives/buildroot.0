@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:24 +0100
-Subject: [Buildroot] [PATCH 05/22] package/python-lmdb: new package.
+Date: Mon,  1 Feb 2016 15:05:31 +0100
+Subject: [Buildroot] [PATCH 12/22] package/python-pytrie: new package.
 In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-6-git-send-email-mc5686@mclink.it>
+Message-ID: <1454335541-14224-13-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +12,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                    |  1 +
- package/python-lmdb/Config.in        |  8 ++++++++
- package/python-lmdb/python-lmdb.hash |  3 +++
- package/python-lmdb/python-lmdb.mk   | 15 +++++++++++++++
+ package/Config.in                        |  1 +
+ package/python-pytrie/Config.in          |  8 ++++++++
+ package/python-pytrie/python-pytrie.hash |  3 +++
+ package/python-pytrie/python-pytrie.mk   | 15 +++++++++++++++
  4 files changed, 27 insertions(+)
- create mode 100644 package/python-lmdb/Config.in
- create mode 100644 package/python-lmdb/python-lmdb.hash
- create mode 100644 package/python-lmdb/python-lmdb.mk
+ create mode 100644 package/python-pytrie/Config.in
+ create mode 100644 package/python-pytrie/python-pytrie.hash
+ create mode 100644 package/python-pytrie/python-pytrie.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 3980c00..8dcaef7 100644
+index fc90edb..c4bc8f8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -657,6 +657,7 @@ menu "External python modules"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
-+	source "package/python-lmdb/Config.in"
- 	source "package/python-lxml/Config.in"
- 	source "package/python-mad/Config.in"
- 	source "package/python-mako/Config.in"
-diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
+@@ -699,6 +699,7 @@ menu "External python modules"
+ 	source "package/python-pysnmp/Config.in"
+ 	source "package/python-pysnmp-apps/Config.in"
+ 	source "package/python-pysnmp-mibs/Config.in"
++	source "package/python-pytrie/Config.in"
+ 	source "package/python-pyudev/Config.in"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
 new file mode 100644
-index 0000000..2cff7ac
+index 0000000..3b9db7f
 --- /dev/null
-+++ b/package/python-lmdb/Config.in
++++ b/package/python-pytrie/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_LMDB
-+	bool "python-lmdb"
++config BR2_PACKAGE_PYTHON_PYTRIE
++	bool "python-pytrie"
 +	depends on BR2_PACKAGE_PYTHON
 +	help
-+	  Universal Python binding for the LMDB 'Lightning' Database.
++	  A pure Python implementation of the trie data structure.
 +
-+	  https://pypi.python.org/pypi/lmdb
++	  https://pypi.python.org/pypi/PyTrie
 +
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
 new file mode 100644
-index 0000000..ba4cc96
+index 0000000..ede6e72
 --- /dev/null
-+++ b/package/python-lmdb/python-lmdb.hash
++++ b/package/python-pytrie/python-pytrie.hash
 @@ -0,0 +1,3 @@
 +# Locally computed.
-+md5	001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
-+sha256	37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
++md5	5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
++sha256	b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
+diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
 new file mode 100644
-index 0000000..7295083
+index 0000000..ad1ee46
 --- /dev/null
-+++ b/package/python-lmdb/python-lmdb.mk
++++ b/package/python-pytrie/python-pytrie.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-lmdb
++# python-pytrie
 +#
 +################################################################################
 +
-+PYTHON_LMDB_VERSION = 0.88
-+PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
-+PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
-+PYTHON_LMDB_LICENSE = BSD
-+#PYTHON_LMDB_LICENSE_FILES = LICENSE
-+PYTHON_LMDB_SETUP_TYPE = setuptools
-+#PYTHON_LMDB_DEPENDENCIES = 
++PYTHON_PYTRIE_VERSION = 0.2
++PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
++PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
++PYTHON_PYTRIE_LICENSE = BSD-3c
++PYTHON_PYTRIE_LICENSE_FILES = LICENSE
++PYTHON_PYTRIE_SETUP_TYPE = distutils
++#PYTHON_PYTRIE_DEPENDENCIES = 
 +
 +$(eval $(python-package))
 -- 
