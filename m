@@ -1,10 +1,10 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:21 +0100
-Subject: [Buildroot] [PATCH 02/22] package/python-characteristic: new
-	package.
+Date: Mon,  1 Feb 2016 15:05:20 +0100
+Subject: [Buildroot] [PATCH 01/22] package/python-jinja2: bump version to
+	2.8 (needed by python-crossbar).
 In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
 References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-3-git-send-email-mc5686@mclink.it>
+Message-ID: <1454335541-14224-2-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,70 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                                        |  1 +
- package/python-characteristic/Config.in                  |  8 ++++++++
- package/python-characteristic/python-characteristic.hash |  3 +++
- package/python-characteristic/python-characteristic.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/python-characteristic/Config.in
- create mode 100644 package/python-characteristic/python-characteristic.hash
- create mode 100644 package/python-characteristic/python-characteristic.mk
+ package/python-jinja2/python-jinja2.hash | 7 ++++---
+ package/python-jinja2/python-jinja2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..53734fd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -623,6 +623,7 @@ menu "External python modules"
- 	source "package/python-can/Config.in"
- 	source "package/python-certifi/Config.in"
- 	source "package/python-cffi/Config.in"
-+	source "package/python-characteristic/Config.in"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
- 	source "package/python-coherence/Config.in"
-diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
-new file mode 100644
-index 0000000..625e27e
---- /dev/null
-+++ b/package/python-characteristic/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_CHARACTERISTIC
-+	bool "python-characteristic"
-+	depends on BR2_PACKAGE_PYTHON
-+	help
-+	  Python attributes without boilerplate.
-+
-+	  https://pypi.python.org/pypi/characteristic
-+
-diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
-new file mode 100644
-index 0000000..e9ef879
---- /dev/null
-+++ b/package/python-characteristic/python-characteristic.hash
-@@ -0,0 +1,3 @@
-+# Locally computed.
-+md5	b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
-+sha256	ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
-diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
-new file mode 100644
-index 0000000..0def7a5
---- /dev/null
-+++ b/package/python-characteristic/python-characteristic.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-characteristic
-+#
-+################################################################################
-+
-+PYTHON_CHARACTERISTIC_VERSION = 14.3.0
-+PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
-+PYTHON_CHARACTERISTIC_SITE = http://pypi.python.org/packages/source/c/characteristic
-+PYTHON_CHARACTERISTIC_LICENSE = MIT
-+#PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
-+PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
-+#PYTHON_CHARACTERISTIC_DEPENDENCIES = 
-+
-+$(eval $(python-package))
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 6e8c160..b76d5b3 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,3 +1,4 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9dffd2f3b43d673802fe857c8445b1a, sha256 locally computed
+-md5	b9dffd2f3b43d673802fe857c8445b1a  Jinja2-2.7.3.tar.gz
+-sha256	2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb  Jinja2-2.7.3.tar.gz
++# added by MCon: md5 is from site, sha is locally computed.
++md5	edb51693fe22c53cee5403775c71a99e  Jinja2-2.8.tar.gz
++sha1	4a33c1a0fd585eba2507e8c274a9cd113b1d13ab  Jinja2-2.8.tar.gz
++sha256	bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4  Jinja2-2.8.tar.gz
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 8440b64..ce6e2b9 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JINJA2_VERSION = 2.7.3
++PYTHON_JINJA2_VERSION = 2.8
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
 -- 
 2.1.4
