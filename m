@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:53:12 +0100
-Subject: [Buildroot] [PATCH 2/5] docs/manual: slightly clarify patch
+Date: Mon, 1 Feb 2016 19:54:15 +0100
+Subject: [Buildroot] [PATCH 3/5] COPYING: add exception about patch
  licensing
-In-Reply-To: <1454338344-24973-3-git-send-email-luca@lucaceresoli.net>
+In-Reply-To: <1454338344-24973-4-git-send-email-luca@lucaceresoli.net>
 References: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
- <1454338344-24973-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160201195312.09e2d34f@free-electrons.com>
+ <1454338344-24973-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160201195415.1f87f378@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca,
+Dear Luca Ceresoli,
 
-On Mon,  1 Feb 2016 15:52:21 +0100, Luca Ceresoli wrote:
-> Adding a patch is a modification to Buildroot. Thus this sentence might be
-> interpreted as "Patches are released under the Buildroot license".
-> 
-> Being a legal matter, the last thing we want is to be
-> ambiguous. Reword the sentence to avoid any misunderstandings.
+On Mon,  1 Feb 2016 15:52:22 +0100, Luca Ceresoli wrote:
+> Several people have been asking what is the license of the patches
+> provided by Buildroot. COPYING is the authoritative place to state this.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
->  docs/manual/patch-policy.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  COPYING | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-> index 0b4604e..cfda5c5 100644
-> --- a/docs/manual/patch-policy.txt
-> +++ b/docs/manual/patch-policy.txt
-> @@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
->  
->  === Format and licensing of the package patches
->  
-> -Patches are released under the same license as the software that is
-> -modified.
-> +Patches are released under the same license as the software that they
-> +modify.
+> diff --git a/COPYING b/COPYING
+> index d511905..8f2ba0b 100644
+> --- a/COPYING
+> +++ b/COPYING
+> @@ -1,3 +1,13 @@
+> +Except for the below exception, Buildroot is licensed under the GNU
+> +General Public License, version 2, whose text is reported below.
 
-"as the software that they apply to" ?
+is "reported" the right word here ?
 
 Thomas
 -- 
