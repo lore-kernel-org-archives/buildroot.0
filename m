@@ -1,58 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 21:46:08 +0100
-Subject: [Buildroot] [git commit] imx-lib: bump to version 5.1
-Message-ID: <20160201224659.D55A77F918@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Feb 2016 17:02:06 +0100
+Subject: [Buildroot] [git commit] package/Makefile.in: correct gettext
+	handling for musl
+Message-ID: <20160201224701.516787FA6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a58ad513a1b84b7fe3d0e2a7155f10e1180a984
+commit: https://git.buildroot.net/buildroot/commit/?id=dc95d50fe3ee4dc72f19f838f9c05fec75973140
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Change version to be independent of BSP version.  This limits
-confusion on future BSP updates that do not include imx-lib updates.
+Based on a patch by Bernd Kuhls.
 
-Changelog since 3.14.28-1.0.0_ga:
-- Add i.MX 7D support.
-- Change LICENSE file.
-- Enable pxp libraries for i.MX 6UltraLite.
-- Fix rng and shara2 to exclude the 6UL platform to avoid build breaks
+The AM_GNU_GETTEXT autotools macro misdetects musl gettext support as it
+checks for internal glibc symbols.  Work around it by forcing libc gettext
+support when musl is used for the supported gettext api levels.
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/b299454
-https://github.com/Freescale/meta-fsl-arm/commit/5f28af0
+As this is a generic issue for any package using AM_GNU_GETTEXT, add it to
+the global TARGET_CONFIGURE_ARGS instead of for each affected package.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-lib/imx-lib.hash | 2 +-
- package/freescale-imx/imx-lib/imx-lib.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Makefile.in | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/imx-lib/imx-lib.hash b/package/freescale-imx/imx-lib/imx-lib.hash
-index 85f0a40..8e4bd73 100644
---- a/package/freescale-imx/imx-lib/imx-lib.hash
-+++ b/package/freescale-imx/imx-lib/imx-lib.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256 46022817d25f154b60247fdcbb87216e23e553bd88ec9664b1b5d5911e7aa2a2  imx-lib-3.14.28-1.0.0.tar.gz
-+sha256 2b4547ffb1de328cf8997a09a423c6f015d808493efd11a98a5d42c6497e3445  imx-lib-5.1.tar.gz
-diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index e160cca..b49357b 100644
---- a/package/freescale-imx/imx-lib/imx-lib.mk
-+++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -4,10 +4,10 @@
- #
+diff --git a/package/Makefile.in b/package/Makefile.in
+index c5652af..96d93b0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -340,6 +340,15 @@ else
+ BR2_AC_CV_C_BIGENDIAN = ac_cv_c_bigendian=no
+ endif
+ 
++# AM_GNU_GETTEXT misdetects musl gettext support.
++# musl currently implements api level 1 and 2 (basic + ngettext)
++# http://www.openwall.com/lists/musl/2015/04/16/3
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++BR2_GT_CV_FUNC_GNUGETTEXT_LIBC = \
++	gt_cv_func_gnugettext1_libc=yes
++	gt_cv_func_gnugettext2_libc=yes
++endif
++
+ TARGET_CONFIGURE_ARGS = \
+ 	$(BR2_AC_CV_TRAP_CHECK) \
+ 	ac_cv_func_mmap_fixed_mapped=yes \
+@@ -350,7 +359,8 @@ TARGET_CONFIGURE_ARGS = \
+ 	ac_cv_func_calloc_0_nonnull=yes \
+ 	ac_cv_func_realloc_0_nonnull=yes \
+ 	lt_cv_sys_lib_search_path_spec="" \
+-	$(BR2_AC_CV_C_BIGENDIAN)
++	$(BR2_AC_CV_C_BIGENDIAN) \
++	$(BR2_GT_CV_FUNC_GNUGETTEXT_LIBC)
+ 
  ################################################################################
- 
--IMX_LIB_VERSION = $(FREESCALE_IMX_VERSION)
-+IMX_LIB_VERSION = 5.1
- IMX_LIB_SITE = $(FREESCALE_IMX_SITE)
- IMX_LIB_LICENSE = LGPLv2.1+
--IMX_LIB_LICENSE_FILES = pxp/pxp_lib.h
-+IMX_LIB_LICENSE_FILES = COPYING-LGPL-2.1
- 
- IMX_LIB_INSTALL_STAGING = YES
  
