@@ -1,55 +1,59 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Mon,  1 Feb 2016 15:05:41 +0100
-Subject: [Buildroot] [PATCH 22/22] package/python-cffi: host-package added
-	(needs host-libffi).
-In-Reply-To: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454335541-14224-23-git-send-email-mc5686@mclink.it>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 1 Feb 2016 15:08:58 +0100
+Subject: [Buildroot] [PATCH 02/16 v3] toolchain/external: add hashes for
+ actual sources
+In-Reply-To: <20160201135405.GD4278@free.fr>
+References: <cover.1454004518.git.yann.morin.1998@free.fr>
+ <1aaa41e84c4084331e638ac19c10017d6ad30268.1454004518.git.yann.morin.1998@free.fr>
+ <56AE8B01.1080205@mind.be> <20160201135405.GD4278@free.fr>
+Message-ID: <56AF66FA.6080409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/libffi/libffi.mk           | 11 +++++++++++
- package/python-cffi/python-cffi.mk |  2 ++
- 2 files changed, 13 insertions(+)
+On 01-02-16 14:54, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2016-01-31 23:30 +0100, Arnout Vandecappelle spake thusly:
+>> On 28-01-16 19:15, Yann E. MORIN wrote:
+>>> As we currently download the actual sources as part of saving the
+>>> legal-info, we do not check the hashes of those downloads.
+> [--SNIP--]
+>>> So we just add hashes for those actual external-toolchain sources we may
+>>> have to download.
+> [--SNIP--]
+>>> diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
+>>> index dd7073f..22bbe51 100644
+>>> --- a/toolchain/toolchain-external/toolchain-external.hash
+>>> +++ b/toolchain/toolchain-external/toolchain-external.hash
+>>> @@ -12,6 +12,7 @@ sha256 c65b1b4b918d5185349d62a3b7bf43b4b21e1175c52598ec047ca56b3f11d857  blackfi
+>>>  # Mentor's Sourcery CodeBench Lite toolchains
+>>>  # ARM
+>>>  sha256 39ee0e789034334ecc89af94e838e3a4815400ac5ff980f808f466b04778532e  arm-2014.05-29-arm-none-linux-gnueabi-i686-pc-linux-gnu.tar.bz2
+>>> +sha256 e16a5b1e41d7ff1e74161f9405182001bc8d1360d89564e73911032e6966cc0d  arm-2014.05-29-arm-none-linux-gnueabi.src.tar.bz2
+>>
+>>  Why only this one, and not the six other Sourcery toolchains?
+> 
+> Because I did not add them. ;-)
+> 
+> Seriously, I just forgot. And it takes quite some time to get them all.
+> 
+> I've added hashes for all the CS toolchains now, but maybe there are
+> other toolchains for which we're still missing the hashes for the source
+> tarball. Maybe we can just add them whenever someone stumbles on it?
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 8f0f72d..47de8cd 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -22,6 +22,17 @@ endef
- 
- LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
- 
-+# Move the headers to the usual location, and adjust the .pc file
-+# accordingly.
-+define HOST_LIBFFI_MOVE_HOST_HEADERS
-+	mv $(HOST_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(HOST_DIR)/usr/include/
-+	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
-+		$(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
-+	rm -rf $(HOST_DIR)/usr/lib/libffi-*
-+endef
-+
-+HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
-+
- # Remove headers that are not at the usual location from the target
- define LIBFFI_REMOVE_TARGET_HEADERS
- 	$(RM) -rf $(TARGET_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)
-diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-index 70fbe02..02c969b 100644
---- a/package/python-cffi/python-cffi.mk
-+++ b/package/python-cffi/python-cffi.mk
-@@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
- PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
- PYTHON_CFFI_LICENSE = MIT
- PYTHON_CFFI_LICENSE_FILES = LICENSE
-+HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser host-libffi
- 
- $(eval $(python-package))
-+$(eval $(host-python-package))
+ I checked, and we only have source for Sourcery, Arago and Linaro toolchains.
+
+ Regards,
+ Arnout
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
