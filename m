@@ -1,144 +1,250 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon,  1 Feb 2016 22:55:58 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
+Date: Mon,  1 Feb 2016 22:55:59 +0100
+Subject: [Buildroot] [PATCH v2 2/2] gst1-imx: bump to version 0.12.0
 In-Reply-To: <1454363759-23349-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1454363759-23349-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1454363759-23349-2-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1454363759-23349-3-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a library for using the i.MX6 VPU. It is an alternative to
-libfslvpuwrap, hosted on Github, and has an API that features several
-improvements over libfslvpuwrap, which include:
+Changelog:
+* vpu:
+  - Completely rewritten plugin code; elements now based on libimxvpuapi
+    instead of libfslvpuwrap
+  - imxvpuenc_h264 inserts SPS/PPS data in front of I/IDR frames
+  - imxvpuenc_mjpeg's quality factor actually has an effect, and is
+    equivalent to the libjpeg's quality factor (it is used in exactly
+    the same way to scale the quantization matrix' coefficients)
+  - the encoder's output buffers no longer have to use DMA memory; they
+    use regular system memory instead
+  - new support in imxvpudec (referred to as "chroma interleaving") for
+    NV12, NV16, NV24 as output formats as an alternative to the I420,
+    Y42B, Y444 formats
+  - removed all of the system frame number tracking code, since it is
+    unnecessary; Instead, the libimxvpuapi's context fields are used to
+    associate input/output frames with GstVideoCodecFrame system frame
+    numbers
+  - fix memory leaks related to missing buffer pool unref'ing
 
-* User-defined context information associated with input frames, which
-is passed on to corresponding output frames (to be able to identify
-which input frame produced which output frame)
-* Groundwork for future DMA-BUF/BMM/ION/CMA allocator integration, using
-file descriptors instead of physical addresses
-* Indicators for when it is safe to try to decode frames, which is
-critical in multi-threaded playback cases
-* Simplified, higher-level JPEG en/decoding API, based on the VPU MJPEG
-codec; useful for picture viewing without the extra boilerplate for
-VPU-based en/decoding
+* imxv4l2videosrc:
+  - support for crop metadata
+  - element uses the width, height, etc. of the format that the device
+    actually uses during operation (instead of default values)
+  - autofocus control support via GstPhotography
+  - fix incorrect GLib warnings
+  - fix segmentation fault when shutting down the element
 
-Changelog 0.10.0 -> 0.10.1:
-- add debian packaging files
-- update waf to version 1.8.16
-- add workaround in wscript to prevent stale pkg-config .pc files
-- fix memory leak by adding missing IOFreeVirtMem() call in vpulib
-backend
+* eglvivsink:
+  - remove extra g_free() calls, which lead to runtime errors
+  - remove GLESv2 VIVANTE link dependencies
+  - add Android platform
+  - manually retrieve VIV direct texture functions
+    with this and the link dependency elimination, this means that for
+    platforms except the framebuffer one, no Vivante specific headers
+    and libraries are needed anymore
+  - fix blocking issue in the Wayland platform mainloop
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/e519d6c
-https://github.com/Freescale/meta-fsl-arm/commit/1dd6a5b
+* improved and expanded documentation
 
-This package has been implicitely tested through gstreamer as the
-plugins rely on it for vpu decoding:
+* pxp: NV16 *is* supported after all (it was actually a bug in GStreamer
+pre-1.5.91)
+NOTE: this does not break compatibility with GStreamer versions older
+than 1.5.91
+
+* compositor: Update backported aggregator code to GStreamer 1.6
+
+* blitter:
+  - error handling improvements
+  - add missing buffer pool unref'ing, which lead to memory leaks
+  - add missing compositor dependency to blitter base
+
+* uniaudio:
+  - only build the uniaudio plugin if at least one codec was found
+    during configuration
+  - disable plugin if the gstaudio library is not available
+  - add AAC profile field to the sink caps with GStreamer >= 1.4.4 to
+    ensure the uniaudio decoder is only used for AAC-LC data
+
+* ipu: increase fill frame width from 8 to 64 pixels to make IPU fill
+operations work with pre-3.14 Freescale kernels
+
+* g2d: use padding pixels when setting surface parameters, fixing G2D
+failures with frame sizes that aren't aligned
+
+* wscript:
+  - improve Android support
+  - fix installation paths for the common, blitter, compositor libraries
+
+This is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/cf7a088
+
+However this package now offers a more flexible approach because it can
+be built without the GPU or VPU elements for devices based on SoCs that
+lack those features like the new i.MX7.
+
+Tested with the following commands on i.MX6Q (IPU):
  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxipuvideosink
+ # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+   matroskademux ! imxvpudec ! imxeglvivsink
+
+Tested with the following commands on i.MX6SX (PXP):
+ # gst-launch-1.0 imxv4l2videosrc device=/dev/video1 ! imxpxpvideosink
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
 
 Changelog v1->v2:
 - add hash file
-- add upstream URL
-- change license to LGPLv2.1+
+
+So far I've kept the PXP/IPU "options" which are not really options.
+As explained earlier, the goal is for users of the i.MX7 to know the PXP
+plugin will be built without any other dependency.
 
 Thanks,
 Gary
 
 ---
- package/Config.in                      |  1 +
- package/libimxvpuapi/Config.in         | 12 ++++++++++++
- package/libimxvpuapi/libimxvpuapi.hash |  2 ++
- package/libimxvpuapi/libimxvpuapi.mk   | 35 ++++++++++++++++++++++++++++++++++
- 4 files changed, 50 insertions(+)
- create mode 100644 package/libimxvpuapi/Config.in
- create mode 100644 package/libimxvpuapi/libimxvpuapi.hash
- create mode 100644 package/libimxvpuapi/libimxvpuapi.mk
+ package/gstreamer1/gst1-imx/Config.in     | 58 ++++++++++++++++++++++++++-----
+ package/gstreamer1/gst1-imx/gst1-imx.hash |  2 ++
+ package/gstreamer1/gst1-imx/gst1-imx.mk   | 15 ++++++--
+ 3 files changed, 64 insertions(+), 11 deletions(-)
+ create mode 100644 package/gstreamer1/gst1-imx/gst1-imx.hash
 
-diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..d3e5e30 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1033,6 +1033,7 @@ menu "Multimedia"
- 	source "package/libfslparser/Config.in"
- 	source "package/libfslvpuwrap/Config.in"
- 	source "package/libhdhomerun/Config.in"
-+	source "package/libimxvpuapi/Config.in"
- 	source "package/libmatroska/Config.in"
- 	source "package/libmms/Config.in"
- 	source "package/libmpeg2/Config.in"
-diff --git a/package/libimxvpuapi/Config.in b/package/libimxvpuapi/Config.in
-new file mode 100644
-index 0000000..a48e441
---- /dev/null
-+++ b/package/libimxvpuapi/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LIBIMXVPUAPI
-+	bool "libimxvpuapi"
-+	depends on BR2_arm # Only relevant for i.MX
-+	select BR2_PACKAGE_FREESCALE_IMX
-+	select BR2_PACKAGE_IMX_VPU
-+	help
-+	  This library provides an API for using the iMX6 VPU video engine. It
-+	  is an alternative to Freescale's VPU wrapper. Both the wrapper and
-+	  this library are layered on top of imx-vpu, the low-level iMX6 VPU
-+	  interface.
+diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
+index f7284f4..5f0da84 100644
+--- a/package/gstreamer1/gst1-imx/Config.in
++++ b/package/gstreamer1/gst1-imx/Config.in
+@@ -1,19 +1,13 @@
+ comment "gst1-imx needs an imx-specific Linux kernel to be built"
+ 	depends on BR2_arm && !BR2_LINUX_KERNEL
+ 
+-# Required by imx-gpu-viv
+-comment "gst1-imx needs an (e)glibc toolchain"
+-	depends on BR2_arm
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC
+-
+-config BR2_PACKAGE_GST1_IMX
++menuconfig BR2_PACKAGE_GST1_IMX
+ 	bool "gst1-imx"
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_arm # Only relevant for i.MX
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-gpu-viv
+-	depends on BR2_PACKAGE_IMX_GPU_VIV
+-	depends on BR2_PACKAGE_LIBFSLVPUWRAP
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
++	select BR2_PACKAGE_GST1_IMX_IPU_PLUGIN
++	select BR2_PACKAGE_GST1_IMX_PXP_PLUGIN
+ 	help
+ 	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
+ 	  i.MX6 platforms, with emphasis on video en/decoding using the VPU
+@@ -25,3 +19,49 @@ config BR2_PACKAGE_GST1_IMX
+ 	  The software as a whole is currently in beta stage.
+ 
+ 	  https://github.com/Freescale/gstreamer-imx
 +
-+	  https://github.com/Freescale/libimxvpuapi
-diff --git a/package/libimxvpuapi/libimxvpuapi.hash b/package/libimxvpuapi/libimxvpuapi.hash
++if BR2_PACKAGE_GST1_IMX
++
++config BR2_PACKAGE_GST1_IMX_IPU_PLUGIN
++	bool "IPU plugin"
++	help
++	  IPU plugin library
++
++config BR2_PACKAGE_GST1_IMX_PXP_PLUGIN
++	bool "PXP plugin"
++	help
++	  PXP plugin library
++
++config BR2_PACKAGE_GST1_IMX_V4L2_PLUGIN
++	bool "V4L2 plugin"
++	select BR2_PACKAGE_GST1_PLUGINS_BAD
++	help
++	  V4L2 plugin library
++
++config BR2_PACKAGE_GST1_IMX_VPU_PLUGIN
++	bool "VPU plugin"
++	select BR2_PACKAGE_LIBIMXVPUAPI
++	help
++	  VPU plugin library
++
++# Required by imx-gpu-viv
++comment "GPU sinks need an (e)glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
++
++config BR2_PACKAGE_GST1_IMX_EGL_PLUGIN
++	bool "EGL plugin"
++	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-gpu-viv
++	depends on BR2_PACKAGE_IMX_GPU_VIV
++	help
++	  EGL plugin library
++
++config BR2_PACKAGE_GST1_IMX_G2D_PLUGIN
++	bool "G2D plugin"
++	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-gpu-viv
++	depends on BR2_PACKAGE_IMX_GPU_VIV
++	depends on BR2_PACKAGE_GST1_IMX_EGL_PLUGIN
++	select BR2_PACKAGE_IMX_GPU_VIV_G2D
++	help
++	  G2D plugin library
++
++endif
+diff --git a/package/gstreamer1/gst1-imx/gst1-imx.hash b/package/gstreamer1/gst1-imx/gst1-imx.hash
 new file mode 100644
-index 0000000..fd90a20
+index 0000000..03e1729
 --- /dev/null
-+++ b/package/libimxvpuapi/libimxvpuapi.hash
++++ b/package/gstreamer1/gst1-imx/gst1-imx.hash
 @@ -0,0 +1,2 @@
 +# locally computed hash
-+sha256 8d7aeed88c06fda44318cef9565ae47b86461bd309908b1103a7974ed0822a8d  libimxvpuapi-0.10.1.tar.gz
-diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
-new file mode 100644
-index 0000000..8e62682
---- /dev/null
-+++ b/package/libimxvpuapi/libimxvpuapi.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# libimxvpuapi
-+#
-+################################################################################
++sha256 df34f080e24ac8f1619780aa5ad4e6ab1333f822cd2bf5fcb380b28c97248810  gst1-imx-0.12.0.tar.gz
+diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
+index 8ede8ad..f3eac0a 100644
+--- a/package/gstreamer1/gst1-imx/gst1-imx.mk
++++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_IMX_VERSION = 0.11.1
++GST1_IMX_VERSION = 0.12.0
+ GST1_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GST1_IMX_VERSION))
+ 
+ GST1_IMX_LICENSE = LGPLv2+
+@@ -13,13 +13,23 @@ GST1_IMX_LICENSE_FILES = LICENSE
+ GST1_IMX_INSTALL_STAGING = YES
+ 
+ GST1_IMX_DEPENDENCIES += host-pkgconf host-python \
+-	imx-gpu-viv gstreamer1 gst1-plugins-base libfslvpuwrap
++	gstreamer1 gst1-plugins-base
+ 
+ # needs access to imx-specific kernel headers
+ GST1_IMX_DEPENDENCIES += linux
+ GST1_IMX_CONF_OPTS += --prefix="/usr" \
+ 	--kernel-headers="$(LINUX_DIR)/include"
+ 
++ifeq ($(BR2_PACKAGE_GST1_IMX_V4L2_PLUGIN),y)
++GST1_IMX_DEPENDENCIES += gst1-plugins-bad
++endif
 +
-+LIBIMXVPUAPI_VERSION = 0.10.1
-+LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
-+LIBIMXVPUAPI_LICENSE = LGPLv2.1+
-+LIBIMXVPUAPI_LICENSE_FILES = LICENSE
-+LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
-+LIBIMXVPUAPI_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_GST1_IMX_VPU_PLUGIN),y)
++GST1_IMX_DEPENDENCIES += libimxvpuapi
++endif
 +
-+define LIBIMXVPUAPI_CONFIGURE_CMDS
-+	cd $(@D); \
-+	$(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf configure \
-+		--prefix=/usr
-+endef
-+
-+define LIBIMXVPUAPI_BUILD_CMDS
-+	cd $(@D); \
-+	$(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS)
-+endef
-+
-+define LIBIMXVPUAPI_INSTALL_STAGING_CMDS
-+	cd $(@D); \
-+	$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) install
-+endef
-+
-+define LIBIMXVPUAPI_INSTALL_TARGET_CMDS
-+	cd $(@D); \
-+	$(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
++ifeq ($(BR2_PACKAGE_GST1_IMX_EGL_PLUGIN),y)
++GST1_IMX_DEPENDENCIES += imx-gpu-viv
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ GST1_IMX_DEPENDENCIES += xlib_libX11
+ GST1_IMX_CONF_OPTS += --egl-platform=x11
+@@ -31,6 +41,7 @@ else
+ GST1_IMX_CONF_OPTS += --egl-platform=fb
+ endif
+ endif
++endif
+ 
+ define GST1_IMX_CONFIGURE_CMDS
+ 	cd $(@D); \
 -- 
 2.6.4
