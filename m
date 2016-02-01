@@ -1,58 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 19:51:08 +0100
-Subject: [Buildroot] [PATCH v6 02/13] core: use $(CURDIR) to set TOPDIR
-In-Reply-To: <1454342021-22960-3-git-send-email-s.martin49@gmail.com>
-References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
- <1454342021-22960-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <56AFA91C.2090707@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 19:53:12 +0100
+Subject: [Buildroot] [PATCH 2/5] docs/manual: slightly clarify patch
+ licensing
+In-Reply-To: <1454338344-24973-3-git-send-email-luca@lucaceresoli.net>
+References: <1454338344-24973-1-git-send-email-luca@lucaceresoli.net>
+ <1454338344-24973-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160201195312.09e2d34f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-02-16 16:53, Samuel Martin wrote:
-> This changes saves a shell call and uses a variable automatically set
-> by make [1].
-> 
-> [1] http://www.gnu.org/software/make/manual/make.html#Quick-Reference
+Luca,
 
- But then we should maybe remove TOPDIR, and replace it with CURDIR? You can't
-change directories in make, so CURDIR will always be valid.
-
- Regards,
- Arnout
-
+On Mon,  1 Feb 2016 15:52:21 +0100, Luca Ceresoli wrote:
+> Adding a patch is a modification to Buildroot. Thus this sentence might be
+> interpreted as "Patches are released under the Buildroot license".
 > 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Being a legal matter, the last thing we want is to be
+> ambiguous. Reword the sentence to avoid any misunderstandings.
 > 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
-> changes v5 -> v6:
-> - new patch
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  docs/manual/patch-policy.txt | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 17c181b..13c16af 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -69,7 +69,7 @@ endif
->  .NOTPARALLEL:
+> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+> index 0b4604e..cfda5c5 100644
+> --- a/docs/manual/patch-policy.txt
+> +++ b/docs/manual/patch-policy.txt
+> @@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
 >  
->  # absolute path
-> -TOPDIR := $(shell pwd)
-> +TOPDIR := $(CURDIR)
->  CONFIG_CONFIG_IN = Config.in
->  CONFIG = support/kconfig
->  DATE := $(shell date +%Y%m%d)
-> 
+>  === Format and licensing of the package patches
+>  
+> -Patches are released under the same license as the software that is
+> -modified.
+> +Patches are released under the same license as the software that they
+> +modify.
 
+"as the software that they apply to" ?
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
