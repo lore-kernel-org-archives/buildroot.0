@@ -1,74 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:38:02 +0100
-Subject: [Buildroot] [git commit] toolchain-external: bump Linaro ARM to
-	2015.11-2
-Message-ID: <20160201224711.613CD7F892@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Feb 2016 19:32:43 +0100
+Subject: [Buildroot] [git commit] uclibc: remove version selection
+Message-ID: <20160201224709.25AA47F8C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7199d7a9dfa6d07811f1f767acc6e4e6c723f42b
+commit: https://git.buildroot.net/buildroot/commit/?id=824e303eab3e20bcc21bdd3ec0007817369e87c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Runtime tested with Qemu 2.3.1 using a configuration based on
-qemu_arm_vexpress_defconfig with BR2_ARM_ENABLE_VFP and
-BR2_ARM_EABIHF selected
+Since we now only support uClibc-ng, remove the version selection from
+the uclibc package.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: only add the symlink with the old 2014.09 Linaro toolchain,
-for the newer ones, it is no longer needed. This has been runtime
-tested in Qemu.]
+Note that the BR2_UCLIBC_VERSION_SUPPORTS_* hidden booleans, which
+were only used to allow each uClibc version to specify which thread
+implementation they support and on which architecture are removed. Now
+such architecture dependencies are directly encoded in the "Thread
+library implementation" choice.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/Config.in               | 2 +-
- toolchain/toolchain-external/toolchain-external.hash | 2 +-
- toolchain/toolchain-external/toolchain-external.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/uclibc/Config.in | 41 +++++------------------------------------
+ package/uclibc/uclibc.mk | 11 +++--------
+ 2 files changed, 8 insertions(+), 44 deletions(-)
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index a873e41..a195421 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -37,7 +37,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 452043d..16bf89c 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -7,38 +7,9 @@ config BR2_PACKAGE_UCLIBC
  
- # See the note above.
- config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
--	bool "Linaro ARM 2015.08"
-+	bool "Linaro ARM 2015.11"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A
- 	depends on BR2_HOSTARCH = "x86_64"
-diff --git a/toolchain/toolchain-external/toolchain-external.hash b/toolchain/toolchain-external/toolchain-external.hash
-index bc913c4..6c211bf 100644
---- a/toolchain/toolchain-external/toolchain-external.hash
-+++ b/toolchain/toolchain-external/toolchain-external.hash
-@@ -32,7 +32,7 @@ sha256 254af7d02eb3bcc8345c78e131700bc995d65b68232caaed21150a5fd1456070  arago-2
+ comment "uClibc Options"
  
- # ARM and Aarch64 toolchains from Linaro
- sha256 0cffac0caea0eb3c8bdddfa14be011ce366680f40aeddbefc7cf23cb6d4f1891  gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
--sha256 34812c5d0556db86259ac6eb3f8bcf4ce8eca3fa8d7180875958492a42e9853f  gcc-linaro-5.1-2015.08-x86_64_arm-linux-gnueabihf.tar.xz
-+sha256 ff2d231749e59968cb5e7032b4f4e4ae82ff9f11c23967863e627a6c59cb3bc0  gcc-linaro-5.2-2015.11-2-x86_64_arm-linux-gnueabihf.tar.xz
- sha256 4bc9d86390f8fa67a693ba4768ba5b12faaf7dd37c706c05ccd9321e765226e4  gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- sha256 24b86799a6c64380c740bf31a700b46e854fc0a821da2341e9868f0196c864de  gcc-linaro-5.1-2015.08-x86_64_armeb-linux-gnueabihf.tar.xz
- sha256 3954f496ab01de67241109e82abfaa9b7625fdab4f05e79e7902e9814a07b832  gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index e5efb0b..fb1dff2 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -297,11 +297,11 @@ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
- ifeq ($(HOSTARCH),x86)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
-+TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.1-2015.08/arm-linux-gnueabihf
--TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.1-2015.08-x86_64_arm-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/arm-linux-gnueabihf
-+TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_arm-linux-gnueabihf.tar.xz
- endif
--TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- ifeq ($(HOSTARCH),x86)
- TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
+-config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
+-	bool
+-
+-config BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+-	bool
+-
+-config BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+-	bool
+-
+-choice
+-	prompt "uClibc C library Version"
+-	default BR2_UCLIBC_VERSION_NG
+-	help
+-	  Select the version of uClibc you wish to use.
+-
+-	config BR2_UCLIBC_VERSION_NG
+-		bool "uClibc-ng"
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS if BR2_m68k
+-		select BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD \
+-		       if BR2_m68k || BR2_arm || BR2_armeb
+-		select BR2_UCLIBC_VERSION_SUPPORTS_NPTL \
+-		       if !BR2_m68k && !BR2_x86_i386
+-
+-endchoice
+-
+-config BR2_UCLIBC_VERSION_STRING
+-	string
+-	default "1.0.11"		if BR2_UCLIBC_VERSION_NG
+-
+ config BR2_UCLIBC_CONFIG
+ 	string "uClibc configuration file to use?"
+-	default "package/uclibc/uClibc-ng.config" if BR2_UCLIBC_VERSION_NG
++	default "package/uclibc/uClibc-ng.config"
+ 	help
+ 	  Some people may wish to use their own modified uClibc configuration
+ 	  file and will specify their config file location with this option.
+@@ -76,9 +47,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ 
+ choice
+ 	prompt "Thread library implementation"
+-	default BR2_PTHREADS_NATIVE if BR2_UCLIBC_VERSION_SUPPORTS_NPTL
+-	default BR2_PTHREADS_OLD if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
+-	default BR2_PTHREADS if BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
++	default BR2_PTHREADS_NATIVE
+ 	help
+ 	  Use this option to select the thread library implementation
+ 	  that should be used in your toolchain.
+@@ -89,18 +58,18 @@ choice
+ 	config BR2_PTHREADS
+ 		bool "linuxthreads"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+-		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS
++		depends on BR2_m68k
+ 
+ 	config BR2_PTHREADS_OLD
+ 		bool "linuxthreads (stable/old)"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+-		depends on BR2_UCLIBC_VERSION_SUPPORTS_LINUXTHREADS_OLD
++		depends on BR2_m68k || BR2_arm || BR2_armeb
+ 
+ 	config BR2_PTHREADS_NATIVE
+ 		bool "Native POSIX Threading (NPTL)"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+ 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-		depends on BR2_UCLIBC_VERSION_SUPPORTS_NPTL
++		depends on !BR2_m68k && !BR2_x86_i386
+ endchoice
+ 
+ config BR2_PTHREAD_DEBUG
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 44b8a97..6b05181 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,16 +4,11 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = $(call qstrip,$(BR2_UCLIBC_VERSION_STRING))
+-UCLIBC_SOURCE ?= uClibc-$(UCLIBC_VERSION).tar.bz2
++UCLIBC_VERSION = 1.0.11
++UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
++UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPLv2.1+
+ UCLIBC_LICENSE_FILES = COPYING.LIB
+-
+-ifeq ($(BR2_UCLIBC_VERSION_NG),y)
+-UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+-UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+-endif
+-
+ UCLIBC_INSTALL_STAGING = YES
+ 
+ # uclibc is part of the toolchain so disable the toolchain dependency
