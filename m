@@ -1,22 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:56:36 +0100
-Subject: [Buildroot] [PATCH] linux-headers: bump 4.{1, 3, 4}.x series
-In-Reply-To: <1454338268-29537-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1454338268-29537-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160201195636.1fd81eaf@free-electrons.com>
+Date: Mon, 1 Feb 2016 19:57:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/autoconf-archive: bump to
+ version 2015.09.25
+In-Reply-To: <1454337295-14367-1-git-send-email-thomas.claveirole@green-communications.fr>
+References: <1454337295-14367-1-git-send-email-thomas.claveirole@green-communications.fr>
+Message-ID: <20160201195736.36f508e7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Thomas Claveirole,
 
-On Mon,  1 Feb 2016 11:51:08 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Mon,  1 Feb 2016 15:34:55 +0100, Thomas Claveirole wrote:
+> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
 > ---
->  package/linux-headers/Config.in.host | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/autoconf-archive/autoconf-archive.hash | 2 +-
+>  package/autoconf-archive/autoconf-archive.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied, thanks.
 
