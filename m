@@ -1,86 +1,62 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon,  1 Feb 2016 10:37:00 +0100
-Subject: [Buildroot] [PATCH 1/4] imx-gpu-viv: bump version to 5.0.11 p7.1
+Date: Mon,  1 Feb 2016 10:37:01 +0100
+Subject: [Buildroot] [PATCH 2/4] xdriver_xf86-video-imx-viv: bump to version
+	5.0.11 p7.1
 In-Reply-To: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1454319423-13913-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1454319423-13913-2-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1454319423-13913-3-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upgrade to 5.0.11 P7.1 for i.MX6 with GPU
-
-i.MX6QP qualified graphics driver(5.0.11P7.1).
-Includes many of the bug fixes and stability improvements.
-For more information refer to release notes from
-http://www.freescale.com/imx6qp
-
-libGAL_egl is no longer provided in p7.1.
+The license is now provided in the package.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/b3ef125
+https://github.com/Freescale/meta-fsl-arm/commit/1195b71
 
-This package has been tested with both X11 and Framebuffer backends:
- # cd /usr/share/examples/viv_samples/vdk/
- # apitrace trace --api egl ./tutorial7
- # gmem_info
- ... display memory use per PID ...
- #?apitrace replay tutorial7.trace
- #?eglretrace tutorial7.trace
+The following xorg.conf was used in order to force the use of the
+vivante module:
+https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics
+/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+
+Note that the X server must be started with the "noreset" option to
+avoid crashes when closing X apps.
+ # X -noreset
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  4 ++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 11 +----------
- 2 files changed, 3 insertions(+), 12 deletions(-)
+ .../x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash   | 2 +-
+ package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index aa1bdee..149afc2 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+index 9b3c7d3..72608dd 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
+@@ -1,2 +1,2 @@
  # locally computed
--sha256	b5b9c8e216b2bc4281c2443e07eab90547de0abd705614756ed68c7ad2fcf97a  imx-gpu-viv-5.0.11.p4.5-sfp.bin
--sha256	0591b495cd1c2547ae007d405b90729e2fb90603a5728b39d1a99cb4e1cf1eb4  imx-gpu-viv-5.0.11.p4.5-hfp.bin
-+sha256	43fea6ebbb1222e0f594fff3b48147f4bb6173b85f2caa9fa6bf04a1c85ee93a  imx-gpu-viv-5.0.11.p7.1-sfp.bin
-+sha256	e49ca1d31ca83bb50f6672325db37ae3754eb9073ad98a37790ab1209ea5cba8  imx-gpu-viv-5.0.11.p7.1-hfp.bin
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index a66c82e..133632b 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
+-sha256	1a0b25a91b493e99dfa94a802290320ea998ebd45d7aab0f73d7c7bb521b7e84  xserver-xorg-video-imx-viv-5.0.11.p4.5.tar.gz
++sha256	ab6a896cafba324105d26f52b7dad2c41d04d75cc9e48b66e8041a95660a04ee  xserver-xorg-video-imx-viv-5.0.11.p7.1.tar.gz
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+index a3a3167..884b30e 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--IMX_GPU_VIV_BASE_VERSION = 5.0.11.p4.5
-+IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.1
- ifeq ($(BR2_ARM_EABIHF),y)
- IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
- else
-@@ -26,13 +26,6 @@ define IMX_GPU_VIV_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_VIV_SOURCE))
- endef
+-XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p4.5
++XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = 5.0.11.p7.1
+ XDRIVER_XF86_VIDEO_IMX_VIV_SITE = $(FREESCALE_IMX_SITE)
+ XDRIVER_XF86_VIDEO_IMX_VIV_SOURCE = xserver-xorg-video-imx-viv-$(XDRIVER_XF86_VIDEO_IMX_VIV_VERSION).tar.gz
+ XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv xserver_xorg-server \
+ 	xproto_xproto xproto_xf86driproto libdrm
+ XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = GPLv2+
++XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-GPL-2
+ XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
+ XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)/EXA/src -f makefile.linux
  
--# For some reason libGAL_egl for x11 is called libGAL_egl.dri.so
--ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
--define IMX_GPU_VIV_FIXUP_SYMLINKS
--	ln -sf libGAL_egl.dri.so $(@D)/gpu-core/usr/lib/libGAL_egl.so
--endef
--endif
--
- # Instead of building, we fix up the inconsistencies that exist
- # in the upstream archive here.
- # Make sure these commands are idempotent.
-@@ -49,8 +42,6 @@ define IMX_GPU_VIV_BUILD_CMDS
- 	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
- 	ln -sf libVIVANTE-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVIVANTE.so
- 	ln -sf libGAL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
--	ln -sf libGAL_egl.$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL_egl.so
--	$(IMX_GPU_VIV_FIXUP_SYMLINKS)
- endef
- 
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
 -- 
 2.7.0
