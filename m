@@ -1,97 +1,93 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  1 Feb 2016 16:34:28 +0100
-Subject: [Buildroot] [PATCH v3 2/2] toolchain-external: move the sysroot
-	toolchain support check to helper function
-In-Reply-To: <1454340868-2040-1-git-send-email-romain.naour@gmail.com>
-References: <1454340868-2040-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1454340868-2040-2-git-send-email-romain.naour@gmail.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Mon, 1 Feb 2016 16:38:06 +0100
+Subject: [Buildroot] [PATCH v2 00/17] Rework atomic handling
+In-Reply-To: <20160201161926.3b2488f8@free-electrons.com>
+References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160201144730.7ca660e9@pcviktorin.fit.vutbr.cz>
+ <20160201161926.3b2488f8@free-electrons.com>
+Message-ID: <20160201163806.33d566ba@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sysroot toolchain support check is duplicated at three locations in the
-external toolchain infra. So move it inside the check_unusable_toolchain helper
-that is called when the toolchain package is configured
-(TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS).
+On Mon, 1 Feb 2016 16:19:26 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-All checks in TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS and
-TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS can be safely removed since it's already
-done in TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS.
+> Jan,
+> 
+> On Mon, 1 Feb 2016 14:47:30 +0100, Jan Viktorin wrote:
+> 
+> > recently, I was doing some tests on MicroBlaze and discovered that I
+> > am missing the atomic operations there. Then I could see this patch
+> > series. Thanks for that, however, I have still issues with this.  
+> 
+> Ah, so you're doing some Microblaze stuff? If so, some help would
+> definitely be welcome to maintain this platform.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
-v3: add missing exit 1
-    s/$(__CROSS_CC)/$${__CROSS_CC}/
-    Improve commit log (ThomasP)
-v2: new patch
----
- toolchain/helpers.mk                               |  5 +++++
- toolchain/toolchain-external/toolchain-external.mk | 14 +-------------
- 2 files changed, 6 insertions(+), 13 deletions(-)
+Unfortunately, this is just a single test on MicroBlaze after quite a
+long time. We've moved on to Zynq...
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 6102371..8a776f2 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -423,6 +423,11 @@ check_unusable_toolchain = \
- 	if test "$${libc_a_path}" = "libc.a" ; then \
- 		echo "Unable to detect the toolchain sysroot, Buildroot cannot handle this toolchain." ; \
- 		exit 1 ; \
-+	fi ; \
-+	sysroot_dir="$(call toolchain_find_sysroot,$${__CROSS_CC})" ; \
-+	if test -z "$${sysroot_dir}" ; then \
-+		echo "External toolchain doesn't support --sysroot. Cannot use." ; \
-+		exit 1 ; \
- 	fi
- 
- #
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 518afd6..5ad6309 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -467,17 +467,13 @@ $$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:.*/(usr/)?(lib(32|64
- endef
- 
- # Checks for an already installed toolchain: check the toolchain
--# location, check that it supports sysroot, and then verify that it
-+# location, check that it is usable, and then verify that it
- # matches the configuration provided in Buildroot: ABI, C++ support,
- # kernel headers version, type of C library and all C library features.
- define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	$(Q)$(call check_cross_compiler_exists,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)$(call check_unusable_toolchain,$(TOOLCHAIN_EXTERNAL_CC))
- 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
--	if test -z "$${SYSROOT_DIR}" ; then \
--		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
--		exit 1 ; \
--	fi ; \
- 	$(call check_kernel_headers_version,\
- 		$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)),\
- 		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST))); \
-@@ -588,10 +584,6 @@ endef
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
--	if test -z "$${SYSROOT_DIR}" ; then \
--		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
--		exit 1 ; \
--	fi ; \
- 	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	SUPPORT_LIB_DIR="" ; \
-@@ -633,10 +625,6 @@ endef
- 
- define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
- 	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
--	if test -z "$${SYSROOT_DIR}" ; then \
--		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
--		exit 1 ; \
--	fi ; \
- 	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
- 	SUPPORT_LIB_DIR="" ; \
+> 
+> > The libatomic_ops claims to not support MicroBlaze in its Config.in.  
+> 
+> Right.
+> 
+> > So it is not possible to use either __sync_* ones nor __atomic_* ones.  
+> 
+> This has nothing to do with libatomic_ops or not.
+> 
+> __sync and __atomic built-ins are provided by gcc, the compiler.
+> 
+> They are completely orthogonal to libatomic_ops. Programs/libraries
+> using __sync* or __atomic* functions do not need libatomic_ops. 
+> 
+> > Even if I change this and enable it for BR2_microblaze, I am unable to
+> > compile the libatomic_ops properly (with the Buildroot toolchain 4.9.x).  
+> 
+> There is no support for Microblaze in libatomic_ops, so this is not
+> surprising. See src/atomic_ops/sysdeps/gcc/ in the libatomic_ops
+> sources.
+> 
+> Maybe with generic.h / generic-small.h, libatomic_ops can rely on the
+> __sync or __atomic built-ins, but I haven't tried this possibility.
+> 
+> > Moreover, I've read somewhere that the new GCC connects the __sync_*
+> > interface to the __atomic_* interface internally. Is it true?  
+> 
+> I don't know how things are implemented internally in gcc.
+> 
+> > Is this done by the libatomic_ops library? I am confused by this
+> > situation... I made some wrappers doing the __sync_* to __atomic_*
+> > translation but still with no success.  
+> 
+> Are you use you are not confusing libatomic_ops and libatomic ?
+> 
+> libatomic_ops is a separate project, which has nothing to do with gcc.
+> 
+> libatomic is a library part of gcc, which exists since gcc 4.7, and
+> provided as part of the gcc runtime on the target.
+
+So, this the source of my confusion. Yes, I thought that libatomic and
+libatomic_ops are related or same as I couldn't find libatomic anywhere in the
+Buildroot. Thanks for clarification.
+
+If I have a library that links with __atomic_* calls I just need to
+link with libatomic when building for MicroBlaze, is that correct?
+
+Regards
+Jan
+
+> 
+> Best regards,
+> 
+> Thomas
+
+
+
 -- 
-2.4.3
+   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
+   System Architect              Web:    www.RehiveTech.com
+   RehiveTech
+   Brno, Czech Republic
