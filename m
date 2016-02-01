@@ -1,137 +1,84 @@
 From: Ludovic Guegan <ludovic.guegan@gmail.com>
-Date: Tue,  2 Feb 2016 00:30:58 +0100
-Subject: [Buildroot] [PATCH 1/8 RFC] package/golang: create Go 1.5 host
-	compiler package
+Date: Tue,  2 Feb 2016 00:30:59 +0100
+Subject: [Buildroot] [PATCH 2/8 RFC] package/golang-gb: create gb package to
+	build and fetch go packages
 In-Reply-To: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
 References: <1454369465-4804-1-git-send-email-ludovic.guegan@gmail.com>
-Message-ID: <1454369465-4804-2-git-send-email-ludovic.guegan@gmail.com>
+Message-ID: <1454369465-4804-3-git-send-email-ludovic.guegan@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This compiler is bootstraped using a Go 1.4 compiler.
-
 Signed-off-by: Ludovic Guegan <ludovic.guegan@gmail.com>
 ---
- package/Config.in.host        |  1 +
- package/golang/Config.in.host |  7 +++++
- package/golang/golang.hash    |  2 ++
- package/golang/golang.mk      | 72 +++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 82 insertions(+)
- create mode 100644 package/golang/Config.in.host
- create mode 100644 package/golang/golang.hash
- create mode 100644 package/golang/golang.mk
+ package/Config.in.host           |  1 +
+ package/golang-gb/Config.in.host |  8 ++++++++
+ package/golang-gb/golang-gb.mk   | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 39 insertions(+)
+ create mode 100644 package/golang-gb/Config.in.host
+ create mode 100644 package/golang-gb/golang-gb.mk
 
 diff --git a/package/Config.in.host b/package/Config.in.host
-index 8e6b870..0625bd0 100644
+index 0625bd0..2d99d37 100644
 --- a/package/Config.in.host
 +++ b/package/Config.in.host
-@@ -12,6 +12,7 @@ menu "Host utilities"
- 	source "package/genext2fs/Config.in.host"
+@@ -13,6 +13,7 @@ menu "Host utilities"
  	source "package/genimage/Config.in.host"
  	source "package/genpart/Config.in.host"
-+	source "package/golang/Config.in.host"
+ 	source "package/golang/Config.in.host"
++	source "package/golang-gb/Config.in.host"
  	source "package/gptfdisk/Config.in.host"
  	source "package/imx-usb-loader/Config.in.host"
  	source "package/jq/Config.in.host"
-diff --git a/package/golang/Config.in.host b/package/golang/Config.in.host
+diff --git a/package/golang-gb/Config.in.host b/package/golang-gb/Config.in.host
 new file mode 100644
-index 0000000..11ce925
+index 0000000..b84a83f
 --- /dev/null
-+++ b/package/golang/Config.in.host
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_HOST_GOLANG
-+	bool "golang"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
++++ b/package/golang-gb/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_GOLANG_GB
++	bool "golang-gb"
++	depends on BR2_PACKAGE_HOST_GOLANG
 +	help
-+	  Go build system. It is used to cros-compile Go programs for the target.
++          gb is an alternative build tool for the Go programming language.
 +
-+	  http://golang.org/
-diff --git a/package/golang/golang.hash b/package/golang/golang.hash
++	  https://getgb.io
++
+diff --git a/package/golang-gb/golang-gb.mk b/package/golang-gb/golang-gb.mk
 new file mode 100644
-index 0000000..751e19a
+index 0000000..9ae9da7
 --- /dev/null
-+++ b/package/golang/golang.hash
-@@ -0,0 +1,2 @@
-+sha256 754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
-+sha256 299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b  go1.4.2.src.tar.gz
-diff --git a/package/golang/golang.mk b/package/golang/golang.mk
-new file mode 100644
-index 0000000..f02ebde
---- /dev/null
-+++ b/package/golang/golang.mk
-@@ -0,0 +1,72 @@
++++ b/package/golang-gb/golang-gb.mk
+@@ -0,0 +1,30 @@
 +################################################################################
 +#
-+# golang
++# golang-gb
 +#
 +################################################################################
 +
-+GOLANG_VERSION = 1.5.3
-+GOLANG_SOURCE = go$(GOLANG_VERSION).src.tar.gz
-+GOLANG_SITE = https://storage.googleapis.com/golang
-+GOLANG_LICENSE = BSD-3c
-+GOLANG_LICENSE_FILES = LICENSE
-+GOLANG_EXTRA_SOURCE = go1.4.2.src.tar.gz
-+HOST_GOLANG_EXTRA_DOWNLOADS = https://storage.googleapis.com/golang/$(GOLANG_EXTRA_SOURCE)
-+GOLANG_SUBDIR = go
++GOLANG_GB_VERSION = 0.4.0
++GOLANG_GB_TAG = v$(GOLANG_GB_VERSION)
++GOLANG_GB_SITE = $(call github,constabulary,gb,$(GOLANG_GB_TAG))
++GOLANG_GB_LICENSE = MIT
 +
-+#
-+# Environment used to bootstrap
-+#
-+GOLANG_BOOTSTRAP_DIR = $(@D)/bootstrap
-+GOLANG_BOOTSTRAP_GO = $(GOLANG_BOOTSTRAP_DIR)/go
-+GOLANG_BOOTSTRAP_BIN = $(GOLANG_BOOTSTRAP_GO)/bin
-+GOLANG_BOOTSTRAP_ENV = GOBIN=$(GOLANG_BOOTSTRAP_BIN) PATH=$(BR_PATH)
++GOLANG_GB_ENV = GOPATH=$(@D)
 +
-+#
-+# Environment used to build
-+#
-+GOLANG_GOROOT_FINAL = $(HOST_DIR)/usr/lib/go
-+GOLANG_BUILD_ENV = PATH=$(GOLANG_BOOTSTRAP_BIN):$(BR_PATH) \
-+	GOROOT_FINAL=$(GOLANG_GOROOT_FINAL) \
-+	GOROOT_BOOTSTRAP=$(GOLANG_BOOTSTRAP_GO)
-+
-+#
-+# Packages can use GO_HOST_BINARY to call the go program
-+#
-+GO_HOST_BINARY = $(HOST_DIR)/usr/bin/go
-+
-+#
-+# Extracts bootstraping and host compilers
-+#
-+define HOST_GOLANG_EXTRACT_CMDS
-+	mkdir -p $(GOLANG_BOOTSTRAP_BIN)
-+	tar xvaf $(BR2_DL_DIR)/$(GOLANG_EXTRA_SOURCE) -C $(GOLANG_BOOTSTRAP_DIR)
-+	tar xvaf $(BR2_DL_DIR)/$(GOLANG_SOURCE) -C $(@D)
++define HOST_GOLANG_GB_EXTRACT_CMDS
++	mkdir -p $(@D)/src/github.com/constabulary
++	tar xvaf $(DL_DIR)/golang-gb-$(GOLANG_GB_VERSION).tar.gz -C $(@D)
++	mv $(@D)/gb-$(GOLANG_GB_VERSION) $(@D)/src/github.com/constabulary/gb
 +endef
 +
-+#
-+# Build bootstraping compiler before the host compiler.
-+#
-+define HOST_GOLANG_BOOTSTRAP
-+	cd $(GOLANG_BOOTSTRAP_GO)/src; env -i $(GOLANG_BOOTSTRAP_ENV) ./make.bash
++define HOST_GOLANG_GB_BUILD_CMDS
++	env -i $(GOLANG_GB_ENV) $(GO_HOST_BINARY) install -v github.com/constabulary/gb/cmd/gb
++	env -i $(GOLANG_GB_ENV) $(GO_HOST_BINARY) install -v github.com/constabulary/gb/cmd/gb-vendor
 +endef
 +
-+HOST_GOLANG_PRE_BUILD_HOOKS += HOST_GOLANG_BOOTSTRAP
-+
-+#
-+# Compile the host compiler with the envionment pointing to the bootstraping
-+# compiler previously built
-+#
-+define HOST_GOLANG_BUILD_CMDS
-+	cd $(HOST_GOLANG_SRCDIR)/src; env -i $(GOLANG_BUILD_ENV) ./make.bash
-+endef
-+
-+#
-+# Install Go by simply copying the source and the binary to the final
-+# destination
-+#
-+define HOST_GOLANG_INSTALL_CMDS
-+	cp -a $(HOST_GOLANG_SRCDIR) $(GOLANG_GOROOT_FINAL)
-+	ln -fs $(GOLANG_GOROOT_FINAL)/bin/go $(GO_HOST_BINARY)
++define HOST_GOLANG_GB_INSTALL_CMDS
++	$(INSTALL) -m 755 $(@D)/bin/gb $(HOST_DIR)/usr/bin
++	$(INSTALL) -m 755 $(@D)/bin/gb-vendor $(HOST_DIR)/usr/bin
 +endef
 +
 +$(eval $(host-generic-package))
