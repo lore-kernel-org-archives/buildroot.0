@@ -1,78 +1,101 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 01 Feb 2016 22:05:17 +0100
-Subject: [Buildroot] [PATCH 1/1] RFC: musl: Fix gettext support
-References: <1454194293-17572-1-git-send-email-bernd.kuhls@t-online.de>
- <87mvrkcsvm.fsf@dell.be.48ers.dk>
-Message-ID: <dtt4ocxf5l.ln2@ID-313208.user.individual.net>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 1 Feb 2016 22:07:35 +0100
+Subject: [Buildroot] [PATCH 08/10] libimxvpuapi: add new package
+In-Reply-To: <20160201214218.3eb39852@free-electrons.com>
+References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1454154357-31625-9-git-send-email-gary.bisson@boundarydevices.com>
+ <20160201214218.3eb39852@free-electrons.com>
+Message-ID: <CAAMH-yscefcieOucmeT2ZpuqG44LBYvKha9VV93=wN_KJCBh-A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 01 Feb 2016 17:11:57 +0100 schrieb Peter Korsgaard:
+Thomas, All,
 
-> I now spent some quality time (!) with gettext.m4 and figured out what
-> we really going on here with musl and libintl.h, and I've pushed a
-> simpler / more complete patch fixing the issue.
-> 
-> I have therefore marked this patch as superseeded.
-> 
-> I've also reverted the madplay fix now that it is handled globally in
-> TARGET_CONFIGURE_ARGS.
+On Mon, Feb 1, 2016 at 9:42 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Gary Bisson,
+>
+> On Sat, 30 Jan 2016 12:45:55 +0100, Gary Bisson wrote:
+>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 09c2b40..d3e5e30 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1033,6 +1033,7 @@ menu "Multimedia"
+>>       source "package/libfslparser/Config.in"
+>>       source "package/libfslvpuwrap/Config.in"
+>>       source "package/libhdhomerun/Config.in"
+>> +     source "package/libimxvpuapi/Config.in"
+>
+> Why isn't it part of the package/freescale/ directory ? Because it
+> isn't sourced from the same site ?
 
-Hi Peter,
+No actually my thought process was that this package is the equivalent
+of libfslvpuwrap which, for some reason, isn't part of the
+freescale-imx folder. Not sure why, I'm sure there's an historical
+reason behind it.
 
-there is still a problem left, binutils contains its own intl library 
-with a GNU libintl.h, similar to the one provided by gettext. It changes 
-function names in libbfd.so, this leads to a link error at least with 
-dropwatch:
+>>       source "package/libmatroska/Config.in"
+>>       source "package/libmms/Config.in"
+>>       source "package/libmpeg2/Config.in"
+>> diff --git a/package/libimxvpuapi/Config.in b/package/libimxvpuapi/Config.in
+>> new file mode 100644
+>> index 0000000..222aa76
+>> --- /dev/null
+>> +++ b/package/libimxvpuapi/Config.in
+>> @@ -0,0 +1,10 @@
+>> +config BR2_PACKAGE_LIBIMXVPUAPI
+>> +     bool "libimxvpuapi"
+>> +     depends on BR2_arm # Only relevant for i.MX
+>> +     select BR2_PACKAGE_FREESCALE_IMX
+>> +     select BR2_PACKAGE_IMX_VPU
+>
+> I am wondering if the first one shouldn't be a "depends on", but I'm
+> not sure. What do other think ?
+>
+>> +     help
+>> +       This library provides an API for using the iMX6 VPU video engine. It
+>> +       is an alternative to Freescale's VPU wrapper. Both the wrapper and
+>> +       this library are layered on top of imx-vpu, the low-level iMX6 VPU
+>> +       interface.
+>
+> A URL to the upstream web page would be good. A github page is fine as
+> a fallback if there's no real upstream web site.
 
-http://autobuild.buildroot.net/results/c90/
-c90f7688b3b2e07f3232db163dc747c954604442//
+Ok, I will add the Github page then:
+https://github.com/Freescale/libimxvpuapi
 
-/home/test/autobuild/instance-2/output/host/usr/x86_64-buildroot-linux-
-musl/sysroot/usr/lib/../lib64/libbfd.so: undefined reference to 
-`libintl_dgettext'
+>> diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+>> new file mode 100644
+>> index 0000000..ff9282d
+>> --- /dev/null
+>> +++ b/package/libimxvpuapi/libimxvpuapi.mk
+>> @@ -0,0 +1,35 @@
+>> +################################################################################
+>> +#
+>> +# libimxvpuapi
+>> +#
+>> +################################################################################
+>> +
+>> +LIBIMXVPUAPI_VERSION = 0.10.1
+>> +LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
+>> +LIBIMXVPUAPI_LICENSE = LGPLv2.1
+>
+> License seems to be LGPLv2.1+.
 
-This situation is still present today after your commit:
+The LICENSE file says LGPLv2.1 but indeed the source code headers
+state the LGPLv2.1+. Who wins then?
+https://github.com/Freescale/libimxvpuapi/blob/master/imxvpuapi/imxvpuapi_jpeg.c#L7
+https://github.com/Freescale/libimxvpuapi/blob/master/LICENSE
 
-output/host/usr/bin/x86_64-linux-readelf -a output/staging/usr/lib64/
-libbfd-2.24.so | grep gettext
-0000002e4d50  012400000007 R_X86_64_JUMP_SLO 0000000000000000 
-libintl_dgettext + 0
-   292: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND 
-libintl_dgettext
-  1275: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND 
-libintl_dgettext
+> Also, you forgot to include a hash file. Could you fix those issues and
+> send an updated version?
 
-Again I hacked a bit to get the problem solved in a way you will never 
-accept it ;)
+I might have missed an update, are we providing hash even for Github
+projects now?
 
-$ cat package/binutils/2.24/200-musl-gettext.patch
-diff -uNr binutils-2.24.org/Makefile.in binutils-2.24/Makefile.in
---- binutils-2.24.org/Makefile.in	2013-12-02 10:31:21.000000000 
-+0100
-+++ binutils-2.24/Makefile.in	2016-02-01 21:54:49.286655138 +0100
-@@ -16938,6 +16938,7 @@
- 	esac; \
- 	srcdiroption="--srcdir=$${topdir}/intl"; \
- 	libsrcdir="$$s/intl"; \
-+	gt_cv_func_gnugettext1_libc=yes \
- 	$(SHELL) $${libsrcdir}/configure \
- 	  $(HOST_CONFIGARGS) --build=${build_alias} --host=${host_alias} \
- 	  --target=${target_alias} $${srcdiroption}  \
-
-Using this patch libbfd-2.24.so will look like this:
-
-$ output/host/usr/bin/x86_64-linux-readelf -a output/staging/usr/lib64/
-libbfd-2.24.so | grep gettext
-0000002e4be0  00bb00000007 R_X86_64_JUMP_SLO 0000000000000000 dgettext + 0
-   187: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND dgettext
-  1171: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND dgettext
-
-and dropwatch will compile fine. I tried to get the content of our 
-$gt_cv_func_gnugettext1_libc variable from Makefile.in down to binutils/
-intl/configure and failed :( I hope this will help anyway.
-
-Regards, Bernd
+Regards,
+Gary
