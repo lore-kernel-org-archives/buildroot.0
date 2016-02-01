@@ -1,31 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2016 14:20:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/squashfs: fix musl build
-In-Reply-To: <1454261983-17555-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Sun, 31 Jan 2016 18:39:43 +0100")
-References: <1454261983-17555-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <874mdsefd1.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 14:26:59 +0100
+Subject: [Buildroot] [PATCH v12 1/3] toolchain-external: don't exclude
+ too much lib in sysroot rsync
+In-Reply-To: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1453984366-12393-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <20160201142659.15d9d3b9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Dear Thomas De Schampheleire,
 
- > The build errors were not yet found by the autobuilders:
- > action.c: In function ?name_fn?:
- > action.c:1911:29: error: ?FNM_EXTMATCH? undeclared (first use in this function)
- >      FNM_PATHNAME|FNM_PERIOD|FNM_EXTMATCH) == 0;)
- >                              ^
- > pseudo.c: In function ?read_pseudo_def?:
- > pseudo.c:435:11: error: ?S_IFBLK? undeclared (first use in this function)
- >    mode |= S_IFBLK;
- >            ^
+On Thu, 28 Jan 2016 13:32:44 +0100, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> The copy_toolchain_sysroot helper in toolchain/helpers.mk performs an
+> rsync of various directories from the extracted external toolchain to the
+> corresponding directory in staging.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[...]
 
-Committed, thanks.
+Better late than never, I've finally applied your patch series, after
+making sure that a build + minimal run-time test of a minimal ARM
+system based on a Linaro toolchain still works fine.
 
+Thanks for this work, and thanks to Romain for being brave enough to
+analyze, review and test those patches!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
