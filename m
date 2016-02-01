@@ -1,78 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 19:41:24 +0100
-Subject: [Buildroot] [PATCH] package: aespipe: add host variant
-In-Reply-To: <1454341047-14412-1-git-send-email-ariel@vanguardiasur.com.ar>
-References: <1454341047-14412-1-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <56AFA6D4.3060109@mind.be>
+Date: Mon, 1 Feb 2016 19:42:30 +0100
+Subject: [Buildroot] [PATCH 02/22] package/python-characteristic: new
+ package.
+In-Reply-To: <CAGm1_ks8JT7QWkRtArXixm-kvN0D2tXSDvXk2nZPYfke+2h2fg@mail.gmail.com>
+References: <1454335541-14224-1-git-send-email-mc5686@mclink.it>
+ <1454335541-14224-3-git-send-email-mc5686@mclink.it>
+ <CAGm1_ks8JT7QWkRtArXixm-kvN0D2tXSDvXk2nZPYfke+2h2fg@mail.gmail.com>
+Message-ID: <56AFA716.4060108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-02-16 16:37, Ariel D'Alessandro wrote:
-> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-
- Your commit message should explain why this is needed. Something like:
-
-Post-image scripts may want to encrypt the resulting image with aespipe
-(and decrypt it in the update tool on the target), so it is useful to have
-the host version and to be able to select it in the configuration.
-
-> ---
->  package/Config.in.host         |  1 +
->  package/aespipe/Config.in.host | 10 ++++++++++
->  package/aespipe/aespipe.mk     |  1 +
->  3 files changed, 12 insertions(+)
->  create mode 100644 package/aespipe/Config.in.host
+On 01-02-16 16:14, Yegor Yefremov wrote:
+> On Mon, Feb 1, 2016 at 3:05 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+>> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+>> ---
+>>  package/Config.in                                        |  1 +
+>>  package/python-characteristic/Config.in                  |  8 ++++++++
+>>  package/python-characteristic/python-characteristic.hash |  3 +++
+>>  package/python-characteristic/python-characteristic.mk   | 15 +++++++++++++++
+>>  4 files changed, 27 insertions(+)
+>>  create mode 100644 package/python-characteristic/Config.in
+>>  create mode 100644 package/python-characteristic/python-characteristic.hash
+>>  create mode 100644 package/python-characteristic/python-characteristic.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 09c2b40..53734fd 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -623,6 +623,7 @@ menu "External python modules"
+>>         source "package/python-can/Config.in"
+>>         source "package/python-certifi/Config.in"
+>>         source "package/python-cffi/Config.in"
+>> +       source "package/python-characteristic/Config.in"
+>>         source "package/python-cheetah/Config.in"
+>>         source "package/python-cherrypy/Config.in"
+>>         source "package/python-coherence/Config.in"
+>> diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
+>> new file mode 100644
+>> index 0000000..625e27e
+>> --- /dev/null
+>> +++ b/package/python-characteristic/Config.in
+>> @@ -0,0 +1,8 @@
+>> +config BR2_PACKAGE_PYTHON_CHARACTERISTIC
+>> +       bool "python-characteristic"
+>> +       depends on BR2_PACKAGE_PYTHON
 > 
-> diff --git a/package/Config.in.host b/package/Config.in.host
-> index 8e6b870..1c691a3 100644
-> --- a/package/Config.in.host
-> +++ b/package/Config.in.host
-> @@ -1,5 +1,6 @@
->  menu "Host utilities"
->  
-> +	source "package/aespipe/Config.in.host"
->  	source "package/checkpolicy/Config.in.host"
->  	source "package/cramfs/Config.in.host"
->  	source "package/dfu-util/Config.in.host"
-> diff --git a/package/aespipe/Config.in.host b/package/aespipe/Config.in.host
-> new file mode 100644
-> index 0000000..29f6232
-> --- /dev/null
-> +++ b/package/aespipe/Config.in.host
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_HOST_AESPIPE
-> +	bool "host aespipe"
-> +	depends on BR2_USE_MMU # fork()
+> remove depends
 
- This shouldn't be there. If the target doesn't have a MMU, you can still build
-it for the host.
-
- Otherwise looks good to me.
+ Do you mean that this package works on python3?
 
  Regards,
  Arnout
 
-> +	help
-> +	  aespipe program is AES encrypting or decrypting pipe. It reads from
-> +	  standard input and writes to standard output. It can be used to
-> +	  create and restore encrypted tar or cpio archives. It can be used to
-> +	  encrypt and decrypt loop-AES compatible encrypted disk images.
-> +
-> +	  http://koti.tnnet.fi/jari.ruusu/linux/
-> diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
-> index a220688..c567092 100644
-> --- a/package/aespipe/aespipe.mk
-> +++ b/package/aespipe/aespipe.mk
-> @@ -10,3 +10,4 @@ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
->  AESPIPE_LICENSE = GPL
->  
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
 > 
-
+>> +       help
+>> +         Python attributes without boilerplate.
+>> +
+>> +         https://pypi.python.org/pypi/characteristic
+>> +
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
