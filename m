@@ -1,35 +1,46 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  1 Feb 2016 23:19:56 +0100
-Subject: [Buildroot] [PATCH v2 5/5] legal-info: explicitly state how patches
-	are licensed
+Date: Mon,  1 Feb 2016 23:19:53 +0100
+Subject: [Buildroot] [PATCH v2 2/5] docs/manual: slightly clarify patch
+	licensing
 In-Reply-To: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
 References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1454365196-26319-6-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1454365196-26319-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- support/legal-info/README.header | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Adding a patch is a modification to Buildroot. Thus this sentence might be
+interpreted as "Patches are released under the Buildroot license".
 
-diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-index 0b5aa66..316f799 100644
---- a/support/legal-info/README.header
-+++ b/support/legal-info/README.header
-@@ -18,7 +18,7 @@ This material is composed of the following items.
-    sources/ subdirectory (except for the non-redistributable packages, which
-    have not been saved). Patches that were applied are also saved, along
-    with a file named 'series' that lists the patches in the order they were
--   applied.
-+   applied. Patches are under the same license as the original package.
-  * A manifest file listing the configured packages and related information.
-  * The license text of the packages; they have been saved in the licenses/
-    subdirectory.
+Being a legal matter, the last thing we want is to be
+ambiguous. Reword the sentence to avoid any misunderstandings.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+---
+Changes v1 -> v2:
+- "they modify" -> "they apply to" (Thomas).
+---
+ docs/manual/patch-policy.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
+index 0b4604e..d50c971 100644
+--- a/docs/manual/patch-policy.txt
++++ b/docs/manual/patch-policy.txt
+@@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
+ 
+ === Format and licensing of the package patches
+ 
+-Patches are released under the same license as the software that is
+-modified.
++Patches are released under the same license as the software they apply
++to.
+ 
+ A message explaining what the patch does, and why it is needed, should
+ be added in the header commentary of the patch.
 -- 
 1.9.1
