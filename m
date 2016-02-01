@@ -1,38 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:40:56 +0100
-Subject: [Buildroot] [PATCH v2 0/8] Remove uClibc version selection:
- always use uClibc-ng
-In-Reply-To: <87wpqob882.fsf@dell.be.48ers.dk>
-References: <1453929930-18215-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <87wpqob882.fsf@dell.be.48ers.dk>
-Message-ID: <20160201194056.1a16839e@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 1 Feb 2016 19:41:24 +0100
+Subject: [Buildroot] [PATCH] package: aespipe: add host variant
+In-Reply-To: <1454341047-14412-1-git-send-email-ariel@vanguardiasur.com.ar>
+References: <1454341047-14412-1-git-send-email-ariel@vanguardiasur.com.ar>
+Message-ID: <56AFA6D4.3060109@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 01-02-16 16:37, Ariel D'Alessandro wrote:
+> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 
-On Mon, 01 Feb 2016 19:23:25 +0100, Peter Korsgaard wrote:
+ Your commit message should explain why this is needed. Something like:
 
->  > Since April 2015, the uClibc-ng has done very regular releases of the
->  > uClibc C library, and is the de-facto active replacement of the now
->  > defunct uClibc project.
+Post-image scripts may want to encrypt the resulting image with aespipe
+(and decrypt it in the update tool on the target), so it is useful to have
+the host version and to be able to select it in the configuration.
+
+> ---
+>  package/Config.in.host         |  1 +
+>  package/aespipe/Config.in.host | 10 ++++++++++
+>  package/aespipe/aespipe.mk     |  1 +
+>  3 files changed, 12 insertions(+)
+>  create mode 100644 package/aespipe/Config.in.host
 > 
->  > uClibc 0.9.33 is going to be 4 years old in the coming months, and we
->  > already need 50+ patches to make it somewhat usable.
-> 
->  > It is therefore time to simply offer uClibc-ng as our only supported
->  > uClibc version, and remove the options of using uClibc 0.9.33 and
->  > uClibc-snapshot. To achieve this, this patch series:
-> 
-> Committed entire series, thanks!
+> diff --git a/package/Config.in.host b/package/Config.in.host
+> index 8e6b870..1c691a3 100644
+> --- a/package/Config.in.host
+> +++ b/package/Config.in.host
+> @@ -1,5 +1,6 @@
+>  menu "Host utilities"
+>  
+> +	source "package/aespipe/Config.in.host"
+>  	source "package/checkpolicy/Config.in.host"
+>  	source "package/cramfs/Config.in.host"
+>  	source "package/dfu-util/Config.in.host"
+> diff --git a/package/aespipe/Config.in.host b/package/aespipe/Config.in.host
+> new file mode 100644
+> index 0000000..29f6232
+> --- /dev/null
+> +++ b/package/aespipe/Config.in.host
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_HOST_AESPIPE
+> +	bool "host aespipe"
+> +	depends on BR2_USE_MMU # fork()
 
-Wohoho, thanks! Finally the uClibc mess is getting saner! :-)
+ This shouldn't be there. If the target doesn't have a MMU, you can still build
+it for the host.
 
-Thomas
+ Otherwise looks good to me.
+
+ Regards,
+ Arnout
+
+> +	help
+> +	  aespipe program is AES encrypting or decrypting pipe. It reads from
+> +	  standard input and writes to standard output. It can be used to
+> +	  create and restore encrypted tar or cpio archives. It can be used to
+> +	  encrypt and decrypt loop-AES compatible encrypted disk images.
+> +
+> +	  http://koti.tnnet.fi/jari.ruusu/linux/
+> diff --git a/package/aespipe/aespipe.mk b/package/aespipe/aespipe.mk
+> index a220688..c567092 100644
+> --- a/package/aespipe/aespipe.mk
+> +++ b/package/aespipe/aespipe.mk
+> @@ -10,3 +10,4 @@ AESPIPE_SITE = http://loop-aes.sourceforge.net/aespipe
+>  AESPIPE_LICENSE = GPL
+>  
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> 
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
