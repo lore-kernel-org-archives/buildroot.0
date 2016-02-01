@@ -1,41 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 1 Feb 2016 19:59:55 +0100
-Subject: [Buildroot] [git commit] strongswan: unavailable for static builds
-Message-ID: <20160201224714.3E2B07F8C1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Feb 2016 23:46:45 +0100
+Subject: [Buildroot] [git commit] binutils: ensure TARGET_CONFIGURE_ARGS is
+	taken into consideration for subdirs
+Message-ID: <20160201224716.068D67F8C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c42cb74b02b5ca4499db65072b8a5a880e9414ab
+commit: https://git.buildroot.net/buildroot/commit/?id=1d42d0acca6fbae5fca01024314600369d99995e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Uses dlopen in plugin_loader (not optional), fixes:
-http://autobuild.buildroot.net/results/601/601d8dc1654d8733db49b195139e12437663034c/
+Binutils runs the configure scripts of subdirs at make time, so we need a
+custom build command to ensure TARGET_CONFIGURE_ARGS are taken into
+consideration for those (E.G. for musl gettext handling).
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reported-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/binutils/binutils.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index b26f1c7..cada78b 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -1,11 +1,12 @@
--comment "strongswan needs a toolchain w/ threads"
-+comment "strongswan needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 7c5955e..a3e27be 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -74,6 +74,12 @@ HOST_BINUTILS_CONF_OPTS = \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
- menuconfig BR2_PACKAGE_STRONGSWAN
- 	bool "strongswan"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	help
- 	  strongSwan is an OpenSource IPsec implementation for the
- 	  Linux operating system. It is based on the discontinued
++# binutils run configure script of subdirs at make time, so ensure
++# our TARGET_CONFIGURE_ARGS are taken into consideration for those
++define BINUTILS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) -C $(@D)
++endef
++
+ # We just want libbfd, libiberty and libopcodes,
+ # not the full-blown binutils in staging
+ define BINUTILS_INSTALL_STAGING_CMDS
