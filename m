@@ -1,26 +1,22 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  1 Feb 2016 16:53:31 +0100
-Subject: [Buildroot] [PATCH v6 03/13] core: re-enter make if $(CURDIR) or
-	$(O) are not absolute canonical path
+Date: Mon,  1 Feb 2016 16:53:33 +0100
+Subject: [Buildroot] [PATCH v6 05/13] core: make staging *-config scripts
+	relocatable
 In-Reply-To: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
 References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1454342021-22960-4-git-send-email-s.martin49@gmail.com>
+Message-ID: <1454342021-22960-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
-they can be resolved differently, depending on each package build-system
-(whether it uses the given paths or get the absolute canonical ones).
+This change adjusts the _CONFIG_SCRIPTS hook to set add {exec_,}prefix computed
+relatively to the script location.
 
-Thus, to make easier tracking down host machine paths leaking into the
-host, target or staging trees, the CURDIR and O variables are set to
-their absolute canonical paths.
-
-Note that this change takes care of the makefile wrapper installed in
-$(O) to avoid unneeded make recursion.
+This patch hook only fixes *-config scripts located in the staging area,
+the target ones are already removed. A follow-up change will fix those
+from the HOST_DIR location.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -28,52 +24,21 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 changes v5 -> v6:
 - new patch
 ---
- Makefile | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 13c16af..10193ba 100644
---- a/Makefile
-+++ b/Makefile
-@@ -26,16 +26,30 @@
- 
- # Trick for always running with a fixed umask
- UMASK = 0022
--ifneq ($(shell umask),$(UMASK))
-+
-+# Check if we need to re-enter make for one or several of the following reasons:
-+# 1- Wrong (too restrictive) umask:
-+#    This prevents Buildroot and packages from creating files and directories.
-+# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
-+#    This makes harder tracking and fixing host machine path leaks.
-+# 3- Output location (i.e. $(O)) not being the absolute canonical path:
-+#    This makes harder tracking and fixing host machine path leaks.
-+#
-+# Note:
-+# - remove the trailing '/.' from $(O) as it can be added by the makefile
-+#   wrapper installed in the $(O).
-+ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
- .PHONY: _all $(MAKECMDGOALS)
- 
- $(MAKECMDGOALS): _all
- 	@:
- 
- _all:
--	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
-+	umask $(UMASK) && \
-+		$(MAKE) -C $(realpath $(CURDIR)) --no-print-directory \
-+			$(MAKECMDGOALS) O=$(realpath $(O))
- 
--else # umask
-+else # umask / $(CURDIR) / $(O)
- 
- # This is our default rule, so must come first
- all:
-@@ -1001,4 +1015,4 @@ include docs/manual/manual.mk
- 
- .PHONY: $(noconfig_targets)
- 
--endif #umask
-+endif #umask / $(CURDIR) / $(O)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1e024d3..1bf613e 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -240,7 +240,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+ 		$(call MESSAGE,"Fixing package configuration files") ;\
+ 			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+ 				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
+-				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
++				-e "s,^\(exec_\)\?prefix=.*,\1prefix=\`dirname \$$0\`/../../usr,g" \
+ 				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+ 				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+ 				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
 -- 
 2.7.0
