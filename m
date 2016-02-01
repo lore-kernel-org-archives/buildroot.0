@@ -1,52 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2016 07:25:36 +0100
-Subject: [Buildroot] [git commit] fs/common: generate users before setting
-	permissions
-Message-ID: <20160201224703.64EE27F90D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 1 Feb 2016 23:44:47 +0100
+Subject: [Buildroot] [git commit] package/python-spidev: fix musl build
+Message-ID: <20160201224704.411CA7F892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f28a38e1ab4c7556be0b5ec059dd78302e0884a
+commit: https://git.buildroot.net/buildroot/commit/?id=56032eedf4d02e02ba7bf2ed687c8950f79b31fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We will need the users and groups to get defined before we can use them
-from makedevs.
+The build error was not yet being found by the autobuilders.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- fs/common.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ .../0001-Fix-build-with-musl-libc.patch            | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 528e194..3a424f6 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -78,6 +78,11 @@ $$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
- 	rm -f $$(USERS_TABLE)
- 	echo "set -e" >> $$(FAKEROOT_SCRIPT)
- 	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
-+ifneq ($$(ROOTFS_USERS_TABLES),)
-+	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
-+endif
-+	printf '$$(subst $$(sep),\n,$$(PACKAGES_USERS))' >> $$(USERS_TABLE)
-+	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
- ifneq ($$(ROOTFS_DEVICE_TABLES),)
- 	cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
- ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
-@@ -86,11 +91,6 @@ endif
- 	printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >> $$(FULL_DEVICE_TABLE)
- 	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
- endif
--ifneq ($$(ROOTFS_USERS_TABLES),)
--	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
--endif
--	printf '$$(subst $$(sep),\n,$$(PACKAGES_USERS))' >> $$(USERS_TABLE)
--	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
- 	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
- 	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+diff --git a/package/python-spidev/0001-Fix-build-with-musl-libc.patch b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
+new file mode 100644
+index 0000000..b22a73a
+--- /dev/null
++++ b/package/python-spidev/0001-Fix-build-with-musl-libc.patch
+@@ -0,0 +1,43 @@
++From 3d6e59bff088783f249a60a5f1c900c7f99f933b Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 31 Jan 2016 15:03:50 +0100
++Subject: [PATCH 1/1] Fix build with musl libc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Include missing header to prevent build error:
++
++spidev_module.c: In function ???SpiDev_xfer???:
++spidev_module.c:330:27: error: ???_IOC_SIZEBITS??? undeclared (first use in this function)
++  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
++                           ^
++spidev_module.c:330:27: note: each undeclared identifier is reported only once for each function it appears in
++spidev_module.c: In function ???SpiDev_xfer2???:
++spidev_module.c:421:27: error: ???_IOC_SIZEBITS??? undeclared (first use in this function)
++  status = ioctl(self->fd, SPI_IOC_MESSAGE(1), &xfer);
++                           ^
++
++Signed-off-by: Bernd Kuhls bernd.kuhls at t-online.de
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++Patch sent upstream: https://github.com/doceme/py-spidev/pull/39
++
++ spidev_module.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/spidev_module.c b/spidev_module.c
++index d58ef07..bccaacf 100644
++--- a/spidev_module.c
+++++ b/spidev_module.c
++@@ -25,6 +25,7 @@
++ #include <linux/spi/spidev.h>
++ #include <linux/types.h>
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ 
++ #define SPIDEV_MAXPATH 4096
++ 
++-- 
++2.7.0
++
