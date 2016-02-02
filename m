@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Tue,  2 Feb 2016 01:44:50 +0100
-Subject: [Buildroot] [PATCH 10/19] python-pynacl: new package
+Date: Tue,  2 Feb 2016 01:44:56 +0100
+Subject: [Buildroot] [PATCH 16/19] python-msgpack: bump to 0.4.7
 In-Reply-To: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454373899-22481-11-git-send-email-mc5686@mclink.it>
+Message-ID: <1454373899-22481-17-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                        |  1 +
- package/python-pynacl/Config.in          |  9 +++++++++
- package/python-pynacl/python-pynacl.hash |  3 +++
- package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-pynacl/Config.in
- create mode 100644 package/python-pynacl/python-pynacl.hash
- create mode 100644 package/python-pynacl/python-pynacl.mk
+ package/python-msgpack/Config.in           | 1 -
+ package/python-msgpack/python-msgpack.hash | 3 +++
+ package/python-msgpack/python-msgpack.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
+ create mode 100644 package/python-msgpack/python-msgpack.hash
 
-diff --git a/package/Config.in b/package/Config.in
-index 6b84875..9dc5123 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -687,6 +687,7 @@ menu "External python modules"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pygments/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pynacl/Config.in"
- 	source "package/python-pyopenssl/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pypcap/Config.in"
-diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index ed0b432..e740835 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	bool "python-msgpack"
+-	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+ 	depends on BR2_ARCH_HAS_ATOMICS # msgpack
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
 new file mode 100644
-index 0000000..2d7c9dd
+index 0000000..636aa90
 --- /dev/null
-+++ b/package/python-pynacl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYNACL
-+	bool "python-pynacl"
-+	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_PYTHON_SIX
-+	help
-+	  Python binding to the Networking and Cryptography (NaCl) library.
-+
-+	  https://pypi.python.org/pypi/PyNaCl
-+
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
-new file mode 100644
-index 0000000..7035ac7
---- /dev/null
-+++ b/package/python-pynacl/python-pynacl.hash
++++ b/package/python-msgpack/python-msgpack.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
-+md5	12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
-+sha256	d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
-new file mode 100644
-index 0000000..e82611e
---- /dev/null
-+++ b/package/python-pynacl/python-pynacl.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-pynacl
-+#
-+################################################################################
-+
-+PYTHON_PYNACL_VERSION = 1.0.1
-+PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
-+PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
-+PYTHON_PYNACL_LICENSE = Apache-2.0
-+PYTHON_PYNACL_LICENSE_FILES = LICENSE
-+PYTHON_PYNACL_SETUP_TYPE = setuptools
-+PYTHON_PYNACL_DEPENDENCIES = libsodium python-six
-+PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
-+
-+$(eval $(python-package))
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=eb2aad1081534ef3a9f32a0ecd350b9b, sha356 locally computed.
++md5	eb2aad1081534ef3a9f32a0ecd350b9b  msgpack-python-0.4.7.tar.gz
++sha256	5e001229a54180a02dcdd59db23c9978351af55b1290c27bc549e381f43acd6b  msgpack-python-0.4.7.tar.gz
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index adf78b2..344b7bf 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_MSGPACK_VERSION = 0.4.0
++PYTHON_MSGPACK_VERSION = 0.4.7
+ PYTHON_MSGPACK_SOURCE = msgpack-python-$(PYTHON_MSGPACK_VERSION).tar.gz
+ PYTHON_MSGPACK_SITE = https://pypi.python.org/packages/source/m/msgpack-python
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
 -- 
 2.1.4
