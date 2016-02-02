@@ -1,100 +1,86 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Tue, 2 Feb 2016 19:02:21 +0100
-Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
-In-Reply-To: <20160110105950.GA3460@free.fr>
-References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
- <20160110105950.GA3460@free.fr>
-Message-ID: <AAEB3B19-DD00-496E-BE0A-D227A5198E0D@xiot.nl>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Feb 2016 18:02:31 +0100
+Subject: [Buildroot] [git commit] python-mistune: new package
+Message-ID: <20160202192537.2B26E80AC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I was trying your script and I seem to run into an issue with zip?ed archives;
+commit: https://git.buildroot.net/buildroot/commit/?id=56526bbfae64fee625f560297a979f8345887a00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-$ ~/scanpypi WTForms -o package
-buildroot package name for WTForms: python-wtforms
-Package: python-wtforms
-Fetching package WTForms
-Downloading package WTForms from https://pypi.python.org/packages/source/W/WTForms/WTForms-2.1.zip...
-Traceback (most recent call last):
-  File "/home/echaudron/scanpypi", line 653, in <module>
-    main()
-  File "/home/echaudron/scanpypi", line 596, in main
-    package.extract_package(tmp_path)
-  File "/home/echaudron/scanpypi", line 211, in extract_package
-    with zipfile.open(fileobj=as_file) as as_zipfile:
-AttributeError: 'module' object has no attribute ?open'
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-//Eelco
+[Thomas:
+ - rename the .mk file to carry the proper name
+ - rewrap Config.in help text to use the proper length and avoid a
+   trailing space
+ - remove excessive empty new line at the end of Config.in
+ - specify BSD-3c as the license, since it's the variant being used,
+   and it's more specific than just BSD.]
 
-> On 10 Jan 2016, at 11:59, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> 
-> Denis, All,
-> 
-> Sorry for the long delay. I'm now having a look at this patch.
-> 
-> On 2015-07-28 15:15 +0200, Denis THULIN spake thusly:
->> An utility for creating python package from the python package index
->> It fetches packages info from http://pypi.python.org and generates
->> corresponding packages files.
-> 
-> So, we currently have scancpan to create perl packages. You are adding
-> scanpypi to create Python packages. There's also someone who submitted
-> a script to generate a 'generic' package (i.e. not perl/python) [0].
-> The scancpan is written in perl, yours and the generic one in Python.
-> 
-> Besides Perl and Python, we also have nodejs which provides a similar
-> "package-store" and for which it would become interesting to provide a
-> helper script to generate packages [1].
-> 
-> What I would love to see is that we have a single script to add
-> packages. Something like:
-> 
->    $ ./support/script/add-package -t TYPE [OPTS] PKG [PKG...]
-> 
-> with TYPE being one of the package types we currently have (generic,
-> autotools... python, perl...) or an abstract type (nodejs...).
-> 
-> Then, the cpan, pypi, nodejs... script would be just 'backends' that
-> would provide classes called by the main script, like;
-> 
->    pkg = new PythonPkg("foo")
->    pkg.get_br_name()       returns the BR2_PACKAGE_ name
->    pkg.get_version()       returns the _VERSION string
->    pkg.get_source()        returns the _SOURCE string
->    pkg.get_site()          returns the _SITE string
->    pkg.get_method()        returns the _SITE_METHOD string
->    pkg.get_dependencies()  returns the _DEPENDENCIES list
->    ... and so on, you get the idea. ;-)
-> 
-> That would also recursively generate the packages for the dependencies,
-> if not already present.
-> 
-> Of course, that would mean we'd have to standardise on a single
-> language. I think Python is the way to go here.
-> 
-> Would you be interested in pursuing this?
-> 
-> [0] https://patchwork.ozlabs.org/patch/523257/
-> [1] that could also require a nodejs-package infra, but not necessarily.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |  1 +
+ package/python-mistune/Config.in           |  7 +++++++
+ package/python-mistune/python-mistune.hash |  3 +++
+ package/python-mistune/python-mistune.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160202/7d987657/attachment-0001.html>
+diff --git a/package/Config.in b/package/Config.in
+index da49c1a..8ee5ad4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -663,6 +663,7 @@ menu "External python modules"
+ 	source "package/python-markdown/Config.in"
+ 	source "package/python-markupsafe/Config.in"
+ 	source "package/python-meld3/Config.in"
++	source "package/python-mistune/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-netifaces/Config.in"
+ 	source "package/python-networkmanager/Config.in"
+diff --git a/package/python-mistune/Config.in b/package/python-mistune/Config.in
+new file mode 100644
+index 0000000..e62689d
+--- /dev/null
++++ b/package/python-mistune/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MISTUNE
++	bool "python-mistune"
++	help
++	  The fastest markdown parser in pure Python with renderer
++	  features, inspired by marked.
++
++	  https://pypi.python.org/pypi/mistune
+diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
+new file mode 100644
+index 0000000..b161e11
+--- /dev/null
++++ b/package/python-mistune/python-mistune.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=057bc28bf629d6a1283d680a34ed9d0f, sha256 locally computed.
++md5	057bc28bf629d6a1283d680a34ed9d0f  mistune-0.7.1.tar.gz
++sha256	6076dedf768348927d991f4371e5a799c6a0158b16091df08ee85ee231d929a7  mistune-0.7.1.tar.gz
+diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
+new file mode 100644
+index 0000000..a1e5710
+--- /dev/null
++++ b/package/python-mistune/python-mistune.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-mistune
++#
++################################################################################
++
++PYTHON_MISTUNE_VERSION = 0.7.1
++PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
++PYTHON_MISTUNE_SITE = http://pypi.python.org/packages/source/m/mistune
++PYTHON_MISTUNE_LICENSE = BSD-3c
++PYTHON_MISTUNE_LICENSE_FILES = LICENSE
++PYTHON_MISTUNE_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
