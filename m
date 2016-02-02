@@ -1,79 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 16:03:14 +0100
-Subject: [Buildroot] [PATCH v2] package/lirc-tools: fix musl build
-In-Reply-To: <1454246963-3880-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454246963-3880-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0C532.4030106@mind.be>
+Date: Tue, 2 Feb 2016 16:03:54 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libndp: fix musl build
+In-Reply-To: <1454168407-3108-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1454168407-3108-1-git-send-email-bernd.kuhls@t-online.de>
+ <1454168407-3108-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0C55A.7090809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 14:29, Bernd Kuhls wrote:
-> Inspired by
-> https://bug.tasktools.org/secure/attachment/10271/0001-Fix-build-with-musl-libc.patch
-> 
+On 30-01-16 16:40, Bernd Kuhls wrote:
 > Fixes
-> http://autobuild.buildroot.net/results/603/603c4426c47220808305a416f3d60fec2d8c02a3/
-> http://autobuild.buildroot.net/results/c08/c08abddeb5f0d0d1adec63ab4390562e3cfe1087/
+> http://autobuild.buildroot.net/results/d42/d42bebe51bbec38f131840b6bbefdc162f0ad194/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: re-formatted patch and sent upstream (Thomas)
-> 
->  .../0004-lirc-lsremotes.cpp-Fix-musl-build.patch   | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/lirc-tools/0004-lirc-lsremotes.cpp-Fix-musl-build.patch
-> 
-> diff --git a/package/lirc-tools/0004-lirc-lsremotes.cpp-Fix-musl-build.patch b/package/lirc-tools/0004-lirc-lsremotes.cpp-Fix-musl-build.patch
-> new file mode 100644
-> index 0000000..f3c03d7
-> --- /dev/null
-> +++ b/package/lirc-tools/0004-lirc-lsremotes.cpp-Fix-musl-build.patch
-> @@ -0,0 +1,35 @@
-> +From 027fae88f1001f7a74a791e348c05a11255aac7f Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 31 Jan 2016 14:23:02 +0100
-> +Subject: [PATCH 1/1] lirc-lsremotes.cpp: Fix musl build
-> +
-> +Inspired by
-> +https://bug.tasktools.org/secure/attachment/10271/0001-Fix-build-with-musl-libc.patch
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> +Patch sent upstream: https://sourceforge.net/p/lirc/tickets/174/
-> +Adjusted path for lirc-tools 0.9.2
-> +
-> + tools/lirc-lsremotes.cpp | 5 +++++
-> + 1 file changed, 5 insertions(+)
-> +
-> +diff --git a/tools/lirc-lsremotes.cpp b/tools/lirc-lsremotes.cpp
-> +index 8f2c65b..baee10e 100644
-> +--- a/tools/lirc-lsremotes.c
-> ++++ b/tools/lirc-lsremotes.c
-> +@@ -25,6 +25,11 @@
-> + 
-> + static const logchannel_t logchannel = LOG_APP;
-> + 
-> ++/* fixes build with musl libc */
-> ++#ifndef GLOB_BRACE
-> ++#define GLOB_BRACE 0
-> ++#endif
 
- This can't be right... It will completely break the globbing, because the
-pattern that is used later on in fact relies on braces. So instead, the whole
-thing should be rewritten to not use braces.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
 
-> ++
-> + static int opt_silent = 0;
-> + static int opt_dump = 0;
+> ---
+>  package/libndp/0001-ndptool.c-Fix-musl-build.patch | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/libndp/0001-ndptool.c-Fix-musl-build.patch
+> 
+> diff --git a/package/libndp/0001-ndptool.c-Fix-musl-build.patch b/package/libndp/0001-ndptool.c-Fix-musl-build.patch
+> new file mode 100644
+> index 0000000..547598c
+> --- /dev/null
+> +++ b/package/libndp/0001-ndptool.c-Fix-musl-build.patch
+> @@ -0,0 +1,30 @@
+> +From 561f80b9a848be923f37bf1afedbecf92da3b2e7 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sat, 30 Jan 2016 16:36:39 +0100
+> +Subject: [PATCH 1/1] ndptool.c: Fix musl build
+> +
+> +Fixes a build issue with the musl C library
+> +http://autobuild.buildroot.net/results/d42/d42bebe51bbec38f131840b6bbefdc162f0ad194/build-end.log
+> +
+> +Patch sent upstream: https://github.com/jpirko/libndp/pull/7
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + utils/ndptool.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/utils/ndptool.c b/utils/ndptool.c
+> +index 04ec4e1..c6ef48c 100644
+> +--- a/utils/ndptool.c
+> ++++ b/utils/ndptool.c
+> +@@ -27,6 +27,7 @@
+> + #include <netinet/in.h>
+> + #include <arpa/inet.h>
+> + #include <errno.h>
+> ++#include <sys/select.h>
+> + #include <ndp.h>
 > + 
+> + enum verbosity_level {
 > +-- 
-> +2.7.0
+> +2.7.0.rc3
 > +
 > 
 
