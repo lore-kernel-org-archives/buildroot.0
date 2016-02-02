@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 14:44:44 +0100
-Subject: [Buildroot] [PATCH 04/19] python-click: new package
-In-Reply-To: <1454373899-22481-5-git-send-email-mc5686@mclink.it>
+Date: Tue, 2 Feb 2016 14:46:23 +0100
+Subject: [Buildroot] [PATCH 13/19] python-shutilwhich: new package
+In-Reply-To: <1454373899-22481-14-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-5-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ksHkz0wkW5qZV2TRAA=Dmy3NJApX4H+pS4fJ4pQSEe2Tw@mail.gmail.com>
+ <1454373899-22481-14-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ktK6Y1yQgsA=bj2uwa=a_=vLNjQCsf=1KfNuwsnFCNVxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,67 +17,67 @@ On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  package/Config.in                      |  1 +
->  package/python-click/Config.in         |  7 +++++++
->  package/python-click/python-click.hash |  3 +++
->  package/python-click/python-click.mk   | 14 ++++++++++++++
+>  package/Config.in                                  |  1 +
+>  package/python-shutilwhich/Config.in               |  8 ++++++++
+>  package/python-shutilwhich/python-shutilwhich.hash |  3 +++
+>  package/python-shutilwhich/python-shutilwhich.mk   | 13 +++++++++++++
 >  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-click/Config.in
->  create mode 100644 package/python-click/python-click.hash
->  create mode 100644 package/python-click/python-click.mk
+>  create mode 100644 package/python-shutilwhich/Config.in
+>  create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
+>  create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 52be929..c4ee543 100644
+> index 8b3304c..0d91863 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -627,6 +627,7 @@ menu "External python modules"
->         source "package/python-characteristic/Config.in"
->         source "package/python-cheetah/Config.in"
->         source "package/python-cherrypy/Config.in"
-> +       source "package/python-click/Config.in"
->         source "package/python-coherence/Config.in"
->         source "package/python-configobj/Config.in"
->         source "package/python-configshell-fb/Config.in"
-> diff --git a/package/python-click/Config.in b/package/python-click/Config.in
+> @@ -711,6 +711,7 @@ menu "External python modules"
+>         source "package/python-serial/Config.in"
+>         source "package/python-service-identity/Config.in"
+>         source "package/python-setuptools/Config.in"
+> +       source "package/python-shutilwhich/Config.in"
+>         source "package/python-simplejson/Config.in"
+>         source "package/python-singledispatch/Config.in"
+>         source "package/python-sip/Config.in"
+> diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
 > new file mode 100644
-> index 0000000..3755146
+> index 0000000..d610cfe
 > --- /dev/null
-> +++ b/package/python-click/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_CLICK
-> +       bool "python-click"
+> +++ b/package/python-shutilwhich/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_SHUTILWHICH
+> +       bool "python-shutilwhich"
+> +       depends on BR2_PACKAGE_PYTHON
 > +       help
-> +         A simple wrapper around optparse for powerful command line utilities.
+> +         shutil.which for those not using Python 3.3 yet.
 > +
-> +         https://pypi.python.org/pypi/click
+> +         https://pypi.python.org/pypi/shutilwhich/
 > +
-> diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+> diff --git a/package/python-shutilwhich/python-shutilwhich.hash b/package/python-shutilwhich/python-shutilwhich.hash
 > new file mode 100644
-> index 0000000..72aab0a
+> index 0000000..b1a2c78
 > --- /dev/null
-> +++ b/package/python-click/python-click.hash
+> +++ b/package/python-shutilwhich/python-shutilwhich.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=83252a8095397b1f5f710fdd58b484d9, sha256 locally computed.
-> +md5    83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
-> +sha256 fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
-> diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=915947c5cdae7afd748ac715ee547adb, sha256 locally computed.
+> +md5    915947c5cdae7afd748ac715ee547adb  shutilwhich-1.1.0.tar.gz
+> +sha256 db1f39c6461e42f630fa617bb8c79090f7711c9ca493e615e43d0610ecb64dc6  shutilwhich-1.1.0.tar.gz
+> diff --git a/package/python-shutilwhich/python-shutilwhich.mk b/package/python-shutilwhich/python-shutilwhich.mk
 > new file mode 100644
-> index 0000000..cf28825
+> index 0000000..b2e06d5
 > --- /dev/null
-> +++ b/package/python-click/python-click.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-shutilwhich/python-shutilwhich.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# python-click
+> +# python-shutilwhich
 > +#
 > +################################################################################
 > +
-> +PYTHON_CLICK_VERSION = 6.2
-> +PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
-> +PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
-> +PYTHON_CLICK_LICENSE = BSD
-> +PYTHON_CLICK_LICENSE_FILES = LICENSE
-> +PYTHON_CLICK_SETUP_TYPE = setuptools
+> +PYTHON_SHUTILWHICH_VERSION = 1.1.0
+> +PYTHON_SHUTILWHICH_SOURCE = shutilwhich-$(PYTHON_SHUTILWHICH_VERSION).tar.gz
+> +PYTHON_SHUTILWHICH_SITE = http://pypi.python.org/packages/source/s/shutilwhich
+> +PYTHON_SHUTILWHICH_LICENSE = MIT
+> +PYTHON_SHUTILWHICH_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
