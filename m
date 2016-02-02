@@ -1,89 +1,46 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 09:16:05 +0100
-Subject: [Buildroot] [PATCH 05/19] python-lmdb: new package
-In-Reply-To: <1454373899-22481-6-git-send-email-mc5686@mclink.it>
-References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-6-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kuRecy1nAKiFLKD3WpkNvB=UiiTo1OXnDC_AwLGbOOhvg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 2 Feb 2016 09:17:38 +0100
+Subject: [Buildroot] [git commit] gstreamer1: don't rely on a recent
+	coreutils for relative symlink support
+Message-ID: <20160202081741.8D6C181696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                    |  1 +
->  package/python-lmdb/Config.in        |  8 ++++++++
->  package/python-lmdb/python-lmdb.hash |  3 +++
->  package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-lmdb/Config.in
->  create mode 100644 package/python-lmdb/python-lmdb.hash
->  create mode 100644 package/python-lmdb/python-lmdb.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index c4ee543..4294813 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -658,6 +658,7 @@ menu "External python modules"
->         source "package/python-json-schema-validator/Config.in"
->         source "package/python-keyring/Config.in"
->         source "package/python-libconfig/Config.in"
-> +       source "package/python-lmdb/Config.in"
->         source "package/python-lxml/Config.in"
->         source "package/python-mad/Config.in"
->         source "package/python-mako/Config.in"
-> diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
-> new file mode 100644
-> index 0000000..06d6876
-> --- /dev/null
-> +++ b/package/python-lmdb/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_LMDB
-> +       bool "python-lmdb"
-> +       select BR2_PACKAGE_PYTHON_CFFI # runtime
-> +       help
-> +         Universal Python binding for the LMDB 'Lightning' Database.
-> +
-> +         https://pypi.python.org/pypi/lmdb
-> +
-> diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-> new file mode 100644
-> index 0000000..c983cfb
-> --- /dev/null
-> +++ b/package/python-lmdb/python-lmdb.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
-> +md5    001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
-> +sha256 37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
-> diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-> new file mode 100644
-> index 0000000..7873f62
-> --- /dev/null
-> +++ b/package/python-lmdb/python-lmdb.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-lmdb
-> +#
-> +################################################################################
-> +
-> +PYTHON_LMDB_VERSION = 0.88
-> +PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
-> +PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
-> +PYTHON_LMDB_LICENSE = BSD
-> +PYTHON_LMDB_SETUP_TYPE = setuptools
-> +PYTHON_LMDB_DEPENDENCIES = python-cffi
+commit: https://git.buildroot.net/buildroot/commit/?id=c15f70488b4b5fd132ccf27cc6ab556ba410e387
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-this should be host-python-cffi
+Fixes:
+http://autobuild.buildroot.net/results/3ae/3ae368cfd0ecd7be4c7e864590ec5dbf79d576ac/
+http://autobuild.buildroot.net/results/4c9/4c951f31984e0eff21fc165cb68065f527c237e6/
 
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+And many more.
+
+The recent change to create the legacy gstconfig.h symlink using ln -srf
+unfortunately breaks on older distributions as it was only added in
+coreutils 8.16 (2012).
+
+Instead, "manually" create the relative symlink.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 0eb46e8..b788160 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -41,8 +41,8 @@ GSTREAMER1_DEPENDENCIES = libglib2 host-pkgconf host-bison host-flex
+ # updated to look in the correct location.
+ # Add a symlink to the legacy location
+ define GSTREAMER1_LEGACY_CGSTCONFIG_H
+-	ln -srf $(STAGING_DIR)/usr/lib/gstreamer-1.0/include/gst/gstconfig.h \
+-	       $(STAGING_DIR)/usr/include/gstreamer-1.0/gst/gstconfig.h
++	cd $(STAGING_DIR)/usr/include/gstreamer-1.0/gst && \
++		ln -sf ../../../lib/gstreamer-1.0/include/gst/gstconfig.h .
+ endef
+ GSTREAMER1_POST_INSTALL_STAGING_HOOKS += GSTREAMER1_LEGACY_CGSTCONFIG_H
+ 
