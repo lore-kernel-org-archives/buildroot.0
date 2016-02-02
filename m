@@ -1,59 +1,89 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 16:24:15 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openipmi: fix musl build
-In-Reply-To: <1454232190-11626-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454232190-11626-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0CA1F.50409@mind.be>
+Date: Tue, 2 Feb 2016 16:27:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mraa: fix musl build
+In-Reply-To: <1454227344-20681-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454227344-20681-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0CAEA.4080508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 10:23, Bernd Kuhls wrote:
-> The build error is known upstream
-> http://sourceforge.net/p/openipmi/patches/26/
-> and was not yet caught by our autobuilders:
+On 31-01-16 09:02, Bernd Kuhls wrote:
+> These build error have not yet being found by the autobuilders:
 > 
-> ui.c: In function ?get_ip_addr?:
-> ui.c:340:5: error: unknown type name ?u_int32_t?
->      u_int32_t     addr;
+> /home/bernd/buildroot/br3/output/build/mraa-v0.9.0/src/uart/uart.c: In function ?mraa_uart_set_mode?:
+> /home/bernd/buildroot/br3/output/build/mraa-v0.9.0/src/uart/uart.c:364:40: error: ?CMSPAR? undeclared (first use in this function)
+>              termio.c_cflag |= PARENB | CMSPAR | PARODD;
+>                                         ^
+> /home/bernd/buildroot/br3/output/build/mraa-v0.9.0/src/uart/uart.c:364:40: note: each undeclared identifier is reported only once for each function it appears in
+> /home/bernd/buildroot/br3/output/build/mraa-v0.9.0/src/uart/uart.c: In function ?mraa_uart_data_available?:
+> /home/bernd/buildroot/br3/output/build/mraa-v0.9.0/src/uart/uart.c:491:20: error: storage size of ?timeout? isn?t known
+>      struct timeval timeout;
+>                     ^
+> /home/bernd/buildroot/br3/output/build/mraa-v0.9.0/src/uart/uart.c:502:5: error: unknown type name ?fd_set?
+>      fd_set readfds;
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0003-uart.c-fix-build-with-musl-libc.patch     | 40 ++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
+> 
+> diff --git a/package/mraa/0003-uart.c-fix-build-with-musl-libc.patch b/package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
+> new file mode 100644
+> index 0000000..75ceb6f
+> --- /dev/null
+> +++ b/package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
+> @@ -0,0 +1,40 @@
+> +From 30e4abcd5f53bac50da874ba8795388fc05f5252 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 31 Jan 2016 08:57:05 +0100
+> +Subject: [PATCH 1/1] uart.c: fix build with musl libc
+> +
+> +musl does not define CMSPAR on all archs, patch inspired by
+> +http://git.alpinelinux.org/cgit/aports/plain/main/freerdp/musl-fix.patch
+> +
+> +musl needs sys/select.h to provide fd_set.
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
  Regards,
  Arnout
 
-
-> ---
->  package/openipmi/openipmi.hash | 2 ++
->  package/openipmi/openipmi.mk   | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
-> index 3a40f60..e6fafe4 100644
-> --- a/package/openipmi/openipmi.hash
-> +++ b/package/openipmi/openipmi.hash
-> @@ -1,2 +1,4 @@
->  # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
->  sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
-> +# Locally computed
-> +sha256	0eafaa502ccf752899c5089159574081067d0c4ac53ea0ace33a5087f33ea32a	0001-ui-use-standard-uint32_t.patch
-> diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-> index 85bd6b4..4dd901b 100644
-> --- a/package/openipmi/openipmi.mk
-> +++ b/package/openipmi/openipmi.mk
-> @@ -7,6 +7,8 @@
->  OPENIPMI_VERSION = 2.0.21
->  OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
->  OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
-> +OPENIPMI_PATCH = \
-> +	http://sourceforge.net/p/openipmi/patches/26/attachment/0001-ui-use-standard-uint32_t.patch
->  OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
->  OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
->  OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
+> +---
+> +Patch sent upstream: https://github.com/intel-iot-devkit/mraa/pull/418
+> +
+> + src/uart/uart.c | 5 +++++
+> + 1 file changed, 5 insertions(+)
+> +
+> +diff --git a/src/uart/uart.c b/src/uart/uart.c
+> +index 6d3973a..0f8a2e3 100644
+> +--- a/src/uart/uart.c
+> ++++ b/src/uart/uart.c
+> +@@ -29,10 +29,15 @@
+> + #include <unistd.h>
+> + #include <string.h>
+> + #include <termios.h>
+> ++#include <sys/select.h>
+> + 
+> + #include "uart.h"
+> + #include "mraa_internal.h"
+> + 
+> ++#ifndef CMSPAR
+> ++#define CMSPAR   010000000000
+> ++#endif
+> ++
+> + // This function takes an unsigned int and converts it to a B* speed_t
+> + // that can be used with linux/posix termios
+> + static speed_t
+> +-- 
+> +2.7.0.rc3
+> +
 > 
 
 
