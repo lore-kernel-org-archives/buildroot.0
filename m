@@ -1,105 +1,183 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 2 Feb 2016 10:07:21 +0100
-Subject: [Buildroot] [PATCH 10/10] gst1-imx: bump to version 0.12.0
-In-Reply-To: <56B06F42.6050503@mind.be>
-References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454154357-31625-11-git-send-email-gary.bisson@boundarydevices.com>
- <20160201214437.66ddff9e@free-electrons.com>
- <CAAMH-yufkAQV7p50daw=VYTGeM41RvtpYKsZGzRwZ2K_vKVbxQ@mail.gmail.com>
- <20160201232711.1e2c85a6@free-electrons.com>
- <CAAMH-yvxXLP4SOiZLs9PR2wiFjf7L0-DTk81G9SJvNDLhYzv-Q@mail.gmail.com>
- <56B06F42.6050503@mind.be>
-Message-ID: <CAAMH-yutuQ8g8gzmKUVpc6a=5kup0PwWiZrctNgHp7bPWppOyQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 2 Feb 2016 09:55:58 +0100
+Subject: [Buildroot] [git commit] package/linux-headers: add option to use
+	same sources as the kernel
+Message-ID: <20160202090739.5895781696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=63abfb7210313fcc84b912ff2884b1357beff4b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Feb 2, 2016 at 9:56 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 01-02-16 23:49, Gary Bisson wrote:
->> Thomas, All,
->>
->> On Mon, Feb 1, 2016 at 11:27 PM, Thomas Petazzoni
->> <thomas.petazzoni@free-electrons.com> wrote:
->>> Hello,
->>>
->>> On Mon, 1 Feb 2016 22:20:36 +0100, Gary Bisson wrote:
->>>
->>>>> So it no longer depends on the GPU stuff ?
->>>>
->>>> No, you can build this package without the GPU backend which implies
->>>> the GPU sinks won't be built. The end goal is for i.MX7 which doesn't
->>>> have any GPU, right now I have to include the GPU binaries just to
->>>> build the pxp/v4l plugins.
->>>
->>> ACK, makes sense.
->>>
->>>>>> -     depends on BR2_PACKAGE_LIBFSLVPUWRAP
->>>>>>       select BR2_PACKAGE_GST1_PLUGINS_BASE
->>>>>> +     select BR2_PACKAGE_GST1_IMX_IPU_PLUGIN
->>>>>> +     select BR2_PACKAGE_GST1_IMX_PXP_PLUGIN
->>>>>
->>>>> This is weird. If you "select" these options here, it means that there
->>>>> is no way to disable those options. So why are they options in the
->>>>> first place ?
->>>>
->>>> I just wanted to make it explicit that the package will at least build
->>>> those two plugins. Then leaving it up to the user to select whichever
->>>> plugin he wants. There actually is no option to disable plugins from
->>>> the packages, it's all a question of dependency. As soon as the i.MX
->>>> linux kernel is built, PXP and IPU will be. As soon as the GPU
->>>> libraries are includes, GPU sink plugins will be built.
->>>
->>> Hum, then it is not good, because it means that even if you disable the
->>> GPU sink plugin options, but still have the GPU libraries enabled, the
->>> GPU sink plugins will be installed on your target. This is very
->>> confusing.
->>
->> Yes, I understand, is it really a big deal? There's going to be more
->> plugins than expected in the rootfs, it's free!
->
->  We don't consider rootfs size to be for free.
+Some heavily (and most often improperly) modified Linux kernels may export
+new APIs to userland, so as to speak to custom hardware or custom kernel
+facilities.
 
-I understand.
+However, we currently have no easy way to use such kernels as a source
+for the linux-headers package, which precludes having those userland
+headers intalled for userland applications to use them.
 
->>> I think you should remove the sub-options, and then simply expand the
->>> Config.in help text of the main option to say:
->>>
->>>  - The IPU and PXP plugins are always built.
->>>  - The GPU sink plugin is built when ... is enabled.
->>>  - The ... plugin is built when ... is enabled.
->>
->> This would be ever more confusing in my opinion. It means that when
->> you select gstreamer-imx you have no idea of what is going to be
->> built. Then when you realize you need the graphics libraries you have
->> to browse to select it yourself.
->
->  That's why it should be mentioned in the help text.
->
->>
->> Wouldn't it be possible to force the option value when the IMX_GPU_VIV
->> package is selected? I guess that would bring a circular dependency
->> but at least someone wouldn't be able to remove the option without
->> removing the graphics binaries.
->
->  Yes, that is possible. But we only do that in situations where it is not
-> obvious which other package you should select. The idea is to avoid a
-> proliferation of Config.in options.
->
->  But in this case, you _anyway_ still have to manually select the imx-gpu-viv
-> package... So I don't think there is much point in adding the sub-options.
-> Except if you can convert all the depends into selects (except for the glibc one
-> of course).
+We do have a way for the kernel to use the same version as for the
+headers, but that is definitely not enough, as the linux-headers package
+has a version choice that is far less versatile and capable than that of
+the linux package.
 
-Yes the GPU was actually a bad example, the VPU and V4L plugins do
-have selects that work. But I'll offer a v3 without the options, just
-with text in the Config.in and if later I find another approach I'll
-submit an RFC.
+Add a new option for the linux-headers package, for the user to specify
+that the version (really, the sources) of the kernel be used to install
+the headers from.
 
-Thank you all for your feedback.
+We do that by making linux-headers patch-depend on the linux package.
 
-Regards,
-Gary
+We can't have linux-header simply depend on linux, because the simple
+dependency means the the dependee will be configured, built and installed
+before the dependent is configured. And since linux is a target package,
+it depends on the toolchain, which internally dependes on linux-headers,
+which would depend on linux, and we'd get a circular dependency.
+
+Using patch-depend will ensure that linux is extracted and patched
+before linux-headers is extracted, which is really all we need.
+
+Then, we install the headers from the linux source tree, rather than
+from linux-headers' source tree (as there's nothing in there!).
+
+Since we need to install a private set for uClibc (see cde947f, uclibc:
+prevent rebuilding after installation to staging), we explicitly set
+INSTALL_HDR_PATH when calling the kernel' install-headers rule in
+LINUX_HEADERS_CONFIGURE_CMDS, so that the headers are installed in
+linux-headers' $(@D) instead of linux' $(@D).
+
+Finally, as there is no way to know the kernel version in this case, we
+must still prompt the user for the kernel series the headers are from
+(like we do for a custom version) and check for consistency at build
+time.
+
+Note however that this still leaves users that want to built their
+such-kernel outside of Buildroot out in the cold.
+
+[Peter: drop comment as suggested by Thomas]
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Karoly Kasza <kaszak@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                        |  1 +
+ package/linux-headers/Config.in.host   |  7 ++++++-
+ package/linux-headers/linux-headers.mk | 25 ++++++++++++++++++++++---
+ 3 files changed, 29 insertions(+), 4 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 40d7844..8971192 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -31,6 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 
+ config BR2_LINUX_KERNEL_SAME_AS_HEADERS
+ 	bool "Same as toolchain kernel headers"
++	depends on !BR2_KERNEL_HEADERS_AS_KERNEL
+ 	depends on BR2_TOOLCHAIN_BUILDROOT
+ 	help
+ 	  This option will re-use the same kernel sources as the one
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e556bbf..ad5ee2e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -5,12 +5,17 @@ comment "Kernel Header Options"
+ 
+ choice
+ 	prompt "Kernel Headers"
++	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+ 	default BR2_KERNEL_HEADERS_4_4
+ 	help
+ 	  Select the version of kernel header files you wish to use.
+ 	  You must select the correct set of header files to match
+ 	  the kernel you intend to use on your target system.
+ 
++	config BR2_KERNEL_HEADERS_AS_KERNEL
++		bool "Same as kernel"
++		depends on BR2_LINUX_KERNEL
++
+ 	config BR2_KERNEL_HEADERS_3_2
+ 		bool "Linux 3.2.x kernel headers"
+ 		depends on !BR2_arc && !BR2_nios2
+@@ -87,7 +92,7 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 
+ choice
+ 	bool "Custom kernel headers series"
+-	depends on BR2_KERNEL_HEADERS_VERSION
++	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
+ 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
+ 	help
+ 	  Set to the kernel headers series you manually set above.
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 1b8b81b..6339280 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -7,6 +7,19 @@
+ # This package is used to provide Linux kernel headers for the
+ # internal toolchain backend.
+ 
++ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
++
++LINUX_HEADERS_VERSION = none
++LINUX_HEADERS_SOURCE =
++
++LINUX_HEADERS_LICENSE = $(LINUX_LICENSE)
++LINUX_HEADERS_LICENSE_FILES = $(LINUX_LICENSE_FILES)
++
++LINUX_HEADERS_PATCH_DEPENDENCIES = linux
++LINUX_HEADERS_REAL_DIR = $(LINUX_DIR)
++
++else # ! BR2_KERNEL_HEADERS_AS_KERNEL
++
+ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+ ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
+ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+@@ -16,9 +29,14 @@ else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
+ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+ endif
+ LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
++
+ LINUX_HEADERS_LICENSE = GPLv2
+ LINUX_HEADERS_LICENSE_FILES = COPYING
+ 
++LINUX_HEADERS_REAL_DIR = $(@D)
++
++endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
++
+ LINUX_HEADERS_INSTALL_STAGING = YES
+ 
+ # linux-headers is part of the toolchain so disable the toolchain dependency
+@@ -35,17 +53,18 @@ LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
+ # uClibc building. This way uClibc doesn't modify linux headers on installation
+ # of "its" headers
+ define LINUX_HEADERS_CONFIGURE_CMDS
+-	(cd $(@D); \
++	(cd $(LINUX_HEADERS_REAL_DIR); \
+ 		$(TARGET_MAKE_ENV) $(MAKE) \
+ 			ARCH=$(KERNEL_ARCH) \
+ 			HOSTCC="$(HOSTCC)" \
+ 			HOSTCFLAGS="$(HOSTCFLAGS)" \
+ 			HOSTCXX="$(HOSTCXX)" \
++			INSTALL_HDR_PATH=$(@D)/usr \
+ 			headers_install)
+ endef
+ 
+ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+-	(cd $(@D); \
++	(cd $(LINUX_HEADERS_REAL_DIR); \
+ 		$(TARGET_MAKE_ENV) $(MAKE) \
+ 			ARCH=$(KERNEL_ARCH) \
+ 			HOSTCC="$(HOSTCC)" \
+@@ -55,7 +74,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+ 			headers_install)
+ endef
+ 
+-ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
++ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
+ 		$(STAGING_DIR),\
