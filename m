@@ -1,95 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 21:26:47 +0100
-Subject: [Buildroot] [PATCH 05/19] python-lmdb: new package
-In-Reply-To: <CAGm1_kuRecy1nAKiFLKD3WpkNvB=UiiTo1OXnDC_AwLGbOOhvg@mail.gmail.com>
-References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-6-git-send-email-mc5686@mclink.it>
- <CAGm1_kuRecy1nAKiFLKD3WpkNvB=UiiTo1OXnDC_AwLGbOOhvg@mail.gmail.com>
-Message-ID: <CAGm1_ksfkMWb-9NUjo7g=AFxANX7fHFnsAfCRv5fosJC2ta=hQ@mail.gmail.com>
+From: Eelco Chaudron <echaudron@xiot.nl>
+Date: Tue, 2 Feb 2016 21:49:35 +0100
+Subject: [Buildroot] Problem with python packages in .zip format
+Message-ID: <F9CA10A6-C5B6-4D4D-B38A-829D1D422751@xiot.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 2, 2016 at 9:16 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
->> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
->> ---
->>  package/Config.in                    |  1 +
->>  package/python-lmdb/Config.in        |  8 ++++++++
->>  package/python-lmdb/python-lmdb.hash |  3 +++
->>  package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
->>  4 files changed, 26 insertions(+)
->>  create mode 100644 package/python-lmdb/Config.in
->>  create mode 100644 package/python-lmdb/python-lmdb.hash
->>  create mode 100644 package/python-lmdb/python-lmdb.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index c4ee543..4294813 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -658,6 +658,7 @@ menu "External python modules"
->>         source "package/python-json-schema-validator/Config.in"
->>         source "package/python-keyring/Config.in"
->>         source "package/python-libconfig/Config.in"
->> +       source "package/python-lmdb/Config.in"
->>        OpenLDAP Public License source "package/python-lxml/Config.in"
->>         source "package/python-mad/Config.in"
->>         source "package/python-mako/Config.in"
->> diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
->> new file mode 100644
->> index 0000000..06d6876
->> --- /dev/null
->> +++ b/package/python-lmdb/Config.in
->> @@ -0,0 +1,8 @@
->> +config BR2_PACKAGE_PYTHON_LMDB
->> +       bool "python-lmdb"
->> +       select BR2_PACKAGE_PYTHON_CFFI # runtime
->> +       help
->> +         Universal Python binding for the LMDB 'Lightning' Database.
->> +
->> +         https://pypi.python.org/pypi/lmdb
->> +
->> diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
->> new file mode 100644
->> index 0000000..c983cfb
->> --- /dev/null
->> +++ b/package/python-lmdb/python-lmdb.hash
->> @@ -0,0 +1,3 @@
->> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
->> +md5    001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
->> +sha256 37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
->> diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
->> new file mode 100644
->> index 0000000..7873f62
->> --- /dev/null
->> +++ b/package/python-lmdb/python-lmdb.mk
->> @@ -0,0 +1,14 @@
->> +################################################################################
->> +#
->> +# python-lmdb
->> +#
->> +################################################################################
->> +
->> +PYTHON_LMDB_VERSION = 0.88
->> +PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
->> +PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
->> +PYTHON_LMDB_LICENSE = BSD
+Hi All,
 
-license is OpenLDAP Public License, please check
+Before I start investigating I was wondering if some one has seen this before?
+If the python packages is in .zip it does not seem to know how to extract and thinks it a binary.
+See the following:
 
->> +PYTHON_LMDB_SETUP_TYPE = setuptools
->> +PYTHON_LMDB_DEPENDENCIES = python-cffi
->
-> this should be host-python-cffi
->
->> +$(eval $(python-package))
->> --
->> 2.1.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+$ make python-flask-wtf
+>>> python-wtforms 2.1 Downloading
+--2016-02-02 21:45:45--  https://pypi.python.org/packages/source/W/WTForms/WTForms-2.1.zip
+Resolving pypi.python.org (pypi.python.org)... 23.235.43.223
+Connecting to pypi.python.org (pypi.python.org)|23.235.43.223|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 553644 (541K) [application/octet-stream]
+Saving to: ?/home/echaudron/buildroot/output/build/.WTForms-2.1.zip.3oIKIZ/output?
+
+/home/echaudron/buildroot/output/build/.WTForms-2.1.zip.3oIKI 100%[==================================================================================================================================================================================>] 540.67K  3.42MB/s   in 0.2s   
+
+2016-02-02 21:45:45 (3.42 MB/s) - ?/home/echaudron/buildroot/output/build/.WTForms-2.1.zip.3oIKIZ/output? saved [553644/553644]
+
+WTForms-2.1.zip: OK (md5: 6938a541fafd1a1ae2f6b9b88588eef2)
+WTForms-2.1.zip: OK (sha256: ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f)
+>>> python-wtforms 2.1 Extracting
+/home/echaudron/buildroot/dl/WTForms-2.1.zip | tar --strip-components=1 -C /home/echaudron/buildroot/output/build/python-wtforms-2.1   -xf -
+/bin/bash: /home/echaudron/buildroot/dl/WTForms-2.1.zip: Permission denied
+tar: This does not look like a tar archive
+tar: Exiting with failure status due to previous errors
+package/pkg-generic.mk:128: recipe for target '/home/echaudron/buildroot/output/build/python-wtforms-2.1/.stamp_extracted' failed
+make[1]: *** [/home/echaudron/buildroot/output/build/python-wtforms-2.1/.stamp_extracted] Error 2
+Makefile:36: recipe for target '_all' failed
+make: *** [_all] Error 2
+
+Thanks,
+
+Eelco
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160202/dadfe7b7/attachment.html>
