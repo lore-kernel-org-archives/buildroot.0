@@ -1,182 +1,229 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 2 Feb 2016 10:01:00 +0100
-Subject: [Buildroot] [PATCH] Don't build host-cmake if it is available
- on the build host
-In-Reply-To: <56B06C7F.3010201@mind.be>
-References: <1454363063-21105-1-git-send-email-luca@lucaceresoli.net>
- <56B06C7F.3010201@mind.be>
-Message-ID: <56B0704C.4060400@lucaceresoli.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 2 Feb 2016 10:04:20 +0100
+Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
+In-Reply-To: <56B014A7.2070808@huawei.com>
+References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+ <569A60E6.2030108@gmail.com>
+ <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
+ <569FFB7E.2000104@gmail.com>
+ <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
+ <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
+Message-ID: <56B07114.9030404@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Bamvor,
 
-thanks for the review.
-
-Unfortunately this patch is not working, at least for qjson with qt4.
-
-qjson fails with:
-
-CMake Error in src/CMakeLists.txt:
-   Imported target "Qt4::QtCore" includes non-existent path
-
-     "QT_MKSPECS_DIR-NOTFOUND/default"
-
-   in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
-
-   * The path was deleted, renamed, or moved to another location.
-
-   * An install or uninstall procedure did not complete successfully.
-
-   * The installation package was faulty and references files it does not
-   provide.
-
-I am investigating right now.
-
-Below my replies to your comments.
-
-Arnout Vandecappelle wrote:
-> On 01-02-16 22:44, Luca Ceresoli wrote:
->> Currently all cmake packages depend on host-cmake. Unfortunately
->> host-cmake takes a long time to configure and build: almost 7 minutes
->> on a dual-core i5 with SSD. The time does not change even with ccache
->> enabled.
+Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
+> Hi, Romain
+> 
+> 
+> On 2016/1/24 19:35, Romain Naour wrote:
+>> Hi Bamvor,
 >>
->> Indeed, building host-ccache is not very useful if it is already
->
->   host-ccache -> host-cmake
+>> Le 21/01/2016 10:03, Bamvor Zhang Jian a ?crit :
+>>> Hi, Romain
+>>>
+>>> On 01/21/2016 05:26 AM, Romain Naour wrote:
+>>>> Hi Bamvor,
+>>>>
+>>>> Le 19/01/2016 05:00, Bamvor Zhang Jian a ?crit :
+>>>>> Hi, Romain
+>>>>>
+>>>>> On 01/16/2016 11:25 PM, Romain Naour wrote:
+>>>>>> Hello Bamvor,
+>>> [...]
+>>>>>> Can you provide the command lines you used to build the toolchain ? on
+>>>>>> which abe
+>>>>>> branch ? Otherwise we can't test your series.
+>>>>> You could find the toolchain here[1]
+>>>>
+>>>> Thanks but this is not a cross-toolchain:
+>>>>
+>>>> file bin/aarch64-ilp32-linux-gnu-gcc
+>>>> bin/aarch64-ilp32-linux-gnu-gcc: ELF 64-bit LSB executable, ARM aarch64,
+>>>> version
+>>>> 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for
+>>>> GNU/Linux 3.7.0, BuildID[sha1]=0727b9d5c173c83568f5d19cfc87a05540ec8b77, not
+>>>> stripped
+>>>>
+>>>> It seems that's a native toolchain.
+>>>>
+>>>> It should be something like (from aarch64-linaro 2015.08)
+>>>> file bin/aarch64-linux-gnu-gcc
+>>>> bin/aarch64-linux-gnu-gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
+>>>> dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux
+>>>> 2.6.32, BuildID[sha1]=91a19539d0f6b0f38d599db648b4b5760000666a, not stripped
+>>>>
+>>> Yeap, it is not a cross compile. I use it in an aarch64 chroot environment in
+>>> x86. I feel it is enough to test these patches.
+>>
+>> Buildroot is a tool for cross-compiling, you know it ;-)
+>> Honestly I'm not very interested to test the toolchain by itself, only your
+>> patches for the external toolchain infra.
+>>
+>>>> Can you provide a pre-build toolchain or a recipe to rebuild a aarch64 ipl32
+>>>> toolchain ?
+>>> Linaro provide abe[1] to build toochain. You could follow this script[2] to know
+>>> how to use it. It seems that the server in tcwg is down. Hope, you could make
+>>> use of the method used by abe system.
+>>
+>> I really tried to build a aarch64 ipl32 cross-toolchain with abe but I'm stuck
+>> with glibc build. I don't know what's the glibc branch I should use.
+>> By default I used the release/2.20/master branch
+>>
+>> aarch64-ilp32-linux-gnu-gcc -mabi=ilp32 -nostdlib -nostartfiles -r -o
+>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/Scrt1.o
+>>
+>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.os
+>>
+>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/abi-note.o
+>>
+>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/init.o
+>>
+>> ../sysdeps/aarch64/start.S: Assembler messages:
+>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
+>> in this object file format
+>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
+>> in this object file format
+>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
+>> in this object file format
+>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/sysd-rules:1345:
+>>
+>> recipe for target
+>> '/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o'
+>>
+>> failed
+>> make[2]: ***
+>> [/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o]
+>>
+>> Error 1
+> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
+> update it for patch v6 rfc5.
 
-Oops. :)
+Thanks for this link.
 
->
->> installed on the build host: it is supposed to be quite portable, and
->> the only patch we have for cmake seems to only affect target-cmake.
->>
->> We avoid building host-cmake if cmake is already available on the host
->> using a technique similar to the one used for host-tar and host-xzcat.
->>
->> First, we leverage the existing infrastructure in
->> support/dependencies/dependencies.mk to set CMAKE to either "cmake" or
->> "$(HOST_DIR)/usr/bin/cmake". In the latter case we also set
->> BUILD_HOST_CMAKE = YES meaning we need to build host-cmake.
->>
->> Then in pkg-cmake.mk we launch $(CMAKE) instead of
->> $(HOST_DIR)/usr/bin/cmake.
->>
->> Finally, we do skip adding the dependency on host-cmake for all cmake
->> packages when $(BUILD_HOST_CMAKE) != YES.
->>
->> Unlike what we do for host-tar and host-xzcat, for host-cmake we do
->> not add host-cmake to DEPENDENCIES_HOST_PREREQ. Otherwise host-cmake
->> would be a dependency for _any_ package when it's not installed on the
->> host, even if no cmake package is selected.
->
->   Nice and long commit message, thanks!
->
->>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Cc: Samuel Martin <s.martin49@gmail.com>
->> Cc: Davide Viti <zinosat@tiscali.it>
->> ---
->>   package/pkg-cmake.mk                     |  6 ++++--
->>   support/dependencies/check-host-cmake.mk |  6 ++++++
->>   support/dependencies/check-host-cmake.sh | 14 ++++++++++++++
->>   3 files changed, 24 insertions(+), 2 deletions(-)
->>   create mode 100644 support/dependencies/check-host-cmake.mk
->>   create mode 100755 support/dependencies/check-host-cmake.sh
->>
->> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
->> index 81dcfcc..e3bd603 100644
->> --- a/package/pkg-cmake.mk
->> +++ b/package/pkg-cmake.mk
->> @@ -85,7 +85,7 @@ define $(2)_CONFIGURE_CMDS
->>   	cd $$($$(PKG)_BUILDDIR) && \
->>   	rm -f CMakeCache.txt && \
->>   	PATH=$$(BR_PATH) \
->> -	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->> +	$$($$(PKG)_CONF_ENV) $$(CMAKE) $$($$(PKG)_SRCDIR) \
->>   		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
->>   		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
->>   		-DCMAKE_INSTALL_PREFIX="/usr" \
->> @@ -110,7 +110,7 @@ define $(2)_CONFIGURE_CMDS
->>   	cd $$($$(PKG)_BUILDDIR) && \
->>   	rm -f CMakeCache.txt && \
->>   	PATH=$$(BR_PATH) \
->> -	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
->> +	$$(CMAKE) $$($$(PKG)_SRCDIR) \
->>   		-DCMAKE_INSTALL_SO_NO_EXE=0 \
->>   		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
->>   		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
->> @@ -149,7 +149,9 @@ $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
->>   	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
->>   endif
->>
->> +ifeq ($$(BUILD_HOST_CMAKE),YES)
->>   $(2)_DEPENDENCIES += host-cmake
->> +endif
->>
->>   #
->>   # Build step. Only define it if not already defined by the package .mk
->> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
->> new file mode 100644
->> index 0000000..fe16322
->> --- /dev/null
->> +++ b/support/dependencies/check-host-cmake.mk
->> @@ -0,0 +1,6 @@
->> +CMAKE ?= cmake
->> +
->> +ifeq (,$(call suitable-host-package,cmake,$(CMAKE)))
->> +BUILD_HOST_CMAKE = YES
->> +CMAKE = $(HOST_DIR)/usr/bin/cmake
->> +endif
->> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
->> new file mode 100755
->> index 0000000..76a81e0
->> --- /dev/null
->> +++ b/support/dependencies/check-host-cmake.sh
->> @@ -0,0 +1,14 @@
->> +#!/bin/sh
->> +
->> +candidate="$1"
->> +
->> +cmake=`which $candidate`
->
->   $candidate could be an absolute path, in which case which returns nothing.
->
->> +if [ ! -x "$cmake" ]; then
->> +	cmake=`which cmake`
->
->   Since there is already CMAKE ?= cmake in the caller, this is pointless.
->
->   How about a
->
-> for cmake in "$cmake" "$( which "$cmake" )"; do
->   ...
->
-> instead?
+To be honest, I don't think this series will be merged as is until a stable
+toolchain release is made. When it's done, can you respin your series on top of
+master since the toolchain-external code has been updated recently ?
 
-Your suggestions are absolutely correct. I shamelessly copied other
-check-host-*.sh scripts and just concentrated on having the thing
-working. Seems like thos other script need a cleanup now. I'll have a
-look (if/after I can make this thing working).
+Best regards,
+Romain
 
->
->> +	if [ ! -x "$cmake" ]; then
->> +		# echo nothing: no suitable cmake found
->> +		exit 1
->> +	fi
->> +fi
->
->   I have the feeling that there should also be a version check here, though I
-> don't know which version we should use.
-
-Right. My idea is to download all the cmake packages that are currently
-in Buildroot, find the highest version mentioned in their
-CMAKE_MINIMUM_REQUIRED() statement and check for that version in the
-script.
-
--- 
-Luca
+> 
+> Regards
+> 
+> Bamvor
+> 
+> 
+> [1] https://github.com/norov/glibc/tree/thunderx-ilp32-32time_toff_t
+>>
+>> Also I had several issue with the abe script on my system (Fedora) and I had to
+>> modify some part of the script to be able to continue the build.
+>>
+>> So, It would be great if you can provide a precompiled cross-toolchain.
+>>
+>> Best regards,
+>> Romain
+>>
+>>>
+>>> Regards
+>>>
+>>> Bamvor
+>>>
+>>> [1]
+>>> https://git.linaro.org/toolchain/abe.git/blob/refs/heads/benchmarking:/abe.sh
+>>> [2]
+>>> https://git.linaro.org/toolchain/spec2xxx-utils.git/blob/refs/heads/test:/bench-ilp32.sh
+>>>
+>>>
+>>>>>>
+>>>>>> Do you know if Linaro plans to release a ipl32 toolchain ?
+>>>>> It seems that linaro will not release it before patches for ilp32 of kernel
+>>>>> and
+>>>>> glibc upstreamed.
+>>>>> Here[2] is a status for ilp32 in linaro.
+>>>>
+>>>> Thanks for the link.
+>>>>
+>>>> Best regards,
+>>>> Romain
+>>>>
+>>>>>
+>>>>> Regards
+>>>>>
+>>>>> Bamvor
+>>>>>
+>>>>> [1] http://people.linaro.org/~maxim.kuvyrkov/bench-ilp32/
+>>>>> [2] https://wiki.linaro.org/Platform/arm64-ilp32
+>>>>>
+>>>>>> Best regards,
+>>>>>> Romain Naour
+>>>>>>
+>>>>>>>
+>>>>>>> changes since v2
+>>>>>>> 1.  rebase on the patch have been .
+>>>>>>>      "827ba46 aarch64: add big endian(aarch64_be) support"
+>>>>>>> 2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5
+>>>>>>> according to
+>>>>>>>      the suggestion from Thomas.
+>>>>>>> 3.  Improve the ifeq in patch 2/5 according to Gustavo.
+>>>>>>> 4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to
+>>>>>>> Gustavo.
+>>>>>>>
+>>>>>>> changes since v1
+>>>>>>> 1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
+>>>>>>> 2.  Change default libc, toolchain for ilp32 build.
+>>>>>>> 3.  Others changes suggested by Gustavo.
+>>>>>>>
+>>>>>>> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
+>>>>>>> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
+>>>>>>> [3] https://git.linaro.org/kernel/linux-linaro-tracking.git
+>>>>>>> [4] https://wiki.linaro.org/ABE
+>>>>>>>
+>>>>>>>
+>>>>>>> Bamvor Jian Zhang (5):
+>>>>>>>    aarch64: align aarch64_be config with aarch64s'
+>>>>>>>    aarch64: ilp32: handle special file name
+>>>>>>>    aarch64: ilp32: add ilp32 compiler and linker flags
+>>>>>>>    aarch64: ilp32: add ilp32 build config
+>>>>>>>    aarch64: ilp32 defconfig examples
+>>>>>>>
+>>>>>>>   Makefile                                           |  6 +++
+>>>>>>>   arch/Config.in.aarch64                             | 36 ++++++++++++++++++
+>>>>>>>   configs/aarch64_be_defconfig                       |  2 +
+>>>>>>>   configs/aarch64_be_ilp32_defconfig                 |  8 ++++
+>>>>>>>   configs/aarch64_ilp32_defconfig                    |  8 ++++
+>>>>>>>   package/Makefile.in                                | 13 ++++++-
+>>>>>>>   package/binutils/Config.in                         |  4 +-
+>>>>>>>   package/binutils/Config.in.host                    |  5 ++-
+>>>>>>>   package/dropwatch/Config.in                        |  5 ++-
+>>>>>>>   package/gcc/Config.in.host                         | 11 +++---
+>>>>>>>   package/gdb/Config.in.host                         |  2 +-
+>>>>>>>   package/gpsd/Config.in                             |  2 +-
+>>>>>>>   package/lightning/Config.in                        |  5 ++-
+>>>>>>>   package/nginx/Config.in                            |  3 +-
+>>>>>>>   package/oprofile/Config.in                         |  6 ++-
+>>>>>>>   toolchain/Config.in                                |  2 +
+>>>>>>>   toolchain/helpers.mk                               |  5 ++-
+>>>>>>>   toolchain/toolchain-buildroot/Config.in            |  7 ++--
+>>>>>>>   toolchain/toolchain-external/Config.in             | 22 +++++++++++
+>>>>>>>   toolchain/toolchain-external/toolchain-external.mk | 44
+>>>>>>> +++++++++++++++++++++-
+>>>>>>>   20 files changed, 169 insertions(+), 27 deletions(-)
+>>>>>>>   create mode 100644 configs/aarch64_be_defconfig
+>>>>>>>   create mode 100644 configs/aarch64_be_ilp32_defconfig
+>>>>>>>   create mode 100644 configs/aarch64_ilp32_defconfig
+>>>>>>>
+>>>>>>
+>>>>>
+>>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+> 
