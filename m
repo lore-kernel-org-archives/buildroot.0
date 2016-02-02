@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 14:37:21 +0100
-Subject: [Buildroot] [PATCH 11/19] python-pytrie: new package
-In-Reply-To: <1454373899-22481-12-git-send-email-mc5686@mclink.it>
+Date: Tue, 2 Feb 2016 14:39:16 +0100
+Subject: [Buildroot] [PATCH 07/19] python-netaddr: new package
+In-Reply-To: <1454373899-22481-8-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-12-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kvbX9c40N3VGc14N=4CMvUv12XUEymFY+5urdG-6B01pQ@mail.gmail.com>
+ <1454373899-22481-8-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ks_nJsA=wDhz8+Tuw+yHnACr30zx3f3KDnncAFcL3Oaaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,67 +17,67 @@ On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  package/Config.in                        |  1 +
->  package/python-pytrie/Config.in          |  7 +++++++
->  package/python-pytrie/python-pytrie.hash |  3 +++
->  package/python-pytrie/python-pytrie.mk   | 14 ++++++++++++++
+>  package/Config.in                          |  1 +
+>  package/python-netaddr/Config.in           |  7 +++++++
+>  package/python-netaddr/python-netaddr.hash |  3 +++
+>  package/python-netaddr/python-netaddr.mk   | 14 ++++++++++++++
 >  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-pytrie/Config.in
->  create mode 100644 package/python-pytrie/python-pytrie.hash
->  create mode 100644 package/python-pytrie/python-pytrie.mk
+>  create mode 100644 package/python-netaddr/Config.in
+>  create mode 100644 package/python-netaddr/python-netaddr.hash
+>  create mode 100644 package/python-netaddr/python-netaddr.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 9dc5123..345a512 100644
+> index 80a4201..9b6e6bc 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -700,6 +700,7 @@ menu "External python modules"
->         source "package/python-pysnmp/Config.in"
->         source "package/python-pysnmp-apps/Config.in"
->         source "package/python-pysnmp-mibs/Config.in"
-> +       source "package/python-pytrie/Config.in"
->         source "package/python-pyudev/Config.in"
->         source "package/python-pyusb/Config.in"
->         source "package/python-pyxb/Config.in"
-> diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
+> @@ -667,6 +667,7 @@ menu "External python modules"
+>         source "package/python-meld3/Config.in"
+>         source "package/python-mistune/Config.in"
+>         source "package/python-msgpack/Config.in"
+> +       source "package/python-netaddr/Config.in"
+>         source "package/python-netifaces/Config.in"
+>         source "package/python-networkmanager/Config.in"
+>         source "package/python-nfc/Config.in"
+> diff --git a/package/python-netaddr/Config.in b/package/python-netaddr/Config.in
 > new file mode 100644
-> index 0000000..4f61db0
+> index 0000000..8e58a34
 > --- /dev/null
-> +++ b/package/python-pytrie/Config.in
+> +++ b/package/python-netaddr/Config.in
 > @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PYTRIE
-> +       bool "python-pytrie"
+> +config BR2_PACKAGE_PYTHON_NETADDR
+> +       bool "python-netaddr"
 > +       help
-> +         A pure Python implementation of the trie data structure.
+> +         A network address manipulation library for Python.
 > +
-> +         https://pypi.python.org/pypi/PyTrie
+> +         https://pypi.python.org/pypi/netaddr
 > +
-> diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
+> diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
 > new file mode 100644
-> index 0000000..88d2542
+> index 0000000..5fcdda4
 > --- /dev/null
-> +++ b/package/python-pytrie/python-pytrie.hash
+> +++ b/package/python-netaddr/python-netaddr.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
-> +md5    5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
-> +sha256 b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
-> diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c65bb34f8bedfbbca0b316c490cd13a0, sha256 locally computed.
+> +md5    c65bb34f8bedfbbca0b316c490cd13a0  netaddr-0.7.18.tar.gz
+> +sha256 a1f5c9fcf75ac2579b9995c843dade33009543c04f218ff7c007b3c81695bd19  netaddr-0.7.18.tar.gz
+> diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
 > new file mode 100644
-> index 0000000..e3bea4f
+> index 0000000..2a4e40c
 > --- /dev/null
-> +++ b/package/python-pytrie/python-pytrie.mk
+> +++ b/package/python-netaddr/python-netaddr.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-pytrie
+> +# python-netaddr
 > +#
 > +################################################################################
 > +
-> +PYTHON_PYTRIE_VERSION = 0.2
-> +PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
-> +PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
-> +PYTHON_PYTRIE_LICENSE = BSD-3c
-> +PYTHON_PYTRIE_LICENSE_FILES = LICENSE
-> +PYTHON_PYTRIE_SETUP_TYPE = distutils
+> +PYTHON_NETADDR_VERSION = 0.7.18
+> +PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
+> +PYTHON_NETADDR_SITE = http://pypi.python.org/packages/source/n/netaddr
+> +PYTHON_NETADDR_LICENSE = BSD
+> +PYTHON_NETADDR_LICENSE_FILES = LICENSE
+> +PYTHON_NETADDR_SETUP_TYPE = distutils
 > +
 > +$(eval $(python-package))
 > --
