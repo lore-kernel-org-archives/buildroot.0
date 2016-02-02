@@ -1,158 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  2 Feb 2016 16:31:23 +0100
-Subject: [Buildroot] [PATCH v3 05/18] pulseaudio: remove
-	BR2_ARCH_HAS_ATOMICS dependency
+Date: Tue,  2 Feb 2016 16:31:24 +0100
+Subject: [Buildroot] [PATCH v3 06/18] apache, apr: fix atomic handling
 In-Reply-To: <1454427096-20967-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1454427096-20967-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1454427096-20967-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1454427096-20967-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pulseaudio is able to either use the atomic __sync builtins from the
-compiler, or to rely on libatomic_ops for atomic operations. However,
-since it anyway selects json-c which requires the __sync built-ins, it
-means using libatomic_ops is useless: even if you use libatomic_ops
-for pulseaudio, you'd still get a link error in pulseaudio due to the
-missing __sync built-in for the json-c library.
+Since the apache package was introduced,
+--enable-nonportable-atomics=yes was passed when
+BR2_ARCH_HAS_ATOMICS. However, Apache doesn't take this option: it
+only passes it down when building the APR library. But since we're
+building APR separately, this statement had no effect.
 
-Also, since pulseaudio now inherits the BR2_TOOLCHAIN_HAS_SYNC_4 from
-json-c, which matches the __sync built-in from pulseaudio, this
-commit:
-
- - Drops the BR2_ARCH_HAS_ATOMICS dependency
- - Forces pulseaudio to not detect libatomic_ops
- - Propagates the removal of BR2_ARCH_HAS_ATOMICS dependency to
-   pulseaudio's reverse dependencies.
+So this commit removes the useless code from the Apache package, and
+instead adds the appropriate logic to the apr package, using the new
+BR2_TOOLCHAIN_HAS_SYNC_x symbols rather than BR2_ARCH_HAS_ATOMICS.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/efl/Config.in                          | 1 -
- package/espeak/Config.in                       | 1 -
- package/gstreamer/gst-plugins-good/Config.in   | 2 --
- package/gstreamer1/gst1-plugins-good/Config.in | 2 --
- package/mpd/Config.in                          | 1 -
- package/pulseaudio/Config.in                   | 2 --
- package/pulseaudio/pulseaudio.mk               | 7 ++++++-
- 7 files changed, 6 insertions(+), 10 deletions(-)
+ package/apache/apache.mk |  4 ----
+ package/apr/apr.mk       | 15 +++++++++++++++
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index 21cbf5f..418f41e 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -81,7 +81,6 @@ config BR2_PACKAGE_EFL_LIBSNDFILE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 8e7b6be..e752fcc 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -35,10 +35,6 @@ APACHE_CONF_OPTS = \
+ 	--disable-lua \
+ 	--disable-luajit
  
- config BR2_PACKAGE_EFL_PULSEAUDIO
- 	bool "Enable pulseaudio support (recommended)"
--	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
- 	select BR2_PACKAGE_PULSEAUDIO
- 	default y
-diff --git a/package/espeak/Config.in b/package/espeak/Config.in
-index eebaf6f..aed627a 100644
---- a/package/espeak/Config.in
-+++ b/package/espeak/Config.in
-@@ -32,7 +32,6 @@ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+-ifeq ($(BR2_ARCH_HAS_ATOMICS),y)
+-APACHE_CONF_OPTS += --enable-nonportable-atomics=yes
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBXML2),y)
+ APACHE_DEPENDENCIES += libxml2
+ # Apache wants the path to the header file, where it can find
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 0fed19c..361a79f 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -35,6 +35,21 @@ endif
+ # Fix lfs detection when cross compiling
+ APR_CONF_ENV += apr_cv_use_lfs64=yes
  
- config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
- 	bool "pulseaudio"
--	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
- 	select BR2_PACKAGE_PULSEAUDIO
- 
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index f169435..36ab6cb 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -204,7 +204,6 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_OSS4
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
--	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
- 	depends on !BR2_STATIC_LIBS # pulseaudio
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
- 	select BR2_PACKAGE_PULSEAUDIO
-@@ -212,7 +211,6 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 
- comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 6855c4b..2606b86 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -311,7 +311,6 @@ comment "gdkpixbuf needs a toolchain w/ wchar, threads"
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
--	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
- 	depends on !BR2_STATIC_LIBS # pulseaudio
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
- 	select BR2_PACKAGE_PULSEAUDIO
-@@ -321,7 +320,6 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 
- comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 4455795..618bea9 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -246,7 +246,6 @@ config BR2_PACKAGE_MPD_OSS
- 
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
--	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
- 	depends on !BR2_STATIC_LIBS # pulseaudio
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
- 	select BR2_PACKAGE_PULSEAUDIO
-diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
-index 4583d22..20aa374 100644
---- a/package/pulseaudio/Config.in
-+++ b/package/pulseaudio/Config.in
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_PULSEAUDIO
- 	select BR2_PACKAGE_LIBSNDFILE
- 	select BR2_PACKAGE_SPEEX
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_ARCH_HAS_ATOMICS
- 	help
- 	  PulseAudio is a sound system for POSIX OSes, meaning that it
- 	  is a proxy for your sound applications. It allows you to do
-@@ -34,6 +33,5 @@ endif
- 
- comment "pulseaudio needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 8450090..86bbb2f 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -15,9 +15,14 @@ PULSEAUDIO_CONF_OPTS = \
- 	--disable-legacy-database-entry-format \
- 	--disable-manpages
- 
-+# Make sure we don't detect libatomic_ops. Indeed, since pulseaudio
-+# requires json-c, which needs 4 bytes __sync builtins, there should
-+# be no need for pulseaudio to rely on libatomic_ops.
-+PULSE_AUDIO_CONF_ENV += \
-+	ac_cv_header_atomic_ops_h=no
++# Use non-portable atomics when available: 8 bytes atomics are used on
++# 64-bits architectures, 4 bytes atomics on 32-bits architectures. We
++# have to override ap_cv_atomic_builtins because the test used to
++# check for atomic builtins uses AC_TRY_RUN, which doesn't work when
++# cross-compiling.
++ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_8),y:y)
++APR_CONF_OPTS += --enable-nonportable-atomics
++APR_CONF_ENV += ap_cv_atomic_builtins=yes
++else ifeq ($(BR2_ARCH_IS_64):$(BR2_TOOLCHAIN_HAS_SYNC_4),:y)
++APR_CONF_OPTS += --enable-nonportable-atomics
++APR_CONF_ENV += ap_cv_atomic_builtins=yes
++else
++APR_CONF_OPTS += --disable-nonportable-atomics
++endif
 +
- PULSEAUDIO_DEPENDENCIES = \
- 	host-pkgconf libtool json-c libsndfile speex host-intltool \
--	$(if $(BR2_PACKAGE_LIBATOMIC_OPS),libatomic_ops) \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
- 	$(if $(BR2_PACKAGE_ALSA_LIB),alsa-lib) \
- 	$(if $(BR2_PACKAGE_LIBGLIB2),libglib2) \
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ APR_DEPENDENCIES += util-linux
+ endif
 -- 
 2.6.4
