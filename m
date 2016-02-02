@@ -1,81 +1,120 @@
-From: James Knight <james.knight@rockwellcollins.com>
-Date: Tue, 2 Feb 2016 17:48:36 -0500
-Subject: [Buildroot] [RFC 1/1] e2fsprogs: support findfs
-In-Reply-To: <56B12655.8000105@mind.be>
-References: <1454446924-10368-1-git-send-email-james.knight@rockwellcollins.com>
- <56B12655.8000105@mind.be>
-Message-ID: <CALe+oY8=d5fYnyfehm57hAHjHn-eKRWVLGDCumY+Xrp-C7849w@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed,  3 Feb 2016 00:05:42 +0100
+Subject: [Buildroot] [PATCH] RFC: adding customizable linux logo
+Message-ID: <1454454342-27717-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+This patch adds a custom linux logo to the generated kernel image.
 
-Thanks for the comments.
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
 
-On Tue, Feb 2, 2016 at 4:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> ...
->> An alternative to this approach would be to remove any e2fsprogs's
->> findfs references from Buildroot and add the findfs utility to
->> util-linux (since the package provides a findfs utility as well).
->
->  Ideally, both should be done :-)
+I often use the linux kernel logo as an early full screen bootsplash.
+For such a reason I wrote this patch and I'm looking for comments.
 
-I thought this should be done as well. I initially made changes that
-would include util-linux's findfs and you can toggle between both.
-However, after I implemented a chunk of the work, I saw e2fsprog's
-dependency (at least in the Config.in) for util-linux/libblkid. Since
-util-linux build's libblkid, e2fsprog should never attempt to build
-the library itself (thus, cannot never support findfs). Hence why
-maybe findfs should be removed from Buildroot's e2fsprog package
-(unless I'm missing something).
+ linux/Config.ext.in              |  8 ++++++++
+ linux/linux-ext-customlogo.mk    | 11 +++++++++++
+ package/Config.in                |  1 +
+ package/customlogo/Config.in     | 16 ++++++++++++++++
+ package/customlogo/customlogo.mk | 15 +++++++++++++++
+ 5 files changed, 51 insertions(+)
+ create mode 100644 linux/linux-ext-customlogo.mk
+ create mode 100644 package/customlogo/Config.in
+ create mode 100644 package/customlogo/customlogo.mk
 
->  The patch is missing a commit message.
->
->  Did you send it upstream?
-
-Did not provide a commit message or send anything upstream. Just
-looking for input first before making a complete package (if any will
-be made).
-
->> +diff -Naur a/configure.in b/configure.in
->> +--- a/configure.in   2016-02-02 15:03:02.440059366 -0500
->> ++++ b/configure.in   2016-02-02 15:03:38.265404484 -0500
->> +@@ -533,6 +533,7 @@
->> +             [AC_MSG_ERROR([external blkid library not found])], -luuid)
->> +     BLKID_CMT=#
->> +     PROFILED_LIBBLKID=$LIBBLKID
->> ++    AC_DEFINE(CONFIG_BUILD_FINDFS, 1)
->
->  Hm, it would be weird if this were allowed... If you add this,
-> CONFIG_BUILD_FINDFS will be defined if --disable-libblkid was given. if
-> --enable-libblkid was given, and if nothing is given. So the whole point of the
-> option is moot. That doesn't sound right...
->
->  Can you check that with upstream, or consult their logs when the option was
-> introduced?
-
-It doesn't; I completely agree. I feel there should be an option in there that:
-
- 1) Builds without libblkid with a limited subset.
- 2) Builds with an externally provided libblkid with blkid-related features.
- 3) Builds its "private" libblkid library with blkid-related features.
-
-I'm no master at autoconf work, but how I viewed its current
-configuration file is that option 1 (partially) and 3 are only
-available. Although looking throughout the source code, I see a bunch
-of code requiring blkid-support. Maybe there is some magic that its
-internal implementation of findfs requires its internal variant of
-blkid-related code (although forcing to build with this patch, it
-seems to just work (limited testing)). I try to find more via old
-commit logs.
-
-That all being said, I don't necessarily like the patch. It's
-modifying the package to get a non-Busybox findfs to work in
-Buildroot. I'd prefer making the alternative change to using
-util-linux's findfs and removing e2fsprog's findfs (which seemed to
-work in my limited testing). Just doing a shout out before I submit a
-patch request for something that might not be ideal (maybe I should
-have submitted an RFC for the alternative approach first).
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 755c23b..b752c9c 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -1,5 +1,13 @@
+ menu "Linux Kernel Extensions"
+ 
++# Custom logo
++config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
++	select BR2_PACKAGE_CUSTOMLOGO
++	bool "Custom logo"
++	help
++	  change linux boot logo with your own graphics. 
++	  Can be used as an early bootsplash.
++
+ # Xenomai
+ config BR2_LINUX_KERNEL_EXT_XENOMAI
+ 	bool "Adeos/Xenomai Real-time patch"
+diff --git a/linux/linux-ext-customlogo.mk b/linux/linux-ext-customlogo.mk
+new file mode 100644
+index 0000000..68c613a
+--- /dev/null
++++ b/linux/linux-ext-customlogo.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# Custom logo
++#
++################################################################################
++
++LINUX_EXTENSIONS += customlogo
++
++define CUSTOMLOGO_PREPARE_KERNEL
++	cp $(CUSTOMLOGO_DIR)/logo_linux_clut224.ppm $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
++endef
+diff --git a/package/Config.in b/package/Config.in
+index 7ced9d4..1552f32 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -214,6 +214,7 @@ comment "Sounds"
+ 
+ comment "Themes"
+ 	source "package/gtk2-engines/Config.in"
++	source "package/customlogo/Config.in"
+ 
+ endmenu
+ 
+diff --git a/package/customlogo/Config.in b/package/customlogo/Config.in
+new file mode 100644
+index 0000000..f8502da
+--- /dev/null
++++ b/package/customlogo/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_CUSTOMLOGO
++	bool "Custom logo"
++	help
++	  Change linux boot logo with your own graphics. 
++	  Can be used as an early bootsplash.
++
++	  *REQUIRES* a pre installed imagemagick on the host system.
++
++if BR2_PACKAGE_CUSTOMLOGO
++
++config BR2_PACKAGE_CUSTOMLOGO_PATH
++	string "image file path"
++	help
++	  This image will be used as custom logo.
++
++endif
+diff --git a/package/customlogo/customlogo.mk b/package/customlogo/customlogo.mk
+new file mode 100644
+index 0000000..4f11522
+--- /dev/null
++++ b/package/customlogo/customlogo.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# customlogo
++#
++################################################################################
++
++CUSTOMLOGO_SOURCE =
++
++define CUSTOMLOGO_BUILD_CMDS
++	convert $(BR2_PACKAGE_CUSTOMLOGO_PATH) \
++		-dither None -colors 224 -compress none \
++		$(@D)/logo_linux_clut224.ppm
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.1
