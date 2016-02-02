@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 18:46:08 +0100
-Subject: [Buildroot] [PATCH v6 08/13] core: add HOST_SANITIZE_RPATH_HOOK
- to TARGET_FINALIZE_HOOKS
-In-Reply-To: <1454342021-22960-9-git-send-email-s.martin49@gmail.com>
+Date: Tue, 2 Feb 2016 19:13:38 +0100
+Subject: [Buildroot] [PATCH v6 09/13] core: add {TARGET,
+ STAGING}_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+In-Reply-To: <1454342021-22960-10-git-send-email-s.martin49@gmail.com>
 References: <1454342021-22960-1-git-send-email-s.martin49@gmail.com>
- <1454342021-22960-9-git-send-email-s.martin49@gmail.com>
-Message-ID: <56B0EB60.5050306@mind.be>
+ <1454342021-22960-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <56B0F1D2.9070400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,14 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01-02-16 16:53, Samuel Martin wrote:
-> This patch adds host-patchelf as a target-finalize dependency, and
-> introduces the HOST_SANITIZE_RPATH_HOOK hook to fix the ELF files'
-> RPATH from the HOST_DIR location (excluding the sysroot).
+> This patch introduces the TARGET_SANITIZE_RPATH_HOOK and
+> STAGING_SANITIZE_RPATH_HOOK hooks fixing the ELF files' RPATH of
+> binaries from, respectively, the TARGET_DIR and the STAGING_DIR
+> locations.
 > 
-> After running this hook, the RPATH from any host ELF files is relative to
-> the binary location itself.
-> 
-> Notes:
-> - we avoid to fix RPATH in the sysroot.
-> - we do not try to fix RPATH in the external toolchain installation
->   location as they may have been built in a way, this is already correct;
->   furthermore, fixing RPATH in those programs may result in breaking them.
-> - the whole host directory is processed because a number of
->   host-package install programs that could be useful in places
->   different from $(HOST_DIR)/{bin,sbin,usr/bin,usr/sbin}.
-> - the shared libraries are also processed in case they have a 'main'
->   function.
-> 
-> As a step toward a fully relocatable SDK, this change allows to get the
-> toolchain relocatable, but not yet the whole SDK.
+> After running this hook, the RPATH from any target ELF files from both
+> the target and the staging locations won't contain any occurence of the
+> sysroot or some build locations.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > 
@@ -42,74 +30,91 @@ On 01-02-16 16:53, Samuel Martin wrote:
 > - add debug mode support
 > 
 > changes v4->v5:
+> - target hook now sanitizes the rpath (Baruch)
 > - add verbose support
+> - update comment
 > 
 > changes v3->v4:
-> - add host-patchelf to PACKAGES instead of target-finalize (Baruch)
+> - rebase
 > - add comment
 > 
 > changes v2->v3:
 > - move hook in Makefile (Baruch)
 > ---
->  Makefile | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+>  Makefile | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
 > diff --git a/Makefile b/Makefile
-> index 7c87177..b1f4fcf 100644
+> index b1f4fcf..eb8a037 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -616,6 +616,31 @@ endef
->  TARGET_FINALIZE_HOOKS += PURGE_LOCALES
->  endif
+> @@ -641,6 +641,26 @@ endef
 >  
-> +# RPATH fixing
-> +# - The host hook sets RPATH in host ELF binaries, using relative paths to the
-> +#   library locations.
-> +# - The target hook sanitizes RPATH in target ELF binaries, removing paths
-> +#   pointing to package's build directories or the sysroot's libdirs.
-> +PACKAGES += host-patchelf
-> +
-> +ifeq ($(BR2_DEBUG_RPATH),)
-> +BR2_DEBUG_RPATH = 0
-> +endif
-> +ifeq ($(BR2_DEBUG_RPATH),0)
-> +DEBUG_RPATH = 0
-> +else
-> +DEBUG_RPATH = $(shell echo $$(($(BR2_DEBUG_RPATH)+1)))
-> +endif
-
- I don't like this debug handling in the Makefile. For the toolchain wrapper,
-the BR2_DEBUG_WRAPPER variable is used directly in the wrapper, so nothing
-specific has to be done in the Makefile. So here as well I'd prefer to use
-BR2_DEBUG_RPATH in the scripts.
-
- Since the logging stuff is generic, you will indeed have to convert it to the
-DEBUG variable in the fix-rpath script, but IMHO that's much more acceptable.
-
- Also, it should be sufficient to set DEBUG=${BR_DEBUG_RPATH}. If
-BR2_DEBUG_RPATH is not set, the ${DEBUG:=0} in log.sh will set it to 0.
-
-
-> +
-> +define HOST_SANITIZE_RPATH_HOOK
+>  TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
+>  
+> +# Function sanitizing target/staging ELF files' RPATH.
+> +# i.e. it removes paths pointing to the staging or build location from the ELF
+> +# files' RPATH.
+> +define TARGET_SANITIZE_RPATH_HOOK
 > +	DEBUG=$(DEBUG_RPATH) \
 > +	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
-> +	READELF=readelf \
+> +	READELF=$(TARGET_READELF) \
+> +		$(TOPDIR)/support/scripts/fix-rpath target $(TARGET_DIR)
+> +endef
+> +
+> +define STAGING_SANITIZE_RPATH_HOOK
+> +	DEBUG=$(DEBUG_RPATH) \
+> +	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
+> +	READELF=$(TARGET_READELF) \
+> +		$(TOPDIR)/support/scripts/fix-rpath staging $(STAGING_DIR)
 
- That's already set by the scripts, and actually it's probably better if the
-user has the possibility to override readelf.
+ Since target and staging are basically the same, I'd just make a single call to
+fix-rpath and add a loop over basedirs there. So
 
+	.../fix-rpath target $(TARGET_DIR) $(STAGING_DIR)
 
-> +		$(TOPDIR)/support/scripts/fix-rpath host $(HOST_DIR)
+ Or actually, I'm not sure if it makes a lot of sense to have the fix-rpath
+script the way it is now, because the only commonality between host and target
+is the filter_elf step. But that could in fact easily be done inside the
+sanitize_rpath function (which would check for an ELF file at start and exit 0
+if it's not ELF).
 
- I find this indentation a bit weird. But OK.
+ So you could have
+
+define HOST_SANITIZE_RPATH_HOOK
+	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
+	find $(HOST_DIR) -path "$(HOST_DIR)/usr/*/sysroot" -prune -o \
+		"$(HOST_DIR)/opt/ext-toolchain" -prune -o \
+		-type f \
+		-exec $(TOPDIR)/support/scripts/sanitize-rpath \
+			"$(HOST_DIR)" '{}' keep_lib_and_usr_lib \;
+endef
+
+define TARGET_SANITIZE_RPATH_HOOK
+	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
+	READELF=$(TARGET_READELF) \
+	find $(STAGING_DIR) -type f \
+		-exec $(TOPDIR)/support/scripts/sanitize-rpath \
+			"$(STAGING_DIR)" '{}' \;
+	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
+	READELF=$(TARGET_READELF) \
+	find $(TARGET_DIR) -type f \
+		-exec $(TOPDIR)/support/scripts/sanitize-rpath \
+			"$(STAGING_DIR)" '{}' \;
+endef
+
+ OK, maybe some factorization should be possible here, but the fix-rpath script
+is 100 lines long and those save only 3 lines in the Makefile, so really I don't
+think that's a good refactoring...
+
 
  Regards,
  Arnout
 
 > +endef
 > +
-> +TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
+> +TARGET_FINALIZE_HOOKS += TARGET_SANITIZE_RPATH_HOOK \
+> +       STAGING_SANITIZE_RPATH_HOOK
 > +
 >  $(TARGETS_ROOTFS): target-finalize
 >  
