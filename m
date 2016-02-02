@@ -1,99 +1,51 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 09:36:31 +0100
-Subject: [Buildroot] [PATCH 17/19] python-pyasn-modules: new package
-In-Reply-To: <1454373899-22481-18-git-send-email-mc5686@mclink.it>
-References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-18-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kuGjeF0Kj8=VVcq2fy5s_y8aawuw=4x1XspDoqbokQ8kg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 Feb 2016 09:40:28 +0100
+Subject: [Buildroot] [PATCH v2] util-linux: fix static builds with uClibc
+In-Reply-To: <1453904776-13016-1-git-send-email-ltrimas@synopsys.com> (Lada
+ Trimasova's message of "Wed, 27 Jan 2016 17:26:16 +0300")
+References: <1453904776-13016-1-git-send-email-ltrimas@synopsys.com>
+Message-ID: <87a8nj8pz7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                                      |  1 +
->  package/python-pyasn-modules/Config.in                 |  8 ++++++++
->  package/python-pyasn-modules/python-pyasn-modules.hash |  3 +++
->  package/python-pyasn-modules/python-pyasn-modules.mk   | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-pyasn-modules/Config.in
->  create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
->  create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index b8b7129..807cffb 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -679,6 +679,7 @@ menu "External python modules"
->         source "package/python-protobuf/Config.in"
->         source "package/python-psutil/Config.in"
->         source "package/python-pyasn/Config.in"
-> +       source "package/python-pyasn-modules/Config.in"
->         source "package/python-pycli/Config.in"
->         source "package/python-pycparser/Config.in"
->         source "package/python-pycrypto/Config.in"
-> diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
-> new file mode 100644
-> index 0000000..68d1579
-> --- /dev/null
-> +++ b/package/python-pyasn-modules/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_PYASN_MODULES
-> +       bool "python-pyasn-modules"
+>>>>> "Lada" == Lada Trimasova <Lada.Trimasova@synopsys.com> writes:
 
-add python-pyasn dependency
+ > In case of uClibc librt depends on libpthread. In particular
+ > timer_create() function uses pthread_XXX(). That means in case
+ > of static builds it's required to link not librt alone but
+ > together with libpthread. So if checking timer_create function
+ > in librt fails, it is necessary to check if timer_create function
+ > successfully links with "-lpthread".
 
-depends on BR2_INSTALL_LIBSTDCPP
+ > That issues was spotted in Buldroot autobuilder failures:
+ > http://autobuild.buildroot.net/results/759/75960db671807091fe9155aee9e46a6245e32590/
+ > http://autobuild.buildroot.org/results/112/112e8b85783f5aaba42a937a6eb064317615a21b/
 
-> +       select BR2_PACKAGE_PYASN
-> +       help
-> +         A collection of ASN.1-based protocols modules.
-> +
-> +         https://pypi.python.org/pypi/pyasn1-modules
-> +
+ > 0005-build-sys-use-REALTIME_LIBS.patch is a back-port of upstream
+ > https://github.com/karelzak/util-linux/commit/b97edfe731fdf3d3e92e40494b22658207ab6d3c
+ > that won't apply cleanly on v2.27.1
 
-comment "python-pyasn-modules needs a toolchain w/ C++"
-        depends on !BR2_INSTALL_LIBSTDCPP
+ > 0006-buildsys-fix-static-configuration-and-building.patch was just
+ > applied upstream, see https://github.com/karelzak/util-linux/commit/71a77ca1ddfdd7e0d14caad9e8a607a83d61a45c
 
-see package/python-pyasn/Config.in for reference
+ > Both patches must be removed on util-linux version bump.
 
-> diff --git a/package/python-pyasn-modules/python-pyasn-modules.hash b/package/python-pyasn-modules/python-pyasn-modules.hash
-> new file mode 100644
-> index 0000000..6d9a707
-> --- /dev/null
-> +++ b/package/python-pyasn-modules/python-pyasn-modules.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=178129bc7fbf07215c25230c5f053f81, sha256 locally computed.
-> +md5    178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
-> +sha256 10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
-> diff --git a/package/python-pyasn-modules/python-pyasn-modules.mk b/package/python-pyasn-modules/python-pyasn-modules.mk
-> new file mode 100644
-> index 0000000..9ba13cb
-> --- /dev/null
-> +++ b/package/python-pyasn-modules/python-pyasn-modules.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-pyasn-modules
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYASN_MODULES_VERSION = 0.0.8
-> +PYTHON_PYASN_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
-> +PYTHON_PYASN_MODULES_SITE = http://pypi.python.org/packages/source/p/pyasn1-modules
-> +PYTHON_PYASN_MODULES_LICENSE = BSD
-> +PYTHON_PYASN_MODULES_LICENSE_FILES = LICENSE.txt
-> +PYTHON_PYASN_MODULES_SETUP_TYPE = setuptools
-> +PYTHON_PYASN_MODULES_DEPENDENCIES = python-pyasn
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
+ > Cc: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+
+ > ---
+ > v1 of this patch http://patchwork.ozlabs.org/patch/549236/ by Alexey Brodkin
+ > changes v1->v2:
+ > - fix typo in timer_create_function
+ > - use libpthread only if necessary.
+
+Committed, thanks.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
