@@ -1,198 +1,54 @@
-From: Zhangjian (Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Tue, 2 Feb 2016 10:29:59 +0800
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-In-Reply-To: <56A4B6F0.8080108@gmail.com>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
- <569A60E6.2030108@gmail.com>
- <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
- <569FFB7E.2000104@gmail.com>
- <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
- <56A4B6F0.8080108@gmail.com>
-Message-ID: <56B014A7.2070808@huawei.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 06:36:54 +0100
+Subject: [Buildroot] [PATCH 01/19] python-jinja2: bump to 2.8
+In-Reply-To: <1454373899-22481-2-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-2-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kuJeY6iyj2Q2zBaTdBdNatQb7mp8=H3DCsVROoXOd3-MA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Romain
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-On 2016/1/24 19:35, Romain Naour wrote:
-> Hi Bamvor,
+> ---
+>  package/python-jinja2/python-jinja2.hash | 6 +++---
+>  package/python-jinja2/python-jinja2.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 >
-> Le 21/01/2016 10:03, Bamvor Zhang Jian a ?crit :
->> Hi, Romain
->>
->> On 01/21/2016 05:26 AM, Romain Naour wrote:
->>> Hi Bamvor,
->>>
->>> Le 19/01/2016 05:00, Bamvor Zhang Jian a ?crit :
->>>> Hi, Romain
->>>>
->>>> On 01/16/2016 11:25 PM, Romain Naour wrote:
->>>>> Hello Bamvor,
->> [...]
->>>>> Can you provide the command lines you used to build the toolchain ? on which abe
->>>>> branch ? Otherwise we can't test your series.
->>>> You could find the toolchain here[1]
->>>
->>> Thanks but this is not a cross-toolchain:
->>>
->>> file bin/aarch64-ilp32-linux-gnu-gcc
->>> bin/aarch64-ilp32-linux-gnu-gcc: ELF 64-bit LSB executable, ARM aarch64, version
->>> 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for
->>> GNU/Linux 3.7.0, BuildID[sha1]=0727b9d5c173c83568f5d19cfc87a05540ec8b77, not
->>> stripped
->>>
->>> It seems that's a native toolchain.
->>>
->>> It should be something like (from aarch64-linaro 2015.08)
->>> file bin/aarch64-linux-gnu-gcc
->>> bin/aarch64-linux-gnu-gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
->>> dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux
->>> 2.6.32, BuildID[sha1]=91a19539d0f6b0f38d599db648b4b5760000666a, not stripped
->>>
->> Yeap, it is not a cross compile. I use it in an aarch64 chroot environment in
->> x86. I feel it is enough to test these patches.
+> diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+> index 6e8c160..04fcbc8 100644
+> --- a/package/python-jinja2/python-jinja2.hash
+> +++ b/package/python-jinja2/python-jinja2.hash
+> @@ -1,3 +1,3 @@
+> -# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9dffd2f3b43d673802fe857c8445b1a, sha256 locally computed
+> -md5    b9dffd2f3b43d673802fe857c8445b1a  Jinja2-2.7.3.tar.gz
+> -sha256 2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb  Jinja2-2.7.3.tar.gz
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=edb51693fe22c53cee5403775c71a99e, sha256 locally computed.
+> +md5    edb51693fe22c53cee5403775c71a99e  Jinja2-2.8.tar.gz
+> +sha256 bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4  Jinja2-2.8.tar.gz
+> diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+> index 8440b64..ce6e2b9 100644
+> --- a/package/python-jinja2/python-jinja2.mk
+> +++ b/package/python-jinja2/python-jinja2.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
-> Buildroot is a tool for cross-compiling, you know it ;-)
-> Honestly I'm not very interested to test the toolchain by itself, only your
-> patches for the external toolchain infra.
+> -PYTHON_JINJA2_VERSION = 2.7.3
+> +PYTHON_JINJA2_VERSION = 2.8
+>  PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+>  PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+>  PYTHON_JINJA2_SETUP_TYPE = setuptools
+> --
+> 2.1.4
 >
->>> Can you provide a pre-build toolchain or a recipe to rebuild a aarch64 ipl32
->>> toolchain ?
->> Linaro provide abe[1] to build toochain. You could follow this script[2] to know
->> how to use it. It seems that the server in tcwg is down. Hope, you could make
->> use of the method used by abe system.
->
-> I really tried to build a aarch64 ipl32 cross-toolchain with abe but I'm stuck
-> with glibc build. I don't know what's the glibc branch I should use.
-> By default I used the release/2.20/master branch
->
-> aarch64-ilp32-linux-gnu-gcc -mabi=ilp32 -nostdlib -nostartfiles -r -o
-> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/Scrt1.o
-> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.os
-> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/abi-note.o
-> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/init.o
-> ../sysdeps/aarch64/start.S: Assembler messages:
-> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
-> in this object file format
-> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
-> in this object file format
-> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
-> in this object file format
-> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/sysd-rules:1345:
-> recipe for target
-> '/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o'
-> failed
-> make[2]: ***
-> [/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o]
-> Error 1
-You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to update it for patch v6 rfc5.
-
-Regards
-
-Bamvor
-
-
-[1] https://github.com/norov/glibc/tree/thunderx-ilp32-32time_toff_t
->
-> Also I had several issue with the abe script on my system (Fedora) and I had to
-> modify some part of the script to be able to continue the build.
->
-> So, It would be great if you can provide a precompiled cross-toolchain.
->
-> Best regards,
-> Romain
->
->>
->> Regards
->>
->> Bamvor
->>
->> [1] https://git.linaro.org/toolchain/abe.git/blob/refs/heads/benchmarking:/abe.sh
->> [2] https://git.linaro.org/toolchain/spec2xxx-utils.git/blob/refs/heads/test:/bench-ilp32.sh
->>
->>>>>
->>>>> Do you know if Linaro plans to release a ipl32 toolchain ?
->>>> It seems that linaro will not release it before patches for ilp32 of kernel and
->>>> glibc upstreamed.
->>>> Here[2] is a status for ilp32 in linaro.
->>>
->>> Thanks for the link.
->>>
->>> Best regards,
->>> Romain
->>>
->>>>
->>>> Regards
->>>>
->>>> Bamvor
->>>>
->>>> [1] http://people.linaro.org/~maxim.kuvyrkov/bench-ilp32/
->>>> [2] https://wiki.linaro.org/Platform/arm64-ilp32
->>>>
->>>>> Best regards,
->>>>> Romain Naour
->>>>>
->>>>>>
->>>>>> changes since v2
->>>>>> 1.  rebase on the patch have been .
->>>>>>      "827ba46 aarch64: add big endian(aarch64_be) support"
->>>>>> 2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5 according to
->>>>>>      the suggestion from Thomas.
->>>>>> 3.  Improve the ifeq in patch 2/5 according to Gustavo.
->>>>>> 4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to Gustavo.
->>>>>>
->>>>>> changes since v1
->>>>>> 1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
->>>>>> 2.  Change default libc, toolchain for ilp32 build.
->>>>>> 3.  Others changes suggested by Gustavo.
->>>>>>
->>>>>> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
->>>>>> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
->>>>>> [3] https://git.linaro.org/kernel/linux-linaro-tracking.git
->>>>>> [4] https://wiki.linaro.org/ABE
->>>>>>
->>>>>>
->>>>>> Bamvor Jian Zhang (5):
->>>>>>    aarch64: align aarch64_be config with aarch64s'
->>>>>>    aarch64: ilp32: handle special file name
->>>>>>    aarch64: ilp32: add ilp32 compiler and linker flags
->>>>>>    aarch64: ilp32: add ilp32 build config
->>>>>>    aarch64: ilp32 defconfig examples
->>>>>>
->>>>>>   Makefile                                           |  6 +++
->>>>>>   arch/Config.in.aarch64                             | 36 ++++++++++++++++++
->>>>>>   configs/aarch64_be_defconfig                       |  2 +
->>>>>>   configs/aarch64_be_ilp32_defconfig                 |  8 ++++
->>>>>>   configs/aarch64_ilp32_defconfig                    |  8 ++++
->>>>>>   package/Makefile.in                                | 13 ++++++-
->>>>>>   package/binutils/Config.in                         |  4 +-
->>>>>>   package/binutils/Config.in.host                    |  5 ++-
->>>>>>   package/dropwatch/Config.in                        |  5 ++-
->>>>>>   package/gcc/Config.in.host                         | 11 +++---
->>>>>>   package/gdb/Config.in.host                         |  2 +-
->>>>>>   package/gpsd/Config.in                             |  2 +-
->>>>>>   package/lightning/Config.in                        |  5 ++-
->>>>>>   package/nginx/Config.in                            |  3 +-
->>>>>>   package/oprofile/Config.in                         |  6 ++-
->>>>>>   toolchain/Config.in                                |  2 +
->>>>>>   toolchain/helpers.mk                               |  5 ++-
->>>>>>   toolchain/toolchain-buildroot/Config.in            |  7 ++--
->>>>>>   toolchain/toolchain-external/Config.in             | 22 +++++++++++
->>>>>>   toolchain/toolchain-external/toolchain-external.mk | 44 +++++++++++++++++++++-
->>>>>>   20 files changed, 169 insertions(+), 27 deletions(-)
->>>>>>   create mode 100644 configs/aarch64_be_defconfig
->>>>>>   create mode 100644 configs/aarch64_be_ilp32_defconfig
->>>>>>   create mode 100644 configs/aarch64_ilp32_defconfig
->>>>>>
->>>>>
->>>>
->>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
->
