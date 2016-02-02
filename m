@@ -1,157 +1,66 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 2 Feb 2016 16:23:16 +0100
-Subject: [Buildroot] [PATCH] toolchain: add gdb wrapper that
- automatically passes the gdbinit file
-In-Reply-To: <1454422827-10282-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1454422827-10282-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <CAAXf6LXBGuGfXj28oghkKFkHiuG=mZ0aspdv+YQ3pCUAS2xFDQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 2 Feb 2016 16:24:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openipmi: fix musl build
+In-Reply-To: <1454232190-11626-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454232190-11626-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0CA1F.50409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 2, 2016 at 3:20 PM, Thomas De Schampheleire
-<patrickdepinguin@gmail.com> wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> Buildroot already provided a gdbinit file to set the right sysroot, but
-> required users to pass this file explicitly when invoking gdb.
->
-> Make the process a bit more user-friendly by creating a gdb wrapper that
-> passes the gdbinit file to the real gdb program.
->
-> The code needs to take into account several cases (internal toolchain,
-> external toolchain, ...) because the name and type of the real gdb program
-> differs.
->
-> The documentation is updated to reflect this change.
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 31-01-16 10:23, Bernd Kuhls wrote:
+> The build error is known upstream
+> http://sourceforge.net/p/openipmi/patches/26/
+> and was not yet caught by our autobuilders:
+> 
+> ui.c: In function ?get_ip_addr?:
+> ui.c:340:5: error: unknown type name ?u_int32_t?
+>      u_int32_t     addr;
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+
 > ---
->  docs/manual/using-buildroot-debugger.txt           |  7 +++--
->  package/gdb/gdb.mk                                 |  2 +-
->  toolchain/helpers.mk                               | 36 +++++++++++++++++++---
->  toolchain/toolchain-external/toolchain-external.mk | 10 +++---
->  4 files changed, 42 insertions(+), 13 deletions(-)
->
-> diff --git a/docs/manual/using-buildroot-debugger.txt b/docs/manual/using-buildroot-debugger.txt
-> index b5063ca..8422229 100644
-> --- a/docs/manual/using-buildroot-debugger.txt
-> +++ b/docs/manual/using-buildroot-debugger.txt
-> @@ -35,7 +35,7 @@ Then, on the host, you should start the cross gdb using the following
->  command line:
->
->  ----------------------------
-> -<buildroot>/output/host/usr/bin/<tuple>-gdb -x <buildroot>/output/staging/usr/share/buildroot/gdbinit foo
-> +<buildroot>/output/host/usr/bin/<tuple>-gdb foo
->  ----------------------------
->
->  Of course, +foo+ must be available in the current directory, built
-> @@ -43,8 +43,9 @@ with debugging symbols. Typically you start this command from the
->  directory where +foo+ is built (and not from +output/target/+ as the
->  binaries in that directory are stripped).
->
-> -The +<buildroot>/output/staging/usr/share/buildroot/gdbinit+ file will tell the
-> -cross gdb where to find the libraries of the target.
-> +Since Buildroot 2016.02, the above gdb program is actually a wrapper script
-> +that passes a gdbinit file. The gdbinit file tells the cross gdb where to find
-> +the libraries of the target.
->
->  Finally, to connect to the target from the cross gdb:
->
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 3b0f501..1bafe7e 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -184,7 +184,7 @@ endef
->
->  HOST_GDB_POST_INSTALL_HOOKS += HOST_GDB_ADD_SYMLINK
->
-> -HOST_GDB_POST_INSTALL_HOOKS += gen_gdbinit_file
-> +HOST_GDB_POST_INSTALL_HOOKS += setup_gdb_wrapper
->
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index 02cc0bb..592a551 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -421,8 +421,36 @@ check_unusable_toolchain = \
->         fi
->
->  #
-> -# Generate gdbinit file for use with Buildroot
-> -#
-> -gen_gdbinit_file = \
-> +# Create a gdb wrapper that sources a minimal gdbinit file. We don't need to
-> +# create a gdbtui wrapper because that one actually calls gdb.
-> +# For internal toolchains:
-> +# - if BR2_PACKAGE_HOST_GDB is set, gdb is built by buildroot and a real file at
-> +#   $(TARGET_CROSS)gdb ( == $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb )
-> +# For external toolchains:
-> +# - if BR2_PACKAGE_HOST_GDB is not set, gdb is provided by the external
-> +#   toolchain and $(TARGET_CROSS)gdb is a symlink.
-> +# - if BR2_PACKAGE_HOST_GDB is set, gdb is built by buildroot and a real file at
-> +#   $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb
-> +#
-> +define setup_gdb_wrapper
->         mkdir -p $(STAGING_DIR)/usr/share/buildroot/ ; \
-> -       echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit
-> +       echo "set sysroot $(STAGING_DIR)" > $(STAGING_DIR)/usr/share/buildroot/gdbinit ; \
-> +       if [ -f $(TARGET_CROSS)gdb -a ! -e $(TARGET_CROSS)gdb.real ]; then \
-> +               gdb_wrapper=$(TARGET_CROSS)gdb ; \
-> +               real_gdb=$${gdb_wrapper}.real ; \
-> +               mv $${gdb_wrapper} $${real_gdb} ; \
-> +       elif [ -L $(TARGET_CROSS)gdb ]; then \
-> +               gdb_wrapper=$(TARGET_CROSS)gdb ; \
-> +               real_gdb=`readlink -f $(TARGET_CROSS)gdb`; \
-> +               rm $(TARGET_CROSS)gdb ; \
+>  package/openipmi/openipmi.hash | 2 ++
+>  package/openipmi/openipmi.mk   | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/package/openipmi/openipmi.hash b/package/openipmi/openipmi.hash
+> index 3a40f60..e6fafe4 100644
+> --- a/package/openipmi/openipmi.hash
+> +++ b/package/openipmi/openipmi.hash
+> @@ -1,2 +1,4 @@
+>  # From http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library/
+>  sha1 54f63ab7fe09f6a4b0b718601fe9c61014aa220b OpenIPMI-2.0.21.tar.gz
+> +# Locally computed
+> +sha256	0eafaa502ccf752899c5089159574081067d0c4ac53ea0ace33a5087f33ea32a	0001-ui-use-standard-uint32_t.patch
+> diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
+> index 85bd6b4..4dd901b 100644
+> --- a/package/openipmi/openipmi.mk
+> +++ b/package/openipmi/openipmi.mk
+> @@ -7,6 +7,8 @@
+>  OPENIPMI_VERSION = 2.0.21
+>  OPENIPMI_SITE = http://sourceforge.net/projects/openipmi/files/OpenIPMI%202.0%20Library
+>  OPENIPMI_SOURCE = OpenIPMI-2.0.21.tar.gz
+> +OPENIPMI_PATCH = \
+> +	http://sourceforge.net/p/openipmi/patches/26/attachment/0001-ui-use-standard-uint32_t.patch
+>  OPENIPMI_LICENSE = LGPLv2+, GPLv2+, BSD-3c
+>  OPENIPMI_LICENSE_FILES = COPYING.LIB COPYING COPYING.BSD
+>  OPENIPMI_DEPENDENCIES = popt ncurses host-pkgconf
+> 
 
-should this have a '-f' statement? In my testing it was not needed,
-but I don't know if there are other cases...
 
-> +       elif [ -f $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb ]; then \
-> +               gdb_wrapper=$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-gdb ; \
-> +               real_gdb=$${gdb_wrapper}.real ; \
-> +               mv $${gdb_wrapper} $${real_gdb} ; \
-> +       fi ; \
-> +       if [ -n "$${gdb_wrapper}" ]; then \
-> +               echo "#!/bin/sh" > $${gdb_wrapper} ; \
-> +               echo "$${real_gdb} -x $(STAGING_DIR)/usr/share/buildroot/gdbinit \$$@" >> $${gdb_wrapper} ; \
-> +               chmod +x $${gdb_wrapper} ; \
-> +       fi
-> +endef
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 518afd6..9b6cef8 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -727,12 +727,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
->  endef
->
->  #
-> -# Generate gdbinit file for use with Buildroot
-> +# Generate gdb wrapper and gdbinit file for use with Buildroot
->  #
-> -define TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT
-> +define TOOLCHAIN_EXTERNAL_INSTALL_GDB_WRAPPER
->         $(Q)if test -f $(TARGET_CROSS)gdb ; then \
-> -               $(call MESSAGE,"Installing gdbinit"); \
-> -               $(gen_gdbinit_file); \
-> +               $(call MESSAGE,"Creating gdb wrapper and gdbinit file"); \
-> +               $(setup_gdb_wrapper); \
->         fi
->  endef
->
-> @@ -756,7 +756,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
->         $(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
->         $(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
->         $(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
-> -       $(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
-> +       $(TOOLCHAIN_EXTERNAL_INSTALL_GDB_WRAPPER)
->  endef
->
->  # Even though we're installing things in both the staging, the host
-> --
-> 2.4.10
->
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
