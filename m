@@ -1,67 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 12:16:24 +0100
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-In-Reply-To: <56B089D6.4070106@huawei.com>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
- <569A60E6.2030108@gmail.com>
- <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
- <569FFB7E.2000104@gmail.com>
- <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
- <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
- <56B07114.9030404@gmail.com> <56B089D6.4070106@huawei.com>
-Message-ID: <56B09008.8030202@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 Feb 2016 12:20:31 +0100
+Subject: [Buildroot] [PATCH] board: Add support for Acmesystems Arietta
+	g25
+In-Reply-To: <1453591076-30009-1-git-send-email-angelo.compagnucci@gmail.com>
+ (Angelo Compagnucci's message of "Sun, 24 Jan 2016 00:17:56 +0100")
+References: <1453591076-30009-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <87a8nj7400.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-02-16 11:49, Zhangjian (Bamvor) wrote:
-> Hi, Romain
-> 
-> On 2016/2/2 17:04, Romain Naour wrote:
->> Hi Bamvor,
->>
->> Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
-[snip]
->>> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
->>> update it for patch v6 rfc5.
->>
->> Thanks for this link.
->>
->> To be honest, I don't think this series will be merged as is until a stable
->> toolchain release is made.
-> What's your mean stable toolchain? A toolchain release from a organization or
-> company?
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
- It means a release made by someone, not a random version from a git tree
-somewhere. Basically something where people know where to send bug reports to.
-This indeed usually means it's done by an organisation.
+ > This patch adds a minimal working configuration for
+ > Acmesystems Arietta g25
+
+ > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
+Thanks, see below for a few comments.
+
+ > ---
+ >  board/acmesystems/arietta-g25/readme.txt        | 50 +++++++++++++++++++++++++
+ >  configs/acmesystems_arietta_g25_128mb_defconfig | 23 ++++++++++++
+ >  configs/acmesystems_arietta_g25_256mb_defconfig | 23 ++++++++++++
+ >  3 files changed, 96 insertions(+)
+ >  create mode 100644 board/acmesystems/arietta-g25/readme.txt
+ >  create mode 100644 configs/acmesystems_arietta_g25_128mb_defconfig
+ >  create mode 100644 configs/acmesystems_arietta_g25_256mb_defconfig
+
+ > diff --git a/board/acmesystems/arietta-g25/readme.txt b/board/acmesystems/arietta-g25/readme.txt
+ > new file mode 100644
+ > index 0000000..bccdb61
+ > --- /dev/null
+ > +++ b/board/acmesystems/arietta-g25/readme.txt
+ > @@ -0,0 +1,50 @@
+ > +Build instructions
+ > +==================
+ > +
+ > +As a regular user configure and then build:
+ > +
+ > +$ make acmesystems_arietta_g25_128mb_defconfig (128MB RAM variant)
+ > +  or...
+ > +$ make acmesystems_arietta_g25_256mb_defconfig (256MB RAM variant)
+
+It's a pity that we need two different configurations when they are so
+similar. It's been a few years since I've used at91bootstrap, I take it
+that doesn't have any sdram size detection logic like U-Boot has
+nowadays? (get_ram_size()).
 
 
-> Do you think it will be accepted after patch of ilp32 of kernel and glibc
-> upstream?
+> +$ make
+ > +
+ > +Writing to the MicroSD card
+ > +===========================
+ > +
+ > +You'll need a blank MicroSD (obviously) initialized
+ > +in a particular way to be able to boot from it.
+ > +
+ > +Assuming the card is seen as /dev/sdb in your PC/laptop/other device
+ > +you'll need to run the following commands as root or via sudo.
+ > +
+ > +Make sure all of the card partitions are unmounted before starting.
+ > +
+ > +First we'll need to create two partitions:
+ > +
+ > +# sfdisk -uM /dev/sdb <<EOF
+ > +,32,6
+ > +;
+ > +EOF
+ > +
+ > +Then we'll need to create the empty filesystems:
+ > +
+ > +# mkdosfs -n SD_BOOT /dev/sdb1
+ > +# mkfs.ext4 -L SD_ROOT /dev/sdb2
+ > +
+ > +We'll populate the first partition (boot) with the relevant files:
+ > +
+ > +# mount /dev/sdb1 /mnt
+ > +# cp output/images/at91bootstrap.bin /mnt/BOOT.BIN
+ > +# cp output/images/zImage /mnt
+ > +# cp output/images/at91-ariag25.dtb /mnt
+ > +# umount /mnt
+ > +
+ > +And the root filesystem afterwards:
+ > +
+ > +# mount /dev/sdb2 /mnt
+ > +# tar -C /mnt output/images/rootfs.tar
+ > +# umount /mnt
+ > +
+ > +You're done, insert the MicroSD card in the slot and enjoy.
 
- It doesn't necessarily mean that upstream has to have accepted it already. We
-just prefer to have a release tarball.
+Could you convert this to genimage instead of all these manual steps?
+Have a look at board/orangepi/orangepipc/genimage.cfg for an example.
 
- Regards,
- Arnout
-
-> I am trying to improve the glibc support for ilp32 base on the exist one
-
->> When it's done, can you respin your series on top of
->> master since the toolchain-external code has been updated recently ?
-> Yes, of course.
-> 
-
-[snip]
-
+Thanks!
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
