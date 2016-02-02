@@ -1,89 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 10:26:57 +0100
-Subject: [Buildroot] [PATCH 09/19] python-pygments: new package
-In-Reply-To: <1454373899-22481-10-git-send-email-mc5686@mclink.it>
-References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-10-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kt4osF=fYKM128fCnvv+dVw6xCntGQqFmAYa6MUFpgBKg@mail.gmail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue,  2 Feb 2016 10:47:37 +0100
+Subject: [Buildroot] [PATCH v3 0/2] gst1-imx: bump version to 0.12.0
+Message-ID: <1454406459-2132-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Hi all,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+This series is the follow-up of the previous update of Freescale packages.
+http://lists.busybox.net/pipermail/buildroot/2016-February/151334.html
 
-> ---
->  package/Config.in                            |  1 +
->  package/python-pygments/Config.in            |  7 +++++++
->  package/python-pygments/python-pygments.hash |  3 +++
->  package/python-pygments/python-pygments.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-pygments/Config.in
->  create mode 100644 package/python-pygments/python-pygments.hash
->  create mode 100644 package/python-pygments/python-pygments.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 623333a..6b84875 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -685,6 +685,7 @@ menu "External python modules"
->         source "package/python-pydal/Config.in"
->         source "package/python-pyftpdlib/Config.in"
->         source "package/python-pygame/Config.in"
-> +       source "package/python-pygments/Config.in"
->         source "package/python-pyinotify/Config.in"
->         source "package/python-pyopenssl/Config.in"
->         source "package/python-pyparsing/Config.in"
-> diff --git a/package/python-pygments/Config.in b/package/python-pygments/Config.in
-> new file mode 100644
-> index 0000000..d0e3f00
-> --- /dev/null
-> +++ b/package/python-pygments/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PYGMENTS
-> +       bool "python-pygments"
-> +       help
-> +         Pygments is a syntax highlighting package written in Python.
-> +
-> +         https://pypi.python.org/pypi/Pygments
-> +
-> diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
-> new file mode 100644
-> index 0000000..bb954dd
-> --- /dev/null
-> +++ b/package/python-pygments/python-pygments.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=84533d22f72de894f6d3907c3ca9eddf, sha256 locally computed.
-> +md5    84533d22f72de894f6d3907c3ca9eddf  Pygments-2.1.tar.gz
-> +sha256 13a0ef5fafd7b16cf995bc28fe7aab0780dab1b2fda0fc89e033709af8b8a47b  Pygments-2.1.tar.gz
-> diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
-> new file mode 100644
-> index 0000000..d087cef
-> --- /dev/null
-> +++ b/package/python-pygments/python-pygments.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-pygments
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYGMENTS_VERSION = 2.1
-> +PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
-> +PYTHON_PYGMENTS_SITE = http://pypi.python.org/packages/source/P/Pygments
-> +PYTHON_PYGMENTS_LICENSE = BSD
-> +PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
-> +PYTHON_PYGMENTS_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+It takes the following comments into account:
+http://lists.busybox.net/pipermail/buildroot/2016-February/151607.html
+http://lists.busybox.net/pipermail/buildroot/2016-February/151605.html
+
+Thanks,
+Gary
+
+Gary Bisson (2):
+  libimxvpuapi: add new package
+  gst1-imx: bump to version 0.12.0
+
+ package/Config.in                         |  1 +
+ package/gstreamer1/gst1-imx/Config.in     | 18 +++++++---------
+ package/gstreamer1/gst1-imx/gst1-imx.hash |  2 ++
+ package/gstreamer1/gst1-imx/gst1-imx.mk   | 20 +++++++++++++++---
+ package/libimxvpuapi/Config.in            | 12 +++++++++++
+ package/libimxvpuapi/libimxvpuapi.hash    |  2 ++
+ package/libimxvpuapi/libimxvpuapi.mk      | 35 +++++++++++++++++++++++++++++++
+ 7 files changed, 76 insertions(+), 14 deletions(-)
+ create mode 100644 package/gstreamer1/gst1-imx/gst1-imx.hash
+ create mode 100644 package/libimxvpuapi/Config.in
+ create mode 100644 package/libimxvpuapi/libimxvpuapi.hash
+ create mode 100644 package/libimxvpuapi/libimxvpuapi.mk
+
+-- 
+2.6.4
