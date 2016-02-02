@@ -1,83 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Feb 2016 17:54:08 +0100
-Subject: [Buildroot] [git commit] python-click: new package
-Message-ID: <20160202165454.CD00680AE4@busybox.osuosl.org>
+From: Mike Frysinger <vapier@gentoo.org>
+Date: Tue, 2 Feb 2016 11:56:49 -0500
+Subject: [Buildroot] glibc and --enable-kernel
+In-Reply-To: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
+References: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
+Message-ID: <20160202165649.GE7732@vapier.lan>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45c903065dff389e1885f976d758465fbdcb3e56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 27 Jan 2016 15:21, Sam Bobroff wrote:
+> 1) Unnecessary compat code: If you've built a kernel and glibc together
+> (presumably this is common when using buildroot) then you have no need of any
+> compat code because the only kernel you'll be using is the one you just built.
+> According to the doc (above) this causes glibc to include unnecessary compat
+> code which slows it down.
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+the overhead is not that great.  glibc is written such that it tries the
+latest feature first, and if it works, it's done.  the overhead is really
+just the extra return value checking, and that only applies to some cases.
+i suspect profiling of pretty much every program out there wouldn't even
+register this overhead.
 
-[Thomas:
- - rewrap Config.in help text, lines were slightly too long
- - remove excessive empty line at end of Config.in
- - specify BSD-3c as the license, since BSD is not specific enough.]
+> 2) Availability of new features: It appears from the code that the
+> documentation leaves out some important information. What actually happens
+> while building glibc is that the "minimum kernel version" (which is either the
+> version given by "--enable-kernel=" or the oldest possible version for that
+> architecture) sets both __LINUX_KERNEL_VERSION and __ABI_TAG_VERSION so that
+> glibc will never use any kernel features *newer* than this version. Therefore
+> you cannot get access to recent kernel features *at all* via glibc (without
+> manually altering glibc.mk).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                      |  1 +
- package/python-click/Config.in         |  7 +++++++
- package/python-click/python-click.hash |  3 +++
- package/python-click/python-click.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+this is dangerously incorrect FUD.  i don't know why you think this, but
+it is *not* correct.  when a feature requires a newer kernel version than
+the minimum set, it will first attempt to use the newer feature, and if
+the kernel returns an error (e.g. ENOSYS), it will cache the result and
+transparently fall back to the old code.
 
-diff --git a/package/Config.in b/package/Config.in
-index a491d85..da49c1a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -627,6 +627,7 @@ menu "External python modules"
- 	source "package/python-cffi/Config.in"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
-+	source "package/python-click/Config.in"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-click/Config.in b/package/python-click/Config.in
-new file mode 100644
-index 0000000..c026998
---- /dev/null
-+++ b/package/python-click/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_CLICK
-+	bool "python-click"
-+	help
-+	  A simple wrapper around optparse for powerful command line
-+	  utilities.
-+
-+	  https://pypi.python.org/pypi/click
-diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
-new file mode 100644
-index 0000000..72aab0a
---- /dev/null
-+++ b/package/python-click/python-click.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=83252a8095397b1f5f710fdd58b484d9, sha256 locally computed.
-+md5	83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
-+sha256	fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
-diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
-new file mode 100644
-index 0000000..19ae187
---- /dev/null
-+++ b/package/python-click/python-click.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-click
-+#
-+################################################################################
-+
-+PYTHON_CLICK_VERSION = 6.2
-+PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
-+PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
-+PYTHON_CLICK_LICENSE = BSD-3c
-+PYTHON_CLICK_LICENSE_FILES = LICENSE
-+PYTHON_CLICK_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+for example, from the glibc-2.22 release:
+https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/wordsize-64/posix_fallocate.c;h=8ae8a2927d174a70b7de724dc82f5c040174050b
+
+if the min kernel version is high enough, __ASSUME_FALLOCATE is set to 1,
+so the code ends up being the fallocate syscall directly.  but if it is
+not, the syscall is tried, and if it fails w/ENOSYS, we cache the result
+in __have_fallocate before falling back to older methods.  all future
+calls will then see that cached value and immediately fallback.
+
+> (An example of a recent feature would be the sendmmsg syscall, which
+> requires a kernel version of 3.0.0 but the minimum version for PowerPC 64 is
+> 2.6.24.)
+
+i don't know where you're getting this information either.  starting with
+glibc-2.20, the min required kernel version has been 2.6.32 for everyone.
+
+the sendmmsg wrapper is tricky due to having to handle cancellation end
+points.  so in this case, glibc will avoid using the syscall directly
+unless it can assume it exists.
+https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sendmmsg.c;h=67b7ca9bfc9d63320fde1cceb95f81336a340f33
+
+so in the ppc case, it will use socketcall(sendmmsg) when the min kernel
+is below 3.0.  otherwise it uses sendmmsg directly.  in this particular
+case, we haven't found the runtime overhead significant relative to the
+source code overhead of having to deal with pthread cancellation.  this
+is another case i doubt you can get to show up in profiling.
+
+> I'd like to prepare a patch to make this configurable, and it obviously
+> wouldn't be difficult to add but I'm not sure of the best way to do it.
+
+all that said, having buildroot provide an option to set the min kernel
+version with the default matching the selected kernel should be fine.
+-mike
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160202/ca69dc10/attachment.asc>
