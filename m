@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 14:34:23 +0100
-Subject: [Buildroot] [PATCH 15/19] python-txaio: new package
-In-Reply-To: <1454373899-22481-16-git-send-email-mc5686@mclink.it>
+Date: Tue, 2 Feb 2016 14:37:21 +0100
+Subject: [Buildroot] [PATCH 11/19] python-pytrie: new package
+In-Reply-To: <1454373899-22481-12-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-16-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kuHzrb6ZaGd4ptHKZd02PTGJpZSnObsxTe2vnxBhSnkCA@mail.gmail.com>
+ <1454373899-22481-12-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kvbX9c40N3VGc14N=4CMvUv12XUEymFY+5urdG-6B01pQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,76 +13,71 @@ To: buildroot@busybox.net
 
 On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
 > ---
->  package/Config.in                      |  1 +
->  package/python-txaio/Config.in         |  8 ++++++++
->  package/python-txaio/python-txaio.hash |  3 +++
->  package/python-txaio/python-txaio.mk   | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-txaio/Config.in
->  create mode 100644 package/python-txaio/python-txaio.hash
->  create mode 100644 package/python-txaio/python-txaio.mk
+>  package/Config.in                        |  1 +
+>  package/python-pytrie/Config.in          |  7 +++++++
+>  package/python-pytrie/python-pytrie.hash |  3 +++
+>  package/python-pytrie/python-pytrie.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-pytrie/Config.in
+>  create mode 100644 package/python-pytrie/python-pytrie.hash
+>  create mode 100644 package/python-pytrie/python-pytrie.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 56a56a8..b8b7129 100644
+> index 9dc5123..345a512 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -721,6 +721,7 @@ menu "External python modules"
->         source "package/python-tornado/Config.in"
->         source "package/python-treq/Config.in"
->         source "package/python-twisted/Config.in"
-> +       source "package/python-txaio/Config.in"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
->         source "package/python-versiontools/Config.in"
-> diff --git a/package/python-txaio/Config.in b/package/python-txaio/Config.in
+> @@ -700,6 +700,7 @@ menu "External python modules"
+>         source "package/python-pysnmp/Config.in"
+>         source "package/python-pysnmp-apps/Config.in"
+>         source "package/python-pysnmp-mibs/Config.in"
+> +       source "package/python-pytrie/Config.in"
+>         source "package/python-pyudev/Config.in"
+>         source "package/python-pyusb/Config.in"
+>         source "package/python-pyxb/Config.in"
+> diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
 > new file mode 100644
-> index 0000000..c4c8467
+> index 0000000..4f61db0
 > --- /dev/null
-> +++ b/package/python-txaio/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_TXAIO
-> +       bool "python-txaio"
-> +       select BR2_PACKAGE_PYTHON_SIX
-
-add "# runtime" comment
-
+> +++ b/package/python-pytrie/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_PYTRIE
+> +       bool "python-pytrie"
 > +       help
-> +         Compatibility API between asyncio/Twisted/Trollius.
+> +         A pure Python implementation of the trie data structure.
 > +
-> +         https://pypi.python.org/pypi/txaio
+> +         https://pypi.python.org/pypi/PyTrie
 > +
-> diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
+> diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
 > new file mode 100644
-> index 0000000..5d9e6cf
+> index 0000000..88d2542
 > --- /dev/null
-> +++ b/package/python-txaio/python-txaio.hash
+> +++ b/package/python-pytrie/python-pytrie.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
-> +md5    c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
-> +sha256 6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
-> diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
+> +md5    5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
+> +sha256 b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
+> diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
 > new file mode 100644
-> index 0000000..8311eaa
+> index 0000000..e3bea4f
 > --- /dev/null
-> +++ b/package/python-txaio/python-txaio.mk
-> @@ -0,0 +1,15 @@
+> +++ b/package/python-pytrie/python-pytrie.mk
+> @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-txaio
+> +# python-pytrie
 > +#
 > +################################################################################
 > +
-> +PYTHON_TXAIO_VERSION = 2.2.1
-> +PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
-> +PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
-> +PYTHON_TXAIO_LICENSE = BSD
-> +PYTHON_TXAIO_LICENSE_FILES = LICENSE
-> +PYTHON_TXAIO_SETUP_TYPE = setuptools
-> +PYTHON_TXAIO_DEPENDENCIES = python-six
-
-remove runtime dependency
-
+> +PYTHON_PYTRIE_VERSION = 0.2
+> +PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
+> +PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
+> +PYTHON_PYTRIE_LICENSE = BSD-3c
+> +PYTHON_PYTRIE_LICENSE_FILES = LICENSE
+> +PYTHON_PYTRIE_SETUP_TYPE = distutils
 > +
 > +$(eval $(python-package))
 > --
