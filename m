@@ -1,229 +1,71 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 2 Feb 2016 10:04:20 +0100
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-In-Reply-To: <56B014A7.2070808@huawei.com>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
- <569A60E6.2030108@gmail.com>
- <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
- <569FFB7E.2000104@gmail.com>
- <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
- <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
-Message-ID: <56B07114.9030404@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 Feb 2016 10:05:20 +0100
+Subject: [Buildroot] [PATCH 1/3] package/linux-headers: add option to
+	use same sources as the kernel
+In-Reply-To: <dde8a16a5331beb6280d7b86002aa917eae44664.1453314776.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Wed, 20 Jan 2016 19:34:28 +0100")
+References: <cover.1453314776.git.yann.morin.1998@free.fr>
+ <dde8a16a5331beb6280d7b86002aa917eae44664.1453314776.git.yann.morin.1998@free.fr>
+Message-ID: <87vb677a9b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bamvor,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
-> Hi, Romain
-> 
-> 
-> On 2016/1/24 19:35, Romain Naour wrote:
->> Hi Bamvor,
->>
->> Le 21/01/2016 10:03, Bamvor Zhang Jian a ?crit :
->>> Hi, Romain
->>>
->>> On 01/21/2016 05:26 AM, Romain Naour wrote:
->>>> Hi Bamvor,
->>>>
->>>> Le 19/01/2016 05:00, Bamvor Zhang Jian a ?crit :
->>>>> Hi, Romain
->>>>>
->>>>> On 01/16/2016 11:25 PM, Romain Naour wrote:
->>>>>> Hello Bamvor,
->>> [...]
->>>>>> Can you provide the command lines you used to build the toolchain ? on
->>>>>> which abe
->>>>>> branch ? Otherwise we can't test your series.
->>>>> You could find the toolchain here[1]
->>>>
->>>> Thanks but this is not a cross-toolchain:
->>>>
->>>> file bin/aarch64-ilp32-linux-gnu-gcc
->>>> bin/aarch64-ilp32-linux-gnu-gcc: ELF 64-bit LSB executable, ARM aarch64,
->>>> version
->>>> 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for
->>>> GNU/Linux 3.7.0, BuildID[sha1]=0727b9d5c173c83568f5d19cfc87a05540ec8b77, not
->>>> stripped
->>>>
->>>> It seems that's a native toolchain.
->>>>
->>>> It should be something like (from aarch64-linaro 2015.08)
->>>> file bin/aarch64-linux-gnu-gcc
->>>> bin/aarch64-linux-gnu-gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
->>>> dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux
->>>> 2.6.32, BuildID[sha1]=91a19539d0f6b0f38d599db648b4b5760000666a, not stripped
->>>>
->>> Yeap, it is not a cross compile. I use it in an aarch64 chroot environment in
->>> x86. I feel it is enough to test these patches.
->>
->> Buildroot is a tool for cross-compiling, you know it ;-)
->> Honestly I'm not very interested to test the toolchain by itself, only your
->> patches for the external toolchain infra.
->>
->>>> Can you provide a pre-build toolchain or a recipe to rebuild a aarch64 ipl32
->>>> toolchain ?
->>> Linaro provide abe[1] to build toochain. You could follow this script[2] to know
->>> how to use it. It seems that the server in tcwg is down. Hope, you could make
->>> use of the method used by abe system.
->>
->> I really tried to build a aarch64 ipl32 cross-toolchain with abe but I'm stuck
->> with glibc build. I don't know what's the glibc branch I should use.
->> By default I used the release/2.20/master branch
->>
->> aarch64-ilp32-linux-gnu-gcc -mabi=ilp32 -nostdlib -nostartfiles -r -o
->> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/Scrt1.o
->>
->> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.os
->>
->> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/abi-note.o
->>
->> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/init.o
->>
->> ../sysdeps/aarch64/start.S: Assembler messages:
->> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
->> in this object file format
->> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
->> in this object file format
->> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
->> in this object file format
->> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/sysd-rules:1345:
->>
->> recipe for target
->> '/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o'
->>
->> failed
->> make[2]: ***
->> [/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o]
->>
->> Error 1
-> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
-> update it for patch v6 rfc5.
+ > Some heavily (and most often improperly) modified kernel may export
+ > new APIs to userland, so as to speak to custom hardware or custom kernel
+ > facilities.
 
-Thanks for this link.
+ > However, we currently have no easy way to use such kernels as a source
+ > for the linux-headers package, which precludes having those userland
+ > headers intalled for userland applications to use them.
 
-To be honest, I don't think this series will be merged as is until a stable
-toolchain release is made. When it's done, can you respin your series on top of
-master since the toolchain-external code has been updated recently ?
+ > We do have a way for the kernel to use the same version as for the
+ > headers, but that is definitely not enough, as the linux-headers package
+ > has a version choice that is far less versatile and capable than that of
+ > the linux package.
 
-Best regards,
-Romain
+ > Add a new option for the linux-headers package, for the user to specify
+ > that the version (really, the sources) of the kernel be used to install
+ > the headers from.
 
-> 
-> Regards
-> 
-> Bamvor
-> 
-> 
-> [1] https://github.com/norov/glibc/tree/thunderx-ilp32-32time_toff_t
->>
->> Also I had several issue with the abe script on my system (Fedora) and I had to
->> modify some part of the script to be able to continue the build.
->>
->> So, It would be great if you can provide a precompiled cross-toolchain.
->>
->> Best regards,
->> Romain
->>
->>>
->>> Regards
->>>
->>> Bamvor
->>>
->>> [1]
->>> https://git.linaro.org/toolchain/abe.git/blob/refs/heads/benchmarking:/abe.sh
->>> [2]
->>> https://git.linaro.org/toolchain/spec2xxx-utils.git/blob/refs/heads/test:/bench-ilp32.sh
->>>
->>>
->>>>>>
->>>>>> Do you know if Linaro plans to release a ipl32 toolchain ?
->>>>> It seems that linaro will not release it before patches for ilp32 of kernel
->>>>> and
->>>>> glibc upstreamed.
->>>>> Here[2] is a status for ilp32 in linaro.
->>>>
->>>> Thanks for the link.
->>>>
->>>> Best regards,
->>>> Romain
->>>>
->>>>>
->>>>> Regards
->>>>>
->>>>> Bamvor
->>>>>
->>>>> [1] http://people.linaro.org/~maxim.kuvyrkov/bench-ilp32/
->>>>> [2] https://wiki.linaro.org/Platform/arm64-ilp32
->>>>>
->>>>>> Best regards,
->>>>>> Romain Naour
->>>>>>
->>>>>>>
->>>>>>> changes since v2
->>>>>>> 1.  rebase on the patch have been .
->>>>>>>      "827ba46 aarch64: add big endian(aarch64_be) support"
->>>>>>> 2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5
->>>>>>> according to
->>>>>>>      the suggestion from Thomas.
->>>>>>> 3.  Improve the ifeq in patch 2/5 according to Gustavo.
->>>>>>> 4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to
->>>>>>> Gustavo.
->>>>>>>
->>>>>>> changes since v1
->>>>>>> 1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
->>>>>>> 2.  Change default libc, toolchain for ilp32 build.
->>>>>>> 3.  Others changes suggested by Gustavo.
->>>>>>>
->>>>>>> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
->>>>>>> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
->>>>>>> [3] https://git.linaro.org/kernel/linux-linaro-tracking.git
->>>>>>> [4] https://wiki.linaro.org/ABE
->>>>>>>
->>>>>>>
->>>>>>> Bamvor Jian Zhang (5):
->>>>>>>    aarch64: align aarch64_be config with aarch64s'
->>>>>>>    aarch64: ilp32: handle special file name
->>>>>>>    aarch64: ilp32: add ilp32 compiler and linker flags
->>>>>>>    aarch64: ilp32: add ilp32 build config
->>>>>>>    aarch64: ilp32 defconfig examples
->>>>>>>
->>>>>>>   Makefile                                           |  6 +++
->>>>>>>   arch/Config.in.aarch64                             | 36 ++++++++++++++++++
->>>>>>>   configs/aarch64_be_defconfig                       |  2 +
->>>>>>>   configs/aarch64_be_ilp32_defconfig                 |  8 ++++
->>>>>>>   configs/aarch64_ilp32_defconfig                    |  8 ++++
->>>>>>>   package/Makefile.in                                | 13 ++++++-
->>>>>>>   package/binutils/Config.in                         |  4 +-
->>>>>>>   package/binutils/Config.in.host                    |  5 ++-
->>>>>>>   package/dropwatch/Config.in                        |  5 ++-
->>>>>>>   package/gcc/Config.in.host                         | 11 +++---
->>>>>>>   package/gdb/Config.in.host                         |  2 +-
->>>>>>>   package/gpsd/Config.in                             |  2 +-
->>>>>>>   package/lightning/Config.in                        |  5 ++-
->>>>>>>   package/nginx/Config.in                            |  3 +-
->>>>>>>   package/oprofile/Config.in                         |  6 ++-
->>>>>>>   toolchain/Config.in                                |  2 +
->>>>>>>   toolchain/helpers.mk                               |  5 ++-
->>>>>>>   toolchain/toolchain-buildroot/Config.in            |  7 ++--
->>>>>>>   toolchain/toolchain-external/Config.in             | 22 +++++++++++
->>>>>>>   toolchain/toolchain-external/toolchain-external.mk | 44
->>>>>>> +++++++++++++++++++++-
->>>>>>>   20 files changed, 169 insertions(+), 27 deletions(-)
->>>>>>>   create mode 100644 configs/aarch64_be_defconfig
->>>>>>>   create mode 100644 configs/aarch64_be_ilp32_defconfig
->>>>>>>   create mode 100644 configs/aarch64_ilp32_defconfig
->>>>>>>
->>>>>>
->>>>>
->>>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
+ > We do that by making linux-headers patch-depend on the linux package.
+
+ > We can't have linux-header simply depend on linux, because the simple
+ > depenency means the the dependee will be configured, built and installed
+ > before the dependent is configured. And since linux is a target package,
+ > it depends on the toolchain, which internally dependes on linux-headers,
+ > which would depend on linux, and we'd get a circular dependency.
+
+ > Using patch-depend will ensure that linux is extracted and patched
+ > before linux-headers is extracted, which is really all we need.
+
+ > Then, we install the headers from the linux source tree, rather than
+ > from linux-headers' source tree (as there's nothing in there!).
+
+ > Since we need to install a private set for uClibc (see cde947f, uclibc:
+ > prevent rebuilding after installation to staging), we explicitly set
+ > INSTALL_HDR_PATH when calling the kernel' install-headers rule in
+ > LINUX_HEADERS_CONFIGURE_CMDS, so that the headers are installed in
+ > linux-headers' $(@D) instead of linux' $(@D).
+
+ > Finally, as there is no way to know the kernel version in this case, we
+ > must still prompt the user for the kernel series the headers are from
+ > (like we do for a custom version) and check for consistency at build
+ > time.
+
+ > Note however that this still leaves users that want to built their
+ > such-kernel outside of Buildroot out in the cold.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Karoly Kasza <kaszak@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Cc: Peter Korsgaard <jacmet@uclibc.org>
+
+Committed after dropping the comment as suggested by Thomas, thanks.
+
+-- 
+Bye, Peter Korsgaard
