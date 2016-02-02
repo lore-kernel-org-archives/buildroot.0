@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 14:48:12 +0100
-Subject: [Buildroot] [PATCH 18/19] python-autobahn: new package
-In-Reply-To: <1454373899-22481-19-git-send-email-mc5686@mclink.it>
+Date: Tue, 2 Feb 2016 14:48:41 +0100
+Subject: [Buildroot] [PATCH 03/19] python-cbor: new package
+In-Reply-To: <1454373899-22481-4-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-19-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kvueHH9dMq=W0p63ScVkuqkJUR2CjDoVc17oHc_-4UD0w@mail.gmail.com>
+ <1454373899-22481-4-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ku2QYmxO4JMppmZi68B9Si+vJHXwF9n0PW+uyng8OC54Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,77 +13,70 @@ To: buildroot@busybox.net
 
 On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
 > ---
->  package/Config.in                            |  1 +
->  package/python-autobahn/Config.in            |  9 +++++++++
->  package/python-autobahn/python-autobahn.hash |  3 +++
->  package/python-autobahn/python-autobahn.mk   | 15 +++++++++++++++
->  4 files changed, 28 insertions(+)
->  create mode 100644 package/python-autobahn/Config.in
->  create mode 100644 package/python-autobahn/python-autobahn.hash
->  create mode 100644 package/python-autobahn/python-autobahn.mk
+>  package/Config.in                    |  1 +
+>  package/python-cbor/Config.in        |  7 +++++++
+>  package/python-cbor/python-cbor.hash |  3 +++
+>  package/python-cbor/python-cbor.mk   | 13 +++++++++++++
+>  4 files changed, 24 insertions(+)
+>  create mode 100644 package/python-cbor/Config.in
+>  create mode 100644 package/python-cbor/python-cbor.hash
+>  create mode 100644 package/python-cbor/python-cbor.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 807cffb..9e0f7ca 100644
+> index 21348d8..52be929 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -617,6 +617,7 @@ endif
->  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "External python modules"
->         source "package/python-alsaaudio/Config.in"
-> +       source "package/python-autobahn/Config.in"
->         source "package/python-backports-abc/Config.in"
+> @@ -621,6 +621,7 @@ menu "External python modules"
 >         source "package/python-beautifulsoup4/Config.in"
 >         source "package/python-bottle/Config.in"
-> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+>         source "package/python-can/Config.in"
+> +       source "package/python-cbor/Config.in"
+>         source "package/python-certifi/Config.in"
+>         source "package/python-cffi/Config.in"
+>         source "package/python-characteristic/Config.in"
+> diff --git a/package/python-cbor/Config.in b/package/python-cbor/Config.in
 > new file mode 100644
-> index 0000000..b7a722a
+> index 0000000..2d0962d
 > --- /dev/null
-> +++ b/package/python-autobahn/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_AUTOBAHN
-> +       bool "python-autobahn"
-> +       select BR2_PACKAGE_PYTHON_SIX
-> +       select BR2_PACKAGE_PYTHON_TXAIO
-
-mark dependencies as # runtime
-
+> +++ b/package/python-cbor/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_CBOR
+> +       bool "python-cbor"
 > +       help
-> +         WebSocket client Hhh server library, WAMP real-time framework.
+> +         RFC 7049 - Concise Binary Object Representation.
 > +
-> +         https://pypi.python.org/pypi/autobahn
+> +         https://pypi.python.org/pypi/cbor
 > +
-> diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+> diff --git a/package/python-cbor/python-cbor.hash b/package/python-cbor/python-cbor.hash
 > new file mode 100644
-> index 0000000..8f55ac1
+> index 0000000..6714348
 > --- /dev/null
-> +++ b/package/python-autobahn/python-autobahn.hash
+> +++ b/package/python-cbor/python-cbor.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
-> +md5    b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
-> +sha256 664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
-> diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=711ee5ecc896595c1e95c1c48356606c, sha256 locally computed.
+> +md5    711ee5ecc896595c1e95c1c48356606c  cbor-0.1.25.tar.gz
+> +sha256 e342d425dde88bb93b741e34e3ba092492ba1f6fca94ce356054fb7daa420746  cbor-0.1.25.tar.gz
+> diff --git a/package/python-cbor/python-cbor.mk b/package/python-cbor/python-cbor.mk
 > new file mode 100644
-> index 0000000..0ab740a
+> index 0000000..4c3ce9d
 > --- /dev/null
-> +++ b/package/python-autobahn/python-autobahn.mk
-> @@ -0,0 +1,15 @@
+> +++ b/package/python-cbor/python-cbor.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# python-autobahn
+> +# python-cbor
 > +#
 > +################################################################################
 > +
-> +PYTHON_AUTOBAHN_VERSION = 0.12.1
-> +PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-> +PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
-> +PYTHON_AUTOBAHN_LICENSE = MIT
-> +PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-> +PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
-> +PYTHON_AUTOBAHN_DEPENDENCIES = python-six python-txaio
-
-remove runtime dependencies
-
+> +PYTHON_CBOR_VERSION = 0.1.25
+> +PYTHON_CBOR_SOURCE = cbor-$(PYTHON_CBOR_VERSION).tar.gz
+> +PYTHON_CBOR_SITE = http://pypi.python.org/packages/source/c/cbor
+> +PYTHON_CBOR_LICENSE = Apache
+> +PYTHON_CBOR_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
