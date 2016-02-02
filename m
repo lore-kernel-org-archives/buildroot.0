@@ -1,49 +1,111 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 13:50:48 +0100
-Subject: [Buildroot] [PATCH 1/1] Update
-	freescale_imx6qsabreauto_defconfig
-In-Reply-To: <1454407564-6117-1-git-send-email-jan.sarenik@ysoft.com>
-References: <1454407564-6117-1-git-send-email-jan.sarenik@ysoft.com>
-Message-ID: <56B0A628.2000003@mind.be>
+Date: Tue, 2 Feb 2016 14:02:13 +0100
+Subject: [Buildroot] [PATCH 2/2] package/oprofile: fux musl build
+In-Reply-To: <1454235289-1353-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1454235289-1353-1-git-send-email-bernd.kuhls@t-online.de>
+ <1454235289-1353-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0A8D5.5040409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02-02-16 11:06, Jan Sarenik wrote:
-> Signed-off-by: Jan Sarenik <jan.sarenik@ysoft.com>
+On 31-01-16 11:14, Bernd Kuhls wrote:
+> The build error has not yet been found by the autobuilders:
+> 
+> operf.cpp: In function ?int __delete_old_previous_sample_data(const char*, const stat*, int, FTW*)?:
+> operf.cpp:862:10: error: ?FTW_STOP? was not declared in this scope
+>    return FTW_STOP;
+>           ^
+> operf.cpp:864:10: error: ?FTW_CONTINUE? was not declared in this scope
+>    return FTW_CONTINUE;
+>           ^
+> operf.cpp: In function ?void convert_sample_data()?:
+> operf.cpp:899:41: error: ?FTW_ACTIONRETVAL? was not declared in this scope
+>                  int flags = FTW_DEPTH | FTW_ACTIONRETVAL;
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/oprofile/0001-musl.patch | 53 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 package/oprofile/0001-musl.patch
+> 
+> diff --git a/package/oprofile/0001-musl.patch b/package/oprofile/0001-musl.patch
+> new file mode 100644
+> index 0000000..95ae200
+> --- /dev/null
+> +++ b/package/oprofile/0001-musl.patch
+> @@ -0,0 +1,53 @@
+> +Fix musl build
+> +
+> +Downloaded from:
+> +https://github.com/openwrt-mirror/openwrt/blob/f22d5e25660106a48727c7aa5d1a73e4171a7987/package/devel/oprofile/patches/100-musl.patch
+> +after I found a hint for the patch here:
+> +http://patchwork.openembedded.org/patch/112675/
+> +
+> +Because openwrt removed the oprofile package from their repo last week
+> +https://github.com/openwrt-mirror/openwrt/commit/aaf46a8524e138e1673a398e8d2dd9357405b313#diff-fe14456f94abf436d997e2c01c10f3bd
+> +I decided to put this patch into the buildroot repo instead of adding
+> +_PATCH to oprofile.mk
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (build test of this defconfig)
+ Commit message could be a lot better:
+
+Remove non-Posix use of FTW_ACTIONRETVAL
+
+The musl implementation of nftw doesn't support the glibc extension
+FTW_ACTIONRETVAL. Since none of the features of FTW_ACTIONRETVAL are
+used here, just use the normal nftw return value.
+
+
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +
+> +--- a/pe_profiling/operf.cpp
+> ++++ b/pe_profiling/operf.cpp
+> +@@ -857,11 +857,14 @@ static int __delete_old_previous_sample_
+> +                                 int tflag  __attribute__((unused)),
+> +                                 struct FTW *ftwbuf __attribute__((unused)))
+> + {
+> ++	int err;
+> ++
+> + 	if (remove(fpath)) {
+> ++		err = errno;
+> + 		perror("sample data removal error");
+> +-		return FTW_STOP;
+> ++		return err;
+> + 	} else {
+> +-		return FTW_CONTINUE;
+> ++		return 0;
+> + 	}
+> + }
+> + 
+> +@@ -896,7 +899,7 @@ static void convert_sample_data(void)
+> + 		return;
+> + 
+> + 	if (!operf_options::append) {
+> +-                int flags = FTW_DEPTH | FTW_ACTIONRETVAL;
+> ++                int flags = FTW_DEPTH;
+> + 		errno = 0;
+> + 		if (nftw(previous_sampledir.c_str(), __delete_old_previous_sample_data, 32, flags) !=0 &&
+> + 				errno != ENOENT) {
+> +--- a/libop/op_events.c
+> ++++ b/libop/op_events.c
+> +@@ -83,7 +83,7 @@ static int parse_hex(char const * str)
+> + static u64 parse_long_hex(char const * str)
+> + {
+> + 	u64 value;
+> +-	if (sscanf(str, "%Lx", &value) != 1)
+> ++	if (sscanf(str, "0x%llx", &value) != 1)
+
+ Why is this change needed? musl supports the standard %Lx specifier, no?
 
  Regards,
  Arnout
 
-> ---
->  configs/freescale_imx6qsabreauto_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-> index 70367a7..38af560 100644
-> --- a/configs/freescale_imx6qsabreauto_defconfig
-> +++ b/configs/freescale_imx6qsabreauto_defconfig
-> @@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_GIT=y
->  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
-> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
->  BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
->  BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> @@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
->  BR2_TARGET_UBOOT_FORMAT_IMX=y
->  BR2_TARGET_UBOOT_CUSTOM_GIT=y
->  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
-> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+> + 		parse_error("expected long hexadecimal value");
+> + 
+> + 	fflush(stderr);
 > 
 
 
