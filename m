@@ -1,27 +1,19 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 16:21:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/psmisc: fix musl build
-In-Reply-To: <1454242565-13780-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454242565-13780-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0C973.8070400@mind.be>
+Date: Tue, 2 Feb 2016 16:23:04 +0100
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5base: fix musl build
+In-Reply-To: <1454235429-6713-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454235429-6713-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0C9D8.9000904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 13:16, Bernd Kuhls wrote:
-> Add upstream commit fixing a build error not yet been found by the
-> autobuilders:
-> 
-> pstree.c: In function ?get_threadname?:
-> pstree.c:798:15: error: ?PATH_MAX? undeclared (first use in this function)
->      char path[PATH_MAX + 1];
->                ^
-> pstree.c:798:15: note: each undeclared identifier is reported only once for each function it appears in
-> pstree.c:798:10: warning: unused variable ?path? [-Wunused-variable]
->      char path[PATH_MAX + 1];
->           ^
+On 31-01-16 11:17, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/a15/a1586717154efb6495dfcdb5c7ce11a047dd68db/
+> http://autobuild.buildroot.net/results/363/3636ddcc0efa974c674f36d3c65eea5beb32af52/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
@@ -32,31 +24,58 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Arnout
 
 > ---
->  package/psmisc/psmisc.hash | 1 +
->  package/psmisc/psmisc.mk   | 2 ++
->  2 files changed, 3 insertions(+)
+> v2: hopefully fixed patch comment (Thomas)
 > 
-> diff --git a/package/psmisc/psmisc.hash b/package/psmisc/psmisc.hash
-> index fd99edf..5e489ed 100644
-> --- a/package/psmisc/psmisc.hash
-> +++ b/package/psmisc/psmisc.hash
-> @@ -1,2 +1,3 @@
->  # Locally computed:
->  sha256  97323cad619210845b696d7d722c383852b2acb5c49b5b0852c4f29c77a8145a  psmisc-22.21.tar.gz
-> +sha256  4f1cb11c7182ad96e682ec50a2d9a6a22079a2b11dffde3bb3cb67823b679422  e7203c36a2a4dc10cd8268a5dc036fc9c2a73b6c.diff
-> diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-> index cbdf4c6..2f83b7d 100644
-> --- a/package/psmisc/psmisc.mk
-> +++ b/package/psmisc/psmisc.mk
-> @@ -6,6 +6,8 @@
->  
->  PSMISC_VERSION = 22.21
->  PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
-> +PSMISC_PATCH = \
-> +	https://gitlab.com/psmisc/psmisc/commit/e7203c36a2a4dc10cd8268a5dc036fc9c2a73b6c.diff
->  PSMISC_LICENSE = GPLv2
->  PSMISC_LICENSE_FILES = COPYING
->  PSMISC_DEPENDENCIES = ncurses $(if $(BR2_NEEDS_GETTEXT_IF_LOCALE),gettext)
+>  ...Invert-conditional-for-defining-QT_SOCKLE.patch | 40 ++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> 
+> diff --git a/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> new file mode 100644
+> index 0000000..97be739
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> @@ -0,0 +1,40 @@
+> +From 8f09897de948cea8861ca95e182f442cf15a339e Mon Sep 17 00:00:00 2001
+> +From: Khem Raj <raj.khem@gmail.com>
+> +Date: Mon, 8 Jun 2015 13:59:25 -0700
+> +Subject: [PATCH] linux-oe-g++: Invert conditional for defining QT_SOCKLEN_T
+> +
+> +This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
+> +only when its glibc < 2 and not also for the libraries which may define
+> +it as per standards but are not glibc, e.g. musl
+> +
+> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> +[Bernd: Downloaded from
+> +https://github.com/meta-qt5/meta-qt5/blob/d9d1d04760430cd0e5edd1764d832860715e7b83/recipes-qt/qt5/qtbase/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+> +and adjusted path.]
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> + mkspecs/linux-oe-g++/qplatformdefs.h | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/mkspecs/linux-oe-g++/qplatformdefs.h b/mkspecs/linux-oe-g++/qplatformdefs.h
+> +index dd12003..8623651 100644
+> +--- a/mkspecs/linux-g++/qplatformdefs.h
+> ++++ b/mkspecs/linux-g++/qplatformdefs.h
+> +@@ -86,10 +86,10 @@
+> + 
+> + #undef QT_SOCKLEN_T
+> + 
+> +-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
+> +-#define QT_SOCKLEN_T            socklen_t
+> +-#else
+> ++#if defined(__GLIBC__) && (__GLIBC__ < 2)
+> + #define QT_SOCKLEN_T            int
+> ++#else
+> ++#define QT_SOCKLEN_T            socklen_t
+> + #endif
+> + 
+> + #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
+> +-- 
+> +2.1.4
+> +
 > 
 
 
