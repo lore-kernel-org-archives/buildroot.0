@@ -1,36 +1,245 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Feb 2016 11:55:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/ola: fix musl build
-In-Reply-To: <1454147144-27111-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1454147144-27111-1-git-send-email-bernd.kuhls@t-online.de>
- <1454147144-27111-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160202115506.00388279@free-electrons.com>
+From: Zhangjian (Bamvor) <bamvor.zhangjian@huawei.com>
+Date: Tue, 2 Feb 2016 18:49:58 +0800
+Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
+In-Reply-To: <56B07114.9030404@gmail.com>
+References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+ <569A60E6.2030108@gmail.com>
+ <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
+ <569FFB7E.2000104@gmail.com>
+ <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
+ <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
+ <56B07114.9030404@gmail.com>
+Message-ID: <56B089D6.4070106@huawei.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi, Romain
 
-On Sat, 30 Jan 2016 10:45:44 +0100, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/17f/17fe88868acdbba074561da14c4417e31d506823/
-> http://autobuild.buildroot.net/results/d99/d99ca60cc4bf86c338fd61f9fd2de0bb9598d670/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...0002-Fix-build-errors-with-musl-C-library.patch | 41 ++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 package/ola/0002-Fix-build-errors-with-musl-C-library.patch
+On 2016/2/2 17:04, Romain Naour wrote:
+> Hi Bamvor,
+>
+> Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
+>> Hi, Romain
+>>
+>>
+>> On 2016/1/24 19:35, Romain Naour wrote:
+>>> Hi Bamvor,
+>>>
+>>> Le 21/01/2016 10:03, Bamvor Zhang Jian a ?crit :
+>>>> Hi, Romain
+>>>>
+>>>> On 01/21/2016 05:26 AM, Romain Naour wrote:
+>>>>> Hi Bamvor,
+>>>>>
+>>>>> Le 19/01/2016 05:00, Bamvor Zhang Jian a ?crit :
+>>>>>> Hi, Romain
+>>>>>>
+>>>>>> On 01/16/2016 11:25 PM, Romain Naour wrote:
+>>>>>>> Hello Bamvor,
+>>>> [...]
+>>>>>>> Can you provide the command lines you used to build the toolchain ? on
+>>>>>>> which abe
+>>>>>>> branch ? Otherwise we can't test your series.
+>>>>>> You could find the toolchain here[1]
+>>>>>
+>>>>> Thanks but this is not a cross-toolchain:
+>>>>>
+>>>>> file bin/aarch64-ilp32-linux-gnu-gcc
+>>>>> bin/aarch64-ilp32-linux-gnu-gcc: ELF 64-bit LSB executable, ARM aarch64,
+>>>>> version
+>>>>> 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for
+>>>>> GNU/Linux 3.7.0, BuildID[sha1]=0727b9d5c173c83568f5d19cfc87a05540ec8b77, not
+>>>>> stripped
+>>>>>
+>>>>> It seems that's a native toolchain.
+>>>>>
+>>>>> It should be something like (from aarch64-linaro 2015.08)
+>>>>> file bin/aarch64-linux-gnu-gcc
+>>>>> bin/aarch64-linux-gnu-gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
+>>>>> dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux
+>>>>> 2.6.32, BuildID[sha1]=91a19539d0f6b0f38d599db648b4b5760000666a, not stripped
+>>>>>
+>>>> Yeap, it is not a cross compile. I use it in an aarch64 chroot environment in
+>>>> x86. I feel it is enough to test these patches.
+>>>
+>>> Buildroot is a tool for cross-compiling, you know it ;-)
+>>> Honestly I'm not very interested to test the toolchain by itself, only your
+>>> patches for the external toolchain infra.
+>>>
+>>>>> Can you provide a pre-build toolchain or a recipe to rebuild a aarch64 ipl32
+>>>>> toolchain ?
+>>>> Linaro provide abe[1] to build toochain. You could follow this script[2] to know
+>>>> how to use it. It seems that the server in tcwg is down. Hope, you could make
+>>>> use of the method used by abe system.
+>>>
+>>> I really tried to build a aarch64 ipl32 cross-toolchain with abe but I'm stuck
+>>> with glibc build. I don't know what's the glibc branch I should use.
+>>> By default I used the release/2.20/master branch
+>>>
+>>> aarch64-ilp32-linux-gnu-gcc -mabi=ilp32 -nostdlib -nostartfiles -r -o
+>>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/Scrt1.o
+>>>
+>>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.os
+>>>
+>>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/abi-note.o
+>>>
+>>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/init.o
+>>>
+>>> ../sysdeps/aarch64/start.S: Assembler messages:
+>>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
+>>> in this object file format
+>>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
+>>> in this object file format
+>>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
+>>> in this object file format
+>>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/sysd-rules:1345:
+>>>
+>>> recipe for target
+>>> '/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o'
+>>>
+>>> failed
+>>> make[2]: ***
+>>> [/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o]
+>>>
+>>> Error 1
+>> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
+>> update it for patch v6 rfc5.
+>
+> Thanks for this link.
+>
+> To be honest, I don't think this series will be merged as is until a stable
+> toolchain release is made.
+What's your mean stable toolchain? A toolchain release from a organization or
+company?
+Do you think it will be accepted after patch of ilp32 of kernel and glibc
+upstream?
+I am trying to improve the glibc support for ilp32 base on the exist one
+ > When it's done, can you respin your series on top of
+> master since the toolchain-external code has been updated recently ?
+Yes, of course.
 
-Since your patch has been merged upstream (good!), I've changed this
-commit to use OLA_PATCH pointing to the github commit, and applied.
+Regards
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bamvor
+>
+> Best regards,
+> Romain
+>
+>>
+>> Regards
+>>
+>> Bamvor
+>>
+>>
+>> [1] https://github.com/norov/glibc/tree/thunderx-ilp32-32time_toff_t
+>>>
+>>> Also I had several issue with the abe script on my system (Fedora) and I had to
+>>> modify some part of the script to be able to continue the build.
+>>>
+>>> So, It would be great if you can provide a precompiled cross-toolchain.
+>>>
+>>> Best regards,
+>>> Romain
+>>>
+>>>>
+>>>> Regards
+>>>>
+>>>> Bamvor
+>>>>
+>>>> [1]
+>>>> https://git.linaro.org/toolchain/abe.git/blob/refs/heads/benchmarking:/abe.sh
+>>>> [2]
+>>>> https://git.linaro.org/toolchain/spec2xxx-utils.git/blob/refs/heads/test:/bench-ilp32.sh
+>>>>
+>>>>
+>>>>>>>
+>>>>>>> Do you know if Linaro plans to release a ipl32 toolchain ?
+>>>>>> It seems that linaro will not release it before patches for ilp32 of kernel
+>>>>>> and
+>>>>>> glibc upstreamed.
+>>>>>> Here[2] is a status for ilp32 in linaro.
+>>>>>
+>>>>> Thanks for the link.
+>>>>>
+>>>>> Best regards,
+>>>>> Romain
+>>>>>
+>>>>>>
+>>>>>> Regards
+>>>>>>
+>>>>>> Bamvor
+>>>>>>
+>>>>>> [1] http://people.linaro.org/~maxim.kuvyrkov/bench-ilp32/
+>>>>>> [2] https://wiki.linaro.org/Platform/arm64-ilp32
+>>>>>>
+>>>>>>> Best regards,
+>>>>>>> Romain Naour
+>>>>>>>
+>>>>>>>>
+>>>>>>>> changes since v2
+>>>>>>>> 1.  rebase on the patch have been .
+>>>>>>>>       "827ba46 aarch64: add big endian(aarch64_be) support"
+>>>>>>>> 2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5
+>>>>>>>> according to
+>>>>>>>>       the suggestion from Thomas.
+>>>>>>>> 3.  Improve the ifeq in patch 2/5 according to Gustavo.
+>>>>>>>> 4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to
+>>>>>>>> Gustavo.
+>>>>>>>>
+>>>>>>>> changes since v1
+>>>>>>>> 1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
+>>>>>>>> 2.  Change default libc, toolchain for ilp32 build.
+>>>>>>>> 3.  Others changes suggested by Gustavo.
+>>>>>>>>
+>>>>>>>> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
+>>>>>>>> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
+>>>>>>>> [3] https://git.linaro.org/kernel/linux-linaro-tracking.git
+>>>>>>>> [4] https://wiki.linaro.org/ABE
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> Bamvor Jian Zhang (5):
+>>>>>>>>     aarch64: align aarch64_be config with aarch64s'
+>>>>>>>>     aarch64: ilp32: handle special file name
+>>>>>>>>     aarch64: ilp32: add ilp32 compiler and linker flags
+>>>>>>>>     aarch64: ilp32: add ilp32 build config
+>>>>>>>>     aarch64: ilp32 defconfig examples
+>>>>>>>>
+>>>>>>>>    Makefile                                           |  6 +++
+>>>>>>>>    arch/Config.in.aarch64                             | 36 ++++++++++++++++++
+>>>>>>>>    configs/aarch64_be_defconfig                       |  2 +
+>>>>>>>>    configs/aarch64_be_ilp32_defconfig                 |  8 ++++
+>>>>>>>>    configs/aarch64_ilp32_defconfig                    |  8 ++++
+>>>>>>>>    package/Makefile.in                                | 13 ++++++-
+>>>>>>>>    package/binutils/Config.in                         |  4 +-
+>>>>>>>>    package/binutils/Config.in.host                    |  5 ++-
+>>>>>>>>    package/dropwatch/Config.in                        |  5 ++-
+>>>>>>>>    package/gcc/Config.in.host                         | 11 +++---
+>>>>>>>>    package/gdb/Config.in.host                         |  2 +-
+>>>>>>>>    package/gpsd/Config.in                             |  2 +-
+>>>>>>>>    package/lightning/Config.in                        |  5 ++-
+>>>>>>>>    package/nginx/Config.in                            |  3 +-
+>>>>>>>>    package/oprofile/Config.in                         |  6 ++-
+>>>>>>>>    toolchain/Config.in                                |  2 +
+>>>>>>>>    toolchain/helpers.mk                               |  5 ++-
+>>>>>>>>    toolchain/toolchain-buildroot/Config.in            |  7 ++--
+>>>>>>>>    toolchain/toolchain-external/Config.in             | 22 +++++++++++
+>>>>>>>>    toolchain/toolchain-external/toolchain-external.mk | 44
+>>>>>>>> +++++++++++++++++++++-
+>>>>>>>>    20 files changed, 169 insertions(+), 27 deletions(-)
+>>>>>>>>    create mode 100644 configs/aarch64_be_defconfig
+>>>>>>>>    create mode 100644 configs/aarch64_be_ilp32_defconfig
+>>>>>>>>    create mode 100644 configs/aarch64_ilp32_defconfig
+>>>>>>>>
+>>>>>>>
+>>>>>>
+>>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+>
