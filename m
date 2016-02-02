@@ -1,67 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 09:35:02 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/gstreamer/gst-plugins-base:
- Fix build on x86 if emmintrin.h is available but can't be used
-In-Reply-To: <87y4b49ljj.fsf@dell.be.48ers.dk>
-References: <1454177927-13601-1-git-send-email-bernd.kuhls@t-online.de>
- <87y4b49ljj.fsf@dell.be.48ers.dk>
-Message-ID: <56B06A36.60505@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 09:36:31 +0100
+Subject: [Buildroot] [PATCH 17/19] python-pyasn-modules: new package
+In-Reply-To: <1454373899-22481-18-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-18-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kuGjeF0Kj8=VVcq2fy5s_y8aawuw=4x1XspDoqbokQ8kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01-02-16 22:18, Peter Korsgaard wrote:
-> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
-[snip]
-> > diff --git a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
-> b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
->  > index e1374ed..902ee05 100644
->  > --- a/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
->  > +++ b/package/gstreamer/gst-plugins-base/gst-plugins-base.mk
->  > @@ -7,6 +7,8 @@
->  >  GST_PLUGINS_BASE_VERSION = 0.10.36
->  >  GST_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST_PLUGINS_BASE_VERSION).tar.xz
->  >  GST_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
->  > +GST_PLUGINS_BASE_PATCH = \
->  > +  
->  http://git.alpinelinux.org/cgit/aports/plain/main/gst-plugins-base0.10/sse.patch
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                                      |  1 +
+>  package/python-pyasn-modules/Config.in                 |  8 ++++++++
+>  package/python-pyasn-modules/python-pyasn-modules.hash |  3 +++
+>  package/python-pyasn-modules/python-pyasn-modules.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-pyasn-modules/Config.in
+>  create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
+>  create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
 >
-> Thanks, but I'm not too happy about these git.alphinelinux.org
-> downloads as:
+> diff --git a/package/Config.in b/package/Config.in
+> index b8b7129..807cffb 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -679,6 +679,7 @@ menu "External python modules"
+>         source "package/python-protobuf/Config.in"
+>         source "package/python-psutil/Config.in"
+>         source "package/python-pyasn/Config.in"
+> +       source "package/python-pyasn-modules/Config.in"
+>         source "package/python-pycli/Config.in"
+>         source "package/python-pycparser/Config.in"
+>         source "package/python-pycrypto/Config.in"
+> diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
+> new file mode 100644
+> index 0000000..68d1579
+> --- /dev/null
+> +++ b/package/python-pyasn-modules/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_PYASN_MODULES
+> +       bool "python-pyasn-modules"
+
+add python-pyasn dependency
+
+depends on BR2_INSTALL_LIBSTDCPP
+
+> +       select BR2_PACKAGE_PYASN
+> +       help
+> +         A collection of ASN.1-based protocols modules.
+> +
+> +         https://pypi.python.org/pypi/pyasn1-modules
+> +
+
+comment "python-pyasn-modules needs a toolchain w/ C++"
+        depends on !BR2_INSTALL_LIBSTDCPP
+
+see package/python-pyasn/Config.in for reference
+
+> diff --git a/package/python-pyasn-modules/python-pyasn-modules.hash b/package/python-pyasn-modules/python-pyasn-modules.hash
+> new file mode 100644
+> index 0000000..6d9a707
+> --- /dev/null
+> +++ b/package/python-pyasn-modules/python-pyasn-modules.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=178129bc7fbf07215c25230c5f053f81, sha256 locally computed.
+> +md5    178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
+> +sha256 10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
+> diff --git a/package/python-pyasn-modules/python-pyasn-modules.mk b/package/python-pyasn-modules/python-pyasn-modules.mk
+> new file mode 100644
+> index 0000000..9ba13cb
+> --- /dev/null
+> +++ b/package/python-pyasn-modules/python-pyasn-modules.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pyasn-modules
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYASN_MODULES_VERSION = 0.0.8
+> +PYTHON_PYASN_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN1_MODULES_VERSION).tar.gz
+> +PYTHON_PYASN_MODULES_SITE = http://pypi.python.org/packages/source/p/pyasn1-modules
+> +PYTHON_PYASN_MODULES_LICENSE = BSD
+> +PYTHON_PYASN_MODULES_LICENSE_FILES = LICENSE.txt
+> +PYTHON_PYASN_MODULES_SETUP_TYPE = setuptools
+> +PYTHON_PYASN_MODULES_DEPENDENCIES = python-pyasn
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
 >
-> - We have no guarantees that the URL stays valid (E.G. doesn't specify
->   any git version).
->
-> - The filename is very generic (sse.patch), so we end up with that on
->   sources.buildroot.net and basically have to keep it "forever".
->
-> As these patches are very small and already in upstream git I have
-> instead picked them (it turned out the alphinelinux patch was a squash
-> of two commits) from the upstream git repo and added them in buildroot.
-
- Hi Bernd,
-
- I told you earlier that we prefer to download patches rather than include them
-in Buildroot, but I was wrong about that, sorry. It seems we (= Peter :-) only
-prefer to download patches when they're really large.
-
- Again, sorry for misinforming you.
-
- Regards,
- Arnout
-
-
->
-> Committed with that fixed, thanks.
->
-
-
--- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
