@@ -1,76 +1,94 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Tue,  2 Feb 2016 14:34:19 +0100
-Subject: [Buildroot] [PATCH] nfs-utils: Fix autobuilders issues
-Message-ID: <1454420059-11641-1-git-send-email-maxime.hadjinlian@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 14:34:23 +0100
+Subject: [Buildroot] [PATCH 15/19] python-txaio: new package
+In-Reply-To: <1454373899-22481-16-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-16-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kuHzrb6ZaGd4ptHKZd02PTGJpZSnObsxTe2vnxBhSnkCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes
-http://autobuild.buildroot.net/results/948/948f81d7ed2c080a675ee9fec754f6fda1fd905f/
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-txaio/Config.in         |  8 ++++++++
+>  package/python-txaio/python-txaio.hash |  3 +++
+>  package/python-txaio/python-txaio.mk   | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-txaio/Config.in
+>  create mode 100644 package/python-txaio/python-txaio.hash
+>  create mode 100644 package/python-txaio/python-txaio.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 56a56a8..b8b7129 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -721,6 +721,7 @@ menu "External python modules"
+>         source "package/python-tornado/Config.in"
+>         source "package/python-treq/Config.in"
+>         source "package/python-twisted/Config.in"
+> +       source "package/python-txaio/Config.in"
+>         source "package/python-urllib3/Config.in"
+>         source "package/python-urwid/Config.in"
+>         source "package/python-versiontools/Config.in"
+> diff --git a/package/python-txaio/Config.in b/package/python-txaio/Config.in
+> new file mode 100644
+> index 0000000..c4c8467
+> --- /dev/null
+> +++ b/package/python-txaio/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_TXAIO
+> +       bool "python-txaio"
+> +       select BR2_PACKAGE_PYTHON_SIX
 
-The patches has been sent upstream:
-http://article.gmane.org/gmane.linux.nfs/76139
+add "# runtime" comment
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- ...4-mountd-Add-check-for-struct-file_handle.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
+> +       help
+> +         Compatibility API between asyncio/Twisted/Trollius.
+> +
+> +         https://pypi.python.org/pypi/txaio
+> +
+> diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
+> new file mode 100644
+> index 0000000..5d9e6cf
+> --- /dev/null
+> +++ b/package/python-txaio/python-txaio.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
+> +md5    c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
+> +sha256 6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
+> diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
+> new file mode 100644
+> index 0000000..8311eaa
+> --- /dev/null
+> +++ b/package/python-txaio/python-txaio.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-txaio
+> +#
+> +################################################################################
+> +
+> +PYTHON_TXAIO_VERSION = 2.2.1
+> +PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
+> +PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
+> +PYTHON_TXAIO_LICENSE = BSD
+> +PYTHON_TXAIO_LICENSE_FILES = LICENSE
+> +PYTHON_TXAIO_SETUP_TYPE = setuptools
+> +PYTHON_TXAIO_DEPENDENCIES = python-six
 
-diff --git a/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch b/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
-new file mode 100644
-index 0000000..7aca266
---- /dev/null
-+++ b/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
-@@ -0,0 +1,46 @@
-+From 3c23b3ea7f5069e8fd4d5758704cd968504f1079 Mon Sep 17 00:00:00 2001
-+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+Date: Tue, 2 Feb 2016 10:07:22 +0100
-+Subject: [PATCH] mountd: Add check for 'struct file_handle'
-+
-+The code to check if name_to_handle_at() is implemented generates only a
-+warning but with some toolchain it doesn't fail to link (the function must be
-+implemented somewhere).
-+However the "struct file_handle" type is not available.
-+
-+So, this patch adds a check for this struct.
-+
-+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-+---
-+ configure.ac         | 1 +
-+ utils/mountd/cache.c | 2 +-
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 25d2ba4..913a86f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -425,6 +425,7 @@ AC_TYPE_PID_T
-+ AC_TYPE_SIZE_T
-+ AC_HEADER_TIME
-+ AC_STRUCT_TM
-++AC_CHECK_TYPES([struct file_handle])
-+ 
-+ dnl *************************************************************
-+ dnl Check for functions
-+diff --git a/utils/mountd/cache.c b/utils/mountd/cache.c
-+index 7847446..dc64f6d 100644
-+--- a/utils/mountd/cache.c
-++++ b/utils/mountd/cache.c
-+@@ -424,7 +424,7 @@ static int same_path(char *child, char *parent, int len)
-+ 	if (count_slashes(p) != count_slashes(parent))
-+ 		return 0;
-+ 
-+-#if HAVE_NAME_TO_HANDLE_AT
-++#if defined(HAVE_NAME_TO_HANDLE_AT) && defined(HAVE_STRUCT_FILE_HANDLE)
-+ 	struct {
-+ 		struct file_handle fh;
-+ 		unsigned char handle[128];
-+-- 
-+2.7.0
-+
--- 
-2.7.0
+remove runtime dependency
+
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
