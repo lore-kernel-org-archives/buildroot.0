@@ -1,62 +1,88 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  2 Feb 2016 13:01:46 -0300
-Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
-Message-ID: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue,  2 Feb 2016 13:01:47 -0300
+Subject: [Buildroot] [PATCH 2/3] libgee: new package
+In-Reply-To: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1454428908-7183-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-vala/valac can use gir and vapi data files installed by other packages,
-but since these are normally installed to staging and host-vala looks
-for them in the host directory (logically) this leads to failure.
-So wrap them to call the real tool and add this information via
-command-line parameters to them.
-
-This is required for libgee-granite vala-in-vala bindings.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/vala/vala-wrapper |  2 ++
- package/vala/vala.mk      | 18 ++++++++++++++++++
- 2 files changed, 20 insertions(+)
- create mode 100644 package/vala/vala-wrapper
+ package/Config.in          |  1 +
+ package/libgee/Config.in   | 15 +++++++++++++++
+ package/libgee/libgee.hash |  2 ++
+ package/libgee/libgee.mk   | 16 ++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/libgee/Config.in
+ create mode 100644 package/libgee/libgee.hash
+ create mode 100644 package/libgee/libgee.mk
 
-diff --git a/package/vala/vala-wrapper b/package/vala/vala-wrapper
+diff --git a/package/Config.in b/package/Config.in
+index c087ff1..cd64613 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1178,6 +1178,7 @@ menu "Other"
+ 	source "package/libevdev/Config.in"
+ 	source "package/libevent/Config.in"
+ 	source "package/libffi/Config.in"
++	source "package/libgee/Config.in"
+ 	source "package/libglib2/Config.in"
+ 	source "package/libical/Config.in"
+ 	source "package/liblinear/Config.in"
+diff --git a/package/libgee/Config.in b/package/libgee/Config.in
 new file mode 100644
-index 0000000..ea0bd09
+index 0000000..07c387c
 --- /dev/null
-+++ b/package/vala/vala-wrapper
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+$0- at VALA_VERSION@ --vapidir=@STAGING_DIR@/usr/share/vala/vapi --girdir=@STAGING_DIR@/usr/share/gir-1.0 $@
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 56d4db3..5267f68 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -16,4 +16,22 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
- # available".
- HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
- 
-+# We wrap vala & valac to point to the proper gir and vapi data dirs
-+# Otherwise we'll get host directory data which isn't enough
-+define HOST_VALA_INSTALL_WRAPPER
-+	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
-+		$(HOST_DIR)/usr/bin/vala
-+	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
-+		$(HOST_DIR)/usr/bin/valac
-+	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
-+		$(HOST_DIR)/usr/bin/vala
-+	$(SED) 's, at STAGING_DIR@,$(STAGING_DIR),g' \
-+		$(HOST_DIR)/usr/bin/vala
-+	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
-+		$(HOST_DIR)/usr/bin/valac
-+	$(SED) 's, at STAGING_DIR@,$(STAGING_DIR),g' \
-+		$(HOST_DIR)/usr/bin/valac
-+endef
-+HOST_VALA_POST_INSTALL_HOOKS += HOST_VALA_INSTALL_WRAPPER
++++ b/package/libgee/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBGEE
++	bool "libgee"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Libgee is an utility library providing GObject-based
++	  interfaces and classes for commonly used data structures.
 +
- $(eval $(host-autotools-package))
++	  https://wiki.gnome.org/Projects/Libgee
++
++comment "libgee needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
+new file mode 100644
+index 0000000..4c38c78
+--- /dev/null
++++ b/package/libgee/libgee.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.0.sha256sum
++sha256	4ad99ef937d071b4883c061df40bfe233f7649d50c354cf81235f180b4244399	libgee-0.18.0.tar.xz
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
+new file mode 100644
+index 0000000..1df322c
+--- /dev/null
++++ b/package/libgee/libgee.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# libgee
++#
++################################################################################
++
++LIBGEE_VERSION_MAJOR = 0.18
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).0
++LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
++LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
++LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
++LIBGEE_INSTALL_STAGING = YES
++LIBGEE_LICENSE = LGPLv2.1+
++LIBGEE_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
 2.4.10
