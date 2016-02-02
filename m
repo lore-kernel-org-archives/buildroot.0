@@ -1,150 +1,153 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Feb 2016 09:23:37 +0100
-Subject: [Buildroot] [git commit] util-linux: fix static builds with uClibc
-Message-ID: <20160202084044.F0DEE80831@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 2 Feb 2016 09:44:47 +0100
+Subject: [Buildroot] [PATCH] Don't build host-cmake if it is available
+ on the build host
+In-Reply-To: <1454363063-21105-1-git-send-email-luca@lucaceresoli.net>
+References: <1454363063-21105-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <56B06C7F.3010201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c823c6ee6ae68115f4d81b6aa5020486a273018e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01-02-16 22:44, Luca Ceresoli wrote:
+> Currently all cmake packages depend on host-cmake. Unfortunately
+> host-cmake takes a long time to configure and build: almost 7 minutes
+> on a dual-core i5 with SSD. The time does not change even with ccache
+> enabled.
+> 
+> Indeed, building host-ccache is not very useful if it is already
 
-In case of uClibc librt depends on libpthread. In particular
-timer_create() function uses pthread_XXX(). That means in case
-of static builds it's required to link not librt alone but
-together with libpthread. So if checking timer_create function
-in librt fails, it is necessary to check if timer_create function
-successfully links with "-lpthread".
+ host-ccache -> host-cmake
 
-That issues was spotted in Buldroot autobuilder failures:
-http://autobuild.buildroot.net/results/759/75960db671807091fe9155aee9e46a6245e32590/
-http://autobuild.buildroot.org/results/112/112e8b85783f5aaba42a937a6eb064317615a21b/
+> installed on the build host: it is supposed to be quite portable, and
+> the only patch we have for cmake seems to only affect target-cmake.
+> 
+> We avoid building host-cmake if cmake is already available on the host
+> using a technique similar to the one used for host-tar and host-xzcat.
+> 
+> First, we leverage the existing infrastructure in
+> support/dependencies/dependencies.mk to set CMAKE to either "cmake" or
+> "$(HOST_DIR)/usr/bin/cmake". In the latter case we also set
+> BUILD_HOST_CMAKE = YES meaning we need to build host-cmake.
+> 
+> Then in pkg-cmake.mk we launch $(CMAKE) instead of
+> $(HOST_DIR)/usr/bin/cmake.
+> 
+> Finally, we do skip adding the dependency on host-cmake for all cmake
+> packages when $(BUILD_HOST_CMAKE) != YES.
+> 
+> Unlike what we do for host-tar and host-xzcat, for host-cmake we do
+> not add host-cmake to DEPENDENCIES_HOST_PREREQ. Otherwise host-cmake
+> would be a dependency for _any_ package when it's not installed on the
+> host, even if no cmake package is selected.
 
-0005-build-sys-use-REALTIME_LIBS.patch is a back-port of upstream
-https://github.com/karelzak/util-linux/commit/b97edfe731fdf3d3e92e40494b22658207ab6d3c
-that won't apply cleanly on v2.27.1
+ Nice and long commit message, thanks!
 
-0006-buildsys-fix-static-configuration-and-building.patch was just
-applied upstream, see https://github.com/karelzak/util-linux/commit/71a77ca1ddfdd7e0d14caad9e8a607a83d61a45c
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Samuel Martin <s.martin49@gmail.com>
+> Cc: Davide Viti <zinosat@tiscali.it>
+> ---
+>  package/pkg-cmake.mk                     |  6 ++++--
+>  support/dependencies/check-host-cmake.mk |  6 ++++++
+>  support/dependencies/check-host-cmake.sh | 14 ++++++++++++++
+>  3 files changed, 24 insertions(+), 2 deletions(-)
+>  create mode 100644 support/dependencies/check-host-cmake.mk
+>  create mode 100755 support/dependencies/check-host-cmake.sh
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index 81dcfcc..e3bd603 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -85,7 +85,7 @@ define $(2)_CONFIGURE_CMDS
+>  	cd $$($$(PKG)_BUILDDIR) && \
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+> -	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> +	$$($$(PKG)_CONF_ENV) $$(CMAKE) $$($$(PKG)_SRCDIR) \
+>  		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+>  		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
+>  		-DCMAKE_INSTALL_PREFIX="/usr" \
+> @@ -110,7 +110,7 @@ define $(2)_CONFIGURE_CMDS
+>  	cd $$($$(PKG)_BUILDDIR) && \
+>  	rm -f CMakeCache.txt && \
+>  	PATH=$$(BR_PATH) \
+> -	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
+> +	$$(CMAKE) $$($$(PKG)_SRCDIR) \
+>  		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+>  		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+>  		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+> @@ -149,7 +149,9 @@ $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
+>  	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+>  endif
+>  
+> +ifeq ($$(BUILD_HOST_CMAKE),YES)
+>  $(2)_DEPENDENCIES += host-cmake
+> +endif
+>  
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+> diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+> new file mode 100644
+> index 0000000..fe16322
+> --- /dev/null
+> +++ b/support/dependencies/check-host-cmake.mk
+> @@ -0,0 +1,6 @@
+> +CMAKE ?= cmake
+> +
+> +ifeq (,$(call suitable-host-package,cmake,$(CMAKE)))
+> +BUILD_HOST_CMAKE = YES
+> +CMAKE = $(HOST_DIR)/usr/bin/cmake
+> +endif
+> diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+> new file mode 100755
+> index 0000000..76a81e0
+> --- /dev/null
+> +++ b/support/dependencies/check-host-cmake.sh
+> @@ -0,0 +1,14 @@
+> +#!/bin/sh
+> +
+> +candidate="$1"
+> +
+> +cmake=`which $candidate`
 
-Both patches must be removed on util-linux version bump.
+ $candidate could be an absolute path, in which case which returns nothing.
 
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0005-build-sys-use-REALTIME_LIBS.patch         | 41 ++++++++++++++++
- ...sys-fix-static-configuration-and-building.patch | 54 ++++++++++++++++++++++
- 2 files changed, 95 insertions(+)
+> +if [ ! -x "$cmake" ]; then
+> +	cmake=`which cmake`
 
-diff --git a/package/util-linux/0005-build-sys-use-REALTIME_LIBS.patch b/package/util-linux/0005-build-sys-use-REALTIME_LIBS.patch
-new file mode 100644
-index 0000000..6402ef5
---- /dev/null
-+++ b/package/util-linux/0005-build-sys-use-REALTIME_LIBS.patch
-@@ -0,0 +1,41 @@
-+From 9ed54668c15534a3b9d75e8a3e90b72ea426e596 Mon Sep 17 00:00:00 2001
-+From: Karel Zak <kzak@redhat.com>
-+Date: Fri, 9 Oct 2015 11:31:49 +0200
-+Subject: [PATCH] build-sys: use REALTIME_LIBS
-+
-+Signed-off-by: Karel Zak <kzak@redhat.com>
-+---
-+ misc-utils/Makemodule.am | 2 +-
-+ sys-utils/Makemodule.am  | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/misc-utils/Makemodule.am b/misc-utils/Makemodule.am
-+index e801611..b96d18b 100644
-+--- a/misc-utils/Makemodule.am
-++++ b/misc-utils/Makemodule.am
-+@@ -90,7 +90,7 @@ endif
-+ if BUILD_UUIDD
-+ usrsbin_exec_PROGRAMS += uuidd
-+ dist_man_MANS += misc-utils/uuidd.8
-+-uuidd_LDADD = $(LDADD) libuuid.la libcommon.la
-++uuidd_LDADD = $(LDADD) libuuid.la libcommon.la $(REALTIME_LIBS)
-+ uuidd_CFLAGS = $(DAEMON_CFLAGS) $(AM_CFLAGS) -I$(ul_libuuid_incdir)
-+ uuidd_LDFLAGS = $(DAEMON_LDFLAGS) $(AM_LDFLAGS)
-+ uuidd_SOURCES = misc-utils/uuidd.c
-+
-+diff --git a/sys-utils/Makemodule.am b/sys-utils/Makemodule.am
-+index f306e65..3d28ff1 100644
-+--- a/sys-utils/Makemodule.am
-++++ b/sys-utils/Makemodule.am
-+@@ -2,7 +2,7 @@ if BUILD_FLOCK
-+ usrbin_exec_PROGRAMS += flock
-+ dist_man_MANS += sys-utils/flock.1
-+ flock_SOURCES = sys-utils/flock.c lib/monotonic.c lib/timer.c
-+-flock_LDADD = $(LDADD) libcommon.la -lrt
-++flock_LDADD = $(LDADD) libcommon.la $(REALTIME_LIBS)
-+ endif
-+
-+ if BUILD_IPCMK
-+-- 
-+2.5.0
-+
-diff --git a/package/util-linux/0006-buildsys-fix-static-configuration-and-building.patch b/package/util-linux/0006-buildsys-fix-static-configuration-and-building.patch
-new file mode 100644
-index 0000000..cd5654e
---- /dev/null
-+++ b/package/util-linux/0006-buildsys-fix-static-configuration-and-building.patch
-@@ -0,0 +1,54 @@
-+From f69e18629d1c91d83ab91314baf5e34088b57f6e Mon Sep 17 00:00:00 2001
-+From: Lada Trimasova <ltrimas@synopsys.com>
-+Date: Wed, 27 Jan 2016 16:26:41 +0300
-+Subject: [PATCH] buildsys: fix static configuration and building
-+
-+In case of uClibc librt depends on libpthread. In particular
-+timer_create() function uses pthread_XXX(). That means in case
-+of static builds it's required to link not librt alone but
-+together with libpthread. So if checking timer_create function
-+in librt fails, it is necessary to check if timer_create function
-+successfully links with "-lpthread".
-+
-+That issues was spotted in Buldroot autobuilder failures:
-+http://autobuild.buildroot.net/results/759/75960db671807091fe9155aee9e46a6245e32590/
-+http://autobuild.buildroot.org/results/112/112e8b85783f5aaba42a937a6eb064317615a21b/
-+
-+Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-+---
-+ configure.ac | 13 +++++++++++--
-+ 1 file changed, 11 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 56512c0..9392bf2 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -382,14 +382,23 @@ AC_CHECK_FUNCS([clock_gettime], [],
-+ AC_SUBST([REALTIME_LIBS])
-+ 
-+ have_timer="no"
-+-AC_CHECK_FUNCS([timer_createx],
-++AC_CHECK_FUNCS([timer_create],
-+ 	[have_time="yes"],
-+ 	[AC_CHECK_LIB([rt], [timer_create], [
-+ 		have_timer="yes"
-+ 		REALTIME_LIBS="-lrt"
-+-	])]
-++	],[
-++		AC_SEARCH_LIBS([timer_create], [rt], [
-++			AC_MSG_RESULT(yes)
-++			have_timer="yes"
-++			REALTIME_LIBS="-lrt -lpthread"
-++		],[], [-lpthread]
-++		)
-++		])]
-+ )
-+ 
-++AC_SUBST([REALTIME_LIBS])
-++
-+ 
-+ AC_CHECK_MEMBER([struct sockaddr.sa_len],
-+ 		AC_DEFINE_UNQUOTED([HAVE_SA_LEN], [1], [Define if struct sockaddr contains sa_len]), [],
-+-- 
-+2.5.0
-+
+ Since there is already CMAKE ?= cmake in the caller, this is pointless.
+
+ How about a
+
+for cmake in "$cmake" "$( which "$cmake" )"; do
+ ...
+
+instead?
+
+> +	if [ ! -x "$cmake" ]; then
+> +		# echo nothing: no suitable cmake found
+> +		exit 1
+> +	fi
+> +fi
+
+ I have the feeling that there should also be a version check here, though I
+don't know which version we should use.
+
+ Regards,
+ Arnout
+
+> +
+> +echo $cmake
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
