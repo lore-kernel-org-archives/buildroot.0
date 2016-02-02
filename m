@@ -1,120 +1,79 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed,  3 Feb 2016 00:05:42 +0100
-Subject: [Buildroot] [PATCH] RFC: adding customizable linux logo
-Message-ID: <1454454342-27717-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 02 Feb 2016 21:18:49 -0200
+Subject: [Buildroot] [PATCH v6 1/1] package/dhcp: bump version to
+	4.3.3-P1
+References: <1453736110-11878-1-git-send-email-rdkehn@yahoo.com>
+Message-ID: <56b13959cc789_bb93ffc40199db8503a@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a custom linux logo to the generated kernel image.
+Hi Doug,
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
+On Mon, Jan 25, 2016 at 01:35 PM, Doug Kehn <rdkehn@yahoo.com> wrote:
+> bind source tar-ball is now embedded into the dhcp source. The embedded
+> bind tar-ball is extracted after the dhcp source so cross compiling
+> patches can be applied to the dhcp and bind before the package is built.
+> 
+> The embedded bind configure is called as part of dhcp make instead of
+> dhcp configure; therefore, needed configure parameters are set in the
+> make env.
+> 
+> 0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
+> been submitted upstream as part of a cross compiling enhancement
+> suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
+> 0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
+> 
+> Buildroot thread
+> 	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
+> has related information.
+> 
+> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> ---
+> Changes v5 -> v6
+>   - patch configure.ac instead of configure/Makefile.in (suggested by Arnout)
+>   - rework dhcp.mk for patch changes.
 
-I often use the linux kernel logo as an early full screen bootsplash.
-For such a reason I wrote this patch and I'm looking for comments.
+The patches are much cleaner now!
 
- linux/Config.ext.in              |  8 ++++++++
- linux/linux-ext-customlogo.mk    | 11 +++++++++++
- package/Config.in                |  1 +
- package/customlogo/Config.in     | 16 ++++++++++++++++
- package/customlogo/customlogo.mk | 15 +++++++++++++++
- 5 files changed, 51 insertions(+)
- create mode 100644 linux/linux-ext-customlogo.mk
- create mode 100644 package/customlogo/Config.in
- create mode 100644 package/customlogo/customlogo.mk
+[snip]
+> --- a/package/dhcp/dhcp.hash
+> +++ b/package/dhcp/dhcp.hash
+> @@ -1,2 +1,2 @@
+> -# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R12/dhcp-4.1-ESV-R12.tar.gz.sha256.asc
+> -sha256	53265d1bf5e2073379df03c73a1a34d38a904307609c0f9cb77223912e753e5f	dhcp-4.1-ESV-R12.tar.gz
+> +# Verified from https://ftp.isc.org/isc/dhcp/4.2.3-P1/dhcp-4.2.3-P1.tar.gz.sha256.asc
 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 755c23b..b752c9c 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -1,5 +1,13 @@
- menu "Linux Kernel Extensions"
- 
-+# Custom logo
-+config BR2_LINUX_KERNEL_EXT_CUSTOMLOGO
-+	select BR2_PACKAGE_CUSTOMLOGO
-+	bool "Custom logo"
-+	help
-+	  change linux boot logo with your own graphics. 
-+	  Can be used as an early bootsplash.
-+
- # Xenomai
- config BR2_LINUX_KERNEL_EXT_XENOMAI
- 	bool "Adeos/Xenomai Real-time patch"
-diff --git a/linux/linux-ext-customlogo.mk b/linux/linux-ext-customlogo.mk
-new file mode 100644
-index 0000000..68c613a
---- /dev/null
-+++ b/linux/linux-ext-customlogo.mk
-@@ -0,0 +1,11 @@
-+################################################################################
-+#
-+# Custom logo
-+#
-+################################################################################
-+
-+LINUX_EXTENSIONS += customlogo
-+
-+define CUSTOMLOGO_PREPARE_KERNEL
-+	cp $(CUSTOMLOGO_DIR)/logo_linux_clut224.ppm $(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
-+endef
-diff --git a/package/Config.in b/package/Config.in
-index 7ced9d4..1552f32 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -214,6 +214,7 @@ comment "Sounds"
- 
- comment "Themes"
- 	source "package/gtk2-engines/Config.in"
-+	source "package/customlogo/Config.in"
- 
- endmenu
- 
-diff --git a/package/customlogo/Config.in b/package/customlogo/Config.in
-new file mode 100644
-index 0000000..f8502da
---- /dev/null
-+++ b/package/customlogo/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_CUSTOMLOGO
-+	bool "Custom logo"
-+	help
-+	  Change linux boot logo with your own graphics. 
-+	  Can be used as an early bootsplash.
-+
-+	  *REQUIRES* a pre installed imagemagick on the host system.
-+
-+if BR2_PACKAGE_CUSTOMLOGO
-+
-+config BR2_PACKAGE_CUSTOMLOGO_PATH
-+	string "image file path"
-+	help
-+	  This image will be used as custom logo.
-+
-+endif
-diff --git a/package/customlogo/customlogo.mk b/package/customlogo/customlogo.mk
-new file mode 100644
-index 0000000..4f11522
---- /dev/null
-+++ b/package/customlogo/customlogo.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# customlogo
-+#
-+################################################################################
-+
-+CUSTOMLOGO_SOURCE =
-+
-+define CUSTOMLOGO_BUILD_CMDS
-+	convert $(BR2_PACKAGE_CUSTOMLOGO_PATH) \
-+		-dither None -colors 224 -compress none \
-+		$(@D)/logo_linux_clut224.ppm
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+There are typos here (s/4.2.3-P1/4.3.3-P1/g).
+It should be:
+# Verified from https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz.sha256.asc
+
+See:
+$ wget -q https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz.sha256.asc
+$ gpg --verify dhcp-4.3.3-P1.tar.gz.sha256.asc dhcp-4.3.3-P1.tar.gz
+gpg: Signature made Sex 18 Dez 2015 10:51:04 BRST using RSA key ID 911A4C02
+gpg: Good signature from "Internet Systems Consortium, Inc. (Signing key, 2015-2016) <codesign@isc.org>"
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: ADBE 9446 286C 7949 05F1  E075 6FA6 EBC9 911A 4C02
+$ sha256sum dhcp-4.3.3-P1.tar.gz
+c11e896dffa1bfbc49462965d3f6dec45534e34068603546d9a236f2aa669921  dhcp-4.3.3-P1.tar.gz
+
+> +sha256 c11e896dffa1bfbc49462965d3f6dec45534e34068603546d9a236f2aa669921 dhcp-4.3.3-P1.tar.gz
+[snip]
+
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Build test for arm using both external and buildroot toolchains, with
+all package flags enabled (client, server, relay).
+Basic run test (calling 'dhclient -v' gets an IPv4 address) using a
+qemu-system-arm target.
+
+With the typos fixed:
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+Regards,
+Ricardo
