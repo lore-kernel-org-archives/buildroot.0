@@ -1,120 +1,109 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Tue, 2 Feb 2016 20:54:26 +0100
-Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
-In-Reply-To: <AAEB3B19-DD00-496E-BE0A-D227A5198E0D@xiot.nl>
-References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
- <20160110105950.GA3460@free.fr>
- <AAEB3B19-DD00-496E-BE0A-D227A5198E0D@xiot.nl>
-Message-ID: <0AC4E613-2042-4057-8487-BAD82B2C020B@xiot.nl>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Tue,  2 Feb 2016 14:57:26 -0500
+Subject: [Buildroot] [PATCH v2 00/18] Erlang 18 and native atomic ops
+In-Reply-To: <1453511471-28519-19-git-send-email-fhunleth@troodon-software.com>
+References: <1453511471-28519-19-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guess it might be my version of python, however changing the zip part to the following fixed it;
+This patch set pulls in a major update to Erlang. A couple build errors were
+introduced by the upgrade which necessitated upgrading several Erlang
+packages. It turns out that Erlang's native atomic ops code has been
+improved since the last version so that it is now preferred over using
+libatomic ops. The final commit that makes the switch away from libatomic_ops
+fixes builds on aarch64 without affecting other builds (at least the
+qemu_*_defconfigs w/ Erlang and a few other configs.) Erlang autobuilder errors
+due to musl are not addressed by this patch set.
 
-        if self.filename[-3:] == 'zip':                                                                                            
-            with zipfile.ZipFile(as_file) as as_zipfile:                                                                           
-                tmp_pkg = os.path.join(tmp_path, self.buildroot_name) 
+Changes v1->v2:
+  - Several formatting/SoB fixes
+  - Fixed legal-info errors (Thanks Romain)
+  - Fixed a missing dependency with erlang-fast_tls (Thanks Romain)
+  - Reworked final patch for choosing atomic ops implementation based
+    on many helpful comments from Thomas.
 
-python
-Python 2.7.10 (default, Oct 14 2015, 16:09:02) 
-[GCC 5.2.1 20151010] on linux2
+Frank Hunleth (18):
+  erlang: bump to version 18.2.1
+  pkg-rebar.mk: pass C++ compiler path and options
+  erlang-goldrush: bump to version 0.1.8
+  erlang-lager: bump to version 2.2.0
+  erlang-rebar: bump to version 2.6.1
+  erlang-fast_tls: new package
+  erlang-p1-cache-tab: bump to version 1.0.1
+  erlang-p1-iconv: bump to version 0.9.0
+  erlang-p1-stringprep: bump to version 1.0.0
+  erlang-p1_stun: bump to version 0.9.0
+  erlang-p1-sip: bump to version 1.0.0
+  erlang-p1-tls: bump to version 1.0.0
+  erlang-p1-utils: bump to version 1.0.3
+  erlang-p1-xml: bump to version 1.1.1
+  erlang-p1-yaml: bump to version 1.0.0
+  erlang-p1-zlib: bump to version 1.0.0
+  ejabberd: bump to version 16.01
+  erlang: support choosing atomic ops
 
-//Eelco
+ package/Config.in                                  |  3 +-
+ ...001-remove-dependencies-from-rebar-config.patch | 83 ++++++++++++++++++++++
+ package/ejabberd/0001-remove-deps.patch            | 22 ------
+ package/ejabberd/0002-disable-rebar-deps.patch     | 76 --------------------
+ .../0002-remove-make-targets-for-deps.patch        | 74 +++++++++++++++++++
+ package/ejabberd/0003-disable-test.patch           | 27 -------
+ .../0003-remove-checking-erlang-version.patch      | 30 ++++++++
+ package/ejabberd/0004-correct-include.patch        | 56 +++++++++++++++
+ package/ejabberd/0004-disable-version-check.patch  | 20 ------
+ .../0005-disable-ERLANG_DEPRECATED_CHECK.patch     | 27 +++++++
+ package/ejabberd/0005-fix-includes.patch           | 45 ------------
+ ...006-disable-erlang-deprecated-types-check.patch | 20 ------
+ ...ns.patch => 0006-fix-install-permissions.patch} | 41 +++++------
+ ...jabberdctl.patch => 0007-fix-ejabberdctl.patch} | 21 ++++--
+ package/ejabberd/Config.in                         |  5 +-
+ package/ejabberd/ejabberd.hash                     |  6 +-
+ package/ejabberd/ejabberd.mk                       |  2 +-
+ package/erlang-fast_tls/Config.in                  |  8 +++
+ package/erlang-fast_tls/erlang-fast_tls.mk         | 14 ++++
+ package/erlang-goldrush/erlang-goldrush.mk         |  2 +-
+ package/erlang-lager/erlang-lager.mk               |  2 +-
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk |  4 +-
+ package/erlang-p1-iconv/erlang-p1-iconv.mk         |  2 +-
+ package/erlang-p1-sip/erlang-p1-sip.mk             |  4 +-
+ package/erlang-p1-stringprep/Config.in             |  4 ++
+ .../erlang-p1-stringprep/erlang-p1-stringprep.mk   |  2 +-
+ package/erlang-p1-tls/erlang-p1-tls.mk             |  2 +-
+ package/erlang-p1-utils/erlang-p1-utils.mk         |  4 +-
+ package/erlang-p1-xml/erlang-p1-xml.mk             |  4 +-
+ package/erlang-p1-yaml/erlang-p1-yaml.mk           |  2 +-
+ package/erlang-p1-zlib/erlang-p1-zlib.mk           |  2 +-
+ .../{erlang-p1-stun => erlang-p1_stun}/Config.in   |  4 +-
+ .../erlang-p1_stun.mk}                             |  6 +-
+ package/erlang-rebar/erlang-rebar.mk               |  2 +-
+ ...04-erts-fix-incorrect-use-of-ac-egrep-cpp.patch | 79 --------------------
+ package/erlang/Config.in                           | 55 ++++++++++++--
+ package/erlang/erlang.hash                         |  5 +-
+ package/erlang/erlang.mk                           | 16 +++--
+ package/pkg-rebar.mk                               |  2 +
+ 39 files changed, 426 insertions(+), 357 deletions(-)
+ create mode 100644 package/ejabberd/0001-remove-dependencies-from-rebar-config.patch
+ delete mode 100644 package/ejabberd/0001-remove-deps.patch
+ delete mode 100644 package/ejabberd/0002-disable-rebar-deps.patch
+ create mode 100644 package/ejabberd/0002-remove-make-targets-for-deps.patch
+ delete mode 100644 package/ejabberd/0003-disable-test.patch
+ create mode 100644 package/ejabberd/0003-remove-checking-erlang-version.patch
+ create mode 100644 package/ejabberd/0004-correct-include.patch
+ delete mode 100644 package/ejabberd/0004-disable-version-check.patch
+ create mode 100644 package/ejabberd/0005-disable-ERLANG_DEPRECATED_CHECK.patch
+ delete mode 100644 package/ejabberd/0005-fix-includes.patch
+ delete mode 100644 package/ejabberd/0006-disable-erlang-deprecated-types-check.patch
+ rename package/ejabberd/{0007-fix-install-permissions.patch => 0006-fix-install-permissions.patch} (73%)
+ rename package/ejabberd/{0008-fix-ejabberdctl.patch => 0007-fix-ejabberdctl.patch} (56%)
+ create mode 100644 package/erlang-fast_tls/Config.in
+ create mode 100644 package/erlang-fast_tls/erlang-fast_tls.mk
+ rename package/{erlang-p1-stun => erlang-p1_stun}/Config.in (70%)
+ rename package/{erlang-p1-stun/erlang-p1-stun.mk => erlang-p1_stun/erlang-p1_stun.mk} (77%)
+ delete mode 100644 package/erlang/0004-erts-fix-incorrect-use-of-ac-egrep-cpp.patch
 
-> On 02 Feb 2016, at 19:02, Eelco Chaudron <echaudron@xiot.nl> wrote:
-> 
-> I was trying your script and I seem to run into an issue with zip?ed archives;
-> 
-> $ ~/scanpypi WTForms -o package
-> buildroot package name for WTForms: python-wtforms
-> Package: python-wtforms
-> Fetching package WTForms
-> Downloading package WTForms from https://pypi.python.org/packages/source/W/WTForms/WTForms-2.1.zip <https://pypi.python.org/packages/source/W/WTForms/WTForms-2.1.zip>...
-> Traceback (most recent call last):
->   File "/home/echaudron/scanpypi", line 653, in <module>
->     main()
->   File "/home/echaudron/scanpypi", line 596, in main
->     package.extract_package(tmp_path)
->   File "/home/echaudron/scanpypi", line 211, in extract_package
->     with zipfile.open(fileobj=as_file) as as_zipfile:
-> AttributeError: 'module' object has no attribute ?open'
-> 
-> //Eelco
-> 
->> On 10 Jan 2016, at 11:59, Yann E. MORIN <yann.morin.1998 at free.fr <mailto:yann.morin.1998@free.fr>> wrote:
->> 
->> Denis, All,
->> 
->> Sorry for the long delay. I'm now having a look at this patch.
->> 
->> On 2015-07-28 15:15 +0200, Denis THULIN spake thusly:
->>> An utility for creating python package from the python package index
->>> It fetches packages info from http://pypi.python.org <http://pypi.python.org/> and generates
->>> corresponding packages files.
->> 
->> So, we currently have scancpan to create perl packages. You are adding
->> scanpypi to create Python packages. There's also someone who submitted
->> a script to generate a 'generic' package (i.e. not perl/python) [0].
->> The scancpan is written in perl, yours and the generic one in Python.
->> 
->> Besides Perl and Python, we also have nodejs which provides a similar
->> "package-store" and for which it would become interesting to provide a
->> helper script to generate packages [1].
->> 
->> What I would love to see is that we have a single script to add
->> packages. Something like:
->> 
->>    $ ./support/script/add-package -t TYPE [OPTS] PKG [PKG...]
->> 
->> with TYPE being one of the package types we currently have (generic,
->> autotools... python, perl...) or an abstract type (nodejs...).
->> 
->> Then, the cpan, pypi, nodejs... script would be just 'backends' that
->> would provide classes called by the main script, like;
->> 
->>    pkg = new PythonPkg("foo")
->>    pkg.get_br_name()       returns the BR2_PACKAGE_ name
->>    pkg.get_version()       returns the _VERSION string
->>    pkg.get_source()        returns the _SOURCE string
->>    pkg.get_site()          returns the _SITE string
->>    pkg.get_method()        returns the _SITE_METHOD string
->>    pkg.get_dependencies()  returns the _DEPENDENCIES list
->>    ... and so on, you get the idea. ;-)
->> 
->> That would also recursively generate the packages for the dependencies,
->> if not already present.
->> 
->> Of course, that would mean we'd have to standardise on a single
->> language. I think Python is the way to go here.
->> 
->> Would you be interested in pursuing this?
->> 
->> [0] https://patchwork.ozlabs.org/patch/523257/ <https://patchwork.ozlabs.org/patch/523257/>
->> [1] that could also require a nodejs-package infra, but not necessarily.
->> 
->> Regards,
->> Yann E. MORIN.
->> 
->> -- 
->> .-----------------.--------------------.------------------.--------------------.
->> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->> | http://ymorin.is-a-geek.org/ <http://ymorin.is-a-geek.org/> | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->> '------------------------------^-------^------------------^--------------------'
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net <mailto:buildroot@busybox.net>
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160202/1e833d9f/attachment.html>
+-- 
+2.5.0
