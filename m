@@ -1,46 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 2 Feb 2016 10:20:46 +0100
-Subject: [Buildroot] [git commit] package/ola: fix musl build
-Message-ID: <20160202092359.333458166B@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 10:26:57 +0100
+Subject: [Buildroot] [PATCH 09/19] python-pygments: new package
+In-Reply-To: <1454373899-22481-10-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-10-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kt4osF=fYKM128fCnvv+dVw6xCntGQqFmAYa6MUFpgBKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8424a6ad6ad4d3828312a4a1b357ba08f911d8f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
-Fixes
-http://autobuild.buildroot.net/results/17f/17fe88868acdbba074561da14c4417e31d506823/
-http://autobuild.buildroot.net/results/d99/d99ca60cc4bf86c338fd61f9fd2de0bb9598d670/
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: switch to using the upstreamed Github patch.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ola/ola.hash | 1 +
- package/ola/ola.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/ola/ola.hash b/package/ola/ola.hash
-index f8e0b5f..628b525 100644
---- a/package/ola/ola.hash
-+++ b/package/ola/ola.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 74baba18c5b62aba15e27e6b7882c6eac22043c8e7b297e4d2f6eb05dd1a33b0 ola-0.10.0.tar.gz
-+sha256 32a8a7a00c7db7647710c84ed02611f2eba99669f2de4da7aceae9d4444f53a3 34999c70dcbe2d38bf13d57c9cfbdc63f0899b9a.patch
-diff --git a/package/ola/ola.mk b/package/ola/ola.mk
-index fa897fe..a983459 100644
---- a/package/ola/ola.mk
-+++ b/package/ola/ola.mk
-@@ -6,7 +6,7 @@
- 
- OLA_VERSION = 0.10.0
- OLA_SITE = $(call github,OpenLightingProject,ola,$(OLA_VERSION))
--
-+OLA_PATCH = https://github.com/OpenLightingProject/ola/commit/34999c70dcbe2d38bf13d57c9cfbdc63f0899b9a.patch
- OLA_LICENSE = LGPLv2.1+ (libola, libolacommon, Python bindings), GPLv2+ (libolaserver, olad, Python examples and tests)
- OLA_LICENSE_FILES = LICENCE GPL LGPL
- OLA_INSTALL_STAGING = YES
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-pygments/Config.in            |  7 +++++++
+>  package/python-pygments/python-pygments.hash |  3 +++
+>  package/python-pygments/python-pygments.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-pygments/Config.in
+>  create mode 100644 package/python-pygments/python-pygments.hash
+>  create mode 100644 package/python-pygments/python-pygments.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 623333a..6b84875 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -685,6 +685,7 @@ menu "External python modules"
+>         source "package/python-pydal/Config.in"
+>         source "package/python-pyftpdlib/Config.in"
+>         source "package/python-pygame/Config.in"
+> +       source "package/python-pygments/Config.in"
+>         source "package/python-pyinotify/Config.in"
+>         source "package/python-pyopenssl/Config.in"
+>         source "package/python-pyparsing/Config.in"
+> diff --git a/package/python-pygments/Config.in b/package/python-pygments/Config.in
+> new file mode 100644
+> index 0000000..d0e3f00
+> --- /dev/null
+> +++ b/package/python-pygments/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_PYGMENTS
+> +       bool "python-pygments"
+> +       help
+> +         Pygments is a syntax highlighting package written in Python.
+> +
+> +         https://pypi.python.org/pypi/Pygments
+> +
+> diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
+> new file mode 100644
+> index 0000000..bb954dd
+> --- /dev/null
+> +++ b/package/python-pygments/python-pygments.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=84533d22f72de894f6d3907c3ca9eddf, sha256 locally computed.
+> +md5    84533d22f72de894f6d3907c3ca9eddf  Pygments-2.1.tar.gz
+> +sha256 13a0ef5fafd7b16cf995bc28fe7aab0780dab1b2fda0fc89e033709af8b8a47b  Pygments-2.1.tar.gz
+> diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
+> new file mode 100644
+> index 0000000..d087cef
+> --- /dev/null
+> +++ b/package/python-pygments/python-pygments.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-pygments
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYGMENTS_VERSION = 2.1
+> +PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
+> +PYTHON_PYGMENTS_SITE = http://pypi.python.org/packages/source/P/Pygments
+> +PYTHON_PYGMENTS_LICENSE = BSD
+> +PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
+> +PYTHON_PYGMENTS_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
