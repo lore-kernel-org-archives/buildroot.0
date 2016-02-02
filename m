@@ -1,75 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 15:44:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/squeezelite: fix musl build
-In-Reply-To: <1454262247-30214-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454262247-30214-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0C0CC.3080208@mind.be>
+Date: Tue, 2 Feb 2016 15:51:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rsyslog: fix musl buil
+In-Reply-To: <1454254080-11795-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454254080-11795-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0C27F.3060701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 18:44, Bernd Kuhls wrote:
-> The build error was not yet found by the autobuilders:
+On 31-01-16 16:28, Bernd Kuhls wrote:
+> The build error was not yet being found by the autobuilders:
 > 
-> output_alsa.c: In function ?output_init_alsa?:
-> output_alsa.c:865:10: error: ?M_TRIM_THRESHOLD? undeclared (first use in this function)
->   mallopt(M_TRIM_THRESHOLD, -1);
->           ^
-> output_alsa.c:865:10: note: each undeclared identifier is reported only once for each function it appears in
-> output_alsa.c:866:10: error: ?M_MMAP_MAX? undeclared (first use in this function)
->   mallopt(M_MMAP_MAX, 0);
->           ^
+> omfile.c: In function ?prepareFile?:
+> omfile.c:580:3: error: implicit declaration of function ?open? [-Werror=implicit-function-declaration]
+>    fd = open((char*) newFileName, O_WRONLY|O_APPEND|O_CREAT|O_NOCTTY|O_CLOEXEC,
+>    ^
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...02-only-run-glibc-specific-hacks-on-glibc.patch | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
+>  package/rsyslog/rsyslog.hash | 2 ++
+>  package/rsyslog/rsyslog.mk   | 2 ++
+>  2 files changed, 4 insertions(+)
 > 
-> diff --git a/package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch b/package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
-> new file mode 100644
-> index 0000000..12237e4
-> --- /dev/null
-> +++ b/package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
-> @@ -0,0 +1,30 @@
-> +From d898fac929cd093bb39af3f517158777c21c06ef Mon Sep 17 00:00:00 2001
-> +From: Carlo Landmeter <clandmeter@gmail.com>
-> +Date: Tue, 31 Mar 2015 10:07:14 +0000
-> +Subject: [PATCH] only run glibc specific hacks on glibc
-> +
-> +---
-> +Patch downloaded from upstream PR:
-> +https://github.com/robadenshi/squeezelite/issues/97
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> + output_alsa.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/output_alsa.c b/output_alsa.c
-> +index aa01560..c1b5435 100644
-> +--- a/output_alsa.c
-> ++++ b/output_alsa.c
-> +@@ -853,7 +853,7 @@ void output_init_alsa(log_level level, const char *device, unsigned output_buf_s
-> + 		set_mixer(output.device, volume_mixer_name, volume_mixer_index ? atoi(volume_mixer_index) : 0, true, 0, 0);
-> + 	}
-> + 
-> +-#if LINUX
-> ++#if defined(__GLIBC__)
-> + 	// RT linux - aim to avoid pagefaults by locking memory: 
-> + 	// https://rt.wiki.kernel.org/index.php/Threaded_RT-application_with_memory_locking_and_stack_handling_example
-> + 	if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
+> diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+> index 5f9e0ed..9d96edf 100644
+> --- a/package/rsyslog/rsyslog.hash
+> +++ b/package/rsyslog/rsyslog.hash
+> @@ -1,2 +1,4 @@
+>  # From http://www.rsyslog.com/downloads/download-v8-stable/
+>  sha256	eab00e8e758cd9dd33b3e2cf6af80297d1951dc7db37bd723a6488a35d577adc	rsyslog-8.9.0.tar.gz
+> +# Locally computed
+> +sha256	feda2d9ca6c788e375116b6c43b6c4ac5debe83dab0efcfc9a47216c9af36599	musl-fix.patch
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index 5dde924..68b75a5 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -6,6 +6,8 @@
+>  
+>  RSYSLOG_VERSION = 8.9.0
+>  RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+> +RSYSLOG_PATCH = \
+> +	http://git.alpinelinux.org/cgit/aports/plain/main/rsyslog/musl-fix.patch
 
- This doesn't look right - you still want to do the mlockall even on musl, no?
+ Patch is not good, the #ifdef OS_SOLARIS should be removed. Like is done in
+upstream commit 835571774dc519dd2cff7ab1020cf298cc953a8f. Please use that one
+instead.
+
 
  Regards,
  Arnout
 
-> +-- 
-> +2.3.4
-> +
+>  RSYSLOG_LICENSE = GPLv3, LGPLv3, Apache-2.0
+>  RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+>  RSYSLOG_DEPENDENCIES = zlib libestr liblogging json-c host-pkgconf
 > 
 
 
