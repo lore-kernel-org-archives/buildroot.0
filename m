@@ -1,178 +1,83 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue,  2 Feb 2016 18:37:42 +0100
-Subject: [Buildroot] [PATCH v2] gr-osmosdr: new package
-Message-ID: <1454434662-4679-1-git-send-email-gwenj@trabucayre.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Feb 2016 17:54:08 +0100
+Subject: [Buildroot] [git commit] python-click: new package
+Message-ID: <20160202165454.CD00680AE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=45c903065dff389e1885f976d758465fbdcb3e56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support for gr-osmosdr - a GNU Radio block for interfacing with various
-radio hardware.
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+[Thomas:
+ - rewrap Config.in help text, lines were slightly too long
+ - remove excessive empty line at end of Config.in
+ - specify BSD-3c as the license, since BSD is not specific enough.]
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-Changes v1 -> v2:
-	- use github instead of tarball (issue with hash changed for same archive
-	  content);
-	- use 'select' gnuradio instead of 'depends on' gnuradio;
-	- due to previous point add gnuradio list of  dependencies;
-	- gr-osmosdr need gnuradio-block -> add select.
----
- package/Config.in                  |  1 +
- package/gr-osmosdr/Config.in       | 56 ++++++++++++++++++++++++++++++++++++++
- package/gr-osmosdr/gr-osmosdr.hash |  2 ++
- package/gr-osmosdr/gr-osmosdr.mk   | 55 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 114 insertions(+)
- create mode 100644 package/gr-osmosdr/Config.in
- create mode 100644 package/gr-osmosdr/gr-osmosdr.hash
- create mode 100644 package/gr-osmosdr/gr-osmosdr.mk
+ package/Config.in                      |  1 +
+ package/python-click/Config.in         |  7 +++++++
+ package/python-click/python-click.hash |  3 +++
+ package/python-click/python-click.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index a491d85..9ff97c0 100644
+index a491d85..da49c1a 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1271,6 +1271,7 @@ menu "Miscellaneous"
- 	source "package/empty/Config.in"
- 	source "package/gnuradio/Config.in"
- 	source "package/googlefontdirectory/Config.in"
-+	source "package/gr-osmosdr/Config.in"
- 	source "package/haveged/Config.in"
- 	source "package/mcrypt/Config.in"
- 	source "package/mobile-broadband-provider-info/Config.in"
-diff --git a/package/gr-osmosdr/Config.in b/package/gr-osmosdr/Config.in
+@@ -627,6 +627,7 @@ menu "External python modules"
+ 	source "package/python-cffi/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
++	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+diff --git a/package/python-click/Config.in b/package/python-click/Config.in
 new file mode 100644
-index 0000000..9218fdc
+index 0000000..c026998
 --- /dev/null
-+++ b/package/gr-osmosdr/Config.in
-@@ -0,0 +1,56 @@
-+comment "gr-omsmosdr needs a toolchain w/ C++, NPTL, wchar, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+
-+config BR2_PACKAGE_GR_OSMOSDR
-+	bool "gr-osmosdr"
-+	depends on BR2_INSTALL_LIBSTDCPP # gnuradio
-+	depends on !BR2_STATIC_LIBS # gnuradio
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # gnuradio
-+	depends on BR2_USE_MMU # use fork()
-+	depends on BR2_USE_WCHAR # gnuradio
-+	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS # gnuradio
-+	select BR2_PACKAGE_GNURADIO
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
++++ b/package/python-click/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_CLICK
++	bool "python-click"
 +	help
-+	  GNU Radio block for interfacing with various radio hardware
++	  A simple wrapper around optparse for powerful command line
++	  utilities.
 +
-+if BR2_PACKAGE_GR_OSMOSDR
-+
-+comment "gr-osmosdr-python needs gnuradio w/ python support"
-+	depends on !BR2_PACKAGE_GNURADIO_PYTHON
-+
-+config BR2_PACKAGE_GR_OSMOSDR_PYTHON
-+	bool "python support"
-+	depends on BR2_PACKAGE_GNURADIO_PYTHON
-+	help
-+	  Enable Python support
-+
-+config BR2_PACKAGE_GR_OSMOSDR_IQFILE
-+	bool "IQ File Source support"
-+	help
-+	  Enable IQ File Source support
-+
-+comment "gr-osmodr-rtlsdr needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_GR_OSMOSDR_RTLSDR
-+	bool "Osmocom RTLSDR support"
-+	select BR2_PACKAGE_LIBRTLSDR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # librtlsdr
-+	help
-+	  Enable Osmocom RTLSDR support
-+
-+config BR2_PACKAGE_GR_OSMOSDR_RTLSDR_TCP
-+	bool "RTLSDR TCP Client support"
-+	help
-+	  Enable RTLSDR TCP client support
-+
-+config BR2_PACKAGE_GR_OSMOSDR_RFSPACE
-+	bool "RFSPACE Receivers support"
-+	help
-+	  Enable RFSPACE Receivers support
-+
-+endif
-diff --git a/package/gr-osmosdr/gr-osmosdr.hash b/package/gr-osmosdr/gr-osmosdr.hash
++	  https://pypi.python.org/pypi/click
+diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
 new file mode 100644
-index 0000000..ce6e84a
+index 0000000..72aab0a
 --- /dev/null
-+++ b/package/gr-osmosdr/gr-osmosdr.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated:
-+sha256 d40462dddc0ebd769b2df3c6ad6fe82c9e9a4a73f7b3c5ce53efbce724906290 gr-osmosdr-a45968f3381f33b86ca344bb76bd62c131d98d93.tar.gz
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
++++ b/package/python-click/python-click.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=83252a8095397b1f5f710fdd58b484d9, sha256 locally computed.
++md5	83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
++sha256	fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
+diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
 new file mode 100644
-index 0000000..3f32220
+index 0000000..19ae187
 --- /dev/null
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -0,0 +1,55 @@
++++ b/package/python-click/python-click.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# gr-osmosdr
++# python-click
 +#
 +################################################################################
 +
-+GR_OSMOSDR_VERSION = a45968f3381f33b86ca344bb76bd62c131d98d93
-+GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,$(GR_OSMOSDR_VERSION))
-+GR_OSMOSDR_LICENSE = GPLv3+
-+GR_OSMOSDR_LICENSE_FILES = COPYING
++PYTHON_CLICK_VERSION = 6.2
++PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
++PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
++PYTHON_CLICK_LICENSE = BSD-3c
++PYTHON_CLICK_LICENSE_FILES = LICENSE
++PYTHON_CLICK_SETUP_TYPE = setuptools
 +
-+# gr-osmosdr prevents doing an in-source-tree build
-+GR_OSMOSDR_SUPPORTS_IN_SOURCE_BUILD = no
-+
-+GR_OSMOSDR_DEPENDENCIES = gnuradio
-+
-+GR_OSMOSDR_CONF_OPTS = -DENABLE_DEFAULT=OFF
-+
-+# For third-party blocks, the gr-osmosdr libraries are mandatory at
-+# compile time.
-+GR_OSMOSDR_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_PYTHON),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=ON
-+GR_OSMOSDR_DEPENDENCIES += python
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_PYTHON=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_IQFILE),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_FILE=ON
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_FILE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_RTLSDR),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL=ON
-+GR_OSMOSDR_DEPENDENCIES += librtlsdr
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_RTLSDR_TCP),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL_TCP=ON
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RTL_TCP=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GR_OSMOSDR_RFSPACE),y)
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RFSPACE=ON
-+else
-+GR_OSMOSDR_CONF_OPTS += -DENABLE_RFSPACE=OFF
-+endif
-+
-+$(eval $(cmake-package))
--- 
-2.4.10
++$(eval $(python-package))
