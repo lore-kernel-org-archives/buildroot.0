@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 14:39:16 +0100
-Subject: [Buildroot] [PATCH 07/19] python-netaddr: new package
-In-Reply-To: <1454373899-22481-8-git-send-email-mc5686@mclink.it>
+Date: Tue, 2 Feb 2016 14:40:12 +0100
+Subject: [Buildroot] [PATCH 02/19] python-characteristic: new package
+In-Reply-To: <1454373899-22481-3-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-8-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ks_nJsA=wDhz8+Tuw+yHnACr30zx3f3KDnncAFcL3Oaaw@mail.gmail.com>
+ <1454373899-22481-3-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ksTFjWQ-dhftmF_66CXbfbkbnBeJuH_diiiFTm89crD_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,71 @@ To: buildroot@busybox.net
 
 On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
 > ---
->  package/Config.in                          |  1 +
->  package/python-netaddr/Config.in           |  7 +++++++
->  package/python-netaddr/python-netaddr.hash |  3 +++
->  package/python-netaddr/python-netaddr.mk   | 14 ++++++++++++++
+>  package/Config.in                                        |  1 +
+>  package/python-characteristic/Config.in                  |  7 +++++++
+>  package/python-characteristic/python-characteristic.hash |  3 +++
+>  package/python-characteristic/python-characteristic.mk   | 14 ++++++++++++++
 >  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-netaddr/Config.in
->  create mode 100644 package/python-netaddr/python-netaddr.hash
->  create mode 100644 package/python-netaddr/python-netaddr.mk
+>  create mode 100644 package/python-characteristic/Config.in
+>  create mode 100644 package/python-characteristic/python-characteristic.hash
+>  create mode 100644 package/python-characteristic/python-characteristic.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 80a4201..9b6e6bc 100644
+> index dd6887b..21348d8 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -667,6 +667,7 @@ menu "External python modules"
->         source "package/python-meld3/Config.in"
->         source "package/python-mistune/Config.in"
->         source "package/python-msgpack/Config.in"
-> +       source "package/python-netaddr/Config.in"
->         source "package/python-netifaces/Config.in"
->         source "package/python-networkmanager/Config.in"
->         source "package/python-nfc/Config.in"
-> diff --git a/package/python-netaddr/Config.in b/package/python-netaddr/Config.in
+> @@ -623,6 +623,7 @@ menu "External python modules"
+>         source "package/python-can/Config.in"
+>         source "package/python-certifi/Config.in"
+>         source "package/python-cffi/Config.in"
+> +       source "package/python-characteristic/Config.in"
+>         source "package/python-cheetah/Config.in"
+>         source "package/python-cherrypy/Config.in"
+>         source "package/python-coherence/Config.in"
+> diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
 > new file mode 100644
-> index 0000000..8e58a34
+> index 0000000..d1c4faa
 > --- /dev/null
-> +++ b/package/python-netaddr/Config.in
+> +++ b/package/python-characteristic/Config.in
 > @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_NETADDR
-> +       bool "python-netaddr"
+> +config BR2_PACKAGE_PYTHON_CHARACTERISTIC
+> +       bool "python-characteristic"
 > +       help
-> +         A network address manipulation library for Python.
+> +         Python attributes without boilerplate.
 > +
-> +         https://pypi.python.org/pypi/netaddr
+> +         https://pypi.python.org/pypi/characteristic
 > +
-> diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
+> diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
 > new file mode 100644
-> index 0000000..5fcdda4
+> index 0000000..e9ef879
 > --- /dev/null
-> +++ b/package/python-netaddr/python-netaddr.hash
+> +++ b/package/python-characteristic/python-characteristic.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c65bb34f8bedfbbca0b316c490cd13a0, sha256 locally computed.
-> +md5    c65bb34f8bedfbbca0b316c490cd13a0  netaddr-0.7.18.tar.gz
-> +sha256 a1f5c9fcf75ac2579b9995c843dade33009543c04f218ff7c007b3c81695bd19  netaddr-0.7.18.tar.gz
-> diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
+> +# Locally computed.
+> +md5    b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
+
+no reference to upstream MD5
+
+> +sha256 ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+> diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
 > new file mode 100644
-> index 0000000..2a4e40c
+> index 0000000..dc3e8bb
 > --- /dev/null
-> +++ b/package/python-netaddr/python-netaddr.mk
+> +++ b/package/python-characteristic/python-characteristic.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-netaddr
+> +# python-characteristic
 > +#
 > +################################################################################
 > +
-> +PYTHON_NETADDR_VERSION = 0.7.18
-> +PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
-> +PYTHON_NETADDR_SITE = http://pypi.python.org/packages/source/n/netaddr
-> +PYTHON_NETADDR_LICENSE = BSD
-> +PYTHON_NETADDR_LICENSE_FILES = LICENSE
-> +PYTHON_NETADDR_SETUP_TYPE = distutils
+> +PYTHON_CHARACTERISTIC_VERSION = 14.3.0
+> +PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
+> +PYTHON_CHARACTERISTIC_SITE = http://pypi.python.org/packages/source/c/characteristic
+> +PYTHON_CHARACTERISTIC_LICENSE = MIT
+> +PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
+> +PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
