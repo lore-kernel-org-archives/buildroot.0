@@ -1,91 +1,151 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Feb 2016 01:02:18 +0100
-Subject: [Buildroot] [git commit] unrar: new package
-Message-ID: <20160202000441.EF43E80365@busybox.osuosl.org>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Tue,  2 Feb 2016 01:44:40 +0100
+Subject: [Buildroot] [PATCH 00/19] Changes needed to compile crossbar
+Message-ID: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dd53276b09b857581b03e65857339cdc0e6e771
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All these new packages, along with two upgrades (python-jinja2 and python-msgpack) and
+several packages from patchwork (python-cryptography, python-pyopenssl, python-pycparser,
+python-cffi, libffi and python-cryptography), are needed to compile and run crossbar.
+Please note this patch-set is not "standalone".
 
-[Peter: also pass TARGET_LDFLAGS]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in        |  1 +
- package/unrar/Config.in  | 13 +++++++++++++
- package/unrar/unrar.hash |  2 ++
- package/unrar/unrar.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
+Crossbar is is an open-source WAMP application router that allows to build advanced 
+applications from loosely-coupled components that can talk in real-time with each other.
 
-diff --git a/package/Config.in b/package/Config.in
-index 09c2b40..a10d926 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -56,6 +56,7 @@ endif
- 	source "package/lz4/Config.in"
- 	source "package/lzip/Config.in"
- 	source "package/lzop/Config.in"
-+	source "package/unrar/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/unzip/Config.in"
- endif
-diff --git a/package/unrar/Config.in b/package/unrar/Config.in
-new file mode 100644
-index 0000000..29696c3
---- /dev/null
-+++ b/package/unrar/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_UNRAR
-+	bool "unrar"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	help
-+	  RAR file uncompressor.
-+
-+	  http://www.rarlab.com/rar_add.htm
-+
-+comment "unrar needs a toolchain w/ C++, wchar, threads"
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/unrar/unrar.hash b/package/unrar/unrar.hash
-new file mode 100644
-index 0000000..4490d70
---- /dev/null
-+++ b/package/unrar/unrar.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256	ff593728aed0ac865908b8ea52cff449a4c298f095db2f3d27438ffbc3e35d5b	unrarsrc-5.3.9.tar.gz
-diff --git a/package/unrar/unrar.mk b/package/unrar/unrar.mk
-new file mode 100644
-index 0000000..89dff9b
---- /dev/null
-+++ b/package/unrar/unrar.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# unrar
-+#
-+################################################################################
-+
-+UNRAR_VERSION = 5.3.9
-+UNRAR_SOURCE = unrarsrc-$(UNRAR_VERSION).tar.gz
-+UNRAR_SITE = http://www.rarlab.com/rar
-+UNRAR_LICENSE = unrar
-+UNRAR_LICENSE_FILES = license.txt
-+
-+define UNRAR_BUILD_CMDS
-+	$(MAKE) CXX="$(TARGET_CXX)" STRIP="/bin/true" \
-+		CXXFLAGS="$(TARGET_CXXFLAGS) -pthread" \
-+		LDFLAGS="$(TARGET_LDFLAGS) -pthread" -C $(@D)
-+endef
-+
-+define UNRAR_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
+Further info about crossbar can be found at: http://crossbar.io/
+
+Mauro Condarelli (19):
+  python-jinja2: bump to 2.8
+  python-characteristic: new package
+  python-cbor: new package
+  python-click: new package
+  python-lmdb: new package
+  python-mistune: new package
+  python-netaddr: new package
+  python-pycparser: python runtime added
+  python-pygments: new package
+  python-pynacl: new package
+  python-pytrie: new package
+  python-service-identity: new package
+  python-shutilwhich: new package
+  python-treq: new package
+  python-txaio: new package
+  python-msgpack: bump to 0.4.7
+  python-pyasn-modules: new package
+  python-autobahn: new package
+  python-crossbar: new package
+
+ package/Config.in                                  | 17 +++++++++++++++
+ package/python-autobahn/Config.in                  |  9 ++++++++
+ package/python-autobahn/python-autobahn.hash       |  3 +++
+ package/python-autobahn/python-autobahn.mk         | 15 ++++++++++++++
+ package/python-cbor/Config.in                      |  7 +++++++
+ package/python-cbor/python-cbor.hash               |  3 +++
+ package/python-cbor/python-cbor.mk                 | 13 ++++++++++++
+ package/python-characteristic/Config.in            |  7 +++++++
+ .../python-characteristic.hash                     |  3 +++
+ .../python-characteristic/python-characteristic.mk | 14 +++++++++++++
+ package/python-click/Config.in                     |  7 +++++++
+ package/python-click/python-click.hash             |  3 +++
+ package/python-click/python-click.mk               | 14 +++++++++++++
+ package/python-crossbar/Config.in                  | 24 ++++++++++++++++++++++
+ package/python-crossbar/python-crossbar.hash       |  3 +++
+ package/python-crossbar/python-crossbar.mk         | 17 +++++++++++++++
+ package/python-jinja2/python-jinja2.hash           |  6 +++---
+ package/python-jinja2/python-jinja2.mk             |  2 +-
+ package/python-lmdb/Config.in                      |  8 ++++++++
+ package/python-lmdb/python-lmdb.hash               |  3 +++
+ package/python-lmdb/python-lmdb.mk                 | 14 +++++++++++++
+ package/python-mistune/Config.in                   |  8 ++++++++
+ package/python-mistune/python-mistune.hash         |  3 +++
+ package/python-mistune/python-treq.mk              | 14 +++++++++++++
+ package/python-msgpack/Config.in                   |  1 -
+ package/python-msgpack/python-msgpack.hash         |  3 +++
+ package/python-msgpack/python-msgpack.mk           |  2 +-
+ package/python-netaddr/Config.in                   |  7 +++++++
+ package/python-netaddr/python-netaddr.hash         |  3 +++
+ package/python-netaddr/python-netaddr.mk           | 14 +++++++++++++
+ package/python-pyasn-modules/Config.in             |  8 ++++++++
+ .../python-pyasn-modules/python-pyasn-modules.hash |  3 +++
+ .../python-pyasn-modules/python-pyasn-modules.mk   | 15 ++++++++++++++
+ package/python-pycparser/Config.in                 |  6 ++++++
+ package/python-pycparser/python-pycparser.mk       |  1 +
+ package/python-pygments/Config.in                  |  7 +++++++
+ package/python-pygments/python-pygments.hash       |  3 +++
+ package/python-pygments/python-pygments.mk         | 14 +++++++++++++
+ package/python-pynacl/Config.in                    |  9 ++++++++
+ package/python-pynacl/python-pynacl.hash           |  3 +++
+ package/python-pynacl/python-pynacl.mk             | 16 +++++++++++++++
+ package/python-pytrie/Config.in                    |  7 +++++++
+ package/python-pytrie/python-pytrie.hash           |  3 +++
+ package/python-pytrie/python-pytrie.mk             | 14 +++++++++++++
+ package/python-service-identity/Config.in          | 11 ++++++++++
+ .../python-service-identity.hash                   |  3 +++
+ .../python-service-identity.mk                     | 15 ++++++++++++++
+ package/python-shutilwhich/Config.in               |  8 ++++++++
+ package/python-shutilwhich/python-shutilwhich.hash |  3 +++
+ package/python-shutilwhich/python-shutilwhich.mk   | 13 ++++++++++++
+ package/python-treq/Config.in                      | 11 ++++++++++
+ package/python-treq/python-treq.hash               |  3 +++
+ package/python-treq/python-treq.mk                 | 15 ++++++++++++++
+ package/python-txaio/Config.in                     |  8 ++++++++
+ package/python-txaio/python-txaio.hash             |  3 +++
+ package/python-txaio/python-txaio.mk               | 15 ++++++++++++++
+ 56 files changed, 458 insertions(+), 6 deletions(-)
+ create mode 100644 package/python-autobahn/Config.in
+ create mode 100644 package/python-autobahn/python-autobahn.hash
+ create mode 100644 package/python-autobahn/python-autobahn.mk
+ create mode 100644 package/python-cbor/Config.in
+ create mode 100644 package/python-cbor/python-cbor.hash
+ create mode 100644 package/python-cbor/python-cbor.mk
+ create mode 100644 package/python-characteristic/Config.in
+ create mode 100644 package/python-characteristic/python-characteristic.hash
+ create mode 100644 package/python-characteristic/python-characteristic.mk
+ create mode 100644 package/python-click/Config.in
+ create mode 100644 package/python-click/python-click.hash
+ create mode 100644 package/python-click/python-click.mk
+ create mode 100644 package/python-crossbar/Config.in
+ create mode 100644 package/python-crossbar/python-crossbar.hash
+ create mode 100644 package/python-crossbar/python-crossbar.mk
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
+ create mode 100644 package/python-mistune/Config.in
+ create mode 100644 package/python-mistune/python-mistune.hash
+ create mode 100644 package/python-mistune/python-treq.mk
+ create mode 100644 package/python-msgpack/python-msgpack.hash
+ create mode 100644 package/python-netaddr/Config.in
+ create mode 100644 package/python-netaddr/python-netaddr.hash
+ create mode 100644 package/python-netaddr/python-netaddr.mk
+ create mode 100644 package/python-pyasn-modules/Config.in
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
+ create mode 100644 package/python-pycparser/Config.in
+ create mode 100644 package/python-pygments/Config.in
+ create mode 100644 package/python-pygments/python-pygments.hash
+ create mode 100644 package/python-pygments/python-pygments.mk
+ create mode 100644 package/python-pynacl/Config.in
+ create mode 100644 package/python-pynacl/python-pynacl.hash
+ create mode 100644 package/python-pynacl/python-pynacl.mk
+ create mode 100644 package/python-pytrie/Config.in
+ create mode 100644 package/python-pytrie/python-pytrie.hash
+ create mode 100644 package/python-pytrie/python-pytrie.mk
+ create mode 100644 package/python-service-identity/Config.in
+ create mode 100644 package/python-service-identity/python-service-identity.hash
+ create mode 100644 package/python-service-identity/python-service-identity.mk
+ create mode 100644 package/python-shutilwhich/Config.in
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
+ create mode 100644 package/python-treq/Config.in
+ create mode 100644 package/python-treq/python-treq.hash
+ create mode 100644 package/python-treq/python-treq.mk
+ create mode 100644 package/python-txaio/Config.in
+ create mode 100644 package/python-txaio/python-txaio.hash
+ create mode 100644 package/python-txaio/python-txaio.mk
+
+-- 
+2.1.4
