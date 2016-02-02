@@ -1,63 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 16:53:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/lshw: fix musl build
-In-Reply-To: <1454194758-19349-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1454194758-19349-1-git-send-email-bernd.kuhls@t-online.de>
- <1454194758-19349-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0D0DF.5020808@mind.be>
+Date: Tue, 2 Feb 2016 16:54:26 +0100
+Subject: [Buildroot] [PATCH v2] package/iperf3: fix musl build
+In-Reply-To: <1454178476-3057-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454178476-3057-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0D132.5000203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-01-16 23:59, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/aa3/aa3abc215b7a4e95b60be9a635758d8448e4959f/
-> http://autobuild.buildroot.net/results/075/075423a70b9bb80b2f13cac4fb95502180e68b43/
-> http://autobuild.buildroot.net/results/61f/61fb9b93af41b565fd44bab95955ab6f63c1f1ad/
+On 30-01-16 19:27, Bernd Kuhls wrote:
+> Ported -D_GNU_SOURCE from https://dev.openwrt.org/changeset/45103
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/lshw/lshw.hash | 2 ++
->  package/lshw/lshw.mk   | 3 +++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
-> index 4f3a2e8..416d496 100644
-> --- a/package/lshw/lshw.hash
-> +++ b/package/lshw/lshw.hash
-> @@ -1,2 +1,4 @@
->  # Locally calculated
->  sha256	eb9cc053fa0f1e78685cb695596e73931bfb55d2377e3bc3b8b94aff4c5a489c	lshw-B.02.17.tar.gz
-> +sha256	2e5a3d63da8475db17fd90969bcb1930cf19d2b8da7be41edeea5c2a53878382	no-private-uint.patch
-> +sha256	c8365f7ac8fc7a751c78d89ab446111bb1a235bc977a1b21e1b826c2e62361d1	basename-limits-long-bits.patch
-> diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
-> index f516933..a4a2603 100644
-> --- a/package/lshw/lshw.mk
-> +++ b/package/lshw/lshw.mk
-> @@ -6,6 +6,9 @@
->  
->  LSHW_VERSION = B.02.17
->  LSHW_SITE = http://ezix.org/software/files
-> +LSHW_PATCH = \
-> +	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/basename-limits-long-bits.patch \
 
- I'm not so fond of this one, I think instead it could be just a const_cast.
-
- But it's OK as is, it just needs to be downloaded and added as a buildroot
-patch. With that:
-
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
  Regards,
  Arnout
 
-> +	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/no-private-uint.patch
->  LSHW_LICENSE = GPLv2
->  LSHW_LICENSE_FILES = COPYING
+> ---
+>  .../iperf3/0002-Fix-build-using-musl-libc.patch    | 43 ++++++++++++++++++++++
+>  package/iperf3/iperf3.mk                           |  2 +
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 package/iperf3/0002-Fix-build-using-musl-libc.patch
+> 
+> diff --git a/package/iperf3/0002-Fix-build-using-musl-libc.patch b/package/iperf3/0002-Fix-build-using-musl-libc.patch
+> new file mode 100644
+> index 0000000..f220360
+> --- /dev/null
+> +++ b/package/iperf3/0002-Fix-build-using-musl-libc.patch
+> @@ -0,0 +1,43 @@
+> +From 1fe02385b60c9dcd8a04b8bd3ff5cff120ec35a6 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sat, 30 Jan 2016 19:23:20 +0100
+> +Subject: [PATCH 1/1] Fix build using musl libc
+> +
+> +Fixes https://github.com/esnet/iperf/issues/331
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> +Patch sent upstream: https://github.com/esnet/iperf/pull/344
+> +
+> + src/cjson.h | 2 ++
+> + src/timer.h | 1 +
+> + 2 files changed, 3 insertions(+)
+> +
+> +diff --git a/src/cjson.h b/src/cjson.h
+> +index d4449e6..7af19a9 100644
+> +--- a/src/cjson.h
+> ++++ b/src/cjson.h
+> +@@ -23,6 +23,8 @@
+> + #ifndef cJSON__h
+> + #define cJSON__h
+> + 
+> ++#include <stdint.h>
+> ++
+> + #ifdef __cplusplus
+> + extern "C"
+> + {
+> +diff --git a/src/timer.h b/src/timer.h
+> +index 0f9c5eb..9b22b7f 100644
+> +--- a/src/timer.h
+> ++++ b/src/timer.h
+> +@@ -30,6 +30,7 @@
+> + #ifndef __TIMER_H
+> + #define __TIMER_H
+> + 
+> ++#include <stdint.h>
+> + #include <sys/time.h>
+> + 
+> + /* TimerClientData is an opaque value that tags along with a timer.  The
+> +-- 
+> +2.7.0.rc3
+> +
+> diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+> index 885a599..74d6cce 100644
+> --- a/package/iperf3/iperf3.mk
+> +++ b/package/iperf3/iperf3.mk
+> @@ -9,4 +9,6 @@ IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
+>  IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+>  IPERF3_LICENSE_FILES = LICENSE
 >  
+> +IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+> +
+>  $(eval $(autotools-package))
 > 
 
 
