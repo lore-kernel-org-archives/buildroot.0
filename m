@@ -1,71 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  2 Feb 2016 09:12:46 +0100
-Subject: [Buildroot] [PATCH] kodi,
-	mpd: fix samba4 related dependency mistakes
-Message-ID: <1454400766-10041-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 09:11:56 +0100
+Subject: [Buildroot] [PATCH 10/19] python-pynacl: new package
+In-Reply-To: <1454373899-22481-11-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-11-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kvip9aakRqCEqr5Xp_LZv92RNXvSDmCYs37yp93rnNcVg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit fixes the following kconfig warning:
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                        |  1 +
+>  package/python-pynacl/Config.in          |  9 +++++++++
+>  package/python-pynacl/python-pynacl.hash |  3 +++
+>  package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
+>  4 files changed, 29 insertions(+)
+>  create mode 100644 package/python-pynacl/Config.in
+>  create mode 100644 package/python-pynacl/python-pynacl.hash
+>  create mode 100644 package/python-pynacl/python-pynacl.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 6b84875..9dc5123 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -687,6 +687,7 @@ menu "External python modules"
+>         source "package/python-pygame/Config.in"
+>         source "package/python-pygments/Config.in"
+>         source "package/python-pyinotify/Config.in"
+> +       source "package/python-pynacl/Config.in"
+>         source "package/python-pyopenssl/Config.in"
+>         source "package/python-pyparsing/Config.in"
+>         source "package/python-pypcap/Config.in"
+> diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+> new file mode 100644
+> index 0000000..2d7c9dd
+> --- /dev/null
+> +++ b/package/python-pynacl/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_PYNACL
+> +       bool "python-pynacl"
+> +       select BR2_PACKAGE_LIBSODIUM
+> +       select BR2_PACKAGE_PYTHON_SIX
 
-   warning: (BR2_PACKAGE_KODI_LIBSMBCLIENT && BR2_PACKAGE_MPD_LIBSMBCLIENT) selects BR2_PACKAGE_SAMBA4 which has unmet direct dependencies (!BR2_PACKAGE_SAMBA && BR2_USE_MMU && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_NATIVE_RPC && BR2_TOOLCHAIN_HAS_THREADS && !BR2_STATIC_LIBS && !BR2_nios2)
+always add "# runtime" comment after a runtime dependency
 
-by updating the kodi and mpd Config.in files to properly take into
-account the dependencies of the BR2_PACKAGE_SAMBA4 option that they
-select.
+python-six is a runtime one and libsodium is a buildtime dependency
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kodi/Config.in | 5 +++--
- package/mpd/Config.in  | 8 ++++++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+this is a cffi-backend package, so add
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index e697b52..a657f5b 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -208,12 +208,13 @@ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- comment "shairport support needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
--comment "samba support needs an (e)glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+comment "samba support needs an (e)glibc toolchain w/ RPC"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 
- config BR2_PACKAGE_KODI_LIBSMBCLIENT
- 	bool "samba"
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_SAMBA4
- 	help
- 	  Enable Samba support
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index be0843f..db79b08 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -189,13 +189,17 @@ config BR2_PACKAGE_MPD_LIBNFS
- comment "nfs support needs a toolchain w/ threads support"
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_HAS_NATIVE_RPC)
- 
--comment "samba support needs an (e)glibc toolchain"
--	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+comment "samba support needs an (e)glibc toolchain w/ dynamic library, RPC"
-+	depends on !BR2_nios2
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 
- config BR2_PACKAGE_MPD_LIBSMBCLIENT
- 	bool "samba"
- 	depends on !BR2_nios2 # samba
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_PACKAGE_SAMBA4
- 	help
- 	  Enable Samba support.
--- 
-2.6.4
+select select BR2_PACKAGE_PYTHON_CFFI # runtime
+
+> +       help
+> +         Python binding to the Networking and Cryptography (NaCl) library.
+> +
+> +         https://pypi.python.org/pypi/PyNaCl
+> +
+> diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
+> new file mode 100644
+> index 0000000..7035ac7
+> --- /dev/null
+> +++ b/package/python-pynacl/python-pynacl.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
+> +md5    12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
+> +sha256 d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
+> diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
+> new file mode 100644
+> index 0000000..e82611e
+> --- /dev/null
+> +++ b/package/python-pynacl/python-pynacl.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# python-pynacl
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYNACL_VERSION = 1.0.1
+> +PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
+> +PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
+> +PYTHON_PYNACL_LICENSE = Apache-2.0
+> +PYTHON_PYNACL_LICENSE_FILES = LICENSE
+> +PYTHON_PYNACL_SETUP_TYPE = setuptools
+> +PYTHON_PYNACL_DEPENDENCIES = libsodium python-six
+
+python-six is a runtime dependency, so remove,but add host-python-cffi
+
+> +PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
