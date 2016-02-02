@@ -1,41 +1,76 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Feb 2016 14:27:03 +0100
-Subject: [Buildroot] glibc and --enable-kernel
-In-Reply-To: <56AAA5BE.2050306@mind.be> (Arnout Vandecappelle's message of
- "Fri, 29 Jan 2016 00:35:26 +0100")
-References: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
- <20160127092119.7cf8953d@free-electrons.com>
- <20160128025537.GB5589@tungsten.ozlabs.ibm.com>
- <20160128093618.42baf311@free-electrons.com>
- <56AAA5BE.2050306@mind.be>
-Message-ID: <87egcv5jko.fsf@dell.be.48ers.dk>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Tue,  2 Feb 2016 14:34:19 +0100
+Subject: [Buildroot] [PATCH] nfs-utils: Fix autobuilders issues
+Message-ID: <1454420059-11641-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+This patch fixes
+http://autobuild.buildroot.net/results/948/948f81d7ed2c080a675ee9fec754f6fda1fd905f/
 
-Hi,
+The patches has been sent upstream:
+http://article.gmane.org/gmane.linux.nfs/76139
 
- >> The only reason that may encourage you to use
- >> BR2_TOOLCHAIN_HEADERS_AT_LEAST instead of BR2_DEFAULT_KERNEL_HEADERS is
- >> an upcoming patch from Yann E. Morin (already submitted but not merged
- >> yet), which allows to tell Buildroot to use the kernel version
- >> specified in the "Kernel" menu as the version for the kernel headers.
- >> In this case, I believe BR2_DEFAULT_KERNEL_HEADERS will not be correct,
- >> while BR2_TOOLCHAIN_HEADERS_AT_LEAST will be.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ ...4-mountd-Add-check-for-struct-file_handle.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
 
- >  A minor issue with _AT_LEAST, however, is that it will probably go through
- > deprecation eventually. Right now we have "2.6" as the lowest _AT_LEAST - how
- > will glibc deal with that? I can imagine at some point we'll deprecate 3,1, 3.2,
- > and 3.3, so if you're using 3.3 headers the _AT_LEAST will become 3.0. Right
- > now, we already have that for 2.6.3x, which will fall back to 2.6.0 (I guess -
- > should be checked if glibc doesn't barf on 2.6 without .0).
-
-If it does, then I suggest we filter out --enable-kernel for the oldest
-variant, so we're back to how it works now as a lowest common denominator.
-
+diff --git a/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch b/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
+new file mode 100644
+index 0000000..7aca266
+--- /dev/null
++++ b/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
+@@ -0,0 +1,46 @@
++From 3c23b3ea7f5069e8fd4d5758704cd968504f1079 Mon Sep 17 00:00:00 2001
++From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++Date: Tue, 2 Feb 2016 10:07:22 +0100
++Subject: [PATCH] mountd: Add check for 'struct file_handle'
++
++The code to check if name_to_handle_at() is implemented generates only a
++warning but with some toolchain it doesn't fail to link (the function must be
++implemented somewhere).
++However the "struct file_handle" type is not available.
++
++So, this patch adds a check for this struct.
++
++Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++---
++ configure.ac         | 1 +
++ utils/mountd/cache.c | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 25d2ba4..913a86f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -425,6 +425,7 @@ AC_TYPE_PID_T
++ AC_TYPE_SIZE_T
++ AC_HEADER_TIME
++ AC_STRUCT_TM
+++AC_CHECK_TYPES([struct file_handle])
++ 
++ dnl *************************************************************
++ dnl Check for functions
++diff --git a/utils/mountd/cache.c b/utils/mountd/cache.c
++index 7847446..dc64f6d 100644
++--- a/utils/mountd/cache.c
+++++ b/utils/mountd/cache.c
++@@ -424,7 +424,7 @@ static int same_path(char *child, char *parent, int len)
++ 	if (count_slashes(p) != count_slashes(parent))
++ 		return 0;
++ 
++-#if HAVE_NAME_TO_HANDLE_AT
+++#if defined(HAVE_NAME_TO_HANDLE_AT) && defined(HAVE_STRUCT_FILE_HANDLE)
++ 	struct {
++ 		struct file_handle fh;
++ 		unsigned char handle[128];
++-- 
++2.7.0
++
 -- 
-Bye, Peter Korsgaard
+2.7.0
