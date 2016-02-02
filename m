@@ -1,76 +1,89 @@
-From: Mike Frysinger <vapier@gentoo.org>
-Date: Tue, 2 Feb 2016 03:15:44 -0500
-Subject: [Buildroot] uClibc-admins post from martin@barkynet.com
- requires approval
-In-Reply-To: <20151202233118.GH23754@vapier.lan>
-References: <mailman.2362.1449086836.25824.uclibc-admins@busybox.net>
- <CAC1BbcQHvWVm9LxysSR=6605h1C7Kk-Dg2thMNE4CKq3_KpPNw@mail.gmail.com>
- <878u5cfs82.fsf@dell.be.48ers.dk>
- <20151202220028.GG23754@vapier.lan>
- <87a8pse9tb.fsf@dell.be.48ers.dk>
- <20151202233118.GH23754@vapier.lan>
-Message-ID: <20160202081544.GA7732@vapier.lan>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 09:16:05 +0100
+Subject: [Buildroot] [PATCH 05/19] python-lmdb: new package
+In-Reply-To: <1454373899-22481-6-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-6-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kuRecy1nAKiFLKD3WpkNvB=UiiTo1OXnDC_AwLGbOOhvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02 Dec 2015 18:31, Mike Frysinger wrote:
-> On 02 Dec 2015 23:59, Peter Korsgaard wrote:
-> > >>>>> "Mike" == Mike Frysinger <vapier@gentoo.org> writes:
-> > 
-> >  > i've added a bugzilla component, but not sure that'll really help smooth
-> >  > over this scenario.  i looked at the API available, but i'm not seeing a
-> >  > callback to update the versions list.
-> >  > 	https://www.bugzilla.org/docs/4.4/en/html/api/
-> > 
-> >  > there is one to get the current list:
-> >  > 	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html
-> > 
-> >  > maybe the buildroot release scripts can print a reminder ?
-> > 
-> > It actually already does, it was just late and I forgot:
-> > 
-> > echo "also don't forget to add the version to bugzilla"
-> 
-> there is an update API:
-> 	https://www.bugzilla.org/docs/4.4/en/html/api/Bugzilla/WebService/Product.html#update
-> 
-> but version fields aren't yet exposed.  there's an open bug upstream w/code,
-> but looks like things have stalled.  i'll let you know if/when that shows up.
-> 	https://bugzilla.mozilla.org/show_bug.cgi?id=777047
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                    |  1 +
+>  package/python-lmdb/Config.in        |  8 ++++++++
+>  package/python-lmdb/python-lmdb.hash |  3 +++
+>  package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/python-lmdb/Config.in
+>  create mode 100644 package/python-lmdb/python-lmdb.hash
+>  create mode 100644 package/python-lmdb/python-lmdb.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index c4ee543..4294813 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -658,6 +658,7 @@ menu "External python modules"
+>         source "package/python-json-schema-validator/Config.in"
+>         source "package/python-keyring/Config.in"
+>         source "package/python-libconfig/Config.in"
+> +       source "package/python-lmdb/Config.in"
+>         source "package/python-lxml/Config.in"
+>         source "package/python-mad/Config.in"
+>         source "package/python-mako/Config.in"
+> diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
+> new file mode 100644
+> index 0000000..06d6876
+> --- /dev/null
+> +++ b/package/python-lmdb/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_LMDB
+> +       bool "python-lmdb"
+> +       select BR2_PACKAGE_PYTHON_CFFI # runtime
+> +       help
+> +         Universal Python binding for the LMDB 'Lightning' Database.
+> +
+> +         https://pypi.python.org/pypi/lmdb
+> +
+> diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
+> new file mode 100644
+> index 0000000..c983cfb
+> --- /dev/null
+> +++ b/package/python-lmdb/python-lmdb.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
+> +md5    001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
+> +sha256 37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+> diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
+> new file mode 100644
+> index 0000000..7873f62
+> --- /dev/null
+> +++ b/package/python-lmdb/python-lmdb.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-lmdb
+> +#
+> +################################################################################
+> +
+> +PYTHON_LMDB_VERSION = 0.88
+> +PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+> +PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
+> +PYTHON_LMDB_LICENSE = BSD
+> +PYTHON_LMDB_SETUP_TYPE = setuptools
+> +PYTHON_LMDB_DEPENDENCIES = python-cffi
 
-i've deployed a module to our bugs instance after the 5.0 upgrade and the
-conversion to the new rest api.  i've verified it works on bugstest, so
-you should give it a spin on the main bugs instance next time there is a
-release and let me know how it goes.
+this should be host-python-cffi
 
-here's how i did it:
-(1) login:
-  $ curl 'https://bugstest.busybox.net/rest/login?login=<user>&password=<pass>'
-  {"id":409,"token":"920-ljDS89ajkl"}
-(2) create the version:
-  $ curl -i -X POST 'https://bugstest.busybox.net/rest/vvversion?product=Buildroot&name=<version>&token=920-ljDS89ajkl'
-  {"id":281}
-(3) logout:
-  $ curl 'https://bugstest.busybox.net/rest/logout?token=920-ljDS89ajkl'
-  {"result":null}
-the responses are all obviously JSON, so it should be easy to unpack.
-
-if you run step (2) more than once, it will throw an error, so don't
-worry about creating duplicate entries.
-  {"message":"The version '2016.16' already exists for product 'buildroot'.","code":32000,"error":true,...}
-
-if you want to know more about the REST API, check out:
-	https://bugzilla.readthedocs.org/en/latest/api/
-and maybe also this python cli:
-	https://github.com/williamh/pybugz
--mike
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160202/19f56799/attachment.asc>
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
