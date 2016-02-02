@@ -1,156 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 14:42:59 +0100
-Subject: [Buildroot] [PATCH v2 2/2] package/sconeserver: bump version to
- fix musl build
-In-Reply-To: <1454256656-9253-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1454256656-9253-1-git-send-email-bernd.kuhls@t-online.de>
- <1454256656-9253-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0B263.5060805@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 2 Feb 2016 14:44:44 +0100
+Subject: [Buildroot] [PATCH 04/19] python-click: new package
+In-Reply-To: <1454373899-22481-5-git-send-email-mc5686@mclink.it>
+References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
+ <1454373899-22481-5-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ksHkz0wkW5qZV2TRAA=Dmy3NJApX4H+pS4fJ4pQSEe2Tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 17:10, Bernd Kuhls wrote:
-> Fixes this musl build error:
-> TermBuffer.cpp: In member function ?virtual scx::Condition scx::TermBuffer::read(void*, int, int&)?:
-> TermBuffer.cpp:83:10: error: ?CEOT? was not declared in this scope
->      case CEOT:
->           ^
-> TermBuffer.cpp:123:10: error: ?CERASE? was not declared in this scope
->      case CERASE: // Backspace
->           ^
-> The autobuilders did not catch this specific error yet because they
-> failed earlier with other packages, but I am continuing the build based
-> on the defconfig from:
-> http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
-> 
-> - added hash
-> - removed 0001-fix-ssl-libs-ordering.patch, applied upstream:
->   https://github.com/sconemad/sconeserver/commit/ffb69ca18fd03d0dc976696144d215b3a8555155
-> - disabled markdown module because its git submodule cmark
->   ( https://github.com/sconemad/sconeserver/tree/master/markdown )
->   has no cross-compile support provided by the sconeserver build system:
-> 
-> make[4]: Entering directory '/home/bernd/buildroot/br3/output/build/sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd/markdown/cmark'
-> mkdir -p build; \
-> cd build; \
-> cmake .. \
-> 	-G "Unix Makefiles" \
-> 	-DCMAKE_BUILD_TYPE= \
-> 	-DCMAKE_INSTALL_PREFIX=/usr/local
-> -- The C compiler identification is GNU 5.3.1
-> -- The CXX compiler identification is GNU 5.3.1
-> -- Check for working C compiler: /usr/bin/cc
-> -- Check for working C compiler: /usr/bin/cc -- works
-> [...]
+On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
- That could probably be patched, but OK.
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-
- This version has also added pkg-config useage for gpsd, so host-pkgconf should
-be added to the dependencies in the gpsd case.
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
-> v2: updated comments in sconeserver.mk (Arnout)
-> 
->  .../sconeserver/0001-fix-ssl-libs-ordering.patch   | 36 ----------------------
->  package/sconeserver/sconeserver.hash               |  2 ++
->  package/sconeserver/sconeserver.mk                 | 11 ++++---
->  3 files changed, 8 insertions(+), 41 deletions(-)
->  delete mode 100644 package/sconeserver/0001-fix-ssl-libs-ordering.patch
->  create mode 100644 package/sconeserver/sconeserver.hash
-> 
-> diff --git a/package/sconeserver/0001-fix-ssl-libs-ordering.patch b/package/sconeserver/0001-fix-ssl-libs-ordering.patch
-> deleted file mode 100644
-> index f1f25b9..0000000
-> --- a/package/sconeserver/0001-fix-ssl-libs-ordering.patch
-> +++ /dev/null
-> @@ -1,36 +0,0 @@
-> -configure: re-order SSL libs when linking
-> -
-> -When doing static builds, the ordering of libs is important, as the
-> -linker does not back-pedal to previous libraries specified on the
-> -command line to find missing symbols, and only searches for those
-> -missing symbols in the following libs.
-> -
-> -Thus, as -lssl needs symbols from -lcrypto, it needs to come before
-> --lcrypto.
-> -
-> -And globally, we do *not* append new libraries, we prepend them.
-> -
-> -Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> -
-> -diff -durN a/configure.in b/configure.in
-> ---- a/configure.in	2014-10-16 11:12:08.000000000 +0200
-> -+++ b/configure.in	2015-05-30 15:44:25.540329788 +0200
-> -@@ -133,12 +133,14 @@
-> -     [AC_MSG_ERROR([header file <openssl/ssl.h> is required for OpenSSL, use --with-openssl-path=PATH])]
-> -   )
-> -   AC_CHECK_LIB([crypto],[CRYPTO_new_ex_data],
-> --    [SSL_LIBADD="$SSL_LIBADD -lcrypto"],
-> --    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])]
-> -+    [SSL_LIBADD="-lcrypto $SSL_LIBADD"],
-> -+    [AC_MSG_ERROR([library 'crypto' is required for OpenSSL])],
-> -+    [$SSL_LIBADD]
-> -   )
-> -   AC_CHECK_LIB([ssl],[SSL_library_init],
-> --    [SSL_LIBADD="$SSL_LIBADD -lssl"],
-> --    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])]
-> -+    [SSL_LIBADD="-lssl $SSL_LIBADD"],
-> -+    [AC_MSG_ERROR([library 'ssl' is required for OpenSSL])],
-> -+    [$SSL_LIBADD]
-> -   )
-> -   AC_SUBST(SSL_LIBADD)
-> - fi
-> diff --git a/package/sconeserver/sconeserver.hash b/package/sconeserver/sconeserver.hash
+>  package/Config.in                      |  1 +
+>  package/python-click/Config.in         |  7 +++++++
+>  package/python-click/python-click.hash |  3 +++
+>  package/python-click/python-click.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-click/Config.in
+>  create mode 100644 package/python-click/python-click.hash
+>  create mode 100644 package/python-click/python-click.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 52be929..c4ee543 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -627,6 +627,7 @@ menu "External python modules"
+>         source "package/python-characteristic/Config.in"
+>         source "package/python-cheetah/Config.in"
+>         source "package/python-cherrypy/Config.in"
+> +       source "package/python-click/Config.in"
+>         source "package/python-coherence/Config.in"
+>         source "package/python-configobj/Config.in"
+>         source "package/python-configshell-fb/Config.in"
+> diff --git a/package/python-click/Config.in b/package/python-click/Config.in
 > new file mode 100644
-> index 0000000..2e1fe84
+> index 0000000..3755146
 > --- /dev/null
-> +++ b/package/sconeserver/sconeserver.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256	442c29ae93f615b610983187023ba6c1a9ca69526cb07f69576efba1d29d9daf	sconeserver-c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd.tar.gz
-> diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-> index 2072142..0a8158e 100644
-> --- a/package/sconeserver/sconeserver.mk
-> +++ b/package/sconeserver/sconeserver.mk
-> @@ -4,16 +4,17 @@
->  #
->  ################################################################################
->  
-> -# Release 0.6.0 doesn't build cleanly, so use a recent
-> -# Git commit.
-> -SCONESERVER_VERSION = 3b886c3dda6eda39bcb27472d29ed7fd3185ba1d
-> +SCONESERVER_VERSION = c4b8e14f6e9e06cbff5b4195f69d6fce9391a1cd
->  SCONESERVER_SITE = $(call github,sconemad,sconeserver,$(SCONESERVER_VERSION))
->  SCONESERVER_LICENSE = GPLv2+
->  SCONESERVER_LICENSE_FILES = COPYING
-> -# For 0001-fix-ssl-libs-ordering.patch and configure isn't up to date
-> +# upstream tarball does not contain a configure script
->  SCONESERVER_AUTORECONF = YES
->  SCONESERVER_DEPENDENCIES += pcre
-> -SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6
-> +# disable markdown module because its git submodule cmark
-> +# https://github.com/sconemad/sconeserver/tree/master/markdown
-> +# has no cross-compile support provided by the sconeserver build system
-> +SCONESERVER_CONF_OPTS += --with-ip --with-local --with-ip6 --without-markdown
->  
->  # Sconeserver configure script fails to find the libxml2 headers.
->  ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> +++ b/package/python-click/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_CLICK
+> +       bool "python-click"
+> +       help
+> +         A simple wrapper around optparse for powerful command line utilities.
+> +
+> +         https://pypi.python.org/pypi/click
+> +
+> diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
+> new file mode 100644
+> index 0000000..72aab0a
+> --- /dev/null
+> +++ b/package/python-click/python-click.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=83252a8095397b1f5f710fdd58b484d9, sha256 locally computed.
+> +md5    83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
+> +sha256 fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
+> diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
+> new file mode 100644
+> index 0000000..cf28825
+> --- /dev/null
+> +++ b/package/python-click/python-click.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-click
+> +#
+> +################################################################################
+> +
+> +PYTHON_CLICK_VERSION = 6.2
+> +PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
+> +PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
+> +PYTHON_CLICK_LICENSE = BSD
+> +PYTHON_CLICK_LICENSE_FILES = LICENSE
+> +PYTHON_CLICK_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
