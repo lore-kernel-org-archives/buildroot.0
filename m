@@ -1,79 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 14:24:31 +0100
-Subject: [Buildroot] [PATCH 2/2] package/smack: fix musl build
-In-Reply-To: <1454257581-22383-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
- <1454257581-22383-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0AE0F.5070706@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 02 Feb 2016 14:27:03 +0100
+Subject: [Buildroot] glibc and --enable-kernel
+In-Reply-To: <56AAA5BE.2050306@mind.be> (Arnout Vandecappelle's message of
+ "Fri, 29 Jan 2016 00:35:26 +0100")
+References: <20160127042104.GA6719@tungsten.ozlabs.ibm.com>
+ <20160127092119.7cf8953d@free-electrons.com>
+ <20160128025537.GB5589@tungsten.ozlabs.ibm.com>
+ <20160128093618.42baf311@free-electrons.com>
+ <56AAA5BE.2050306@mind.be>
+Message-ID: <87egcv5jko.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 17:26, Bernd Kuhls wrote:
-> The build error was not yet found by the autobuilders:
-> 
-> common.c: In function ?clear?:
-> common.c:36:12: error: ?PATH_MAX? undeclared (first use in this function)
->   char path[PATH_MAX];
->             ^
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi,
 
+ >> The only reason that may encourage you to use
+ >> BR2_TOOLCHAIN_HEADERS_AT_LEAST instead of BR2_DEFAULT_KERNEL_HEADERS is
+ >> an upcoming patch from Yann E. Morin (already submitted but not merged
+ >> yet), which allows to tell Buildroot to use the kernel version
+ >> specified in the "Kernel" menu as the version for the kernel headers.
+ >> In this case, I believe BR2_DEFAULT_KERNEL_HEADERS will not be correct,
+ >> while BR2_TOOLCHAIN_HEADERS_AT_LEAST will be.
 
- Regards,
- Arnout
+ >  A minor issue with _AT_LEAST, however, is that it will probably go through
+ > deprecation eventually. Right now we have "2.6" as the lowest _AT_LEAST - how
+ > will glibc deal with that? I can imagine at some point we'll deprecate 3,1, 3.2,
+ > and 3.3, so if you're using 3.3 headers the _AT_LEAST will become 3.0. Right
+ > now, we already have that for 2.6.3x, which will fall back to 2.6.0 (I guess -
+ > should be checked if glibc doesn't barf on 2.6 without .0).
 
-> ---
->  ...ck-common.c-Include-limits.h-for-PATH_MAX.patch | 29 ++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-> 
-> diff --git a/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-> new file mode 100644
-> index 0000000..0e30ef5
-> --- /dev/null
-> +++ b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
-> @@ -0,0 +1,29 @@
-> +From 316c911aa741b14513622a4206ed6d324e951fa0 Mon Sep 17 00:00:00 2001
-> +From: Felix Janda <felix.janda@posteo.de>
-> +Date: Wed, 20 May 2015 21:25:22 +0200
-> +Subject: [PATCH 1/1] libsmack/common.c: Include <limits.h> for PATH_MAX
-> +
-> +Signed-off-by: Felix Janda <felix.janda@posteo.de>
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> +Downloaded from upstream commit
-> +https://github.com/smack-team/smack/commit/316c911aa741b14513622a4206ed6d324e951fa0
-> +
-> + libsmack/common.c | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/libsmack/common.c b/libsmack/common.c
-> +index 55fee1a..55b59e3 100644
-> +--- a/libsmack/common.c
-> ++++ b/libsmack/common.c
-> +@@ -22,6 +22,7 @@
-> + #include <dirent.h>
-> + #include <errno.h>
-> + #include <fcntl.h>
-> ++#include <limits.h>
-> + #include <stdio.h>
-> + #include <string.h>
-> + #include <unistd.h>
-> +-- 
-> +2.7.0
-> +
-> 
-
+If it does, then I suggest we filter out --enable-kernel for the oldest
+variant, so we're back to how it works now as a lowest common denominator.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
