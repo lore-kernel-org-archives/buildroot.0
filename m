@@ -1,48 +1,68 @@
-From: Eelco Chaudron <echaudron@xiot.nl>
-Date: Tue, 2 Feb 2016 21:49:35 +0100
-Subject: [Buildroot] Problem with python packages in .zip format
-Message-ID: <F9CA10A6-C5B6-4D4D-B38A-829D1D422751@xiot.nl>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Tue,  2 Feb 2016 16:02:04 -0500
+Subject: [Buildroot] [RFC 1/1] e2fsprogs: support findfs
+Message-ID: <1454446924-10368-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+The following adjusts e2fsprogs's configure to force the enablement of
+CONFIG_BUILD_FINDFS. The current support for e2fsprogs's findfs is not
+complete; while the findfs symbolic link to e2label is made, e2label
+does not handle the `findfs` argument. By ensuring the
+CONFIG_BUILD_FINDFS flag is set, e2label is built with findfs support.
+Since e2fsprogs already requires libblkid, the build should not be an
+issue; however, using this option prevent a developer from restricting
+findfs-related code in e2label (see alternative below).
 
-Before I start investigating I was wondering if some one has seen this before?
-If the python packages is in .zip it does not seem to know how to extract and thinks it a binary.
-See the following:
+Note that the `--disable-libblkid` configuration argument must remain
+to prevent conflicts with util-linux's libblkid and an e2fsprogs-
+generated variant (see e1ffc2f791b336339909c90559b7db40b455f172).
 
-$ make python-flask-wtf
->>> python-wtforms 2.1 Downloading
---2016-02-02 21:45:45--  https://pypi.python.org/packages/source/W/WTForms/WTForms-2.1.zip
-Resolving pypi.python.org (pypi.python.org)... 23.235.43.223
-Connecting to pypi.python.org (pypi.python.org)|23.235.43.223|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 553644 (541K) [application/octet-stream]
-Saving to: ?/home/echaudron/buildroot/output/build/.WTForms-2.1.zip.3oIKIZ/output?
+An alternative to this approach would be to remove any e2fsprogs's
+findfs references from Buildroot and add the findfs utility to
+util-linux (since the package provides a findfs utility as well).
 
-/home/echaudron/buildroot/output/build/.WTForms-2.1.zip.3oIKI 100%[==================================================================================================================================================================================>] 540.67K  3.42MB/s   in 0.2s   
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+Cc: Zheng Yi <yzheng@techyauld.com>
+---
+ package/e2fsprogs/0002-support-findfs.patch | 11 +++++++++++
+ package/e2fsprogs/e2fsprogs.mk              |  3 +++
+ 2 files changed, 14 insertions(+)
+ create mode 100644 package/e2fsprogs/0002-support-findfs.patch
 
-2016-02-02 21:45:45 (3.42 MB/s) - ?/home/echaudron/buildroot/output/build/.WTForms-2.1.zip.3oIKIZ/output? saved [553644/553644]
-
-WTForms-2.1.zip: OK (md5: 6938a541fafd1a1ae2f6b9b88588eef2)
-WTForms-2.1.zip: OK (sha256: ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f)
->>> python-wtforms 2.1 Extracting
-/home/echaudron/buildroot/dl/WTForms-2.1.zip | tar --strip-components=1 -C /home/echaudron/buildroot/output/build/python-wtforms-2.1   -xf -
-/bin/bash: /home/echaudron/buildroot/dl/WTForms-2.1.zip: Permission denied
-tar: This does not look like a tar archive
-tar: Exiting with failure status due to previous errors
-package/pkg-generic.mk:128: recipe for target '/home/echaudron/buildroot/output/build/python-wtforms-2.1/.stamp_extracted' failed
-make[1]: *** [/home/echaudron/buildroot/output/build/python-wtforms-2.1/.stamp_extracted] Error 2
-Makefile:36: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-Thanks,
-
-Eelco
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160202/dadfe7b7/attachment.html>
+diff --git a/package/e2fsprogs/0002-support-findfs.patch b/package/e2fsprogs/0002-support-findfs.patch
+new file mode 100644
+index 0000000..4e125fa
+--- /dev/null
++++ b/package/e2fsprogs/0002-support-findfs.patch
+@@ -0,0 +1,11 @@
++diff -Naur a/configure.in b/configure.in
++--- a/configure.in	2016-02-02 15:03:02.440059366 -0500
+++++ b/configure.in	2016-02-02 15:03:38.265404484 -0500
++@@ -533,6 +533,7 @@
++ 		[AC_MSG_ERROR([external blkid library not found])], -luuid)
++ 	BLKID_CMT=#
++ 	PROFILED_LIBBLKID=$LIBBLKID
+++	AC_DEFINE(CONFIG_BUILD_FINDFS, 1)
++ 	AC_MSG_RESULT([Disabling private blkid library])
++ else
++ 	LIBBLKID='$(LIB)/libblkid'$LIB_EXT
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 4b81b44..d16edde 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -12,6 +12,9 @@ E2FSPROGS_LICENSE_FILES = COPYING lib/uuid/COPYING lib/ss/mit-sipb-copyright.h l
+ E2FSPROGS_INSTALL_STAGING = YES
+ E2FSPROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-libs
+ 
++# 0002-support-findfs.patch
++E2FSPROGS_AUTORECONF = YES
++
+ # e4defrag doesn't build on older systems like RHEL5.x, and we don't
+ # need it on the host anyway.
+ HOST_E2FSPROGS_CONF_OPTS += --disable-defrag
+-- 
+2.6.4.windows.1
