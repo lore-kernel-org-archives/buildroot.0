@@ -1,36 +1,105 @@
-From: Jan Sarenik <jasan@jasan.tk>
-Date: Tue,  2 Feb 2016 11:06:04 +0100
-Subject: [Buildroot] [PATCH 1/1] Update freescale_imx6qsabreauto_defconfig
-Message-ID: <1454407564-6117-1-git-send-email-jan.sarenik@ysoft.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 2 Feb 2016 10:07:21 +0100
+Subject: [Buildroot] [PATCH 10/10] gst1-imx: bump to version 0.12.0
+In-Reply-To: <56B06F42.6050503@mind.be>
+References: <1454154357-31625-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1454154357-31625-11-git-send-email-gary.bisson@boundarydevices.com>
+ <20160201214437.66ddff9e@free-electrons.com>
+ <CAAMH-yufkAQV7p50daw=VYTGeM41RvtpYKsZGzRwZ2K_vKVbxQ@mail.gmail.com>
+ <20160201232711.1e2c85a6@free-electrons.com>
+ <CAAMH-yvxXLP4SOiZLs9PR2wiFjf7L0-DTk81G9SJvNDLhYzv-Q@mail.gmail.com>
+ <56B06F42.6050503@mind.be>
+Message-ID: <CAAMH-yutuQ8g8gzmKUVpc6a=5kup0PwWiZrctNgHp7bPWppOyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jan Sarenik <jan.sarenik@ysoft.com>
----
- configs/freescale_imx6qsabreauto_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Arnout, All,
 
-diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-index 70367a7..38af560 100644
---- a/configs/freescale_imx6qsabreauto_defconfig
-+++ b/configs/freescale_imx6qsabreauto_defconfig
-@@ -17,7 +17,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,4 +32,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
--- 
-2.7.0
+On Tue, Feb 2, 2016 at 9:56 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 01-02-16 23:49, Gary Bisson wrote:
+>> Thomas, All,
+>>
+>> On Mon, Feb 1, 2016 at 11:27 PM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Hello,
+>>>
+>>> On Mon, 1 Feb 2016 22:20:36 +0100, Gary Bisson wrote:
+>>>
+>>>>> So it no longer depends on the GPU stuff ?
+>>>>
+>>>> No, you can build this package without the GPU backend which implies
+>>>> the GPU sinks won't be built. The end goal is for i.MX7 which doesn't
+>>>> have any GPU, right now I have to include the GPU binaries just to
+>>>> build the pxp/v4l plugins.
+>>>
+>>> ACK, makes sense.
+>>>
+>>>>>> -     depends on BR2_PACKAGE_LIBFSLVPUWRAP
+>>>>>>       select BR2_PACKAGE_GST1_PLUGINS_BASE
+>>>>>> +     select BR2_PACKAGE_GST1_IMX_IPU_PLUGIN
+>>>>>> +     select BR2_PACKAGE_GST1_IMX_PXP_PLUGIN
+>>>>>
+>>>>> This is weird. If you "select" these options here, it means that there
+>>>>> is no way to disable those options. So why are they options in the
+>>>>> first place ?
+>>>>
+>>>> I just wanted to make it explicit that the package will at least build
+>>>> those two plugins. Then leaving it up to the user to select whichever
+>>>> plugin he wants. There actually is no option to disable plugins from
+>>>> the packages, it's all a question of dependency. As soon as the i.MX
+>>>> linux kernel is built, PXP and IPU will be. As soon as the GPU
+>>>> libraries are includes, GPU sink plugins will be built.
+>>>
+>>> Hum, then it is not good, because it means that even if you disable the
+>>> GPU sink plugin options, but still have the GPU libraries enabled, the
+>>> GPU sink plugins will be installed on your target. This is very
+>>> confusing.
+>>
+>> Yes, I understand, is it really a big deal? There's going to be more
+>> plugins than expected in the rootfs, it's free!
+>
+>  We don't consider rootfs size to be for free.
+
+I understand.
+
+>>> I think you should remove the sub-options, and then simply expand the
+>>> Config.in help text of the main option to say:
+>>>
+>>>  - The IPU and PXP plugins are always built.
+>>>  - The GPU sink plugin is built when ... is enabled.
+>>>  - The ... plugin is built when ... is enabled.
+>>
+>> This would be ever more confusing in my opinion. It means that when
+>> you select gstreamer-imx you have no idea of what is going to be
+>> built. Then when you realize you need the graphics libraries you have
+>> to browse to select it yourself.
+>
+>  That's why it should be mentioned in the help text.
+>
+>>
+>> Wouldn't it be possible to force the option value when the IMX_GPU_VIV
+>> package is selected? I guess that would bring a circular dependency
+>> but at least someone wouldn't be able to remove the option without
+>> removing the graphics binaries.
+>
+>  Yes, that is possible. But we only do that in situations where it is not
+> obvious which other package you should select. The idea is to avoid a
+> proliferation of Config.in options.
+>
+>  But in this case, you _anyway_ still have to manually select the imx-gpu-viv
+> package... So I don't think there is much point in adding the sub-options.
+> Except if you can convert all the depends into selects (except for the glibc one
+> of course).
+
+Yes the GPU was actually a bad example, the VPU and V4L plugins do
+have selects that work. But I'll offer a v3 without the options, just
+with text in the Config.in and if later I find another approach I'll
+submit an RFC.
+
+Thank you all for your feedback.
+
+Regards,
+Gary
