@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Tue,  2 Feb 2016 01:44:58 +0100
-Subject: [Buildroot] [PATCH 18/19] python-autobahn: new package
+Date: Tue,  2 Feb 2016 01:44:45 +0100
+Subject: [Buildroot] [PATCH 05/19] python-lmdb: new package
 In-Reply-To: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454373899-22481-19-git-send-email-mc5686@mclink.it>
+Message-ID: <1454373899-22481-6-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,70 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                            |  1 +
- package/python-autobahn/Config.in            |  9 +++++++++
- package/python-autobahn/python-autobahn.hash |  3 +++
- package/python-autobahn/python-autobahn.mk   | 15 +++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-autobahn/Config.in
- create mode 100644 package/python-autobahn/python-autobahn.hash
- create mode 100644 package/python-autobahn/python-autobahn.mk
+ package/Config.in                    |  1 +
+ package/python-lmdb/Config.in        |  8 ++++++++
+ package/python-lmdb/python-lmdb.hash |  3 +++
+ package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 807cffb..9e0f7ca 100644
+index c4ee543..4294813 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -617,6 +617,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
-+	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bottle/Config.in"
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+@@ -658,6 +658,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-lmdb/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
 new file mode 100644
-index 0000000..b7a722a
+index 0000000..06d6876
 --- /dev/null
-+++ b/package/python-autobahn/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_AUTOBAHN
-+	bool "python-autobahn"
-+	select BR2_PACKAGE_PYTHON_SIX
-+	select BR2_PACKAGE_PYTHON_TXAIO
++++ b/package/python-lmdb/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_LMDB
++	bool "python-lmdb"
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
 +	help
-+	  WebSocket client Hhh server library, WAMP real-time framework.
++	  Universal Python binding for the LMDB 'Lightning' Database.
 +
-+	  https://pypi.python.org/pypi/autobahn
++	  https://pypi.python.org/pypi/lmdb
 +
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
 new file mode 100644
-index 0000000..8f55ac1
+index 0000000..c983cfb
 --- /dev/null
-+++ b/package/python-autobahn/python-autobahn.hash
++++ b/package/python-lmdb/python-lmdb.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
-+md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
-+sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
++md5	001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
++sha256	37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
 new file mode 100644
-index 0000000..0ab740a
+index 0000000..7873f62
 --- /dev/null
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-autobahn
++# python-lmdb
 +#
 +################################################################################
 +
-+PYTHON_AUTOBAHN_VERSION = 0.12.1
-+PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-+PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
-+PYTHON_AUTOBAHN_LICENSE = MIT
-+PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-+PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
-+PYTHON_AUTOBAHN_DEPENDENCIES = python-six python-txaio
++PYTHON_LMDB_VERSION = 0.88
++PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
++PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
++PYTHON_LMDB_LICENSE = BSD
++PYTHON_LMDB_SETUP_TYPE = setuptools
++PYTHON_LMDB_DEPENDENCIES = python-cffi
 +
 +$(eval $(python-package))
 -- 
