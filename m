@@ -1,67 +1,25 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 14:10:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wipe: fix musl build
-In-Reply-To: <1454273054-8087-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454273054-8087-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0AAB5.6000900@mind.be>
+Date: Tue, 2 Feb 2016 14:24:31 +0100
+Subject: [Buildroot] [PATCH 2/2] package/smack: fix musl build
+In-Reply-To: <1454257581-22383-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1454257581-22383-1-git-send-email-bernd.kuhls@t-online.de>
+ <1454257581-22383-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56B0AE0F.5070706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 21:44, Bernd Kuhls wrote:
+On 31-01-16 17:26, Bernd Kuhls wrote:
 > The build error was not yet found by the autobuilders:
 > 
-> In file included from main.c:46:0:
-> rand.h:31:9: error: unknown type name ?u_int32_t?
->  typedef u_int32_t u_rand_t;
->          ^
-> <builtin>: recipe for target 'main.o' failed
+> common.c: In function ?clear?:
+> common.c:36:12: error: ?PATH_MAX? undeclared (first use in this function)
+>   char path[PATH_MAX];
+>             ^
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/wipe/0001-musl.patch | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/wipe/0001-musl.patch
-> 
-> diff --git a/package/wipe/0001-musl.patch b/package/wipe/0001-musl.patch
-> new file mode 100644
-> index 0000000..35b3af8
-> --- /dev/null
-> +++ b/package/wipe/0001-musl.patch
-> @@ -0,0 +1,28 @@
-> +Fix musl build
-> +
-> +In file included from main.c:46:0:
-> +rand.h:31:9: error: unknown type name ?u_int32_t?
-> + typedef u_int32_t u_rand_t;
-> +         ^
-> +<builtin>: recipe for target 'main.o' failed
-> +
-> +Patch sent upstream: https://sourceforge.net/p/wipe/patches/4/
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +
-> +diff -uNr wipe-2.3.1.org/rand.h wipe-2.3.1/rand.h
-> +--- wipe-2.3.1.org/rand.h	2003-12-03 04:01:02.000000000 +0100
-> ++++ wipe-2.3.1/rand.h	2016-01-31 21:39:54.000000000 +0100
-> +@@ -22,10 +22,9 @@
-> + 
-> + #ifdef HAVE_STDINT_H
-> + # include "stdint.h"
-> +-#else
-> +-# ifndef LINUX
-> ++#endif
-> ++#if !defined(u_int32_t)
-> + #  define u_int32_t uint32_t
-> +-# endif
-> + #endif
-
- Wouldn't it be better to use uint32_t everywhere?
-
- However, since the project hasn't had any activity since 2009, I don't think we
-can expect much from upstream, so this quick-and-dirty patch should be OK.
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
@@ -69,8 +27,46 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
  Regards,
  Arnout
 
-> + 
-> + typedef u_int32_t u_rand_t;
+> ---
+>  ...ck-common.c-Include-limits.h-for-PATH_MAX.patch | 29 ++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
+> 
+> diff --git a/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
+> new file mode 100644
+> index 0000000..0e30ef5
+> --- /dev/null
+> +++ b/package/smack/0001-libsmack-common.c-Include-limits.h-for-PATH_MAX.patch
+> @@ -0,0 +1,29 @@
+> +From 316c911aa741b14513622a4206ed6d324e951fa0 Mon Sep 17 00:00:00 2001
+> +From: Felix Janda <felix.janda@posteo.de>
+> +Date: Wed, 20 May 2015 21:25:22 +0200
+> +Subject: [PATCH 1/1] libsmack/common.c: Include <limits.h> for PATH_MAX
+> +
+> +Signed-off-by: Felix Janda <felix.janda@posteo.de>
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +---
+> +Downloaded from upstream commit
+> +https://github.com/smack-team/smack/commit/316c911aa741b14513622a4206ed6d324e951fa0
+> +
+> + libsmack/common.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/libsmack/common.c b/libsmack/common.c
+> +index 55fee1a..55b59e3 100644
+> +--- a/libsmack/common.c
+> ++++ b/libsmack/common.c
+> +@@ -22,6 +22,7 @@
+> + #include <dirent.h>
+> + #include <errno.h>
+> + #include <fcntl.h>
+> ++#include <limits.h>
+> + #include <stdio.h>
+> + #include <string.h>
+> + #include <unistd.h>
+> +-- 
+> +2.7.0
+> +
 > 
 
 
