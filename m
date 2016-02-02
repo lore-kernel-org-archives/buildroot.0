@@ -1,88 +1,83 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 16:55:12 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/kodi: not available using a
- musl-based toolchain
-In-Reply-To: <1454168886-30961-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454168886-30961-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0D160.5060500@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  2 Feb 2016 12:59:08 -0300
+Subject: [Buildroot] [PATCH v2] socat: security bump to version 2.0.0-b9
+Message-ID: <1454428748-7062-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30-01-16 16:48, Bernd Kuhls wrote:
-> The build stops with
-> configure: error: unsupported host (i586-buildroot-linux-musl)
-> due to musl not being supported in
-> https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
-> 
-> Removing this obstacle will show that musl is really not being
-> supported, the build will fail:
-> 
-> In file included from emu_msvcrt.cpp:64:0:
-> emu_msvcrt.h:93:3: error: ?__off64_t? does not name a type
->    __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
->    ^
-> emu_msvcrt.h:94:3: error: ?__off_t? does not name a type
->    __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
->    ^
-> 
-> I know these problems are fixable and the voidlinux projects seems to
-> have done it already for 15.2-Isengard:
-> https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
-> 
-> Since Kodi 16.0-Jarvis is already at rc1 stage and the 15.x-branch
-> being closed upstream as "final"[1] version I will put no effort
-> providing a musl-compilable package for the current Kodi package.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+Socat security advisory 7 and MSVR-1499: "Bad DH p parameter in OpenSSL"
+Socat security advisory 8: "Stack overflow in arguments parser"
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: add patch status, computed hash comment
 
+ .../0002-ptrdiff_t-is-defined-in-stddef.h.patch    | 28 ++++++++++++++++++++++
+ package/socat/socat.hash                           |  4 +++-
+ package/socat/socat.mk                             |  2 +-
+ 3 files changed, 32 insertions(+), 2 deletions(-)
+ create mode 100644 package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
 
- Regards,
- Arnout
-
-> ---
-> v2: added explanation for Kodi not being available for musl (Thomas)
-> 
->  package/kodi/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index e697b52..ed90ed6 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
->  	bool
->  	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
->  
-> -comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
-> +comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library"
->  	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
-> +		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-> +		|| BR2_TOOLCHAIN_USES_MUSL
->  	depends on BR2_USE_MMU
->  
->  config BR2_PACKAGE_KODI_EGL_GLES
-> @@ -89,6 +90,7 @@ menuconfig BR2_PACKAGE_KODI
->  	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on !BR2_TOOLCHAIN_USES_MUSL
->  	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
->  	depends on BR2_USE_MMU # python
->  	depends on BR2_USE_WCHAR
-> 
-
-
+diff --git a/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch b/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
+new file mode 100644
+index 0000000..acae641
+--- /dev/null
++++ b/package/socat/0002-ptrdiff_t-is-defined-in-stddef.h.patch
+@@ -0,0 +1,28 @@
++From 99c55f2694fe8621ca2344eb002610dac7f9c969 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Tue, 2 Feb 2016 09:34:24 -0300
++Subject: [PATCH] ptrdiff_t is defined in stddef.h
++
++Status: sent upstream via email.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++ nestlex.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/nestlex.c b/nestlex.c
++index f7950f0..f49482d 100644
++--- a/nestlex.c
+++++ b/nestlex.c
++@@ -4,6 +4,8 @@
++ 
++ /* a function for lexical scanning of nested character patterns */
++ 
+++#include <stddef.h>	/* ptrdiff_t */
+++
++ #include "config.h"
++ #include "mytypes.h"
++ 
++-- 
++2.4.10
++
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+index a876ae2..d867d8a 100644
+--- a/package/socat/socat.hash
++++ b/package/socat/socat.hash
+@@ -1,2 +1,4 @@
+ # From http://www.dest-unreach.org/socat/download.md5sum
+-md5	ff56576703dfdeac221357a348c30760	socat-2.0.0-b8.tar.bz2
++md5	553b1593d0a192cb09cbdc687ef1baac	socat-2.0.0-b9.tar.bz2
++# Calculated based on the hash above
++sha256	49efb0a5c66b94b279014addc2851faf8ebbd1ec4b7e31c1de7e912d7b4983d2	socat-2.0.0-b9.tar.bz2
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index eaf13bc..754b210 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCAT_VERSION = 2.0.0-b8
++SOCAT_VERSION = 2.0.0-b9
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPLv2
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.10
