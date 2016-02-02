@@ -1,245 +1,109 @@
-From: Zhangjian (Bamvor) <bamvor.zhangjian@huawei.com>
-Date: Tue, 2 Feb 2016 18:49:58 +0800
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-In-Reply-To: <56B07114.9030404@gmail.com>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
- <569A60E6.2030108@gmail.com>
- <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
- <569FFB7E.2000104@gmail.com>
- <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
- <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
- <56B07114.9030404@gmail.com>
-Message-ID: <56B089D6.4070106@huawei.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 2 Feb 2016 11:57:21 +0100
+Subject: [Buildroot] [PATCH v2] toolchain: add a harmless link when
+ sysroot detection is not accurate
+In-Reply-To: <1453475155-49586-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1453475155-49586-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <56B08B91.5080704@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Romain
+ping
 
-On 2016/2/2 17:04, Romain Naour wrote:
-> Hi Bamvor,
->
-> Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
->> Hi, Romain
->>
->>
->> On 2016/1/24 19:35, Romain Naour wrote:
->>> Hi Bamvor,
->>>
->>> Le 21/01/2016 10:03, Bamvor Zhang Jian a ?crit :
->>>> Hi, Romain
->>>>
->>>> On 01/21/2016 05:26 AM, Romain Naour wrote:
->>>>> Hi Bamvor,
->>>>>
->>>>> Le 19/01/2016 05:00, Bamvor Zhang Jian a ?crit :
->>>>>> Hi, Romain
->>>>>>
->>>>>> On 01/16/2016 11:25 PM, Romain Naour wrote:
->>>>>>> Hello Bamvor,
->>>> [...]
->>>>>>> Can you provide the command lines you used to build the toolchain ? on
->>>>>>> which abe
->>>>>>> branch ? Otherwise we can't test your series.
->>>>>> You could find the toolchain here[1]
->>>>>
->>>>> Thanks but this is not a cross-toolchain:
->>>>>
->>>>> file bin/aarch64-ilp32-linux-gnu-gcc
->>>>> bin/aarch64-ilp32-linux-gnu-gcc: ELF 64-bit LSB executable, ARM aarch64,
->>>>> version
->>>>> 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, for
->>>>> GNU/Linux 3.7.0, BuildID[sha1]=0727b9d5c173c83568f5d19cfc87a05540ec8b77, not
->>>>> stripped
->>>>>
->>>>> It seems that's a native toolchain.
->>>>>
->>>>> It should be something like (from aarch64-linaro 2015.08)
->>>>> file bin/aarch64-linux-gnu-gcc
->>>>> bin/aarch64-linux-gnu-gcc: ELF 64-bit LSB executable, x86-64, version 1 (SYSV),
->>>>> dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux
->>>>> 2.6.32, BuildID[sha1]=91a19539d0f6b0f38d599db648b4b5760000666a, not stripped
->>>>>
->>>> Yeap, it is not a cross compile. I use it in an aarch64 chroot environment in
->>>> x86. I feel it is enough to test these patches.
->>>
->>> Buildroot is a tool for cross-compiling, you know it ;-)
->>> Honestly I'm not very interested to test the toolchain by itself, only your
->>> patches for the external toolchain infra.
->>>
->>>>> Can you provide a pre-build toolchain or a recipe to rebuild a aarch64 ipl32
->>>>> toolchain ?
->>>> Linaro provide abe[1] to build toochain. You could follow this script[2] to know
->>>> how to use it. It seems that the server in tcwg is down. Hope, you could make
->>>> use of the method used by abe system.
->>>
->>> I really tried to build a aarch64 ipl32 cross-toolchain with abe but I'm stuck
->>> with glibc build. I don't know what's the glibc branch I should use.
->>> By default I used the release/2.20/master branch
->>>
->>> aarch64-ilp32-linux-gnu-gcc -mabi=ilp32 -nostdlib -nostartfiles -r -o
->>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/Scrt1.o
->>>
->>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.os
->>>
->>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/abi-note.o
->>>
->>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/init.o
->>>
->>> ../sysdeps/aarch64/start.S: Assembler messages:
->>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
->>> in this object file format
->>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
->>> in this object file format
->>> ../sysdeps/aarch64/start.S:92: Error: cannot represent BFD_RELOC_64 relocation
->>> in this object file format
->>> /home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/sysd-rules:1345:
->>>
->>> recipe for target
->>> '/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o'
->>>
->>> failed
->>> make[2]: ***
->>> [/home/naourr/linaro-toolchain/builds/x86_64-unknown-linux-gnu/aarch64-ilp32-linux-gnu/glibc.git~linaro-2.20-ilp32-ilp32/csu/start.o]
->>>
->>> Error 1
->> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
->> update it for patch v6 rfc5.
->
-> Thanks for this link.
->
-> To be honest, I don't think this series will be merged as is until a stable
-> toolchain release is made.
-What's your mean stable toolchain? A toolchain release from a organization or
-company?
-Do you think it will be accepted after patch of ilp32 of kernel and glibc
-upstream?
-I am trying to improve the glibc support for ilp32 base on the exist one
- > When it's done, can you respin your series on top of
-> master since the toolchain-external code has been updated recently ?
-Yes, of course.
+Currently Codescape MIPS toolchains are broken for big-endian. This 
+patch fixes the problem.
 
-Regards
-
-Bamvor
+On 22/01/16 16:05, Vicente Olivert Riera wrote:
+> Sometimes is not possible to detect if the sysroots are nested or side
+> by side. For instance this happens for MIPS big endian, where the
+> sysroot and the arch-sysroot directories are the same. Examples:
 >
-> Best regards,
-> Romain
+> === Mentor Sourcery CodeBench toolchain
 >
->>
->> Regards
->>
->> Bamvor
->>
->>
->> [1] https://github.com/norov/glibc/tree/thunderx-ilp32-32time_toff_t
->>>
->>> Also I had several issue with the abe script on my system (Fedora) and I had to
->>> modify some part of the script to be able to continue the build.
->>>
->>> So, It would be great if you can provide a precompiled cross-toolchain.
->>>
->>> Best regards,
->>> Romain
->>>
->>>>
->>>> Regards
->>>>
->>>> Bamvor
->>>>
->>>> [1]
->>>> https://git.linaro.org/toolchain/abe.git/blob/refs/heads/benchmarking:/abe.sh
->>>> [2]
->>>> https://git.linaro.org/toolchain/spec2xxx-utils.git/blob/refs/heads/test:/bench-ilp32.sh
->>>>
->>>>
->>>>>>>
->>>>>>> Do you know if Linaro plans to release a ipl32 toolchain ?
->>>>>> It seems that linaro will not release it before patches for ilp32 of kernel
->>>>>> and
->>>>>> glibc upstreamed.
->>>>>> Here[2] is a status for ilp32 in linaro.
->>>>>
->>>>> Thanks for the link.
->>>>>
->>>>> Best regards,
->>>>> Romain
->>>>>
->>>>>>
->>>>>> Regards
->>>>>>
->>>>>> Bamvor
->>>>>>
->>>>>> [1] http://people.linaro.org/~maxim.kuvyrkov/bench-ilp32/
->>>>>> [2] https://wiki.linaro.org/Platform/arm64-ilp32
->>>>>>
->>>>>>> Best regards,
->>>>>>> Romain Naour
->>>>>>>
->>>>>>>>
->>>>>>>> changes since v2
->>>>>>>> 1.  rebase on the patch have been .
->>>>>>>>       "827ba46 aarch64: add big endian(aarch64_be) support"
->>>>>>>> 2.  Add "!BR2_aarch64_be" along with "!BR2_aarch64" in patch 1/5
->>>>>>>> according to
->>>>>>>>       the suggestion from Thomas.
->>>>>>>> 3.  Improve the ifeq in patch 2/5 according to Gustavo.
->>>>>>>> 4.  Do not pass invalid "-mabi" option to ld in patch 3/5 according to
->>>>>>>> Gustavo.
->>>>>>>>
->>>>>>>> changes since v1
->>>>>>>> 1.  Avoid mabi issue in gcc 4.8 while build aarch64 lp64.
->>>>>>>> 2.  Change default libc, toolchain for ilp32 build.
->>>>>>>> 3.  Others changes suggested by Gustavo.
->>>>>>>>
->>>>>>>> [1] http://lists.busybox.net/pipermail/buildroot/2015-March/122115.html
->>>>>>>> [2] http://lists.busybox.net/pipermail/buildroot/2015-March/122424.html
->>>>>>>> [3] https://git.linaro.org/kernel/linux-linaro-tracking.git
->>>>>>>> [4] https://wiki.linaro.org/ABE
->>>>>>>>
->>>>>>>>
->>>>>>>> Bamvor Jian Zhang (5):
->>>>>>>>     aarch64: align aarch64_be config with aarch64s'
->>>>>>>>     aarch64: ilp32: handle special file name
->>>>>>>>     aarch64: ilp32: add ilp32 compiler and linker flags
->>>>>>>>     aarch64: ilp32: add ilp32 build config
->>>>>>>>     aarch64: ilp32 defconfig examples
->>>>>>>>
->>>>>>>>    Makefile                                           |  6 +++
->>>>>>>>    arch/Config.in.aarch64                             | 36 ++++++++++++++++++
->>>>>>>>    configs/aarch64_be_defconfig                       |  2 +
->>>>>>>>    configs/aarch64_be_ilp32_defconfig                 |  8 ++++
->>>>>>>>    configs/aarch64_ilp32_defconfig                    |  8 ++++
->>>>>>>>    package/Makefile.in                                | 13 ++++++-
->>>>>>>>    package/binutils/Config.in                         |  4 +-
->>>>>>>>    package/binutils/Config.in.host                    |  5 ++-
->>>>>>>>    package/dropwatch/Config.in                        |  5 ++-
->>>>>>>>    package/gcc/Config.in.host                         | 11 +++---
->>>>>>>>    package/gdb/Config.in.host                         |  2 +-
->>>>>>>>    package/gpsd/Config.in                             |  2 +-
->>>>>>>>    package/lightning/Config.in                        |  5 ++-
->>>>>>>>    package/nginx/Config.in                            |  3 +-
->>>>>>>>    package/oprofile/Config.in                         |  6 ++-
->>>>>>>>    toolchain/Config.in                                |  2 +
->>>>>>>>    toolchain/helpers.mk                               |  5 ++-
->>>>>>>>    toolchain/toolchain-buildroot/Config.in            |  7 ++--
->>>>>>>>    toolchain/toolchain-external/Config.in             | 22 +++++++++++
->>>>>>>>    toolchain/toolchain-external/toolchain-external.mk | 44
->>>>>>>> +++++++++++++++++++++-
->>>>>>>>    20 files changed, 169 insertions(+), 27 deletions(-)
->>>>>>>>    create mode 100644 configs/aarch64_be_defconfig
->>>>>>>>    create mode 100644 configs/aarch64_be_ilp32_defconfig
->>>>>>>>    create mode 100644 configs/aarch64_ilp32_defconfig
->>>>>>>>
->>>>>>>
->>>>>>
->>>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
+> $ readlink -f $(LANG=C mips-linux-gnu-gcc -print-file-name=libc.a) | sed
+> -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
+> /toolchains/mips-2015.11/mips-linux-gnu/libc/
+>
+> $ readlink -f $(LANG=C mips-linux-gnu-gcc -EB -print-file-name=libc.a) |
+> sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
+> /toolchains/mips-2015.11/mips-linux-gnu/libc/
+>
+> === Codescape toolchain
+>
+> $ readlink -f $(LANG=C mips-img-linux-gnu-gcc -print-file-name=libc.a) |
+> sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
+> /toolchains/mips-img-linux-gnu/2015.06-05/sysroot/mips-r6-hard/
+>
+> $ readlink -f $(LANG=C mips-img-linux-gnu-gcc -EB
+> -print-file-name=libc.a) | sed -r -e
+> 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
+> /toolchains/mips-img-linux-gnu/2015.06-05/sysroot/mips-r6-hard/
+>
+> For those cases where the sysroot detection is not accurate we add a
+> harmless symlink necessary for certain toolchains such as Codescape for
+> MIPS. The other toolchains in this situation (unknown sysroot layout)
+> don't need this symlink to work, but as stated before, this symlink is
+> harmless.
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> Changes v1 -> v2:
+>   - Update the comment above the copy_toolchain_sysroot function.
+>   - Explain in the commit log which toolchains are affected and provide
+>     some outputs of -print-file-name to explain the problem.
+>     (Both changes requested by Thomas Petazzoni)
+>
+>   toolchain/helpers.mk | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+>
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 70695ee..c8245f7 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -130,6 +130,12 @@ copy_toolchain_lib_root = \
+>   #
+>   # * Create a symbolic link
+>   #
+> +# If we are in the situation where we don't know if the sysroot layout
+> +# is nested of side by side, we:
+> +#
+> +# * Create a symbolic link because it's harmless and is necessary for
+> +#   certain toolchains like Codescape for MIPS.
+> +#
+>   # Finally, some toolchains (i.e Linaro binary toolchains) store
+>   # support libraries (libstdc++, libgcc_s) outside of the sysroot, so
+>   # we simply copy all the libraries from the "support lib directory"
+> @@ -160,9 +166,12 @@ copy_toolchain_sysroot = \
+>   	done ; \
+>   	SYSROOT_DIR_CANON=`readlink -f $${SYSROOT_DIR}` ; \
+>   	ARCH_SYSROOT_DIR_CANON=`readlink -f $${ARCH_SYSROOT_DIR}` ; \
+> +	echo "SYSROOT_DIR_CANON: $${ARCH_SYSROOT_DIR_CANON}" ; \
+> +	echo "ARCH_SYSROOT_DIR_CANON: $${ARCH_SYSROOT_DIR_CANON}" ; \
+>   	if [ $${SYSROOT_DIR_CANON} != $${ARCH_SYSROOT_DIR_CANON} ] ; then \
+>   		relpath="./" ; \
+>   		if [ $${ARCH_SYSROOT_DIR_CANON:0:$${\#SYSROOT_DIR_CANON}} == $${SYSROOT_DIR_CANON} ] ; then \
+> +			echo "Nested sysroots detected." ; \
+>   			if [ ! -d $${ARCH_SYSROOT_DIR}/usr/include ] ; then \
+>   				cp -a $${SYSROOT_DIR}/usr/include $(STAGING_DIR)/usr ; \
+>   			fi ; \
+> @@ -174,9 +183,16 @@ copy_toolchain_sysroot = \
+>   			ln -s $${relpath} $(STAGING_DIR)/$${ARCH_SUBDIR} ; \
+>   			echo "Symlinking $(STAGING_DIR)/$${ARCH_SUBDIR} -> $${relpath}" ; \
+>   		elif [ `dirname $${ARCH_SYSROOT_DIR_CANON}` == `dirname $${SYSROOT_DIR_CANON}` ] ; then \
+> +			echo "Side by side sysroots detected." ; \
+>   			ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
+>   			echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
+>   		fi ; \
+> +	else \
+> +		relpath="./" ; \
+> +		echo "Unable to detect if sysroots are nested or side by side." ; \
+> +		echo "Creating a harmless symlink necessary for certain toolchains." ; \
+> +		ln -snf $${relpath} $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` ; \
+> +		echo "Symlinking $(STAGING_DIR)/`basename $${ARCH_SYSROOT_DIR_CANON}` -> $${relpath}" ; \
+>   	fi ; \
+>   	if test -n "$${SUPPORT_LIB_DIR}" ; then \
+>   		cp -a $${SUPPORT_LIB_DIR}/* $(STAGING_DIR)/lib/ ; \
 >
