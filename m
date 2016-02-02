@@ -1,56 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  2 Feb 2016 16:31:30 +0100
-Subject: [Buildroot] [PATCH v3 12/18] thrift: remove BR2_ARCH_HAS_ATOMICS
+Date: Tue,  2 Feb 2016 16:31:31 +0100
+Subject: [Buildroot] [PATCH v3 13/18] msgpack: rework BR2_ARCH_HAS_ATOMICS
 	dependency
 In-Reply-To: <1454427096-20967-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1454427096-20967-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1454427096-20967-13-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1454427096-20967-14-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thrift builds perfectly fine on SPARC, which doesn't implement any of
-the __sync built-ins, so we can get rid of the BR2_ARCH_HAS_ATOMICS
-dependency.
+The msgpack source code indeed checks for the 4 bytes __sync built-in,
+so this commit switches the package from a BR2_ARCH_HAS_ATOMICS
+dependency to a BR2_TOOLCHAIN_HAS_SYNC_4 dependency.
 
-The dependency on atomic operations originated in commit
-1aaa14d84f1c920423ed0286b78f64a2b4b2b575 ("thrift: disable for ARC"),
-but there was no reference to any autobuilder failure. Our testing
-with an ARC toolchain that doesn't have atomics shows that thrift
-builds just fine, and code inspection also shows no usage of
-__sync_*() built-ins. At the time of the commit, the thrift version
-was 0.9.1, which also did not contain any __sync_*() call.
+python-msgpack, a reverse dependency of msgpack, is changed in the
+same way.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[yann.morin.1998 at free.fr: build-tested on an ARC toolchain without
- atomics, with CPU 770D]
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/thrift/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/msgpack/Config.in        | 4 ++--
+ package/python-msgpack/Config.in | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index b9960f8..54ca9b8 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_THRIFT
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index a57a378..b8e8213 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
 -	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
-@@ -20,7 +19,6 @@ config BR2_PACKAGE_THRIFT
- 	  http://thrift.apache.org/
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  MessagePack is an efficient binary serialization format.
  
- comment "thrift needs a toolchain w/ C++, wchar, threads"
+@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
+ 	  http://msgpack.org/
+ 
+ comment "msgpack needs a toolchain w/ C++"
 -	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index e740835..7206c22 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	bool "python-msgpack"
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on BR2_ARCH_HAS_ATOMICS # msgpack
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -12,6 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	  https://pypi.python.org/pypi/msgpack-python/
+ 
+ comment "python-msgpack needs a toolchain w/ C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
 2.6.4
