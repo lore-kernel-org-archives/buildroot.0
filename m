@@ -1,96 +1,118 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 2 Feb 2016 10:11:34 +0100
-Subject: [Buildroot] [PATCH 14/19] python-treq: new package
-In-Reply-To: <1454373899-22481-15-git-send-email-mc5686@mclink.it>
-References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
- <1454373899-22481-15-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kv2c6PmnGLuLfVbJzZ13jFFfOmxc2On+-xLUizPCxUyMQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 2 Feb 2016 10:20:46 +0100
+Subject: [Buildroot] [git commit] kernel-module-imx-gpu-viv: add new package
+Message-ID: <20160202092359.0DDBC8166B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 2, 2016 at 1:44 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                    |  1 +
->  package/python-treq/Config.in        | 11 +++++++++++
->  package/python-treq/python-treq.hash |  3 +++
->  package/python-treq/python-treq.mk   | 15 +++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/python-treq/Config.in
->  create mode 100644 package/python-treq/python-treq.hash
->  create mode 100644 package/python-treq/python-treq.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 0d91863..56a56a8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -719,6 +719,7 @@ menu "External python modules"
->         source "package/python-spidev/Config.in"
->         source "package/python-thrift/Config.in"
->         source "package/python-tornado/Config.in"
-> +       source "package/python-treq/Config.in"
->         source "package/python-twisted/Config.in"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
-> diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-> new file mode 100644
-> index 0000000..32d1ecf
-> --- /dev/null
-> +++ b/package/python-treq/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_TREQ
-> +       bool "python-treq"
-> +       select BR2_PACKAGE_PYTHON_REQUESTS
-> +       select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
-> +       select BR2_PACKAGE_PYTHON_SIX
-> +       select BR2_PACKAGE_PYTHON_TWISTED
+commit: https://git.buildroot.net/buildroot/commit/?id=da4fff547c4c55926cf0c62cf1ebb6a59d5e0347
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-add "# runtime" comment to all this packages
+This is the Vivante kernel driver split from the kernel source code in
+order to make it possible to be used in any kernel source since 3.10.53.
 
-> +       help
-> +         treq is an HTTP library inspired by requests but written on top of Twisted's Agents.
-> +         It provides a simple, higher level API for making HTTP requests when using Twisted.
-> +
-> +         https://github.com/twisted/treq
-> diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
-> new file mode 100644
-> index 0000000..f4cc4d6
-> --- /dev/null
-> +++ b/package/python-treq/python-treq.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b1fb60759ad5a885cb8ea562553f2d4c, sha256 locally computed
-> +md5    b1fb60759ad5a885cb8ea562553f2d4c  treq-15.1.0.tar.gz
-> +sha256 425a47d5d52a993d51211028fb6ade252e5fbea094e878bb4b644096a7322de8  treq-15.1.0.tar.gz
-> diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
-> new file mode 100644
-> index 0000000..cea9f59
-> --- /dev/null
-> +++ b/package/python-treq/python-treq.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-treq
-> +#
-> +################################################################################
-> +
-> +PYTHON_TREQ_VERSION = 15.1.0
-> +PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
-> +PYTHON_TREQ_SITE = http://pypi.python.org/packages/source/t/treq
-> +PYTHON_TREQ_LICENSE = MIT
-> +PYTHON_TREQ_LICENSE_FILES = LICENSE
-> +PYTHON_TREQ_SETUP_TYPE = setuptools
-> +PYTHON_TREQ_DEPENDENCIES = python-requests python-service-identity python-six python-twisted
+The driver source code provided by Freescale needs fixes so the
+community forked the code to allow faster development and easier
+integration of fixes from the community.
 
-all these packages are run-time dependencies, so remove this line completely
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/32cf391
+https://github.com/Freescale/meta-fsl-arm/commit/4249193
 
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This package has been tested with the following commands:
+ # modprobe galcore
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux.mk                                       |  2 ++
+ package/freescale-imx/Config.in                      |  1 +
+ .../kernel-module-imx-gpu-viv/Config.in              | 14 ++++++++++++++
+ .../kernel-module-imx-gpu-viv.hash                   |  2 ++
+ .../kernel-module-imx-gpu-viv.mk                     | 20 ++++++++++++++++++++
+ 5 files changed, 39 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 3c53a0b..c9986cd 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -251,6 +251,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
++	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
++		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
+ endef
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index a958dbd..dfb6cc4 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -52,6 +52,7 @@ source "package/freescale-imx/libz160/Config.in"
+ endif
+ if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
+ source "package/freescale-imx/imx-gpu-viv/Config.in"
++source "package/freescale-imx/kernel-module-imx-gpu-viv/Config.in"
+ endif
+ 
+ endif
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
+new file mode 100644
+index 0000000..bcc5517
+--- /dev/null
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/Config.in
+@@ -0,0 +1,14 @@
++comment "kernel-module-imx-gpu-viv needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
++
++config BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV
++	bool "kernel-module-imx-gpu-viv"
++	depends on BR2_LINUX_KERNEL
++	help
++	  Kernel loadable module for Vivante GPU.
++
++	  This package uses an exact copy of the GPU kernel driver source code
++	  of the same version as base and include fixes and improvements
++	  developed by FSL Community
++
++	  https://github.com/Freescale/kernel-module-imx-gpu-viv
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+new file mode 100644
+index 0000000..7d01afb
+--- /dev/null
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256 955037fd86d31cdddaed15c254f377f4b30a8abcf5a5e4f9185bd660ff14b7c3  kernel-module-imx-gpu-viv-eeeb23c0fb1cee01318088d417025263479c44ac.tar.gz
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+new file mode 100644
+index 0000000..95b0a6b
+--- /dev/null
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# kernel-module-imx-gpu-viv
++#
++################################################################################
++
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = eeeb23c0fb1cee01318088d417025263479c44ac
++KERNEL_MODULE_IMX_GPU_VIV_SITE = \
++	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
++KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPLv2
++KERNEL_MODULE_IMX_GPU_VIV_LICENSE_FILES = COPYING
++
++KERNEL_MODULE_IMX_GPU_VIV_MODULE_MAKE_OPTS = \
++	AQROOT=$(@D)/kernel-module-imx-gpu-viv-src \
++	KERNEL_DIR=$(LINUX_DIR)
++
++KERNEL_MODULE_IMX_GPU_VIV_MODULE_SUBDIRS = kernel-module-imx-gpu-viv-src
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
