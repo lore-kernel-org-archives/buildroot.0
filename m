@@ -1,86 +1,233 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2016 14:06:03 +0100
-Subject: [Buildroot] [PATCH 3/6] package/libsigrok: fix musl build
-In-Reply-To: <1454248738-12371-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1454248738-12371-1-git-send-email-bernd.kuhls@t-online.de>
- <1454248738-12371-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56B0A9BB.5060509@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue,  2 Feb 2016 14:05:59 +0100
+Subject: [Buildroot] [PATCH v3] support/scripts: add size-stats-compare
+	script
+Message-ID: <1454418359-22799-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 31-01-16 14:58, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
-> http://autobuild.buildroot.net/results/a4d/a4dab61fb39dd642f85fad20972a0a4572af9a73/
-> and others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Leverage the CSV files produces by size-stats (make graph-size) to allow
+for a comparison of rootfs size between two different buildroot
+compilations.
 
+The script takes the file-size CSV files of two compilations as input, and
+produces a textual report of the differences per package.
+Using the -d/--detail flag, the report will show the file size changes
+instead of package size changes.
+The -t/--threshold option allows to ignore file size differences smaller
+or equal than the given threshold (in bytes).
 
- Regards,
- Arnout
+Example output is:
 
-> ---
->  ...01-beaglelogic.h-fix-build-with-musl-libc.patch | 38 ++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
-> 
-> diff --git a/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
-> new file mode 100644
-> index 0000000..e9ecf85
-> --- /dev/null
-> +++ b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
-> @@ -0,0 +1,38 @@
-> +From 1b9ca481b2447154d12a7a94fe90c5b968ddf41c Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sat, 30 Jan 2016 20:01:05 +0100
-> +Subject: [PATCH 1/1] beaglelogic.h: fix build with musl libc
-> +
-> +This patch fixes a build error seen on the buildroot project:
-> +http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
-> +
-> +Patch taken from
-> +https://github.com/dx9/ceph/commit/4f7bcabca7737c3f48f07ca2b4b1296c29e3358b
-> +which solved a similar problem.
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> +Patch sent upstream:
-> +http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1948
-> +
-> + src/hardware/beaglelogic/beaglelogic.h | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/src/hardware/beaglelogic/beaglelogic.h b/src/hardware/beaglelogic/beaglelogic.h
-> +index 9015c61..165b386 100644
-> +--- a/src/hardware/beaglelogic/beaglelogic.h
-> ++++ b/src/hardware/beaglelogic/beaglelogic.h
-> +@@ -28,6 +28,10 @@
-> + #include <stdlib.h>
-> + #include <unistd.h>
-> + 
-> ++#ifndef __STRING
-> ++# define __STRING(x) #x
-> ++#endif
-> ++
-> + /* BeagleLogic device node name */
-> + #define BEAGLELOGIC_DEV_NODE        "/dev/beaglelogic"
-> + #define BEAGLELOGIC_SYSFS_ATTR(a)   "/sys/devices/virtual/misc/beaglelogic/"\
-> +-- 
-> +2.7.0.rc3
-> +
-> 
+Size difference per package (bytes), threshold = 0
+--------------------------------------------------------------------------------
+       -8192         busybox
+      228572   added dmalloc
+      301584   added jq
+--------------------------------------------------------------------------------
+      521964         TOTAL
 
+or with detailed view:
 
+Size difference per file (bytes), threshold = 0
+--------------------------------------------------------------------------------
+       -8192         bin/busybox
+       18152   added usr/bin/jq
+       39252   added usr/bin/dmalloc
+       46968   added usr/lib/libdmalloc.so
+       47288   added usr/lib/libdmallocxx.so
+       47316   added usr/lib/libdmallocth.so
+       47748   added usr/lib/libdmallocthcxx.so
+      283432   added usr/lib/libjq.so.1.0.4
+--------------------------------------------------------------------------------
+      521964         TOTAL
+
+---
+v3:
+- rename this/other to old/new and swap input arguments to match 'diff'-like
+  expectations (ThomasP)
+- change visual representation
+v2:
+Addressing Arnout's comments:
+- improve help text
+- remove references to commits-to-be-backported
+- fix references to 'package' while really file or package could be meant
+- verify header of CSV file is as expected
+- don't print output header for sections that are empty
+- use <= instead of < for threshold
+- use argparse.Filetype for file path verification
+- use positional args for input files
+- improve string wrapping
+- add reference to script in manual
+- ensure Python 3 compatibility
+Other changes:
+- also print out total size difference
+- add docstrings to methods
+- add TODO with possible improvements
+
+ docs/manual/common-usage.txt       |  10 +++
+ support/scripts/size-stats-compare | 127 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 137 insertions(+)
+ create mode 100755 support/scripts/size-stats-compare
+
+diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+index 8d0ba63..18677b8 100644
+--- a/docs/manual/common-usage.txt
++++ b/docs/manual/common-usage.txt
+@@ -317,6 +317,16 @@ The collected filesystem size data is only meaningful after a complete
+ clean rebuild. Be sure to run +make clean all+ before using +make
+ graph-size+.
+ 
++To compare the root filesystem size of two different Buildroot compilations,
++for example after adjusting the configuration or when switching to another
++Buildroot release, use the +size-stats-compare+ script. It takes two
+++file-size-stats.csv+ files (produced by +make graph-size+) as input.
++Refer to the help text of this script for more details:
++
++----------------
++support/scripts/size-stats-compare -h
++----------------
++
+ include::eclipse-integration.txt[]
+ 
+ include::advanced.txt[]
+diff --git a/support/scripts/size-stats-compare b/support/scripts/size-stats-compare
+new file mode 100755
+index 0000000..e5a1ec3
+--- /dev/null
++++ b/support/scripts/size-stats-compare
+@@ -0,0 +1,127 @@
++#!/usr/bin/env python
++
++# Copyright (C) 2016 Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 2 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++# General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program; if not, write to the Free Software
++# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
++
++# TODO (improvements)
++# - support K,M,G size suffixes for threshold
++# - output CSV file in addition to stdout reporting
++
++import csv
++import argparse
++import sys
++
++def read_file_size_csv(inputf, detail=None):
++    """Extract package or file sizes from CSV file into size dictionary"""
++    sizes = {}
++    reader = csv.reader(inputf)
++
++    header = next(reader)
++    if (header[0] != 'File name' or header[1] != 'Package name' or
++        header[2] != 'File size' or header[3] != 'Package size'):
++        print(("Input file %s does not contain the expected header. Are you "
++               "sure this file corresponds to the file-size-stats.csv "
++               "file created by 'make graph-size'?") % inputf.name)
++        sys.exit(1)
++
++    for row in reader:
++        if detail:
++            sizes[row[0]] = int(row[2])
++        else:
++            sizes[row[1]] = int(row[3])
++
++    return sizes
++
++def compare_sizes(old, new):
++    """Return delta/added/removed dictionaries based on two input size
++    dictionaries"""
++    delta = {}
++    oldkeys = set(old.keys())
++    newkeys = set(new.keys())
++
++    # packages/files in both
++    for entry in newkeys.intersection(oldkeys):
++        delta[entry] = ('', new[entry] - old[entry])
++    # packages/files only in new
++    for entry in newkeys.difference(oldkeys):
++        delta[entry] = ('added', new[entry])
++    # packages/files only in old
++    for entry in oldkeys.difference(newkeys):
++        delta[entry] = ('removed', -old[entry])
++
++    return delta
++
++def print_results(result, threshold):
++    """Print the given result dictionary sorted by size, ignoring any entries
++    below or equal to threshold"""
++
++    from six import iteritems
++    list_result = list(iteritems(result))
++    # result is a dictionary: name -> (flag, size difference)
++    # list_result is a list of tuples: (name, (flag, size difference))
++
++    for entry in sorted(list_result, key=lambda entry: entry[1][1]):
++        if threshold is not None and abs(entry[1][1]) <= threshold:
++            continue
++        print('%12s %7s %s' % (entry[1][1], entry[1][0], entry[0]))
++
++
++# main #########################################################################
++
++description = """
++Compare rootfs size between Buildroot compilations, for example after changing
++configuration options or after switching to another Buildroot release.
++
++This script compares the file-size-stats.csv file generated by 'make graph-size'
++with the corresponding file from another Buildroot compilation.
++The size differences can be reported per package or per file.
++Size differences smaller or equal than a given threshold can be ignored.
++"""
++
++parser = argparse.ArgumentParser(description=description,
++                                 formatter_class=argparse.RawDescriptionHelpFormatter)
++
++parser.add_argument('-d', '--detail', action='store_true',
++                    help='''report differences for individual files rather than
++                            packages''')
++parser.add_argument('-t', '--threshold', type=int,
++                    help='''ignore size differences smaller or equal than this
++                            value (bytes)''')
++parser.add_argument('old_file_size_csv', type=argparse.FileType('r'),
++                    metavar='old-file-size-stats.csv',
++                    help="""old CSV file with file and package size statistics,
++                            generated by 'make graph-size'""")
++parser.add_argument('new_file_size_csv', type=argparse.FileType('r'),
++                    metavar='new-file-size-stats.csv',
++                    help='new CSV file with file and package size statistics')
++args = parser.parse_args()
++
++if args.detail:
++    keyword = 'file'
++else:
++    keyword = 'package'
++
++old_sizes = read_file_size_csv(args.old_file_size_csv, args.detail)
++new_sizes = read_file_size_csv(args.new_file_size_csv, args.detail)
++
++delta = compare_sizes(old_sizes, new_sizes)
++
++print('Size difference per %s (bytes), threshold = %s' % (keyword, args.threshold))
++print(80*'-')
++print_results(delta, args.threshold)
++print(80*'-')
++print_results({'TOTAL': ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
++              threshold=None)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.10
