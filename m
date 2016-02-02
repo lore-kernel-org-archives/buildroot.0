@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Tue,  2 Feb 2016 01:44:44 +0100
-Subject: [Buildroot] [PATCH 04/19] python-click: new package
+Date: Tue,  2 Feb 2016 01:44:41 +0100
+Subject: [Buildroot] [PATCH 01/19] python-jinja2: bump to 2.8
 In-Reply-To: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
 References: <1454373899-22481-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454373899-22481-5-git-send-email-mc5686@mclink.it>
+Message-ID: <1454373899-22481-2-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                      |  1 +
- package/python-click/Config.in         |  7 +++++++
- package/python-click/python-click.hash |  3 +++
- package/python-click/python-click.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-click/Config.in
- create mode 100644 package/python-click/python-click.hash
- create mode 100644 package/python-click/python-click.mk
+ package/python-jinja2/python-jinja2.hash | 6 +++---
+ package/python-jinja2/python-jinja2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 52be929..c4ee543 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -627,6 +627,7 @@ menu "External python modules"
- 	source "package/python-characteristic/Config.in"
- 	source "package/python-cheetah/Config.in"
- 	source "package/python-cherrypy/Config.in"
-+	source "package/python-click/Config.in"
- 	source "package/python-coherence/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
-diff --git a/package/python-click/Config.in b/package/python-click/Config.in
-new file mode 100644
-index 0000000..3755146
---- /dev/null
-+++ b/package/python-click/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_CLICK
-+	bool "python-click"
-+	help
-+	  A simple wrapper around optparse for powerful command line utilities.
-+
-+	  https://pypi.python.org/pypi/click
-+
-diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
-new file mode 100644
-index 0000000..72aab0a
---- /dev/null
-+++ b/package/python-click/python-click.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=83252a8095397b1f5f710fdd58b484d9, sha256 locally computed.
-+md5	83252a8095397b1f5f710fdd58b484d9  click-6.2.tar.gz
-+sha256	fba0ff70f5ebb4cebbf64c40a8fbc222fb7cf825237241e548354dabe3da6a82  click-6.2.tar.gz
-diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
-new file mode 100644
-index 0000000..cf28825
---- /dev/null
-+++ b/package/python-click/python-click.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-click
-+#
-+################################################################################
-+
-+PYTHON_CLICK_VERSION = 6.2
-+PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
-+PYTHON_CLICK_SITE = http://pypi.python.org/packages/source/c/click
-+PYTHON_CLICK_LICENSE = BSD
-+PYTHON_CLICK_LICENSE_FILES = LICENSE
-+PYTHON_CLICK_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 6e8c160..04fcbc8 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b9dffd2f3b43d673802fe857c8445b1a, sha256 locally computed
+-md5	b9dffd2f3b43d673802fe857c8445b1a  Jinja2-2.7.3.tar.gz
+-sha256	2e24ac5d004db5714976a04ac0e80c6df6e47e98c354cb2c0d82f8879d4f8fdb  Jinja2-2.7.3.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=edb51693fe22c53cee5403775c71a99e, sha256 locally computed.
++md5	edb51693fe22c53cee5403775c71a99e  Jinja2-2.8.tar.gz
++sha256	bc1ff2ff88dbfacefde4ddde471d1417d3b304e8df103a7a9437d47269201bf4  Jinja2-2.8.tar.gz
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 8440b64..ce6e2b9 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JINJA2_VERSION = 2.7.3
++PYTHON_JINJA2_VERSION = 2.8
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+ PYTHON_JINJA2_SITE = http://pypi.python.org/packages/source/J/Jinja2
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
 -- 
 2.1.4
