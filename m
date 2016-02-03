@@ -1,174 +1,110 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Feb 2016 00:35:44 +0100
-Subject: [Buildroot] [PATCH 06/16 v4] core/legal-info: ensure legal-info
- works in off-line mode
-In-Reply-To: <b64d74dcfda277aa72757454fc79a388540bd8a8.1454536753.git.yann.morin.1998@free.fr>
-References: <cover.1454536753.git.yann.morin.1998@free.fr>
- <b64d74dcfda277aa72757454fc79a388540bd8a8.1454536753.git.yann.morin.1998@free.fr>
-Message-ID: <20160203233544.GD3428@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 4 Feb 2016 00:57:38 +0100
+Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
+	licensing
+In-Reply-To: <20160203230208.GB3428@free.fr>
+References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
+ <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
+ <20160203230208.GB3428@free.fr>
+Message-ID: <56B293F2.9070201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
 
-On 2016-02-03 23:21 +0100, Yann E. MORIN spake thusly:
-> TBC: explain the part about the stamp file
 
-Damn, I borked my rebase and lost that part of the commit log... :-(
+On 04-02-16 00:02, Yann E. MORIN wrote:
+> Luca, All,
+> 
+> On 2016-02-01 23:19 +0100, Luca Ceresoli spake thusly:
+>> Several people have been asking what is the license of the patches
+>> provided by Buildroot. COPYING is the authoritative place to state it.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+>> ---
+>> Changes v1 -> v2:
+>>  - Rewrite it almost entirely (Arnout, Thomas).
+>> ---
+>>  COPYING | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/COPYING b/COPYING
+>> index d511905..3596777 100644
+>> --- a/COPYING
+>> +++ b/COPYING
+>> @@ -1,3 +1,11 @@
+>> +Except for the patches provided for packages, Buildroot is licensed
+>> +under the GNU General Public License, version 2.
+> 
+> There a gotcha here. The manual states, in chapter 12.3:
+> 
+>     Buildroot [is] released under the GNU General Public License,
+>     version 2 or (at your option) any later version.
+> 
+> So, we have to clarify: is it GPLv2 or GPLV2+ ?
+> 
+> It's too late today for me to go digging; I'll do that tomorrow. Just
+> rmind me before the end of the week if there's not feedback from my part
+> on this topic.
+> 
+> Until then, NAK.
+> 
+>> +Patches provided by Buildroot for packages are released under the same
+>> +license as the software that they modify.
+> 
+> Here's an alternative proposal, to replace both sentences:
+> 
+>     Buildroot comes with its own license, reproduced below.
+> 
+>     Buildroot also bundles patch files, which are applied to the
+>     sources of the various packages. Those patches are not covered
+>     by the license of Buildroot. See those individual packages for
+>     their license (running 'make legal-info' after your build may
+>     help).
 
-I'll rewrite it tomorrow (too late now).
+ Much better.
 
-Sorry for the mess... :-/
+ Still better:
 
-Regards,
-Yann E. MORIN.
+    Buildroot comes with its own license, reproduced below.
 
-> Almost all packages which are saved for legal-info have their source
-> archives downloaded as part of 'make source', which makes an off-line
-> build completely possible [0].
+    Buildroot also bundles patch files, which are applied to the
+    sources of the various packages. Those patches are not covered
+    by the license of Buildroot, but are provided under the same
+    license as the software they apply to. Run 'make legal-info' to
+    collect the licenses of your selected packages and their patches.
+
+(borrowing from the update of the manual here).
+
+ Note that this sentence doesn't clarify the issue of proprietary licenses. It's
+basically still the same as what we have now in that respect.
+
+ Regards,
+ Arnout
+
 > 
-> However, for the pre-configured external toolchains, the source tarball
-> is different, as the main tarball is a binary package. And that source
-> tarball is only downloaded during the legal-info phase, which makes it
-> inconvenient for full off-line builds.
+> Regards,
+> Yann E. MORIN.
 > 
-> We fix that by adding a new rule, $(1)-legal-source which only
-> $(1)-all-source depends on, so that we only download it for a top-level
-> 'make source', not as part of the standard download mechanism (i.e. only
-> what is really needed to build).
-> 
-> This way, we can do a complete [0] off-line build and are still able to
-> generate legal-info, while at the same time we do not incur any download
-> overhead during a simple build.
-> 
-> Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
-> not empty. However, since _ACTUAL_SOURCE_TARBALL defaults to the value
-> of _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
-> spurious report of a missing hash for the tarball, since it was not in
-> a standard package rule (configure, build, install..) and thus would
-> miss the PKG and PKGDIR variables to find the .hash file.
-> 
-> We fix that in this commit as well, by:
-> 
->   - setting PKG and PKGDIR just for the -legal-source rule;
-> 
->   - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
->     the same as _SOURCE (to avoid a second report about the hash).
-> 
-> [0] Save for nodejs which invarriably wants to download stuff at build
-> time. Sigh... :-( Fixing that is work for another time...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <jacmet@uclibc.org>
-> 
-> ---
-> Changes v3 -> v4:
->   - handle it with a stamp file  (Luca)
-> 
-> Changes v2 -> v3:
->   - re-order the PHONY targets  (Arnout)
->   - don't reorder setting _ACTUAL_SOURCE/_SITE, it's done in its own
->     patch now  (Arnout)
->   - adapt the commit log accordingly  (Arnout)
->   - typo
-> 
-> Changes v1 -> v2:
->   - drop the 'redistribute == ignore', it does not exist yet
-> ---
->  package/pkg-generic.mk | 25 ++++++++++++++++++++++---
->  1 file changed, 22 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 5958029..95dbffd 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -123,6 +123,12 @@ $(BUILD_DIR)/%/.stamp_downloaded:
->  	$(Q)mkdir -p $(@D)
->  	$(Q)touch $@
->  
-> +# Retrieve actual source archive, e.g. for prebuilt external toolchains
-> +$(BUILD_DIR)/%/.stamp_actual_downloaded:
-> +	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL)); \
-> +	$(Q)mkdir -p $(@D)
-> +	$(Q)touch $@
-> +
->  # Unpack the archive
->  $(BUILD_DIR)/%/.stamp_extracted:
->  	@$(call step_start,extract)
-> @@ -527,6 +533,7 @@ $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
->  $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
->  $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
->  $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
-> +$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_DIR)/.stamp_actual_downloaded
->  $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
->  
->  # default extract command
-> @@ -634,6 +641,17 @@ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
->  
->  $(1)-source:		$$($(2)_TARGET_SOURCE)
->  
-> +$(1)-all-source:	$(1)-legal-source
-> +$(1)-legal-info:	$(1)-legal-source
-> +$(1)-legal-source:	$(1)-source
-> +
-> +# Only downlaod the actual source if it differs from the 'main' archive
-> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
-> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
-> +$(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
-> +endif # actual sources != sources
-> +endif # actual sources != ""
-> +
->  $(1)-source-check:
->  	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
->  
-> @@ -659,6 +677,7 @@ $(1)-extract:		$(1)-rsync
->  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
->  
->  $(1)-source:
-> +$(1)-legal-source:
->  
->  $(1)-source-check:
->  	test -d $$($(2)_OVERRIDE_SRCDIR)
-> @@ -731,6 +750,8 @@ $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
->  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
->  $$($(2)_TARGET_SOURCE):			PKG=$(2)
->  $$($(2)_TARGET_SOURCE):			PKGDIR=$(pkgdir)
-> +$$($(2)_TARGET_ACTUAL_SOURCE):		PKG=$(2)
-> +$$($(2)_TARGET_ACTUAL_SOURCE):		PKGDIR=$(pkgdir)
->  $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
->  
->  # Compute the name of the Kconfig option that correspond to the
-> @@ -801,9 +822,6 @@ else
->  # Other packages
->  
->  ifeq ($$($(2)_REDISTRIBUTE),YES)
-> -ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
-> -	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
-> -endif
->  # Copy the source tarball
->  	$$(Q)$$(call hardlink-copy,\
->  		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
-> @@ -898,6 +916,7 @@ endif
->  	$(1)-install-staging \
->  	$(1)-install-target \
->  	$(1)-legal-info \
-> +	$(1)-legal-source \
->  	$(1)-patch \
->  	$(1)-rebuild \
->  	$(1)-reconfigure \
-> -- 
-> 1.9.1
+>> +-----------------------------------------------------------------
+>> +
+>>  		    GNU GENERAL PUBLIC LICENSE
+>>  		       Version 2, June 1991
+>>  
+>> -- 
+>> 1.9.1
+>>
 > 
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
