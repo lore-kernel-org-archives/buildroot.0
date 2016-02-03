@@ -1,8 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  3 Feb 2016 22:45:27 +0100
-Subject: [Buildroot] [PATCH RFC 0/2] unify library locations in
-	target/staging
-Message-ID: <1454535929-25379-1-git-send-email-patrickdepinguin@gmail.com>
+Date: Wed,  3 Feb 2016 22:45:28 +0100
+Subject: [Buildroot] [PATCH RFC 1/2] toolchain: copy_toolchain_lib_root:
+	rename LIBSPATH to LIBPATHS
+In-Reply-To: <1454535929-25379-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1454535929-25379-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1454535929-25379-2-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,30 +13,42 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-See second patch for full details, first patch is just a minor correction
-in variable naming.
+LIBSPATH is populated based on a find with a pattern that can look like:
+    libfoo*.so
+and thus the output of the find will contain all file paths that match this
+pattern.
 
-This is code has been tested for various toolchains, BUT is not yet correct
-for Blackfin toolchains when FDPIC_SHARED is selected (hence: DO NOT APPLY)
-For this family there is some specific code that needs to be fixed.
+Unfortunately, the name LIBSPATH suggests that only one entry is returned,
+rather than possibly multiple.
 
-Another improvement is the simplification of the copy_toolchain_lib_root
-arguments: only the LIB argument is used now.
+As this code is quite complex, use the more accurate name LIBPATHS iso
+LIBSPATH.
 
-Finally, a follow-up patch is expected to unify the variables LIB_EXTERNAL_LIBS
-and USR_LIB_EXTERNAL_LIBS, as there is no need for the distinction anymore.
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ toolchain/helpers.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-/Thomas
-
-
-
-Thomas De Schampheleire (2):
-  toolchain: copy_toolchain_lib_root: rename LIBSPATH to LIBPATHS
-  toolchain-external: unify library locations in target and staging dir
-
- toolchain/helpers.mk                               | 18 ++++--------------
- toolchain/toolchain-external/toolchain-external.mk | 14 ++++----------
- 2 files changed, 8 insertions(+), 24 deletions(-)
-
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 02cc0bb..ee878e8 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -55,13 +55,13 @@ copy_toolchain_lib_root = \
+ 		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR} \
+ 		$${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
+ 		$${SUPPORT_LIB_DIR} ; do \
+-		LIBSPATH=`find $${dir} -maxdepth 1 -name "$${LIB}" 2>/dev/null` ; \
+-		if test -n "$${LIBSPATH}" ; then \
++		LIBPATHS=`find $${dir} -maxdepth 1 -name "$${LIB}" 2>/dev/null` ; \
++		if test -n "$${LIBPATHS}" ; then \
+ 			break ; \
+ 		fi \
+ 	done ; \
+ 	mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+-	for LIBPATH in $${LIBSPATH} ; do \
++	for LIBPATH in $${LIBPATHS} ; do \
+ 		while true ; do \
+ 			LIBNAME=`basename $${LIBPATH}`; \
+ 			LIBDIR=`dirname $${LIBPATH}` ; \
 -- 
 2.4.10
