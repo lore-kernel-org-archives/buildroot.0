@@ -1,76 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Feb 2016 23:22:00 +0100
-Subject: [Buildroot] [PATCH 10/16 v4] core/apply-patches: store full path of
-	applied patches
+Date: Wed,  3 Feb 2016 23:21:55 +0100
+Subject: [Buildroot] [PATCH 05/16 v4] core/pkg-generic: reorder variables
+	definitions for legal-info
 In-Reply-To: <cover.1454536753.git.yann.morin.1998@free.fr>
 References: <cover.1454536753.git.yann.morin.1998@free.fr>
-Message-ID: <dee59ce3d408b1479a3c087b89c338d37d17d34d.1454536753.git.yann.morin.1998@free.fr>
+Message-ID: <67f6a5f78fbec35e884eac7200bf0a1f3ad2968d.1454536753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we only store the filename of the applied patches.
+Move the declarations of _ACTUAL_SOURCE and _ACTUAL_SITE earlier, so
+that they are close to where _SOURCE and _SITE are handled.
 
-However, we are soon to want to install those patches in the legal-info
-directory, so we'll have to know where those patches come from.
-
-Instead of duplicating the logic to find the patches (bundled,
-downloaded, from a global patch dir...), just store the full path to
-each of those patches so we can retrieve them more easily later on.
-
-Also always create the list-file, even if empty, so that we need not
-test for its existence before reading it.
+This looks so far like a purely cosmetic change, but makes more sense
+with the follow-up patch, where we'll need them earlier in the file.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-[Tested only with patches in the Buildroot sources]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 ---
-Changes v1 -> v2:
-  - do not duplicate '/' in paths  (Luca)
+Changes v2 -> v3:
+  - move that to its own patch  (Arnout)
 ---
- support/scripts/apply-patches.sh | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ package/pkg-generic.mk | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-index 201278d..20a1552 100755
---- a/support/scripts/apply-patches.sh
-+++ b/support/scripts/apply-patches.sh
-@@ -63,8 +63,12 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
-     xargs -0 -r rm -f
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 893ee07..5958029 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -427,6 +427,14 @@ ifndef $(2)_SOURCE
+  endif
+ endif
  
- function apply_patch {
--    path=$1
--    patch=$2
-+    path="${1%%/}"
-+    patch="${2}"
-+    case "${path}" in
-+        /*) ;;
-+        *)  path="$(pwd)/${path}";;
-+    esac
-     if [ "$3" ]; then
-         type="series"; uncomp="cat"
-     else
-@@ -99,7 +103,7 @@ function apply_patch {
-         echo "Error: missing patch file ${path}/$patch"
-         exit 1
-     fi
--    echo $patch >> ${builddir}/.applied_patches_list
-+    echo "${path}/${patch}" >> ${builddir}/.applied_patches_list
-     ${uncomp} "${path}/$patch" | patch -g0 -p1 -E -d "${builddir}" -t -N $silent
-     if [ $? != 0 ] ; then
-         echo "Patch failed!  Please fix ${patch}!"
-@@ -141,6 +145,7 @@ function scan_patchdir {
-     fi
- }
++# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
++# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
++# point to the actual sources tarball. Use the actual sources for legal-info.
++# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
++# so these are the defaults for FOO_ACTUAL_*.
++$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
++$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
++
+ ifndef $(2)_PATCH
+  ifdef $(3)_PATCH
+   $(2)_PATCH = $$($(3)_PATCH)
+@@ -763,14 +771,6 @@ endif
+ endif
+ endif
  
-+touch ${builddir}/.applied_patches_list
- scan_patchdir "$patchdir" "$patchpattern"
- 
- # Check for rejects...
+-# If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
+-# indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
+-# point to the actual sources tarball. Use the actual sources for legal-info.
+-# For most packages the FOO_SITE/FOO_SOURCE pair points to real source code,
+-# so these are the defaults for FOO_ACTUAL_*.
+-$(2)_ACTUAL_SOURCE_TARBALL ?= $$($(2)_SOURCE)
+-$(2)_ACTUAL_SOURCE_SITE    ?= $$(call qstrip,$$($(2)_SITE))
+-
+ # legal-info: produce legally relevant info.
+ $(1)-legal-info:
+ # Packages without a source are assumed to be part of Buildroot, skip them.
 -- 
 1.9.1
