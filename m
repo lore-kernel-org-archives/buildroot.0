@@ -1,72 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 23:45:16 +0100
-Subject: [Buildroot] [PATCH v1] qt5: bump version to 5.5.1
-In-Reply-To: <1454536883-5029-1-git-send-email-ps.report@gmx.net>
-References: <1454536883-5029-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160203234516.1d9e0291@free-electrons.com>
+Date: Wed, 3 Feb 2016 23:46:00 +0100
+Subject: [Buildroot] [git commit] toolchain: copy_toolchain_lib_root: rename
+	LIBSPATH to LIBPATHS
+Message-ID: <20160203224616.BD7358014A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: https://git.buildroot.net/buildroot/commit/?id=335f331ff29b825686d74ebb33e59bc400855c82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  3 Feb 2016 23:01:23 +0100, Peter Seiderer wrote:
-> Reduce hash lists to strongest only (sha256).
-> 
-> Remove upstream committed patches (qt5base):
->  - 0004-no-gold-linker-for-host-build.patch (see [1], [2])
->  - 0007-big_endian-fix_destformat.patch (see [3])
->  - 0008-QtGui-force-image-dir-in-include_path.patch (see [4], [5])
-> 
-> [1] https://bugreports.qt.io/browse/QTBUG-46125
-> [2] https://codereview.qt-project.org/#/c/113563/
-> [3] https://codereview.qt-project.org/#/c/120654/
-> [4] https://bugreports.qt.io/browse/QTBUG-47400
-> [5] https://codereview.qt-project.org/#/c/122145/
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Note: updates new qt5tools package too.
-> ---
->  package/qt5/qt5.mk                                 |  2 +-
->  package/qt5/qt53d/qt53d.hash                       |  4 +-
->  .../0004-no-gold-linker-for-host-build.patch       | 41 ----------
->  .../qt5base/0007-big_endian-fix_destformat.patch   | 34 ---------
->  ...008-QtGui-force-image-dir-in-include_path.patch | 89 ----------------------
->  package/qt5/qt5base/qt5base.hash                   |  6 +-
->  package/qt5/qt5connectivity/qt5connectivity.hash   |  6 +-
->  package/qt5/qt5declarative/qt5declarative.hash     |  6 +-
->  package/qt5/qt5enginio/qt5enginio.hash             |  6 +-
->  .../qt5graphicaleffects/qt5graphicaleffects.hash   |  6 +-
->  package/qt5/qt5imageformats/qt5imageformats.hash   |  6 +-
->  package/qt5/qt5multimedia/qt5multimedia.hash       |  6 +-
->  package/qt5/qt5quick1/qt5quick1.hash               |  6 +-
->  package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  6 +-
->  package/qt5/qt5script/qt5script.hash               |  6 +-
->  package/qt5/qt5sensors/qt5sensors.hash             |  6 +-
->  package/qt5/qt5serialport/qt5serialport.hash       |  6 +-
->  package/qt5/qt5svg/qt5svg.hash                     |  6 +-
->  package/qt5/qt5tools/qt5tools.hash                 |  6 +-
->  package/qt5/qt5webchannel/qt5webchannel.hash       |  6 +-
->  .../qt5/qt5webkit-examples/qt5webkit-examples.hash |  6 +-
->  package/qt5/qt5webkit/qt5webkit.hash               |  6 +-
->  package/qt5/qt5websockets/qt5websockets.hash       |  6 +-
->  package/qt5/qt5x11extras/qt5x11extras.hash         |  6 +-
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  6 +-
->  25 files changed, 43 insertions(+), 247 deletions(-)
->  delete mode 100644 package/qt5/qt5base/0004-no-gold-linker-for-host-build.patch
->  delete mode 100644 package/qt5/qt5base/0007-big_endian-fix_destformat.patch
->  delete mode 100644 package/qt5/qt5base/0008-QtGui-force-image-dir-in-include_path.patch
+LIBSPATH is populated based on a find with a pattern that can look like:
+    libfoo*.so
+and thus the output of the find will contain all file paths that match this
+pattern.
 
-Applied, after removing the chunk related to qt5tools, since it hasn't
-been merged yet.
+Unfortunately, the name LIBSPATH suggests that only one entry is returned,
+rather than possibly multiple.
 
-Thanks!
+As this code is quite complex, use the more accurate name LIBPATHS iso
+LIBSPATH.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/helpers.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 02cc0bb..ee878e8 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -55,13 +55,13 @@ copy_toolchain_lib_root = \
+ 		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR} \
+ 		$${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
+ 		$${SUPPORT_LIB_DIR} ; do \
+-		LIBSPATH=`find $${dir} -maxdepth 1 -name "$${LIB}" 2>/dev/null` ; \
+-		if test -n "$${LIBSPATH}" ; then \
++		LIBPATHS=`find $${dir} -maxdepth 1 -name "$${LIB}" 2>/dev/null` ; \
++		if test -n "$${LIBPATHS}" ; then \
+ 			break ; \
+ 		fi \
+ 	done ; \
+ 	mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
+-	for LIBPATH in $${LIBSPATH} ; do \
++	for LIBPATH in $${LIBPATHS} ; do \
+ 		while true ; do \
+ 			LIBNAME=`basename $${LIBPATH}`; \
+ 			LIBDIR=`dirname $${LIBPATH}` ; \
