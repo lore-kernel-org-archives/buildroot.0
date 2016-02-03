@@ -1,135 +1,166 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Feb 2016 00:34:30 +0100
-Subject: [Buildroot] [PATCH v2 4/5] docs/manual: add section about patch
-	licensing
-In-Reply-To: <1454365196-26319-5-git-send-email-luca@lucaceresoli.net>
-References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
- <1454365196-26319-5-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160203233430.GC3428@free.fr>
+Date: Thu, 4 Feb 2016 00:35:44 +0100
+Subject: [Buildroot] [PATCH 06/16 v4] core/legal-info: ensure legal-info
+ works in off-line mode
+In-Reply-To: <b64d74dcfda277aa72757454fc79a388540bd8a8.1454536753.git.yann.morin.1998@free.fr>
+References: <cover.1454536753.git.yann.morin.1998@free.fr>
+ <b64d74dcfda277aa72757454fc79a388540bd8a8.1454536753.git.yann.morin.1998@free.fr>
+Message-ID: <20160203233544.GD3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+All,
 
-On 2016-02-01 23:19 +0100, Luca Ceresoli spake thusly:
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> ---
-> Changes v1 -> v2:
-> - "they modify" -> "they apply to" (Thomas).
-> ---
->  docs/manual/legal-notice.txt | 16 ++++++++++++++--
->  docs/manual/patch-policy.txt |  2 +-
->  2 files changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-> index 5895224..49c4965 100644
-> --- a/docs/manual/legal-notice.txt
-> +++ b/docs/manual/legal-notice.txt
-> @@ -131,11 +131,13 @@ Buildroot, with the name used in the manifest files:
->    http://apache.org/licenses/LICENSE-2.0.html[
->    Apache License, version 2.0];
->  
-> +[[legal-info-buildroot]]
->  === Complying with the Buildroot license
->  
->  Buildroot itself is an open source software, released under the
-> -http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General Public
-> -License, version 2] or (at your option) any later version.
-> +http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General
-> +Public License, version 2] or (at your option) any later version, with
-> +the exception of the package patches detailed below.
+On 2016-02-03 23:21 +0100, Yann E. MORIN spake thusly:
+> TBC: explain the part about the stamp file
 
-As previously said, we have to clarify this. However, since yout patch
-does not change it, and merely wraps lines:
+Damn, I borked my rebase and lost that part of the commit log... :-(
 
->  However, being a build system, it is not normally part of the end product:
->  if you develop the root filesystem, kernel, bootloader or toolchain for a
->  device, the code of Buildroot is only present on the development machine, not
-> @@ -156,3 +158,13 @@ material that must be redistributed.
->  
->  Keep in mind that this is only the Buildroot developers' opinion, and you
->  should consult your legal department or lawyer in case of any doubt.
-> +
-> +==== Patches to packages
-> +
-> +Buildroot is bundled with a set of patches that it applies to packages
+I'll rewrite it tomorrow (too late now).
 
-... that are applied to...
-
-> +to fix cross-compilation or other issues. See xref:patch-policy[] for
-> +the technical details.
-> +
-> +These patches are effectively a derived work of the upstream package,
-
-... a derived work of the package they are applied to...
-
-> +and they are released under the same license as the software they
-
-and so are released...
-
-> +apply to.
-
-So, we still have the problem of patches that are applied to packages
-that can be had under a non-public license, like e.g. Qt, polarssl...
-for which there exists a proprietary alternative?
-
-In my opinion, the patches we carry are only available under the FLOSS
-license we can get them:
-
-  - if we cherry-picked them from upstream, then the only license we
-    ever had for those patches is the FLOSS license, not the proprietary
-    one; so they can't be applied to the proprietary version of the
-    package (but a licensee may get those patches from the licensor, and
-    replace our patches with the ones it got from the licensor);
-
-  - if we wrote them, the only solution we have is to make them public
-    domain, or they could not be applied either (we don't know the
-    licensing terms for that proprietary version, so we can't license
-    them under those terms);
-
-  - if we got them from somewhere else (e.g. openwrt, gentoo,
-    alpine...), then we'd have to get the licensing terms from those
-    providers, and I guess most of them either don't know (most
-    probable) or would only provide them under the usual FLOSS license
-    of that package (not knowing better than us in points 1 and 2 above).
-
-So, this situation is really complex, and we can't deal with that in
-such a simple way.
-
-> They are not distributed under the Buildroot license.
-
-Well, what of a patch to a GPLv2 package? It is the same license as
-Buidlroot's license... What I mean, is that some patches might be
-covered by the same licensing terms, but that it's not because of
-Buildroot, but because of the package they are applied to. I'd like we
-make that clearer...
-
-But as I explained above, it is far from trivial. We need to think a bit
-more about it...
-
-So NAK on my part.
+Sorry for the mess... :-/
 
 Regards,
 Yann E. MORIN.
 
-> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-> index d50c971..fe432a7 100644
-> --- a/docs/manual/patch-policy.txt
-> +++ b/docs/manual/patch-policy.txt
-> @@ -91,7 +91,7 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
->  === Format and licensing of the package patches
+> Almost all packages which are saved for legal-info have their source
+> archives downloaded as part of 'make source', which makes an off-line
+> build completely possible [0].
+> 
+> However, for the pre-configured external toolchains, the source tarball
+> is different, as the main tarball is a binary package. And that source
+> tarball is only downloaded during the legal-info phase, which makes it
+> inconvenient for full off-line builds.
+> 
+> We fix that by adding a new rule, $(1)-legal-source which only
+> $(1)-all-source depends on, so that we only download it for a top-level
+> 'make source', not as part of the standard download mechanism (i.e. only
+> what is really needed to build).
+> 
+> This way, we can do a complete [0] off-line build and are still able to
+> generate legal-info, while at the same time we do not incur any download
+> overhead during a simple build.
+> 
+> Also, we previously downloaded the _ACTUAL_SOURCE_TARBALL when it was
+> not empty. However, since _ACTUAL_SOURCE_TARBALL defaults to the value
+> of _SOURCE, it can not be empty when _SOURCE is not. Thus, we'd get a
+> spurious report of a missing hash for the tarball, since it was not in
+> a standard package rule (configure, build, install..) and thus would
+> miss the PKG and PKGDIR variables to find the .hash file.
+> 
+> We fix that in this commit as well, by:
+> 
+>   - setting PKG and PKGDIR just for the -legal-source rule;
+> 
+>   - only downloading _ACTUAL_SOURCE_TARBALL if it is not empty *and* not
+>     the same as _SOURCE (to avoid a second report about the hash).
+> 
+> [0] Save for nodejs which invarriably wants to download stuff at build
+> time. Sigh... :-( Fixing that is work for another time...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> 
+> ---
+> Changes v3 -> v4:
+>   - handle it with a stamp file  (Luca)
+> 
+> Changes v2 -> v3:
+>   - re-order the PHONY targets  (Arnout)
+>   - don't reorder setting _ACTUAL_SOURCE/_SITE, it's done in its own
+>     patch now  (Arnout)
+>   - adapt the commit log accordingly  (Arnout)
+>   - typo
+> 
+> Changes v1 -> v2:
+>   - drop the 'redistribute == ignore', it does not exist yet
+> ---
+>  package/pkg-generic.mk | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 5958029..95dbffd 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -123,6 +123,12 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+>  	$(Q)mkdir -p $(@D)
+>  	$(Q)touch $@
 >  
->  Patches are released under the same license as the software they apply
-> -to.
-> +to. (see xref:legal-info-buildroot[]).
+> +# Retrieve actual source archive, e.g. for prebuilt external toolchains
+> +$(BUILD_DIR)/%/.stamp_actual_downloaded:
+> +	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL)); \
+> +	$(Q)mkdir -p $(@D)
+> +	$(Q)touch $@
+> +
+>  # Unpack the archive
+>  $(BUILD_DIR)/%/.stamp_extracted:
+>  	@$(call step_start,extract)
+> @@ -527,6 +533,7 @@ $(2)_TARGET_RSYNC =	        $$($(2)_DIR)/.stamp_rsynced
+>  $(2)_TARGET_PATCH =		$$($(2)_DIR)/.stamp_patched
+>  $(2)_TARGET_EXTRACT =		$$($(2)_DIR)/.stamp_extracted
+>  $(2)_TARGET_SOURCE =		$$($(2)_DIR)/.stamp_downloaded
+> +$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_DIR)/.stamp_actual_downloaded
+>  $(2)_TARGET_DIRCLEAN =		$$($(2)_DIR)/.stamp_dircleaned
 >  
->  A message explaining what the patch does, and why it is needed, should
->  be added in the header commentary of the patch.
+>  # default extract command
+> @@ -634,6 +641,17 @@ $(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
+>  
+>  $(1)-source:		$$($(2)_TARGET_SOURCE)
+>  
+> +$(1)-all-source:	$(1)-legal-source
+> +$(1)-legal-info:	$(1)-legal-source
+> +$(1)-legal-source:	$(1)-source
+> +
+> +# Only downlaod the actual source if it differs from the 'main' archive
+> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),)
+> +ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+> +$(1)-legal-source:	$$($(2)_TARGET_ACTUAL_SOURCE)
+> +endif # actual sources != sources
+> +endif # actual sources != ""
+> +
+>  $(1)-source-check:
+>  	$$(foreach p,$$($(2)_ALL_DOWNLOADS),$$(call SOURCE_CHECK,$$(p))$$(sep))
+>  
+> @@ -659,6 +677,7 @@ $(1)-extract:		$(1)-rsync
+>  $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+>  
+>  $(1)-source:
+> +$(1)-legal-source:
+>  
+>  $(1)-source-check:
+>  	test -d $$($(2)_OVERRIDE_SRCDIR)
+> @@ -731,6 +750,8 @@ $$($(2)_TARGET_PATCH):			PKGDIR=$(pkgdir)
+>  $$($(2)_TARGET_EXTRACT):		PKG=$(2)
+>  $$($(2)_TARGET_SOURCE):			PKG=$(2)
+>  $$($(2)_TARGET_SOURCE):			PKGDIR=$(pkgdir)
+> +$$($(2)_TARGET_ACTUAL_SOURCE):		PKG=$(2)
+> +$$($(2)_TARGET_ACTUAL_SOURCE):		PKGDIR=$(pkgdir)
+>  $$($(2)_TARGET_DIRCLEAN):		PKG=$(2)
+>  
+>  # Compute the name of the Kconfig option that correspond to the
+> @@ -801,9 +822,6 @@ else
+>  # Other packages
+>  
+>  ifeq ($$($(2)_REDISTRIBUTE),YES)
+> -ifneq ($$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_SOURCE))
+> -	$$(call DOWNLOAD,$$($(2)_ACTUAL_SOURCE_SITE)/$$($(2)_ACTUAL_SOURCE_TARBALL))
+> -endif
+>  # Copy the source tarball
+>  	$$(Q)$$(call hardlink-copy,\
+>  		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
+> @@ -898,6 +916,7 @@ endif
+>  	$(1)-install-staging \
+>  	$(1)-install-target \
+>  	$(1)-legal-info \
+> +	$(1)-legal-source \
+>  	$(1)-patch \
+>  	$(1)-rebuild \
+>  	$(1)-reconfigure \
 > -- 
 > 1.9.1
 > 
