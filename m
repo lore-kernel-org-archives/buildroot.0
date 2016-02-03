@@ -1,53 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  3 Feb 2016 23:22:04 +0100
-Subject: [Buildroot] [PATCH 14/16 v4] core/legal-info: generate a hash of
-	all saved files
+Date: Wed,  3 Feb 2016 23:22:06 +0100
+Subject: [Buildroot] [PATCH 16/16 v4] core/pkg-virtual: ignore from
+	legal-info output
 In-Reply-To: <cover.1454536753.git.yann.morin.1998@free.fr>
 References: <cover.1454536753.git.yann.morin.1998@free.fr>
-Message-ID: <ff3a81f56f95e0f7c39a89e508569added0c231a.1454536753.git.yann.morin.1998@free.fr>
+Message-ID: <758fb04b86bec833cd306ab5678d18504920bd54.1454536753.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Having a hash of the saved files can be interesting for the recipient to
-verify the integrity of the files.
-
-We remove the warning file earlier, to exclude it from the hash list.
+Virtual packages really have nothing to save for legal-info, so we just
+ignore them, to avoid spurious "extracting" and "patching" messages
+while running legal-info.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <jacmet@uclibc.org>
 
 ---
+Changes v3 -> v4:
+  - rephrase the .Note  (Luca)
+  - drop now-incorrect blurb from the commit log  (Luca)
+
 Changes v1 -> v2:
-  - simplify getting rid of the ..../legal-info/ prefix  (Luca)
-  - always sort with the C locale
+  - use the new _LEGAL_IGNORE variable  (Thomas, Luca, Peter)
 ---
- Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ docs/manual/adding-packages-virtual.txt | 5 +++++
+ package/pkg-virtual.mk                  | 2 ++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 68259fd..1acc2b2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -696,8 +696,14 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
- 		cat support/legal-info/README.warnings-header \
- 			$(LEGAL_WARNINGS) >>$(LEGAL_REPORT); \
- 		cat $(LEGAL_WARNINGS); fi
--	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
- 	@rm -f $(LEGAL_WARNINGS)
-+	@(cd $(LEGAL_INFO_DIR); \
-+	  find * -type f -exec sha256sum {} + \
-+	  |LC_ALL=C sort -k2 \
-+	  >.legal-info.sha256; \
-+	  mv .legal-info.sha256 legal-info.sha256 \
-+	)
-+	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
+index a5f17a2..3857927 100644
+--- a/docs/manual/adding-packages-virtual.txt
++++ b/docs/manual/adding-packages-virtual.txt
+@@ -56,6 +56,11 @@ The +.mk+ for the virtual package should just evaluate the +virtual-package+ mac
+ The ability to have target and host packages is also available, with the
+ +host-virtual-package+ macro.
  
- show-targets:
- 	@echo $(PACKAGES) $(TARGETS_ROOTFS)
++.Note:
++The +virtual-package+ infrastructure automatically marks virtual packages to be
++excluded from the +legal-info+ output (by internally setting +FOO_LEGAL_IGNORE+
++to 'YES').
++
+ ==== Provider's +Config.in+ file
+ 
+ When adding a package as a provider, only the +Config.in+ file requires some
+diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
+index 244c1d0..445f09a 100644
+--- a/package/pkg-virtual.mk
++++ b/package/pkg-virtual.mk
+@@ -59,6 +59,8 @@ endif
+ # Add dependency against the provider
+ $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
+ 
++$(2)_LEGAL_IGNORE = YES
++
+ # Call the generic package infrastructure to generate the necessary
+ # make targets
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
 -- 
 1.9.1
