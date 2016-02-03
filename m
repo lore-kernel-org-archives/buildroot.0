@@ -1,120 +1,68 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  3 Feb 2016 22:45:29 +0100
-Subject: [Buildroot] [PATCH RFC 2/2] toolchain-external: unify library
-	locations in target and staging dir
-In-Reply-To: <1454535929-25379-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1454535929-25379-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1454535929-25379-3-git-send-email-patrickdepinguin@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Feb 2016 22:54:02 +0100
+Subject: [Buildroot] [PATCH v2 1/3] libffi: fix headers location for
+ host-libffi
+In-Reply-To: <1451978244-15878-2-git-send-email-yegorslists@googlemail.com>
+References: <1451978244-15878-1-git-send-email-yegorslists@googlemail.com>
+ <1451978244-15878-2-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160203225402.4d29a0d2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Hello,
 
-The toolchain-external logic is roughly:
-- populate the staging dir by rsyncing the entire ${ARCH_LIB_DIR} and
-  usr/${ARCH_LIB_DIR} from sysroot.
-- populate the target dir by explictly copying some libraries from sysroot
-  into target/lib and some other libraries in target/usr/lib, the split
-  being hardcoded into buildroot regardless of the location in the sysroot.
+On Tue,  5 Jan 2016 08:17:22 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> There is a special hook for target-libffi, that moves headers
+> from /usr/lib/libffi-version/include to /usr/include. This patch
+> adds the same procedure for host-libffi.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/libffi/libffi.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+> index 8f0f72d..47de8cd 100644
+> --- a/package/libffi/libffi.mk
+> +++ b/package/libffi/libffi.mk
+> @@ -22,6 +22,17 @@ endef
+>  
+>  LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+>  
+> +# Move the headers to the usual location, and adjust the .pc file
+> +# accordingly.
+> +define HOST_LIBFFI_MOVE_HOST_HEADERS
+> +	mv $(HOST_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(HOST_DIR)/usr/include/
+> +	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
+> +		$(HOST_DIR)/usr/lib/pkgconfig/libffi.pc
+> +	rm -rf $(HOST_DIR)/usr/lib/libffi-*
+> +endef
+> +
+> +HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
 
-This means that a library libfoo could be located in:
-  staging/lib/libfoo.so
-  target/usr/lib/libfoo.so
+I've applied, but after doing some changes. First, the existing staging
+fixup had a mistake, it was removing the directory from $(TARGET_DIR),
+while it should have been removed from $(STAGING_DIR). I've fixed that
+in a preparation commit:
 
-When debugging an application that links against this library, gdb will
-fruitlessly search for 'usr/lib/libfoo.so' in staging, and then suggest to
-use 'set solib-search-path' which is a hack, really.
+  https://git.busybox.net/buildroot/commit/?id=2b73538920107b6c020ce5c4c8d9f7f672549bb1
 
-To solve the problem, we need to make sure that libraries from the toolchain
-are installed in the same relative location in staging and target.
-Achieve this by:
-- replacing the convoluted search for libraries using for+find in sysroot
-  with a simple find in staging.
-- determine DESTDIR for each library individually based on the location in
-  staging.
-- treating LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS equivalently
+Once this was fixed, your new code to take care of headers in
+$(HOST_DIR) was exactly the same as the one taking care of the headers
+in $(STAGING_DIR). So I've factorized the code in a common function,
+which takes as argument the base directory. Which gives:
 
-Test procedure:
-- set configuration for a given toolchain
-- make clean toolchain
-- find output/target | sort > /tmp/out-before
-- apply patch
-- make clean toolchain
-- find output/target | sort > /tmp/out-after
-- diff -u /tmp/out-before /tmp/out-after
+  https://git.busybox.net/buildroot/commit/?id=f41091176bb3e8da6cf78760b69f188e9868a259
 
-The only changes should be some libraries moving from lib to usr/lib or vice
-versa. Notable examples being libstdc++ and libatomic.
+Thanks!
 
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
----
- toolchain/helpers.mk                               | 16 +++-------------
- toolchain/toolchain-external/toolchain-external.mk | 14 ++++----------
- 2 files changed, 7 insertions(+), 23 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index ee878e8..aa53c7c 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -47,21 +47,11 @@ copy_toolchain_lib_root = \
- 	SUPPORT_LIB_DIR="$(strip $2)" ; \
- 	ARCH_LIB_DIR="$(strip $3)" ; \
- 	LIB="$(strip $4)"; \
--	DESTDIR="$(strip $5)" ; \
- \
--	for dir in \
--		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR}/$(TOOLCHAIN_EXTERNAL_PREFIX) \
--		$${ARCH_SYSROOT_DIR}/usr/$(TOOLCHAIN_EXTERNAL_PREFIX)/$${ARCH_LIB_DIR} \
--		$${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR} \
--		$${ARCH_SYSROOT_DIR}/usr/$${ARCH_LIB_DIR} \
--		$${SUPPORT_LIB_DIR} ; do \
--		LIBPATHS=`find $${dir} -maxdepth 1 -name "$${LIB}" 2>/dev/null` ; \
--		if test -n "$${LIBPATHS}" ; then \
--			break ; \
--		fi \
--	done ; \
--	mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
-+	LIBPATHS=`find $(STAGING_DIR) -follow -name "$${LIB}" 2>/dev/null` ; \
- 	for LIBPATH in $${LIBPATHS} ; do \
-+		DESTDIR=`echo $${LIBPATH} | sed "s,^$(STAGING_DIR)/,," | xargs dirname` ; \
-+		mkdir -p $(TARGET_DIR)/$${DESTDIR}; \
- 		while true ; do \
- 			LIBNAME=`basename $${LIBPATH}`; \
- 			LIBDIR=`dirname $${LIBPATH}` ; \
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 518afd6..c2076d9 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -604,11 +604,8 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- 	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
- 	if test -z "$(BR2_STATIC_LIBS)" ; then \
- 		$(call MESSAGE,"Copying external toolchain libraries to target...") ; \
--		for libs in $(LIB_EXTERNAL_LIBS); do \
--			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/lib); \
--		done ; \
--		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
--			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
-+		for libs in $(LIB_EXTERNAL_LIBS) $(USR_LIB_EXTERNAL_LIBS); do \
-+			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs); \
- 		done ; \
- 	fi ; \
- 	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
-@@ -668,11 +665,8 @@ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
- 	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
- 	        fi ; \
- 	fi ; \
--	for libs in $(LIB_EXTERNAL_LIBS); do \
--	        $(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/lib); \
--	done ; \
--	for libs in $(USR_LIB_EXTERNAL_LIBS); do \
--	        $(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs,/usr/lib); \
-+	for libs in $(LIB_EXTERNAL_LIBS) $(USR_LIB_EXTERNAL_LIBS); do \
-+	        $(call copy_toolchain_lib_root,$${FDPIC_SYSROOT_DIR},$${FDPIC_SUPPORT_LIB_DIR},$${FDPIC_LIB_DIR},$$libs); \
- 	done
- endef
- endif
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
