@@ -1,39 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  3 Feb 2016 10:42:38 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.9
-Message-ID: <1454506958-11012-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Feb 2016 15:38:37 +0100
+Subject: [Buildroot] [PATCH v2 15/17] openal: add missing
+ BR2_TOOLCHAIN_HAS_SYNC_4 dependency
+In-Reply-To: <56AC9EC3.9030706@dawncrow.de>
+References: <1453934861-26364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1453934861-26364-16-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56ABB0C2.9070203@dawncrow.de>
+ <20160130000635.018f59fa@free-electrons.com>
+ <56AC9EC3.9030706@dawncrow.de>
+Message-ID: <20160203153837.29beb118@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 38418a8..1bccffd 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	e07c05dea525c6bf0dd8017fc5b89d886954f04fedf457ecd1ce488ac3b86ab7	gnutls-3.4.8.tar.xz
-+sha256	48594fadba33d450f796ec69526cf2bce6ff9bc3dc90fbd7bf38dc3601f57c3f	gnutls-3.4.9.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 78dfa5a..32f44e6 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.4
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
+On Sat, 30 Jan 2016 12:30:11 +0100, Andr? Hentschel wrote:
+
+> > Hum, you are right indeed. I will look into this again, but if it's a
+> > dependency on __atomic functions, then it should depend on gcc >= 4.7
+> > *and* link with libatomic.
+> 
+> I looked a bit closer and openal has its own checks for availability of sync/atomic functions...
+> So the dependecy is something like (gcc >= 4.7 || has_sync_4)
+> Not sure how to make it link to libatomic without patching...
+
+I sent a new version of the patch, which hopefully resolves the
+problem. See the V3 of my atomic patch series.
+
+Best regards,
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
