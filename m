@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 22:54:06 +0100
-Subject: [Buildroot] [PATCH v2 2/3] python-pycparser: new package
-In-Reply-To: <1451978244-15878-3-git-send-email-yegorslists@googlemail.com>
-References: <1451978244-15878-1-git-send-email-yegorslists@googlemail.com>
- <1451978244-15878-3-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160203225406.050ba430@free-electrons.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Wed, 3 Feb 2016 13:59:43 -0800
+Subject: [Buildroot] Speeding up the build.
+Message-ID: <CAJJ6jxtGOGWOrr9FE8yJSPcSv6ox0LsEHtuBD3LdC2ZS6uHY4Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear yegorslists at googlemail.com,
+Hi,
 
-On Tue,  5 Jan 2016 08:17:23 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> pycparser requires C preprocessor in order to parse C related files,
-> hence available only as host package.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes:
-> 	v2: remove target package variant
+I know buy faster hardware...
 
-Applied, thanks.
+We have the ability to share a common download directory, so multiple
+systems builds can have faster downloads.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We have the ability to install a pre-build toolchain - that really helps.
+
+We can have multiple output directories, using the single downloaded
+buildroot directory. Saves git downloading and disk storage.
+
+Is there any way to share the host built utilities? It could be done
+like using a pre-built toolchain, or some kind of special links for
+output/host. The problem is .../host is splatted right in the middle
+of the dynamic per build output directory. Do these files get changed
+much in normal buildroot use, so they should stay in output?
+
+Thanks for any suggestions,
+Steve
