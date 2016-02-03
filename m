@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 23:46:43 +0100
-Subject: [Buildroot] [PATCH 01/16 v4] toolchain/external: newer Linaro
- toolchains do not provide source code
-In-Reply-To: <d106bdc792390e59a0504330df5d663c66758590.1454536753.git.yann.morin.1998@free.fr>
-References: <cover.1454536753.git.yann.morin.1998@free.fr>
- <d106bdc792390e59a0504330df5d663c66758590.1454536753.git.yann.morin.1998@free.fr>
-Message-ID: <20160203234643.74b8c062@free-electrons.com>
+Date: Wed, 3 Feb 2016 23:50:41 +0100
+Subject: [Buildroot] Question about ARC HS38 core
+Message-ID: <20160203235041.75b1a6d6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Alexey, Lada,
 
-On Wed,  3 Feb 2016 23:21:51 +0100, Yann E. MORIN wrote:
-> Currently, we have a pattern-matching that automatically derives the
-> the source tarball filename from the binary tarball filename.
-> 
-> However, the latest Linaro toolchains no longer follow that scheme (and
-> do not even readily provide the sources...).
-> 
-> Remove the generic pattern-matching, and explicitly set the source
-> tarball name for those toolchains that do have a source tarball readily
-> available.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@openwide.fr>
-> ---
->  toolchain/toolchain-external/toolchain-external.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+While working on the atomic series [1], Yann and I discovered something
+probably wrong in the handling of the HS38 core in Buildroot.
 
-Applied, thanks.
+The BR2_ARC_ATOMIC_EXT option is described as below:
+
+# Choice of atomic instructions presence
+config BR2_ARC_ATOMIC_EXT
+        bool "Atomic extension (LLOCK/SCOND instructions)"
+        default y if BR2_arc770d || BR2_archs38
+
+I.e, it makes the atomic extension optional on both the ARC770D and the
+ARCHS38 cores.
+
+However, our testing with this option *disabled* shows that:
+
+ * An ARC770D toolchain indeed lacks the atomic intrinsics __sync_*()
+   in the compiler, as expected.
+
+ * An ARCHS38 toolchain still has the atomic intrinsics in the compiler.
+
+This leads us to think that ARC HS38 in fact always have the atomic
+extension available, regardless of the BR2_ARC_ATOMIC_EXT option.
+
+Could you check this ?
+
+Thanks a lot!
 
 Thomas
+
+[1] http://lists.busybox.net/pipermail/buildroot/2016-February/151672.html
 -- 
 Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
