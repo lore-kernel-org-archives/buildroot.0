@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Feb 2016 23:53:44 +0100
-Subject: [Buildroot] [PATCH v2 2/5] docs/manual: slightly clarify patch
+Date: Thu, 4 Feb 2016 00:02:08 +0100
+Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
 	licensing
-In-Reply-To: <1454365196-26319-3-git-send-email-luca@lucaceresoli.net>
+In-Reply-To: <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
 References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
- <1454365196-26319-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160203225344.GA3428@free.fr>
+ <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160203230208.GB3428@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,42 +15,62 @@ To: buildroot@busybox.net
 Luca, All,
 
 On 2016-02-01 23:19 +0100, Luca Ceresoli spake thusly:
-> Adding a patch is a modification to Buildroot. Thus this sentence might be
-> interpreted as "Patches are released under the Buildroot license".
-> 
-> Being a legal matter, the last thing we want is to be
-> ambiguous. Reword the sentence to avoid any misunderstandings.
+> Several people have been asking what is the license of the patches
+> provided by Buildroot. COPYING is the authoritative place to state it.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+> Changes v1 -> v2:
+>  - Rewrite it almost entirely (Arnout, Thomas).
+> ---
+>  COPYING | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/COPYING b/COPYING
+> index d511905..3596777 100644
+> --- a/COPYING
+> +++ b/COPYING
+> @@ -1,3 +1,11 @@
+> +Except for the patches provided for packages, Buildroot is licensed
+> +under the GNU General Public License, version 2.
+
+There a gotcha here. The manual states, in chapter 12.3:
+
+    Buildroot [is] released under the GNU General Public License,
+    version 2 or (at your option) any later version.
+
+So, we have to clarify: is it GPLv2 or GPLV2+ ?
+
+It's too late today for me to go digging; I'll do that tomorrow. Just
+rmind me before the end of the week if there's not feedback from my part
+on this topic.
+
+Until then, NAK.
+
+> +Patches provided by Buildroot for packages are released under the same
+> +license as the software that they modify.
+
+Here's an alternative proposal, to replace both sentences:
+
+    Buildroot comes with its own license, reproduced below.
+
+    Buildroot also bundles patch files, which are applied to the
+    sources of the various packages. Those patches are not covered
+    by the license of Buildroot. See those individual packages for
+    their license (running 'make legal-info' after your build may
+    help).
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Changes v1 -> v2:
-> - "they modify" -> "they apply to" (Thomas).
-> ---
->  docs/manual/patch-policy.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-> index 0b4604e..d50c971 100644
-> --- a/docs/manual/patch-policy.txt
-> +++ b/docs/manual/patch-policy.txt
-> @@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
+> +-----------------------------------------------------------------
+> +
+>  		    GNU GENERAL PUBLIC LICENSE
+>  		       Version 2, June 1991
 >  
->  === Format and licensing of the package patches
->  
-> -Patches are released under the same license as the software that is
-> -modified.
-> +Patches are released under the same license as the software they apply
-> +to.
->  
->  A message explaining what the patch does, and why it is needed, should
->  be added in the header commentary of the patch.
 > -- 
 > 1.9.1
 > 
