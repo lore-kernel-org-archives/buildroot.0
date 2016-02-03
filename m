@@ -1,39 +1,290 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 09:31:32 +0100
-Subject: [Buildroot] [PATCH] package: aespipe: add host variant
-In-Reply-To: <56B122F5.9000002@vanguardiasur.com.ar>
-References: <1454341047-14412-1-git-send-email-ariel@vanguardiasur.com.ar>
- <20160201200235.6cba4eb2@free-electrons.com>
- <56B122F5.9000002@vanguardiasur.com.ar>
-Message-ID: <20160203093132.01b9d78c@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Wed,  3 Feb 2016 12:33:40 +0300
+Subject: [Buildroot] [PATCH] binutils: fix .loc processing in xtensa gas
+Message-ID: <1454492020-25967-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ariel D'Alessandro,
+Fixes:
+  http://autobuild.buildroot.net/results/bff7436a800eeea92c0c92bd2846b0f2b31947fd/
 
-On Tue, 2 Feb 2016 18:43:17 -0300, Ariel D'Alessandro wrote:
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+Upstream status: patch submitted.
 
-> The justification is pretty much what Arnout said:
-> 
-> ""
-> Post-image scripts may want to encrypt the resulting image with aespipe
-> (and decrypt it in the update tool on the target), so it is useful to
-> have the host version and to be able to select it in the configuration.
-> ""
-> 
-> In fact, that's exactly why I added host-aespipe to one of my projects.
-> Is this enough to include it as a host package?
+ ...-xtensa-fix-signedness-of-gas-relocations.patch |   47 +++++++++
+ ...-xtensa-fix-signedness-of-gas-relocations.patch |   99 ++++++++++++++++++++
+ ...-xtensa-fix-signedness-of-gas-relocations.patch |   99 ++++++++++++++++++++
+ 3 files changed, 245 insertions(+), 0 deletions(-)
+ create mode 100644 package/binutils/2.23.2/914-xtensa-fix-signedness-of-gas-relocations.patch
+ create mode 100644 package/binutils/2.24/914-xtensa-fix-signedness-of-gas-relocations.patch
+ create mode 100644 package/binutils/2.25.1/914-xtensa-fix-signedness-of-gas-relocations.patch
 
-Yes, this justification is good. It should have been part of the commit
-log originally though :-)
-
-Thanks!
-
-Thomas
+diff --git a/package/binutils/2.23.2/914-xtensa-fix-signedness-of-gas-relocations.patch b/package/binutils/2.23.2/914-xtensa-fix-signedness-of-gas-relocations.patch
+new file mode 100644
+index 0000000..2955e11
+--- /dev/null
++++ b/package/binutils/2.23.2/914-xtensa-fix-signedness-of-gas-relocations.patch
+@@ -0,0 +1,47 @@
++From 6c7c5c477ef9ccf2d2548cf2ac3cec9bd3c9c5b6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 2 Feb 2016 17:11:38 +0300
++Subject: [PATCH] xtensa: fix signedness of gas relocations
++
++Change 1058c7532d0b "Use signed data type for R_XTENSA_DIFF* relocation
++offsets." changed signedness of BFD_RELOC_XTENSA_DIFF* relocations
++substituted for BFD_RELOC_*. This made it impossible to encode arbitrary
++8-, 16- and 32-bit values, which broke e.g. debug info encoding by .loc
++directive. Revert this part and add test.
++
++gas/
++2016-02-03  Max Filippov  <jcmvbkbc@gmail.com>
++	* config/tc-xtensa.c (md_apply_fix): Mark BFD_RELOC_XTENSA_DIFF*
++	substitutions for BFD_RELOC_* as unsigned.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c           |  6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index a119871..36a06cc 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -5961,15 +5961,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    default:
++ 	      break;
++-- 
++2.1.4
++
+diff --git a/package/binutils/2.24/914-xtensa-fix-signedness-of-gas-relocations.patch b/package/binutils/2.24/914-xtensa-fix-signedness-of-gas-relocations.patch
+new file mode 100644
+index 0000000..bd75166
+--- /dev/null
++++ b/package/binutils/2.24/914-xtensa-fix-signedness-of-gas-relocations.patch
+@@ -0,0 +1,99 @@
++From 6c7c5c477ef9ccf2d2548cf2ac3cec9bd3c9c5b6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 2 Feb 2016 17:11:38 +0300
++Subject: [PATCH] xtensa: fix signedness of gas relocations
++
++Change 1058c7532d0b "Use signed data type for R_XTENSA_DIFF* relocation
++offsets." changed signedness of BFD_RELOC_XTENSA_DIFF* relocations
++substituted for BFD_RELOC_*. This made it impossible to encode arbitrary
++8-, 16- and 32-bit values, which broke e.g. debug info encoding by .loc
++directive. Revert this part and add test.
++
++gas/
++2016-02-03  Max Filippov  <jcmvbkbc@gmail.com>
++	* config/tc-xtensa.c (md_apply_fix): Mark BFD_RELOC_XTENSA_DIFF*
++	substitutions for BFD_RELOC_* as unsigned.
++
++gas/testsuite/
++2016-02-03  Max Filippov  <jcmvbkbc@gmail.com>
++	* gas/xtensa/all.exp: Add loc to list of xtensa tests.
++	* gas/xtensa/loc.d: New file: loc test result patterns.
++	* gas/xtensa/loc.s: New file: loc test.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c           |  6 +++---
++ gas/testsuite/gas/xtensa/all.exp |  1 +
++ gas/testsuite/gas/xtensa/loc.d   | 10 ++++++++++
++ gas/testsuite/gas/xtensa/loc.s   |  7 +++++++
++ 4 files changed, 21 insertions(+), 3 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/loc.d
++ create mode 100644 gas/testsuite/gas/xtensa/loc.s
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index a119871..36a06cc 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -5961,15 +5961,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    default:
++ 	      break;
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 31b725b..7ff7bd7 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -101,6 +101,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "trampoline"
++     run_dump_test "first_frag_align"
++     run_dump_test "auto-litpools"
+++    run_dump_test "loc"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/loc.d b/gas/testsuite/gas/xtensa/loc.d
++new file mode 100644
++index 0000000..71983cc
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/loc.d
++@@ -0,0 +1,10 @@
+++#as:
+++#objdump: -r
+++#name: .loc directive relocs
+++
+++.*: +file format .*xtensa.*
+++
+++RELOCATION RECORDS FOR \[\.debug_line\]:
+++#...
+++.*R_XTENSA_DIFF16.*\.text\+0x00009c42
+++#...
++diff --git a/gas/testsuite/gas/xtensa/loc.s b/gas/testsuite/gas/xtensa/loc.s
++new file mode 100644
++index 0000000..029e14e
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/loc.s
++@@ -0,0 +1,7 @@
+++	.text
+++	.file 1 "loc.s"
+++	.loc 1 3
+++	nop
+++	.space 40000
+++	.loc 1 5
+++	nop
++-- 
++2.1.4
++
+diff --git a/package/binutils/2.25.1/914-xtensa-fix-signedness-of-gas-relocations.patch b/package/binutils/2.25.1/914-xtensa-fix-signedness-of-gas-relocations.patch
+new file mode 100644
+index 0000000..bd75166
+--- /dev/null
++++ b/package/binutils/2.25.1/914-xtensa-fix-signedness-of-gas-relocations.patch
+@@ -0,0 +1,99 @@
++From 6c7c5c477ef9ccf2d2548cf2ac3cec9bd3c9c5b6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 2 Feb 2016 17:11:38 +0300
++Subject: [PATCH] xtensa: fix signedness of gas relocations
++
++Change 1058c7532d0b "Use signed data type for R_XTENSA_DIFF* relocation
++offsets." changed signedness of BFD_RELOC_XTENSA_DIFF* relocations
++substituted for BFD_RELOC_*. This made it impossible to encode arbitrary
++8-, 16- and 32-bit values, which broke e.g. debug info encoding by .loc
++directive. Revert this part and add test.
++
++gas/
++2016-02-03  Max Filippov  <jcmvbkbc@gmail.com>
++	* config/tc-xtensa.c (md_apply_fix): Mark BFD_RELOC_XTENSA_DIFF*
++	substitutions for BFD_RELOC_* as unsigned.
++
++gas/testsuite/
++2016-02-03  Max Filippov  <jcmvbkbc@gmail.com>
++	* gas/xtensa/all.exp: Add loc to list of xtensa tests.
++	* gas/xtensa/loc.d: New file: loc test result patterns.
++	* gas/xtensa/loc.s: New file: loc test.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c           |  6 +++---
++ gas/testsuite/gas/xtensa/all.exp |  1 +
++ gas/testsuite/gas/xtensa/loc.d   | 10 ++++++++++
++ gas/testsuite/gas/xtensa/loc.s   |  7 +++++++
++ 4 files changed, 21 insertions(+), 3 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/loc.d
++ create mode 100644 gas/testsuite/gas/xtensa/loc.s
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index a119871..36a06cc 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -5961,15 +5961,15 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
++ 	    {
++ 	    case BFD_RELOC_8:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    case BFD_RELOC_16:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    case BFD_RELOC_32:
++ 	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
++-	      fixP->fx_signed = 1;
+++	      fixP->fx_signed = 0;
++ 	      break;
++ 	    default:
++ 	      break;
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 31b725b..7ff7bd7 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -101,6 +101,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "trampoline"
++     run_dump_test "first_frag_align"
++     run_dump_test "auto-litpools"
+++    run_dump_test "loc"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/loc.d b/gas/testsuite/gas/xtensa/loc.d
++new file mode 100644
++index 0000000..71983cc
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/loc.d
++@@ -0,0 +1,10 @@
+++#as:
+++#objdump: -r
+++#name: .loc directive relocs
+++
+++.*: +file format .*xtensa.*
+++
+++RELOCATION RECORDS FOR \[\.debug_line\]:
+++#...
+++.*R_XTENSA_DIFF16.*\.text\+0x00009c42
+++#...
++diff --git a/gas/testsuite/gas/xtensa/loc.s b/gas/testsuite/gas/xtensa/loc.s
++new file mode 100644
++index 0000000..029e14e
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/loc.s
++@@ -0,0 +1,7 @@
+++	.text
+++	.file 1 "loc.s"
+++	.loc 1 3
+++	nop
+++	.space 40000
+++	.loc 1 5
+++	nop
++-- 
++2.1.4
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.7.6
