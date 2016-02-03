@@ -1,61 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Feb 2016 00:07:17 +0100
-Subject: [Buildroot] [PATCH v9] board: add support for ARM Juno r0 and
- r1 Development Boards
-In-Reply-To: <04784686a5d1ac9de8cb2f74b686ae60cd4447a4.1454523321.git.jpinto@synopsys.com>
-References: <04784686a5d1ac9de8cb2f74b686ae60cd4447a4.1454523321.git.jpinto@synopsys.com>
-Message-ID: <20160204000717.1be2fd28@free-electrons.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 03 Feb 2016 21:15:26 -0200
+Subject: [Buildroot] [PATCH 1/2] yad: fix libgtk2 related dependency
+	error
+References: <mailman.2229.1454536893.28235.buildroot@busybox.net>
+Message-ID: <56b28a0eeab24_19087bc7805919a@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joao,
+Hi Gustavo,
 
-On Wed,  3 Feb 2016 18:20:30 +0000, Joao Pinto wrote:
-> The Juno ARM Development Platform (ADP) is a software development
-> platform for ARMv8-A, it includes the Juno Versatile Express board 
-> and an ARMv8-A reference software port available through Linaro.
+On Wed, 3 Feb 2016 09:17:48 -0300, Gustavo Zacarias wrote:
+> On 02/02/16 22:52, Ricardo Martincoski wrote:
 > 
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+>> --- a/package/yad/Config.in
+>> +++ b/package/yad/Config.in
+>> @@ -2,6 +2,7 @@ config BR2_PACKAGE_YAD
+>>   	bool "yad"
+>>   	depends on BR2_PACKAGE_XORG7
+>>   	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
+>> +	select BR2_PACKAGE_LIBGTK3_X11 if BR2_PACKAGE_LIBGTK3
+>>   	help
+>>   	  YAD (yet another dialog) is a tool for create graphical dialogs
+>>   	  from shell scripts.
+> 
+> Hi.
+> This logic is severely broken, you can't force X11 if someone is using 
+> gtk3 with say broadway or wayland.
+> Not to mention BR2_PACKAGE_LIBGTK3_X11 depends on xorg being selected.
 
-I am not sure why your v9 does not appear in patchwork, but v8 does.
-Anyway, this is still not good, because the kernel commit your
-defconfig uses no longer exists in the Linaro Git repository, so the
-download fails:
+Thank you for your explanation.
+I marked my patch as Superseded by yours
+http://patchwork.ozlabs.org/patch/577916/
+yad: fix libgtk3 dependency
 
->>> linux 0d752ce2de3057e12e220d104beb02744147be4f Downloading
-Doing full clone
-Cloning into bare repository 'linux-0d752ce2de3057e12e220d104beb02744147be4f'...
-fatal: not a tree object
+> 
+>> -ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+>> +ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+> 
+> This isn't accurate either, you first say it needs x11 by selecting it, 
+> but you then basically say no?
 
-It works for you because you have the tarball'ed kernel in your
-$(BR2_DL_DIR), but it won't work for anyone else.
+My intent was to let the dependency to x11 be handled at config time.
+But I see now the way it currently is on the master branch is better.
 
-You should make sure to use a commit in a branch that the Linaro
-developers will not rebase, otherwise the commit will disappear in the
-future.
-
-Also, another problem of your submission is that you're adding two
-defconfigs, while there's no reason to do so. The only difference
-between the two is the Device Tree to be built. And we can perfectly
-build two Device Trees in a single defconfig.
-
-So could you apply the attached patch on top of yours (which addresses
-this problem), and squash it with your commit ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-configs-merge-ARM-Juno-configs.patch
-Type: text/x-patch
-Size: 3505 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160204/c655172c/attachment-0001.bin>
+Regards,
+Ricardo
