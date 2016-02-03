@@ -1,154 +1,180 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 23:35:00 +0100
-Subject: [Buildroot] [PATCH v2] board: Add support for Acmesystems
- Arietta g25
-In-Reply-To: <1454537710-17322-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1454537710-17322-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20160203233500.0027b907@free-electrons.com>
+Date: Wed, 3 Feb 2016 23:44:38 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt5tools: new package
+In-Reply-To: <1454536870-4977-1-git-send-email-ps.report@gmx.net>
+References: <1454536870-4977-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160203234438.08f631d1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Angelo Compagnucci,
+Dear Peter Seiderer,
 
-On Wed,  3 Feb 2016 23:15:10 +0100, Angelo Compagnucci wrote:
+On Wed,  3 Feb 2016 23:01:10 +0100, Peter Seiderer wrote:
+> - host programs: lconvert, lrelease and lupdate
 
->  board/acmesystems/arietta-g25/genimage.cfg      | 35 +++++++++++++++++++++++++
->  board/acmesystems/arietta-g25/post-image.sh     | 16 +++++++++++
->  board/acmesystems/arietta-g25/readme.txt        | 24 +++++++++++++++++
->  configs/acmesystems_arietta_g25_128mb_defconfig | 31 ++++++++++++++++++++++
->  configs/acmesystems_arietta_g25_256mb_defconfig | 31 ++++++++++++++++++++++
->  5 files changed, 137 insertions(+)
->  create mode 100644 board/acmesystems/arietta-g25/genimage.cfg
->  create mode 100755 board/acmesystems/arietta-g25/post-image.sh
->  create mode 100644 board/acmesystems/arietta-g25/readme.txt
->  create mode 100644 configs/acmesystems_arietta_g25_128mb_defconfig
->  create mode 100644 configs/acmesystems_arietta_g25_256mb_defconfig
-> 
-> diff --git a/board/acmesystems/arietta-g25/genimage.cfg b/board/acmesystems/arietta-g25/genimage.cfg
+Ok, so you say they are host programs, i.e built to be executed on the
+host. It is somewhat weird that they are built by a target package, but
+since it's already the case with the qt5base package providing qmake
+and other tools, I guess that's OK.
+
+> diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
 > new file mode 100644
-> index 0000000..b2b55e8
+> index 0000000..432f095
 > --- /dev/null
-> +++ b/board/acmesystems/arietta-g25/genimage.cfg
-> @@ -0,0 +1,35 @@
-> +# Minimal SD card image for the Acmesystems Arietta G25
+> +++ b/package/qt5/qt5tools/Config.in
+> @@ -0,0 +1,41 @@
+> +config BR2_PACKAGE_QT5TOOLS
+> +	bool "qt5tools"
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  This package corresponds to the qt5tools module.
+> +
+> +	  http://qt.io
+> +
+> +if BR2_PACKAGE_QT5TOOLS
+> +
+> +config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+> +	bool "Linguist host tools (lconvert, lrelease, lupdate)"
+> +	help
+> +	  This option enables the linguist host tools
+> +	  lconvert, lrelease and lupdate.
+> +
+> +config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+> +	bool "pixeltool"
+> +	select BR2_PACKAGE_QT5BASE_PNG
+> +        select BR2_PACKAGE_LIBPNG
+
+This line is not properly indented and is not needed, since
+BR2_PACKAGE_QT5BASE_PNG already selects BR2_PACKAGE_LIBPNG.
+
+It *may* be needed if pixeltool directly calls libpng functions, in
+order to make this dependency clear. But isn't pixeltool only using
+qt5base PNG functions ?
+
+> diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+> new file mode 100644
+> index 0000000..a849f4c
+> --- /dev/null
+> +++ b/package/qt5/qt5tools/qt5tools.mk
+> @@ -0,0 +1,106 @@
+> +################################################################################
 > +#
-> +image boot.vfat {
-> +	vfat {
-> +		file zImage {
-> +			image = "zImage"
-> +		}
+> +# qt5tools
+> +#
+> +################################################################################
 > +
-> +		file acme-arietta.dtb {
-> +			image = "at91-ariag25.dtb"
-> +		}
+> +QT5TOOLS_VERSION = $(QT5_VERSION)
+> +QT5TOOLS_SITE = $(QT5_SITE)
+> +QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5BASE_VERSION).tar.xz
 > +
-> +		file boot.bin{
-> +			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.7.bin"
-> +		}
-> +	}
-> +	size = 15M
+> +QT5TOOLS_DEPENDENCIES = qt5base
+> +QT5TOOLS_INSTALL_STAGING = YES
+> +
+> +# linguist tools compile conditionally on qtHaveModule(qmldevtools-private)
+> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+> +QT5TOOLS_DEPENDENCIES += qt5declarative
+> +endif
 
-Why 15M and not 16M, which seems more logical for computer people?
+linguist tools are built for the host according to what you're saying.
+So how can they use a target package ?
 
+> +define QT5TOOLS_BUILD_CMDS_ALL
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> +		sub-src-qmake_all
 
-> diff --git a/board/acmesystems/arietta-g25/readme.txt b/board/acmesystems/arietta-g25/readme.txt
-> new file mode 100644
-> index 0000000..076be21
-> --- /dev/null
-> +++ b/board/acmesystems/arietta-g25/readme.txt
-> @@ -0,0 +1,24 @@
+The line break is not really needed here.
 
-Maybe a short introduction here to say which board this document
-applies to with a link to the official web site of the board would be
-good.
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+> +define QT5TOOLS_BUILD_CMDS_LINGUIST_TOOLS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lconvert
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lrelease
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lupdate
+> +endef
+> +define QT5TOOLS_INSTALL_STAGING_CMDS_LINGUIST_TOOLS
+> +	cp -dpf $(@D)/bin/lconvert $(STAGING_DIR)/usr/bin
+> +	cp -dpf $(@D)/bin/lrelease $(STAGING_DIR)/usr/bin
+> +	cp -dpf $(@D)/bin/lupdate $(STAGING_DIR)/usr/bin
 
-> +Build instructions
-> +==================
-> +
-> +As a regular user configure and then build:
+So they are host tools, but you install them in $(STAGING_DIR) where we
+install only target binaries ? This looks weird.
 
-No need to say "As a regular user" I believe.
+Also, the canonical way of installing binaries is:
 
-> +
-> +$ make acmesystems_arietta_g25_128mb_defconfig (128MB RAM variant)
-> +
-> +or...
-> +
-> +$ make acmesystems_arietta_g25_256mb_defconfig (256MB RAM variant)
-> +
-> +then:
-> +
-> +$ make
-> +
-> +How to write the SD card
-> +========================
-> +
-> +Once the build process is finished you will have an image called "sdcard.img"
-> +in the output/images/ directory.
-> +
-> +Copy the bootable "sdcard.img" onto an SD card with "dd":
-> +
-> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+	$(INSTALL) -D -m0755 $(@D)/bin/lconvert $(STAGING_DIR)/usr/bin/lconvert
 
-There are no instructions on how to use the system on the platform,
-like a button to push or anything like that?
-
-> diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
-> new file mode 100644
-> index 0000000..f6bf310
-> --- /dev/null
-> +++ b/configs/acmesystems_arietta_g25_128mb_defconfig
-> @@ -0,0 +1,31 @@
-> +# Architecture
-> +BR2_arm=y
+> +endef
+> +endif
 > +
-> +# Toolchain
-> +BR2_KERNEL_HEADERS_VERSION=y
-> +BR2_DEFAULT_KERNEL_VERSION="4.1.1"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_PIXELTOOL),y)
+> +QT5TOOLS_DEPENDENCIES += libpng
+
+Really needed ?
+
+> +define QT5TOOLS_BUILD_CMDS_PIXELTOOL
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/pixeltool
+> +endef
+> +define QT5TOOLS_INSTALL_TARGET_CMDS_PIXELTOOL
+> +	cp -dpf $(@D)/bin/pixeltool $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
 > +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.1"
-> +BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-ariag25"
-> +BR2_LINUX_KERNEL_XZ=y
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_QTDIAG),y)
+> +define QT5TOOLS_BUILD_CMDS_QTDIAG
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/qtdiag
+> +endef
+> +define QT5TOOLS_INSTALL_TARGET_CMDS_QTDIAG
+> +	cp -dpf $(@D)/bin/qtdiag $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
 > +
-> +# Bootloader
-> +BR2_TARGET_AT91BOOTSTRAP3=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="git://github.com/tanzilli/at91bootstrap.git"
-> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="cedbde4b36695b715f469f4872f47e5cc8115000"
-> +BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-128m"
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_QTPATHS),y)
+> +define QT5TOOLS_BUILD_CMDS_QTPATHS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/qtpaths
+> +endef
+> +define QT5TOOLS_INSTALL_TARGET_CMDS_QTPATHS
+> +	cp -dpf $(@D)/bin/qtpaths $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
 > +
-> +# Image
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/acmesystems/arietta-g25/post-image.sh"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO),y)
+> +define QT5TOOLS_BUILD_CMDS_QTPLUGININFO
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/qtplugininfo
+> +endef
+> +define QT5TOOLS_INSTALL_TARGET_CMDS_QTDIAG
+> +	cp -dpf $(@D)/bin/qtplugininfo $(TARGET_DIR)/usr/bin
+> +endef
+> +endif
 
-You need to add the following line:
+All this logic looks fairly repetitive. What about instead:
 
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_MTOOLS=y
+QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+	linguist/lconvert linguist/lrelease linguist/lupdate
+QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
+QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTDIAG) += qtdiag
+QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
+QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPLUGINFO) += qtpluginfo
 
-otherwise I believe your defconfig will not build (unless of course you
-have those tools installed on your system, but since they are not part
-of the mandatory dependencies of Buildroot, we have to build them).
+and then:
 
-They are needed for genimage to create the VFAT filesystem containing
-the bootloader, DT and kernel.
+define QT5TOOLS_BUILD_CMDS
+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+		sub-src-qmake_all
+	$(foreach p,$(QT5TOOLS_TOOL_DIRS_y),\
+		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
+endef
 
-Could you fix those (minor) issues and send an updated version?
+And ditto for the installation.
 
-Thanks a lot!
+You might need to do a special case for the linguist tools, though.
+
+Best regards,
 
 Thomas
 -- 
