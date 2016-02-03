@@ -1,55 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 22:31:14 +0100
-Subject: [Buildroot] [git commit] libffi: fix headers location for
-	host-libffi
-Message-ID: <20160203213539.4C7D3800EE@busybox.osuosl.org>
+Date: Wed, 3 Feb 2016 22:34:14 +0100
+Subject: [Buildroot] [git commit] python-cffi: add host variant
+Message-ID: <20160203213539.8B82B817D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f41091176bb3e8da6cf78760b69f188e9868a259
+commit: https://git.buildroot.net/buildroot/commit/?id=ce726bae3150506174fd612318615a3be81224bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is a special hook for target-libffi, that moves headers
-from /usr/lib/libffi-version/include to /usr/include. This patch
-adds the same procedure for host-libffi.
+Host variant is needed to cross-compile CFFI based C library wrappers.
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 [Thomas:
- - factorize code between the staging headers cleanup and the host
-   headers cleanup.]
+ - add dependency on host-pkgconf for the host package variant.
+ - add various environment variables needed to make pkg-config behave
+   properly when building host-python-cffi. Otherwise, pkg-config
+   returns values that are appropriate to build things for the target,
+   and the build fails.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libffi/libffi.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/python-cffi/python-cffi.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
-index 3373c17..38ef2d6 100644
---- a/package/libffi/libffi.mk
-+++ b/package/libffi/libffi.mk
-@@ -13,15 +13,19 @@ LIBFFI_AUTORECONF = YES
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index 70fbe02..7151789 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
+@@ -12,4 +12,16 @@ PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
+ PYTHON_CFFI_LICENSE = MIT
+ PYTHON_CFFI_LICENSE_FILES = LICENSE
  
- # Move the headers to the usual location, and adjust the .pc file
- # accordingly.
--define LIBFFI_MOVE_STAGING_HEADERS
--	mv $(STAGING_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(STAGING_DIR)/usr/include/
-+define LIBFFI_MOVE_HEADERS
-+	mv $(1)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/usr/include/
- 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
--		$(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
--	rm -rf $(STAGING_DIR)/usr/lib/libffi-*
-+		$(1)/usr/lib/pkgconfig/libffi.pc
-+	rm -rf $(1)/usr/lib/libffi-*
- endef
- 
-+LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR))
- LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
- 
-+HOST_LIBFFI_MOVE_HOST_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(HOST_DIR))
-+HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
++# This host package uses pkg-config to find libffi, so we have to
++# provide the proper hints for pkg-config to behave properly for host
++# packages.
++HOST_PYTHON_CFFI_ENV = \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_LIBDIR="$(HOST_DIR)/usr/lib/pkgconfig:$(HOST_DIR)/usr/share/pkgconfig"
++HOST_PYTHON_CFFI_DEPENDENCIES = host-pkgconf host-python-pycparser host-libffi
 +
- # Remove headers that are not at the usual location from the target
- define LIBFFI_REMOVE_TARGET_HEADERS
- 	$(RM) -rf $(TARGET_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)
+ $(eval $(python-package))
++$(eval $(host-python-package))
