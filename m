@@ -1,83 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 22:34:20 +0100
-Subject: [Buildroot] [git commit] python-smbus-cffi: new package
-Message-ID: <20160203213539.9EFDC800EE@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed,  3 Feb 2016 22:45:27 +0100
+Subject: [Buildroot] [PATCH RFC 0/2] unify library locations in
+	target/staging
+Message-ID: <1454535929-25379-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d05cb121a93aa0501f4c7369881d304063c84da
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-[Thomas:
- - fix license, it's GPLv2, not GPLv2+.]
+See second patch for full details, first patch is just a minor correction
+in variable naming.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                                |  1 +
- package/python-smbus-cffi/Config.in              | 10 ++++++++++
- package/python-smbus-cffi/python-smbus-cffi.hash |  3 +++
- package/python-smbus-cffi/python-smbus-cffi.mk   | 15 +++++++++++++++
- 4 files changed, 29 insertions(+)
+This is code has been tested for various toolchains, BUT is not yet correct
+for Blackfin toolchains when FDPIC_SHARED is selected (hence: DO NOT APPLY)
+For this family there is some specific code that needs to be fixed.
 
-diff --git a/package/Config.in b/package/Config.in
-index f2b6901..532b10a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -707,6 +707,7 @@ menu "External python modules"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
- 	source "package/python-six/Config.in"
-+	source "package/python-smbus-cffi/Config.in"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tornado/Config.in"
-diff --git a/package/python-smbus-cffi/Config.in b/package/python-smbus-cffi/Config.in
-new file mode 100644
-index 0000000..32f005c
---- /dev/null
-+++ b/package/python-smbus-cffi/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_SMBUS_CFFI
-+	bool "python-smbus-cffi"
-+	select BR2_PACKAGE_PYTHON_CFFI
-+	help
-+	  This Python module allows SMBus access through the I2C /dev
-+	  interface on Linux hosts. The host kernel must have I2C
-+	  support, I2C device interface support, and a bus adapter
-+	  driver.
-+
-+	  https://github.com/bivab/smbus-cffi
-diff --git a/package/python-smbus-cffi/python-smbus-cffi.hash b/package/python-smbus-cffi/python-smbus-cffi.hash
-new file mode 100644
-index 0000000..1e28df9
---- /dev/null
-+++ b/package/python-smbus-cffi/python-smbus-cffi.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f621c871bd658ee665751ad78e3b2df9, sha256 locally computed
-+md5     f621c871bd658ee665751ad78e3b2df9  smbus-cffi-0.5.1.tar.gz
-+sha256  fb4195aaabfc01586863f60d3190b5cb1bf8f12622fd597e23e48768dad6bde8  smbus-cffi-0.5.1.tar.gz
-diff --git a/package/python-smbus-cffi/python-smbus-cffi.mk b/package/python-smbus-cffi/python-smbus-cffi.mk
-new file mode 100644
-index 0000000..5fd9558
---- /dev/null
-+++ b/package/python-smbus-cffi/python-smbus-cffi.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-smbus-cffi
-+#
-+################################################################################
-+
-+PYTHON_SMBUS_CFFI_VERSION = 0.5.1
-+PYTHON_SMBUS_CFFI_SOURCE = smbus-cffi-$(PYTHON_SMBUS_CFFI_VERSION).tar.gz
-+PYTHON_SMBUS_CFFI_SITE = https://pypi.python.org/packages/source/s/smbus-cffi
-+PYTHON_SMBUS_CFFI_SETUP_TYPE = setuptools
-+PYTHON_SMBUS_CFFI_LICENSE = GPLv2
-+PYTHON_SMBUS_CFFI_LICENSE_FILES = LICENSE
-+PYTHON_SMBUS_CFFI_DEPENDENCIES = host-python-cffi
-+
-+$(eval $(python-package))
+Another improvement is the simplification of the copy_toolchain_lib_root
+arguments: only the LIB argument is used now.
+
+Finally, a follow-up patch is expected to unify the variables LIB_EXTERNAL_LIBS
+and USR_LIB_EXTERNAL_LIBS, as there is no need for the distinction anymore.
+
+/Thomas
+
+
+
+Thomas De Schampheleire (2):
+  toolchain: copy_toolchain_lib_root: rename LIBSPATH to LIBPATHS
+  toolchain-external: unify library locations in target and staging dir
+
+ toolchain/helpers.mk                               | 18 ++++--------------
+ toolchain/toolchain-external/toolchain-external.mk | 14 ++++----------
+ 2 files changed, 8 insertions(+), 24 deletions(-)
+
+-- 
+2.4.10
