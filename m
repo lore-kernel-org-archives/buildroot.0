@@ -1,45 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 21:21:25 +0100
-Subject: [Buildroot] [PATCH] toolchain: bump ARC toolchain components to
- arc-2015.12
-In-Reply-To: <1454527762-483-1-git-send-email-ltrimas@synopsys.com>
-References: <1454527762-483-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <20160203212125.329014b9@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 3 Feb 2016 22:11:38 +0100
+Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
+In-Reply-To: <56B09008.8030202@mind.be>
+References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+ <569A60E6.2030108@gmail.com>
+ <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
+ <569FFB7E.2000104@gmail.com>
+ <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
+ <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
+ <56B07114.9030404@gmail.com> <56B089D6.4070106@huawei.com>
+ <56B09008.8030202@mind.be>
+Message-ID: <56B26D0A.3000906@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Lada Trimasova,
+Hello Bamvor, All,
 
-On Wed,  3 Feb 2016 22:29:22 +0300, Lada Trimasova wrote:
-> This change introduces newer ARC toolchain in Buildroot.
+Le 02/02/2016 12:16, Arnout Vandecappelle a ?crit :
+> On 02-02-16 11:49, Zhangjian (Bamvor) wrote:
+>> Hi, Romain
+>>
+>> On 2016/2/2 17:04, Romain Naour wrote:
+>>> Hi Bamvor,
+>>>
+>>> Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
+> [snip]
+>>>> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
+>>>> update it for patch v6 rfc5.
+>>>
+>>> Thanks for this link.
+
+The git tree from github doesn't build:
+
+../sysdeps/aarch64/multiarch/memset.c: In function '__libc_memset_ifunc':
+../sysdeps/aarch64/multiarch/memset.c:35:1: error: implicit declaration of
+function '__getauxval' [-Werror=implicit-function-declaration]
+libc_ifunc (__libc_memset,
+
+>>>
+>>> To be honest, I don't think this series will be merged as is until a stable
+>>> toolchain release is made.
+>> What's your mean stable toolchain? A toolchain release from a organization or
+>> company?
 > 
-> That new arc-2015.12 release doesn't bring any significant changes
-> but mostly is focused on fixes and minor improvements here and there.
-> Most noticeable changes are:
->  * GCC: Source update to v4.8.5
->  * GDB: Updated to upstream 7.10 release.
+>  It means a release made by someone, not a random version from a git tree
+> somewhere. Basically something where people know where to send bug reports to.
+> This indeed usually means it's done by an organisation.
+
+At the beginning of this review I expected that it was easy to rebuild an IPL32
+toolchain using the abe script, but it's not the case.
+
 > 
-> You may find more info on fixes and improvements in that release at:
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.12
+> 
+>> Do you think it will be accepted after patch of ilp32 of kernel and glibc
+>> upstream?
+> 
+>  It doesn't necessarily mean that upstream has to have accepted it already. We
+> just prefer to have a release tarball.
 
-This commit log seems to imply that you're bumping all toolchain
-components (gcc, binutils, gdb), but in fact the commit is only bumping
-gcc. Is this expected ?
+See as example the toolchains provided by Imagination Technologies [1] or
+Synopsys [2]. All their patches they are using may not upstream yet, but they
+provide a working toolchain which is pretty well tested.
 
-If so, then the commit title should rather be:
+[1] http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05/
+[2] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/
 
-gcc: bump ARC version to arc-2015.12
+> 
+>  Regards,
+>  Arnout
+> 
+>> I am trying to improve the glibc support for ilp32 base on the exist one
 
-But I'm pretty sure you also want to bump binutils and gdb. Note that
-this could be done in three separate commits.
+I understand, that's great.
 
-Thanks!
+Best regards,
+Romain
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> 
+>>> When it's done, can you respin your series on top of
+>>> master since the toolchain-external code has been updated recently ?
+>> Yes, of course.
+>>
+> 
+> [snip]
+> 
+> 
