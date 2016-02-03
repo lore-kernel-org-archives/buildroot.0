@@ -1,47 +1,82 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue,  2 Feb 2016 23:52:36 -0200
-Subject: [Buildroot]  [PATCH 2/2] yad: bump to version 0.33.1
-In-Reply-To: <1454464356-12637-1-git-send-email-ricardo.martincoski@gmail.com>
-References: <1454464356-12637-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <1454464356-12637-2-git-send-email-ricardo.martincoski@gmail.com>
+From: rdkehn at yahoo.com <rdkehn@yahoo.com>
+Date: Tue, 2 Feb 2016 22:35:44 -0600
+Subject: [Buildroot] [PATCH v6 1/1] package/dhcp: bump version to
+	4.3.3-P1
+In-Reply-To: <56b13959cc789_bb93ffc40199db8503a@ultri2.mail>
+References: <1453736110-11878-1-git-send-email-rdkehn@yahoo.com>
+ <56b13959cc789_bb93ffc40199db8503a@ultri2.mail>
+Message-ID: <20160203043544.GA572@dkarchlinux64.gateway.pace.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-This patch is completely unrelated to the build fix [PATCH 1/2].
-But both patches change the same package, so I didn't see any harm in
-sending it as a patch series.
----
- package/yad/yad.hash | 5 +++--
- package/yad/yad.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Hi Ricardo,
 
-diff --git a/package/yad/yad.hash b/package/yad/yad.hash
-index 4e88ab0..1839282 100644
---- a/package/yad/yad.hash
-+++ b/package/yad/yad.hash
-@@ -1,2 +1,3 @@
--# Locally computed
--sha256 c91d6a9eb36abdb502d2d8ada0ec29c266b94a6628f723adeca436bee0b6c55c yad-0.31.2.tar.xz
-+# From http://sourceforge.net/projects/yad-dialog/files/
-+md5	4e24888712be1e95fd3cea815f19c6cb	yad-0.33.1.tar.xz
-+sha1	b39977128678ca67bf4649929510f729c9cf1e67	yad-0.33.1.tar.xz
-diff --git a/package/yad/yad.mk b/package/yad/yad.mk
-index 9d7ab37..9c07d91 100644
---- a/package/yad/yad.mk
-+++ b/package/yad/yad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--YAD_VERSION = 0.31.2
-+YAD_VERSION = 0.33.1
- YAD_SOURCE = yad-$(YAD_VERSION).tar.xz
- YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
- YAD_LICENSE = GPLv3
--- 
-1.9.1
+On Tue, Feb 02, 2016 at 09:18:49PM -0200, Ricardo Martincoski wrote:
+> Hi Doug,
+> 
+> On Mon, Jan 25, 2016 at 01:35 PM, Doug Kehn <rdkehn@yahoo.com> wrote:
+> > bind source tar-ball is now embedded into the dhcp source. The embedded
+> > bind tar-ball is extracted after the dhcp source so cross compiling
+> > patches can be applied to the dhcp and bind before the package is built.
+> > 
+> > The embedded bind configure is called as part of dhcp make instead of
+> > dhcp configure; therefore, needed configure parameters are set in the
+> > make env.
+> > 
+> > 0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
+> > been submitted upstream as part of a cross compiling enhancement
+> > suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
+> > 0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
+> > 
+> > Buildroot thread
+> > 	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
+> > has related information.
+> > 
+> > Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> > ---
+> > Changes v5 -> v6
+> >   - patch configure.ac instead of configure/Makefile.in (suggested by Arnout)
+> >   - rework dhcp.mk for patch changes.
+> 
+> The patches are much cleaner now!
+
+Thanks for reviewing!
+
+> 
+> [snip]
+> > --- a/package/dhcp/dhcp.hash
+> > +++ b/package/dhcp/dhcp.hash
+> > @@ -1,2 +1,2 @@
+> > -# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R12/dhcp-4.1-ESV-R12.tar.gz.sha256.asc
+> > -sha256	53265d1bf5e2073379df03c73a1a34d38a904307609c0f9cb77223912e753e5f	dhcp-4.1-ESV-R12.tar.gz
+> > +# Verified from https://ftp.isc.org/isc/dhcp/4.2.3-P1/dhcp-4.2.3-P1.tar.gz.sha256.asc
+> 
+> There are typos here (s/4.2.3-P1/4.3.3-P1/g).
+> It should be:
+> # Verified from https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz.sha256.asc
+> 
+> See:
+> $ wget -q https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz.sha256.asc
+> $ gpg --verify dhcp-4.3.3-P1.tar.gz.sha256.asc dhcp-4.3.3-P1.tar.gz
+> gpg: Signature made Sex 18 Dez 2015 10:51:04 BRST using RSA key ID 911A4C02
+> gpg: Good signature from "Internet Systems Consortium, Inc. (Signing key, 2015-2016) <codesign@isc.org>"
+> gpg: WARNING: This key is not certified with a trusted signature!
+> gpg:          There is no indication that the signature belongs to the owner.
+> Primary key fingerprint: ADBE 9446 286C 7949 05F1  E075 6FA6 EBC9 911A 4C02
+> $ sha256sum dhcp-4.3.3-P1.tar.gz
+> c11e896dffa1bfbc49462965d3f6dec45534e34068603546d9a236f2aa669921  dhcp-4.3.3-P1.tar.gz
+> 
+> > +sha256 c11e896dffa1bfbc49462965d3f6dec45534e34068603546d9a236f2aa669921 dhcp-4.3.3-P1.tar.gz
+> [snip]
+
+Well crap. I downloaded with browser then ran gpg --verify. I guess
+I went back and copied the wrong link for updating hash. Thanks.
+... here comes v7.
+
+Regards,
+...doug
