@@ -1,60 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  3 Feb 2016 10:01:55 -0300
-Subject: [Buildroot] [PATCH] yad: fix libgtk3 dependency
-Message-ID: <1454504515-4365-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  3 Feb 2016 10:42:38 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.9
+Message-ID: <1454506958-11012-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make it depend explicitly on BR2_PACKAGE_LIBGTK3_X11 (the X11 backend
-option) to avoid the checker from complaining.
-Also add a comment about yad requiring the X11 backend otherwise it's
-ambiguous if a user has libgtk3 enabled with broadway/wayland and the
-comment shows up. Fixes:
-http://autobuild.buildroot.net/results/84d/84d97bbcc0ea4f8eaa50dd25bf9ee8fdee4b937f/
-
-Also cleanup some tiny whitespace in the package mk file.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/yad/Config.in | 6 +++---
- package/yad/yad.mk    | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/yad/Config.in b/package/yad/Config.in
-index e4b63a2..50b97c5 100644
---- a/package/yad/Config.in
-+++ b/package/yad/Config.in
-@@ -1,13 +1,13 @@
- config BR2_PACKAGE_YAD
- 	bool "yad"
- 	depends on BR2_PACKAGE_XORG7
--	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
-+	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3_X11
- 	help
- 	  YAD (yet another dialog) is a tool for create graphical dialogs
- 	  from shell scripts.
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 38418a8..1bccffd 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	e07c05dea525c6bf0dd8017fc5b89d886954f04fedf457ecd1ce488ac3b86ab7	gnutls-3.4.8.tar.xz
++sha256	48594fadba33d450f796ec69526cf2bce6ff9bc3dc90fbd7bf38dc3601f57c3f	gnutls-3.4.9.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 78dfa5a..32f44e6 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- 	  http://sourceforge.net/projects/yad-dialog/
- 
--comment "yad needs libgtk2 or libgtk3"
-+comment "yad needs libgtk2 or libgtk3 w/ X11 backend"
- 	depends on BR2_PACKAGE_XORG7
--	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3
-+	depends on !BR2_PACKAGE_LIBGTK2 && !BR2_PACKAGE_LIBGTK3_X11
-diff --git a/package/yad/yad.mk b/package/yad/yad.mk
-index fc25267..24d331c 100644
---- a/package/yad/yad.mk
-+++ b/package/yad/yad.mk
-@@ -10,7 +10,6 @@ YAD_SITE = http://sourceforge.net/projects/yad-dialog/files
- YAD_LICENSE = GPLv3
- YAD_LICENSE_FILES = COPYING
- YAD_DEPENDENCIES = host-intltool host-pkgconf
--
- YAD_CONF_OPTS = --enable-html=no
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
 -- 
 2.4.10
