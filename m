@@ -1,56 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 3 Feb 2016 23:00:10 +0100
-Subject: [Buildroot] [PATCH v2 3/3] python-cffi: add host variant
-In-Reply-To: <1451978244-15878-4-git-send-email-yegorslists@googlemail.com>
-References: <1451978244-15878-1-git-send-email-yegorslists@googlemail.com>
- <1451978244-15878-4-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160203230010.0112a74e@free-electrons.com>
+Date: Wed, 3 Feb 2016 23:01:00 +0100
+Subject: [Buildroot] [PATCH] python-smbus-cffi: new package
+In-Reply-To: <1451599710-7304-1-git-send-email-yegorslists@googlemail.com>
+References: <1451599710-7304-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160203230100.57ec5e97@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yegor Yefremov,
 
-On Tue,  5 Jan 2016 08:17:24 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Host variant is needed to cross-compile CFFI based C library wrappers.
-> 
+On Thu, 31 Dec 2015 23:08:30 +0100, Yegor Yefremov wrote:
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
-> Changes:
-> 	v2: add host-libffi dependency
-> 
->  package/python-cffi/python-cffi.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
-> index 70fbe02..02c969b 100644
-> --- a/package/python-cffi/python-cffi.mk
-> +++ b/package/python-cffi/python-cffi.mk
-> @@ -11,5 +11,7 @@ PYTHON_CFFI_SETUP_TYPE = setuptools
->  PYTHON_CFFI_DEPENDENCIES = host-pkgconf libffi
->  PYTHON_CFFI_LICENSE = MIT
->  PYTHON_CFFI_LICENSE_FILES = LICENSE
-> +HOST_PYTHON_CFFI_DEPENDENCIES = host-python-pycparser host-libffi
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
+>  package/Config.in                                |  1 +
+>  package/python-smbus-cffi/Config.in              |  9 +++++++++
+>  package/python-smbus-cffi/python-smbus-cffi.hash |  3 +++
+>  package/python-smbus-cffi/python-smbus-cffi.mk   | 15 +++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-smbus-cffi/Config.in
+>  create mode 100644 package/python-smbus-cffi/python-smbus-cffi.hash
+>  create mode 100644 package/python-smbus-cffi/python-smbus-cffi.mk
 
-This wasn't building properly here, because python-cffi uses pkg-config
-to get the flags to link with libffi, and by default our pkg-config
-returns results that are valid to build stuff for the target, not for
-the host.
+Even though this patch was no longer in patchwork, I applied it as I
+used it as a test case for the python-cffi stuff.
 
-So, I've fixed that by passing a bunch of pkg-config environment
-variables when building the host package.
+I had to fix the license though:
 
-Also, you were missing the host-pkgconf dependency for the dependencies
-of host variant.
-
-Committed with those issues fixed.
+    [Thomas:
+     - fix license, it's GPLv2, not GPLv2+.]
 
 Thanks!
 
