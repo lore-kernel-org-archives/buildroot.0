@@ -1,84 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Feb 2016 00:02:08 +0100
-Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
-	licensing
-In-Reply-To: <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
-References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
- <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160203230208.GB3428@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 4 Feb 2016 00:07:17 +0100
+Subject: [Buildroot] [PATCH v9] board: add support for ARM Juno r0 and
+ r1 Development Boards
+In-Reply-To: <04784686a5d1ac9de8cb2f74b686ae60cd4447a4.1454523321.git.jpinto@synopsys.com>
+References: <04784686a5d1ac9de8cb2f74b686ae60cd4447a4.1454523321.git.jpinto@synopsys.com>
+Message-ID: <20160204000717.1be2fd28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+Joao,
 
-On 2016-02-01 23:19 +0100, Luca Ceresoli spake thusly:
-> Several people have been asking what is the license of the patches
-> provided by Buildroot. COPYING is the authoritative place to state it.
+On Wed,  3 Feb 2016 18:20:30 +0000, Joao Pinto wrote:
+> The Juno ARM Development Platform (ADP) is a software development
+> platform for ARMv8-A, it includes the Juno Versatile Express board 
+> and an ARMv8-A reference software port available through Linaro.
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
 
-> ---
-> Changes v1 -> v2:
->  - Rewrite it almost entirely (Arnout, Thomas).
-> ---
->  COPYING | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/COPYING b/COPYING
-> index d511905..3596777 100644
-> --- a/COPYING
-> +++ b/COPYING
-> @@ -1,3 +1,11 @@
-> +Except for the patches provided for packages, Buildroot is licensed
-> +under the GNU General Public License, version 2.
+I am not sure why your v9 does not appear in patchwork, but v8 does.
+Anyway, this is still not good, because the kernel commit your
+defconfig uses no longer exists in the Linaro Git repository, so the
+download fails:
 
-There a gotcha here. The manual states, in chapter 12.3:
+>>> linux 0d752ce2de3057e12e220d104beb02744147be4f Downloading
+Doing full clone
+Cloning into bare repository 'linux-0d752ce2de3057e12e220d104beb02744147be4f'...
+fatal: not a tree object
 
-    Buildroot [is] released under the GNU General Public License,
-    version 2 or (at your option) any later version.
+It works for you because you have the tarball'ed kernel in your
+$(BR2_DL_DIR), but it won't work for anyone else.
 
-So, we have to clarify: is it GPLv2 or GPLV2+ ?
+You should make sure to use a commit in a branch that the Linaro
+developers will not rebase, otherwise the commit will disappear in the
+future.
 
-It's too late today for me to go digging; I'll do that tomorrow. Just
-rmind me before the end of the week if there's not feedback from my part
-on this topic.
+Also, another problem of your submission is that you're adding two
+defconfigs, while there's no reason to do so. The only difference
+between the two is the Device Tree to be built. And we can perfectly
+build two Device Trees in a single defconfig.
 
-Until then, NAK.
+So could you apply the attached patch on top of yours (which addresses
+this problem), and squash it with your commit ?
 
-> +Patches provided by Buildroot for packages are released under the same
-> +license as the software that they modify.
+Thanks!
 
-Here's an alternative proposal, to replace both sentences:
-
-    Buildroot comes with its own license, reproduced below.
-
-    Buildroot also bundles patch files, which are applied to the
-    sources of the various packages. Those patches are not covered
-    by the license of Buildroot. See those individual packages for
-    their license (running 'make legal-info' after your build may
-    help).
-
-Regards,
-Yann E. MORIN.
-
-> +-----------------------------------------------------------------
-> +
->  		    GNU GENERAL PUBLIC LICENSE
->  		       Version 2, June 1991
->  
-> -- 
-> 1.9.1
-> 
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-configs-merge-ARM-Juno-configs.patch
+Type: text/x-patch
+Size: 3505 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160204/c655172c/attachment-0001.bin>
