@@ -1,90 +1,55 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 3 Feb 2016 22:11:38 +0100
-Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
-In-Reply-To: <56B09008.8030202@mind.be>
-References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
- <569A60E6.2030108@gmail.com>
- <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
- <569FFB7E.2000104@gmail.com>
- <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
- <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
- <56B07114.9030404@gmail.com> <56B089D6.4070106@huawei.com>
- <56B09008.8030202@mind.be>
-Message-ID: <56B26D0A.3000906@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 3 Feb 2016 22:31:14 +0100
+Subject: [Buildroot] [git commit] libffi: fix headers location for
+	host-libffi
+Message-ID: <20160203213539.4C7D3800EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bamvor, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f41091176bb3e8da6cf78760b69f188e9868a259
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 02/02/2016 12:16, Arnout Vandecappelle a ?crit :
-> On 02-02-16 11:49, Zhangjian (Bamvor) wrote:
->> Hi, Romain
->>
->> On 2016/2/2 17:04, Romain Naour wrote:
->>> Hi Bamvor,
->>>
->>> Le 02/02/2016 03:29, Zhangjian (Bamvor) a ?crit :
-> [snip]
->>>> You could this glibc[1]. IIRC, It is for patch v6 rfc2. We are planning to
->>>> update it for patch v6 rfc5.
->>>
->>> Thanks for this link.
+There is a special hook for target-libffi, that moves headers
+from /usr/lib/libffi-version/include to /usr/include. This patch
+adds the same procedure for host-libffi.
 
-The git tree from github doesn't build:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Thomas:
+ - factorize code between the staging headers cleanup and the host
+   headers cleanup.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libffi/libffi.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-../sysdeps/aarch64/multiarch/memset.c: In function '__libc_memset_ifunc':
-../sysdeps/aarch64/multiarch/memset.c:35:1: error: implicit declaration of
-function '__getauxval' [-Werror=implicit-function-declaration]
-libc_ifunc (__libc_memset,
-
->>>
->>> To be honest, I don't think this series will be merged as is until a stable
->>> toolchain release is made.
->> What's your mean stable toolchain? A toolchain release from a organization or
->> company?
-> 
->  It means a release made by someone, not a random version from a git tree
-> somewhere. Basically something where people know where to send bug reports to.
-> This indeed usually means it's done by an organisation.
-
-At the beginning of this review I expected that it was easy to rebuild an IPL32
-toolchain using the abe script, but it's not the case.
-
-> 
-> 
->> Do you think it will be accepted after patch of ilp32 of kernel and glibc
->> upstream?
-> 
->  It doesn't necessarily mean that upstream has to have accepted it already. We
-> just prefer to have a release tarball.
-
-See as example the toolchains provided by Imagination Technologies [1] or
-Synopsys [2]. All their patches they are using may not upstream yet, but they
-provide a working toolchain which is pretty well tested.
-
-[1] http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05/
-[2] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/
-
-> 
->  Regards,
->  Arnout
-> 
->> I am trying to improve the glibc support for ilp32 base on the exist one
-
-I understand, that's great.
-
-Best regards,
-Romain
-
-> 
->>> When it's done, can you respin your series on top of
->>> master since the toolchain-external code has been updated recently ?
->> Yes, of course.
->>
-> 
-> [snip]
-> 
-> 
+diff --git a/package/libffi/libffi.mk b/package/libffi/libffi.mk
+index 3373c17..38ef2d6 100644
+--- a/package/libffi/libffi.mk
++++ b/package/libffi/libffi.mk
+@@ -13,15 +13,19 @@ LIBFFI_AUTORECONF = YES
+ 
+ # Move the headers to the usual location, and adjust the .pc file
+ # accordingly.
+-define LIBFFI_MOVE_STAGING_HEADERS
+-	mv $(STAGING_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(STAGING_DIR)/usr/include/
++define LIBFFI_MOVE_HEADERS
++	mv $(1)/usr/lib/libffi-$(LIBFFI_VERSION)/include/*.h $(1)/usr/include/
+ 	$(SED) '/^includedir.*/d' -e '/^Cflags:.*/d' \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/libffi.pc
+-	rm -rf $(STAGING_DIR)/usr/lib/libffi-*
++		$(1)/usr/lib/pkgconfig/libffi.pc
++	rm -rf $(1)/usr/lib/libffi-*
+ endef
+ 
++LIBFFI_MOVE_STAGING_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(STAGING_DIR))
+ LIBFFI_POST_INSTALL_STAGING_HOOKS += LIBFFI_MOVE_STAGING_HEADERS
+ 
++HOST_LIBFFI_MOVE_HOST_HEADERS = $(call LIBFFI_MOVE_HEADERS,$(HOST_DIR))
++HOST_LIBFFI_POST_INSTALL_HOOKS += HOST_LIBFFI_MOVE_HOST_HEADERS
++
+ # Remove headers that are not at the usual location from the target
+ define LIBFFI_REMOVE_TARGET_HEADERS
+ 	$(RM) -rf $(TARGET_DIR)/usr/lib/libffi-$(LIBFFI_VERSION)
