@@ -1,329 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Feb 2016 21:55:00 +0100
-Subject: [Buildroot] [git commit] board: add support for ARM Juno r0 and r1
-	Development Boards
-Message-ID: <20160204211358.9587E8180E@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  4 Feb 2016 22:16:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 5.6.18
+Message-ID: <1454620568-23891-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9b147ffa4f4ef4fd8cbf3cf04ac9c2ccb1b71d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The Juno ARM Development Platform (ADP) is a software development
-platform for ARMv8-A, it includes the Juno Versatile Express board
-and an ARMv8-A reference software port available through Linaro.
-
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Changelog: http://www.php.net/ChangeLog-5.php#5.6.18
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- board/arm/juno/linux-juno-defconfig | 167 ++++++++++++++++++++++++++++++++++++
- board/arm/juno/readme.txt           | 104 ++++++++++++++++++++++
- configs/arm_juno_defconfig          |  14 +++
- 3 files changed, 285 insertions(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/arm/juno/linux-juno-defconfig b/board/arm/juno/linux-juno-defconfig
-new file mode 100644
-index 0000000..96ccb5c
---- /dev/null
-+++ b/board/arm/juno/linux-juno-defconfig
-@@ -0,0 +1,167 @@
-+CONFIG_SMP=y
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_FHANDLE=y
-+CONFIG_AUDIT=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BSD_PROCESS_ACCT=y
-+CONFIG_BSD_PROCESS_ACCT_V3=y
-+CONFIG_TASKSTATS=y
-+CONFIG_TASK_DELAY_ACCT=y
-+CONFIG_TASK_XACCT=y
-+CONFIG_TASK_IO_ACCOUNTING=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+CONFIG_MEMCG=y
-+CONFIG_MEMCG_SWAP=y
-+CONFIG_MEMCG_KMEM=y
-+CONFIG_CGROUP_HUGETLB=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_PROFILING=y
-+CONFIG_JUMP_LABEL=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_ARCH_VEXPRESS=y
-+CONFIG_PCI=y
-+CONFIG_PCI_MSI=y
-+CONFIG_PCI_HOST_GENERIC=y
-+CONFIG_PCIEPORTBUS=y
-+CONFIG_HOTPLUG_PCI_PCIE=y
-+CONFIG_HOTPLUG_PCI=y
-+CONFIG_NR_CPUS=6
-+CONFIG_PREEMPT=y
-+CONFIG_KSM=y
-+CONFIG_TRANSPARENT_HUGEPAGE=y
-+CONFIG_CMA=y
-+CONFIG_CMDLINE="console=ttyAMA0"
-+CONFIG_COMPAT=y
-+CONFIG_CPU_IDLE=y
-+CONFIG_ARM_CPUIDLE=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-+CONFIG_CPU_FREQ_GOV_INTERACTIVE=y
-+CONFIG_ARM_BIG_LITTLE_CPUFREQ=y
-+CONFIG_ARM_DT_BL_CPUFREQ=y
-+CONFIG_ARM_SCPI_CPUFREQ=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_BPF_JIT=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_ATA=y
-+CONFIG_SATA_AHCI=y
-+CONFIG_SATA_AHCI_PLATFORM=y
-+CONFIG_AHCI_XGENE=y
-+CONFIG_PATA_PLATFORM=y
-+CONFIG_PATA_OF_PLATFORM=y
-+CONFIG_NETDEVICES=y
-+CONFIG_TUN=y
-+CONFIG_SKY2=y
-+CONFIG_SMC91X=y
-+CONFIG_SMSC911X=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_SERIO_AMBAKMI=y
-+CONFIG_LEGACY_PTY_COUNT=16
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_AMBA_PL011=y
-+CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_SERIAL_XILINX_PS_UART=y
-+CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_DESIGNWARE_PLATFORM=y
-+CONFIG_I2C_SLAVE=y
-+CONFIG_SPI=y
-+CONFIG_SPI_PL022=y
-+CONFIG_PTP_1588_CLOCK=m
-+CONFIG_GPIO_PL061=y
-+CONFIG_GPIO_XGENE=y
-+CONFIG_POWER_RESET_XGENE=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_VEXPRESS=m
-+CONFIG_DRM=y
-+CONFIG_DRM_I2C_NXP_TDA998X=y
-+CONFIG_DRM_ARM=y
-+CONFIG_DRM_HDLCD=y
-+CONFIG_DRM_VIRTUAL_HDLCD=y
-+CONFIG_FB_ARMCLCD=y
-+CONFIG_LOGO=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_HCD_PLATFORM=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_ISP1760=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_ULPI=y
-+CONFIG_MMC=y
-+CONFIG_MMC_ARMMMCI=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SPI=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_EFI=y
-+CONFIG_RTC_DRV_PL030=y
-+CONFIG_RTC_DRV_PL031=y
-+CONFIG_DMADEVICES=y
-+CONFIG_PL330_DMA=y
-+CONFIG_COMMON_CLK_SCPI=y
-+CONFIG_ARM_TIMER_SP804=y
-+CONFIG_MAILBOX=y
-+CONFIG_ARM_MHU=y
-+CONFIG_PHY_XGENE=y
-+CONFIG_ARM_SCPI_PROTOCOL=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT3_FS=y
-+CONFIG_FANOTIFY=y
-+CONFIG_FANOTIFY_ACCESS_PERMISSIONS=y
-+CONFIG_QUOTA=y
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_FUSE_FS=y
-+CONFIG_CUSE=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_HUGETLBFS=y
-+CONFIG_EFIVAR_FS=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_VIRTUALIZATION=y
-+CONFIG_KVM=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_DEBUG_INFO=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_LOCKUP_DETECTOR=y
-+CONFIG_SECURITY=y
-+CONFIG_CRYPTO_ANSI_CPRNG=y
-+CONFIG_ARM64_CRYPTO=y
-+CONFIG_CRYPTO_SHA1_ARM64_CE=y
-+CONFIG_CRYPTO_SHA2_ARM64_CE=y
-+CONFIG_CRYPTO_GHASH_ARM64_CE=y
-+CONFIG_CRYPTO_AES_ARM64_CE_CCM=y
-+CONFIG_CRYPTO_AES_ARM64_CE_BLK=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_SOC=y
-+CONFIG_SND_SIMPLE_CARD=y
-+CONFIG_SND_DESIGNWARE_I2S=y
-diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
-new file mode 100644
-index 0000000..52fabf9
---- /dev/null
-+++ b/board/arm/juno/readme.txt
-@@ -0,0 +1,104 @@
-+ARM Juno r1/r0
-+
-+Intro
-+=====
-+
-+These instructions apply to all models of the ARM Juno:
-+  - Juno r0 (does not support PCIe)
-+  - Juno r1 (supports PCIe)
-+
-+Buildroot will generate the kernel image, device tree blob and a
-+minimal root filesystem.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+Configuring Buildroot is pretty simple, just execute:
-+
-+  $ make arm_juno_defconfig
-+
-+Build the rootfs, kernel and DTB
-+--------------------------------
-+
-+Note: you will need to have access to the network, since Buildroot will
-+download the packages' sources.
-+
-+You may now build your rootfs with:
-+
-+  $ make
-+
-+(This may take a while)
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- rootfs.tar
-+    +-- juno.dtb (if Juno r0 is used)
-+    +-- juno-r1.dtb (if Juno r1 is used)
-+    +-- Image
-+
-+Preparing your rootfs
-+======================
-+
-+Format your pen drive as a ext3 filesystem by executing:
-+
-+   $ mkfs.ext3 /dev/<your device>
-+
-+Installing your rootfs
-+======================
-+
-+After mounting the pen drive please execute the following:
-+
-+   $ sudo tar -xvf output/images/rootfs.tar -C <pen drive mount path>
-+
-+When completed make sure to unmount the device:
-+
-+   $ umount <pen drive mount path>
-+
-+Insert the pen drive in one of the ARM Juno' USB type A connectors.
-+
-+Configure *.dtb in the boot configuration for Juno r0
-+=====================================================
-+
-+SITE1/HBI0262B/images.txt
-+.....
-+NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
-+NOR3ADDRESS: 0x00C00000          ;Image Flash Address
-+NOR3FILE: \SOFTWARE\juno.dtb     ;Image File Name
-+NOR3NAME: board.dtb              ;Specify Image name to preserve file extension
-+NOR3LOAD: 00000000               ;Image Load Address
-+NOR3ENTRY: 00000000              ;Image Entry Point
-+......
-+
-+Configure *.dtb in the boot configuration for Juno r1
-+=====================================================
-+
-+SITE1/HBI0262C/images.txt
-+......
-+NOR3UPDATE: AUTO                 ;Image Update:NONE/AUTO/FORCE
-+NOR3ADDRESS: 0x00C00000          ;Image Flash Address
-+NOR3FILE: \SOFTWARE\juno-r1.dtb  ;Image File Name
-+NOR3NAME: board.dtb              ;Specify target filename to preserve file extension
-+NOR3LOAD: 00000000               ;Image Load Address
-+NOR3ENTRY: 00000000              ;Image Entry Point
-+......
-+
-+Installing kernel image and DTB
-+===============================
-+
-+1. Connect to the ARM Juno UART0 and execute USB_ON in the terminal
-+2. Connect a USB cable between your PC and ARM Juno USB type B connector
-+   A mass storage device should appear in your desktop.
-+3. Open the software/ folder
-+4. Copy the 'Image' file to software/
-+5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
-+6. Press the red button in the front pannel of ARM Juno
-+
-+At this time, the board will erase the Flash entry for each new item and
-+replace it with the lastest ones.
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-new file mode 100644
-index 0000000..87b6374
---- /dev/null
-+++ b/configs/arm_juno_defconfig
-@@ -0,0 +1,14 @@
-+BR2_aarch64=y
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="4.2.2"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2=y
-+BR2_TARGET_GENERIC_HOSTNAME="juno-buildroot"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to SNPS Juno by Buildroot"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.linaro.org/kernel/linux-linaro-tracking.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-linaro-4.3-2015.11"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 7a7616f..5cdafc6 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256	ea9d5749380c7c7171e131616466deacd7cb124b5010eafc34e551b0a7b0fb2c	php-5.6.17.tar.xz
++sha256	54dd9106c3469bc7028644d72ac140af00655420bbaaf4a742a64e9ed02ec1b0	php-5.6.18.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 84443a1..f2c7e28 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.6.17
++PHP_VERSION = 5.6.18
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+-- 
+2.7.0
