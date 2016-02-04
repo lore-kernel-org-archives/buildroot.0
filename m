@@ -1,66 +1,60 @@
-From: Andreas Ehmanns <universeii@gmx.de>
-Date: Thu, 4 Feb 2016 09:31:26 +0100
-Subject: [Buildroot] [PATCH 1/1] Add config to nfsd to set number of
- threads
-In-Reply-To: <20151217202555.GE3653@free.fr>
-References: <1450381505-3796-1-git-send-email-universeII@gmx.de>
- <20151217200424.GC3653@free.fr> <567317AE.5060006@gmx.de>
- <20151217202555.GE3653@free.fr>
-Message-ID: <56B30C5E.2020702@gmx.de>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Thu, 4 Feb 2016 11:15:27 +0000
+Subject: [Buildroot] [PATCH v9] board: add support for ARM Juno r0 and
+ r1 Development Boards
+In-Reply-To: <20160204000717.1be2fd28@free-electrons.com>
+References: <04784686a5d1ac9de8cb2f74b686ae60cd4447a4.1454523321.git.jpinto@synopsys.com>
+ <20160204000717.1be2fd28@free-electrons.com>
+Message-ID: <56B332CF.5060207@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann,
-please find below the rework of the nfsd init script.
-The changes are very small. Please note that a change from
 
-kill -9 `pidof nfsd` 2>/dev/null
+Hi Thomas,
 
-to killall was not possible since killall did not kill the nfsd threads. 
-It simply did not work and I couldn't figure out the root cause.
+I will check it and send a v10 today. Thanks for the buildroot' defconfig tip.
 
-Let me know what you think about. If it's o.k. for you, I re-send the 
-patch using git.
+Joao
 
-Regards,
-Andreas
-
-Am 17.12.2015 um 21:25 schrieb Yann E. MORIN:
-> Andreas, All,
->
-> On 2015-12-17 21:14 +0100, Andreas Ehmanns spake thusly:
->> Am 17.12.2015 um 21:04 schrieb Yann E. MORIN:
-> [--SNIP--]
->>> Unrelated yto this change, I noticed that this script is completely
->>> consistent with how it stops services:
->>>    - sometimes, we killall, sometimes we kill-9
->>>    - the order in which we kill, echo and rm pid file is not consistent
->>>
->>> It would be nice if we stopped all the NFS services in a consistent way,
->>> like always use killall, then remove the pid file, and eventually echo
->>> the status. Would you like to send a follow-up patch that does that
->>> cleanup, please? ;-)
->> I can prepare a patch for that but I have no possibility to test the changes
->> since today was my last day in office for this year and I don't have a
->> target system here at home.
+On 2/3/2016 11:07 PM, Thomas Petazzoni wrote:
+> Joao,
+> 
+> On Wed,  3 Feb 2016 18:20:30 +0000, Joao Pinto wrote:
+>> The Juno ARM Development Platform (ADP) is a software development
+>> platform for ARMv8-A, it includes the Juno Versatile Express board 
+>> and an ARMv8-A reference software port available through Linaro.
 >>
->> What do you think?
-> No problem at all! Just work on it when you can, it's absolutely not
-> time-critical.
->
-> Thanks, and happy end-of-year celebrations! ;-)
->
-> Regards,
-> Yann E. MORIN.
->
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-Reordered-kill-echo-and-pid-file-remove.patch
-Type: text/x-patch
-Size: 1045 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160204/baa05842/attachment.bin>
+>> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+> 
+> I am not sure why your v9 does not appear in patchwork, but v8 does.
+> Anyway, this is still not good, because the kernel commit your
+> defconfig uses no longer exists in the Linaro Git repository, so the
+> download fails:
+> 
+>>>> linux 0d752ce2de3057e12e220d104beb02744147be4f Downloading
+> Doing full clone
+> Cloning into bare repository 'linux-0d752ce2de3057e12e220d104beb02744147be4f'...
+> fatal: not a tree object
+> 
+> It works for you because you have the tarball'ed kernel in your
+> $(BR2_DL_DIR), but it won't work for anyone else.
+> 
+> You should make sure to use a commit in a branch that the Linaro
+> developers will not rebase, otherwise the commit will disappear in the
+> future.
+> 
+> Also, another problem of your submission is that you're adding two
+> defconfigs, while there's no reason to do so. The only difference
+> between the two is the Device Tree to be built. And we can perfectly
+> build two Device Trees in a single defconfig.
+> 
+> So could you apply the attached patch on top of yours (which addresses
+> this problem), and squash it with your commit ?
+> 
+> Thanks!
+> 
+> Thomas
+> 
