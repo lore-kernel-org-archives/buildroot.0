@@ -1,116 +1,138 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 4 Feb 2016 23:04:13 +0100
-Subject: [Buildroot] [git commit] protobuf: introduce
-	BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-Message-ID: <20160204225438.819E68025B@busybox.osuosl.org>
+Date: Fri, 5 Feb 2016 00:06:13 +0100
+Subject: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for
+ PowerPC
+In-Reply-To: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
+References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20160205000613.504940f9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abdc56006bf253bec393066f96f69f0a6246b896
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Carlos,
 
-The architecture dependencies of protobuf are going to change, and
-they are already duplicated between protobuf, ola and mosh. In order
-to factorize the expression of those dependencies, this commit
-introduces BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS.
+On Thu, 28 Jan 2016 11:08:35 -0200, Carlos Santos wrote:
+> From: Henrique Marks <henrique.marks@datacom.ind.br>
+> 
+> Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/protobuf/0001-PowerPC-Support.patch | 54 +++++++++++++++++++++++++++++
+>  package/protobuf/Config.in                  |  5 ++-
+>  2 files changed, 56 insertions(+), 3 deletions(-)
+>  create mode 100644 package/protobuf/0001-PowerPC-Support.patch
 
-Note that we include in this hidden Config.in option both the target
-architecture dependency and the host architecture dependency.
+This patch doesn't actually work. First there are a number of problems:
 
-Finally, this commit also fixes a real mistake in the mosh Config.in
-file, where the condition on the architecture dependency for the
-Config.in comment was inverted: we only want to show the Config.in
-comment when we are on supported architectures.
+ - The patch you apply has technically nothing to do with enabling the
+   PowerPC architecture. It seems more related to supporting old
+   compilers.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/mosh/Config.in     |  5 ++---
- package/ola/Config.in      |  6 ++----
- package/protobuf/Config.in | 20 +++++++++++++-------
- 3 files changed, 17 insertions(+), 14 deletions(-)
+ - The patch you apply is already applied upstream, so in this case, we
+   prefer to use the upstream patch directly.
 
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index 868b9ff..26f7233 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -1,15 +1,14 @@
- comment "mosh needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
- 		|| BR2_STATIC_LIBS
--	depends on !(BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64)
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MOSH
- 	bool "mosh"
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
- 	depends on !BR2_STATIC_LIBS # protobuf
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index fd693de..55cea65 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -1,7 +1,7 @@
- comment "ola needs a toolchain w/ C++, threads, wchar, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_OLA
- 	bool "ola (open lighting architecture)"
-@@ -12,9 +12,7 @@ config BR2_PACKAGE_OLA
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64 # protobuf
--	# protobuf -> host-protobuf
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	help
- 	  Open Lighting Architecture provides applications
- 	  with a mechanism to send and receive DMX512 & RDM
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 9ee7e7d..3d4320b 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -1,12 +1,19 @@
-+# See src/google/protobuf/stubs/platform_macros.h for supported archs.
-+# PowerPC doesn't actually work.
-+# host-protobuf only builds on certain architectures
-+config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_arm
-+	default y if BR2_i386
-+	default y if BR2_mipsel
-+	default y if BR2_x86_64
-+	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+
- config BR2_PACKAGE_PROTOBUF
- 	bool "protobuf"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	# See src/google/protobuf/stubs/platform_macros.h for supported archs.
--	# PowerPC doesn't actually work.
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
--	# host-protobuf only builds on certain architectures
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  Protocol buffers are Google's language-neutral, platform-neutral,
-@@ -17,5 +24,4 @@ config BR2_PACKAGE_PROTOBUF
- comment "protobuf needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| BR2_STATIC_LIBS
--	depends on BR2_arm || BR2_i386 || BR2_mipsel || BR2_x86_64
--	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-+	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ - You change the architecture dependencies in protobuf/Config.in, but
+   forget to propagate this change to the reverse dependencies of
+   protobuf, namely the mosh and ola packages. To make this easier,
+   I've changed protobuf/Config.in to provide a
+   BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS variable, and changed mosh and
+   ola to use it. See commit
+   https://git.busybox.net/buildroot/commit/?id=abdc56006bf253bec393066f96f69f0a6246b896.
+
+But then, despite those issues, your patch still doesn't build on
+PowerPC with the following defconfig for example:
+
+BR2_powerpc=y
+BR2_powerpc_8548=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_OLA=y
+BR2_PACKAGE_MOSH=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+It fails with:
+
+In file included from ./google/protobuf/stubs/once.h:81:0,
+                 from google/protobuf/stubs/common.cc:34:
+./google/protobuf/stubs/atomicops.h:209:2: error: #error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
+In file included from ./google/protobuf/stubs/once.h:81:0,
+                 from google/protobuf/stubs/once.cc:38:
+./google/protobuf/stubs/atomicops.h:209:2: error: #error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
+In file included from google/protobuf/stubs/atomicops_internals_x86_msvc.cc:37:0:
+./google/protobuf/stubs/atomicops.h:209:2: error: #error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
+In file included from google/protobuf/stubs/atomicops_internals_x86_gcc.cc:36:0:
+./google/protobuf/stubs/atomicops.h:209:2: error: #error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
+
+Looking at atomicops.h, I can read:
+
+#elif defined(__GNUC__)
+#if defined(GOOGLE_PROTOBUF_ARCH_IA32) || defined(GOOGLE_PROTOBUF_ARCH_X64)
+#include <google/protobuf/stubs/atomicops_internals_x86_gcc.h>
+#elif defined(GOOGLE_PROTOBUF_ARCH_ARM) && defined(__linux__)
+#include <google/protobuf/stubs/atomicops_internals_arm_gcc.h>
+#elif defined(GOOGLE_PROTOBUF_ARCH_AARCH64)
+#include <google/protobuf/stubs/atomicops_internals_arm64_gcc.h>
+#elif defined(GOOGLE_PROTOBUF_ARCH_ARM_QNX)
+#include <google/protobuf/stubs/atomicops_internals_arm_qnx.h>
+#elif defined(GOOGLE_PROTOBUF_ARCH_MIPS) || defined(GOOGLE_PROTOBUF_ARCH_MIPS64)
+#include <google/protobuf/stubs/atomicops_internals_mips_gcc.h>
+#elif defined(__native_client__)
+#include <google/protobuf/stubs/atomicops_internals_pnacl.h>
+#elif (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4))
+#include <google/protobuf/stubs/atomicops_internals_generic_gcc.h>
+#elif defined(__clang__)
+#if __has_extension(c_atomic)
+#include <google/protobuf/stubs/atomicops_internals_generic_gcc.h>
+#else
+#error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
+#endif
+#else
+#error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
+#endif
+
+So it means that on i386, on x86-64, on ARM and on MIPS and MIPS64,
+there are built-in implementation for the atomic operations.
+
+For all other architectures, it relies on
+atomicops_internals_generic_gcc.h, only when gcc >= 4.7. And indeed my
+tested toolchain only has gcc 4.5.
+
+In fact atomicops_internals_generic_gcc.h uses the __atomic_*()
+built-ins of the compiler, which indeed are only introduced in gcc 4.7.
+But on some architectures, they require linking with -latomic. See my
+atomic patch series at
+http://lists.busybox.net/pipermail/buildroot/2016-February/151672.html,
+and especially patch
+http://lists.busybox.net/pipermail/buildroot/2016-February/151674.html
+which has all the gory details.
+
+And in fact, with those atomics, not only PowerPC can be supported, but
+any other architecture (except if protobuf has other
+architecture-specific dependencies elsewhere).
+
+So, once my atomic patch series is merged, we could do:
+
+config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+        bool
+        default y if BR2_arm
+        default y if BR2_i386
+        default y if BR2_mipsel
+        default y if BR2_x86_64
+	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+        depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+
+*and* ensure protobuf gets linked with -latomic.
+
+What do you think ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
