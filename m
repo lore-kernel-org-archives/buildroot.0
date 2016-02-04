@@ -1,143 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Feb 2016 21:42:24 +0100
-Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
-	licensing
-In-Reply-To: <56B293F2.9070201@mind.be>
-References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
- <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
- <20160203230208.GB3428@free.fr> <56B293F2.9070201@mind.be>
-Message-ID: <20160204204224.GA3468@free.fr>
+Date: Thu, 4 Feb 2016 21:50:04 +0100
+Subject: [Buildroot] [PATCH 1/1] Add config to nfsd to set number of
+ threads
+In-Reply-To: <56B30C5E.2020702@gmx.de>
+References: <1450381505-3796-1-git-send-email-universeII@gmx.de>
+ <20151217200424.GC3653@free.fr> <567317AE.5060006@gmx.de>
+ <20151217202555.GE3653@free.fr> <56B30C5E.2020702@gmx.de>
+Message-ID: <20160204205004.GB3468@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Luca, All,
+Andreas, All,
 
-On 2016-02-04 00:57 +0100, Arnout Vandecappelle spake thusly:
-> On 04-02-16 00:02, Yann E. MORIN wrote:
-> > On 2016-02-01 23:19 +0100, Luca Ceresoli spake thusly:
-> >> Several people have been asking what is the license of the patches
-> >> provided by Buildroot. COPYING is the authoritative place to state it.
-> >>
-> >> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> >> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >> Cc: Arnout Vandecappelle <arnout@mind.be>
-> > 
-> >> ---
-> >> Changes v1 -> v2:
-> >>  - Rewrite it almost entirely (Arnout, Thomas).
-> >> ---
-> >>  COPYING | 8 ++++++++
-> >>  1 file changed, 8 insertions(+)
-> >>
-> >> diff --git a/COPYING b/COPYING
-> >> index d511905..3596777 100644
-> >> --- a/COPYING
-> >> +++ b/COPYING
-> >> @@ -1,3 +1,11 @@
-> >> +Except for the patches provided for packages, Buildroot is licensed
-> >> +under the GNU General Public License, version 2.
-[--SNIP--]
-> >> +Patches provided by Buildroot for packages are released under the same
-> >> +license as the software that they modify.
-> > 
-> > Here's an alternative proposal, to replace both sentences:
-> > 
-> >     Buildroot comes with its own license, reproduced below.
-> > 
-> >     Buildroot also bundles patch files, which are applied to the
-> >     sources of the various packages. Those patches are not covered
-> >     by the license of Buildroot. See those individual packages for
-> >     their license (running 'make legal-info' after your build may
-> >     help).
+On 2016-02-04 09:31 +0100, Andreas Ehmanns spake thusly:
+> Dear Yann,
+> please find below the rework of the nfsd init script.
+> The changes are very small. Please note that a change from
 > 
->  Much better.
+> kill -9 `pidof nfsd` 2>/dev/null
 > 
->  Still better:
-> 
->     Buildroot comes with its own license, reproduced below.
-> 
->     Buildroot also bundles patch files, which are applied to the
->     sources of the various packages. Those patches are not covered
->     by the license of Buildroot, but are provided under the same
->     license as the software they apply to. Run 'make legal-info' to
->     collect the licenses of your selected packages and their patches.
+> to killall was not possible since killall did not kill the nfsd threads. It
+> simply did not work and I couldn't figure out the root cause.
 
-Indeed, that's even better.
+What about using something like;
+    rpc.nfsd 0
+    killall -9 nfsd
 
-> (borrowing from the update of the manual here).
-> 
->  Note that this sentence doesn't clarify the issue of proprietary licenses. It's
-> basically still the same as what we have now in that respect.
+From 'man rpc.nfsd':
+    In particular rpc.nfsd 0 will stop all threads and thus close any
+    open connections.
 
-Not really. It is implicitly addressed, since the above states:
+(maybe with a little sleep in-between the two calls to let things settle
+down?)
 
-    [The patches] are provided under the same license as the software
-    they apply to.
+Care to have a look, please?
 
-So, if someone has a proprietary license for a package *we* only can get
-under an Open Source license, that someone would potentially be tricked
-into believing that the patches we carry are under the license he was
-provided that package under. Which is not really true, see below...
+> Let me know what you think about. If it's o.k. for you, I re-send the patch
+> using git.
 
-There are only two options:
+Well, it's already a nice improvement. ;-)
 
+Please, consider the above suggestion. Adapt the script if required, and
+respin with git, please.
 
- 1) Our patches are available under the same license as the package they
-    apply to is publicly and commonly available under.
-
-    This basically means the patches can't be applied to a proprietary-
-    licensed package when it is only publicly and commonly available
-    under a Free (aka GPL-like) license. However, for an Open Source
-    (aka BSD-like) license, they might still be useable on a proprietary-
-    licensed package; and even so, that might not be completely possible,
-    see point 2, third paragraph, below.
-
-    This position has the benefit of clarifying the status of existing
-    patches, as we can't easily relicense them, while we can easily
-    srand by the position that this was the intended situation to begin
-    with.
-
-
- 2) Our patches are available under a license that allows them to still
-    be applied even if the recipient of the package they modify has been
-    granted different licensing terms (aka proprietary) than the ones
-    that package is publicly and commonly available under.
-
-    This means that part of the software we write is no longer Free (as
-    from a GPL-sided point-of-view), basically this is a blank check for
-    including them in proprietary software.
-
-    Furthermore, we can not know all the proprietary licenses each such
-    package may be available under, by the mere fact that such licenses
-    may not be publicly known. In most, if not all jurisdiction, one can
-    not be bound by terms one does not have knowledge of. I.e. if we
-    wanted our patches to be useable under those licenses, then we would
-    have to provide our patches under a *very* liberal license, probably
-    just the Public Domain, as any license, even the most liberal ones
-    like the WTFPL, may have terms that contradicts terms of such a
-    proprietary license (which we have no detail for).
-
-    Finally, this can not apply to our existing patches, as we can not
-    assume that the original submitters of those patches would have
-    expected they be made available under any license beside the license
-    under which the package is publicly and commonly available.  I.e.
-    we're anyway screwed with existing patches.
-
-
-Yet, IANAL, TINLA etc...
-
-We *really* need to sort out this situation, so that we all agree on
-what the license for our patches are. Needless to say that I will
-strongly advocate that we settle on the first solution.
-
-Until we sort this out, the proposal by Arnout is probably the best we
-can provide so far.
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
+
+> From 13fa8728220cfe80b7ab3d48837183088f4094d5 Mon Sep 17 00:00:00 2001
+> From: Andreas Ehmanns <universeII@gmx.de>
+> Date: Thu, 4 Feb 2016 09:23:35 +0100
+> Subject: [PATCH 1/1] Reordered kill, echo and pid file remove
+> 
+> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
+> ---
+>  package/nfs-utils/S60nfs | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+> index 5639b8f..0bd5a44 100755
+> --- a/package/nfs-utils/S60nfs
+> +++ b/package/nfs-utils/S60nfs
+> @@ -38,8 +38,8 @@ start() {
+>  
+>  	printf "Starting NFS mountd: "
+>  	rpc.mountd
+> -	echo "done"
+>  	touch /var/lock/subsys/nfs
+> +	echo "done"
+>  }
+>  
+>  stop() {
+> @@ -54,14 +54,15 @@ stop() {
+>  
+>  	printf "Shutting down NFS services: "
+>  	/usr/sbin/exportfs -au
+> -	rm -f /var/lock/subsys/nfs
+>  	killall -q rpc.statd
+> +	rm -f /var/lock/subsys/nfs
+>  	echo "done"
+>  
+>  	printf "Stopping NFS statd: "
+>  	killall -q rpc.statd
+> -	echo "done"
+> +	rm -f /var/run/rpc.statd.pid
+>  	rm -f /var/lock/subsys/nfslock
+> +	echo "done"
+>  }
+>  
+>  # See how we were called.
+> -- 
+> 2.1.4
+> 
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
