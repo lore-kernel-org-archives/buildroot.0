@@ -1,40 +1,54 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu,  4 Feb 2016 16:41:07 +1300
-Subject: [Buildroot] [PATCH] micropython: bump to v1.6
-Message-ID: <1454557267-13936-1-git-send-email-judge.packham@gmail.com>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Thu, 4 Feb 2016 09:39:57 +0530
+Subject: [Buildroot] [PATCH v2 1/1] docs/manual: document format for
+ specifying licenses
+In-Reply-To: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <56B2CF15.2030102@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
+Hi all,
 
- package/micropython/micropython.hash | 2 +-
- package/micropython/micropython.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Monday 25 January 2016 10:35 AM, Rahul Bedarkar wrote:
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+> Changes v1 -> v2:
+>    - tweak commit message (added missing 'for')
+>    - use full sentences (suggested by Thomas Petazzoni)
+>    - don't standardize components (suggested by Thomas Petazzoni)
+>    - add missing 'the' before +or+ keyword (suggested by Thomas Petazzoni)
+> ---
+>   docs/manual/adding-packages-generic.txt | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 1f9c7bb..47cd95b 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -387,7 +387,15 @@ information is (assuming the package name is +libfoo+) :
+>     Otherwise, describe the license in a precise and concise way, avoiding
+>     ambiguous names such as +BSD+ which actually name a family of licenses.
+>     This variable is optional. If it is not defined, +unknown+ will appear in
+> -  the +license+ field of the manifest file for this package.
+> +  the +license+ field of the manifest file for this package. +
+> +  The expected format for this variable must comply with the following rules:
+> +  ** If the package is released under multiple licenses, then +comma+ separate
+> +  licenses (e.g. +`LIBFOO_LICENSE = GPLv2+, LGPLv2.1+`+). If there is clear
+> +  distinction between which component is licensed under what license, then
+> +  annotate the license with that component
+> +  (e.g. +`LIBFOO_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)`+).
+> +  ** If the package is dual licensed, then separate licenses with the +or+
+> +  keyword (e.g. +`LIBFOO_LICENSE = AFLv2.1 or GPLv2+`+).
+>
+>   * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
+>     tarball that contain the license(s) under which the package is released.
+>
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 0c9e2ae..b3a7c22 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,2 +1,2 @@
- #locally computed
--sha256 3c594ee701622f01c4e9c7abd1c322a0bc6c8af17bea0b0126812cb8e61bb5d9  micropython-v1.5.2.tar.gz
-+sha256 f8ea3faffa797de1a06c16c8f57c784c665b318ca08ac17f74dcbc95322d47de  micropython-v1.6.tar.gz
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 59d164f..853caa2 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MICROPYTHON_VERSION = v1.5.2
-+MICROPYTHON_VERSION = v1.6
- MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
- MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
--- 
-2.7.0
+Any comments on this ?
+
+Regards,
+Rahul
