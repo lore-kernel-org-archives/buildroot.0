@@ -1,106 +1,83 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 4 Feb 2016 14:37:44 +0100
-Subject: [Buildroot] [PATCH] Don't build host-cmake if it is available
- on the build host
-In-Reply-To: <56B0704C.4060400@lucaceresoli.net>
-References: <1454363063-21105-1-git-send-email-luca@lucaceresoli.net>
- <56B06C7F.3010201@mind.be> <56B0704C.4060400@lucaceresoli.net>
-Message-ID: <56B35428.2070400@lucaceresoli.net>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu,  4 Feb 2016 11:40:38 -0200
+Subject: [Buildroot] [PATCH 1/1] libbsd: upgrade to v0.8.2 and expand
+	architecture support
+Message-ID: <1454593238-5352-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+There is no reason to limit libbsd to ARM, x86 and x86_64. MicroBlaze is the
+only architecture supported by Buildroot that is not supported by libbsd.
 
-Luca Ceresoli wrote:
-> Hi Arnout,
->
-> thanks for the review.
->
-> Unfortunately this patch is not working, at least for qjson with qt4.
+According to Arnout Vandecappelle, "the exclusion was "from the time that we
+only supported glibc for external toolchains and it didn't get too much
+attention. So we missed the fact that glibc doesn't include linux/a.out.h".
 
-It's fixed now (thanks to Samuel Martin for the help). So it's now time
-for the refinements.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/libbsd/Config.in         | 9 +++++----
+ package/libbsd/libbsd.hash       | 2 +-
+ package/libbsd/libbsd.mk         | 2 +-
+ package/netcat-openbsd/Config.in | 6 +++---
+ 4 files changed, 10 insertions(+), 9 deletions(-)
 
-[...]
-
->>> new file mode 100644
->>> index 0000000..fe16322
->>> --- /dev/null
->>> +++ b/support/dependencies/check-host-cmake.mk
->>> @@ -0,0 +1,6 @@
->>> +CMAKE ?= cmake
->>> +
->>> +ifeq (,$(call suitable-host-package,cmake,$(CMAKE)))
->>> +BUILD_HOST_CMAKE = YES
->>> +CMAKE = $(HOST_DIR)/usr/bin/cmake
->>> +endif
->>> diff --git a/support/dependencies/check-host-cmake.sh
->>> b/support/dependencies/check-host-cmake.sh
->>> new file mode 100755
->>> index 0000000..76a81e0
->>> --- /dev/null
->>> +++ b/support/dependencies/check-host-cmake.sh
->>> @@ -0,0 +1,14 @@
->>> +#!/bin/sh
->>> +
->>> +candidate="$1"
->>> +
->>> +cmake=`which $candidate`
->>
->>   $candidate could be an absolute path, in which case which returns
->> nothing.
-
-Not sure I got what you mean, sorry. which + absolute path returns the
-absolute path itself, if it exists:
-
-$ which cmake
-/usr/bin/cmake
-$ which /usr/bin/cmake
-/usr/bin/cmake
-$ which /not/quite/cmake
-$
-
-And the which(1) manpage confirms this is correct.
-
->>> +if [ ! -x "$cmake" ]; then
->>> +    cmake=`which cmake`
->>
->>   Since there is already CMAKE ?= cmake in the caller, this is pointless.
-
-Aah, yes. Removing the second if will still allow to override CMAKE
-('make CMAKE=/my/custom/cmake qjson') but if it does not exist it will
-not search for one in the path. Sounds good.
-
->>   How about a
->>
->> for cmake in "$cmake" "$( which "$cmake" )"; do
->>   ...
->>
->> instead?
-
-Given the above discussion about which(1), I think this is useless.
-
->>> +    if [ ! -x "$cmake" ]; then
->>> +        # echo nothing: no suitable cmake found
->>> +        exit 1
->>> +    fi
->>> +fi
->>
->>   I have the feeling that there should also be a version check here,
->> though I
->> don't know which version we should use.
->
-> Right. My idea is to download all the cmake packages that are currently
-> in Buildroot, find the highest version mentioned in their
-> CMAKE_MINIMUM_REQUIRED() statement and check for that version in the
-> script.
-
-I added it, will be in v2. This was absolutely needed to make it work on
-a Ubuntu 14.04 LTS host. More details will be in the commit log (which
-will be even longer, ooh yeah).
-
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index d521f05..f5012c1 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -1,9 +1,10 @@
+ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	bool
+-	# libbsd requires a.out.h, which is only available for those
+-	# architectures: arm, x86 (and alpha, currently not supported in Buildroot;
+-	# also m68k which is currently not enabled, so can't be tested.)
+-	default y if BR2_arm || BR2_i386 || BR2_x86_64
++	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
++	default y if !BR2_microblaze
++
++comment "libbsd does not support the MicroBlaze architecture"
++	depends on !BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
+index be4ba50..f77c0aa 100644
+--- a/package/libbsd/libbsd.hash
++++ b/package/libbsd/libbsd.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	9e8f34ffa9c8579c87965a55a82d8ac37a1dc64858f717b7c49452ade277cc62	libbsd-0.6.0.tar.xz
++sha256	b2f644cae94a6e2fe109449c20ad79a0f6ee4faec2205b07eefa0020565e250a	libbsd-0.8.2.tar.xz
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 99a9572..634a614 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBSD_VERSION = 0.6.0
++LIBBSD_VERSION = 0.8.2
+ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+ LIBBSD_SITE = http://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-3c, MIT
+diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+index 346561a..7da0477 100644
+--- a/package/netcat-openbsd/Config.in
++++ b/package/netcat-openbsd/Config.in
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_NETCAT_OPENBSD
+ 
+ 	  https://packages.debian.org/sid/netcat-openbsd
+ 
+-comment "netcat-openbsd needs an (e)glibc toolchain w/ threads"
+-	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
++comment "netcat-openbsd needs libbsd and an (e)glibc toolchain w/ threads"
++	depends on !BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC
+ ~
 -- 
-Luca
+2.5.0
