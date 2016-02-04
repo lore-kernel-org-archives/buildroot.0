@@ -1,33 +1,234 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 4 Feb 2016 20:55:05 +0100
-Subject: [Buildroot] Setting RGB
-In-Reply-To: <CAKvcKqdfjtx96fk=cjMze7sOeY59OfWy1NZ2c_LY8TsuZ29DMA@mail.gmail.com>
-References: <CAKvcKqdfjtx96fk=cjMze7sOeY59OfWy1NZ2c_LY8TsuZ29DMA@mail.gmail.com>
-Message-ID: <20160204205505.5a842de4@gmx.net>
+Date: Thu, 4 Feb 2016 21:20:39 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt5tools: new package
+In-Reply-To: <20160203234438.08f631d1@free-electrons.com>
+References: <1454536870-4977-1-git-send-email-ps.report@gmx.net>
+ <20160203234438.08f631d1@free-electrons.com>
+Message-ID: <20160204212039.461849f4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gabriel Andr?s Castillo,
+Hello Thomas,
 
-On Thu, 4 Feb 2016 11:28:24 -0300, Gabriel Andr?s Castillo <gcastillo@controlnet.com.ar> wrote:
+On Wed, 3 Feb 2016 23:44:38 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-> Hi, i have running my board, but the only problem are colors. I don't know
-> where to configure RGB on buildroot.
-> The problem is that my blue is red, and the red is blue when i run a qt5
-> application.
-
-Not much information about which board, which architecture, which display (vga, hdmi, lvds?),
-which buildroot version (and which configuration file)...
-
-Colors only wrong when using qt5 (x11, linuxfb or eglfs?)?
-Try qt4, directfb etc...
-
-Regards,
-Peter
-
-> Regards.
+> Dear Peter Seiderer,
 > 
-> --
+> On Wed,  3 Feb 2016 23:01:10 +0100, Peter Seiderer wrote:
+> > - host programs: lconvert, lrelease and lupdate
+> 
+> Ok, so you say they are host programs, i.e built to be executed on the
+> host. It is somewhat weird that they are built by a target package, but
+> since it's already the case with the qt5base package providing qmake
+> and other tools, I guess that's OK.
+> 
+
+Not sure, but I think for a 'real' host-qt5tools package a host-qt5base
+package would be needed?
+
+> > diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+> > new file mode 100644
+> > index 0000000..432f095
+> > --- /dev/null
+> > +++ b/package/qt5/qt5tools/Config.in
+> > @@ -0,0 +1,41 @@
+> > +config BR2_PACKAGE_QT5TOOLS
+> > +	bool "qt5tools"
+> > +	help
+> > +	  Qt is a cross-platform application and UI framework for
+> > +	  developers using C++.
+> > +
+> > +	  This package corresponds to the qt5tools module.
+> > +
+> > +	  http://qt.io
+> > +
+> > +if BR2_PACKAGE_QT5TOOLS
+> > +
+> > +config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+> > +	bool "Linguist host tools (lconvert, lrelease, lupdate)"
+> > +	help
+> > +	  This option enables the linguist host tools
+> > +	  lconvert, lrelease and lupdate.
+> > +
+> > +config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+> > +	bool "pixeltool"
+> > +	select BR2_PACKAGE_QT5BASE_PNG
+> > +        select BR2_PACKAGE_LIBPNG
+> 
+> This line is not properly indented and is not needed, since
+
+Sorry for the indent mismatch (still missing a good tab/space
+highlight config for vim...).
+
+> BR2_PACKAGE_QT5BASE_PNG already selects BR2_PACKAGE_LIBPNG.
+
+O.k., will drop the line...
+
+> 
+> It *may* be needed if pixeltool directly calls libpng functions, in
+> order to make this dependency clear. But isn't pixeltool only using
+> qt5base PNG functions ?
+
+Pixeltools just saves images (hardcoded) as png files...
+
+> 
+> > diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+> > new file mode 100644
+> > index 0000000..a849f4c
+> > --- /dev/null
+> > +++ b/package/qt5/qt5tools/qt5tools.mk
+> > @@ -0,0 +1,106 @@
+> > +################################################################################
+> > +#
+> > +# qt5tools
+> > +#
+> > +################################################################################
+> > +
+> > +QT5TOOLS_VERSION = $(QT5_VERSION)
+> > +QT5TOOLS_SITE = $(QT5_SITE)
+> > +QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5BASE_VERSION).tar.xz
+> > +
+> > +QT5TOOLS_DEPENDENCIES = qt5base
+> > +QT5TOOLS_INSTALL_STAGING = YES
+> > +
+> > +# linguist tools compile conditionally on qtHaveModule(qmldevtools-private)
+> > +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+> > +QT5TOOLS_DEPENDENCIES += qt5declarative
+> > +endif
+> 
+> linguist tools are built for the host according to what you're saying.
+> So how can they use a target package ?
+
+The condition qtHaveModule(qmldevtools-private) is only used to
+decide if lupdate will support parsing qml files (via setting
+QT_NO_QML define), no linking against target qt5 libs...
+
+> 
+> > +define QT5TOOLS_BUILD_CMDS_ALL
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +		sub-src-qmake_all
+> 
+> The line break is not really needed here.
+
+O.k, will fix it....
+
+> 
+> > +endef
+> > +
+> > +ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+> > +define QT5TOOLS_BUILD_CMDS_LINGUIST_TOOLS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lconvert
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lrelease
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lupdate
+> > +endef
+> > +define QT5TOOLS_INSTALL_STAGING_CMDS_LINGUIST_TOOLS
+> > +	cp -dpf $(@D)/bin/lconvert $(STAGING_DIR)/usr/bin
+> > +	cp -dpf $(@D)/bin/lrelease $(STAGING_DIR)/usr/bin
+> > +	cp -dpf $(@D)/bin/lupdate $(STAGING_DIR)/usr/bin
+> 
+> So they are host tools, but you install them in $(STAGING_DIR) where we
+> install only target binaries ? This looks weird.
+
+Did first try to install to $(HOST_DIR)/usr/bin but this breaks
+my use case (from .pro file):
+
+    updateqm.input = TRANSLATIONS
+    updateqm.output = Languages/${QMAKE_FILE_BASE}.qm
+    updateqm.variable_out = PRE_TARGETDEPS
+    updateqm.commands = $$[QT_INSTALL_BINS]/lrelease -markuntranslated \"$$LITERAL_HASH\" -idbased ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
+    updateqm.CONFIG += no_link
+    QMAKE_EXTRA_COMPILERS += updateqm
+
+which works with the prebuild qt5 packages for linux and windows, so
+I decided to install to the staging dir, maybe changing the 
+QT_INSTALL_BINS path is better?
+> 
+> Also, the canonical way of installing binaries is:
+> 
+> 	$(INSTALL) -D -m0755 $(@D)/bin/lconvert $(STAGING_DIR)/usr/bin/lconvert
+> 
+
+O.k, will fix...
+
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_QT5TOOLS_PIXELTOOL),y)
+> > +QT5TOOLS_DEPENDENCIES += libpng
+> 
+> Really needed ?
+
+O.k., will drop...
+
+> 
+> > +define QT5TOOLS_BUILD_CMDS_PIXELTOOL
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/pixeltool
+> > +endef
+> > +define QT5TOOLS_INSTALL_TARGET_CMDS_PIXELTOOL
+> > +	cp -dpf $(@D)/bin/pixeltool $(TARGET_DIR)/usr/bin
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_QT5TOOLS_QTDIAG),y)
+> > +define QT5TOOLS_BUILD_CMDS_QTDIAG
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/qtdiag
+> > +endef
+> > +define QT5TOOLS_INSTALL_TARGET_CMDS_QTDIAG
+> > +	cp -dpf $(@D)/bin/qtdiag $(TARGET_DIR)/usr/bin
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_QT5TOOLS_QTPATHS),y)
+> > +define QT5TOOLS_BUILD_CMDS_QTPATHS
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/qtpaths
+> > +endef
+> > +define QT5TOOLS_INSTALL_TARGET_CMDS_QTPATHS
+> > +	cp -dpf $(@D)/bin/qtpaths $(TARGET_DIR)/usr/bin
+> > +endef
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO),y)
+> > +define QT5TOOLS_BUILD_CMDS_QTPLUGININFO
+> > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/qtplugininfo
+> > +endef
+> > +define QT5TOOLS_INSTALL_TARGET_CMDS_QTDIAG
+> > +	cp -dpf $(@D)/bin/qtplugininfo $(TARGET_DIR)/usr/bin
+> > +endef
+> > +endif
+> 
+> All this logic looks fairly repetitive. What about instead:
+> 
+> QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+> 	linguist/lconvert linguist/lrelease linguist/lupdate
+> QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
+> QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTDIAG) += qtdiag
+> QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
+> QT5TOOLS_TOOL_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPLUGINFO) += qtpluginfo
+> 
+> and then:
+> 
+> define QT5TOOLS_BUILD_CMDS
+> 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> 		sub-src-qmake_all
+> 	$(foreach p,$(QT5TOOLS_TOOL_DIRS_y),\
+> 		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
+> endef
+> 
+> And ditto for the installation.
+
+O.k, looks much better, will do...
+> 
+> You might need to do a special case for the linguist tools, though.
+> 
+
+Thanks for review...
+
+Regards, Peter
+
+
+> Best regards,
+> 
+> Thomas
