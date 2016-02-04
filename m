@@ -1,44 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 Feb 2016 01:00:14 +0100
-Subject: [Buildroot] Why is libbsd limited to ARM, x86 and x86_64?
-In-Reply-To: <1734711132.950514.1454525438621.JavaMail.zimbra@datacom.ind.br>
-References: <1326783145.511396.1454427009117.JavaMail.zimbra@datacom.ind.br>
- <56B11B08.2070306@mind.be>
- <1351688359.878304.1454513991848.JavaMail.zimbra@datacom.ind.br>
- <1734711132.950514.1454525438621.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <56B2948E.2090805@mind.be>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu,  4 Feb 2016 16:41:07 +1300
+Subject: [Buildroot] [PATCH] micropython: bump to v1.6
+Message-ID: <1454557267-13936-1-git-send-email-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Please don't top-post]
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
 
-On 03-02-16 19:50, Carlos Santos wrote:
-> Two questions, first:
-> 
-> 1. Is it enough to build for quemu boards?
+ package/micropython/micropython.hash | 2 +-
+ package/micropython/micropython.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Sure. I don't think runtime testing is really needed, except maybe for powerpc.
-
-> 
-> 2. I'm absolutely ignorant about nios2. What defconfig should I use to build for it? 
-
- Hm, looks like we don't have a nios2 defconfig... But you can do a very quick
-build-test by setting arch to nios2 and selecting the Sourcery toolchain.
-
- Regards,
- Arnout
-
-> 
-> Carlos Santos (Casantos)
-> DATACOM, P&D
-
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 0c9e2ae..b3a7c22 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,2 +1,2 @@
+ #locally computed
+-sha256 3c594ee701622f01c4e9c7abd1c322a0bc6c8af17bea0b0126812cb8e61bb5d9  micropython-v1.5.2.tar.gz
++sha256 f8ea3faffa797de1a06c16c8f57c784c665b318ca08ac17f74dcbc95322d47de  micropython-v1.6.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 59d164f..853caa2 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MICROPYTHON_VERSION = v1.5.2
++MICROPYTHON_VERSION = v1.6
+ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0
