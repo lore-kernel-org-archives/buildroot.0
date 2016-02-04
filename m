@@ -1,107 +1,111 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Feb 2016 21:50:04 +0100
-Subject: [Buildroot] [PATCH 1/1] Add config to nfsd to set number of
- threads
-In-Reply-To: <56B30C5E.2020702@gmx.de>
-References: <1450381505-3796-1-git-send-email-universeII@gmx.de>
- <20151217200424.GC3653@free.fr> <567317AE.5060006@gmx.de>
- <20151217202555.GE3653@free.fr> <56B30C5E.2020702@gmx.de>
-Message-ID: <20160204205004.GB3468@free.fr>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 4 Feb 2016 22:07:05 +0100
+Subject: [Buildroot] [PATCH v2 1/2] qt5tools: new package
+In-Reply-To: <20160204213823.463b5e1f@free-electrons.com>
+References: <1454536870-4977-1-git-send-email-ps.report@gmx.net>
+ <20160203234438.08f631d1@free-electrons.com>
+ <20160204212039.461849f4@gmx.net>
+ <20160204213823.463b5e1f@free-electrons.com>
+Message-ID: <20160204220705.0f227f46@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+Hello Thomas,
 
-On 2016-02-04 09:31 +0100, Andreas Ehmanns spake thusly:
-> Dear Yann,
-> please find below the rework of the nfsd init script.
-> The changes are very small. Please note that a change from
+On Thu, 4 Feb 2016 21:38:23 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Hello Peter,
 > 
-> kill -9 `pidof nfsd` 2>/dev/null
+> On Thu, 4 Feb 2016 21:20:39 +0100, Peter Seiderer wrote:
 > 
-> to killall was not possible since killall did not kill the nfsd threads. It
-> simply did not work and I couldn't figure out the root cause.
+> > > Ok, so you say they are host programs, i.e built to be executed on the
+> > > host. It is somewhat weird that they are built by a target package, but
+> > > since it's already the case with the qt5base package providing qmake
+> > > and other tools, I guess that's OK.
+> > 
+> > Not sure, but I think for a 'real' host-qt5tools package a host-qt5base
+> > package would be needed?
+> 
+> Yes, and we are not going to do that. If qt5tools by default already
+> builds those linguist tools for the host machine, then that's fine,
+> it's like qt5base that automatically builds qmake for the host, and the
+> Qt libraries for the target.
 
-What about using something like;
-    rpc.nfsd 0
-    killall -9 nfsd
+O.k, thanks for clarification...
 
-From 'man rpc.nfsd':
-    In particular rpc.nfsd 0 will stop all threads and thus close any
-    open connections.
+> 
+> > > It *may* be needed if pixeltool directly calls libpng functions, in
+> > > order to make this dependency clear. But isn't pixeltool only using
+> > > qt5base PNG functions ?
+> > 
+> > Pixeltools just saves images (hardcoded) as png files...
+> 
+> This does not really answer the question. The question is really
+> whether pixeltools uses only the Qt5 PNG functions, or directly the
+> libpng functions.
 
-(maybe with a little sleep in-between the two calls to let things settle
-down?)
+Sorry for not being precise here, pixeltools uses only Qt5 PNG functions
+(via QPixmap.save(name, "PNG"))...
 
-Care to have a look, please?
+> 
+> > > > +# linguist tools compile conditionally on qtHaveModule(qmldevtools-private)
+> > > > +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+> > > > +QT5TOOLS_DEPENDENCIES += qt5declarative
+> > > > +endif
+> > > 
+> > > linguist tools are built for the host according to what you're saying.
+> > > So how can they use a target package ?
+> > 
+> > The condition qtHaveModule(qmldevtools-private) is only used to
+> > decide if lupdate will support parsing qml files (via setting
+> > QT_NO_QML define), no linking against target qt5 libs...
+> 
+> OK. Can you indicate this as a comment above this condition?
 
-> Let me know what you think about. If it's o.k. for you, I re-send the patch
-> using git.
+O.k., will do...
 
-Well, it's already a nice improvement. ;-)
+> 
+> > > > +ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+> > > > +define QT5TOOLS_BUILD_CMDS_LINGUIST_TOOLS
+> > > > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lconvert
+> > > > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lrelease
+> > > > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist/lupdate
+> > > > +endef
+> > > > +define QT5TOOLS_INSTALL_STAGING_CMDS_LINGUIST_TOOLS
+> > > > +	cp -dpf $(@D)/bin/lconvert $(STAGING_DIR)/usr/bin
+> > > > +	cp -dpf $(@D)/bin/lrelease $(STAGING_DIR)/usr/bin
+> > > > +	cp -dpf $(@D)/bin/lupdate $(STAGING_DIR)/usr/bin
+> > > 
+> > > So they are host tools, but you install them in $(STAGING_DIR) where we
+> > > install only target binaries ? This looks weird.
+> > 
+> > Did first try to install to $(HOST_DIR)/usr/bin but this breaks
+> > my use case (from .pro file):
+> > 
+> >     updateqm.input = TRANSLATIONS
+> >     updateqm.output = Languages/${QMAKE_FILE_BASE}.qm
+> >     updateqm.variable_out = PRE_TARGETDEPS
+> >     updateqm.commands = $$[QT_INSTALL_BINS]/lrelease -markuntranslated \"$$LITERAL_HASH\" -idbased ${QMAKE_FILE_IN} -qm ${QMAKE_FILE_OUT}
+> >     updateqm.CONFIG += no_link
+> >     QMAKE_EXTRA_COMPILERS += updateqm
+> > 
+> > which works with the prebuild qt5 packages for linux and windows, so
+> > I decided to install to the staging dir, maybe changing the 
+> > QT_INSTALL_BINS path is better?
+> 
+> Having host binaries in $(STAGING_DIR) is really not good. So yes,
+> maybe QT_INSTALL_BINS should point to $(HOST_DIR)/usr/bin/.
 
-Please, consider the above suggestion. Adapt the script if required, and
-respin with git, please.
-
-Thanks! :-)
+Will take a look and try to change QT_INSTALL_BINS, hope it breaks no
+other usage...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> From 13fa8728220cfe80b7ab3d48837183088f4094d5 Mon Sep 17 00:00:00 2001
-> From: Andreas Ehmanns <universeII@gmx.de>
-> Date: Thu, 4 Feb 2016 09:23:35 +0100
-> Subject: [PATCH 1/1] Reordered kill, echo and pid file remove
 > 
-> Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
-> ---
->  package/nfs-utils/S60nfs | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Thanks a lot!
 > 
-> diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
-> index 5639b8f..0bd5a44 100755
-> --- a/package/nfs-utils/S60nfs
-> +++ b/package/nfs-utils/S60nfs
-> @@ -38,8 +38,8 @@ start() {
->  
->  	printf "Starting NFS mountd: "
->  	rpc.mountd
-> -	echo "done"
->  	touch /var/lock/subsys/nfs
-> +	echo "done"
->  }
->  
->  stop() {
-> @@ -54,14 +54,15 @@ stop() {
->  
->  	printf "Shutting down NFS services: "
->  	/usr/sbin/exportfs -au
-> -	rm -f /var/lock/subsys/nfs
->  	killall -q rpc.statd
-> +	rm -f /var/lock/subsys/nfs
->  	echo "done"
->  
->  	printf "Stopping NFS statd: "
->  	killall -q rpc.statd
-> -	echo "done"
-> +	rm -f /var/run/rpc.statd.pid
->  	rm -f /var/lock/subsys/nfslock
-> +	echo "done"
->  }
->  
->  # See how we were called.
-> -- 
-> 2.1.4
-> 
-
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Thomas
