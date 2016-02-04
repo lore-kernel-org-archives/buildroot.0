@@ -1,74 +1,22 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu,  4 Feb 2016 13:26:03 -0200
-Subject: [Buildroot] [PATCH 1/1] libbsd: upgrade to v0.8.2 and expand
-	architecture support
-In-Reply-To: <1454593238-5352-1-git-send-email-casantos@datacom.ind.br>
-References: <1454593238-5352-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1454599563-8296-1-git-send-email-casantos@datacom.ind.br>
+Date: Thu, 4 Feb 2016 13:33:14 -0200 (BRST)
+Subject: [Buildroot] Gentle reminder
+Message-ID: <2018051668.1189969.1454599994439.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libbsd still supported uClibc as a C library, we added the architecture
-exclusions because uClibc's a.out.h includes linux/a.out.h. The latter only
-exists for the specified architectures.
+Hello,
 
-However, glibc doesn't include linux/a.out.h, it instead has its own
-implementation and it adds a flag to indicate if a.out is supported on this
-architecture or not.
+Could some good soul take a look at this patch, please:
 
-Since libbsd currently only supports glibc-based toolchains, the architecture
-exclusions are no longer valid.
+    http://patchwork.ozlabs.org/patch/574683/
 
-On microblaze, the build still fails, but this time because of ELF support.
-libbsd explicitly handles architectures and microblaze is not one of them (see
-local-elf.h).
+Thanks
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
----
- package/libbsd/Config.in   | 6 ++----
- package/libbsd/libbsd.hash | 2 +-
- package/libbsd/libbsd.mk   | 2 +-
- 3 files changed, 4 insertions(+), 6 deletions(-)
-
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index d521f05..dd2c19c 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -1,9 +1,7 @@
- config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	bool
--	# libbsd requires a.out.h, which is only available for those
--	# architectures: arm, x86 (and alpha, currently not supported in Buildroot;
--	# also m68k which is currently not enabled, so can't be tested.)
--	default y if BR2_arm || BR2_i386 || BR2_x86_64
-+	# libbsd does not support the MicroBlaze ELF machine type (see local-elf.h)
-+	default y if !BR2_microblaze
- 
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
-index be4ba50..f77c0aa 100644
---- a/package/libbsd/libbsd.hash
-+++ b/package/libbsd/libbsd.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	9e8f34ffa9c8579c87965a55a82d8ac37a1dc64858f717b7c49452ade277cc62	libbsd-0.6.0.tar.xz
-+sha256	b2f644cae94a6e2fe109449c20ad79a0f6ee4faec2205b07eefa0020565e250a	libbsd-0.8.2.tar.xz
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 99a9572..634a614 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBSD_VERSION = 0.6.0
-+LIBBSD_VERSION = 0.8.2
- LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
- LIBBSD_SITE = http://libbsd.freedesktop.org/releases
- LIBBSD_LICENSE = BSD-3c, MIT
--- 
-2.5.0
+Carlos Santos (Casantos) - DATACOM, P&D
+Rua Am?rica, 1000 - Eldorado do Sul, RS, Brasil - 92990-000
+casantos at datacom.ind.br          +55 51 3933.3000 ext. 3627
+http://www.datacom.ind.br
