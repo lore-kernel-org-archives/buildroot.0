@@ -1,39 +1,21 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  5 Feb 2016 09:49:38 -0300
-Subject: [Buildroot] [PATCH] grep: bump to version 2.23
-Message-ID: <1454676578-26606-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 5 Feb 2016 10:02:41 -0300
+Subject: [Buildroot] [PATCH] uclibc: fix MIPS builds with disabled
+	threads
+In-Reply-To: <20160205063435.GA22677@waldemar-brodkorb.de>
+References: <20160205063435.GA22677@waldemar-brodkorb.de>
+Message-ID: <56B49D71.5060004@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/grep/grep.hash | 2 +-
- package/grep/grep.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 05/02/16 03:34, Waldemar Brodkorb wrote:
 
-diff --git a/package/grep/grep.hash b/package/grep/grep.hash
-index 4019db1..5c49da2 100644
---- a/package/grep/grep.hash
-+++ b/package/grep/grep.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking signature
--sha256	ca91d22f017bfcb503d4bc3b44295491c89a33a3df0c3d8b8614f2d3831836eb	grep-2.22.tar.xz
-+sha256	54fc478ee1ce17780109820ef30730c9e18715a949f7d5c6afc673adb2a56ecf	grep-2.23.tar.xz
-diff --git a/package/grep/grep.mk b/package/grep/grep.mk
-index 447ed65..65ef469 100644
---- a/package/grep/grep.mk
-+++ b/package/grep/grep.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GREP_VERSION = 2.22
-+GREP_VERSION = 2.23
- GREP_SITE = $(BR2_GNU_MIRROR)/grep
- GREP_SOURCE = grep-$(GREP_VERSION).tar.xz
- GREP_LICENSE = GPLv3+
--- 
-2.4.10
+> There was a regression found while building for MIPS
+> with disabled threads. Upstream patch fixed it.
+>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
