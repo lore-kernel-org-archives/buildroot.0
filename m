@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Feb 2016 20:25:39 +0100
-Subject: [Buildroot] [PATCH v3 05/17] python-pynacl: new package
-In-Reply-To: <1454696337-9692-6-git-send-email-mc5686@mclink.it>
+Date: Fri, 5 Feb 2016 20:26:21 +0100
+Subject: [Buildroot] [PATCH v3 09/17] python-treq: new package
+In-Reply-To: <1454696337-9692-10-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
- <1454696337-9692-6-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kthQFuNOXnZwsq3=fw_QN1vDt5NU3633W5Sy9RBBABw8Q@mail.gmail.com>
+ <1454696337-9692-10-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kv+fKJM_kuGhJ-Hxw30BsuEiJ-Evt33reR9LDsuhXRA9w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,72 +17,72 @@ On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  package/Config.in                        |  2 ++
->  package/python-pynacl/Config.in          |  9 +++++++++
->  package/python-pynacl/python-pynacl.hash |  3 +++
->  package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
+>  package/Config.in                    |  1 +
+>  package/python-treq/Config.in        | 12 ++++++++++++
+>  package/python-treq/python-treq.hash |  3 +++
+>  package/python-treq/python-treq.mk   | 14 ++++++++++++++
 >  4 files changed, 30 insertions(+)
->  create mode 100644 package/python-pynacl/Config.in
->  create mode 100644 package/python-pynacl/python-pynacl.hash
->  create mode 100644 package/python-pynacl/python-pynacl.mk
+>  create mode 100644 package/python-treq/Config.in
+>  create mode 100644 package/python-treq/python-treq.hash
+>  create mode 100644 package/python-treq/python-treq.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 7b5c747..f46daea 100644
+> index 6db2fe4..fb285d9 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -687,6 +687,8 @@ menu "External python modules"
->         source "package/python-pygame/Config.in"
->         source "package/python-pygments/Config.in"
->         source "package/python-pyinotify/Config.in"
-> +       source "package/python-pynacl/Config.in"
-> +       source "package/python-pyopenssl/Config.in"
->         source "package/python-pyparsing/Config.in"
->         source "package/python-pyparted/Config.in"
->         source "package/python-pypcap/Config.in"
-> diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+> @@ -721,6 +721,7 @@ menu "External python modules"
+>         source "package/python-spidev/Config.in"
+>         source "package/python-thrift/Config.in"
+>         source "package/python-tornado/Config.in"
+> +       source "package/python-treq/Config.in"
+>         source "package/python-twisted/Config.in"
+>         source "package/python-urllib3/Config.in"
+>         source "package/python-urwid/Config.in"
+> diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
 > new file mode 100644
-> index 0000000..5a53648
+> index 0000000..a03d4e3
 > --- /dev/null
-> +++ b/package/python-pynacl/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_PYNACL
-> +       bool "python-pynacl"
-> +       select BR2_PACKAGE_LIBSODIUM
+> +++ b/package/python-treq/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_PYTHON_TREQ
+> +       bool "python-treq"
+> +       select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+> +       select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
 > +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_CFFI # runtime
+> +       select BR2_PACKAGE_PYTHON_TWISTED # runtime
+> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
 > +       help
-> +         Python binding to the Networking and Cryptography (NaCl) library.
+> +         treq is an HTTP library inspired by requests but written on top of Twisted's Agents.
+> +         It provides a simple, higher level API for making HTTP requests when using Twisted.
 > +
-> +         https://pypi.python.org/pypi/PyNaCl
-> diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
+> +         https://github.com/twisted/treq
+> diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
 > new file mode 100644
-> index 0000000..7035ac7
+> index 0000000..f4cc4d6
 > --- /dev/null
-> +++ b/package/python-pynacl/python-pynacl.hash
+> +++ b/package/python-treq/python-treq.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
-> +md5    12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
-> +sha256 d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
-> diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b1fb60759ad5a885cb8ea562553f2d4c, sha256 locally computed
+> +md5    b1fb60759ad5a885cb8ea562553f2d4c  treq-15.1.0.tar.gz
+> +sha256 425a47d5d52a993d51211028fb6ade252e5fbea094e878bb4b644096a7322de8  treq-15.1.0.tar.gz
+> diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
 > new file mode 100644
-> index 0000000..e82611e
+> index 0000000..dbf0e14
 > --- /dev/null
-> +++ b/package/python-pynacl/python-pynacl.mk
-> @@ -0,0 +1,16 @@
+> +++ b/package/python-treq/python-treq.mk
+> @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-pynacl
+> +# python-treq
 > +#
 > +################################################################################
 > +
-> +PYTHON_PYNACL_VERSION = 1.0.1
-> +PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
-> +PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
-> +PYTHON_PYNACL_LICENSE = Apache-2.0
-> +PYTHON_PYNACL_LICENSE_FILES = LICENSE
-> +PYTHON_PYNACL_SETUP_TYPE = setuptools
-> +PYTHON_PYNACL_DEPENDENCIES = libsodium python-six
-> +PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
+> +PYTHON_TREQ_VERSION = 15.1.0
+> +PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
+> +PYTHON_TREQ_SITE = http://pypi.python.org/packages/source/t/treq
+> +PYTHON_TREQ_LICENSE = MIT
+> +PYTHON_TREQ_LICENSE_FILES = LICENSE
+> +PYTHON_TREQ_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
