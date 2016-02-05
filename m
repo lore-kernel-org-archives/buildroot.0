@@ -1,179 +1,168 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Fri, 5 Feb 2016 09:04:53 -0200 (BRST)
-Subject: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for
- PowerPC
-In-Reply-To: <20160205000613.504940f9@free-electrons.com>
-References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
- <20160205000613.504940f9@free-electrons.com>
-Message-ID: <1851498233.1377552.1454670293384.JavaMail.zimbra@datacom.ind.br>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Fri,  5 Feb 2016 12:07:56 +0100
+Subject: [Buildroot] [PATCH v2] Don't build host-cmake if it is available on
+	the build host
+Message-ID: <1454670476-20635-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Currently all cmake packages depend on host-cmake. Unfortunately
+host-cmake takes a long time to configure and build: almost 7 minutes
+on a dual-core i5 with SSD. The time does not change even with ccache
+enabled.
 
-I agree with you, but let me say that the original patch just corrects a "syntax error" in the code !
+Indeed, building host-cmake is avoidable if it is already installed on
+the build host: CMake is supposed to be quite portable, and the only
+patch in Buildroot for the CMake package seems to only affect
+target-cmake.
 
-+ #define GOOGLE_PROTOBUF_ATOMICOPS_ERROR \
-+-#error "Atomic operations are not supported on your platform"
-++"Atomic operations are not supported on your platform"
+We avoid building host-cmake if cmake is already available on the host
+using a technique similar to the one used for host-tar and host-xzcat.
 
-The macro GOOGLE_PROTOBUF_ATOMICOPS_ERROR expands to "another" pre-processor directive (#error "Message"). So if the Macro gets expanded, it will generate a strange message "error: #error ..."
+First, we leverage the existing infrastructure in
+support/dependencies/dependencies.mk to set CMAKE to either "cmake" or
+"$(HOST_DIR)/usr/bin/cmake". In the latter case we also set
+BUILD_HOST_CMAKE = YES meaning we need to build and use host-cmake.
 
-This syntax error correction was submitted upstream, but wasnt applied to protobuf 2.6.1, just to protobuf 3x series. As we cannot drive the push to protobuf 3.x series right now (but we can in the near future, as soon as the first 3.x appears), we submitted a patch to buildroot.
+Then in pkg-cmake.mk we launch $(CMAKE) instead of
+$(HOST_DIR)/usr/bin/cmake.
 
-Despite of this, the solution using the atomic patch you sent seems ok. We are using the patch we submmited for six months now, internally, and we try to send upstream everything, as soon as possible, so that we can keep up with the upstream tree. When your solution goes in, we can remove our internal patch (it is submmited in protobuf upstream 3.x anyway).
+Finally, we do skip adding the dependency on host-cmake for all cmake
+packages when $(BUILD_HOST_CMAKE) != YES.
 
-Thanks for the analysis
+Unlike what we do for host-tar and host-xzcat, for host-cmake we do
+not add host-cmake to DEPENDENCIES_HOST_PREREQ. If we did, host-cmake
+would be a dependency for _any_ package when it's not installed on the
+host, even when no cmake package is selected.
 
+check-host-cmake.sh requires CMake to be at least 3.0 to consider it
+suitable. This is because older versions are affected by the bug
+described and fixed in Buildroot in ef2c1970e4bf ("cmake: add patch to
+fix Qt mkspecs detection"). The bug was fixed in upstream CMake in
+version 3.0 [0].
 
------ Mensagem original -----
-> De: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Para: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org
-> Enviadas: Quinta-feira, 4 de fevereiro de 2016 21:06:13
-> Assunto: Re: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for PowerPC
+Besides, among all the cmake packages currently in Buildroot, the
+highest version mentioned in cmake_minimum_required() is 3.0 (the
+grantlee package). Thus 3.0 should be enough to build all current
+packages. Of course, with the addition or bump of packages, the
+minimum required version will raise.
 
-> Carlos,
-> 
-> On Thu, 28 Jan 2016 11:08:35 -0200, Carlos Santos wrote:
->> From: Henrique Marks <henrique.marks@datacom.ind.br>
->> 
->> Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
->> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
->> ---
->>  package/protobuf/0001-PowerPC-Support.patch | 54 +++++++++++++++++++++++++++++
->>  package/protobuf/Config.in                  |  5 ++-
->>  2 files changed, 56 insertions(+), 3 deletions(-)
->>  create mode 100644 package/protobuf/0001-PowerPC-Support.patch
-> 
-> This patch doesn't actually work. First there are a number of problems:
-> 
-> - The patch you apply has technically nothing to do with enabling the
->   PowerPC architecture. It seems more related to supporting old
->   compilers.
-> 
-> - The patch you apply is already applied upstream, so in this case, we
->   prefer to use the upstream patch directly.
-> 
-> - You change the architecture dependencies in protobuf/Config.in, but
->   forget to propagate this change to the reverse dependencies of
->   protobuf, namely the mosh and ola packages. To make this easier,
->   I've changed protobuf/Config.in to provide a
->   BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS variable, and changed mosh and
->   ola to use it. See commit
->   https://git.busybox.net/buildroot/commit/?id=abdc56006bf253bec393066f96f69f0a6246b896.
-> 
-> But then, despite those issues, your patch still doesn't build on
-> PowerPC with the following defconfig for example:
-> 
-> BR2_powerpc=y
-> BR2_powerpc_8548=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_OLA=y
-> BR2_PACKAGE_MOSH=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> It fails with:
-> 
-> In file included from ./google/protobuf/stubs/once.h:81:0,
->                 from google/protobuf/stubs/common.cc:34:
-> ./google/protobuf/stubs/atomicops.h:209:2: error: #error
-> GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-> In file included from ./google/protobuf/stubs/once.h:81:0,
->                 from google/protobuf/stubs/once.cc:38:
-> ./google/protobuf/stubs/atomicops.h:209:2: error: #error
-> GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-> In file included from
-> google/protobuf/stubs/atomicops_internals_x86_msvc.cc:37:0:
-> ./google/protobuf/stubs/atomicops.h:209:2: error: #error
-> GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-> In file included from google/protobuf/stubs/atomicops_internals_x86_gcc.cc:36:0:
-> ./google/protobuf/stubs/atomicops.h:209:2: error: #error
-> GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-> 
-> Looking at atomicops.h, I can read:
-> 
-> #elif defined(__GNUC__)
-> #if defined(GOOGLE_PROTOBUF_ARCH_IA32) || defined(GOOGLE_PROTOBUF_ARCH_X64)
-> #include <google/protobuf/stubs/atomicops_internals_x86_gcc.h>
-> #elif defined(GOOGLE_PROTOBUF_ARCH_ARM) && defined(__linux__)
-> #include <google/protobuf/stubs/atomicops_internals_arm_gcc.h>
-> #elif defined(GOOGLE_PROTOBUF_ARCH_AARCH64)
-> #include <google/protobuf/stubs/atomicops_internals_arm64_gcc.h>
-> #elif defined(GOOGLE_PROTOBUF_ARCH_ARM_QNX)
-> #include <google/protobuf/stubs/atomicops_internals_arm_qnx.h>
-> #elif defined(GOOGLE_PROTOBUF_ARCH_MIPS) || defined(GOOGLE_PROTOBUF_ARCH_MIPS64)
-> #include <google/protobuf/stubs/atomicops_internals_mips_gcc.h>
-> #elif defined(__native_client__)
-> #include <google/protobuf/stubs/atomicops_internals_pnacl.h>
-> #elif (((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)) || (__GNUC__ > 4))
-> #include <google/protobuf/stubs/atomicops_internals_generic_gcc.h>
-> #elif defined(__clang__)
-> #if __has_extension(c_atomic)
-> #include <google/protobuf/stubs/atomicops_internals_generic_gcc.h>
-> #else
-> #error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-> #endif
-> #else
-> #error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-> #endif
-> 
-> So it means that on i386, on x86-64, on ARM and on MIPS and MIPS64,
-> there are built-in implementation for the atomic operations.
-> 
-> For all other architectures, it relies on
-> atomicops_internals_generic_gcc.h, only when gcc >= 4.7. And indeed my
-> tested toolchain only has gcc 4.5.
-> 
-> In fact atomicops_internals_generic_gcc.h uses the __atomic_*()
-> built-ins of the compiler, which indeed are only introduced in gcc 4.7.
-> But on some architectures, they require linking with -latomic. See my
-> atomic patch series at
-> http://lists.busybox.net/pipermail/buildroot/2016-February/151672.html,
-> and especially patch
-> http://lists.busybox.net/pipermail/buildroot/2016-February/151674.html
-> which has all the gory details.
-> 
-> And in fact, with those atomics, not only PowerPC can be supported, but
-> any other architecture (except if protobuf has other
-> architecture-specific dependencies elsewhere).
-> 
-> So, once my atomic patch series is merged, we could do:
-> 
-> config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
->        bool
->        default y if BR2_arm
->        default y if BR2_i386
->        default y if BR2_mipsel
->        default y if BR2_x86_64
->	default y if BR2_TOOLCHAIN_HAS_ATOMIC
->        depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> 
-> *and* ensure protobuf gets linked with -latomic.
-> 
-> What do you think ?
-> 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Tested on:
+ - Ubuntu 14.04 without CMake, with official CMake (2.8), PPA CMake
+   (3.2)
+ - Ubuntu 15.10 without CMake, with official CMake (3.2)
 
+[0] https://cmake.org/gitweb?p=cmake.git;h=e8b8b37ef6fef094940d3384df5a1d421b9fa568
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Davide Viti <zinosat@tiscali.it>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+
+---
+
+Note: there is still a pending clarification with Arnout about this
+patch. I'm sending it anyway since v1 is broken, and this one has
+improvements in addition to the bugfix.
+
+On my build server, this patch reduced the build time for a batch of
+16 Buildroot configurations (all building cmake-based packages) from
+2h44m to 1h54m. Woah, it's a 30% saving!
+
+Changes v1 -> v2:
+ - Require cmake >= 3.0. Fixes qjson failure (Luca, Samuel, Thomas)
+ - In check-host-cmake.sh only search $1, not "cmake" (Arnout)
+ - typo: host-ccache -> host-cmake (Arnout)
+---
+ package/pkg-cmake.mk                     |  6 ++++--
+ support/dependencies/check-host-cmake.mk |  6 ++++++
+ support/dependencies/check-host-cmake.sh | 30 ++++++++++++++++++++++++++++++
+ 3 files changed, 40 insertions(+), 2 deletions(-)
+ create mode 100644 support/dependencies/check-host-cmake.mk
+ create mode 100755 support/dependencies/check-host-cmake.sh
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 81dcfcc..e3bd603 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -85,7 +85,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+-	$$($$(PKG)_CONF_ENV) $$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
++	$$($$(PKG)_CONF_ENV) $$(CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_TOOLCHAIN_FILE="$$(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake" \
+ 		-DCMAKE_BUILD_TYPE=$$(if $$(BR2_ENABLE_DEBUG),Debug,Release) \
+ 		-DCMAKE_INSTALL_PREFIX="/usr" \
+@@ -110,7 +110,7 @@ define $(2)_CONFIGURE_CMDS
+ 	cd $$($$(PKG)_BUILDDIR) && \
+ 	rm -f CMakeCache.txt && \
+ 	PATH=$$(BR_PATH) \
+-	$$(HOST_DIR)/usr/bin/cmake $$($$(PKG)_SRCDIR) \
++	$$(CMAKE) $$($$(PKG)_SRCDIR) \
+ 		-DCMAKE_INSTALL_SO_NO_EXE=0 \
+ 		-DCMAKE_FIND_ROOT_PATH="$$(HOST_DIR)" \
+ 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" \
+@@ -149,7 +149,9 @@ $(2)_DEPENDENCIES ?= $$(filter-out host-skeleton host-toolchain $(1),\
+ 	$$(patsubst host-host-%,host-%,$$(addprefix host-,$$($(3)_DEPENDENCIES))))
+ endif
+ 
++ifeq ($$(BUILD_HOST_CMAKE),YES)
+ $(2)_DEPENDENCIES += host-cmake
++endif
+ 
+ #
+ # Build step. Only define it if not already defined by the package .mk
+diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
+new file mode 100644
+index 0000000..fe16322
+--- /dev/null
++++ b/support/dependencies/check-host-cmake.mk
+@@ -0,0 +1,6 @@
++CMAKE ?= cmake
++
++ifeq (,$(call suitable-host-package,cmake,$(CMAKE)))
++BUILD_HOST_CMAKE = YES
++CMAKE = $(HOST_DIR)/usr/bin/cmake
++endif
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+new file mode 100755
+index 0000000..08de60c
+--- /dev/null
++++ b/support/dependencies/check-host-cmake.sh
+@@ -0,0 +1,30 @@
++#!/bin/sh
++
++candidate="$1"
++
++cmake=`which $candidate`
++if [ ! -x "$cmake" ]; then
++	# echo nothing: no suitable cmake found
++	exit 1
++fi
++
++version=`$cmake --version | head -n1 | cut -d\  -f3`
++major=`echo "$version" | cut -d. -f1`
++minor=`echo "$version" | cut -d. -f2`
++
++# Versions before 3.0 are affected by the bug described in
++# https://git.busybox.net/buildroot/commit/?id=ef2c1970e4bff3be3992014070392b0e6bc28bd2
++# and fixed in upstream CMake in version 3.0:
++# https://cmake.org/gitweb?p=cmake.git;h=e8b8b37ef6fef094940d3384df5a1d421b9fa568
++major_min=3
++minor_min=0
++if [ $major -gt $major_min ]; then
++	echo $cmake
++else
++	if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
++		echo $cmake
++	else
++		# echo nothing: no suitable cmake found
++		exit 1
++	fi
++fi
 -- 
-Dr. Henrique Marks
-henrique.marks at datacom.ind.br
-R. Am?rica, 1000 - Eldorado do Sul - RS
-CEP: 92990-000 - Brasil
-Fone: +55 51 3933 3000 - Ramal 3466
+1.9.1
