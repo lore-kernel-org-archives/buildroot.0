@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:48 +0100
-Subject: [Buildroot] [PATCH v3 08/17] python-shutilwhich: new package
+Date: Fri,  5 Feb 2016 19:18:51 +0100
+Subject: [Buildroot] [PATCH v3 11/17] python-pyasn-modules: new package
 In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-9-git-send-email-mc5686@mclink.it>
+Message-ID: <1454696337-9692-12-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,67 +12,72 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                                  |  1 +
- package/python-shutilwhich/Config.in               |  8 ++++++++
- package/python-shutilwhich/python-shutilwhich.hash |  3 +++
- package/python-shutilwhich/python-shutilwhich.mk   | 13 +++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-shutilwhich/Config.in
- create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
- create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
+ package/Config.in                                      |  1 +
+ package/python-pyasn-modules/Config.in                 | 11 +++++++++++
+ package/python-pyasn-modules/python-pyasn-modules.hash |  3 +++
+ package/python-pyasn-modules/python-pyasn-modules.mk   | 15 +++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/python-pyasn-modules/Config.in
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 036de5e..6db2fe4 100644
+index 0257350..2fbc06b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -712,6 +712,7 @@ menu "External python modules"
- 	source "package/python-serial/Config.in"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setuptools/Config.in"
-+	source "package/python-shutilwhich/Config.in"
- 	source "package/python-simplejson/Config.in"
- 	source "package/python-singledispatch/Config.in"
- 	source "package/python-sip/Config.in"
-diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
+@@ -679,6 +679,7 @@ menu "External python modules"
+ 	source "package/python-protobuf/Config.in"
+ 	source "package/python-psutil/Config.in"
+ 	source "package/python-pyasn/Config.in"
++	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pycli/Config.in"
+ 	source "package/python-pycparser/Config.in"
+ 	source "package/python-pycrypto/Config.in"
+diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
 new file mode 100644
-index 0000000..d610cfe
+index 0000000..60258ca
 --- /dev/null
-+++ b/package/python-shutilwhich/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SHUTILWHICH
-+	bool "python-shutilwhich"
-+	depends on BR2_PACKAGE_PYTHON
++++ b/package/python-pyasn-modules/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYASN_MODULES
++	bool "python-pyasn-modules"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PYASN
 +	help
-+	  shutil.which for those not using Python 3.3 yet.
++	  A collection of ASN.1-based protocols modules.
 +
-+	  https://pypi.python.org/pypi/shutilwhich/
++	  https://pypi.python.org/pypi/pyasn1-modules
 +
-diff --git a/package/python-shutilwhich/python-shutilwhich.hash b/package/python-shutilwhich/python-shutilwhich.hash
++comment "python-pyasn-modules needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-pyasn-modules/python-pyasn-modules.hash b/package/python-pyasn-modules/python-pyasn-modules.hash
 new file mode 100644
-index 0000000..b1a2c78
+index 0000000..6d9a707
 --- /dev/null
-+++ b/package/python-shutilwhich/python-shutilwhich.hash
++++ b/package/python-pyasn-modules/python-pyasn-modules.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=915947c5cdae7afd748ac715ee547adb, sha256 locally computed.
-+md5	915947c5cdae7afd748ac715ee547adb  shutilwhich-1.1.0.tar.gz
-+sha256	db1f39c6461e42f630fa617bb8c79090f7711c9ca493e615e43d0610ecb64dc6  shutilwhich-1.1.0.tar.gz
-diff --git a/package/python-shutilwhich/python-shutilwhich.mk b/package/python-shutilwhich/python-shutilwhich.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=178129bc7fbf07215c25230c5f053f81, sha256 locally computed.
++md5	178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
++sha256	10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
+diff --git a/package/python-pyasn-modules/python-pyasn-modules.mk b/package/python-pyasn-modules/python-pyasn-modules.mk
 new file mode 100644
-index 0000000..b2e06d5
+index 0000000..4a4b40b
 --- /dev/null
-+++ b/package/python-shutilwhich/python-shutilwhich.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-pyasn-modules/python-pyasn-modules.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-shutilwhich
++# python-pyasn-modules
 +#
 +################################################################################
 +
-+PYTHON_SHUTILWHICH_VERSION = 1.1.0
-+PYTHON_SHUTILWHICH_SOURCE = shutilwhich-$(PYTHON_SHUTILWHICH_VERSION).tar.gz
-+PYTHON_SHUTILWHICH_SITE = http://pypi.python.org/packages/source/s/shutilwhich
-+PYTHON_SHUTILWHICH_LICENSE = MIT
-+PYTHON_SHUTILWHICH_SETUP_TYPE = setuptools
++PYTHON_PYASN_MODULES_VERSION = 0.0.8
++PYTHON_PYASN_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN_MODULES_VERSION).tar.gz
++PYTHON_PYASN_MODULES_SITE = http://pypi.python.org/packages/source/p/pyasn1-modules
++PYTHON_PYASN_MODULES_LICENSE = BSD
++PYTHON_PYASN_MODULES_LICENSE_FILES = LICENSE.txt
++PYTHON_PYASN_MODULES_SETUP_TYPE = setuptools
++PYTHON_PYASN_MODULES_DEPENDENCIES = python-pyasn
 +
 +$(eval $(python-package))
 -- 
