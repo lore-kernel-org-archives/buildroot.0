@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:45 +0100
-Subject: [Buildroot] [PATCH v3 05/17] python-pynacl: new package
+Date: Fri,  5 Feb 2016 19:18:43 +0100
+Subject: [Buildroot] [PATCH v3 03/17] python-lmdb: new package
 In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-6-git-send-email-mc5686@mclink.it>
+Message-ID: <1454696337-9692-4-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                        |  2 ++
- package/python-pynacl/Config.in          |  9 +++++++++
- package/python-pynacl/python-pynacl.hash |  3 +++
- package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-pynacl/Config.in
- create mode 100644 package/python-pynacl/python-pynacl.hash
- create mode 100644 package/python-pynacl/python-pynacl.mk
+ package/Config.in                    |  1 +
+ package/python-lmdb/Config.in        |  8 ++++++++
+ package/python-lmdb/python-lmdb.hash |  3 +++
+ package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7b5c747..f46daea 100644
+index 3b3526c..8e13c64 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -687,6 +687,8 @@ menu "External python modules"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pygments/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pynacl/Config.in"
-+	source "package/python-pyopenssl/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+@@ -658,6 +658,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-lmdb/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
 new file mode 100644
-index 0000000..5a53648
+index 0000000..06d6876
 --- /dev/null
-+++ b/package/python-pynacl/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYNACL
-+	bool "python-pynacl"
-+	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
++++ b/package/python-lmdb/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_LMDB
++	bool "python-lmdb"
 +	select BR2_PACKAGE_PYTHON_CFFI # runtime
 +	help
-+	  Python binding to the Networking and Cryptography (NaCl) library.
++	  Universal Python binding for the LMDB 'Lightning' Database.
 +
-+	  https://pypi.python.org/pypi/PyNaCl
-diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
++	  https://pypi.python.org/pypi/lmdb
++
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
 new file mode 100644
-index 0000000..7035ac7
+index 0000000..c983cfb
 --- /dev/null
-+++ b/package/python-pynacl/python-pynacl.hash
++++ b/package/python-lmdb/python-lmdb.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
-+md5	12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
-+sha256	d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
-diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
++md5	001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
++sha256	37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
 new file mode 100644
-index 0000000..e82611e
+index 0000000..18302b0
 --- /dev/null
-+++ b/package/python-pynacl/python-pynacl.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pynacl
++# python-lmdb
 +#
 +################################################################################
 +
-+PYTHON_PYNACL_VERSION = 1.0.1
-+PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
-+PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
-+PYTHON_PYNACL_LICENSE = Apache-2.0
-+PYTHON_PYNACL_LICENSE_FILES = LICENSE
-+PYTHON_PYNACL_SETUP_TYPE = setuptools
-+PYTHON_PYNACL_DEPENDENCIES = libsodium python-six
-+PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
++PYTHON_LMDB_VERSION = 0.88
++PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
++PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
++PYTHON_LMDB_LICENSE = OpenLDAP BSD
++PYTHON_LMDB_SETUP_TYPE = setuptools
++PYTHON_LMDB_DEPENDENCIES = host-python-cffi
 +
 +$(eval $(python-package))
 -- 
