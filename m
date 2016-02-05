@@ -1,42 +1,55 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri,  5 Feb 2016 22:44:06 +0100
-Subject: [Buildroot] [PATCH] python-psutil: bump to 3.4.2
-Message-ID: <1454708646-17418-1-git-send-email-yegorslists@googlemail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 5 Feb 2016 22:47:16 +0100
+Subject: [Buildroot] [PATCH] Don't build host-cmake if it is available
+ on the build host
+In-Reply-To: <56B35428.2070400@lucaceresoli.net>
+References: <1454363063-21105-1-git-send-email-luca@lucaceresoli.net>
+ <56B06C7F.3010201@mind.be> <56B0704C.4060400@lucaceresoli.net>
+ <56B35428.2070400@lucaceresoli.net>
+Message-ID: <56B51864.7080406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-psutil/python-psutil.hash | 6 +++---
- package/python-psutil/python-psutil.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 04-02-16 14:37, Luca Ceresoli wrote:
+> Hi Arnout,
+> 
+> Luca Ceresoli wrote:
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index 7897b15..21de357 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=015a013c46bb9bc30b5c344f26dea0d3, sha256 locally computed
--md5	015a013c46bb9bc30b5c344f26dea0d3  psutil-2.1.3.tar.gz
--sha256	b434c75f01715777391f10f456002e33d0ca14633f96fdbd9ff9139b42d9452c  psutil-2.1.3.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=53d18a5a2aff970d5658c22921c2bbe6, sha256 locally computed
-+md5	53d18a5a2aff970d5658c22921c2bbe6  psutil-3.4.2.tar.gz
-+sha256  b17fa01aa766daa388362d0eda5c215d77e03a8d37676b68971f37bf3913b725  psutil-3.4.2.tar.gz
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index 870984d..3570ff4 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PSUTIL_VERSION = 2.1.3
-+PYTHON_PSUTIL_VERSION = 3.4.2
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
- PYTHON_PSUTIL_SITE = http://pypi.python.org/packages/source/p/psutil
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
+>>>> +cmake=`which $candidate`
+>>>
+>>>   $candidate could be an absolute path, in which case which returns
+>>> nothing.
+> 
+> Not sure I got what you mean, sorry. which + absolute path returns the
+> absolute path itself, if it exists:
+> 
+> $ which cmake
+> /usr/bin/cmake
+> $ which /usr/bin/cmake
+> /usr/bin/cmake
+> $ which /not/quite/cmake
+> $
+> 
+> And the which(1) manpage confirms this is correct.
+> 
+
+
+ Oops, my bad, I tested it with a file that wasn't executable...
+
+
+ Regards,
+ Arnout
+
+[snip]
+
+
 -- 
-2.5.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
