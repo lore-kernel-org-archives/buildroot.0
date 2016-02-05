@@ -1,121 +1,93 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Fri,  5 Feb 2016 16:33:04 -0300
-Subject: [Buildroot] [PATCH] linux: add conditional patch for timeconst.pl
-Message-ID: <1454700784-32341-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 5 Feb 2016 20:32:53 +0100
+Subject: [Buildroot] [PATCH v3 14/17] python-wsaccel: new package
+In-Reply-To: <1454696337-9692-15-git-send-email-mc5686@mclink.it>
+References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
+ <1454696337-9692-15-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ktZmNsOAoOUSPvQjTrhT-16KN37nTvJYn7k_X18wxi91g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                          |  1 +
+>  package/python-wsaccel/Config.in           |  7 +++++++
+>  package/python-wsaccel/python-wsaccel.hash |  3 +++
+>  package/python-wsaccel/python-wsaccel.mk   | 13 +++++++++++++
+>  4 files changed, 24 insertions(+)
+>  create mode 100644 package/python-wsaccel/Config.in
+>  create mode 100644 package/python-wsaccel/python-wsaccel.hash
+>  create mode 100644 package/python-wsaccel/python-wsaccel.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index e3e621e..ef0ce7b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -733,6 +733,7 @@ menu "External python modules"
+>         source "package/python-webpy/Config.in"
+>         source "package/python-werkzeug/Config.in"
+>         source "package/python-ws4py/Config.in"
+> +       source "package/python-wsaccel/Config.in"
+>         source "package/python-zope-interface/Config.in"
+>  endmenu
+>  endif
+> diff --git a/package/python-wsaccel/Config.in b/package/python-wsaccel/Config.in
+> new file mode 100644
+> index 0000000..19090e8
+> --- /dev/null
+> +++ b/package/python-wsaccel/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_WSACCEL
+> +       bool "python-wsaccel"
+> +       depends on BR2_PACKAGE_PYTHON
 
-Kernels older than 3.9 (not counting stable releases) used the
-timeconst.pl perl script for their build process.
-The problem with this script is that it used deprecated perl features,
-namely defined(@array) which was removed for the perl 5.22 release,
-causing build failure of older kernels on newer distributions.
+Package is Python 3 compatible.
 
-To fix this instead of going the hard way (moving to the new
-timeconst.bc script) use the easy way by patching timeconst.pl with an
-upstream patch used for stable releases.
+> +       help
+> +         Accelerator for ws4py and AutobahnPython.
+> +
+> +         https://pypi.python.org/pypi/wsaccel
+> diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
+> new file mode 100644
+> index 0000000..a02b5a8
+> --- /dev/null
+> +++ b/package/python-wsaccel/python-wsaccel.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b4ea3d6847855c0587d37fca9db0557, sha256 locally computed.
+> +md5    2b4ea3d6847855c0587d37fca9db0557  wsaccel-0.6.2.tar.gz
+> +sha256 425706acf0724d2f6bfa391ec37b4ef121d3432c956029de3cea4e101c218e0c  wsaccel-0.6.2.tar.gz
+> diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
+> new file mode 100644
+> index 0000000..869aaa5
+> --- /dev/null
+> +++ b/package/python-wsaccel/python-wsaccel.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-wsaccel
+> +#
+> +################################################################################
+> +
+> +PYTHON_WSACCEL_VERSION = 0.6.2
+> +PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
+> +PYTHON_WSACCEL_SITE = http://pypi.python.org/packages/source/w/wsaccel
+> +PYTHON_WSACCEL_LICENSE = Apache
 
-First try a dry-run on the patch to see if it applies, if it does then
-call a proper APPLY_PATCHES to it.
+Apache-2.0
 
-Tested against an arbitrary 2.6.30 kernel (applies and builds), against
-4.4.1 for a missing timeconst.pl (does not apply since it's missing) and
-3.8.13 (does not apply since it's fixed already).
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Known broken distributions: fedora 23.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- ...nst.pl-Eliminate-Perl-warning.patch.conditional | 45 ++++++++++++++++++++++
- linux/linux.mk                                     | 12 +++++-
- 2 files changed, 55 insertions(+), 2 deletions(-)
- create mode 100644 linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
-
-diff --git a/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional b/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
-new file mode 100644
-index 0000000..02abadd
---- /dev/null
-+++ b/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
-@@ -0,0 +1,45 @@
-+From 63a3f603413ffe82ad775f2d62a5afff87fd94a0 Mon Sep 17 00:00:00 2001
-+From: "H. Peter Anvin" <hpa@linux.intel.com>
-+Date: Thu, 7 Feb 2013 17:14:08 -0800
-+Subject: [PATCH] timeconst.pl: Eliminate Perl warning
-+
-+defined(@array) is deprecated in Perl and gives off a warning.
-+Restructure the code to remove that warning.
-+
-+[ hpa: it would be interesting to revert to the timeconst.bc script.
-+  It appears that the failures reported by akpm during testing of
-+  that script was due to a known broken version of make, not a problem
-+  with bc.  The Makefile rules could probably be restructured to avoid
-+  the make bug, or it is probably old enough that it doesn't matter. ]
-+
-+Reported-by: Andi Kleen <ak@linux.intel.com>
-+Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
-+Cc: Andrew Morton <akpm@linux-foundation.org>
-+Cc: <stable@vger.kernel.org>
-+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-+---
-+Patch status: upstream
-+
-+ kernel/timeconst.pl | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
-+index eb51d76..3f42652 100644
-+--- a/kernel/timeconst.pl
-++++ b/kernel/timeconst.pl
-+@@ -369,10 +369,8 @@ if ($hz eq '--can') {
-+ 		die "Usage: $0 HZ\n";
-+ 	}
-+ 
-+-	@val = @{$canned_values{$hz}};
-+-	if (!defined(@val)) {
-+-		@val = compute_values($hz);
-+-	}
-++	$cv = $canned_values{$hz};
-++	@val = defined($cv) ? @$cv : compute_values($hz);
-+ 	output($hz, @val);
-+ }
-+ exit 0;
-+-- 
-+2.4.10
-+
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c9986cd..a0016fe 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -187,6 +187,16 @@ endef
- 
- LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
- 
-+# Older linux kernels use deprecated perl constructs in timeconst.pl
-+# that were removed for perl 5.22+ so it breaks on newer distributions
-+# Try a dry-run patch to see if this applies, if it does go ahead
-+define LINUX_TRY_PATCH_TIMECONST
-+	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional >/dev/null ; then \
-+		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional ; \
-+	fi
-+endef
-+LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
-+
- ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
- LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
- else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
-@@ -251,8 +261,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
- 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
--	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
--		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
- endef
- 
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
--- 
-2.4.10
+> +PYTHON_WSACCEL_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
