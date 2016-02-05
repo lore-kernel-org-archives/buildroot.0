@@ -1,42 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Feb 2016 21:44:58 +0100
-Subject: [Buildroot] [git commit] network-manager: bump to version 1.0.10
-Message-ID: <20160205205333.318288016B@busybox.osuosl.org>
+Date: Fri, 5 Feb 2016 21:44:38 +0100
+Subject: [Buildroot] [git commit] dbus-glib: bump version to 0.106
+Message-ID: <20160205205333.217FE81842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7ef2232e59766ab014be6144e0796db683cb571
+commit: https://git.buildroot.net/buildroot/commit/?id=45bd1c76a931f4aeab26653a7d7f97a2fd63c194
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dbus-glib/dbus-glib.hash | 2 +-
+ package/dbus-glib/dbus-glib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 5e9e0c9..c259b5a 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
+diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
+index 572fc40..e5a2ebc 100644
+--- a/package/dbus-glib/dbus-glib.hash
++++ b/package/dbus-glib/dbus-glib.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.6.sha256sum
--sha256  38ea002403e3b884ffa9aae25aea431d2a8420f81f4919761c83fb92648254bd  NetworkManager-1.0.6.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.10.sha256sum
-+sha256  1bcfce8441dfd9f432a100d06b54f3831a2275cccc3b74b1b4c09a011e179fbc  NetworkManager-1.0.10.tar.xz
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 98879d6..b49f3b8 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated after checking pgp signature
+-sha256 bfc1f1a82bfc3ec3ecafe04d0e87bab7e999f50dce4f4a34d0b89caf6bd821f6  dbus-glib-0.104.tar.gz
++sha256 b38952706dcf68bad9c302999ef0f420b8cf1a2428227123f0ac4764b689c046  dbus-glib-0.106.tar.gz
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index 5e6552a..e191507 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- NETWORK_MANAGER_VERSION_MAJOR = 1.0
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).6
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+-DBUS_GLIB_VERSION = 0.104
++DBUS_GLIB_VERSION = 0.106
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
+ DBUS_GLIB_INSTALL_STAGING = YES
+ DBUS_GLIB_LICENSE = AFLv2.1, GPLv2+
