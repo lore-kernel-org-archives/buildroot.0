@@ -1,35 +1,146 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Feb 2016 13:07:04 +0100
-Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
-	licensing
-In-Reply-To: <56B46A92.3040204@lucaceresoli.net> (Luca Ceresoli's message of
- "Fri, 5 Feb 2016 10:25:38 +0100")
-References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
- <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
- <20160203230208.GB3428@free.fr> <56B293F2.9070201@mind.be>
- <20160204204224.GA3468@free.fr> <56B46A92.3040204@lucaceresoli.net>
-Message-ID: <87powbwec7.fsf@dell.be.48ers.dk>
+From: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
+Date: Fri,  5 Feb 2016 10:43:29 -0200
+Subject: [Buildroot] [PATCH v2] This patch add new package ShellInABox that
+	is a program that implements an in-browser command line
+	shell. It works on any JavaScript and CSS enabled web browser.
+Message-ID: <1454676209-76095-1-git-send-email-lucas.zampar@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+Installing it on your Linux board you can get the access to the command
+prompt directly from web without any needs to install terminal software
+on your PC.
 
-Hi,
+Signed-off-by: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
+---
 
- > At first I thought we had a choice between 1) and 2). But after
- > reconsidering it, option 2) is most likely just illegal, and definitely
- > risky.
+Changes v1 -> v2:
+  - Correct missing double quote at package/Config.in
+---
+ package/Config.in                                  |  1 +
+ package/shellinabox/Config.in                      | 10 +++++++
+ package/shellinabox/S51shellinabox                 | 33 ++++++++++++++++++++++
+ .../shellinabox-2.19-remove-static-library.patch   | 12 ++++++++
+ package/shellinabox/shellinabox.mk                 | 20 +++++++++++++
+ 5 files changed, 76 insertions(+)
+ create mode 100644 package/shellinabox/Config.in
+ create mode 100644 package/shellinabox/S51shellinabox
+ create mode 100644 package/shellinabox/shellinabox-2.19-remove-static-library.patch
+ create mode 100644 package/shellinabox/shellinabox.mk
 
- > My vote is for option 1) too.
-
- > We had several rewrite proposals so far. I'll wait a few more days for
- > more comments, then resubmit. Peter, your opinion would be most welcome.
-
-Yes, option 1 seems the best option to me as well.
-
+diff --git a/package/Config.in b/package/Config.in
+index 529ad33..52f7cf2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1444,6 +1444,7 @@ endif
+ 	source "package/sconeserver/Config.in"
+ 	source "package/ser2net/Config.in"
+ 	source "package/shairport-sync/Config.in"
++	source "package/shellinabox/Config.in"
+ 	source "package/smcroute/Config.in"
+ 	source "package/socat/Config.in"
+ 	source "package/socketcand/Config.in"
+diff --git a/package/shellinabox/Config.in b/package/shellinabox/Config.in
+new file mode 100644
+index 0000000..4187e18
+--- /dev/null
++++ b/package/shellinabox/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_SHELLINABOX
++	bool "shellinabox"
++	select BR2_PACKAGE_ZLIB
++	help
++	Shell in a box - implements a web server that can 
++	export arbitrary command line tools to a web based terminal emulator.
++	This emulator is accessible to any JavaScript and CSS 
++	enabled web browser and does not require any additional browser plugins.
++
++	  http://shellinabox.googlecode.com
+diff --git a/package/shellinabox/S51shellinabox b/package/shellinabox/S51shellinabox
+new file mode 100644
+index 0000000..16298e8
+--- /dev/null
++++ b/package/shellinabox/S51shellinabox
+@@ -0,0 +1,33 @@
++#! /bin/sh
++
++NAME=shellinaboxd
++DAEMON=/usr/bin/$NAME
++ARGS="-s/:LOGIN -t --no-beep -b"
++
++# Gracefully exit if the package has been removed.
++test -x $DAEMON || exit 0
++
++case "$1" in
++  start)
++    printf "Starting $NAME: "
++    start-stop-daemon -S -q -x $DAEMON -- $ARGS
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++  stop)
++    printf "Stopping $NAME: "
++    start-stop-daemon -K -q -n $NAME
++    [ $? = 0 ] && echo "OK" || echo "FAIL"
++    ;;
++  restart|reload)
++    echo "Restarting $NAME: "
++    $0 stop
++    sleep 1
++    $0 start
++    ;;
++  *)
++    echo "Usage: $0 {start|stop|restart|reload}" >&2
++    exit 1
++    ;;
++esac
++
++exit 0
+diff --git a/package/shellinabox/shellinabox-2.19-remove-static-library.patch b/package/shellinabox/shellinabox-2.19-remove-static-library.patch
+new file mode 100644
+index 0000000..dcbeb05
+--- /dev/null
++++ b/package/shellinabox/shellinabox-2.19-remove-static-library.patch
+@@ -0,0 +1,12 @@
++diff -rup shellinabox-2.19_original/Makefile.am shellinabox-2.19/Makefile.am
++--- shellinabox-2.19_original/Makefile.am	2016-02-03 14:17:44.699913649 -0200
+++++ shellinabox-2.19/Makefile.am	2016-02-03 14:08:59.795376662 -0200
++@@ -126,7 +126,7 @@ BUILT_SOURCES        = shellinabox/beep.
++ 
++ shellinaboxd_LDADD   = liblogging.la                                          \
++                        libhttp.la
++-shellinaboxd_LDFLAGS = -static
+++#shellinaboxd_LDFLAGS = -static
++ ## Added this for compatibility with older versions of autoconf/automake
++ docdir               = ${datadir}/doc/${PACKAGE}
++ 
+diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
+new file mode 100644
+index 0000000..c2fe686
+--- /dev/null
++++ b/package/shellinabox/shellinabox.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# shellinabox
++#
++################################################################################
++
++SHELLINABOX_VERSION = 2.19
++SHELLINABOX_SOURCE = v$(SHELLINABOX_VERSION).tar.gz
++SHELLINABOX_SITE = https://github.com/shellinabox/shellinabox/archive
++SHELLINABOX_AUTORECONF = YES
++SHELLINABOX_DEPENDENCIES = zlib openssl
++SHELLINABOX_LICENSE = GPLv2
++
++
++define NTP_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 package/shellinabox/S51shellinabox $(TARGET_DIR)/etc/init.d/S51shellinabox
++endef
++
++
++$(eval $(autotools-package))
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.5.0
