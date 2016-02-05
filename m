@@ -1,85 +1,89 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Feb 2016 20:13:45 +0100
-Subject: [Buildroot] [PATCH v3 15/17] python-setproctitle: new package
-In-Reply-To: <1454696337-9692-16-git-send-email-mc5686@mclink.it>
+Date: Fri, 5 Feb 2016 20:23:59 +0100
+Subject: [Buildroot] [PATCH v3 13/17] python-ujson: new package
+In-Reply-To: <1454696337-9692-14-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
- <1454696337-9692-16-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kvabm5rsK7CJXijmDweOFFoT_Wm0iKOkELwn-o9Xisp5A@mail.gmail.com>
+ <1454696337-9692-14-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ktC2yJzXiMNKS7JKyCU17rchaHQ1OC3uJjVj8OztdF20Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mauro,
-
 On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                                    |  1 +
->  package/python-setproctitle/Config.in                |  7 +++++++
->  package/python-setproctitle/python-setproctitle.hash |  3 +++
->  package/python-setproctitle/python-setproctitle.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-setproctitle/Config.in
->  create mode 100644 package/python-setproctitle/python-setproctitle.hash
->  create mode 100644 package/python-setproctitle/python-setproctitle.mk
+>  package/Config.in                      |  1 +
+>  package/python-ujson/Config.in         |  7 +++++++
+>  package/python-ujson/python-ujson.hash |  3 +++
+>  package/python-ujson/python-ujson.mk   | 13 +++++++++++++
+>  4 files changed, 24 insertions(+)
+>  create mode 100644 package/python-ujson/Config.in
+>  create mode 100644 package/python-ujson/python-ujson.hash
+>  create mode 100644 package/python-ujson/python-ujson.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index ef0ce7b..bf5f0f8 100644
+> index 2fbc06b..e3e621e 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -712,6 +712,7 @@ menu "External python modules"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-serial/Config.in"
->         source "package/python-service-identity/Config.in"
-> +       source "package/python-setproctitle/Config.in"
->         source "package/python-setuptools/Config.in"
->         source "package/python-shutilwhich/Config.in"
->         source "package/python-simplejson/Config.in"
-> diff --git a/package/python-setproctitle/Config.in b/package/python-setproctitle/Config.in
+> @@ -725,6 +725,7 @@ menu "External python modules"
+>         source "package/python-treq/Config.in"
+>         source "package/python-twisted/Config.in"
+>         source "package/python-txaio/Config.in"
+> +       source "package/python-ujson/Config.in"
+>         source "package/python-urllib3/Config.in"
+>         source "package/python-urwid/Config.in"
+>         source "package/python-versiontools/Config.in"
+> diff --git a/package/python-ujson/Config.in b/package/python-ujson/Config.in
 > new file mode 100644
-> index 0000000..b39f3cc
+> index 0000000..eab5bd3
 > --- /dev/null
-> +++ b/package/python-setproctitle/Config.in
+> +++ b/package/python-ujson/Config.in
 > @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_SETPROCTITLE
-> +       bool "python-setproctitle"
+> +config BR2_PACKAGE_PYTHON_UJSON
+> +       bool "python-ujson"
 > +       depends on BR2_PACKAGE_PYTHON
 
-according to setup.py, this package is compatible with Python 3 too
+Package support Python 3
 
 > +       help
-> +         A Python module to customize the process title.
+> +         UltraJSON is an ultra fast JSON encoder and decoder written in pure C with bindings for Python 2.5+ and 3.
+
+Line too long.
+
 > +
-> +         https://pypi.python.org/pypi/setproctitle
-> diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
+> +         https://pypi.python.org/pypi/ujson
+> diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
 > new file mode 100644
-> index 0000000..3b0fd71
+> index 0000000..2132034
 > --- /dev/null
-> +++ b/package/python-setproctitle/python-setproctitle.hash
+> +++ b/package/python-ujson/python-ujson.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=95d9e56c69437246460a20804961d70d, sha256 locally computed.
-> +md5    95d9e56c69437246460a20804961d70d  setproctitle-1.1.9.tar.gz
-> +sha256 1c3414d18f9cacdab78b0ffd8e886d56ad45f22e55001a72aaa0b2aeb56a0ad7  setproctitle-1.1.9.tar.gz
-> diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=42f77b0cce686dfa4da2e68480b1dd24,sha256 locally computed.
+> +md5    42f77b0cce686dfa4da2e68480b1dd24  ujson-1.35.tar.gz
+> +sha256 f66073e5506e91d204ab0c614a148d5aa938bdbf104751be66f8ad7a222f5f86  ujson-1.35.tar.gz
+> diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
 > new file mode 100644
-> index 0000000..63dfad0
+> index 0000000..f7bb0ed
 > --- /dev/null
-> +++ b/package/python-setproctitle/python-setproctitle.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-ujson/python-ujson.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# python-setproctitle
+> +# python-ujson
 > +#
 > +################################################################################
 > +
-> +PYTHON_SETPROCTITLE_VERSION = 1.1.9
-> +PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
-> +PYTHON_SETPROCTITLE_SITE = http://pypi.python.org/packages/source/s/setproctitle
-> +PYTHON_SETPROCTITLE_LICENSE = BSD-3c
-> +PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
-> +PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
+> +PYTHON_UJSON_VERSION = 1.35
+> +PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
+> +PYTHON_UJSON_SITE = http://pypi.python.org/packages/source/u/ujson
+> +PYTHON_UJSON_LICENSE = BSD
+
+This is BSD-3c
+http://opensource.org/licenses/BSD-3-Clause
+
+> +PYTHON_UJSON_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
