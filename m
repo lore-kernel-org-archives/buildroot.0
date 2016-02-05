@@ -1,82 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Feb 2016 21:56:50 +0100
-Subject: [Buildroot] [git commit] uclibc: add a upstream patch to fix vlc
-	runtime issues
-Message-ID: <20160205220712.A87C98026D@busybox.osuosl.org>
+Date: Fri, 5 Feb 2016 23:07:38 +0100
+Subject: [Buildroot] [PATCH v2 1/3] python-setuptools: enable Python 3.x
+ support
+In-Reply-To: <1454661458-18746-1-git-send-email-yegorslists@googlemail.com>
+References: <1454661458-18746-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160205230738.2dad1116@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=195601059c0f643d942c2bd7deab0155d1b4e4d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear yegorslists at googlemail.com,
 
-IDN related declaration without implementation is a bad idea.
+On Fri,  5 Feb 2016 09:37:36 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Add missing XML dependency.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-setuptools/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...e-netdb.h-Do-not-define-IDN-related-flags.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+Applied, thanks.
 
-diff --git a/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch b/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
-new file mode 100644
-index 0000000..c1985ef
---- /dev/null
-+++ b/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
-@@ -0,0 +1,54 @@
-+From 5e9a78c8a839381add6faa61e196e6dad9143163 Mon Sep 17 00:00:00 2001
-+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-+Date: Tue, 2 Feb 2016 12:13:09 +0100
-+Subject: [PATCH] include/netdb.h: Do not define IDN-related flags.
-+
-+getaddrinfo() does not implement IDN encoding, and always fail when
-+provided an IDN flag (e.g., AI_IDN) with EAI_BADFLAGS.  Some packages
-+(such as the VLC media player) check for AI_IDN before they use it;
-+providing an unimplemented AI_IDN in the libc makes these package
-+fail.  As a result they make calls to getaddrinfo() with AI_IDN that
-+always fail while they could have made successful calls without AI_IDN
-+instead.
-+
-+Thus, do not define IDN flags: it is better not to compile rather than
-+to compile a code that always fail.
-+
-+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-+Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-+---
-+ include/netdb.h |   11 -----------
-+ 1 file changed, 11 deletions(-)
-+
-+diff --git a/include/netdb.h b/include/netdb.h
-+index a636b5f..95abe95 100644
-+--- a/include/netdb.h
-++++ b/include/netdb.h
-+@@ -627,16 +627,6 @@ struct addrinfo
-+ # define AI_ALL		0x0010	/* Return IPv4 mapped and IPv6 addresses.  */
-+ # define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose
-+ 				   returned address type..  */
-+-# ifdef __USE_GNU
-+-#  define AI_IDN	0x0040	/* IDN encode input (assuming it is encoded
-+-				   in the current locale's character set)
-+-				   before looking it up. */
-+-#  define AI_CANONIDN	0x0080	/* Translate canonical name from IDN format. */
-+-#  define AI_IDN_ALLOW_UNASSIGNED 0x0100 /* Don't reject unassigned Unicode
-+-					    code points.  */
-+-#  define AI_IDN_USE_STD3_ASCII_RULES 0x0200 /* Validate strings according to
-+-						STD3 rules.  */
-+-# endif
-+ # define AI_NUMERICSERV	0x0400	/* Don't use name resolution.  */
-+ 
-+ /* Error values for `getaddrinfo' function.  */
-+@@ -658,7 +648,6 @@ struct addrinfo
-+ #  define EAI_NOTCANCELED -102	/* Request not canceled.  */
-+ #  define EAI_ALLDONE	  -103	/* All requests done.  */
-+ #  define EAI_INTR	  -104	/* Interrupted by a signal.  */
-+-#  define EAI_IDN_ENCODE  -105	/* IDN encoding failed.  */
-+ # endif
-+ 
-+ # ifdef __USE_MISC
-+-- 
-+1.7.10.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
