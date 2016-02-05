@@ -1,74 +1,81 @@
-From: niranjan.reddy <niranjan.reddy@rockwellcollins.com>
-Date: Fri,  5 Feb 2016 11:12:35 +0530
-Subject: [Buildroot] [PATCH 41/41] cgroupsfs: new package
-Message-ID: <1454650955-31753-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Fri, 5 Feb 2016 07:33:49 +0100
+Subject: [Buildroot] [PATCH] uclibc: add a upstream patch to fix vlc runtime
+	issues
+Message-ID: <20160205063349.GA22649@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Niranjan <niranjan.reddy@rockwellcollins.com>
+IDN related declaration without implementation is a bad idea.
 
-This package consists of scripts that setup cgroups at boot
-without doing any cgroup management or classification of
-tasks into cgroups
-
-Signed-off-by: niranjan.reddy <niranjan.reddy@rockwellcollins.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/Config.in            |  1 +
- package/cgroupfs/Config.in   |  6 ++++++
- package/cgroupfs/cgroupfs.mk | 17 +++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/cgroupfs/Config.in
- create mode 100644 package/cgroupfs/cgroupfs.mk
+ ...e-netdb.h-Do-not-define-IDN-related-flags.patch |   54 ++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 4958b8e..07a8cfb 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1566,6 +1566,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- endif
-+	source "package/cgroupfs/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/emlog/Config.in"
- 	source "package/ftop/Config.in"
-diff --git a/package/cgroupfs/Config.in b/package/cgroupfs/Config.in
+diff --git a/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch b/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
 new file mode 100644
-index 0000000..f83432e
+index 0000000..c1985ef
 --- /dev/null
-+++ b/package/cgroupfs/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_CGROUPFS
-+	bool "cgroupfs"
-+	help
-+	  cgroupfs mount and umount scripts.
++++ b/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
+@@ -0,0 +1,54 @@
++From 5e9a78c8a839381add6faa61e196e6dad9143163 Mon Sep 17 00:00:00 2001
++From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
++Date: Tue, 2 Feb 2016 12:13:09 +0100
++Subject: [PATCH] include/netdb.h: Do not define IDN-related flags.
 +
-+	  https://github.com/tianon/cgroupfs-mount/blob/master/README.md
-diff --git a/package/cgroupfs/cgroupfs.mk b/package/cgroupfs/cgroupfs.mk
-new file mode 100644
-index 0000000..06d430a
---- /dev/null
-+++ b/package/cgroupfs/cgroupfs.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# cgroupfs
-+#
-+#############################################################
-+CGROUPFS_VERSION = 1.0
-+CGROUPFS_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_VERSION))
-+CGROUPFS_INSTALL_TARGET = YES
++getaddrinfo() does not implement IDN encoding, and always fail when
++provided an IDN flag (e.g., AI_IDN) with EAI_BADFLAGS.  Some packages
++(such as the VLC media player) check for AI_IDN before they use it;
++providing an unimplemented AI_IDN in the libc makes these package
++fail.  As a result they make calls to getaddrinfo() with AI_IDN that
++always fail while they could have made successful calls without AI_IDN
++instead.
 +
-+define CGROUPFS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.init $(TARGET_DIR)/etc/init.d/cgroupfs-mount.init
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.upstart $(TARGET_DIR)/etc/init.d/cgroupfs-mount.upstart
-+endef
++Thus, do not define IDN flags: it is better not to compile rather than
++to compile a code that always fail.
 +
-+$(eval $(generic-package))
++Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
++Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
++---
++ include/netdb.h |   11 -----------
++ 1 file changed, 11 deletions(-)
++
++diff --git a/include/netdb.h b/include/netdb.h
++index a636b5f..95abe95 100644
++--- a/include/netdb.h
+++++ b/include/netdb.h
++@@ -627,16 +627,6 @@ struct addrinfo
++ # define AI_ALL		0x0010	/* Return IPv4 mapped and IPv6 addresses.  */
++ # define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose
++ 				   returned address type..  */
++-# ifdef __USE_GNU
++-#  define AI_IDN	0x0040	/* IDN encode input (assuming it is encoded
++-				   in the current locale's character set)
++-				   before looking it up. */
++-#  define AI_CANONIDN	0x0080	/* Translate canonical name from IDN format. */
++-#  define AI_IDN_ALLOW_UNASSIGNED 0x0100 /* Don't reject unassigned Unicode
++-					    code points.  */
++-#  define AI_IDN_USE_STD3_ASCII_RULES 0x0200 /* Validate strings according to
++-						STD3 rules.  */
++-# endif
++ # define AI_NUMERICSERV	0x0400	/* Don't use name resolution.  */
++ 
++ /* Error values for `getaddrinfo' function.  */
++@@ -658,7 +648,6 @@ struct addrinfo
++ #  define EAI_NOTCANCELED -102	/* Request not canceled.  */
++ #  define EAI_ALLDONE	  -103	/* All requests done.  */
++ #  define EAI_INTR	  -104	/* Interrupted by a signal.  */
++-#  define EAI_IDN_ENCODE  -105	/* IDN encoding failed.  */
++ # endif
++ 
++ # ifdef __USE_MISC
++-- 
++1.7.10.4
++
 -- 
-2.5.0
+1.7.10.4
