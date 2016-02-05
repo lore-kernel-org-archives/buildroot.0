@@ -1,46 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Feb 2016 23:28:31 +0100
-Subject: [Buildroot] [PATCH 1/1] libbsd: upgrade to v0.8.2 and expand
- architecture support
-In-Reply-To: <1454599563-8296-1-git-send-email-casantos@datacom.ind.br>
-References: <1454593238-5352-1-git-send-email-casantos@datacom.ind.br>
- <1454599563-8296-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20160205232831.029063f8@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  5 Feb 2016 23:43:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pound: new package
+Message-ID: <1454712192-26144-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlos Santos,
+Makefile needs to be fixed to avoid an error during install:
 
-On Thu,  4 Feb 2016 13:26:03 -0200, Carlos Santos wrote:
-> When libbsd still supported uClibc as a C library, we added the architecture
-> exclusions because uClibc's a.out.h includes linux/a.out.h. The latter only
-> exists for the specified architectures.
-> 
-> However, glibc doesn't include linux/a.out.h, it instead has its own
-> implementation and it adds a flag to indicate if a.out is supported on this
-> architecture or not.
-> 
-> Since libbsd currently only supports glibc-based toolchains, the architecture
-> exclusions are no longer valid.
-> 
-> On microblaze, the build still fails, but this time because of ELF support.
-> libbsd explicitly handles architectures and microblaze is not one of them (see
-> local-elf.h).
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> ---
->  package/libbsd/Config.in   | 6 ++----
->  package/libbsd/libbsd.hash | 2 +-
->  package/libbsd/libbsd.mk   | 2 +-
->  3 files changed, 4 insertions(+), 6 deletions(-)
+/usr/bin/install: cannot change ownership of
+ '/home/bernd/buildroot/buildroot/output/target/usr/sbin/pound':
+ Operation not permitted
+Makefile:60: recipe for target 'install' failed
 
-Applied, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/Config.in        |  1 +
+ package/pound/Config.in  | 18 ++++++++++++++++++
+ package/pound/pound.hash |  2 ++
+ package/pound/pound.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100644 package/pound/Config.in
+ create mode 100644 package/pound/pound.hash
+ create mode 100644 package/pound/pound.mk
 
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 2da3a83..2a231ec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1425,6 +1425,7 @@ endif
+ 	source "package/p910nd/Config.in"
+ 	source "package/phidgetwebservice/Config.in"
+ 	source "package/portmap/Config.in"
++	source "package/pound/Config.in"
+ 	source "package/pppd/Config.in"
+ 	source "package/pptp-linux/Config.in"
+ 	source "package/proftpd/Config.in"
+diff --git a/package/pound/Config.in b/package/pound/Config.in
+new file mode 100644
+index 0000000..91c29ea
+--- /dev/null
++++ b/package/pound/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_POUND
++	bool "pound"
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_OPENSSL
++	help
++	  The Pound program is a reverse proxy, load balancer and HTTPS
++	  front-end for Web server(s). Pound was developed to enable
++	  distributing the load among several Web-servers and to allow
++	  for a convenient SSL wrapper for those Web servers that do not
++	  offer it natively.
++
++	  http://www.apsis.ch/pound
++
++comment "pound needs a toolchain w/ dynamic library, threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/pound/pound.hash b/package/pound/pound.hash
+new file mode 100644
+index 0000000..6908b90
+--- /dev/null
++++ b/package/pound/pound.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	cdfbf5a7e8dc8fbbe0d6c1e83cd3bd3f2472160aac65684bb01ef661c626a8e4	Pound-2.7.tgz
+diff --git a/package/pound/pound.mk b/package/pound/pound.mk
+new file mode 100644
+index 0000000..46f8244
+--- /dev/null
++++ b/package/pound/pound.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# pound
++#
++################################################################################
++
++POUND_VERSION = 2.7
++POUND_SITE = http://www.apsis.ch/pound
++POUND_SOURCE = Pound-$(POUND_VERSION).tgz
++POUND_LICENSE = GPLv3+
++POUND_LICENSE_FILES = GPL.txt
++POUND_DEPENDENCIES = openssl
++
++ifeq ($(BR2_PACKAGE_PCRE),y)
++POUND_DEPENDENCIES += pcre
++endif
++
++# Do not set user/group for the installed binaries.
++define POUND_FIX_INSTALL
++	$(SED) 's/-o proxy -g proxy//g' $(@D)/Makefile
++endef
++POUND_POST_CONFIGURE_HOOKS += POUND_FIX_INSTALL
++
++$(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
