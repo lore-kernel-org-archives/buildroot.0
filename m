@@ -1,40 +1,95 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri,  5 Feb 2016 19:37:00 +0100
-Subject: [Buildroot] [PATCH 1/1] network-manager: bump to version 1.0.10
-Message-ID: <1454697420-30849-1-git-send-email-petr.vorel@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 5 Feb 2016 20:09:59 +0100
+Subject: [Buildroot] [PATCH v3 04/17] python-pygments: new package
+In-Reply-To: <1454696337-9692-5-git-send-email-mc5686@mclink.it>
+References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
+ <1454696337-9692-5-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ks8zh5bbNvUxYesqamaA_KNaU5MOjR7_8QcegQZTP7wLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/network-manager/network-manager.hash | 4 ++--
- package/network-manager/network-manager.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Mauro,
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 5e9e0c9..c259b5a 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.6.sha256sum
--sha256  38ea002403e3b884ffa9aae25aea431d2a8420f81f4919761c83fb92648254bd  NetworkManager-1.0.6.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.10.sha256sum
-+sha256  1bcfce8441dfd9f432a100d06b54f3831a2275cccc3b74b1b4c09a011e179fbc  NetworkManager-1.0.10.tar.xz
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 98879d6..b49f3b8 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NETWORK_MANAGER_VERSION_MAJOR = 1.0
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).6
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
--- 
-2.7.0
+On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-pygments/Config.in            |  7 +++++++
+>  package/python-pygments/python-pygments.hash |  3 +++
+>  package/python-pygments/python-pygments.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-pygments/Config.in
+>  create mode 100644 package/python-pygments/python-pygments.hash
+>  create mode 100644 package/python-pygments/python-pygments.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 8e13c64..7b5c747 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -685,6 +685,7 @@ menu "External python modules"
+>         source "package/python-pydal/Config.in"
+>         source "package/python-pyftpdlib/Config.in"
+>         source "package/python-pygame/Config.in"
+> +       source "package/python-pygments/Config.in"
+>         source "package/python-pyinotify/Config.in"
+>         source "package/python-pyparsing/Config.in"
+>         source "package/python-pyparted/Config.in"
+> diff --git a/package/python-pygments/Config.in b/package/python-pygments/Config.in
+> new file mode 100644
+> index 0000000..d0e3f00
+> --- /dev/null
+> +++ b/package/python-pygments/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_PYGMENTS
+> +       bool "python-pygments"
+> +       help
+> +         Pygments is a syntax highlighting package written in Python.
+> +
+> +         https://pypi.python.org/pypi/Pygments
+> +
+
+Remove this extra line
+
+> diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
+> new file mode 100644
+> index 0000000..bb954dd
+> --- /dev/null
+> +++ b/package/python-pygments/python-pygments.hash
+> @@ -0,0 +1,3 @@
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=84533d22f72de894f6d3907c3ca9eddf, sha256 locally computed.
+> +md5    84533d22f72de894f6d3907c3ca9eddf  Pygments-2.1.tar.gz
+> +sha256 13a0ef5fafd7b16cf995bc28fe7aab0780dab1b2fda0fc89e033709af8b8a47b  Pygments-2.1.tar.gz
+> diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
+> new file mode 100644
+> index 0000000..d087cef
+> --- /dev/null
+> +++ b/package/python-pygments/python-pygments.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-pygments
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYGMENTS_VERSION = 2.1
+> +PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
+> +PYTHON_PYGMENTS_SITE = http://pypi.python.org/packages/source/P/Pygments
+> +PYTHON_PYGMENTS_LICENSE = BSD
+
+This is BSD-2c, see here
+http://opensource.org/licenses/BSD-2-Clause
+
+> +PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
+> +PYTHON_PYGMENTS_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
