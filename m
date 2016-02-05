@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:50 +0100
-Subject: [Buildroot] [PATCH v3 10/17] python-txaio: new package
+Date: Fri,  5 Feb 2016 19:18:57 +0100
+Subject: [Buildroot] [PATCH v3 17/17] python-crossbar: new package
 In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-11-git-send-email-mc5686@mclink.it>
+Message-ID: <1454696337-9692-18-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,67 +12,87 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                      |  1 +
- package/python-txaio/Config.in         |  7 +++++++
- package/python-txaio/python-txaio.hash |  3 +++
- package/python-txaio/python-txaio.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-txaio/Config.in
- create mode 100644 package/python-txaio/python-txaio.hash
- create mode 100644 package/python-txaio/python-txaio.mk
+ package/Config.in                            |  2 ++
+ package/python-crossbar/Config.in            | 23 +++++++++++++++++++++++
+ package/python-crossbar/python-crossbar.hash |  3 +++
+ package/python-crossbar/python-crossbar.mk   | 17 +++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100644 package/python-crossbar/Config.in
+ create mode 100644 package/python-crossbar/python-crossbar.hash
+ create mode 100644 package/python-crossbar/python-crossbar.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fb285d9..0257350 100644
+index a0c57e0..8bc46c8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -723,6 +723,7 @@ menu "External python modules"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
-+	source "package/python-txaio/Config.in"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-diff --git a/package/python-txaio/Config.in b/package/python-txaio/Config.in
+@@ -634,6 +634,8 @@ menu "External python modules"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-crc16/Config.in"
++	source "package/python-crossbar/Config.in"
++	source "package/python-cryptography/Config.in"
+ 	source "package/python-cssselect/Config.in"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-dialog/Config.in"
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
 new file mode 100644
-index 0000000..9d42382
+index 0000000..f52e880
 --- /dev/null
-+++ b/package/python-txaio/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_TXAIO
-+	bool "python-txaio"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
++++ b/package/python-crossbar/Config.in
+@@ -0,0 +1,23 @@
++config BR2_PACKAGE_PYTHON_CROSSBAR
++	bool "python-crossbar"
++	select BR2_PACKAGE_PYTHON_AUTOBAHN
++	select BR2_PACKAGE_PYTHON_CLICK
++	select BR2_PACKAGE_PYTHON_JINJA2
++	select BR2_PACKAGE_PYTHON_MISTUNE
++	select BR2_PACKAGE_PYTHON_NETADDR
++	select BR2_PACKAGE_PYTHON_PYGMENTS
++	select BR2_PACKAGE_PYTHON_PYTRIE
++	select BR2_PACKAGE_PYTHON_PYYAML
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	select BR2_PACKAGE_PYTHON_SHURILWHICH
++	select BR2_PACKAGE_PYTHON_TREQ
++	select BR2_PACKAGE_PYTHON_TWISTED
 +	help
-+	  Compatibility API between asyncio/Twisted/Trollius.
++	  Crossbar.io is an open-source WAMP application router 
++	  that allows to build advanced applications from loosely-coupled
++	  components that can talk in real-time with each other.
 +
-+	  https://pypi.python.org/pypi/txaio
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
++	  https://pypi.python.org/pypi/crossbar
++
++comment "*** Currently Crossbar.io does NOT work without Python sources! ***"
++        depends on BR2_PACKAGE_PYTHON_PYC_ONLY
+diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
 new file mode 100644
-index 0000000..5d9e6cf
+index 0000000..0690e56
 --- /dev/null
-+++ b/package/python-txaio/python-txaio.hash
++++ b/package/python-crossbar/python-crossbar.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
-+md5	c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
-+sha256	6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
++md5	cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
++sha256	4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
+diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
 new file mode 100644
-index 0000000..127bc62
+index 0000000..7a191d9
 --- /dev/null
-+++ b/package/python-txaio/python-txaio.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-crossbar/python-crossbar.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# python-txaio
++# python-crossbar
 +#
 +################################################################################
 +
-+PYTHON_TXAIO_VERSION = 2.2.1
-+PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
-+PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
-+PYTHON_TXAIO_LICENSE = MIT
-+PYTHON_TXAIO_LICENSE_FILES = LICENSE
-+PYTHON_TXAIO_SETUP_TYPE = setuptools
++PYTHON_CROSSBAR_VERSION = 0.12.1
++PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
++PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
++PYTHON_CROSSBAR_LICENSE = AGPL3
++PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
++PYTHON_CROSSBAR_SETUP_TYPE = setuptools
++PYTHON_CROSSBAR_DEPENDENCIES = python-click python-setuptools python-twisted python-autobahn \
++	python-netaddr python-pytrie python-jinja2 python-mistune python-pygments python-pyyaml \
++	python-shutilwhich python-psutil python-treq
 +
 +$(eval $(python-package))
 -- 
