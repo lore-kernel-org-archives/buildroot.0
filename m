@@ -1,41 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Feb 2016 23:13:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mraa: bump version to 0.9.1
-In-Reply-To: <1454709441-31380-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454709441-31380-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160205231318.252a5f62@free-electrons.com>
+Date: Fri, 5 Feb 2016 23:22:13 +0100
+Subject: [Buildroot] [PATCH 1/1] libfcgi:add security patch for
+ CVE-2012-6687
+In-Reply-To: <1454650180-31432-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+References: <1454650180-31432-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <20160205232213.7f1b8a51@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello Niranjan,
 
-On Fri,  5 Feb 2016 22:57:21 +0100, Bernd Kuhls wrote:
-> Removed patches applied upstream:
-> https://github.com/intel-iot-devkit/mraa/commit/86a0e10c037e5c069c48012f169f9e8e2587a0ef
-> https://github.com/intel-iot-devkit/mraa/commit/a87a104efeb83d4e762992e5be3b8908e6d2bf40
-> https://github.com/intel-iot-devkit/mraa/commit/7fce2e2a3a3fbbaa2b645d810bde8a50b9c78023
+Could you fix your mail configuration so that your From is:
+
+	Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+
+Indeed, the From: field gets used as the Git author.
+
+On Fri,  5 Feb 2016 10:59:40 +0530, niranjan.reddy wrote:
+> Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
+> via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
+> use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
+> The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
+> (https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+
+I don't understand, I had a look at this Debian tarball, and couldn't
+spot the fix. Also below, you're signing off the patch, which seems to
+indicate your are the author of it.
+
+Could you clarify ?
+
+> The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
+> officially.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...ake-build-shared-libs-by-default-on-linux.patch | 53 --------------------
->  ...keLists.txt-do-not-require-a-CXX-compiler.patch | 57 ----------------------
->  .../0003-uart.c-fix-build-with-musl-libc.patch     | 40 ---------------
->  package/mraa/mraa.mk                               |  2 +-
->  4 files changed, 1 insertion(+), 151 deletions(-)
->  delete mode 100644 package/mraa/0001-cmake-build-shared-libs-by-default-on-linux.patch
->  delete mode 100644 package/mraa/0002-CMakeLists.txt-do-not-require-a-CXX-compiler.patch
->  delete mode 100644 package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
+> Signed-off-by: niranjan.reddy <niranjan.reddy@rockwellcollins.com>
 
-I've applied, but I had to remove the removal of
-0003-uart.c-fix-build-with-musl-libc.patch, since the patch adding it
-had never been applied.
-
-Thanks a lot for having pushed this musl build fix upstream! It is
-great to be able to simply bump the package without having to carry any
-patch in Buildroot.
+Please use Niranjan Reddy and not niranjan.reddy.
 
 Thanks,
 
