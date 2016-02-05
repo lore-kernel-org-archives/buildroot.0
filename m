@@ -1,27 +1,49 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Feb 2016 16:36:55 +0000
-Subject: [Buildroot] [Bug 8651] libMonoPosixHelper.so wrong link reference
- in buildroot image
-In-Reply-To: <bug-8651-163@https.bugs.busybox.net/>
-References: <bug-8651-163@https.bugs.busybox.net/>
-Message-ID: <bug-8651-163-rDaJh624ZD@https.bugs.busybox.net/>
+From: Martin Bark <martin@barkynet.com>
+Date: Fri,  5 Feb 2016 17:09:40 +0000
+Subject: [Buildroot] [PATCH 1/1] package/zip: add host-zip
+Message-ID: <1454692180-6467-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8651
+Make the host variant of zip available.  This can be useful in
+post-{build,image} scripts.
 
---- Comment #6 from Markus Egle <Markus.Egle@Qiagen.com> ---
-Crosschecked it...
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/Config.in.host     |  1 +
+ package/zip/Config.in.host | 10 ++++++++++
+ 2 files changed, 11 insertions(+)
+ create mode 100644 package/zip/Config.in.host
 
-- corrected ./buildroot/output/target/etc/mono/config
-
-- removed the libMonoPosixHelper.so copy to home folder... at startup
-
-And it works. Thanks.
-
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 8e6b870..917670f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -31,5 +31,6 @@ menu "Host utilities"
+ 	source "package/uboot-tools/Config.in.host"
+ 	source "package/util-linux/Config.in.host"
+ 	source "package/vboot-utils/Config.in.host"
++	source "package/zip/Config.in.host"
+ 
+ endmenu
+diff --git a/package/zip/Config.in.host b/package/zip/Config.in.host
+new file mode 100644
+index 0000000..b14ce55
+--- /dev/null
++++ b/package/zip/Config.in.host
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_HOST_ZIP
++	bool "host zip"
++	help
++	  Zip is a compression and file packaging/archive utility.
++	  Although highly compatible both with PKWARE's PKZIP and
++	  PKUNZIP utilities for MS-DOS and with Info-ZIP's own UnZip,
++	  our primary objectives have been portability and
++	  other-than-MSDOS functionality.
++
++	  http://infozip.sourceforge.net/Zip.html
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.5.0
