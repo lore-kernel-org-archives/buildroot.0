@@ -1,79 +1,100 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:56 +0100
-Subject: [Buildroot] [PATCH v3 16/17] python-autobahn: new package
+Date: Fri,  5 Feb 2016 19:18:52 +0100
+Subject: [Buildroot] [PATCH v3 12/17] python-cryptography: new package
 In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-17-git-send-email-mc5686@mclink.it>
+Message-ID: <1454696337-9692-13-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Yegor Yefremov <yegorslists@googlemail.com>
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                            |  1 +
- package/python-autobahn/Config.in            |  8 ++++++++
- package/python-autobahn/python-autobahn.hash |  3 +++
- package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-autobahn/Config.in
- create mode 100644 package/python-autobahn/python-autobahn.hash
- create mode 100644 package/python-autobahn/python-autobahn.mk
+ .gitignore                                         |  1 +
+ package/python-cryptography/Config.in              | 20 +++++++++++++++++++
+ .../python-cryptography/python-cryptography.hash   |  3 +++
+ package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
+ create mode 100644 package/python-cryptography/Config.in
+ create mode 100644 package/python-cryptography/python-cryptography.hash
+ create mode 100644 package/python-cryptography/python-cryptography.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index bf5f0f8..a0c57e0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -618,6 +618,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
-+	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bottle/Config.in"
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+diff --git a/.gitignore b/.gitignore
+index bb02d9f..faf357f 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -13,3 +13,4 @@
+ *.rej
+ *~
+ *.pyc
++outgoing
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
 new file mode 100644
-index 0000000..cdb2baf
+index 0000000..c6d183f
 --- /dev/null
-+++ b/package/python-autobahn/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_AUTOBAHN
-+	bool "python-autobahn"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TXAIO # runtime
++++ b/package/python-cryptography/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
++	bool "python-cryptography"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_PYTHON_CFFI
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS
++	select BR2_PACKAGE_PYTHON_IDNA
++	select BR2_PACKAGE_PYTHON_PYASN
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON
 +	help
-+	  WebSocket client Hhh server library, WAMP real-time framework.
++	  cryptography is a package designed to expose cryptographic
++	  primitives and recipes to Python developers.
 +
-+	  https://pypi.python.org/pypi/autobahn
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
++	  https://cryptography.io
++
++comment "python-cryptography needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
 new file mode 100644
-index 0000000..8f55ac1
+index 0000000..0358624
 --- /dev/null
-+++ b/package/python-autobahn/python-autobahn.hash
++++ b/package/python-cryptography/python-cryptography.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
-+md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
-+sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=15eeba9e31f852bac21155baa3dfbc61, sha256 locally computed
++md5     15eeba9e31f852bac21155baa3dfbc61  cryptography-1.1.2.tar.gz
++sha256  7f51459f84d670444275e615839f4542c93547a12e938a0a4906dafe5f7de153  cryptography-1.1.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
 new file mode 100644
-index 0000000..1d02867
+index 0000000..fbd0caf
 --- /dev/null
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -0,0 +1,23 @@
 +################################################################################
 +#
-+# python-autobahn
++# python-cryptography
 +#
 +################################################################################
 +
-+PYTHON_AUTOBAHN_VERSION = 0.12.1
-+PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-+PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
-+PYTHON_AUTOBAHN_LICENSE = MIT
-+PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-+PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
++PYTHON_CRYPTOGRAPHY_VERSION = 1.1.2
++PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
++PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
++PYTHON_CRYPTOGRAPHY_LICENSE = Apache
++PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES = python-six \
++				   python-idna \
++				   python-pyasn \
++				   host-python-cffi \
++				   openssl
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES += python-enum34
++endif
 +
 +$(eval $(python-package))
 -- 
