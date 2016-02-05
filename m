@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:57 +0100
-Subject: [Buildroot] [PATCH v3 17/17] python-crossbar: new package
+Date: Fri,  5 Feb 2016 19:18:41 +0100
+Subject: [Buildroot] [PATCH v3 01/17] python-characteristic: new package
 In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-18-git-send-email-mc5686@mclink.it>
+Message-ID: <1454696337-9692-2-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,87 +12,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                            |  2 ++
- package/python-crossbar/Config.in            | 23 +++++++++++++++++++++++
- package/python-crossbar/python-crossbar.hash |  3 +++
- package/python-crossbar/python-crossbar.mk   | 17 +++++++++++++++++
- 4 files changed, 45 insertions(+)
- create mode 100644 package/python-crossbar/Config.in
- create mode 100644 package/python-crossbar/python-crossbar.hash
- create mode 100644 package/python-crossbar/python-crossbar.mk
+ package/Config.in                                        |  1 +
+ package/python-characteristic/Config.in                  |  7 +++++++
+ package/python-characteristic/python-characteristic.hash |  3 +++
+ package/python-characteristic/python-characteristic.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-characteristic/Config.in
+ create mode 100644 package/python-characteristic/python-characteristic.hash
+ create mode 100644 package/python-characteristic/python-characteristic.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a0c57e0..8bc46c8 100644
+index 529ad33..c2698ea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -634,6 +634,8 @@ menu "External python modules"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-crossbar/Config.in"
-+	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
-diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+@@ -625,6 +625,7 @@ menu "External python modules"
+ 	source "package/python-cbor/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
++	source "package/python-characteristic/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
+ 	source "package/python-click/Config.in"
+diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
 new file mode 100644
-index 0000000..f52e880
+index 0000000..d1c4faa
 --- /dev/null
-+++ b/package/python-crossbar/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_PYTHON_CROSSBAR
-+	bool "python-crossbar"
-+	select BR2_PACKAGE_PYTHON_AUTOBAHN
-+	select BR2_PACKAGE_PYTHON_CLICK
-+	select BR2_PACKAGE_PYTHON_JINJA2
-+	select BR2_PACKAGE_PYTHON_MISTUNE
-+	select BR2_PACKAGE_PYTHON_NETADDR
-+	select BR2_PACKAGE_PYTHON_PYGMENTS
-+	select BR2_PACKAGE_PYTHON_PYTRIE
-+	select BR2_PACKAGE_PYTHON_PYYAML
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	select BR2_PACKAGE_PYTHON_SHURILWHICH
-+	select BR2_PACKAGE_PYTHON_TREQ
-+	select BR2_PACKAGE_PYTHON_TWISTED
++++ b/package/python-characteristic/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_CHARACTERISTIC
++	bool "python-characteristic"
 +	help
-+	  Crossbar.io is an open-source WAMP application router 
-+	  that allows to build advanced applications from loosely-coupled
-+	  components that can talk in real-time with each other.
++	  Python attributes without boilerplate.
 +
-+	  https://pypi.python.org/pypi/crossbar
++	  https://pypi.python.org/pypi/characteristic
 +
-+comment "*** Currently Crossbar.io does NOT work without Python sources! ***"
-+        depends on BR2_PACKAGE_PYTHON_PYC_ONLY
-diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
+diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
 new file mode 100644
-index 0000000..0690e56
+index 0000000..41dc18c
 --- /dev/null
-+++ b/package/python-crossbar/python-crossbar.hash
++++ b/package/python-characteristic/python-characteristic.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
-+md5	cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
-+sha256	4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
-diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913, sha256 locally computed.
++md5	b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
++sha256	ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
 new file mode 100644
-index 0000000..7a191d9
+index 0000000..dc3e8bb
 --- /dev/null
-+++ b/package/python-crossbar/python-crossbar.mk
-@@ -0,0 +1,17 @@
++++ b/package/python-characteristic/python-characteristic.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-crossbar
++# python-characteristic
 +#
 +################################################################################
 +
-+PYTHON_CROSSBAR_VERSION = 0.12.1
-+PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
-+PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
-+PYTHON_CROSSBAR_LICENSE = AGPL3
-+PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
-+PYTHON_CROSSBAR_SETUP_TYPE = setuptools
-+PYTHON_CROSSBAR_DEPENDENCIES = python-click python-setuptools python-twisted python-autobahn \
-+	python-netaddr python-pytrie python-jinja2 python-mistune python-pygments python-pyyaml \
-+	python-shutilwhich python-psutil python-treq
++PYTHON_CHARACTERISTIC_VERSION = 14.3.0
++PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
++PYTHON_CHARACTERISTIC_SITE = http://pypi.python.org/packages/source/c/characteristic
++PYTHON_CHARACTERISTIC_LICENSE = MIT
++PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
++PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
