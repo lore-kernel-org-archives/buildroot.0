@@ -1,135 +1,74 @@
 From: niranjan.reddy <niranjan.reddy@rockwellcollins.com>
-Date: Fri,  5 Feb 2016 10:59:40 +0530
-Subject: [Buildroot] [PATCH 1/1] libfcgi:add security patch for CVE-2012-6687
-Message-ID: <1454650180-31432-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Date: Fri,  5 Feb 2016 11:12:35 +0530
+Subject: [Buildroot] [PATCH 41/41] cgroupsfs: new package
+Message-ID: <1454650955-31753-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
-via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
-The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
-(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
-officially.
+From: Niranjan <niranjan.reddy@rockwellcollins.com>
+
+This package consists of scripts that setup cgroups at boot
+without doing any cgroup management or classification of
+tasks into cgroups
 
 Signed-off-by: niranjan.reddy <niranjan.reddy@rockwellcollins.com>
 ---
- package/libfcgi/0006-fix-CVE-2012-6687.patch | 103 +++++++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
- create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
+ package/Config.in            |  1 +
+ package/cgroupfs/Config.in   |  6 ++++++
+ package/cgroupfs/cgroupfs.mk | 17 +++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/cgroupfs/Config.in
+ create mode 100644 package/cgroupfs/cgroupfs.mk
 
-diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+diff --git a/package/Config.in b/package/Config.in
+index 4958b8e..07a8cfb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1566,6 +1566,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
+ 	source "package/debianutils/Config.in"
+ endif
++	source "package/cgroupfs/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/emlog/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/cgroupfs/Config.in b/package/cgroupfs/Config.in
 new file mode 100644
-index 0000000..a8ea847
+index 0000000..f83432e
 --- /dev/null
-+++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
-@@ -0,0 +1,103 @@
-+libfcgi:add security patch for CVE-2012-6687
-+CVE-2012-6687 - remote attackers cause a denial of service (crash) via a large number 
-+of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-+Fix:use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
-+This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below link:
-+(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-+The next release of libfcgi is 2.4.1 which may have this fix is yet to be released 
-+officially.
++++ b/package/cgroupfs/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CGROUPFS
++	bool "cgroupfs"
++	help
++	  cgroupfs mount and umount scripts.
 +
-+Signed-off-by: niranjan.reddy <niranjan.reddy@rockwellcollins.com>
++	  https://github.com/tianon/cgroupfs-mount/blob/master/README.md
+diff --git a/package/cgroupfs/cgroupfs.mk b/package/cgroupfs/cgroupfs.mk
+new file mode 100644
+index 0000000..06d430a
+--- /dev/null
++++ b/package/cgroupfs/cgroupfs.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# cgroupfs
++#
++#############################################################
++CGROUPFS_VERSION = 1.0
++CGROUPFS_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_VERSION))
++CGROUPFS_INSTALL_TARGET = YES
 +
-+Index: b/libfcgi/os_unix.c
-+===================================================================
-+--- a/libfcgi/os_unix.c
-++++ b/libfcgi/os_unix.c
-+@@ -42,6 +42,7 @@
-+ #include <sys/time.h>
-+ #include <sys/un.h>
-+ #include <signal.h>
-++#include <poll.h>
-+ 
-+ #ifdef HAVE_NETDB_H
-+ #include <netdb.h>
-+@@ -103,6 +104,9 @@
-+ static int shutdownPending = FALSE;
-+ static int shutdownNow = FALSE;
-+ 
-++static int libfcgiOsClosePollTimeout = 2000;
-++static int libfcgiIsAfUnixKeeperPollTimeout = 2000;
-++
-+ void OS_ShutdownPending()
-+ {
-+     shutdownPending = TRUE;
-+@@ -168,6 +172,16 @@
-+     if(libInitialized)
-+         return 0;
-+ 
-++    char *libfcgiOsClosePollTimeoutStr = getenv( "LIBFCGI_OS_CLOSE_POLL_TIMEOUT" );
-++    if(libfcgiOsClosePollTimeoutStr) {
-++        libfcgiOsClosePollTimeout = atoi(libfcgiOsClosePollTimeoutStr);
-++    }
-++
-++    char *libfcgiIsAfUnixKeeperPollTimeoutStr = getenv( "LIBFCGI_IS_AF_UNIX_KEEPER_POLL_TIMEOUT" );
-++    if(libfcgiIsAfUnixKeeperPollTimeoutStr) {
-++        libfcgiIsAfUnixKeeperPollTimeout = atoi(libfcgiIsAfUnixKeeperPollTimeoutStr);
-++    }
-++
-+     asyncIoTable = (AioInfo *)malloc(asyncIoTableSize * sizeof(AioInfo));
-+     if(asyncIoTable == NULL) {
-+         errno = ENOMEM;
-+@@ -755,19 +769,16 @@
-+ 
-+     if (shutdown(fd, 1) == 0)
-+     {
-+-        struct timeval tv;
-+-        fd_set rfds;
-++        struct pollfd pfd;
-+         int rv;
-+         char trash[1024];
-+ 
-+-        FD_ZERO(&rfds);
-++        pfd.fd = fd;
-++        pfd.events = POLLIN;
-+ 
-+         do 
-+         {
-+-            FD_SET(fd, &rfds);
-+-            tv.tv_sec = 2;
-+-            tv.tv_usec = 0;
-+-            rv = select(fd + 1, &rfds, NULL, NULL, &tv);
-++            rv = poll(&pfd, 1, libfcgiOsClosePollTimeout);
-+         }
-+         while (rv > 0 && read(fd, trash, sizeof(trash)) > 0);
-+     }
-+@@ -1116,13 +1127,11 @@
-+  */
-+ static int is_af_unix_keeper(const int fd)
-+ {
-+-    struct timeval tval = { READABLE_UNIX_FD_DROP_DEAD_TIMEVAL };
-+-    fd_set read_fds;
-+-
-+-    FD_ZERO(&read_fds);
-+-    FD_SET(fd, &read_fds);
-++    struct pollfd pfd;
-++    pfd.fd = fd;
-++    pfd.events = POLLIN;
-+ 
-+-    return select(fd + 1, &read_fds, NULL, NULL, &tval) >= 0 && FD_ISSET(fd, &read_fds);
-++    return poll(&pfd, 1, libfcgiIsAfUnixKeeperPollTimeout) >= 0 && (pfd.revents & POLLIN);
-+ }
-+ 
-+ /*
++define CGROUPFS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.init $(TARGET_DIR)/etc/init.d/cgroupfs-mount.init
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.upstart $(TARGET_DIR)/etc/init.d/cgroupfs-mount.upstart
++endef
 +
-+Index: b/examples/Makefile.am
-+===================================================================
-+--- a/examples/Makefile.am
-++++ b/examples/Makefile.am
-+@@ -34,5 +34,5 @@ threaded_CFLAGS    = @PTHREAD_CFLAGS@
-+ threaded_LDFLAGS   = @PTHREAD_CFLAGS@ @PTHREAD_LIBS@
-+ 
-+ echo_cpp_SOURCES = $(INCLUDE_FILES) $(INCLUDEDIR)/fcgio.h echo-cpp.cpp
-+-echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la
-++echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la $(LIBDIR)/libfcgi.la
++$(eval $(generic-package))
 -- 
 2.5.0
