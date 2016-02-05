@@ -1,41 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Feb 2016 21:44:38 +0100
-Subject: [Buildroot] [git commit] dbus-glib: bump version to 0.106
-Message-ID: <20160205205333.217FE81842@busybox.osuosl.org>
+Date: Fri, 5 Feb 2016 21:55:35 +0100
+Subject: [Buildroot] [PATCH v4] toolchain: bump ARC toolchain components
+ to arc-2015.12
+In-Reply-To: <1454676400-12797-1-git-send-email-ltrimas@synopsys.com>
+References: <1454676400-12797-1-git-send-email-ltrimas@synopsys.com>
+Message-ID: <20160205215535.791970eb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45bd1c76a931f4aeab26653a7d7f97a2fd63c194
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Lada Trimasova,
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dbus-glib/dbus-glib.hash | 2 +-
- package/dbus-glib/dbus-glib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri,  5 Feb 2016 15:46:40 +0300, Lada Trimasova wrote:
+> This change introduces newer ARC toolchain in Buildroot.
+> 
+> That new arc-2015.12 release doesn't bring any significant changes
+> but mostly is focused on fixes and minor improvements here and there.
+> Most noticeable changes are:
+>  * GCC: Source update to v4.8.5
+>  * GDB: Updated to upstream 7.10 release.
+> 
+> You may find more info on fixes and improvements in that release at:
+> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2015.12
+> 
+> Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> 
+> ---
+> change v1->v3:
+> - binutils and gdb version bump
+> change v2->v3:
+> - use diff.renames copy
+> change v3->v4:
+> - arc-2015.12-rc1 patches to gcc (UPDATE: Fix handling complex PIC moves,
+> UPDATE1: Fix handling complex PIC moves, Don't allow mcompact-casesi for ARCv2)
+> should be applied to arc-2015.12, because of our local decision not to include
+> these patches to arc-2015.12 release.
+> ---
+>  package/binutils/Config.in.host                                         | 2 +-
+>  .../binutils/{arc-2015.12-rc1 => arc-2015.12}/0001-PR-other-56780.patch | 0
+>  .../600-poison-system-directories.patch                                 | 0
+>  package/binutils/binutils.hash                                          | 2 +-
+>  package/binutils/binutils.mk                                            | 2 +-
+>  package/gcc/Config.in.host                                              | 2 +-
+>  .../gcc/{arc-2015.12-rc1 => arc-2015.12}/100-libstdcxx-uclibc-c99.patch | 0
+>  package/gcc/{arc-2015.12-rc1 => arc-2015.12}/851-PR-other-56780.patch   | 0
+>  .../900-UPDATE-Fix-handling-complex-PIC-moves.patch                     | 0
+>  .../901-UPDATE1-Fix-handling-complex-PIC-moves.patch                    | 0
+>  .../950-Don-t-allow-mcompact-casesi-for-ARCv2.patch                     | 0
+>  package/gcc/gcc.hash                                                    | 2 +-
+>  package/gdb/Config.in.host                                              | 2 +-
+>  package/gdb/gdb.hash                                                    | 2 +-
+>  14 files changed, 7 insertions(+), 7 deletions(-)
+>  rename package/binutils/{arc-2015.12-rc1 => arc-2015.12}/0001-PR-other-56780.patch (100%)
+>  rename package/binutils/{arc-2015.12-rc1 => arc-2015.12}/600-poison-system-directories.patch (100%)
+>  rename package/gcc/{arc-2015.12-rc1 => arc-2015.12}/100-libstdcxx-uclibc-c99.patch (100%)
+>  rename package/gcc/{arc-2015.12-rc1 => arc-2015.12}/851-PR-other-56780.patch (100%)
+>  rename package/gcc/{arc-2015.12-rc1 => arc-2015.12}/900-UPDATE-Fix-handling-complex-PIC-moves.patch (100%)
+>  rename package/gcc/{arc-2015.12-rc1 => arc-2015.12}/901-UPDATE1-Fix-handling-complex-PIC-moves.patch (100%)
+>  rename package/gcc/{arc-2015.12-rc1 => arc-2015.12}/950-Don-t-allow-mcompact-casesi-for-ARCv2.patch (100%)
 
-diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
-index 572fc40..e5a2ebc 100644
---- a/package/dbus-glib/dbus-glib.hash
-+++ b/package/dbus-glib/dbus-glib.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 bfc1f1a82bfc3ec3ecafe04d0e87bab7e999f50dce4f4a34d0b89caf6bd821f6  dbus-glib-0.104.tar.gz
-+sha256 b38952706dcf68bad9c302999ef0f420b8cf1a2428227123f0ac4764b689c046  dbus-glib-0.106.tar.gz
-diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
-index 5e6552a..e191507 100644
---- a/package/dbus-glib/dbus-glib.mk
-+++ b/package/dbus-glib/dbus-glib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_GLIB_VERSION = 0.104
-+DBUS_GLIB_VERSION = 0.106
- DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
- DBUS_GLIB_INSTALL_STAGING = YES
- DBUS_GLIB_LICENSE = AFLv2.1, GPLv2+
+Applied, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
