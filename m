@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:46 +0100
-Subject: [Buildroot] [PATCH v3 06/17] python-pytrie: new package
+Date: Fri,  5 Feb 2016 19:18:56 +0100
+Subject: [Buildroot] [PATCH v3 16/17] python-autobahn: new package
 In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-7-git-send-email-mc5686@mclink.it>
+Message-ID: <1454696337-9692-17-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,67 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                        |  1 +
- package/python-pytrie/Config.in          |  7 +++++++
- package/python-pytrie/python-pytrie.hash |  3 +++
- package/python-pytrie/python-pytrie.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-pytrie/Config.in
- create mode 100644 package/python-pytrie/python-pytrie.hash
- create mode 100644 package/python-pytrie/python-pytrie.mk
+ package/Config.in                            |  1 +
+ package/python-autobahn/Config.in            |  8 ++++++++
+ package/python-autobahn/python-autobahn.hash |  3 +++
+ package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-autobahn/Config.in
+ create mode 100644 package/python-autobahn/python-autobahn.hash
+ create mode 100644 package/python-autobahn/python-autobahn.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f46daea..f5665bf 100644
+index bf5f0f8..a0c57e0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -701,6 +701,7 @@ menu "External python modules"
- 	source "package/python-pysnmp/Config.in"
- 	source "package/python-pysnmp-apps/Config.in"
- 	source "package/python-pysnmp-mibs/Config.in"
-+	source "package/python-pytrie/Config.in"
- 	source "package/python-pyudev/Config.in"
- 	source "package/python-pyusb/Config.in"
- 	source "package/python-pyxb/Config.in"
-diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
+@@ -618,6 +618,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
++	source "package/python-autobahn/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bottle/Config.in"
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
 new file mode 100644
-index 0000000..4f61db0
+index 0000000..cdb2baf
 --- /dev/null
-+++ b/package/python-pytrie/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYTRIE
-+	bool "python-pytrie"
++++ b/package/python-autobahn/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_AUTOBAHN
++	bool "python-autobahn"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_TXAIO # runtime
 +	help
-+	  A pure Python implementation of the trie data structure.
++	  WebSocket client Hhh server library, WAMP real-time framework.
 +
-+	  https://pypi.python.org/pypi/PyTrie
-+
-diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
++	  https://pypi.python.org/pypi/autobahn
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
 new file mode 100644
-index 0000000..88d2542
+index 0000000..8f55ac1
 --- /dev/null
-+++ b/package/python-pytrie/python-pytrie.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
-+md5	5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
-+sha256	b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
-diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
++md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
++sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
 new file mode 100644
-index 0000000..e3bea4f
+index 0000000..1d02867
 --- /dev/null
-+++ b/package/python-pytrie/python-pytrie.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pytrie
++# python-autobahn
 +#
 +################################################################################
 +
-+PYTHON_PYTRIE_VERSION = 0.2
-+PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
-+PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
-+PYTHON_PYTRIE_LICENSE = BSD-3c
-+PYTHON_PYTRIE_LICENSE_FILES = LICENSE
-+PYTHON_PYTRIE_SETUP_TYPE = distutils
++PYTHON_AUTOBAHN_VERSION = 0.12.1
++PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
++PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
++PYTHON_AUTOBAHN_LICENSE = MIT
++PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
++PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
