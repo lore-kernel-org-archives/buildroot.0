@@ -1,94 +1,69 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Feb 2016 20:39:08 +0100
-Subject: [Buildroot] [PATCH v3 07/17] python-service-identity: new
-	package
-In-Reply-To: <1454696337-9692-8-git-send-email-mc5686@mclink.it>
-References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
- <1454696337-9692-8-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kvq-eLhA=FcFakcp9N0F8OAiLBkAcmf3iNXB6puiaO+jA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 5 Feb 2016 20:58:54 +0100
+Subject: [Buildroot] [PATCH 1/2] yad: fix libgtk2 related dependency
+	error
+In-Reply-To: <56B1EFEC.4040801@zacarias.com.ar>
+References: <1454464356-12637-1-git-send-email-ricardo.martincoski@gmail.com>
+ <56B1EFEC.4040801@zacarias.com.ar>
+Message-ID: <56B4FEFE.2050408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+On 03-02-16 13:17, Gustavo Zacarias wrote:
+> On 02/02/16 22:52, Ricardo Martincoski wrote:
+> 
+>> --- a/package/yad/Config.in
+>> +++ b/package/yad/Config.in
+>> @@ -2,6 +2,7 @@ config BR2_PACKAGE_YAD
+>>       bool "yad"
+>>       depends on BR2_PACKAGE_XORG7
+>>       depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
+>> +    select BR2_PACKAGE_LIBGTK3_X11 if BR2_PACKAGE_LIBGTK3
+>>       help
+>>         YAD (yet another dialog) is a tool for create graphical dialogs
+>>         from shell scripts.
+> 
+> Hi.
+> This logic is severely broken, you can't force X11 if someone is using gtk3 with
+> say broadway or wayland.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+At least in the current (broken) libgtk3, you can select X11 and wayland in
+parallel.
 
-> ---
->  package/Config.in                                         |  1 +
->  package/python-service-identity/Config.in                 | 10 ++++++++++
->  .../python-service-identity/python-service-identity.hash  |  3 +++
->  .../python-service-identity/python-service-identity.mk    | 15 +++++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/python-service-identity/Config.in
->  create mode 100644 package/python-service-identity/python-service-identity.hash
->  create mode 100644 package/python-service-identity/python-service-identity.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f5665bf..036de5e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -710,6 +710,7 @@ menu "External python modules"
->         source "package/python-requests/Config.in"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-serial/Config.in"
-> +       source "package/python-service-identity/Config.in"
->         source "package/python-setuptools/Config.in"
->         source "package/python-simplejson/Config.in"
->         source "package/python-singledispatch/Config.in"
-> diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
-> new file mode 100644
-> index 0000000..e2200f6
-> --- /dev/null
-> +++ b/package/python-service-identity/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
-> +       bool "python-service-identity"
-> +       select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
-> +       select BR2_PACKAGE_PYTHON_PYASN # runtime
-> +       select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
-> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-> +       help
-> +         Service identity verification for pyOpenSSL.
-> +
-> +         https://pypi.python.org/pypi/service_identity
-> diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
-> new file mode 100644
-> index 0000000..caf29dc
-> --- /dev/null
-> +++ b/package/python-service-identity/python-service-identity.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cea0b0156d73b025ecef660fb51f0d9a, sha256 locally computed.
-> +md5    cea0b0156d73b025ecef660fb51f0d9a  service_identity-14.0.0.tar.gz
-> +sha256 3105a319a7c558490666694f599be0c377ad54824eefb404cde4ce49e74a4f5a  service_identity-14.0.0.tar.gz
-> diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
-> new file mode 100644
-> index 0000000..1be9b92
-> --- /dev/null
-> +++ b/package/python-service-identity/python-service-identity.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-service-identity
-> +#
-> +################################################################################
-> +
-> +PYTHON_SERVICE_IDENTITY_VERSION = 14.0.0
-> +PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
-> +PYTHON_SERVICE_IDENTITY_SITE = http://pypi.python.org/packages/source/s/service_identity
-> +PYTHON_SERVICE_IDENTITY_LICENSE = MIT
-> +PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
-> +PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
-> +PYTHON_SERVICE_IDENTITY_DEPENDENCIES = python-characteristic python-pyasn python-pyasn-modules python-pyopenssl
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
+> Not to mention BR2_PACKAGE_LIBGTK3_X11 depends on xorg being selected.
+
+ The depends is two lines higher.
+
+
+> 
+>> -ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+>> +ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+> 
+> This isn't accurate either, you first say it needs x11 by selecting it, but you
+> then basically say no?
+
+ Since LIBGTK3_X11 was selected if LIBGTK3, either one has the same effect.
+
+
+ Regards,
+ Arnout
+
+
+> Regards.
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
