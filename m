@@ -1,90 +1,121 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Feb 2016 20:31:17 +0100
-Subject: [Buildroot] [PATCH v3 16/17] python-autobahn: new package
-In-Reply-To: <1454696337-9692-17-git-send-email-mc5686@mclink.it>
-References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
- <1454696337-9692-17-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ksFgfWG9fRi9HD+5DSd191sk+mZXQTzVg332JkE=-g=gA@mail.gmail.com>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Fri,  5 Feb 2016 16:33:04 -0300
+Subject: [Buildroot] [PATCH] linux: add conditional patch for timeconst.pl
+Message-ID: <1454700784-32341-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Kernels older than 3.9 (not counting stable releases) used the
+timeconst.pl perl script for their build process.
+The problem with this script is that it used deprecated perl features,
+namely defined(@array) which was removed for the perl 5.22 release,
+causing build failure of older kernels on newer distributions.
 
-> ---
->  package/Config.in                            |  1 +
->  package/python-autobahn/Config.in            |  8 ++++++++
->  package/python-autobahn/python-autobahn.hash |  3 +++
->  package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-autobahn/Config.in
->  create mode 100644 package/python-autobahn/python-autobahn.hash
->  create mode 100644 package/python-autobahn/python-autobahn.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index bf5f0f8..a0c57e0 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -618,6 +618,7 @@ endif
->  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "External python modules"
->         source "package/python-alsaaudio/Config.in"
-> +       source "package/python-autobahn/Config.in"
->         source "package/python-backports-abc/Config.in"
->         source "package/python-beautifulsoup4/Config.in"
->         source "package/python-bottle/Config.in"
-> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
-> new file mode 100644
-> index 0000000..cdb2baf
-> --- /dev/null
-> +++ b/package/python-autobahn/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_AUTOBAHN
-> +       bool "python-autobahn"
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_TXAIO # runtime
-> +       help
-> +         WebSocket client Hhh server library, WAMP real-time framework.
-> +
-> +         https://pypi.python.org/pypi/autobahn
-> diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-> new file mode 100644
-> index 0000000..8f55ac1
-> --- /dev/null
-> +++ b/package/python-autobahn/python-autobahn.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
-> +md5    b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
-> +sha256 664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
-> diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-> new file mode 100644
-> index 0000000..1d02867
-> --- /dev/null
-> +++ b/package/python-autobahn/python-autobahn.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-autobahn
-> +#
-> +################################################################################
-> +
-> +PYTHON_AUTOBAHN_VERSION = 0.12.1
-> +PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-> +PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
-> +PYTHON_AUTOBAHN_LICENSE = MIT
-> +PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-> +PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+To fix this instead of going the hard way (moving to the new
+timeconst.bc script) use the easy way by patching timeconst.pl with an
+upstream patch used for stable releases.
+
+First try a dry-run on the patch to see if it applies, if it does then
+call a proper APPLY_PATCHES to it.
+
+Tested against an arbitrary 2.6.30 kernel (applies and builds), against
+4.4.1 for a missing timeconst.pl (does not apply since it's missing) and
+3.8.13 (does not apply since it's fixed already).
+
+Known broken distributions: fedora 23.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ ...nst.pl-Eliminate-Perl-warning.patch.conditional | 45 ++++++++++++++++++++++
+ linux/linux.mk                                     | 12 +++++-
+ 2 files changed, 55 insertions(+), 2 deletions(-)
+ create mode 100644 linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
+
+diff --git a/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional b/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
+new file mode 100644
+index 0000000..02abadd
+--- /dev/null
++++ b/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
+@@ -0,0 +1,45 @@
++From 63a3f603413ffe82ad775f2d62a5afff87fd94a0 Mon Sep 17 00:00:00 2001
++From: "H. Peter Anvin" <hpa@linux.intel.com>
++Date: Thu, 7 Feb 2013 17:14:08 -0800
++Subject: [PATCH] timeconst.pl: Eliminate Perl warning
++
++defined(@array) is deprecated in Perl and gives off a warning.
++Restructure the code to remove that warning.
++
++[ hpa: it would be interesting to revert to the timeconst.bc script.
++  It appears that the failures reported by akpm during testing of
++  that script was due to a known broken version of make, not a problem
++  with bc.  The Makefile rules could probably be restructured to avoid
++  the make bug, or it is probably old enough that it doesn't matter. ]
++
++Reported-by: Andi Kleen <ak@linux.intel.com>
++Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
++Cc: Andrew Morton <akpm@linux-foundation.org>
++Cc: <stable@vger.kernel.org>
++Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
++---
++Patch status: upstream
++
++ kernel/timeconst.pl | 6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
++index eb51d76..3f42652 100644
++--- a/kernel/timeconst.pl
+++++ b/kernel/timeconst.pl
++@@ -369,10 +369,8 @@ if ($hz eq '--can') {
++ 		die "Usage: $0 HZ\n";
++ 	}
++ 
++-	@val = @{$canned_values{$hz}};
++-	if (!defined(@val)) {
++-		@val = compute_values($hz);
++-	}
+++	$cv = $canned_values{$hz};
+++	@val = defined($cv) ? @$cv : compute_values($hz);
++ 	output($hz, @val);
++ }
++ exit 0;
++-- 
++2.4.10
++
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c9986cd..a0016fe 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -187,6 +187,16 @@ endef
+ 
+ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+ 
++# Older linux kernels use deprecated perl constructs in timeconst.pl
++# that were removed for perl 5.22+ so it breaks on newer distributions
++# Try a dry-run patch to see if this applies, if it does go ahead
++define LINUX_TRY_PATCH_TIMECONST
++	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional >/dev/null ; then \
++		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional ; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
++
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
+@@ -251,8 +261,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
+ 	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+-	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
+-		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
+ endef
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
+-- 
+2.4.10
