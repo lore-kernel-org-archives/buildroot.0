@@ -1,48 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  5 Feb 2016 15:28:19 -0300
-Subject: [Buildroot] [PATCH] libbsd: security bump to version 0.8.2
-Message-ID: <1454696899-19572-1-git-send-email-gustavo@zacarias.com.ar>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri,  5 Feb 2016 19:34:34 +0100
+Subject: [Buildroot] [PATCH 1/1] dbus-glib: bump version to 0.106
+Message-ID: <1454697274-30574-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-2090 - denial of service due to a buffer overflow in the
-"fgetwln"-function.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/libbsd/libbsd.hash | 2 +-
- package/libbsd/libbsd.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/dbus-glib/dbus-glib.hash | 2 +-
+ package/dbus-glib/dbus-glib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
-index be4ba50..f77c0aa 100644
---- a/package/libbsd/libbsd.hash
-+++ b/package/libbsd/libbsd.hash
+diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
+index 572fc40..e5a2ebc 100644
+--- a/package/dbus-glib/dbus-glib.hash
++++ b/package/dbus-glib/dbus-glib.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	9e8f34ffa9c8579c87965a55a82d8ac37a1dc64858f717b7c49452ade277cc62	libbsd-0.6.0.tar.xz
-+sha256	b2f644cae94a6e2fe109449c20ad79a0f6ee4faec2205b07eefa0020565e250a	libbsd-0.8.2.tar.xz
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 99a9572..62dee06 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,12 +4,11 @@
+-sha256 bfc1f1a82bfc3ec3ecafe04d0e87bab7e999f50dce4f4a34d0b89caf6bd821f6  dbus-glib-0.104.tar.gz
++sha256 b38952706dcf68bad9c302999ef0f420b8cf1a2428227123f0ac4764b689c046  dbus-glib-0.106.tar.gz
+diff --git a/package/dbus-glib/dbus-glib.mk b/package/dbus-glib/dbus-glib.mk
+index 5e6552a..e191507 100644
+--- a/package/dbus-glib/dbus-glib.mk
++++ b/package/dbus-glib/dbus-glib.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBSD_VERSION = 0.6.0
-+LIBBSD_VERSION = 0.8.2
- LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
- LIBBSD_SITE = http://libbsd.freedesktop.org/releases
- LIBBSD_LICENSE = BSD-3c, MIT
- LIBBSD_LICENSE_FILES = COPYING
--
- LIBBSD_INSTALL_STAGING = YES
- 
- $(eval $(autotools-package))
+-DBUS_GLIB_VERSION = 0.104
++DBUS_GLIB_VERSION = 0.106
+ DBUS_GLIB_SITE = http://dbus.freedesktop.org/releases/dbus-glib
+ DBUS_GLIB_INSTALL_STAGING = YES
+ DBUS_GLIB_LICENSE = AFLv2.1, GPLv2+
 -- 
-2.4.10
+2.7.0
