@@ -1,8 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri,  5 Feb 2016 09:37:36 +0100
-Subject: [Buildroot] [PATCH v2 1/3] python-setuptools: enable Python 3.x
-	support
-Message-ID: <1454661458-18746-1-git-send-email-yegorslists@googlemail.com>
+Date: Fri,  5 Feb 2016 09:37:37 +0100
+Subject: [Buildroot] [PATCH v2 2/3] python-cryptography: new package
+In-Reply-To: <1454661458-18746-1-git-send-email-yegorslists@googlemail.com>
+References: <1454661458-18746-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1454661458-18746-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,28 +12,96 @@ To: buildroot@busybox.net
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Add missing XML dependency.
-
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-setuptools/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Changes:
+	v2: bump to 1.2.2 and add # runtime tags
 
-diff --git a/package/python-setuptools/Config.in b/package/python-setuptools/Config.in
-index 63c2b01..c72c59f 100644
---- a/package/python-setuptools/Config.in
-+++ b/package/python-setuptools/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_PYTHON_SETUPTOOLS
- 	bool "python-setuptools"
--	depends on BR2_PACKAGE_PYTHON
--	select BR2_PACKAGE_PYTHON_ZLIB
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+ package/Config.in                                  |  1 +
+ package/python-cryptography/Config.in              | 21 ++++++++++++++++++++
+ .../python-cryptography/python-cryptography.hash   |  3 +++
+ package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
+ 4 files changed, 48 insertions(+)
+ create mode 100644 package/python-cryptography/Config.in
+ create mode 100644 package/python-cryptography/python-cryptography.hash
+ create mode 100644 package/python-cryptography/python-cryptography.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 529ad33..4eeaeb4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -632,6 +632,7 @@ menu "External python modules"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-crc16/Config.in"
++	source "package/python-cryptography/Config.in"
+ 	source "package/python-cssselect/Config.in"
+ 	source "package/python-daemon/Config.in"
+ 	source "package/python-dialog/Config.in"
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+new file mode 100644
+index 0000000..249ce56
+--- /dev/null
++++ b/package/python-cryptography/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
++	bool "python-cryptography"
++	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_PYTHON_CFFI
++	select BR2_PACKAGE_PYTHON_IDNA
++	select BR2_PACKAGE_PYTHON_PYASN
++	select BR2_PACKAGE_PYTHON_SIX
++	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
 +	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
 +	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
- 	help
- 	  Download, build, install, upgrade, and uninstall Python packages.
- 
++	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	help
++	  cryptography is a package designed to expose cryptographic
++	  primitives and recipes to Python developers.
++
++	  https://cryptography.io
++
++comment "python-cryptography needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+new file mode 100644
+index 0000000..a411c2f
+--- /dev/null
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b25eebd1d3c6bae52b46f0dcec74dfb, sha256 locally computed
++md5     2b25eebd1d3c6bae52b46f0dcec74dfb  cryptography-1.2.2.tar.gz
++#sha256  7f51459f84d670444275e615839f4542c93547a12e938a0a4906dafe5f7de153  cryptography-1.1.2.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+new file mode 100644
+index 0000000..b370351
+--- /dev/null
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# python-cryptography
++#
++################################################################################
++
++PYTHON_CRYPTOGRAPHY_VERSION = 1.2.2
++PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
++PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
++PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
++PYTHON_CRYPTOGRAPHY_LICENSE = Apache
++PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES = python-six \
++				   python-idna \
++				   python-pyasn \
++				   host-python-cffi \
++				   openssl
++
++ifeq ($(BR2_PACKAGE_PYTHON),y)
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES += python-enum34
++endif
++
++$(eval $(python-package))
 -- 
 2.7.0
