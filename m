@@ -1,28 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 5 Feb 2016 23:09:17 +0100
-Subject: [Buildroot] [PATCH v2] package/rsyslog: fix musl buil
-In-Reply-To: <1454707105-9392-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454707105-9392-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160205230917.0726efb0@free-electrons.com>
+Date: Fri, 5 Feb 2016 23:09:37 +0100
+Subject: [Buildroot] [PATCH] python-psutil: bump to 3.4.2
+In-Reply-To: <1454708646-17418-1-git-send-email-yegorslists@googlemail.com>
+References: <1454708646-17418-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160205230937.7f31c1aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Yegor Yefremov,
 
-On Fri,  5 Feb 2016 22:18:25 +0100, Bernd Kuhls wrote:
-> The build error was not yet being found by the autobuilders:
-> 
-> omfile.c: In function ?prepareFile?:
-> omfile.c:580:3: error: implicit declaration of function ?open? [-Werror=implicit-function-declaration]
->    fd = open((char*) newFileName, O_WRONLY|O_APPEND|O_CREAT|O_NOCTTY|O_CLOEXEC,
->    ^
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Fri,  5 Feb 2016 22:44:06 +0100, Yegor Yefremov wrote:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
-> v2: downloaded patch from upstream commit and added as file (Arnout)
+>  package/python-psutil/python-psutil.hash | 6 +++---
+>  package/python-psutil/python-psutil.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied, thanks.
 
