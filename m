@@ -1,79 +1,144 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Fri,  5 Feb 2016 19:18:44 +0100
-Subject: [Buildroot] [PATCH v3 04/17] python-pygments: new package
-In-Reply-To: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454696337-9692-5-git-send-email-mc5686@mclink.it>
+Date: Fri,  5 Feb 2016 19:18:40 +0100
+Subject: [Buildroot] [PATCH v3 00/17] changes needed for python-crossbar
+	package (new)
+Message-ID: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/Config.in                            |  1 +
- package/python-pygments/Config.in            |  7 +++++++
- package/python-pygments/python-pygments.hash |  3 +++
- package/python-pygments/python-pygments.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+These are the python packeges needed to successfully comile, install and run python-crossbar.
+
+Crossbar is is an open-source WAMP application router that allows to build advanced 
+applications from loosely-coupled components that can talk in real-time with each other.
+
+Further info about crossbar can be found at: http://crossbar.io/
+
+Mauro Condarelli (16):
+  python-characteristic: new package
+  python-pycparser: python runtime added
+  python-lmdb: new package
+  python-pygments: new package
+  python-pynacl: new package
+  python-pytrie: new package
+  python-service-identity: new package
+  python-shutilwhich: new package
+  python-treq: new package
+  python-txaio: new package
+  python-pyasn-modules: new package
+  python-ujson: new package
+  python-wsaccel: new package
+  python-setproctitle: new package
+  python-autobahn: new package
+  python-crossbar: new package
+
+Yegor Yefremov (1):
+  python-cryptography: new package
+
+ .gitignore                                         |  1 +
+ package/Config.in                                  | 18 +++++++++++++++++
+ package/python-autobahn/Config.in                  |  8 ++++++++
+ package/python-autobahn/python-autobahn.hash       |  3 +++
+ package/python-autobahn/python-autobahn.mk         | 14 +++++++++++++
+ package/python-characteristic/Config.in            |  7 +++++++
+ .../python-characteristic.hash                     |  3 +++
+ .../python-characteristic/python-characteristic.mk | 14 +++++++++++++
+ package/python-crossbar/Config.in                  | 23 ++++++++++++++++++++++
+ package/python-crossbar/python-crossbar.hash       |  3 +++
+ package/python-crossbar/python-crossbar.mk         | 17 ++++++++++++++++
+ package/python-cryptography/Config.in              | 20 +++++++++++++++++++
+ .../python-cryptography/python-cryptography.hash   |  3 +++
+ package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
+ package/python-lmdb/Config.in                      |  8 ++++++++
+ package/python-lmdb/python-lmdb.hash               |  3 +++
+ package/python-lmdb/python-lmdb.mk                 | 14 +++++++++++++
+ package/python-pyasn-modules/Config.in             | 11 +++++++++++
+ .../python-pyasn-modules/python-pyasn-modules.hash |  3 +++
+ .../python-pyasn-modules/python-pyasn-modules.mk   | 15 ++++++++++++++
+ package/python-pycparser/Config.in                 |  6 ++++++
+ package/python-pycparser/python-pycparser.mk       |  1 +
+ package/python-pygments/Config.in                  |  7 +++++++
+ package/python-pygments/python-pygments.hash       |  3 +++
+ package/python-pygments/python-pygments.mk         | 14 +++++++++++++
+ package/python-pynacl/Config.in                    |  9 +++++++++
+ package/python-pynacl/python-pynacl.hash           |  3 +++
+ package/python-pynacl/python-pynacl.mk             | 16 +++++++++++++++
+ package/python-pytrie/Config.in                    |  7 +++++++
+ package/python-pytrie/python-pytrie.hash           |  3 +++
+ package/python-pytrie/python-pytrie.mk             | 14 +++++++++++++
+ package/python-service-identity/Config.in          | 10 ++++++++++
+ .../python-service-identity.hash                   |  3 +++
+ .../python-service-identity.mk                     | 15 ++++++++++++++
+ package/python-setproctitle/Config.in              |  7 +++++++
+ .../python-setproctitle/python-setproctitle.hash   |  3 +++
+ package/python-setproctitle/python-setproctitle.mk | 14 +++++++++++++
+ package/python-shutilwhich/Config.in               |  8 ++++++++
+ package/python-shutilwhich/python-shutilwhich.hash |  3 +++
+ package/python-shutilwhich/python-shutilwhich.mk   | 13 ++++++++++++
+ package/python-treq/Config.in                      | 12 +++++++++++
+ package/python-treq/python-treq.hash               |  3 +++
+ package/python-treq/python-treq.mk                 | 14 +++++++++++++
+ package/python-txaio/Config.in                     |  7 +++++++
+ package/python-txaio/python-txaio.hash             |  3 +++
+ package/python-txaio/python-txaio.mk               | 14 +++++++++++++
+ package/python-ujson/Config.in                     |  7 +++++++
+ package/python-ujson/python-ujson.hash             |  3 +++
+ package/python-ujson/python-ujson.mk               | 13 ++++++++++++
+ package/python-wsaccel/Config.in                   |  7 +++++++
+ package/python-wsaccel/python-wsaccel.hash         |  3 +++
+ package/python-wsaccel/python-wsaccel.mk           | 13 ++++++++++++
+ 52 files changed, 469 insertions(+)
+ create mode 100644 package/python-autobahn/Config.in
+ create mode 100644 package/python-autobahn/python-autobahn.hash
+ create mode 100644 package/python-autobahn/python-autobahn.mk
+ create mode 100644 package/python-characteristic/Config.in
+ create mode 100644 package/python-characteristic/python-characteristic.hash
+ create mode 100644 package/python-characteristic/python-characteristic.mk
+ create mode 100644 package/python-crossbar/Config.in
+ create mode 100644 package/python-crossbar/python-crossbar.hash
+ create mode 100644 package/python-crossbar/python-crossbar.mk
+ create mode 100644 package/python-cryptography/Config.in
+ create mode 100644 package/python-cryptography/python-cryptography.hash
+ create mode 100644 package/python-cryptography/python-cryptography.mk
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
+ create mode 100644 package/python-pyasn-modules/Config.in
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
+ create mode 100644 package/python-pycparser/Config.in
  create mode 100644 package/python-pygments/Config.in
  create mode 100644 package/python-pygments/python-pygments.hash
  create mode 100644 package/python-pygments/python-pygments.mk
+ create mode 100644 package/python-pynacl/Config.in
+ create mode 100644 package/python-pynacl/python-pynacl.hash
+ create mode 100644 package/python-pynacl/python-pynacl.mk
+ create mode 100644 package/python-pytrie/Config.in
+ create mode 100644 package/python-pytrie/python-pytrie.hash
+ create mode 100644 package/python-pytrie/python-pytrie.mk
+ create mode 100644 package/python-service-identity/Config.in
+ create mode 100644 package/python-service-identity/python-service-identity.hash
+ create mode 100644 package/python-service-identity/python-service-identity.mk
+ create mode 100644 package/python-setproctitle/Config.in
+ create mode 100644 package/python-setproctitle/python-setproctitle.hash
+ create mode 100644 package/python-setproctitle/python-setproctitle.mk
+ create mode 100644 package/python-shutilwhich/Config.in
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
+ create mode 100644 package/python-treq/Config.in
+ create mode 100644 package/python-treq/python-treq.hash
+ create mode 100644 package/python-treq/python-treq.mk
+ create mode 100644 package/python-txaio/Config.in
+ create mode 100644 package/python-txaio/python-txaio.hash
+ create mode 100644 package/python-txaio/python-txaio.mk
+ create mode 100644 package/python-ujson/Config.in
+ create mode 100644 package/python-ujson/python-ujson.hash
+ create mode 100644 package/python-ujson/python-ujson.mk
+ create mode 100644 package/python-wsaccel/Config.in
+ create mode 100644 package/python-wsaccel/python-wsaccel.hash
+ create mode 100644 package/python-wsaccel/python-wsaccel.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 8e13c64..7b5c747 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -685,6 +685,7 @@ menu "External python modules"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
-+	source "package/python-pygments/Config.in"
- 	source "package/python-pyinotify/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
-diff --git a/package/python-pygments/Config.in b/package/python-pygments/Config.in
-new file mode 100644
-index 0000000..d0e3f00
---- /dev/null
-+++ b/package/python-pygments/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYGMENTS
-+	bool "python-pygments"
-+	help
-+	  Pygments is a syntax highlighting package written in Python.
-+
-+	  https://pypi.python.org/pypi/Pygments
-+
-diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
-new file mode 100644
-index 0000000..bb954dd
---- /dev/null
-+++ b/package/python-pygments/python-pygments.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=84533d22f72de894f6d3907c3ca9eddf, sha256 locally computed.
-+md5	84533d22f72de894f6d3907c3ca9eddf  Pygments-2.1.tar.gz
-+sha256	13a0ef5fafd7b16cf995bc28fe7aab0780dab1b2fda0fc89e033709af8b8a47b  Pygments-2.1.tar.gz
-diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
-new file mode 100644
-index 0000000..d087cef
---- /dev/null
-+++ b/package/python-pygments/python-pygments.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pygments
-+#
-+################################################################################
-+
-+PYTHON_PYGMENTS_VERSION = 2.1
-+PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
-+PYTHON_PYGMENTS_SITE = http://pypi.python.org/packages/source/P/Pygments
-+PYTHON_PYGMENTS_LICENSE = BSD
-+PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
-+PYTHON_PYGMENTS_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
 -- 
 2.1.4
