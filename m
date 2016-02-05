@@ -1,117 +1,209 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Feb 2016 22:51:10 +0100
-Subject: [Buildroot] [PATCH v3 17/17] python-crossbar: new package
-In-Reply-To: <1454696337-9692-18-git-send-email-mc5686@mclink.it>
-References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
- <1454696337-9692-18-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ku55rcRfWOvyQ6qmtaso0RBnzj_nPsXu86ZCqwm7__Ehw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  5 Feb 2016 22:57:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mraa: bump version to 0.9.1
+Message-ID: <1454709441-31380-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                            |  2 ++
->  package/python-crossbar/Config.in            | 23 +++++++++++++++++++++++
->  package/python-crossbar/python-crossbar.hash |  3 +++
->  package/python-crossbar/python-crossbar.mk   | 17 +++++++++++++++++
->  4 files changed, 45 insertions(+)
->  create mode 100644 package/python-crossbar/Config.in
->  create mode 100644 package/python-crossbar/python-crossbar.hash
->  create mode 100644 package/python-crossbar/python-crossbar.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index a0c57e0..8bc46c8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -634,6 +634,8 @@ menu "External python modules"
->         source "package/python-configobj/Config.in"
->         source "package/python-configshell-fb/Config.in"
->         source "package/python-crc16/Config.in"
-> +       source "package/python-crossbar/Config.in"
-> +       source "package/python-cryptography/Config.in"
->         source "package/python-cssselect/Config.in"
->         source "package/python-daemon/Config.in"
->         source "package/python-dialog/Config.in"
-> diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
-> new file mode 100644
-> index 0000000..f52e880
-> --- /dev/null
-> +++ b/package/python-crossbar/Config.in
-> @@ -0,0 +1,23 @@
-> +config BR2_PACKAGE_PYTHON_CROSSBAR
-> +       bool "python-crossbar"
-> +       select BR2_PACKAGE_PYTHON_AUTOBAHN
-> +       select BR2_PACKAGE_PYTHON_CLICK
-> +       select BR2_PACKAGE_PYTHON_JINJA2
-> +       select BR2_PACKAGE_PYTHON_MISTUNE
-> +       select BR2_PACKAGE_PYTHON_NETADDR
-> +       select BR2_PACKAGE_PYTHON_PYGMENTS
-> +       select BR2_PACKAGE_PYTHON_PYTRIE
-> +       select BR2_PACKAGE_PYTHON_PYYAML
-> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS
-> +       select BR2_PACKAGE_PYTHON_SHURILWHICH
-> +       select BR2_PACKAGE_PYTHON_TREQ
-> +       select BR2_PACKAGE_PYTHON_TWISTED
+Removed patches applied upstream:
+https://github.com/intel-iot-devkit/mraa/commit/86a0e10c037e5c069c48012f169f9e8e2587a0ef
+https://github.com/intel-iot-devkit/mraa/commit/a87a104efeb83d4e762992e5be3b8908e6d2bf40
+https://github.com/intel-iot-devkit/mraa/commit/7fce2e2a3a3fbbaa2b645d810bde8a50b9c78023
 
-many selects are missing:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...ake-build-shared-libs-by-default-on-linux.patch | 53 --------------------
+ ...keLists.txt-do-not-require-a-CXX-compiler.patch | 57 ----------------------
+ .../0003-uart.c-fix-build-with-musl-libc.patch     | 40 ---------------
+ package/mraa/mraa.mk                               |  2 +-
+ 4 files changed, 1 insertion(+), 151 deletions(-)
+ delete mode 100644 package/mraa/0001-cmake-build-shared-libs-by-default-on-linux.patch
+ delete mode 100644 package/mraa/0002-CMakeLists.txt-do-not-require-a-CXX-compiler.patch
+ delete mode 100644 package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
 
-pyinotify
-psutils
-ujson
-wsaccel
-cbor
-
-etc. check against setup.py
-
-> +       help
-> +         Crossbar.io is an open-source WAMP application router
-> +         that allows to build advanced applications from loosely-coupled
-> +         components that can talk in real-time with each other.
-> +
-> +         https://pypi.python.org/pypi/crossbar
-> +
-> +comment "*** Currently Crossbar.io does NOT work without Python sources! ***"
-> +        depends on BR2_PACKAGE_PYTHON_PYC_ONLY
-> diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
-> new file mode 100644
-> index 0000000..0690e56
-> --- /dev/null
-> +++ b/package/python-crossbar/python-crossbar.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
-> +md5    cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
-> +sha256 4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
-> diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
-> new file mode 100644
-> index 0000000..7a191d9
-> --- /dev/null
-> +++ b/package/python-crossbar/python-crossbar.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# python-crossbar
-> +#
-> +################################################################################
-> +
-> +PYTHON_CROSSBAR_VERSION = 0.12.1
-> +PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
-> +PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
-> +PYTHON_CROSSBAR_LICENSE = AGPL3
-> +PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
-> +PYTHON_CROSSBAR_SETUP_TYPE = setuptools
-> +PYTHON_CROSSBAR_DEPENDENCIES = python-click python-setuptools python-twisted python-autobahn \
-> +       python-netaddr python-pytrie python-jinja2 python-mistune python-pygments python-pyyaml \
-> +       python-shutilwhich python-psutil python-treq
-> +
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/mraa/0001-cmake-build-shared-libs-by-default-on-linux.patch b/package/mraa/0001-cmake-build-shared-libs-by-default-on-linux.patch
+deleted file mode 100644
+index 9f7c95e..0000000
+--- a/package/mraa/0001-cmake-build-shared-libs-by-default-on-linux.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-Upstream status: Merged
+-Fetched from: https://github.com/intel-iot-devkit/mraa/commit/86a0e10c037e5c069c48012f169f9e8e2587a0ef
+-
+-From 86a0e10c037e5c069c48012f169f9e8e2587a0ef Mon Sep 17 00:00:00 2001
+-From: Samuel Martin <s.martin49@gmail.com>
+-Date: Wed, 6 Jan 2016 01:07:10 +0100
+-Subject: [PATCH] cmake: build shared libs by default on linux
+-
+-The change allows to build shared libraries by default on Linux, while
+-respecting the requested library build type when the standard CMake flag
+-BUILD_SHARED_LIBS is defined.
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-Signed-off-by: Brendan Le Foll <brendan.le.foll@intel.com>
+----
+- CMakeLists.txt     | 7 +++++++
+- src/CMakeLists.txt | 2 +-
+- 2 files changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 9860556..6a189b9 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -10,6 +10,13 @@ set (LIB_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}" CACHE PATH "Installation path for
+- # Set CMAKE_LIB_INSTALL_DIR if not defined
+- include(GNUInstallDirs)
+- 
+-+# By default, build shared object libraries on linux
+-+if (UNIX AND NOT APPLE)
+-+  if (NOT DEFINED BUILD_SHARED_LIBS)
+-+    set(BUILD_SHARED_LIBS ON)
+-+  endif()
+-+endif()
+-+
+- # Appends the cmake/modules path to MAKE_MODULE_PATH variable.
+- set (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
+- 
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index ceb31e4..6698fa4 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -111,7 +111,7 @@ set (mraa_LIB_GLOB_HEADERS
+-   ${PROJECT_SOURCE_DIR}/api/mraa.hpp
+- )
+- 
+--add_library (mraa SHARED ${mraa_LIB_SRCS})
+-+add_library (mraa ${mraa_LIB_SRCS})
+- 
+- 
+- target_link_libraries (mraa ${mraa_LIBS})
+--- 
+-1.9.1
+-
+diff --git a/package/mraa/0002-CMakeLists.txt-do-not-require-a-CXX-compiler.patch b/package/mraa/0002-CMakeLists.txt-do-not-require-a-CXX-compiler.patch
+deleted file mode 100644
+index a01395b..0000000
+--- a/package/mraa/0002-CMakeLists.txt-do-not-require-a-CXX-compiler.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-Upstream status: Merged
+-Fetched from: https://github.com/intel-iot-devkit/mraa/commit/a87a104efeb83d4e762992e5be3b8908e6d2bf40
+-
+-From a87a104efeb83d4e762992e5be3b8908e6d2bf40 Mon Sep 17 00:00:00 2001
+-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+-Date: Tue, 5 Jan 2016 19:36:55 +0100
+-Subject: [PATCH] CMakeLists.txt: do not require a C++ compiler
+-
+-By default, CMake assumes both a C and C++ compiler are required.
+-This is not needed for mraa because it only provides C++ header
+-files. Note that if using SWIG you need one and if using node.js 3+ you'll need
+-a C++11 compiler
+-
+-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+-Signed-off-by: Brendan Le Foll <brendan.le.foll@intel.com>
+----
+- CMakeLists.txt              | 2 +-
+- examples/c++/CMakeLists.txt | 2 ++
+- src/CMakeLists.txt          | 1 +
+- 3 files changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 6a189b9..4457efc 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required (VERSION 2.8)
+--project (mraa)
+-+project (mraa C)
+- 
+- FIND_PACKAGE (Threads REQUIRED)
+- 
+-diff --git a/examples/c++/CMakeLists.txt b/examples/c++/CMakeLists.txt
+-index 69714aa..d688d48 100644
+---- a/examples/c++/CMakeLists.txt
+-+++ b/examples/c++/CMakeLists.txt
+-@@ -1,3 +1,5 @@
+-+enable_language(CXX)
+-+
+- add_executable (AioA0 AioA0.cpp)
+- add_executable (blink-io-cpp Blink-IO.cpp)
+- add_executable (Pwm3-cycle Pwm3-cycle.cpp)
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 6698fa4..05b546c 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -171,6 +171,7 @@ if (DOXYGEN_FOUND)
+- endif ()
+- 
+- if (BUILDSWIG)
+-+  enable_language(CXX)
+-   find_package (SWIG)
+-   if (SWIG_FOUND)
+-     include (${SWIG_USE_FILE})
+--- 
+-1.9.1
+-
+diff --git a/package/mraa/0003-uart.c-fix-build-with-musl-libc.patch b/package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
+deleted file mode 100644
+index 75ceb6f..0000000
+--- a/package/mraa/0003-uart.c-fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 30e4abcd5f53bac50da874ba8795388fc05f5252 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 31 Jan 2016 08:57:05 +0100
+-Subject: [PATCH 1/1] uart.c: fix build with musl libc
+-
+-musl does not define CMSPAR on all archs, patch inspired by
+-http://git.alpinelinux.org/cgit/aports/plain/main/freerdp/musl-fix.patch
+-
+-musl needs sys/select.h to provide fd_set.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+-Patch sent upstream: https://github.com/intel-iot-devkit/mraa/pull/418
+-
+- src/uart/uart.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/src/uart/uart.c b/src/uart/uart.c
+-index 6d3973a..0f8a2e3 100644
+---- a/src/uart/uart.c
+-+++ b/src/uart/uart.c
+-@@ -29,10 +29,15 @@
+- #include <unistd.h>
+- #include <string.h>
+- #include <termios.h>
+-+#include <sys/select.h>
+- 
+- #include "uart.h"
+- #include "mraa_internal.h"
+- 
+-+#ifndef CMSPAR
+-+#define CMSPAR   010000000000
+-+#endif
+-+
+- // This function takes an unsigned int and converts it to a B* speed_t
+- // that can be used with linux/posix termios
+- static speed_t
+--- 
+-2.7.0.rc3
+-
+diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
+index 299beb0..8c7dbc4 100644
+--- a/package/mraa/mraa.mk
++++ b/package/mraa/mraa.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MRAA_VERSION = v0.9.0
++MRAA_VERSION = v0.9.1
+ MRAA_SITE = $(call github,intel-iot-devkit,mraa,$(MRAA_VERSION))
+ MRAA_LICENSE = MIT
+ MRAA_LICENSE_FILES = COPYING
+-- 
+2.7.0
