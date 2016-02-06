@@ -1,26 +1,20 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Feb 2016 21:20:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xvkbd: bump version to 3.7
-In-Reply-To: <1454761749-17257-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454761749-17257-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160206212027.4ef1a439@free-electrons.com>
+Date: Sat, 6 Feb 2016 21:20:31 +0100
+Subject: [Buildroot] [PATCH] micropython: bump to v1.6
+In-Reply-To: <1454557267-13936-1-git-send-email-judge.packham@gmail.com>
+References: <1454557267-13936-1-git-send-email-judge.packham@gmail.com>
+Message-ID: <20160206212031.0b58a532@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Chris Packham,
 
-On Sat,  6 Feb 2016 13:29:09 +0100, Bernd Kuhls wrote:
-> Also switch upstream URL to new host as mentioned on old site.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Thu,  4 Feb 2016 16:41:07 +1300, Chris Packham wrote:
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 > ---
->  package/xvkbd/Config.in  | 2 +-
->  package/xvkbd/xvkbd.hash | 2 +-
->  package/xvkbd/xvkbd.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied, thanks.
 
