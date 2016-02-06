@@ -1,56 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Feb 2016 21:19:57 +0100
-Subject: [Buildroot] [git commit] package/xvkbd: bump version to 3.7
-Message-ID: <20160206202000.E6FEF80771@busybox.osuosl.org>
+Date: Sat, 6 Feb 2016 21:20:21 +0100
+Subject: [Buildroot] [git commit] micropython: bump to v1.6
+Message-ID: <20160206202026.2C7F580771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25bcd8bbbfbc0201d084790c1f8b3de45e9aafca
+commit: https://git.buildroot.net/buildroot/commit/?id=06d41cd77ae5378bc77dc1e0b327d6122ba6e659
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also switch upstream URL to new host as mentioned on old site.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xvkbd/Config.in  | 2 +-
- package/xvkbd/xvkbd.hash | 2 +-
- package/xvkbd/xvkbd.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/micropython/micropython.hash | 2 +-
+ package/micropython/micropython.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xvkbd/Config.in b/package/xvkbd/Config.in
-index bd3f2aa..464a6ef 100644
---- a/package/xvkbd/Config.in
-+++ b/package/xvkbd/Config.in
-@@ -13,4 +13,4 @@ config BR2_PACKAGE_XVKBD
- 	help
- 	  on-screen keyboard for X
- 
--	  http://homepage3.nifty.com/tsato/xvkbd
-+	  http://t-sato.in.coocan.jp/xvkbd
-diff --git a/package/xvkbd/xvkbd.hash b/package/xvkbd/xvkbd.hash
-index a9fa10d..18148e5 100644
---- a/package/xvkbd/xvkbd.hash
-+++ b/package/xvkbd/xvkbd.hash
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 0c9e2ae..b3a7c22 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 93c4bdced9f13f22c367d990e98ffbc53f8210fa28a816fa9c610d86e78bf807 xvkbd-3.2.tar.gz
-+sha256	895f768269820e7c0379b0daac3687bda0c670d192ebb7e61e5613a5939ec90b	xvkbd-3.7.tar.gz
-diff --git a/package/xvkbd/xvkbd.mk b/package/xvkbd/xvkbd.mk
-index 0411fa4..e03f723 100644
---- a/package/xvkbd/xvkbd.mk
-+++ b/package/xvkbd/xvkbd.mk
-@@ -4,8 +4,8 @@
+ #locally computed
+-sha256 3c594ee701622f01c4e9c7abd1c322a0bc6c8af17bea0b0126812cb8e61bb5d9  micropython-v1.5.2.tar.gz
++sha256 f8ea3faffa797de1a06c16c8f57c784c665b318ca08ac17f74dcbc95322d47de  micropython-v1.6.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 59d164f..853caa2 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XVKBD_VERSION = 3.2
--XVKBD_SITE = http://homepage3.nifty.com/tsato/xvkbd
-+XVKBD_VERSION = 3.7
-+XVKBD_SITE = http://t-sato.in.coocan.jp/xvkbd
- XVKBD_LICENSE = GPLv2+
- XVKBD_LICENSE_FILES = README
- 
+-MICROPYTHON_VERSION = v1.5.2
++MICROPYTHON_VERSION = v1.6
+ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
