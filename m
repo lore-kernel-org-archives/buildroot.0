@@ -1,85 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Feb 2016 11:23:14 +0100
-Subject: [Buildroot] [PATCH v3] package/sqlite: add optional support for
-	libedit
-Message-ID: <1454754194-9344-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sat, 6 Feb 2016 11:31:27 +0100
+Subject: [Buildroot] [PATCH v3 02/17] python-pycparser: python runtime
+	added
+In-Reply-To: <1454696337-9692-3-git-send-email-mc5686@mclink.it>
+References: <1454696337-9692-1-git-send-email-mc5686@mclink.it>
+ <1454696337-9692-3-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kvOFWrM0N1D73u_j_tA5hrtyuvKB-Mxu7V4dqBpWgGH8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: rebased
-v2: removed BR2_PACKAGE_SQLITE_READLINE (Thomas, Peter)
+On Fri, Feb 5, 2016 at 7:18 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                            | 1 +
+>  package/python-pycparser/Config.in           | 6 ++++++
+>  package/python-pycparser/python-pycparser.mk | 1 +
+>  3 files changed, 8 insertions(+)
+>  create mode 100644 package/python-pycparser/Config.in
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index c2698ea..3b3526c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -679,6 +679,7 @@ menu "External python modules"
+>         source "package/python-psutil/Config.in"
+>         source "package/python-pyasn/Config.in"
+>         source "package/python-pycli/Config.in"
+> +       source "package/python-pycparser/Config.in"
+>         source "package/python-pycrypto/Config.in"
+>         source "package/python-pydal/Config.in"
+>         source "package/python-pyftpdlib/Config.in"
+> diff --git a/package/python-pycparser/Config.in b/package/python-pycparser/Config.in
+> new file mode 100644
+> index 0000000..49190c3
+> --- /dev/null
+> +++ b/package/python-pycparser/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_PYCPARSER
+> +       bool "python-pycparser"
+> +       help
+> +         C parser in Python
+> +
+> +         https://github.com/eliben/pycparser
+> diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
+> index 328bc8a..a32f1aa 100644
+> --- a/package/python-pycparser/python-pycparser.mk
+> +++ b/package/python-pycparser/python-pycparser.mk
+> @@ -11,4 +11,5 @@ PYTHON_PYCPARSER_SETUP_TYPE = setuptools
+>  PYTHON_PYCPARSER_LICENSE = BSD-3c
+>  PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
+>
+> +$(eval $(python-package))
+>  $(eval $(host-python-package))
 
- Config.in.legacy         | 11 +++++++++++
- package/sqlite/Config.in |  7 -------
- package/sqlite/sqlite.mk |  9 ++++++---
- 3 files changed, 17 insertions(+), 10 deletions(-)
+Seems like we need this package. Crossbar seems to check all
+dependencies from all its dependencies, i.e. crossbar itself doesn't
+need cffi, but lmdb does. This seems something to have with
+entry_point (https://pythonhosted.org/setuptools/setuptools.html#dynamic-discovery-of-services-and-plugins).
+Have no idea, how to disable it.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b38cf90..23fbf8e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,17 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
- 
-+config BR2_PACKAGE_SQLITE_READLINE
-+	bool "command-line editing support was updated"
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
-+	select BR2_LEGACY
-+	help
-+	  This option was removed in favour of the sqlite package
-+	  deciding itself depending on the enabled packages whether
-+	  command-line editing should be enabled, it also also takes
-+	  libedit into account.
-+
- config BR2_LINUX_KERNEL_SAME_AS_HEADERS
- 	bool "using the linux headers version for the kernel has been removed"
- 	select BR2_LEGACY
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index 7ea9eb1..c9fde53 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -8,13 +8,6 @@ config BR2_PACKAGE_SQLITE
- 
- if BR2_PACKAGE_SQLITE
- 
--config BR2_PACKAGE_SQLITE_READLINE
--	bool "Command-line editing"
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
--	help
--	  Enable command-line editing. This requires ncurses and readline.
--
- config BR2_PACKAGE_SQLITE_STAT3
- 	bool "Additional query optimizations (stat3)"
- 	help
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 1603e00..df59d1f 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -45,11 +45,14 @@ else
- SQLITE_CONF_OPTS += --disable-threadsafe
- endif
- 
--ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
-+ifeq ($(BR2_PACKAGE_READLINE),y)
- SQLITE_DEPENDENCIES += ncurses readline
--SQLITE_CONF_OPTS += --enable-readline
-+SQLITE_CONF_OPTS += --disable-editline --enable-readline
-+else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+SQLITE_DEPENDENCIES += libedit
-+SQLITE_CONF_OPTS += --enable-editline --disable-readline
- else
--SQLITE_CONF_OPTS += --disable-readline
-+SQLITE_CONF_OPTS += --disable-editline --disable-readline
- endif
- 
- $(eval $(autotools-package))
--- 
-2.7.0
+Yegor
