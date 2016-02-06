@@ -1,48 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Feb 2016 13:02:27 +0100
-Subject: [Buildroot] [PATCH v2] package/knock: bump version to 0.7.8
-Message-ID: <1454760147-31190-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Feb 2016 13:04:20 +0100
+Subject: [Buildroot] [git commit] ympd: needs <dlfcn.h>
+Message-ID: <20160206120508.6018F80284@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream source repo switched to github.com. Since the last release
-dating back to 2014 no new tarball was released so we switch to the
-latest github commit.
+commit: https://git.buildroot.net/buildroot/commit/?id=4b7a5c10a8d1fcb6cbb41d92c5ce9306754b32b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Add a dependency on !BR2_STATIC_LIBS, since <dlfcn.h> is used. While
+we're at it, we also fix the comment which was lacking the BR2_USE_MMU
+dependency.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/30853c1011544f8b6a5d3b3852af93bef4c0f5cb/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: explained version bump (Thomas)
+ package/ympd/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- package/knock/knock.hash | 2 +-
- package/knock/knock.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/package/knock/knock.hash b/package/knock/knock.hash
-index ae152db..3599e43 100644
---- a/package/knock/knock.hash
-+++ b/package/knock/knock.hash
-@@ -1,2 +1,2 @@
- # locally computed hash
--sha256 9938479c321066424f74c61f6bee46dfd355a828263dc89561a1ece3f56578a4 knock-0.7.tar.gz
-+sha256	940a8de61b4b3530560805c3b9310a077c28c99173c2ccb07ff96720b0e93c58	knock-258a27e5a47809f97c2b9f2751a88c2f94aae891.tar.gz
-diff --git a/package/knock/knock.mk b/package/knock/knock.mk
-index 28db1eb..2ab8d1b 100644
---- a/package/knock/knock.mk
-+++ b/package/knock/knock.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/package/ympd/Config.in b/package/ympd/Config.in
+index ba0e5e8..d0901c7 100644
+--- a/package/ympd/Config.in
++++ b/package/ympd/Config.in
+@@ -3,9 +3,11 @@ config BR2_PACKAGE_YMPD
+ 	select BR2_PACKAGE_LIBMPDCLIENT
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  ympd, a standalone MPD Web GUI written in C, utilizing
+ 	  Websockets and Bootstrap/JS
  
--KNOCK_VERSION = 0.7
--KNOCK_SITE = http://www.zeroflux.org/proj/knock/files
-+KNOCK_VERSION = 258a27e5a47809f97c2b9f2751a88c2f94aae891
-+KNOCK_SITE = $(call github,jvinet,knock,$(KNOCK_VERSION))
-+KNOCK_AUTORECONF = YES
- KNOCK_LICENSE = GPLv2+
- KNOCK_LICENSE_FILES = COPYING
- KNOCK_DEPENDENCIES = libpcap
--- 
-2.7.0
+-comment "ympd needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "ympd needs a toolchain w/ threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
