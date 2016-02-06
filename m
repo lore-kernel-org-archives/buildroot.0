@@ -1,8 +1,8 @@
 From: Jan Heylen <heyleke@gmail.com>
-Date: Sat,  6 Feb 2016 09:57:27 +0100
-Subject: [Buildroot] [PATCH v2] bind: fix intermittent build issues with
+Date: Sat,  6 Feb 2016 10:00:07 +0100
+Subject: [Buildroot] [PATCH v3] bind: fix intermittent build issues with
 	high BR2_JLEVEL
-Message-ID: <1454749047-23035-1-git-send-email-heyleke@gmail.com>
+Message-ID: <1454749207-23363-1-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,18 +31,21 @@ Signed-off-by: Jan Heylen <heyleke@gmail.com>
 Changes v1 --> v2:
   - Added comment
   - Added Fixes link
+Changes v2 --> v3:
+  - Properly commit the added comment :-s
 ---
- package/bind/bind.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/bind/bind.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 9d8d16c..c1db1dd 100644
+index 9d8d16c..12dd52e 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -6,6 +6,7 @@
+@@ -6,6 +6,8 @@
  
  BIND_VERSION = 9.10.3-P3
  BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
++# bind does not support parallel builds.
 +BIND_MAKE = $(MAKE1)
  BIND_INSTALL_STAGING = YES
  BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
