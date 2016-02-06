@@ -1,55 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 6 Feb 2016 11:16:00 +0100
-Subject: [Buildroot] [git commit] neard: add missing
-	BR2_TOOLCHAIN_HAS_SYNC_4 dependency
-Message-ID: <20160206101652.A2EE7805BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] msgpack: rework BR2_ARCH_HAS_ATOMICS
+	dependency
+Message-ID: <20160206101652.51CC780771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23e40b61199126ba976a1b27473b3ade9ab551c0
+commit: https://git.buildroot.net/buildroot/commit/?id=b53a2ac54b8158fcea7c1e7377d24ea1b7769615
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+The msgpack source code indeed checks for the 4 bytes __sync built-in,
+so this commit switches the package from a BR2_ARCH_HAS_ATOMICS
+dependency to a BR2_TOOLCHAIN_HAS_SYNC_4 dependency.
 
-  http://autobuild.buildroot.org/results/b8bf7be2efd8e8e369abdde0a5bec564e8cd6f23/
+python-msgpack, a reverse dependency of msgpack, is changed in the
+same way.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/connman/Config.in | 1 +
- package/neard/Config.in   | 2 ++
- 2 files changed, 3 insertions(+)
+ package/msgpack/Config.in        | 4 ++--
+ package/python-msgpack/Config.in | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 655db86..556de48 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -50,6 +50,7 @@ config BR2_PACKAGE_CONNMAN_LOOPBACK
- config BR2_PACKAGE_CONNMAN_NEARD
- 	bool "enable neard support"
- 	select BR2_PACKAGE_NEARD
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # neard
- 
- config BR2_PACKAGE_CONNMAN_OFONO
- 	bool "enable ofono support"
-diff --git a/package/neard/Config.in b/package/neard/Config.in
-index 353d1af..8571e7c 100644
---- a/package/neard/Config.in
-+++ b/package/neard/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_NEARD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnl, dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
- 	depends on !BR2_STATIC_LIBS # dlopen
+diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
+index a57a378..b8e8213 100644
+--- a/package/msgpack/Config.in
++++ b/package/msgpack/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_MSGPACK
+ 	bool "msgpack"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBNL
-@@ -26,4 +27,5 @@ endif
+ 	help
+ 	  MessagePack is an efficient binary serialization format.
  
- comment "neard needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
+@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
+ 	  http://msgpack.org/
+ 
+ comment "msgpack needs a toolchain w/ C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
 +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
+index e740835..7206c22 100644
+--- a/package/python-msgpack/Config.in
++++ b/package/python-msgpack/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	bool "python-msgpack"
+ 	select BR2_PACKAGE_MSGPACK
+ 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
+-	depends on BR2_ARCH_HAS_ATOMICS # msgpack
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
+ 	help
+ 	  MessagePack (http://msgpack.org/) is a fast, compact binary
+ 	  serialization format, suitable for similar data to JSON.
+@@ -12,6 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
+ 	  https://pypi.python.org/pypi/msgpack-python/
+ 
+ comment "python-msgpack needs a toolchain w/ C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_PYTHON
+ 	depends on !BR2_INSTALL_LIBSTDCPP
