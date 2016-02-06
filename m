@@ -1,189 +1,160 @@
-From: Lucas Zampar <lucas.zampar@gmail.com>
-Date: Sat, 6 Feb 2016 13:17:29 -0200
-Subject: [Buildroot] [PATCH v3] ShellInABox: new package
-In-Reply-To: <1454771503-116304-1-git-send-email-lucas.zampar@gmail.com>
-References: <1454771503-116304-1-git-send-email-lucas.zampar@gmail.com>
-Message-ID: <CAMt=8UL97KVFb-6X0NxinL5EsqmC6NGkE0H1OR7FYk0PtO3svw@mail.gmail.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 6 Feb 2016 18:05:12 +0100
+Subject: [Buildroot] [PATCH] wine: Bump to version 1.8.1
+Message-ID: <56B627C8.5020506@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry about the last two patch. I think that this is the last one.
+Bumping to stable version 1.8.1
 
-BR,
+Upstreamed patch is finally dropped.
 
-Lucas
+Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+---
+...llow-to-override-the-location-of-the-conf.patch | 109 ---------------------
+package/wine/wine.hash | 2 +-
+package/wine/wine.mk | 2 +-
+3 files changed, 2 insertions(+), 111 deletions(-)
+delete mode 100644 package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
 
-2016-02-06 13:11 GMT-02:00 Lucas Zampar Bernardi <lucas.zampar@gmail.com>:
+diff --git a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch b/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
+deleted file mode 100644
+index 9fc9f64..0000000
+--- a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
++++ /dev/null
+@@ -1,109 +0,0 @@
+-From 18078feecc8da0ab2693d0bb5423489fa62920ef Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Tue, 22 Dec 2015 21:25:19 +0100
+-Subject: [PATCH] configure: allow to override the location of the *-config
+- scripts
+-
+-Currently, the configure.ac calls a number of *-config scripts to get
+-details about installed libraries. It assumes that those *-config
+-scripts are readily available in the PATH.
+-
+-While this is true in most situations, it may not be true when
+-cross-compiling: you may have the *-config scripts matching the target
+-environment in a location that isn't in the PATH. For such situations,
+-it is very useful to be able to override the location of such *-config
+-scripts using environment variables.
+-
+-The proposed changes does not introduce any functional difference if
+-you don't pass those new environment variables: if they are not
+-passed, it falls back to the current value.
+-
+-However, if those *_CONFIG variables are passed, then they are used as
+-the path to the corresponding *-config script.
+-
+-The ${FOO_CONFIG:-foo-config} construct is POSIX compliant, so it is
+-available in all shells.
+-
+-(Patch submitted upstream.)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac | 20 ++++++++++----------
+- 1 file changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 86f12c5..37ceab5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1191,7 +1191,7 @@ dnl **** Check for libxml2 ****
+- if test "x$with_xml" != "xno"
+- then
+- WINE_PACKAGE_FLAGS(XML2,[libxml-2.0],[-lxml2],
+-- [`xml2-config --cflags 2>/dev/null`],[`xml2-config --libs 2>/dev/null`],
+-+ [`${XML2_CONFIG:-xml2-config} --cflags 2>/dev/null`],[`${XML2_CONFIG:-xml2-config} --libs 2>/dev/null`],
+- [AC_CHECK_HEADERS([libxml/parser.h libxml/xmlsave.h libxml/SAX2.h])
+- if test "$ac_cv_header_libxml_parser_h" = "yes" -a "$ac_cv_header_libxml_xmlsave_h" = "yes" -a "$ac_cv_header_libxml_SAX2_h" = "yes"
+- then
+-@@ -1220,7 +1220,7 @@ WINE_WARNING_WITH(xml,[test "$ac_cv_lib_xml2_xmlParseMemory" != "yes"],
+- if test "x$with_xslt" != "xno"
+- then
+- WINE_PACKAGE_FLAGS(XSLT,[libxslt],[-lxml2],
+-- [`xslt-config --cflags 2>/dev/null`],[`xslt-config --libs 2>/dev/null`],
+-+ [`${XSLT_CONFIG:-xslt-config} --cflags 2>/dev/null`],[`${XSLT_CONFIG:-xslt-config} --libs 2>/dev/null`],
+- [AC_CHECK_HEADERS([libxslt/pattern.h libxslt/transform.h],,,
+- [#ifdef HAVE_LIBXSLT_PATTERN_H
+- # include <libxslt/pattern.h>
+-@@ -1291,7 +1291,7 @@ WINE_NOTICE_WITH(curses,[test "x$ac_cv_lib_soname_curses$ac_cv_lib_soname_ncurse
+- dnl **** Check for SANE ****
+- if test "x$with_sane" != "xno"
+- then
+-- WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`],
+-+ WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`],
+- [AC_CHECK_HEADER(sane/sane.h,
+- [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
+- [SANE_CFLAGS=""])])
+-@@ -1311,7 +1311,7 @@ dnl **** Check for libgphoto2 ****
+- if test "x$with_gphoto" != "xno"
+- then
+- WINE_PACKAGE_FLAGS(GPHOTO2,[libgphoto2],[-lgphoto2],
+-- [`gphoto2-config --cflags 2>/dev/null`],[`gphoto2-config --libs 2>/dev/null`],
+-+ [`${GPHOTO2_CONFIG:-gphoto2-config} --cflags 2>/dev/null`],[`${GPHOTO2_CONFIG:-gphoto2-config} --libs 2>/dev/null`],
+- [AC_CHECK_HEADER(gphoto2-camera.h,
+- [AC_CHECK_LIB(gphoto2,gp_camera_new,
+- [AC_DEFINE(HAVE_GPHOTO2, 1, [Define if we have the libgphoto2 development environment])],
+-@@ -1319,8 +1319,8 @@ then
+- [$GPHOTO2_LIBS])],
+- [GPHOTO2_LIBS=""; GPHOTO2_CFLAGS=""])])
+- WINE_PACKAGE_FLAGS(GPHOTO2_PORT,[libgphoto2_port],[-lgphoto2_port],
+-- [`gphoto2-port-config --cflags 2>/dev/null`],
+-- [`gphoto2-port-config --libs 2>/dev/null`],
+-+ [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --cflags 2>/dev/null`],
+-+ [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --libs 2>/dev/null`],
+- [AC_CHECK_HEADER(gphoto2-port.h,
+- [AC_CHECK_LIB(gphoto2_port,gp_port_info_list_new,
+- [AC_DEFINE(HAVE_GPHOTO2_PORT, 1, [Define if we have the libgphoto2_port development environment])],
+-@@ -1382,8 +1382,8 @@ dnl **** Check for FreeType 2 ****
+- if test "x$with_freetype" != "xno"
+- then
+- WINE_PACKAGE_FLAGS(FREETYPE,[freetype2],[-lfreetype],
+-- [`(freetype-config --cflags || freetype2-config --cflags) 2>/dev/null`],
+-- [`(freetype-config --libs || freetype2-config --libs) 2>/dev/null`],
+-+ [`(${FREETYPE_CONFIG:-freetype-config} --cflags || ${FREETYPE2_CONFIG:-freetype2-config} --cflags) 2>/dev/null`],
+-+ [`(${FREETYPE_CONFIG:-freetype-config} --libs || ${FREETYPE2_CONFIG:-freetype2-config} --libs) 2>/dev/null`],
+- [AC_CHECK_HEADERS([ft2build.h])
+- if test "$ac_cv_header_ft2build_h" = "yes"
+- then
+-@@ -1538,8 +1538,8 @@ AC_SUBST(CUPS_CFLAGS,"")
+- if test "x$with_cups" != "xno"
+- then
+- ac_save_CPPFLAGS="$CPPFLAGS"
+-- ac_cups_cflags=`cups-config --cflags 2>/dev/null`
+-- ac_cups_libs=`cups-config --ldflags 2>/dev/null`
+-+ ac_cups_cflags=`${CUPS_CONFIG:-cups-config} --cflags 2>/dev/null`
+-+ ac_cups_libs=`${CUPS_CONFIG:-cups-config} --ldflags 2>/dev/null`
+- CPPFLAGS="$CPPFLAGS $ac_cups_cflags"
+- AC_CHECK_HEADERS(cups/cups.h,
+- [WINE_CHECK_SONAME(cups,cupsGetDefault,
+---
+-2.6.4
+-
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 80c0f68..31db6c0 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+# Locally calculated after checking pgp signature
+-sha256 f33b45c18112b2071fbf9edee0e8c575407f9e2a9855ca4ee918ed33efa7c6f4 wine-1.8.tar.bz2
++sha256 149ad3daaf8593b36c5c061285df0ec2a25e20ea48c61323be91088c4d22ca97 wine-1.8.1.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 2cd5c30..59f1670 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,7 +4,7 @@
+#
+################################################################################
 
-> This patch add new package ShellInABox that is a program that implements
-> an in-browser command line shell. It works on any JavaScript and CSS
-> enabled web browser.
->
-> Installing it on your Linux board you can get the access to the command
-> prompt directly from web without any needs to install terminal software
-> on your PC.
->
-> Signed-off-by: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
-> ---
->
-> Changes v2 -> v3:
->   - Correct install target
->   - Install init script using SYSV makefile rule
->   - Just compile app with SSL, if OPENSSL package is selected
->
-> Changes v1 -> v2:
->   - Correct missing double quote at package/Config.in
->
-> Signed-off-by: Lucas Zampar Bernardi <lucas.zampar@gmail.com>
-> ---
->  package/Config.in                                  |  1 +
->  package/shellinabox/Config.in                      | 10 +++++++
->  package/shellinabox/S51shellinabox                 | 33
-> ++++++++++++++++++++++
->  .../shellinabox-2.19-remove-static-library.patch   | 12 ++++++++
->  package/shellinabox/shellinabox.mk                 | 25 ++++++++++++++++
->  5 files changed, 81 insertions(+)
->  create mode 100644 package/shellinabox/Config.in
->  create mode 100644 package/shellinabox/S51shellinabox
->  create mode 100644
-> package/shellinabox/shellinabox-2.19-remove-static-library.patch
->  create mode 100644 package/shellinabox/shellinabox.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 529ad33..52f7cf2 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1444,6 +1444,7 @@ endif
->         source "package/sconeserver/Config.in"
->         source "package/ser2net/Config.in"
->         source "package/shairport-sync/Config.in"
-> +       source "package/shellinabox/Config.in"
->         source "package/smcroute/Config.in"
->         source "package/socat/Config.in"
->         source "package/socketcand/Config.in"
-> diff --git a/package/shellinabox/Config.in b/package/shellinabox/Config.in
-> new file mode 100644
-> index 0000000..1b9525c
-> --- /dev/null
-> +++ b/package/shellinabox/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_SHELLINABOX
-> +       bool "shellinabox"
-> +       select BR2_PACKAGE_ZLIB
-> +       help
-> +       Shell in a box - implements a web server that can
-> +       export arbitrary command line tools to a web based terminal
-> emulator.
-> +       This emulator is accessible to any JavaScript and CSS
-> +       enabled web browser and does not require any additional browser
-> plugins.
-> +
-> +         http://shellinabox.googlecode.com
-> diff --git a/package/shellinabox/S51shellinabox
-> b/package/shellinabox/S51shellinabox
-> new file mode 100644
-> index 0000000..b16f03d
-> --- /dev/null
-> +++ b/package/shellinabox/S51shellinabox
-> @@ -0,0 +1,33 @@
-> +#! /bin/sh
-> +
-> +NAME=shellinaboxd
-> +DAEMON=/usr/bin/$NAME
-> +ARGS="-s/:LOGIN -t --no-beep -b" # start without SSL support
-> +
-> +# Gracefully exit if the package has been removed.
-> +test -x $DAEMON || exit 0
-> +
-> +case "$1" in
-> +  start)
-> +    printf "Starting $NAME: "
-> +    start-stop-daemon -S -q -x $DAEMON -- $ARGS
-> +    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +    ;;
-> +  stop)
-> +    printf "Stopping $NAME: "
-> +    start-stop-daemon -K -q -n $NAME
-> +    [ $? = 0 ] && echo "OK" || echo "FAIL"
-> +    ;;
-> +  restart|reload)
-> +    echo "Restarting $NAME: "
-> +    $0 stop
-> +    sleep 1
-> +    $0 start
-> +    ;;
-> +  *)
-> +    echo "Usage: $0 {start|stop|restart|reload}" >&2
-> +    exit 1
-> +    ;;
-> +esac
-> +
-> +exit 0
-> diff --git
-> a/package/shellinabox/shellinabox-2.19-remove-static-library.patch
-> b/package/shellinabox/shellinabox-2.19-remove-static-library.patch
-> new file mode 100644
-> index 0000000..66b46b7
-> --- /dev/null
-> +++ b/package/shellinabox/shellinabox-2.19-remove-static-library.patch
-> @@ -0,0 +1,12 @@
-> +diff -rup shellinabox-2.19_original/Makefile.am
-> shellinabox-2.19/Makefile.am
-> +--- shellinabox-2.19_original/Makefile.am      2016-02-03
-> 14:17:44.699913649 -0200
-> ++++ shellinabox-2.19/Makefile.am       2016-02-03 14:08:59.795376662 -0200
-> +@@ -126,7 +126,7 @@ BUILT_SOURCES        = shellinabox/beep.
-> +
-> + shellinaboxd_LDADD   = liblogging.la
->       \
-> +                        libhttp.la
-> +-shellinaboxd_LDFLAGS = -static
-> ++#shellinaboxd_LDFLAGS = -static
-> + ## Added this for compatibility with older versions of autoconf/automake
-> + docdir               = ${datadir}/doc/${PACKAGE}
-> +
-> diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/
-> shellinabox.mk
-> new file mode 100644
-> index 0000000..6f84765
-> --- /dev/null
-> +++ b/package/shellinabox/shellinabox.mk
-> @@ -0,0 +1,25 @@
->
-> +################################################################################
-> +#
-> +# shellinabox
-> +#
->
-> +################################################################################
-> +
-> +SHELLINABOX_VERSION = 2.19
-> +SHELLINABOX_SOURCE = v$(SHELLINABOX_VERSION).tar.gz
-> +SHELLINABOX_SITE = https://github.com/shellinabox/shellinabox/archive
-> +SHELLINABOX_AUTORECONF = YES
-> +SHELLINABOX_DEPENDENCIES = zlib
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +SHELLINABOX_DEPENDENCIES += openssl
-> +endif
-> +
-> +SHELLINABOX_LICENSE = GPLv2
-> +
-> +
-> +define SHELLINABOX_INSTALL_INIT_SYSV
-> +       $(INSTALL) -D -m 755 package/shellinabox/S51shellinabox
-> $(TARGET_DIR)/etc/init.d/S51shellinabox
-> +endef
-> +
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.5.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160206/d3949b4a/attachment.html>
+-WINE_VERSION = 1.8
++WINE_VERSION = 1.8.1
+WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+WINE_SITE = https://dl.winehq.org/wine/source/1.8
+WINE_LICENSE = LGPLv2.1+
+-- 
+1.9.1
