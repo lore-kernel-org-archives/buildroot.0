@@ -1,48 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Feb 2016 21:28:31 +0100
-Subject: [Buildroot] [PATCH v2] package: aespipe: add host variant
-In-Reply-To: <1454634772-19009-1-git-send-email-ariel@vanguardiasur.com.ar>
-References: <1454634772-19009-1-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <20160206212831.48600f93@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 6 Feb 2016 23:50:33 +0200
+Subject: [Buildroot] [PATCH] linux: add conditional patch for
+	timeconst.pl
+In-Reply-To: <1454700784-32341-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1454700784-32341-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <20160206215033.GA8084@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ariel D'Alessandro,
+Hi Gustavo,
 
-On Thu,  4 Feb 2016 22:12:52 -0300, Ariel D'Alessandro wrote:
-> Having the host version may allow post-image scripts to encrypt the
-> resulting image with aespipe (and decrypt it in the update tool on the
-> target).
-> 
-> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+On Fri, Feb 05, 2016 at 04:33:04PM -0300, gustavo.zacarias at free-electrons.com wrote:
+> @@ -251,8 +261,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
+>  	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+> -	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
+> -		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
 
-We generally don't use "package: <package>:" as a commit title prefix.
-We either use just "<package>: " or "package/<package>: ". I've
-adjusted the commit title accordingly.
+Is this change intended?
 
-> diff --git a/package/aespipe/Config.in.host b/package/aespipe/Config.in.host
-> new file mode 100644
-> index 0000000..43b5bcf
-> --- /dev/null
-> +++ b/package/aespipe/Config.in.host
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_HOST_AESPIPE
-> +	bool "host aespipe"
-> +	help
-> +	  aespipe program is AES encrypting or decrypting pipe. It reads from
-> +	  standard input and writes to standard output. It can be used to
-> +	  create and restore encrypted tar or cpio archives. It can be used to
-> +	  encrypt and decrypt loop-AES compatible encrypted disk images.
+>  endef
+>  
+>  ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
 
-The lines were slightly too long here, so I rewrapped this paragraph.
+baruch
 
-And then I applied your patch. Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
