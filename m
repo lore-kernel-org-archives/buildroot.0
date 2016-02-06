@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat,  6 Feb 2016 23:59:59 +0100
-Subject: [Buildroot] [PATCH v4 13/17] python-ujson: new package
+Date: Sat,  6 Feb 2016 23:59:47 +0100
+Subject: [Buildroot] [PATCH v4 01/17] python-characteristic: new package
 In-Reply-To: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454799603-5474-14-git-send-email-mc5686@mclink.it>
+Message-ID: <1454799603-5474-2-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,73 +14,70 @@ Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
 ---
 Changes v3 -> v4
-  - removed spurious dependency to python2 Config.in (suggested by Y.Yefremov)
-  - removed spurious dependency to python2 in python-ujson.mk (suggested by Y.Yefremov)
-  - changed license (BSD -> BSD-3c) in python-ujson.mk (suggested by Y.Yefremov; I am
-    unable to understand where he got this info; LICENSE file missing in sources)
+  - removed spurious blank line at end of Config.in (suggested by yegorich)
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                      |  1 +
- package/python-ujson/Config.in         |  7 +++++++
- package/python-ujson/python-ujson.hash |  3 +++
- package/python-ujson/python-ujson.mk   | 13 +++++++++++++
+ package/Config.in                                        |  1 +
+ package/python-characteristic/Config.in                  |  6 ++++++
+ package/python-characteristic/python-characteristic.hash |  3 +++
+ package/python-characteristic/python-characteristic.mk   | 14 ++++++++++++++
  4 files changed, 24 insertions(+)
- create mode 100644 package/python-ujson/Config.in
- create mode 100644 package/python-ujson/python-ujson.hash
- create mode 100644 package/python-ujson/python-ujson.mk
+ create mode 100644 package/python-characteristic/Config.in
+ create mode 100644 package/python-characteristic/python-characteristic.hash
+ create mode 100644 package/python-characteristic/python-characteristic.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 8c079b0..0af00c6 100644
+index 529ad33..c2698ea 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -724,6 +724,7 @@ menu "External python modules"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-txaio/Config.in"
-+	source "package/python-ujson/Config.in"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-diff --git a/package/python-ujson/Config.in b/package/python-ujson/Config.in
+@@ -625,6 +625,7 @@ menu "External python modules"
+ 	source "package/python-cbor/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
++	source "package/python-characteristic/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
+ 	source "package/python-click/Config.in"
+diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
 new file mode 100644
-index 0000000..d185c98
+index 0000000..1226fa8
 --- /dev/null
-+++ b/package/python-ujson/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_UJSON
-+	bool "python-ujson"
++++ b/package/python-characteristic/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_CHARACTERISTIC
++	bool "python-characteristic"
 +	help
-+	  UltraJSON is an ultra fast JSON encoder and decoder written
-+	  in pure C with bindings for Python 2.5+ and 3.
++	  Python attributes without boilerplate.
 +
-+	  https://pypi.python.org/pypi/ujson
-diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
++	  https://pypi.python.org/pypi/characteristic
+diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
 new file mode 100644
-index 0000000..2132034
+index 0000000..41dc18c
 --- /dev/null
-+++ b/package/python-ujson/python-ujson.hash
++++ b/package/python-characteristic/python-characteristic.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=42f77b0cce686dfa4da2e68480b1dd24,sha256 locally computed.
-+md5	42f77b0cce686dfa4da2e68480b1dd24  ujson-1.35.tar.gz
-+sha256	f66073e5506e91d204ab0c614a148d5aa938bdbf104751be66f8ad7a222f5f86  ujson-1.35.tar.gz
-diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913, sha256 locally computed.
++md5	b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
++sha256	ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
 new file mode 100644
-index 0000000..8d4a12b
+index 0000000..dc3e8bb
 --- /dev/null
-+++ b/package/python-ujson/python-ujson.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-characteristic/python-characteristic.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-ujson
++# python-characteristic
 +#
 +################################################################################
 +
-+PYTHON_UJSON_VERSION = 1.35
-+PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
-+PYTHON_UJSON_SITE = http://pypi.python.org/packages/source/u/ujson
-+PYTHON_UJSON_LICENSE = BSD-3c
-+PYTHON_UJSON_SETUP_TYPE = setuptools
++PYTHON_CHARACTERISTIC_VERSION = 14.3.0
++PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
++PYTHON_CHARACTERISTIC_SITE = http://pypi.python.org/packages/source/c/characteristic
++PYTHON_CHARACTERISTIC_LICENSE = MIT
++PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
++PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
