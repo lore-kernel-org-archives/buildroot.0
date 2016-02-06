@@ -1,38 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 6 Feb 2016 21:24:51 +0100
-Subject: [Buildroot] [PATCH v2] pandaboard_defconfig: bump u-boot to
- 2015.10 and kernel to 4.3
-In-Reply-To: <1452250251-9442-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1452250251-9442-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20160206212451.21d0b116@free-electrons.com>
+Date: Sat, 6 Feb 2016 21:25:27 +0100
+Subject: [Buildroot] [git commit] configs: update
+	freescale_imx6qsabreauto_defconfig kernel version
+Message-ID: <20160206202545.C663F8040A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f970415ca99487ca0fa180c5eadbba65afc7945
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  8 Jan 2016 08:50:51 -0200, Sergio Prado wrote:
-> VFPv3 and NEON was enabled and a readme.txt file was added.
-> 
-> Fixes bug #7580.
-> 
-> Tested on Pandaboard ES.
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Jan Sarenik <jan.sarenik@ysoft.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/freescale_imx6qsabreauto_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this patch. Could you rebase it on master ? All defconfigs
-have been touched by a recent change from Yann E. Morin.
-
-Note that all defconfigs should now use the "use kernel headers from
-kernel" mechanism. See
-https://git.busybox.net/buildroot/commit/?id=674e09967818bf49fd1b6bf1f986a4c0f917fa63.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
+index e94e114..c721f4a 100644
+--- a/configs/freescale_imx6qsabreauto_defconfig
++++ b/configs/freescale_imx6qsabreauto_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
