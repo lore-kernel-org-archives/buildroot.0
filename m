@@ -1,28 +1,21 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 6 Feb 2016 11:16:00 +0100
-Subject: [Buildroot] [git commit] thrift: remove BR2_ARCH_HAS_ATOMICS
-	dependency
-Message-ID: <20160206101652.31D8880771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libtorrent: use the proper
+	BR2_TOOLCHAIN_HAS_SYNC_x symbols
+Message-ID: <20160206101651.E35C980771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a98a7d94caf3480b07d188973c367c97430f6ce
+commit: https://git.buildroot.net/buildroot/commit/?id=9a6a13469c409cdcc059c2176e8de25a70f074fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-thrift builds perfectly fine on SPARC, which doesn't implement any of
-the __sync built-ins, so we can get rid of the BR2_ARCH_HAS_ATOMICS
-dependency.
-
-The dependency on atomic operations originated in commit
-1aaa14d84f1c920423ed0286b78f64a2b4b2b575 ("thrift: disable for ARC"),
-but there was no reference to any autobuilder failure. Our testing
-with an ARC toolchain that doesn't have atomics shows that thrift
-builds just fine, and code inspection also shows no usage of
-__sync_*() built-ins. At the time of the commit, the thrift version
-was 0.9.1, which also did not contain any __sync_*() call.
+libtorrent uses 1 bytes and 4 bytes __sync built-ins, so let's use the
+appropriate BR2_TOOLCHAIN_HAS_SYNC_x symbols instead of
+BR2_ARCH_HAS_ATOMICS. The rtorrent package, which is a reverse
+dependency of libtorrent, gets fixed as well.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
@@ -30,26 +23,47 @@ Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  atomics, with CPU 770D]
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/thrift/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/libtorrent/Config.in | 4 ++--
+ package/rtorrent/Config.in   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/thrift/Config.in b/package/thrift/Config.in
-index b9960f8..54ca9b8 100644
---- a/package/thrift/Config.in
-+++ b/package/thrift/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_THRIFT
+diff --git a/package/libtorrent/Config.in b/package/libtorrent/Config.in
+index 17a1f23..4787f9c 100644
+--- a/package/libtorrent/Config.in
++++ b/package/libtorrent/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBTORRENT
+ 	bool "libtorrent"
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
  	depends on BR2_TOOLCHAIN_HAS_THREADS
 -	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBEVENT
-@@ -20,7 +19,6 @@ config BR2_PACKAGE_THRIFT
- 	  http://thrift.apache.org/
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  BitTorrent library written in C++ for *nix
+@@ -10,5 +10,5 @@ config BR2_PACKAGE_LIBTORRENT
+ 	  https://github.com/rakshasa/libtorrent
  
- comment "thrift needs a toolchain w/ C++, wchar, threads"
+ comment "libtorrent needs a toolchain w/ C++, threads"
 -	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/rtorrent/Config.in b/package/rtorrent/Config.in
+index 0583152..190e50f 100644
+--- a/package/rtorrent/Config.in
++++ b/package/rtorrent/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_RTORRENT
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+-	depends on BR2_ARCH_HAS_ATOMICS # libtorrent
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_LIBTORRENT
+ 	select BR2_PACKAGE_NCURSES
+@@ -16,5 +16,5 @@ config BR2_PACKAGE_RTORRENT
+ 
+ comment "rtorrent needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
