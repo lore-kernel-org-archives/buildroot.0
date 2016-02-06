@@ -1,139 +1,125 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Fri, 5 Feb 2016 16:19:29 -0800
-Subject: [Buildroot] [PATCH 2/2] Add Xen 4.6
-In-Reply-To: <1454717969-30723-1-git-send-email-alistair.francis@xilinx.com>
-References: <1454717969-30723-1-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <1454717969-30723-3-git-send-email-alistair.francis@xilinx.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Fri, 05 Feb 2016 23:47:15 -0200
+Subject: [Buildroot] [PATCH] bind: fix intermittent build issues with
+ high BR2_JLEVEL
+Message-ID: <56b550a3201b3_2ad51a8810c9556f@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support to compile Xen 4.6 and Xen tools.
+Hi all,
 
-Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
----
- package/Config.in     |  1 +
- package/xen/Config.in | 31 +++++++++++++++++++++++++++++++
- package/xen/xen.hash  |  2 ++
- package/xen/xen.mk    | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 83 insertions(+)
- create mode 100644 package/xen/Config.in
- create mode 100644 package/xen/xen.hash
- create mode 100644 package/xen/xen.mk
+On Fri, 5 Feb 2016 15:49:43 +0100, Thomas De Schampheleire wrote:
+> On Wed, Jan 6, 2016 at 10:10 PM, Thomas De Schampheleire
+> <patrickdepinguin@gmail.com> wrote:
+>> Hi Thomas,
+>>
+>> On Fri, Nov 6, 2015 at 10:19 AM, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>>> Jan,
+>>>
+>>> On Fri, 6 Nov 2015 08:04:35 +0100, Jan Heylen wrote:
+>>>
+>>>> > I am not sure it is appropriate to send a patch in the name of someone
+>>>> > else. Maybe you're taking one of Peter's previous commit, and
+>>>> > re-applying it, but the context is different, so I believe it should be
+>>>> > under your own name.
+>>>> >
+>>>> OK, just wanted to point out it is the same issue (and the same solution).
+>>>
+>>> OK.
+>>>
+>>>
+>>>> make[1]: Leaving directory `<CUT>/output/build/bind-9.9.7'
+>>>> make: *** [<CUT>/output/build/bind-9.9.7/.stamp_built] Error 2
+>>>>
+>>>> How often are you able to reproduce it ? On what type of build machine ?
+>>
+>> We saw this issue from time to time. Definitely not always, but also
+>> definitely more than once. I don't have exact figures.
+>>
+>>>> >
+>>>>
+>>>> We are on the  2015.05, Released May 31st, 2015 Buildroot release.
+>>>
+>>> On master, we updated bind to 9.9.8. Do you also reproduce the issue
+>>> with bind 9.9.8 ?
+>>>
+>>> What I find weird is that our autobuilder infrastructure generally
+>>> catches pretty well the parallel build issues. And we currently have
+>>> zero failures on bind 9.9.7 and bind 9.9.8:
+>>>
+>>>   http://autobuild.buildroot.org/?reason=bind-9.9.7
+>>>   http://autobuild.buildroot.org/?reason=bind-9.9.8
 
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..4227195 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1616,6 +1616,7 @@ endif
- 	source "package/tpm-tools/Config.in"
- 	source "package/unscd/Config.in"
- 	source "package/util-linux/Config.in"
-+	source "package/xen/Config.in"
- endmenu
- 
- menu "Text editors and viewers"
-diff --git a/package/xen/Config.in b/package/xen/Config.in
-new file mode 100644
-index 0000000..28da69c
---- /dev/null
-+++ b/package/xen/Config.in
-@@ -0,0 +1,31 @@
-+config BR2_PACKAGE_XEN
-+ bool "xen"
-+ depends on BR2_arm || BR2_aarch64 || \
-+ BR2_i386 || BR2_x86_64
-+ depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+ depends on !BR2_STATIC_LIBS # dtc (libfdt)
-+ depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+ depends on BR2_USE_WCHAR # libglib2, util-linux
-+ select BR2_PACKAGE_DTC
-+ select BR2_PACKAGE_LIBAIO
-+ select BR2_PACKAGE_LIBGLIB2
-+ select BR2_PACKAGE_NCURSES
-+ select BR2_PACKAGE_OPENSSL
-+ select BR2_PACKAGE_PIXMAN
-+ select BR2_PACKAGE_UTIL_LINUX
-+ select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+ select BR2_PACKAGE_YAJL
-+ help
-+  This builds the Xen hypervisor and toolstack
-+
-+  http://www.xenproject.org/
-+
-+if BR2_PACKAGE_XEN
-+
-+config BR2_PACKAGE_XEN_HYPERVISOR
-+ bool "Build the Xen hypervisor"
-+
-+config BR2_PACKAGE_XEN_TOOLS
-+ bool "Build the Xen tools"
-+endif
-+
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-new file mode 100644
-index 0000000..c124b3a
---- /dev/null
-+++ b/package/xen/xen.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 6fa1c2431df55aa5950d248e6093b8c8c0f11c357a0adbd348a2186478e80909 xen-4.6.0.tar.gz
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-new file mode 100644
-index 0000000..4331136
---- /dev/null
-+++ b/package/xen/xen.mk
-@@ -0,0 +1,49 @@
-+################################################################################
-+#
-+# Xen
-+#
-+################################################################################
-+
-+XEN_VERSION = 4.6.0
-+XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
-+XEN_INSTALL_IMAGES = YES
-+
-+XEN_DEPENDENCIES += dtc libaio libglib2 ncurses openssl pixman util-linux yajl
-+
-+XEN_MAKE_ENV = \
-+ XEN_TARGET_ARCH=arm64 \
-+ CROSS_COMPILE=$(TARGET_CROSS) \
-+ CXXFLAGS="$(TARGET_CXXFLAGS) -D_FILE_OFFSET_BITS=64" \
-+ CFLAGS="$(TARGET_CFLAGS) -D_FILE_OFFSET_BITS=64" \
-+ PKG_CONFIG=$(PKG_CONFIG_HOST_BINARY)
-+
-+XEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR)
-+
-+ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
-+XEN_MAKE_OPTS += dist-xen
-+
-+define XEN_INSTALL_IMAGES_CMDS
-+ cp $(@D)/xen/xen $(BINARIES_DIR)
-+endef
-+else
-+XEN_CONF_OPTS += --disable-xen
-+endif
-+
-+XEN_CONF_OPTS += --disable-ocamltools
-+
-+ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
-+XEN_MAKE_OPTS += dist-tools
-+XEN_INSTALL_TARGET_OPTS += install-tools
-+
-+define XEN_RENAME_INIT_SCRIPTS
-+ mv $(TARGET_DIR)/etc/init.d/xencommons $(TARGET_DIR)/etc/init.d/S50xencommons
-+ mv $(TARGET_DIR)/etc/init.d/xen-watchdog $(TARGET_DIR)/etc/init.d/S50xen-watchdog
-+ mv $(TARGET_DIR)/etc/init.d/xendomains $(TARGET_DIR)/etc/init.d/S60xendomains
-+endef
-+else
-+XEN_CONF_OPTS += --disable-tools
-+endif
-+
-+XEN_POST_INSTALL_TARGET_HOOKS += XEN_RENAME_INIT_SCRIPTS
-+
-+$(eval $(autotools-package))
--- 
-2.5.0
+The error was caught later:
+http://autobuild.buildroot.org/results/220/2201f04170ea8ef0961e907efce07c041a57c229/
+
+So "Fixes:" can now be added to the commit log.
+
+>>>
+>>>
+>>>> We do build multiple defconfigs (up to 8) (in separate buildroot working
+>>>> folders) at once on the same machine. But I see from the buildroot output
+>>>> that BR2_JLEVEL is set to '9' (cores +1) for each of these jobs?
+>>>
+>>> That's expected if you have left BR2_JLEVEL to its default of 0.
+>>>
+>>>> >>> bind 9.9.7 Building
+>>>> PATH="<CUT>/output/host/bin:<CUT>/output/host/sbin:<CUT>/output/host/usr/bin:<CUT>/output/host/usr/sbin:/usr/local/bin:/usr/bin"
+>>>>  /usr/bin/make -j9  -C <CUT>/output/build/bind-9.9.7/
+>>>> make[1]: Entering directory `<CUT>/output/build/bind-9.9.7'
+>>>> making all in <CUT>/output/build/bind-9.9.7/make
+>>>>
+>>>>
+>>>> Maybe the exact condition is to have multiple buildroot jobs (8) on 8 cores
+>>>> with BR2_JLEVEL set to 8 (so 8*8 = 64 'jobs').
+>>>>
+>>>> So we might optimize that on our side ;-), but still it shouldn't trigger
+>>>> this error?
+>>>
+>>> It should trigger this error indeed.
+>>
+>> From the bind website:
+>> https://kb.isc.org/article/AA-00291/46/Im-trying-to-compile-BIND-9-and-make-is-failing-due-to-files-not-being-found.-Why-.html
+>>
+>> "Using a parallel or distributed "make" to build BIND 9 is not
+>> supported, and doesn't work. If you are using one of these, use normal
+>> make or gmake instead."
+
+Also, from the README file inside the bind package:
+"
+	To build, just
+
+		./configure
+		make
+
+	Do not use a parallel "make".
+"
+So, the solution is the correct one:
+
+On Nov. 5, 2015, 10:57 a.m, Jan Heylen wrote:
+>  BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+> +BIND_MAKE = $(MAKE1)
+>  BIND_INSTALL_STAGING = YES
+
+Even better would be to also have a comment, like this one
+http://patchwork.ozlabs.org/patch/579348/
+On Fri, Feb 05, 2016 at 12:39 AM, Doug Kehn <rdkehn@yahoo.com> wrote:
+> +# bind does not support parallel builds.
+> +DHCP_MAKE = $(MAKE1)
+
+On Fri, 5 Feb 2016 15:49:43 +0100, Thomas De Schampheleire wrote:
+>>
+>> Based on our observed failures and the above upstream message that
+>> parallel make is not supported, shouldn't we take that into account in
+>> buildroot (and thus applying this patch) ?
+>>
+> 
+> Ping... I think this should go in for the release.
+> I should have discussed this on the Buildroot days, but forgot...
+
+Regards,
+Ricardo
