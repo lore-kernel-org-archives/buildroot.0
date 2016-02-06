@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat,  6 Feb 2016 23:59:48 +0100
-Subject: [Buildroot] [PATCH v4 02/17] python-pycparser: python runtime added
+Date: Sat,  6 Feb 2016 23:59:52 +0100
+Subject: [Buildroot] [PATCH v4 06/17] python-pytrie: new package
 In-Reply-To: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454799603-5474-3-git-send-email-mc5686@mclink.it>
+Message-ID: <1454799603-5474-7-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,46 +11,74 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+
 ---
- package/Config.in                            | 1 +
- package/python-pycparser/Config.in           | 6 ++++++
- package/python-pycparser/python-pycparser.mk | 1 +
- 3 files changed, 8 insertions(+)
- create mode 100644 package/python-pycparser/Config.in
+Changes v3 -> v4
+  - removed spurious blank line at end of Config.in (suggested by Y.Yefremov)
+
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ package/Config.in                        |  1 +
+ package/python-pytrie/Config.in          |  6 ++++++
+ package/python-pytrie/python-pytrie.hash |  3 +++
+ package/python-pytrie/python-pytrie.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/python-pytrie/Config.in
+ create mode 100644 package/python-pytrie/python-pytrie.hash
+ create mode 100644 package/python-pytrie/python-pytrie.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c2698ea..3b3526c 100644
+index fb1ef75..9b620e6 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -679,6 +679,7 @@ menu "External python modules"
- 	source "package/python-psutil/Config.in"
- 	source "package/python-pyasn/Config.in"
- 	source "package/python-pycli/Config.in"
-+	source "package/python-pycparser/Config.in"
- 	source "package/python-pycrypto/Config.in"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pyftpdlib/Config.in"
-diff --git a/package/python-pycparser/Config.in b/package/python-pycparser/Config.in
+@@ -700,6 +700,7 @@ menu "External python modules"
+ 	source "package/python-pysnmp/Config.in"
+ 	source "package/python-pysnmp-apps/Config.in"
+ 	source "package/python-pysnmp-mibs/Config.in"
++	source "package/python-pytrie/Config.in"
+ 	source "package/python-pyudev/Config.in"
+ 	source "package/python-pyusb/Config.in"
+ 	source "package/python-pyxb/Config.in"
+diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
 new file mode 100644
-index 0000000..49190c3
+index 0000000..fb1df41
 --- /dev/null
-+++ b/package/python-pycparser/Config.in
++++ b/package/python-pytrie/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYCPARSER
-+	bool "python-pycparser"
++config BR2_PACKAGE_PYTHON_PYTRIE
++	bool "python-pytrie"
 +	help
-+	  C parser in Python
++	  A pure Python implementation of the trie data structure.
 +
-+	  https://github.com/eliben/pycparser
-diff --git a/package/python-pycparser/python-pycparser.mk b/package/python-pycparser/python-pycparser.mk
-index 328bc8a..a32f1aa 100644
---- a/package/python-pycparser/python-pycparser.mk
-+++ b/package/python-pycparser/python-pycparser.mk
-@@ -11,4 +11,5 @@ PYTHON_PYCPARSER_SETUP_TYPE = setuptools
- PYTHON_PYCPARSER_LICENSE = BSD-3c
- PYTHON_PYCPARSER_LICENSE_FILES = LICENSE
- 
++	  https://pypi.python.org/pypi/PyTrie
+diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
+new file mode 100644
+index 0000000..88d2542
+--- /dev/null
++++ b/package/python-pytrie/python-pytrie.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
++md5	5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
++sha256	b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
+diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
+new file mode 100644
+index 0000000..e3bea4f
+--- /dev/null
++++ b/package/python-pytrie/python-pytrie.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pytrie
++#
++################################################################################
++
++PYTHON_PYTRIE_VERSION = 0.2
++PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
++PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
++PYTHON_PYTRIE_LICENSE = BSD-3c
++PYTHON_PYTRIE_LICENSE_FILES = LICENSE
++PYTHON_PYTRIE_SETUP_TYPE = distutils
++
 +$(eval $(python-package))
- $(eval $(host-python-package))
 -- 
 2.1.4
