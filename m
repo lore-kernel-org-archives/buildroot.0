@@ -1,9 +1,9 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sun,  7 Feb 2016 00:00:01 +0100
-Subject: [Buildroot] [PATCH v4 15/17] python-setproctitle: new package
+Date: Sun,  7 Feb 2016 00:00:02 +0100
+Subject: [Buildroot] [PATCH v4 16/17] python-autobahn: new package
 In-Reply-To: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454799603-5474-16-git-send-email-mc5686@mclink.it>
+Message-ID: <1454799603-5474-17-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,73 +11,69 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-
 ---
-Changes v3 -> v4
-  - removed spurious dependency to python2 Config.in (suggested by Y.Yefremov)
-
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/Config.in                                    |  1 +
- package/python-setproctitle/Config.in                |  6 ++++++
- package/python-setproctitle/python-setproctitle.hash |  3 +++
- package/python-setproctitle/python-setproctitle.mk   | 14 ++++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/python-setproctitle/Config.in
- create mode 100644 package/python-setproctitle/python-setproctitle.hash
- create mode 100644 package/python-setproctitle/python-setproctitle.mk
+ package/Config.in                            |  1 +
+ package/python-autobahn/Config.in            |  8 ++++++++
+ package/python-autobahn/python-autobahn.hash |  3 +++
+ package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-autobahn/Config.in
+ create mode 100644 package/python-autobahn/python-autobahn.hash
+ create mode 100644 package/python-autobahn/python-autobahn.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 7bda8d7..adb4188 100644
+index adb4188..0ee5577 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -711,6 +711,7 @@ menu "External python modules"
- 	source "package/python-rtslib-fb/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-service-identity/Config.in"
-+	source "package/python-setproctitle/Config.in"
- 	source "package/python-setuptools/Config.in"
- 	source "package/python-shutilwhich/Config.in"
- 	source "package/python-simplejson/Config.in"
-diff --git a/package/python-setproctitle/Config.in b/package/python-setproctitle/Config.in
+@@ -618,6 +618,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
++	source "package/python-autobahn/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bottle/Config.in"
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
 new file mode 100644
-index 0000000..d13afaa
+index 0000000..cdb2baf
 --- /dev/null
-+++ b/package/python-setproctitle/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SETPROCTITLE
-+	bool "python-setproctitle"
++++ b/package/python-autobahn/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_AUTOBAHN
++	bool "python-autobahn"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_TXAIO # runtime
 +	help
-+	  A Python module to customize the process title.
++	  WebSocket client Hhh server library, WAMP real-time framework.
 +
-+	  https://pypi.python.org/pypi/setproctitle
-diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
++	  https://pypi.python.org/pypi/autobahn
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
 new file mode 100644
-index 0000000..3b0fd71
+index 0000000..8f55ac1
 --- /dev/null
-+++ b/package/python-setproctitle/python-setproctitle.hash
++++ b/package/python-autobahn/python-autobahn.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=95d9e56c69437246460a20804961d70d, sha256 locally computed.
-+md5	95d9e56c69437246460a20804961d70d  setproctitle-1.1.9.tar.gz
-+sha256	1c3414d18f9cacdab78b0ffd8e886d56ad45f22e55001a72aaa0b2aeb56a0ad7  setproctitle-1.1.9.tar.gz
-diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
++md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
++sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
 new file mode 100644
-index 0000000..63dfad0
+index 0000000..1d02867
 --- /dev/null
-+++ b/package/python-setproctitle/python-setproctitle.mk
++++ b/package/python-autobahn/python-autobahn.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-setproctitle
++# python-autobahn
 +#
 +################################################################################
 +
-+PYTHON_SETPROCTITLE_VERSION = 1.1.9
-+PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
-+PYTHON_SETPROCTITLE_SITE = http://pypi.python.org/packages/source/s/setproctitle
-+PYTHON_SETPROCTITLE_LICENSE = BSD-3c
-+PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
-+PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
++PYTHON_AUTOBAHN_VERSION = 0.12.1
++PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
++PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
++PYTHON_AUTOBAHN_LICENSE = MIT
++PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
++PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
