@@ -1,146 +1,89 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat,  6 Feb 2016 23:59:46 +0100
-Subject: [Buildroot] [PATCH v4 00/17] changes needed for python-crossbar
-	package (new)
-Message-ID: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
+Date: Sat,  6 Feb 2016 23:59:51 +0100
+Subject: [Buildroot] [PATCH v4 05/17] python-pynacl: new package
+In-Reply-To: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
+References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
+Message-ID: <1454799603-5474-6-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These are the python packeges needed to successfully comile, install and run python-crossbar.
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
-Crossbar is is an open-source WAMP application router that allows to build advanced.
-applications from loosely-coupled components that can talk in real-time with each other.
+---
+Changes v3 -> v4
+  - removed spurious "source" line in package/Config.in (suggested by T.Petazzoni)
 
-Further info about crossbar can be found at: http://crossbar.io/
-
-I changed patches to accommdate suggestions by Y.Yefremov
-
-Mauro Condarelli (16):
-  python-characteristic: new package
-  python-pycparser: python runtime added
-  python-lmdb: new package
-  python-pygments: new package
-  python-pynacl: new package
-  python-pytrie: new package
-  python-service-identity: new package
-  python-shutilwhich: new package
-  python-treq: new package
-  python-txaio: new package
-  python-pyasn-modules: new package
-  python-ujson: new package
-  python-wsaccel: new package
-  python-setproctitle: new package
-  python-autobahn: new package
-  python-crossbar: new package
-
-Yegor Yefremov (1):
-  python-cryptography: new package
-
- .gitignore                                         |  1 +
- package/Config.in                                  | 16 ++++++++++
- package/python-autobahn/Config.in                  |  8 +++++
- package/python-autobahn/python-autobahn.hash       |  3 ++
- package/python-autobahn/python-autobahn.mk         | 14 ++++++++
- package/python-characteristic/Config.in            |  6 ++++
- .../python-characteristic.hash                     |  3 ++
- .../python-characteristic/python-characteristic.mk | 14 ++++++++
- package/python-crossbar/Config.in                  | 37 ++++++++++++++++++++++
- package/python-crossbar/python-crossbar.hash       |  3 ++
- package/python-crossbar/python-crossbar.mk         | 14 ++++++++
- package/python-cryptography/Config.in              | 20 ++++++++++++
- .../python-cryptography/python-cryptography.hash   |  3 ++
- package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++
- package/python-lmdb/Config.in                      |  7 ++++
- package/python-lmdb/python-lmdb.hash               |  3 ++
- package/python-lmdb/python-lmdb.mk                 | 14 ++++++++
- package/python-pyasn-modules/Config.in             | 11 +++++++
- .../python-pyasn-modules/python-pyasn-modules.hash |  3 ++
- .../python-pyasn-modules/python-pyasn-modules.mk   | 14 ++++++++
- package/python-pycparser/Config.in                 |  6 ++++
- package/python-pycparser/python-pycparser.mk       |  1 +
- package/python-pygments/Config.in                  |  6 ++++
- package/python-pygments/python-pygments.hash       |  3 ++
- package/python-pygments/python-pygments.mk         | 14 ++++++++
- package/python-pynacl/Config.in                    |  9 ++++++
- package/python-pynacl/python-pynacl.hash           |  3 ++
- package/python-pynacl/python-pynacl.mk             | 16 ++++++++++
- package/python-pytrie/Config.in                    |  6 ++++
- package/python-pytrie/python-pytrie.hash           |  3 ++
- package/python-pytrie/python-pytrie.mk             | 14 ++++++++
- package/python-service-identity/Config.in          | 10 ++++++
- .../python-service-identity.hash                   |  3 ++
- .../python-service-identity.mk                     | 15 +++++++++
- package/python-setproctitle/Config.in              |  6 ++++
- .../python-setproctitle/python-setproctitle.hash   |  3 ++
- package/python-setproctitle/python-setproctitle.mk | 14 ++++++++
- package/python-shutilwhich/Config.in               |  7 ++++
- package/python-shutilwhich/python-shutilwhich.hash |  3 ++
- package/python-shutilwhich/python-shutilwhich.mk   | 13 ++++++++
- package/python-treq/Config.in                      | 12 +++++++
- package/python-treq/python-treq.hash               |  3 ++
- package/python-treq/python-treq.mk                 | 14 ++++++++
- package/python-txaio/Config.in                     |  7 ++++
- package/python-txaio/python-txaio.hash             |  3 ++
- package/python-txaio/python-txaio.mk               | 14 ++++++++
- package/python-ujson/Config.in                     |  7 ++++
- package/python-ujson/python-ujson.hash             |  3 ++
- package/python-ujson/python-ujson.mk               | 13 ++++++++
- package/python-wsaccel/Config.in                   |  6 ++++
- package/python-wsaccel/python-wsaccel.hash         |  3 ++
- package/python-wsaccel/python-wsaccel.mk           | 13 ++++++++
- 52 files changed, 470 insertions(+)
- create mode 100644 package/python-autobahn/Config.in
- create mode 100644 package/python-autobahn/python-autobahn.hash
- create mode 100644 package/python-autobahn/python-autobahn.mk
- create mode 100644 package/python-characteristic/Config.in
- create mode 100644 package/python-characteristic/python-characteristic.hash
- create mode 100644 package/python-characteristic/python-characteristic.mk
- create mode 100644 package/python-crossbar/Config.in
- create mode 100644 package/python-crossbar/python-crossbar.hash
- create mode 100644 package/python-crossbar/python-crossbar.mk
- create mode 100644 package/python-cryptography/Config.in
- create mode 100644 package/python-cryptography/python-cryptography.hash
- create mode 100644 package/python-cryptography/python-cryptography.mk
- create mode 100644 package/python-lmdb/Config.in
- create mode 100644 package/python-lmdb/python-lmdb.hash
- create mode 100644 package/python-lmdb/python-lmdb.mk
- create mode 100644 package/python-pyasn-modules/Config.in
- create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
- create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
- create mode 100644 package/python-pycparser/Config.in
- create mode 100644 package/python-pygments/Config.in
- create mode 100644 package/python-pygments/python-pygments.hash
- create mode 100644 package/python-pygments/python-pygments.mk
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+---
+ package/Config.in                        |  1 +
+ package/python-pynacl/Config.in          |  9 +++++++++
+ package/python-pynacl/python-pynacl.hash |  3 +++
+ package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
+ 4 files changed, 29 insertions(+)
  create mode 100644 package/python-pynacl/Config.in
  create mode 100644 package/python-pynacl/python-pynacl.hash
  create mode 100644 package/python-pynacl/python-pynacl.mk
- create mode 100644 package/python-pytrie/Config.in
- create mode 100644 package/python-pytrie/python-pytrie.hash
- create mode 100644 package/python-pytrie/python-pytrie.mk
- create mode 100644 package/python-service-identity/Config.in
- create mode 100644 package/python-service-identity/python-service-identity.hash
- create mode 100644 package/python-service-identity/python-service-identity.mk
- create mode 100644 package/python-setproctitle/Config.in
- create mode 100644 package/python-setproctitle/python-setproctitle.hash
- create mode 100644 package/python-setproctitle/python-setproctitle.mk
- create mode 100644 package/python-shutilwhich/Config.in
- create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
- create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
- create mode 100644 package/python-treq/Config.in
- create mode 100644 package/python-treq/python-treq.hash
- create mode 100644 package/python-treq/python-treq.mk
- create mode 100644 package/python-txaio/Config.in
- create mode 100644 package/python-txaio/python-txaio.hash
- create mode 100644 package/python-txaio/python-txaio.mk
- create mode 100644 package/python-ujson/Config.in
- create mode 100644 package/python-ujson/python-ujson.hash
- create mode 100644 package/python-ujson/python-ujson.mk
- create mode 100644 package/python-wsaccel/Config.in
- create mode 100644 package/python-wsaccel/python-wsaccel.hash
- create mode 100644 package/python-wsaccel/python-wsaccel.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 7b5c747..fb1ef75 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -687,6 +687,7 @@ menu "External python modules"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pygments/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pynacl/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pypcap/Config.in"
+diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+new file mode 100644
+index 0000000..5a53648
+--- /dev/null
++++ b/package/python-pynacl/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYNACL
++	bool "python-pynacl"
++	select BR2_PACKAGE_LIBSODIUM
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
++	help
++	  Python binding to the Networking and Cryptography (NaCl) library.
++
++	  https://pypi.python.org/pypi/PyNaCl
+diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
+new file mode 100644
+index 0000000..7035ac7
+--- /dev/null
++++ b/package/python-pynacl/python-pynacl.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
++md5	12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
++sha256	d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
+diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
+new file mode 100644
+index 0000000..e82611e
+--- /dev/null
++++ b/package/python-pynacl/python-pynacl.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# python-pynacl
++#
++################################################################################
++
++PYTHON_PYNACL_VERSION = 1.0.1
++PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
++PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
++PYTHON_PYNACL_LICENSE = Apache-2.0
++PYTHON_PYNACL_LICENSE_FILES = LICENSE
++PYTHON_PYNACL_SETUP_TYPE = setuptools
++PYTHON_PYNACL_DEPENDENCIES = libsodium python-six
++PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
++
++$(eval $(python-package))
 -- 
 2.1.4
