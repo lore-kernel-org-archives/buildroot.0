@@ -1,219 +1,751 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 6 Feb 2016 11:16:00 +0100
-Subject: [Buildroot] [git commit] arch: remove BR2_ARCH_HAS_ATOMICS option
-Message-ID: <20160206101652.5C3EE80771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cairo, harfbuzz: rework atomic dependencies
+Message-ID: <20160206101652.1831180771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a3f597a0ea3392bbd1063c40291743955309472
+commit: https://git.buildroot.net/buildroot/commit/?id=e64573c47faa4c60d2c331a3f3d677b89b096a29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that BR2_ARCH_HAS_ATOMICS is no longer used anywhere, we can
-remove it from arch/Config.in*, as well as from the documentation.
+This commit handles the reverse dependency tree of cairo in terms of
+atomic dependencies. There are two main changes:
+
+ - cairo in fact no longer needs atomic operations. It can perfectly
+   build without any __sync built-in, as was tested using an ARC
+   toolchain without atomics, and a SPARC toolchain. Optionally, Cairo
+   can use the __atomic builtins provided by gcc >= 4.7, so support
+   for this is added as well. Thanks to this change, the
+   BR2_ARCH_HAS_ATOMICS dependency is removed from cairo and all its
+   reverse dependencies.
+
+ - harfbuzz does require the __sync built-in for 4 bytes integers, so
+   we add a dependency on BR2_TOOLCHAIN_HAS_SYNC_4 to harfbuzz and all
+   its reverse dependency, the main one being the pango package. Due
+   to this, the vast majority of gtk-related packages are moved to a
+   dependency on BR2_ARCH_HAS_ATOMICS (which used to be due to cairo)
+   to a dependency on BR2_TOOLCHAIN_HAS_SYNC_4 (due to pango ->
+   harfbuzz).
+
+In detail:
+
+ - cairo
+
+   Remove BR2_ARCH_HAS_ATOMICS dependency, link against -latomic when
+   gcc >= 4.8 in order to use the __atomic functions.
+
+ - harfbuzz
+
+   Add dependency on BR2_TOOLCHAIN_HAS_SYNC_4
+
+ - cairomm, gst-plugins-good, gst1-plugins-good, libgdiplus,
+   libsvg-cairo, weston
+
+   Remove BR2_ARCH_HAS_ATOMICS dependency (since cairo no longer needs
+   atomics)
+
+ - enlightenment, cwiid, gst-plugins-bad, gst-plugins-base,
+   gst1-plugins-bad, gst1-plugins-base, gtkmm3,
+   libevas-generic-loaders, libfm, libgail, libgtk2, libgtk3, librsvg,
+   openbox, opencv, opencv3, pango, pangomm, pcmanfm, pinentry,
+   rrdtool, webkit, webkitgtk24, xscreensaver
+
+   Switch from a BR2_ARCH_HAS_ATOMICS dependency to a
+   BR2_TOOLCHAIN_HAS_SYNC_4 (they depend on pango, harfbuzz, gtk, or
+   some other related package)
+
+ - directfb
+
+   Remove BR2_ARCH_ATOMICS dependency of the BR2_PACKAGE_DIRECTFB_SVG
+   (since cairo can build without atomics), but add a
+   BR2_TOOLCHAIN_HAS_SYNC_4 dependency on BR2_PACKAGE_DIRECTFB itself
+   since it does use __sync built-ins. This replaces the !BR2_sparc
+   dependency.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- arch/Config.in                            | 4 ----
- arch/Config.in.aarch64                    | 3 ---
- arch/Config.in.arc                        | 3 ---
- arch/Config.in.arm                        | 3 ---
- arch/Config.in.bfin                       | 3 ---
- arch/Config.in.m68k                       | 3 ---
- arch/Config.in.microblaze                 | 3 ---
- arch/Config.in.mips                       | 3 ---
- arch/Config.in.nios2                      | 3 ---
- arch/Config.in.powerpc                    | 3 ---
- arch/Config.in.sh                         | 3 ---
- arch/Config.in.x86                        | 3 ---
- arch/Config.in.xtensa                     | 3 ---
- docs/manual/adding-packages-directory.txt | 5 -----
- 14 files changed, 45 deletions(-)
+ package/cairo/Config.in                        | 1 -
+ package/cairo/cairo.mk                         | 6 ++++++
+ package/cairomm/Config.in                      | 2 --
+ package/cwiid/Config.in                        | 2 +-
+ package/directfb/Config.in                     | 5 ++---
+ package/enlightenment/Config.in                | 6 +++---
+ package/gstreamer/gst-plugins-bad/Config.in    | 4 ++--
+ package/gstreamer/gst-plugins-base/Config.in   | 4 ++--
+ package/gstreamer/gst-plugins-good/Config.in   | 1 -
+ package/gstreamer1/gst1-plugins-bad/Config.in  | 4 ++--
+ package/gstreamer1/gst1-plugins-base/Config.in | 4 ++--
+ package/gstreamer1/gst1-plugins-good/Config.in | 1 -
+ package/gtkmm3/Config.in                       | 4 ++--
+ package/harfbuzz/Config.in                     | 2 ++
+ package/libevas-generic-loaders/Config.in      | 4 ++--
+ package/libfm/Config.in                        | 4 ++--
+ package/libgail/Config.in                      | 4 ++--
+ package/libgdiplus/Config.in                   | 2 --
+ package/libgtk2/Config.in                      | 4 ++--
+ package/libgtk3/Config.in                      | 4 ++--
+ package/librsvg/Config.in                      | 4 ++--
+ package/libsvg-cairo/Config.in                 | 1 -
+ package/openbox/Config.in                      | 4 ++--
+ package/opencv/Config.in                       | 2 +-
+ package/opencv3/Config.in                      | 4 ++--
+ package/pango/Config.in                        | 4 ++--
+ package/pangomm/Config.in                      | 4 ++--
+ package/pcmanfm/Config.in                      | 4 ++--
+ package/pinentry/Config.in                     | 4 ++--
+ package/rrdtool/Config.in                      | 2 +-
+ package/webkit/Config.in                       | 4 ++--
+ package/webkitgtk24/Config.in                  | 4 ++--
+ package/weston/Config.in                       | 2 --
+ package/xscreensaver/Config.in                 | 4 ++--
+ 34 files changed, 56 insertions(+), 59 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 4cdd54e..401bd28 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -284,10 +284,6 @@ config BR2_GCC_TARGET_FLOAT_ABI
- config BR2_GCC_TARGET_MODE
- 	string
+diff --git a/package/cairo/Config.in b/package/cairo/Config.in
+index 38570d6..0c87a29 100644
+--- a/package/cairo/Config.in
++++ b/package/cairo/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_CAIRO
+ 	bool "cairo"
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	select BR2_PACKAGE_PIXMAN
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index d80d068..205250d 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -16,6 +16,12 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+ CAIRO_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DCAIRO_NO_MUTEX=1"
+ endif
  
--# If the architecture has atomic operations, select this:
--config BR2_ARCH_HAS_ATOMICS
--	bool
--
- # Must be selected by binary formats that support shared libraries.
- config BR2_BINFMT_SUPPORTS_SHARED
- 	bool
-diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
-index 325bccc..34cd409 100644
---- a/arch/Config.in.aarch64
-+++ b/arch/Config.in.aarch64
-@@ -5,6 +5,3 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "LITTLE" if BR2_aarch64
- 	default "BIG"	 if BR2_aarch64_be
--
--config BR2_ARCH_HAS_ATOMICS
--	default y
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index 7e0ad08..7d341f3 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -21,9 +21,6 @@ config BR2_ARC_ATOMIC_EXT
- 	bool "Atomic extension (LLOCK/SCOND instructions)"
- 	default y if BR2_arc770d || BR2_archs38
++# cairo can use C++11 atomics when available, so we need to link with
++# libatomic for the architectures who need libatomic.
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
++CAIRO_CONF_ENV += LIBS="-latomic"
++endif
++
+ CAIRO_CONF_OPTS = \
+ 	--enable-trace=no \
+ 	--enable-interpreter=no
+diff --git a/package/cairomm/Config.in b/package/cairomm/Config.in
+index 4477b37..c0d5ccd 100644
+--- a/package/cairomm/Config.in
++++ b/package/cairomm/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_CAIROMM
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBSIGC
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+@@ -16,6 +15,5 @@ config BR2_PACKAGE_CAIROMM
  
--config BR2_ARCH_HAS_ATOMICS
--	default y if BR2_ARC_ATOMIC_EXT
--
- config BR2_ARCH
- 	default "arc"	if BR2_arcle
- 	default "arceb"	if BR2_arceb
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 60cd3a7..2b34f42 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -426,9 +426,6 @@ config BR2_ENDIAN
- 	default "LITTLE" if BR2_arm
- 	default "BIG"	 if BR2_armeb
+ comment "cairomm needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/cwiid/Config.in b/package/cwiid/Config.in
+index 1b64f0a..03b7dbb 100644
+--- a/package/cwiid/Config.in
++++ b/package/cwiid/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_CWIID
+ if BR2_PACKAGE_CWIID
+ config BR2_PACKAGE_CWIID_WMGUI
+ 	bool "wmgui"
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3 -> pango -> harfbuzz
+ 	depends on BR2_PACKAGE_XORG7 # libgtk2
+ 	depends on BR2_USE_WCHAR # libgtk2 -> libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+diff --git a/package/directfb/Config.in b/package/directfb/Config.in
+index 638e4e1..2aed63f 100644
+--- a/package/directfb/Config.in
++++ b/package/directfb/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_DIRECTFB
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # sigval_t issue
+-	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -147,7 +147,6 @@ config BR2_PACKAGE_DIRECTFB_PNG
  
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_CPU
- 	default "arm920t"	if BR2_arm920t
- 	default "arm922t"	if BR2_arm922t
-diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
-index 0783969..415fc89 100644
---- a/arch/Config.in.bfin
-+++ b/arch/Config.in.bfin
-@@ -68,9 +68,6 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "LITTLE"
+ config BR2_PACKAGE_DIRECTFB_SVG
+ 	bool "enable SVG support"
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	default y
+ 	select BR2_PACKAGE_LIBSVG_CAIRO
  
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_CPU
- 	default bf606		if BR2_bf606
- 	default bf607		if BR2_bf607
-diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
-index 6b868a1..f40f97c 100644
---- a/arch/Config.in.m68k
-+++ b/arch/Config.in.m68k
-@@ -4,9 +4,6 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "BIG"
+@@ -163,6 +162,6 @@ config BR2_PACKAGE_DIRECTFB_TESTS
+ endif # BR2_PACKAGE_DIRECTFB
  
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_ARCH
- 	default "68000"		if BR2_m68k_68000
- 	default "68010"		if BR2_m68k_68010
-diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
-index 7c21dfc..2d4c1fe 100644
---- a/arch/Config.in.microblaze
-+++ b/arch/Config.in.microblaze
-@@ -9,6 +9,3 @@ config BR2_ENDIAN
- config BR2_microblaze
- 	bool
- 	default y if BR2_microblazeel || BR2_microblazebe
--
--config BR2_ARCH_HAS_ATOMICS
--	default y
-diff --git a/arch/Config.in.mips b/arch/Config.in.mips
-index 1e5d24d..fda1a1d 100644
---- a/arch/Config.in.mips
-+++ b/arch/Config.in.mips
-@@ -67,9 +67,6 @@ config BR2_ENDIAN
- 	default "LITTLE"	if BR2_mipsel || BR2_mips64el
- 	default "BIG" 	    	if BR2_mips || BR2_mips64
+ comment "directfb needs a (e)glibc or uClibc toolchain w/ C++, threads, gcc >= 4.5"
+-	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 || BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
+index fc1f469..05ee6fc 100644
+--- a/package/enlightenment/Config.in
++++ b/package/enlightenment/Config.in
+@@ -10,8 +10,8 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_EFL
+ 	depends on BR2_PACKAGE_XORG7
+-	# libevas-generic-loaders-svg -> librsvg -> pango -> cairo
+-	depends on BR2_ARCH_HAS_ATOMICS
++	# libevas-generic-loaders-svg -> librsvg -> pango -> harfbuzz
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_EFL_X_XLIB
+ 	select BR2_PACKAGE_EFL_JPEG # needed at runtime by enlightenment_start
+ 	select BR2_PACKAGE_EFL_PNG # needed at runtime by enlightenment_start
+@@ -31,4 +31,4 @@ config BR2_PACKAGE_ENLIGHTENMENT
+ comment "enlightenment needs a toolchain w/ wchar, C++, threads"
+ 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
+index 43849e2..d95edaa 100644
+--- a/package/gstreamer/gst-plugins-bad/Config.in
++++ b/package/gstreamer/gst-plugins-bad/Config.in
+@@ -298,12 +298,12 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_OPUS
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG
+ 	bool "rsvg"
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+-	depends on BR2_ARCH_HAS_ATOMICS # librsvg -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBRSVG
  
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_ARCH
- 	default "mips32"	if BR2_mips_32
- 	default "mips32r2"	if BR2_mips_32r2
-diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
-index 7807769..ed63898 100644
---- a/arch/Config.in.nios2
-+++ b/arch/Config.in.nios2
-@@ -3,6 +3,3 @@ config BR2_ARCH
+ comment "rsvg plugin needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
  
- config BR2_ENDIAN
- 	default "LITTLE"
--
--config BR2_ARCH_HAS_ATOMICS
--	default y
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 8581a4d..09ac794 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -164,9 +164,6 @@ config BR2_ENDIAN
- 	default "BIG"    if BR2_powerpc || BR2_powerpc64
- 	default "LITTLE" if BR2_powerpc64le
+ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_SDL
+ 	bool "sdl"
+diff --git a/package/gstreamer/gst-plugins-base/Config.in b/package/gstreamer/gst-plugins-base/Config.in
+index 8ececea..8ad9a8e 100644
+--- a/package/gstreamer/gst-plugins-base/Config.in
++++ b/package/gstreamer/gst-plugins-base/Config.in
+@@ -85,12 +85,12 @@ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_OGG
+ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+-	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	select BR2_PACKAGE_PANGO
  
--config BR2_ARCH_HAS_ATOMICS
--	default y
--
- config BR2_GCC_TARGET_CPU
- 	default "401"		if BR2_powerpc_401
- 	default "403"		if BR2_powerpc_403
-diff --git a/arch/Config.in.sh b/arch/Config.in.sh
-index 9f8f79c..1bdea37 100644
---- a/arch/Config.in.sh
-+++ b/arch/Config.in.sh
-@@ -28,6 +28,3 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "LITTLE"	if BR2_sh4 || BR2_sh4a || BR2_sh64
- 	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
--
--config BR2_ARCH_HAS_ATOMICS
--	default y
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 771c20f..7be814b 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -245,9 +245,6 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "LITTLE"
+ comment "pango plugin needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
  
--config BR2_ARCH_HAS_ATOMICS
--	default y if !BR2_x86_i386
--
- config BR2_GCC_TARGET_ARCH
- 	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
-diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
-index a0e18f1..fcb3dc9 100644
---- a/arch/Config.in.xtensa
-+++ b/arch/Config.in.xtensa
-@@ -54,6 +54,3 @@ config BR2_ENDIAN
+ config BR2_PACKAGE_GST_PLUGINS_BASE_PLUGIN_THEORA
+ 	bool "theora (*.ogg video)"
+diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
+index 36ab6cb..65f74e8 100644
+--- a/package/gstreamer/gst-plugins-good/Config.in
++++ b/package/gstreamer/gst-plugins-good/Config.in
+@@ -174,7 +174,6 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_ANNODEX
  
- config BR2_ARCH
- 	default "xtensa"	if BR2_xtensa
--
--config BR2_ARCH_HAS_ATOMICS
--	default y
-diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
-index aa9f4e8..5537032 100644
---- a/docs/manual/adding-packages-directory.txt
-+++ b/docs/manual/adding-packages-directory.txt
-@@ -274,11 +274,6 @@ use in the comment.
- ** Dependency symbol: +BR2_USE_MMU+
- ** Comment string: no comment to be added
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_CAIRO
+ 	bool "cairo"
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
  
--* Atomic instructions (whereby the architecture has instructions to
--  perform some operations atomically, like LOCKCMPXCHG on x86)
--** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
--** Comment string: no comment to be added
--
- * Gcc +__sync_*+ built-ins used for atomic operations. They are
-   available in variants operating on 1 byte, 2 bytes, 4 bytes and 8
-   bytes. Since different architectures support atomic operations on
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 0aafea0..f02be34 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -623,14 +623,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
+ 	bool "rsvg"
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+-	depends on BR2_ARCH_HAS_ATOMICS # librsvg -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBRSVG
+ 	help
+ 	  RSVG plugin library
+ 
+ comment "rsvg plugin needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
+ 	bool "gl"
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index 44367eb..b19fa59 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -129,14 +129,14 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
+ 	bool "pango font renderer"
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+-	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	select BR2_PACKAGE_PANGO
+ 	help
+ 	  Pango-based text rendering and overlay
+ 
+ comment "pango plugin needs a toolchain w/ C++"
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
+ 	bool "theora (*.ogg video)"
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 2606b86..a59033a 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -281,7 +281,6 @@ comment "v4l2 needs a toolchain w/ headers >= 3.0"
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
+ 	bool "cairo"
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	help
+diff --git a/package/gtkmm3/Config.in b/package/gtkmm3/Config.in
+index 80dbbde..238a8cd 100644
+--- a/package/gtkmm3/Config.in
++++ b/package/gtkmm3/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_GTKMM3
+ 	# and GCC >= 5.3.
+ 	# https://sourceware.org/bugzilla/show_bug.cgi?id=19405
+ 	depends on !BR2_nios2
+-	depends on BR2_ARCH_HAS_ATOMICS # libcairomm/libgtk3/libpangomm -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pangomm, libgtk3 -> pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # glibmm, libpangomm -> glibmm/pango
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/libgtk3 -> libglib2
+@@ -24,6 +24,6 @@ config BR2_PACKAGE_GTKMM3
+ 
+ comment "gtkmm3 needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/harfbuzz/Config.in b/package/harfbuzz/Config.in
+index 7a864e9..a6db984 100644
+--- a/package/harfbuzz/Config.in
++++ b/package/harfbuzz/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HARFBUZZ
+ 	bool "harfbuzz"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  HarfBuzz is an OpenType text shaping engine
+ 
+@@ -10,4 +11,5 @@ config BR2_PACKAGE_HARFBUZZ
+ 	  glib2 and icu packages if they are selected.
+ 
+ comment "harfbuzz needs a toolchain w/ C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libevas-generic-loaders/Config.in b/package/libevas-generic-loaders/Config.in
+index 1d5b717..c171d47 100644
+--- a/package/libevas-generic-loaders/Config.in
++++ b/package/libevas-generic-loaders/Config.in
+@@ -27,14 +27,14 @@ config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS_SVG
+ 	depends on BR2_USE_WCHAR # librsvg -> glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # librsvg -> glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+ 	help
+ 	  This option enables the Evas generic SVG loader
+ 
+ comment "SVG loader needs a toolchain w/ wchar, threads, C++"
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+ 
+diff --git a/package/libfm/Config.in b/package/libfm/Config.in
+index c6cfcf6..603b4d5 100644
+--- a/package/libfm/Config.in
++++ b/package/libfm/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_LIBFM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+ 	help
+ 	  A glib/gio-based library providing some file management
+ 	  utilities and related-widgets missing in gtk+/glib. This is
+@@ -23,6 +23,6 @@ config BR2_PACKAGE_LIBFM
+ 
+ comment "libfm needs X.org and a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_XORG7
+diff --git a/package/libgail/Config.in b/package/libgail/Config.in
+index 5e4f03b..821a922 100644
+--- a/package/libgail/Config.in
++++ b/package/libgail/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LIBGAIL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> libglib2
+ 	depends on BR2_USE_MMU # pango -> libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+-	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_DEPRECATED_SINCE_2015_08
+ 	select BR2_PACKAGE_PANGO
+@@ -27,5 +27,5 @@ comment "libgail needs a toolchain w/ C++, wchar, threads"
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_DEPRECATED_SINCE_2015_08
+diff --git a/package/libgdiplus/Config.in b/package/libgdiplus/Config.in
+index f860ab3..6862503 100644
+--- a/package/libgdiplus/Config.in
++++ b/package/libgdiplus/Config.in
+@@ -8,7 +8,6 @@ config BR2_PACKAGE_LIBGDIPLUS
+ 	depends on BR2_USE_WCHAR # libglib2 -> gettext
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	help
+ 	  An Open Source implementation of the GDI+ API.
+ 
+@@ -16,6 +15,5 @@ config BR2_PACKAGE_LIBGDIPLUS
+ 
+ comment "libgdiplus needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index 9326f44..b6cf37e 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	help
+ 	  The GTK+ version 2 graphical user interface library
+ 
+@@ -35,7 +35,7 @@ endif
+ 
+ comment "libgtk2 needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 02c7aaf..ac56b85 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	help
+ 	  The GTK+ version 3 graphical user interface library
+ 
+@@ -84,6 +84,6 @@ endif
+ 
+ comment "libgtk3 needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
+index 03e5cf3..7ce9d06 100644
+--- a/package/librsvg/Config.in
++++ b/package/librsvg/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_LIBRSVG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	help
+ 	  The rsvg library is an efficient renderer for Scalable
+ 	  Vector Graphics (SVG) pictures.
+@@ -20,5 +20,5 @@ config BR2_PACKAGE_LIBRSVG
+ 
+ comment "librsvg needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libsvg-cairo/Config.in b/package/libsvg-cairo/Config.in
+index d69a6b9..9577c69 100644
+--- a/package/libsvg-cairo/Config.in
++++ b/package/libsvg-cairo/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_LIBSVG_CAIRO
+ 	bool "libsvg-cairo"
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_SVG
+ 	select BR2_PACKAGE_LIBSVG
+diff --git a/package/openbox/Config.in b/package/openbox/Config.in
+index f5475bf..3ddd376 100644
+--- a/package/openbox/Config.in
++++ b/package/openbox/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_OPENBOX
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # pango -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBXML2
+@@ -21,7 +21,7 @@ config BR2_PACKAGE_OPENBOX
+ 
+ comment "openbox needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		!BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 679ce6f..8bc6c34 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -179,7 +179,7 @@ config BR2_PACKAGE_OPENCV_WITH_GTK
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # libgtk2 -> glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+ 	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
+ 	select BR2_PACKAGE_LIBGTK2
+ 
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 8736805..3a185d6 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -69,7 +69,7 @@ config BR2_PACKAGE_OPENCV3_WITH_GTK
+ 
+ comment "gtk2 support needs libgtk2"
+ 	depends on BR2_USE_MMU # libgtk2 -> glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_LIBGTK2
+ 
+ config BR2_PACKAGE_OPENCV3_WITH_GTK3
+@@ -78,7 +78,7 @@ config BR2_PACKAGE_OPENCV3_WITH_GTK3
+ 
+ comment "gtk3 support needs libgtk3"
+ 	depends on BR2_USE_MMU # libgtk3 -> glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk3 -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_LIBGTK3
+ 
+ config BR2_PACKAGE_OPENCV3_WITH_QT
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+index e9c3040..7813c4e 100644
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_PANGO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_CAIRO
+@@ -24,6 +24,6 @@ config BR2_PACKAGE_PANGO
+ 
+ comment "pango needs a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_INSTALL_LIBSTDCPP
+diff --git a/package/pangomm/Config.in b/package/pangomm/Config.in
+index 6a84c42..a7c41a0 100644
+--- a/package/pangomm/Config.in
++++ b/package/pangomm/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_PANGOMM
+ 	select BR2_PACKAGE_GLIBMM
+ 	select BR2_PACKAGE_PANGO
+ 	select BR2_PACKAGE_LIBSIGC
+-	depends on BR2_ARCH_HAS_ATOMICS # libcairomm/pango -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # glibmm/pango
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/pango -> libglib2
+@@ -17,6 +17,6 @@ config BR2_PACKAGE_PANGOMM
+ 
+ comment "pangomm needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
+index 4289785..149a595 100644
+--- a/package/pcmanfm/Config.in
++++ b/package/pcmanfm/Config.in
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_PCMANFM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # libgtk2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+ 	help
+ 	  PCMan File Manager (PCManFM) is a file manager application developed
+ 	  by Hong Jen Yee from Taiwan which is meant to be a replacement for
+@@ -19,6 +19,6 @@ config BR2_PACKAGE_PCMANFM
+ 
+ comment "pcmanfm needs X.org and a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_XORG7
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index edf3316..f5a8159 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_PINENTRY_GTK2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -31,7 +31,7 @@ config BR2_PACKAGE_PINENTRY_GTK2
+ 
+ comment "pinentry-gtk2 needs X and a toolchain w/ wchar, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_USE_WCHAR || \
+ 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
+index b07c446..631ed32 100644
+--- a/package/rrdtool/Config.in
++++ b/package/rrdtool/Config.in
+@@ -15,7 +15,7 @@ if BR2_PACKAGE_RRDTOOL
+ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
+ 	bool "rrd_graph"
+ 	default y
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PDF
+diff --git a/package/webkit/Config.in b/package/webkit/Config.in
+index 7f0d1e4..c139f52 100644
+--- a/package/webkit/Config.in
++++ b/package/webkit/Config.in
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_WEBKIT
+ 	depends on BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT # icu
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_ENCHANT
+@@ -47,7 +47,7 @@ config BR2_PACKAGE_WEBKIT
+ comment "webkit needs libgtk2 and a toolchain w/ C++, wchar, threads"
+ 	depends on BR2_DEPRECATED_SINCE_2015_08
+ 	depends on BR2_PACKAGE_WEBKIT_ARCH_SUPPORTS
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+diff --git a/package/webkitgtk24/Config.in b/package/webkitgtk24/Config.in
+index 0a30bac..3c7c330 100644
+--- a/package/webkitgtk24/Config.in
++++ b/package/webkitgtk24/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
+ 
+ comment "webkitgtk24 needs libgtk2 and a toolchain w/ C++, wchar, NPTL, gcc >=4.8"
+ 	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_PACKAGE_LIBGTK2 || !BR2_PACKAGE_XORG7 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -25,7 +25,7 @@ config BR2_PACKAGE_WEBKITGTK24
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on (BR2_PACKAGE_LIBGTK2 && BR2_PACKAGE_XORG7)
+ 	depends on BR2_PACKAGE_WEBKITGTK24_ARCH_SUPPORTS
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # harfbuzz
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+ 	select BR2_PACKAGE_ENCHANT
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index 3fd7981..c5525e1 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -1,5 +1,4 @@
+ comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
+-	depends on BR2_ARCH_HAS_ATOMICS
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
+ 		!BR2_ENABLE_LOCALE
+@@ -19,7 +18,6 @@ config BR2_PACKAGE_WESTON
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+-	depends on BR2_ARCH_HAS_ATOMICS # cairo
+ 	# Runtime dependency
+ 	select BR2_PACKAGE_XKEYBOARD_CONFIG
+ 	# Make sure at least one compositor is selected.
+diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
+index 59b19c5..5213ce3 100644
+--- a/package/xscreensaver/Config.in
++++ b/package/xscreensaver/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_XSCREENSAVER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libgtk2 -> glib2
+ 	depends on BR2_USE_WCHAR # libgtk2 -> glib2
+ 	depends on BR2_USE_MMU # libgtk2 -> glib2
+-	depends on BR2_ARCH_HAS_ATOMICS # libgtk2 -> cairo
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBGTK2
+ 	select BR2_PACKAGE_LIBGLADE
+ 	select BR2_PACKAGE_JPEG
+@@ -25,6 +25,6 @@ config BR2_PACKAGE_XSCREENSAVER
+ comment "xscreensaver needs a toolchain w/ wchar, C++, threads"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU
+-	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR
