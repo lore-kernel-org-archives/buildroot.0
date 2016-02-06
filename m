@@ -1,69 +1,219 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 6 Feb 2016 11:16:00 +0100
-Subject: [Buildroot] [git commit] msgpack: rework BR2_ARCH_HAS_ATOMICS
-	dependency
-Message-ID: <20160206101652.51CC780771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch: remove BR2_ARCH_HAS_ATOMICS option
+Message-ID: <20160206101652.5C3EE80771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b53a2ac54b8158fcea7c1e7377d24ea1b7769615
+commit: https://git.buildroot.net/buildroot/commit/?id=4a3f597a0ea3392bbd1063c40291743955309472
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The msgpack source code indeed checks for the 4 bytes __sync built-in,
-so this commit switches the package from a BR2_ARCH_HAS_ATOMICS
-dependency to a BR2_TOOLCHAIN_HAS_SYNC_4 dependency.
-
-python-msgpack, a reverse dependency of msgpack, is changed in the
-same way.
+Now that BR2_ARCH_HAS_ATOMICS is no longer used anywhere, we can
+remove it from arch/Config.in*, as well as from the documentation.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- package/msgpack/Config.in        | 4 ++--
- package/python-msgpack/Config.in | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/Config.in                            | 4 ----
+ arch/Config.in.aarch64                    | 3 ---
+ arch/Config.in.arc                        | 3 ---
+ arch/Config.in.arm                        | 3 ---
+ arch/Config.in.bfin                       | 3 ---
+ arch/Config.in.m68k                       | 3 ---
+ arch/Config.in.microblaze                 | 3 ---
+ arch/Config.in.mips                       | 3 ---
+ arch/Config.in.nios2                      | 3 ---
+ arch/Config.in.powerpc                    | 3 ---
+ arch/Config.in.sh                         | 3 ---
+ arch/Config.in.x86                        | 3 ---
+ arch/Config.in.xtensa                     | 3 ---
+ docs/manual/adding-packages-directory.txt | 5 -----
+ 14 files changed, 45 deletions(-)
 
-diff --git a/package/msgpack/Config.in b/package/msgpack/Config.in
-index a57a378..b8e8213 100644
---- a/package/msgpack/Config.in
-+++ b/package/msgpack/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_MSGPACK
- 	bool "msgpack"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  MessagePack is an efficient binary serialization format.
+diff --git a/arch/Config.in b/arch/Config.in
+index 4cdd54e..401bd28 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -284,10 +284,6 @@ config BR2_GCC_TARGET_FLOAT_ABI
+ config BR2_GCC_TARGET_MODE
+ 	string
  
-@@ -11,5 +11,5 @@ config BR2_PACKAGE_MSGPACK
- 	  http://msgpack.org/
+-# If the architecture has atomic operations, select this:
+-config BR2_ARCH_HAS_ATOMICS
+-	bool
+-
+ # Must be selected by binary formats that support shared libraries.
+ config BR2_BINFMT_SUPPORTS_SHARED
+ 	bool
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+index 325bccc..34cd409 100644
+--- a/arch/Config.in.aarch64
++++ b/arch/Config.in.aarch64
+@@ -5,6 +5,3 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_aarch64
+ 	default "BIG"	 if BR2_aarch64_be
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 7e0ad08..7d341f3 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -21,9 +21,6 @@ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+ 	default y if BR2_arc770d || BR2_archs38
  
- comment "msgpack needs a toolchain w/ C++"
--	depends on BR2_ARCH_HAS_ATOMICS
- 	depends on !BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/python-msgpack/Config.in b/package/python-msgpack/Config.in
-index e740835..7206c22 100644
---- a/package/python-msgpack/Config.in
-+++ b/package/python-msgpack/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	bool "python-msgpack"
- 	select BR2_PACKAGE_MSGPACK
- 	depends on BR2_INSTALL_LIBSTDCPP # msgpack
--	depends on BR2_ARCH_HAS_ATOMICS # msgpack
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # msgpack
- 	help
- 	  MessagePack (http://msgpack.org/) is a fast, compact binary
- 	  serialization format, suitable for similar data to JSON.
-@@ -12,6 +12,6 @@ config BR2_PACKAGE_PYTHON_MSGPACK
- 	  https://pypi.python.org/pypi/msgpack-python/
+-config BR2_ARCH_HAS_ATOMICS
+-	default y if BR2_ARC_ATOMIC_EXT
+-
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+ 	default "arceb"	if BR2_arceb
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 60cd3a7..2b34f42 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -426,9 +426,6 @@ config BR2_ENDIAN
+ 	default "LITTLE" if BR2_arm
+ 	default "BIG"	 if BR2_armeb
  
- comment "python-msgpack needs a toolchain w/ C++"
--	depends on BR2_ARCH_HAS_ATOMICS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_PYTHON
- 	depends on !BR2_INSTALL_LIBSTDCPP
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_CPU
+ 	default "arm920t"	if BR2_arm920t
+ 	default "arm922t"	if BR2_arm922t
+diff --git a/arch/Config.in.bfin b/arch/Config.in.bfin
+index 0783969..415fc89 100644
+--- a/arch/Config.in.bfin
++++ b/arch/Config.in.bfin
+@@ -68,9 +68,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_CPU
+ 	default bf606		if BR2_bf606
+ 	default bf607		if BR2_bf607
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 6b868a1..f40f97c 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -4,9 +4,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "BIG"
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "68000"		if BR2_m68k_68000
+ 	default "68010"		if BR2_m68k_68010
+diff --git a/arch/Config.in.microblaze b/arch/Config.in.microblaze
+index 7c21dfc..2d4c1fe 100644
+--- a/arch/Config.in.microblaze
++++ b/arch/Config.in.microblaze
+@@ -9,6 +9,3 @@ config BR2_ENDIAN
+ config BR2_microblaze
+ 	bool
+ 	default y if BR2_microblazeel || BR2_microblazebe
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.mips b/arch/Config.in.mips
+index 1e5d24d..fda1a1d 100644
+--- a/arch/Config.in.mips
++++ b/arch/Config.in.mips
+@@ -67,9 +67,6 @@ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_mipsel || BR2_mips64el
+ 	default "BIG" 	    	if BR2_mips || BR2_mips64
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "mips32"	if BR2_mips_32
+ 	default "mips32r2"	if BR2_mips_32r2
+diff --git a/arch/Config.in.nios2 b/arch/Config.in.nios2
+index 7807769..ed63898 100644
+--- a/arch/Config.in.nios2
++++ b/arch/Config.in.nios2
+@@ -3,6 +3,3 @@ config BR2_ARCH
+ 
+ config BR2_ENDIAN
+ 	default "LITTLE"
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
+index 8581a4d..09ac794 100644
+--- a/arch/Config.in.powerpc
++++ b/arch/Config.in.powerpc
+@@ -164,9 +164,6 @@ config BR2_ENDIAN
+ 	default "BIG"    if BR2_powerpc || BR2_powerpc64
+ 	default "LITTLE" if BR2_powerpc64le
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+-
+ config BR2_GCC_TARGET_CPU
+ 	default "401"		if BR2_powerpc_401
+ 	default "403"		if BR2_powerpc_403
+diff --git a/arch/Config.in.sh b/arch/Config.in.sh
+index 9f8f79c..1bdea37 100644
+--- a/arch/Config.in.sh
++++ b/arch/Config.in.sh
+@@ -28,6 +28,3 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"	if BR2_sh4 || BR2_sh4a || BR2_sh64
+ 	default "BIG"		if BR2_sh2a || BR2_sh4eb || BR2_sh4aeb
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 771c20f..7be814b 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -245,9 +245,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+-config BR2_ARCH_HAS_ATOMICS
+-	default y if !BR2_x86_i386
+-
+ config BR2_GCC_TARGET_ARCH
+ 	default "i386"		if BR2_x86_i386
+ 	default "i486"		if BR2_x86_i486
+diff --git a/arch/Config.in.xtensa b/arch/Config.in.xtensa
+index a0e18f1..fcb3dc9 100644
+--- a/arch/Config.in.xtensa
++++ b/arch/Config.in.xtensa
+@@ -54,6 +54,3 @@ config BR2_ENDIAN
+ 
+ config BR2_ARCH
+ 	default "xtensa"	if BR2_xtensa
+-
+-config BR2_ARCH_HAS_ATOMICS
+-	default y
+diff --git a/docs/manual/adding-packages-directory.txt b/docs/manual/adding-packages-directory.txt
+index aa9f4e8..5537032 100644
+--- a/docs/manual/adding-packages-directory.txt
++++ b/docs/manual/adding-packages-directory.txt
+@@ -274,11 +274,6 @@ use in the comment.
+ ** Dependency symbol: +BR2_USE_MMU+
+ ** Comment string: no comment to be added
+ 
+-* Atomic instructions (whereby the architecture has instructions to
+-  perform some operations atomically, like LOCKCMPXCHG on x86)
+-** Dependency symbol: +BR2_ARCH_HAS_ATOMICS+
+-** Comment string: no comment to be added
+-
+ * Gcc +__sync_*+ built-ins used for atomic operations. They are
+   available in variants operating on 1 byte, 2 bytes, 4 bytes and 8
+   bytes. Since different architectures support atomic operations on
