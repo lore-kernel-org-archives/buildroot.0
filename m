@@ -1,100 +1,87 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat,  6 Feb 2016 23:59:58 +0100
-Subject: [Buildroot] [PATCH v4 12/17] python-cryptography: new package
+Date: Sat,  6 Feb 2016 23:59:49 +0100
+Subject: [Buildroot] [PATCH v4 03/17] python-lmdb: new package
 In-Reply-To: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454799603-5474-13-git-send-email-mc5686@mclink.it>
+Message-ID: <1454799603-5474-4-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v3 -> v4
+  - removed spurious blank line at end of Config.in (suggested by yegorich)
+  - yegorich inquired about double licensing; I left as-is because it is
+    like that in PKG-INFO file ("License: OpenLDAP BSD").
+    No LICENSE file is present in package sources.
+
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- .gitignore                                         |  1 +
- package/python-cryptography/Config.in              | 20 +++++++++++++++++++
- .../python-cryptography/python-cryptography.hash   |  3 +++
- package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/python-cryptography/Config.in
- create mode 100644 package/python-cryptography/python-cryptography.hash
- create mode 100644 package/python-cryptography/python-cryptography.mk
+ package/Config.in                    |  1 +
+ package/python-lmdb/Config.in        |  7 +++++++
+ package/python-lmdb/python-lmdb.hash |  3 +++
+ package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/python-lmdb/Config.in
+ create mode 100644 package/python-lmdb/python-lmdb.hash
+ create mode 100644 package/python-lmdb/python-lmdb.mk
 
-diff --git a/.gitignore b/.gitignore
-index bb02d9f..faf357f 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -13,3 +13,4 @@
- *.rej
- *~
- *.pyc
-+outgoing
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 3b3526c..8e13c64 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -658,6 +658,7 @@ menu "External python modules"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
++	source "package/python-lmdb/Config.in"
+ 	source "package/python-lxml/Config.in"
+ 	source "package/python-mad/Config.in"
+ 	source "package/python-mako/Config.in"
+diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
 new file mode 100644
-index 0000000..c6d183f
+index 0000000..baf9bce
 --- /dev/null
-+++ b/package/python-cryptography/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
-+	bool "python-cryptography"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PYTHON_CFFI
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS
-+	select BR2_PACKAGE_PYTHON_IDNA
-+	select BR2_PACKAGE_PYTHON_PYASN
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON
++++ b/package/python-lmdb/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_LMDB
++	bool "python-lmdb"
++	select BR2_PACKAGE_PYTHON_CFFI # runtime
 +	help
-+	  cryptography is a package designed to expose cryptographic
-+	  primitives and recipes to Python developers.
++	  Universal Python binding for the LMDB 'Lightning' Database.
 +
-+	  https://cryptography.io
-+
-+comment "python-cryptography needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
++	  https://pypi.python.org/pypi/lmdb
+diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
 new file mode 100644
-index 0000000..0358624
+index 0000000..c983cfb
 --- /dev/null
-+++ b/package/python-cryptography/python-cryptography.hash
++++ b/package/python-lmdb/python-lmdb.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=15eeba9e31f852bac21155baa3dfbc61, sha256 locally computed
-+md5     15eeba9e31f852bac21155baa3dfbc61  cryptography-1.1.2.tar.gz
-+sha256  7f51459f84d670444275e615839f4542c93547a12e938a0a4906dafe5f7de153  cryptography-1.1.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
++md5	001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
++sha256	37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
 new file mode 100644
-index 0000000..fbd0caf
+index 0000000..18302b0
 --- /dev/null
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -0,0 +1,23 @@
++++ b/package/python-lmdb/python-lmdb.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-cryptography
++# python-lmdb
 +#
 +################################################################################
 +
-+PYTHON_CRYPTOGRAPHY_VERSION = 1.1.2
-+PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
-+PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-+PYTHON_CRYPTOGRAPHY_LICENSE = Apache
-+PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE
-+PYTHON_CRYPTOGRAPHY_DEPENDENCIES = python-six \
-+				   python-idna \
-+				   python-pyasn \
-+				   host-python-cffi \
-+				   openssl
-+
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+PYTHON_CRYPTOGRAPHY_DEPENDENCIES += python-enum34
-+endif
++PYTHON_LMDB_VERSION = 0.88
++PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
++PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
++PYTHON_LMDB_LICENSE = OpenLDAP BSD
++PYTHON_LMDB_SETUP_TYPE = setuptools
++PYTHON_LMDB_DEPENDENCIES = host-python-cffi
 +
 +$(eval $(python-package))
 -- 
