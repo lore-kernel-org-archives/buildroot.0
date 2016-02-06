@@ -1,13 +1,16 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Sat,  6 Feb 2016 10:00:07 +0100
-Subject: [Buildroot] [PATCH v3] bind: fix intermittent build issues with
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 6 Feb 2016 10:45:15 +0100
+Subject: [Buildroot] [git commit] bind: fix intermittent build issues with
 	high BR2_JLEVEL
-Message-ID: <1454749207-23363-1-git-send-email-heyleke@gmail.com>
+Message-ID: <20160206094549.718D080762@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e4749b826c04cda213768332f67ffb82f06105b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Build sometimes breaks with:
 
@@ -18,21 +21,16 @@ make[4]: Leaving directory `/scratch/peko/build/bind-9.6-ESV-R4/bin/rndc/unix'
 
 So disable parallel builds.
 
-[Jan Heylen: This patch was removed with commit c36b5d89c5616f7ca0a7295cbb5c231606beb71e
-by Gustavo Zacarias <gustavo@zacarias.com.ar> but the problem still occurs,
-so disabling parallel builds again]
+This patch was removed with commit
+c36b5d89c5616f7ca0a7295cbb5c231606beb71e by Gustavo Zacarias
+<gustavo@zacarias.com.ar> but the problem still occurs, so disabling
+parallel builds again.
 
 Fixes:
 http://autobuild.buildroot.org/results/220/2201f04170ea8ef0961e907efce07c041a57c229/
 
 Signed-off-by: Jan Heylen <heyleke@gmail.com>
-
----
-Changes v1 --> v2:
-  - Added comment
-  - Added Fixes link
-Changes v2 --> v3:
-  - Properly commit the added comment :-s
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/bind/bind.mk | 2 ++
  1 file changed, 2 insertions(+)
@@ -50,5 +48,3 @@ index 9d8d16c..12dd52e 100644
  BIND_INSTALL_STAGING = YES
  BIND_CONFIG_SCRIPTS = bind9-config isc-config.sh
  BIND_LICENSE = ISC
--- 
-2.5.0
