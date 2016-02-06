@@ -1,88 +1,146 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat,  6 Feb 2016 23:59:49 +0100
-Subject: [Buildroot] [PATCH v4 03/17] python-lmdb: new package
-In-Reply-To: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
-References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1454799603-5474-4-git-send-email-mc5686@mclink.it>
+Date: Sat,  6 Feb 2016 23:59:46 +0100
+Subject: [Buildroot] [PATCH v4 00/17] changes needed for python-crossbar
+	package (new)
+Message-ID: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+These are the python packeges needed to successfully comile, install and run python-crossbar.
 
----
-Changes v3 -> v4
-  - removed spurious blank line at end of Config.in (suggested by yegorich)
-  - yegorich inquired about double licensing; I left as-is because it is
-    like that in PKG-INFO file ("License: OpenLDAP BSD").
-    No LICENSE file is present in package sources.
+Crossbar is is an open-source WAMP application router that allows to build advanced.
+applications from loosely-coupled components that can talk in real-time with each other.
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
----
- package/Config.in                    |  1 +
- package/python-lmdb/Config.in        |  7 +++++++
- package/python-lmdb/python-lmdb.hash |  3 +++
- package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+Further info about crossbar can be found at: http://crossbar.io/
+
+I changed patches to accommdate suggestions by Y.Yefremov
+
+Mauro Condarelli (16):
+  python-characteristic: new package
+  python-pycparser: python runtime added
+  python-lmdb: new package
+  python-pygments: new package
+  python-pynacl: new package
+  python-pytrie: new package
+  python-service-identity: new package
+  python-shutilwhich: new package
+  python-treq: new package
+  python-txaio: new package
+  python-pyasn-modules: new package
+  python-ujson: new package
+  python-wsaccel: new package
+  python-setproctitle: new package
+  python-autobahn: new package
+  python-crossbar: new package
+
+Yegor Yefremov (1):
+  python-cryptography: new package
+
+ .gitignore                                         |  1 +
+ package/Config.in                                  | 16 ++++++++++
+ package/python-autobahn/Config.in                  |  8 +++++
+ package/python-autobahn/python-autobahn.hash       |  3 ++
+ package/python-autobahn/python-autobahn.mk         | 14 ++++++++
+ package/python-characteristic/Config.in            |  6 ++++
+ .../python-characteristic.hash                     |  3 ++
+ .../python-characteristic/python-characteristic.mk | 14 ++++++++
+ package/python-crossbar/Config.in                  | 37 ++++++++++++++++++++++
+ package/python-crossbar/python-crossbar.hash       |  3 ++
+ package/python-crossbar/python-crossbar.mk         | 14 ++++++++
+ package/python-cryptography/Config.in              | 20 ++++++++++++
+ .../python-cryptography/python-cryptography.hash   |  3 ++
+ package/python-cryptography/python-cryptography.mk | 23 ++++++++++++++
+ package/python-lmdb/Config.in                      |  7 ++++
+ package/python-lmdb/python-lmdb.hash               |  3 ++
+ package/python-lmdb/python-lmdb.mk                 | 14 ++++++++
+ package/python-pyasn-modules/Config.in             | 11 +++++++
+ .../python-pyasn-modules/python-pyasn-modules.hash |  3 ++
+ .../python-pyasn-modules/python-pyasn-modules.mk   | 14 ++++++++
+ package/python-pycparser/Config.in                 |  6 ++++
+ package/python-pycparser/python-pycparser.mk       |  1 +
+ package/python-pygments/Config.in                  |  6 ++++
+ package/python-pygments/python-pygments.hash       |  3 ++
+ package/python-pygments/python-pygments.mk         | 14 ++++++++
+ package/python-pynacl/Config.in                    |  9 ++++++
+ package/python-pynacl/python-pynacl.hash           |  3 ++
+ package/python-pynacl/python-pynacl.mk             | 16 ++++++++++
+ package/python-pytrie/Config.in                    |  6 ++++
+ package/python-pytrie/python-pytrie.hash           |  3 ++
+ package/python-pytrie/python-pytrie.mk             | 14 ++++++++
+ package/python-service-identity/Config.in          | 10 ++++++
+ .../python-service-identity.hash                   |  3 ++
+ .../python-service-identity.mk                     | 15 +++++++++
+ package/python-setproctitle/Config.in              |  6 ++++
+ .../python-setproctitle/python-setproctitle.hash   |  3 ++
+ package/python-setproctitle/python-setproctitle.mk | 14 ++++++++
+ package/python-shutilwhich/Config.in               |  7 ++++
+ package/python-shutilwhich/python-shutilwhich.hash |  3 ++
+ package/python-shutilwhich/python-shutilwhich.mk   | 13 ++++++++
+ package/python-treq/Config.in                      | 12 +++++++
+ package/python-treq/python-treq.hash               |  3 ++
+ package/python-treq/python-treq.mk                 | 14 ++++++++
+ package/python-txaio/Config.in                     |  7 ++++
+ package/python-txaio/python-txaio.hash             |  3 ++
+ package/python-txaio/python-txaio.mk               | 14 ++++++++
+ package/python-ujson/Config.in                     |  7 ++++
+ package/python-ujson/python-ujson.hash             |  3 ++
+ package/python-ujson/python-ujson.mk               | 13 ++++++++
+ package/python-wsaccel/Config.in                   |  6 ++++
+ package/python-wsaccel/python-wsaccel.hash         |  3 ++
+ package/python-wsaccel/python-wsaccel.mk           | 13 ++++++++
+ 52 files changed, 470 insertions(+)
+ create mode 100644 package/python-autobahn/Config.in
+ create mode 100644 package/python-autobahn/python-autobahn.hash
+ create mode 100644 package/python-autobahn/python-autobahn.mk
+ create mode 100644 package/python-characteristic/Config.in
+ create mode 100644 package/python-characteristic/python-characteristic.hash
+ create mode 100644 package/python-characteristic/python-characteristic.mk
+ create mode 100644 package/python-crossbar/Config.in
+ create mode 100644 package/python-crossbar/python-crossbar.hash
+ create mode 100644 package/python-crossbar/python-crossbar.mk
+ create mode 100644 package/python-cryptography/Config.in
+ create mode 100644 package/python-cryptography/python-cryptography.hash
+ create mode 100644 package/python-cryptography/python-cryptography.mk
  create mode 100644 package/python-lmdb/Config.in
  create mode 100644 package/python-lmdb/python-lmdb.hash
  create mode 100644 package/python-lmdb/python-lmdb.mk
+ create mode 100644 package/python-pyasn-modules/Config.in
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.hash
+ create mode 100644 package/python-pyasn-modules/python-pyasn-modules.mk
+ create mode 100644 package/python-pycparser/Config.in
+ create mode 100644 package/python-pygments/Config.in
+ create mode 100644 package/python-pygments/python-pygments.hash
+ create mode 100644 package/python-pygments/python-pygments.mk
+ create mode 100644 package/python-pynacl/Config.in
+ create mode 100644 package/python-pynacl/python-pynacl.hash
+ create mode 100644 package/python-pynacl/python-pynacl.mk
+ create mode 100644 package/python-pytrie/Config.in
+ create mode 100644 package/python-pytrie/python-pytrie.hash
+ create mode 100644 package/python-pytrie/python-pytrie.mk
+ create mode 100644 package/python-service-identity/Config.in
+ create mode 100644 package/python-service-identity/python-service-identity.hash
+ create mode 100644 package/python-service-identity/python-service-identity.mk
+ create mode 100644 package/python-setproctitle/Config.in
+ create mode 100644 package/python-setproctitle/python-setproctitle.hash
+ create mode 100644 package/python-setproctitle/python-setproctitle.mk
+ create mode 100644 package/python-shutilwhich/Config.in
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.hash
+ create mode 100644 package/python-shutilwhich/python-shutilwhich.mk
+ create mode 100644 package/python-treq/Config.in
+ create mode 100644 package/python-treq/python-treq.hash
+ create mode 100644 package/python-treq/python-treq.mk
+ create mode 100644 package/python-txaio/Config.in
+ create mode 100644 package/python-txaio/python-txaio.hash
+ create mode 100644 package/python-txaio/python-txaio.mk
+ create mode 100644 package/python-ujson/Config.in
+ create mode 100644 package/python-ujson/python-ujson.hash
+ create mode 100644 package/python-ujson/python-ujson.mk
+ create mode 100644 package/python-wsaccel/Config.in
+ create mode 100644 package/python-wsaccel/python-wsaccel.hash
+ create mode 100644 package/python-wsaccel/python-wsaccel.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index 3b3526c..8e13c64 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -658,6 +658,7 @@ menu "External python modules"
- 	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
-+	source "package/python-lmdb/Config.in"
- 	source "package/python-lxml/Config.in"
- 	source "package/python-mad/Config.in"
- 	source "package/python-mako/Config.in"
-diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
-new file mode 100644
-index 0000000..baf9bce
---- /dev/null
-+++ b/package/python-lmdb/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_LMDB
-+	bool "python-lmdb"
-+	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	help
-+	  Universal Python binding for the LMDB 'Lightning' Database.
-+
-+	  https://pypi.python.org/pypi/lmdb
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-new file mode 100644
-index 0000000..c983cfb
---- /dev/null
-+++ b/package/python-lmdb/python-lmdb.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
-+md5	001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
-+sha256	37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-new file mode 100644
-index 0000000..18302b0
---- /dev/null
-+++ b/package/python-lmdb/python-lmdb.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-lmdb
-+#
-+################################################################################
-+
-+PYTHON_LMDB_VERSION = 0.88
-+PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
-+PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
-+PYTHON_LMDB_LICENSE = OpenLDAP BSD
-+PYTHON_LMDB_SETUP_TYPE = setuptools
-+PYTHON_LMDB_DEPENDENCIES = host-python-cffi
-+
-+$(eval $(python-package))
 -- 
 2.1.4
