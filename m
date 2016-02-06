@@ -1,247 +1,216 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 6 Feb 2016 11:16:00 +0100
-Subject: [Buildroot] [git commit] toolchain: add BR2_TOOLCHAIN_HAS_{SYNC_x,
-	ATOMIC} hidden booleans
-Message-ID: <20160206101651.264E1805BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] json-c: needs __sync_val_compare_and_swap_4
+Message-ID: <20160206101651.736C3805BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6856e417da4f3aa77e2a814db2a89429af072f7d
+commit: https://git.buildroot.net/buildroot/commit/?id=8ea392b84e3a02a7827fc3b97b541d3c41c83935
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, Buildroot provides one BR2_ARCH_HAS_ATOMICS boolean option
-to indicate whether the architecture supports atomic operations or
-not. However, the reality of atomic operations support is much more
-complicated and requires more than one option to be expressed
-properly.
+While json-c itself builds fine on platforms that don't provide the
+__sync atomic built-ins, it does use them. json-c doesn't fail to
+build because only a library is built, so such function calls are left
+unresolved. But as soon as it gets used in another package linked in a
+program, linking will fail due to the missing
+__sync_val_compare_and_swap_4() function.
 
-There are in fact two types of atomic built-ins provided by gcc:
+To fix this, we make json-c depend on BR2_TOOLCHAIN_HAS_SYNC_4, and
+propagate to the reverse dependencies:
 
- (1) The __sync_*() family of functions, which have been in gcc for a
-     long time (probably gcc 4.1). They are available in variants
-     operating on 1-byte, 2-byte, 4-byte and 8-byte integers. Some
-     architectures implement a number of variants, some do not
-     implement any, some implement all of them.
+ - json-c
+   - fastd
+   - pulseaudio
+     - efl
+     - espeak
+     - gst-plugins-good
+     - gst1-plugins-good
+     - mpd
+   - rsyslog
+   - ubus
 
-     They are now considered "legacy" by the gcc developers but are
-     nonetheless still being used by a significant number of userspace
-     libraries and applications.
+Note that pulseaudio already had a BR2_ARCH_HAS_ATOMICS dependency,
+which we are keeping for the moment, and will clean-up in a subsequent
+commit.
 
-     https://gcc.gnu.org/onlinedocs/gcc/_005f_005fsync-Builtins.html
+This commit will also fix packages that could optionally use json-c,
+and therefore fixes build failures like:
 
- (2) The __atomic_*() family of functions, which have been introduced
-     in gcc 4.7. They have been introduced in order to support C++11
-     atomic operations. In gcc 4.8, they are available on all
-     architectures, either built-in or in the libatomic library part
-     of the gcc runtime (in which case the application needs to be
-     linked with -latomic). In gcc 4.7, the __atomic_*() intrinsics
-     are only supported on certain architectures, since libatomic did
-     not exist at the time.
-
-For (1), a single BR2_ARCH_HAS_ATOMICS is not sufficient, because
-depending on the architecture, some variants may or may not be
-available. Setting BR2_ARCH_HAS_ATOMICS to false as soon as one of the
-variant is missing would cause a large number of packages to become
-unavailable, even if they in fact use only more common variants
-available on a large number of architectures. For this reason, we've
-chosen to introduce four new Config.in options:
-
- - BR2_TOOLCHAIN_HAS_SYNC_1
- - BR2_TOOLCHAIN_HAS_SYNC_2
- - BR2_TOOLCHAIN_HAS_SYNC_3
- - BR2_TOOLCHAIN_HAS_SYNC_4
-
-Which indicate whether the toolchain support 1-byte, 2-byte, 4-byte
-and 8-byte __sync_*() built-ins respectively.
-
-For (2), we introduce a BR2_TOOLCHAIN_HAS_ATOMIC, which indicates if
-the __atomic_*() built-ins are available. Note that it is up to the
-package to link with -latomic when gcc is >= 4.8. Since __atomic_*()
-intrinsics for all sizes are supported starting
-
-We conducted a fairly large analysis about various architectures
-supported by Buildroot, as well as with a number of different
-toolchains, to check which combinations support which variant. To do,
-we linked the following program with various toolchains:
-
-int main(void)
-{
-	uint8_t a;
-	uint16_t b;
-	uint32_t c;
-	uint64_t d;
-
-	__sync_fetch_and_add(&a, 3);
-	__sync_fetch_and_add(&b, 3);
-	__sync_fetch_and_add(&c, 3);
-	__sync_fetch_and_add(&d, 3);
-
-	__sync_val_compare_and_swap(&a, 1, 2);
-	__sync_val_compare_and_swap(&b, 1, 2);
-	__sync_val_compare_and_swap(&c, 1, 2);
-	__sync_val_compare_and_swap(&d, 1, 2);
-
-	__atomic_add_fetch(&a, 3, __ATOMIC_RELAXED);
-	__atomic_add_fetch(&b, 3, __ATOMIC_RELAXED);
-	__atomic_add_fetch(&c, 3, __ATOMIC_RELAXED);
-	__atomic_add_fetch(&d, 3, __ATOMIC_RELAXED);
-
-	__atomic_compare_exchange_n(&a, &a, 2, 1,  __ATOMIC_RELAXED,  __ATOMIC_RELAXED);
-	__atomic_compare_exchange_n(&b, &b, 2, 1,  __ATOMIC_RELAXED,  __ATOMIC_RELAXED);
-	__atomic_compare_exchange_n(&c, &c, 2, 1,  __ATOMIC_RELAXED,  __ATOMIC_RELAXED);
-	__atomic_compare_exchange_n(&d, &d, 2, 1,  __ATOMIC_RELAXED,  __ATOMIC_RELAXED);
-
-	return 0;
-}
-
-And looked at which symbols were unresolved. For the __atomic_*()
-ones, we tested with and without -latomic to see which variants are
-built-in, which variants require libatomic. This testing effort has
-led to the following results:
-
-                __sync       __atomic    gcc
-               1  2  4  8    1  2  4  8
-ARC            Y  Y  Y  -    Y  Y  Y  L   4.8 [with BR2_ARC_ATOMIC_EXT]
-ARC            -  -  -  -    L  L  L  L   4.8 [without BR2_ARC_ATOMIC_EXT]
-ARM            Y  Y  Y  X    Y  Y  Y  Y   4.8, 4.7
-ARM            Y  Y  Y  -                 4.5
-AArch64        Y  Y  Y  Y    Y  Y  Y  Y   4.9, 5.1
-Bfin           -  -  Y  -                 4.3
-i386 (i386)    -  -  -  -    L  L  L  L   4.9
-i386 (i486..)  Y  Y  Y  -    L  L  L  L   4.9 [i486, c3, winchip2, winchip-c6]
-i386 (> i586)  Y  Y  Y  Y    L  L  L  L   4.9
-Microblaze     -  -  Y  -    L  L  Y  L   4.9
-MIPS           Y  Y  Y  -    Y  Y  Y  L   4.9
-MIPS64         Y  Y  Y  Y    Y  Y  Y  Y   4.9
-NIOS 2         Y  Y  Y  -    Y  Y  Y  L   4.9, 5.2
-PowerPC        Y  Y  Y  -    Y  Y  Y  L   4.9
-SuperH         Y  Y  Y  -    Y  Y  Y  L   4.9
-SPARC          -  -  -  -    L  L  L  L   4.9
-SPARC64        Y  Y  Y  Y    Y  Y  Y  Y   4.9
-x86_64         Y  Y  Y  Y    Y  Y  Y  Y   4.7, 4.9
-Xtensa         Y  Y  Y  -    Y  Y  Y  Y   4.9
-
-Notes:
-
- * __atomic built-ins appeared in gcc 4.7, so for toolchais older than
-   that, the __atomic column is empty.
-
- * Y means 'supported built-in'
-
- * L means 'supported via linking to libatomic' (only for __atomic
-   functions)
-
- * X indicates a very special case for 8 bytes __sync built-ins on
-   ARM. On ARMv7, there is no problem, starting from gcc 4.7, the
-   __sync built-in for 8 bytes integers is implemented, fully in
-   userspace. For cores < ARMv7, doing a 8 bytes atomic operation
-   requires help from the kernel. Unfortunately, the libgcc code
-   implementing this uses the __write() function to display an error,
-   and this function is internal to glibc. Therefore, if you're using
-   glibc everything is fine, but if you're using uClibc or musl, you
-   cannot link an application that uses 8 bytes __sync
-   operations. This has been fixed as part of gcc PR68095, merged in
-   the gcc 5 branch but not yet part of any gcc release.
-
- * - means not supported
-
-This commit only introduces the new options. Follow-up commits will
-progressively change the packages using BR2_ARCH_HAS_ATOMICS to use
-the appropriate BR2_TOOLCHAIN_HAS_SYNC_x or BR2_TOOLCHAIN_HAS_ATOMIC
-until the point where BR2_ARCH_HAS_ATOMICS can be removed.
+  http://autobuild.buildroot.org/results/4fe/4feaa9089ee9a183c5086b791bea35c0156945af/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 ---
- toolchain/toolchain-common.in | 79 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ package/efl/Config.in                          | 1 +
+ package/espeak/Config.in                       | 1 +
+ package/fastd/Config.in                        | 1 +
+ package/gstreamer/gst-plugins-good/Config.in   | 2 ++
+ package/gstreamer1/gst1-plugins-good/Config.in | 2 ++
+ package/json-c/Config.in                       | 2 ++
+ package/mpd/Config.in                          | 2 ++
+ package/pulseaudio/Config.in                   | 2 ++
+ package/rsyslog/Config.in                      | 2 ++
+ package/ubus/Config.in                         | 2 ++
+ 10 files changed, 17 insertions(+)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 8408852..1b7b416 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -307,3 +307,82 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	default "4.5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	default "4.4"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
- 	default "4.3"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
-+
-+config BR2_TOOLCHAIN_HAS_SYNC_1
-+	bool
-+	default y
-+	depends on !BR2_x86_i386
-+	depends on !BR2_bfin
-+	depends on !BR2_microblaze
-+	depends on !BR2_sparc
-+	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
-+
-+config BR2_TOOLCHAIN_HAS_SYNC_2
-+	bool
-+	default y if BR2_TOOLCHAIN_HAS_SYNC_1
-+
-+config BR2_TOOLCHAIN_HAS_SYNC_4
-+	bool
-+	default y
-+	depends on !BR2_sparc
-+	depends on !BR2_x86_i386
-+	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
-+
-+# The availability of __sync for 8-byte types on ARM is somewhat
-+# complicated:
-+#
-+#  - It appeared in gcc starting with gcc 4.7.
-+#
-+#  - On ARMv7, there is no problem, it can be directly implemented in
-+#    userspace.
-+#
-+#  - On < ARMv7, it requires help from the kernel. Unfortunately, the
-+#    libgcc code implementing 8-byte __sync with the help from the
-+#    kernel calls __write() when a failure occurs, which is a function
-+#    internal to glibc, not available in uClibc and musl. This means
-+#    that the 8-byte __sync operations are not available on < ARMv7
-+#    with uClibc and musl. This problem was fixed as part of gcc
-+#    PR68059, which was backported to the gcc 5 branch, but isn't yet
-+#    part of any gcc 5.x release.
-+#
-+config BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-+	bool
-+	default y
-+	depends on BR2_arm || BR2_armeb
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_ARM_CPU_ARMV7A
-+
-+# 8-byte intrinsics available on most x86 CPUs, except a few old ones
-+config BR2_TOOLCHAIN_X86_HAS_SYNC_8
-+	bool
-+	default y
-+	depends on BR2_i386
-+	depends on !BR2_x86_i386
-+	depends on !BR2_x86_i486
-+	depends on !BR2_x86_c3
-+	depends on !BR2_x86_winchip_c6
-+	depends on !BR2_x86_winchip2
-+
-+# 8-byte intrinsics available:
-+#  - On all 64 bits architecture
-+#  - On a certain combinations of ARM platforms
-+#  - On certain x86 32 bits CPUs
-+config BR2_TOOLCHAIN_HAS_SYNC_8
-+	bool
-+	default y if BR2_ARCH_IS_64
-+	default y if BR2_TOOLCHAIN_ARM_HAS_SYNC_8
-+	default y if BR2_TOOLCHAIN_X86_HAS_SYNC_8
-+
-+# __atomic intrinsics are available:
-+# - with gcc 4.8, either through built-ins or libatomic, on all
-+#   architectures
-+# - with gcc 4.7, libatomic did not exist, so only built-ins are
-+#   available. This means that __atomic can only be used in a subset
-+#   of the architectures
-+config BR2_TOOLCHAIN_HAS_ATOMIC
-+	bool
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_arm
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_armeb
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_xtensa
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_ARCH_IS_64
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 85e46b1..21cbf5f 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -82,6 +82,7 @@ config BR2_PACKAGE_EFL_LIBSNDFILE
+ config BR2_PACKAGE_EFL_PULSEAUDIO
+ 	bool "Enable pulseaudio support (recommended)"
+ 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	default y
+ 	help
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+index 94e2816..eebaf6f 100644
+--- a/package/espeak/Config.in
++++ b/package/espeak/Config.in
+@@ -33,6 +33,7 @@ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 
+ endchoice
+diff --git a/package/fastd/Config.in b/package/fastd/Config.in
+index f753ce4..55bdbd6 100644
+--- a/package/fastd/Config.in
++++ b/package/fastd/Config.in
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_FASTD_STATUS_SOCKET
+ 	bool "status socket support"
+ 	default y
+ 	select BR2_PACKAGE_JSON_C
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	help
+ 	  Enable support for a socket to get fastd's status.
+ 
+diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
+index 0544b7c..f169435 100644
+--- a/package/gstreamer/gst-plugins-good/Config.in
++++ b/package/gstreamer/gst-plugins-good/Config.in
+@@ -206,12 +206,14 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
+ 	depends on BR2_USE_MMU # pulseaudio
+ 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
+ 	depends on !BR2_STATIC_LIBS # pulseaudio
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	bool "pulseaudio"
+ 
+ comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index a8cdde2..6855c4b 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -313,6 +313,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
+ 	depends on BR2_USE_MMU # pulseaudio
+ 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
+ 	depends on !BR2_STATIC_LIBS # pulseaudio
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	help
+@@ -321,6 +322,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
+ comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+diff --git a/package/json-c/Config.in b/package/json-c/Config.in
+index 67348fb..4df44a9 100644
+--- a/package/json-c/Config.in
++++ b/package/json-c/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_JSON_C
+ 	bool "json-c"
++	# uses __sync_val_compare_and_swap_4
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  JSON-C - A JSON implementation in C
+ 
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index db79b08..17f8e96 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -252,11 +252,13 @@ config BR2_PACKAGE_MPD_PULSEAUDIO
+ 	bool "pulseaudio"
+ 	depends on BR2_ARCH_HAS_ATOMICS # pulseaudio
+ 	depends on !BR2_STATIC_LIBS # pulseaudio
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pulseaudio -> json-c
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	help
+ 	  Enable pulseaudio output support.
+ 
+ comment "pulseaudio support needs a toolchain w/ dynamic library"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS
+ 
+ comment "Miscellaneous plugins"
+diff --git a/package/pulseaudio/Config.in b/package/pulseaudio/Config.in
+index 63c8ca4..4583d22 100644
+--- a/package/pulseaudio/Config.in
++++ b/package/pulseaudio/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PULSEAUDIO
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	select BR2_PACKAGE_LIBTOOL
+ 	select BR2_PACKAGE_JSON_C
+ 	select BR2_PACKAGE_LIBSNDFILE
+@@ -34,4 +35,5 @@ endif
+ comment "pulseaudio needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_ARCH_HAS_ATOMICS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
+index d66132f..3599207 100644
+--- a/package/rsyslog/Config.in
++++ b/package/rsyslog/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_RSYSLOG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # modules
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	help
+ 	  Rsyslog is a powerful and flexible syslog implementation
+ 
+@@ -14,4 +15,5 @@ config BR2_PACKAGE_RSYSLOG
+ 
+ comment "rsyslog needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/ubus/Config.in b/package/ubus/Config.in
+index 8567321..391fc8d 100644
+--- a/package/ubus/Config.in
++++ b/package/ubus/Config.in
+@@ -1,10 +1,12 @@
+ comment "ubus needs a toolchain w/ dynamic library"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+         depends on BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_UBUS
+ 	bool "ubus"
+ 	select BR2_PACKAGE_LIBUBOX
+ 	select BR2_PACKAGE_JSON_C
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c
+ 	depends on !BR2_STATIC_LIBS # libubox
+ 	help
+ 	  IPC/RPC bus that allows communication between processes.
