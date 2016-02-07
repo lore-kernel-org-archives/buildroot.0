@@ -1,55 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 22:04:45 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/procps-ng: Fix install,
- procps-ng does not use /usr/bin anymore
-In-Reply-To: <1454365287-4697-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454365287-4697-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207220445.79787a46@free-electrons.com>
+Date: Sun, 7 Feb 2016 22:05:17 +0100
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+	to 0.4.12
+Message-ID: <20160207210520.F259A80AC2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=57e020b3e20462a2e59f2dabad9e260cc86eed0a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  1 Feb 2016 23:21:27 +0100, Bernd Kuhls wrote:
-> We do not need to move binaries around anymore since this commit:
-> https://gitlab.com/procps-ng/procps/commit/430b559ba2826f80dffa840622ae0fc744000b13
-> 
-> Removing PROCPS_NG_CONF_OPTS completely leads to binaries being
-> installed to /usr/bin, we have to keep an empty --exec-prefix to have
-> binaries in /bin:
-> 
-> libtool: install: /usr/bin/install -c free /home/bernd/buildroot/output/target/bin/free
-> libtool: install: /usr/bin/install -c pgrep /home/bernd/buildroot/output/target/bin/pgrep
-> libtool: install: /usr/bin/install -c pkill /home/bernd/buildroot/output/target/bin/pkill
-> libtool: install: /usr/bin/install -c pmap /home/bernd/buildroot/output/target/bin/pmap
-> libtool: install: /usr/bin/install -c pwdx /home/bernd/buildroot/output/target/bin/pwdx
-> libtool: install: /usr/bin/install -c tload /home/bernd/buildroot/output/target/bin/tload
-> libtool: install: /usr/bin/install -c uptime /home/bernd/buildroot/output/target/bin/uptime
-> libtool: install: /usr/bin/install -c vmstat /home/bernd/buildroot/output/target/bin/vmstat
-> libtool: install: /usr/bin/install -c w /home/bernd/buildroot/output/target/bin/w
-> libtool: install: /usr/bin/install -c pidof /home/bernd/buildroot/output/target/bin/pidof
-> libtool: install: /usr/bin/install -c kill /home/bernd/buildroot/output/target/bin/kill
-> libtool: install: /usr/bin/install -c slabtop /home/bernd/buildroot/output/target/bin/slabtop
-> libtool: install: /usr/bin/install -c watch /home/bernd/buildroot/output/target/bin/watch
-> libtool: install: /usr/bin/install -c top/top /home/bernd/buildroot/output/target/bin/top
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/ab7/ab7ed83d60823c1b023c7b76fcbe9c20d537ed4c//
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: Removed unneeded options from PROCPS_NG_CONF_OPTS (Thomas)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I've applied, after changing the empty exec-prefix to use
---exec-prefix=/ instead.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 9500ab1..942046b 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	e9dfe7160fd3b465d6d5068f219122626ef790cce507e290cd09852c7d90726f	dovecot-2.2-pigeonhole-0.4.10.tar.gz
++sha256	98a2fd79b0d9effd08c0caf04d483b1caa5e4503dae811e6d436948557bfb702	dovecot-2.2-pigeonhole-0.4.12.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index d057c7a..2b8232d 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.10
++DOVECOT_PIGEONHOLE_VERSION = 0.4.12
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
