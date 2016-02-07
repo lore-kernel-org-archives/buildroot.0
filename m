@@ -1,13 +1,16 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun,  7 Feb 2016 22:59:24 +0100
-Subject: [Buildroot] [PATCH v2] package/libatomic_ops: rename libatomic_ops
-	supported arch Kconfig symbol
-Message-ID: <1454882365-10901-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Feb 2016 23:12:11 +0100
+Subject: [Buildroot] [git commit] package/libatomic_ops: rename
+	libatomic_ops supported arch Kconfig symbol
+Message-ID: <20160207221239.DBD5E8014E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=eebd770728376106215c519acc4cd74a1b79a141
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 According to the discussion on the mailing-list [1], rename
 the libatomic_ops supported architectures Kconfig symbol.
@@ -17,8 +20,7 @@ the libatomic_ops supported architectures Kconfig symbol.
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Frank Hunleth <fhunleth@troodon-software.com>
----
-v2: drop the ligacy handling, it's an hidden symbol (ThomasP)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
  package/bdwgc/Config.in         | 2 +-
  package/erlang/Config.in        | 4 ++--
@@ -110,5 +112,3 @@ index dcd353f..6bc3090 100644
 +	depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
  	depends on !BR2_sparc64
  
--- 
-2.4.3
