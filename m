@@ -1,46 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 15:52:41 +0100
-Subject: [Buildroot] [PATCH v3] support/scripts: add size-stats-compare
- script
-In-Reply-To: <1454418359-22799-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1454418359-22799-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <20160207155241.012775ba@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Feb 2016 15:57:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-geode:
+	bump version to 2.11.18
+Message-ID: <1454857060-8120-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas De Schampheleire,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash | 4 ++--
+ package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Tue,  2 Feb 2016 14:05:59 +0100, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
-> 
-> Leverage the CSV files produces by size-stats (make graph-size) to allow
-> for a comparison of rootfs size between two different buildroot
-> compilations.
-> 
-> The script takes the file-size CSV files of two compilations as input, and
-> produces a textual report of the differences per package.
-> Using the -d/--detail flag, the report will show the file size changes
-> instead of package size changes.
-> The -t/--threshold option allows to ignore file size differences smaller
-> or equal than the given threshold (in bytes).
-> 
-> Example output is:
-> 
-> Size difference per package (bytes), threshold = 0
-> --------------------------------------------------------------------------------
->        -8192         busybox
->       228572   added dmalloc
->       301584   added jq
-> --------------------------------------------------------------------------------
->       521964         TOTAL
-
-Applied, thanks.
-
-Thomas
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+index 991cf6b..b05983f 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-May/002607.html
+-sha256	07b4d42623e71e592b77c52a75cf230f8e711c8a0c1b26cecb06e9231d333c41	xf86-video-geode-2.11.17.tar.bz2
++# From http://lists.x.org/archives/xorg-announce/2016-February/002673.html
++sha256	d6ece9a862a68be3cdf86a87e0e1ba5e199168b8d075129646638f53649ba9e8	xf86-video-geode-2.11.18.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+index ae5bc0b..b882f1f 100644
+--- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
++++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.17
++XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.18
+ XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
