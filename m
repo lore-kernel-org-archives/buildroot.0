@@ -1,93 +1,134 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 10:27:43 +0100
-Subject: [Buildroot] [PATCH v4 07/17] python-service-identity: new
-	package
-In-Reply-To: <1454799603-5474-8-git-send-email-mc5686@mclink.it>
-References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-8-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kv_oztd4tv_HwBbn_fhyW4qCm1Vuy8K-3ajFD9Zjy9RGQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Feb 2016 12:21:41 +0100
+Subject: [Buildroot] [git commit] package/lcdproc: fix musl build
+Message-ID: <20160207112146.DA9B580497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 6, 2016 at 11:59 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> ---
->  package/Config.in                                         |  1 +
->  package/python-service-identity/Config.in                 | 10 ++++++++++
->  .../python-service-identity/python-service-identity.hash  |  3 +++
->  .../python-service-identity/python-service-identity.mk    | 15 +++++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/python-service-identity/Config.in
->  create mode 100644 package/python-service-identity/python-service-identity.hash
->  create mode 100644 package/python-service-identity/python-service-identity.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9b620e6..afef272 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -709,6 +709,7 @@ menu "External python modules"
->         source "package/python-requests/Config.in"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-serial/Config.in"
-> +       source "package/python-service-identity/Config.in"
->         source "package/python-setuptools/Config.in"
->         source "package/python-simplejson/Config.in"
->         source "package/python-singledispatch/Config.in"
-> diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
-> new file mode 100644
-> index 0000000..e2200f6
-> --- /dev/null
-> +++ b/package/python-service-identity/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
-> +       bool "python-service-identity"
-> +       select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
-> +       select BR2_PACKAGE_PYTHON_PYASN # runtime
-> +       select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
-> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-> +       help
-> +         Service identity verification for pyOpenSSL.
-> +
-> +         https://pypi.python.org/pypi/service_identity
-> diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
-> new file mode 100644
-> index 0000000..caf29dc
-> --- /dev/null
-> +++ b/package/python-service-identity/python-service-identity.hash
-> @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cea0b0156d73b025ecef660fb51f0d9a, sha256 locally computed.
-> +md5    cea0b0156d73b025ecef660fb51f0d9a  service_identity-14.0.0.tar.gz
-> +sha256 3105a319a7c558490666694f599be0c377ad54824eefb404cde4ce49e74a4f5a  service_identity-14.0.0.tar.gz
-> diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
-> new file mode 100644
-> index 0000000..1be9b92
-> --- /dev/null
-> +++ b/package/python-service-identity/python-service-identity.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-service-identity
-> +#
-> +################################################################################
-> +
-> +PYTHON_SERVICE_IDENTITY_VERSION = 14.0.0
-> +PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
-> +PYTHON_SERVICE_IDENTITY_SITE = http://pypi.python.org/packages/source/s/service_identity
-> +PYTHON_SERVICE_IDENTITY_LICENSE = MIT
-> +PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
-> +PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
-> +PYTHON_SERVICE_IDENTITY_DEPENDENCIES = python-characteristic python-pyasn python-pyasn-modules python-pyopenssl
+commit: https://git.buildroot.net/buildroot/commit/?id=60ad5b9dac3385929ff425dd34032e5a7a74e814
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-you don't need them as build-time deps.
+Fixes
+http://autobuild.buildroot.net/results/9ce/9cec3bea99f2aa10313da38c1e81655666c774f7/
+http://autobuild.buildroot.net/results/b3d/b3d09286d018e53a6d57f8dd5616010a3b212731/
+http://autobuild.buildroot.net/results/aa2/aa27b150a79b14fe1dda74a56371b4ee35b3ac15/
+and others
 
-> +$(eval $(python-package))
-> --
-> 2.1.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lcdproc/0002-musl.patch | 102 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+
+diff --git a/package/lcdproc/0002-musl.patch b/package/lcdproc/0002-musl.patch
+new file mode 100644
+index 0000000..d0425fd
+--- /dev/null
++++ b/package/lcdproc/0002-musl.patch
+@@ -0,0 +1,102 @@
++Fix musl build
++
++Partly downloaded from
++http://lists.omnipotent.net/pipermail/lcdproc/2015-November/014291.html
++http://lists.omnipotent.net/pipermail/lcdproc/2015-November/014281.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr lcdproc-0.5.7.org/clients/lcdproc/machine.h lcdproc-0.5.7/clients/lcdproc/machine.h
++--- lcdproc-0.5.7.org/clients/lcdproc/machine.h	2012-08-19 16:29:07.000000000 +0200
+++++ lcdproc-0.5.7/clients/lcdproc/machine.h	2016-01-30 14:07:33.641802847 +0100
++@@ -12,6 +12,7 @@
++ #ifndef _lcdproc_machine_h_
++ #define _lcdproc_machine_h_
++ 
+++#include <time.h>
++ #include "shared/LL.h"
++ 
++ #ifndef LOADAVG_NSTATS
++diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-pifacecad.c lcdproc-0.5.7/server/drivers/hd44780-pifacecad.c
++--- lcdproc-0.5.7.org/server/drivers/hd44780-pifacecad.c	2014-03-23 11:22:09.000000000 +0100
+++++ lcdproc-0.5.7/server/drivers/hd44780-pifacecad.c	2016-01-30 14:12:03.521279729 +0100
++@@ -54,6 +54,7 @@
++ #include <unistd.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ #include <stdint.h>
++ #include <linux/spi/spidev.h>
++ 
++diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-rpi.c lcdproc-0.5.7/server/drivers/hd44780-rpi.c
++--- lcdproc-0.5.7.org/server/drivers/hd44780-rpi.c	2014-03-23 11:22:09.000000000 +0100
+++++ lcdproc-0.5.7/server/drivers/hd44780-rpi.c	2016-01-30 14:04:10.288112853 +0100
++@@ -285,7 +285,7 @@
++ 
++ 	/* Unmap and free memory */
++ 	if (gpio_map != NULL)
++-		munmap((caddr_t) gpio_map, GPIO_BLOCK_SIZE);
+++		munmap((void *) gpio_map, GPIO_BLOCK_SIZE);
++ 	if (p->rpi_gpio != NULL)
++ 		free(p->rpi_gpio);
++ 	p->rpi_gpio = NULL;
++diff -uNr lcdproc-0.5.7.org/server/drivers/hd44780-spi.c lcdproc-0.5.7/server/drivers/hd44780-spi.c
++--- lcdproc-0.5.7.org/server/drivers/hd44780-spi.c	2014-03-23 11:22:09.000000000 +0100
+++++ lcdproc-0.5.7/server/drivers/hd44780-spi.c	2016-01-30 14:11:11.604763500 +0100
++@@ -29,6 +29,7 @@
++ #include <unistd.h>
++ #include <fcntl.h>
++ #include <sys/ioctl.h>
+++#include <linux/ioctl.h>
++ #include <stdint.h>
++ #include <linux/spi/spidev.h>
++ 
++diff -uNr lcdproc-0.5.7.org/server/drivers/mtc_s16209x.c lcdproc-0.5.7/server/drivers/mtc_s16209x.c
++--- lcdproc-0.5.7.org/server/drivers/mtc_s16209x.c	2011-08-14 14:29:16.000000000 +0200
+++++ lcdproc-0.5.7/server/drivers/mtc_s16209x.c	2016-01-30 14:13:10.691122839 +0100
++@@ -49,6 +49,7 @@
++ #include <fcntl.h>
++ #include <string.h>
++ #include <errno.h>
+++#include <sys/file.h>
++ 
++ #ifdef HAVE_CONFIG_H
++ # include "config.h"
++diff -uNr lcdproc-0.5.7.org/server/drivers/rawserial.c lcdproc-0.5.7/server/drivers/rawserial.c
++--- lcdproc-0.5.7.org/server/drivers/rawserial.c	2014-03-23 11:22:10.000000000 +0100
+++++ lcdproc-0.5.7/server/drivers/rawserial.c	2016-01-30 14:03:43.465779507 +0100
++@@ -60,13 +60,13 @@
++ 	/** \name Event loop timing. refresh_time and refresh_delta form the
++ 	 * event loop timing mechanism for configurable update rates.
++ 	 *@{*/
++-	uint refresh_time;		/**< time at the last screen update */
++-	uint refresh_delta;		/**< time step to next screen update */
+++	unsigned int refresh_time;		/**< time@the last screen update */
+++	unsigned int refresh_delta;		/**< time step to next screen update */
++ 	/**@}*/
++ } PrivateData;
++ 
++ /* Local prototypes */
++-static uint get_millisecond_time(void);
+++static unsigned int get_millisecond_time(void);
++ 
++ 
++ /* Vars for the server core */
++@@ -303,7 +303,7 @@
++ 	PrivateData *p = drvthis->private_data;
++ 	char out[LCD_MAX_WIDTH * LCD_MAX_HEIGHT];
++ 
++-	uint currentTime = get_millisecond_time();
+++	unsigned int currentTime = get_millisecond_time();
++ 	int t_delta = currentTime - p->refresh_time;
++ 
++ 	/*
++@@ -415,7 +415,7 @@
++  *
++  * \return  int with current millisecond time.
++  */
++-static uint
+++static unsigned int
++ get_millisecond_time(void)
++ {
++ 	struct timeval ts;
