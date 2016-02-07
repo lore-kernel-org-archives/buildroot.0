@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 18:43:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/squeezelite: fix musl build
-In-Reply-To: <1454262247-30214-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454262247-30214-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207184337.0affb88c@free-electrons.com>
+Date: Sun, 7 Feb 2016 18:48:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kbd: fix musl build
+In-Reply-To: <1454158223-10088-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454158223-10088-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207184808.567ac03b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,28 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 31 Jan 2016 18:44:07 +0100, Bernd Kuhls wrote:
-> The build error was not yet found by the autobuilders:
-> 
-> output_alsa.c: In function ?output_init_alsa?:
-> output_alsa.c:865:10: error: ?M_TRIM_THRESHOLD? undeclared (first use in this function)
->   mallopt(M_TRIM_THRESHOLD, -1);
->           ^
-> output_alsa.c:865:10: note: each undeclared identifier is reported only once for each function it appears in
-> output_alsa.c:866:10: error: ?M_MMAP_MAX? undeclared (first use in this function)
->   mallopt(M_MMAP_MAX, 0);
->           ^
+On Sat, 30 Jan 2016 13:50:23 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/535/5357953e763a1ac4f17332abac54ce2946629a41/
+> http://autobuild.buildroot.net/results/cbd/cbd8f4ccde45e157e97ca9ef3035fd9e108e10ab/
+> http://autobuild.buildroot.net/results/cbf/cbfc14d5c7a61e997ff091983e586195e85a4316/
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...02-only-run-glibc-specific-hacks-on-glibc.patch | 30 ++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/squeezelite/0002-only-run-glibc-specific-hacks-on-glibc.patch
+>  package/kbd/0002-musl-headers-error.patch          | 122 +++++++++++++++++++++
+>  .../kbd/0003-fix-struct_winsize-collision.patch    |  18 +++
+>  2 files changed, 140 insertions(+)
+>  create mode 100644 package/kbd/0002-musl-headers-error.patch
+>  create mode 100644 package/kbd/0003-fix-struct_winsize-collision.patch
 
-Applied with some changes:
+This was much more complicated than it needs to be: bumping to the
+latest version 2.0.3 is easier and fixes the musl build issue. It still
+requires the libintl patch, and backporting an already upstream patch
+to remove the check dependency. But it's still easier.
 
-    [Thomas: only enclose the mallopt() call in __GLIBC__, use Git to
-    format the patch, improve the commit log.]
+See:
+
+  https://git.busybox.net/buildroot/commit/?id=056c9d28c43c6d665d193635a2f1a03998a852b6
 
 Thanks!
 
