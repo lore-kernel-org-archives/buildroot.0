@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:10 +0100
-Subject: [Buildroot] [PATCH 26/28] package/kodi-adsp-biquad-filters: new
+Date: Sun,  7 Feb 2016 17:03:00 +0100
+Subject: [Buildroot] [PATCH 16/28] package/kodi-screensaver-asterwave: new
 	package
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-27-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,58 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-biquad-filters/Config.in                 | 10 ++++++++++
- .../kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk   | 14 ++++++++++++++
- package/kodi/Config.in                                     |  1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-adsp-biquad-filters/Config.in
- create mode 100644 package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk
+ package/kodi-screensaver-asterwave/Config.in                  | 11 +++++++++++
+ .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk  | 11 +++++++++++
+ package/kodi/Config.in                                        |  1 +
+ 3 files changed, 23 insertions(+)
+ create mode 100644 package/kodi-screensaver-asterwave/Config.in
+ create mode 100644 package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
 
-diff --git a/package/kodi-adsp-biquad-filters/Config.in b/package/kodi-adsp-biquad-filters/Config.in
+diff --git a/package/kodi-screensaver-asterwave/Config.in b/package/kodi-screensaver-asterwave/Config.in
 new file mode 100644
-index 0000000..efb783c
+index 0000000..c430cff
 --- /dev/null
-+++ b/package/kodi-adsp-biquad-filters/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_ADSP_BIQUAD_FILTERS
-+	bool "kodi-adsp-biquad-filters"
-+	select BR2_PACKAGE_LIBASPLIB
-+	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
++++ b/package/kodi-screensaver-asterwave/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE
++	bool "kodi-screensaver-asterwave"
++	depends on BR2_PACKAGE_KODI_GL # libsoil
++	select BR2_PACKAGE_LIBSOIL
 +	help
-+	  Biquad filter addon for Kodi's AudioDSP-System
++	  AsterWave screensaver for Kodi
 +
-+	  https://github.com/kodi-adsp/adsp.biquad.filters
-diff --git a/package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk b/package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk
++	  https://github.com/notspiff/screensaver.asterwave
++
++comment "asterwave needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
 new file mode 100644
-index 0000000..e5543bb
+index 0000000..1cb74f3
 --- /dev/null
-+++ b/package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk
-@@ -0,0 +1,14 @@
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+@@ -0,0 +1,11 @@
 +################################################################################
 +#
-+# kodi-adsp-biquad-filters
++# kodi-screensaver-asterwave
 +#
 +################################################################################
 +
-+KODI_ADSP_BIQUAD_FILTERS_VERSION = 71087c48bb655b4539fdb2f367f7f7d820bdb1d6
-+KODI_ADSP_BIQUAD_FILTERS_SITE = $(call github,kodi-adsp,adsp.biquad.filters,$(KODI_ADSP_BIQUAD_FILTERS_VERSION))
-+KODI_ADSP_BIQUAD_FILTERS_LICENSE = GPLv2+
-+KODI_ADSP_BIQUAD_FILTERS_LICENSE_FILES = LICENSE.md
-+KODI_ADSP_BIQUAD_FILTERS_DEPENDENCIES = libasplib libplatform \
-+	kodi-platform tinyxml
++KODI_SCREENSAVER_ASTERWAVE_VERSION = 0dc2c48dadb100954eef823e7e3a5f502ce65b1e
++KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,notspiff,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
++KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libsoil
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 09513a2..55b2afa 100644
+index e696de4..65f37ad 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -238,6 +238,7 @@ endmenu
+@@ -264,6 +264,7 @@ endmenu
  
- menu "Audio DSP addons"
- 	source "package/kodi-adsp-basic/Config.in"
-+	source "package/kodi-adsp-biquad-filters/Config.in"
- 	source "package/kodi-adsp-freesurround/Config.in"
- endmenu
- 
+ menu "Screensavers"
+ 	source "package/kodi-screensaver-asteroids/Config.in"
++	source "package/kodi-screensaver-asterwave/Config.in"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
 -- 
 2.7.0
