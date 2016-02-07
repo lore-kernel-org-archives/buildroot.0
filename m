@@ -1,39 +1,75 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  7 Feb 2016 20:39:06 -0300
-Subject: [Buildroot] [PATCH 1/3] configs/qemu: update arm-vexpress
-	instructions for SMP
-Message-ID: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Sun,  7 Feb 2016 20:39:07 -0300
+Subject: [Buildroot] [PATCH 2/3] configs/qemu: drop arm nuri
+In-Reply-To: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1454888348-8149-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can use the vexpress arm defconfig to test SMP features in Qemu.
-So document the necessary invocation changes to account for this, in
-preparation of the arm nuri defconfig removal.
+This config has no prospect of going into the future (by using DTS), and
+qemu doesn't do a good job at emulating it (networking problems), so
+drop it.
+All of the ARM SMP testing duties are now in the vexpress defconfig
+which is better suited/supported.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- board/qemu/arm-vexpress/readme.txt | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ board/qemu/arm-nuri/readme.txt  | 11 -----------
+ configs/qemu_arm_nuri_defconfig | 24 ------------------------
+ 2 files changed, 35 deletions(-)
+ delete mode 100644 board/qemu/arm-nuri/readme.txt
+ delete mode 100644 configs/qemu_arm_nuri_defconfig
 
-diff --git a/board/qemu/arm-vexpress/readme.txt b/board/qemu/arm-vexpress/readme.txt
-index 7ca4e89..c7a7607 100644
---- a/board/qemu/arm-vexpress/readme.txt
-+++ b/board/qemu/arm-vexpress/readme.txt
-@@ -1,8 +1,11 @@
- Run the emulation with:
- 
--  qemu-system-arm -M vexpress-a9 -m 256 -kernel output/images/zImage -dtb output/images/vexpress-v2p-ca9.dtb -drive file=output/images/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
-+  qemu-system-arm -M vexpress-a9 -smp 1 -m 256 -kernel output/images/zImage -dtb output/images/vexpress-v2p-ca9.dtb -drive file=output/images/rootfs.ext2,if=sd,format=raw -append "console=ttyAMA0,115200 root=/dev/mmcblk0" -serial stdio -net nic,model=lan9118 -net user
- 
- The login prompt will appear in the terminal that started Qemu. The
- graphical window is the framebuffer.
- 
-+If you want to emulate more cores change "-smp 1" to "-smp 2" for
-+dual-core or even "smp -4" for a quad-core configuration.
-+
- Tested with QEMU 2.3.0
+diff --git a/board/qemu/arm-nuri/readme.txt b/board/qemu/arm-nuri/readme.txt
+deleted file mode 100644
+index df07a5c..0000000
+--- a/board/qemu/arm-nuri/readme.txt
++++ /dev/null
+@@ -1,11 +0,0 @@
+-Run the emulation with:
+-
+-  qemu-system-arm -M nuri -kernel output/images/zImage -append "console=ttySAC1,115200" -smp 2 -serial null -serial stdio
+-
+-The login prompt will appear in the terminal that started Qemu. The
+-graphical window is the framebuffer.
+-
+-Startup time is slow because of the SMP CPU emulation so be patient.
+-This emulation is known to be flaky.
+-
+-Tested with QEMU 2.3.0
+diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
+deleted file mode 100644
+index 9c64f74..0000000
+--- a/configs/qemu_arm_nuri_defconfig
++++ /dev/null
+@@ -1,24 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_cortex_a9=y
+-BR2_ARM_ENABLE_NEON=y
+-BR2_ARM_ENABLE_VFP=y
+-BR2_ARM_FPU_VFPV3D16=y
+-
+-# System
+-BR2_TARGET_GENERIC_GETTY_PORT="ttySAC1"
+-
+-# Filesystem
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-
+-# Linux headers same as kernel, a 4.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-# Stuck at 3.10.x because there's no Nuri DTS
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.96"
+-BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
+-BR2_LINUX_KERNEL_ZIMAGE=y
 -- 
 2.4.10
