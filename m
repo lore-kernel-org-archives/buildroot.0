@@ -1,80 +1,76 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Feb 2016 22:34:24 +0100
-Subject: [Buildroot] [PATCH 1/6 v3] package/avahi: break circular
-	dependencies
+Date: Sun,  7 Feb 2016 22:34:26 +0100
+Subject: [Buildroot] [PATCH 3/6 v3] core: catch failures in graph-depends
 In-Reply-To: <cover.1454880734.git.yann.morin.1998@free.fr>
 References: <cover.1454880734.git.yann.morin.1998@free.fr>
-Message-ID: <9851ff7c9ebb4f8cac4886d696e9ce7d589e2961.1454880734.git.yann.morin.1998@free.fr>
+Message-ID: <d9c3aae49bda2a879b222946464f9405ae1a5ac6.1454880734.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently have two circular dependency chains:
+Currently, we generate the dependency graph in a single command, piping
+the stdout of support/scripts/.graph-depends to the stdin of dot.
 
-    avahi -> libglade -> libgtk2 -> cups -> avahi
-    avahi -> libgtk3 -> cups -> avahi
+Unfortunately, this means we can't catch a failure of graph-depends, as
+the shell can only treturn the exit code of the last command in a pipe.
 
-The cups -> avahi dependency makes sense, as cups would be able to use
-Bonjour and mDNS to find printers, so we want to keep that dependency.
+Still, we do want to keep the output of graph-depends, and we in fact do
+keep it by mean of a tee.
 
-The libgtk2 -> cups and libgtk3 -> cups dependencies also make sense, to
-be able to offer cups in the print dialogs.
+graph-depends has just gained the ability to generate its output to a
+file, so we break the pipe in two differnet commands, so we can bail out
+on graph-depends errors.
 
-However, the avahi -> libglade and avahi -> libgtk3 dependencies do not
-really make sense. As Thomas puts it:
-
-    The avahi GUI programs seem really useless to me. On Debian/Ubuntu
-    distributions, they are not even packaged within the main avahi
-    packages, but as separate packages, probably indicating that they
-    are not very commonly used.
-
-So, we drop the avahi -> libglade and avahi -> libgtk3 dependencies, to
-break the circular dependency chain.
+Do that for the two call sites.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
-Changes v2 -> v3:
-  - break the loop at the avahi -> libgtk{2,3} deps  (Thomas)
+Changes v2 -> v3;
+  - split out of the previous patch  (Thomas)
 ---
- package/avahi/avahi.mk | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ Makefile               | 6 ++++--
+ package/pkg-generic.mk | 8 +++++---
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 9c6b609..7229673 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -71,6 +71,8 @@ AVAHI_CONF_ENV = \
- AVAHI_CONF_OPTS = \
- 	--disable-qt3 \
- 	--disable-qt4 \
-+	--disable-gtk \
-+	--disable-gtk3 \
- 	--disable-gdbm \
- 	--disable-pygtk \
- 	--disable-mono \
-@@ -126,19 +128,6 @@ else
- AVAHI_CONF_OPTS += --disable-glib --disable-gobject
- endif
+diff --git a/Makefile b/Makefile
+index 68259fd..7c5daa4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -721,8 +721,10 @@ graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(GRAPHS_DIR)
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends $(BR2_GRAPH_DEPS_OPTS) \
+-	|tee $(GRAPHS_DIR)/$(@).dot \
+-	|dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) -o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT)
++		-o $(GRAPHS_DIR)/$(@).dot
++	dot $(BR2_GRAPH_DOT_OPTS) -T$(BR_GRAPH_OUT) \
++		-o $(GRAPHS_DIR)/$(@).$(BR_GRAPH_OUT) \
++		$(GRAPHS_DIR)/$(@).dot
  
--ifeq ($(BR2_PACKAGE_LIBGLADE),y)
--AVAHI_DEPENDENCIES += libglade
--else
--AVAHI_CONF_OPTS += --disable-gtk
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGTK3),y)
--AVAHI_DEPENDENCIES += libgtk3
--AVAHI_CONF_OPTS += --enable-gtk3
--else
--AVAHI_CONF_OPTS += --disable-gtk3
--endif
--
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- AVAHI_CONF_ENV += \
- 	am_cv_pathless_PYTHON=python \
+ graph-size:
+ 	$(Q)mkdir -p $(GRAPHS_DIR)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 1e024d3..e22babb 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -668,9 +668,11 @@ $(1)-show-depends:
+ $(1)-graph-depends: graph-depends-requirements
+ 			@$$(INSTALL) -d $$(GRAPHS_DIR)
+ 			@cd "$$(CONFIG_DIR)"; \
+-			$$(TOPDIR)/support/scripts/graph-depends -p $(1) $$(BR2_GRAPH_DEPS_OPTS) \
+-			|tee $$(GRAPHS_DIR)/$$(@).dot \
+-			|dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) -o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT)
++			$$(TOPDIR)/support/scripts/graph-depends $$(BR2_GRAPH_DEPS_OPTS) \
++				-p $(1) -o $$(GRAPHS_DIR)/$$(@).dot
++			dot $$(BR2_GRAPH_DOT_OPTS) -T$$(BR_GRAPH_OUT) \
++				-o $$(GRAPHS_DIR)/$$(@).$$(BR_GRAPH_OUT) \
++				$$(GRAPHS_DIR)/$$(@).dot
+ 
+ $(1)-all-source:	$(1)-source
+ $(1)-all-source:	$$(foreach p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
 -- 
 1.9.1
