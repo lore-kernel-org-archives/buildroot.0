@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 08:45:39 +0100
-Subject: [Buildroot] [PATCH v4 15/17] python-setproctitle: new package
-In-Reply-To: <1454799603-5474-16-git-send-email-mc5686@mclink.it>
+Date: Sun, 7 Feb 2016 08:46:53 +0100
+Subject: [Buildroot] [PATCH v4 17/17] python-crossbar: new package
+In-Reply-To: <1454799603-5474-18-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-16-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kvkpE7T9SMPmBUce8HSA3jbShpQAFcgB+pBTbcFMRXz9A@mail.gmail.com>
+ <1454799603-5474-18-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ktiF1Tkpw9_rdEkUEzKP5a-T0i3rU7e7bcR4pJXJMGzHA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,77 +12,111 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Sun, Feb 7, 2016 at 12:00 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>#
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 >
 > ---
 > Changes v3 -> v4
->   - removed spurious dependency to python2 Config.in (suggested by Y.Yefremov)
+>   - added several "select ... # runtime" in Config.in (suggested by Y.Yefremov)
+>   - removed all dpendencies from python-crossbar.mk
+>   - removed spurious "source" line in package/Config.in
+>   - slightly edited comment in Config.in
 >
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                                    |  1 +
->  package/python-setproctitle/Config.in                |  6 ++++++
->  package/python-setproctitle/python-setproctitle.hash |  3 +++
->  package/python-setproctitle/python-setproctitle.mk   | 14 ++++++++++++++
->  4 files changed, 24 insertions(+)
->  create mode 100644 package/python-setproctitle/Config.in
->  create mode 100644 package/python-setproctitle/python-setproctitle.hash
->  create mode 100644 package/python-setproctitle/python-setproctitle.mk
+>  package/Config.in                            |  1 +
+>  package/python-crossbar/Config.in            | 37 ++++++++++++++++++++++++++++
+>  package/python-crossbar/python-crossbar.hash |  3 +++
+>  package/python-crossbar/python-crossbar.mk   | 14 +++++++++++
+>  4 files changed, 55 insertions(+)
+>  create mode 100644 package/python-crossbar/Config.in
+>  create mode 100644 package/python-crossbar/python-crossbar.hash
+>  create mode 100644 package/python-crossbar/python-crossbar.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 7bda8d7..adb4188 100644
+> index 0ee5577..acb9520 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -711,6 +711,7 @@ menu "External python modules"
->         source "package/python-rtslib-fb/Config.in"
->         source "package/python-serial/Config.in"
->         source "package/python-service-identity/Config.in"
-> +       source "package/python-setproctitle/Config.in"
->         source "package/python-setuptools/Config.in"
->         source "package/python-shutilwhich/Config.in"
->         source "package/python-simplejson/Config.in"
-> diff --git a/package/python-setproctitle/Config.in b/package/python-setproctitle/Config.in
+> @@ -634,6 +634,7 @@ menu "External python modules"
+>         source "package/python-configobj/Config.in"
+>         source "package/python-configshell-fb/Config.in"
+>         source "package/python-crc16/Config.in"
+> +       source "package/python-crossbar/Config.in"
+>         source "package/python-cssselect/Config.in"
+>         source "package/python-daemon/Config.in"
+>         source "package/python-dialog/Config.in"
+> diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
 > new file mode 100644
-> index 0000000..d13afaa
+> index 0000000..ee9d6a9
 > --- /dev/null
-> +++ b/package/python-setproctitle/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_SETPROCTITLE
-> +       bool "python-setproctitle"
+> +++ b/package/python-crossbar/Config.in
+> @@ -0,0 +1,37 @@
+> +config BR2_PACKAGE_PYTHON_CROSSBAR
+> +       bool "python-crossbar"
+> +       select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
+> +       select BR2_PACKAGE_PYTHON_CBOR # runtime
+> +       select BR2_PACKAGE_PYTHON_CLICK # runtime
+> +       select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+> +       select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+> +       select BR2_PACKAGE_PYTHON_MISTUNE # runtime
+> +       select BR2_PACKAGE_PYTHON_MSGPACK # runtime
+> +       select BR2_PACKAGE_PYTHON_NETADDR # runtime
+> +       select BR2_PACKAGE_PYTHON_PSUTIL # runtime
+> +       select BR2_PACKAGE_PYTHON_PYASN # runtime
+> +       select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+> +       select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
+> +       select BR2_PACKAGE_PYTHON_PYINOTIFY # runtime
+> +       select BR2_PACKAGE_PYTHON_PYNACL # runtime
+> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+> +       select BR2_PACKAGE_PYTHON_PYTRIE # runtime
+> +       select BR2_PACKAGE_PYTHON_PYYAML # runtime
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> +       select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+> +       select BR2_PACKAGE_PYTHON_SETPROCTITLE # runtime
+> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+> +       select BR2_PACKAGE_PYTHON_SHURILWHICH # runtime
+> +       select BR2_PACKAGE_PYTHON_TREQ # runtime
+> +       select BR2_PACKAGE_PYTHON_TWISTED # runtime
+> +       select BR2_PACKAGE_PYTHON_UJSON # runtime
+> +       select BR2_PACKAGE_PYTHON_WSACCEL # runtime
 > +       help
-> +         A Python module to customize the process title.
+> +         Crossbar.io is an open-source WAMP application router
+> +         that allows to build advanced applications from loosely-coupled
+> +         components that can talk in real-time with each other.
 > +
-> +         https://pypi.python.org/pypi/setproctitle
-> diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
+> +         https://pypi.python.org/pypi/crossbar
+> +
+> +comment "Currently Crossbar.io does NOT work without Python sources!"
+> +        depends on BR2_PACKAGE_PYTHON_PYC_ONLY
+> diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
 > new file mode 100644
-> index 0000000..3b0fd71
+> index 0000000..0690e56
 > --- /dev/null
-> +++ b/package/python-setproctitle/python-setproctitle.hash
+> +++ b/package/python-crossbar/python-crossbar.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=95d9e56c69437246460a20804961d70d, sha256 locally computed.
-> +md5    95d9e56c69437246460a20804961d70d  setproctitle-1.1.9.tar.gz
-> +sha256 1c3414d18f9cacdab78b0ffd8e886d56ad45f22e55001a72aaa0b2aeb56a0ad7  setproctitle-1.1.9.tar.gz
-> diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
+> +md5    cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
+> +sha256 4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
+> diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
 > new file mode 100644
-> index 0000000..63dfad0
+> index 0000000..a35d54d
 > --- /dev/null
-> +++ b/package/python-setproctitle/python-setproctitle.mk
+> +++ b/package/python-crossbar/python-crossbar.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-setproctitle
+> +# python-crossbar
 > +#
 > +################################################################################
 > +
-> +PYTHON_SETPROCTITLE_VERSION = 1.1.9
-> +PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
-> +PYTHON_SETPROCTITLE_SITE = http://pypi.python.org/packages/source/s/setproctitle
-> +PYTHON_SETPROCTITLE_LICENSE = BSD-3c
-> +PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
-> +PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
+> +PYTHON_CROSSBAR_VERSION = 0.12.1
+> +PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
+> +PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
+> +PYTHON_CROSSBAR_LICENSE = AGPL3
+> +PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
+> +PYTHON_CROSSBAR_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
