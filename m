@@ -1,88 +1,88 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 08:45:20 +0100
-Subject: [Buildroot] [PATCH v4 09/17] python-treq: new package
-In-Reply-To: <1454799603-5474-10-git-send-email-mc5686@mclink.it>
+Date: Sun, 7 Feb 2016 08:45:39 +0100
+Subject: [Buildroot] [PATCH v4 15/17] python-setproctitle: new package
+In-Reply-To: <1454799603-5474-16-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-10-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ktq-sSnqt6qFHqhP8R=RTnWfsFSFajrSRg+U9_xskftYQ@mail.gmail.com>
+ <1454799603-5474-16-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kvkpE7T9SMPmBUce8HSA3jbShpQAFcgB+pBTbcFMRXz9A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 6, 2016 at 11:59 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+On Sun, Feb 7, 2016 at 12:00 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>#
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
+>
 > ---
->  package/Config.in                    |  1 +
->  package/python-treq/Config.in        | 12 ++++++++++++
->  package/python-treq/python-treq.hash |  3 +++
->  package/python-treq/python-treq.mk   | 14 ++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/python-treq/Config.in
->  create mode 100644 package/python-treq/python-treq.hash
->  create mode 100644 package/python-treq/python-treq.mk
+> Changes v3 -> v4
+>   - removed spurious dependency to python2 Config.in (suggested by Y.Yefremov)
+>
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                                    |  1 +
+>  package/python-setproctitle/Config.in                |  6 ++++++
+>  package/python-setproctitle/python-setproctitle.hash |  3 +++
+>  package/python-setproctitle/python-setproctitle.mk   | 14 ++++++++++++++
+>  4 files changed, 24 insertions(+)
+>  create mode 100644 package/python-setproctitle/Config.in
+>  create mode 100644 package/python-setproctitle/python-setproctitle.hash
+>  create mode 100644 package/python-setproctitle/python-setproctitle.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 26f6bf9..13964ca 100644
+> index 7bda8d7..adb4188 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -720,6 +720,7 @@ menu "External python modules"
->         source "package/python-spidev/Config.in"
->         source "package/python-thrift/Config.in"
->         source "package/python-tornado/Config.in"
-> +       source "package/python-treq/Config.in"
->         source "package/python-twisted/Config.in"
->         source "package/python-urllib3/Config.in"
->         source "package/python-urwid/Config.in"
-> diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+> @@ -711,6 +711,7 @@ menu "External python modules"
+>         source "package/python-rtslib-fb/Config.in"
+>         source "package/python-serial/Config.in"
+>         source "package/python-service-identity/Config.in"
+> +       source "package/python-setproctitle/Config.in"
+>         source "package/python-setuptools/Config.in"
+>         source "package/python-shutilwhich/Config.in"
+>         source "package/python-simplejson/Config.in"
+> diff --git a/package/python-setproctitle/Config.in b/package/python-setproctitle/Config.in
 > new file mode 100644
-> index 0000000..a03d4e3
+> index 0000000..d13afaa
 > --- /dev/null
-> +++ b/package/python-treq/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_PYTHON_TREQ
-> +       bool "python-treq"
-> +       select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-> +       select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_TWISTED # runtime
-> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+> +++ b/package/python-setproctitle/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_SETPROCTITLE
+> +       bool "python-setproctitle"
 > +       help
-> +         treq is an HTTP library inspired by requests but written on top of Twisted's Agents.
-> +         It provides a simple, higher level API for making HTTP requests when using Twisted.
+> +         A Python module to customize the process title.
 > +
-> +         https://github.com/twisted/treq
-> diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
+> +         https://pypi.python.org/pypi/setproctitle
+> diff --git a/package/python-setproctitle/python-setproctitle.hash b/package/python-setproctitle/python-setproctitle.hash
 > new file mode 100644
-> index 0000000..f4cc4d6
+> index 0000000..3b0fd71
 > --- /dev/null
-> +++ b/package/python-treq/python-treq.hash
+> +++ b/package/python-setproctitle/python-setproctitle.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b1fb60759ad5a885cb8ea562553f2d4c, sha256 locally computed
-> +md5    b1fb60759ad5a885cb8ea562553f2d4c  treq-15.1.0.tar.gz
-> +sha256 425a47d5d52a993d51211028fb6ade252e5fbea094e878bb4b644096a7322de8  treq-15.1.0.tar.gz
-> diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=95d9e56c69437246460a20804961d70d, sha256 locally computed.
+> +md5    95d9e56c69437246460a20804961d70d  setproctitle-1.1.9.tar.gz
+> +sha256 1c3414d18f9cacdab78b0ffd8e886d56ad45f22e55001a72aaa0b2aeb56a0ad7  setproctitle-1.1.9.tar.gz
+> diff --git a/package/python-setproctitle/python-setproctitle.mk b/package/python-setproctitle/python-setproctitle.mk
 > new file mode 100644
-> index 0000000..dbf0e14
+> index 0000000..63dfad0
 > --- /dev/null
-> +++ b/package/python-treq/python-treq.mk
+> +++ b/package/python-setproctitle/python-setproctitle.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-treq
+> +# python-setproctitle
 > +#
 > +################################################################################
 > +
-> +PYTHON_TREQ_VERSION = 15.1.0
-> +PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
-> +PYTHON_TREQ_SITE = http://pypi.python.org/packages/source/t/treq
-> +PYTHON_TREQ_LICENSE = MIT
-> +PYTHON_TREQ_LICENSE_FILES = LICENSE
-> +PYTHON_TREQ_SETUP_TYPE = setuptools
+> +PYTHON_SETPROCTITLE_VERSION = 1.1.9
+> +PYTHON_SETPROCTITLE_SOURCE = setproctitle-$(PYTHON_SETPROCTITLE_VERSION).tar.gz
+> +PYTHON_SETPROCTITLE_SITE = http://pypi.python.org/packages/source/s/setproctitle
+> +PYTHON_SETPROCTITLE_LICENSE = BSD-3c
+> +PYTHON_SETPROCTITLE_LICENSE_FILES = COPYRIGHT
+> +PYTHON_SETPROCTITLE_SETUP_TYPE = distutils
 > +
 > +$(eval $(python-package))
 > --
