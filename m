@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 08:43:34 +0100
-Subject: [Buildroot] [PATCH v4 06/17] python-pytrie: new package
-In-Reply-To: <1454799603-5474-7-git-send-email-mc5686@mclink.it>
+Date: Sun, 7 Feb 2016 08:43:57 +0100
+Subject: [Buildroot] [PATCH v4 04/17] python-pygments: new package
+In-Reply-To: <1454799603-5474-5-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-7-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ks=vcBchRMchMPKqfyiR+zmVFNwECQvucsjH3aPXojnPw@mail.gmail.com>
+ <1454799603-5474-5-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ksJoP17CmM6yEOcoGdaD7Ejid+ZWEb09HT6q-bDJTR-8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,70 +19,71 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 >
 > ---
 > Changes v3 -> v4
->   - removed spurious blank line at end of Config.in (suggested by Y.Yefremov)
+>   - removed spurious blank line at end of Config.in (suggested by yegorich)
+>   - changed license (BSD -> BSD-2c) (suggested by yegorich)
 >
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                        |  1 +
->  package/python-pytrie/Config.in          |  6 ++++++
->  package/python-pytrie/python-pytrie.hash |  3 +++
->  package/python-pytrie/python-pytrie.mk   | 14 ++++++++++++++
+>  package/Config.in                            |  1 +
+>  package/python-pygments/Config.in            |  6 ++++++
+>  package/python-pygments/python-pygments.hash |  3 +++
+>  package/python-pygments/python-pygments.mk   | 14 ++++++++++++++
 >  4 files changed, 24 insertions(+)
->  create mode 100644 package/python-pytrie/Config.in
->  create mode 100644 package/python-pytrie/python-pytrie.hash
->  create mode 100644 package/python-pytrie/python-pytrie.mk
+>  create mode 100644 package/python-pygments/Config.in
+>  create mode 100644 package/python-pygments/python-pygments.hash
+>  create mode 100644 package/python-pygments/python-pygments.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index fb1ef75..9b620e6 100644
+> index 8e13c64..7b5c747 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -700,6 +700,7 @@ menu "External python modules"
->         source "package/python-pysnmp/Config.in"
->         source "package/python-pysnmp-apps/Config.in"
->         source "package/python-pysnmp-mibs/Config.in"
-> +       source "package/python-pytrie/Config.in"
->         source "package/python-pyudev/Config.in"
->         source "package/python-pyusb/Config.in"
->         source "package/python-pyxb/Config.in"
-> diff --git a/package/python-pytrie/Config.in b/package/python-pytrie/Config.in
+> @@ -685,6 +685,7 @@ menu "External python modules"
+>         source "package/python-pydal/Config.in"
+>         source "package/python-pyftpdlib/Config.in"
+>         source "package/python-pygame/Config.in"
+> +       source "package/python-pygments/Config.in"
+>         source "package/python-pyinotify/Config.in"
+>         source "package/python-pyparsing/Config.in"
+>         source "package/python-pyparted/Config.in"
+> diff --git a/package/python-pygments/Config.in b/package/python-pygments/Config.in
 > new file mode 100644
-> index 0000000..fb1df41
+> index 0000000..f097c52
 > --- /dev/null
-> +++ b/package/python-pytrie/Config.in
+> +++ b/package/python-pygments/Config.in
 > @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PYTRIE
-> +       bool "python-pytrie"
+> +config BR2_PACKAGE_PYTHON_PYGMENTS
+> +       bool "python-pygments"
 > +       help
-> +         A pure Python implementation of the trie data structure.
+> +         Pygments is a syntax highlighting package written in Python.
 > +
-> +         https://pypi.python.org/pypi/PyTrie
-> diff --git a/package/python-pytrie/python-pytrie.hash b/package/python-pytrie/python-pytrie.hash
+> +         https://pypi.python.org/pypi/Pygments
+> diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
 > new file mode 100644
-> index 0000000..88d2542
+> index 0000000..bb954dd
 > --- /dev/null
-> +++ b/package/python-pytrie/python-pytrie.hash
+> +++ b/package/python-pygments/python-pygments.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5997b46c854a68bc588f4527c987663a, sha256 locally computed.
-> +md5    5997b46c854a68bc588f4527c987663a  PyTrie-0.2.tar.gz
-> +sha256 b272021351efadc6757591aac03ed4794bdfd091122204a4673e94bfb66cc500  PyTrie-0.2.tar.gz
-> diff --git a/package/python-pytrie/python-pytrie.mk b/package/python-pytrie/python-pytrie.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=84533d22f72de894f6d3907c3ca9eddf, sha256 locally computed.
+> +md5    84533d22f72de894f6d3907c3ca9eddf  Pygments-2.1.tar.gz
+> +sha256 13a0ef5fafd7b16cf995bc28fe7aab0780dab1b2fda0fc89e033709af8b8a47b  Pygments-2.1.tar.gz
+> diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
 > new file mode 100644
-> index 0000000..e3bea4f
+> index 0000000..eafd775
 > --- /dev/null
-> +++ b/package/python-pytrie/python-pytrie.mk
+> +++ b/package/python-pygments/python-pygments.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-pytrie
+> +# python-pygments
 > +#
 > +################################################################################
 > +
-> +PYTHON_PYTRIE_VERSION = 0.2
-> +PYTHON_PYTRIE_SITE = http://pypi.python.org/packages/source/P/PyTrie
-> +PYTHON_PYTRIE_SOURCE = PyTrie-$(PYTHON_PYTRIE_VERSION).tar.gz
-> +PYTHON_PYTRIE_LICENSE = BSD-3c
-> +PYTHON_PYTRIE_LICENSE_FILES = LICENSE
-> +PYTHON_PYTRIE_SETUP_TYPE = distutils
+> +PYTHON_PYGMENTS_VERSION = 2.1
+> +PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
+> +PYTHON_PYGMENTS_SITE = http://pypi.python.org/packages/source/P/Pygments
+> +PYTHON_PYGMENTS_LICENSE = BSD-2c
+> +PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
+> +PYTHON_PYGMENTS_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
