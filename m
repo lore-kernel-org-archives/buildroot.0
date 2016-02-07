@@ -1,95 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Feb 2016 22:34:25 +0100
-Subject: [Buildroot] [PATCH 2/6 v3] support/graph-depends: add option to
-	specify output file
+Date: Sun,  7 Feb 2016 22:34:28 +0100
+Subject: [Buildroot] [PATCH 5/6 v3] support/graph-depends: teach it to only
+	check dependencies
 In-Reply-To: <cover.1454880734.git.yann.morin.1998@free.fr>
 References: <cover.1454880734.git.yann.morin.1998@free.fr>
-Message-ID: <e3c730b6288daeebf708640fed37b38339cf263a.1454880734.git.yann.morin.1998@free.fr>
+Message-ID: <b3414ece9fc74306e5674a71371c871c071b6402.1454880734.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, graph-depends outputs the dotfile program to stdout, and uses
-stderr to trace the dependencies it is currently looking for.
-
-Redirection was done because the output was directly piped into the dot
-program to generate the final PDF/SVG/... dependency graph, but that
-meant that an error in the graph-depends script was never caught
-(because shell pipes only return the final command exit status, and an
-empty dot program is perfectly valid so dot would not complain).
-
-Add an option to tell graph-depends where to store the generated dot
-program, and keep stdout as the default if not specified.
+Add an option to graph-depends to only do the dependency checks and not
+generate the dot program.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
-
 ---
-Changes v2 -> v3:
-  - rename variable to a consistent 'outfile' name  (Thomas)
-  - don't change the Makefiles now  (Thomas)
----
- support/scripts/graph-depends | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ support/scripts/graph-depends | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index fd8ad2f..74ba995 100755
+index ec32b20..13ddc94 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
 @@ -38,6 +38,8 @@ max_depth = 0
  transitive = True
  
  parser = argparse.ArgumentParser(description="Graph packages dependencies")
-+parser.add_argument("--outfile", "-o", metavar="DOT_FILE", dest="outfile",
-+                    help="File in which to generate the dot representation")
++parser.add_argument("--check-only", "-C", dest="check_only", action="store_true", default=False,
++                    help="Only do the dependency checks (circular deps...)")
+ parser.add_argument("--outfile", "-o", metavar="DOT_FILE", dest="outfile",
+                     help="File in which to generate the dot representation")
  parser.add_argument("--package", '-p', metavar="PACKAGE",
-                     help="Graph the dependencies of PACKAGE")
- parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, default=0,
-@@ -60,6 +62,11 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+@@ -62,9 +64,14 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
                      help="Draw (do not draw) transitive dependencies")
  args = parser.parse_args()
  
-+if args.outfile is None:
-+    outfile = sys.stdout
-+else:
-+    outfile = open(args.outfile, "wb")
++check_only = args.check_only
 +
- if args.package is None:
-     mode = MODE_FULL
+ if args.outfile is None:
+     outfile = sys.stdout
  else:
-@@ -339,10 +346,10 @@ def print_attrs(pkg):
-             color = target_colour
-     version = dict_version.get(pkg)
-     if version == "virtual":
--        print("%s [label = <<I>%s</I>>]" % (name, label))
-+        outfile.write("%s [label = <<I>%s</I>>]\n" % (name, label))
-     else:
--        print("%s [label = \"%s\"]" % (name, label))
--    print("%s [color=%s,style=filled]" % (name, color))
-+        outfile.write("%s [label = \"%s\"]\n" % (name, label))
-+    outfile.write("%s [color=%s,style=filled]\n" % (name, color))
++    if check_only:
++        sys.stderr.write("don't specify outfile and check-only at the same time\n")
++        sys.exit(1)
+     outfile = open(args.outfile, "wb")
  
- # Print the dependency graph of a package
- def print_pkg_deps(depth, pkg):
-@@ -369,13 +376,13 @@ def print_pkg_deps(depth, pkg):
-                     add = False
-                     break
-             if add:
--                print("%s -> %s" % (pkg_node_name(pkg), pkg_node_name(d)))
-+                outfile.write("%s -> %s\n" % (pkg_node_name(pkg), pkg_node_name(d)))
-                 print_pkg_deps(depth+1, d)
+ if args.package is None:
+@@ -351,6 +358,9 @@ def remove_extra_deps(deps):
+     return deps
  
- # Start printing the graph data
--print("digraph G {")
-+outfile.write("digraph G {\n")
- 
- done_deps = []
- print_pkg_deps(0, rootpkg)
- 
--print("}")
-+outfile.write("}\n")
+ check_circular_deps(dict_deps)
++if check_only:
++    sys.exit(0)
++
+ dict_deps = remove_extra_deps(dict_deps)
+ dict_version = get_version([pkg for pkg in allpkgs
+                                 if pkg != "all" and not pkg.startswith("root")])
 -- 
 1.9.1
