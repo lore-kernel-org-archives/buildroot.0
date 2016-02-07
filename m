@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 14:15:30 +0100
-Subject: [Buildroot] [PATCH v2 18/18] erlang: support choosing atomic ops
-In-Reply-To: <56B73D5C.9020704@gmail.com>
-References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-19-git-send-email-fhunleth@troodon-software.com>
- <56B73D5C.9020704@gmail.com>
-Message-ID: <20160207141530.022f87a4@free-electrons.com>
+Date: Sun, 7 Feb 2016 14:24:05 +0100
+Subject: [Buildroot] [PATCH 1/2] package/iprutils: bump version to 2.4.10
+In-Reply-To: <1454167529-26085-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454167529-26085-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207142405.23351d1f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, Frank,
+Dear Bernd Kuhls,
 
-On Sun, 7 Feb 2016 13:49:32 +0100, Romain Naour wrote:
+On Sat, 30 Jan 2016 16:25:28 +0100, Bernd Kuhls wrote:
+> Upstream now provides a new autoconf-based build system, therefore
+> our patches for Makefile are not needed anymore. The build system
+> checks for function matherr in libm, this test fails so check for
+> main().
 
-> Copy past error: BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS doesn't exist but you
-> probably wanted BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS.
-> 
-> Maybe BR2_PACKAGE_LIBATOMIC_ARCH_SUPPORTS which is defined in libatomic_ops
-> package is confusing... Thomas ?
+Checking for main() is silly. Instead, I've changed the patch to check
+for pow(), which is actually used by the iprconfig.c code. I've also
+reformatted the patch with Git. Once again: whenever the upstream
+project uses Git, *please* use Git to format the patches for that
+package.
 
-Yes, it should be renamed to BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS.
-Could someone send a patch for this?
+I also had to rework the gettext patch because the configure.ac script
+was now checking for <libintl.h>, which doesn't exist in uClibc
+toolchains if you haven't built gettext.
+
+I've also submitted the two patches upstream.
+
+Thanks!
 
 Thomas
 -- 
