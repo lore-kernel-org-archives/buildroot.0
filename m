@@ -1,54 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 22:16:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/irda-utils: fix musl build
-In-Reply-To: <1454148798-28228-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1454148798-28228-1-git-send-email-bernd.kuhls@t-online.de>
- <1454148798-28228-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207221650.2ee89791@free-electrons.com>
+Date: Sun, 7 Feb 2016 22:19:05 +0100
+Subject: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for
+ PowerPC
+In-Reply-To: <249443164.1454061.1454678578498.JavaMail.zimbra@datacom.ind.br>
+References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
+ <20160205000613.504940f9@free-electrons.com>
+ <1851498233.1377552.1454670293384.JavaMail.zimbra@datacom.ind.br>
+ <20160205140909.764ff2e6@free-electrons.com>
+ <249443164.1454061.1454678578498.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20160207221905.358caa32@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Henrique Marks,
 
-On Sat, 30 Jan 2016 11:13:18 +0100, Bernd Kuhls wrote:
+On Fri, 5 Feb 2016 11:22:58 -0200 (BRST), Henrique Marks wrote:
+> Yes, once the atomic series enter master branch, we are going to proceed on with this patch:
+> 
+> - Change protobuf, as you stated.
+> - Change Dependent Packages, it is four or five last time i checked out.
+> - Build on powerpc these packages, with gcc > 4.8
 
-> diff --git a/package/irda-utils/0004-musl.patch b/package/irda-utils/0004-musl.patch
-> new file mode 100644
-> index 0000000..e3e766f
-> --- /dev/null
-> +++ b/package/irda-utils/0004-musl.patch
-> @@ -0,0 +1,37 @@
-> +Fix musl build
-> +
-> +Downloaded from
-> +http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-connectivity/irda-utils/irda-utils-0.9.18/musl.patch
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-This...
-
-> +
-> +
-> +Replace use of <net/if_packet.h> with <linux/if_packet.h>.
-> +
-> +kernel headers <linux/if_packet.h> already provides the
-> +needed definitions, moreover not all libc implementations
-> +provide if_packet.h e.g. musl
-> +
-> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
-> +Upstream-Status: Pending
-
-... should have been here.
-
-Applied after fixing this.
-
-Can you check if the patch has really been submitted upstream? I
-quickly looked in the irda-utils archives, and couldn't find it. Also,
-if you could submit upstream the other patches we have, it would be
-great.
+The atomic series has been merged in master. Can you respin this
+protobuf patch, taking into account the comments I made?
 
 Thanks!
 
