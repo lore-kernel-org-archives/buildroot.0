@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 14:24:05 +0100
-Subject: [Buildroot] [PATCH 1/2] package/iprutils: bump version to 2.4.10
-In-Reply-To: <1454167529-26085-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 7 Feb 2016 14:24:24 +0100
+Subject: [Buildroot] [PATCH 2/2] package/iprutils: Fix musl build
+In-Reply-To: <1454167529-26085-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1454167529-26085-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207142405.23351d1f@free-electrons.com>
+ <1454167529-26085-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207142424.666d6d38@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,19 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 30 Jan 2016 16:25:28 +0100, Bernd Kuhls wrote:
-> Upstream now provides a new autoconf-based build system, therefore
-> our patches for Makefile are not needed anymore. The build system
-> checks for function matherr in libm, this test fails so check for
-> main().
+On Sat, 30 Jan 2016 16:25:29 +0100, Bernd Kuhls wrote:
+> This patch is intended to replace
+> http://patchwork.ozlabs.org/patch/572182/
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/558/5584556c04077c8bd4829f31f1aad2587c3d5d4d/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Checking for main() is silly. Instead, I've changed the patch to check
-for pow(), which is actually used by the iprconfig.c code. I've also
-reformatted the patch with Git. Once again: whenever the upstream
-project uses Git, *please* use Git to format the patches for that
-package.
+I've changed the patch by a Git formatted patch, and submitted the
+patch upstream.
 
-I also had to rework the gettext patch because the configure.ac script
-was now checking for <libintl.h>, which doesn't exist in uClibc
-toolchains if you haven't built gettext.
-
-I've also submitted the two patches upstream.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
