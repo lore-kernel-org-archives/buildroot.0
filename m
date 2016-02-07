@@ -1,35 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 16:19:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iucode-tool: bump version to 1.5
-In-Reply-To: <1454149489-1093-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454149489-1093-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207161957.124c543f@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  7 Feb 2016 12:25:21 -0300
+Subject: [Buildroot] [PATCH] fio: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <1454858721-3670-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+It uses __sync_fetch_and_add_4() and other 32-bit atomics, fixes:
+http://autobuild.buildroot.net/results/692/692fe7999efb63a2bffee02f84b9f636afcfe5f4/
 
-On Sat, 30 Jan 2016 11:24:49 +0100, Bernd Kuhls wrote:
-> Upstream changed to gitlab.com
-> Added hash
-> Upstream tarballs contains a working configure script, therefore remove
-> autoreconf.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/iucode-tool/Config.in        | 2 +-
->  package/iucode-tool/iucode-tool.hash | 2 ++
->  package/iucode-tool/iucode-tool.mk   | 6 +++---
->  3 files changed, 6 insertions(+), 4 deletions(-)
->  create mode 100644 package/iucode-tool/iucode-tool.hash
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/fio/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied, thanks.
-
-Thomas
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index b1f9045..89f54f9 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FIO
+ 	bool "fio"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# fio uses posix_madvise(), which is not part of any official
+ 	# release of uClibc, but is part of uClibc Git, and backported
+@@ -20,5 +21,6 @@ config BR2_PACKAGE_FIO
+ 
+ comment "fio needs a toolchain w/ dynamic library, threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
