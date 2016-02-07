@@ -1,32 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 15:49:20 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/openobex: fix broken
- download URL, add hash
-In-Reply-To: <8760yajb1p.fsf@dell.be.48ers.dk>
-References: <1454233738-8795-1-git-send-email-bernd.kuhls@t-online.de>
- <8760yajb1p.fsf@dell.be.48ers.dk>
-Message-ID: <20160207154920.4e565ee9@free-electrons.com>
+Date: Sun, 7 Feb 2016 15:49:45 +0100
+Subject: [Buildroot] [git commit] python-twisted: enable Python 3 support
+Message-ID: <20160207144948.AA31580579@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=102e985ddf9c13039418b8e8b4b127937c5605bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 31 Jan 2016 11:30:42 +0100, Peter Korsgaard wrote:
+setup3.py will be automatically invoked from setup.py,
+if executing on Python 3 platform.
 
-> I see upstream has released 1.7.1 (in a normall tarball). Any reason we
-> don't use that instead?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-twisted/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-1.7.1 is now using a CMake based build system rather than autotools, so
-it's a much bigger change, which can be handled separately.
-
-So I've taken Bernd's patch as is, but it would be nice to upgrade to
-1.7.1 at some point.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index b302101..1221fc2 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_TWISTED
+ 	bool "python-twisted"
+-	depends on BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
+ 	help
+ 	  Twisted is an event-driven networking engine written in Python.
