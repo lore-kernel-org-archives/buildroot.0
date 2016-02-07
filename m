@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:04 +0100
-Subject: [Buildroot] [PATCH 20/28] package/kodi-visualisation-fishbmc: new
+Date: Sun,  7 Feb 2016 17:03:10 +0100
+Subject: [Buildroot] [PATCH 26/28] package/kodi-adsp-biquad-filters: new
 	package
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-21-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-27-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +13,60 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-fishbmc/Config.in                | 10 ++++++++++
- .../kodi-visualisation-fishbmc.mk                           | 13 +++++++++++++
- package/kodi/Config.in                                      |  1 +
- 3 files changed, 24 insertions(+)
- create mode 100644 package/kodi-visualisation-fishbmc/Config.in
- create mode 100644 package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+ package/kodi-adsp-biquad-filters/Config.in                 | 10 ++++++++++
+ .../kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk   | 14 ++++++++++++++
+ package/kodi/Config.in                                     |  1 +
+ 3 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-adsp-biquad-filters/Config.in
+ create mode 100644 package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk
 
-diff --git a/package/kodi-visualisation-fishbmc/Config.in b/package/kodi-visualisation-fishbmc/Config.in
+diff --git a/package/kodi-adsp-biquad-filters/Config.in b/package/kodi-adsp-biquad-filters/Config.in
 new file mode 100644
-index 0000000..9f1a4c5
+index 0000000..efb783c
 --- /dev/null
-+++ b/package/kodi-visualisation-fishbmc/Config.in
++++ b/package/kodi-adsp-biquad-filters/Config.in
 @@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_FISHBMC
-+	bool "kodi-visualisation-fishbmc"
-+	depends on BR2_PACKAGE_KODI_GL
++config BR2_PACKAGE_KODI_ADSP_BIQUAD_FILTERS
++	bool "kodi-adsp-biquad-filters"
++	select BR2_PACKAGE_LIBASPLIB
++	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
 +	help
-+	  Fische visualiser for Kodi
++	  Biquad filter addon for Kodi's AudioDSP-System
 +
-+	  https://github.com/notspiff/visualization.fishbmc
-+
-+comment "fishbmc needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++	  https://github.com/kodi-adsp/adsp.biquad.filters
+diff --git a/package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk b/package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk
 new file mode 100644
-index 0000000..1e07774
+index 0000000..e5543bb
 --- /dev/null
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-@@ -0,0 +1,13 @@
++++ b/package/kodi-adsp-biquad-filters/kodi-adsp-biquad-filters.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# kodi-visualisation-fishbmc
++# kodi-adsp-biquad-filters
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_FISHBMC_VERSION = 50c38c296a62e096a2216e43b86d864ee265c506
-+KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
-+KODI_VISUALISATION_FISHBMC_LICENSE = GPLv2+
-+KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
-+KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
++KODI_ADSP_BIQUAD_FILTERS_VERSION = 71087c48bb655b4539fdb2f367f7f7d820bdb1d6
++KODI_ADSP_BIQUAD_FILTERS_SITE = $(call github,kodi-adsp,adsp.biquad.filters,$(KODI_ADSP_BIQUAD_FILTERS_VERSION))
++KODI_ADSP_BIQUAD_FILTERS_LICENSE = GPLv2+
++KODI_ADSP_BIQUAD_FILTERS_LICENSE_FILES = LICENSE.md
++KODI_ADSP_BIQUAD_FILTERS_DEPENDENCIES = libasplib libplatform \
++	kodi-platform tinyxml
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index f201008..c60b3ff 100644
+index 09513a2..55b2afa 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -278,6 +278,7 @@ menu "Screensavers"
+@@ -238,6 +238,7 @@ endmenu
+ 
+ menu "Audio DSP addons"
+ 	source "package/kodi-adsp-basic/Config.in"
++	source "package/kodi-adsp-biquad-filters/Config.in"
+ 	source "package/kodi-adsp-freesurround/Config.in"
  endmenu
  
- menu "Visualisations"
-+	source "package/kodi-visualisation-fishbmc/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
- 	source "package/kodi-visualisation-spectrum/Config.in"
 -- 
 2.7.0
