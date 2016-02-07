@@ -1,36 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 14:31:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pulseview: update musl patch
-In-Reply-To: <1454850622-9888-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454850622-9888-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207143110.35530abf@free-electrons.com>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Sun, 7 Feb 2016 10:41:27 -0300
+Subject: [Buildroot] [PATCH] linux: add conditional patch for
+	timeconst.pl
+In-Reply-To: <20160206215033.GA8084@tarshish>
+References: <1454700784-32341-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <20160206215033.GA8084@tarshish>
+Message-ID: <56B74987.3010401@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On 06/02/16 18:50, Baruch Siach wrote:
 
-On Sun,  7 Feb 2016 14:10:22 +0100, Bernd Kuhls wrote:
-> Upstream requested to update the source of the musl patch:
-> http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1954
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/pulseview/0001-musl.patch | 54 +++++++++++++++++++++++++++++++++++++++
->  package/pulseview/pulseview.mk    |  4 ---
->  2 files changed, 54 insertions(+), 4 deletions(-)
->  create mode 100644 package/pulseview/0001-musl.patch
+> Hi Gustavo,
+>
+> On Fri, Feb 05, 2016 at 04:33:04PM -0300, gustavo.zacarias at free-electrons.com wrote:
+>> @@ -251,8 +261,6 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>>   		$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK_MARK,$(@D)/.config))
+>>   	$(if $(BR2_LINUX_KERNEL_APPENDED_DTB),
+>>   		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+>> -	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
+>> -		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
+>
+> Is this change intended?
 
-Applied, thanks. I would have preferred to continue download the patch,
-but the Gitweb URL is full of ? and ; characters, which don't seem to
-play well with our download infra.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi Baruch.
+Argh, not, i'll send v2 rebased on latest master, thanks.
+Regards.
