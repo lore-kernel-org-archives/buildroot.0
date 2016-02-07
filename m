@@ -1,73 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Feb 2016 22:34:26 +0100
-Subject: [Buildroot] [PATCH 0/6 v3] Detect and fix circular dependencies
-	(branch yem/fixes)
-Message-ID: <cover.1454880734.git.yann.morin.1998@free.fr>
+Date: Sun,  7 Feb 2016 22:34:24 +0100
+Subject: [Buildroot] [PATCH 1/6 v3] package/avahi: break circular
+	dependencies
+In-Reply-To: <cover.1454880734.git.yann.morin.1998@free.fr>
+References: <cover.1454880734.git.yann.morin.1998@free.fr>
+Message-ID: <9851ff7c9ebb4f8cac4886d696e9ce7d589e2961.1454880734.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+We currently have two circular dependency chains:
 
-We currently have two circular dependencies:
-    cups -> avahi -> libglade -> libgtk2 -> cups
-    cups -> avahi -> libgtk3 -> cups
+    avahi -> libglade -> libgtk2 -> cups -> avahi
+    avahi -> libgtk3 -> cups -> avahi
 
-This series fixes those two loops (by cutting the avahi -> libgtk{2,3}
-dependency).
+The cups -> avahi dependency makes sense, as cups would be able to use
+Bonjour and mDNS to find printers, so we want to keep that dependency.
 
-It also adds support for detecting future such circular dependencies,
-and makes the graph-depends script robust in such a situation.
+The libgtk2 -> cups and libgtk3 -> cups dependencies also make sense, to
+be able to offer cups in the print dialogs.
 
+However, the avahi -> libglade and avahi -> libgtk3 dependencies do not
+really make sense. As Thomas puts it:
 
+    The avahi GUI programs seem really useless to me. On Debian/Ubuntu
+    distributions, they are not even packaged within the main avahi
+    packages, but as separate packages, probably indicating that they
+    are not very commonly used.
+
+So, we drop the avahi -> libglade and avahi -> libgtk3 dependencies, to
+break the circular dependency chain.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+---
 Changes v2 -> v3:
-  - break the loop on avahi -> libgtk{2,3}  (Thomas)
-  - consistency in variables and options  (Thomas)
+  - break the loop at the avahi -> libgtk{2,3} deps  (Thomas)
+---
+ package/avahi/avahi.mk | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-Changes v1 -> v2:
-  - optimise the loop detection  (Thomas, Arnout)
-  - add timings for the new check  (Thomas)
-  - actually fix the two loops
-  - enhance graph-depends to only check dependencies
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit b5ad2ce5a35a7909307de806b9606c560b5cb85d:
-
-  fio: depends on BR2_TOOLCHAIN_HAS_SYNC_4 (2016-02-07 22:23:52 +0100)
-
-are available in the git repository at:
-
-  git://git.busybox.net/~ymorin/git/buildroot yem/fixes
-
-for you to fetch changes up to f0509ca9d1287b071a0cb1d965ead2bccdac5bc1:
-
-  core: add a make target to check the dependencies (2016-02-07 22:31:30 +0100)
-
-----------------------------------------------------------------
-Yann E. MORIN (6):
-      package/avahi: break circular dependencies
-      support/graph-depends: add option to specify output file
-      core: catch failures in graph-depends
-      support/graph-depends: detect circular dependencies
-      support/graph-depends: teach it to only check dependencies
-      core: add a make target to check the dependencies
-
- Makefile                      | 10 ++++++--
- package/avahi/avahi.mk        | 15 ++----------
- package/pkg-generic.mk        |  8 ++++---
- support/scripts/graph-depends | 56 ++++++++++++++++++++++++++++++++++++++-----
- 4 files changed, 65 insertions(+), 24 deletions(-)
-
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index 9c6b609..7229673 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -71,6 +71,8 @@ AVAHI_CONF_ENV = \
+ AVAHI_CONF_OPTS = \
+ 	--disable-qt3 \
+ 	--disable-qt4 \
++	--disable-gtk \
++	--disable-gtk3 \
+ 	--disable-gdbm \
+ 	--disable-pygtk \
+ 	--disable-mono \
+@@ -126,19 +128,6 @@ else
+ AVAHI_CONF_OPTS += --disable-glib --disable-gobject
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGLADE),y)
+-AVAHI_DEPENDENCIES += libglade
+-else
+-AVAHI_CONF_OPTS += --disable-gtk
+-endif
+-
+-ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+-AVAHI_DEPENDENCIES += libgtk3
+-AVAHI_CONF_OPTS += --enable-gtk3
+-else
+-AVAHI_CONF_OPTS += --disable-gtk3
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ AVAHI_CONF_ENV += \
+ 	am_cv_pathless_PYTHON=python \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
