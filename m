@@ -1,97 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 14:10:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pulseview: update musl patch
-Message-ID: <1454850622-9888-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 7 Feb 2016 14:14:03 +0100
+Subject: [Buildroot] [git commit] package/iprutils: add patch to fix musl
+	build
+Message-ID: <20160207131412.564FB802B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream requested to update the source of the musl patch:
-http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1954
+commit: https://git.buildroot.net/buildroot/commit/?id=a7b9b632fd1f9306dcb7d426ada8cf86001da424
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This commit adds a patch to the iprutils to fix the build with the
+musl C library.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: reformatted the patch with Git, added a better commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pulseview/0001-musl.patch | 54 +++++++++++++++++++++++++++++++++++++++
- package/pulseview/pulseview.mk    |  4 ---
- 2 files changed, 54 insertions(+), 4 deletions(-)
- create mode 100644 package/pulseview/0001-musl.patch
+ ...-iprlib-fixes-for-compatibility-with-musl.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/pulseview/0001-musl.patch b/package/pulseview/0001-musl.patch
+diff --git a/package/iprutils/0003-iprlib-fixes-for-compatibility-with-musl.patch b/package/iprutils/0003-iprlib-fixes-for-compatibility-with-musl.patch
 new file mode 100644
-index 0000000..1acee73
+index 0000000..0fe882f
 --- /dev/null
-+++ b/package/pulseview/0001-musl.patch
-@@ -0,0 +1,54 @@
-+From dcfe0a01f72021aab961245d0ebcc9f8d4504b40 Mon Sep 17 00:00:00 2001
-+From: Soeren Apel <soeren@apelpie.net>
-+Date: Sun, 31 Jan 2016 14:12:44 +0100
-+Subject: [PATCH] View: Honor ENABLE_DECODE compiler switch
++++ b/package/iprutils/0003-iprlib-fixes-for-compatibility-with-musl.patch
+@@ -0,0 +1,34 @@
++From df3b2b74ed7b49d74f5a5ec5687bcc3188d3b319 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 7 Feb 2016 14:10:44 +0100
++Subject: [PATCH] iprlib: fixes for compatibility with musl
 +
-+Signed-off-by: Soeren Apel <soeren@apelpie.net>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++<bits/sockaddr.h> is an internal C library header, which is not
++guaranteed to be available in all C libraries, so it shouldn't be
++included, otherwise iprutils cannot be built with musl.
++
++<limits.h> is needed to get the definition of PATH_MAX.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+Patch downloaded from upstream git:
-+http://sigrok.org/gitweb/?p=pulseview.git;a=commitdiff;h=dcfe0a01f72021aab961245d0ebcc9f8d4504b40
-+as suggested by upstream:
-+http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1954
++ iprlib.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+ pv/view/view.cpp | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/pv/view/view.cpp b/pv/view/view.cpp
-+index c9b08bf..6ad7dea 100644
-+--- a/pv/view/view.cpp
-++++ b/pv/view/view.cpp
-+@@ -43,7 +43,6 @@
-+ #include <libsigrokcxx/libsigrokcxx.hpp>
++diff --git a/iprlib.h b/iprlib.h
++index 16fe1e1..73aa1ce 100644
++--- a/iprlib.h
+++++ b/iprlib.h
++@@ -46,9 +46,9 @@
++ #include <asm/byteorder.h>
++ #include <sys/mman.h>
++ #include <paths.h>
++-#include <bits/sockaddr.h>
++ #include <linux/netlink.h>
++ #include <time.h>
+++#include <limits.h>
 + 
-+ #include "analogsignal.hpp"
-+-#include "decodetrace.hpp"
-+ #include "header.hpp"
-+ #include "logicsignal.hpp"
-+ #include "ruler.hpp"
-+@@ -59,6 +58,10 @@
-+ #include "pv/data/logicsegment.hpp"
-+ #include "pv/util.hpp"
-+ 
-++#ifdef ENABLE_DECODE
-++#include "decodetrace.hpp"
-++#endif
-++
-+ using boost::shared_lock;
-+ using boost::shared_mutex;
-+ 
-+@@ -455,9 +458,11 @@ void View::enable_coloured_bg(bool state)
-+ 		if (l)
-+ 			l->set_coloured_bg(state);
-+ 
-++#ifdef ENABLE_DECODE
-+ 		shared_ptr<DecodeTrace> d = dynamic_pointer_cast<DecodeTrace>(i);
-+ 		if (d)
-+ 			d->set_coloured_bg(state);
-++#endif
-+ 	}
-+ 
-+ 	viewport_->update();
++ typedef uint8_t u8;
++ typedef uint16_t u16;
 +-- 
-+2.6.2
++2.6.4
 +
-diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
-index 35d852c..cc97187 100644
---- a/package/pulseview/pulseview.mk
-+++ b/package/pulseview/pulseview.mk
-@@ -8,10 +8,6 @@
- 
- PULSEVIEW_VERSION = 0.3.0
- PULSEVIEW_SITE = http://sigrok.org/download/source/pulseview
--# bug fixed upstream
--# http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1950
--PULSEVIEW_PATCH = \
--	https://github.com/abraxa/pulseview/commit/dcfe0a01f72021aab961245d0ebcc9f8d4504b40.patch
- PULSEVIEW_LICENSE = GPLv3+
- PULSEVIEW_LICENSE_FILES = COPYING
- PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
--- 
-2.7.0
