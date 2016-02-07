@@ -1,75 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  7 Feb 2016 20:39:07 -0300
-Subject: [Buildroot] [PATCH 2/3] configs/qemu: drop arm nuri
+Date: Sun,  7 Feb 2016 20:39:08 -0300
+Subject: [Buildroot] [PATCH 3/3] configs/qemu: convert versatile to dt
 In-Reply-To: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1454888348-8149-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1454888348-8149-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This config has no prospect of going into the future (by using DTS), and
-qemu doesn't do a good job at emulating it (networking problems), so
-drop it.
-All of the ARM SMP testing duties are now in the vexpress defconfig
-which is better suited/supported.
+As a followup to http://patchwork.ozlabs.org/patch/548550/ fully convert
+the versatile defconfig to create the dtb and update the instructions.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- board/qemu/arm-nuri/readme.txt  | 11 -----------
- configs/qemu_arm_nuri_defconfig | 24 ------------------------
- 2 files changed, 35 deletions(-)
- delete mode 100644 board/qemu/arm-nuri/readme.txt
- delete mode 100644 configs/qemu_arm_nuri_defconfig
+ board/qemu/arm-versatile/linux-4.4.config | 1 +
+ board/qemu/arm-versatile/readme.txt       | 2 +-
+ configs/qemu_arm_versatile_defconfig      | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/board/qemu/arm-nuri/readme.txt b/board/qemu/arm-nuri/readme.txt
-deleted file mode 100644
-index df07a5c..0000000
---- a/board/qemu/arm-nuri/readme.txt
-+++ /dev/null
-@@ -1,11 +0,0 @@
--Run the emulation with:
--
--  qemu-system-arm -M nuri -kernel output/images/zImage -append "console=ttySAC1,115200" -smp 2 -serial null -serial stdio
--
--The login prompt will appear in the terminal that started Qemu. The
--graphical window is the framebuffer.
--
--Startup time is slow because of the SMP CPU emulation so be patient.
--This emulation is known to be flaky.
--
--Tested with QEMU 2.3.0
-diff --git a/configs/qemu_arm_nuri_defconfig b/configs/qemu_arm_nuri_defconfig
-deleted file mode 100644
-index 9c64f74..0000000
---- a/configs/qemu_arm_nuri_defconfig
-+++ /dev/null
-@@ -1,24 +0,0 @@
--# Architecture
--BR2_arm=y
--BR2_cortex_a9=y
--BR2_ARM_ENABLE_NEON=y
--BR2_ARM_ENABLE_VFP=y
--BR2_ARM_FPU_VFPV3D16=y
--
--# System
--BR2_TARGET_GENERIC_GETTY_PORT="ttySAC1"
--
--# Filesystem
--# BR2_TARGET_ROOTFS_TAR is not set
--BR2_TARGET_ROOTFS_INITRAMFS=y
--
--# Linux headers same as kernel, a 4.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
--
--# Kernel
--BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--# Stuck at 3.10.x because there's no Nuri DTS
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.10.96"
--BR2_LINUX_KERNEL_DEFCONFIG="exynos4"
--BR2_LINUX_KERNEL_ZIMAGE=y
+diff --git a/board/qemu/arm-versatile/linux-4.4.config b/board/qemu/arm-versatile/linux-4.4.config
+index 9a1ae58..99df3a6 100644
+--- a/board/qemu/arm-versatile/linux-4.4.config
++++ b/board/qemu/arm-versatile/linux-4.4.config
+@@ -3,6 +3,7 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_ARCH_VERSATILE=y
+ CONFIG_MACH_VERSATILE_AB=y
++CONFIG_MACH_VERSATILE_DT=y
+ CONFIG_PCI=y
+ CONFIG_AEABI=y
+ CONFIG_USE_OF=y
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index 4af2f46..44d70d8 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-arm -M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
++  qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
+ 
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index bb64cfe..d95c803 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -20,3 +20,5 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.4.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
 -- 
 2.4.10
