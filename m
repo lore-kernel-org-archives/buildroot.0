@@ -1,88 +1,93 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 10:26:08 +0100
-Subject: [Buildroot] [PATCH v4 16/17] python-autobahn: new package
-In-Reply-To: <1454799603-5474-17-git-send-email-mc5686@mclink.it>
+Date: Sun, 7 Feb 2016 10:27:43 +0100
+Subject: [Buildroot] [PATCH v4 07/17] python-service-identity: new
+	package
+In-Reply-To: <1454799603-5474-8-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-17-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kuqJ106WRiWuD3XMdR6rr8VLhxfL4Ki7qz4_MkzunMjhg@mail.gmail.com>
+ <1454799603-5474-8-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_kv_oztd4tv_HwBbn_fhyW4qCm1Vuy8K-3ajFD9Zjy9RGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 7, 2016 at 12:00 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
+On Sat, Feb 6, 2016 at 11:59 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                            |  1 +
->  package/python-autobahn/Config.in            |  8 ++++++++
->  package/python-autobahn/python-autobahn.hash |  3 +++
->  package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-autobahn/Config.in
->  create mode 100644 package/python-autobahn/python-autobahn.hash
->  create mode 100644 package/python-autobahn/python-autobahn.mk
+>  package/Config.in                                         |  1 +
+>  package/python-service-identity/Config.in                 | 10 ++++++++++
+>  .../python-service-identity/python-service-identity.hash  |  3 +++
+>  .../python-service-identity/python-service-identity.mk    | 15 +++++++++++++++
+>  4 files changed, 29 insertions(+)
+>  create mode 100644 package/python-service-identity/Config.in
+>  create mode 100644 package/python-service-identity/python-service-identity.hash
+>  create mode 100644 package/python-service-identity/python-service-identity.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index adb4188..0ee5577 100644
+> index 9b620e6..afef272 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -618,6 +618,7 @@ endif
->  if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
->  menu "External python modules"
->         source "package/python-alsaaudio/Config.in"
-> +       source "package/python-autobahn/Config.in"
->         source "package/python-backports-abc/Config.in"
->         source "package/python-beautifulsoup4/Config.in"
->         source "package/python-bottle/Config.in"
-> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+> @@ -709,6 +709,7 @@ menu "External python modules"
+>         source "package/python-requests/Config.in"
+>         source "package/python-rtslib-fb/Config.in"
+>         source "package/python-serial/Config.in"
+> +       source "package/python-service-identity/Config.in"
+>         source "package/python-setuptools/Config.in"
+>         source "package/python-simplejson/Config.in"
+>         source "package/python-singledispatch/Config.in"
+> diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
 > new file mode 100644
-> index 0000000..cdb2baf
+> index 0000000..e2200f6
 > --- /dev/null
-> +++ b/package/python-autobahn/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_AUTOBAHN
-> +       bool "python-autobahn"
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_TXAIO # runtime
+> +++ b/package/python-service-identity/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+> +       bool "python-service-identity"
+> +       select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
+> +       select BR2_PACKAGE_PYTHON_PYASN # runtime
+> +       select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
+> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
 > +       help
-> +         WebSocket client Hhh server library, WAMP real-time framework.
+> +         Service identity verification for pyOpenSSL.
 > +
-> +         https://pypi.python.org/pypi/autobahn
-> diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+> +         https://pypi.python.org/pypi/service_identity
+> diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
 > new file mode 100644
-> index 0000000..8f55ac1
+> index 0000000..caf29dc
 > --- /dev/null
-> +++ b/package/python-autobahn/python-autobahn.hash
+> +++ b/package/python-service-identity/python-service-identity.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
-> +md5    b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
-> +sha256 664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
-> diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cea0b0156d73b025ecef660fb51f0d9a, sha256 locally computed.
+> +md5    cea0b0156d73b025ecef660fb51f0d9a  service_identity-14.0.0.tar.gz
+> +sha256 3105a319a7c558490666694f599be0c377ad54824eefb404cde4ce49e74a4f5a  service_identity-14.0.0.tar.gz
+> diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
 > new file mode 100644
-> index 0000000..1d02867
+> index 0000000..1be9b92
 > --- /dev/null
-> +++ b/package/python-autobahn/python-autobahn.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/python-service-identity/python-service-identity.mk
+> @@ -0,0 +1,15 @@
 > +################################################################################
 > +#
-> +# python-autobahn
+> +# python-service-identity
 > +#
 > +################################################################################
 > +
-> +PYTHON_AUTOBAHN_VERSION = 0.12.1
-> +PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-> +PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
-> +PYTHON_AUTOBAHN_LICENSE = MIT
-> +PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-> +PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
-> +
+> +PYTHON_SERVICE_IDENTITY_VERSION = 14.0.0
+> +PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
+> +PYTHON_SERVICE_IDENTITY_SITE = http://pypi.python.org/packages/source/s/service_identity
+> +PYTHON_SERVICE_IDENTITY_LICENSE = MIT
+> +PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
+> +PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
+> +PYTHON_SERVICE_IDENTITY_DEPENDENCIES = python-characteristic python-pyasn python-pyasn-modules python-pyopenssl
+
+you don't need them as build-time deps.
+
 > +$(eval $(python-package))
-
-autobahn has problems being compiled to *.pyc, so also needs PYC_ONLY
-dependency. This part will be invoked during pyc creation
-https://github.com/crossbario/autobahn-python/blob/master/setup.py#L241
-and tries to import a module, that tries to load libsodium
-(cross-compikled version).
-
-Yegor
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
