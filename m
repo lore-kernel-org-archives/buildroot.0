@@ -1,98 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 14:26:35 +0100
-Subject: [Buildroot] [git commit] package/pulseview: update musl patch
-Message-ID: <20160207133029.2D3F980158@busybox.osuosl.org>
+Date: Sun, 7 Feb 2016 14:25:08 +0100
+Subject: [Buildroot] [git commit] package/libsigrok: update musl patch
+Message-ID: <20160207133029.0AF45805E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3492c511bfe5c97a937375c5ebc222a3ec543dee
+commit: https://git.buildroot.net/buildroot/commit/?id=391448a79a700ee6952558dc751e7e7437f7af3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream requested to update the source of the musl patch:
-http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1954
+Upstream chose a different fix:
+http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1951
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pulseview/0001-musl.patch | 54 +++++++++++++++++++++++++++++++++++++++
- package/pulseview/pulseview.mk    |  4 ---
- 2 files changed, 54 insertions(+), 4 deletions(-)
+ ...01-beaglelogic.h-fix-build-with-musl-libc.patch | 46 +++++++++++-----------
+ 1 file changed, 22 insertions(+), 24 deletions(-)
 
-diff --git a/package/pulseview/0001-musl.patch b/package/pulseview/0001-musl.patch
-new file mode 100644
-index 0000000..1acee73
---- /dev/null
-+++ b/package/pulseview/0001-musl.patch
-@@ -0,0 +1,54 @@
-+From dcfe0a01f72021aab961245d0ebcc9f8d4504b40 Mon Sep 17 00:00:00 2001
-+From: Soeren Apel <soeren@apelpie.net>
-+Date: Sun, 31 Jan 2016 14:12:44 +0100
-+Subject: [PATCH] View: Honor ENABLE_DECODE compiler switch
-+
-+Signed-off-by: Soeren Apel <soeren@apelpie.net>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+Patch downloaded from upstream git:
-+http://sigrok.org/gitweb/?p=pulseview.git;a=commitdiff;h=dcfe0a01f72021aab961245d0ebcc9f8d4504b40
-+as suggested by upstream:
-+http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1954
-+
-+ pv/view/view.cpp | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/pv/view/view.cpp b/pv/view/view.cpp
-+index c9b08bf..6ad7dea 100644
-+--- a/pv/view/view.cpp
-++++ b/pv/view/view.cpp
-+@@ -43,7 +43,6 @@
-+ #include <libsigrokcxx/libsigrokcxx.hpp>
-+ 
-+ #include "analogsignal.hpp"
-+-#include "decodetrace.hpp"
-+ #include "header.hpp"
-+ #include "logicsignal.hpp"
-+ #include "ruler.hpp"
-+@@ -59,6 +58,10 @@
-+ #include "pv/data/logicsegment.hpp"
-+ #include "pv/util.hpp"
-+ 
-++#ifdef ENABLE_DECODE
-++#include "decodetrace.hpp"
-++#endif
-++
-+ using boost::shared_lock;
-+ using boost::shared_mutex;
-+ 
-+@@ -455,9 +458,11 @@ void View::enable_coloured_bg(bool state)
-+ 		if (l)
-+ 			l->set_coloured_bg(state);
-+ 
-++#ifdef ENABLE_DECODE
-+ 		shared_ptr<DecodeTrace> d = dynamic_pointer_cast<DecodeTrace>(i);
-+ 		if (d)
-+ 			d->set_coloured_bg(state);
-++#endif
-+ 	}
-+ 
-+ 	viewport_->update();
-+-- 
-+2.6.2
-+
-diff --git a/package/pulseview/pulseview.mk b/package/pulseview/pulseview.mk
-index 35d852c..cc97187 100644
---- a/package/pulseview/pulseview.mk
-+++ b/package/pulseview/pulseview.mk
-@@ -8,10 +8,6 @@
+diff --git a/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
+index e9ecf85..2b20680 100644
+--- a/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
++++ b/package/libsigrok/0001-beaglelogic.h-fix-build-with-musl-libc.patch
+@@ -1,38 +1,36 @@
+-From 1b9ca481b2447154d12a7a94fe90c5b968ddf41c Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 30 Jan 2016 20:01:05 +0100
+-Subject: [PATCH 1/1] beaglelogic.h: fix build with musl libc
++From 83bf4762e42a4d4a5c077f48d8f5715c9147d9b8 Mon Sep 17 00:00:00 2001
++From: Aurelien Jacobs <aurel@gnuage.org>
++Date: Mon, 1 Feb 2016 22:37:36 +0100
++Subject: [PATCH] beaglelogic: use standard # operator instead of ugly __STRING
++ macro
  
- PULSEVIEW_VERSION = 0.3.0
- PULSEVIEW_SITE = http://sigrok.org/download/source/pulseview
--# bug fixed upstream
--# http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1950
--PULSEVIEW_PATCH = \
--	https://github.com/abraxa/pulseview/commit/dcfe0a01f72021aab961245d0ebcc9f8d4504b40.patch
- PULSEVIEW_LICENSE = GPLv3+
- PULSEVIEW_LICENSE_FILES = COPYING
- PULSEVIEW_DEPENDENCIES = libsigrok qt5base qt5svg boost
+-This patch fixes a build error seen on the buildroot project:
+-http://autobuild.buildroot.net/results/afc/afcea2068d5b0ba707aa90339401550602103ca7/
+-
+-Patch taken from
+-https://github.com/dx9/ceph/commit/4f7bcabca7737c3f48f07ca2b4b1296c29e3358b
+-which solved a similar problem.
++Also note that the __ namespace is reserved by POSIX for its private
++usage, so user land software should never rely on any kind of API
++with a __ prefix.
+ 
++Signed-off-by: Aurelien Jacobs <aurel@gnuage.org>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+-Patch sent upstream:
+-http://article.gmane.org/gmane.comp.debugging.sigrok.devel/1948
++Patch downloaded from upstream git:
++http://sigrok.org/gitweb/?p=libsigrok.git;a=commit;h=83bf4762e42a4d4a5c077f48d8f5715c9147d9b8
+ 
+- src/hardware/beaglelogic/beaglelogic.h | 4 ++++
+- 1 file changed, 4 insertions(+)
++ src/hardware/beaglelogic/beaglelogic.h | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
+ 
+ diff --git a/src/hardware/beaglelogic/beaglelogic.h b/src/hardware/beaglelogic/beaglelogic.h
+-index 9015c61..165b386 100644
++index 9015c61..96713ba 100644
+ --- a/src/hardware/beaglelogic/beaglelogic.h
+ +++ b/src/hardware/beaglelogic/beaglelogic.h
+-@@ -28,6 +28,10 @@
+- #include <stdlib.h>
+- #include <unistd.h>
++@@ -30,8 +30,7 @@
+  
+-+#ifndef __STRING
+-+# define __STRING(x) #x
+-+#endif
+-+
+  /* BeagleLogic device node name */
+  #define BEAGLELOGIC_DEV_NODE        "/dev/beaglelogic"
+- #define BEAGLELOGIC_SYSFS_ATTR(a)   "/sys/devices/virtual/misc/beaglelogic/"\
++-#define BEAGLELOGIC_SYSFS_ATTR(a)   "/sys/devices/virtual/misc/beaglelogic/"\
++-					__STRING(a)
+++#define BEAGLELOGIC_SYSFS_ATTR(a)   "/sys/devices/virtual/misc/beaglelogic/" #a
++ 
++ /* Reproduced verbatim from beaglelogic.h in the kernel tree until the kernel
++  * module hits the mainline. Contains the ABI, so DO NOT TOUCH this section */
+ -- 
+-2.7.0.rc3
++2.6.2
+ 
