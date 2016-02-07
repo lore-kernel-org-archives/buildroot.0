@@ -1,34 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 22:04:22 +0100
-Subject: [Buildroot] [PATCH] mpd: disable for sparcv8
-In-Reply-To: <20160119224338.GA16884@waldemar-brodkorb.de>
-References: <20160119224338.GA16884@waldemar-brodkorb.de>
-Message-ID: <20160207220422.0568f982@free-electrons.com>
+Date: Sun, 7 Feb 2016 22:04:45 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/procps-ng: Fix install,
+ procps-ng does not use /usr/bin anymore
+In-Reply-To: <1454365287-4697-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454365287-4697-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207220445.79787a46@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+Dear Bernd Kuhls,
 
-On Tue, 19 Jan 2016 23:43:38 +0100, Waldemar Brodkorb wrote:
-> Even the main source code in mpd requires some missing
-> atomic ops. So only disable some failing plugins, does not
-> solve the following autobuild error:
-> http://autobuild.buildroot.net/results/e2207280f3a177e12dba502b1c01f5aeb431d04c/
+On Mon,  1 Feb 2016 23:21:27 +0100, Bernd Kuhls wrote:
+> We do not need to move binaries around anymore since this commit:
+> https://gitlab.com/procps-ng/procps/commit/430b559ba2826f80dffa840622ae0fc744000b13
 > 
-> Leon3 works fine.
+> Removing PROCPS_NG_CONF_OPTS completely leads to binaries being
+> installed to /usr/bin, we have to keep an empty --exec-prefix to have
+> binaries in /bin:
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> libtool: install: /usr/bin/install -c free /home/bernd/buildroot/output/target/bin/free
+> libtool: install: /usr/bin/install -c pgrep /home/bernd/buildroot/output/target/bin/pgrep
+> libtool: install: /usr/bin/install -c pkill /home/bernd/buildroot/output/target/bin/pkill
+> libtool: install: /usr/bin/install -c pmap /home/bernd/buildroot/output/target/bin/pmap
+> libtool: install: /usr/bin/install -c pwdx /home/bernd/buildroot/output/target/bin/pwdx
+> libtool: install: /usr/bin/install -c tload /home/bernd/buildroot/output/target/bin/tload
+> libtool: install: /usr/bin/install -c uptime /home/bernd/buildroot/output/target/bin/uptime
+> libtool: install: /usr/bin/install -c vmstat /home/bernd/buildroot/output/target/bin/vmstat
+> libtool: install: /usr/bin/install -c w /home/bernd/buildroot/output/target/bin/w
+> libtool: install: /usr/bin/install -c pidof /home/bernd/buildroot/output/target/bin/pidof
+> libtool: install: /usr/bin/install -c kill /home/bernd/buildroot/output/target/bin/kill
+> libtool: install: /usr/bin/install -c slabtop /home/bernd/buildroot/output/target/bin/slabtop
+> libtool: install: /usr/bin/install -c watch /home/bernd/buildroot/output/target/bin/watch
+> libtool: install: /usr/bin/install -c top/top /home/bernd/buildroot/output/target/bin/top
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/ab7/ab7ed83d60823c1b023c7b76fcbe9c20d537ed4c//
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: Removed unneeded options from PROCPS_NG_CONF_OPTS (Thomas)
 
-I've applied what I believe is a better solution:
-
-  https://git.busybox.net/buildroot/commit/?id=84533029c70a4dffb2cd2e4f05e3903fd1b8fcd9
-
-(it allows to build mpd on SPARCv8)
-
-So I've marked your patch as rejected.
+I've applied, after changing the empty exec-prefix to use
+--exec-prefix=/ instead.
 
 Thanks!
 
