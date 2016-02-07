@@ -1,89 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 22:40:55 +0100
-Subject: [Buildroot] [git commit] package/musepack: fix musl build
-Message-ID: <20160207214153.3FCAF80758@busybox.osuosl.org>
+Date: Sun, 7 Feb 2016 22:44:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/musepack: fix musl build
+In-Reply-To: <1454142700-9293-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454142700-9293-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207224432.4532ebc0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f3aed3f50ff48c8a60185407d7220aeedfea5e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-This commit adds two patches needed to fix musl related build issues
-in musepack: a missing <sys/select.h> inclusion, and an inclusion of
-<fpu_control.h> that should be made conditional on __GLIBC__.
+On Sat, 30 Jan 2016 09:31:40 +0100, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/6eb/6ebc9cbee3fc48f4f5b658d11b040ad62fb6607f/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/musepack/0003-musl.patch | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>  create mode 100644 package/musepack/0003-musl.patch
 
-Fixes:
+I've applied, but to be honest, I almost rejected your patch:
 
-  http://autobuild.buildroot.net/results/6eb/6ebc9cbee3fc48f4f5b658d11b040ad62fb6607f/
+ 1/ The musepack patch does two completely different things, they
+    should have been two separate patches.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: split the patch in two patches, add proper patch
-description.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0003-include-fpu-control-with-glibc-only.patch | 26 ++++++++++++++++++++++
- package/musepack/0004-missing-sys-select.patch     | 21 +++++++++++++++++
- 2 files changed, 47 insertions(+)
+ 2/ "Fix musl" is not a proper patch description. Due to this, I have
+    to dig myself again in the issue, to understand what was the
+    problem, and how your patch fixes it. Please add a proper
+    description to each and every patch. "Fix musl" is *not* a good
+    description.
 
-diff --git a/package/musepack/0003-include-fpu-control-with-glibc-only.patch b/package/musepack/0003-include-fpu-control-with-glibc-only.patch
-new file mode 100644
-index 0000000..6f50155
---- /dev/null
-+++ b/package/musepack/0003-include-fpu-control-with-glibc-only.patch
-@@ -0,0 +1,26 @@
-+Include <fpu_control.h> only on glibc systems
-+
-+The <fpu_control.h> header provides _FPU_*() macros, which the
-+Init_FPU() function uses only on i386, and only when they are
-+defined. Since <fpu_control.h> is not available, this causes a build
-+failure with C libraries such as musl. By simply including
-+<fpu_control.h> explicitly on glibc systems, we avoid the build
-+failure, since mpcenc.c already conditionally uses the <fpu_control.h>
-+macros only if they are defined.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Thomas: better commit log.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+diff -uNr musepack_src_r475.org/mpcenc/mpcenc.h musepack_src_r475/mpcenc/mpcenc.h
-+--- musepack_src_r475.org/mpcenc/mpcenc.h	2009-02-23 19:15:46.000000000 +0100
-++++ musepack_src_r475/mpcenc/mpcenc.h	2016-01-30 09:29:08.000000000 +0100
-+@@ -50,7 +51,7 @@
-+ # include <unistd.h>
-+ #endif
-+ 
-+-#if   defined __linux__
-++#if   defined __GLIBC__
-+ #  include <fpu_control.h>
-+ #elif defined __FreeBSD__
-+ # include <machine/floatingpoint.h>
-diff --git a/package/musepack/0004-missing-sys-select.patch b/package/musepack/0004-missing-sys-select.patch
-new file mode 100644
-index 0000000..1e3a4b1
---- /dev/null
-+++ b/package/musepack/0004-missing-sys-select.patch
-@@ -0,0 +1,21 @@
-+Add missing <sys/select.h> include
-+
-+This header is needed when types like fd_set are used. This fixes a
-+build issue occuring on the musl C library.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Thomas: better commit log.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+
-+Index: b/mpcenc/mpcenc.h
-+===================================================================
-+--- a/mpcenc/mpcenc.h
-++++ b/mpcenc/mpcenc.h
-+@@ -34,6 +34,7 @@
-+ //// portable system includes //////////////////////////////////////
-+ #include <stddef.h>
-+ #include <math.h>
-++#include <sys/select.h>
-+ 
-+ //// system dependent system includes //////////////////////////////
-+ // low level I/O, where are prototypes and constants?
+See
+https://git.busybox.net/buildroot/commit/package/musepack?id=5f3aed3f50ff48c8a60185407d7220aeedfea5e5
+for the type of description that we need to have.
+
+Don't get me wrong: I definitely appreciate your effort to fix numerous
+musl build failures. But with such short descriptions, I have to
+basically re-do all the investigation you have already done... which
+means I spend as much time as you have done. Could you please help by
+writing longer patch descriptions ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
