@@ -1,96 +1,114 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:02:54 +0100
-Subject: [Buildroot] [PATCH 10/28] package/kodi: Remove dependency for
-	BR2_STATIC_LIBS from sub packages
+Date: Sun,  7 Feb 2016 17:03:02 +0100
+Subject: [Buildroot] [PATCH 18/28] package/kodi-screensaver-matrixtrails:
+	new package
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-11-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi itself already depends on !BR2_STATIC_LIBS, there is no need to
-duplicate this as reverse dependencies in sub options which depend on
-Kodi.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ .../kodi-screensaver-matrixtrails/0001-cmake.patch | 33 ++++++++++++++++++++++
+ package/kodi-screensaver-matrixtrails/Config.in    | 11 ++++++++
+ .../kodi-screensaver-matrixtrails.mk               | 14 +++++++++
+ package/kodi/Config.in                             |  1 +
+ 4 files changed, 59 insertions(+)
+ create mode 100644 package/kodi-screensaver-matrixtrails/0001-cmake.patch
+ create mode 100644 package/kodi-screensaver-matrixtrails/Config.in
+ create mode 100644 package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
 
+diff --git a/package/kodi-screensaver-matrixtrails/0001-cmake.patch b/package/kodi-screensaver-matrixtrails/0001-cmake.patch
+new file mode 100644
+index 0000000..6307544
+--- /dev/null
++++ b/package/kodi-screensaver-matrixtrails/0001-cmake.patch
+@@ -0,0 +1,33 @@
++fix linking against libsoil
++
++Patch sent upstream
++https://github.com/notspiff/screensaver.matrixtrails/pull/3
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.org/CMakeLists.txt screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5/CMakeLists.txt
++--- screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.org/CMakeLists.txt	2015-10-29 08:05:30.000000000 +0100
+++++ screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5/CMakeLists.txt	2015-10-30 22:33:25.000000000 +0100
++@@ -18,7 +18,7 @@
++                          src/main.cpp
++                          src/matrixtrails.cpp)
++ 
++-set(DEPLIBS ${SOIL_LIBRARIES})
+++set(DEPLIBS ${SOIL_LIBRARY})
++ 
++ build_addon(screensaver.matrixtrails MATRIXTRAILS DEPLIBS)
++ 
++diff -uNr screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.org/FindSOIL.cmake screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5/FindSOIL.cmake
++--- screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5.org/FindSOIL.cmake	2015-10-29 08:05:30.000000000 +0100
+++++ screensaver.matrixtrails-16057e7195f930109f0a4aea999296ca315700e5/FindSOIL.cmake	2015-10-30 22:37:10.627094287 +0100
++@@ -1,7 +1,7 @@
++ find_path(SOIL_INCLUDE_DIRS SOIL/SOIL.h)
++-find_library(SOIL_LIBRARIES NAMES SOIL)
+++find_library(SOIL_LIBRARY NAMES SOIL)
++ 
++ include(FindPackageHandleStandardArgs)
++-find_package_handle_standard_args(SOIL DEFAULT_MSG SOIL_INCLUDE_DIRS SOIL_LIBRARIES)
+++find_package_handle_standard_args(SOIL DEFAULT_MSG SOIL_INCLUDE_DIRS SOIL_LIBRARY)
++ 
++-mark_as_advanced(SOIL_INCLUDE_DIRS SOIL_LIBRARIES)
+++mark_as_advanced(SOIL_INCLUDE_DIRS SOIL_LIBRARY)
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+new file mode 100644
+index 0000000..72ed958
+--- /dev/null
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
++	bool "kodi-screensaver-matrixtrails"
++	depends on BR2_PACKAGE_KODI_GL # libsoil
++	select BR2_PACKAGE_LIBSOIL
++	help
++	  Matrix trails screensaver for Kodi
++
++	  https://github.com/notspiff/screensaver.matrixtrails
++
++comment "matrixtrails needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+new file mode 100644
+index 0000000..5ecacdf
+--- /dev/null
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# kodi-screensaver-matrixtrails
++#
++################################################################################
++
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 16057e7195f930109f0a4aea999296ca315700e5
++KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,notspiff,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
++KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPLv2+
++KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
++
++KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
++
++$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 44d0d58..e696de4 100644
+index 4b0be39..ce5aa1e 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -117,7 +117,6 @@ config BR2_PACKAGE_KODI_ALSA_LIB
- 
- config BR2_PACKAGE_KODI_AVAHI
- 	bool "avahi"
--	depends on !BR2_STATIC_LIBS # avahi
- 	select BR2_PACKAGE_AVAHI
- 	select BR2_PACKAGE_AVAHI_DAEMON
- 	help
-@@ -132,26 +131,21 @@ config BR2_PACKAGE_KODI_DBUS
- 
- config BR2_PACKAGE_KODI_LIBBLURAY
- 	bool "blu-ray"
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBBLURAY
- 	help
- 	  Enable Blu-ray input support.
- 	  Select this if you want to play back Blu-ray content.
- 
--comment "libbluray support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
- config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
--	depends on !BR2_STATIC_LIBS # libcec
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
- 	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want Kodi to support HDMI CEC.
- 
--comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
-+comment "hdmi cec support needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_KODI_LIRC
- 	bool "lirc"
-@@ -184,15 +178,11 @@ config BR2_PACKAGE_KODI_RTMPDUMP
- 
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
--	depends on !BR2_STATIC_LIBS # libshairplay -> avahi
- 	select BR2_PACKAGE_LIBSHAIRPLAY
- 	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
- 
--comment "shairport support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
- comment "samba support needs a (e)glibc or uClibc toolchain w/ RPC"
- 	depends on (!BR2_TOOLCHAIN_USES_GLIBC && \
- 		!BR2_TOOLCHAIN_USES_UCLIBC) || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -228,14 +218,10 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBVA
- 	help
- 	  Enable libva support.
- 
--comment "libva support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
--
- config BR2_PACKAGE_KODI_OPTICALDRIVE
- 	bool
- 
+@@ -269,6 +269,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-cpblobs/Config.in"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
++	source "package/kodi-screensaver-matrixtrails/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
+ 	source "package/kodi-screensaver-rsxs/Config.in"
 -- 
 2.7.0
