@@ -1,17 +1,17 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 08:41:51 +0100
-Subject: [Buildroot] [PATCH v4 05/17] python-pynacl: new package
-In-Reply-To: <1454799603-5474-6-git-send-email-mc5686@mclink.it>
+Date: Sun, 7 Feb 2016 08:42:17 +0100
+Subject: [Buildroot] [PATCH v4 14/17] python-wsaccel: new package
+In-Reply-To: <1454799603-5474-15-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-6-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_kvB+E1jsx_S9gnQzmVLRbfqYN8Qzzpz9+iD5DYSxq0KyA@mail.gmail.com>
+ <1454799603-5474-15-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ksNn+RUWeC85wOMDVx8CsOAAQq4+jYtTt1Jj5TNiA5xNQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 6, 2016 at 11:59 PM, Mauro Condarelli <mc5686@mclink.it> wrote:
+On Sun, Feb 7, 2016 at 12:00 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
@@ -19,75 +19,71 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 >
 > ---
 > Changes v3 -> v4
->   - removed spurious "source" line in package/Config.in (suggested by T.Petazzoni)
+>   - removed spurious dependency to python2 Config.in (suggested by Y.Yefremov)
+>   - changed license (Apache -> Apache-2.0) in python-wsaccel.mk (suggested by Y.Yefremov; I am
+>     unable to understand where he got this info; LICENSE file missing in sources)
 >
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                        |  1 +
->  package/python-pynacl/Config.in          |  9 +++++++++
->  package/python-pynacl/python-pynacl.hash |  3 +++
->  package/python-pynacl/python-pynacl.mk   | 16 ++++++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/python-pynacl/Config.in
->  create mode 100644 package/python-pynacl/python-pynacl.hash
->  create mode 100644 package/python-pynacl/python-pynacl.mk
+>  package/Config.in                          |  1 +
+>  package/python-wsaccel/Config.in           |  6 ++++++
+>  package/python-wsaccel/python-wsaccel.hash |  3 +++
+>  package/python-wsaccel/python-wsaccel.mk   | 13 +++++++++++++
+>  4 files changed, 23 insertions(+)
+>  create mode 100644 package/python-wsaccel/Config.in
+>  create mode 100644 package/python-wsaccel/python-wsaccel.hash
+>  create mode 100644 package/python-wsaccel/python-wsaccel.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 7b5c747..fb1ef75 100644
+> index 0af00c6..7bda8d7 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -687,6 +687,7 @@ menu "External python modules"
->         source "package/python-pygame/Config.in"
->         source "package/python-pygments/Config.in"
->         source "package/python-pyinotify/Config.in"
-> +       source "package/python-pynacl/Config.in"
->         source "package/python-pyparsing/Config.in"
->         source "package/python-pyparted/Config.in"
->         source "package/python-pypcap/Config.in"
-> diff --git a/package/python-pynacl/Config.in b/package/python-pynacl/Config.in
+> @@ -732,6 +732,7 @@ menu "External python modules"
+>         source "package/python-webpy/Config.in"
+>         source "package/python-werkzeug/Config.in"
+>         source "package/python-ws4py/Config.in"
+> +       source "package/python-wsaccel/Config.in"
+>         source "package/python-zope-interface/Config.in"
+>  endmenu
+>  endif
+> diff --git a/package/python-wsaccel/Config.in b/package/python-wsaccel/Config.in
 > new file mode 100644
-> index 0000000..5a53648
+> index 0000000..ee61e8a
 > --- /dev/null
-> +++ b/package/python-pynacl/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_PYNACL
-> +       bool "python-pynacl"
-> +       select BR2_PACKAGE_LIBSODIUM
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_CFFI # runtime
+> +++ b/package/python-wsaccel/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_WSACCEL
+> +       bool "python-wsaccel"
 > +       help
-> +         Python binding to the Networking and Cryptography (NaCl) library.
+> +         Accelerator for ws4py and AutobahnPython.
 > +
-> +         https://pypi.python.org/pypi/PyNaCl
-> diff --git a/package/python-pynacl/python-pynacl.hash b/package/python-pynacl/python-pynacl.hash
+> +         https://pypi.python.org/pypi/wsaccel
+> diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
 > new file mode 100644
-> index 0000000..7035ac7
+> index 0000000..a02b5a8
 > --- /dev/null
-> +++ b/package/python-pynacl/python-pynacl.hash
+> +++ b/package/python-wsaccel/python-wsaccel.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=12fd03d8ce64e0318cb1c69272f17704, sha256 locally computed.
-> +md5    12fd03d8ce64e0318cb1c69272f17704  PyNaCl-1.0.1.tar.gz
-> +sha256 d21d7a7358a85fb9b9ddadfbd1176c40fe199334fe2202881255e77f6d3773f4  PyNaCl-1.0.1.tar.gz
-> diff --git a/package/python-pynacl/python-pynacl.mk b/package/python-pynacl/python-pynacl.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b4ea3d6847855c0587d37fca9db0557, sha256 locally computed.
+> +md5    2b4ea3d6847855c0587d37fca9db0557  wsaccel-0.6.2.tar.gz
+> +sha256 425706acf0724d2f6bfa391ec37b4ef121d3432c956029de3cea4e101c218e0c  wsaccel-0.6.2.tar.gz
+> diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
 > new file mode 100644
-> index 0000000..e82611e
+> index 0000000..3e7b332
 > --- /dev/null
-> +++ b/package/python-pynacl/python-pynacl.mk
-> @@ -0,0 +1,16 @@
+> +++ b/package/python-wsaccel/python-wsaccel.mk
+> @@ -0,0 +1,13 @@
 > +################################################################################
 > +#
-> +# python-pynacl
+> +# python-wsaccel
 > +#
 > +################################################################################
 > +
-> +PYTHON_PYNACL_VERSION = 1.0.1
-> +PYTHON_PYNACL_SOURCE = PyNaCl-$(PYTHON_PYNACL_VERSION).tar.gz
-> +PYTHON_PYNACL_SITE = http://pypi.python.org/packages/source/P/PyNaCl
-> +PYTHON_PYNACL_LICENSE = Apache-2.0
-> +PYTHON_PYNACL_LICENSE_FILES = LICENSE
-> +PYTHON_PYNACL_SETUP_TYPE = setuptools
-> +PYTHON_PYNACL_DEPENDENCIES = libsodium python-six
-> +PYTHON_PYNACL_ENV = SODIUM_INSTALL=system
+> +PYTHON_WSACCEL_VERSION = 0.6.2
+> +PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
+> +PYTHON_WSACCEL_SITE = http://pypi.python.org/packages/source/w/wsaccel
+> +PYTHON_WSACCEL_LICENSE = Apache-2.0
+> +PYTHON_WSACCEL_SETUP_TYPE = setuptools
 > +
 > +$(eval $(python-package))
 > --
