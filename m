@@ -1,89 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 23:14:43 +0100
-Subject: [Buildroot] [git commit] package/avahi: break circular dependencies
-Message-ID: <20160207222644.4BCA980AC2@busybox.osuosl.org>
+Date: Sun, 7 Feb 2016 23:28:38 +0100
+Subject: [Buildroot] [PATCH 0/6 v3] Detect and fix circular dependencies
+ (branch yem/fixes)
+In-Reply-To: <cover.1454880734.git.yann.morin.1998@free.fr>
+References: <cover.1454880734.git.yann.morin.1998@free.fr>
+Message-ID: <20160207232838.6d288eae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92f704a8c120521458610d610fc6e54d032f1345
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Yann E. MORIN,
 
-We currently have two circular dependency chains:
+On Sun,  7 Feb 2016 22:34:26 +0100, Yann E. MORIN wrote:
 
-    avahi -> libglade -> libgtk2 -> cups -> avahi
-    avahi -> libgtk3 -> cups -> avahi
+> Yann E. MORIN (6):
+>       package/avahi: break circular dependencies
 
-The cups -> avahi dependency makes sense, as cups would be able to use
-Bonjour and mDNS to find printers, so we want to keep that dependency.
+Applied after adding a comment in avahi.mk to explain why we disabled
+gtk2/gtk3 support.
 
-The libgtk2 -> cups and libgtk3 -> cups dependencies also make sense, to
-be able to offer cups in the print dialogs.
+>       support/graph-depends: add option to specify output file
 
-However, the avahi -> libglade and avahi -> libgtk3 dependencies do not
-really make sense. As Thomas puts it:
+Applied after changing the metavar from DOT_FILE to OUT_FILE, in order
+to be consistent with the rest of the patch.
 
-    The avahi GUI programs seem really useless to me. On Debian/Ubuntu
-    distributions, they are not even packaged within the main avahi
-    packages, but as separate packages, probably indicating that they
-    are not very commonly used.
+>       core: catch failures in graph-depends
+>       support/graph-depends: detect circular dependencies
+>       support/graph-depends: teach it to only check dependencies
+>       core: add a make target to check the dependencies
 
-So, we drop the avahi -> libglade and avahi -> libgtk3 dependencies, to
-break the circular dependency chain.
+All applied. To be honest, I only quickly skimmed through the circular
+dependency checking function. It seemed reasonable, but I clearly
+didn't do a very thorough verification of it.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-[Thomas: add comment in the .mk file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/avahi/avahi.mk | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+What about submitting an autobuild-run patch now to make use of this
+functionality? :-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 9c6b609..5d6e6a8 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -68,9 +68,21 @@ AVAHI_CONF_ENV = \
- 	avahi_cv_sys_cxx_works=yes \
- 	DATADIRNAME=share
- 
-+# Note: even if we have Gtk2 and Gtk3 support in Buildroot, we
-+# explicitly disable support for them, in order to avoid the following
-+# circular dependencies:
-+#
-+#  avahi -> libglade -> libgtk2 -> cups -> avahi
-+#  avahi -> libgtk3 -> cups -> avahi
-+#
-+# Since Gtk2 and Gtk3 in Avahi are only used for some example/demo
-+# programs, we decided to disable their support to solve the circular
-+# dependency.
- AVAHI_CONF_OPTS = \
- 	--disable-qt3 \
- 	--disable-qt4 \
-+	--disable-gtk \
-+	--disable-gtk3 \
- 	--disable-gdbm \
- 	--disable-pygtk \
- 	--disable-mono \
-@@ -126,19 +138,6 @@ else
- AVAHI_CONF_OPTS += --disable-glib --disable-gobject
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGLADE),y)
--AVAHI_DEPENDENCIES += libglade
--else
--AVAHI_CONF_OPTS += --disable-gtk
--endif
--
--ifeq ($(BR2_PACKAGE_LIBGTK3),y)
--AVAHI_DEPENDENCIES += libgtk3
--AVAHI_CONF_OPTS += --enable-gtk3
--else
--AVAHI_CONF_OPTS += --disable-gtk3
--endif
--
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- AVAHI_CONF_ENV += \
- 	am_cv_pathless_PYTHON=python \
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
