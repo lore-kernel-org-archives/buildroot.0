@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:09 +0100
-Subject: [Buildroot] [PATCH 25/28] package/kodi-adsp-basic: new package
+Date: Sun,  7 Feb 2016 17:03:04 +0100
+Subject: [Buildroot] [PATCH 20/28] package/kodi-visualisation-fishbmc: new
+	package
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-21-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,61 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-basic/Config.in          | 12 ++++++++++++
- package/kodi-adsp-basic/kodi-adsp-basic.mk | 13 +++++++++++++
- package/kodi/Config.in                     |  1 +
- 3 files changed, 26 insertions(+)
- create mode 100644 package/kodi-adsp-basic/Config.in
- create mode 100644 package/kodi-adsp-basic/kodi-adsp-basic.mk
+ package/kodi-visualisation-fishbmc/Config.in                | 10 ++++++++++
+ .../kodi-visualisation-fishbmc.mk                           | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-visualisation-fishbmc/Config.in
+ create mode 100644 package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
 
-diff --git a/package/kodi-adsp-basic/Config.in b/package/kodi-adsp-basic/Config.in
+diff --git a/package/kodi-visualisation-fishbmc/Config.in b/package/kodi-visualisation-fishbmc/Config.in
 new file mode 100644
-index 0000000..9ebc1ca
+index 0000000..9f1a4c5
 --- /dev/null
-+++ b/package/kodi-adsp-basic/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_KODI_ADSP_BASIC
-+	bool "kodi-adsp-basic"
-+	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-visualisation-fishbmc/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_VISUALISATION_FISHBMC
++	bool "kodi-visualisation-fishbmc"
++	depends on BR2_PACKAGE_KODI_GL
 +	help
-+	  This add-on contains basic dsp related parts to handle speaker
-+	  delays, channel related volume amplification. As mode it
-+	  supports a Dolby Pro Logic II compatible multichannel downmix
-+	  to stereo, which becomes available if only 2 channel output on
-+	  Kodi is selected.
++	  Fische visualiser for Kodi
 +
-+	  https://github.com/kodi-adsp/adsp.basic
-diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.mk b/package/kodi-adsp-basic/kodi-adsp-basic.mk
++	  https://github.com/notspiff/visualization.fishbmc
++
++comment "fishbmc needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
 new file mode 100644
-index 0000000..0b1ba95
+index 0000000..1e07774
 --- /dev/null
-+++ b/package/kodi-adsp-basic/kodi-adsp-basic.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-adsp-basic
++# kodi-visualisation-fishbmc
 +#
 +################################################################################
 +
-+KODI_ADSP_BASIC_VERSION = cb56e0eb6530fd50a286d47ef0be529001e9d556
-+KODI_ADSP_BASIC_SITE = $(call github,kodi-adsp,adsp.basic,$(KODI_ADSP_BASIC_VERSION))
-+KODI_ADSP_BASIC_LICENSE = GPLv3+
-+KODI_ADSP_BASIC_LICENSE_FILES = LICENSE.md
-+KODI_ADSP_BASIC_DEPENDENCIES = libplatform kodi-platform
++KODI_VISUALISATION_FISHBMC_VERSION = 50c38c296a62e096a2216e43b86d864ee265c506
++KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
++KODI_VISUALISATION_FISHBMC_LICENSE = GPLv2+
++KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
++KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d36106a..09513a2 100644
+index f201008..c60b3ff 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -237,6 +237,7 @@ menu "Audio decoder addons"
+@@ -278,6 +278,7 @@ menu "Screensavers"
  endmenu
  
- menu "Audio DSP addons"
-+	source "package/kodi-adsp-basic/Config.in"
- 	source "package/kodi-adsp-freesurround/Config.in"
- endmenu
- 
+ menu "Visualisations"
++	source "package/kodi-visualisation-fishbmc/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
 -- 
 2.7.0
