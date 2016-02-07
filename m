@@ -1,63 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  7 Feb 2016 22:34:28 +0100
-Subject: [Buildroot] [PATCH 5/6 v3] support/graph-depends: teach it to only
-	check dependencies
+Date: Sun,  7 Feb 2016 22:34:29 +0100
+Subject: [Buildroot] [PATCH 6/6 v3] core: add a make target to check the
+	dependencies
 In-Reply-To: <cover.1454880734.git.yann.morin.1998@free.fr>
 References: <cover.1454880734.git.yann.morin.1998@free.fr>
-Message-ID: <b3414ece9fc74306e5674a71371c871c071b6402.1454880734.git.yann.morin.1998@free.fr>
+Message-ID: <f0509ca9d1287b071a0cb1d965ead2bccdac5bc1.1454880734.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add an option to graph-depends to only do the dependency checks and not
-generate the dot program.
+Add a make target that will checks the dependencies of all packages.
+This will currently only detect circular dependencies, but more tests
+can be added later if need be.
+
+This can then be used in the autobuilders to automatically report
+dependency issues.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
 ---
- support/scripts/graph-depends | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index ec32b20..13ddc94 100755
---- a/support/scripts/graph-depends
-+++ b/support/scripts/graph-depends
-@@ -38,6 +38,8 @@ max_depth = 0
- transitive = True
+diff --git a/Makefile b/Makefile
+index 7c5daa4..9daf011 100644
+--- a/Makefile
++++ b/Makefile
+@@ -733,6 +733,10 @@ graph-size:
+ 		--file-size-csv $(GRAPHS_DIR)/file-size-stats.csv \
+ 		--package-size-csv $(GRAPHS_DIR)/package-size-stats.csv
  
- parser = argparse.ArgumentParser(description="Graph packages dependencies")
-+parser.add_argument("--check-only", "-C", dest="check_only", action="store_true", default=False,
-+                    help="Only do the dependency checks (circular deps...)")
- parser.add_argument("--outfile", "-o", metavar="DOT_FILE", dest="outfile",
-                     help="File in which to generate the dot representation")
- parser.add_argument("--package", '-p', metavar="PACKAGE",
-@@ -62,9 +64,14 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
-                     help="Draw (do not draw) transitive dependencies")
- args = parser.parse_args()
- 
-+check_only = args.check_only
++check-dependencies:
++	@cd "$(CONFIG_DIR)"; \
++	$(TOPDIR)/support/scripts/graph-depends -C
 +
- if args.outfile is None:
-     outfile = sys.stdout
- else:
-+    if check_only:
-+        sys.stderr.write("don't specify outfile and check-only at the same time\n")
-+        sys.exit(1)
-     outfile = open(args.outfile, "wb")
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
  
- if args.package is None:
-@@ -351,6 +358,9 @@ def remove_extra_deps(deps):
-     return deps
- 
- check_circular_deps(dict_deps)
-+if check_only:
-+    sys.exit(0)
-+
- dict_deps = remove_extra_deps(dict_deps)
- dict_version = get_version([pkg for pkg in allpkgs
-                                 if pkg != "all" and not pkg.startswith("root")])
+ all: menuconfig
 -- 
 1.9.1
