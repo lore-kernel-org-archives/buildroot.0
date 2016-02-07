@@ -1,136 +1,208 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 17:01:14 +0100
-Subject: [Buildroot] [PATCH v4 17/17] python-crossbar: new package
-In-Reply-To: <CAGm1_ktiF1Tkpw9_rdEkUEzKP5a-T0i3rU7e7bcR4pJXJMGzHA@mail.gmail.com>
-References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-18-git-send-email-mc5686@mclink.it>
- <CAGm1_ktiF1Tkpw9_rdEkUEzKP5a-T0i3rU7e7bcR4pJXJMGzHA@mail.gmail.com>
-Message-ID: <CAGm1_ktQxdpTo9mVc7E4MQPKThR0WAO+NNuFEepCjCnwk31v5g@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Feb 2016 17:02:46 +0100
+Subject: [Buildroot] [PATCH 02/28] package/kodi-screensaver-rsxs: new package
+In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Feb 7, 2016 at 8:46 AM, Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
-> On Sun, Feb 7, 2016 at 12:00 AM, Mauro Condarelli <mc5686@mclink.it> wrote:
->> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
->
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
->>
->> ---
->> Changes v3 -> v4
->>   - added several "select ... # runtime" in Config.in (suggested by Y.Yefremov)
->>   - removed all dpendencies from python-crossbar.mk
->>   - removed spurious "source" line in package/Config.in
->>   - slightly edited comment in Config.in
->>
->> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
->> ---
->>  package/Config.in                            |  1 +
->>  package/python-crossbar/Config.in            | 37 ++++++++++++++++++++++++++++
->>  package/python-crossbar/python-crossbar.hash |  3 +++
->>  package/python-crossbar/python-crossbar.mk   | 14 +++++++++++
->>  4 files changed, 55 insertions(+)
->>  create mode 100644 package/python-crossbar/Config.in
->>  create mode 100644 package/python-crossbar/python-crossbar.hash
->>  create mode 100644 package/python-crossbar/python-crossbar.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 0ee5577..acb9520 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -634,6 +634,7 @@ menu "External python modules"
->>         source "package/python-configobj/Config.in"
->>         source "package/python-configshell-fb/Config.in"
->>         source "package/python-crc16/Config.in"
->> +       source "package/python-crossbar/Config.in"
->>         source "package/python-cssselect/Config.in"
->>         source "package/python-daemon/Config.in"
->>         source "package/python-dialog/Config.in"
->> diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
->> new file mode 100644
->> index 0000000..ee9d6a9
->> --- /dev/null
->> +++ b/package/python-crossbar/Config.in
->> @@ -0,0 +1,37 @@
->> +config BR2_PACKAGE_PYTHON_CROSSBAR
->> +       bool "python-crossbar"
->> +       select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
->> +       select BR2_PACKAGE_PYTHON_CBOR # runtime
->> +       select BR2_PACKAGE_PYTHON_CLICK # runtime
->> +       select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
->> +       select BR2_PACKAGE_PYTHON_JINJA2 # runtime
->> +       select BR2_PACKAGE_PYTHON_MISTUNE # runtime
->> +       select BR2_PACKAGE_PYTHON_MSGPACK # runtime
->> +       select BR2_PACKAGE_PYTHON_NETADDR # runtime
->> +       select BR2_PACKAGE_PYTHON_PSUTIL # runtime
->> +       select BR2_PACKAGE_PYTHON_PYASN # runtime
->> +       select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
->> +       select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
->> +       select BR2_PACKAGE_PYTHON_PYINOTIFY # runtime
->> +       select BR2_PACKAGE_PYTHON_PYNACL # runtime
->> +       select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
->> +       select BR2_PACKAGE_PYTHON_PYTRIE # runtime
->> +       select BR2_PACKAGE_PYTHON_PYYAML # runtime
->> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->> +       select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
->> +       select BR2_PACKAGE_PYTHON_SETPROCTITLE # runtime
->> +       select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->> +       select BR2_PACKAGE_PYTHON_SHURILWHICH # runtime
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ Config.in.legacy                                   |  7 ++++
+ .../kodi-screensaver-rsxs/0001-cross-compile.patch | 37 ++++++++++++++++++++++
+ package/kodi-screensaver-rsxs/Config.in            | 10 ++++++
+ .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 14 ++++++++
+ package/kodi/Config.in                             | 12 +------
+ package/kodi/kodi.mk                               | 20 ++----------
+ 6 files changed, 71 insertions(+), 29 deletions(-)
+ create mode 100644 package/kodi-screensaver-rsxs/0001-cross-compile.patch
+ create mode 100644 package/kodi-screensaver-rsxs/Config.in
+ create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
 
- select BR2_PACKAGE_PYTHON_SHURILWHICH if BR2_PACKAGE_PYTHON # runtime
-
-because BR2_PACKAGE_PYTHON_SHURILWHICH is Python 2 only package
-
->> +       select BR2_PACKAGE_PYTHON_TREQ # runtime
->> +       select BR2_PACKAGE_PYTHON_TWISTED # runtime
->> +       select BR2_PACKAGE_PYTHON_UJSON # runtime
->> +       select BR2_PACKAGE_PYTHON_WSACCEL # runtime
->> +       help
->> +         Crossbar.io is an open-source WAMP application router
->> +         that allows to build advanced applications from loosely-coupled
->> +         components that can talk in real-time with each other.
->> +
->> +         https://pypi.python.org/pypi/crossbar
->> +
->> +comment "Currently Crossbar.io does NOT work without Python sources!"
->> +        depends on BR2_PACKAGE_PYTHON_PYC_ONLY
->> diff --git a/package/python-crossbar/python-crossbar.hash b/package/python-crossbar/python-crossbar.hash
->> new file mode 100644
->> index 0000000..0690e56
->> --- /dev/null
->> +++ b/package/python-crossbar/python-crossbar.hash
->> @@ -0,0 +1,3 @@
->> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cbe9b62a1ec2eebbc0cd0cef887a4993, sha256 locally computed.
->> +md5    cbe9b62a1ec2eebbc0cd0cef887a4993  crossbar-0.12.1.tar.gz
->> +sha256 4919e683bcfa3c633da8207f24189fd196ef8412b647f0365cf74c0bff8b4ada  crossbar-0.12.1.tar.gz
->> diff --git a/package/python-crossbar/python-crossbar.mk b/package/python-crossbar/python-crossbar.mk
->> new file mode 100644
->> index 0000000..a35d54d
->> --- /dev/null
->> +++ b/package/python-crossbar/python-crossbar.mk
->> @@ -0,0 +1,14 @@
->> +################################################################################
->> +#
->> +# python-crossbar
->> +#
->> +################################################################################
->> +
->> +PYTHON_CROSSBAR_VERSION = 0.12.1
->> +PYTHON_CROSSBAR_SOURCE = crossbar-$(PYTHON_CROSSBAR_VERSION).tar.gz
->> +PYTHON_CROSSBAR_SITE = http://pypi.python.org/packages/source/c/crossbar
->> +PYTHON_CROSSBAR_LICENSE = AGPL3
->> +PYTHON_CROSSBAR_LICENSE_FILES = LICENSE
->> +PYTHON_CROSSBAR_SETUP_TYPE = setuptools
->> +
->> +$(eval $(python-package))
->> --
->> 2.1.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 35ed2ab..a45551b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_PACKAGE_KODI_RSXS
++	bool "rsxs support in Kodi was moved to an addon"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_SCREENSAVER_RSXS
++	help
++	  rsxs support in Kodi was moved to an addon
++
+ config BR2_PACKAGE_KODI_GOOM
+ 	bool "Goom support in Kodi was moved to an addon"
+ 	select BR2_LEGACY
+diff --git a/package/kodi-screensaver-rsxs/0001-cross-compile.patch b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
+new file mode 100644
+index 0000000..56c2f4e
+--- /dev/null
++++ b/package/kodi-screensaver-rsxs/0001-cross-compile.patch
+@@ -0,0 +1,37 @@
++Fix cross-compilation
++
++Use the cross-compiler and not the host version.
++
++Patch sent upstream:
++https://github.com/notspiff/screensavers.rsxs/pull/5
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt
++--- screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259.org/CMakeLists.txt	2015-03-19 12:20:23.000000000 +0100
+++++ screensavers.rsxs-195e0ec3fbbcb2ee2012cd560e42d05167f0f259/CMakeLists.txt	2015-07-19 20:26:16.660481032 +0200
++@@ -33,6 +33,11 @@
++                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/skyrocket
++                     ${PROJECT_SOURCE_DIR}/${rsxs_dir}/src/solarwinds)
++                         
+++
+++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
+++string( REGEX REPLACE "-[^-]+$" ""
+++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
+++
++ include(ExternalProject)
++ set(update_command "")
++ if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
++@@ -46,8 +51,11 @@
++   endif()
++ endif()
++ externalproject_add(rsxs SOURCE_DIR ${PROJECT_SOURCE_DIR}/${rsxs_dir}
++-                    CONFIGURE_COMMAND ${configure_start}
+++                    CONFIGURE_COMMAND gl_cv_func_gettimeofday_clobber=no
+++                                      ac_cv_func_malloc_0_nonnull=yes
+++                                      ${configure_start}
++                                       --prefix=<INSTALL_DIR>
+++                                      --host=${TOOLCHAIN_NAME}
++                                       --without-xscreensaver
++                                       --disable-cyclone
++                                       --disable-euphoria
+diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
+new file mode 100644
+index 0000000..4abebe5
+--- /dev/null
++++ b/package/kodi-screensaver-rsxs/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
++	bool "kodi-screensaver-rsxs"
++	depends on BR2_PACKAGE_KODI_GL # libglu
++	help
++	  RSXS screensaver add-ons for Kodi
++
++	  https://github.com/notspiff/screensavers.rsxs
++
++comment "rsxs needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+new file mode 100644
+index 0000000..c76e9da
+--- /dev/null
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# kodi-screensaver-rsxs
++#
++################################################################################
++
++KODI_SCREENSAVER_RSXS_VERSION = 195e0ec3fbbcb2ee2012cd560e42d05167f0f259
++KODI_SCREENSAVER_RSXS_SITE = $(call github,notspiff,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
++KODI_SCREENSAVER_RSXS_LICENSE = GPLv3
++KODI_SCREENSAVER_RSXS_LICENSE_FILES = lib/rsxs-1.0/COPYING
++
++KODI_SCREENSAVER_RSXS_DEPENDENCIES = kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index dcddade..af5e40b 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -81,9 +81,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_TIFF
+ 	select BR2_PACKAGE_TINYXML
+ 	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_KODI_GL
+-	select BR2_PACKAGE_XLIB_LIBXMU if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
+ 	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_KODI_GL
+-	select BR2_PACKAGE_XLIB_LIBXT if BR2_PACKAGE_KODI_GL # needed by rsxs screensaver
+ 	select BR2_PACKAGE_YAJL
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+@@ -136,15 +134,6 @@ config BR2_PACKAGE_KODI_LIBBLURAY
+ comment "libbluray support needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 
+-config BR2_PACKAGE_KODI_RSXS
+-	bool "rsxs screensaver"
+-	depends on BR2_PACKAGE_KODI_GL
+-	help
+-	  Enable goom screensaver
+-
+-comment "rsxs needs an OpenGL backend"
+-	depends on !BR2_PACKAGE_KODI_GL
+-
+ config BR2_PACKAGE_KODI_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_STATIC_LIBS # libcec
+@@ -295,6 +284,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
++	source "package/kodi-screensaver-rsxs/Config.in"
+ 	source "package/kodi-screensaver-stars/Config.in"
+ endmenu
+ 
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 94e59e7..ef3f174 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -35,6 +35,7 @@ KODI_CONF_OPTS +=  \
+ 	--disable-openmax \
+ 	--disable-projectm \
+ 	--disable-pulse \
++	--disable-rsxs \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -89,24 +90,8 @@ ifeq ($(BR2_PACKAGE_KODI_GL),y)
+ KODI_DEPENDENCIES += libglew libglu libgl xlib_libX11 xlib_libXext \
+ 	xlib_libXmu xlib_libXrandr xlib_libXt libdrm
+ KODI_CONF_OPTS += --enable-gl --enable-x11 --disable-gles
+-ifeq ($(BR2_PACKAGE_KODI_RSXS),y)
+-# fix rsxs compile
+-# gcc5: http://trac.kodi.tv/ticket/16006#comment:6
+-# make sure target libpng-config is used, options taken from rsxs-0.9/acinclude.m4
+-KODI_CONF_ENV += \
+-	ac_cv_type__Bool=yes \
+-	jm_cv_func_gettimeofday_clobber=no \
+-	mac_cv_pkg_png=$(STAGING_DIR)/usr/bin/libpng-config \
+-	mac_cv_pkg_cppflags="`$(STAGING_DIR)/usr/bin/libpng-config --I_opts --cppflags`" \
+-	mac_cv_pkg_cxxflags="`$(STAGING_DIR)/usr/bin/libpng-config --ccopts`" \
+-	mac_cv_pkg_ldflags="`$(STAGING_DIR)/usr/bin/libpng-config --L_opts --R_opts`" \
+-	mac_cv_pkg_libs="`$(STAGING_DIR)/usr/bin/libpng-config --libs`"
+-KODI_CONF_OPTS += --enable-rsxs
+ else
+-KODI_CONF_OPTS += --disable-rsxs
+-endif
+-else
+-KODI_CONF_OPTS += --disable-gl --disable-rsxs --disable-x11
++KODI_CONF_OPTS += --disable-gl --disable-x11
+ ifeq ($(BR2_PACKAGE_KODI_EGL_GLES),y)
+ KODI_DEPENDENCIES += libegl libgles
+ KODI_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags --libs egl`"
+@@ -224,7 +209,6 @@ endef
+ KODI_PRE_CONFIGURE_HOOKS += KODI_BOOTSTRAP
+ 
+ define KODI_CLEAN_UNUSED_ADDONS
+-	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/screensaver.rsxs.plasma
+ 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.milkdrop
+ 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.projectm
+ 	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/visualization.itunes
+-- 
+2.7.0
