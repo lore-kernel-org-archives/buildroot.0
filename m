@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:12 +0100
-Subject: [Buildroot] [PATCH 28/28] package/kodi-visualisation-vsxu: new
+Date: Sun,  7 Feb 2016 17:03:07 +0100
+Subject: [Buildroot] [PATCH 23/28] package/kodi-audiodecoder-opus: new
 	package
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-29-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-24-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,57 +13,59 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-vsxu/Config.in                  |  8 ++++++++
- package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk | 13 +++++++++++++
- package/kodi/Config.in                                     |  1 +
- 3 files changed, 22 insertions(+)
- create mode 100644 package/kodi-visualisation-vsxu/Config.in
- create mode 100644 package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
+ package/kodi-audiodecoder-opus/Config.in                 | 10 ++++++++++
+ package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk | 13 +++++++++++++
+ package/kodi/Config.in                                   |  1 +
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-audiodecoder-opus/Config.in
+ create mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
 
-diff --git a/package/kodi-visualisation-vsxu/Config.in b/package/kodi-visualisation-vsxu/Config.in
+diff --git a/package/kodi-audiodecoder-opus/Config.in b/package/kodi-audiodecoder-opus/Config.in
 new file mode 100644
-index 0000000..2c2df17
+index 0000000..12d7247
 --- /dev/null
-+++ b/package/kodi-visualisation-vsxu/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_VSXU
-+	bool "kodi-visualisation-vsxu"
-+	select BR2_PACKAGE_VSXU
-+	depends on BR2_i386 || BR2_x86_64 # vsxu
++++ b/package/kodi-audiodecoder-opus/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
++	bool "kodi-audiodecoder-opus"
++	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBOGG
++	select BR2_PACKAGE_OPUS
++	select BR2_PACKAGE_OPUSFILE
 +	help
-+	  VSXu visualisation for Kodi
++	  Opus audio decoder for Kodi
 +
-+	  https://github.com/notspiff/visualization.vsxu
-diff --git a/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
++	  https://github.com/notspiff/audiodecoder.opus
+diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
 new file mode 100644
-index 0000000..7ba39c7
+index 0000000..efe17f3
 --- /dev/null
-+++ b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
++++ b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-visualisation-vsxu
++# kodi-audiodecoder-opus
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_VSXU_VERSION = 990332f0719503c4575021f5f64daa0fbc35ac4e
-+KODI_VISUALISATION_VSXU_SITE = $(call github,notspiff,visualization.vsxu,$(KODI_VISUALISATION_VSXU_VERSION))
-+KODI_VISUALISATION_VSXU_LICENSE = GPLv2+
-+KODI_VISUALISATION_VSXU_LICENSE_FILES = debian/copyright
-+KODI_VISUALISATION_VSXU_DEPENDENCIES = kodi vsxu
++KODI_AUDIODECODER_OPUS_VERSION = 0bd11e35e6ed8b6480e4100ac8927113cb085eda
++KODI_AUDIODECODER_OPUS_SITE = $(call github,notspiff,audiodecoder.opus,$(KODI_AUDIODECODER_OPUS_VERSION))
++KODI_AUDIODECODER_OPUS_LICENSE = GPLv2+
++KODI_AUDIODECODER_OPUS_LICENSE_FILES = src/OpusCodec.cpp
++KODI_AUDIODECODER_OPUS_DEPENDENCIES = kodi-platform libogg opus opusfile
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 55b2afa..db342aa 100644
+index 216e730..86bd40d 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -291,6 +291,7 @@ menu "Visualisations"
- 	source "package/kodi-visualisation-goom/Config.in"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
- 	source "package/kodi-visualisation-spectrum/Config.in"
-+	source "package/kodi-visualisation-vsxu/Config.in"
- 	source "package/kodi-visualisation-waveforhue/Config.in"
- 	source "package/kodi-visualisation-waveform/Config.in"
- endmenu
+@@ -228,6 +228,7 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
++	source "package/kodi-audiodecoder-opus/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
 -- 
 2.7.0
