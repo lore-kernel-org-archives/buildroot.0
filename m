@@ -1,72 +1,71 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:01 +0100
-Subject: [Buildroot] [PATCH 17/28] package/kodi-screensaver-cpblobs: new
-	package
+Date: Sun,  7 Feb 2016 17:02:52 +0100
+Subject: [Buildroot] [PATCH 08/28] package/kodi: not available using a
+	musl-based toolchain
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The build stops with
+configure: error: unsupported host (i586-buildroot-linux-musl)
+due to musl not being supported in
+https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
+
+Removing this obstacle will show that musl is really not being
+supported, the build will fail:
+
+In file included from emu_msvcrt.cpp:64:0:
+emu_msvcrt.h:93:3: error: ?__off64_t? does not name a type
+   __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
+   ^
+emu_msvcrt.h:94:3: error: ?__off_t? does not name a type
+   __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
+   ^
+
+I know these problems are fixable and the voidlinux projects seems to
+have done it already for 15.2-Isengard:
+https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
+
+For Jarvis-16.0 these patches have to be rebased at a later stage.
+For now block the Kodi package with musl-based toolchains to avoid
+build errors.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-cpblobs/Config.in                  | 11 +++++++++++
- .../kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk    | 13 +++++++++++++
- package/kodi/Config.in                                      |  1 +
- 3 files changed, 25 insertions(+)
- create mode 100644 package/kodi-screensaver-cpblobs/Config.in
- create mode 100644 package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+ package/kodi/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
-new file mode 100644
-index 0000000..184509e
---- /dev/null
-+++ b/package/kodi-screensaver-cpblobs/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
-+	bool "kodi-screensaver-cpblobs"
-+	depends on BR2_PACKAGE_KODI_GL # libsoil
-+	select BR2_PACKAGE_LIBSOIL
-+	help
-+	  CpBlobs screensaver for Kodi
-+
-+	  https://github.com/notspiff/screensaver.cpblobs
-+
-+comment "cpblobs needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-new file mode 100644
-index 0000000..57f3adb
---- /dev/null
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-screensaver-cpblobs
-+#
-+################################################################################
-+
-+KODI_SCREENSAVER_CPBLOBS_VERSION = 87a3abfbe6e4fd1089548eab77a84902d0e1af60
-+KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
-+KODI_SCREENSAVER_CPBLOBS_LICENSE = GPLv2+
-+KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
-+KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
-+
-+$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 65f37ad..4b0be39 100644
+index 8c853ee..1efcdd2 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -266,6 +266,7 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-asteroids/Config.in"
- 	source "package/kodi-screensaver-asterwave/Config.in"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
-+	source "package/kodi-screensaver-cpblobs/Config.in"
- 	source "package/kodi-screensaver-crystalmorph/Config.in"
- 	source "package/kodi-screensaver-greynetic/Config.in"
- 	source "package/kodi-screensaver-pingpong/Config.in"
+@@ -2,11 +2,12 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+-comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
++comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -92,6 +93,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
 -- 
 2.7.0
