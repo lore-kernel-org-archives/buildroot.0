@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 22:05:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dovecot-pigeonhole: bump
- version to 0.4.12
-In-Reply-To: <1454795528-10852-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454795528-10852-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160207220546.579949d0@free-electrons.com>
+Date: Sun, 7 Feb 2016 22:08:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ipsec-tools: fix broken
+ download URL
+In-Reply-To: <1454148798-28228-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454148798-28228-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207220826.29a2db86@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,11 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat,  6 Feb 2016 22:52:08 +0100, Bernd Kuhls wrote:
+On Sat, 30 Jan 2016 11:13:17 +0100, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
->  package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/ipsec-tools/ipsec-tools.mk | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
 Applied, thanks.
 
