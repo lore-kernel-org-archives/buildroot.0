@@ -1,37 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 22:07:56 +0100
-Subject: [Buildroot] [git commit] package/ipsec-tools: fix broken download
-	URL
-Message-ID: <20160207211554.6FD65802CF@busybox.osuosl.org>
+Date: Sun, 7 Feb 2016 22:16:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/irda-utils: fix musl build
+In-Reply-To: <1454148798-28228-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1454148798-28228-1-git-send-email-bernd.kuhls@t-online.de>
+ <1454148798-28228-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160207221650.2ee89791@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c7a6f522053bbff8066106eb4f67ab83d0c4273
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/ipsec-tools/ipsec-tools.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+On Sat, 30 Jan 2016 11:13:18 +0100, Bernd Kuhls wrote:
 
-diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
-index 9454c4e..98216ea 100644
---- a/package/ipsec-tools/ipsec-tools.mk
-+++ b/package/ipsec-tools/ipsec-tools.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
- 
--IPSEC_TOOLS_VERSION_MAJOR = 0.8
--IPSEC_TOOLS_VERSION = $(IPSEC_TOOLS_VERSION_MAJOR).2
-+IPSEC_TOOLS_VERSION = 0.8.2
- IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
--IPSEC_TOOLS_SITE = http://ftp.sunet.se/pub/NetBSD/misc/ipsec-tools/$(IPSEC_TOOLS_VERSION_MAJOR)
-+IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
- IPSEC_TOOLS_INSTALL_STAGING = YES
- IPSEC_TOOLS_MAKE = $(MAKE1)
- IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex
+> diff --git a/package/irda-utils/0004-musl.patch b/package/irda-utils/0004-musl.patch
+> new file mode 100644
+> index 0000000..e3e766f
+> --- /dev/null
+> +++ b/package/irda-utils/0004-musl.patch
+> @@ -0,0 +1,37 @@
+> +Fix musl build
+> +
+> +Downloaded from
+> +http://cgit.openembedded.org/openembedded-core/plain/meta/recipes-connectivity/irda-utils/irda-utils-0.9.18/musl.patch
+> +
+> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+This...
+
+> +
+> +
+> +Replace use of <net/if_packet.h> with <linux/if_packet.h>.
+> +
+> +kernel headers <linux/if_packet.h> already provides the
+> +needed definitions, moreover not all libc implementations
+> +provide if_packet.h e.g. musl
+> +
+> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> +Upstream-Status: Pending
+
+... should have been here.
+
+Applied after fixing this.
+
+Can you check if the patch has really been submitted upstream? I
+quickly looked in the irda-utils archives, and couldn't find it. Also,
+if you could submit upstream the other patches we have, it would be
+great.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
