@@ -1,73 +1,41 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:06 +0100
-Subject: [Buildroot] [PATCH 22/28] package/kodi-pvr-hdhomerun: new package
-In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-23-git-send-email-bernd.kuhls@t-online.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  7 Feb 2016 13:43:15 -0300
+Subject: [Buildroot] [PATCH] bluez5_utils: depends on
+	BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <1454863395-15652-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-hdhomerun/Config.in             | 13 +++++++++++++
- package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk | 13 +++++++++++++
- package/kodi/Config.in                           |  1 +
- 3 files changed, 27 insertions(+)
- create mode 100644 package/kodi-pvr-hdhomerun/Config.in
- create mode 100644 package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+It uses __sync_fetch_and_add_4() and other 32-bit atomics, fixes:
+http://autobuild.buildroot.net/results/498/4984850d872448c5702eac79b831891f77ad3cf0/
 
-diff --git a/package/kodi-pvr-hdhomerun/Config.in b/package/kodi-pvr-hdhomerun/Config.in
-new file mode 100644
-index 0000000..c4e997c
---- /dev/null
-+++ b/package/kodi-pvr-hdhomerun/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_KODI_PVR_HOMERUN
-+	bool "kodi-pvr-hdhomerun"
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
-+	select BR2_PACKAGE_JSONCPP
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBHDHOMERUN
-+	help
-+	  Kodi's HDHomeRun client addon
-+
-+	  https://github.com/kodi-pvr/pvr.hdhomerun
-+
-+comment "kodi-pvr-hdhomerun needs a toolchain w/ gcc >= 4.7"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-new file mode 100644
-index 0000000..38e5b87
---- /dev/null
-+++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-pvr-hdhomerun
-+#
-+################################################################################
-+
-+KODI_PVR_HDHOMERUN_VERSION = a1bf18ce9bbcb0272102d9a03df6de9dfd7c4021
-+KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
-+KODI_PVR_HDHOMERUN_LICENSE = GPLv2+
-+KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
-+KODI_PVR_HDHOMERUN_DEPENDENCIES = jsoncpp kodi-platform libhdhomerun
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 258a44d..216e730 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -248,6 +248,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-dvblink/Config.in"
- 	source "package/kodi-pvr-dvbviewer/Config.in"
- 	source "package/kodi-pvr-filmon/Config.in"
-+	source "package/kodi-pvr-hdhomerun/Config.in"
- 	source "package/kodi-pvr-hts/Config.in"
- 	source "package/kodi-pvr-iptvsimple/Config.in"
- 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/bluez5_utils/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/bluez5_utils/Config.in b/package/bluez5_utils/Config.in
+index 57f8c45..18b7bbf 100644
+--- a/package/bluez5_utils/Config.in
++++ b/package/bluez5_utils/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_BLUEZ5_UTILS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 	# wordexp support not in our uClibc configuration
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
+@@ -80,6 +81,7 @@ comment "bluez5-utils needs a glibc or musl toolchain w/ wchar, threads, headers
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+ 
+ comment "bluez5-utils conflicts with older bluez-utils version"
 -- 
-2.7.0
+2.4.10
