@@ -1,89 +1,105 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 21:56:36 +0100
-Subject: [Buildroot] [git commit] package/procps-ng: Fix install,
-	procps-ng does not use /usr/bin anymore
-Message-ID: <20160207210346.D7FD0802A0@busybox.osuosl.org>
+Date: Sun, 7 Feb 2016 22:02:51 +0100
+Subject: [Buildroot] [git commit] mpd: fix build on SPARC
+Message-ID: <20160207210347.15B3B8033C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=834893a965a993e8a73e30b448426f626419f3c8
+commit: https://git.buildroot.net/buildroot/commit/?id=84533029c70a4dffb2cd2e4f05e3903fd1b8fcd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We do not need to move binaries around anymore since this commit:
-https://gitlab.com/procps-ng/procps/commit/430b559ba2826f80dffa840622ae0fc744000b13
-
-Removing PROCPS_NG_CONF_OPTS completely leads to binaries being
-installed to /usr/bin, we still have to define a custom --exec-prefix
-to get binaries in /bin:
-
-libtool: install: /usr/bin/install -c free /home/bernd/buildroot/output/target/bin/free
-libtool: install: /usr/bin/install -c pgrep /home/bernd/buildroot/output/target/bin/pgrep
-libtool: install: /usr/bin/install -c pkill /home/bernd/buildroot/output/target/bin/pkill
-libtool: install: /usr/bin/install -c pmap /home/bernd/buildroot/output/target/bin/pmap
-libtool: install: /usr/bin/install -c pwdx /home/bernd/buildroot/output/target/bin/pwdx
-libtool: install: /usr/bin/install -c tload /home/bernd/buildroot/output/target/bin/tload
-libtool: install: /usr/bin/install -c uptime /home/bernd/buildroot/output/target/bin/uptime
-libtool: install: /usr/bin/install -c vmstat /home/bernd/buildroot/output/target/bin/vmstat
-libtool: install: /usr/bin/install -c w /home/bernd/buildroot/output/target/bin/w
-libtool: install: /usr/bin/install -c pidof /home/bernd/buildroot/output/target/bin/pidof
-libtool: install: /usr/bin/install -c kill /home/bernd/buildroot/output/target/bin/kill
-libtool: install: /usr/bin/install -c slabtop /home/bernd/buildroot/output/target/bin/slabtop
-libtool: install: /usr/bin/install -c watch /home/bernd/buildroot/output/target/bin/watch
-libtool: install: /usr/bin/install -c top/top /home/bernd/buildroot/output/target/bin/top
+mpd uses __atomic_*() built-ins, but forgets to link with -latomic
+when needed, so this commit adds a patch that ensures it will link
+with libatomic, and adds a dependency on BR2_TOOLCHAIN_HAS_ATOMIC.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/ab7/ab7ed83d60823c1b023c7b76fcbe9c20d537ed4c//
+  http://autobuild.buildroot.net/results/e2207280f3a177e12dba502b1c01f5aeb431d04c/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: pass --exec-prefix=/ instead of an empty prefix.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/procps-ng/procps-ng.mk | 24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ ...configure.ac-check-if-libatomic-is-needed.patch | 40 ++++++++++++++++++++++
+ package/mpd/Config.in                              |  2 ++
+ package/mpd/mpd.mk                                 |  1 +
+ 3 files changed, 43 insertions(+)
 
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index e0e89c4..fb1b236 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -19,18 +19,6 @@ PROCPS_NG_GETTEXTIZE = YES
- # wins the fight over who gets to have their utils actually installed.
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- PROCPS_NG_DEPENDENCIES += busybox
--# Also overwrite the remaining busybox symlinks for tools which are now
--# provided by procps-ng and got installed in /usr/bin instead of /bin.
--# Currently these tools are only pidof and watch. We only need to do
--# this if the /usr/bin and /bin directories are not merged.
--ifeq ($(BR2_ROOTFS_MERGED_USR),)
--define PROCPS_NG_MOVE_BINARIES
--	for i in pidof watch; do \
--		mv $(TARGET_DIR)/usr/bin/$$i $(TARGET_DIR)/bin/; \
--	done
--endef
--PROCPS_NG_POST_INSTALL_TARGET_HOOKS += PROCPS_NG_MOVE_BINARIES
--endif
- endif
+diff --git a/package/mpd/0005-configure.ac-check-if-libatomic-is-needed.patch b/package/mpd/0005-configure.ac-check-if-libatomic-is-needed.patch
+new file mode 100644
+index 0000000..a9873a7
+--- /dev/null
++++ b/package/mpd/0005-configure.ac-check-if-libatomic-is-needed.patch
+@@ -0,0 +1,40 @@
++From 8eaf14a17244aaf000b4d19e4fde4a637576939f Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 7 Feb 2016 21:40:47 +0100
++Subject: [PATCH] configure.ac: check if libatomic is needed
++
++The mpd source code uses the C++11 <atomic> functionality, which
++internally is implemented using the __atomic_*() gcc built-ins. On
++certain architectures, the __atomic_*() built-ins are implemented in
++the libatomic library that comes with the rest of the gcc runtime. Due
++to this, code using <atomic> might need to link against libatomic,
++otherwise one hits build issues such as:
++
++GlobalEvents.cxx:(.text._ZN12GlobalEvents4EmitENS_5EventE+0x14): undefined reference to `__atomic_fetch_or_4'
++
++on an architecture like SPARC.
++
++To solve this, a configure.ac check is added to know if we need to
++link against libatomic or not.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ configure.ac | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 107b45a..8e6fab7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -233,6 +233,8 @@ if test x$have_pthread_setname_np = xyes; then
++ 	AC_DEFINE(HAVE_PTHREAD_SETNAME_NP, 1, [Is pthread_setname_np() available?])
++ fi
++ 
+++AC_SEARCH_LIBS([__atomic_load_4], [atomic])
+++
++ dnl ---------------------------------------------------------------------------
++ dnl Event loop selection
++ dnl ---------------------------------------------------------------------------
++-- 
++2.6.4
++
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index b368397..3ac806f 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -6,6 +6,7 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -312,5 +313,6 @@ endif
+ comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 7a265f4..d5d77a6 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -11,6 +11,7 @@ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
+ MPD_LICENSE = GPLv2+
+ MPD_LICENSE_FILES = COPYING
++MPD_AUTORECONF = YES
  
- ifeq ($(BR2_NEEDS_GETTEXT_IF_LOCALE),y)
-@@ -45,15 +33,9 @@ else
- PROCPS_NG_CONF_OPTS += --without-systemd
- endif
+ # Some options need an explicit --disable or --enable
  
--# We need this to make procps-ng binaries installed in $(TARGET_DIR)/usr
--# instead of $(TARGET_DIR)/usr/usr
--PROCPS_NG_CONF_OPTS += \
--	--prefix=/usr \
--	--exec-prefix=/ \
--	--sysconfdir=/etc \
--	--libdir=/usr/lib \
--	--bindir=/bin \
--	--sbindir=/sbin
-+# Make sure binaries get installed in /bin, so that they overwrite
-+# their busybox counterparts.
-+PROCPS_NG_CONF_OPTS += --exec-prefix=/
- 
- # Allows unicode characters to show in 'watch'
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
