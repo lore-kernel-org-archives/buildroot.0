@@ -1,124 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 7 Feb 2016 23:20:38 +0100
-Subject: [Buildroot] [git commit] support/graph-depends: detect circular
-	dependencies
-Message-ID: <20160207222644.91D0F80008@busybox.osuosl.org>
+Date: Sun, 7 Feb 2016 23:21:40 +0100
+Subject: [Buildroot] [git commit] support/graph-depends: teach it to only
+	check dependencies
+Message-ID: <20160207222644.9E89180008@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f48c08f0f58cf99268a1f6be1edf96e5438a83b1
+commit: https://git.buildroot.net/buildroot/commit/?id=90551bfac01a41979ab24ff58bfb80742f8470ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, if there is a circular dependency in the packages, the
-graph-depends script just errors out with a Python RuntimeError which is
-not caught, resulting in a very-long backtrace which does not provide
-any hint as what the real issue is (even if "RuntimeError: maximum
-recursion depth exceeded" is a pretty good hint at it).
-
-We fix that by recursing the dependency chain of each package, until we
-either end up with a package with no dependency, or with a package
-already seen along the current dependency chain.
-
-We need to introduce a new function, check_circular_deps(), because we
-can't re-use the existing ones:
-
-  - remove_mandatory_deps() does not iterate,
-
-  - remove_transitive_deps() does iterate, but we do not call it for the
-    top-level package if it is not 'all'
-
-  - it does not make sense to use those functions anyway, as they were
-    not designed to _check_ but to _act_ on the dependency chain.
-
-Since we've had time-related issues in the past, we do not want to
-introduce yet another time-hog, so here are timings with the circular
-dependency check:
-
-    $ time python -m cProfile -s cumtime support/scripts/graph-depends
-    [...]
-             28352654 function calls (20323050 primitive calls) in 87.292 seconds
-
-       Ordered by: cumulative time
-
-       ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-            1    0.012    0.012   87.292   87.292 graph-depends:24(<module>)
-           21    0.000    0.000   73.685    3.509 subprocess.py:473(_eintr_retry_call)
-            7    0.000    0.000   73.655   10.522 subprocess.py:768(communicate)
-            7   73.653   10.522   73.653   10.522 {method 'read' of 'file' objects}
-          5/1    0.027    0.005   43.488   43.488 graph-depends:164(get_all_depends)
-            5    0.003    0.001   43.458    8.692 graph-depends:135(get_depends)
-            1    0.001    0.001   25.712   25.712 graph-depends:98(get_version)
-            1    0.001    0.001   13.457   13.457 graph-depends:337(remove_extra_deps)
-         1717    1.672    0.001   13.050    0.008 graph-depends:290(remove_transitive_deps)
-    9784086/2672326    5.079    0.000   11.363    0.000 graph-depends:274(is_dep)
-    2883343/1980154    2.650    0.000    6.942    0.000 graph-depends:262(is_dep_uncached)
-            1    0.000    0.000    4.529    4.529 graph-depends:121(get_targets)
-      2883343    1.123    0.000    1.851    0.000 graph-depends:246(is_dep_cache_insert)
-      9784086    1.783    0.000    1.783    0.000 graph-depends:255(is_dep_cache_lookup)
-      2881580    0.728    0.000    0.728    0.000 {method 'update' of 'dict' objects}
-            1    0.001    0.001    0.405    0.405 graph-depends:311(check_circular_deps)
-    12264/1717    0.290    0.000    0.404    0.000 graph-depends:312(recurse)
-    [...]
-    real    1m27.371s
-    user    1m15.075s
-    sys     0m12.673s
-
-The cumulative time spent in check_circular_deps is just below 0.5s,
-which is largely less than 1% of the total run time.
+Add an option to graph-depends to only do the dependency checks and not
+generate the dot program.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ support/scripts/graph-depends | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index c0c6a94..d933eaa 100755
+index d933eaa..efb73d2 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -313,6 +313,32 @@ def remove_transitive_deps(pkg,deps):
- def remove_mandatory_deps(pkg,deps):
-     return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
+@@ -38,6 +38,8 @@ max_depth = 0
+ transitive = True
  
-+# This function will check that there is no loop in the dependency chain
-+# As a side effect, it builds up the dependency cache.
-+def check_circular_deps(deps):
-+    def recurse(pkg):
-+        if not pkg in list(deps.keys()):
-+            return
-+        if pkg in not_loop:
-+            return
-+        not_loop.append(pkg)
-+        chain.append(pkg)
-+        for p in deps[pkg]:
-+            if p in chain:
-+                sys.stderr.write("\nRecursion detected for  : %s\n" % (p))
-+                while True:
-+                    _p = chain.pop()
-+                    sys.stderr.write("which is a dependency of: %s\n" % (_p))
-+                    if p == _p:
-+                        sys.exit(1)
-+            recurse(p)
-+        chain.pop()
+ parser = argparse.ArgumentParser(description="Graph packages dependencies")
++parser.add_argument("--check-only", "-C", dest="check_only", action="store_true", default=False,
++                    help="Only do the dependency checks (circular deps...)")
+ parser.add_argument("--outfile", "-o", metavar="OUT_FILE", dest="outfile",
+                     help="File in which to generate the dot representation")
+ parser.add_argument("--package", '-p', metavar="PACKAGE",
+@@ -62,9 +64,14 @@ parser.add_argument("--no-transitive", dest="transitive", action='store_false',
+                     help="Draw (do not draw) transitive dependencies")
+ args = parser.parse_args()
+ 
++check_only = args.check_only
 +
-+    not_loop = []
-+    chain = []
-+    for pkg in list(deps.keys()):
-+        recurse(pkg)
-+
- # This functions trims down the dependency list of all packages.
- # It applies in sequence all the dependency-elimination methods.
- def remove_extra_deps(deps):
-@@ -324,6 +350,7 @@ def remove_extra_deps(deps):
-             deps[pkg] = remove_transitive_deps(pkg,deps)
+ if args.outfile is None:
+     outfile = sys.stdout
+ else:
++    if check_only:
++        sys.stderr.write("don't specify outfile and check-only at the same time\n")
++        sys.exit(1)
+     outfile = open(args.outfile, "wb")
+ 
+ if args.package is None:
+@@ -351,6 +358,9 @@ def remove_extra_deps(deps):
      return deps
  
-+check_circular_deps(dict_deps)
+ check_circular_deps(dict_deps)
++if check_only:
++    sys.exit(0)
++
  dict_deps = remove_extra_deps(dict_deps)
  dict_version = get_version([pkg for pkg in allpkgs
                                  if pkg != "all" and not pkg.startswith("root")])
