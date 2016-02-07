@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2016 17:03:08 +0100
-Subject: [Buildroot] [PATCH 24/28] package/kodi-adsp-freesurround: new
+Date: Sun,  7 Feb 2016 17:03:12 +0100
+Subject: [Buildroot] [PATCH 28/28] package/kodi-visualisation-vsxu: new
 	package
 In-Reply-To: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1454860992-25114-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1454860992-25114-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1454860992-25114-29-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,57 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-freesurround/Config.in                 | 11 +++++++++++
- package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk | 13 +++++++++++++
- package/kodi/Config.in                                   |  4 ++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/kodi-adsp-freesurround/Config.in
- create mode 100644 package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
+ package/kodi-visualisation-vsxu/Config.in                  |  8 ++++++++
+ package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk | 13 +++++++++++++
+ package/kodi/Config.in                                     |  1 +
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/kodi-visualisation-vsxu/Config.in
+ create mode 100644 package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
 
-diff --git a/package/kodi-adsp-freesurround/Config.in b/package/kodi-adsp-freesurround/Config.in
+diff --git a/package/kodi-visualisation-vsxu/Config.in b/package/kodi-visualisation-vsxu/Config.in
 new file mode 100644
-index 0000000..3d6b129
+index 0000000..2c2df17
 --- /dev/null
-+++ b/package/kodi-adsp-freesurround/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_KODI_ADSP_FREESURROUND
-+	bool "kodi-adsp-freesurround"
-+	select BR2_PACKAGE_LIBPLATFORM
-+	select BR2_PACKAGE_KODI_PLATFORM
++++ b/package/kodi-visualisation-vsxu/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_VISUALISATION_VSXU
++	bool "kodi-visualisation-vsxu"
++	select BR2_PACKAGE_VSXU
++	depends on BR2_i386 || BR2_x86_64 # vsxu
 +	help
-+	  FreeSurround is meant to be the KODI equivalent of your hi-fi
-+	  receiver's Dolby ProLogic II button. It's purpose is to decode
-+	  surround information from your stereo music and to produce
-+	  multichannel output from it.
++	  VSXu visualisation for Kodi
 +
-+	  https://github.com/kodi-adsp/adsp.freesurround
-diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
++	  https://github.com/notspiff/visualization.vsxu
+diff --git a/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
 new file mode 100644
-index 0000000..49cf673
+index 0000000..7ba39c7
 --- /dev/null
-+++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
++++ b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-adsp-freesurround
++# kodi-visualisation-vsxu
 +#
 +################################################################################
 +
-+KODI_ADSP_FREESURROUND_VERSION = 08b691d3d9a0382d2f6f789a31614fb02512036c
-+KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
-+KODI_ADSP_FREESURROUND_LICENSE = GPLv3+
-+KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
-+KODI_ADSP_FREESURROUND_DEPENDENCIES = libplatform kodi-platform
++KODI_VISUALISATION_VSXU_VERSION = 990332f0719503c4575021f5f64daa0fbc35ac4e
++KODI_VISUALISATION_VSXU_SITE = $(call github,notspiff,visualization.vsxu,$(KODI_VISUALISATION_VSXU_VERSION))
++KODI_VISUALISATION_VSXU_LICENSE = GPLv2+
++KODI_VISUALISATION_VSXU_LICENSE_FILES = debian/copyright
++KODI_VISUALISATION_VSXU_DEPENDENCIES = kodi vsxu
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 86bd40d..d36106a 100644
+index 55b2afa..db342aa 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -236,6 +236,10 @@ menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-vgmstream/Config.in"
+@@ -291,6 +291,7 @@ menu "Visualisations"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
++	source "package/kodi-visualisation-vsxu/Config.in"
+ 	source "package/kodi-visualisation-waveforhue/Config.in"
+ 	source "package/kodi-visualisation-waveform/Config.in"
  endmenu
- 
-+menu "Audio DSP addons"
-+	source "package/kodi-adsp-freesurround/Config.in"
-+endmenu
-+
- menu "Audio encoder addons"
- 	source "package/kodi-audioencoder-flac/Config.in"
- 	source "package/kodi-audioencoder-lame/Config.in"
 -- 
 2.7.0
