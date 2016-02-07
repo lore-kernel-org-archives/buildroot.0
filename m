@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 7 Feb 2016 08:40:31 +0100
-Subject: [Buildroot] [PATCH v4 01/17] python-characteristic: new package
-In-Reply-To: <1454799603-5474-2-git-send-email-mc5686@mclink.it>
+Date: Sun, 7 Feb 2016 08:41:15 +0100
+Subject: [Buildroot] [PATCH v4 03/17] python-lmdb: new package
+In-Reply-To: <1454799603-5474-4-git-send-email-mc5686@mclink.it>
 References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-2-git-send-email-mc5686@mclink.it>
-Message-ID: <CAGm1_ktRzu5hKbhNzYL-BKrxmd_b_11vdzpv5gnWb6kWKr-kJw@mail.gmail.com>
+ <1454799603-5474-4-git-send-email-mc5686@mclink.it>
+Message-ID: <CAGm1_ku-usgOfTrHSgdg4J_RqD84ewfc__LdREUAKDhDw22E_Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,69 +20,73 @@ Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
 > Changes v3 -> v4
 >   - removed spurious blank line at end of Config.in (suggested by yegorich)
+>   - yegorich inquired about double licensing; I left as-is because it is
+>     like that in PKG-INFO file ("License: OpenLDAP BSD").
+>     No LICENSE file is present in package sources.
 >
 > Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 > ---
->  package/Config.in                                        |  1 +
->  package/python-characteristic/Config.in                  |  6 ++++++
->  package/python-characteristic/python-characteristic.hash |  3 +++
->  package/python-characteristic/python-characteristic.mk   | 14 ++++++++++++++
->  4 files changed, 24 insertions(+)
->  create mode 100644 package/python-characteristic/Config.in
->  create mode 100644 package/python-characteristic/python-characteristic.hash
->  create mode 100644 package/python-characteristic/python-characteristic.mk
+>  package/Config.in                    |  1 +
+>  package/python-lmdb/Config.in        |  7 +++++++
+>  package/python-lmdb/python-lmdb.hash |  3 +++
+>  package/python-lmdb/python-lmdb.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-lmdb/Config.in
+>  create mode 100644 package/python-lmdb/python-lmdb.hash
+>  create mode 100644 package/python-lmdb/python-lmdb.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 529ad33..c2698ea 100644
+> index 3b3526c..8e13c64 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -625,6 +625,7 @@ menu "External python modules"
->         source "package/python-cbor/Config.in"
->         source "package/python-certifi/Config.in"
->         source "package/python-cffi/Config.in"
-> +       source "package/python-characteristic/Config.in"
->         source "package/python-cheetah/Config.in"
->         source "package/python-cherrypy/Config.in"
->         source "package/python-click/Config.in"
-> diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
+> @@ -658,6 +658,7 @@ menu "External python modules"
+>         source "package/python-json-schema-validator/Config.in"
+>         source "package/python-keyring/Config.in"
+>         source "package/python-libconfig/Config.in"
+> +       source "package/python-lmdb/Config.in"
+>         source "package/python-lxml/Config.in"
+>         source "package/python-mad/Config.in"
+>         source "package/python-mako/Config.in"
+> diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
 > new file mode 100644
-> index 0000000..1226fa8
+> index 0000000..baf9bce
 > --- /dev/null
-> +++ b/package/python-characteristic/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_CHARACTERISTIC
-> +       bool "python-characteristic"
+> +++ b/package/python-lmdb/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_LMDB
+> +       bool "python-lmdb"
+> +       select BR2_PACKAGE_PYTHON_CFFI # runtime
 > +       help
-> +         Python attributes without boilerplate.
+> +         Universal Python binding for the LMDB 'Lightning' Database.
 > +
-> +         https://pypi.python.org/pypi/characteristic
-> diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
+> +         https://pypi.python.org/pypi/lmdb
+> diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
 > new file mode 100644
-> index 0000000..41dc18c
+> index 0000000..c983cfb
 > --- /dev/null
-> +++ b/package/python-characteristic/python-characteristic.hash
+> +++ b/package/python-lmdb/python-lmdb.hash
 > @@ -0,0 +1,3 @@
-> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913, sha256 locally computed.
-> +md5    b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
-> +sha256 ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
-> diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
+> +# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=001817d754f96865549c85fb5251082f, sha256 locally computed.
+> +md5    001817d754f96865549c85fb5251082f  lmdb-0.88.tar.gz
+> +sha256 37d97041fb237da5600e14b889af49bd47538d6fde4a69d3a6c9097f787d175a  lmdb-0.88.tar.gz
+> diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
 > new file mode 100644
-> index 0000000..dc3e8bb
+> index 0000000..18302b0
 > --- /dev/null
-> +++ b/package/python-characteristic/python-characteristic.mk
+> +++ b/package/python-lmdb/python-lmdb.mk
 > @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-characteristic
+> +# python-lmdb
 > +#
 > +################################################################################
 > +
-> +PYTHON_CHARACTERISTIC_VERSION = 14.3.0
-> +PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
-> +PYTHON_CHARACTERISTIC_SITE = http://pypi.python.org/packages/source/c/characteristic
-> +PYTHON_CHARACTERISTIC_LICENSE = MIT
-> +PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
-> +PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
+> +PYTHON_LMDB_VERSION = 0.88
+> +PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
+> +PYTHON_LMDB_SITE = http://pypi.python.org/packages/source/l/lmdb
+> +PYTHON_LMDB_LICENSE = OpenLDAP BSD
+> +PYTHON_LMDB_SETUP_TYPE = setuptools
+> +PYTHON_LMDB_DEPENDENCIES = host-python-cffi
 > +
 > +$(eval $(python-package))
 > --
