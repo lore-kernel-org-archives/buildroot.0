@@ -1,46 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 12:12:19 +0100
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: bump to version 5.5.0
-In-Reply-To: <1454165460-32174-1-git-send-email-martin@barkynet.com>
-References: <1454165460-32174-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160208121219.2d32d53d@free-electrons.com>
+Date: Mon, 8 Feb 2016 12:12:55 +0100
+Subject: [Buildroot] [git commit] configs/qemu: convert versatile to dt
+Message-ID: <20160208111306.8A5027FB0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+commit: https://git.buildroot.net/buildroot/commit/?id=5825f1036a7dafcc69de3d84a57876ab0a1585cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Jan 2016 14:50:59 +0000, Martin Bark wrote:
-> Patches from 5.3.0 have been copied over with the following exceptions:
->  - Removed 0005-Fix-crash-in-GetInterfaceAddresses.patch as this has
->    been applied upstream
->  - Renamed 0006-Fix-support-for-uClibc-ng.patch to
->    0005-Fix-support-for-uClibc-ng.patch
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
->  .../0005-Fix-crash-in-GetInterfaceAddresses.patch  | 37 ----------------------
->  ...01-Remove-dependency-on-Python-bz2-module.patch |  0
->  .../0002-gyp-force-link-command-to-use-CXX.patch   |  0
->  ...hon-variable-instead-of-hardcoding-Python.patch |  0
->  .../0004-Fix-va_list-not-declared.patch            |  0
->  .../0005-Fix-support-for-uClibc-ng.patch}          |  0
->  package/nodejs/Config.in                           |  6 ++--
->  package/nodejs/nodejs.hash                         |  4 +--
->  8 files changed, 5 insertions(+), 42 deletions(-)
->  delete mode 100644 package/nodejs/5.3.0/0005-Fix-crash-in-GetInterfaceAddresses.patch
->  rename package/nodejs/{5.3.0 => 5.5.0}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
->  rename package/nodejs/{5.3.0 => 5.5.0}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
->  rename package/nodejs/{5.3.0 => 5.5.0}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
->  rename package/nodejs/{5.3.0 => 5.5.0}/0004-Fix-va_list-not-declared.patch (100%)
->  rename package/nodejs/{5.3.0/0006-Fix-support-for-uClibc-ng.patch => 5.5.0/0005-Fix-support-for-uClibc-ng.patch} (100%)
+As a followup to http://patchwork.ozlabs.org/patch/548550/ fully convert
+the versatile defconfig to create the dtb and update the instructions.
 
-Both patches applied, thanks!
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ board/qemu/arm-versatile/linux-4.4.config | 1 +
+ board/qemu/arm-versatile/readme.txt       | 2 +-
+ configs/qemu_arm_versatile_defconfig      | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/board/qemu/arm-versatile/linux-4.4.config b/board/qemu/arm-versatile/linux-4.4.config
+index 9a1ae58..99df3a6 100644
+--- a/board/qemu/arm-versatile/linux-4.4.config
++++ b/board/qemu/arm-versatile/linux-4.4.config
+@@ -3,6 +3,7 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_ARCH_VERSATILE=y
+ CONFIG_MACH_VERSATILE_AB=y
++CONFIG_MACH_VERSATILE_DT=y
+ CONFIG_PCI=y
+ CONFIG_AEABI=y
+ CONFIG_USE_OF=y
+diff --git a/board/qemu/arm-versatile/readme.txt b/board/qemu/arm-versatile/readme.txt
+index 4af2f46..44d70d8 100644
+--- a/board/qemu/arm-versatile/readme.txt
++++ b/board/qemu/arm-versatile/readme.txt
+@@ -1,6 +1,6 @@
+ Run the emulation with:
+ 
+-  qemu-system-arm -M versatilepb -kernel output/images/zImage -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
++  qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi,format=raw -append "root=/dev/sda console=ttyAMA0,115200" -serial stdio -net nic,model=rtl8139 -net user
+ 
+ The login prompt will appear in the terminal that started Qemu. The
+ graphical window is the framebuffer.
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index bb64cfe..d95c803 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -20,3 +20,5 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.1"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-4.4.config"
+ BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
