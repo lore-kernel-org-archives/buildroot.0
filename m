@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 16:27:03 +0100
-Subject: [Buildroot] [git commit] rpi-userland: fix typos in the
-	libilclient.so library installation
-Message-ID: <20160208152716.4536880504@busybox.osuosl.org>
+Date: Mon, 8 Feb 2016 16:29:45 +0100
+Subject: [Buildroot] [PATCH 1/1] fix typo for libilclient.so on target
+In-Reply-To: <1454944884-49410-1-git-send-email-michael.schenk@albistechnologies.com>
+References: <1454944884-49410-1-git-send-email-michael.schenk@albistechnologies.com>
+Message-ID: <20160208162945.3a76ee76@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36c267e6f6ce88089c0c576a98d5c09406d51ca7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Schenk, Michael,
 
-Signed-off-by: Michael Schenk <michael.schenk@albistechnologies.com>
-[Thomas: tweak commit title.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-userland/rpi-userland.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Mon, 8 Feb 2016 16:21:24 +0100, Schenk, Michael wrote:
+> Signed-off-by: Schenk, Michael <michael.schenk@albistechnologies.com>
+> ---
+>  package/rpi-userland/rpi-userland.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpi-userland/rpi-userland.mk b/package/rpi-userland/rpi-userland.mk
-index 0a25b2d..fbf6fb4 100644
---- a/package/rpi-userland/rpi-userland.mk
-+++ b/package/rpi-userland/rpi-userland.mk
-@@ -35,14 +35,14 @@ RPI_USERLAND_CONF_OPTS += -DALL_APPS=ON
- define RPI_USERLAND_EXTRA_LIBS_TARGET
- 	$(INSTALL) -m 0644 -D \
- 		$(@D)/build/lib/libilclient.so \
--		$(TARGET_DIR)/usr/lib/libilcient.so
-+		$(TARGET_DIR)/usr/lib/libilclient.so
- endef
- RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_EXTRA_LIBS_TARGET
- 
- define RPI_USERLAND_EXTRA_LIBS_STAGING
- 	$(INSTALL) -m 0644 -D \
- 		$(@D)/build/lib/libilclient.so \
--		$(STAGING_DIR)/usr/lib/libilcient.so
-+		$(STAGING_DIR)/usr/lib/libilclient.so
- endef
- RPI_USERLAND_POST_INSTALL_STAGING_HOOKS += RPI_USERLAND_EXTRA_LIBS_STAGING
- 
+Thanks, I've applied after tweaking two things:
+
+ - The commit title, which should always follow the format:
+
+   <package>: <description>
+
+   And also your commit title was talking about "target", but you're
+   also fixing the "staging" installation. So all in all, I've changed
+   the commit title to:
+
+   rpi-userland: fix typos in the libilclient.so library installation
+
+   For future patches, if you could use this convention for commit
+   titles, it would be great.
+
+ - The author/SoB lines, where for consistency reasons we prefer to
+   have the first name before the last name. Yes, I know that depending
+   on your geographical area, the common way of doing this is
+   different, but Buildroot Git history uses "FirstName LastName
+   <email>" everywhere, so I've changed this. If you can change your
+   Git configuration to use this for future patches, it would be great.
+
+Thanks a lot for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
