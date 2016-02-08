@@ -1,39 +1,24 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Feb 2016 18:32:41 +0100
-Subject: [Buildroot] [PATCH 1/1] fix typo for libilclient.so on target
-In-Reply-To: <20160208162945.3a76ee76@free-electrons.com>
-References: <1454944884-49410-1-git-send-email-michael.schenk@albistechnologies.com>
- <20160208162945.3a76ee76@free-electrons.com>
-Message-ID: <20160208173241.GC3436@free.fr>
+Date: Mon, 8 Feb 2016 18:34:33 +0100
+Subject: [Buildroot] Website down?!
+In-Reply-To: <CA+TH9VngQgxK65OoKpPz-o4pPb7MVkoG3=338Hr3bsiw0OK0ig@mail.gmail.com>
+References: <CA+TH9VngQgxK65OoKpPz-o4pPb7MVkoG3=338Hr3bsiw0OK0ig@mail.gmail.com>
+Message-ID: <20160208173433.GD3436@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Michael, All,
+Angelo, All,
 
-On 2016-02-08 16:29 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 8 Feb 2016 16:21:24 +0100, Schenk, Michael wrote:
-> > Signed-off-by: Schenk, Michael <michael.schenk@albistechnologies.com>
-> > ---
-> >  package/rpi-userland/rpi-userland.mk | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+On 2016-02-08 15:30 +0100, Angelo Compagnucci spake thusly:
+> http://isup.me/buildroot.org
 > 
-> Thanks, I've applied after tweaking two things:
-[--SNIP--]
->  - The author/SoB lines, where for consistency reasons we prefer to
->    have the first name before the last name. Yes, I know that depending
->    on your geographical area, the common way of doing this is
->    different, but Buildroot Git history uses "FirstName LastName
->    <email>" everywhere, so I've changed this. If you can change your
->    Git configuration to use this for future patches, it would be great.
+> Buildroot website seems down ...
 
-I beg to disagree here. I amongst all would prefer we do not force
-people to identify one way or another. We should *really* let people
-identify the way *they* want to.
-
-Thank you.
+It's up now. I alos tested at the time you inquired, but it was working.
+slowly (very slowly) but it did work.
 
 Regards,
 Yann E. MORIN.
