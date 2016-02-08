@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 21:29:38 +0100
-Subject: [Buildroot] [git commit] docs/manual: update graph-depends
-	documentation about --stop-on
-Message-ID: <20160208213711.CB6958182E@busybox.osuosl.org>
+Date: Mon, 8 Feb 2016 22:38:16 +0100
+Subject: [Buildroot] [PATCH v2 0/3] graph-depends: allow to exclude host
+ packages
+In-Reply-To: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160208223816.4e492668@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44beb463371ab30ec5a0d6423cc2d358ec7fa24f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This commit updates the graph-depends documentation to take into
-account the new 'host' keyword that can be passed to the --stop-on and
---exclude options.
+On Wed, 27 Jan 2016 21:32:12 +0100, Thomas Petazzoni wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/common-usage.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+> Here is a v2 of the small patch series that allows to exclude host
+> packages. It fixes a major bug in the previous implementation, which
+> was stopping drawing the list of dependencies as soon as one host
+> package was encountered, rather than just skipping that one package.
+> 
+> This new implementation hopefully fixes that problem.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+> Thomas Petazzoni (3):
+>   graph-depends: fix handling of "virtual" in exclude_list
+>   graph-depends: add support for excluding host packages
+>   docs/manual: update graph-depends documentation about --stop-on
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 18677b8..7602260 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -212,9 +212,10 @@ The +graph-depends+ behaviour can be controlled by setting options in the
-   default, +0+, means no limit.
- 
- * +--stop-on PKG+, +-s PKG+, to stop the graph on the package +PKG+.
--  +PKG+ can be an actual package name, a glob, or the keyword 'virtual'
--  (to stop on virtual packages). The package is still present on the
--  graph, but its dependencies are not.
-+  +PKG+ can be an actual package name, a glob, the keyword 'virtual'
-+  (to stop on virtual packages), or the keyword 'host' (to stop on
-+  host packages). The package is still present on the graph, but its
-+  dependencies are not.
- 
- * +--exclude PKG+, +-x PKG+, like +--stop-on+, but also omits +PKG+ from
-   the graph.
+I've applied those three patches, after fixing the minor nit pointed by
+Yann on PATCH 2/3.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
