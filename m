@@ -1,43 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 22:38:16 +0100
-Subject: [Buildroot] [PATCH v2 0/3] graph-depends: allow to exclude host
- packages
-In-Reply-To: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1453926735-29571-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160208223816.4e492668@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 8 Feb 2016 22:51:48 +0100
+Subject: [Buildroot] [RFC] Python pyc compilation check
+Message-ID: <CAGm1_ks382K2C96g7BV1ZAxETEPMu_DAGznGrq45RV2hLRmE3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As promised Samuel's patch:
 
-On Wed, 27 Jan 2016 21:32:12 +0100, Thomas Petazzoni wrote:
+diff --git a/package/python/python.mk b/package/python/python.mk
+index 5ef3589..1d131c0 100644
+--- a/package/python/python.mk
++++ b/package/python/python.mk
+@@ -220,8 +220,9 @@ $(eval $(host-autotools-package))
 
-> Here is a v2 of the small patch series that allows to exclude host
-> packages. It fixes a major bug in the previous implementation, which
-> was stopping drawing the list of dependencies as soon as one host
-> package was encountered, rather than just skipping that one package.
-> 
-> This new implementation hopefully fixes that problem.
-> 
-> Thanks,
-> 
-> Thomas
-> 
-> Thomas Petazzoni (3):
->   graph-depends: fix handling of "virtual" in exclude_list
->   graph-depends: add support for excluding host packages
->   docs/manual: update graph-depends documentation about --stop-on
+ define PYTHON_CREATE_PYC_FILES
+  PYTHONPATH="$(PYTHON_PATH)" \
+- $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
+- compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)')"
++ $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
++ $(TOPDIR)/support/scripts/pycompile.py \
++ "$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)"
+ endef
 
-I've applied those three patches, after fixing the minor nit pointed by
-Yann on PATCH 2/3.
+ ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 507c610..1eb356b 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -217,8 +217,9 @@ $(eval $(host-autotools-package))
 
-Thanks,
+ define PYTHON3_CREATE_PYC_FILES
+  PYTHONPATH="$(PYTHON3_PATH)" \
+- $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
+- compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)')"
++ $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
++ $(TOPDIR)/support/scripts/pycompile.py \
++ "$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+ endef
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+new file mode 100755
+index 0000000..fde711a
+--- /dev/null
++++ b/support/scripts/pycompile.py
+@@ -0,0 +1,24 @@
++#!/usr/bin/env python
++
++# Wrapper for python2 and python3 around compileall to raise exception
++# when a python byte code generation failed.
++#
++# Inspired from:
++#   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
++
++from __future__ import print_function
++import sys
++import py_compile
++import compileall
++
++class ReportProblem:
++    def __nonzero__(self):
++        type, value, traceback = sys.exc_info()
++        if type is not None and issubclass(type, py_compile.PyCompileError):
++            print("Cannot compile %s" %value.file)
++            raise value
++        return 1
++
++report_problem = ReportProblem()
++
++compileall.compile_dir(sys.argv[1], quiet=report_problem)
+
+Yegor
