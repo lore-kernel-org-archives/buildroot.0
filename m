@@ -1,117 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Feb 2016 18:27:14 +0100
-Subject: [Buildroot] [PATCH v4] package/sqlite: add optional support for
- libedit
-In-Reply-To: <1454951043-29268-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454951043-29268-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160208172714.GB3436@free.fr>
+Date: Mon, 8 Feb 2016 18:32:41 +0100
+Subject: [Buildroot] [PATCH 1/1] fix typo for libilclient.so on target
+In-Reply-To: <20160208162945.3a76ee76@free-electrons.com>
+References: <1454944884-49410-1-git-send-email-michael.schenk@albistechnologies.com>
+ <20160208162945.3a76ee76@free-electrons.com>
+Message-ID: <20160208173241.GC3436@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Thomas, Michael, All,
 
-On 2016-02-08 18:04 +0100, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v4: rebased
-> v3: rebased
-> v2: removed BR2_PACKAGE_SQLITE_READLINE (Thomas, Peter)
+On 2016-02-08 16:29 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 8 Feb 2016 16:21:24 +0100, Schenk, Michael wrote:
+> > Signed-off-by: Schenk, Michael <michael.schenk@albistechnologies.com>
+> > ---
+> >  package/rpi-userland/rpi-userland.mk | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  Config.in.legacy         | 11 +++++++++++
->  package/sqlite/Config.in |  7 -------
->  package/sqlite/sqlite.mk |  9 ++++++---
->  3 files changed, 17 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index 3677f86..0ea8c7d 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -145,6 +145,17 @@ endif
->  ###############################################################################
->  comment "Legacy options removed in 2016.02"
->  
-> +config BR2_PACKAGE_SQLITE_READLINE
-> +	bool "command-line editing support was updated"
-> +	select BR2_PACKAGE_NCURSES
-> +	select BR2_PACKAGE_READLINE
-> +	select BR2_LEGACY
-> +	help
-> +	  This option was removed in favour of the sqlite package
-> +	  deciding itself depending on the enabled packages whether
-> +	  command-line editing should be enabled, it also also takes
-> +	  libedit into account.
-> +
->  config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
->  	bool "openpowerlink debug option has been removed"
->  	select BR2_LEGACY
-> diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-> index 7ea9eb1..c9fde53 100644
-> --- a/package/sqlite/Config.in
-> +++ b/package/sqlite/Config.in
-> @@ -8,13 +8,6 @@ config BR2_PACKAGE_SQLITE
->  
->  if BR2_PACKAGE_SQLITE
->  
-> -config BR2_PACKAGE_SQLITE_READLINE
-> -	bool "Command-line editing"
-> -	select BR2_PACKAGE_NCURSES
-> -	select BR2_PACKAGE_READLINE
-> -	help
-> -	  Enable command-line editing. This requires ncurses and readline.
-> -
->  config BR2_PACKAGE_SQLITE_STAT3
->  	bool "Additional query optimizations (stat3)"
->  	help
-> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-> index 1603e00..df59d1f 100644
-> --- a/package/sqlite/sqlite.mk
-> +++ b/package/sqlite/sqlite.mk
-> @@ -45,11 +45,14 @@ else
->  SQLITE_CONF_OPTS += --disable-threadsafe
->  endif
->  
-> -ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
-> +ifeq ($(BR2_PACKAGE_READLINE),y)
->  SQLITE_DEPENDENCIES += ncurses readline
+> Thanks, I've applied after tweaking two things:
+[--SNIP--]
+>  - The author/SoB lines, where for consistency reasons we prefer to
+>    have the first name before the last name. Yes, I know that depending
+>    on your geographical area, the common way of doing this is
+>    different, but Buildroot Git history uses "FirstName LastName
+>    <email>" everywhere, so I've changed this. If you can change your
+>    Git configuration to use this for future patches, it would be great.
 
-If you /etc/profile.d/sendfileneed both ncurses and readline, then the
-condition should be something like:
+I beg to disagree here. I amongst all would prefer we do not force
+people to identify one way or another. We should *really* let people
+identify the way *they* want to.
 
-    ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
-
-Yes, I know that readline forcibly depends on ncurses. Still, it is best
-to match the condition to the packages you actually depend on .
-
-Otherwise, looks OK.
-
-When you fix that, you can add my:
-
-    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Thank you.
 
 Regards,
 Yann E. MORIN.
-
-> -SQLITE_CONF_OPTS += --enable-readline
-> +SQLITE_CONF_OPTS += --disable-editline --enable-readline
-> +else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-> +SQLITE_DEPENDENCIES += libedit
-> +SQLITE_CONF_OPTS += --enable-editline --disable-readline
->  else
-> -SQLITE_CONF_OPTS += --disable-readline
-> +SQLITE_CONF_OPTS += --disable-editline --disable-readline
->  endif
->  
->  $(eval $(autotools-package))
-> -- 
-> 2.7.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
