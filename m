@@ -1,34 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 21:26:59 +0100
-Subject: [Buildroot] [PATCH] polarssl: security bump to version 1.2.19
-In-Reply-To: <1454959620-6274-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1454959620-6274-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160208212659.4800e230@free-electrons.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 08 Feb 2016 18:55:35 -0200
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump version to 6.9.3-3
+References: <20160208184634.GF3436@free.fr>
+Message-ID: <56b900c7e3704_699e3fb84c940acc3104a@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
-
-On Mon,  8 Feb 2016 16:27:00 -0300, Gustavo Zacarias wrote:
-> Fix bug in certificate validation that caused valid chains to be
-> rejected when the first intermediate certificate has
-> pathLenConstraint=0.
+On Mon, Feb 08, 2016 at 04:46 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[snip]
 > 
-> Removed potential leak in rsa_rsassa_pkcs1_v15_sign().
+> Since you seem to be interested in ImageMagick, could you check what
+> that patch is all about and if it is still relevant:
 > 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/polarssl/polarssl.hash | 4 ++--
->  package/polarssl/polarssl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>     https://patchwork.ozlabs.org/patch/484767/
+> 
+[snip]
 
-Applied, thanks.
+Sure. I will take a look into this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Ricardo
