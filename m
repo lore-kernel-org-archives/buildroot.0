@@ -1,39 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 09:17:52 +0100
-Subject: [Buildroot] [PATCH] yad: fix libgtk3 dependency
-In-Reply-To: <56B7DFB4.4030101@zacarias.com.ar>
-References: <1454504515-4365-1-git-send-email-gustavo@zacarias.com.ar>
- <20160207233241.7e5eb5b9@free-electrons.com>
- <56B7DFB4.4030101@zacarias.com.ar>
-Message-ID: <20160208091752.293fd9da@free-electrons.com>
+Date: Mon, 8 Feb 2016 09:19:14 +0100
+Subject: [Buildroot] [PATCH 1/1] libfcgi:add security patch for
+ CVE-2012-6687
+In-Reply-To: <CAMshMJaMbQQfW3Cu0+2oYe95jy=wxtB9zpFtkeUs54Shj-m07Q@mail.gmail.com>
+References: <1454650180-31432-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+ <20160205232213.7f1b8a51@free-electrons.com>
+ <CAMshMJaMbQQfW3Cu0+2oYe95jy=wxtB9zpFtkeUs54Shj-m07Q@mail.gmail.com>
+Message-ID: <20160208091914.5bb18dd5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Dear Niranjan Reddy,
 
-On Sun, 7 Feb 2016 21:22:12 -0300, Gustavo Zacarias wrote:
-> On 07/02/16 19:32, Thomas Petazzoni wrote:
-> 
-> >>   config BR2_PACKAGE_YAD
-> >>   	bool "yad"
-> >>   	depends on BR2_PACKAGE_XORG7
-> >> -	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3
-> >> +	depends on BR2_PACKAGE_LIBGTK2 || BR2_PACKAGE_LIBGTK3_X11
-> >
-> > Is the BR2_PACKAGE_XORG7 dependency still needed, then?
-> 
-> Hi.
-> I believe it isn't, the only weak spot right now is that libgtk3 isn't 
-> deterministic - you can select multiple backends like x11 & wayland, 
-> however i'm unsure if that's allowed, IIRC there's no way to select 
-> which one you want.
+On Mon, 8 Feb 2016 11:45:58 +0530, Niranjan Reddy wrote:
 
-I'm not sure to understand: following your patch, we depend on
-BR2_PACKAGE_LIBGTK3_X11, so yad can only be enabled if the Gtk3 X11
-backend was selected.
+> Thanks for your inputs . I'll change my mail configuration as :
+> 
+>  Niranjan Reddy <niranjan.reddy@rockwellcollins.com> .
+> 
+>  You can find the patch in the debain/patches folder with file name "poll".
+> 
+> Anton Kortunov <toshic.toshic@gmail.com> is the author of the patch and
+> i'll change it .
+
+OK. So you will resend an updated version of your patch, right?
+
+Thanks!
 
 Thomas
 -- 
