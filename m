@@ -1,26 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 12:13:36 +0100
-Subject: [Buildroot] [PATCH 1/1] imagemagick: bump version to 6.9.3-3
-In-Reply-To: <1454909812-32383-1-git-send-email-ricardo.martincoski@gmail.com>
-References: <1454909812-32383-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <20160208121336.335ce90f@free-electrons.com>
+Date: Mon, 8 Feb 2016 12:13:44 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/qemu: update arm-vexpress
+ instructions for SMP
+In-Reply-To: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1454888348-8149-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160208121344.7481b349@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ricardo Martincoski,
+Dear Gustavo Zacarias,
 
-On Mon,  8 Feb 2016 03:36:52 -0200, Ricardo Martincoski wrote:
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On Sun,  7 Feb 2016 20:39:06 -0300, Gustavo Zacarias wrote:
+> We can use the vexpress arm defconfig to test SMP features in Qemu.
+> So document the necessary invocation changes to account for this, in
+> preparation of the arm nuri defconfig removal.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
-> Previous version IS working, but it depends on
-> http://sources.buildroot.net/
+>  board/qemu/arm-vexpress/readme.txt | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Applied, thanks.
+All three patches applied, thanks!
 
 Thomas
 -- 
