@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 21:20:39 +0100
-Subject: [Buildroot] Speeding up the Build
-In-Reply-To: <CAJJ6jxs8G9i=K-qCCu29LZe0ro-kEjJeVTOHiEgEmmP88O=taQ@mail.gmail.com>
-References: <CAJJ6jxvwFavFNNVMnBuCGr4hmEgOdRzyU6XDx=_9bF9a9FUn5Q@mail.gmail.com>
- <56B6021E.3070608@lucaceresoli.net>
- <CAJJ6jxs8G9i=K-qCCu29LZe0ro-kEjJeVTOHiEgEmmP88O=taQ@mail.gmail.com>
-Message-ID: <20160208212039.38bed8ae@free-electrons.com>
+Date: Mon, 8 Feb 2016 21:21:57 +0100
+Subject: [Buildroot] [PATCHv3] wine: Bump to version 1.8.1
+In-Reply-To: <56B8DCC1.9080203@dawncrow.de>
+References: <56B8DCC1.9080203@dawncrow.de>
+Message-ID: <20160208212157.533df7f7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Andr? Hentschel,
 
-On Mon, 8 Feb 2016 12:14:35 -0800, Steve Calfee wrote:
+On Mon, 8 Feb 2016 19:21:53 +0100, Andr? Hentschel wrote:
+> Bumping to stable version 1.8.1
+> 
+> Upstreamed patch is finally dropped.
+> 
+> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
+> ---
+> try2: removing autoreconf, thanks to Thomas for reviewing
+> try3: resend
 
-> Sorry I don't use CMAKE. Could your solution be extended to other host
-> packages? Python for instance takes a long time to build and I have
-> one installed. Unless we are patching the host tool or require a
-> special version, it would build faster if buildroot used the installed
-> version rather than building. I mean generically it would be nice.
+Thanks, but we don't take patches as attached files, since we cannot
+easily review them.
 
-For Python, we:
+Why don't you send patches with git send-email, as I suggested, and as
+is suggested in the Buildroot manual?
 
- 1/ Need a host-python whose version matches the one of the target
-    python being built.
+Yes, it requires a little bit of time to configure git send-email, but
+you will 1/ have patches properly formatted and 2/ save a lot of time
+when sending patch series.
 
- 2/ Need some special host tools that are built as part of the
-    host-python build, in order to build some stuff for the target
-    python.
-
-So unfortunately, it's not straightforward to use the Python of your
-distribution.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
