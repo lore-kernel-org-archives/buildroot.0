@@ -1,89 +1,80 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  8 Feb 2016 10:04:22 +0100
-Subject: [Buildroot] [PATCH v4 2/2] python-pyopenssl: new package
-In-Reply-To: <1454922262-14230-1-git-send-email-yegorslists@googlemail.com>
-References: <1454922262-14230-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1454922262-14230-2-git-send-email-yegorslists@googlemail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Mon, 8 Feb 2016 11:12:52 +0100
+Subject: [Buildroot] [PATCH] docs/manual: fixing one liners for vagrant
+In-Reply-To: <56B7D1A5.2080509@mind.be>
+References: <1454848845-22149-1-git-send-email-angelo.compagnucci@gmail.com>
+ <56B7D1A5.2080509@mind.be>
+Message-ID: <CA+TH9Vm6komsmt-Q=1TgOk1rCY5br+ZVfyFFBeB+nX6NrMvwCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Arnout Vandecappelle,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes
-	v2: add # runtime tags
+2016-02-08 0:22 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+> On 07-02-16 13:40, Angelo Compagnucci wrote:
+>> * Changing back wget to curl cause wget it's not available
+>>   on mac os x.
+>> * Braking up too long windows one liner.
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>>  docs/manual/getting.txt | 6 ++++--
+>>  1 file changed, 4 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/docs/manual/getting.txt b/docs/manual/getting.txt
+>> index bb63cab..549938a 100644
+>> --- a/docs/manual/getting.txt
+>> +++ b/docs/manual/getting.txt
+>> @@ -19,13 +19,15 @@ If you want to setup an isolated buildroot environment on Linux or Mac
+>>  Os X, paste this line onto your terminal:
+>>
+>>  --------------------
+>> -wget https://buildroot.org/downloads/Vagrantfile; vagrant up
+>> +curl -O https://buildroot.org/downloads/Vagrantfile; vagrant up
+>
+>  Ack on this one.
+>
+>>  --------------------
+>>
+>>  If you are on Windows, paste this into your powershell:
+>>
+>>  --------------------
+>> -(new-object System.Net.WebClient).DownloadFile("https://buildroot.org/downloads/Vagrantfile","Vagrantfile"); vagrant up
+>> +(new-object System.Net.WebClient).DownloadFile(
+>> +"https://buildroot.org/downloads/Vagrantfile","Vagrantfile");
+>
+>  Does this still work if you cut&paste it with the line break? (Not a windows
+> user myself...)
 
- package/Config.in                              |  1 +
- package/python-pyopenssl/Config.in             | 12 ++++++++++++
- package/python-pyopenssl/python-pyopenssl.hash |  3 +++
- package/python-pyopenssl/python-pyopenssl.mk   | 14 ++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/python-pyopenssl/Config.in
- create mode 100644 package/python-pyopenssl/python-pyopenssl.hash
- create mode 100644 package/python-pyopenssl/python-pyopenssl.mk
+Of course, yes, it was tested with several windows versions.
 
-diff --git a/package/Config.in b/package/Config.in
-index 4eeaeb4..3d1ae44 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -684,6 +684,7 @@ menu "External python modules"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pyopenssl/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
-new file mode 100644
-index 0000000..c32e211
---- /dev/null
-+++ b/package/python-pyopenssl/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_PYOPENSSL
-+	bool "python-pyopenssl"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Python wrapper module around the OpenSSL library.
-+
-+	  https://github.com/pyca/pyopenssl
-+
-+comment "python-pyopenssl needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-new file mode 100644
-index 0000000..0c6e25a
---- /dev/null
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f447644afcbd5f0a1f47350fec63a4c6, sha256 locally computed
-+md5     f447644afcbd5f0a1f47350fec63a4c6  pyOpenSSL-0.15.1.tar.gz
-+sha256  f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672  pyOpenSSL-0.15.1.tar.gz
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-new file mode 100644
-index 0000000..239fd98
---- /dev/null
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pyopenssl
-+#
-+################################################################################
-+
-+PYTHON_PYOPENSSL_VERSION = 0.15.1
-+PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
-+PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
-+PYTHON_PYOPENSSL_LICENSE = Apache-2.0
-+PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
-+PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+Sincerely, Angelo.
+
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>> +vagrant up
+>>  --------------------
+>>
+>>  If you want to follow development, you can use the daily snapshots or
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+
+
 -- 
-2.7.0
+Profile: http://it.linkedin.com/in/compagnucciangelo
