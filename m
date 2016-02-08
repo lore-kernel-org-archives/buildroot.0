@@ -1,63 +1,117 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Feb 2016 18:19:40 +0100
-Subject: [Buildroot] [PATCH 1/1] skeleton: Rename /etc/profile.d/umask
- to umask.sh
-In-Reply-To: <20160208172509.2e68a8ba@free-electrons.com>
-References: <1454946165-8192-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <20160208172509.2e68a8ba@free-electrons.com>
-Message-ID: <20160208171940.GA3436@free.fr>
+Date: Mon, 8 Feb 2016 18:27:14 +0100
+Subject: [Buildroot] [PATCH v4] package/sqlite: add optional support for
+ libedit
+In-Reply-To: <1454951043-29268-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454951043-29268-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160208172714.GB3436@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Bernd, All,
 
-On 2016-02-08 17:25 +0100, Thomas Petazzoni spake thusly:
-> On Mon,  8 Feb 2016 16:42:45 +0100, Nicolas Cavallari wrote:
-> > /etc/profile only sources files that matches the /etc/profile.d/*.sh
-> > pattern, so /etc/profile.d/umask was never sourced.
-> > 
-> > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> > ---
-> >  system/skeleton/etc/profile.d/{umask => umask.sh} | 0
-> >  1 file changed, 0 insertions(+), 0 deletions(-)
-> >  rename system/skeleton/etc/profile.d/{umask => umask.sh} (100%)
-> > 
-> > diff --git a/system/skeleton/etc/profile.d/umask b/system/skeleton/etc/profile.d/umask.sh
-> > similarity index 100%
-> > rename from system/skeleton/etc/profile.d/umask
-> > rename to system/skeleton/etc/profile.d/umask.sh
+On 2016-02-08 18:04 +0100, Bernd Kuhls spake thusly:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v4: rebased
+> v3: rebased
+> v2: removed BR2_PACKAGE_SQLITE_READLINE (Thomas, Peter)
 > 
-> I'd rather think that /etc/profile should source all files
-> in /etc/profile.d/. At least that's what I would expect from a
-> <something>.d/ directory.
+>  Config.in.legacy         | 11 +++++++++++
+>  package/sqlite/Config.in |  7 -------
+>  package/sqlite/sqlite.mk |  9 ++++++---
+>  3 files changed, 17 insertions(+), 10 deletions(-)
 > 
-> What do others think about this?
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 3677f86..0ea8c7d 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,17 @@ endif
+>  ###############################################################################
+>  comment "Legacy options removed in 2016.02"
+>  
+> +config BR2_PACKAGE_SQLITE_READLINE
+> +	bool "command-line editing support was updated"
+> +	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_READLINE
+> +	select BR2_LEGACY
+> +	help
+> +	  This option was removed in favour of the sqlite package
+> +	  deciding itself depending on the enabled packages whether
+> +	  command-line editing should be enabled, it also also takes
+> +	  libedit into account.
+> +
+>  config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
+>  	bool "openpowerlink debug option has been removed"
+>  	select BR2_LEGACY
+> diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
+> index 7ea9eb1..c9fde53 100644
+> --- a/package/sqlite/Config.in
+> +++ b/package/sqlite/Config.in
+> @@ -8,13 +8,6 @@ config BR2_PACKAGE_SQLITE
+>  
+>  if BR2_PACKAGE_SQLITE
+>  
+> -config BR2_PACKAGE_SQLITE_READLINE
+> -	bool "Command-line editing"
+> -	select BR2_PACKAGE_NCURSES
+> -	select BR2_PACKAGE_READLINE
+> -	help
+> -	  Enable command-line editing. This requires ncurses and readline.
+> -
+>  config BR2_PACKAGE_SQLITE_STAT3
+>  	bool "Additional query optimizations (stat3)"
+>  	help
+> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+> index 1603e00..df59d1f 100644
+> --- a/package/sqlite/sqlite.mk
+> +++ b/package/sqlite/sqlite.mk
+> @@ -45,11 +45,14 @@ else
+>  SQLITE_CONF_OPTS += --disable-threadsafe
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
+> +ifeq ($(BR2_PACKAGE_READLINE),y)
+>  SQLITE_DEPENDENCIES += ncurses readline
 
-The *.sh is customary on standard distros. So I'd keep it named as thus
-so users are not surprised that we include things that would not have
-been included.
+If you /etc/profile.d/sendfileneed both ncurses and readline, then the
+condition should be something like:
 
-The reasoning behind this is that a Bourne-compliant (aka POSIX) shell
-would parse only the *.sh scripts, which ought to Bounre-compliant,
-leaving aside other scripts for the other shells (like csh, which is not
-Bourne-compliant but may still scan files from /etc/profile.d with a
-pattern not-unlike *.csh).
+    ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
 
-Furthermore, as the (other) Thomas pointed out, we do not want to source
-any stray (backup) file (even though I'd argue that the user should be
-responsible for cleaning up that location before generating the image,
-but that leaves local edits as a possible source of confusion).
+Yes, I know that readline forcibly depends on ncurses. Still, it is best
+to match the condition to the packages you actually depend on .
 
-So, I prefer that we only source /etc/profile.d/*.sh because of the
-aforementioned reasons, i.e.;
-  - Bourne/POSIX-compliant scripts
-  - principple of least-surprise
+Otherwise, looks OK.
+
+When you fix that, you can add my:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> -SQLITE_CONF_OPTS += --enable-readline
+> +SQLITE_CONF_OPTS += --disable-editline --enable-readline
+> +else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+> +SQLITE_DEPENDENCIES += libedit
+> +SQLITE_CONF_OPTS += --enable-editline --disable-readline
+>  else
+> -SQLITE_CONF_OPTS += --disable-readline
+> +SQLITE_CONF_OPTS += --disable-editline --disable-readline
+>  endif
+>  
+>  $(eval $(autotools-package))
+> -- 
+> 2.7.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
