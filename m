@@ -1,88 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  8 Feb 2016 20:56:41 +0100
-Subject: [Buildroot] [PATCH v5] package/sqlite: add optional support for
-	libedit
-Message-ID: <1454961401-15479-1-git-send-email-bernd.kuhls@t-online.de>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Mon, 8 Feb 2016 12:14:35 -0800
+Subject: [Buildroot] Speeding up the Build
+In-Reply-To: <56B6021E.3070608@lucaceresoli.net>
+References: <CAJJ6jxvwFavFNNVMnBuCGr4hmEgOdRzyU6XDx=_9bF9a9FUn5Q@mail.gmail.com>
+ <56B6021E.3070608@lucaceresoli.net>
+Message-ID: <CAJJ6jxs8G9i=K-qCCu29LZe0ro-kEjJeVTOHiEgEmmP88O=taQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v5: updated readline condition to include ncurses (Yann)
-v4: rebased
-v3: rebased
-v2: removed BR2_PACKAGE_SQLITE_READLINE (Thomas, Peter)
+On Sat, Feb 6, 2016 at 6:24 AM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+> Hi Steve,
+>
+> Steve Calfee wrote:
+>>
+<snip>
+>> Is there any way to share the host built utilities? It could be done
+>> like using a pre-built toolchain, or some kind of special links for
+>> output/host. The problem is .../host is splatted right in the middle
+>> of the dynamic per build output directory. Do these files get changed
+>> much in normal buildroot use, so they should stay in output?
+>
+>
+> Not quite replying to your question (Arnout has already done, with
+> great detail).
+>
+> But I submitted a patch [0] to skip host-cmake building entirely. It
+> saves 30% of the build time in my setup. If you use cmake-based
+> packages, you might want to give it a try and give your feedback.
+>
+> [0] http://patchwork.ozlabs.org/patch/579445/
+>
+> --
+> Luca
 
- Config.in.legacy         | 11 +++++++++++
- package/sqlite/Config.in |  7 -------
- package/sqlite/sqlite.mk |  9 ++++++---
- 3 files changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3677f86..0ea8c7d 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,17 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
- 
-+config BR2_PACKAGE_SQLITE_READLINE
-+	bool "command-line editing support was updated"
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_READLINE
-+	select BR2_LEGACY
-+	help
-+	  This option was removed in favour of the sqlite package
-+	  deciding itself depending on the enabled packages whether
-+	  command-line editing should be enabled, it also also takes
-+	  libedit into account.
-+
- config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
- 	bool "openpowerlink debug option has been removed"
- 	select BR2_LEGACY
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index 7ea9eb1..c9fde53 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -8,13 +8,6 @@ config BR2_PACKAGE_SQLITE
- 
- if BR2_PACKAGE_SQLITE
- 
--config BR2_PACKAGE_SQLITE_READLINE
--	bool "Command-line editing"
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
--	help
--	  Enable command-line editing. This requires ncurses and readline.
--
- config BR2_PACKAGE_SQLITE_STAT3
- 	bool "Additional query optimizations (stat3)"
- 	help
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 1603e00..8103996 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -45,11 +45,14 @@ else
- SQLITE_CONF_OPTS += --disable-threadsafe
- endif
- 
--ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
-+ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
- SQLITE_DEPENDENCIES += ncurses readline
--SQLITE_CONF_OPTS += --enable-readline
-+SQLITE_CONF_OPTS += --disable-editline --enable-readline
-+else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+SQLITE_DEPENDENCIES += libedit
-+SQLITE_CONF_OPTS += --enable-editline --disable-readline
- else
--SQLITE_CONF_OPTS += --disable-readline
-+SQLITE_CONF_OPTS += --disable-editline --disable-readline
- endif
- 
- $(eval $(autotools-package))
--- 
-2.7.0
+Sorry I don't use CMAKE. Could your solution be extended to other host
+packages? Python for instance takes a long time to build and I have
+one installed. Unless we are patching the host tool or require a
+special version, it would build faster if buildroot used the installed
+version rather than building. I mean generically it would be nice.
+
+Steve
