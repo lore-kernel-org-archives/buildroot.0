@@ -1,62 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 8 Feb 2016 21:29:06 +0100
-Subject: [Buildroot] [git commit] graph-depends: add support for excluding
-	host packages
-Message-ID: <20160208213711.B994A8025F@busybox.osuosl.org>
+Date: Mon, 8 Feb 2016 21:28:19 +0100
+Subject: [Buildroot] [git commit] graph-depends: fix handling of "virtual"
+	in exclude_list
+Message-ID: <20160208213711.90BCD817BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee8e4c5c250c3562f810d3b6102b9d9e7004082f
+commit: https://git.buildroot.net/buildroot/commit/?id=7771bb93b2a2b2b9ef6835785d51fb2bfe1ea584
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Just like the --stop-on and --exclude options allow to stop on or
-exclude virtual packages from the list by passing the "virtual" magic
-value, this commit extends the graph-depends logic to support a "host"
-magic value for --stop-on and --exclude. This will allow to draw the
-graph by stopping on host packages, or by excluding host packages.
+The condition to determine if a virtual package should be excluded
+from the list due to "virtual" being passed in --exclude is under a
+loop iterating over each entry of the exclude_list, but it doesn't use
+the iterator of this list.
+
+Indeed, the condition contains:
+
+	"virtual" in exclude_list
+
+which checks automatically if "virtual" was passed in the list. Due to
+this, there is no need for this check to be within the "for p in
+exclude_list" iteration. This commit fixes that by moving the check
+outside of the loop.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas: minor code beautification suggested by Yann E. Morin.]
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- support/scripts/graph-depends | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ support/scripts/graph-depends | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-index fcf3cca..a00eb9d 100755
+index efb73d2..fcf3cca 100755
 --- a/support/scripts/graph-depends
 +++ b/support/scripts/graph-depends
-@@ -48,8 +48,9 @@ parser.add_argument("--depth", '-d', metavar="DEPTH", dest="depth", type=int, de
-                     help="Limit the dependency graph to DEPTH levels; 0 means no limit.")
- parser.add_argument("--stop-on", "-s", metavar="PACKAGE", dest="stop_list", action="append",
-                     help="Do not graph past this package (can be given multiple times)." \
--                       + " Can be a package name or a glob, or" \
--                       + " 'virtual' to stop on virtual packages.")
-+                       + " Can be a package name or a glob, " \
-+                       + " 'virtual' to stop on virtual packages, or " \
-+                       + "'host' to stop on host packages.")
- parser.add_argument("--exclude", "-x", metavar="PACKAGE", dest="exclude_list", action="append",
-                     help="Like --stop-on, but do not add PACKAGE to the graph.")
- parser.add_argument("--colours", "-c", metavar="COLOR_LIST", dest="colours",
-@@ -401,11 +402,16 @@ def print_pkg_deps(depth, pkg):
-             return
-     if dict_version.get(pkg) == "virtual" and "virtual" in stop_list:
+@@ -403,15 +403,14 @@ def print_pkg_deps(depth, pkg):
          return
-+    if pkg.startswith("host-") and "host" in stop_list:
-+        return
      if max_depth == 0 or depth < max_depth:
          for d in dict_deps[pkg]:
-             if dict_version.get(d) == "virtual" \
-                and "virtual" in exclude_list:
-                 continue
-+            if d.startswith("host-") \
-+               and "host" in exclude_list:
++            if dict_version.get(d) == "virtual" \
++               and "virtual" in exclude_list:
 +                continue
              add = True
              for p in exclude_list:
                  if fnmatch(d,p):
+                     add = False
+                     break
+-                if dict_version.get(d) == "virtual" \
+-                and "virtual" in exclude_list:
+-                    add = False
+-                    break
+             if add:
+                 outfile.write("%s -> %s\n" % (pkg_node_name(pkg), pkg_node_name(d)))
+                 print_pkg_deps(depth+1, d)
