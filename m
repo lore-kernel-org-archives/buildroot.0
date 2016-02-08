@@ -1,162 +1,76 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Mon, 8 Feb 2016 19:21:53 +0100
-Subject: [Buildroot] [PATCHv3] wine: Bump to version 1.8.1
-Message-ID: <56B8DCC1.9080203@dawncrow.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Feb 2016 19:46:34 +0100
+Subject: [Buildroot] [PATCH 1/1] imagemagick: bump version to 6.9.3-3
+In-Reply-To: <1454909812-32383-1-git-send-email-ricardo.martincoski@gmail.com>
+References: <1454909812-32383-1-git-send-email-ricardo.martincoski@gmail.com>
+Message-ID: <20160208184634.GF3436@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to stable version 1.8.1
+Ricardo, All,
 
-Upstreamed patch is finally dropped.
+On 2016-02-08 03:36 -0200, Ricardo Martincoski spake thusly:
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+> ---
+> Previous version IS working, but it depends on
+> http://sources.buildroot.net/
+> 
+> Previous version was released less than a month ago.
+> But now its tarball got removed from the upstream download page
+> ---
+>  package/imagemagick/imagemagick.hash | 2 +-
+>  package/imagemagick/imagemagick.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+> index 1d5794f..31ddfd2 100644
+> --- a/package/imagemagick/imagemagick.hash
+> +++ b/package/imagemagick/imagemagick.hash
+> @@ -1,2 +1,2 @@
+>  # From http://www.imagemagick.org/download/releases/digest.rdf
+> -sha256	78a9bfc581c81fb8376c00d06431b49f218d3900690905dc985459cbf5e41c4d	ImageMagick-6.9.3-2.tar.xz
+> +sha256	d127f76c674f1454adf0444ecec96f344c3dca522cc3320f0ef88d8060123048	ImageMagick-6.9.3-3.tar.xz
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 76061fa..eee567e 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -IMAGEMAGICK_VERSION = 6.9.3-2
+> +IMAGEMAGICK_VERSION = 6.9.3-3
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
-try2: removing autoreconf, thanks to Thomas for reviewing
-try3: resend
--------------- next part --------------
-diff --git a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch b/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
-deleted file mode 100644
-index 9fc9f64..0000000
---- a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From 18078feecc8da0ab2693d0bb5423489fa62920ef Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 22 Dec 2015 21:25:19 +0100
--Subject: [PATCH] configure: allow to override the location of the *-config
-- scripts
--
--Currently, the configure.ac calls a number of *-config scripts to get
--details about installed libraries. It assumes that those *-config
--scripts are readily available in the PATH.
--
--While this is true in most situations, it may not be true when
--cross-compiling: you may have the *-config scripts matching the target
--environment in a location that isn't in the PATH. For such situations,
--it is very useful to be able to override the location of such *-config
--scripts using environment variables.
--
--The proposed changes does not introduce any functional difference if
--you don't pass those new environment variables: if they are not
--passed, it falls back to the current value.
--
--However, if those *_CONFIG variables are passed, then they are used as
--the path to the corresponding *-config script.
--
--The ${FOO_CONFIG:-foo-config} construct is POSIX compliant, so it is
--available in all shells.
--
--(Patch submitted upstream.)
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure.ac | 20 ++++++++++----------
-- 1 file changed, 10 insertions(+), 10 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 86f12c5..37ceab5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1191,7 +1191,7 @@ dnl **** Check for libxml2 ****
-- if test "x$with_xml" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(XML2,[libxml-2.0],[-lxml2],
---                       [`xml2-config --cflags 2>/dev/null`],[`xml2-config --libs 2>/dev/null`],
--+                       [`${XML2_CONFIG:-xml2-config} --cflags 2>/dev/null`],[`${XML2_CONFIG:-xml2-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADERS([libxml/parser.h libxml/xmlsave.h libxml/SAX2.h])
--         if test "$ac_cv_header_libxml_parser_h" = "yes" -a "$ac_cv_header_libxml_xmlsave_h" = "yes" -a "$ac_cv_header_libxml_SAX2_h" = "yes"
--         then
--@@ -1220,7 +1220,7 @@ WINE_WARNING_WITH(xml,[test "$ac_cv_lib_xml2_xmlParseMemory" != "yes"],
-- if test "x$with_xslt" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(XSLT,[libxslt],[-lxml2],
---                       [`xslt-config --cflags 2>/dev/null`],[`xslt-config --libs 2>/dev/null`],
--+                       [`${XSLT_CONFIG:-xslt-config} --cflags 2>/dev/null`],[`${XSLT_CONFIG:-xslt-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADERS([libxslt/pattern.h libxslt/transform.h],,,
--         [#ifdef HAVE_LIBXSLT_PATTERN_H
-- # include <libxslt/pattern.h>
--@@ -1291,7 +1291,7 @@ WINE_NOTICE_WITH(curses,[test "x$ac_cv_lib_soname_curses$ac_cv_lib_soname_ncurse
-- dnl **** Check for SANE ****
-- if test "x$with_sane" != "xno"
-- then
---    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`],
--+    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`],
--         [AC_CHECK_HEADER(sane/sane.h,
--             [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
--             [SANE_CFLAGS=""])])
--@@ -1311,7 +1311,7 @@ dnl **** Check for libgphoto2 ****
-- if test "x$with_gphoto" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(GPHOTO2,[libgphoto2],[-lgphoto2],
---                       [`gphoto2-config --cflags 2>/dev/null`],[`gphoto2-config --libs 2>/dev/null`],
--+                       [`${GPHOTO2_CONFIG:-gphoto2-config} --cflags 2>/dev/null`],[`${GPHOTO2_CONFIG:-gphoto2-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADER(gphoto2-camera.h,
--                         [AC_CHECK_LIB(gphoto2,gp_camera_new,
--                                       [AC_DEFINE(HAVE_GPHOTO2, 1, [Define if we have the libgphoto2 development environment])],
--@@ -1319,8 +1319,8 @@ then
--                                       [$GPHOTO2_LIBS])],
--                         [GPHOTO2_LIBS=""; GPHOTO2_CFLAGS=""])])
--     WINE_PACKAGE_FLAGS(GPHOTO2_PORT,[libgphoto2_port],[-lgphoto2_port],
---                       [`gphoto2-port-config --cflags 2>/dev/null`],
---                       [`gphoto2-port-config --libs 2>/dev/null`],
--+                       [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --cflags 2>/dev/null`],
--+                       [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADER(gphoto2-port.h,
--                         [AC_CHECK_LIB(gphoto2_port,gp_port_info_list_new,
--                                       [AC_DEFINE(HAVE_GPHOTO2_PORT, 1, [Define if we have the libgphoto2_port development environment])],
--@@ -1382,8 +1382,8 @@ dnl **** Check for FreeType 2 ****
-- if test "x$with_freetype" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(FREETYPE,[freetype2],[-lfreetype],
---                       [`(freetype-config --cflags || freetype2-config --cflags) 2>/dev/null`],
---                       [`(freetype-config --libs || freetype2-config --libs) 2>/dev/null`],
--+                       [`(${FREETYPE_CONFIG:-freetype-config} --cflags || ${FREETYPE2_CONFIG:-freetype2-config} --cflags) 2>/dev/null`],
--+                       [`(${FREETYPE_CONFIG:-freetype-config} --libs || ${FREETYPE2_CONFIG:-freetype2-config} --libs) 2>/dev/null`],
--         [AC_CHECK_HEADERS([ft2build.h])
--         if test "$ac_cv_header_ft2build_h" = "yes"
--         then
--@@ -1538,8 +1538,8 @@ AC_SUBST(CUPS_CFLAGS,"")
-- if test "x$with_cups" != "xno"
-- then
--     ac_save_CPPFLAGS="$CPPFLAGS"
---    ac_cups_cflags=`cups-config --cflags 2>/dev/null`
---    ac_cups_libs=`cups-config --ldflags 2>/dev/null`
--+    ac_cups_cflags=`${CUPS_CONFIG:-cups-config} --cflags 2>/dev/null`
--+    ac_cups_libs=`${CUPS_CONFIG:-cups-config} --ldflags 2>/dev/null`
--     CPPFLAGS="$CPPFLAGS $ac_cups_cflags"
--     AC_CHECK_HEADERS(cups/cups.h,
--             [WINE_CHECK_SONAME(cups,cupsGetDefault,
---- 
--2.6.4
--
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 80c0f68..31db6c0 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 f33b45c18112b2071fbf9edee0e8c575407f9e2a9855ca4ee918ed33efa7c6f4 wine-1.8.tar.bz2
-+sha256 149ad3daaf8593b36c5c061285df0ec2a25e20ea48c61323be91088c4d22ca97 wine-1.8.1.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 2cd5c30..fc04027 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.8
-+WINE_VERSION = 1.8.1
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
--# For 0001-sane-config-fix.patch
--WINE_AUTORECONF = YES
- 
- # Wine needs its own directory structure and tools for cross compiling
- WINE_CONF_OPTS = \
+Since you seem to be interested in ImageMagick, could you check what
+that patch is all about and if it is still relevant:
+
+    https://patchwork.ozlabs.org/patch/484767/
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+>  IMAGEMAGICK_SOURCE = ImageMagick-$(IMAGEMAGICK_VERSION).tar.xz
+>  IMAGEMAGICK_SITE = http://www.imagemagick.org/download/releases
+>  IMAGEMAGICK_LICENSE = Apache-2.0
+> -- 
+> 1.9.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
