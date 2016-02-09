@@ -1,38 +1,136 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  9 Feb 2016 07:46:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kbd: Fix broken Makefile when
-	host-gettext was built before kbd
-Message-ID: <1455000377-32030-1-git-send-email-bernd.kuhls@t-online.de>
+From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Date: Tue,  9 Feb 2016 12:22:26 +0530
+Subject: [Buildroot] [PATCH v2 1/1] libfcgi:add security patch for
+	CVE-2012-6687
+Message-ID: <1455000746-26644-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch uses the same solution used for util-linux:
-https://git.busybox.net/buildroot/commit/package/util-linux?id=71f279f9a2bd3f086f3d31fa5a669d3f638bee99
+From: "Niranjan Reddy" <niranjan.reddy@rockwellcollins.com>
 
-To trigger the bug just build host-gettext before kbd.
-
-Fixes
-http://autobuild.buildroot.net/results/87e/87ea83ae4e7b7640651acd5031a624ca42e5b348/
-http://autobuild.buildroot.net/results/532/532684b98e050cf5b4c50786bc9e8825eab21f97/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
+via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
+use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
+The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
+(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
+officially.
 ---
- package/kbd/kbd.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libfcgi/0006-fix-CVE-2012-6687.patch | 103 +++++++++++++++++++++++++++
+ 1 file changed, 103 insertions(+)
+ create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
 
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index 8da153f..9dabce1 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -17,4 +17,6 @@ KBD_LICENSE = GPLv2+
- KBD_LICENSE_FILES = COPYING
- KBD_AUTORECONF = YES
- 
-+KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+new file mode 100644
+index 0000000..a8ea847
+--- /dev/null
++++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+@@ -0,0 +1,103 @@
++libfcgi:add security patch for CVE-2012-6687
++CVE-2012-6687 - remote attackers cause a denial of service (crash) via a large number 
++of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
++Fix:use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
++This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below link:
++(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
++The next release of libfcgi is 2.4.1 which may have this fix is yet to be released 
++officially.
 +
- $(eval $(autotools-package))
++Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
++
++Index: b/libfcgi/os_unix.c
++===================================================================
++--- a/libfcgi/os_unix.c
+++++ b/libfcgi/os_unix.c
++@@ -42,6 +42,7 @@
++ #include <sys/time.h>
++ #include <sys/un.h>
++ #include <signal.h>
+++#include <poll.h>
++ 
++ #ifdef HAVE_NETDB_H
++ #include <netdb.h>
++@@ -103,6 +104,9 @@
++ static int shutdownPending = FALSE;
++ static int shutdownNow = FALSE;
++ 
+++static int libfcgiOsClosePollTimeout = 2000;
+++static int libfcgiIsAfUnixKeeperPollTimeout = 2000;
+++
++ void OS_ShutdownPending()
++ {
++     shutdownPending = TRUE;
++@@ -168,6 +172,16 @@
++     if(libInitialized)
++         return 0;
++ 
+++    char *libfcgiOsClosePollTimeoutStr = getenv( "LIBFCGI_OS_CLOSE_POLL_TIMEOUT" );
+++    if(libfcgiOsClosePollTimeoutStr) {
+++        libfcgiOsClosePollTimeout = atoi(libfcgiOsClosePollTimeoutStr);
+++    }
+++
+++    char *libfcgiIsAfUnixKeeperPollTimeoutStr = getenv( "LIBFCGI_IS_AF_UNIX_KEEPER_POLL_TIMEOUT" );
+++    if(libfcgiIsAfUnixKeeperPollTimeoutStr) {
+++        libfcgiIsAfUnixKeeperPollTimeout = atoi(libfcgiIsAfUnixKeeperPollTimeoutStr);
+++    }
+++
++     asyncIoTable = (AioInfo *)malloc(asyncIoTableSize * sizeof(AioInfo));
++     if(asyncIoTable == NULL) {
++         errno = ENOMEM;
++@@ -755,19 +769,16 @@
++ 
++     if (shutdown(fd, 1) == 0)
++     {
++-        struct timeval tv;
++-        fd_set rfds;
+++        struct pollfd pfd;
++         int rv;
++         char trash[1024];
++ 
++-        FD_ZERO(&rfds);
+++        pfd.fd = fd;
+++        pfd.events = POLLIN;
++ 
++         do 
++         {
++-            FD_SET(fd, &rfds);
++-            tv.tv_sec = 2;
++-            tv.tv_usec = 0;
++-            rv = select(fd + 1, &rfds, NULL, NULL, &tv);
+++            rv = poll(&pfd, 1, libfcgiOsClosePollTimeout);
++         }
++         while (rv > 0 && read(fd, trash, sizeof(trash)) > 0);
++     }
++@@ -1116,13 +1127,11 @@
++  */
++ static int is_af_unix_keeper(const int fd)
++ {
++-    struct timeval tval = { READABLE_UNIX_FD_DROP_DEAD_TIMEVAL };
++-    fd_set read_fds;
++-
++-    FD_ZERO(&read_fds);
++-    FD_SET(fd, &read_fds);
+++    struct pollfd pfd;
+++    pfd.fd = fd;
+++    pfd.events = POLLIN;
++ 
++-    return select(fd + 1, &read_fds, NULL, NULL, &tval) >= 0 && FD_ISSET(fd, &read_fds);
+++    return poll(&pfd, 1, libfcgiIsAfUnixKeeperPollTimeout) >= 0 && (pfd.revents & POLLIN);
++ }
++ 
++ /*
++
++Index: b/examples/Makefile.am
++===================================================================
++--- a/examples/Makefile.am
+++++ b/examples/Makefile.am
++@@ -34,5 +34,5 @@ threaded_CFLAGS    = @PTHREAD_CFLAGS@
++ threaded_LDFLAGS   = @PTHREAD_CFLAGS@ @PTHREAD_LIBS@
++ 
++ echo_cpp_SOURCES = $(INCLUDE_FILES) $(INCLUDEDIR)/fcgio.h echo-cpp.cpp
++-echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la
+++echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la $(LIBDIR)/libfcgi.la
 -- 
-2.7.0
+2.5.0
