@@ -1,52 +1,49 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Tue, 9 Feb 2016 12:27:25 -0200
-Subject: [Buildroot] [PATCH v2] pandaboard_defconfig: bump u-boot to
- 2015.10 and kernel to 4.3
-In-Reply-To: <20160206212451.21d0b116@free-electrons.com>
-References: <1452250251-9442-1-git-send-email-sergio.prado@e-labworks.com>
- <20160206212451.21d0b116@free-electrons.com>
-Message-ID: <CANu7NGsNJBEGxbdzOEqLuFyr0bH5tk0qkenP9XtKfZQsBeZ7mg@mail.gmail.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Tue,  9 Feb 2016 16:06:28 +0100
+Subject: [Buildroot] [PATCH RESEND 1/1] skeleton: Have /etc/profile source
+	[A-Za-z0-9_-]+ files in profile.d.
+In-Reply-To: <1890083.agaboDjt8N@hardbit>
+References: <1890083.agaboDjt8N@hardbit>
+Message-ID: <1455030388-10858-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Instead of sourcing all files ending with .sh (which is unexpected
+enough that /etc/profile.d/umask was missed), source all files which
+matches [A-Za-z0-9_-]+.  This way, backup files from most text editors
+(e.g.  umask~, umask.dpkg-old, .umask.swp~) will not be sourced.
 
-2016-02-06 18:24 GMT-02:00 Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com>:
->
-> Dear Sergio Prado,
->
-> On Fri,  8 Jan 2016 08:50:51 -0200, Sergio Prado wrote:
-> > VFPv3 and NEON was enabled and a readme.txt file was added.
-> >
-> > Fixes bug #7580.
-> >
-> > Tested on Pandaboard ES.
-> >
-> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
->
-> Thanks for this patch. Could you rebase it on master ? All defconfigs
-> have been touched by a recent change from Yann E. Morin.
->
-> Note that all defconfigs should now use the "use kernel headers from
-> kernel" mechanism. See
->
-https://git.busybox.net/buildroot/commit/?id=674e09967818bf49fd1b6bf1f986a4c0f917fa63
-.
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
 
-Sure. I'll send V3.
+Resend with the correct list address.
 
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160209/f6114edb/attachment.html>
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index 3a97427..2fb7743 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -12,9 +12,14 @@ export PAGER='/bin/more '
+ export EDITOR='/bin/vi'
+ 
+ # Source configuration files from /etc/profile.d
+-for i in /etc/profile.d/*.sh ; do
+-	if [ -r "$i" ]; then
+-		. $i
+-	fi
+-	unset i
++for i in /etc/profile.d/* ; do
++	case "$i" in
++	/etc/profile.d/*[^A-Za-z0-9_-]*)
++		continue;;
++	*)
++		if [ -r "$i" ]; then
++			. $i
++		fi
++	esac
+ done
++unset i
+-- 
+2.7.0
