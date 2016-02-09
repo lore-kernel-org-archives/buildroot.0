@@ -1,163 +1,176 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Feb 2016 18:23:36 +0100
-Subject: [Buildroot] [PATCH 1/1] Allow imagemagick to find ghostscript
- fonts.
-In-Reply-To: <56b96b4422432_3e71e0793c203d6@ultri2.mail>
-References: <56b96b4422432_3e71e0793c203d6@ultri2.mail>
-Message-ID: <20160209172336.GA3682@free.fr>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue,  9 Feb 2016 16:14:52 -0200
+Subject: [Buildroot] [PATCH v3] pandaboard_defconfig: bump u-boot to 2015.10
+	and kernel to 4.3
+Message-ID: <1455041692-12727-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+VFPv3 and NEON was enabled and a readme.txt file was added.
 
-On 2016-02-09 02:29 -0200, Ricardo Martincoski spake thusly:
-> I don't need this patch for my own personal use, but I took a look into it.
+Fixes bug #7580.
 
-Thank you, this is very much appreciated! :-)
+Tested on Pandaboard ES.
 
-> On Tue, 29 Dec 2015 17:45:04 +0100, Thomas Petazzoni wrote:
-> > Could you give a specific example use of imagemagick that triggers this
-> > problem, so that we can reproduce the problem on our side and
-> > investigate the possible solutions?
-> 
-> Using this config with the master branch:
-> BR2_PACKAGE_IMAGEMAGICK=y  
-> BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
-> BR2_PACKAGE_FREETYPE=y
-> The problem can be triggered by converting any text file to ps
-> $ cd /tmp ; echo -e 'text 1\ntext 2' > file.txt ; convert file.txt file.ps
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+Changes v3 -> v2:
+  - rebased
+Changes v1 -> v2:
+  - Removed extra "=====" signs from readme.txt.
+  - Removed empty new lines from readme.txt.
+  - Improved script and description to format the sdcard in the
+    readme.txt.
+  - Locking kernel headers version, u-boot version and kernel version
+    being used.
+---
+ board/pandaboard/readme.txt  | 76 ++++++++++++++++++++++++++++++++++++++++++++
+ configs/pandaboard_defconfig | 43 ++++++++++---------------
+ 2 files changed, 92 insertions(+), 27 deletions(-)
+ create mode 100644 board/pandaboard/readme.txt
 
-Aha, so that is the root of the problem. Thanks for the explanations.
-
-[--SNIP--]
-> The wrong path is the default for debian-based distros
-> /usr/share/fonts/type1/gsfonts/ # debian non-x11, default for imagemagick
-> /usr/share/fonts/X11/Type1/     # debian x11
-> 
-> An alternative solution would be to have the fonts installed to this location
-> +++ b/package/ghostscript-fonts/ghostscript-fonts.mk
-> @@@ -13,1 -13,1 +13,1 @@@ GHOSTSCRIPT_FONTS_LICENSE_FILES = COPYI
-> --GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/gs
-> ++GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/type1/gsfonts
-> 
-> I don't see from
-> grep -w '\(gs\|ghostscript-fonts\|GHOSTSCRIPT_FONTS_\)' -R package/
-> any explicit use of this path nor hard dependency.
-> But changing it can potentially break packages (in runtime!) if them expect
-> the fonts to be installed in the current location.
-
-And why not symlink the former to the latter?
-
-> Does anyone know an example of package that would break?
-> 
-> >> >> Magick: unable to read font `(null)' @ error/annotate.c/RenderFreetype/1153
-> >> >> They are non-fatal but could get annoying fast if you are using 'convert'
-> 
-> The error is non-fatal in a batch conversion.
-> But each error means a file failed to be converted.
-> The output is not generated for the failed file.
-
-This is a sad decision not to fail in that case... :-(
-
-> >> >> on a lot of files.
-> >> >>
-> >> >> Signed-off-by: Robert Sohn <grepper@gmail.com>
-> >> >> ---
-> >> >>  package/imagemagick/imagemagick.mk | 3 ++-
-> >> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >> >>
-> >> >> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> >> >> index 298d0a8..1abb2a8 100644
-> >> >> --- a/package/imagemagick/imagemagick.mk
-> >> >> +++ b/package/imagemagick/imagemagick.mk
-> >> >> @@ -33,7 +33,8 @@ IMAGEMAGICK_CONF_OPTS = \
-> >> >>  	--without-dps \
-> >> >>  	--without-gslib \
-> >> >>  	--without-fpx \
-> >> >> -	--without-x
-> >> >> +	--without-x \
-> >> >> +	--with-gs-font-dir=/usr/share/fonts/gs
-> 
-> Configuring unconditionally does not seem so bad in this case, IMO.
-> The configured path will be added to an XML that will be used at runtime.
-> If freetype support is not compiled in or the fonts are not installed,
-> /convert/ would fail anyway.
-
-The best would probbly to do something like Thomas suggested:
-
-> >> > ifeq ($(BR2_PACKAGE_GHOSTSCRIPT_FONTS),y)
-> >> > IMAGEMAGICK_CONF_OPTS += --with-gs-font-dir=/usr/share/fonts/gs
-> >> > endif
-> BR2_PACKAGE_FREETYPE is also needed.
-
-    ifeq ($(BR2_PACKAGE_FREETYPE)$(BR2_PACKAGE_GHOSTSCRIPT_FONTS),yy)
-    IMAGEMAGICK_CONF_OPTS += --with-gs-font-dir=/usr/share/fonts/gs
-    endif
-
-But with the symlink I suggested above, that might not even be
-necessary, would it?
-
-> >> > Or maybe we should use $(GHOSTSCRIPT_FONTS_TARGET_DIR) here, instead of 
-> >> > duplicating it?
-> 
-> It seems good practice to me.
-> But we can't use GHOSTSCRIPT_FONTS_TARGET_DIR as is, it is prefixed with
-> TARGET_DIR. We could create an auxiliary symbol
-
-Then what about:
-
-    package/ghostscript-fonts/ghostscript-fonts.mk;
-        GHOSTSCRIPT_FONTS_DIR = /usr/share/fonts/gs
-        GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/$(GHOSTSCRIPT_FONTS_DIR)
-
-    package/imagemagick/imagemagick.mk:
-        ifeq ($(BR2_PACKAGE_FREETYPE)$(BR2_PACKAGE_GHOSTSCRIPT_FONTS),yy)
-        IMAGEMAGICK_CONF_OPTS += --with-gs-font-dir=$(GHOSTSCRIPT_FONTS_DIR)
-        endif
-
-> >> Hm, the problem is that the issue will remain if ghostscript-fonts are
-> >> not installed. I don't know the solution to that.
-> >
-> >The usual way to set a dependency package is to add a 'select' statement for 
-> >that package in Config.in. In this case ghostscript-fonts is not a hard 
-> >dependency, because imagemagick is quite functional without it, and its size 
-> >is non negligible. Maybe adding a comment to the help text in Config.in would 
-> >suffice.
-> >
-> >What do others think?
-> 
-> Adding a comment to the Config.in sounds reasonable to me.
-> One would need both BR2_PACKAGE_FREETYPE as optional build dependency and
-> BR2_PACKAGE_GHOSTSCRIPT_FONTS as optional runtime dependency to get the
-> conversion txt -> ps to work.
-
-Well, since it is an *optional* and *runtime* dependency, then there is
-rally nothing to do, neither in the Config.in nor in the .mk.
-
-However, if we want to be a little bit user-friendly, we could add a
-Config.in opiton in ImageMagick, like:
-
-    config BR2_PACKAGE_IMAGEMAGICK_TXT_PS
-        bool "support txt->ps conversion"
-        select BR2_PACKAGE_FREETYPE # runtime
-        select BR2_PACKAGE_GHOSTSCRIPT_FONTS # runtime
-
-(with the appropriate "depends on" to propagate freetype's and
-ghostscript-fonts' own dependencies...
-
-Anyway, thanks a lot Ricardo for the thorough and detailed explanations.
-It was really useful. :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/board/pandaboard/readme.txt b/board/pandaboard/readme.txt
+new file mode 100644
+index 000000000000..8741349d19f0
+--- /dev/null
++++ b/board/pandaboard/readme.txt
+@@ -0,0 +1,76 @@
++Pandaboard
++==========
++
++This file documents the Buildroot support for the Pandaboard, a
++low-power, low-cost single-board computer development platform based
++on the Texas Instruments OMAP4 system on a chip (SoC).
++
++Configuring and building Buildroot
++----------------------------------
++
++Start from the defconfig:
++
++  $ make pandaboard_defconfig
++
++You can edit build options the usual way:
++
++  $ make menuconfig
++
++When you are happy with the setup, run:
++
++  $ make
++
++The result of the build with the default settings should be these files:
++
++  output/images
++  ??? MLO
++  ??? omap4-panda-a4.dtb
++  ??? omap4-panda.dtb
++  ??? omap4-panda-es.dtb
++  ??? rootfs.ext2
++  ??? u-boot.img
++  ??? zImage
++
++Setting up your SD card
++-----------------------
++
++*Important*: pay attention which partition you are modifying so you don't
++accidentally erase the wrong file system, e.g your host computer or your
++external storage!
++
++In the default setup you need to create two partitions on your SD card:
++a boot partition and a rootfs partition.
++
++The ROM code from OMAP processors need the SD card to be formatted with
++a special geometry in the partition table. To do that, you can use the
++shell script below (this script was extracted from
++http://elinux.org/Panda_How_to_MLO_%26_u-boot).
++
++#!/bin/sh
++DRIVE=$1
++if [ -b "$DRIVE" ] ; then
++	dd if=/dev/zero of=$DRIVE bs=1024 count=1024
++	SIZE=`fdisk -l $DRIVE | grep Disk | awk '{print $5}'`
++	echo DISK SIZE - $SIZE bytes
++	CYLINDERS=`echo $SIZE/255/63/512 | bc`
++	echo CYLINDERS - $CYLINDERS
++	{
++	echo ,9,0x0C,*
++	echo ,,,-
++	} | sfdisk -D -H 255 -S 63 -C $CYLINDERS $DRIVE
++	mkfs.vfat -F 32 -n "boot" ${DRIVE}1
++	mke2fs -j -L "rootfs" ${DRIVE}2
++fi
++
++The next step is to mount the sdcard's first partition and copy MLO
++and u-boot.img to it.
++
++  $ sudo mkdir -p /mnt/sdcard
++  $ sudo mount /dev/sdX1 /mnt/sdcard
++  $ sudo cp MLO u-boot.img /mnt/sdcard
++  $ sudo umount /mnt/sdcard
++
++The last step is to copy the rootfs image to the sdcard's second
++partition using 'dd':
++
++  $ sudo dd if=rootfs.ext2 of=/dev/sdX2 bs=1M conv=fsync
+diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
+index 93ec1b093071..8dffc83f0ae7 100644
+--- a/configs/pandaboard_defconfig
++++ b/configs/pandaboard_defconfig
+@@ -1,37 +1,26 @@
+-# Architecture
+ BR2_arm=y
+ BR2_cortex_a9=y
+-
+-# system
+-BR2_TARGET_GENERIC_GETTY=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_ENABLE_VFP=y
++BR2_ARM_EABI=y
++BR2_ARM_FPU_VFPV3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
+-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+-
+-# filesystem
+-BR2_TARGET_ROOTFS_EXT2=y
+-# BR2_TARGET_ROOTFS_TAR is not set
+-
+-# Linux headers same as kernel, a 3.12 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+-
+-# Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.12.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.3.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+-BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+-BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+-BR2_LINUX_KERNEL_APPENDED_DTB=y
+-BR2_LINUX_KERNEL_USE_INTREE_DTS=y
+-# might need omap4-panda or omap4-panda-a4 instead
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es"
+-
+-# Bootloaders
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.10"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap4_panda"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_BOARDNAME="omap4_panda"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+-BR2_TARGET_UBOOT_LATEST_VERSION=n
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2012.07"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
