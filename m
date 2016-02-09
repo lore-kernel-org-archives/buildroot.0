@@ -1,101 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 00:07:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix dbus activation
-In-Reply-To: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
-References: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
-Message-ID: <56BA7138.6000408@mind.be>
+Date: Wed, 10 Feb 2016 00:08:58 +0100
+Subject: [Buildroot] [PATCH v2] linux: add conditional patch for
+ timeconst.pl
+In-Reply-To: <1454852508-27544-1-git-send-email-gustavo.zacarias@free-electrons.com>
+References: <1454852508-27544-1-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <56BA718A.5060500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08-02-16 23:50, Gabe Evans wrote:
-> Various DBus activated services fail to start with errors similar to:
+On 07-02-16 14:41, gustavo.zacarias at free-electrons.com wrote:
+> From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 > 
->   Unit dbus-org.freedesktop.hostname1.service failed to load: File exists.
+> Kernels older than 3.9 (not counting stable releases) used the
+> timeconst.pl perl script for their build process.
+> The problem with this script is that it used deprecated perl features,
+> namely defined(@array) which was removed for the perl 5.22 release,
+> causing build failure of older kernels on newer distributions.
 > 
-> The message itself is rather vague and can be seen as a warning in
-> systemd-networkd logs. Meanwhile, tools like hostnamectl don't work
-> at all.
+> To fix this instead of going the hard way (moving to the new
+> timeconst.bc script) use the easy way by patching timeconst.pl with an
+> upstream patch used for stable releases.
 > 
-> The post-install target hook SYSTEMD_SANITIZE_PATH_IN_UNITS was replacing
-> symlinks with duplicate files. The sed command could have used
-> --follow-symlinks to avoid this 
-
- Or better yet, add -type f to the find command.
-
-> but I instead chose to remove the hook
-> since this fix doesn't seem to be needed anymore.
+> First try a dry-run on the patch to see if it applies, if it does then
+> call a proper APPLY_PATCHES to it.
 > 
-> Some configure options are also removed:
+> Tested against an arbitrary 2.6.30 kernel (applies and builds), against
+> 4.4.1 for a missing timeconst.pl (does not apply since it's missing) and
+> 3.8.13 (does not apply since it's fixed already).
 > 
->  * --with-dbuspolicydir, --with-dbussessionservicedir, and
->    --with-dbussystemservicedir are no longer needed since these are
->    defaults in recent releases.
+> Known broken distributions: fedora 23.
+
+ and debian testing (stretch) and unstable (sid).
+
+ As Thomas said, it's dirty, but we really need this.
+
 > 
->  * --disable-dbus has no effect when combined with --disable-tests. The
->    option itself only applies to tests, not the runtime.
+> Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+> ---
+> v2: rebase on top of master
+> 
+>  ...nst.pl-Eliminate-Perl-warning.patch.conditional | 45 ++++++++++++++++++++++
+>  linux/linux.mk                                     | 10 +++++
+>  2 files changed, 55 insertions(+)
+>  create mode 100644 linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
+> 
 
- This part really should have been in a separate patch, with as subject
-"systemd: remove redundant configure options".
+[snip]
 
- Still, this patch gets my
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 578fea1..7e20255 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -184,6 +184,16 @@ endef
+>  
+>  LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+>  
+> +# Older linux kernels use deprecated perl constructs in timeconst.pl
+> +# that were removed for perl 5.22+ so it breaks on newer distributions
+> +# Try a dry-run patch to see if this applies, if it does go ahead
+> +define LINUX_TRY_PATCH_TIMECONST
+> +	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional >/dev/null ; then \
+> +		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional ; \
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- (checked that there is not HOST_DIR reference and that the dbus paths are still
-correct).
+ The only reason to use APPLY_PATCHES is that it updates .applied_patches_list,
+right? In that case, perhaps it's better to do that directly here. So instead of
+a dry-run, just apply the patch right away, and if it succeeds add it to
+.applied_patches_list.
 
+> +	fi
+> +endef
+> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
 
- If you repost as two patches, you can carry my acked/tested tags.
+ This is a patch that we probably _do_ want to apply even in case of
+OVERRIDE_SRCDIR. So maybe add it to LINUX_PRE_CONFIGURE_HOOKS instead. Even
+though that's even more of a hack (and conflicts with the out-of-tree build
+support).
+
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-> ---
->  package/systemd/systemd.mk | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index e432069..05121cf 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -32,14 +32,10 @@ SYSTEMD_CONF_OPTS += \
->  	--disable-selinux \
->  	--disable-pam \
->  	--disable-libcryptsetup \
-> -	--with-dbuspolicydir=/etc/dbus-1/system.d \
-> -	--with-dbussessionservicedir=/usr/share/dbus-1/services \
-> -	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
->  	--disable-efi \
->  	--disable-gnuefi \
->  	--disable-ldconfig \
->  	--disable-tests \
-> -	--disable-dbus \
->  	--without-python
->  
->  SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
-> @@ -150,16 +146,10 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
->  	touch $(TARGET_DIR)/etc/machine-id
->  endef
->  
-> -define SYSTEMD_SANITIZE_PATH_IN_UNITS
-> -	find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
-> -		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
-> -endef
-> -
->  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
->  	SYSTEMD_INSTALL_INIT_HOOK \
->  	SYSTEMD_INSTALL_MACHINEID_HOOK \
-> -	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-> -	SYSTEMD_SANITIZE_PATH_IN_UNITS
-> +	SYSTEMD_INSTALL_RESOLVCONF_HOOK
->  
->  define SYSTEMD_USERS
->  	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
+> +
+>  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+>  LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+>  else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
 > 
 
 
