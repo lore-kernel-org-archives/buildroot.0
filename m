@@ -1,44 +1,60 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Tue, 9 Feb 2016 20:19:14 -0300
-Subject: [Buildroot] [PATCH v2] linux: add conditional patch for
- timeconst.pl
-In-Reply-To: <56BA718A.5060500@mind.be>
-References: <1454852508-27544-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <56BA718A.5060500@mind.be>
-Message-ID: <56BA73F2.7080009@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Feb 2016 00:26:34 +0100
+Subject: [Buildroot] [PATCH v3] valgrind: fix musl compile
+In-Reply-To: <1455058401-28034-1-git-send-email-ps.report@gmx.net>
+References: <1455058401-28034-1-git-send-email-ps.report@gmx.net>
+Message-ID: <56BA75AA.20403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/02/16 20:08, Arnout Vandecappelle wrote:
+On 09-02-16 23:53, Peter Seiderer wrote:
+> Add musl libc detection (based on suggestions by Romain Naour and
+> Arnout Vandecappelle) and add some tweaks for musl support (based
+> on OpenWRT patch [1]).
+> 
+> Fixes ([2]):
+>   checking the glibc version... unsupported version
+>   configure: error: Valgrind requires glibc version 2.2 or later
+> 
+> Patch suggested upstream (see [3]).
+> 
+> [1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
+> [2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
+> [3] https://bugs.kde.org/show_bug.cgi?id=359202
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
->   and debian testing (stretch) and unstable (sid).
->
->   As Thomas said, it's dirty, but we really need this.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Hi Arnout.
-Yes, i couldn't figure out a cleaner way to do this, continues below...
+ One small nit:
 
->   The only reason to use APPLY_PATCHES is that it updates .applied_patches_list,
-> right? In that case, perhaps it's better to do that directly here. So instead of
-> a dry-run, just apply the patch right away, and if it succeeds add it to
-> .applied_patches_list.
+[snip]
+> + 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
+> +-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
+> +-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
+> ++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later, uclibc,])
 
-I could have probed the timeconst.pl file presence and relevancy (if it 
-contains defined(@array)...), but then a dry-run patch does that for me 
-just fine with the proper parameters.
-Yes, that's the reason for APPLY_PATCHES, however since it's already 
-there why bother duplicating code?
-Also thought of extending apply-patches.sh to add an option for 
-try-do/discard, but i believe it's a double-edged sword and not worth it 
-quite yet.
+ It's uClibc (capital C).
 
->   This is a patch that we probably _do_ want to apply even in case of
-> OVERRIDE_SRCDIR. So maybe add it to LINUX_PRE_CONFIGURE_HOOKS instead. Even
-> though that's even more of a hack (and conflicts with the out-of-tree build
-> support).
+> ++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
+> + 	;;
+> + esac
+> + 
+[snip]
 
-Possibly, let's hear other people thoughts on this.
-Regards.
+ I guess you'll update the upstream bug report as well?
+
+ Regards,
+ Arnout
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
