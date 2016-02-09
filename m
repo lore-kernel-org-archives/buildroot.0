@@ -1,114 +1,159 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Feb 2016 23:47:00 +0100
-Subject: [Buildroot] [RFC] Python pyc compilation check
-In-Reply-To: <CAGm1_ks382K2C96g7BV1ZAxETEPMu_DAGznGrq45RV2hLRmE3g@mail.gmail.com>
-References: <CAGm1_ks382K2C96g7BV1ZAxETEPMu_DAGznGrq45RV2hLRmE3g@mail.gmail.com>
-Message-ID: <56BA6C64.8050900@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  9 Feb 2016 23:53:21 +0100
+Subject: [Buildroot] [PATCH v3] valgrind: fix musl compile
+Message-ID: <1455058401-28034-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- This is just an RFC, but if it gets good review I guess you intend to squash it
-with the other series?
+Add musl libc detection (based on suggestions by Romain Naour and
+Arnout Vandecappelle) and add some tweaks for musl support (based
+on OpenWRT patch [1]).
 
- I'm basically OK with the concept of this patch, with a few remarks still below.
+Fixes ([2]):
+  checking the glibc version... unsupported version
+  configure: error: Valgrind requires glibc version 2.2 or later
 
-On 08-02-16 22:51, Yegor Yefremov wrote:
-> As promised Samuel's patch:
-> 
-> diff --git a/package/python/python.mk b/package/python/python.mk
-> index 5ef3589..1d131c0 100644
-> --- a/package/python/python.mk
-> +++ b/package/python/python.mk
-> @@ -220,8 +220,9 @@ $(eval $(host-autotools-package))
-> 
->  define PYTHON_CREATE_PYC_FILES
->   PYTHONPATH="$(PYTHON_PATH)" \
-> - $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
-> - compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)')"
-> + $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
+Patch suggested upstream (see [3]).
 
- You should add indentation here.
+[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
+[2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
+[3] https://bugs.kde.org/show_bug.cgi?id=359202
 
-> + $(TOPDIR)/support/scripts/pycompile.py \
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v2 -> v3:
+  - change valgrind patch define logic (suggested by Arnout Vandecappelle)
 
- $(TOPDIR) isn't needed, it is always executed from the top directory.
+Changes v1 -> v2:
+  - add proper musl libc detection (suggested by Romain Naour and
+    Arnout Vandecappelle)
+---
+ package/valgrind/0004-Fixes-for-musl-libc.patch | 99 +++++++++++++++++++++++++
+ package/valgrind/valgrind.mk                    |  3 +
+ 2 files changed, 102 insertions(+)
+ create mode 100644 package/valgrind/0004-Fixes-for-musl-libc.patch
 
-> + "$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)"
->  endef
-> 
->  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index 507c610..1eb356b 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -217,8 +217,9 @@ $(eval $(host-autotools-package))
-> 
->  define PYTHON3_CREATE_PYC_FILES
->   PYTHONPATH="$(PYTHON3_PATH)" \
-> - $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
-> - compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)')"
-> + $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
-> + $(TOPDIR)/support/scripts/pycompile.py \
-> + "$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
-
- Same same.
-
->  endef
-> 
->  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
-> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-> new file mode 100755
-> index 0000000..fde711a
-> --- /dev/null
-> +++ b/support/scripts/pycompile.py
-> @@ -0,0 +1,24 @@
-> +#!/usr/bin/env python
-> +
-> +# Wrapper for python2 and python3 around compileall to raise exception
-> +# when a python byte code generation failed.
-> +#
-> +# Inspired from:
-> +#   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
-> +
-> +from __future__ import print_function
-> +import sys
-> +import py_compile
-> +import compileall
-> +
-> +class ReportProblem:
-> +    def __nonzero__(self):
-
- This could really use some comment to explain why it needs to be a class with a
-__nonzero__ member.
-
- Regards,
- Arnout
-
-> +        type, value, traceback = sys.exc_info()
-> +        if type is not None and issubclass(type, py_compile.PyCompileError):
-> +            print("Cannot compile %s" %value.file)
-> +            raise value
-> +        return 1
-> +
-> +report_problem = ReportProblem()
-> +
-> +compileall.compile_dir(sys.argv[1], quiet=report_problem)
-> 
-> Yegor
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/package/valgrind/0004-Fixes-for-musl-libc.patch b/package/valgrind/0004-Fixes-for-musl-libc.patch
+new file mode 100644
+index 0000000..a36e91f
+--- /dev/null
++++ b/package/valgrind/0004-Fixes-for-musl-libc.patch
+@@ -0,0 +1,99 @@
++From 6916cc1b02ab271f04e925b8fce130c4833b9faf Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 31 Oct 2015 19:45:04 +0100
++Subject: [PATCH] Fixes for musl libc.
++
++- add musl libc detection (prevents configure error)
++- adjust preload and symbol names (based on the OpenWrt
++  patch, see [1])
++
++[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac             | 16 ++++++++++++++--
++ coregrind/vg_preloaded.c |  2 +-
++ include/pub_tool_redir.h |  9 ++++++++-
++ 3 files changed, 23 insertions(+), 4 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 8ab7f9b..d1fa071 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1009,6 +1009,13 @@ if test x$VGCONF_PLATFORM_PRI_CAPS = xX86_SOLARIS \
++     GLIBC_VERSION="solaris"
++ fi
++ 
+++# GLIBC_VERSION is empty if a musl libc is used, so use the toolchain tuple
+++# in this case.
+++if test x$GLIBC_VERSION = x; then
+++    if $CC -dumpmachine | grep -q musl; then
+++        GLIBC_VERSION=musl
+++    fi
+++fi
++ 
++ AC_MSG_CHECKING([the glibc version])
++ 
++@@ -1064,10 +1071,15 @@ case "${GLIBC_VERSION}" in
++ 	# DEFAULT_SUPP set in host_os switch-case above.
++ 	# No other suppression file is used.
++ 	;;
+++     musl)
+++	AC_MSG_RESULT(Musl)
+++	AC_DEFINE([MUSL_LIBC], 1, [Define to 1 if you're using Musl libc])
+++	# no DEFAULT_SUPP file yet for musl libc.
+++	;;
++      2.0|2.1|*)
++ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
++-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
++-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
+++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later, uclibc,])
+++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
++ 	;;
++ esac
++ 
++diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
++index 2ea7a7a..7b51aba 100644
++--- a/coregrind/vg_preloaded.c
+++++ b/coregrind/vg_preloaded.c
++@@ -56,7 +56,7 @@
++ void VG_NOTIFY_ON_LOAD(freeres)( void );
++ void VG_NOTIFY_ON_LOAD(freeres)( void )
++ {
++-#  if !defined(__UCLIBC__) \
+++#  if !defined(__UCLIBC__) && !defined(MUSL_LIBC) \
++       && !defined(VGPV_arm_linux_android) \
++       && !defined(VGPV_x86_linux_android) \
++       && !defined(VGPV_mips32_linux_android) \
++diff --git a/include/pub_tool_redir.h b/include/pub_tool_redir.h
++index bac00d7..babcf9a 100644
++--- a/include/pub_tool_redir.h
+++++ b/include/pub_tool_redir.h
++@@ -242,8 +242,11 @@
++ /* --- Soname of the standard C library. --- */
++ 
++ #if defined(VGO_linux) || defined(VGO_solaris)
+++# if defined(MUSL_LIBC)
+++#  define  VG_Z_LIBC_SONAME  libcZdZa              // libc.*
+++#else
++ #  define  VG_Z_LIBC_SONAME  libcZdsoZa              // libc.so*
++-
+++#endif
++ #elif defined(VGO_darwin) && (DARWIN_VERS <= DARWIN_10_6)
++ #  define  VG_Z_LIBC_SONAME  libSystemZdZaZddylib    // libSystem.*.dylib
++ 
++@@ -274,7 +277,11 @@
++ /* --- Soname of the pthreads library. --- */
++ 
++ #if defined(VGO_linux)
+++# if defined(MUSL_LIBC)
+++#  define  VG_Z_LIBPTHREAD_SONAME  libcZdZa              // libc.*
+++#else
++ #  define  VG_Z_LIBPTHREAD_SONAME  libpthreadZdsoZd0     // libpthread.so.0
+++#endif
++ #elif defined(VGO_darwin)
++ #  define  VG_Z_LIBPTHREAD_SONAME  libSystemZdZaZddylib  // libSystem.*.dylib
++ #elif defined(VGO_solaris)
++-- 
++2.1.4
++
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 5849b49..46ba13e 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -12,6 +12,9 @@ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+ VALGRIND_CONF_OPTS = --disable-ubsan
+ VALGRIND_INSTALL_STAGING = YES
+ 
++# patch 0004-Fixes-for-musl-libc.patch touching configure.ac
++VALGRIND_AUTORECONF = YES
++
+ ifeq ($(BR2_GCC_ENABLE_TLS),y)
+ VALGRIND_CONF_OPTS += --enable-tls
+ else
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
