@@ -1,141 +1,45 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 09 Feb 2016 02:29:56 -0200
-Subject: [Buildroot] [PATCH 1/1] Allow imagemagick to find ghostscript
- fonts.
-Message-ID: <56b96b4422432_3e71e0793c203d6@ultri2.mail>
+Date: Tue,  9 Feb 2016 04:42:44 -0200
+Subject: [Buildroot]  [PATCH] xapp_xf86dga: fix xlib_libXaw dependency
+Message-ID: <1455000164-1743-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Make it select BR2_PACKAGE_XLIB_LIBXAW, that also selects
+BR2_PACKAGE_XLIB_LIBXT and BR2_PACKAGE_XLIB_LIBXMU
 
-I don't need this patch for my own personal use, but I took a look into it.
+Fixes:
+http://autobuild.buildroot.net/results/aee/aee4a895c74647292715705bfcdf742f3ea2f76f/
 
-On Tue, 29 Dec 2015 17:45:04 +0100, Thomas Petazzoni wrote:
-> Could you give a specific example use of imagemagick that triggers this
-> problem, so that we can reproduce the problem on our side and
-> investigate the possible solutions?
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Peter Korsgaard <jacmet@sunsite.dk>
+---
+The error message is:
+Makefile:475: *** xlib_libXaw is in the dependency chain of xapp_xf86dga that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
 
-Using this config with the master branch:
-BR2_PACKAGE_IMAGEMAGICK=y  
-BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
-BR2_PACKAGE_FREETYPE=y
-The problem can be triggered by converting any text file to ps
-$ cd /tmp ; echo -e 'text 1\ntext 2' > file.txt ; convert file.txt file.ps
+The error can reproduced with this config
+BR2_TOOLCHAIN_EXTERNAL=y # easy for toolchain w/ MMU sup.
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XAPP_XF86DGA=y
+---
+ package/x11r7/xapp_xf86dga/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-And doing this on the target works around the problem
-$ sed -e s,/usr/share/fonts/type1/gsfonts,/usr/share/fonts/gs,g -i /etc/ImageMagick-6/type-ghostscript.xml
-
-
-On Tue Jun 16 20:01:02 UTC 2015, Baruch Siach wrote:
->On Tue, Jun 16, 2015 at 02:27:23PM -0400, grepper wrote:
->> On 15/06/15 11:39 PM, Baruch Siach wrote:
->> > On Mon, Jun 15, 2015 at 10:12:26PM -0400, grepper wrote:
->> >> From: Robert Sohn <grepper@gmail.com>
->> >>
->> >> It appears that Imagemagick needs to be configured with
->> >>  --with-gs-font-dir=/usr/share/fonts/gs else it will not find
->> >> the ghostscript fonts and /etc/ImageMagick-6/type-ghostscript.xml
->> >> will contain the wrong font paths. You end up with messages like:
-
-The wrong path is the default for debian-based distros
-/usr/share/fonts/type1/gsfonts/ # debian non-x11, default for imagemagick
-/usr/share/fonts/X11/Type1/     # debian x11
-
-An alternative solution would be to have the fonts installed to this location
-+++ b/package/ghostscript-fonts/ghostscript-fonts.mk
-@@@ -13,1 -13,1 +13,1 @@@ GHOSTSCRIPT_FONTS_LICENSE_FILES = COPYI
---GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/gs
-++GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/type1/gsfonts
-
-I don't see from
-grep -w '\(gs\|ghostscript-fonts\|GHOSTSCRIPT_FONTS_\)' -R package/
-any explicit use of this path nor hard dependency.
-But changing it can potentially break packages (in runtime!) if them expect
-the fonts to be installed in the current location.
-
-Does anyone know an example of package that would break?
-
->> >> Magick: unable to read font `(null)' @ error/annotate.c/RenderFreetype/1153
->> >> They are non-fatal but could get annoying fast if you are using 'convert'
-
-The error is non-fatal in a batch conversion.
-But each error means a file failed to be converted.
-The output is not generated for the failed file.
-
->> >> on a lot of files.
->> >>
->> >> Signed-off-by: Robert Sohn <grepper@gmail.com>
->> >> ---
->> >>  package/imagemagick/imagemagick.mk | 3 ++-
->> >>  1 file changed, 2 insertions(+), 1 deletion(-)
->> >>
->> >> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
->> >> index 298d0a8..1abb2a8 100644
->> >> --- a/package/imagemagick/imagemagick.mk
->> >> +++ b/package/imagemagick/imagemagick.mk
->> >> @@ -33,7 +33,8 @@ IMAGEMAGICK_CONF_OPTS = \
->> >>  	--without-dps \
->> >>  	--without-gslib \
->> >>  	--without-fpx \
->> >> -	--without-x
->> >> +	--without-x \
->> >> +	--with-gs-font-dir=/usr/share/fonts/gs
-
-Configuring unconditionally does not seem so bad in this case, IMO.
-The configured path will be added to an XML that will be used at runtime.
-If freetype support is not compiled in or the fonts are not installed,
-/convert/ would fail anyway.
-
->> > 
->> > These fonts are only available when the ghostscript-fonts is built, isn't it? 
-
-Yes.
-
->> > If so, then this should be
->> > 
->> > ifeq ($(BR2_PACKAGE_GHOSTSCRIPT_FONTS),y)
->> > IMAGEMAGICK_CONF_OPTS += --with-gs-font-dir=/usr/share/fonts/gs
->> > endif
-
-BR2_PACKAGE_FREETYPE is also needed.
-
->> > 
->> > Or maybe we should use $(GHOSTSCRIPT_FONTS_TARGET_DIR) here, instead of 
->> > duplicating it?
-
-It seems good practice to me.
-But we can't use GHOSTSCRIPT_FONTS_TARGET_DIR as is, it is prefixed with
-TARGET_DIR. We could create an auxiliary symbol
-
-+++ b/package/ghostscript-fonts/ghostscript-fonts.mk
-@@@ -13,1 -13,1 +13,2 @@@ GHOSTSCRIPT_FONTS_LICENSE_FILES = COPYI
---GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/gs
-++GHOSTSCRIPT_FONTS_DIR = /usr/share/fonts/gs
-++GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/$(GHOSTSCRIPT_FONTS_DIR)
-+++ b/package/imagemagick/imagemagick.mk
-@@@ -37,1 -37,1 +37,1 @@@ IMAGEMAGICK_CONF_OPTS = 
---	--with-gs-font-dir=/usr/share/fonts/gs
-++	--with-gs-font-dir=$(GHOSTSCRIPT_FONTS_DIR)
-
->> 
->> Hm, the problem is that the issue will remain if ghostscript-fonts are
->> not installed. I don't know the solution to that.
->
->The usual way to set a dependency package is to add a 'select' statement for 
->that package in Config.in. In this case ghostscript-fonts is not a hard 
->dependency, because imagemagick is quite functional without it, and its size 
->is non negligible. Maybe adding a comment to the help text in Config.in would 
->suffice.
->
->What do others think?
-
-Adding a comment to the Config.in sounds reasonable to me.
-One would need both BR2_PACKAGE_FREETYPE as optional build dependency and
-BR2_PACKAGE_GHOSTSCRIPT_FONTS as optional runtime dependency to get the
-conversion txt -> ps to work.
-
-Regards,
-Ricardo
+diff --git a/package/x11r7/xapp_xf86dga/Config.in b/package/x11r7/xapp_xf86dga/Config.in
+index 8a13bd4..bd128c0 100644
+--- a/package/x11r7/xapp_xf86dga/Config.in
++++ b/package/x11r7/xapp_xf86dga/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_XAPP_XF86DGA
+ 	bool "xf86dga"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXXF86DGA
++	select BR2_PACKAGE_XLIB_LIBXAW
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  test program for the XFree86-DGA extension
+-- 
+1.9.1
