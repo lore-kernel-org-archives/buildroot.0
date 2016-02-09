@@ -1,118 +1,140 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Feb 2016 23:13:59 +0100
-Subject: [Buildroot] [PATCH v2] Don't build host-cmake if it is
- available on the build host
-In-Reply-To: <56B92945.1040705@lucaceresoli.net>
-References: <1454670476-20635-1-git-send-email-luca@lucaceresoli.net>
- <20160208190134.GG3436@free.fr> <56B92945.1040705@lucaceresoli.net>
-Message-ID: <56BA64A7.3010303@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 9 Feb 2016 23:16:30 +0100
+Subject: [Buildroot] [PATCH v2] valgrind: fix musl compile
+In-Reply-To: <56BA5D92.2090005@mind.be>
+References: <1455051210-20712-1-git-send-email-ps.report@gmx.net>
+ <56BA5D92.2090005@mind.be>
+Message-ID: <20160209231630.2f99e37f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09-02-16 00:48, Luca Ceresoli wrote:
-> Dear Yann,
+Hello Arnout,
+
+On Tue, 9 Feb 2016 22:43:46 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 09-02-16 21:53, Peter Seiderer wrote:
+> > Add musl libc detection (based on suggestions by Romain Naour and
+> > Arnout Vandecappelle) and add some tweaks for musl support (based
+> > on OpenWRT patch [1]).
+> > 
+> > Fixes ([2]):
+> >   checking the glibc version... unsupported version
+> >   configure: error: Valgrind requires glibc version 2.2 or later
+> > 
+> > Patch suggested upstream (see [3]).
+> > 
+> > [1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
+> > [2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
+> > [3] https://bugs.kde.org/show_bug.cgi?id=359202
+> > 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Changes v1 -> v2:
+> >   - add proper musl libc detection (suggested by Romain Naour and
+> >     Arnout Vandecappelle)
+> [snip]
+> > ++     musl)
+> > ++	AC_MSG_RESULT(Musl)
+> > ++	AC_DEFINE([MUSL_LIBC], 1, [Define to 1 if you're using Musl libc])
+> > ++	# no DEFAULT_SUPP file yet for musl libc.
+> > ++	;;
+> > +      2.0|2.1|*)
+> > + 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
+> > + 	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
+> > +-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
+> > ++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
 > 
-> Yann E. MORIN wrote:
->> Luca, All,
->>
->> On 2016-02-05 12:07 +0100, Luca Ceresoli spake thusly:
-[snip]
->>> Besides, among all the cmake packages currently in Buildroot, the
->>> highest version mentioned in cmake_minimum_required() is 3.0 (the
->>> grantlee package). Thus 3.0 should be enough to build all current
->>> packages. Of course, with the addition or bump of packages, the
->>> minimum required version will raise.
->>
->> Would it make sense to have the cmake-package infra check for that?
-> 
-> Sure it would. But I don't know how to do it properly.
-> 
-> Simply grepping CMakeLists.txt is not reliable: some packages do
-> 
->   cmake_minimum_required(VERSION ${SOME_COMPUTED_VARIABLE})
-> 
-> Probably the only solid way to obtain the minimum required version would
-> be to launch cmake and let it tell us. But I had a very quick look and
-> I didn't find any way to ask it such information.
+>  Actuallly, uClibc was already supported as well :-)
 
- I think the best way to check is to make sure there is an autobuilder with
-cmake 3.0. Of course, when we bump the minimum required version, that
-autobuilder should be bumped as well. Thomas, do you see this feasible?
-[snip]
->>> diff --git a/support/dependencies/check-host-cmake.mk
->>> b/support/dependencies/check-host-cmake.mk
->>> new file mode 100644
->>> index 0000000..fe16322
->>> --- /dev/null
->>> +++ b/support/dependencies/check-host-cmake.mk
->>> @@ -0,0 +1,6 @@
->>> +CMAKE ?= cmake
->>
->> At first, I was a bit worried that we use just 'CMAKE' as the variable
->> name.
->>
->> But in retrospect, it seems you want to allow the user to specify his
->> own locally-installed cmake, right? Is so, maybe you could add that to
->> the manual (chapter 8.6, Environment variables).
-> 
-> "you want to allow" is an overstatement. What happened is that I lazily
-> copied check-host-tar.sh, which happens to have the same construct. I
-> don't know whether it was done on purpose there, but I realized being
-> able to do 'make CMAKE=/my/dirty/cmake' might be useful, e.g. if one
-> is hacking cmake itself and wants to use a specific version without
-> tweaking PATH.
-
- Like, for example, on an autobuilder with cmake 3.0 :-)
-
-
-[snip]
->>> +major_min=3
->>> +minor_min=0
->>> +if [ $major -gt $major_min ]; then
->>> +    echo $cmake
->>> +else
->>> +    if [ $major -eq $major_min -a $minor -ge $minor_min ]; then
->>
->> Damn, I would have suggested you make it a single condition:
->>
->>      if [ ${major} -gt ${major_min} -o \
->>           ${major} -eq ${major_min} -a ${minor} -ge ${minor_min} ]; then
-> 
-> It's nicer and cleaner. However it would produce fairly long lines when
-> comparing three or more numbers. E.g. for asciidoc we want at least
-> version >= 8.6.3.
-> 
-> I wonder whether it would make sense to extract a shell function to
-> compare a version number and reuse it in all check-host-*.sh, and
-> possibly elsewhere. But that's for another day.
-
- It's something that would fit nicely in the concept of 'shell modules' that
-Samuel introduces as part of the fix-rpath series [1].
-
-
- Regards,
- Arnout
-
-
-[1] http://patchwork.ozlabs.org/patch/576597/
+O.k, will add uclibc as well...
 
 > 
->> But since what you did is what is already done for asciidoc and tar, I
->> guess that's OK.
->>
->> Yet, I prefer we use ${..} to expand variables, it is /cleaner/...
+> > + 	;;
+> > + esac
+> > + 
+> > +diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
+> > +index 2ea7a7a..e49c832 100644
+> > +--- a/coregrind/vg_preloaded.c
+> > ++++ b/coregrind/vg_preloaded.c
+> > +@@ -56,7 +56,7 @@
+> > + void VG_NOTIFY_ON_LOAD(freeres)( void );
+> > + void VG_NOTIFY_ON_LOAD(freeres)( void )
+> > + {
+> > +-#  if !defined(__UCLIBC__) \
+> > ++#  if !defined(__UCLIBC__) && defined(__GLIBC__) \
 > 
-> Sure, will do.
+>  Adding defined(__GLIBC__) effectively excludes android (bionic), doesn't it?
+> 
+> > +       && !defined(VGPV_arm_linux_android) \
+> > +       && !defined(VGPV_x86_linux_android) \
+> > +       && !defined(VGPV_mips32_linux_android) \
+> > +diff --git a/include/pub_tool_redir.h b/include/pub_tool_redir.h
+> > +index bac00d7..b8cd97e 100644
+> > +--- a/include/pub_tool_redir.h
+> > ++++ b/include/pub_tool_redir.h
+> > +@@ -242,8 +242,11 @@
+> > + /* --- Soname of the standard C library. --- */
+> > + 
+> > + #if defined(VGO_linux) || defined(VGO_solaris)
+> > ++# if defined(__GLIBC__) || defined(__UCLIBC__)
+> 
+>  AFAICS, on solaris neither of these is defined, so that's probably not good
+> either. I guess it's better to revert the condition and check on musl instead.
+
+O.k, will do...
+
+> 
+> > + #  define  VG_Z_LIBC_SONAME  libcZdsoZa              // libc.so*
+> > +-
+> > ++#else
+> > ++#  define  VG_Z_LIBC_SONAME  libcZdZa              // libc.*
+> > ++#endif
+> > + #elif defined(VGO_darwin) && (DARWIN_VERS <= DARWIN_10_6)
+> > + #  define  VG_Z_LIBC_SONAME  libSystemZdZaZddylib    // libSystem.*.dylib
+> > + 
+> > +@@ -274,7 +277,11 @@
+> > + /* --- Soname of the pthreads library. --- */
+> > + 
+> > + #if defined(VGO_linux)
+> > ++# if defined(__GLIBC__) || defined(__UCLIBC__)
+> 
+>  Same here.
 > 
 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+O.k, will do...
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+> 
+> > + #  define  VG_Z_LIBPTHREAD_SONAME  libpthreadZdsoZd0     // libpthread.so.0
+> > ++#else
+> > ++#  define  VG_Z_LIBPTHREAD_SONAME  libcZdZa              // libc.*
+> > ++#endif
+> > + #elif defined(VGO_darwin)
+> > + #  define  VG_Z_LIBPTHREAD_SONAME  libSystemZdZaZddylib  // libSystem.*.dylib
+> > + #elif defined(VGO_solaris)
+> > +-- 
+> > +2.1.4
+> > +
+> > diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> > index 5849b49..46ba13e 100644
+> > --- a/package/valgrind/valgrind.mk
+> > +++ b/package/valgrind/valgrind.mk
+> > @@ -12,6 +12,9 @@ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+> >  VALGRIND_CONF_OPTS = --disable-ubsan
+> >  VALGRIND_INSTALL_STAGING = YES
+> >  
+> > +# patch 0004-Fixes-for-musl-libc.patch touching configure.ac
+> > +VALGRIND_AUTORECONF = YES
+> > +
+> >  ifeq ($(BR2_GCC_ENABLE_TLS),y)
+> >  VALGRIND_CONF_OPTS += --enable-tls
+> >  else
+> > 
+> 
+> 
