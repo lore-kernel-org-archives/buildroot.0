@@ -1,45 +1,38 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue,  9 Feb 2016 04:42:44 -0200
-Subject: [Buildroot]  [PATCH] xapp_xf86dga: fix xlib_libXaw dependency
-Message-ID: <1455000164-1743-1-git-send-email-ricardo.martincoski@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  9 Feb 2016 07:46:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kbd: Fix broken Makefile when
+	host-gettext was built before kbd
+Message-ID: <1455000377-32030-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make it select BR2_PACKAGE_XLIB_LIBXAW, that also selects
-BR2_PACKAGE_XLIB_LIBXT and BR2_PACKAGE_XLIB_LIBXMU
+This patch uses the same solution used for util-linux:
+https://git.busybox.net/buildroot/commit/package/util-linux?id=71f279f9a2bd3f086f3d31fa5a669d3f638bee99
 
-Fixes:
-http://autobuild.buildroot.net/results/aee/aee4a895c74647292715705bfcdf742f3ea2f76f/
+To trigger the bug just build host-gettext before kbd.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
+Fixes
+http://autobuild.buildroot.net/results/87e/87ea83ae4e7b7640651acd5031a624ca42e5b348/
+http://autobuild.buildroot.net/results/532/532684b98e050cf5b4c50786bc9e8825eab21f97/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-The error message is:
-Makefile:475: *** xlib_libXaw is in the dependency chain of xapp_xf86dga that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
+ package/kbd/kbd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-The error can reproduced with this config
-BR2_TOOLCHAIN_EXTERNAL=y # easy for toolchain w/ MMU sup.
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XAPP_XF86DGA=y
----
- package/x11r7/xapp_xf86dga/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/x11r7/xapp_xf86dga/Config.in b/package/x11r7/xapp_xf86dga/Config.in
-index 8a13bd4..bd128c0 100644
---- a/package/x11r7/xapp_xf86dga/Config.in
-+++ b/package/x11r7/xapp_xf86dga/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_XAPP_XF86DGA
- 	bool "xf86dga"
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXXF86DGA
-+	select BR2_PACKAGE_XLIB_LIBXAW
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  test program for the XFree86-DGA extension
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index 8da153f..9dabce1 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -17,4 +17,6 @@ KBD_LICENSE = GPLv2+
+ KBD_LICENSE_FILES = COPYING
+ KBD_AUTORECONF = YES
+ 
++KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
++
+ $(eval $(autotools-package))
 -- 
-1.9.1
+2.7.0
