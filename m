@@ -1,37 +1,37 @@
-From: Neha Bairathi <Neha.Bairathi@imgtec.com>
-Date: Tue, 9 Feb 2016 18:47:37 +0530
-Subject: [Buildroot] [PATCH 1/1] libuci: correct lua path
-Message-ID: <1455023857-27794-1-git-send-email-Neha.Bairathi@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 9 Feb 2016 10:18:48 -0300
+Subject: [Buildroot] [PATCH] webkitgtk24: fix building with rpi egl/gles
+In-Reply-To: <20160209114533.159871e2@free-electrons.com>
+References: <1454971920-18533-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160209114533.159871e2@free-electrons.com>
+Message-ID: <56B9E738.2010107@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-LUAPATH is used as the path for installing lua binding.
-As buildroot specifies the install prefix, STAGING_DIR gets
-appended to TARGET_DIR which is incorrect path for installation,
-so use relative path.
+On 09/02/16 07:45, Thomas Petazzoni wrote:
 
-Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
-Signed-off-by: Neha Bairathi <Neha.Bairathi@imgtec.com>
----
- package/libuci/libuci.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Isn't it possible to use pkg-config ? We install egl.pc and glesv2.pc
+> from all our OpenGL implementations specifically for this reason.
+>
+> Thanks!
+>
+> Thomas
 
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index a78048d..8c060d5 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -13,7 +13,7 @@ LIBUCI_DEPENDENCIES = libubox
- ifeq ($(BR2_PACKAGE_LUA_5_1),y)
- LIBUCI_DEPENDENCIES += lua
- LIBUCI_CONF_OPTS += -DBUILD_LUA=ON \
--	-DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
-+	-DLUAPATH=/usr/lib/lua/5.1 \
- 	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
- else
- LIBUCI_CONF_OPTS += -DBUILD_LUA=OFF
--- 
-2.6.2
+Hi.
+Ehhh sure, though i did find it odd that many others users of these 
+don't do it, like kodi, gst-omx, libcec and gst1-plugins-bad.
+
+Care to look at http://patchwork.ozlabs.org/patch/564312/ as well since 
+it fixes the other webkitgtk24 build failure? (unknown/dependencies, 
+plus it's also nice to save users some crazyness).
+
+http://patchwork.ozlabs.org/patch/564313/ might be nice as well to 
+legacy the midori https option since it becomes redundant.
+
+(these two are backports of 2.10.x which doesn't make sense to submit 
+until libgtk3 is bumped/wayland fixed).
+
+Regards.
