@@ -1,167 +1,56 @@
-From: =?UTF-8?q?Andr=C3=A9=20Hentschel?= <nerv@dawncrow.de>
-Date: Tue,  9 Feb 2016 22:10:58 +0100
-Subject: [Buildroot] [PATCHv4] wine: Bump to version 1.8.1
-Message-ID: <1455052258-5463-1-git-send-email-nerv@dawncrow.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 9 Feb 2016 22:17:18 +0100
+Subject: [Buildroot] Report of Buildroot Developer Days FOSDEM 2016
+Message-ID: <56BA575E.40007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bumping to stable version 1.8.1
+ Hi all,
 
-Upstreamed patch is finally dropped.
+ Last week Monday and Tuesday we had the Buildroot Developer Days. You can find
+a report on the wiki [1].
 
-Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
----
- ...llow-to-override-the-location-of-the-conf.patch | 109 ---------------------
- package/wine/wine.hash                             |   2 +-
- package/wine/wine.mk                               |   4 +-
- 3 files changed, 2 insertions(+), 113 deletions(-)
- delete mode 100644 package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
+ The main discussion point at this meeting was the launch of the Buildroot
+Foundation, a not-for-profit to support buildroot. Maxime Hadjinlian is handling
+the paperwork as we speak. Once the dust settles, you can expect another
+announcement about how you can become a member of the Foundation.
 
-diff --git a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch b/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
-deleted file mode 100644
-index 9fc9f64..0000000
---- a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
-+++ /dev/null
-@@ -1,109 +0,0 @@
--From 18078feecc8da0ab2693d0bb5423489fa62920ef Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Tue, 22 Dec 2015 21:25:19 +0100
--Subject: [PATCH] configure: allow to override the location of the *-config
-- scripts
--
--Currently, the configure.ac calls a number of *-config scripts to get
--details about installed libraries. It assumes that those *-config
--scripts are readily available in the PATH.
--
--While this is true in most situations, it may not be true when
--cross-compiling: you may have the *-config scripts matching the target
--environment in a location that isn't in the PATH. For such situations,
--it is very useful to be able to override the location of such *-config
--scripts using environment variables.
--
--The proposed changes does not introduce any functional difference if
--you don't pass those new environment variables: if they are not
--passed, it falls back to the current value.
--
--However, if those *_CONFIG variables are passed, then they are used as
--the path to the corresponding *-config script.
--
--The ${FOO_CONFIG:-foo-config} construct is POSIX compliant, so it is
--available in all shells.
--
--(Patch submitted upstream.)
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure.ac | 20 ++++++++++----------
-- 1 file changed, 10 insertions(+), 10 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 86f12c5..37ceab5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1191,7 +1191,7 @@ dnl **** Check for libxml2 ****
-- if test "x$with_xml" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(XML2,[libxml-2.0],[-lxml2],
---                       [`xml2-config --cflags 2>/dev/null`],[`xml2-config --libs 2>/dev/null`],
--+                       [`${XML2_CONFIG:-xml2-config} --cflags 2>/dev/null`],[`${XML2_CONFIG:-xml2-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADERS([libxml/parser.h libxml/xmlsave.h libxml/SAX2.h])
--         if test "$ac_cv_header_libxml_parser_h" = "yes" -a "$ac_cv_header_libxml_xmlsave_h" = "yes" -a "$ac_cv_header_libxml_SAX2_h" = "yes"
--         then
--@@ -1220,7 +1220,7 @@ WINE_WARNING_WITH(xml,[test "$ac_cv_lib_xml2_xmlParseMemory" != "yes"],
-- if test "x$with_xslt" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(XSLT,[libxslt],[-lxml2],
---                       [`xslt-config --cflags 2>/dev/null`],[`xslt-config --libs 2>/dev/null`],
--+                       [`${XSLT_CONFIG:-xslt-config} --cflags 2>/dev/null`],[`${XSLT_CONFIG:-xslt-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADERS([libxslt/pattern.h libxslt/transform.h],,,
--         [#ifdef HAVE_LIBXSLT_PATTERN_H
-- # include <libxslt/pattern.h>
--@@ -1291,7 +1291,7 @@ WINE_NOTICE_WITH(curses,[test "x$ac_cv_lib_soname_curses$ac_cv_lib_soname_ncurse
-- dnl **** Check for SANE ****
-- if test "x$with_sane" != "xno"
-- then
---    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`],
--+    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`],
--         [AC_CHECK_HEADER(sane/sane.h,
--             [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
--             [SANE_CFLAGS=""])])
--@@ -1311,7 +1311,7 @@ dnl **** Check for libgphoto2 ****
-- if test "x$with_gphoto" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(GPHOTO2,[libgphoto2],[-lgphoto2],
---                       [`gphoto2-config --cflags 2>/dev/null`],[`gphoto2-config --libs 2>/dev/null`],
--+                       [`${GPHOTO2_CONFIG:-gphoto2-config} --cflags 2>/dev/null`],[`${GPHOTO2_CONFIG:-gphoto2-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADER(gphoto2-camera.h,
--                         [AC_CHECK_LIB(gphoto2,gp_camera_new,
--                                       [AC_DEFINE(HAVE_GPHOTO2, 1, [Define if we have the libgphoto2 development environment])],
--@@ -1319,8 +1319,8 @@ then
--                                       [$GPHOTO2_LIBS])],
--                         [GPHOTO2_LIBS=""; GPHOTO2_CFLAGS=""])])
--     WINE_PACKAGE_FLAGS(GPHOTO2_PORT,[libgphoto2_port],[-lgphoto2_port],
---                       [`gphoto2-port-config --cflags 2>/dev/null`],
---                       [`gphoto2-port-config --libs 2>/dev/null`],
--+                       [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --cflags 2>/dev/null`],
--+                       [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --libs 2>/dev/null`],
--         [AC_CHECK_HEADER(gphoto2-port.h,
--                         [AC_CHECK_LIB(gphoto2_port,gp_port_info_list_new,
--                                       [AC_DEFINE(HAVE_GPHOTO2_PORT, 1, [Define if we have the libgphoto2_port development environment])],
--@@ -1382,8 +1382,8 @@ dnl **** Check for FreeType 2 ****
-- if test "x$with_freetype" != "xno"
-- then
--     WINE_PACKAGE_FLAGS(FREETYPE,[freetype2],[-lfreetype],
---                       [`(freetype-config --cflags || freetype2-config --cflags) 2>/dev/null`],
---                       [`(freetype-config --libs || freetype2-config --libs) 2>/dev/null`],
--+                       [`(${FREETYPE_CONFIG:-freetype-config} --cflags || ${FREETYPE2_CONFIG:-freetype2-config} --cflags) 2>/dev/null`],
--+                       [`(${FREETYPE_CONFIG:-freetype-config} --libs || ${FREETYPE2_CONFIG:-freetype2-config} --libs) 2>/dev/null`],
--         [AC_CHECK_HEADERS([ft2build.h])
--         if test "$ac_cv_header_ft2build_h" = "yes"
--         then
--@@ -1538,8 +1538,8 @@ AC_SUBST(CUPS_CFLAGS,"")
-- if test "x$with_cups" != "xno"
-- then
--     ac_save_CPPFLAGS="$CPPFLAGS"
---    ac_cups_cflags=`cups-config --cflags 2>/dev/null`
---    ac_cups_libs=`cups-config --ldflags 2>/dev/null`
--+    ac_cups_cflags=`${CUPS_CONFIG:-cups-config} --cflags 2>/dev/null`
--+    ac_cups_libs=`${CUPS_CONFIG:-cups-config} --ldflags 2>/dev/null`
--     CPPFLAGS="$CPPFLAGS $ac_cups_cflags"
--     AC_CHECK_HEADERS(cups/cups.h,
--             [WINE_CHECK_SONAME(cups,cupsGetDefault,
---- 
--2.6.4
--
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 80c0f68..31db6c0 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 f33b45c18112b2071fbf9edee0e8c575407f9e2a9855ca4ee918ed33efa7c6f4 wine-1.8.tar.bz2
-+sha256 149ad3daaf8593b36c5c061285df0ec2a25e20ea48c61323be91088c4d22ca97 wine-1.8.1.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index 2cd5c30..fc04027 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,14 +4,12 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.8
-+WINE_VERSION = 1.8.1
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
- WINE_LICENSE_FILES = COPYING.LIB LICENSE
- WINE_DEPENDENCIES = host-bison host-flex host-wine
--# For 0001-sane-config-fix.patch
--WINE_AUTORECONF = YES
- 
- # Wine needs its own directory structure and tools for cross compiling
- WINE_CONF_OPTS = \
+ Other important discussion points:
+
+- Participation in GSoC. There is a wiki page [2] to gather the ideas. Deadline
+for proposals is February 19.
+
+- On the testing front, no progress has been made except that the continuous
+builds of the defconfigs have moved to Travis CI [3].
+
+- We have clarified the license of package patches [4].
+
+There also has been work on improving the relocatable toolchain support (a new
+patch series has been posted) and on musl/gettext handling (this has been
+merged). But we haven't done as much hacking as usual. Also the list of pending
+patches is still over 300.
+
+
+ Our next events are the Buildroot Summer Camp in Toulouse beginning of July,
+and the Buildroot Developer Meeting after ELC-E in Berlin on October 8 and 9.
+But before that, don't forget to join the Buildroot Foundation!
+
+
+ Regards,
+ Arnout
+
+
+[1] http://elinux.org/Buildroot:DeveloperDaysFOSDEM2016
+[2] http://elinux.org/Buildroot:GSoC2016Ideas
+[3] https://travis-ci.org/buildroot/buildroot-defconfig-testing/builds
+[4] http://patchwork.ozlabs.org/patch/576726/
 -- 
-1.9.1
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
