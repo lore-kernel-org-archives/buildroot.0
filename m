@@ -1,159 +1,108 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  9 Feb 2016 23:53:21 +0100
-Subject: [Buildroot] [PATCH v3] valgrind: fix musl compile
-Message-ID: <1455058401-28034-1-git-send-email-ps.report@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Feb 2016 00:07:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix dbus activation
+In-Reply-To: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
+References: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
+Message-ID: <56BA7138.6000408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add musl libc detection (based on suggestions by Romain Naour and
-Arnout Vandecappelle) and add some tweaks for musl support (based
-on OpenWRT patch [1]).
+On 08-02-16 23:50, Gabe Evans wrote:
+> Various DBus activated services fail to start with errors similar to:
+> 
+>   Unit dbus-org.freedesktop.hostname1.service failed to load: File exists.
+> 
+> The message itself is rather vague and can be seen as a warning in
+> systemd-networkd logs. Meanwhile, tools like hostnamectl don't work
+> at all.
+> 
+> The post-install target hook SYSTEMD_SANITIZE_PATH_IN_UNITS was replacing
+> symlinks with duplicate files. The sed command could have used
+> --follow-symlinks to avoid this 
 
-Fixes ([2]):
-  checking the glibc version... unsupported version
-  configure: error: Valgrind requires glibc version 2.2 or later
+ Or better yet, add -type f to the find command.
 
-Patch suggested upstream (see [3]).
+> but I instead chose to remove the hook
+> since this fix doesn't seem to be needed anymore.
+> 
+> Some configure options are also removed:
+> 
+>  * --with-dbuspolicydir, --with-dbussessionservicedir, and
+>    --with-dbussystemservicedir are no longer needed since these are
+>    defaults in recent releases.
+> 
+>  * --disable-dbus has no effect when combined with --disable-tests. The
+>    option itself only applies to tests, not the runtime.
 
-[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
-[2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
-[3] https://bugs.kde.org/show_bug.cgi?id=359202
+ This part really should have been in a separate patch, with as subject
+"systemd: remove redundant configure options".
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v2 -> v3:
-  - change valgrind patch define logic (suggested by Arnout Vandecappelle)
+ Still, this patch gets my
 
-Changes v1 -> v2:
-  - add proper musl libc detection (suggested by Romain Naour and
-    Arnout Vandecappelle)
----
- package/valgrind/0004-Fixes-for-musl-libc.patch | 99 +++++++++++++++++++++++++
- package/valgrind/valgrind.mk                    |  3 +
- 2 files changed, 102 insertions(+)
- create mode 100644 package/valgrind/0004-Fixes-for-musl-libc.patch
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ (checked that there is not HOST_DIR reference and that the dbus paths are still
+correct).
 
-diff --git a/package/valgrind/0004-Fixes-for-musl-libc.patch b/package/valgrind/0004-Fixes-for-musl-libc.patch
-new file mode 100644
-index 0000000..a36e91f
---- /dev/null
-+++ b/package/valgrind/0004-Fixes-for-musl-libc.patch
-@@ -0,0 +1,99 @@
-+From 6916cc1b02ab271f04e925b8fce130c4833b9faf Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sat, 31 Oct 2015 19:45:04 +0100
-+Subject: [PATCH] Fixes for musl libc.
-+
-+- add musl libc detection (prevents configure error)
-+- adjust preload and symbol names (based on the OpenWrt
-+  patch, see [1])
-+
-+[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ configure.ac             | 16 ++++++++++++++--
-+ coregrind/vg_preloaded.c |  2 +-
-+ include/pub_tool_redir.h |  9 ++++++++-
-+ 3 files changed, 23 insertions(+), 4 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 8ab7f9b..d1fa071 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1009,6 +1009,13 @@ if test x$VGCONF_PLATFORM_PRI_CAPS = xX86_SOLARIS \
-+     GLIBC_VERSION="solaris"
-+ fi
-+ 
-++# GLIBC_VERSION is empty if a musl libc is used, so use the toolchain tuple
-++# in this case.
-++if test x$GLIBC_VERSION = x; then
-++    if $CC -dumpmachine | grep -q musl; then
-++        GLIBC_VERSION=musl
-++    fi
-++fi
-+ 
-+ AC_MSG_CHECKING([the glibc version])
-+ 
-+@@ -1064,10 +1071,15 @@ case "${GLIBC_VERSION}" in
-+ 	# DEFAULT_SUPP set in host_os switch-case above.
-+ 	# No other suppression file is used.
-+ 	;;
-++     musl)
-++	AC_MSG_RESULT(Musl)
-++	AC_DEFINE([MUSL_LIBC], 1, [Define to 1 if you're using Musl libc])
-++	# no DEFAULT_SUPP file yet for musl libc.
-++	;;
-+      2.0|2.1|*)
-+ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
-+-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
-+-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
-++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later, uclibc,])
-++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
-+ 	;;
-+ esac
-+ 
-+diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
-+index 2ea7a7a..7b51aba 100644
-+--- a/coregrind/vg_preloaded.c
-++++ b/coregrind/vg_preloaded.c
-+@@ -56,7 +56,7 @@
-+ void VG_NOTIFY_ON_LOAD(freeres)( void );
-+ void VG_NOTIFY_ON_LOAD(freeres)( void )
-+ {
-+-#  if !defined(__UCLIBC__) \
-++#  if !defined(__UCLIBC__) && !defined(MUSL_LIBC) \
-+       && !defined(VGPV_arm_linux_android) \
-+       && !defined(VGPV_x86_linux_android) \
-+       && !defined(VGPV_mips32_linux_android) \
-+diff --git a/include/pub_tool_redir.h b/include/pub_tool_redir.h
-+index bac00d7..babcf9a 100644
-+--- a/include/pub_tool_redir.h
-++++ b/include/pub_tool_redir.h
-+@@ -242,8 +242,11 @@
-+ /* --- Soname of the standard C library. --- */
-+ 
-+ #if defined(VGO_linux) || defined(VGO_solaris)
-++# if defined(MUSL_LIBC)
-++#  define  VG_Z_LIBC_SONAME  libcZdZa              // libc.*
-++#else
-+ #  define  VG_Z_LIBC_SONAME  libcZdsoZa              // libc.so*
-+-
-++#endif
-+ #elif defined(VGO_darwin) && (DARWIN_VERS <= DARWIN_10_6)
-+ #  define  VG_Z_LIBC_SONAME  libSystemZdZaZddylib    // libSystem.*.dylib
-+ 
-+@@ -274,7 +277,11 @@
-+ /* --- Soname of the pthreads library. --- */
-+ 
-+ #if defined(VGO_linux)
-++# if defined(MUSL_LIBC)
-++#  define  VG_Z_LIBPTHREAD_SONAME  libcZdZa              // libc.*
-++#else
-+ #  define  VG_Z_LIBPTHREAD_SONAME  libpthreadZdsoZd0     // libpthread.so.0
-++#endif
-+ #elif defined(VGO_darwin)
-+ #  define  VG_Z_LIBPTHREAD_SONAME  libSystemZdZaZddylib  // libSystem.*.dylib
-+ #elif defined(VGO_solaris)
-+-- 
-+2.1.4
-+
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 5849b49..46ba13e 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -12,6 +12,9 @@ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
- VALGRIND_CONF_OPTS = --disable-ubsan
- VALGRIND_INSTALL_STAGING = YES
- 
-+# patch 0004-Fixes-for-musl-libc.patch touching configure.ac
-+VALGRIND_AUTORECONF = YES
-+
- ifeq ($(BR2_GCC_ENABLE_TLS),y)
- VALGRIND_CONF_OPTS += --enable-tls
- else
+
+ If you repost as two patches, you can carry my acked/tested tags.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+> ---
+>  package/systemd/systemd.mk | 12 +-----------
+>  1 file changed, 1 insertion(+), 11 deletions(-)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index e432069..05121cf 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -32,14 +32,10 @@ SYSTEMD_CONF_OPTS += \
+>  	--disable-selinux \
+>  	--disable-pam \
+>  	--disable-libcryptsetup \
+> -	--with-dbuspolicydir=/etc/dbus-1/system.d \
+> -	--with-dbussessionservicedir=/usr/share/dbus-1/services \
+> -	--with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+>  	--disable-efi \
+>  	--disable-gnuefi \
+>  	--disable-ldconfig \
+>  	--disable-tests \
+> -	--disable-dbus \
+>  	--without-python
+>  
+>  SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
+> @@ -150,16 +146,10 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+>  	touch $(TARGET_DIR)/etc/machine-id
+>  endef
+>  
+> -define SYSTEMD_SANITIZE_PATH_IN_UNITS
+> -	find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
+> -		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
+> -endef
+> -
+>  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+>  	SYSTEMD_INSTALL_INIT_HOOK \
+>  	SYSTEMD_INSTALL_MACHINEID_HOOK \
+> -	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
+> -	SYSTEMD_SANITIZE_PATH_IN_UNITS
+> +	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+>  
+>  define SYSTEMD_USERS
+>  	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
+> 
+
+
 -- 
-2.1.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
