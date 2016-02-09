@@ -1,104 +1,141 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Mon, 8 Feb 2016 21:23:54 -0500
-Subject: [Buildroot] [PATCH v2 10/18] erlang-p1_stun: bump to version
-	0.9.0
-In-Reply-To: <56B67925.6050606@gmail.com>
-References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
- <56B67925.6050606@gmail.com>
-Message-ID: <CA+-urNRqPcnhm72iVsQVVPhh5JwyHf4X_GBg8=XH9TqdAtkn1Q@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 09 Feb 2016 02:29:56 -0200
+Subject: [Buildroot] [PATCH 1/1] Allow imagemagick to find ghostscript
+ fonts.
+Message-ID: <56b96b4422432_3e71e0793c203d6@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Hello all,
 
-On Sat, Feb 6, 2016 at 5:52 PM, Romain Naour <romain.naour@gmail.com> wrote:
-> Hi Frank, All,
->
-> Le 02/02/2016 20:57, Frank Hunleth a ?crit :
->> As part of the version change, the package name changed to use an
->> underscore rather than a hyphen. Fortunately, the name change doesn't
->> affect the Config.in option, so no legacy handling is needed.
->
-> I don't understand why we need to rename the Buildroot package here.
+I don't need this patch for my own personal use, but I took a look into it.
 
-I renamed it for consistency with upstream. However, now that I look
-into it, the rest of the erlang-p1-* packages could be renamed
-erlang-p1_* by the same logic. I think that I'll revert the renaming
-here and bump the version rather than tackling everything in this
-patch set.
+On Tue, 29 Dec 2015 17:45:04 +0100, Thomas Petazzoni wrote:
+> Could you give a specific example use of imagemagick that triggers this
+> problem, so that we can reproduce the problem on our side and
+> investigate the possible solutions?
 
-Frank
+Using this config with the master branch:
+BR2_PACKAGE_IMAGEMAGICK=y  
+BR2_PACKAGE_GHOSTSCRIPT_FONTS=y
+BR2_PACKAGE_FREETYPE=y
+The problem can be triggered by converting any text file to ps
+$ cd /tmp ; echo -e 'text 1\ntext 2' > file.txt ; convert file.txt file.ps
 
+And doing this on the target works around the problem
+$ sed -e s,/usr/share/fonts/type1/gsfonts,/usr/share/fonts/gs,g -i /etc/ImageMagick-6/type-ghostscript.xml
+
+
+On Tue Jun 16 20:01:02 UTC 2015, Baruch Siach wrote:
+>On Tue, Jun 16, 2015 at 02:27:23PM -0400, grepper wrote:
+>> On 15/06/15 11:39 PM, Baruch Siach wrote:
+>> > On Mon, Jun 15, 2015 at 10:12:26PM -0400, grepper wrote:
+>> >> From: Robert Sohn <grepper@gmail.com>
+>> >>
+>> >> It appears that Imagemagick needs to be configured with
+>> >>  --with-gs-font-dir=/usr/share/fonts/gs else it will not find
+>> >> the ghostscript fonts and /etc/ImageMagick-6/type-ghostscript.xml
+>> >> will contain the wrong font paths. You end up with messages like:
+
+The wrong path is the default for debian-based distros
+/usr/share/fonts/type1/gsfonts/ # debian non-x11, default for imagemagick
+/usr/share/fonts/X11/Type1/     # debian x11
+
+An alternative solution would be to have the fonts installed to this location
++++ b/package/ghostscript-fonts/ghostscript-fonts.mk
+@@@ -13,1 -13,1 +13,1 @@@ GHOSTSCRIPT_FONTS_LICENSE_FILES = COPYI
+--GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/gs
+++GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/type1/gsfonts
+
+I don't see from
+grep -w '\(gs\|ghostscript-fonts\|GHOSTSCRIPT_FONTS_\)' -R package/
+any explicit use of this path nor hard dependency.
+But changing it can potentially break packages (in runtime!) if them expect
+the fonts to be installed in the current location.
+
+Does anyone know an example of package that would break?
+
+>> >> Magick: unable to read font `(null)' @ error/annotate.c/RenderFreetype/1153
+>> >> They are non-fatal but could get annoying fast if you are using 'convert'
+
+The error is non-fatal in a batch conversion.
+But each error means a file failed to be converted.
+The output is not generated for the failed file.
+
+>> >> on a lot of files.
+>> >>
+>> >> Signed-off-by: Robert Sohn <grepper@gmail.com>
+>> >> ---
+>> >>  package/imagemagick/imagemagick.mk | 3 ++-
+>> >>  1 file changed, 2 insertions(+), 1 deletion(-)
+>> >>
+>> >> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+>> >> index 298d0a8..1abb2a8 100644
+>> >> --- a/package/imagemagick/imagemagick.mk
+>> >> +++ b/package/imagemagick/imagemagick.mk
+>> >> @@ -33,7 +33,8 @@ IMAGEMAGICK_CONF_OPTS = \
+>> >>  	--without-dps \
+>> >>  	--without-gslib \
+>> >>  	--without-fpx \
+>> >> -	--without-x
+>> >> +	--without-x \
+>> >> +	--with-gs-font-dir=/usr/share/fonts/gs
+
+Configuring unconditionally does not seem so bad in this case, IMO.
+The configured path will be added to an XML that will be used at runtime.
+If freetype support is not compiled in or the fonts are not installed,
+/convert/ would fail anyway.
+
+>> > 
+>> > These fonts are only available when the ghostscript-fonts is built, isn't it? 
+
+Yes.
+
+>> > If so, then this should be
+>> > 
+>> > ifeq ($(BR2_PACKAGE_GHOSTSCRIPT_FONTS),y)
+>> > IMAGEMAGICK_CONF_OPTS += --with-gs-font-dir=/usr/share/fonts/gs
+>> > endif
+
+BR2_PACKAGE_FREETYPE is also needed.
+
+>> > 
+>> > Or maybe we should use $(GHOSTSCRIPT_FONTS_TARGET_DIR) here, instead of 
+>> > duplicating it?
+
+It seems good practice to me.
+But we can't use GHOSTSCRIPT_FONTS_TARGET_DIR as is, it is prefixed with
+TARGET_DIR. We could create an auxiliary symbol
+
++++ b/package/ghostscript-fonts/ghostscript-fonts.mk
+@@@ -13,1 -13,1 +13,2 @@@ GHOSTSCRIPT_FONTS_LICENSE_FILES = COPYI
+--GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/gs
+++GHOSTSCRIPT_FONTS_DIR = /usr/share/fonts/gs
+++GHOSTSCRIPT_FONTS_TARGET_DIR = $(TARGET_DIR)/$(GHOSTSCRIPT_FONTS_DIR)
++++ b/package/imagemagick/imagemagick.mk
+@@@ -37,1 -37,1 +37,1 @@@ IMAGEMAGICK_CONF_OPTS = 
+--	--with-gs-font-dir=/usr/share/fonts/gs
+++	--with-gs-font-dir=$(GHOSTSCRIPT_FONTS_DIR)
+
+>> 
+>> Hm, the problem is that the issue will remain if ghostscript-fonts are
+>> not installed. I don't know the solution to that.
 >
-> Best regards,
-> Romain
+>The usual way to set a dependency package is to add a 'select' statement for 
+>that package in Config.in. In this case ghostscript-fonts is not a hard 
+>dependency, because imagemagick is quite functional without it, and its size 
+>is non negligible. Maybe adding a comment to the help text in Config.in would 
+>suffice.
 >
->>
->> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->> ---
->>  package/Config.in                                                   | 2 +-
->>  package/{erlang-p1-stun => erlang-p1_stun}/Config.in                | 4 ++--
->>  .../erlang-p1-stun.mk => erlang-p1_stun/erlang-p1_stun.mk}          | 6 +++---
->>  3 files changed, 6 insertions(+), 6 deletions(-)
->>  rename package/{erlang-p1-stun => erlang-p1_stun}/Config.in (70%)
->>  rename package/{erlang-p1-stun/erlang-p1-stun.mk => erlang-p1_stun/erlang-p1_stun.mk} (77%)
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index e576c92..c5a7734 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -476,7 +476,7 @@ menu "Erlang libraries/modules"
->>       source "package/erlang-p1-iconv/Config.in"
->>       source "package/erlang-p1-sip/Config.in"
->>       source "package/erlang-p1-stringprep/Config.in"
->> -     source "package/erlang-p1-stun/Config.in"
->> +     source "package/erlang-p1_stun/Config.in"
->>       source "package/erlang-p1-tls/Config.in"
->>       source "package/erlang-p1-utils/Config.in"
->>       source "package/erlang-p1-xml/Config.in"
->> diff --git a/package/erlang-p1-stun/Config.in b/package/erlang-p1_stun/Config.in
->> similarity index 70%
->> rename from package/erlang-p1-stun/Config.in
->> rename to package/erlang-p1_stun/Config.in
->> index 70cdd91..b3f56de 100644
->> --- a/package/erlang-p1-stun/Config.in
->> +++ b/package/erlang-p1_stun/Config.in
->> @@ -1,6 +1,6 @@
->>  config BR2_PACKAGE_ERLANG_P1_STUN
->> -     bool "erlang-p1-stun"
->> -     select BR2_PACKAGE_ERLANG_P1_TLS
->> +     bool "erlang-p1_stun"
->> +     select BR2_PACKAGE_ERLANG_FAST_TLS
->>       select BR2_PACKAGE_ERLANG_P1_UTILS
->>       help
->>         STUN library for Erlang
->> diff --git a/package/erlang-p1-stun/erlang-p1-stun.mk b/package/erlang-p1_stun/erlang-p1_stun.mk
->> similarity index 77%
->> rename from package/erlang-p1-stun/erlang-p1-stun.mk
->> rename to package/erlang-p1_stun/erlang-p1_stun.mk
->> index 7920347..d689585 100644
->> --- a/package/erlang-p1-stun/erlang-p1-stun.mk
->> +++ b/package/erlang-p1_stun/erlang-p1_stun.mk
->> @@ -1,14 +1,14 @@
->>  ################################################################################
->>  #
->> -# erlang-p1-stun
->> +# erlang-p1_stun
->>  #
->>  ################################################################################
->>
->> -ERLANG_P1_STUN_VERSION = a3dce07
->> +ERLANG_P1_STUN_VERSION = 0.9.0
->>  ERLANG_P1_STUN_SITE = $(call github,processone,stun,$(ERLANG_P1_STUN_VERSION))
->>  ERLANG_P1_STUN_LICENSE = GPLv2+
->>  ERLANG_P1_STUN_LICENSE_FILES = COPYING
->> -ERLANG_P1_STUN_DEPENDENCIES = erlang-p1-tls erlang-p1-utils
->> +ERLANG_P1_STUN_DEPENDENCIES = erlang-fast_tls erlang-p1-utils
->>  ERLANG_P1_STUN_INSTALL_STAGING = YES
->>
->>  $(eval $(rebar-package))
->>
+>What do others think?
+
+Adding a comment to the Config.in sounds reasonable to me.
+One would need both BR2_PACKAGE_FREETYPE as optional build dependency and
+BR2_PACKAGE_GHOSTSCRIPT_FONTS as optional runtime dependency to get the
+conversion txt -> ps to work.
+
+Regards,
+Ricardo
