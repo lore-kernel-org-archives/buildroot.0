@@ -1,40 +1,52 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  9 Feb 2016 14:46:32 +0100
-Subject: [Buildroot] [PATCH] package/monit: bump to version 5.16.1
-Message-ID: <1455025592-25755-1-git-send-email-joerg.krause@embedded.rocks>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 9 Feb 2016 12:27:25 -0200
+Subject: [Buildroot] [PATCH v2] pandaboard_defconfig: bump u-boot to
+ 2015.10 and kernel to 4.3
+In-Reply-To: <20160206212451.21d0b116@free-electrons.com>
+References: <1452250251-9442-1-git-send-email-sergio.prado@e-labworks.com>
+ <20160206212451.21d0b116@free-electrons.com>
+Message-ID: <CANu7NGsNJBEGxbdzOEqLuFyr0bH5tk0qkenP9XtKfZQsBeZ7mg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/monit/monit.hash | 4 ++--
- package/monit/monit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello Thomas,
 
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-index 3724490..5d527c2 100644
---- a/package/monit/monit.hash
-+++ b/package/monit/monit.hash
-@@ -1,2 +1,2 @@
--# From https://mmonit.com/monit/dist/monit-5.12.2.tar.gz.sha256:
--sha256	8ab0296d1aa2351b1573481592d7b5e06de1edd49dff1b5552839605a450914c  monit-5.12.2.tar.gz
-+# From https://mmonit.com/monit/dist/monit-5.16.1.tar.gz.sha256:
-+sha256	b729b8345f5b85311c7f05751fc5d009128fd4a95fc4929a04b43bd15ab3b23f  monit-5.16.1.tar.gz
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index 9f0a29a..0843ee5 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONIT_VERSION = 5.12.2
-+MONIT_VERSION = 5.16.1
- MONIT_SITE = http://mmonit.com/monit/dist
- MONIT_LICENSE = AGPLv3 with OpenSSL exception
- MONIT_LICENSE_FILES = COPYING
--- 
-2.7.1
+2016-02-06 18:24 GMT-02:00 Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com>:
+>
+> Dear Sergio Prado,
+>
+> On Fri,  8 Jan 2016 08:50:51 -0200, Sergio Prado wrote:
+> > VFPv3 and NEON was enabled and a readme.txt file was added.
+> >
+> > Fixes bug #7580.
+> >
+> > Tested on Pandaboard ES.
+> >
+> > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+>
+> Thanks for this patch. Could you rebase it on master ? All defconfigs
+> have been touched by a recent change from Yann E. Morin.
+>
+> Note that all defconfigs should now use the "use kernel headers from
+> kernel" mechanism. See
+>
+https://git.busybox.net/buildroot/commit/?id=674e09967818bf49fd1b6bf1f986a4c0f917fa63
+.
+
+Sure. I'll send V3.
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160209/f6114edb/attachment.html>
