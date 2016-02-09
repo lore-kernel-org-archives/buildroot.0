@@ -1,49 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 9 Feb 2016 11:45:33 +0100
-Subject: [Buildroot] [PATCH] webkitgtk24: fix building with rpi egl/gles
-In-Reply-To: <1454971920-18533-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1454971920-18533-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160209114533.159871e2@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  9 Feb 2016 10:17:57 -0300
+Subject: [Buildroot] [PATCH v2] webkitgtk24: fix building with rpi egl/gles
+Message-ID: <1455023877-10821-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Some egl/gles binary-only implementations need some extra help in the
+form of additional include directories, like rpi-userland. Fixes:
 
-On Mon,  8 Feb 2016 19:52:00 -0300, Gustavo Zacarias wrote:
-> It needs special handling for the additional include fixes. Fixes:
-> http://autobuild.buildroot.net/results/083/083ce94b1ac61a60aa16906336612af59e32b18b/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/webkitgtk24/webkitgtk24.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
-> index 8a831d9..07927ac 100644
-> --- a/package/webkitgtk24/webkitgtk24.mk
-> +++ b/package/webkitgtk24/webkitgtk24.mk
-> @@ -69,6 +69,13 @@ WEBKITGTK24_CONF_OPTS += \
->  	--enable-webgl \
->  	--disable-glx
->  WEBKITGTK24_DEPENDENCIES += libegl libgles
-> +# RPi EGL/GLES needs special handling
-> +ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> +WEBKITGTK24_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) \
-> +	-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
-> +        -I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
-> +	LIBS="-lvcos -lvchostif"
-> +endif
+http://autobuild.buildroot.net/results/083/083ce94b1ac61a60aa16906336612af59e32b18b/
 
-Isn't it possible to use pkg-config ? We install egl.pc and glesv2.pc
-from all our OpenGL implementations specifically for this reason.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+v2: Use pkg-config
 
-Thanks!
+ package/webkitgtk24/webkitgtk24.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
+index 8a831d9..8556f4e 100644
+--- a/package/webkitgtk24/webkitgtk24.mk
++++ b/package/webkitgtk24/webkitgtk24.mk
+@@ -13,8 +13,8 @@ WEBKITGTK24_LICENSE_FILES = \
+ 	Source/WebCore/LICENSE-APPLE \
+ 	Source/WebCore/LICENSE-LGPL-2
+ WEBKITGTK24_DEPENDENCIES = host-ruby host-flex host-bison host-gperf \
+-	enchant harfbuzz icu jpeg libcurl libgtk2 libsecret libsoup \
+-	libxml2 libxslt sqlite webp
++	host-pkgconf enchant harfbuzz icu jpeg libcurl libgtk2 \
++	libsecret libsoup libxml2 libxslt sqlite webp
+ 
+ WEBKITGTK24_DEPENDENCIES += \
+ 	$(if $(BR_PACKAGE_XLIB_LIBXCOMPOSITE),xlib_libXcomposite) \
+@@ -69,6 +69,10 @@ WEBKITGTK24_CONF_OPTS += \
+ 	--enable-webgl \
+ 	--disable-glx
+ WEBKITGTK24_DEPENDENCIES += libegl libgles
++# Some EGL/GLES implementations needs extra help (eg. rpi-userland)
++WEBKITGTK24_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) \
++	`$(PKG_CONFIG_HOST_BINARY) --cflags egl` \
++	`$(PKG_CONFIG_HOST_BINARY) --clfags glesv2`"
+ # No GL
+ else
+ WEBKITGTK24_CONF_OPTS += \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
