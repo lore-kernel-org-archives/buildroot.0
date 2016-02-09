@@ -1,127 +1,61 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Feb 2016 22:43:46 +0100
-Subject: [Buildroot] [PATCH v2] valgrind: fix musl compile
-In-Reply-To: <1455051210-20712-1-git-send-email-ps.report@gmx.net>
-References: <1455051210-20712-1-git-send-email-ps.report@gmx.net>
-Message-ID: <56BA5D92.2090005@mind.be>
+Date: Tue, 9 Feb 2016 22:46:32 +0100
+Subject: [Buildroot] [PATCH RESEND 1/1] skeleton: Have /etc/profile
+ source [A-Za-z0-9_-]+ files in profile.d.
+In-Reply-To: <1455030388-10858-1-git-send-email-nicolas.cavallari@green-communications.fr>
+References: <1890083.agaboDjt8N@hardbit>
+ <1455030388-10858-1-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <56BA5E38.5010806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09-02-16 21:53, Peter Seiderer wrote:
-> Add musl libc detection (based on suggestions by Romain Naour and
-> Arnout Vandecappelle) and add some tweaks for musl support (based
-> on OpenWRT patch [1]).
-> 
-> Fixes ([2]):
->   checking the glibc version... unsupported version
->   configure: error: Valgrind requires glibc version 2.2 or later
-> 
-> Patch suggested upstream (see [3]).
-> 
-> [1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
-> [2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
-> [3] https://bugs.kde.org/show_bug.cgi?id=359202
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - add proper musl libc detection (suggested by Romain Naour and
->     Arnout Vandecappelle)
-[snip]
-> ++     musl)
-> ++	AC_MSG_RESULT(Musl)
-> ++	AC_DEFINE([MUSL_LIBC], 1, [Define to 1 if you're using Musl libc])
-> ++	# no DEFAULT_SUPP file yet for musl libc.
-> ++	;;
-> +      2.0|2.1|*)
-> + 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
-> + 	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
-> +-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
-> ++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
+On 09-02-16 16:06, Nicolas Cavallari wrote:
+> Instead of sourcing all files ending with .sh (which is unexpected
+> enough that /etc/profile.d/umask was missed), source all files which
+> matches [A-Za-z0-9_-]+.  This way, backup files from most text editors
+> (e.g.  umask~, umask.dpkg-old, .umask.swp~) will not be sourced.
 
- Actuallly, uClibc was already supported as well :-)
-
-> + 	;;
-> + esac
-> + 
-> +diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
-> +index 2ea7a7a..e49c832 100644
-> +--- a/coregrind/vg_preloaded.c
-> ++++ b/coregrind/vg_preloaded.c
-> +@@ -56,7 +56,7 @@
-> + void VG_NOTIFY_ON_LOAD(freeres)( void );
-> + void VG_NOTIFY_ON_LOAD(freeres)( void )
-> + {
-> +-#  if !defined(__UCLIBC__) \
-> ++#  if !defined(__UCLIBC__) && defined(__GLIBC__) \
-
- Adding defined(__GLIBC__) effectively excludes android (bionic), doesn't it?
-
-> +       && !defined(VGPV_arm_linux_android) \
-> +       && !defined(VGPV_x86_linux_android) \
-> +       && !defined(VGPV_mips32_linux_android) \
-> +diff --git a/include/pub_tool_redir.h b/include/pub_tool_redir.h
-> +index bac00d7..b8cd97e 100644
-> +--- a/include/pub_tool_redir.h
-> ++++ b/include/pub_tool_redir.h
-> +@@ -242,8 +242,11 @@
-> + /* --- Soname of the standard C library. --- */
-> + 
-> + #if defined(VGO_linux) || defined(VGO_solaris)
-> ++# if defined(__GLIBC__) || defined(__UCLIBC__)
-
- AFAICS, on solaris neither of these is defined, so that's probably not good
-either. I guess it's better to revert the condition and check on musl instead.
-
-> + #  define  VG_Z_LIBC_SONAME  libcZdsoZa              // libc.so*
-> +-
-> ++#else
-> ++#  define  VG_Z_LIBC_SONAME  libcZdZa              // libc.*
-> ++#endif
-> + #elif defined(VGO_darwin) && (DARWIN_VERS <= DARWIN_10_6)
-> + #  define  VG_Z_LIBC_SONAME  libSystemZdZaZddylib    // libSystem.*.dylib
-> + 
-> +@@ -274,7 +277,11 @@
-> + /* --- Soname of the pthreads library. --- */
-> + 
-> + #if defined(VGO_linux)
-> ++# if defined(__GLIBC__) || defined(__UCLIBC__)
-
- Same here.
-
+ Actually, I'm with Yann, it's better to keep it as *.sh. In addition to the
+reasons he quotes, I'd also add that the code with this patch becomes a lot more
+complicated than just sourcing *.sh.
 
 
  Regards,
  Arnout
 
-
-> + #  define  VG_Z_LIBPTHREAD_SONAME  libpthreadZdsoZd0     // libpthread.so.0
-> ++#else
-> ++#  define  VG_Z_LIBPTHREAD_SONAME  libcZdZa              // libc.*
-> ++#endif
-> + #elif defined(VGO_darwin)
-> + #  define  VG_Z_LIBPTHREAD_SONAME  libSystemZdZaZddylib  // libSystem.*.dylib
-> + #elif defined(VGO_solaris)
-> +-- 
-> +2.1.4
-> +
-> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-> index 5849b49..46ba13e 100644
-> --- a/package/valgrind/valgrind.mk
-> +++ b/package/valgrind/valgrind.mk
-> @@ -12,6 +12,9 @@ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
->  VALGRIND_CONF_OPTS = --disable-ubsan
->  VALGRIND_INSTALL_STAGING = YES
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> ---
+> 
+> Resend with the correct list address.
+> 
+> diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+> index 3a97427..2fb7743 100644
+> --- a/system/skeleton/etc/profile
+> +++ b/system/skeleton/etc/profile
+> @@ -12,9 +12,14 @@ export PAGER='/bin/more '
+>  export EDITOR='/bin/vi'
 >  
-> +# patch 0004-Fixes-for-musl-libc.patch touching configure.ac
-> +VALGRIND_AUTORECONF = YES
-> +
->  ifeq ($(BR2_GCC_ENABLE_TLS),y)
->  VALGRIND_CONF_OPTS += --enable-tls
->  else
+>  # Source configuration files from /etc/profile.d
+> -for i in /etc/profile.d/*.sh ; do
+> -	if [ -r "$i" ]; then
+> -		. $i
+> -	fi
+> -	unset i
+> +for i in /etc/profile.d/* ; do
+> +	case "$i" in
+> +	/etc/profile.d/*[^A-Za-z0-9_-]*)
+> +		continue;;
+> +	*)
+> +		if [ -r "$i" ]; then
+> +			. $i
+> +		fi
+> +	esac
+>  done
+> +unset i
 > 
 
 
