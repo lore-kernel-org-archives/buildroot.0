@@ -1,66 +1,114 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Feb 2016 23:43:16 +0100
-Subject: [Buildroot] [PATCH v2] valgrind: fix musl compile
-In-Reply-To: <20160209233103.3b3001be@gmx.net>
-References: <1455051210-20712-1-git-send-email-ps.report@gmx.net>
- <56BA5D92.2090005@mind.be> <20160209231630.2f99e37f@gmx.net>
- <20160209233103.3b3001be@gmx.net>
-Message-ID: <56BA6B84.2010003@mind.be>
+Date: Tue, 9 Feb 2016 23:47:00 +0100
+Subject: [Buildroot] [RFC] Python pyc compilation check
+In-Reply-To: <CAGm1_ks382K2C96g7BV1ZAxETEPMu_DAGznGrq45RV2hLRmE3g@mail.gmail.com>
+References: <CAGm1_ks382K2C96g7BV1ZAxETEPMu_DAGznGrq45RV2hLRmE3g@mail.gmail.com>
+Message-ID: <56BA6C64.8050900@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ This is just an RFC, but if it gets good review I guess you intend to squash it
+with the other series?
 
+ I'm basically OK with the concept of this patch, with a few remarks still below.
 
-On 09-02-16 23:31, Peter Seiderer wrote:
-> Hello Arnout,
+On 08-02-16 22:51, Yegor Yefremov wrote:
+> As promised Samuel's patch:
 > 
-> (one more e-mail, hit the send button too early)
+> diff --git a/package/python/python.mk b/package/python/python.mk
+> index 5ef3589..1d131c0 100644
+> --- a/package/python/python.mk
+> +++ b/package/python/python.mk
+> @@ -220,8 +220,9 @@ $(eval $(host-autotools-package))
 > 
-> On Tue, 9 Feb 2016 23:16:30 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
-> 
->> Hello Arnout,
->>
->> On Tue, 9 Feb 2016 22:43:46 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>> On 09-02-16 21:53, Peter Seiderer wrote:
-[snip]
->>>> +diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
->>>> +index 2ea7a7a..e49c832 100644
->>>> +--- a/coregrind/vg_preloaded.c
->>>> ++++ b/coregrind/vg_preloaded.c
->>>> +@@ -56,7 +56,7 @@
->>>> + void VG_NOTIFY_ON_LOAD(freeres)( void );
->>>> + void VG_NOTIFY_ON_LOAD(freeres)( void )
->>>> + {
->>>> +-#  if !defined(__UCLIBC__) \
->>>> ++#  if !defined(__UCLIBC__) && defined(__GLIBC__) \
->>>
->>>  Adding defined(__GLIBC__) effectively excludes android (bionic), doesn't it?
-> 
-> Not sure about this one, I think it is o.k. for the buildroot case:
-> - old behavior was __UCLIBC__ or __GLIBC__ is defined (!__UCLIBC__
->   means __GLIBC__ is defined)
-> - new behavior is __UCLIBC__ or __GLIBC__ or MUSL_LIBC is defined,
->   so from !__UCLIBC__ follows __GLIBC__ or MUSL_LIBC, so the need
->   to check explicit for __GLIBC__ ...
-> 
-> Do I miss something? Not sure about the right solution for upstream...
+>  define PYTHON_CREATE_PYC_FILES
+>   PYTHONPATH="$(PYTHON_PATH)" \
+> - $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) -c "import compileall; \
+> - compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)')"
+> + $(HOST_DIR)/usr/bin/python$(PYTHON_VERSION_MAJOR) \
 
- I did indeed mean for upstream. And also for buildroot in the longer term,
-because at some point we _will_ start supporting a fourth libc.
+ You should add indentation here.
+
+> + $(TOPDIR)/support/scripts/pycompile.py \
+
+ $(TOPDIR) isn't needed, it is always executed from the top directory.
+
+> + "$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)"
+>  endef
+> 
+>  ifeq ($(BR2_PACKAGE_PYTHON_PYC_ONLY),y)
+> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+> index 507c610..1eb356b 100644
+> --- a/package/python3/python3.mk
+> +++ b/package/python3/python3.mk
+> @@ -217,8 +217,9 @@ $(eval $(host-autotools-package))
+> 
+>  define PYTHON3_CREATE_PYC_FILES
+>   PYTHONPATH="$(PYTHON3_PATH)" \
+> - $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) -c "import compileall; \
+> - compileall.compile_dir('$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)')"
+> + $(HOST_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR) \
+> + $(TOPDIR)/support/scripts/pycompile.py \
+> + "$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)"
+
+ Same same.
+
+>  endef
+> 
+>  ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+> new file mode 100755
+> index 0000000..fde711a
+> --- /dev/null
+> +++ b/support/scripts/pycompile.py
+> @@ -0,0 +1,24 @@
+> +#!/usr/bin/env python
+> +
+> +# Wrapper for python2 and python3 around compileall to raise exception
+> +# when a python byte code generation failed.
+> +#
+> +# Inspired from:
+> +#   http://stackoverflow.com/questions/615632/how-to-detect-errors-from-compileall-compile-dir
+> +
+> +from __future__ import print_function
+> +import sys
+> +import py_compile
+> +import compileall
+> +
+> +class ReportProblem:
+> +    def __nonzero__(self):
+
+ This could really use some comment to explain why it needs to be a class with a
+__nonzero__ member.
 
  Regards,
  Arnout
 
-[snip]
+> +        type, value, traceback = sys.exc_info()
+> +        if type is not None and issubclass(type, py_compile.PyCompileError):
+> +            print("Cannot compile %s" %value.file)
+> +            raise value
+> +        return 1
+> +
+> +report_problem = ReportProblem()
+> +
+> +compileall.compile_dir(sys.argv[1], quiet=report_problem)
+> 
+> Yegor
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
