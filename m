@@ -1,74 +1,23 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 21:09:05 +0100
-Subject: [Buildroot] [PATCH] Makefile: Fix overlay overwriting everything
-In-Reply-To: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
-References: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
-Message-ID: <56BB98E1.4070008@mind.be>
+Date: Wed, 10 Feb 2016 21:11:47 +0100
+Subject: [Buildroot] Request for adding RPi.GPIO Library
+In-Reply-To: <BLU181-W68D53F3CAE65B8A96E7B6FD1D70@phx.gbl>
+References: <BLU181-W68D53F3CAE65B8A96E7B6FD1D70@phx.gbl>
+Message-ID: <56BB9983.7060308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-02-16 16:58, Maxime Hadjinlian wrote:
-> After bumping from a 2 years old Buildroot installation, I got the
-> following messages from the kernel at boot:
-> 
-> Failed to execute /init (error -2)
-> 
-> It appears that the overlay mechanisms was causing my issues.
-> 
-> Description:
-> The overlay mechanisms works by rsync'ing files from a folder specified
-> by the user into target.
-> Since c5bd8af65e50a51735eb112fed9cbe6337f14e06, /bin, /sbin and /lib are
-> symlinked into /usr.
-> 
-> Problem:
-> If you have an overlay that contains the directory /bin, /sbin or /lib, rsync
-> will erase the symlink and create a directory in its place.
-> The directory, say .../target/lib, would *only* contains the overlay's content.
-> Obviously, this causes a lot of troubles, starting with the kernel
-> failing to start init (because of missing shared libraries).
-> 
-> Solution:
-> Telling rsync to treat symlinked dir on the receiver side as directory
-> allow users to be blissfully ignorant of that problem.
+On 10-02-16 08:19, Pradeeka Seneviratne wrote:
+> It would be great if you could add the RPi.GPIO package to the buildroot.
+> https://pypi.python.org/pypi/RPi.GPIO
 
- I'm not so sure of this one... It makes it impossible to override the symlinks
-in the skeleton in the overlay. Say, you want to populate /var/spool with some
-directories so it becomes useable.
-
- That said, it's probably better in that case to override the skeleton directly,
-so that package installation can pick up the new directory.
-
- Still, you _are_ breaking a valid use case with this patch.
-
- What do the others think?
+ Is that the same as http://patchwork.ozlabs.org/patch/565140/ ?
 
  Regards,
  Arnout
-
-> 
-> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 71735b5..2f33ddf 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -655,7 +655,7 @@ endif
->  
->  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
->  		$(call MESSAGE,"Copying overlay $(d)"); \
-> -		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
-> +		rsync -a --keep-dirlinks --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
->  			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
->  			$(d)/ $(TARGET_DIR)$(sep))
->  
-> 
 
 
 -- 
