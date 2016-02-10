@@ -1,52 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Feb 2016 16:50:37 +0100
-Subject: [Buildroot] [PATCH 1/1] protobuf: fix detection of __atomic_*()
-	built-ins
-In-Reply-To: <1455118392-3965-1-git-send-email-casantos@datacom.ind.br>
+Date: Wed, 10 Feb 2016 16:57:00 +0100
+Subject: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for
+ PowerPC
+In-Reply-To: <927354538.1864929.1455117949486.JavaMail.zimbra@datacom.ind.br>
 References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
- <1455118392-3965-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <20160210165037.1b02b8ee@free-electrons.com>
+ <20160205000613.504940f9@free-electrons.com>
+ <927354538.1864929.1455117949486.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <20160210165700.7f97a29c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Carlos Santos,
 
-Thanks, this looks good, with one nit, see below.
+On Wed, 10 Feb 2016 13:25:49 -0200 (BRST), Carlos Santos wrote:
 
-On Wed, 10 Feb 2016 13:33:12 -0200, Carlos Santos wrote:
+> > config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+> >        bool
+> >        default y if BR2_arm
+> >        default y if BR2_i386
+> >        default y if BR2_mipsel
+> >        default y if BR2_x86_64
+> 
+> These architecture checks would be superseded by the BR2_TOOLCHAIN_HAS_ATOMIC boolean.
 
-> diff --git a/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
-> new file mode 100644
-> index 0000000..237bc71
-> --- /dev/null
-> +++ b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
-> @@ -0,0 +1,34 @@
-> +From 0883fa19d59ece19eec30937c65fd10162ef57b0 Mon Sep 17 00:00:00 2001
-> +From: Carlos Santos <casantos@datacom.ind.br>
-> +Date: Wed, 10 Feb 2016 12:54:43 -0200
-> +Subject: [PATCH] configure.ac: check if libatomic is needed
-> +
-> +In Buildroot, to simplify things, we've decided to simply require gcc 4.8
-> +as soon as the architectures has at least one __atomic_*() built-in
-> +variant that requires libatomic.
-> +
-> +Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
-> +*could* technically build with gcc 4.7. This is probably not a big deal,
-> +and we can live with requiring gcc 4.8 on PowerPC to build protobuf.
-> +
-> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Indeed.
 
-The patch description should not mention Buildroot and not mention
-Buildroot specific choices. It should be written as if you were going
-to submit it upstream, i.e with a proper justification as to why
-linking with libatomic may be needed.
+> >	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+> >        depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+> > 
+> > *and* ensure protobuf gets linked with -latomic.
+> 
+> Hum, this requires a patch on configure.ac that that would hardly be accepted upstream.
 
-And in fact, I'm even going to ask you to submit this patch upstream :-)
+Why? If they use __atomic_*() built-ins, then they must link with
+libatomic if it exists, since __atomic_*() built-ins are not guaranteed
+to be available on all architectures if you don't link with libatomic.
 
-Thanks a lot!
+Look for example at the Android NDK documentation, which says that you
+should link with libatomic when using <atomic> in C++ :
+
+  http://developer.android.com/ndk/guides/cpp-support.html
+
+(search for "atomic support").
+
+Best regards,
 
 Thomas
 -- 
