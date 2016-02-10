@@ -1,15 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2016 18:11:38 +0100
-Subject: [Buildroot] [git commit branch/next] gupnp-av: bump to version
-	0.12.8
-Message-ID: <20160210171146.7550F801F9@busybox.osuosl.org>
+Date: Wed, 10 Feb 2016 18:11:36 +0100
+Subject: [Buildroot] [git commit branch/next] gupnp: bump to version 0.20.16
+Message-ID: <20160210171146.5E62F80386@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=338ae5762dc01050fe62b25babd4c1b37d024bb0
+commit: https://git.buildroot.net/buildroot/commit/?id=a279cf74bcea4f57f5bd2887b8e8a43026a2197f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Which also means moving from unstable->stable (odd numbers in gnome
@@ -18,31 +17,31 @@ project packages are development).
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gupnp-av/gupnp-av.hash | 4 ++--
- package/gupnp-av/gupnp-av.mk   | 4 ++--
+ package/gupnp/gupnp.hash | 4 ++--
+ package/gupnp/gupnp.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gupnp-av/gupnp-av.hash b/package/gupnp-av/gupnp-av.hash
-index 0101ed4..b973171 100644
---- a/package/gupnp-av/gupnp-av.hash
-+++ b/package/gupnp-av/gupnp-av.hash
+diff --git a/package/gupnp/gupnp.hash b/package/gupnp/gupnp.hash
+index 597cb42..4208ecd 100644
+--- a/package/gupnp/gupnp.hash
++++ b/package/gupnp/gupnp.hash
 @@ -1,2 +1,2 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-av/0.11/gupnp-av-0.11.6.sha256sum:
--sha256 401991336babb18c4ebed16e75e0b4d3e5848cff7bb878bbfd54a5d15203c4cc gupnp-av-0.11.6.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp-av/0.12/gupnp-av-0.12.8.sha256sum:
-+sha256	759bc7d46aff894c282d17f508d9b5be82de96aa74b10cb6b0fc6c5e07cc273c	gupnp-av-0.12.8.tar.xz
-diff --git a/package/gupnp-av/gupnp-av.mk b/package/gupnp-av/gupnp-av.mk
-index 6360c93..5835155 100644
---- a/package/gupnp-av/gupnp-av.mk
-+++ b/package/gupnp-av/gupnp-av.mk
+-# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.19/gupnp-0.19.4.sha256sum:
+-sha256 3c1fb2873cb2f8f152b9d49598d55b15b8f3c1096a03ade46ce69694798fb243  gupnp-0.19.4.tar.xz
++# Hash from: http://ftp.gnome.org/pub/gnome/sources/gupnp/0.20/gupnp-0.20.16.sha256sum:
++sha256	ff1119eff12529c46837e03c742f69dc4fae48d59097d79582d38a383b832602	gupnp-0.20.16.tar.xz
+diff --git a/package/gupnp/gupnp.mk b/package/gupnp/gupnp.mk
+index 85faaa4..c3ec0a0 100644
+--- a/package/gupnp/gupnp.mk
++++ b/package/gupnp/gupnp.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GUPNP_AV_VERSION_MAJOR = 0.11
--GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).6
-+GUPNP_AV_VERSION_MAJOR = 0.12
-+GUPNP_AV_VERSION = $(GUPNP_AV_VERSION_MAJOR).8
- GUPNP_AV_SOURCE = gupnp-av-$(GUPNP_AV_VERSION).tar.xz
- GUPNP_AV_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp-av/$(GUPNP_AV_VERSION_MAJOR)
- GUPNP_AV_LICENSE = LGPLv2+
+-GUPNP_VERSION_MAJOR = 0.19
+-GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).4
++GUPNP_VERSION_MAJOR = 0.20
++GUPNP_VERSION = $(GUPNP_VERSION_MAJOR).16
+ GUPNP_SOURCE = gupnp-$(GUPNP_VERSION).tar.xz
+ GUPNP_SITE = http://ftp.gnome.org/pub/gnome/sources/gupnp/$(GUPNP_VERSION_MAJOR)
+ GUPNP_LICENSE = LGPLv2+
