@@ -1,65 +1,39 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 10 Feb 2016 16:42:27 -0200 (BRST)
-Subject: [Buildroot] [PATCH 1/1] protobuf: fix detection of __atomic_*()
-	built-ins
-In-Reply-To: <20160210165037.1b02b8ee@free-electrons.com>
-References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
- <1455118392-3965-1-git-send-email-casantos@datacom.ind.br>
- <20160210165037.1b02b8ee@free-electrons.com>
-Message-ID: <1240623306.1965860.1455129747228.JavaMail.zimbra@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 10 Feb 2016 16:04:52 -0300
+Subject: [Buildroot] [PATCH] wireless-regdb: bump to version 2016.02.08
+Message-ID: <1455131092-12000-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Thanks, Zimbra, for messing rearranging the messages in the inbox, so I answer them in the wrong order].
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: buildroot at buildroot.org, "henrique marks" <henrique.marks@datacom.ind.br>
-> Sent: Wednesday, February 10, 2016 1:50:37 PM
-> Subject: Re: [PATCH 1/1] protobuf: fix detection of __atomic_*() built-ins
-
-> Hello,
-> 
-> Thanks, this looks good, with one nit, see below.
-> 
-> On Wed, 10 Feb 2016 13:33:12 -0200, Carlos Santos wrote:
-> 
->> diff --git
->> a/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
->> b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
->> new file mode 100644
->> index 0000000..237bc71
->> --- /dev/null
->> +++ b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
->> @@ -0,0 +1,34 @@
->> +From 0883fa19d59ece19eec30937c65fd10162ef57b0 Mon Sep 17 00:00:00 2001
->> +From: Carlos Santos <casantos@datacom.ind.br>
->> +Date: Wed, 10 Feb 2016 12:54:43 -0200
->> +Subject: [PATCH] configure.ac: check if libatomic is needed
->> +
->> +In Buildroot, to simplify things, we've decided to simply require gcc 4.8
->> +as soon as the architectures has at least one __atomic_*() built-in
->> +variant that requires libatomic.
->> +
->> +Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
->> +*could* technically build with gcc 4.7. This is probably not a big deal,
->> +and we can live with requiring gcc 4.8 on PowerPC to build protobuf.
->> +
->> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-> 
-> The patch description should not mention Buildroot and not mention
-> Buildroot specific choices. It should be written as if you were going
-> to submit it upstream, i.e with a proper justification as to why
-> linking with libatomic may be needed.
-
-This patch only exists to appease Buildroot but, anyway, I can rewrite the comment.
-
-> And in fact, I'm even going to ask you to submit this patch upstream :-)
-
-They don't need this. Their detection of the atomic built-ins already works without additional help.
-
-Carlos Santos (Casantos)
-DATACOM, P&D
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index cafc631..8685020 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256	013e07d988f5cd7d24e4aa7a6cd406615d441ea6b882a02d2a46a78edeb2cfb6	wireless-regdb-2015.12.14.tar.xz
++sha256	ce957b7f4fe103d8fb4d160d3b39825ad0b0da639b7453d4022d71415b6c9f9f	wireless-regdb-2016.02.08.tar.xz
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 38d1c26..083ab00 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2015.12.14
++WIRELESS_REGDB_VERSION = 2016.02.08
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
+-- 
+2.4.10
