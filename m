@@ -1,32 +1,44 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Feb 2016 11:47:47 -0300
-Subject: [Buildroot] [PATCH 3/3] cppzmq: bump to version 68a7b09c
-In-Reply-To: <1455115667-22269-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1455115667-22269-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1455115667-22269-3-git-send-email-gustavo@zacarias.com.ar>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Wed, 10 Feb 2016 16:03:23 +0100
+Subject: [Buildroot] Fwd: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
+In-Reply-To: <1455102927-28502-1-git-send-email-jer@airfi.aero>
+References: <1455102927-28502-1-git-send-email-jer@airfi.aero>
+Message-ID: <CANCHnQppW3mmP=6WGBChD06+7ns0u1D5R6MQb=pxCmV6nQ7=Mw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/cppzmq/cppzmq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+---------- Forwarded message ----------
+From: Jeroen Roovers <jer@airfi.aero>
+Date: 10 February 2016 at 12:15
+Subject: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
+To: buildroot at buildroot.org
+Cc: Jeroen Roovers <jer@airfi.aero>
 
-diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
-index 5446de8..113b9a0 100644
---- a/package/cppzmq/cppzmq.mk
-+++ b/package/cppzmq/cppzmq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CPPZMQ_VERSION = 1f05e0d111197c64be32ad5aecd59f4d1b05a819
-+CPPZMQ_VERSION = 68a7b09cfce01c4c279fba2cf91686fcfc566848
- CPPZMQ_SITE = $(call github,zeromq,cppzmq,$(CPPZMQ_VERSION))
- CPPZMQ_INSTALL_STAGING = YES
- CPPZMQ_DEPENDENCIES = zeromq
--- 
+
+    If we want to set proper LDFLAGS, then we need to mangle that in the
+    uboot build system as it calls ld(1) (in fact ld.bfd) directly,
+    where the "-Wl," prefix should only be used when the linker is
+    called indirectly through gcc(1).
+
+Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+---
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index d539b31..9996aca 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -83,6 +83,7 @@ endif
+
+ UBOOT_MAKE_OPTS += \
+        CROSS_COMPILE="$(TARGET_CROSS)" \
++       LDFLAGS="$(TARGET_LDFLAGS:-Wl,%=%)" \
+        ARCH=$(UBOOT_ARCH)
+
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+--
 2.4.10
