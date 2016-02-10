@@ -1,33 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2016 08:11:03 +0100
+Date: Wed, 10 Feb 2016 08:12:43 +0100
 Subject: [Buildroot] [PATCH v2] linux: add conditional patch for
 	timeconst.pl
-In-Reply-To: <56BA718A.5060500@mind.be> (Arnout Vandecappelle's message of
- "Wed, 10 Feb 2016 00:08:58 +0100")
+In-Reply-To: <1454852508-27544-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ (gustavo zacarias's message of "Sun, 7 Feb 2016 10:41:48 -0300")
 References: <1454852508-27544-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <56BA718A.5060500@mind.be>
-Message-ID: <87vb5xrqew.fsf@dell.be.48ers.dk>
+Message-ID: <87r3glrqc4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "gustavo" == gustavo zacarias <gustavo.zacarias@free-electrons.com> writes:
 
-Hi,
+ > From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+ > Kernels older than 3.9 (not counting stable releases) used the
+ > timeconst.pl perl script for their build process.
+ > The problem with this script is that it used deprecated perl features,
+ > namely defined(@array) which was removed for the perl 5.22 release,
+ > causing build failure of older kernels on newer distributions.
 
- >> +LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+ > To fix this instead of going the hard way (moving to the new
+ > timeconst.bc script) use the easy way by patching timeconst.pl with an
+ > upstream patch used for stable releases.
 
- >  This is a patch that we probably _do_ want to apply even in case of
- > OVERRIDE_SRCDIR. So maybe add it to LINUX_PRE_CONFIGURE_HOOKS instead. Even
- > though that's even more of a hack (and conflicts with the out-of-tree build
- > support).
+ > First try a dry-run on the patch to see if it applies, if it does then
+ > call a proper APPLY_PATCHES to it.
 
-We have so far said that it is the responsibility of the user overriding
-to handle all patches they need, and it imho makes sense here as
-well. If they build the kernel manually outside buildroot they also need
-to patch this.
+ > Tested against an arbitrary 2.6.30 kernel (applies and builds), against
+ > 4.4.1 for a missing timeconst.pl (does not apply since it's missing) and
+ > 3.8.13 (does not apply since it's fixed already).
+
+ > Known broken distributions: fedora 23.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+ > ---
+ > v2: rebase on top of master
+
+Yes, I'm afraid we need this :/
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
