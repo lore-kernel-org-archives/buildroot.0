@@ -1,44 +1,74 @@
-From: Jeroen Roovers <jer@airfi.aero>
-Date: Wed, 10 Feb 2016 16:03:23 +0100
-Subject: [Buildroot] Fwd: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
-In-Reply-To: <1455102927-28502-1-git-send-email-jer@airfi.aero>
-References: <1455102927-28502-1-git-send-email-jer@airfi.aero>
-Message-ID: <CANCHnQppW3mmP=6WGBChD06+7ns0u1D5R6MQb=pxCmV6nQ7=Mw@mail.gmail.com>
+From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Date: Wed, 10 Feb 2016 20:32:36 +0530
+Subject: [Buildroot] [PATCH 1/1] cgroupsfs: new package
+Message-ID: <1455116556-3449-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----------- Forwarded message ----------
-From: Jeroen Roovers <jer@airfi.aero>
-Date: 10 February 2016 at 12:15
-Subject: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
-To: buildroot at buildroot.org
-Cc: Jeroen Roovers <jer@airfi.aero>
+From: Niranjan <niranjan.reddy@rockwellcollins.com>
 
+This package consists of scripts that setup cgroups at boot
+without doing any cgroup management or classification of
+tasks into cgroups
 
-    If we want to set proper LDFLAGS, then we need to mangle that in the
-    uboot build system as it calls ld(1) (in fact ld.bfd) directly,
-    where the "-Wl," prefix should only be used when the linker is
-    called indirectly through gcc(1).
-
-Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in            |  1 +
+ package/cgroupfs/Config.in   |  6 ++++++
+ package/cgroupfs/cgroupfs.mk | 17 +++++++++++++++++
+ 3 files changed, 24 insertions(+)
+ create mode 100644 package/cgroupfs/Config.in
+ create mode 100644 package/cgroupfs/cgroupfs.mk
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d539b31..9996aca 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -83,6 +83,7 @@ endif
-
- UBOOT_MAKE_OPTS += \
-        CROSS_COMPILE="$(TARGET_CROSS)" \
-+       LDFLAGS="$(TARGET_LDFLAGS:-Wl,%=%)" \
-        ARCH=$(UBOOT_ARCH)
-
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
---
-2.4.10
+diff --git a/package/Config.in b/package/Config.in
+index a5b31aa..452fd0b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1571,6 +1571,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
+ 	source "package/debianutils/Config.in"
+ endif
++	source "package/cgroupfs/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/emlog/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/cgroupfs/Config.in b/package/cgroupfs/Config.in
+new file mode 100644
+index 0000000..f83432e
+--- /dev/null
++++ b/package/cgroupfs/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_CGROUPFS
++	bool "cgroupfs"
++	help
++	  cgroupfs mount and umount scripts.
++
++	  https://github.com/tianon/cgroupfs-mount/blob/master/README.md
+diff --git a/package/cgroupfs/cgroupfs.mk b/package/cgroupfs/cgroupfs.mk
+new file mode 100644
+index 0000000..06d430a
+--- /dev/null
++++ b/package/cgroupfs/cgroupfs.mk
+@@ -0,0 +1,17 @@
++#############################################################
++#
++# cgroupfs
++#
++#############################################################
++CGROUPFS_VERSION = 1.0
++CGROUPFS_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_VERSION))
++CGROUPFS_INSTALL_TARGET = YES
++
++define CGROUPFS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.init $(TARGET_DIR)/etc/init.d/cgroupfs-mount.init
++	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.upstart $(TARGET_DIR)/etc/init.d/cgroupfs-mount.upstart
++endef
++
++$(eval $(generic-package))
+-- 
+2.5.0
