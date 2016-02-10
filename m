@@ -1,129 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2016 21:57:35 +0100
-Subject: [Buildroot] [PATCH 2/3] board/firefly_rk3288: add new board
-In-Reply-To: <1453478020-311-3-git-send-email-ariel@vanguardiasur.com.ar>
- (Ariel D'Alessandro's message of "Fri, 22 Jan 2016 12:53:39 -0300")
-References: <1453478020-311-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1453478020-311-3-git-send-email-ariel@vanguardiasur.com.ar>
-Message-ID: <874mdgs2ps.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 10 Feb 2016 21:58:18 +0100
+Subject: [Buildroot] [PATCH 2/3] package/dovecot: add optional support for xz
+In-Reply-To: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1455137899-18008-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ariel" == Ariel D'Alessandro <ariel@vanguardiasur.com.ar> writes:
+When xz was compiled before, dovecot will use it as optional dependency:
 
- > More info about the board:
- > http://en.t-firefly.com/en/firenow/firefly_rk3288/specifications/
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/dovecot/lib30_imap_zlib_plugin.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [liblz4.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
- > Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
- > ---
- >  board/firefly/firefly-rk3288/build_sd_image.sh | 18 ++++++++++++
- >  board/firefly/firefly-rk3288/extlinux.conf     |  6 ++++
- >  board/firefly/firefly-rk3288/post-image.sh     |  6 ++++
- >  board/firefly/firefly-rk3288/pre-image.sh      |  3 ++
- >  board/firefly/firefly-rk3288/readme.txt        | 40 ++++++++++++++++++++++++++
- >  board/firefly/firefly-rk3288/sd-image.cfg      | 22 ++++++++++++++
+(lz4 support will be added with the next patch of this series)
 
-It imho makes sense to squash the defconfig patch together with this
-one.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dovecot/dovecot.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
->  6 files changed, 95 insertions(+)
- >  create mode 100755 board/firefly/firefly-rk3288/build_sd_image.sh
- >  create mode 100644 board/firefly/firefly-rk3288/extlinux.conf
- >  create mode 100755 board/firefly/firefly-rk3288/post-image.sh
- >  create mode 100755 board/firefly/firefly-rk3288/pre-image.sh
- >  create mode 100644 board/firefly/firefly-rk3288/readme.txt
- >  create mode 100644 board/firefly/firefly-rk3288/sd-image.cfg
-
- > diff --git a/board/firefly/firefly-rk3288/build_sd_image.sh b/board/firefly/firefly-rk3288/build_sd_image.sh
- > new file mode 100755
- > index 0000000..ae7fde1
- > --- /dev/null
- > +++ b/board/firefly/firefly-rk3288/build_sd_image.sh
- > @@ -0,0 +1,18 @@
- > +#!/bin/bash
- > +
- > +set -ue
- > +
- > +D=board/firefly/firefly-rk3288
- > +CFG=${D}/sd-image.cfg
- > +
- > +T=$(mktemp -d)
- > +mkdir -p $T/{root,tmp}
-
-Other post-image scripts use ${BUILD_DIR}/genimage.tmp for the temporary
-directory, please do as well.
-
-> +
- > +$HOST_DIR/usr/bin/genimage		\
- > +	--rootpath $T/root/			\
- > +	--tmppath $T/tmp/			\
- > +	--inputpath $BINARIES_DIR/	\
- > +	--outputpath $BINARIES_DIR/	\
- > +	--config ${CFG}				\
- > +
- > +rm -rf $T
-
-All our other defconfigs call genimage directly from post-image.sh, and
-as this is a very small script would prefer to do that here as well.
-
-
-> diff --git a/board/firefly/firefly-rk3288/extlinux.conf b/board/firefly/firefly-rk3288/extlinux.conf
- > new file mode 100644
- > index 0000000..65092d2
- > --- /dev/null
- > +++ b/board/firefly/firefly-rk3288/extlinux.conf
- > @@ -0,0 +1,6 @@
- > +default firefly-rk3288
- > +
- > +label firefly-rk3288
- > +kernel /boot/uImage
- > +devicetree /boot/rk3288-firefly.dtb
- > +append console=ttyS2,115200n8 earlyprintk init=/sbin/init root=/dev/mmcblk0p1 rootwait
-
-why the init=? Is earlyprintk really good to use by default?
-
-
-> diff --git a/board/firefly/firefly-rk3288/post-image.sh b/board/firefly/firefly-rk3288/post-image.sh
- > new file mode 100755
- > index 0000000..98c2778
- > --- /dev/null
- > +++ b/board/firefly/firefly-rk3288/post-image.sh
- > @@ -0,0 +1,6 @@
- > +board=board/firefly/firefly-rk3288
-
-You can use $(dirname $0) instead of hardcoding this.
-
-
-> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
- > +
- > +$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
- > +
- > +${board}/build_sd_image.sh
- > diff --git a/board/firefly/firefly-rk3288/pre-image.sh b/board/firefly/firefly-rk3288/pre-image.sh
-
-Other boards calls this post-build.sh, please use that as well for
-consistency.
-
-
-> new file mode 100755
- > index 0000000..7770f6b
- > --- /dev/null
- > +++ b/board/firefly/firefly-rk3288/pre-image.sh
- > @@ -0,0 +1,3 @@
- > +board=board/firefly/firefly-rk3288
-
-dirname $0 as well here.
-
-> +
- > +install -m 0644 -D $board/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-
-You could simply put this in a rootfs overlay and point
-BR2_ROOTFS_OVERLAY to that directory instead of this explicit handling.
-
-Other than that it looks good.
-
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index eea9efc..dbf2dab 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -76,6 +76,13 @@ else
+ DOVECOT_CONF_OPTS += --without-sqlite
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++DOVECOT_CONF_OPTS += --with-lzma
++DOVECOT_DEPENDENCIES += xz
++else
++DOVECOT_CONF_OPTS += --without-lzma
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ DOVECOT_CONF_OPTS += --with-zlib
+ DOVECOT_DEPENDENCIES += zlib
 -- 
-Bye, Peter Korsgaard
+2.7.0
