@@ -1,135 +1,113 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 10 Feb 2016 08:12:57 +0100
-Subject: [Buildroot] [git commit] Update for 2016.02-rc1
-Message-ID: <20160210072226.E80AF81851@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: add conditional patch for
+	timeconst.pl
+Message-ID: <20160210072226.D974E818D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecf55c3f0276d2afb1a5f62e2e183bda730b8bac
+commit: https://git.buildroot.net/buildroot/commit/?id=d6a5d71aba8e21b8aa28d93075a603297d1d3b3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Kernels older than 3.9 (not counting stable releases) used the
+timeconst.pl perl script for their build process.
+The problem with this script is that it used deprecated perl features,
+namely defined(@array) which was removed for the perl 5.22 release,
+causing build failure of older kernels on newer distributions.
+
+To fix this instead of going the hard way (moving to the new
+timeconst.bc script) use the easy way by patching timeconst.pl with an
+upstream patch used for stable releases.
+
+First try a dry-run on the patch to see if it applies, if it does then
+call a proper APPLY_PATCHES to it.
+
+Tested against an arbitrary 2.6.30 kernel (applies and builds), against
+4.4.1 for a missing timeconst.pl (does not apply since it's missing) and
+3.8.13 (does not apply since it's fixed already).
+
+Known broken distributions: fedora 23, debian testing (stretch) and unstable
+(sid).
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES                    |  2 +-
- Makefile                   |  2 +-
- docs/website/download.html | 22 +++++++++++-----------
- docs/website/news.html     | 23 +++++++++++++++++++++++
- 4 files changed, 36 insertions(+), 13 deletions(-)
+ ...nst.pl-Eliminate-Perl-warning.patch.conditional | 45 ++++++++++++++++++++++
+ linux/linux.mk                                     | 10 +++++
+ 2 files changed, 55 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 5a63add..6892121 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2016.02, Not yet released
-+2016.02-rc1, Released February 10th, 2016
- 
- 	Fixes all over the tree and new features.
- 
-diff --git a/Makefile b/Makefile
-index 9daf011..71735b5 100644
---- a/Makefile
-+++ b/Makefile
-@@ -41,7 +41,7 @@ else # umask
- all:
- 
- # Set and export the version string
--export BR2_VERSION := 2016.02-git
-+export BR2_VERSION := 2016.02-rc1
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 34b06bf..c1f89ff 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -41,41 +41,41 @@
- 	  <p><a href="/downloads/buildroot-2015.11.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
--<!--
--      <h3 style="text-align: center;">Latest release candidate: <b>2015.11-rc3</b></h3>
+diff --git a/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional b/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
+new file mode 100644
+index 0000000..02abadd
+--- /dev/null
++++ b/linux/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional
+@@ -0,0 +1,45 @@
++From 63a3f603413ffe82ad775f2d62a5afff87fd94a0 Mon Sep 17 00:00:00 2001
++From: "H. Peter Anvin" <hpa@linux.intel.com>
++Date: Thu, 7 Feb 2013 17:14:08 -0800
++Subject: [PATCH] timeconst.pl: Eliminate Perl warning
 +
-+      <h3 style="text-align: center;">Latest release candidate: <b>2016.02-rc1</b></h3>
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2015.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2015.11-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.02-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2015.11-rc3.tar.gz">buildroot-2015.11-rc3.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2015.11-rc3.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.02-rc1.tar.gz">buildroot-2016.02-rc1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.02-rc1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2015.11-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2015.11-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2016.02-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2015.11-rc3.tar.bz2">buildroot-2015.11-rc3.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2015.11-rc3.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2016.02-rc1.tar.bz2">buildroot-2016.02-rc1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2016.02-rc1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
---->
++defined(@array) is deprecated in Perl and gives off a warning.
++Restructure the code to remove that warning.
 +
-       This and earlier releases (and their PGP signatures) can always be downloaded from
-       <a href="/downloads/">http://buildroot.net/downloads/</a>.
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 5d4c264..c72b818 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,29 @@
- <h2>News</h2>
- <ul class="timeline">
++[ hpa: it would be interesting to revert to the timeconst.bc script.
++  It appears that the failures reported by akpm during testing of
++  that script was due to a known broken version of make, not a problem
++  with bc.  The Makefile rules could probably be restructured to avoid
++  the make bug, or it is probably old enough that it doesn't matter. ]
++
++Reported-by: Andi Kleen <ak@linux.intel.com>
++Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
++Cc: Andrew Morton <akpm@linux-foundation.org>
++Cc: <stable@vger.kernel.org>
++Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
++---
++Patch status: upstream
++
++ kernel/timeconst.pl | 6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/kernel/timeconst.pl b/kernel/timeconst.pl
++index eb51d76..3f42652 100644
++--- a/kernel/timeconst.pl
+++++ b/kernel/timeconst.pl
++@@ -369,10 +369,8 @@ if ($hz eq '--can') {
++ 		die "Usage: $0 HZ\n";
++ 	}
++ 
++-	@val = @{$canned_values{$hz}};
++-	if (!defined(@val)) {
++-		@val = compute_values($hz);
++-	}
+++	$cv = $canned_values{$hz};
+++	@val = defined($cv) ? @$cv : compute_values($hz);
++ 	output($hz, @val);
++ }
++ exit 0;
++-- 
++2.4.10
++
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 578fea1..7e20255 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -184,6 +184,16 @@ endef
  
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2016.02-rc1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>10 February 2016</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>We have a new release candidate! Lots of
-+	  changes all over the tree, see
-+	  the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.02-rc1">CHANGES</a>
-+	  file for details.</p>
+ LINUX_POST_PATCH_HOOKS += LINUX_APPLY_LOCAL_PATCHES
+ 
++# Older linux kernels use deprecated perl constructs in timeconst.pl
++# that were removed for perl 5.22+ so it breaks on newer distributions
++# Try a dry-run patch to see if this applies, if it does go ahead
++define LINUX_TRY_PATCH_TIMECONST
++	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional >/dev/null ; then \
++		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0001-timeconst.pl-Eliminate-Perl-warning.patch.conditional ; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
 +
-+	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2016.02-rc1.tar.bz2">2016.02-rc1
-+	    release candidate</a>, and report any
-+	  problems found to the
-+	  <a href="support.html">mailing list</a> or
-+	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG),y)
