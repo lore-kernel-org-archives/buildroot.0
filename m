@@ -1,60 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 00:26:34 +0100
-Subject: [Buildroot] [PATCH v3] valgrind: fix musl compile
-In-Reply-To: <1455058401-28034-1-git-send-email-ps.report@gmx.net>
-References: <1455058401-28034-1-git-send-email-ps.report@gmx.net>
-Message-ID: <56BA75AA.20403@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 09 Feb 2016 22:10:35 -0200
+Subject: [Buildroot] [PATCH] package/x11r7/xapp_xf86dga: remove
+ dependencies on Xt/Xaw/Xmu
+References: <1455055451-19200-1-git-send-email-arnout@mind.be>
+Message-ID: <56ba7ffbb97c6_5caf1b5a92c61834@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09-02-16 23:53, Peter Seiderer wrote:
-> Add musl libc detection (based on suggestions by Romain Naour and
-> Arnout Vandecappelle) and add some tweaks for musl support (based
-> on OpenWRT patch [1]).
+On Tue, Feb 09, 2016 at 08:04 PM, Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> wrote:
+> Since the bump to 1.0.3, xapp_xf86dga no longer uses libXt, libXaw and
+> libXmu. So these dependencies should be removed from the .mk file.
 > 
-> Fixes ([2]):
->   checking the glibc version... unsupported version
->   configure: error: Valgrind requires glibc version 2.2 or later
+> They were already removed from Config.in, leading to messages like:
+> Makefile:475: *** xlib_libXaw is in the dependency chain of xapp_xf86dga
+> that has added it to its _DEPENDENCIES variable without selecting it or
+> depending on it from Config.in.  Stop.
+
+You can add if you want:
+
+Fixes:
+http://autobuild.buildroot.net/results/aee/aee4a895c74647292715705bfcdf742f3ea2f76f/
+
 > 
-> Patch suggested upstream (see [3]).
-> 
-> [1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
-> [2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
-> [3] https://bugs.kde.org/show_bug.cgi?id=359202
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Build test for the autobuild issue using minimal config
+BR2_TOOLCHAIN_EXTERNAL=y # easy for toolchain w/ MMU support
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XAPP_XF86DGA=y
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- One small nit:
-
-[snip]
-> + 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
-> +-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
-> +-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
-> ++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later, uclibc,])
-
- It's uClibc (capital C).
-
-> ++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
-> + 	;;
-> + esac
-> + 
-[snip]
-
- I guess you'll update the upstream bug report as well?
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+Ricardo
