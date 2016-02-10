@@ -1,74 +1,54 @@
-From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Date: Wed, 10 Feb 2016 20:32:36 +0530
-Subject: [Buildroot] [PATCH 1/1] cgroupsfs: new package
-Message-ID: <1455116556-3449-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+Date: Wed, 10 Feb 2016 20:37:13 +0530
+Subject: [Buildroot] [PATCH V7] package/nvme: new package
+In-Reply-To: <56B2EAC9.1090801@linux.vnet.ibm.com>
+References: <20160121052928.8568.3019.stgit@localhost.localdomain>
+ <56B2EAC9.1090801@linux.vnet.ibm.com>
+Message-ID: <56BB5221.1000504@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Niranjan <niranjan.reddy@rockwellcollins.com>
+Hi Thomas,
 
-This package consists of scripts that setup cgroups at boot
-without doing any cgroup management or classification of
-tasks into cgroups
+Please let us know when NVME patches will get into the build?
 
-Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
----
- package/Config.in            |  1 +
- package/cgroupfs/Config.in   |  6 ++++++
- package/cgroupfs/cgroupfs.mk | 17 +++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/cgroupfs/Config.in
- create mode 100644 package/cgroupfs/cgroupfs.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index a5b31aa..452fd0b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1571,6 +1571,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/dcron/Config.in"
- 	source "package/debianutils/Config.in"
- endif
-+	source "package/cgroupfs/Config.in"
- 	source "package/dsp-tools/Config.in"
- 	source "package/emlog/Config.in"
- 	source "package/ftop/Config.in"
-diff --git a/package/cgroupfs/Config.in b/package/cgroupfs/Config.in
-new file mode 100644
-index 0000000..f83432e
---- /dev/null
-+++ b/package/cgroupfs/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_CGROUPFS
-+	bool "cgroupfs"
-+	help
-+	  cgroupfs mount and umount scripts.
-+
-+	  https://github.com/tianon/cgroupfs-mount/blob/master/README.md
-diff --git a/package/cgroupfs/cgroupfs.mk b/package/cgroupfs/cgroupfs.mk
-new file mode 100644
-index 0000000..06d430a
---- /dev/null
-+++ b/package/cgroupfs/cgroupfs.mk
-@@ -0,0 +1,17 @@
-+#############################################################
-+#
-+# cgroupfs
-+#
-+#############################################################
-+CGROUPFS_VERSION = 1.0
-+CGROUPFS_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_VERSION))
-+CGROUPFS_INSTALL_TARGET = YES
-+
-+define CGROUPFS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.init $(TARGET_DIR)/etc/init.d/cgroupfs-mount.init
-+	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.upstart $(TARGET_DIR)/etc/init.d/cgroupfs-mount.upstart
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.5.0
+On 02/04/2016 11:38 AM, Mamatha Inamdar wrote:
+> Hi Thomas,
+>
+> When NVME patch will get into "buildroot" project ?
+>
+>
+> On 01/21/2016 11:06 AM, Mamatha Inamdar wrote:
+>> Add support for building NVME utility - a utility for interacting with
+>> standard NVM Express (optimized PCI Express SSD interface) devices.
+>>
+>> Signed-off-by: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+>> ---
+>>   package/Config.in                             |    1 +
+>>   package/nvme/0001-NVME-Makefile-cleanup.patch |   25 
+>> +++++++++++++++++++++++++
+>>   package/nvme/Config.in                        |    6 ++++++
+>>   package/nvme/nvme.hash                        |    2 ++
+>>   package/nvme/nvme.mk                          |   22 
+>> ++++++++++++++++++++++
+>>   5 files changed, 56 insertions(+)
+>>   create mode 100644 package/nvme/0001-NVME-Makefile-cleanup.patch
+>>   create mode 100644 package/nvme/Config.in
+>>   create mode 100644 package/nvme/nvme.hash
+>>   create mode 100755 package/nvme/nvme.mk
+>> neric-package))
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
