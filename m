@@ -1,51 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 11 Feb 2016 00:07:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vpnc: fix musl build
-In-Reply-To: <1453640456-32346-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453640456-32346-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160211000743.33a1e73f@free-electrons.com>
+From: Gabe Evans <gabe@hashrabbit.co>
+Date: Wed, 10 Feb 2016 23:44:03 +0000
+Subject: [Buildroot] [PATCH v2 1/2] systemd: fix dbus activation
+In-Reply-To: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
+References: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
+Message-ID: <1455147844-4918-1-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Various DBus activated services fail to start with errors similar to:
 
-On Sun, 24 Jan 2016 14:00:56 +0100, Bernd Kuhls wrote:
-> The autobuilders did not catch the error yet because they failed
-> earlier with other packages, but I am continuing the build based
-> on the defconfig from:
-> http://autobuild.buildroot.net/results/6cc/6cc0f8c067e07deea688b9b97284601a596b898c/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  Unit dbus-org.freedesktop.hostname1.service failed to load: File exists.
 
-Once again, those patches really didn't had a proper commit log, so I
-don't want to merge something like this. Yes the other existing patches
-for vpnc are crappy, but it's not a reason to add more of them.
+The message itself is rather vague and can be seen as a warning in
+systemd-networkd logs. Meanwhile, tools like hostnamectl don't work
+at all.
 
-So instead, I've sent a series which updates the vpnc package,
-reformats the patch with Git, splits them properly, adds proper commit
-logs, and I submitted a pull request upstream.
+The post-install target hook SYSTEMD_SANITIZE_PATH_IN_UNITS was replacing
+symlinks with duplicate files. The find command could have used -type f
+to avoid this but I instead chose to remove the hook since this fix doesn't
+seem to be needed anymore.
 
-See:
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+Changes v1 -> v2:
+  - split changes into two separate commits (suggested by Arnout)
+---
+ package/systemd/systemd.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-  http://lists.busybox.net/pipermail/buildroot/2016-February/152495.html
-
-Could you review all the pending musl fix patches from you that are in
-patchwork, and try to rework the ones where the musl patches don't
-have a proper commit log. Hint: if the commit log is just "musl fix",
-then it's wrong. If the commit makes it work for musl, but is otherwise
-non-upstreamable, it's wrong.
-
-It would really help if you could clean up some of those patches. We do
-want to fix musl related issues, but not at the expense of having
-unclean patches added in Buildroot.
-
-Thanks a lot,
-
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index e432069..2340963 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -150,16 +150,10 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
+ 	touch $(TARGET_DIR)/etc/machine-id
+ endef
+ 
+-define SYSTEMD_SANITIZE_PATH_IN_UNITS
+-	find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
+-		-exec $(SED) 's,$(HOST_DIR),,g' {} \;
+-endef
+-
+ SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
+ 	SYSTEMD_INSTALL_INIT_HOOK \
+ 	SYSTEMD_INSTALL_MACHINEID_HOOK \
+-	SYSTEMD_INSTALL_RESOLVCONF_HOOK \
+-	SYSTEMD_SANITIZE_PATH_IN_UNITS
++	SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ 
+ define SYSTEMD_USERS
+ 	systemd-journal -1 systemd-journal -1 * /var/log/journal - - Journal
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
