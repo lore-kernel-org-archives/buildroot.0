@@ -1,109 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 22:39:59 +0100
-Subject: [Buildroot] [PATCH 1/1] cgroupsfs: new package
-In-Reply-To: <1455116556-3449-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-References: <1455116556-3449-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <56BBAE2F.5010504@mind.be>
+Date: Wed, 10 Feb 2016 22:52:59 +0100
+Subject: [Buildroot] [PATCH 1/2] Update libaio to 0.3.110
+In-Reply-To: <1454719042-6185-2-git-send-email-alistair.francis@xilinx.com>
+References: <1454719042-6185-1-git-send-email-alistair.francis@xilinx.com>
+ <1454719042-6185-2-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <56BBB13B.9060000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-02-16 16:02, Niranjan Reddy wrote:
-> From: Niranjan <niranjan.reddy@rockwellcollins.com>
+On 06-02-16 01:37, Alistair Francis wrote:
+> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
 > 
-> This package consists of scripts that setup cgroups at boot
-> without doing any cgroup management or classification of
-> tasks into cgroups
-> 
-> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 > ---
->  package/Config.in            |  1 +
->  package/cgroupfs/Config.in   |  6 ++++++
->  package/cgroupfs/cgroupfs.mk | 17 +++++++++++++++++
->  3 files changed, 24 insertions(+)
->  create mode 100644 package/cgroupfs/Config.in
->  create mode 100644 package/cgroupfs/cgroupfs.mk
+>  package/libaio/0001-arches.patch | 671 ---------------------------------------
+>  package/libaio/Config.in         |   2 +-
+>  package/libaio/libaio.hash       |   4 +-
+>  package/libaio/libaio.mk         |   2 +-
+>  4 files changed, 4 insertions(+), 675 deletions(-)
+>  delete mode 100644 package/libaio/0001-arches.patch
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index a5b31aa..452fd0b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1571,6 +1571,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
->  	source "package/dcron/Config.in"
->  	source "package/debianutils/Config.in"
->  endif
-> +	source "package/cgroupfs/Config.in"
->  	source "package/dsp-tools/Config.in"
->  	source "package/emlog/Config.in"
->  	source "package/ftop/Config.in"
-> diff --git a/package/cgroupfs/Config.in b/package/cgroupfs/Config.in
-> new file mode 100644
-> index 0000000..f83432e
-> --- /dev/null
-> +++ b/package/cgroupfs/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_CGROUPFS
-> +	bool "cgroupfs"
+> diff --git a/package/libaio/0001-arches.patch b/package/libaio/0001-arches.patch
+> deleted file mode 100644
+> index c85568c..0000000
+> --- a/package/libaio/0001-arches.patch
+> +++ /dev/null
+> @@ -1,671 +0,0 @@
+> -Patch borrowed from OpenEmbedded, available at
+> -recipes/libaio/libaio-0.3.106/00_arches.patch in their source
+> -tree. The patch has been adapted to remove the ARM-related
+> -definitions, since they have been merged in later versions of libaio.
+> -
+> -The patch adds various architecture specific definitions (syscall
+> -number and macros) for m68k, MIPS, PA/RISC and Sparc. Amongst these,
+> -Buildroot mostly only cares about MIPS, but it was just easier to take
+> -the whole OpenEmbedded patch.
+> -
+> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- I think this package makes no sense at all under systemd, since systemd already
-mounts all cgroups. So I'd make this depend on !BR2_INIT_SYSTEMD.
-
-> +	help
-> +	  cgroupfs mount and umount scripts.
-> +
-> +	  https://github.com/tianon/cgroupfs-mount/blob/master/README.md
-
- Remove the last bit, https://github.com/tianon/cgroupfs-mount shows the readme
-as well and has more navigation options.
-
-> diff --git a/package/cgroupfs/cgroupfs.mk b/package/cgroupfs/cgroupfs.mk
-> new file mode 100644
-> index 0000000..06d430a
-> --- /dev/null
-> +++ b/package/cgroupfs/cgroupfs.mk
-> @@ -0,0 +1,17 @@
-> +#############################################################
-> +#
-> +# cgroupfs
-> +#
-> +#############################################################
-> +CGROUPFS_VERSION = 1.0
-> +CGROUPFS_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_VERSION))
-> +CGROUPFS_INSTALL_TARGET = YES
-
- That's the default, not needed.
-
-> +
-> +define CGROUPFS_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
-
- Instead of $(BUILD_DIR)/cgroupfs-1.0 use $(@D)
-
-> +	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
-> +	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.init $(TARGET_DIR)/etc/init.d/cgroupfs-mount.init
-
- If it doesn't start with Snn (where nn is a number) it will not be executed.
-Also, it should not be part of the INSTALL_TARGET_CMDS, but it should be part of
-CGROUPFS_INSTALL_INIT_SYSV (check the manual).
-
- However, this script is full of debianisms and will just not work. You'll have
-to create your own simple start script. And it can be extremely simple, just a
-case statement to handle start, stop and restart.
-
-> +	$(INSTALL) -D -m 0755 $(BUILD_DIR)/cgroupfs-1.0/debian/cgroupfs-mount.upstart $(TARGET_DIR)/etc/init.d/cgroupfs-mount.upstart
-
- Since we don't have upstart, this makes no sense.
-
+ Why did you remove this patch? As far as I can see, there is nothing upstream
+that adds mips support. Or is syscall-generic good enough?
 
  Regards,
  Arnout
-
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
 
 
 -- 
