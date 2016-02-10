@@ -1,139 +1,82 @@
-From: Gabe Evans <gabe@hashrabbit.co>
-Date: Wed, 10 Feb 2016 22:14:49 +0000
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix dbus activation
-In-Reply-To: <56BA7138.6000408@mind.be>
-References: <1454971831-11139-1-git-send-email-gabe@hashrabbit.co>
- <56BA7138.6000408@mind.be>
-Message-ID: <CAHsRNLjfsoP=D1iJ7eiEG2NxDfmzQUh9yt+=Mzbq5OEDFe8kZg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Feb 2016 23:35:22 +0100
+Subject: [Buildroot] [PATCH v2 3/5] COPYING: add exception about patch
+	licensing
+In-Reply-To: <20160203230208.GB3428@free.fr>
+References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
+ <1454365196-26319-4-git-send-email-luca@lucaceresoli.net>
+ <20160203230208.GB3428@free.fr>
+Message-ID: <56BBBB2A.1060706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On 04-02-16 00:02, Yann E. MORIN wrote:
+> Luca, All,
+> 
+> On 2016-02-01 23:19 +0100, Luca Ceresoli spake thusly:
+>> > Several people have been asking what is the license of the patches
+>> > provided by Buildroot. COPYING is the authoritative place to state it.
+>> > 
+>> > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> > Cc: Arnout Vandecappelle <arnout@mind.be>
+>> > ---
+>> > Changes v1 -> v2:
+>> >  - Rewrite it almost entirely (Arnout, Thomas).
+>> > ---
+>> >  COPYING | 8 ++++++++
+>> >  1 file changed, 8 insertions(+)
+>> > 
+>> > diff --git a/COPYING b/COPYING
+>> > index d511905..3596777 100644
+>> > --- a/COPYING
+>> > +++ b/COPYING
+>> > @@ -1,3 +1,11 @@
+>> > +Except for the patches provided for packages, Buildroot is licensed
+>> > +under the GNU General Public License, version 2.
+> There a gotcha here. The manual states, in chapter 12.3:
+> 
+>     Buildroot [is] released under the GNU General Public License,
+>     version 2 or (at your option) any later version.
+> 
+> So, we have to clarify: is it GPLv2 or GPLV2+ ?
+> 
+> It's too late today for me to go digging; I'll do that tomorrow. Just
+> rmind me before the end of the week if there's not feedback from my part
+> on this topic.
 
-On Tue, Feb 9, 2016 at 3:07 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+ Reminder :-)
 
-> On 08-02-16 23:50, Gabe Evans wrote:
-> > Various DBus activated services fail to start with errors similar to:
-> >
-> >   Unit dbus-org.freedesktop.hostname1.service failed to load: File
-> exists.
-> >
-> > The message itself is rather vague and can be seen as a warning in
-> > systemd-networkd logs. Meanwhile, tools like hostnamectl don't work
-> > at all.
-> >
-> > The post-install target hook SYSTEMD_SANITIZE_PATH_IN_UNITS was replacing
-> > symlinks with duplicate files. The sed command could have used
-> > --follow-symlinks to avoid this
->
->  Or better yet, add -type f to the find command.
->
+ But I did the digging. The situation is of course complicated.
 
-Right! I might have been suffering from some tunnel vision while figuring
-this out.
+ We don't have many files that specify a license by themselves. All of them
+specify 'or later', except for makedevs.c (obviously, because it is copied from
+busybox), toolchain-wrapper.c (added by Peter in 2011), and the manual itself,
+which specify v2 only.
 
+ The top-level Makefile is the only thing of which you could say that it has
+project-wide scope. And that says 'or later'.
 
->
-> > but I instead chose to remove the hook
-> > since this fix doesn't seem to be needed anymore.
-> >
-> > Some configure options are also removed:
-> >
-> >  * --with-dbuspolicydir, --with-dbussessionservicedir, and
-> >    --with-dbussystemservicedir are no longer needed since these are
-> >    defaults in recent releases.
-> >
-> >  * --disable-dbus has no effect when combined with --disable-tests. The
-> >    option itself only applies to tests, not the runtime.
->
->  This part really should have been in a separate patch, with as subject
-> "systemd: remove redundant configure options".
-
-
->  Still, this patch gets my
->
-> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->  (checked that there is not HOST_DIR reference and that the dbus paths are
-> still
-> correct).
->
->
->  If you repost as two patches, you can carry my acked/tested tags.
->
-
-Thanks for your feedback. I'll split this up and send v2 when I have some
-free time.
-
-Thanks,
-Gabe
+ So, what does that mean for buildroot as a whole? I think it is GPLv2+, except
+for the package patches and except for the files that explicitly specify a
+different license. Can we fit that in the formulation that evolved in this thread?
 
 
->
->  Regards,
->  Arnout
->
-> >
-> > Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-> > ---
-> >  package/systemd/systemd.mk | 12 +-----------
-> >  1 file changed, 1 insertion(+), 11 deletions(-)
-> >
-> > diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> > index e432069..05121cf 100644
-> > --- a/package/systemd/systemd.mk
-> > +++ b/package/systemd/systemd.mk
-> > @@ -32,14 +32,10 @@ SYSTEMD_CONF_OPTS += \
-> >       --disable-selinux \
-> >       --disable-pam \
-> >       --disable-libcryptsetup \
-> > -     --with-dbuspolicydir=/etc/dbus-1/system.d \
-> > -     --with-dbussessionservicedir=/usr/share/dbus-1/services \
-> > -     --with-dbussystemservicedir=/usr/share/dbus-1/system-services \
-> >       --disable-efi \
-> >       --disable-gnuefi \
-> >       --disable-ldconfig \
-> >       --disable-tests \
-> > -     --disable-dbus \
-> >       --without-python
-> >
-> >  SYSTEMD_CFLAGS = $(TARGET_CFLAGS) -fno-lto
-> > @@ -150,16 +146,10 @@ define SYSTEMD_INSTALL_MACHINEID_HOOK
-> >       touch $(TARGET_DIR)/etc/machine-id
-> >  endef
-> >
-> > -define SYSTEMD_SANITIZE_PATH_IN_UNITS
-> > -     find $(TARGET_DIR)/lib/systemd/system -name '*.service' \
-> > -             -exec $(SED) 's,$(HOST_DIR),,g' {} \;
-> > -endef
-> > -
-> >  SYSTEMD_POST_INSTALL_TARGET_HOOKS += \
-> >       SYSTEMD_INSTALL_INIT_HOOK \
-> >       SYSTEMD_INSTALL_MACHINEID_HOOK \
-> > -     SYSTEMD_INSTALL_RESOLVCONF_HOOK \
-> > -     SYSTEMD_SANITIZE_PATH_IN_UNITS
-> > +     SYSTEMD_INSTALL_RESOLVCONF_HOOK
-> >
-> >  define SYSTEMD_USERS
-> >       systemd-journal -1 systemd-journal -1 * /var/log/journal - -
-> Journal
-> >
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
+ Regards,
+ Arnout
+
+> 
+> Until then, NAK.
+> 
+
+
 -- 
-Gabe Evans | Co-Founder & CTO
-hashrabbit.co ? angel.co/hashrabbit ? github.com/gevans
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160210/5f82d4fe/attachment.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
