@@ -1,52 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 21:00:16 +0100
+Date: Wed, 10 Feb 2016 21:06:03 +0100
 Subject: [Buildroot] [PATCH 1/1] protobuf: fix detection of __atomic_*()
  built-ins
-In-Reply-To: <1455118392-3965-1-git-send-email-casantos@datacom.ind.br>
+In-Reply-To: <1240623306.1965860.1455129747228.JavaMail.zimbra@datacom.ind.br>
 References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
  <1455118392-3965-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <56BB96D0.4040901@mind.be>
+ <20160210165037.1b02b8ee@free-electrons.com>
+ <1240623306.1965860.1455129747228.JavaMail.zimbra@datacom.ind.br>
+Message-ID: <56BB982B.4050706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-02-16 16:33, Carlos Santos wrote:
-[snip]
-> +#
-> +# On PowerPC, the __atomic_*() built-ins for 1-byte, 2-byte and 4-byte
-> +# types are available built-in. However, the __atomic_*() built-ins for
-> +# 8-byte types is implemented via libatomic, so only available since gcc
-> +# 4.8.
-> +#
-> +# In Buildroot, to simplify things, we've decided to simply require gcc
-> +# 4.8 as soon as the architectures has at least one __atomic_*() built-in
-> +# variant that requires libatomic.
-> +#
-> +# Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
-> +# *could* technically build with gcc 4.7. This is probably not a big deal,
-> +# and we can live with requiring gcc 4.8 on PowerPC to build protobuf. 
-> +#
->  # host-protobuf only builds on certain architectures
->  config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
->  	bool
-> -	default y if BR2_arm
-> -	default y if BR2_i386
-> -	default y if BR2_mipsel
-> -	default y if BR2_x86_64
+On 10-02-16 19:42, Carlos Santos wrote:
+> [Thanks, Zimbra, for messing rearranging the messages in the inbox, so I answer them in the wrong order].
+> 
+>> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+>> To: "Carlos Santos" <casantos@datacom.ind.br>
+>> Cc: buildroot at buildroot.org, "henrique marks" <henrique.marks@datacom.ind.br>
+>> Sent: Wednesday, February 10, 2016 1:50:37 PM
+>> Subject: Re: [PATCH 1/1] protobuf: fix detection of __atomic_*() built-ins
+> 
+>> Hello,
+>>
+>> Thanks, this looks good, with one nit, see below.
+>>
+>> On Wed, 10 Feb 2016 13:33:12 -0200, Carlos Santos wrote:
+>>
+>>> diff --git
+>>> a/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
+>>> b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
+>>> new file mode 100644
+>>> index 0000000..237bc71
+>>> --- /dev/null
+>>> +++ b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
+>>> @@ -0,0 +1,34 @@
+>>> +From 0883fa19d59ece19eec30937c65fd10162ef57b0 Mon Sep 17 00:00:00 2001
+>>> +From: Carlos Santos <casantos@datacom.ind.br>
+>>> +Date: Wed, 10 Feb 2016 12:54:43 -0200
+>>> +Subject: [PATCH] configure.ac: check if libatomic is needed
+>>> +
+>>> +In Buildroot, to simplify things, we've decided to simply require gcc 4.8
+>>> +as soon as the architectures has at least one __atomic_*() built-in
+>>> +variant that requires libatomic.
+>>> +
+>>> +Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
+>>> +*could* technically build with gcc 4.7. This is probably not a big deal,
+>>> +and we can live with requiring gcc 4.8 on PowerPC to build protobuf.
+>>> +
+>>> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>>
+>> The patch description should not mention Buildroot and not mention
+>> Buildroot specific choices. It should be written as if you were going
+>> to submit it upstream, i.e with a proper justification as to why
+>> linking with libatomic may be needed.
+> 
+> This patch only exists to appease Buildroot but, anyway, I can rewrite the comment.
+> 
+>> And in fact, I'm even going to ask you to submit this patch upstream :-)
+> 
+> They don't need this. Their detection of the atomic built-ins already works without additional help.
 
- Sorry for my confusion, but why do you remove these? It will still work with
-gcc 4.7 on arm, i386, mipsel and x86_64 because it will use its custom atomic
-implementation, no?
+ Clearly it doesn't work, or this wouldn't be needed...
 
+ Except if they specifically want to exclude any architecture for which they
+don't have their custom atomics implementation.
+
+ By the way, you check for atomic_4, which happens to be a special case on
+microblaze: it doesn't need -latomic for atomic_4, but it does for the others.
+So if they do use any other atomic operation, it would be better to check for
+atomic_2 or atomic_1 (or better yet, all of them).
 
  Regards,
  Arnout
 
-> +	default y if BR2_TOOLCHAIN_HAS_ATOMIC
->  	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
