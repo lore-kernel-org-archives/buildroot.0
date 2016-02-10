@@ -1,55 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 10 Feb 2016 16:57:00 +0100
-Subject: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for
- PowerPC
-In-Reply-To: <927354538.1864929.1455117949486.JavaMail.zimbra@datacom.ind.br>
-References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
- <20160205000613.504940f9@free-electrons.com>
- <927354538.1864929.1455117949486.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160210165700.7f97a29c@free-electrons.com>
+From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Date: Wed, 10 Feb 2016 16:58:28 +0100
+Subject: [Buildroot] [PATCH] Makefile: Fix overlay overwriting everything
+Message-ID: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlos Santos,
+After bumping from a 2 years old Buildroot installation, I got the
+following messages from the kernel at boot:
 
-On Wed, 10 Feb 2016 13:25:49 -0200 (BRST), Carlos Santos wrote:
+Failed to execute /init (error -2)
 
-> > config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-> >        bool
-> >        default y if BR2_arm
-> >        default y if BR2_i386
-> >        default y if BR2_mipsel
-> >        default y if BR2_x86_64
-> 
-> These architecture checks would be superseded by the BR2_TOOLCHAIN_HAS_ATOMIC boolean.
+It appears that the overlay mechanisms was causing my issues.
 
-Indeed.
+Description:
+The overlay mechanisms works by rsync'ing files from a folder specified
+by the user into target.
+Since c5bd8af65e50a51735eb112fed9cbe6337f14e06, /bin, /sbin and /lib are
+symlinked into /usr.
 
-> >	default y if BR2_TOOLCHAIN_HAS_ATOMIC
-> >        depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-> > 
-> > *and* ensure protobuf gets linked with -latomic.
-> 
-> Hum, this requires a patch on configure.ac that that would hardly be accepted upstream.
+Problem:
+If you have an overlay that contains the directory /bin, /sbin or /lib, rsync
+will erase the symlink and create a directory in its place.
+The directory, say .../target/lib, would *only* contains the overlay's content.
+Obviously, this causes a lot of troubles, starting with the kernel
+failing to start init (because of missing shared libraries).
 
-Why? If they use __atomic_*() built-ins, then they must link with
-libatomic if it exists, since __atomic_*() built-ins are not guaranteed
-to be available on all architectures if you don't link with libatomic.
+Solution:
+Telling rsync to treat symlinked dir on the receiver side as directory
+allow users to be blissfully ignorant of that problem.
 
-Look for example at the Android NDK documentation, which says that you
-should link with libatomic when using <atomic> in C++ :
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  http://developer.android.com/ndk/guides/cpp-support.html
-
-(search for "atomic support").
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 71735b5..2f33ddf 100644
+--- a/Makefile
++++ b/Makefile
+@@ -655,7 +655,7 @@ endif
+ 
+ 	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+ 		$(call MESSAGE,"Copying overlay $(d)"); \
+-		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
++		rsync -a --keep-dirlinks --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+ 			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+ 			$(d)/ $(TARGET_DIR)$(sep))
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
