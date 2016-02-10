@@ -1,67 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 23:51:34 +0100
-Subject: [Buildroot] [PATCH v7 1/1] package/dhcp: bump version to
-	4.3.3-P1
-In-Reply-To: <1454639985-620-1-git-send-email-rdkehn@yahoo.com>
-References: <1454639985-620-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <56BBBEF6.5050904@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 11 Feb 2016 00:03:08 +0100
+Subject: [Buildroot] [PATCH 0/4] vpnc: update and fix musl build
+Message-ID: <1455145392-2355-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05-02-16 03:39, Doug Kehn wrote:
-> bind source tar-ball is now embedded into the dhcp source. The embedded
-> bind tar-ball is extracted after the dhcp source so cross compiling
-> patches can be applied to the dhcp and bind before the package is built.
-> 
-> The embedded bind configure is called as part of dhcp make instead of
-> dhcp configure; therefore, needed configure parameters are set in the
-> make env.
-> 
-> 0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
-> been submitted upstream as part of a cross compiling enhancement
-> suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
-> 0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
-> 
-> Buildroot thread
-> 	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
-> has related information.
-> 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-[snip]
-> +# bind configure is called via dhcp make instead of dhcp configure. The make env
-> +# needs extra values for bind configure.
-> +DHCP_MAKE_ENV = \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	BUILD_CC="$(HOSTCC)"
+Hello,
 
- For consistency, we should also pass HOST_CFLAGS, HOST_CPPFLAGS and
-HOST_LDFLAGS, but they're actually not so useful. Oh, wait, the HOST_LDFLAGS
-are, in case it links with anything in HOST_DIR (which it doesn't, of course).
-Still, just to be safe...
+The starting point of this series was the patch from Bernd fixing the
+vpnc package to build with musl:
 
- With that, you can add my
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  http://patchwork.ozlabs.org/patch/572246/
 
+However, I was not very happy with the patches directly imported from
+Alpine Linux, with no real commit log, no explanation, etc.
 
- Regards,
- Arnout
+So instead, I went ahead and updated the vpnc package to use a more
+recent upstream version, to reformat all the patches using Git, to
+re-organize the existing patches into cleaner ones, and rework the
+musl fixes into clean patches as well.
 
-> +
->  ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
->  DHCP_CONF_OPTS += --enable-delayed-ack
->  endif
-> 
+All patches have been submitted upstream:
 
+  https://github.com/ndpgroup/vpnc/pull/6
+
+It isn't entirely clear how this Github repository gets maintained
+compared to the Subversion repository mentioned on the official vpnc
+homepage, but it seems to be kept reasonably up-to-date.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (4):
+  vpnc: switch to github as the new site
+  vpnc: simplify patch 0001
+  vpnc: bump to newer upstream version
+  vpnc: add patches to fix build with the musl C library
+
+ ...ile-allow-to-override-the-PREFIX-variable.patch | 32 ++++++++++
+ package/vpnc/0001-fix-build.patch                  | 71 ----------------------
+ ...02-Makefile-allow-to-override-the-version.patch | 42 +++++++++++++
+ package/vpnc/0002-nomanual.patch                   | 15 -----
+ ...file-allow-passing-custom-CFLAGS-CPPFLAGS.patch | 46 ++++++++++++++
+ package/vpnc/0003-susv3-legacy.patch               | 12 ----
+ ...e-provide-an-option-to-not-build-manpages.patch | 58 ++++++++++++++++++
+ ...low-passing-a-custom-path-to-libgcrypt-co.patch | 41 +++++++++++++
+ ...place-deprecated-SUSv3-functions-with-POS.patch | 37 +++++++++++
+ ...n-t-assume-error.h-is-available-on-all-Li.patch | 54 ++++++++++++++++
+ ...p.c-don-t-include-linux-if_tun.h-on-Linux.patch | 56 +++++++++++++++++
+ ...g.c-add-missing-sys-ttydefaults.h-include.patch | 38 ++++++++++++
+ package/vpnc/Config.in                             |  6 ++
+ package/vpnc/vpnc.hash                             |  2 +-
+ package/vpnc/vpnc.mk                               | 19 +++---
+ 15 files changed, 420 insertions(+), 109 deletions(-)
+ create mode 100644 package/vpnc/0001-Makefile-allow-to-override-the-PREFIX-variable.patch
+ delete mode 100644 package/vpnc/0001-fix-build.patch
+ create mode 100644 package/vpnc/0002-Makefile-allow-to-override-the-version.patch
+ delete mode 100644 package/vpnc/0002-nomanual.patch
+ create mode 100644 package/vpnc/0003-Makefile-allow-passing-custom-CFLAGS-CPPFLAGS.patch
+ delete mode 100644 package/vpnc/0003-susv3-legacy.patch
+ create mode 100644 package/vpnc/0004-Makefile-provide-an-option-to-not-build-manpages.patch
+ create mode 100644 package/vpnc/0005-Makefile-allow-passing-a-custom-path-to-libgcrypt-co.patch
+ create mode 100644 package/vpnc/0006-config.c-Replace-deprecated-SUSv3-functions-with-POS.patch
+ create mode 100644 package/vpnc/0007-sysdep.h-don-t-assume-error.h-is-available-on-all-Li.patch
+ create mode 100644 package/vpnc/0008-sysdep.c-don-t-include-linux-if_tun.h-on-Linux.patch
+ create mode 100644 package/vpnc/0009-config.c-add-missing-sys-ttydefaults.h-include.patch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.6.4
