@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 22:14:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gdb: add optional support for xz
-In-Reply-To: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 10 Feb 2016 22:19:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: add optional
+ support for bzip2
+In-Reply-To: <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <56BBA842.9080301@mind.be>
+ <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <56BBA94B.3000809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,47 +13,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 10-02-16 21:59, Bernd Kuhls wrote:
-> When xz was compiled before, gdb will use it as optional dependency:
+> When bzip2 was compiled before, libarchive will use it as optional
+> dependency:
 > 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.1]
+> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libarchive.so.13.1.2 | grep NEEDED
 >  0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+>  0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
+>  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
 >  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libarchive/libarchive.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+> index 206de3f..f438d6e 100644
+> --- a/package/libarchive/libarchive.mk
+> +++ b/package/libarchive/libarchive.mk
+> @@ -42,6 +42,12 @@ else
+>  LIBARCHIVE_CONF_OPTS += --disable-xattr
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_BZIP2),y)
+> +LIBARCHIVE_DEPENDENCIES += bzip2
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- This should probably go in to 2016.02.
+ No --with-bz2lib? If there is a good reason, mention it in the commit log.
 
  Regards,
  Arnout
 
-> ---
->  package/gdb/gdb.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 3b0f501..32d52eb 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -118,6 +118,13 @@ else
->  GDB_CONF_OPTS += --without-expat
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_XZ),y)
-> +GDB_CONF_OPTS += --with-lzma
-> +GDB_DEPENDENCIES += xz
 > +else
-> +GDB_CONF_OPTS += --without-lzma
+> +LIBARCHIVE_CONF_OPTS += --without-bz2lib
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  GDB_CONF_OPTS += --with-zlib
->  GDB_DEPENDENCIES += zlib
+>  ifeq ($(BR2_PACKAGE_EXPAT),y)
+>  LIBARCHIVE_DEPENDENCIES += expat
+>  else
 > 
 
 
