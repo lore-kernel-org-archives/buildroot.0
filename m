@@ -1,80 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Feb 2016 21:06:03 +0100
-Subject: [Buildroot] [PATCH 1/1] protobuf: fix detection of __atomic_*()
- built-ins
-In-Reply-To: <1240623306.1965860.1455129747228.JavaMail.zimbra@datacom.ind.br>
-References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
- <1455118392-3965-1-git-send-email-casantos@datacom.ind.br>
- <20160210165037.1b02b8ee@free-electrons.com>
- <1240623306.1965860.1455129747228.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <56BB982B.4050706@mind.be>
+Date: Wed, 10 Feb 2016 21:09:05 +0100
+Subject: [Buildroot] [PATCH] Makefile: Fix overlay overwriting everything
+In-Reply-To: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1455119908-21976-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <56BB98E1.4070008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10-02-16 19:42, Carlos Santos wrote:
-> [Thanks, Zimbra, for messing rearranging the messages in the inbox, so I answer them in the wrong order].
+On 10-02-16 16:58, Maxime Hadjinlian wrote:
+> After bumping from a 2 years old Buildroot installation, I got the
+> following messages from the kernel at boot:
 > 
->> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
->> To: "Carlos Santos" <casantos@datacom.ind.br>
->> Cc: buildroot at buildroot.org, "henrique marks" <henrique.marks@datacom.ind.br>
->> Sent: Wednesday, February 10, 2016 1:50:37 PM
->> Subject: Re: [PATCH 1/1] protobuf: fix detection of __atomic_*() built-ins
+> Failed to execute /init (error -2)
 > 
->> Hello,
->>
->> Thanks, this looks good, with one nit, see below.
->>
->> On Wed, 10 Feb 2016 13:33:12 -0200, Carlos Santos wrote:
->>
->>> diff --git
->>> a/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
->>> b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
->>> new file mode 100644
->>> index 0000000..237bc71
->>> --- /dev/null
->>> +++ b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
->>> @@ -0,0 +1,34 @@
->>> +From 0883fa19d59ece19eec30937c65fd10162ef57b0 Mon Sep 17 00:00:00 2001
->>> +From: Carlos Santos <casantos@datacom.ind.br>
->>> +Date: Wed, 10 Feb 2016 12:54:43 -0200
->>> +Subject: [PATCH] configure.ac: check if libatomic is needed
->>> +
->>> +In Buildroot, to simplify things, we've decided to simply require gcc 4.8
->>> +as soon as the architectures has at least one __atomic_*() built-in
->>> +variant that requires libatomic.
->>> +
->>> +Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
->>> +*could* technically build with gcc 4.7. This is probably not a big deal,
->>> +and we can live with requiring gcc 4.8 on PowerPC to build protobuf.
->>> +
->>> +Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
->>
->> The patch description should not mention Buildroot and not mention
->> Buildroot specific choices. It should be written as if you were going
->> to submit it upstream, i.e with a proper justification as to why
->> linking with libatomic may be needed.
+> It appears that the overlay mechanisms was causing my issues.
 > 
-> This patch only exists to appease Buildroot but, anyway, I can rewrite the comment.
+> Description:
+> The overlay mechanisms works by rsync'ing files from a folder specified
+> by the user into target.
+> Since c5bd8af65e50a51735eb112fed9cbe6337f14e06, /bin, /sbin and /lib are
+> symlinked into /usr.
 > 
->> And in fact, I'm even going to ask you to submit this patch upstream :-)
+> Problem:
+> If you have an overlay that contains the directory /bin, /sbin or /lib, rsync
+> will erase the symlink and create a directory in its place.
+> The directory, say .../target/lib, would *only* contains the overlay's content.
+> Obviously, this causes a lot of troubles, starting with the kernel
+> failing to start init (because of missing shared libraries).
 > 
-> They don't need this. Their detection of the atomic built-ins already works without additional help.
+> Solution:
+> Telling rsync to treat symlinked dir on the receiver side as directory
+> allow users to be blissfully ignorant of that problem.
 
- Clearly it doesn't work, or this wouldn't be needed...
+ I'm not so sure of this one... It makes it impossible to override the symlinks
+in the skeleton in the overlay. Say, you want to populate /var/spool with some
+directories so it becomes useable.
 
- Except if they specifically want to exclude any architecture for which they
-don't have their custom atomics implementation.
+ That said, it's probably better in that case to override the skeleton directly,
+so that package installation can pick up the new directory.
 
- By the way, you check for atomic_4, which happens to be a special case on
-microblaze: it doesn't need -latomic for atomic_4, but it does for the others.
-So if they do use any other atomic operation, it would be better to check for
-atomic_2 or atomic_1 (or better yet, all of them).
+ Still, you _are_ breaking a valid use case with this patch.
+
+ What do the others think?
 
  Regards,
  Arnout
+
+> 
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 71735b5..2f33ddf 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -655,7 +655,7 @@ endif
+>  
+>  	@$(foreach d, $(call qstrip,$(BR2_ROOTFS_OVERLAY)), \
+>  		$(call MESSAGE,"Copying overlay $(d)"); \
+> -		rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+> +		rsync -a --keep-dirlinks --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
+>  			--chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
+>  			$(d)/ $(TARGET_DIR)$(sep))
+>  
+> 
 
 
 -- 
