@@ -1,33 +1,54 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Feb 2016 08:19:56 -0300
-Subject: [Buildroot] [PATCH] libcue: needs host-bison and host-flex
-Message-ID: <1455103196-29850-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+Date: Wed, 10 Feb 2016 08:58:11 -0300
+Subject: [Buildroot] [PATCH v2] package: aespipe: add host variant
+In-Reply-To: <20160206212831.48600f93@free-electrons.com>
+References: <1454634772-19009-1-git-send-email-ariel@vanguardiasur.com.ar>
+ <20160206212831.48600f93@free-electrons.com>
+Message-ID: <56BB25D3.3040205@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/975/975663820e3d4e78e52c11ac3c0535d5537a134a/
+Thomas,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libcue/libcue.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+El 06/02/16 a las 17:28, Thomas Petazzoni escribi?:
+> Dear Ariel D'Alessandro,
+> 
+> On Thu,  4 Feb 2016 22:12:52 -0300, Ariel D'Alessandro wrote:
+>> Having the host version may allow post-image scripts to encrypt the
+>> resulting image with aespipe (and decrypt it in the update tool on the
+>> target).
+>>
+>> Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
+> 
+> We generally don't use "package: <package>:" as a commit title prefix.
+> We either use just "<package>: " or "package/<package>: ". I've
+> adjusted the commit title accordingly.
+> 
+>> diff --git a/package/aespipe/Config.in.host b/package/aespipe/Config.in.host
+>> new file mode 100644
+>> index 0000000..43b5bcf
+>> --- /dev/null
+>> +++ b/package/aespipe/Config.in.host
+>> @@ -0,0 +1,9 @@
+>> +config BR2_PACKAGE_HOST_AESPIPE
+>> +	bool "host aespipe"
+>> +	help
+>> +	  aespipe program is AES encrypting or decrypting pipe. It reads from
+>> +	  standard input and writes to standard output. It can be used to
+>> +	  create and restore encrypted tar or cpio archives. It can be used to
+>> +	  encrypt and decrypt loop-AES compatible encrypted disk images.
+> 
+> The lines were slightly too long here, so I rewrapped this paragraph.
+> 
+> And then I applied your patch. Thanks a lot!
 
-diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
-index de8f792..7012453 100644
---- a/package/libcue/libcue.mk
-+++ b/package/libcue/libcue.mk
-@@ -8,7 +8,7 @@ LIBCUE_VERSION = v1.4.0
- LIBCUE_SITE = $(call github,lipnitsk,libcue,$(LIBCUE_VERSION))
- LIBCUE_LICENSE = GPLv2, BSD-2c (rem.c)
- LIBCUE_LICENSE_FILES = COPYING
--LIBCUE_DEPENDENCIES = flex
-+LIBCUE_DEPENDENCIES = host-bison host-flex flex
- LIBCUE_INSTALL_STAGING = YES
- LIBCUE_AUTORECONF = YES
- 
+Great :) Thank you very much!
+
+Regards,
+
 -- 
-2.4.10
+Ariel D'Alessandro, VanguardiaSur
+www.vanguardiasur.com.ar
