@@ -1,46 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 10 Feb 2016 21:58:19 +0100
-Subject: [Buildroot] [PATCH 3/3] package/dovecot: add optional support for
-	lz4
-In-Reply-To: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1455137899-18008-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 10 Feb 2016 21:58:42 +0100
+Subject: [Buildroot] [PATCH 2/2] package/links: add optional support for xz
+In-Reply-To: <1455137922-18060-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1455137922-18060-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1455137922-18060-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When lz4 was compiled before, dovecot will use it as optional dependency:
+When xz was compiled before, links will use it as optional dependency:
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/dovecot/lib30_imap_zlib_plugin.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/links | grep NEEDED
  0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
- 0x00000001 (NEEDED)                     Shared library: [liblz4.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libevent-2.0.so.5]
  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/links/links.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index dbf2dab..6b69329 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -76,6 +76,13 @@ else
- DOVECOT_CONF_OPTS += --without-sqlite
+diff --git a/package/links/links.mk b/package/links/links.mk
+index b948de4..4d2cb2e 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -47,6 +47,10 @@ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LINKS_DEPENDENCIES += openssl
  endif
  
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+DOVECOT_CONF_OPTS += --with-lz4
-+DOVECOT_DEPENDENCIES += lz4
-+else
-+DOVECOT_CONF_OPTS += --without-lz4
++ifeq ($(BR2_PACKAGE_XZ),y)
++LINKS_DEPENDENCIES += xz
 +endif
 +
- ifeq ($(BR2_PACKAGE_XZ),y)
- DOVECOT_CONF_OPTS += --with-lzma
- DOVECOT_DEPENDENCIES += xz
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LINKS_DEPENDENCIES += zlib
+ endif
 -- 
 2.7.0
