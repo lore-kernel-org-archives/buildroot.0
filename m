@@ -1,42 +1,46 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 10 Feb 2016 07:37:37 -0300
-Subject: [Buildroot] [PATCH] freetype: bump to version 2.6.3
-Message-ID: <1455100657-895-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 10 Feb 2016 08:06:25 -0300
+Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.6.5
+Message-ID: <1455102385-18073-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+CVE-2015-7511 - Mitigate side-channel attack on ECDH with Weierstrass
+curves.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgcrypt/libgcrypt.hash | 6 ++++--
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index dc238f2..45f91df 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
--md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
--sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
-+# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.3/
-+md5	0037b25a8c090bc8a1218e867b32beb1	freetype-2.6.3.tar.bz2
-+sha1	6c98bd5d0be313207c37ca23d25faf983486aee5	freetype-2.6.3.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index fa11b0c..d95c424 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index e845a51..272d332 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,2 +1,4 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00000.html
+-sha1 ed52add1ce635deeb2f5c6650e52667debd4ec70  libgcrypt-1.6.4.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q1/000384.html
++sha1	c3a5a13e717f7b3e3895650afc1b6e0d3fe9c726	libgcrypt-1.6.5.tar.bz2
++# Calculated based on the hash above
++sha256	f49ebc5842d455ae7019def33eb5a014a0f07a2a8353dc3aa50a76fd1dafa924	libgcrypt-1.6.5.tar.bz2
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 53d1d6c..7c27a22 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.6.2
-+FREETYPE_VERSION = 2.6.3
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
+-LIBGCRYPT_VERSION = 1.6.4
++LIBGCRYPT_VERSION = 1.6.5
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPLv2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
 -- 
 2.4.10
