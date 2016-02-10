@@ -1,76 +1,56 @@
-From: GabrielCastillo <gcastillo@controlnet.com.ar>
-Date: Wed, 10 Feb 2016 09:40:39 -0800 (PST)
-Subject: [Buildroot] Setting RGB
-In-Reply-To: <20160204205505.5a842de4@gmx.net>
-References: <CAKvcKqdfjtx96fk=cjMze7sOeY59OfWy1NZ2c_LY8TsuZ29DMA@mail.gmail.com>
- <20160204205505.5a842de4@gmx.net>
-Message-ID: <1455126039107-125494.post@n4.nabble.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Wed, 10 Feb 2016 16:30:19 -0200 (BRST)
+Subject: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for
+ PowerPC
+In-Reply-To: <20160210174425.592ffaa5@free-electrons.com>
+References: <1453986515-9505-1-git-send-email-casantos@datacom.ind.br>
+ <20160205000613.504940f9@free-electrons.com>
+ <927354538.1864929.1455117949486.JavaMail.zimbra@datacom.ind.br>
+ <20160210165700.7f97a29c@free-electrons.com>
+ <2127002292.1917904.1455121926734.JavaMail.zimbra@datacom.ind.br>
+ <20160210174425.592ffaa5@free-electrons.com>
+Message-ID: <574465614.1961308.1455129019177.JavaMail.zimbra@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I'm using:
-- SAMA5D3x
--Atmel
-- The Display is a Multiino MI0500PT-7
+> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
+> To: "Carlos Santos" <casantos@datacom.ind.br>
+> Cc: buildroot at buildroot.org
+> Sent: Wednesday, February 10, 2016 2:44:25 PM
+> Subject: Re: [Buildroot] [PATCH 1/1] protobuf: apply patch to compile for PowerPC
 
-I don't know if on QT4 works, but i need to make an App on QT5.
+> Dear Carlos Santos,
+> 
+> On Wed, 10 Feb 2016 14:32:06 -0200 (BRST), Carlos Santos wrote:
+> 
+>> The problem is the same you found on mpd (commit
+>> 84533029c70a4dffb2cd2e4f05e3903fd1b8fcd9) in branch master. With the patch in
+>> configure.ac I get this:
+>> 
+>> $ owerpc-e500v2-linux-gnuspe-ldd --root target/ target/usr/bin/protoc
+>>         libprotobuf.so.9 => /usr/lib/libprotobuf.so.9 (0xdeadbeef)
+>>         libatomic.so.1 => /lib/libatomic.so.1 (0xdeadbeef)
+>>         libpthread.so.0 => /lib/libpthread.so.0 (0xdeadbeef)
+>>         libc.so.6 => /lib/libc.so.6 (0xdeadbeef)
+>>         ld.so.1 => /lib/ld.so.1 (0xdeadbeef)
+>>         libz.so.1 => /usr/lib/libz.so.1 (0xdeadbeef)
+>>         libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0xdeadbeef)
+>>         libm.so.6 => /lib/libm.so.6 (0xdeadbeef)
+>>         libgcc_s.so.1 => /lib/libgcc_s.so.1 (0xdeadbeef)
+>>         libprotoc.so.9 => /usr/lib/libprotoc.so.9 (0xdeadbeef)
+> 
+> Yes, looks good.
+> 
+>> Without the patch protoc is not linked to libatomic.so.1.
+> 
+> Indeed.
+> 
+> And so, what's the problem ?
 
-I have configure a panel-simple.c with:
- 
-static const struct drm_display_mode multiinno_mi0500pt_mode = {               
-  ????.clock = 30000,                                                            
-  ????.hdisplay = 800,                                                           
-  ????.hsync_start = 800 + 2,                                                    
-  ????.hsync_end = 800 + 2 + 41,                                                 
-  ????.htotal = 800 + 2 + 41 + 2,                                                
-  ????.vdisplay = 480,                                                           
-  ????.vsync_start = 480 + 2,                                                    
-  ????.vsync_end = 480 + 2 + 41,                                                 
-  ????.vtotal = 480 + 2 + 41 + 2,                                                
-  ????.vrefresh = 60,                                                            
-  ????.flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,                      
-  };                                                                             
-                                                                                 
-  static const struct panel_desc multiinno_mi0500pt = {                          
-  ????.modes = &multiinno_mi0500pt_mode,                                         
-  ????.num_modes = 1,                                                            
-  ????.bpc = 8,                                                                  
-  ????.size = {                                                                  
-  ????????.width = 108,                                                          
-  ????????.height = 65,                                                          
-  ????},                                                                         
-  ????.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
-};
+Henrique just warned me (offline) about the misunderstanding. The "problem" here is that the patch on configure.ac would not be accepted upstream, since their detection of the atomic operations already works. This is not big deal, IMO, so if you are satisfied with the patch then go ahead and apply it.
 
-and i change the DTS to include it:
-
-????panel: panel {                                                             
-         compatible = "multiinno,mi0500pt", "simple-panel";             
-         backlight = <&backlight>;                                      
-         power-supply = <&panel_reg>;                                   
-         #address-cells = <1>;                                          
-         #size-cells = <0>;                                             
-         status = "okay";                                               
-                                                                              
-         port at 0 {                                                       
-                reg = <0>;                                             
-                #address-cells = <1>;                                  
-                #size-cells = <0>;                                     
-                                                                             
-                panel_input: endpoint at 0 {                              
-                        reg = <0>;                                     
-                        remote-endpoint = <&hlcdc_panel_output>;       
-                 };                                                     
-        };                                                             
-};   
-
-That is all i do to include the new display.
-
-
-
---
-View this message in context: http://buildroot-busybox.2317881.n4.nabble.com/Setting-RGB-tp124903p125494.html
-Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+Carlos Santos (Casantos)
+DATACOM, P&D
