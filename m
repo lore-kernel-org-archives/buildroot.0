@@ -1,48 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:16:16 +0100
-Subject: [Buildroot] [git commit] chrony: security bump to version 2.2.1
-Message-ID: <20160211221809.127358184D@busybox.osuosl.org>
+Date: Thu, 11 Feb 2016 23:18:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
+	version to 1.18.1
+In-Reply-To: <1455044006-25742-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Tue, 9 Feb 2016 19:53:26 +0100")
+References: <1455044006-25742-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87h9heq4ax.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b6e76a3a12441a3785c5a794dc76b87a9965622
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes:
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-CVE-2016-1567: Impersonation between authenticated peers.
+Committed to next, thanks.
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/chrony/chrony.hash | 6 +++---
- package/chrony/chrony.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
-index 066ecb5..fb8a655 100644
---- a/package/chrony/chrony.hash
-+++ b/package/chrony/chrony.hash
-@@ -1,3 +1,3 @@
--# From http://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2015/10/msg00002.html
--md5  17bc77d3d2ce942675f9600b60452717         chrony-2.2.tar.gz
--sha1 eed81b53ef504430128a3a6fa5b56f7ee2fdf2b1 chrony-2.2.tar.gz
-+# From http://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2016/01/msg00000.html
-+md5  ce46990540aab3670d093311ee43fe17         chrony-2.2.1.tar.gz
-+sha1 290b761478dc90d4921c98b7030ead07c49f2afd chrony-2.2.1.tar.gz
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index aa7306f..369d7eb 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHRONY_VERSION = 2.2
-+CHRONY_VERSION = 2.2.1
- CHRONY_SITE = http://download.tuxfamily.org/chrony
- CHRONY_LICENSE = GPLv2
- CHRONY_LICENSE_FILES = COPYING
+-- 
+Bye, Peter Korsgaard
