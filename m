@@ -1,133 +1,162 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Thu, 11 Feb 2016 21:08:21 +0100
-Subject: [Buildroot] How do folks add packages to an existing rootfs
- during development?
-In-Reply-To: <CAF_dkJDw95gyf3WFhfy7_zPgD05W4N0kTmGFLJbWcTCRwj1uKw@mail.gmail.com>
-References: <CAF_dkJDw95gyf3WFhfy7_zPgD05W4N0kTmGFLJbWcTCRwj1uKw@mail.gmail.com>
-Message-ID: <56BCEA35.9060408@mclink.it>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 11 Feb 2016 21:11:54 +0100
+Subject: [Buildroot] [PATCH v4] valgrind: fix musl compile
+Message-ID: <1455221514-8620-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Patrick,
-comments below.
+Add musl libc detection (based on suggestions by Romain Naour and
+Arnout Vandecappelle) and add some tweaks for musl support (based
+on OpenWRT patch [1]).
 
-Il 11/02/2016 16:23, Patrick Doyle ha scritto:
-> I have read section 10.7 "Why doesn't Buildroot generate binary
-> packages (.deb, .ipkg...)?" in the Buildroot users manual, and I
-> understand and appreciate the answer to that question.
->
-> My question is slightly different, and it is based on the following scenario:
->
-> I am creating a buildroot environment for my custom product.  I have
-> generated the rootfs and deployed it to my development board.  Once I
-> have done that, I have customized a few things to my liking (e.g.
-> hostname, installed my custom application, generated OpenSSH keys,
-> etc...).  Now I discover that I also want to add another package to my
-> environment.
-First of all I do structure my development dir with three subdirs:
-buildroot, input and output.
-This main subdir is also (usually) under git control, so I have a basic .gitignore containing:
+Fixes ([2]):
+  checking the glibc version... unsupported version
+  configure: error: Valgrind requires glibc version 2.2 or later
 
-buildroot
-output
+Patch suggested upstream (see [3]).
 
-./buildroot is populated by normal "git clone ..."
-./input contains:
+[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
+[2] http://autobuild.buildroot.org/results/7b0/7b048ba58918f0a08498c61327fcf35a85a84837
+[3] https://bugs.kde.org/show_bug.cgi?id=359202
 
-./input/board/
-./input/configs/
-./input/overlay/
-./input/package/
-./input/patch/
-./input/Config.in
-./input/external.mk
-./input/permissions.makedev
-./input/users.table
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v3 -> v4:
+  - fix uClibc spelling (suggested by Arnout Vandecappelle)
 
-Initial config is done with "cd buildroot && make O=../output BR2_EXTERNAL=../input yourboard_defconfig"
+Changes v2 -> v3:
+  - change valgrind patch define logic (suggested by Arnout Vandecappelle)
 
-After that all configurations/compilations are done via: "(cd output && make whatever)"
+Changes v1 -> v2:
+  - add proper musl libc detection (suggested by Romain Naour and
+    Arnout Vandecappelle)
+---
+ package/valgrind/0004-Fixes-for-musl-libc.patch | 99 +++++++++++++++++++++++++
+ package/valgrind/valgrind.mk                    |  3 +
+ 2 files changed, 102 insertions(+)
+ create mode 100644 package/valgrind/0004-Fixes-for-musl-libc.patch
 
-> Option 1:
-> Rerun "make menuconfig; make"; generate a new rootfs; flash it on my
-> board; and redo the customizations.  (Most of the customizations will
-> get easier with time, as I roll them into my configuration, but some
-> of them, such as OpenSSH host keys, will just have to change each time
-> I do this).
-In general I try to do my configurations editing input/overlay.
-This way they will be part of next iteration
-When forced to work directly on target I try to backport to the ./input/overlay/ tree
-For this I found using mc (Midnight Commander) with one panel connected to target via "Shell link" very effective.
-> Option 2:
-> Rerun "make menuconfig; make" and deploy just the new package.
-> Lather, rinse, repeat, until I've figured out what package sets make
-> the most sense.  Then do Option 1.
-Here a I use rsync to add whatever needed without clobbering what shouldn't be clobbered.
-Using it with Buildroot output is not trivial.
-I use the following script:
-
-===================
-#!/bin/bash
-
-target=
-port=
-here=$(pwd)
-clean=none
-
-while getopts ":t:p:" opt; do
-   case $opt in
-     t)
-       target=$OPTARG
-       ;;
-     p)
-       port="-p $OPTARG"
-       ;;
-     \?)
-       echo "Invalid option: -$OPTARG" >&2
-       exit 1
-       ;;
-     :)
-       echo "Option -$OPTARG requires an argument." >&2
-       exit 1
-       ;;
-   esac
-done
-
-if [ -z "$target" ]
-then
-   echo "usage: $0 -t <target IP> [ -p <target ssh port> ]"
-   exit 1
-fi
-
-cd /tmp
-mkdir TMPfs
-cd TMPfs
-
-fakeroot bash <<- EOF
-         tar xf $here/output/images/rootfs.tar
-         rsync -av -e "ssh $port -i $here/operator -oUserKnownHostsFile=$HOME/.ssh/known_hosts" . root@$target:/
-EOF
-
-rm -rf *
-cd ..
-rmdir TMPfs
-===================
-
-I generated a key pair operator/operator.pub and I added operator.pub to ./input/overlay/root/.ssh/authorized_keys
-
->
-> Which option do folks in this community choose in general?
->
-> --wpd
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-Hope it Helps
-
-Regards
-Mauro
+diff --git a/package/valgrind/0004-Fixes-for-musl-libc.patch b/package/valgrind/0004-Fixes-for-musl-libc.patch
+new file mode 100644
+index 0000000..d543728
+--- /dev/null
++++ b/package/valgrind/0004-Fixes-for-musl-libc.patch
+@@ -0,0 +1,99 @@
++From 50859f3577418cc42f76e1319e699202a615bbe1 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 31 Oct 2015 19:45:04 +0100
++Subject: [PATCH] Fixes for musl libc.
++
++- add musl libc detection (prevents configure error)
++- adjust preload and symbol names (based on the OpenWrt
++  patch, see [1])
++
++[1] https://dev.openwrt.org/browser/trunk/package/devel/valgrind/patches/200-musl_fix.patch?rev=46302
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ configure.ac             | 16 ++++++++++++++--
++ coregrind/vg_preloaded.c |  2 +-
++ include/pub_tool_redir.h |  9 ++++++++-
++ 3 files changed, 23 insertions(+), 4 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 8ab7f9b..e865bf5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1009,6 +1009,13 @@ if test x$VGCONF_PLATFORM_PRI_CAPS = xX86_SOLARIS \
++     GLIBC_VERSION="solaris"
++ fi
++ 
+++# GLIBC_VERSION is empty if a musl libc is used, so use the toolchain tuple
+++# in this case.
+++if test x$GLIBC_VERSION = x; then
+++    if $CC -dumpmachine | grep -q musl; then
+++        GLIBC_VERSION=musl
+++    fi
+++fi
++ 
++ AC_MSG_CHECKING([the glibc version])
++ 
++@@ -1064,10 +1071,15 @@ case "${GLIBC_VERSION}" in
++ 	# DEFAULT_SUPP set in host_os switch-case above.
++ 	# No other suppression file is used.
++ 	;;
+++     musl)
+++	AC_MSG_RESULT(Musl)
+++	AC_DEFINE([MUSL_LIBC], 1, [Define to 1 if you're using Musl libc])
+++	# no DEFAULT_SUPP file yet for musl libc.
+++	;;
++      2.0|2.1|*)
++ 	AC_MSG_RESULT([unsupported version ${GLIBC_VERSION}])
++-	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later,])
++-	AC_MSG_ERROR([Darwin libc, Bionic libc or Solaris libc])
+++	AC_MSG_ERROR([Valgrind requires glibc version 2.2 or later, uClibc,])
+++	AC_MSG_ERROR([musl libc, Darwin libc, Bionic libc or Solaris libc])
++ 	;;
++ esac
++ 
++diff --git a/coregrind/vg_preloaded.c b/coregrind/vg_preloaded.c
++index 2ea7a7a..7b51aba 100644
++--- a/coregrind/vg_preloaded.c
+++++ b/coregrind/vg_preloaded.c
++@@ -56,7 +56,7 @@
++ void VG_NOTIFY_ON_LOAD(freeres)( void );
++ void VG_NOTIFY_ON_LOAD(freeres)( void )
++ {
++-#  if !defined(__UCLIBC__) \
+++#  if !defined(__UCLIBC__) && !defined(MUSL_LIBC) \
++       && !defined(VGPV_arm_linux_android) \
++       && !defined(VGPV_x86_linux_android) \
++       && !defined(VGPV_mips32_linux_android) \
++diff --git a/include/pub_tool_redir.h b/include/pub_tool_redir.h
++index bac00d7..babcf9a 100644
++--- a/include/pub_tool_redir.h
+++++ b/include/pub_tool_redir.h
++@@ -242,8 +242,11 @@
++ /* --- Soname of the standard C library. --- */
++ 
++ #if defined(VGO_linux) || defined(VGO_solaris)
+++# if defined(MUSL_LIBC)
+++#  define  VG_Z_LIBC_SONAME  libcZdZa              // libc.*
+++#else
++ #  define  VG_Z_LIBC_SONAME  libcZdsoZa              // libc.so*
++-
+++#endif
++ #elif defined(VGO_darwin) && (DARWIN_VERS <= DARWIN_10_6)
++ #  define  VG_Z_LIBC_SONAME  libSystemZdZaZddylib    // libSystem.*.dylib
++ 
++@@ -274,7 +277,11 @@
++ /* --- Soname of the pthreads library. --- */
++ 
++ #if defined(VGO_linux)
+++# if defined(MUSL_LIBC)
+++#  define  VG_Z_LIBPTHREAD_SONAME  libcZdZa              // libc.*
+++#else
++ #  define  VG_Z_LIBPTHREAD_SONAME  libpthreadZdsoZd0     // libpthread.so.0
+++#endif
++ #elif defined(VGO_darwin)
++ #  define  VG_Z_LIBPTHREAD_SONAME  libSystemZdZaZddylib  // libSystem.*.dylib
++ #elif defined(VGO_solaris)
++-- 
++2.1.4
++
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index 5849b49..46ba13e 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -12,6 +12,9 @@ VALGRIND_LICENSE_FILES = COPYING COPYING.DOCS
+ VALGRIND_CONF_OPTS = --disable-ubsan
+ VALGRIND_INSTALL_STAGING = YES
+ 
++# patch 0004-Fixes-for-musl-libc.patch touching configure.ac
++VALGRIND_AUTORECONF = YES
++
+ ifeq ($(BR2_GCC_ENABLE_TLS),y)
+ VALGRIND_CONF_OPTS += --enable-tls
+ else
+-- 
+2.1.4
