@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:12:24 +0100
-Subject: [Buildroot] [git commit branch/next] libsodium: bump to version
-	1.0.8
-Message-ID: <20160211221538.612487FDA3@busybox.osuosl.org>
+Date: Thu, 11 Feb 2016 23:14:45 +0100
+Subject: [Buildroot] [git commit branch/next] usb-modeswitch: bump to
+	version 2.3.0
+Message-ID: <20160211221538.B76DA7FDA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=455d97555ab96c01e2fc8dd661ad2cdc876ffbf8
+commit: https://git.buildroot.net/buildroot/commit/?id=c06a0f50d6cfdf87dd7baf7fb97d7b6a1ca5c30d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsodium/libsodium.hash | 2 +-
- package/libsodium/libsodium.mk   | 2 +-
+ package/usb_modeswitch/usb_modeswitch.hash | 2 +-
+ package/usb_modeswitch/usb_modeswitch.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
-index 3544237..8b79555 100644
---- a/package/libsodium/libsodium.hash
-+++ b/package/libsodium/libsodium.hash
+diff --git a/package/usb_modeswitch/usb_modeswitch.hash b/package/usb_modeswitch/usb_modeswitch.hash
+index 2033d31..075ef63 100644
+--- a/package/usb_modeswitch/usb_modeswitch.hash
++++ b/package/usb_modeswitch/usb_modeswitch.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	940d03ea7d2caa7940e24564bf6d9f66d6edd1df1e0111ff8e3655f3b864fb59	libsodium-1.0.6.tar.gz
-+sha256	c0f191d2527852641e0a996b7b106d2e04cbc76ea50731b2d0babd3409301926	libsodium-1.0.8.tar.gz
-diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
-index 09bc777..bd6f58d 100644
---- a/package/libsodium/libsodium.mk
-+++ b/package/libsodium/libsodium.mk
+ # Locally calculated
+-sha256	7ee42be2fe26dde20c58f54bf678fb136d2706250e4aa74f06fc97268a46e90f	usb-modeswitch-2.2.6.tar.bz2
++sha256	f93e940c2eb0c585a5d2210177338e68a9b24f409e351e4a854132453246b894	usb-modeswitch-2.3.0.tar.bz2
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index aca13e4..ac41a80 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSODIUM_VERSION = 1.0.6
-+LIBSODIUM_VERSION = 1.0.8
- LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
- LIBSODIUM_LICENSE = ISC
- LIBSODIUM_LICENSE_FILES = LICENSE
+-USB_MODESWITCH_VERSION = 2.2.6
++USB_MODESWITCH_VERSION = 2.3.0
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+ USB_MODESWITCH_DEPENDENCIES = libusb
