@@ -1,48 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:09:12 +0100
-Subject: [Buildroot] [git commit] libgcrypt: security bump to version 1.6.5
-Message-ID: <20160211221019.2FB51818B0@busybox.osuosl.org>
+Date: Thu, 11 Feb 2016 23:09:52 +0100
+Subject: [Buildroot] [git commit] libcue: needs host-bison and host-flex
+Message-ID: <20160211221019.41FF27FB06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f05056b03ed19905870a7a5b15d7e57d2163bba9
+commit: https://git.buildroot.net/buildroot/commit/?id=efc4682594a0dbfbd51f781f91cc50aa7a2a97a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-CVE-2015-7511 - Mitigate side-channel attack on ECDH with Weierstrass
-curves.
+http://autobuild.buildroot.net/results/975/975663820e3d4e78e52c11ac3c0535d5537a134a/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgcrypt/libgcrypt.hash | 6 ++++--
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libcue/libcue.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index e845a51..272d332 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,2 +1,4 @@
--# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00000.html
--sha1 ed52add1ce635deeb2f5c6650e52667debd4ec70  libgcrypt-1.6.4.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q1/000384.html
-+sha1	c3a5a13e717f7b3e3895650afc1b6e0d3fe9c726	libgcrypt-1.6.5.tar.bz2
-+# Calculated based on the hash above
-+sha256	f49ebc5842d455ae7019def33eb5a014a0f07a2a8353dc3aa50a76fd1dafa924	libgcrypt-1.6.5.tar.bz2
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 53d1d6c..7c27a22 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libcue/libcue.mk b/package/libcue/libcue.mk
+index de8f792..7012453 100644
+--- a/package/libcue/libcue.mk
++++ b/package/libcue/libcue.mk
+@@ -8,7 +8,7 @@ LIBCUE_VERSION = v1.4.0
+ LIBCUE_SITE = $(call github,lipnitsk,libcue,$(LIBCUE_VERSION))
+ LIBCUE_LICENSE = GPLv2, BSD-2c (rem.c)
+ LIBCUE_LICENSE_FILES = COPYING
+-LIBCUE_DEPENDENCIES = flex
++LIBCUE_DEPENDENCIES = host-bison host-flex flex
+ LIBCUE_INSTALL_STAGING = YES
+ LIBCUE_AUTORECONF = YES
  
--LIBGCRYPT_VERSION = 1.6.4
-+LIBGCRYPT_VERSION = 1.6.5
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPLv2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
