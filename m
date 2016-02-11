@@ -1,21 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:12:07 +0100
-Subject: [Buildroot] [PATCH] openldap: bump to version 2.4.44
-In-Reply-To: <1455109981-30528-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 10 Feb 2016 10:13:01 -0300")
-References: <1455109981-30528-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8760xurj60.fsf@dell.be.48ers.dk>
+From: James Knight <james.knight@rockwellcollins.com>
+Date: Thu, 11 Feb 2016 17:13:06 -0500
+Subject: [Buildroot] [PATCH 1/1] chrony: security bump to version 2.2.1
+Message-ID: <1455228786-19136-1-git-send-email-james.knight@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+Fixes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+CVE-2016-1567: Impersonation between authenticated peers.
 
-Committed to next, thanks.
+Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+---
+ package/chrony/chrony.hash | 6 +++---
+ package/chrony/chrony.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 066ecb5..fb8a655 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,3 +1,3 @@
+-# From http://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2015/10/msg00002.html
+-md5  17bc77d3d2ce942675f9600b60452717         chrony-2.2.tar.gz
+-sha1 eed81b53ef504430128a3a6fa5b56f7ee2fdf2b1 chrony-2.2.tar.gz
++# From http://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2016/01/msg00000.html
++md5  ce46990540aab3670d093311ee43fe17         chrony-2.2.1.tar.gz
++sha1 290b761478dc90d4921c98b7030ead07c49f2afd chrony-2.2.1.tar.gz
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index aa7306f..369d7eb 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 2.2
++CHRONY_VERSION = 2.2.1
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPLv2
+ CHRONY_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.6.4.windows.1
