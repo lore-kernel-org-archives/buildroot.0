@@ -1,42 +1,133 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 11 Feb 2016 15:13:24 -0300
-Subject: [Buildroot] [PATCH 2/2] usb-modeswitch-data: bump to version
-	20160112
-In-Reply-To: <1455214404-32549-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1455214404-32549-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1455214404-32549-2-git-send-email-gustavo@zacarias.com.ar>
+From: Mauro Condarelli <mc5686@mclink.it>
+Date: Thu, 11 Feb 2016 21:08:21 +0100
+Subject: [Buildroot] How do folks add packages to an existing rootfs
+ during development?
+In-Reply-To: <CAF_dkJDw95gyf3WFhfy7_zPgD05W4N0kTmGFLJbWcTCRwj1uKw@mail.gmail.com>
+References: <CAF_dkJDw95gyf3WFhfy7_zPgD05W4N0kTmGFLJbWcTCRwj1uKw@mail.gmail.com>
+Message-ID: <56BCEA35.9060408@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/usb_modeswitch_data/usb_modeswitch_data.hash | 2 +-
- package/usb_modeswitch_data/usb_modeswitch_data.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Patrick,
+comments below.
 
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.hash b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-index 05a5445..0df5475 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.hash
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	584d362bc0060c02016edaac7b05ebd6558d5dcbdf14f1ae6d0ec9630265a982	usb-modeswitch-data-20151101.tar.bz2
-+sha256	d679a44a48b1d1f243fea6b4d2bd54e0e08010ff579dd81eaf698954c0c6dfa7	usb-modeswitch-data-20160112.tar.bz2
-diff --git a/package/usb_modeswitch_data/usb_modeswitch_data.mk b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-index d8d5622..a0cbc12 100644
---- a/package/usb_modeswitch_data/usb_modeswitch_data.mk
-+++ b/package/usb_modeswitch_data/usb_modeswitch_data.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--USB_MODESWITCH_DATA_VERSION = 20151101
-+USB_MODESWITCH_DATA_VERSION = 20160112
- USB_MODESWITCH_DATA_SOURCE = usb-modeswitch-data-$(USB_MODESWITCH_DATA_VERSION).tar.bz2
- USB_MODESWITCH_DATA_SITE = http://www.draisberghof.de/usb_modeswitch
- USB_MODESWITCH_DATA_DEPENDENCIES = usb_modeswitch
--- 
-2.4.10
+Il 11/02/2016 16:23, Patrick Doyle ha scritto:
+> I have read section 10.7 "Why doesn't Buildroot generate binary
+> packages (.deb, .ipkg...)?" in the Buildroot users manual, and I
+> understand and appreciate the answer to that question.
+>
+> My question is slightly different, and it is based on the following scenario:
+>
+> I am creating a buildroot environment for my custom product.  I have
+> generated the rootfs and deployed it to my development board.  Once I
+> have done that, I have customized a few things to my liking (e.g.
+> hostname, installed my custom application, generated OpenSSH keys,
+> etc...).  Now I discover that I also want to add another package to my
+> environment.
+First of all I do structure my development dir with three subdirs:
+buildroot, input and output.
+This main subdir is also (usually) under git control, so I have a basic .gitignore containing:
+
+buildroot
+output
+
+./buildroot is populated by normal "git clone ..."
+./input contains:
+
+./input/board/
+./input/configs/
+./input/overlay/
+./input/package/
+./input/patch/
+./input/Config.in
+./input/external.mk
+./input/permissions.makedev
+./input/users.table
+
+Initial config is done with "cd buildroot && make O=../output BR2_EXTERNAL=../input yourboard_defconfig"
+
+After that all configurations/compilations are done via: "(cd output && make whatever)"
+
+> Option 1:
+> Rerun "make menuconfig; make"; generate a new rootfs; flash it on my
+> board; and redo the customizations.  (Most of the customizations will
+> get easier with time, as I roll them into my configuration, but some
+> of them, such as OpenSSH host keys, will just have to change each time
+> I do this).
+In general I try to do my configurations editing input/overlay.
+This way they will be part of next iteration
+When forced to work directly on target I try to backport to the ./input/overlay/ tree
+For this I found using mc (Midnight Commander) with one panel connected to target via "Shell link" very effective.
+> Option 2:
+> Rerun "make menuconfig; make" and deploy just the new package.
+> Lather, rinse, repeat, until I've figured out what package sets make
+> the most sense.  Then do Option 1.
+Here a I use rsync to add whatever needed without clobbering what shouldn't be clobbered.
+Using it with Buildroot output is not trivial.
+I use the following script:
+
+===================
+#!/bin/bash
+
+target=
+port=
+here=$(pwd)
+clean=none
+
+while getopts ":t:p:" opt; do
+   case $opt in
+     t)
+       target=$OPTARG
+       ;;
+     p)
+       port="-p $OPTARG"
+       ;;
+     \?)
+       echo "Invalid option: -$OPTARG" >&2
+       exit 1
+       ;;
+     :)
+       echo "Option -$OPTARG requires an argument." >&2
+       exit 1
+       ;;
+   esac
+done
+
+if [ -z "$target" ]
+then
+   echo "usage: $0 -t <target IP> [ -p <target ssh port> ]"
+   exit 1
+fi
+
+cd /tmp
+mkdir TMPfs
+cd TMPfs
+
+fakeroot bash <<- EOF
+         tar xf $here/output/images/rootfs.tar
+         rsync -av -e "ssh $port -i $here/operator -oUserKnownHostsFile=$HOME/.ssh/known_hosts" . root@$target:/
+EOF
+
+rm -rf *
+cd ..
+rmdir TMPfs
+===================
+
+I generated a key pair operator/operator.pub and I added operator.pub to ./input/overlay/root/.ssh/authorized_keys
+
+>
+> Which option do folks in this community choose in general?
+>
+> --wpd
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+Hope it Helps
+
+Regards
+Mauro
