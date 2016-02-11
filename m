@@ -1,7 +1,7 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Feb 2016 21:11:54 +0100
-Subject: [Buildroot] [PATCH v4] valgrind: fix musl compile
-Message-ID: <1455221514-8620-1-git-send-email-ps.report@gmx.net>
+Date: Thu, 11 Feb 2016 21:17:04 +0100
+Subject: [Buildroot] [PATCH v5] valgrind: fix musl compile
+Message-ID: <1455221824-8821-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,7 +23,11 @@ Patch suggested upstream (see [3]).
 [3] https://bugs.kde.org/show_bug.cgi?id=359202
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
+Changes v4 -> v5:
+  - add Reviewed-by
+
 Changes v3 -> v4:
   - fix uClibc spelling (suggested by Arnout Vandecappelle)
 
