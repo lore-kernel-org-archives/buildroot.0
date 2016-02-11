@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:09:32 +0100
-Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.6.5
-In-Reply-To: <1455102385-18073-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 10 Feb 2016 08:06:25 -0300")
-References: <1455102385-18073-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egcirjab.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Feb 2016 23:09:57 +0100
+Subject: [Buildroot] [PATCH] libcue: needs host-bison and host-flex
+In-Reply-To: <1455103196-29850-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 10 Feb 2016 08:19:56 -0300")
+References: <1455103196-29850-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a8n6rj9m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,7 @@ To: buildroot@busybox.net
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
  > Fixes:
- > CVE-2015-7511 - Mitigate side-channel attack on ECDH with Weierstrass
- > curves.
+ > http://autobuild.buildroot.net/results/975/975663820e3d4e78e52c11ac3c0535d5537a134a/
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
