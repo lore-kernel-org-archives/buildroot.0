@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:13:25 +0100
-Subject: [Buildroot] [git commit branch/next] wireless-regdb: bump to
-	version 2016.02.08
-Message-ID: <20160211221538.A57787FDA3@busybox.osuosl.org>
+Date: Thu, 11 Feb 2016 23:12:24 +0100
+Subject: [Buildroot] [git commit branch/next] libsodium: bump to version
+	1.0.8
+Message-ID: <20160211221538.612487FDA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e27632e4cd4fb15252455f9ddfeaf9c394a504e
+commit: https://git.buildroot.net/buildroot/commit/?id=455d97555ab96c01e2fc8dd661ad2cdc876ffbf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ package/libsodium/libsodium.hash | 2 +-
+ package/libsodium/libsodium.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index cafc631..8685020 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
+diff --git a/package/libsodium/libsodium.hash b/package/libsodium/libsodium.hash
+index 3544237..8b79555 100644
+--- a/package/libsodium/libsodium.hash
++++ b/package/libsodium/libsodium.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	013e07d988f5cd7d24e4aa7a6cd406615d441ea6b882a02d2a46a78edeb2cfb6	wireless-regdb-2015.12.14.tar.xz
-+sha256	ce957b7f4fe103d8fb4d160d3b39825ad0b0da639b7453d4022d71415b6c9f9f	wireless-regdb-2016.02.08.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 38d1c26..083ab00 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+ # Locally calculated after checking pgp signature
+-sha256	940d03ea7d2caa7940e24564bf6d9f66d6edd1df1e0111ff8e3655f3b864fb59	libsodium-1.0.6.tar.gz
++sha256	c0f191d2527852641e0a996b7b106d2e04cbc76ea50731b2d0babd3409301926	libsodium-1.0.8.tar.gz
+diff --git a/package/libsodium/libsodium.mk b/package/libsodium/libsodium.mk
+index 09bc777..bd6f58d 100644
+--- a/package/libsodium/libsodium.mk
++++ b/package/libsodium/libsodium.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2015.12.14
-+WIRELESS_REGDB_VERSION = 2016.02.08
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-LIBSODIUM_VERSION = 1.0.6
++LIBSODIUM_VERSION = 1.0.8
+ LIBSODIUM_SITE = https://download.libsodium.org/libsodium/releases
+ LIBSODIUM_LICENSE = ISC
+ LIBSODIUM_LICENSE_FILES = LICENSE
