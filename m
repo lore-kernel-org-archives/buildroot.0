@@ -1,9 +1,7 @@
 From: Mauro Condarelli <mc5686@mclink.it>
-Date: Thu, 11 Feb 2016 11:58:47 +0100
-Subject: [Buildroot] [PATCH v5 19/20] python-autobahn: new package
-In-Reply-To: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
-References: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
-Message-ID: <1455188328-7595-2-git-send-email-mc5686@mclink.it>
+Date: Thu, 11 Feb 2016 11:58:46 +0100
+Subject: [Buildroot] [PATCH v5 18/20] python-service-identity: new package
+Message-ID: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +12,74 @@ Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 
 ---
 Changes v4 -> v5
-  - added dependency from Python sources.
+  - removed spurous (runtime) depemndencies in .mk
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 ---
- package/Config.in                            |  1 +
- package/python-autobahn/Config.in            | 11 +++++++++++
- package/python-autobahn/python-autobahn.hash |  3 +++
- package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-autobahn/Config.in
- create mode 100644 package/python-autobahn/python-autobahn.hash
- create mode 100644 package/python-autobahn/python-autobahn.mk
+ package/Config.in                                          |  1 +
+ package/python-service-identity/Config.in                  | 10 ++++++++++
+ .../python-service-identity/python-service-identity.hash   |  3 +++
+ package/python-service-identity/python-service-identity.mk | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-service-identity/Config.in
+ create mode 100644 package/python-service-identity/python-service-identity.hash
+ create mode 100644 package/python-service-identity/python-service-identity.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d1d0ec7..4b92a2a 100644
+index 5907ad6..d1d0ec7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -618,6 +618,7 @@ endif
- if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
- menu "External python modules"
- 	source "package/python-alsaaudio/Config.in"
-+	source "package/python-autobahn/Config.in"
- 	source "package/python-backports-abc/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bottle/Config.in"
-diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+@@ -713,6 +713,7 @@ menu "External python modules"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-setproctitle/Config.in"
++	source "package/python-service-identity/Config.in"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simplejson/Config.in"
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
 new file mode 100644
-index 0000000..9f5da46
+index 0000000..e2200f6
 --- /dev/null
-+++ b/package/python-autobahn/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PYTHON_AUTOBAHN
-+	bool "python-autobahn"
-+	depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TXAIO # runtime
++++ b/package/python-service-identity/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
++	bool "python-service-identity"
++	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
++	select BR2_PACKAGE_PYTHON_PYASN # runtime
++	select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
++	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
 +	help
-+	  WebSocket client Hhh server library, WAMP real-time framework.
++	  Service identity verification for pyOpenSSL.
 +
-+	  https://pypi.python.org/pypi/autobahn
-+comment "Currently Crossbar.io does NOT work without Python sources!"
-+	depends on BR2_PACKAGE_PYTHON_PYC_ONLY
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
++	  https://pypi.python.org/pypi/service_identity
+diff --git a/package/python-service-identity/python-service-identity.hash b/package/python-service-identity/python-service-identity.hash
 new file mode 100644
-index 0000000..8f55ac1
+index 0000000..caf29dc
 --- /dev/null
-+++ b/package/python-autobahn/python-autobahn.hash
++++ b/package/python-service-identity/python-service-identity.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
-+md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
-+sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=cea0b0156d73b025ecef660fb51f0d9a, sha256 locally computed.
++md5	cea0b0156d73b025ecef660fb51f0d9a  service_identity-14.0.0.tar.gz
++sha256	3105a319a7c558490666694f599be0c377ad54824eefb404cde4ce49e74a4f5a  service_identity-14.0.0.tar.gz
+diff --git a/package/python-service-identity/python-service-identity.mk b/package/python-service-identity/python-service-identity.mk
 new file mode 100644
-index 0000000..1d02867
+index 0000000..9eca3c1
 --- /dev/null
-+++ b/package/python-autobahn/python-autobahn.mk
++++ b/package/python-service-identity/python-service-identity.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-autobahn
++# python-service-identity
 +#
 +################################################################################
 +
-+PYTHON_AUTOBAHN_VERSION = 0.12.1
-+PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
-+PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
-+PYTHON_AUTOBAHN_LICENSE = MIT
-+PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
-+PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
++PYTHON_SERVICE_IDENTITY_VERSION = 14.0.0
++PYTHON_SERVICE_IDENTITY_SOURCE = service_identity-$(PYTHON_SERVICE_IDENTITY_VERSION).tar.gz
++PYTHON_SERVICE_IDENTITY_SITE = http://pypi.python.org/packages/source/s/service_identity
++PYTHON_SERVICE_IDENTITY_LICENSE = MIT
++PYTHON_SERVICE_IDENTITY_LICENSE_FILES = LICENSE
++PYTHON_SERVICE_IDENTITY_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
 -- 
