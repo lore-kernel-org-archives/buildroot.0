@@ -1,109 +1,82 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2016 20:20:26 +0100
-Subject: [Buildroot] [PATCH 5/5] toolchain-external: unify LIB_EXTERNAL_LIBS
-	and USR_LIB_EXTERNAL_LIBS
-In-Reply-To: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1455304826-10557-6-git-send-email-patrickdepinguin@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 12 Feb 2016 20:22:29 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/numactl: Fix uClibc compile
+	breakage after musl compile fix
+Message-ID: <1455304949-16808-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Fixes
+http://autobuild.buildroot.net/results/316/3160fb32fbb6990b0bb268524dcea02a1f6880a7/
+http://autobuild.buildroot.net/results/961/9616f09e7cbd020134ba72853acaa28a308432a3//
+and others
 
-With the alignment of toolchain library location in target and staging,
-there is no need anymore for the distinction between LIB_EXTERNAL_LIBS and
-USR_LIB_EXTERNAL_LIBS. Unify them into TOOLCHAIN_EXTERNAL_LIBS.
-
-Related, update the help text of
-BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- toolchain/toolchain-external/Config.in             |  3 +--
- toolchain/toolchain-external/toolchain-external.mk | 22 +++++++++++-----------
- 2 files changed, 12 insertions(+), 13 deletions(-)
+v2: updated patch to consider improvements suggested by upstream
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 7ba3929..9d81a2e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -1006,8 +1006,7 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
- 	help
- 	  If your external toolchain provides extra libraries that
- 	  need to be copied to the target filesystem, enter them
--	  here, separated by spaces. They will be copied to the
--	  target's /lib directory.
-+	  here, separated by spaces.
+ .../0001-use-glibc-prereq-only-on-glibc.patch      | 34 ++++++++++++----------
+ 1 file changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch b/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
+index 0158bd9..efb2870 100644
+--- a/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
++++ b/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
+@@ -1,4 +1,7 @@
+-Use __GLIBC_PREREQ only when __GLIBC__ is defined
++From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 12 Feb 2016 19:25:02 +0100
++Subject: [PATCH 1/1] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
  
- endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ The way __GLIBC_PREREQ() is currently used means that it's evaluated
+ even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
+@@ -8,28 +11,29 @@ libraries not defining __GLIBC__ such as the musl C library.
+ Patch originally taken from:
+ https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
  
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index a333c32..bd1a807 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -64,33 +64,33 @@
- #  of Buildroot is handled identical for the 2 toolchain types.
++Patch sent upstream: https://github.com/numactl/numactl/pull/4
++
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: Reworked to fix uClibc]
+ [Thomas: improve patch description.]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ syscall.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
  
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
--LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
--LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += ld-linux-armhf.so.*
- else
--LIB_EXTERNAL_LIBS += ld*.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += ld*.so.*
- endif
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIB_EXTERNAL_LIBS += libpthread.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
- ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
--LIB_EXTERNAL_LIBS += libthread_db.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libthread_db.so.*
- endif # gdbserver
- endif # ! no threads
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
--LIB_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.*
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
--LIB_EXTERNAL_LIBS += libc.so libgcc_s.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libc.so libgcc_s.so.*
- endif
- 
- ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
--USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
-+TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
- endif
- 
--LIB_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
-+TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS))
- 
- # Details about sysroot directory selection.
- #
-@@ -593,7 +593,7 @@ endef
- define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
- 	$(Q)if test -z "$(BR2_STATIC_LIBS)" ; then \
- 		$(call MESSAGE,"Copying external toolchain libraries to target...") ; \
--		for libs in $(LIB_EXTERNAL_LIBS) $(USR_LIB_EXTERNAL_LIBS); do \
-+		for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
- 			$(call copy_toolchain_lib_root,$$libs); \
- 		done ; \
- 	fi
-@@ -663,7 +663,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
- endef
- define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
- 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
--	for libs in $(LIB_EXTERNAL_LIBS) $(USR_LIB_EXTERNAL_LIBS); do \
-+	for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
- 		$(call copy_toolchain_lib_root,$$libs); \
- 	done
- endef
+---- a/syscall.c.orig	2014-10-20 16:12:53.000000000 +0200
+-+++ b/syscall.c	2015-06-22 08:13:22.729034702 +0200
+-@@ -115,14 +115,16 @@
++diff --git a/syscall.c b/syscall.c
++index 4589b85..37782d9 100644
++--- a/syscall.c
+++++ b/syscall.c
++@@ -115,7 +115,7 @@
+  
+  #endif
+  
+ -#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+-+#if defined(__GLIBC__)
+-+# if __GLIBC_PREREQ(2,11)
+++#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
+  
+  /* glibc 2.11 seems to have working 6 argument sycall. Use the
+     glibc supplied syscall in this case.
+-    The version cut-off is rather arbitary and could be probably
+-    earlier. */
+- 
+--#define syscall6 syscall
+-+#  define syscall6 syscall
+-+#endif
+- #elif defined(__x86_64__)
+- /* 6 argument calls on x86-64 are often buggy in both glibc and
+-    asm/unistd.h. Add a working version here. */
++-- 
++2.7.0
++
 -- 
-2.4.10
+2.7.0
