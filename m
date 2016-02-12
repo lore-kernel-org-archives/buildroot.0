@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2016 20:20:22 +0100
-Subject: [Buildroot] [PATCH 1/5] toolchain-external: blackfin: install FDPIC
-	libraries also to staging
+Date: Fri, 12 Feb 2016 20:20:23 +0100
+Subject: [Buildroot] [PATCH 2/5] toolchain-external: remove unused
+	calculation of ARCH_SUBDIR
 In-Reply-To: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
 References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1455304826-10557-3-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,40 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-For external Blackfin toolchains with BR2_BFIN_INSTALL_FDPIC_SHARED set,
-the FDPIC shared libraries are currently only copied to the target
-directory, not to staging.
-
-For debugging purposes, an unstripped copy in staging is necessary.
-Moreover, this change will simplify a subsequent change that lines up the
-location of shared libraries between target and staging directories.
+In TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS, ARCH_SUBDIR is calculated but not
+used, and can thus be removed. Since SYSROOT_DIR is only used for the
+calculation of ARCH_SUBDIR, it can be removed too.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ toolchain/toolchain-external/toolchain-external.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
 diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 6c3022a..ffdee49 100644
+index ffdee49..9d88158 100644
 --- a/toolchain/toolchain-external/toolchain-external.mk
 +++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -656,6 +656,20 @@ endef
- # nonetheless requested the installation of the FDPIC libraries to the
- # target filesystem.
- ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
-+define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
-+	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...") ; \
-+	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
-+	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-+	FDPIC_SUPPORT_LIB_DIR="" ; \
-+	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-+	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-+	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
-+	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-+	        fi ; \
-+	fi ; \
-+	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
-+endef
- define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
- 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
- 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
-@@ -755,6 +769,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
- define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
- 	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
-+	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
- 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
- endef
-@@ -771,3 +786,4 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
- endef
+@@ -587,12 +587,7 @@ endef
+ #                       to the target filesystem.
  
- $(eval $(generic-package))
-+
+ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+-	$(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))" ; \
+-	if test -z "$${SYSROOT_DIR}" ; then \
+-		@echo "External toolchain doesn't support --sysroot. Cannot use." ; \
+-		exit 1 ; \
+-	fi ; \
+-	ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+ 	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+ 	SUPPORT_LIB_DIR="" ; \
+ 	if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+@@ -601,7 +596,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+ 			SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+ 		fi ; \
+ 	fi ; \
+-	ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+ 	if test -z "$(BR2_STATIC_LIBS)" ; then \
+ 		$(call MESSAGE,"Copying external toolchain libraries to target...") ; \
+ 		for libs in $(LIB_EXTERNAL_LIBS); do \
 -- 
 2.4.10
