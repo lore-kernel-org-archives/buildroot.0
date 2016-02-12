@@ -1,106 +1,41 @@
-From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
-Date: Fri, 12 Feb 2016 16:13:52 +0530
-Subject: [Buildroot] [PATCH V7] package/nvme: new package
-In-Reply-To: <56BCB863.4000507@linux.vnet.ibm.com>
-References: <20160121052928.8568.3019.stgit@localhost.localdomain>
- <56BBA4C0.4020304@mind.be> <56BC6DFC.3020403@linux.vnet.ibm.com>
- <56BCB863.4000507@linux.vnet.ibm.com>
-Message-ID: <56BDB768.5030602@linux.vnet.ibm.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 12 Feb 2016 12:13:08 +0100
+Subject: [Buildroot] [PATCH] libqmi: bump to 1.12.8
+Message-ID: <1455275588-28096-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-updated all your comments and sending new version of Patch.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 02/11/2016 10:05 PM, Mamatha Inamdar wrote:
-> Hi Arnout,
->
-> please take a look at my comments below
->
-> On 02/11/2016 04:48 PM, Mamatha Inamdar wrote:
->>
->>
->> Thanks for the review comments
->> updated all your comments and sent new version of Patch.
->>
->> On 02/11/2016 02:29 AM, Arnout Vandecappelle wrote:
->>> diff --git a/package/nvme/0001-NVME-Makefile-cleanup.patch b/package/nvme/0001-NVME-Makefile-cleanup.patch
->>> new file mode 100644
->>> index 0000000..74beac9
->>> --- /dev/null
->>> +++ b/package/nvme/0001-NVME-Makefile-cleanup.patch
->>> @@ -0,0 +1,25 @@
->>> +From 985a18605f8decd766370a7d9873c77c16b9253c Mon Sep 17 00:00:00 2001
->>> +From: Mamatha Inamdar<mamatha4@linux.vnet.ibm.com>
->>> +Date: Mon, 18 Jan 2016 12:40:00 +0530
->>> +Subject: [PATCH V2] NVME Makefile update
->>> +
->>> +Makefile cleanup: remove -Werror flag in CFLAGS
->>> +
->>> +Signed-off-by: Mamatha Inamdar<mamatha4@linux.vnet.ibm.com>
->>> +---
->>> + Makefile | 2 +-
->>> + 1 file changed, 1 insertion(+), 1 deletion(-)
->>> +
->>> +diff --git a/Makefile b/Makefile
->>> +index d0c0ce4..003928b 100644
->>> +--- a/Makefile
->>> ++++ b/Makefile
->>> +@@ -1,4 +1,4 @@
->>> +-CFLAGS += -std=gnu99 -O2 -g -Wall -Werror
->>> ++CFLAGS += -std=gnu99 -O2 -g -Wall
->>>   This patch doesn't apply, the CFLAGS line looks completely different. Have you
->>> tested your patch before submitting?
->>
->> yes I have tested my patch and it will apply fine.
->
-> With regard to the above comment, upon checking the patch again,
-> I see some issues in applying the patch due to version mismatch.
->
-> While compiling op-build I see nvme-cli version 0.1 code is 
-> downloading which is the reason my patch fails to apply.
-> I have created the patch on version 0.2 (using git clone 
-> https://github.com/linux-nvme/nvme-cli.git)
->
-> I am looking into the reason why older version of nvme-cli is getting 
-> downloaded during compilation of op-build.
->
-
-
-I worked on the above issue and tested the patch.
-I am able to compile buildroot successfully with the patch.
-Sending new version of the patch with all your comments updated.
-
-Thanks
-Mamatha
-
->>
->>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160212/494f18c4/attachment.html>
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index a2c37d3..df0bb0b 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  0857bffece4e8ddfa7f721dd9ca63b4c78de345ac9ae2faebf04062cacba3780  libqmi-1.12.6.tar.xz
++sha256  d23a397d9c963f637c99622df74ed08a2ba2276552c21eea1ed1d05eeafc82a7  libqmi-1.12.8.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 1bc6121..0ff20a6 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.12.6
++LIBQMI_VERSION = 1.12.8
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
+-- 
+2.1.4
