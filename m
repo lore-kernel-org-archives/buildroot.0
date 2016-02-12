@@ -1,8 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2016 20:20:21 +0100
-Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
-	staging
-Message-ID: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+Date: Fri, 12 Feb 2016 20:20:22 +0100
+Subject: [Buildroot] [PATCH 1/5] toolchain-external: blackfin: install FDPIC
+	libraries also to staging
+In-Reply-To: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,27 +13,56 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-As discussed on the Buildroot developer days, Buildroot installs some libraries
-in a different location in target than in staging. This is specifically seen for
-libstdc++ and libatomic.
+For external Blackfin toolchains with BR2_BFIN_INSTALL_FDPIC_SHARED set,
+the FDPIC shared libraries are currently only copied to the target
+directory, not to staging.
 
-This patch series tackles that problem and performs related cleanup.
+For debugging purposes, an unstripped copy in staging is necessary.
+Moreover, this change will simplify a subsequent change that lines up the
+location of shared libraries between target and staging directories.
 
+Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-
-Thomas De Schampheleire (5):
-  toolchain-external: blackfin: install FDPIC libraries also to staging
-  toolchain-external: remove unused calculation of ARCH_SUBDIR
-  toolchain-external: extract installation of gdbserver to separate
-    define
-  toolchain-external: align library locations in target and staging dir
-  toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
-
- package/glibc/glibc.mk                             |  2 +-
- toolchain/helpers.mk                               | 57 ++---------------
- toolchain/toolchain-external/Config.in             |  3 +-
- toolchain/toolchain-external/toolchain-external.mk | 71 ++++++++++------------
- 4 files changed, 40 insertions(+), 93 deletions(-)
-
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 6c3022a..ffdee49 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -656,6 +656,20 @@ endef
+ # nonetheless requested the installation of the FDPIC libraries to the
+ # target filesystem.
+ ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
++define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
++	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...") ; \
++	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
++	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
++	FDPIC_SUPPORT_LIB_DIR="" ; \
++	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
++	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
++	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
++	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
++	        fi ; \
++	fi ; \
++	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
++endef
+ define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
+ 	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
+ 	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+@@ -755,6 +769,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
+ define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+ 	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
++	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+ 	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+ endef
+@@ -771,3 +786,4 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+ endef
+ 
+ $(eval $(generic-package))
++
 -- 
 2.4.10
