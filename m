@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Feb 2016 22:47:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/numactl: Fix uClibc compile
+Date: Fri, 12 Feb 2016 22:49:34 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/numactl: Fix uClibc compile
  breakage after musl compile fix
-In-Reply-To: <1455301707-8995-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455301707-8995-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160212224750.38fc5c37@free-electrons.com>
+In-Reply-To: <1455304949-16808-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1455304949-16808-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160212224934.32cd9661@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Fri, 12 Feb 2016 19:28:27 +0100, Bernd Kuhls wrote:
+On Fri, 12 Feb 2016 20:22:29 +0100, Bernd Kuhls wrote:
 
 >  -#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
 > -+#if defined(__GLIBC__)
-> ++#if defined(__GLIBC__) && !defined(__UCLIBC__)
->  +# if __GLIBC_PREREQ(2,11)
+> -+# if __GLIBC_PREREQ(2,11)
+> ++#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
 
-What about just:
+If you put both on the same line, aren't we back to the musl build
+issue, where testing if a macro is defined *and* using it in the same
+condition doesn't work ?
 
-#if defined(__GLIBC_PREREQ)
-#if __GLIBC_PREREQ(2,11)
-...
-#endif
-#endif
+Did you verify this solution with a build against a musl toolchain ?
+
+Thanks,
 
 Thomas
 -- 
