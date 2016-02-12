@@ -1,109 +1,170 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Feb 2016 21:35:23 +0100
-Subject: [Buildroot] Analysis of build failures
-In-Reply-To: <56BE31F1.7010700@gmail.com>
-References: <20160212073018.E5E46101657@stock.ovh.net>
- <20160212104541.0e3774b1@free-electrons.com>
- <56BE31F1.7010700@gmail.com>
-Message-ID: <20160212213523.7a50a906@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 12 Feb 2016 21:50:24 +0100
+Subject: [Buildroot] [git commit] mpd: fix build on SPARC
+In-Reply-To: <1455189153.8389.7.camel@embedded.rocks>
+References: <20160207210347.15B3B8033C@busybox.osuosl.org>
+ <1455189153.8389.7.camel@embedded.rocks>
+Message-ID: <56BE4590.8070803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
-
-On Fri, 12 Feb 2016 20:26:41 +0100, Romain Naour wrote:
-
-> >>          arc |                host-efl-1.15.3 | NOK | http://autobuild.buildroot.net/results/7dcaeb8fbb5739c36aa0615e3d8a13e9c32993b0/
-> > 
-> > I guess would be fixed by http://patchwork.ozlabs.org/patch/572201/.
+On 11-02-16 12:12, J?rg Krause wrote:
+> Dear Thomas Petazzoni,
 > 
-> I reopened a bug about this issue the upstream fix is not enough. See
-> https://phab.enlightenment.org/T2718
-
-I don't see this bug as being reopened. Am I missing something ?
-
-> So, for the moment we can build efl 1.15 only with Lua 5.1 (Lua 5.1 was the
-> default version used at the time I tested the efl bump series).
-
-Right, so http://patchwork.ozlabs.org/patch/572201/ would fix the
-problem for now, correct ?
-
-BTW, your patch references https://phab.enlightenment.org/T2728, but
-this URL cannot be accessed without creating an account on this
-Phabricator instance, which is somewhat annoying.
-
-> I have a local branch that bump the efl to the latest version (1.17.0) and the
-> support for lua-old doesn't build with (5.1, 5.2 and 5.3) due to this issue.
-
-Due to which issue ?
-
-> The problem for 2016.02 is it's too late to enable lua-jit support in efl. So
-> people using efl with 2016.02 will have to switch to lua-jit when efl will be
-> updated to a newer version :-/
+> On So, 2016-02-07 at 22:02 +0100, Thomas Petazzoni wrote:
+>> commit: https://git.buildroot.net/buildroot/commit/?id=84533029c70a4d
+>> ffb2cd2e4f05e3903fd1b8fcd9
+>> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/mas
+>> ter
+>>
+>> mpd uses __atomic_*() built-ins, but forgets to link with -latomic
+>> when needed, so this commit adds a patch that ensures it will link
+>> with libatomic, and adds a dependency on BR2_TOOLCHAIN_HAS_ATOMIC.
+>>
+>> Fixes:
+>>
+>>   http://autobuild.buildroot.net/results/e2207280f3a177e12dba502b1c01
+>> f5aeb431d04c/
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> ---
+>>  ...configure.ac-check-if-libatomic-is-needed.patch | 40
+>> ++++++++++++++++++++++
+>>  package/mpd/Config.in                              |  2 ++
+>>  package/mpd/mpd.mk                                 |  1 +
+>>  3 files changed, 43 insertions(+)
+>>
+>> diff --git a/package/mpd/0005-configure.ac-check-if-libatomic-is-
+>> needed.patch b/package/mpd/0005-configure.ac-check-if-libatomic-is-
+>> needed.patch
+>> new file mode 100644
+>> index 0000000..a9873a7
+>> --- /dev/null
+>> +++ b/package/mpd/0005-configure.ac-check-if-libatomic-is-
+>> needed.patch
+>> @@ -0,0 +1,40 @@
+>> +From 8eaf14a17244aaf000b4d19e4fde4a637576939f Mon Sep 17 00:00:00
+>> 2001
+>> +From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> +Date: Sun, 7 Feb 2016 21:40:47 +0100
+>> +Subject: [PATCH] configure.ac: check if libatomic is needed
+>> +
+>> +The mpd source code uses the C++11 <atomic> functionality, which
+>> +internally is implemented using the __atomic_*() gcc built-ins. On
+>> +certain architectures, the __atomic_*() built-ins are implemented in
+>> +the libatomic library that comes with the rest of the gcc runtime.
+>> Due
+>> +to this, code using <atomic> might need to link against libatomic,
+>> +otherwise one hits build issues such as:
+>> +
+>> +GlobalEvents.cxx:(.text._ZN12GlobalEvents4EmitENS_5EventE+0x14):
+>> undefined reference to `__atomic_fetch_or_4'
+>> +
+>> +on an architecture like SPARC.
+>> +
+>> +To solve this, a configure.ac check is added to know if we need to
+>> +link against libatomic or not.
+>> +
+>> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com
+>>>
+>> +---
+>> + configure.ac | 2 ++
+>> + 1 file changed, 2 insertions(+)
+>> +
+>> +diff --git a/configure.ac b/configure.ac
+>> +index 107b45a..8e6fab7 100644
+>> +--- a/configure.ac
+>> ++++ b/configure.ac
+>> +@@ -233,6 +233,8 @@ if test x$have_pthread_setname_np = xyes; then
+>> + 	AC_DEFINE(HAVE_PTHREAD_SETNAME_NP, 1, [Is
+>> pthread_setname_np() available?])
+>> + fi
+>> + 
+>> ++AC_SEARCH_LIBS([__atomic_load_4], [atomic])
+>> ++
+>> + dnl -------------------------------------------------------------
+>> --------------
+>> + dnl Event loop selection
+>> + dnl -------------------------------------------------------------
+>> --------------
+>> +-- 
+>> +2.6.4
+>> +
+>> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+>> index b368397..3ac806f 100644
+>> --- a/package/mpd/Config.in
+>> +++ b/package/mpd/Config.in
+>> @@ -6,6 +6,7 @@ menuconfig BR2_PACKAGE_MPD
+>>  	depends on BR2_USE_MMU # libglib2
+>>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+>>  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+>> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>>  	select BR2_PACKAGE_BOOST
+>>  	select BR2_PACKAGE_LIBGLIB2
+>>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+>> @@ -312,5 +313,6 @@ endif
+>>  comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.6"
+>>  	depends on BR2_USE_MMU
+>>  	depends on BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+>> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+>>  		!BR2_TOOLCHAIN_HAS_THREADS ||
+>> !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+>> diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+>> index 7a265f4..d5d77a6 100644
+>> --- a/package/mpd/mpd.mk
+>> +++ b/package/mpd/mpd.mk
+>> @@ -11,6 +11,7 @@ MPD_SITE = http://www.musicpd.org/download/mpd/$(MP
+>> D_VERSION_MAJOR)
+>>  MPD_DEPENDENCIES = host-pkgconf boost libglib2
+>>  MPD_LICENSE = GPLv2+
+>>  MPD_LICENSE_FILES = COPYING
+>> +MPD_AUTORECONF = YES
+>>  
+>>  # Some options need an explicit --disable or --enable
+>>  
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
-> Do you want me to send a small series (3 patches) adding lua-jit support for
-> 2016.02 ?
-
-No, it's too late for such a change. I prefer a minimal solution, so if
-forcing the use of Lua 5.1 fixes the problem for now (as your patch
-http://patchwork.ozlabs.org/patch/572201/) suggests, I'd prefer this
-option.
-
-> >>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/00a5ef3a4e10700c79b83bc1ab026808ce930030/
-> >>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/c98add9541defd5f12415b69521a1b32ddfa270d/
-> >>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/527d982ab6616eb7bef9419a9e793f7a46c32830/
-> >>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/d4e18789c1da2d8518db873d7833af186daf9859/
-> > 
-> > Romain, didn't we say we should add some exclusion for this issue ? If
-> > so, can you submit a patch ?
+> With this commit mpd requires libatomic.so to be installed on the
+> target:
 > 
-> Technically, it's a toolchain issue with gcc 4.9. So if we rebuild a new nios2
-> toolchain with gcc 5.3 this error is gone. Otherwise we can add an autobuilder
-> exception for br-nios2-full-2015.11-rc1-71-g90d1299.tar.bz2.
+>     $ output/host/usr/bin/arm-linux-readelf -d output/target/usr/bin/mpd
+>     | grep libatomic
+>      0x00000001 (NEEDED)                     Shared library:
+>     [libatomic.so.1]
 > 
-> Even we can remove BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII since the new
-> codesourcery toolchain use gcc 5.2.
-
-For the time being, can we simply do:
-
--       depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # triggers compiler bug
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_nios2
-
-Or simply as you suggest, we add an exclusion in the autobuilders.
-Probably the easiest. Can you send a patch doing this ?
-
-> >>        nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/ee562524c5b12191e584ceae89006c5a5103e700/
-> > 
-> > Romain, is the patch for this pending somewhere ?
+> Otherwise mpd fails with:
+>     "Error loading shared library libatomic.so.1: No such file or
+>     directory (needed by /usr/bin/mpd)".
 > 
-> We need to rebuild a nios2 toolchain with the upstream patch applied [1] and
-> disable for BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII:
+> However, with an external musl toolchain built with Buildroot no
+> libatomic.so will be installed on the target, it only exists in
+> sysroot:
 > 
-> [1]
-> https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=83da6e748c8f105f07e17f53aa6b99ed7867ff5f
-> 
-> Otherwise we can apply this one: http://patchwork.ozlabs.org/patch/561414/
+>     $ find output/ -type f -name "libatomic.so*"
+>     output/host/usr/arm-buildroot-linux-
+>     musleabi/sysroot/lib/libatomic.so.1.1.0
 
-We need to do three things here I believe:
+ I wonder if we shouldn't just copy all the libraries for the external
+toolchains. If you're using an external toolchain, you probably don't care about
+size too much. Or you'd use a buildroot-built external toolchain, and in that
+case really everything is needed.
 
- 1/ Add a BR2_TOOLCHAIN_BINUTILS_HAS_BUG_xyz option, which the CodeSourcery
-    option would select and Qt GUI would depends
-    on !BR2_TOOLCHAIN_BINUTILS_HAS_BUG_xyz
 
- 2/ Add the patch to the binutils package.
+ Regards,
+ Arnout
 
- 3/ Add an exclusion to the autobuilder script, until the toolchains
-    are rebuilt with the upstream patch.
 
-Do you think you can work on this ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
