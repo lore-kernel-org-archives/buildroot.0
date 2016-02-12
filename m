@@ -1,30 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Feb 2016 19:29:24 +0100
-Subject: [Buildroot] Analysis of build failures
-References: <20160212073018.E5E46101657@stock.ovh.net>
- <20160212104541.0e3774b1@free-electrons.com>
-Message-ID: <4tk1pcx7a1.ln2@ID-313208.user.individual.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Fri, 12 Feb 2016 20:20:21 +0100
+Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
+	staging
+Message-ID: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 12 Feb 2016 10:45:41 +0100 schrieb Thomas Petazzoni:
+From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
->>      powerpc |                 numactl-2.0.11 | NOK |
->>      http://autobuild.buildroot.net/
-results/2b62e30bcb36c3877686b1471642273e21756c91/
-> 
-> This seems to be a regression following the merge of patch
-> https://git.busybox.net/buildroot/commit/?
-id=21ed7a92fe5a771911ef06f97522e504d0eebbc2
-> from Bernd.
-> 
-> Bernd, can you have a look ?
+As discussed on the Buildroot developer days, Buildroot installs some libraries
+in a different location in target than in staging. This is specifically seen for
+libstdc++ and libatomic.
 
-Hi Thomas,
+This patch series tackles that problem and performs related cleanup.
 
-should be fixed by: http://patchwork.ozlabs.org/patch/582268/
 
-Regards, Bernd
+
+Thomas De Schampheleire (5):
+  toolchain-external: blackfin: install FDPIC libraries also to staging
+  toolchain-external: remove unused calculation of ARCH_SUBDIR
+  toolchain-external: extract installation of gdbserver to separate
+    define
+  toolchain-external: align library locations in target and staging dir
+  toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
+
+ package/glibc/glibc.mk                             |  2 +-
+ toolchain/helpers.mk                               | 57 ++---------------
+ toolchain/toolchain-external/Config.in             |  3 +-
+ toolchain/toolchain-external/toolchain-external.mk | 71 ++++++++++------------
+ 4 files changed, 40 insertions(+), 93 deletions(-)
+
+-- 
+2.4.10
