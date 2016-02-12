@@ -1,82 +1,85 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Feb 2016 20:22:29 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/numactl: Fix uClibc compile
-	breakage after musl compile fix
-Message-ID: <1455304949-16808-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 12 Feb 2016 20:26:41 +0100
+Subject: [Buildroot] Analysis of build failures
+In-Reply-To: <20160212104541.0e3774b1@free-electrons.com>
+References: <20160212073018.E5E46101657@stock.ovh.net>
+ <20160212104541.0e3774b1@free-electrons.com>
+Message-ID: <56BE31F1.7010700@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/316/3160fb32fbb6990b0bb268524dcea02a1f6880a7/
-http://autobuild.buildroot.net/results/961/9616f09e7cbd020134ba72853acaa28a308432a3//
-and others
+Hi Thomas, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: updated patch to consider improvements suggested by upstream
+Le 12/02/2016 10:45, Thomas Petazzoni a ?crit :
+> Hello,
+> 
+> Rodrigo, Martin, Romain, Vicente, J?rg, Bernd, Gustavo, please see
+> below. Others, please see below as well :-)
+> 
+> On Fri, 12 Feb 2016 08:30:18 +0100 (CET), Thomas Petazzoni wrote:
+> 
 
- .../0001-use-glibc-prereq-only-on-glibc.patch      | 34 ++++++++++++----------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+>>          arc |                host-efl-1.15.3 | NOK | http://autobuild.buildroot.net/results/7dcaeb8fbb5739c36aa0615e3d8a13e9c32993b0/
+> 
+> I guess would be fixed by http://patchwork.ozlabs.org/patch/572201/.
 
-diff --git a/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch b/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
-index 0158bd9..efb2870 100644
---- a/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
-+++ b/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
-@@ -1,4 +1,7 @@
--Use __GLIBC_PREREQ only when __GLIBC__ is defined
-+From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Fri, 12 Feb 2016 19:25:02 +0100
-+Subject: [PATCH 1/1] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
- 
- The way __GLIBC_PREREQ() is currently used means that it's evaluated
- even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
-@@ -8,28 +11,29 @@ libraries not defining __GLIBC__ such as the musl C library.
- Patch originally taken from:
- https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
- 
-+Patch sent upstream: https://github.com/numactl/numactl/pull/4
-+
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: Reworked to fix uClibc]
- [Thomas: improve patch description.]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ syscall.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
----- a/syscall.c.orig	2014-10-20 16:12:53.000000000 +0200
--+++ b/syscall.c	2015-06-22 08:13:22.729034702 +0200
--@@ -115,14 +115,16 @@
-+diff --git a/syscall.c b/syscall.c
-+index 4589b85..37782d9 100644
-+--- a/syscall.c
-++++ b/syscall.c
-+@@ -115,7 +115,7 @@
-  
-  #endif
-  
- -#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
--+#if defined(__GLIBC__)
--+# if __GLIBC_PREREQ(2,11)
-++#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
-  
-  /* glibc 2.11 seems to have working 6 argument sycall. Use the
-     glibc supplied syscall in this case.
--    The version cut-off is rather arbitary and could be probably
--    earlier. */
-- 
---#define syscall6 syscall
--+#  define syscall6 syscall
--+#endif
-- #elif defined(__x86_64__)
-- /* 6 argument calls on x86-64 are often buggy in both glibc and
--    asm/unistd.h. Add a working version here. */
-+-- 
-+2.7.0
-+
--- 
-2.7.0
+I reopened a bug about this issue the upstream fix is not enough. See
+https://phab.enlightenment.org/T2718
+So, for the moment we can build efl 1.15 only with Lua 5.1 (Lua 5.1 was the
+default version used at the time I tested the efl bump series).
+
+I have a local branch that bump the efl to the latest version (1.17.0) and the
+support for lua-old doesn't build with (5.1, 5.2 and 5.3) due to this issue. The
+only solution is to add lua-jit support which build and work correctly (tested
+with Qemu).
+
+The problem for 2016.02 is it's too late to enable lua-jit support in efl. So
+people using efl with 2016.02 will have to switch to lua-jit when efl will be
+updated to a newer version :-/
+
+Do you want me to send a small series (3 patches) adding lua-jit support for
+2016.02 ?
+
+> 
+>> microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/d63e346ba4d00a68602b1bcec0acb09e266a53c9/
+> 
+> The infamous documentation problem, would be fixed by
+> http://patchwork.ozlabs.org/patch/576556/.
+
+Or this one http://patchwork.ozlabs.org/patch/572150/ even if I don't like to
+use sed all over the gdb tree :-/
+
+> 
+>>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/00a5ef3a4e10700c79b83bc1ab026808ce930030/
+>>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/c98add9541defd5f12415b69521a1b32ddfa270d/
+>>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/527d982ab6616eb7bef9419a9e793f7a46c32830/
+>>        nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/d4e18789c1da2d8518db873d7833af186daf9859/
+> 
+> Romain, didn't we say we should add some exclusion for this issue ? If
+> so, can you submit a patch ?
+
+Technically, it's a toolchain issue with gcc 4.9. So if we rebuild a new nios2
+toolchain with gcc 5.3 this error is gone. Otherwise we can add an autobuilder
+exception for br-nios2-full-2015.11-rc1-71-g90d1299.tar.bz2.
+
+Even we can remove BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII since the new
+codesourcery toolchain use gcc 5.2.
+
+> 
+>>        nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/ee562524c5b12191e584ceae89006c5a5103e700/
+> 
+> Romain, is the patch for this pending somewhere ?
+
+We need to rebuild a nios2 toolchain with the upstream patch applied [1] and
+disable for BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII:
+
+[1]
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=83da6e748c8f105f07e17f53aa6b99ed7867ff5f
+
+Otherwise we can apply this one: http://patchwork.ozlabs.org/patch/561414/
+
+Best regards,
+Romain
