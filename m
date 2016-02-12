@@ -1,32 +1,23 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2016 23:20:38 +0100
-Subject: [Buildroot] [git commit] skeleton: Recreate /var/run symlink
-Message-ID: <20160211222655.380A48192A@busybox.osuosl.org>
+From: Rahul Bedarkar <Rahul.Bedarkar@imgtec.com>
+Date: Fri, 12 Feb 2016 09:05:01 +0530
+Subject: [Buildroot] [PATCH 1/3] gssdp: bump to version 0.14.14
+In-Reply-To: <1455123877-9983-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1455123877-9983-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <56BD52E5.5090804@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25043d8a311fc1425fb392d7716a42a0a4cec9e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Gustavo,
 
-It was the only one with a trailing slash, it's only for coherence's
-sake.
+On Wednesday 10 February 2016 10:34 PM, Gustavo Zacarias wrote:
+> Which also means moving from unstable->stable (odd numbers on gnome
+> project packages are development).
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- system/skeleton/var/run | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But project web page https://developer.gnome.org/gssdp/ says 0.14.14 is 
+a development version. And same applies for gupnp and gupnp-av.
 
-diff --git a/system/skeleton/var/run b/system/skeleton/var/run
-index d1a2745..84ba55b 120000
---- a/system/skeleton/var/run
-+++ b/system/skeleton/var/run
-@@ -1 +1 @@
--../run/
-\ No newline at end of file
-+../run
-\ No newline at end of file
+Regards,
+Rahul
