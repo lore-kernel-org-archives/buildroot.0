@@ -1,74 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 12 Feb 2016 10:19:33 +0100
-Subject: [Buildroot] [PATCH 3/3] libraw1394: add patch to fix
-	CLOCK_MONOTONIC_RAW build problem
-In-Reply-To: <1455268773-12503-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1455268773-12503-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1455268773-12503-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Feb 2016 10:19:31 +0100
+Subject: [Buildroot] [PATCH 1/3] libraw: add dependency on host-pkgconf
+Message-ID: <1455268773-12503-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CLOCK_MONOTONIC_RAW is a fairly recent addition, which may not be
-available in old C libraries/kernels. This commit adds a libraw1394
-patch that makes the use of CLOCK_MONOTONIC_RAW optional. The patch
-has been submitted upstream.
+Otherwise, it fails to autoreconf with a weird error message:
 
-Fixes:
+configure.ac:15: error: possibly undefined macro: AC_SUBST
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+configure.ac:40: error: possibly undefined macro: AC_MSG_WARN
 
-  http://autobuild.buildroot.net/results/198149e80be3e62eaf9f4731442031a1aa93409c/
+Indeed, the configure.ac uses PKG_CHECK_MODULES(), so we need to have
+the corresponding m4 file installed by host-pkgconf.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...build-the-CLOCK_MONOTONIC_RAW-test-condit.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
+ package/libraw/libraw.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch b/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
-new file mode 100644
-index 0000000..b87ef71
---- /dev/null
-+++ b/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
-@@ -0,0 +1,38 @@
-+From 94c66ade15d7fc468b52c72dfe76a8c10b1910a7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Fri, 12 Feb 2016 10:13:45 +0100
-+Subject: [PATCH] testlibraw: build the CLOCK_MONOTONIC_RAW test conditionally
-+
-+CLOCK_MONOTONIC_RAW is a somewhat recent addition, and some older
-+toolchains/kernels may not have the support for it. Therefore, we
-+build the part of the test that uses CLOCK_MONOTONIC_RAW only when
-+this definition is available.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ tools/testlibraw.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/tools/testlibraw.c b/tools/testlibraw.c
-+index d8a0702..ae37157 100644
-+--- a/tools/testlibraw.c
-++++ b/tools/testlibraw.c
-+@@ -211,6 +211,7 @@ read_cycle_timer(raw1394handle_t handle)
-+ 	printf("    local time from CLOCK_MONOTONIC: %lld us\n",
-+ 	       (unsigned long long)local_time);
-+ 
-++#if defined(CLOCK_MONOTONIC_RAW)
-+ 	retval = raw1394_read_cycle_timer_and_clock(handle, &ct, &local_time,
-+ 						    CLOCK_MONOTONIC_RAW);
-+ 	if (retval < 0) {
-+@@ -221,6 +222,7 @@ read_cycle_timer(raw1394handle_t handle)
-+ 	       ct >> 25, (ct >> 12) & 0x1fff, ct & 0xfff);
-+ 	printf("    local time from CLOCK_MONOTONIC_RAW: %lld us\n",
-+ 	       (unsigned long long)local_time);
-++#endif
-+ }
-+ 
-+ int test_card(int card)
-+-- 
-+2.6.4
-+
+diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
+index 03f09f9..7fc4709 100644
+--- a/package/libraw/libraw.mk
++++ b/package/libraw/libraw.mk
+@@ -17,6 +17,7 @@ LIBRAW_CONF_OPTS += \
+ 	--disable-demosaic-pack-gpl3
+ LIBRAW_LICENSE = LGPLv2.1 or CDDL 1.0 or LibRaw Software License 27032010
+ LIBRAW_LICENSE_FILES = LICENSE.LGPL LICENSE.CDDL LICENSE.LibRaw.pdf README
++LIBRAW_DEPENDENCIES = host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_JASPER),y)
+ LIBRAW_CONF_OPTS += --enable-jasper
 -- 
 2.6.4
