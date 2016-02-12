@@ -1,79 +1,48 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Fri, 12 Feb 2016 14:48:03 +0100
-Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
- installed programs
-In-Reply-To: <CAGkQfmO7+XR4zixkn+UN_wWr+=ZgyXX-FajQrqhEqRWQiwBv=g@mail.gmail.com>
-References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
- <20160203173440.6d0567d7@free-electrons.com>
- <CAGkQfmO7+XR4zixkn+UN_wWr+=ZgyXX-FajQrqhEqRWQiwBv=g@mail.gmail.com>
-Message-ID: <CAGkQfmPWrA7P29mfJDPk_-03a4bXLzAhPp3A7+wcLS6OafATqw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Feb 2016 14:50:06 +0100
+Subject: [Buildroot] Booting from cramfs image
+In-Reply-To: <CAJrvd8PF5qwZxm3N0b73fJ+Ea4OFMTf-1unN1uhf7FdZBivvSA@mail.gmail.com>
+References: <CAJrvd8PF5qwZxm3N0b73fJ+Ea4OFMTf-1unN1uhf7FdZBivvSA@mail.gmail.com>
+Message-ID: <20160212145006.77bfa2fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hajime,
 
-2016-02-03 18:13 GMT+01:00 Romain Izard <romain.izard.pro@gmail.com>:
-> 2016-02-03 17:34 GMT+01:00 Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com>:
->>
->> On Wed,  3 Feb 2016 12:14:48 +0100, Romain Izard wrote:
->>
->> > +menuconfig BR2_PACKAGE_COREUTILS_SELECT
->> > +     bool "Override the default set of installed coreutils"
->> > +     depends on BR2_PACKAGE_COREUTILS
->> > +
->> > +if BR2_PACKAGE_COREUTILS_SELECT
->> >
+On Thu, 11 Feb 2016 21:36:38 +0100, Hajime Yamasaki Vukelic wrote:
 
-[...]
+> I have an amlogic board (WetekPlay if anyone's familiar with it), and I
+> have a kernel image with initramfs, and a rootfs image in cramfs format.
+> The files involved are `boot.img` which is built using kernel uImage file,
+> DTB, and initramfs in cpio.gz format, and `rootfs.cramfs`. Both are written
+> to a FAT32 microSD card.
+> 
+> I'm trying to get the initramfs loop mount the cramfs image and switch_root
+> to it, but I keep getting kernel panic. The init script looks like this:
+> 
+>     https://gist.github.com/foxbunny/936438bf2ba67c2a5879
+> 
+> The error message:
+> 
+>     https://gist.github.com/foxbunny/fd9ceb120e8fe5a631aa
+> 
+> If someone could give me pointers on how to debug or fix this, I would
+> greatly appreciate it.
 
->> >
->> > +endif
->>
->> This is really a loooooong list of options that will be annoying to
->> maintain I believe.
->>
->
-> Is the coreutils package moving that fast ?
->
-> The list is now done, and it's not that hard to customize
-> the "gen-list-of-programs.sh" script from coreutils to generate
-> a new version, even to reproduce the few manual tweaks I used.
->
-> And adding/removing an entry from time to time does not look that annoying.
-> This type of list can be an issue when different development branches
-> touch the same file, but here I do not expect it to be an issue.
->
->> What about instead having a string option to list the requested binaries?
->> If empty, then the default programs are built and installed.  If
->> non-empty, then only the programs listed in the string option will be
->> built and installed.
->
-> That's what I wanted to do in the beginning.
->
-> From what I understand from the coreutils configure.ac and m4/* files,
-> it is not possible to start from an empty list, and then add requested
-> programs, at least without patching.
->
-> As coreutils is one of the longest-lived GNU projects, its autotool
-> configuration is so elaborate that I do not feel comfortable with
-> changing it.
->
-> As a bonus, as each program is documented (with the headline
-> from its man page in the coreutils package), the user experience
-> in Kconfig is quite good, whereas a comma-separated, 30-word
-> configuration option will be cumbersome to edit and review.
->
-> The same pattern also exists in the util-linux package, but with half
-> as many options.
+Well, it essentially means that your init program on your real root
+filesystem (in the cramfs image) does not work. Built for the wrong
+architecture variant, missing libraries, etc. Could be lots of things.
 
-What is your point of view regarding my comments?
-Is patching the coreutils mainline to implement your proposed
-behavior the only way to proceed on this topic?
+Also, why use a cramfs filesystem rather than the modern modern and
+efficient squashfs?
 
 Best regards,
+
+Thomas
 -- 
-Romain Izard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
