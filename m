@@ -1,94 +1,148 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 12 Feb 2016 11:38:22 -0300
-Subject: [Buildroot] [PATCH 2/2] libbsd: add patch for clock_gettime usage
-In-Reply-To: <1455287902-12495-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1455287902-12495-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1455287902-12495-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 12 Feb 2016 16:17:22 +0100
+Subject: [Buildroot] [PATCH v2 1/1] cgroupsfs: new package
+In-Reply-To: <1455286842-11540-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+References: <1455286842-11540-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <20160212161722.48c9a703@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libbsd uses clock_gettime() but doesn't check for it in librt.
-This causes breakage on old glibc versions (< 2.17). Fixes:
-http://autobuild.buildroot.net/results/a5b/a5b837d6d02ec96ac53c5b1c531a0c8e7eafeb9a/
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- ...0001-build-clock_gettime-might-need-librt.patch | 49 ++++++++++++++++++++++
- package/libbsd/libbsd.mk                           |  3 +-
- 2 files changed, 51 insertions(+), 1 deletion(-)
- create mode 100644 package/libbsd/0001-build-clock_gettime-might-need-librt.patch
+Thanks for this new iteration! See some comments below.
 
-diff --git a/package/libbsd/0001-build-clock_gettime-might-need-librt.patch b/package/libbsd/0001-build-clock_gettime-might-need-librt.patch
-new file mode 100644
-index 0000000..ad6fcdb
---- /dev/null
-+++ b/package/libbsd/0001-build-clock_gettime-might-need-librt.patch
-@@ -0,0 +1,49 @@
-+From 188049ac7adcabfa66e5b6a674ac28a2f7da81f3 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Fri, 12 Feb 2016 11:06:58 -0300
-+Subject: [PATCH] build: clock_gettime might need librt
-+
-+In older glibc versions (< 2.17) clock_gettime is in librt.
-+Add a check for this to avoid build breakage for programs/libraries that
-+use libbsd on such systems.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Patch status: submitted upstream
-+
-+ configure.ac    | 5 +++++
-+ src/Makefile.am | 2 ++
-+ 2 files changed, 7 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d334774..1862d19 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -44,6 +44,11 @@ AC_SUBST([TESTU01_LIBS])
-+ AM_CONDITIONAL([HAVE_LIBTESTU01],
-+                [test "x$ac_cv_lib_testu01_unif01_CreateExternGenBits" = "xyes"])
-+ 
-++# In old glibc versions (< 2.17) clock_gettime() is in librt
-++AC_SEARCH_LIBS([clock_gettime], [rt],
-++             [LIB_CLOCK_GETTIME="-lrt"])
-++AC_SUBST([LIB_CLOCK_GETTIME])
-++
-+ # Checks for header files.
-+ AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h])
-+ 
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 4649937..6b705f0 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -52,6 +52,8 @@ hash/md5hl.c: $(srcdir)/hash/helper.c
-+ libbsd_la_DEPENDENCIES = \
-+ 	$(libbsd_la_included_sources) \
-+ 	libbsd.map
-++libbsd_la_LIBADD = \
-++	$(LIB_CLOCK_GETTIME)
-+ libbsd_la_LDFLAGS = \
-+ 	-Wl,--version-script=$(srcdir)/libbsd.map \
-+ 	-version-number $(LIBBSD_ABI)
-+-- 
-+2.4.10
-+
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index 634a614..f750d75 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -9,7 +9,8 @@ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
- LIBBSD_SITE = http://libbsd.freedesktop.org/releases
- LIBBSD_LICENSE = BSD-3c, MIT
- LIBBSD_LICENSE_FILES = COPYING
--
- LIBBSD_INSTALL_STAGING = YES
-+# For 0001-build-clock_gettime-might-need-librt.patch
-+LIBBSD_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+On Fri, 12 Feb 2016 19:50:42 +0530, Niranjan Reddy wrote:
+> From: Niranjan <niranjan.reddy@rockwellcollins.com>
+
+We want the first name + last name in the From: field.
+
+> diff --git a/package/cgroupfs/S30cgroupfs b/package/cgroupfs/S30cgroupfs
+> new file mode 100644
+> index 0000000..86819de
+> --- /dev/null
+> +++ b/package/cgroupfs/S30cgroupfs
+> @@ -0,0 +1,50 @@
+> +#!/bin/sh
+> +#
+> +# cgroupfs:   Set up cgroupfs mounts.
+> +#
+> +# description:  Control groups are a kernel mechanism for tracking and imposing
+> +#  		limits on resource usage on groups of tasks.
+> +#
+> +#
+
+Generally speaking, you should look at some other init scripts in
+Buildroot, to be more similar to what they look like.
+
+> +
+> +RETVAL=0
+> +case "$1" in
+> +	start)
+> +		test -x /usr/bin/cgroupfs-mount || exit 0
+
+Not needed.
+
+> +		echo "Mounting cgroupfs hierarchy"
+
+Use printf here
+
+> +		/usr/bin/cgroupfs-mount
+
+And do something like:
+
+		printf "Mounting cgroupfs hierarchy: "
+		/usr/bin/cgroupfs-mount
+		[ $? = 0 ] && echo "OK" || echo "FAIL"
+
+> +		RETVAL=$?
+
+I don't think there's any need for a RETVAL variable, just do exit $?
+at the end of the script, like S50dropbear is doing.
+
+> +		;;
+> +
+> +	stop)
+> +		test -x /usr/bin/cgroupfs-umount || exit 0
+> +		echo "Unmounting cgroupfs hierarchy"
+> +		/usr/bin/cgroupfs-umount
+> +		RETVAL=$?
+> +		;;
+> +
+> +	restart|force-reload)
+> +		if mountpoint -q /sys/fs/cgroup; then
+> +			$0 stop
+> +		fi
+> +		exec $0 start
+> +		;;
+> +
+> +	status)
+> +		if mountpoint -q /sys/fs/cgroup; then
+> +			# TODO decide whether to detect "partial mounted" status (ie, whether all available subsystems are mounted correctly)
+
+This comment needs to be wrapped. Or handled :)
+
+> +			echo "cgroupfs hierarchy is mounted"
+> +			exit 0
+> +		else
+> +			echo "cgroupfs hierarchy is not mounted"
+> +			exit 1
+> +		fi
+> +		;;
+> +
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart|status}"
+> +		exit 1
+> +		;;
+> +esac
+
+Also, we often put the start(), stop() and status() code in functions,
+so that the indentation remains more reasonable. Again, see S50dropbear
+for a pretty good example.
+
+> diff --git a/package/cgroupfs/cgroupfs.mk b/package/cgroupfs/cgroupfs.mk
+> new file mode 100644
+> index 0000000..8d178ff
+> --- /dev/null
+> +++ b/package/cgroupfs/cgroupfs.mk
+> @@ -0,0 +1,22 @@
+> +#############################################################
+> +#
+> +# cgroupfs
+> +#
+> +#############################################################
+
+We want 80 hash signs here. Yes that's silly. But we like it :)
+
+And also, an empty new line between this comment header and the first
+variable.
+
+> +CGROUPFS_VERSION = 7285bf44402029394808339f69f4f293730fc2c6
+> +CGROUPFS_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_VERSION))
+> +CGROUPFS_LICENSE = GPL-3+
+
+Should be GPLv3+
+
+> +CGROUPFS_LICENSE_FILES = COPYRIGHT
+> +
+> +define CGROUPFS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
+> +	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
+> +endef
+> +
+> +define CGROUPFS_INSTALL_INIT_SYSV
+> +	$(INSTALL) -m 0755 -D package/cgroupfs/S30cgroupfs \
+
+You can use $(CGROUPFS_PKGDIR) instead of package/cgroupfs/
+
+Also, your should add a .hash file to this package.
+
+Thanks!
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
