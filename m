@@ -1,100 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 12 Feb 2016 23:33:23 +0100
-Subject: [Buildroot] [PATCH 2/2] package/binutils-2.25.1: backport upstream
-	patch for PR19405
-In-Reply-To: <1455316403-7793-1-git-send-email-romain.naour@gmail.com>
-References: <1455316403-7793-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <1455316403-7793-2-git-send-email-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Feb 2016 23:46:02 +0100
+Subject: [Buildroot] [PATCH 03/16 v4] core/pkg-utils: add macro to
+ hardlink-or-copy
+In-Reply-To: <56BE5C84.8050602@lucaceresoli.net>
+References: <cover.1454536753.git.yann.morin.1998@free.fr>
+ <821b8ea9cd929a6c05b715d12e99f3da00aa9ed4.1454536753.git.yann.morin.1998@free.fr>
+ <56BE5C84.8050602@lucaceresoli.net>
+Message-ID: <20160212224602.GB3395@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes Buildroot generated toolchains:
-http://autobuild.buildroot.net/results/89b/89b46f97e2736d9337f888c761259e7bc7cdd128
+Luca, All,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...ertion-in-NIOS2-linker-to-allow-signed-16.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch
+On 2016-02-12 23:28 +0100, Luca Ceresoli spake thusly:
+> On 03/02/2016 23:21, Yann E. MORIN wrote:
+> > This macro will try to copy a source file into a destination directory,
+> > by first attempting to hard-link, and falling back to a plain copy.
+> > 
+> > In some situations, it will be necessary that the destination file is
+> > named differently than the source (e.g. due to a re-numbering), so if a
+> > third argument is specified, it is treated as the basename of the
+> > destination file.
+[--SNIP--]
+> > +define hardlink-copy
+> > +	{ mkdir -p $(2) && \
+> > +	  rm -f        $(strip $(2))/$(if $(3),$(strip $(3)),$(notdir $(1))) && \
+> > +	  { ln -f $(1) $(strip $(2))/$(if $(3),$(strip $(3)),$(notdir $(1))) 2>/dev/null || \
+> > +	    cp -f $(1) $(strip $(2))/$(if $(3),$(strip $(3)),$(notdir $(1))); \
+> > +	  } \
+> > +	}
+> > +endef
+> 
+> Unfortunately this version of the patch does not seem to work, although
+> I can't wrap my head around the reason. What's happening is _weird_.
 
-diff --git a/package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch b/package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch
-new file mode 100644
-index 0000000..6ae9d9a
---- /dev/null
-+++ b/package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch
-@@ -0,0 +1,70 @@
-+From d07f38875f37f4608e8ecb761619d84716896f14 Mon Sep 17 00:00:00 2001
-+From: Nick Clifton <nickc@redhat.com>
-+Date: Wed, 10 Feb 2016 11:25:59 +0000
-+Subject: [PATCH] Correct assertion in NIOS2 linker to allow signed 16-buit
-+ immediate values.
-+
-+	PR 19405
-+	* elf32-nios2.c (nios2_elf32_install_imm16): Allow for signed
-+	immediate values.
-+	* elf-eh-frame.c (_bfd_elf_discard_section_eh_frame): Limit the
-+	number of messages about FDE encoding preventing .eh_frame_hdr
-+	generation.
-+
-+[Romain: rebase on 2.25.1]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ bfd/elf-eh-frame.c | 18 +++++++++++++++---
-+ bfd/elf32-nios2.c  |  2 +-
-+ 2 files changed, 16 insertions(+), 4 deletions(-)
-+
-+diff --git a/bfd/elf-eh-frame.c b/bfd/elf-eh-frame.c
-+index 002932d..22430f9 100644
-+--- a/bfd/elf-eh-frame.c
-++++ b/bfd/elf-eh-frame.c
-+@@ -1181,14 +1181,26 @@ _bfd_elf_discard_section_eh_frame
-+ 		     && ent->make_relative == 0)
-+ 		    || (ent->fde_encoding & 0x70) == DW_EH_PE_aligned))
-+ 	      {
-++		static int num_warnings_issued = 0;
-++
-+ 		/* If a shared library uses absolute pointers
-+ 		   which we cannot turn into PC relative,
-+ 		   don't create the binary search table,
-+ 		   since it is affected by runtime relocations.  */
-+ 		hdr_info->table = FALSE;
-+-		(*info->callbacks->einfo)
-+-		  (_("%P: FDE encoding in %B(%A) prevents .eh_frame_hdr"
-+-		     " table being created.\n"), abfd, sec);
-++		if (num_warnings_issued < 10)
-++		  {
-++		    (*info->callbacks->einfo)
-++		      (_("%P: FDE encoding in %B(%A) prevents .eh_frame_hdr"
-++			 " table being created.\n"), abfd, sec);
-++		    num_warnings_issued ++;
-++		  }
-++		else if (num_warnings_issued == 10)
-++		  {
-++		    (*info->callbacks->einfo)
-++		      (_("%P: Further warnings about FDE encoding preventing .eh_frame_hdr generation dropped.\n"));
-++		    num_warnings_issued ++;
-++		  }
-+ 	      }
-+ 	    ent->removed = 0;
-+ 	    hdr_info->fde_count++;
-+diff --git a/bfd/elf32-nios2.c b/bfd/elf32-nios2.c
-+index 0105b70..726647d 100644
-+--- a/bfd/elf32-nios2.c
-++++ b/bfd/elf32-nios2.c
-+@@ -1035,7 +1035,7 @@ nios2_elf32_install_imm16 (asection *sec, bfd_vma offset, bfd_vma value)
-+ {
-+   bfd_vma word = bfd_get_32 (sec->owner, sec->contents + offset);
-+ 
-+-  BFD_ASSERT(value <= 0xffff);
-++  BFD_ASSERT (value <= 0xffff || ((bfd_signed_vma) value) >= -0xffff);
-+ 
-+   bfd_put_32 (sec->owner, word | ((value & 0xffff) << 6),
-+ 	      sec->contents + offset);
-+-- 
-+2.4.3
-+
+Damned, that's right. It's broke... :-/
+
+> If I apply all of your patches up to 10/16, 'make legal-info' works. If
+> I add patch 11 ("core/legal-info: also save patches"), it does not. Add
+> patch 12 and it works again.
+[--SNIP--]
+> This is the best I could understand at the moment... :-(
+
+Thanks for the detailed analysis! :-)
+I'll investigate this further.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.4.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
