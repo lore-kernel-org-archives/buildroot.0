@@ -1,40 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Feb 2016 16:46:20 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/boost: Disable fenv support
- with uClibc
-In-Reply-To: <1454759480-27848-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454759480-27848-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160213164620.35f85675@free-electrons.com>
+From: Hajime Yamasaki Vukelic <hayavuk@gmail.com>
+Date: Sat, 13 Feb 2016 17:11:20 +0100
+Subject: [Buildroot] Booting from cramfs image
+In-Reply-To: <CAJrvd8OxrKSy2p6xEM1hdSzF4zKRXYZgW0OX2Zfk1emNu=rjpg@mail.gmail.com>
+References: <CAJrvd8PF5qwZxm3N0b73fJ+Ea4OFMTf-1unN1uhf7FdZBivvSA@mail.gmail.com>
+ <20160212145006.77bfa2fa@free-electrons.com>
+ <CAJrvd8OxrKSy2p6xEM1hdSzF4zKRXYZgW0OX2Zfk1emNu=rjpg@mail.gmail.com>
+Message-ID: <CAJrvd8NmDaxMwntC94P4EZYC-WGy3FySdg2d_yGM9MbQQRBBKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Thomans,
 
-On Sat,  6 Feb 2016 12:51:20 +0100, Bernd Kuhls wrote:
-> The boost build system does not recognize the fact that fenv.h is an
-> optional module in uClibc and tries to use it even if UCLIBC_HAS_FENV
-> is disabled. This patch disables fenv support completely when compiling
-> with a uClibc-based toolchain.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/160/160e1b98b204148ecf128144826554b6c523931b/
-> and many others
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: updated patch to define BOOST_NO_FENV_H for the linux platform config
->     instead of patching the boost source directly
+I thank you again for your hints. Simply switching to squashfs seems
+to have fixed the issue, so I assume it was some issue with mounting
+the cramfs image.
 
-As I said, I'm still not entirely happy with this solution, but nobody
-was able to find a better solution, and we need to fix this problem.
+-- Hajime
 
-So: applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+On Sat, Feb 13, 2016 at 11:22 AM, Hajime Yamasaki Vukelic
+<hayavuk@gmail.com> wrote:
+> Thomas,
+>
+> On Fri, Feb 12, 2016 at 2:50 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> [SNIP]
+>> > If someone could give me pointers on how to debug or fix this, I would
+>> > greatly appreciate it.
+>>
+>> Well, it essentially means that your init program on your real root
+>> filesystem (in the cramfs image) does not work. Built for the wrong
+>> architecture variant, missing libraries, etc. Could be lots of things.
+>
+> Ah, thanks, it hasn't occurred to me that would be the case. Is there
+> some way I can get useful output and maybe store it on the card for
+> debugging purposes?
+>
+>> Also, why use a cramfs filesystem rather than the modern modern and
+>> efficient squashfs?
+>
+> This is the first time I'm doing this type of setup, so simply lack of
+> experience, I guess. :)
+>
+> -- Hajime
