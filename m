@@ -1,28 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 13 Feb 2016 20:08:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lvm2: fix musl build
-References: <1453847201-19076-1-git-send-email-bernd.kuhls@t-online.de>
- <56B0C539.1000200@gmail.com>
-Message-ID: <oib4pcxqnk.ln2@ID-313208.user.individual.net>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sat, 13 Feb 2016 19:22:38 +0000
+Subject: [Buildroot] [lvm-devel] MUSL fun
+In-Reply-To: <1ca4pcxqnk.ln2@ID-313208.user.individual.net>
+References: <CA+BsyQ4tDvVFXyo2Po9jiFKVobaJhMy7PoxWjczT8KFK9BrXWQ@mail.gmail.com>
+ <1ca4pcxqnk.ln2@ID-313208.user.individual.net>
+Message-ID: <CA+BsyQ6ihax71VER=dgCHF-eV0mfjYqZo6LixK21BVrMCGb-Bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 02 Feb 2016 16:03:21 +0100 schrieb Romain Naour:
+Bernd,
 
->> ++#else ++#define _reopen_stream(stream, fd, mode, name) (freopen(NULL,
->> mode, stream) != NULL)
->> ++#endif
-> 
-> I'm just wondering why not use freopen() directly and remove
-> __reopen_stream() ?
+[cc buildroot]
 
-Hi Romain,
+Like you I'd been investigating this issue from the buildroot end.
+Since October I've had no spare time to look at buildroot fixes.
 
-a similar question last year on the lvm2 mailinglist remained unanswered, 
-I just sent a reminder, along with our patch:
-http://article.gmane.org/gmane.linux.lvm.devel/15110
+I was hoping for an explanation about why LVM implemented the above
+behaviour, but I never got one, and I didn't fancy working on a patch
+that would never get accepted when other projects were more open ..
 
-Regards, Bernd
+I think the best approach is probably just to add the freopen() patch
+as Romain suggested and keep the patch available in buildroot in the
+hope that we can build support for LVM to accept it.
+
+Brendan
+
+
+On 13 February 2016 at 18:48, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Am Tue, 15 Sep 2015 17:43:58 +0100 schrieb Brendan Heading:
+>
+>> In theory a straightforward fix would be to do something like:
+>>
+>> if (!freopen(NULL, "r", stdin))
+>>      goto out;
+>>
+>> .. but I suspect there is a good reason why this isn't done. Can anyone
+>> shed any light on this ? If not I will submit a patch.
+>
+> Hi Brendan,
+>
+> the buildroot project also supports musl, the build of lvm2 fails due to
+> the problem you described. Did you find a working solution for the
+> problem? A patch I submitted to the buildroot project, based on patches I
+> found at the Alpinelinux project, raised some questions I am unable to
+> answer: http://patchwork.ozlabs.org/patch/573519/
+>
+> Regards, Bernd
+>
+> --
+> lvm-devel mailing list
+> lvm-devel at redhat.com
+> https://www.redhat.com/mailman/listinfo/lvm-devel
