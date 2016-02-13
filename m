@@ -1,104 +1,55 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Feb 2016 21:37:50 +0100
-Subject: [Buildroot] Issue with toolchain wrapper changes
-In-Reply-To: <20160213163116.745e4507@free-electrons.com>
-References: <20160213163116.745e4507@free-electrons.com>
-Message-ID: <56BF941E.80008@mind.be>
+From: Brendan Heading <brendanheading@gmail.com>
+Date: Sat, 13 Feb 2016 21:19:56 +0000
+Subject: [Buildroot] [lvm-devel] MUSL fun
+In-Reply-To: <56BF99FF.1030900@redhat.com>
+References: <CA+BsyQ4tDvVFXyo2Po9jiFKVobaJhMy7PoxWjczT8KFK9BrXWQ@mail.gmail.com>
+ <1ca4pcxqnk.ln2@ID-313208.user.individual.net>
+ <CA+BsyQ6ihax71VER=dgCHF-eV0mfjYqZo6LixK21BVrMCGb-Bg@mail.gmail.com>
+ <56BF99FF.1030900@redhat.com>
+Message-ID: <CA+BsyQ53DooiSj+wErGhM+PemjA7=fKtEBcGHJVmR++tOMo-XQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13-02-16 16:31, Thomas Petazzoni wrote:
-> Hello Arnout,
-> 
-> I am facing some issues with the toolchain wrapper, which I believe
-> were introduced by the changes done to use the toolchain wrapper also
-> for the internal toolchain backend.
-> 
-> As you know, Buildroot installs all its host stuff in $(HOST_DIR)/usr,
-> and not directly under $(HOST_DIR). For the autobuilders, I build a
-> number of toolchains with Buildroot, which are then used as pre-built
-> external toolchains by the autobuilders. In order for those toolchains
-> to look like conventional toolchains, at the end of their build, I do:
-> 
-> 	mv /path/to/host/usr/* /path/to/host/
-> 	rmdir /path/to/host/usr/
-> 
-> Which moves everything outside of the usr/ subdirectory, and removes
-> the usr/ subdirectory itself. This used to work perfectly fine, but
-> now, it fails to find the .br_real equivalent of the command being
-> executed. Example:
-> 
-> thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ ls
-> arm-buildroot-linux-musleabi  bin  include  lib  libexec  share
-> thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ ./bin/arm-linux-gcc -v
-> /home/thomas/x-tools/usr/bin/arm-linux-gcc.br_real: No such file or directory
-> 
-> As you can see, it looks for arm-linux-gcc.br_real
-> in /home/thomas/x-tools/usr/bin, while it is
-> in /home/thomas/x-tools/armv5-musl-new-2016.02-1/bin/.
+> commands/toolcontext.c: In function 'create_toolcontext':
+> commands/toolcontext.c:1796:10: error: assignment of read-only variable
+> 'stdin'
+>     stdin = new_stream;
+> --
+>
+> So now - from where comes the idea  of  'stdin' being read-only variable ?
+> Looking at some POSIX spec e.g.:
+> http://pubs.opengroup.org/onlinepubs/009695399/functions/stdin.html
+>
+> there is no sign of having this read-only var.
+>
+> So what kind of OS this actually is ?
 
- 5ce73dca5238d30b0cbfe64c1ecbaec777c6a8fe was supposed to fix this situation. I
-didn't find a way to avoid hardcoding the BR_CROSS_PATH_SUFFIX/usr/bin bit in
-the wrapper, so instead I reversed the logic: the _external_ toolchain wrapper
-will avoid calling the wrapper and instead call the .br_real directly. So,
-calling the wrapper outside the usr directory will indeed fail, but when it's
-used as an external toolchain in buildroot, it should work fine.
+musl's rather conservative interpretation appears to be that since the
+values of stdin, stdout and stderr are explicitly defined by POSIX, it
+is implicit that the variables holding these values should be const.
 
- Obviously this is not an ideal situation, but I don't have better ideas. Well,
-except to get rid of the usr part, as you point out below. The problem is that
-the wrapper needs to have absbasedir to find the sysroot, and for the external
-toolchain this needs to lead to opt/ext-toolchain. Well, maybe we coud use ../
-in BR_SYSROOT, or we could make more than a difference between the internal and
-the external toolchain, or we could add keep a bindir variable in addition to
-absbasedir and use that for ccache and the internal toolchain. Right, so I do
-have some ideas :-)
+http://www.openwall.com/lists/musl/2013/03/18/1
 
- Anyway it's going to be a much bigger change than the one from 5ce73dca, and I
-think it's not for 2016.02.
+There's not a lot of point in debating the rights or wrongs of this.
+If it were me, I'd take a pragmatic approach, and if it were me I'd
+make this a configurable option, but this defeats musl's stated
+objectives and they won't accept a patch to change it.
 
+> There is a reason from lvm2 implementation here - freopen() is not giving
+> application full control over internal buffer allocation and we need to be
+> sure we lock-in memory for critical section - and some glibc versions are
+> allocating buffers here via 'mmap' call.
+>
+> That said - there could be accepted a patch checking in configure  for
+> 'read-only' stdin  - and using then #ifdef compilation that would
+> replace use of  internal lvm2 reopen code with libc function.
 
- Regards,
- Arnout
+I had a suspicion you would have a good reason.
 
+On first glance your proposal sounds like a good compromise and one
+that would be worth exploring.
 
-> 
-> If I move everything again under a usr/ subdirectory, it all works fine
-> again:
-> 
-> thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ mkdir usr
-> thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ mv * usr/
-> mv: cannot move ?usr? to a subdirectory of itself, ?usr/usr?
-> thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ ./usr/bin/arm-linux-gcc -v
-> Using built-in specs.
-> COLLECT_GCC=/home/thomas/x-tools/armv5-musl-new-2016.02-1/usr/bin/arm-linux-gcc.br_real
-> COLLECT_LTO_WRAPPER=/home/thomas/x-tools/armv5-musl-new-2016.02-1/usr/bin/../libexec/gcc/arm-buildroot-linux-musleabi/5.3.0/lto-wrapper
-> Target: arm-buildroot-linux-musleabi
-> Configured with: ./configure --prefix=/build/armv5-musl-new-2016.02-1/usr --sysconfdir=/build/armv5-musl-new-2016.02-1/etc --enable-static --target=arm-buildroot-linux-musleabi --with-sysroot=/build/armv5-musl-new-2016.02-1/usr/arm-buildroot-linux-musleabi/sysroot --disable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --with-gmp=/build/armv5-musl-new-2016.02-1/usr --with-mpfr=/build/armv5-musl-new-2016.02-1/usr --with-pkgversion='Buildroot 2016.02-rc1-00006-gbb13242' --with-bugurl=http://bugs.buildroot.net/ --disable-libquadmath --disable-libsanitizer --disable-tls --disable-libmudflap --enable-threads --with-mpc=/build/armv5-musl-new-2016.02-1/usr --without-isl --without-cloog --with-float=soft --disable-decimal-float --with-abi=aapcs-linux --with-cpu=arm926ej-s --with-float=soft --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/build/armv5-musl-new-2016.02-1/usr/arm-buildroot-linux-musleabi/bin --enable-shared --disable-libgomp
-> Thread model: posix
-> gcc version 5.3.0 (Buildroot 2016.02-rc1-00006-gbb13242) 
-> 
-> Now, I'm sure the problem is at the beginning of the
-> toolchain-wrapper.c main() function. But I'm wondering what is the
-> proper fix for this. Should I fix the toolchain-wrapper logic to
-> properly work in such a situation ? Should we remove the usr/
-> sub-directory completely from Buildroot, as you suggested multiple
-> times already ?
-> 
-> Do you have some other suggestions ?
-> 
-> Thanks!
-> 
-> Thomas
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Brendan
