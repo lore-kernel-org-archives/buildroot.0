@@ -1,55 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 13 Feb 2016 18:15:53 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/numactl: Fix uClibc compile
- breakage after musl compile fix
-In-Reply-To: <20160213173119.0aa5f7c9@free-electrons.com>
-References: <1455304949-16808-1-git-send-email-bernd.kuhls@t-online.de>
- <20160212224934.32cd9661@free-electrons.com>
- <6vu3pcxqnk.ln2@ID-313208.user.individual.net>
- <20160213173119.0aa5f7c9@free-electrons.com>
-Message-ID: <20160213181553.2e05bb6d@free-electrons.com>
+Date: Sat, 13 Feb 2016 18:18:49 +0100
+Subject: [Buildroot] [git commit] libbsd: add patch for clock_gettime usage
+Message-ID: <20160213171853.9CC837FD4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0e656cba53dba78b1fd3ff00ce56de1657e594bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 13 Feb 2016 17:31:19 +0100, Thomas Petazzoni wrote:
+libbsd uses clock_gettime() but doesn't check for it in librt.
+This causes breakage on old glibc versions (< 2.17). Fixes:
+http://autobuild.buildroot.net/results/a5b/a5b837d6d02ec96ac53c5b1c531a0c8e7eafeb9a/
 
-> Then I don't really understand. The original problem was:
-> 
-> syscall.c:118:41: error: missing binary operator before token "("
->  #if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-> 
-> But musl doesn't defined __GLIBC__. So I don't see how it would be
-> different to do:
-> 
->  #if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-> 
-> or
-> 
->  #if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
-> 
-> When neither __GLIBC__ nor __GLIBC_PREREQ are defined (which is the
-> case with musl).
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...0001-build-clock_gettime-might-need-librt.patch | 49 ++++++++++++++++++++++
+ package/libbsd/libbsd.mk                           |  3 +-
+ 2 files changed, 51 insertions(+), 1 deletion(-)
 
-And indeed, with your new patch applied, the build still fails with
-musl:
-
-syscall.c:118:46: error: missing binary operator before token "("
- #if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
-
-This really needs to be within a #if defined(__GLIBC__).
-
-Can you submit a patch that fixes this, and test it with glibc, uclibc
-and musl?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libbsd/0001-build-clock_gettime-might-need-librt.patch b/package/libbsd/0001-build-clock_gettime-might-need-librt.patch
+new file mode 100644
+index 0000000..ad6fcdb
+--- /dev/null
++++ b/package/libbsd/0001-build-clock_gettime-might-need-librt.patch
+@@ -0,0 +1,49 @@
++From 188049ac7adcabfa66e5b6a674ac28a2f7da81f3 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Fri, 12 Feb 2016 11:06:58 -0300
++Subject: [PATCH] build: clock_gettime might need librt
++
++In older glibc versions (< 2.17) clock_gettime is in librt.
++Add a check for this to avoid build breakage for programs/libraries that
++use libbsd on such systems.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: submitted upstream
++
++ configure.ac    | 5 +++++
++ src/Makefile.am | 2 ++
++ 2 files changed, 7 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index d334774..1862d19 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -44,6 +44,11 @@ AC_SUBST([TESTU01_LIBS])
++ AM_CONDITIONAL([HAVE_LIBTESTU01],
++                [test "x$ac_cv_lib_testu01_unif01_CreateExternGenBits" = "xyes"])
++ 
+++# In old glibc versions (< 2.17) clock_gettime() is in librt
+++AC_SEARCH_LIBS([clock_gettime], [rt],
+++             [LIB_CLOCK_GETTIME="-lrt"])
+++AC_SUBST([LIB_CLOCK_GETTIME])
+++
++ # Checks for header files.
++ AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h])
++ 
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 4649937..6b705f0 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -52,6 +52,8 @@ hash/md5hl.c: $(srcdir)/hash/helper.c
++ libbsd_la_DEPENDENCIES = \
++ 	$(libbsd_la_included_sources) \
++ 	libbsd.map
+++libbsd_la_LIBADD = \
+++	$(LIB_CLOCK_GETTIME)
++ libbsd_la_LDFLAGS = \
++ 	-Wl,--version-script=$(srcdir)/libbsd.map \
++ 	-version-number $(LIBBSD_ABI)
++-- 
++2.4.10
++
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 634a614..f750d75 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -9,7 +9,8 @@ LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
+ LIBBSD_SITE = http://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-3c, MIT
+ LIBBSD_LICENSE_FILES = COPYING
+-
+ LIBBSD_INSTALL_STAGING = YES
++# For 0001-build-clock_gettime-might-need-librt.patch
++LIBBSD_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
