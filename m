@@ -1,37 +1,93 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 13 Feb 2016 16:41:56 +0100
-Subject: [Buildroot] RFC: Patch series for Kodi 16-Jarvis
-References: <3sigkcxlsq.ln2@ID-313208.user.individual.net>
- <vjiikcxh6u.ln2@ID-313208.user.individual.net>
- <20151220135412.652a8344@free-electrons.com>
- <20151220130054.GC3677@free.fr>
- <20151220141613.22b22bdc@free-electrons.com>
- <j6oikcxh6u.ln2@ID-313208.user.individual.net>
- <20151220145152.GE3677@free.fr>
- <l4gjkcx7k7.ln2@ID-313208.user.individual.net>
- <v21fncxsj2.ln2@ID-313208.user.individual.net>
- <psp1ocx40l.ln2@ID-313208.user.individual.net>
- <0hpcocxnjs.ln2@ID-313208.user.individual.net>
- <e4ujocxnoh.ln2@ID-313208.user.individual.net>
- <20160207145859.4fdc2389@free-electrons.com>
-Message-ID: <4fv3pcxqnk.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Feb 2016 16:41:58 +0100
+Subject: [Buildroot] [git commit] package/pulseaudio: remove musl fix
+Message-ID: <20160213154228.68D807FD0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 07 Feb 2016 14:58:59 +0100 schrieb Thomas Petazzoni:
+commit: https://git.buildroot.net/buildroot/commit/?id=f061f5a1da1a45ffbd0af29eb7613f83885945cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Are we sure that Kodi 16.0 will be released by the end of February ? If
-> that's the case, then I think I'm OK with taking the -rc3 patches right
-> now, and then bump to 16.0 when it gets released, before we release
-> 2016.02.
+A recent change in puseaudio 8.0 [1] removed the nonstandard
+__WORDSIZE define. So 0002-musl-fixes.patch is not needed
+anymore.
 
-Hi Thomas,
+Also remove PULSEAUDIO_AUTORECONF.
 
-I marked the whole Kodi series as "deferred" in patchworks to reduce the 
-number of patches there. When Kodi 16.0 is finally released I will send 
-an updated version with hashes ;)
+Fixes:
+http://autobuild.buildroot.net/results/dc6/dc6642b18a97f6e0ac1524fe836226a7ee23df86
 
-Regards, Bernd
+[1] https://cgit.freedesktop.org/pulseaudio/pulseaudio/commit/?id=7c1a5d61597b8a7b762f8295c7d791942dba3fb5
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pulseaudio/0002-musl-fixes.patch | 41 --------------------------------
+ package/pulseaudio/pulseaudio.mk         |  2 --
+ 2 files changed, 43 deletions(-)
+
+diff --git a/package/pulseaudio/0002-musl-fixes.patch b/package/pulseaudio/0002-musl-fixes.patch
+deleted file mode 100644
+index fedb3a0..0000000
+--- a/package/pulseaudio/0002-musl-fixes.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-Portability fixes for musl taken from voidlinux:
+-
+-- _WORDIZE is declared in <bits/user.h> via <sys/user.h>.
+-
+-	--xtraeme
+-
+-[Bernd: Downloaded from
+-http://git.alpinelinux.org/cgit/aports/tree/testing/pulseaudio/musl-fixes.patch
+-and adjusted paths.]
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Thomas: remove xlocale.h part, it was fixed upstream.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+---- a/configure.ac.orig	2015-09-24 11:36:06.107661526 +0200
+-+++ b/configure.ac	2015-09-24 11:36:40.420036775 +0200
+-@@ -407,7 +407,7 @@ AC_HEADER_STDC
+- # POSIX
+- AC_CHECK_HEADERS_ONCE([arpa/inet.h glob.h grp.h netdb.h netinet/in.h \
+-     netinet/in_systm.h netinet/tcp.h poll.h pwd.h sched.h \
+--    sys/mman.h sys/select.h sys/socket.h sys/wait.h \
+-+    sys/mman.h sys/select.h sys/socket.h sys/wait.h sys/user.h \
+-     sys/uio.h syslog.h sys/dl.h dlfcn.h linux/sockios.h])
+- AC_CHECK_HEADERS([netinet/ip.h], [], [],
+-                  [#include <sys/types.h>
+---- a/src/pulsecore/sample-util.h.orig	2015-09-24 11:37:57.773677238 +0200
+-+++ b/src/pulsecore/sample-util.h	2015-09-24 11:38:46.668208677 +0200
+-@@ -24,6 +24,14 @@
+- #include <inttypes.h>
+- #include <limits.h>
+- 
+-+#ifdef HAVE_CONFIG_H
+-+#include <config.h>
+-+#endif
+-+
+-+#ifdef HAVE_SYS_USER_H
+-+#include <sys/user.h>	/* required by _WORDIZE with musl */
+-+#endif
+-+
+- #include <pulse/gccmacro.h>
+- #include <pulse/sample.h>
+- #include <pulse/volume.h>
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index c51e1d7..86bbb2f 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -7,8 +7,6 @@
+ PULSEAUDIO_VERSION = 8.0
+ PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases
+-# 0002-musl-fixes.patch patches configure.ac
+-PULSEAUDIO_AUTORECONF = YES
+ PULSEAUDIO_INSTALL_STAGING = YES
+ PULSEAUDIO_LICENSE = LGPLv2.1+ (specific license for modules, see LICENSE file)
+ PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
