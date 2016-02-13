@@ -1,56 +1,88 @@
-From: Brendan Heading <brendanheading@gmail.com>
-Date: Sat, 13 Feb 2016 19:22:38 +0000
-Subject: [Buildroot] [lvm-devel] MUSL fun
-In-Reply-To: <1ca4pcxqnk.ln2@ID-313208.user.individual.net>
-References: <CA+BsyQ4tDvVFXyo2Po9jiFKVobaJhMy7PoxWjczT8KFK9BrXWQ@mail.gmail.com>
- <1ca4pcxqnk.ln2@ID-313208.user.individual.net>
-Message-ID: <CA+BsyQ6ihax71VER=dgCHF-eV0mfjYqZo6LixK21BVrMCGb-Bg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 13 Feb 2016 21:02:48 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/numactl: Fix uClibc compile
+	breakage after musl compile fix
+Message-ID: <1455393768-26580-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Fixes
+http://autobuild.buildroot.net/results/316/3160fb32fbb6990b0bb268524dcea02a1f6880a7/
+http://autobuild.buildroot.net/results/961/9616f09e7cbd020134ba72853acaa28a308432a3//
+and others
 
-[cc buildroot]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: use a better fix (Thomas)
+v2: updated patch to consider improvements suggested by upstream
 
-Like you I'd been investigating this issue from the buildroot end.
-Since October I've had no spare time to look at buildroot fixes.
+ .../0001-use-glibc-prereq-only-on-glibc.patch      | 41 ++++++++++++----------
+ 1 file changed, 22 insertions(+), 19 deletions(-)
 
-I was hoping for an explanation about why LVM implemented the above
-behaviour, but I never got one, and I didn't fancy working on a patch
-that would never get accepted when other projects were more open ..
-
-I think the best approach is probably just to add the freopen() patch
-as Romain suggested and keep the patch available in buildroot in the
-hope that we can build support for LVM to accept it.
-
-Brendan
-
-
-On 13 February 2016 at 18:48, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Am Tue, 15 Sep 2015 17:43:58 +0100 schrieb Brendan Heading:
->
->> In theory a straightforward fix would be to do something like:
->>
->> if (!freopen(NULL, "r", stdin))
->>      goto out;
->>
->> .. but I suspect there is a good reason why this isn't done. Can anyone
->> shed any light on this ? If not I will submit a patch.
->
-> Hi Brendan,
->
-> the buildroot project also supports musl, the build of lvm2 fails due to
-> the problem you described. Did you find a working solution for the
-> problem? A patch I submitted to the buildroot project, based on patches I
-> found at the Alpinelinux project, raised some questions I am unable to
-> answer: http://patchwork.ozlabs.org/patch/573519/
->
-> Regards, Bernd
->
-> --
-> lvm-devel mailing list
-> lvm-devel at redhat.com
-> https://www.redhat.com/mailman/listinfo/lvm-devel
+diff --git a/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch b/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
+index 0158bd9..04561e9 100644
+--- a/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
++++ b/package/numactl/0001-use-glibc-prereq-only-on-glibc.patch
+@@ -1,35 +1,38 @@
+-Use __GLIBC_PREREQ only when __GLIBC__ is defined
++From e72abd55ae9a6509372af4e02de707c76d466698 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Fri, 12 Feb 2016 19:25:02 +0100
++Subject: [PATCH 1/1] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
+ 
+ The way __GLIBC_PREREQ() is currently used means that it's evaluated
+ even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
+ not exist if __GLIBC__ is not defined, causing build failures on C
+ libraries not defining __GLIBC__ such as the musl C library.
+ 
+-Patch originally taken from:
+-https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
++Patch sent upstream: https://github.com/numactl/numactl/pull/5
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: Reworked to fix uClibc]
+ [Thomas: improve patch description.]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ syscall.c | 4 ++++
++ 1 file changed, 4 insertions(+)
+ 
+---- a/syscall.c.orig	2014-10-20 16:12:53.000000000 +0200
+-+++ b/syscall.c	2015-06-22 08:13:22.729034702 +0200
+-@@ -115,14 +115,16 @@
++diff --git a/syscall.c b/syscall.c
++index 4589b85..255853d 100644
++--- a/syscall.c
+++++ b/syscall.c
++@@ -115,6 +115,10 @@
+  
+  #endif
+  
+--#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+-+#if defined(__GLIBC__)
+-+# if __GLIBC_PREREQ(2,11)
+++#ifndef __GLIBC_PREREQ
+++# define __GLIBC_PREREQ(x,y) 0
+++#endif
+++
++ #if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+  
+  /* glibc 2.11 seems to have working 6 argument sycall. Use the
+-    glibc supplied syscall in this case.
+-    The version cut-off is rather arbitary and could be probably
+-    earlier. */
+- 
+--#define syscall6 syscall
+-+#  define syscall6 syscall
+-+#endif
+- #elif defined(__x86_64__)
+- /* 6 argument calls on x86-64 are often buggy in both glibc and
+-    asm/unistd.h. Add a working version here. */
++-- 
++2.7.0
++
+-- 
+2.7.0
