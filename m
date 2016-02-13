@@ -1,36 +1,39 @@
-From: Hajime Yamasaki Vukelic <hayavuk@gmail.com>
-Date: Sat, 13 Feb 2016 11:22:06 +0100
-Subject: [Buildroot] Booting from cramfs image
-In-Reply-To: <20160212145006.77bfa2fa@free-electrons.com>
-References: <CAJrvd8PF5qwZxm3N0b73fJ+Ea4OFMTf-1unN1uhf7FdZBivvSA@mail.gmail.com>
- <20160212145006.77bfa2fa@free-electrons.com>
-Message-ID: <CAJrvd8OxrKSy2p6xEM1hdSzF4zKRXYZgW0OX2Zfk1emNu=rjpg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Feb 2016 12:16:05 +0100
+Subject: [Buildroot] [PATCH] Don't install in mysql directory
+In-Reply-To: <56BE8C68.3050409@proximus.be>
+References: <1450051027-23633-1-git-send-email-arnout@mind.be>
+ <20151229212831.07ec737f@free-electrons.com>
+ <56BDA833.4080506@proximus.be>
+ <20160212104822.776f573f@free-electrons.com>
+ <56BE8C68.3050409@proximus.be>
+Message-ID: <20160213121605.54ef7700@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Fri, Feb 12, 2016 at 2:50 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-[SNIP]
-> > If someone could give me pointers on how to debug or fix this, I would
-> > greatly appreciate it.
->
-> Well, it essentially means that your init program on your real root
-> filesystem (in the cramfs image) does not work. Built for the wrong
-> architecture variant, missing libraries, etc. Could be lots of things.
+On Sat, 13 Feb 2016 02:52:40 +0100, Johan Sagaert wrote:
 
-Ah, thanks, it hasn't occurred to me that would be the case. Is there
-some way I can get useful output and maybe store it on the card for
-debugging purposes?
+> My app complained not finding libmysqlclient.so.16 because it was in 
+> /usr/lib/mysql,
 
-> Also, why use a cramfs filesystem rather than the modern modern and
-> efficient squashfs?
+Which version of Buildroot are you using? As I said, we are now
+installing the MySQL libraries in /usr/lib, and no longer
+in /usr/lib/mysql.
 
-This is the first time I'm doing this type of setup, so simply lack of
-experience, I guess. :)
+It depends on whether you have
+https://git.busybox.net/buildroot/commit/package/mysql?id=7b9c5d65e0dc3b6b55ff67196b8110c5a758da31
+in your Buildroot version or not. This commit is only part of
+2016.02-rc1.
 
--- Hajime
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
