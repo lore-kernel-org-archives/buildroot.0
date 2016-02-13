@@ -1,7 +1,7 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 12 Feb 2016 22:39:39 -0200
-Subject: [Buildroot]  [PATCH] fio: Add patch to import stdint.h explicitly
-Message-ID: <1455323979-340-1-git-send-email-ricardo.martincoski@gmail.com>
+Date: Fri, 12 Feb 2016 23:00:51 -0200
+Subject: [Buildroot] [PATCH v2] fio: Add patch to import stdint.h explicitly
+Message-ID: <1455325251-20195-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,6 +18,9 @@ Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+Changes v1 -> v2:
+  - fixed the wrong name of the patch file
+
 Adding to CC the 2 most recent committers.
 As you recent changed this package, you probably can spot problems on my
 patch more easily than others ;-)
@@ -44,15 +47,15 @@ BR2_arm=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_PACKAGE_FIO=y
 ---
- ...0001-compile_fix_for_linux_header_changes.patch | 42 ++++++++++++++++++++++
+ ...0001-compile-fix-for-linux-header-changes.patch | 42 ++++++++++++++++++++++
  1 file changed, 42 insertions(+)
- create mode 100644 package/fio/0001-compile_fix_for_linux_header_changes.patch
+ create mode 100644 package/fio/0001-compile-fix-for-linux-header-changes.patch
 
-diff --git a/package/fio/0001-compile_fix_for_linux_header_changes.patch b/package/fio/0001-compile_fix_for_linux_header_changes.patch
+diff --git a/package/fio/0001-compile-fix-for-linux-header-changes.patch b/package/fio/0001-compile-fix-for-linux-header-changes.patch
 new file mode 100644
 index 0000000..4a37e9d
 --- /dev/null
-+++ b/package/fio/0001-compile_fix_for_linux_header_changes.patch
++++ b/package/fio/0001-compile-fix-for-linux-header-changes.patch
 @@ -0,0 +1,42 @@
 +From d7bb6180f831091c468e5aa749b142efd5eddda4 Mon Sep 17 00:00:00 2001
 +From: "Robin H. Johnson" <robbat2@gentoo.org>
