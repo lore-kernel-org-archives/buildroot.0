@@ -1,8 +1,7 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Fri, 12 Feb 2016 22:38:12 -0200
-Subject: [Buildroot] =?utf-8?b?W0J1acOnZHJvb3RdIFtQQVRDSF0gZmlvOiBBZGQg?=
-	=?utf-8?q?patch_to_import_stdint=2Eh_explicitly?=
-Message-ID: <1455323892-27058-1-git-send-email-ricardo.martincoski@gmail.com>
+Date: Fri, 12 Feb 2016 22:39:39 -0200
+Subject: [Buildroot]  [PATCH] fio: Add patch to import stdint.h explicitly
+Message-ID: <1455323979-340-1-git-send-email-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
