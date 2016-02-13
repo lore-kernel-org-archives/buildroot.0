@@ -1,98 +1,70 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 13 Feb 2016 14:07:48 +0100
-Subject: [Buildroot] [PATCH] package/pulseaudio: remove musl fix
-Message-ID: <1455368868-25728-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 13 Feb 2016 16:31:16 +0100
+Subject: [Buildroot] Issue with toolchain wrapper changes
+Message-ID: <20160213163116.745e4507@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A recent change in puseaudio 8.0 [1] removed the nonstandard
-__WORDSIZE define. So 0002-musl-fixes.patch is not needed
-anymore.
+Hello Arnout,
 
-Also remove PULSEAUDIO_AUTORECONF.
+I am facing some issues with the toolchain wrapper, which I believe
+were introduced by the changes done to use the toolchain wrapper also
+for the internal toolchain backend.
 
-Fixes:
-http://autobuild.buildroot.net/results/dc6/dc6642b18a97f6e0ac1524fe836226a7ee23df86
+As you know, Buildroot installs all its host stuff in $(HOST_DIR)/usr,
+and not directly under $(HOST_DIR). For the autobuilders, I build a
+number of toolchains with Buildroot, which are then used as pre-built
+external toolchains by the autobuilders. In order for those toolchains
+to look like conventional toolchains, at the end of their build, I do:
 
-[1] https://cgit.freedesktop.org/pulseaudio/pulseaudio/commit/?id=7c1a5d61597b8a7b762f8295c7d791942dba3fb5
+	mv /path/to/host/usr/* /path/to/host/
+	rmdir /path/to/host/usr/
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-The fix was needed with pulseaudio 7.0 and I missed
-that It wasn't needed with pulseaudio 8.0 while reviewing
-Bernd's patch.
+Which moves everything outside of the usr/ subdirectory, and removes
+the usr/ subdirectory itself. This used to work perfectly fine, but
+now, it fails to find the .br_real equivalent of the command being
+executed. Example:
 
-Build tested with a musl and Glibc toolchains
----
- package/pulseaudio/0002-musl-fixes.patch | 41 --------------------------------
- package/pulseaudio/pulseaudio.mk         |  2 --
- 2 files changed, 43 deletions(-)
- delete mode 100644 package/pulseaudio/0002-musl-fixes.patch
+thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ ls
+arm-buildroot-linux-musleabi  bin  include  lib  libexec  share
+thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ ./bin/arm-linux-gcc -v
+/home/thomas/x-tools/usr/bin/arm-linux-gcc.br_real: No such file or directory
 
-diff --git a/package/pulseaudio/0002-musl-fixes.patch b/package/pulseaudio/0002-musl-fixes.patch
-deleted file mode 100644
-index fedb3a0..0000000
---- a/package/pulseaudio/0002-musl-fixes.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--Portability fixes for musl taken from voidlinux:
--
--- _WORDIZE is declared in <bits/user.h> via <sys/user.h>.
--
--	--xtraeme
--
--[Bernd: Downloaded from
--http://git.alpinelinux.org/cgit/aports/tree/testing/pulseaudio/musl-fixes.patch
--and adjusted paths.]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Thomas: remove xlocale.h part, it was fixed upstream.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
----- a/configure.ac.orig	2015-09-24 11:36:06.107661526 +0200
--+++ b/configure.ac	2015-09-24 11:36:40.420036775 +0200
--@@ -407,7 +407,7 @@ AC_HEADER_STDC
-- # POSIX
-- AC_CHECK_HEADERS_ONCE([arpa/inet.h glob.h grp.h netdb.h netinet/in.h \
--     netinet/in_systm.h netinet/tcp.h poll.h pwd.h sched.h \
---    sys/mman.h sys/select.h sys/socket.h sys/wait.h \
--+    sys/mman.h sys/select.h sys/socket.h sys/wait.h sys/user.h \
--     sys/uio.h syslog.h sys/dl.h dlfcn.h linux/sockios.h])
-- AC_CHECK_HEADERS([netinet/ip.h], [], [],
--                  [#include <sys/types.h>
----- a/src/pulsecore/sample-util.h.orig	2015-09-24 11:37:57.773677238 +0200
--+++ b/src/pulsecore/sample-util.h	2015-09-24 11:38:46.668208677 +0200
--@@ -24,6 +24,14 @@
-- #include <inttypes.h>
-- #include <limits.h>
-- 
--+#ifdef HAVE_CONFIG_H
--+#include <config.h>
--+#endif
--+
--+#ifdef HAVE_SYS_USER_H
--+#include <sys/user.h>	/* required by _WORDIZE with musl */
--+#endif
--+
-- #include <pulse/gccmacro.h>
-- #include <pulse/sample.h>
-- #include <pulse/volume.h>
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index c51e1d7..86bbb2f 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -7,8 +7,6 @@
- PULSEAUDIO_VERSION = 8.0
- PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
- PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases
--# 0002-musl-fixes.patch patches configure.ac
--PULSEAUDIO_AUTORECONF = YES
- PULSEAUDIO_INSTALL_STAGING = YES
- PULSEAUDIO_LICENSE = LGPLv2.1+ (specific license for modules, see LICENSE file)
- PULSEAUDIO_LICENSE_FILES = LICENSE GPL LGPL
+As you can see, it looks for arm-linux-gcc.br_real
+in /home/thomas/x-tools/usr/bin, while it is
+in /home/thomas/x-tools/armv5-musl-new-2016.02-1/bin/.
+
+If I move everything again under a usr/ subdirectory, it all works fine
+again:
+
+thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ mkdir usr
+thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ mv * usr/
+mv: cannot move ?usr? to a subdirectory of itself, ?usr/usr?
+thomas at skate:~/x-tools/armv5-musl-new-2016.02-1$ ./usr/bin/arm-linux-gcc -v
+Using built-in specs.
+COLLECT_GCC=/home/thomas/x-tools/armv5-musl-new-2016.02-1/usr/bin/arm-linux-gcc.br_real
+COLLECT_LTO_WRAPPER=/home/thomas/x-tools/armv5-musl-new-2016.02-1/usr/bin/../libexec/gcc/arm-buildroot-linux-musleabi/5.3.0/lto-wrapper
+Target: arm-buildroot-linux-musleabi
+Configured with: ./configure --prefix=/build/armv5-musl-new-2016.02-1/usr --sysconfdir=/build/armv5-musl-new-2016.02-1/etc --enable-static --target=arm-buildroot-linux-musleabi --with-sysroot=/build/armv5-musl-new-2016.02-1/usr/arm-buildroot-linux-musleabi/sysroot --disable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --with-gmp=/build/armv5-musl-new-2016.02-1/usr --with-mpfr=/build/armv5-musl-new-2016.02-1/usr --with-pkgversion='Buildroot 2016.02-rc1-00006-gbb13242' --with-bugurl=http://bugs.buildroot.net/ --disable-libquadmath --disable-libsanitizer --disable-tls --disable-libmudflap --enable-threads --with-mpc=/build/armv5-musl-new-2016.02-1/usr --without-isl --without-cloog --with-float=soft --disable-decimal-float --with-abi=aapcs-linux --with-cpu=arm926ej-s --with-float=soft --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/build/armv5-musl-new-2016.02-1/usr/arm-buildroot-linux-musleabi/bin --enable-shared --disable-libgomp
+Thread model: posix
+gcc version 5.3.0 (Buildroot 2016.02-rc1-00006-gbb13242) 
+
+Now, I'm sure the problem is at the beginning of the
+toolchain-wrapper.c main() function. But I'm wondering what is the
+proper fix for this. Should I fix the toolchain-wrapper logic to
+properly work in such a situation ? Should we remove the usr/
+sub-directory completely from Buildroot, as you suggested multiple
+times already ?
+
+Do you have some other suggestions ?
+
+Thanks!
+
+Thomas
 -- 
-2.4.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
