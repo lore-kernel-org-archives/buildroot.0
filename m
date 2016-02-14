@@ -1,34 +1,44 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 14 Feb 2016 23:03:31 +0100
-Subject: [Buildroot] [PATCH 2/2] package/monolinte: updating download url
-In-Reply-To: <1455487411-14605-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1455487411-14605-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1455487411-14605-2-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Feb 2016 23:25:55 +0100
+Subject: [Buildroot] [git commit branch/next] package/mono: bump to version
+	4.2.2.30
+Message-ID: <20160214222605.1AB777F886@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Latest mono revision changed download url for monolite, updating it.
+commit: https://git.buildroot.net/buildroot/commit/?id=7eeed78bfa0fc8a771b5c3c42b86cdcfaf6df0f2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+This patch bumps mono to the latest 4.2.2.30 version.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/monolite/monolite.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 3c53bff..761e776 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 001f6be..37e0e8b 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 b7b461fe04375f621d88166ba8c6f1cb33c439fd3e17136460f7d087a51ed792  mono-4.2.1.102.tar.bz2
++sha256 57858cd033be9915d7abdc5158c1faae8fa05757c3b7117cab3d703aa696c56b  mono-4.2.2.30.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 8f99983..e50ef50 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MONOLITE_VERSION = 138
--MONOLITE_SITE = http://storage.bos.xamarin.com/mono-dist-master/latest
-+MONOLITE_SITE = http://download.mono-project.com/monolite/
- MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPLv2 or commercial
- 
--- 
-1.9.1
+-MONO_VERSION = 4.2.1.102
++MONO_VERSION = 4.2.2.30
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
