@@ -1,73 +1,87 @@
 From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
-Date: Sun, 14 Feb 2016 16:27:34 +0530
-Subject: [Buildroot] [PATCH V8] package/nvme: new package
-In-Reply-To: <20160212144408.7ac40a76@free-electrons.com>
-References: <20160212105841.13451.45986.stgit@localhost.localdomain>
- <20160212144408.7ac40a76@free-electrons.com>
-Message-ID: <56C05D9E.8050701@linux.vnet.ibm.com>
+Date: Sun, 14 Feb 2016 16:31:40 +0530
+Subject: [Buildroot] [PATCH V9] package/nvme: new package
+Message-ID: <20160214105817.12233.88403.stgit@localhost.localdomain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Add support for building NVME utility - a utility for interacting with
+standard NVM Express (optimized PCI Express SSD interface) devices.
 
-Yes nvme V0.3 will solve all compilation issues,
-updated your comments and sending
-new version of the patch.
+Signed-off-by: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+---
+ package/Config.in      |    1 +
+ package/nvme/Config.in |    8 ++++++++
+ package/nvme/nvme.hash |    2 ++
+ package/nvme/nvme.mk   |   23 +++++++++++++++++++++++
+ 4 files changed, 34 insertions(+)
+ create mode 100644 package/nvme/Config.in
+ create mode 100644 package/nvme/nvme.hash
+ create mode 100755 package/nvme/nvme.mk
 
-
-On 02/12/2016 07:14 PM, Thomas Petazzoni wrote:
-> Dear Mamatha Inamdar,
->
-> On Fri, 12 Feb 2016 16:58:30 +0530, Mamatha Inamdar wrote:
->> Add support for building NVME utility - a utility for interacting with
->> standard NVM Express (optimized PCI Express SSD interface) devices.
->>
->> Changes in V8:
->> /package/nvme/Makefile patch not added:
->> CFLAGS changes in nvme/Makefile is not required because I did not see
->> any compilation errors after adding "depend on BR2_powerpc64 || BR2_powerpc64le"
->> line in nvme/Config.in for this I have to enable 64-bit arch in config file.
->> after enabling 64-bit arch I do not see any compilation errors in nvme code.
-> I know Arnout asked you to add the PowerPC64 dependency, but I
-> disagree. I don't see anything in this tool that is PowerPC64 specific.
->
-> Moreover, the -m64 that was causing problem has been removed upstream,
-> as part of commit
-> https://github.com/linux-nvme/nvme-cli/commit/3686759d04825d35fb8d9667c3d4a14e880f5b4d.
->
-> In fact, I believe this commit from upstream probably solves a lot of
-> cross-compilation problems, so please use v0.3 instead of v0.2, since
-> v0.3 includes this commit.
->
->> diff --git a/package/nvme/Config.in b/package/nvme/Config.in
->> new file mode 100644
->> index 0000000..878bed3
->> --- /dev/null
->> +++ b/package/nvme/Config.in
->> @@ -0,0 +1,10 @@
->> +config BR2_PACKAGE_NVME
->> +	bool "nvme"
->> +	depends on BR2_powerpc64 || BR2_powerpc64le
-> Remove this dependency.
->
->> +
-> And this empty line/
->
->> +	help
->> +	  Add support for building NVME utility - a utility
-> "Add support" is not a proper wording to describe a package. Instead,
-> you should just have something like:
->
-> 	  NVME utility, a utility for interacting with standard NVM
-> 	  Express ...
->
->> +	  for interacting with standard NVM Express
->> +	  (optimized PCI Express SSD interface) devices.
->> +
->> +	  https://github.com/linux-nvme/nvme-cli
-> Thanks,
->
-> Thomas
+diff --git a/package/Config.in b/package/Config.in
+index e0c2e2a..4d173d4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -380,6 +380,7 @@ endif
+ 	source "package/neard/Config.in"
+ 	source "package/nvidia-driver/Config.in"
+ 	source "package/nvidia-tegra23/Config.in"
++	source "package/nvme/Config.in"
+ 	source "package/ofono/Config.in"
+ 	source "package/ola/Config.in"
+ 	source "package/on2-8170-modules/Config.in"
+diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+new file mode 100644
+index 0000000..aae154d
+--- /dev/null
++++ b/package/nvme/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_NVME
++	bool "nvme"
++	help
++	  NVME utility, a utility for interacting
++	  with standard NVM Express
++	  (optimized PCI Express SSD interface) devices.
++
++	  https://github.com/linux-nvme/nvme-cli
+diff --git a/package/nvme/nvme.hash b/package/nvme/nvme.hash
+new file mode 100644
+index 0000000..b299041
+--- /dev/null
++++ b/package/nvme/nvme.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 c631e90dd4d411cdb618b26bc36b06706e6f1f2d3db38874bcfe48f4bc15aac4 nvme-v0.3.tar.gz
+diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+new file mode 100755
+index 0000000..8cb8863
+--- /dev/null
++++ b/package/nvme/nvme.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# nvme
++#
++################################################################################
++
++NVME_VERSION = v0.3
++NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
++NVME_LICENSE = GPLv2+
++NVME_LICENSE_FILES = COPYING
++
++# LIBUDEV=1 means that libudev is _disabled_
++define NVME_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		LIBUDEV=1 -C $(@D)
++endef
++
++define NVME_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
++		PREFIX=/usr install-bin
++endef
++
++$(eval $(generic-package))
