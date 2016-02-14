@@ -1,39 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 21:53:06 +0100
-Subject: [Buildroot] [git commit branch/next] package/mjpg-streamer: added
-	optional dependency to libv4l
-Message-ID: <20160214205356.67A227F929@busybox.osuosl.org>
+Date: Sun, 14 Feb 2016 21:53:02 +0100
+Subject: [Buildroot] [git commit branch/next] package/libnfs: bump version
+	to 1.10.0
+Message-ID: <20160214205356.4A8A680567@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4e6a3a186f58bee3566eb1aaa5b8a311fb515c8
+commit: https://git.buildroot.net/buildroot/commit/?id=0df58de040bfa33985466114017310282557f2ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Removed m4-hack after upstream adding m4/ to its repo:
+https://github.com/sahlberg/libnfs/commit/8338c7e27f4fa3a120d8ee901611aaa3e390d576
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mjpg-streamer/mjpg-streamer.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/libnfs/libnfs.hash | 2 +-
+ package/libnfs/libnfs.mk   | 8 +-------
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index e54c600..a710af6 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -14,8 +14,13 @@ MJPG_STREAMER_LICENSE = GPLv2+
- MJPG_STREAMER_LICENSE_FILES = LICENSE
- MJPG_STREAMER_DEPENDENCIES = jpeg
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 14d304f..27a9e5d 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	e95af693e763a504eee72dacf3dc6c1001d83e40b807e7e1d0be2eaf48af779c	libnfs-libnfs-1.9.8.tar.gz
++sha256	7f6c62a05c7e0f0749f2b13f178a4ed7aaf17bd09e65a10bb147bfe9807da272	libnfs-libnfs-1.10.0.tar.gz
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index 40d5ceb..e49656b 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+MJPG_STREAMER_DEPENDENCIES += libv4l
-+MJPG_STREAMER_USE_LIBV4L += USE_LIBV4L2=true
-+endif
-+
- define MJPG_STREAMER_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) $(MJPG_STREAMER_USE_LIBV4L)
- endef
+-LIBNFS_VERSION = libnfs-1.9.8
++LIBNFS_VERSION = libnfs-1.10.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
+@@ -17,10 +17,4 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LIBNFS_DEPENDENCIES += libtirpc
+ endif
  
- define MJPG_STREAMER_INSTALL_TARGET_CMDS
+-# Needed for autoreconf
+-define LIBNFS_MAKE_M4_DIR
+-	mkdir $(@D)/m4
+-endef
+-LIBNFS_POST_EXTRACT_HOOKS += LIBNFS_MAKE_M4_DIR
+-
+ $(eval $(autotools-package))
