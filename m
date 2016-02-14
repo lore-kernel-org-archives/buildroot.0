@@ -1,38 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 21:56:49 +0100
-Subject: [Buildroot] [PATCH/next 4/4] package/mjpg-streamer: added
- optional dependency to libv4l
-In-Reply-To: <1455442176-31448-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1455442176-31448-1-git-send-email-bernd.kuhls@t-online.de>
- <1455442176-31448-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160214215649.07a73997@free-electrons.com>
+Date: Sun, 14 Feb 2016 21:57:03 +0100
+Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
+	mesa3d-headers}: bump version to 11.1.2
+Message-ID: <20160214205707.3E58B8183C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=01dd888bca7df2c5510b2e129758170b4ded2bae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 14 Feb 2016 10:29:36 +0100, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> +ifeq ($(BR2_PACKAGE_LIBV4L),y)
-> +MJPG_STREAMER_DEPENDENCIES += libv4l
-> +MJPG_STREAMER_USE_LIBV4L += USE_LIBV4L2=true
-> +endif
-
-On this one, some possible further improvements:
-
- - Use a variable named MJPG_STREAMER_MAKE_OPTS and not
-   MJPG_STREAMER_USE_LIBV4L.
-
- - Pass USE_LIBV4L2=false when libv4l is not enabled (if passing =false
-   actually has the intended effect)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 2c32b16..5cad42d 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 11.1.1
++MESA3D_HEADERS_VERSION = 11.1.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 2ad543c..695c535 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/mesa-announce/2016-January/000196.html
+-sha256	64db074fc514136b5fb3890111f0d50604db52f0b1e94ba3fcb0fe8668a7fd20	mesa-11.1.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-February/000199.html
++sha256	8f72aead896b340ba0f7a4a474bfaf71681f5d675592aec1cb7ba698e319148b	mesa-11.1.2.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 7ed6af0..ff2f932 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 11.1.1
++MESA3D_VERSION = 11.1.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
