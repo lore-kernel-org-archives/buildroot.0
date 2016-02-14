@@ -1,46 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 13:51:41 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/numactl: Fix uClibc compile
- breakage after musl compile fix
-In-Reply-To: <1455393768-26580-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455393768-26580-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160214135141.3b0cbd49@free-electrons.com>
+From: noreply at cubro.net <noreply@cubro.net>
+Date: Sun, 14 Feb 2016 14:40:17 +0100
+Subject: [Buildroot] Bug: Nginx SSL Module does not compile with
+	BR2_STATIC_LIBS
+Message-ID: <56C083C1.3000502@cubro.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+To whom it may concern,
 
-On Sat, 13 Feb 2016 21:02:48 +0100, Bernd Kuhls wrote:
+Setting BR2_STATIC_LIBS will break the compilation of Nginx with the SSL 
+module.
 
-> --#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-> -+#if defined(__GLIBC__)
-> -+# if __GLIBC_PREREQ(2,11)
-> ++#ifndef __GLIBC_PREREQ
-> ++# define __GLIBC_PREREQ(x,y) 0
-> ++#endif
-> ++
-> + #if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+Error message:
+./configure: error: SSL modules require the OpenSSL library.
+You can either do not enable the modules, or install the OpenSSL library 
+into the system, or build the OpenSSL library statically from the source 
+with nginx by using --with-openssl=<path> option.
 
-I still don't understand why
-
-#if defined(__GLIBC__)
-#if __GLIBC_PREREQ(2, 11)
-...
-#endif
-#endif
-
-isn't the proposed solution. It looks so much cleaner and simpler than
-defining __GLIBC_PREREQ to 0 when __GLIBC__ is not defined. And it is
-actually the most correct solution I believe: only use __GLIBC_PREREQ
-when __GLIBC__ is defined.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Tested with the latest stable 2015.11.1
