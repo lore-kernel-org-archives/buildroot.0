@@ -1,37 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 21:50:42 +0100
-Subject: [Buildroot] [PATCH 1/3] libraw: add dependency on host-pkgconf
-In-Reply-To: <1455268773-12503-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1455268773-12503-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160214215042.406b51f7@free-electrons.com>
+Date: Sun, 14 Feb 2016 21:51:19 +0100
+Subject: [Buildroot] [git commit] package/syslogd: workaround a compiler bug
+	with CS powerpc 2012.03
+Message-ID: <20160214205123.4FED3817D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8e3a5c13546451c0c6ceb8bc64e4397ceed14aca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 12 Feb 2016 10:19:31 +0100, Thomas Petazzoni wrote:
-> Otherwise, it fails to autoreconf with a weird error message:
-> 
-> configure.ac:15: error: possibly undefined macro: AC_SUBST
->       If this token and others are legitimate, please use m4_pattern_allow.
->       See the Autoconf documentation.
-> configure.ac:40: error: possibly undefined macro: AC_MSG_WARN
-> 
-> Indeed, the configure.ac uses PKG_CHECK_MODULES(), so we need to have
-> the corresponding m4 file installed by host-pkgconf.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/libraw/libraw.mk | 1 +
->  1 file changed, 1 insertion(+)
+The O3 optimization triggers a compiler bug with this toolchain,
+change it with 02.
 
-All three patches applied on master!
+Fixes:
+http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sysklogd/sysklogd.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index de2edf4..9e315bc 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -14,6 +14,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ SYSKLOGD_DEPENDENCIES = busybox
+ endif
+ 
++# CS PowerPC 2012.03 triggers compiler bug.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
++define SYSKLOGD_WORKAROUND_COMPILER_BUG
++	$(SED) 's/-O3/-O2/' $(@D)/Makefile
++endef
++SYSKLOGD_POST_PATCH_HOOKS = SYSKLOGD_WORKAROUND_COMPILER_BUG
++endif
++
+ define SYSKLOGD_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
