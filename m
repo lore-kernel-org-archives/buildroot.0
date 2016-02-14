@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 21:53:01 +0100
-Subject: [Buildroot] [git commit branch/next] package/libass: bump version
-	to 0.13.1
-Message-ID: <20160214205356.24F7380567@busybox.osuosl.org>
+Date: Sun, 14 Feb 2016 21:53:06 +0100
+Subject: [Buildroot] [git commit branch/next] package/mjpg-streamer: added
+	optional dependency to libv4l
+Message-ID: <20160214205356.67A227F929@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67c7fe48c947c9eb94a89fc3ea24e4ff61f78da8
+commit: https://git.buildroot.net/buildroot/commit/?id=e4e6a3a186f58bee3566eb1aaa5b8a311fb515c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libass/libass.hash | 2 +-
- package/libass/libass.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mjpg-streamer/mjpg-streamer.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/libass/libass.hash b/package/libass/libass.hash
-index 87d3f26..88f15f4 100644
---- a/package/libass/libass.hash
-+++ b/package/libass/libass.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	e0071a3b2e95411c8d474014678368e3f0b852f7d663e0564b344e7335eb0671	libass-0.13.0.tar.xz
-+sha256	4aa36b1876a61cab46fc9284fee84224b9e2840fe7b3e63d96a8d32574343fe7	libass-0.13.1.tar.xz
-diff --git a/package/libass/libass.mk b/package/libass/libass.mk
-index 2f0ca08..df0c7ae 100644
---- a/package/libass/libass.mk
-+++ b/package/libass/libass.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index e54c600..a710af6 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
+@@ -14,8 +14,13 @@ MJPG_STREAMER_LICENSE = GPLv2+
+ MJPG_STREAMER_LICENSE_FILES = LICENSE
+ MJPG_STREAMER_DEPENDENCIES = jpeg
  
--LIBASS_VERSION = 0.13.0
-+LIBASS_VERSION = 0.13.1
- LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
++ifeq ($(BR2_PACKAGE_LIBV4L),y)
++MJPG_STREAMER_DEPENDENCIES += libv4l
++MJPG_STREAMER_USE_LIBV4L += USE_LIBV4L2=true
++endif
++
+ define MJPG_STREAMER_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) $(MJPG_STREAMER_USE_LIBV4L)
+ endef
+ 
+ define MJPG_STREAMER_INSTALL_TARGET_CMDS
