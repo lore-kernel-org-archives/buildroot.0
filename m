@@ -1,52 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 22:03:06 +0100
-Subject: [Buildroot] [git commit] util-linux: add findfs option
-Message-ID: <20160214210631.8D24F80057@busybox.osuosl.org>
+Date: Sun, 14 Feb 2016 22:06:51 +0100
+Subject: [Buildroot] [PATCH v2 1/2] e2fsprogs: remove findfs option
+In-Reply-To: <1455295206-15684-1-git-send-email-james.knight@rockwellcollins.com>
+References: <1455295206-15684-1-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20160214220651.2cf79206@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5dc580b158f4790197843de1b2128025f83a0c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear James Knight,
 
-Add the findfs utility option for util-linux package.
+On Fri, 12 Feb 2016 11:40:05 -0500, James Knight wrote:
+> The e2fsprogs package's findfs option provides no capabilities. When the
+> option is selected, a symbolic link is generated from findfs to e2label;
+> however, e2label will not handle findfs since the respective code is
+> explicitly disabled when `--disable-libblkid` is passed in. At this
+> time, the e2fsprogs package only supports findfs capabilities when
+> building its "private blkid library".
+> 
+> Note that the `--disable-libblkid` configuration argument must remain
+> to prevent conflicts with util-linux's libblkid and an e2fsprogs-
+> generated variant (see e1ffc2f791b336339909c90559b7db40b455f172).
+> 
+> Since e2fsprogs cannot provide findfs capabilities, the option is being
+> removed in this change. A following change will be introduced to include
+> util-linux's findfs utility.
+> 
+> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
+> Cc: Zheng Yi <yzheng@techyauld.com>
+> ---
+> Changes v1 -> v2:
+>   - Add missing legacy handling (pointed out by Thomas Petazzoni).
+> ---
+>  Config.in.legacy               | 9 +++++++++
+>  package/e2fsprogs/Config.in    | 5 -----
+>  package/e2fsprogs/e2fsprogs.mk | 9 ---------
+>  3 files changed, 9 insertions(+), 14 deletions(-)
 
-Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-Cc: Zheng Yi <yzheng@techyauld.com>
-[Thomas: respect alphabetic ordering.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/util-linux/Config.in     | 5 +++++
- package/util-linux/util-linux.mk | 1 +
- 2 files changed, 6 insertions(+)
+Applied, thanks.
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index df89f99..3f9a7db 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -91,6 +91,11 @@ config BR2_PACKAGE_UTIL_LINUX_FDFORMAT
- 	help
- 	  Low-level format a floppy disk
- 
-+config BR2_PACKAGE_UTIL_LINUX_FINDFS
-+	bool "findfs"
-+	help
-+	  Find a filesystem by label or UUID
-+
- config BR2_PACKAGE_UTIL_LINUX_FSCK
- 	bool "fsck"
- 	help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index f6e5d62..7342174 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -73,6 +73,7 @@ UTIL_LINUX_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_EJECT),--enable-eject,--disable-eject) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX_FINDFS),--enable-findfs,--disable-findfs) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
- 	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
