@@ -1,43 +1,73 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 Feb 2016 11:55:13 +0100
-Subject: [Buildroot] [PATCH] package/syslogd: workaround a compiler bug with
-	CS powerpc 2012.03
-Message-ID: <1455447313-14334-1-git-send-email-romain.naour@gmail.com>
+From: Mamatha Inamdar <mamatha4@linux.vnet.ibm.com>
+Date: Sun, 14 Feb 2016 16:27:34 +0530
+Subject: [Buildroot] [PATCH V8] package/nvme: new package
+In-Reply-To: <20160212144408.7ac40a76@free-electrons.com>
+References: <20160212105841.13451.45986.stgit@localhost.localdomain>
+ <20160212144408.7ac40a76@free-electrons.com>
+Message-ID: <56C05D9E.8050701@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The O3 optimization triggers a compiler bug with this toolchain,
-change it with 02.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
+Yes nvme V0.3 will solve all compilation issues,
+updated your comments and sending
+new version of the patch.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/sysklogd/sysklogd.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index de2edf4..9e315bc 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -14,6 +14,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSKLOGD_DEPENDENCIES = busybox
- endif
- 
-+# CS PowerPC 2012.03 triggers compiler bug.
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
-+define SYSKLOGD_WORKAROUND_COMPILER_BUG
-+	$(SED) 's/-O3/-O2/' $(@D)/Makefile
-+endef
-+SYSKLOGD_POST_PATCH_HOOKS = SYSKLOGD_WORKAROUND_COMPILER_BUG
-+endif
-+
- define SYSKLOGD_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
- endef
--- 
-2.4.3
+On 02/12/2016 07:14 PM, Thomas Petazzoni wrote:
+> Dear Mamatha Inamdar,
+>
+> On Fri, 12 Feb 2016 16:58:30 +0530, Mamatha Inamdar wrote:
+>> Add support for building NVME utility - a utility for interacting with
+>> standard NVM Express (optimized PCI Express SSD interface) devices.
+>>
+>> Changes in V8:
+>> /package/nvme/Makefile patch not added:
+>> CFLAGS changes in nvme/Makefile is not required because I did not see
+>> any compilation errors after adding "depend on BR2_powerpc64 || BR2_powerpc64le"
+>> line in nvme/Config.in for this I have to enable 64-bit arch in config file.
+>> after enabling 64-bit arch I do not see any compilation errors in nvme code.
+> I know Arnout asked you to add the PowerPC64 dependency, but I
+> disagree. I don't see anything in this tool that is PowerPC64 specific.
+>
+> Moreover, the -m64 that was causing problem has been removed upstream,
+> as part of commit
+> https://github.com/linux-nvme/nvme-cli/commit/3686759d04825d35fb8d9667c3d4a14e880f5b4d.
+>
+> In fact, I believe this commit from upstream probably solves a lot of
+> cross-compilation problems, so please use v0.3 instead of v0.2, since
+> v0.3 includes this commit.
+>
+>> diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+>> new file mode 100644
+>> index 0000000..878bed3
+>> --- /dev/null
+>> +++ b/package/nvme/Config.in
+>> @@ -0,0 +1,10 @@
+>> +config BR2_PACKAGE_NVME
+>> +	bool "nvme"
+>> +	depends on BR2_powerpc64 || BR2_powerpc64le
+> Remove this dependency.
+>
+>> +
+> And this empty line/
+>
+>> +	help
+>> +	  Add support for building NVME utility - a utility
+> "Add support" is not a proper wording to describe a package. Instead,
+> you should just have something like:
+>
+> 	  NVME utility, a utility for interacting with standard NVM
+> 	  Express ...
+>
+>> +	  for interacting with standard NVM Express
+>> +	  (optimized PCI Express SSD interface) devices.
+>> +
+>> +	  https://github.com/linux-nvme/nvme-cli
+> Thanks,
+>
+> Thomas
