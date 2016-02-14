@@ -1,54 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 22:07:16 +0100
-Subject: [Buildroot] [PATCH v2 2/2] util-linux: add findfs option
-In-Reply-To: <1455295206-15684-2-git-send-email-james.knight@rockwellcollins.com>
-References: <1455295206-15684-1-git-send-email-james.knight@rockwellcollins.com>
- <1455295206-15684-2-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20160214220716.568ff860@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 14 Feb 2016 21:08:11 +0000
+Subject: [Buildroot] [Bug 8576] Building embedded Linux for Atmel
+ SAMA5D4_Xplained with HDMI work not propber. HDMI does not work
+In-Reply-To: <bug-8576-163@https.bugs.busybox.net/>
+References: <bug-8576-163@https.bugs.busybox.net/>
+Message-ID: <bug-8576-163-axczkYeTuc@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear James Knight,
+https://bugs.busybox.net/show_bug.cgi?id=8576
 
-On Fri, 12 Feb 2016 11:40:06 -0500, James Knight wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index df89f99..bf6d5c0 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -96,6 +96,11 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
->  	help
->  	  Check and repair a linux filesystem
->  
-> +config BR2_PACKAGE_UTIL_LINUX_FINDFS
-> +	bool "findfs"
-> +	help
-> +	  Find a filesystem by label or UUID
-> +
->  config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
->  	bool "hwclock"
->  	help
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index f6e5d62..a892b01 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -74,6 +74,7 @@ UTIL_LINUX_CONF_OPTS += \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
-> +	$(if $(BR2_PACKAGE_UTIL_LINUX_FINDFS),--enable-findfs,--disable-findfs) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WONTFIX
+             Status|NEW                         |RESOLVED
 
-Alphabetic ordering was not correct in both the Config.in and
-util-linux.mk files. I've fixed that up and applied. Thanks!
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+While a real problem, this bug is not a Buildroot problem, but rather a kernel
+problem that should be discussed with the Atmel kernel maintainers.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
