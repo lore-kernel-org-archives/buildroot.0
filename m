@@ -1,89 +1,154 @@
 From: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Date: Sun, 14 Feb 2016 15:56:00 -0300
-Subject: [Buildroot] [PATCH 1/3] mali-t76x: add new package
-In-Reply-To: <878u2ss3rz.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Feb 2016 15:59:16 -0300
+Subject: [Buildroot] [PATCH 2/3] board/firefly_rk3288: add new board
+In-Reply-To: <874mdgs2ps.fsf@dell.be.48ers.dk>
 References: <1453478020-311-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1453478020-311-2-git-send-email-ariel@vanguardiasur.com.ar>
- <878u2ss3rz.fsf@dell.be.48ers.dk>
-Message-ID: <56C0CDC0.7080809@vanguardiasur.com.ar>
+ <1453478020-311-3-git-send-email-ariel@vanguardiasur.com.ar>
+ <874mdgs2ps.fsf@dell.be.48ers.dk>
+Message-ID: <56C0CE84.50009@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Peter,
 
-El 10/02/16 a las 17:34, Peter Korsgaard escribi?:
+El 10/02/16 a las 17:57, Peter Korsgaard escribi?:
 >>>>>> "Ariel" == Ariel D'Alessandro <ariel@vanguardiasur.com.ar> writes:
 > 
->  > Package provides the binary user-space components for the ARM Mali
->  > Midgard T76X GPU.
-> 
->  > Note that this package requires a kernel with the ARM Mali Midgard GPU
->  > Kernel Drivers enabled.
+>  > More info about the board:
+>  > http://en.t-firefly.com/en/firenow/firefly_rk3288/specifications/
 > 
 >  > Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
 >  > ---
->  >  package/Config.in                                  |  1 +
->  >  ...latform.h-with-framebuffer-instead-of-X11.patch | 39 +++++++++++++
->  >  package/mali-t76x/Config.in                        | 27 +++++++++
->  >  package/mali-t76x/egl.pc                           | 12 ++++
->  >  package/mali-t76x/glesv2.pc                        | 12 ++++
->  >  package/mali-t76x/rockchip-mali.mk                 | 64 ++++++++++++++++++++++
->  >  6 files changed, 155 insertions(+)
->  >  create mode 100644 package/mali-t76x/0001-use-eglplatform.h-with-framebuffer-instead-of-X11.patch
->  >  create mode 100644 package/mali-t76x/Config.in
->  >  create mode 100644 package/mali-t76x/egl.pc
->  >  create mode 100644 package/mali-t76x/glesv2.pc
->  >  create mode 100644 package/mali-t76x/rockchip-mali.mk
+>  >  board/firefly/firefly-rk3288/build_sd_image.sh | 18 ++++++++++++
+>  >  board/firefly/firefly-rk3288/extlinux.conf     |  6 ++++
+>  >  board/firefly/firefly-rk3288/post-image.sh     |  6 ++++
+>  >  board/firefly/firefly-rk3288/pre-image.sh      |  3 ++
+>  >  board/firefly/firefly-rk3288/readme.txt        | 40 ++++++++++++++++++++++++++
+>  >  board/firefly/firefly-rk3288/sd-image.cfg      | 22 ++++++++++++++
 > 
->  > diff --git a/package/mali-t76x/rockchip-mali.mk b/package/mali-t76x/rockchip-mali.mk
->  > new file mode 100644
->  > index 0000000..3117864
+> It imho makes sense to squash the defconfig patch together with this
+> one.
+
+OK, will squash these patches then.
+
+> 
+>>  6 files changed, 95 insertions(+)
+>  >  create mode 100755 board/firefly/firefly-rk3288/build_sd_image.sh
+>  >  create mode 100644 board/firefly/firefly-rk3288/extlinux.conf
+>  >  create mode 100755 board/firefly/firefly-rk3288/post-image.sh
+>  >  create mode 100755 board/firefly/firefly-rk3288/pre-image.sh
+>  >  create mode 100644 board/firefly/firefly-rk3288/readme.txt
+>  >  create mode 100644 board/firefly/firefly-rk3288/sd-image.cfg
+> 
+>  > diff --git a/board/firefly/firefly-rk3288/build_sd_image.sh b/board/firefly/firefly-rk3288/build_sd_image.sh
+>  > new file mode 100755
+>  > index 0000000..ae7fde1
 >  > --- /dev/null
->  > +++ b/package/mali-t76x/rockchip-mali.mk
-> 
-> This file should be named mali-t76x.mk to match the directory and
-> variables.
-
-Right, will do that.
-
-> 
->> @@ -0,0 +1,64 @@
->  > +################################################################################
->  > +#
->  > +# mali-t76x
->  > +#
->  > +################################################################################
+>  > +++ b/board/firefly/firefly-rk3288/build_sd_image.sh
+>  > @@ -0,0 +1,18 @@
+>  > +#!/bin/bash
 >  > +
->  > +MALI_T76X_VERSION = r5p0-06rel0
->  > +MALI_T76X_SOURCE = mali-t76x_$(MALI_T76X_VERSION)_linux_1+fbdev.tar.gz
->  > +MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T76X_VERSION)
+>  > +set -ue
+>  > +
+>  > +D=board/firefly/firefly-rk3288
+>  > +CFG=${D}/sd-image.cfg
+>  > +
+>  > +T=$(mktemp -d)
+>  > +mkdir -p $T/{root,tmp}
 > 
-> A .hash file listing the sha256sum for this would be nice.
+> Other post-image scripts use ${BUILD_DIR}/genimage.tmp for the temporary
+> directory, please do as well.
 
-OK, will do.
+Will do.
 
 > 
 >> +
->  > +MALI_T76X_EXTRA_SITE = https://www.khronos.org/registry
->  > +MALI_T76X_EXTRA_DOWNLOADS = \
->  > +	$(MALI_T76X_EXTRA_SITE)/egl/api/EGL/egl.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/egl/api/EGL/eglext.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/egl/api/EGL/eglplatform.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/gles/api/GLES/gl.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/gles/api/GLES/glext.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/gles/api/GLES/glplatform.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/gles/api/old/2.0/gl2.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/gles/api/old/2.0/gl2ext.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/gles/api/old/2.0/gl2platform.h \
->  > +	$(MALI_T76X_EXTRA_SITE)/egl/api/KHR/khrplatform.h
+>  > +$HOST_DIR/usr/bin/genimage		\
+>  > +	--rootpath $T/root/			\
+>  > +	--tmppath $T/tmp/			\
+>  > +	--inputpath $BINARIES_DIR/	\
+>  > +	--outputpath $BINARIES_DIR/	\
+>  > +	--config ${CFG}				\
+>  > +
+>  > +rm -rf $T
 > 
-> Could this use mesa3d-headers like the nvidia drivers do?
+> All our other defconfigs call genimage directly from post-image.sh, and
+> as this is a very small script would prefer to do that here as well.
 
-I wasn't aware of the mesa3d-headers. It seems to be just what needed
-here, so I'll give a try and modify the package as well.
+OK, will do that.
+
+> 
+> 
+>> diff --git a/board/firefly/firefly-rk3288/extlinux.conf b/board/firefly/firefly-rk3288/extlinux.conf
+>  > new file mode 100644
+>  > index 0000000..65092d2
+>  > --- /dev/null
+>  > +++ b/board/firefly/firefly-rk3288/extlinux.conf
+>  > @@ -0,0 +1,6 @@
+>  > +default firefly-rk3288
+>  > +
+>  > +label firefly-rk3288
+>  > +kernel /boot/uImage
+>  > +devicetree /boot/rk3288-firefly.dtb
+>  > +append console=ttyS2,115200n8 earlyprintk init=/sbin/init root=/dev/mmcblk0p1 rootwait
+> 
+> why the init=? Is earlyprintk really good to use by default?
+
+None of these options are really needed, so I'll remove them.
+
+> 
+> 
+>> diff --git a/board/firefly/firefly-rk3288/post-image.sh b/board/firefly/firefly-rk3288/post-image.sh
+>  > new file mode 100755
+>  > index 0000000..98c2778
+>  > --- /dev/null
+>  > +++ b/board/firefly/firefly-rk3288/post-image.sh
+>  > @@ -0,0 +1,6 @@
+>  > +board=board/firefly/firefly-rk3288
+> 
+> You can use $(dirname $0) instead of hardcoding this.
+
+OK.
+
+> 
+> 
+>> +MKIMAGE=$HOST_DIR/usr/bin/mkimage
+>  > +
+>  > +$MKIMAGE -n rk3288 -T rksd -d $BINARIES_DIR/u-boot-spl-dtb.bin $BINARIES_DIR/u-boot-spl-dtb.img
+>  > +
+>  > +${board}/build_sd_image.sh
+>  > diff --git a/board/firefly/firefly-rk3288/pre-image.sh b/board/firefly/firefly-rk3288/pre-image.sh
+> 
+> Other boards calls this post-build.sh, please use that as well for
+> consistency.
+
+OK.
+
+> 
+> 
+>> new file mode 100755
+>  > index 0000000..7770f6b
+>  > --- /dev/null
+>  > +++ b/board/firefly/firefly-rk3288/pre-image.sh
+>  > @@ -0,0 +1,3 @@
+>  > +board=board/firefly/firefly-rk3288
+> 
+> dirname $0 as well here.
+
+OK.
+
+> 
+>> +
+>  > +install -m 0644 -D $board/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
+> 
+> You could simply put this in a rootfs overlay and point
+> BR2_ROOTFS_OVERLAY to that directory instead of this explicit handling.
+
+Well, if you're OK with this, I'd prefer keeping that as it is now
+instead of the overlay.
 
 > 
 > Other than that it looks good.
