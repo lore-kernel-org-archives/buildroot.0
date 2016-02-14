@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 14 Feb 2016 22:06:51 +0100
-Subject: [Buildroot] [PATCH v2 1/2] e2fsprogs: remove findfs option
-In-Reply-To: <1455295206-15684-1-git-send-email-james.knight@rockwellcollins.com>
+Date: Sun, 14 Feb 2016 22:07:16 +0100
+Subject: [Buildroot] [PATCH v2 2/2] util-linux: add findfs option
+In-Reply-To: <1455295206-15684-2-git-send-email-james.knight@rockwellcollins.com>
 References: <1455295206-15684-1-git-send-email-james.knight@rockwellcollins.com>
-Message-ID: <20160214220651.2cf79206@free-electrons.com>
+ <1455295206-15684-2-git-send-email-james.knight@rockwellcollins.com>
+Message-ID: <20160214220716.568ff860@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +13,39 @@ To: buildroot@busybox.net
 
 Dear James Knight,
 
-On Fri, 12 Feb 2016 11:40:05 -0500, James Knight wrote:
-> The e2fsprogs package's findfs option provides no capabilities. When the
-> option is selected, a symbolic link is generated from findfs to e2label;
-> however, e2label will not handle findfs since the respective code is
-> explicitly disabled when `--disable-libblkid` is passed in. At this
-> time, the e2fsprogs package only supports findfs capabilities when
-> building its "private blkid library".
-> 
-> Note that the `--disable-libblkid` configuration argument must remain
-> to prevent conflicts with util-linux's libblkid and an e2fsprogs-
-> generated variant (see e1ffc2f791b336339909c90559b7db40b455f172).
-> 
-> Since e2fsprogs cannot provide findfs capabilities, the option is being
-> removed in this change. A following change will be introduced to include
-> util-linux's findfs utility.
-> 
-> Signed-off-by: James Knight <james.knight@rockwellcollins.com>
-> Cc: Zheng Yi <yzheng@techyauld.com>
-> ---
-> Changes v1 -> v2:
->   - Add missing legacy handling (pointed out by Thomas Petazzoni).
-> ---
->  Config.in.legacy               | 9 +++++++++
->  package/e2fsprogs/Config.in    | 5 -----
->  package/e2fsprogs/e2fsprogs.mk | 9 ---------
->  3 files changed, 9 insertions(+), 14 deletions(-)
+On Fri, 12 Feb 2016 11:40:06 -0500, James Knight wrote:
 
-Applied, thanks.
+> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+> index df89f99..bf6d5c0 100644
+> --- a/package/util-linux/Config.in
+> +++ b/package/util-linux/Config.in
+> @@ -96,6 +96,11 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
+>  	help
+>  	  Check and repair a linux filesystem
+>  
+> +config BR2_PACKAGE_UTIL_LINUX_FINDFS
+> +	bool "findfs"
+> +	help
+> +	  Find a filesystem by label or UUID
+> +
+>  config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
+>  	bool "hwclock"
+>  	help
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index f6e5d62..a892b01 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -74,6 +74,7 @@ UTIL_LINUX_CONF_OPTS += \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
+> +	$(if $(BR2_PACKAGE_UTIL_LINUX_FINDFS),--enable-findfs,--disable-findfs) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_KILL),--enable-kill,--disable-kill) \
+>  	$(if $(BR2_PACKAGE_UTIL_LINUX_LAST),--enable-last,--disable-last) \
+
+Alphabetic ordering was not correct in both the Config.in and
+util-linux.mk files. I've fixed that up and applied. Thanks!
 
 Thomas
 -- 
