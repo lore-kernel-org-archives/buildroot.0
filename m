@@ -1,66 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2016 20:29:34 +0100
-Subject: [Buildroot] [PATCH 3/3] configs/firefly_rk3288: new board
-In-Reply-To: <56C0CEF5.8000806@vanguardiasur.com.ar> (Ariel D'Alessandro's
- message of "Sun, 14 Feb 2016 16:01:09 -0300")
-References: <1453478020-311-1-git-send-email-ariel@vanguardiasur.com.ar>
- <1453478020-311-4-git-send-email-ariel@vanguardiasur.com.ar>
- <87ziv8qnnk.fsf@dell.be.48ers.dk>
- <56C0CEF5.8000806@vanguardiasur.com.ar>
-Message-ID: <87povznl9d.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 14 Feb 2016 21:49:43 +0100
+Subject: [Buildroot] [git commit] libraw1394: add patch to fix
+	CLOCK_MONOTONIC_RAW build problem
+Message-ID: <20160214205002.95C5881842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ariel" == Ariel D'Alessandro <ariel@vanguardiasur.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=60d71a9cbe3b209e501a339d45860abc789a42d1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+CLOCK_MONOTONIC_RAW is a fairly recent addition, which may not be
+available in old C libraries/kernels. This commit adds a libraw1394
+patch that makes the use of CLOCK_MONOTONIC_RAW optional. The patch
+has been submitted upstream.
 
->> Our defconfigs are normally very minimal, E.G. only a basic busybox
- >> based image and a kernel/bootloader - In other words the basics to start
- >> your own development from.
- >> 
- >> There has been some discussion about doing more full blown "demo"
- >> defconfigs, so I'm fine with adding a more complicated
- >> firefly_rk3288_demo_defconfig in addition to the basic one.
+Fixes:
 
- > I see. So, I could submit a firefly_rk3288_demo_defconfig with Qt5
- > enabled and a firefly_rk3288_defconfig without it, just the minimal
- > stuff. Do you agree?
+  http://autobuild.buildroot.net/results/198149e80be3e62eaf9f4731442031a1aa93409c/
 
-Yes, that's fine!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...build-the-CLOCK_MONOTONIC_RAW-test-condit.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
- >>> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/firefly-rk3288/pre-image.sh"
- >> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/firefly/firefly-rk3288/post-image.sh"
- >> > +BR2_LINUX_KERNEL=y
- >> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
- >> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git at github.com:mmind/linux-rockchip.git"
- >> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ccb89e9b5657b4911c16d08e1581121222ee12c4"
- >> 
- >> Will this commit stay available or is this a branch that gets rebased?
-
- > It's a devel branch from Heiko, so it will rebased almost for sure.
- > However, this commit is probably to stay available as it isn't one of
- > the latest ones.
-
- > Of course, the right thing to do here is to take the kernel from
- > mainline and patch it with the Midgard stuff. I'm planning doing this in
- > the future, but just for now I think that building from that Heiko's
- > commit won't cause any trouble.
-
-Ok. It would be good to hear from Heiko if we can expect this commit to
-stay. Heiko, what do you say?
-
- >> Other than that it looks good, thanks. Care to send updated patches
- >> fixing these issues?
- >> 
-
- > Yeah, I'm sending a patchset v2 ASAP. Thanks!
-
-Great, thanks!
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch b/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
+new file mode 100644
+index 0000000..b87ef71
+--- /dev/null
++++ b/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
+@@ -0,0 +1,38 @@
++From 94c66ade15d7fc468b52c72dfe76a8c10b1910a7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Fri, 12 Feb 2016 10:13:45 +0100
++Subject: [PATCH] testlibraw: build the CLOCK_MONOTONIC_RAW test conditionally
++
++CLOCK_MONOTONIC_RAW is a somewhat recent addition, and some older
++toolchains/kernels may not have the support for it. Therefore, we
++build the part of the test that uses CLOCK_MONOTONIC_RAW only when
++this definition is available.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ tools/testlibraw.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/tools/testlibraw.c b/tools/testlibraw.c
++index d8a0702..ae37157 100644
++--- a/tools/testlibraw.c
+++++ b/tools/testlibraw.c
++@@ -211,6 +211,7 @@ read_cycle_timer(raw1394handle_t handle)
++ 	printf("    local time from CLOCK_MONOTONIC: %lld us\n",
++ 	       (unsigned long long)local_time);
++ 
+++#if defined(CLOCK_MONOTONIC_RAW)
++ 	retval = raw1394_read_cycle_timer_and_clock(handle, &ct, &local_time,
++ 						    CLOCK_MONOTONIC_RAW);
++ 	if (retval < 0) {
++@@ -221,6 +222,7 @@ read_cycle_timer(raw1394handle_t handle)
++ 	       ct >> 25, (ct >> 12) & 0x1fff, ct & 0xfff);
++ 	printf("    local time from CLOCK_MONOTONIC_RAW: %lld us\n",
++ 	       (unsigned long long)local_time);
+++#endif
++ }
++ 
++ int test_card(int card)
++-- 
++2.6.4
++
