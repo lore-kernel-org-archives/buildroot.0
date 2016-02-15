@@ -1,564 +1,86 @@
-From: Johan Sagaert <sagaert.johan@proximus.be>
-Date: Mon, 15 Feb 2016 17:13:03 +0100
-Subject: [Buildroot] libcapn build failure
-Message-ID: <56C1F90F.80804@proximus.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 15 Feb 2016 13:45:49 -0300
+Subject: [Buildroot] [PATCH] graphite2: security bump to version 1.3.5
+Message-ID: <1455554749-11434-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-
-I am trying to get libcapn into buildroot.(cmake based)
-Build error :
-
- >>> libcapn 7a6dc662e9daa864f687 Configuring
-(mkdir -p 
-/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && cd 
-/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && rm -f 
-CMakeCache.txt && 
-PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin:/root/google-cloud-sdk/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/build/host-cmake-3.1.3/bin:/root/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" 
-/home/buildroot12git/output/host/usr/bin/cmake 
-/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ 
--DCMAKE_TOOLCHAIN_FILE="/home/buildroot12git/output/host/usr/share/buildroot/toolchainfile.cmake" 
--DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="/usr" 
--DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF 
--DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF 
--DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON 
--DUSE_CCACHE=OFF  )
--- Looking for include file ctype.h
--- Looking for include file ctype.h - found
--- Looking for include file inttypes.h
--- Looking for include file inttypes.h - found
--- Looking for include file stdint.h
--- Looking for include file stdint.h - found
--- Looking for include file unistd.h
--- Looking for include file unistd.h - found
--- Looking for include file netinet/in.h
--- Looking for include file netinet/in.h - found
--- Looking for include file arpa/inet.h
--- Looking for include file arpa/inet.h - found
--- Looking for include file netdb.h
--- Looking for include file netdb.h - found
--- Looking for include file sys/fcntl.h
--- Looking for include file sys/fcntl.h - found
--- Looking for include file sys/socket.h
--- Looking for include file sys/socket.h - found
--- Looking for include file strings.h
--- Looking for include file strings.h - found
--- Looking for strerror_r
--- Looking for strerror_r - found
--- Performing test APN_HAVE_GLIBC_STRERROR_R
-CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the 
-following cache variables appropriately:
-    APN_HAVE_GLIBC_STRERROR_R (advanced)
-    APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT (advanced)
-For details see 
-/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
--- Performing test APN_HAVE_GLIBC_STRERROR_R - Failed
--- Performing test APN_HAVE_POSIX_STRERROR_R
-CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the 
-following cache variables appropriately:
-    APN_HAVE_POSIX_STRERROR_R (advanced)
-    APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT (advanced)
-For details see 
-/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
--- Performing test APN_HAVE_POSIX_STRERROR_R - Failed
--- Found OpenSSL: 
-/home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libssl.so;/home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libcrypto.so 
-(found version "1.0.2c")
--- Configuring incomplete, errors occurred!
-See also 
-"/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeOutput.log".
-make: *** 
-[/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/.stamp_configured] 
-Error 1
-
-
-
-I have no clue how to set cache variables appropriately...
-
-(Due to the git submodule usage, i had to clone it first some where else 
-and then
-executed  git submodule update --init , and then i copied the 3rd party 
-source into my build tree
-in order to get the jansson source)
-
-See attached logfiles
-
-
-almost giving up
-
-Regards , Johan
-
-========
-Config.in
-========
-config BR2_PACKAGE_LIBCAPN
-     bool "libcapn"
-     select BR2_PACKAGE_OPENSSL
-     select BR2_PACKAGE_JANSSON
-     help
-       libcapn is a C Library to interact with the
-       Apple Push Notification Service (APNs for short)
-       using simple and intuitive API.
-       With the library you can easily send push
-       notifications to iOS and OS X (>= 10.8) devices.
-
-       http://libcapn.org
-
-
-
-==========
-libcapn.mk :
-==========
-################################################################################
-#
-# libcapn
-#
-################################################################################
-
-LIBCAPN_VERSION = 7a6dc662e9daa864f687
-LIBCAPN_SITE = $(call github,adobkin,libcapn,$(LIBCAPN_VERSION))
-LIBCAPNLICENSE = MIT
-
-LIBCAPN_DEPENDENCIES += jansson openssl
-
-$(eval $(cmake-package))
-
-
-
-
-
-
-
--------------- next part --------------
-# This file was generated by CMake because it detected TRY_RUN() commands
-# in crosscompiling mode. It will be overwritten by the next CMake run.
-# Copy it to a safe location, set the variables to appropriate values
-# and use it then to preset the CMake cache (using -C).
-
-
-# APN_HAVE_GLIBC_STRERROR_R
-#    indicates whether the executable would have been able to run on its
-#    target platform. If so, set APN_HAVE_GLIBC_STRERROR_R to
-#    the exit code (in many cases 0 for success), otherwise enter "FAILED_TO_RUN".
-# APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT
-#    contains the text the executable would have printed on stdout and stderr.
-#    If the executable would not have been able to run, set APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT empty.
-#    Otherwise check if the output is evaluated by the calling CMake code. If so,
-#    check what the source file would have printed when called with the given arguments.
-# The APN_HAVE_GLIBC_STRERROR_R_res variable holds the build result for this TRY_RUN().
-# 
-# Source file   : /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/cmake/tests/strerror_r.c
-# Executable    : /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/cmTryCompileExec4045902334-APN_HAVE_GLIBC_STRERROR_R
-# Run arguments : 
-#    Called from: [1]	/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeLists.txt
-
-set( APN_HAVE_GLIBC_STRERROR_R 
-     "PLEASE_FILL_OUT-FAILED_TO_RUN"
-     CACHE STRING "Result from TRY_RUN" FORCE)
-
-set( APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT 
-     "PLEASE_FILL_OUT-NOTFOUND"
-     CACHE STRING "Output from TRY_RUN" FORCE)
-
-
-# APN_HAVE_POSIX_STRERROR_R
-#    indicates whether the executable would have been able to run on its
-#    target platform. If so, set APN_HAVE_POSIX_STRERROR_R to
-#    the exit code (in many cases 0 for success), otherwise enter "FAILED_TO_RUN".
-# APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT
-#    contains the text the executable would have printed on stdout and stderr.
-#    If the executable would not have been able to run, set APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT empty.
-#    Otherwise check if the output is evaluated by the calling CMake code. If so,
-#    check what the source file would have printed when called with the given arguments.
-# The APN_HAVE_POSIX_STRERROR_R_res variable holds the build result for this TRY_RUN().
-# 
-# Source file   : /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/cmake/tests/strerror_r.c
-# Executable    : /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/cmTryCompileExec57386457-APN_HAVE_POSIX_STRERROR_R
-# Run arguments : 
-#    Called from: [1]	/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeLists.txt
-
-set( APN_HAVE_POSIX_STRERROR_R 
-     "PLEASE_FILL_OUT-FAILED_TO_RUN"
-     CACHE STRING "Result from TRY_RUN" FORCE)
-
-set( APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT 
-     "PLEASE_FILL_OUT-NOTFOUND"
-     CACHE STRING "Output from TRY_RUN" FORCE)
-
--------------- next part --------------
-Determining if files ctype.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3012005515/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3012005515.dir/build.make CMakeFiles/cmTryCompileExec3012005515.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3012005515.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3012005515.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3012005515
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3012005515.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3012005515.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3012005515 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files inttypes.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3176211897/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3176211897.dir/build.make CMakeFiles/cmTryCompileExec3176211897.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3176211897.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3176211897.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3176211897
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3176211897.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3176211897.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3176211897 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files stdint.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec178702197/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec178702197.dir/build.make CMakeFiles/cmTryCompileExec178702197.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec178702197.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec178702197.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec178702197
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec178702197.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec178702197.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec178702197 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files unistd.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec163422342/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec163422342.dir/build.make CMakeFiles/cmTryCompileExec163422342.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec163422342.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec163422342.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec163422342
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec163422342.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec163422342.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec163422342 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files netinet/in.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec662429393/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec662429393.dir/build.make CMakeFiles/cmTryCompileExec662429393.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec662429393.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec662429393.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec662429393
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec662429393.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec662429393.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec662429393 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files arpa/inet.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3644705899/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3644705899.dir/build.make CMakeFiles/cmTryCompileExec3644705899.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3644705899.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3644705899.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3644705899
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3644705899.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3644705899.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3644705899 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files netdb.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3803773661/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3803773661.dir/build.make CMakeFiles/cmTryCompileExec3803773661.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3803773661.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3803773661.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3803773661
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3803773661.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3803773661.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3803773661 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files sys/fcntl.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3653573711/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3653573711.dir/build.make CMakeFiles/cmTryCompileExec3653573711.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3653573711.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3653573711.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3653573711
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3653573711.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3653573711.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3653573711 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files sys/socket.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec353482855/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec353482855.dir/build.make CMakeFiles/cmTryCompileExec353482855.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec353482855.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec353482855.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec353482855
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec353482855.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec353482855.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec353482855 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files strings.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3816471643/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3816471643.dir/build.make CMakeFiles/cmTryCompileExec3816471643.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3816471643.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3816471643.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3816471643
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3816471643.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3816471643.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3816471643 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if the function strerror_r exists passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3094756682/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3094756682.dir/build.make CMakeFiles/cmTryCompileExec3094756682.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3094756682.dir/CheckFunctionExists.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic -DCHECK_FUNCTION_EXISTS=strerror_r   -o CMakeFiles/cmTryCompileExec3094756682.dir/CheckFunctionExists.c.o   -c /home/buildroot12git/output/host/usr/share/cmake-3.1/Modules/CheckFunctionExists.c
-Linking C executable cmTryCompileExec3094756682
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3094756682.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic -DCHECK_FUNCTION_EXISTS=strerror_r    CMakeFiles/cmTryCompileExec3094756682.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3094756682 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files ctype.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3965004427/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3965004427.dir/build.make CMakeFiles/cmTryCompileExec3965004427.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3965004427.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec3965004427.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec3965004427
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3965004427.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec3965004427.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec3965004427 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files inttypes.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2995014684/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2995014684.dir/build.make CMakeFiles/cmTryCompileExec2995014684.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec2995014684.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec2995014684.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec2995014684
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2995014684.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec2995014684.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2995014684 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files stdint.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec1167004389/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec1167004389.dir/build.make CMakeFiles/cmTryCompileExec1167004389.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec1167004389.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec1167004389.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec1167004389
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1167004389.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec1167004389.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec1167004389 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files unistd.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2441558430/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2441558430.dir/build.make CMakeFiles/cmTryCompileExec2441558430.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec2441558430.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec2441558430.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec2441558430
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2441558430.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec2441558430.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2441558430 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files netinet/in.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec1173346298/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec1173346298.dir/build.make CMakeFiles/cmTryCompileExec1173346298.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec1173346298.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec1173346298.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec1173346298
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1173346298.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec1173346298.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec1173346298 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files arpa/inet.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2341594534/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2341594534.dir/build.make CMakeFiles/cmTryCompileExec2341594534.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec2341594534.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec2341594534.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec2341594534
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2341594534.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec2341594534.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2341594534 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files netdb.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2698646572/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2698646572.dir/build.make CMakeFiles/cmTryCompileExec2698646572.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec2698646572.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec2698646572.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec2698646572
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2698646572.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec2698646572.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2698646572 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files sys/fcntl.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec2625764696/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec2625764696.dir/build.make CMakeFiles/cmTryCompileExec2625764696.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec2625764696.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec2625764696.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec2625764696
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec2625764696.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec2625764696.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec2625764696 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files sys/socket.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec393298358/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec393298358.dir/build.make CMakeFiles/cmTryCompileExec393298358.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec393298358.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec393298358.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec393298358
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec393298358.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec393298358.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec393298358 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if files strings.h exist passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec1690370338/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec1690370338.dir/build.make CMakeFiles/cmTryCompileExec1690370338.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec1690370338.dir/CheckIncludeFiles.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic    -o CMakeFiles/cmTryCompileExec1690370338.dir/CheckIncludeFiles.c.o   -c /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CheckIncludeFiles.c
-Linking C executable cmTryCompileExec1690370338
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec1690370338.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic     CMakeFiles/cmTryCompileExec1690370338.dir/CheckIncludeFiles.c.o  -o cmTryCompileExec1690370338 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-
-
-Determining if the function strerror_r exists passed with the following output:
-Change Dir: /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp
-
-Run Build Command:"/usr/bin/make" "cmTryCompileExec3589961591/fast"
-make[1]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/usr/bin/make -f CMakeFiles/cmTryCompileExec3589961591.dir/build.make CMakeFiles/cmTryCompileExec3589961591.dir/build
-make[2]: Entering directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_progress_report /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp/CMakeFiles 1
-Building C object CMakeFiles/cmTryCompileExec3589961591.dir/CheckFunctionExists.c.o
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc  -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic -DCHECK_FUNCTION_EXISTS=strerror_r   -o CMakeFiles/cmTryCompileExec3589961591.dir/CheckFunctionExists.c.o   -c /home/buildroot12git/output/host/usr/share/cmake-3.1/Modules/CheckFunctionExists.c
-Linking C executable cmTryCompileExec3589961591
-/home/buildroot12git/output/host/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3589961591.dir/link.txt --verbose=1
-/home/buildroot12git/output/host/usr/bin/ccache /home/buildroot12git/output/host/usr/bin/arm-buildroot-linux-gnueabi-gcc -std=c99 -D_POSIX_C_SOURCE=200112L -Wno-deprecated -Wall -Wextra -Wimplicit -fPIC -W -Wformat-security -pedantic -DCHECK_FUNCTION_EXISTS=strerror_r    CMakeFiles/cmTryCompileExec3589961591.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3589961591 -rdynamic 
-make[2]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
-make[1]: Leaving directory `/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeTmp'
+Fixes:
+CVE-2016-1521 - An exploitable out-of-bounds read vulnerability exists
+in the opcode handling functionality of Libgraphite. A specially crafted
+font can cause an out-of-bounds read resulting in arbitrary code
+execution. An attacker can provide a malicious font to trigger this
+vulnerability.
+CVE-2016-1522 - An exploitable NULL pointer dereference exists in the
+bidirectional font handling functionality of Libgraphite. A specially
+crafted font can cause a NULL pointer dereference resulting in a crash.
+An attacker can provide a malicious font to trigger this vulnerability.
+CVE-2016-1523 - An exploitable heap-based buffer overflow exists in the
+context item handling functionality of Libgraphite. A specially crafted
+font can cause a buffer overflow resulting in potential code execution.
+An attacker can provide a malicious font to trigger this vulnerability.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/graphite2/0001-disable-double-promotion.patch | 13 +++++++------
+ package/graphite2/graphite2.hash                      |  4 ++--
+ package/graphite2/graphite2.mk                        |  2 +-
+ 3 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/package/graphite2/0001-disable-double-promotion.patch b/package/graphite2/0001-disable-double-promotion.patch
+index 9199a63..3bda3d7 100644
+--- a/package/graphite2/0001-disable-double-promotion.patch
++++ b/package/graphite2/0001-disable-double-promotion.patch
+@@ -4,10 +4,11 @@ The warning flag isn't recognized for older GCC versions (blackfin),
+ so just disable it.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
++[Gustavo: update for 1.3.5]
+ 
+-diff -Nura graphite2-1.3.3.orig/src/CMakeLists.txt graphite2-1.3.3/src/CMakeLists.txt
+---- graphite2-1.3.3.orig/src/CMakeLists.txt	2015-09-24 10:06:28.877851596 -0300
+-+++ graphite2-1.3.3/src/CMakeLists.txt	2015-09-24 10:06:48.201519767 -0300
++diff -Nura graphite2-1.3.5.orig/src/CMakeLists.txt graphite2-1.3.5/src/CMakeLists.txt
++--- graphite2-1.3.5.orig/src/CMakeLists.txt	2016-02-15 11:46:45.941906112 -0300
+++++ graphite2-1.3.5/src/CMakeLists.txt	2016-02-15 11:46:54.237194222 -0300
+ @@ -111,9 +111,6 @@
+          COMPILE_FLAGS   "-Wall -Wextra -Wno-unknown-pragmas -Wendif-labels -Wshadow -Wctor-dtor-privacy -Wnon-virtual-dtor -fno-rtti -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden -fno-stack-protector"
+          LINK_FLAGS      "-nodefaultlibs ${GRAPHITE_LINK_FLAGS}" 
+@@ -15,6 +16,6 @@ diff -Nura graphite2-1.3.3.orig/src/CMakeLists.txt graphite2-1.3.3/src/CMakeList
+ -    if (CMAKE_COMPILER_IS_GNUCXX)
+ -        add_definitions(-Wdouble-promotion)
+ -    endif (CMAKE_COMPILER_IS_GNUCXX)
+-     if (${CMAKE_CXX_COMPILER} MATCHES  ".*mingw.*")
+-         target_link_libraries(graphite2 kernel32 msvcr90 mingw32 gcc user32)
+-     else (${CMAKE_CXX_COMPILER} MATCHES  ".*mingw.*")
++     message(STATUS "Compiler ID is: ${CMAKE_CXX_COMPILER_ID}")
++     if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
++         add_definitions(-Wimplicit-fallthrough)
+diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
+index 1e8a54b..07102cf 100644
+--- a/package/graphite2/graphite2.hash
++++ b/package/graphite2/graphite2.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/silgraphite/files/graphite2
+-md5	7cda6fc6bc197b216777b15ce52c38a8	graphite2-1.3.3.tgz
+-sha1	54b04c283bab4695de63ae2dd6cff392dd49d7f0	graphite2-1.3.3.tgz
++md5	5b8d22a8bbf031838e31432868c0109c	graphite2-1.3.5.tgz
++sha1	044f65d5b4ade3169f5fcd75a25f047c81f5d33e	graphite2-1.3.5.tgz
+diff --git a/package/graphite2/graphite2.mk b/package/graphite2/graphite2.mk
+index 0de4178..82c4a3b 100644
+--- a/package/graphite2/graphite2.mk
++++ b/package/graphite2/graphite2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRAPHITE2_VERSION = 1.3.3
++GRAPHITE2_VERSION = 1.3.5
+ GRAPHITE2_SOURCE = graphite2-$(GRAPHITE2_VERSION).tgz
+ GRAPHITE2_SITE = http://downloads.sourceforge.net/project/silgraphite/graphite2
+ GRAPHITE2_INSTALL_STAGING = YES
+-- 
+2.4.10
