@@ -1,57 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Feb 2016 23:17:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iputils: patch ping to link
- against libm
-In-Reply-To: <1455541206-18200-1-git-send-email-martin@barkynet.com>
-References: <1455541206-18200-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160215231703.2052c7e0@free-electrons.com>
+Date: Mon, 15 Feb 2016 23:30:43 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/numactl: Fix uClibc compile
+ breakage after musl compile fix
+In-Reply-To: <6ie6pcx556.ln2@ID-313208.user.individual.net>
+References: <1455393768-26580-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160214135141.3b0cbd49@free-electrons.com>
+ <6ie6pcx556.ln2@ID-313208.user.individual.net>
+Message-ID: <20160215233043.39f36d97@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin,
+Bernd,
 
-On Mon, 15 Feb 2016 13:00:06 +0000, Martin Bark wrote:
-> ping fails to compile with uClibc based toolchains with the error
-> 
-> undefined reference to `__finite'
-> 
-> Add a patch to link ping against libm to resolve the math library function
-> finite().
-> 
-> Note, this error is not seen with glibc based toolchains because finite
-> seems to be resolved in both libm and libc.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/08f7386f75c881bc582b338824f8ccd509b2921e/
-> http://autobuild.buildroot.net/results/5aeef61fbd399dd78dc72b9e7cce978e6f1f58b4/
-> 
-> A pull request has been sent to fix this issue upstream, see
-> https://github.com/iputils/iputils/pull/42
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Sun, 14 Feb 2016 15:11:50 +0100, Bernd Kuhls wrote:
 
-Thanks for working on this issue. However, I am not entirely happy with
-the explanation.
+> the code you mentioned above was the first PR I sent on github[1] and 
+> received this answer: 
+> https://github.com/numactl/numactl/pull/4#issuecomment-183441544
+> 
+> "I don't think the patch is correct. If GLIBC_PREREQ fails the #elif 
+> defined(__x86_64) path still needs to be taken. So you need to combine 
+> the two #ifs into one line"
+> 
+> And combining the two #ifs into one line breaks compilation on musl so I 
+> wrote the current patch.
 
-Indeed, if you try to build iputils against uClibc, it builds just
-fine. It is apparently only when the entire build is done with
-BR2_ENABLE_DEBUG=y that the build failure occurs. And your commit log
-doesn't explain at all why the problem only occurs when the build is
-done with debugging symbols enabled.
+Can you try the below patch instead?
 
-I've tried building iputils against uClibc, it works fine. I've tried
-building iputils against uClibc with BR2_ENABLE_DEBUG=y (using a
-pre-built uClibc toolchain, which isn't built with debugging symbols),
-and it works fine. So it seems that it only happens when the entire
-build is done with debugging symbols, including uClibc itself.
+Index: b/syscall.c
+===================================================================
+--- a/syscall.c
++++ b/syscall.c
+@@ -115,7 +115,13 @@
+ 
+ #endif
+ 
+-#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
++#if defined(__GLIBC__)
++# if __GLIBC_PREREQ(2, 11)
++#  define GLIBC_HAS_WORKING_SYSCALL6
++# endif
++#endif
++
++#if defined(GLIBC_HAS_WORKING_SYSCALL6)
+ 
+ /* glibc 2.11 seems to have working 6 argument sycall. Use the
+    glibc supplied syscall in this case.
 
-While linking with -lm might be the correct fix, I am not convinced yet
-due the lack of explanation for the root of the problem.
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
