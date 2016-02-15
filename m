@@ -1,53 +1,45 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Mon, 15 Feb 2016 18:57:00 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2016.02.0
-Message-ID: <1455559020-14664-1-git-send-email-fabio.porcedda@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 15 Feb 2016 21:48:51 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-02-14
+In-Reply-To: <CAFGQKxf1p3JGf_Yo7KF23ge9TNwdrSz-D7CbEx=P6f1KEkomcA@mail.gmail.com>
+References: <20160215073024.E815F101D00@stock.ovh.net>
+ <CAFGQKxf1p3JGf_Yo7KF23ge9TNwdrSz-D7CbEx=P6f1KEkomcA@mail.gmail.com>
+Message-ID: <20160215214851.0129b01f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Hello Martin,
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 39cb5d2..363ac2b 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2016.01.0"
-+	bool "2016.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2016.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2016.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index b6e1869..a5d526a 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
--md5 99f8c1252e3085e4b3a4e365ff36e9bd barebox-2016.01.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2016.02.0.tar.bz2.md5
-+md5 451cf8d025af6acbe7aaa2596541550f barebox-2016.02.0.tar.bz2
- 
- # Locally calculated
--sha256 f0bb34b745b9c8c626186e22b0154f57c15d0eec5de1e3654f740665b2136d91 barebox-2016.01.0.tar.bz2
-+sha256 1b4760e535994f950c10ef407ff59cf5c0ed97ab30476b9054e1f65d3e372eff barebox-2016.02.0.tar.bz2
+On Mon, 15 Feb 2016 15:10:44 +0000, Martin Bark wrote:
+
+> >       mipsel |              host-nodejs-5.5.0 | NOK | http://autobuild.buildroot.net/results/87e9bbbb36f7fe4868d238ef6a7b72eb8cca7052/
+> >       x86_64 |              host-nodejs-5.5.0 | NOK | http://autobuild.buildroot.net/results/f748c0956f71a7857d5cc9ae7bfe3c14357a078a/
+> 
+> I was able to reproduce the error in host-nodejs and i can confirm my
+> patch to update to node 5.6.0
+> (http://patchwork.ozlabs.org/patch/581620/) fixes this.  Specifically
+> the update i made to
+> 0003-Use-a-python-variable-instead-of-hardcoding-Python.patch.
+
+Thanks for looking into this issue. However, at this point, we cannot
+merge a bump of nodejs to 5.6.0 to our master branch, because this
+branch is "frozen" in terms of version bumps, package additions and
+major changes.
+
+Do you think  it is possible to have instead two patches, one that adds
+the 0003-Use-a-python-variable-instead-of-hardcoding-Python.patch fix
+to NodeJS 5.5.0, so that I can apply it on master, and another patch on
+top of it that bumps NodeJS to 5.6.0, which I would apply on our next
+branch ?
+
+Thanks!
+
+Thomas
 -- 
-2.7.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
