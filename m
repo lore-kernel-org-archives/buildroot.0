@@ -1,31 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Feb 2016 22:53:10 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-firmware: add support for MT7601u
-In-Reply-To: <1455510448-28443-1-git-send-email-matt@thewebers.ws>
-References: <1455510448-28443-1-git-send-email-matt@thewebers.ws>
-Message-ID: <20160215225310.317e5f57@free-electrons.com>
+Date: Mon, 15 Feb 2016 22:52:57 +0100
+Subject: [Buildroot] [git commit branch/next] barebox: bump to version
+	2016.02.0
+Message-ID: <20160215220049.47A20802E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Matt Weber,
+commit: https://git.buildroot.net/buildroot/commit/?id=dd0220e32fcdae7cf4c42044123fa53ad8921e0a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 15 Feb 2016 04:27:28 +0000, Matt Weber wrote:
-> MT7601u is a MediaTek Wifi 802.11n dongle
-> (New chipset from the combined ralink/mediaTek company)
-> 
-> Signed-off-by: Matt Weber <matt@thewebers.ws>
-> ---
->  package/linux-firmware/Config.in         | 5 +++++
->  package/linux-firmware/linux-firmware.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
+Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Applied, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 39cb5d2..363ac2b 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2016.01.0"
++	bool "2016.02.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2016.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2016.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index b6e1869..a5d526a 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
+-md5 99f8c1252e3085e4b3a4e365ff36e9bd barebox-2016.01.0.tar.bz2
++# http://www.barebox.org/download/barebox-2016.02.0.tar.bz2.md5
++md5 451cf8d025af6acbe7aaa2596541550f barebox-2016.02.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 f0bb34b745b9c8c626186e22b0154f57c15d0eec5de1e3654f740665b2136d91 barebox-2016.01.0.tar.bz2
++sha256 1b4760e535994f950c10ef407ff59cf5c0ed97ab30476b9054e1f65d3e372eff barebox-2016.02.0.tar.bz2
