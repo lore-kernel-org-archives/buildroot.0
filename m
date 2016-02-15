@@ -1,55 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Feb 2016 22:43:55 +0100
-Subject: [Buildroot] [PATCH] graphite2: security bump to version 1.3.5
-In-Reply-To: <1455554749-11434-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1455554749-11434-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160215224355.5896546e@free-electrons.com>
+Date: Mon, 15 Feb 2016 22:48:42 +0100
+Subject: [Buildroot] [git commit branch/next] linux-firmware: add support
+	for MT7601u
+Message-ID: <20160215214851.B9054802F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1c8769eeb0aa723e2ce2cae4692d918aee66a784
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 15 Feb 2016 13:45:49 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> CVE-2016-1521 - An exploitable out-of-bounds read vulnerability exists
-> in the opcode handling functionality of Libgraphite. A specially crafted
-> font can cause an out-of-bounds read resulting in arbitrary code
-> execution. An attacker can provide a malicious font to trigger this
-> vulnerability.
-> CVE-2016-1522 - An exploitable NULL pointer dereference exists in the
-> bidirectional font handling functionality of Libgraphite. A specially
-> crafted font can cause a NULL pointer dereference resulting in a crash.
-> An attacker can provide a malicious font to trigger this vulnerability.
-> CVE-2016-1523 - An exploitable heap-based buffer overflow exists in the
-> context item handling functionality of Libgraphite. A specially crafted
-> font can cause a buffer overflow resulting in potential code execution.
-> An attacker can provide a malicious font to trigger this vulnerability.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/graphite2/0001-disable-double-promotion.patch | 13 +++++++------
->  package/graphite2/graphite2.hash                      |  4 ++--
->  package/graphite2/graphite2.mk                        |  2 +-
->  3 files changed, 10 insertions(+), 9 deletions(-)
+MT7601u is a MediaTek Wifi 802.11n dongle
+(New chipset from the combined ralink/mediaTek company)
 
-Applied, thanks.
+Signed-off-by: Matt Weber <matt@thewebers.ws>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-Note that our graphite2/Config.in points to
-http://sourceforge.net/projects/silgraphite/, which states:
-
-"""
-This project has been deprecated. Graphite2, a new version of the
-Graphite engine, is available at: https://github.com/silnrsi/graphite
-with its own bug tracker.
-"""
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index d838986..97d64ca 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -189,6 +189,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
++	bool "MediaTek MT7601U"
++	help
++	  MediaTek MT7601U
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
+ 	bool "Ralink rt2501/rt61"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 083a381..4667c4c 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -165,6 +165,12 @@ LINUX_FIRMWARE_FILES += mrvl/pcie8897_uapsta.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
+ 
++# MT7601
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U),y)
++LINUX_FIRMWARE_FILES += mt7601u.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
++endif
++
+ # wl127x
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
+ # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
