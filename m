@@ -1,59 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 15 Feb 2016 23:30:43 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/numactl: Fix uClibc compile
- breakage after musl compile fix
-In-Reply-To: <6ie6pcx556.ln2@ID-313208.user.individual.net>
-References: <1455393768-26580-1-git-send-email-bernd.kuhls@t-online.de>
- <20160214135141.3b0cbd49@free-electrons.com>
- <6ie6pcx556.ln2@ID-313208.user.individual.net>
-Message-ID: <20160215233043.39f36d97@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 16 Feb 2016 00:33:27 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: fix typo in configure.ac
+Message-ID: <1455579207-5784-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Fixes:
+http://autobuild.buildroot.net/results/993/9935cd0522d4f978ba2e788a690f66790686b76b
 
-On Sun, 14 Feb 2016 15:11:50 +0100, Bernd Kuhls wrote:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Lada Trimasova <ltrimas@synopsys.com>
+---
+ package/util-linux/0007-build-sys-fix-typo.patch | 34 ++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/util-linux/0007-build-sys-fix-typo.patch
 
-> the code you mentioned above was the first PR I sent on github[1] and 
-> received this answer: 
-> https://github.com/numactl/numactl/pull/4#issuecomment-183441544
-> 
-> "I don't think the patch is correct. If GLIBC_PREREQ fails the #elif 
-> defined(__x86_64) path still needs to be taken. So you need to combine 
-> the two #ifs into one line"
-> 
-> And combining the two #ifs into one line breaks compilation on musl so I 
-> wrote the current patch.
-
-Can you try the below patch instead?
-
-Index: b/syscall.c
-===================================================================
---- a/syscall.c
-+++ b/syscall.c
-@@ -115,7 +115,13 @@
- 
- #endif
- 
--#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-+#if defined(__GLIBC__)
-+# if __GLIBC_PREREQ(2, 11)
-+#  define GLIBC_HAS_WORKING_SYSCALL6
-+# endif
-+#endif
+diff --git a/package/util-linux/0007-build-sys-fix-typo.patch b/package/util-linux/0007-build-sys-fix-typo.patch
+new file mode 100644
+index 0000000..d6aad4c
+--- /dev/null
++++ b/package/util-linux/0007-build-sys-fix-typo.patch
+@@ -0,0 +1,34 @@
++From dea1bd2917ed9490ee96162288e0904e3de9da2d Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 16 Feb 2016 00:24:30 +0100
++Subject: [PATCH] build-sys: fix typo
 +
-+#if defined(GLIBC_HAS_WORKING_SYSCALL6)
- 
- /* glibc 2.11 seems to have working 6 argument sycall. Use the
-    glibc supplied syscall in this case.
-
-Thanks,
-
-Thomas
++When timer_create is available have_timer must be
++set to "yes". But instead have_time is used.
++
++Replace have_time by have_timer.
++
++Fixes:
++http://autobuild.buildroot.net/results/993/9935cd0522d4f978ba2e788a690f66790686b76b
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 4559573..3950f0c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -390,7 +390,7 @@ AC_CHECK_FUNCS([clock_gettime], [],
++ 
++ have_timer="no"
++ AC_CHECK_FUNCS([timer_create],
++-	[have_time="yes"],
+++	[have_timer="yes"],
++ 	[AC_CHECK_LIB([rt], [timer_create], [
++ 		have_timer="yes"
++ 		REALTIME_LIBS="-lrt"
++-- 
++2.5.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
