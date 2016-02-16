@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:07:01 +0100
-Subject: [Buildroot] [git commit] package/dovecot: add optional support for
-	lz4
-Message-ID: <20160216220706.56D9A7FD2E@busybox.osuosl.org>
+Date: Tue, 16 Feb 2016 23:07:33 +0100
+Subject: [Buildroot] [PATCH 1/3] package/dovecot: Remove bzip2 and zlib
+ options
+In-Reply-To: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160216230733.3c4f4542@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=829f21ca83e0cc8449639acf2f69aefc45f3e040
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-When lz4 was compiled before, dovecot will use it as optional dependency:
+On Wed, 10 Feb 2016 21:58:17 +0100, Bernd Kuhls wrote:
+> The next patch of this series will add optional xz and lz4 support, to
+> avoid adding new options for these compression packages simplify the
+> configuration of dovecot by removing the options handling optional
+> compression support.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  Config.in.legacy           | 14 ++++++++++++++
+>  package/dovecot/Config.in  | 12 ------------
+>  package/dovecot/dovecot.mk |  4 ++--
+>  3 files changed, 16 insertions(+), 14 deletions(-)
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/dovecot/lib30_imap_zlib_plugin.so | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
- 0x00000001 (NEEDED)                     Shared library: [liblz4.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+All three patches applied on master, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/dovecot/dovecot.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index dbf2dab..6b69329 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -76,6 +76,13 @@ else
- DOVECOT_CONF_OPTS += --without-sqlite
- endif
- 
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+DOVECOT_CONF_OPTS += --with-lz4
-+DOVECOT_DEPENDENCIES += lz4
-+else
-+DOVECOT_CONF_OPTS += --without-lz4
-+endif
-+
- ifeq ($(BR2_PACKAGE_XZ),y)
- DOVECOT_CONF_OPTS += --with-lzma
- DOVECOT_DEPENDENCIES += xz
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
