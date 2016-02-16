@@ -1,41 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:53:03 +0100
-Subject: [Buildroot] [git commit branch/next] musl: bump to version 1.1.13
-Message-ID: <20160216205307.8E2EF7FDA6@busybox.osuosl.org>
+Date: Tue, 16 Feb 2016 21:52:55 +0100
+Subject: [Buildroot] [git commit branch/next] sqlite: bump to version 3.11.0
+Message-ID: <20160216205307.79CB081839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b14f8ebab3a92ef0537bd18e63628f2a0bbd239c
+commit: https://git.buildroot.net/buildroot/commit/?id=3a8d20e33a2620e38c56a7874ee3d8f045a4c685
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/musl/musl.hash | 2 +-
- package/musl/musl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index b136599..0970ad6 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	720b83c7e276b4b679c0bffe9509340d5f81fd601508e607e708177df0d31c0e  musl-1.1.12.tar.gz
-+sha256	bbacdc64f557d0c4857f7d2daf592c32c29aec1babbb94fcf01a2e05bed15013  musl-1.1.13.tar.gz
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 2cc6699..d68e769 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 1f07794..7a218dc 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1	ea4156fc3f6a4a4a2752a5a3ac5c5b3fe7e1a24b	sqlite-autoconf-3100200.tar.gz
++sha1	e2d300e4b24af5ecd67a1396488893fa44864e36	sqlite-autoconf-3110000.tar.gz
+ # Calculated based on the hash above
+-sha256	a2b3b4bd1291ea7d6c8252f7edff36a4362f2f0e5d5370444ba6cbe313ae2971	sqlite-autoconf-3100200.tar.gz
++sha256	508d4dcbcf7a7181e95c717a1dc4ae3c0880b3d593be0c4b40abb6c3a0e201fb	sqlite-autoconf-3110000.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 1603e00..0a119cc 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.1.12
-+MUSL_VERSION = 1.1.13
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-SQLITE_VERSION = 3100200
++SQLITE_VERSION = 3110000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
