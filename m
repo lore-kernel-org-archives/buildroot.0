@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:52:44 +0100
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 5.6.0
-In-Reply-To: <1455621680-28674-2-git-send-email-martin@barkynet.com>
-References: <1455621680-28674-1-git-send-email-martin@barkynet.com>
- <1455621680-28674-2-git-send-email-martin@barkynet.com>
-Message-ID: <20160216215244.6ead9788@free-electrons.com>
+Date: Tue, 16 Feb 2016 21:53:03 +0100
+Subject: [Buildroot] [git commit branch/next] musl: bump to version 1.1.13
+Message-ID: <20160216205307.8E2EF7FDA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+commit: https://git.buildroot.net/buildroot/commit/?id=b14f8ebab3a92ef0537bd18e63628f2a0bbd239c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 16 Feb 2016 11:21:20 +0000, Martin Bark wrote:
-> This is an important security release. See
-> https://nodejs.org/en/blog/release/v5.6.0/ for further details
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> ---
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/musl/musl.hash | 2 +-
+ package/musl/musl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index b136599..0970ad6 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	720b83c7e276b4b679c0bffe9509340d5f81fd601508e607e708177df0d31c0e  musl-1.1.12.tar.gz
++sha256	bbacdc64f557d0c4857f7d2daf592c32c29aec1babbb94fcf01a2e05bed15013  musl-1.1.13.tar.gz
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 2cc6699..d68e769 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUSL_VERSION = 1.1.12
++MUSL_VERSION = 1.1.13
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
