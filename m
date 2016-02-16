@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:14:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gdb: add optional support for xz
-In-Reply-To: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 16 Feb 2016 23:15:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: add optional
+ support for bzip2
+In-Reply-To: <56BBA94B.3000809@mind.be>
 References: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160216231428.190ba15b@free-electrons.com>
+ <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
+ <56BBA94B.3000809@mind.be>
+Message-ID: <20160216231509.1e87efa9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Bernd,
 
-On Wed, 10 Feb 2016 21:59:08 +0100, Bernd Kuhls wrote:
-> When xz was compiled before, gdb will use it as optional dependency:
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.1]
->  0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/gdb/gdb.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+On Wed, 10 Feb 2016 22:19:07 +0100, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+> > +ifeq ($(BR2_PACKAGE_BZIP2),y)
+> > +LIBARCHIVE_DEPENDENCIES += bzip2
+> 
+>  No --with-bz2lib? If there is a good reason, mention it in the commit log.
+
+Could you give some feedback on this?
+
+Thanks!
 
 Thomas
 -- 
