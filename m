@@ -1,50 +1,65 @@
-From: Alvaro G. M <alvaro.gamez@hazent.com>
-Date: Tue, 16 Feb 2016 16:15:26 +0100
-Subject: [Buildroot] [PATCH 1/1] Declare SED Makefile instead of
-	package/Makefile.in so it exists globally.
-In-Reply-To: <20160216161010.779981bb@free-electrons.com>
-References: <20160216161010.779981bb@free-electrons.com>
-Message-ID: <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 16 Feb 2016 16:22:19 +0100
+Subject: [Buildroot] [PATCH] barebox: add an option to embed environment
+	image
+In-Reply-To: <CAGm1_kuuYYjAtWGH6hThAMCSQ1kYTLyaLPUHiMvAodzKDJmobg@mail.gmail.com>
+References: <1455633262-27930-1-git-send-email-yegorslists@googlemail.com>
+ <CAGm1_kuuYYjAtWGH6hThAMCSQ1kYTLyaLPUHiMvAodzKDJmobg@mail.gmail.com>
+Message-ID: <CAGm1_kt5F03eNiQi6MZMwcwNKA982CXOpaimy33JvHqmJNcXNg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In particular, this allows the use of buildroot-submodule and in general,
-any use of buildroot from out of tree.
+On Tue, Feb 16, 2016 at 3:39 PM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Tue, Feb 16, 2016 at 3:34 PM,  <yegorslists@googlemail.com> wrote:
+>> From: Yegor Yefremov <yegorslists@googlemail.com>
+>>
+>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+>> ---
+>>  boot/barebox/Config.in  | 12 ++++++++++++
+>>  boot/barebox/barebox.mk |  6 ++++++
+>>  2 files changed, 18 insertions(+)
+>>
+>> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+>> index 39cb5d2..5db98c6 100644
+>> --- a/boot/barebox/Config.in
+>> +++ b/boot/barebox/Config.in
+>> @@ -121,4 +121,16 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
+>>           barebox devfs format, stored in the images directory, with
+>>           the same name as the directory name given here.
+>>
+>> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
+>> +       bool "Embed custom environment"
+>> +       help
+>> +         Embed a custom environment image into barebox.bin.
+>> +
+>> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
+>> +       string "Embedded environment path"
+>> +       depends on BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
+>> +       help
+>> +         Path to the directory containing the custom barebox
+>> +         environment.
+>> +
+>>  endif
+>> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+>> index 7715daf..73b73dd 100644
+>> --- a/boot/barebox/barebox.mk
+>> +++ b/boot/barebox/barebox.mk
+>> @@ -72,6 +72,12 @@ define BAREBOX_BUILD_BAREBOXENV_CMDS
+>>  endef
+>>  endif
+>>
+>> +ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV),y)
+>> +define BAREBOX_KCONFIG_FIXUP_CMDS
+>> +       $(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,$(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH)),$(@D)/.config)
 
-Tested-by: Doug Kehn <rdkehn@yahoo.com>
-Tested-by: Alvaro G. M. <alvaro.gamez@hazent.com>
-Signed-off-by: Alvaro G. M <alvaro.gamez@hazent.com>
----
- Makefile            | 1 +
- package/Makefile.in | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+qstrip is wrong here ...
 
-diff --git a/Makefile b/Makefile
-index 71735b5..d6069dd 100644
---- a/Makefile
-+++ b/Makefile
-@@ -279,6 +279,7 @@ HOSTLN := $(shell which $(HOSTLN) || type -p $(HOSTLN) || echo ln)
- HOSTNM := $(shell which $(HOSTNM) || type -p $(HOSTNM) || echo nm)
- HOSTOBJCOPY := $(shell which $(HOSTOBJCOPY) || type -p $(HOSTOBJCOPY) || echo objcopy)
- HOSTRANLIB := $(shell which $(HOSTRANLIB) || type -p $(HOSTRANLIB) || echo ranlib)
-+SED := $(shell which sed || type -p sed) -i -e
- 
- export HOSTAR HOSTAS HOSTCC HOSTCXX HOSTLD
- export HOSTCC_NOCCACHE HOSTCXX_NOCCACHE
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dd595e2..273a594 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -214,7 +214,6 @@ endif
- INSTALL := $(shell which install || type -p install)
- FLEX := $(shell which flex || type -p flex)
- BISON := $(shell which bison || type -p bison)
--SED := $(shell which sed || type -p sed) -i -e
- UNZIP := $(shell which unzip || type -p unzip) -q
- 
- APPLY_PATCHES = support/scripts/apply-patches.sh $(if $(QUIET),-s)
--- 
-2.7.0
+The question is should I make an "order" selection for
+embedded/external image and just use the existing
+BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH?
+
+Yegor
