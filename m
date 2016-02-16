@@ -1,106 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 22:25:40 +0100
-Subject: [Buildroot] [PATCH 1/1] new package: jsen
-In-Reply-To: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <20160216222540.64878554@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 16 Feb 2016 22:27:46 +0100
+Subject: [Buildroot] [v3,
+	0/4] Supporting building a second Barebox config
+In-Reply-To: <20160216185548.GA9144@smipidev>
+References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
+ <CAGm1_kuA6pdj4KJ_TT26f4kfgSYaFMjKiV4T4gLTn-2HsQspeg@mail.gmail.com>
+ <20160216185548.GA9144@smipidev>
+Message-ID: <CAGm1_ktVyZcj+ubstRVr+oUAH5gKnB688nTp2Ad+gFiv3pR-zA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atul,
+On Tue, Feb 16, 2016 at 7:55 PM, Pieter Smith <pieter@boesman.nl> wrote:
+> On Tue, Feb 16, 2016 at 12:55:30PM +0100, Yegor Yefremov wrote:
+>> Hi Pieter,
+>>
+>> On Wed, Jan 20, 2016 at 11:43 PM, Pieter Smith <pieter@boesman.nl> wrote:
+>> > This patch-set in 4 parts adds support for building barebox with up to 2
+>> > configurations. It can be used to build the barebox x-loader or MLO (also
+>> > called Secondary Program Loader) in addition to the standard barebox build
+>> > (Tertiary Program Loader). This implements the design proposed in
+>> > http://elinux.org/Buildroot#Todo_list:
+>> > 1. Have boot/barebox/ containing the common stuff.
+>> > 2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
+>> > 3. There is only one version selection, but each package allows to
+>> >    define the configuration to be used.
+>> > 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+>> >    but share a lot of common definitions between the packages.
+>> >
+>> > To demonstrate that it works as advertized, the last patch adds a defconfig for
+>> > the beaglebone black that makes use of the added functionality.
+>>
+>> I've applied the patches and built both MLO and barebox.bin binaries.
+>> The patches are working as expected.
+>
+> Glad to hear it.
+>
+>> I have following use case: I have one board, but want provide
+>> different environment scripts per project. These scripts should be
+>> stored in BR2_EXTERNAL folder. I'd like to also embed them into
+>> barebox.bin. How can I do it in BR?
+>
+> If I understand you correctly, you would like to customize the barebox
+> environment integrated into barebox.bin on a per-project basis. This is
+> something I spent a few hours looking into, but I have not found an adequate
+> solution. It may be easier to bake a new buildroot environment and flash that.
+>
+> Will this satisfy your use-case?
 
-Thanks also for this contribution. As usual, a few comments.
+I've found a solution: http://patchwork.ozlabs.org/patch/583444/
 
-First, the title should be:
+The question is should enable both inetrnel and external env image? I
+think we should keep both in parallel.
 
-	jsen: new package
-
-As per our convention for naming the commits for new packages.
-
-On Tue, 16 Feb 2016 12:18:13 +0530, Atul Singh wrote:
-
-> diff --git a/package/Config.in b/package/Config.in
-> index a5b31aa..cb3a3c8 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -994,6 +994,7 @@ menu "JSON/XML"
->  	source "package/expat/Config.in"
->  	source "package/ezxml/Config.in"
->  	source "package/jansson/Config.in"
-> +	source "package/jsen/Config.in"
->  	source "package/json-c/Config.in"
->  	source "package/json-glib/Config.in"
->  	source "package/jsoncpp/Config.in"
-
-I am not sure JSON/XML is the appropriate place. Yes, jsen is related
-to JSON, but I believe its main characteristic is that it is a
-Javascript library. So it should probably go under the Javascript menu,
-where we already have another package named json-javascript.
-
-Yegor, what do you think? If the number of Javascript libraries becomes
-really huge, then we can start creating sub-categories. But it is too
-early to do this now.
-
-> diff --git a/package/jsen/jsen.mk b/package/jsen/jsen.mk
-> new file mode 100644
-> index 0000000..e939739
-> --- /dev/null
-> +++ b/package/jsen/jsen.mk
-> @@ -0,0 +1,32 @@
-> +################################################################################
-> +#
-> +# jsen
-> +#
-> +################################################################################
-> +
-> +JSEN_VERSION = v0.6.0
-> +JSEN_SITE = $(call github,bugventure,jsen,$(JSEN_VERSION))
-> +JSEN_LICENSE = MIT
-> +JSEN_LICENSE_FILES = LICENSE
-> +JSEN_DIRECTORIES_LIST = dist lib
-> +JSEN_ROOT_FILES_LIST = index.js
-> +
-> +define JSEN_INSTALL_TARGET_CMDS
-> +	# Install required directories
-> +	for dir in $(JSEN_DIRECTORIES_LIST); \
-> +	do \
-> +		$(INSTALL) -d $(TARGET_DIR)/usr/share/jsen/$$dir && \
-> +		$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/jsen/$$dir \
-> +			$(@D)/$$dir/*.* || exit 1; \
-> +	done
-> +
-> +	# Install required files from the root directory
-> +	for file in $(JSEN_ROOT_FILES_LIST); \
-> +	do \
-> +		$(INSTALL) -D -m 0644 $(@D)/$$file \
-> +			$(TARGET_DIR)/usr/share/jsen/$$file \
-> +			|| exit 1; \
-> +	done
-> +endef
-
-I think this is more complicated than it needs to be. What about:
-
-define JSEN_INSTALL_TARGET_CMDS
-	mkdir -p $(TARGET_DIR)/usr/share/jsen
-	$(foreach d,dist lib index.js,\
-		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/jsen/$(sep))
-endef
-
-As a side note, I am wondering if we shouldn't create some common
-infrastructure to simplify all those packages that just need to "copy"
-stuff. Either a special variable in the generic-package infrastructure,
-or a separate "copy-package" infrastructure that provides a special
-variable that allows the package to list "stuff to be copied" and
-another listing "where to copy". But that's clearly beyond the scope of
-your patch, so don't worry about this.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Yegor
