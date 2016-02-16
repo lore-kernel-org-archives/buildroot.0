@@ -1,42 +1,224 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:16:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mc: add optional support for
- libssh2
-In-Reply-To: <1455139292-5849-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455139292-5849-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160216231643.25fb0886@free-electrons.com>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Tue, 16 Feb 2016 23:29:12 +0100
+Subject: [Buildroot] libcapn build failure
+In-Reply-To: <CAHXCMMJf4JHRKoCZ_B9eMWXf+rXX+xNgi=e2Qzm_mJi8ULBRvg@mail.gmail.com>
+References: <56C1F90F.80804@proximus.be>
+ <CAHXCMMJf4JHRKoCZ_B9eMWXf+rXX+xNgi=e2Qzm_mJi8ULBRvg@mail.gmail.com>
+Message-ID: <56C3A2B8.5030309@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Dear Samuel
 
-On Wed, 10 Feb 2016 22:21:32 +0100, Bernd Kuhls wrote:
-> When libssh2 was compiled before, mc will use it as optional dependency:
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/mc | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libssh2.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libgcrypt.so.20]
->  0x00000001 (NEEDED)                     Shared library: [libgpg-error.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libglib-2.0.so.0]
->  0x00000001 (NEEDED)                     Shared library: [libpthread.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libintl.so.8]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libiconv.so.2]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mc/mc.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+Op 16/02/2016 om 14:27 schreef Samuel Martin:
+> Hi Johan,
+>
+>
+> On Feb 15, 2016 5:13 PM, "Johan Sagaert"<sagaert.johan@proximus.be>  wrote:
+>> Hi
+>>
+>> I am trying to get libcapn into buildroot.(cmake based)
+>> Build error :
+>>
+>>>>> libcapn 7a6dc662e9daa864f687 Configuring
+>> (mkdir -p /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && cd /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && rm -f CMakeCache.txt && PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin:/root/google-cloud-sdk/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/build/host-cmake-3.1.3/bin:/root/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" /home/buildroot12git/output/host/usr/bin/cmake /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ -DCMAKE_TOOLCHAIN_FILE="/home/buildroot12git/output/host/usr/share/buildroot/toolchainfile.cmake" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DB
+>> UILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON -DUSE_CCACHE=OFF  )
+>> -- Looking for include file ctype.h
+>> -- Looking for include file ctype.h - found
+>> -- Looking for include file inttypes.h
+>> -- Looking for include file inttypes.h - found
+>> -- Looking for include file stdint.h
+>> -- Looking for include file stdint.h - found
+>> -- Looking for include file unistd.h
+>> -- Looking for include file unistd.h - found
+>> -- Looking for include file netinet/in.h
+>> -- Looking for include file netinet/in.h - found
+>> -- Looking for include file arpa/inet.h
+>> -- Looking for include file arpa/inet.h - found
+>> -- Looking for include file netdb.h
+>> -- Looking for include file netdb.h - found
+>> -- Looking for include file sys/fcntl.h
+>> -- Looking for include file sys/fcntl.h - found
+>> -- Looking for include file sys/socket.h
+>> -- Looking for include file sys/socket.h - found
+>> -- Looking for include file strings.h
+>> -- Looking for include file strings.h - found
+>> -- Looking for strerror_r
+>> -- Looking for strerror_r - found
+>> -- Performing test APN_HAVE_GLIBC_STRERROR_R
+>> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
+>>     APN_HAVE_GLIBC_STRERROR_R (advanced)
+>>     APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT (advanced)
+>> For details see /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
+>> -- Performing test APN_HAVE_GLIBC_STRERROR_R - Failed
+>> -- Performing test APN_HAVE_POSIX_STRERROR_R
+>> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
+>>     APN_HAVE_POSIX_STRERROR_R (advanced)
+>>     APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT (advanced)
+>> For details see /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
+>> -- Performing test APN_HAVE_POSIX_STRERROR_R - Failed
+>> -- Found OpenSSL: /home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libssl.so;/home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libcrypto.so (found version "1.0.2c")
+>> -- Configuring incomplete, errors occurred!
+>> See also "/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeOutput.log".
+>> make: *** [/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/.stamp_configured] Error 1
+>>
+>>
+>>
+>> I have no clue how to set cache variables appropriately...
+>>
+>> (Due to the git submodule usage, i had to clone it first some where else and then
+>> executed  git submodule update --init , and then i copied the 3rd party source into my build tree
+>> in order to get the jansson source)
+>>
+>> See attached logfiles
+>>
+>>
+>> almost giving up
+> Don't! This part of the learning process ;-)
+>
+> Few tips for investigating cmake package failures:
+> 1) the log files generated by cmake (i.e. the *.error and *.output
+> files) are good starting points;
+> 2) after configuring, you can check the CMakeCache.txt file (located
+> in the build directory) to see what is the value of this or that
+> variable;
+> 3) you can set/force some variables for the configure step by adding
+> some *_CONF_OPTS (see [1]), e.g.:
+>        MYPKG_CONF_OPTS += -Dvarfoo=value
+> 4) some variables may not be stored in the CMakeCache.txt file, or if
+> you want to trace some cmake code path, you can patch the
+> CMakeLists.txt files calling the message function [2] (similar to
+> adding printf in the code);
+> 5) a last thing when having trouble with some dependency modules, you
+> may need to add --trace to the cmake options [3]. This is not what you
+> need here.
+>
+> Of course, trying to do run test in the buildroot case is a complete non-sense.
+>
+> For your issue, you should start with tips 2), 3) and maybe 4).
+>
+> For this specific HAVE_*_STRERROR test, you may need to set those
+> corresponding cmake variables differently, depending on the C-library
+> used in the toolchain.
+>
+> [...]
+>> ==========
+>> libcapn.mk :
+>> ==========
+>> ################################################################################
+>> #
+>> # libcapn
+>> #
+>> ################################################################################
+>>
+>> LIBCAPN_VERSION = 7a6dc662e9daa864f687
+>> LIBCAPN_SITE = $(call github,adobkin,libcapn,$(LIBCAPN_VERSION))
+>> LIBCAPNLICENSE = MIT
+>>
+>> LIBCAPN_DEPENDENCIES += jansson openssl
+>>
+>> $(eval $(cmake-package))
+> This looks right; try playing with (values are set randomly here ;-]):
+> LIBCAPN_CONF_OPTS = -DAPN_HAVE_GLIBC_STRERROR_R=ON \
+>    -DAPN_HAVE_POSIX_STRERROR_R=OFF
+>
+> This should bypass the tryrun test.
+>
+> Good luck ;-)
+>
+>
+> [1]http://nightly.buildroot.org/manual.html#cmake-package-reference
+> [2]https://cmake.org/cmake/help/v3.4/command/message.html
+> [3]https://cmake.org/cmake/help/v3.4/manual/cmake.1.html
+>
+>
+> Regards,
+>
+> --
+> Samuel
+>
+Thanks for keeping me motivated
 
-Applied, thanks.
+There are several problems with this package.
+ From the  README.md :
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+git clonehttps://github.com/adobkin/libcapn.git
+git submodule update --init      <<<---------- This downloads the jansson source.
+
+For this to work in buildroot with git, the .git directory needs to be available in order to execute
+the submodule update.
+So i think i will have to do this step outside of buildroot, and then tar.bz2 the whole thing,
+in order to use it from the libcapn.mk
+
+  So i did this outside of the buildroot build directory.
+
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE= \
+"/home/buildroot12git/output/host/usr/share/buildroot/toolchainfile.cmake" \
+  -DCMAKE_INSTALL_PREFIX=/home/buildroot12git/output/staging/usr -DUSE_CCACHE=OFF \
+  -DAPN_HAVE_GLIBC_STRERROR_R=OFF -DAPN_HAVE_POSIX_STRERROR_R=OFF \
+  -DAPN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT=OFF -DAPN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT=OFF
+
+This brings me somewhat closer , but  there seems to be a problem with 
+the jansson not
+being built for the (ARM) target:
+
+
+Scanning dependencies of target test_unpack
+[100%] Building C object 
+CMakeFiles/test_unpack.dir/test/suites/api/test_unpack.c.o
+Linking C executable bin/test_unpack
+[100%] Built target test_unpack
+[ 35%] No install step for 'jansson'
+[ 40%] Completed 'jansson'
+[ 40%] Built target jansson
+Scanning dependencies of target capn
+[ 45%] Building C object CMakeFiles/capn.dir/src/library/apn_memory.c.o
+[ 50%] Building C object CMakeFiles/capn.dir/src/library/apn.c.o
+[ 55%] Building C object CMakeFiles/capn.dir/src/library/apn_strings.c.o
+[ 60%] Building C object CMakeFiles/capn.dir/src/library/apn_payload.c.o
+[ 65%] Building C object CMakeFiles/capn.dir/src/library/apn_tokens.c.o
+[ 70%] Building C object 
+CMakeFiles/capn.dir/src/library/apn_binary_message.c.o
+[ 75%] Building C object CMakeFiles/capn.dir/src/library/apn_array.c.o
+[ 80%] Building C object CMakeFiles/capn.dir/src/library/apn_strerror.c.o
+[ 85%] Building C object CMakeFiles/capn.dir/src/library/apn_ssl.c.o
+[ 90%] Building C object CMakeFiles/capn.dir/src/library/apn_log.c.o
+Linking C shared library lib/Release/libcapn.so
+/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-gnueabi/4.9.3/../../../../arm-buildroot-linux-gnueabi/bin/ld: 
+src/third_party/jansson/lib/libjansson.a(value.c.o): Relocations in 
+generic ELF (EM: 3)
+/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-gnueabi/4.9.3/../../../../arm-buildroot-linux-gnueabi/bin/ld: 
+src/third_party/jansson/lib/libjansson.a(value.c.o): Relocations in 
+generic ELF (EM: 3)
+src/third_party/jansson/lib/libjansson.a: error adding symbols: File in 
+wrong format
+collect2: error: ld returned 1 exit status
+make[2]: *** [lib/Release/libcapn.so.2.0.0] Error 1
+make[1]: *** [CMakeFiles/capn.dir/all] Error 2
+make: *** [all] Error 2
+
+Then i did some tweaking in the generated link.txt files.(quick and 
+dirty solution)
+
+sed -i 's/src\/third_party\/jansson\/lib\/libjansson.a/-ljansson/g' 
+./CMakeFiles/apn-pusher.dir/link.txt
+sed -i 's/src\/third_party\/jansson\/lib\/libjansson.a/-ljansson/g' 
+./CMakeFiles/capn.dir/link.txt
+
+Linking C executable apn-pusher
+[ 95%] Built target apn-pusher
+Scanning dependencies of target libcapn-config
+[100%] Building C object 
+CMakeFiles/libcapn-config.dir/src/config/apn_config.c.o
+Linking C executable libcapn-config
+[100%] Built target libcapn-config
+
+I guess i need to apply some patches to the 
+src/third_party/jansson/CMakeLists.txt
+unless some -D options could do the job.
+
+Best Regards
+Johan
