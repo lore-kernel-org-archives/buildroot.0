@@ -1,53 +1,32 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Tue, 16 Feb 2016 19:55:48 +0100
-Subject: [Buildroot] [v3,
-	0/4] Supporting building a second Barebox config
-In-Reply-To: <CAGm1_kuA6pdj4KJ_TT26f4kfgSYaFMjKiV4T4gLTn-2HsQspeg@mail.gmail.com>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <CAGm1_kuA6pdj4KJ_TT26f4kfgSYaFMjKiV4T4gLTn-2HsQspeg@mail.gmail.com>
-Message-ID: <20160216185548.GA9144@smipidev>
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Tue, 16 Feb 2016 18:55:50 +0000 (UTC)
+Subject: [Buildroot] [Bug 8576] Building embedded Linux for Atmel
+ SAMA5D4_Xplained with HDMI work not propber. HDMI does not work
+References: <bug-8576-163@https.bugs.busybox.net/>
+ <bug-8576-163-X6I9k76wUk@https.bugs.busybox.net/>
+Message-ID: <n9vrbm$b0a$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 16, 2016 at 12:55:30PM +0100, Yegor Yefremov wrote:
-> Hi Pieter,
-> 
-> On Wed, Jan 20, 2016 at 11:43 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> > This patch-set in 4 parts adds support for building barebox with up to 2
-> > configurations. It can be used to build the barebox x-loader or MLO (also
-> > called Secondary Program Loader) in addition to the standard barebox build
-> > (Tertiary Program Loader). This implements the design proposed in
-> > http://elinux.org/Buildroot#Todo_list:
-> > 1. Have boot/barebox/ containing the common stuff.
-> > 2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
-> > 3. There is only one version selection, but each package allows to
-> >    define the configuration to be used.
-> > 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
-> >    but share a lot of common definitions between the packages.
-> >
-> > To demonstrate that it works as advertized, the last patch adds a defconfig for
-> > the beaglebone black that makes use of the added functionality.
-> 
-> I've applied the patches and built both MLO and barebox.bin binaries.
-> The patches are working as expected.
+On 2016-02-16, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
 
-Glad to hear it.
+> --- Comment #3 from JensAmberg <JensAmberg@mail.de> ---
+> How can i contact Atmel Kernel developer? I post an bug on www.linux4sam.com
+> Forum. But nothing happens
 
-> I have following use case: I have one board, but want provide
-> different environment scripts per project. These scripts should be
-> stored in BR2_EXTERNAL folder. I'd like to also embed them into
-> barebox.bin. How can I do it in BR?
+I've never had any luck all with linux4sam.com, and have given up
+using it.  Questions are usually completely ignored.  If there are any
+responses, they're usually way off base. You might as well walk down
+the street and ask panhandlers: it appears to be the clueless leading
+the incompetent.  You might try contacting your Atmel FAE to see if he
+can help.  There also used to be one or two knowlegable Atmel
+employees who participated in comp.arch.embedded, but that was several
+years ago.
 
-If I understand you correctly, you would like to customize the barebox
-environment integrated into barebox.bin on a per-project basis. This is
-something I spent a few hours looking into, but I have not found an adequate
-solution. It may be easier to bake a new buildroot environment and flash that. 
-
-Will this satisfy your use-case?
-
-> Yegor
-
-- Pieter
+-- 
+Grant Edwards               grant.b.edwards        Yow! Used staples are good
+                                  at               with SOY SAUCE!
+                              gmail.com            
