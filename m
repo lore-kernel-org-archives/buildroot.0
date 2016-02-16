@@ -1,35 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:11:53 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ulogd: add optional support for
- jansson
-In-Reply-To: <1455137935-18111-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455137935-18111-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160216231153.6e747ad8@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Feb 2016 23:11:58 +0100
+Subject: [Buildroot] [PATCH] package/syslogd: workaround a compiler bug
+	with CS powerpc 2012.03
+In-Reply-To: <1455447313-14334-1-git-send-email-romain.naour@gmail.com>
+ (Romain Naour's message of "Sun, 14 Feb 2016 11:55:13 +0100")
+References: <1455447313-14334-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <8760xonw41.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-On Wed, 10 Feb 2016 21:58:54 +0100, Bernd Kuhls wrote:
-> When jansson was compiled before, ulogd will use it as optional
-> dependency:
-> 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/ulogd/ulogd_output_JSON.so | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libjansson.so.4]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/ulogd/ulogd.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+ > The O3 optimization triggers a compiler bug with this toolchain,
+ > change it with 02.
 
-Both patches applied to master, thanks!
+ > Fixes:
+ > http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
 
-Thomas
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > ---
+ >  package/sysklogd/sysklogd.mk | 8 ++++++++
+ >  1 file changed, 8 insertions(+)
+
+ > diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+ > index de2edf4..9e315bc 100644
+ > --- a/package/sysklogd/sysklogd.mk
+ > +++ b/package/sysklogd/sysklogd.mk
+ > @@ -14,6 +14,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ >  SYSKLOGD_DEPENDENCIES = busybox
+ >  endif
+ 
+ > +# CS PowerPC 2012.03 triggers compiler bug.
+ > +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
+ > +define SYSKLOGD_WORKAROUND_COMPILER_BUG
+ > +	$(SED) 's/-O3/-O2/' $(@D)/Makefile
+
+Does this mean that sysklogd isn't using our TARGET_CFLAGS (where we
+most likely pass -Os)?
+
+Why don't we fix that instead?
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
