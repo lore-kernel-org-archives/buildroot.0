@@ -1,42 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:35:54 +0100
-Subject: [Buildroot] [PATCH 1/1] Declare SED Makefile instead of
- package/Makefile.in so it exists globally.
-In-Reply-To: <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
-References: <20160216161010.779981bb@free-electrons.com>
- <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
-Message-ID: <20160216213554.60f53246@free-electrons.com>
+Date: Tue, 16 Feb 2016 21:37:47 +0100
+Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.4.6
+In-Reply-To: <1455638558-1805-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1455638558-1805-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160216213747.223c9fd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Gustavo Zacarias,
 
-The title is too long, it should be:
+On Tue, 16 Feb 2016 13:02:38 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2016-0766 - privilege escalation issue for users of PL/Java.
+> CVE-2016-0773 - issue with regular expression (regex) parsing. Prior
+> code allowed users to pass in expressions which included out-of-range
+> Unicode characters, triggering a backend crash. This issue is critical
+> for PostgreSQL systems with untrusted users or which generate regexes
+> based on user input.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/postgresql/postgresql.hash | 4 ++--
+>  package/postgresql/postgresql.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-	Makefile: declare SED globally
-
-or something like that.
-
-On Tue, 16 Feb 2016 16:15:26 +0100, Alvaro G. M wrote:
-> In particular, this allows the use of buildroot-submodule and in general,
-> any use of buildroot from out of tree.
-
-This commit log should be improved, because:
-
- 1/ Why should we care about buildroot-submodule, and if we care, what
-    is the actual problem ?
-
- 2/ What do you mean by "use Buildroot from out of tree" ? I do out of
-    tree builds every day and it works just fine. So this aspect needs
-    to be detailed.
-
-I have nothing against the change, which is fairly simple, but it needs
-to be justified properly.
-
-Thanks a lot!
+Applied to master, thanks.
 
 Thomas
 -- 
