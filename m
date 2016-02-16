@@ -1,47 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Feb 2016 23:11:58 +0100
-Subject: [Buildroot] [PATCH] package/syslogd: workaround a compiler bug
-	with CS powerpc 2012.03
-In-Reply-To: <1455447313-14334-1-git-send-email-romain.naour@gmail.com>
- (Romain Naour's message of "Sun, 14 Feb 2016 11:55:13 +0100")
-References: <1455447313-14334-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <8760xonw41.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Feb 2016 23:14:07 +0100
+Subject: [Buildroot] [git commit] package/gdb: add optional support for xz
+Message-ID: <20160216221411.4849680439@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=18ce7f11ff3481308d911c362f0c2ef44b9492bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The O3 optimization triggers a compiler bug with this toolchain,
- > change it with 02.
+When xz was compiled before, gdb will use it as optional dependency:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > ---
- >  package/sysklogd/sysklogd.mk | 8 ++++++++
- >  1 file changed, 8 insertions(+)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gdb/gdb.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
- > index de2edf4..9e315bc 100644
- > --- a/package/sysklogd/sysklogd.mk
- > +++ b/package/sysklogd/sysklogd.mk
- > @@ -14,6 +14,14 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- >  SYSKLOGD_DEPENDENCIES = busybox
- >  endif
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 3b0f501..32d52eb 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -118,6 +118,13 @@ else
+ GDB_CONF_OPTS += --without-expat
+ endif
  
- > +# CS PowerPC 2012.03 triggers compiler bug.
- > +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
- > +define SYSKLOGD_WORKAROUND_COMPILER_BUG
- > +	$(SED) 's/-O3/-O2/' $(@D)/Makefile
-
-Does this mean that sysklogd isn't using our TARGET_CFLAGS (where we
-most likely pass -Os)?
-
-Why don't we fix that instead?
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_PACKAGE_XZ),y)
++GDB_CONF_OPTS += --with-lzma
++GDB_DEPENDENCIES += xz
++else
++GDB_CONF_OPTS += --without-lzma
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GDB_CONF_OPTS += --with-zlib
+ GDB_DEPENDENCIES += zlib
