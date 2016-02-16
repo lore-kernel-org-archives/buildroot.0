@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:37:47 +0100
-Subject: [Buildroot] [PATCH] postgresql: security bump to version 9.4.6
-In-Reply-To: <1455638558-1805-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1455638558-1805-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160216213747.223c9fd2@free-electrons.com>
+Date: Tue, 16 Feb 2016 21:37:54 +0100
+Subject: [Buildroot] [PATCH v2] squid: security bump to version 3.5.14
+In-Reply-To: <1455650882-25222-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1455650882-25222-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160216213754.51e824ba@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,15 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Tue, 16 Feb 2016 13:02:38 -0300, Gustavo Zacarias wrote:
+On Tue, 16 Feb 2016 16:28:02 -0300, Gustavo Zacarias wrote:
 > Fixes:
-> CVE-2016-0766 - privilege escalation issue for users of PL/Java.
-> CVE-2016-0773 - issue with regular expression (regex) parsing. Prior
-> code allowed users to pass in expressions which included out-of-range
-> Unicode characters, triggering a backend crash. This issue is critical
-> for PostgreSQL systems with untrusted users or which generate regexes
-> based on user input.
+> SQUID-2016:1 - Remote Denial of service issue in SSL/TLS processing.
+> 
+> CVE-2016-2390 assigned.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/postgresql/postgresql.hash | 4 ++--
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Change for v2: promote to security bump, add description
 
 Applied to master, thanks.
 
