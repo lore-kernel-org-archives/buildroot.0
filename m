@@ -1,224 +1,168 @@
-From: Johan Sagaert <sagaert.johan@proximus.be>
-Date: Tue, 16 Feb 2016 23:29:12 +0100
-Subject: [Buildroot] libcapn build failure
-In-Reply-To: <CAHXCMMJf4JHRKoCZ_B9eMWXf+rXX+xNgi=e2Qzm_mJi8ULBRvg@mail.gmail.com>
-References: <56C1F90F.80804@proximus.be>
- <CAHXCMMJf4JHRKoCZ_B9eMWXf+rXX+xNgi=e2Qzm_mJi8ULBRvg@mail.gmail.com>
-Message-ID: <56C3A2B8.5030309@proximus.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Feb 2016 23:31:46 +0100
+Subject: [Buildroot] [git commit branch/next] wine: Bump to version 1.8.1
+Message-ID: <20160216223153.3C748818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel
+commit: https://git.buildroot.net/buildroot/commit/?id=ee2dc86c675c7975402d95b8a94177de22c0eb80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Op 16/02/2016 om 14:27 schreef Samuel Martin:
-> Hi Johan,
->
->
-> On Feb 15, 2016 5:13 PM, "Johan Sagaert"<sagaert.johan@proximus.be>  wrote:
->> Hi
->>
->> I am trying to get libcapn into buildroot.(cmake based)
->> Build error :
->>
->>>>> libcapn 7a6dc662e9daa864f687 Configuring
->> (mkdir -p /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && cd /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && rm -f CMakeCache.txt && PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin:/root/google-cloud-sdk/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/build/host-cmake-3.1.3/bin:/root/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" /home/buildroot12git/output/host/usr/bin/cmake /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ -DCMAKE_TOOLCHAIN_FILE="/home/buildroot12git/output/host/usr/share/buildroot/toolchainfile.cmake" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DB
->> UILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON -DUSE_CCACHE=OFF  )
->> -- Looking for include file ctype.h
->> -- Looking for include file ctype.h - found
->> -- Looking for include file inttypes.h
->> -- Looking for include file inttypes.h - found
->> -- Looking for include file stdint.h
->> -- Looking for include file stdint.h - found
->> -- Looking for include file unistd.h
->> -- Looking for include file unistd.h - found
->> -- Looking for include file netinet/in.h
->> -- Looking for include file netinet/in.h - found
->> -- Looking for include file arpa/inet.h
->> -- Looking for include file arpa/inet.h - found
->> -- Looking for include file netdb.h
->> -- Looking for include file netdb.h - found
->> -- Looking for include file sys/fcntl.h
->> -- Looking for include file sys/fcntl.h - found
->> -- Looking for include file sys/socket.h
->> -- Looking for include file sys/socket.h - found
->> -- Looking for include file strings.h
->> -- Looking for include file strings.h - found
->> -- Looking for strerror_r
->> -- Looking for strerror_r - found
->> -- Performing test APN_HAVE_GLIBC_STRERROR_R
->> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
->>     APN_HAVE_GLIBC_STRERROR_R (advanced)
->>     APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT (advanced)
->> For details see /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
->> -- Performing test APN_HAVE_GLIBC_STRERROR_R - Failed
->> -- Performing test APN_HAVE_POSIX_STRERROR_R
->> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
->>     APN_HAVE_POSIX_STRERROR_R (advanced)
->>     APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT (advanced)
->> For details see /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
->> -- Performing test APN_HAVE_POSIX_STRERROR_R - Failed
->> -- Found OpenSSL: /home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libssl.so;/home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libcrypto.so (found version "1.0.2c")
->> -- Configuring incomplete, errors occurred!
->> See also "/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeOutput.log".
->> make: *** [/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/.stamp_configured] Error 1
->>
->>
->>
->> I have no clue how to set cache variables appropriately...
->>
->> (Due to the git submodule usage, i had to clone it first some where else and then
->> executed  git submodule update --init , and then i copied the 3rd party source into my build tree
->> in order to get the jansson source)
->>
->> See attached logfiles
->>
->>
->> almost giving up
-> Don't! This part of the learning process ;-)
->
-> Few tips for investigating cmake package failures:
-> 1) the log files generated by cmake (i.e. the *.error and *.output
-> files) are good starting points;
-> 2) after configuring, you can check the CMakeCache.txt file (located
-> in the build directory) to see what is the value of this or that
-> variable;
-> 3) you can set/force some variables for the configure step by adding
-> some *_CONF_OPTS (see [1]), e.g.:
->        MYPKG_CONF_OPTS += -Dvarfoo=value
-> 4) some variables may not be stored in the CMakeCache.txt file, or if
-> you want to trace some cmake code path, you can patch the
-> CMakeLists.txt files calling the message function [2] (similar to
-> adding printf in the code);
-> 5) a last thing when having trouble with some dependency modules, you
-> may need to add --trace to the cmake options [3]. This is not what you
-> need here.
->
-> Of course, trying to do run test in the buildroot case is a complete non-sense.
->
-> For your issue, you should start with tips 2), 3) and maybe 4).
->
-> For this specific HAVE_*_STRERROR test, you may need to set those
-> corresponding cmake variables differently, depending on the C-library
-> used in the toolchain.
->
-> [...]
->> ==========
->> libcapn.mk :
->> ==========
->> ################################################################################
->> #
->> # libcapn
->> #
->> ################################################################################
->>
->> LIBCAPN_VERSION = 7a6dc662e9daa864f687
->> LIBCAPN_SITE = $(call github,adobkin,libcapn,$(LIBCAPN_VERSION))
->> LIBCAPNLICENSE = MIT
->>
->> LIBCAPN_DEPENDENCIES += jansson openssl
->>
->> $(eval $(cmake-package))
-> This looks right; try playing with (values are set randomly here ;-]):
-> LIBCAPN_CONF_OPTS = -DAPN_HAVE_GLIBC_STRERROR_R=ON \
->    -DAPN_HAVE_POSIX_STRERROR_R=OFF
->
-> This should bypass the tryrun test.
->
-> Good luck ;-)
->
->
-> [1]http://nightly.buildroot.org/manual.html#cmake-package-reference
-> [2]https://cmake.org/cmake/help/v3.4/command/message.html
-> [3]https://cmake.org/cmake/help/v3.4/manual/cmake.1.html
->
->
-> Regards,
->
-> --
-> Samuel
->
-Thanks for keeping me motivated
+Bumping to stable version 1.8.1
 
-There are several problems with this package.
- From the  README.md :
+Upstreamed patch is finally dropped.
 
-git clonehttps://github.com/adobkin/libcapn.git
-git submodule update --init      <<<---------- This downloads the jansson source.
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...llow-to-override-the-location-of-the-conf.patch | 109 ---------------------
+ package/wine/wine.hash                             |   2 +-
+ package/wine/wine.mk                               |   4 +-
+ 3 files changed, 2 insertions(+), 113 deletions(-)
 
-For this to work in buildroot with git, the .git directory needs to be available in order to execute
-the submodule update.
-So i think i will have to do this step outside of buildroot, and then tar.bz2 the whole thing,
-in order to use it from the libcapn.mk
-
-  So i did this outside of the buildroot build directory.
-
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE= \
-"/home/buildroot12git/output/host/usr/share/buildroot/toolchainfile.cmake" \
-  -DCMAKE_INSTALL_PREFIX=/home/buildroot12git/output/staging/usr -DUSE_CCACHE=OFF \
-  -DAPN_HAVE_GLIBC_STRERROR_R=OFF -DAPN_HAVE_POSIX_STRERROR_R=OFF \
-  -DAPN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT=OFF -DAPN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT=OFF
-
-This brings me somewhat closer , but  there seems to be a problem with 
-the jansson not
-being built for the (ARM) target:
-
-
-Scanning dependencies of target test_unpack
-[100%] Building C object 
-CMakeFiles/test_unpack.dir/test/suites/api/test_unpack.c.o
-Linking C executable bin/test_unpack
-[100%] Built target test_unpack
-[ 35%] No install step for 'jansson'
-[ 40%] Completed 'jansson'
-[ 40%] Built target jansson
-Scanning dependencies of target capn
-[ 45%] Building C object CMakeFiles/capn.dir/src/library/apn_memory.c.o
-[ 50%] Building C object CMakeFiles/capn.dir/src/library/apn.c.o
-[ 55%] Building C object CMakeFiles/capn.dir/src/library/apn_strings.c.o
-[ 60%] Building C object CMakeFiles/capn.dir/src/library/apn_payload.c.o
-[ 65%] Building C object CMakeFiles/capn.dir/src/library/apn_tokens.c.o
-[ 70%] Building C object 
-CMakeFiles/capn.dir/src/library/apn_binary_message.c.o
-[ 75%] Building C object CMakeFiles/capn.dir/src/library/apn_array.c.o
-[ 80%] Building C object CMakeFiles/capn.dir/src/library/apn_strerror.c.o
-[ 85%] Building C object CMakeFiles/capn.dir/src/library/apn_ssl.c.o
-[ 90%] Building C object CMakeFiles/capn.dir/src/library/apn_log.c.o
-Linking C shared library lib/Release/libcapn.so
-/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-gnueabi/4.9.3/../../../../arm-buildroot-linux-gnueabi/bin/ld: 
-src/third_party/jansson/lib/libjansson.a(value.c.o): Relocations in 
-generic ELF (EM: 3)
-/home/buildroot12git/output/host/usr/lib/gcc/arm-buildroot-linux-gnueabi/4.9.3/../../../../arm-buildroot-linux-gnueabi/bin/ld: 
-src/third_party/jansson/lib/libjansson.a(value.c.o): Relocations in 
-generic ELF (EM: 3)
-src/third_party/jansson/lib/libjansson.a: error adding symbols: File in 
-wrong format
-collect2: error: ld returned 1 exit status
-make[2]: *** [lib/Release/libcapn.so.2.0.0] Error 1
-make[1]: *** [CMakeFiles/capn.dir/all] Error 2
-make: *** [all] Error 2
-
-Then i did some tweaking in the generated link.txt files.(quick and 
-dirty solution)
-
-sed -i 's/src\/third_party\/jansson\/lib\/libjansson.a/-ljansson/g' 
-./CMakeFiles/apn-pusher.dir/link.txt
-sed -i 's/src\/third_party\/jansson\/lib\/libjansson.a/-ljansson/g' 
-./CMakeFiles/capn.dir/link.txt
-
-Linking C executable apn-pusher
-[ 95%] Built target apn-pusher
-Scanning dependencies of target libcapn-config
-[100%] Building C object 
-CMakeFiles/libcapn-config.dir/src/config/apn_config.c.o
-Linking C executable libcapn-config
-[100%] Built target libcapn-config
-
-I guess i need to apply some patches to the 
-src/third_party/jansson/CMakeLists.txt
-unless some -D options could do the job.
-
-Best Regards
-Johan
+diff --git a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch b/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
+deleted file mode 100644
+index 9fc9f64..0000000
+--- a/package/wine/0001-configure-allow-to-override-the-location-of-the-conf.patch
++++ /dev/null
+@@ -1,109 +0,0 @@
+-From 18078feecc8da0ab2693d0bb5423489fa62920ef Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Tue, 22 Dec 2015 21:25:19 +0100
+-Subject: [PATCH] configure: allow to override the location of the *-config
+- scripts
+-
+-Currently, the configure.ac calls a number of *-config scripts to get
+-details about installed libraries. It assumes that those *-config
+-scripts are readily available in the PATH.
+-
+-While this is true in most situations, it may not be true when
+-cross-compiling: you may have the *-config scripts matching the target
+-environment in a location that isn't in the PATH. For such situations,
+-it is very useful to be able to override the location of such *-config
+-scripts using environment variables.
+-
+-The proposed changes does not introduce any functional difference if
+-you don't pass those new environment variables: if they are not
+-passed, it falls back to the current value.
+-
+-However, if those *_CONFIG variables are passed, then they are used as
+-the path to the corresponding *-config script.
+-
+-The ${FOO_CONFIG:-foo-config} construct is POSIX compliant, so it is
+-available in all shells.
+-
+-(Patch submitted upstream.)
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac | 20 ++++++++++----------
+- 1 file changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 86f12c5..37ceab5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1191,7 +1191,7 @@ dnl **** Check for libxml2 ****
+- if test "x$with_xml" != "xno"
+- then
+-     WINE_PACKAGE_FLAGS(XML2,[libxml-2.0],[-lxml2],
+--                       [`xml2-config --cflags 2>/dev/null`],[`xml2-config --libs 2>/dev/null`],
+-+                       [`${XML2_CONFIG:-xml2-config} --cflags 2>/dev/null`],[`${XML2_CONFIG:-xml2-config} --libs 2>/dev/null`],
+-         [AC_CHECK_HEADERS([libxml/parser.h libxml/xmlsave.h libxml/SAX2.h])
+-         if test "$ac_cv_header_libxml_parser_h" = "yes" -a "$ac_cv_header_libxml_xmlsave_h" = "yes" -a "$ac_cv_header_libxml_SAX2_h" = "yes"
+-         then
+-@@ -1220,7 +1220,7 @@ WINE_WARNING_WITH(xml,[test "$ac_cv_lib_xml2_xmlParseMemory" != "yes"],
+- if test "x$with_xslt" != "xno"
+- then
+-     WINE_PACKAGE_FLAGS(XSLT,[libxslt],[-lxml2],
+--                       [`xslt-config --cflags 2>/dev/null`],[`xslt-config --libs 2>/dev/null`],
+-+                       [`${XSLT_CONFIG:-xslt-config} --cflags 2>/dev/null`],[`${XSLT_CONFIG:-xslt-config} --libs 2>/dev/null`],
+-         [AC_CHECK_HEADERS([libxslt/pattern.h libxslt/transform.h],,,
+-         [#ifdef HAVE_LIBXSLT_PATTERN_H
+- # include <libxslt/pattern.h>
+-@@ -1291,7 +1291,7 @@ WINE_NOTICE_WITH(curses,[test "x$ac_cv_lib_soname_curses$ac_cv_lib_soname_ncurse
+- dnl **** Check for SANE ****
+- if test "x$with_sane" != "xno"
+- then
+--    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`sane-config --cflags 2>/dev/null`],[`sane-config --ldflags 2>/dev/null`],
+-+    WINE_PACKAGE_FLAGS(SANE,[libsane],,[`${SANE_CONFIG:-sane-config} --cflags 2>/dev/null`],[`${SANE_CONFIG:-sane-config} --ldflags 2>/dev/null`],
+-         [AC_CHECK_HEADER(sane/sane.h,
+-             [WINE_CHECK_SONAME(sane,sane_init,,[SANE_CFLAGS=""],[$SANE_LIBS])],
+-             [SANE_CFLAGS=""])])
+-@@ -1311,7 +1311,7 @@ dnl **** Check for libgphoto2 ****
+- if test "x$with_gphoto" != "xno"
+- then
+-     WINE_PACKAGE_FLAGS(GPHOTO2,[libgphoto2],[-lgphoto2],
+--                       [`gphoto2-config --cflags 2>/dev/null`],[`gphoto2-config --libs 2>/dev/null`],
+-+                       [`${GPHOTO2_CONFIG:-gphoto2-config} --cflags 2>/dev/null`],[`${GPHOTO2_CONFIG:-gphoto2-config} --libs 2>/dev/null`],
+-         [AC_CHECK_HEADER(gphoto2-camera.h,
+-                         [AC_CHECK_LIB(gphoto2,gp_camera_new,
+-                                       [AC_DEFINE(HAVE_GPHOTO2, 1, [Define if we have the libgphoto2 development environment])],
+-@@ -1319,8 +1319,8 @@ then
+-                                       [$GPHOTO2_LIBS])],
+-                         [GPHOTO2_LIBS=""; GPHOTO2_CFLAGS=""])])
+-     WINE_PACKAGE_FLAGS(GPHOTO2_PORT,[libgphoto2_port],[-lgphoto2_port],
+--                       [`gphoto2-port-config --cflags 2>/dev/null`],
+--                       [`gphoto2-port-config --libs 2>/dev/null`],
+-+                       [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --cflags 2>/dev/null`],
+-+                       [`${GPHOTO2_PORT_CONFIG:-gphoto2-port-config} --libs 2>/dev/null`],
+-         [AC_CHECK_HEADER(gphoto2-port.h,
+-                         [AC_CHECK_LIB(gphoto2_port,gp_port_info_list_new,
+-                                       [AC_DEFINE(HAVE_GPHOTO2_PORT, 1, [Define if we have the libgphoto2_port development environment])],
+-@@ -1382,8 +1382,8 @@ dnl **** Check for FreeType 2 ****
+- if test "x$with_freetype" != "xno"
+- then
+-     WINE_PACKAGE_FLAGS(FREETYPE,[freetype2],[-lfreetype],
+--                       [`(freetype-config --cflags || freetype2-config --cflags) 2>/dev/null`],
+--                       [`(freetype-config --libs || freetype2-config --libs) 2>/dev/null`],
+-+                       [`(${FREETYPE_CONFIG:-freetype-config} --cflags || ${FREETYPE2_CONFIG:-freetype2-config} --cflags) 2>/dev/null`],
+-+                       [`(${FREETYPE_CONFIG:-freetype-config} --libs || ${FREETYPE2_CONFIG:-freetype2-config} --libs) 2>/dev/null`],
+-         [AC_CHECK_HEADERS([ft2build.h])
+-         if test "$ac_cv_header_ft2build_h" = "yes"
+-         then
+-@@ -1538,8 +1538,8 @@ AC_SUBST(CUPS_CFLAGS,"")
+- if test "x$with_cups" != "xno"
+- then
+-     ac_save_CPPFLAGS="$CPPFLAGS"
+--    ac_cups_cflags=`cups-config --cflags 2>/dev/null`
+--    ac_cups_libs=`cups-config --ldflags 2>/dev/null`
+-+    ac_cups_cflags=`${CUPS_CONFIG:-cups-config} --cflags 2>/dev/null`
+-+    ac_cups_libs=`${CUPS_CONFIG:-cups-config} --ldflags 2>/dev/null`
+-     CPPFLAGS="$CPPFLAGS $ac_cups_cflags"
+-     AC_CHECK_HEADERS(cups/cups.h,
+-             [WINE_CHECK_SONAME(cups,cupsGetDefault,
+--- 
+-2.6.4
+-
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 80c0f68..31db6c0 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 f33b45c18112b2071fbf9edee0e8c575407f9e2a9855ca4ee918ed33efa7c6f4 wine-1.8.tar.bz2
++sha256 149ad3daaf8593b36c5c061285df0ec2a25e20ea48c61323be91088c4d22ca97 wine-1.8.1.tar.bz2
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 2cd5c30..fc04027 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
+ 
+-WINE_VERSION = 1.8
++WINE_VERSION = 1.8.1
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
+ WINE_SITE = https://dl.winehq.org/wine/source/1.8
+ WINE_LICENSE = LGPLv2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_DEPENDENCIES = host-bison host-flex host-wine
+-# For 0001-sane-config-fix.patch
+-WINE_AUTORECONF = YES
+ 
+ # Wine needs its own directory structure and tools for cross compiling
+ WINE_CONF_OPTS = \
