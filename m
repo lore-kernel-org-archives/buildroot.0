@@ -1,92 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 22:03:59 +0100
-Subject: [Buildroot] [PATCH 1/1] font-awesome:new package
-In-Reply-To: <1455601427-20322-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1455601427-20322-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <20160216220359.6b79146a@free-electrons.com>
+Date: Tue, 16 Feb 2016 22:25:40 +0100
+Subject: [Buildroot] [PATCH 1/1] new package: jsen
+In-Reply-To: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+References: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+Message-ID: <20160216222540.64878554@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Atul,
+Atul,
 
-Thanks for this contribution! Looks mostly good, I have a few comments
-though, see below.
+Thanks also for this contribution. As usual, a few comments.
 
-On Tue, 16 Feb 2016 11:13:47 +0530, Atul Singh wrote:
->  Font Awesome is a full suite of 605 pictographic icons for easy
->  scalable vector graphics on websites.
+First, the title should be:
 
-Initial space at the beginning of each line is not needed.
+	jsen: new package
+
+As per our convention for naming the commits for new packages.
+
+On Tue, 16 Feb 2016 12:18:13 +0530, Atul Singh wrote:
 
 > diff --git a/package/Config.in b/package/Config.in
-> index a5b31aa..a2bd46e 100644
+> index a5b31aa..cb3a3c8 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -854,6 +854,7 @@ menu "Graphics"
->  	source "package/cairomm/Config.in"
->  	source "package/exiv2/Config.in"
->  	source "package/fltk/Config.in"
-> +	source "package/font-awesome/Config.in"
->  	source "package/fontconfig/Config.in"
->  	source "package/freetype/Config.in"
->  	source "package/gd/Config.in"
+> @@ -994,6 +994,7 @@ menu "JSON/XML"
+>  	source "package/expat/Config.in"
+>  	source "package/ezxml/Config.in"
+>  	source "package/jansson/Config.in"
+> +	source "package/jsen/Config.in"
+>  	source "package/json-c/Config.in"
+>  	source "package/json-glib/Config.in"
+>  	source "package/jsoncpp/Config.in"
 
-This package should rather go in the "Fonts, cursors, icons, sounds and
-themes" menu, sub-menu "Icons".
+I am not sure JSON/XML is the appropriate place. Yes, jsen is related
+to JSON, but I believe its main characteristic is that it is a
+Javascript library. So it should probably go under the Javascript menu,
+where we already have another package named json-javascript.
 
-> diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+Yegor, what do you think? If the number of Javascript libraries becomes
+really huge, then we can start creating sub-categories. But it is too
+early to do this now.
+
+> diff --git a/package/jsen/jsen.mk b/package/jsen/jsen.mk
 > new file mode 100644
-> index 0000000..acaa3d8
+> index 0000000..e939739
 > --- /dev/null
-> +++ b/package/font-awesome/font-awesome.mk
-> @@ -0,0 +1,23 @@
+> +++ b/package/jsen/jsen.mk
+> @@ -0,0 +1,32 @@
 > +################################################################################
 > +#
-> +# font-awesome
+> +# jsen
 > +#
 > +################################################################################
 > +
-> +FONT_AWESOME_VERSION = v4.5.0
-> +FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
-> +FONT_AWESOME_LICENSE = OFLv1.1, MIT
-
-License would be more precise with:
-
-	OFLv1.1 (font), MIT (CSS, LESS and Sass files)
-
-> +FONT_AWESOME_LICENSE_FILES = css/font-awesome.css
-
-This is not a license text, it only repeats that it's under OFLv1.1
-(font) and MIT (CSS). So I'd say, just don't specify any LICENSE_FILES.
-
-> +FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
-
-Out of curiosity, can you explain in which situation are the "less" and
-"scss" directories useful ?
-
-> +define FONT_AWESOME_INSTALL_TARGET_CMDS
+> +JSEN_VERSION = v0.6.0
+> +JSEN_SITE = $(call github,bugventure,jsen,$(JSEN_VERSION))
+> +JSEN_LICENSE = MIT
+> +JSEN_LICENSE_FILES = LICENSE
+> +JSEN_DIRECTORIES_LIST = dist lib
+> +JSEN_ROOT_FILES_LIST = index.js
+> +
+> +define JSEN_INSTALL_TARGET_CMDS
 > +	# Install required directories
-
-Comment is not very useful.
-
-> +	for dir in $(FONT_AWESOME_DIRECTORIES_LIST); \
+> +	for dir in $(JSEN_DIRECTORIES_LIST); \
 > +	do \
-> +		$(INSTALL) -d $(TARGET_DIR)/usr/share/font-awesome/$$dir && \
-> +		$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/font-awesome/$$dir \
+> +		$(INSTALL) -d $(TARGET_DIR)/usr/share/jsen/$$dir && \
+> +		$(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/jsen/$$dir \
 > +			$(@D)/$$dir/*.* || exit 1; \
+> +	done
+> +
+> +	# Install required files from the root directory
+> +	for file in $(JSEN_ROOT_FILES_LIST); \
+> +	do \
+> +		$(INSTALL) -D -m 0644 $(@D)/$$file \
+> +			$(TARGET_DIR)/usr/share/jsen/$$file \
+> +			|| exit 1; \
+> +	done
+> +endef
 
-We generally use "cp -dpfr" to copy full directories. What about simply:
+I think this is more complicated than it needs to be. What about:
 
-	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
-	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
-		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
+define JSEN_INSTALL_TARGET_CMDS
+	mkdir -p $(TARGET_DIR)/usr/share/jsen
+	$(foreach d,dist lib index.js,\
+		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/jsen/$(sep))
+endef
 
-Could you take into account those comments, and send an updated version?
+As a side note, I am wondering if we shouldn't create some common
+infrastructure to simplify all those packages that just need to "copy"
+stuff. Either a special variable in the generic-package infrastructure,
+or a separate "copy-package" infrastructure that provides a special
+variable that allows the package to list "stuff to be copied" and
+another listing "where to copy". But that's clearly beyond the scope of
+your patch, so don't worry about this.
 
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
