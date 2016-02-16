@@ -1,59 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Feb 2016 23:35:07 +0100
-Subject: [Buildroot] [PATCH 1/1] Declare SED Makefile instead of
- package/Makefile.in so it exists globally.
-In-Reply-To: <20160216213554.60f53246@free-electrons.com>
-References: <20160216161010.779981bb@free-electrons.com>
- <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
- <20160216213554.60f53246@free-electrons.com>
-Message-ID: <56C3A41B.7070200@mind.be>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Tue, 16 Feb 2016 23:56:17 +0100
+Subject: [Buildroot] libcapn build failure
+In-Reply-To: <20160216233311.2c448df5@free-electrons.com>
+References: <56C1F90F.80804@proximus.be>
+ <CAHXCMMJf4JHRKoCZ_B9eMWXf+rXX+xNgi=e2Qzm_mJi8ULBRvg@mail.gmail.com>
+ <56C3A2B8.5030309@proximus.be> <20160216233311.2c448df5@free-electrons.com>
+Message-ID: <56C3A911.7060502@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alvaro,
+Dear Thomas
 
- In addition to Thomas's comments, please use your full name in the
-Signed-off-by line.
+Op 16/02/2016 om 23:33 schreef Thomas Petazzoni:
+> Dear Johan Sagaert,
+>
+> On Tue, 16 Feb 2016 23:29:12 +0100, Johan Sagaert wrote:
+>
+>> git clonehttps://github.com/adobkin/libcapn.git
+>> git submodule update --init      <<<---------- This downloads the jansson source.
+> We already have a jansson package in Buildroot, so you should rather
+> make your package "select" it, and then tweak your package so that it
+> uses the Buildroot-built jansson rather than its own internal copy.
+>
+> Best regards,
+>
+> Thomas
+I agree,
+It is even the same version as in buildroot, and
+it would make the submodule downloadunnecessary.
 
-On 16-02-16 21:35, Thomas Petazzoni wrote:
-> Hello,
-> 
-> The title is too long, it should be:
-> 
-> 	Makefile: declare SED globally
-> 
-> or something like that.
-> 
-> On Tue, 16 Feb 2016 16:15:26 +0100, Alvaro G. M wrote:
->> In particular, this allows the use of buildroot-submodule and in general,
->> any use of buildroot from out of tree.
-> 
-> This commit log should be improved, because:
-> 
->  1/ Why should we care about buildroot-submodule, and if we care, what
->     is the actual problem ?
-> 
->  2/ What do you mean by "use Buildroot from out of tree" ? I do out of
->     tree builds every day and it works just fine. So this aspect needs
->     to be detailed.
-> 
-> I have nothing against the change, which is fairly simple, but it needs
-> to be justified properly.
+If you could give me some info how i could modify CMakeLists.txt so it
+tests for the jansson library and uses that for linking.
 
- I suspect we're not going to like the justification :-)
+Thanks
 
-
- Regards,
- Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Johan
