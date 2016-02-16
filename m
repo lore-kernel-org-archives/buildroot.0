@@ -1,40 +1,42 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 16 Feb 2016 12:55:30 +0100
-Subject: [Buildroot] [v3,
-	0/4] Supporting building a second Barebox config
-In-Reply-To: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
-Message-ID: <CAGm1_kuA6pdj4KJ_TT26f4kfgSYaFMjKiV4T4gLTn-2HsQspeg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Feb 2016 10:16:52 -0300
+Subject: [Buildroot] [PATCH] squid: bump to version 3.5.14
+Message-ID: <1455628612-14123-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pieter,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Wed, Jan 20, 2016 at 11:43 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> This patch-set in 4 parts adds support for building barebox with up to 2
-> configurations. It can be used to build the barebox x-loader or MLO (also
-> called Secondary Program Loader) in addition to the standard barebox build
-> (Tertiary Program Loader). This implements the design proposed in
-> http://elinux.org/Buildroot#Todo_list:
-> 1. Have boot/barebox/ containing the common stuff.
-> 2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
-> 3. There is only one version selection, but each package allows to
->    define the configuration to be used.
-> 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
->    but share a lot of common definitions between the packages.
->
-> To demonstrate that it works as advertized, the last patch adds a defconfig for
-> the beaglebone black that makes use of the added functionality.
-
-I've applied the patches and built both MLO and barebox.bin binaries.
-The patches are working as expected.
-
-I have following use case: I have one board, but want provide
-different environment scripts per project. These scripts should be
-stored in BR2_EXTERNAL folder. I'd like to also embed them into
-barebox.bin. How can I do it in BR?
-
-Yegor
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 97fb45d..f86c09a 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.13.tar.bz2.asc
+-md5	3fccd1c072433bb896374a832f608b7d	squid-3.5.13.tar.bz2
+-sha1	9bf3b803752c019cb2ddf15afa20f21fa9d385e3	squid-3.5.13.tar.bz2
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.14.tar.bz2.asc
++md5	d589a2dd8ea8867170cef582e7334442	squid-3.5.14.tar.bz2
++sha1	f6a0262b09f7f463822cbdb50bac8f5dd1213d27	squid-3.5.14.tar.bz2
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index f205da2..2b7a9a2 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).13
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
+-- 
+2.4.10
