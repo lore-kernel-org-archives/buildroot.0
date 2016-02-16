@@ -1,83 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Feb 2016 16:08:31 +0100
-Subject: [Buildroot] [PATCH v2] Don't build host-cmake if it is
- available on the build host
-In-Reply-To: <CAHXCMMK33AqXM7wEQPCDycgiRWJJMxDcUH-+ZWW0pX7tYmAq-Q@mail.gmail.com>
-References: <1454670476-20635-1-git-send-email-luca@lucaceresoli.net>
- <CAHXCMMK33AqXM7wEQPCDycgiRWJJMxDcUH-+ZWW0pX7tYmAq-Q@mail.gmail.com>
-Message-ID: <56C33B6F.8080704@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 16 Feb 2016 16:10:10 +0100
+Subject: [Buildroot] $(SED) not defined if 'make menuconfig
+ savedefconfig'
+In-Reply-To: <CAM+bi4vPDjVgiAiXV-ch9jbOo=B04dSce3w3QRsVfsxMgAYpzg@mail.gmail.com>
+References: <CAM+bi4tjaJB2bJuQ40_cap55ZrEmOYg4Ssz+TMM_zg5Cb0yo6A@mail.gmail.com>
+ <20150615153742.02ebdb85@free-electrons.com>
+ <20150615142011.GA16458@dkarchlinux64.currentcomm.com>
+ <CAM+bi4vL3aa+RO30s7ScAti=yykL+woGXpA=KaQMMgAd3HEd-g@mail.gmail.com>
+ <CAM+bi4vPDjVgiAiXV-ch9jbOo=B04dSce3w3QRsVfsxMgAYpzg@mail.gmail.com>
+Message-ID: <20160216161010.779981bb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Alvaro,
 
+On Tue, 16 Feb 2016 12:46:55 +0100, Alvaro Gamez wrote:
 
-On 16-02-16 14:55, Samuel Martin wrote:
-> Hi Luca, all,
+> > I've just tested it too and can confirm that this fixes the problem and my
+> > particular use case with buildroot-submodule.
+> >
+> > Tested-by: Alvaro G. M. <alvaro.gamez@hazent.com>
+> >
+> >
+> I just wanted to query about the status of this patch. I haven't found it
+> on patchwork, probably because it wasn't sent as a PATCH email on itself,
+> but it was tested by Doug and me.
 > 
-> On Fri, Feb 5, 2016 at 12:07 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
-[snip]
->> > Finally, we do skip adding the dependency on host-cmake for all cmake
->> > packages when $(BUILD_HOST_CMAKE) != YES.
-> Sorry for not spotting this earlier, but:
-> host-cmake has a dependency on host-pkgconf, which cmake (the host
-> program) may use at runtime to find the dependencies when it is
-> configuring a project.
-> In the BR host tree, pkg-config is a wrapper with environment
-> variables correctly preset to find stuff in the sysroot tree by
-> default.
-> 
-> Here is a test case:
-> 
-> A is a cmake-package depending on B.
-> B is a generic-package providing a *.pc file.
-> CMake uses its FindPkgConfig module to detect B.
-> 
-> So, currently we got:
-> - A depends on: B and host-cmake
-> - host-cmake depends on host-pkgconf
-> - When configuring A, host-cmake should use host-pkgconf to find B
-> 
-> With this patch, in the case cmake build is skipped, we get:
-> - A depends on: B
-> - When configuring A, cmake (from the host system) may use pkg-config
-> (from the host system) to find B, but this pkg-config won't have the
-> env. vars. correctly set to find B in the sysroot. In the best case,
-> it won't find B, in the worst case it will try to link against B from
-> the host system.
-> 
-> I'm not sure what it the best and clean way to handle this...
-> Maybe $(BUILD_HOST_CMAKE) != YES should be use to noop the
-> HOST_CMAKE_{CONFIGURE,BUILD,INSTALLL}_CMDS commands, but we keep the
-> dependency on host-cmake, so we don't lose host-cmake's dependencies.
-> 
-> Any thought about this?
+> I can confirm it still applies and works as intended. If you need me to, I
+> can git-email it.
 
- The correct approach would be to add explicit dependencies on host-pkgconf for
-packages that need it, just like we do for autotools packages.
+Indeed this patch is not in patchwork. And if a patch is not in
+patchwork, we will definitely forget about it. We have several hundreds
+of patches already in patchwork, so we can hardly keep track of patches
+that were not submitted in a form that allows them to be tracked by
+patchwork.
 
- The difficulty is of course finding out which packages need host-pkgconf. It
-seems it's not as simple as searching for FindPkgConfig in the CMakeLists.txt
-files of each cmake package, because there are other modules that implicitly use
-this. So we'd have to make a list of all those modules and check for all of
-them. And then of course there are the packages that install new cmake modules
-that use this, but which don't use FindPkgConfig (or even cmake) themselves...
+So, it would be really good if you could submit this patch with 'git
+send-email'.
 
- In 3d475ee0 you added the unconditional host-pkgconf dependency to work around
-this problem. If we remove that dependency, the autobuilders should detect the
-missing host-pkgconf dependencies even when host-cmake is used.
+Thanks a lot!
 
- Regards,
- Arnout
-
-[snip]
-
+Thomas
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
