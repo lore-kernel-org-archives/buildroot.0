@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:33:12 +0100
-Subject: [Buildroot] [git commit] postgresql: security bump to version 9.4.6
-Message-ID: <20160216203412.1B2E38180F@busybox.osuosl.org>
+Date: Tue, 16 Feb 2016 21:33:56 +0100
+Subject: [Buildroot] [git commit] squid: security bump to version 3.5.14
+Message-ID: <20160216203412.3E87F7FEEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd80d3c03185dfd0ef1c214c98da35e61f0737c5
+commit: https://git.buildroot.net/buildroot/commit/?id=d389858d0c6de0743cb07674624f4d5b93b3bc4a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-CVE-2016-0766 - privilege escalation issue for users of PL/Java.
-CVE-2016-0773 - issue with regular expression (regex) parsing. Prior
-code allowed users to pass in expressions which included out-of-range
-Unicode characters, triggering a backend crash. This issue is critical
-for PostgreSQL systems with untrusted users or which generate regexes
-based on user input.
+SQUID-2016:1 - Remote Denial of service issue in SSL/TLS processing.
+
+CVE-2016-2390 assigned.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 97bb56d..9015e99 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.5/postgresql-9.4.5.tar.bz2.sha256
--sha256	b87c50c66b6ea42a9712b5f6284794fabad0616e6ae420cf0f10523be6d94a39  postgresql-9.4.5.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.4.6/postgresql-9.4.6.tar.bz2.sha256
-+sha256	cbce1f4d01a6142c5d8bebe125623c5198ec04f363da7dd3d3b3a4100b4140a6  postgresql-9.4.6.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index a42fe73..444c1b1 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 97fb45d..f86c09a 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.13.tar.bz2.asc
+-md5	3fccd1c072433bb896374a832f608b7d	squid-3.5.13.tar.bz2
+-sha1	9bf3b803752c019cb2ddf15afa20f21fa9d385e3	squid-3.5.13.tar.bz2
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.14.tar.bz2.asc
++md5	d589a2dd8ea8867170cef582e7334442	squid-3.5.14.tar.bz2
++sha1	f6a0262b09f7f463822cbdb50bac8f5dd1213d27	squid-3.5.14.tar.bz2
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index f205da2..2b7a9a2 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--POSTGRESQL_VERSION = 9.4.5
-+POSTGRESQL_VERSION = 9.4.6
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).13
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
