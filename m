@@ -1,32 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 16 Feb 2016 10:32:50 -0300
-Subject: [Buildroot] [PATCH] graphite2: security bump to version 1.3.5
-In-Reply-To: <20160215224355.5896546e@free-electrons.com>
-References: <1455554749-11434-1-git-send-email-gustavo@zacarias.com.ar>
- <20160215224355.5896546e@free-electrons.com>
-Message-ID: <56C32502.8010204@zacarias.com.ar>
+Date: Tue, 16 Feb 2016 10:33:33 -0300
+Subject: [Buildroot] [PATCH] graphite2: switch homepage
+Message-ID: <1455629613-16164-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/02/16 18:43, Thomas Petazzoni wrote:
+Point to the official/proper one.
 
-> Note that our graphite2/Config.in points to
-> http://sourceforge.net/projects/silgraphite/, which states:
->
-> """
-> This project has been deprecated. Graphite2, a new version of the
-> Graphite engine, is available at: https://github.com/silnrsi/graphite
-> with its own bug tracker.
-> """
->
-> Best regards,
->
-> Thomas
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/graphite2/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi.
-Yes, it's pointing to the old home page, i'll send a followup patch 
-changing that, thanks.
-Regards.
+diff --git a/package/graphite2/Config.in b/package/graphite2/Config.in
+index 0ec07a2..5499e17 100644
+--- a/package/graphite2/Config.in
++++ b/package/graphite2/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_GRAPHITE2
+ 	  groups to provide cross-platform rendering for complex
+ 	  writing systems.
+ 
+-	  http://sourceforge.net/projects/silgraphite/
++	  http://graphite.sil.org/
+ 
+ comment "graphite2 needs a toolchain w/ C++, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+-- 
+2.4.10
