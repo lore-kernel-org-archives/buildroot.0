@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:33:56 +0100
-Subject: [Buildroot] [git commit] squid: security bump to version 3.5.14
-Message-ID: <20160216203412.3E87F7FEEF@busybox.osuosl.org>
+Date: Tue, 16 Feb 2016 21:35:54 +0100
+Subject: [Buildroot] [PATCH 1/1] Declare SED Makefile instead of
+ package/Makefile.in so it exists globally.
+In-Reply-To: <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
+References: <20160216161010.779981bb@free-electrons.com>
+ <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
+Message-ID: <20160216213554.60f53246@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d389858d0c6de0743cb07674624f4d5b93b3bc4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-SQUID-2016:1 - Remote Denial of service issue in SSL/TLS processing.
+The title is too long, it should be:
 
-CVE-2016-2390 assigned.
+	Makefile: declare SED globally
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+or something like that.
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 97fb45d..f86c09a 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.13.tar.bz2.asc
--md5	3fccd1c072433bb896374a832f608b7d	squid-3.5.13.tar.bz2
--sha1	9bf3b803752c019cb2ddf15afa20f21fa9d385e3	squid-3.5.13.tar.bz2
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.14.tar.bz2.asc
-+md5	d589a2dd8ea8867170cef582e7334442	squid-3.5.14.tar.bz2
-+sha1	f6a0262b09f7f463822cbdb50bac8f5dd1213d27	squid-3.5.14.tar.bz2
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index f205da2..2b7a9a2 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).13
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).14
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
+On Tue, 16 Feb 2016 16:15:26 +0100, Alvaro G. M wrote:
+> In particular, this allows the use of buildroot-submodule and in general,
+> any use of buildroot from out of tree.
+
+This commit log should be improved, because:
+
+ 1/ Why should we care about buildroot-submodule, and if we care, what
+    is the actual problem ?
+
+ 2/ What do you mean by "use Buildroot from out of tree" ? I do out of
+    tree builds every day and it works just fine. So this aspect needs
+    to be detailed.
+
+I have nothing against the change, which is fairly simple, but it needs
+to be justified properly.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
