@@ -1,109 +1,86 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Tue, 16 Feb 2016 11:21:19 +0000
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: update python variable patch
-Message-ID: <1455621680-28674-1-git-send-email-martin@barkynet.com>
+Date: Tue, 16 Feb 2016 11:21:20 +0000
+Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 5.6.0
+In-Reply-To: <1455621680-28674-1-git-send-email-martin@barkynet.com>
+References: <1455621680-28674-1-git-send-email-martin@barkynet.com>
+Message-ID: <1455621680-28674-2-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update 0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-for v5.5.0 to include the js2c.py tool.
-
-Fixes:
-http://autobuild.buildroot.net/results/87e9bbbb36f7fe4868d238ef6a7b72eb8cca7052/
-http://autobuild.buildroot.net/results/f748c0956f71a7857d5cc9ae7bfe3c14357a078a/
+This is an important security release. See
+https://nodejs.org/en/blog/release/v5.6.0/ for further details
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
 
 v1 -> v2
- - new in v2, split out from patch to bump node to v5.6.0
- - hand crafted patch to minimise changes
+ - split updated 0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+   into a separate patch because it also is needed for
+   v5.5.0 (Suggested by Thomas Petazzoni)
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 ---
- ...hon-variable-instead-of-hardcoding-Python.patch | 25 ++++++++++++++++------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+ .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
+ .../{5.5.0 => 5.6.0}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
+ .../0003-Use-a-python-variable-instead-of-hardcoding-Python.patch     | 0
+ package/nodejs/{5.5.0 => 5.6.0}/0004-Fix-va_list-not-declared.patch   | 0
+ package/nodejs/{5.5.0 => 5.6.0}/0005-Fix-support-for-uClibc-ng.patch  | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 7 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/nodejs/{5.5.0 => 5.6.0}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
+ rename package/nodejs/{5.5.0 => 5.6.0}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
+ rename package/nodejs/{5.5.0 => 5.6.0}/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch (100%)
+ rename package/nodejs/{5.5.0 => 5.6.0}/0004-Fix-va_list-not-declared.patch (100%)
+ rename package/nodejs/{5.5.0 => 5.6.0}/0005-Fix-support-for-uClibc-ng.patch (100%)
 
-diff --git a/package/nodejs/5.5.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/5.5.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-index 3104644..4d8d715 100644
---- a/package/nodejs/5.5.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-+++ b/package/nodejs/5.5.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
-@@ -16,15 +16,17 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Martin Bark <martin@barkynet.com>
- [yann.morin.1998 at free.fr: adapt to 4.1.2]
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+[Martin: adapt to 5.5.0]
-+Signed-off-by: Martin Bark <martin@barkynet.com>
- ---
-  deps/v8/tools/gyp/v8.gyp | 8 ++++----
-  1 file changed, 4 insertions(+), 4 deletions(-)
+diff --git a/package/nodejs/5.5.0/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.6.0/0001-Remove-dependency-on-Python-bz2-module.patch
+similarity index 100%
+rename from package/nodejs/5.5.0/0001-Remove-dependency-on-Python-bz2-module.patch
+rename to package/nodejs/5.6.0/0001-Remove-dependency-on-Python-bz2-module.patch
+diff --git a/package/nodejs/5.5.0/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.6.0/0002-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/5.5.0/0002-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/5.6.0/0002-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/5.5.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch b/package/nodejs/5.6.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+similarity index 100%
+rename from package/nodejs/5.5.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+rename to package/nodejs/5.6.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+diff --git a/package/nodejs/5.5.0/0004-Fix-va_list-not-declared.patch b/package/nodejs/5.6.0/0004-Fix-va_list-not-declared.patch
+similarity index 100%
+rename from package/nodejs/5.5.0/0004-Fix-va_list-not-declared.patch
+rename to package/nodejs/5.6.0/0004-Fix-va_list-not-declared.patch
+diff --git a/package/nodejs/5.5.0/0005-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.6.0/0005-Fix-support-for-uClibc-ng.patch
+similarity index 100%
+rename from package/nodejs/5.5.0/0005-Fix-support-for-uClibc-ng.patch
+rename to package/nodejs/5.6.0/0005-Fix-support-for-uClibc-ng.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index cdf7705..bec0eee 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
  
- diff --git a/deps/v8/tools/gyp/v8.gyp b/deps/v8/tools/gyp/v8.gyp
--index c703155..06c0b2b 100644
-+index 1e5705d..e2e5dfe 100644
- --- a/deps/v8/tools/gyp/v8.gyp
- +++ b/deps/v8/tools/gyp/v8.gyp
--@@ -1696,14 +1696,14 @@
-+@@ -1723,14 +1723,14 @@
-                        '<(PRODUCT_DIR)/natives_blob_host.bin',
-                      ],
-                      'action': [
-@@ -41,7 +43,7 @@ index c703155..06c0b2b 100644
-                      ],
-                    }],
-                  ],
--@@ -1712,7 +1712,7 @@
-+@@ -1739,7 +1739,7 @@
-                    '<(PRODUCT_DIR)/natives_blob.bin',
-                  ],
-                  'action': [
-@@ -50,7 +52,7 @@ index c703155..06c0b2b 100644
-                  ],
-                }],
-              ],
--@@ -1812,7 +1812,7 @@
-+@@ -1847,7 +1847,7 @@
-              '<(SHARED_INTERMEDIATE_DIR)/libraries.cc',
-            ],
-            'action': [
-@@ -59,7 +61,7 @@ index c703155..06c0b2b 100644
-              '../../tools/js2c.py',
-              '<(SHARED_INTERMEDIATE_DIR)/libraries.cc',
-              'CORE',
--@@ -1838,7 +1838,7 @@
-+@@ -1873,7 +1873,7 @@
-              '<(SHARED_INTERMEDIATE_DIR)/experimental-libraries.cc',
-            ],
-            'action': [
-@@ -68,7 +70,16 @@ index c703155..06c0b2b 100644
-              '../../tools/js2c.py',
-              '<(SHARED_INTERMEDIATE_DIR)/experimental-libraries.cc',
-              'EXPERIMENTAL',
--@@ -1863,7 +1863,7 @@
-+@@ -1898,7 +1898,7 @@
-+             '<(SHARED_INTERMEDIATE_DIR)/code-stub-libraries.cc',
-+           ],
-+           'action': [
-+-            'python',
-++            '<(python)',
-+             '../../tools/js2c.py',
-+             '<(SHARED_INTERMEDIATE_DIR)/code-stub-libraries.cc',
-+             'CODE_STUB',
-+@@ -1923,7 +1923,7 @@
-              '<(SHARED_INTERMEDIATE_DIR)/extras-libraries.cc',
-            ],
-            'action': [
-@@ -77,7 +88,7 @@ index c703155..06c0b2b 100644
-              '../../tools/js2c.py',
-              '<(SHARED_INTERMEDIATE_DIR)/extras-libraries.cc',
-              'EXTRAS',
--@@ -1900,7 +1900,7 @@
-+@@ -1960,7 +1960,7 @@
-                '<(SHARED_INTERMEDIATE_DIR)/debug-support.cc',
-              ],
-              'action': [
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "5.5.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "5.6.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.41"
+ 
+ menu "Module Selection"
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index e65f14a..ccad648 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.41/SHASUMS256.txt
+ sha256	79f694e2a5c42543b75d0c69f6860499d7593136d0f6b59e7163b9e66fb2c995  node-v0.10.41.tar.gz
+ 
+-# From upstream URL: http://nodejs.org/dist/v5.5.0/SHASUMS256.txt
+-sha256  9c46b4dc9548e43826f71f6571f56e39783c456b9516045b496ea73321731e22  node-v5.5.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v5.6.0/SHASUMS256.txt
++sha256  588341e466ac72f6b8e9fa500f04edf149f7d4e8141c4175c495d6d1484405e3  node-v5.6.0.tar.xz
 -- 
 2.5.0
