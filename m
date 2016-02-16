@@ -1,35 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:07:33 +0100
-Subject: [Buildroot] [PATCH 1/3] package/dovecot: Remove bzip2 and zlib
- options
-In-Reply-To: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455137899-18008-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160216230733.3c4f4542@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Feb 2016 23:08:47 +0100
+Subject: [Buildroot] [PATCH v2] Don't build host-cmake if it is
+ available on the build host
+In-Reply-To: <56C353FF.1030907@lucaceresoli.net>
+References: <1454670476-20635-1-git-send-email-luca@lucaceresoli.net>
+ <CAHXCMMK33AqXM7wEQPCDycgiRWJJMxDcUH-+ZWW0pX7tYmAq-Q@mail.gmail.com>
+ <56C33B6F.8080704@mind.be> <56C353FF.1030907@lucaceresoli.net>
+Message-ID: <56C39DEF.2070603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
-
-On Wed, 10 Feb 2016 21:58:17 +0100, Bernd Kuhls wrote:
-> The next patch of this series will add optional xz and lz4 support, to
-> avoid adding new options for these compression packages simplify the
-> configuration of dovecot by removing the options handling optional
-> compression support.
+On 16-02-16 17:53, Luca Ceresoli wrote:
+> Hi Samuel, Arnout,
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  Config.in.legacy           | 14 ++++++++++++++
->  package/dovecot/Config.in  | 12 ------------
->  package/dovecot/dovecot.mk |  4 ++--
->  3 files changed, 16 insertions(+), 14 deletions(-)
+> On 16/02/2016 16:08, Arnout Vandecappelle wrote:
+>>
+>>
+>> On 16-02-16 14:55, Samuel Martin wrote:
+>>> Hi Luca, all,
+>>>
+>>> On Fri, Feb 5, 2016 at 12:07 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>> [snip]
+>>>>> Finally, we do skip adding the dependency on host-cmake for all cmake
+>>>>> packages when $(BUILD_HOST_CMAKE) != YES.
+>>> Sorry for not spotting this earlier, but:
+>>> host-cmake has a dependency on host-pkgconf, which cmake (the host
+>>> program) may use at runtime to find the dependencies when it is
+>>> configuring a project.
+>>> In the BR host tree, pkg-config is a wrapper with environment
+>>> variables correctly preset to find stuff in the sysroot tree by
+>>> default.
+>>>
+>>> Here is a test case:
+>>>
+>>> A is a cmake-package depending on B.
+>>> B is a generic-package providing a *.pc file.
+>>> CMake uses its FindPkgConfig module to detect B.
+>>>
+>>> So, currently we got:
+>>> - A depends on: B and host-cmake
+>>> - host-cmake depends on host-pkgconf
+>>> - When configuring A, host-cmake should use host-pkgconf to find B
+>>>
+>>> With this patch, in the case cmake build is skipped, we get:
+>>> - A depends on: B
+>>> - When configuring A, cmake (from the host system) may use pkg-config
+>>> (from the host system) to find B, but this pkg-config won't have the
+>>> env. vars. correctly set to find B in the sysroot. In the best case,
+>>> it won't find B, in the worst case it will try to link against B from
+>>> the host system.
+> 
+> Thanks for the insight.
+> 
+> I wonder whether we can do anything in toolchainfile.cmake to prevent
+> cmake from using the pkg-config on the system. Don't the following lines
+> already do it? [Disclaimer: I'm in a hurry and checking the docs _now_
+> would take too long]
+> 
+>   set(CMAKE_PROGRAM_PATH "${RELOCATED_HOST_DIR}/usr/bin")
+>   set(CMAKE_FIND_ROOT_PATH "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+>   set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+>   set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
+>   set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+>   set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
-All three patches applied on master, thanks!
+ This will add the host dir to the program path, but not stop it from searching
+/usr/bin.
 
-Thomas
+ Maybe we should always put a fake pkg-config script in $(HOST_DIR)/usr/bin that
+always returns false. This script will be overwritten by host-pkgconf, so
+anything that tries to use it without depending on host-pkgconf will get a
+failure, and the pkg-config from /usr/bin/ is completely avoided. Well, this
+script should be smart enough to still work for host packages...
+
+>>>
+>>> I'm not sure what it the best and clean way to handle this...
+>>> Maybe $(BUILD_HOST_CMAKE) != YES should be use to noop the
+>>> HOST_CMAKE_{CONFIGURE,BUILD,INSTALLL}_CMDS commands, but we keep the
+>>> dependency on host-cmake, so we don't lose host-cmake's dependencies.
+>>>
+>>> Any thought about this?
+>>
+>>  The correct approach would be to add explicit dependencies on host-pkgconf for
+>> packages that need it, just like we do for autotools packages.
+>>
+>>  The difficulty is of course finding out which packages need host-pkgconf. It
+>> seems it's not as simple as searching for FindPkgConfig in the CMakeLists.txt
+>> files of each cmake package, because there are other modules that implicitly use
+>> this. So we'd have to make a list of all those modules and check for all of
+>> them. And then of course there are the packages that install new cmake modules
+>> that use this, but which don't use FindPkgConfig (or even cmake) themselves...
+>>
+>>  In 3d475ee0 you added the unconditional host-pkgconf dependency to work around
+>> this problem. If we remove that dependency, the autobuilders should detect the
+>> missing host-pkgconf dependencies even when host-cmake is used.
+> 
+> The workaround Samuel added in that commit is in package/cmake/cmake.mk:
+> 
+>   +HOST_CMAKE_DEPENDENCIES = host-pkgconf
+> 
+> This could probably ported to my patch in package/pkg-cmake.mk:
+> 
+>   +ifeq ($$(BUILD_HOST_CMAKE),YES)
+>    $(2)_DEPENDENCIES += host-cmake
+>   +else
+>   +$(2)_DEPENDENCIES += host-pkgconf
+>   +endif
+> 
+> But I agree with Arnout that if a package actually uses pkg-conf, it
+> should depend on it. Of course this means it must fail when the
+> dependency is missing, not use the system pkg-conf.
+
+ Ack that.
+
+ Regards,
+ Arnout
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
