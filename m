@@ -1,12 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 21:28:04 +0100
+Date: Tue, 16 Feb 2016 21:30:23 +0100
 Subject: [Buildroot] [PATCH 1/1] package/iputils: patch ping to link
  against libm
-In-Reply-To: <20160216190329.GO14809@waldemar-brodkorb.de>
+In-Reply-To: <CAFGQKxdemRmCT51fvTuTOeYWeOv9y3Tv2nY=wUdpVKtePUf0bQ@mail.gmail.com>
 References: <1455541206-18200-1-git-send-email-martin@barkynet.com>
  <20160215231703.2052c7e0@free-electrons.com>
  <20160216190329.GO14809@waldemar-brodkorb.de>
-Message-ID: <20160216212804.7a56f3a7@free-electrons.com>
+ <CAFGQKxdemRmCT51fvTuTOeYWeOv9y3Tv2nY=wUdpVKtePUf0bQ@mail.gmail.com>
+Message-ID: <20160216213023.14b06e86@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +16,31 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 16 Feb 2016 20:03:29 +0100, Waldemar Brodkorb wrote:
+On Tue, 16 Feb 2016 19:58:13 +0000, Martin Bark wrote:
 
-> The root of the problem is rather simple. When you use math library
-> functions you are required to link libm explicitely. I think for
-> historical reasons. For musl this is no issue as everything is
-> included in libc.so. In uClibc world you have the choice and could simply
-> build a system without any math library. 
-> GNU libc seems to have weak aliases for finitef even in libc.so:
-> nm output/build/glibc-2.22/build/libc.so|grep finitef                                                                                                      
-> 0002ba9c W finitef
-> 0002ba9c T __finitef
-> 0002ba9c t __GI___finitef
+> I can't reproduce the issues you see.  I just ran some more tests and
+> for me iputils fails with undefined reference to `__finite' when built
+> against uClibc regardless of BR2_ENABLE_DEBUG=y.  I had a defconfig
+> with only BR2_PACKAGE_IPUTILS=y.
 > 
-> So linking with GNU libc does not fail for iputils even without -lm.
-> 
-> Not sure, I cannot find every libm function, but some. tgamma or
-> exp10 is not referenced in libc.so.
-> 
-> May be Mike can explain the Glibc behaviour?
-> 
-> The finite macros where added here:
-> http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/include/math.h?id=21902b578e96fd6b85b9bcda8a0e929fc844ec51
-> So 1.0.10 is the first release containing this BSD specific
-> functions in a usable way.
-> 
-> I think BR2_*DEBUG* option is not related to this error.
+> I looked at the autobuild fails for iputils from here
+> http://autobuild.buildroot.org/?reason=iputils-c8ff6feaf0442f8efd96ccb415770c54f9e84d47
+> and there are lots of fails without BR2_ENABLE_DEBUG=y
 
-OK, but how do you explain that:
+All failures occur with the internal toolchain backend, i.e when using
+the latest uClibc-ng version. So it seems to me that the failure
+started to exist in a recent uClibc-ng version: the pre-built uClibc
+toolchains that are based on uClibc-ng 1.0.9 do not exhibit the problem.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_IPUTILS=y
-# BR2_TARGET_ROOTFS_TAR is not set
+> > The finite macros where added here:
+> > http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/include/math.h?id=21902b578e96fd6b85b9bcda8a0e929fc844ec51
+> > So 1.0.10 is the first release containing this BSD specific
+> > functions in a usable way.
 
-Builds just fine (and uses uClibc 1.0.9) ?
+Which would probably match with Waldemar's change in 1.0.10.
+
+Waldemar, can you conrfirm? If those functions are only available
+starting in 1.0.10, how can iputils build with 1.0.9 ?
 
 Thanks,
 
