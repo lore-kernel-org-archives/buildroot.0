@@ -1,104 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:06:40 +0100
-Subject: [Buildroot] [git commit] package/dovecot: Remove bzip2 and zlib
-	options
-Message-ID: <20160216220706.144F681836@busybox.osuosl.org>
+Date: Tue, 16 Feb 2016 23:06:55 +0100
+Subject: [Buildroot] [git commit] package/dovecot: add optional support for
+	xz
+Message-ID: <20160216220706.2769A7FD2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f39ac4d288858989782c8321f9da78236a11a3c9
+commit: https://git.buildroot.net/buildroot/commit/?id=b9ddfddf9d7f22c61f0857d4bde731f94bace8d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The next patch of this series will add optional xz and lz4 support, to
-avoid adding new options for these compression packages simplify the
-configuration of dovecot by removing the options handling optional
-compression support.
+When xz was compiled before, dovecot will use it as optional dependency:
+
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/dovecot/lib30_imap_zlib_plugin.so | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [liblz4.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+
+(lz4 support will be added with the next patch of this series)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy           | 14 ++++++++++++++
- package/dovecot/Config.in  | 12 ------------
- package/dovecot/dovecot.mk |  4 ++--
- 3 files changed, 16 insertions(+), 14 deletions(-)
+ package/dovecot/dovecot.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2fda9f8..081bacd 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,20 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.02"
- 
-+config BR2_PACKAGE_DOVECOT_BZIP2
-+	bool "bzip2 support option has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_BZIP2
-+	help
-+	  Bzip2 support is built if the bzip2 package is selected.
-+
-+config BR2_PACKAGE_DOVECOT_ZLIB
-+	bool "zlib support option has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Zlib support is built if the zlib package is selected.
-+
- config BR2_PACKAGE_E2FSPROGS_FINDFS
- 	bool "e2fsprogs findfs option has been removed"
- 	select BR2_LEGACY
-diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
-index 3baae6e..194efb6 100644
---- a/package/dovecot/Config.in
-+++ b/package/dovecot/Config.in
-@@ -13,12 +13,6 @@ config BR2_PACKAGE_DOVECOT
- 
- if BR2_PACKAGE_DOVECOT
- 
--config BR2_PACKAGE_DOVECOT_BZIP2
--	bool "bzip2 support"
--	select BR2_PACKAGE_BZIP2
--	help
--	  Enable bzip2 support.
--
- config BR2_PACKAGE_DOVECOT_MYSQL
- 	bool "mysql support"
- 	select BR2_PACKAGE_MYSQL
-@@ -43,12 +37,6 @@ config BR2_PACKAGE_DOVECOT_SQLITE
- 	help
- 	  Enable SQLite support.
- 
--config BR2_PACKAGE_DOVECOT_ZLIB
--	bool "zlib support"
--	select BR2_PACKAGE_ZLIB
--	help
--	  Enable zlib support.
--
- source package/dovecot-pigeonhole/Config.in
- 
- endif # BR2_PACKAGE_DOVECOT
 diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 8451e52..eea9efc 100644
+index eea9efc..dbf2dab 100644
 --- a/package/dovecot/dovecot.mk
 +++ b/package/dovecot/dovecot.mk
-@@ -33,7 +33,7 @@ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL)$(BR2_PACKAGE_DOVECOT_SQLITE),)
- DOVECOT_CONF_OPTS += --without-sql
- endif
- 
--ifeq ($(BR2_PACKAGE_DOVECOT_BZIP2),y)
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
- DOVECOT_CONF_OPTS += --with-bzlib
- DOVECOT_DEPENDENCIES += bzip2
- else
-@@ -76,7 +76,7 @@ else
+@@ -76,6 +76,13 @@ else
  DOVECOT_CONF_OPTS += --without-sqlite
  endif
  
--ifeq ($(BR2_PACKAGE_DOVECOT_ZLIB),y)
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
++ifeq ($(BR2_PACKAGE_XZ),y)
++DOVECOT_CONF_OPTS += --with-lzma
++DOVECOT_DEPENDENCIES += xz
++else
++DOVECOT_CONF_OPTS += --without-lzma
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
  DOVECOT_CONF_OPTS += --with-zlib
  DOVECOT_DEPENDENCIES += zlib
- else
