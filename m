@@ -1,32 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 16:08:06 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-02-14
-In-Reply-To: <CAFGQKxc-Z1R7yD9iqjKkVrOnCoRzuNBTSR_Nmf2n-E9gp2kPaA@mail.gmail.com>
-References: <20160215073024.E815F101D00@stock.ovh.net>
- <CAFGQKxf1p3JGf_Yo7KF23ge9TNwdrSz-D7CbEx=P6f1KEkomcA@mail.gmail.com>
- <20160215214851.0129b01f@free-electrons.com>
- <CAFGQKxc-Z1R7yD9iqjKkVrOnCoRzuNBTSR_Nmf2n-E9gp2kPaA@mail.gmail.com>
-Message-ID: <20160216160806.7d7d08f7@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Feb 2016 16:08:31 +0100
+Subject: [Buildroot] [PATCH v2] Don't build host-cmake if it is
+ available on the build host
+In-Reply-To: <CAHXCMMK33AqXM7wEQPCDycgiRWJJMxDcUH-+ZWW0pX7tYmAq-Q@mail.gmail.com>
+References: <1454670476-20635-1-git-send-email-luca@lucaceresoli.net>
+ <CAHXCMMK33AqXM7wEQPCDycgiRWJJMxDcUH-+ZWW0pX7tYmAq-Q@mail.gmail.com>
+Message-ID: <56C33B6F.8080704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Martin,
 
-On Tue, 16 Feb 2016 11:25:03 +0000, Martin Bark wrote:
 
-> I have split the update to
-> 0003-Use-a-python-variable-instead-of-hardcoding-Python.patch into a
-> separate patch and sent out an update patch set. The one you want to
-> fix this issue is http://patchwork.ozlabs.org/patch/583333/
+On 16-02-16 14:55, Samuel Martin wrote:
+> Hi Luca, all,
+> 
+> On Fri, Feb 5, 2016 at 12:07 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+[snip]
+>> > Finally, we do skip adding the dependency on host-cmake for all cmake
+>> > packages when $(BUILD_HOST_CMAKE) != YES.
+> Sorry for not spotting this earlier, but:
+> host-cmake has a dependency on host-pkgconf, which cmake (the host
+> program) may use at runtime to find the dependencies when it is
+> configuring a project.
+> In the BR host tree, pkg-config is a wrapper with environment
+> variables correctly preset to find stuff in the sysroot tree by
+> default.
+> 
+> Here is a test case:
+> 
+> A is a cmake-package depending on B.
+> B is a generic-package providing a *.pc file.
+> CMake uses its FindPkgConfig module to detect B.
+> 
+> So, currently we got:
+> - A depends on: B and host-cmake
+> - host-cmake depends on host-pkgconf
+> - When configuring A, host-cmake should use host-pkgconf to find B
+> 
+> With this patch, in the case cmake build is skipped, we get:
+> - A depends on: B
+> - When configuring A, cmake (from the host system) may use pkg-config
+> (from the host system) to find B, but this pkg-config won't have the
+> env. vars. correctly set to find B in the sysroot. In the best case,
+> it won't find B, in the worst case it will try to link against B from
+> the host system.
+> 
+> I'm not sure what it the best and clean way to handle this...
+> Maybe $(BUILD_HOST_CMAKE) != YES should be use to noop the
+> HOST_CMAKE_{CONFIGURE,BUILD,INSTALLL}_CMDS commands, but we keep the
+> dependency on host-cmake, so we don't lose host-cmake's dependencies.
+> 
+> Any thought about this?
 
-Thanks a lot, I've applied this patch to the master branch!
+ The correct approach would be to add explicit dependencies on host-pkgconf for
+packages that need it, just like we do for autotools packages.
 
-Thomas
+ The difficulty is of course finding out which packages need host-pkgconf. It
+seems it's not as simple as searching for FindPkgConfig in the CMakeLists.txt
+files of each cmake package, because there are other modules that implicitly use
+this. So we'd have to make a list of all those modules and check for all of
+them. And then of course there are the packages that install new cmake modules
+that use this, but which don't use FindPkgConfig (or even cmake) themselves...
+
+ In 3d475ee0 you added the unconditional host-pkgconf dependency to work around
+this problem. If we remove that dependency, the autobuilders should detect the
+missing host-pkgconf dependencies even when host-cmake is used.
+
+ Regards,
+ Arnout
+
+[snip]
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
