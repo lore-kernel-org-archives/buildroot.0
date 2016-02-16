@@ -1,10 +1,10 @@
 From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Date: Tue, 16 Feb 2016 11:48:21 +0530
-Subject: [Buildroot] [Buildroot PATCH Selinux v10 06/11] policycoreutils:
-	new package
+Date: Tue, 16 Feb 2016 11:48:22 +0530
+Subject: [Buildroot] [Buildroot PATCH Selinux v10 07/11] qemu x86 selinux:
+	base br defconfig
 In-Reply-To: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <1455603506-26138-6-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <1455603506-26138-7-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,22 @@ To: buildroot@busybox.net
 
 From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
+This will build a base SELinux system that boots with SELinux
+in permissive mode. Also adding documentation on how to use it.
+
 Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Niranjan <niranjan.reddy@rockwellcollins.com>
 
 ---
 Changes v9 -> v10:
-  - Added LDFLAGS for HOST_POLICYCOREUTILS_MAKE_OPTS:LDFLAGS="-Wl,-rpath,$(HOST_DIR)/usr/lib"
+  - Changed version number of QEMU from 2.2.1 to 2.3.0
 
 Changes v8 -> v9:
-  - Cleaned up DESTDIR references in patches to use PREFIX instead
-    (suggested by Samuel)
-  - Added the use of the ARCH to pass the host and target architectures
-    to the build (Suggested by Samuel)
+  - No changes
 
 Changes v7 -> v8:
-  - Cleaned up indentations in policycoreutils.mk (Suggested by
-    Thomas P.)
-  - Fixed sed separator (Suggested by Thomas P.)
-  - Cleaned up cross compile patches and make options (Suggested by
-    Thomas P.)
-  - Changed dbus-glib dependency to a select and cleaned up the
-    dependencies (Suggested by Thomas P.)
+  - No changes
 
 Changes v6 -> v7:
   - No changes
@@ -43,667 +37,198 @@ Changes v5 -> v6:
   - No changes
 
 Changes v4 -> v5:
-  - Updated depends and removed glibc dependency (Matt W.)
-  - Updated site to github (Matt W.)
-  - Added host python 2/3 support (Matt W.)
-  - Removed sandbox and mctrans support (Matt W.)
-  - Removed restorcon init script (Matt W.)
-  - Agree as optional settings were removed so menu isn't needed
-    (Suggested by Ryan B. and Thomas P.)
-  - added Config.in select for LIBCAP_NG (Suggested by Thomas P.)
-  - cleaned up pam/audit ifeq (Suggested by Thomas P.)
-  - fixed CFLAGS to include target_cflags instead of += (Suggested by
-    Thomas P.)
-  - Refactored lists of build/install steps into loops  (Suggested by
-    Thomas P.)
-  - Removed += on first host depends assignment (Suggested by Thomas P.)
-  - Refactored host make opts assignments (Suggested by Thomas P.)
-  - Limited to glibc because of fts.h, some uclibc toolchains have it
-    others don't.  Eventually this would be good to fix with the updated
-    method of file traversal. (Matt W.)
-  - Gettext fixups for uclibc support.  Counter productive as we
-    now limit to glibc only. (Matt W.)
-  - Added musl as possible lib type (Matt W.)
-  - Removed largefile dependency (Clayton S.)
-  - Changed dbus-glib select to a depends on in the Config.in (suggested
-    by Ryan B.)
+  - Update the qemu_x86_defconfig to the 4.0 kernel series (Clayton S.)
 
-Changes v3 -> v4:
-  - Add a select for the libselinux Python bindings when debugging
-    is enabled.  This will cause Python to be built for the target
-    (suggested by Thomas P.)
-  - Cleaned up the configure comments (suggested by Thomas).
-  - Added a dependency on BR2_USE_MMU for the debugging option
-    because python requires it (suggested by Thomas P.)
-  - Removed the dependencies on audit and linux-pam. Both packages
-    are now optional dependencies based on whether or not the package
-    has been selected
-  - Moved the dependency on dbus-glib to only the restorecond option
-    where it is used
-  - Added a INSTALL_INIT_SYSV for the restorecond daemon rather than
-    just installing it directly
-  - Adding a dependency on glibc
-  - Removed the clean commands
-
-Changes v2 -> v3:
-  - Added dependencies on BR2_TOOLCHAIN_HAS_THREADS and BR2_LARGEFILE
-    (suggested by Thomas P.)
-  - Changes patch naming convention (suggested by Thomas P.)
-  - Added selects for linux-pam and audit
-
-Changes v1 -> v2:
-  - General cleanup to the mk file to conform to the standard format
-  - Fixed the patch naming to avoid using the version number
-  - Cleaned up the patch to include a signed-off-by line
-  - Changed package dependencies into selects in the config
+Changes v1 -> v4:
+  - Did not exist
 ---
- package/Config.in                                  |   1 +
- ...IR-to-all-paths-that-use-an-absolute-path.patch | 275 +++++++++++++++++++++
- .../0002-Allow-CFLAGS-to-be-overwritten.patch      |  57 +++++
- ...licy-python-install-arguments-to-be-a-var.patch |  42 ++++
- package/policycoreutils/Config.in                  |  59 +++++
- package/policycoreutils/policycoreutils.hash       |   2 +
- package/policycoreutils/policycoreutils.mk         | 110 +++++++++
- 7 files changed, 546 insertions(+)
- create mode 100644 package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
- create mode 100644 package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch
- create mode 100644 package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch
- create mode 100644 package/policycoreutils/Config.in
- create mode 100644 package/policycoreutils/policycoreutils.hash
- create mode 100644 package/policycoreutils/policycoreutils.mk
+ board/qemu/x86/linux-4.0-selinux.config | 77 +++++++++++++++++++++++++++++++++
+ board/qemu/x86/readme.txt               | 17 ++++++++
+ configs/qemu_x86_selinux_defconfig      | 67 ++++++++++++++++++++++++++++
+ 3 files changed, 161 insertions(+)
+ create mode 100644 board/qemu/x86/linux-4.0-selinux.config
+ create mode 100644 configs/qemu_x86_selinux_defconfig
 
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..198e683 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1518,6 +1518,7 @@ menu "Real-Time"
- endmenu
+diff --git a/board/qemu/x86/linux-4.0-selinux.config b/board/qemu/x86/linux-4.0-selinux.config
+new file mode 100644
+index 0000000..89ab0dc
+--- /dev/null
++++ b/board/qemu/x86/linux-4.0-selinux.config
+@@ -0,0 +1,77 @@
++# CONFIG_LOCALVERSION_AUTO is not set
++# CONFIG_SWAP is not set
++CONFIG_AUDIT=y
++# CONFIG_COMPAT_BRK is not set
++CONFIG_MODULES=y
++# CONFIG_BLK_DEV_BSG is not set
++# CONFIG_IOSCHED_DEADLINE is not set
++# CONFIG_IOSCHED_CFQ is not set
++# CONFIG_X86_EXTENDED_PLATFORM is not set
++# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
++# CONFIG_MTRR_SANITIZER is not set
++# CONFIG_SECCOMP is not set
++# CONFIG_RELOCATABLE is not set
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_IP_PNP=y
++# CONFIG_INET_XFRM_MODE_TRANSPORT is not set
++# CONFIG_INET_XFRM_MODE_TUNNEL is not set
++# CONFIG_INET_XFRM_MODE_BEET is not set
++# CONFIG_INET_LRO is not set
++# CONFIG_INET_DIAG is not set
++# CONFIG_IPV6 is not set
++# CONFIG_WIRELESS is not set
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++# CONFIG_PREVENT_FIRMWARE_BUILD is not set
++# CONFIG_FIRMWARE_IN_KERNEL is not set
++# CONFIG_BLK_DEV is not set
++CONFIG_BLK_DEV_SD=y
++CONFIG_ATA=y
++CONFIG_ATA_PIIX=y
++CONFIG_NETDEVICES=y
++CONFIG_NE2K_PCI=y
++CONFIG_8139CP=y
++# CONFIG_WLAN is not set
++# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
++# CONFIG_INPUT_MOUSE is not set
++# CONFIG_SERIO_SERPORT is not set
++# CONFIG_LEGACY_PTYS is not set
++# CONFIG_DEVKMEM is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++# CONFIG_HW_RANDOM is not set
++# CONFIG_HWMON is not set
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_HDA_INTEL=y
++# CONFIG_USB_SUPPORT is not set
++# CONFIG_X86_PLATFORM_DEVICES is not set
++# CONFIG_DMIID is not set
++CONFIG_EXT2_FS=y
++CONFIG_EXT2_FS_XATTR=y
++CONFIG_EXT2_FS_POSIX_ACL=y
++CONFIG_EXT2_FS_SECURITY=y
++CONFIG_EXT3_FS=y
++CONFIG_EXT3_FS_POSIX_ACL=y
++CONFIG_EXT3_FS_SECURITY=y
++# CONFIG_DNOTIFY is not set
++# CONFIG_INOTIFY_USER is not set
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++# CONFIG_MISC_FILESYSTEMS is not set
++CONFIG_NFS_FS=y
++CONFIG_ROOT_NFS=y
++# CONFIG_ENABLE_WARN_DEPRECATED is not set
++# CONFIG_ENABLE_MUST_CHECK is not set
++# CONFIG_UNUSED_SYMBOLS is not set
++# CONFIG_FRAME_POINTER is not set
++# CONFIG_X86_VERBOSE_BOOTUP is not set
++CONFIG_SECURITY=y
++CONFIG_SECURITY_NETWORK=y
++CONFIG_SECURITY_SELINUX=y
++CONFIG_SECURITY_SELINUX_BOOTPARAM=y
++CONFIG_CRYPTO_ANSI_CPRNG=y
++# CONFIG_VIRTUALIZATION is not set
+diff --git a/board/qemu/x86/readme.txt b/board/qemu/x86/readme.txt
+index 62c51b0..b5cb3fe 100644
+--- a/board/qemu/x86/readme.txt
++++ b/board/qemu/x86/readme.txt
+@@ -7,3 +7,20 @@ Optionally add -smp N to emulate a SMP system with N CPUs.
+ The login prompt will appear in the graphical window.
  
- menu "Security"
-+	source "package/policycoreutils/Config.in"
- 	source "package/setools/Config.in"
- endmenu
- 
-diff --git a/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
+ Tested with QEMU 2.3.0
++
++-------------------------------------------------------------------
++
++Run the SElinux target emulation with:
++
++  qemu-system-i386 -M pc -kernel output/images/bzImage -drive file=output/images/rootfs.ext2,if=ide -append "root=/dev/sda rw console=ttyS0 selinux=1" -net nic,model=rtl8139 -net user -display none -serial stdio
++
++The emulation should reboot once the first time for relabeling and
++then provide a login prompt. The login is username root and password
++root because PAM requires a password in this secure configuration. To
++enable SELinux enforcing at boot, login and edit the
++/etc/selinux/config and set SELINUX to enforcing. Save and make sure
++to "sync" before restarting the emulation as the ext2 fs would
++otherwise corrupt when the emulation exits. After enforcing is
++default, the selinux= provided as part of the qemu "append" above can
++be used to turn enforcing on/off. This configuration would be tailored
++as part of a targets refpolicy customization.
+diff --git a/configs/qemu_x86_selinux_defconfig b/configs/qemu_x86_selinux_defconfig
 new file mode 100644
-index 0000000..a25bd33
+index 0000000..feb4534
 --- /dev/null
-+++ b/package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch
-@@ -0,0 +1,275 @@
-+From 92d7cc3539f8bfc68b2f2bf688375647abf73ee7 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 10 Jul 2015 11:44:08 -0500
-+Subject: [PATCH 1/3] Add DESTDIR to all paths that use an absolute path
++++ b/configs/qemu_x86_selinux_defconfig
+@@ -0,0 +1,67 @@
++# Architecture
++BR2_x86_pentiumpro=y
 +
-+To aid in cross compiling, add the DESTDIR variable to the start of all
-+of the paths used during compilation. Most paths already used DESTDIR.
++# Default to the latest Code Sourcery
++BR2_TOOLCHAIN_EXTERNAL=y
 +
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ Makefile                |  4 ++--
-+ audit2allow/Makefile    |  2 +-
-+ load_policy/Makefile    |  2 +-
-+ mcstrans/src/Makefile   | 22 +++++++++++++---------
-+ mcstrans/utils/Makefile | 11 +++++++----
-+ newrole/Makefile        | 12 ++++++------
-+ restorecond/Makefile    |  6 ++++--
-+ run_init/Makefile       | 12 ++++++------
-+ sepolicy/Makefile       |  2 +-
-+ setfiles/Makefile       |  4 ++--
-+ 10 files changed, 43 insertions(+), 34 deletions(-)
++# Select SYSV init to provide selinux enabled init
++BR2_INIT_SYSV=y
 +
-+diff --git a/Makefile b/Makefile
-+index 3980799..0fca022 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,8 +1,8 @@
-+ SUBDIRS = sepolicy setfiles semanage load_policy newrole run_init sandbox secon audit2allow audit2why sestatus semodule_package semodule semodule_link semodule_expand semodule_deps sepolgen-ifgen setsebool scripts po man gui
-+ 
-+-INOTIFYH = $(shell ls /usr/include/sys/inotify.h 2>/dev/null)
-++INOTIFYH = $(shell ls $(DESTDIR)/usr/include/sys/inotify.h 2>/dev/null)
-+ 
-+-ifeq (${INOTIFYH}, /usr/include/sys/inotify.h)
-++ifeq (${INOTIFYH}, $(DESTDIR)/usr/include/sys/inotify.h)
-+ 	SUBDIRS += restorecond
-+ endif
-+ 
-+diff --git a/audit2allow/Makefile b/audit2allow/Makefile
-+index 88635d4..1647b5a 100644
-+--- a/audit2allow/Makefile
-++++ b/audit2allow/Makefile
-+@@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-+ BINDIR ?= $(PREFIX)/bin
-+ LIBDIR ?= $(PREFIX)/lib
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(PREFIX)/share/locale
-+ 
-+ all: ;
-+ 
-+diff --git a/load_policy/Makefile b/load_policy/Makefile
-+index 7c5bab0..5cd0bbb 100644
-+--- a/load_policy/Makefile
-++++ b/load_policy/Makefile
-+@@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(DESTDIR)/sbin
-+ USRSBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(PREFIX)/share/locale
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+diff --git a/mcstrans/src/Makefile b/mcstrans/src/Makefile
-+index fb44490..a0666f1 100644
-+--- a/mcstrans/src/Makefile
-++++ b/mcstrans/src/Makefile
-+@@ -1,22 +1,26 @@
-+-ARCH = $(shell uname -i)
-++# Installation directories.
-++PREFIX  ?= $(DESTDIR)/usr
-++SBINDIR ?= $(DESTDIR)/sbin
-++INITDIR ?= $(DESTDIR)/etc/rc.d/init.d
-++
-++ARCH ?= $(shell uname -i)
-+ ifeq "$(ARCH)" "x86_64"
-+ 	# In case of 64 bit system, use these lines
-+-	LIBDIR=/usr/lib64
-+-else 
-++	LIBDIR=$(PREFIX)/lib64
-++else
-+ ifeq "$(ARCH)" "i686"
-+ 	# In case of 32 bit system, use these lines
-+-	LIBDIR=/usr/lib
-++	LIBDIR=$(PREFIX)/lib
-+ else
-+ ifeq "$(ARCH)" "i386"
-+ 	# In case of 32 bit system, use these lines
-+-	LIBDIR=/usr/lib
-++	LIBDIR=$(PREFIX)/lib
-++else
-++	# Default to these lines if arch is unknown
-++	LIBDIR=$(PREFIX)/lib
-+ endif
-+ endif
-+ endif
-+-# Installation directories.
-+-PREFIX  ?= $(DESTDIR)/usr
-+-SBINDIR ?= $(DESTDIR)/sbin
-+-INITDIR ?= $(DESTDIR)/etc/rc.d/init.d
-+ 
-+ PROG_SRC=mcstrans.c  mcscolor.c  mcstransd.c  mls_level.c
-+ PROG_OBJS= $(patsubst %.c,%.o,$(PROG_SRC))
-+diff --git a/mcstrans/utils/Makefile b/mcstrans/utils/Makefile
-+index 1ffb027..da5c152 100644
-+--- a/mcstrans/utils/Makefile
-++++ b/mcstrans/utils/Makefile
-+@@ -2,18 +2,21 @@
-+ PREFIX ?= $(DESTDIR)/usr
-+ BINDIR ?= $(PREFIX)/sbin
-+ 
-+-ARCH = $(shell uname -i)
-++ARCH ?= $(shell uname -i)
-+ ifeq "$(ARCH)" "x86_64"
-+         # In case of 64 bit system, use these lines
-+-        LIBDIR=/usr/lib64
-++        LIBDIR=$(PREFIX)/lib64
-+ else
-+ ifeq "$(ARCH)" "i686"
-+         # In case of 32 bit system, use these lines
-+-        LIBDIR=/usr/lib
-++        LIBDIR=$(PREFIX)/lib
-+ else
-+ ifeq "$(ARCH)" "i386"
-+         # In case of 32 bit system, use these lines
-+-        LIBDIR=/usr/lib
-++        LIBDIR=$(PREFIX)/lib
-++else
-++        # Default to these lines if arch is unknown
-++        LIBDIR=$(PREFIX)/lib
-+ endif
-+ endif
-+ endif
-+diff --git a/newrole/Makefile b/newrole/Makefile
-+index 646cd4d..045e3b7 100644
-+--- a/newrole/Makefile
-++++ b/newrole/Makefile
-+@@ -3,9 +3,9 @@ PREFIX ?= $(DESTDIR)/usr
-+ BINDIR ?= $(PREFIX)/bin
-+ MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+-LOCALEDIR = /usr/share/locale
-+-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++LOCALEDIR = $(PREFIX)/share/locale
-++PAMH = $(shell ls $(PREFIX)/include/security/pam_appl.h 2>/dev/null)
-++AUDITH = $(shell ls $(PREFIX)/include/libaudit.h 2>/dev/null)
-+ # Enable capabilities to permit newrole to generate audit records.
-+ # This will make newrole a setuid root program.
-+ # The capabilities used are: CAP_AUDIT_WRITE.
-+@@ -24,7 +24,7 @@ CFLAGS ?= -Werror -Wall -W
-+ EXTRA_OBJS =
-+ override CFLAGS += -DVERSION=\"$(VERSION)\" $(LDFLAGS) -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ LDLIBS += -lselinux -L$(PREFIX)/lib
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(PREFIX)/include/security/pam_appl.h)
-+ 	override CFLAGS += -DUSE_PAM
-+ 	EXTRA_OBJS += hashtab.o
-+ 	LDLIBS += -lpam -lpam_misc
-+@@ -32,7 +32,7 @@ else
-+ 	override CFLAGS += -D_XOPEN_SOURCE=500
-+ 	LDLIBS += -lcrypt
-+ endif
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(PREFIX)/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+@@ -66,7 +66,7 @@ install: all
-+ 	test -d $(MANDIR)/man1 || install -m 755 -d $(MANDIR)/man1
-+ 	install -m $(MODE) newrole $(BINDIR)
-+ 	install -m 644 newrole.1 $(MANDIR)/man1/
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(PREFIX)/include/security/pam_appl.h)
-+ 	test -d $(ETCDIR)/pam.d || install -m 755 -d $(ETCDIR)/pam.d
-+ ifeq ($(LSPP_PRIV),y)
-+ 	install -m 644 newrole-lspp.pamd $(ETCDIR)/pam.d/newrole
-+diff --git a/restorecond/Makefile b/restorecond/Makefile
-+index 3074542..7c40f95 100644
-+--- a/restorecond/Makefile
-++++ b/restorecond/Makefile
-+@@ -10,11 +10,13 @@ autostart_DATA = sealertauto.desktop
-+ INITDIR = $(DESTDIR)/etc/rc.d/init.d
-+ SELINUXDIR = $(DESTDIR)/etc/selinux
-+ 
-+-DBUSFLAGS = -DHAVE_DBUS -I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/dbus-1.0/include
-++DBUSFLAGS = -DHAVE_DBUS -I$(PREFIX)/include/dbus-1.0 -I$(PREFIX)/lib64/dbus-1.0/include \
-++		-I$(PREFIX)/lib/dbus-1.0/include
-+ DBUSLIB = -ldbus-glib-1 -ldbus-1
-+ 
-+ CFLAGS ?= -g -Werror -Wall -W
-+-override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/lib/glib-2.0/include
-++override CFLAGS += -I$(PREFIX)/include $(DBUSFLAGS) -I$(PREFIX)/include/glib-2.0 \
-++		-I$(PREFIX)/lib64/glib-2.0/include -I$(PREFIX)/lib/glib-2.0/include
-+ 
-+ LDLIBS += -lselinux $(DBUSLIB) -lglib-2.0 -L$(LIBDIR)
-+ 
-+diff --git a/run_init/Makefile b/run_init/Makefile
-+index 12b39b4..da49c41 100644
-+--- a/run_init/Makefile
-++++ b/run_init/Makefile
-+@@ -4,21 +4,21 @@ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+-LOCALEDIR ?= /usr/share/locale
-+-PAMH = $(shell ls /usr/include/security/pam_appl.h 2>/dev/null)
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++LOCALEDIR ?= $(PREFIX)/share/locale
-++PAMH = $(shell ls $(PREFIX)/include/security/pam_appl.h 2>/dev/null)
-++AUDITH = $(shell ls $(PREFIX)/include/libaudit.h 2>/dev/null)
-+ 
-+ CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include -DUSE_NLS -DLOCALEDIR="\"$(LOCALEDIR)\"" -DPACKAGE="\"policycoreutils\""
-+ LDLIBS += -lselinux -L$(PREFIX)/lib
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(PREFIX)/include/security/pam_appl.h)
-+ 	override CFLAGS += -DUSE_PAM
-+ 	LDLIBS += -lpam -lpam_misc
-+ else
-+ 	override CFLAGS += -D_XOPEN_SOURCE=500
-+ 	LDLIBS += -lcrypt
-+ endif
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(PREFIX)/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+@@ -38,7 +38,7 @@ install: all
-+ 	install -m 755 open_init_pty $(SBINDIR)
-+ 	install -m 644 run_init.8 $(MANDIR)/man8/
-+ 	install -m 644 open_init_pty.8 $(MANDIR)/man8/
-+-ifeq ($(PAMH), /usr/include/security/pam_appl.h)
-++ifeq ($(PAMH), $(PREFIX)/include/security/pam_appl.h)
-+ 	install -m 644 run_init.pamd $(ETCDIR)/pam.d/run_init
-+ endif
-+ 
-+diff --git a/sepolicy/Makefile b/sepolicy/Makefile
-+index 11b534f..1249546 100644
-+--- a/sepolicy/Makefile
-++++ b/sepolicy/Makefile
-+@@ -5,7 +5,7 @@ LIBDIR ?= $(PREFIX)/lib
-+ BINDIR ?= $(PREFIX)/bin
-+ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+-LOCALEDIR ?= /usr/share/locale
-++LOCALEDIR ?= $(PREFIX)/share/locale
-+ PYTHON ?= /usr/bin/python
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+diff --git a/setfiles/Makefile b/setfiles/Makefile
-+index 4b44b3c..ebc22c8 100644
-+--- a/setfiles/Makefile
-++++ b/setfiles/Makefile
-+@@ -3,7 +3,7 @@ PREFIX ?= $(DESTDIR)/usr
-+ SBINDIR ?= $(DESTDIR)/sbin
-+ MANDIR = $(PREFIX)/share/man
-+ LIBDIR ?= $(PREFIX)/lib
-+-AUDITH = $(shell ls /usr/include/libaudit.h 2>/dev/null)
-++AUDITH = $(shell ls $(PREFIX)/include/libaudit.h 2>/dev/null)
-+ 
-+ PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk -S '{ print $$3 }')
-+ ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-+@@ -12,7 +12,7 @@ CFLAGS = -g -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include
-+ LDLIBS = -lselinux -lsepol -L$(LIBDIR)
-+ 
-+-ifeq ($(AUDITH), /usr/include/libaudit.h)
-++ifeq ($(AUDITH), $(PREFIX)/include/libaudit.h)
-+ 	override CFLAGS += -DUSE_AUDIT
-+ 	LDLIBS += -laudit
-+ endif
-+-- 
-+1.9.1
++# Default password to allow PAM login
++BR2_TARGET_GENERIC_ROOT_PASSWD="root"
 +
-diff --git a/package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch b/package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch
-new file mode 100644
-index 0000000..ca708ab
---- /dev/null
-+++ b/package/policycoreutils/0002-Allow-CFLAGS-to-be-overwritten.patch
-@@ -0,0 +1,57 @@
-+From cfce1180f96cca5e7444d94b2ebc39213d7dac75 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 10 Jul 2015 11:47:09 -0500
-+Subject: [PATCH 2/3] Allow CFLAGS to be overwritten
++# Default the shell to bash, sh symlinks to busybox which
++# is not compatible with refpolicy
++BR2_SYSTEM_BIN_SH_BASH=y
 +
-+Allow all CFLAGS declarations to be overwritten to aid in cross
-+compiling.
++# Pull in SELinux specific file overlay to allow login
++# in enforcing mode.
++BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt board/common_selinux/skeleton_permissions.txt"
++BR2_ROOTFS_OVERLAY="board/common_selinux/skeleton"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/common_selinux/post_build.sh"
 +
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ sepolicy/Makefile | 2 +-
-+ sestatus/Makefile | 2 +-
-+ setfiles/Makefile | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
++# Lock to a kernel that's been tested against selinux libs
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.0-selinux.config"
 +
-+diff --git a/sepolicy/Makefile b/sepolicy/Makefile
-+index 1249546..a52667a 100644
-+--- a/sepolicy/Makefile
-++++ b/sepolicy/Makefile
-+@@ -9,7 +9,7 @@ LOCALEDIR ?= $(PREFIX)/share/locale
-+ PYTHON ?= /usr/bin/python
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+-override CFLAGS = $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-++override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-+ 
-+ BASHCOMPLETIONS=sepolicy-bash-completion.sh 
-+ 
-+diff --git a/sestatus/Makefile b/sestatus/Makefile
-+index c5db7a3..c04ff00 100644
-+--- a/sestatus/Makefile
-++++ b/sestatus/Makefile
-+@@ -5,7 +5,7 @@ MANDIR = $(PREFIX)/share/man
-+ ETCDIR ?= $(DESTDIR)/etc
-+ LIBDIR ?= $(PREFIX)/lib
-+ 
-+-CFLAGS = -Werror -Wall -W
-++CFLAGS ?= -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include -D_FILE_OFFSET_BITS=64
-+ LDLIBS = -lselinux -L$(LIBDIR)
-+ 
-+diff --git a/setfiles/Makefile b/setfiles/Makefile
-+index ebc22c8..7c48814 100644
-+--- a/setfiles/Makefile
-++++ b/setfiles/Makefile
-+@@ -8,7 +8,7 @@ AUDITH = $(shell ls $(PREFIX)/include/libaudit.h 2>/dev/null)
-+ PROGRESS_STEP=$(shell grep "^\#define STAR_COUNT" restore.h | awk -S '{ print $$3 }')
-+ ABORT_ON_ERRORS=$(shell grep "^\#define ABORT_ON_ERRORS" setfiles.c | awk -S '{ print $$3 }')
-+ 
-+-CFLAGS = -g -Werror -Wall -W
-++CFLAGS ?= -g -Werror -Wall -W
-+ override CFLAGS += -I$(PREFIX)/include
-+ LDLIBS = -lselinux -lsepol -L$(LIBDIR)
-+ 
-+-- 
-+1.9.1
++# Customized busybox config providing a tailored
++# balance of applets vs full apps
++BR2_PACKAGE_BUSYBOX_CONFIG="board/common_selinux/busybox-selinux.config"
 +
-diff --git a/package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch b/package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch
-new file mode 100644
-index 0000000..1b8c3bf
---- /dev/null
-+++ b/package/policycoreutils/0003-Change-sepolicy-python-install-arguments-to-be-a-var.patch
-@@ -0,0 +1,42 @@
-+From 4bb3e6bda68fe52fcd2df4f27c5900f4b0d50fa1 Mon Sep 17 00:00:00 2001
-+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+Date: Fri, 10 Jul 2015 11:56:49 -0500
-+Subject: [PATCH 3/3] Change sepolicy python install arguments to be a variable
++# Ensure busybox is built as individual binaries for the
++# SELinux refpolicy to work correctly
++BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES=y
 +
-+To allow the python install arguments to be overwritten, change the
-+arguments to be a variable. This also cleans up the DESTDIR detection a
-+little bit.
++# Audit service
++BR2_PACKAGE_AUDIT=y
 +
-+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
-+---
-+ sepolicy/Makefile | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
++# Enhanced authentication with selinux hooks
++BR2_PACKAGE_LINUX_PAM=y
 +
-+diff --git a/sepolicy/Makefile b/sepolicy/Makefile
-+index a52667a..4a10df6 100644
-+--- a/sepolicy/Makefile
-++++ b/sepolicy/Makefile
-+@@ -7,6 +7,11 @@ SBINDIR ?= $(PREFIX)/sbin
-+ MANDIR ?= $(PREFIX)/share/man
-+ LOCALEDIR ?= $(PREFIX)/share/locale
-+ PYTHON ?= /usr/bin/python
-++ifneq (,$(DESTDIR))
-++PYTHON_INSTALL_ARGS ?= --root $(DESTDIR)
-++else
-++PYTHON_INSTALL_ARGS ?=
-++endif
-+ BASHCOMPLETIONDIR ?= $(DESTDIR)/etc/bash_completion.d/
-+ SHAREDIR ?= $(PREFIX)/share/sandbox
-+ override CFLAGS += $(LDFLAGS) -I$(PREFIX)/include -DPACKAGE="policycoreutils" -Wall -Werror -Wextra -W  -DSHARED -shared
-+@@ -23,7 +28,7 @@ clean:
-+ 	-rm -rf build *~ \#* *pyc .#*
-+ 
-+ install:
-+-	$(PYTHON) setup.py install `test -n "$(DESTDIR)" && echo --root $(DESTDIR)`
-++	$(PYTHON) setup.py install $(PYTHON_INSTALL_ARGS)
-+ 	[ -d $(BINDIR) ] || mkdir -p $(BINDIR)
-+ 	install -m 755 sepolicy.py $(BINDIR)/sepolicy
-+ 	-mkdir -p $(MANDIR)/man8
-+-- 
-+1.9.1
++# Full version of login with SELinux support
++BR2_PACKAGE_UTIL_LINUX=y
++BR2_PACKAGE_UTIL_LINUX_BINARIES=y
++BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
 +
-diff --git a/package/policycoreutils/Config.in b/package/policycoreutils/Config.in
-new file mode 100644
-index 0000000..1dc01c4
---- /dev/null
-+++ b/package/policycoreutils/Config.in
-@@ -0,0 +1,59 @@
-+config BR2_PACKAGE_POLICYCOREUTILS
-+	bool "policycoreutils"
-+	select BR2_PACKAGE_LIBSEMANAGE
-+	select BR2_PACKAGE_LIBCAP_NG
-+	select BR2_PACKAGE_GETTEXT if BR2_NEEDS_GETTEXT
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libsemanage
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # uses fts.h
-+	help
-+	  Policycoreutils is a collection of policy utilities (originally
-+	  the "core" set of utilities needed to use SELinux, although it
-+	  has grown a bit over time), which have different dependencies.
-+	  sestatus, secon, run_init, and newrole only use libselinux.
-+	  load_policy and setfiles only use libselinux and libsepol.
-+	  semodule and semanage use libsemanage (and thus bring in
-+	  dependencies on libsepol and libselinux as well). setsebool
-+	  uses libselinux to make non-persistent boolean changes (via
-+	  the kernel interface) and uses libsemanage to make persistent
-+	  boolean changes.
++# SSH daemon for secure login
++BR2_PACKAGE_OPENSSH=y
 +
-+	  The base package will install the following utilities:
-+	      load_policy
-+	      newrole
-+	      restorecond
-+	      run_init
-+	      secon
-+	      semodule
-+	      semodule_deps
-+	      semodule_expand
-+	      semodule_link
-+	      semodule_package
-+	      sepolgen-ifgen
-+	      sestatus
-+	      setfiles
-+	      setsebool
++# Provides tools for fs security context relabeling
++BR2_PACKAGE_POLICYCOREUTILS=y
 +
-+	  http://selinuxproject.org/page/Main_Page
++# SELinux policy config/definition
++BR2_PACKAGE_REFPOLICY=y
 +
-+comment "policycoreutils needs a glibc or musl toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS  \
-+		|| !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++# Logging daemon
++BR2_PACKAGE_RSYSLOG=y
 +
-+if BR2_PACKAGE_POLICYCOREUTILS
++#rootfs with spare space for fs relabel activity
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_RESBLKS=5
++# BR2_TARGET_ROOTFS_TAR is not set
 +
-+config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
-+	bool "restorecond Utility"
-+	select BR2_PACKAGE_DBUS_GLIB
-+	depends on BR2_PACKAGE_DBUS
-+	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_USE_MMU # glib2
-+	help
-+	  Enable restorecond to be built
-+
-+comment "restorecond needs a toolchain w/ wchar, threads, dbus"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_DBUS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+endif
-diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
-new file mode 100644
-index 0000000..575dd25
---- /dev/null
-+++ b/package/policycoreutils/policycoreutils.hash
-@@ -0,0 +1,2 @@
-+# https://github.com/SELinuxProject/selinux/wiki/Releases
-+sha256 b6881741f9f9988346a73bfeccb0299941dc117349753f0ef3f23ee86f06c1b5  policycoreutils-2.1.14.tar.gz
-diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
-new file mode 100644
-index 0000000..eeb8c5d
---- /dev/null
-+++ b/package/policycoreutils/policycoreutils.mk
-@@ -0,0 +1,110 @@
-+################################################################################
-+#
-+# policycoreutils
-+#
-+################################################################################
-+
-+POLICYCOREUTILS_VERSION = 2.1.14
-+POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20130423
-+POLICYCOREUTILS_LICENSE = GPLv2
-+POLICYCOREUTILS_LICENSE_FILES = COPYING
-+
-+# gettext for load_policy.c use of libintl_* functions
-+POLICYCOREUTILS_DEPENDENCIES = libsemanage libcap-ng $(if $(BR2_NEEDS_GETTEXT),gettext)
-+
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+POLICYCOREUTILS_DEPENDENCIES += linux-pam
-+POLICYCOREUTILS_MAKE_OPTS += NAMESPACE_PRIV=y
-+define POLICYCOREUTILS_INSTALL_TARGET_LINUX_PAM_CONFS
-+	$(INSTALL) -D -m 0644 $(@D)/newrole/newrole-lspp.pamd $(TARGET_DIR)/etc/pam.d/newrole
-+	$(INSTALL) -D -m 0644 $(@D)/run_init/run_init.pamd $(TARGET_DIR)/etc/pam.d/run_init
-+endef
-+endif
-+
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+POLICYCOREUTILS_DEPENDENCIES += audit
-+POLICYCOREUTILS_MAKE_OPTS += AUDIT_LOG_PRIV=y
-+endif
-+
-+# Enable LSPP_PRIV if both audit and linux pam are enabled
-+ifeq ($(BR2_PACKAGE_LINUX_PAM)$(BR2_PACKAGE_AUDIT),yy)
-+POLICYCOREUTILS_MAKE_OPTS += LSPP_PRIV=y
-+endif
-+
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-+# large file support.
-+# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+POLICYCOREUTILS_MAKE_OPTS += \
-+	CC="$(TARGET_CC)" \
-+	CFLAGS="$(TARGET_CFLAGS) -U_FILE_OFFSET_BITS" \
-+	LDFLAGS="$(TARGET_LDFLAGS) $(if $(BR2_NEEDS_GETTEXT),-lintl)" \
-+	ARCH="$(BR2_ARCH)" \
-+	LDFLAGS="-Wl,-rpath,$(HOST_DIR)/usr/lib"
-+
-+POLICYCOREUTILS_MAKE_DIRS = load_policy newrole run_init \
-+	secon semodule semodule_deps semodule_expand semodule_link \
-+	semodule_package sepolgen-ifgen sestatus setfiles setsebool
-+
-+ifeq ($(BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND),y)
-+POLICYCOREUTILS_DEPENDENCIES += dbus-glib
-+POLICYCOREUTILS_MAKE_DIRS += restorecond
-+endif
-+
-+define POLICYCOREUTILS_BUILD_CMDS
-+	for dir in $(POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(STAGING_DIR) all || exit 1 ; \
-+	done
-+endef
-+
-+define POLICYCOREUTILS_INSTALL_TARGET_CMDS
-+	for dir in $(POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install || exit 1 ; \
-+	done
-+endef
-+
-+HOST_POLICYCOREUTILS_DEPENDENCIES = host-libsemanage host-dbus-glib host-sepolgen host-setools
-+
-+# Undefining _FILE_OFFSET_BITS here because of a "bug" with glibc fts.h
-+# large file support.
-+# See https://bugzilla.redhat.com/show_bug.cgi?id=574992 for more information
-+HOST_POLICYCOREUTILS_MAKE_OPTS = \
-+	CC="$(HOSTCC)" \
-+	CFLAGS="$(HOST_CFLAGS) -U_FILE_OFFSET_BITS" \
-+	PYTHON="$(HOST_DIR)/usr/bin/python" \
-+	PYTHON_INSTALL_ARGS="$(HOST_PKG_PYTHON_DISTUTILS_INSTALL_OPTS)" \
-+	ARCH="$(HOSTARCH)" \
-+	LDFLAGS="-Wl,-rpath,$(HOST_DIR)/usr/lib"
-+
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+HOST_POLICYCOREUTILS_DEPENDENCIES += host-python3
-+HOST_POLICYCOREUTILS_MAKE_OPTS += \
-+	PYLIBVER="python$(PYTHON3_VERSION_MAJOR)"
-+else
-+HOST_POLICYCOREUTILS_DEPENDENCIES += host-python
-+HOST_POLICYCOREUTILS_MAKE_OPTS += \
-+	PYLIBVER="python$(PYTHON_VERSION_MAJOR)"
-+endif
-+
-+# Note: We are only building the programs required by the refpolicy build
-+HOST_POLICYCOREUTILS_MAKE_DIRS = load_policy semodule semodule_deps semodule_expand semodule_link \
-+	semodule_package setfiles restorecond audit2allow audit2why scripts semanage sepolicy
-+
-+define HOST_POLICYCOREUTILS_BUILD_CMDS
-+	for dir in $(HOST_POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(HOST_POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(HOST_DIR) all || exit 1 ; \
-+	done
-+endef
-+
-+define HOST_POLICYCOREUTILS_INSTALL_CMDS
-+	for dir in $(HOST_POLICYCOREUTILS_MAKE_DIRS) ; do \
-+		$(MAKE) -C $(@D)/$${dir} $(HOST_POLICYCOREUTILS_MAKE_OPTS) DESTDIR=$(HOST_DIR) install || exit 1 ; \
-+	done
-+	# Fix python paths
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/audit2allow
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/audit2why
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/sepolgen-ifgen
-+	$(SED) 's%/usr/bin/%$(HOST_DIR)/usr/bin/%g' $(HOST_DIR)/usr/bin/sepolicy
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
++# Offline tools for policy analysis/building
++BR2_PACKAGE_HOST_CHECKPOLICY=y
 -- 
 2.5.0
