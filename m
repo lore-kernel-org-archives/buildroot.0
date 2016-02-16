@@ -1,33 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 16 Feb 2016 23:15:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libarchive: add optional
- support for bzip2
-In-Reply-To: <56BBA94B.3000809@mind.be>
-References: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
- <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
- <56BBA94B.3000809@mind.be>
-Message-ID: <20160216231509.1e87efa9@free-electrons.com>
+Date: Tue, 16 Feb 2016 23:15:37 +0100
+Subject: [Buildroot] [git commit] package/tiff: add optional support for xz
+Message-ID: <20160216221543.17C7A8183C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae8641239bd85212acd9f93f0d838c4c1d48ea71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Feb 2016 22:19:07 +0100, Arnout Vandecappelle wrote:
+When xz was compiled before, tiff will use it as optional dependency:
 
-> > +ifeq ($(BR2_PACKAGE_BZIP2),y)
-> > +LIBARCHIVE_DEPENDENCIES += bzip2
-> 
->  No --with-bz2lib? If there is a good reason, mention it in the commit log.
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libtiff.so.5.2.4 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libjpeg.so.9]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libm.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
-Could you give some feedback on this?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tiff/Config.in | 4 ++++
+ package/tiff/tiff.mk   | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tiff/Config.in b/package/tiff/Config.in
+index acb335c..00c2a3d 100644
+--- a/package/tiff/Config.in
++++ b/package/tiff/Config.in
+@@ -41,6 +41,10 @@ config BR2_PACKAGE_TIFF_ZLIB
+ 	select BR2_PACKAGE_ZLIB
+ 	default y
+ 
++config BR2_PACKAGE_TIFF_XZ
++	bool "XZ compression"
++	select BR2_PACKAGE_XZ
++
+ config BR2_PACKAGE_TIFF_PIXARLOG
+ 	bool "Pixar log-format algorithm (requires Zlib)"
+ 	select BR2_PACKAGE_TIFF_ZLIB
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index c2e713c..266272a 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -49,6 +49,12 @@ else
+ TIFF_DEPENDENCIES += zlib
+ endif
+ 
++ifneq ($(BR2_PACKAGE_TIFF_XZ),y)
++TIFF_CONF_OPTS += --disable-lzma
++else
++TIFF_DEPENDENCIES += xz
++endif
++
+ ifneq ($(BR2_PACKAGE_TIFF_PIXARLOG),y)
+ TIFF_CONF_OPTS += --disable-pixarlog
+ endif
