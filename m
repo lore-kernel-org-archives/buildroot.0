@@ -1,113 +1,109 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 16 Feb 2016 22:34:35 +0100
-Subject: [Buildroot] [PATCH 1/1] new package: jsen
-In-Reply-To: <20160216222540.64878554@free-electrons.com>
-References: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
- <20160216222540.64878554@free-electrons.com>
-Message-ID: <CAGm1_kviG99T0iMXBEZhb48CaW-QiOZn-ADWoutfWF42PO7Zjw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Feb 2016 22:39:26 +0100
+Subject: [Buildroot] problem adding new package libcapn
+In-Reply-To: <56C10733.8040706@proximus.be>
+References: <56C10733.8040706@proximus.be>
+Message-ID: <56C3970E.5090405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atul, Thomas,
+ Hi Johan,
 
-On Tue, Feb 16, 2016 at 10:25 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Atul,
->
-> Thanks also for this contribution. As usual, a few comments.
->
-> First, the title should be:
->
->         jsen: new package
->
-> As per our convention for naming the commits for new packages.
->
-> On Tue, 16 Feb 2016 12:18:13 +0530, Atul Singh wrote:
->
->> diff --git a/package/Config.in b/package/Config.in
->> index a5b31aa..cb3a3c8 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -994,6 +994,7 @@ menu "JSON/XML"
->>       source "package/expat/Config.in"
->>       source "package/ezxml/Config.in"
->>       source "package/jansson/Config.in"
->> +     source "package/jsen/Config.in"
->>       source "package/json-c/Config.in"
->>       source "package/json-glib/Config.in"
->>       source "package/jsoncpp/Config.in"
->
-> I am not sure JSON/XML is the appropriate place. Yes, jsen is related
-> to JSON, but I believe its main characteristic is that it is a
-> Javascript library. So it should probably go under the Javascript menu,
-> where we already have another package named json-javascript.
->
-> Yegor, what do you think? If the number of Javascript libraries becomes
-> really huge, then we can start creating sub-categories. But it is too
-> early to do this now.
+ It seems you are in the habit of needing packages that are tricky to
+cross-compile :-)
 
-I agree with you, that this package should go to Javascript libraries.
+On 15-02-16 00:01, Johan Sagaert wrote:
+> Hi
+> 
+> I am trying to add a new package libcapn
+> 
+> from the README.md
+> 
+> ## Installation
+> ### on *nix
+> __Requirements__
+> 
+> - [CMake](http://cmake.org) >= 2.8.5
+> - Clang 3 and later or GCC 4.6 and later
 
->> diff --git a/package/jsen/jsen.mk b/package/jsen/jsen.mk
->> new file mode 100644
->> index 0000000..e939739
->> --- /dev/null
->> +++ b/package/jsen/jsen.mk
->> @@ -0,0 +1,32 @@
->> +################################################################################
->> +#
->> +# jsen
->> +#
->> +################################################################################
->> +
->> +JSEN_VERSION = v0.6.0
->> +JSEN_SITE = $(call github,bugventure,jsen,$(JSEN_VERSION))
->> +JSEN_LICENSE = MIT
->> +JSEN_LICENSE_FILES = LICENSE
->> +JSEN_DIRECTORIES_LIST = dist lib
->> +JSEN_ROOT_FILES_LIST = index.js
->> +
->> +define JSEN_INSTALL_TARGET_CMDS
->> +     # Install required directories
->> +     for dir in $(JSEN_DIRECTORIES_LIST); \
->> +     do \
->> +             $(INSTALL) -d $(TARGET_DIR)/usr/share/jsen/$$dir && \
->> +             $(INSTALL) -m 0644 -t $(TARGET_DIR)/usr/share/jsen/$$dir \
->> +                     $(@D)/$$dir/*.* || exit 1; \
->> +     done
->> +
->> +     # Install required files from the root directory
->> +     for file in $(JSEN_ROOT_FILES_LIST); \
->> +     do \
->> +             $(INSTALL) -D -m 0644 $(@D)/$$file \
->> +                     $(TARGET_DIR)/usr/share/jsen/$$file \
->> +                     || exit 1; \
->> +     done
->> +endef
->
-> I think this is more complicated than it needs to be. What about:
->
-> define JSEN_INSTALL_TARGET_CMDS
->         mkdir -p $(TARGET_DIR)/usr/share/jsen
->         $(foreach d,dist lib index.js,\
->                 cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/jsen/$(sep))
-> endef
->
-> As a side note, I am wondering if we shouldn't create some common
-> infrastructure to simplify all those packages that just need to "copy"
-> stuff. Either a special variable in the generic-package infrastructure,
-> or a separate "copy-package" infrastructure that provides a special
-> variable that allows the package to list "stuff to be copied" and
-> another listing "where to copy". But that's clearly beyond the scope of
-> your patch, so don't worry about this.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+ Remember to encode this dependency in Config.in, i.e.
+
+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+
+(preferably with a comment why it is needed).
+
+> - make
+> 
+> __Build instructions__
+> 
+> $ git clone https://github.com/adobkin/libcapn.git
+> $ git submodule update --init
+> $ mkdir build
+> $ cd build
+> $ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ../
+> $ make
+> $ sudo make install
+> ```
+> 
+> 
+> 1) I am not sure how the git submodule update --init is handled in buildroot.
+
+ If you need it, then you have to:
+
+- add an EXTRA_DOWNLOADS of the tarball (using the github macro);
+
+- add a POST_EXTRACT_HOOKS to extract the tarball in the right subdirectory.
+
+> 
+> 2) Building yields this error:
+> 
+[snip]
+> -- Looking for strerror_r - found
+> -- Performing test APN_HAVE_GLIBC_STRERROR_R
+> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following
+> cache variables appropriately:
+>    APN_HAVE_GLIBC_STRERROR_R (advanced)
+>    APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT (advanced)
+> For details see
+> /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
+> -- Performing test APN_HAVE_GLIBC_STRERROR_R - Failed
+> -- Performing test APN_HAVE_POSIX_STRERROR_R
+> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following
+> cache variables appropriately:
+>    APN_HAVE_POSIX_STRERROR_R (advanced)
+>    APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT (advanced)
+> For details see
+> /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
+
+ It's trying to run the cross-compiled program, which obviously won't work. So
+you have to pass the correct setting using _CONF_OPTS = -D...
+
+ But as far as I can see, it will _always_ be APN_HAVE_POSIX_STRERROR_R, because
+_GNU_SOURCE is not defined and _POSIX_C_SOURCE is explicitly set to 200112L. I
+checked this with a native build. So I'd try to upstream a patch that removes
+this test completely... The alternative is to set the cache variables explicitly.
+
+> -- Performing test APN_HAVE_POSIX_STRERROR_R - Failed
+> -- Found OpenSSL:
+> /home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libssl.so;/home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libcrypto.so
+> (found version "1.0.2c")
+
+ Don't forget to add the openssl select to Config.in and dependency to libcapn.mk!
+
+
+ Regards,
+ Arnout
+
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
