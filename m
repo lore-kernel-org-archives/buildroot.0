@@ -1,59 +1,36 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 16 Feb 2016 15:34:22 +0100
-Subject: [Buildroot] [PATCH] barebox: add an option to embed environment
-	image
-Message-ID: <1455633262-27930-1-git-send-email-yegorslists@googlemail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Feb 2016 14:38:16 +0000
+Subject: [Buildroot] [Bug 8651] libMonoPosixHelper.so wrong link reference
+ in buildroot image
+In-Reply-To: <bug-8651-163@https.bugs.busybox.net/>
+References: <bug-8651-163@https.bugs.busybox.net/>
+Message-ID: <bug-8651-163-155UDOB7cf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+https://bugs.busybox.net/show_bug.cgi?id=8651
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- boot/barebox/Config.in  | 12 ++++++++++++
- boot/barebox/barebox.mk |  6 ++++++
- 2 files changed, 18 insertions(+)
+--- Comment #8 from Markus Egle <Markus.Egle@Qiagen.com> ---
+Created attachment 6331
+  --> https://bugs.busybox.net/attachment.cgi?id=6331&action=edit
+Archive with SimpleSerialPortOpen.exe
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 39cb5d2..5db98c6 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -121,4 +121,16 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
- 	  barebox devfs format, stored in the images directory, with
- 	  the same name as the directory name given here.
- 
-+config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
-+	bool "Embed custom environment"
-+	help
-+	  Embed a custom environment image into barebox.bin.
-+
-+config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
-+	string "Embedded environment path"
-+	depends on BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
-+	help
-+	  Path to the directory containing the custom barebox
-+	  environment.
-+
- endif
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7715daf..73b73dd 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -72,6 +72,12 @@ define BAREBOX_BUILD_BAREBOXENV_CMDS
- endef
- endif
- 
-+ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV),y)
-+define BAREBOX_KCONFIG_FIXUP_CMDS
-+	$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENVIRONMENT_PATH,$(call qstrip, $(BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH)),$(@D)/.config)
-+endef
-+endif
-+
- ifeq ($(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
- BAREBOX_ENV_NAME = $(notdir $(call qstrip,\
- 	$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
+            SerialPort sp = new SerialPort("/dev/ttyS0", 19200);
+            try
+            {
+                sp.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+creates the error that libMonoPosixHelper.so couldn't be found.
+
 -- 
-2.1.4
+You are receiving this mail because:
+You are on the CC list for the bug.
