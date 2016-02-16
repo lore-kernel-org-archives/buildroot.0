@@ -1,139 +1,32 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 16 Feb 2016 14:27:08 +0100
-Subject: [Buildroot] libcapn build failure
-In-Reply-To: <56C1F90F.80804@proximus.be>
-References: <56C1F90F.80804@proximus.be>
-Message-ID: <CAHXCMMJf4JHRKoCZ_B9eMWXf+rXX+xNgi=e2Qzm_mJi8ULBRvg@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 16 Feb 2016 10:32:50 -0300
+Subject: [Buildroot] [PATCH] graphite2: security bump to version 1.3.5
+In-Reply-To: <20160215224355.5896546e@free-electrons.com>
+References: <1455554749-11434-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160215224355.5896546e@free-electrons.com>
+Message-ID: <56C32502.8010204@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Johan,
+On 15/02/16 18:43, Thomas Petazzoni wrote:
 
-
-On Feb 15, 2016 5:13 PM, "Johan Sagaert" <sagaert.johan@proximus.be> wrote:
+> Note that our graphite2/Config.in points to
+> http://sourceforge.net/projects/silgraphite/, which states:
 >
-> Hi
+> """
+> This project has been deprecated. Graphite2, a new version of the
+> Graphite engine, is available at: https://github.com/silnrsi/graphite
+> with its own bug tracker.
+> """
 >
-> I am trying to get libcapn into buildroot.(cmake based)
-> Build error :
+> Best regards,
 >
-> >>> libcapn 7a6dc662e9daa864f687 Configuring
-> (mkdir -p /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && cd /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ && rm -f CMakeCache.txt && PATH="/home/buildroot12git/output/host/bin:/home/buildroot12git/output/host/sbin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/host/usr/sbin:/root/google-cloud-sdk/bin:/home/buildroot12git/output/host/usr/bin:/home/buildroot12git/output/build/host-cmake-3.1.3/bin:/root/google-cloud-sdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" /home/buildroot12git/output/host/usr/bin/cmake /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/ -DCMAKE_TOOLCHAIN_FILE="/home/buildroot12git/output/host/usr/share/buildroot/toolchainfile.cmake" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON -DUSE_CCACHE=OFF  )
-> -- Looking for include file ctype.h
-> -- Looking for include file ctype.h - found
-> -- Looking for include file inttypes.h
-> -- Looking for include file inttypes.h - found
-> -- Looking for include file stdint.h
-> -- Looking for include file stdint.h - found
-> -- Looking for include file unistd.h
-> -- Looking for include file unistd.h - found
-> -- Looking for include file netinet/in.h
-> -- Looking for include file netinet/in.h - found
-> -- Looking for include file arpa/inet.h
-> -- Looking for include file arpa/inet.h - found
-> -- Looking for include file netdb.h
-> -- Looking for include file netdb.h - found
-> -- Looking for include file sys/fcntl.h
-> -- Looking for include file sys/fcntl.h - found
-> -- Looking for include file sys/socket.h
-> -- Looking for include file sys/socket.h - found
-> -- Looking for include file strings.h
-> -- Looking for include file strings.h - found
-> -- Looking for strerror_r
-> -- Looking for strerror_r - found
-> -- Performing test APN_HAVE_GLIBC_STRERROR_R
-> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
->    APN_HAVE_GLIBC_STRERROR_R (advanced)
->    APN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT (advanced)
-> For details see /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
-> -- Performing test APN_HAVE_GLIBC_STRERROR_R - Failed
-> -- Performing test APN_HAVE_POSIX_STRERROR_R
-> CMake Error: TRY_RUN() invoked in cross-compiling mode, please set the following cache variables appropriately:
->    APN_HAVE_POSIX_STRERROR_R (advanced)
->    APN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT (advanced)
-> For details see /home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/TryRunResults.cmake
-> -- Performing test APN_HAVE_POSIX_STRERROR_R - Failed
-> -- Found OpenSSL: /home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libssl.so;/home/buildroot12git/output/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/lib/libcrypto.so (found version "1.0.2c")
-> -- Configuring incomplete, errors occurred!
-> See also "/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/CMakeFiles/CMakeOutput.log".
-> make: *** [/home/buildroot12git/output/build/libcapn-7a6dc662e9daa864f687/.stamp_configured] Error 1
->
->
->
-> I have no clue how to set cache variables appropriately...
->
-> (Due to the git submodule usage, i had to clone it first some where else and then
-> executed  git submodule update --init , and then i copied the 3rd party source into my build tree
-> in order to get the jansson source)
->
-> See attached logfiles
->
->
-> almost giving up
+> Thomas
 
-Don't! This part of the learning process ;-)
-
-Few tips for investigating cmake package failures:
-1) the log files generated by cmake (i.e. the *.error and *.output
-files) are good starting points;
-2) after configuring, you can check the CMakeCache.txt file (located
-in the build directory) to see what is the value of this or that
-variable;
-3) you can set/force some variables for the configure step by adding
-some *_CONF_OPTS (see [1]), e.g.:
-      MYPKG_CONF_OPTS += -Dvarfoo=value
-4) some variables may not be stored in the CMakeCache.txt file, or if
-you want to trace some cmake code path, you can patch the
-CMakeLists.txt files calling the message function [2] (similar to
-adding printf in the code);
-5) a last thing when having trouble with some dependency modules, you
-may need to add --trace to the cmake options [3]. This is not what you
-need here.
-
-Of course, trying to do run test in the buildroot case is a complete non-sense.
-
-For your issue, you should start with tips 2), 3) and maybe 4).
-
-For this specific HAVE_*_STRERROR test, you may need to set those
-corresponding cmake variables differently, depending on the C-library
-used in the toolchain.
-
-[...]
-> ==========
-> libcapn.mk :
-> ==========
-> ################################################################################
-> #
-> # libcapn
-> #
-> ################################################################################
->
-> LIBCAPN_VERSION = 7a6dc662e9daa864f687
-> LIBCAPN_SITE = $(call github,adobkin,libcapn,$(LIBCAPN_VERSION))
-> LIBCAPNLICENSE = MIT
->
-> LIBCAPN_DEPENDENCIES += jansson openssl
->
-> $(eval $(cmake-package))
-
-This looks right; try playing with (values are set randomly here ;-]):
-LIBCAPN_CONF_OPTS = -DAPN_HAVE_GLIBC_STRERROR_R=ON \
-  -DAPN_HAVE_POSIX_STRERROR_R=OFF
-
-This should bypass the tryrun test.
-
-Good luck ;-)
-
-
-[1] http://nightly.buildroot.org/manual.html#cmake-package-reference
-[2] https://cmake.org/cmake/help/v3.4/command/message.html
-[3] https://cmake.org/cmake/help/v3.4/manual/cmake.1.html
-
-
-Regards,
-
---
-Samuel
+Hi.
+Yes, it's pointing to the old home page, i'll send a followup patch 
+changing that, thanks.
+Regards.
