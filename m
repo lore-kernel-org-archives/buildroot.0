@@ -1,30 +1,27 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Feb 2016 16:28:18 -0300
-Subject: [Buildroot] [PATCH] spice: arch-mask toolchain comment
-Message-ID: <1455737298-31358-1-git-send-email-gustavo@zacarias.com.ar>
+From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Date: Wed, 17 Feb 2016 15:04:49 -0500 (EST)
+Subject: [Buildroot] pjsip package status
+Message-ID: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise it shows up for other architectures with minimal toolchains
-giving the impression that it's available/tested.
+Hi, 
+Regarding pjsip package ( http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html ), is there any reason why it's not part of the package collection yet? 
+Regards, 
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/spice/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/spice/Config.in b/package/spice/Config.in
-index f1fcf69..bde3a92 100644
---- a/package/spice/Config.in
-+++ b/package/spice/Config.in
-@@ -1,4 +1,5 @@
- comment "spice server needs a toolchain w/ wchar, threads"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
- 
- comment "spice server depends on python (for pyparsing)"
 -- 
-2.4.10
+Patrick Keroulas 
+Consultant en logiciel libre, 
+Savoir-faire Linux Inc. 
+
+7275 Saint-Urbain, bureau 200 
+Montr?al, Qu?bec H2R 2Y5 
+t?l: (514) 276-5468 ext. 167 
+fax: (514) 276-5465 
+_____________________ 
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160217/c9e3dd4c/attachment.html>
