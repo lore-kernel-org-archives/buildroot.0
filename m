@@ -1,65 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2016 22:09:09 +0100
-Subject: [Buildroot] [git commit] icu: fix build-time segfault by
-	backporting upstream fix
-Message-ID: <20160217211033.2086D80ACC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Feb 2016 22:13:13 +0100
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: append endianness
+ argument to TARGET_LD for MIPS
+In-Reply-To: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160217221313.439547e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef557e0d28a59c251f693acc8d7452e66d7483fa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Vicente Olivert Riera,
 
-The icu bug http://bugs.icu-project.org/trac/ticket/11959 also
-hit me, but oddly enough only when running build build server via
-Jenkins. This patch adds the upstream fix for the mentioned bug, so the
-patch most likely can be removed at the next version bump.
+On Wed, 17 Feb 2016 17:07:53 +0000, Vicente Olivert Riera wrote:
+> We don't use a wrapper for ld in Buildroot like we do for gcc, so when
+> using ld for linking (instead of gcc) the process can fail if the
+> appropriate arguments are not passed to it. For instance, this happens
+> when building perf (Linux -> Linux Kernel Tools -> perf) for MIPS little
+> endian, and this is how the error message looks like:
+> 
+>  LD    /br/output/build/perf-custom/fd/libapi-in.o
+> /br/output/host/usr/bin/mips-linux-gnu-ld:
+> /br/output/build/perf-custom/fd/array.o: compiled for a little endian
+> system and target is big endian
+> 
+> In this case the linker is called without passing any argument to
+> indicate the endianness, so the default one is used, which is big endian
+> and therefore the process fails because the object files were built for
+> little endian instead.
+> 
+> This patch doesn't fix the problem in perf. It just appends the right
+> endianness argument (-EL or -EB) to the TARGET_LD variable when building
+> for MIPS architecture.
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/Makefile.in | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index dd595e2..8422b96 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -190,6 +190,19 @@ TARGET_READELF  = $(TARGET_CROSS)readelf
+>  TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
+>  TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+>  
+> +# Append the endianness argument to ld for MIPS architecture in order to
+> +# avoid problems like this one when using ld instead of gcc for linking:
+> +# mips-linux-gnu-ld: failed to merge target specific data of file foo.o
+> +# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
+> +# target is big endian
+> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> +ifeq ($(BR2_ENDIAN),"BIG")
+> +TARGET_LD += -EB
+> +else
+> +TARGET_LD += -EL
+> +endif
+> +endif
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...llocating-memory-for-pkgDataFlags.-compil.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+This is really an horrible fix IMO. First because TARGET_LD is only
+meant to contain the path to the linker, and not additional flags.
+Additional flags should go in TARGET_LDFLAGS.
 
-diff --git a/package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch b/package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch
-new file mode 100644
-index 0000000..d53a761
---- /dev/null
-+++ b/package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch
-@@ -0,0 +1,34 @@
-+From 212016f27dd581fd7bef1a44a3342c59619a4ec8 Mon Sep 17 00:00:00 2001
-+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+Date: Wed, 27 Jan 2016 17:24:25 +0100
-+Subject: [PATCH] fix "Error allocating memory for pkgDataFlags." compilation
-+ error
-+
-+ This is backport of the upstream icu commit 38081
-+(http://bugs.icu-project.org/trac/changeset/38081/icu/trunk), which is
-+a fix to upstream icu bug #11959
-+(http://bugs.icu-project.org/trac/ticket/11959)
-+
-+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+---
-+ source/tools/toolutil/flagparser.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/source/tools/toolutil/flagparser.c b/source/tools/toolutil/flagparser.c
-+index 5543415..57256c3 100644
-+--- a/source/tools/toolutil/flagparser.c
-++++ b/source/tools/toolutil/flagparser.c
-+@@ -96,8 +96,8 @@ parseFlagsFile_cleanup:
-+     uprv_free(buffer);
-+ 
-+     T_FileStream_close(f);
-+-    
-+-    if (U_FAILURE(*status)) {
-++
-++    if (U_FAILURE(*status) && *status != U_BUFFER_OVERFLOW_ERROR) {
-+         return -1;
-+     }
-+ 
-+-- 
-+1.9.1
-+
+And secondly because programs should not use ld directly for linking,
+but gcc. Remember Vicente, you already fixed this issue in other
+packages and the fix was to use gcc instead of ld.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
