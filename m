@@ -1,68 +1,61 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 17 Feb 2016 17:07:54 +0000
-Subject: [Buildroot] [PATCH 2/2] linux/linux.mk: add LD="$(TARGET_LD)" to
-	LINUX_MAKE_FLAGS
-In-Reply-To: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1455728874-47789-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 17 Feb 2016 18:23:11 +0100
+Subject: [Buildroot] Issue with toolchain wrapper changes
+In-Reply-To: <20160217125658.7776ac38@free-electrons.com>
+References: <20160213163116.745e4507@free-electrons.com>
+ <87lh6j1ttt.fsf@dell.be.48ers.dk>
+ <20160217125658.7776ac38@free-electrons.com>
+Message-ID: <CAAXf6LXc4FvFMcZOKBa-X0Krr+TvEL=pkfzKO1VHuaUthoLqEA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some Linux tools like perf use ld for linking instead of gcc, and that
-may cause problems on certain architectures (MIPS, for instance) since
-we don't use a wrapper for ld as we do for gcc and the call to the
-linker may lack some necessary arguments (which would be included if we
-were using a wrapper). The problem is explained in detail below.
+On Feb 17, 2016 13:00, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Wed, 17 Feb 2016 12:04:30 +0100, Peter Korsgaard wrote:
+> > >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+writes:
+> >
+> >  > Hello Arnout,
+> >  > I am facing some issues with the toolchain wrapper, which I believe
+> >  > were introduced by the changes done to use the toolchain wrapper also
+> >  > for the internal toolchain backend.
+> >
+> >  > As you know, Buildroot installs all its host stuff in
+$(HOST_DIR)/usr,
+> >  > and not directly under $(HOST_DIR). For the autobuilders, I build a
+> >  > number of toolchains with Buildroot, which are then used as pre-built
+> >  > external toolchains by the autobuilders. In order for those
+toolchains
+> >  > to look like conventional toolchains, at the end of their build, I
+do:
+> >
+> >  >    mv /path/to/host/usr/* /path/to/host/
+> >  >    rmdir /path/to/host/usr/
+> >
+> >  > Which moves everything outside of the usr/ subdirectory, and removes
+> >  > the usr/ subdirectory itself. This used to work perfectly fine, but
+> >  > now, it fails to find the .br_real equivalent of the command being
+> >  > executed. Example:
+> >
+> > Is the extra /usr really such a problem? I've built a bunch of
+> > toolchains, and just refer to them as /opt/br/<whatever>/usr.
+>
+> Yes, for my purpose it's annoying. I want to produce pre-built
+> toolchains that everyone can use, in Buildroot or something else, so I
+> want them to look like normal toolchains. And normal toolchains don't
+> have this useless usr/ top-level directory.
 
-perf defines the value of LD on its Makefile by doing this:
+I may be misunderstanding something, but what is the problem with creating
+the archive from the usr directory? This is what I did at the time I was
+using a buildroot toolchain.
 
-$(call allow-override,LD,$(CROSS_COMPILE)ld)
-
-So, if we don't pass an LD variable to override its value it will set
-the value using the content of the CROSS_COMPILE variable and the result
-will be something like <arch>-linux-gnu-ld.
-
-This works fine for all architectures (because the value will be the
-same as the TARGET_LD variable) except for MIPS, because the value of
-TARGET_LD when building for MIPS also contains the argument to set the
-endianness.
-
-Due to that, perf will fail to build for MIPS little endian because the
-linker (ld) will not receive any argument to set the endianness and the
-default one (-EB for big endian) will be used instead. The error looks
-like this:
-
- LD    /br/output/build/perf-custom/fd/libapi-in.o
-/br/output/host/usr/bin/mips-linux-gnu-ld:
-/br/output/build/perf-custom/fd/array.o: compiled for a little endian
-system and target is big endian
-
-So in order to make sure that perf will call the linker as we want
-(using the value of the TARGET_LD variable), we define an LD variable
-which value is the same as TARGET_LD, and we add that variable to the
-LINUX_MAKE_FLAGS one. Then, since the linux-tool-perf.mk file uses that
-variable, the value of LD in the perf Makefile will be overriden with
-ours and the problem will be fixed.
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- linux/linux.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e20255..7f48155 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -79,6 +79,7 @@ LINUX_MAKE_FLAGS = \
- 	HOSTCC="$(HOSTCC)" \
- 	HOSTCFLAGS="$(HOSTCFLAGS)" \
- 	ARCH=$(KERNEL_ARCH) \
-+	LD="$(TARGET_LD)" \
- 	INSTALL_MOD_PATH=$(TARGET_DIR) \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
--- 
-2.4.10
+/Thomas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160217/734dfd5e/attachment.html>
