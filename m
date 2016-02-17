@@ -1,29 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Feb 2016 22:35:31 +0100
-Subject: [Buildroot] [PATCH v4 01/17] python-characteristic: new package
-In-Reply-To: <1454799603-5474-2-git-send-email-mc5686@mclink.it>
-References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-2-git-send-email-mc5686@mclink.it>
-Message-ID: <20160217223531.0192cee7@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2016 22:29:15 +0100
+Subject: [Buildroot] [git commit] package/binutils-2.25.1: backport upstream
+	patch for PR19405
+Message-ID: <20160217213959.CACB88194E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mauro Condarelli,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f169fe85ed709a9d9201aab68d2185d02aa3f8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  6 Feb 2016 23:59:47 +0100, Mauro Condarelli wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> 
-> ---
-> Changes v3 -> v4
->   - removed spurious blank line at end of Config.in (suggested by yegorich)
+Fixes Buildroot generated toolchains:
+http://autobuild.buildroot.net/results/89b/89b46f97e2736d9337f888c761259e7bc7cdd128
 
-Applied to next, thanks!
+Upstream bug:
+https://sourceware.org/bugzilla/show_bug.cgi?id=19405
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ertion-in-NIOS2-linker-to-allow-signed-16.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+
+diff --git a/package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch b/package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch
+new file mode 100644
+index 0000000..6ae9d9a
+--- /dev/null
++++ b/package/binutils/2.25.1/915-Correct-assertion-in-NIOS2-linker-to-allow-signed-16.patch
+@@ -0,0 +1,70 @@
++From d07f38875f37f4608e8ecb761619d84716896f14 Mon Sep 17 00:00:00 2001
++From: Nick Clifton <nickc@redhat.com>
++Date: Wed, 10 Feb 2016 11:25:59 +0000
++Subject: [PATCH] Correct assertion in NIOS2 linker to allow signed 16-buit
++ immediate values.
++
++	PR 19405
++	* elf32-nios2.c (nios2_elf32_install_imm16): Allow for signed
++	immediate values.
++	* elf-eh-frame.c (_bfd_elf_discard_section_eh_frame): Limit the
++	number of messages about FDE encoding preventing .eh_frame_hdr
++	generation.
++
++[Romain: rebase on 2.25.1]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ bfd/elf-eh-frame.c | 18 +++++++++++++++---
++ bfd/elf32-nios2.c  |  2 +-
++ 2 files changed, 16 insertions(+), 4 deletions(-)
++
++diff --git a/bfd/elf-eh-frame.c b/bfd/elf-eh-frame.c
++index 002932d..22430f9 100644
++--- a/bfd/elf-eh-frame.c
+++++ b/bfd/elf-eh-frame.c
++@@ -1181,14 +1181,26 @@ _bfd_elf_discard_section_eh_frame
++ 		     && ent->make_relative == 0)
++ 		    || (ent->fde_encoding & 0x70) == DW_EH_PE_aligned))
++ 	      {
+++		static int num_warnings_issued = 0;
+++
++ 		/* If a shared library uses absolute pointers
++ 		   which we cannot turn into PC relative,
++ 		   don't create the binary search table,
++ 		   since it is affected by runtime relocations.  */
++ 		hdr_info->table = FALSE;
++-		(*info->callbacks->einfo)
++-		  (_("%P: FDE encoding in %B(%A) prevents .eh_frame_hdr"
++-		     " table being created.\n"), abfd, sec);
+++		if (num_warnings_issued < 10)
+++		  {
+++		    (*info->callbacks->einfo)
+++		      (_("%P: FDE encoding in %B(%A) prevents .eh_frame_hdr"
+++			 " table being created.\n"), abfd, sec);
+++		    num_warnings_issued ++;
+++		  }
+++		else if (num_warnings_issued == 10)
+++		  {
+++		    (*info->callbacks->einfo)
+++		      (_("%P: Further warnings about FDE encoding preventing .eh_frame_hdr generation dropped.\n"));
+++		    num_warnings_issued ++;
+++		  }
++ 	      }
++ 	    ent->removed = 0;
++ 	    hdr_info->fde_count++;
++diff --git a/bfd/elf32-nios2.c b/bfd/elf32-nios2.c
++index 0105b70..726647d 100644
++--- a/bfd/elf32-nios2.c
+++++ b/bfd/elf32-nios2.c
++@@ -1035,7 +1035,7 @@ nios2_elf32_install_imm16 (asection *sec, bfd_vma offset, bfd_vma value)
++ {
++   bfd_vma word = bfd_get_32 (sec->owner, sec->contents + offset);
++ 
++-  BFD_ASSERT(value <= 0xffff);
+++  BFD_ASSERT (value <= 0xffff || ((bfd_signed_vma) value) >= -0xffff);
++ 
++   bfd_put_32 (sec->owner, word | ((value & 0xffff) << 6),
++ 	      sec->contents + offset);
++-- 
++2.4.3
++
