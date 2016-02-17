@@ -1,39 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Feb 2016 22:05:17 +0100
-Subject: [Buildroot] pjsip package status
-In-Reply-To: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
-References: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <20160217220517.00f5e5fa@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2016 22:10:22 +0100
+Subject: [Buildroot] [PATCH 1/1] icu: fix build-time segfault by
+	backporting upstream fix
+In-Reply-To: <1455725382-32751-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+ (Zoltan Gyarmati's message of "Wed, 17 Feb 2016 17:09:42 +0100")
+References: <1455725382-32751-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <87oabfxcu9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Patrick,
+>>>>> "Zoltan" == Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com> writes:
 
-On Wed, 17 Feb 2016 15:04:49 -0500 (EST), Patrick Keroulas wrote:
+ > The icu bug http://bugs.icu-project.org/trac/ticket/11959 also
+ > hit me, but oddly enough only when running build build server via
+ > Jenkins. This patch adds the upstream fix for the mentioned bug, so the
+ > patch most likely can be removed at the next version bump.
 
-> Regarding pjsip package
-> ( http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html
-> ), is there any reason why it's not part of the package collection
-> yet? Regards, 
+ > Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 
-A first version was posted on April 26th, to which I made some
-comments. The original author, Bernd Kuhls, made some changes and
-posted a second version on the same day, April 26th. But then nothing
-happened, until Luca Ceresoli asked on October 4th if Bernd was still
-interested. On October 5th, Bernd said he was no longer interested in
-the patch.
+Committed, thanks.
 
-So, if you are interested by pjsip, feel free to take over the patch,
-starting from its latest version, available at
-http://patchwork.ozlabs.org/patch/464737/.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
