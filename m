@@ -1,35 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Feb 2016 13:50:05 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
-In-Reply-To: <CAAMH-yvyOhp+5jxVDo=ZaAooX4G4GTrj5ZJtO2Djm-8o4khgbg@mail.gmail.com>
-References: <1454363759-23349-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454363759-23349-2-git-send-email-gary.bisson@boundarydevices.com>
- <20160216215313.15f228fe@gmx.net>
- <CAAMH-yuzsvt-6U-JX7RhNoEcWoJA4ahRm4U27LvWLwXyg4UtTg@mail.gmail.com>
- <trinity-f34aaf6c-100d-4336-9dbf-030d951133dd-1455701165352@3capp-gmx-bs46>
- <CAAMH-ysOoy8FNMZAOA0_m_vOnduBTYuQLcOe-2eVt+8t4wZvaw@mail.gmail.com>
- <trinity-9474c08f-9274-4fd6-961b-8257e3d58bd3-1455712203984@3capp-gmx-bs71>
- <CAAMH-yvyOhp+5jxVDo=ZaAooX4G4GTrj5ZJtO2Djm-8o4khgbg@mail.gmail.com>
-Message-ID: <20160217135005.2c0e0650@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 17 Feb 2016 10:00:46 -0300
+Subject: [Buildroot] [PATCH next] musl: add fwrite regression patch
+Message-ID: <1455714046-22512-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As pointed in http://www.openwall.com/lists/musl/2016/02/17/3 add the
+fwrite regression patch for the recent 1.1.13 release.
 
-On Wed, 17 Feb 2016 13:42:44 +0100, Gary Bisson wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...n-in-fputs-that-fwrite-returning-0-implie.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
 
-> Well it is not Nitrogen6x-specific, it applies to all i.MX6 platforms
-> so I'm not sure where would be the best place to give this info apart
-> from the help text. Thomas, any idea on this?
-
-I am not sure where to store such platform-specific information. A new
-section in the Buildroot manual, perhaps?
-
-Thomas
+diff --git a/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
+new file mode 100644
+index 0000000..b32b752
+--- /dev/null
++++ b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
+@@ -0,0 +1,38 @@
++From 10a17dfbad2c267d885817abc9c7589fc7ff630b Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Tue, 16 Feb 2016 13:26:16 -0500
++Subject: [PATCH] fix assumption in fputs that fwrite returning 0 implies an
++ error
++
++internally, the idiom of passing nmemb=1 to fwrite and interpreting
++the return value of fwrite (which is necessarily 0 or 1) as
++failure/success is fairly widely used. this is not correct, however,
++when the size argument is unknown and may be zero, since C requires
++fwrite to return 0 in that special case. previously fwrite always
++returned nmemb on success, but this was changed for conformance with
++ISO C by commit 500c6886c654fd45e4926990fee2c61d816be197.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: upstream.
++
++ src/stdio/fputs.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/stdio/fputs.c b/src/stdio/fputs.c
++index 4737f44..1cf344f 100644
++--- a/src/stdio/fputs.c
+++++ b/src/stdio/fputs.c
++@@ -3,7 +3,8 @@
++ 
++ int fputs(const char *restrict s, FILE *restrict f)
++ {
++-	return (int)fwrite(s, strlen(s), 1, f) - 1;
+++	size_t l = strlen(s);
+++	return (fwrite(s, 1, l, f)==l) - 1;
++ }
++ 
++ weak_alias(fputs, fputs_unlocked);
++-- 
++2.4.10
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
