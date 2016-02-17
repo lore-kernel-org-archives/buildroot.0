@@ -1,198 +1,229 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Wed, 17 Feb 2016 15:43:01 -0200
-Subject: [Buildroot] [PATCH v2 1/1] protobuf: fix detection of __atomic_*()
-	built-ins
-In-Reply-To: <1455730981-6316-1-git-send-email-casantos@datacom.ind.br>
-References: <1455204185-7124-1-git-send-email-casantos@datacom.ind.br>
- <1455730981-6316-1-git-send-email-casantos@datacom.ind.br>
-Message-ID: <1455730981-6316-2-git-send-email-casantos@datacom.ind.br>
+From: Sagaert Johan <sagaert.johan@proximus.be>
+Date: Wed, 17 Feb 2016 19:04:06 +0100
+Subject: [Buildroot] [PATCH v2 1/1] libcapn : new package
+Message-ID: <1455732246-27866-1-git-send-email-sagaert.johan@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use the recently introduced BR2_TOOLCHAIN_HAS_ATOMIC boolean.
+libcapn is a C Library to interact with the Apple Push Notification Service
+(APNs for short) using simple and intuitive API.
+With the library you can easily send push notifications to iOS and OS X (>= 10.8) devices.
 
-- Import an upstream patch to fix error handling when atomic operations
-  are not detected. Without this patch the build fails due to a syntax
-  error instead of showing the proper message.
+The patches remove the jansson git submodule requirement
+and links against the jansson Builtroot package instead.
 
-- Add a patch to configure.ac to check if libatomic is needed and force
-  linking to it (we will attempt to submit this upstream).
-
-- Disable build for SPARC64 because it fails due to a missing definition
-  of Atomic64.
-
-On PowerPC, the __atomic_*() built-ins for 1-byte, 2-byte and 4-byte
-types are available built-in. The corresponding built-ins for 8-byte
-types, however, are implemented via libatomic, so requiring gcc >= 4.8.
-
-In Buildroot, to simplify things, it was decided to require gcc 4.8 as
-soon as the architectures has at least one __atomic_*() built-in variant
-that requires libatomic.
-
-Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
-*could* technically build with gcc 4.7. This is probably not a big deal,
-and we can live with requiring gcc 4.8 on PowerPC to build protobuf. The
-same restriction applies to SPARC.
-
-The build for SPARC64 breaks even using the master branch of protobuf
-due to undefined references to some NoBarrier_Atomic*() functions.
-
-Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
 ---
- ...GLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch | 61 ++++++++++++++++++++++
- ...configure.ac-check-if-libatomic-is-needed.patch | 34 ++++++++++++
- package/protobuf/Config.in                         | 21 +++++++-
- 3 files changed, 115 insertions(+), 1 deletion(-)
- create mode 100644 package/protobuf/0001-Fix-GOOGLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch
- create mode 100644 package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
+Changes V1->V2
+	include missing hash file.
+---
+ package/Config.in                                  |  1 +
+ .../0001-use-global-jansson-include-file.patch     | 26 +++++++++++
+ ...ve-the-jansson-git-submodule-requirements.patch | 54 ++++++++++++++++++++++
+ .../0003-remove-ld.so.conf.d-creation.patch        | 29 ++++++++++++
+ package/libcapn/Config.in                          | 13 ++++++
+ package/libcapn/libcapn.hash                       |  2 +
+ package/libcapn/libcapn.mk                         | 18 ++++++++
+ 7 files changed, 143 insertions(+)
+ create mode 100644 package/libcapn/0001-use-global-jansson-include-file.patch
+ create mode 100644 package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch
+ create mode 100644 package/libcapn/0003-remove-ld.so.conf.d-creation.patch
+ create mode 100644 package/libcapn/Config.in
+ create mode 100644 package/libcapn/libcapn.hash
+ create mode 100644 package/libcapn/libcapn.mk
 
-diff --git a/package/protobuf/0001-Fix-GOOGLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch b/package/protobuf/0001-Fix-GOOGLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch
+diff --git a/package/Config.in b/package/Config.in
+index 529ad33..30042fe 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1073,6 +1073,7 @@ menu "Networking"
+ 	source "package/gupnp-av/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
++	source "package/libcapn/Config.in"
+ 	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcurl/Config.in"
+diff --git a/package/libcapn/0001-use-global-jansson-include-file.patch b/package/libcapn/0001-use-global-jansson-include-file.patch
 new file mode 100644
-index 0000000..c271ea4
+index 0000000..8e89b7e
 --- /dev/null
-+++ b/package/protobuf/0001-Fix-GOOGLE_PROTOBUF_ATOMICOPS_ERROR-syntax-error.patch
-@@ -0,0 +1,61 @@
-+From 50982f711de6ad58f6e0bef01a75d2b9cf35f5dc Mon Sep 17 00:00:00 2001
-+From: George Redivo <george.redivo@datacom.ind.br>
-+Date: Mon, 6 Jul 2015 16:56:41 -0300
-+Subject: [PATCH 1/2] Fix GOOGLE_PROTOBUF_ATOMICOPS_ERROR syntax error
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libcapn/0001-use-global-jansson-include-file.patch
+@@ -0,0 +1,26 @@
++From d696407e5fe6d14ac18f4b63532c4eaa80699fa3 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@proximus.be>
++Date: Wed, 17 Feb 2016 10:05:13 +0100
++Subject: [PATCH 1/3] use global jansson include file
 +
-+It's not possible to define "#error" inside a define.
-+It causes 'error: stray ?#? in program' compilation error.
-+
-+Now the define GOOGLE_PROTOBUF_ATOMICOPS_ERROR is the error message
-+and it's used along the code together "#error".
++Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
 +---
-+ src/google/protobuf/stubs/atomicops.h | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
++ src/library/apn_payload.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/google/protobuf/stubs/atomicops.h b/src/google/protobuf/stubs/atomicops.h
-+index b1336e3..a130b38 100644
-+--- a/src/google/protobuf/stubs/atomicops.h
-++++ b/src/google/protobuf/stubs/atomicops.h
-+@@ -162,7 +162,7 @@ Atomic64 Release_Load(volatile const Atomic64* ptr);
++diff --git a/src/library/apn_payload.c b/src/library/apn_payload.c
++index eaf5010..ac000e5 100644
++--- a/src/library/apn_payload.c
+++++ b/src/library/apn_payload.c
++@@ -24,7 +24,7 @@
++ #include <errno.h>
++ #include <assert.h>
 + 
-+ // Include our platform specific implementation.
-+ #define GOOGLE_PROTOBUF_ATOMICOPS_ERROR \
-+-#error "Atomic operations are not supported on your platform"
-++"Atomic operations are not supported on your platform"
-+ 
-+ // ThreadSanitizer, http://clang.llvm.org/docs/ThreadSanitizer.html.
-+ #if defined(THREAD_SANITIZER)
-+@@ -172,7 +172,7 @@ Atomic64 Release_Load(volatile const Atomic64* ptr);
-+ #if defined(GOOGLE_PROTOBUF_ARCH_IA32) || defined(GOOGLE_PROTOBUF_ARCH_X64)
-+ #include <google/protobuf/stubs/atomicops_internals_x86_msvc.h>
-+ #else
-+-GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-++#error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-+ #endif
-+ 
-+ // Solaris
-+@@ -203,15 +203,15 @@ GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-+ #if __has_extension(c_atomic)
-+ #include <google/protobuf/stubs/atomicops_internals_generic_gcc.h>
-+ #else
-+-GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-++#error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-+ #endif
-+ #else
-+-GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-++#error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-+ #endif
-+ 
-+ // Unknown.
-+ #else
-+-GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-++#error GOOGLE_PROTOBUF_ATOMICOPS_ERROR
-+ #endif
-+ 
-+ // On some platforms we need additional declarations to make AtomicWord
++-#include "src/jansson.h"
+++#include "jansson.h"
++ #include "apn_strings.h"
++ #include "apn_memory.h"
++ #include "apn_private.h"
 +-- 
-+2.5.0
++2.3.3
 +
-diff --git a/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
+diff --git a/package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch b/package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch
 new file mode 100644
-index 0000000..a70a23e
+index 0000000..7de9095
 --- /dev/null
-+++ b/package/protobuf/0002-configure.ac-check-if-libatomic-is-needed.patch
-@@ -0,0 +1,34 @@
-+From f020fe05a20dfcd16cd7df833dcf3cdeef770538 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <casantos@datacom.ind.br>
-+Date: Thu, 11 Feb 2016 10:58:35 -0200
-+Subject: [PATCH 2/2] configure.ac: check if libatomic is needed
++++ b/package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch
+@@ -0,0 +1,54 @@
++From e418621d70d05ca9b77de6a1d369ff01266a3347 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@proximus.be>
++Date: Wed, 17 Feb 2016 10:05:58 +0100
++Subject: [PATCH 2/3] remove the jansson git submodule requirements
 +
-+Compilation of protobuf for PowerPC and SPARC may fail due to missing
-+references to __atomic_fetch_add_4 and __atomic_compare_exchange_4.
-+
-+The __atomic_*() intrinsics for all sizes are provided by libatomic when
-+gcc is >= 4.8. This can be achieved by adding this to configure.ac:
-+
-+    AC_SEARCH_LIBS([__atomic_fetch_add_4], [atomic])
-+
-+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
++Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
 +---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
++ CMakeLists.txt | 16 +---------------
++ 1 file changed, 1 insertion(+), 15 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index c07067c..88d4a0d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -139,6 +139,8 @@ AM_CONDITIONAL([USE_EXTERNAL_PROTOC], [test "$with_protoc" != "no"])
-+ ACX_PTHREAD
-+ AC_CXX_STL_HASH
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 75e3b35..7a80fe6 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -94,10 +94,6 @@ ENDFOREACH(STRERROR_R_HEADER)
 + 
-++AC_SEARCH_LIBS([__atomic_load_4], [atomic])
-++
-+ case "$target_os" in
-+   mingw* | cygwin* | win*)
-+     ;;
++ INCLUDE(ExternalProject)
++ 
++-INCLUDE_DIRECTORIES ("${CAPN_THIRD_PARTY_DIR}/jansson")
++-INCLUDE_DIRECTORIES ("${CAPN_THIRD_PARTY_DIR}/jansson/include")
++-
++-
++ CONFIGURE_FILE("${CAPN_SOURCE_LIB_DIR}/apn_platform.h.cmake" "${PROJECT_BINARY_DIR}/src/library/apn_platform.h")
++ CONFIGURE_FILE("${CAPN_SOURCE_LIB_DIR}/apn_version.h.cmake" "${PROJECT_BINARY_DIR}/src/library/apn_version.h")
++ 
++@@ -206,16 +202,6 @@ ELSE(WIN32)
++             ENDIF()
++         ENDIF()
++ 
++-        ExternalProject_Add(
++-            jansson
++-            SOURCE_DIR "${CAPN_THIRD_PARTY_DIR}/jansson"
++-            BINARY_DIR "${CAPN_THIRD_PARTY_DIR}/jansson"
++-            INSTALL_DIR "${CAPN_THIRD_PARTY_DIR}/jansson"
++-            CMAKE_COMMAND cmake . -DCMAKE_C_FLAGS=-fPIC -DJANSSON_BUILD_DOCS=OFF
++-            BUILD_COMMAND make
++-            INSTALL_COMMAND ""
++-        )
++-		
++         SET(CAPN_INSTALL_PATH_LIB "${CAPN_INSTALL_PATH_LIB}/${CAPN_LIB_NAME}")
++         SET(CAPN_PKGCONF_FILE_NAME "libcapn.pc")
++         CONFIGURE_FILE("${CAPN_PKGCONF_FILE_NAME}.cmake" "${PROJECT_BINARY_DIR}/${CAPN_PKGCONF_FILE_NAME}")
++@@ -255,7 +241,7 @@ IF(WIN32)
++ 	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} ${OPENSSL_SSLEAY_LIBRARY})
++ 	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} ${OPENSSL_LIBEAY_LIBRARY})
++ ELSE()
++-	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} "${CAPN_THIRD_PARTY_DIR}/jansson/lib/libjansson.a")
+++	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} "jansson")
++ 	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} ${OPENSSL_LIBRARIES})
++ ENDIF()
++ 
 +-- 
-+2.5.0
++2.3.3
 +
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 3d4320b..3215a07 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -1,5 +1,22 @@
- # See src/google/protobuf/stubs/platform_macros.h for supported archs.
--# PowerPC doesn't actually work.
+diff --git a/package/libcapn/0003-remove-ld.so.conf.d-creation.patch b/package/libcapn/0003-remove-ld.so.conf.d-creation.patch
+new file mode 100644
+index 0000000..1605b37
+--- /dev/null
++++ b/package/libcapn/0003-remove-ld.so.conf.d-creation.patch
+@@ -0,0 +1,29 @@
++From e5d1accd8dca48639dea6f7c98501b1040652cea Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@proximus.be>
++Date: Wed, 17 Feb 2016 10:12:58 +0100
++Subject: [PATCH 3/3] remove ld.so.conf.d creation
++
++Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
++---
++ CMakeLists.txt | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7a80fe6..354688f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -211,11 +211,6 @@ ELSE(WIN32)
++             IF(NOT DEFINED CAPN_INSTALL_PATH_SYSCONFIG)
++                 SET(CAPN_INSTALL_PATH_SYSCONFIG "/etc"  CACHE PATH "")
++             ENDIF()
++-            IF(EXISTS "${CAPN_INSTALL_PATH_SYSCONFIG}/ld.so.conf.d" AND IS_DIRECTORY "${CAPN_INSTALL_PATH_SYSCONFIG}/ld.so.conf.d")
++-                SET(CAPN_LDCONF_FILE_NAME "libcapn-${CAPN_VERSION}-${CAPN_ARCH_STR}.conf")
++-                CONFIGURE_FILE(libcapn.ld.conf.cmake "${PROJECT_BINARY_DIR}/${CAPN_LDCONF_FILE_NAME}")
++-                INSTALL(FILES "${PROJECT_BINARY_DIR}/${CAPN_LDCONF_FILE_NAME}" DESTINATION "${CAPN_INSTALL_PATH_SYSCONFIG}/ld.so.conf.d")
++-            ENDIF()
++         ENDIF()
++ 
++         CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/config/apn_config.c.cmake" "${PROJECT_BINARY_DIR}/src/config/apn_config.c")
++-- 
++2.3.3
++
+diff --git a/package/libcapn/Config.in b/package/libcapn/Config.in
+new file mode 100644
+index 0000000..5b25910
+--- /dev/null
++++ b/package/libcapn/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBCAPN
++	bool "libcapn"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_JANSSON
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	help
++	  libcapn is a C Library to interact with the 
++	  Apple Push Notification Service (APNs for short)
++	  using simple and intuitive API.
++	  With the library you can easily send push 
++	  notifications to iOS and OS X (>= 10.8) devices.
++	  
++	  http://libcapn.org
+diff --git a/package/libcapn/libcapn.hash b/package/libcapn/libcapn.hash
+new file mode 100644
+index 0000000..b2a2fad
+--- /dev/null
++++ b/package/libcapn/libcapn.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	726aac9ca0dc26fd5e43d7b6a942fb2520a078c0bf2af1aac2b9ad12311a55e5  libcapn-7a6dc662e9daa864f687.tar.gz
+diff --git a/package/libcapn/libcapn.mk b/package/libcapn/libcapn.mk
+new file mode 100644
+index 0000000..df8e162
+--- /dev/null
++++ b/package/libcapn/libcapn.mk
+@@ -0,0 +1,18 @@
++################################################################################
 +#
-+# On PowerPC, the __atomic_*() built-ins for 1-byte, 2-byte and 4-byte
-+# types are available built-in. However, the __atomic_*() built-ins for
-+# 8-byte types is implemented via libatomic, so only available since gcc
-+# 4.8.
++# libcapn
 +#
-+# In Buildroot, to simplify things, we've decided to simply require gcc
-+# 4.8 as soon as the architectures has at least one __atomic_*() built-in
-+# variant that requires libatomic.
-+#
-+# Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
-+# *could* technically build with gcc 4.7. This is probably not a big deal,
-+# and we can live with requiring gcc 4.8 on PowerPC to build protobuf. 
-+#
-+# The SPARC64 build fails due to a missing definition of Atomic64. This
-+# has been fixed on the master branch but the build still breaks due to
-+# undefined references to internal NoBarrier_Atomic*() functions.
-+#
- # host-protobuf only builds on certain architectures
- config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	bool
-@@ -7,6 +24,8 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_i386
- 	default y if BR2_mipsel
- 	default y if BR2_x86_64
-+	default y if BR2_TOOLCHAIN_HAS_ATOMIC
-+	depends on !BR2_sparc64 # missing definition of Atomic64
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 
- config BR2_PACKAGE_PROTOBUF
++################################################################################
++
++LIBCAPN_VERSION = 7a6dc662e9daa864f687
++LIBCAPN_SITE = $(call github,adobkin,libcapn,$(LIBCAPN_VERSION))
++LIBCAPNLICENSE = MIT
++LIBCAPN_DEPENDENCIES += jansson openssl
++LIBCAPN_INSTALL_STAGING = YES
++LIBCAPN_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release \
++  -DAPN_HAVE_GLIBC_STRERROR_R=OFF \
++  -DAPN_HAVE_POSIX_STRERROR_R=OFF \
++  -DAPN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT=OFF \
++  -DAPN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT=OFF 
++    
++$(eval $(cmake-package))
 -- 
-2.5.0
+2.3.3
