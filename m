@@ -1,735 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2016 10:45:25 +0100
-Subject: [Buildroot] [git commit] glibc: add security patches
-Message-ID: <20160217094808.F3BB380AEB@busybox.osuosl.org>
+From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+Date: Wed, 17 Feb 2016 15:26:52 +0530
+Subject: [Buildroot] [PATCH v2 1/1] font-awesome:new package
+Message-ID: <1455703012-8163-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b10101b6f611055b74d4bf289110707c22e9ba7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Font Awesome is a full suite of 605 pictographic icons for easy
+scalable vector graphics on websites.
 
-Fix for 2.21 and 2.22:
-CVE-2015-7547 - glibc getaddrinfo stack-based buffer overflow.
+Changes v1->v2:
+ -Simplified the loop for fetching the target directories(suggested by Thomas).
+ -updated license information in .mk file.
+ -added the package in the Fonts submenu (suggested by Thomas).
+ -Removed the FONT_AWESOME_LICENSE_FILES variable.
 
-For 2.21:
-CVE-2014-8121 - Unexpected closing of nss_files databases after lookups
-causes denial of service.
-CVE-2015-1781 - buffer overflow in gethostbyname_r() and related
-functions with misaligned buffer.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
 ---
- package/glibc/2.21/0001-fix-CVE-2015-7547.patch | 236 ++++++++++++++++++++++++
- package/glibc/2.21/0002-fix-CVE-2015-1781.patch |  32 ++++
- package/glibc/2.21/0003-fix-CVE-2014-8121.patch | 176 ++++++++++++++++++
- package/glibc/2.22/0001-fix-CVE-2015-7547.patch | 236 ++++++++++++++++++++++++
- 4 files changed, 680 insertions(+)
+ package/Config.in                      |  1 +
+ package/font-awesome/Config.in         |  7 +++++++
+ package/font-awesome/font-awesome.hash |  2 ++
+ package/font-awesome/font-awesome.mk   | 18 ++++++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/font-awesome/Config.in
+ create mode 100644 package/font-awesome/font-awesome.hash
+ create mode 100644 package/font-awesome/font-awesome.mk
 
-diff --git a/package/glibc/2.21/0001-fix-CVE-2015-7547.patch b/package/glibc/2.21/0001-fix-CVE-2015-7547.patch
+diff --git a/package/Config.in b/package/Config.in
+index a5b31aa..2677a50 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -199,6 +199,7 @@ comment "Fonts"
+ 	source "package/bitstream-vera/Config.in"
+ 	source "package/cantarell/Config.in"
+ 	source "package/dejavu/Config.in"
++	source "package/font-awesome/Config.in"
+ 	source "package/ghostscript-fonts/Config.in"
+ 	source "package/inconsolata/Config.in"
+ 	source "package/liberation/Config.in"
+diff --git a/package/font-awesome/Config.in b/package/font-awesome/Config.in
 new file mode 100644
-index 0000000..4353a16
+index 0000000..065f554
 --- /dev/null
-+++ b/package/glibc/2.21/0001-fix-CVE-2015-7547.patch
-@@ -0,0 +1,236 @@
-+Fetched from gentoo glibc patchball
-+Original patch filename: 10_all_glibc-CVE-2015-7547.patch
-+Based on: https://sourceware.org/ml/libc-alpha/2016-02/msg00416.html
++++ b/package/font-awesome/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_FONT_AWESOME
++	bool "font-awesome"
++	help
++	  Font Awesome is a full suite of 605 pictographic icons for easy
++	  scalable vector graphics on websites.
 +
-+Fixes:
-+CVE-2015-7547 - glibc getaddrinfo stack-based buffer overflow.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/resolv/nss_dns/dns-host.c
-++++ b/resolv/nss_dns/dns-host.c
-+@@ -1031,7 +1031,10 @@ gaih_getanswer_slice (const querybuf *answer, int anslen, const char *qname,
-+   int h_namelen = 0;
-+ 
-+   if (ancount == 0)
-+-    return NSS_STATUS_NOTFOUND;
-++    {
-++      *h_errnop = HOST_NOT_FOUND;
-++      return NSS_STATUS_NOTFOUND;
-++    }
-+ 
-+   while (ancount-- > 0 && cp < end_of_message && had_error == 0)
-+     {
-+@@ -1208,7 +1211,14 @@ gaih_getanswer_slice (const querybuf *answer, int anslen, const char *qname,
-+   /* Special case here: if the resolver sent a result but it only
-+      contains a CNAME while we are looking for a T_A or T_AAAA record,
-+      we fail with NOTFOUND instead of TRYAGAIN.  */
-+-  return canon == NULL ? NSS_STATUS_TRYAGAIN : NSS_STATUS_NOTFOUND;
-++  if (canon != NULL)
-++    {
-++      *h_errnop = HOST_NOT_FOUND;
-++      return NSS_STATUS_NOTFOUND;
-++    }
-++
-++  *h_errnop = NETDB_INTERNAL;
-++  return NSS_STATUS_TRYAGAIN;
-+ }
-+ 
-+ 
-+@@ -1242,8 +1252,15 @@ gaih_getanswer (const querybuf *answer1, int anslen1, const querybuf *answer2,
-+ 						     &pat, &buffer, &buflen,
-+ 						     errnop, h_errnop, ttlp,
-+ 						     &first);
-++      /* Use the second response status in some cases.  */
-+       if (status != NSS_STATUS_SUCCESS && status2 != NSS_STATUS_NOTFOUND)
-+ 	status = status2;
-++      /* Do not return a truncated second response (unless it was
-++         unavoidable e.g. unrecoverable TRYAGAIN).  */
-++      if (status == NSS_STATUS_SUCCESS
-++	  && (status2 == NSS_STATUS_TRYAGAIN
-++	      && *errnop == ERANGE && *h_errnop != NO_RECOVERY))
-++	status = NSS_STATUS_TRYAGAIN;
-+     }
-+ 
-+   return status;
-+--- a/resolv/res_query.c
-++++ b/resolv/res_query.c
-+@@ -396,6 +396,7 @@ __libc_res_nsearch(res_state statp,
-+ 		  {
-+ 		    free (*answerp2);
-+ 		    *answerp2 = NULL;
-++		    *nanswerp2 = 0;
-+ 		    *answerp2_malloced = 0;
-+ 		  }
-+ 	}
-+@@ -447,6 +448,7 @@ __libc_res_nsearch(res_state statp,
-+ 			  {
-+ 			    free (*answerp2);
-+ 			    *answerp2 = NULL;
-++			    *nanswerp2 = 0;
-+ 			    *answerp2_malloced = 0;
-+ 			  }
-+ 
-+@@ -521,6 +523,7 @@ __libc_res_nsearch(res_state statp,
-+ 	  {
-+ 	    free (*answerp2);
-+ 	    *answerp2 = NULL;
-++	    *nanswerp2 = 0;
-+ 	    *answerp2_malloced = 0;
-+ 	  }
-+ 	if (saved_herrno != -1)
-+--- a/resolv/res_send.c
-++++ b/resolv/res_send.c
-+@@ -639,11 +639,7 @@ send_vc(res_state statp,
-+ {
-+ 	const HEADER *hp = (HEADER *) buf;
-+ 	const HEADER *hp2 = (HEADER *) buf2;
-+-	u_char *ans = *ansp;
-+-	int orig_anssizp = *anssizp;
-+-	// XXX REMOVE
-+-	// int anssiz = *anssizp;
-+-	HEADER *anhp = (HEADER *) ans;
-++	HEADER *anhp = (HEADER *) *ansp;
-+ 	struct sockaddr_in6 *nsap = EXT(statp).nsaddrs[ns];
-+ 	int truncating, connreset, n;
-+ 	/* On some architectures compiler might emit a warning indicating
-+@@ -767,35 +763,6 @@ send_vc(res_state statp,
-+ 		assert (anscp != NULL || ansp2 == NULL);
-+ 		thisresplenp = &resplen;
-+ 	} else {
-+-		if (*anssizp != MAXPACKET) {
-+-			/* No buffer allocated for the first
-+-			   reply.  We can try to use the rest
-+-			   of the user-provided buffer.  */
-+-#if __GNUC_PREREQ (4, 7)
-+-			DIAG_PUSH_NEEDS_COMMENT;
-+-			DIAG_IGNORE_NEEDS_COMMENT (5, "-Wmaybe-uninitialized");
-+-#endif
-+-#if _STRING_ARCH_unaligned
-+-			*anssizp2 = orig_anssizp - resplen;
-+-			*ansp2 = *ansp + resplen;
-+-#else
-+-			int aligned_resplen
-+-			  = ((resplen + __alignof__ (HEADER) - 1)
-+-			     & ~(__alignof__ (HEADER) - 1));
-+-			*anssizp2 = orig_anssizp - aligned_resplen;
-+-			*ansp2 = *ansp + aligned_resplen;
-+-#endif
-+-#if __GNUC_PREREQ (4, 7)
-+-			DIAG_POP_NEEDS_COMMENT;
-+-#endif
-+-		} else {
-+-			/* The first reply did not fit into the
-+-			   user-provided buffer.  Maybe the second
-+-			   answer will.  */
-+-			*anssizp2 = orig_anssizp;
-+-			*ansp2 = *ansp;
-+-		}
-+-
-+ 		thisanssizp = anssizp2;
-+ 		thisansp = ansp2;
-+ 		thisresplenp = resplen2;
-+@@ -804,10 +771,14 @@ send_vc(res_state statp,
-+ 	anhp = (HEADER *) *thisansp;
-+ 
-+ 	*thisresplenp = rlen;
-+-	if (rlen > *thisanssizp) {
-+-		/* Yes, we test ANSCP here.  If we have two buffers
-+-		   both will be allocatable.  */
-+-		if (__glibc_likely (anscp != NULL))       {
-++	/* Is the answer buffer too small?  */
-++	if (*thisanssizp < rlen) {
-++		/* If the current buffer is not the the static
-++		   user-supplied buffer then we can reallocate
-++		   it.  */
-++		if (thisansp != NULL && thisansp != ansp) {
-++			/* Always allocate MAXPACKET, callers expect
-++			   this specific size.  */
-+ 			u_char *newp = malloc (MAXPACKET);
-+ 			if (newp == NULL) {
-+ 				*terrno = ENOMEM;
-+@@ -957,8 +928,6 @@ send_dg(res_state statp,
-+ {
-+ 	const HEADER *hp = (HEADER *) buf;
-+ 	const HEADER *hp2 = (HEADER *) buf2;
-+-	u_char *ans = *ansp;
-+-	int orig_anssizp = *anssizp;
-+ 	struct timespec now, timeout, finish;
-+ 	struct pollfd pfd[1];
-+ 	int ptimeout;
-+@@ -1154,50 +1123,48 @@ send_dg(res_state statp,
-+ 			assert (anscp != NULL || ansp2 == NULL);
-+ 			thisresplenp = &resplen;
-+ 		} else {
-+-			if (*anssizp != MAXPACKET) {
-+-				/* No buffer allocated for the first
-+-				   reply.  We can try to use the rest
-+-				   of the user-provided buffer.  */
-+-#if _STRING_ARCH_unaligned
-+-				*anssizp2 = orig_anssizp - resplen;
-+-				*ansp2 = *ansp + resplen;
-+-#else
-+-				int aligned_resplen
-+-				  = ((resplen + __alignof__ (HEADER) - 1)
-+-				     & ~(__alignof__ (HEADER) - 1));
-+-				*anssizp2 = orig_anssizp - aligned_resplen;
-+-				*ansp2 = *ansp + aligned_resplen;
-+-#endif
-+-			} else {
-+-				/* The first reply did not fit into the
-+-				   user-provided buffer.  Maybe the second
-+-				   answer will.  */
-+-				*anssizp2 = orig_anssizp;
-+-				*ansp2 = *ansp;
-+-			}
-+-
-+ 			thisanssizp = anssizp2;
-+ 			thisansp = ansp2;
-+ 			thisresplenp = resplen2;
-+ 		}
-+ 
-+ 		if (*thisanssizp < MAXPACKET
-+-		    /* Yes, we test ANSCP here.  If we have two buffers
-+-		       both will be allocatable.  */
-+-		    && anscp
-++		    /* If the current buffer is not the the static
-++		       user-supplied buffer then we can reallocate
-++		       it.  */
-++		    && (thisansp != NULL && thisansp != ansp)
-+ #ifdef FIONREAD
-++		    /* Is the size too small?  */
-+ 		    && (ioctl (pfd[0].fd, FIONREAD, thisresplenp) < 0
-+ 			|| *thisanssizp < *thisresplenp)
-+ #endif
-+                     ) {
-++			/* Always allocate MAXPACKET, callers expect
-++			   this specific size.  */
-+ 			u_char *newp = malloc (MAXPACKET);
-+ 			if (newp != NULL) {
-+-				*anssizp = MAXPACKET;
-+-				*thisansp = ans = newp;
-++				*thisanssizp = MAXPACKET;
-++				*thisansp = newp;
-+ 				if (thisansp == ansp2)
-+ 				  *ansp2_malloced = 1;
-+ 			}
-+ 		}
-++		/* We could end up with truncation if anscp was NULL
-++		   (not allowed to change caller's buffer) and the
-++		   response buffer size is too small.  This isn't a
-++		   reliable way to detect truncation because the ioctl
-++		   may be an inaccurate report of the UDP message size.
-++		   Therefore we use this only to issue debug output.
-++		   To do truncation accurately with UDP we need
-++		   MSG_TRUNC which is only available on Linux.  We
-++		   can abstract out the Linux-specific feature in the
-++		   future to detect truncation.  */
-++		if (__glibc_unlikely (*thisanssizp < *thisresplenp)) {
-++			Dprint(statp->options & RES_DEBUG,
-++			       (stdout, ";; response may be truncated (UDP)\n")
-++			);
-++		}
-++
-+ 		HEADER *anhp = (HEADER *) *thisansp;
-+ 		socklen_t fromlen = sizeof(struct sockaddr_in6);
-+ 		assert (sizeof(from) <= fromlen);
-diff --git a/package/glibc/2.21/0002-fix-CVE-2015-1781.patch b/package/glibc/2.21/0002-fix-CVE-2015-1781.patch
++	  https://github.com/FortAwesome/Font-Awesome
+diff --git a/package/font-awesome/font-awesome.hash b/package/font-awesome/font-awesome.hash
 new file mode 100644
-index 0000000..3bdfa97
+index 0000000..d6b2be7
 --- /dev/null
-+++ b/package/glibc/2.21/0002-fix-CVE-2015-1781.patch
-@@ -0,0 +1,32 @@
-+From 10c6d2e3243cefdd22933d3706f53d9f913c6cab Mon Sep 17 00:00:00 2001
-+From: Arjun Shankar <arjun.is@lostca.se>
-+Date: Tue, 21 Apr 2015 14:06:31 +0200
-+Subject: [PATCH] CVE-2015-1781: resolv/nss_dns/dns-host.c buffer overflow
-+ [BZ#18287]
-+
-+Fixes:
-+CVE-2015-1781 - buffer overflow in gethostbyname_r() and related
-+functions with misaligned buffer.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ resolv/nss_dns/dns-host.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/resolv/nss_dns/dns-host.c b/resolv/nss_dns/dns-host.c
-+index f715ab0..40069a7 100644
-+--- a/resolv/nss_dns/dns-host.c
-++++ b/resolv/nss_dns/dns-host.c
-+@@ -615,7 +615,8 @@ getanswer_r (const querybuf *answer, int anslen, const char *qname, int qtype,
-+   int have_to_map = 0;
-+   uintptr_t pad = -(uintptr_t) buffer % __alignof__ (struct host_data);
-+   buffer += pad;
-+-  if (__glibc_unlikely (buflen < sizeof (struct host_data) + pad))
-++  buflen = buflen > pad ? buflen - pad : 0;
-++  if (__glibc_unlikely (buflen < sizeof (struct host_data)))
-+     {
-+       /* The buffer is too small.  */
-+     too_small:
-+-- 
-+2.4.4
-+
-diff --git a/package/glibc/2.21/0003-fix-CVE-2014-8121.patch b/package/glibc/2.21/0003-fix-CVE-2014-8121.patch
++++ b/package/font-awesome/font-awesome.hash
+@@ -0,0 +1,2 @@
++# Locally Computed
++sha256  7813f416057da622b16229b10fef550e1dc64c5bb59871cd38fa86e76dfdbae8  font-awesome-v4.5.0.tar.gz
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
 new file mode 100644
-index 0000000..df3534e
+index 0000000..d552e26
 --- /dev/null
-+++ b/package/glibc/2.21/0003-fix-CVE-2014-8121.patch
-@@ -0,0 +1,176 @@
-+From 6d0b7b443c9735672bb76d003c3f7263c5292d7d Mon Sep 17 00:00:00 2001
-+From: Florian Weimer <fweimer@redhat.com>
-+Date: Wed, 29 Apr 2015 14:41:25 +0200
-+Subject: [PATCH 23/27] CVE-2014-8121: Do not close NSS files database during
-+ iteration [BZ #18007]
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/font-awesome/font-awesome.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# font-awesome
++#
++################################################################################
 +
-+(cherry picked from commit e871e19b5f19d2e6595e911b0a5b1c19cda20cc7)
++FONT_AWESOME_VERSION = v4.5.0
++FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
++FONT_AWESOME_LICENSE = OFLv1.1(font), MIT(CSS, LESS and Sass files)
++FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
 +
-+Fixes:
-+CVE-2014-8121 - Unexpected closing of nss_files databases after lookups
-+causes denial of service.
++define FONT_AWESOME_INSTALL_TARGET_CMDS
++        mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
++        $(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
++                cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
++endef
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+ nss/Makefile              |   2 +-
-+ nss/nss_files/files-XXX.c |   2 +-
-+ nss/tst-nss-getpwent.c    | 118 ++++++++++++++++++++++++++++++++++++++++++++++
-+ 3 files changed, 120 insertions(+), 2 deletions(-)
-+ create mode 100644 nss/tst-nss-getpwent.c
-+
-+diff --git a/nss/Makefile b/nss/Makefile
-+index d419baf..dc351dd 100644
-+--- a/nss/Makefile
-++++ b/nss/Makefile
-+@@ -39,7 +39,7 @@ install-bin             := getent makedb
-+ makedb-modules = xmalloc hash-string
-+ extra-objs		+= $(makedb-modules:=.o)
-+ 
-+-tests			= test-netdb tst-nss-test1 test-digits-dots
-++tests			= test-netdb tst-nss-test1 test-digits-dots tst-nss-getpwent
-+ xtests			= bug-erange
-+ 
-+ # Specify rules for the nss_* modules.  We have some services.
-+diff --git a/nss/nss_files/files-XXX.c b/nss/nss_files/files-XXX.c
-+index a7a45e5..a7ce5ea 100644
-+--- a/nss/nss_files/files-XXX.c
-++++ b/nss/nss_files/files-XXX.c
-+@@ -134,7 +134,7 @@ CONCAT(_nss_files_set,ENTNAME) (int stayopen)
-+ 
-+   __libc_lock_lock (lock);
-+ 
-+-  status = internal_setent (stayopen);
-++  status = internal_setent (1);
-+ 
-+   if (status == NSS_STATUS_SUCCESS && fgetpos (stream, &position) < 0)
-+     {
-+diff --git a/nss/tst-nss-getpwent.c b/nss/tst-nss-getpwent.c
-+new file mode 100644
-+index 0000000..f2e8abc
-+--- /dev/null
-++++ b/nss/tst-nss-getpwent.c
-+@@ -0,0 +1,118 @@
-++/* Copyright (C) 2015 Free Software Foundation, Inc.
-++   This file is part of the GNU C Library.
-++
-++   The GNU C Library is free software; you can redistribute it and/or
-++   modify it under the terms of the GNU Lesser General Public
-++   License as published by the Free Software Foundation; either
-++   version 2.1 of the License, or (at your option) any later version.
-++
-++   The GNU C Library is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-++   Lesser General Public License for more details.
-++
-++   You should have received a copy of the GNU Lesser General Public
-++   License along with the GNU C Library; if not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#include <pwd.h>
-++#include <stdbool.h>
-++#include <stdio.h>
-++#include <stdlib.h>
-++#include <string.h>
-++
-++int
-++do_test (void)
-++{
-++  /* Count the number of entries in the password database, and fetch
-++     data from the first and last entries.  */
-++  size_t count = 0;
-++  struct passwd * pw;
-++  char *first_name = NULL;
-++  uid_t first_uid = 0;
-++  char *last_name = NULL;
-++  uid_t last_uid = 0;
-++  setpwent ();
-++  while ((pw  = getpwent ()) != NULL)
-++    {
-++      if (first_name == NULL)
-++	{
-++	  first_name = strdup (pw->pw_name);
-++	  if (first_name == NULL)
-++	    {
-++	      printf ("strdup: %m\n");
-++	      return 1;
-++	    }
-++	  first_uid = pw->pw_uid;
-++	}
-++
-++      free (last_name);
-++      last_name = strdup (pw->pw_name);
-++      if (last_name == NULL)
-++	{
-++	  printf ("strdup: %m\n");
-++	  return 1;
-++	}
-++      last_uid = pw->pw_uid;
-++      ++count;
-++    }
-++  endpwent ();
-++
-++  if (count == 0)
-++    {
-++      printf ("No entries in the password database.\n");
-++      return 0;
-++    }
-++
-++  /* Try again, this time interleaving with name-based and UID-based
-++     lookup operations.  The counts do not match if the interleaved
-++     lookups affected the enumeration.  */
-++  size_t new_count = 0;
-++  setpwent ();
-++  while ((pw  = getpwent ()) != NULL)
-++    {
-++      if (new_count == count)
-++	{
-++	  printf ("Additional entry in the password database.\n");
-++	  return 1;
-++	}
-++      ++new_count;
-++      struct passwd *pw2 = getpwnam (first_name);
-++      if (pw2 == NULL)
-++	{
-++	  printf ("getpwnam (%s) failed: %m\n", first_name);
-++	  return 1;
-++	}
-++      pw2 = getpwnam (last_name);
-++      if (pw2 == NULL)
-++	{
-++	  printf ("getpwnam (%s) failed: %m\n", last_name);
-++	  return 1;
-++	}
-++      pw2 = getpwuid (first_uid);
-++      if (pw2 == NULL)
-++	{
-++	  printf ("getpwuid (%llu) failed: %m\n",
-++		  (unsigned long long) first_uid);
-++	  return 1;
-++	}
-++      pw2 = getpwuid (last_uid);
-++      if (pw2 == NULL)
-++	{
-++	  printf ("getpwuid (%llu) failed: %m\n",
-++		  (unsigned long long) last_uid);
-++	  return 1;
-++	}
-++    }
-++  endpwent ();
-++  if (new_count < count)
-++    {
-++      printf ("Missing entry in the password database.\n");
-++      return 1;
-++    }
-++
-++  return 0;
-++}
-++
-++#define TEST_FUNCTION do_test ()
-++#include "../test-skeleton.c"
-+-- 
-+2.6.2
-+
-diff --git a/package/glibc/2.22/0001-fix-CVE-2015-7547.patch b/package/glibc/2.22/0001-fix-CVE-2015-7547.patch
-new file mode 100644
-index 0000000..19b8b6e
---- /dev/null
-+++ b/package/glibc/2.22/0001-fix-CVE-2015-7547.patch
-@@ -0,0 +1,236 @@
-+Fetched from gentoo glibc patchball
-+Original patch filename: 10_all_glibc-CVE-2015-7547.patch
-+Based on: https://sourceware.org/ml/libc-alpha/2016-02/msg00416.html
-+
-+Fixes:
-+CVE-2015-7547 - glibc getaddrinfo stack-based buffer overflow.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+--- a/resolv/nss_dns/dns-host.c
-++++ b/resolv/nss_dns/dns-host.c
-+@@ -1031,7 +1031,10 @@ gaih_getanswer_slice (const querybuf *answer, int anslen, const char *qname,
-+   int h_namelen = 0;
-+ 
-+   if (ancount == 0)
-+-    return NSS_STATUS_NOTFOUND;
-++    {
-++      *h_errnop = HOST_NOT_FOUND;
-++      return NSS_STATUS_NOTFOUND;
-++    }
-+ 
-+   while (ancount-- > 0 && cp < end_of_message && had_error == 0)
-+     {
-+@@ -1208,7 +1211,14 @@ gaih_getanswer_slice (const querybuf *answer, int anslen, const char *qname,
-+   /* Special case here: if the resolver sent a result but it only
-+      contains a CNAME while we are looking for a T_A or T_AAAA record,
-+      we fail with NOTFOUND instead of TRYAGAIN.  */
-+-  return canon == NULL ? NSS_STATUS_TRYAGAIN : NSS_STATUS_NOTFOUND;
-++  if (canon != NULL)
-++    {
-++      *h_errnop = HOST_NOT_FOUND;
-++      return NSS_STATUS_NOTFOUND;
-++    }
-++
-++  *h_errnop = NETDB_INTERNAL;
-++  return NSS_STATUS_TRYAGAIN;
-+ }
-+ 
-+ 
-+@@ -1242,8 +1252,15 @@ gaih_getanswer (const querybuf *answer1, int anslen1, const querybuf *answer2,
-+ 						     &pat, &buffer, &buflen,
-+ 						     errnop, h_errnop, ttlp,
-+ 						     &first);
-++      /* Use the second response status in some cases.  */
-+       if (status != NSS_STATUS_SUCCESS && status2 != NSS_STATUS_NOTFOUND)
-+ 	status = status2;
-++      /* Do not return a truncated second response (unless it was
-++         unavoidable e.g. unrecoverable TRYAGAIN).  */
-++      if (status == NSS_STATUS_SUCCESS
-++	  && (status2 == NSS_STATUS_TRYAGAIN
-++	      && *errnop == ERANGE && *h_errnop != NO_RECOVERY))
-++	status = NSS_STATUS_TRYAGAIN;
-+     }
-+ 
-+   return status;
-+--- a/resolv/res_query.c
-++++ b/resolv/res_query.c
-+@@ -396,6 +396,7 @@ __libc_res_nsearch(res_state statp,
-+ 		  {
-+ 		    free (*answerp2);
-+ 		    *answerp2 = NULL;
-++		    *nanswerp2 = 0;
-+ 		    *answerp2_malloced = 0;
-+ 		  }
-+ 	}
-+@@ -447,6 +448,7 @@ __libc_res_nsearch(res_state statp,
-+ 			  {
-+ 			    free (*answerp2);
-+ 			    *answerp2 = NULL;
-++			    *nanswerp2 = 0;
-+ 			    *answerp2_malloced = 0;
-+ 			  }
-+ 
-+@@ -521,6 +523,7 @@ __libc_res_nsearch(res_state statp,
-+ 	  {
-+ 	    free (*answerp2);
-+ 	    *answerp2 = NULL;
-++	    *nanswerp2 = 0;
-+ 	    *answerp2_malloced = 0;
-+ 	  }
-+ 	if (saved_herrno != -1)
-+--- a/resolv/res_send.c
-++++ b/resolv/res_send.c
-+@@ -639,11 +639,7 @@ send_vc(res_state statp,
-+ {
-+ 	const HEADER *hp = (HEADER *) buf;
-+ 	const HEADER *hp2 = (HEADER *) buf2;
-+-	u_char *ans = *ansp;
-+-	int orig_anssizp = *anssizp;
-+-	// XXX REMOVE
-+-	// int anssiz = *anssizp;
-+-	HEADER *anhp = (HEADER *) ans;
-++	HEADER *anhp = (HEADER *) *ansp;
-+ 	struct sockaddr *nsap = get_nsaddr (statp, ns);
-+ 	int truncating, connreset, n;
-+ 	/* On some architectures compiler might emit a warning indicating
-+@@ -767,35 +763,6 @@ send_vc(res_state statp,
-+ 		assert (anscp != NULL || ansp2 == NULL);
-+ 		thisresplenp = &resplen;
-+ 	} else {
-+-		if (*anssizp != MAXPACKET) {
-+-			/* No buffer allocated for the first
-+-			   reply.  We can try to use the rest
-+-			   of the user-provided buffer.  */
-+-#if __GNUC_PREREQ (4, 7)
-+-			DIAG_PUSH_NEEDS_COMMENT;
-+-			DIAG_IGNORE_NEEDS_COMMENT (5, "-Wmaybe-uninitialized");
-+-#endif
-+-#if _STRING_ARCH_unaligned
-+-			*anssizp2 = orig_anssizp - resplen;
-+-			*ansp2 = *ansp + resplen;
-+-#else
-+-			int aligned_resplen
-+-			  = ((resplen + __alignof__ (HEADER) - 1)
-+-			     & ~(__alignof__ (HEADER) - 1));
-+-			*anssizp2 = orig_anssizp - aligned_resplen;
-+-			*ansp2 = *ansp + aligned_resplen;
-+-#endif
-+-#if __GNUC_PREREQ (4, 7)
-+-			DIAG_POP_NEEDS_COMMENT;
-+-#endif
-+-		} else {
-+-			/* The first reply did not fit into the
-+-			   user-provided buffer.  Maybe the second
-+-			   answer will.  */
-+-			*anssizp2 = orig_anssizp;
-+-			*ansp2 = *ansp;
-+-		}
-+-
-+ 		thisanssizp = anssizp2;
-+ 		thisansp = ansp2;
-+ 		thisresplenp = resplen2;
-+@@ -804,10 +771,14 @@ send_vc(res_state statp,
-+ 	anhp = (HEADER *) *thisansp;
-+ 
-+ 	*thisresplenp = rlen;
-+-	if (rlen > *thisanssizp) {
-+-		/* Yes, we test ANSCP here.  If we have two buffers
-+-		   both will be allocatable.  */
-+-		if (__glibc_likely (anscp != NULL))       {
-++	/* Is the answer buffer too small?  */
-++	if (*thisanssizp < rlen) {
-++		/* If the current buffer is not the the static
-++		   user-supplied buffer then we can reallocate
-++		   it.  */
-++		if (thisansp != NULL && thisansp != ansp) {
-++			/* Always allocate MAXPACKET, callers expect
-++			   this specific size.  */
-+ 			u_char *newp = malloc (MAXPACKET);
-+ 			if (newp == NULL) {
-+ 				*terrno = ENOMEM;
-+@@ -957,8 +928,6 @@ send_dg(res_state statp,
-+ {
-+ 	const HEADER *hp = (HEADER *) buf;
-+ 	const HEADER *hp2 = (HEADER *) buf2;
-+-	u_char *ans = *ansp;
-+-	int orig_anssizp = *anssizp;
-+ 	struct timespec now, timeout, finish;
-+ 	struct pollfd pfd[1];
-+ 	int ptimeout;
-+@@ -1154,50 +1123,48 @@ send_dg(res_state statp,
-+ 			assert (anscp != NULL || ansp2 == NULL);
-+ 			thisresplenp = &resplen;
-+ 		} else {
-+-			if (*anssizp != MAXPACKET) {
-+-				/* No buffer allocated for the first
-+-				   reply.  We can try to use the rest
-+-				   of the user-provided buffer.  */
-+-#if _STRING_ARCH_unaligned
-+-				*anssizp2 = orig_anssizp - resplen;
-+-				*ansp2 = *ansp + resplen;
-+-#else
-+-				int aligned_resplen
-+-				  = ((resplen + __alignof__ (HEADER) - 1)
-+-				     & ~(__alignof__ (HEADER) - 1));
-+-				*anssizp2 = orig_anssizp - aligned_resplen;
-+-				*ansp2 = *ansp + aligned_resplen;
-+-#endif
-+-			} else {
-+-				/* The first reply did not fit into the
-+-				   user-provided buffer.  Maybe the second
-+-				   answer will.  */
-+-				*anssizp2 = orig_anssizp;
-+-				*ansp2 = *ansp;
-+-			}
-+-
-+ 			thisanssizp = anssizp2;
-+ 			thisansp = ansp2;
-+ 			thisresplenp = resplen2;
-+ 		}
-+ 
-+ 		if (*thisanssizp < MAXPACKET
-+-		    /* Yes, we test ANSCP here.  If we have two buffers
-+-		       both will be allocatable.  */
-+-		    && anscp
-++		    /* If the current buffer is not the the static
-++		       user-supplied buffer then we can reallocate
-++		       it.  */
-++		    && (thisansp != NULL && thisansp != ansp)
-+ #ifdef FIONREAD
-++		    /* Is the size too small?  */
-+ 		    && (ioctl (pfd[0].fd, FIONREAD, thisresplenp) < 0
-+ 			|| *thisanssizp < *thisresplenp)
-+ #endif
-+                     ) {
-++			/* Always allocate MAXPACKET, callers expect
-++			   this specific size.  */
-+ 			u_char *newp = malloc (MAXPACKET);
-+ 			if (newp != NULL) {
-+-				*anssizp = MAXPACKET;
-+-				*thisansp = ans = newp;
-++				*thisanssizp = MAXPACKET;
-++				*thisansp = newp;
-+ 				if (thisansp == ansp2)
-+ 				  *ansp2_malloced = 1;
-+ 			}
-+ 		}
-++		/* We could end up with truncation if anscp was NULL
-++		   (not allowed to change caller's buffer) and the
-++		   response buffer size is too small.  This isn't a
-++		   reliable way to detect truncation because the ioctl
-++		   may be an inaccurate report of the UDP message size.
-++		   Therefore we use this only to issue debug output.
-++		   To do truncation accurately with UDP we need
-++		   MSG_TRUNC which is only available on Linux.  We
-++		   can abstract out the Linux-specific feature in the
-++		   future to detect truncation.  */
-++		if (__glibc_unlikely (*thisanssizp < *thisresplenp)) {
-++			Dprint(statp->options & RES_DEBUG,
-++			       (stdout, ";; response may be truncated (UDP)\n")
-++			);
-++		}
-++
-+ 		HEADER *anhp = (HEADER *) *thisansp;
-+ 		socklen_t fromlen = sizeof(struct sockaddr_in6);
-+ 		assert (sizeof(from) <= fromlen);
++$(eval $(generic-package))
+-- 
+2.5.0
