@@ -1,47 +1,93 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Feb 2016 00:44:00 +0100
-Subject: [Buildroot] [PATCH v9 1/1] package/dhcp: bump version to
-	4.3.3-P1
-In-Reply-To: <1455677124-21497-1-git-send-email-rdkehn@yahoo.com>
-References: <1455677124-21497-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <56C505C0.40306@mind.be>
+Date: Thu, 18 Feb 2016 00:48:20 +0100
+Subject: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
+In-Reply-To: <CAAMH-yvyOhp+5jxVDo=ZaAooX4G4GTrj5ZJtO2Djm-8o4khgbg@mail.gmail.com>
+References: <1454363759-23349-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1454363759-23349-2-git-send-email-gary.bisson@boundarydevices.com>
+ <20160216215313.15f228fe@gmx.net>
+ <CAAMH-yuzsvt-6U-JX7RhNoEcWoJA4ahRm4U27LvWLwXyg4UtTg@mail.gmail.com>
+ <trinity-f34aaf6c-100d-4336-9dbf-030d951133dd-1455701165352@3capp-gmx-bs46>
+ <CAAMH-ysOoy8FNMZAOA0_m_vOnduBTYuQLcOe-2eVt+8t4wZvaw@mail.gmail.com>
+ <trinity-9474c08f-9274-4fd6-961b-8257e3d58bd3-1455712203984@3capp-gmx-bs71>
+ <CAAMH-yvyOhp+5jxVDo=ZaAooX4G4GTrj5ZJtO2Djm-8o4khgbg@mail.gmail.com>
+Message-ID: <56C506C4.6020103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-02-16 03:45, Doug Kehn wrote:
-> bind source tar-ball is now embedded into the dhcp source. The embedded
-> bind tar-ball is extracted after the dhcp source so cross compiling
-> patches can be applied to the dhcp and bind before the package is built.
+On 17-02-16 13:42, Gary Bisson wrote:
+> Hi Peter,
 > 
-> The embedded bind configure is called as part of dhcp make instead of
-> dhcp configure; therefore, needed configure parameters are set in the
-> make env.
+> On Wed, Feb 17, 2016 at 1:30 PM, Peter Seiderer <ps.report@gmx.net> wrote:
+>> Hello Gary,
+>>
+>>> <snip>
+>>>> No, working with boundarydevices linux-imx6-f4c8395 and original boundary config
+>>>> and there is a '/dev/galcore' entry on the target...
+>>>
+>>> Yes but that is the problem. Please try again with
+>>> BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV.
+>>>
+>>> As you know, 3D graphics libraries match a specific kernel driver.
+>>> Since it was an issue for many people, Vivante started to provide a
+>>> kernel module so you can easily have the latest driver on an older
+>>> kernel.
+>>>
+>>> Since I've updated the graphics to the latest (5.0.11 p7.1), the
+>>> driver inside the 3.14.28 kernel is outdated so you need to use the
+>>> Vivante kernel module. I didn't for the selection of the kernel module
+>>> when the libraries are selected since some kernels (3.14.52) have the
+>>> correct driver built-in.
+>>>
+>>
+>> Got it now, the missing part was:
+>>
+>>  BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y
+>>
+>> Qt5 eglfs and gstreamer imxeglvivsink are working now...
 > 
-> 0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
-> been submitted upstream as part of a cross compiling enhancement
-> suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
-> 0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
+> Good to hear!
 > 
-> Buildroot thread
-> 	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
-> has related information.
+>>> Sorry for the confusion but know that if you want to make sure the
+>>> driver matches the user-space blobs, always select the Vivante kernel
+>>> module as I'll make to always update both at the same time.
+>>>
+>>
+>> Maybe a little hint in board/boundarydevices/nitrogen6x/readme.txt would be useful?
 > 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Well it is not Nitrogen6x-specific, it applies to all i.MX6 platforms
+> so I'm not sure where would be the best place to give this info apart
+> from the help text. Thomas, any idea on this?
+> 
+> Yocto is forcing the use of the Vivante kernel module, maybe we should
+> do the same but I'm not fond of this approach.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ We can't force select because BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV depends on
+the kernel to be built. But we could do
 
- I'm still not sure if it wouldn't be better to call the bind configure in a
-post-configure hook, but this is definitely simpler and anyway we do the same
-for e.g. gcc.
+	select BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV if BR2_LINUX_KERNEL
 
+ I don't think this would be such a bad idea. Added size isn't really a big
+deal. Of course, the user still has to load the module...
 
  Regards,
  Arnout
+
+> 
+>> Many thanks for your support...
+> 
+> No problem. Thanks for your valuable feedback!
+> 
+> Regards,
+> Gary
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
