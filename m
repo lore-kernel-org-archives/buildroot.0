@@ -1,36 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2016 22:26:08 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: CodeSourcery NiosII
-	2015.11 affected by PR19405
-In-Reply-To: <1455316403-7793-1-git-send-email-romain.naour@gmail.com> (Romain
- Naour's message of "Fri, 12 Feb 2016 23:33:22 +0100")
-References: <1455316403-7793-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <87fuwrxc3z.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 17 Feb 2016 22:28:25 +0100
+Subject: [Buildroot] [git commit branch/next] python-characteristic: new
+	package
+Message-ID: <20160217212914.942A58185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=eb570bb560da656f75f3aed1ac203f48381f846f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Fixes:
- > http://autobuild.buildroot.net/results/ee562524c5b12191e584ceae89006c5a5103e700
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                        |  1 +
+ package/python-characteristic/Config.in                  |  6 ++++++
+ package/python-characteristic/python-characteristic.hash |  3 +++
+ package/python-characteristic/python-characteristic.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > ---
- >  package/grantlee/Config.in             | 1 +
- >  package/opencv/Config.in               | 1 +
- >  package/opencv3/Config.in              | 1 +
- >  package/pinentry/Config.in             | 1 +
- >  package/poppler/Config.in              | 1 +
- >  package/qt/Config.in                   | 7 +++++++
-
-Hmm, why are we only adding a comment to qt and not all these other
-packages?
-
-It would be good to add a link to the upstream bugtracker in the commit
-description / where the kconfig symbol is added.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/Config.in b/package/Config.in
+index 21be9f6..edf06f1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -626,6 +626,7 @@ menu "External python modules"
+ 	source "package/python-cbor/Config.in"
+ 	source "package/python-certifi/Config.in"
+ 	source "package/python-cffi/Config.in"
++	source "package/python-characteristic/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
+ 	source "package/python-click/Config.in"
+diff --git a/package/python-characteristic/Config.in b/package/python-characteristic/Config.in
+new file mode 100644
+index 0000000..1226fa8
+--- /dev/null
++++ b/package/python-characteristic/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_CHARACTERISTIC
++	bool "python-characteristic"
++	help
++	  Python attributes without boilerplate.
++
++	  https://pypi.python.org/pypi/characteristic
+diff --git a/package/python-characteristic/python-characteristic.hash b/package/python-characteristic/python-characteristic.hash
+new file mode 100644
+index 0000000..41dc18c
+--- /dev/null
++++ b/package/python-characteristic/python-characteristic.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b249368dd021fde1c06b4802867c0913, sha256 locally computed.
++md5	b249368dd021fde1c06b4802867c0913  characteristic-14.3.0.tar.gz
++sha256	ded68d4e424115ed44e5c83c2a901a0b6157a959079d7591d92106ffd3ada380  characteristic-14.3.0.tar.gz
+diff --git a/package/python-characteristic/python-characteristic.mk b/package/python-characteristic/python-characteristic.mk
+new file mode 100644
+index 0000000..dc3e8bb
+--- /dev/null
++++ b/package/python-characteristic/python-characteristic.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-characteristic
++#
++################################################################################
++
++PYTHON_CHARACTERISTIC_VERSION = 14.3.0
++PYTHON_CHARACTERISTIC_SOURCE = characteristic-$(PYTHON_CHARACTERISTIC_VERSION).tar.gz
++PYTHON_CHARACTERISTIC_SITE = http://pypi.python.org/packages/source/c/characteristic
++PYTHON_CHARACTERISTIC_LICENSE = MIT
++PYTHON_CHARACTERISTIC_LICENSE_FILES = LICENSE
++PYTHON_CHARACTERISTIC_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
