@@ -1,43 +1,74 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Feb 2016 23:22:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libcapn : new package
-In-Reply-To: <20160217221900.1ee0f081@free-electrons.com>
-References: <1455732246-27866-1-git-send-email-sagaert.johan@proximus.be>
- <20160217221900.1ee0f081@free-electrons.com>
-Message-ID: <56C4F2AE.7020806@mind.be>
+Date: Wed, 17 Feb 2016 23:41:14 +0100
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: append endianness
+ argument to TARGET_LD for MIPS
+In-Reply-To: <20160217221313.439547e4@free-electrons.com>
+References: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160217221313.439547e4@free-electrons.com>
+Message-ID: <56C4F70A.8060506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-02-16 22:19, Thomas Petazzoni wrote:
-> Hello Johan,
+On 17-02-16 22:13, Thomas Petazzoni wrote:
+> Dear Vicente Olivert Riera,
 > 
-> Thanks for this patch! See some comments below.
-> 
-> On Wed, 17 Feb 2016 19:04:06 +0100, Sagaert Johan wrote:
+> On Wed, 17 Feb 2016 17:07:53 +0000, Vicente Olivert Riera wrote:
+>> We don't use a wrapper for ld in Buildroot like we do for gcc, so when
+>> using ld for linking (instead of gcc) the process can fail if the
+>> appropriate arguments are not passed to it. For instance, this happens
+>> when building perf (Linux -> Linux Kernel Tools -> perf) for MIPS little
+>> endian, and this is how the error message looks like:
 [snip]
->> +LIBCAPN_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release \
+>> +# Append the endianness argument to ld for MIPS architecture in order to
+>> +# avoid problems like this one when using ld instead of gcc for linking:
+>> +# mips-linux-gnu-ld: failed to merge target specific data of file foo.o
+>> +# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
+>> +# target is big endian
+>> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+>> +ifeq ($(BR2_ENDIAN),"BIG")
+>> +TARGET_LD += -EB
+>> +else
+>> +TARGET_LD += -EL
+>> +endif
+>> +endif
 > 
-> This is already passed by the CMake package infrastructure, so it is
-> useless (and wrong when BR2_ENABLE_DEBUG is enabled).
+> This is really an horrible fix IMO. First because TARGET_LD is only
+> meant to contain the path to the linker, and not additional flags.
+> Additional flags should go in TARGET_LDFLAGS.
 > 
->> +  -DAPN_HAVE_GLIBC_STRERROR_R=OFF \
->> +  -DAPN_HAVE_POSIX_STRERROR_R=OFF \
->> +  -DAPN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT=OFF \
->> +  -DAPN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT=OFF 
-> 
-> I'm pretty sure those could be set to "ON" when glibc is used, but I
-> guess OFF is a sane default, and if it builds and works this way, fair
-> enough.
+> And secondly because programs should not use ld directly for linking,
+> but gcc. Remember Vicente, you already fixed this issue in other
+> packages and the fix was to use gcc instead of ld.
 
- As I explained in the original discussion I had with Johan: even on glibc, the
-POSIX version of strerror_r will be used because the CMakeLists.txt also adds
--D_POSIX_C_SOURCE=200112L and doesn't add -D_GNU_SOURCE.
+ So, are we really going to "fix" all packages that use ld directly? I don't see
+why a package shouldn't be allowed to call ld when it is really doing linking
+without any other toolchainy stuff.
+
+ LDFLAGS has a bit of the same problem: there will probably be packages that
+don't (completely) honour it.
+
+ For CFLAGS, that was the reason why we introduced the wrapper. So I think we
+should just add a wrapper for ld as well.
+
+ Ideally the ld wrapper and the gcc wrapper should be refactored into the same
+source file, but I think we could start out with separate sources and factor later.
+
+ Any takers?
+
+
+ Unless Vicente volunteers to work on an ld wrapper, I guess on the short term
+we should take patches like these. That said, it should really be passed through
+LDFLAGS and not LD itself.
 
  Regards,
  Arnout
+
+> 
+> Thomas
+> 
 
 
 -- 
