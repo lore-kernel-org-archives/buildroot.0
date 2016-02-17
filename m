@@ -1,49 +1,85 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Feb 2016 00:33:23 +0100
-Subject: [Buildroot] copy-package infrastructure [was: Re: [PATCH 1/1] new
- package: jsen]
-In-Reply-To: <20160216222540.64878554@free-electrons.com>
-References: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
- <20160216222540.64878554@free-electrons.com>
-Message-ID: <56C3B1C3.7060807@mind.be>
+Date: Wed, 17 Feb 2016 01:17:34 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: patch ping to link
+ against libm
+In-Reply-To: <20160216212804.7a56f3a7@free-electrons.com>
+References: <1455541206-18200-1-git-send-email-martin@barkynet.com>
+ <20160215231703.2052c7e0@free-electrons.com>
+ <20160216190329.GO14809@waldemar-brodkorb.de>
+ <20160216212804.7a56f3a7@free-electrons.com>
+Message-ID: <56C3BC1E.1060002@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16-02-16 22:25, Thomas Petazzoni wrote:
-> define JSEN_INSTALL_TARGET_CMDS
-> 	mkdir -p $(TARGET_DIR)/usr/share/jsen
-> 	$(foreach d,dist lib index.js,\
-> 		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/jsen/$(sep))
-> endef
+On 16-02-16 21:28, Thomas Petazzoni wrote:
+> Hello,
 > 
-> As a side note, I am wondering if we shouldn't create some common
-> infrastructure to simplify all those packages that just need to "copy"
-> stuff. Either a special variable in the generic-package infrastructure,
-> or a separate "copy-package" infrastructure that provides a special
-> variable that allows the package to list "stuff to be copied" and
-> another listing "where to copy". But that's clearly beyond the scope of
-> your patch, so don't worry about this.
+> On Tue, 16 Feb 2016 20:03:29 +0100, Waldemar Brodkorb wrote:
+> 
+>> The root of the problem is rather simple. When you use math library
+>> functions you are required to link libm explicitely. I think for
+>> historical reasons. For musl this is no issue as everything is
+>> included in libc.so. In uClibc world you have the choice and could simply
+>> build a system without any math library. 
+>> GNU libc seems to have weak aliases for finitef even in libc.so:
+>> nm output/build/glibc-2.22/build/libc.so|grep finitef                                                                                                      
+>> 0002ba9c W finitef
+>> 0002ba9c T __finitef
+>> 0002ba9c t __GI___finitef
+>>
+>> So linking with GNU libc does not fail for iputils even without -lm.
+>>
+>> Not sure, I cannot find every libm function, but some. tgamma or
+>> exp10 is not referenced in libc.so.
+>>
+>> May be Mike can explain the Glibc behaviour?
+>>
+>> The finite macros where added here:
+>> http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/include/math.h?id=21902b578e96fd6b85b9bcda8a0e929fc844ec51
+>> So 1.0.10 is the first release containing this BSD specific
+>> functions in a usable way.
+>>
+>> I think BR2_*DEBUG* option is not related to this error.
+> 
+> OK, but how do you explain that:
+> 
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_IPUTILS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> Builds just fine (and uses uClibc 1.0.9) ?
 
+ I think the difference is in gcc versions. It looks like gcc 4.7 in that
+external toolchain uses a built-in inline version of __finite(), while gcc 4.9
+just calls the external function. I don't think it has anything to do with the
+uClibc version (though I didn't try all combinations). But for sure, it fails
+with gcc 4.9 and uClibc 1.0.10 while it succeeds with the same config and gcc 4.7.
 
- It fairly often happens that other stuff is needed as well, so the copy-package
-infrastructure doesn't sound like a good idea. A variable is also not so simple,
-because you need to specify the source and the target directories.
+ I don't think BR2_ENABLE_DEBUG has anything to do with it, but I didn't test that.
 
- So I think it should be a function, like
+ Anyway, it seems obvious to me that if you use finite(), then you should link
+with -lm. There's bound to be some combination of libc and compiler that
+requires -lm.
 
-define JSEN_INSTALL_TARGET_CMDS
-	$(call copy-dirs,dist lib index js,/usr/share/jsen)
-endef
+ So, maybe add 'and gcc 4.9' to the commit message, but even without it:
 
- However, I think it's not really worth it. We're saving just a little bit of
-code, and hiding what's really happening. I prefer to keep things explicit.
-
- BTW in the same vein, we should also get rid of the github helper. It was
-introduced because the github URLs were changing all the time, but that's no
-longer the case now.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
