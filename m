@@ -1,64 +1,62 @@
-From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-Date: Wed, 17 Feb 2016 17:09:42 +0100
-Subject: [Buildroot] [PATCH 1/1] icu: fix build-time segfault by backporting
-	upstream fix
-Message-ID: <1455725382-32751-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 17 Feb 2016 17:07:53 +0000
+Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: append endianness
+	argument to TARGET_LD for MIPS
+Message-ID: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The icu bug http://bugs.icu-project.org/trac/ticket/11959 also
-hit me, but oddly enough only when running build build server via
-Jenkins. This patch adds the upstream fix for the mentioned bug, so the
-patch most likely can be removed at the next version bump.
+We don't use a wrapper for ld in Buildroot like we do for gcc, so when
+using ld for linking (instead of gcc) the process can fail if the
+appropriate arguments are not passed to it. For instance, this happens
+when building perf (Linux -> Linux Kernel Tools -> perf) for MIPS little
+endian, and this is how the error message looks like:
 
-Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+ LD    /br/output/build/perf-custom/fd/libapi-in.o
+/br/output/host/usr/bin/mips-linux-gnu-ld:
+/br/output/build/perf-custom/fd/array.o: compiled for a little endian
+system and target is big endian
+
+In this case the linker is called without passing any argument to
+indicate the endianness, so the default one is used, which is big endian
+and therefore the process fails because the object files were built for
+little endian instead.
+
+This patch doesn't fix the problem in perf. It just appends the right
+endianness argument (-EL or -EB) to the TARGET_LD variable when building
+for MIPS architecture.
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- ...llocating-memory-for-pkgDataFlags.-compil.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch
+ package/Makefile.in | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch b/package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch
-new file mode 100644
-index 0000000..d53a761
---- /dev/null
-+++ b/package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch
-@@ -0,0 +1,34 @@
-+From 212016f27dd581fd7bef1a44a3342c59619a4ec8 Mon Sep 17 00:00:00 2001
-+From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+Date: Wed, 27 Jan 2016 17:24:25 +0100
-+Subject: [PATCH] fix "Error allocating memory for pkgDataFlags." compilation
-+ error
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dd595e2..8422b96 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -190,6 +190,19 @@ TARGET_READELF  = $(TARGET_CROSS)readelf
+ TARGET_OBJCOPY  = $(TARGET_CROSS)objcopy
+ TARGET_OBJDUMP  = $(TARGET_CROSS)objdump
+ 
++# Append the endianness argument to ld for MIPS architecture in order to
++# avoid problems like this one when using ld instead of gcc for linking:
++# mips-linux-gnu-ld: failed to merge target specific data of file foo.o
++# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
++# target is big endian
++ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
++ifeq ($(BR2_ENDIAN),"BIG")
++TARGET_LD += -EB
++else
++TARGET_LD += -EL
++endif
++endif
 +
-+ This is backport of the upstream icu commit 38081
-+(http://bugs.icu-project.org/trac/changeset/38081/icu/trunk), which is
-+a fix to upstream icu bug #11959
-+(http://bugs.icu-project.org/trac/ticket/11959)
-+
-+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-+---
-+ source/tools/toolutil/flagparser.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/source/tools/toolutil/flagparser.c b/source/tools/toolutil/flagparser.c
-+index 5543415..57256c3 100644
-+--- a/source/tools/toolutil/flagparser.c
-++++ b/source/tools/toolutil/flagparser.c
-+@@ -96,8 +96,8 @@ parseFlagsFile_cleanup:
-+     uprv_free(buffer);
-+ 
-+     T_FileStream_close(f);
-+-    
-+-    if (U_FAILURE(*status)) {
-++
-++    if (U_FAILURE(*status) && *status != U_BUFFER_OVERFLOW_ERROR) {
-+         return -1;
-+     }
-+ 
-+-- 
-+1.9.1
-+
+ ifeq ($(BR2_STRIP_strip),y)
+ STRIP_STRIP_DEBUG := --strip-debug
+ STRIP_STRIP_UNNEEDED := --strip-unneeded
 -- 
-1.9.1
+2.4.10
