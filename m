@@ -1,27 +1,21 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Wed, 17 Feb 2016 15:04:49 -0500 (EST)
-Subject: [Buildroot] pjsip package status
-Message-ID: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2016 21:31:34 +0100
+Subject: [Buildroot] [PATCH] usbredir: bump to version 0.7.1
+In-Reply-To: <1455736299-22035-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 17 Feb 2016 16:11:39 -0300")
+References: <1455736299-22035-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d1rvyt7d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, 
-Regarding pjsip package ( http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html ), is there any reason why it's not part of the package collection yet? 
-Regards, 
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed to next, thanks.
 
 -- 
-Patrick Keroulas 
-Consultant en logiciel libre, 
-Savoir-faire Linux Inc. 
-
-7275 Saint-Urbain, bureau 200 
-Montr?al, Qu?bec H2R 2Y5 
-t?l: (514) 276-5468 ext. 167 
-fax: (514) 276-5465 
-_____________________ 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160217/c9e3dd4c/attachment.html>
+Bye, Peter Korsgaard
