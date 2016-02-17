@@ -1,12 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Feb 2016 08:55:09 +0100
-Subject: [Buildroot] copy-package infrastructure [was: Re: [PATCH 1/1]
- new package: jsen]
-In-Reply-To: <56C3B1C3.7060807@mind.be>
-References: <1455605293-1869-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
- <20160216222540.64878554@free-electrons.com>
- <56C3B1C3.7060807@mind.be>
-Message-ID: <20160217085509.370548df@free-electrons.com>
+Date: Wed, 17 Feb 2016 08:56:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: patch ping to link
+ against libm
+In-Reply-To: <56C3BC1E.1060002@mind.be>
+References: <1455541206-18200-1-git-send-email-martin@barkynet.com>
+ <20160215231703.2052c7e0@free-electrons.com>
+ <20160216190329.GO14809@waldemar-brodkorb.de>
+ <20160216212804.7a56f3a7@free-electrons.com>
+ <56C3BC1E.1060002@mind.be>
+Message-ID: <20160217085620.050d6132@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +17,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 17 Feb 2016 00:33:23 +0100, Arnout Vandecappelle wrote:
+On Wed, 17 Feb 2016 01:17:34 +0100, Arnout Vandecappelle wrote:
 
-> > As a side note, I am wondering if we shouldn't create some common
-> > infrastructure to simplify all those packages that just need to "copy"
-> > stuff. Either a special variable in the generic-package infrastructure,
-> > or a separate "copy-package" infrastructure that provides a special
-> > variable that allows the package to list "stuff to be copied" and
-> > another listing "where to copy". But that's clearly beyond the scope of
-> > your patch, so don't worry about this.
+>  I think the difference is in gcc versions. It looks like gcc 4.7 in that
+> external toolchain uses a built-in inline version of __finite(), while gcc 4.9
+> just calls the external function. I don't think it has anything to do with the
+> uClibc version (though I didn't try all combinations). But for sure, it fails
+> with gcc 4.9 and uClibc 1.0.10 while it succeeds with the same config and gcc 4.7.
+
+Aaah, okay. Makes sense.
+
+>  I don't think BR2_ENABLE_DEBUG has anything to do with it, but I didn't test that.
 > 
-> 
->  It fairly often happens that other stuff is needed as well, so the copy-package
-> infrastructure doesn't sound like a good idea. A variable is also not so simple,
-> because you need to specify the source and the target directories.
+>  Anyway, it seems obvious to me that if you use finite(), then you should link
+> with -lm. There's bound to be some combination of libc and compiler that
+> requires -lm.
 
-Yes, it is indeed common that a few other things need to be done.
+I fully agree that from the beginning -lm is needed. However, I didn't
+like the fact that the build failures were not fully understood.
 
->  So I think it should be a function, like
-> 
-> define JSEN_INSTALL_TARGET_CMDS
-> 	$(call copy-dirs,dist lib index js,/usr/share/jsen)
-> endef
-> 
->  However, I think it's not really worth it. We're saving just a little bit of
-> code, and hiding what's really happening. I prefer to keep things explicit.
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Yeah, that's an opinion. I don't have a strong opinion either way, but
-I can certainly understand the opinion that things should remain
-explicit, and to not needlessly introduce new infrastructures.
-
->  BTW in the same vein, we should also get rid of the github helper. It was
-> introduced because the github URLs were changing all the time, but that's no
-> longer the case now.
-
-Right. It would make it clearer for anyone reading the code that when
-fetching from Github, we're actually doing an http download and not a
-git clone.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
