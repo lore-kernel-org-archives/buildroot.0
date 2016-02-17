@@ -1,24 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2016 21:32:59 +0100
-Subject: [Buildroot] [PATCH] spice: arch-mask toolchain comment
-In-Reply-To: <1455737298-31358-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 17 Feb 2016 16:28:18 -0300")
-References: <1455737298-31358-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <874md7yt50.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Feb 2016 21:32:47 +0100
+Subject: [Buildroot] [git commit] spice: arch-mask toolchain comment
+Message-ID: <20160217203311.CB2FA81941@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3c686eb407be5775d7eb0e942f377cd106896f69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Otherwise it shows up for other architectures with minimal toolchains
- > giving the impression that it's available/tested.
+Otherwise it shows up for other architectures with minimal toolchains
+giving the impression that it's available/tested.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spice/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/spice/Config.in b/package/spice/Config.in
+index f1fcf69..bde3a92 100644
+--- a/package/spice/Config.in
++++ b/package/spice/Config.in
+@@ -1,4 +1,5 @@
+ comment "spice server needs a toolchain w/ wchar, threads"
++	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "spice server depends on python (for pyparsing)"
