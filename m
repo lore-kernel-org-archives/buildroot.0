@@ -1,83 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:46:38 +0100
-Subject: [Buildroot] [git commit] privoxy: new package
-Message-ID: <20160302202754.2445480203@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2016 15:12:43 +0100
+Subject: [Buildroot] [git commit] musl: add fwrite regression patch
+Message-ID: <20160302202752.9809680203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8a263fe361ab37ec6765b9ff6478c3b15e3d139
+commit: https://git.buildroot.net/buildroot/commit/?id=8ffed8ae08d5b8b3a30fb3d00c9e3ad2b84c9b2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in            |  1 +
- package/privoxy/Config.in    | 12 ++++++++++++
- package/privoxy/privoxy.hash |  3 +++
- package/privoxy/privoxy.mk   | 16 ++++++++++++++++
- 4 files changed, 32 insertions(+)
+As pointed in http://www.openwall.com/lists/musl/2016/02/17/3 add the
+fwrite regression patch for the recent 1.1.13 release.
 
-diff --git a/package/Config.in b/package/Config.in
-index 023a190..8aa6bb5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1446,6 +1446,7 @@ endif
- 	source "package/portmap/Config.in"
- 	source "package/pppd/Config.in"
- 	source "package/pptp-linux/Config.in"
-+	source "package/privoxy/Config.in"
- 	source "package/proftpd/Config.in"
- 	source "package/proxychains-ng/Config.in"
- 	source "package/ptpd/Config.in"
-diff --git a/package/privoxy/Config.in b/package/privoxy/Config.in
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...n-in-fputs-that-fwrite-returning-0-implie.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
 new file mode 100644
-index 0000000..8d8d01a
+index 0000000..b32b752
 --- /dev/null
-+++ b/package/privoxy/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PRIVOXY
-+	bool "privoxy"
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_PCRE
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  A non-caching web proxy with advanced filtering capabilities
-+	  for enhancing privacy, modifying web page data and HTTP
-+	  headers, controlling access, and removing ads and other
-+	  obnoxious Internet junk.
++++ b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
+@@ -0,0 +1,38 @@
++From 10a17dfbad2c267d885817abc9c7589fc7ff630b Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Tue, 16 Feb 2016 13:26:16 -0500
++Subject: [PATCH] fix assumption in fputs that fwrite returning 0 implies an
++ error
 +
-+	  http://www.privoxy.org/
-diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
-new file mode 100644
-index 0000000..aea8f2d
---- /dev/null
-+++ b/package/privoxy/privoxy.hash
-@@ -0,0 +1,3 @@
-+# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.24%20%28stable%29/
-+md5	44a47d1a5000db8cccd61ace0e25e7f7	privoxy-3.0.24-stable-src.tar.gz
-+sha1	343c547a9e795ff029a78310963e0c04448975ee	privoxy-3.0.24-stable-src.tar.gz
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-new file mode 100644
-index 0000000..4b5a1a6
---- /dev/null
-+++ b/package/privoxy/privoxy.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# privoxy
-+#
-+################################################################################
++internally, the idiom of passing nmemb=1 to fwrite and interpreting
++the return value of fwrite (which is necessarily 0 or 1) as
++failure/success is fairly widely used. this is not correct, however,
++when the size argument is unknown and may be zero, since C requires
++fwrite to return 0 in that special case. previously fwrite always
++returned nmemb on success, but this was changed for conformance with
++ISO C by commit 500c6886c654fd45e4926990fee2c61d816be197.
 +
-+PRIVOXY_VERSION = 3.0.24
-+PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
-+PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
-+# configure not shipped
-+PRIVOXY_AUTORECONF = YES
-+PRIVOXY_DEPENDENCIES = pcre zlib
-+PRIVOXY_LICENSE = GPLv2+
-+PRIVOXY_LICENSE_FILES = LICENSE
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: upstream.
 +
-+$(eval $(autotools-package))
++ src/stdio/fputs.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/stdio/fputs.c b/src/stdio/fputs.c
++index 4737f44..1cf344f 100644
++--- a/src/stdio/fputs.c
+++++ b/src/stdio/fputs.c
++@@ -3,7 +3,8 @@
++ 
++ int fputs(const char *restrict s, FILE *restrict f)
++ {
++-	return (int)fwrite(s, strlen(s), 1, f) - 1;
+++	size_t l = strlen(s);
+++	return (fwrite(s, 1, l, f)==l) - 1;
++ }
++ 
++ weak_alias(fputs, fputs_unlocked);
++-- 
++2.4.10
++
