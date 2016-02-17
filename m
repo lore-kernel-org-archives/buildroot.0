@@ -1,186 +1,209 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 17 Feb 2016 10:45:41 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
-In-Reply-To: <CAAMH-yuzsvt-6U-JX7RhNoEcWoJA4ahRm4U27LvWLwXyg4UtTg@mail.gmail.com>
-References: <1454363759-23349-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454363759-23349-2-git-send-email-gary.bisson@boundarydevices.com>
- <20160216215313.15f228fe@gmx.net>,
- <CAAMH-yuzsvt-6U-JX7RhNoEcWoJA4ahRm4U27LvWLwXyg4UtTg@mail.gmail.com>
-Message-ID: <trinity-cadde813-570a-4e7a-b943-d69330bfa040-1455702340920@3capp-gmx-bs24>
+From: Sagaert Johan <sagaert.johan@proximus.be>
+Date: Wed, 17 Feb 2016 10:46:02 +0100
+Subject: [Buildroot] [PATCH 1/1] libcapn : new package
+Message-ID: <1455702362-300-1-git-send-email-sagaert.johan@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary,
+Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
+---
+ package/Config.in                                  |  1 +
+ .../0001-use-global-jansson-include-file.patch     | 26 +++++++++++
+ ...ve-the-jansson-git-submodule-requirements.patch | 54 ++++++++++++++++++++++
+ .../0003-remove-ld.so.conf.d-creation.patch        | 29 ++++++++++++
+ package/libcapn/Config.in                          | 13 ++++++
+ package/libcapn/libcapn.mk                         | 18 ++++++++
+ 6 files changed, 141 insertions(+)
+ create mode 100644 package/libcapn/0001-use-global-jansson-include-file.patch
+ create mode 100644 package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch
+ create mode 100644 package/libcapn/0003-remove-ld.so.conf.d-creation.patch
+ create mode 100644 package/libcapn/Config.in
+ create mode 100644 package/libcapn/libcapn.mk
 
-> Gesendet: Dienstag, 16. Februar 2016 um 23:57 Uhr
-> Von: "Gary Bisson" <gary.bisson@boundarydevices.com>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Betreff: Re: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
->
-> Peter, All,
-> 
-> On Tue, Feb 16, 2016 at 9:53 PM, Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Hello Gary,
-> >
-> > On Mon,  1 Feb 2016 22:55:58 +0100, Gary Bisson <gary.bisson@boundarydevices.com> wrote:
-> >
-> > > <snip>
-> > > +LIBIMXVPUAPI_VERSION = 0.10.1
-> > > +LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
-> > > +LIBIMXVPUAPI_LICENSE = LGPLv2.1+
-> > > +LIBIMXVPUAPI_LICENSE_FILES = LICENSE
-> > > +LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
-> > > +LIBIMXVPUAPI_INSTALL_STAGING = YES
-> > > +
-> > > +define LIBIMXVPUAPI_CONFIGURE_CMDS
-> > > +     cd $(@D); \
-> > > +     $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf configure \
-> > > +             --prefix=/usr
-> > > +endef
-> >
-> > On my x86_64 (OpenSUSE-13.2) host build the libs and libimxvpuapi.pc
-> > are installed into $(STAGING_DIR)/usr/lib64 and $(TARGET_DIR)/usr/lib64.
-> >
-> > To be usable by eg. gst1-imx the install path should be $(STAGING_DIR)/usr/lib
-> > and $(TARGET_DIR)/usr/lib. To achieve this I added '--libdir=/usr/lib' to
-> > overwrite the default '/usr/lib64':
-> 
-> I'd like to understand why it behaves like this with your setup. I'm
-> using a 64-bit OS too (Debian Testing) but the libs go to /usr/lib as
-> expected.
-> 
-> Could you pastebin the full log of libimxvpuapi build, your buildroot
-> configuration as well as you 'env'?
-> 
-
-Build log attached (rm -r build/libimxvpuapi-0.10.1; make V=1 2>&1 | tee out_build_libimxvpuapi_orig.txt),
-same buildroot setup as in previous e-mail: out_build_libimxvpuapi_orig.txt
-
-$ cd build/libimxvpuapi-0.10.1/
-$ /home/seiderer/Work/BD_Nitrogen6x/Buildroot-2016-02/build_2016_02_001/host/usr/bin/python2 ./waf configure --help
-...
-    --libdir=LIBDIR     object code libraries [EXEC_PREFIX/lib64]
-...
-
-$ env
-LESSKEY=/etc/lesskey.bin
-NNTPSERVER=news
-MANPATH=/usr/local/man:/usr/share/man
-HOSTNAME=XXXXXXX
-XKEYSYMDB=/usr/X11R6/lib/X11/XKeysymDB
-HOST=XXXXXXX
-TERM=rxvt-unicode-256color
-SHELL=/bin/bash
-PROFILEREAD=true
-HISTSIZE=1000
-MORE=-sl
-JRE_HOME=/usr/lib64/jvm/java/jre
-USER=seiderer
-LS_COLORS=
-XNLSPATH=/usr/share/X11/nls
-QEMU_AUDIO_DRV=pa
-HOSTTYPE=x86_64
-CONFIG_SITE=/usr/share/site/x86_64-unknown-linux-gnu
-FROM_HEADER=
-PAGER=less
-CSHEDIT=emacs
-XDG_CONFIG_DIRS=/etc/xdg
-LIBGL_DEBUG=quiet
-MINICOM=-c on
-MAIL=/var/mail/seiderer
-PATH=/opt/tools/bin:/home/seiderer/bin:/usr/local/bin:/usr/bin:/bin:/usr/bin/X11:/usr/games
-CPU=x86_64
-JAVA_BINDIR=/usr/lib64/jvm/java/bin
-INPUTRC=/home/seiderer/.inputrc
-PWD=/home/seiderer/Work/BD_Nitrogen6x/Buildroot-2016-02/build_2016_02_001/build/libimxvpuapi-0.10.1
-gopher_proxy=
-JAVA_HOME=/usr/lib64/jvm/java
-LANG=en_US.UTF-8
-PYTHONSTARTUP=/etc/pythonstart
-SDK_HOME=/usr/lib64/jvm/java
-GPG_TTY=/dev/pts/3
-AUDIODRIVER=pulseaudio
-QT_SYSTEM_DIR=/usr/share/desktop-data
-JDK_HOME=/usr/lib64/jvm/java
-SHLVL=1
-HOME=/home/seiderer
-ALSA_CONFIG_PATH=/etc/alsa-pulse.conf
-SDL_AUDIODRIVER=pulse
-LESS_ADVANCED_PREPROCESSOR=no
-OSTYPE=linux
-LS_OPTIONS=-N --color=none -T 0
-WINDOWMANAGER=/usr/bin/gnome
-G_FILENAME_ENCODING=@locale,UTF-8,ISO-8859-15,CP1252
-LESS=-M -I -R
-MACHTYPE=x86_64-suse-linux
-LOGNAME=seiderer
-CVS_RSH=ssh
-XDG_DATA_DIRS=/usr/share
-SSH_CONNECTION=10.5.121.193 49159 10.5.123.15 22
-LESSOPEN=lessopen.sh %s
-XDG_RUNTIME_DIR=/run/user/1000
-DISPLAY=localhost:13.0
-XAUTHLOCALHOSTNAME=DLxX9PSE02
-NO_AT_BRIDGE=1
-LESSCLOSE=lessclose.sh %s %s
-G_BROKEN_FILENAMES=1
-JAVA_ROOT=/usr/lib64/jvm/java
-COLORTERM=1
-BASH_FUNC_mc%%=() {  . /usr/share/mc/mc-wrapper.sh
-}
-OLDPWD=/home/seiderer/Work/BD_Nitrogen6x/Buildroot-2016-02/build_2016_02_001
-_=/usr/bin/env
-
-Regards,
-Peter
-
-> > --- a/package/libimxvpuapi/libimxvpuapi.mk
-> > +++ b/package/libimxvpuapi/libimxvpuapi.mk
-> > @@ -14,7 +14,7 @@ LIBIMXVPUAPI_INSTALL_STAGING = YES
-> >  define LIBIMXVPUAPI_CONFIGURE_CMDS
-> >         cd $(@D); \
-> >         $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf configure \
-> > -               --prefix=/usr
-> > +               --prefix=/usr --libdir=/usr/lib
-> >  endef
-> >
-> >  define LIBIMXVPUAPI_BUILD_CMDS
-> >
-> >
-> > With this you can add my
-> >
-> > Tested-by: Peter Seiderer <ps.report@gmx.net>
-> >
-> > for '...! imxvpudec ! imxipuvideosink'
-> 
-> Ok, I'll do that once I understand the difference which requires this
-> libdir argument.
-> 
-> > But I had problems using the imxeglvivsink element and
-> > with qt5 eglfs, suspecting your 'Update most Freescale packages' patch series
-> > (using buildroot-2016.02-rc1 with your '[PATCH v3 0/2] gst1-imx: bump version to 0.12.0'
-> > patches on top), but did not find time yet to investigate further...
-> 
-> Does a basic gstreamer pipeline work?
-> # gst-launch-1.0 videotestsrc ! imxeglvivsink
-> 
-> If not there's no wonder qt5 doesn't like it. I haven't tried qt5 but
-> I'm sure the gstreamer imxeglvivsink does work.
-> 
-> In case you've enabled BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV, you
-> might need to load the Galcore module manually in case you don't have
-> eudev for instance:
-> # insmod /lib/modules/3.14.28/extra/galcore.ko
-> 
-> Regards,
-> Gary
-> 
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: out_build_libimxvpuapi_orig.txt
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160217/72bf950a/attachment.txt>
+diff --git a/package/Config.in b/package/Config.in
+index 529ad33..30042fe 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1073,6 +1073,7 @@ menu "Networking"
+ 	source "package/gupnp-av/Config.in"
+ 	source "package/ibrcommon/Config.in"
+ 	source "package/ibrdtn/Config.in"
++	source "package/libcapn/Config.in"
+ 	source "package/libcgi/Config.in"
+ 	source "package/libcgicc/Config.in"
+ 	source "package/libcurl/Config.in"
+diff --git a/package/libcapn/0001-use-global-jansson-include-file.patch b/package/libcapn/0001-use-global-jansson-include-file.patch
+new file mode 100644
+index 0000000..8e89b7e
+--- /dev/null
++++ b/package/libcapn/0001-use-global-jansson-include-file.patch
+@@ -0,0 +1,26 @@
++From d696407e5fe6d14ac18f4b63532c4eaa80699fa3 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@proximus.be>
++Date: Wed, 17 Feb 2016 10:05:13 +0100
++Subject: [PATCH 1/3] use global jansson include file
++
++Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
++---
++ src/library/apn_payload.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/library/apn_payload.c b/src/library/apn_payload.c
++index eaf5010..ac000e5 100644
++--- a/src/library/apn_payload.c
+++++ b/src/library/apn_payload.c
++@@ -24,7 +24,7 @@
++ #include <errno.h>
++ #include <assert.h>
++ 
++-#include "src/jansson.h"
+++#include "jansson.h"
++ #include "apn_strings.h"
++ #include "apn_memory.h"
++ #include "apn_private.h"
++-- 
++2.3.3
++
+diff --git a/package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch b/package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch
+new file mode 100644
+index 0000000..7de9095
+--- /dev/null
++++ b/package/libcapn/0002-remove-the-jansson-git-submodule-requirements.patch
+@@ -0,0 +1,54 @@
++From e418621d70d05ca9b77de6a1d369ff01266a3347 Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@proximus.be>
++Date: Wed, 17 Feb 2016 10:05:58 +0100
++Subject: [PATCH 2/3] remove the jansson git submodule requirements
++
++Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
++---
++ CMakeLists.txt | 16 +---------------
++ 1 file changed, 1 insertion(+), 15 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 75e3b35..7a80fe6 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -94,10 +94,6 @@ ENDFOREACH(STRERROR_R_HEADER)
++ 
++ INCLUDE(ExternalProject)
++ 
++-INCLUDE_DIRECTORIES ("${CAPN_THIRD_PARTY_DIR}/jansson")
++-INCLUDE_DIRECTORIES ("${CAPN_THIRD_PARTY_DIR}/jansson/include")
++-
++-
++ CONFIGURE_FILE("${CAPN_SOURCE_LIB_DIR}/apn_platform.h.cmake" "${PROJECT_BINARY_DIR}/src/library/apn_platform.h")
++ CONFIGURE_FILE("${CAPN_SOURCE_LIB_DIR}/apn_version.h.cmake" "${PROJECT_BINARY_DIR}/src/library/apn_version.h")
++ 
++@@ -206,16 +202,6 @@ ELSE(WIN32)
++             ENDIF()
++         ENDIF()
++ 
++-        ExternalProject_Add(
++-            jansson
++-            SOURCE_DIR "${CAPN_THIRD_PARTY_DIR}/jansson"
++-            BINARY_DIR "${CAPN_THIRD_PARTY_DIR}/jansson"
++-            INSTALL_DIR "${CAPN_THIRD_PARTY_DIR}/jansson"
++-            CMAKE_COMMAND cmake . -DCMAKE_C_FLAGS=-fPIC -DJANSSON_BUILD_DOCS=OFF
++-            BUILD_COMMAND make
++-            INSTALL_COMMAND ""
++-        )
++-		
++         SET(CAPN_INSTALL_PATH_LIB "${CAPN_INSTALL_PATH_LIB}/${CAPN_LIB_NAME}")
++         SET(CAPN_PKGCONF_FILE_NAME "libcapn.pc")
++         CONFIGURE_FILE("${CAPN_PKGCONF_FILE_NAME}.cmake" "${PROJECT_BINARY_DIR}/${CAPN_PKGCONF_FILE_NAME}")
++@@ -255,7 +241,7 @@ IF(WIN32)
++ 	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} ${OPENSSL_SSLEAY_LIBRARY})
++ 	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} ${OPENSSL_LIBEAY_LIBRARY})
++ ELSE()
++-	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} "${CAPN_THIRD_PARTY_DIR}/jansson/lib/libjansson.a")
+++	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} "jansson")
++ 	TARGET_LINK_LIBRARIES(${CAPN_LIB_NAME} ${OPENSSL_LIBRARIES})
++ ENDIF()
++ 
++-- 
++2.3.3
++
+diff --git a/package/libcapn/0003-remove-ld.so.conf.d-creation.patch b/package/libcapn/0003-remove-ld.so.conf.d-creation.patch
+new file mode 100644
+index 0000000..1605b37
+--- /dev/null
++++ b/package/libcapn/0003-remove-ld.so.conf.d-creation.patch
+@@ -0,0 +1,29 @@
++From e5d1accd8dca48639dea6f7c98501b1040652cea Mon Sep 17 00:00:00 2001
++From: Sagaert Johan <sagaert.johan@proximus.be>
++Date: Wed, 17 Feb 2016 10:12:58 +0100
++Subject: [PATCH 3/3] remove ld.so.conf.d creation
++
++Signed-off-by: Sagaert Johan <sagaert.johan@proximus.be>
++---
++ CMakeLists.txt | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 7a80fe6..354688f 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -211,11 +211,6 @@ ELSE(WIN32)
++             IF(NOT DEFINED CAPN_INSTALL_PATH_SYSCONFIG)
++                 SET(CAPN_INSTALL_PATH_SYSCONFIG "/etc"  CACHE PATH "")
++             ENDIF()
++-            IF(EXISTS "${CAPN_INSTALL_PATH_SYSCONFIG}/ld.so.conf.d" AND IS_DIRECTORY "${CAPN_INSTALL_PATH_SYSCONFIG}/ld.so.conf.d")
++-                SET(CAPN_LDCONF_FILE_NAME "libcapn-${CAPN_VERSION}-${CAPN_ARCH_STR}.conf")
++-                CONFIGURE_FILE(libcapn.ld.conf.cmake "${PROJECT_BINARY_DIR}/${CAPN_LDCONF_FILE_NAME}")
++-                INSTALL(FILES "${PROJECT_BINARY_DIR}/${CAPN_LDCONF_FILE_NAME}" DESTINATION "${CAPN_INSTALL_PATH_SYSCONFIG}/ld.so.conf.d")
++-            ENDIF()
++         ENDIF()
++ 
++         CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/src/config/apn_config.c.cmake" "${PROJECT_BINARY_DIR}/src/config/apn_config.c")
++-- 
++2.3.3
++
+diff --git a/package/libcapn/Config.in b/package/libcapn/Config.in
+new file mode 100644
+index 0000000..5b25910
+--- /dev/null
++++ b/package/libcapn/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBCAPN
++	bool "libcapn"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_JANSSON
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
++	help
++	  libcapn is a C Library to interact with the 
++	  Apple Push Notification Service (APNs for short)
++	  using simple and intuitive API.
++	  With the library you can easily send push 
++	  notifications to iOS and OS X (>= 10.8) devices.
++	  
++	  http://libcapn.org
+diff --git a/package/libcapn/libcapn.mk b/package/libcapn/libcapn.mk
+new file mode 100644
+index 0000000..df8e162
+--- /dev/null
++++ b/package/libcapn/libcapn.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# libcapn
++#
++################################################################################
++
++LIBCAPN_VERSION = 7a6dc662e9daa864f687
++LIBCAPN_SITE = $(call github,adobkin,libcapn,$(LIBCAPN_VERSION))
++LIBCAPNLICENSE = MIT
++LIBCAPN_DEPENDENCIES += jansson openssl
++LIBCAPN_INSTALL_STAGING = YES
++LIBCAPN_CONF_OPTS = -DCMAKE_BUILD_TYPE=Release \
++  -DAPN_HAVE_GLIBC_STRERROR_R=OFF \
++  -DAPN_HAVE_POSIX_STRERROR_R=OFF \
++  -DAPN_HAVE_GLIBC_STRERROR_R__TRYRUN_OUTPUT=OFF \
++  -DAPN_HAVE_POSIX_STRERROR_R__TRYRUN_OUTPUT=OFF 
++    
++$(eval $(cmake-package))
+-- 
+2.3.3
