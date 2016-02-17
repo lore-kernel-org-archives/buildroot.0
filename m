@@ -1,37 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Feb 2016 21:51:15 +0100
-Subject: [Buildroot] [PATCH v2 0/1] protobuf: fix detection of
- __atomic_*()	built-ins
-In-Reply-To: <1824328105.3286559.1455733980693.JavaMail.zimbra@datacom.ind.br>
-References: <1455204185-7124-1-git-send-email-casantos@datacom.ind.br>
- <1455204185-7124-1-git-send-email-casantos@datacom.ind.br>
- <1455730981-6316-1-git-send-email-casantos@datacom.ind.br>
- <1824328105.3286559.1455733980693.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160217215115.504737a9@free-electrons.com>
+Date: Wed, 17 Feb 2016 21:59:21 +0100
+Subject: [Buildroot] Issue with toolchain wrapper changes
+In-Reply-To: <CAAXf6LXc4FvFMcZOKBa-X0Krr+TvEL=pkfzKO1VHuaUthoLqEA@mail.gmail.com>
+References: <20160213163116.745e4507@free-electrons.com>
+ <87lh6j1ttt.fsf@dell.be.48ers.dk>
+ <20160217125658.7776ac38@free-electrons.com>
+ <CAAXf6LXc4FvFMcZOKBa-X0Krr+TvEL=pkfzKO1VHuaUthoLqEA@mail.gmail.com>
+Message-ID: <20160217215921.581d6c94@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Carlos Santos,
+Hello,
 
-On Wed, 17 Feb 2016 16:33:00 -0200 (BRST), Carlos Santos wrote:
-> > From: "Carlos Santos" <casantos@datacom.ind.br>
-> > To: buildroot at buildroot.org
-> > Cc: "thomas petazzoni" <thomas.petazzoni@free-electrons.com>
-> > Sent: Wednesday, February 17, 2016 3:43:00 PM
-> > Subject: [Buildroot] [PATCH v2 0/1] protobuf: fix detection of __atomic_*()	built-ins
-> 
-> > - Clarify that we *will* attempt to submit upstream the patch in
-> >  configure.ac.
-> 
-> In progress:
-> 
->   - https://goo.gl/Kzju4X
->   - https://goo.gl/v6bypJ
+On Wed, 17 Feb 2016 18:23:11 +0100, Thomas De Schampheleire wrote:
 
-Excellent, thanks for working on this!
+> I may be misunderstanding something, but what is the problem with creating
+> the archive from the usr directory? This is what I did at the time I was
+> using a buildroot toolchain.
+
+It no longer works, see the initial e-mail I sent to start this thread.
+
+Best regards,
 
 Thomas
 -- 
