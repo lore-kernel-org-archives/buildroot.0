@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 17 Feb 2016 21:59:21 +0100
-Subject: [Buildroot] Issue with toolchain wrapper changes
-In-Reply-To: <CAAXf6LXc4FvFMcZOKBa-X0Krr+TvEL=pkfzKO1VHuaUthoLqEA@mail.gmail.com>
-References: <20160213163116.745e4507@free-electrons.com>
- <87lh6j1ttt.fsf@dell.be.48ers.dk>
- <20160217125658.7776ac38@free-electrons.com>
- <CAAXf6LXc4FvFMcZOKBa-X0Krr+TvEL=pkfzKO1VHuaUthoLqEA@mail.gmail.com>
-Message-ID: <20160217215921.581d6c94@free-electrons.com>
+Date: Wed, 17 Feb 2016 22:05:17 +0100
+Subject: [Buildroot] pjsip package status
+In-Reply-To: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
+References: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <20160217220517.00f5e5fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Patrick,
 
-On Wed, 17 Feb 2016 18:23:11 +0100, Thomas De Schampheleire wrote:
+On Wed, 17 Feb 2016 15:04:49 -0500 (EST), Patrick Keroulas wrote:
 
-> I may be misunderstanding something, but what is the problem with creating
-> the archive from the usr directory? This is what I did at the time I was
-> using a buildroot toolchain.
+> Regarding pjsip package
+> ( http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html
+> ), is there any reason why it's not part of the package collection
+> yet? Regards, 
 
-It no longer works, see the initial e-mail I sent to start this thread.
+A first version was posted on April 26th, to which I made some
+comments. The original author, Bernd Kuhls, made some changes and
+posted a second version on the same day, April 26th. But then nothing
+happened, until Luca Ceresoli asked on October 4th if Bernd was still
+interested. On October 5th, Bernd said he was no longer interested in
+the patch.
 
-Best regards,
+So, if you are interested by pjsip, feel free to take over the patch,
+starting from its latest version, available at
+http://patchwork.ozlabs.org/patch/464737/.
+
+Thanks a lot!
 
 Thomas
 -- 
