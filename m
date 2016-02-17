@@ -1,14 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 17 Feb 2016 13:30:04 +0100
-Subject: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
-In-Reply-To: <CAAMH-ysOoy8FNMZAOA0_m_vOnduBTYuQLcOe-2eVt+8t4wZvaw@mail.gmail.com>
-References: <1454363759-23349-1-git-send-email-gary.bisson@boundarydevices.com>
- <1454363759-23349-2-git-send-email-gary.bisson@boundarydevices.com>
- <20160216215313.15f228fe@gmx.net>
- <CAAMH-yuzsvt-6U-JX7RhNoEcWoJA4ahRm4U27LvWLwXyg4UtTg@mail.gmail.com>
- <trinity-f34aaf6c-100d-4336-9dbf-030d951133dd-1455701165352@3capp-gmx-bs46>,
- <CAAMH-ysOoy8FNMZAOA0_m_vOnduBTYuQLcOe-2eVt+8t4wZvaw@mail.gmail.com>
-Message-ID: <trinity-9474c08f-9274-4fd6-961b-8257e3d58bd3-1455712203984@3capp-gmx-bs71>
+Date: Wed, 17 Feb 2016 13:38:42 +0100
+Subject: [Buildroot] [PATCH v4 2/2] gst1-imx: bump to version 0.12.0
+In-Reply-To: <1455712071-14629-3-git-send-email-gary.bisson@boundarydevices.com>
+References: <1455712071-14629-1-git-send-email-gary.bisson@boundarydevices.com>, 
+ <1455712071-14629-3-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <trinity-9f9d8817-2e2a-4269-a7c9-037874542cad-1455712722475@3capp-gmx-bs71>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,182 +13,238 @@ To: buildroot@busybox.net
 
 Hello Gary,
 
-> Gesendet: Mittwoch, 17. Februar 2016 um 10:37 Uhr
+> Gesendet: Mittwoch, 17. Februar 2016 um 13:27 Uhr
 > Von: "Gary Bisson" <gary.bisson@boundarydevices.com>
-> An: "Peter Seiderer" <ps.report@gmx.net>
-> Cc: buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> Betreff: Re: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
+> An: buildroot at busybox.net
+> Cc: thomas.petazzoni at free-electrons.com, ps.report at gmx.net, baruch at tkos.co.il, "Gary Bisson" <gary.bisson@boundarydevices.com>
+> Betreff: [PATCH v4 2/2] gst1-imx: bump to version 0.12.0
 >
-> Hi Peter,
+> Changelog:
+> * vpu:
+>   - Completely rewritten plugin code; elements now based on libimxvpuapi
+>     instead of libfslvpuwrap
+>   - imxvpuenc_h264 inserts SPS/PPS data in front of I/IDR frames
+>   - imxvpuenc_mjpeg's quality factor actually has an effect, and is
+>     equivalent to the libjpeg's quality factor (it is used in exactly
+>     the same way to scale the quantization matrix' coefficients)
+>   - the encoder's output buffers no longer have to use DMA memory; they
+>     use regular system memory instead
+>   - new support in imxvpudec (referred to as "chroma interleaving") for
+>     NV12, NV16, NV24 as output formats as an alternative to the I420,
+>     Y42B, Y444 formats
+>   - removed all of the system frame number tracking code, since it is
+>     unnecessary; Instead, the libimxvpuapi's context fields are used to
+>     associate input/output frames with GstVideoCodecFrame system frame
+>     numbers
+>   - fix memory leaks related to missing buffer pool unref'ing
 > 
-> On Wed, Feb 17, 2016 at 10:26 AM, Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > Hello Gary,
-> >
-> > > Gesendet: Dienstag, 16. Februar 2016 um 23:57 Uhr
-> > > Von: "Gary Bisson" <gary.bisson@boundarydevices.com>
-> > > An: "Peter Seiderer" <ps.report@gmx.net>
-> > > Cc: buildroot at busybox.net, "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> > > Betreff: Re: [Buildroot] [PATCH v2 1/2] libimxvpuapi: add new package
-> >
-> > [snip]
-> >
-> > >
-> > > > But I had problems using the imxeglvivsink element and
-> > > > with qt5 eglfs, suspecting your 'Update most Freescale packages' patch series
-> > > > (using buildroot-2016.02-rc1 with your '[PATCH v3 0/2] gst1-imx: bump version to 0.12.0'
-> > > > patches on top), but did not find time yet to investigate further...
-> > >
-> > > Does a basic gstreamer pipeline work?
-> > > # gst-launch-1.0 videotestsrc ! imxeglvivsink
-> > >
-> >
-> > No:
-> >
-> > $ GST_DEBUG=*:3 gst-launch-1.0 videotestsrc ! imxeglvivsink
-> > Setting pipeline to PAUSED ...
-> > mxc_sdc_fb fb.20: 1920x1080 h_sync,r,l: 44,88,148  v_sync,l,u: 5,4,36 pixclock=148500000 Hz
-> > imx-ipuv3 2800000.ipu: try ipu internal clk
-> > imx-ipuv3 2800000.ipu: disp=0, pixel_clk=148500000 148500000 parent=148500000 div=1
-> > 0:00:00.229253000   245   0x9d1ee0 ERROR      imxeglplatform_fb egl_platform_fb.c:72:gst_imx_egl_viv_sink_egl_platform_create: eglGetDisplay failed: bad alloc
-> > ERROR: Pipeline doesn't want to pause.
-> > Setting pipeline to NULL ...
-> > Freeing pipeline ...
-> > mxc_sdc_fb fb.20: 1920x1080 h_sync,r,l: 44,88,148  v_sync,l,u: 5,4,36 pixclock=148500000 Hz
-> > imx-ipuv3 2800000.ipu: try ipu internal clk
-> > imx-ipuv3 2800000.ipu: disp=0, pixel_clk=148500000 148500000 parent=148500000 div=1
-> >
-> > Using Buildroot-2016-02-rc1 with
-> > https://patchwork.ozlabs.org/patch/577011/mbox/
-> > https://patchwork.ozlabs.org/patch/577012/mbox/
+> * imxv4l2videosrc:
+>   - support for crop metadata
+>   - element uses the width, height, etc. of the format that the device
+>     actually uses during operation (instead of default values)
+>   - autofocus control support via GstPhotography
+>   - fix incorrect GLib warnings
+>   - fix segmentation fault when shutting down the element
 > 
-> The setup I tried yesterday was:
-> - Buildroot master commit f3fac0dcfdf (post 2016.02-rc1).
-> - Plus the two patches you mention above
+> * eglvivsink:
+>   - remove extra g_free() calls, which lead to runtime errors
+>   - remove GLESv2 VIVANTE link dependencies
+>   - add Android platform
+>   - manually retrieve VIV direct texture functions
+>     with this and the link dependency elimination, this means that for
+>     platforms except the framebuffer one, no Vivante specific headers
+>     and libraries are needed anymore
+>   - fix blocking issue in the Wayland platform mainloop
 > 
-> > and 'qt5tools: new package' patches on top with the following defconfig (based on
-> > the original nitrogen6x_defconfig config):
-> >
-> > BR2_arm=y
-> > BR2_cortex_a9=y
-> > BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-> > BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-> > BR2_GLIBC_VERSION_2_22=y
-> > BR2_BINUTILS_VERSION_2_25_X=y
-> > BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-> > BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> > BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
-> > BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-> > BR2_LINUX_KERNEL=y
-> > BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> > BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
-> > BR2_LINUX_KERNEL_DEFCONFIG="boundary"
-> > BR2_LINUX_KERNEL_ZIMAGE=y
-> > BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> > BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
-> > BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> > BR2_PACKAGE_GSTREAMER1=y
-> > BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_APP=y
-> > BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC=y
-> > BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
-> > BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA=y
-> > BR2_PACKAGE_GST1_PLUGINS_GOOD=y
-> > BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2=y
-> > BR2_PACKAGE_GST1_PLUGINS_BAD=y
-> > BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS=y
-> > BR2_PACKAGE_GST1_PLUGINS_UGLY=y
-> > BR2_PACKAGE_GST1_IMX=y
-> > BR2_PACKAGE_BINUTILS=y
-> > BR2_PACKAGE_DEJAVU=y
-> > BR2_PACKAGE_QT5=y
-> > BR2_PACKAGE_QT5BASE_LICENSE_APPROVED=y
-> > BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM=y
-> > BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
-> > BR2_PACKAGE_QT5BASE_LINUXFB=y
-> > BR2_PACKAGE_QT5BASE_EGLFS=y
-> > BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-> > BR2_PACKAGE_QT5BASE_FONTCONFIG=y
-> > BR2_PACKAGE_QT5BASE_GIF=y
-> > BR2_PACKAGE_QT5BASE_JPEG=y
-> > BR2_PACKAGE_QT5BASE_PNG=y
-> > BR2_PACKAGE_QT5GRAPHICALEFFECTS=y
-> > BR2_PACKAGE_QT5MULTIMEDIA=y
-> > BR2_PACKAGE_QT5QUICKCONTROLS=y
-> > BR2_PACKAGE_QT5SERIALPORT=y
-> > BR2_PACKAGE_QT5TOOLS=y
-> > BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS=y
-> > BR2_PACKAGE_QT5WEBSOCKETS=y
-> > BR2_PACKAGE_QT5SCRIPT=y
-> > BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q=y
-> > BR2_PACKAGE_IMX_LIB=y
-> > BR2_PACKAGE_IMX_GPU_VIV=y
-> > BR2_PACKAGE_OPENSSL=y
-> > BR2_PACKAGE_LIBV4L=y
-> > BR2_PACKAGE_LIBV4L_UTILS=y
-> > BR2_PACKAGE_LIBIMXVPUAPI=y
-> > BR2_TARGET_ROOTFS_EXT2=y
-> > BR2_TARGET_ROOTFS_EXT2_4=y
-> > BR2_TARGET_UBOOT=y
-> > BR2_TARGET_UBOOT_BOARDNAME="nitrogen6q"
-> > BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> > BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/a4070a8/u-boot-a4070a8.tar.gz"
-> > BR2_TARGET_UBOOT_FORMAT_IMX=y
-> > BR2_PACKAGE_HOST_GENIMAGE=y
-> > BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> >
-> > > If not there's no wonder qt5 doesn't like it. I haven't tried qt5 but
-> > > I'm sure the gstreamer imxeglvivsink does work.
-> > >
-> >
-> > My last working version was based on buildroot-2015.11.1 plus 'qt5: bump version to 5.5.1' and
-> > 'qt5tools: new package' on top...
-> >
-> > > In case you've enabled BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV, you
-> > > might need to load the Galcore module manually in case you don't have
-> > > eudev for instance:
-> > > # insmod /lib/modules/3.14.28/extra/galcore.ko
-> >
-> > No, working with boundarydevices linux-imx6-f4c8395 and original boundary config
-> > and there is a '/dev/galcore' entry on the target...
+> * improved and expanded documentation
 > 
-> Yes but that is the problem. Please try again with
-> BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV.
+> * pxp: NV16 *is* supported after all (it was actually a bug in GStreamer
+> pre-1.5.91)
+> NOTE: this does not break compatibility with GStreamer versions older
+> than 1.5.91
 > 
-> As you know, 3D graphics libraries match a specific kernel driver.
-> Since it was an issue for many people, Vivante started to provide a
-> kernel module so you can easily have the latest driver on an older
-> kernel.
+> * compositor: Update backported aggregator code to GStreamer 1.6
 > 
-> Since I've updated the graphics to the latest (5.0.11 p7.1), the
-> driver inside the 3.14.28 kernel is outdated so you need to use the
-> Vivante kernel module. I didn't for the selection of the kernel module
-> when the libraries are selected since some kernels (3.14.52) have the
-> correct driver built-in.
+> * blitter:
+>   - error handling improvements
+>   - add missing buffer pool unref'ing, which lead to memory leaks
+>   - add missing compositor dependency to blitter base
+> 
+> * uniaudio:
+>   - only build the uniaudio plugin if at least one codec was found
+>     during configuration
+>   - disable plugin if the gstaudio library is not available
+>   - add AAC profile field to the sink caps with GStreamer >= 1.4.4 to
+>     ensure the uniaudio decoder is only used for AAC-LC data
+> 
+> * ipu: increase fill frame width from 8 to 64 pixels to make IPU fill
+> operations work with pre-3.14 Freescale kernels
+> 
+> * g2d: use padding pixels when setting surface parameters, fixing G2D
+> failures with frame sizes that aren't aligned
+> 
+> * wscript:
+>   - improve Android support
+>   - fix installation paths for the common, blitter, compositor libraries
+> 
+> This is based on the Yocto equivalent:
+> https://github.com/Freescale/meta-fsl-arm/commit/cf7a088
+> 
+> However this package now offers a more flexible approach because it can
+> be built without the GPU or VPU elements for devices based on SoCs that
+> lack those features like the new i.MX7.
+> 
+> Tested with the following commands on i.MX6Q (IPU):
+>  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
+>  # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>    matroskademux ! imxvpudec ! imxipuvideosink
+>  # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
+>    matroskademux ! imxvpudec ! imxeglvivsink
+> 
+> Tested with the following commands on i.MX6SX (PXP):
+>  # gst-launch-1.0 imxv4l2videosrc device=/dev/video1 ! imxpxpvideosink
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+> 
+> Changes v1->v2:
+> - add hash file
+> 
+> Changes v2->v3:
+> - remove plugin options
+> - replaced by text in Config.in
+> - update package description (no longer beta stage)
+> https://github.com/Freescale/gstreamer-imx/commit/dc05fb8
+> - update gst1-imx.mk dependencies mechanism
+> - add missing libfslcodec case
+>   - another series is needed for it to actually work:
+> http://lists.busybox.net/pipermail/buildroot/2016-January/150490.html
+> 
+> Changes v3->v4:
+> - none
+> 
+> Peter, I didn't add your Tested-by for this patch since you had troubles with
+> the imxeglvivsink. Please let us know if the Vivante kernel module fixed the
+> issue.
 > 
 
-Got it now, the missing part was:
+The imxeglvivsink problem is fixed by 'BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y', pipelines
+with imxeglvivsink are now working, you can add my:
 
- BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV=y
-
-Qt5 eglfs and gstreamer imxeglvivsink are working now...
-
-> Sorry for the confusion but know that if you want to make sure the
-> driver matches the user-space blobs, always select the Vivante kernel
-> module as I'll make to always update both at the same time.
-> 
-
-Maybe a little hint in board/boundarydevices/nitrogen6x/readme.txt would be useful?
-
-Many thanks for your support...
+Tested-by: Peter Seiderer <ps.report@gmx.net>
 
 Regards,
 Peter
 
-> Regards,
+> Thanks,
 > Gary
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> ---
+>  package/gstreamer1/gst1-imx/Config.in     | 18 +++++++-----------
+>  package/gstreamer1/gst1-imx/gst1-imx.hash |  2 ++
+>  package/gstreamer1/gst1-imx/gst1-imx.mk   | 20 +++++++++++++++++---
+>  3 files changed, 26 insertions(+), 14 deletions(-)
+>  create mode 100644 package/gstreamer1/gst1-imx/gst1-imx.hash
+> 
+> diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
+> index f7284f4..0084483 100644
+> --- a/package/gstreamer1/gst1-imx/Config.in
+> +++ b/package/gstreamer1/gst1-imx/Config.in
+> @@ -1,27 +1,23 @@
+>  comment "gst1-imx needs an imx-specific Linux kernel to be built"
+>  	depends on BR2_arm && !BR2_LINUX_KERNEL
+>  
+> -# Required by imx-gpu-viv
+> -comment "gst1-imx needs an (e)glibc toolchain"
+> -	depends on BR2_arm
+> -	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> -
+>  config BR2_PACKAGE_GST1_IMX
+>  	bool "gst1-imx"
+>  	depends on BR2_LINUX_KERNEL
+>  	depends on BR2_arm # Only relevant for i.MX
+> -	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-gpu-viv
+> -	depends on BR2_PACKAGE_IMX_GPU_VIV
+> -	depends on BR2_PACKAGE_LIBFSLVPUWRAP
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE
+>  	help
+>  	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
+> -	  i.MX6 platforms, with emphasis on video en/decoding using the VPU
+> -	  engine.
+> +	  i.MX platforms, which make use of the i.MX multimedia capabilities.
+>  
+>  	  This software supports only the i.MX6 SoC family and requires a
+>  	  kernel that includes the i.MX6 specific headers to be built.
+>  
+> -	  The software as a whole is currently in beta stage.
+> +	  The IPU and PXP plugins are always built.
+> +	  The V4L2 plugin is built when BR2_PACKAGE_GST1_PLUGINS_BAD is enabled.
+> +	  The VPU plugin is built when BR2_PACKAGE_LIBIMXVPUAPI is enabled.
+> +	  The EGL plugin is built when BR2_PACKAGE_IMX_GPU_VIV is enabled.
+> +	  The G2D plugin is built when BR2_PACKAGE_IMX_GPU_VIV_G2D is enabled.
+> +	  The MP3 plugin is built when BR2_PACKAGE_LIBFSLCODEC is enabled.
+>  
+>  	  https://github.com/Freescale/gstreamer-imx
+> diff --git a/package/gstreamer1/gst1-imx/gst1-imx.hash b/package/gstreamer1/gst1-imx/gst1-imx.hash
+> new file mode 100644
+> index 0000000..03e1729
+> --- /dev/null
+> +++ b/package/gstreamer1/gst1-imx/gst1-imx.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed hash
+> +sha256 df34f080e24ac8f1619780aa5ad4e6ab1333f822cd2bf5fcb380b28c97248810  gst1-imx-0.12.0.tar.gz
+> diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
+> index 8ede8ad..ca6bc49 100644
+> --- a/package/gstreamer1/gst1-imx/gst1-imx.mk
+> +++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -GST1_IMX_VERSION = 0.11.1
+> +GST1_IMX_VERSION = 0.12.0
+>  GST1_IMX_SITE = $(call github,Freescale,gstreamer-imx,$(GST1_IMX_VERSION))
+>  
+>  GST1_IMX_LICENSE = LGPLv2+
+> @@ -12,14 +12,27 @@ GST1_IMX_LICENSE_FILES = LICENSE
+>  
+>  GST1_IMX_INSTALL_STAGING = YES
+>  
+> -GST1_IMX_DEPENDENCIES += host-pkgconf host-python \
+> -	imx-gpu-viv gstreamer1 gst1-plugins-base libfslvpuwrap
+> +GST1_IMX_DEPENDENCIES += \
+> +	host-pkgconf \
+> +	host-python \
+> +	gstreamer1 \
+> +	gst1-plugins-base
+>  
+>  # needs access to imx-specific kernel headers
+>  GST1_IMX_DEPENDENCIES += linux
+>  GST1_IMX_CONF_OPTS += --prefix="/usr" \
+>  	--kernel-headers="$(LINUX_DIR)/include"
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD),y)
+> +GST1_IMX_DEPENDENCIES += gst1-plugins-bad
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBIMXVPUAPI),y)
+> +GST1_IMX_DEPENDENCIES += libimxvpuapi
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_IMX_GPU_VIV),y)
+> +GST1_IMX_DEPENDENCIES += imx-gpu-viv
+>  ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+>  GST1_IMX_DEPENDENCIES += xlib_libX11
+>  GST1_IMX_CONF_OPTS += --egl-platform=x11
+> @@ -31,6 +44,7 @@ else
+>  GST1_IMX_CONF_OPTS += --egl-platform=fb
+>  endif
+>  endif
+> +endif
+>  
+>  define GST1_IMX_CONFIGURE_CMDS
+>  	cd $(@D); \
+> -- 
+> 2.7.0
+> 
 > 
