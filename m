@@ -1,21 +1,25 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 17 Feb 2016 10:00:46 -0300
-Subject: [Buildroot] [PATCH next] musl: add fwrite regression patch
-Message-ID: <1455714046-22512-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2016 15:12:43 +0100
+Subject: [Buildroot] [git commit branch/next] musl: add fwrite regression
+	patch
+Message-ID: <20160217141257.3F9CE802B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=8ffed8ae08d5b8b3a30fb3d00c9e3ad2b84c9b2e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 As pointed in http://www.openwall.com/lists/musl/2016/02/17/3 add the
 fwrite regression patch for the recent 1.1.13 release.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...n-in-fputs-that-fwrite-returning-0-implie.patch | 38 ++++++++++++++++++++++
  1 file changed, 38 insertions(+)
- create mode 100644 package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
 
 diff --git a/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
 new file mode 100644
@@ -61,5 +65,3 @@ index 0000000..b32b752
 +-- 
 +2.4.10
 +
--- 
-2.4.10
