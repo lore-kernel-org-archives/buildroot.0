@@ -1,45 +1,44 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Wed, 17 Feb 2016 20:52:13 -0200
-Subject: [Buildroot] [PATCH v9 1/1] package/dhcp: bump version to
-	4.3.3-P1
-References: <1455677124-21497-1-git-send-email-rdkehn@yahoo.com>
-Message-ID: <56c4f99da9297_ccd13d9cfc6991c@ultri2.mail>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Wed, 17 Feb 2016 23:59:43 +0100
+Subject: [Buildroot] [Bug 8576] Building embedded Linux for Atmel
+ SAMA5D4_Xplained with HDMI work not propber. HDMI does not work
+In-Reply-To: <n9vrbm$b0a$1@ger.gmane.org>
+References: <bug-8576-163@https.bugs.busybox.net/>
+ <bug-8576-163-X6I9k76wUk@https.bugs.busybox.net/>
+ <n9vrbm$b0a$1@ger.gmane.org>
+Message-ID: <20160217225943.GO2189@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Doug,
+Hi,
 
-On Wed, Feb 17, 2016 at 12:45 AM, Doug Kehn <rdkehn@yahoo.com> wrote:
-> bind source tar-ball is now embedded into the dhcp source. The embedded
-> bind tar-ball is extracted after the dhcp source so cross compiling
-> patches can be applied to the dhcp and bind before the package is built.
+On 16/02/2016 at 18:55:50 +0000, Grant Edwards wrote :
+> On 2016-02-16, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
 > 
-> The embedded bind configure is called as part of dhcp make instead of
-> dhcp configure; therefore, needed configure parameters are set in the
-> make env.
+> > --- Comment #3 from JensAmberg <JensAmberg@mail.de> ---
+> > How can i contact Atmel Kernel developer? I post an bug on www.linux4sam.com
+> > Forum. But nothing happens
 > 
-> 0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
-> been submitted upstream as part of a cross compiling enhancement
-> suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
-> 0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
+> I've never had any luck all with linux4sam.com, and have given up
+> using it.  Questions are usually completely ignored.  If there are any
+> responses, they're usually way off base. You might as well walk down
+> the street and ask panhandlers: it appears to be the clueless leading
+> the incompetent.  You might try contacting your Atmel FAE to see if he
+> can help.  There also used to be one or two knowlegable Atmel
+> employees who participated in comp.arch.embedded, but that was several
+> years ago.
 > 
-> Buildroot thread
-> 	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
-> has related information.
-> 
-> Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Using origin/next + [PATCH v9], I did a build test for arm with all
-package flags enabled (client, server, relay). Tested using arm
-toolchains external-glibc, external-musl and buildroot-uClibc.
-Basic run test (calling 'dhclient -v' gets an IPv4 address) using a
-qemu_arm_versatile target.
+The best way to contact kernel developers is to use the kernel mailing
+lists. For AT91, this is the linux arm kernel mailing list (lakml):
 
-Regards,
-Ricardo
+http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+
+-- 
+Alexandre Belloni, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
