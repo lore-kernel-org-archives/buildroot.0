@@ -1,84 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Feb 2016 23:38:04 +0100
-Subject: [Buildroot] [git commit] python-treq: new package
-Message-ID: <20160302202753.5E0AE80203@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2016 11:03:47 +0100
+Subject: [Buildroot] [git commit] pv: bump to version 1.6.0
+Message-ID: <20160302202752.8030180203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=357b945957dacec8a0bf3aa425d9b40f45f5a487
+commit: https://git.buildroot.net/buildroot/commit/?id=16690601030eb1d4e911ab82d3e0309919524b92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas: rewrap Config.in help text.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                    |  1 +
- package/python-treq/Config.in        | 13 +++++++++++++
- package/python-treq/python-treq.hash |  3 +++
- package/python-treq/python-treq.mk   | 14 ++++++++++++++
- 4 files changed, 31 insertions(+)
+And drop patch now upstream.
 
-diff --git a/package/Config.in b/package/Config.in
-index d9da232..7a88d5b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -722,6 +722,7 @@ menu "External python modules"
- 	source "package/python-spidev/Config.in"
- 	source "package/python-thrift/Config.in"
- 	source "package/python-tornado/Config.in"
-+	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
-diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
-new file mode 100644
-index 0000000..a8590a9
---- /dev/null
-+++ b/package/python-treq/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_TREQ
-+	bool "python-treq"
-+	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-+	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TWISTED # runtime
-+	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
-+	help
-+	  treq is an HTTP library inspired by requests but written on
-+	  top of Twisted's Agents.  It provides a simple, higher level
-+	  API for making HTTP requests when using Twisted.
-+
-+	  https://github.com/twisted/treq
-diff --git a/package/python-treq/python-treq.hash b/package/python-treq/python-treq.hash
-new file mode 100644
-index 0000000..f4cc4d6
---- /dev/null
-+++ b/package/python-treq/python-treq.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b1fb60759ad5a885cb8ea562553f2d4c, sha256 locally computed
-+md5	b1fb60759ad5a885cb8ea562553f2d4c  treq-15.1.0.tar.gz
-+sha256	425a47d5d52a993d51211028fb6ade252e5fbea094e878bb4b644096a7322de8  treq-15.1.0.tar.gz
-diff --git a/package/python-treq/python-treq.mk b/package/python-treq/python-treq.mk
-new file mode 100644
-index 0000000..dbf0e14
---- /dev/null
-+++ b/package/python-treq/python-treq.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-treq
-+#
-+################################################################################
-+
-+PYTHON_TREQ_VERSION = 15.1.0
-+PYTHON_TREQ_SOURCE = treq-$(PYTHON_TREQ_VERSION).tar.gz
-+PYTHON_TREQ_SITE = http://pypi.python.org/packages/source/t/treq
-+PYTHON_TREQ_LICENSE = MIT
-+PYTHON_TREQ_LICENSE_FILES = LICENSE
-+PYTHON_TREQ_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pv/0001-add-lstat64-to-64-emulation.patch | 22 ----------------------
+ package/pv/pv.hash                                |  2 +-
+ package/pv/pv.mk                                  |  2 +-
+ 3 files changed, 2 insertions(+), 24 deletions(-)
+
+diff --git a/package/pv/0001-add-lstat64-to-64-emulation.patch b/package/pv/0001-add-lstat64-to-64-emulation.patch
+deleted file mode 100644
+index a2aa4f5..0000000
+--- a/package/pv/0001-add-lstat64-to-64-emulation.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-[PATCH] add lstat64 to *64 emulation
+-
+-pv nowadays also uses lstat64, so add it to the emulation defines for !LFS
+-builds.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- autoconf/header.in |    1 +
+- 1 file changed, 1 insertion(+)
+-
+-Index: pv-1.5.7/autoconf/header.in
+-===================================================================
+---- pv-1.5.7.orig/autoconf/header.in
+-+++ pv-1.5.7/autoconf/header.in
+-@@ -76,6 +76,7 @@
+- # endif
+- # define open64 open
+- # define lseek64 lseek
+-+# define lstat64 lstat
+- #endif
+- 
+- #undef HAVE_IPC
+diff --git a/package/pv/pv.hash b/package/pv/pv.hash
+index 4120a81..291d6dd 100644
+--- a/package/pv/pv.hash
++++ b/package/pv/pv.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	c8535061bb703086b67fa540da162ad48d6ecd219ae74157111465adfdef5997  pv-1.5.7.tar.bz2
++sha256	0ece824e0da27b384d11d1de371f20cafac465e038041adab57fcf4b5036ef8d  pv-1.6.0.tar.bz2
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index 47f570f..2279805 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PV_VERSION = 1.5.7
++PV_VERSION = 1.6.0
+ PV_SOURCE = pv-$(PV_VERSION).tar.bz2
+ PV_SITE = http://www.ivarch.com/programs/sources
+ PV_LICENSE = Artistic-2.0
