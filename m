@@ -1,41 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Feb 2016 10:21:28 +0000
-Subject: [Buildroot] [Bug 8696] xdriver_xf86-input-mouse install header
- files in target directory
-In-Reply-To: <bug-8696-163@https.bugs.busybox.net/>
-References: <bug-8696-163@https.bugs.busybox.net/>
-Message-ID: <bug-8696-163-BBx5ibwu2s@https.bugs.busybox.net/>
+From: Matthew Shyu <matthew.shyu.amlogic@gmail.com>
+Date: Wed, 17 Feb 2016 18:41:26 +0800
+Subject: [Buildroot] [PATCH 1/1] fix host-openssl binary installation
+Message-ID: <1455705686-20822-1-git-send-email-matthew.shyu.amlogic@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8696
+From: Matthew Shyu <matthew.shyu@amlogic.com>
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+The Configure script in openssl takes install_prefix from env by default
+$install_prefix= "$ENV{'INSTALL_PREFIX'}"
+However, the INSTALL_PREFIX points to *TARGET* folder instead of
+*HOST* folder.
+This is fixed by intentionally setting install_prefix to blank.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-             Status|NEW                         |ASSIGNED
+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+---
+ package/openssl/openssl.mk |    1 +
+ 1 file changed, 1 insertion(+)
 
---- Comment #5 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Yes, this has been the case for a long time now.
-
-I even had a patch series to fix that once and for all:
-    http://lists.busybox.net/pipermail/buildroot/2015-November/143562.html
-
-But it was dismissed in favour of Gustavoz' pkg-conf fixups. However,
-that series did not completely fix the Xorg weirdness, but since it
-was not causing regressions (i.e. the bad paths were prsent before and
-after), the pkg-conf fixes were applied, and my series got forgotten.
-
-I'll respin that in a moment...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index b7498a7..c35e93f 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -63,6 +63,7 @@ define HOST_OPENSSL_CONFIGURE_CMDS
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		./config \
+ 		--prefix=$(HOST_DIR)/usr \
++		--install_prefix= \
+ 		--openssldir=$(HOST_DIR)/etc/ssl \
+ 		--libdir=/lib \
+ 		shared \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+1.7.9.5
