@@ -1,20 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Feb 2016 15:06:20 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.4.2
-In-Reply-To: <1455800001-18956-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 18 Feb 2016 09:53:21 -0300")
-References: <1455800001-18956-1-git-send-email-gustavo@zacarias.com.ar>
- <1455800001-18956-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fuwqw1sz.fsf@dell.be.48ers.dk>
+Date: Thu, 18 Feb 2016 15:07:53 +0100
+Subject: [Buildroot] [PATCH] binutils: fix .init/.fini literals moving
+	in xtensa gas
+In-Reply-To: <1455745813-28854-1-git-send-email-jcmvbkbc@gmail.com> (Max
+ Filippov's message of "Thu, 18 Feb 2016 00:50:13 +0300")
+References: <1455745813-28854-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <87bn7ew1qe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Despite the documentation and the comment in xtensa_move_literals, in
+ > the presence of --text-section-literals and --auto-litpools literals are
+ > moved from the separate literal sections into .init and .fini, because
+ > the check in the xtensa_move_literals is incorrect.
+
+ > This fixes build errors seen with projects that have .init/.fini and use
+ > text-section-literals.
+
+ > Backported from: 4111950f363221c4641dc2f33bea61cc94f34906
+ > Reported-by: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
 Committed, thanks.
 
