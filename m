@@ -1,14 +1,18 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 18 Feb 2016 12:08:51 -0300
-Subject: [Buildroot] [PATCH] gvfs: bump to version 1.26.3
-Message-ID: <1455808131-19134-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 18 Feb 2016 16:14:43 +0100
+Subject: [Buildroot] [git commit branch/next] gvfs: bump to version 1.26.3
+Message-ID: <20160218151451.E346A8185C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2fb2fb61b91bc8bf037b7d26cd294cd936e28543
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/gvfs/gvfs.hash | 4 ++--
  package/gvfs/gvfs.mk   | 2 +-
@@ -36,5 +40,3 @@ index 48d2b50..f566fc7 100644
  GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
  GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
  GVFS_INSTALL_STAGING = YES
--- 
-2.4.10
