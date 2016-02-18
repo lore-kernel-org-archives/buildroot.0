@@ -1,109 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Feb 2016 01:02:30 +0100
-Subject: [Buildroot] [Question] Including only needed makefiles?
-In-Reply-To: <20160217095923.GB3444@free.fr>
-References: <CAK7LNAQNQp_zm-QFyaMhtPtJt+h3BkiwEasXTc6twFm5W_dUnw@mail.gmail.com>
- <20160217091115.0f89f400@free-electrons.com> <20160217095923.GB3444@free.fr>
-Message-ID: <56C50A16.2030507@mind.be>
+From: Alan Ott <alan@softiron.co.uk>
+Date: Wed, 17 Feb 2016 17:13:39 -0700
+Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
+In-Reply-To: <20160217215023.79adbe1c@free-electrons.com>
+References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
+ <1444859483-2268-5-git-send-email-alan@softiron.co.uk>
+ <20151014235522.774491e2@free-electrons.com>
+ <561ED08C.5010301@softiron.co.uk>
+ <1629967145.779413.1445282966636.JavaMail.zimbra@datacom.ind.br>
+ <1531197965.3282303.1455733032855.JavaMail.zimbra@datacom.ind.br>
+ <20160217215023.79adbe1c@free-electrons.com>
+Message-ID: <3E1323DE-EB35-4012-9DD2-BC0448C4A84B@softiron.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 17-02-16 10:59, Yann E. MORIN wrote:
-> Yamada-san, Thomas, All,
-> 
-> On 2016-02-17 09:11 +0100, Thomas Petazzoni spake thusly:
->> On Wed, 17 Feb 2016 13:00:26 +0900, Masahiro Yamada wrote:
->>> I am not an active developer of Buildroot.
->>> Apology if I am asking a silly question.
->> Your question is not silly at all!
-> 
-> Indeed. No question is stupid. You're welcome to ask.
-> 
-> [--SNIP--]
->>> [2]
->>> If we achieve the perfect dependency in Kconfig,
->>> perhaps can we include makefiles that are really
->>> enabled by Kconfig?   For example, like this?
->>>
->>> pkg-$(BR2_PACKAGE_BUSYBOX) += busybox
->>> pkg-$(BR2_PACKAGE_LAME)    += lame
->>> pkg-$(BR2_PACKAGE_GZIP)    += gzip
->>>    ...
->>>
->>> include $(addprefix packages, $(addsuffix Makefike, $(pkg-y)))
->>
->> I propose such a change two years ago, see my RFC patch series at:
->>
->>    http://lists.busybox.net/pipermail/buildroot/2014-March/092548.html
->>
->> The main complexity is that while target packages all have a Config.in
->> options, it is not the case for host packages. And therefore, changing
->> to a per package makefile inclusion requires adding lots and lots of
->> Config.in options for host packages.
->>
->> Another issue (explained in the cover letter) was that we could no
->> longer use sub-directories in packages, such as
->> package/qt5/qt5base/qt5base.mk.
-> 
-> Well, except with Yamada's proposal (or something similar), we could
-> explicitly manage the sub-directories, like so:
-> 
->     pkg-$(BR2_PACKAGE_FOO) += foo
->     pkg-$(BR2_PACKAGE_BAR) += sub-dir/bar
-
- One big problem with this: what to do with host packages?
-
-> 
->     -include $(addprefix packages/,$(foreach p,$(pkg),$(p)/$(notdir $(p)).mk))
-> 
-> Of course, that means explicitly listing all packages, instead of the
-> current glob-include. But sinc ewe're already explicitly source-ing
-> Config.in files, this would make it symetric for the .mk files as well.
-
- I have the feeling this is going to be an added maintainance burden. Or at
-least, a burden for adding packages. But it's not really that big a deal.
-
- We'd have to think about what to do with the subdirectories though.
-
-> 
->> If you look at the feedback of the patch series, it was generally quite
->> positive, but this needs more work, and is only saving a few seconds of
->> make parsing, which are not such a big deal. So the effort is fairly
->> big for limited savings.
-> 
-> Indeed, I don't believe the few startup seconds are that problematic.
-> Yes, they are annoying.
-
- They're horribly annoying. I'm an avid user of bash-completion and my tab key
-remains pressed virtually continuously. So I'm all the time going 'make
-busy<TAB>' Argh!
 
 
- Regards,
- Arnout
+On February 17, 2016 1:50:23 PM MST, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>Hello,
+>
+>On Wed, 17 Feb 2016 16:17:12 -0200 (BRST), Carlos Santos wrote:
+>
+>> Hello Alan,
+>> 
+>> I noticed that this patch set is still in "Changes Requested" state.
+>Is there anything I can do to help?
+>
+>You can take over the patch, make the necessary changes and post an
+>updated version of it.
+>
+>If your changes are limited, it is customary to keep the original
+>author as the author of the patch.
+>
+>If your changes are really major and essentially rewrite the whole
+>patch, then you can re-assign the authorship of the patch to you, but
+>keep a reference to the original author in the commit log.
+>
+>It is definitely more than welcome to pick up old patches for which
+>changes were requested, but whose author didn't had the time to
+>implement.
+>
 
-> 
-> It takes roughly 3s on my machine (dual core-i5 with SSD), but I can see
-> that it could take quite a bit more on leww powerful machines,
-> especially those with rotating rust...
-> 
->> I would personally rank implementing top-level parallel build at a much
->> higher priority level than this micro-optimization.
-> 
-> Agreed.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Hi Carlos, I agree. I ran out of time on this, unfortunately :( .Have a look at the original comments from Thomas here:
+https://patchwork.ozlabs.org/patch/530390/
 
+As far as a authorship, the changes requested are significant enough that you can take my authorship off. I don't mind.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Alan. 
