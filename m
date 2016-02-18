@@ -1,64 +1,157 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 18 Feb 2016 17:26:18 -0200 (BRST)
-Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
-In-Reply-To: <20160218171814.7709b731@free-electrons.com>
-References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
- <561ED08C.5010301@softiron.co.uk>
- <1629967145.779413.1445282966636.JavaMail.zimbra@datacom.ind.br>
- <1531197965.3282303.1455733032855.JavaMail.zimbra@datacom.ind.br>
- <20160217215023.79adbe1c@free-electrons.com>
- <3E1323DE-EB35-4012-9DD2-BC0448C4A84B@softiron.co.uk>
- <1397733218.10703.1455812066287.JavaMail.zimbra@datacom.ind.br>
- <20160218171814.7709b731@free-electrons.com>
-Message-ID: <57594283.82586.1455823578308.JavaMail.zimbra@datacom.ind.br>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Thu, 18 Feb 2016 11:41:42 -0800
+Subject: [Buildroot] [PATCH v2] Update libaio to 0.3.110
+In-Reply-To: <56C503EE.8080007@mind.be>
+References: <1455735064-10038-1-git-send-email-alistair.francis@xilinx.com>
+ <56C503EE.8080007@mind.be>
+Message-ID: <CAKmqyKPtXwL+69i2W-PG+boK7ouqMFTMMkYYRT2ShsyrQyoqJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@free-electrons.com>
-> To: "Carlos Santos" <casantos@datacom.ind.br>
-> Cc: "Alan Ott" <alan@softiron.co.uk>, buildroot at buildroot.org
-> Sent: Thursday, February 18, 2016 2:18:14 PM
-> Subject: Re: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
+On Wed, Feb 17, 2016 at 3:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 17-02-16 19:51, Alistair Francis wrote:
+>> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
+>>
+>> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+>> ---
+>>  package/libaio/0001-arches.patch | 322 ++++++++++++++++-----------------------
+>>  package/libaio/Config.in         |   2 +-
+>>  package/libaio/libaio.hash       |   4 +-
+>>  package/libaio/libaio.mk         |   2 +-
+>>  4 files changed, 135 insertions(+), 195 deletions(-)
+>>
+>> diff --git a/package/libaio/0001-arches.patch b/package/libaio/0001-arches.patch
+>> index c85568c..d1c7f66 100644
+>> --- a/package/libaio/0001-arches.patch
+>> +++ b/package/libaio/0001-arches.patch
+>> @@ -1,62 +1,15 @@
+>>  Patch borrowed from OpenEmbedded, available at
+>> -recipes/libaio/libaio-0.3.106/00_arches.patch in their source
+>> -tree. The patch has been adapted to remove the ARM-related
+>> -definitions, since they have been merged in later versions of libaio.
+>
+>  I wonder about this comment. The patch from openembedded _still_ has the
+> addition of unistd.h.
+>
+>> +/meta/recipes-extended/libaio/libaio/00_arches.patch in their source
+>> +tree.
+>>
+>> -The patch adds various architecture specific definitions (syscall
+>> -number and macros) for m68k, MIPS, PA/RISC and Sparc. Amongst these,
+>> -Buildroot mostly only cares about MIPS, but it was just easier to take
+>> -the whole OpenEmbedded patch.
+>
+>  The openembedded patch doesn't have a decent commit message, so this bit should
+> stay (removing the sparc bit obviously).
 
-> Hello,
-> 
-> On Thu, 18 Feb 2016 14:14:26 -0200 (BRST), Carlos Santos wrote:
-> 
->> 1. Submit a patchset that replaces the sites from googlecode.com to github,
->> maintaining the same package versions (including gtest and gmock, that would be
->> left at version 1.7.0).
->> 
->> This change is easy to apply and could even be brought to the impending
->> Buildroot 2016.02, IMO, since it does not change the package versions, only
->> reduces the risk of build failures due to problems in googlecode.com (I
->> consider this a bug fix). The patchset would update the following patches:
->> 
->>     http://patchwork.ozlabs.org/patch/530387/
->>     http://patchwork.ozlabs.org/patch/530388/
->>     http://patchwork.ozlabs.org/patch/530389/
->>     http://patchwork.ozlabs.org/patch/530390/
->>     http://patchwork.ozlabs.org/patch/530391/
->> 
->> 
->> 2. Submit a patchset that replaces packages gtest and gmock by a "googletest"
->> package, as suggested by Thomas. This change is quite disruptive for us at
->> DATACOM because it may require changing the recipes that we maintain in
->> $(BR2_EXTERNAL), so I humbly ask you to postpone the change.
->> 
->> 3. Submit a patchset that upgrades googletest to a newer release, hopefully
->> v1.8.0, or to the current HEAD, as decided by Peter Korsgaard and Alan. I will
->> do this after ensuring that the change does not break anything.
-> 
-> Sounds good. Note that (1), (2) and (3) could also be part of the same
-> patch series if you wish. But it's fine to have (1) first, wait to get
-> it merge, and only then continue with (2) and (3).
+Ok, I have kept most of this in.
 
-Thomas,
+>
+>> +Upstream-Status: Inappropriate [embedded specific]
+>
+>  That's not really true... It's completely appropriate for upstream, since it
+> just adds arches.
+>
+>>
+>> -Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>
+>  You should add your own Sob. It's OK to remove Thomas's because you
+> re-downloaded the patch from openembedded.
 
-Considering that my work will focus on GTest/GMock I thing that patches 530387 through 530389 can be applied, leaving 530390 and 530391 in "Changes Requested" state. Do you agree?
+Ok, I have added my own SOB line.
 
-Carlos Santos (Casantos)
-DATACOM, P&D
+>
+>> ----
+>> - src/libaio.h         |   24 +++++
+>> - src/syscall-m68k.h   |   78 +++++++++++++++++
+>> - src/syscall-mips.h   |  223 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>> - src/syscall-parisc.h |  146 +++++++++++++++++++++++++++++++++
+>> - src/syscall-sparc.h  |  130 +++++++++++++++++++++++++++++
+>> - src/syscall.h        |    8 +
+>> - 7 files changed, 725 insertions(+)
+>> +from openembedded, added by Qing He <qing.he@intel.com>
+>>
+> [snip]
+> [- lines removed from the hunk below so the new version is visible]
+>> +Index: libaio-0.3.110/src/syscall-arm.h
+>>  ===================================================================
+>> +--- libaio-0.3.110.orig/src/syscall-arm.h
+>> ++++ libaio-0.3.110/src/syscall-arm.h
+>> +@@ -114,3 +114,119 @@ type fname(type1 arg1, type2 arg2, type3
+>> +   return (type) __res_r0;                                           \
+>> + }
+>> +
+>>  +/*
+>> ++ *  linux/include/asm-arm/unistd.h
+>>  + *
+>> ++ *  Copyright (C) 2001-2005 Russell King
+>>  + *
+>> ++ * This program is free software; you can redistribute it and/or modify
+>> ++ * it under the terms of the GNU General Public License version 2 as
+>> ++ * published by the Free Software Foundation.
+>>  + *
+>> ++ * Please forward _all_ changes to this file to rmk at arm.linux.org.uk,
+>> ++ * no matter what the change is.  Thanks!
+>>  + */
+>>  +
+>> ++#define __NR_OABI_SYSCALL_BASE      0x900000
+>
+>  This is completely wrong, it's exactly the same text that was already there,
+> repeated a second time...
+>
+>  I think it would be better to not simply copy the openembedded patch, instead
+> simply taking the mips bit and nothing else.
+
+Fair enough. I have modified the patch to just add MIPS support.
+
+Thanks,
+
+Alistair
+
+>
+>  And then that bit could be upstreamed, too!
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+>>  +
+>> ++#if defined(__thumb__) || defined(__ARM_EABI__)
+>> ++#define __NR_SYSCALL_BASE   0
+>> ++#else
+>> ++#define __NR_SYSCALL_BASE   __NR_OABI_SYSCALL_BASE
+>> ++#endif
+>>  +
+>> ++#define __NR_io_setup                       (__NR_SYSCALL_BASE+243)
+>> ++#define __NR_io_destroy                     (__NR_SYSCALL_BASE+244)
+>> ++#define __NR_io_getevents           (__NR_SYSCALL_BASE+245)
+>> ++#define __NR_io_submit                      (__NR_SYSCALL_BASE+246)
+>> ++#define __NR_io_cancel                      (__NR_SYSCALL_BASE+247)
+>>  +
+>> ++#define __sys2(x) #x
+>> ++#define __sys1(x) __sys2(x)
+>> ++
+>> ++#if defined(__thumb__) || defined(__ARM_EABI__)
+>> ++#define __SYS_REG(name) register long __sysreg __asm__("r7") = __NR_##name;
+>> ++#define __SYS_REG_LIST(regs...) "r" (__sysreg) , ##regs
+>> ++#define __syscall(name) "swi\t0"
+>> ++#else
+>> ++#define __SYS_REG(name)
+>> ++#define __SYS_REG_LIST(regs...) regs
+>> ++#define __syscall(name) "swi\t" __sys1(__NR_##name) ""
+>> ++#endif
+>> ++
+> [snip]
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
