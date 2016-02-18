@@ -1,54 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Feb 2016 15:47:27 +0100
-Subject: [Buildroot] Buildroot 2016.02-rc2 released
-Message-ID: <8737sqvzwg.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Feb 2016 12:08:51 -0300
+Subject: [Buildroot] [PATCH] gvfs: bump to version 1.26.3
+Message-ID: <1455808131-19134-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Buildroot 2016.02-rc2 is released - Go download it at:
-
-http://buildroot.net/downloads/buildroot-2016.02-rc2.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2016.02-rc2.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2016.02-rc1..
-    14  Gustavo Zacarias
-    12  Bernd Kuhls
-     4  Peter Korsgaard
-     4  Romain Naour
-     3  James Knight
-     3  Thomas Petazzoni
-     2  Gabe Evans
-     1  Angelo Compagnucci
-     1  J?rg Krause
-     1  Martin Bark
-     1  Max Filippov
-     1  Maxime Hadjinlian
-     1  Peter Seiderer
-     1  Ricardo Martincoski
-     1  Zoltan Gyarmati
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.02-rc2
-
-Expect the final 2016.02 release by the end of the month.
-
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 19e820a..5cc8857 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.2.sha256sum
+-sha256	695b6e0f3de5ac2cb4d188917edef3f13299328150a2413f1a7131d9b2d48d18	gvfs-1.26.2.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.3.sha256sum
++sha256	a70f75fa60d66f3f478c0c8aec43d0e43455a8cc75a4dfa8029e51c816401b4a	gvfs-1.26.3.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index 48d2b50..f566fc7 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GVFS_VERSION_MAJOR = 1.26
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.4.10
