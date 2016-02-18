@@ -1,39 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Feb 2016 10:25:00 +0100
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: append endianness
-	argument to TARGET_LD for MIPS
-In-Reply-To: <20160218090740.74a227b0@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 18 Feb 2016 09:07:40 +0100")
-References: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160217221313.439547e4@free-electrons.com>
- <56C4F70A.8060506@mind.be>
- <20160218090740.74a227b0@free-electrons.com>
-Message-ID: <87si0qwetv.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 18 Feb 2016 09:53:20 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{2, 12, 14,
+	18}.x and 4.{1, 4}.x series
+Message-ID: <1455800001-18956-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Hi,
-
- >> Unless Vicente volunteers to work on an ld wrapper, I guess on the short term
- >> we should take patches like these. That said, it should really be passed through
- >> LDFLAGS and not LD itself.
-
- > And the hack be limited to those specific packages that are broken,
- > IMO. At least until we realize how many packages are affected by this.
- > It would be annoying to put those additional flags globally just to fix
- > one single package.
-
-As I understood it from Vicente on IRC:
-
-- The endian flags are always required when linking
-- The options are understood both when linking with gcc and ld
-
-Which is why I suggested we do it globally.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ad5ee2e..bdf99f5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -207,17 +207,17 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.76"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.77"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.96"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.53"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.60"	if BR2_KERNEL_HEADERS_3_14
++	default "3.12.54"	if BR2_KERNEL_HEADERS_3_12
++	default "3.14.61"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.26"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.27"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.17"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.18"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.5"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.1"		if BR2_KERNEL_HEADERS_4_4
++	default "4.4.2"		if BR2_KERNEL_HEADERS_4_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-Bye, Peter Korsgaard
+2.4.10
