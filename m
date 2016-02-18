@@ -1,51 +1,77 @@
-From: Alan Ott <alan@softiron.co.uk>
-Date: Wed, 17 Feb 2016 17:13:39 -0700
-Subject: [Buildroot] [PATCH 4/5] gtest: Upgrade to GitHub HEAD
-In-Reply-To: <20160217215023.79adbe1c@free-electrons.com>
-References: <1444859483-2268-1-git-send-email-alan@softiron.co.uk>
- <1444859483-2268-5-git-send-email-alan@softiron.co.uk>
- <20151014235522.774491e2@free-electrons.com>
- <561ED08C.5010301@softiron.co.uk>
- <1629967145.779413.1445282966636.JavaMail.zimbra@datacom.ind.br>
- <1531197965.3282303.1455733032855.JavaMail.zimbra@datacom.ind.br>
- <20160217215023.79adbe1c@free-electrons.com>
-Message-ID: <3E1323DE-EB35-4012-9DD2-BC0448C4A84B@softiron.co.uk>
+From: matthew.amlogic shyu <matthew.shyu.amlogic@gmail.com>
+Date: Thu, 18 Feb 2016 09:05:09 +0800
+Subject: [Buildroot] [PATCH 1/1] fix host-openssl binary installation
+In-Reply-To: <8737sr1ise.fsf@dell.be.48ers.dk>
+References: <1455705686-20822-1-git-send-email-matthew.shyu.amlogic@gmail.com>
+ <8737sr1ise.fsf@dell.be.48ers.dk>
+Message-ID: <CAJjDOTnPLk-zo4+fxFtrbfUCWo+q9fcHcPE3fRQxUscXHkfjKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
+
+On Wednesday, February 17, 2016, Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> >>>>> "Matthew" == Matthew Shyu <matthew.shyu.amlogic@gmail.com
+> <javascript:;>> writes:
+>
+>  > From: Matthew Shyu <matthew.shyu@amlogic.com <javascript:;>>
+>  > The Configure script in openssl takes install_prefix from env by default
+>  > $install_prefix= "$ENV{'INSTALL_PREFIX'}"
+>  > However, the INSTALL_PREFIX points to *TARGET* folder instead of
+>  > *HOST* folder.
+>  > This is fixed by intentionally setting install_prefix to blank.
+>
+> Sorry, I'm not following you here. Do you mean that you have exported
+> INSTALL_PREFIX=<something> in your environment outside Buildroot? We do
+> indeed pass INSTALL_PREFIX to make install when we install the target
+> version to staging/target, but I don't see the relation to the host
+> variant?
+>
+> Yes, the INSTALL_PREFIX env is passed in  from buildroot.  However,  as
+you said, it points to output/staging/usr.  For host variant, the correct
+installation path should be output/host/usr, which is set by --prefix.  The
+idea of this patch is for host-openssl not to use --install-prefix but to
+use --prefix.
 
 
-On February 17, 2016 1:50:23 PM MST, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
->Hello,
 >
->On Wed, 17 Feb 2016 16:17:12 -0200 (BRST), Carlos Santos wrote:
+> > Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com <javascript:;>>
+>  > ---
+>  >  package/openssl/openssl.mk |    1 +
+>  >  1 file changed, 1 insertion(+)
 >
->> Hello Alan,
->> 
->> I noticed that this patch set is still in "Changes Requested" state.
->Is there anything I can do to help?
+>  > diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+>  > index b7498a7..c35e93f 100644
+>  > --- a/package/openssl/openssl.mk
+>  > +++ b/package/openssl/openssl.mk
+>  > @@ -63,6 +63,7 @@ define HOST_OPENSSL_CONFIGURE_CMDS
+>  >              $(HOST_CONFIGURE_OPTS) \
+>  >              ./config \
+>  >              --prefix=$(HOST_DIR)/usr \
+>  > +            --install_prefix= \
+>  >              --openssldir=$(HOST_DIR)/etc/ssl \
+>  >              --libdir=/lib \
+>  >              shared \
+>  > --
+>  > 1.7.9.5
 >
->You can take over the patch, make the necessary changes and post an
->updated version of it.
+>  > _______________________________________________
+>  > buildroot mailing list
+>  > buildroot at busybox.net <javascript:;>
+>  > http://lists.busybox.net/mailman/listinfo/buildroot
 >
->If your changes are limited, it is customary to keep the original
->author as the author of the patch.
 >
->If your changes are really major and essentially rewrite the whole
->patch, then you can re-assign the authorship of the patch to you, but
->keep a reference to the original author in the commit log.
->
->It is definitely more than welcome to pick up old patches for which
->changes were requested, but whose author didn't had the time to
->implement.
+> --
+> Bye, Peter Korsgaard
 >
 
-Hi Carlos, I agree. I ran out of time on this, unfortunately :( .Have a look at the original comments from Thomas here:
-https://patchwork.ozlabs.org/patch/530390/
-
-As far as a authorship, the changes requested are significant enough that you can take my authorship off. I don't mind.
-
-Alan. 
+Regards,
+Matthew
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160218/c159dbe7/attachment.html>
