@@ -1,55 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Feb 2016 16:33:56 +0100
-Subject: [Buildroot] [git commit] glibc: add version 2.23
-Message-ID: <20160302202752.E30F780203@busybox.osuosl.org>
+Date: Fri, 19 Feb 2016 16:33:13 +0100
+Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.14.1
+Message-ID: <20160302202752.CD84B80203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3e49d7a453543a6ec266c158b174bf492660a0f
+commit: https://git.buildroot.net/buildroot/commit/?id=d98aae3bca4f1ca8ebcabb025ed94a1bbb5cba72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Clarify the reason it's not available for sparc < v9.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/Config.in  | 9 ++++++++-
- package/glibc/glibc.hash | 1 +
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index aeb236c..d8f54b6 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -39,7 +39,13 @@ config BR2_GLIBC_VERSION_2_21
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index a301fb3..685ccf4 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.13.1.tar.gz.sha256
+-sha256 d4604e3e4875e99d0446a436f857a849d1e3dda59096861dcd6a0e6c16474cb7  libupnpp-0.13.1.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.14.1.tar.gz.sha256
++sha256  ffb33379f3734419de683b0adca5228e802c64d3960681c15f3a8de7d7e315d1  libupnpp-0.14.1.tar.gz
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 71ba311..1525f81 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_GLIBC_VERSION_2_22
- 	bool "2.22"
--	depends on !BR2_sparc # broken
-+	# No support for pthread barriers on < v9 ISA
-+	depends on !BR2_sparc
-+
-+config BR2_GLIBC_VERSION_2_23
-+	bool "2.23"
-+	# No support for pthread barriers on < v9 ISA
-+	depends on !BR2_sparc
- 
- endchoice
- 
-@@ -51,3 +57,4 @@ config BR2_GLIBC_VERSION_STRING
- 	default "2.19-svnr25243" if BR2_EGLIBC_VERSION_2_19
- 	default "2.21" if BR2_GLIBC_VERSION_2_21
- 	default "2.22" if BR2_GLIBC_VERSION_2_22
-+	default "2.23" if BR2_GLIBC_VERSION_2_23
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 979202e..c809735 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -6,3 +6,4 @@ md5	197836c2ba42fb146e971222647198dd	eglibc-2.19-svnr25243.tar.bz2
- sha1	8013c1935b46fd50d2d1fbfad3b0af362b75fb28	eglibc-2.19-svnr25243.tar.bz2
- sha256  aeeb362437965a5d3f40b151094ca79def04a115bd363fdd4a9a0c69482923b8  glibc-2.21.tar.xz
- sha256	eb731406903befef1d8f878a46be75ef862b9056ab0cde1626d08a7a05328948	glibc-2.22.tar.xz
-+sha256	94efeb00e4603c8546209cefb3e1a50a5315c86fa9b078b6fad758e187ce13e9	glibc-2.23.tar.xz
+-LIBUPNPP_VERSION = 0.13.1
++LIBUPNPP_VERSION = 0.14.1
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = GPLv2+
+ LIBUPNPP_LICENSE_FILES = COPYING
