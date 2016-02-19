@@ -1,75 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 00:04:16 +0100
-Subject: [Buildroot] [git commit] python-wsaccel: new package
-Message-ID: <20160302202753.A186980203@busybox.osuosl.org>
+Date: Fri, 19 Feb 2016 22:17:58 +0100
+Subject: [Buildroot] [git commit] python-pygments: new package
+Message-ID: <20160302202753.1A16F7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3c8633ed6914a6c1f12b2ce56f18ac08979d3c2
+commit: https://git.buildroot.net/buildroot/commit/?id=f17c345d9df90a1661816392a97ab18bde751f01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |  1 +
- package/python-wsaccel/Config.in           |  6 ++++++
- package/python-wsaccel/python-wsaccel.hash |  3 +++
- package/python-wsaccel/python-wsaccel.mk   | 13 +++++++++++++
- 4 files changed, 23 insertions(+)
+ package/Config.in                            |  1 +
+ package/python-pygments/Config.in            |  6 ++++++
+ package/python-pygments/python-pygments.hash |  3 +++
+ package/python-pygments/python-pygments.mk   | 14 ++++++++++++++
+ 4 files changed, 24 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 4862280..7a9ed0a 100644
+index b69a481..ca3d063 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -735,6 +735,7 @@ menu "External python modules"
- 	source "package/python-webpy/Config.in"
- 	source "package/python-werkzeug/Config.in"
- 	source "package/python-ws4py/Config.in"
-+	source "package/python-wsaccel/Config.in"
- 	source "package/python-zope-interface/Config.in"
- endmenu
- endif
-diff --git a/package/python-wsaccel/Config.in b/package/python-wsaccel/Config.in
+@@ -686,6 +686,7 @@ menu "External python modules"
+ 	source "package/python-pydal/Config.in"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
++	source "package/python-pygments/Config.in"
+ 	source "package/python-pyinotify/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+diff --git a/package/python-pygments/Config.in b/package/python-pygments/Config.in
 new file mode 100644
-index 0000000..ee61e8a
+index 0000000..f097c52
 --- /dev/null
-+++ b/package/python-wsaccel/Config.in
++++ b/package/python-pygments/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_WSACCEL
-+	bool "python-wsaccel"
++config BR2_PACKAGE_PYTHON_PYGMENTS
++	bool "python-pygments"
 +	help
-+	  Accelerator for ws4py and AutobahnPython.
++	  Pygments is a syntax highlighting package written in Python.
 +
-+	  https://pypi.python.org/pypi/wsaccel
-diff --git a/package/python-wsaccel/python-wsaccel.hash b/package/python-wsaccel/python-wsaccel.hash
++	  https://pypi.python.org/pypi/Pygments
+diff --git a/package/python-pygments/python-pygments.hash b/package/python-pygments/python-pygments.hash
 new file mode 100644
-index 0000000..a02b5a8
+index 0000000..bb954dd
 --- /dev/null
-+++ b/package/python-wsaccel/python-wsaccel.hash
++++ b/package/python-pygments/python-pygments.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b4ea3d6847855c0587d37fca9db0557, sha256 locally computed.
-+md5	2b4ea3d6847855c0587d37fca9db0557  wsaccel-0.6.2.tar.gz
-+sha256	425706acf0724d2f6bfa391ec37b4ef121d3432c956029de3cea4e101c218e0c  wsaccel-0.6.2.tar.gz
-diff --git a/package/python-wsaccel/python-wsaccel.mk b/package/python-wsaccel/python-wsaccel.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=84533d22f72de894f6d3907c3ca9eddf, sha256 locally computed.
++md5	84533d22f72de894f6d3907c3ca9eddf  Pygments-2.1.tar.gz
++sha256	13a0ef5fafd7b16cf995bc28fe7aab0780dab1b2fda0fc89e033709af8b8a47b  Pygments-2.1.tar.gz
+diff --git a/package/python-pygments/python-pygments.mk b/package/python-pygments/python-pygments.mk
 new file mode 100644
-index 0000000..3e7b332
+index 0000000..eafd775
 --- /dev/null
-+++ b/package/python-wsaccel/python-wsaccel.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-pygments/python-pygments.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-wsaccel
++# python-pygments
 +#
 +################################################################################
 +
-+PYTHON_WSACCEL_VERSION = 0.6.2
-+PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
-+PYTHON_WSACCEL_SITE = http://pypi.python.org/packages/source/w/wsaccel
-+PYTHON_WSACCEL_LICENSE = Apache-2.0
-+PYTHON_WSACCEL_SETUP_TYPE = setuptools
++PYTHON_PYGMENTS_VERSION = 2.1
++PYTHON_PYGMENTS_SOURCE = Pygments-$(PYTHON_PYGMENTS_VERSION).tar.gz
++PYTHON_PYGMENTS_SITE = http://pypi.python.org/packages/source/P/Pygments
++PYTHON_PYGMENTS_LICENSE = BSD-2c
++PYTHON_PYGMENTS_LICENSE_FILES = LICENSE
++PYTHON_PYGMENTS_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
