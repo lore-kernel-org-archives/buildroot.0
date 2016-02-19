@@ -1,69 +1,22 @@
-From: Jeroen Roovers <jer@airfi.aero>
-Date: Fri, 19 Feb 2016 16:04:30 +0100
-Subject: [Buildroot] Fwd:  Fwd: [PATCH 1/1] uboot: Strip "-Wl, " from LDFLAGS
-In-Reply-To: <CANCHnQp5E4kx=2VpVDXAC-sn+ruxe=0nwamG=DXp_WEgQVCRjw@mail.gmail.com>
-References: <1455102927-28502-1-git-send-email-jer@airfi.aero>
- <CANCHnQppW3mmP=6WGBChD06+7ns0u1D5R6MQb=pxCmV6nQ7=Mw@mail.gmail.com>
- <20160210174115.5c7f174d@free-electrons.com>
- <CANCHnQogKCY-OTT2=wTkNJ8D52QWetBqdnWbfAqRKKcoW8Yrpw@mail.gmail.com>
- <CANCHnQp5E4kx=2VpVDXAC-sn+ruxe=0nwamG=DXp_WEgQVCRjw@mail.gmail.com>
-Message-ID: <CANCHnQqp9kn3VuavOtSorF5TmKuUMVQEs=QyLpUMSzr7pB0=wA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 19 Feb 2016 16:33:31 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libupnpp: bump to version 0.14.1
+In-Reply-To: <1455868871-4339-1-git-send-email-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Fri, 19 Feb 2016 09:01:10
+ +0100")
+References: <1455868871-4339-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <87bn7ciuk4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apparently this didn't make it to the list.
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
----------- Forwarded message ----------
-From: Jeroen Roovers <jeroen.roovers@airfi.aero>
-Date: 10 February 2016 at 17:47
-Subject: Re: [Buildroot] Fwd: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
-To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: buildroot at buildroot.org
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
+Committed to next, thanks.
 
-I set BR2_TARGET_LDFLAGS="-Wl,-O1 -Wl,--as-needed" in .config.
-Everywere else, the resulting LDFLAGS is correctly used, i.e. as
-linker flags passed to GCC.
-
-The specific problem I am fixing is that ld.bfd, as called by uboot,
-does not know what -Wl,-O1 or -Wl,--as-needed are, but does know what
--O1 and --as-needed are. So it's sort of a build failure, which that
-patch fixes.
-
-
-On 10 February 2016 at 17:41, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> Thanks for this patch! See some comments below.
->
-> On Wed, 10 Feb 2016 16:03:23 +0100, Jeroen Roovers wrote:
->> ---------- Forwarded message ----------
->> From: Jeroen Roovers <jer@airfi.aero>
->> Date: 10 February 2016 at 12:15
->> Subject: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
->> To: buildroot at buildroot.org
->> Cc: Jeroen Roovers <jer@airfi.aero>
->>
->>
->>     If we want to set proper LDFLAGS, then we need to mangle that in the
->>     uboot build system as it calls ld(1) (in fact ld.bfd) directly,
->>     where the "-Wl," prefix should only be used when the linker is
->>     called indirectly through gcc(1).
->>
->> Signed-off-by: Jeroen Roovers <jer@airfi.aero>
->
-> What specific/real problem is this fixing? I.e in which
-> situation/configuration are you seeing that TARGET_LDFLAGS contains a
-> -Wl option?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+-- 
+Bye, Peter Korsgaard
