@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 00:10:27 +0100
-Subject: [Buildroot] [PATCH v4 14/17] python-wsaccel: new package
-In-Reply-To: <1454799603-5474-15-git-send-email-mc5686@mclink.it>
-References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-15-git-send-email-mc5686@mclink.it>
-Message-ID: <20160220001027.0f00fc52@free-electrons.com>
+Date: Sat, 20 Feb 2016 00:14:05 +0100
+Subject: [Buildroot] [PATCH] zmqpp: bump to version 4.1.2
+In-Reply-To: <1455800827-19066-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1455800827-19066-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160220001405.79f8eda5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mauro Condarelli,
+Gustavo,
 
-On Sun,  7 Feb 2016 00:00:00 +0100, Mauro Condarelli wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+On Thu, 18 Feb 2016 10:07:07 -0300, Gustavo Zacarias wrote:
+> Drop 0001-add-cstdlib-header-to-ensure-EXIT_FAILURE-presence.patch since
+> it's already upstream.
+> 
+> Rebase shared/static build patches - these look unnecessary if we switch
+> to cmake-package, however it seems to require the zmq package switches
+> to cmake-package as well since static library naming looks different,
+> which might be a problem for users.
+> 
+> Also set the minimum required version of gcc to 4.7.x since the code now
+> requires c++1x.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-I've applied to next, though I have one request (see below).
+This update doesn't seem to build here:
 
-> +PYTHON_WSACCEL_VERSION = 0.6.2
-> +PYTHON_WSACCEL_SOURCE = wsaccel-$(PYTHON_WSACCEL_VERSION).tar.gz
-> +PYTHON_WSACCEL_SITE = http://pypi.python.org/packages/source/w/wsaccel
-> +PYTHON_WSACCEL_LICENSE = Apache-2.0
+install -m 755 ./build/libzmqpp.so.4 /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libzmqpp.so.4.1.2
+install -m 755 ./build/libzmqpp.a /home/thomas/projets/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libzmqpp.a
+install: cannot stat ?./build/libzmqpp.a?: No such file or directory
+Makefile:158: recipe for target 'install' failed
+make[2]: *** [install] Error 1
+package/pkg-generic.mk:234: recipe for target '/home/thomas/projets/buildroot/output/build/zmqpp-4.1.2/.stamp_staging_installed' failed
+make[1]: *** [/home/thomas/projets/buildroot/output/build/zmqpp-4.1.2/.stamp_staging_installed] Error 2
+Makefile:36: recipe for target '_all' failed
 
-It is really annoying that there is no proper license information in
-this tarball. After the 0.6.2 release, the upstream project has added a
-proper LICENSE file (see
-https://github.com/methane/wsaccel/commit/71e963bd5f49b91a7d95d0004de64ce5b935cc25).
-It would be good to ask upstream to make a 0.6.3 release, published on
-PyPi, which we could use and therefore reference the LICENSE file.
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
