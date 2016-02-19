@@ -1,43 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Feb 2016 23:44:13 +0100
-Subject: [Buildroot] GSoC 2016
-Message-ID: <20160219224413.GA3387@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 Feb 2016 23:44:51 +0100
+Subject: [Buildroot] [PATCH v4 10/17] python-txaio: new package
+In-Reply-To: <1454799603-5474-11-git-send-email-mc5686@mclink.it>
+References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
+ <1454799603-5474-11-git-send-email-mc5686@mclink.it>
+Message-ID: <20160219234451.0000249e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Dear Mauro Condarelli,
 
-I'm happy to inform you that Buildroot has candidated to be a mentoring
-organisation for the Google Summer of Code 2016!
+On Sat,  6 Feb 2016 23:59:56 +0100, Mauro Condarelli wrote:
+> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+> ---
+>  package/Config.in                      |  1 +
+>  package/python-txaio/Config.in         |  7 +++++++
+>  package/python-txaio/python-txaio.hash |  3 +++
+>  package/python-txaio/python-txaio.mk   | 14 ++++++++++++++
+>  4 files changed, 25 insertions(+)
+>  create mode 100644 package/python-txaio/Config.in
+>  create mode 100644 package/python-txaio/python-txaio.hash
+>  create mode 100644 package/python-txaio/python-txaio.mk
 
-We previously mentored two students, one in each of 2013 and 2014, who
-provided some enhancements to the graphic and multimedia support for
-ARM SOCs in Buildroot.
+Applied to next, thanks!
 
-This year, we offer a wide range of topics touching the core of
-Buildroot; the list of topics is available on our ideas page:
-    http://elinux.org/Buildroot:GSoC2016Ideas
-
-I'd like to thank the five core developpers that have volunteered to be
-mentors this year, and have helped with the preparation of the topic
-list: Arnout, Peter, Romain, Thomas and me.
-
-Of course, this list is not definitive; we can still add new topics.
-Feel free to offer suggestions.
-
-Google is now reviewing the candidate organisations, and will announe
-the final list of participating organisations on February, the 29th.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
