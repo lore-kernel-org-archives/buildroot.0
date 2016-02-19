@@ -1,97 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Feb 2016 23:12:05 +0100
-Subject: [Buildroot] [git commit] python-cryptography: new package
-Message-ID: <20160302202753.3D3337FA0E@busybox.osuosl.org>
+Date: Fri, 19 Feb 2016 23:50:40 +0100
+Subject: [Buildroot] [git commit] python-pyasn-modules: new package
+Message-ID: <20160302202753.72CB580203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbeeb4c8cb4e44c654ca27db9ae05a83202f4104
+commit: https://git.buildroot.net/buildroot/commit/?id=688793a19579b563d451b574e5924466445163ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Thomas:
- - fix license information: it is either Apache-2.0 *or* BSD-3c
- - add the LICENSE file to the list of license files, since it is the
-   one that explains that the license is either Apache-2.0 or BSD-3c.]
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                                  |  1 +
- package/python-cryptography/Config.in              | 23 ++++++++++++++++++++++
- .../python-cryptography/python-cryptography.hash   |  3 +++
- package/python-cryptography/python-cryptography.mk | 15 ++++++++++++++
- 4 files changed, 42 insertions(+)
+ package/Config.in                                      |  1 +
+ package/python-pyasn-modules/Config.in                 | 11 +++++++++++
+ package/python-pyasn-modules/python-pyasn-modules.hash |  3 +++
+ package/python-pyasn-modules/python-pyasn-modules.mk   | 14 ++++++++++++++
+ 4 files changed, 29 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index ce71f3c..c92e925 100644
+index 2098141..11ba42d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -634,6 +634,7 @@ menu "External python modules"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-crc16/Config.in"
-+	source "package/python-cryptography/Config.in"
- 	source "package/python-cssselect/Config.in"
- 	source "package/python-daemon/Config.in"
- 	source "package/python-dialog/Config.in"
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+@@ -681,6 +681,7 @@ menu "External python modules"
+ 	source "package/python-protobuf/Config.in"
+ 	source "package/python-psutil/Config.in"
+ 	source "package/python-pyasn/Config.in"
++	source "package/python-pyasn-modules/Config.in"
+ 	source "package/python-pycli/Config.in"
+ 	source "package/python-pycparser/Config.in"
+ 	source "package/python-pycrypto/Config.in"
+diff --git a/package/python-pyasn-modules/Config.in b/package/python-pyasn-modules/Config.in
 new file mode 100644
-index 0000000..9827cf8
+index 0000000..387020d
 --- /dev/null
-+++ b/package/python-cryptography/Config.in
-@@ -0,0 +1,23 @@
-+config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
-+	bool "python-cryptography"
-+	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PYTHON_CFFI # runtime
-+	select BR2_PACKAGE_PYTHON_IDNA # runtime
-+	select BR2_PACKAGE_PYTHON_PYASN # runtime
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
-+	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++++ b/package/python-pyasn-modules/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_PYASN_MODULES
++	bool "python-pyasn-modules"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_PYASN # runtime
 +	help
-+	  cryptography is a package designed to expose cryptographic
-+	  primitives and recipes to Python developers.
++	  A collection of ASN.1-based protocols modules.
 +
-+	  https://cryptography.io
++	  https://pypi.python.org/pypi/pyasn1-modules
 +
-+comment "python-cryptography needs a toolchain w/ C++"
++comment "python-pyasn-modules needs a toolchain w/ C++"
 +	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+diff --git a/package/python-pyasn-modules/python-pyasn-modules.hash b/package/python-pyasn-modules/python-pyasn-modules.hash
 new file mode 100644
-index 0000000..b35f801
+index 0000000..6d9a707
 --- /dev/null
-+++ b/package/python-cryptography/python-cryptography.hash
++++ b/package/python-pyasn-modules/python-pyasn-modules.hash
 @@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b25eebd1d3c6bae52b46f0dcec74dfb, sha256 locally computed
-+md5     2b25eebd1d3c6bae52b46f0dcec74dfb  cryptography-1.2.2.tar.gz
-+sha256  3f219cb9106d9b737ea9c332c4d15d70ac328f91b59fd9d79f78bdea8f826a67  cryptography-1.2.2.tar.gz
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=178129bc7fbf07215c25230c5f053f81, sha256 locally computed.
++md5	178129bc7fbf07215c25230c5f053f81  pyasn1-modules-0.0.8.tar.gz
++sha256	10561934f1829bcc455c7ecdcdacdb4be5ffd3696f26f468eb6eb41e107f3837  pyasn1-modules-0.0.8.tar.gz
+diff --git a/package/python-pyasn-modules/python-pyasn-modules.mk b/package/python-pyasn-modules/python-pyasn-modules.mk
 new file mode 100644
-index 0000000..cefd3cb
+index 0000000..bb32227
 --- /dev/null
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-pyasn-modules/python-pyasn-modules.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-cryptography
++# python-pyasn-modules
 +#
 +################################################################################
 +
-+PYTHON_CRYPTOGRAPHY_VERSION = 1.2.2
-+PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-+PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
-+PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
-+PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3c
-+PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
-+PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
++PYTHON_PYASN_MODULES_VERSION = 0.0.8
++PYTHON_PYASN_MODULES_SOURCE = pyasn1-modules-$(PYTHON_PYASN_MODULES_VERSION).tar.gz
++PYTHON_PYASN_MODULES_SITE = http://pypi.python.org/packages/source/p/pyasn1-modules
++PYTHON_PYASN_MODULES_LICENSE = BSD-2c
++PYTHON_PYASN_MODULES_LICENSE_FILES = LICENSE.txt
++PYTHON_PYASN_MODULES_SETUP_TYPE = setuptools
 +
 +$(eval $(python-package))
