@@ -1,56 +1,43 @@
 From: Lee Jones <lee.jones@linaro.org>
-Date: Fri, 19 Feb 2016 17:09:00 +0000
-Subject: [Buildroot] [PATCH 4/9] boards: stm32f469-disco: Add kernel patch
-	to provide top compatible string
+Date: Fri, 19 Feb 2016 17:08:59 +0000
+Subject: [Buildroot] [PATCH 3/9] boards: stm32f469-disco: Add a post-image
+	script
 In-Reply-To: <1455901745-18486-1-git-send-email-lee.jones@linaro.org>
 References: <1455901745-18486-1-git-send-email-lee.jones@linaro.org>
-Message-ID: <1455901745-18486-5-git-send-email-lee.jones@linaro.org>
+Message-ID: <1455901745-18486-4-git-send-email-lee.jones@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-At the time of submission, the Mainline kernel does not currently
-support the STM32f469.  This patch ensures the correct DTB will be
-matched on boot.
+Once each of the; bootloader, kernel, host utilities and rootfs have
+been successfully built and packaged, this post-image script will
+endeavour to flash the relevant images onto the board.
 
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- .../kernel/0001-kernel-add-top-compatible.patch    | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0001-kernel-add-top-compatible.patch
+ board/stmicroelectronics/stm32/stm32f469-disco/post-image.sh | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100755 board/stmicroelectronics/stm32/stm32f469-disco/post-image.sh
 
-diff --git a/board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0001-kernel-add-top-compatible.patch b/board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0001-kernel-add-top-compatible.patch
-new file mode 100644
-index 0000000..6f920a6
+diff --git a/board/stmicroelectronics/stm32/stm32f469-disco/post-image.sh b/board/stmicroelectronics/stm32/stm32f469-disco/post-image.sh
+new file mode 100755
+index 0000000..281660b
 --- /dev/null
-+++ b/board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0001-kernel-add-top-compatible.patch
-@@ -0,0 +1,25 @@
-+From 6bd8bae3dd0631f8d23e63617dca289f162e6840 Mon Sep 17 00:00:00 2001
-+From: Lee Jones <lee.jones@linaro.org>
-+Date: Tue, 16 Feb 2016 14:04:17 +0000
-+Subject: [PATCH 3/3] ARM: stm32: Identify a new board - STM32F469
++++ b/board/stmicroelectronics/stm32/stm32f469-disco/post-image.sh
+@@ -0,0 +1,12 @@
++#!/bin/bash
 +
-+Signed-off-by: Lee Jones <lee.jones@linaro.org>
-+---
-+ arch/arm/mach-stm32/board-dt.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/arch/arm/mach-stm32/board-dt.c b/arch/arm/mach-stm32/board-dt.c
-+index f2ad772..ceee477 100644
-+--- a/arch/arm/mach-stm32/board-dt.c
-++++ b/arch/arm/mach-stm32/board-dt.c
-+@@ -10,6 +10,7 @@
-+ 
-+ static const char *const stm32_compat[] __initconst = {
-+ 	"st,stm32f429",
-++	"st,stm32f469",
-+ 	NULL
-+ };
-+ 
-+-- 
-+1.9.1
-+
++$HOST_DIR/usr/bin/openocd -f board/stm32f469discovery.cfg \
++  -c "init" \
++  -c "reset init" \
++  -c "flash probe 0" \
++  -c "flash info 0" \
++  -c "flash write_image erase $BINARIES_DIR/stm32f469i-disco.bin 0x08000000" \
++  -c "flash write_image erase $BINARIES_DIR/stm32f469-disco.dtb 0x08004000" \
++  -c "flash write_image erase $BINARIES_DIR/xipImage 0x08008000" \
++  -c "reset run" \
++  -c "shutdown"
 -- 
 1.9.1
