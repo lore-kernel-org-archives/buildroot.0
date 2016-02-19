@@ -1,88 +1,56 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 19 Feb 2016 08:48:56 +0100
-Subject: [Buildroot] [PATCH] package/avahi: bump to version 0.6.32
-Message-ID: <1455868136-8911-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Fri, 19 Feb 2016 09:01:11 +0100
+Subject: [Buildroot] [PATCH 2/2] package/upmpdcli: bump to version 1.1.0
+In-Reply-To: <1455868871-4339-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1455868871-4339-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1455868871-4339-2-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also:
- * switch download site to github as the previous download page is not
-   maintained anymore
- * drop 0004-no-gtk-deprecations.patch as it is applied upstream
+upmpdcli version 1.1.0 requires libupnpp version 0.14.1.
+
+Also adjust the installation of the config file. It is renamed to upmpdcli.conf-dist
+in the sources, but we install it as upmpdcli.conf as usual.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
-Note: Does anyone knows if we still need to set AVAHI_CONF_ENV? Unfortunatly,
-      there is no comment about this.
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
----
- package/avahi/0004-no-gtk-deprecations.patch | 30 ----------------------------
- package/avahi/avahi.hash                     |  2 +-
- package/avahi/avahi.mk                       |  4 ++--
- 3 files changed, 3 insertions(+), 33 deletions(-)
- delete mode 100644 package/avahi/0004-no-gtk-deprecations.patch
-
-diff --git a/package/avahi/0004-no-gtk-deprecations.patch b/package/avahi/0004-no-gtk-deprecations.patch
-deleted file mode 100644
-index d187053..0000000
---- a/package/avahi/0004-no-gtk-deprecations.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Patch from http://pkgs.fedoraproject.org/cgit/avahi.git/plain/avahi-0.6.31-no-deprecations.patch?id=b3f4de05e331258c5123e3acc144e452595c2112
--
--Don't disable deprecated GTK support, as that breaks builds with modern GTK3
--versions.
--
--For more details, see the Fedora bugzilla:
--https://bugzilla.redhat.com/show_bug.cgi?id=1001676
--
--[Peter: patch Makefile.in so we don't need autoreconf]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- avahi-ui/Makefile.am |    2 +-
-- avahi-ui/Makefile.in |    3 +--
-- configure.ac         |    2 +-
-- 3 files changed, 3 insertions(+), 4 deletions(-)
--
--Index: avahi-0.6.31/avahi-ui/Makefile.in
--===================================================================
----- avahi-0.6.31.orig/avahi-ui/Makefile.in
--+++ avahi-0.6.31/avahi-ui/Makefile.in
--@@ -464,8 +464,7 @@
-- top_srcdir = @top_srcdir@
-- 
-- # This cool debug trap works on i386/gcc only
---AM_CFLAGS = -I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 \
---	-DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1 \
--+AM_CFLAGS = -I$(top_srcdir) \
-- 	'-DDEBUG_TRAP=__asm__("int $$3")' $(am__append_1)
-- pkglibdatadir = $(libdir)/avahi
-- desktopdir = $(datadir)/applications
-diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
-index 99bbd51..09c5d42 100644
---- a/package/avahi/avahi.hash
-+++ b/package/avahi/avahi.hash
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 5a6c47a..07324a7 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
-+sha256  d54991185d514a0aba54ebeb408d7575b60f5818a772e28fa0e18b98bc1db454	avahi-0.6.32.tar.gz
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 5d6e6a8..cad7acd 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -11,8 +11,8 @@
- # either version 2.1 of the License, or (at your option) any
- # later version.
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.13.1.tar.gz.sha256
+-sha256 86f964e49b0288a4d660aa4ad83576d83aad7c354df67d3aa8e324e8912876e0  upmpdcli-0.13.1.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.0.tar.gz.sha256
++sha256  7193488091a204ed691d1f3ce3354e183c8245428a4a7ca8bd032e1a6c48520f  upmpdcli-1.1.0.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index ba5bbb2..6168595 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--AVAHI_VERSION = 0.6.31
--AVAHI_SITE = http://www.avahi.org/download
-+AVAHI_VERSION = 0.6.32
-+AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
- AVAHI_LICENSE = LGPLv2.1+
- AVAHI_LICENSE_FILES = LICENSE
- AVAHI_INSTALL_STAGING = YES
+-UPMPDCLI_VERSION = 0.13.1
++UPMPDCLI_VERSION = 1.1.0
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
+@@ -40,7 +40,7 @@ define UPMPDCLI_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ define UPMPDCLI_INSTALL_CONF_FILE
+-	$(INSTALL) -D -m 0755 $(@D)/src/upmpdcli.conf $(TARGET_DIR)/etc/upmpdcli.conf
++	$(INSTALL) -D -m 0755 $(@D)/src/upmpdcli.conf-dist $(TARGET_DIR)/etc/upmpdcli.conf
+ endef
+ 
+ UPMPDCLI_POST_INSTALL_TARGET_HOOKS += UPMPDCLI_INSTALL_CONF_FILE
 -- 
 2.7.1
