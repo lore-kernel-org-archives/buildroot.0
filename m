@@ -1,47 +1,69 @@
-From: Antoine Tenart <antoine.tenart@free-electrons.com>
-Date: Fri, 19 Feb 2016 15:32:20 +0100
-Subject: [Buildroot] [PATCH v4] qt5tools: new package
-In-Reply-To: <1454682615-3448-1-git-send-email-ps.report@gmx.net>
-References: <1454682615-3448-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160219143219.GA30826@kwain>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Fri, 19 Feb 2016 16:04:30 +0100
+Subject: [Buildroot] Fwd:  Fwd: [PATCH 1/1] uboot: Strip "-Wl, " from LDFLAGS
+In-Reply-To: <CANCHnQp5E4kx=2VpVDXAC-sn+ruxe=0nwamG=DXp_WEgQVCRjw@mail.gmail.com>
+References: <1455102927-28502-1-git-send-email-jer@airfi.aero>
+ <CANCHnQppW3mmP=6WGBChD06+7ns0u1D5R6MQb=pxCmV6nQ7=Mw@mail.gmail.com>
+ <20160210174115.5c7f174d@free-electrons.com>
+ <CANCHnQogKCY-OTT2=wTkNJ8D52QWetBqdnWbfAqRKKcoW8Yrpw@mail.gmail.com>
+ <CANCHnQp5E4kx=2VpVDXAC-sn+ruxe=0nwamG=DXp_WEgQVCRjw@mail.gmail.com>
+Message-ID: <CANCHnQqp9kn3VuavOtSorF5TmKuUMVQEs=QyLpUMSzr7pB0=wA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Apparently this didn't make it to the list.
 
-I tested your patch to build the QT5 Linguistic Tools, and it worked
-well :)
+---------- Forwarded message ----------
+From: Jeroen Roovers <jeroen.roovers@airfi.aero>
+Date: 10 February 2016 at 17:47
+Subject: Re: [Buildroot] Fwd: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
+To: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: buildroot at buildroot.org
 
-However I have one comment:
 
-On Fri, Feb 05, 2016 at 03:30:15PM +0100, Peter Seiderer wrote:
-> +
-> +define QT5TOOLS_INSTALL_STAGING_CMDS
+I set BR2_TARGET_LDFLAGS="-Wl,-O1 -Wl,--as-needed" in .config.
+Everywere else, the resulting LDFLAGS is correctly used, i.e. as
+linker flags passed to GCC.
 
-I think you need to call the 'install' target here, to install the QT5
-Tools cmake modules in the host directory:
+The specific problem I am fixing is that ld.bfd, as called by uboot,
+does not know what -Wl,-O1 or -Wl,--as-needed are, but does know what
+-O1 and --as-needed are. So it's sort of a build failure, which that
+patch fixes.
 
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
 
-> +	$(foreach p,$(QT5TOOLS_INSTALL_STAGING_y), \
-> +		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(HOST_DIR)/usr/bin/$(p)$(sep))
-> +endef
-
-Thanks,
-
-Antoine
-
--- 
-Antoine T?nart, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160219/08621b59/attachment.asc>
+On 10 February 2016 at 17:41, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> Thanks for this patch! See some comments below.
+>
+> On Wed, 10 Feb 2016 16:03:23 +0100, Jeroen Roovers wrote:
+>> ---------- Forwarded message ----------
+>> From: Jeroen Roovers <jer@airfi.aero>
+>> Date: 10 February 2016 at 12:15
+>> Subject: [PATCH 1/1] uboot: Strip "-Wl," from LDFLAGS
+>> To: buildroot at buildroot.org
+>> Cc: Jeroen Roovers <jer@airfi.aero>
+>>
+>>
+>>     If we want to set proper LDFLAGS, then we need to mangle that in the
+>>     uboot build system as it calls ld(1) (in fact ld.bfd) directly,
+>>     where the "-Wl," prefix should only be used when the linker is
+>>     called indirectly through gcc(1).
+>>
+>> Signed-off-by: Jeroen Roovers <jer@airfi.aero>
+>
+> What specific/real problem is this fixing? I.e in which
+> situation/configuration are you seeing that TARGET_LDFLAGS contains a
+> -Wl option?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
