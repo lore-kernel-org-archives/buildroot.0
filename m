@@ -1,56 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Feb 2016 16:33:21 +0100
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.1.0
-Message-ID: <20160302202752.D970780203@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 19 Feb 2016 22:27:46 +0100
+Subject: [Buildroot] [git commit] python-shutilwhich: new package
+Message-ID: <20160302202753.2F456807F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ece8fd1bcade6134547c75a40c8020e1d7c4bde
+commit: https://git.buildroot.net/buildroot/commit/?id=96a7a3cb7688ff67f02d45f0002c638ee5faadb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-upmpdcli version 1.1.0 requires libupnpp version 0.14.1.
-
-Also adjust the installation of the config file. It is renamed to upmpdcli.conf-dist
-in the sources, but we install it as upmpdcli.conf as usual.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Thomas: fix license, it's not MIT, but PSF.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                                  |  1 +
+ package/python-shutilwhich/Config.in               |  7 +++++++
+ package/python-shutilwhich/python-shutilwhich.hash |  3 +++
+ package/python-shutilwhich/python-shutilwhich.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 5a6c47a..07324a7 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,2 +1,2 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-0.13.1.tar.gz.sha256
--sha256 86f964e49b0288a4d660aa4ad83576d83aad7c354df67d3aa8e324e8912876e0  upmpdcli-0.13.1.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.0.tar.gz.sha256
-+sha256  7193488091a204ed691d1f3ce3354e183c8245428a4a7ca8bd032e1a6c48520f  upmpdcli-1.1.0.tar.gz
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index ba5bbb2..6168595 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 0.13.1
-+UPMPDCLI_VERSION = 1.1.0
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = GPLv2+
- UPMPDCLI_LICENSE_FILES = COPYING
-@@ -40,7 +40,7 @@ define UPMPDCLI_INSTALL_INIT_SYSTEMD
- endef
- 
- define UPMPDCLI_INSTALL_CONF_FILE
--	$(INSTALL) -D -m 0755 $(@D)/src/upmpdcli.conf $(TARGET_DIR)/etc/upmpdcli.conf
-+	$(INSTALL) -D -m 0755 $(@D)/src/upmpdcli.conf-dist $(TARGET_DIR)/etc/upmpdcli.conf
- endef
- 
- UPMPDCLI_POST_INSTALL_TARGET_HOOKS += UPMPDCLI_INSTALL_CONF_FILE
+diff --git a/package/Config.in b/package/Config.in
+index 32bf4dd..ce71f3c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -710,6 +710,7 @@ menu "External python modules"
+ 	source "package/python-rtslib-fb/Config.in"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-setuptools/Config.in"
++	source "package/python-shutilwhich/Config.in"
+ 	source "package/python-simplejson/Config.in"
+ 	source "package/python-singledispatch/Config.in"
+ 	source "package/python-sip/Config.in"
+diff --git a/package/python-shutilwhich/Config.in b/package/python-shutilwhich/Config.in
+new file mode 100644
+index 0000000..abdc8d7
+--- /dev/null
++++ b/package/python-shutilwhich/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SHUTILWHICH
++	bool "python-shutilwhich"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  shutil.which for those not using Python 3.3 yet.
++
++	  https://pypi.python.org/pypi/shutilwhich/
+diff --git a/package/python-shutilwhich/python-shutilwhich.hash b/package/python-shutilwhich/python-shutilwhich.hash
+new file mode 100644
+index 0000000..b1a2c78
+--- /dev/null
++++ b/package/python-shutilwhich/python-shutilwhich.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=915947c5cdae7afd748ac715ee547adb, sha256 locally computed.
++md5	915947c5cdae7afd748ac715ee547adb  shutilwhich-1.1.0.tar.gz
++sha256	db1f39c6461e42f630fa617bb8c79090f7711c9ca493e615e43d0610ecb64dc6  shutilwhich-1.1.0.tar.gz
+diff --git a/package/python-shutilwhich/python-shutilwhich.mk b/package/python-shutilwhich/python-shutilwhich.mk
+new file mode 100644
+index 0000000..0497e1b
+--- /dev/null
++++ b/package/python-shutilwhich/python-shutilwhich.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-shutilwhich
++#
++################################################################################
++
++PYTHON_SHUTILWHICH_VERSION = 1.1.0
++PYTHON_SHUTILWHICH_SOURCE = shutilwhich-$(PYTHON_SHUTILWHICH_VERSION).tar.gz
++PYTHON_SHUTILWHICH_SITE = http://pypi.python.org/packages/source/s/shutilwhich
++PYTHON_SHUTILWHICH_LICENSE = Python Software Foundation License
++PYTHON_SHUTILWHICH_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
