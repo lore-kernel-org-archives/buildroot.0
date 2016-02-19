@@ -1,51 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 14:24:38 +0100
-Subject: [Buildroot] [git commit] package/zip: add host-zip
-Message-ID: <20160302202753.D7B6380203@busybox.osuosl.org>
+Date: Fri, 19 Feb 2016 23:56:34 +0100
+Subject: [Buildroot] [git commit] python-ujson: new package
+Message-ID: <20160302202753.88B7380203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddb8ff9d95d71cee6fb965817d077409dd3056a6
+commit: https://git.buildroot.net/buildroot/commit/?id=0226a0af0f19a90d822cd01e9720cdc20cc771f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Make the host variant of zip available.  This can be useful in
-post-{build,image} scripts.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in.host     |  1 +
- package/zip/Config.in.host | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+ package/Config.in                      |  1 +
+ package/python-ujson/Config.in         |  7 +++++++
+ package/python-ujson/python-ujson.hash |  3 +++
+ package/python-ujson/python-ujson.mk   | 13 +++++++++++++
+ 4 files changed, 24 insertions(+)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1c691a3..09c98fb 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -32,5 +32,6 @@ menu "Host utilities"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
- 	source "package/vboot-utils/Config.in.host"
-+	source "package/zip/Config.in.host"
- 
- endmenu
-diff --git a/package/zip/Config.in.host b/package/zip/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 11ba42d..ce15775 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -726,6 +726,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
++	source "package/python-ujson/Config.in"
+ 	source "package/python-urllib3/Config.in"
+ 	source "package/python-urwid/Config.in"
+ 	source "package/python-versiontools/Config.in"
+diff --git a/package/python-ujson/Config.in b/package/python-ujson/Config.in
 new file mode 100644
-index 0000000..b14ce55
+index 0000000..d185c98
 --- /dev/null
-+++ b/package/zip/Config.in.host
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_ZIP
-+	bool "host zip"
++++ b/package/python-ujson/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_UJSON
++	bool "python-ujson"
 +	help
-+	  Zip is a compression and file packaging/archive utility.
-+	  Although highly compatible both with PKWARE's PKZIP and
-+	  PKUNZIP utilities for MS-DOS and with Info-ZIP's own UnZip,
-+	  our primary objectives have been portability and
-+	  other-than-MSDOS functionality.
++	  UltraJSON is an ultra fast JSON encoder and decoder written
++	  in pure C with bindings for Python 2.5+ and 3.
 +
-+	  http://infozip.sourceforge.net/Zip.html
++	  https://pypi.python.org/pypi/ujson
+diff --git a/package/python-ujson/python-ujson.hash b/package/python-ujson/python-ujson.hash
+new file mode 100644
+index 0000000..2132034
+--- /dev/null
++++ b/package/python-ujson/python-ujson.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=42f77b0cce686dfa4da2e68480b1dd24,sha256 locally computed.
++md5	42f77b0cce686dfa4da2e68480b1dd24  ujson-1.35.tar.gz
++sha256	f66073e5506e91d204ab0c614a148d5aa938bdbf104751be66f8ad7a222f5f86  ujson-1.35.tar.gz
+diff --git a/package/python-ujson/python-ujson.mk b/package/python-ujson/python-ujson.mk
+new file mode 100644
+index 0000000..8d4a12b
+--- /dev/null
++++ b/package/python-ujson/python-ujson.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-ujson
++#
++################################################################################
++
++PYTHON_UJSON_VERSION = 1.35
++PYTHON_UJSON_SOURCE = ujson-$(PYTHON_UJSON_VERSION).tar.gz
++PYTHON_UJSON_SITE = http://pypi.python.org/packages/source/u/ujson
++PYTHON_UJSON_LICENSE = BSD-3c
++PYTHON_UJSON_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
