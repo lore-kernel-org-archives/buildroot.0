@@ -1,51 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 19:21:24 +0100
-Subject: [Buildroot] [git commit branch/next] erlang-p1-yaml: bump to
-	version 1.0.0
-Message-ID: <20160220182140.75B0D7F9FD@busybox.osuosl.org>
+Date: Sat, 20 Feb 2016 19:21:23 +0100
+Subject: [Buildroot] [git commit branch/next] erlang-p1-tls: indicate
+	OpenSSL exception in license info
+Message-ID: <20160220182140.520EF7F9FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ab8937ba5d449be46af3b6e0041364e1968a9a1
+commit: https://git.buildroot.net/buildroot/commit/?id=dc681779f6384a2639401c1deee77f0575ccabcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-[Thomas: add dependency on erlang-p1-utils, as noticed by Romain
-Naour.]
+The license of erlang-p1-tls is indeed GPLv2+ as indicated in
+ERLANG_P1_TLS_LICENSE, but this GPLv2+ carries an OpenSSL exception,
+which allows it to be linked against the OpenSSL library. Therefore,
+we update the license information accordingly.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-yaml/Config.in         | 1 +
- package/erlang-p1-yaml/erlang-p1-yaml.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/erlang-p1-tls/erlang-p1-tls.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/erlang-p1-yaml/Config.in b/package/erlang-p1-yaml/Config.in
-index 25c9b02..2ab78d1 100644
---- a/package/erlang-p1-yaml/Config.in
-+++ b/package/erlang-p1-yaml/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ERLANG_P1_YAML
- 	bool "erlang-p1-yaml"
-+	select BR2_PACKAGE_ERLANG_P1_UTILS
- 	select BR2_PACKAGE_LIBYAML
- 	help
- 	  Erlang wrapper for libyaml C library
-diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
-index 6f7c977..22fcda4 100644
---- a/package/erlang-p1-yaml/erlang-p1-yaml.mk
-+++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
+index f7212c4..77f06e6 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-tls/erlang-p1-tls.mk
+@@ -6,7 +6,7 @@
  
--ERLANG_P1_YAML_VERSION = e1f081e
-+ERLANG_P1_YAML_VERSION = 1.0.0
- ERLANG_P1_YAML_SITE = $(call github,processone,p1_yaml,$(ERLANG_P1_YAML_VERSION))
- ERLANG_P1_YAML_LICENSE = Apache-2.0
- ERLANG_P1_YAML_LICENSE_FILES = COPYING
--ERLANG_P1_YAML_DEPENDENCIES = libyaml
-+ERLANG_P1_YAML_DEPENDENCIES = libyaml erlang-p1-utils
- 
- $(eval $(rebar-package))
+ ERLANG_P1_TLS_VERSION = 1.0.0
+ ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
+-ERLANG_P1_TLS_LICENSE = GPLv2+
++ERLANG_P1_TLS_LICENSE = GPLv2+ with OpenSSL exception
+ ERLANG_P1_TLS_LICENSE_FILES = COPYING
+ ERLANG_P1_TLS_INSTALL_STAGING = YES
+ ERLANG_P1_TLS_DEPENDENCIES = openssl
