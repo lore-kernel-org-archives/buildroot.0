@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 17:40:11 +0100
-Subject: [Buildroot] [PATCH 8/8] package/links: add --with/--without-libjpeg
+Date: Sat, 20 Feb 2016 17:40:08 +0100
+Subject: [Buildroot] [PATCH 5/8] package/links: add --with/--without-bzip2
 In-Reply-To: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1455986411-14273-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1455986411-14273-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,19 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 3 insertions(+)
 
 diff --git a/package/links/links.mk b/package/links/links.mk
-index f42f21c..b62889f 100644
+index 847d311..26af392 100644
 --- a/package/links/links.mk
 +++ b/package/links/links.mk
-@@ -28,7 +28,10 @@ else
- LINKS_CONF_OPTS += --without-directfb
+@@ -36,7 +36,10 @@ endif
  endif
- ifeq ($(BR2_PACKAGE_JPEG),y)
-+LINKS_CONF_OPTS += --with-libjpeg
- LINKS_DEPENDENCIES += jpeg
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
++LINKS_CONF_OPTS += --with-bzip2
+ LINKS_DEPENDENCIES += bzip2
 +else
-+LINKS_CONF_OPTS += --without-libjpeg
++LINKS_CONF_OPTS += --without-bzip2
  endif
- ifeq ($(BR2_PACKAGE_TIFF),y)
- LINKS_CONF_OPTS += --with-libtiff
+ 
+ ifeq ($(BR2_PACKAGE_LIBEVENT),y)
 -- 
 2.7.0
