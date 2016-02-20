@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2016 11:47:02 +0100
+Date: Sat, 20 Feb 2016 11:56:36 +0100
 Subject: [Buildroot] [PATCH v3] support/misc: Adding Vagrant file for
  provisioning
 In-Reply-To: <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
 References: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
  <8737t8xx5a.fsf@dell.be.48ers.dk>
  <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
-Message-ID: <20160220104701.GB3418@free.fr>
+Message-ID: <20160220105636.GC3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,34 +17,26 @@ Angelo, All,
 
 On 2016-02-05 09:05 +0100, Angelo Compagnucci spake thusly:
 > 2016-02-04 17:23 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
-> > Next to Yanns comments I would prefer to use wget like we do elsewhere
-> > in Buildroot to download stuff.
+> > This no longer applies and as Yann mentioned it isn't really needed so
+> > I've dropped this hunk.
 > 
-> Argh! That curl was on purpose (probably I'm a novice in the buildroot
-> world, but not completely thoughtless!), wget it's not distributed
-> with Mac Os X and it's quite an accomplishment installing it [1].
+> I don't agree too much, giving hints to run buildroot on windows or
+> Mac Os X it's really important to grow our userbase and I think it
+> deserve it's own box on the download page!
 
-Three things:
+I think we should have just pointed to the Vagrant file, nothing more.
 
-  - wget is available from MacPorts, Homebrew and Fink; it is easy to
-    install; their documentation is pretty explicit (at leat for me who
-    does not even have a Mac, and never ever touched one).
+Really, if someone knows what a Vagrant file is, they surely know how to
+use it, no? Or are you going to further expand that section with help on
+how to use Vagrant? And Puppet, Chef and the clique?
 
-  - if you consider wget to be hard to install, what about Vagrant? I
-    doubt it is installed on a stock MacOS; surely the user will *have*
-    to install stuff on his system...
+> I'll submit a new patch soon.
 
-  - if someone is not able to replace the wget incantation with a similar
-    curl incantation (or the opposite), then there's a deeper problem;
-    this is really 101 [1]...
+We should stop at some point, and really expect that the user knows at
+least some basic requirements. And I believe basic knowledge of Linux,
+the command line, and a little bit of gray matter are required.
 
-So, totally irrelevant...
-
-> I'll send a patch soon.
-
-Which has already been applied, which is a little bit sad... :-(
-
-[1] https://en.wikipedia.org/wiki/101_%28number%29#In_education
+(and maybe I should stop ranting. ;-] )
 
 Regards,
 Yann E. MORIN.
