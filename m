@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:33 +0100
-Subject: [Buildroot] [PATCH/next 28/31] package/kodi-adsp-basic: new package
+Date: Sat, 20 Feb 2016 23:09:30 +0100
+Subject: [Buildroot] [PATCH/next 25/31] package/kodi-pvr-hdhomerun: new
+	package
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-29-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,71 +13,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-adsp-basic/Config.in            | 12 ++++++++++++
- package/kodi-adsp-basic/kodi-adsp-basic.hash |  2 ++
- package/kodi-adsp-basic/kodi-adsp-basic.mk   | 13 +++++++++++++
- package/kodi/Config.in                       |  1 +
- 4 files changed, 28 insertions(+)
- create mode 100644 package/kodi-adsp-basic/Config.in
- create mode 100644 package/kodi-adsp-basic/kodi-adsp-basic.hash
- create mode 100644 package/kodi-adsp-basic/kodi-adsp-basic.mk
+ package/kodi-pvr-hdhomerun/Config.in               |  9 +++++++++
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash |  2 ++
+ package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   | 15 +++++++++++++++
+ package/kodi/Config.in                             |  1 +
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/kodi-pvr-hdhomerun/Config.in
+ create mode 100644 package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
+ create mode 100644 package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
 
-diff --git a/package/kodi-adsp-basic/Config.in b/package/kodi-adsp-basic/Config.in
+diff --git a/package/kodi-pvr-hdhomerun/Config.in b/package/kodi-pvr-hdhomerun/Config.in
 new file mode 100644
-index 0000000..9ebc1ca
+index 0000000..ed5b914
 --- /dev/null
-+++ b/package/kodi-adsp-basic/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_KODI_ADSP_BASIC
-+	bool "kodi-adsp-basic"
-+	select BR2_PACKAGE_LIBPLATFORM
++++ b/package/kodi-pvr-hdhomerun/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_KODI_PVR_HDHOMERUN
++	bool "kodi-pvr-hdhomerun"
++	select BR2_PACKAGE_JSONCPP
 +	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_LIBHDHOMERUN
 +	help
-+	  This add-on contains basic dsp related parts to handle speaker
-+	  delays, channel related volume amplification. As mode it
-+	  supports a Dolby Pro Logic II compatible multichannel downmix
-+	  to stereo, which becomes available if only 2 channel output on
-+	  Kodi is selected.
++	  Kodi's HDHomeRun client addon
 +
-+	  https://github.com/kodi-adsp/adsp.basic
-diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.hash b/package/kodi-adsp-basic/kodi-adsp-basic.hash
++	  https://github.com/kodi-pvr/pvr.hdhomerun
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
 new file mode 100644
-index 0000000..e668ff2
+index 0000000..e822ae2
 --- /dev/null
-+++ b/package/kodi-adsp-basic/kodi-adsp-basic.hash
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 0ae320af73085c322671d4b361248ff4341a6a04bd81c8b699847d5b04da828f kodi-adsp-basic-cb56e0eb6530fd50a286d47ef0be529001e9d556.tar.gz
-diff --git a/package/kodi-adsp-basic/kodi-adsp-basic.mk b/package/kodi-adsp-basic/kodi-adsp-basic.mk
++sha256  356548f86616a421e0b1d7f2a91eb5159c74b666973faa9de626940eb89afc54  kodi-pvr-hdhomerun-8d7b8af10633ad995193fb045cbaac6094a8f98d.tar.gz
+diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
 new file mode 100644
-index 0000000..0b1ba95
+index 0000000..c35c38a
 --- /dev/null
-+++ b/package/kodi-adsp-basic/kodi-adsp-basic.mk
-@@ -0,0 +1,13 @@
++++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# kodi-adsp-basic
++# kodi-pvr-hdhomerun
 +#
 +################################################################################
 +
-+KODI_ADSP_BASIC_VERSION = cb56e0eb6530fd50a286d47ef0be529001e9d556
-+KODI_ADSP_BASIC_SITE = $(call github,kodi-adsp,adsp.basic,$(KODI_ADSP_BASIC_VERSION))
-+KODI_ADSP_BASIC_LICENSE = GPLv3+
-+KODI_ADSP_BASIC_LICENSE_FILES = LICENSE.md
-+KODI_ADSP_BASIC_DEPENDENCIES = libplatform kodi-platform
++# This cset is on the branch 'Jarvis'
++# When Kodi is updated, then this should be updated to the corresponding branch
++KODI_PVR_HDHOMERUN_VERSION = 8d7b8af10633ad995193fb045cbaac6094a8f98d
++KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
++KODI_PVR_HDHOMERUN_LICENSE = GPLv2+
++KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
++KODI_PVR_HDHOMERUN_DEPENDENCIES = jsoncpp kodi-platform libhdhomerun
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index b035a76..34f7644 100644
+index 017d607..daed533 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -237,6 +237,7 @@ menu "Audio decoder addons"
- endmenu
- 
- menu "Audio DSP addons"
-+	source "package/kodi-adsp-basic/Config.in"
- 	source "package/kodi-adsp-freesurround/Config.in"
- endmenu
- 
+@@ -248,6 +248,7 @@ menu "PVR addons"
+ 	source "package/kodi-pvr-dvblink/Config.in"
+ 	source "package/kodi-pvr-dvbviewer/Config.in"
+ 	source "package/kodi-pvr-filmon/Config.in"
++	source "package/kodi-pvr-hdhomerun/Config.in"
+ 	source "package/kodi-pvr-hts/Config.in"
+ 	source "package/kodi-pvr-iptvsimple/Config.in"
+ 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
 -- 
 2.7.0
