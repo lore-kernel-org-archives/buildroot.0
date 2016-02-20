@@ -1,34 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Feb 2016 23:39:51 +0100
-Subject: [Buildroot] Problem with package wvdial 1.61
-In-Reply-To: <CADj18OU-NiTPs0gk8RuQtfuepqytuaXRz7cCWL4-QmXwVSGt5w@mail.gmail.com>
-References: <CADj18OU-NiTPs0gk8RuQtfuepqytuaXRz7cCWL4-QmXwVSGt5w@mail.gmail.com>
-Message-ID: <56C8EB37.7020206@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 23:45:41 +0100
+Subject: [Buildroot] [PATCH 1/2] package/vim: add optional support for acl
+Message-ID: <1456008342-10748-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/18/16 10:02, Pascal K wrote:
-> --> WvDial: Internet dialer version 1.61
-> --> Warning: section [Dialer Defaults] does not exist in wvdial.conf.
+When acl was compiled before, vim will use it as optional dependency:
 
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/vim | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libacl.so.1]
+[...]
 
- You didn't report that bit above.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vim/vim.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- However, the [Dialer Defaults] section does exist... Just as a sanity check,
-can you remove the first (empty) line of the file? Else you'll have to dive into
-the wvdial code to find why it wouldn't find the Dialer Defaults section...
-
-
- Regards,
- Arnout
-
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index a6b75d0..d9e0b60 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -27,6 +27,13 @@ VIM_CONF_OPTS = --with-tlib=ncurses --enable-gui=no --without-x
+ VIM_LICENSE = Charityware
+ VIM_LICENSE_FILES = README.txt
+ 
++ifeq ($(BR2_PACKAGE_ACL),y)
++VIM_CONF_OPTS += --enable-acl
++VIM_DEPENDENCIES += acl
++else
++VIM_CONF_OPTS += --disable-acl
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ VIM_CONF_OPTS += --enable-selinux
+ VIM_DEPENDENCIES += libselinux
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0
