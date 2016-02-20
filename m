@@ -1,44 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2016 18:37:41 +0100
-Subject: [Buildroot] [PATCH 0/8] package/links: With or without you ;)
-In-Reply-To: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 18:38:37 +0100
+Subject: [Buildroot] [PATCH 1/8] package/links: add --with/--without-zlib
+In-Reply-To: <1455986411-14273-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160220173741.GF3418@free.fr>
+ <1455986411-14273-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160220173837.GG3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernds, All,
-
-Aha, I see I'm not the only one providing little jokes in the commit
-logs/titles! Thanks for the good laugh! ;-)
+Bernd, All,
 
 On 2016-02-20 17:40 +0100, Bernd Kuhls spake thusly:
-> this patch series adds --with/--without to CONF_OPTS as requested by
-> Thomas: http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/140285
-> 
-> Regards, Bernd
-> 
-> Bernd Kuhls (8):
->   package/links: add --with/--without-zlib
->   package/links: add --with/--without-lzma
->   package/links: add --with/--without-ssl
->   package/links: add --with/--without-libevent
->   package/links: add --with/--without-bzip2
->   package/links: add --with/--without-libtiff
->   package/links: add --disable-graphics
->   package/links: add --with/--without-libjpeg
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-I'll be reviewing those in a moment...
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  package/links/links.mk | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+> ---
+>  package/links/links.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
+> diff --git a/package/links/links.mk b/package/links/links.mk
+> index 4d2cb2e..8d7ecba 100644
+> --- a/package/links/links.mk
+> +++ b/package/links/links.mk
+> @@ -52,7 +52,10 @@ LINKS_DEPENDENCIES += xz
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +LINKS_CONF_OPTS += --with-zlib
+>  LINKS_DEPENDENCIES += zlib
+> +else
+> +LINKS_CONF_OPTS += --without-zlib
+>  endif
+>  
+>  $(eval $(autotools-package))
 > -- 
 > 2.7.0
 > 
