@@ -1,81 +1,51 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 20 Feb 2016 18:09:20 -0500
-Subject: [Buildroot] [PATCH v2 10/18] erlang-p1_stun: bump to version
-	0.9.0
-In-Reply-To: <20160220233043.2be4fa0c@free-electrons.com>
-References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
- <20160220233043.2be4fa0c@free-electrons.com>
-Message-ID: <CA+-urNRQdWeYMt4RxONJFMDTBV9EtcD_+TBV3G-PismHVUhhOA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Feb 2016 00:11:30 +0100
+Subject: [Buildroot] [PATCH] docs/manual: add info about AGPLv3 license
+In-Reply-To: <1456002529-21636-1-git-send-email-yegorslists@googlemail.com>
+References: <1456002529-21636-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <56C8F2A2.1040603@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 02/20/16 22:08, Yegor Yefremov wrote:
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Sat, Feb 20, 2016 at 5:30 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Frank Hunleth,
->
-> On Tue,  2 Feb 2016 14:57:36 -0500, Frank Hunleth wrote:
->> As part of the version change, the package name changed to use an
->> underscore rather than a hyphen. Fortunately, the name change doesn't
->> affect the Config.in option, so no legacy handling is needed.
->>
->> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->
-> As suggested by Romain in his review, I've dropped the rename.
-> Generally speaking, when things aren't clear between _ and -, I very
-> much prefer to see - used in package name (though I admit this is a
-> personal preference).
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Yes, I generally have the same preference. In the Erlang world, the
-style is to use underscores since module names can be represented as
-atoms. In theory, you can quote atoms if you want them to have
-hyphens, but it doesn't look pretty. In the end, I don't think that it
-bothers me either way, so I'm happy to leave it as is.
+ Since we have this for mongodb and monit, this could probably be considered a
+bugfix so for 2016.02.
 
->
->
->>  config BR2_PACKAGE_ERLANG_P1_STUN
->> -     bool "erlang-p1-stun"
->> -     select BR2_PACKAGE_ERLANG_P1_TLS
->> +     bool "erlang-p1_stun"
->> +     select BR2_PACKAGE_ERLANG_FAST_TLS
->
-> Build testing has shown that BR2_PACKAGE_ERLANG_FAST_TLS was not the
-> proper dependency, and instead keeping BR2_PACKAGE_ERLANG_P1_TLS was
-> the right solution. Could you double check why you switched to
-> fast_tls ?
+ Regards,
+ Arnout
 
-This was a mistake on my part. I fixed it in a patch that I hadn't
-sent to the list, so thanks for fixing that for me.
-
-Frank
-
->
-> So, I've applied to next, with the following changes:
->
->     [Thomas:
->      - do only the version bump, not the package rename, as suggested by
->        Romain Naour
->      - erlang-p1-stun continues to depend on erlang-p1-tls, not
->        erlang-fast_tls.]
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+> ---
+>  docs/manual/legal-notice.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+> index 5895224..0a91c37 100644
+> --- a/docs/manual/legal-notice.txt
+> +++ b/docs/manual/legal-notice.txt
+> @@ -74,6 +74,9 @@ file to inform you of relevant material that could not be saved.
+>  Here is a list of the licenses that are most widely used by packages in
+>  Buildroot, with the name used in the manifest files:
+>  
+> +* `AGPLv3`:
+> +  http://www.gnu.org/licenses/agpl-3.0.en.html[
+> +  GNU Affero General Public License, version 3];
+>  * `GPLv2`:
+>    http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
+>    GNU General Public License, version 2];
+> 
 
 
 -- 
-Frank Hunleth
-Troodon Software LLC
-Embedded Software Development
-http://troodon-software.com/
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
