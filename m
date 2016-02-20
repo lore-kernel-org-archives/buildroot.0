@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2016 18:40:40 +0100
-Subject: [Buildroot] [PATCH 6/8] package/links: add
- --with/--without-libtiff
-In-Reply-To: <1455986411-14273-7-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 18:42:13 +0100
+Subject: [Buildroot] [PATCH 7/8] package/links: add --disable-graphics
+In-Reply-To: <1455986411-14273-8-git-send-email-bernd.kuhls@t-online.de>
 References: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
- <1455986411-14273-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160220174040.GK3418@free.fr>
+ <1455986411-14273-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160220174213.GL3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,24 +22,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/links/links.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/links/links.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 > diff --git a/package/links/links.mk b/package/links/links.mk
-> index 26af392..3486d94 100644
+> index 3486d94..f42f21c 100644
 > --- a/package/links/links.mk
 > +++ b/package/links/links.mk
-> @@ -31,7 +31,10 @@ ifeq ($(BR2_PACKAGE_JPEG),y)
->  LINKS_DEPENDENCIES += jpeg
+> @@ -36,6 +36,8 @@ LINKS_DEPENDENCIES += tiff
+>  else
+>  LINKS_CONF_OPTS += --without-libtiff
 >  endif
->  ifeq ($(BR2_PACKAGE_TIFF),y)
-> +LINKS_CONF_OPTS += --with-libtiff
->  LINKS_DEPENDENCIES += tiff
 > +else
-> +LINKS_CONF_OPTS += --without-libtiff
->  endif
+> +LINKS_CONF_OPTS += --disable-graphics
 >  endif
 >  
+>  ifeq ($(BR2_PACKAGE_BZIP2),y)
 > -- 
 > 2.7.0
 > 
