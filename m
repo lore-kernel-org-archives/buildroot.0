@@ -1,151 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 10:22:33 +0100
-Subject: [Buildroot] [git commit branch/next] mali-t76x: add new package
-Message-ID: <20160220110711.6132480AEB@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 20 Feb 2016 12:07:54 +0100
+Subject: [Buildroot] [PATCH v3] support/misc: Adding Vagrant file for
+	provisioning
+In-Reply-To: <20160220105636.GC3418@free.fr>
+References: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
+ <8737t8xx5a.fsf@dell.be.48ers.dk>
+ <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
+ <20160220105636.GC3418@free.fr>
+Message-ID: <CA+TH9VnQB_-2qKy2yRzOT6jCzz5hv4xiioW5r5g8F69G2sgrZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=536ba133b04aa8b4991c411dcd2b76be849127ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Yann E. MORIN ,
 
-Package provides the binary user-space components for the ARM Mali
-Midgard T76X GPU.
+2016-02-20 11:56 GMT+01:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Angelo, All,
+>
+> On 2016-02-05 09:05 +0100, Angelo Compagnucci spake thusly:
+>> 2016-02-04 17:23 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>> > This no longer applies and as Yann mentioned it isn't really needed so
+>> > I've dropped this hunk.
+>>
+>> I don't agree too much, giving hints to run buildroot on windows or
+>> Mac Os X it's really important to grow our userbase and I think it
+>> deserve it's own box on the download page!
+>
+> I think we should have just pointed to the Vagrant file, nothing more.
+>
+> Really, if someone knows what a Vagrant file is, they surely know how to
+> use it, no? Or are you going to further expand that section with help on
+> how to use Vagrant? And Puppet, Chef and the clique?
 
-Note that this package requires a kernel with the ARM Mali Midgard GPU
-Kernel Drivers enabled.
+Obviously, I'm not in the position to steer the project in a way or
+another, but IMHO giving a little bit of advice on how to run
+Buildroot on others OSes could only benefit the project as a whole.
 
-Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/Config.in                |  1 +
- package/mali-t76x/Config.in      | 28 ++++++++++++++++++++++++++++
- package/mali-t76x/egl.pc         | 11 +++++++++++
- package/mali-t76x/glesv2.pc      | 11 +++++++++++
- package/mali-t76x/mali-t76x.hash |  2 ++
- package/mali-t76x/mali-t76x.mk   | 27 +++++++++++++++++++++++++++
- 6 files changed, 80 insertions(+)
+And please stop with that Puppet, Chef and other amenities, they are
+not meant to rapidly build a virtual machine with some software inside
+and nobody talked about them than you.
 
-diff --git a/package/Config.in b/package/Config.in
-index 7a9ed0a..11569d3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -399,6 +399,7 @@ endif
- 	source "package/lshw/Config.in"
- 	source "package/lsuio/Config.in"
- 	source "package/lvm2/Config.in"
-+	source "package/mali-t76x/Config.in"
- 	source "package/mdadm/Config.in"
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
-diff --git a/package/mali-t76x/Config.in b/package/mali-t76x/Config.in
-new file mode 100644
-index 0000000..6c2ae4e
---- /dev/null
-+++ b/package/mali-t76x/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_MALI_T76X
-+	bool "mali-t76x"
-+	select BR2_PACKAGE_MESA3D_HEADERS
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_arm
-+	help
-+	  Install the binary user-space components for the ARM Mali Midgard
-+	  T76X GPU. This package requires a kernel with the ARM Mali Midgard
-+	  GPU Kernel Drivers enabled.
-+
-+	  Source: http://malideveloper.arm.com/resources/drivers/
-+
-+if BR2_PACKAGE_MALI_T76X
-+
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "mali-t76x"
-+
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "mali-t76x"
-+
-+endif
-+
-+comment "mali-t76x needs an (e)glibc toolchain with armhf enabled"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-diff --git a/package/mali-t76x/egl.pc b/package/mali-t76x/egl.pc
-new file mode 100644
-index 0000000..614b700
---- /dev/null
-+++ b/package/mali-t76x/egl.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr/
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: egl
-+Description: ARM Mali implementation of EGL
-+Version: 1.5
-+Requires:
-+Libs: -L${libdir} -lEGL -lGLESv2
-+Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-diff --git a/package/mali-t76x/glesv2.pc b/package/mali-t76x/glesv2.pc
-new file mode 100644
-index 0000000..5997eac
---- /dev/null
-+++ b/package/mali-t76x/glesv2.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
-+
-+Name: glesv2
-+Description: ARM Mali implementation of OpenGL ESv2
-+Version: 2.0
-+Requires:
-+Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
-+Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-diff --git a/package/mali-t76x/mali-t76x.hash b/package/mali-t76x/mali-t76x.hash
-new file mode 100644
-index 0000000..a754b98
---- /dev/null
-+++ b/package/mali-t76x/mali-t76x.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  5a0b00438edc8066b374481d3332a43c07ec2bd3bc73265983a968970f754902  mali-t76x_r5p0-06rel0_linux_1+fbdev.tar.gz
-diff --git a/package/mali-t76x/mali-t76x.mk b/package/mali-t76x/mali-t76x.mk
-new file mode 100644
-index 0000000..702f583
---- /dev/null
-+++ b/package/mali-t76x/mali-t76x.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# mali-t76x
-+#
-+################################################################################
-+
-+MALI_T76X_VERSION = r5p0-06rel0
-+MALI_T76X_SOURCE = mali-t76x_$(MALI_T76X_VERSION)_linux_1+fbdev.tar.gz
-+MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T76X_VERSION)
-+
-+MALI_T76X_INSTALL_STAGING = YES
-+MALI_T76X_PROVIDES = libegl libgles
-+
-+define MALI_T76X_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 755 $(@D)/*.so $(STAGING_DIR)/usr/lib/
-+
-+	$(INSTALL) -D -m 0644 package/mali-t76x/egl.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/mali-t76x/glesv2.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-+endef
-+
-+define MALI_T76X_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/*.so $(TARGET_DIR)/usr/lib/
-+endef
-+
-+$(eval $(generic-package))
+As I stated before, the goal here is to give the opportunity to the
+people who cannot run Buildroot natively to use it anyway, in a simple
+to run Vm.
+
+Nothing more nothing less.
+
+>
+>> I'll submit a new patch soon.
+>
+> We should stop at some point, and really expect that the user knows at
+> least some basic requirements. And I believe basic knowledge of Linux,
+> the command line, and a little bit of gray matter are required.
+
+Again, giving advice and being friendly on how a user wants to run
+buildroot in his own machine could only benefit the project.
+
+And little bit of modernity sometime it's not so bad!
+
+> (and maybe I should stop ranting. ;-] )
+
+Yes, I also think so :)
+
+Sincerely, Angelo
+
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
