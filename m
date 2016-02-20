@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 16:54:50 +0100
-Subject: [Buildroot] [PATCH v5 20/20] python-crossbar: new package
-In-Reply-To: <CAGm1_ktxUzHSBiOak_XKjNAXquQu2KK431n5wH1b02BLJw+P9Q@mail.gmail.com>
-References: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
- <1455188328-7595-3-git-send-email-mc5686@mclink.it>
- <20160220153848.0a8c45fd@free-electrons.com>
- <CAGm1_ktxUzHSBiOak_XKjNAXquQu2KK431n5wH1b02BLJw+P9Q@mail.gmail.com>
-Message-ID: <20160220165450.6cdfe844@free-electrons.com>
+Date: Sat, 20 Feb 2016 16:58:29 +0100
+Subject: [Buildroot] [git commit] erlang-rebar: fix license variables
+Message-ID: <20160220160302.A2D1580E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=498055a8c2e66a8a36b6205555b1c7e806b4d31f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Feb 2016 16:46:28 +0100, Yegor Yefremov wrote:
+The erlang-rebar package uses ERLANG_ as the prefix for its license
+variables, therefore overriding the license information from the
+erlang package. This commit fixes this by using the appropriate
+ERLANG_REBAR_ suffix.
 
-> Have you tried this example with PYC only version?
-> 
-> http://crossbar.io/docs/Getting-started-with-Python/
-> 
-> crossbar init --template hello:python --appdir $HOME/hello
-> crossbar start --cbdir /home/oberstet/hello/.crossbar
-> 
-> See my attempt to find a solution for this issue:
-> https://github.com/crossbario/crossbar/pull/638
+Reported-by: Romain Naour <romain.naour@openwide.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang-rebar/erlang-rebar.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-No, I only tried "crossbar version". Since the commit log did not
-give any details about the failing scenario, I couldn't know how to
-reproduce the issue.
-
-I added a comment in your pull request, to support your claim. However,
-I believe it is indeed a bit horrible to add all this code. Why is the
-code looking for process.py in the first place rather than using the
-normal Python import logic, which properly works with .pyc files only?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/erlang-rebar/erlang-rebar.mk b/package/erlang-rebar/erlang-rebar.mk
+index f29eb75..d2189e1 100644
+--- a/package/erlang-rebar/erlang-rebar.mk
++++ b/package/erlang-rebar/erlang-rebar.mk
+@@ -13,8 +13,8 @@ ERLANG_REBAR_SITE = $(call github,rebar,rebar,$(ERLANG_REBAR_VERSION))
+ 
+ # Although the file LICENSE state Apache-2.0, a lot (if not all) the files
+ # in src/ bear the MIT licence.
+-ERLANG_LICENSE = Apache-2.0, MIT
+-ERLANG_LICENSE_FILES = LICENSE
++ERLANG_REBAR_LICENSE = Apache-2.0, MIT
++ERLANG_REBAR_LICENSE_FILES = LICENSE
+ 
+ # We do not have a target variant, so just define the dependencies,
+ # configure and build commands for the host variant.
