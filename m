@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:29 +0100
-Subject: [Buildroot] [PATCH/next 24/31] package/kodi-visualisation-fountain:
-	new package
+Date: Sat, 20 Feb 2016 23:09:32 +0100
+Subject: [Buildroot] [PATCH/next 27/31] package/kodi-adsp-freesurround: new
+	package
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-28-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,73 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-fountain/Config.in                 | 11 +++++++++++
- .../kodi-visualisation-fountain.hash                          |  2 ++
- .../kodi-visualisation-fountain.mk                            | 11 +++++++++++
- package/kodi/Config.in                                        |  1 +
- 4 files changed, 25 insertions(+)
- create mode 100644 package/kodi-visualisation-fountain/Config.in
- create mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
- create mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+ package/kodi-adsp-freesurround/Config.in                   | 11 +++++++++++
+ package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash |  2 ++
+ package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk   | 13 +++++++++++++
+ package/kodi/Config.in                                     |  4 ++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/kodi-adsp-freesurround/Config.in
+ create mode 100644 package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
+ create mode 100644 package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
 
-diff --git a/package/kodi-visualisation-fountain/Config.in b/package/kodi-visualisation-fountain/Config.in
+diff --git a/package/kodi-adsp-freesurround/Config.in b/package/kodi-adsp-freesurround/Config.in
 new file mode 100644
-index 0000000..2c52edd
+index 0000000..3d6b129
 --- /dev/null
-+++ b/package/kodi-visualisation-fountain/Config.in
++++ b/package/kodi-adsp-freesurround/Config.in
 @@ -0,0 +1,11 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
-+	bool "kodi-visualisation-fountain"
-+	depends on BR2_PACKAGE_KODI_GL # libsoil
-+	select BR2_PACKAGE_LIBSOIL
++config BR2_PACKAGE_KODI_ADSP_FREESURROUND
++	bool "kodi-adsp-freesurround"
++	select BR2_PACKAGE_LIBPLATFORM
++	select BR2_PACKAGE_KODI_PLATFORM
 +	help
-+	  Fountain visualization for Kodi
++	  FreeSurround is meant to be the KODI equivalent of your hi-fi
++	  receiver's Dolby ProLogic II button. It's purpose is to decode
++	  surround information from your stereo music and to produce
++	  multichannel output from it.
 +
-+	  https://github.com/notspiff/visualization.fountain
-+
-+comment "fountain needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
++	  https://github.com/kodi-adsp/adsp.freesurround
+diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
 new file mode 100644
-index 0000000..8dc933e
+index 0000000..f23717f
 --- /dev/null
-+++ b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
++++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 7b2867f415f22e4bc4ba834034f00117fcf76774aea0afc7bf30b5f2d1991dd7 kodi-visualisation-fountain-f22deacd2396a204694d346f85369ea9ea70e16f.tar.gz
-diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
++sha256 652c32d0c4b61343cbed13b6edd1ab4ad35280240a0ddb386f04adaa46986e7f kodi-adsp-freesurround-08b691d3d9a0382d2f6f789a31614fb02512036c.tar.gz
+diff --git a/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
 new file mode 100644
-index 0000000..5684402
+index 0000000..49cf673
 --- /dev/null
-+++ b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
-@@ -0,0 +1,11 @@
++++ b/package/kodi-adsp-freesurround/kodi-adsp-freesurround.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-visualisation-fountain
++# kodi-adsp-freesurround
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_FOUNTAIN_VERSION = f22deacd2396a204694d346f85369ea9ea70e16f
-+KODI_VISUALISATION_FOUNTAIN_SITE = $(call github,notspiff,visualization.fountain,$(KODI_VISUALISATION_FOUNTAIN_VERSION))
-+KODI_VISUALISATION_FOUNTAIN_DEPENDENCIES = kodi libsoil
++KODI_ADSP_FREESURROUND_VERSION = 08b691d3d9a0382d2f6f789a31614fb02512036c
++KODI_ADSP_FREESURROUND_SITE = $(call github,kodi-adsp,adsp.freesurround,$(KODI_ADSP_FREESURROUND_VERSION))
++KODI_ADSP_FREESURROUND_LICENSE = GPLv3+
++KODI_ADSP_FREESURROUND_LICENSE_FILES = LICENSE.md
++KODI_ADSP_FREESURROUND_DEPENDENCIES = libplatform kodi-platform
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 57e84ec..017d607 100644
+index 8f44581..b035a76 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -279,6 +279,7 @@ endmenu
+@@ -236,6 +236,10 @@ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-vgmstream/Config.in"
+ endmenu
  
- menu "Visualisations"
- 	source "package/kodi-visualisation-fishbmc/Config.in"
-+	source "package/kodi-visualisation-fountain/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
- 	source "package/kodi-visualisation-spectrum/Config.in"
++menu "Audio DSP addons"
++	source "package/kodi-adsp-freesurround/Config.in"
++endmenu
++
+ menu "Audio encoder addons"
+ 	source "package/kodi-audioencoder-flac/Config.in"
+ 	source "package/kodi-audioencoder-lame/Config.in"
 -- 
 2.7.0
