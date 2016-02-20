@@ -1,30 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:18:06 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/libarchive: add optional
- support for bzip2
-In-Reply-To: <1455976435-2614-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455976435-2614-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160220151806.62441ac5@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 15:21:42 +0100
+Subject: [Buildroot] [PATCH 1/2] package/links: add optional support for
+	libevent
+References: <1455137922-18060-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160216231104.643353ad@free-electrons.com>
+Message-ID: <mc9mpcxlr5.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Am Tue, 16 Feb 2016 23:11:04 +0100 schrieb Thomas Petazzoni:
 
-On Sat, 20 Feb 2016 14:53:54 +0100, Bernd Kuhls wrote:
+> I've applied both patches to master. However, could you send another
+> patch that forces --with-<foo>/--without-<foo> ? Since we were not doing
+> that for other dependencies, I applied your patches as-is, but I would
+> like to see those options added explicitly.
 
-> configure.ac always checks bz2 support unless --without-bz2lib is used:
-> https://github.com/libarchive/libarchive/blob/master/configure.ac#L300
-> 
-> Therefore we do not need --with-bz2lib.
+Hi Thomas,
 
-Still, we prefer to be explicit, and pass --with-<foo> for all
-AC_ARG_WITH() options.
+do you prefer the patches for the master or the next branch?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
