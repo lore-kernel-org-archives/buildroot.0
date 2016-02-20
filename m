@@ -1,131 +1,195 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Sat, 20 Feb 2016 10:34:42 +0100
-Subject: [Buildroot] [PATCH 1/2] package/Makefile.in: append endianness
- argument to TARGET_LD for MIPS
-In-Reply-To: <56C4F70A.8060506@mind.be>
-References: <1455728874-47789-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160217221313.439547e4@free-electrons.com>
- <56C4F70A.8060506@mind.be>
-Message-ID: <CAGszK3iYC7MmwnNpqoSHBM7G3o-dpviq+x9yF+DcKtM7d1Sv_A@mail.gmail.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sat, 20 Feb 2016 10:55:49 +0100
+Subject: [Buildroot] [PATCH v4] package/python-pillow: new package
+Message-ID: <1455962149-29459-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 17, 2016 at 11:41 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 17-02-16 22:13, Thomas Petazzoni wrote:
->> Dear Vicente Olivert Riera,
->>
->> On Wed, 17 Feb 2016 17:07:53 +0000, Vicente Olivert Riera wrote:
->>> We don't use a wrapper for ld in Buildroot like we do for gcc, so when
->>> using ld for linking (instead of gcc) the process can fail if the
->>> appropriate arguments are not passed to it. For instance, this happens
->>> when building perf (Linux -> Linux Kernel Tools -> perf) for MIPS little
->>> endian, and this is how the error message looks like:
-> [snip]
->>> +# Append the endianness argument to ld for MIPS architecture in order to
->>> +# avoid problems like this one when using ld instead of gcc for linking:
->>> +# mips-linux-gnu-ld: failed to merge target specific data of file foo.o
->>> +# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
->>> +# target is big endian
->>> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
->>> +ifeq ($(BR2_ENDIAN),"BIG")
->>> +TARGET_LD += -EB
->>> +else
->>> +TARGET_LD += -EL
->>> +endif
->>> +endif
->>
->> This is really an horrible fix IMO. First because TARGET_LD is only
->> meant to contain the path to the linker, and not additional flags.
->> Additional flags should go in TARGET_LDFLAGS.
->>
->> And secondly because programs should not use ld directly for linking,
->> but gcc. Remember Vicente, you already fixed this issue in other
->> packages and the fix was to use gcc instead of ld.
->
->  So, are we really going to "fix" all packages that use ld directly? I don't see
-> why a package shouldn't be allowed to call ld when it is really doing linking
-> without any other toolchainy stuff.
->
->  LDFLAGS has a bit of the same problem: there will probably be packages that
-> don't (completely) honour it.
->
->  For CFLAGS, that was the reason why we introduced the wrapper. So I think we
-> should just add a wrapper for ld as well.
->
->  Ideally the ld wrapper and the gcc wrapper should be refactored into the same
-> source file, but I think we could start out with separate sources and factor later.
->
->  Any takers?
->
->
->  Unless Vicente volunteers to work on an ld wrapper, I guess on the short term
-> we should take patches like these. That said, it should really be passed through
-> LDFLAGS and not LD itself.
+This patch adds python-pillow, the friendly python image library fork.
 
-Hi,
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changes:
+v3 -> v4:
 
-I'm following this discussion in the scope of this 'ld wrapper' in
-toolchain-wrapper, as there are still other packages out there that
-have this issue (e.g. Dmalloc using ld directly). Without proper
-knowledge on what is the 'correct' way I saw also following (old)
-comment I wanted to point to:
+* Fixing a couple of typos
 
-From: http://lists.busybox.net/pipermail/buildroot/2013-june/073430.html
-On 6 June 2013, Markos Chandras <hwoarang@gentoo.org> wrote:
-[snip]
-> I am  inclined to say that binutils do not need to be changed, because
-> you should never call the linker directly to do the linking (I recall
-> directfb does that and fails with the same problem). You should be
-> using gcc instead and it will pass all the appropriate linker flags to
-> the linker. Such build systems need fixing instead of trying to
-> workaround the problem in the toolchain.
->
-> Having said that, the entire patchset [heyleke: topic was ld-toolchain-wrapper] could be seen as a temporary
-> workaround for this problem. In the libiscsi case, I need to
-> understand why libtool invokes the linker without the correct flags.
-> If you try to compile a simple test program using the buildroot
-> mip64-linux-gcc toolchain (pass -v as well) you will  notice that gcc
-> passes -melf64btsmip correctly.
+v2 -> v3:
 
-That  being said and pointed to, there is this old patchset from
-Thomas Petazzoni on toolchain-wrapper for 'ld'. The  main principles
-are not changes since the original patch, but toolchain-wrapper was
-moved and other patches were added later, so I had to rework it a bit,
-and tested it, it fixes the issue for mips and dmalloc package, the
-original patch and discussion:
-Http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/60942
+* Simplified package
+* Better handling of setup type
+* Adding hash file
 
-Although it was reviewed back then, it looks like it never made into
-the buildroot repository. As said, I've rebased and reworked it a bit,
-I'll put it on the mailing list. But as said, I'm not saying it is the
-'correct' or 'incorrect' way of fixing this mips-ld stuff, but it does
-fix it for the way dmalloc's buildsystem is constructed (using ld
-directly).
+v1 -> v2:
 
-Best regards,
+* Added patch to remove platform guessing, now headers should be searched in buildroot folders
+* Fixed optional configure options
 
-Jan
+ package/Config.in                                  |  1 +
+ ...setup.py-removing-unneeded-platform-guess.patch | 85 ++++++++++++++++++++++
+ package/python-pillow/Config.in                    | 12 +++
+ package/python-pillow/python-pillow.hash           |  2 +
+ package/python-pillow/python-pillow.mk             | 17 +++++
+ 5 files changed, 117 insertions(+)
+ create mode 100644 package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
+ create mode 100644 package/python-pillow/Config.in
+ create mode 100644 package/python-pillow/python-pillow.hash
+ create mode 100644 package/python-pillow/python-pillow.mk
 
->
->  Regards,
->  Arnout
->
->>
->> Thomas
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/Config.in b/package/Config.in
+index 3eb3618..55f16cc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -674,6 +674,7 @@ menu "External python modules"
+ 	source "package/python-paho-mqtt/Config.in"
+ 	source "package/python-pam/Config.in"
+ 	source "package/python-paramiko/Config.in"
++	source "package/python-pillow/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-protobuf/Config.in"
+ 	source "package/python-psutil/Config.in"
+diff --git a/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
+new file mode 100644
+index 0000000..5f43013
+--- /dev/null
++++ b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
+@@ -0,0 +1,85 @@
++From cb8c67c0b7ee805100c381300ea29262e8b5838a Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Thu, 22 Oct 2015 22:45:31 +0200
++Subject: [PATCH] setup.py: removing unneeded platform guess
++
++Platform guess is not needed when cross compiling on buildroot
++so removing it.
++
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ setup.py | 58 +---------------------------------------------------------
++ 1 file changed, 1 insertion(+), 57 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 4cb7257..038b7dc 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -241,63 +241,7 @@ class pil_build_ext(build_ext):
++                 _add_directory(include_dirs, "/usr/X11/include")
++ 
++         elif sys.platform.startswith("linux"):
++-            arch_tp = (plat.processor(), plat.architecture()[0])
++-            if arch_tp == ("x86_64", "32bit"):
++-                # 32 bit build on 64 bit machine.
++-                _add_directory(library_dirs, "/usr/lib/i386-linux-gnu")
++-            else:
++-                for platform_ in arch_tp:
++-
++-                    if not platform_:
++-                        continue
++-
++-                    if platform_ in ["x86_64", "64bit"]:
++-                        _add_directory(library_dirs, "/lib64")
++-                        _add_directory(library_dirs, "/usr/lib64")
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/x86_64-linux-gnu")
++-                        break
++-                    elif platform_ in ["i386", "i686", "32bit"]:
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/i386-linux-gnu")
++-                        break
++-                    elif platform_ in ["aarch64"]:
++-                        _add_directory(library_dirs, "/usr/lib64")
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/aarch64-linux-gnu")
++-                        break
++-                    elif platform_ in ["arm", "armv7l"]:
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/arm-linux-gnueabi")
++-                        break
++-                    elif platform_ in ["ppc64"]:
++-                        _add_directory(library_dirs, "/usr/lib64")
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/ppc64-linux-gnu")
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/powerpc64-linux-gnu")
++-                        break
++-                    elif platform_ in ["ppc"]:
++-                        _add_directory(library_dirs, "/usr/lib/ppc-linux-gnu")
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/powerpc-linux-gnu")
++-                        break
++-                    elif platform_ in ["s390x"]:
++-                        _add_directory(library_dirs, "/usr/lib64")
++-                        _add_directory(
++-                            library_dirs, "/usr/lib/s390x-linux-gnu")
++-                        break
++-                    elif platform_ in ["s390"]:
++-                        _add_directory(library_dirs, "/usr/lib/s390-linux-gnu")
++-                        break
++-                else:
++-                    raise ValueError(
++-                        "Unable to identify Linux platform: `%s`" % platform_)
++-
++-            # XXX Kludge. Above /\ we brute force support multiarch. Here we
++-            # try Barry's more general approach. Afterward, something should
++-            # work ;-)
++-            self.add_multiarch_paths()
+++            pass
++ 
++         elif sys.platform.startswith("gnu"):
++             self.add_multiarch_paths()
++-- 
++1.9.1
++
+diff --git a/package/python-pillow/Config.in b/package/python-pillow/Config.in
+new file mode 100644
+index 0000000..d5c3809
+--- /dev/null
++++ b/package/python-pillow/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_PILLOW
++	bool "python-pillow"
++	help
++	  Pillow is the "friendly" PIL fork by Alex Clark and Contributors. PIL is
++	  the Python Imaging Library by Fredrik Lundh and Contributors.
++
++	  Pillow relies on external libraries to provide support various
++	  image formats. Select the corresponding package(s) to get this
++	  support. Pillow can use jpeg, zlib (for PNG), tiff, freetype, webp,
++	  and openjpeg (JPEG-2000).
++
++	  https://pypi.python.org/pypi/Pillow/
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+new file mode 100644
+index 0000000..fd2978a
+--- /dev/null
++++ b/package/python-pillow/python-pillow.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 780f21465e2b7690fc55925188373cd54668ea4d71964f971e1fea4bc16d365e  python-pillow-3.0.0.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+new file mode 100644
+index 0000000..a956a2e
+--- /dev/null
++++ b/package/python-pillow/python-pillow.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# python-pillow
++#
++################################################################################
++
++PYTHON_PILLOW_VERSION = 3.0.0
++PYTHON_PILLOW_SITE = $(call github,python-pillow,Pillow,$(PYTHON_PILLOW_VERSION))
++PYTHON_PILLOW_SETUP_TYPE = setuptools
++PYTHON_PILLOW_DEPENDENCIES = $(if $(BR2_PACKAGE_JPEG),jpeg) \
++      $(if $(BR2_PACKAGE_ZLIB),zlib) \
++      $(if $(BR2_PACKAGE_TIFF),tiff) \
++      $(if $(BR2_PACKAGE_FREETYPE),freetype) \
++      $(if $(BR2_PACKAGE_WEBP),webp) \
++      $(if $(BR2_PACKAGE_OPENJPEG),openjpeg)
++
++$(eval $(python-package))
+-- 
+1.9.1
