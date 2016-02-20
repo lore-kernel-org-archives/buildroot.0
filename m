@@ -1,42 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 23:04:19 +0100
-Subject: [Buildroot] [git commit branch/next] package/kexec: bump version to
-	2.0.11
-Message-ID: <20160220220649.F151C801E0@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 20 Feb 2016 23:06:57 +0100
+Subject: [Buildroot] [PATCH v4] qt5tools: new package
+In-Reply-To: <20160219143219.GA30826@kwain>
+References: <1454682615-3448-1-git-send-email-ps.report@gmx.net>
+ <20160219143219.GA30826@kwain>
+Message-ID: <20160220230657.46a13638@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff370f7a69b17a7dbe9b9d8dcc530c2a8ab3da18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Antoine Tenart,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 19 Feb 2016 15:32:20 +0100, Antoine Tenart <antoine.tenart@free-electrons.com> wrote:
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index fa2d8be..24a71e7 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256	8ae34a9ceb76350954e1e1e3ca9ab51da15862bd5f2fd14392208e60fb454f71	kexec-tools-2.0.9.tar.xz
-+sha256	b1097986ffdb928cf41a94e8a5dfddc981a8fa710cccf13298e7f8dd939a2ee3	kexec-tools-2.0.11.tar.xz
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index d158406..d27c514 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.9
-+KEXEC_VERSION = 2.0.11
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPLv2
+> Hello Peter,
+> 
+> I tested your patch to build the QT5 Linguistic Tools, and it worked
+> well :)
+> 
+
+Thanks for testing...
+
+> However I have one comment:
+> 
+> On Fri, Feb 05, 2016 at 03:30:15PM +0100, Peter Seiderer wrote:
+> > +
+> > +define QT5TOOLS_INSTALL_STAGING_CMDS
+> 
+> I think you need to call the 'install' target here, to install the QT5
+> Tools cmake modules in the host directory:
+> 
+> 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> 
+
+Thanks for the hint, will send an updated patch soon, mind to give the cmake
+part a little test?
+
+Regards,
+Peter
+
+> > +	$(foreach p,$(QT5TOOLS_INSTALL_STAGING_y), \
+> > +		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(HOST_DIR)/usr/bin/$(p)$(sep))
+> > +endef
+> 
+> Thanks,
+> 
+> Antoine
+> 
