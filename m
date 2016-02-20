@@ -1,188 +1,187 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 20 Feb 2016 23:08:03 +0100
-Subject: [Buildroot] [PATCH v5] qt5tools: new package
-Message-ID: <1456006083-15740-1-git-send-email-ps.report@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 23:09:06 +0100
+Subject: [Buildroot] [PATCH/next 01/31] package/kodi-visualisation-goom: new
+	package
+In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- host programs: lconvert, lrelease and lupdate
-- target programs: pixeltool, qtdiag, qtpath and qtplugininfo
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v4 -> v5:
-  - use install target for linguist staging install, copy
-    cmake module files too (suggested by Antoine Tenart)
+ Config.in.legacy                                   | 11 ++++++++
+ .../0001-cross-compile.patch                       | 32 ++++++++++++++++++++++
+ package/kodi-visualisation-goom/Config.in          | 10 +++++++
+ .../kodi-visualisation-goom.hash                   |  2 ++
+ .../kodi-visualisation-goom.mk                     | 14 ++++++++++
+ package/kodi/Config.in                             | 10 +------
+ package/kodi/kodi.mk                               |  7 +----
+ 7 files changed, 71 insertions(+), 15 deletions(-)
+ create mode 100644 package/kodi-visualisation-goom/0001-cross-compile.patch
+ create mode 100644 package/kodi-visualisation-goom/Config.in
+ create mode 100644 package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+ create mode 100644 package/kodi-visualisation-goom/kodi-visualisation-goom.mk
 
-Changes v3 -> v4:
-  - fix trailing whitespace
-
-Changes v2 -> v3:
-  - rebased (update to qt-5.5.1)
-  - drop unneeded select libpng line (Thomas Petazzoni)
-  - drop unneeded line break (Thomas Petazzoni)
-  - pixeltool needs BR2_PACKAGE_QT5BASE_GUI and
-    BR2_PACKAGE_QT5BASE_WIDGETS too
-  - use foreach instead of repetitive open coding (Thomas Petazzoni)
-  - install host tools to host directory instead of staging
-    directory (Thomas Petazzoni)
-  - add more comment about linguist tools dependency on
-    qt5declarative (Thomas Petazzoni)
-
-Changes v1 -> v2:
-  - add target programs, reword commit message
----
- package/qt5/Config.in              |  1 +
- package/qt5/qt5tools/Config.in     | 42 ++++++++++++++++++++++++
- package/qt5/qt5tools/qt5tools.hash |  2 ++
- package/qt5/qt5tools/qt5tools.mk   | 66 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 111 insertions(+)
- create mode 100644 package/qt5/qt5tools/Config.in
- create mode 100644 package/qt5/qt5tools/qt5tools.hash
- create mode 100644 package/qt5/qt5tools/qt5tools.mk
-
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index ad6226e..1c42102 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -42,6 +42,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5sensors/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
-+source "package/qt5/qt5tools/Config.in"
- source "package/qt5/qt5webchannel/Config.in"
- source "package/qt5/qt5websockets/Config.in"
- source "package/qt5/qt5x11extras/Config.in"
-diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3677f86..cd8d939 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,6 +143,17 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++
++comment "Legacy options removed in 2016.05"
++
++config BR2_PACKAGE_KODI_GOOM
++	bool "Goom support in Kodi was moved to an addon"
++	select BR2_LEGACY
++	select BR2_PACKAGE_KODI_VISUALISATION_GOOM
++	help
++	  Goom support in Kodi was moved to an addon
++
++###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
+ config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
+diff --git a/package/kodi-visualisation-goom/0001-cross-compile.patch b/package/kodi-visualisation-goom/0001-cross-compile.patch
 new file mode 100644
-index 0000000..9e939f2
+index 0000000..8dd0fe9
 --- /dev/null
-+++ b/package/qt5/qt5tools/Config.in
-@@ -0,0 +1,42 @@
-+config BR2_PACKAGE_QT5TOOLS
-+	bool "qt5tools"
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
++++ b/package/kodi-visualisation-goom/0001-cross-compile.patch
+@@ -0,0 +1,32 @@
++Fix cross-compilation
 +
-+	  This package corresponds to the qt5tools module.
++Use the cross-compiler and not the host version.
 +
-+	  http://qt.io
++Patch sent upstream:
++https://github.com/notspiff/visualization.goom/pull/4
 +
-+if BR2_PACKAGE_QT5TOOLS
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
-+	bool "Linguist host tools (lconvert, lrelease, lupdate)"
-+	help
-+	  This option enables the linguist host tools
-+	  lconvert, lrelease and lupdate.
-+
-+config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
-+	bool "pixeltool"
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5BASE_PNG # saving png images
-+	help
-+	  Compile and install the pixeltool program.
-+
-+config BR2_PACKAGE_QT5TOOLS_QTDIAG
-+	bool "qtdiag"
-+	help
-+	  Compile and install the qtdiag program.
-+
-+config BR2_PACKAGE_QT5TOOLS_QTPATHS
-+	bool "qtpaths"
-+	help
-+	  Compile and install the qtpaths program.
-+
-+config BR2_PACKAGE_QT5TOOLS_QTPLUGININFO
-+	bool "qtplugininfo"
-+	help
-+	  Compile and install the qtplugininfo program.
-+
-+endif
-diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
++diff -uNr visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt
++--- visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt	2014-10-31 11:34:21.000000000 +0100
+++++ visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt	2015-07-19 19:49:43.340054342 +0200
++@@ -13,6 +13,10 @@
++                     ${KODI_INCLUDE_DIR}
++                     ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/src)
++ 
+++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
+++string( REGEX REPLACE "-[^-]+$" ""
+++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
+++
++ include(ExternalProject)
++ set(update_command "")
++ if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
++@@ -20,7 +24,7 @@
++ endif()
++ externalproject_add(libgoom SOURCE_DIR ${PROJECT_SOURCE_DIR}/lib/goom2k4-0
++                     "${update_command}"
++-                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR>
+++                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR> --host=${TOOLCHAIN_NAME}
++                     BUILD_COMMAND ${MAKE}
++                     INSTALL_COMMAND "")
++ 
+diff --git a/package/kodi-visualisation-goom/Config.in b/package/kodi-visualisation-goom/Config.in
 new file mode 100644
-index 0000000..f54c94a
+index 0000000..c1f1751
 --- /dev/null
-+++ b/package/qt5/qt5tools/qt5tools.hash
++++ b/package/kodi-visualisation-goom/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_KODI_VISUALISATION_GOOM
++	bool "kodi-visualisation-goom"
++	depends on BR2_PACKAGE_KODI_GL
++	help
++	  GOOM visualiser for Kodi
++
++	  https://github.com/notspiff/visualization.goom
++
++comment "goom needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+new file mode 100644
+index 0000000..8507c65
+--- /dev/null
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
 @@ -0,0 +1,2 @@
-+# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qttools-opensource-src-5.5.1.tar.xz.mirrorlist
-+sha256 4361f6ce49717058160908297841a18b94645cec593d1b48fb126c9d06c87bfd qttools-opensource-src-5.5.1.tar.xz
-diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
++# Locally computed
++sha256 66a71a5c5a1c0016d7020fcc9941634ee465dab14644cdc96023ce0a28408338 kodi-visualisation-goom-16747b7dba9cbdcfdc8df44e849eaf09450fc86f.tar.gz
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
 new file mode 100644
-index 0000000..f3d78ce
+index 0000000..89f2bab
 --- /dev/null
-+++ b/package/qt5/qt5tools/qt5tools.mk
-@@ -0,0 +1,66 @@
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# qt5tools
++# kodi-visualisation-goom
 +#
 +################################################################################
 +
-+QT5TOOLS_VERSION = $(QT5_VERSION)
-+QT5TOOLS_SITE = $(QT5_SITE)
-+QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5BASE_VERSION).tar.xz
++KODI_VISUALISATION_GOOM_VERSION = 16747b7dba9cbdcfdc8df44e849eaf09450fc86f
++KODI_VISUALISATION_GOOM_SITE = $(call github,notspiff,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
++KODI_VISUALISATION_GOOM_LICENSE = GPLv2+
++KODI_VISUALISATION_GOOM_LICENSE_FILES = src/Main.cpp
 +
-+QT5TOOLS_DEPENDENCIES = qt5base
-+QT5TOOLS_INSTALL_STAGING = YES
++KODI_VISUALISATION_GOOM_DEPENDENCIES = kodi
 +
-+# linguist tools compile conditionally on qtHaveModule(qmldevtools-private),
-+# but the condition is used only used to decide if lupdate will support
-+# parsing qml files (via setting QT_NO_QML define), no linking against
-+# target qt5 will happen
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
-+QT5TOOLS_DEPENDENCIES += qt5declarative
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5TOOLS_LICENSE = LGPLv2.1 with exception or LGPLv3
-+QT5TOOLS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
-+else
-+QT5TOOLS_LICENSE = Commercial license
-+QT5TOOLS_REDISTRIBUTE = NO
-+endif
-+
-+QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
-+	linguist/lconvert linguist/lrelease linguist/lupdate
-+ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
-+# use install target to copy cmake module files
-+define QT5TOOLS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
-+endef
-+endif
-+
-+QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
-+QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
-+
-+QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTDIAG) += qtdiag
-+QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTDIAG) += qtdiag
-+
-+QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
-+QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
-+
-+QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO) += qtplugininfo
-+QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO) += qtplugininfo
-+
-+define QT5TOOLS_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5TOOLS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) sub-src-qmake_all
-+	$(foreach p,$(QT5TOOLS_BUILD_DIRS_y), \
-+		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
-+endef
-+
-+define QT5TOOLS_INSTALL_TARGET_CMDS
-+	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
-+		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 7d28882..dcddade 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -136,15 +136,6 @@ config BR2_PACKAGE_KODI_LIBBLURAY
+ comment "libbluray support needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+ 
+-config BR2_PACKAGE_KODI_GOOM
+-	bool "goom screensaver"
+-	depends on BR2_PACKAGE_KODI_GL
+-	help
+-	  Enable goom screensaver
+-
+-comment "goom needs an OpenGL backend"
+-	depends on !BR2_PACKAGE_KODI_GL
+-
+ config BR2_PACKAGE_KODI_RSXS
+ 	bool "rsxs screensaver"
+ 	depends on BR2_PACKAGE_KODI_GL
+@@ -308,6 +299,7 @@ menu "Screensavers"
+ endmenu
+ 
+ menu "Visualisations"
++	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
+ 	source "package/kodi-visualisation-waveforhue/Config.in"
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index bf3aa7a..94e59e7 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -30,6 +30,7 @@ KODI_CONF_ENV = \
+ 
+ KODI_CONF_OPTS +=  \
+ 	--with-ffmpeg=shared \
++	--disable-goom \
+ 	--disable-joystick \
+ 	--disable-openmax \
+ 	--disable-projectm \
+@@ -116,12 +117,6 @@ KODI_CONF_OPTS += --disable-gles
+ endif
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_KODI_GOOM),y)
+-KODI_CONF_OPTS += --enable-goom
+-else
+-KODI_CONF_OPTS += --disable-goom
+-endif
+-
+ ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
+ KODI_DEPENDENCIES += libusb-compat
+ KODI_CONF_OPTS += --enable-libusb
 -- 
-2.1.4
+2.7.0
