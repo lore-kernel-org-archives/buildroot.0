@@ -1,45 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 00:27:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lftp: add optional support for expat
-Message-ID: <1456010851-27810-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Feb 2016 00:31:39 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: remove patch for uClibc
+ support
+In-Reply-To: <1455920889-14777-1-git-send-email-romain.naour@gmail.com>
+References: <1455920889-14777-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <56C8F75B.7060701@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When expat was compiled before, the proto-http module will use it as
-optional dependency:
+On 02/19/16 23:28, Romain Naour wrote:
+> This patch is not needed anymore since the uClibc support
+> has been removed from Buildroot.
+> This patch was needed for uClibc <= 0.9.33 support.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> Build tested with 2014R1 bfin toolchain.
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/lftp/4.6.4/proto-http.so | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libexpat.so.1]
-[...]
+ But that toolchain is using uClibc 0.9.33, no? So how come it still works then?
 
-The build system offers no option to en-/disable expat support:
-https://github.com/lavv17/lftp/blob/lftp-4.6-stable/configure.ac#L337
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/lftp/lftp.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ Regards,
+ Arnout
 
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index d2d58fd..5051f70 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -17,6 +17,10 @@ ifneq ($(BR2_STATIC_LIBS),y)
- LFTP_CONF_OPTS += --with-modules
- endif
- 
-+ifeq ($(BR2_PACKAGE_EXPAT)$(BR2_PACKAGE_LFTP_PROTO_HTTP),yy)
-+LFTP_DEPENDENCIES += expat
-+endif
-+
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LFTP_DEPENDENCIES += gnutls
- LFTP_CONF_OPTS += --with-gnutls
+> The arc-1015.12 toolchain shouldn't trigger the build issue
+> since it's based on uClibc-snapshot (upstream HEAD)
+> ---
+>  ...fine-mkostemp-for-older-version-of-uClibc.patch | 50 ----------------------
+>  1 file changed, 50 deletions(-)
+>  delete mode 100644 package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+[snip]
+
 -- 
-2.7.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
