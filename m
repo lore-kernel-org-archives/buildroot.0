@@ -1,43 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 21:19:54 +0100
-Subject: [Buildroot] [PATCH v3] support/misc: Adding Vagrant file for
-	provisioning
-In-Reply-To: <CA+TH9VnQB_-2qKy2yRzOT6jCzz5hv4xiioW5r5g8F69G2sgrZg@mail.gmail.com>
- (Angelo Compagnucci's message of "Sat, 20 Feb 2016 12:07:54 +0100")
-References: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
- <8737t8xx5a.fsf@dell.be.48ers.dk>
- <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
- <20160220105636.GC3418@free.fr>
- <CA+TH9VnQB_-2qKy2yRzOT6jCzz5hv4xiioW5r5g8F69G2sgrZg@mail.gmail.com>
-Message-ID: <87fuwnf82d.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Feb 2016 21:25:04 +0100
+Subject: [Buildroot] [PATCH] sysklogd: override SKFLAGS with
+	TARGET_CFLAGS
+In-Reply-To: <1455967730-10332-1-git-send-email-romain.naour@gmail.com>
+ (Romain Naour's message of "Sat, 20 Feb 2016 12:28:50 +0100")
+References: <1455967730-10332-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <87bn7bf7tr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Hi,
+ > TARGET_CFLAGS is not taken into account since SKFLAGS is used as CFLAGS.
+ > We need to override SKFLAGS with TARGET_CFLAGS but keep -DSYSV which was
+ > present in SKFLAGS.
 
- > Obviously, I'm not in the position to steer the project in a way or
- > another, but IMHO giving a little bit of advice on how to run
- > Buildroot on others OSes could only benefit the project as a whole.
+ > Improve the previous fix introduced by
+ > 8e3a5c13546451c0c6ceb8bc64e4397ceed14aca.
 
- > And please stop with that Puppet, Chef and other amenities, they are
- > not meant to rapidly build a virtual machine with some software inside
- > and nobody talked about them than you.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
 
- > As I stated before, the goal here is to give the opportunity to the
- > people who cannot run Buildroot natively to use it anyway, in a simple
- > to run Vm.
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
 
- > Nothing more nothing less.
-
-Understood, and I appreciate it. I think the confusion / disagreement
-comes from the fact that the main developers aren't the target audience,
-and they don't have a need / desire to use it, but that doesn't mean
-others might not.
+Committed, thanks.
 
 -- 
 Venlig hilsen,
