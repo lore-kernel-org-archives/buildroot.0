@@ -1,45 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:31:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kexec: add optional support for xz
-Message-ID: <1456007514-29695-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Feb 2016 23:34:34 +0100
+Subject: [Buildroot] [PATCH v2 13/18] erlang-p1-utils: bump to version
+ 1.0.3
+In-Reply-To: <1454443064-14269-14-git-send-email-fhunleth@troodon-software.com>
+References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
+ <1454443064-14269-14-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160220233434.347a757a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When xz was compiled before, kexec will use it as optional dependency:
+Dear Frank Hunleth,
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/kdump | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [liblzma.so.5]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+On Tue,  2 Feb 2016 14:57:39 -0500, Frank Hunleth wrote:
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+> Changes v1->v2:
+>   - Fix license file name
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kexec/kexec.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Applied to next, thanks.
 
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index d158406..7264a1c 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -17,6 +17,17 @@ else
- KEXEC_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+# fixes broken check for xz when cross-compiling:
-+# checking for lzma_code in -llzma...
-+# ./configure: line 4712: ac_fn_c_try_link: command not found
-+KEXEC_CONF_ENV += ac_cv_lib_lzma_lzma_code=yes
-+KEXEC_CONF_OPTS += --with-lzma
-+KEXEC_DEPENDENCIES += xz
-+else
-+KEXEC_CONF_OPTS += --without-lzma
-+endif
-+
- define KEXEC_REMOVE_LIB_TOOLS
- 	rm -rf $(TARGET_DIR)/usr/lib/kexec-tools
- endef
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
