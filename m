@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 17:40:04 +0100
-Subject: [Buildroot] [PATCH 1/8] package/links: add --with/--without-zlib
+Date: Sat, 20 Feb 2016 17:40:11 +0100
+Subject: [Buildroot] [PATCH 8/8] package/links: add --with/--without-libjpeg
 In-Reply-To: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1455986411-14273-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1455986411-14273-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,19 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 3 insertions(+)
 
 diff --git a/package/links/links.mk b/package/links/links.mk
-index 4d2cb2e..8d7ecba 100644
+index f42f21c..b62889f 100644
 --- a/package/links/links.mk
 +++ b/package/links/links.mk
-@@ -52,7 +52,10 @@ LINKS_DEPENDENCIES += xz
+@@ -28,7 +28,10 @@ else
+ LINKS_CONF_OPTS += --without-directfb
  endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LINKS_CONF_OPTS += --with-zlib
- LINKS_DEPENDENCIES += zlib
+ ifeq ($(BR2_PACKAGE_JPEG),y)
++LINKS_CONF_OPTS += --with-libjpeg
+ LINKS_DEPENDENCIES += jpeg
 +else
-+LINKS_CONF_OPTS += --without-zlib
++LINKS_CONF_OPTS += --without-libjpeg
  endif
- 
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ LINKS_CONF_OPTS += --with-libtiff
 -- 
 2.7.0
