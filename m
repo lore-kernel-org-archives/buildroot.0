@@ -1,42 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:52:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/trace-cmd: add optional support for
-	audit
-Message-ID: <1456008742-4361-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Feb 2016 23:54:10 +0100
+Subject: [Buildroot] [PATCH v2 05/18] erlang-rebar: bump to version 2.6.1
+In-Reply-To: <6FDD64E6-B998-4761-BABC-319E2B21EEB2@troodon-software.com>
+References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
+ <1454443064-14269-6-git-send-email-fhunleth@troodon-software.com>
+ <20160220192418.08424caa@free-electrons.com>
+ <6FDD64E6-B998-4761-BABC-319E2B21EEB2@troodon-software.com>
+Message-ID: <20160220235410.0e240a1e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When audit was compiled before, trace-cmd will use it as optional
-dependency:
+Hello Frank,
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/trace-cmd | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [ld64-uClibc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libaudit.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+On Sat, 20 Feb 2016 13:31:47 -0500, Frank Hunleth wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/trace-cmd/trace-cmd.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> Thanks for applying some of the Erlang patches. I've had a really
+> busy week, but as soon as I get back today, I'll see what's missing
+> and send a patch set with any residual changes that didn't make your
+> cut. I know that I had several changes that various people had
+> requested.
 
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index 839e7ee..2348155 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -13,6 +13,10 @@ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
- 
- TRACE_CMD_DEPENDENCIES = host-pkgconf
- 
-+ifeq ($(BR2_PACKAGE_AUDIT),y)
-+TRACE_CMD_DEPENDENCIES += audit
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- TRACE_CMD_DEPENDENCIES += python host-swig
- TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
+No problem. I've applied all of them, but had to do some changes on a
+few of them (I've replied to each patch individually to let you know).
+Please double check my change on the fast_tls vs. p1-tls dependency
+change in p1-stun.
+
+I have left on the side the ejabberd update for the moment, since
+Romain had some comments. I'll mark this patch as "Changes Requested",
+so please respin.
+
+Regarding the erlang atomic operations patch, I haven't had a look yet.
+
+Best regards,
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
