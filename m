@@ -1,40 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 23:46:07 +0100
-Subject: [Buildroot] [git commit] package/libsoil: add a comment about why
-	we rename the Makefile
-Message-ID: <20160220224637.13BD180262@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 20 Feb 2016 23:46:34 +0100
+Subject: [Buildroot] [PATCH] perf: append endianness argument to ld when
+ building for MIPS
+In-Reply-To: <1455816222-43031-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1455816222-43031-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <56C8ECCA.6010705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f8c65bb6b6be0197cd39c3f3573064d5881b5bc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/18/16 18:23, Vicente Olivert Riera wrote:
+> We need to pass an argument to ld for setting the endianness when
+> building it for MIPS architecture, otherwise the default one will always
+> be used (which is big endian) and the compilation for little endian will
+> always fail showing an error like this one:
+> 
+> LD    foo.o
+> mips-linux-gnu-ld: foo.o: compiled for a little endian system and target
+> is big endian
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  linux/linux-tool-perf.mk | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
+> index 07c3514..7ad6629 100644
+> --- a/linux/linux-tool-perf.mk
+> +++ b/linux/linux-tool-perf.mk
+> @@ -27,6 +27,21 @@ PERF_MAKE_FLAGS = \
+>  	WERROR=0 \
+>  	ASCIIDOC=
+>  
+> +# We need to pass an argument to ld for setting the endianness when
+> +# building it for MIPS architecture, otherwise the default one will
+> +# always be used (which is big endian) and the compilation for little
+> +# endian will always fail showing an error like this one:
+> +#  LD    foo.o
+> +# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
+> +# target is big endian
+> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+> +ifeq ($(BR2_ENDIAN),"BIG")
 
-Commit 8461906d (package/libsoil: fix build using old versions of patch)
-added a workaround for older patch versions, but didn't add any comment in
-the .mk file explaining why this is done.
+ Er, isn't this a bit silly? Can you have big-endian mipsel, or little-endian mips?
 
-Add a comment explaining why for clarity.
+ Regards,
+ Arnout
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libsoil/libsoil.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
+> +else
+> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
+> +endif
+> +endif
+> +
+>  # The call to backtrace() function fails for ARC, because for some
+>  # reason the unwinder from libgcc returns early. Thus the usage of
+>  # backtrace() should be disabled in perf explicitly: at build time
+> 
 
-diff --git a/package/libsoil/libsoil.mk b/package/libsoil/libsoil.mk
-index 99a47f6..efa67d9 100644
---- a/package/libsoil/libsoil.mk
-+++ b/package/libsoil/libsoil.mk
-@@ -18,6 +18,10 @@ define LIBSOIL_EXTRACT_CMDS
- 	mv $(@D)/Simple\ OpenGL\ Image\ Library/* $(@D)
- endef
- 
-+# gnu patch < v2.5.9 doesn't correctly handle spaces in file names,
-+# and we want to patch the 'alternate Makefile.txt' file, so rename
-+# the file (and patch the renamed file) for compatibility with older
-+# distributions
- define REMOVE_SPACE_FROM_FILENAME
- 	cd $(@D)/projects/makefile/ && \
- 		mv "alternate Makefile.txt" alternate_Makefile.txt
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
