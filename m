@@ -1,73 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:50:18 +0100
-Subject: [Buildroot] [git commit] package/iputils: patch ping to link
-	against libm
-Message-ID: <20160220145025.54C0E7FFAC@busybox.osuosl.org>
+Date: Sat, 20 Feb 2016 15:50:38 +0100
+Subject: [Buildroot] [git commit] package/libarchive: add optional support
+	for bzip2
+Message-ID: <20160220145041.98848802F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f41db8f9ac4c5c50b32c6e2315aa1e6aa72afb3
+commit: https://git.buildroot.net/buildroot/commit/?id=67ce9dcb94a2100f4e09164b0cebf973e95885fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ping fails to compile with uClibc based toolchains with the error
+When bzip2 was compiled before, libarchive will use it as optional
+dependency:
 
-undefined reference to `__finite'
+$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libarchive.so.13.1.2 | grep NEEDED
+ 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+ 0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
+ 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 
-Add a patch to link ping against libm to resolve the math library function
-finite().
-
-Note, this error is not seen with glibc based toolchains because finite
-seems to be resolved in both libm and libc.
-
-Fixes:
-http://autobuild.buildroot.net/results/08f7386f75c881bc582b338824f8ccd509b2921e/
-http://autobuild.buildroot.net/results/5aeef61fbd399dd78dc72b9e7cce978e6f1f58b4/
-
-A pull request has been sent to fix this issue upstream, see
-https://github.com/iputils/iputils/pull/42
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iputils/0001-ping-link-against-libm.patch | 29 +++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/libarchive/libarchive.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/iputils/0001-ping-link-against-libm.patch b/package/iputils/0001-ping-link-against-libm.patch
-new file mode 100644
-index 0000000..d151c5b
---- /dev/null
-+++ b/package/iputils/0001-ping-link-against-libm.patch
-@@ -0,0 +1,29 @@
-+From 8d189e73e660a637ae3f5a604448103ea42e397d Mon Sep 17 00:00:00 2001
-+From: Martin Bark <martin@barkynet.com>
-+Date: Fri, 12 Feb 2016 16:52:19 +0000
-+Subject: [PATCH] ping: link against libm
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 206de3f..726142b 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
+@@ -42,6 +42,13 @@ else
+ LIBARCHIVE_CONF_OPTS += --disable-xattr
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BZIP2),y)
++LIBARCHIVE_CONF_OPTS += --with-bz2lib
++LIBARCHIVE_DEPENDENCIES += bzip2
++else
++LIBARCHIVE_CONF_OPTS += --without-bz2lib
++endif
 +
-+This commit links ping against libm because ping.c calls the math library
-+function finite().
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 8b37c42..fb80f6f 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -156,7 +156,7 @@ LIB_clockdiff = $(LIB_CAP)
-+ DEF_ping_common = $(DEF_CAP) $(DEF_IDN)
-+ DEF_ping6_common = $(DEF_CAP) $(DEF_IDN)
-+ DEF_ping  = $(DEF_CAP) $(DEF_IDN) $(DEF_WITHOUT_IFADDRS)
-+-LIB_ping  = $(LIB_CAP) $(LIB_IDN) $(LIB_RESOLV)
-++LIB_ping  = $(LIB_CAP) $(LIB_IDN) $(LIB_RESOLV) -lm
-+ 
-+ ping: ping_common.o ping6_common.o
-+ ping.o ping_common.o ping6_common.o: ping.h in6_flowlabel.h
-+-- 
-+2.7.0
-+
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+ LIBARCHIVE_DEPENDENCIES += expat
+ else
