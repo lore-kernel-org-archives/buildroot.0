@@ -1,39 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 14:43:00 +0100
-Subject: [Buildroot] [PATCH v4 05/17] python-pynacl: new package
-In-Reply-To: <1454799603-5474-6-git-send-email-mc5686@mclink.it>
-References: <1454799603-5474-1-git-send-email-mc5686@mclink.it>
- <1454799603-5474-6-git-send-email-mc5686@mclink.it>
-Message-ID: <20160220144300.0d1e791b@free-electrons.com>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Sat, 20 Feb 2016 14:45:55 +0100
+Subject: [Buildroot] Buildroot for normal PC
+In-Reply-To: <20160220101054.GA3418@free.fr>
+References: <56C79CD9.3010503@dawncrow.de> <20160220101054.GA3418@free.fr>
+Message-ID: <56C86E13.8040203@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Mauro Condarelli,
+Am 20.02.2016 um 11:10 schrieb Yann E. MORIN:
+> Andr?, All,
+>
 
-On Sat,  6 Feb 2016 23:59:51 +0100, Mauro Condarelli wrote:
-> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+Hi,
+
+Thanks for the hints.
+But I really need bare metal for my intents, qemu won't help.
+As soon as I have more time I'll try, if I succeed I'll also try to upstream a defconfig.
+
+> On 2016-02-19 23:53 +0100, Andr? Hentschel spake thusly:
+>> I wanna try some more things with the Wine package in buildroot, but I
+>> can't easily setup a testing environment for a PC.
 > 
-> ---
-> Changes v3 -> v4
->   - removed spurious "source" line in package/Config.in (suggested by T.Petazzoni)
-
-I've applied to next, after doing the following changes:
-
-[Thomas:
- - remove python-six from the build dependencies, it is only a runtime
-   dependency
- - add host-python-cffi in the build dependencies.]
-
-Please try to build your new packages with just that package enabled,
-in order to catch missing dependencies.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>     $ make list-defconfigs |grep x86
+>       qemu_x86_64_defconfig               - Build for qemu_x86_64
+>       qemu_x86_defconfig                  - Build for qemu_x86
+> 
+> So I'd suggest you use qemu for that.
+> 
+>> One part is which bootloader to use and how to pack everything together
+>> to a bootable USB-Stick, HDD image or CD. (And I didn't found a defconfig
+>> for that)...
+> 
+> No, we don't have a defconfig for a traditional PC.
+> 
+>> The other part is about the nvidia-driver, I'll need the legacy one for
+>> my card. Can I simply alter the version number in the makefile?
+> 
+> I'm not sure the legacy driver has the same "layout" (in terms of
+> buildsystem) as the current driver, so I would not bet on it...
+> 
+> However, if as I suggested above, you were to use qemu, you would not
+> need to setup a bootloader. You can tell qemu to directly boot a kernel,
+> see:
+>     board/qemu/x86/readme.txt
+> 
+> As for the video driver, qemu does not (yet!) provide a 3D-accelerated
+> graphics card, but you can use mesa3d for SW OpenGL if you need that.
+> 
+> I guess using qemu will be more efficient than using a real PC, at least
+> as long as you're not looking at performance, and especially graphics
+> performance.
+> 
+> Well, at least, that's what I would be doing. ;-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
