@@ -1,52 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2016 11:10:54 +0100
-Subject: [Buildroot] Buildroot for normal PC
-In-Reply-To: <56C79CD9.3010503@dawncrow.de>
-References: <56C79CD9.3010503@dawncrow.de>
-Message-ID: <20160220101054.GA3418@free.fr>
+Date: Sat, 20 Feb 2016 11:47:02 +0100
+Subject: [Buildroot] [PATCH v3] support/misc: Adding Vagrant file for
+ provisioning
+In-Reply-To: <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
+References: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
+ <8737t8xx5a.fsf@dell.be.48ers.dk>
+ <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
+Message-ID: <20160220104701.GB3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
+Angelo, All,
 
-On 2016-02-19 23:53 +0100, Andr? Hentschel spake thusly:
-> I wanna try some more things with the Wine package in buildroot, but I
-> can't easily setup a testing environment for a PC.
+On 2016-02-05 09:05 +0100, Angelo Compagnucci spake thusly:
+> 2016-02-04 17:23 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+> > Next to Yanns comments I would prefer to use wget like we do elsewhere
+> > in Buildroot to download stuff.
+> 
+> Argh! That curl was on purpose (probably I'm a novice in the buildroot
+> world, but not completely thoughtless!), wget it's not distributed
+> with Mac Os X and it's quite an accomplishment installing it [1].
 
-    $ make list-defconfigs |grep x86
-      qemu_x86_64_defconfig               - Build for qemu_x86_64
-      qemu_x86_defconfig                  - Build for qemu_x86
+Three things:
 
-So I'd suggest you use qemu for that.
+  - wget is available from MacPorts, Homebrew and Fink; it is easy to
+    install; their documentation is pretty explicit (at leat for me who
+    does not even have a Mac, and never ever touched one).
 
-> One part is which bootloader to use and how to pack everything together
-> to a bootable USB-Stick, HDD image or CD. (And I didn't found a defconfig
-> for that)...
+  - if you consider wget to be hard to install, what about Vagrant? I
+    doubt it is installed on a stock MacOS; surely the user will *have*
+    to install stuff on his system...
 
-No, we don't have a defconfig for a traditional PC.
+  - if someone is not able to replace the wget incantation with a similar
+    curl incantation (or the opposite), then there's a deeper problem;
+    this is really 101 [1]...
 
-> The other part is about the nvidia-driver, I'll need the legacy one for
-> my card. Can I simply alter the version number in the makefile?
+So, totally irrelevant...
 
-I'm not sure the legacy driver has the same "layout" (in terms of
-buildsystem) as the current driver, so I would not bet on it...
+> I'll send a patch soon.
 
-However, if as I suggested above, you were to use qemu, you would not
-need to setup a bootloader. You can tell qemu to directly boot a kernel,
-see:
-    board/qemu/x86/readme.txt
+Which has already been applied, which is a little bit sad... :-(
 
-As for the video driver, qemu does not (yet!) provide a 3D-accelerated
-graphics card, but you can use mesa3d for SW OpenGL if you need that.
-
-I guess using qemu will be more efficient than using a real PC, at least
-as long as you're not looking at performance, and especially graphics
-performance.
-
-Well, at least, that's what I would be doing. ;-)
+[1] https://en.wikipedia.org/wiki/101_%28number%29#In_education
 
 Regards,
 Yann E. MORIN.
