@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sat, 20 Feb 2016 19:21:23 +0100
-Subject: [Buildroot] [git commit branch/next] erlang-p1-sip: bump to version
+Subject: [Buildroot] [git commit branch/next] erlang-p1-tls: bump to version
 	1.0.0
-Message-ID: <20160220182140.378FE80333@busybox.osuosl.org>
+Message-ID: <20160220182140.47A1F80333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f9f673233235fded27577c74295fc3ecf2e4804
+commit: https://git.buildroot.net/buildroot/commit/?id=345d3b300d963747599809a63c556fd13e811528
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: adjust erlang-p1-stun dependency since the package was not
-renamed.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang-p1-sip/erlang-p1-sip.mk | 2 +-
+ package/erlang-p1-tls/erlang-p1-tls.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
-index d017a92..24075a7 100644
---- a/package/erlang-p1-sip/erlang-p1-sip.mk
-+++ b/package/erlang-p1-sip/erlang-p1-sip.mk
+diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
+index 4f1fc48..f7212c4 100644
+--- a/package/erlang-p1-tls/erlang-p1-tls.mk
++++ b/package/erlang-p1-tls/erlang-p1-tls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_SIP_VERSION = fd3e461
-+ERLANG_P1_SIP_VERSION = 1.0.0
- ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
- ERLANG_P1_SIP_LICENSE = GPLv2 with OpenSSL exception
- ERLANG_P1_SIP_LICENSE_FILES = COPYING
+-ERLANG_P1_TLS_VERSION = b070004
++ERLANG_P1_TLS_VERSION = 1.0.0
+ ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
+ ERLANG_P1_TLS_LICENSE = GPLv2+
+ ERLANG_P1_TLS_LICENSE_FILES = COPYING
