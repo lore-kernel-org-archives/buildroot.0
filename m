@@ -1,85 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Feb 2016 23:52:59 +0100
-Subject: [Buildroot] [git commit] package/avahi: bump to version 0.6.32
-Message-ID: <20160302202753.7EBBF80203@busybox.osuosl.org>
+Date: Sat, 20 Feb 2016 19:21:24 +0100
+Subject: [Buildroot] [git commit] erlang-p1-xml: bump to version 1.1.1
+Message-ID: <20160302202755.111BD80203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61c056d40bc51f99f8be19b7e77894a5e6565fd6
+commit: https://git.buildroot.net/buildroot/commit/?id=2a39cbd932ba15594322fe0020e3798d183916d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also:
- * switch download site to github as the previous download page is not
-   maintained anymore
- * drop 0004-no-gtk-deprecations.patch as it is applied upstream
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+[Thomas:
+  - add dependency on erlang-p1-utils, as noticed by Romain Naour.
+  - the license is now Apache-2.0 and no longer GPLv2+.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/avahi/0004-no-gtk-deprecations.patch | 30 ----------------------------
- package/avahi/avahi.hash                     |  2 +-
- package/avahi/avahi.mk                       |  4 ++--
- 3 files changed, 3 insertions(+), 33 deletions(-)
+ package/erlang-p1-xml/Config.in        | 1 +
+ package/erlang-p1-xml/erlang-p1-xml.mk | 8 ++++----
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/avahi/0004-no-gtk-deprecations.patch b/package/avahi/0004-no-gtk-deprecations.patch
-deleted file mode 100644
-index d187053..0000000
---- a/package/avahi/0004-no-gtk-deprecations.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Patch from http://pkgs.fedoraproject.org/cgit/avahi.git/plain/avahi-0.6.31-no-deprecations.patch?id=b3f4de05e331258c5123e3acc144e452595c2112
--
--Don't disable deprecated GTK support, as that breaks builds with modern GTK3
--versions.
--
--For more details, see the Fedora bugzilla:
--https://bugzilla.redhat.com/show_bug.cgi?id=1001676
--
--[Peter: patch Makefile.in so we don't need autoreconf]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- avahi-ui/Makefile.am |    2 +-
-- avahi-ui/Makefile.in |    3 +--
-- configure.ac         |    2 +-
-- 3 files changed, 3 insertions(+), 4 deletions(-)
--
--Index: avahi-0.6.31/avahi-ui/Makefile.in
--===================================================================
----- avahi-0.6.31.orig/avahi-ui/Makefile.in
--+++ avahi-0.6.31/avahi-ui/Makefile.in
--@@ -464,8 +464,7 @@
-- top_srcdir = @top_srcdir@
-- 
-- # This cool debug trap works on i386/gcc only
---AM_CFLAGS = -I$(top_srcdir) -DG_DISABLE_DEPRECATED=1 \
---	-DGDK_DISABLE_DEPRECATED=1 -DGTK_DISABLE_DEPRECATED=1 \
--+AM_CFLAGS = -I$(top_srcdir) \
-- 	'-DDEBUG_TRAP=__asm__("int $$3")' $(am__append_1)
-- pkglibdatadir = $(libdir)/avahi
-- desktopdir = $(datadir)/applications
-diff --git a/package/avahi/avahi.hash b/package/avahi/avahi.hash
-index 99bbd51..09c5d42 100644
---- a/package/avahi/avahi.hash
-+++ b/package/avahi/avahi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	8372719b24e2dd75de6f59bb1315e600db4fd092805bd1201ed0cb651a2dab48	avahi-0.6.31.tar.gz
-+sha256  d54991185d514a0aba54ebeb408d7575b60f5818a772e28fa0e18b98bc1db454	avahi-0.6.32.tar.gz
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 5d6e6a8..cad7acd 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -11,8 +11,8 @@
- # either version 2.1 of the License, or (at your option) any
- # later version.
+diff --git a/package/erlang-p1-xml/Config.in b/package/erlang-p1-xml/Config.in
+index a6f4bd7..504501d 100644
+--- a/package/erlang-p1-xml/Config.in
++++ b/package/erlang-p1-xml/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_ERLANG_P1_XML
+ 	bool "erlang-p1-xml"
++	select BR2_PACKAGE_ERLANG_P1_UTILS
+ 	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  XML utilities for Erlang
+diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
+index f81d3e5..31bab23 100644
+--- a/package/erlang-p1-xml/erlang-p1-xml.mk
++++ b/package/erlang-p1-xml/erlang-p1-xml.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
  
--AVAHI_VERSION = 0.6.31
--AVAHI_SITE = http://www.avahi.org/download
-+AVAHI_VERSION = 0.6.32
-+AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
- AVAHI_LICENSE = LGPLv2.1+
- AVAHI_LICENSE_FILES = LICENSE
- AVAHI_INSTALL_STAGING = YES
+-ERLANG_P1_XML_VERSION = 2c61083
++ERLANG_P1_XML_VERSION = 1.1.1
+ ERLANG_P1_XML_SITE = $(call github,processone,xml,$(ERLANG_P1_XML_VERSION))
+-ERLANG_P1_XML_LICENSE = GPLv2+
+-ERLANG_P1_XML_LICENSE_FILES = COPYING
+-ERLANG_P1_XML_DEPENDENCIES = expat
++ERLANG_P1_XML_LICENSE = Apache-2.0
++ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
++ERLANG_P1_XML_DEPENDENCIES = expat erlang-p1-utils
+ ERLANG_P1_XML_INSTALL_STAGING = YES
+ 
+ ERLANG_P1_XML_USE_AUTOCONF = YES
