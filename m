@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 17:40:06 +0100
-Subject: [Buildroot] [PATCH 3/8] package/links: add --with/--without-ssl
+Date: Sat, 20 Feb 2016 17:40:10 +0100
+Subject: [Buildroot] [PATCH 7/8] package/links: add --disable-graphics
 In-Reply-To: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1455986411-14273-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1455986411-14273-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/links/links.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/links/links.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/links/links.mk b/package/links/links.mk
-index 3515e5f..3a4519f 100644
+index 3486d94..f42f21c 100644
 --- a/package/links/links.mk
 +++ b/package/links/links.mk
-@@ -44,7 +44,10 @@ LINKS_DEPENDENCIES += libevent
+@@ -36,6 +36,8 @@ LINKS_DEPENDENCIES += tiff
+ else
+ LINKS_CONF_OPTS += --without-libtiff
  endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LINKS_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr --enable-ssl-pkgconfig
- LINKS_DEPENDENCIES += openssl
 +else
-+LINKS_CONF_OPTS += --without-ssl
++LINKS_CONF_OPTS += --disable-graphics
  endif
  
- ifeq ($(BR2_PACKAGE_XZ),y)
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
 -- 
 2.7.0
