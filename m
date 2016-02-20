@@ -1,41 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:23:13 +0100
-Subject: [Buildroot] [PATCH v8 13/28] package/freeswitch: enable mod_vpx,
-	add optional dependency to libvpx
+Date: Sat, 20 Feb 2016 23:23:03 +0100
+Subject: [Buildroot] [PATCH v8 03/28] package/freeswitch: add optional
+	dependency to libuuid
 In-Reply-To: <1456007008-5200-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456007008-5200-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456007008-5200-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456007008-5200-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mod_vpx delivers native support for these video codecs:
-
-codec,VP8 Video,mod_vpx
-codec,VP9 Video,mod_vpx
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/Config.in     | 4 ++++
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 2 files changed, 8 insertions(+)
 
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index b52d469..a641008 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -10,6 +10,10 @@ config BR2_PACKAGE_FREESWITCH
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_SPEEX
+ 	select BR2_PACKAGE_SQLITE
++	# "libuuid development package highly recommended!"
++	# https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/build/config/uuid.m4#9
++	select BR2_PACKAGE_UTIL_LINUX if BR2_USE_WCHAR
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID if BR2_USE_WCHAR
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  FreeSWITCH is a scalable open source cross-platform telephony
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 82cd84b..6191fad 100644
+index f4846c9..2c98c6c 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -191,6 +191,11 @@ FREESWITCH_DEPENDENCIES += libyaml
- FREESWITCH_ENABLED_MODULES += languages/mod_yaml
- endif
+@@ -162,4 +162,8 @@ endef
  
-+ifeq ($(BR2_PACKAGE_LIBVPX),y)
-+FREESWITCH_DEPENDENCIES += libvpx
-+FREESWITCH_ENABLED_MODULES += codecs/mod_vpx
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++FREESWITCH_DEPENDENCIES += util-linux
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yy)
- FREESWITCH_DEPENDENCIES += libvpx libyuv
- FREESWITCH_ENABLED_MODULES += applications/mod_fsv
+ $(eval $(autotools-package))
 -- 
 2.7.0
