@@ -1,35 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 18:31:50 +0100
-Subject: [Buildroot] [PATCH v5 19/20] python-autobahn: new package
-In-Reply-To: <CAGm1_ksj0CetgAFvrnRty5Tz+wRX77XxOZ_VFKvFn1na=D58Kg@mail.gmail.com>
-References: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
- <1455188328-7595-2-git-send-email-mc5686@mclink.it>
- <20160220150553.1da70aab@free-electrons.com>
- <CAGm1_ksj0CetgAFvrnRty5Tz+wRX77XxOZ_VFKvFn1na=D58Kg@mail.gmail.com>
-Message-ID: <20160220183150.0c2d7af8@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Feb 2016 18:35:43 +0100
+Subject: [Buildroot] pjsip package status
+In-Reply-To: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
+References: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <20160220173543.GE3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Patrick, All,
 
-On Sat, 20 Feb 2016 16:53:36 +0100, Yegor Yefremov wrote:
+On 2016-02-17 15:04 -0500, Patrick Keroulas spake thusly:
+> Regarding pjsip package ( [1]http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html ), is there any reason why it's not
+> part of the package collection yet?
 
-> Try to compile autobahn with PYC only and twisted and
-> python-pynacl-1.0.1 enabled. I get:
+You may want to have a look at my in-proress series that adds Asterisk.
+The last few patches are to add pjsip.
+    https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/asterisk
 
-OK. This should have been mentioned in the commit log, and if
-python-pynacl and twisted are optional dependencies of python-autobahn,
-which affect its build process, then they should be handled as such.
+Please have a look and provide your feedback.
 
-Can you submit follow-up patches ?
+I will probably send that series shortly afte rthe next release is cut
+(i.e. in errly March).
 
-Thanks,
+Regards,
+Yann E. MORIN.
 
-Thomas
+> Regards,
+> --
+> Patrick Keroulas
+> Consultant en logiciel libre,
+> Savoir-faire Linux Inc.
+> 
+> 7275 Saint-Urbain, bureau 200
+> Montr?al, Qu?bec H2R 2Y5
+> t?l: (514) 276-5468 ext. 167
+> fax: (514) 276-5465
+> _____________________
+> 
+> Links:
+> 1. http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
