@@ -1,31 +1,21 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 20 Feb 2016 22:08:49 +0100
-Subject: [Buildroot] [PATCH] docs/manual: add info about AGPLv3 license
-Message-ID: <1456002529-21636-1-git-send-email-yegorslists@googlemail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Feb 2016 23:04:54 +0100
+Subject: [Buildroot] [PATCH 1/2] package/kexec: bump version to 2.0.11
+In-Reply-To: <1453555545-28609-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Sat, 23 Jan 2016 14:25:44 +0100")
+References: <1453555545-28609-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87egc7domx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- docs/manual/legal-notice.txt | 3 +++
- 1 file changed, 3 insertions(+)
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-index 5895224..0a91c37 100644
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -74,6 +74,9 @@ file to inform you of relevant material that could not be saved.
- Here is a list of the licenses that are most widely used by packages in
- Buildroot, with the name used in the manifest files:
- 
-+* `AGPLv3`:
-+  http://www.gnu.org/licenses/agpl-3.0.en.html[
-+  GNU Affero General Public License, version 3];
- * `GPLv2`:
-   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
-   GNU General Public License, version 2];
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to next, thanks.
+
 -- 
-2.5.0
+Bye, Peter Korsgaard
