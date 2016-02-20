@@ -1,56 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 21:22:31 +0100
-Subject: [Buildroot] [git commit] sysklogd: override SKFLAGS with
-	TARGET_CFLAGS
-Message-ID: <20160220202550.1566F7FDA9@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 21:28:09 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/libdrm: bump version to 2.4.67
+Message-ID: <1456000089-3939-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea4266211d7e9268cc8bf04f986abaa1135d48a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-TARGET_CFLAGS is not taken into account since SKFLAGS is used as CFLAGS.
-We need to override SKFLAGS with TARGET_CFLAGS but keep -DSYSV which was
-present in SKFLAGS.
-
-Improve the previous fix introduced by
-8e3a5c13546451c0c6ceb8bc64e4397ceed14aca.
-
-Fixes:
-http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sysklogd/sysklogd.mk | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ package/libdrm/libdrm.hash | 4 ++--
+ package/libdrm/libdrm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 9e315bc..49997d4 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -14,16 +14,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSKLOGD_DEPENDENCIES = busybox
- endif
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 948c7bf..8e3104c 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/dri-devel/2015-December/097697.html
+-sha256	79cb8e988749794edfb2d777b298d5292eff353bbbb71ed813589e61d2bc2d76	libdrm-2.4.66.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2016-February/100859.html
++sha256	ee5b71e1113be37544d0752681c12f040c01f782e2933df7d7bc21fd0d10cebe	libdrm-2.4.67.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 8d84beb..99a78d2 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# CS PowerPC 2012.03 triggers compiler bug.
--ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
--define SYSKLOGD_WORKAROUND_COMPILER_BUG
--	$(SED) 's/-O3/-O2/' $(@D)/Makefile
--endef
--SYSKLOGD_POST_PATCH_HOOKS = SYSKLOGD_WORKAROUND_COMPILER_BUG
--endif
--
-+# Override SKFLAGS which is used as CFLAGS.
- define SYSKLOGD_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) SKFLAGS="$(TARGET_CFLAGS) -DSYSV" \
-+		-C $(@D)
- endef
- 
- define SYSKLOGD_INSTALL_TARGET_CMDS
+-LIBDRM_VERSION = 2.4.66
++LIBDRM_VERSION = 2.4.67
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = http://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+-- 
+2.7.0
