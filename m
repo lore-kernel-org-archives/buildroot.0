@@ -1,37 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 19:21:23 +0100
-Subject: [Buildroot] [git commit branch/next] erlang-p1-tls: indicate
-	OpenSSL exception in license info
-Message-ID: <20160220182140.520EF7F9FD@busybox.osuosl.org>
+Date: Sat, 20 Feb 2016 19:22:59 +0100
+Subject: [Buildroot] [PATCH v2 01/18] erlang: bump to version 18.2.1
+In-Reply-To: <1454443064-14269-2-git-send-email-fhunleth@troodon-software.com>
+References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
+ <1454443064-14269-2-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160220192259.0f72f450@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc681779f6384a2639401c1deee77f0575ccabcf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Frank Hunleth,
 
-The license of erlang-p1-tls is indeed GPLv2+ as indicated in
-ERLANG_P1_TLS_LICENSE, but this GPLv2+ carries an OpenSSL exception,
-which allows it to be linked against the OpenSSL library. Therefore,
-we update the license information accordingly.
+On Tue,  2 Feb 2016 14:57:27 -0500, Frank Hunleth wrote:
+> This is a major release of Erlang that includes a licensing change from
+> the EPL to the Apache License, significant changes to the timer APIs, better
+> support for large maps, and security improvements.
+> 
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+> Changes v1 -> v2:
+>   - Add sha256 as suggested by Romain
+>   - Update autoreconf comment now that reason changed
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/erlang-p1-tls/erlang-p1-tls.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to next, thanks.
 
-diff --git a/package/erlang-p1-tls/erlang-p1-tls.mk b/package/erlang-p1-tls/erlang-p1-tls.mk
-index f7212c4..77f06e6 100644
---- a/package/erlang-p1-tls/erlang-p1-tls.mk
-+++ b/package/erlang-p1-tls/erlang-p1-tls.mk
-@@ -6,7 +6,7 @@
- 
- ERLANG_P1_TLS_VERSION = 1.0.0
- ERLANG_P1_TLS_SITE = $(call github,processone,tls,$(ERLANG_P1_TLS_VERSION))
--ERLANG_P1_TLS_LICENSE = GPLv2+
-+ERLANG_P1_TLS_LICENSE = GPLv2+ with OpenSSL exception
- ERLANG_P1_TLS_LICENSE_FILES = COPYING
- ERLANG_P1_TLS_INSTALL_STAGING = YES
- ERLANG_P1_TLS_DEPENDENCIES = openssl
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
