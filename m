@@ -1,80 +1,86 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:17 +0100
-Subject: [Buildroot] [PATCH/next 12/31] package/ffmpeg: Remove patch not
-	needed anymore for Kodi 16.0-Jarvis
+Date: Sat, 20 Feb 2016 23:09:14 +0100
+Subject: [Buildroot] [PATCH/next 09/31] package/kodi: reorder select/depends
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From [1]:
+"Even though the ordering has absolutely no consequences in Kconfig, it
+is not logical (when reading). It is more logical and far easier to
+understand when depends come first, followed by the selects."
+
+Also, the Config.in example in the manual suggests to use this coding
+style [2].
+
+[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
+[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...add-public-version-of-ff_read_frame_flush.patch | 53 ----------------------
- 1 file changed, 53 deletions(-)
- delete mode 100644 package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
+ package/kodi/Config.in | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch b/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
-deleted file mode 100644
-index 58a91e2..0000000
---- a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 7d7ce18ff0d24b586634fa6e631fa0eec7865aae Mon Sep 17 00:00:00 2001
--From: elupus <elupus@xbmc.org>
--Date: Tue, 1 Nov 2011 20:18:35 +0100
--Subject: [PATCH 13/13] add public version of ff_read_frame_flush
--
--We need this since we sometimes seek on the
--input stream behind ffmpeg's back. After this
--all data need to be flushed completely.
--
--Patch part of the XBMC patch set for ffmpeg, downloaded from
--https://github.com/xbmc/FFmpeg/.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libavformat/avformat.h | 5 +++++
-- libavformat/utils.c    | 5 +++++
-- 2 files changed, 10 insertions(+)
--
--diff --git a/libavformat/avformat.h b/libavformat/avformat.h
--index 2e54ed1..3a9f292 100644
----- a/libavformat/avformat.h
--+++ b/libavformat/avformat.h
--@@ -2121,6 +2121,11 @@ int av_find_best_stream(AVFormatContext *ic,
-- int av_read_frame(AVFormatContext *s, AVPacket *pkt);
-- 
-- /**
--+ * Clear out any buffered data in context
--+ */
--+void av_read_frame_flush(AVFormatContext *s);
--+
--+/**
--  * Seek to the keyframe at timestamp.
--  * 'timestamp' in 'stream_index'.
--  *
--diff --git a/libavformat/utils.c b/libavformat/utils.c
--index f4fb172..10dda18 100644
----- a/libavformat/utils.c
--+++ b/libavformat/utils.c
--@@ -1624,6 +1624,11 @@ void ff_read_frame_flush(AVFormatContext *s)
--     }
-- }
-- 
--+void av_read_frame_flush(AVFormatContext *s)
--+{
--+  ff_read_frame_flush(s);
--+}
--+
-- void ff_update_cur_dts(AVFormatContext *s, AVStream *ref_st, int64_t timestamp)
-- {
--     int i;
---- 
--2.1.0
--
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 13be622..abd1dc1 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -33,6 +33,15 @@ comment "kodi requires an OpenGL ES and EGL backend"
+ 
+ menuconfig BR2_PACKAGE_KODI
+ 	bool "kodi"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
++	depends on BR2_USE_MMU # python
++	depends on BR2_USE_WCHAR
++	depends on !BR2_STATIC_LIBS # python
++	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	select BR2_NEEDS_HOST_JAVA
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_THREAD
+@@ -90,15 +99,6 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_YAJL
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
+-	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_TOOLCHAIN_USES_MUSL
+-	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+-	depends on BR2_USE_MMU # python
+-	depends on BR2_USE_WCHAR
+-	depends on !BR2_STATIC_LIBS # python
+-	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	help
+ 	  Kodi is an award-winning free and open source (GPL) software
+ 	  media player and entertainment hub for digital media.
+@@ -132,8 +132,8 @@ config BR2_PACKAGE_KODI_DBUS
+ 
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+-	select BR2_PACKAGE_LIBBLURAY
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBBLURAY
+ 	help
+ 	  Enable Blu-ray input support.
+ 	  Select this if you want to play back Blu-ray content.
+@@ -228,8 +228,8 @@ config BR2_PACKAGE_KODI_LIBUSB
+ 
+ config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+-	select BR2_PACKAGE_LIBVA
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBVA
+ 	help
+ 	  Enable libva support.
+ 
 -- 
 2.7.0
