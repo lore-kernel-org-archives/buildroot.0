@@ -1,42 +1,35 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:23:12 +0100
-Subject: [Buildroot] [PATCH v8 12/28] package/freeswitch: enable mod_av,
-	add optional dependencies to ffmpeg, libvpx & libyuv
+Date: Sat, 20 Feb 2016 23:23:16 +0100
+Subject: [Buildroot] [PATCH v8 16/28] package/freeswitch: add optional
+	dependency to libg7221
 In-Reply-To: <1456007008-5200-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456007008-5200-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456007008-5200-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456007008-5200-17-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mod_av delivers native support for these video codecs:
-
-codec,H263 Video,mod_av
-codec,H263+ Video,mod_av
-codec,H264 Video,mod_av
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index dc96785..82cd84b 100644
+index fd262e2..7505136 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -160,6 +160,11 @@ endef
+@@ -186,6 +186,10 @@ else
+ FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE)$(BR2_PACKAGE_FFMPEG_SWSCALE)$(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yyyy)
-+FREESWITCH_DEPENDENCIES += ffmpeg libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += applications/mod_av
++ifeq ($(BR2_PACKAGE_LIBG7221),y)
++FREESWITCH_DEPENDENCIES += libg7221
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
- endif
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
 -- 
 2.7.0
