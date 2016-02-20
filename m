@@ -1,108 +1,99 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 00:18:08 +0100
-Subject: [Buildroot] [git commit branch/next] package/gutenprint:
-	Un-deprecate and bump version to 5.2.11
-Message-ID: <20160220231812.16DAF8028D@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Feb 2016 00:19:28 +0100
+Subject: [Buildroot] [PATCH v2 05/18] erlang-rebar: bump to version 2.6.1
+In-Reply-To: <56C8F126.1040903@mind.be>
+References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
+ <1454443064-14269-6-git-send-email-fhunleth@troodon-software.com>
+ <56B67620.1040700@gmail.com>
+ <20160220183731.57f5122f@free-electrons.com>
+ <20160220180803.GQ3418@free.fr> <56C8F126.1040903@mind.be>
+Message-ID: <20160220231928.GR3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dd344a44f41eadb464f0857ac290342fc379f2d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Arnout, All,
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-[Thomas: add missing dependency of host-gutenprint on host-pkgconf,
-needed since configure.ac uses PKG_CHECK_MODULES and the package is
-autoreconfigured.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...-print-olympus.c-fix-endianness-detection.patch | 33 ++++++++++++++++++++++
- package/gutenprint/Config.in                       |  2 --
- package/gutenprint/gutenprint.hash                 |  2 +-
- package/gutenprint/gutenprint.mk                   |  5 ++--
- 4 files changed, 36 insertions(+), 6 deletions(-)
+On 2016-02-21 00:05 +0100, Arnout Vandecappelle spake thusly:
+> On 02/20/16 19:08, Yann E. MORIN wrote:
+[--SNIP--]
+> > Well, that's not how licensing works.
+> > 
+> > Individual files have their own licenses, and they retain those licenses
+> > even when they are combined together. So, if you have two files under
+> > two licenses, like so:
+> >     file-1.c    MIT
+> >     file-2.c    Apache-2.0
+> 
+>  Actually, I think it's not really the files that carry a license. It is how you
+> got it. This shows in packages that are dual licensed (i.e., with an OR), where
+> it is possible that you got it under only one of those licenses (e.g. because it
+> was combined with another work that puts constraints on it).
 
-diff --git a/package/gutenprint/0003-print-olympus.c-fix-endianness-detection.patch b/package/gutenprint/0003-print-olympus.c-fix-endianness-detection.patch
-new file mode 100644
-index 0000000..fc1746c
---- /dev/null
-+++ b/package/gutenprint/0003-print-olympus.c-fix-endianness-detection.patch
-@@ -0,0 +1,33 @@
-+From e0dad4bb237f1155e920c30c6fd3412e96a3e84d Mon Sep 17 00:00:00 2001
-+From: Olivier Schonken <olivier.schonken@gmail.com>
-+Date: Sun, 24 Jan 2016 17:14:21 +0200
-+Subject: [PATCH 1/1] print-olympus.c: fix endianness detection
-+
-+The __LITTLE_ENDIAN__ and __BIG_ENDIAN__ macros are not a reliable way to
-+detect endianness. Instead, rely on __BYTE_ORDER like we do in the rest of
-+the code.
-+
-+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-+---
-+ src/main/print-olympus.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/main/print-olympus.c b/src/main/print-olympus.c
-+index 42c4897..8b2aa80 100644
-+--- a/src/main/print-olympus.c
-++++ b/src/main/print-olympus.c
-+@@ -4901,9 +4901,9 @@ dyesub_do_print(stp_vars_t *v, stp_image_t *image)
-+   }
-+ 
-+   if (pv.bytes_per_ink_channel > 1) {
-+-#if defined(__LITTLE_ENDIAN) || defined(__LITTLE_ENDIAN__)
-++#if (__BYTE_ORDER == __LITTLE_ENDIAN)
-+     pv.byteswap = dyesub_feature(caps, DYESUB_FEATURE_BIGENDIAN);
-+-#elif defined (__BIG_ENDIAN) || defined(__BIG_ENDIAN__)
-++#elif (__BYTE_ORDER == __BIG_ENDIAN)
-+     pv.byteswap = !dyesub_feature(caps, DYESUB_FEATURE_BIGENDIAN);
-+ #else
-+ #error "Unable to determine endianness, aborting compilation!"
-+-- 
-+1.9.1
-+
-diff --git a/package/gutenprint/Config.in b/package/gutenprint/Config.in
-index 686dbce..f93717c 100644
---- a/package/gutenprint/Config.in
-+++ b/package/gutenprint/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_GUTENPRINT
- 	bool "gutenprint"
--	# because of cups security issues
--	depends on BR2_DEPRECATED_SINCE_2015_05
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_CUPS
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-diff --git a/package/gutenprint/gutenprint.hash b/package/gutenprint/gutenprint.hash
-index 3cfe0e1..a52cc7d 100644
---- a/package/gutenprint/gutenprint.hash
-+++ b/package/gutenprint/gutenprint.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  4b27e4f06f32d30271df89ecb6089bb11bcf2caec5f60b0909e083095354bca0  gutenprint-5.2.9.tar.bz2
-+sha256  c1a34cd2e02527de4d2a9bf6c14732cb9aa11b333f771eb6043fdc974de24df9  gutenprint-5.2.11.tar.bz2
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 3ff05b6..7e3024d 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GUTENPRINT_VERSION_MAJOR = 5.2
--GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).9
-+GUTENPRINT_VERSION = $(GUTENPRINT_VERSION_MAJOR).11
- GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint-$(GUTENPRINT_VERSION_MAJOR)/$(GUTENPRINT_VERSION)
- GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
- GUTENPRINT_LICENSE = GPLv2+
-@@ -44,8 +44,7 @@ GUTENPRINT_CONF_OPTS = \
- # USE_PREGEN_XMLI18N_TMP_H is added by our patch
- GUTENPRINT_MAKE_ENV = BR2_USE_PREGEN_XMLI18N_TMP_H=$(HOST_DIR)/usr/include/xmli18n-tmp.h
- 
--# We have no host dependencies
--HOST_GUTENPRINT_DEPENDENCIES =
-+HOST_GUTENPRINT_DEPENDENCIES = host-pkgconf
- # The host-gutenprint shall create the required header
- HOST_GUTENPRINT_MAKE_ENV =
- 
+Again, IANAL, TTYL, and so on...
+
+However, if some "other work" puts constraints on the file, then that
+file still retains its own license; the rights you had under that
+license are just diminished by those "constraints" of the license for
+that "other work".
+
+>  And unfortunately, it is not very clear under which license you received the
+> code when you got it through a combined work. You _could_ claim that because you
+> received these files as part of the erlang-rebar package, you have only received
+> file-1.c under the MIT license. However, you could also claim that the
+> distributors of erlang-rebar never intended to change the license of file-1.c,
+> so that that individual file can still be used under the MIT license. So:
+> situation is not clear IMHO.
+
+No, it's definitely not clear, as all licensing issues! :-)
+
+Still, I think we should not take the responisibility to do such an
+in-depth licensing analysis, and that we should dtride of the safe side
+by just listing all those licenses that apply (see below).
+
+> > If the two licenses are "compatible", then you are allowed to combine
+> > the two files to produce a derived work. That derived work is then
+> > governed by both licenses. In effect, the most stringent license will
+> > dominate, but the other will still apply.
+> > 
+> > Let's take two hypotetical licenses:
+> > 
+> >   - the Hello License, which states: If you use that file, you must say
+> >     Hello to the closest Human being.
+> > 
+> >   - the Tea-Now License, which states: If you use that file, you must
+> >     drink a tea now.
+> > 
+> > Those two licenses are compatible (i.e. you can say Hello and drink a
+> > tea), so you can combine them. Still, you have to do both, not either.
+> > 
+> > So yes, we need to specify *all* the licenses that govern files used to
+> > generate the output.
+> > 
+> > Note that the licenses list in Buildroot is to be interpreted as:
+> >     The combined work generated from this package is governed by those
+> >     licenses.
+> 
+>  I don't think we can put that strong a claim, I think it is: the combined work
+> generated from this package may be governed by those licenses.
+> 
+>  One example where the 'may' is important is when you configured out some file,
+> and that was the only file under a particular license, then that license doesn't
+> apply anymore to the combined work.
+
+I see your point. But we usually try to make that license conditional in
+this case, like dtc, ffmpeg, kmod and a few others. Not saying that we
+always do so, but we tend to.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
