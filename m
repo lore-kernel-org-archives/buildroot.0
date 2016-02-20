@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 23:35:22 +0100
-Subject: [Buildroot] [PATCH v2 14/18] erlang-p1-xml: bump to version
- 1.1.1
-In-Reply-To: <1454443064-14269-15-git-send-email-fhunleth@troodon-software.com>
+Date: Sat, 20 Feb 2016 23:35:51 +0100
+Subject: [Buildroot] [PATCH v2 15/18] erlang-p1-yaml: bump to version
+ 1.0.0
+In-Reply-To: <1454443064-14269-16-git-send-email-fhunleth@troodon-software.com>
 References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-15-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160220233522.445645d6@free-electrons.com>
+ <1454443064-14269-16-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160220233551.16158ec8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,28 @@ To: buildroot@busybox.net
 
 Dear Frank Hunleth,
 
-On Tue,  2 Feb 2016 14:57:40 -0500, Frank Hunleth wrote:
+On Tue,  2 Feb 2016 14:57:41 -0500, Frank Hunleth wrote:
 > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 > ---
-> Changes v1->v2:
->   - Fix license file name
+>  package/erlang-p1-yaml/erlang-p1-yaml.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  package/erlang-p1-xml/erlang-p1-xml.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/erlang-p1-xml/erlang-p1-xml.mk b/package/erlang-p1-xml/erlang-p1-xml.mk
-> index f81d3e5..36c1537 100644
-> --- a/package/erlang-p1-xml/erlang-p1-xml.mk
-> +++ b/package/erlang-p1-xml/erlang-p1-xml.mk
-> @@ -4,10 +4,10 @@
+> diff --git a/package/erlang-p1-yaml/erlang-p1-yaml.mk b/package/erlang-p1-yaml/erlang-p1-yaml.mk
+> index 6f7c977..ba661b9 100644
+> --- a/package/erlang-p1-yaml/erlang-p1-yaml.mk
+> +++ b/package/erlang-p1-yaml/erlang-p1-yaml.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -ERLANG_P1_XML_VERSION = 2c61083
-> +ERLANG_P1_XML_VERSION = 1.1.1
->  ERLANG_P1_XML_SITE = $(call github,processone,xml,$(ERLANG_P1_XML_VERSION))
->  ERLANG_P1_XML_LICENSE = GPLv2+
-> -ERLANG_P1_XML_LICENSE_FILES = COPYING
-> +ERLANG_P1_XML_LICENSE_FILES = LICENSE.txt
->  ERLANG_P1_XML_DEPENDENCIES = expat
->  ERLANG_P1_XML_INSTALL_STAGING = YES
+> -ERLANG_P1_YAML_VERSION = e1f081e
+> +ERLANG_P1_YAML_VERSION = 1.0.0
+>  ERLANG_P1_YAML_SITE = $(call github,processone,p1_yaml,$(ERLANG_P1_YAML_VERSION))
+>  ERLANG_P1_YAML_LICENSE = Apache-2.0
+>  ERLANG_P1_YAML_LICENSE_FILES = COPYING
 
-As noticed by Romain Naour, a dependency on erlang-p1-utils was
-missing, I could verified that with a build test. Also, the license has
-changed from GPLv2+ to Apache-2.0. So I've applied to next with the
-following changes:
-
-    [Thomas:
-      - add dependency on erlang-p1-utils, as noticed by Romain Naour.
-      - the license is now Apache-2.0 and no longer GPLv2+.]
-
-Thanks!
+Same problem as erlang-p1-xml: the dependency on erlang-p1-utils was
+missing. I've added it and applied to the next branch. Thanks!
 
 Thomas
 -- 
