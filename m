@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:50:38 +0100
-Subject: [Buildroot] [git commit] package/libarchive: add optional support
-	for bzip2
-Message-ID: <20160220145041.98848802F1@busybox.osuosl.org>
+Date: Sat, 20 Feb 2016 15:51:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iputils: patch ping to link
+ against libm
+In-Reply-To: <1455541206-18200-1-git-send-email-martin@barkynet.com>
+References: <1455541206-18200-1-git-send-email-martin@barkynet.com>
+Message-ID: <20160220155111.368c3657@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67ce9dcb94a2100f4e09164b0cebf973e95885fd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Martin Bark,
 
-When bzip2 was compiled before, libarchive will use it as optional
-dependency:
+On Mon, 15 Feb 2016 13:00:06 +0000, Martin Bark wrote:
+> ping fails to compile with uClibc based toolchains with the error
+> 
+> undefined reference to `__finite'
+> 
+> Add a patch to link ping against libm to resolve the math library function
+> finite().
+> 
+> Note, this error is not seen with glibc based toolchains because finite
+> seems to be resolved in both libm and libc.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/08f7386f75c881bc582b338824f8ccd509b2921e/
+> http://autobuild.buildroot.net/results/5aeef61fbd399dd78dc72b9e7cce978e6f1f58b4/
+> 
+> A pull request has been sent to fix this issue upstream, see
+> https://github.com/iputils/iputils/pull/42
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
+> ---
+>  package/iputils/0001-ping-link-against-libm.patch | 29 +++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 package/iputils/0001-ping-link-against-libm.patch
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libarchive.so.13.1.2 | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
- 0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+Applied to master, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libarchive/libarchive.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 206de3f..726142b 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -42,6 +42,13 @@ else
- LIBARCHIVE_CONF_OPTS += --disable-xattr
- endif
- 
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+LIBARCHIVE_CONF_OPTS += --with-bz2lib
-+LIBARCHIVE_DEPENDENCIES += bzip2
-+else
-+LIBARCHIVE_CONF_OPTS += --without-bz2lib
-+endif
-+
- ifeq ($(BR2_PACKAGE_EXPAT),y)
- LIBARCHIVE_DEPENDENCIES += expat
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
