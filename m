@@ -1,38 +1,48 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sat, 20 Feb 2016 13:31:47 -0500
-Subject: [Buildroot] [PATCH v2 05/18] erlang-rebar: bump to version 2.6.1
-In-Reply-To: <20160220192418.08424caa@free-electrons.com>
-References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-6-git-send-email-fhunleth@troodon-software.com>
- <20160220192418.08424caa@free-electrons.com>
-Message-ID: <6FDD64E6-B998-4761-BABC-319E2B21EEB2@troodon-software.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat, 20 Feb 2016 20:10:10 +0100
+Subject: [Buildroot] [PATCH] package/shairport-sync: fix static build issue
+Message-ID: <1455995410-19843-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Add a patch from upstream to fix static build issue with linking against openssl
+and alsa.
 
-Thanks for applying some of the Erlang patches. I've had a really busy week, but as soon as I get back today, I'll see what's missing and send a patch set with any residual changes that didn't make your cut. I know that I had several changes that various people had requested.
+Fixes:
+http://autobuild.buildroot.net/results/682/6821605cf12e1a5393c29b30baf00cb0f1e1a451/
+http://autobuild.buildroot.net/results/3cb/3cb79d566e197771d88e317789d05e9f467f4717/
+http://autobuild.buildroot.net/results/9bc/9bcc27461b67e718f49419ba292afd28f1152dc6/
+http://autobuild.buildroot.net/results/75a/75afbec6ba4c4b0ae2c18423a0d7eccf098b2eaa/
+.. and possibly more.
 
-Thanks,
-Frank
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 1 +
+ package/shairport-sync/shairport-sync.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-> On Feb 20, 2016, at 1:24 PM, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
-> 
-> Dear Frank Hunleth,
-> 
->> On Tue,  2 Feb 2016 14:57:31 -0500, Frank Hunleth wrote:
->> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->> ---
->> package/erlang-rebar/erlang-rebar.mk | 2 +-
->> 1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Applied to next, thanks.
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index e87dacd..35aba30 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  6f3535012ed25017e4f893f9bad5391c2ea23c64f398caac3f29d8dad5f9e987  shairport-sync-2.8.0.tar.gz
++sha256  e0c750f51c54611e564ddb1ee161aa57ba6be36d3bf54198d9a6435ad6bf1757  8e8a0ee7ab0db61dc46735a1206843fe943ffc61.patch
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index e25a78c..628d121 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -10,6 +10,7 @@ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VE
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
+ SHAIRPORT_SYNC_LICENSE_FILES = LICENSES
+ SHAIRPORT_SYNC_DEPENDENCIES = alsa-lib libconfig libdaemon popt host-pkgconf
++SHAIRPORT_SYNC_PATCH = https://github.com/mikebrady/shairport-sync/commit/8e8a0ee7ab0db61dc46735a1206843fe943ffc61.patch
+ 
+ # git clone, no configure
+ SHAIRPORT_SYNC_AUTORECONF = YES
+-- 
+2.7.1
