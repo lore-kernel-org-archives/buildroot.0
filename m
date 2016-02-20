@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:21 +0100
-Subject: [Buildroot] [PATCH/next 16/31]
-	package/kodi-visualisation-shadertoy: bump version, add hash
+Date: Sat, 20 Feb 2016 23:09:29 +0100
+Subject: [Buildroot] [PATCH/next 24/31] package/kodi-visualisation-fountain:
+	new package
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-25-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...FindOpenGLES2-also-search-for-egl-with-pkg-config.patch | 14 +++++++-------
- .../kodi-visualisation-shadertoy.hash                      |  2 ++
- .../kodi-visualisation-shadertoy.mk                        |  4 ++--
- 3 files changed, 11 insertions(+), 9 deletions(-)
- create mode 100644 package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+ package/kodi-visualisation-fountain/Config.in                 | 11 +++++++++++
+ .../kodi-visualisation-fountain.hash                          |  2 ++
+ .../kodi-visualisation-fountain.mk                            | 11 +++++++++++
+ package/kodi/Config.in                                        |  1 +
+ 4 files changed, 25 insertions(+)
+ create mode 100644 package/kodi-visualisation-fountain/Config.in
+ create mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+ create mode 100644 package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
 
-diff --git a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
-index f40c173..6737296 100644
---- a/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
-+++ b/package/kodi-visualisation-shadertoy/0001-FindOpenGLES2-also-search-for-egl-with-pkg-config.patch
-@@ -17,15 +17,15 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
- index 8b084cf..81bbe27 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -24,7 +24,7 @@ else()
-+@@ -35,7 +35,7 @@
-+     endif()
-    endif()
-- endif()
-  
---include_directories(${OpenGL_INCLUDE_DIR}
--+include_directories(${OpenGL_INCLUDE_DIR} ${OpenGLES2_INCLUDE_DIRS}
--                     ${GLEW_INCLUDE_DIR}
--                     ${KODI_INCLUDE_DIR}
--                     ${PROJECT_SOURCE_DIR}/lib/kissfft
-+-  include_directories(${OpenGL_INCLUDE_DIR}
-++  include_directories(${OpenGL_INCLUDE_DIR} ${OpenGLES2_INCLUDE_DIRS}
-+                       ${GLEW_INCLUDE_DIR}
-+                       ${KODI_INCLUDE_DIR}
-+                       ${platform_INCLUDE_DIRS}
- diff --git a/FindOpenGLES2.cmake b/FindOpenGLES2.cmake
- index e1b7d21..2a9ce0d 100644
- --- a/FindOpenGLES2.cmake
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+diff --git a/package/kodi-visualisation-fountain/Config.in b/package/kodi-visualisation-fountain/Config.in
 new file mode 100644
-index 0000000..fdd81fd
+index 0000000..2c52edd
 --- /dev/null
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
++++ b/package/kodi-visualisation-fountain/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
++	bool "kodi-visualisation-fountain"
++	depends on BR2_PACKAGE_KODI_GL # libsoil
++	select BR2_PACKAGE_LIBSOIL
++	help
++	  Fountain visualization for Kodi
++
++	  https://github.com/notspiff/visualization.fountain
++
++comment "fountain needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
+new file mode 100644
+index 0000000..8dc933e
+--- /dev/null
++++ b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 88732c399bb7e1237e8fc375583bb3789c96a28695a3805fb374361a7e5636c5 kodi-visualisation-shadertoy-f9988007681bf37e6c03d6992bae30133b020608.tar.gz
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 1b11f79..308016e 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
++sha256 7b2867f415f22e4bc4ba834034f00117fcf76774aea0afc7bf30b5f2d1991dd7 kodi-visualisation-fountain-f22deacd2396a204694d346f85369ea9ea70e16f.tar.gz
+diff --git a/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+new file mode 100644
+index 0000000..5684402
+--- /dev/null
++++ b/package/kodi-visualisation-fountain/kodi-visualisation-fountain.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# kodi-visualisation-fountain
++#
++################################################################################
++
++KODI_VISUALISATION_FOUNTAIN_VERSION = f22deacd2396a204694d346f85369ea9ea70e16f
++KODI_VISUALISATION_FOUNTAIN_SITE = $(call github,notspiff,visualization.fountain,$(KODI_VISUALISATION_FOUNTAIN_VERSION))
++KODI_VISUALISATION_FOUNTAIN_DEPENDENCIES = kodi libsoil
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 57e84ec..017d607 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -279,6 +279,7 @@ endmenu
  
--KODI_VISUALISATION_SHADERTOY_VERSION = a4eaaad4ab7204a30224f2c6952f7a7035ca1c38
-+KODI_VISUALISATION_SHADERTOY_VERSION = f9988007681bf37e6c03d6992bae30133b020608
- KODI_VISUALISATION_SHADERTOY_SITE = $(call github,notspiff,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPLv2+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = src/main.cpp
--KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = kodi libplatform
- 
- $(eval $(cmake-package))
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-fishbmc/Config.in"
++	source "package/kodi-visualisation-fountain/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
 -- 
 2.7.0
