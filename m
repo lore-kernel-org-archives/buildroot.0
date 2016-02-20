@@ -1,42 +1,50 @@
-From: Mauro Condarelli <mc5686@mclink.it>
-Date: Sat, 20 Feb 2016 13:32:24 +0100
-Subject: [Buildroot] [PATCH v5 18/20] python-service-identity: new
-	package
-In-Reply-To: <20160219224047.6276af21@free-electrons.com>
-References: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
- <20160219224047.6276af21@free-electrons.com>
-Message-ID: <56C85CD8.2000608@mclink.it>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 20 Feb 2016 13:48:22 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain-external: CodeSourcery NiosII
+ 2015.11 affected by PR19405
+In-Reply-To: <87fuwrxc3z.fsf@dell.be.48ers.dk>
+References: <1455316403-7793-1-git-send-email-romain.naour@gmail.com>
+ <87fuwrxc3z.fsf@dell.be.48ers.dk>
+Message-ID: <56C86096.4060207@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas.
 
-Il 19/02/2016 22:40, Thomas Petazzoni ha scritto:
-> Mauro,
+Hi Peter,
+
+Le 17/02/2016 22:26, Peter Korsgaard a ?crit :
+
+>>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>   > Fixes:
+>   > http://autobuild.buildroot.net/results/ee562524c5b12191e584ceae89006c5a5103e700
 >
-> On Thu, 11 Feb 2016 11:58:46 +0100, Mauro Condarelli wrote:
->> Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-> Just a quick comment: it is really horrible for people
-> reviewing/applying your patches that you sent this patch separately
-> from the rest of the series. Now I have to manually figure out that
-> this patch labeled 18/20 in your v5 is in fact needed for patch 09/17
-> in your v4.
-Sorry about that.
-I was (and perhaps am) still trying to fully understand workflow.
-
-> Please resend full series, so that the dependencies between patches
-> remain explicit. Or if you don't do that, resend the new iteration of a
-> patch as a reply to the previous patch and with the same sequence
-> number.
-Ok.
-Next time I'll resend the full series and then I'll mark the previous one as "superseded" in Patchwork.
-Should I do something to link together the (versioned) series? They seem to appear as independent in Patchwork.
-
-> Thanks,
+>   > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>   > ---
+>   >  package/grantlee/Config.in             | 1 +
+>   >  package/opencv/Config.in               | 1 +
+>   >  package/opencv3/Config.in              | 1 +
+>   >  package/pinentry/Config.in             | 1 +
+>   >  package/poppler/Config.in              | 1 +
+>   >  package/qt/Config.in                   | 7 +++++++
 >
-> Thomas
-Regards and Apologies
-Mauro
+> Hmm, why are we only adding a comment to qt and not all these other
+> packages?
+
+I wasn't sure if we want to add a comment for a toolchain bug.
+Hopefully the list of packages affected by this bug is not so long.
+
+>
+> It would be good to add a link to the upstream bugtracker in the commit
+> description / where the kconfig symbol is added.
+
+See, v2 http://patchwork.ozlabs.org/patch/585613/
+Sorry, I forgot to add v2 in the tittle :-/
+
+Best regards,
+Romain
+
+>
+>
