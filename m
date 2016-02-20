@@ -1,51 +1,80 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 14:53:54 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/libarchive: add optional support
-	for bzip2
-Message-ID: <1455976435-2614-1-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Feb 2016 15:04:07 +0100
+Subject: [Buildroot] [git commit branch/next] python-autobahn: new package
+Message-ID: <20160220140439.BB55D80E44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When bzip2 was compiled before, libarchive will use it as optional
-dependency:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b51d9ddf8160067c983212902151e0f48c1a7af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-$ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libarchive.so.13.1.2 | grep NEEDED
- 0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
- 0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
- 0x00000001 (NEEDED)                     Shared library: [libz.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.1]
-
-configure.ac always checks bz2 support unless --without-bz2lib is used:
-https://github.com/libarchive/libarchive/blob/master/configure.ac#L300
-
-Therefore we do not need --with-bz2lib.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
+[Thomas: remove dependency on having .py files, since it builds fine
+and imports fine with .pyc files only.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
-v2: Added note why --with-bz2lib is not needed (Arnout)
+ package/Config.in                            |  1 +
+ package/python-autobahn/Config.in            |  9 +++++++++
+ package/python-autobahn/python-autobahn.hash |  3 +++
+ package/python-autobahn/python-autobahn.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
- package/libarchive/libarchive.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 206de3f..f438d6e 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -42,6 +42,12 @@ else
- LIBARCHIVE_CONF_OPTS += --disable-xattr
- endif
- 
-+ifeq ($(BR2_PACKAGE_BZIP2),y)
-+LIBARCHIVE_DEPENDENCIES += bzip2
-+else
-+LIBARCHIVE_CONF_OPTS += --without-bz2lib
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index d979da2..df96d40 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -620,6 +620,7 @@ endif
+ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-alsaaudio/Config.in"
++	source "package/python-autobahn/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-beautifulsoup4/Config.in"
+ 	source "package/python-bottle/Config.in"
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+new file mode 100644
+index 0000000..7e1429c
+--- /dev/null
++++ b/package/python-autobahn/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_AUTOBAHN
++	bool "python-autobahn"
++	select BR2_PACKAGE_PYTHON_SIX # runtime
++	select BR2_PACKAGE_PYTHON_TXAIO # runtime
++	help
++	  WebSocket client Hhh server library, WAMP real-time
++	  framework.
 +
- ifeq ($(BR2_PACKAGE_EXPAT),y)
- LIBARCHIVE_DEPENDENCIES += expat
- else
--- 
-2.7.0
++	  https://pypi.python.org/pypi/autobahn
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+new file mode 100644
+index 0000000..8f55ac1
+--- /dev/null
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=b4b5445050749c1033b9b58f694f0c64, sha256 locally computed.
++md5	b4b5445050749c1033b9b58f694f0c64  autobahn-0.12.1.tar.gz
++sha256	664223879e159c88221f42d8d1ac6b8c4268d8b9316d8ab69a02761c5744cd79  autobahn-0.12.1.tar.gz
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+new file mode 100644
+index 0000000..1d02867
+--- /dev/null
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-autobahn
++#
++################################################################################
++
++PYTHON_AUTOBAHN_VERSION = 0.12.1
++PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
++PYTHON_AUTOBAHN_SITE = http://pypi.python.org/packages/source/a/autobahn
++PYTHON_AUTOBAHN_LICENSE = MIT
++PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
++PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
