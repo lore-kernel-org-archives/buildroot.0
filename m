@@ -1,38 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Feb 2016 00:42:23 +0100
-Subject: [Buildroot] Buildroot for normal PC
-In-Reply-To: <56C79CD9.3010503@dawncrow.de>
-References: <56C79CD9.3010503@dawncrow.de>
-Message-ID: <56C8F9DF.1090008@mind.be>
+Date: Sun, 21 Feb 2016 00:45:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libarchive: add optional
+ support for bzip2
+In-Reply-To: <sg7mpcxlr5.ln2@ID-313208.user.individual.net>
+References: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
+ <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
+ <56BBA94B.3000809@mind.be> <sg7mpcxlr5.ln2@ID-313208.user.individual.net>
+Message-ID: <56C8FAB2.3010504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/19/16 23:53, Andr? Hentschel wrote:
-> Hi,
+On 02/20/16 14:49, Bernd Kuhls wrote:
+> Am Wed, 10 Feb 2016 22:19:07 +0100 schrieb Arnout Vandecappelle:
 > 
-> I wanna try some more things with the Wine package in buildroot, but I can't easily setup a testing environment for a PC.
-> One part is which bootloader to use and how to pack everything together to a bootable USB-Stick, HDD image or CD. (And I didn't found a defconfig for that)...
+>>  No --with-bz2lib? If there is a good reason, mention it in the commit
+>>  log.
+> 
+> Hi Arnout,
+> 
+> libarchive always checks for bzip2 unless --without-bz2lib is used:
+> https://github.com/libarchive/libarchive/blob/master/configure.ac#L300
+> 
+> Therefore I see no need for --with-bz2lib and I also should not have 
+> added --with-lzma as well, I will send a patch removing it along with v2 
+> of this patch explaining why --with-bz2lib is not needed.
 
- Check out BR2_TARGET_ROOTFS_ISO9660_HYBRID (after enabling the
-syslinux/isolinux bootloader and the iso9660 filesystem). It makes a bootable
-USB image.
+ We prefer to have both an explicit enable and disable (or with and without)
+because:
 
-> The other part is about the nvidia-driver, I'll need the legacy one for my card. Can I simply alter the version number in the makefile?
+- it makes it simpler in case the default changes after a version bump;
 
- That could be trickier...
+- it makes it easier for other people to understand that the right thing is done
+(no need to check in configure what the default is);
+
+- AFAIK the typical --enable/--with will give an error if the dependency is not
+found, which gives an extra safety net;
+
+- we do it like this in other places, it's nice to see the same pattern everywhere.
 
 
  Regards,
  Arnout
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
 
 
 -- 
