@@ -1,29 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 14:49:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libarchive: add optional
-	support for bzip2
-References: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
- <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
- <56BBA94B.3000809@mind.be>
-Message-ID: <sg7mpcxlr5.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Feb 2016 14:53:02 +0100
+Subject: [Buildroot] [git commit] lshw: add upstream patch to fix build on
+	Blackfin
+Message-ID: <20160220135307.5A9748081D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 10 Feb 2016 22:19:07 +0100 schrieb Arnout Vandecappelle:
+commit: https://git.buildroot.net/buildroot/commit/?id=0500c7c603e8f384daf380a56ab2b6703b988d06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  No --with-bz2lib? If there is a good reason, mention it in the commit
->  log.
+On Blackfin, the build fails due to the use of the L suffix instead of
+LL. To fix this, this commit adds an upstream patch from the project
+Github repository.
 
-Hi Arnout,
+Fixes:
 
-libarchive always checks for bzip2 unless --without-bz2lib is used:
-https://github.com/libarchive/libarchive/blob/master/configure.ac#L300
+  http://autobuild.buildroot.org/results/6d7d2034836e0d8705bba2f2597d3e1cde2c43b8/
 
-Therefore I see no need for --with-bz2lib and I also should not have 
-added --with-lzma as well, I will send a patch removing it along with v2 
-of this patch explaining why --with-bz2lib is not needed.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lshw/lshw.hash | 1 +
+ package/lshw/lshw.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Regards, Bernd
+diff --git a/package/lshw/lshw.hash b/package/lshw/lshw.hash
+index 416d496..8dfc7d3 100644
+--- a/package/lshw/lshw.hash
++++ b/package/lshw/lshw.hash
+@@ -2,3 +2,4 @@
+ sha256	eb9cc053fa0f1e78685cb695596e73931bfb55d2377e3bc3b8b94aff4c5a489c	lshw-B.02.17.tar.gz
+ sha256	2e5a3d63da8475db17fd90969bcb1930cf19d2b8da7be41edeea5c2a53878382	no-private-uint.patch
+ sha256	c8365f7ac8fc7a751c78d89ab446111bb1a235bc977a1b21e1b826c2e62361d1	basename-limits-long-bits.patch
++sha256	9eba284061574e02a6b162ab20dff07c48693e00f781220ee974ba5c90d1cca9	988f5449791ebf869ab9fa7520463dab4eae3404.patch
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index a4a2603..e8e67e2 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -8,7 +8,8 @@ LSHW_VERSION = B.02.17
+ LSHW_SITE = http://ezix.org/software/files
+ LSHW_PATCH = \
+ 	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/basename-limits-long-bits.patch \
+-	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/no-private-uint.patch
++	http://git.alpinelinux.org/cgit/aports/plain/testing/lshw/no-private-uint.patch \
++	https://github.com/lyonel/lshw/commit/988f5449791ebf869ab9fa7520463dab4eae3404.patch
+ LSHW_LICENSE = GPLv2
+ LSHW_LICENSE_FILES = COPYING
+ 
