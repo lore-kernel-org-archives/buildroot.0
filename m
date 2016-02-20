@@ -1,29 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:57:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-geode:
- bump version to 2.11.18
-In-Reply-To: <1454857060-8120-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454857060-8120-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160220155759.147388fb@free-electrons.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sat, 20 Feb 2016 16:16:21 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-02-19
+In-Reply-To: <20160220073017.2A200101DA7@stock.ovh.net>
+References: <20160220073017.2A200101DA7@stock.ovh.net>
+Message-ID: <1455981381.5444.1.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On Sa, 2016-02-20 at 08:30 +0100, Thomas Petazzoni wrote:
+> Build statistics for 2016-02-19
+> ===============================
+> 
 
-On Sun,  7 Feb 2016 15:57:40 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash | 4 ++--
->  package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> ?????????arm |???????????shairport-sync-2.8.0 | NOK |
+> http://autobuild.buildroot.net/results/6821605cf12e1a5393c29b30baf00c
+> b0f1e1a451/
 
-Applied to next, thanks.
+Inproper use of pkg-config. I'll prepare a for this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Best regards
+J?rg Krause
