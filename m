@@ -1,95 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 00:32:51 +0100
-Subject: [Buildroot] [PATCH v5 1/1] package/cups-filters: Add new
- package cups-filters 1.8.1
-In-Reply-To: <1453668465-30869-1-git-send-email-olivier.schonken@gmail.com>
-References: <1453668465-30869-1-git-send-email-olivier.schonken@gmail.com>
-Message-ID: <20160221003251.460d29e4@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 00:40:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xerces: add optional support for icu
+Message-ID: <1456011625-29254-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Olivier,
+When icu was compiled before, xerces will use it as optional dependency:
 
-Thanks for respining. I have a few more questions, see below.
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libxerces-c-3.1.so | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libicudata.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libicui18n.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libicuuc.so.56]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
 
-On Sun, 24 Jan 2016 22:47:45 +0200, Olivier Schonken wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/xerces/xerces.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-> new file mode 100644
-> index 0000000..23bfae5
-> --- /dev/null
-> +++ b/package/cups-filters/Config.in
-> @@ -0,0 +1,41 @@
-> +comment "cups-filters needs a toolchain w/ dynamic library"
-> +	depends on BR2_STATIC_LIBS
-
-This should have "depends on BR2_USE_MMU" so that the comment is not
-shown on architectures for which cups-filters can anyway not be built.
-
-> +
-> +config BR2_PACKAGE_CUPS_FILTERS
-> +	bool "cups-filters"
-> +	# needs fork()
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_STATIC_LIBS
-> +	select BR2_PACKAGE_CUPS
-
-Are you sure you want to do a "select BR2_PACKAGE_CUPS" ?
-
-First, if you "select BR2_PACKAGE_CUPS", you must replicate all
-"depends on" of BR2_PACKAGE_CUPS. And especially the dependency on
-BR2_INSTALL_LIBSTDCPP. Which means that the pdftops sub-option becomes
-quite useless, since it was mainly there because this feature requires
-C++ support.
-
-Secondly, it is quite obvious that "cups-filters" would need the "cups"
-package. So in fact this "select BR2_PACKAGE_CUPS" could very well be
-replaced by a "depends on BR2_PACKAGE_CUPS". Especially since other
-cups-depending packages such as gutenprint, foomatic-filters or hplip
-already use "depends on BR2_PACKAGE_CUPS".
-
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_IJS
-> +	select BR2_PACKAGE_LCMS2
-> +	select BR2_PACKAGE_POPPLER
-> +	select BR2_PACKAGE_QPDF
-
-You need to replicate the dependencies of all those packages you are
-selecting. For libglib2, it means for example:
-
-        depends on BR2_USE_WCHAR # gettext
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_USE_MMU # fork()
-
-poppler also depends on C++ support, so another reason why you need to
-"depends on BR2_INSTALL_LIBSTDCPP". Ditto for qpdf.
-
-> +if BR2_PACKAGE_CUPS_FILTERS
-> +
-> +config BR2_PACKAGE_CUPS_FILTERS_PDFTOPS
-> +	bool "pdftops support"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  Enable pdftops support
-
-Is it really useful to have a separate option for this? It doesn't seem
-to require any additional dependency (not even C++ support, see above).
-If the size difference is minimal, then we should get rid of this
-option, and simply build pdftops support unconditionally.
-
-You can update the Config.in.legacy file about pdftops support being
-removed from cups, by adding in the comment that the support is now in
-the cups-filters package.
-
-Could you respin after handling those comments?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
+index cf36183..e57949a 100644
+--- a/package/xerces/xerces.mk
++++ b/package/xerces/xerces.mk
+@@ -21,6 +21,13 @@ endef
+ 
+ XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
+ 
++ifeq ($(BR2_PACKAGE_ICU),y)
++XERCES_CONF_OPTS += --with-icu=$(STAGING_DIR)/usr
++XERCES_DEPENDENCIES += icu
++else
++XERCES_CONF_OPTS += --without-icu
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ XERCES_CONF_ENV += LIBS=-liconv
+ XERCES_DEPENDENCIES += libiconv
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
