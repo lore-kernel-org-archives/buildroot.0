@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2016 18:39:38 +0100
-Subject: [Buildroot] [PATCH 4/8] package/links: add
- --with/--without-libevent
-In-Reply-To: <1455986411-14273-5-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 20 Feb 2016 18:40:13 +0100
+Subject: [Buildroot] [PATCH 5/8] package/links: add
+	--with/--without-bzip2
+In-Reply-To: <1455986411-14273-6-git-send-email-bernd.kuhls@t-online.de>
 References: <1455986411-14273-1-git-send-email-bernd.kuhls@t-online.de>
- <1455986411-14273-5-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160220173938.GI3418@free.fr>
+ <1455986411-14273-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160220174013.GJ3418@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -27,20 +27,20 @@ Yann E. MORIN.
 >  1 file changed, 3 insertions(+)
 > 
 > diff --git a/package/links/links.mk b/package/links/links.mk
-> index 3a4519f..847d311 100644
+> index 847d311..26af392 100644
 > --- a/package/links/links.mk
 > +++ b/package/links/links.mk
-> @@ -40,7 +40,10 @@ LINKS_DEPENDENCIES += bzip2
+> @@ -36,7 +36,10 @@ endif
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_BZIP2),y)
+> +LINKS_CONF_OPTS += --with-bzip2
+>  LINKS_DEPENDENCIES += bzip2
+> +else
+> +LINKS_CONF_OPTS += --without-bzip2
 >  endif
 >  
 >  ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-> +LINKS_CONF_OPTS += --with-libevent
->  LINKS_DEPENDENCIES += libevent
-> +else
-> +LINKS_CONF_OPTS += --without-libevent
->  endif
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
 > -- 
 > 2.7.0
 > 
