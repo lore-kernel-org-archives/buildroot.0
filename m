@@ -1,71 +1,80 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:13 +0100
-Subject: [Buildroot] [PATCH/next 08/31] package/kodi: not available using a
-	musl-based toolchain
+Date: Sat, 20 Feb 2016 23:09:17 +0100
+Subject: [Buildroot] [PATCH/next 12/31] package/ffmpeg: Remove patch not
+	needed anymore for Kodi 16.0-Jarvis
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-13-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The build stops with
-configure: error: unsupported host (i586-buildroot-linux-musl)
-due to musl not being supported in
-https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
-
-Removing this obstacle will show that musl is really not being
-supported, the build will fail:
-
-In file included from emu_msvcrt.cpp:64:0:
-emu_msvcrt.h:93:3: error: ?__off64_t? does not name a type
-   __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
-   ^
-emu_msvcrt.h:94:3: error: ?__off_t? does not name a type
-   __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
-   ^
-
-I know these problems are fixable and the voidlinux projects seems to
-have done it already for 15.2-Isengard:
-https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
-
-For Jarvis-16.0 these patches have to be rebased at a later stage.
-For now block the Kodi package with musl-based toolchains to avoid
-build errors.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ ...add-public-version-of-ff_read_frame_flush.patch | 53 ----------------------
+ 1 file changed, 53 deletions(-)
+ delete mode 100644 package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 23468cc..13be622 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -2,11 +2,12 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	bool
- 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
- 
--comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
-+comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
-+		|| BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_KODI_EGL_GLES
-@@ -92,6 +93,7 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
- 	depends on BR2_USE_MMU # python
- 	depends on BR2_USE_WCHAR
+diff --git a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch b/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
+deleted file mode 100644
+index 58a91e2..0000000
+--- a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 7d7ce18ff0d24b586634fa6e631fa0eec7865aae Mon Sep 17 00:00:00 2001
+-From: elupus <elupus@xbmc.org>
+-Date: Tue, 1 Nov 2011 20:18:35 +0100
+-Subject: [PATCH 13/13] add public version of ff_read_frame_flush
+-
+-We need this since we sometimes seek on the
+-input stream behind ffmpeg's back. After this
+-all data need to be flushed completely.
+-
+-Patch part of the XBMC patch set for ffmpeg, downloaded from
+-https://github.com/xbmc/FFmpeg/.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libavformat/avformat.h | 5 +++++
+- libavformat/utils.c    | 5 +++++
+- 2 files changed, 10 insertions(+)
+-
+-diff --git a/libavformat/avformat.h b/libavformat/avformat.h
+-index 2e54ed1..3a9f292 100644
+---- a/libavformat/avformat.h
+-+++ b/libavformat/avformat.h
+-@@ -2121,6 +2121,11 @@ int av_find_best_stream(AVFormatContext *ic,
+- int av_read_frame(AVFormatContext *s, AVPacket *pkt);
+- 
+- /**
+-+ * Clear out any buffered data in context
+-+ */
+-+void av_read_frame_flush(AVFormatContext *s);
+-+
+-+/**
+-  * Seek to the keyframe at timestamp.
+-  * 'timestamp' in 'stream_index'.
+-  *
+-diff --git a/libavformat/utils.c b/libavformat/utils.c
+-index f4fb172..10dda18 100644
+---- a/libavformat/utils.c
+-+++ b/libavformat/utils.c
+-@@ -1624,6 +1624,11 @@ void ff_read_frame_flush(AVFormatContext *s)
+-     }
+- }
+- 
+-+void av_read_frame_flush(AVFormatContext *s)
+-+{
+-+  ff_read_frame_flush(s);
+-+}
+-+
+- void ff_update_cur_dts(AVFormatContext *s, AVStream *ref_st, int64_t timestamp)
+- {
+-     int i;
+--- 
+-2.1.0
+-
 -- 
 2.7.0
