@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 23:30:43 +0100
-Subject: [Buildroot] [PATCH v2 10/18] erlang-p1_stun: bump to version
- 0.9.0
-In-Reply-To: <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
+Date: Sat, 20 Feb 2016 23:31:19 +0100
+Subject: [Buildroot] [PATCH v2 11/18] erlang-p1-sip: bump to version
+ 1.0.0
+In-Reply-To: <1454443064-14269-12-git-send-email-fhunleth@troodon-software.com>
 References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160220233043.2be4fa0c@free-electrons.com>
+ <1454443064-14269-12-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160220233119.6522113f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +14,30 @@ To: buildroot@busybox.net
 
 Dear Frank Hunleth,
 
-On Tue,  2 Feb 2016 14:57:36 -0500, Frank Hunleth wrote:
-> As part of the version change, the package name changed to use an
-> underscore rather than a hyphen. Fortunately, the name change doesn't
-> affect the Config.in option, so no legacy handling is needed.
-> 
+On Tue,  2 Feb 2016 14:57:37 -0500, Frank Hunleth wrote:
 > Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  package/erlang-p1-sip/erlang-p1-sip.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/erlang-p1-sip/erlang-p1-sip.mk b/package/erlang-p1-sip/erlang-p1-sip.mk
+> index d017a92..eb963c8 100644
+> --- a/package/erlang-p1-sip/erlang-p1-sip.mk
+> +++ b/package/erlang-p1-sip/erlang-p1-sip.mk
+> @@ -4,11 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -ERLANG_P1_SIP_VERSION = fd3e461
+> +ERLANG_P1_SIP_VERSION = 1.0.0
+>  ERLANG_P1_SIP_SITE = $(call github,processone,p1_sip,$(ERLANG_P1_SIP_VERSION))
+>  ERLANG_P1_SIP_LICENSE = GPLv2 with OpenSSL exception
+>  ERLANG_P1_SIP_LICENSE_FILES = COPYING
+> -ERLANG_P1_SIP_DEPENDENCIES = erlang-p1-stun erlang-p1-tls erlang-p1-utils
+> +ERLANG_P1_SIP_DEPENDENCIES = erlang-p1_stun erlang-p1-tls erlang-p1-utils
 
-As suggested by Romain in his review, I've dropped the rename.
-Generally speaking, when things aren't clear between _ and -, I very
-much prefer to see - used in package name (though I admit this is a
-personal preference).
-
-
->  config BR2_PACKAGE_ERLANG_P1_STUN
-> -	bool "erlang-p1-stun"
-> -	select BR2_PACKAGE_ERLANG_P1_TLS
-> +	bool "erlang-p1_stun"
-> +	select BR2_PACKAGE_ERLANG_FAST_TLS
-
-Build testing has shown that BR2_PACKAGE_ERLANG_FAST_TLS was not the
-proper dependency, and instead keeping BR2_PACKAGE_ERLANG_P1_TLS was
-the right solution. Could you double check why you switched to
-fast_tls ?
-
-So, I've applied to next, with the following changes:
-
-    [Thomas:
-     - do only the version bump, not the package rename, as suggested by
-       Romain Naour
-     - erlang-p1-stun continues to depend on erlang-p1-tls, not
-       erlang-fast_tls.]
-
-Thanks!
+This erlang-p1-stun was not renamed, I've removed this change for the
+patch, and then applied to the next branch. Thanks!
 
 Thomas
 -- 
