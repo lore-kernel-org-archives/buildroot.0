@@ -1,60 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Feb 2016 23:49:19 +0100
-Subject: [Buildroot] [PATCH v3] Update libaio to 0.3.110
-In-Reply-To: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
-References: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <56C8ED6F.1010201@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Feb 2016 23:50:39 +0100
+Subject: [Buildroot] state of olimex_imx233_olinuxino_defconfig
+In-Reply-To: <CAPiYbRL+v9QK+cK1D+kmyPx58wx8ehmZVWGDQHRTzRe5=diHfg@mail.gmail.com>
+ (Phil Eichinger's message of "Sat, 20 Feb 2016 23:15:01 +0100")
+References: <CAPiYbRL+v9QK+cK1D+kmyPx58wx8ehmZVWGDQHRTzRe5=diHfg@mail.gmail.com>
+Message-ID: <87egc7c7y8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/18/16 20:39, Alistair Francis wrote:
-> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
+>>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
 
- The commit message should have mentioned that the patch is now reduced to just
-MIPS. It should also mention the upstream status of the patch. Have you sent it
-upstream?
+ > Hello
+ > I recently tried olimex_imx233_olinuxino_defconfig and created the SD
+ > card according to the readme.txt. It failed to boot with:
+ > "
+ > PowerPrep start initialize power...
+ > Battery Voltage = 0.74V
+ > No battery or bad battery
+ > detected!!!.Disabling battery
+ > voltage measurements./r/nLLCFeb 16 201616:01:38
+ > EMI_CTRL 0x1C084040
+ > FRAC 0x92926192
+ > init_ddr_mt46v32m16_133Mhz
+ > power 0x00820710
+ > Frac 0x92926192
+ > start change cpu freq
+ > hbus 0x00000003
+ > cpu 0x00010001
+ > LLLLLLLFCLJ
+ > "
+ > Looks like the handover to the kernel is somehow broken, as it is not starting.
 
- Otherwise:
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Sorry, no experience with imx233 / mxs-bootlets. Gustavoz, you've done
+various updates to the defconfig. Does it work for you? Any hints?
 
- Regards,
- Arnout
+ > I am however not sure if I should submit an updated defconfig or a new
+ > one like olimex_imx233_olinuxino_uboot_defconfig and extend the
+ > readme.txt to cover both use cases?
 
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
-> ---
->  package/libaio/0001-arches.patch | 454 ++-------------------------------------
->  package/libaio/Config.in         |   2 +-
->  package/libaio/libaio.hash       |   4 +-
->  package/libaio/libaio.mk         |   2 +-
->  4 files changed, 20 insertions(+), 442 deletions(-)
-> 
-> diff --git a/package/libaio/0001-arches.patch b/package/libaio/0001-arches.patch
-> index c85568c..4b77f57 100644
-> --- a/package/libaio/0001-arches.patch
-> +++ b/package/libaio/0001-arches.patch
-> @@ -1,145 +1,28 @@
->  Patch borrowed from OpenEmbedded, available at
-> -recipes/libaio/libaio-0.3.106/00_arches.patch in their source
-> -tree. The patch has been adapted to remove the ARM-related
-> -definitions, since they have been merged in later versions of libaio.
-> +/meta/recipes-extended/libaio/libaio/00_arches.patch in their source
-> +tree. This patch has been modified to only add the MIPS definitions.
->  
-> -The patch adds various architecture specific definitions (syscall
-> -number and macros) for m68k, MIPS, PA/RISC and Sparc. Amongst these,
-> -Buildroot mostly only cares about MIPS, but it was just easier to take
-> -the whole OpenEmbedded patch.
-> +The patch adds MIPS specific definitions (syscall number and macros).
-
+Lets see what Gustavoz says.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
