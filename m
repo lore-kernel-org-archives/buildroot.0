@@ -1,56 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 00:12:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/quota: add optional support for
-	e2fsprogs
-In-Reply-To: <1456009925-11756-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456009925-11756-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456009925-11756-2-git-send-email-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 00:12:47 +0100
+Subject: [Buildroot] [PATCH v2 10/18] erlang-p1_stun: bump to version
+ 0.9.0
+In-Reply-To: <CA+-urNRQdWeYMt4RxONJFMDTBV9EtcD_+TBV3G-PismHVUhhOA@mail.gmail.com>
+References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
+ <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
+ <20160220233043.2be4fa0c@free-electrons.com>
+ <CA+-urNRQdWeYMt4RxONJFMDTBV9EtcD_+TBV3G-PismHVUhhOA@mail.gmail.com>
+Message-ID: <20160221001247.1f188600@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When e2fsprogs was compiled before, quota will use it as optional
-dependency:
+Hello,
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/quotacheck | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libcom_err.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libext2fs.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
+On Sat, 20 Feb 2016 18:09:20 -0500, Frank Hunleth wrote:
 
-Quote from configure log before this patch when e2fsprogs were missing:
+> Yes, I generally have the same preference. In the Erlang world, the
+> style is to use underscores since module names can be represented as
+> atoms. In theory, you can quote atoms if you want them to have
+> hyphens, but it doesn't look pretty. In the end, I don't think that it
+> bothers me either way, so I'm happy to leave it as is.
 
-checking ext2fs/ext2fs.h usability... no
-checking ext2fs/ext2fs.h presence... no
-checking for ext2fs/ext2fs.h... no
-checking for com_err in -lcom_err... no
-checking for ext2fs_initialize in -lext2fs... no
-configure: WARNING: Ext2 direct support won't be compiled. Libraries not found.
+Ok, fine.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/quota/quota.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> >>  config BR2_PACKAGE_ERLANG_P1_STUN
+> >> -     bool "erlang-p1-stun"
+> >> -     select BR2_PACKAGE_ERLANG_P1_TLS
+> >> +     bool "erlang-p1_stun"
+> >> +     select BR2_PACKAGE_ERLANG_FAST_TLS
+> >
+> > Build testing has shown that BR2_PACKAGE_ERLANG_FAST_TLS was not the
+> > proper dependency, and instead keeping BR2_PACKAGE_ERLANG_P1_TLS was
+> > the right solution. Could you double check why you switched to
+> > fast_tls ?
+> 
+> This was a mistake on my part. I fixed it in a patch that I hadn't
+> sent to the list, so thanks for fixing that for me.
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index a6b0322..c30a2bd 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -18,6 +18,13 @@ QUOTA_DEPENDENCIES += gettext
- QUOTA_LIBS += -lintl
- endif
- 
-+ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
-+QUOTA_DEPENDENCIES += e2fsprogs
-+QUOTA_CONF_OPTS += --enable-ext2direct
-+else
-+QUOTA_CONF_OPTS += --disable-ext2direct
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- QUOTA_DEPENDENCIES += libtirpc host-pkgconf
- QUOTA_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+So, is the fast_tls package still useful?
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
