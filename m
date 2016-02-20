@@ -1,46 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 00:40:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xerces: add optional support for icu
-Message-ID: <1456011625-29254-1-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 21 Feb 2016 00:42:23 +0100
+Subject: [Buildroot] Buildroot for normal PC
+In-Reply-To: <56C79CD9.3010503@dawncrow.de>
+References: <56C79CD9.3010503@dawncrow.de>
+Message-ID: <56C8F9DF.1090008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When icu was compiled before, xerces will use it as optional dependency:
+On 02/19/16 23:53, Andr? Hentschel wrote:
+> Hi,
+> 
+> I wanna try some more things with the Wine package in buildroot, but I can't easily setup a testing environment for a PC.
+> One part is which bootloader to use and how to pack everything together to a bootable USB-Stick, HDD image or CD. (And I didn't found a defconfig for that)...
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libxerces-c-3.1.so | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libgcc_s.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libicudata.so.56]
- 0x0000000000000001 (NEEDED)             Shared library: [libicui18n.so.56]
- 0x0000000000000001 (NEEDED)             Shared library: [libicuuc.so.56]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libstdc++.so.6]
+ Check out BR2_TARGET_ROOTFS_ISO9660_HYBRID (after enabling the
+syslinux/isolinux bootloader and the iso9660 filesystem). It makes a bootable
+USB image.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/xerces/xerces.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> The other part is about the nvidia-driver, I'll need the legacy one for my card. Can I simply alter the version number in the makefile?
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index cf36183..e57949a 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -21,6 +21,13 @@ endef
- 
- XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
- 
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+XERCES_CONF_OPTS += --with-icu=$(STAGING_DIR)/usr
-+XERCES_DEPENDENCIES += icu
-+else
-+XERCES_CONF_OPTS += --without-icu
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- XERCES_CONF_ENV += LIBS=-liconv
- XERCES_DEPENDENCIES += libiconv
+ That could be trickier...
+
+
+ Regards,
+ Arnout
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+
 -- 
-2.7.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
