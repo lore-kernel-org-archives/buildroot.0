@@ -1,49 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 20:51:17 +0100
-Subject: [Buildroot] [PATCH 3/3] package/syslog-ng: add optional support for
-	geoip
-In-Reply-To: <1455997877-9594-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1455997877-9594-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1455997877-9594-3-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 20 Feb 2016 21:19:54 +0100
+Subject: [Buildroot] [PATCH v3] support/misc: Adding Vagrant file for
+	provisioning
+In-Reply-To: <CA+TH9VnQB_-2qKy2yRzOT6jCzz5hv4xiioW5r5g8F69G2sgrZg@mail.gmail.com>
+ (Angelo Compagnucci's message of "Sat, 20 Feb 2016 12:07:54 +0100")
+References: <1447887095-16773-1-git-send-email-angelo.compagnucci@gmail.com>
+ <8737t8xx5a.fsf@dell.be.48ers.dk>
+ <CA+TH9Vni80B2u4toCMZdBq0pj-YycNk9b1yTNULPMWMFapKfnw@mail.gmail.com>
+ <20160220105636.GC3418@free.fr>
+ <CA+TH9VnQB_-2qKy2yRzOT6jCzz5hv4xiioW5r5g8F69G2sgrZg@mail.gmail.com>
+Message-ID: <87fuwnf82d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When geoip was compiled before, syslog-ng will use it as optional
-dependency:
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/syslog-ng/libgeoip-plugin.so | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [ld64-uClibc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libGeoIP.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libsyslog-ng-3.7.so.0]
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/syslog-ng/syslog-ng.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ > Obviously, I'm not in the position to steer the project in a way or
+ > another, but IMHO giving a little bit of advice on how to run
+ > Buildroot on others OSes could only benefit the project as a whole.
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index f11d895..1acaad8 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -20,6 +20,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSLOG_NG_DEPENDENCIES += busybox
- endif
- 
-+ifeq ($(BR2_PACKAGE_GEOIP),y)
-+SYSLOG_NG_DEPENDENCIES += geoip
-+SYSLOG_NG_CONF_OPTS += --enable-geoip
-+else
-+SYSLOG_NG_CONF_OPTS += --disable-geoip
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- SYSLOG_NG_DEPENDENCIES += libcap
- SYSLOG_NG_CONF_OPTS += --enable-linux-caps
+ > And please stop with that Puppet, Chef and other amenities, they are
+ > not meant to rapidly build a virtual machine with some software inside
+ > and nobody talked about them than you.
+
+ > As I stated before, the goal here is to give the opportunity to the
+ > people who cannot run Buildroot natively to use it anyway, in a simple
+ > to run Vm.
+
+ > Nothing more nothing less.
+
+Understood, and I appreciate it. I think the confusion / disagreement
+comes from the fact that the main developers aren't the target audience,
+and they don't have a need / desire to use it, but that doesn't mean
+others might not.
+
 -- 
-2.7.0
+Venlig hilsen,
+Peter Korsgaard 
