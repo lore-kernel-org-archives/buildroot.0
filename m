@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:30 +0100
-Subject: [Buildroot] [PATCH/next 25/31] package/kodi-pvr-hdhomerun: new
+Date: Sat, 20 Feb 2016 23:09:36 +0100
+Subject: [Buildroot] [PATCH/next 31/31] package/kodi-visualisation-vsxu: new
 	package
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-26-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-32-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,70 +13,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-hdhomerun/Config.in               |  9 +++++++++
- package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash |  2 ++
- package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk   | 15 +++++++++++++++
- package/kodi/Config.in                             |  1 +
- 4 files changed, 27 insertions(+)
- create mode 100644 package/kodi-pvr-hdhomerun/Config.in
- create mode 100644 package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
- create mode 100644 package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
+ package/kodi-visualisation-vsxu/Config.in                   |  8 ++++++++
+ .../kodi-visualisation-vsxu/kodi-visualisation-vsxu.hash    |  2 ++
+ package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk  | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-visualisation-vsxu/Config.in
+ create mode 100644 package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.hash
+ create mode 100644 package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
 
-diff --git a/package/kodi-pvr-hdhomerun/Config.in b/package/kodi-pvr-hdhomerun/Config.in
+diff --git a/package/kodi-visualisation-vsxu/Config.in b/package/kodi-visualisation-vsxu/Config.in
 new file mode 100644
-index 0000000..ed5b914
+index 0000000..2c2df17
 --- /dev/null
-+++ b/package/kodi-pvr-hdhomerun/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_KODI_PVR_HDHOMERUN
-+	bool "kodi-pvr-hdhomerun"
-+	select BR2_PACKAGE_JSONCPP
-+	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_LIBHDHOMERUN
++++ b/package/kodi-visualisation-vsxu/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_KODI_VISUALISATION_VSXU
++	bool "kodi-visualisation-vsxu"
++	select BR2_PACKAGE_VSXU
++	depends on BR2_i386 || BR2_x86_64 # vsxu
 +	help
-+	  Kodi's HDHomeRun client addon
++	  VSXu visualisation for Kodi
 +
-+	  https://github.com/kodi-pvr/pvr.hdhomerun
-diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++	  https://github.com/notspiff/visualization.vsxu
+diff --git a/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.hash b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.hash
 new file mode 100644
-index 0000000..e822ae2
+index 0000000..fd916e3
 --- /dev/null
-+++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.hash
++++ b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256  356548f86616a421e0b1d7f2a91eb5159c74b666973faa9de626940eb89afc54  kodi-pvr-hdhomerun-8d7b8af10633ad995193fb045cbaac6094a8f98d.tar.gz
-diff --git a/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
++sha256 c8d48cb52c348bf2ff2d027f0c86a5122c72b8263886cc25b35872431fe5e319 kodi-visualisation-vsxu-990332f0719503c4575021f5f64daa0fbc35ac4e.tar.gz
+diff --git a/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
 new file mode 100644
-index 0000000..c35c38a
+index 0000000..7ba39c7
 --- /dev/null
-+++ b/package/kodi-pvr-hdhomerun/kodi-pvr-hdhomerun.mk
-@@ -0,0 +1,15 @@
++++ b/package/kodi-visualisation-vsxu/kodi-visualisation-vsxu.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-pvr-hdhomerun
++# kodi-visualisation-vsxu
 +#
 +################################################################################
 +
-+# This cset is on the branch 'Jarvis'
-+# When Kodi is updated, then this should be updated to the corresponding branch
-+KODI_PVR_HDHOMERUN_VERSION = 8d7b8af10633ad995193fb045cbaac6094a8f98d
-+KODI_PVR_HDHOMERUN_SITE = $(call github,kodi-pvr,pvr.hdhomerun,$(KODI_PVR_HDHOMERUN_VERSION))
-+KODI_PVR_HDHOMERUN_LICENSE = GPLv2+
-+KODI_PVR_HDHOMERUN_LICENSE_FILES = src/client.h
-+KODI_PVR_HDHOMERUN_DEPENDENCIES = jsoncpp kodi-platform libhdhomerun
++KODI_VISUALISATION_VSXU_VERSION = 990332f0719503c4575021f5f64daa0fbc35ac4e
++KODI_VISUALISATION_VSXU_SITE = $(call github,notspiff,visualization.vsxu,$(KODI_VISUALISATION_VSXU_VERSION))
++KODI_VISUALISATION_VSXU_LICENSE = GPLv2+
++KODI_VISUALISATION_VSXU_LICENSE_FILES = debian/copyright
++KODI_VISUALISATION_VSXU_DEPENDENCIES = kodi vsxu
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 017d607..daed533 100644
+index d9a24f5..d4721c2 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -248,6 +248,7 @@ menu "PVR addons"
- 	source "package/kodi-pvr-dvblink/Config.in"
- 	source "package/kodi-pvr-dvbviewer/Config.in"
- 	source "package/kodi-pvr-filmon/Config.in"
-+	source "package/kodi-pvr-hdhomerun/Config.in"
- 	source "package/kodi-pvr-hts/Config.in"
- 	source "package/kodi-pvr-iptvsimple/Config.in"
- 	source "package/kodi-pvr-mediaportal-tvserver/Config.in"
+@@ -291,6 +291,7 @@ menu "Visualisations"
+ 	source "package/kodi-visualisation-goom/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
++	source "package/kodi-visualisation-vsxu/Config.in"
+ 	source "package/kodi-visualisation-waveforhue/Config.in"
+ 	source "package/kodi-visualisation-waveform/Config.in"
+ endmenu
 -- 
 2.7.0
