@@ -1,64 +1,54 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 20 Feb 2016 23:46:34 +0100
-Subject: [Buildroot] [PATCH] perf: append endianness argument to ld when
- building for MIPS
-In-Reply-To: <1455816222-43031-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1455816222-43031-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <56C8ECCA.6010705@mind.be>
+Date: Sat, 20 Feb 2016 23:49:19 +0100
+Subject: [Buildroot] [PATCH v3] Update libaio to 0.3.110
+In-Reply-To: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
+References: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <56C8ED6F.1010201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/18/16 18:23, Vicente Olivert Riera wrote:
-> We need to pass an argument to ld for setting the endianness when
-> building it for MIPS architecture, otherwise the default one will always
-> be used (which is big endian) and the compilation for little endian will
-> always fail showing an error like this one:
-> 
-> LD    foo.o
-> mips-linux-gnu-ld: foo.o: compiled for a little endian system and target
-> is big endian
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  linux/linux-tool-perf.mk | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
-> index 07c3514..7ad6629 100644
-> --- a/linux/linux-tool-perf.mk
-> +++ b/linux/linux-tool-perf.mk
-> @@ -27,6 +27,21 @@ PERF_MAKE_FLAGS = \
->  	WERROR=0 \
->  	ASCIIDOC=
->  
-> +# We need to pass an argument to ld for setting the endianness when
-> +# building it for MIPS architecture, otherwise the default one will
-> +# always be used (which is big endian) and the compilation for little
-> +# endian will always fail showing an error like this one:
-> +#  LD    foo.o
-> +# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
-> +# target is big endian
-> +ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
-> +ifeq ($(BR2_ENDIAN),"BIG")
+On 02/18/16 20:39, Alistair Francis wrote:
+> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
 
- Er, isn't this a bit silly? Can you have big-endian mipsel, or little-endian mips?
+ The commit message should have mentioned that the patch is now reduced to just
+MIPS. It should also mention the upstream status of the patch. Have you sent it
+upstream?
+
+ Otherwise:
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
-> +else
-> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
-> +endif
-> +endif
-> +
->  # The call to backtrace() function fails for ARC, because for some
->  # reason the unwinder from libgcc returns early. Thus the usage of
->  # backtrace() should be disabled in perf explicitly: at build time
 > 
+> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> ---
+>  package/libaio/0001-arches.patch | 454 ++-------------------------------------
+>  package/libaio/Config.in         |   2 +-
+>  package/libaio/libaio.hash       |   4 +-
+>  package/libaio/libaio.mk         |   2 +-
+>  4 files changed, 20 insertions(+), 442 deletions(-)
+> 
+> diff --git a/package/libaio/0001-arches.patch b/package/libaio/0001-arches.patch
+> index c85568c..4b77f57 100644
+> --- a/package/libaio/0001-arches.patch
+> +++ b/package/libaio/0001-arches.patch
+> @@ -1,145 +1,28 @@
+>  Patch borrowed from OpenEmbedded, available at
+> -recipes/libaio/libaio-0.3.106/00_arches.patch in their source
+> -tree. The patch has been adapted to remove the ARM-related
+> -definitions, since they have been merged in later versions of libaio.
+> +/meta/recipes-extended/libaio/libaio/00_arches.patch in their source
+> +tree. This patch has been modified to only add the MIPS definitions.
+>  
+> -The patch adds various architecture specific definitions (syscall
+> -number and macros) for m68k, MIPS, PA/RISC and Sparc. Amongst these,
+> -Buildroot mostly only cares about MIPS, but it was just easier to take
+> -the whole OpenEmbedded patch.
+> +The patch adds MIPS specific definitions (syscall number and macros).
 
 
 -- 
