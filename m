@@ -1,95 +1,71 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:09:16 +0100
-Subject: [Buildroot] [PATCH/next 11/31] package/kodi: Remove dependency for
-	BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 from sub packages
+Date: Sat, 20 Feb 2016 23:09:13 +0100
+Subject: [Buildroot] [PATCH/next 08/31] package/kodi: not available using a
+	musl-based toolchain
 In-Reply-To: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456006176-21308-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456006176-21308-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi itself already depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, there is
-no need to duplicate this as reverse dependencies in sub options which
-depend on Kodi.
+The build stops with
+configure: error: unsupported host (i586-buildroot-linux-musl)
+due to musl not being supported in
+https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
+
+Removing this obstacle will show that musl is really not being
+supported, the build will fail:
+
+In file included from emu_msvcrt.cpp:64:0:
+emu_msvcrt.h:93:3: error: ?__off64_t? does not name a type
+   __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
+   ^
+emu_msvcrt.h:94:3: error: ?__off_t? does not name a type
+   __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
+   ^
+
+I know these problems are fixable and the voidlinux projects seems to
+have done it already for 15.2-Isengard:
+https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
+
+For Jarvis-16.0 these patches have to be rebased at a later stage.
+For now block the Kodi package with musl-based toolchains to avoid
+build errors.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-argustv/Config.in | 4 ----
- package/kodi-pvr-filmon/Config.in  | 4 ----
- package/kodi-pvr-pctv/Config.in    | 4 ----
- package/kodi-pvr-stalker/Config.in | 4 ----
- 4 files changed, 16 deletions(-)
+ package/kodi/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
-index 247d83c..216000a 100644
---- a/package/kodi-pvr-argustv/Config.in
-+++ b/package/kodi-pvr-argustv/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_ARGUSTV
- 	bool "kodi-pvr-argustv"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Kodi's ARGUS TV client addon
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 23468cc..13be622 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -2,11 +2,12 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
  
- 	  https://github.com/kodi-pvr/pvr.argustv
--
--comment "kodi-pvr-argustv needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
-index 3d87ec8..0b662df 100644
---- a/package/kodi-pvr-filmon/Config.in
-+++ b/package/kodi-pvr-filmon/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_FILMON
- 	bool "kodi-pvr-filmon"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Filmon PVR client addon for Kodi
+-comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
++comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
  
- 	  https://github.com/kodi-pvr/pvr.filmon
--
--comment "kodi-pvr-filmon needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 1bef551..255cd4a 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  PCTV PVR client addon for Kodi
- 
- 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
--
--comment "kodi-pvr-pctv needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-index 26a8c3f..3ec530c 100644
---- a/package/kodi-pvr-stalker/Config.in
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_STALKER
- 	bool "kodi-pvr-stalker"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  A PVR Client that connects Kodi to Stalker Middleware
- 
- 	  https://github.com/kodi-pvr/pvr.stalker
--
--comment "kodi-pvr-stalker needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -92,6 +93,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
 -- 
 2.7.0
