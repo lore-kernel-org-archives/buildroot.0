@@ -1,43 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:51:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iputils: patch ping to link
- against libm
-In-Reply-To: <1455541206-18200-1-git-send-email-martin@barkynet.com>
-References: <1455541206-18200-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160220155111.368c3657@free-electrons.com>
+Date: Sat, 20 Feb 2016 15:51:22 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/libarchive: add optional
+ support for bzip2
+In-Reply-To: <1455978594-6454-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1455978594-6454-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160220155122.634b5251@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+Dear Bernd Kuhls,
 
-On Mon, 15 Feb 2016 13:00:06 +0000, Martin Bark wrote:
-> ping fails to compile with uClibc based toolchains with the error
+On Sat, 20 Feb 2016 15:29:54 +0100, Bernd Kuhls wrote:
+> When bzip2 was compiled before, libarchive will use it as optional
+> dependency:
 > 
-> undefined reference to `__finite'
+> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/lib/libarchive.so.13.1.2 | grep NEEDED
+>  0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
+>  0x00000001 (NEEDED)                     Shared library: [libbz2.so.1.0]
+>  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
+>  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
 > 
-> Add a patch to link ping against libm to resolve the math library function
-> finite().
-> 
-> Note, this error is not seen with glibc based toolchains because finite
-> seems to be resolved in both libm and libc.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/08f7386f75c881bc582b338824f8ccd509b2921e/
-> http://autobuild.buildroot.net/results/5aeef61fbd399dd78dc72b9e7cce978e6f1f58b4/
-> 
-> A pull request has been sent to fix this issue upstream, see
-> https://github.com/iputils/iputils/pull/42
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/iputils/0001-ping-link-against-libm.patch | 29 +++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/iputils/0001-ping-link-against-libm.patch
+> v3: Added --with-bz2lib (Thomas)
+> v2: Added note why --with-bz2lib is not needed (Arnout)
 
-Applied to master, thanks.
+Applied to master, thanks!
 
 Thomas
 -- 
