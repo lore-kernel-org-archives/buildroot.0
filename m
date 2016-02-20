@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 19:26:15 +0100
-Subject: [Buildroot] [PATCH v2 07/18] erlang-p1-cache-tab: bump to
- version 1.0.1
-In-Reply-To: <1454443064-14269-8-git-send-email-fhunleth@troodon-software.com>
+Date: Sat, 20 Feb 2016 19:26:25 +0100
+Subject: [Buildroot] [PATCH v2 08/18] erlang-p1-iconv: bump to version
+ 0.9.0
+In-Reply-To: <1454443064-14269-9-git-send-email-fhunleth@troodon-software.com>
 References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-8-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160220192615.416c594f@free-electrons.com>
+ <1454443064-14269-9-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <20160220192625.594d7297@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,13 @@ To: buildroot@busybox.net
 
 Dear Frank Hunleth,
 
-On Tue,  2 Feb 2016 14:57:33 -0500, Frank Hunleth wrote:
+On Tue,  2 Feb 2016 14:57:34 -0500, Frank Hunleth wrote:
+> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+> ---
+>  package/erlang-p1-iconv/erlang-p1-iconv.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> -ERLANG_P1_CACHE_TAB_VERSION = f7ea12b
-> +ERLANG_P1_CACHE_TAB_VERSION = 1.0.1
->  ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
->  ERLANG_P1_CACHE_TAB_LICENSE = GPLv2+
-
-The license has changed, it's now Apache-2.0. I've fixed that up and
-applied to the next branch.
-
-Thanks,
+Applied to next, thanks.
 
 Thomas
 -- 
