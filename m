@@ -1,116 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Feb 2016 09:31:42 +0100
-Subject: [Buildroot] [git commit] arch/arm: add the cortex A17 variant
-	supported by gcc 5.x
-Message-ID: <20160302202756.4727D7FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 20 Feb 2016 18:38:10 +0100
+Subject: [Buildroot] [git commit] erlang-fast_tls: new package
+Message-ID: <20160302202754.8428D7FF3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=027b7ca0f240d3c7a51f3b2ea151c04329c4b569
+commit: https://git.buildroot.net/buildroot/commit/?id=cc7257b264a9fbbe4eb236ed318a697ca11b87b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add the Cortex A17 variant. This core is considered a replacement
-of the Cortex A12 and is supported by gcc 5 / binutils 2.25+
+This package is used by the newer versions of the ejabberd dependencies.
 
-Suggested-by: Ross Green <greenfross@netscape.net>
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm              | 9 +++++++++
- package/binutils/Config.in.host | 4 ++++
- package/gcc/Config.in.host      | 9 ++++++---
- 3 files changed, 19 insertions(+), 3 deletions(-)
+ package/Config.in                          |  1 +
+ package/erlang-fast_tls/Config.in          |  8 ++++++++
+ package/erlang-fast_tls/erlang-fast_tls.mk | 14 ++++++++++++++
+ 3 files changed, 23 insertions(+)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b34f42..04f0369 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -159,6 +159,14 @@ config BR2_cortex_a15
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-+config BR2_cortex_a17
-+	bool "cortex-A17"
-+	select BR2_ARM_CPU_HAS_ARM
-+	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_m3
- 	bool "cortex-M3"
- 	select BR2_ARM_CPU_HAS_THUMB
-@@ -442,6 +450,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a9"	if BR2_cortex_a9
- 	default "cortex-a12"	if BR2_cortex_a12
- 	default "cortex-a15"	if BR2_cortex_a15
-+	default "cortex-a17"	if BR2_cortex_a17
- 	default "cortex-m3"	if BR2_cortex_m3
- 	default "fa526"		if BR2_fa526
- 	default "marvell-pj4"	if BR2_pj4
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index df3c385..07574e4 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -12,6 +12,8 @@ choice
- 			   !BR2_powerpc64le && !BR2_nios2
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# Unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24_X
-@@ -19,6 +21,8 @@ choice
- 		depends on !BR2_nios2 && !BR2_powerpc64le
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# Unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		bool "binutils 2.24"
- 
- 	config BR2_BINUTILS_VERSION_2_25_X
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index cad6896..560ea52 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -21,7 +21,8 @@ choice
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
--			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
-+			!BR2_cortex_a15 && !BR2_cortex_a17 && \
-+			!BR2_fa526 && !BR2_pj4
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
- 			!BR2_powerpc_power8
-@@ -44,7 +45,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
--		depends on !BR2_cortex_a12 && !BR2_pj4
-+		depends on !BR2_cortex_a12 && !BR2_pj4 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
- 			!BR2_powerpc_power8
-@@ -63,7 +64,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
--		depends on !BR2_cortex_a12
-+		depends on !BR2_cortex_a12 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_power8
- 		# gcc-4.8.x + binutils-2.25 is broken for MIPS
-@@ -86,6 +87,8 @@ choice
- 		bool "gcc 4.9.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_arc
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+diff --git a/package/Config.in b/package/Config.in
+index 8aa6bb5..422978f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -471,6 +471,7 @@ menu "Interpreter languages and scripting"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
++	source "package/erlang-fast_tls/Config.in"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-p1-cache-tab/Config.in"
+diff --git a/package/erlang-fast_tls/Config.in b/package/erlang-fast_tls/Config.in
+new file mode 100644
+index 0000000..3bf52a1
+--- /dev/null
++++ b/package/erlang-fast_tls/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_ERLANG_FAST_TLS
++	bool "erlang-fast_tls"
++	select BR2_PACKAGE_ERLANG_P1_UTILS
++	select BR2_PACKAGE_OPENSSL
++	help
++	  TLS / SSL OpenSSL-based native driver for Erlang / Elixir
++
++	  https://github.com/processone/fast_tls
+diff --git a/package/erlang-fast_tls/erlang-fast_tls.mk b/package/erlang-fast_tls/erlang-fast_tls.mk
+new file mode 100644
+index 0000000..63c55c5
+--- /dev/null
++++ b/package/erlang-fast_tls/erlang-fast_tls.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# erlang-fast_tls
++#
++################################################################################
++
++ERLANG_FAST_TLS_VERSION = 1.0.0
++ERLANG_FAST_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_FAST_TLS_VERSION))
++ERLANG_FAST_TLS_LICENSE = Apache-2.0
++ERLANG_FAST_TLS_LICENSE_FILES = LICENSE.txt
++ERLANG_FAST_TLS_INSTALL_STAGING = YES
++ERLANG_FAST_TLS_DEPENDENCIES = openssl erlang-p1-utils
++
++$(eval $(rebar-package))
