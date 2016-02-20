@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2016 23:23:11 +0100
-Subject: [Buildroot] [PATCH v8 11/28] package/freeswitch: enable mod_fsv,
-	add optional dependencies to libvpx & libyuv
+Date: Sat, 20 Feb 2016 23:23:19 +0100
+Subject: [Buildroot] [PATCH v8 19/28] package/freeswitch: enable mod_opus,
+	add optional dependency to opus
 In-Reply-To: <1456007008-5200-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456007008-5200-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456007008-5200-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456007008-5200-20-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index a280aa6..dc96785 100644
+index 70f1b3d..49eb74c 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -186,6 +186,11 @@ FREESWITCH_DEPENDENCIES += libyaml
- FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+@@ -231,6 +231,11 @@ FREESWITCH_DEPENDENCIES += lua
+ FREESWITCH_ENABLED_MODULES += languages/mod_lua
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBVPX)$(BR2_PACKAGE_LIBYUV),yy)
-+FREESWITCH_DEPENDENCIES += libvpx libyuv
-+FREESWITCH_ENABLED_MODULES += applications/mod_fsv
++ifeq ($(BR2_PACKAGE_OPUS),y)
++FREESWITCH_DEPENDENCIES += opus
++FREESWITCH_ENABLED_MODULES += codecs/mod_opus
 +endif
 +
- ifeq ($(BR2_PACKAGE_LUA),y)
- FREESWITCH_DEPENDENCIES += lua
- FREESWITCH_ENABLED_MODULES += languages/mod_lua
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.7.0
