@@ -1,11 +1,11 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sat, 20 Feb 2016 16:46:28 +0100
-Subject: [Buildroot] [PATCH v5 20/20] python-crossbar: new package
-In-Reply-To: <20160220153848.0a8c45fd@free-electrons.com>
+Date: Sat, 20 Feb 2016 16:53:36 +0100
+Subject: [Buildroot] [PATCH v5 19/20] python-autobahn: new package
+In-Reply-To: <20160220150553.1da70aab@free-electrons.com>
 References: <1455188328-7595-1-git-send-email-mc5686@mclink.it>
- <1455188328-7595-3-git-send-email-mc5686@mclink.it>
- <20160220153848.0a8c45fd@free-electrons.com>
-Message-ID: <CAGm1_ktxUzHSBiOak_XKjNAXquQu2KK431n5wH1b02BLJw+P9Q@mail.gmail.com>
+ <1455188328-7595-2-git-send-email-mc5686@mclink.it>
+ <20160220150553.1da70aab@free-electrons.com>
+Message-ID: <CAGm1_ksj0CetgAFvrnRty5Tz+wRX77XxOZ_VFKvFn1na=D58Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,116 +14,169 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Sat, Feb 20, 2016 at 3:38 PM, Thomas Petazzoni
+On Sat, Feb 20, 2016 at 3:05 PM, Thomas Petazzoni
 <thomas.petazzoni@free-electrons.com> wrote:
 > Mauro,
 >
-> On Thu, 11 Feb 2016 11:58:48 +0100, Mauro Condarelli wrote:
+> On Thu, 11 Feb 2016 11:58:47 +0100, Mauro Condarelli wrote:
 >
->> diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+>> diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
 >> new file mode 100644
->> index 0000000..0cd3ee1
+>> index 0000000..9f5da46
 >> --- /dev/null
->> +++ b/package/python-crossbar/Config.in
->> @@ -0,0 +1,38 @@
->> +config BR2_PACKAGE_PYTHON_CROSSBAR
->> +     bool "python-crossbar"
+>> +++ b/package/python-autobahn/Config.in
+>> @@ -0,0 +1,11 @@
+>> +config BR2_PACKAGE_PYTHON_AUTOBAHN
+>> +     bool "python-autobahn"
 >> +     depends on !BR2_PACKAGE_PYTHON_PYC_ONLY
 >
-> I tested with BR2_PACKAGE_PYTHON_PYC_ONLY=y and it just built and
-> worked fine for me. I was able to run "crossbar version" :
+> I did a build with BR2_PACKAGE_PYTHON_PYC_ONLY=y, and tested at runtime
+> "import autobahn", and it worked perfectly fine.
 >
-> # crossbar version
-> Automatically choosing optimal Twisted reactor
-> Running on Linux and optimal reactor (epoll) was installed.
->      __  __  __  __  __  __      __     __
->     /  `|__)/  \/__`/__`|__) /\ |__)  |/  \
->     \__,|  \\__/.__/.__/|__)/~~\|  \. |\__/
->
->  Crossbar.io        : 0.12.1
->    Autobahn         : 0.12.1 (with JSON, MessagePack, CBOR)
->    Twisted          : 15.5.0-EPollReactor
->    LMDB             : 0.89/lmdb-0.9.18
->    Python           : 3.4.3/CPython
->  OS                 : Linux-4.2.0-armv7l-with-libc1
->  Machine            : armv7l
->
->> +     select BR2_PACKAGE_PYTHON_AUTOBAHN # runtime
->> +     select BR2_PACKAGE_PYTHON_CBOR # runtime
->> +     select BR2_PACKAGE_PYTHON_CLICK # runtime
->> +     select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
->> +     select BR2_PACKAGE_PYTHON_JINJA2 # runtime
->> +     select BR2_PACKAGE_PYTHON_MISTUNE # runtime
->> +     select BR2_PACKAGE_PYTHON_MSGPACK # runtime
->> +     select BR2_PACKAGE_PYTHON_NETADDR # runtime
->> +     select BR2_PACKAGE_PYTHON_PSUTIL # runtime
->> +     select BR2_PACKAGE_PYTHON_PYASN # runtime
->> +     select BR2_PACKAGE_PYTHON_PYASN_MODULES # runtime
->> +     select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
->> +     select BR2_PACKAGE_PYTHON_PYINOTIFY # runtime
->> +     select BR2_PACKAGE_PYTHON_PYNACL # runtime
->> +     select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
->> +     select BR2_PACKAGE_PYTHON_PYTRIE # runtime
->> +     select BR2_PACKAGE_PYTHON_PYYAML # runtime
->> +     select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->> +     select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
->> +     select BR2_PACKAGE_PYTHON_SETPROCTITLE # runtime
->> +     select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
->> +     select BR2_PACKAGE_PYTHON_SHUTILWHICH if BR2_PACKAGE_PYTHON # runtime
->> +     select BR2_PACKAGE_PYTHON_TREQ # runtime
->> +     select BR2_PACKAGE_PYTHON_TWISTED # runtime
->> +     select BR2_PACKAGE_PYTHON_UJSON # runtime
->> +     select BR2_PACKAGE_PYTHON_WSACCEL # runtime
->
-> Mentioning "# runtime" each time was a bit annoying, so I've changed
-> this to one single comment at the beginning saying that all
-> dependencies are runtime dependencies.
->
-> Note however that:
->
->  * Dependency on BR2_PACKAGE_PYTHON_LMDB was missing. Without this,
->    "crossbar version" was failing with
->    "pkg_resources.DistributionNotFound: The 'lmdb>=0.88' distribution
->    was not found and is required by crossbar"
->
->  * Dependency on BR2_PACKAGE_PYTHON_PYCPARSER was missing. Without
->    this, "crossbar version" was failing with:
->    "pkg_resources.DistributionNotFound: The 'pycparser' distribution
->    was not found and is required by cffi".
->
-> Also, there is still one problem with your package: when running
-> "crossbar version", it complains that:
->
-> pkg_resources.DistributionNotFound: The 'shutilwhich>=1.1.0' distribution was not found and is required by crossbar
->
-> However, shutilwhich is only available for Python 2.x, and I'm using
-> Python 3.x. When I force enable python-shutilwhich on Python 3.x, then
-> I can run "crossbar version" (this is how I did my test above).
->
-> But since shutilwhich is not supposed to be enabled with Python 3.x,
-> this was really a hack.
->
-> Can you look into this and provide a solution?
->
-> Once again, when you submit new packages, please make sure that they
-> build and run by building a configuration that only has *this* package
-> enabled.
->
->> +PYTHON_CROSSBAR_LICENSE = AGPL3
->
-> We use AGPLv3 and not AGPL3.
->
-> I've committed to the next branch with those issues fixed, except the
-> shutilwhich one.
+> So, I've removed this dependency, and applied your patch to the next
+> branch. If you think the dependency is really needed, please send a
+> follow-up patch on top of the next branch to re-add it, with a proper
+> justification.
 
-Have you tried this example with PYC only version?
+Try to compile autobahn with PYC only and twisted and
+python-pynacl-1.0.1 enabled. I get:
 
-http://crossbar.io/docs/Getting-started-with-Python/
+>>> python-autobahn 0.12.1 Building
+(cd /home/user/Documents/versioned/buildroot/testing/build/python-autobahn-0.12.1//;
+PATH="/home/user/Documents/versioned/buildroot/testing/host/bin:/home/user/Documents/versioned/buildroot/testing/host/sbin:/home/user/Documents/versioned/buildroot/testing/host/usr/bin:/home/user/Documents/versioned/buildroot/testing/host/usr/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+PYTHONPATH="/home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/sysconfigdata/:/home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/"
+_python_sysroot=/home/user/Documents/versioned/buildroot/testing/host/usr/arm-buildroot-linux-gnueabi/sysroot
+_python_prefix=/usr _python_exec_prefix=/usr
+/home/user/Documents/versioned/buildroot/testing/host/usr/bin/python
+setup.py build  )
+running build
+running build_py
+creating build
+creating build/lib
+creating build/lib/autobahn
+copying autobahn/__init__.py -> build/lib/autobahn
+copying autobahn/util.py -> build/lib/autobahn
+creating build/lib/autobahn/wamp
+copying autobahn/wamp/__init__.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/keyring.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/component.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/message.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/websocket.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/serializer.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/auth.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/cryptosign.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/protocol.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/types.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/exception.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/role.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/uri.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/interfaces.py -> build/lib/autobahn/wamp
+copying autobahn/wamp/request.py -> build/lib/autobahn/wamp
+creating build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/__init__.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_auth.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_protocol.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_uri_pattern.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_component.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_message.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_runner.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_protocol_peer.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_websocket.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_serializer.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_exception.py -> build/lib/autobahn/wamp/test
+copying autobahn/wamp/test/test_user_handler_errors.py ->
+build/lib/autobahn/wamp/test
+creating build/lib/autobahn/websocket
+copying autobahn/websocket/__init__.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/utf8validator.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/compress_base.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/compress_bzip2.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/compress_deflate.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/compress.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/protocol.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/types.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/compress_snappy.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/interfaces.py -> build/lib/autobahn/websocket
+copying autobahn/websocket/xormasker.py -> build/lib/autobahn/websocket
+creating build/lib/autobahn/websocket/test
+copying autobahn/websocket/test/__init__.py -> build/lib/autobahn/websocket/test
+copying autobahn/websocket/test/test_protocol.py ->
+build/lib/autobahn/websocket/test
+copying autobahn/websocket/test/test_websocket_url.py ->
+build/lib/autobahn/websocket/test
+copying autobahn/websocket/test/test_websocket.py ->
+build/lib/autobahn/websocket/test
+creating build/lib/autobahn/asyncio
+copying autobahn/asyncio/__init__.py -> build/lib/autobahn/asyncio
+copying autobahn/asyncio/wamp.py -> build/lib/autobahn/asyncio
+copying autobahn/asyncio/websocket.py -> build/lib/autobahn/asyncio
+creating build/lib/autobahn/twisted
+copying autobahn/twisted/__init__.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/forwarder.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/wamp.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/resource.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/component.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/websocket.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/choosereactor.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/util.py -> build/lib/autobahn/twisted
+copying autobahn/twisted/rawsocket.py -> build/lib/autobahn/twisted
+package init file 'twisted/plugins/__init__.py' not found (or not a
+regular file)
+creating build/lib/twisted
+creating build/lib/twisted/plugins
+copying twisted/plugins/autobahn_endpoints.py -> build/lib/twisted/plugins
+copying twisted/plugins/autobahn_twistd.py -> build/lib/twisted/plugins
+Twisted found (default reactor is <class
+'twisted.internet.epollreactor.EPollReactor'>)
+Unhandled Error
+Traceback (most recent call last):
+  File "setup.py", line 256, in <module>
+    list(getPlugins(IPlugin))
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/plugin.py",
+line 213, in getPlugins
 
-crossbar init --template hello:python --appdir $HOME/hello
-crossbar start --cbdir /home/oberstet/hello/.crossbar
+--- <exception caught here> ---
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/plugin.py",
+line 171, in getCache
 
-See my attempt to find a solution for this issue:
-https://github.com/crossbario/crossbar/pull/638
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/python/modules.py",
+line 389, in load
+
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/python/reflect.py",
+line 303, in namedAny
+
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/python/reflect.py",
+line 250, in _importAndCheckStack
+
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/python/compat.py",
+line 380, in reraise
+
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/twisted/plugins/autobahn_endpoints.py",
+line 46, in <module>
+
+  File "/home/user/Documents/versioned/buildroot/testing/build/python-autobahn-0.12.1/autobahn/twisted/__init__.py",
+line 51, in <module>
+    from autobahn.twisted.wamp import ApplicationSession
+  File "/home/user/Documents/versioned/buildroot/testing/build/python-autobahn-0.12.1/autobahn/twisted/wamp.py",
+line 35, in <module>
+    from autobahn.wamp import protocol
+  File "/home/user/Documents/versioned/buildroot/testing/build/python-autobahn-0.12.1/autobahn/wamp/protocol.py",
+line 42, in <module>
+    from autobahn.wamp.keyring import EncryptedPayload
+  File "/home/user/Documents/versioned/buildroot/testing/build/python-autobahn-0.12.1/autobahn/wamp/keyring.py",
+line 61, in <module>
+    from nacl.public import PrivateKey, PublicKey, Box
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/nacl/public.py",
+line 18, in <module>
+
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/nacl/bindings/__init__.py",
+line 17, in <module>
+
+  File "home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/nacl/bindings/crypto_box.py",
+line 17, in <module>
+
+builtins.ImportError:
+/home/user/Documents/versioned/buildroot/testing/target/usr/lib/python3.4/site-packages/nacl/_sodium.cpython-34m.so:
+wrong ELF class: ELFCLASS32
 
 Yegor
