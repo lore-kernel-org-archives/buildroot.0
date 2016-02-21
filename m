@@ -1,42 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Feb 2016 16:14:43 +0100
-Subject: [Buildroot] [git commit] gvfs: bump to version 1.26.3
-Message-ID: <20160302202752.C42C680203@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 14:28:43 +0100
+Subject: [Buildroot] [git commit] collectd: Add service file
+Message-ID: <20160302202755.6E7D77FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb2fb61b91bc8bf037b7d26cd294cd936e28543
+commit: https://git.buildroot.net/buildroot/commit/?id=7f18274a92e4db5c4cac1c248a40cbd3be91db7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gvfs/gvfs.hash | 4 ++--
- package/gvfs/gvfs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The service file was taken from Debian.
 
-diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
-index 19e820a..5cc8857 100644
---- a/package/gvfs/gvfs.hash
-+++ b/package/gvfs/gvfs.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.2.sha256sum
--sha256	695b6e0f3de5ac2cb4d188917edef3f13299328150a2413f1a7131d9b2d48d18	gvfs-1.26.2.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.3.sha256sum
-+sha256	a70f75fa60d66f3f478c0c8aec43d0e43455a8cc75a4dfa8029e51c816401b4a	gvfs-1.26.3.tar.xz
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index 48d2b50..f566fc7 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/collectd/collectd.mk      |  8 ++++++++
+ package/collectd/collectd.service | 17 +++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index eb66f25..78e24b8 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -185,4 +185,12 @@ define COLLECTD_INSTALL_TARGET_CMDS
+ 	rm -f $(TARGET_DIR)/usr/share/collectd/postgresql_default.conf
+ endef
  
- GVFS_VERSION_MAJOR = 1.26
--GVFS_VERSION = $(GVFS_VERSION_MAJOR).2
-+GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
- GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
- GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
- GVFS_INSTALL_STAGING = YES
++define COLLECTD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/collectd/collectd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/collectd.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/collectd.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/collectd/collectd.service b/package/collectd/collectd.service
+new file mode 100644
+index 0000000..e203806
+--- /dev/null
++++ b/package/collectd/collectd.service
+@@ -0,0 +1,17 @@
++[Unit]
++Description=Statistics collection and monitoring daemon
++After=local-fs.target network.target
++Requires=local-fs.target network.target
++ConditionPathExists=/etc/collectd.conf
++
++[Service]
++Type=notify
++NotifyAccess=main
++EnvironmentFile=-/etc/default/collectd
++ExecStartPre=/usr/sbin/collectd -t
++ExecStart=/usr/sbin/collectd
++Restart=always
++RestartSec=10
++
++[Install]
++WantedBy=multi-user.target
