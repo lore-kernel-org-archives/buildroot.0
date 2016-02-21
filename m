@@ -1,38 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:10:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spice: depend on libglib2
-In-Reply-To: <20160221220552.GF3456@free.fr>
-References: <1456076407-20364-1-git-send-email-bernd.kuhls@t-online.de>
- <20160221211249.723daeb6@free-electrons.com>
- <20160221220552.GF3456@free.fr>
-Message-ID: <20160221231059.4491f666@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:13:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pound: new package
+In-Reply-To: <1454712192-26144-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1454712192-26144-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221231329.29094844@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+Dear Bernd Kuhls,
 
-On Sun, 21 Feb 2016 23:05:52 +0100, Yann E. MORIN wrote:
+On Fri,  5 Feb 2016 23:43:12 +0100, Bernd Kuhls wrote:
 
->     $ git grep -E '\<glib.h\>'
->     server/reds.c:#include <glib.h>
-> 
-> The server is not optional (only the client is), and reds.c is not
-> conditoinal in server/Makefile.am.
+> +POUND_VERSION = 2.7
+> +POUND_SITE = http://www.apsis.ch/pound
+> +POUND_SOURCE = Pound-$(POUND_VERSION).tgz
+> +POUND_LICENSE = GPLv3+
+> +POUND_LICENSE_FILES = GPL.txt
+> +POUND_DEPENDENCIES = openssl
 
-Aaah, I missed the PKG_CHECK_MODULES([GLIB2], [glib-2.0 >= 2.22]) line.
+Unfortunately, nobody will be able to distribute binaries of this
+program. The GPLv3 is incompatible with the OpenSSL license. The
+authors of Pound should have planned an exception to the GPLv3, but I
+haven't seen any indication of this.
 
-Since I believe Bernd's patch was pointing to:
+I've nonetheless applied the package since well, it's not our
+responsibility, but GPLv3+OpenSSL -> not good.
 
-SPICE_REQUIRES+=" glib-2.0 >= 2.22"
+> +# Do not set user/group for the installed binaries.
+> +define POUND_FIX_INSTALL
+> +	$(SED) 's/-o proxy -g proxy//g' $(@D)/Makefile
+> +endef
+> +POUND_POST_CONFIGURE_HOOKS += POUND_FIX_INSTALL
 
-I thought he was referring to this line as the justification for the
-glib dependency.
+I've removed this and instead passed:
 
-But OK, it really needs glib. I'll apply Bernd's patch. Thanks for
-confirming!
+	--with-owner=$(shell id -un) \
+	--with-group=$(shell id -gn)
+
+So that we install with the current user/group, which is guaranteed to
+work fine. And all files get anyway re-assigned to root when creating
+the final image.
+
+Applied to next with this change!
+
+Thanks,
 
 Thomas
 -- 
