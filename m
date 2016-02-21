@@ -1,49 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Feb 2016 00:45:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libarchive: add optional
- support for bzip2
-In-Reply-To: <sg7mpcxlr5.ln2@ID-313208.user.individual.net>
-References: <1455137950-18164-1-git-send-email-bernd.kuhls@t-online.de>
- <1455137950-18164-2-git-send-email-bernd.kuhls@t-online.de>
- <56BBA94B.3000809@mind.be> <sg7mpcxlr5.ln2@ID-313208.user.individual.net>
-Message-ID: <56C8FAB2.3010504@mind.be>
+Date: Sun, 21 Feb 2016 01:00:44 +0100
+Subject: [Buildroot] [PATCH] sysklogd: override SKFLAGS with
+	TARGET_CFLAGS
+In-Reply-To: <1455967730-10332-1-git-send-email-romain.naour@gmail.com>
+References: <1455967730-10332-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <56C8FE2C.1070000@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/20/16 14:49, Bernd Kuhls wrote:
-> Am Wed, 10 Feb 2016 22:19:07 +0100 schrieb Arnout Vandecappelle:
+On 02/20/16 12:28, Romain Naour wrote:
+> TARGET_CFLAGS is not taken into account since SKFLAGS is used as CFLAGS.
+> We need to override SKFLAGS with TARGET_CFLAGS but keep -DSYSV which was
+> present in SKFLAGS.
 > 
->>  No --with-bz2lib? If there is a good reason, mention it in the commit
->>  log.
+> Improve the previous fix introduced by
+> 8e3a5c13546451c0c6ceb8bc64e4397ceed14aca.
 > 
-> Hi Arnout,
+> Fixes:
+> http://autobuild.buildroot.net/results/2fb/2fb94ecfdc32761a09da35e6fcbdd512847ec911
 > 
-> libarchive always checks for bzip2 unless --without-bz2lib is used:
-> https://github.com/libarchive/libarchive/blob/master/configure.ac#L300
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Reported-by: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/sysklogd/sysklogd.mk | 12 +++---------
+>  1 file changed, 3 insertions(+), 9 deletions(-)
 > 
-> Therefore I see no need for --with-bz2lib and I also should not have 
-> added --with-lzma as well, I will send a patch removing it along with v2 
-> of this patch explaining why --with-bz2lib is not needed.
+> diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+> index 9e315bc..49997d4 100644
+> --- a/package/sysklogd/sysklogd.mk
+> +++ b/package/sysklogd/sysklogd.mk
+> @@ -14,16 +14,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+>  SYSKLOGD_DEPENDENCIES = busybox
+>  endif
+>  
+> -# CS PowerPC 2012.03 triggers compiler bug.
+> -ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2),y)
+> -define SYSKLOGD_WORKAROUND_COMPILER_BUG
+> -	$(SED) 's/-O3/-O2/' $(@D)/Makefile
+> -endef
+> -SYSKLOGD_POST_PATCH_HOOKS = SYSKLOGD_WORKAROUND_COMPILER_BUG
+> -endif
+> -
+> +# Override SKFLAGS which is used as CFLAGS.
+>  define SYSKLOGD_BUILD_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) SKFLAGS="$(TARGET_CFLAGS) -DSYSV" \
 
- We prefer to have both an explicit enable and disable (or with and without)
-because:
+ Doesn't that make the bug above reappear when you have configured
+BR2_OPTIMIZE_3? In other words, shouldn't we do something like:
 
-- it makes it simpler in case the default changes after a version bump;
-
-- it makes it easier for other people to understand that the right thing is done
-(no need to check in configure what the default is);
-
-- AFAIK the typical --enable/--with will give an error if the dependency is not
-found, which gives an extra safety net;
-
-- we do it like this in other places, it's nice to see the same pattern everywhere.
+ifeq ($(BR2_TOOLCHAIN...),y)
+SYSKLOGD_CFLAGS = $(subst -O3,-O2,$(TARGET_CFLAGS))
+else
+SYSKLOGD_CFLAGS = $(TARGET_CFLAGS)
+endif
+SYSKLOGD_CFLAGS += -DSYSV
 
 
  Regards,
  Arnout
+
+
+> +		-C $(@D)
+>  endef
+>  
+>  define SYSKLOGD_INSTALL_TARGET_CMDS
+> 
 
 
 -- 
