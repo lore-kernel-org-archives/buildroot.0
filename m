@@ -1,17 +1,23 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 20 Feb 2016 23:58:42 -0200
-Subject: [Buildroot] (no subject)
-Message-ID: <56c919d2e4721_2b3e164487084615@ultri2.mail>
+Date: Sat, 20 Feb 2016 23:07:39 -0300
+Subject: [Buildroot] [PATCH 2/2] package/vim: add optional support for
+	gmp
+Message-ID: <56c91beb3ec34_2b3e3fd8cc6dbf34848f7@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls,
+All,
+
+Sorry the e-mail without subject,
+I did something wrong and my mail client did not understand the subject line.
+Resending to go to patchwork.
+If this e-mail still don't work I will give up to avoid spam.
 
 On Sat, 20 Feb 2016 23:45:42 +0100, Bernd Kuhls wrote:
-> Subject: [Buildroot] [PATCH 2/2] package/vim: add optional support for
+> Sub ject: [Buildroot] [PATCH 2/2] package/vim: add optional support for
 > 	gmp
 
 Typo: s/gmp/gpm/g
