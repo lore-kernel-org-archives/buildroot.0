@@ -1,46 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 10:50:07 +0100
-Subject: [Buildroot] [PATCH 03/14] package/pure-ftpd: add optional support
-	for elfutils
+Date: Sun, 21 Feb 2016 10:50:10 +0100
+Subject: [Buildroot] [PATCH 06/14] package/zsh: add optional support for gdbm
 In-Reply-To: <1456048218-4061-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456048218-4061-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456048218-4061-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456048218-4061-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When elfutils was compiled before, pure-ftpd will use it as optional
-dependency:
+When gdbm was compiled before, zsh will use it as optional dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/pure-ftpd | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libelf.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libcrypt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
-
-The build system offers no option to en-/disable elfutils support,
-check m4/getloadavg.m4, line 44.
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/bin/zsh | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libgdbm.so.4]
+[...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pure-ftpd/pure-ftpd.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/zsh/zsh.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index aa65e9e..8df4c23 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -16,6 +16,10 @@ PURE_FTPD_CONF_OPTS = \
- 	--with-puredb \
- 	--with-rfc2640
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 03456b8..c3af034 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -12,6 +12,13 @@ ZSH_CONF_OPTS = --bindir=/bin
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
  
-+ifeq ($(BR2_PACKAGE_ELFUTILS),y)
-+PURE_FTPD_DEPENDENCIES += elfutils
++ifeq ($(BR2_PACKAGE_GDBM),y)
++ZSH_CONF_OPTS += --enable-gdbm
++ZSH_DEPENDENCIES += gdbm
++else
++ZSH_CONF_OPTS += --disable-gdbm
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- PURE_FTPD_CONF_OPTS += --with-capabilities
- PURE_FTPD_DEPENDENCIES += libcap
+ # Remove versioned zsh-x.y.z binary taking up space
+ define ZSH_TARGET_INSTALL_FIXUPS
+ 	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
 -- 
 2.7.0
