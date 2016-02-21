@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 12:41:56 +0100
-Subject: [Buildroot] [git commit] package/openipmi: add optional support for
-	gdbm
-Message-ID: <20160221114251.985E580506@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 12:42:43 +0100
+Subject: [Buildroot] [git commit] package/zsh: add optional support for
+	libcap
+Message-ID: <20160221114251.B526780506@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33b6119d87e8eea6244894f914ce51f4bce1efa9
+commit: https://git.buildroot.net/buildroot/commit/?id=3fc55da0e8479fc6103af80c3a08334fbaacc5cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When gdbm was compiled before, openipmi will use it as optional
-dependency:
+When libcap was compiled before, zsh will use it as optional dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/ipmi_sim | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/bin/zsh | grep NEEDED
  0x0000000000000001 (NEEDED)             Shared library: [libgdbm.so.4]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
 [...]
-
-The build system offers no option to en-/disable gdbm support,
-check configure.ac, line 309+
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openipmi/openipmi.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/zsh/zsh.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/openipmi/openipmi.mk b/package/openipmi/openipmi.mk
-index 4dd901b..ea46e19 100644
---- a/package/openipmi/openipmi.mk
-+++ b/package/openipmi/openipmi.mk
-@@ -23,6 +23,10 @@ OPENIPMI_CONF_OPTS = \
- 	--with-python=no \
- 	--with-swig=no
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index c3af034..9f4a582 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -19,6 +19,13 @@ else
+ ZSH_CONF_OPTS += --disable-gdbm
+ endif
  
-+ifeq ($(BR2_PACKAGE_GDBM),y)
-+OPENIPMI_DEPENDENCIES += gdbm
++ifeq ($(BR2_PACKAGE_LIBCAP),y)
++ZSH_CONF_OPTS += --enable-cap
++ZSH_DEPENDENCIES += libcap
++else
++ZSH_CONF_OPTS += --disable-cap
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENIPMI_DEPENDENCIES += openssl
- OPENIPMI_CONF_OPTS += --with-openssl=yes
+ # Remove versioned zsh-x.y.z binary taking up space
+ define ZSH_TARGET_INSTALL_FIXUPS
+ 	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
