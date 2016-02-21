@@ -1,42 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Feb 2016 23:09:02 +0100
-Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
-	installed programs
-In-Reply-To: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
- (Romain Izard's message of "Wed, 3 Feb 2016 12:14:48 +0100")
-References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
-Message-ID: <877fhxaf7l.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:10:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/spice: depend on libglib2
+In-Reply-To: <20160221220552.GF3456@free.fr>
+References: <1456076407-20364-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160221211249.723daeb6@free-electrons.com>
+ <20160221220552.GF3456@free.fr>
+Message-ID: <20160221231059.4491f666@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Izard <romain.izard.pro@gmail.com> writes:
+Yann,
 
- > As the recent revisions of coreutils use a single multi-call executable,
- > it is not possible to reduce the installed size of coreutils by removing
- > the unused programs. But the list of installed programs can be passed
- > when configuring the package, and it is possible ensure that only
- > required programs are embedded into the multi-call executable.
+On Sun, 21 Feb 2016 23:05:52 +0100, Yann E. MORIN wrote:
 
- > A global configuration option selects either the default set of
- > programs, or a configurable set. In the latter case, each coreutil
- > program has its own option.
+>     $ git grep -E '\<glib.h\>'
+>     server/reds.c:#include <glib.h>
+> 
+> The server is not optional (only the client is), and reds.c is not
+> conditoinal in server/Makefile.am.
 
- > Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+Aaah, I missed the PKG_CHECK_MODULES([GLIB2], [glib-2.0 >= 2.22]) line.
 
-Are you really using a setup where this detailed tweaking of coreutils
-is needed?
+Since I believe Bernd's patch was pointing to:
 
-Coreutils isn't super huge:
+SPICE_REQUIRES+=" glib-2.0 >= 2.22"
 
-ls -lh target/usr/bin/coreutils
--rwxr-xr-x 1 peko peko 933K Feb 21 23:01 target/usr/bin/coreutils
+I thought he was referring to this line as the justification for the
+glib dependency.
 
-And if you are using coreutils instead of busybox you are probably not
-very interested in saving every last byte of rootfs size anyway, so I'm
-not sure we should have 500+ lines of Config.in for this.
+But OK, it really needs glib. I'll apply Bernd's patch. Thanks for
+confirming!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
