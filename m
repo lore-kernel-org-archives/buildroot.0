@@ -1,37 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:29:18 +0100
-Subject: [Buildroot] [PATCH 04/10] package/mediastreamer: add optional
- support for libupnp
-In-Reply-To: <1456076099-19607-4-git-send-email-bernd.kuhls@t-online.de>
-References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
- <1456076099-19607-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221212918.606f0917@free-electrons.com>
+Date: Sun, 21 Feb 2016 21:30:17 +0100
+Subject: [Buildroot] [git commit] package/binutils: add optional support for
+	zlib
+Message-ID: <20160221203021.D615F80AE9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5646b51098cddce56e959defe90fe03fe2104fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Feb 2016 18:34:53 +0100, Bernd Kuhls wrote:
-> When libupnp was compiled before, mediastreamer will use it as optional
-> dependency:
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libmediastreamer_voip.so.3.0.0 | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [libmediastreamer_base.so.3]
->  0x0000000000000001 (NEEDED)             Shared library: [libupnp.so.6]
-> [...]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mediastreamer/mediastreamer.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+When zlib was compiled before, binutils will use it as optional
+dependency:
 
-Patches 4 to 10 applied to master, thanks!
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libbfd-2.24.so | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Apparantly the build system offers no support to control the
+dependency, --without-system-zlib with zlib installed still provides
+libbfd-2.24.so linked to libz.so.1.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/binutils/binutils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index a96a9a8..0f75c1d 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -61,6 +61,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+ BINUTILS_DEPENDENCIES += busybox
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++BINUTILS_DEPENDENCIES += zlib
++endif
++
+ # "host" binutils should actually be "cross"
+ # We just keep the convention of "host utility" for now
+ HOST_BINUTILS_CONF_OPTS = \
