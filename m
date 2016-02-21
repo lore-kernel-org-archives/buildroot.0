@@ -1,59 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 12:48:43 +0100
-Subject: [Buildroot] [PATCH 12/14] package/pulseaudio: add optional
- support for udev
-In-Reply-To: <1456048218-4061-12-git-send-email-bernd.kuhls@t-online.de>
-References: <1456048218-4061-1-git-send-email-bernd.kuhls@t-online.de>
- <1456048218-4061-12-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221124843.444de9e1@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 21 Feb 2016 09:21:24 -0300
+Subject: [Buildroot] state of olimex_imx233_olinuxino_defconfig
+In-Reply-To: <87egc7c7y8.fsf@dell.be.48ers.dk>
+References: <CAPiYbRL+v9QK+cK1D+kmyPx58wx8ehmZVWGDQHRTzRe5=diHfg@mail.gmail.com>
+ <87egc7c7y8.fsf@dell.be.48ers.dk>
+Message-ID: <56C9ABC4.1070506@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+On 20/02/16 19:50, Peter Korsgaard wrote:
 
-On Sun, 21 Feb 2016 10:50:16 +0100, Bernd Kuhls wrote:
-> When udev was compiled before, pulseaudio will use it as optional
-> dependency:
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/pulse-8.0/modules/module-alsa-sink.so | grep NEEDED
-> [...]
->  0x0000000000000001 (NEEDED)             Shared library: [libudev.so.1]
-> [...]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/pulseaudio/pulseaudio.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-> index 36661cc..fbac516 100644
-> --- a/package/pulseaudio/pulseaudio.mk
-> +++ b/package/pulseaudio/pulseaudio.mk
-> @@ -79,6 +79,13 @@ else
->  PULSEAUDIO_CONF_OPTS += --without-soxr
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> +PULSEAUDIO_CONF_OPTS += --enable-libudev
-> +PULSEAUDIO_DEPENDENCIES += udev
-> +else
-> +PULSEAUDIO_CONF_OPTS += --disable-libudev
-> +endif
+>>>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
+>
+>   > Hello
+>   > I recently tried olimex_imx233_olinuxino_defconfig and created the SD
+>   > card according to the readme.txt. It failed to boot with:
+>   > "
+>   > PowerPrep start initialize power...
+>   > Battery Voltage = 0.74V
+>   > No battery or bad battery
+>   > detected!!!.Disabling battery
+>   > voltage measurements./r/nLLCFeb 16 201616:01:38
+>   > EMI_CTRL 0x1C084040
+>   > FRAC 0x92926192
+>   > init_ddr_mt46v32m16_133Mhz
+>   > power 0x00820710
+>   > Frac 0x92926192
+>   > start change cpu freq
+>   > hbus 0x00000003
+>   > cpu 0x00010001
+>   > LLLLLLLFCLJ
+>   > "
+>   > Looks like the handover to the kernel is somehow broken, as it is not starting.
+>
+> Sorry, no experience with imx233 / mxs-bootlets. Gustavoz, you've done
+> various updates to the defconfig. Does it work for you? Any hints?
+>
+>   > I am however not sure if I should submit an updated defconfig or a new
+>   > one like olimex_imx233_olinuxino_uboot_defconfig and extend the
+>   > readme.txt to cover both use cases?
+>
+> Lets see what Gustavoz says.
 
-The udev dependency was already handled by:
-
-	$(if $(BR2_PACKAGE_HAS_UDEV),udev)
-
-However, your patch makes it more explicit by using --enable/--disable.
-I've therefore adapted your patch and its commit log before applying.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Hi All.
+Unfortunately i don't have an olinuxino in my hands any more.
+It's very likely bootlets isn't happy with newer toolchain components - 
+it's known to be somewhat fragile in that aspect, so if someone wants to 
+update the defconfig to use uboot that would be great.
+That wasn't a viable option when i added it since it didn't work vanilla.
+Regards.
