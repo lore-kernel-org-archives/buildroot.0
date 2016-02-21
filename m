@@ -1,151 +1,476 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 10:22:33 +0100
-Subject: [Buildroot] [git commit] mali-t76x: add new package
-Message-ID: <20160302202753.B168F80203@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:30:01 +0100
+Subject: [Buildroot] [git commit] ejabberd: convert patches to git format
+Message-ID: <20160302202756.1F93580203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=536ba133b04aa8b4991c411dcd2b76be849127ee
+commit: https://git.buildroot.net/buildroot/commit/?id=47da40e1d9f3bcad8635d563ae04e56597b8ca9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package provides the binary user-space components for the ARM Mali
-Midgard T76X GPU.
-
-Note that this package requires a kernel with the ARM Mali Midgard GPU
-Kernel Drivers enabled.
-
-Signed-off-by: Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                |  1 +
- package/mali-t76x/Config.in      | 28 ++++++++++++++++++++++++++++
- package/mali-t76x/egl.pc         | 11 +++++++++++
- package/mali-t76x/glesv2.pc      | 11 +++++++++++
- package/mali-t76x/mali-t76x.hash |  2 ++
- package/mali-t76x/mali-t76x.mk   | 27 +++++++++++++++++++++++++++
- 6 files changed, 80 insertions(+)
+ package/ejabberd/0001-remove-deps.patch            | 22 ---------
+ .../0001-remove-make-targets-for-deps.patch        | 29 +++++++++++
+ ...tch => 0002-remove-make-targets-for-deps.patch} | 19 +++++---
+ ...remove-testing-with-MySQL-and-PostgreSQL.patch} | 25 ++++++----
+ package/ejabberd/0004-disable-version-check.patch  | 20 --------
+ .../0004-remove-checking-erlang-version.patch      | 30 ++++++++++++
+ package/ejabberd/0005-correct-include.patch        | 56 ++++++++++++++++++++++
+ package/ejabberd/0005-fix-includes.patch           | 45 -----------------
+ .../0006-disable-ERLANG_DEPRECATED_CHECK.patch     | 27 +++++++++++
+ ...006-disable-erlang-deprecated-types-check.patch | 20 --------
+ .../ejabberd/0007-fix-install-permissions.patch    | 23 +++++----
+ package/ejabberd/0008-fix-ejabberdctl.patch        | 19 ++++++--
+ 12 files changed, 200 insertions(+), 135 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7a9ed0a..11569d3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -399,6 +399,7 @@ endif
- 	source "package/lshw/Config.in"
- 	source "package/lsuio/Config.in"
- 	source "package/lvm2/Config.in"
-+	source "package/mali-t76x/Config.in"
- 	source "package/mdadm/Config.in"
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
-diff --git a/package/mali-t76x/Config.in b/package/mali-t76x/Config.in
+diff --git a/package/ejabberd/0001-remove-deps.patch b/package/ejabberd/0001-remove-deps.patch
+deleted file mode 100644
+index c5700dd..0000000
+--- a/package/ejabberd/0001-remove-deps.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Description: remove make targets for deps
+- Without this patch, dependencies would be downloaded and compiled
+- using rebar at build time.
+-Author: Philipp Huebner <debalance@debian.org>
+-
+-Index: ejabberd/rebar.config.script
+-===================================================================
+-diff --git a/rebar.config.script b/rebar.config.script
+-index 633433c..646a15a 100644
+---- a/rebar.config.script
+-+++ b/rebar.config.script
+-@@ -187,9 +187,7 @@ Config = [{erl_opts, Macros ++ HiPE ++ DebugInfo ++
+-           {xref_checks, []},
+- 	  {xref_queries,
+- 	   [{"(XC - UC) || (XU - X - B - "
+--	     ++ string:join(CfgXrefs, " - ") ++ ")", []}]},
+--          {post_hooks, PostHooks ++ CfgPostHooks},
+--          {deps, AllDeps}] ++ ElixirConfig,
+-+	     ++ string:join(CfgXrefs, " - ") ++ ")", []}]}],
+- %%io:format("ejabberd configuration:~n  ~p~n", [Config]),
+- Config.
+- 
+diff --git a/package/ejabberd/0001-remove-make-targets-for-deps.patch b/package/ejabberd/0001-remove-make-targets-for-deps.patch
 new file mode 100644
-index 0000000..6c2ae4e
+index 0000000..060c407
 --- /dev/null
-+++ b/package/mali-t76x/Config.in
-@@ -0,0 +1,28 @@
-+config BR2_PACKAGE_MALI_T76X
-+	bool "mali-t76x"
-+	select BR2_PACKAGE_MESA3D_HEADERS
-+	select BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_ARM_EABIHF
-+	depends on BR2_arm
-+	help
-+	  Install the binary user-space components for the ARM Mali Midgard
-+	  T76X GPU. This package requires a kernel with the ARM Mali Midgard
-+	  GPU Kernel Drivers enabled.
++++ b/package/ejabberd/0001-remove-make-targets-for-deps.patch
+@@ -0,0 +1,29 @@
++From a4910ec9257d0743e42c4b1650b6ef60196a013d Mon Sep 17 00:00:00 2001
++From: Philipp Huebner <debalance@debian.org>
++Date: Sun, 21 Feb 2016 10:52:53 -0500
++Subject: [PATCH] remove make targets for deps
 +
-+	  Source: http://malideveloper.arm.com/resources/drivers/
++Without this patch, dependencies would be downloaded and compiled
++using rebar at build time.
++---
++ rebar.config.script | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
 +
-+if BR2_PACKAGE_MALI_T76X
++diff --git a/rebar.config.script b/rebar.config.script
++index 833595d..1b6177d 100644
++--- a/rebar.config.script
+++++ b/rebar.config.script
++@@ -192,9 +192,7 @@ Config = [{erl_opts, Macros ++ HiPE ++ DebugInfo ++
++           {xref_checks, []},
++ 	  {xref_queries,
++ 	   [{"(XC - UC) || (XU - X - B - "
++-	     ++ string:join(CfgXrefs, " - ") ++ ")", []}]},
++-          {post_hooks, PostHooks ++ CfgPostHooks},
++-          {deps, AllDeps}] ++ ElixirConfig,
+++	     ++ string:join(CfgXrefs, " - ") ++ ")", []}]}],
++ %%io:format("ejabberd configuration:~n  ~p~n", [Config]),
++ Config.
++ 
++-- 
++2.5.0
 +
-+config BR2_PACKAGE_PROVIDES_LIBEGL
-+	default "mali-t76x"
+diff --git a/package/ejabberd/0002-disable-rebar-deps.patch b/package/ejabberd/0002-remove-make-targets-for-deps.patch
+similarity index 79%
+rename from package/ejabberd/0002-disable-rebar-deps.patch
+rename to package/ejabberd/0002-remove-make-targets-for-deps.patch
+index e76b8a2..757ae38 100644
+--- a/package/ejabberd/0002-disable-rebar-deps.patch
++++ b/package/ejabberd/0002-remove-make-targets-for-deps.patch
+@@ -1,10 +1,14 @@
+-Description: remove make targets for deps
+- Without this patch, dependencies would be downloaded and compiled
+- using rebar at build time.
+-Author: Philipp Huebner <debalance@debian.org>
++From 9ab065047fab913b7250525a51b9c9ad6f3a3478 Mon Sep 17 00:00:00 2001
++From: Philipp Huebner <debalance@debian.org>
++Date: Sun, 21 Feb 2016 10:55:14 -0500
++Subject: [PATCH] remove make targets for deps
 +
-+config BR2_PACKAGE_PROVIDES_LIBGLES
-+	default "mali-t76x"
++Without this patch, dependencies would be downloaded and compiled
++using rebar at build time.
++---
++ Makefile.in | 32 ++++----------------------------
++ 1 file changed, 4 insertions(+), 28 deletions(-)
+ 
+-Index: ejabberd/Makefile.in
+-===================================================================
+ diff --git a/Makefile.in b/Makefile.in
+ index 8dd6bf5..b9d783a 100644
+ --- a/Makefile.in
+@@ -74,3 +78,6 @@ index 8dd6bf5..b9d783a 100644
+  dialyzer/erlang.plt:
+  	@mkdir -p dialyzer
+  	@dialyzer --build_plt --output_plt dialyzer/erlang.plt \
++-- 
++2.5.0
 +
-+endif
+diff --git a/package/ejabberd/0003-disable-test.patch b/package/ejabberd/0003-remove-testing-with-MySQL-and-PostgreSQL.patch
+similarity index 53%
+rename from package/ejabberd/0003-disable-test.patch
+rename to package/ejabberd/0003-remove-testing-with-MySQL-and-PostgreSQL.patch
+index 1b28957..316406a 100644
+--- a/package/ejabberd/0003-disable-test.patch
++++ b/package/ejabberd/0003-remove-testing-with-MySQL-and-PostgreSQL.patch
+@@ -1,16 +1,20 @@
+-Description: remove testing with MySQL and PostgreSQL
+- Without this patch a test would be initiated after building ejabberd that
+- requires specially configured instances of MySQL and PostgreSQL to be up
+- and running.
+-Author: Philipp Huebner <debalance@debian.org>
++From a4192bbd52250bd52d80b05f81cd5645abc650dc Mon Sep 17 00:00:00 2001
++From: Philipp Huebner <debalance@debian.org>
++Date: Sun, 21 Feb 2016 10:59:14 -0500
++Subject: [PATCH] remove testing with MySQL and PostgreSQL
 +
-+comment "mali-t76x needs an (e)glibc toolchain with armhf enabled"
-+	depends on BR2_arm
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_ARM_EABIHF
-diff --git a/package/mali-t76x/egl.pc b/package/mali-t76x/egl.pc
++Without this patch a test would be initiated after building ejabberd
++that requires specially configured instances of MySQL and PostgreSQL
++to be up and running.
++---
++ Makefile.in | 6 ------
++ 1 file changed, 6 deletions(-)
+ 
+-Index: ejabberd/Makefile.in
+-===================================================================
+ diff --git a/Makefile.in b/Makefile.in
+-index ffd1d30..835d611 100644
++index b9d783a..9cd905f 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+-@@ -306,14 +306,8 @@ dialyzer: erlang_plt deps_plt ejabberd_plt
++@@ -282,14 +282,8 @@ dialyzer: erlang_plt deps_plt ejabberd_plt
+  	status=$$? ; if [ $$status -ne 2 ]; then exit $$status; else exit 0; fi
+  
+  test:
+@@ -25,3 +29,6 @@ index ffd1d30..835d611 100644
+  
+  .PHONY: src edoc dialyzer Makefile TAGS clean clean-rel distclean rel \
+  	install uninstall uninstall-binary uninstall-all translations deps test spec \
++-- 
++2.5.0
++
+diff --git a/package/ejabberd/0004-disable-version-check.patch b/package/ejabberd/0004-disable-version-check.patch
+deleted file mode 100644
+index f2f1e81..0000000
+--- a/package/ejabberd/0004-disable-version-check.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Description: remove checking erlang version
+- Without this patch, the configure will try to run erlang to simply check if
+- the version is supported by ejabberd. Instead, we do this test statically.
+-Author: Johan Oudinet <johan.oudinet@gmail.com>
+-
+-Index: ejabberd/configure.ac
+-===================================================================
+---- ejabberd.orig/configure.ac	2014-10-20 11:04:14.751256865 +0200
+-+++ ejabberd/configure.ac	2014-10-20 11:03:47.983578623 +0200
+-@@ -37,10 +37,8 @@ AC_ARG_ENABLE(erlang-version-check,
+- 	[Check Erlang/OTP version @<:@default=yes@:>@])])
+- case "$enable_erlang_version_check" in
+- 	yes|'')
+--		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX])
+- 		;;
+- 	no)
+--		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX],[warn])
+- 		;;
+- esac
+- 
+diff --git a/package/ejabberd/0004-remove-checking-erlang-version.patch b/package/ejabberd/0004-remove-checking-erlang-version.patch
 new file mode 100644
-index 0000000..614b700
+index 0000000..8997cca
 --- /dev/null
-+++ b/package/mali-t76x/egl.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr/
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++++ b/package/ejabberd/0004-remove-checking-erlang-version.patch
+@@ -0,0 +1,30 @@
++From bec405139144c8901b7d3771f5f658a3fed64b8a Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Sun, 21 Feb 2016 11:00:24 -0500
++Subject: [PATCH] remove checking erlang version
 +
-+Name: egl
-+Description: ARM Mali implementation of EGL
-+Version: 1.5
-+Requires:
-+Libs: -L${libdir} -lEGL -lGLESv2
-+Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-diff --git a/package/mali-t76x/glesv2.pc b/package/mali-t76x/glesv2.pc
-new file mode 100644
-index 0000000..5997eac
---- /dev/null
-+++ b/package/mali-t76x/glesv2.pc
-@@ -0,0 +1,11 @@
-+prefix=/usr
-+exec_prefix=${prefix}
-+libdir=${exec_prefix}/lib
-+includedir=${prefix}/include
++Without this patch, the configure will try to run erlang to simply
++check if the version is supported by ejabberd. Instead, we do this test
++statically.
++---
++ configure.ac | 2 --
++ 1 file changed, 2 deletions(-)
 +
-+Name: glesv2
-+Description: ARM Mali implementation of OpenGL ESv2
-+Version: 2.0
-+Requires:
-+Libs: -L${libdir} -lGLESv2 -lGLESv1_CM
-+Cflags: -I${includedir} -DMESA_EGL_NO_X11_HEADERS
-diff --git a/package/mali-t76x/mali-t76x.hash b/package/mali-t76x/mali-t76x.hash
++diff --git a/configure.ac b/configure.ac
++index d5f313e..4b35d57 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -39,10 +39,8 @@ AC_ARG_ENABLE(erlang-version-check,
++ 	[Check Erlang/OTP version @<:@default=yes@:>@])])
++ case "$enable_erlang_version_check" in
++ 	yes|'')
++-		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX])
++ 		;;
++ 	no)
++-		ERLANG_VERSION_CHECK([$REQUIRE_ERLANG_MIN],[$REQUIRE_ERLANG_MAX],[warn])
++ 		;;
++ esac
++ 
++-- 
++2.5.0
++
+diff --git a/package/ejabberd/0005-correct-include.patch b/package/ejabberd/0005-correct-include.patch
 new file mode 100644
-index 0000000..a754b98
+index 0000000..dc2d1c3
 --- /dev/null
-+++ b/package/mali-t76x/mali-t76x.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  5a0b00438edc8066b374481d3332a43c07ec2bd3bc73265983a968970f754902  mali-t76x_r5p0-06rel0_linux_1+fbdev.tar.gz
-diff --git a/package/mali-t76x/mali-t76x.mk b/package/mali-t76x/mali-t76x.mk
++++ b/package/ejabberd/0005-correct-include.patch
+@@ -0,0 +1,56 @@
++From 9878a2cfb1a927f4b42f1c4d08df434084739626 Mon Sep 17 00:00:00 2001
++From: Philipp Huebner <debalance@debian.org>
++Date: Sun, 21 Feb 2016 11:01:42 -0500
++Subject: [PATCH] correct include
++
++This part of the code was moved into it's own project and was packaged
++separately by me. To make the build process work, this small fix is
++necessary.
++---
++ src/mod_sip.erl           | 2 +-
++ src/mod_sip_proxy.erl     | 2 +-
++ src/mod_sip_registrar.erl | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/src/mod_sip.erl b/src/mod_sip.erl
++index 1e4044b..4279b64 100644
++--- a/src/mod_sip.erl
+++++ b/src/mod_sip.erl
++@@ -38,7 +38,7 @@
++ 
++ -include("ejabberd.hrl").
++ -include("logger.hrl").
++--include_lib("esip/include/esip.hrl").
+++-include_lib("p1_sip/include/esip.hrl").
++ 
++ %%%===================================================================
++ %%% API
++diff --git a/src/mod_sip_proxy.erl b/src/mod_sip_proxy.erl
++index a0dff12..b5794fa 100644
++--- a/src/mod_sip_proxy.erl
+++++ b/src/mod_sip_proxy.erl
++@@ -40,7 +40,7 @@
++ 
++ -include("ejabberd.hrl").
++ -include("logger.hrl").
++--include_lib("esip/include/esip.hrl").
+++-include_lib("p1_sip/include/esip.hrl").
++ 
++ -define(SIGN_LIFETIME, 300). %% in seconds.
++ 
++diff --git a/src/mod_sip_registrar.erl b/src/mod_sip_registrar.erl
++index f6b3103..1061c88 100644
++--- a/src/mod_sip_registrar.erl
+++++ b/src/mod_sip_registrar.erl
++@@ -37,7 +37,7 @@
++ 
++ -include("ejabberd.hrl").
++ -include("logger.hrl").
++--include_lib("esip/include/esip.hrl").
+++-include_lib("p1_sip/include/esip.hrl").
++ 
++ -define(CALL_TIMEOUT, timer:seconds(30)).
++ -define(DEFAULT_EXPIRES, 3600).
++-- 
++2.5.0
++
+diff --git a/package/ejabberd/0005-fix-includes.patch b/package/ejabberd/0005-fix-includes.patch
+deleted file mode 100644
+index 27ad761..0000000
+--- a/package/ejabberd/0005-fix-includes.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-Description: correct include
+- This part of the code was moved into it's own project and was packaged
+- separately by me. To make the build process work, this small fix is
+- necessary.
+-Author: Philipp Huebner <debalance@debian.org>
+-
+-Index: ejabberd/src/mod_sip_proxy.erl
+-===================================================================
+---- ejabberd.orig/src/mod_sip_proxy.erl
+-+++ ejabberd/src/mod_sip_proxy.erl
+-@@ -21,7 +21,7 @@
+- 
+- -include("ejabberd.hrl").
+- -include("logger.hrl").
+---include_lib("esip/include/esip.hrl").
+-+-include_lib("p1_sip/include/esip.hrl").
+- 
+- -define(SIGN_LIFETIME, 300). %% in seconds.
+- 
+-Index: ejabberd/src/mod_sip.erl
+-===================================================================
+---- ejabberd.orig/src/mod_sip.erl
+-+++ ejabberd/src/mod_sip.erl
+-@@ -20,7 +20,7 @@
+- 
+- -include("ejabberd.hrl").
+- -include("logger.hrl").
+---include_lib("esip/include/esip.hrl").
+-+-include_lib("p1_sip/include/esip.hrl").
+- 
+- %%%===================================================================
+- %%% API
+-Index: ejabberd/src/mod_sip_registrar.erl
+-===================================================================
+---- ejabberd.orig/src/mod_sip_registrar.erl
+-+++ ejabberd/src/mod_sip_registrar.erl
+-@@ -20,7 +20,7 @@
+- 
+- -include("ejabberd.hrl").
+- -include("logger.hrl").
+---include_lib("esip/include/esip.hrl").
+-+-include_lib("p1_sip/include/esip.hrl").
+- 
+- -define(CALL_TIMEOUT, timer:seconds(30)).
+- -define(DEFAULT_EXPIRES, 3600).
+diff --git a/package/ejabberd/0006-disable-ERLANG_DEPRECATED_CHECK.patch b/package/ejabberd/0006-disable-ERLANG_DEPRECATED_CHECK.patch
 new file mode 100644
-index 0000000..702f583
+index 0000000..ea52b3e
 --- /dev/null
-+++ b/package/mali-t76x/mali-t76x.mk
++++ b/package/ejabberd/0006-disable-ERLANG_DEPRECATED_CHECK.patch
 @@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# mali-t76x
-+#
-+################################################################################
++From 615eae56cabd7d15a8f62b6f50e598818932c9ca Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Sun, 21 Feb 2016 11:02:33 -0500
++Subject: [PATCH] disable ERLANG_DEPRECATED_CHECK
 +
-+MALI_T76X_VERSION = r5p0-06rel0
-+MALI_T76X_SOURCE = mali-t76x_$(MALI_T76X_VERSION)_linux_1+fbdev.tar.gz
-+MALI_T76X_SITE = http://malideveloper.arm.com/downloads/drivers/binary/$(MALI_T76X_VERSION)
++Without this patch, the configure will try to execute erlang to check
++if it uses deprecated types. Assume the answer is false.
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+MALI_T76X_INSTALL_STAGING = YES
-+MALI_T76X_PROVIDES = libegl libgles
++diff --git a/configure.ac b/configure.ac
++index 4b35d57..da87585 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -243,7 +243,7 @@ if test "$ENABLEUSER" != ""; then
++   AC_SUBST([INSTALLUSER], [$ENABLEUSER])
++ fi
++ 
++-ERLANG_DEPRECATED_TYPES_CHECK
+++AC_SUBST(erlang_deprecated_types, false)
++ 
++ if test "$sqlite" = "true"; then
++    AX_LIB_SQLITE3([3.6.19])
++-- 
++2.5.0
 +
-+define MALI_T76X_INSTALL_STAGING_CMDS
-+	$(INSTALL) -m 755 $(@D)/*.so $(STAGING_DIR)/usr/lib/
+diff --git a/package/ejabberd/0006-disable-erlang-deprecated-types-check.patch b/package/ejabberd/0006-disable-erlang-deprecated-types-check.patch
+deleted file mode 100644
+index 1b70953..0000000
+--- a/package/ejabberd/0006-disable-erlang-deprecated-types-check.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-Description: disable ERLANG_DEPRECATED_CHECK
+- Without this patch, the configure will try to execute erlang to check
+- if it uses deprecated types. Assume the answer is false.
+-Author: Johan Oudinet <johan.oudinet@gmail.com>
+-
+-Index: ejabberd/configure.ac
+-====================================================================
+-diff --git a/configure.ac b/configure.ac
+-index 6ae0a24..e5498df 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -252,7 +252,7 @@ if test "$ENABLEUSER" != ""; then
+-   AC_SUBST([INSTALLUSER], [$ENABLEUSER])
+- fi
+- 
+--ERLANG_DEPRECATED_TYPES_CHECK
+-+AC_SUBST(erlang_deprecated_types, false)
+- 
+- if test "$sqlite" = "true"; then
+-    AX_LIB_SQLITE3([3.6.19])
+diff --git a/package/ejabberd/0007-fix-install-permissions.patch b/package/ejabberd/0007-fix-install-permissions.patch
+index 2ad8453..e30b49e 100644
+--- a/package/ejabberd/0007-fix-install-permissions.patch
++++ b/package/ejabberd/0007-fix-install-permissions.patch
+@@ -1,13 +1,17 @@
+-Description: fix install permissions
+- Without this patch, the makefile will try to install directories and
+- files with incompatible permissions for ejabberd, which run as an
+- ejabberd user.
+-Author: Johan Oudinet <johan.oudinet@gmail.com>
++From 0f4db8755263c0825b02b4197cdb64b11fb8c638 Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Sun, 21 Feb 2016 11:03:16 -0500
++Subject: [PATCH] fix install permissions
 +
-+	$(INSTALL) -D -m 0644 package/mali-t76x/egl.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
-+	$(INSTALL) -D -m 0644 package/mali-t76x/glesv2.pc \
-+		$(STAGING_DIR)/usr/lib/pkgconfig/glesv2.pc
-+endef
++Without this patch, the makefile will try to install directories and
++files with incompatible permissions for ejabberd, which run as an
++ejabberd user.
++---
++ Makefile.in | 40 ++++++----------------------------------
++ 1 file changed, 6 insertions(+), 34 deletions(-)
+ 
+-Index: ejabberd/Makefile.in
+-===================================================================
+ diff --git a/Makefile.in b/Makefile.in
+-index b9d783a..6ec805a 100644
++index 9cd905f..442b851 100644
+ --- a/Makefile.in
+ +++ b/Makefile.in
+ @@ -122,10 +122,8 @@ copy-files: $(call TO_DEST,$(MAIN_FILES))
+@@ -77,3 +81,6 @@ index b9d783a..6ec805a 100644
+  
+  uninstall: uninstall-binary
+  
++-- 
++2.5.0
 +
-+define MALI_T76X_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 755 $(@D)/*.so $(TARGET_DIR)/usr/lib/
-+endef
+diff --git a/package/ejabberd/0008-fix-ejabberdctl.patch b/package/ejabberd/0008-fix-ejabberdctl.patch
+index af0b6ee..fc23fff 100644
+--- a/package/ejabberd/0008-fix-ejabberdctl.patch
++++ b/package/ejabberd/0008-fix-ejabberdctl.patch
+@@ -1,10 +1,16 @@
+-Description: fix ejabberdctl
+- Change default values so ejabberdctl run commands as ejabberd user
+- Also add a way for the user to change default values.
++From dc6046d9eaef16dc4e9fcda2021219910bfea0de Mon Sep 17 00:00:00 2001
++From: Johan Oudinet <johan.oudinet@gmail.com>
++Date: Sun, 21 Feb 2016 11:03:58 -0500
++Subject: [PATCH] fix ejabberdctl
 +
-+$(eval $(generic-package))
++Change default values so ejabberdctl run commands as ejabberd user
++Also add a way for the user to change default values.
++
+ Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
++---
++ ejabberdctl.template | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
+ 
+-Index: ejabberd/ejabberdctl.template
+-===================================================================
+ diff --git a/ejabberdctl.template b/ejabberdctl.template
+ index c7d76ef..a7afce1 100755
+ --- a/ejabberdctl.template
+@@ -23,3 +29,6 @@ index c7d76ef..a7afce1 100755
+  # check the proper system user is used if defined
+  if [ "$INSTALLUSER" != "" ] ; then
+      EXEC_CMD="false"
++-- 
++2.5.0
++
