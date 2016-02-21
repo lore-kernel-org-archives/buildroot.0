@@ -1,54 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 12:03:42 +0100
-Subject: [Buildroot] [PATCH 13/14] package/jack2: add optional support
-	for opus
-References: <1456048218-4061-1-git-send-email-bernd.kuhls@t-online.de>
- <1456048218-4061-13-git-send-email-bernd.kuhls@t-online.de>
- <56C996A2.2080108@mind.be>
-Message-ID: <e5iopcx3h.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 12:23:25 +0100
+Subject: [Buildroot] [git commit] package/lftp: add optional support for
+	expat
+Message-ID: <20160221112340.22BF9802A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=91889c19bea220907620c1c40a1869933153a1d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Am Sun, 21 Feb 2016 11:51:14 +0100 schrieb Arnout Vandecappelle:
+When expat was compiled before, the proto-http module will use it as
+optional dependency:
 
->  Note that it also seems to have an optional dependency on celt051,
->  dbus,
-> libsndfile, libsamplerate (based on looking at the wscripts).
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/lftp/4.6.4/proto-http.so | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libexpat.so.1]
+[...]
 
-Quoting https://git.busybox.net/buildroot/tree/package/jack2/jack2.mk#n10
-"JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python"
+The build system offers no option to en-/disable expat support:
+https://github.com/lavv17/lftp/blob/lftp-4.6-stable/configure.ac#L337
 
-I tried to compile celt051 with jack2 but somehow celt051 was not 
-detected by jack2.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lftp/lftp.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->  Which makes me wonder: how did you find these optional dependencies? I
->  assumed
-> that you had built an allyesconfig, then deleted output/build, then
-> built again,
-> and then did a readelf. But in that case, you should have caught these
-> other dependencies.
-
-I built an allyesconfig, but the dependency check was done by the fli4l
-[1] build system. Fli4l uses buildroot to compile its binaries but it 
-extends buildroot by a sandbox mechanism. Before installing binaries to 
-staging and target dirs all packages are installed into a package-
-specific sandbox directory first, in this directory all linked libraries 
-of the package binaries are detected and checked whether they are part of 
-<pkg>_DEPENDENCIES, if not, the build fails.
-
-The list of packages I talked about[2] was gathered that way, so there is 
-no guarantee I caught all dependencies, the same is true for the method 
-you described. Thats the reason I did not bother much about the missing 
-celt051 detection by jack2.
-
-Btw, fli4l uses the top-level parallel make option ;)
-
-Regards, Bernd
-
-[1] http://www.fli4l.de/en/home/whats-that-fli4l/
-[2] http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/139935
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index d2d58fd..5051f70 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -17,6 +17,10 @@ ifneq ($(BR2_STATIC_LIBS),y)
+ LFTP_CONF_OPTS += --with-modules
+ endif
+ 
++ifeq ($(BR2_PACKAGE_EXPAT)$(BR2_PACKAGE_LFTP_PROTO_HTTP),yy)
++LFTP_DEPENDENCIES += expat
++endif
++
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LFTP_DEPENDENCIES += gnutls
+ LFTP_CONF_OPTS += --with-gnutls
