@@ -1,43 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 12:42:35 +0100
-Subject: [Buildroot] [git commit] package/zsh: add optional support for gdbm
-Message-ID: <20160221114251.A515180506@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 12:43:36 +0100
+Subject: [Buildroot] [git commit] package/pulseaudio: add optional support
+	for libsoxr
+Message-ID: <20160221114649.C48EC8042F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8692be657f59b1e11b8a61d9e75aac598e8b86a
+commit: https://git.buildroot.net/buildroot/commit/?id=2658f92566625f86e2fdcfc2fb1508d28d6390bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When gdbm was compiled before, zsh will use it as optional dependency:
+When libsoxr was compiled before, pulseaudio will use it as optional
+dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/bin/zsh | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libgdbm.so.4]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/pulseaudio | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libpulsecore-8.0.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpulse.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libspeexdsp.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsoxr.so.0]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/zsh/zsh.mk | 7 +++++++
+ package/pulseaudio/pulseaudio.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 03456b8..c3af034 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -12,6 +12,13 @@ ZSH_CONF_OPTS = --bindir=/bin
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index cd8d0f9..36661cc 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -72,6 +72,13 @@ else
+ PULSEAUDIO_CONF_OPTS += --disable-gtk3
+ endif
  
-+ifeq ($(BR2_PACKAGE_GDBM),y)
-+ZSH_CONF_OPTS += --enable-gdbm
-+ZSH_DEPENDENCIES += gdbm
++ifeq ($(BR2_PACKAGE_LIBSOXR),y)
++PULSEAUDIO_CONF_OPTS += --with-soxr
++PULSEAUDIO_DEPENDENCIES += libsoxr
 +else
-+ZSH_CONF_OPTS += --disable-gdbm
++PULSEAUDIO_CONF_OPTS += --without-soxr
 +endif
 +
- # Remove versioned zsh-x.y.z binary taking up space
- define ZSH_TARGET_INSTALL_FIXUPS
- 	rm -f $(TARGET_DIR)/bin/zsh-$(ZSH_VERSION)
+ ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
+ # The optional webrtc echo canceller is written in C++, causing auto* to want
+ # to link module-echo-cancel.so with CXX even if webrtc ISN'T used.
