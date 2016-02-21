@@ -1,43 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 10:50:17 +0100
-Subject: [Buildroot] [PATCH 13/14] package/jack2: add optional support for
-	opus
+Date: Sun, 21 Feb 2016 10:50:14 +0100
+Subject: [Buildroot] [PATCH 10/14] package/pulseaudio: add optional support
+	for jack2
 In-Reply-To: <1456048218-4061-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456048218-4061-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456048218-4061-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456048218-4061-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When opus was compiled before, jack2 will use it as optional dependency:
+When jack2 was compiled before, pulseaudio will use it as optional
+dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/jackd | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libjackserver.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libopus.so.0]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/pulse-8.0/modules/module-jack-source.so | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgdbm.so.4]
+ 0x0000000000000001 (NEEDED)             Shared library: [libjack.so.0]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/jack2/jack2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pulseaudio/pulseaudio.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index 73328d3..e018861 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -10,6 +10,10 @@ JACK2_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
- JACK2_INSTALL_STAGING = YES
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index ee522cb..cd8d0f9 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -42,6 +42,13 @@ else
+ PULSEAUDIO_CONF_OPTS += --with-database=simple
+ endif
  
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+JACK2_DEPENDENCIES += opus
++ifeq ($(BR2_PACKAGE_JACK2),y)
++PULSEAUDIO_CONF_OPTS += --enable-jack
++PULSEAUDIO_DEPENDENCIES += jack2
++else
++PULSEAUDIO_CONF_OPTS += --disable-jack
 +endif
 +
- define JACK2_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS)	\
+ ifeq ($(BR2_PACKAGE_ORC),y)
+ PULSEAUDIO_DEPENDENCIES += orc
+ PULSEAUDIO_CONF_ENV += ORCC=$(HOST_DIR)/usr/bin/orcc
 -- 
 2.7.0
