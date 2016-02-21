@@ -1,45 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 18:34:58 +0100
-Subject: [Buildroot] [PATCH 09/10] package/lxc: add optional support for
-	libseccomp
+Date: Sun, 21 Feb 2016 18:34:53 +0100
+Subject: [Buildroot] [PATCH 04/10] package/mediastreamer: add optional
+	support for libupnp
 In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456076099-19607-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456076099-19607-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libseccomp was compiled before, lxc will use it as optional
+When libupnp was compiled before, mediastreamer will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/libexec/lxc/lxc-monitord | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [liblxc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libseccomp.so.2]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libmediastreamer_voip.so.3.0.0 | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libmediastreamer_base.so.3]
+ 0x0000000000000001 (NEEDED)             Shared library: [libupnp.so.6]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/lxc/lxc.mk | 7 +++++++
+ package/mediastreamer/mediastreamer.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
-index e382f4d..8190969 100644
---- a/package/lxc/lxc.mk
-+++ b/package/lxc/lxc.mk
-@@ -15,4 +15,11 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
- 	--disable-lua --disable-python \
- 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 79d8e75..047509e 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -20,6 +20,13 @@ else
+ MEDIASTREAMER_CONF_OPTS += --disable-alsa
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+LXC_CONF_OPTS += --enable-seccomp
-+LXC_DEPENDENCIES += libseccomp
++ifeq ($(BR2_PACKAGE_LIBUPNP),y)
++MEDIASTREAMER_CONF_OPTS += --enable-upnp
++MEDIASTREAMER_DEPENDENCIES += libupnp
 +else
-+LXC_CONF_OPTS += --disable-seccomp
++MEDIASTREAMER_CONF_OPTS += --disable-upnp
 +endif
 +
- $(eval $(autotools-package))
+ # portaudio backend needs speex as well
+ ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX),yy)
+ MEDIASTREAMER_CONF_OPTS += --enable-portaudio
 -- 
 2.7.0
