@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:45:22 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: add optional support
-	for lcms2
-Message-ID: <20160221135332.AE91C7FDC4@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 14:45:36 +0100
+Subject: [Buildroot] [git commit] package/libfm: add optional support for
+	libexif
+Message-ID: <20160221135332.C085F817EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fa25a8fb7ee6b612ba8240d02e05a5ef3a9c6e0
+commit: https://git.buildroot.net/buildroot/commit/?id=018843ce1bfe1c83d12a3e12f9b9b4c986ec9e7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When lcms2 was compiled before, imagemagick will use it as optional
+When libexif was compiled before, libfm will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/identify | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libMagickCore-6.Q16.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libMagickWand-6.Q16.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [liblcms2.so.2]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libfm.so.4.0.3 | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libexif.so.12]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/imagemagick/imagemagick.mk | 7 +++++++
+ package/libfm/libfm.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index eee567e..8fc9532 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -60,6 +60,13 @@ else
- IMAGEMAGICK_CONF_OPTS += --without-jpeg
- endif
+diff --git a/package/libfm/libfm.mk b/package/libfm/libfm.mk
+index f0888b7..e8410d0 100644
+--- a/package/libfm/libfm.mk
++++ b/package/libfm/libfm.mk
+@@ -12,4 +12,11 @@ LIBFM_LICENSE = GPLv2+, LGPLv2.1+
+ LIBFM_LICENSE_FILES = COPYING src/extra/fm-xml-file.c
+ LIBFM_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_LCMS2),y)
-+IMAGEMAGICK_CONF_OPTS += --with-lcms
-+IMAGEMAGICK_DEPENDENCIES += lcms2
++ifeq ($(BR2_PACKAGE_LIBEXIF),y)
++LIBFM_CONF_OPTS += --enable-exif
++LIBFM_DEPENDENCIES += libexif
 +else
-+IMAGEMAGICK_CONF_OPTS += --without-lcms
++LIBFM_CONF_OPTS += --disable-exif
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- IMAGEMAGICK_CONF_OPTS += --with-png
- IMAGEMAGICK_DEPENDENCIES += libpng
+ $(eval $(autotools-package))
