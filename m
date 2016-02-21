@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:38:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kexec: add optional support for
- xz
-In-Reply-To: <1456007514-29695-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456007514-29695-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221143850.579fae60@free-electrons.com>
+Date: Sun, 21 Feb 2016 14:39:02 +0100
+Subject: [Buildroot] [git commit] package/trace-cmd: add optional support
+	for audit
+Message-ID: <20160221133955.E41C780415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d013a287e1402bd058553452ec1f8cbd0ea5ff1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Feb 2016 23:31:54 +0100, Bernd Kuhls wrote:
+When audit was compiled before, trace-cmd will use it as optional
+dependency:
 
-> +ifeq ($(BR2_PACKAGE_XZ),y)
-> +# fixes broken check for xz when cross-compiling:
-> +# checking for lzma_code in -llzma...
-> +# ./configure: line 4712: ac_fn_c_try_link: command not found
-> +KEXEC_CONF_ENV += ac_cv_lib_lzma_lzma_code=yes
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/trace-cmd | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [ld64-uClibc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libaudit.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
 
-Instead of this, I've added a bump to version 2.0.11, which contains an
-upstream commit that fixes this issue. Yes, it's a version bump on
-master, but it's a minor version bump, so I think it's reasonable.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/trace-cmd/trace-cmd.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index 839e7ee..2348155 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -13,6 +13,10 @@ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+ 
+ TRACE_CMD_DEPENDENCIES = host-pkgconf
+ 
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++TRACE_CMD_DEPENDENCIES += audit
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ TRACE_CMD_DEPENDENCIES += python host-swig
+ TRACE_CMD_MAKE_OPTS = PYTHON_VERS=python
