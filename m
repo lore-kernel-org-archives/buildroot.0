@@ -1,41 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:44:03 +0100
-Subject: [Buildroot] [PATCH] package/sdl_mixer: disable libmad support
- for static build only
-In-Reply-To: <CABLs7GVft7bo9tdj8wMh4E0Z9DNQssZNWw4XYo9V=ANBdpceOg@mail.gmail.com>
-References: <1456073708-19562-1-git-send-email-romain.naour@gmail.com>
- <20160221181830.01215f6e@free-electrons.com>
- <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
- <20160221211340.4db41609@free-electrons.com>
- <CABLs7GVft7bo9tdj8wMh4E0Z9DNQssZNWw4XYo9V=ANBdpceOg@mail.gmail.com>
-Message-ID: <20160221214403.217426b2@free-electrons.com>
+Date: Sun, 21 Feb 2016 21:40:53 +0100
+Subject: [Buildroot] [git commit branch/next] ifupdown: bump to version 0.8.8
+Message-ID: <20160221204439.403898046E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rodrigo Rebello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4558f82dea2db6f037d92940f95fd2fcaeb1ae4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 21 Feb 2016 17:37:28 -0300, Rodrigo Rebello wrote:
+Also add a kludge switching the explicit invocation of the ip binary
+from /bin to /sbin since that's where buildroot installs it.
 
-> That's a good point. Well, at least chocolate-doom is being actively
-> maintained, so we'll be able to upstream a patch in that case.
-> 
-> As for the other 3, do you think keeping patches for them in buildroot
-> could turn out to be a hassle in the long run?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ifupdown/ifupdown.hash |  4 ++--
+ package/ifupdown/ifupdown.mk   | 13 +++++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-Having patches that are not upstream is a hassle in general.
-
-But since those packages are basically unmaintained upstream as far as
-I remember, it means upstream won't do any new release, and therefore
-we won't have to update/change the patches. Having patches is really a
-big annoyance when the upstream project is still active and makes
-releases, since we have to update our patches whenever we bump the
-package.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
+index 02dfd2b..c5a4189 100644
+--- a/package/ifupdown/ifupdown.hash
++++ b/package/ifupdown/ifupdown.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.2.dsc
+-sha256	edb08f935fea9bc376c3faa0140c04c7a4d4ef5f22fd280ec4060386a75df10b	ifupdown_0.8.2.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.8.dsc
++sha256	180edaaa6de99e4e74de7229481edf74361b8e8468462842618a42a952a26c0e	ifupdown_0.8.8.tar.xz
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index 7fbd003..37aaf5d 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-IFUPDOWN_VERSION = 0.8.2
++IFUPDOWN_VERSION = 0.8.8
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+-IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
++IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
+ IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ IFUPDOWN_LICENSE = GPLv2+
+ IFUPDOWN_LICENSE_FILES = COPYING
+@@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
++# We need to switch from /bin/ip to /sbin/ip
++IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
++define IFUPDOWN_MAKE_IP_IN_SBIN
++	for f in $(IFUPDOWN_DEFN_FILES) ; do \
++		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
++	done
++endef
++IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
++
+ $(eval $(generic-package))
