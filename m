@@ -1,34 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Feb 2016 09:39:58 +0100
-Subject: [Buildroot] [git commit] docs/manual: add info about AGPLv3 license
-Message-ID: <20160221084024.93D47803EE@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 10:01:14 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-02-19
+In-Reply-To: <871t86cvak.fsf@dell.be.48ers.dk>
+References: <20160220073017.2A200101DA7@stock.ovh.net>
+ <1455997702.5444.6.camel@embedded.rocks>
+ <20160221000639.512d7658@free-electrons.com>
+ <871t86cvak.fsf@dell.be.48ers.dk>
+Message-ID: <20160221100114.591bd29e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=797f906ba345fb828cb05aef2404c388a5bfa33b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter Korsgaard,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/legal-notice.txt | 3 +++
- 1 file changed, 3 insertions(+)
+On Sun, 21 Feb 2016 09:38:43 +0100, Peter Korsgaard wrote:
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-index 5895224..0a91c37 100644
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -74,6 +74,9 @@ file to inform you of relevant material that could not be saved.
- Here is a list of the licenses that are most widely used by packages in
- Buildroot, with the name used in the manifest files:
- 
-+* `AGPLv3`:
-+  http://www.gnu.org/licenses/agpl-3.0.en.html[
-+  GNU Affero General Public License, version 3];
- * `GPLv2`:
-   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[
-   GNU General Public License, version 2];
+>  > Yes, it is really a work-around, but it is so much simpler than adding
+>  > a BR2_TOOLCHAIN_HAS_GCC_BUG_58952, selecting it for all broken
+>  > toolchain + adding the autobuilder exceptions that are needed to also
+>  > exclude the custom external toolchains that are affected.
+> 
+>  > (Not sure Peter will agree, since my proposal is not the cleanest
+>  > solution, but it's by far the one with the least impact.)
+> 
+> Yes, I agree - And preferably send the patch upstream as well!
+
+Well, in essence, this patch will not be accepted upstream. It is a
+crappy work-around for a compiler bug, so it would be very logical for
+upstream to reject this patch.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
