@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:13:40 +0100
-Subject: [Buildroot] [PATCH] package/sdl_mixer: disable libmad support
- for static build only
-In-Reply-To: <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
-References: <1456073708-19562-1-git-send-email-romain.naour@gmail.com>
- <20160221181830.01215f6e@free-electrons.com>
- <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
-Message-ID: <20160221211340.4db41609@free-electrons.com>
+Date: Sun, 21 Feb 2016 21:18:00 +0100
+Subject: [Buildroot] [PATCH 01/10] package/gnuradio: add optional
+ support for orc
+In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221211800.2444fbcb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Bernd Kuhls,
 
-On Sun, 21 Feb 2016 17:06:13 -0300, Rodrigo Rebello wrote:
+On Sun, 21 Feb 2016 18:34:50 +0100, Bernd Kuhls wrote:
+> When orc was compiled before, gnuradio will use it as optional
+> dependency:
+> 
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gnuradio-config-info | grep NEEDED
+> [...]
+>  0x0000000000000001 (NEEDED)             Shared library: [liborc-0.4.so.0]
+> [...]
+> 
+> Apparently there is no option provided by the build system to
+> en-/disable support for orc:
+> https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> I don't think this workaround is necessary at all. Adding a
-> 'Libs.private' section to SDL_mixer.pc and fixing packages that depend
-> on SDL_mixer so that they use pkg-config doesn't seem too complicated.
-> Currently only chocolate-doom, lbreakout2, ltris and prboom depend on
-> it.
+Can you check it properly finds the orcc compiler in
+$(HOST_DIR)/usr/bin ? I believe this might need some more tweaks than
+just depending on orc.
 
-This is obviously the best option. Unfortunately, many of those
-packages are not maintained, so we can't upstream the patches you're
-talking about...
+I'm Cc'ing Gwenhael, who is the main contributor to the GNURadio
+package. Gwenhael, can you have a look at Bernd's patch to enable ORC
+as an optional dependency of GNURadio ?
 
-> I'll work on a patch for chocolate-doom now and handle the other 3 later.
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
