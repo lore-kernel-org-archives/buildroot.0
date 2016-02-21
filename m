@@ -1,67 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2016 17:38:54 +0100
-Subject: [Buildroot] [PATCH v2 1/1] pkg-utils: mask tput failure for
- non-interactive sessions
-In-Reply-To: <BLU436-SMTP109FC79F88920A925196F40A0A20@phx.gbl>
-References: <BLU436-SMTP109FC79F88920A925196F40A0A20@phx.gbl>
-Message-ID: <20160221163854.GD3456@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 21 Feb 2016 17:55:08 +0100
+Subject: [Buildroot] [PATCH] package/sdl_mixer: disable libmad support for
+	static build only
+Message-ID: <1456073708-19562-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-James, All,
+Following the discussion on the ML [1], all package using SDL_mixer will
+unlikely forget to link with -lmad.
 
-On 2016-02-21 11:04 -0500, James Knight spake thusly:
-> When invoking a build from a non-interactive session (for example, a
-> Jenkins build), there is no terminal session to modify. When preparing
-> variables to track the bold and boldoff mode sequences, the `tput`
-> command will always fail as there is no terminal to query. The following
-> change masks the error message when `tput` fails; leaving the TERM_BOLD
-> and TERM_RESET variables empty.
-> 
-> Signed-off-by: James Knight <james.d.knight@live.com>
+[...]sysroot/usr/lib/libSDL_mixer.a(music_mad.o): In function `read_next_frame':
+music_mad.c:(.text+0xbc): undefined reference to `mad_stream_buffer'
+music_mad.c:(.text+0xd0): undefined reference to `mad_frame_decode'
+music_mad.c:(.text+0x134): undefined reference to `mad_timer_add'
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Until SDL_mixer and other package using it are not fixed, disable libmad support
+for static build only.
 
-Regards,
-Yann E. MORIN.
+Fixes:
+http://autobuild.buildroot.net/results/e09/e09ea3a64d396bbc855acf7c07fcbea28fb2395d
 
-> ---
-> Changes v1 -> v2:
->   - Removed space in stderr redirection (suggested by Yann E. MORIN).
-> ---
->  package/pkg-utils.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 44bd2c9..f88313a 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -84,8 +84,8 @@ suitable-extractor = $(INFLATE$(suffix $(1)))
->  
->  # MESSAGE Macro -- display a message in bold type
->  MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
-> -TERM_BOLD := $(shell tput smso)
-> -TERM_RESET := $(shell tput rmso)
-> +TERM_BOLD := $(shell tput smso 2>/dev/null)
-> +TERM_RESET := $(shell tput rmso 2>/dev/null)
->  
->  # Utility functions for 'find'
->  # findfileclauses(filelist) => -name 'X' -o -name 'Y'
-> -- 
-> 1.9.5.msysgit.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] http://lists.busybox.net/pipermail/buildroot/2016-February/153442.html
 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Rodrigo Rebello <rprebello@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/sdl_mixer/sdl_mixer.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+index a602b6e..3547799 100644
+--- a/package/sdl_mixer/sdl_mixer.mk
++++ b/package/sdl_mixer/sdl_mixer.mk
+@@ -20,7 +20,8 @@ SDL_MIXER_CONF_OPTS = \
+ 	--disable-music-mp3 \
+ 	--disable-music-flac # configure script fails when cross compiling
+ 
+-ifeq ($(BR2_PACKAGE_LIBMAD),y)
++# disable libmad support for static build only.
++ifeq ($(BR2_PACKAGE_LIBMAD)x$(BR2_STATIC_LIBS),yx)
+ SDL_MIXER_CONF_OPTS += --enable-music-mp3-mad-gpl
+ SDL_MIXER_DEPENDENCIES += libmad
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.0
