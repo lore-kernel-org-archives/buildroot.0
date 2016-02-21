@@ -1,52 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:24:32 +0100
-Subject: [Buildroot] [git commit] libcap: enable extended attribute support
-Message-ID: <20160302202758.222A77FA0E@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 23:29:18 +0100
+Subject: [Buildroot] [git commit] erlang-fast_tls: remove unused package
+Message-ID: <20160302202756.1485A7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cc9dd31e1d07a30001645b4f8a0f4aff91dbc1c
+commit: https://git.buildroot.net/buildroot/commit/?id=4d14100fb4e6ddcf7eff01fe9c49676ccc3c7f1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is required for capability support in files, via fakeroot.
+This package was added in error when updating ejabberd dependencies. It
+is not used.
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libcap/libcap.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/Config.in                          |  1 -
+ package/erlang-fast_tls/Config.in          |  8 --------
+ package/erlang-fast_tls/erlang-fast_tls.mk | 14 --------------
+ 3 files changed, 23 deletions(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 54844f8..252c4bb 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -20,8 +20,7 @@ else
- LIBCAP_HAVE_LIBATTR = no
- endif
- 
--# we don't have host-attr
--HOST_LIBCAP_DEPENDENCIES =
-+HOST_LIBCAP_DEPENDENCIES = host-attr
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBCAP_MAKE_TARGET = libcap.a
-@@ -67,12 +66,13 @@ define LIBCAP_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_LIBCAP_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
-+		LIBATTR=yes RAISE_SETFCAP=no
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
--		prefix=/usr lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
-+		LIBATTR=yes RAISE_SETFCAP=no prefix=/usr lib=lib install
- endef
- 
- $(eval $(generic-package))
+diff --git a/package/Config.in b/package/Config.in
+index c5442de..c69d632 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -472,7 +472,6 @@ menu "Interpreter languages and scripting"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
+-	source "package/erlang-fast_tls/Config.in"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-p1-cache-tab/Config.in"
+diff --git a/package/erlang-fast_tls/Config.in b/package/erlang-fast_tls/Config.in
+deleted file mode 100644
+index 3bf52a1..0000000
+--- a/package/erlang-fast_tls/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_ERLANG_FAST_TLS
+-	bool "erlang-fast_tls"
+-	select BR2_PACKAGE_ERLANG_P1_UTILS
+-	select BR2_PACKAGE_OPENSSL
+-	help
+-	  TLS / SSL OpenSSL-based native driver for Erlang / Elixir
+-
+-	  https://github.com/processone/fast_tls
+diff --git a/package/erlang-fast_tls/erlang-fast_tls.mk b/package/erlang-fast_tls/erlang-fast_tls.mk
+deleted file mode 100644
+index 63c55c5..0000000
+--- a/package/erlang-fast_tls/erlang-fast_tls.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# erlang-fast_tls
+-#
+-################################################################################
+-
+-ERLANG_FAST_TLS_VERSION = 1.0.0
+-ERLANG_FAST_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_FAST_TLS_VERSION))
+-ERLANG_FAST_TLS_LICENSE = Apache-2.0
+-ERLANG_FAST_TLS_LICENSE_FILES = LICENSE.txt
+-ERLANG_FAST_TLS_INSTALL_STAGING = YES
+-ERLANG_FAST_TLS_DEPENDENCIES = openssl erlang-p1-utils
+-
+-$(eval $(rebar-package))
