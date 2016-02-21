@@ -1,43 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 15:57:47 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-geode:
-	bump version to 2.11.18
-Message-ID: <20160302202754.32BAB80203@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 23:46:22 +0100
+Subject: [Buildroot] [git commit] package/multicat: Add package
+Message-ID: <20160302202756.3E1EA7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d30102693aa562f026b78ee260e46cc7b4751e3a
+commit: https://git.buildroot.net/buildroot/commit/?id=ddc2285ff2be6841e5144d3a5749d14fa21ea425
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+multicat is a simple and efficient multicast and transport stream manipulation
+tool.
+
+Signed-off-by: Julian Scheel <julian@jusst.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash | 4 ++--
- package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in              |  1 +
+ package/multicat/Config.in     | 11 +++++++++++
+ package/multicat/multicat.hash |  4 ++++
+ package/multicat/multicat.mk   | 23 +++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-index 991cf6b..b05983f 100644
---- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-+++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002607.html
--sha256	07b4d42623e71e592b77c52a75cf230f8e711c8a0c1b26cecb06e9231d333c41	xf86-video-geode-2.11.17.tar.bz2
-+# From http://lists.x.org/archives/xorg-announce/2016-February/002673.html
-+sha256	d6ece9a862a68be3cdf86a87e0e1ba5e199168b8d075129646638f53649ba9e8	xf86-video-geode-2.11.18.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-index ae5bc0b..b882f1f 100644
---- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-+++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.17
-+XDRIVER_XF86_VIDEO_GEODE_VERSION = 2.11.18
- XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
+diff --git a/package/Config.in b/package/Config.in
+index c69d632..dc68184 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -28,6 +28,7 @@ menu "Audio and video applications"
+ 	source "package/mpd-mpc/Config.in"
+ 	source "package/mpg123/Config.in"
+ 	source "package/mplayer/Config.in"
++	source "package/multicat/Config.in"
+ 	source "package/musepack/Config.in"
+ 	source "package/ncmpc/Config.in"
+ 	source "package/on2-8170-libs/Config.in"
+diff --git a/package/multicat/Config.in b/package/multicat/Config.in
+new file mode 100644
+index 0000000..8dfb6c1
+--- /dev/null
++++ b/package/multicat/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_MULTICAT
++	bool "multicat"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_BITSTREAM
++	help
++	  Simple and efficient multicast and transport stream manipulation.
++
++	  http://www.videolan.org/projects/multicat.html
++
++comment 'multicat needs a toolchain w/ threads'
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/multicat/multicat.hash b/package/multicat/multicat.hash
+new file mode 100644
+index 0000000..38cf9d7
+--- /dev/null
++++ b/package/multicat/multicat.hash
+@@ -0,0 +1,4 @@
++# from https://get.videolan.org/multicat/2.1/multicat-2.1.tar.bz2.md5
++md5 2e3ecd8dee64f5bd32a61733d4cc2226 multicat-2.1.tar.bz2
++# locally calculated
++sha256 5eabe8d9a3dde452b2d348683cc7da213680551a9d4059c356f7319c6aa9b3d1 multicat-2.1.tar.bz2
+diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
+new file mode 100644
+index 0000000..5909bc5
+--- /dev/null
++++ b/package/multicat/multicat.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# multicat
++#
++################################################################################
++
++MULTICAT_VERSION = 2.1
++MULTICAT_SOURCE = multicat-$(MULTICAT_VERSION).tar.bz2
++MULTICAT_SITE = https://get.videolan.org/multicat/$(MULTICAT_VERSION)
++MULTICAT_LICENSE = GPLv2+
++MULTICAT_LICENSE_FILES = COPYING
++
++MULTICAT_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
++
++define MULTICAT_BUILD_CMDS
++	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MULTICAT_INSTALL_TARGET_CMDS
++	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
