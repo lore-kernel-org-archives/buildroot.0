@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:28:45 +0100
-Subject: [Buildroot] [git commit] package/gawk: add optional support for
-	libsigsegv
-Message-ID: <20160221202911.E060D7F934@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 21:28:55 +0100
+Subject: [Buildroot] [git commit] package/lxc: add optional support for
+	libseccomp
+Message-ID: <20160221202911.ED24F81819@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82efed68dad1831056aeba502641124bdc7ed6c7
+commit: https://git.buildroot.net/buildroot/commit/?id=2e461df5dd0cc37bde6908a932528a74a512636d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libsigsegv was compiled before, gawk will use it as optional
+When libseccomp was compiled before, lxc will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gawk | grep NEEDED
-  0x0000000000000001 (NEEDED)             Shared library: [libsigsegv.so.2]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/libexec/lxc/lxc-monitord | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [liblxc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libseccomp.so.2]
 [...]
-
-The build system offers no option to en-/disable libsigsegv support:
-http://git.savannah.gnu.org/cgit/gawk.git/tree/m4/libsigsegv.m4
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gawk/gawk.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lxc/lxc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 507ea6d..da9be95 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -16,6 +16,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- GAWK_DEPENDENCIES += busybox
- endif
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index e382f4d..8190969 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -15,4 +15,11 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
  
-+ifeq ($(BR2_PACKAGE_LIBSIGSEGV),y)
-+GAWK_DEPENDENCIES += libsigsegv
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++LXC_CONF_OPTS += --enable-seccomp
++LXC_DEPENDENCIES += libseccomp
++else
++LXC_CONF_OPTS += --disable-seccomp
 +endif
 +
- # --with-mpfr requires an argument so just let
- # configure find it automatically
- ifeq ($(BR2_PACKAGE_MPFR),y)
+ $(eval $(autotools-package))
