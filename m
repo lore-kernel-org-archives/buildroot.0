@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:21:26 +0100
-Subject: [Buildroot] [git commit] package/nfs-utils: add optional support
-	for libcap
-Message-ID: <20160221172737.53B2781801@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 18:21:21 +0100
+Subject: [Buildroot] [git commit] package/kismet: add optional support for
+	libcap
+Message-ID: <20160221172737.3DDD281801@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be589759ee12d47a44512cb5a4b17f5824991aa5
+commit: https://git.buildroot.net/buildroot/commit/?id=46143f16834987dce379a88d98ce7068cabfe29f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libcap was compiled before, nfs-utils will use it as optional
+When libcap was compiled before, kismet will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/sm-notify | grep NEEDED
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/kismet_server | grep NEEDED
  0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libtirpc.so.3]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+[...]
+
+The build system offers no option to en-/disable libcap support:
+https://www.kismetwireless.net/gitweb/?p=kismet.git;a=blob;f=configure.ac;h=e874b10f3c1d56e2deb5e8adf4b8da4066fdde56;hb=HEAD#l635
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nfs-utils/nfs-utils.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/kismet/kismet.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 6dd175c..179009d 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -28,6 +28,13 @@ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += usr/sbin/rpcdebug
- NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_LOCKD) += usr/sbin/rpc.lockd
- NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 64a0ab2..f4a28b8 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -15,6 +15,10 @@ KISMET_LICENSE_FILES = debian/copyright
+ # We touch configure.in:
+ KISMET_AUTORECONF = YES
  
 +ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+NFS_UTILS_CONF_OPTS += --enable-caps
-+NFS_UTILS_DEPENDENCIES += libcap
-+else
-+NFS_UTILS_CONF_OPTS += --disable-caps
++KISMET_DEPENDENCIES += libcap
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- NFS_UTILS_CONF_OPTS += --enable-tirpc
- NFS_UTILS_DEPENDENCIES += libtirpc
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ KISMET_DEPENDENCIES += pcre
+ endif
