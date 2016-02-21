@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:23:36 +0100
-Subject: [Buildroot] [PATCH 1/7] package/gstreamer1/gstreamer1: add
- optional support for libcap
-In-Reply-To: <1456066125-28379-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 18:23:41 +0100
+Subject: [Buildroot] [PATCH 2/7] package/gstreamer1/gst1-plugins-good:
+ add optional support for libv4l
+In-Reply-To: <1456066125-28379-2-git-send-email-bernd.kuhls@t-online.de>
 References: <1456066125-28379-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221182336.20b8066c@free-electrons.com>
+ <1456066125-28379-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221182341.62c2cb8d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Dear Bernd Kuhls,
 
-On Sun, 21 Feb 2016 15:48:39 +0100, Bernd Kuhls wrote:
+On Sun, 21 Feb 2016 15:48:40 +0100, Bernd Kuhls wrote:
+> When libv4l was compiled before, gst1-plugins-good will use it as
+> optional dependency:
+> 
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/gstreamer-1.0/libgstvideo4linux2.so | grep NEEDED | sort
+> [...]
+>  0x0000000000000001 (NEEDED)             Shared library: [libv4l2.so.0]
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-> +ifeq ($(BR2_PACKAGE_LIBCAP),y)
-> +GSTREAMER1_CONF_OPTS += --with-ptp-helper-permissions=capabilities
-> +GSTREAMER1_DEPENDENCIES += libcap
-> +else
-> +GSTREAMER1_CONF_OPTS += --with-ptp-helper-permissions=auto
-> +endif
-
-I am not entirely sure about this one. When BR2_PACKAGE_LIBCAP=y, are
-we sure that the user wants to use capabilities for everything
-including this GStreamer feature? There are other possible values for
---with-ptp-helper-permissions. So it would be good to have a commit log
-that details a bit more the reasoning, other than just "it might use
-libcap, so let's use it".
+Applied to master, thanks.
 
 Thomas
 -- 
