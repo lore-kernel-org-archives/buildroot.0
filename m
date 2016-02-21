@@ -1,62 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:40:53 +0100
-Subject: [Buildroot] [git commit] ifupdown: bump to version 0.8.8
-Message-ID: <20160302202755.C26947FA0E@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 15:38:56 +0100
+Subject: [Buildroot] [git commit] font-awesome:new package
+Message-ID: <20160302202755.8E1317FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4558f82dea2db6f037d92940f95fd2fcaeb1ae4d
+commit: https://git.buildroot.net/buildroot/commit/?id=4f6ba8cd458e3fa78789c8848493712b8574a294
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add a kludge switching the explicit invocation of the ip binary
-from /bin to /sbin since that's where buildroot installs it.
+Font Awesome is a full suite of 605 pictographic icons for easy
+scalable vector graphics on websites.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
+[Thomas: fix misc minor typos.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ifupdown/ifupdown.hash |  4 ++--
- package/ifupdown/ifupdown.mk   | 13 +++++++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ package/Config.in                      |  1 +
+ package/font-awesome/Config.in         |  7 +++++++
+ package/font-awesome/font-awesome.hash |  2 ++
+ package/font-awesome/font-awesome.mk   | 18 ++++++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
-index 02dfd2b..c5a4189 100644
---- a/package/ifupdown/ifupdown.hash
-+++ b/package/ifupdown/ifupdown.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.2.dsc
--sha256	edb08f935fea9bc376c3faa0140c04c7a4d4ef5f22fd280ec4060386a75df10b	ifupdown_0.8.2.tar.xz
-+# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.8.dsc
-+sha256	180edaaa6de99e4e74de7229481edf74361b8e8468462842618a42a952a26c0e	ifupdown_0.8.8.tar.xz
-diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
-index 7fbd003..37aaf5d 100644
---- a/package/ifupdown/ifupdown.mk
-+++ b/package/ifupdown/ifupdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--IFUPDOWN_VERSION = 0.8.2
-+IFUPDOWN_VERSION = 0.8.8
- IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
--IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
-+IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
- IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- IFUPDOWN_LICENSE = GPLv2+
- IFUPDOWN_LICENSE_FILES = COPYING
-@@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
- endef
- 
-+# We need to switch from /bin/ip to /sbin/ip
-+IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
-+define IFUPDOWN_MAKE_IP_IN_SBIN
-+	for f in $(IFUPDOWN_DEFN_FILES) ; do \
-+		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
-+	done
-+endef
-+IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
+diff --git a/package/Config.in b/package/Config.in
+index 422978f..96b780c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -199,6 +199,7 @@ comment "Fonts"
+ 	source "package/bitstream-vera/Config.in"
+ 	source "package/cantarell/Config.in"
+ 	source "package/dejavu/Config.in"
++	source "package/font-awesome/Config.in"
+ 	source "package/ghostscript-fonts/Config.in"
+ 	source "package/inconsolata/Config.in"
+ 	source "package/liberation/Config.in"
+diff --git a/package/font-awesome/Config.in b/package/font-awesome/Config.in
+new file mode 100644
+index 0000000..694d74e
+--- /dev/null
++++ b/package/font-awesome/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_FONT_AWESOME
++	bool "font-awesome"
++	help
++	  Font Awesome is a full suite of 605 pictographic icons for
++	  easy scalable vector graphics on websites.
 +
- $(eval $(generic-package))
++	  https://github.com/FortAwesome/Font-Awesome
+diff --git a/package/font-awesome/font-awesome.hash b/package/font-awesome/font-awesome.hash
+new file mode 100644
+index 0000000..9f3715e
+--- /dev/null
++++ b/package/font-awesome/font-awesome.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  7813f416057da622b16229b10fef550e1dc64c5bb59871cd38fa86e76dfdbae8  font-awesome-v4.5.0.tar.gz
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+new file mode 100644
+index 0000000..6ebb92c
+--- /dev/null
++++ b/package/font-awesome/font-awesome.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# font-awesome
++#
++################################################################################
++
++FONT_AWESOME_VERSION = v4.5.0
++FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
++FONT_AWESOME_LICENSE = OFLv1.1 (font), MIT (CSS, LESS and Sass files)
++FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
++
++define FONT_AWESOME_INSTALL_TARGET_CMDS
++        mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
++        $(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
++                cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
++endef
++
++$(eval $(generic-package))
