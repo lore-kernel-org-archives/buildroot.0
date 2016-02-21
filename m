@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:30:40 +0100
-Subject: [Buildroot] [git commit] package/quagga: add optional support for
-	libcap
-Message-ID: <20160221203049.0E6778021B@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 21:30:57 +0100
+Subject: [Buildroot] [git commit] package/imagemagick: add optional support
+	for webp
+Message-ID: <20160221203102.CC5E680438@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00351a541b3577ed4cddf107a3d757e6348fd406
+commit: https://git.buildroot.net/buildroot/commit/?id=9d12f12846cc1018b17f5cb995facc3282bd5793
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libcap was compiled before, quagga will use it as optional
+When webp was compiled before, imagemagick will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/vtysh | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/stream | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libMagickCore-6.Q16.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libMagickWand-6.Q16.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libjpeg.so.8]
+ 0x0000000000000001 (NEEDED)             Shared library: [libwebp.so.5]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/quagga/quagga.mk | 7 +++++++
+ package/imagemagick/imagemagick.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index c5dd2ba..4a55594 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -14,6 +14,13 @@ QUAGGA_CONF_OPTS = --program-transform-name=''
- # 0002-configure-fix-static-linking-with-readline.patch
- QUAGGA_AUTORECONF = YES
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 8fc9532..639b0e8 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -105,6 +105,13 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-fftw
+ endif
  
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+QUAGGA_CONF_OPTS += --enable-capabilities
-+QUAGGA_DEPENDENCIES += libcap
++ifeq ($(BR2_PACKAGE_WEBP),y)
++IMAGEMAGICK_CONF_OPTS += --with-webp
++IMAGEMAGICK_DEPENDENCIES += webp
 +else
-+QUAGGA_CONF_OPTS += --disable-capabilities
++IMAGEMAGICK_CONF_OPTS += --without-webp
 +endif
 +
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BABELD),--enable-babeld,--disable-babeld)
- QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGPD),--enable-bgpd,--disable-bgpd)
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ IMAGEMAGICK_CONF_OPTS += --with-zlib
+ IMAGEMAGICK_DEPENDENCIES += zlib
