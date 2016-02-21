@@ -1,114 +1,66 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sun, 21 Feb 2016 10:12:10 -0300
-Subject: [Buildroot] [PATCH 1/2] arch/arm: add the cortex A17 variant
-	supported by gcc 5.x
-Message-ID: <1456060331-2239-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Date: Sun, 21 Feb 2016 10:12:11 -0300
+Subject: [Buildroot] [PATCH 2/2] board/firefly_rk3288: Update ARM variant
+	and fix kernel repo
+In-Reply-To: <1456060331-2239-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1456060331-2239-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1456060331-2239-2-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the Cortex A17 variant. This core is considered a replacement
-of the Cortex A12 and is supported by gcc 5.
+This commit updates the two firefly_rk3288 defconfigs recently
+added. First we switch to the ARM cortex-A17 core. Second,
+we switch the kernel github access from SSH to HTTPS, which
+is suitable for anonymous access.
 
-Suggested-by: Ross Green <greenfross@netscape.net>
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- arch/Config.in.arm              | 9 +++++++++
- package/binutils/Config.in.host | 4 ++++
- package/gcc/Config.in.host      | 9 ++++++---
- 3 files changed, 19 insertions(+), 3 deletions(-)
+ configs/firefly_rk3288_defconfig      | 4 ++--
+ configs/firefly_rk3288_demo_defconfig | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b34f42850cf..04f0369c0b97 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -159,6 +159,14 @@ config BR2_cortex_a15
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-+config BR2_cortex_a17
-+	bool "cortex-A17"
-+	select BR2_ARM_CPU_HAS_ARM
-+	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_m3
- 	bool "cortex-M3"
- 	select BR2_ARM_CPU_HAS_THUMB
-@@ -442,6 +450,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a9"	if BR2_cortex_a9
- 	default "cortex-a12"	if BR2_cortex_a12
- 	default "cortex-a15"	if BR2_cortex_a15
-+	default "cortex-a17"	if BR2_cortex_a17
- 	default "cortex-m3"	if BR2_cortex_m3
- 	default "fa526"		if BR2_fa526
- 	default "marvell-pj4"	if BR2_pj4
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index df3c385de5ad..07574e42ca8a 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -12,6 +12,8 @@ choice
- 			   !BR2_powerpc64le && !BR2_nios2
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# Unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		bool "binutils 2.23.2"
- 
- 	config BR2_BINUTILS_VERSION_2_24_X
-@@ -19,6 +21,8 @@ choice
- 		depends on !BR2_nios2 && !BR2_powerpc64le
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# Unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		bool "binutils 2.24"
- 
- 	config BR2_BINUTILS_VERSION_2_25_X
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index cad6896b44cc..560ea5210418 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -21,7 +21,8 @@ choice
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
--			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
-+			!BR2_cortex_a15 && !BR2_cortex_a17 && \
-+			!BR2_fa526 && !BR2_pj4
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
- 			!BR2_powerpc_power8
-@@ -44,7 +45,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
--		depends on !BR2_cortex_a12 && !BR2_pj4
-+		depends on !BR2_cortex_a12 && !BR2_pj4 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
- 			!BR2_powerpc_power8
-@@ -63,7 +64,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
--		depends on !BR2_cortex_a12
-+		depends on !BR2_cortex_a12 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_power8
- 		# gcc-4.8.x + binutils-2.25 is broken for MIPS
-@@ -86,6 +87,8 @@ choice
- 		bool "gcc 4.9.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_arc
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+diff --git a/configs/firefly_rk3288_defconfig b/configs/firefly_rk3288_defconfig
+index bd3faa62ba94..0affd677e1c1 100644
+--- a/configs/firefly_rk3288_defconfig
++++ b/configs/firefly_rk3288_defconfig
+@@ -1,5 +1,5 @@
+ BR2_arm=y
+-BR2_cortex_a12=y
++BR2_cortex_a17=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ BR2_TARGET_GENERIC_HOSTNAME="firefly-rk3288"
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/firefly-rk3288/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/firefly/firefly-rk3288/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git at github.com:mmind/linux-rockchip.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mmind/linux-rockchip.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ccb89e9b5657b4911c16d08e1581121222ee12c4"
+ BR2_LINUX_KERNEL_DEFCONFIG="rk3288_veyron"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+diff --git a/configs/firefly_rk3288_demo_defconfig b/configs/firefly_rk3288_demo_defconfig
+index 4a0aca12d036..59bbe77247dd 100644
+--- a/configs/firefly_rk3288_demo_defconfig
++++ b/configs/firefly_rk3288_demo_defconfig
+@@ -1,5 +1,5 @@
+ BR2_arm=y
+-BR2_cortex_a12=y
++BR2_cortex_a17=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/firefly/firefly-rk3288/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/firefly/firefly-rk3288/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git at github.com:mmind/linux-rockchip.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mmind/linux-rockchip.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="ccb89e9b5657b4911c16d08e1581121222ee12c4"
+ BR2_LINUX_KERNEL_DEFCONFIG="rk3288_veyron"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
 -- 
 2.7.0
