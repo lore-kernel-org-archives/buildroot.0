@@ -1,68 +1,54 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 21 Feb 2016 18:25:08 +0100
-Subject: [Buildroot] [v3,
-	0/4] Supporting building a second Barebox config
-In-Reply-To: <CAGm1_ktVyZcj+ubstRVr+oUAH5gKnB688nTp2Ad+gFiv3pR-zA@mail.gmail.com>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <CAGm1_kuA6pdj4KJ_TT26f4kfgSYaFMjKiV4T4gLTn-2HsQspeg@mail.gmail.com>
- <20160216185548.GA9144@smipidev>
- <CAGm1_ktVyZcj+ubstRVr+oUAH5gKnB688nTp2Ad+gFiv3pR-zA@mail.gmail.com>
-Message-ID: <20160221172508.GA14073@smipidev>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 18:25:15 +0100
+Subject: [Buildroot] [PATCH 6/7] package/avahi: add optional support for
+ libcap
+In-Reply-To: <1456066125-28379-6-git-send-email-bernd.kuhls@t-online.de>
+References: <1456066125-28379-1-git-send-email-bernd.kuhls@t-online.de>
+ <1456066125-28379-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221182515.4f082234@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Feb 16, 2016 at 10:27:46PM +0100, Yegor Yefremov wrote:
-> On Tue, Feb 16, 2016 at 7:55 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> > On Tue, Feb 16, 2016 at 12:55:30PM +0100, Yegor Yefremov wrote:
-> >> Hi Pieter,
-> >>
-> >> On Wed, Jan 20, 2016 at 11:43 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> >> > This patch-set in 4 parts adds support for building barebox with up to 2
-> >> > configurations. It can be used to build the barebox x-loader or MLO (also
-> >> > called Secondary Program Loader) in addition to the standard barebox build
-> >> > (Tertiary Program Loader). This implements the design proposed in
-> >> > http://elinux.org/Buildroot#Todo_list:
-> >> > 1. Have boot/barebox/ containing the common stuff.
-> >> > 2. Add two separate packages boot/barebox-1/ and boot/barebox-2/.
-> >> > 3. There is only one version selection, but each package allows to
-> >> >    define the configuration to be used.
-> >> > 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
-> >> >    but share a lot of common definitions between the packages.
-> >> >
-> >> > To demonstrate that it works as advertized, the last patch adds a defconfig for
-> >> > the beaglebone black that makes use of the added functionality.
-> >>
-> >> I've applied the patches and built both MLO and barebox.bin binaries.
-> >> The patches are working as expected.
-> >
-> > Glad to hear it.
-> >
-> >> I have following use case: I have one board, but want provide
-> >> different environment scripts per project. These scripts should be
-> >> stored in BR2_EXTERNAL folder. I'd like to also embed them into
-> >> barebox.bin. How can I do it in BR?
-> >
-> > If I understand you correctly, you would like to customize the barebox
-> > environment integrated into barebox.bin on a per-project basis. This is
-> > something I spent a few hours looking into, but I have not found an adequate
-> > solution. It may be easier to bake a new buildroot environment and flash that.
-> >
-> > Will this satisfy your use-case?
-> 
-> I've found a solution: http://patchwork.ozlabs.org/patch/583444/
-> 
-> The question is should enable both inetrnel and external env image? I
-> think we should keep both in parallel.
+Dear Bernd Kuhls,
 
-I agree with having both in parallel. I have a personal preference for a
-baked-in environments. It allows environment resetting with an erase or delete
-(not the case with a separate env image). I can however come up with a number
-of use-cases where an external env image is useful from a manufacturing
-perspective.
- 
-> Yegor
+On Sun, 21 Feb 2016 15:48:44 +0100, Bernd Kuhls wrote:
 
-- Pieter
+> diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+> index 5d6e6a8..ce89e42 100644
+> --- a/package/avahi/avahi.mk
+> +++ b/package/avahi/avahi.mk
+> @@ -117,6 +117,9 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
+>  AVAHI_DEPENDENCIES += expat
+> +ifeq ($(BR2_PACKAGE_LIBCAP),y)
+> +AVAHI_DEPENDENCIES += libcap
+> +endif
+
+It is a bit weird to have this in the middle of the expat handling, IMO.
+
+>  AVAHI_CONF_OPTS += --with-xml=expat
+>  else
+>  AVAHI_CONF_OPTS += --with-xml=none
+
+Shouldn't we simply do:
+
+ifeq ($(BR2_PACKAGE_EXPAT),y)
+AVAHI_DEPENDENCIES += expat
+AVAHI_CONF_OPTS += --with-xml=expat
+else
+AVAHI_CONF_OPTS += --with-xml=none
+endif
+
+ifeq ($(BR2_PACKAGE_LIBCAP),y)
+AVAHI_DEPENDENCIES += libcap
+endif
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
