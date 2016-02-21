@@ -1,46 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 18:34:53 +0100
-Subject: [Buildroot] [PATCH 04/10] package/mediastreamer: add optional
-	support for libupnp
+Date: Sun, 21 Feb 2016 18:34:59 +0100
+Subject: [Buildroot] [PATCH 10/10] package/mutt: add optional support for
+	libidn
 In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456076099-19607-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456076099-19607-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libupnp was compiled before, mediastreamer will use it as optional
+When libidn was compiled before, mutt will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libmediastreamer_voip.so.3.0.0 | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libmediastreamer_base.so.3]
- 0x0000000000000001 (NEEDED)             Shared library: [libupnp.so.6]
-[...]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mutt | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libncurses.so.5]
+ 0x0000000000000001 (NEEDED)             Shared library: [libidn.so.11]
+ 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mediastreamer/mediastreamer.mk | 7 +++++++
+ package/mutt/mutt.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 79d8e75..047509e 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -20,6 +20,13 @@ else
- MEDIASTREAMER_CONF_OPTS += --disable-alsa
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index b07f9b2..14c5be9 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -17,6 +17,13 @@ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBUPNP),y)
-+MEDIASTREAMER_CONF_OPTS += --enable-upnp
-+MEDIASTREAMER_DEPENDENCIES += libupnp
++ifeq ($(BR2_PACKAGE_LIBIDN),y)
++MUTT_DEPENDENCIES += libidn
++MUTT_CONF_OPTS += --with-idn
 +else
-+MEDIASTREAMER_CONF_OPTS += --disable-upnp
++MUTT_CONF_OPTS += --without-idn
 +endif
 +
- # portaudio backend needs speex as well
- ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX),yy)
- MEDIASTREAMER_CONF_OPTS += --enable-portaudio
+ ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
+ MUTT_CONF_OPTS += --enable-imap
+ else
 -- 
 2.7.0
