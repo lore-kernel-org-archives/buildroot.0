@@ -1,45 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 18:34:50 +0100
-Subject: [Buildroot] [PATCH 01/10] package/gnuradio: add optional support
-	for orc
-Message-ID: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 18:34:52 +0100
+Subject: [Buildroot] [PATCH 03/10] package/gnupg2: add optional support for
+	libusb-compat
+In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456076099-19607-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When orc was compiled before, gnuradio will use it as optional
+When libusb-compat was compiled before, gnupg2 will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gnuradio-config-info | grep NEEDED
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/libexec/scdaemon | grep NEEDED
 [...]
- 0x0000000000000001 (NEEDED)             Shared library: [liborc-0.4.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libusb-0.1.so.4]
 [...]
-
-Apparently there is no option provided by the build system to
-en-/disable support for orc:
-https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gnuradio/gnuradio.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/gnupg2/gnupg2.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index fc5cd1f..b7dbcb9 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -17,6 +17,10 @@ GNURADIO_DEPENDENCIES = \
- 	host-swig \
- 	boost
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 2e1f067..8d4f373 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -38,6 +38,13 @@ else
+ GNUPG2_CONF_OPTS += --disable-bzip2
+ endif
  
-+ifeq ($(BR2_PACKAGE_ORC),y)
-+GNURADIO_DEPENDENCIES += orc
++ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
++GNUPG2_CONF_OPTS += --enable-ccid-driver
++GNUPG2_DEPENDENCIES += libusb-compat
++else
++GNUPG2_CONF_OPTS += --disable-ccid-driver
 +endif
 +
- GNURADIO_CONF_OPTS = \
- 	-DENABLE_DEFAULT=OFF \
- 	-DENABLE_VOLK=ON \
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ GNUPG2_CONF_OPTS += --with-readline=$(STAGING_DIR)
+ GNUPG2_DEPENDENCIES += readline
 -- 
 2.7.0
