@@ -1,41 +1,48 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 20 Feb 2016 23:07:39 -0300
-Subject: [Buildroot] [PATCH 2/2] package/vim: add optional support for
-	gmp
-Message-ID: <56c91beb3ec34_2b3e3fd8cc6dbf34848f7@ultri2.mail>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 07:32:59 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/vim: add optional support for gpm
+Message-ID: <1456036379-10200-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+When gpm was compiled before, vim will use it as optional dependency:
 
-Sorry the e-mail without subject,
-I did something wrong and my mail client did not understand the subject line.
-Resending to go to patchwork.
-If this e-mail still don't work I will give up to avoid spam.
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/vim | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libacl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libgpm.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libncurses.so.5]
 
-On Sat, 20 Feb 2016 23:45:42 +0100, Bernd Kuhls wrote:
-> Sub ject: [Buildroot] [PATCH 2/2] package/vim: add optional support for
-> 	gmp
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: fixed typos gmp -> gpm (Ricardo)
 
-Typo: s/gmp/gpm/g
+ package/vim/vim.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> 
-> When gmp was compiled before, vim will use it as optional dependency:
-
-Typo: s/gmp/gpm/g
-
-It seems silly because these are only typos, but we have both packages
-(gmp and gpm) in buildroot.
-
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/vim | grep NEEDED | sort
->  0x0000000000000001 (NEEDED)             Shared library: [libacl.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libgpm.so.2]
-
-Regards,
-Ricardo
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index d9e0b60..6e05050 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -34,6 +34,13 @@ else
+ VIM_CONF_OPTS += --disable-acl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GPM),y)
++VIM_CONF_OPTS += --enable-gpm
++VIM_DEPENDENCIES += gpm
++else
++VIM_CONF_OPTS += --disable-gpm
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ VIM_CONF_OPTS += --enable-selinux
+ VIM_DEPENDENCIES += libselinux
+-- 
+2.7.0
