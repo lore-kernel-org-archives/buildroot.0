@@ -1,47 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 18:34:59 +0100
-Subject: [Buildroot] [PATCH 10/10] package/mutt: add optional support for
-	libidn
-In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456076099-19607-10-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 18:34:50 +0100
+Subject: [Buildroot] [PATCH 01/10] package/gnuradio: add optional support
+	for orc
+Message-ID: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libidn was compiled before, mutt will use it as optional
+When orc was compiled before, gnuradio will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mutt | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libncurses.so.5]
- 0x0000000000000001 (NEEDED)             Shared library: [libidn.so.11]
- 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gnuradio-config-info | grep NEEDED
+[...]
+ 0x0000000000000001 (NEEDED)             Shared library: [liborc-0.4.so.0]
+[...]
+
+Apparently there is no option provided by the build system to
+en-/disable support for orc:
+https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mutt/mutt.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/gnuradio/gnuradio.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index b07f9b2..14c5be9 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -17,6 +17,13 @@ MUTT_DEPENDENCIES += libiconv
- MUTT_CONF_OPTS += --enable-iconv
- endif
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index fc5cd1f..b7dbcb9 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -17,6 +17,10 @@ GNURADIO_DEPENDENCIES = \
+ 	host-swig \
+ 	boost
  
-+ifeq ($(BR2_PACKAGE_LIBIDN),y)
-+MUTT_DEPENDENCIES += libidn
-+MUTT_CONF_OPTS += --with-idn
-+else
-+MUTT_CONF_OPTS += --without-idn
++ifeq ($(BR2_PACKAGE_ORC),y)
++GNURADIO_DEPENDENCIES += orc
 +endif
 +
- ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
- MUTT_CONF_OPTS += --enable-imap
- else
+ GNURADIO_CONF_OPTS = \
+ 	-DENABLE_DEFAULT=OFF \
+ 	-DENABLE_VOLK=ON \
 -- 
 2.7.0
