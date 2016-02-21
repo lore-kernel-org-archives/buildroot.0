@@ -1,34 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 21:43:13 +0100
-Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: bump u-boot to
-	2016.01
-Message-ID: <20160302202757.35E9580203@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 21:50:55 +0100
+Subject: [Buildroot] [git commit] poppler: install xpdf-headers to enable
+	building of cups-filters
+Message-ID: <20160302202755.CD6327FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d03c73d588862abee3d7bb30c0deb0da3cc3afcb
+commit: https://git.buildroot.net/buildroot/commit/?id=fb992c4fd286714e40f68c9be1bd09a0aa96652d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Add --enable-xpdf-headers to poppler.mk. Required for succesfull
+build of cups-filters.
+
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/olimex_a20_olinuxino_micro_defconfig | 3 ++-
+ package/poppler/poppler.mk | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index a641ad7..6d05f74 100644
---- a/configs/olimex_a20_olinuxino_micro_defconfig
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -35,7 +35,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 6142cba..1113e4b 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -11,7 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPLv2+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_INSTALL_STAGING = YES
+-POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
++POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
++	--enable-xpdf-headers
+ 
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ POPPLER_CONF_OPTS += --enable-cms=lcms2
