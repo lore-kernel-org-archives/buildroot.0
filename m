@@ -1,30 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:37:32 +0100
-Subject: [Buildroot] [PATCH v3 1/3] ejabberd: convert patches to git
- format
-In-Reply-To: <1456078306-26054-1-git-send-email-fhunleth@troodon-software.com>
-References: <1456078306-26054-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160221213732.5b7dcb19@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 21 Feb 2016 21:43:00 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/avahi: add optional support
+	for libcap
+In-Reply-To: <20160221213549.5767bca8@free-electrons.com> (Thomas Petazzoni's
+ message of "Sun, 21 Feb 2016 21:35:49 +0100")
+References: <1456077439-26606-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160221213549.5767bca8@free-electrons.com>
+Message-ID: <87y4adaj6z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Frank,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Sun, 21 Feb 2016 13:11:44 -0500, Frank Hunleth wrote:
+ > Dear Bernd Kuhls,
+ > On Sun, 21 Feb 2016 18:57:19 +0100, Bernd Kuhls wrote:
+ >> When libcap was compiled before, avahi daemon will use it as optional
+ >> dependency:
+ >> 
+ >> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/avahi-daemon | grep NEEDED | sort
+ >> 0x0000000000000001 (NEEDED)             Shared library: [libavahi-common.so.3]
+ >> 0x0000000000000001 (NEEDED)             Shared library: [libavahi-core.so.7]
+ >> 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+ >> [...]
+ >> 
+ >> The build system offers no option to en-/disable libcap support:
+ >> http://git.0pointer.net/avahi.git/tree/configure.ac#n382
+ >> 
+ >> The check for libcap was placed inside the BR2_PACKAGE_AVAHI_DAEMON
+ >> because only avahi-daemon uses libcap, it provides chroot support.
 
-> +Subject: [PATCH 1/8] remove make targets for deps
+ > Still, the configure.ac test is done unconditionally (i.e regardless
+ > of whether the daemon is enabled or not), so I believe we should also
+ > do the same.
 
-Please use "git format-patch -N" to not have patch numbering inside the
-patches themselves. This way, the numbering doesn't need to be
-completely changed when you add a 9th patch.
+ > Peter, Yann, Arnout, your thoughts?
 
-Thanks!
+It's safer to do it unconditionally (and we are unlikely to have
+problems with dependency loops with avahi/libcap, so that's not an issue
+either).
 
-Thomas
+So I would prefer to have it outside the _DAEMON conditional as well.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
