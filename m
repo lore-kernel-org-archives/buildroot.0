@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:12:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spice: depend on libglib2
-In-Reply-To: <1456076407-20364-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456076407-20364-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221211249.723daeb6@free-electrons.com>
+Date: Sun, 21 Feb 2016 21:13:40 +0100
+Subject: [Buildroot] [PATCH] package/sdl_mixer: disable libmad support
+ for static build only
+In-Reply-To: <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
+References: <1456073708-19562-1-git-send-email-romain.naour@gmail.com>
+ <20160221181830.01215f6e@free-electrons.com>
+ <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
+Message-ID: <20160221211340.4db41609@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hello,
 
-On Sun, 21 Feb 2016 18:40:07 +0100, Bernd Kuhls wrote:
-> The package selects BR2_PACKAGE_LIBGLIB2 but did not depend on it.
-> 
-> The buildsystem treats libglib2 as a hard-dependency:
-> https://cgit.freedesktop.org/spice/spice/tree/configure.ac?h=0.12#n117
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sun, 21 Feb 2016 17:06:13 -0300, Rodrigo Rebello wrote:
 
-I am not sure in fact. The part of configure.ac you're pointing to
-simply adds libglib2 to SPICE_REQUIRES, which is *only* used in the
-spice build system to fill in the Requires.private field of
-spice-server.pc. I.e, it seems like libglib2 is only an indirect
-dependency of spice, and a reference to libglib2 only needed when
-static linking.
+> I don't think this workaround is necessary at all. Adding a
+> 'Libs.private' section to SDL_mixer.pc and fixing packages that depend
+> on SDL_mixer so that they use pkg-config doesn't seem too complicated.
+> Currently only chocolate-doom, lbreakout2, ltris and prboom depend on
+> it.
 
-This clearly needs more investigation, as other dependencies of spice
-are handled in the same way.
+This is obviously the best option. Unfortunately, many of those
+packages are not maintained, so we can't upstream the patches you're
+talking about...
 
-Yann, you originally added the spice package, maybe you can have a look?
+> I'll work on a patch for chocolate-doom now and handle the other 3 later.
 
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
