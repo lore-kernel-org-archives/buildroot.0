@@ -1,77 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 19 Feb 2016 23:40:29 +0100
-Subject: [Buildroot] [git commit] python-txaio: new package
-Message-ID: <20160302202753.68E9980203@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 21:40:53 +0100
+Subject: [Buildroot] [git commit] ifupdown: bump to version 0.8.8
+Message-ID: <20160302202755.C26947FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=148d964e4dd66397b3bc14f5aca4321d6c409d35
+commit: https://git.buildroot.net/buildroot/commit/?id=4558f82dea2db6f037d92940f95fd2fcaeb1ae4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mauro Condarelli <mc5686@mclink.it>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Also add a kludge switching the explicit invocation of the ip binary
+from /bin to /sbin since that's where buildroot installs it.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                      |  1 +
- package/python-txaio/Config.in         |  7 +++++++
- package/python-txaio/python-txaio.hash |  3 +++
- package/python-txaio/python-txaio.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
+ package/ifupdown/ifupdown.hash |  4 ++--
+ package/ifupdown/ifupdown.mk   | 13 +++++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7a88d5b..2098141 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -724,6 +724,7 @@ menu "External python modules"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-treq/Config.in"
- 	source "package/python-twisted/Config.in"
-+	source "package/python-txaio/Config.in"
- 	source "package/python-urllib3/Config.in"
- 	source "package/python-urwid/Config.in"
- 	source "package/python-versiontools/Config.in"
-diff --git a/package/python-txaio/Config.in b/package/python-txaio/Config.in
-new file mode 100644
-index 0000000..9d42382
---- /dev/null
-+++ b/package/python-txaio/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_TXAIO
-+	bool "python-txaio"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	help
-+	  Compatibility API between asyncio/Twisted/Trollius.
+diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
+index 02dfd2b..c5a4189 100644
+--- a/package/ifupdown/ifupdown.hash
++++ b/package/ifupdown/ifupdown.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.2.dsc
+-sha256	edb08f935fea9bc376c3faa0140c04c7a4d4ef5f22fd280ec4060386a75df10b	ifupdown_0.8.2.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.8.dsc
++sha256	180edaaa6de99e4e74de7229481edf74361b8e8468462842618a42a952a26c0e	ifupdown_0.8.8.tar.xz
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index 7fbd003..37aaf5d 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-IFUPDOWN_VERSION = 0.8.2
++IFUPDOWN_VERSION = 0.8.8
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+-IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20151205T042642Z/pool/main/i/ifupdown
++IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
+ IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ IFUPDOWN_LICENSE = GPLv2+
+ IFUPDOWN_LICENSE_FILES = COPYING
+@@ -23,4 +23,13 @@ define IFUPDOWN_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) BASEDIR=$(TARGET_DIR) -C $(@D) install
+ endef
+ 
++# We need to switch from /bin/ip to /sbin/ip
++IFUPDOWN_DEFN_FILES = can inet inet6 ipx link meta
++define IFUPDOWN_MAKE_IP_IN_SBIN
++	for f in $(IFUPDOWN_DEFN_FILES) ; do \
++		$(SED) 's,/bin/ip,/sbin/ip,' $(@D)/$$f.defn ; \
++	done
++endef
++IFUPDOWN_POST_PATCH_HOOKS += IFUPDOWN_MAKE_IP_IN_SBIN
 +
-+	  https://pypi.python.org/pypi/txaio
-diff --git a/package/python-txaio/python-txaio.hash b/package/python-txaio/python-txaio.hash
-new file mode 100644
-index 0000000..5d9e6cf
---- /dev/null
-+++ b/package/python-txaio/python-txaio.hash
-@@ -0,0 +1,3 @@
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=c2a7e6ebfdf8987c3938e40e39a3c5e7, sha256 locally computed
-+md5	c2a7e6ebfdf8987c3938e40e39a3c5e7  txaio-2.2.1.tar.gz
-+sha256	6eee00c397d8193d15313dfc36da3eac8d64edf0b92fe3b67cd5a735ffc3074b  txaio-2.2.1.tar.gz
-diff --git a/package/python-txaio/python-txaio.mk b/package/python-txaio/python-txaio.mk
-new file mode 100644
-index 0000000..127bc62
---- /dev/null
-+++ b/package/python-txaio/python-txaio.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-txaio
-+#
-+################################################################################
-+
-+PYTHON_TXAIO_VERSION = 2.2.1
-+PYTHON_TXAIO_SOURCE = txaio-$(PYTHON_TXAIO_VERSION).tar.gz
-+PYTHON_TXAIO_SITE = http://pypi.python.org/packages/source/t/txaio
-+PYTHON_TXAIO_LICENSE = MIT
-+PYTHON_TXAIO_LICENSE_FILES = LICENSE
-+PYTHON_TXAIO_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+ $(eval $(generic-package))
