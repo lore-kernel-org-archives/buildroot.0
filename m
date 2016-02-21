@@ -1,40 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Feb 2016 22:19:28 +0100
-Subject: [Buildroot] [PATCH 1/3] toolchain-external: bump Linaro AArch64
-	to 2015.11-2
-In-Reply-To: <1454347864-4891-1-git-send-email-romain.naour@gmail.com> (Romain
- Naour's message of "Mon, 1 Feb 2016 18:31:02 +0100")
-References: <1454347864-4891-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <87mvqtahi7.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Feb 2016 22:19:54 +0100
+Subject: [Buildroot] [git commit] toolchain-external/Config.in: Fix Linaro
+	typo
+Message-ID: <20160221212027.94D7480826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c0c3d7d6c9d4e78fd5b4e3c70b8119217370a02a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Runtime tested with Qemu 2.3.1 using qemu_aarch64_virt_defconfig.
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > ---
- >  toolchain/toolchain-external/Config.in               | 2 +-
- >  toolchain/toolchain-external/toolchain-external.hash | 2 +-
- >  toolchain/toolchain-external/toolchain-external.mk   | 4 ++--
- >  3 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/toolchain-external/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
- > index 763d728..a873e41 100644
- > --- a/toolchain/toolchain-external/Config.in
- > +++ b/toolchain/toolchain-external/Config.in
- > @@ -543,7 +543,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 7ba3929..2ee4c0f 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -526,7 +526,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+ 	  Toolchain for the Blackfin architecture, from
+ 	  http://blackfin.uclinux.org.
  
- >  # See note about Linar ARM/ARMEB toolchains, above.
- >  config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
- > -	bool "Linaro AArch64 2015.08"
- > +	bool "Linaro AArch64 2015.11"
-
-Not related to this patch, but I see we have a typo just above (Linar
-ARM/ARMEB). I'll fix that now.
-
--- 
-Bye, Peter Korsgaard
+-# See note about Linar ARM/ARMEB toolchains, above.
++# See note about Linaro ARM/ARMEB toolchains, above.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 14.09"
+ 	depends on BR2_aarch64
+@@ -541,7 +541,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	  Toolchain for the AArch64 architecture, from
+ 	  http://www.linaro.org/engineering/armv8/
+ 
+-# See note about Linar ARM/ARMEB toolchains, above.
++# See note about Linaro ARM/ARMEB toolchains, above.
+ config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+ 	bool "Linaro AArch64 2015.11"
+ 	depends on BR2_aarch64
