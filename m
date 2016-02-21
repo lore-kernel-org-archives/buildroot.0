@@ -1,36 +1,92 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Feb 2016 19:14:11 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/util-linux: disable libsmartcols
-	in no-MMU platforms
-Message-ID: <1456078452-23865-1-git-send-email-romain.naour@gmail.com>
+Date: Sun, 21 Feb 2016 19:14:12 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/util-linux: remove patch for
+	uClibc support
+In-Reply-To: <1456078452-23865-1-git-send-email-romain.naour@gmail.com>
+References: <1456078452-23865-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1456078452-23865-2-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Thomas Petazzoni [1], the libsmartcols library can't
-be used on no-MMU platform since fork() is used.
+This patch is not needed anymore since the uClibc support has been removed from
+Buildroot. This patch was needed for uClibc <= 0.9.33 support.
+
+The only remaining supported external toolchain using uClibc 0.9.33 is the
+2014R1 bfin toolchain. But all features that needs mkostemp() require fork() [1].
+So, we can safely remove the patch.
 
 [1] http://lists.busybox.net/pipermail/buildroot/2016-February/153414.html
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/util-linux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+v2: Improve the commit log
+Build tested with 2014R1 bfin toolchain (FLAT mode).
+The arc-1015.12 toolchain shouldn't trigger the build issue
+since it's based on uClibc-snapshot (upstream HEAD)
+---
+ ...fine-mkostemp-for-older-version-of-uClibc.patch | 50 ----------------------
+ 1 file changed, 50 deletions(-)
+ delete mode 100644 package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 3f9a7db..60abd67 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -27,6 +27,7 @@ config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 
- config BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
- 	bool "libsmartcols"
-+	depends on BR2_USE_MMU # fork
- 	help
- 	  Install libsmartcols.
- 
+diff --git a/package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch b/package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
+deleted file mode 100644
+index 0dfe7be..0000000
+--- a/package/util-linux/0003-c.h-define-mkostemp-for-older-version-of-uClibc.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 42a84250fc78bae3e885ecd1379e713663fe6487 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@openwide.fr>
+-Date: Sun, 6 Apr 2014 12:12:41 +0200
+-Subject: [PATCH 1/1] c.h: define mkostemp for older version of uClibc
+-
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- configure.ac |  2 ++
+- include/c.h  | 14 ++++++++++++++
+- 2 files changed, 16 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 35a1f26..a9b8d34 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -321,6 +321,8 @@ AC_CHECK_FUNCS([ \
+- ])
+- AC_FUNC_FSEEKO
+- 
+-+AC_CHECK_FUNCS([mkostemp])
+-+
+- AC_CHECK_FUNCS([openat fstatat unlinkat], [have_openat=yes], [have_openat=no])
+- AC_CHECK_FUNCS([ioperm iopl], [have_io=yes])
+- 
+-diff --git a/include/c.h b/include/c.h
+-index 4a9bf3d..1b880ed 100644
+---- a/include/c.h
+-+++ b/include/c.h
+-@@ -300,4 +300,18 @@ static inline int usleep(useconds_t usec)
+- # define SEEK_HOLE	4
+- #endif
+- 
+-+/*
+-+ * mkostemp() may be missing with older version of uClibc
+-+ */
+-+#ifndef HAVE_MKOSTEMP
+-+static inline int mkostemp(char *template, int flags)
+-+{
+-+	int fd;
+-+	fd = mkstemp(template);
+-+	if (flags & O_CLOEXEC && fd >= 0)
+-+		fcntl(fd, F_SETFD, FD_CLOEXEC);
+-+	return fd;
+-+}
+-+#endif
+-+
+- #endif /* UTIL_LINUX_C_H */
+--- 
+-1.9.0
+-
 -- 
 2.5.0
