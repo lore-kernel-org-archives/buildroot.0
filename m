@@ -1,55 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:13:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pound: new package
-In-Reply-To: <1454712192-26144-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1454712192-26144-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221231329.29094844@free-electrons.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 21 Feb 2016 17:16:15 -0500
+Subject: [Buildroot] [PATCH v2 10/18] erlang-p1_stun: bump to version
+	0.9.0
+In-Reply-To: <20160221001247.1f188600@free-electrons.com>
+References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
+ <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
+ <20160220233043.2be4fa0c@free-electrons.com>
+ <CA+-urNRQdWeYMt4RxONJFMDTBV9EtcD_+TBV3G-PismHVUhhOA@mail.gmail.com>
+ <20160221001247.1f188600@free-electrons.com>
+Message-ID: <CA+-urNTkNGraZicUOm_wT_OrAajb7KkvhMZqZbs_AAKDHHmycw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Hi Thomas,
 
-On Fri,  5 Feb 2016 23:43:12 +0100, Bernd Kuhls wrote:
+On Sat, Feb 20, 2016 at 6:12 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sat, 20 Feb 2016 18:09:20 -0500, Frank Hunleth wrote:
+>
+>> Yes, I generally have the same preference. In the Erlang world, the
+>> style is to use underscores since module names can be represented as
+>> atoms. In theory, you can quote atoms if you want them to have
+>> hyphens, but it doesn't look pretty. In the end, I don't think that it
+>> bothers me either way, so I'm happy to leave it as is.
+>
+> Ok, fine.
+>
+>> >>  config BR2_PACKAGE_ERLANG_P1_STUN
+>> >> -     bool "erlang-p1-stun"
+>> >> -     select BR2_PACKAGE_ERLANG_P1_TLS
+>> >> +     bool "erlang-p1_stun"
+>> >> +     select BR2_PACKAGE_ERLANG_FAST_TLS
+>> >
+>> > Build testing has shown that BR2_PACKAGE_ERLANG_FAST_TLS was not the
+>> > proper dependency, and instead keeping BR2_PACKAGE_ERLANG_P1_TLS was
+>> > the right solution. Could you double check why you switched to
+>> > fast_tls ?
+>>
+>> This was a mistake on my part. I fixed it in a patch that I hadn't
+>> sent to the list, so thanks for fixing that for me.
+>
+> So, is the fast_tls package still useful?
 
-> +POUND_VERSION = 2.7
-> +POUND_SITE = http://www.apsis.ch/pound
-> +POUND_SOURCE = Pound-$(POUND_VERSION).tgz
-> +POUND_LICENSE = GPLv3+
-> +POUND_LICENSE_FILES = GPL.txt
-> +POUND_DEPENDENCIES = openssl
+No. I'll send a patch that removes it.
 
-Unfortunately, nobody will be able to distribute binaries of this
-program. The GPLv3 is incompatible with the OpenSSL license. The
-authors of Pound should have planned an exception to the GPLv3, but I
-haven't seen any indication of this.
-
-I've nonetheless applied the package since well, it's not our
-responsibility, but GPLv3+OpenSSL -> not good.
-
-> +# Do not set user/group for the installed binaries.
-> +define POUND_FIX_INSTALL
-> +	$(SED) 's/-o proxy -g proxy//g' $(@D)/Makefile
-> +endef
-> +POUND_POST_CONFIGURE_HOOKS += POUND_FIX_INSTALL
-
-I've removed this and instead passed:
-
-	--with-owner=$(shell id -un) \
-	--with-group=$(shell id -gn)
-
-So that we install with the current user/group, which is guaranteed to
-work fine. And all files get anyway re-assigned to root when creating
-the final image.
-
-Applied to next with this change!
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Frank
