@@ -1,71 +1,67 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 21 Feb 2016 17:34:05 +0100
-Subject: [Buildroot] [PATCH] package/util-linux: remove patch for uClibc
- support
-In-Reply-To: <20160221151047.70803045@free-electrons.com>
-References: <1455920889-14777-1-git-send-email-romain.naour@gmail.com>
- <56C8F75B.7060701@mind.be> <20160221151047.70803045@free-electrons.com>
-Message-ID: <56C9E6FD.2070707@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Feb 2016 17:38:54 +0100
+Subject: [Buildroot] [PATCH v2 1/1] pkg-utils: mask tput failure for
+ non-interactive sessions
+In-Reply-To: <BLU436-SMTP109FC79F88920A925196F40A0A20@phx.gbl>
+References: <BLU436-SMTP109FC79F88920A925196F40A0A20@phx.gbl>
+Message-ID: <20160221163854.GD3456@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Arnout,
+James, All,
 
-Le 21/02/2016 15:10, Thomas Petazzoni a ?crit :
-> Dear Arnout Vandecappelle,
+On 2016-02-21 11:04 -0500, James Knight spake thusly:
+> When invoking a build from a non-interactive session (for example, a
+> Jenkins build), there is no terminal session to modify. When preparing
+> variables to track the bold and boldoff mode sequences, the `tput`
+> command will always fail as there is no terminal to query. The following
+> change masks the error message when `tput` fails; leaving the TERM_BOLD
+> and TERM_RESET variables empty.
 > 
-> On Sun, 21 Feb 2016 00:31:39 +0100, Arnout Vandecappelle wrote:
->> On 02/19/16 23:28, Romain Naour wrote:
->>> This patch is not needed anymore since the uClibc support
->>> has been removed from Buildroot.
->>> This patch was needed for uClibc <= 0.9.33 support.
->>>
->>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>> ---
->>> Build tested with 2014R1 bfin toolchain.
->>
->>  But that toolchain is using uClibc 0.9.33, no? So how come it still works then?
-> 
-> mkostemp is used in three places:
-> 
-> lib/fileutils.c:	fd = mkostemp(localtmp, O_RDWR|O_CREAT|O_EXCL|O_CLOEXEC);
-> libblkid/src/save.c:			fd = mkostemp(tmp, O_RDWR|O_CREAT|O_EXCL|O_CLOEXEC);
-> libmount/src/utils.c:	fd = mkostemp(n, O_RDWR|O_CREAT|O_EXCL|O_CLOEXEC);
-> 
-> Both libblkid and libmount are "depends on BR2_USE_MMU", so they are
-> not built on Blackfin.
-> 
-> However, I don't see how it can work with lib/fileutils. And indeed, at
-> build time I get:
-> 
->   CC       lib/libcommon_la-match.lo
-> lib/fileutils.c: In function ?xmkstemp?:
-> lib/fileutils.c:36: warning: implicit declaration of function ?mkostemp?
-> lib/fileutils.c:36: warning: nested extern declaration of ?mkostemp?
-> 
-> And indeed:
-> 
-> $ ./output/host/usr/bin/bfin-linux-uclibc-gcc -o foo foo.c -lsmartcols
-> /home/thomas/projets/buildroot/output/host/usr/bfin-buildroot-linux-uclibc/sysroot/usr/lib/libsmartcols.so: undefined reference to `_fork'
-> /home/thomas/projets/buildroot/output/host/usr/bfin-buildroot-linux-uclibc/sysroot/usr/lib/libsmartcols.so: undefined reference to `_mkostemp'
-> collect2: ld returned 1 exit status
-> 
-> Though it looks like this smartcols library also uses fork(), so it
-> anyway cannot work properly.
-> 
-> Romain, it seems like your patch is not completely correct, so I've
-> marked it as Rejected.
+> Signed-off-by: James Knight <james.d.knight@live.com>
 
-Ok no problem, I probably didn't selected the good util-linux option... my bad.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Best regards,
-Romain
+Regards,
+Yann E. MORIN.
 
+> ---
+> Changes v1 -> v2:
+>   - Removed space in stderr redirection (suggested by Yann E. MORIN).
+> ---
+>  package/pkg-utils.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Best regards,
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 44bd2c9..f88313a 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -84,8 +84,8 @@ suitable-extractor = $(INFLATE$(suffix $(1)))
+>  
+>  # MESSAGE Macro -- display a message in bold type
+>  MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+> -TERM_BOLD := $(shell tput smso)
+> -TERM_RESET := $(shell tput rmso)
+> +TERM_BOLD := $(shell tput smso 2>/dev/null)
+> +TERM_RESET := $(shell tput rmso 2>/dev/null)
+>  
+>  # Utility functions for 'find'
+>  # findfileclauses(filelist) => -name 'X' -o -name 'Y'
+> -- 
+> 1.9.5.msysgit.1
 > 
-> Thomas
-> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
