@@ -1,50 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 11:51:26 +0100
-Subject: [Buildroot] [PATCH 5/7] package/dvdauthor: add optional support for
-	libfribidi
+Date: Sun, 21 Feb 2016 11:51:23 +0100
+Subject: [Buildroot] [PATCH 2/7] package/imagemagick: add optional support
+	for lcms2
 In-Reply-To: <1456051888-2047-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456051888-2047-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456051888-2047-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456051888-2047-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libfribidi was compiled before, dvdauthor will use it as optional
+When lcms2 was compiled before, imagemagick will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/spumux | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libexpat.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libfontconfig.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libfreetype.so.6]
- 0x0000000000000001 (NEEDED)             Shared library: [libfribidi.so.0]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/identify | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libMagickCore-6.Q16.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libMagickWand-6.Q16.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblcms2.so.2]
 [...]
-
-The build system offers no option to en-/disable libfribidi support:
-https://github.com/ldo/dvdauthor/blob/master/configure.ac#L83
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dvdauthor/dvdauthor.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/imagemagick/imagemagick.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/dvdauthor/dvdauthor.mk b/package/dvdauthor/dvdauthor.mk
-index be006f1..6b90c43 100644
---- a/package/dvdauthor/dvdauthor.mk
-+++ b/package/dvdauthor/dvdauthor.mk
-@@ -34,6 +34,10 @@ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
- DVDAUTHOR_DEPENDENCIES += fontconfig
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index eee567e..8fc9532 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -60,6 +60,13 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-jpeg
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
-+DVDAUTHOR_DEPENDENCIES += libfribidi
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++IMAGEMAGICK_CONF_OPTS += --with-lcms
++IMAGEMAGICK_DEPENDENCIES += lcms2
++else
++IMAGEMAGICK_CONF_OPTS += --without-lcms
 +endif
 +
- ifeq ($(BR2_PACKAGE_DVDAUTHOR_DVDUNAUTHOR),y)
- DVDAUTHOR_DEPENDENCIES += libdvdread
- DVDAUTHOR_CONF_OPTS += --enable-dvdunauthor
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ IMAGEMAGICK_CONF_OPTS += --with-png
+ IMAGEMAGICK_DEPENDENCIES += libpng
 -- 
 2.7.0
