@@ -1,65 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2016 23:05:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spice: depend on libglib2
-In-Reply-To: <20160221211249.723daeb6@free-electrons.com>
-References: <1456076407-20364-1-git-send-email-bernd.kuhls@t-online.de>
- <20160221211249.723daeb6@free-electrons.com>
-Message-ID: <20160221220552.GF3456@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:00:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/pound: new package
+Message-ID: <20160221220719.85A7A80E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a3b3a8ba5ef719d4aaee84b6d7ed9bb07663804
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2016-02-21 21:12 +0100, Thomas Petazzoni spake thusly:
-> Dear Bernd Kuhls,
-> 
-> On Sun, 21 Feb 2016 18:40:07 +0100, Bernd Kuhls wrote:
-> > The package selects BR2_PACKAGE_LIBGLIB2 but did not depend on it.
-> > 
-> > The buildsystem treats libglib2 as a hard-dependency:
-> > https://cgit.freedesktop.org/spice/spice/tree/configure.ac?h=0.12#n117
-> > 
-> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> I am not sure in fact. The part of configure.ac you're pointing to
-> simply adds libglib2 to SPICE_REQUIRES, which is *only* used in the
-> spice build system to fill in the Requires.private field of
-> spice-server.pc. I.e, it seems like libglib2 is only an indirect
-> dependency of spice, and a reference to libglib2 only needed when
-> static linking.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: pass --with-owner/--with-group instead of SEDing the
+Makefile.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in        |  1 +
+ package/pound/Config.in  | 18 ++++++++++++++++++
+ package/pound/pound.hash |  2 ++
+ package/pound/pound.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
 
-    $ git grep -E '\<glib.h\>'
-    server/reds.c:#include <glib.h>
-
-The server is not optional (only the client is), and reds.c is not
-conditoinal in server/Makefile.am.
-
-So it looks like it really requires glib for itself.
-
-> This clearly needs more investigation, as other dependencies of spice
-> are handled in the same way.
-
-Not sure I'm following... Except for libglib2, for each select or
-depends on, we have the corresponding entry in _DEPENDENCIES.
-
-Unless you're referring to how spice internally treats its depednencies?
-
-> Yann, you originally added the spice package, maybe you can have a look?
-
-Are you kidding? That was more than three years ago! Hehe! ;-)
-
-And by the way, a bump would be welcome (after the release, I mean). ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index c0b3b17..23fd62c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1448,6 +1448,7 @@ endif
+ 	source "package/p910nd/Config.in"
+ 	source "package/phidgetwebservice/Config.in"
+ 	source "package/portmap/Config.in"
++	source "package/pound/Config.in"
+ 	source "package/pppd/Config.in"
+ 	source "package/pptp-linux/Config.in"
+ 	source "package/privoxy/Config.in"
+diff --git a/package/pound/Config.in b/package/pound/Config.in
+new file mode 100644
+index 0000000..91c29ea
+--- /dev/null
++++ b/package/pound/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_POUND
++	bool "pound"
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_OPENSSL
++	help
++	  The Pound program is a reverse proxy, load balancer and HTTPS
++	  front-end for Web server(s). Pound was developed to enable
++	  distributing the load among several Web-servers and to allow
++	  for a convenient SSL wrapper for those Web servers that do not
++	  offer it natively.
++
++	  http://www.apsis.ch/pound
++
++comment "pound needs a toolchain w/ dynamic library, threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/pound/pound.hash b/package/pound/pound.hash
+new file mode 100644
+index 0000000..6908b90
+--- /dev/null
++++ b/package/pound/pound.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256	cdfbf5a7e8dc8fbbe0d6c1e83cd3bd3f2472160aac65684bb01ef661c626a8e4	Pound-2.7.tgz
+diff --git a/package/pound/pound.mk b/package/pound/pound.mk
+new file mode 100644
+index 0000000..4086642
+--- /dev/null
++++ b/package/pound/pound.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# pound
++#
++################################################################################
++
++POUND_VERSION = 2.7
++POUND_SITE = http://www.apsis.ch/pound
++POUND_SOURCE = Pound-$(POUND_VERSION).tgz
++POUND_LICENSE = GPLv3+
++POUND_LICENSE_FILES = GPL.txt
++POUND_DEPENDENCIES = openssl
++
++# Force owner/group to us, otherwise it will try proxy:proxy by
++# default.
++POUND_CONF_OPTS = \
++	--with-owner=$(shell id -un) \
++	--with-group=$(shell id -gn)
++
++ifeq ($(BR2_PACKAGE_PCRE),y)
++POUND_DEPENDENCIES += pcre
++endif
++
++$(eval $(autotools-package))
