@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:29:41 +0100
-Subject: [Buildroot] [PATCH v2 1/2] python-iniparse: new package
-In-Reply-To: <1454193970-22544-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-References: <1454193970-22544-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
-Message-ID: <20160221232941.647837e4@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:30:18 +0100
+Subject: [Buildroot] [git commit branch/next] ejabberd: add reason for
+	autoreconf
+Message-ID: <20160221223023.BC1027FEDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Zoltan Gyarmati,
+commit: https://git.buildroot.net/buildroot/commit/?id=f0b6540c07c712309aed6e87e06eb37a29acd6df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 30 Jan 2016 23:46:09 +0100, Zoltan Gyarmati wrote:
-> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - add sha256 hash
->   - whitespace and line length fixes
-> ---
->  package/Config.in                            |  1 +
->  package/python-iniparse/Config.in            | 11 +++++++++++
->  package/python-iniparse/python-iniparse.hash |  4 ++++
->  package/python-iniparse/python-iniparse.mk   | 14 ++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/python-iniparse/Config.in
->  create mode 100644 package/python-iniparse/python-iniparse.hash
->  create mode 100644 package/python-iniparse/python-iniparse.mk
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ejabberd/ejabberd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Both patches applied to next, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index a3aad35..1140eb1 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -13,6 +13,7 @@ EJABBERD_DEPENDENCIES = getent openssl host-erlang-lager erlang-lager \
+ 	erlang-p1-cache-tab erlang-p1-iconv erlang-p1-sip \
+ 	erlang-p1-stringprep erlang-p1-xml erlang-p1-yaml erlang-p1-zlib
+ 
++# 0001-remove-make-targets-for-deps.patch updates Makefile.in
+ EJABBERD_USE_AUTOCONF = YES
+ EJABBERD_AUTORECONF = YES
+ 
