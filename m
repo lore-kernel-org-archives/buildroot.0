@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 15:01:47 +0100
+Date: Sun, 21 Feb 2016 15:02:12 +0100
 Subject: [Buildroot] [git commit] package/syslog-ng: add optional support
-	for libcap
-Message-ID: <20160221140229.CCFA2817D7@busybox.osuosl.org>
+	for libuuid from util-linux
+Message-ID: <20160221140231.9421C7F936@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fee0703d8cf7ebc99cc8094425e10cb382731f4c
+commit: https://git.buildroot.net/buildroot/commit/?id=aacc651dce40f406f74c90d92dd798e4df812c91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libcap was compiled before, syslog-ng will use it as optional
+When libuuid was compiled before, syslog-ng will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/syslog-ng | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libsyslog-ng-3.7.so.0.0.0 | grep NEEDED | sort
 [...]
+ 0x0000000000000001 (NEEDED)             Shared library: [libuuid.so.1]
+
+The build system offers no option to en-/disable libuuid support:
+https://github.com/balabit/syslog-ng/blob/master/configure.ac#L1291
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/syslog-ng/syslog-ng.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/syslog-ng/syslog-ng.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 5f48a79..54593e4 100644
+index 54593e4..f11d895 100644
 --- a/package/syslog-ng/syslog-ng.mk
 +++ b/package/syslog-ng/syslog-ng.mk
-@@ -20,6 +20,13 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- SYSLOG_NG_DEPENDENCIES += busybox
+@@ -58,6 +58,10 @@ else
+ SYSLOG_NG_CONF_OPTS += --disable-json
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+SYSLOG_NG_DEPENDENCIES += libcap
-+SYSLOG_NG_CONF_OPTS += --enable-linux-caps
-+else
-+SYSLOG_NG_CONF_OPTS += --disable-linux-caps
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++SYSLOG_NG_DEPENDENCIES += util-linux
 +endif
 +
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- SYSLOG_NG_DEPENDENCIES += python
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ SYSLOG_NG_DEPENDENCIES += systemd
  SYSLOG_NG_CONF_OPTS += \
