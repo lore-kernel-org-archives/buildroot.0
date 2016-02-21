@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:23:47 +0100
-Subject: [Buildroot] [PATCH 4/7] package/kismet: add optional support
+Date: Sun, 21 Feb 2016 18:23:53 +0100
+Subject: [Buildroot] [PATCH 5/7] package/nfs-utils: add optional support
  for libcap
-In-Reply-To: <1456066125-28379-4-git-send-email-bernd.kuhls@t-online.de>
+In-Reply-To: <1456066125-28379-5-git-send-email-bernd.kuhls@t-online.de>
 References: <1456066125-28379-1-git-send-email-bernd.kuhls@t-online.de>
- <1456066125-28379-4-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221182347.54b77eab@free-electrons.com>
+ <1456066125-28379-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221182353.54b91fa4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,20 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sun, 21 Feb 2016 15:48:42 +0100, Bernd Kuhls wrote:
-> When libcap was compiled before, kismet will use it as optional
+On Sun, 21 Feb 2016 15:48:43 +0100, Bernd Kuhls wrote:
+> When libcap was compiled before, nfs-utils will use it as optional
 > dependency:
 > 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/kismet_server | grep NEEDED
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/sm-notify | grep NEEDED
 >  0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
-> [...]
-> 
-> The build system offers no option to en-/disable libcap support:
-> https://www.kismetwireless.net/gitweb/?p=kismet.git;a=blob;f=configure.ac;h=e874b10f3c1d56e2deb5e8adf4b8da4066fdde56;hb=HEAD#l635
+>  0x0000000000000001 (NEEDED)             Shared library: [libtirpc.so.3]
+>  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/kismet/kismet.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/nfs-utils/nfs-utils.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
 Applied to master, thanks.
 
