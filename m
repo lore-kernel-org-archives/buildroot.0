@@ -1,25 +1,23 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 17:55:33 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/libgsm: new package
-References: <1430072810-27772-1-git-send-email-bernd.kuhls@t-online.de>
- <20160111224046.GE4257@free.fr>
-Message-ID: <5p6ppcx8q1.ln2@ID-313208.user.individual.net>
+Date: Sun, 21 Feb 2016 17:57:06 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/libspandsp: new package
+References: <1430069699-528-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160109175401.GC3444@free.fr>
+Message-ID: <2s6ppcx8q1.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 11 Jan 2016 23:40:46 +0100 schrieb Yann E. MORIN:
+Am Sat, 09 Jan 2016 18:54:01 +0100 schrieb Yann E. MORIN:
 
-> So I've added that patch to my series adding asterisk, and I've reworked
-> it a bit.
+> This one is also in the series I'm about to send, so I'll also mark it
+> rejected n patchwork.
 
 Hi Yann,
 
-FYI, I just saw that mediastreamer has an optional dependency to libgsm, 
-to control it mediastreamer's build system supports --enable-gsm/
---disable-gsm. If you enable gsm support you need to add
---with-gsm=$(STAGING_DIR)/usr, otherwise mediastreamer will look in /usr.
+mediastreamer also has an optional dependency to spandsp,
+--enable-spandsp/--disable-spandsp exists.
 
 Regards, Bernd
