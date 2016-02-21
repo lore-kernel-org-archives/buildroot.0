@@ -1,72 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:36:32 +0100
-Subject: [Buildroot] [git commit] package/kexec: add optional support for xz,
-	bump version
-Message-ID: <20160221133751.8046380770@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 14:38:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kexec: add optional support for
+ xz
+In-Reply-To: <1456007514-29695-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456007514-29695-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221143850.579fae60@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1a04d7ad12ce6162601bb0801782597e7bfb107
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-When xz was compiled before, kexec will use it as optional dependency:
+On Sat, 20 Feb 2016 23:31:54 +0100, Bernd Kuhls wrote:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/kdump | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [liblzma.so.5]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+> +ifeq ($(BR2_PACKAGE_XZ),y)
+> +# fixes broken check for xz when cross-compiling:
+> +# checking for lzma_code in -llzma...
+> +# ./configure: line 4712: ac_fn_c_try_link: command not found
+> +KEXEC_CONF_ENV += ac_cv_lib_lzma_lzma_code=yes
 
-The version bump to 2.0.11 is needed to fix a configure script issue:
+Instead of this, I've added a bump to version 2.0.11, which contains an
+upstream commit that fixes this issue. Yes, it's a version bump on
+master, but it's a minor version bump, so I think it's reasonable.
 
-   line 4712: ac_fn_c_try_link: command not found
+Thanks!
 
-This issue was fixed by upstream commit
-http://git.kernel.org/cgit/utils/kernel/kexec/kexec-tools.git/commit/configure.ac?id=58bbd468571b3e80585e5d68e97c8d67c8ed583b,
-which was merged after 2.0.9 was released.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: bump version instead of doing a "hack" to force the use of
-the lzma library.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/kexec/kexec.hash | 2 +-
- package/kexec/kexec.mk   | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index fa2d8be..24a71e7 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256	8ae34a9ceb76350954e1e1e3ca9ab51da15862bd5f2fd14392208e60fb454f71	kexec-tools-2.0.9.tar.xz
-+sha256	b1097986ffdb928cf41a94e8a5dfddc981a8fa710cccf13298e7f8dd939a2ee3	kexec-tools-2.0.11.tar.xz
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index d158406..0e64c0d 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.9
-+KEXEC_VERSION = 2.0.11
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPLv2
-@@ -17,6 +17,13 @@ else
- KEXEC_CONF_OPTS += --without-zlib
- endif
- 
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+KEXEC_CONF_OPTS += --with-lzma
-+KEXEC_DEPENDENCIES += xz
-+else
-+KEXEC_CONF_OPTS += --without-lzma
-+endif
-+
- define KEXEC_REMOVE_LIB_TOOLS
- 	rm -rf $(TARGET_DIR)/usr/lib/kexec-tools
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
