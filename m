@@ -1,40 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 11:51:22 +0100
-Subject: [Buildroot] [PATCH 1/7] package/cifs-utils: add optional support
-	for keyutils
-Message-ID: <1456051888-2047-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 11:51:27 +0100
+Subject: [Buildroot] [PATCH 6/7] package/sdl_sound: add optional support for
+	libmodplug
+In-Reply-To: <1456051888-2047-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456051888-2047-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456051888-2047-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When keyutils was compiled before, cifs-utils will use it as optional
+When libmodplug was compiled before, sdl_sound will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/cifscreds | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libkeyutils.so.1]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libSDL_sound-1.0.so.1.0.2 | grep NEEDED | sort
  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libmodplug.so.1]
+[...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/cifs-utils/cifs-utils.mk | 4 ++++
+ package/sdl_sound/sdl_sound.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index e668b08..89358b1 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -14,6 +14,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
- CIFS_UTILS_CONF_OPTS += --disable-pie
+diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
+index 416f381..0e7f44d 100644
+--- a/package/sdl_sound/sdl_sound.mk
++++ b/package/sdl_sound/sdl_sound.mk
+@@ -21,6 +21,10 @@ ifeq ($(BR2_PACKAGE_FLAC),y)
+ SDL_SOUND_DEPENDENCIES += flac # is only used if ogg is also enabled
  endif
  
-+ifeq ($(BR2_PACKAGE_KEYUTILS),y)
-+CIFS_UTILS_DEPENDENCIES += keyutils
++ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
++SDL_SOUND_DEPENDENCIES += libmodplug
 +endif
 +
- define CIFS_UTILS_NO_WERROR
- 	$(SED) 's/-Werror//' $(@D)/Makefile.in
- endef
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+ SDL_SOUND_DEPENDENCIES += libvorbis
+ endif
 -- 
 2.7.0
