@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:29:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/omniorb: add optional support
- for openssl
-In-Reply-To: <1456067932-12447-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1456067932-12447-1-git-send-email-bernd.kuhls@t-online.de>
- <1456067932-12447-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221182950.2b0b0878@free-electrons.com>
+Date: Sun, 21 Feb 2016 18:30:09 +0100
+Subject: [Buildroot] [git commit] pkg-utils: mask tput failure for
+	non-interactive sessions
+Message-ID: <20160221173138.D6C1380E44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=2406955bce3e6371b5ebb3faac65d1aca9d3e108
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Feb 2016 16:18:52 +0100, Bernd Kuhls wrote:
-> When openssl was compiled before, omniorb will use it as optional
-> dependency:
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libomnisslTP4.so.2.0 | grep NEEDED
->  0x0000000000000001 (NEEDED)             Shared library: [libomniORB4.so.2]
->  0x0000000000000001 (NEEDED)             Shared library: [libomnithread.so.4]
->  0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
->  0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
->  0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
-> [...]
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/omniorb/omniorb.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+When invoking a build from a non-interactive session (for example, a
+Jenkins build), there is no terminal session to modify. When preparing
+variables to track the bold and boldoff mode sequences, the `tput`
+command will always fail as there is no terminal to query. The following
+change masks the error message when `tput` fails; leaving the TERM_BOLD
+and TERM_RESET variables empty.
 
-Applied to master, thanks.
+Signed-off-by: James Knight <james.d.knight@live.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pkg-utils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 44bd2c9..f88313a 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -84,8 +84,8 @@ suitable-extractor = $(INFLATE$(suffix $(1)))
+ 
+ # MESSAGE Macro -- display a message in bold type
+ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+-TERM_BOLD := $(shell tput smso)
+-TERM_RESET := $(shell tput rmso)
++TERM_BOLD := $(shell tput smso 2>/dev/null)
++TERM_RESET := $(shell tput rmso 2>/dev/null)
+ 
+ # Utility functions for 'find'
+ # findfileclauses(filelist) => -name 'X' -o -name 'Y'
