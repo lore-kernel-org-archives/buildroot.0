@@ -1,46 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 16:18:51 +0100
-Subject: [Buildroot] [PATCH 1/2] package/omniorb: add optional support for
-	zlib
-Message-ID: <1456067932-12447-1-git-send-email-bernd.kuhls@t-online.de>
+From: James Knight <james.d.knight@live.com>
+Date: Sun, 21 Feb 2016 10:40:49 -0500
+Subject: [Buildroot] [PATCH 1/1] pkg-utils: mask tput failure for
+	non-interactive sessions
+Message-ID: <BLU436-SMTP6377F2EEAE54E32A4A6DDDA0A20@phx.gbl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When zlib was compiled before, omniorb will use it as optional
-dependency:
+When invoking a build from a non-interactive session (for example, a
+Jenkins build), there is no terminal session to modify. When preparing
+variables to track the bold and boldoff mode sequences, the `tput`
+command will always fail as there is no terminal to query. The following
+change masks the error message when `tput` fails; leaving the TERM_BOLD
+and TERM_RESET variables empty.
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libomniZIOP4.so.2.0 | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libomniORB4.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libomnithread.so.4]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
-[...]
-
-The build system offers no option to en-/disable libuuid support,
-check acinclude.m4, line 435+.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: James Knight <james.d.knight@live.com>
 ---
- package/omniorb/omniorb.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pkg-utils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index aaf3bf3..1bbde3b 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -30,6 +30,10 @@ HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
- OMNIORB_CONF_OPTS += --disable-longdouble
- HOST_OMNIORB_CONF_OPTS += --disable-longdouble
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index 44bd2c9..12447fc 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -84,8 +84,8 @@ suitable-extractor = $(INFLATE$(suffix $(1)))
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+OMNIORB_DEPENDENCIES += zlib
-+endif
-+
- # The EmbeddedSystem define (set below in OMNIORB_ADJUST_TOOLDIR)
- # enables building of just the lib and disables building of
- # tools/apps/services.  In some cases the apps/services are still
+ # MESSAGE Macro -- display a message in bold type
+ MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
+-TERM_BOLD := $(shell tput smso)
+-TERM_RESET := $(shell tput rmso)
++TERM_BOLD := $(shell tput smso 2> /dev/null)
++TERM_RESET := $(shell tput rmso 2> /dev/null)
+ 
+ # Utility functions for 'find'
+ # findfileclauses(filelist) => -name 'X' -o -name 'Y'
 -- 
-2.7.0
+1.9.5.msysgit.1
