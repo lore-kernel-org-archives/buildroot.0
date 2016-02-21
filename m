@@ -1,223 +1,541 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 15:58:58 +0100
-Subject: [Buildroot] [git commit] package/dhcp: bump version to 4.3.3-P1
-Message-ID: <20160302202755.B6E4C7FA0E@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 15:33:50 +0100
+Subject: [Buildroot] [git commit] libaio: bump version to 0.3.110
+Message-ID: <20160302202755.83F947FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fb3f220807a5203c6854e30ab126e2f78b280cd
+commit: https://git.buildroot.net/buildroot/commit/?id=1ded02f0b2cdad55a554e7d438fa9f2bd1fe4059
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-bind source tar-ball is now embedded into the dhcp source. The embedded
-bind tar-ball is extracted after the dhcp source so cross compiling
-patches can be applied to the dhcp and bind before the package is built.
+Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
 
-The embedded bind configure is called as part of dhcp make instead of
-dhcp configure; therefore, needed configure parameters are set in the
-make env.
+The 0001-arches.patch is simplified to only add MIPS definitions: the
+SPARC support has been merged upstream, and we don't need the m68k and
+parisc support.
 
-0001-dhcp-cross-compile.patch and 0002-bind-cross-compile.patch have
-been submitted upstream as part of a cross compiling enhancement
-suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
-0003-bind-hos-cc.patch is already scheduled for the next dhcp release.
-
-Buildroot thread
-	http://lists.busybox.net/pipermail/buildroot/2016-January/149079.html
-has related information.
-
-Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+[Thomas:
+ - respect alphabetic ordering in the definition of
+   BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ - add more details in the commit log.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dhcp/0001-dhcp-cross-compile.patch | 34 +++++++++++++++++++++++++
- package/dhcp/0002-bind-cross-compile.patch | 24 ++++++++++++++++++
- package/dhcp/0003-bind-host-cc.patch       | 40 ++++++++++++++++++++++++++++++
- package/dhcp/dhcp.hash                     |  4 +--
- package/dhcp/dhcp.mk                       | 28 +++++++++++++++++++--
- 5 files changed, 126 insertions(+), 4 deletions(-)
+ package/libaio/0001-arches.patch | 454 ++-------------------------------------
+ package/libaio/Config.in         |   2 +-
+ package/libaio/libaio.hash       |   4 +-
+ package/libaio/libaio.mk         |   2 +-
+ 4 files changed, 20 insertions(+), 442 deletions(-)
 
-diff --git a/package/dhcp/0001-dhcp-cross-compile.patch b/package/dhcp/0001-dhcp-cross-compile.patch
-new file mode 100644
-index 0000000..95b4689
---- /dev/null
-+++ b/package/dhcp/0001-dhcp-cross-compile.patch
-@@ -0,0 +1,34 @@
-+dhcp cross compile support integration
-+
-+Allow BINDCONFIG to be initialized in environment passed to configure.
-+
-+Allow archiver to be determined during configure.
-+
-+This patch is submitted upstream as part of a cross compiling enhancement
-+suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: dhcp-4.3.3-P1/configure.ac
-+===================================================================
-+--- dhcp-4.3.3-P1.orig/configure.ac
-++++ dhcp-4.3.3-P1/configure.ac
-+@@ -33,7 +33,7 @@ if test "$GCC" = "yes"; then
-+ fi
-+ 
-+ # We can have some flags to pass to bind configure
-+-BINDCONFIG=
-++BINDCONFIG="$BINDCONFIG"
-+ AC_SUBST(BINDCONFIG)
-+ 
-+ # POSIX doesn't include the IPv6 Advanced Socket API and glibc hides
-+@@ -43,6 +43,9 @@ AC_SUBST(BINDCONFIG)
-+ # Use this to define _GNU_SOURCE to pull in the IPv6 Advanced Socket API.
-+ AC_USE_SYSTEM_EXTENSIONS
-+ 
-++AC_CHECK_TOOL(AR,ar)
-++AC_SUBST(AR)
-++
-+ AC_PROG_RANLIB
-+ AC_CONFIG_HEADERS([includes/config.h])
-+ 
-diff --git a/package/dhcp/0002-bind-cross-compile.patch b/package/dhcp/0002-bind-cross-compile.patch
-new file mode 100644
-index 0000000..f7c42c6
---- /dev/null
-+++ b/package/dhcp/0002-bind-cross-compile.patch
-@@ -0,0 +1,24 @@
-+bind cross compile support integration
-+
-+Pass system types from dhcp configure to bind configure.
-+
-+This patch is submitted upstream as part of a cross compiling enhancement
-+suggestion to dhcp-suggest at isc.org. Reference ISC-Bugs #41502.
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: dhcp-4.3.3-P1/bind/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3-P1.orig/bind/Makefile.in
-++++ dhcp-4.3.3-P1/bind/Makefile.in
-+@@ -30,7 +30,9 @@ bindconfig = --disable-kqueue --disable-
-+ 	--without-openssl --without-libxml2 --enable-exportlib \
-+ 	--with-gssapi=no --enable-threads=no @BINDCONFIG@ \
-+ 	--with-export-includedir=${binddir}/include \
-+-	--with-export-libdir=${binddir}/lib
-++	--with-export-libdir=${binddir}/lib \
-++	--target=@target_alias@ --host=@host_alias@ \
-++	--build=@build_alias@
-+ 
-+ @BIND_ATF_FALSE at cleandirs = ./lib ./include
-+ @BIND_ATF_TRUE at cleandirs = ./lib ./include ./atf
-diff --git a/package/dhcp/0003-bind-host-cc.patch b/package/dhcp/0003-bind-host-cc.patch
-new file mode 100644
-index 0000000..96c144f
---- /dev/null
-+++ b/package/dhcp/0003-bind-host-cc.patch
-@@ -0,0 +1,40 @@
-+ensure host compiler is used
-+
-+dns/Makefile.in patch is derived from:
-+http://wiki.beyondlogic.org/patches/dhcp-4.3.0b1.bind_arm-linux-gnueabi.patch
-+
-+This patch is already accepted upstream and will be included in the next
-+release:
-+--[snip]--
-+From Francis Dupont via RT <dhcp-suggest@isc.org>
-+To   rdkehn at yahoo.com 
-+
-+Message body
-+It was fixed on the master branch sometimes ago.
-+Quoting master RELNOTES:
-+
-+- Made the embedded bind libraries able to be cross compiled
-+  (please refer to the bind9 documentation to learn how to cross
-+  compile DHCP and its bind library dependency).
-+  [ISC-Bugs #38836]
-+
-+This is in the Changes since 4.3.3 so for the next release.
-+--[snip]--
-+
-+Signed-off-by: Doug Kehn <rdkehn@yahoo.com>
-+
-+Index: dhcp-4.3.3-P1/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
-+===================================================================
-+--- dhcp-4.3.3-P1.orig/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
-++++ dhcp-4.3.3-P1/bind/bind-9.9.7-P3/lib/export/dns/Makefile.in
-+@@ -168,7 +168,9 @@ code.h:	gen
-+ 	./gen -s ${srcdir} > code.h
-+ 
-+ gen: ${srcdir}/gen.c
-+-	${CC} ${ALL_CFLAGS} ${LDFLAGS} -o $@ ${srcdir}/gen.c ${LIBS}
-++	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
-++		${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
-++		${BUILD_LIBS}
-+ 
-+ #We don't need rbtdb64 for this library
-+ #rbtdb64. at O@: rbtdb.c
-diff --git a/package/dhcp/dhcp.hash b/package/dhcp/dhcp.hash
-index 84e3c63..fd9b24a 100644
---- a/package/dhcp/dhcp.hash
-+++ b/package/dhcp/dhcp.hash
+diff --git a/package/libaio/0001-arches.patch b/package/libaio/0001-arches.patch
+index c85568c..4b77f57 100644
+--- a/package/libaio/0001-arches.patch
++++ b/package/libaio/0001-arches.patch
+@@ -1,145 +1,28 @@
+ Patch borrowed from OpenEmbedded, available at
+-recipes/libaio/libaio-0.3.106/00_arches.patch in their source
+-tree. The patch has been adapted to remove the ARM-related
+-definitions, since they have been merged in later versions of libaio.
++/meta/recipes-extended/libaio/libaio/00_arches.patch in their source
++tree. This patch has been modified to only add the MIPS definitions.
+ 
+-The patch adds various architecture specific definitions (syscall
+-number and macros) for m68k, MIPS, PA/RISC and Sparc. Amongst these,
+-Buildroot mostly only cares about MIPS, but it was just easier to take
+-the whole OpenEmbedded patch.
++The patch adds MIPS specific definitions (syscall number and macros).
+ 
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/libaio.h         |   24 +++++
+- src/syscall-m68k.h   |   78 +++++++++++++++++
+- src/syscall-mips.h   |  223 +++++++++++++++++++++++++++++++++++++++++++++++++++
+- src/syscall-parisc.h |  146 +++++++++++++++++++++++++++++++++
+- src/syscall-sparc.h  |  130 +++++++++++++++++++++++++++++
+- src/syscall.h        |    8 +
+- 7 files changed, 725 insertions(+)
++Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+ 
+-Index: libaio-0.3.109/src/libaio.h
++Index: libaio-0.3.110/src/syscall.h
+ ===================================================================
+---- libaio-0.3.109.orig/src/libaio.h
+-+++ libaio-0.3.109/src/libaio.h
+-@@ -83,6 +83,30 @@
+- #define PADDEDptr(x, y)	x; unsigned y
+- #define PADDEDul(x, y)	unsigned long x; unsigned y
+- #  endif
+-+#elif defined(__m68k__) /* big endian, 32 bits */
+-+#define PADDED(x, y)	unsigned y; x
+-+#define PADDEDptr(x, y)	unsigned y; x
+-+#define PADDEDul(x, y)	unsigned y; unsigned long x
+-+#elif defined(__sparc__) /* big endian, 32 bits */
+-+#define PADDED(x, y)	unsigned y; x
+-+#define PADDEDptr(x, y)	unsigned y; x
+-+#define PADDEDul(x, y)	unsigned y; unsigned long x
+-+#elif defined(__hppa__) /* big endian, 32 bits */
+-+#define PADDED(x, y)	unsigned y; x
+-+#define PADDEDptr(x, y)	unsigned y; x
+-+#define PADDEDul(x, y)	unsigned y; unsigned long x
++--- libaio-0.3.110.orig/src/syscall.h
+++++ libaio-0.3.110/src/syscall.h
++@@ -28,6 +28,8 @@
++ #include "syscall-sparc.h"
++ #elif defined(__aarch64__)
++ #include "syscall-arm64.h"
+ +#elif defined(__mips__)
+-+#  if defined (__MIPSEB__) /* big endian, 32 bits */
+-+#define PADDED(x, y)	unsigned y; x
+-+#define PADDEDptr(x, y)	unsigned y; x
+-+#define PADDEDul(x, y)	unsigned y; unsigned long x
+-+#  elif defined(__MIPSEL__) /* little endian, 32 bits */
+-+#define PADDED(x, y)	x; unsigned y
+-+#define PADDEDptr(x, y)	x; unsigned y
+-+#define PADDEDul(x, y)	unsigned long x; unsigned y
+-+#  else
+-+#    error "neither mipseb nor mipsel?"
+-+#  endif
+++#include "syscall-mips.h"
+  #else
+- #error	endian?
+- #endif
+-Index: libaio-0.3.109/src/syscall-m68k.h
+-===================================================================
+---- /dev/null
+-+++ libaio-0.3.109/src/syscall-m68k.h
+-@@ -0,0 +1,78 @@
+-+#define __NR_io_setup		241
+-+#define __NR_io_destroy		242
+-+#define __NR_io_getevents	243
+-+#define __NR_io_submit		244
+-+#define __NR_io_cancel		245
+-+
+-+#define io_syscall1(type,fname,sname,atype,a) \
+-+type fname(atype a) \
+-+{ \
+-+register long __res __asm__ ("%d0") = __NR_##sname; \
+-+register long __a __asm__ ("%d1") = (long)(a); \
+-+__asm__ __volatile__ ("trap  #0" \
+-+		      : "+d" (__res) \
+-+		      : "d" (__a)  ); \
+-+return (type) __res; \
+-+}
+-+
+-+#define io_syscall2(type,fname,sname,atype,a,btype,b) \
+-+type fname(atype a,btype b) \
+-+{ \
+-+register long __res __asm__ ("%d0") = __NR_##sname; \
+-+register long __a __asm__ ("%d1") = (long)(a); \
+-+register long __b __asm__ ("%d2") = (long)(b); \
+-+__asm__ __volatile__ ("trap  #0" \
+-+		      : "+d" (__res) \
+-+		      : "d" (__a), "d" (__b) \
+-+		     ); \
+-+return (type) __res; \
+-+}
+-+
+-+#define io_syscall3(type,fname,sname,atype,a,btype,b,ctype,c) \
+-+type fname(atype a,btype b,ctype c) \
+-+{ \
+-+register long __res __asm__ ("%d0") = __NR_##sname; \
+-+register long __a __asm__ ("%d1") = (long)(a); \
+-+register long __b __asm__ ("%d2") = (long)(b); \
+-+register long __c __asm__ ("%d3") = (long)(c); \
+-+__asm__ __volatile__ ("trap  #0" \
+-+		      : "+d" (__res) \
+-+		      : "d" (__a), "d" (__b), \
+-+			"d" (__c) \
+-+		     ); \
+-+return (type) __res; \
+-+}
+-+
+-+#define io_syscall4(type,fname,sname,atype,a,btype,b,ctype,c,dtype,d) \
+-+type fname (atype a, btype b, ctype c, dtype d) \
+-+{ \
+-+register long __res __asm__ ("%d0") = __NR_##sname; \
+-+register long __a __asm__ ("%d1") = (long)(a); \
+-+register long __b __asm__ ("%d2") = (long)(b); \
+-+register long __c __asm__ ("%d3") = (long)(c); \
+-+register long __d __asm__ ("%d4") = (long)(d); \
+-+__asm__ __volatile__ ("trap  #0" \
+-+		      : "+d" (__res) \
+-+		      : "d" (__a), "d" (__b), \
+-+			"d" (__c), "d" (__d)  \
+-+		     ); \
+-+return (type) __res; \
+-+}
+-+
+-+#define io_syscall5(type,fname,sname,atype,a,btype,b,ctype,c,dtype,d,etype,e) \
+-+type fname (atype a,btype b,ctype c,dtype d,etype e) \
+-+{ \
+-+register long __res __asm__ ("%d0") = __NR_##sname; \
+-+register long __a __asm__ ("%d1") = (long)(a); \
+-+register long __b __asm__ ("%d2") = (long)(b); \
+-+register long __c __asm__ ("%d3") = (long)(c); \
+-+register long __d __asm__ ("%d4") = (long)(d); \
+-+register long __e __asm__ ("%d5") = (long)(e); \
+-+__asm__ __volatile__ ("trap  #0" \
+-+		      : "+d" (__res) \
+-+		      : "d" (__a), "d" (__b), \
+-+			"d" (__c), "d" (__d), "d" (__e)  \
+-+		     ); \
+-+return (type) __res; \
+-+}
+-+
+-Index: libaio-0.3.109/src/syscall-mips.h
++ #warning "using generic syscall method"
++ #include "syscall-generic.h"
++Index: libaio-0.3.110/src/syscall-mips.h
+ ===================================================================
+ --- /dev/null
+-+++ libaio-0.3.109/src/syscall-mips.h
+++++ libaio-0.3.110/src/syscall-mips.h
+ @@ -0,0 +1,223 @@
+ +/*
+ + * This file is subject to the terms and conditions of the GNU General Public
+@@ -364,308 +247,3 @@ Index: libaio-0.3.109/src/syscall-mips.h
+ +
+ +#endif /* (_MIPS_SIM == _MIPS_SIM_NABI32) || (_MIPS_SIM == _MIPS_SIM_ABI64) */
+ +
+-Index: libaio-0.3.109/src/syscall-parisc.h
+-===================================================================
+---- /dev/null
+-+++ libaio-0.3.109/src/syscall-parisc.h
+-@@ -0,0 +1,146 @@
+-+/*
+-+ * Linux system call numbers.
+-+ *
+-+ * Cary Coutant says that we should just use another syscall gateway
+-+ * page to avoid clashing with the HPUX space, and I think he's right:
+-+ * it will would keep a branch out of our syscall entry path, at the
+-+ * very least.  If we decide to change it later, we can ``just'' tweak
+-+ * the LINUX_GATEWAY_ADDR define at the bottom and make __NR_Linux be
+-+ * 1024 or something.  Oh, and recompile libc. =)
+-+ *
+-+ * 64-bit HPUX binaries get the syscall gateway address passed in a register
+-+ * from the kernel at startup, which seems a sane strategy.
+-+ */
+-+
+-+#define __NR_Linux                0
+-+#define __NR_io_setup           (__NR_Linux + 215)
+-+#define __NR_io_destroy         (__NR_Linux + 216)
+-+#define __NR_io_getevents       (__NR_Linux + 217)
+-+#define __NR_io_submit          (__NR_Linux + 218)
+-+#define __NR_io_cancel          (__NR_Linux + 219)
+-+
+-+#define SYS_ify(syscall_name)   __NR_##syscall_name
+-+
+-+/* Assume all syscalls are done from PIC code just to be
+-+ * safe. The worst case scenario is that you lose a register
+-+ * and save/restore r19 across the syscall. */
+-+#define PIC
+-+
+-+/* Definition taken from glibc 2.3.3
+-+ * sysdeps/unix/sysv/linux/hppa/sysdep.h
+-+ */
+-+
+-+#ifdef PIC
+-+/* WARNING: CANNOT BE USED IN A NOP! */
+-+# define K_STW_ASM_PIC	"       copy %%r19, %%r4\n"
+-+# define K_LDW_ASM_PIC	"       copy %%r4, %%r19\n"
+-+# define K_USING_GR4	"%r4",
+-+#else
+-+# define K_STW_ASM_PIC	" \n"
+-+# define K_LDW_ASM_PIC	" \n"
+-+# define K_USING_GR4
+-+#endif
+-+
+-+/* GCC has to be warned that a syscall may clobber all the ABI
+-+   registers listed as "caller-saves", see page 8, Table 2
+-+   in section 2.2.6 of the PA-RISC RUN-TIME architecture
+-+   document. However! r28 is the result and will conflict with
+-+   the clobber list so it is left out. Also the input arguments
+-+   registers r20 -> r26 will conflict with the list so they
+-+   are treated specially. Although r19 is clobbered by the syscall
+-+   we cannot say this because it would violate ABI, thus we say
+-+   r4 is clobbered and use that register to save/restore r19
+-+   across the syscall. */
+-+
+-+#define K_CALL_CLOB_REGS "%r1", "%r2", K_USING_GR4 \
+-+			 "%r20", "%r29", "%r31"
+-+
+-+#undef K_INLINE_SYSCALL
+-+#define K_INLINE_SYSCALL(name, nr, args...)	({			\
+-+	long __sys_res;							\
+-+	{								\
+-+		register unsigned long __res __asm__("r28");		\
+-+		K_LOAD_ARGS_##nr(args)					\
+-+		/* FIXME: HACK stw/ldw r19 around syscall */		\
+-+		__asm__ volatile(					\
+-+			K_STW_ASM_PIC					\
+-+			"	ble  0x100(%%sr2, %%r0)\n"		\
+-+			"	ldi %1, %%r20\n"			\
+-+			K_LDW_ASM_PIC					\
+-+			: "=r" (__res)					\
+-+			: "i" (SYS_ify(name)) K_ASM_ARGS_##nr		\
+-+			: "memory", K_CALL_CLOB_REGS K_CLOB_ARGS_##nr	\
+-+		);							\
+-+		__sys_res = (long)__res;				\
+-+	}								\
+-+	__sys_res;							\
+-+})
+-+
+-+#define K_LOAD_ARGS_0()
+-+#define K_LOAD_ARGS_1(r26)					\
+-+	register unsigned long __r26 __asm__("r26") = (unsigned long)(r26);   \
+-+	K_LOAD_ARGS_0()
+-+#define K_LOAD_ARGS_2(r26,r25)					\
+-+	register unsigned long __r25 __asm__("r25") = (unsigned long)(r25);   \
+-+	K_LOAD_ARGS_1(r26)
+-+#define K_LOAD_ARGS_3(r26,r25,r24)				\
+-+	register unsigned long __r24 __asm__("r24") = (unsigned long)(r24);   \
+-+	K_LOAD_ARGS_2(r26,r25)
+-+#define K_LOAD_ARGS_4(r26,r25,r24,r23)				\
+-+	register unsigned long __r23 __asm__("r23") = (unsigned long)(r23);   \
+-+	K_LOAD_ARGS_3(r26,r25,r24)
+-+#define K_LOAD_ARGS_5(r26,r25,r24,r23,r22)			\
+-+	register unsigned long __r22 __asm__("r22") = (unsigned long)(r22);   \
+-+	K_LOAD_ARGS_4(r26,r25,r24,r23)
+-+#define K_LOAD_ARGS_6(r26,r25,r24,r23,r22,r21)			\
+-+	register unsigned long __r21 __asm__("r21") = (unsigned long)(r21);   \
+-+	K_LOAD_ARGS_5(r26,r25,r24,r23,r22)
+-+
+-+/* Even with zero args we use r20 for the syscall number */
+-+#define K_ASM_ARGS_0
+-+#define K_ASM_ARGS_1 K_ASM_ARGS_0, "r" (__r26)
+-+#define K_ASM_ARGS_2 K_ASM_ARGS_1, "r" (__r25)
+-+#define K_ASM_ARGS_3 K_ASM_ARGS_2, "r" (__r24)
+-+#define K_ASM_ARGS_4 K_ASM_ARGS_3, "r" (__r23)
+-+#define K_ASM_ARGS_5 K_ASM_ARGS_4, "r" (__r22)
+-+#define K_ASM_ARGS_6 K_ASM_ARGS_5, "r" (__r21)
+-+
+-+/* The registers not listed as inputs but clobbered */
+-+#define K_CLOB_ARGS_6
+-+#define K_CLOB_ARGS_5 K_CLOB_ARGS_6, "%r21"
+-+#define K_CLOB_ARGS_4 K_CLOB_ARGS_5, "%r22"
+-+#define K_CLOB_ARGS_3 K_CLOB_ARGS_4, "%r23"
+-+#define K_CLOB_ARGS_2 K_CLOB_ARGS_3, "%r24"
+-+#define K_CLOB_ARGS_1 K_CLOB_ARGS_2, "%r25"
+-+#define K_CLOB_ARGS_0 K_CLOB_ARGS_1, "%r26"
+-+
+-+#define io_syscall1(type,fname,sname,type1,arg1)			\
+-+type fname(type1 arg1)							\
+-+{									\
+-+    return K_INLINE_SYSCALL(sname, 1, arg1);				\
+-+}
+-+
+-+#define io_syscall2(type,fname,sname,type1,arg1,type2,arg2)		\
+-+type fname(type1 arg1, type2 arg2)					\
+-+{									\
+-+    return K_INLINE_SYSCALL(sname, 2, arg1, arg2);			\
+-+}
+-+
+-+#define io_syscall3(type,fname,sname,type1,arg1,type2,arg2,type3,arg3)	\
+-+type fname(type1 arg1, type2 arg2, type3 arg3)				\
+-+{									\
+-+    return K_INLINE_SYSCALL(sname, 3, arg1, arg2, arg3);		\
+-+}
+-+
+-+#define io_syscall4(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4) \
+-+type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4)		\
+-+{									\
+-+    return K_INLINE_SYSCALL(sname, 4, arg1, arg2, arg3, arg4);		\
+-+}
+-+
+-+#define io_syscall5(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4,type5,arg5) \
+-+type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4, type5 arg5)	\
+-+{									\
+-+    return K_INLINE_SYSCALL(sname, 5, arg1, arg2, arg3, arg4, arg5);	\
+-+}
+-+
+-Index: libaio-0.3.109/src/syscall-sparc.h
+-===================================================================
+---- /dev/null
+-+++ libaio-0.3.109/src/syscall-sparc.h
+-@@ -0,0 +1,130 @@
+-+/* $Id: unistd.h,v 1.74 2002/02/08 03:57:18 davem Exp $ */
+-+
+-+/*
+-+ * System calls under the Sparc.
+-+ *
+-+ * Don't be scared by the ugly clobbers, it is the only way I can
+-+ * think of right now to force the arguments into fixed registers
+-+ * before the trap into the system call with gcc 'asm' statements.
+-+ *
+-+ * Copyright (C) 1995 David S. Miller (davem at caip.rutgers.edu)
+-+ *
+-+ * SunOS compatibility based upon preliminary work which is:
+-+ *
+-+ * Copyright (C) 1995 Adrian M. Rodriguez (adrian at remus.rutgers.edu)
+-+ */
+-+
+-+
+-+#define __NR_io_setup		268
+-+#define __NR_io_destroy		269
+-+#define __NR_io_submit		270
+-+#define __NR_io_cancel		271
+-+#define __NR_io_getevents	272
+-+
+-+
+-+#define io_syscall1(type,fname,sname,type1,arg1) \
+-+type fname(type1 arg1) \
+-+{ \
+-+long __res; \
+-+register long __g1 __asm__ ("g1") = __NR_##sname; \
+-+register long __o0 __asm__ ("o0") = (long)(arg1); \
+-+__asm__ __volatile__ ("t 0x10\n\t" \
+-+		      "bcc 1f\n\t" \
+-+		      "mov %%o0, %0\n\t" \
+-+		      "sub %%g0, %%o0, %0\n\t" \
+-+		      "1:\n\t" \
+-+		      : "=r" (__res), "=&r" (__o0) \
+-+		      : "1" (__o0), "r" (__g1) \
+-+		      : "cc"); \
+-+if (__res < -255 || __res >= 0) \
+-+	return (type) __res; \
+-+return -1; \
+-+}
+-+
+-+#define io_syscall2(type,fname,sname,type1,arg1,type2,arg2) \
+-+type fname(type1 arg1,type2 arg2) \
+-+{ \
+-+long __res; \
+-+register long __g1 __asm__ ("g1") = __NR_##sname; \
+-+register long __o0 __asm__ ("o0") = (long)(arg1); \
+-+register long __o1 __asm__ ("o1") = (long)(arg2); \
+-+__asm__ __volatile__ ("t 0x10\n\t" \
+-+		      "bcc 1f\n\t" \
+-+		      "mov %%o0, %0\n\t" \
+-+		      "sub %%g0, %%o0, %0\n\t" \
+-+		      "1:\n\t" \
+-+		      : "=r" (__res), "=&r" (__o0) \
+-+		      : "1" (__o0), "r" (__o1), "r" (__g1) \
+-+		      : "cc"); \
+-+if (__res < -255 || __res >= 0) \
+-+	return (type) __res; \
+-+return -1; \
+-+}
+-+
+-+#define io_syscall3(type,fname,sname,type1,arg1,type2,arg2,type3,arg3) \
+-+type fname(type1 arg1,type2 arg2,type3 arg3) \
+-+{ \
+-+long __res; \
+-+register long __g1 __asm__ ("g1") = __NR_##sname; \
+-+register long __o0 __asm__ ("o0") = (long)(arg1); \
+-+register long __o1 __asm__ ("o1") = (long)(arg2); \
+-+register long __o2 __asm__ ("o2") = (long)(arg3); \
+-+__asm__ __volatile__ ("t 0x10\n\t" \
+-+		      "bcc 1f\n\t" \
+-+		      "mov %%o0, %0\n\t" \
+-+		      "sub %%g0, %%o0, %0\n\t" \
+-+		      "1:\n\t" \
+-+		      : "=r" (__res), "=&r" (__o0) \
+-+		      : "1" (__o0), "r" (__o1), "r" (__o2), "r" (__g1) \
+-+		      : "cc"); \
+-+if (__res < -255 || __res>=0) \
+-+	return (type) __res; \
+-+return -1; \
+-+}
+-+
+-+#define io_syscall4(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4) \
+-+type fname(type1 arg1, type2 arg2, type3 arg3, type4 arg4) \
+-+{ \
+-+long __res; \
+-+register long __g1 __asm__ ("g1") = __NR_##sname; \
+-+register long __o0 __asm__ ("o0") = (long)(arg1); \
+-+register long __o1 __asm__ ("o1") = (long)(arg2); \
+-+register long __o2 __asm__ ("o2") = (long)(arg3); \
+-+register long __o3 __asm__ ("o3") = (long)(arg4); \
+-+__asm__ __volatile__ ("t 0x10\n\t" \
+-+		      "bcc 1f\n\t" \
+-+		      "mov %%o0, %0\n\t" \
+-+		      "sub %%g0, %%o0, %0\n\t" \
+-+		      "1:\n\t" \
+-+		      : "=r" (__res), "=&r" (__o0) \
+-+		      : "1" (__o0), "r" (__o1), "r" (__o2), "r" (__o3), "r" (__g1) \
+-+		      : "cc"); \
+-+if (__res < -255 || __res>=0) \
+-+	return (type) __res; \
+-+return -1; \
+-+}
+-+
+-+#define io_syscall5(type,fname,sname,type1,arg1,type2,arg2,type3,arg3,type4,arg4, \
+-+	  type5,arg5) \
+-+type fname(type1 arg1,type2 arg2,type3 arg3,type4 arg4,type5 arg5) \
+-+{ \
+-+long __res; \
+-+register long __g1 __asm__ ("g1") = __NR_##sname; \
+-+register long __o0 __asm__ ("o0") = (long)(arg1); \
+-+register long __o1 __asm__ ("o1") = (long)(arg2); \
+-+register long __o2 __asm__ ("o2") = (long)(arg3); \
+-+register long __o3 __asm__ ("o3") = (long)(arg4); \
+-+register long __o4 __asm__ ("o4") = (long)(arg5); \
+-+__asm__ __volatile__ ("t 0x10\n\t" \
+-+		      "bcc 1f\n\t" \
+-+		      "mov %%o0, %0\n\t" \
+-+		      "sub %%g0, %%o0, %0\n\t" \
+-+		      "1:\n\t" \
+-+		      : "=r" (__res), "=&r" (__o0) \
+-+		      : "1" (__o0), "r" (__o1), "r" (__o2), "r" (__o3), "r" (__o4), "r" (__g1) \
+-+		      : "cc"); \
+-+if (__res < -255 || __res>=0) \
+-+	return (type) __res; \
+-+return -1; \
+-+}
+-+
+-Index: libaio-0.3.109/src/syscall.h
+-===================================================================
+---- libaio-0.3.109.orig/src/syscall.h
+-+++ libaio-0.3.109/src/syscall.h
+-@@ -24,6 +24,14 @@
+- #include "syscall-alpha.h"
+- #elif defined(__arm__)
+- #include "syscall-arm.h"
+-+#elif defined(__m68k__)
+-+#include "syscall-m68k.h"
+-+#elif defined(__sparc__)
+-+#include "syscall-sparc.h"
+-+#elif defined(__hppa__)
+-+#include "syscall-parisc.h"
+-+#elif defined(__mips__)
+-+#include "syscall-mips.h"
+- #else
+- #error "add syscall-arch.h"
+- #endif
+diff --git a/package/libaio/Config.in b/package/libaio/Config.in
+index cc44cb6..3031c89 100644
+--- a/package/libaio/Config.in
++++ b/package/libaio/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+ 	bool
+-	default y if BR2_arm || BR2_armeb || BR2_i386 || \
++	default y if BR2_aarch64 || BR2_arm || BR2_armeb || BR2_i386 || \
+ 		BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
+ 		BR2_sparc || BR2_x86_64
+ 
+diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
+index deb16e8..7aa8961 100644
+--- a/package/libaio/libaio.hash
++++ b/package/libaio/libaio.hash
 @@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/dhcp/4.1-ESV-R12/dhcp-4.1-ESV-R12.tar.gz.sha256.asc
--sha256	53265d1bf5e2073379df03c73a1a34d38a904307609c0f9cb77223912e753e5f	dhcp-4.1-ESV-R12.tar.gz
-+# Verified from https://ftp.isc.org/isc/dhcp/4.3.3-P1/dhcp-4.3.3-P1.tar.gz.sha256.asc
-+sha256 c11e896dffa1bfbc49462965d3f6dec45534e34068603546d9a236f2aa669921 dhcp-4.3.3-P1.tar.gz
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index c05e694..5cb6043 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
+-# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio/libaio_0.3.109-3.dsc
+-sha256	bf4a457253cbaab215aea75cb6e18dc8d95bbd507e9920661ff9bdd288c8778d	libaio_0.3.109.orig.tar.gz
++# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio/libaio_0.3.110-1.dsc
++sha256	e019028e631725729376250e32b473012f7cb68e1f7275bfc1bbcdd0f8745f7e	libaio_0.3.110.orig.tar.gz
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 53ad7eb..9b28f05 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DHCP_VERSION = 4.1-ESV-R12
-+DHCP_VERSION = 4.3.3-P1
- DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = ISC
-@@ -12,7 +12,8 @@ DHCP_LICENSE_FILES = LICENSE
- DHCP_CONF_ENV = \
- 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
- 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
--	ac_cv_file__dev_random=yes
-+	ac_cv_file__dev_random=yes \
-+	BINDCONFIG='--with-randomdev=/dev/random'
- DHCP_CONF_OPTS = \
- 	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
- 	--with-srv6-lease-file=/var/lib/dhcp/dhcpd6.leases \
-@@ -25,6 +26,29 @@ DHCP_CONF_OPTS = \
- 	--with-relay-pid-file=/var/run/dhcrelay.pid \
- 	--with-relay6-pid-file=/var/run/dhcrelay6.pid
- 
-+# The source for the bind libraries used by dhcp are embedded in the dhcp source
-+# as a tar-ball. Extract the bind source to allow any patches to be applied
-+# during the patch phase.
-+define DHCP_EXTRACT_BIND
-+	cd $(@D)/bind; tar -xvf bind.tar.gz
-+endef
-+DHCP_POST_EXTRACT_HOOKS += DHCP_EXTRACT_BIND
-+
-+# The patchset requires configure et.al. to be regenerated.
-+DHCP_AUTORECONF = YES
-+
-+# bind does not support parallel builds.
-+DHCP_MAKE = $(MAKE1)
-+
-+# bind configure is called via dhcp make instead of dhcp configure. The make env
-+# needs extra values for bind configure.
-+DHCP_MAKE_ENV = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	BUILD_CC="$(HOSTCC)" \
-+	BUILD_CFLAGS="$(HOST_CFLAGS)" \
-+	BUILD_CPPFLAGS="$(HOST_CPPFLAGS)" \
-+	BUILD_LDFLAGS="$(HOST_LDFLAGS)"
-+
- ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
- endif
+-LIBAIO_VERSION = 0.3.109
++LIBAIO_VERSION = 0.3.110
+ LIBAIO_SOURCE = libaio_$(LIBAIO_VERSION).orig.tar.gz
+ LIBAIO_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/liba/libaio
+ LIBAIO_INSTALL_STAGING = YES
