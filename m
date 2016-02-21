@@ -1,32 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Feb 2016 09:38:43 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-02-19
-In-Reply-To: <20160221000639.512d7658@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 21 Feb 2016 00:06:39 +0100")
-References: <20160220073017.2A200101DA7@stock.ovh.net>
- <1455997702.5444.6.camel@embedded.rocks>
- <20160221000639.512d7658@free-electrons.com>
-Message-ID: <871t86cvak.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Feb 2016 09:40:15 +0100
+Subject: [Buildroot] [PATCH] docs/manual: add info about AGPLv3 license
+In-Reply-To: <1456002529-21636-1-git-send-email-yegorslists@googlemail.com>
+ (Yegor Yefremov's message of "Sat, 20 Feb 2016 22:08:49 +0100")
+References: <1456002529-21636-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <87wppybgnk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-Hi,
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
- > Yes, it is really a work-around, but it is so much simpler than adding
- > a BR2_TOOLCHAIN_HAS_GCC_BUG_58952, selecting it for all broken
- > toolchain + adding the autobuilder exceptions that are needed to also
- > exclude the custom external toolchains that are affected.
-
- > (Not sure Peter will agree, since my proposal is not the cleanest
- > solution, but it's by far the one with the least impact.)
-
-Yes, I agree - And preferably send the patch upstream as well!
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
