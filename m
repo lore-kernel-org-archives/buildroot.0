@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:44:54 +0100
-Subject: [Buildroot] [PATCH] ifupdown: bump to version 0.8.8
-In-Reply-To: <1453401915-7117-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1453401915-7117-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160221214454.0a912952@free-electrons.com>
+Date: Sun, 21 Feb 2016 21:50:55 +0100
+Subject: [Buildroot] [git commit branch/next] poppler: install xpdf-headers
+	to enable building of cups-filters
+Message-ID: <20160221205116.CD1DD7FC33@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb992c4fd286714e40f68c9be1bd09a0aa96652d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 21 Jan 2016 15:45:15 -0300, Gustavo Zacarias wrote:
-> Also add a kludge switching the explicit invocation of the ip binary
-> from /bin to /sbin since that's where buildroot installs it.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/ifupdown/ifupdown.hash |  4 ++--
->  package/ifupdown/ifupdown.mk   | 13 +++++++++++--
->  2 files changed, 13 insertions(+), 4 deletions(-)
+Add --enable-xpdf-headers to poppler.mk. Required for succesfull
+build of cups-filters.
 
-Applied to next, thanks.
+Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
+Reviewed-by: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/poppler/poppler.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 6142cba..1113e4b 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -11,7 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPLv2+
+ POPPLER_LICENSE_FILES = COPYING
+ POPPLER_INSTALL_STAGING = YES
+-POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
++POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
++	--enable-xpdf-headers
+ 
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ POPPLER_CONF_OPTS += --enable-cms=lcms2
