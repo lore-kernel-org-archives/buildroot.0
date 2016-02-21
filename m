@@ -1,101 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:59:40 +0100
-Subject: [Buildroot] Rework musl fix patches
-Message-ID: <20160221235940.0b4d71ec@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:46:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/multicat: Add package
+Message-ID: <20160221230123.2ACDA80333@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=ddc2285ff2be6841e5144d3a5749d14fa21ea425
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Your effort to fix musl build issues of a large number of packages is
-very very appreciated. Your latest submissions on the matter have been
-very good, with detailed descriptions, Git formatted patches and
-submission of the resulting fixes to the respective upstream projects.
+multicat is a simple and efficient multicast and transport stream manipulation
+tool.
 
-However, a number of your older patches were still pending in
-patchwork, and do not comply with those requirements. Most of them
-simply borrow a patch from Alpine Linux, OpenEmbedded or OpenWRT, even
-when the patch fixes tons of unrelated things and the explanations are
-poor. Buildroot has higher requirements than Alpine Linux, OE or
-OpenWRT in terms of patch quality and upstream submission.
+Signed-off-by: Julian Scheel <julian@jusst.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in              |  1 +
+ package/multicat/Config.in     | 11 +++++++++++
+ package/multicat/multicat.hash |  4 ++++
+ package/multicat/multicat.mk   | 23 +++++++++++++++++++++++
+ 4 files changed, 39 insertions(+)
 
-Would it be possible to rework those patches, to make sure that:
-
- - For a given package, each musl issue gets fixed by a separate patch
-   in package/<pkg>/.
-
- - Those patches should not be just "fix musl build", but instead a
-   real explanation of what the patch is doing, and how it is not a
-   fix that is musl specific, but a general fix (general for standard
-   conformance, or missing header inclusion, etc.). A detailed
-   description for each patch is needed.
-
- - Those patches should be formatted with Git when the upstream
-   project uses Git.
-
- - When the upstream project is active, those patches should be
-   submitted upstream.
-
-Here are a few examples of problematic patches:
-
- * package/pppd: fix musl build
-
-   A single patch that fixes tons of different issues, with no
-   explanation, and code being commented out instead of removed.
-
- * package/monit: Fix musl build
-
-   No explanation why setting GLOB_ONLYDIR to 0 is safe. Yes,
-   GLOB_ONLYDIR is an optimization, but the monit code doesn't check
-   if the results are directories. It seems to be safe nonetheless
-   because the glob being tested is /proc/[0-9]*, which will probably
-   only return directories. All those assumptions should be
-   explained. Right now, the reviewers of your patches have to do a
-   significant investigation work to verify if the patch is correct or
-   not.
-
-Consequently, I have marked the following musl fixes from you as
-Changes Requested:
-
-    http://patchwork.ozlabs.org/patch/576240/
-    http://patchwork.ozlabs.org/patch/573519/
-    http://patchwork.ozlabs.org/patch/573517/
-    http://patchwork.ozlabs.org/patch/572316/
-    http://patchwork.ozlabs.org/patch/572303/
-    http://patchwork.ozlabs.org/patch/572304/
-    http://patchwork.ozlabs.org/patch/572245/
-    http://patchwork.ozlabs.org/patch/572242/
-    http://patchwork.ozlabs.org/patch/572241/
-    http://patchwork.ozlabs.org/patch/572240/
-    http://patchwork.ozlabs.org/patch/572210/
-    http://patchwork.ozlabs.org/patch/572208/
-    http://patchwork.ozlabs.org/patch/572204/
-    http://patchwork.ozlabs.org/patch/572200/
-    http://patchwork.ozlabs.org/patch/572196/
-    http://patchwork.ozlabs.org/patch/572195/
-    http://patchwork.ozlabs.org/patch/572192/
-    http://patchwork.ozlabs.org/patch/572189/
-    http://patchwork.ozlabs.org/patch/572183/
-    http://patchwork.ozlabs.org/patch/572156/
-    http://patchwork.ozlabs.org/patch/572154/
-    http://patchwork.ozlabs.org/patch/572127/
-    http://patchwork.ozlabs.org/patch/572125/
-    http://patchwork.ozlabs.org/patch/572109/
-    http://patchwork.ozlabs.org/patch/572102/
-    http://patchwork.ozlabs.org/patch/572101/
-    http://patchwork.ozlabs.org/patch/572099/
-    http://patchwork.ozlabs.org/patch/572096/
-
-If you could find the time to rework them as suggested above and
-submit them again, it would be great!
-
-Thanks a lot for this effort!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index c69d632..dc68184 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -28,6 +28,7 @@ menu "Audio and video applications"
+ 	source "package/mpd-mpc/Config.in"
+ 	source "package/mpg123/Config.in"
+ 	source "package/mplayer/Config.in"
++	source "package/multicat/Config.in"
+ 	source "package/musepack/Config.in"
+ 	source "package/ncmpc/Config.in"
+ 	source "package/on2-8170-libs/Config.in"
+diff --git a/package/multicat/Config.in b/package/multicat/Config.in
+new file mode 100644
+index 0000000..8dfb6c1
+--- /dev/null
++++ b/package/multicat/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_MULTICAT
++	bool "multicat"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_BITSTREAM
++	help
++	  Simple and efficient multicast and transport stream manipulation.
++
++	  http://www.videolan.org/projects/multicat.html
++
++comment 'multicat needs a toolchain w/ threads'
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/multicat/multicat.hash b/package/multicat/multicat.hash
+new file mode 100644
+index 0000000..38cf9d7
+--- /dev/null
++++ b/package/multicat/multicat.hash
+@@ -0,0 +1,4 @@
++# from https://get.videolan.org/multicat/2.1/multicat-2.1.tar.bz2.md5
++md5 2e3ecd8dee64f5bd32a61733d4cc2226 multicat-2.1.tar.bz2
++# locally calculated
++sha256 5eabe8d9a3dde452b2d348683cc7da213680551a9d4059c356f7319c6aa9b3d1 multicat-2.1.tar.bz2
+diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
+new file mode 100644
+index 0000000..5909bc5
+--- /dev/null
++++ b/package/multicat/multicat.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# multicat
++#
++################################################################################
++
++MULTICAT_VERSION = 2.1
++MULTICAT_SOURCE = multicat-$(MULTICAT_VERSION).tar.bz2
++MULTICAT_SITE = https://get.videolan.org/multicat/$(MULTICAT_VERSION)
++MULTICAT_LICENSE = GPLv2+
++MULTICAT_LICENSE_FILES = COPYING
++
++MULTICAT_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
++
++define MULTICAT_BUILD_CMDS
++	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define MULTICAT_INSTALL_TARGET_CMDS
++	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
++
++$(eval $(generic-package))
