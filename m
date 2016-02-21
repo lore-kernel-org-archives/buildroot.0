@@ -1,62 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:28:43 +0100
-Subject: [Buildroot] [git commit branch/next] collectd: Add service file
-Message-ID: <20160221132853.0AE017FD26@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 14:29:07 +0100
+Subject: [Buildroot] [PATCH 1/2] collectd: Fix typo
+In-Reply-To: <1456060155-27515-1-git-send-email-maxime.hadjinlian@gmail.com>
+References: <1456060155-27515-1-git-send-email-maxime.hadjinlian@gmail.com>
+Message-ID: <20160221142907.7ec82a66@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f18274a92e4db5c4cac1c248a40cbd3be91db7d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Maxime Hadjinlian,
 
-The service file was taken from Debian.
+On Sun, 21 Feb 2016 14:09:14 +0100, Maxime Hadjinlian wrote:
+> Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> ---
+>  package/collectd/collectd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/collectd/collectd.mk      |  8 ++++++++
- package/collectd/collectd.service | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+)
+Both patches applied to next, thanks!
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index eb66f25..78e24b8 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -185,4 +185,12 @@ define COLLECTD_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/share/collectd/postgresql_default.conf
- endef
- 
-+define COLLECTD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/collectd/collectd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/collectd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/collectd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/collectd/collectd.service b/package/collectd/collectd.service
-new file mode 100644
-index 0000000..e203806
---- /dev/null
-+++ b/package/collectd/collectd.service
-@@ -0,0 +1,17 @@
-+[Unit]
-+Description=Statistics collection and monitoring daemon
-+After=local-fs.target network.target
-+Requires=local-fs.target network.target
-+ConditionPathExists=/etc/collectd.conf
-+
-+[Service]
-+Type=notify
-+NotifyAccess=main
-+EnvironmentFile=-/etc/default/collectd
-+ExecStartPre=/usr/sbin/collectd -t
-+ExecStart=/usr/sbin/collectd
-+Restart=always
-+RestartSec=10
-+
-+[Install]
-+WantedBy=multi-user.target
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
