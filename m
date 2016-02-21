@@ -1,35 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:52:54 +0100
-Subject: [Buildroot] [git commit] package/links: add --with/--without-lzma
-Message-ID: <20160221135332.E840B80E3D@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 14:46:39 +0100
+Subject: [Buildroot] [git commit] package/dvdauthor: add optional support
+	for libfribidi
+Message-ID: <20160221135332.D2DDB7FDC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62ceea5cb5c5ba4c9ba8fe0c86bca7b6d7f49b23
+commit: https://git.buildroot.net/buildroot/commit/?id=be0dbb51ffe9c0beba31b9865aec4c078f98a18d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+When libfribidi was compiled before, dvdauthor will use it as optional
+dependency:
+
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/spumux | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libexpat.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libfontconfig.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libfreetype.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libfribidi.so.0]
+[...]
+
+The build system offers no option to en-/disable libfribidi support:
+https://github.com/ldo/dvdauthor/blob/master/configure.ac#L83
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/links/links.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/dvdauthor/dvdauthor.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 8d7ecba..3515e5f 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -48,7 +48,10 @@ LINKS_DEPENDENCIES += openssl
+diff --git a/package/dvdauthor/dvdauthor.mk b/package/dvdauthor/dvdauthor.mk
+index be006f1..6b90c43 100644
+--- a/package/dvdauthor/dvdauthor.mk
++++ b/package/dvdauthor/dvdauthor.mk
+@@ -34,6 +34,10 @@ ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
+ DVDAUTHOR_DEPENDENCIES += fontconfig
  endif
  
- ifeq ($(BR2_PACKAGE_XZ),y)
-+LINKS_CONF_OPTS += --with-lzma
- LINKS_DEPENDENCIES += xz
-+else
-+LINKS_CONF_OPTS += --without-lzma
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
++ifeq ($(BR2_PACKAGE_LIBFRIBIDI),y)
++DVDAUTHOR_DEPENDENCIES += libfribidi
++endif
++
+ ifeq ($(BR2_PACKAGE_DVDAUTHOR_DVDUNAUTHOR),y)
+ DVDAUTHOR_DEPENDENCIES += libdvdread
+ DVDAUTHOR_CONF_OPTS += --enable-dvdunauthor
