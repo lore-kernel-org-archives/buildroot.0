@@ -1,66 +1,35 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 21 Feb 2016 01:06:24 +0100
-Subject: [Buildroot] [PATCH v4] qt53d: enable assimpsceneparser plugin
-Message-ID: <1456013184-16932-1-git-send-email-ps.report@gmx.net>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 20 Feb 2016 23:58:42 -0200
+Subject: [Buildroot] (no subject)
+Message-ID: <56c919d2e4721_2b3e164487084615@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add hint to help text
-- add assimp dependency
+Bernd Kuhls,
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v3 -> v4:
-  - change to optional dependency on assimp (suggested by Thomas Petazzoni)
-  - always copy plugins/sceneparsers directory (because of new
-    gltfsceneparser plugin)
+On Sat, 20 Feb 2016 23:45:42 +0100, Bernd Kuhls wrote:
+> Subject: [Buildroot] [PATCH 2/2] package/vim: add optional support for
+> 	gmp
 
-Changes v2 -> v3:
-  - no changes
+Typo: s/gmp/gpm/g
 
-Changes v1 -> v2:
-  - no changes
----
- package/qt5/qt53d/Config.in | 2 ++
- package/qt5/qt53d/qt53d.mk  | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> When gmp was compiled before, vim will use it as optional dependency:
 
-diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
-index b2d2912..ff50204 100644
---- a/package/qt5/qt53d/Config.in
-+++ b/package/qt5/qt53d/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_QT53D
- 
- 	  This package corresponds to the qt53d module.
- 
-+	  Enable the assimp package to gain the assimp sceneparser plugin.
-+
- 	  http://doc.qt.io/qt-5/qt3d-index.html
- 
- comment "qt53d module needs an OpenGL-capable backend"
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 810242b..540df73 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -7,7 +7,7 @@
- QT53D_VERSION = $(QT5_VERSION)
- QT53D_SITE = $(QT5_SITE)
- QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
--QT53D_DEPENDENCIES = qt5base qt5declarative
-+QT53D_DEPENDENCIES = $(if $(BR2_PACKAGE_ASSIMP),assimp) qt5base qt5declarative
- QT53D_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-@@ -34,6 +34,7 @@ endef
- ifeq ($(BR2_STATIC_LIBS),)
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- endef
- endif
--- 
-2.1.4
+Typo: s/gmp/gpm/g
+
+It seems silly because these are only typos, but we have both packages
+(gmp and gpm) in buildroot.
+
+> 
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/vim | grep NEEDED | sort
+>  0x0000000000000001 (NEEDED)             Shared library: [libacl.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libgpm.so.2]
+
+Regards,
+Ricardo
