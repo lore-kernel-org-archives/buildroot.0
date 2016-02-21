@@ -1,57 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 16:03:31 +0100
-Subject: [Buildroot] [PATCH v4 1/2] libimxvpuapi: add new package
-In-Reply-To: <1455712071-14629-2-git-send-email-gary.bisson@boundarydevices.com>
-References: <1455712071-14629-1-git-send-email-gary.bisson@boundarydevices.com>
- <1455712071-14629-2-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160221160331.4bc2f8fc@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 16:18:52 +0100
+Subject: [Buildroot] [PATCH 2/2] package/omniorb: add optional support for
+	openssl
+In-Reply-To: <1456067932-12447-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456067932-12447-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456067932-12447-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gary Bisson,
+When openssl was compiled before, omniorb will use it as optional
+dependency:
 
-On Wed, 17 Feb 2016 13:27:50 +0100, Gary Bisson wrote:
-> This is a library for using the i.MX6 VPU. It is an alternative to
-> libfslvpuwrap, hosted on Github, and has an API that features several
-> improvements over libfslvpuwrap, which include:
-> 
-> * User-defined context information associated with input frames, which
-> is passed on to corresponding output frames (to be able to identify
-> which input frame produced which output frame)
-> * Groundwork for future DMA-BUF/BMM/ION/CMA allocator integration, using
-> file descriptors instead of physical addresses
-> * Indicators for when it is safe to try to decode frames, which is
-> critical in multi-threaded playback cases
-> * Simplified, higher-level JPEG en/decoding API, based on the VPU MJPEG
-> codec; useful for picture viewing without the extra boilerplate for
-> VPU-based en/decoding
-> 
-> Changelog 0.10.0 -> 0.10.1:
-> - add debian packaging files
-> - update waf to version 1.8.16
-> - add workaround in wscript to prevent stale pkg-config .pc files
-> - fix memory leak by adding missing IOFreeVirtMem() call in vpulib
-> backend
-> 
-> This patch is based on the Yocto equivalent:
-> https://github.com/Freescale/meta-fsl-arm/commit/e519d6c
-> https://github.com/Freescale/meta-fsl-arm/commit/1dd6a5b
-> 
-> This package has been implicitely tested through gstreamer as the
-> plugins rely on it for vpu decoding:
->  # gst-launch-1.0 playbin uri=file:///root/tears_of_steel_1080p.webm
-> 
-> Tested-by: Peter Seiderer <ps.report@gmx.net>
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> ---
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libomnisslTP4.so.2.0 | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libomniORB4.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libomnithread.so.4]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libssl.so.1.0.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcrypto.so.1.0.0]
+[...]
 
-Both applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/omniorb/omniorb.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thomas
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index 1bbde3b..d278adc 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -30,6 +30,13 @@ HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
+ OMNIORB_CONF_OPTS += --disable-longdouble
+ HOST_OMNIORB_CONF_OPTS += --disable-longdouble
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++OMNIORB_CONF_OPTS += --with-openssl
++OMNIORB_DEPENDENCIES += openssl
++else
++OMNIORB_CONF_OPTS += --without-openssl
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ OMNIORB_DEPENDENCIES += zlib
+ endif
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
