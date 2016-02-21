@@ -1,46 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 18:34:56 +0100
-Subject: [Buildroot] [PATCH 07/10] package/pure-ftpd: add optional support
-	for libsodium
+Date: Sun, 21 Feb 2016 18:34:58 +0100
+Subject: [Buildroot] [PATCH 09/10] package/lxc: add optional support for
+	libseccomp
 In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456076099-19607-7-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456076099-19607-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libsodium was compiled before, pure-ftpd will use it as optional
+When libseccomp was compiled before, lxc will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/pure-statsdecode | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libsodium.so.17]
- 0x0000000000000001 (NEEDED)             Shared library: [libcrypt.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
-
-The build system offers no option to en-/disable libsodium support,
-check configure.ac, line 953.
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/libexec/lxc/lxc-monitord | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [liblxc.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libseccomp.so.2]
+[...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pure-ftpd/pure-ftpd.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/lxc/lxc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 8df4c23..e1040fa 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -27,6 +27,10 @@ else
- PURE_FTPD_CONF_OPTS += --without-capabilities
- endif
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index e382f4d..8190969 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -15,4 +15,11 @@ LXC_CONF_OPTS = --disable-apparmor --with-distro=buildroot \
+ 	--disable-lua --disable-python \
+ 	$(if $(BR2_PACKAGE_BASH),,--disable-bash)
  
-+ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-+PURE_FTPD_DEPENDENCIES += libsodium
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++LXC_CONF_OPTS += --enable-seccomp
++LXC_DEPENDENCIES += libseccomp
++else
++LXC_CONF_OPTS += --disable-seccomp
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PURE_FTPD_CONF_OPTS += --with-tls
- PURE_FTPD_DEPENDENCIES += openssl
+ $(eval $(autotools-package))
 -- 
 2.7.0
