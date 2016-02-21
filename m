@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:30:09 +0100
-Subject: [Buildroot] [git commit] pkg-utils: mask tput failure for
-	non-interactive sessions
-Message-ID: <20160221173138.D6C1380E44@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 18:31:46 +0100
+Subject: [Buildroot] [PATCH v2 1/1] pkg-utils: mask tput failure for
+ non-interactive sessions
+In-Reply-To: <BLU436-SMTP109FC79F88920A925196F40A0A20@phx.gbl>
+References: <BLU436-SMTP109FC79F88920A925196F40A0A20@phx.gbl>
+Message-ID: <20160221183146.673c827c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2406955bce3e6371b5ebb3faac65d1aca9d3e108
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear James Knight,
 
-When invoking a build from a non-interactive session (for example, a
-Jenkins build), there is no terminal session to modify. When preparing
-variables to track the bold and boldoff mode sequences, the `tput`
-command will always fail as there is no terminal to query. The following
-change masks the error message when `tput` fails; leaving the TERM_BOLD
-and TERM_RESET variables empty.
+On Sun, 21 Feb 2016 11:04:58 -0500, James Knight wrote:
+> When invoking a build from a non-interactive session (for example, a
+> Jenkins build), there is no terminal session to modify. When preparing
+> variables to track the bold and boldoff mode sequences, the `tput`
+> command will always fail as there is no terminal to query. The following
+> change masks the error message when `tput` fails; leaving the TERM_BOLD
+> and TERM_RESET variables empty.
+> 
+> Signed-off-by: James Knight <james.d.knight@live.com>
+> ---
+> Changes v1 -> v2:
+>   - Removed space in stderr redirection (suggested by Yann E. MORIN).
+> ---
+>  package/pkg-utils.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: James Knight <james.d.knight@live.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-utils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 44bd2c9..f88313a 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -84,8 +84,8 @@ suitable-extractor = $(INFLATE$(suffix $(1)))
- 
- # MESSAGE Macro -- display a message in bold type
- MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
--TERM_BOLD := $(shell tput smso)
--TERM_RESET := $(shell tput rmso)
-+TERM_BOLD := $(shell tput smso 2>/dev/null)
-+TERM_RESET := $(shell tput rmso 2>/dev/null)
- 
- # Utility functions for 'find'
- # findfileclauses(filelist) => -name 'X' -o -name 'Y'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
