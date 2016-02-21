@@ -1,41 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Feb 2016 10:17:02 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-02-19
-In-Reply-To: <20160221100114.591bd29e@free-electrons.com> (Thomas Petazzoni's
- message of "Sun, 21 Feb 2016 10:01:14 +0100")
-References: <20160220073017.2A200101DA7@stock.ovh.net>
- <1455997702.5444.6.camel@embedded.rocks>
- <20160221000639.512d7658@free-electrons.com>
- <871t86cvak.fsf@dell.be.48ers.dk>
- <20160221100114.591bd29e@free-electrons.com>
-Message-ID: <87si0mbey9.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Feb 2016 10:21:53 +0100
+Subject: [Buildroot] [PATCH] sysklogd: override SKFLAGS with
+	TARGET_CFLAGS
+In-Reply-To: <56C8FE2C.1070000@mind.be> (Arnout Vandecappelle's message of
+ "Sun, 21 Feb 2016 01:00:44 +0100")
+References: <1455967730-10332-1-git-send-email-romain.naour@gmail.com>
+ <56C8FE2C.1070000@mind.be>
+Message-ID: <87oababeq6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
 Hi,
 
- >> > (Not sure Peter will agree, since my proposal is not the cleanest
- >> > solution, but it's by far the one with the least impact.)
- >> 
- >> Yes, I agree - And preferably send the patch upstream as well!
+ >> +# Override SKFLAGS which is used as CFLAGS.
+ >> define SYSKLOGD_BUILD_CMDS
+ >> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ >> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) SKFLAGS="$(TARGET_CFLAGS) -DSYSV" \
 
- > Well, in essence, this patch will not be accepted upstream. It is a
- > crappy work-around for a compiler bug, so it would be very logical for
- > upstream to reject this patch.
+ >  Doesn't that make the bug above reappear when you have configured
+ > BR2_OPTIMIZE_3? In other words, shouldn't we do something like:
 
-Well, true - But presumably other Boost users may have affected
-toolchains, so perhaps they do want to carry it to help people (I don't
-know what the boost policy is, their "creative" C++ template code
-probably triggers various other compiler bugs).
+ > ifeq ($(BR2_TOOLCHAIN...),y)
+ > SYSKLOGD_CFLAGS = $(subst -O3,-O2,$(TARGET_CFLAGS))
+ > else
+ > SYSKLOGD_CFLAGS = $(TARGET_CFLAGS)
+ > endif
+ > SYSKLOGD_CFLAGS += -DSYSV
 
-It's imho worth a try to send upstream.
+True, but chances are that other packages will be affected by that -O3
+issue with the 2012.03, so perhaps the safest option is to make
+BR2_OPTIMIZE_3 depend on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
