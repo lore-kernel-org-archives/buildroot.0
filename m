@@ -1,33 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:22:22 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/cairo: add optional support
- for lzo
-In-Reply-To: <1456066049-28163-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456066049-28163-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160221182222.41cec685@free-electrons.com>
+Date: Sun, 21 Feb 2016 18:23:36 +0100
+Subject: [Buildroot] [PATCH 1/7] package/gstreamer1/gstreamer1: add
+ optional support for libcap
+In-Reply-To: <1456066125-28379-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456066125-28379-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221182336.20b8066c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Bernd,
 
-On Sun, 21 Feb 2016 15:47:29 +0100, Bernd Kuhls wrote:
-> When lzo was compiled before, cairo will use it as optional dependency:
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/cairo-sphinx | grep NEEDED | sort
-> [...]
->  0x0000000000000001 (NEEDED)             Shared library: [liblzo2.so.2]
-> 
-> The build system offers no option to en-/disable lzo support:
-> https://cgit.freedesktop.org/cairo/tree/configure.ac#n54
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: moved lzo outside BR2_PACKAGE_CAIRO_TEE option (Arnout)
+On Sun, 21 Feb 2016 15:48:39 +0100, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+> +ifeq ($(BR2_PACKAGE_LIBCAP),y)
+> +GSTREAMER1_CONF_OPTS += --with-ptp-helper-permissions=capabilities
+> +GSTREAMER1_DEPENDENCIES += libcap
+> +else
+> +GSTREAMER1_CONF_OPTS += --with-ptp-helper-permissions=auto
+> +endif
+
+I am not entirely sure about this one. When BR2_PACKAGE_LIBCAP=y, are
+we sure that the user wants to use capabilities for everything
+including this GStreamer feature? There are other possible values for
+--with-ptp-helper-permissions. So it would be good to have a commit log
+that details a bit more the reasoning, other than just "it might use
+libcap, so let's use it".
 
 Thomas
 -- 
