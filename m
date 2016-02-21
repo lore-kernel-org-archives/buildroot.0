@@ -1,48 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:28:48 +0100
-Subject: [Buildroot] [git commit] package/omniorb: add optional support for
-	zlib
-Message-ID: <20160221172914.5EB1D801DD@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 18:29:28 +0100
+Subject: [Buildroot] [PATCH v2 1/4] package/sdl_sound: add optional
+ support for libmodplug
+In-Reply-To: <1456066610-32050-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456066610-32050-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221182928.32e1e455@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05f79602f531ea04e34359c44e7c35e5e2168bdb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-When zlib was compiled before, omniorb will use it as optional
-dependency:
+On Sun, 21 Feb 2016 15:56:47 +0100, Bernd Kuhls wrote:
+> When libmodplug was compiled before, sdl_sound will use it as optional
+> dependency:
+> 
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libSDL_sound-1.0.so.1.0.2 | grep NEEDED | sort
+>  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libmodplug.so.1]
+> [...]
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: add --enable/disable-modplug (Thomas)
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libomniZIOP4.so.2.0 | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libomniORB4.so.2]
- 0x0000000000000001 (NEEDED)             Shared library: [libomnithread.so.4]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
-[...]
+All four patches applied to master, thanks.
 
-The build system offers no option to en-/disable zlib support,
-check acinclude.m4, line 435+.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/omniorb/omniorb.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index aaf3bf3..1bbde3b 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -30,6 +30,10 @@ HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
- OMNIORB_CONF_OPTS += --disable-longdouble
- HOST_OMNIORB_CONF_OPTS += --disable-longdouble
- 
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+OMNIORB_DEPENDENCIES += zlib
-+endif
-+
- # The EmbeddedSystem define (set below in OMNIORB_ADJUST_TOOLDIR)
- # enables building of just the lib and disables building of
- # tools/apps/services.  In some cases the apps/services are still
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
