@@ -1,52 +1,70 @@
 From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun, 21 Feb 2016 17:16:15 -0500
-Subject: [Buildroot] [PATCH v2 10/18] erlang-p1_stun: bump to version
-	0.9.0
-In-Reply-To: <20160221001247.1f188600@free-electrons.com>
-References: <1454443064-14269-1-git-send-email-fhunleth@troodon-software.com>
- <1454443064-14269-11-git-send-email-fhunleth@troodon-software.com>
- <20160220233043.2be4fa0c@free-electrons.com>
- <CA+-urNRQdWeYMt4RxONJFMDTBV9EtcD_+TBV3G-PismHVUhhOA@mail.gmail.com>
- <20160221001247.1f188600@free-electrons.com>
-Message-ID: <CA+-urNTkNGraZicUOm_wT_OrAajb7KkvhMZqZbs_AAKDHHmycw@mail.gmail.com>
+Date: Sun, 21 Feb 2016 17:16:27 -0500
+Subject: [Buildroot] [PATCH] erlang-fast_tls: remove unused package
+Message-ID: <1456092987-17791-1-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This package was added in error when updating ejabberd dependencies. It
+is not used.
 
-On Sat, Feb 20, 2016 at 6:12 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sat, 20 Feb 2016 18:09:20 -0500, Frank Hunleth wrote:
->
->> Yes, I generally have the same preference. In the Erlang world, the
->> style is to use underscores since module names can be represented as
->> atoms. In theory, you can quote atoms if you want them to have
->> hyphens, but it doesn't look pretty. In the end, I don't think that it
->> bothers me either way, so I'm happy to leave it as is.
->
-> Ok, fine.
->
->> >>  config BR2_PACKAGE_ERLANG_P1_STUN
->> >> -     bool "erlang-p1-stun"
->> >> -     select BR2_PACKAGE_ERLANG_P1_TLS
->> >> +     bool "erlang-p1_stun"
->> >> +     select BR2_PACKAGE_ERLANG_FAST_TLS
->> >
->> > Build testing has shown that BR2_PACKAGE_ERLANG_FAST_TLS was not the
->> > proper dependency, and instead keeping BR2_PACKAGE_ERLANG_P1_TLS was
->> > the right solution. Could you double check why you switched to
->> > fast_tls ?
->>
->> This was a mistake on my part. I fixed it in a patch that I hadn't
->> sent to the list, so thanks for fixing that for me.
->
-> So, is the fast_tls package still useful?
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/Config.in                          |  1 -
+ package/erlang-fast_tls/Config.in          |  8 --------
+ package/erlang-fast_tls/erlang-fast_tls.mk | 14 --------------
+ 3 files changed, 23 deletions(-)
+ delete mode 100644 package/erlang-fast_tls/Config.in
+ delete mode 100644 package/erlang-fast_tls/erlang-fast_tls.mk
 
-No. I'll send a patch that removes it.
-
-Frank
+diff --git a/package/Config.in b/package/Config.in
+index 23fd62c..c5b328e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -472,7 +472,6 @@ menu "Interpreter languages and scripting"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
+ menu "Erlang libraries/modules"
+-	source "package/erlang-fast_tls/Config.in"
+ 	source "package/erlang-goldrush/Config.in"
+ 	source "package/erlang-lager/Config.in"
+ 	source "package/erlang-p1-cache-tab/Config.in"
+diff --git a/package/erlang-fast_tls/Config.in b/package/erlang-fast_tls/Config.in
+deleted file mode 100644
+index 3bf52a1..0000000
+--- a/package/erlang-fast_tls/Config.in
++++ /dev/null
+@@ -1,8 +0,0 @@
+-config BR2_PACKAGE_ERLANG_FAST_TLS
+-	bool "erlang-fast_tls"
+-	select BR2_PACKAGE_ERLANG_P1_UTILS
+-	select BR2_PACKAGE_OPENSSL
+-	help
+-	  TLS / SSL OpenSSL-based native driver for Erlang / Elixir
+-
+-	  https://github.com/processone/fast_tls
+diff --git a/package/erlang-fast_tls/erlang-fast_tls.mk b/package/erlang-fast_tls/erlang-fast_tls.mk
+deleted file mode 100644
+index 63c55c5..0000000
+--- a/package/erlang-fast_tls/erlang-fast_tls.mk
++++ /dev/null
+@@ -1,14 +0,0 @@
+-################################################################################
+-#
+-# erlang-fast_tls
+-#
+-################################################################################
+-
+-ERLANG_FAST_TLS_VERSION = 1.0.0
+-ERLANG_FAST_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_FAST_TLS_VERSION))
+-ERLANG_FAST_TLS_LICENSE = Apache-2.0
+-ERLANG_FAST_TLS_LICENSE_FILES = LICENSE.txt
+-ERLANG_FAST_TLS_INSTALL_STAGING = YES
+-ERLANG_FAST_TLS_DEPENDENCIES = openssl erlang-p1-utils
+-
+-$(eval $(rebar-package))
+-- 
+2.5.0
