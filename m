@@ -1,81 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:38:31 +0100
-Subject: [Buildroot] [git commit] package/lz4: bump version to r131
-Message-ID: <20160302202759.30B277FA0E@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 23:00:16 +0100
+Subject: [Buildroot] [git commit] package/pound: new package
+Message-ID: <20160302202755.E440D7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ad38a4fc2007df4bee9a941aed46c8771b6a84c
+commit: https://git.buildroot.net/buildroot/commit/?id=4a3b3a8ba5ef719d4aaee84b6d7ed9bb07663804
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-systemd v228 requires lz4 >= 125
-
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-[Thomas: only pass PREFIX=/usr at install time instead of using
-LZ4_MAKE_OPTS, and also pass it for the host installation.]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: pass --with-owner/--with-group instead of SEDing the
+Makefile.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lz4/lz4.hash |  2 ++
- package/lz4/lz4.mk   | 15 +++++++++------
- 2 files changed, 11 insertions(+), 6 deletions(-)
+ package/Config.in        |  1 +
+ package/pound/Config.in  | 18 ++++++++++++++++++
+ package/pound/pound.hash |  2 ++
+ package/pound/pound.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
 
-diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+diff --git a/package/Config.in b/package/Config.in
+index c0b3b17..23fd62c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1448,6 +1448,7 @@ endif
+ 	source "package/p910nd/Config.in"
+ 	source "package/phidgetwebservice/Config.in"
+ 	source "package/portmap/Config.in"
++	source "package/pound/Config.in"
+ 	source "package/pppd/Config.in"
+ 	source "package/pptp-linux/Config.in"
+ 	source "package/privoxy/Config.in"
+diff --git a/package/pound/Config.in b/package/pound/Config.in
 new file mode 100644
-index 0000000..1281284
+index 0000000..91c29ea
 --- /dev/null
-+++ b/package/lz4/lz4.hash
++++ b/package/pound/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_POUND
++	bool "pound"
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_OPENSSL
++	help
++	  The Pound program is a reverse proxy, load balancer and HTTPS
++	  front-end for Web server(s). Pound was developed to enable
++	  distributing the load among several Web-servers and to allow
++	  for a convenient SSL wrapper for those Web servers that do not
++	  offer it natively.
++
++	  http://www.apsis.ch/pound
++
++comment "pound needs a toolchain w/ dynamic library, threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/pound/pound.hash b/package/pound/pound.hash
+new file mode 100644
+index 0000000..6908b90
+--- /dev/null
++++ b/package/pound/pound.hash
 @@ -0,0 +1,2 @@
-+# sha256 locally computed
-+sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 38e10d8..576b2a2 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LZ4_VERSION = r123
-+LZ4_VERSION = r131
- LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
- LZ4_LICENSE = BSD-2c
-@@ -12,7 +12,7 @@ LZ4_LICENSE_FILES = LICENSE
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- define LZ4_DISABLE_SHARED
--	$(SED) '/SHARED/d' $(@D)/Makefile
-+	$(SED) '/SHARED/d' $(@D)/lib/Makefile
- endef
- LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
- endif
-@@ -22,19 +22,22 @@ define HOST_LZ4_BUILD_CMDS
- endef
- 
- define HOST_LZ4_INSTALL_CMDS
--	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
-+		PREFIX=/usr install -C $(@D)
- endef
- 
- define LZ4_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib
- endef
- 
- define LZ4_INSTALL_STAGING_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
-+		PREFIX=/usr install -C $(@D)
- endef
- 
- define LZ4_INSTALL_TARGET_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
-+		PREFIX=/usr install -C $(@D)/lib
- endef
- 
- $(eval $(generic-package))
++# Locally computed
++sha256	cdfbf5a7e8dc8fbbe0d6c1e83cd3bd3f2472160aac65684bb01ef661c626a8e4	Pound-2.7.tgz
+diff --git a/package/pound/pound.mk b/package/pound/pound.mk
+new file mode 100644
+index 0000000..4086642
+--- /dev/null
++++ b/package/pound/pound.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# pound
++#
++################################################################################
++
++POUND_VERSION = 2.7
++POUND_SITE = http://www.apsis.ch/pound
++POUND_SOURCE = Pound-$(POUND_VERSION).tgz
++POUND_LICENSE = GPLv3+
++POUND_LICENSE_FILES = GPL.txt
++POUND_DEPENDENCIES = openssl
++
++# Force owner/group to us, otherwise it will try proxy:proxy by
++# default.
++POUND_CONF_OPTS = \
++	--with-owner=$(shell id -un) \
++	--with-group=$(shell id -gn)
++
++ifeq ($(BR2_PACKAGE_PCRE),y)
++POUND_DEPENDENCIES += pcre
++endif
++
++$(eval $(autotools-package))
