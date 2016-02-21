@@ -1,39 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 18:20:09 +0100
-Subject: [Buildroot] [PATCH] package/util-linux: remove patch for uClibc
- support
-In-Reply-To: <56C9E6FD.2070707@gmail.com>
-References: <1455920889-14777-1-git-send-email-romain.naour@gmail.com>
- <56C8F75B.7060701@mind.be>
- <20160221151047.70803045@free-electrons.com>
- <56C9E6FD.2070707@gmail.com>
-Message-ID: <20160221182009.4ad78b2f@free-electrons.com>
+Date: Sun, 21 Feb 2016 18:22:22 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/cairo: add optional support
+ for lzo
+In-Reply-To: <1456066049-28163-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456066049-28163-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221182222.41cec685@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Bernd Kuhls,
 
-On Sun, 21 Feb 2016 17:34:05 +0100, Romain Naour wrote:
-
-> > Though it looks like this smartcols library also uses fork(), so it
-> > anyway cannot work properly.
-> > 
-> > Romain, it seems like your patch is not completely correct, so I've
-> > marked it as Rejected.
+On Sun, 21 Feb 2016 15:47:29 +0100, Bernd Kuhls wrote:
+> When lzo was compiled before, cairo will use it as optional dependency:
 > 
-> Ok no problem, I probably didn't selected the good util-linux option... my bad.
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/cairo-sphinx | grep NEEDED | sort
+> [...]
+>  0x0000000000000001 (NEEDED)             Shared library: [liblzo2.so.2]
+> 
+> The build system offers no option to en-/disable lzo support:
+> https://cgit.freedesktop.org/cairo/tree/configure.ac#n54
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: moved lzo outside BR2_PACKAGE_CAIRO_TEE option (Arnout)
 
-util-linux itself build fine. It's then if you try to link a program
-with libsmartcols.
-
-But on the other hand, libsmartcols uses fork(), which cannot be used
-on no-MMU platforms... So the fact that libsmartcols uses mkostemp()
-is maybe not that relevant.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
