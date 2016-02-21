@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:29:30 +0100
-Subject: [Buildroot] [PATCH] erlang-fast_tls: remove unused package
-In-Reply-To: <1456092987-17791-1-git-send-email-fhunleth@troodon-software.com>
-References: <1456092987-17791-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160221232930.638777a0@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:29:41 +0100
+Subject: [Buildroot] [PATCH v2 1/2] python-iniparse: new package
+In-Reply-To: <1454193970-22544-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+References: <1454193970-22544-1-git-send-email-mr.zoltan.gyarmati@gmail.com>
+Message-ID: <20160221232941.647837e4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Frank Hunleth,
+Dear Zoltan Gyarmati,
 
-On Sun, 21 Feb 2016 17:16:27 -0500, Frank Hunleth wrote:
-> This package was added in error when updating ejabberd dependencies. It
-> is not used.
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+On Sat, 30 Jan 2016 23:46:09 +0100, Zoltan Gyarmati wrote:
+> Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 > ---
->  package/Config.in                          |  1 -
->  package/erlang-fast_tls/Config.in          |  8 --------
->  package/erlang-fast_tls/erlang-fast_tls.mk | 14 --------------
->  3 files changed, 23 deletions(-)
->  delete mode 100644 package/erlang-fast_tls/Config.in
->  delete mode 100644 package/erlang-fast_tls/erlang-fast_tls.mk
+> Changes v1 -> v2:
+>   - add sha256 hash
+>   - whitespace and line length fixes
+> ---
+>  package/Config.in                            |  1 +
+>  package/python-iniparse/Config.in            | 11 +++++++++++
+>  package/python-iniparse/python-iniparse.hash |  4 ++++
+>  package/python-iniparse/python-iniparse.mk   | 14 ++++++++++++++
+>  4 files changed, 30 insertions(+)
+>  create mode 100644 package/python-iniparse/Config.in
+>  create mode 100644 package/python-iniparse/python-iniparse.hash
+>  create mode 100644 package/python-iniparse/python-iniparse.mk
 
-Applied to next, thanks.
+Both patches applied to next, thanks!
 
 Thomas
 -- 
