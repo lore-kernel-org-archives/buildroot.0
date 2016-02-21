@@ -1,70 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:29:18 +0100
-Subject: [Buildroot] [git commit] erlang-fast_tls: remove unused package
-Message-ID: <20160302202756.1485A7FA0E@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 23:28:12 +0100
+Subject: [Buildroot] [git commit] python-iniparse: new package
+Message-ID: <20160302202755.F35177FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d14100fb4e6ddcf7eff01fe9c49676ccc3c7f1b
+commit: https://git.buildroot.net/buildroot/commit/?id=699a992f9b0f1f98583e87b564145c2606f695f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package was added in error when updating ejabberd dependencies. It
-is not used.
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |  1 -
- package/erlang-fast_tls/Config.in          |  8 --------
- package/erlang-fast_tls/erlang-fast_tls.mk | 14 --------------
- 3 files changed, 23 deletions(-)
+ package/Config.in                            |  1 +
+ package/python-iniparse/Config.in            | 11 +++++++++++
+ package/python-iniparse/python-iniparse.hash |  4 ++++
+ package/python-iniparse/python-iniparse.mk   | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index c5442de..c69d632 100644
+index 23fd62c..ba50199 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -472,7 +472,6 @@ menu "Interpreter languages and scripting"
- 	source "package/erlang/Config.in"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
--	source "package/erlang-fast_tls/Config.in"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-lager/Config.in"
- 	source "package/erlang-p1-cache-tab/Config.in"
-diff --git a/package/erlang-fast_tls/Config.in b/package/erlang-fast_tls/Config.in
-deleted file mode 100644
-index 3bf52a1..0000000
---- a/package/erlang-fast_tls/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_ERLANG_FAST_TLS
--	bool "erlang-fast_tls"
--	select BR2_PACKAGE_ERLANG_P1_UTILS
--	select BR2_PACKAGE_OPENSSL
--	help
--	  TLS / SSL OpenSSL-based native driver for Erlang / Elixir
--
--	  https://github.com/processone/fast_tls
-diff --git a/package/erlang-fast_tls/erlang-fast_tls.mk b/package/erlang-fast_tls/erlang-fast_tls.mk
-deleted file mode 100644
-index 63c55c5..0000000
---- a/package/erlang-fast_tls/erlang-fast_tls.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# erlang-fast_tls
--#
--################################################################################
--
--ERLANG_FAST_TLS_VERSION = 1.0.0
--ERLANG_FAST_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_FAST_TLS_VERSION))
--ERLANG_FAST_TLS_LICENSE = Apache-2.0
--ERLANG_FAST_TLS_LICENSE_FILES = LICENSE.txt
--ERLANG_FAST_TLS_INSTALL_STAGING = YES
--ERLANG_FAST_TLS_DEPENDENCIES = openssl erlang-p1-utils
--
--$(eval $(rebar-package))
+@@ -656,6 +656,7 @@ menu "External python modules"
+ 	source "package/python-httplib2/Config.in"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-idna/Config.in"
++	source "package/python-iniparse/Config.in"
+ 	source "package/python-ipaddr/Config.in"
+ 	source "package/python-ipaddress/Config.in"
+ 	source "package/python-ipy/Config.in"
+diff --git a/package/python-iniparse/Config.in b/package/python-iniparse/Config.in
+new file mode 100644
+index 0000000..65c1064
+--- /dev/null
++++ b/package/python-iniparse/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_INIPARSE
++	bool "python-iniparse"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  iniparse is an INI parser for Python which is API compatible
++	  with the standard library's ConfigParser, preserves
++	  structure of INI files (order of sections & options,
++	  indentation, comments, and blank lines are preserved when
++	  data is updated), and is more convenient to use.
++
++	  https://pypi.python.org/pypi/iniparse
+diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
+new file mode 100644
+index 0000000..d7d8e93
+--- /dev/null
++++ b/package/python-iniparse/python-iniparse.hash
+@@ -0,0 +1,4 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e573e9e9733d97623881ce9bbe5eca6, sha256 locally computed
++md5 5e573e9e9733d97623881ce9bbe5eca6 iniparse-0.4.tar.gz
++sha256 abc1ee12d2cfb2506109072d6c21e40b6c75a3fe90a9c924327d80bc0d99c054  iniparse-0.4.tar.gz
++
+diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
+new file mode 100644
+index 0000000..b00e0c4
+--- /dev/null
++++ b/package/python-iniparse/python-iniparse.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-iniparse
++#
++################################################################################
++
++PYTHON_INIPARSE_VERSION = 0.4
++PYTHON_INIPARSE_SOURCE = iniparse-$(PYTHON_INIPARSE_VERSION).tar.gz
++PYTHON_INIPARSE_SITE = https://pypi.python.org/packages/source/i/iniparse
++PYTHON_INIPARSE_LICENSE = Python software foundation license v2, MIT
++PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
++PYTHON_INIPARSE_SETUP_TYPE = distutils
++
++$(eval $(python-package))
