@@ -1,70 +1,78 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Sun, 21 Feb 2016 17:16:27 -0500
-Subject: [Buildroot] [PATCH] erlang-fast_tls: remove unused package
-Message-ID: <1456092987-17791-1-git-send-email-fhunleth@troodon-software.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 21 Feb 2016 23:28:12 +0100
+Subject: [Buildroot] [git commit branch/next] crudini: new package
+Message-ID: <20160221222828.6AB9C7FD46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package was added in error when updating ejabberd dependencies. It
-is not used.
+commit: https://git.buildroot.net/buildroot/commit/?id=8b62b1b45a8364801b46569b5d3fd4ae489f76b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in                          |  1 -
- package/erlang-fast_tls/Config.in          |  8 --------
- package/erlang-fast_tls/erlang-fast_tls.mk | 14 --------------
- 3 files changed, 23 deletions(-)
- delete mode 100644 package/erlang-fast_tls/Config.in
- delete mode 100644 package/erlang-fast_tls/erlang-fast_tls.mk
+ package/Config.in            |  1 +
+ package/crudini/Config.in    |  9 +++++++++
+ package/crudini/crudini.hash |  3 +++
+ package/crudini/crudini.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 23fd62c..c5b328e 100644
+index ba50199..c5442de 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -472,7 +472,6 @@ menu "Interpreter languages and scripting"
- 	source "package/erlang/Config.in"
- if BR2_PACKAGE_ERLANG
- menu "Erlang libraries/modules"
--	source "package/erlang-fast_tls/Config.in"
- 	source "package/erlang-goldrush/Config.in"
- 	source "package/erlang-lager/Config.in"
- 	source "package/erlang-p1-cache-tab/Config.in"
-diff --git a/package/erlang-fast_tls/Config.in b/package/erlang-fast_tls/Config.in
-deleted file mode 100644
-index 3bf52a1..0000000
---- a/package/erlang-fast_tls/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_ERLANG_FAST_TLS
--	bool "erlang-fast_tls"
--	select BR2_PACKAGE_ERLANG_P1_UTILS
--	select BR2_PACKAGE_OPENSSL
--	help
--	  TLS / SSL OpenSSL-based native driver for Erlang / Elixir
--
--	  https://github.com/processone/fast_tls
-diff --git a/package/erlang-fast_tls/erlang-fast_tls.mk b/package/erlang-fast_tls/erlang-fast_tls.mk
-deleted file mode 100644
-index 63c55c5..0000000
---- a/package/erlang-fast_tls/erlang-fast_tls.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# erlang-fast_tls
--#
--################################################################################
--
--ERLANG_FAST_TLS_VERSION = 1.0.0
--ERLANG_FAST_TLS_SITE = $(call github,processone,fast_tls,$(ERLANG_FAST_TLS_VERSION))
--ERLANG_FAST_TLS_LICENSE = Apache-2.0
--ERLANG_FAST_TLS_LICENSE_FILES = LICENSE.txt
--ERLANG_FAST_TLS_INSTALL_STAGING = YES
--ERLANG_FAST_TLS_DEPENDENCIES = openssl erlang-p1-utils
--
--$(eval $(rebar-package))
--- 
-2.5.0
+@@ -1559,6 +1559,7 @@ endif
+ comment "Utilities"
+ 	source "package/at/Config.in"
+ 	source "package/ccrypt/Config.in"
++	source "package/crudini/Config.in"
+ 	source "package/dialog/Config.in"
+ 	source "package/dtach/Config.in"
+ 	source "package/file/Config.in"
+diff --git a/package/crudini/Config.in b/package/crudini/Config.in
+new file mode 100644
+index 0000000..e4e26e5
+--- /dev/null
++++ b/package/crudini/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_CRUDINI
++	bool "crudini"
++	depends on BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON_INIPARSE # runtime
++	help
++	  A utility for handling ini files from the command line and
++	  shell scripts
++
++	  https://pypi.python.org/pypi/crudini
+diff --git a/package/crudini/crudini.hash b/package/crudini/crudini.hash
+new file mode 100644
+index 0000000..b9aaecf
+--- /dev/null
++++ b/package/crudini/crudini.hash
+@@ -0,0 +1,3 @@
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=7d1313f1bb9800db9cbceaa518bcf212, sha256 locally computed
++md5    7d1313f1bb9800db9cbceaa518bcf212 crudini-0.7.tar.gz
++sha256 5d493ae6600e54f9e0296b12d3adba99b88a439d8c4b2ebf9bc6f9c0613a03d7  crudini-0.7.tar.gz
+diff --git a/package/crudini/crudini.mk b/package/crudini/crudini.mk
+new file mode 100644
+index 0000000..d797efc
+--- /dev/null
++++ b/package/crudini/crudini.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# crudini
++#
++################################################################################
++
++CRUDINI_VERSION = 0.7
++CRUDINI_SOURCE = crudini-$(CRUDINI_VERSION).tar.gz
++CRUDINI_SITE = https://pypi.python.org/packages/source/c/crudini
++CRUDINI_SETUP_TYPE = setuptools
++CRUDINI_LICENSE = GPLv2
++CRUDINI_LICENSE_FILES = COPYING
++
++$(eval $(python-package))
