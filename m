@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:27:35 +0100
-Subject: [Buildroot] [git commit] package/mediastreamer: add optional
-	support for libvpx
-Message-ID: <20160221202739.1DB1A817CE@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 21:29:07 +0100
+Subject: [Buildroot] [git commit] package/mutt: add optional support for
+	libidn
+Message-ID: <20160221202912.06A4F817EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a93d7c8da7ec93cfa94c447d3dc9c3a21469509a
+commit: https://git.buildroot.net/buildroot/commit/?id=751e58f606ce5e40194ce929d713ccafb1328888
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libvpx was compiled before, mediastreamer will use it as optional
+When libidn was compiled before, mutt will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libmediastreamer_voip.so.3.0.0 | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libmediastreamer_base.so.3]
- 0x0000000000000001 (NEEDED)             Shared library: [libopus.so.0]
- 0x0000000000000001 (NEEDED)             Shared library: [libvpx.so.2]
-[...]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mutt | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libncurses.so.5]
+ 0x0000000000000001 (NEEDED)             Shared library: [libidn.so.11]
+ 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mediastreamer/mediastreamer.mk | 7 +++++++
+ package/mutt/mutt.mk | 7 +++++++
  1 file changed, 7 insertions(+)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index cf25196..81f5b50 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -27,6 +27,13 @@ else
- MEDIASTREAMER_CONF_OPTS += --disable-upnp
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index b07f9b2..14c5be9 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -17,6 +17,13 @@ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBVPX),y)
-+MEDIASTREAMER_CONF_OPTS += --enable-vp8
-+MEDIASTREAMER_DEPENDENCIES += libvpx
++ifeq ($(BR2_PACKAGE_LIBIDN),y)
++MUTT_DEPENDENCIES += libidn
++MUTT_CONF_OPTS += --with-idn
 +else
-+MEDIASTREAMER_CONF_OPTS += --disable-vp8
++MUTT_CONF_OPTS += --without-idn
 +endif
 +
- ifeq ($(BR2_PACKAGE_OPUS),y)
- MEDIASTREAMER_CONF_OPTS += --enable-opus
- MEDIASTREAMER_DEPENDENCIES += opus
+ ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
+ MUTT_CONF_OPTS += --enable-imap
+ else
