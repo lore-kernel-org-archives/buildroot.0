@@ -1,50 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 18:57:19 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/avahi: add optional support for
-	libcap
-Message-ID: <1456077439-26606-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 18:57:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: add optional support
+	for webp
+Message-ID: <1456077450-26675-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libcap was compiled before, avahi daemon will use it as optional
+When webp was compiled before, imagemagick will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/avahi-daemon | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libavahi-common.so.3]
- 0x0000000000000001 (NEEDED)             Shared library: [libavahi-core.so.7]
- 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/stream | grep NEEDED
+ 0x0000000000000001 (NEEDED)             Shared library: [libMagickCore-6.Q16.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libMagickWand-6.Q16.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libjpeg.so.8]
+ 0x0000000000000001 (NEEDED)             Shared library: [libwebp.so.5]
 [...]
-
-The build system offers no option to en-/disable libcap support:
-http://git.0pointer.net/avahi.git/tree/configure.ac#n382
-
-The check for libcap was placed inside the BR2_PACKAGE_AVAHI_DAEMON
-because only avahi-daemon uses libcap, it provides chroot support.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: moved the new code block a bit and added more notes about the usage
-    of libcap (Thomas)
+ package/imagemagick/imagemagick.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- package/avahi/avahi.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 5d6e6a8..e84a69e 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -118,6 +118,9 @@ endif
- ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
- AVAHI_DEPENDENCIES += expat
- AVAHI_CONF_OPTS += --with-xml=expat
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+AVAHI_DEPENDENCIES += libcap
-+endif
- else
- AVAHI_CONF_OPTS += --with-xml=none
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 8fc9532..639b0e8 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -105,6 +105,13 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-fftw
  endif
+ 
++ifeq ($(BR2_PACKAGE_WEBP),y)
++IMAGEMAGICK_CONF_OPTS += --with-webp
++IMAGEMAGICK_DEPENDENCIES += webp
++else
++IMAGEMAGICK_CONF_OPTS += --without-webp
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ IMAGEMAGICK_CONF_OPTS += --with-zlib
+ IMAGEMAGICK_DEPENDENCIES += zlib
 -- 
 2.7.0
