@@ -1,47 +1,56 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 15:56:47 +0100
-Subject: [Buildroot] [PATCH v2 1/4] package/sdl_sound: add optional support
-	for libmodplug
-Message-ID: <1456066610-32050-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2016 15:56:48 +0100
+Subject: [Buildroot] [PATCH v2 2/4] package/sdl_sound: FLAC support depends
+	on libogg
+In-Reply-To: <1456066610-32050-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456066610-32050-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456066610-32050-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When libmodplug was compiled before, sdl_sound will use it as optional
-dependency:
+For the flac package itself libogg is an optional dependency, but for
+flac support in sdl_sound libogg is mandatory:
+http://hg.icculus.org/icculus/SDL_sound/file/394e3ec86164/configure.in#l263
+
+To avoid compiling flac when libogg is disabled change the if-clause
+in this package to reflect the real dependency:
 
 $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libSDL_sound-1.0.so.1.0.2 | grep NEEDED | sort
  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libFLAC.so.8]
  0x0000000000000001 (NEEDED)             Shared library: [libmodplug.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libogg.so.0]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: add --enable/disable-modplug (Thomas)
+v2: add --enable/disable-flac (Thomas)
 
- package/sdl_sound/sdl_sound.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/sdl_sound/sdl_sound.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/package/sdl_sound/sdl_sound.mk b/package/sdl_sound/sdl_sound.mk
-index 416f381..faf88ae 100644
+index faf88ae..6201967 100644
 --- a/package/sdl_sound/sdl_sound.mk
 +++ b/package/sdl_sound/sdl_sound.mk
-@@ -21,6 +21,13 @@ ifeq ($(BR2_PACKAGE_FLAC),y)
- SDL_SOUND_DEPENDENCIES += flac # is only used if ogg is also enabled
+@@ -17,8 +17,11 @@ SDL_SOUND_DEPENDENCIES += libiconv
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
-+SDL_SOUND_CONF_OPTS += --enable-modplug
-+SDL_SOUND_DEPENDENCIES += libmodplug
+ # optional dependencies
+-ifeq ($(BR2_PACKAGE_FLAC),y)
+-SDL_SOUND_DEPENDENCIES += flac # is only used if ogg is also enabled
++ifeq ($(BR2_PACKAGE_FLAC)$(BR2_PACKAGE_LIBOGG),yy)
++SDL_SOUND_CONF_OPTS += --enable-flac
++SDL_SOUND_DEPENDENCIES += flac libogg
 +else
-+SDL_SOUND_CONF_OPTS += --disable-modplug
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
- SDL_SOUND_DEPENDENCIES += libvorbis
++SDL_SOUND_CONF_OPTS += --disable-flac
  endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBMODPLUG),y)
 -- 
 2.7.0
