@@ -1,44 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2016 19:09:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/binutils: add optional support for
-	zlib
-Message-ID: <1456078152-18432-1-git-send-email-bernd.kuhls@t-online.de>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Sun, 21 Feb 2016 13:11:46 -0500
+Subject: [Buildroot] [PATCH v3 3/3] ejabberd: add reason for autoreconf
+In-Reply-To: <1456078306-26054-1-git-send-email-fhunleth@troodon-software.com>
+References: <1456078306-26054-1-git-send-email-fhunleth@troodon-software.com>
+Message-ID: <1456078306-26054-3-git-send-email-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When zlib was compiled before, binutils will use it as optional
-dependency:
-
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/libbfd-2.24.so | grep NEEDED
- 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
-
-Apparantly the build system offers no support to control the
-dependency, --without-system-zlib with zlib installed still provides
-libbfd-2.24.so linked to libz.so.1.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 ---
- package/binutils/binutils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Changes v2 -> v3:
+  - Add reason for autoreconf (suggested by Romain Naour)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index a96a9a8..0f75c1d 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -61,6 +61,10 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- BINUTILS_DEPENDENCIES += busybox
- endif
+ package/ejabberd/ejabberd.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
+index a3aad35..1140eb1 100644
+--- a/package/ejabberd/ejabberd.mk
++++ b/package/ejabberd/ejabberd.mk
+@@ -13,6 +13,7 @@ EJABBERD_DEPENDENCIES = getent openssl host-erlang-lager erlang-lager \
+ 	erlang-p1-cache-tab erlang-p1-iconv erlang-p1-sip \
+ 	erlang-p1-stringprep erlang-p1-xml erlang-p1-yaml erlang-p1-zlib
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+BINUTILS_DEPENDENCIES += zlib
-+endif
-+
- # "host" binutils should actually be "cross"
- # We just keep the convention of "host utility" for now
- HOST_BINUTILS_CONF_OPTS = \
++# 0001-remove-make-targets-for-deps.patch updates Makefile.in
+ EJABBERD_USE_AUTOCONF = YES
+ EJABBERD_AUTORECONF = YES
+ 
 -- 
-2.7.0
+2.5.0
