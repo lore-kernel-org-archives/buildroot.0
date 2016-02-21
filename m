@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:39:10 +0100
-Subject: [Buildroot] [git commit] package/libeXosip2: add optional support
-	for c-ares
-Message-ID: <20160221133955.F30C080415@busybox.osuosl.org>
+Date: Sun, 21 Feb 2016 14:43:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/trace-cmd: add optional support
+ for audit
+In-Reply-To: <1456008742-4361-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456008742-4361-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160221144318.0e4e6d1c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88b756986a46340603676397383a07cf5580101f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-When c-ares was compiled before, libeXosip2 will use it as optional
-dependency:
+On Sat, 20 Feb 2016 23:52:22 +0100, Bernd Kuhls wrote:
+> When audit was compiled before, trace-cmd will use it as optional
+> dependency:
+> 
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/trace-cmd | grep NEEDED | sort
+>  0x0000000000000001 (NEEDED)             Shared library: [ld64-uClibc.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libaudit.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
+>  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/trace-cmd/trace-cmd.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/sip_reg | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libcares.so.2]
-[...]
+Applied to master, thanks.
 
-The build system offers no option to en-/disable c-ares support:
-http://git.savannah.gnu.org/cgit/exosip.git/tree/configure.in?h=exosip-3.X.X#n208
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libeXosip2/libeXosip2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/libeXosip2/libeXosip2.mk b/package/libeXosip2/libeXosip2.mk
-index d7d0af8..d101f95 100644
---- a/package/libeXosip2/libeXosip2.mk
-+++ b/package/libeXosip2/libeXosip2.mk
-@@ -20,6 +20,10 @@ ifeq ($(BR2_arc),y)
- LIBEXOSIP2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -U__arc__"
- endif
- 
-+ifeq ($(BR2_PACKAGE_C_ARES),y)
-+LIBEXOSIP2_DEPENDENCIES += c-ares
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBEXOSIP2_DEPENDENCIES += openssl
- LIBEXOSIP2_CONF_OPTS += --enable-openssl
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
