@@ -1,92 +1,89 @@
-From: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
-Date: Mon, 22 Feb 2016 17:21:54 -0500 (EST)
-Subject: [Buildroot] pjsip package status
-In-Reply-To: <20160220173543.GE3418@free.fr>
-References: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
- <20160220173543.GE3418@free.fr>
-Message-ID: <841623823.459573.1456179714125.JavaMail.zimbra@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 23:23:17 +0100
+Subject: [Buildroot] [git commit branch/next] afboot-stm32: new package
+Message-ID: <20160222222417.9F1B780F40@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, 
+commit: https://git.buildroot.net/buildroot/commit/?id=70c26b8c53c395ef4194cbed5b121a2b9243e4e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Sure I can take a look at this but my BR experience is quite limited. 
-Not sure about gsm, srtp, and portaudio. Why aren't they treated like other options? Are you sure they're necessary for Asterisk application? 
-I thought configure options should limit the package footprint as much as possible. 
+This is a _very_ small bootloader for STM32 platforms.
 
-Regards, 
+At submission afboot-stm32 supports the following boards:
 
--- 
-Patrick Keroulas 
-Consultant en logiciel libre, 
-Savoir-faire Linux Inc. 
+  stm32429i-eval
+  stm32746g-eval
+  stm32f429i-disco
+  stm32f469i-disco
 
-7275 Saint-Urbain, bureau 200 
-Montr?al, Qu?bec H2R 2Y5 
-t?l: (514) 276-5468 ext. 167 
-fax: (514) 276-5465 
-_____________________ 
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: fix commit title, add dependency on BR2_arm.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/Config.in                      |  1 +
+ boot/afboot-stm32/Config.in         |  7 +++++++
+ boot/afboot-stm32/afboot-stm32.hash |  2 ++
+ boot/afboot-stm32/afboot-stm32.mk   | 18 ++++++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-
-From: "Yann E. MORIN" <yann.morin.1998@free.fr> 
-To: "Patrick Keroulas" <patrick.keroulas@savoirfairelinux.com> 
-Cc: "buildroot" <buildroot@busybox.net> 
-Sent: Saturday, February 20, 2016 12:35:43 PM 
-Subject: Re: [Buildroot] pjsip package status 
-
-Patrick, All, 
-
-On 2016-02-17 15:04 -0500, Patrick Keroulas spake thusly: 
-> Regarding pjsip package ( [1]http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html ), is there any reason why it's not 
-> part of the package collection yet? 
-
-You may want to have a look at my in-proress series that adds Asterisk. 
-The last few patches are to add pjsip. 
-https://git.buildroot.org/~ymorin/git/buildroot/log?h=yem/asterisk 
-
-Please have a look and provide your feedback. 
-
-I will probably send that series shortly afte rthe next release is cut 
-(i.e. in errly March). 
-
-Regards, 
-Yann E. MORIN. 
-
-> Regards, 
-> -- 
-> Patrick Keroulas 
-> Consultant en logiciel libre, 
-> Savoir-faire Linux Inc. 
-> 
-> 7275 Saint-Urbain, bureau 200 
-> Montr?al, Qu?bec H2R 2Y5 
-> t?l: (514) 276-5468 ext. 167 
-> fax: (514) 276-5465 
-> _____________________ 
-> 
-> Links: 
-> 1. http://lists.busybox.net/pipermail/buildroot/2015-April/126960.html 
-
-> _______________________________________________ 
-> buildroot mailing list 
-> buildroot at busybox.net 
-> http://lists.busybox.net/mailman/listinfo/buildroot 
-
-
--- 
-.-----------------.--------------------.------------------.--------------------. 
-| Yann E. MORIN | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: | 
-| +33 662 376 056 | Software Designer | \ / CAMPAIGN | ___ | 
-| +33 223 225 172 `------------.-------: X AGAINST | \e/ There is no | 
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL | v conspiracy. | 
-'------------------------------^-------^------------------^--------------------' 
-_______________________________________________ 
-buildroot mailing list 
-buildroot at busybox.net 
-http://lists.busybox.net/mailman/listinfo/buildroot 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160222/45bde57e/attachment.html>
+diff --git a/boot/Config.in b/boot/Config.in
+index 54760b9..4daf079 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -1,5 +1,6 @@
+ menu "Bootloaders"
+ 
++source "boot/afboot-stm32/Config.in"
+ source "boot/at91bootstrap/Config.in"
+ source "boot/at91bootstrap3/Config.in"
+ source "boot/at91dataflashboot/Config.in"
+diff --git a/boot/afboot-stm32/Config.in b/boot/afboot-stm32/Config.in
+new file mode 100644
+index 0000000..309b9e0
+--- /dev/null
++++ b/boot/afboot-stm32/Config.in
+@@ -0,0 +1,7 @@
++config BR2_TARGET_AFBOOT_STM32
++	bool "afboot-stm32"
++	depends on BR2_arm
++	help
++	  afboot-stm32 is a very small bootloader for STM32 platforms
++
++	  https://github.com/mcoquelin-stm32/afboot-stm32
+diff --git a/boot/afboot-stm32/afboot-stm32.hash b/boot/afboot-stm32/afboot-stm32.hash
+new file mode 100644
+index 0000000..d23b74a
+--- /dev/null
++++ b/boot/afboot-stm32/afboot-stm32.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 dbd715c8b99f7d266f74a04707a4dac76b75b31321f24dee5256a6348260530c  afboot-stm32-v0.1.tar.gz
+diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
+new file mode 100644
+index 0000000..ac85d58
+--- /dev/null
++++ b/boot/afboot-stm32/afboot-stm32.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# afboot-stm32
++#
++################################################################################
++
++AFBOOT_STM32_VERSION = v0.1
++AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
++
++define AFBOOT_STM32_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define AFBOOT_STM32_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/stm32*.bin $(BINARIES_DIR)
++endef
++
++$(eval $(generic-package))
