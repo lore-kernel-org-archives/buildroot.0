@@ -1,63 +1,64 @@
-From: gwenhael.goavec <gwenj@trabucayre.com>
-Date: Mon, 22 Feb 2016 15:23:25 +0100
-Subject: [Buildroot] [PATCH 01/10] package/gnuradio: add optional
- support for orc
-In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160222152325.1717b196@x230.trabucayre.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 22 Feb 2016 15:23:15 +0100
+Subject: [Buildroot] [PATCH 3/4] docs/manual/contribute.txt: add section
+ for preparing patch series
+In-Reply-To: <1454348717-4711-4-git-send-email-arnout@mind.be>
+References: <1454348717-4711-1-git-send-email-arnout@mind.be>
+ <1454348717-4711-4-git-send-email-arnout@mind.be>
+Message-ID: <CAGm1_ksnWrHmd_Rm-xApYNvuLZG4sCTi1hMxsq9zqKUfsDp-6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+On Mon, Feb 1, 2016 at 6:45 PM, Arnout Vandecappelle (Essensium/Mind)
+<arnout@mind.be> wrote:
+> In subsequent patches, we will add more explanation about how to
+> prepare patches, so it will be worthwhile to have a separate section
+> for the series preparation.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Reviewed-by: "Gwenhael Goavec-Merou" <gwenhael.goavec-merou@trabucayre.com>
-Tested-by: "Gwenhael Goavec-Merou" <gwenhael.goavec-merou@trabucayre.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Best regards,
-
-Gwenhael
-
-On Sun, 21 Feb 2016 18:34:50 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-
-> When orc was compiled before, gnuradio will use it as optional
-> dependency:
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a
-> output/target/usr/bin/gnuradio-config-info | grep NEEDED [...]
->  0x0000000000000001 (NEEDED)             Shared library:
-> [liborc-0.4.so.0] [...]
-> 
-> Apparently there is no option provided by the build system to
-> en-/disable support for orc:
-> https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/gnuradio/gnuradio.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/gnuradio/gnuradio.mk
-> b/package/gnuradio/gnuradio.mk index fc5cd1f..b7dbcb9 100644
-> --- a/package/gnuradio/gnuradio.mk
-> +++ b/package/gnuradio/gnuradio.mk
-> @@ -17,6 +17,10 @@ GNURADIO_DEPENDENCIES = \
->  	host-swig \
->  	boost
->  
-> +ifeq ($(BR2_PACKAGE_ORC),y)
-> +GNURADIO_DEPENDENCIES += orc
-> +endif
+> Note: for this patch, I started using
+> http://dustycloud.org/blog/vcs-friendly-patchable-document-line-wrapping/
+> If nobody opposes, I propose to require this formatting for the manual
+> from now on. It will be weird for a while, but in the end I think it
+> would be A Good Thing (TM). If that formatting had been followed, this
+> patch, for example, would have a diffstat of +3 instead of the current
+> +7-4.
+> ---
+>  docs/manual/contribute.txt | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+> index b74897d..e19ba15 100644
+> --- a/docs/manual/contribute.txt
+> +++ b/docs/manual/contribute.txt
+> @@ -182,10 +182,13 @@ _Please, do not attach patches to bugs, send them to the mailing list
+>  instead_.
+>
+>  If you made some changes to Buildroot and you would like to contribute
+> -them to the Buildroot project, proceed as follows. Starting from the
+> -changes committed in your local git view, _rebase_ your development
+> -branch on top of the upstream tree before generating a patch set. To do
+> -so, run:
+> +  them to the Buildroot project, proceed as follows.
 > +
->  GNURADIO_CONF_OPTS = \
->  	-DENABLE_DEFAULT=OFF \
->  	-DENABLE_VOLK=ON \
-> -- 
+> +==== Preparing a patch series
+> +
+> +Starting from the changes committed in your local git view, _rebase_ your
+> +  development branch on top of the upstream tree before generating a patch set.
+> +To do so, run:
+>
+>  ---------------------
+>  $ git fetch --all --tags
+> --
 > 2.7.0
-> 
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
