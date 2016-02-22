@@ -1,40 +1,24 @@
 From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Mon, 22 Feb 2016 09:51:23 -0800
+Date: Mon, 22 Feb 2016 09:52:19 -0800
 Subject: [Buildroot] [PATCH v3] Update libaio to 0.3.110
-In-Reply-To: <56C8ED6F.1010201@mind.be>
+In-Reply-To: <20160221153709.1bfa1230@free-electrons.com>
 References: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
- <56C8ED6F.1010201@mind.be>
-Message-ID: <CAKmqyKNyu=4NZX_Mdf7O2288On5w+CfGySsSGeCR7icGtjyqkg@mail.gmail.com>
+ <20160221153709.1bfa1230@free-electrons.com>
+Message-ID: <CAKmqyKMns3Y9L9Fzfu=0UQf3Xxr4isR-PmzvuJ5FKtqjWFNk5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 20, 2016 at 2:49 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 02/18/16 20:39, Alistair Francis wrote:
+On Sun, Feb 21, 2016 at 6:37 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Alistair,
+>
+> Thanks for the patch!
+>
+> On Thu, 18 Feb 2016 11:39:51 -0800, Alistair Francis wrote:
 >> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
->
->  The commit message should have mentioned that the patch is now reduced to just
-> MIPS. It should also mention the upstream status of the patch. Have you sent it
-> upstream?
->
->  Otherwise:
->  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Thanks!
-
-I was going to send a new version with an updated commit message, but
-it looks like I don't need to now. Thanks for helping me get this in.
-
-Thanks,
-
-Alistair
-
->
->  Regards,
->  Arnout
->
 >>
 >> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
 >> ---
@@ -43,30 +27,55 @@ Alistair
 >>  package/libaio/libaio.hash       |   4 +-
 >>  package/libaio/libaio.mk         |   2 +-
 >>  4 files changed, 20 insertions(+), 442 deletions(-)
->>
->> diff --git a/package/libaio/0001-arches.patch b/package/libaio/0001-arches.patch
->> index c85568c..4b77f57 100644
->> --- a/package/libaio/0001-arches.patch
->> +++ b/package/libaio/0001-arches.patch
->> @@ -1,145 +1,28 @@
->>  Patch borrowed from OpenEmbedded, available at
->> -recipes/libaio/libaio-0.3.106/00_arches.patch in their source
->> -tree. The patch has been adapted to remove the ARM-related
->> -definitions, since they have been merged in later versions of libaio.
->> +/meta/recipes-extended/libaio/libaio/00_arches.patch in their source
->> +tree. This patch has been modified to only add the MIPS definitions.
->>
->> -The patch adds various architecture specific definitions (syscall
->> -number and macros) for m68k, MIPS, PA/RISC and Sparc. Amongst these,
->> -Buildroot mostly only cares about MIPS, but it was just easier to take
->> -the whole OpenEmbedded patch.
+>
+> It took me a bit of time to understand why we can reduce the patch to
+> just MIPS definitions. Indeed, in the patch, there are some m68k and
+> PA-RISC definitions which we don't really care about since we don't
+> support those architectures. However, the SPARC definitions we do care
+> about. But in fact, they have been merged upstream. It would have been
+> good to add such explanations in the commit log, to ease review. I've
+> adjusted the commit log to make this explicit.
+>
+> Another comment is that the title should always be:
+>
+>         <package>: <what happens>
+>
+> i.e something like:
+>
+>         libaio: bump to version 0.3.110
+>
+>
 >> +The patch adds MIPS specific definitions (syscall number and macros).
 >
+> Vicente, can you work with libaio upstream to get the MIPS specific
+> definitions merged? Maybe this should also be enabled on
+> mips64/mips64el.
 >
+>> diff --git a/package/libaio/Config.in b/package/libaio/Config.in
+>> index cc44cb6..63db829 100644
+>> --- a/package/libaio/Config.in
+>> +++ b/package/libaio/Config.in
+>> @@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+>>       bool
+>>       default y if BR2_arm || BR2_armeb || BR2_i386 || \
+>>               BR2_m68k || BR2_mips || BR2_mipsel || BR2_powerpc || \
+>> -             BR2_sparc || BR2_x86_64
+>> +             BR2_sparc || BR2_x86_64 || BR2_aarch64
+>
+> I've changed this to keep the alphabetic ordering, and applied your
+> patch to our next branch.
+
+Great! Thanks for applying it.
+
+Thanks,
+
+Alistair
+
+>
+> Thanks!
+>
+> Thomas
 > --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
