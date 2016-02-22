@@ -1,29 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Feb 2016 12:27:34 +0000
-Subject: [Buildroot] [Bug 8651] libMonoPosixHelper.so wrong link reference
- in buildroot image
-In-Reply-To: <bug-8651-163@https.bugs.busybox.net/>
-References: <bug-8651-163@https.bugs.busybox.net/>
-Message-ID: <bug-8651-163-4qbZmcwEZA@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 13:33:37 +0100
+Subject: [Buildroot] [PATCH] glibc: remove version 2.21
+In-Reply-To: <56CAFE21.4030803@zacarias.com.ar>
+References: <1456142845-5372-1-git-send-email-gustavo@zacarias.com.ar>
+ <1456142845-5372-2-git-send-email-gustavo@zacarias.com.ar>
+ <20160222132027.091e7c84@free-electrons.com>
+ <56CAFE21.4030803@zacarias.com.ar>
+Message-ID: <20160222133337.743dba7f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8651
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Mon, 22 Feb 2016 09:25:05 -0300, Gustavo Zacarias wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|FIXED                       |---
-             Status|RESOLVED                    |REOPENED
+> > Is it SPARC entirely, or only some specific architecture variants of
+> > SPARC that are no longer supported ?
+> >
 
---- Comment #11 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Reopening the bug, since the patch proposed by Angelo has not been
-submitted/applied in Buildroot. Angelo, can you submit your patch?
+> Quick SPARC lesson.
 
+Good, because I don't know anything about SPARC :)
+
+> SPARC < V9 = 32 bits (AKA sparc arch).
+> SPARC >= V9 = 64 bits and 32 bits as well (similar to x86, AKA sparc64 
+> arch).
+
+ACK.
+
+> Now, you can use atomics for >= v9 and even on 32 bits, but normally 
+> even if you use 32 bit userland you want a 64 bit kernel anyway (IIRC 
+> solaris supports 32 bit kernel as well for old/transition versions, but 
+> AFAIK linux never went there).
+
+I don't really see why you're talking specifically about atomics here,
+but OK with the rest.
+
+> So basically yes, sparc = no glibc, sparc64 = yes glibc, because we 
+> don't support multilib (in gentoo it wasn't 100% multilib in the past, 
+> except that binutils/gcc did support -m64/-m32, but there wasn't libc 
+> support, hence not really multilib).
+
+I don't follow the relation with multilib support. Care to expand on
+this?
+
+Thanks!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
