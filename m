@@ -1,42 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Feb 2016 09:32:00 +0100
-Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version 1.2.0
-Message-ID: <20160222083229.261C1800F5@busybox.osuosl.org>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Mon, 22 Feb 2016 09:40:55 +0100
+Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
+	installed programs
+In-Reply-To: <877fhxaf7l.fsf@dell.be.48ers.dk>
+References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
+ <877fhxaf7l.fsf@dell.be.48ers.dk>
+Message-ID: <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d86a987a8f6aa445ec11eaa00d14d5177ae45166
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Peter,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+2016-02-21 23:09 GMT+01:00 Peter Korsgaard <peter@korsgaard.com>:
+>>>>>> "Romain" == Romain Izard <romain.izard.pro@gmail.com> writes:
+>
+>  > As the recent revisions of coreutils use a single multi-call
+>  > executable, it is not possible to reduce the installed size of
+>  > coreutils by removing the unused programs. But the list of
+>  > installed programs can be passed when configuring the package, and
+>  > it is possible ensure that only required programs are embedded into
+>  > the multi-call executable.
+>
+>  > A global configuration option selects either the default set of
+>  > programs, or a configurable set. In the latter case, each coreutil
+>  > program has its own option.
+>
+>  > Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+>
+> Are you really using a setup where this detailed tweaking of coreutils
+> is needed?
+>
+> Coreutils isn't super huge:
+>
+> ls -lh target/usr/bin/coreutils -rwxr-xr-x 1 peko peko 933K Feb 21
+> 23:01 target/usr/bin/coreutils
+>
+> And if you are using coreutils instead of busybox you are probably not
+> very interested in saving every last byte of rootfs size anyway, so
+> I'm not sure we should have 500+ lines of Config.in for this.
+>
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 67050a7..b7330fc 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.3.tar.bz2.sha256
--sha256	d93d7cb7979c32672e902fdfa884599e63f07f2fa5b06c66147d20c516d4b8f7	harfbuzz-1.1.3.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.0.tar.bz2.sha256
-+sha256	79ff5305153d15931fbdda80c9612783b0283dee44f4c2af71aa37353daaa685	harfbuzz-1.2.0.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index c704f32..7cdc356 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.1.3
-+HARFBUZZ_VERSION = 1.2.0
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+My issue is that I'm updating an existing system, and the application
+has expensive scripts that rely on the behaviour of coreutils regarding
+some options that busybox does not have. As I cannot easily change those
+scripts, my goal is to try to provide the same services with an updated
+rootfs. To keep everything (including wifi, bluetooth, glib and a lot
+more) in less 10 MiB as it did in the past, removing even 300 KiB from
+coreutils is a step in the right direction. And I though it was a better
+if is was done in a clean way, instead of the ad-hoc patches I had in
+the previous generation
+
+But if you think buildroot does not need it, I won't insist.
+
+Best regards,
+-- 
+Romain Izard
