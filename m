@@ -1,79 +1,52 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 22 Feb 2016 22:55:20 +0100
-Subject: [Buildroot] Analysis of build results for 2016-02-21
-In-Reply-To: <CALdGskKUp-GtxeOBWq-5Tzp7b2zBad3=RoRxeN1eaJHPcg5Xww@mail.gmail.com>
-References: <CALdGskKUp-GtxeOBWq-5Tzp7b2zBad3=RoRxeN1eaJHPcg5Xww@mail.gmail.com>
-Message-ID: <56CB83C8.3090500@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 22:56:31 +0100
+Subject: [Buildroot] [PATCH] zmqpp: bump to version 4.1.2
+In-Reply-To: <56CB4A82.6000506@zacarias.com.ar>
+References: <1455800827-19066-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160220001405.79f8eda5@free-electrons.com>
+ <56CB4A82.6000506@zacarias.com.ar>
+Message-ID: <20160222225631.6db1588a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Olivier, All,
+Gustavo,
 
-Le 22/02/2016 20:05, Olivier Schonken a ?crit :
-> Hi Thomas, All
-> 
-> 
-> arm |                     cups-2.1.2 | NOK
-> | http://autobuild.buildroot.net/results/07ccca8f80c56ab0ff48bfee876885b1c8c3916e/
-> arc |                     cups-2.1.2 | NOK
-> | http://autobuild.buildroot.net/results/b169b939e38cb761319a92d2871f4f59ddb5c4ac/
-> 
-> Both error cases looks like it has to do with uclibc not behaving as expected at
-> link time for the ippserver build (Both builds link statically with position
-> independent execution also set).  For the arm platform it can't find the Scrt1.o
-> file, and for the ARC compiler, __init_array_end is undefined.
+On Mon, 22 Feb 2016 14:50:58 -0300, Gustavo Zacarias wrote:
 
-Thanks for the investigation!
+> Care to provide a defconfig for this?
+> I've tested the three possible combinations (static, shared, both) 
+> without issue.
 
-I don't think it's related to uClibc library but static build only
-(BR2_STATIC_LIBS=y).
+Sure, I'm testing:
 
-> 
-> I haven't considered all the options yet, but two that come to mind are
-> disabling cups support for uclibc type compilers, or else to disable the cups
-> test-framework.
-> 
-> The missing Scrt1.o has to do with the compiler.  In the Configure step,
-> autotools checks whether the compiler is capable of generating position
-> independent executables.
-> 
-> "checking whether compiler supports -fPIE... yes"
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2015.11-rc1-71-g90d1299.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_ZMQPP=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-Can you try with LSB_BUILD=y in CUPS_CONF_OPTS ?
-This allow to remove -fPIE -pie from CFLAGS.
+I'm testing on today's next branch (at
+d86a987a8f6aa445ec11eaa00d14d5177ae45166) + your zmqpp bump.
 
-Maybe something like:
+I've re-done the build to verify, and I'm still seeing the same build
+issue.
 
-# Remove -fPIE -pie from CFLAGS
-ifeq ($(BR2_STATIC_LIBS),y)
-CUPS_CONF_OPTS += LSB_BUILD=y
-endif
-
-Best regards,
-Romain
-
-> 
-> In the linking stage it then looks for Scrt1.o, which it can't find.  This
-> breaks the build.
-> 
-> From http://dev.gentoo.org/~vapier/crt.txt
-> crt1.o
->   Newer style of the initial runtime code.  Contains the _start symbol which
->   sets up the env with argc/argv/libc _init/libc _fini before jumping to the
->   libc main.  glibc calls this file 'start.S'.
-> Scrt1.o
->   Used in place of crt1.o when generating PIEs.
-> 
-> Regards
-> 
-> Olivier Schonken
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
