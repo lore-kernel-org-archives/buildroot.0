@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Feb 2016 09:07:24 -0300
-Subject: [Buildroot] [PATCH v2] glibc: remove version 2.21
-Message-ID: <1456142845-5372-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 22 Feb 2016 09:07:25 -0300
+Subject: [Buildroot] [PATCH] glibc: remove version 2.21
+In-Reply-To: <1456142845-5372-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1456142845-5372-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1456142845-5372-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +14,6 @@ Mask out glibc for sparc as well since it's no longer available.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
-v2: mask out sparc glibc support
-
  package/glibc/2.21/0001-fix-CVE-2015-7547.patch | 236 ------------------------
  package/glibc/2.21/0002-fix-CVE-2015-1781.patch |  32 ----
  package/glibc/2.21/0003-fix-CVE-2014-8121.patch | 176 ------------------
