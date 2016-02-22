@@ -1,105 +1,68 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@intel.com>
-Date: Mon, 22 Feb 2016 23:31:59 +0100
-Subject: [Buildroot] [PATCH v2] msr-tools: new package
-In-Reply-To: <20160222222152.GA22228@jazz.nc.intel.com>
-References: <20160222222152.GA22228@jazz.nc.intel.com>
-Message-ID: <1456180319-23117-1-git-send-email-vincent.stehle@intel.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 22 Feb 2016 23:42:20 +0100
+Subject: [Buildroot] [PATCH] configs: add Boundary Devices i.MX7 Nitrogen7
+	support
+Message-ID: <1456180940-6439-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The MSR Tools project provides utilities to access x86 processor MSRs
-and CPU ID directly.
+This board is using a different kernel and u-boot branch than the
+other Boundary Devices platforms since NXP forked the 3.14 kernel to add
+i.MX7 support (see imx_3.14.38_6ul7d_beta branch).
+Next kernel version, 3.14.52, will be the same for all i.MX platforms.
 
-https://01.org/msr-tools
+https://boundarydevices.com/product/nitrogen7/
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@intel.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
+ configs/nitrogen7_defconfig | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 configs/nitrogen7_defconfig
 
-Changes since v1:
-- Add comments in Config.in that msr-tools runs only on x86
-- Drop redundant _SOURCE specification in msr-tools.mk
-
- package/Config.in                |  1 +
- package/msr-tools/Config.in      | 15 +++++++++++++++
- package/msr-tools/msr-tools.hash |  2 ++
- package/msr-tools/msr-tools.mk   | 21 +++++++++++++++++++++
- 4 files changed, 39 insertions(+)
- create mode 100644 package/msr-tools/Config.in
- create mode 100644 package/msr-tools/msr-tools.hash
- create mode 100644 package/msr-tools/msr-tools.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..f468b46 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -403,6 +403,7 @@ endif
- 	source "package/memtest86/Config.in"
- 	source "package/memtester/Config.in"
- 	source "package/minicom/Config.in"
-+	source "package/msr-tools/Config.in"
- 	source "package/nanocom/Config.in"
- 	source "package/neard/Config.in"
- 	source "package/nvidia-driver/Config.in"
-diff --git a/package/msr-tools/Config.in b/package/msr-tools/Config.in
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
 new file mode 100644
-index 0000000..b348499
+index 0000000..91529e8
 --- /dev/null
-+++ b/package/msr-tools/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_MSR_TOOLS
-+	bool "msr-tools"
-+	depends on BR2_i386 || BR2_x86_64
-+	help
-+	  The MSR Tools project provides utilities to access x86 processor MSRs
-+	  and CPU ID directly.
++++ b/configs/nitrogen7_defconfig
+@@ -0,0 +1,36 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a7=y
 +
-+	  Those tools access the hardware through the /dev/cpu/<cpu#>/msr and
-+	  /dev/cpu/<cpu#>/cpuid devices. This necessitates msr and cpuid
-+	  support in the kernel.
++# system
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +
-+	  https://01.org/msr-tools
++# filesystem
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
 +
-+comment "msr-tools runs only on x86 CPUs"
-+	depends on !BR2_i386 && !BR2_x86_64
-diff --git a/package/msr-tools/msr-tools.hash b/package/msr-tools/msr-tools.hash
-new file mode 100644
-index 0000000..18146df
---- /dev/null
-+++ b/package/msr-tools/msr-tools.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256 9b87245ee091a798184e447066e9e0d7709b7c81f5e6ad55f2b958c1aa50c4a3 msr-tools-1.3.tar.gz
-diff --git a/package/msr-tools/msr-tools.mk b/package/msr-tools/msr-tools.mk
-new file mode 100644
-index 0000000..f14684f
---- /dev/null
-+++ b/package/msr-tools/msr-tools.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# msr-tools
-+#
-+################################################################################
++# Linux headers same as kernel, a 3.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
 +
-+MSR_TOOLS_VERSION = 1.3
-+MSR_TOOLS_SITE = $(call github,01org,msr-tools,msr-tools-$(MSR_TOOLS_VERSION))
-+MSR_TOOLS_LICENSE = GPLv2+
++# bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
++BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/b2e1315/u-boot-b2e1315.tar.gz"
 +
-+define MSR_TOOLS_BUILD_CMDS
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) CC="$(CCACHE) $(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-+endef
-+
-+define MSR_TOOLS_INSTALL_TARGET_CMDS
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -C $(@D) install sbindir="$(TARGET_DIR)/usr/sbin"
-+endef
-+
-+$(eval $(generic-package))
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/20cee23/linux-imx6-20cee23.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="boundary"
++BR2_LINUX_KERNEL_ZIMAGE=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-nitrogen7"
 -- 
 2.7.0
