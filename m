@@ -1,10 +1,10 @@
 From: Lee Jones <lee.jones@linaro.org>
-Date: Mon, 22 Feb 2016 18:59:22 +0000
-Subject: [Buildroot] [PATCH v2 08/15] boards: stm32f469-disco: Add OpenOCD
-	patch to supply a new config
+Date: Mon, 22 Feb 2016 18:59:23 +0000
+Subject: [Buildroot] [PATCH v2 09/15] boards: stm32f469-disco: Add OpenOCD
+	patch to support on-board flash chip
 In-Reply-To: <1456167569-8713-1-git-send-email-lee.jones@linaro.org>
 References: <1456167569-8713-1-git-send-email-lee.jones@linaro.org>
-Message-ID: <1456167569-8713-9-git-send-email-lee.jones@linaro.org>
+Message-ID: <1456167569-8713-10-git-send-email-lee.jones@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +12,55 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 At the time of submission, OpenOCD does not support the STM32f469.
-This patch adds a new configuration file which provides some board
-specifics required to correctly handle the stm32f469-disco dev
-board.
+This patch adds support for the STM32F469-DISCO's on-board flash
+chip.  Without this patch there is no way to flash the board.
 
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- .../patches/openocd/0.9.0/0001-add-config.patch    | 37 ++++++++++++++++++++++
+ .../patches/openocd/0.9.0/0002-flash-nor.patch     | 37 ++++++++++++++++++++++
  1 file changed, 37 insertions(+)
- create mode 100644 board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0001-add-config.patch
+ create mode 100644 board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0002-flash-nor.patch
 
-diff --git a/board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0001-add-config.patch b/board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0001-add-config.patch
+diff --git a/board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0002-flash-nor.patch b/board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0002-flash-nor.patch
 new file mode 100644
-index 0000000..4404807
+index 0000000..068613c
 --- /dev/null
-+++ b/board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0001-add-config.patch
++++ b/board/stmicroelectronics/stm32/stm32f469-disco/patches/openocd/0.9.0/0002-flash-nor.patch
 @@ -0,0 +1,37 @@
-+From 26045588f462476cee356d15a24944d6c26befb4 Mon Sep 17 00:00:00 2001
-+From: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-+Date: Sat, 24 Oct 2015 00:13:38 +0200
-+Subject: [PATCH 1/1] tcl: add STM32F469 discovery board config
++From 3e219648c80a27f0519003f3b088cbb846e255d8 Mon Sep 17 00:00:00 2001
++From: Maxime Coquelin <maxime.coquelin@st.com>
++Date: Sat, 24 Oct 2015 00:03:54 +0200
++Subject: [PATCH 1/1] flash/nor/stm32f2x: Add STM32F469 part
 +
-+Change-Id: Iad7ee06330b3259ea0ce0d174dfdade6785913eb
++Change-Id: I4e13ceb0ba954dc2fea059ddeef10109be938c9c
 +Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-+Reviewed-on: http://openocd.zylin.com/3043
++Reviewed-on: http://openocd.zylin.com/3042
 +Tested-by: jenkins
-+Reviewed-by: Antonio Borneo <borneo.antonio@gmail.com>
 +Reviewed-by: Freddie Chopin <freddie.chopin@gmail.com>
 +---
-+ tcl/board/stm32f469discovery.cfg | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+ create mode 100644 tcl/board/stm32f469discovery.cfg
++ src/flash/nor/stm32f2x.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/tcl/board/stm32f469discovery.cfg b/tcl/board/stm32f469discovery.cfg
-+new file mode 100644
-+index 0000000..eecfe33
-+--- /dev/null
-++++ b/tcl/board/stm32f469discovery.cfg
-+@@ -0,0 +1,12 @@
-++#
-++# This is an STM32F469 discovery board with a single STM32F469NI chip.
-++# http://www.st.com/web/catalog/tools/FM116/CL1620/SC959/SS1532/LN1848/PF262395
-++#
-++
-++source [find interface/stlink-v2-1.cfg]
-++
-++transport select hla_swd
-++
-++source [find target/stm32f4x.cfg]
-++
-++reset_config srst_only
++diff --git a/src/flash/nor/stm32f2x.c b/src/flash/nor/stm32f2x.c
++index 2130444..89fc75d 100644
++--- a/src/flash/nor/stm32f2x.c
+++++ b/src/flash/nor/stm32f2x.c
++@@ -790,6 +790,7 @@ static int stm32x_probe(struct flash_bank *bank)
++ 		max_flash_size_in_kb = 1024;
++ 		break;
++ 	case 0x419:
+++	case 0x434:
++ 		max_flash_size_in_kb = 2048;
++ 		break;
++ 	case 0x423:
++@@ -952,6 +953,7 @@ static int get_stm32x_info(struct flash_bank *bank, char *buf, int buf_size)
++ 
++ 	case 0x413:
++ 	case 0x419:
+++	case 0x434:
++ 		device_str = "STM32F4xx";
++ 
++ 		switch (rev_id) {
 +-- 
 +1.9.1
 +
