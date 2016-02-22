@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Feb 2016 14:19:18 -0300
-Subject: [Buildroot] [PATCH] cantarell: bump to version 0.0.23
-Message-ID: <1456161558-24269-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 22 Feb 2016 14:25:11 -0300
+Subject: [Buildroot] [PATCH] acl: cleanup pointless indentation
+Message-ID: <1456161911-12929-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cantarell/cantarell.hash | 4 ++--
- package/cantarell/cantarell.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/acl/acl.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
-index 5d8284d..2d2bab5 100644
---- a/package/cantarell/cantarell.hash
-+++ b/package/cantarell/cantarell.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.21.sha256sum
--sha256	2d3e925574648f0902c61975f84acac445ee9cda826280644bdf772960b46e85	cantarell-fonts-0.0.21.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.23.sha256sum
-+sha256	d85e165ac5d676d6b21c7870d8243cb612a2dc766d91fda788d56d5f5ad5db4e	cantarell-fonts-0.0.23.tar.xz
-diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
-index c677c78..9943d70 100644
---- a/package/cantarell/cantarell.mk
-+++ b/package/cantarell/cantarell.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 62e5d15..cbe5e93 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -16,15 +16,15 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+ # around their deficiencies by passing installation paths.
+-ACL_INSTALL_STAGING_OPTS = 			\
+-	prefix=$(STAGING_DIR)/usr 		\
+-	exec_prefix=$(STAGING_DIR)/usr 		\
+-	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib	\
++ACL_INSTALL_STAGING_OPTS = \
++	prefix=$(STAGING_DIR)/usr \
++	exec_prefix=$(STAGING_DIR)/usr \
++	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
+ 	install-dev install-lib
  
- CANTARELL_VERSION_MAJOR = 0.0
--CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).21
-+CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).23
- CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
- CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
- CANTARELL_DEPENDENCIES = host-pkgconf
+-ACL_INSTALL_TARGET_OPTS = 			\
+-	prefix=$(TARGET_DIR)/usr 		\
+-	exec_prefix=$(TARGET_DIR)/usr 		\
++ACL_INSTALL_TARGET_OPTS = \
++	prefix=$(TARGET_DIR)/usr \
++	exec_prefix=$(TARGET_DIR)/usr \
+ 	install install-lib
+ 
+ # The libdir variable in libacl.la is empty, so let's fix it. This is
 -- 
 2.4.10
