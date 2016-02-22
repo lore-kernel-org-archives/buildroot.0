@@ -1,25 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Feb 2016 13:06:07 +0000
-Subject: [Buildroot] [Bug 8651] libMonoPosixHelper.so wrong link reference
- in buildroot image
-In-Reply-To: <bug-8651-163@https.bugs.busybox.net/>
-References: <bug-8651-163@https.bugs.busybox.net/>
-Message-ID: <bug-8651-163-l1HLJj0Ukw@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 14:23:46 +0100
+Subject: [Buildroot] Help reviewing/testing patches
+Message-ID: <20160222142346.5e910b73@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8651
+Hello everyone,
 
---- Comment #12 from Angelo <angelo.compagnucci@gmail.com> ---
-(In reply to Thomas Petazzoni from comment #11)
+The queue of pending patches in our patch tracker [1] remain quite long,
+with 290 patches pending at the time of this writing. I know some of
+you are annoyed by the time it takes to get patches merged.
 
-Of Course, I'll submit a patch soon.
+If you want to speed up the merge of patches, then the best thing you
+could do is to review and test patches. I did a quick stat, and on the
+290 pending patches, only 27 of them had at least one Reviewed-by,
+Acked-by or Tested-by tag.
 
-Sincerely, angelo
+Yes, you could say that it's 27 patches that the Buildroot maintainers
+should have looked at or applied, but it also means there's 263 patches
+that are waiting for anyone to review/test them :-)
 
+It is *very* useful when looking at a patch to see that someone else
+has already build tested, or even runtime tested, has verified the
+license, has verified the dependencies, etc. Of course, the more you
+say about what you have reviewed/verified, the more valuable your
+review is.
+
+If you review a patch and ask the submitter to do some changes that are
+fairly significant, do not hesitate to ask us to mark the patch as
+"Changes Requested" in patchwork (ask us by e-mail or IRC to change the
+status of a patch). However, if the changes needed are minor, then
+Peter or I can typically handle them directly while applying, which
+avoids another potentially lengthy round-trip with the original
+submitter.
+
+Thanks a lot for your participation!
+
+Thomas
+
+[1] http://patchwork.ozlabs.org/project/buildroot/list/
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
