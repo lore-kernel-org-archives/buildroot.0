@@ -1,53 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2016 23:33:44 +0100
-Subject: [Buildroot] pjsip package status
-In-Reply-To: <841623823.459573.1456179714125.JavaMail.zimbra@savoirfairelinux.com>
-References: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
- <20160220173543.GE3418@free.fr>
- <841623823.459573.1456179714125.JavaMail.zimbra@savoirfairelinux.com>
-Message-ID: <20160222223344.GA3463@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 23:37:19 +0100
+Subject: [Buildroot] [PATCH] owfs: new package
+In-Reply-To: <1456173419-32284-1-git-send-email-arnout@mind.be>
+References: <1456173419-32284-1-git-send-email-arnout@mind.be>
+Message-ID: <20160222233719.55228a26@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick, All,
+Arnout,
 
-On 2016-02-22 17:21 -0500, Patrick Keroulas spake thusly:
-> Sure I can take a look at this but my BR experience is quite limited.
-> Not sure about gsm, srtp, and portaudio. Why aren't they treated like
-> other options?  Are you sure they're necessary for Asterisk application?
+On Mon, 22 Feb 2016 21:36:59 +0100, Arnout Vandecappelle
+(Essensium/Mind) wrote:
 
-Well, I was mostly pointing you to this branch so you can look at the
-pjsip package (since that was your inquiry).
+> diff --git a/package/owfs/0001-configure.ac-check-for-localtime_r.patch b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
+> new file mode 100644
+> index 0000000..bdaab4f
+> --- /dev/null
+> +++ b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
+> @@ -0,0 +1,48 @@
+> +From dd7c906a7e548ccb7b9c101221531d6b203f701f Mon Sep 17 00:00:00 2001
+> +From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+> +Date: Sun, 21 Feb 2016 17:02:06 +0100
+> +Subject: [PATCH] configure.ac: check for localtime_r
+> +
+> +HAVE_LOCALTIME_R is used in module/owftpd/src/c/file_list.c, so it
+> +should be checked for.
+> +
+> +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> +---
+> + configure.ac                   | 2 +-
+> + module/swig/python/setup.py.in | 7 -------
+> + 2 files changed, 1 insertion(+), 8 deletions(-)
 
-I am not sure what you meant by "treated like other options". Some of
-the features in Asterisk have dependencies on other packages (like srtp
-for example), while others use internal code (like gsm for example).
+Your description explains perfectly well the change in configure.ac,
+but does not explain the change done in setup.py.in. Shouldn't it be
+part of a separate patch, with a proper description ?
 
-No, they are not _strictly_ required for Asterisk to behave. Asterisk
-can be an IP-only application, but it can also make use of telephony
-cards (hence ss7 et al.). It seems it can also understand some GSM
-dialect, too. But all that is optional and depends on what the user
-needs; so some users may enable some of those options, while other users
-may enable some other options.
+The rest of the patch looks good.
 
-> I thought configure options should limit the package footprint as much
-> as possible.
+Thanks!
 
-Well, you could put it that way. I prefer to say:
-    We have options so only what is strictly needed is present.
-
-Which incidentally reduces the footprint! ;-)
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
