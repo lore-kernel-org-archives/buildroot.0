@@ -1,116 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Feb 2016 09:31:42 +0100
-Subject: [Buildroot] [git commit branch/next] arch/arm: add the cortex A17
-	variant supported by gcc 5.x
-Message-ID: <20160222083229.1E94281849@busybox.osuosl.org>
+Date: Mon, 22 Feb 2016 09:32:00 +0100
+Subject: [Buildroot] [git commit branch/next] harfbuzz: bump to version 1.2.0
+Message-ID: <20160222083229.261C1800F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=027b7ca0f240d3c7a51f3b2ea151c04329c4b569
+commit: https://git.buildroot.net/buildroot/commit/?id=d86a987a8f6aa445ec11eaa00d14d5177ae45166
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add the Cortex A17 variant. This core is considered a replacement
-of the Cortex A12 and is supported by gcc 5 / binutils 2.25+
-
-Suggested-by: Ross Green <greenfross@netscape.net>
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.arm              | 9 +++++++++
- package/binutils/Config.in.host | 4 ++++
- package/gcc/Config.in.host      | 9 ++++++---
- 3 files changed, 19 insertions(+), 3 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b34f42..04f0369 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -159,6 +159,14 @@ config BR2_cortex_a15
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
-+config BR2_cortex_a17
-+	bool "cortex-A17"
-+	select BR2_ARM_CPU_HAS_ARM
-+	select BR2_ARM_CPU_HAS_NEON
-+	select BR2_ARM_CPU_HAS_VFPV4
-+	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
- config BR2_cortex_m3
- 	bool "cortex-M3"
- 	select BR2_ARM_CPU_HAS_THUMB
-@@ -442,6 +450,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a9"	if BR2_cortex_a9
- 	default "cortex-a12"	if BR2_cortex_a12
- 	default "cortex-a15"	if BR2_cortex_a15
-+	default "cortex-a17"	if BR2_cortex_a17
- 	default "cortex-m3"	if BR2_cortex_m3
- 	default "fa526"		if BR2_fa526
- 	default "marvell-pj4"	if BR2_pj4
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index df3c385..07574e4 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -12,6 +12,8 @@ choice
- 			   !BR2_powerpc64le && !BR2_nios2
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# Unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		bool "binutils 2.23.2"
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index 67050a7..b7330fc 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.1.3.tar.bz2.sha256
+-sha256	d93d7cb7979c32672e902fdfa884599e63f07f2fa5b06c66147d20c516d4b8f7	harfbuzz-1.1.3.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.0.tar.bz2.sha256
++sha256	79ff5305153d15931fbdda80c9612783b0283dee44f4c2af71aa37353daaa685	harfbuzz-1.2.0.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index c704f32..7cdc356 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	config BR2_BINUTILS_VERSION_2_24_X
-@@ -19,6 +21,8 @@ choice
- 		depends on !BR2_nios2 && !BR2_powerpc64le
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+		# Unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		bool "binutils 2.24"
- 
- 	config BR2_BINUTILS_VERSION_2_25_X
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index cad6896..560ea52 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -21,7 +21,8 @@ choice
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
- 		depends on !BR2_cortex_a7 && !BR2_cortex_a12 && \
--			!BR2_cortex_a15 && !BR2_fa526 && !BR2_pj4
-+			!BR2_cortex_a15 && !BR2_cortex_a17 && \
-+			!BR2_fa526 && !BR2_pj4
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
- 			!BR2_powerpc_power8
-@@ -44,7 +45,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
--		depends on !BR2_cortex_a12 && !BR2_pj4
-+		depends on !BR2_cortex_a12 && !BR2_pj4 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_e5500 && !BR2_powerpc_e6500 && \
- 			!BR2_powerpc_power8
-@@ -63,7 +64,7 @@ choice
- 		depends on !BR2_microblaze && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
- 		# Broken or unsupported ARM cores
--		depends on !BR2_cortex_a12
-+		depends on !BR2_cortex_a12 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_power8
- 		# gcc-4.8.x + binutils-2.25 is broken for MIPS
-@@ -86,6 +87,8 @@ choice
- 		bool "gcc 4.9.x"
- 		# Broken or unsupported architectures
- 		depends on !BR2_arc
-+		# Broken or unsupported ARM cores
-+		depends on !BR2_cortex_a17
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		# PR60102 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60102
+-HARFBUZZ_VERSION = 1.1.3
++HARFBUZZ_VERSION = 1.2.0
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
