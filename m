@@ -1,43 +1,40 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 22 Feb 2016 13:52:57 -0300
-Subject: [Buildroot] [PATCH 4/4] fakeroot: enable capability support
-In-Reply-To: <1456159977-8428-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1456159977-8428-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1456159977-8428-5-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 22 Feb 2016 14:19:18 -0300
+Subject: [Buildroot] [PATCH] cantarell: bump to version 0.0.23
+Message-ID: <1456161558-24269-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-
-Enable file capability support, this still requires fakeroot script
-(makedev) support.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/fakeroot/fakeroot.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ package/cantarell/cantarell.hash | 4 ++--
+ package/cantarell/cantarell.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 168cd13..06f1a73 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -7,13 +7,7 @@
- FAKEROOT_VERSION = 1.20.2
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
- FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
--# Force capabilities detection off
--# For now these are process capabilities (faked) rather than file
--# so they're of no real use
--HOST_FAKEROOT_CONF_ENV = \
--	ac_cv_header_sys_capability_h=no \
--	ac_cv_func_capset=no
--
-+FAKEROOT_DEPENDENCIES = host-libcap
- FAKEROOT_LICENSE = GPLv3+
- FAKEROOT_LICENSE_FILES = COPYING
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index 5d8284d..2d2bab5 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.21.sha256sum
+-sha256	2d3e925574648f0902c61975f84acac445ee9cda826280644bdf772960b46e85	cantarell-fonts-0.0.21.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.23.sha256sum
++sha256	d85e165ac5d676d6b21c7870d8243cb612a2dc766d91fda788d56d5f5ad5db4e	cantarell-fonts-0.0.23.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index c677c78..9943d70 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
+ CANTARELL_VERSION_MAJOR = 0.0
+-CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).21
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).23
+ CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
 -- 
 2.4.10
