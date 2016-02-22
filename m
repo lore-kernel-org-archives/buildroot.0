@@ -1,68 +1,34 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 22 Feb 2016 23:42:20 +0100
-Subject: [Buildroot] [PATCH] configs: add Boundary Devices i.MX7 Nitrogen7
-	support
-Message-ID: <1456180940-6439-1-git-send-email-gary.bisson@boundarydevices.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 23:44:21 +0100
+Subject: [Buildroot] [PATCH] package/mono: Fixing wrong MonoPosixHelper
+ location
+In-Reply-To: <1456172423-17113-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1456172423-17113-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20160222234421.74cead04@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This board is using a different kernel and u-boot branch than the
-other Boundary Devices platforms since NXP forked the 3.14 kernel to add
-i.MX7 support (see imx_3.14.38_6ul7d_beta branch).
-Next kernel version, 3.14.52, will be the same for all i.MX platforms.
+Angelo,
 
-https://boundarydevices.com/product/nitrogen7/
+On Mon, 22 Feb 2016 21:20:23 +0100, Angelo Compagnucci wrote:
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- configs/nitrogen7_defconfig | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 configs/nitrogen7_defconfig
+> diff --git a/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
+> new file mode 100644
+> index 0000000..66cc1ea
+> --- /dev/null
+> +++ b/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
+> @@ -0,0 +1,13 @@
 
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-new file mode 100644
-index 0000000..91529e8
---- /dev/null
-+++ b/configs/nitrogen7_defconfig
-@@ -0,0 +1,36 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+
-+# filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Linux headers same as kernel, a 3.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/b2e1315/u-boot-b2e1315.tar.gz"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/20cee23/linux-imx6-20cee23.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-nitrogen7"
+The patch itself lacks a description + SoB. Can you resend a new
+version that includes this?
+
+Thanks!
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
