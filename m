@@ -1,116 +1,123 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 22 Feb 2016 15:40:59 +0100
-Subject: [Buildroot] [PATCH] msr-tools: new package
-In-Reply-To: <1454087465-23445-1-git-send-email-vincent.stehle@intel.com>
-References: <1454087465-23445-1-git-send-email-vincent.stehle@intel.com>
-Message-ID: <CAGm1_kuNhAYrMRf_T3FU5gCoYYT72nEm=MeTRWkdo9FrYjK9-g@mail.gmail.com>
+Date: Mon, 22 Feb 2016 16:00:56 +0100
+Subject: [Buildroot] [PATCH 1/1 v2] sphinxbase: new package
+In-Reply-To: <1453134708-17909-1-git-send-email-yba@tkos.co.il>
+References: <1453134708-17909-1-git-send-email-yba@tkos.co.il>
+Message-ID: <CAGm1_ktWxhn10OZf2S2x=yRvjfJE2N5Qu+50c-5kWdzXiuX9cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vincent,
+Hi Jonathan,
 
-On Fri, Jan 29, 2016 at 6:11 PM, Vincent Stehl?
-<vincent.stehle@intel.com> wrote:
-> The MSR Tools project provides utilities to access x86 processor MSRs
-> and CPU ID directly.
+On Mon, Jan 18, 2016 at 5:31 PM, Jonathan Ben-Avraham <yba@tkos.co.il> wrote:
+> From: Jonathan Ben Avraham <yba@tkos.co.il>
 >
-> https://01.org/msr-tools
+> CMUSphinx toolkit is a speech recognition toolkit with various tools
+> used to build speech applications. CMU Sphinx toolkit has a number of
+> packages for different tasks and applications. The toolkit is designed
+> for use on mobile platforms.
 >
-> Signed-off-by: Vincent Stehl? <vincent.stehle@intel.com>
+> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
 > ---
->  package/Config.in                |  1 +
->  package/msr-tools/Config.in      | 12 ++++++++++++
->  package/msr-tools/msr-tools.hash |  2 ++
->  package/msr-tools/msr-tools.mk   | 22 ++++++++++++++++++++++
->  4 files changed, 37 insertions(+)
->  create mode 100644 package/msr-tools/Config.in
->  create mode 100644 package/msr-tools/msr-tools.hash
->  create mode 100644 package/msr-tools/msr-tools.mk
+> Changes v1 -> v2:
+>  1. Applied all review comments by Arnout Vandecappelle:
+>   a. Removed comments regarding github repo
+>   b. Added comment regarding missing license file upstream bug report
+>   c. Added example source file as license file
+>   d. Removed redundant source specification
+>
+>  2. Tested patch application with git apply --check
+>
+>  package/Config.in                  |    1 +
+>  package/sphinxbase/Config.in       |   13 +++++++++++++
+>  package/sphinxbase/sphinxbase.hash |    2 ++
+>  package/sphinxbase/sphinxbase.mk   |   18 ++++++++++++++++++
+>  4 files changed, 34 insertions(+)
+>  create mode 100644 package/sphinxbase/Config.in
+>  create mode 100644 package/sphinxbase/sphinxbase.hash
+>  create mode 100644 package/sphinxbase/sphinxbase.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 09c2b40..5e2451c 100644
+> index 89b23db..b555808 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -402,6 +402,7 @@ endif
->         source "package/memtest86/Config.in"
->         source "package/memtester/Config.in"
->         source "package/minicom/Config.in"
-> +       source "package/msr-tools/Config.in"
->         source "package/nanocom/Config.in"
->         source "package/neard/Config.in"
->         source "package/nvidia-driver/Config.in"
-> diff --git a/package/msr-tools/Config.in b/package/msr-tools/Config.in
+> @@ -1213,6 +1213,7 @@ endif
+>         source "package/protobuf-c/Config.in"
+>         source "package/qhull/Config.in"
+>         source "package/qlibc/Config.in"
+> +       source "package/sphinxbase/Config.in"
+>         source "package/startup-notification/Config.in"
+>         source "package/tz/Config.in"
+>         source "package/tzdata/Config.in"
+> diff --git a/package/sphinxbase/Config.in b/package/sphinxbase/Config.in
 > new file mode 100644
-> index 0000000..cc7ac2d
+> index 0000000..ee9ca31
 > --- /dev/null
-> +++ b/package/msr-tools/Config.in
-> @@ -0,0 +1,12 @@
-> +config BR2_PACKAGE_MSR_TOOLS
-> +       bool "msr-tools"
-> +       depends on BR2_i386 || BR2_x86_64
+> +++ b/package/sphinxbase/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_SPHINXBASE
+> +       bool "sphinxbase"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
 > +       help
-> +         The MSR Tools project provides utilities to access x86 processor MSRs
-> +         and CPU ID directly.
+> +         CMUSphinx toolkit is a leading speech recognition toolkit with
+> +         various tools used to build speech applications. CMU Sphinx
+> +         toolkit has a number of packages for different tasks and
+> +         applications.
 > +
-> +         Those tools access the hardware through the /dev/cpu/<cpu#>/msr and
-> +         /dev/cpu/<cpu#>/cpuid devices. This necessitates msr and cpuid
-> +         support in the kernel.
+> +         http://cmusphinx.sourceforge.net/
 > +
-> +         https://01.org/msr-tools
-
-Config.in is missing a depends message like this:
-
-comment "msr-tools runs only on x86 CPUs"
-        depends on !BR2_i386 && !BR2_x86_64
-
-> diff --git a/package/msr-tools/msr-tools.hash b/package/msr-tools/msr-tools.hash
+> +comment "sphinxbase needs a toolchain with threads"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/sphinxbase/sphinxbase.hash b/package/sphinxbase/sphinxbase.hash
 > new file mode 100644
-> index 0000000..18146df
+> index 0000000..483fda3
 > --- /dev/null
-> +++ b/package/msr-tools/msr-tools.hash
+> +++ b/package/sphinxbase/sphinxbase.hash
 > @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256 9b87245ee091a798184e447066e9e0d7709b7c81f5e6ad55f2b958c1aa50c4a3 msr-tools-1.3.tar.gz
-> diff --git a/package/msr-tools/msr-tools.mk b/package/msr-tools/msr-tools.mk
+> +# Locally computed
+> +sha256 b8b19a207d1a285753a93ed67c36aacba0ebdc0892471fd3be6f6ffaba776f88 sphinxbase-5prealpha.tar.gz
+
+sha256 seems to be wrong
+
+> diff --git a/package/sphinxbase/sphinxbase.mk b/package/sphinxbase/sphinxbase.mk
 > new file mode 100644
-> index 0000000..91a783a
+> index 0000000..9397997
 > --- /dev/null
-> +++ b/package/msr-tools/msr-tools.mk
-> @@ -0,0 +1,22 @@
+> +++ b/package/sphinxbase/sphinxbase.mk
+> @@ -0,0 +1,17 @@
 > +################################################################################
 > +#
-> +# msr-tools
+> +# sphinxbase
 > +#
 > +################################################################################
 > +
-> +MSR_TOOLS_VERSION = 1.3
-> +MSR_TOOLS_SITE = $(call github,01org,msr-tools,msr-tools-$(MSR_TOOLS_VERSION))
-> +MSR_TOOLS_SOURCE = msr-tools-$(MSR_TOOLS_VERSION).tar.gz
+> +SPHINXBASE_VERSION = 5prealpha
+> +SPHINXBASE_SITE = http://downloads.sourceforge.net/project/cmusphinx/sphinxbase
 
-Do you really need MSR_TOOLS_SOURCE?
+I could download the file only with this URL:
 
-Other than that looks good to me.
+SPHINXBASE_SITE =
+http://downloads.sourceforge.net/project/cmusphinx/sphinxbase/5prealpha
+
+> +SPHINXBASE_AUTORECONF = YES
+
+Why do you need autoreconf?
 
 Yegor
 
-> +MSR_TOOLS_LICENSE = GPLv2+
+> +SPHINXBASE_LICENSE = MIT
+> +# Note http://sourceforge.net/p/cmusphinx/bugs/441/ "LICENSE file missing in"
+> +# 5prealpha tarballs". The license is contained in the copyright notice at the
+> +# top of each source file. For example:
+> +SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
+> +SPHINXBASE_CONF_OPTS = --without-python
 > +
-> +define MSR_TOOLS_BUILD_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) \
-> +       $(MAKE) -C $(@D) CC="$(CCACHE) $(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-> +endef
-> +
-> +define MSR_TOOLS_INSTALL_TARGET_CMDS
-> +       $(TARGET_CONFIGURE_OPTS) \
-> +       $(MAKE) -C $(@D) install sbindir="$(TARGET_DIR)/usr/sbin"
-> +endef
-> +
-> +$(eval $(generic-package))
+> +$(eval $(autotools-package))
 > --
-> 2.7.0.rc3
+> 1.7.9.5
 >
 > _______________________________________________
 > buildroot mailing list
