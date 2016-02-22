@@ -1,271 +1,148 @@
-From: Phil Eichinger <phil.eichinger@gmail.com>
-Date: Mon, 22 Feb 2016 07:27:56 +0100
-Subject: [Buildroot] [PATCH v2] configs/olimex_imx233_olinuxino: switch to
-	u-boot
-In-Reply-To: <1456075479-12750-1-git-send-email-phil@zankapfel.net>
-References: <1456075479-12750-1-git-send-email-phil@zankapfel.net>
-Message-ID: <1456122476-6210-1-git-send-email-phil@zankapfel.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 08:30:22 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-02-21
+Message-ID: <20160222073022.D29851025E8@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mxs-bootlets broke somewhere in between toolchain version bumps.
-Directly boot u-boot, as this is supported now, but it requires updated partitioning (see readme.txt)
-Drop mxs-bootlets patches, they aren't needed anymore.
+Build statistics for 2016-02-21
+===============================
 
-Signed-off-by: Phil Eichinger <phil@zankapfel.net>
-Tested-by: Phil Eichinger <phil@zankapfel.net>
----
-Changes v1 -> v2:
- - Drop BR2_GLOBAL_PATCH_DIR (suggested by Baruch Siach)
+        success : 191
+       failures : 70 
+       timeouts : 3  
+          TOTAL : 264
 
- .../mxs-bootlets/mxs-bootlets-01-olinuxino.patch   | 122 ---------------------
- board/olimex/imx233_olinuxino/readme.txt           |  30 +++--
- configs/olimex_imx233_olinuxino_defconfig          |  39 ++-----
- 3 files changed, 32 insertions(+), 159 deletions(-)
- delete mode 100644 board/olimex/imx233_olinuxino/mxs-bootlets/mxs-bootlets-01-olinuxino.patch
+Classification of failures by reason
+====================================
 
-diff --git a/board/olimex/imx233_olinuxino/mxs-bootlets/mxs-bootlets-01-olinuxino.patch b/board/olimex/imx233_olinuxino/mxs-bootlets/mxs-bootlets-01-olinuxino.patch
-deleted file mode 100644
-index 54c3ca0..0000000
---- a/board/olimex/imx233_olinuxino/mxs-bootlets/mxs-bootlets-01-olinuxino.patch
-+++ /dev/null
-@@ -1,122 +0,0 @@
--Forward-ported patch from https://github.com/koliqi/imx23-olinuxino
--for mxs-bootlets-10.12.01
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff -Nura imx-bootlets-src-10.12.01/linux_prep/board/imx23_olinuxino_dev.c imx-bootlets-src-10.12.01-olinuxino/linux_prep/board/imx23_olinuxino_dev.c
----- imx-bootlets-src-10.12.01/linux_prep/board/imx23_olinuxino_dev.c	1969-12-31 21:00:00.000000000 -0300
--+++ imx-bootlets-src-10.12.01-olinuxino/linux_prep/board/imx23_olinuxino_dev.c	2013-05-17 15:07:33.282961551 -0300
--@@ -0,0 +1,54 @@
--+/*
--+ * Platform specific data for the IMX23_OLINUXINO development board
--+ *
--+ * Fadil Berisha <fadil.r.berisha@gmail.com>
--+ *
--+ * Copyright 2008 SigmaTel, Inc
--+ * Copyright 2008 Embedded Alley Solutions, Inc
--+ * Copyright 2009-2010 Freescale Semiconductor, Inc. All Rights Reserved.
--+ *
--+ * This file is licensed under the terms of the GNU General Public License
--+ * version 2. This program is licensed "as is" without any warranty of any
--+ * kind, whether express or implied.
--+ *
--+ * http://www.opensource.org/licenses/gpl-license.html
--+ * http://www.gnu.org/copyleft/gpl.html
--+ */
--+#include <setup.h>
--+#include <keys.h>
--+#include <lradc_buttons.h>
--+
--+/************************************************
--+ * LRADC keyboard data *
--+ ************************************************/
--+int lradc_keypad_ch = LRADC_CH0;
--+int lradc_vddio_ch = LRADC_CH6;
--+
--+struct lradc_keycode lradc_keycodes[] = {
--+ { 100, KEY4 },
--+ { 306, KEY5 },
--+ { 601, KEY6 },
--+ { 932, KEY7 },
--+ { 1260, KEY8 },
--+ { 1424, KEY9 },
--+ { 1707, KEY10 },
--+ { 2207, KEY11 },
--+ { 2525, KEY12 },
--+ { 2831, KEY13 },
--+ { 3134, KEY14 },
--+ { -1, 0 },
--+};
--+
--+/************************************************
--+ * Magic key combinations for Armadillo *
--+ ************************************************/
--+u32 magic_keys[MAGIC_KEY_NR] = {
--+ [MAGIC_KEY1] = KEY4,
--+ [MAGIC_KEY2] = KEY6,
--+ [MAGIC_KEY3] = KEY10,
--+};
--+
--+/************************************************
--+ * Default command line *
--+ ************************************************/
--+char cmdline_def[] = "console=ttyAMA0,115200";
--diff -Nura imx-bootlets-src-10.12.01/linux_prep/cmdlines/imx23_olinuxino_dev.txt imx-bootlets-src-10.12.01-olinuxino/linux_prep/cmdlines/imx23_olinuxino_dev.txt
----- imx-bootlets-src-10.12.01/linux_prep/cmdlines/imx23_olinuxino_dev.txt	1969-12-31 21:00:00.000000000 -0300
--+++ imx-bootlets-src-10.12.01-olinuxino/linux_prep/cmdlines/imx23_olinuxino_dev.txt	2013-05-17 15:07:49.663496106 -0300
--@@ -0,0 +1,3 @@
--+console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw rootwait
--+console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw rootwait
--+console=ttyAMA0,115200 root=/dev/mmcblk0p2 rw rootwait
--diff -Nura imx-bootlets-src-10.12.01/linux_prep/core/setup.c imx-bootlets-src-10.12.01-olinuxino/linux_prep/core/setup.c
----- imx-bootlets-src-10.12.01/linux_prep/core/setup.c	2010-11-04 04:35:38.000000000 -0300
--+++ imx-bootlets-src-10.12.01-olinuxino/linux_prep/core/setup.c	2013-05-17 15:08:39.246114205 -0300
--@@ -84,6 +84,8 @@
-- #include "../../mach-mx28/includes/registers/regsrtc.h"
-- #elif defined(STMP378X)
-- #include "../../mach-mx23/includes/registers/regsrtc.h"
--+#elif defined(IMX23_OLINUXINO)
--+#include "../../mach-mx23/includes/registers/regsrtc.h"
-- #endif
--
-- #define NAND_SECONDARY_BOOT          0x00000002
--diff -Nura imx-bootlets-src-10.12.01/linux_prep/include/mx23/platform.h imx-bootlets-src-10.12.01-olinuxino/linux_prep/include/mx23/platform.h
----- imx-bootlets-src-10.12.01/linux_prep/include/mx23/platform.h	2010-11-04 04:35:38.000000000 -0300
--+++ imx-bootlets-src-10.12.01-olinuxino/linux_prep/include/mx23/platform.h	2013-05-17 15:09:21.006476997 -0300
--@@ -19,6 +19,8 @@
--
-- #if defined (BOARD_STMP378X_DEV)
-- #define	MACHINE_ID	0xa45
--+#elif defined (BOARD_IMX23_OLINUXINO_DEV)
--+#define MACHINE_ID	0x1009
-- #else
-- #error "Allocate a machine ID for your board"
-- #endif
--diff -Nura imx-bootlets-src-10.12.01/linux_prep/Makefile imx-bootlets-src-10.12.01-olinuxino/linux_prep/Makefile
----- imx-bootlets-src-10.12.01/linux_prep/Makefile	2010-11-04 04:35:38.000000000 -0300
--+++ imx-bootlets-src-10.12.01-olinuxino/linux_prep/Makefile	2013-05-17 15:09:53.554539143 -0300
--@@ -69,6 +69,11 @@
-- HW_OBJS = $(LRADC_OBJS)
-- CFLAGS += -DMX28 -DBOARD_MX28_EVK
-- endif
--+ifeq ($(BOARD), imx23_olinuxino_dev)
--+ARCH = mx23
--+HW_OBJS = $(LRADC_OBJS)
--+CFLAGS += -DIMX23_OLINUXINO -DBOARD_IMX23_OLINUXINO_DEV
--+endif
--
-- # Generic code
-- CORE_OBJS = entry.o resume.o cmdlines.o setup.o keys.o
--diff -Nura imx-bootlets-src-10.12.01/Makefile imx-bootlets-src-10.12.01-olinuxino/Makefile
----- imx-bootlets-src-10.12.01/Makefile	2010-11-04 04:35:38.000000000 -0300
--+++ imx-bootlets-src-10.12.01-olinuxino/Makefile	2013-05-17 15:23:53.709956619 -0300
--@@ -16,6 +16,9 @@
-- ifeq ($(BOARD), iMX28_EVK)
-- ARCH = mx28
-- endif
--+ifeq ($(BOARD), imx23_olinuxino_dev)
--+ARCH = mx23
--+endif
--
-- all: build_prep gen_bootstream
--
-diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
-index 1c36a61..39dec77 100644
---- a/board/olimex/imx233_olinuxino/readme.txt
-+++ b/board/olimex/imx233_olinuxino/readme.txt
-@@ -6,10 +6,11 @@ one or more of: hostapd, iw, wireless_tools and/or wpa_supplicant.
- It also pulls up the console on the serial port, not on TV output.
- 
- You'll need a spare MicroSD card with Freescale's special partition layout.
--This is basically two partitions:
-+This is basically three partitions:
- 
--1) Type 53, the bootstrap + bootloader/kernel partition, should be 16MB.
--2) Anything you like, for this example an ext2 partition, type 83 (linux).
-+1) Type 53, the u-boot partition, should be 16MB.
-+2) VFAT, place Kernel as uImage there
-+3) Anything you like, for this example an ext2 partition, type 83 (linux).
- 
- Assuming you see your MicroSD card as /dev/sdc you'd need to do, as root
- and from the buildroot project top level directory:
-@@ -43,15 +44,28 @@ and from the buildroot project top level directory:
-    p
-    2
-    <ENTER>
-+   +5M
-+   t
-+   2
-+   4
-+   n
-+   p
-+   3
-+   <ENTER>
-    <ENTER>
-    w
- 
- 4. Fill up the first (bootstrap + kernel) partition
--   # dd if=output/images/imx23_olinuxino_dev_linux.sb bs=512 of=/dev/sdc1 seek=4
-+   # dd if=output/images/u-boot.sd bs=512 of=/dev/sdc1
-+
-+5. Create VFAT Filesystem
-+   # mkfs.vfat /dev/sdc2
-+
-+6. Mount and copy output/images/uImage.imx23-olinuxino to the VFAT partition, rename to uImage
- 
--5. Fill up the second (filesystem) partition
--   # dd if=output/images/rootfs.ext2 of=/dev/sdc2 bs=512
-+7. Fill up the third (filesystem) partition
-+   # dd if=output/images/rootfs.ext2 of=/dev/sdc3 bs=512
- 
--6. Remove the MicroSD card from your linux PC and put it into your olinuxino.
-+8. Remove the MicroSD card from your linux PC and put it into your olinuxino.
- 
--7. Boot! You're done!
-+9. Boot! You're done!
-diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
-index 2184ad8..d27909f 100644
---- a/configs/olimex_imx233_olinuxino_defconfig
-+++ b/configs/olimex_imx233_olinuxino_defconfig
-@@ -1,40 +1,15 @@
--# Architecture
- BR2_arm=y
--BR2_arm926t=y
--
--# Patches (mxs-bootlets)
--BR2_GLOBAL_PATCH_DIR="board/olimex/imx233_olinuxino"
--
--# System
--BR2_TARGET_GENERIC_GETTY=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
--
--# Filesystem
--BR2_TARGET_ROOTFS_EXT2=y
--# BR2_TARGET_ROOTFS_TAR is not set
--
--# Linux headers same as kernel, a 3.18 series
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
--
--# Bootloader
--BR2_TARGET_MXS_BOOTLETS=y
--BR2_TARGET_MXS_BOOTLETS_CUSTOM_PATCH_DIR="board/olimex/imx233_olinuxino"
--BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD=y
--BR2_TARGET_MXS_BOOTLETS_CUSTOM_BOARD_NAME="imx23_olinuxino_dev"
--
--# Kernel
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.2"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/imx233_olinuxino/linux-3.18.config"
--BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
-+BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
-+BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx23-olinuxino"
--
--# For automatic firmware loading
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--
--# Firmware for WiFi
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010=y
- BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271=y
-@@ -42,3 +17,9 @@ BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
- BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
- BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
- BR2_PACKAGE_ZD1211_FIRMWARE=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
-+BR2_TARGET_UBOOT_FORMAT_SD=y
+                numactl-2.0.11 | 6 
+                      qt-4.8.7 | 5 
+               pax-utils-1.1.4 | 4 
+                 opencv-2.4.10 | 3 
+                 libdrm-2.4.66 | 3 
+                   qhull-7.2.0 | 2 
+hidapi-d17db57b9d4354752e0a... | 2 
+             ipsec-tools-0.8.2 | 2 
+                 mesa3d-11.1.1 | 2 
+              gst1-libav-1.6.3 | 2 
+               libcap-ng-0.7.4 | 2 
+               nfs-utils-1.3.3 | 2 
+canfestival-7740ac6fdedc23e... | 2 
+                    cups-2.1.2 | 2 
+pifmrds-0bf57f9ce0d954365a3... | 2 
+                sqlite-3100200 | 2 
+                  trinity-v1.6 | 1 
+                   fio-fio-2.6 | 1 
+        ltp-testsuite-20150903 | 1 
+               trousers-0.3.13 | 1 
+                   perl-5.22.1 | 1 
+                   tor-0.2.7.6 | 1 
+                    sox-14.4.2 | 1 
+                    ruby-2.3.0 | 1 
+       openpgm-release-5-2-122 | 1 
+             bluez5_utils-5.37 | 1 
+               qt5webkit-5.5.1 | 1 
+make[3]: *** [code/CMakeFil... | 1 
+               host-efl-1.15.3 | 1 
+                 igmpproxy-0.1 | 1 
+                  stunnel-5.29 | 1 
+          chocolate-doom-2.2.1 | 1 
+                     gdb-7.9.1 | 1 
+                   erlang-17.5 | 1 
+kodi-pvr-argustv-32f03271cc... | 1 
+                 setools-3.3.8 | 1 
+                   mplayer-1.2 | 1 
+                  prboom-2.5.0 | 1 
+     openvmtools-stable-9.10.2 | 1 
+               ipmitool-1.8.15 | 1 
+            kodi-15.2-Isengard | 1 
+                   hostapd-2.5 | 1 
+                 libraw-0.17.1 | 1 
+sconeserver-c4b8e14f6e9e06c... | 1 
+               libsodium-1.0.6 | 1 
+       host-erlang-rebar-2.5.1 | 1 
+
+Detail of failures
+===================
+
+        mips |              bluez5_utils-5.37 | NOK | http://autobuild.buildroot.net/results/2bf4e5ea9b67b80ba38bfeaf71b747a92be09011/
+         arm | canfestival-7740ac6fdedc23e... | NOK | http://autobuild.buildroot.net/results/92802995144a76202040421255b003aded527958/
+         arm | canfestival-7740ac6fdedc23e... | NOK | http://autobuild.buildroot.net/results/db5733d2a62f84f90056d5e48e3f08fe94b87a6d/
+         arm |           chocolate-doom-2.2.1 | NOK | http://autobuild.buildroot.net/results/e09ea3a64d396bbc855acf7c07fcbea28fb2395d/
+         arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/07ccca8f80c56ab0ff48bfee876885b1c8c3916e/
+         arc |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/b169b939e38cb761319a92d2871f4f59ddb5c4ac/
+     aarch64 |                    erlang-17.5 | NOK | http://autobuild.buildroot.net/results/8b47dea53fc8608ab62cadfaeecdf828fd3d940f/
+        sh4a |                    fio-fio-2.6 | NOK | http://autobuild.buildroot.net/results/68f98acca8b02aeaa98c78d2e95a6a29df629fef/
+         arm |                      gdb-7.9.1 | NOK | http://autobuild.buildroot.net/results/edfb6854306ccaed9592139ad803850c2e0011d2/
+    mips64el |               gst1-libav-1.6.3 | NOK | http://autobuild.buildroot.net/results/b848969d518008dadb40fbebc40bab4124231c2b/
+    mips64el |               gst1-libav-1.6.3 | NOK | http://autobuild.buildroot.net/results/ace98b9c51379e19f70bbe0bda94ff80ab9dd7fc/
+        i686 | hidapi-d17db57b9d4354752e0a... | NOK | http://autobuild.buildroot.net/results/6f0c9a682bc98f962874a38c9e2a334fea21b0cb/
+      xtensa | hidapi-d17db57b9d4354752e0a... | NOK | http://autobuild.buildroot.net/results/a9216cd5f9568ef134b64341b629efea40d54fe1/
+      x86_64 |                host-efl-1.15.3 | NOK | http://autobuild.buildroot.net/results/c427d13cf1c50305047a3f0b0051520e672f91d8/
+         arm |        host-erlang-rebar-2.5.1 | TIM | http://autobuild.buildroot.net/results/685e2ec91d889c6a789025864e6b4890ef6b532d/
+         arm |                    hostapd-2.5 | NOK | http://autobuild.buildroot.net/results/39ff650ca14bdfa35b35bbf13e01cfceeb43035e/
+         arm |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/f44629feae5eb8b8b61e88eac5b24cbfce8a1c4d/
+         arm |                ipmitool-1.8.15 | NOK | http://autobuild.buildroot.net/results/ad8fbadedc152ec93c175aeb24f062e8290a352e/
+      x86_64 |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/d618837a536dfd3d076ae1cecd1f598b4bf7efcd/
+      x86_64 |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/fa6b8a8175420e9d76f23eb7b61075ac5ce315de/
+         arm |             kodi-15.2-Isengard | NOK | http://autobuild.buildroot.net/results/43939f65e4516adddc4385c6e0a2193abcab0446/
+         arm | kodi-pvr-argustv-32f03271cc... | NOK | http://autobuild.buildroot.net/results/dacc3bd00ab2346d7655c0a1fb99f6c50b9da08b/
+       nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/67f19f1fdf642c3c72deb931cb674b114bacc4da/
+       nios2 |                libcap-ng-0.7.4 | NOK | http://autobuild.buildroot.net/results/ed2503778126253fad08d9828f442a0b9d042fc2/
+       sparc |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/a17047ada385e5be5f60c07254597fcb7c4183d0/
+       sparc |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/6d79591bce2d3fa5b93e268fe50d5b89ecd24521/
+      x86_64 |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/52cdd46091740aab423987bdd6e2423b157a8799/
+         arc |                  libraw-0.17.1 | NOK | http://autobuild.buildroot.net/results/b1d80c4b62bd71e722f53b0e2caadd7951f23dd7/
+       sparc |                libsodium-1.0.6 | TIM | http://autobuild.buildroot.net/results/80988d3cc1cebd32b5c9718b936f9dfe9c10e34a/
+     sparc64 |         ltp-testsuite-20150903 | NOK | http://autobuild.buildroot.net/results/ce2c1fb10dfef1039545443ff9ef969889d2bf40/
+microblazeel | make[3]: *** [code/CMakeFil... | TIM | http://autobuild.buildroot.net/results/a692bc6df992cd05470fcc5b6e59ffb449da2069/
+         arc |                  mesa3d-11.1.1 | NOK | http://autobuild.buildroot.net/results/0eb25c0756eeb6b7ad4d3b1a86a47dfff3d766ef/
+microblazeel |                  mesa3d-11.1.1 | NOK | http://autobuild.buildroot.net/results/521aad4fd2e24fd78fa26a1d0c6284d56100a467/
+     aarch64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/e82b37607e3ef9efb0933e9300c48074d249a414/
+     powerpc |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/630771e41d71443e7c6a1ab3367199ebcc451153/
+     powerpc |                nfs-utils-1.3.3 | NOK | http://autobuild.buildroot.net/results/ddb1f5ccb1fb41fdfb7c035c0a8282a4afaa9c61/
+     powerpc |                 numactl-2.0.11 | NOK | http://autobuild.buildroot.net/results/11e90fc79cb96631fd3e44af7e15650047858b7d/
+     powerpc |                 numactl-2.0.11 | NOK | http://autobuild.buildroot.net/results/1997e8c52e093395bc0b15d6de1ccf328e077fce/
+     powerpc |                 numactl-2.0.11 | NOK | http://autobuild.buildroot.net/results/39892be2a1857b727f4213079faaade52d4da0d2/
+    mips64el |                 numactl-2.0.11 | NOK | http://autobuild.buildroot.net/results/131b044097725c00c58c05bf0d4e2afa05cf145a/
+     powerpc |                 numactl-2.0.11 | NOK | http://autobuild.buildroot.net/results/4db511e9d09b67ea333814d3698866c82c7afb54/
+     powerpc |                 numactl-2.0.11 | NOK | http://autobuild.buildroot.net/results/6a1470c60b08c95765f3549177dfa6059b76493b/
+     sparc64 |                  opencv-2.4.10 | NOK | http://autobuild.buildroot.net/results/63086c31c57fd68aa2759c51d7dfd49ae9e7239b/
+     sparc64 |                  opencv-2.4.10 | NOK | http://autobuild.buildroot.net/results/d05d7a24283cb0b5f305a7cd4cf8a60a4be7959d/
+     sparc64 |                  opencv-2.4.10 | NOK | http://autobuild.buildroot.net/results/92ebbd138dea50183880db49f920439b60e6f89b/
+         arm |        openpgm-release-5-2-122 | NOK | http://autobuild.buildroot.net/results/bc6209c2531c791a095935ffc6ff461de04f5b04/
+        i686 |      openvmtools-stable-9.10.2 | NOK | http://autobuild.buildroot.net/results/a6b5ef77df470c99c83ccc02a731f944e9747c65/
+     powerpc |                pax-utils-1.1.4 | NOK | http://autobuild.buildroot.net/results/8a3156e287282fb63c009e04248faf09f9b29476/
+     powerpc |                pax-utils-1.1.4 | NOK | http://autobuild.buildroot.net/results/d2686e71dcc1cf017503f7c68efdfe5c521abbc3/
+        bfin |                pax-utils-1.1.4 | NOK | http://autobuild.buildroot.net/results/ee3701c11ba8094e74c7356105ee2a18c2c73100/
+        i686 |                pax-utils-1.1.4 | NOK | http://autobuild.buildroot.net/results/a854da559be1d617d31acbb08c39e6ac5464cee7/
+         arm |                    perl-5.22.1 | NOK | http://autobuild.buildroot.net/results/985dc18ec04901bea7d4fdd6e0145f7625e80869/
+         arm | pifmrds-0bf57f9ce0d954365a3... | NOK | http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
+         arm | pifmrds-0bf57f9ce0d954365a3... | NOK | http://autobuild.buildroot.net/results/a124d4c8a2ef36165b29fbcc99c4c8ff89d296fb/
+        sh4a |                   prboom-2.5.0 | NOK | http://autobuild.buildroot.net/results/918d72bd9684a39dc688b143b682f8b5f49f1b26/
+        bfin |                    qhull-7.2.0 | NOK | http://autobuild.buildroot.net/results/884bd0fef2f88154da949fa3f4cc04368575183a/
+        bfin |                    qhull-7.2.0 | NOK | http://autobuild.buildroot.net/results/34f8754e2ddb243aaa73af196622449f655c5213/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/3f3d2938ba6a590ff2c4b20a7a15a46cbb079bc8/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/f67b512b761cb53a9d66ecfda9894e1f8d86c26f/
+       sparc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/872cb03d5869bd616fe8b22099a9ec4d556645ea/
+       sparc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/d462bf881ab01102ae26e20794b90c0ac3bbe27e/
+       nios2 |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/90a74e1c6c759e7029802caed2b3117fd63b1f17/
+      mipsel |                qt5webkit-5.5.1 | NOK | http://autobuild.buildroot.net/results/9379603f465a5ce3a579bf27338a5a4be0f11728/
+     powerpc |                     ruby-2.3.0 | NOK | http://autobuild.buildroot.net/results/87c882bc1a0dec9d76917c1e2db51fea61150294/
+         arm | sconeserver-c4b8e14f6e9e06c... | NOK | http://autobuild.buildroot.net/results/d22c1da4439806ded7cf8abf54ef92d0bf97dc9f/
+     sparc64 |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/fde279194387e131a4027d5a1e2183da8e477bbb/
+      mipsel |                     sox-14.4.2 | NOK | http://autobuild.buildroot.net/results/95721f7b88c46a20202fb02e408817097df965c3/
+         arm |                 sqlite-3100200 | NOK | http://autobuild.buildroot.net/results/52202f98b9ebd273bdb3dd87f27cb1789f8362f9/
+         arm |                 sqlite-3100200 | NOK | http://autobuild.buildroot.net/results/d97674be3ebc90ab99e93b1b294cfae8c7c1dad8/
+    mips64el |                   stunnel-5.29 | NOK | http://autobuild.buildroot.net/results/64cd09dc957cbeaab9c5c6d331d38e6e22da29ae/
+     aarch64 |                    tor-0.2.7.6 | NOK | http://autobuild.buildroot.net/results/fd0be644bf5c1c448eb1d2f94adbb433095f22f8/
+         arm |                   trinity-v1.6 | NOK | http://autobuild.buildroot.net/results/6703eb14e69120f82878e4d3fb0dc5a4362cd8ef/
+         arc |                trousers-0.3.13 | NOK | http://autobuild.buildroot.net/results/28638752ebe923b6597ebc6838c1f97477dc23dc/
+
+
 -- 
-2.1.4
+http://autobuild.buildroot.net
