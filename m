@@ -1,56 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2016 13:33:37 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 22 Feb 2016 09:40:58 -0300
 Subject: [Buildroot] [PATCH] glibc: remove version 2.21
-In-Reply-To: <56CAFE21.4030803@zacarias.com.ar>
+In-Reply-To: <20160222133337.743dba7f@free-electrons.com>
 References: <1456142845-5372-1-git-send-email-gustavo@zacarias.com.ar>
  <1456142845-5372-2-git-send-email-gustavo@zacarias.com.ar>
  <20160222132027.091e7c84@free-electrons.com>
  <56CAFE21.4030803@zacarias.com.ar>
-Message-ID: <20160222133337.743dba7f@free-electrons.com>
+ <20160222133337.743dba7f@free-electrons.com>
+Message-ID: <56CB01DA.1060601@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 22/02/16 09:33, Thomas Petazzoni wrote:
 
-On Mon, 22 Feb 2016 09:25:05 -0300, Gustavo Zacarias wrote:
+> I don't really see why you're talking specifically about atomics here,
+> but OK with the rest.
 
-> > Is it SPARC entirely, or only some specific architecture variants of
-> > SPARC that are no longer supported ?
-> >
+Because newer glibc versions need them for thread barriers, see glibc 
+source in sysdeps/sparc/sparc32/atomic-machine.h
 
-> Quick SPARC lesson.
+>> So basically yes, sparc = no glibc, sparc64 = yes glibc, because we
+>> don't support multilib (in gentoo it wasn't 100% multilib in the past,
+>> except that binutils/gcc did support -m64/-m32, but there wasn't libc
+>> support, hence not really multilib).
+>
+> I don't follow the relation with multilib support. Care to expand on
+> this?
 
-Good, because I don't know anything about SPARC :)
-
-> SPARC < V9 = 32 bits (AKA sparc arch).
-> SPARC >= V9 = 64 bits and 32 bits as well (similar to x86, AKA sparc64 
-> arch).
-
-ACK.
-
-> Now, you can use atomics for >= v9 and even on 32 bits, but normally 
-> even if you use 32 bit userland you want a 64 bit kernel anyway (IIRC 
-> solaris supports 32 bit kernel as well for old/transition versions, but 
-> AFAIK linux never went there).
-
-I don't really see why you're talking specifically about atomics here,
-but OK with the rest.
-
-> So basically yes, sparc = no glibc, sparc64 = yes glibc, because we 
-> don't support multilib (in gentoo it wasn't 100% multilib in the past, 
-> except that binutils/gcc did support -m64/-m32, but there wasn't libc 
-> support, hence not really multilib).
-
-I don't follow the relation with multilib support. Care to expand on
-this?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Since you can't build a 32-bit linux kernel for v9+ then you need a gcc 
+capable of -m64 for v9, even if your userland is 32-bit.
+There's no separation in cpu mode for SPARC 32/64 bits like there is for 
+x86, so you can use the new instructions even in 32-bit "mode".
+Regards.
