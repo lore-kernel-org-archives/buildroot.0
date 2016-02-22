@@ -1,51 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2016 23:33:43 +0100
-Subject: [Buildroot] [PATCH v2 01/15] boot: Add new bootloader
- afboot-stm32
-In-Reply-To: <1456167569-8713-2-git-send-email-lee.jones@linaro.org>
-References: <1456167569-8713-1-git-send-email-lee.jones@linaro.org>
- <1456167569-8713-2-git-send-email-lee.jones@linaro.org>
-Message-ID: <20160222233343.17e442ed@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 22 Feb 2016 23:33:44 +0100
+Subject: [Buildroot] pjsip package status
+In-Reply-To: <841623823.459573.1456179714125.JavaMail.zimbra@savoirfairelinux.com>
+References: <1914178697.329791.1455739489770.JavaMail.zimbra@savoirfairelinux.com>
+ <20160220173543.GE3418@free.fr>
+ <841623823.459573.1456179714125.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <20160222223344.GA3463@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Lee,
+Patrick, All,
 
-On Mon, 22 Feb 2016 18:59:15 +0000, Lee Jones wrote:
-> This is a _very_ small bootloader for STM32 platforms.
-> 
-> At submission afboot-stm32 supports the following boards:
-> 
->   stm32429i-eval
->   stm32746g-eval
->   stm32f429i-disco
->   stm32f469i-disco
-> 
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  boot/Config.in                      |  1 +
->  boot/afboot-stm32/Config.in         |  6 ++++++
->  boot/afboot-stm32/afboot-stm32.hash |  2 ++
->  boot/afboot-stm32/afboot-stm32.mk   | 18 ++++++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 boot/afboot-stm32/Config.in
->  create mode 100644 boot/afboot-stm32/afboot-stm32.hash
->  create mode 100644 boot/afboot-stm32/afboot-stm32.mk
+On 2016-02-22 17:21 -0500, Patrick Keroulas spake thusly:
+> Sure I can take a look at this but my BR experience is quite limited.
+> Not sure about gsm, srtp, and portaudio. Why aren't they treated like
+> other options?  Are you sure they're necessary for Asterisk application?
 
-I've applied to next, after doing the following changes:
+Well, I was mostly pointing you to this branch so you can look at the
+pjsip package (since that was your inquiry).
 
- - Changed the commit title to "afboot-stm32: new package", which is
-   our standard for package additions.
+I am not sure what you meant by "treated like other options". Some of
+the features in Asterisk have dependencies on other packages (like srtp
+for example), while others use internal code (like gsm for example).
 
- - Added the "depends on BR2_arm" dependency.
+No, they are not _strictly_ required for Asterisk to behave. Asterisk
+can be an IP-only application, but it can also make use of telephony
+cards (hence ss7 et al.). It seems it can also understand some GSM
+dialect, too. But all that is optional and depends on what the user
+needs; so some users may enable some of those options, while other users
+may enable some other options.
 
-Thanks!
+> I thought configure options should limit the package footprint as much
+> as possible.
 
-Thomas
+Well, you could put it that way. I prefer to say:
+    We have options so only what is strictly needed is present.
+
+Which incidentally reduces the footprint! ;-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
