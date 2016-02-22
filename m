@@ -1,72 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 22 Feb 2016 12:12:11 +0100
-Subject: [Buildroot] [git commit] board/calao: drop remaining snowball files
-Message-ID: <20160222111352.59720817EA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 12:14:46 +0100
+Subject: [Buildroot] [PATCH 7/9] boards: stm32f469-disco: Add kernel
+ patch to set RAM address to 0
+In-Reply-To: <1455901745-18486-8-git-send-email-lee.jones@linaro.org>
+References: <1455901745-18486-1-git-send-email-lee.jones@linaro.org>
+ <1455901745-18486-8-git-send-email-lee.jones@linaro.org>
+Message-ID: <20160222121446.2e0e142e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b23ab47ad4c4ac2f7916673be518704af5dbde7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Lee,
 
-Commit b3fa8e24 (configs: remove calao_snowball_defconfig) dropped the
-outdated snowball defconfig, but forgot to remove the board files.
+On Fri, 19 Feb 2016 17:09:03 +0000, Lee Jones wrote:
+> At the time of submission, the Mainline kernel does not currently
+> support the STM32f469.  This patch makes changes to the defconfig
+> to enable booting with the CPIO which Buildroot puts together.
+> 
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  .../patches/kernel/0004-enable-cpio-rootfs.patch   | 26 ++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0004-enable-cpio-rootfs.patch
+> 
+> diff --git a/board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0004-enable-cpio-rootfs.patch b/board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0004-enable-cpio-rootfs.patch
+> new file mode 100644
+> index 0000000..28a1b81
+> --- /dev/null
+> +++ b/board/stmicroelectronics/stm32/stm32f469-disco/patches/kernel/0004-enable-cpio-rootfs.patch
+> @@ -0,0 +1,26 @@
+> +From 025cf91280af68d2e7f527e46dce072713fa79ac Mon Sep 17 00:00:00 2001
+> +From: Lee Jones <lee.jones@linaro.org>
+> +Date: Thu, 18 Feb 2016 11:07:25 +0000
+> +Subject: [PATCH 1/1] ARM: stm32: Add support for booting with a CPIO rootfs
+> +
+> +Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> +---
+> + arch/arm/configs/stm32_defconfig | 5 +++++
+> + 1 file changed, 5 insertions(+)
+> +
+> +diff --git a/arch/arm/configs/stm32_defconfig b/arch/arm/configs/stm32_defconfig
+> +index 4725fab..eaac94c 100644
+> +--- a/arch/arm/configs/stm32_defconfig
+> ++++ b/arch/arm/configs/stm32_defconfig
+> +@@ -68,3 +68,8 @@ CONFIG_MAGIC_SYSRQ=y
+> + # CONFIG_FTRACE is not set
+> + CONFIG_CRC_ITU_T=y
+> + CONFIG_CRC7=y
+> ++CONFIG_INITRAMFS_ROOT_UID=0
+> ++CONFIG_INITRAMFS_ROOT_GID=0
+> ++CONFIG_INITRAMFS_SOURCE="${BR_BINARIES_DIR}/rootfs.cpio"
+> ++CONFIG_RD_GZIP=y
+> ++CONFIG_INITRAMFS_COMPRESSION_GZIP=y
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/calao/snowball/linux-3.4.patch | 45 ------------------------------------
- 1 file changed, 45 deletions(-)
+This is not needed. Buildroot already sets those options when building
+a kernel with BR2_TARGET_ROOTFS_INITRAMFS=y in the Buildroot
+configuration. See linux/linux.mk, and search for
+BR2_TARGET_ROOTFS_INITRAMFS.
 
-diff --git a/board/calao/snowball/linux-3.4.patch b/board/calao/snowball/linux-3.4.patch
-deleted file mode 100644
-index 4e6fb51..0000000
---- a/board/calao/snowball/linux-3.4.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 3d1a9b44b9dcd2c0f5d54c09596c96c0524d8340 Mon Sep 17 00:00:00 2001
--From: Gregory Hermant <gregory.hermant@calao-systems.com>
--Date: Tue, 13 Nov 2012 11:47:41 +0100
--Subject: [PATCH] trace-debug[stm]: Fix for BT/WLAN instability
--
--Pins under mop500_ske_pins array are used for different
--functionalities in snowball. Ex: GPIO161 pin configured
--for keypad here must stay configured as GPIO alternate
--function for operating PMU_EN pin of BT/WLAN chip in snowball.
--So forbid configuring these pins, for snowball
--
--Signed-off-by: Rajanikanth H.V <rajanikanth.hv@stericsson.com>
--Signed-off-by: Gregory Hermant <gregory.hermant@calao-systems.com>
-----
-- arch/arm/mach-ux500/board-mop500-stm.c |    7 +++++--
-- 1 file changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/arch/arm/mach-ux500/board-mop500-stm.c b/arch/arm/mach-ux500/board-mop500-stm.c
--index 1bef2a0..532fb9e 100644
----- a/arch/arm/mach-ux500/board-mop500-stm.c
--+++ b/arch/arm/mach-ux500/board-mop500-stm.c
--@@ -121,7 +121,9 @@ static int stm_ste_disable_ape_on_mipi60(void)
-- 	if (retval)
-- 		STM_ERR("Failed to disable MIPI60\n");
-- 	else {
---		retval = nmk_config_pins(ARRAY_AND_SIZE(mop500_ske_pins));
--+		if (!machine_is_snowball())
--+			retval = nmk_config_pins(
--+				ARRAY_AND_SIZE(mop500_ske_pins));
-- 		if (retval)
-- 			STM_ERR("Failed to enable SKE gpio\n");
-- 	}
--@@ -314,7 +316,8 @@ static int stm_ste_connection(enum stm_connection_type con_type)
-- 		/* Enable altC3 on GPIO70-74 (STMMOD) and GPIO75-76 (UARTMOD) */
-- 		prcmu_enable_stm_mod_uart();
-- 		/* Enable APE on MIPI60 */
---		retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
--+		if (!machine_is_snowball())
--+			retval = nmk_config_pins_sleep(ARRAY_AND_SIZE(mop500_ske_pins));
-- 		if (retval)
-- 			STM_ERR("Failed to disable SKE GPIO\n");
-- 		else {
---- 
--1.7.9.5
--
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
