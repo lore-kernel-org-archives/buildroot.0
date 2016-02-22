@@ -1,64 +1,57 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 22 Feb 2016 10:20:59 +0100
-Subject: [Buildroot] [PATCH] docs/manual: add "python-package CFFI backend"
-	section
-Message-ID: <1456132859-8459-1-git-send-email-yegorslists@googlemail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 22 Feb 2016 10:27:04 +0100
+Subject: [Buildroot] [PATCH] package/monit: bump to version 5.16.1
+In-Reply-To: <20160221220537.05f829bd@free-electrons.com>
+References: <1455025592-25755-1-git-send-email-joerg.krause@embedded.rocks>
+ <20160221220537.05f829bd@free-electrons.com>
+Message-ID: <1456133224.27562.5.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Dear Thomas,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- docs/manual/adding-packages-python.txt | 36 ++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+On So, 2016-02-21 at 22:05 +0100, Thomas Petazzoni wrote:
+> Dear J?rg Krause,
+> 
+> On Tue,??9 Feb 2016 14:46:32 +0100, J?rg Krause wrote:
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > ?package/monit/monit.hash | 4 ++--
+> > ?package/monit/monit.mk???| 2 +-
+> > ?2 files changed, 3 insertions(+), 3 deletions(-)
+> This doesn't build, as there is no 5.16.1 release upstream:
+> 
+> > 
+> > > 
+> > > > 
+> > > > monit 5.16.1 Downloading
+> --2016-02-21 21:54:17--??http://mmonit.com/monit/dist/monit-5.16.1.ta
+> r.gz
+> Resolving mmonit.com (mmonit.com)... 62.109.39.247
+> Connecting to mmonit.com (mmonit.com)|62.109.39.247|:80... connected.
+> HTTP request sent, awaiting response... 302 Found
+> Location: https://mmonit.com/monit/dist/monit-5.16.1.tar.gz
+> [following]
+> --2016-02-21 21:54:17--??https://mmonit.com/monit/dist/monit-5.16.1.t
+> ar.gz
+> Connecting to mmonit.com (mmonit.com)|62.109.39.247|:443...
+> connected.
+> HTTP request sent, awaiting response... 404 Not Found
+> 2016-02-21 21:54:17 ERROR 404: Not Found.
+> 
+> Looking at https://mmonit.com/monit/dist/, the last version is 5.16.
+> 
+> How did you find a 5.16.1 version ?
 
-diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-index 588dbf8..3278998 100644
---- a/docs/manual/adding-packages-python.txt
-+++ b/docs/manual/adding-packages-python.txt
-@@ -160,3 +160,39 @@ possible to customize what is done in any particular step:
-   +PYTHON_FOO_BUILD_CMDS+ variable, it will be used instead of the
-   default Python one. However, using this method should be restricted
-   to very specific cases. Do not use it in the general case.
-+
-+[[python-package-cffi-backend]]
-+
-+==== +python-package+ CFFI backend
-+
-+C Foreign Function Interface for Python (CFFI) provides a convenient and
-+reliable way to call compiled C code from Python using interface declarations
-+written in C. Python packages relying on this backend can be identified by
-+appearance of +cffi+ dependency in an +install_requires+ field of their
-++setup.py+ file.
-+
-+Such a package needs +python-cffi+ as a runtime dependency in order to import
-+compiled C library wrapper on a target and +host-python-cffi+ as a build-time
-+dependency in order to cross-compile the C wrapper. You'll need to add following
-+code to you package's +Config.in+ and +*.mk+ files respectively:
-+
-+
-+------------------------
-+config BR2_PACKAGE_PYTHON_FOO
-+        bool "python-foo"
-+        select BR2_PACKAGE_PYTHON_CFFI # runtime
-+------------------------
-+
-+------------------------
-+################################################################################
-+#
-+# python-foo
-+#
-+################################################################################
-+
-+...
-+
-+PYTHON_FOO_DEPENDENCIES = host-python-cffi
-+
-+$(eval $(python-package))
-+------------------------
--- 
-2.7.0
+Looks like it was removed meanwhile:
+    $ ls dl/monit-*.tar.gz
+    dl/monit-5.16.1.tar.gz
+
+I'll prepare a new patch for this package.
+
+Best regards
+J?rg Krause
