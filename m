@@ -1,120 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 00:09:24 +0100
-Subject: [Buildroot] [PATCH v1] qt: add font license information
-In-Reply-To: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
-References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
-Message-ID: <56CB9524.3090704@mind.be>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Tue, 23 Feb 2016 00:24:12 +0100
+Subject: [Buildroot] [PATCH v2] configs/olimex_imx233_olinuxino: switch
+	to u-boot
+In-Reply-To: <20160222234908.5cd7b5a7@free-electrons.com>
+References: <1456075479-12750-1-git-send-email-phil@zankapfel.net>
+ <1456122476-6210-1-git-send-email-phil@zankapfel.net>
+ <20160222234908.5cd7b5a7@free-electrons.com>
+Message-ID: <CAPiYbRJgxCXCNSasxzzzS86-u-+wqZ4UyBLzhpkcb_huWkwqeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/12/15 22:22, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Not sure about the japanese font and about MIT or MIT-like
-> licenses (no exact match of the wording to other MIT licenses).
-> ---
->  package/qt/qt.mk | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index a7bbe5f..3fbb3e1 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -656,6 +656,32 @@ define QT_INSTALL_TARGET_FONTS
->  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
->  	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
->  endef
-> +ifeq ($(BR2_PACKAGE_QT_FONT_MICRO),y)
-> +QT_LICENSE += Public Domain (Micro font)
-> +# disabled because this file (containing the Public Domain notice) is
-> +# the font source file too...
-> +#QT_LICENSE_FILES += src/3rdparty/fonts/micro.bdf
+On 22 February 2016 at 23:49, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Phil Eichinger,
+>
+> On Mon, 22 Feb 2016 07:27:56 +0100, Phil Eichinger wrote:
+>
+>> Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+>> Tested-by: Phil Eichinger <phil@zankapfel.net>
+>
+> Tested-by tags are meant to be given by other people, not the patch
+> author, since we assume you have tested the patches you are
+> submitting :-)
 
- IMHO LICENSE_FILES are not needed for Public Domain. The point of the license
-file is to offer the complete license text, not to prove that the license is
-right. For public domain, a complete license text is not needed.
-
- It is useful to have a comment of where you found this license, but if it is
-just in the file itself, that's not really relevant.
-
-> +endif
-> +ifeq ($(BR2_PACKAGE_QT_FONT_FIXED),y)
-> +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
-> +QT_LICENSE += Public Domain (Fixed font)
-> +endif
-> +ifeq ($(BR2_PACKAGE_QT_FONT_HELVETICA),y)
-> +QT_LICENSE += MIT-like (Helvetica fonts)
-
- Hm, doesn't look that MIT-like to me. I'd call it 'Adobe Helvetica license'.
-
-> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-> +endif
-> +ifeq ($(BR2_PACKAGE_QT_FONT_JAPANESE),y)
-> +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
-> +# Public Domain
-
- I think that's a mistake... I submitted bug #815616 to debian.
-
-> +QT_LICENSE += Public Domain (Japanese font)
-> +# according to lib/fonts/README same as Helvetica fonts?
-
- Yep, it's from the same source.
-
- It's a bit annoying that you'd have
-
-Adobe Helvetica license (Helvetica fonts) Adobe Helvetica license (Japanese font)
-
-i.e. the same thing twice. So I'd make it:
-
-ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
-QT_LICENSE += Adobe Helvetica license (Helvetica/Japanese fonts)
-QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-endif
-
-> +#QT_LICENSE += MIT-like (Japanese fonts)
-> +#QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-> +endif
-> +ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
-> +QT_LICENSE += Freeware (Unifont font)
-> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
-> +endif
->  endif
->  
->  ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
-> @@ -663,6 +689,10 @@ define QT_INSTALL_TARGET_FONTS_TTF
->  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
->  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
->  endef
-> +QT_LICENSE += MIT-like (DejaVu/Vera TrueType fonts)
-
- Also not that MIT-like, so make it 'Bitstream license'.
+This should read Tested-on-actual-hardware-by ;-)
 
 
- The problem with the way that it's done now is that the different licenses will
-not be comma-separated while they usually are. But adding commas is difficult in
-this case, so OK.
+>> -BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
+>> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+>> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
+>
+> Any reason to use an appended uImage? If you're using a recent version
+> of U-Boot, you should use bootz to boot a zImage, and boot with a DTB
+> separate from the kernel.
 
+The reason behind this is the u-boot defconfig boots an uImage by default.
+So I thought this defconfig should provide the easiest starting point for anyone
+trying to get an image up and running.
 
- Regards,
- Arnout
+> Also:
+>
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
+>> +BR2_TARGET_UBOOT_FORMAT_SD=y
+>
+> Please used a fixed U-Boot version, otherwise your defconfig might
+> break in the future when we bump the default U-Boot version. See other
+> defconfig.
 
+Ah, didn't think of that.
 
-> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
-> +	src/3rdparty/fonts/README.DejaVu \
-> +	src/3rdparty/fonts/COPYRIGHT.Vera
->  endif
->  endif # BR2_PACKAGE_QT_EMBEDDED
->  
-> 
+> Another thing is that you removed some comments from the defconfig,
+> while some of them were really useful, such as the one that explains
+> why BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y is enabled. We normally
+> don't enable mdev support in our default defconfig, but this defconfig
+> has a specific reason for doing so, so this comment should be kept.
 
+Good point, I'll add them again.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> Finally, but this is a possible improvement for the future, you could
+> probably replace the complicated sequence of commands to build the SD
+> card by a nice post-image script that relies on genimage. But this is
+> for another patch.
+
+I was thinking of something like an post-image script but doesn't that
+mean to settle on
+something like the smallest SD card possible?
+Or were you thinking more of an interactive post-image script?
+Meanwhile I've tried a 4.4.1 kernel and it works, but I think I will
+put the kernel
+version bump into another patch.
+
+> Could you send an updated version that takes into account the above
+> suggestions?
+
+Sure, tomorrow!
+Thanks for your thorough review, again I've learned a lot!
+
+Cheers, Phil
