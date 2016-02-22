@@ -1,78 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 17:38:52 +0100
-Subject: [Buildroot] [git commit] sdparm: bump to version 1.10
-Message-ID: <20160302202757.024707FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 22 Feb 2016 23:23:17 +0100
+Subject: [Buildroot] [git commit] afboot-stm32: new package
+Message-ID: <20160302202756.607F480203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad8358599649bc336ee17a1fc02a0ca350d1352b
+commit: https://git.buildroot.net/buildroot/commit/?id=70c26b8c53c395ef4194cbed5b121a2b9243e4e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-0000-makefile-remove-host-headers-include.patch is upstream so remove it
-and drop autoreconf.
+This is a _very_ small bootloader for STM32 platforms.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+At submission afboot-stm32 supports the following boards:
+
+  stm32429i-eval
+  stm32746g-eval
+  stm32f429i-disco
+  stm32f469i-disco
+
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: fix commit title, add dependency on BR2_arm.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0000-makefile-remove-host-headers-include.patch   | 19 -------------------
- package/sdparm/sdparm.hash                            |  2 +-
- package/sdparm/sdparm.mk                              |  5 +----
- 3 files changed, 2 insertions(+), 24 deletions(-)
+ boot/Config.in                      |  1 +
+ boot/afboot-stm32/Config.in         |  7 +++++++
+ boot/afboot-stm32/afboot-stm32.hash |  2 ++
+ boot/afboot-stm32/afboot-stm32.mk   | 18 ++++++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/sdparm/0000-makefile-remove-host-headers-include.patch b/package/sdparm/0000-makefile-remove-host-headers-include.patch
-deleted file mode 100644
-index 765a81d..0000000
---- a/package/sdparm/0000-makefile-remove-host-headers-include.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--src/Makefile.am: remove host headers incdlue
--
--Using host headers is bad for cross compilation. Instead, use the '=' prefix
--which expands to the current sysroot.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--diff -Nuar sdparm-1.09-orig/src/Makefile.am sdparm-1.09/src/Makefile.am
----- sdparm-1.09-orig/src/Makefile.am	2014-09-23 18:48:44.000000000 +0300
--+++ sdparm-1.09/src/Makefile.am	2015-02-06 09:33:43.693477667 +0200
--@@ -41,7 +41,7 @@
-- 			../lib/sg_pt_common.c
-- 
-- if HAVE_SGUTILS
---INCLUDES = -I/usr/include/scsi
--+INCLUDES = -I=/scsi
-- sdparm_LDADD = @GETOPT_O_FILES@ @os_libs@ @SGUTILS_LIBS@
-- sdparm_DEPENDENCIES = @GETOPT_O_FILES@
-- else
-diff --git a/package/sdparm/sdparm.hash b/package/sdparm/sdparm.hash
-index ff5e7b6..050785a 100644
---- a/package/sdparm/sdparm.hash
-+++ b/package/sdparm/sdparm.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	0f5e07438ef56e045443bd827008a38076e029558b00adbfc45f9cc8a5c75349	sdparm-1.09.tar.xz
-+sha256	7dc9e148cef22744e00809dad21b59ac544e3615001bc1b2399978f73e1d58ca	sdparm-1.10.tar.xz
-diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
-index 9fc2067..ed1606c 100644
---- a/package/sdparm/sdparm.mk
-+++ b/package/sdparm/sdparm.mk
-@@ -4,15 +4,12 @@
- #
- ################################################################################
+diff --git a/boot/Config.in b/boot/Config.in
+index 54760b9..4daf079 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -1,5 +1,6 @@
+ menu "Bootloaders"
  
--SDPARM_VERSION = 1.09
-+SDPARM_VERSION = 1.10
- SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tar.xz
- SDPARM_SITE = http://sg.danny.cz/sg/p
- SDPARM_LICENSE = BSD-3c
- SDPARM_LICENSE_FILES = COPYING
- 
--# Patching src/Makefile.am
--SDPARM_AUTORECONF = YES
--
- ifeq ($(BR2_PACKAGE_SG3_UTILS),y)
- SDPARM_DEPENDENCIES += sg3_utils
- else
++source "boot/afboot-stm32/Config.in"
+ source "boot/at91bootstrap/Config.in"
+ source "boot/at91bootstrap3/Config.in"
+ source "boot/at91dataflashboot/Config.in"
+diff --git a/boot/afboot-stm32/Config.in b/boot/afboot-stm32/Config.in
+new file mode 100644
+index 0000000..309b9e0
+--- /dev/null
++++ b/boot/afboot-stm32/Config.in
+@@ -0,0 +1,7 @@
++config BR2_TARGET_AFBOOT_STM32
++	bool "afboot-stm32"
++	depends on BR2_arm
++	help
++	  afboot-stm32 is a very small bootloader for STM32 platforms
++
++	  https://github.com/mcoquelin-stm32/afboot-stm32
+diff --git a/boot/afboot-stm32/afboot-stm32.hash b/boot/afboot-stm32/afboot-stm32.hash
+new file mode 100644
+index 0000000..d23b74a
+--- /dev/null
++++ b/boot/afboot-stm32/afboot-stm32.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 dbd715c8b99f7d266f74a04707a4dac76b75b31321f24dee5256a6348260530c  afboot-stm32-v0.1.tar.gz
+diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
+new file mode 100644
+index 0000000..ac85d58
+--- /dev/null
++++ b/boot/afboot-stm32/afboot-stm32.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# afboot-stm32
++#
++################################################################################
++
++AFBOOT_STM32_VERSION = v0.1
++AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
++
++define AFBOOT_STM32_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
++endef
++
++define AFBOOT_STM32_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/stm32*.bin $(BINARIES_DIR)
++endef
++
++$(eval $(generic-package))
