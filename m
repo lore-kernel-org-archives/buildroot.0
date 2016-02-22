@@ -1,44 +1,44 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 22 Feb 2016 09:23:23 -0300
-Subject: [Buildroot] [PATCH v2 0/4] Move download links away from Google Code
-In-Reply-To: <444859483-2268-1-git-send-email-alan@softiron.co.uk>
-References: <444859483-2268-1-git-send-email-alan@softiron.co.uk>
-Message-ID: <1456143807-3350-1-git-send-email-casantos@datacom.ind.br>
+Date: Mon, 22 Feb 2016 09:23:25 -0300
+Subject: [Buildroot] [PATCH v2 2/4] gst-dsp: Move download link away from
+	Google Code
+In-Reply-To: <1456143807-3350-1-git-send-email-casantos@datacom.ind.br>
+References: <1456143807-3350-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1456143807-3350-3-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Google Code going away early next year. Remove download links from
-Google Code and find the new official repos for those projects.
+From: Alan Ott <alan@softiron.co.uk>
 
-These patches came from Buildroot Dev Days in Dublin. There will be more
-to come to clean up the other projects using Google Code.
+Google Code is being shut down. The google code site which hosts the
+source .tar.gz references github/felipec, which has a gst-dsp repository
+with the same code as the tar.gz previously referenced.
 
-Alan Ott (3):
-  dsp-tools: Move download link away from Google Code
-  gst-dsp: Move download link away from Google Code
-  gst-omapfb: Move download link away from Google Code
+Change the GST_DSP_SITE to this github repo.
 
-Carlos Santos (1):
-  gtest,gmock: Move download link away from Google Code
+Signed-off-by: Alan Ott <alan@softiron.co.uk>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/gstreamer/gst-dsp/gst-dsp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- package/dsp-tools/dsp-tools.mk                     |   4 +-
- package/gmock/0001-force-use-python2.patch         |   8 -
- ...0002-Copy-acx_pthread.m4-from-GTest-1.7.0.patch | 394 +++++++++++++++++++++
- package/gmock/Config.in                            |   2 +-
- package/gmock/gmock.hash                           |   4 +-
- package/gmock/gmock.mk                             |  23 +-
- package/gstreamer/gst-dsp/gst-dsp.mk               |   4 +-
- package/gstreamer/gst-omapfb/gst-omapfb.mk         |   4 +-
- package/gtest/0001-force-use-python2.patch         |  12 +
- package/gtest/Config.in                            |   2 +-
- package/gtest/gtest.hash                           |   4 +-
- package/gtest/gtest.mk                             |  11 +-
- 12 files changed, 430 insertions(+), 42 deletions(-)
- create mode 100644 package/gmock/0002-Copy-acx_pthread.m4-from-GTest-1.7.0.patch
- create mode 100644 package/gtest/0001-force-use-python2.patch
-
+diff --git a/package/gstreamer/gst-dsp/gst-dsp.mk b/package/gstreamer/gst-dsp/gst-dsp.mk
+index d9e202d..dedffb9 100644
+--- a/package/gstreamer/gst-dsp/gst-dsp.mk
++++ b/package/gstreamer/gst-dsp/gst-dsp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GST_DSP_VERSION = 0.10.2
+-GST_DSP_SITE = http://gst-dsp.googlecode.com/files
++GST_DSP_VERSION = v0.10.2
++GST_DSP_SITE = $(call github,felipec,gst-dsp,$(GST_DSP_VERSION))
+ 
+ define GST_DSP_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
 -- 
 2.5.0
