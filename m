@@ -1,65 +1,120 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 00:08:28 +0100
-Subject: [Buildroot] [PATCH] owfs: new package
-In-Reply-To: <20160222233719.55228a26@free-electrons.com>
-References: <1456173419-32284-1-git-send-email-arnout@mind.be>
- <20160222233719.55228a26@free-electrons.com>
-Message-ID: <56CB94EC.6030705@mind.be>
+Date: Tue, 23 Feb 2016 00:09:24 +0100
+Subject: [Buildroot] [PATCH v1] qt: add font license information
+In-Reply-To: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
+References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
+Message-ID: <56CB9524.3090704@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 06/12/15 22:22, Peter Seiderer wrote:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Not sure about the japanese font and about MIT or MIT-like
+> licenses (no exact match of the wording to other MIT licenses).
+> ---
+>  package/qt/qt.mk | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index a7bbe5f..3fbb3e1 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -656,6 +656,32 @@ define QT_INSTALL_TARGET_FONTS
+>  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+>  	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
+>  endef
+> +ifeq ($(BR2_PACKAGE_QT_FONT_MICRO),y)
+> +QT_LICENSE += Public Domain (Micro font)
+> +# disabled because this file (containing the Public Domain notice) is
+> +# the font source file too...
+> +#QT_LICENSE_FILES += src/3rdparty/fonts/micro.bdf
 
-On 02/22/16 23:37, Thomas Petazzoni wrote:
-> Arnout,
->
-> On Mon, 22 Feb 2016 21:36:59 +0100, Arnout Vandecappelle
-> (Essensium/Mind) wrote:
->
-> > diff --git a/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-> b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-> > new file mode 100644
-> > index 0000000..bdaab4f
-> > --- /dev/null
-> > +++ b/package/owfs/0001-configure.ac-check-for-localtime_r.patch
-> > @@ -0,0 +1,48 @@
-> > +From dd7c906a7e548ccb7b9c101221531d6b203f701f Mon Sep 17 00:00:00 2001
-> > +From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-> > +Date: Sun, 21 Feb 2016 17:02:06 +0100
-> > +Subject: [PATCH] configure.ac: check for localtime_r
-> > +
-> > +HAVE_LOCALTIME_R is used in module/owftpd/src/c/file_list.c, so it
-> > +should be checked for.
-> > +
-> > +Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> > +---
-> > + configure.ac                   | 2 +-
-> > + module/swig/python/setup.py.in | 7 -------
-> > + 2 files changed, 1 insertion(+), 8 deletions(-)
->
-> Your description explains perfectly well the change in configure.ac,
-> but does not explain the change done in setup.py.in. Shouldn't it be
-> part of a separate patch, with a proper description ?
+ IMHO LICENSE_FILES are not needed for Public Domain. The point of the license
+file is to offer the complete license text, not to prove that the license is
+right. For public domain, a complete license text is not needed.
 
- Oops, that's a leftover from my failed attempt to get python3 to work.
+ It is useful to have a comment of where you found this license, but if it is
+just in the file itself, that's not really relevant.
+
+> +endif
+> +ifeq ($(BR2_PACKAGE_QT_FONT_FIXED),y)
+> +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
+> +QT_LICENSE += Public Domain (Fixed font)
+> +endif
+> +ifeq ($(BR2_PACKAGE_QT_FONT_HELVETICA),y)
+> +QT_LICENSE += MIT-like (Helvetica fonts)
+
+ Hm, doesn't look that MIT-like to me. I'd call it 'Adobe Helvetica license'.
+
+> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
+> +endif
+> +ifeq ($(BR2_PACKAGE_QT_FONT_JAPANESE),y)
+> +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
+> +# Public Domain
+
+ I think that's a mistake... I submitted bug #815616 to debian.
+
+> +QT_LICENSE += Public Domain (Japanese font)
+> +# according to lib/fonts/README same as Helvetica fonts?
+
+ Yep, it's from the same source.
+
+ It's a bit annoying that you'd have
+
+Adobe Helvetica license (Helvetica fonts) Adobe Helvetica license (Japanese font)
+
+i.e. the same thing twice. So I'd make it:
+
+ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
+QT_LICENSE += Adobe Helvetica license (Helvetica/Japanese fonts)
+QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
+endif
+
+> +#QT_LICENSE += MIT-like (Japanese fonts)
+> +#QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
+> +endif
+> +ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
+> +QT_LICENSE += Freeware (Unifont font)
+> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
+> +endif
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
+> @@ -663,6 +689,10 @@ define QT_INSTALL_TARGET_FONTS_TTF
+>  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+>  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+>  endef
+> +QT_LICENSE += MIT-like (DejaVu/Vera TrueType fonts)
+
+ Also not that MIT-like, so make it 'Bitstream license'.
+
+
+ The problem with the way that it's done now is that the different licenses will
+not be comma-separated while they usually are. But adding commas is difficult in
+this case, so OK.
+
 
  Regards,
  Arnout
 
->
-> The rest of the patch looks good.
->
-> Thanks!
->
-> Thomas
->
+
+> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
+> +	src/3rdparty/fonts/README.DejaVu \
+> +	src/3rdparty/fonts/COPYRIGHT.Vera
+>  endif
+>  endif # BR2_PACKAGE_QT_EMBEDDED
+>  
+> 
+
 
 -- 
-Arnout Vandecappelle arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
