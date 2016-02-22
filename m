@@ -1,57 +1,54 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 22 Feb 2016 10:27:04 +0100
-Subject: [Buildroot] [PATCH] package/monit: bump to version 5.16.1
-In-Reply-To: <20160221220537.05f829bd@free-electrons.com>
-References: <1455025592-25755-1-git-send-email-joerg.krause@embedded.rocks>
- <20160221220537.05f829bd@free-electrons.com>
-Message-ID: <1456133224.27562.5.camel@embedded.rocks>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 22 Feb 2016 10:22:45 +0000
+Subject: [Buildroot] [PATCH v2] perf: append endianness argument to ld when
+	building for MIPS
+Message-ID: <1456136565-6167-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+We need to pass an argument to ld for setting the endianness when
+building it for MIPS architecture, otherwise the default one will always
+be used (which is big endian) and the compilation for little endian will
+always fail showing an error like this one:
 
-On So, 2016-02-21 at 22:05 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Tue,??9 Feb 2016 14:46:32 +0100, J?rg Krause wrote:
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > ?package/monit/monit.hash | 4 ++--
-> > ?package/monit/monit.mk???| 2 +-
-> > ?2 files changed, 3 insertions(+), 3 deletions(-)
-> This doesn't build, as there is no 5.16.1 release upstream:
-> 
-> > 
-> > > 
-> > > > 
-> > > > monit 5.16.1 Downloading
-> --2016-02-21 21:54:17--??http://mmonit.com/monit/dist/monit-5.16.1.ta
-> r.gz
-> Resolving mmonit.com (mmonit.com)... 62.109.39.247
-> Connecting to mmonit.com (mmonit.com)|62.109.39.247|:80... connected.
-> HTTP request sent, awaiting response... 302 Found
-> Location: https://mmonit.com/monit/dist/monit-5.16.1.tar.gz
-> [following]
-> --2016-02-21 21:54:17--??https://mmonit.com/monit/dist/monit-5.16.1.t
-> ar.gz
-> Connecting to mmonit.com (mmonit.com)|62.109.39.247|:443...
-> connected.
-> HTTP request sent, awaiting response... 404 Not Found
-> 2016-02-21 21:54:17 ERROR 404: Not Found.
-> 
-> Looking at https://mmonit.com/monit/dist/, the last version is 5.16.
-> 
-> How did you find a 5.16.1 version ?
+LD    foo.o
+mips-linux-gnu-ld: foo.o: compiled for a little endian system and target
+is big endian
 
-Looks like it was removed meanwhile:
-    $ ls dl/monit-*.tar.gz
-    dl/monit-5.16.1.tar.gz
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+- Simplify the logic of the ifeq block.
 
-I'll prepare a new patch for this package.
+ linux/linux-tool-perf.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Best regards
-J?rg Krause
+diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
+index 07c3514..1070a1c 100644
+--- a/linux/linux-tool-perf.mk
++++ b/linux/linux-tool-perf.mk
+@@ -27,6 +27,19 @@ PERF_MAKE_FLAGS = \
+ 	WERROR=0 \
+ 	ASCIIDOC=
+ 
++# We need to pass an argument to ld for setting the endianness when
++# building it for MIPS architecture, otherwise the default one will
++# always be used (which is big endian) and the compilation for little
++# endian will always fail showing an error like this one:
++#  LD    foo.o
++# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
++# target is big endian
++ifeq ($(BR2_mips)$(BR2_mips64),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
++else ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
++PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
++endif
++
+ # The call to backtrace() function fails for ARC, because for some
+ # reason the unwinder from libgcc returns early. Thus the usage of
+ # backtrace() should be disabled in perf explicitly: at build time
+-- 
+2.4.10
