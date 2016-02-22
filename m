@@ -1,28 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2016 13:20:27 +0100
-Subject: [Buildroot] [PATCH] glibc: remove version 2.21
-In-Reply-To: <1456142845-5372-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1456142845-5372-1-git-send-email-gustavo@zacarias.com.ar>
- <1456142845-5372-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160222132027.091e7c84@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Feb 2016 12:20:52 +0000
+Subject: [Buildroot] [Bug 8651] libMonoPosixHelper.so wrong link reference
+ in buildroot image
+In-Reply-To: <bug-8651-163@https.bugs.busybox.net/>
+References: <bug-8651-163@https.bugs.busybox.net/>
+Message-ID: <bug-8651-163-kgMh1g40Dt@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+https://bugs.busybox.net/show_bug.cgi?id=8651
 
-On Mon, 22 Feb 2016 09:07:25 -0300, Gustavo Zacarias wrote:
-> Mask out glibc for sparc as well since it's no longer available.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Markus Egle <Markus.Egle@Qiagen.com> changed:
 
-Is it SPARC entirely, or only some specific architecture variants of
-SPARC that are no longer supported ?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-Thomas
+--- Comment #10 from Markus Egle <Markus.Egle@Qiagen.com> ---
+Fixed.
+
+Applied patch with copying to buildroot/package/mono
+After 
+> make clean
+> make
+
+buildroot/output/target/etc/mono/config shows the correct path for
+libMonoPosixHelper.so without any prefix and accordingly bzImage works as
+expected. 
+
+Thanks
+Markus
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
