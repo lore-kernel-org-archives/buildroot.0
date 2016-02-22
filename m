@@ -1,59 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2016 23:21:44 +0100
-Subject: [Buildroot] Analysis of build results for 2016-02-21
-In-Reply-To: <CALdGskKUp-GtxeOBWq-5Tzp7b2zBad3=RoRxeN1eaJHPcg5Xww@mail.gmail.com>
-References: <CALdGskKUp-GtxeOBWq-5Tzp7b2zBad3=RoRxeN1eaJHPcg5Xww@mail.gmail.com>
-Message-ID: <20160222232144.61b99b32@free-electrons.com>
+From: Vincent =?iso-8859-1?Q?Stehl=E9?= <vincent.stehle@intel.com>
+Date: Mon, 22 Feb 2016 23:21:52 +0100
+Subject: [Buildroot] [PATCH] msr-tools: new package
+In-Reply-To: <CAGm1_kuNhAYrMRf_T3FU5gCoYYT72nEm=MeTRWkdo9FrYjK9-g@mail.gmail.com>
+References: <1454087465-23445-1-git-send-email-vincent.stehle@intel.com>
+ <CAGm1_kuNhAYrMRf_T3FU5gCoYYT72nEm=MeTRWkdo9FrYjK9-g@mail.gmail.com>
+Message-ID: <20160222222152.GA22228@jazz.nc.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Olivier,
+Hi Yegor,
 
-On Mon, 22 Feb 2016 21:05:00 +0200, Olivier Schonken wrote:
+Thank you very much for your review!
 
-> arm |                     cups-2.1.2 | NOK |
-> http://autobuild.buildroot.net/results/07ccca8f80c56ab0ff48bfee876885b1c8c3916e/
-> arc |                     cups-2.1.2 | NOK |
-> http://autobuild.buildroot.net/results/b169b939e38cb761319a92d2871f4f59ddb5c4ac/
+On Mon, Feb 22, 2016 at 03:40:59PM +0100, Yegor Yefremov wrote:
 > 
-> Both error cases looks like it has to do with uclibc not behaving as
-> expected at link time for the ippserver build (Both builds link statically
-> with position independent execution also set).  For the arm platform it
-> can't find the Scrt1.o file, and for the ARC compiler, __init_array_end is
-> undefined.
+> Config.in is missing a depends message like this:
 > 
-> I haven't considered all the options yet, but two that come to mind are
-> disabling cups support for uclibc type compilers, or else to disable the
-> cups test-framework.
+> comment "msr-tools runs only on x86 CPUs"
+>         depends on !BR2_i386 && !BR2_x86_64
 
-Disabling for uClibc is completely overkill: this problem only occurs
-on ARM with static linking and on ARC. CUPS builds perfectly fine on
-ARM/uClibc when dynamic linking is used.
+Good idea; I'll add that.
 
-The problem is that CUPS forcefully uses PIE support, and:
+..
+> > +MSR_TOOLS_SOURCE = msr-tools-$(MSR_TOOLS_VERSION).tar.gz
+> 
+> Do you really need MSR_TOOLS_SOURCE?
 
- 1/ Our static-only toolchain for ARM that uses uClibc-ng does not
-    contain Scrt1.o, while a dynamic-linking enabled uClibc-ng ARM
-    toolchain does have it. Due to this, trying to link a minimal C
-    program with -fPIE -pie fails. I'm Cc'ing Waldemar, the uClibc-ng
-    maintainer, to get his input on this.
+And you are right again: this is definitely not necessary to repeat the default
+source name :)
 
- 2/ PIE is not supported by the ARC architecture, and should not be
-    used. Unfortunately, the configure script of CUPS only does an
-    AC_TRY_COMPILE() test to verify the support of PIE in the compiler,
-    but on ARC, it only fails at link time, so the test should be an
-    AC_TRY_LINK(). Olivier, could you try to fix the cups stuff so that
-    we can autoreconf it properly, and therefore fix such issues in the
-    cups configure.ac ? I'm also Cc'ing Alexey from Synopsys, who can
-    give more details about the PIE issue on ARC.
+Thanks for spotting those; I'll send a v2 right away.
 
-Thanks for your investigation!
+Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Vincent.
