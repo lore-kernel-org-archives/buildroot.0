@@ -1,61 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 22 Feb 2016 12:07:37 +0100
-Subject: [Buildroot] [PATCH 1/9] boot: Add new bootloader afboot-stm32
-In-Reply-To: <1455901745-18486-2-git-send-email-lee.jones@linaro.org>
+Date: Mon, 22 Feb 2016 12:08:53 +0100
+Subject: [Buildroot] [PATCH 0/9] Add support for STM32F469-DISCO board
+In-Reply-To: <1455901745-18486-1-git-send-email-lee.jones@linaro.org>
 References: <1455901745-18486-1-git-send-email-lee.jones@linaro.org>
- <1455901745-18486-2-git-send-email-lee.jones@linaro.org>
-Message-ID: <20160222120737.510e31f5@free-electrons.com>
+Message-ID: <20160222120853.3ff1872a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Lee,
+Dear Lee Jones,
 
-On Fri, 19 Feb 2016 17:08:57 +0000, Lee Jones wrote:
+On Fri, 19 Feb 2016 17:08:56 +0000, Lee Jones wrote:
 
-> diff --git a/boot/afboot-stm32/Config.in b/boot/afboot-stm32/Config.in
-> new file mode 100644
-> index 0000000..d6fe13c
-> --- /dev/null
-> +++ b/boot/afboot-stm32/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_TARGET_AFBOOT_STM32
-> +	bool "afboot-stm32"
-> +	select BR2_PACKAGE_HOST_OPENOCD
+> Lee Jones (9):
+>   boot: Add new bootloader afboot-stm32
+>   configs: Add a tested working STM32F469-DISCO defconfig
+>   boards: stm32f469-disco: Add a post-image script
+>   boards: stm32f469-disco: Add kernel patch to provide top compatible
+>     string
+>   boards: stm32f469-disco: Add kernel patch to provide DTS file
+>   boards: stm32f469-disco: Add kernel patch to set RAM address to 0
+>   boards: stm32f469-disco: Add kernel patch to set RAM address to 0
+>   boards: stm32f469-disco: Add OpenOCD patch to supply a new config
+>   boards: stm32f469-disco: Add OpenOCD patch to support on-board flash
+>     chip
 
-There's no real reason to select host-openocd here. It's not needed to
-build/use the bootloader. One could use a different flashing program.
+Patches 2 to 9 should be squashed together. Indeed, PATCH 2 relies on
+having all other patches applied, otherwise it won't work. For example
+PATCH 2 references the post-image script, but it is introduced only in
+PATCH 3.
 
-> diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
-> new file mode 100644
-> index 0000000..60ab3b7
-> --- /dev/null
-> +++ b/boot/afboot-stm32/afboot-stm32.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# afboot-stm32
-> +#
-> +################################################################################
-> +
-> +AFBOOT_STM32_VERSION = v0.1
-> +AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
-
-Since you're sourcing from Github, please add a .hash file for this new
-package.
-
-> +define AFBOOT_STM32_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
-> +endef
-> +
-> +define AFBOOT_STM32_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/stm32*.bin $(BINARIES_DIR)
-
-Get rid of the -D option here.
-
-Other than those minor nits, it looks good.
+Best regards,
 
 Thomas
 -- 
