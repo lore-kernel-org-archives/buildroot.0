@@ -1,42 +1,85 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 22:14:44 +0100
-Subject: [Buildroot] [git commit] libnss: bump to version 4.22.1
-Message-ID: <20160302202757.60C827FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Feb 2016 23:56:02 +0100
+Subject: [Buildroot] [git commit] package/sqlite: add optional support for
+	libedit
+Message-ID: <20160302202756.D272080203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b63783dafe1e797a9aab8c98e2ec39de70e6ae6
+commit: https://git.buildroot.net/buildroot/commit/?id=007c2ce917199339c0876227c2e612b11f8e7e15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy         | 11 +++++++++++
+ package/sqlite/Config.in |  7 -------
+ package/sqlite/sqlite.mk |  9 ++++++---
+ 3 files changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 4fa5897..6e4d330 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_21_RTM/src/SHA256SUMS
--sha256	3f7a5b027d7cdd5c0e4ff7544da33fdc6f56c2f8c27fff02938fd4a6fbe87239	nss-3.21.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_22_1_RTM/src/SHA256SUMS
-+sha256	89e1fc7074e5c325962821289f4cd7d8207ae95af2308ba881215ed9ca68fa4f	nss-3.22.1.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 6fdb77c..c474f61 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3677f86..0ea8c7d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,17 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
  
--LIBNSS_VERSION = 3.21
-+LIBNSS_VERSION = 3.22.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
++config BR2_PACKAGE_SQLITE_READLINE
++	bool "command-line editing support was updated"
++	select BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_READLINE
++	select BR2_LEGACY
++	help
++	  This option was removed in favour of the sqlite package
++	  deciding itself depending on the enabled packages whether
++	  command-line editing should be enabled, it also also takes
++	  libedit into account.
++
+ config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
+ 	bool "openpowerlink debug option has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
+index 7ea9eb1..c9fde53 100644
+--- a/package/sqlite/Config.in
++++ b/package/sqlite/Config.in
+@@ -8,13 +8,6 @@ config BR2_PACKAGE_SQLITE
+ 
+ if BR2_PACKAGE_SQLITE
+ 
+-config BR2_PACKAGE_SQLITE_READLINE
+-	bool "Command-line editing"
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_READLINE
+-	help
+-	  Enable command-line editing. This requires ncurses and readline.
+-
+ config BR2_PACKAGE_SQLITE_STAT3
+ 	bool "Additional query optimizations (stat3)"
+ 	help
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 0a119cc..870b891 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -45,11 +45,14 @@ else
+ SQLITE_CONF_OPTS += --disable-threadsafe
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SQLITE_READLINE),y)
++ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
+ SQLITE_DEPENDENCIES += ncurses readline
+-SQLITE_CONF_OPTS += --enable-readline
++SQLITE_CONF_OPTS += --disable-editline --enable-readline
++else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++SQLITE_DEPENDENCIES += libedit
++SQLITE_CONF_OPTS += --enable-editline --disable-readline
+ else
+-SQLITE_CONF_OPTS += --disable-readline
++SQLITE_CONF_OPTS += --disable-editline --disable-readline
+ endif
+ 
+ $(eval $(autotools-package))
