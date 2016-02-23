@@ -1,64 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:18:42 +0100
-Subject: [Buildroot] [git commit branch/next] qt53d: enable
-	assimpsceneparser plugin
-Message-ID: <20160223211905.914F38184D@busybox.osuosl.org>
+Date: Tue, 23 Feb 2016 22:19:29 +0100
+Subject: [Buildroot] [PATCH v5] qt53d: enable assimpsceneparser plugin
+In-Reply-To: <1456088489-10062-1-git-send-email-ps.report@gmx.net>
+References: <1456088489-10062-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160223221929.6d450087@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0a1fc98477f5c81a41ee3e563a8ce71ef4c92a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Peter Seiderer,
 
-- add hint to help text
-- add assimp dependency
-- always install the gltf (and any future) sceneparser to target.
+On Sun, 21 Feb 2016 22:01:28 +0100, Peter Seiderer wrote:
+> - add hint to help text
+> - add assimp dependency
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v4 -> v5:
+>   - change assimp dependency declaration location (suggested by Arnout Vandecappelle)
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: update commit message as suggested by Arnout.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qt5/qt53d/Config.in | 2 ++
- package/qt5/qt53d/qt53d.mk  | 5 +++++
- 2 files changed, 7 insertions(+)
+Applied to next after updating the commit message as suggested by
+Arnout. Thanks!
 
-diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
-index b2d2912..ff50204 100644
---- a/package/qt5/qt53d/Config.in
-+++ b/package/qt5/qt53d/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_QT53D
- 
- 	  This package corresponds to the qt53d module.
- 
-+	  Enable the assimp package to gain the assimp sceneparser plugin.
-+
- 	  http://doc.qt.io/qt-5/qt3d-index.html
- 
- comment "qt53d module needs an OpenGL-capable backend"
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 810242b..24c42e6 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -10,6 +10,10 @@ QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
- QT53D_DEPENDENCIES = qt5base qt5declarative
- QT53D_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_ASSIMP),y)
-+QT53D_DEPENDENCIES += assimp
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT53D_LICENSE = GPLv2+ or LGPLv3
- QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
-@@ -34,6 +38,7 @@ endef
- ifeq ($(BR2_STATIC_LIBS),)
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- endef
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
