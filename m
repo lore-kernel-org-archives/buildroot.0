@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2016 21:26:41 +0100
-Subject: [Buildroot] [git commit] samba4: bump to version 4.3.5
-Message-ID: <20160302202756.867AD7FA0E@busybox.osuosl.org>
+Date: Tue, 23 Feb 2016 22:56:26 +0100
+Subject: [Buildroot] [git commit] Config.in: Add BR2_DEPRECATED_SINCE_2016_05
+Message-ID: <20160302202756.AE5A67FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cf5ac0e76cc20aac6278e4031eeced236b8f0c4
+commit: https://git.buildroot.net/buildroot/commit/?id=bca107ee6d010ec0f61526bd800a2beec9f82c23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+In preparation for new deprecated features/symbols.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index f42e37a..1b53657 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5d0eb52e842832af922f7d57716eacff23192906ec3bdf6727e18ca24f1419d9	samba-4.3.4.tar.gz
-+sha256	583f927a823b272757fd4df0be267bd20a223b06cfc3c662df17e4870f14bf1c	samba-4.3.5.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4e796a6..64f9957 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index 30e88e3..dfb5721 100644
+--- a/Config.in
++++ b/Config.in
+@@ -365,6 +365,10 @@ config BR2_DEPRECATED_SINCE_2016_02
+ 	bool
+ 	default y
  
--SAMBA4_VERSION = 4.3.4
-+SAMBA4_VERSION = 4.3.5
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
++config BR2_DEPRECATED_SINCE_2016_05
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
