@@ -1,96 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 23:33:20 +0100
-Subject: [Buildroot] [PATCH v2] qt: add font license information
-In-Reply-To: <1456264376-28974-1-git-send-email-ps.report@gmx.net>
-References: <1456264376-28974-1-git-send-email-ps.report@gmx.net>
-Message-ID: <56CCDE30.2050903@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Feb 2016 23:35:28 +0100
+Subject: [Buildroot] [PATCH v4] package/python-pillow: new package
+In-Reply-To: <CA+TH9Vmri=sS5e0gacaoRMxwxNT_evmC9=-ERFvxS86H3NnpKQ@mail.gmail.com>
+References: <1455962149-29459-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20160221152621.52c42acd@free-electrons.com>
+ <CA+TH9Vmri=sS5e0gacaoRMxwxNT_evmC9=-ERFvxS86H3NnpKQ@mail.gmail.com>
+Message-ID: <20160223233528.4016ea2b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/23/16 22:52, Peter Seiderer wrote:
+Hello,
 
- I would mention the discussion about the commas in the commit log, like this:
+On Tue, 23 Feb 2016 23:18:47 +0100, Angelo Compagnucci wrote:
 
------
-With this implementation, the different licenses will be separated with
-<space><comma>. This is not nice, but to avoid it a pretty ugly construct is needed:
-QT_LICENSE = $(shell echo $(QT_LICENSE_BITS) | sed 's% , %, %g')
-
-Since the <space><comma> is just a minor nuisance, we're not going to that kind
-of complexity.
------
-
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - update most font licenses (thanks to Arnout Vandecappelle)
->   - add comma-separator between the licenses (no nice solution,
->     will add ' ,', but without the starting problem at:
+> Right.
 > 
->     QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
->     ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
->     QT_LICENSE += or Digia Qt Commercial license
->     endif
-> ---
->  package/qt/qt.mk | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> I actually implemented something lie this in pkg-python.mk
 > 
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index a64d32f..beadb41 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -660,13 +660,33 @@ define QT_INSTALL_TARGET_FONTS
->  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
->  	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
->  endef
-> +ifeq ($(BR2_PACKAGE_QT_FONT_MICRO),y)
-> +# Public Domain as stated in the font source src/3rdparty/fonts/micro.bdf
-> +QT_LICENSE += , Public Domain (Micro font)
->  endif
-> +ifeq ($(BR2_PACKAGE_QT_FONT_FIXED),y)
-> +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
-
- Given that they were wrong before, this isn't a great reference :-) But it is
-in fact specified in src/3rdparty/fonts/5x7.bdf
-
-> +QT_LICENSE += , Public Domain (Fixed font)
-
- Same issue as with helvetica/japanese: same license is specified twice. So use
-the same approach as below.
-
-> +endif
-> +ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
-> +QT_LICENSE += , Adobe Helvetica license (Helvetica/Japanese fonts)
-> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-> +endif
-> +ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
-> +QT_LICENSE += , Freeware (Unifont font)
-> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
-> +endif
-> +endif # QT_FONTS
->  
->  ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
->  define QT_INSTALL_TARGET_FONTS_TTF
->  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
->  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
->  endef
-> +QT_LICENSE += , Bitstream license (DejaVu/Vera TrueType fonts)
-> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
-> +	src/3rdparty/fonts/README.DejaVu \
-> +	src/3rdparty/fonts/COPYRIGHT.Vera
->  endif
->  endif # BR2_PACKAGE_QT_EMBEDDED
->  
+> [...]
+> $(2)_BUILD_TARGET ?= build
+> [...]
+> $(2)_BASE_BUILD_TGT   = $$($(2)_BUILD_TARGET)
+> [...]
 > 
+> and seems to work and not breaking other packages.
+> This way I can add:
+> 
+> PYTHON_PILLOW_BUILD_TARGET = build_ext
+> 
+> What do you think?
+
+Since it's the first package to require this, I would rather suggest to
+override PYTHON_PILLOW_BUILD_CMDS in python-pillow.mk, so that this
+hack is limited to this package.
+
+Should more packages need this in the future, we can add better
+support in the infrastructure.
+
+But a Python package that needs to pass options only to build_ext is
+IMO broken, and should allow them to be passed to the "build" target.
+build_ext is more or less an internal step, which we shouldn't have to
+worry about.
 
 
+> >> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> >
+> > Can you submit this patch upstream or at least report the issue?
+> 
+> I don't think so. That piece of code is used to guess the platform on
+> which your are compiling with the assumption that host arch == target
+> arch. Probably, pillow is not originally designed to be cross compiled
+> and the build system would require a rewrite for a more structured
+> approach.
+> The only way to let buildroot passing the appropriate options to build
+> and setup is to remove that piece of code.
+
+Well, you can make it upstreamable by making it understand some
+environment variable, or better some option, to indicate that we are
+cross-compiling.
+
+So yes, your patch is not acceptable upstream as is, but my comment is
+precisely that is should ideally be in a form that can potentially be
+accepted upstream.
+
+Thanks!
+
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
