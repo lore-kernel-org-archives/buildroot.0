@@ -1,21 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 23:35:28 +0100
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 23 Feb 2016 23:36:36 +0100
 Subject: [Buildroot] [PATCH v4] package/python-pillow: new package
 In-Reply-To: <CA+TH9Vmri=sS5e0gacaoRMxwxNT_evmC9=-ERFvxS86H3NnpKQ@mail.gmail.com>
 References: <1455962149-29459-1-git-send-email-angelo.compagnucci@gmail.com>
  <20160221152621.52c42acd@free-electrons.com>
  <CA+TH9Vmri=sS5e0gacaoRMxwxNT_evmC9=-ERFvxS86H3NnpKQ@mail.gmail.com>
-Message-ID: <20160223233528.4016ea2b@free-electrons.com>
+Message-ID: <56CCDEF4.9050803@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue, 23 Feb 2016 23:18:47 +0100, Angelo Compagnucci wrote:
-
+On 02/23/16 23:18, Angelo Compagnucci wrote:
+> Dear Thomas Petazzoni,
+> 
+> 2016-02-21 15:26 GMT+01:00 Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com>:
+[snip]
+>> It seems like you should pass explicit --enable/--disable options,
+>> since at least jpeg and zlib are by default expected to be enabled.
+>> See https://pillow.readthedocs.org/en/latest/installation.html#external-libraries.
+>>
+>> Unfortunately, those options are only recognized when calling "setup.py
+>> build_ext", not when calling "setup.py build" as the python-package
+>> infrastructure is doing. So you might need to override the build
+>> commands for this package.
+> 
 > Right.
 > 
 > I actually implemented something lie this in pkg-python.mk
@@ -33,43 +44,17 @@ On Tue, 23 Feb 2016 23:18:47 +0100, Angelo Compagnucci wrote:
 > 
 > What do you think?
 
-Since it's the first package to require this, I would rather suggest to
-override PYTHON_PILLOW_BUILD_CMDS in python-pillow.mk, so that this
-hack is limited to this package.
+ Looks like a good idea to me - parallel with autotools-package.
 
-Should more packages need this in the future, we can add better
-support in the infrastructure.
+ Regards,
+ Arnout
 
-But a Python package that needs to pass options only to build_ext is
-IMO broken, and should allow them to be passed to the "build" target.
-build_ext is more or less an internal step, which we shouldn't have to
-worry about.
+[snip]
 
-
-> >> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> >
-> > Can you submit this patch upstream or at least report the issue?
-> 
-> I don't think so. That piece of code is used to guess the platform on
-> which your are compiling with the assumption that host arch == target
-> arch. Probably, pillow is not originally designed to be cross compiled
-> and the build system would require a rewrite for a more structured
-> approach.
-> The only way to let buildroot passing the appropriate options to build
-> and setup is to remove that piece of code.
-
-Well, you can make it upstreamable by making it understand some
-environment variable, or better some option, to indicate that we are
-cross-compiling.
-
-So yes, your patch is not acceptable upstream as is, but my comment is
-precisely that is should ideally be in a form that can potentially be
-accepted upstream.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
