@@ -1,10 +1,10 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 23 Feb 2016 01:24:25 +0100
-Subject: [Buildroot] [PATCH 1/9] olimex/a20_olinuxino: update readme.txt
-	with lime2 info
+Date: Tue, 23 Feb 2016 01:24:31 +0100
+Subject: [Buildroot] [PATCH 7/9] olimex_a20_olinuxino_lime: update to use
+	genimage
 In-Reply-To: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
 References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1456187073-2876-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1456187073-2876-8-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +12,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Francois Perrad <fperrad@gmail.com>
 ---
- board/olimex/a20_olinuxino/readme.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ board/olimex/a20_olinuxino/readme.txt            | 2 +-
+ configs/olimex_a20_olinuxino_lime_defconfig      | 2 ++
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
-index 7998aa12e6a4..ab7ab1ec2426 100644
+index feba9daefc6f..18c069e1077e 100644
 --- a/board/olimex/a20_olinuxino/readme.txt
 +++ b/board/olimex/a20_olinuxino/readme.txt
-@@ -3,12 +3,13 @@ A20-OLinuXino-LIME and A20-OLinuXino-MICRO
- Intro
- =====
+@@ -52,7 +52,7 @@ After building, you should get a tree like this:
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- script.bin (lime_mali)
+-    +-- sdcard.img (micro)
++    +-- sdcard.img (micro, lime)
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+     +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index e6c33c82d907..b2127672d74a 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
  
--These are open hardware boards, both based an the AllWinners A20 SoC.
-+These are open hardware boards, all based an the AllWinners A20 SoC.
+ # Kernel
+@@ -41,4 +42,5 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
  
- for more details about the boards see the following pages:
-  - https://www.olimex.com/Products/OLinuXino/open-source-hardware
-  - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
-  - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
-+ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME2/
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index ca71b55bcff8..737c690930e1 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
  
- The following defconfigs are available:
-  - olimex_a20_olinuxino_micro_defconfig
+ # Kernel
+@@ -45,4 +46,5 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 -- 
 1.9.1
