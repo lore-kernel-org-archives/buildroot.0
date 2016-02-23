@@ -1,48 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:11:38 +0100
-Subject: [Buildroot] [git commit] Config.in.legacy: fix separator for
-	2016.05 legacy options
-Message-ID: <20160302202759.D4EA37F98B@busybox.osuosl.org>
+Date: Tue, 23 Feb 2016 22:18:42 +0100
+Subject: [Buildroot] [git commit] qt53d: enable assimpsceneparser plugin
+Message-ID: <20160302202756.930507FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2661c4f1b715d4ea3df41c4c86373f64bf4a5b6b
+commit: https://git.buildroot.net/buildroot/commit/?id=d0a1fc98477f5c81a41ee3e563a8ce71ef4c92a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since we opened up the next branch, a number of options have been
-added to Config.in.legacy. However, they are located under the "legacy
-options removed in 2016.02", which is not correct. This commit fixes
-that by adding the "legacy options removed in 2016.05" header, and
-restoring the one related to 2016.02 at the right location.
+- add hint to help text
+- add assimp dependency
+- always install the gltf (and any future) sceneparser to target.
 
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: update commit message as suggested by Arnout.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Config.in.legacy | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/qt5/qt53d/Config.in | 2 ++
+ package/qt5/qt53d/qt53d.mk  | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 69b3c84..53baa84 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,7 +143,7 @@ comment "----------------------------------------------------"
- endif
+diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+index b2d2912..ff50204 100644
+--- a/package/qt5/qt53d/Config.in
++++ b/package/qt5/qt53d/Config.in
+@@ -12,6 +12,8 @@ config BR2_PACKAGE_QT53D
  
- ###############################################################################
--comment "Legacy options removed in 2016.02"
-+comment "Legacy options removed in 2016.05"
+ 	  This package corresponds to the qt53d module.
  
- config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
- 	bool "systemd all extras option has been removed"
-@@ -173,6 +173,9 @@ config BR2_PACKAGE_SQLITE_READLINE
- 	  command-line editing should be enabled, it also also takes
- 	  libedit into account.
- 
-+###############################################################################
-+comment "Legacy options removed in 2016.02"
++	  Enable the assimp package to gain the assimp sceneparser plugin.
 +
- config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
- 	bool "openpowerlink debug option has been removed"
- 	select BR2_LEGACY
+ 	  http://doc.qt.io/qt-5/qt3d-index.html
+ 
+ comment "qt53d module needs an OpenGL-capable backend"
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index 810242b..24c42e6 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -10,6 +10,10 @@ QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
+ QT53D_DEPENDENCIES = qt5base qt5declarative
+ QT53D_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_ASSIMP),y)
++QT53D_DEPENDENCIES += assimp
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+ QT53D_LICENSE = GPLv2+ or LGPLv3
+ QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
+@@ -34,6 +38,7 @@ endef
+ ifeq ($(BR2_STATIC_LIBS),)
+ define QT53D_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
+ endef
+ endif
