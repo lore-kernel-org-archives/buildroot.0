@@ -1,59 +1,63 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 23 Feb 2016 01:24:29 +0100
-Subject: [Buildroot] [PATCH 5/9] olimex_a20_olinuxino_micro: remove
-	redundant defconfig lines
-In-Reply-To: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
-References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1456187073-2876-6-git-send-email-luca@lucaceresoli.net>
+Date: Tue, 23 Feb 2016 01:24:24 +0100
+Subject: [Buildroot] [PATCH 0/9] Olimex A20 OlinuXino updates
+Message-ID: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These defconfig options are set to their default values, so they are
-redundant and can be removed without effect.
+Hi,
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- configs/olimex_a20_olinuxino_micro_defconfig | 4 ----
- 1 file changed, 4 deletions(-)
+here's a series of updates to the Olimex OlinuXino A20 board support
+in Buildroot.
 
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index 420252c2c36b..f84da343eb8c 100644
---- a/configs/olimex_a20_olinuxino_micro_defconfig
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -1,7 +1,6 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
- # Linux headers same as kernel, a 4.4 series
-@@ -10,7 +9,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
--BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-@@ -20,7 +18,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -38,7 +35,6 @@ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
- 
+Patches 1 and 5 are just cleanups.
+
+Patches 2-4 revive the -MICRO board by upgrading the kernel and U-Boot
+and enabling DHCP autoconfiguration.
+
+Patch 6 enables genimage to generate an SD card image. It also
+documents how to write the SD, but the old, manual SD writing
+instructions are not removed since they are still needed for the -LIME
+and -LIME2 boards.
+
+Everything up to here is build- and run-time tested. Following patches
+are build-tested only since I don't own these boards.
+
+Patches 7 and 8 enable genimage for the other two boards, and patch 9
+removes the manual SD card writing instructions.
+
+Francois, Jan, or anybody having acces to these boards, if you could
+test patches 7 and 8 report whether they work, you would help in
+making simpler and more uniform the support for the whole family of
+boards. Thanks!
+
+Luca
+
+
+Luca Ceresoli (9):
+  olimex/a20_olinuxino: update readme.txt with lime2 info
+  olimex_a20_olinuxino_micro: bump linux to 4.4.2
+  olimex_a20_olinuxino_micro: bump u-boot to 2016.01
+  olimex_a20_olinuxino_micro: initialize the network with DHCP
+  olimex_a20_olinuxino_micro: remove redundant defconfig lines
+  olimex_a20_olinuxino_micro: update to use genimage
+  olimex_a20_olinuxino_lime: update to use genimage
+  olimex_a20_olinuxino_lime2: update to use genimage
+  olimex_a20_olinuxino_*: remove old SD writing instructions
+
+ board/olimex/a20_olinuxino/genimage.cfg          | 16 +++++++
+ board/olimex/a20_olinuxino/post-image.sh         | 16 +++++++
+ board/olimex/a20_olinuxino/readme.txt            | 56 ++++--------------------
+ configs/olimex_a20_olinuxino_lime2_defconfig     |  2 +
+ configs/olimex_a20_olinuxino_lime_defconfig      |  2 +
+ configs/olimex_a20_olinuxino_lime_mali_defconfig |  2 +
+ configs/olimex_a20_olinuxino_micro_defconfig     | 16 +++----
+ 7 files changed, 54 insertions(+), 56 deletions(-)
+ create mode 100644 board/olimex/a20_olinuxino/genimage.cfg
+ create mode 100755 board/olimex/a20_olinuxino/post-image.sh
+
 -- 
 1.9.1
