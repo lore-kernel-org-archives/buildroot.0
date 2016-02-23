@@ -1,47 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 23:43:14 +0100
-Subject: [Buildroot] [PATCH v4] package/python-web2py: cleaning for
- space saving
-In-Reply-To: <1438070683-2109-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1438070683-2109-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20160223234314.7d391cbc@free-electrons.com>
+Date: Tue, 23 Feb 2016 23:45:04 +0100
+Subject: [Buildroot] [git commit] libuci: correct lua path
+Message-ID: <20160223224510.123377FD0D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo,
+commit: https://git.buildroot.net/buildroot/commit/?id=21af11cce07f60ed6bbc4a21d5247a5153cbfac0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Jul 2015 10:04:43 +0200, Angelo Compagnucci wrote:
-> This patch removes from web2py folder welcome, examples application
-> and a bunch of other files uneeded in production,
-> furthermore, it removes the admin interface if unneeded.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+LUAPATH is used as the path for installing lua binding.
+As buildroot specifies the install prefix, STAGING_DIR gets
+appended to TARGET_DIR which is incorrect path for installation,
+so use relative path.
 
-I saw this old patch having Reviewed-by from Arnout and Yann and was
-therefore tempted to apply it. However, I believe Arnout and Yann made
-some very valuable comments before giving their Reviewed-by, and I
-would prefer to see those comments be implemented rather than applying
-the patch as-is.
+Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Signed-off-by: Neha Bairathi <Neha.Bairathi@imgtec.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libuci/libuci.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-To sum-up, the comments are:
-
- * Split in three patches: 1/ clean-up the installation, 2/ add option
-   to remove the admin interface, 3/ move the admin password generation
-   from install time to build time. This will also mean you'll have
-   more detailed commit log, which will also fulfill a comment made by
-   Yann.
-
- * Use rsync with exclude to copy only the useful files
-
-Could you rework this patch to take into account those comments?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index a78048d..8c060d5 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -13,7 +13,7 @@ LIBUCI_DEPENDENCIES = libubox
+ ifeq ($(BR2_PACKAGE_LUA_5_1),y)
+ LIBUCI_DEPENDENCIES += lua
+ LIBUCI_CONF_OPTS += -DBUILD_LUA=ON \
+-	-DLUAPATH=$(STAGING_DIR)/usr/lib/lua/5.1 \
++	-DLUAPATH=/usr/lib/lua/5.1 \
+ 	-DLUA_CFLAGS=-I$(STAGING_DIR)/usr/include
+ else
+ LIBUCI_CONF_OPTS += -DBUILD_LUA=OFF
