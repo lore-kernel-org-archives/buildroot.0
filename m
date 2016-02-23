@@ -1,153 +1,100 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 23 Feb 2016 21:02:34 +0100
-Subject: [Buildroot] [PATCH v1] qt: add font license information
-In-Reply-To: <56CB9524.3090704@mind.be>
-References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
- <56CB9524.3090704@mind.be>
-Message-ID: <20160223210234.7cccf313@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 23 Feb 2016 21:07:40 +0100
+Subject: [Buildroot] [PATCH] docs/manual: add "python-package CFFI
+ backend" section
+In-Reply-To: <1456132859-8459-1-git-send-email-yegorslists@googlemail.com>
+References: <1456132859-8459-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <56CCBC0C.1060709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
-
-On Tue, 23 Feb 2016 00:09:24 +0100, Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> On 06/12/15 22:22, Peter Seiderer wrote:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Not sure about the japanese font and about MIT or MIT-like
-> > licenses (no exact match of the wording to other MIT licenses).
-> > ---
-> >  package/qt/qt.mk | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> > index a7bbe5f..3fbb3e1 100644
-> > --- a/package/qt/qt.mk
-> > +++ b/package/qt/qt.mk
-> > @@ -656,6 +656,32 @@ define QT_INSTALL_TARGET_FONTS
-> >  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
-> >  	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
-> >  endef
-> > +ifeq ($(BR2_PACKAGE_QT_FONT_MICRO),y)
-> > +QT_LICENSE += Public Domain (Micro font)
-> > +# disabled because this file (containing the Public Domain notice) is
-> > +# the font source file too...
-> > +#QT_LICENSE_FILES += src/3rdparty/fonts/micro.bdf
+On 02/22/16 10:20, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
->  IMHO LICENSE_FILES are not needed for Public Domain. The point of the license
-> file is to offer the complete license text, not to prove that the license is
-> right. For public domain, a complete license text is not needed.
-> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-O.k, if no proof for Public Domain via a license file is necessary...
+ Hi Yegor,
 
->  It is useful to have a comment of where you found this license, but if it is
-> just in the file itself, that's not really relevant.
-> 
+ A few forgotton words as indicated below.
 
-Will just add a little comment...
+ Also, Peter, have you given some thought to my proposal of requiring the
+http://dustycloud.org/blog/vcs-friendly-patchable-document-line-wrapping/
+line wrapping style for new documentation patches?
 
-> > +endif
-> > +ifeq ($(BR2_PACKAGE_QT_FONT_FIXED),y)
-> > +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
-> > +QT_LICENSE += Public Domain (Fixed font)
-> > +endif
-> > +ifeq ($(BR2_PACKAGE_QT_FONT_HELVETICA),y)
-> > +QT_LICENSE += MIT-like (Helvetica fonts)
+> ---
+>  docs/manual/adding-packages-python.txt | 36 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
->  Hm, doesn't look that MIT-like to me. I'd call it 'Adobe Helvetica license'.
-> 
+> diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+> index 588dbf8..3278998 100644
+> --- a/docs/manual/adding-packages-python.txt
+> +++ b/docs/manual/adding-packages-python.txt
+> @@ -160,3 +160,39 @@ possible to customize what is done in any particular step:
+>    +PYTHON_FOO_BUILD_CMDS+ variable, it will be used instead of the
+>    default Python one. However, using this method should be restricted
+>    to very specific cases. Do not use it in the general case.
+> +
+> +[[python-package-cffi-backend]]
+> +
+> +==== +python-package+ CFFI backend
+> +
+> +C Foreign Function Interface for Python (CFFI) provides a convenient and
+> +reliable way to call compiled C code from Python using interface declarations
+> +written in C. Python packages relying on this backend can be identified by
+> +appearance of +cffi+ dependency in an +install_requires+ field of their
 
-O.k.
+appearance of the +cffi+ dependency
 
-> > +QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-> > +endif
-> > +ifeq ($(BR2_PACKAGE_QT_FONT_JAPANESE),y)
-> > +# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
-> > +# Public Domain
-> 
->  I think that's a mistake... I submitted bug #815616 to debian.
-> 
-> > +QT_LICENSE += Public Domain (Japanese font)
-> > +# according to lib/fonts/README same as Helvetica fonts?
-> 
->  Yep, it's from the same source.
-> 
+> ++setup.py+ file.
+> +
+> +Such a package needs +python-cffi+ as a runtime dependency in order to import
+> +compiled C library wrapper on a target and +host-python-cffi+ as a build-time
 
-Thanks for investigation...
+the compiled C library wrapper on the target, and +host-python-cffi+ as a ...
 
->  It's a bit annoying that you'd have
-> 
-> Adobe Helvetica license (Helvetica fonts) Adobe Helvetica license (Japanese font)
-> 
-> i.e. the same thing twice. So I'd make it:
-> 
-> ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
-> QT_LICENSE += Adobe Helvetica license (Helvetica/Japanese fonts)
-> QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-> endif
+> +dependency in order to cross-compile the C wrapper. You'll need to add following
 
-O.k.
+You'll need to add the following code
 
-> 
-> > +#QT_LICENSE += MIT-like (Japanese fonts)
-> > +#QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
-> > +endif
-> > +ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
-> > +QT_LICENSE += Freeware (Unifont font)
-> > +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
-> > +endif
-> >  endif
-> >  
-> >  ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
-> > @@ -663,6 +689,10 @@ define QT_INSTALL_TARGET_FONTS_TTF
-> >  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
-> >  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
-> >  endef
-> > +QT_LICENSE += MIT-like (DejaVu/Vera TrueType fonts)
-> 
->  Also not that MIT-like, so make it 'Bitstream license'.
-> 
+> +code to you package's +Config.in+ and +*.mk+ files respectively:
 
-O.k.
-
-> 
->  The problem with the way that it's done now is that the different licenses will
-> not be comma-separated while they usually are. But adding commas is difficult in
-> this case, so OK.
-> 
-
-Will try Thomas suggestion for adding commas....
-
-Wanted to do a similar patch for qt5base, but did not find the license files,
-see QTBUG-46655 ([1]), after some discussion on the mailing list ([2]) the
-decision was to drop the bundled fonts (abandoned: [3], [4], merged: [5], [6])...
-
-Regards,
-Peter
+to the package's +Config.in+ and +*.mk+ files, respectively.
 
 
-[1] https://bugreports.qt.io/browse/QTBUG-46655
-[2] http://lists.qt-project.org/pipermail/development/2015-June/021924.html
-[3] https://codereview.qt-project.org/#/c/114503/
-[4] https://codereview.qt-project.org/#/c/114512/
-[5] https://codereview.qt-project.org/#/c/123568/
-[6] https://codereview.qt-project.org/#/c/123567/
+ Regards,
+ Arnout
+
+> +
+> +
+> +------------------------
+> +config BR2_PACKAGE_PYTHON_FOO
+> +        bool "python-foo"
+> +        select BR2_PACKAGE_PYTHON_CFFI # runtime
+> +------------------------
+> +
+> +------------------------
+> +################################################################################
+> +#
+> +# python-foo
+> +#
+> +################################################################################
+> +
+> +...
+> +
+> +PYTHON_FOO_DEPENDENCIES = host-python-cffi
+> +
+> +$(eval $(python-package))
+> +------------------------
 > 
->  Regards,
->  Arnout
-> 
-> 
-> > +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
-> > +	src/3rdparty/fonts/README.DejaVu \
-> > +	src/3rdparty/fonts/COPYRIGHT.Vera
-> >  endif
-> >  endif # BR2_PACKAGE_QT_EMBEDDED
-> >  
-> > 
-> 
-> 
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
