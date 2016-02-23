@@ -1,48 +1,87 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 22 Feb 2016 22:06:57 -0300
-Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
-In-Reply-To: <56CBAA86.4070305@mind.be>
-References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
- <20160221222816.4e53e921@free-electrons.com> <56CA62D8.10309@zacarias.com.ar>
- <56CB9DFA.506@mind.be> <56CBA547.3020200@zacarias.com.ar>
- <56CBAA86.4070305@mind.be>
-Message-ID: <56CBB0B1.6020506@zacarias.com.ar>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 22 Feb 2016 22:07:37 -0600
+Subject: [Buildroot] [PATCH 1/1] raptor: new package
+Message-ID: <1456200457-47727-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/02/16 21:40, Arnout Vandecappelle wrote:
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/Config.in          |  1 +
+ package/raptor/Config.in   | 13 +++++++++++++
+ package/raptor/raptor.hash |  2 ++
+ package/raptor/raptor.mk   | 19 +++++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/raptor/Config.in
+ create mode 100644 package/raptor/raptor.hash
+ create mode 100644 package/raptor/raptor.mk
 
->> If you're implying i don't help in other aspects and i just care about what i
->> send i suggest you take a look at lots of autobuilder fixes for packages i never
->> use.
->
->   That's why I mentioned that 92% of the patches you submitted have already been
-> applied. The other buildroot contributors really appreciate the work you do. And
-> share your frustration that too many patches tend to linger, and need to be
-> rebased all the time. In fact, Thomas and Peter have the additional frustration
-> that all of their time is taken up by applying other people's patches, leaving
-> no time to work on their own ideas.
-
-Oh come on, you're smarter than that: most of my merged patches are trivial.
-That's the consequence of let's call them "big series" lingering on 
-forever - it really demotivates to work on anything groundbreaking since 
-you've gotta rebase forever to keep them sane on top of other changes 
-with nothing happening to it.
-How about relinquising some control? Add a new committer, maybe Yann, 
-yourself or some other trusted volunteer, that way the new committer(s) 
-can clean up the simple queue and leave the more contentious series for 
-the more experienced ones. Maybe put on some simple ground rules like 
-don't commit your own stuff and so on.
-They will make mistakes, sure, but then everybody does and both Peter & 
-Thomas will get some free time for their particular interests.
-Otherwise we end up with these emails that make a lot of noise and then 
-everything cools down and nothing changes, the scaling remains at the 
-same sucklevel.
-It's not a life-forever thing, if it doesn't work then try some other 
-thing, but if there's no trying for some new approach evidently nothing 
-will change no matter how much you push for new blood, reviews, tested 
-and acks.
-Regards.
+diff --git a/package/Config.in b/package/Config.in
+index 529ad33..3f0b442 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1008,6 +1008,7 @@ menu "JSON/XML"
+ 	source "package/mxml/Config.in"
+ 	source "package/rapidjson/Config.in"
+ 	source "package/rapidxml/Config.in"
++	source "package/raptor/Config.in"
+ 	source "package/tinyxml/Config.in"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/xerces/Config.in"
+diff --git a/package/raptor/Config.in b/package/raptor/Config.in
+new file mode 100644
+index 0000000..61bc49b
+--- /dev/null
++++ b/package/raptor/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_RAPTOR
++	bool "raptor"
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBXSLT
++	select BR2_PACKAGE_YAJL
++	help
++	  A C library that provides a set of parsers and
++	  serializers that generate Resource Description
++	  Framework (RDF) triples by parsing syntaxes or
++	  serialize the triples into a syntax.
++
++	  http://librdf.org/raptor/
+diff --git a/package/raptor/raptor.hash b/package/raptor/raptor.hash
+new file mode 100644
+index 0000000..ee7a71b
+--- /dev/null
++++ b/package/raptor/raptor.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed raptor2-2.0.15.tar.gz
+diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+new file mode 100644
+index 0000000..128e444
+--- /dev/null
++++ b/package/raptor/raptor.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# raptor
++#
++################################################################################
++
++RAPTOR_VERSION = 2.0.15
++RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
++RAPTOR_SITE = http://download.librdf.org/source
++RAPTOR_DEPENDENCIES = libxml2 libcurl libxslt yajl
++RAPTOR_LICENSE = GPLv2.1 LGPLv2.1 Apache-2.0
++RAPTOR_LICENSE_FILES = LICENSE.txt
++
++RAPTOR_CONF_OPTS = --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
++		--with-curl-config=$(STAGING_DIR)/usr/bin/curl-config \
++		--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
++		--with-yajl=$(STAGING_DIR)
++
++$(eval $(autotools-package))
+-- 
+1.9.1
