@@ -1,10 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 20:39:25 +0100
-Subject: [Buildroot] [PATCH v1] qt: add font license information
-In-Reply-To: <20160223135110.064721b6@free-electrons.com>
-References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
- <56CB9524.3090704@mind.be> <20160223135110.064721b6@free-electrons.com>
-Message-ID: <56CCB56D.2000802@mind.be>
+Date: Tue, 23 Feb 2016 20:43:44 +0100
+Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
+In-Reply-To: <20160223104816.20c97306@free-electrons.com>
+References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160221222816.4e53e921@free-electrons.com> <56CA62D8.10309@zacarias.com.ar>
+ <56CB9DFA.506@mind.be> <56CBA547.3020200@zacarias.com.ar>
+ <56CBAA86.4070305@mind.be> <56CBB0B1.6020506@zacarias.com.ar>
+ <56CC2980.1020402@mind.be> <20160223104816.20c97306@free-electrons.com>
+Message-ID: <56CCB670.5000202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +16,53 @@ To: buildroot@busybox.net
 
 
 
-On 02/23/16 13:51, Thomas Petazzoni wrote:
-> Arnout,
+On 02/23/16 10:48, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Thanks a lot for having reviewed this patch, which is not very simple
-> in terms of licensing details.
+> On Tue, 23 Feb 2016 10:42:24 +0100, Arnout Vandecappelle wrote:
 > 
-> On Tue, 23 Feb 2016 00:09:24 +0100, Arnout Vandecappelle wrote:
+>>  This could indeed be a good idea. One reason to limit the number of committers
+>> was to avoid conflicts (i.e. two committers working on the same patch in
+>> parallel), but as I understand it, Thomas and Peter noticed that this isn't
+>> really a problem in practice.
+>>
+>>  So indeed, having a third person that applies trivial patches could be
+>> worthwhile to try.
+>>
+>>  That said, Yann and I are already spending a large part of our buildroot time
+>> on reviewing patches. I don't think that applying them immediately is going to
+>> make that much of a difference.
 > 
->>  The problem with the way that it's done now is that the different licenses will
->> not be comma-separated while they usually are. But adding commas is difficult in
->> this case, so OK.
+> Fully agreed: applying the patch is clearly not what takes time. It's a
+> mechanical and stupid operation.
 > 
-> I thought we could do something such as:
+> What takes time is that when there is no Acked-by/Reviewed-by/Tested-by
+> from a trusted person and the patch is not obviously trivial, then I
+> have to go review the patch myself entirely. Download the source code,
+> check that the license is correct, verify that optional dependencies
+> are properly handled, build in a few basic situations, etc. All those
+> steps I skip when there has been some previous A/R/T tags given by
+> trusted persons.
 > 
-> QT_LICENSE += Foo (bar),
-> QT_LICENSE += Bar (foo),
-> QT_LICENSE += Baz (boz),
-> QT_LICENSE := $(patsubst %$(comma),%,$(QT_LICENSE))
+> When I see that Arnout or Yann has started reviewing a specific patch
+> or patch series, I assume that they will continue to handle the
+> discussion with the submitter until they give their
+> Acked-by/Reviewed-by. And therefore, I simply skip that patch or patch
+> series, and move on to other topics.
 > 
-> But it unfortunately seems to remove all commas. We could then do:
-> 
-> QT_FINAL_LICENSE = $(shell echo "$(QT_LICENSE)" | sed 's:\(.*\),:\1:')
-> 
-> Not super pretty, but it's just one line of crap.
+> So what *really* saves time is people reviewing and testing patches. Of
+> course, the more "trusted" those persons are, the more valuable this
+> effort is. Gustavo, you're a person with a high trust, but
+> unfortunately, you're doing none of this review/testing effort.
 
- Actually, that last bit could be moved to the legal-info infra itself, e.g. in
-the legal-manifest function.
-
- But that's for another patch :-)
+ There is one indirect gain, however. In case something needs to be fixed up
+(not quite the majority but still a significant subset of the patches), then
+Yann and I currently just give comments and wait for a v2 of the patch. This
+often leads to several iterations. Fixing the patch right away and pushing it
+will take less time.
 
  Regards,
  Arnout
-
-> 
-> Thomas
-> 
 
 -- 
 Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
