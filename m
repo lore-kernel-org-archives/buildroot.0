@@ -1,48 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 10:10:20 +0100
-Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
-In-Reply-To: <56CBA547.3020200@zacarias.com.ar>
-References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
- <20160221222816.4e53e921@free-electrons.com>
- <56CA62D8.10309@zacarias.com.ar> <56CB9DFA.506@mind.be>
- <56CBA547.3020200@zacarias.com.ar>
-Message-ID: <20160223101020.0a87c0f3@free-electrons.com>
+Date: Tue, 23 Feb 2016 10:12:47 +0100
+Subject: [Buildroot] [PATCH v2] configs/olimex_imx233_olinuxino: switch
+ to u-boot
+In-Reply-To: <CAPiYbRJgxCXCNSasxzzzS86-u-+wqZ4UyBLzhpkcb_huWkwqeg@mail.gmail.com>
+References: <1456075479-12750-1-git-send-email-phil@zankapfel.net>
+ <1456122476-6210-1-git-send-email-phil@zankapfel.net>
+ <20160222234908.5cd7b5a7@free-electrons.com>
+ <CAPiYbRJgxCXCNSasxzzzS86-u-+wqZ4UyBLzhpkcb_huWkwqeg@mail.gmail.com>
+Message-ID: <20160223101247.243becf1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gustavo,
+Hello,
 
-On Mon, 22 Feb 2016 21:18:15 -0300, Gustavo Zacarias wrote:
+On Tue, 23 Feb 2016 00:24:12 +0100, Phil Eichinger wrote:
 
-> I was asked to step in and maintain webkitgtk, gtk3 & accesory packages.
-> And this has been sitting in patchwork for quite some time with no 
-> comments or anything and rotting down (this = the gtk3 bump and other 
-> pieces that depend on it).
-> It means i'll just take is as there's no interest and just leave it rot 
-> completely - i didn't pick this up because it's something i use or have 
-> any particular interest in.
-> If you're implying i don't help in other aspects and i just care about 
-> what i send i suggest you take a look at lots of autobuilder fixes for 
-> packages i never use.
+> > Tested-by tags are meant to be given by other people, not the patch
+> > author, since we assume you have tested the patches you are
+> > submitting :-)
+> 
+> This should read Tested-on-actual-hardware-by ;-)
 
-As Arnout said, all our patches are definitely appreciated, and most of
-them are applied really quickly. Some of them indeed take more time,
-but there's nothing personal against you: we have ~300 other patches
-sitting in patchwork.
+Then this should be mentioned explicitly in the commit log, as it's
+useful information.
 
-However, you are almost never helping us by reviewing/testing patches
-from others. Due to this, instead of applying your patches, I have to
-review and test patches from other contributors. Conclusion: if you
-want your patches to be applied faster, the best way is to help the
-community by reviewing and testing patches. Your review and test effort
-would be really valuable: you are a long-time Buildroot developer, so
-you know all the best practices, usual pitfalls and all, which means
-that we trust your review.
+> >> -BR2_LINUX_KERNEL_APPENDED_ZIMAGE=y
+> >> +BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+> >> +BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x42000000"
+> >
+> > Any reason to use an appended uImage? If you're using a recent version
+> > of U-Boot, you should use bootz to boot a zImage, and boot with a DTB
+> > separate from the kernel.
+> 
+> The reason behind this is the u-boot defconfig boots an uImage by default.
+> So I thought this defconfig should provide the easiest starting point for anyone
+> trying to get an image up and running.
 
-Thanks a lot!
+Makes sense. Then keep it this way, but please mention that in the
+commit log as well. zImage + separate DTB is normally the "modern" way
+of booting on ARM, so it's the situation we normally expect to see when
+a defconfig is modernized. If it isn't this way, then it's good to have
+the explanation that you gave.
+
+> > Finally, but this is a possible improvement for the future, you could
+> > probably replace the complicated sequence of commands to build the SD
+> > card by a nice post-image script that relies on genimage. But this is
+> > for another patch.
+> 
+> I was thinking of something like an post-image script but doesn't that
+> mean to settle on
+> something like the smallest SD card possible?
+> Or were you thinking more of an interactive post-image script?
+
+Look at the other boards that use genimage, simply do:
+
+	git grep genimage board/
+
+And you will see multiple examples of genimage usage.
+
+> > Could you send an updated version that takes into account the above
+> > suggestions?
+> 
+> Sure, tomorrow!
+> Thanks for your thorough review, again I've learned a lot!
+
+You're welcome. Thanks to you for contributing in the first place!
 
 Thomas
 -- 
