@@ -1,80 +1,46 @@
-From: Atul Singh <atul.singh.mandla@rockwellcollins.com>
-Date: Tue, 23 Feb 2016 18:54:55 +0530
-Subject: [Buildroot] [PATCH v3 1/1] jsen: new package
-Message-ID: <1456233895-31812-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Feb 2016 16:19:42 +0100
+Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
+In-Reply-To: <20160223104816.20c97306@free-electrons.com> (Thomas Petazzoni's
+ message of "Tue, 23 Feb 2016 10:48:16 +0100")
+References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160221222816.4e53e921@free-electrons.com>
+ <56CA62D8.10309@zacarias.com.ar> <56CB9DFA.506@mind.be>
+ <56CBA547.3020200@zacarias.com.ar> <56CBAA86.4070305@mind.be>
+ <56CBB0B1.6020506@zacarias.com.ar> <56CC2980.1020402@mind.be>
+ <20160223104816.20c97306@free-electrons.com>
+Message-ID: <87wppv78tt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
----
-Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
- package/Config.in      |  1 +
- package/jsen/Config.in |  6 ++++++
- package/jsen/jsen.hash |  2 ++
- package/jsen/jsen.mk   | 18 ++++++++++++++++++
- 4 files changed, 27 insertions(+)
- create mode 100644 package/jsen/Config.in
- create mode 100644 package/jsen/jsen.hash
- create mode 100644 package/jsen/jsen.mk
+ > Hello,
+ > On Tue, 23 Feb 2016 10:42:24 +0100, Arnout Vandecappelle wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index a5b31aa..6f8b8bd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -984,6 +984,7 @@ menu "External jQuery plugins"
- 	source "package/jquery-validation/Config.in"
- endmenu
- endif
-+	source "package/jsen/Config.in"
- 	source "package/jsmin/Config.in"
- 	source "package/json-javascript/Config.in"
- endmenu
-diff --git a/package/jsen/Config.in b/package/jsen/Config.in
-new file mode 100644
-index 0000000..8c41a19
---- /dev/null
-+++ b/package/jsen/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_JSEN
-+	bool "jsen"
-+	help
-+	  JSEN (JSON Sentinel) validates your JSON objects using JSON-Schema.
-+
-+	  https://github.com/bugventure/jsen
-diff --git a/package/jsen/jsen.hash b/package/jsen/jsen.hash
-new file mode 100644
-index 0000000..fdfcd93
---- /dev/null
-+++ b/package/jsen/jsen.hash
-@@ -0,0 +1,2 @@
-+# Locally Computed
-+sha256  651b3ae5c92865705c144175a8297305788a0e9a1f46ee9b8caa127c6bce6709  jsen-v0.6.0.tar.gz
-diff --git a/package/jsen/jsen.mk b/package/jsen/jsen.mk
-new file mode 100644
-index 0000000..535389d
---- /dev/null
-+++ b/package/jsen/jsen.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# jsen
-+#
-+################################################################################
-+
-+JSEN_VERSION = v0.6.0
-+JSEN_SITE = $(call github,bugventure,jsen,$(JSEN_VERSION))
-+JSEN_LICENSE = MIT
-+JSEN_LICENSE_FILES = LICENSE
-+
-+define JSEN_INSTALL_TARGET_CMDS
-+        mkdir -p $(TARGET_DIR)/usr/share/jsen
-+        $(foreach d,dist lib index.js,\
-+                cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/jsen/$(sep))
-+endef
-+
-+$(eval $(generic-package))
+ >> This could indeed be a good idea. One reason to limit the number of committers
+ >> was to avoid conflicts (i.e. two committers working on the same patch in
+ >> parallel), but as I understand it, Thomas and Peter noticed that this isn't
+ >> really a problem in practice.
+ >> 
+ >> So indeed, having a third person that applies trivial patches could be
+ >> worthwhile to try.
+ >> 
+ >> That said, Yann and I are already spending a large part of our buildroot time
+ >> on reviewing patches. I don't think that applying them immediately is going to
+ >> make that much of a difference.
+
+ > Fully agreed: applying the patch is clearly not what takes time. It's a
+ > mechanical and stupid operation.
+
+Agreed. I'm all for ways of improving our ways of working, but I don't
+think this will change much. Adding Thomas as a co-maintainer has imho
+been very good, but adding a 3rd committer without having more reviewers
+imho won't make any significant difference.
+
 -- 
-2.5.0
+Venlig hilsen,
+Peter Korsgaard 
