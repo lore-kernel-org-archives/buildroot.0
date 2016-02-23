@@ -1,31 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 13:30:16 +0100
-Subject: [Buildroot] Analysis of build results for 2016-02-21
-In-Reply-To: <CANCHnQpG80FamNFj6R_8KTB1a--6LjPugDrBCf4cSojGt5XTOg@mail.gmail.com>
-References: <20160222073022.D29851025E8@stock.ovh.net>
- <20160222150539.0301105e@free-electrons.com>
- <20160223101233.GH1766@serenity.lan>
- <CANCHnQpG80FamNFj6R_8KTB1a--6LjPugDrBCf4cSojGt5XTOg@mail.gmail.com>
-Message-ID: <20160223133016.1a6592fe@free-electrons.com>
+Date: Tue, 23 Feb 2016 13:51:10 +0100
+Subject: [Buildroot] [PATCH v1] qt: add font license information
+In-Reply-To: <56CB9524.3090704@mind.be>
+References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
+ <56CB9524.3090704@mind.be>
+Message-ID: <20160223135110.064721b6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jeroen, John,
+Arnout,
 
-On Tue, 23 Feb 2016 11:40:52 +0100, Jeroen Roovers wrote:
-> https://gitweb.gentoo.org/repo/gentoo.git/tree/net-wireless/bluez/files/bluez-5.37-endian.patch
+Thanks a lot for having reviewed this patch, which is not very simple
+in terms of licensing details.
 
-Sounds good! Care to submit a patch for Buildroot that adds this patch,
-with a proper description and SoB ?
+On Tue, 23 Feb 2016 00:09:24 +0100, Arnout Vandecappelle wrote:
 
-Could you also look if the patch has been merged upstream? If it has
-been merged, using the upstream patch is better. If it hasn't been
-merged upstream, then submitting it would be good.
+>  The problem with the way that it's done now is that the different licenses will
+> not be comma-separated while they usually are. But adding commas is difficult in
+> this case, so OK.
 
-Thanks a lot!
+I thought we could do something such as:
+
+QT_LICENSE += Foo (bar),
+QT_LICENSE += Bar (foo),
+QT_LICENSE += Baz (boz),
+QT_LICENSE := $(patsubst %$(comma),%,$(QT_LICENSE))
+
+But it unfortunately seems to remove all commas. We could then do:
+
+QT_FINAL_LICENSE = $(shell echo "$(QT_LICENSE)" | sed 's:\(.*\),:\1:')
+
+Not super pretty, but it's just one line of crap.
 
 Thomas
 -- 
