@@ -1,95 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:36:50 +0100
-Subject: [Buildroot] [Buildroot PATCH Selinux v10 04/11] linux-pam:
- selinux host dependencies
-In-Reply-To: <1455603506-26138-4-git-send-email-niranjan.reddy@rockwellcollins.com>
+Date: Tue, 23 Feb 2016 22:47:48 +0100
+Subject: [Buildroot] [Buildroot PATCH Selinux v10 05/11] busybox:
+ applets as individual binaries
+In-Reply-To: <1455603506-26138-5-git-send-email-niranjan.reddy@rockwellcollins.com>
 References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
- <1455603506-26138-4-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <20160223223650.74c20cfa@free-electrons.com>
+ <1455603506-26138-5-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <20160223224748.05d575d8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Niranjan Reddy,
+Hello,
 
-Again, missing commit log. The commit title is completely unclear, and
-does not even seem to be related to the change being done. How adding a
-host variant of the linux-pam package and using this host variant is
-related to "selinux host dependencies" ?
+On Tue, 16 Feb 2016 11:48:20 +0530, Niranjan Reddy wrote:
 
-On Tue, 16 Feb 2016 11:48:19 +0530, Niranjan Reddy wrote:
-
-> +# Use the host-pam pam_conv1 app to create the pam.d files
-
-So that's why linux-pam needs to depend on host-linux-pam. So the
-addition of this dependency in PATCH 2 should in fact go in this patch.
-
-> +define LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
-> +	if [ -d $(TARGET_DIR)/etc/pam.d/ ]; then \
-
-Is this conditional really needed? Are there situations where linux-pam
-will not install things in /etc/pam.d/ ?
-
-> +		mv $(TARGET_DIR)/etc/pam.d/ $(TARGET_DIR)/etc/pam.d.orig/; \
+> +ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
+> +define BUSYBOX_PERMISSIONS
+> +	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
+> +endef
+> +
+> +# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE. The
+> +# permissions are pulled from the applets.h file that is generated during
+> +# the build and used to determine all of the possible applets. The permissions
+> +# file is generated and added to the list of device tables used by makedevs to
+> +# set file permissions.
+> +define BUSYBOX_MAKEDEV_PERMISSIONS
+> +	if [ -f $(@D)/.buildroot_permissions ]; then \
+> +		rm $(@D)/.buildroot_permissions; \
 > +	fi; \
-
-; \ not needed here
-
-> +	cd $(TARGET_DIR)/etc/ && cat $(@D)/conf/pam.conf | $(HOST_DIR)/usr/bin/pam_conv1; \
-
-Ditto
-
-> +	if [ -d $(TARGET_DIR)/etc/pam.d.orig ]; then \
-> +		cp -a $(TARGET_DIR)/etc/pam.d/* $(TARGET_DIR)/etc/pam.d.orig/; \
-> +		rm -rf $(TARGET_DIR)/etc/pam.d/; \
-> +		mv $(TARGET_DIR)/etc/pam.d.orig/ $(TARGET_DIR)/etc/pam.d/; \
-> +	fi;
-
-; not needed
-
-> +	$(INSTALL) -D -m 0644 package/linux-pam/system-auth.pamd $(TARGET_DIR)/etc/pam.d/system-auth
+> +	touch $(@D)/.buildroot_permissions; \
+> +	for app in `grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" $(@D)/include/applets.h \
+> +			| sed -e 's/,.*//' -e 's/.*(//'`; \
+> +	do \
+> +		temp=`grep -w $${app} $(@D)/busybox.links`; \
+> +		if [ -n "$${temp}" ]; then \
+> +			echo "$${temp} f 4755 0  0 - - - - -" >> $(@D)/.buildroot_permissions; \
+> +		fi; \
+> +	done
 > +endef
+> +BUSYBOX_POST_INSTALL_TARGET_HOOKS += BUSYBOX_MAKEDEV_PERMISSIONS
+> +BR2_ROOTFS_DEVICE_TABLE += $(BUSYBOX_DIR)/.buildroot_permissions
+> +else
 
-linux-pam used to be packaged without this complicated dance. Can you
-add some justification about why we're doing this complicated dance,
-and what it brings?
+I already said it in previous reviews, but I really don't like this. I
+don't like that you're appending directly to BR2_ROOTFS_DEVICE_TABLE,
+and I don't like the complicated logic.
 
-> +
-> +LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
->  LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
->  
-> +HOST_LINUX_PAM_DEPENDENCIES = host-flex host-pkgconf
-> +
-> +HOST_LINUX_PAM_CONF_OPTS = 
-> +	--disable-rpath \
-> +	--enable-read-both-confs \
-> +	--disable-regenerate-docu \
-> +	--disable-isadir \
-> +	--disable-nis \
-> +	--enable-securedir=/lib/security \
-> +	--disable-prelude \
-> +	--disable-cracklib \
-> +	--disable-lckpwdf \
-> +	--disable-db \
-> +	--disable-selinux \
-> +	--disable-audit \
-> +
-> +define HOST_LINUX_PAM_INSTALL_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/conf/pam_conv1/pam_conv1 $(HOST_DIR)/usr/bin/
+There are 6 applets with BB_SUID_REQUIRE, and 6 applets with
+BB_SUID_MAYBE. So I would prefer to have:
 
-We need a full destination path when $(INSTALL) -D is used, so
-$(HOST_DIR)/usr/bin/pam_conv1.
+define BUSYBOX_PERMISSIONS
+	/bin/ping	f	f4755 0 0 - - - - -
+	...
+endef
 
-> +endef
+for all 12 applets. The issue you will probably encounter is that
+makedevs will fail if you specify a file that doesn't exist. My
+proposal to solve this (I'm Cc'ing Yann here to get his opinion) is to
+add a marker or flag to tell makedevs "don't fail if the file doesn't
+exist". Maybe:
 
-One empty newline here please.
+	-/bin/ping
 
->  $(eval $(autotools-package))
-> +$(eval $(host-autotools-package))
+or something like this.
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
