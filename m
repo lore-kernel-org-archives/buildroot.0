@@ -1,105 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 21:44:52 +0100
-Subject: [Buildroot] [PATCH v3 1/1] jsen: new package
-In-Reply-To: <1456233895-31812-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-References: <1456233895-31812-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
-Message-ID: <56CCC4C4.5020402@mind.be>
+Date: Tue, 23 Feb 2016 21:46:28 +0100
+Subject: [Buildroot] "The owner of buildroot.uclibc.org has configured
+ their website improperly."
+In-Reply-To: <87k2lv6u8z.fsf@dell.be.48ers.dk>
+References: <CAF_dkJCBdH-p5Oa6TcKobVBR-ovT84jB64dE4mhy8ZaHV9UATQ@mail.gmail.com>
+ <87k2lv6u8z.fsf@dell.be.48ers.dk>
+Message-ID: <56CCC524.8020709@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/23/16 14:24, Atul Singh wrote:
+On 02/23/16 21:34, Peter Korsgaard wrote:
+>>>>>> "Patrick" == Patrick Doyle <wpdster@gmail.com> writes:
 > 
-> ---
-> Signed-off-by: Atul Singh <atul.singh.mandla@rockwellcollins.com>
->  package/Config.in      |  1 +
->  package/jsen/Config.in |  6 ++++++
->  package/jsen/jsen.hash |  2 ++
->  package/jsen/jsen.mk   | 18 ++++++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/jsen/Config.in
->  create mode 100644 package/jsen/jsen.hash
->  create mode 100644 package/jsen/jsen.mk
+>  > I apologise if this has already been asked.
+>  > When I try to connect to buildroot.uclibc.org with my ubuntu 14.04
+>  > Firefox 44.0.2, I get the following message:
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index a5b31aa..6f8b8bd 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -984,6 +984,7 @@ menu "External jQuery plugins"
->  	source "package/jquery-validation/Config.in"
->  endmenu
->  endif
-> +	source "package/jsen/Config.in"
+>  > Your connection is not secure
+>  > The owner of buildroot.uclibc.org has configured their website
+>  > improperly. To protect your information from being stolen, Firefox has
+>  > not connected to this website.
+> 
+>  > This site uses HTTP Strict Transport Security (HSTS) to specify that
+>  > Firefox only connect to it securely. As a result, it is not possible
+>  > to add an exception for this certificate.
+> 
+>  > I thought I should mention this, even though I'm sure I can't be the
+>  > first to have noticed it.
+> 
+> First of all, buildroot.uclibc.org is the legacy name - Nowadays we have
+> buildroot.{org,net}, so please use http://buildroot.org instead.
+> 
+> Secondly, the reason why you get this error is that the uClibc
+> developers have recently added HSTS for *.uclibc.org (which forces
+> https:// access), and the certificate we use for Buildroot doesn't list
+> the legacy buildroot.uclibc.org address.
 
- I wonder if this is really the correct place for it. This menu is for
-Javascript libraries that are installed in /var/www, i.e. that are meant to be
-used by web clients. AFAICS, however, jsen is meant to be used with nodejs
-(which is why it's installed in /usr/share, I guess). So I think we should
-create a new menu under the nodejs package:
-
-	source "package/nodejs/Config.in"
-if BR2_PACKAGE_NODEJS
-menu "NodeJS libraries/modules"
-	source "package/jsen/Config.in"
-endmenu
-endif
-
- I vaguely remember that this was discussed before - if so, the conclusion of
-that discussion should have been in your commit message.
-
+ The fix could be that the webserver is configured to redirect
+buildroot.uclibc.org to buildroot.org, instead of serving it directly.
 
  Regards,
  Arnout
 
->  	source "package/jsmin/Config.in"
->  	source "package/json-javascript/Config.in"
->  endmenu
-> diff --git a/package/jsen/Config.in b/package/jsen/Config.in
-> new file mode 100644
-> index 0000000..8c41a19
-> --- /dev/null
-> +++ b/package/jsen/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_JSEN
-> +	bool "jsen"
-> +	help
-> +	  JSEN (JSON Sentinel) validates your JSON objects using JSON-Schema.
-> +
-> +	  https://github.com/bugventure/jsen
-> diff --git a/package/jsen/jsen.hash b/package/jsen/jsen.hash
-> new file mode 100644
-> index 0000000..fdfcd93
-> --- /dev/null
-> +++ b/package/jsen/jsen.hash
-> @@ -0,0 +1,2 @@
-> +# Locally Computed
-> +sha256  651b3ae5c92865705c144175a8297305788a0e9a1f46ee9b8caa127c6bce6709  jsen-v0.6.0.tar.gz
-> diff --git a/package/jsen/jsen.mk b/package/jsen/jsen.mk
-> new file mode 100644
-> index 0000000..535389d
-> --- /dev/null
-> +++ b/package/jsen/jsen.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# jsen
-> +#
-> +################################################################################
-> +
-> +JSEN_VERSION = v0.6.0
-> +JSEN_SITE = $(call github,bugventure,jsen,$(JSEN_VERSION))
-> +JSEN_LICENSE = MIT
-> +JSEN_LICENSE_FILES = LICENSE
-> +
-> +define JSEN_INSTALL_TARGET_CMDS
-> +        mkdir -p $(TARGET_DIR)/usr/share/jsen
-> +        $(foreach d,dist lib index.js,\
-> +                cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/jsen/$(sep))
-> +endef
-> +
-> +$(eval $(generic-package))
+> 
+> I'll try to get that fixed, but please move to the official address
+> instead, which we've had for ~5 years or so by now.
 > 
 
 
