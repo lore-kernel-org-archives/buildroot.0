@@ -1,69 +1,116 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2016 22:59:41 +0100
-Subject: [Buildroot] [git commit branch/next] configs: add Boundary Devices
-	i.MX7 Nitrogen7 support
-Message-ID: <20160223222809.4705981849@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 23 Feb 2016 23:29:16 +0100
+Subject: [Buildroot] [PATCH v3] package/mono: Fixing wrong
+	MonoPosixHelper location
+In-Reply-To: <56CCDAD8.5070904@mind.be>
+References: <1456264228-19851-1-git-send-email-angelo.compagnucci@gmail.com>
+ <56CCDAD8.5070904@mind.be>
+Message-ID: <CA+TH9VnvmxhZtx9aM0C0CCXo4duH-Y9kQ6yM5Tpia1YWpY8D4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c49ae49d9cf42d29b31505054b79ea414c33480
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Arnout Vandecappelle,
 
-This board is using a different kernel and u-boot branch than the
-other Boundary Devices platforms since NXP forked the 3.14 kernel to add
-i.MX7 support (see imx_3.14.38_6ul7d_beta branch).
-Next kernel version, 3.14.52, will be the same for all i.MX platforms.
+2016-02-23 23:19 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
+> On 02/23/16 22:50, Angelo Compagnucci wrote:
+>> * This patch solves installation problems with monoposixhelper
+>
+>  This description should be better, e.g. taking part of the bug description.
+>
+> libMonoPosixHelper.so will be searched in the HOST_DIR/usr/lib/ path. This path
+> and file may exist on my building machine, but not on the target.
+>
+> Fixes bug #8651.
 
-https://boundarydevices.com/product/nitrogen7/
+Have I to resend?
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/nitrogen7_defconfig | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+>
+>> * Fixes https://bugs.busybox.net/show_bug.cgi?id=8651
+>>
+>> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> ---
+>> Changelog:
+>>
+>> v2 -> v3:
+>> The patch was based on mono master and not on mono 4.2.2.30.
+>> This patch is now based on mono 4.2.2.30.
+>> This patch was tested on br_next.
+>>
+>> v1 -> v2:
+>> * Added SoB and description to patch
+>>
+>>
+>>  ....in-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
+>>  1 file changed, 28 insertions(+)
+>>  create mode 100644 package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+>>
+>> diff --git a/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+>> new file mode 100644
+>> index 0000000..6ebb802
+>> --- /dev/null
+>> +++ b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+>> @@ -0,0 +1,28 @@
+>> +From 76aa4fb62a433e61dc35eefcc3077f0463182d2f Mon Sep 17 00:00:00 2001
+>> +From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> +Date: Tue, 23 Feb 2016 22:43:39 +0100
+>> +Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
+>> +
+>> +This patch remove a wrong prefix for libMonoPosixHelper
+>> +
+>> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>> +---
+>> + data/config.in | 2 +-
+>> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>> +
+>> +diff --git a/data/config.in b/data/config.in
+>> +index b760176..41495b9 100644
+>> +--- a/data/config.in
+>> ++++ b/data/config.in
+>> +@@ -10,7 +10,7 @@
+>> +     <dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
+>> +     <dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
+>> +     <dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
+>> +-    <dllmap dll="MonoPosixHelper" target="@prefix@/@reloc_libdir@/libMonoPosixHelper@libsuffix@" os="!windows" />
+>> ++    <dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
+>
+>  So 6b5f6dd0434b66062110cf764688975ecfed646f doesn't fix it? That would mean
+> that mono_assembly_getrootdir() is wrong, which is bound to lead to other
+> problems...
 
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-new file mode 100644
-index 0000000..91529e8
---- /dev/null
-+++ b/configs/nitrogen7_defconfig
-@@ -0,0 +1,36 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+
-+# filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# Linux headers same as kernel, a 3.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="nitrogen7"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-boot-imx6/tarball/b2e1315/u-boot-b2e1315.tar.gz"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/20cee23/linux-imx6-20cee23.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="boundary"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-nitrogen7"
+That commit is not included in mono-4.2.2.30, could you explain better?
+
+Do you think I have to backport that patch from master? Honestly, if
+the released a buggy version, we should wait a correct one. I'm
+reactive about upgrading mono version in buildroot!
+
+Sincerely, Angelo
+
+>
+>
+>  Regards,
+>  Arnout
+>
+>> +     <dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
+>> +     <dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
+>> +     <dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
+>> +--
+>> +1.9.1
+>> +
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
