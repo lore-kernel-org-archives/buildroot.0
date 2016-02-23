@@ -1,46 +1,77 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2016 16:19:42 +0100
-Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
-In-Reply-To: <20160223104816.20c97306@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 23 Feb 2016 10:48:16 +0100")
-References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
- <20160221222816.4e53e921@free-electrons.com>
- <56CA62D8.10309@zacarias.com.ar> <56CB9DFA.506@mind.be>
- <56CBA547.3020200@zacarias.com.ar> <56CBAA86.4070305@mind.be>
- <56CBB0B1.6020506@zacarias.com.ar> <56CC2980.1020402@mind.be>
- <20160223104816.20c97306@free-electrons.com>
-Message-ID: <87wppv78tt.fsf@dell.be.48ers.dk>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Tue, 23 Feb 2016 12:54:48 -0300
+Subject: [Buildroot] [PATCH] procrank_linux: new package
+Message-ID: <1456242888-23322-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
- > Hello,
- > On Tue, 23 Feb 2016 10:42:24 +0100, Arnout Vandecappelle wrote:
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/Config.in                        |  3 +++
+ package/procrank_linux/Config.in         |  7 +++++++
+ package/procrank_linux/procrank_linux.mk | 21 +++++++++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 package/procrank_linux/Config.in
+ create mode 100644 package/procrank_linux/procrank_linux.mk
 
- >> This could indeed be a good idea. One reason to limit the number of committers
- >> was to avoid conflicts (i.e. two committers working on the same patch in
- >> parallel), but as I understand it, Thomas and Peter noticed that this isn't
- >> really a problem in practice.
- >> 
- >> So indeed, having a third person that applies trivial patches could be
- >> worthwhile to try.
- >> 
- >> That said, Yann and I are already spending a large part of our buildroot time
- >> on reviewing patches. I don't think that applying them immediately is going to
- >> make that much of a difference.
-
- > Fully agreed: applying the patch is clearly not what takes time. It's a
- > mechanical and stupid operation.
-
-Agreed. I'm all for ways of improving our ways of working, but I don't
-think this will change much. Adding Thomas as a co-maintainer has imho
-been very good, but adding a 3rd committer without having more reviewers
-imho won't make any significant difference.
-
+diff --git a/package/Config.in b/package/Config.in
+index 00132df..c1be419 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1595,6 +1595,9 @@ endif
+ 	source "package/powerpc-utils/Config.in"
+ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/procps-ng/Config.in"
++endif
++	source "package/procrank_linux/Config.in"
++if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/psmisc/Config.in"
+ endif
+ 	source "package/pwgen/Config.in"
+diff --git a/package/procrank_linux/Config.in b/package/procrank_linux/Config.in
+new file mode 100644
+index 0000000..59d462b
+--- /dev/null
++++ b/package/procrank_linux/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PROCRANK_LINUX
++	bool "procrank_linux"
++	help
++	  procrank is a tool commonly used by Android platform
++	  developers to find out how much memory is really being used.
++
++	  https://github.com/csimmonds/procrank_linux
+diff --git a/package/procrank_linux/procrank_linux.mk b/package/procrank_linux/procrank_linux.mk
+new file mode 100644
+index 0000000..7e74319
+--- /dev/null
++++ b/package/procrank_linux/procrank_linux.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# procrank_linux
++#
++################################################################################
++
++PROCRANK_LINUX_VERSION = 21c30ab4514a5b15ac6e813e21bee0d3d714cb08
++PROCRANK_LINUX_SITE = $(call github,csimmonds,procrank_linux,$(PROCRANK_LINUX_VERSION))
++PROCRANK_LINUX_LICENSE = Apache-2.0
++PROCRANK_LINUX_LICENSE_FILES = NOTICE
++
++define PROCRANK_LINUX_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE="$(TARGET_CROSS)"
++endef
++
++define PROCRANK_LINUX_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/procrank \
++		$(TARGET_DIR)/usr/bin/procrank
++endef
++
++$(eval $(generic-package))
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.4.10
