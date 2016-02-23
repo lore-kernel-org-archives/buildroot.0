@@ -1,37 +1,105 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Feb 2016 13:33:47 -0300
-Subject: [Buildroot] Include binary firmware blob in image
-In-Reply-To: <CAF_dkJDzeoumYA2KKCa2oxo9NwKg+cYf0t=EhedY=up04NbuvA@mail.gmail.com>
-References: <CAF_dkJDzeoumYA2KKCa2oxo9NwKg+cYf0t=EhedY=up04NbuvA@mail.gmail.com>
-Message-ID: <56CC89EB.9020807@zacarias.com.ar>
+Date: Tue, 23 Feb 2016 13:48:09 -0300
+Subject: [Buildroot] [PATCH] qt: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/02/16 13:30, Patrick Doyle wrote:
+It uses __sync_add_and_fetch_4() and other 32-bit atomics, fixes:
+http://autobuild.buildroot.net/results/7ac/7acdbc54e26ad2ba4756512614192be0a086f563/
 
-> Short version:
-> What is the best way to include a binary firmware blob fetched from
-> GitHub in a buildroot image?
->
-> Long version:
-> I am using the wilc1003_firmware.bin file available in the
-> https://github.com/linux4sc/wireless-firmware GitHub repository.  It
-> needs to be installed in /lib/firmware/atmel on my rootfs.
->
-> I could certainly write a post_build.sh script to clone the repo and
-> copy the file to the rootfs, but this doesn't feel like the most
-> buildroot-esque way to do this.  I feel like I should create a package
-> (where should I put it in the menu hierarchy?) and use that.
->
-> Is there an existing example I could follow for this sort of package?
->
-> Can folks recommend any tips or tricks for writing this package from scratch?
->
-> --wpd
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/opencv/Config.in      | 1 +
+ package/pinentry/Config.in    | 1 +
+ package/python-pyqt/Config.in | 2 ++
+ package/python-sip/Config.in  | 2 ++
+ package/qt/Config.in          | 2 ++
+ 5 files changed, 8 insertions(+)
 
-Take a look at package/zd1211-firmware, or package/ux500-firmware.
-Or if it's lots of firmware options/choices, then package/linux-firmware.
-Regards.
+diff --git a/package/opencv/Config.in b/package/opencv/Config.in
+index 8bc6c34..8ebca21 100644
+--- a/package/opencv/Config.in
++++ b/package/opencv/Config.in
+@@ -210,6 +210,7 @@ config BR2_PACKAGE_OPENCV_WITH_QT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # qt
+ 	depends on BR2_PACKAGE_OPENCV_LIB_HIGHGUI
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # qt
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_STL
+ 	select BR2_PACKAGE_QT_GUI_MODULE
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index f5a8159..8f6bdb9 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -40,6 +40,7 @@ config BR2_PACKAGE_PINENTRY_QT4
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # qt
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_GUI_MODULE
+ 	help
+diff --git a/package/python-pyqt/Config.in b/package/python-pyqt/Config.in
+index a50cb74..f2d06c4 100644
+--- a/package/python-pyqt/Config.in
++++ b/package/python-pyqt/Config.in
+@@ -1,5 +1,6 @@
+ comment "python-pyqt needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_PYTHON_PYQT
+@@ -7,6 +8,7 @@ config BR2_PACKAGE_PYTHON_PYQT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
+ 	depends on BR2_USE_MMU # qt
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # qt
+ 	select BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_PYTHON_SIP
+ 	help
+diff --git a/package/python-sip/Config.in b/package/python-sip/Config.in
+index 45e48ad..9a4296a 100644
+--- a/package/python-sip/Config.in
++++ b/package/python-sip/Config.in
+@@ -1,5 +1,6 @@
+ comment "python-sip needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ config BR2_PACKAGE_PYTHON_SIP
+@@ -7,6 +8,7 @@ config BR2_PACKAGE_PYTHON_SIP
+ 	depends on BR2_INSTALL_LIBSTDCPP # qt
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # qt
+ 	depends on BR2_USE_MMU # qt
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # qt
+ 	select BR2_PACKAGE_QT
+ 	help
+ 	  SIP is a tool that makes it very easy to create Python
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index bf14724..06444ed 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -1,5 +1,6 @@
+ comment "qt needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+ 
+ menuconfig BR2_PACKAGE_QT
+@@ -7,6 +8,7 @@ menuconfig BR2_PACKAGE_QT
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+-- 
+2.4.10
