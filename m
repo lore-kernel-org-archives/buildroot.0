@@ -1,95 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:29:29 +0100
-Subject: [Buildroot] [Buildroot PATCH Selinux v10 02/11] linux-pam:
- selinux audit dependencies
-In-Reply-To: <1455603506-26138-2-git-send-email-niranjan.reddy@rockwellcollins.com>
+Date: Tue, 23 Feb 2016 22:31:02 +0100
+Subject: [Buildroot] [Buildroot PATCH Selinux v10 03/11] linux-pam:
+ selinux system auth
+In-Reply-To: <1455603506-26138-3-git-send-email-niranjan.reddy@rockwellcollins.com>
 References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
- <1455603506-26138-2-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <20160223222929.59589097@free-electrons.com>
+ <1455603506-26138-3-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <20160223223102.2e02dbe6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Niranjan Reddy,
+Hello,
 
-There is no commit log, and the commit title is really unclear. Maybe
-it should be:
+On Tue, 16 Feb 2016 11:48:18 +0530, Niranjan Reddy wrote:
 
-	linux-pam: add optional libselinux and audit dependencies
-
-On Tue, 16 Feb 2016 11:48:17 +0530, Niranjan Reddy wrote:
-
-> diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-> index 26b627e..c2897df 100644
-> --- a/package/linux-pam/linux-pam.mk
-> +++ b/package/linux-pam/linux-pam.mk
-> @@ -8,15 +8,18 @@ LINUX_PAM_VERSION = 1.1.8
->  LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
->  LINUX_PAM_SITE = http://linux-pam.org/library
->  LINUX_PAM_INSTALL_STAGING = YES
-> +# cracklib and libdb are not currently present in buildroot
-
-Why are you specifically talking about cracklib and libdb, and not
-about --disable-prelude, --disable-nis, and so on? While I'm generally
-all for adding comments, I believe in this case it is not very useful.
-
->  LINUX_PAM_CONF_OPTS = \
->  	--disable-prelude \
->  	--disable-isadir \
->  	--disable-nis \
->  	--disable-db \
-> +	--disable-cracklib \
-
-This change seemingly has nothing to do with the commit title, so it
-should be part of a separate patch (unless there is a justification for
-this change to be related).
-
->  	--disable-regenerate-docu \
->  	--enable-securedir=/lib/security \
->  	--libdir=/lib
-> -LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf
-> +# host-linux-pam is needed for creating pam conf files
-> +LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf host-linux-pam
-
-But how is the current linux-pam package working? What change makes
-this host-linux-pam dependency now necessary? How is this related to
-adding the selinux and audit dependencies?
-
-Also, this patch is PATCH 2 in your series, but the host variant of
-linux-pam only gets introduced in PATCH 4. So if I apply the patches in
-order from your series, and stop after PATCH 2 or PATCH 3, things will
-be broken.
-
->  LINUX_PAM_AUTORECONF = YES
->  LINUX_PAM_LICENSE = BSD-3c
->  LINUX_PAM_LICENSE_FILES = Copyright
-> @@ -26,6 +29,20 @@ LINUX_PAM_DEPENDENCIES += gettext
->  LINUX_PAM_MAKE_OPTS += LIBS=-lintl
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-> +LINUX_PAM_CONF_OPTS += --enable-selinux
-> +LINUX_PAM_DEPENDENCIES += libselinux
-> +else
-> +LINUX_PAM_CONF_OPTS += --disable-selinux
-> +endif
+> diff --git a/package/linux-pam/system-auth.pamd b/package/linux-pam/system-auth.pamd
+> new file mode 100644
+> index 0000000..2fa116a
+> --- /dev/null
+> +++ b/package/linux-pam/system-auth.pamd
+> @@ -0,0 +1,15 @@
+> +#%PAM-1.0
+> +auth        required      pam_env.so
+> +auth        sufficient    pam_unix.so
+> +auth        required      pam_deny.so
 > +
-> +ifeq ($(BR2_PACKAGE_AUDIT),y)
-> +LINUX_PAM_CONF_OPTS += --enable-audit
-> +LINUX_PAM_DEPENDENCIES += audit
-> +else
-> +LINUX_PAM_CONF_OPTS += --disable-audit
-> +endif
-
-This part looks good, and seems to be the only part related to the
-commit title.
-
+> +account     required      pam_unix.so
 > +
->  # Install default pam config (deny everything)
->  define LINUX_PAM_INSTALL_CONFIG
->  	$(INSTALL) -m 0644 -D package/linux-pam/other.pam \
+> +#password    required      pam_cracklib.so try_first_pass retry=3
+> +password    sufficient    pam_unix.so md5 shadow try_first_pass
+> +password    required      pam_deny.so
+> +
+> +session     optional      pam_keyinit.so revoke
+> +session     required      pam_limits.so
+> +session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+> +session     required      pam_unix.so
+
+This patch is just adding one file, which doesn't get used anywhere.
+Yes, I know, it will be used in PATCH 4, but either it should be
+squashed in PATCH 4 itself (which is reasonable since PATCH 4 isn't
+that large), or if you want to keep it separate, indicate how it will
+be used in the commit log, and explains what it is doing.
+
+Remember: the people reviewing your code need to *understand* what's
+going on, and are not necessarily selinux/pam experts. So you have to
+give a sufficient amount of details.
 
 Thanks!
 
