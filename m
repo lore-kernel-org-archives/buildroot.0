@@ -1,24 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2016 22:57:44 +0100
-Subject: [Buildroot] [PATCH 2/2] linux-headers: mark EOL versions
-	deprecated
-In-Reply-To: <1456163698-7860-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 22 Feb 2016 14:54:58 -0300")
-References: <1456163698-7860-1-git-send-email-gustavo@zacarias.com.ar>
- <1456163698-7860-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87mvqr5btz.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Feb 2016 22:56:26 +0100
+Subject: [Buildroot] [git commit branch/next] Config.in: Add
+	BR2_DEPRECATED_SINCE_2016_05
+Message-ID: <20160223215936.65A2180128@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bca107ee6d010ec0f61526bd800a2beec9f82c23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Follow the upstream EOL cycle and mark 4.3 as deprecated for 2016.05.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+In preparation for new deprecated features/symbols.
 
-Committed to next, thanks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in b/Config.in
+index 30e88e3..dfb5721 100644
+--- a/Config.in
++++ b/Config.in
+@@ -365,6 +365,10 @@ config BR2_DEPRECATED_SINCE_2016_02
+ 	bool
+ 	default y
+ 
++config BR2_DEPRECATED_SINCE_2016_05
++	bool
++	default y
++
+ endif
+ 
+ config BR2_ENABLE_DEBUG
