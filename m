@@ -1,114 +1,55 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 23 Feb 2016 23:18:47 +0100
-Subject: [Buildroot] [PATCH v4] package/python-pillow: new package
-In-Reply-To: <20160221152621.52c42acd@free-electrons.com>
-References: <1455962149-29459-1-git-send-email-angelo.compagnucci@gmail.com>
- <20160221152621.52c42acd@free-electrons.com>
-Message-ID: <CA+TH9Vmri=sS5e0gacaoRMxwxNT_evmC9=-ERFvxS86H3NnpKQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 23 Feb 2016 19:19:29 -0300
+Subject: [Buildroot] [PATCH] qt: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20160223222219.24b95205@free-electrons.com>
+References: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160223222219.24b95205@free-electrons.com>
+Message-ID: <56CCDAF1.9070209@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+On 23/02/16 18:22, Thomas Petazzoni wrote:
 
-2016-02-21 15:26 GMT+01:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Angelo,
+> Isn't this broader than it needs to be? Only the Javascript code seems
+> to use this atomic operation, so maybe we could just make
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT depends on
+> BR2_TOOLCHAIN_HAS_SYNC_4. Or maybe it's
+> BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT.
 >
-> On Sat, 20 Feb 2016 10:55:49 +0100, Angelo Compagnucci wrote:
->> This patch adds python-pillow, the friendly python image library fork.
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> By doing this, it also simplifies the patch quite a bit, since you
+> don't need to propagate the dependency to too many packages (if any).
 >
-> This package does not build when jpeg is disabled:
+> I've indeed tested, and the following defconfig builds fine:
 >
-> running build_ext
-> Traceback (most recent call last):
->   File "setup.py", line 711, in <module>
->     zip_safe=not debug_build(),
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/core.py", line 148, in setup
->     dist.run_commands()
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/dist.py", line 955, in run_commands
->     self.run_command(cmd)
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/dist.py", line 974, in run_command
->     cmd_obj.run()
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/command/build.py", line 126, in run
->     self.run_command(cmd_name)
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/cmd.py", line 313, in run_command
->     self.distribution.run_command(command)
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/dist.py", line 974, in run_command
->     cmd_obj.run()
->   File "/home/thomas/projets/buildroot/output/host/usr/lib/python3.4/distutils/command/build_ext.py", line 342, in run
->     self.build_extensions()
->   File "setup.py", line 459, in build_extensions
->     % (f, f))
-> ValueError: --enable-jpeg requested but jpeg not found, aborting.
+> BR2_sparc=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-glibc-2015.11-rc1-71-g90d1299.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_QT=y
+> BR2_PACKAGE_QT_LICENSE_APPROVED=y
+> # BR2_PACKAGE_QT_GUI_MODULE is not set
+> # BR2_PACKAGE_QT_XML is not set
+> # BR2_PACKAGE_QT_NETWORK is not set
+> # BR2_PACKAGE_QT_SCRIPT is not set
+> # BR2_TARGET_ROOTFS_TAR is not set
 >
-> It seems like you should pass explicit --enable/--disable options,
-> since at least jpeg and zlib are by default expected to be enabled.
-> See https://pillow.readthedocs.org/en/latest/installation.html#external-libraries.
->
-> Unfortunately, those options are only recognized when calling "setup.py
-> build_ext", not when calling "setup.py build" as the python-package
-> infrastructure is doing. So you might need to override the build
-> commands for this package.
+> Which proves that Qt by itself doesn't use those atomic operations.
+> Could you research which specific sub-option(s) are causing problems?
+> I'm pretty sure it's either script or webkit, or possibly both.
 
-Right.
-
-I actually implemented something lie this in pkg-python.mk
-
-[...]
-$(2)_BUILD_TARGET ?= build
-[...]
-$(2)_BASE_BUILD_TGT   = $$($(2)_BUILD_TARGET)
-[...]
-
-and seems to work and not breaking other packages.
-This way I can add:
-
-PYTHON_PILLOW_BUILD_TARGET = build_ext
-
-What do you think?
-
-
->> diff --git a/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
->> new file mode 100644
->> index 0000000..5f43013
->> --- /dev/null
->> +++ b/package/python-pillow/0001-setup.py-removing-unneeded-platform-guess.patch
->> @@ -0,0 +1,85 @@
->> +From cb8c67c0b7ee805100c381300ea29262e8b5838a Mon Sep 17 00:00:00 2001
->> +From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> +Date: Thu, 22 Oct 2015 22:45:31 +0200
->> +Subject: [PATCH] setup.py: removing unneeded platform guess
->> +
->> +Platform guess is not needed when cross compiling on buildroot
->> +so removing it.
->> +
->> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->
-> Can you submit this patch upstream or at least report the issue?
-
-I don't think so. That piece of code is used to guess the platform on
-which your are compiling with the assumption that host arch == target
-arch. Probably, pillow is not originally designed to be cross compiled
-and the build system would require a rewrite for a more structured
-approach.
-The only way to let buildroot passing the appropriate options to build
-and setup is to remove that piece of code.
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
-
-
--- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+It's possible, however how likely is it an arch that doesn't support 
+atomics (normally meaning very old) running a QT gui?
+SPARC v8 is normally used these days for rad-hard/aerospace/avionics 
+solutions (gaisler), it's doubtful anyone with an old sparcstation (pre 
+1995) with known broken kernel support will care.
+Regards.
