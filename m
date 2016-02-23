@@ -1,66 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2016 15:12:43 +0100
-Subject: [Buildroot] [git commit] musl: add fwrite regression patch
-Message-ID: <20160302202752.9809680203@busybox.osuosl.org>
+Date: Tue, 23 Feb 2016 21:26:41 +0100
+Subject: [Buildroot] [git commit] samba4: bump to version 4.3.5
+Message-ID: <20160302202756.867AD7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ffed8ae08d5b8b3a30fb3d00c9e3ad2b84c9b2e
+commit: https://git.buildroot.net/buildroot/commit/?id=0cf5ac0e76cc20aac6278e4031eeced236b8f0c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As pointed in http://www.openwall.com/lists/musl/2016/02/17/3 add the
-fwrite regression patch for the recent 1.1.13 release.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...n-in-fputs-that-fwrite-returning-0-implie.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
-new file mode 100644
-index 0000000..b32b752
---- /dev/null
-+++ b/package/musl/1.1.13/0001-fix-assumption-in-fputs-that-fwrite-returning-0-implie.patch
-@@ -0,0 +1,38 @@
-+From 10a17dfbad2c267d885817abc9c7589fc7ff630b Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Tue, 16 Feb 2016 13:26:16 -0500
-+Subject: [PATCH] fix assumption in fputs that fwrite returning 0 implies an
-+ error
-+
-+internally, the idiom of passing nmemb=1 to fwrite and interpreting
-+the return value of fwrite (which is necessarily 0 or 1) as
-+failure/success is fairly widely used. this is not correct, however,
-+when the size argument is unknown and may be zero, since C requires
-+fwrite to return 0 in that special case. previously fwrite always
-+returned nmemb on success, but this was changed for conformance with
-+ISO C by commit 500c6886c654fd45e4926990fee2c61d816be197.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: upstream.
-+
-+ src/stdio/fputs.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/stdio/fputs.c b/src/stdio/fputs.c
-+index 4737f44..1cf344f 100644
-+--- a/src/stdio/fputs.c
-++++ b/src/stdio/fputs.c
-+@@ -3,7 +3,8 @@
-+ 
-+ int fputs(const char *restrict s, FILE *restrict f)
-+ {
-+-	return (int)fwrite(s, strlen(s), 1, f) - 1;
-++	size_t l = strlen(s);
-++	return (fwrite(s, 1, l, f)==l) - 1;
-+ }
-+ 
-+ weak_alias(fputs, fputs_unlocked);
-+-- 
-+2.4.10
-+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index f42e37a..1b53657 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	5d0eb52e842832af922f7d57716eacff23192906ec3bdf6727e18ca24f1419d9	samba-4.3.4.tar.gz
++sha256	583f927a823b272757fd4df0be267bd20a223b06cfc3c662df17e4870f14bf1c	samba-4.3.5.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 4e796a6..64f9957 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.3.4
++SAMBA4_VERSION = 4.3.5
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
