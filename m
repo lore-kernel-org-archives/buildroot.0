@@ -1,119 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Feb 2016 00:28:34 +0100
-Subject: [Buildroot] [PATCH] core: do not attempt downloads with no
- _VERSION set
-In-Reply-To: <20160124223345.GA31752@vostro>
-References: <20160124223345.GA31752@vostro>
-Message-ID: <56CCEB22.2090700@mind.be>
+Date: Wed, 24 Feb 2016 00:55:41 +0100
+Subject: [Buildroot] [PATCH] linux: don't add to toolchain dependency
+In-Reply-To: <20160222131901.3baa956e@free-electrons.com>
+References: <1456141244-624-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160222131901.3baa956e@free-electrons.com>
+Message-ID: <56CCF17D.2030508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/24/16 23:33, Alex Suykov wrote:
-> Currently, when the package defines no _SOURCE and no _VERSION
-> variables, we end up trying to download <PACKAGE>-undefined.tar.gz.
+On 02/22/16 13:19, Thomas Petazzoni wrote:
+> Gustavo,
 > 
-> This is utterly pointless.
+> Cc'ing Yann.
 > 
-> Change the logic to not attempt a download when neither _SOURCE
-> nor _VERSION is set:
->   - do not set an undefined _VERSION to "undefined"
->   - do not append an empty (or "undefined") version to the package
->     rawname
->   - use the package rawname in the MESSAGE macro
+> On Mon, 22 Feb 2016 08:40:44 -0300, Gustavo Zacarias wrote:
 > 
-> Consequently, for packages that have no _VERSION, the build
-> directory will be just the package name (which to some may look
-> nicer than the current "package-undefined").
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index 7e20255..dc1c79e 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -8,6 +8,9 @@ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+>>  LINUX_LICENSE = GPLv2
+>>  LINUX_LICENSE_FILES = COPYING
+>>  
+>> +# Used when BR2_KERNEL_HEADERS_AS_KERNEL=y
+>> +LINUX_ADD_TOOLCHAIN_DEPENDENCY = NO
 > 
-> Furthermore, the message trace is also a bit leaner (to the same
-> people that find "package" nicer than "package-undefined").
+> This is annoying, because we *do* need the toolchain dependency to
+> build the Linux kernel. I think we would rather need to do:
 > 
-> Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> LINUX_HEADERS_PATCH_DEPENDENCIES = linux-patch
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ Well, _PATCH_DEPENDENCIES already does that:
 
- Note that we could also remove the _SOURCE and _VERSION definitions in
-pkg-virtual.mk.
+# Order-only dependency
+$$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
 
- Some additional comments below.
 
-> ---
->  package/pkg-generic.mk | 6 ++----
->  package/pkg-utils.mk   | 2 +-
->  2 files changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 1e024d3..a5ee023 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -380,8 +380,6 @@ ifndef $(2)_VERSION
->    $(2)_DL_VERSION := $$($(3)_DL_VERSION)
->   else ifdef $(3)_VERSION
->    $(2)_DL_VERSION := $$($(3)_VERSION)
-> - else
-> -  $(2)_DL_VERSION = undefined
->   endif
->  else
->   $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
-> @@ -392,7 +390,7 @@ ifdef $(3)_OVERRIDE_SRCDIR
->    $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
->  endif
->  
-> -$(2)_BASE_NAME	=  $(1)-$$($(2)_VERSION)
-> +$(2)_BASE_NAME	=  $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_DL_DIR	=  $$(DL_DIR)/$$($(2)_BASE_NAME)
->  $(2)_DIR	=  $$(BUILD_DIR)/$$($(2)_BASE_NAME)
->  
-> @@ -422,7 +420,7 @@ endif
->  ifndef $(2)_SOURCE
->   ifdef $(3)_SOURCE
->    $(2)_SOURCE = $$($(3)_SOURCE)
-> - else
-> + else ifdef $(2)_VERSION
->    $(2)_SOURCE			?= $$($(2)_RAWNAME)-$$($(2)_VERSION).tar.gz
+ The problem identified by Gustavo doesn't happen in a normal build, it's only
+when you do make source. That's because for source we use:
 
- Maybe we should also fix this whitespace gibberish.
+$(1)-all-source:        $(1)-source
+$(1)-all-source:        $$(foreach
+p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
 
->   endif
->  endif
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 44bd2c9..c098b55 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -83,7 +83,7 @@ INFLATE.tar  = cat
->  suitable-extractor = $(INFLATE$(suffix $(1)))
->  
->  # MESSAGE Macro -- display a message in bold type
-> -MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_NAME) $($(PKG)_VERSION) $(call qstrip,$(1))$(TERM_RESET)"
-> +MESSAGE = echo "$(TERM_BOLD)>>> $($(PKG)_BASE_NAME) $(call qstrip,$(1))$(TERM_RESET)"
 
- This part I don't like much. I did like it that the package name and the
-version were separated in the messages. The idea of this change is to avoid a
-double space when PKG_VERSION is empty, but in fact we already have that for the
-finalizing steps.
+ I have to think a bit more about possible solutions. But the good thing is that
+it's less important: a normal build will still work without warning, and make
+source will also still work and have all the packages, it just has a warning
+that is not so nice. So if it doesn't get fixed for 2016.02 it's no disaster.
 
- So, to eliminate all spaces, I'd make it
-
-MESSAGE = echo "$(TERM_BOLD)>>>" $($(PKG)_NAME) $($(PKG)_VERSION) "$(call
-qstrip,$(1))$(TERM_RESET)"
-
-this way, empty package name and version will be eliminated by shell parsing.
-
- But that's a separate patch, so I propose to eliminate just this bit from the
-patch and apply.
 
  Regards,
  Arnout
 
-
->  TERM_BOLD := $(shell tput smso)
->  TERM_RESET := $(shell tput rmso)
->  
+> 
+> Though I'm not sure how great it is to have a non-package listed in the
+> <pkg>_DEPENDENCIES variable. Surely it might break graph-depends and
+> other similar tooling.
+> 
+> Thomas
 > 
 
 
