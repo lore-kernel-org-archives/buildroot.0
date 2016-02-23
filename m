@@ -1,103 +1,42 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 23 Feb 2016 22:19:58 +0100
-Subject: [Buildroot] [PATCH v2] package/mono: Fixing wrong
-	MonoPosixHelper location
-In-Reply-To: <56CCCAD9.5030700@mind.be>
-References: <1456209431-19667-1-git-send-email-angelo.compagnucci@gmail.com>
- <56CCCAD9.5030700@mind.be>
-Message-ID: <CA+TH9V=cMOHF5zMVCR0VAg8d_mxLO4XoV_xLh-rx5_90DSTJQQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Feb 2016 22:21:00 +0100
+Subject: [Buildroot] [PATCH 01/10] package/gnuradio: add optional
+ support for orc
+In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160223222100.674aba5c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle
+Dear Bernd Kuhls,
 
-2016-02-23 22:10 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
-> On 02/23/16 07:37, Angelo Compagnucci wrote:
->> * This patch solves installation problems with monoposixhelper
->> * Submitted upstream for inclusion
->
->  You sent us the upstream patch, which doesn't apply to our 4.2.2.30 (next) and
-> 4.2.1.102 (master) versions.
->
->> * Fixes https://bugs.busybox.net/show_bug.cgi?id=8651
->
->  I doubt that this is the correct solution, since this $mono_libdir construct
-> was just introduced upstream in commit 6b5f6dd0434b66062110cf764688975ecfed646f.
-> Heck, maybe that commit even fixes the issue? At least the commit log seems a
-> bit related.
+On Sun, 21 Feb 2016 18:34:50 +0100, Bernd Kuhls wrote:
+> When orc was compiled before, gnuradio will use it as optional
+> dependency:
+> 
+> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gnuradio-config-info | grep NEEDED
+> [...]
+>  0x0000000000000001 (NEEDED)             Shared library: [liborc-0.4.so.0]
+> [...]
+> 
+> Apparently there is no option provided by the build system to
+> en-/disable support for orc:
+> https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/gnuradio/gnuradio.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-You are probably right, I'm reconsidering all the facts right now ad
-probably I resend a new patch.
+Applied to master, thanks!
 
-Sincerely, Angelo
+Thanks to Gwenhael for testing!
 
->
->  Regards,
->  Arnout
->
->>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> ---
->> Changelog:
->>
->> v1 -> v2:
->>
->> * Added SoB and description to patch
->>
->>
->>  ...007-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
->>  1 file changed, 28 insertions(+)
->>  create mode 100644 package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
->>
->> diff --git a/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
->> new file mode 100644
->> index 0000000..fb77c6f
->> --- /dev/null
->> +++ b/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
->> @@ -0,0 +1,28 @@
->> +From b56f7f940f804cdda4216b841f2ba83475a5b19d Mon Sep 17 00:00:00 2001
->> +From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> +Date: Sun, 14 Feb 2016 22:32:25 +0100
->> +Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
->> +
->> +This patch remove a wrong prefix for libMonoPosixHelper.
->> +
->> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->> +---
->> + data/config.in | 2 +-
->> + 1 file changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/data/config.in b/data/config.in
->> +index b4b7243..41495b9 100644
->> +--- a/data/config.in
->> ++++ b/data/config.in
->> +@@ -10,7 +10,7 @@
->> +     <dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
->> +     <dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
->> +     <dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
->> +-    <dllmap dll="MonoPosixHelper" target="$mono_libdir/libMonoPosixHelper@libsuffix@" os="!windows" />
->> ++    <dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
->> +     <dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
->> +     <dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
->> +     <dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
->> +--
->> +1.9.1
->> +
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-
-
-
+Thomas
 -- 
-Profile: http://it.linkedin.com/in/compagnucciangelo
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
