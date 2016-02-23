@@ -1,142 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 01:22:06 +0100
-Subject: [Buildroot] [PATCH v2] msr-tools: new package
-In-Reply-To: <1456180319-23117-1-git-send-email-vincent.stehle@intel.com>
-References: <20160222222152.GA22228@jazz.nc.intel.com>
- <1456180319-23117-1-git-send-email-vincent.stehle@intel.com>
-Message-ID: <56CBA62E.1040200@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 23 Feb 2016 01:24:28 +0100
+Subject: [Buildroot] [PATCH 4/9] olimex_a20_olinuxino_micro: initialize the
+	network with DHCP
+In-Reply-To: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
+References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1456187073-2876-5-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/22/16 23:31, Vincent Stehl? wrote:
-> The MSR Tools project provides utilities to access x86 processor MSRs
-> and CPU ID directly.
-> 
-> https://01.org/msr-tools
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@intel.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> ---
-> 
-> Changes since v1:
-> - Add comments in Config.in that msr-tools runs only on x86
-> - Drop redundant _SOURCE specification in msr-tools.mk
-> 
->  package/Config.in                |  1 +
->  package/msr-tools/Config.in      | 15 +++++++++++++++
->  package/msr-tools/msr-tools.hash |  2 ++
->  package/msr-tools/msr-tools.mk   | 21 +++++++++++++++++++++
->  4 files changed, 39 insertions(+)
->  create mode 100644 package/msr-tools/Config.in
->  create mode 100644 package/msr-tools/msr-tools.hash
->  create mode 100644 package/msr-tools/msr-tools.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 529ad33..f468b46 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -403,6 +403,7 @@ endif
->  	source "package/memtest86/Config.in"
->  	source "package/memtester/Config.in"
->  	source "package/minicom/Config.in"
-> +	source "package/msr-tools/Config.in"
->  	source "package/nanocom/Config.in"
->  	source "package/neard/Config.in"
->  	source "package/nvidia-driver/Config.in"
-> diff --git a/package/msr-tools/Config.in b/package/msr-tools/Config.in
-> new file mode 100644
-> index 0000000..b348499
-> --- /dev/null
-> +++ b/package/msr-tools/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_MSR_TOOLS
-> +	bool "msr-tools"
-> +	depends on BR2_i386 || BR2_x86_64
-> +	help
-> +	  The MSR Tools project provides utilities to access x86 processor MSRs
-> +	  and CPU ID directly.
-> +
-> +	  Those tools access the hardware through the /dev/cpu/<cpu#>/msr and
-> +	  /dev/cpu/<cpu#>/cpuid devices. This necessitates msr and cpuid
-> +	  support in the kernel.
+To allow a more complete "out-of-the-box" startup with the defconfig,
+enable automatic network configuration of eth0 using DHCP.
 
- Maybe specify which kernel options should be enabled, i.e. CONFIG_X86_CPUID and
-CONFIG_X86_MSR.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ configs/olimex_a20_olinuxino_micro_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +
-> +	  https://01.org/msr-tools
-> +
-> +comment "msr-tools runs only on x86 CPUs"
-> +	depends on !BR2_i386 && !BR2_x86_64
-
- As I wrote, this shouldn't be there.
-
-> diff --git a/package/msr-tools/msr-tools.hash b/package/msr-tools/msr-tools.hash
-> new file mode 100644
-> index 0000000..18146df
-> --- /dev/null
-> +++ b/package/msr-tools/msr-tools.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256 9b87245ee091a798184e447066e9e0d7709b7c81f5e6ad55f2b958c1aa50c4a3 msr-tools-1.3.tar.gz
-> diff --git a/package/msr-tools/msr-tools.mk b/package/msr-tools/msr-tools.mk
-> new file mode 100644
-> index 0000000..f14684f
-> --- /dev/null
-> +++ b/package/msr-tools/msr-tools.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# msr-tools
-> +#
-> +################################################################################
-> +
-> +MSR_TOOLS_VERSION = 1.3
-> +MSR_TOOLS_SITE = $(call github,01org,msr-tools,msr-tools-$(MSR_TOOLS_VERSION))
-> +MSR_TOOLS_LICENSE = GPLv2+
-
- cpuid.c specifies GPLv2-only, so we should stick to that.
-
- Add a comment saying that there is no license file in the tarball. Or cpuid.c
-could be used.
-
-> +
-> +define MSR_TOOLS_BUILD_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(MAKE) -C $(@D) CC="$(CCACHE) $(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)"
-
- Is it possible to instead use
-
-	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-
-? At least, LDFLAGS should be passed as well.
-
-> +endef
-> +
-> +define MSR_TOOLS_INSTALL_TARGET_CMDS
-> +	$(TARGET_CONFIGURE_OPTS) \
-
- I think this should be after the make.
-
-
- Regards,
- Arnout
-
-> +	$(MAKE) -C $(@D) install sbindir="$(TARGET_DIR)/usr/sbin"
-> +endef
-> +
-> +$(eval $(generic-package))
-> 
-
-
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+index 6d05f74bea8f..420252c2c36b 100644
+--- a/configs/olimex_a20_olinuxino_micro_defconfig
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+ 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
