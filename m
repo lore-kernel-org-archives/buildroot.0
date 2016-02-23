@@ -1,87 +1,64 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 22 Feb 2016 22:07:37 -0600
-Subject: [Buildroot] [PATCH 1/1] raptor: new package
-Message-ID: <1456200457-47727-1-git-send-email-matthew.weber@rockwellcollins.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 23 Feb 2016 07:37:11 +0100
+Subject: [Buildroot] [PATCH v2] package/mono: Fixing wrong MonoPosixHelper
+	location
+Message-ID: <1456209431-19667-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
- package/Config.in          |  1 +
- package/raptor/Config.in   | 13 +++++++++++++
- package/raptor/raptor.hash |  2 ++
- package/raptor/raptor.mk   | 19 +++++++++++++++++++
- 4 files changed, 35 insertions(+)
- create mode 100644 package/raptor/Config.in
- create mode 100644 package/raptor/raptor.hash
- create mode 100644 package/raptor/raptor.mk
+* This patch solves installation problems with monoposixhelper
+* Submitted upstream for inclusion
+* Fixes https://bugs.busybox.net/show_bug.cgi?id=8651
 
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..3f0b442 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1008,6 +1008,7 @@ menu "JSON/XML"
- 	source "package/mxml/Config.in"
- 	source "package/rapidjson/Config.in"
- 	source "package/rapidxml/Config.in"
-+	source "package/raptor/Config.in"
- 	source "package/tinyxml/Config.in"
- 	source "package/tinyxml2/Config.in"
- 	source "package/xerces/Config.in"
-diff --git a/package/raptor/Config.in b/package/raptor/Config.in
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changelog:
+
+v1 -> v2:
+
+* Added SoB and description to patch
+
+
+ ...007-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
+
+diff --git a/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
 new file mode 100644
-index 0000000..61bc49b
+index 0000000..fb77c6f
 --- /dev/null
-+++ b/package/raptor/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_RAPTOR
-+	bool "raptor"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBXSLT
-+	select BR2_PACKAGE_YAJL
-+	help
-+	  A C library that provides a set of parsers and
-+	  serializers that generate Resource Description
-+	  Framework (RDF) triples by parsing syntaxes or
-+	  serialize the triples into a syntax.
++++ b/package/mono/0007-fixing-wrong-MonoPosixHelper-location.patch
+@@ -0,0 +1,28 @@
++From b56f7f940f804cdda4216b841f2ba83475a5b19d Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Sun, 14 Feb 2016 22:32:25 +0100
++Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
 +
-+	  http://librdf.org/raptor/
-diff --git a/package/raptor/raptor.hash b/package/raptor/raptor.hash
-new file mode 100644
-index 0000000..ee7a71b
---- /dev/null
-+++ b/package/raptor/raptor.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed raptor2-2.0.15.tar.gz
-diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
-new file mode 100644
-index 0000000..128e444
---- /dev/null
-+++ b/package/raptor/raptor.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# raptor
-+#
-+################################################################################
++This patch remove a wrong prefix for libMonoPosixHelper.
 +
-+RAPTOR_VERSION = 2.0.15
-+RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
-+RAPTOR_SITE = http://download.librdf.org/source
-+RAPTOR_DEPENDENCIES = libxml2 libcurl libxslt yajl
-+RAPTOR_LICENSE = GPLv2.1 LGPLv2.1 Apache-2.0
-+RAPTOR_LICENSE_FILES = LICENSE.txt
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ data/config.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+RAPTOR_CONF_OPTS = --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
-+		--with-curl-config=$(STAGING_DIR)/usr/bin/curl-config \
-+		--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config \
-+		--with-yajl=$(STAGING_DIR)
++diff --git a/data/config.in b/data/config.in
++index b4b7243..41495b9 100644
++--- a/data/config.in
+++++ b/data/config.in
++@@ -10,7 +10,7 @@
++ 	<dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
++ 	<dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
++ 	<dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
++-	<dllmap dll="MonoPosixHelper" target="$mono_libdir/libMonoPosixHelper@libsuffix@" os="!windows" />
+++	<dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
++ 	<dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
++ 	<dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
++ 	<dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
++-- 
++1.9.1
 +
-+$(eval $(autotools-package))
 -- 
 1.9.1
