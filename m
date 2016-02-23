@@ -1,73 +1,95 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 20:43:44 +0100
-Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
-In-Reply-To: <20160223104816.20c97306@free-electrons.com>
-References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
- <20160221222816.4e53e921@free-electrons.com> <56CA62D8.10309@zacarias.com.ar>
- <56CB9DFA.506@mind.be> <56CBA547.3020200@zacarias.com.ar>
- <56CBAA86.4070305@mind.be> <56CBB0B1.6020506@zacarias.com.ar>
- <56CC2980.1020402@mind.be> <20160223104816.20c97306@free-electrons.com>
-Message-ID: <56CCB670.5000202@mind.be>
+Date: Tue, 23 Feb 2016 20:51:56 +0100
+Subject: [Buildroot] [PATCH v5] qt53d: enable assimpsceneparser plugin
+In-Reply-To: <1456088489-10062-1-git-send-email-ps.report@gmx.net>
+References: <1456088489-10062-1-git-send-email-ps.report@gmx.net>
+Message-ID: <56CCB85C.9000407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 02/21/16 22:01, Peter Seiderer wrote:
+> - add hint to help text
+> - add assimp dependency
 
+ One thing more could have been noted in the commit message:
 
-On 02/23/16 10:48, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Tue, 23 Feb 2016 10:42:24 +0100, Arnout Vandecappelle wrote:
-> 
->>  This could indeed be a good idea. One reason to limit the number of committers
->> was to avoid conflicts (i.e. two committers working on the same patch in
->> parallel), but as I understand it, Thomas and Peter noticed that this isn't
->> really a problem in practice.
->>
->>  So indeed, having a third person that applies trivial patches could be
->> worthwhile to try.
->>
->>  That said, Yann and I are already spending a large part of our buildroot time
->> on reviewing patches. I don't think that applying them immediately is going to
->> make that much of a difference.
-> 
-> Fully agreed: applying the patch is clearly not what takes time. It's a
-> mechanical and stupid operation.
-> 
-> What takes time is that when there is no Acked-by/Reviewed-by/Tested-by
-> from a trusted person and the patch is not obviously trivial, then I
-> have to go review the patch myself entirely. Download the source code,
-> check that the license is correct, verify that optional dependencies
-> are properly handled, build in a few basic situations, etc. All those
-> steps I skip when there has been some previous A/R/T tags given by
-> trusted persons.
-> 
-> When I see that Arnout or Yann has started reviewing a specific patch
-> or patch series, I assume that they will continue to handle the
-> discussion with the submitter until they give their
-> Acked-by/Reviewed-by. And therefore, I simply skip that patch or patch
-> series, and move on to other topics.
-> 
-> So what *really* saves time is people reviewing and testing patches. Of
-> course, the more "trusted" those persons are, the more valuable this
-> effort is. Gustavo, you're a person with a high trust, but
-> unfortunately, you're doing none of this review/testing effort.
+- always install the gltf (and any future) sceneparser to target.
 
- There is one indirect gain, however. In case something needs to be fixed up
-(not quite the majority but still a significant subset of the patches), then
-Yann and I currently just give comments and wait for a v2 of the patch. This
-often leads to several iterations. Fixing the patch right away and pushing it
-will take less time.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ (Build-test, compared with/without assimp).
+
 
  Regards,
  Arnout
 
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v4 -> v5:
+>   - change assimp dependency declaration location (suggested by Arnout Vandecappelle)
+> 
+> Changes v3 -> v4:
+>   - change to optional dependency on assimp (suggested by Thomas Petazzoni)
+>   - always copy plugins/sceneparsers directory (because of new
+>     gltfsceneparser plugin)
+> 
+> Changes v2 -> v3:
+>   - no changes
+> 
+> Changes v1 -> v2:
+>   - no changes
+> ---
+>  package/qt5/qt53d/Config.in | 2 ++
+>  package/qt5/qt53d/qt53d.mk  | 5 +++++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
+> index b2d2912..ff50204 100644
+> --- a/package/qt5/qt53d/Config.in
+> +++ b/package/qt5/qt53d/Config.in
+> @@ -12,6 +12,8 @@ config BR2_PACKAGE_QT53D
+>  
+>  	  This package corresponds to the qt53d module.
+>  
+> +	  Enable the assimp package to gain the assimp sceneparser plugin.
+> +
+>  	  http://doc.qt.io/qt-5/qt3d-index.html
+>  
+>  comment "qt53d module needs an OpenGL-capable backend"
+> diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+> index 810242b..24c42e6 100644
+> --- a/package/qt5/qt53d/qt53d.mk
+> +++ b/package/qt5/qt53d/qt53d.mk
+> @@ -10,6 +10,10 @@ QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
+>  QT53D_DEPENDENCIES = qt5base qt5declarative
+>  QT53D_INSTALL_STAGING = YES
+>  
+> +ifeq ($(BR2_PACKAGE_ASSIMP),y)
+> +QT53D_DEPENDENCIES += assimp
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+>  QT53D_LICENSE = GPLv2+ or LGPLv3
+>  QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
+> @@ -34,6 +38,7 @@ endef
+>  ifeq ($(BR2_STATIC_LIBS),)
+>  define QT53D_INSTALL_TARGET_CMDS
+>  	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
+> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+>  	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
+>  endef
+>  endif
+> 
+
+
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
