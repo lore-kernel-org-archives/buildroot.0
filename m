@@ -1,39 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:21:00 +0100
-Subject: [Buildroot] [PATCH 01/10] package/gnuradio: add optional
- support for orc
-In-Reply-To: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456076099-19607-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160223222100.674aba5c@free-electrons.com>
+Date: Tue, 23 Feb 2016 22:22:19 +0100
+Subject: [Buildroot] [PATCH] qt: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160223222219.24b95205@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Gustavo,
 
-On Sun, 21 Feb 2016 18:34:50 +0100, Bernd Kuhls wrote:
-> When orc was compiled before, gnuradio will use it as optional
-> dependency:
-> 
-> $ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gnuradio-config-info | grep NEEDED
-> [...]
->  0x0000000000000001 (NEEDED)             Shared library: [liborc-0.4.so.0]
-> [...]
-> 
-> Apparently there is no option provided by the build system to
-> en-/disable support for orc:
-> https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/gnuradio/gnuradio.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+On Tue, 23 Feb 2016 13:48:09 -0300, Gustavo Zacarias wrote:
 
-Applied to master, thanks!
+>  menuconfig BR2_PACKAGE_QT
+> @@ -7,6 +8,7 @@ menuconfig BR2_PACKAGE_QT
+>  	depends on BR2_USE_MMU # fork
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 
-Thanks to Gwenhael for testing!
+Isn't this broader than it needs to be? Only the Javascript code seems
+to use this atomic operation, so maybe we could just make
+BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT depends on
+BR2_TOOLCHAIN_HAS_SYNC_4. Or maybe it's
+BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT.
+
+By doing this, it also simplifies the patch quite a bit, since you
+don't need to propagate the dependency to too many packages (if any).
+
+I've indeed tested, and the following defconfig builds fine:
+
+BR2_sparc=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-glibc-2015.11-rc1-71-g90d1299.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_QT=y
+BR2_PACKAGE_QT_LICENSE_APPROVED=y
+# BR2_PACKAGE_QT_GUI_MODULE is not set
+# BR2_PACKAGE_QT_XML is not set
+# BR2_PACKAGE_QT_NETWORK is not set
+# BR2_PACKAGE_QT_SCRIPT is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+
+Which proves that Qt by itself doesn't use those atomic operations.
+Could you research which specific sub-option(s) are causing problems?
+I'm pretty sure it's either script or webkit, or possibly both.
+
+Thanks!
 
 Thomas
 -- 
