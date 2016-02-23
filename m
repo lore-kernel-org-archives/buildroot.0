@@ -1,31 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:19:29 +0100
-Subject: [Buildroot] [PATCH v5] qt53d: enable assimpsceneparser plugin
-In-Reply-To: <1456088489-10062-1-git-send-email-ps.report@gmx.net>
-References: <1456088489-10062-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160223221929.6d450087@free-electrons.com>
+Date: Tue, 23 Feb 2016 22:20:25 +0100
+Subject: [Buildroot] [git commit] package/gnuradio: add optional support for
+	orc
+Message-ID: <20160223212031.7332C8047C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Seiderer,
+commit: https://git.buildroot.net/buildroot/commit/?id=55163723ea14d4e5da75910e4bbb4af4aa7f1afe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 21 Feb 2016 22:01:28 +0100, Peter Seiderer wrote:
-> - add hint to help text
-> - add assimp dependency
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v4 -> v5:
->   - change assimp dependency declaration location (suggested by Arnout Vandecappelle)
+When orc was compiled before, gnuradio will use it as optional
+dependency:
 
-Applied to next after updating the commit message as suggested by
-Arnout. Thanks!
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/gnuradio-config-info | grep NEEDED
+[...]
+ 0x0000000000000001 (NEEDED)             Shared library: [liborc-0.4.so.0]
+[...]
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Apparently there is no option provided by the build system to
+en-/disable support for orc:
+https://github.com/gnuradio/volk/blob/41b4df055b2c8d4f2c23ad2bdc60c0b47b4f0dd8/lib/CMakeLists.txt#L449
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: "Gwenhael Goavec-Merou" <gwenhael.goavec-merou@trabucayre.com>
+Tested-by: "Gwenhael Goavec-Merou" <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gnuradio/gnuradio.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index fc5cd1f..b7dbcb9 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -17,6 +17,10 @@ GNURADIO_DEPENDENCIES = \
+ 	host-swig \
+ 	boost
+ 
++ifeq ($(BR2_PACKAGE_ORC),y)
++GNURADIO_DEPENDENCIES += orc
++endif
++
+ GNURADIO_CONF_OPTS = \
+ 	-DENABLE_DEFAULT=OFF \
+ 	-DENABLE_VOLK=ON \
