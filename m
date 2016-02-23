@@ -1,67 +1,65 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue, 23 Feb 2016 22:50:28 +0100
-Subject: [Buildroot] [PATCH v3] package/mono: Fixing wrong MonoPosixHelper
-	location
-Message-ID: <1456264228-19851-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 23 Feb 2016 22:52:56 +0100
+Subject: [Buildroot] [PATCH v2] qt: add font license information
+Message-ID: <1456264376-28974-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* This patch solves installation problems with monoposixhelper
-* Fixes https://bugs.busybox.net/show_bug.cgi?id=8651
-
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changelog:
+Changes v1 -> v2:
+  - update most font licenses (thanks to Arnout Vandecappelle)
+  - add comma-separator between the licenses (no nice solution,
+    will add ' ,', but without the starting problem at:
 
-v2 -> v3:
-The patch was based on mono master and not on mono 4.2.2.30.
-This patch is now based on mono 4.2.2.30.
-This patch was tested on br_next.
+    QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
+    ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+    QT_LICENSE += or Digia Qt Commercial license
+    endif
+---
+ package/qt/qt.mk | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-v1 -> v2:
-* Added SoB and description to patch
-
-
- ....in-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
-
-diff --git a/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
-new file mode 100644
-index 0000000..6ebb802
---- /dev/null
-+++ b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
-@@ -0,0 +1,28 @@
-+From 76aa4fb62a433e61dc35eefcc3077f0463182d2f Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+Date: Tue, 23 Feb 2016 22:43:39 +0100
-+Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
-+
-+This patch remove a wrong prefix for libMonoPosixHelper
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ data/config.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/data/config.in b/data/config.in
-+index b760176..41495b9 100644
-+--- a/data/config.in
-++++ b/data/config.in
-+@@ -10,7 +10,7 @@
-+ 	<dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
-+ 	<dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
-+ 	<dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
-+-	<dllmap dll="MonoPosixHelper" target="@prefix@/@reloc_libdir@/libMonoPosixHelper@libsuffix@" os="!windows" />
-++	<dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
-+ 	<dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
-+ 	<dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
-+ 	<dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
-+-- 
-+1.9.1
-+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index a64d32f..beadb41 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -660,13 +660,33 @@ define QT_INSTALL_TARGET_FONTS
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
+ endef
++ifeq ($(BR2_PACKAGE_QT_FONT_MICRO),y)
++# Public Domain as stated in the font source src/3rdparty/fonts/micro.bdf
++QT_LICENSE += , Public Domain (Micro font)
+ endif
++ifeq ($(BR2_PACKAGE_QT_FONT_FIXED),y)
++# according to https://launchpad.net/ubuntu/vivid/+source/qtbase-opensource-src/+copyright
++QT_LICENSE += , Public Domain (Fixed font)
++endif
++ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
++QT_LICENSE += , Adobe Helvetica license (Helvetica/Japanese fonts)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
++endif
++ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
++QT_LICENSE += , Freeware (Unifont font)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
++endif
++endif # QT_FONTS
+ 
+ ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
+ define QT_INSTALL_TARGET_FONTS_TTF
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+ endef
++QT_LICENSE += , Bitstream license (DejaVu/Vera TrueType fonts)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
++	src/3rdparty/fonts/README.DejaVu \
++	src/3rdparty/fonts/COPYRIGHT.Vera
+ endif
+ endif # BR2_PACKAGE_QT_EMBEDDED
+ 
 -- 
-1.9.1
+2.1.4
