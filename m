@@ -1,45 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2016 21:34:36 +0100
-Subject: [Buildroot] "The owner of buildroot.uclibc.org has configured
-	their website improperly."
-In-Reply-To: <CAF_dkJCBdH-p5Oa6TcKobVBR-ovT84jB64dE4mhy8ZaHV9UATQ@mail.gmail.com>
- (Patrick Doyle's message of "Tue, 23 Feb 2016 11:59:20 -0500")
-References: <CAF_dkJCBdH-p5Oa6TcKobVBR-ovT84jB64dE4mhy8ZaHV9UATQ@mail.gmail.com>
-Message-ID: <87k2lv6u8z.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Tue, 23 Feb 2016 17:36:14 -0300
+Subject: [Buildroot] [PATCH] procrank_linux: new package
+In-Reply-To: <56CCC087.9060506@mind.be>
+References: <1456242888-23322-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <56CCC087.9060506@mind.be>
+Message-ID: <56CCC2BE.6060901@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Patrick" == Patrick Doyle <wpdster@gmail.com> writes:
+On 23/02/16 17:26, Arnout Vandecappelle wrote:
 
- > I apologise if this has already been asked.
- > When I try to connect to buildroot.uclibc.org with my ubuntu 14.04
- > Firefox 44.0.2, I get the following message:
+>   You forgot to add a hash file.
 
- > Your connection is not secure
- > The owner of buildroot.uclibc.org has configured their website
- > improperly. To protect your information from being stolen, Firefox has
- > not connected to this website.
+Are github pull hashes stable? (i.e. not tagged)
 
- > This site uses HTTP Strict Transport Security (HSTS) to specify that
- > Firefox only connect to it securely. As a result, it is not possible
- > to add an exception for this certificate.
+>   Check. There's a Makefile licensed GPLv2+ but I guess that's not relevant.
 
- > I thought I should mention this, even though I'm sure I can't be the
- > first to have noticed it.
+I've used the same logic, in the end it's the code that matters.
 
-First of all, buildroot.uclibc.org is the legacy name - Nowadays we have
-buildroot.{org,net}, so please use http://buildroot.org instead.
+>   What a horrible Makefile... There is no way to pass CFLAGS and LDFLAGS.
+> Fortunately, with the toolchain wrapper, this shouldn't be a problem anymore.
+> Well, except for LDFLAGS. This _is_ going to be a problem on e.g. Blackfin FLAT.
+> I guess a patch adding CFLAGS and LDFLAGS to the Makefiles would be upstreamable?
 
-Secondly, the reason why you get this error is that the uClibc
-developers have recently added HSTS for *.uclibc.org (which forces
-https:// access), and the certificate we use for Buildroot doesn't list
-the legacy buildroot.uclibc.org address.
-
-I'll try to get that fixed, but please move to the official address
-instead, which we've had for ~5 years or so by now.
-
--- 
-Bye, Peter Korsgaard
+Actually bfin flat builds fine, it's on my testing rotation for static 
+builds when there's no need for mmu since it uses an old gcc and it's 
+quick to catch "newer version required" scenarios (everything quite old 
+and funky).
+That being said i had a previous version that i wasn't quick enough to 
+submit that had a patch which was removed since upstream was quick 
+enough accepting the pull (musl build fix).
+Regards.
