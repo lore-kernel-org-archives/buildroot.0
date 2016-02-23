@@ -1,44 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2016 22:25:08 +0100
-Subject: [Buildroot] [PATCH] configs: atmel: ensure EABIhf is selected
-	for sama5d*
-In-Reply-To: <20160223211829.GA10681@piout.net> (Alexandre Belloni's message
- of "Tue, 23 Feb 2016 22:18:29 +0100")
-References: <1456244344-12726-1-git-send-email-alexandre.belloni@free-electrons.com>
- <87fuwj6tot.fsf@dell.be.48ers.dk> <20160223211829.GA10681@piout.net>
-Message-ID: <8737sj6rwr.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 23 Feb 2016 22:25:06 +0100
+Subject: [Buildroot] [Buildroot PATCH Selinux v10 01/11] dbus: selinux
+ file context support
+In-Reply-To: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <20160223222506.168bbff3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexandre" == Alexandre Belloni <alexandre.belloni@free-electrons.com> writes:
+Hello Niranjan,
 
-Hi,
+Thanks a lot for respining the SELinux patch series. If you have some
+time to work on this in the coming weeks to send new iterations as
+needed, I really hope to be able to merge this for 2016.05.
 
- >> We also have a atmel_sama5d3_xplained_mmc_defconfig that you
- >> forgot. Committed with that fixed, thanks.
+On Tue, 16 Feb 2016 11:48:16 +0530, Niranjan Reddy wrote:
 
- > I changed it and I forgot to amend my commit, thanks for fixing that.
+> diff --git a/package/dbus/S30dbus b/package/dbus/S30dbus
+> index 4427b5c..6fbf915 100644
+> --- a/package/dbus/S30dbus
+> +++ b/package/dbus/S30dbus
+> @@ -17,6 +17,10 @@
+>  [ -d /var/run/dbus ] || mkdir -p /var/run/dbus
+>  [ -d /var/lock/subsys ] || mkdir -p /var/lock/subsys
+>  [ -d /tmp/dbus ] || mkdir -p /tmp/dbus
+> +[ -d /var/lib/dbus ] || mkdir -p /var/lib/dbus
+> +if [ -e /sbin/restorecon ]; then
+> +   restorecon -R /var/run/dbus /var/lock/subsys /tmp/dbus /var/lib/dbus
+> +fi
 
-You're welcome.
+This really needs a better commit message. Why are you doing this? Why
+do you need to create /var/lib/dbus if it doesn't exist? Why do you
+need to do a restorecon on /var/lock/subsys, which doesn't look
+immediately related to dbus.
 
+Could you give some more details, and integrate those details in a
+commit log?
 
- >> It seems like we need to fixup the other defconfigs using EABIHF as well
- >> :/ In hindsight, maybe BR2_ARM_ENABLE_VFP should have defaulted to 'y'
- >> instead.
- >> 
+Thanks!
 
- > Off list, I was suggesting to Thomas add BR2_ARM_ENABLE_VFP = y to all
- > defconfigs with a BR2_ARM_FPU_VFP* but it only catches four more
- > defconfigs. However, there are a lot more, like beaglebone, the
- > allwiner based boards, most of the freescale ones, etc...
-
-This is only a problem for CPU cores where the VFP is optional like
-arm926/A5/A9, and I've fixed up our A9 configs now so I believe it is
-ok.
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
