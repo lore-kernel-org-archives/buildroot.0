@@ -1,39 +1,83 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 23 Feb 2016 14:34:02 -0300
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.3.5
-Message-ID: <1456248842-17322-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 23 Feb 2016 18:59:55 +0100
+Subject: [Buildroot] [PATCH 0/9] Olimex A20 OlinuXino updates
+In-Reply-To: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
+References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <CAB0FRsufz4DCdX9fT2axV-TjTEgxifus8EExibNXJYyKE97RXQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+2016-02-23 1:24 GMT+01:00 Luca Ceresoli <luca@lucaceresoli.net>:
+> Hi,
+>
+> here's a series of updates to the Olimex OlinuXino A20 board support
+> in Buildroot.
+>
+> Patches 1 and 5 are just cleanups.
+>
+> Patches 2-4 revive the -MICRO board by upgrading the kernel and U-Boot
+> and enabling DHCP autoconfiguration.
+>
+> Patch 6 enables genimage to generate an SD card image. It also
+> documents how to write the SD, but the old, manual SD writing
+> instructions are not removed since they are still needed for the -LIME
+> and -LIME2 boards.
+>
+> Everything up to here is build- and run-time tested. Following patches
+> are build-tested only since I don't own these boards.
+>
+> Patches 7 and 8 enable genimage for the other two boards, and patch 9
+> removes the manual SD card writing instructions.
+>
+> Francois, Jan, or anybody having acces to these boards, if you could
+> test patches 7 and 8 report whether they work, you would help in
+> making simpler and more uniform the support for the whole family of
+> boards. Thanks!
+>
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index f42e37a..1b53657 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	5d0eb52e842832af922f7d57716eacff23192906ec3bdf6727e18ca24f1419d9	samba-4.3.4.tar.gz
-+sha256	583f927a823b272757fd4df0be267bd20a223b06cfc3c662df17e4870f14bf1c	samba-4.3.5.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 118a4ae..715983e 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.3.4
-+SAMBA4_VERSION = 4.3.5
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
--- 
-2.4.10
+another cleanup, in configs/olimex_a20_olinuxino_lime2_defconfig these
+3 lines could be removed:
+BR2_PACKAGE_SUNXI_TOOLS=y
+BR2_PACKAGE_SUNXI_BOARDS=y
+BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
+
+there are only needed with a linux-sunxi kernel, like in
+configs/olimex_a20_olinuxino_lime_mali_defconfig
+
+Fran?ois
+
+> Luca
+>
+>
+> Luca Ceresoli (9):
+>   olimex/a20_olinuxino: update readme.txt with lime2 info
+>   olimex_a20_olinuxino_micro: bump linux to 4.4.2
+>   olimex_a20_olinuxino_micro: bump u-boot to 2016.01
+>   olimex_a20_olinuxino_micro: initialize the network with DHCP
+>   olimex_a20_olinuxino_micro: remove redundant defconfig lines
+>   olimex_a20_olinuxino_micro: update to use genimage
+>   olimex_a20_olinuxino_lime: update to use genimage
+>   olimex_a20_olinuxino_lime2: update to use genimage
+>   olimex_a20_olinuxino_*: remove old SD writing instructions
+>
+>  board/olimex/a20_olinuxino/genimage.cfg          | 16 +++++++
+>  board/olimex/a20_olinuxino/post-image.sh         | 16 +++++++
+>  board/olimex/a20_olinuxino/readme.txt            | 56 ++++--------------------
+>  configs/olimex_a20_olinuxino_lime2_defconfig     |  2 +
+>  configs/olimex_a20_olinuxino_lime_defconfig      |  2 +
+>  configs/olimex_a20_olinuxino_lime_mali_defconfig |  2 +
+>  configs/olimex_a20_olinuxino_micro_defconfig     | 16 +++----
+>  7 files changed, 54 insertions(+), 56 deletions(-)
+>  create mode 100644 board/olimex/a20_olinuxino/genimage.cfg
+>  create mode 100755 board/olimex/a20_olinuxino/post-image.sh
+>
+> --
+> 1.9.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
