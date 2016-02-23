@@ -1,100 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 23 Feb 2016 21:07:40 +0100
-Subject: [Buildroot] [PATCH] docs/manual: add "python-package CFFI
- backend" section
-In-Reply-To: <1456132859-8459-1-git-send-email-yegorslists@googlemail.com>
-References: <1456132859-8459-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <56CCBC0C.1060709@mind.be>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 23 Feb 2016 21:19:46 +0100
+Subject: [Buildroot] [PATCH v1] qt: add font license information
+In-Reply-To: <20160223135110.064721b6@free-electrons.com>
+References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
+ <56CB9524.3090704@mind.be>
+ <20160223135110.064721b6@free-electrons.com>
+Message-ID: <20160223211946.08dbb7c6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/22/16 10:20, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello Thomas,
+
+On Tue, 23 Feb 2016 13:51:10 +0100, Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+
+> Arnout,
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-
- Hi Yegor,
-
- A few forgotton words as indicated below.
-
- Also, Peter, have you given some thought to my proposal of requiring the
-http://dustycloud.org/blog/vcs-friendly-patchable-document-line-wrapping/
-line wrapping style for new documentation patches?
-
-> ---
->  docs/manual/adding-packages-python.txt | 36 ++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+> Thanks a lot for having reviewed this patch, which is not very simple
+> in terms of licensing details.
 > 
-> diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
-> index 588dbf8..3278998 100644
-> --- a/docs/manual/adding-packages-python.txt
-> +++ b/docs/manual/adding-packages-python.txt
-> @@ -160,3 +160,39 @@ possible to customize what is done in any particular step:
->    +PYTHON_FOO_BUILD_CMDS+ variable, it will be used instead of the
->    default Python one. However, using this method should be restricted
->    to very specific cases. Do not use it in the general case.
-> +
-> +[[python-package-cffi-backend]]
-> +
-> +==== +python-package+ CFFI backend
-> +
-> +C Foreign Function Interface for Python (CFFI) provides a convenient and
-> +reliable way to call compiled C code from Python using interface declarations
-> +written in C. Python packages relying on this backend can be identified by
-> +appearance of +cffi+ dependency in an +install_requires+ field of their
-
-appearance of the +cffi+ dependency
-
-> ++setup.py+ file.
-> +
-> +Such a package needs +python-cffi+ as a runtime dependency in order to import
-> +compiled C library wrapper on a target and +host-python-cffi+ as a build-time
-
-the compiled C library wrapper on the target, and +host-python-cffi+ as a ...
-
-> +dependency in order to cross-compile the C wrapper. You'll need to add following
-
-You'll need to add the following code
-
-> +code to you package's +Config.in+ and +*.mk+ files respectively:
-
-to the package's +Config.in+ and +*.mk+ files, respectively.
-
-
- Regards,
- Arnout
-
-> +
-> +
-> +------------------------
-> +config BR2_PACKAGE_PYTHON_FOO
-> +        bool "python-foo"
-> +        select BR2_PACKAGE_PYTHON_CFFI # runtime
-> +------------------------
-> +
-> +------------------------
-> +################################################################################
-> +#
-> +# python-foo
-> +#
-> +################################################################################
-> +
-> +...
-> +
-> +PYTHON_FOO_DEPENDENCIES = host-python-cffi
-> +
-> +$(eval $(python-package))
-> +------------------------
+> On Tue, 23 Feb 2016 00:09:24 +0100, Arnout Vandecappelle wrote:
 > 
+> >  The problem with the way that it's done now is that the different licenses will
+> > not be comma-separated while they usually are. But adding commas is difficult in
+> > this case, so OK.
+> 
+> I thought we could do something such as:
+> 
+> QT_LICENSE += Foo (bar),
+> QT_LICENSE += Bar (foo),
+> QT_LICENSE += Baz (boz),
+> QT_LICENSE := $(patsubst %$(comma),%,$(QT_LICENSE))
+> 
+> But it unfortunately seems to remove all commas. We could then do:
+> 
+> QT_FINAL_LICENSE = $(shell echo "$(QT_LICENSE)" | sed 's:\(.*\),:\1:')
+> 
+> Not super pretty, but it's just one line of crap.
 
+O.k. will take it for the next patch version...
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+Peter
+
+> 
+> Thomas
