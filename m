@@ -1,83 +1,59 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 23 Feb 2016 18:59:55 +0100
-Subject: [Buildroot] [PATCH 0/9] Olimex A20 OlinuXino updates
-In-Reply-To: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
-References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <CAB0FRsufz4DCdX9fT2axV-TjTEgxifus8EExibNXJYyKE97RXQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 23 Feb 2016 20:39:25 +0100
+Subject: [Buildroot] [PATCH v1] qt: add font license information
+In-Reply-To: <20160223135110.064721b6@free-electrons.com>
+References: <1434140535-13792-1-git-send-email-ps.report@gmx.net>
+ <56CB9524.3090704@mind.be> <20160223135110.064721b6@free-electrons.com>
+Message-ID: <56CCB56D.2000802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-02-23 1:24 GMT+01:00 Luca Ceresoli <luca@lucaceresoli.net>:
-> Hi,
->
-> here's a series of updates to the Olimex OlinuXino A20 board support
-> in Buildroot.
->
-> Patches 1 and 5 are just cleanups.
->
-> Patches 2-4 revive the -MICRO board by upgrading the kernel and U-Boot
-> and enabling DHCP autoconfiguration.
->
-> Patch 6 enables genimage to generate an SD card image. It also
-> documents how to write the SD, but the old, manual SD writing
-> instructions are not removed since they are still needed for the -LIME
-> and -LIME2 boards.
->
-> Everything up to here is build- and run-time tested. Following patches
-> are build-tested only since I don't own these boards.
->
-> Patches 7 and 8 enable genimage for the other two boards, and patch 9
-> removes the manual SD card writing instructions.
->
-> Francois, Jan, or anybody having acces to these boards, if you could
-> test patches 7 and 8 report whether they work, you would help in
-> making simpler and more uniform the support for the whole family of
-> boards. Thanks!
->
 
-another cleanup, in configs/olimex_a20_olinuxino_lime2_defconfig these
-3 lines could be removed:
-BR2_PACKAGE_SUNXI_TOOLS=y
-BR2_PACKAGE_SUNXI_BOARDS=y
-BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
 
-there are only needed with a linux-sunxi kernel, like in
-configs/olimex_a20_olinuxino_lime_mali_defconfig
+On 02/23/16 13:51, Thomas Petazzoni wrote:
+> Arnout,
+> 
+> Thanks a lot for having reviewed this patch, which is not very simple
+> in terms of licensing details.
+> 
+> On Tue, 23 Feb 2016 00:09:24 +0100, Arnout Vandecappelle wrote:
+> 
+>>  The problem with the way that it's done now is that the different licenses will
+>> not be comma-separated while they usually are. But adding commas is difficult in
+>> this case, so OK.
+> 
+> I thought we could do something such as:
+> 
+> QT_LICENSE += Foo (bar),
+> QT_LICENSE += Bar (foo),
+> QT_LICENSE += Baz (boz),
+> QT_LICENSE := $(patsubst %$(comma),%,$(QT_LICENSE))
+> 
+> But it unfortunately seems to remove all commas. We could then do:
+> 
+> QT_FINAL_LICENSE = $(shell echo "$(QT_LICENSE)" | sed 's:\(.*\),:\1:')
+> 
+> Not super pretty, but it's just one line of crap.
 
-Fran?ois
+ Actually, that last bit could be moved to the legal-info infra itself, e.g. in
+the legal-manifest function.
 
-> Luca
->
->
-> Luca Ceresoli (9):
->   olimex/a20_olinuxino: update readme.txt with lime2 info
->   olimex_a20_olinuxino_micro: bump linux to 4.4.2
->   olimex_a20_olinuxino_micro: bump u-boot to 2016.01
->   olimex_a20_olinuxino_micro: initialize the network with DHCP
->   olimex_a20_olinuxino_micro: remove redundant defconfig lines
->   olimex_a20_olinuxino_micro: update to use genimage
->   olimex_a20_olinuxino_lime: update to use genimage
->   olimex_a20_olinuxino_lime2: update to use genimage
->   olimex_a20_olinuxino_*: remove old SD writing instructions
->
->  board/olimex/a20_olinuxino/genimage.cfg          | 16 +++++++
->  board/olimex/a20_olinuxino/post-image.sh         | 16 +++++++
->  board/olimex/a20_olinuxino/readme.txt            | 56 ++++--------------------
->  configs/olimex_a20_olinuxino_lime2_defconfig     |  2 +
->  configs/olimex_a20_olinuxino_lime_defconfig      |  2 +
->  configs/olimex_a20_olinuxino_lime_mali_defconfig |  2 +
->  configs/olimex_a20_olinuxino_micro_defconfig     | 16 +++----
->  7 files changed, 54 insertions(+), 56 deletions(-)
->  create mode 100644 board/olimex/a20_olinuxino/genimage.cfg
->  create mode 100755 board/olimex/a20_olinuxino/post-image.sh
->
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ But that's for another patch :-)
+
+ Regards,
+ Arnout
+
+> 
+> Thomas
+> 
+
+-- 
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
