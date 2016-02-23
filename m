@@ -1,41 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:50:24 +0100
-Subject: [Buildroot] [Buildroot PATCH Selinux v10 09/11]
- python-pyparsing: Add host build option
-In-Reply-To: <1455603506-26138-9-git-send-email-niranjan.reddy@rockwellcollins.com>
-References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
- <1455603506-26138-9-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <20160223225024.7b8956b2@free-electrons.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 23 Feb 2016 22:50:28 +0100
+Subject: [Buildroot] [PATCH v3] package/mono: Fixing wrong MonoPosixHelper
+	location
+Message-ID: <1456264228-19851-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+* This patch solves installation problems with monoposixhelper
+* Fixes https://bugs.busybox.net/show_bug.cgi?id=8651
 
-On Tue, 16 Feb 2016 11:48:24 +0530, Niranjan Reddy wrote:
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changelog:
 
-> diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
-> index ad066b8..c8f304b 100644
-> --- a/package/python-pyparsing/python-pyparsing.mk
-> +++ b/package/python-pyparsing/python-pyparsing.mk
-> @@ -12,3 +12,4 @@ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
->  PYTHON_PYPARSING_SETUP_TYPE = distutils
->  
->  $(eval $(python-package))
-> +$(eval $(host-python-package))
+v2 -> v3:
+The patch was based on mono master and not on mono 4.2.2.30.
+This patch is now based on mono 4.2.2.30.
+This patch was tested on br_next.
 
-What is using this new host-python-pyparsing package? Your latest two
-patches 10 and 11 are not making use of it, and I couldn't spot this
-being used in the previous patches either (and if it was used in the
-previous patches, then it would be another ordering issue in your patch
-series).
+v1 -> v2:
+* Added SoB and description to patch
 
-Thanks,
 
-Thomas
+ ....in-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+
+diff --git a/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+new file mode 100644
+index 0000000..6ebb802
+--- /dev/null
++++ b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+@@ -0,0 +1,28 @@
++From 76aa4fb62a433e61dc35eefcc3077f0463182d2f Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Tue, 23 Feb 2016 22:43:39 +0100
++Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
++
++This patch remove a wrong prefix for libMonoPosixHelper
++
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ data/config.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/data/config.in b/data/config.in
++index b760176..41495b9 100644
++--- a/data/config.in
+++++ b/data/config.in
++@@ -10,7 +10,7 @@
++ 	<dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
++ 	<dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
++ 	<dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
++-	<dllmap dll="MonoPosixHelper" target="@prefix@/@reloc_libdir@/libMonoPosixHelper@libsuffix@" os="!windows" />
+++	<dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
++ 	<dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
++ 	<dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
++ 	<dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
++-- 
++1.9.1
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
