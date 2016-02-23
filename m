@@ -1,62 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 09:11:46 +0100
-Subject: [Buildroot] Analysis of build results for 2016-02-21
-In-Reply-To: <CALdGskLWXoRtKZdqYErn6w4QmcAxLroxtzxkMFYiRsPuH_O7Hg@mail.gmail.com>
-References: <CALdGskKUp-GtxeOBWq-5Tzp7b2zBad3=RoRxeN1eaJHPcg5Xww@mail.gmail.com>
- <20160222232144.61b99b32@free-electrons.com>
- <CALdGskLWXoRtKZdqYErn6w4QmcAxLroxtzxkMFYiRsPuH_O7Hg@mail.gmail.com>
-Message-ID: <20160223091146.33e3f5b1@free-electrons.com>
+Date: Tue, 23 Feb 2016 10:10:20 +0100
+Subject: [Buildroot] [PATCH 1/3] vala: add vala/valac wrapper
+In-Reply-To: <56CBA547.3020200@zacarias.com.ar>
+References: <1454428908-7183-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160221222816.4e53e921@free-electrons.com>
+ <56CA62D8.10309@zacarias.com.ar> <56CB9DFA.506@mind.be>
+ <56CBA547.3020200@zacarias.com.ar>
+Message-ID: <20160223101020.0a87c0f3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Gustavo,
 
-On Tue, 23 Feb 2016 09:34:31 +0200, Olivier Schonken wrote:
+On Mon, 22 Feb 2016 21:18:15 -0300, Gustavo Zacarias wrote:
 
-> The suggestion from Romain to disable -fPIE as below works for both
-> architectures.  Can I submit a patch for this? Or do you want to wait for a
-> response from Alexey and Waldemar?
-> 
-> # Remove -fPIE -pie from CFLAGS
-> ifeq ($(BR2_STATIC_LIBS),y)
-> CUPS_CONF_OPTS += LSB_BUILD=y
-> endif
+> I was asked to step in and maintain webkitgtk, gtk3 & accesory packages.
+> And this has been sitting in patchwork for quite some time with no 
+> comments or anything and rotting down (this = the gtk3 bump and other 
+> pieces that depend on it).
+> It means i'll just take is as there's no interest and just leave it rot 
+> completely - i didn't pick this up because it's something i use or have 
+> any particular interest in.
+> If you're implying i don't help in other aspects and i just care about 
+> what i send i suggest you take a look at lots of autobuilder fixes for 
+> packages i never use.
 
-Unfortunately, I don't like this, for several reasons:
+As Arnout said, all our patches are definitely appreciated, and most of
+them are applied really quickly. Some of them indeed take more time,
+but there's nothing personal against you: we have ~300 other patches
+sitting in patchwork.
 
- 1/ LSB_BUILD=y will also disable stack protection support.
+However, you are almost never helping us by reviewing/testing patches
+from others. Due to this, instead of applying your patches, I have to
+review and test patches from other contributors. Conclusion: if you
+want your patches to be applied faster, the best way is to help the
+community by reviewing and testing patches. Your review and test effort
+would be really valuable: you are a long-time Buildroot developer, so
+you know all the best practices, usual pitfalls and all, which means
+that we trust your review.
 
- 2/ Only uClibc in static library build is affected by the problem, not
-    musl for example.
-
- 3/ It is not fixing the real problem.
-
-The real fixes are:
-
- 1/ Use AC_CACHE_VAL() in the configure.ac script to be able to force
-    disable PIE, and then use that to disable it on ARC. Or
-    alternatively, change the configure.ac to use:
-
-++AX_CHECK_COMPILE_FLAG([-fPIE -DPIE], [PIE_CFLAGS="-fPIE -DPIE"])
-++AX_CHECK_LINK_FLAG([-pie], [PIE_LDFLAGS="$PIE_LDFLAGS -pie"])
-
-    Which also provide cache variables to override their results. See
-    http://patchwork.ozlabs.org/patch/569556/.
-
- 2/ Fix the uClibc static case by fixing the toolchain build process or
-    uClibc itself (depending on which one is broken).
-
-Of course, this requires effort than the quick hack of LSB_BUILD=y, but
-those are IMO the real fixes, while LSB_BUILD=y is papering over the
-real problem.
-
-Note that there are other classes of cups-2.1.2 build failures visible
-at http://autobuild.buildroot.org/?reason=cups-2.1.2.
-
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
