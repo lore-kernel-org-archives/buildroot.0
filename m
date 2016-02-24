@@ -1,43 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Feb 2016 14:14:15 +0100
-Subject: [Buildroot] [PATCH] qt: depends on BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <56CD9FD6.7040409@zacarias.com.ar>
-References: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
- <20160223222219.24b95205@free-electrons.com>
- <56CCDAF1.9070209@zacarias.com.ar>
- <20160223233023.6b376939@free-electrons.com>
- <56CD9FD6.7040409@zacarias.com.ar>
-Message-ID: <20160224141415.1b6f3f16@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 24 Feb 2016 10:38:16 -0300
+Subject: [Buildroot] [PATCH] sdparm: bump to version 1.10
+Message-ID: <1456321096-7714-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+0000-makefile-remove-host-headers-include.patch is upstream so remove it
+and drop autoreconf.
 
-On Wed, 24 Feb 2016 09:19:34 -0300, Gustavo Zacarias wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0000-makefile-remove-host-headers-include.patch   | 19 -------------------
+ package/sdparm/sdparm.hash                            |  2 +-
+ package/sdparm/sdparm.mk                              |  5 +----
+ 3 files changed, 2 insertions(+), 24 deletions(-)
+ delete mode 100644 package/sdparm/0000-makefile-remove-host-headers-include.patch
 
-> It seems it's both script & webkit that need atomics.
-> However i think the arch supports list is flawed as well, webkit hasn't 
-> worked for many of those architectures in the past - they build, yes, 
-> but they'll probably crash on startup.
-> But i'm not about to test all of them since that would require hardware, 
-> so i'm removing sparc as well since it's a cliche that can't be fixed.
-
-Fully agreed to remove SPARC from the list of supported architectures
-for webkit and script. However, I believe it would still be good to add
-the BR2_TOOLCHAIN_HAS_SYNC_4 dependency as well.
-
-Regarding the architectures that build but don't work at runtime, I
-guess all we can do is leave things are they are, and change them
-when/if someone complains/reports an issue. We are indeed not going to
-test Webkit/Script on every possible funky architecture.
-
-Best regards,
-
-Thomas
+diff --git a/package/sdparm/0000-makefile-remove-host-headers-include.patch b/package/sdparm/0000-makefile-remove-host-headers-include.patch
+deleted file mode 100644
+index 765a81d..0000000
+--- a/package/sdparm/0000-makefile-remove-host-headers-include.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-src/Makefile.am: remove host headers incdlue
+-
+-Using host headers is bad for cross compilation. Instead, use the '=' prefix
+-which expands to the current sysroot.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-diff -Nuar sdparm-1.09-orig/src/Makefile.am sdparm-1.09/src/Makefile.am
+---- sdparm-1.09-orig/src/Makefile.am	2014-09-23 18:48:44.000000000 +0300
+-+++ sdparm-1.09/src/Makefile.am	2015-02-06 09:33:43.693477667 +0200
+-@@ -41,7 +41,7 @@
+- 			../lib/sg_pt_common.c
+- 
+- if HAVE_SGUTILS
+--INCLUDES = -I/usr/include/scsi
+-+INCLUDES = -I=/scsi
+- sdparm_LDADD = @GETOPT_O_FILES@ @os_libs@ @SGUTILS_LIBS@
+- sdparm_DEPENDENCIES = @GETOPT_O_FILES@
+- else
+diff --git a/package/sdparm/sdparm.hash b/package/sdparm/sdparm.hash
+index ff5e7b6..050785a 100644
+--- a/package/sdparm/sdparm.hash
++++ b/package/sdparm/sdparm.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	0f5e07438ef56e045443bd827008a38076e029558b00adbfc45f9cc8a5c75349	sdparm-1.09.tar.xz
++sha256	7dc9e148cef22744e00809dad21b59ac544e3615001bc1b2399978f73e1d58ca	sdparm-1.10.tar.xz
+diff --git a/package/sdparm/sdparm.mk b/package/sdparm/sdparm.mk
+index 9fc2067..ed1606c 100644
+--- a/package/sdparm/sdparm.mk
++++ b/package/sdparm/sdparm.mk
+@@ -4,15 +4,12 @@
+ #
+ ################################################################################
+ 
+-SDPARM_VERSION = 1.09
++SDPARM_VERSION = 1.10
+ SDPARM_SOURCE = sdparm-$(SDPARM_VERSION).tar.xz
+ SDPARM_SITE = http://sg.danny.cz/sg/p
+ SDPARM_LICENSE = BSD-3c
+ SDPARM_LICENSE_FILES = COPYING
+ 
+-# Patching src/Makefile.am
+-SDPARM_AUTORECONF = YES
+-
+ ifeq ($(BR2_PACKAGE_SG3_UTILS),y)
+ SDPARM_DEPENDENCIES += sg3_utils
+ else
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
