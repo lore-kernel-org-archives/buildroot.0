@@ -1,43 +1,68 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Wed, 24 Feb 2016 11:26:32 -0300
-Subject: [Buildroot] [PATCH v2 4/4] fakeroot: enable capability support
-In-Reply-To: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1456323992-27845-5-git-send-email-gustavo.zacarias@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 24 Feb 2016 15:36:10 +0100
+Subject: [Buildroot] [PATCH v2] docs/manual: add "python-package CFFI
+	backend" section
+Message-ID: <1456324570-1463-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Enable file capability support, this still requires fakeroot script
-(makedev) support.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/fakeroot/fakeroot.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+Changes:
+	v2: resolve grammatical issues suggested by Arnout Vandecappelle
 
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 168cd13..06f1a73 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -7,13 +7,7 @@
- FAKEROOT_VERSION = 1.20.2
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
- FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
--# Force capabilities detection off
--# For now these are process capabilities (faked) rather than file
--# so they're of no real use
--HOST_FAKEROOT_CONF_ENV = \
--	ac_cv_header_sys_capability_h=no \
--	ac_cv_func_capset=no
--
-+FAKEROOT_DEPENDENCIES = host-libcap
- FAKEROOT_LICENSE = GPLv3+
- FAKEROOT_LICENSE_FILES = COPYING
- 
+ docs/manual/adding-packages-python.txt | 37 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/docs/manual/adding-packages-python.txt b/docs/manual/adding-packages-python.txt
+index 588dbf8..656b289 100644
+--- a/docs/manual/adding-packages-python.txt
++++ b/docs/manual/adding-packages-python.txt
+@@ -160,3 +160,40 @@ possible to customize what is done in any particular step:
+   +PYTHON_FOO_BUILD_CMDS+ variable, it will be used instead of the
+   default Python one. However, using this method should be restricted
+   to very specific cases. Do not use it in the general case.
++
++[[python-package-cffi-backend]]
++
++==== +python-package+ CFFI backend
++
++C Foreign Function Interface for Python (CFFI) provides a convenient and
++reliable way to call compiled C code from Python using interface declarations
++written in C. Python packages relying on this backend can be identified by
++appearance of the +cffi+ dependency in an +install_requires+ field of their
+++setup.py+ file.
++
++Such a package needs +python-cffi+ as a runtime dependency in order to import
++the compiled C library wrapper on the target and +host-python-cffi+ as a
++build-time dependency in order to cross-compile the C wrapper. You'll need to
++add the following code to the package's +Config.in+ and +*.mk+ files,
++respectively.
++
++
++------------------------
++config BR2_PACKAGE_PYTHON_FOO
++        bool "python-foo"
++        select BR2_PACKAGE_PYTHON_CFFI # runtime
++------------------------
++
++------------------------
++################################################################################
++#
++# python-foo
++#
++################################################################################
++
++...
++
++PYTHON_FOO_DEPENDENCIES = host-python-cffi
++
++$(eval $(python-package))
++------------------------
 -- 
-2.4.10
+2.7.0
