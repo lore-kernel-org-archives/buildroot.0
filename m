@@ -1,45 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 23:30:52 +0100
-Subject: [Buildroot] [git commit] ifupdown: bump to version 0.8.10
-Message-ID: <20160302202757.74B857F98B@busybox.osuosl.org>
+Date: Wed, 24 Feb 2016 23:43:15 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: update to use
+	genimage
+Message-ID: <20160302202757.819687F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ca923bd18495b60c1c782b1cb8dca40b7020f4c
+commit: https://git.buildroot.net/buildroot/commit/?id=316215a746f59f9ffcbc39d3a1475f432e02dd27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ifupdown/ifupdown.hash | 4 ++--
- package/ifupdown/ifupdown.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ board/olimex/a20_olinuxino/genimage.cfg      | 16 ++++++++++++++++
+ board/olimex/a20_olinuxino/post-image.sh     | 16 ++++++++++++++++
+ board/olimex/a20_olinuxino/readme.txt        | 17 +++++++++++++++--
+ configs/olimex_a20_olinuxino_micro_defconfig |  2 ++
+ 4 files changed, 49 insertions(+), 2 deletions(-)
 
-diff --git a/package/ifupdown/ifupdown.hash b/package/ifupdown/ifupdown.hash
-index c5a4189..cd180ad 100644
---- a/package/ifupdown/ifupdown.hash
-+++ b/package/ifupdown/ifupdown.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.8.dsc
--sha256	180edaaa6de99e4e74de7229481edf74361b8e8468462842618a42a952a26c0e	ifupdown_0.8.8.tar.xz
-+# From http://ftp.de.debian.org/debian/pool/main/i/ifupdown/ifupdown_0.8.10.dsc
-+sha256	d4730441b9234e5dcaab7dd688ad48ec17e130d1534a357b1c4fff13cf741b0c	ifupdown_0.8.10.tar.xz
-diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
-index 37aaf5d..1421a67 100644
---- a/package/ifupdown/ifupdown.mk
-+++ b/package/ifupdown/ifupdown.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/board/olimex/a20_olinuxino/genimage.cfg b/board/olimex/a20_olinuxino/genimage.cfg
+new file mode 100644
+index 0000000..8ea24cc
+--- /dev/null
++++ b/board/olimex/a20_olinuxino/genimage.cfg
+@@ -0,0 +1,16 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/olimex/a20_olinuxino/post-image.sh b/board/olimex/a20_olinuxino/post-image.sh
+new file mode 100755
+index 0000000..9cca1b1
+--- /dev/null
++++ b/board/olimex/a20_olinuxino/post-image.sh
+@@ -0,0 +1,16 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 485bf56..febfbe7 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -52,6 +52,7 @@ After building, you should get a tree like this:
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- script.bin (lime_mali)
++    +-- sdcard.img (micro)
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+     +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+@@ -60,8 +61,20 @@ After building, you should get a tree like this:
+     `-- zImage
  
--IFUPDOWN_VERSION = 0.8.8
-+IFUPDOWN_VERSION = 0.8.10
- IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
--IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160113T035819Z/pool/main/i/ifupdown
-+IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160122T224509Z/pool/main/i/ifupdown
- IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
- IFUPDOWN_LICENSE = GPLv2+
- IFUPDOWN_LICENSE_FILES = COPYING
+ 
+-How to write the SD card
+-========================
++How to write the SD card - boards with sdcard.img
++=================================================
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to a uSD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the uSD.
++
++
++How to write the SD card - other boards
++=======================================
+ 
+ 
+ Prepare the SD card
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+index f84da34..3574a75 100644
+--- a/configs/olimex_a20_olinuxino_micro_defconfig
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+@@ -39,4 +40,5 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
