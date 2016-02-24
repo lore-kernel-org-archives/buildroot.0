@@ -1,42 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 22:14:44 +0100
-Subject: [Buildroot] [git commit branch/next] libnss: bump to version 4.22.1
-Message-ID: <20160224211718.F1AB97FB5C@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 24 Feb 2016 18:19:29 -0300
+Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
+ installed programs
+In-Reply-To: <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
+References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
+ <877fhxaf7l.fsf@dell.be.48ers.dk>
+ <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
+Message-ID: <56CE1E61.7000008@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b63783dafe1e797a9aab8c98e2ec39de70e6ae6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 22/02/16 05:40, Romain Izard wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> My issue is that I'm updating an existing system, and the application
+> has expensive scripts that rely on the behaviour of coreutils regarding
+> some options that busybox does not have. As I cannot easily change those
+> scripts, my goal is to try to provide the same services with an updated
+> rootfs. To keep everything (including wifi, bluetooth, glib and a lot
+> more) in less 10 MiB as it did in the past, removing even 300 KiB from
+> coreutils is a step in the right direction. And I though it was a better
+> if is was done in a clean way, instead of the ad-hoc patches I had in
+> the previous generation
+>
+> But if you think buildroot does not need it, I won't insist.
+>
+> Best regards,
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 4fa5897..6e4d330 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_21_RTM/src/SHA256SUMS
--sha256	3f7a5b027d7cdd5c0e4ff7544da33fdc6f56c2f8c27fff02938fd4a6fbe87239	nss-3.21.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_22_1_RTM/src/SHA256SUMS
-+sha256	89e1fc7074e5c325962821289f4cd7d8207ae95af2308ba881215ed9ca68fa4f	nss-3.22.1.tar.gz
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 6fdb77c..c474f61 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.21
-+LIBNSS_VERSION = 3.22.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+Hi Romain.
+How about adding a more lightweight option to the coreutils package to 
+disable the single-binary mode?
+That way if all you want is 1-2 binaries you can purge the rest from a 
+post-build script to save space, if you want more then single-binary 
+mode makes sense to kill code duplication.
+Regards.
