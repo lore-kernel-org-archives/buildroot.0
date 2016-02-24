@@ -1,50 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 22:58:56 +0100
-Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
-	installed programs
-In-Reply-To: <20160224214832.GA3449@free.fr> (Yann E. MORIN's message of "Wed, 
- 24 Feb 2016 22:48:32 +0100")
-References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
- <877fhxaf7l.fsf@dell.be.48ers.dk>
- <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
- <56CE1E61.7000008@zacarias.com.ar> <20160224214832.GA3449@free.fr>
-Message-ID: <87r3g1zs67.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Feb 2016 23:02:53 +0100
+Subject: [Buildroot] [PATCH 1/1] Makefile: change order of libraries to
+ fix linking issue
+In-Reply-To: <1456347342-3521-1-git-send-email-limpens@gmail.com>
+References: <1456347342-3521-1-git-send-email-limpens@gmail.com>
+Message-ID: <56CE288D.8060802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ Hi Eric,
 
-Hi,
+ Thanks for your patch.
 
->> How about adding a more lightweight option to the coreutils package to
- >> disable the single-binary mode?
+ The subject should be:
 
- > Yes, that is a great ides, maybe a choice like:
+<package>: <what changed>
 
- >     choice
- >         bool "Single-binary mode"
- >         default BR2_PKG_COREUTILS_SINGLE_SYMLINKS
+so in this case:
 
- >     config BR2_PKG_COREUTILS_SINGLE_NONE
- >         bool "none"
+pifmrds: fix static linking
 
- >     config BR2_PKG_COREUTILS_SINGLE_SYMLINKS
- >         bool "symlinks"
+On 02/24/16 21:55, Eric Limpens wrote:
+> When building a static variant, link errors occur. Changing the order
+> of libsndfile and libm fixes this error
 
- >     config BR2_PKG_COREUTILS_SINGLE_SHEBANGS
- >         bool "shebangs"
+ Add a reference to the autobuild failure.
 
- >     endchoice
+> 
+> Signed-off-by: Eric Limpens <limpens@gmail.com>
+> ---
+>  package/pifmrds/0003-Makefile-fix-static-link-libm.patch | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>  create mode 100644 package/pifmrds/0003-Makefile-fix-static-link-libm.patch
+> 
+> diff --git a/package/pifmrds/0003-Makefile-fix-static-link-libm.patch b/package/pifmrds/0003-Makefile-fix-static-link-libm.patch
+> new file mode 100644
+> index 0000000..eb9cdcf
+> --- /dev/null
+> +++ b/package/pifmrds/0003-Makefile-fix-static-link-libm.patch
+> @@ -0,0 +1,15 @@
 
- > And the corresponding code in the .mk file, of course.
+ The patch should contain an explanation, just like a commit log. It should also
+have your Signed-off-by.
 
-Didn't we just discuss on IRC that shebangs didn't have any advantages
-over symlinks? If so, I would prefer to keep things simple and only have
-a choice between symlinks (default) or classical multiple binaries.
+ Also, because upstream uses git, it's convenient to have the patches in git
+format. It would also be convenient if you could try to upstream the patches, so
+then they should obviously be git-formatted.
+
+> +--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-24 10:23:41.455695546 +0100
+> ++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-24 10:25:07.003876714 +0100
+> +@@ -1,10 +1,10 @@
+> + CC = gcc
+> + 
+> + app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
+> +-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+> ++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
+
+ Not for you Eric, but:
+
+ I was going to suggest to use pkg-config here, but it turns out that libsndfile
+itself forgets to add -lm to Libs.private, so that wouldn't help...
+
+ Regards,
+ Arnout
+
+> + 
+> + rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
+> +-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+> ++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
+> + 
+> + rds.o: rds.c waveforms.h
+> + 	$(CC) $(CFLAGS) rds.c
+> 
+
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
