@@ -1,32 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 23:46:00 +0100
-Subject: [Buildroot] [PATCH 0/9] Olimex A20 OlinuXino updates
-In-Reply-To: <CAB0FRsufz4DCdX9fT2axV-TjTEgxifus8EExibNXJYyKE97RXQ@mail.gmail.com>
- (=?utf-8?Q?=22Fran=C3=A7ois?= Perrad"'s message of "Tue, 23 Feb 2016
- 18:59:55 +0100")
-References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
- <CAB0FRsufz4DCdX9fT2axV-TjTEgxifus8EExibNXJYyKE97RXQ@mail.gmail.com>
-Message-ID: <87oab5ybfb.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Feb 2016 23:43:37 +0100
+Subject: [Buildroot] [git commit branch/next] olimex_a20_olinuxino_lime:
+	update to use genimage
+Message-ID: <20160224224623.D615F801D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fran?ois" == Fran?ois Perrad <francois.perrad@gadz.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=65301a472e939eb9ebd1a992cdd0cda60ad33fbb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Hi,
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Francois Perrad <fperrad@gmail.com>
+Tested-by: Francois Perrad <fperrad@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/olimex/a20_olinuxino/readme.txt            | 2 +-
+ configs/olimex_a20_olinuxino_lime_defconfig      | 2 ++
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
- > another cleanup, in configs/olimex_a20_olinuxino_lime2_defconfig these
- > 3 lines could be removed:
- > BR2_PACKAGE_SUNXI_TOOLS=y
- > BR2_PACKAGE_SUNXI_BOARDS=y
- > BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a20/a20-olinuxino_lime.fex"
-
- > there are only needed with a linux-sunxi kernel, like in
- > configs/olimex_a20_olinuxino_lime_mali_defconfig
-
-Indeed. Care to send a patch to do this?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index febfbe7..8be1bf4 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -52,7 +52,7 @@ After building, you should get a tree like this:
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- script.bin (lime_mali)
+-    +-- sdcard.img (micro)
++    +-- sdcard.img (micro, lime)
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+     +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index e6c33c8..b212767 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+@@ -41,4 +42,5 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index ca71b55..737c690 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+@@ -45,4 +46,5 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
