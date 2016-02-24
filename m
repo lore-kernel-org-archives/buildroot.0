@@ -1,38 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 21:50:55 +0100
-Subject: [Buildroot] [git commit] poppler: install xpdf-headers to enable
-	building of cups-filters
-Message-ID: <20160302202755.CD6327FA0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 21:45:38 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: remove
+	redundant defconfig lines
+Message-ID: <20160302202757.4A0C27F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb992c4fd286714e40f68c9be1bd09a0aa96652d
+commit: https://git.buildroot.net/buildroot/commit/?id=ad009b6b95d9f0c67d6027247008d2baf422c8e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add --enable-xpdf-headers to poppler.mk. Required for succesfull
-build of cups-filters.
+These defconfig options are set to their default values, so they are
+redundant and can be removed without effect.
 
-Signed-off-by: Olivier Schonken <olivier.schonken@gmail.com>
-Reviewed-by: Samuel Martin <s.martin49@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poppler/poppler.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ configs/olimex_a20_olinuxino_micro_defconfig | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 6142cba..1113e4b 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -11,7 +11,8 @@ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
- POPPLER_LICENSE = GPLv2+
- POPPLER_LICENSE_FILES = COPYING
- POPPLER_INSTALL_STAGING = YES
--POPPLER_CONF_OPTS = --with-font-configuration=fontconfig
-+POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
-+	--enable-xpdf-headers
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+index 420252c..f84da34 100644
+--- a/configs/olimex_a20_olinuxino_micro_defconfig
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -1,7 +1,6 @@
+ # Architecture
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- POPPLER_CONF_OPTS += --enable-cms=lcms2
+ # Linux headers same as kernel, a 4.4 series
+@@ -10,7 +9,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+-BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
+@@ -20,7 +18,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
+-BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -38,7 +35,6 @@ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+-BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
