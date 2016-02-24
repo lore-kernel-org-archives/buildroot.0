@@ -1,51 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Feb 2016 21:36:21 +0100
-Subject: [Buildroot] Buildroot for normal PC
-In-Reply-To: <56CCC07E.80507@dawncrow.de>
-References: <56C79CD9.3010503@dawncrow.de> <56C8F9DF.1090008@mind.be>
- <56CCC07E.80507@dawncrow.de>
-Message-ID: <56CE1445.3020005@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 21:40:13 +0100
+Subject: [Buildroot] [PATCH 1/9] olimex/a20_olinuxino: update readme.txt
+	with lime2 info
+In-Reply-To: <1456187073-2876-2-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 23 Feb 2016 01:24:25 +0100")
+References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
+ <1456187073-2876-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <871t813kr6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/23/16 21:26, Andr? Hentschel wrote:
-> Am 21.02.2016 um 00:42 schrieb Arnout Vandecappelle:
->> On 02/19/16 23:53, Andr? Hentschel wrote:
->>> Hi,
->>>
->>> I wanna try some more things with the Wine package in buildroot, but I can't easily setup a testing environment for a PC.
->>> One part is which bootloader to use and how to pack everything together to a bootable USB-Stick, HDD image or CD. (And I didn't found a defconfig for that)...
->>
->>  Check out BR2_TARGET_ROOTFS_ISO9660_HYBRID (after enabling the
->> syslinux/isolinux bootloader and the iso9660 filesystem). It makes a bootable
->> USB image.
-> 
-> 
-> Sounds great, tried it.
-> Sadly it fails on boot like this:
-> 
-> ISOLINUX 6.03 EHDD Copyright (C) 1994-2014 H. Peter Anvin et al
-> Loading /boot/vmlinux... ok
-> Booting kernel failed: Invalid argument
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- Doesn't give much information :-( I tried it in a virtualbox and then isolinux
-doesn't even load the kernel...
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > ---
+ >  board/olimex/a20_olinuxino/readme.txt | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
 
- Regards,
- Arnout
+ > diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+ > index 7998aa12e6a4..ab7ab1ec2426 100644
+ > --- a/board/olimex/a20_olinuxino/readme.txt
+ > +++ b/board/olimex/a20_olinuxino/readme.txt
+ > @@ -3,12 +3,13 @@ A20-OLinuXino-LIME and A20-OLinuXino-MICRO
+ >  Intro
+ >  =====
+ 
+ > -These are open hardware boards, both based an the AllWinners A20 SoC.
+ > +These are open hardware boards, all based an the AllWinners A20 SoC.
 
-> 
-> Any idea?
-> 
+s/an /on /, and the company is called Allwinner (or Allwinner
+Technology). 
 
+Committed to next with that fixed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
