@@ -1,39 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:17:06 +0100
-Subject: [Buildroot] [git commit] package/lz4: only use PREFIX for host
-	installation
-Message-ID: <20160302202759.DEB7F7FB71@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 20:56:05 +0100
+Subject: [Buildroot] [git commit] gcc: mark 4.7.x as deprecated
+Message-ID: <20160302202757.0CDD980203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8cca4c192e1890b2f1fbe422d8b63e405b46f67
+commit: https://git.buildroot.net/buildroot/commit/?id=04f416df91109f75f393820fa924db4a8f257326
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As noted by Peter Korsgaard, using DESTDIR=$(HOST_DIR) and PREFIX=/usr
-for the host installation is useless and actually incorrect (the
-pkg-config file contains incorrect paths). Instead, using
-PREFIX=$(HOST_DIR)/usr is simpler, and actually correct.
+We're already using 4.9.x as default, and have 4.8.x on the lower side
+together with 5.x (5.3.0) on the higher side.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lz4/lz4.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index 576b2a2..d2b09bb 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -22,8 +22,8 @@ define HOST_LZ4_BUILD_CMDS
- endef
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 560ea52..5cc0dd3 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -41,6 +41,7 @@ choice
  
- define HOST_LZ4_INSTALL_CMDS
--	$(MAKE) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
--		PREFIX=/usr install -C $(@D)
-+	$(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
-+		install -C $(@D)
- endef
- 
- define LZ4_BUILD_CMDS
+ 	config BR2_GCC_VERSION_4_7_X
+ 		bool "gcc 4.7.x"
++		depends on BR2_DEPRECATED_SINCE_2016_05
+ 		# Broken or unsupported architectures
+ 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
+ 			&& !BR2_powerpc64le && !BR2_nios2
