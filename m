@@ -1,26 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 21:43:59 +0100
-Subject: [Buildroot] [PATCH 4/9] olimex_a20_olinuxino_micro: initialize
-	the network with DHCP
-In-Reply-To: <1456187073-2876-5-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Tue, 23 Feb 2016 01:24:28 +0100")
-References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
- <1456187073-2876-5-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87oab5260g.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Feb 2016 21:45:06 +0100
+Subject: [Buildroot] Analysis of build results for 2016-02-21
+In-Reply-To: <CABGWzsS4nDC=Mq9mmQQMuxEa3bhkmHnExjQ93Z9v_5-zdAEPBQ@mail.gmail.com>
+References: <20160222073022.D29851025E8@stock.ovh.net>
+ <20160222150539.0301105e@free-electrons.com>
+ <CABGWzsS4nDC=Mq9mmQQMuxEa3bhkmHnExjQ93Z9v_5-zdAEPBQ@mail.gmail.com>
+Message-ID: <56CE1652.90901@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+On 02/24/16 12:08, Eric Limpens wrote:
+> I've just submitted a patch to fix the issue for pifmrds. I don't fully
+> understand why, but changing the order of 2 libraries fixed the problem.
+> 
+> Tested the patch with a non-static build and no issues occurred during building.
+> 
 
- > To allow a more complete "out-of-the-box" startup with the defconfig,
- > enable automatic network configuration of eth0 using DHCP.
+ That patch doesn't appear on the list or patchwork. Can you check if it got
+sent correctly?
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-
-Committed to next, thanks.
+ Regards,
+ Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
