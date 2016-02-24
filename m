@@ -1,28 +1,50 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Wed, 24 Feb 2016 16:35:19 -0500
-Subject: [Buildroot] Why not perform a shallow clone?
-In-Reply-To: <56CE1FC5.8090408@mind.be>
-References: <CAF_dkJA0tBn_6x-sBwqF6Hb4x4+Pp3vM+e+rndm24kJe_y6pVg@mail.gmail.com>
- <CAHXCMMKHZ0usTWkgfJUbM6P4zLV2ZkAxQB9H9KrTVPar=fMEuA@mail.gmail.com>
- <CAF_dkJCZ3SzR3u7RASj-9ABxd8D70p6V1BGdVKZNnPKtFay0Gg@mail.gmail.com>
- <CAF_dkJCgzJQE4i1DbDF_=eVgfEDJHDiwD-qRAjQe72ar+_=YBg@mail.gmail.com>
- <56CE1FC5.8090408@mind.be>
-Message-ID: <CAF_dkJDc5VT1VkmNBi3CRuLWaeoAbpmmkMdCXMwGWgO27eX23g@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Wed, 24 Feb 2016 22:42:50 +0100
+Subject: [Buildroot] Analysis of build results for 2016-02-21
+In-Reply-To: <20160222150539.0301105e@free-electrons.com>
+References: <20160222073022.D29851025E8@stock.ovh.net>
+ <20160222150539.0301105e@free-electrons.com>
+Message-ID: <20160224214249.GO14809@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 24, 2016 at 4:25 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 02/24/16 21:18, Patrick Doyle wrote:
->> On Wed, Feb 24, 2016 at 2:50 PM, Patrick Doyle <wpdster@gmail.com> wrote:
->> No, that doesn't seem to work either.  linux.mk doesn't use $(call
->> github).  Oh well.
->
->  $(call github) is not really needed, you can just use the actual URL in your
-> config: https://github.com/<project>/<repo>/archive/<version>/<version>.tar.gz
->
-Oh, that's clever!  Thank you very much!
+Hi Thomas,
+Thomas Petazzoni wrote,
 
---wpd
+> Hello,
+> 
+> >        sparc |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/a17047ada385e5be5f60c07254597fcb7c4183d0/
+> >        sparc |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/6d79591bce2d3fa5b93e268fe50d5b89ecd24521/
+> 
+> Could be fixed by http://patchwork.ozlabs.org/patch/569818/, but this
+> patch is wrong I believe now that we have proper Config.in options to
+> describe atomic operation dependencies.
+> 
+> Waldemar, could you have a look?
+
+What about adding a nice chapter to the buildroot manual explaining
+how to handle typical build problems. Subchapters like:
+- PIE and static builds 
+- Atomic build failures
+
+come into my mind. 
+
+Then anybody trying to fix autobuilder problems could step in.
+
+My personal agenda for buildroot is more like this:
+- fix ARM noMMU internal toolchain 
+- push any required elf2flt changes to new (old) upstream and update
+  br url to fetch it from there
+- add internal bfin toolchain support as soon as gcc 6 is out and
+  integrated
+- resend my coldfire/m68k patch set in a more granular way
+- fix any interesting uClibc-ng compile problems
+..
+- analyze any interesting sparc/sparc64 autobuilder problems
+  if no other is fixing it :)
+
+best regards
+ Waldemar
