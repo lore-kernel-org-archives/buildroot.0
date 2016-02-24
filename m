@@ -1,69 +1,46 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Feb 2016 21:34:43 +0100
-Subject: [Buildroot] [PATCH v3] package/mono: Fixing wrong
- MonoPosixHelper location
-In-Reply-To: <CA+TH9VnvmxhZtx9aM0C0CCXo4duH-Y9kQ6yM5Tpia1YWpY8D4g@mail.gmail.com>
-References: <1456264228-19851-1-git-send-email-angelo.compagnucci@gmail.com>
- <56CCDAD8.5070904@mind.be>
- <CA+TH9VnvmxhZtx9aM0C0CCXo4duH-Y9kQ6yM5Tpia1YWpY8D4g@mail.gmail.com>
-Message-ID: <56CE13E3.8050603@mind.be>
+Date: Wed, 24 Feb 2016 21:36:21 +0100
+Subject: [Buildroot] Buildroot for normal PC
+In-Reply-To: <56CCC07E.80507@dawncrow.de>
+References: <56C79CD9.3010503@dawncrow.de> <56C8F9DF.1090008@mind.be>
+ <56CCC07E.80507@dawncrow.de>
+Message-ID: <56CE1445.3020005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/23/16 23:29, Angelo Compagnucci wrote:
-> Dear Arnout Vandecappelle,
+On 02/23/16 21:26, Andr? Hentschel wrote:
+> Am 21.02.2016 um 00:42 schrieb Arnout Vandecappelle:
+>> On 02/19/16 23:53, Andr? Hentschel wrote:
+>>> Hi,
+>>>
+>>> I wanna try some more things with the Wine package in buildroot, but I can't easily setup a testing environment for a PC.
+>>> One part is which bootloader to use and how to pack everything together to a bootable USB-Stick, HDD image or CD. (And I didn't found a defconfig for that)...
+>>
+>>  Check out BR2_TARGET_ROOTFS_ISO9660_HYBRID (after enabling the
+>> syslinux/isolinux bootloader and the iso9660 filesystem). It makes a bootable
+>> USB image.
 > 
-> 2016-02-23 23:19 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
->> On 02/23/16 22:50, Angelo Compagnucci wrote:
->>> * This patch solves installation problems with monoposixhelper
->>
->>  This description should be better, e.g. taking part of the bug description.
->>
->> libMonoPosixHelper.so will be searched in the HOST_DIR/usr/lib/ path. This path
->> and file may exist on my building machine, but not on the target.
->>
->> Fixes bug #8651.
 > 
-> Have I to resend?
-
- Depends on the outcome of the discussion below.
-
-[snip]
->>
->>  So 6b5f6dd0434b66062110cf764688975ecfed646f doesn't fix it? That would mean
->> that mono_assembly_getrootdir() is wrong, which is bound to lead to other
->> problems...
+> Sounds great, tried it.
+> Sadly it fails on boot like this:
 > 
-> That commit is not included in mono-4.2.2.30, could you explain better?
+> ISOLINUX 6.03 EHDD Copyright (C) 1994-2014 H. Peter Anvin et al
+> Loading /boot/vmlinux... ok
+> Booting kernel failed: Invalid argument
 
- That commit is from the 4.3 branch (I think, I haven't made a full clone, just
-browsed on github).
-
-> Do you think I have to backport that patch from master? Honestly, if
-> the released a buggy version, we should wait a correct one. I'm
-> reactive about upgrading mono version in buildroot!
-
- That commit is dated July 23, 2015, so we can wait a long time still :-)
-
- But I asked the question because your original patch v1 was made on top of the
-4.3 (or rather, master) branch. So there are two possibilities: either it's
-still broken on master, or you never actually tested the master branch before
-you submitted the patch upstream.
-
- - If it is not broken on master, then it's better to backport commit
-6b5f6dd0434b66062110cf764688975ecfed646f from master.
-
- - If it is still broken on master, then your patch is good for buildroot, but I
-fear there will be other issues lurking in the shadows because it means the
-mono_assembly_getrootdir() function doesn't work correctly in buildroot.
+ Doesn't give much information :-( I tried it in a virtualbox and then isolinux
+doesn't even load the kernel...
 
  Regards,
  Arnout
 
-[snip]
+> 
+> Any idea?
+> 
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
