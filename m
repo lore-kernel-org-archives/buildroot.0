@@ -1,46 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:22:15 +0100
-Subject: [Buildroot] [git commit] acl: cleanup pointless indentation
-Message-ID: <20160302202758.0549F7FA0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 21:41:03 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: bump linux to
+	4.4.2
+Message-ID: <20160302202757.2BB027FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d3621224278bef25cad56ebbe51bc0d18d0d572
+commit: https://git.buildroot.net/buildroot/commit/?id=812b25fd0045ec36385a72a782ef57e3102248e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acl/acl.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ configs/olimex_a20_olinuxino_micro_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index 62e5d15..cbe5e93 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -16,15 +16,15 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
- # While the configuration system uses autoconf, the Makefiles are
- # hand-written and do not use automake. Therefore, we have to hack
- # around their deficiencies by passing installation paths.
--ACL_INSTALL_STAGING_OPTS = 			\
--	prefix=$(STAGING_DIR)/usr 		\
--	exec_prefix=$(STAGING_DIR)/usr 		\
--	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib	\
-+ACL_INSTALL_STAGING_OPTS = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
- 	install-dev install-lib
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+index da2fd8a..a641ad7 100644
+--- a/configs/olimex_a20_olinuxino_micro_defconfig
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -4,8 +4,8 @@ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
--ACL_INSTALL_TARGET_OPTS = 			\
--	prefix=$(TARGET_DIR)/usr 		\
--	exec_prefix=$(TARGET_DIR)/usr 		\
-+ACL_INSTALL_TARGET_OPTS = \
-+	prefix=$(TARGET_DIR)/usr \
-+	exec_prefix=$(TARGET_DIR)/usr \
- 	install install-lib
+-# Linux headers same as kernel, a 4.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
++# Linux headers same as kernel, a 4.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
  
- # The libdir variable in libacl.la is empty, so let's fix it. This is
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_ZIMAGE=y
