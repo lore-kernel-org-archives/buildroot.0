@@ -1,57 +1,71 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 24 Feb 2016 23:19:30 +0100
-Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
-	installed programs
-In-Reply-To: <87r3g1zs67.fsf@dell.be.48ers.dk>
-References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
- <877fhxaf7l.fsf@dell.be.48ers.dk>
- <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
- <56CE1E61.7000008@zacarias.com.ar> <20160224214832.GA3449@free.fr>
- <87r3g1zs67.fsf@dell.be.48ers.dk>
-Message-ID: <20160224221930.GB3449@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 24 Feb 2016 23:26:55 +0100
+Subject: [Buildroot] Confusion about location of custom Linux patches
+In-Reply-To: <CAF_dkJA2VYCaAMTY=D3zsdV6YcAa1FS2w+8A2ygqrCuqQFWfCQ@mail.gmail.com>
+References: <CAF_dkJA2VYCaAMTY=D3zsdV6YcAa1FS2w+8A2ygqrCuqQFWfCQ@mail.gmail.com>
+Message-ID: <56CE2E2F.6060809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
-
-On 2016-02-24 22:58 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> >> How about adding a more lightweight option to the coreutils package to
->  >> disable the single-binary mode?
+On 02/24/16 20:56, Patrick Doyle wrote:
+> According to the documentation in section 9.8:
 > 
->  > Yes, that is a great ides, maybe a choice like:
->  >     choice
->  >         bool "Single-binary mode"
->  >         default BR2_PKG_COREUTILS_SINGLE_SYMLINKS
->  >     config BR2_PKG_COREUTILS_SINGLE_NONE
->  >         bool "none"
->  >     config BR2_PKG_COREUTILS_SINGLE_SYMLINKS
->  >         bool "symlinks"
->  >     config BR2_PKG_COREUTILS_SINGLE_SHEBANGS
->  >         bool "shebangs"
->  >     endchoice
->  > And the corresponding code in the .mk file, of course.
+> "The exception to BR2_GLOBAL_PATCH_DIR being the preferred method for
+> specifying custom patches is BR2_LINUX_KERNEL_PATCH."
+
+ The next sentence reads:
+
++BR2_LINUX_KERNEL_PATCH+ should be used to specify kernel patches that
+are available at an URL.
+
+ It could indeed be worded a bit more explicitly.
+
 > 
-> Didn't we just discuss on IRC that shebangs didn't have any advantages
-> over symlinks? If so, I would prefer to keep things simple and only have
-> a choice between symlinks (default) or classical multiple binaries.
+> But later, in section 9.10, it says:
+> 
+> "Specifically for the Linux kernel, there also exists the option
+> BR2_LINUX_KERNEL_PATCH with as main advantage that it can also
+> download patches from a URL. If you do not need this,
+> BR2_GLOBAL_PATCH_DIR is preferred."
+> 
+> I tried deciding that BR2_GLOBAL_PATCH_DIR was preferred, but now I'm
+> not sure how to name the subdirectory inside BR2_GLOBAL_PATCH_DIR.  I
+> have tried $BR2_GLOBAL_PATCH_DIR/kernel and
+> $BR2_GLOBAL_PATCH_DIR/linux, and neither has seemed to work.
 
-Well, shebangs is the current situation, so users may rely on it (for
-whatever ill reason), so we should support that.
+ linux is right. You must have done something else wrong. Do the file names end
+with .patch?
 
-However, I won't battle over it, as my preference would go with hardlinks
-instead, but that option is not available. Meh... ;-)
+ Also note that patches are skipped if you use BR2_LINUX_KERNEL_CUSTOM_LOCAL or
+LINUX_OVERRIDE_SRCDIR.
 
-Regards,
-Yann E. MORIN.
+ Regards,
+ Arnout
+
+
+> 
+> So now I'm just gonna ask...
+> 
+> I am building outside the buildroot tree in a custom tree.  I have
+> kernel patches that I need to apply (until such time as they get
+> folded into the kernel).  Where is the best place to place them and
+> how should that directory be named?
+> 
+> --wpd
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
