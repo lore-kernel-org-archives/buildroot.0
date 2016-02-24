@@ -1,62 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:28:43 +0100
-Subject: [Buildroot] [git commit] collectd: Add service file
-Message-ID: <20160302202755.6E7D77FA0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 21:43:13 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: bump u-boot to
+	2016.01
+Message-ID: <20160302202757.35E9580203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f18274a92e4db5c4cac1c248a40cbd3be91db7d
+commit: https://git.buildroot.net/buildroot/commit/?id=d03c73d588862abee3d7bb30c0deb0da3cc3afcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The service file was taken from Debian.
-
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/collectd.mk      |  8 ++++++++
- package/collectd/collectd.service | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+)
+ configs/olimex_a20_olinuxino_micro_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index eb66f25..78e24b8 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -185,4 +185,12 @@ define COLLECTD_INSTALL_TARGET_CMDS
- 	rm -f $(TARGET_DIR)/usr/share/collectd/postgresql_default.conf
- endef
- 
-+define COLLECTD_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/collectd/collectd.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/collectd.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -fs ../../../../usr/lib/systemd/system/collectd.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/collectd.service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/collectd/collectd.service b/package/collectd/collectd.service
-new file mode 100644
-index 0000000..e203806
---- /dev/null
-+++ b/package/collectd/collectd.service
-@@ -0,0 +1,17 @@
-+[Unit]
-+Description=Statistics collection and monitoring daemon
-+After=local-fs.target network.target
-+Requires=local-fs.target network.target
-+ConditionPathExists=/etc/collectd.conf
-+
-+[Service]
-+Type=notify
-+NotifyAccess=main
-+EnvironmentFile=-/etc/default/collectd
-+ExecStartPre=/usr/sbin/collectd -t
-+ExecStart=/usr/sbin/collectd
-+Restart=always
-+RestartSec=10
-+
-+[Install]
-+WantedBy=multi-user.target
+diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
+index a641ad7..6d05f74 100644
+--- a/configs/olimex_a20_olinuxino_micro_defconfig
++++ b/configs/olimex_a20_olinuxino_micro_defconfig
+@@ -35,7 +35,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
