@@ -1,43 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:24:14 +0100
-Subject: [Buildroot] [git commit] attr: add host variant
-Message-ID: <20160302202758.0D8937FA0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 23:43:51 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime2: update to use
+	genimage
+Message-ID: <20160302202757.9642E7F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc739517e7b4f48e25354fc7c769a11c6d30e2a
+commit: https://git.buildroot.net/buildroot/commit/?id=ae13fd947b0e844da5b806acaf5301ecb223e78b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is required for host-libcap for extended attributes support, which
-leads to capabilities support as well.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Jan Viktorin <viktorin@rehivetech.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/attr/attr.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ board/olimex/a20_olinuxino/readme.txt        | 2 +-
+ configs/olimex_a20_olinuxino_lime2_defconfig | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
-index a66891b..e9963ba 100644
---- a/package/attr/attr.mk
-+++ b/package/attr/attr.mk
-@@ -26,6 +26,11 @@ ATTR_INSTALL_TARGET_OPTS = 			\
- 	exec_prefix=$(TARGET_DIR)/usr 		\
- 	install install-lib
- 
-+HOST_ATTR_INSTALL_OPTS = \
-+	prefix=$(HOST_DIR)/usr \
-+	exec_prefix=$(HOST_DIR)/usr \
-+	install-dev install-lib
-+
- # The libdir variable in libattr.la is empty, so let's fix it. This is
- # probably due to attr not using automake, and not doing fully the
- # right thing with libtool.
-@@ -37,3 +42,4 @@ endef
- ATTR_POST_INSTALL_STAGING_HOOKS += ATTR_FIX_LIBTOOL_LA_LIBDIR
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 8be1bf4..d6871ce 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -52,7 +52,7 @@ After building, you should get a tree like this:
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- script.bin (lime_mali)
+-    +-- sdcard.img (micro, lime)
++    +-- sdcard.img
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+     +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index 1a2bb45..1e3fa4a 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -7,6 +7,7 @@ BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+@@ -28,4 +29,5 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
