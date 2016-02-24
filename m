@@ -1,61 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 24 Feb 2016 10:02:22 -0300
-Subject: [Buildroot] [PATCH] linux: don't add to toolchain dependency
-In-Reply-To: <56CCF17D.2030508@mind.be>
-References: <1456141244-624-1-git-send-email-gustavo@zacarias.com.ar>
- <20160222131901.3baa956e@free-electrons.com> <56CCF17D.2030508@mind.be>
-Message-ID: <56CDA9DE.4000900@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 24 Feb 2016 14:14:15 +0100
+Subject: [Buildroot] [PATCH] qt: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <56CD9FD6.7040409@zacarias.com.ar>
+References: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160223222219.24b95205@free-electrons.com>
+ <56CCDAF1.9070209@zacarias.com.ar>
+ <20160223233023.6b376939@free-electrons.com>
+ <56CD9FD6.7040409@zacarias.com.ar>
+Message-ID: <20160224141415.1b6f3f16@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/02/16 20:55, Arnout Vandecappelle wrote:
+Hello,
 
->   Well, _PATCH_DEPENDENCIES already does that:
->
-> # Order-only dependency
-> $$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
->
->
->   The problem identified by Gustavo doesn't happen in a normal build, it's only
-> when you do make source. That's because for source we use:
->
-> $(1)-all-source:        $(1)-source
-> $(1)-all-source:        $$(foreach
-> p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
->
->
->   I have to think a bit more about possible solutions. But the good thing is that
-> it's less important: a normal build will still work without warning, and make
-> source will also still work and have all the packages, it just has a warning
-> that is not so nice. So if it doesn't get fixed for 2016.02 it's no disaster.
+On Wed, 24 Feb 2016 09:19:34 -0300, Gustavo Zacarias wrote:
 
-It's not only -source, any dependency-using routines are affected, 
-legal-info, graph-depends as well as long as you build a kernel.
-In fact graph-depends is broken:
+> It seems it's both script & webkit that need atomics.
+> However i think the arch supports list is flawed as well, webkit hasn't 
+> worked for many of those architectures in the past - they build, yes, 
+> but they'll probably crash on startup.
+> But i'm not about to test all of them since that would require hardware, 
+> so i'm removing sparc as well since it's a cliche that can't be fixed.
 
-$ make graph-depends
-Getting targets
-Getting dependencies for ['toolchain-buildroot', 'toolchain', 'busybox', 
-'glibc', 'initscripts', 'linux-headers', 'skeleton', 'linux', 
-'host-fakeroot', 'host-makedevs', 'rootfs-cpio', 'rootfs-initramfs']
-Getting dependencies for ['host-kmod', 'host-gcc-final', 
-'host-gcc-initial', 'host-gawk']
-Getting dependencies for ['host-gmp', 'host-binutils', 'host-pkgconf', 
-'host-mpfr', 'host-mpc']
-Getting dependencies for ['host-m4']
+Fully agreed to remove SPARC from the list of supported architectures
+for webkit and script. However, I believe it would still be good to add
+the BR2_TOOLCHAIN_HAS_SYNC_4 dependency as well.
 
-Recursion detected for  : toolchain
-which is a dependency of: linux
-which is a dependency of: linux-headers
-which is a dependency of: glibc
-which is a dependency of: host-gcc-final
-which is a dependency of: toolchain-buildroot
-which is a dependency of: toolchain
-Makefile:721: recipe for target 'graph-depends' failed
-make: *** [graph-depends] Error 1
+Regarding the architectures that build but don't work at runtime, I
+guess all we can do is leave things are they are, and change them
+when/if someone complains/reports an issue. We are indeed not going to
+test Webkit/Script on every possible funky architecture.
 
-So it's not as innocent as you think.
-Regards.
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
