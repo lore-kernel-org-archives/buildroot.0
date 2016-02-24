@@ -1,34 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 20:56:05 +0100
-Subject: [Buildroot] [git commit branch/next] gcc: mark 4.7.x as deprecated
-Message-ID: <20160224200444.A5E648184B@busybox.osuosl.org>
+Date: Wed, 24 Feb 2016 21:02:50 +0100
+Subject: [Buildroot] [git commit branch/next] sysstat: bump to version
+	11.2.1.1
+Message-ID: <20160224200444.B6F5080454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04f416df91109f75f393820fa924db4a8f257326
+commit: https://git.buildroot.net/buildroot/commit/?id=25e5f788b34806b859045979cade771bef1f3e9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-We're already using 4.9.x as default, and have 4.8.x on the lower side
-together with 5.x (5.3.0) on the higher side.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/sysstat/sysstat.hash | 2 +-
+ package/sysstat/sysstat.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 560ea52..5cc0dd3 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -41,6 +41,7 @@ choice
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index d69440b..3714258 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,2 +1,2 @@
+ # From: http://sebastien.godard.pagesperso-orange.fr/download.html
+-sha1	61b70892d864f8bac5714e2fe0a006f0fda6efba	sysstat-11.2.0.tar.xz
++sha1	01dd5212efff6eff6f9018711de3de471516060e	sysstat-11.2.1.1.tar.xz
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index ba0eb26..449c30a 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	config BR2_GCC_VERSION_4_7_X
- 		bool "gcc 4.7.x"
-+		depends on BR2_DEPRECATED_SINCE_2016_05
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
+-SYSSTAT_VERSION = 11.2.0
++SYSSTAT_VERSION = 11.2.1.1
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
