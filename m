@@ -1,59 +1,73 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 21:45:38 +0100
-Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: remove
-	redundant defconfig lines
-Message-ID: <20160302202757.4A0C27F98B@busybox.osuosl.org>
+Date: Wed, 24 Feb 2016 23:43:37 +0100
+Subject: [Buildroot] [git commit] olimex_a20_olinuxino_lime: update to use
+	genimage
+Message-ID: <20160302202757.8BDBF7F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad009b6b95d9f0c67d6027247008d2baf422c8e3
+commit: https://git.buildroot.net/buildroot/commit/?id=65301a472e939eb9ebd1a992cdd0cda60ad33fbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These defconfig options are set to their default values, so they are
-redundant and can be removed without effect.
-
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Francois Perrad <fperrad@gmail.com>
+Tested-by: Francois Perrad <fperrad@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/olimex_a20_olinuxino_micro_defconfig | 4 ----
- 1 file changed, 4 deletions(-)
+ board/olimex/a20_olinuxino/readme.txt            | 2 +-
+ configs/olimex_a20_olinuxino_lime_defconfig      | 2 ++
+ configs/olimex_a20_olinuxino_lime_mali_defconfig | 2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index 420252c..f84da34 100644
---- a/configs/olimex_a20_olinuxino_micro_defconfig
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -1,7 +1,6 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
- # Linux headers same as kernel, a 4.4 series
-@@ -10,7 +9,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
- BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
--BR2_TARGET_GENERIC_GETTY=y
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index febfbe7..8be1bf4 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -52,7 +52,7 @@ After building, you should get a tree like this:
+     +-- rootfs.ext2
+     +-- rootfs.ext4 -> rootfs.ext2
+     +-- script.bin (lime_mali)
+-    +-- sdcard.img (micro)
++    +-- sdcard.img (micro, lime)
+     +-- sun7i-a20-olinuxino-lime.dtb (lime, mainline)
+     +-- sun7i-a20-olinuxino-lime2.dtb (lime2, mainline)
+     +-- sun7i-a20-olinuxino-micro.dtb (micro, mainline)
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index e6c33c8..b212767 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_SYSTEM_DHCP="eth0"
  BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
-@@ -20,7 +18,6 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
--BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -38,7 +35,6 @@ BR2_TARGET_UBOOT_BOARDNAME="A20-OLinuXino_MICRO"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--BR2_TARGET_UBOOT_FORMAT_BIN=y
- BR2_TARGET_UBOOT_SPL=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+@@ -41,4 +42,5 @@ BR2_TARGET_UBOOT_SPL=y
  BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
  
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/olimex_a20_olinuxino_lime_mali_defconfig b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+index ca71b55..737c690 100644
+--- a/configs/olimex_a20_olinuxino_lime_mali_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_mali_defconfig
+@@ -12,6 +12,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a20_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/a20_olinuxino/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot-mali.cmd $(TARGET_DIR)/boot"
+ 
+ # Kernel
+@@ -45,4 +46,5 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+ 
+ # Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
