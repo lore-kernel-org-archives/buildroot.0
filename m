@@ -1,79 +1,66 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Feb 2016 23:02:53 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: change order of libraries to
- fix linking issue
-In-Reply-To: <1456347342-3521-1-git-send-email-limpens@gmail.com>
-References: <1456347342-3521-1-git-send-email-limpens@gmail.com>
-Message-ID: <56CE288D.8060802@mind.be>
+Date: Wed, 24 Feb 2016 23:09:45 +0100
+Subject: [Buildroot] Analysis of build results for 2016-02-21
+In-Reply-To: <20160224214249.GO14809@waldemar-brodkorb.de>
+References: <20160222073022.D29851025E8@stock.ovh.net>
+ <20160222150539.0301105e@free-electrons.com>
+ <20160224214249.GO14809@waldemar-brodkorb.de>
+Message-ID: <56CE2A29.6080106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Eric,
-
- Thanks for your patch.
-
- The subject should be:
-
-<package>: <what changed>
-
-so in this case:
-
-pifmrds: fix static linking
-
-On 02/24/16 21:55, Eric Limpens wrote:
-> When building a static variant, link errors occur. Changing the order
-> of libsndfile and libm fixes this error
-
- Add a reference to the autobuild failure.
-
+On 02/24/16 22:42, Waldemar Brodkorb wrote:
+> Hi Thomas,
+> Thomas Petazzoni wrote,
 > 
-> Signed-off-by: Eric Limpens <limpens@gmail.com>
-> ---
->  package/pifmrds/0003-Makefile-fix-static-link-libm.patch | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->  create mode 100644 package/pifmrds/0003-Makefile-fix-static-link-libm.patch
+>> Hello,
+>>
+>>>        sparc |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/a17047ada385e5be5f60c07254597fcb7c4183d0/
+>>>        sparc |                  libdrm-2.4.66 | NOK | http://autobuild.buildroot.net/results/6d79591bce2d3fa5b93e268fe50d5b89ecd24521/
+>>
+>> Could be fixed by http://patchwork.ozlabs.org/patch/569818/, but this
+>> patch is wrong I believe now that we have proper Config.in options to
+>> describe atomic operation dependencies.
+>>
+>> Waldemar, could you have a look?
 > 
-> diff --git a/package/pifmrds/0003-Makefile-fix-static-link-libm.patch b/package/pifmrds/0003-Makefile-fix-static-link-libm.patch
-> new file mode 100644
-> index 0000000..eb9cdcf
-> --- /dev/null
-> +++ b/package/pifmrds/0003-Makefile-fix-static-link-libm.patch
-> @@ -0,0 +1,15 @@
+> What about adding a nice chapter to the buildroot manual explaining
+> how to handle typical build problems. Subchapters like:
+> - PIE and static builds 
+> - Atomic build failures
 
- The patch should contain an explanation, just like a commit log. It should also
-have your Signed-off-by.
+ Great plan! Patches welcome :-)
 
- Also, because upstream uses git, it's convenient to have the patches in git
-format. It would also be convenient if you could try to upstream the patches, so
-then they should obviously be git-formatted.
-
-> +--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-24 10:23:41.455695546 +0100
-> ++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-24 10:25:07.003876714 +0100
-> +@@ -1,10 +1,10 @@
-> + CC = gcc
-> + 
-> + app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
-> +-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
-> ++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
-
- Not for you Eric, but:
-
- I was going to suggest to use pkg-config here, but it turns out that libsndfile
-itself forgets to add -lm to Libs.private, so that wouldn't help...
 
  Regards,
  Arnout
 
-> + 
-> + rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
-> +-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
-> ++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
-> + 
-> + rds.o: rds.c waveforms.h
-> + 	$(CC) $(CFLAGS) rds.c
+> 
+> come into my mind. 
+> 
+> Then anybody trying to fix autobuilder problems could step in.
+> 
+> My personal agenda for buildroot is more like this:
+> - fix ARM noMMU internal toolchain 
+> - push any required elf2flt changes to new (old) upstream and update
+>   br url to fetch it from there
+> - add internal bfin toolchain support as soon as gcc 6 is out and
+>   integrated
+> - resend my coldfire/m68k patch set in a more granular way
+> - fix any interesting uClibc-ng compile problems
+> ..
+> - analyze any interesting sparc/sparc64 autobuilder problems
+>   if no other is fixing it :)
+> 
+> best regards
+>  Waldemar
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 
