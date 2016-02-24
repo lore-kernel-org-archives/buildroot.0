@@ -1,82 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 20 Feb 2016 18:51:16 +0100
-Subject: [Buildroot] [git commit] erlang-p1-stringprep: bump to version 1.0.0
-Message-ID: <20160302202754.A5A317FF3E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 22:14:44 +0100
+Subject: [Buildroot] [git commit] libnss: bump to version 4.22.1
+Message-ID: <20160302202757.60C827FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=861ebf9111ab432857d6fbd98680bbf4996cfd07
+commit: https://git.buildroot.net/buildroot/commit/?id=6b63783dafe1e797a9aab8c98e2ec39de70e6ae6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version includes C++ code, so also add dependency on a C++
-compiler.
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-[Thomas:
- - propagate new C++ dependency to ejabberd, as noticed by
-   Romain Naour
- - fix license information and license files. Not all the code is
-   under the TCL license, in fact most of the code is under the
-   Apache-2.0 license, and some additional license files have been
-   added to clarify this.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ejabberd/Config.in                           | 5 +++--
- package/erlang-p1-stringprep/Config.in               | 4 ++++
- package/erlang-p1-stringprep/erlang-p1-stringprep.mk | 6 +++---
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ejabberd/Config.in b/package/ejabberd/Config.in
-index 7b4e99b..5d176c3 100644
---- a/package/ejabberd/Config.in
-+++ b/package/ejabberd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_EJABBERD
- 	bool "ejabberd"
- 	depends on BR2_PACKAGE_ERLANG
-+	depends on BR2_INSTALL_LIBSTDCPP # stringprep
- 	select BR2_PACKAGE_ERLANG_LAGER
- 	select BR2_PACKAGE_ERLANG_P1_CACHE_TAB
- 	select BR2_PACKAGE_ERLANG_P1_ICONV
-@@ -18,5 +19,5 @@ config BR2_PACKAGE_EJABBERD
- 
- 	  http://www.ejabberd.im
- 
--comment "ejabberd needs erlang"
--	depends on !BR2_PACKAGE_ERLANG
-+comment "ejabberd needs erlang, toolchain w/ C++"
-+	depends on !BR2_PACKAGE_ERLANG || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/erlang-p1-stringprep/Config.in b/package/erlang-p1-stringprep/Config.in
-index 3ef77ed..bc4d139 100644
---- a/package/erlang-p1-stringprep/Config.in
-+++ b/package/erlang-p1-stringprep/Config.in
-@@ -1,5 +1,9 @@
-+comment "erlang-p1-stringprep needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_ERLANG_P1_STRINGPREP
- 	bool "erlang-p1-stringprep"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	help
- 	  Erlang interface to stringprep
- 
-diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-index 60c80bc..0a5a1f5 100644
---- a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-+++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 4fa5897..6e4d330 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_21_RTM/src/SHA256SUMS
+-sha256	3f7a5b027d7cdd5c0e4ff7544da33fdc6f56c2f8c27fff02938fd4a6fbe87239	nss-3.21.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_22_1_RTM/src/SHA256SUMS
++sha256	89e1fc7074e5c325962821289f4cd7d8207ae95af2308ba881215ed9ca68fa4f	nss-3.22.1.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 6fdb77c..c474f61 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_STRINGPREP_VERSION = 3c64023
-+ERLANG_P1_STRINGPREP_VERSION = 1.0.0
- ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
--ERLANG_P1_STRINGPREP_LICENSE = TCL
--ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.TCL
-+ERLANG_P1_STRINGPREP_LICENSE = TCL (tools/*.tcl), Apache-2.0 (rest)
-+ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.ALL LICENSE.TCL LICENSE.txt
- 
- $(eval $(rebar-package))
+-LIBNSS_VERSION = 3.21
++LIBNSS_VERSION = 3.22.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
