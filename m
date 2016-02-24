@@ -1,42 +1,58 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 24 Feb 2016 09:19:34 -0300
-Subject: [Buildroot] [PATCH] qt: depends on BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20160223233023.6b376939@free-electrons.com>
-References: <1456246089-19346-1-git-send-email-gustavo@zacarias.com.ar>
- <20160223222219.24b95205@free-electrons.com>
- <56CCDAF1.9070209@zacarias.com.ar>
- <20160223233023.6b376939@free-electrons.com>
-Message-ID: <56CD9FD6.7040409@zacarias.com.ar>
+Date: Wed, 24 Feb 2016 09:20:42 -0300
+Subject: [Buildroot] [PATCH 1/2] qt: script & webkit depend on
+	BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <1456316443-7087-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 23/02/16 19:30, Thomas Petazzoni wrote:
+They use __sync_add_and_fetch_4() and other 32-bit atomics, fixes:
+http://autobuild.buildroot.net/results/7ac/7acdbc54e26ad2ba4756512614192be0a086f563/
 
-> Hello,
->
-> On Tue, 23 Feb 2016 19:19:29 -0300, Gustavo Zacarias wrote:
->
->> It's possible, however how likely is it an arch that doesn't support
->> atomics (normally meaning very old) running a QT gui?
->
-> The specific config I tested had the GUI support disabled, i.e just
-> QtCore, not QtGui.
->
-> Though I agree with you that generally speaking, usage on SPARC is
-> unlikely. But by narrowing the dependency to just script and/or webkit,
-> we have to propagate it to a lot less packages, which actually means
-> that supporting this weird SPARC architecture creates less noise, which
-> is what we want.
->
-> Thomas
+Also remove sparc from supported architectures since it won't grow
+atomics support magically.
 
-It seems it's both script & webkit that need atomics.
-However i think the arch supports list is flawed as well, webkit hasn't 
-worked for many of those architectures in the past - they build, yes, 
-but they'll probably crash on startup.
-But i'm not about to test all of them since that would require hardware, 
-so i'm removing sparc as well since it's a cliche that can't be fixed.
-Regards.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/qt/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt/Config.in b/package/qt/Config.in
+index bf14724..1579b61 100644
+--- a/package/qt/Config.in
++++ b/package/qt/Config.in
+@@ -407,12 +407,13 @@ config BR2_PACKAGE_QT_NETWORK
+ 
+ config BR2_PACKAGE_QT_ARCH_SUPPORTS_WEBKIT
+ 	bool
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	# see src/3rdparty/webkit/Source/JavaScriptCore/wtf/Platform.h
+ 	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
+ 	default y if BR2_arc || BR2_arm || BR2_armeb || BR2_i386 || BR2_microblazeel || \
+ 		BR2_microblazebe || BR2_mips || BR2_mipsel || \
+ 		(BR2_mips64 || BR2_mips64el) && !BR2_MIPS_NABI32 || BR2_powerpc || \
+-		BR2_powerpc64 || BR2_powerpc64le || BR2_sparc || BR2_x86_64
++		BR2_powerpc64 || BR2_powerpc64le || BR2_x86_64
+ 	# The CodeSourcery SuperH toolchain fails to build Webkit,
+ 	# with an assertion failure in binutils.
+ 	default y if (BR2_sh4 || BR2_sh4eb || BR2_sh4a || BR2_sh4aeb) && \
+@@ -454,12 +455,13 @@ config BR2_PACKAGE_QT_OPENSSL
+ 
+ config BR2_PACKAGE_QT_ARCH_SUPPORTS_SCRIPT
+ 	bool
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	# see http://lists.busybox.net/pipermail/buildroot/2014-November/112605.html
+ 	default y if BR2_arc || BR2_arm || BR2_armeb || aarch64 || BR2_i386 || \
+ 		BR2_microblazeel || BR2_microblazebe || BR2_mips || BR2_mipsel || \
+ 		BR2_mips64 || BR2_mips64el || BR2_nios2 || BR2_powerpc || \
+ 		BR2_powerpc64 || BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || \
+-		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64
++		BR2_sh4a || BR2_sh4aeb || BR2_x86_64
+ 
+ config BR2_PACKAGE_QT_SCRIPT
+ 	bool "Script Module"
+-- 
+2.4.10
