@@ -1,75 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 24 Feb 2016 00:55:41 +0100
-Subject: [Buildroot] [PATCH] linux: don't add to toolchain dependency
-In-Reply-To: <20160222131901.3baa956e@free-electrons.com>
-References: <1456141244-624-1-git-send-email-gustavo@zacarias.com.ar>
- <20160222131901.3baa956e@free-electrons.com>
-Message-ID: <56CCF17D.2030508@mind.be>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 23 Feb 2016 19:34:08 -0800
+Subject: [Buildroot] user question about ubi nand
+Message-ID: <CAJJ6jxu+5mSnNq6hmnCS1nB5cx8qmyip5qoRONjtw1WHUqox5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/22/16 13:19, Thomas Petazzoni wrote:
-> Gustavo,
-> 
-> Cc'ing Yann.
-> 
-> On Mon, 22 Feb 2016 08:40:44 -0300, Gustavo Zacarias wrote:
-> 
->> diff --git a/linux/linux.mk b/linux/linux.mk
->> index 7e20255..dc1c79e 100644
->> --- a/linux/linux.mk
->> +++ b/linux/linux.mk
->> @@ -8,6 +8,9 @@ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
->>  LINUX_LICENSE = GPLv2
->>  LINUX_LICENSE_FILES = COPYING
->>  
->> +# Used when BR2_KERNEL_HEADERS_AS_KERNEL=y
->> +LINUX_ADD_TOOLCHAIN_DEPENDENCY = NO
-> 
-> This is annoying, because we *do* need the toolchain dependency to
-> build the Linux kernel. I think we would rather need to do:
-> 
-> LINUX_HEADERS_PATCH_DEPENDENCIES = linux-patch
+Ubi seems very well supported in buildroot and linux. The problem is
+figuring out how to use it.
 
- Well, _PATCH_DEPENDENCIES already does that:
+I have created two nand partitions, one rootfs and one data. I would
+like the rootfs to be readonly and data to be r/w. After tons of
+searches I have configured the rootfs and stored the buildroot built
+image in it.
 
-# Order-only dependency
-$$($(2)_TARGET_PATCH):  | $$(patsubst %,%-patch,$$($(2)_FINAL_PATCH_DEPENDENCIES))
+My question is how do I move r/w areas from rootfs into the r/w
+partition. Examples are /etc/ files /run files which start as /var/run
+and finally application files like mysql databases which are in
+/usr/share/. I assume the post scripts can be used, but I cannot find
+examples. In post scripts how do I set permissions/user/group fields.
+How do I link to a mounted partition.
 
+http://free-electrons.com/blog/creating-flashing-ubi-ubifs-images/ has
+lots of info. But say I want a custom ubi.cfg file, where do I put it
+or how do i menuconfig it? Say I want 2 partitions, one ro and one rw
+I assume I need a special cfg file. Ubi asks for lots of magic
+numbers, how do I get them - such as erasesize, subpagesize, offsets
+etc? I assume defaults are good, but how can I know. Typical Linux
+stuff, however these thing are knowable, how do I find it out (via web
+searches etc). How do I do set the config file in BR2_EXTERNAL?
 
- The problem identified by Gustavo doesn't happen in a normal build, it's only
-when you do make source. That's because for source we use:
+All info I find is schizophrenic. Net searches say how to do things
+like this in uboot and linux. Sometimes in the same doc paragraph. It
+is never clear which instruction matches which of uboot and linux. For
+buildroot the best is stuff mainly done in the build, but something
+must be done on the target. What is the recommended procedure for mass
+building systems?
 
-$(1)-all-source:        $(1)-source
-$(1)-all-source:        $$(foreach
-p,$$($(2)_FINAL_ALL_DEPENDENCIES),$$(p)-all-source)
+What if the nand and rootfs is bigger than ram? How do you update it in uboot?
 
-
- I have to think a bit more about possible solutions. But the good thing is that
-it's less important: a normal build will still work without warning, and make
-source will also still work and have all the packages, it just has a warning
-that is not so nice. So if it doesn't get fixed for 2016.02 it's no disaster.
-
-
- Regards,
- Arnout
-
-> 
-> Though I'm not sure how great it is to have a non-package listed in the
-> <pkg>_DEPENDENCIES variable. Surely it might break graph-depends and
-> other similar tooling.
-> 
-> Thomas
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Steve
