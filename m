@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 17:36:39 +0100
-Subject: [Buildroot] [PATCH 1/2] libssh: security bump to version 0.7.3
-In-Reply-To: <1456315304-25601-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 24 Feb 2016 09:01:43 -0300")
+Date: Wed, 24 Feb 2016 17:36:46 +0100
+Subject: [Buildroot] [PATCH 2/2] libssh2: security bump to version 1.7.0
+In-Reply-To: <1456315304-25601-2-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 24 Feb 2016 09:01:44 -0300")
 References: <1456315304-25601-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <877fhu3w14.fsf@dell.be.48ers.dk>
+ <1456315304-25601-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8737si3w0x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +15,7 @@ To: buildroot@busybox.net
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
  > Fixes:
- > CVE-2016-0739 - Bits/bytes confusion resulting in truncated
- > Difffie-Hellman secret length.
+ > CVE-2016-0787 - diffie_hellman_sha256: convert bytes to bits.
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
