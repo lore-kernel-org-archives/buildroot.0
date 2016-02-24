@@ -1,55 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 21:51:51 +0100
-Subject: [Buildroot] [PATCH 6/9] olimex_a20_olinuxino_micro: update to
-	use genimage
-In-Reply-To: <1456187073-2876-7-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Tue, 23 Feb 2016 01:24:30 +0100")
-References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
- <1456187073-2876-7-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87fuwh25nc.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Feb 2016 21:40:33 +0100
+Subject: [Buildroot] [git commit branch/next] olimex/a20_olinuxino: update
+	readme.txt with lime2 info
+Message-ID: <20160224205300.07F76818F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=937568ea4db373f7acc649a3668386809245ea36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > ---
- >  board/olimex/a20_olinuxino/genimage.cfg      | 16 ++++++++++++++++
- >  board/olimex/a20_olinuxino/post-image.sh     | 16 ++++++++++++++++
- >  board/olimex/a20_olinuxino/readme.txt        | 17 +++++++++++++++--
- >  configs/olimex_a20_olinuxino_micro_defconfig |  2 ++
- >  4 files changed, 49 insertions(+), 2 deletions(-)
- >  create mode 100644 board/olimex/a20_olinuxino/genimage.cfg
- >  create mode 100755 board/olimex/a20_olinuxino/post-image.sh
+[Peter: fix typo, s/AllWinner/Allwinner/]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/olimex/a20_olinuxino/readme.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- > diff --git a/board/olimex/a20_olinuxino/genimage.cfg b/board/olimex/a20_olinuxino/genimage.cfg
- > new file mode 100644
- > index 000000000000..8ea24ccab8f3
- > --- /dev/null
- > +++ b/board/olimex/a20_olinuxino/genimage.cfg
- > @@ -0,0 +1,16 @@
- > +image sdcard.img {
- > +	hdimage {
- > +	}
- > +
- > +	partition u-boot {
- > +		in-partition-table = "no"
- > +		image = "u-boot-sunxi-with-spl.bin"
- > +		offset = 8192
- > +	}
- > +
- > +	partition rootfs {
- > +		partition-type = 0x83
- > +		image = "rootfs.ext4"
- > +		size = 512M
- > +	}
- > +}
-
-What about the dtb file? The other Allwinner based boards store this in
-a first vfat partition.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 7998aa1..485bf56 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -3,12 +3,13 @@ A20-OLinuXino-LIME and A20-OLinuXino-MICRO
+ Intro
+ =====
+ 
+-These are open hardware boards, both based an the AllWinners A20 SoC.
++These are open hardware boards, all based on the Allwinner A20 SoC.
+ 
+ for more details about the boards see the following pages:
+  - https://www.olimex.com/Products/OLinuXino/open-source-hardware
+  - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
+  - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
++ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME2/
+ 
+ The following defconfigs are available:
+  - olimex_a20_olinuxino_micro_defconfig
