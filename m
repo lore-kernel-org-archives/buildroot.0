@@ -1,43 +1,53 @@
 From: Eric Limpens <limpens@gmail.com>
-Date: Wed, 24 Feb 2016 21:55:42 +0100
-Subject: [Buildroot] [PATCH 1/1] Makefile: change order of libraries to fix
-	linking issue
-Message-ID: <1456347342-3521-1-git-send-email-limpens@gmail.com>
+Date: Wed, 24 Feb 2016 21:59:24 +0100
+Subject: [Buildroot] Analysis of build results for 2016-02-21
+In-Reply-To: <56CE1652.90901@mind.be>
+References: <20160222073022.D29851025E8@stock.ovh.net>
+ <20160222150539.0301105e@free-electrons.com>
+ <CABGWzsS4nDC=Mq9mmQQMuxEa3bhkmHnExjQ93Z9v_5-zdAEPBQ@mail.gmail.com>
+ <56CE1652.90901@mind.be>
+Message-ID: <CABGWzsQGABWcWTmSuTKwqK2jy+QVzp7JFjOdkv++Z+ywp4MHeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building a static variant, link errors occur. Changing the order
-of libsndfile and libm fixes this error
+Thanks Arnout,
 
-Signed-off-by: Eric Limpens <limpens@gmail.com>
----
- package/pifmrds/0003-Makefile-fix-static-link-libm.patch | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 package/pifmrds/0003-Makefile-fix-static-link-libm.patch
+My email configuration for git was messed up. I've resent the patch to the
+list.
 
-diff --git a/package/pifmrds/0003-Makefile-fix-static-link-libm.patch b/package/pifmrds/0003-Makefile-fix-static-link-libm.patch
-new file mode 100644
-index 0000000..eb9cdcf
---- /dev/null
-+++ b/package/pifmrds/0003-Makefile-fix-static-link-libm.patch
-@@ -0,0 +1,15 @@
-+--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-24 10:23:41.455695546 +0100
-++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-24 10:25:07.003876714 +0100
-+@@ -1,10 +1,10 @@
-+ CC = gcc
-+ 
-+ app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
-+-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
-++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
-+ 
-+ rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
-+-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
-++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
-+ 
-+ rds.o: rds.c waveforms.h
-+ 	$(CC) $(CFLAGS) rds.c
--- 
-1.9.1
+Sincerely, Eric.
+
+
+
+On Wed, Feb 24, 2016 at 9:45 PM, Arnout Vandecappelle <arnout@mind.be>
+wrote:
+
+> On 02/24/16 12:08, Eric Limpens wrote:
+> > I've just submitted a patch to fix the issue for pifmrds. I don't fully
+> > understand why, but changing the order of 2 libraries fixed the problem.
+> >
+> > Tested the patch with a non-static build and no issues occurred during
+> building.
+> >
+>
+>  That patch doesn't appear on the list or patchwork. Can you check if it
+> got
+> sent correctly?
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160224/c1f22415/attachment.html>
