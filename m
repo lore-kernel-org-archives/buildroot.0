@@ -1,42 +1,35 @@
 From: Patrick Doyle <wpdster@gmail.com>
-Date: Wed, 24 Feb 2016 14:50:42 -0500
-Subject: [Buildroot] Why not perform a shallow clone?
-In-Reply-To: <CAHXCMMKHZ0usTWkgfJUbM6P4zLV2ZkAxQB9H9KrTVPar=fMEuA@mail.gmail.com>
-References: <CAF_dkJA0tBn_6x-sBwqF6Hb4x4+Pp3vM+e+rndm24kJe_y6pVg@mail.gmail.com>
- <CAHXCMMKHZ0usTWkgfJUbM6P4zLV2ZkAxQB9H9KrTVPar=fMEuA@mail.gmail.com>
-Message-ID: <CAF_dkJCZ3SzR3u7RASj-9ABxd8D70p6V1BGdVKZNnPKtFay0Gg@mail.gmail.com>
+Date: Wed, 24 Feb 2016 14:56:18 -0500
+Subject: [Buildroot] Confusion about location of custom Linux patches
+Message-ID: <CAF_dkJA2VYCaAMTY=D3zsdV6YcAa1FS2w+8A2ygqrCuqQFWfCQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Feb 24, 2016 at 2:41 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi,
->
-> On Wed, Feb 24, 2016 at 8:30 PM, Patrick Doyle <wpdster@gmail.com> wrote:
->> So I'm sitting here watching my buildroot make do a complete clone of
->> the Linux kernel, where I have told it that I want a specific sha1
->> commit and I started wondering...
->>
->> Why not do a shallow clone?
-> It tries, but cannot (see
-> https://git.buildroot.org/buildroot/tree/support/download/git#n34)
->
-Oh bummer...
+According to the documentation in section 9.8:
 
-I wonder why git-clone -b doesn't accept a sha1sum.  Oh well.
+"The exception to BR2_GLOBAL_PATCH_DIR being the preferred method for
+specifying custom patches is BR2_LINUX_KERNEL_PATCH."
 
+But later, in section 9.10, it says:
 
-So how do you folks handle pinning a revision of, for example, the
-kernel?  I naively assumed that I would specify
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL and
-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION, which appears to do what I want,
-but it seems wasteful to have to clone the whole Linux repo just to
-get that one clone.
+"Specifically for the Linux kernel, there also exists the option
+BR2_LINUX_KERNEL_PATCH with as main advantage that it can also
+download patches from a URL. If you do not need this,
+BR2_GLOBAL_PATCH_DIR is preferred."
 
-I suppose I could tell menuconfig that the (Atmel) kernel I am cloning
-is available on github somehow and have the magic "fetch a sha1sum
-from github" work.  I'll go think about that for a bit.
+I tried deciding that BR2_GLOBAL_PATCH_DIR was preferred, but now I'm
+not sure how to name the subdirectory inside BR2_GLOBAL_PATCH_DIR.  I
+have tried $BR2_GLOBAL_PATCH_DIR/kernel and
+$BR2_GLOBAL_PATCH_DIR/linux, and neither has seemed to work.
+
+So now I'm just gonna ask...
+
+I am building outside the buildroot tree in a custom tree.  I have
+kernel patches that I need to apply (until such time as they get
+folded into the kernel).  Where is the best place to place them and
+how should that directory be named?
 
 --wpd
