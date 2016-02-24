@@ -1,34 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 24 Feb 2016 15:47:33 +0100
-Subject: [Buildroot] [PATCH v2] docs/manual: add "python-package CFFI
- backend" section
-In-Reply-To: <1456324570-1463-1-git-send-email-yegorslists@googlemail.com>
-References: <1456324570-1463-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160224154733.043ffae6@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 16:41:01 +0100
+Subject: [Buildroot] "The owner of buildroot.uclibc.org has configured
+	their website improperly."
+In-Reply-To: <87bn776sek.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Tue, 23 Feb 2016 22:14:27 +0100")
+References: <CAF_dkJCBdH-p5Oa6TcKobVBR-ovT84jB64dE4mhy8ZaHV9UATQ@mail.gmail.com>
+ <87k2lv6u8z.fsf@dell.be.48ers.dk> <56CCC524.8020709@mind.be>
+ <87bn776sek.fsf@dell.be.48ers.dk>
+Message-ID: <87io1e3ylu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Wed, 24 Feb 2016 15:36:10 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-Hum, I already applied the v1 of your patch, with some minor changes.
-Did I forget to send the e-mail notification?
+ > Even if change it so https://buildroot.uclibc.org serves a redirect we
+ > still need to respond with a valid certificate, so I'll try to fix that
+ > with letsencrypt.
 
-See:
+This is now fixed.
 
-  https://git.busybox.net/buildroot/commit/?h=next&id=0e5c9c2b35c71a3d3180c5829975dba5222b30c9
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
