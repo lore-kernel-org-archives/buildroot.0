@@ -1,30 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 17:37:27 +0100
-Subject: [Buildroot] [PATCH] squid: security bump to version 3.5.15
-In-Reply-To: <56CDB77E.2040604@zacarias.com.ar> (Gustavo Zacarias's message of
- "Wed, 24 Feb 2016 11:00:30 -0300")
-References: <1456317803-2254-1-git-send-email-gustavo@zacarias.com.ar>
- <CANCHnQrP-ECr1avqaYbz+5uupdt9xEeoQ7-Vz-V7L3CiUShMMg@mail.gmail.com>
- <56CDB77E.2040604@zacarias.com.ar>
-Message-ID: <87y4aa2hfc.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Feb 2016 17:36:23 +0100
+Subject: [Buildroot] [git commit] libssh: security bump to version 0.7.3
+Message-ID: <20160224163805.1B22C80420@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bc86ea3fee44a915b8e29c9a966ebcd8ca46ec7d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On 24/02/16 10:57, Jeroen Roovers wrote:
- >> The announcement at
- >> http://www.squid-cache.org/Advisories/SQUID-2016_2.txt disappeared and
- >> http://www.squid-cache.org/Advisories/ no longer lists it (Google's
- >> cache does) so I guess another release is coming pretty soon.
+Fixes:
+CVE-2016-0739 - Bits/bytes confusion resulting in truncated
+Difffie-Hellman secret length.
 
- > Guess we'll have to wait for a follow-on on
- > http://www.openwall.com/lists/oss-security/2016/02/24/12
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libssh/libssh.hash | 6 +++---
+ package/libssh/libssh.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Ok, I'll wait with applying this then.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 49bf6c9..1eef804 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,4 +1,4 @@
+ # from https://red.libssh.org/projects/libssh/files/
+-md5	5d7d468937649a6dfc6186edfff083db	libssh-0.7.2.tar.xz
+-# Locally calculated after checking signature on uncompressed libssh-0.7.2.tar
+-sha256	a32c45b9674141cab4bde84ded7d53e931076c6b0f10b8fd627f3584faebae62  libssh-0.7.2.tar.xz
++md5	05465da8004f3258db946346213209de	libssh-0.7.3.tar.xz
++# Locally calculated after checking signature on uncompressed libssh-0.7.3.tar
++sha256	26ef46be555da21112c01e4b9f5e3abba9194485c8822ab55ba3d6496222af98  libssh-0.7.3.tar.xz
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index d425ff0..29bbf4e 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBSSH_VERSION = 0.7.2
++LIBSSH_VERSION = 0.7.3
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+-LIBSSH_SITE = https://red.libssh.org/attachments/download/177
++LIBSSH_SITE = https://red.libssh.org/attachments/download/195
+ LIBSSH_LICENSE = LGPLv2.1
+ LIBSSH_LICENSE_FILES = COPYING
+ LIBSSH_INSTALL_STAGING = YES
