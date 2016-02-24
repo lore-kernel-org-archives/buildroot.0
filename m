@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 21:42:13 +0100
-Subject: [Buildroot] [PATCH 2/9] olimex_a20_olinuxino_micro: bump linux
-	to 4.4.2
-In-Reply-To: <1456187073-2876-3-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Tue, 23 Feb 2016 01:24:26 +0100")
+Date: Wed, 24 Feb 2016 21:43:16 +0100
+Subject: [Buildroot] [PATCH 3/9] olimex_a20_olinuxino_micro: bump u-boot
+	to 2016.01
+In-Reply-To: <1456187073-2876-4-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Tue, 23 Feb 2016 01:24:27 +0100")
 References: <1456187073-2876-1-git-send-email-luca@lucaceresoli.net>
- <1456187073-2876-3-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87wppt263e.fsf@dell.be.48ers.dk>
+ <1456187073-2876-4-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87si0h261n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
