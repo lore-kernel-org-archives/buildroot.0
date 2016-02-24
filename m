@@ -1,95 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:52:35 +0100
-Subject: [Buildroot] [git commit] package/kodi: Remove dependency for
-	BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 from sub packages
-Message-ID: <20160302202800.7C7C280203@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 23:30:42 +0100
+Subject: [Buildroot] [git commit] debianutils: bump to version 4.7
+Message-ID: <20160302202757.6B8BC7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1b1762d18f2f4a915acf614b75f563003b280e7
+commit: https://git.buildroot.net/buildroot/commit/?id=eec7853b253ff02b9ff44ec972ba165e5b56cd22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kodi itself already depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, there is
-no need to duplicate this as reverse dependencies in sub options which
-depend on Kodi.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi-pvr-argustv/Config.in | 4 ----
- package/kodi-pvr-filmon/Config.in  | 4 ----
- package/kodi-pvr-pctv/Config.in    | 4 ----
- package/kodi-pvr-stalker/Config.in | 4 ----
- 4 files changed, 16 deletions(-)
+ package/debianutils/debianutils.hash | 4 ++--
+ package/debianutils/debianutils.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
-index 247d83c..216000a 100644
---- a/package/kodi-pvr-argustv/Config.in
-+++ b/package/kodi-pvr-argustv/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_ARGUSTV
- 	bool "kodi-pvr-argustv"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Kodi's ARGUS TV client addon
+diff --git a/package/debianutils/debianutils.hash b/package/debianutils/debianutils.hash
+index 43f1225..4d1b574 100644
+--- a/package/debianutils/debianutils.hash
++++ b/package/debianutils/debianutils.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.5.1.dsc
+-sha256	a531c23e0105fe01cfa928457a8343a1e947e2621b3cd4d05f4e9656020c63b7	debianutils_4.5.1.tar.xz
++# From http://ftp.de.debian.org/debian/pool/main/d/debianutils/debianutils_4.7.dsc
++sha256	a269cacd40f52f2fa5d5636357714a49e8538459c16d77772efaa23711fe53d9	debianutils_4.7.tar.xz
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+index 5c78504..17f0240 100644
+--- a/package/debianutils/debianutils.mk
++++ b/package/debianutils/debianutils.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- 	  https://github.com/kodi-pvr/pvr.argustv
--
--comment "kodi-pvr-argustv needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
-index 3d87ec8..0b662df 100644
---- a/package/kodi-pvr-filmon/Config.in
-+++ b/package/kodi-pvr-filmon/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_FILMON
- 	bool "kodi-pvr-filmon"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Filmon PVR client addon for Kodi
- 
- 	  https://github.com/kodi-pvr/pvr.filmon
--
--comment "kodi-pvr-filmon needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 1bef551..255cd4a 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  PCTV PVR client addon for Kodi
- 
- 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
--
--comment "kodi-pvr-pctv needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
-index 26a8c3f..3ec530c 100644
---- a/package/kodi-pvr-stalker/Config.in
-+++ b/package/kodi-pvr-stalker/Config.in
-@@ -1,12 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_STALKER
- 	bool "kodi-pvr-stalker"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
- 	select BR2_PACKAGE_JSONCPP
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  A PVR Client that connects Kodi to Stalker Middleware
- 
- 	  https://github.com/kodi-pvr/pvr.stalker
--
--comment "kodi-pvr-stalker needs a toolchain w/ gcc >= 4.7"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+-DEBIANUTILS_VERSION = 4.5.1
++DEBIANUTILS_VERSION = 4.7
+ DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+-DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20150526T034723Z/pool/main/d/debianutils
++DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20160126T220153Z/pool/main/d/debianutils
+ DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+ # Make sure we override the busybox tools, such as which
+ DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
