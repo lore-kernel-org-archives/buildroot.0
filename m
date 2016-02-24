@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:40:13 +0100
-Subject: [Buildroot] [git commit] package/libplatform: bump version, add hash
-Message-ID: <20160302202800.1431880203@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Feb 2016 21:40:33 +0100
+Subject: [Buildroot] [git commit] olimex/a20_olinuxino: update readme.txt
+	with lime2 info
+Message-ID: <20160302202757.22A927FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89a8178ba5d502b4b049adf87935d26770db99ed
+commit: https://git.buildroot.net/buildroot/commit/?id=937568ea4db373f7acc649a3668386809245ea36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Peter: fix typo, s/AllWinner/Allwinner/]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libplatform/libplatform.hash | 2 ++
- package/libplatform/libplatform.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ board/olimex/a20_olinuxino/readme.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
-new file mode 100644
-index 0000000..8975dfd
---- /dev/null
-+++ b/package/libplatform/libplatform.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  3603ead8b16a48cb35b1e6dea330a693f10552b1a6ea036c5db9ec248cd8baf5  libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38.tar.gz
-diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
-index 4eb934f..6d54915 100644
---- a/package/libplatform/libplatform.mk
-+++ b/package/libplatform/libplatform.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/olimex/a20_olinuxino/readme.txt b/board/olimex/a20_olinuxino/readme.txt
+index 7998aa1..485bf56 100644
+--- a/board/olimex/a20_olinuxino/readme.txt
++++ b/board/olimex/a20_olinuxino/readme.txt
+@@ -3,12 +3,13 @@ A20-OLinuXino-LIME and A20-OLinuXino-MICRO
+ Intro
+ =====
  
--LIBPLATFORM_VERSION = 1.0.10
-+LIBPLATFORM_VERSION = feafe68e3e0b02c3261aefb3d711863ef6fadd38
- LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
- LIBPLATFORM_LICENSE = GPLv2+, PHP license v3.01
- LIBPLATFORM_LICENSE_FILES = src/os.h src/util/fstrcmp.c
+-These are open hardware boards, both based an the AllWinners A20 SoC.
++These are open hardware boards, all based on the Allwinner A20 SoC.
+ 
+ for more details about the boards see the following pages:
+  - https://www.olimex.com/Products/OLinuXino/open-source-hardware
+  - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-MICRO/
+  - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME/
++ - https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXino-LIME2/
+ 
+ The following defconfigs are available:
+  - olimex_a20_olinuxino_micro_defconfig
