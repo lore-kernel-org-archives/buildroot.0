@@ -1,9 +1,9 @@
 From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Wed, 24 Feb 2016 11:26:31 -0300
-Subject: [Buildroot] [PATCH v2 3/4] libcap: enable extended attribute support
+Date: Wed, 24 Feb 2016 11:26:32 -0300
+Subject: [Buildroot] [PATCH v2 4/4] fakeroot: enable capability support
 In-Reply-To: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
 References: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <1456323992-27845-4-git-send-email-gustavo.zacarias@free-electrons.com>
+Message-ID: <1456323992-27845-5-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +12,32 @@ To: buildroot@busybox.net
 
 From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-This is required for capability support in files, via fakeroot.
+Enable file capability support, this still requires fakeroot script
+(makedev) support.
 
 Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 ---
- package/libcap/libcap.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/fakeroot/fakeroot.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 54844f8..252c4bb 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -20,8 +20,7 @@ else
- LIBCAP_HAVE_LIBATTR = no
- endif
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 168cd13..06f1a73 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -7,13 +7,7 @@
+ FAKEROOT_VERSION = 1.20.2
+ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
+ FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141005T221953Z/pool/main/f/fakeroot
+-# Force capabilities detection off
+-# For now these are process capabilities (faked) rather than file
+-# so they're of no real use
+-HOST_FAKEROOT_CONF_ENV = \
+-	ac_cv_header_sys_capability_h=no \
+-	ac_cv_func_capset=no
+-
++FAKEROOT_DEPENDENCIES = host-libcap
+ FAKEROOT_LICENSE = GPLv3+
+ FAKEROOT_LICENSE_FILES = COPYING
  
--# we don't have host-attr
--HOST_LIBCAP_DEPENDENCIES =
-+HOST_LIBCAP_DEPENDENCIES = host-attr
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBCAP_MAKE_TARGET = libcap.a
-@@ -67,12 +66,13 @@ define LIBCAP_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_LIBCAP_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
-+		LIBATTR=yes RAISE_SETFCAP=no
- endef
- 
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
--		prefix=/usr lib=lib install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
-+		LIBATTR=yes RAISE_SETFCAP=no prefix=/usr lib=lib install
- endef
- 
- $(eval $(generic-package))
 -- 
 2.4.10
