@@ -1,58 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:53:22 +0100
-Subject: [Buildroot] [git commit] package/systemd: add optional support for
-	binfmt
-Message-ID: <20160302202759.9DAA77F98B@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 22:24:20 +0100
+Subject: [Buildroot] [git commit] attr: cleanup pointless indentation
+Message-ID: <20160302202758.162117FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d8485bc7531b04b05c26878b1e961cd9df62512
+commit: https://git.buildroot.net/buildroot/commit/?id=a14a68057644555ddefb4ae8e9923397377daf5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-[Thomas: rewrap Config.in help text.]
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/Config.in  | 8 ++++++++
- package/systemd/systemd.mk | 6 ++++++
- 2 files changed, 14 insertions(+)
+ package/attr/attr.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index e9a7883..6289252 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -84,6 +84,14 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index e9963ba..3db66cb 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -15,15 +15,15 @@ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+ # around their deficiencies by passing installation paths.
+-ATTR_INSTALL_STAGING_OPTS = 			\
+-	prefix=$(STAGING_DIR)/usr 		\
+-	exec_prefix=$(STAGING_DIR)/usr 		\
+-	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib 	\
++ATTR_INSTALL_STAGING_OPTS = \
++	prefix=$(STAGING_DIR)/usr \
++	exec_prefix=$(STAGING_DIR)/usr \
++	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
+ 	install-dev install-lib
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+-ATTR_INSTALL_TARGET_OPTS = 			\
+-	prefix=$(TARGET_DIR)/usr 		\
+-	exec_prefix=$(TARGET_DIR)/usr 		\
++ATTR_INSTALL_TARGET_OPTS = \
++	prefix=$(TARGET_DIR)/usr \
++	exec_prefix=$(TARGET_DIR)/usr \
+ 	install install-lib
  
-+config BR2_PACKAGE_SYSTEMD_BINFMT
-+	bool "enable binfmt tool"
-+	help
-+	  systemd-binfmt is an early boot service that registers
-+	  additional binary formats for executables in the kernel.
-+
-+	  http://www.freedesktop.org/software/systemd/man/systemd-binfmt.service.html
-+
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 87fdbd7..5f7941c 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -131,6 +131,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-microhttpd
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
-+SYSTEMD_CONF_OPTS += --enable-binfmt
-+else
-+SYSTEMD_CONF_OPTS += --disable-binfmt
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += --enable-networkd
- define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ HOST_ATTR_INSTALL_OPTS = \
