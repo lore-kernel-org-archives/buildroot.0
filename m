@@ -1,61 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:36:29 +0100
-Subject: [Buildroot] [git commit branch/next] package/iputils: removed
-	dependency on openssl
-Message-ID: <20160225204454.4670C818B3@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 21:36:49 +0100
+Subject: [Buildroot] [git commit branch/next] package/iputils: add support
+	for libgcrypt
+Message-ID: <20160225204454.662067FD10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae103ea242af87dbde787837e672f471b10929c
+commit: https://git.buildroot.net/buildroot/commit/?id=ca99ed18025d3ad42575cb23a8c284a8d64abef3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-iputils does not have to be built with openssl so remove selecting
-BR2_PACKAGE_OPENSSL and make the dependency optional
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iputils/Config.in  | 1 -
- package/iputils/iputils.mk | 8 +++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/iputils/iputils.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index 40580d2..c83e414 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_IPUTILS
- 	bool "iputils"
--	select BR2_PACKAGE_OPENSSL
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  This package is set of small useful utilities for Linux networking.
 diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 6392dec..953f1f5 100644
+index efedf1f..92e2bc9 100644
 --- a/package/iputils/iputils.mk
 +++ b/package/iputils/iputils.mk
-@@ -16,7 +16,6 @@ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
--IPUTILS_DEPENDENCIES = openssl
- 
- # Build after busybox so target ends up with this package's full
- # versions of the applications instead of busybox applets.
-@@ -34,6 +33,13 @@ else
+@@ -33,6 +33,13 @@ else
  IPUTILS_MAKE_OPTS += USE_CAP=no
  endif
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
-+IPUTILS_DEPENDENCIES += openssl
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++IPUTILS_MAKE_OPTS += USE_GCRYPT=yes
++IPUTILS_DEPENDENCIES += libgcrypt
 +else
-+IPUTILS_MAKE_OPTS += USE_CRYPTO=no
++IPUTILS_MAKE_OPTS += USE_GCRYPT=no
 +endif
 +
- define IPUTILS_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
- endef
+ ifeq ($(BR2_PACKAGE_NETTLE),y)
+ IPUTILS_MAKE_OPTS += USE_NETTLE=yes
+ IPUTILS_DEPENDENCIES += nettle
