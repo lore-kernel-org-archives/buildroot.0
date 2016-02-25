@@ -1,10 +1,10 @@
 From: Gabe Evans <gabe@hashrabbit.co>
-Date: Thu, 25 Feb 2016 21:55:22 +0000
-Subject: [Buildroot] [PATCH 13/32] package/systemd: add optional support for
-	quotacheck
+Date: Thu, 25 Feb 2016 21:55:23 +0000
+Subject: [Buildroot] [PATCH 14/32] package/systemd: add optional support for
+	tmpfiles
 In-Reply-To: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
-Message-ID: <1456437341-19025-14-git-send-email-gabe@hashrabbit.co>
+Message-ID: <1456437341-19025-15-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,37 +18,37 @@ Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
  2 files changed, 15 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index c111d46..2ebd825 100644
+index 2ebd825..2f89b0e 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -109,6 +109,15 @@ config BR2_PACKAGE_SYSTEMD_BOOTCHART
+@@ -118,6 +118,15 @@ config BR2_PACKAGE_SYSTEMD_QUOTACHECK
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-bootchart.html
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-quotacheck.service.html
  
-+config BR2_PACKAGE_SYSTEMD_QUOTACHECK
-+	bool "enable quotacheck tools"
++config BR2_PACKAGE_SYSTEMD_TMPFILES
++	bool "enable tmpfiles support"
 +	help
-+	  systemd-quotacheck is a service responsible for file system quota checks. It
-+	  is run once at boot after all necessary file systems are mounted. It is
-+	  pulled in only if at least one file system has quotas enabled.
++	  systemd-tmpfiles creates, deletes, and cleans up volatile and temporary
++	  files and directories, based on the configuration file format and location
++	  specified in tmpfiles.d(5).
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-quotacheck.service.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-tmpfiles.html
 +
  config BR2_PACKAGE_SYSTEMD_NETWORKD
  	bool "enable network manager"
  	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 6627177..14c180a 100644
+index 14c180a..aebdbbc 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -145,6 +145,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-bootchart
+@@ -151,6 +151,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-quotacheck
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_QUOTACHECK),y)
-+SYSTEMD_CONF_OPTS += --enable-quotacheck
++ifeq ($(BR2_PACKAGE_SYSTEMD_TMPFILES),y)
++SYSTEMD_CONF_OPTS += --enable-tmpfiles
 +else
-+SYSTEMD_CONF_OPTS += --disable-quotacheck
++SYSTEMD_CONF_OPTS += --disable-tmpfiles
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
