@@ -1,9 +1,9 @@
 From: Gabe Evans <gabe@hashrabbit.co>
-Date: Thu, 25 Feb 2016 21:55:13 +0000
-Subject: [Buildroot] [PATCH 04/32] package/systemd: add --enable/disable-lz4
+Date: Thu, 25 Feb 2016 21:55:14 +0000
+Subject: [Buildroot] [PATCH 05/32] package/systemd: add --enable/disable-zlib
 In-Reply-To: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
-Message-ID: <1456437341-19025-5-git-send-email-gabe@hashrabbit.co>
+Message-ID: <1456437341-19025-6-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 ---
- package/systemd/Config.in  | 3 ++-
  package/systemd/systemd.mk | 7 +++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 1972b1d..9de6e11 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -56,7 +56,8 @@ config BR2_PACKAGE_SYSTEMD
- 	  The selection of other packages will enable some features:
- 
- 	  - acl package will add support for multi-seat.
--	  - xz package will add compression support in journal and coredump.
-+	  - xz and/or lz4 packages will add compression support in journal
-+	    and coredump.
- 	  - libgcrypt package will add support for journal sealing and resolved
- 	    DNSSEC verification.
- 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index ac211c8..9f15f24 100644
+index 9f15f24..29c764e 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -83,6 +83,13 @@ else
- SYSTEMD_CONF_OPTS += --disable-bzip2
+@@ -97,6 +97,13 @@ else
+ SYSTEMD_CONF_OPTS += --disable-xz
  endif
  
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+SYSTEMD_DEPENDENCIES += lz4
-+SYSTEMD_CONF_OPTS += --enable-lz4
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++SYSTEMD_DEPENDENCIES += zlib
++SYSTEMD_CONF_OPTS += --enable-zlib
 +else
-+SYSTEMD_CONF_OPTS += --disable-lz4
++SYSTEMD_CONF_OPTS += --disable-zlib
 +endif
 +
- ifeq ($(BR2_PACKAGE_XZ),y)
- SYSTEMD_DEPENDENCIES += xz
- SYSTEMD_CONF_OPTS += --enable-xz
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ SYSTEMD_DEPENDENCIES += libgcrypt
+ SYSTEMD_CONF_OPTS += \
 -- 
 1.9.1
