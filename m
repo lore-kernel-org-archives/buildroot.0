@@ -1,39 +1,59 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 25 Feb 2016 17:13:58 +0100
-Subject: [Buildroot] wget download: 'scheme missing' results in empty
- output file
-In-Reply-To: <20160225170758.1f444549@free-electrons.com>
-References: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
- <20160225170758.1f444549@free-electrons.com>
-Message-ID: <CAAXf6LXz_WcAAsk+kts3cZ4=v1Pw1rB=nLf9yKr9FotCZRR8sg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 17:14:33 +0100
+Subject: [Buildroot] How to include lsblk from linux-utils?
+In-Reply-To: <05f401d16fdf$4ddcc840$e99658c0$@chordia.co.uk>
+References: <05f401d16fdf$4ddcc840$e99658c0$@chordia.co.uk>
+Message-ID: <20160225171433.7e200dfc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 25, 2016 at 5:07 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Thomas,
->
-> On Thu, 25 Feb 2016 14:19:56 +0100, Thomas De Schampheleire wrote:
->
->> When a package does not (by error) define FOO_SITE, and the source
->> archive is not already present, the wget download helper will be
->> invoked with as URL /foo-xxx.tar.gz. wget reports 'Scheme missing' and
->> bails out, but _returns with a successful error code (0)_.
->
-> Shouldn't we simply be checking in the package infrastructure that
-> FOO_SITE is not empty?
->
+Hello Jerry,
 
-When a PRIMARY_MIRROR is set and there is a 'guarantee' or expectation
-that each file is present on that mirror, FOO_SITE is not really used
-and could be empty for proprietary packages, since there is no actual
-proper value. Sure one could fill in a bogus value, but it's not very
-nice.
+On Thu, 25 Feb 2016 15:15:04 -0000, jerry at chordia.co.uk wrote:
+> Using BR 2016-02 how do I get lsblk installed? 
+> 
+> The source package is present but the utilities are not being built. I've
+> got System Tools >> install utilities selected but no lsblk is visible.
 
-Also, for packages where the source is included with buildroot, like
-makedevs, FOO_SITE is empty too.
+You need to add a patch like the below to be able to select lsblk in
+your build:
 
-/Thomas
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 3f9a7db..d4f9a3d 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -139,6 +139,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+        help
+          Set up and control loop devices
+ 
++config BR2_PACKAGE_UTIL_LINUX_LSBLK
++       bool "lsblk"
++       help
++         List block devices.
++
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+        bool "mesg"
+        help
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 7342174..141dffd 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -85,6 +85,7 @@ UTIL_LINUX_CONF_OPTS += \
+        $(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+        $(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
+        $(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
++       $(if $(BR2_PACKAGE_UTIL_LINUX_LSBLK),--enable-lsblk,--disable-lsblk) \
+        $(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+        $(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
+        $(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
