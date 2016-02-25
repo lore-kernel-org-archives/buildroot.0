@@ -1,65 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:34:34 +0100
-Subject: [Buildroot] [PATCH v2 0/4] Add file capability/xattr support
-In-Reply-To: <56CF7247.2060500@free-electrons.com>
-References: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <20160225215003.5886d69d@free-electrons.com>
- <56CF6B75.10604@free-electrons.com>
- <20160225221004.26bb337b@free-electrons.com>
- <56CF7247.2060500@free-electrons.com>
-Message-ID: <20160225223434.78aa35b9@free-electrons.com>
+Date: Thu, 25 Feb 2016 22:27:44 +0100
+Subject: [Buildroot] [git commit] hostapd: correct legal info
+Message-ID: <20160225213612.62C797F92A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+commit: https://git.buildroot.net/buildroot/commit/?id=52f845742f9a7adbb98cf06df7976828ccebaf62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 25 Feb 2016 18:29:43 -0300, Gustavo Zacarias wrote:
+hostapd is licensed under BSD-3c only and not dual licensed.
 
-> > Can we imagine an extension to the makedevs syntax where you could give
-> > some additional properties for a given file, as following lines, e.g:
-> >
-> > /usr/bin/foo f 755 0 0 - - - - -
-> > |XATTR blabla extended attribute
-> > |XATTR blabla extended attribute
-> > |ACL blabla ACL
-> >
-> > Or something like this?
-> 
-> My only concern with extending the format to multi lines is that the 
-> data file will likely be incompatible with previous versions of makedevs.
+Quoting from COPYING file
+ This software was previously distributed under BSD/GPL v2 dual license
+ terms that allowed either of those license alternatives to be
+ selected. As of February 11, 2012, the project has chosen to use only
+ the BSD license option for future distribution. As such, the GPL v2
+ license option is no longer used.
 
-Indeed. But is this really a concern? makedevs is built by Buildroot,
-so we are sure which version is being used, right?
+Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/hostapd/hostapd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Yes, if we make it part of makedevs, then having an option would be a
-> > bit weird, but still reasonable since this stuff is pretty advanced, so
-> > people who need that quite certainly know what they are doing.
-> 
-> I'd go for homogeneous syntax in makedevs if that's the chosen way, just 
-> make it skip those ops when it's not enabled.
-
-OK.
-
-> > Right. This is IMO a good reason to make this optional. makedevs could
-> > have an option to accept (or not) the extended properties, and then if
-> > we have not enabled xattr/capability in Buildroot, this option is not
-> > passed, which guarantees that makedevs will bail out if an extended
-> > property is used.
-> 
-> Might be worth CCing rockwellcollins guys that are working in selinux, 
-> they're definitely interested in this since selinux loves xattrs.
-
-Seems like a good idea. Can you do that when you post your next
-patches? Or maybe you can send a short summary of an initial proposal,
-and Cc them?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 88867e6..dca07c1 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -10,7 +10,7 @@ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+ HOSTAPD_DEPENDENCIES = host-pkgconf libnl
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+-HOSTAPD_LICENSE = GPLv2/BSD-3c
++HOSTAPD_LICENSE = BSD-3c
+ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
+ 
