@@ -1,42 +1,39 @@
 From: Andreas Ehmanns <universeII@gmx.de>
-Date: Thu, 25 Feb 2016 22:24:42 +0100
-Subject: [Buildroot] [PATCH 2/4] Package netsnmp: Removed 'set -e'
+Date: Thu, 25 Feb 2016 22:24:43 +0100
+Subject: [Buildroot] [PATCH 3/4] Package netsnmp: Added missing reload of
+	snmptrapd
 In-Reply-To: <1456435484-4723-1-git-send-email-universeII@gmx.de>
 References: <1456435484-4723-1-git-send-email-universeII@gmx.de>
-Message-ID: <1456435484-4723-2-git-send-email-universeII@gmx.de>
+Message-ID: <1456435484-4723-3-git-send-email-universeII@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-set -e has been removed from init script since
-it causes the init script to terminate if an
-error occurs. This prevents the script to create
-an "FAIL" printout in case of an error.
+In case of a reload command the snmpdtrapd wasn't
+restarted.
 
 Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
 ---
- package/netsnmp/S59snmpd | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/netsnmp/S59snmpd | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
-index cfda625..2762082 100755
+index 2762082..2d076e0 100755
 --- a/package/netsnmp/S59snmpd
 +++ b/package/netsnmp/S59snmpd
-@@ -1,4 +1,4 @@
--#! /bin/sh -e
-+#! /bin/sh
- ### BEGIN INIT INFO
- # Provides:           snmpd snmptrapd
- # Required-Start:     $network $local_fs
-@@ -11,7 +11,6 @@
- #
- # Author:    Jochen Friedrich <jochen@scram.de>
- #
--set -e
- 
- export PATH=/sbin:/usr/sbin:/bin:/usr/bin
+@@ -65,6 +65,11 @@ reload() {
+         start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
+         printf " snmpd"
+     fi
++
++    if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
++        start-stop-daemon -q -K -s 1 -p /var/run/snmptrapd.pid -x /usr/sbin/snmptrapd
++        printf " snmptrapd"
++    fi
+     echo "."
+ }
  
 -- 
 2.1.4
