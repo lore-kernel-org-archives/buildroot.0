@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:37:57 +0100
-Subject: [Buildroot] [git commit branch/next] gst-dsp: Move download link
-	away from Google Code
-Message-ID: <20160225213837.9399D7F95B@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 22:41:14 +0100
+Subject: [Buildroot] [PATCH v2 0/4] Move download links away from Google
+ Code
+In-Reply-To: <1456143807-3350-1-git-send-email-casantos@datacom.ind.br>
+References: <444859483-2268-1-git-send-email-alan@softiron.co.uk>
+ <1456143807-3350-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <20160225224114.2e07acb8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac5a2f5e36ba487d184bef8a12d754121023a26a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Carlos Santos,
 
-Google Code is being shut down. The google code site which hosts the
-source .tar.gz references github/felipec, which has a gst-dsp repository
-with the same code as the tar.gz previously referenced.
+On Mon, 22 Feb 2016 09:23:23 -0300, Carlos Santos wrote:
 
-Change the GST_DSP_SITE to this github repo.
+> Alan Ott (3):
+>   dsp-tools: Move download link away from Google Code
+>   gst-dsp: Move download link away from Google Code
+>   gst-omapfb: Move download link away from Google Code
 
-Signed-off-by: Alan Ott <alan@softiron.co.uk>
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer/gst-dsp/gst-dsp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I've applied those three to the next branch. If you have some time,
+adding a hash file for those packages would be good.
 
-diff --git a/package/gstreamer/gst-dsp/gst-dsp.mk b/package/gstreamer/gst-dsp/gst-dsp.mk
-index d9e202d..dedffb9 100644
---- a/package/gstreamer/gst-dsp/gst-dsp.mk
-+++ b/package/gstreamer/gst-dsp/gst-dsp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GST_DSP_VERSION = 0.10.2
--GST_DSP_SITE = http://gst-dsp.googlecode.com/files
-+GST_DSP_VERSION = v0.10.2
-+GST_DSP_SITE = $(call github,felipec,gst-dsp,$(GST_DSP_VERSION))
- 
- define GST_DSP_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
+I haven't had the time to review the gtest/gmock patch for the moment,
+which is why it has not been applied yet.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
