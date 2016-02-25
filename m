@@ -1,49 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 11:03:30 +0100
-Subject: [Buildroot] [PATCH 2/2] gcc: remove 4.5.x
-In-Reply-To: <87h9gxxgc7.fsf@dell.be.48ers.dk>
-References: <1456336840-14890-1-git-send-email-gustavo@zacarias.com.ar>
- <1456336840-14890-2-git-send-email-gustavo@zacarias.com.ar>
- <87io1d3mhr.fsf@dell.be.48ers.dk>
- <20160225104848.2f5d892f@free-electrons.com>
- <87h9gxxgc7.fsf@dell.be.48ers.dk>
-Message-ID: <20160225110330.27b02428@free-electrons.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 25 Feb 2016 10:14:52 +0000
+Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump version to
+	20160104
+Message-ID: <1456395292-15493-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The following certificate authorities were added (+):
++ "CA WoSign ECC Root"
++ "Certification Authority of WoSign G2"
++ "Certinomis - Root CA"
++ "OISTE WISeKey Global Root GB CA"
++ "T?RKTRUST Elektronik Sertifika Hizmet Sa?lay?c?s? H5"
++ "T?RKTRUST Elektronik Sertifika Hizmet Sa?lay?c?s? H6"
 
-On Thu, 25 Feb 2016 10:57:28 +0100, Peter Korsgaard wrote:
+The following certificate authorities were removed (-):
+- "A-Trust-nQual-03"
+- "Buypass Class 3 CA 1"
+- "ComSign Secured CA"
+- "Digital Signature Trust Co. Global CA 1"
+- "Digital Signature Trust Co. Global CA 3"
+- "SG TRUST SERVICES RACINE"
+- "TC TrustCenter Class 2 CA II"
+- "TC TrustCenter Universal CA I"
+- "TURKTRUST Certificate Services Provider Root 1"
+- "TURKTRUST Certificate Services Provider Root 2"
+- "UTN DATACorp SGC Root CA"
+- "Verisign Class 4 Public Primary Certification Authority - G3"
 
->  > Dear Peter Korsgaard,
->  > On Wed, 24 Feb 2016 21:02:40 +0100, Peter Korsgaard wrote:
-> 
->  >> What do we do with our 4.5 based external toolchains and
->  >> BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 (used by directfb)?
-> 
->  > I think the BR2_TOOLCHAIN_GCC_AT_LEAST_* must be kept for pretty much
->  > all versions of gcc. This symbol is not related to whether we support
->  > that gcc version in our internal toolchain backend or not. Possibly any
->  > gcc version can be used with the external toolchain backend.
-> 
-> True, but we might consider removing preconfigured external toolchains
-> using ancient versions if there's sensible newer alternatives available.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/ca-certificates/ca-certificates.hash | 4 ++--
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Right. But I like to keep those crappy old preconfigured external
-toolchains, because it forces us to test things with old gcc versions,
-old kernel headers and all. Some users are probably forced to use old
-gcc version for some reason, so I like to keep testing a bit the old
-stuff.
-
-You could object that we could continue to do this testing in the
-autobuilders by supporting those toolchains as "custom external
-toolchains" and not have them as preconfigured toolchains :-)
-
-Thomas
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 06120f5..b467316 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   c2d7ae81e28ff1f8a6b9ef7602c4e756ff08503c                         ca-certificates_20150426.tar.xz
+-sha256 37dbaa93ed64cc4ae93ac295f9248fbc741bd51376438cfb1257f17efab5494f ca-certificates_20150426.tar.xz
++sha1   4525a194736c6691dbd59fa87281b722837b4768                         ca-certificates_20160104.tar.xz
++sha256 09eb770122e23260316120c0cbbddc8a1d33e7147210ce44e146084d5d5abcdd ca-certificates_20160104.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index b64120e..da1b70d 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20150426
++CA_CERTIFICATES_VERSION = 20160104
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20150528T221654Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20160104T220912Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
+ CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
