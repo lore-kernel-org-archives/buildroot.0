@@ -1,41 +1,60 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 25 Feb 2016 12:51:13 +0100
-Subject: [Buildroot] [PATCH v3 0/2] Patch file clarification & Co
-Message-ID: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
+Date: Thu, 25 Feb 2016 12:51:14 +0100
+Subject: [Buildroot] [PATCH v3 1/2] COPYING: add exception about patch
+	licensing
+In-Reply-To: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
+References: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1456401075-16948-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Several people have been asking what is the license of the patches
+provided by Buildroot. COPYING is the authoritative place to state it.
 
-several Buildroot users reportedly asked details about how the patches
-bundled with Buildroot are licensed.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Steve Calfee <stevecalfee@gmail.com>
 
-Following the discussion during the latest Buildroot Developer Days,
-this small series is aimed at clarifying patch licensing in the places
-where it makes sense: COPYING, the manual and the legal-info output.
+---
+Changes v2 -> v3:
+ - Rewrite it entirely based on comments on the mailing list (Yann,
+   Arnout, Thomas, Peter, Steve).
 
-This v3 is a refinement of v2 based on the comments received.
+Changes v1 -> v2:
+ - Rewrite it almost entirely (Arnout, Thomas).
+---
+ COPYING | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-The first two patches of v2 have been applied on master in the
-meanwhile, and are not repeated here.
-
-I also removed the last patch of v2 ("legal-info: explicitly state how
-patches are licensed"): it will only makes sense after Yann's
-improvements to save the patches in legal-info will be applied. When
-this happens, I'll take care to resend it.
-
-
-Luca Ceresoli (2):
-  COPYING: add exception about patch licensing
-  docs/manual: add section about patch licensing
-
- COPYING                      | 16 ++++++++++++++++
- docs/manual/legal-notice.txt | 17 +++++++++++++++--
- docs/manual/patch-policy.txt |  2 +-
- 3 files changed, 32 insertions(+), 3 deletions(-)
-
+diff --git a/COPYING b/COPYING
+index d511905..0c018b0 100644
+--- a/COPYING
++++ b/COPYING
+@@ -1,3 +1,19 @@
++With the exceptions below, Buildroot is distributed under the terms of
++the GNU General Public License, reproduced below; either version 2 of
++the License, or (at your option) any later version.
++
++Some files in Buildroot contain a different license statement. Those
++files are licensed under the license contained in the file itself.
++
++Buildroot also bundles patch files, which are applied to the sources
++of the various packages. Those patches are not covered by the license
++of Buildroot. Instead, they are covered by the license of the software
++to which the patches are applied. When said software is available
++under multiple licenses, the Buildroot patches are only provided under
++the publicly accessible licenses.
++
++-----------------------------------------------------------------
++
+ 		    GNU GENERAL PUBLIC LICENSE
+ 		       Version 2, June 1991
+ 
 -- 
 1.9.1
