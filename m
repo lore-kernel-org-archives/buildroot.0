@@ -1,46 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:24:20 +0100
-Subject: [Buildroot] [git commit] attr: cleanup pointless indentation
-Message-ID: <20160302202758.162117FA0E@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 22:38:14 +0100
+Subject: [Buildroot] [git commit] gst-omapfb: Move download link away from
+	Google Code
+Message-ID: <20160302202758.3D8457FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a14a68057644555ddefb4ae8e9923397377daf5d
+commit: https://git.buildroot.net/buildroot/commit/?id=c71d31a84ca74e6a1707d744456dbeefb6018b71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Google Code is being shut down. The google code site which hosts the
+source .tar.gz references github/felipec, which has a gst-omapfb
+repository with the same code as the tar.gz previously referenced.
+
+Change the GST_OMAPFB_SITE to this github repo.
+
+Signed-off-by: Alan Ott <alan@softiron.co.uk>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/attr/attr.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/gstreamer/gst-omapfb/gst-omapfb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
-index e9963ba..3db66cb 100644
---- a/package/attr/attr.mk
-+++ b/package/attr/attr.mk
-@@ -15,15 +15,15 @@ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
- # While the configuration system uses autoconf, the Makefiles are
- # hand-written and do not use automake. Therefore, we have to hack
- # around their deficiencies by passing installation paths.
--ATTR_INSTALL_STAGING_OPTS = 			\
--	prefix=$(STAGING_DIR)/usr 		\
--	exec_prefix=$(STAGING_DIR)/usr 		\
--	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib 	\
-+ATTR_INSTALL_STAGING_OPTS = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
- 	install-dev install-lib
+diff --git a/package/gstreamer/gst-omapfb/gst-omapfb.mk b/package/gstreamer/gst-omapfb/gst-omapfb.mk
+index bd545f9..c0bf690 100644
+--- a/package/gstreamer/gst-omapfb/gst-omapfb.mk
++++ b/package/gstreamer/gst-omapfb/gst-omapfb.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--ATTR_INSTALL_TARGET_OPTS = 			\
--	prefix=$(TARGET_DIR)/usr 		\
--	exec_prefix=$(TARGET_DIR)/usr 		\
-+ATTR_INSTALL_TARGET_OPTS = \
-+	prefix=$(TARGET_DIR)/usr \
-+	exec_prefix=$(TARGET_DIR)/usr \
- 	install install-lib
+-GST_OMAPFB_VERSION = 1.0
+-GST_OMAPFB_SITE = http://gst-dsp.googlecode.com/files
++GST_OMAPFB_VERSION = v1.0
++GST_OMAPFB_SITE = $(call github,felipec,gst-omapfb,$(GST_OMAPFB_VERSION))
  
- HOST_ATTR_INSTALL_OPTS = \
+ define GST_OMAPFB_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
