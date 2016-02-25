@@ -1,42 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:51:05 +0100
-Subject: [Buildroot] [git commit] tvheadend: depends on
-	BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <20160225210306.49C4E80AE6@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 25 Feb 2016 22:03:25 +0100
+Subject: [Buildroot] [PATCH v4] package/mono: Fixing wrong MonoPosixHelper
+	location
+Message-ID: <1456434205-26293-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e42a0f091593cd1dde1f72a9513edd941ab456e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch solves an host path leaking in /etc/mono/config
+that leads to searching libmonoposixhelper into the wrong path.
+This bug is fixed upstream, but not included in the current stable
+release.
 
-It uses __sync_fetch_and_add_4() and other 32-bit atomics, fixes:
-http://autobuild.buildroot.net/results/610/610ef13ee1d62597f51b061cd1216e7a4e96abff/
+Fixes bug #8651.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/tvheadend/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Changes
+v3 -> v4:
+* Rewording commit message
+* Retaining the previous acked-by from Arnout Vandecappelle
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index bfc156a..095ec65 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,12 +1,14 @@
- comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on !BR2_STATIC_LIBS # dladdr()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_DTV_SCAN_TABLES
- 	select BR2_PACKAGE_FFMPEG_AVRESAMPLE if BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
+v2 -> v3:
+* The patch was based on mono master and not on mono 4.2.2.30.
+* This patch is now based on mono 4.2.2.30.
+* This patch was tested on br_next.
+
+v1 -> v2:
+* Added SoB and description to patch
+
+ ....in-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+
+diff --git a/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+new file mode 100644
+index 0000000..6ebb802
+--- /dev/null
++++ b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+@@ -0,0 +1,28 @@
++From 76aa4fb62a433e61dc35eefcc3077f0463182d2f Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Tue, 23 Feb 2016 22:43:39 +0100
++Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
++
++This patch remove a wrong prefix for libMonoPosixHelper
++
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ data/config.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/data/config.in b/data/config.in
++index b760176..41495b9 100644
++--- a/data/config.in
+++++ b/data/config.in
++@@ -10,7 +10,7 @@
++ 	<dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
++ 	<dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
++ 	<dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
++-	<dllmap dll="MonoPosixHelper" target="@prefix@/@reloc_libdir@/libMonoPosixHelper@libsuffix@" os="!windows" />
+++	<dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
++ 	<dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
++ 	<dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
++ 	<dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
++-- 
++1.9.1
++
+-- 
+1.9.1
