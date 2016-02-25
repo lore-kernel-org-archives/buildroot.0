@@ -1,70 +1,68 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 25 Feb 2016 23:26:59 +0100
-Subject: [Buildroot] Incorrect kernel configuration produced from
-	_defconfig file
-In-Reply-To: <20160225230603.7651ae97@free-electrons.com>
-References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
- <20160225170443.2e6208f4@free-electrons.com>
- <20160225161451.GE12073@piout.net>
- <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
- <20160225165032.GG12073@piout.net>
- <20160225180352.1d768c84@free-electrons.com>
- <87si0gv5jp.fsf@dell.be.48ers.dk>
- <20160225230603.7651ae97@free-electrons.com>
-Message-ID: <20160225222659.GM12073@piout.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 25 Feb 2016 23:31:23 +0100
+Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
+ installed programs
+In-Reply-To: <CAGkQfmPYv0oSwO-wuQWDvzt+kC9i=1wcymz6dV7jjP=i9dN7CA@mail.gmail.com>
+References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
+ <877fhxaf7l.fsf@dell.be.48ers.dk>
+ <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
+ <56CE1E61.7000008@zacarias.com.ar> <20160224214832.GA3449@free.fr>
+ <87r3g1zs67.fsf@dell.be.48ers.dk> <20160224221930.GB3449@free.fr>
+ <CAGkQfmPYv0oSwO-wuQWDvzt+kC9i=1wcymz6dV7jjP=i9dN7CA@mail.gmail.com>
+Message-ID: <56CF80BB.7070907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/2016 at 23:06:03 +0100, Thomas Petazzoni wrote :
-> Hello,
+On 02/25/16 11:54, Romain Izard wrote:
+> 2016-02-24 23:19 GMT+01:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+>> On 2016-02-24 22:58 +0100, Peter Korsgaard spake thusly:
+>>
+>>> Didn't we just discuss on IRC that shebangs didn't have any
+>>> advantages over symlinks? If so, I would prefer to keep things simple
+>>> and only have a choice between symlinks (default) or classical
+>>> multiple binaries.
+>>
+>> Well, shebangs is the current situation, so users may rely on it (for
+>> whatever ill reason), so we should support that.
+>>
+>> However, I won't battle over it, as my preference would go with
+>> hardlinks instead, but that option is not available. Meh... ;-)
 > 
-> On Thu, 25 Feb 2016 22:33:30 +0100, Peter Korsgaard wrote:
-> 
-> > oldnoconfig was introduced (renamed) just before 2.6.36
-> > (ef61ca88c511154d6bead23c08f9a021cfdfeb01) and olddefconfig was
-> > introduced during the 3.7 cycle (fb16d8912db5268f29706010ecafff74b971c58d).
-> > 
-> > With the recent discussion about if we would rely on devtmpfs or not
-> > (which was added in the 2.6.32 cycle), I don't think we can rely on any
-> > of them without the fallback code.
-> > 
-> > The fact that oldnoconfig == olddefconfig is also kernel specific, but
-> > from a quick look it doesn't seem to cause any conflicts:
-> > 
-> >  - busybox doesn't have it
-> >  - barebox, uClibc and uboot have it with similar behaviour as the kernel
-> 
-> It is somewhat odd that oldnoconfig and olddefconfig are doing the
-> same. If they are the same, why do they have two different names?
-> 
-> I would have expected oldnoconfig to say "no" to all new options, and
-> olddefconfig to say "use the default" to all new options.
-> 
+> The issue is that the single binary mode is much more space-efficient
+> than the classical mode. For my subset of 52 executables, it takes 704
 
-That's exactly why it has been renamed:
+ You really need half of the coreutils programs because they have some feature
+that is not supported by busybox? Or are you trying to eliminate busybox entirely?
 
-scripts/kconfig/Makefile:
-# oldnoconfig is an alias of olddefconfig, because people already are dependent
-# on its behavior (sets new symbols to their default value but not 'n') with the
-# counter-intuitive name.
-oldnoconfig: olddefconfig
+ If you know which extra features you need, perhaps you can just port them to
+busybox? Upstream is really receptive to adding (sensible) features, as long as
+they are hidden behind a config option.
 
-scripts/kconfig/conf.c:
-	/*
-	 * oldnoconfig is an alias of olddefconfig, because people already
-	 * are dependent on its behavior(sets new symbols to their default
-	 * value but not 'n') with the counter-intuitive name.
-	 */
-	{"oldnoconfig",     no_argument,       NULL, olddefconfig},
 
-See fb16d8912db5268f29706010ecafff74b971c58d and
-67d34a6a391369269a2e5dba8a5f42cc4cd50231
+ Note: unlike the others, and don't have a problem with this huge menu. But
+since all the other core maintainers have voiced objections against it, I doubt
+it will go in.
+
+ Regards,
+ Arnout
+
+> KiB for the single-binary mode with shebangs, and 1.9 MiB with separate
+> programs (after stripping). I get a similar ratio if I compress it.
+> 
+> The classical mode is in fact worse than taking the coreutils package
+> without filtering, which takes 1.5 MiB.
+> 
+> Best regards,
+> 
 
 
 -- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
