@@ -1,43 +1,121 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:24:14 +0100
-Subject: [Buildroot] [git commit branch/next] attr: add host variant
-Message-ID: <20160225212457.0CD217FFE0@busybox.osuosl.org>
+From: Andreas Ehmanns <universeII@gmx.de>
+Date: Thu, 25 Feb 2016 22:24:41 +0100
+Subject: [Buildroot] [PATCH 1/4] Package netsnmp: Created start(), stop(),
+	reload().
+Message-ID: <1456435484-4723-1-git-send-email-universeII@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bc739517e7b4f48e25354fc7c769a11c6d30e2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Changed init script to get rid of double code.
+Start, stop and reload code has been put into
+separate functions and 'restart' will just call
+stop() and start() with a delay in between.
 
-This is required for host-libcap for extended attributes support, which
-leads to capabilities support as well.
-
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
 ---
- package/attr/attr.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/netsnmp/S59snmpd | 71 +++++++++++++++++++++++++-----------------------
+ 1 file changed, 37 insertions(+), 34 deletions(-)
 
-diff --git a/package/attr/attr.mk b/package/attr/attr.mk
-index a66891b..e9963ba 100644
---- a/package/attr/attr.mk
-+++ b/package/attr/attr.mk
-@@ -26,6 +26,11 @@ ATTR_INSTALL_TARGET_OPTS = 			\
- 	exec_prefix=$(TARGET_DIR)/usr 		\
- 	install install-lib
+diff --git a/package/netsnmp/S59snmpd b/package/netsnmp/S59snmpd
+index 4eea512..cfda625 100755
+--- a/package/netsnmp/S59snmpd
++++ b/package/netsnmp/S59snmpd
+@@ -38,56 +38,59 @@ if [ "$SNMPDCOMPAT" = "yes" ]; then
+   ln -sf /var/agentx/master /var/run/agentx
+ fi
  
-+HOST_ATTR_INSTALL_OPTS = \
-+	prefix=$(HOST_DIR)/usr \
-+	exec_prefix=$(HOST_DIR)/usr \
-+	install-dev install-lib
+-case "$1" in
+-  start)
++start() {
+     printf "Starting network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
+-      printf " snmpd"
++        start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
++        printf " snmpd"
+     fi
+     if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
+-      printf " snmptrapd"
++        start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
++        printf " snmptrapd"
+     fi
+     echo "."
+-    ;;
+-  stop)
++}
 +
- # The libdir variable in libattr.la is empty, so let's fix it. This is
- # probably due to attr not using automake, and not doing fully the
- # right thing with libtool.
-@@ -37,3 +42,4 @@ endef
- ATTR_POST_INSTALL_STAGING_HOOKS += ATTR_FIX_LIBTOOL_LA_LIBDIR
++stop() {
+     printf "Stopping network management services:"
+     start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
+     printf " snmpd"
+     start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
+     printf " snmptrapd"
+     echo "."
+-    ;;
+-  restart)
+-    printf "Restarting network management services:"
+-    start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
+-    start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
+-    # Allow the daemons time to exit completely.
+-    sleep 2
+-    if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-      start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
+-      printf " snmpd"
+-    fi
+-    if [ "$TRAPDRUN" = "yes" -a -f /etc/snmp/snmptrapd.conf ]; then
+-      # Allow snmpd time to start up.
+-      sleep 1
+-      start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
+-      printf " snmptrapd"
+-    fi
+-    echo "."
+-    ;;
+-  reload|force-reload)
++}
++
++reload() {
+     printf "Reloading network management services:"
+     if [ "$SNMPDRUN" = "yes" -a -f /etc/snmp/snmpd.conf ]; then
+-      start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
+-      printf " snmpd"
++        start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
++        printf " snmpd"
+     fi
+     echo "."
+-    ;;
+-  *)
+-    echo "Usage: /etc/init.d/snmpd {start|stop|restart|reload|force-reload}"
+-    exit 1
++}
++
++case "$1" in
++    start)
++        start
++        ;;
++
++    stop)
++        stop
++        ;;
++
++    restart)
++        stop
++        # Allow the daemons time to exit completely.
++        sleep 2
++        start
++        ;;
++
++    reload|force-reload)
++        reload
++        ;;
++    *)
++        echo "Usage: $0 {start|stop|restart|reload|force-reload}"
++        exit 1
+ esac
  
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ exit 0
+-- 
+2.1.4
