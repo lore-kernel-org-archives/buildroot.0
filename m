@@ -1,61 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Feb 2016 00:24:57 +0100
-Subject: [Buildroot] [PATCH] util-linux: add option for lsblk
-In-Reply-To: <1456432249-27364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1456432249-27364-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56CF8D49.3020209@mind.be>
+Date: Fri, 26 Feb 2016 00:30:55 +0100
+Subject: [Buildroot] [PATCH 1/1] Add config to nfsd to set number of
+ threads
+In-Reply-To: <56CF66D2.2080804@gmx.de>
+References: <1450381505-3796-1-git-send-email-universeII@gmx.de>
+ <20151217200424.GC3653@free.fr> <567317AE.5060006@gmx.de>
+ <20151217202555.GE3653@free.fr> <56B30C5E.2020702@gmx.de>
+ <20160204205004.GB3468@free.fr> <56BDA67E.8060404@gmx.de>
+ <56CF66D2.2080804@gmx.de>
+Message-ID: <56CF8EAF.407@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/25/16 21:30, Thomas Petazzoni wrote:
-> This commit adds an option to the util-linux package that allows to
-> build the lsblk utility.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 02/25/16 21:40, Andreas Ehmanns wrote:
+> Yann,
+> is the patch o.k. for you? Shall I resend it using git?
 
+ Yes, please send using git. Patches sent as attachments have an even bigger
+chance of being ignored than other patches.
+
+ However, I can already say that it should be two separate patches: one changing
+"done" to OK/FAIL, and a second one doing the functional changes.
 
  Regards,
  Arnout
 
-> ---
->  package/util-linux/Config.in     | 5 +++++
->  package/util-linux/util-linux.mk | 1 +
->  2 files changed, 6 insertions(+)
+> Please let me know.
 > 
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index 3f9a7db..d4f9a3d 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -139,6 +139,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
->  	help
->  	  Set up and control loop devices
->  
-> +config BR2_PACKAGE_UTIL_LINUX_LSBLK
-> +	bool "lsblk"
-> +	help
-> +	  List block devices.
-> +
->  config BR2_PACKAGE_UTIL_LINUX_MESG
->  	bool "mesg"
->  	help
-> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-> index 7342174..141dffd 100644
-> --- a/package/util-linux/util-linux.mk
-> +++ b/package/util-linux/util-linux.mk
-> @@ -85,6 +85,7 @@ UTIL_LINUX_CONF_OPTS += \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
-> +	$(if $(BR2_PACKAGE_UTIL_LINUX_LSBLK),--enable-lsblk,--disable-lsblk) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
->  	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
+> Regards,
+> Andreas
 > 
-
+> Am 12.02.2016 um 10:31 schrieb Andreas Ehmanns:
+>> Yann,
+>> indeed a killall -9 worked. So I reworked the patch. According to Thomas'
+>> recommendation I added the OK/FAIL output as done in the dropbox init script.
+>> Please have a look at the attached patch. If it's o.k., I'll resend it using git.
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
