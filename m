@@ -1,74 +1,44 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu, 25 Feb 2016 22:03:25 +0100
-Subject: [Buildroot] [PATCH v4] package/mono: Fixing wrong MonoPosixHelper
-	location
-Message-ID: <1456434205-26293-1-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 22:04:17 +0100
+Subject: [Buildroot] [PATCH 1/1] Added OK/FAIL output to SNMP init
+ script.
+In-Reply-To: <56CF6784.5030403@gmx.de>
+References: <1456335081-4834-1-git-send-email-universeII@gmx.de>
+ <20160225104643.0921463c@free-electrons.com>
+ <56CF5DBF.2060109@gmx.de>
+ <20160225212541.6e6e5356@free-electrons.com>
+ <56CF6784.5030403@gmx.de>
+Message-ID: <20160225220417.7df2cbca@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch solves an host path leaking in /etc/mono/config
-that leads to searching libmonoposixhelper into the wrong path.
-This bug is fixed upstream, but not included in the current stable
-release.
+Hello,
 
-Fixes bug #8651.
+On Thu, 25 Feb 2016 21:43:48 +0100, Andreas Ehmanns wrote:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
-Changes
-v3 -> v4:
-* Rewording commit message
-* Retaining the previous acked-by from Arnout Vandecappelle
+> one "stupid" questions. Shall the patches be incremental or relative to 
+> the original file?
+> Example: Change some lines and create the first patch. Then change the 
+> next things based on the original file or based on the already patched file?
 
-v2 -> v3:
-* The patch was based on mono master and not on mono 4.2.2.30.
-* This patch is now based on mono 4.2.2.30.
-* This patch was tested on br_next.
+Based on the already patched file of course, otherwise you won't go
+very far. You need to create a patch series. To do this, create a Git
+branch, make a set of commits that stack on top of each other, and then
+use git format-patch to create one patch file for each commit in your
+branch, and send them with git send-mail.
 
-v1 -> v2:
-* Added SoB and description to patch
+You can look in the Buildroot manual, there are some explanations about
+this:
 
- ....in-fixing-wrong-MonoPosixHelper-location.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
+   http://nightly.buildroot.org/#submitting-patches
 
-diff --git a/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
-new file mode 100644
-index 0000000..6ebb802
---- /dev/null
-+++ b/package/mono/0007-config.in-fixing-wrong-MonoPosixHelper-location.patch
-@@ -0,0 +1,28 @@
-+From 76aa4fb62a433e61dc35eefcc3077f0463182d2f Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+Date: Tue, 23 Feb 2016 22:43:39 +0100
-+Subject: [PATCH] config.in: fixing wrong MonoPosixHelper location
-+
-+This patch remove a wrong prefix for libMonoPosixHelper
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ data/config.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/data/config.in b/data/config.in
-+index b760176..41495b9 100644
-+--- a/data/config.in
-++++ b/data/config.in
-+@@ -10,7 +10,7 @@
-+ 	<dllmap dll="i:odbc32.dll" target="libiodbc.dylib" os="osx"/>
-+ 	<dllmap dll="oci" target="libclntsh@libsuffix@" os="!windows"/>
-+ 	<dllmap dll="db2cli" target="libdb2_36@libsuffix@" os="!windows"/>
-+-	<dllmap dll="MonoPosixHelper" target="@prefix@/@reloc_libdir@/libMonoPosixHelper@libsuffix@" os="!windows" />
-++	<dllmap dll="MonoPosixHelper" target="libMonoPosixHelper@libsuffix@" os="!windows" />
-+ 	<dllmap dll="i:msvcrt" target="@LIBC@" os="!windows"/>
-+ 	<dllmap dll="i:msvcrt.dll" target="@LIBC@" os="!windows"/>
-+ 	<dllmap dll="sqlite" target="@SQLITE@" os="!windows"/>
-+-- 
-+1.9.1
-+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
