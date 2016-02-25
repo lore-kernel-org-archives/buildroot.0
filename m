@@ -1,72 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:31:10 +0100
-Subject: [Buildroot] [git commit branch/next] uboot-tools: add option for
-	dumpimage
-Message-ID: <20160225203423.A0B7B818DB@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 21:35:22 +0100
+Subject: [Buildroot] How to include lsblk from linux-utils?
+In-Reply-To: <069601d16ff2$60263320$20729960$@chordia.co.uk>
+References: <05f401d16fdf$4ddcc840$e99658c0$@chordia.co.uk>
+ <20160225171433.7e200dfc@free-electrons.com>
+ <069601d16ff2$60263320$20729960$@chordia.co.uk>
+Message-ID: <20160225213522.2a67ec28@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7993116ab530e7100b08dc5ee9eefff3a651496
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The tool dumpimage extracts data from U-Boot images.
-U-Boot added dumpimage tool on release 2014.01.
-This commit allows installation on target and host.
+On Thu, 25 Feb 2016 17:31:35 -0000, jerry at chordia.co.uk wrote:
 
-Signed-off-by: Paulo Zaneti <paulo.zaneti@datacom.ind.br>
-Tested-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/uboot-tools/Config.in      | 6 ++++++
- package/uboot-tools/uboot-tools.mk | 8 ++++++++
- 2 files changed, 14 insertions(+)
+> Excellent, that worked. Many thanks. Is this patch going into the next
+> release? 
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index e2c621c..aca310b 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -53,4 +53,10 @@ config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
- 	  bootloader, which allows access to the U-Boot environment
- 	  from Linux.
- 
-+config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
-+	bool "dumpimage"
-+	help
-+	  The dumpimage tool from Das U-Boot bootloader, which allows
-+	  extraction of data from U-Boot images.
-+
- endif
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 3150279..264e9dd 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -52,10 +52,17 @@ define UBOOT_TOOLS_INSTALL_FWPRINTENV
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE),y)
-+define UBOOT_TOOLS_INSTALL_DUMPIMAGE
-+	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(TARGET_DIR)/usr/sbin/dumpimage
-+endef
-+endif
-+
- define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
-+	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
- endef
- 
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-@@ -79,6 +86,7 @@ endef
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin/mkimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/usr/bin/mkenvimage
-+	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/usr/bin/dumpimage
- endef
- 
- $(eval $(generic-package))
+Glad to hear it worked. I've just submitted the patch, so unless anyone
+has objections against it, it should be part of 2016.05 (it is too late
+for 2016.02).
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
