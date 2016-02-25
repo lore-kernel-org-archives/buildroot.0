@@ -1,63 +1,114 @@
-From: Andrea Cappelli <a.cappelli@gmail.com>
-Date: Fri, 26 Feb 2016 00:36:00 +0100
-Subject: [Buildroot] [PATCH 1/1] New package: uwsgi
-In-Reply-To: <0BBD31CA-6B23-476F-842F-8F704E319510@xiot.nl>
-References: <1451577776-29708-1-git-send-email-a.cappelli@gmail.com>
- <0BBD31CA-6B23-476F-842F-8F704E319510@xiot.nl>
-Message-ID: <CAKR0bvsRVtXAgNYk-fmeTr3Z4CoeYZJxPbsE7H95r8GMDzRhww@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 26 Feb 2016 00:44:42 +0100
+Subject: [Buildroot] [PATCH 01/32] package/lz4: bump version to r131
+In-Reply-To: <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
+References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
+ <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
+Message-ID: <56CF91EA.6040300@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-02-25 21:21 GMT+01:00 Eelco Chaudron <echaudron@xiot.nl>:
+ Hi Gabe,
 
-> Hi Andrea,
->
+ I'm not going to review all of the series yet, just a few of them. The patches
+which are pretty independent (like this one) you can resend individually. Only
+when you resend the later ones you need to send the entire series.
 
-Hi Eelco
+On 02/25/16 22:55, Gabe Evans wrote:
+> systemd v228 requires lz4 >= 125
+> 
+> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+> ---
+>  package/lz4/lz4.hash |  2 ++
+>  package/lz4/lz4.mk   | 19 ++++++++++++-------
+>  2 files changed, 14 insertions(+), 7 deletions(-)
+>  create mode 100644 package/lz4/lz4.hash
+> 
+> diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+> new file mode 100644
+> index 0000000..1281284
+> --- /dev/null
+> +++ b/package/lz4/lz4.hash
+> @@ -0,0 +1,2 @@
+> +# sha256 locally computed
+> +sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
+> diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+> index 38e10d8..dbb2221 100644
+> --- a/package/lz4/lz4.mk
+> +++ b/package/lz4/lz4.mk
+> @@ -4,37 +4,42 @@
+>  #
+>  ################################################################################
+>  
+> -LZ4_VERSION = r123
+> +LZ4_VERSION = r131
+>  LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
+>  LZ4_INSTALL_STAGING = YES
+>  LZ4_LICENSE = BSD-2c
+>  LZ4_LICENSE_FILES = LICENSE
+>  
+> +LZ4_MAKE_OPTS = PREFIX=/usr
+
+ I'd prefer to have
+
+LZ4_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) PREFIX=/usr
+HOST_LZ4_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) PREFIX=/usr
+
+ However, is the PREFIX useful during the build? If it's only needed at install
+time, then I would just pass it there, like we do with DESTDIR already.
 
 
->
-> I see that your patch has not yet been included in the master branch, and
-> I was wondering if it has anything to do with the failure to compile when
-> using uclibc?
->
+ Regards,
+ Arnout
 
-I think the main problem is that I didn't have time to rework the patch
-applying all style recommendations (I only changed the patch according to
-Thomas suggestion, but i know I miss something)
-
-
-
-> When I add your patch I get the following build error:
->
-> [/home/echaudron/buildroot/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc]
-> core/uwsgi.o
-> core/uwsgi.c: In function ?uwsgi_backtrace?:
-> core/uwsgi.c:1786:22: fatal error: execinfo.h: No such file or directory
->  #include <execinfo.h>
->                       ^
-> compilation terminated.
-> Makefile:4: recipe for target 'all' failed
-> make[2]: *** [all] Error 1
->
->
-> Before I try to make it work, have you (or anyone else) seen/fixed this?
->
-
-I compiled it on tag 2015.11.1 (9f0610c188007ee481508d453b062d77614c153d)
-because I have some devices in production using that version, and the build
-was successfull; I didn't see this error before, but I can try to
-investigate it on my dev board tomorrow
-
-Best regards
-
+> +
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  define LZ4_DISABLE_SHARED
+> -	$(SED) '/SHARED/d' $(@D)/Makefile
+> +	$(SED) '/SHARED/d' $(@D)/lib/Makefile
+>  endef
+>  LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+>  endif
+>  
+>  define HOST_LZ4_BUILD_CMDS
+> -	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
+> +	$(MAKE) $(HOST_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) -C $(@D)
+>  endef
+>  
+>  define HOST_LZ4_INSTALL_CMDS
+> -	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
+> +	$(MAKE) $(HOST_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
+> +		install -C $(@D)
+>  endef
+>  
+>  define LZ4_BUILD_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) -C $(@D)/lib
+>  endef
+>  
+>  define LZ4_INSTALL_STAGING_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
+> +		install -C $(@D)
+>  endef
+>  
+>  define LZ4_INSTALL_TARGET_CMDS
+> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
+> +		install -C $(@D)/lib
+>  endef
+>  
+>  $(eval $(generic-package))
+> 
 
 
 -- 
-Andrea Cappelli
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160226/3d037e55/attachment-0001.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
