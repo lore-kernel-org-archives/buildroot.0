@@ -1,41 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 18:03:52 +0100
-Subject: [Buildroot] Incorrect kernel configuration produced from
- _defconfig file
-In-Reply-To: <20160225165032.GG12073@piout.net>
-References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
- <20160225170443.2e6208f4@free-electrons.com>
- <20160225161451.GE12073@piout.net>
- <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
- <20160225165032.GG12073@piout.net>
-Message-ID: <20160225180352.1d768c84@free-electrons.com>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Thu, 25 Feb 2016 14:08:14 -0300
+Subject: [Buildroot] [PATCH 1/1] uboot-tools: add option for dumpimage
+In-Reply-To: <1456409941-10295-1-git-send-email-paulo.zaneti@datacom.ind.br>
+References: <1456409941-10295-1-git-send-email-paulo.zaneti@datacom.ind.br>
+Message-ID: <1456420094-1215-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alexandre Belloni,
+From: Paulo Zaneti <paulo.zaneti@datacom.ind.br>
 
-On Thu, 25 Feb 2016 17:50:32 +0100, Alexandre Belloni wrote:
+The tool dumpimage extracts data from U-Boot images.
+U-Boot added dumpimage tool on release 2014.01.
+This commit allows installation on target and host.
 
-> Personally, I'd drop the yes "" | part of it and use only make
-> olddefconfig but the rules are also used for busybox et al. so you'd
-> have to check that all have a recent enough kconfig
+Signed-off-by: Paulo Zaneti <paulo.zaneti@datacom.ind.br>
+Tested-by: Carlos Santos <casantos@datacom.ind.br>
 
-I think the reason we still use the yes "" trick is that we have a
-generic kconfig infrastructure, and it should work for all kconfig
-based packages. Including old kernel version (when was
-olddefconfig introduced?) or Busybox (which has an horribly old copy of
-the kconfig code).
+Built host (x86_64) and target (PowerPC) packages and verified that
+both are compiled and installed properly.
 
-So switching to olddefconfig might not be that easy. But maybe this is
-something that can be made conditional in the pkg-kconfig
-infrastructure. Like use olddefconfig if available, and if not fall
-back to the yes "" | make oldconfig trick.
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+---
+ package/uboot-tools/Config.in      | 6 ++++++
+ package/uboot-tools/uboot-tools.mk | 8 ++++++++
+ 2 files changed, 14 insertions(+)
 
-Thomas
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index e2c621c..aca310b 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -53,4 +53,10 @@ config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+ 	  bootloader, which allows access to the U-Boot environment
+ 	  from Linux.
+ 
++config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
++	bool "dumpimage"
++	help
++	  The dumpimage tool from Das U-Boot bootloader, which allows
++	  extraction of data from U-Boot images.
++
+ endif
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 3150279..264e9dd 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -52,10 +52,17 @@ define UBOOT_TOOLS_INSTALL_FWPRINTENV
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE),y)
++define UBOOT_TOOLS_INSTALL_DUMPIMAGE
++	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(TARGET_DIR)/usr/sbin/dumpimage
++endef
++endif
++
+ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
+ 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
+ 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
+ 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
++	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
+@@ -79,6 +86,7 @@ endef
+ define HOST_UBOOT_TOOLS_INSTALL_CMDS
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin/mkimage
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/usr/bin/mkenvimage
++	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/usr/bin/dumpimage
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
