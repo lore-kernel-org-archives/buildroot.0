@@ -1,40 +1,29 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Thu, 25 Feb 2016 15:24:18 -0500
-Subject: [Buildroot] buildroot with linaro-5.2-2015.11-1 toolchain
-In-Reply-To: <56CF60D0.6060500@gmail.com>
-References: <CAF_dkJB=bcGLC7cTKxz=cDGa12D5DqT4JX-qDDyApjFswtraDQ@mail.gmail.com>
- <56CF60D0.6060500@gmail.com>
-Message-ID: <CAF_dkJCsPjyD61DA9-+VE7i+D-NLnwJBLxVxwZ-Lpu3DDJO5=Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 21:25:41 +0100
+Subject: [Buildroot] [PATCH 1/1] Added OK/FAIL output to SNMP init
+ script.
+In-Reply-To: <56CF5DBF.2060109@gmx.de>
+References: <1456335081-4834-1-git-send-email-universeII@gmx.de>
+ <20160225104643.0921463c@free-electrons.com>
+ <56CF5DBF.2060109@gmx.de>
+Message-ID: <20160225212541.6e6e5356@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 25, 2016 at 3:15 PM, Romain Naour <romain.naour@gmail.com> wrote:
-> Hello,
->
-> Le 25/02/2016 21:02, Patrick Doyle a ?crit :
->> arrgghh...nothing seems to be going smoothly today.  Well, some days
->> are like that..
->>
->> Is buildroot known to work (or not work) with the linaro-5.2-2015.11-1
->> toolchain (available at
->> https://releases.linaro.org/components/toolchain/binaries/latest-5.2/arm-linux-gnueabihf/)
->> specified as an external preinstalled toolchain?
->
-> Don't use 5.2-2015.11-1 it's broken use 5.2-2015.11-2 which is already supported
-> by Buildroot 2016.02-rc2.
->
-> See https://bugs.linaro.org/show_bug.cgi?id=1995
+Andreas,
 
-Thanks.  I managed to track that down just _after_ I posted my
-frustrated email :-)
+On Thu, 25 Feb 2016 21:02:07 +0100, Andreas Ehmanns wrote:
 
-Golly it would be nice if the latest-5.2 link at
-https://releases.linaro.org/components/toolchain/binaries/ pointed
-folks at the 11-2 toolchain instead of the 11-1 toolchain.
+> thanks for the feedback. I will prepare several patches including 
+> smaller changes and re-submit them.
 
-Oh well.
+Thanks a lot!
 
---wpd
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
