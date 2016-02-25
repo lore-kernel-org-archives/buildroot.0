@@ -1,29 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:35:22 +0100
-Subject: [Buildroot] How to include lsblk from linux-utils?
-In-Reply-To: <069601d16ff2$60263320$20729960$@chordia.co.uk>
-References: <05f401d16fdf$4ddcc840$e99658c0$@chordia.co.uk>
- <20160225171433.7e200dfc@free-electrons.com>
- <069601d16ff2$60263320$20729960$@chordia.co.uk>
-Message-ID: <20160225213522.2a67ec28@free-electrons.com>
+Date: Thu, 25 Feb 2016 21:36:08 +0100
+Subject: [Buildroot] [PATCH 1/1] uboot-tools: add option for dumpimage
+In-Reply-To: <1456409941-10295-1-git-send-email-paulo.zaneti@datacom.ind.br>
+References: <1456409941-10295-1-git-send-email-paulo.zaneti@datacom.ind.br>
+Message-ID: <20160225213608.4c5ecc35@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Paulo Zaneti,
 
-On Thu, 25 Feb 2016 17:31:35 -0000, jerry at chordia.co.uk wrote:
+On Thu, 25 Feb 2016 11:19:01 -0300, Paulo Zaneti wrote:
+> The tool dumpimage extracts data from U-Boot images.
+> U-Boot added dumpimage tool on release 2014.01.
+> This commit allows installation on target and host.
+> 
+> Signed-off-by: Paulo Zaneti <paulo.zaneti@datacom.ind.br>
+> ---
+>  package/uboot-tools/Config.in      | 6 ++++++
+>  package/uboot-tools/uboot-tools.mk | 8 ++++++++
+>  2 files changed, 14 insertions(+)
 
-> Excellent, that worked. Many thanks. Is this patch going into the next
-> release? 
+Applied to next, thanks.
 
-Glad to hear it worked. I've just submitted the patch, so unless anyone
-has objections against it, it should be part of 2016.05 (it is too late
-for 2016.02).
+It is somewhat odd that the host variant gets installed in usr/bin, and
+the target variant in usr/sbin, but it's already the case for the other
+U-Boot tools. So if we want to improve this, it can be done as a
+separate patch.
 
-Best regards,
+Thanks,
 
 Thomas
 -- 
