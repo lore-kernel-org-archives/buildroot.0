@@ -1,47 +1,54 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Thu, 25 Feb 2016 18:00:37 -0300
-Subject: [Buildroot] [PATCH v2 0/4] Add file capability/xattr support
-In-Reply-To: <20160225215003.5886d69d@free-electrons.com>
-References: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <20160225215003.5886d69d@free-electrons.com>
-Message-ID: <56CF6B75.10604@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 21:51:21 +0100
+Subject: [Buildroot] [git commit] ofono: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20160225210308.55D687FCBD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/16 17:50, Thomas Petazzoni wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0a4ea533d4ea096b83b7ebb3c0c19da8e41ddbda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> So, if you think that specifying the capabilities or extended
-> attributes should be done via a separate data file, then it means we
-> will have a new option to specify this data file, and we could
-> therefore only bring the additional host-fakeroot dependencies only
-> when this option is enabled, no?
+It uses __sync_fetch_and_add_4() and other 32-bit atomics, fixes:
+http://autobuild.buildroot.net/results/7ec/7ec4142d0f41234309a226a21a7da7acbece90e9/
 
-Hi.
-This is a RFC mostly since it's not complete, although it can be 
-commited as-is it's not usable directly without tweaking the fakeroot 
-script (which isn't exposed functionality at the moment).
-We can extend makedevs syntax/tool, but i believe it will be terribly 
-messy for scenarios where multiple XATTRs are desired, more so if we 
-eventually add ACL support to this.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/connman/Config.in | 1 +
+ package/ofono/Config.in   | 2 ++
+ 2 files changed, 3 insertions(+)
 
->> Also not all target filesystems support extended attributes.
->
-> And possibly the above option should be made visible only when the
-> underlying filesystem supports extended attributes.
->
-> What do you think?
->
-> Thomas
-
-Well, i was hoping for feedback, let's see other opinions.
-Enabling capabilities/xattrs/acls might be an option in target 
-filesystem where people can then add the respective file(s) describing 
-them, hence making it optional. If it were in makedevs it could be an 
-option as well but would pollute things quite a bit.
-Might be worth adding tar acl/xattr support as well, rigth now squashfs 
-and maybe ubifs are the only filesystem targets enabled for this.
-
-Regards.
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 556de48..26406c8 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -55,6 +55,7 @@ config BR2_PACKAGE_CONNMAN_NEARD
+ config BR2_PACKAGE_CONNMAN_OFONO
+ 	bool "enable ofono support"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # libcap-ng
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # ofono
+ 	select BR2_PACKAGE_OFONO
+ 
+ config BR2_PACKAGE_CONNMAN_DEBUG
+diff --git a/package/ofono/Config.in b/package/ofono/Config.in
+index f8365d8..2e3ca22 100644
+--- a/package/ofono/Config.in
++++ b/package/ofono/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_OFONO
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII # libcap-ng
+ 	depends on !BR2_STATIC_LIBS # dlopen()
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_LIBCAP_NG
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_LIBGLIB2
+@@ -18,5 +19,6 @@ config BR2_PACKAGE_OFONO
+ 
+ comment "ofono needs a toolchain w/ dynamic library, wchar, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
