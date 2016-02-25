@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 18:01:58 +0100
-Subject: [Buildroot] wget download: 'scheme missing' results in empty
-	output file
-In-Reply-To: <874mcwwxyx.fsf@dell.be.48ers.dk>
-References: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
- <20160225170758.1f444549@free-electrons.com>
- <CAAXf6LXz_WcAAsk+kts3cZ4=v1Pw1rB=nLf9yKr9FotCZRR8sg@mail.gmail.com>
- <874mcwwxyx.fsf@dell.be.48ers.dk>
-Message-ID: <20160225180158.673b34f5@free-electrons.com>
+Date: Thu, 25 Feb 2016 18:03:52 +0100
+Subject: [Buildroot] Incorrect kernel configuration produced from
+ _defconfig file
+In-Reply-To: <20160225165032.GG12073@piout.net>
+References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
+ <20160225170443.2e6208f4@free-electrons.com>
+ <20160225161451.GE12073@piout.net>
+ <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
+ <20160225165032.GG12073@piout.net>
+Message-ID: <20160225180352.1d768c84@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+Dear Alexandre Belloni,
 
-On Thu, 25 Feb 2016 17:34:14 +0100, Peter Korsgaard wrote:
+On Thu, 25 Feb 2016 17:50:32 +0100, Alexandre Belloni wrote:
 
->  > Also, for packages where the source is included with buildroot, like
->  > makedevs, FOO_SITE is empty too.
-> 
-> .. but those also don't define _SOURCE / _VERSION, so wget isn't called
-> ;)
+> Personally, I'd drop the yes "" | part of it and use only make
+> olddefconfig but the rules are also used for busybox et al. so you'd
+> have to check that all have a recent enough kconfig
 
-Yeah, but I was proposing to check for an empty FOO_SITE in the package
-infrastructure itself, so we're not at the point where wget gets called.
+I think the reason we still use the yes "" trick is that we have a
+generic kconfig infrastructure, and it should work for all kconfig
+based packages. Including old kernel version (when was
+olddefconfig introduced?) or Busybox (which has an horribly old copy of
+the kconfig code).
 
-But to answer Thomas: for cases like makedevs, we can special case such
-packages (their _SOURCE is empty, or something like this).
-
-Best regards,
+So switching to olddefconfig might not be that easy. But maybe this is
+something that can be made conditional in the pkg-kconfig
+infrastructure. Like use olddefconfig if available, and if not fall
+back to the yes "" | make oldconfig trick.
 
 Thomas
 -- 
