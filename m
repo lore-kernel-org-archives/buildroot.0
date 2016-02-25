@@ -1,43 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 21:45:32 +0100
-Subject: [Buildroot] [git commit] openssh: bump to version 7.2p1
-Message-ID: <20160302202759.1532680203@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 21:36:36 +0100
+Subject: [Buildroot] [git commit] package/iputils: add support for nettle
+Message-ID: <20160302202757.D037B7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c62637bdd473236d50ec459c9074ad8a8834129
+commit: https://git.buildroot.net/buildroot/commit/?id=73b56118f2a0d7039fda7a62380ff22d64adbfa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/openssh/openssh.hash | 4 ++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iputils/iputils.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index b93b4a9..36346e0 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.1p2
--sha256	dd75f024dcf21e06a0d6421d582690bf987a1f6323e32ad6619392f3bfde6bbd	openssh-7.1p2.tar.gz
-+# Also from http://www.openssh.com/txt/release-7.2
-+sha256	973cc37b2f3597e4cf599b09e604e79c0fe5d9b6f595a24e91ed0662860b4ac3	openssh-7.2p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 4e97849..0e0bcab 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 953f1f5..efedf1f 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -33,6 +33,13 @@ else
+ IPUTILS_MAKE_OPTS += USE_CAP=no
+ endif
  
--OPENSSH_VERSION = 7.1p2
-+OPENSSH_VERSION = 7.2p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++IPUTILS_MAKE_OPTS += USE_NETTLE=yes
++IPUTILS_DEPENDENCIES += nettle
++else
++IPUTILS_MAKE_OPTS += USE_NETTLE=no
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
+ IPUTILS_DEPENDENCIES += openssl
