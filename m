@@ -1,35 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2016 17:21:39 +0100
-Subject: [Buildroot] wget download: 'scheme missing' results in empty
-	output file
-In-Reply-To: <CAAXf6LVLzgK8WOODsVifFXhNuoOp82UJfTQwNmN7-D0coK0Y4g@mail.gmail.com>
- (Thomas De Schampheleire's message of "Thu, 25 Feb 2016 17:05:44
- +0100")
-References: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
- <87fuwgx0ge.fsf@dell.be.48ers.dk>
- <CAAXf6LVLzgK8WOODsVifFXhNuoOp82UJfTQwNmN7-D0coK0Y4g@mail.gmail.com>
-Message-ID: <878u28wyjw.fsf@dell.be.48ers.dk>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Thu, 25 Feb 2016 11:24:31 -0500
+Subject: [Buildroot] Incorrect kernel configuration produced from
+ _defconfig file
+In-Reply-To: <20160225161451.GE12073@piout.net>
+References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
+ <20160225170443.2e6208f4@free-electrons.com>
+ <20160225161451.GE12073@piout.net>
+Message-ID: <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+On Thu, Feb 25, 2016 at 11:14 AM, Alexandre Belloni
+<alexandre.belloni@free-electrons.com> wrote:
+> Hi,
+>
+> On 25/02/2016 at 17:04:43 +0100, Thomas Petazzoni wrote :
+>> I've Cc'ed Yann on this aspect, and also my colleague Alex who already
+>> saw this problem in the past IIRC.
+>>
+>
+> Yes, that is how I solved it for OE with Yann's advice:
+> http://git.openembedded.org/openembedded-core/commit/?id=9b75f6a5786ff7b2e6219d78b38f0032f100c660
+>
+> oldnoconfig is now an alias for olddefconfig but appeared earlier so it
+> was used to do the right thing with more kernel version.
+>
+So this sounds like a change in buildroot is warranted if we want to
+change this behavior.  I could submit a patch to buildroot that mimics
+Alexandre's Yocto patch.  Is that the next step here?
 
-Hi,
-
- > This is with wget 1.12 from 2009 :)
-
-Yeah, I guessed this was some kind of crufty RHEL thing ;)
-
- > Ok, so probably it's fixed meanwhile, but regardless what about the
- > patch which could cover other issues in such tools (not only wget) ?
-
-Small workarounds for legacy tools are ok, as long as they don't add too
-much complexity and the issue / version they work around is documented
-so we can later remove them again if needed.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+--wpd
