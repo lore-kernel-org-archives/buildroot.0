@@ -1,9 +1,9 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Thu, 25 Feb 2016 14:08:14 -0300
+Date: Thu, 25 Feb 2016 14:14:38 -0300
 Subject: [Buildroot] [PATCH 1/1] uboot-tools: add option for dumpimage
 In-Reply-To: <1456409941-10295-1-git-send-email-paulo.zaneti@datacom.ind.br>
 References: <1456409941-10295-1-git-send-email-paulo.zaneti@datacom.ind.br>
-Message-ID: <1456420094-1215-1-git-send-email-casantos@datacom.ind.br>
+Message-ID: <1456420478-1313-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
