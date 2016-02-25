@@ -1,10 +1,10 @@
 From: Gabe Evans <gabe@hashrabbit.co>
-Date: Thu, 25 Feb 2016 21:55:20 +0000
-Subject: [Buildroot] [PATCH 11/32] package/systemd: add optional support for
-	vconsole
+Date: Thu, 25 Feb 2016 21:55:21 +0000
+Subject: [Buildroot] [PATCH 12/32] package/systemd: add optional support for
+	bootchart
 In-Reply-To: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
-Message-ID: <1456437341-19025-12-git-send-email-gabe@hashrabbit.co>
+Message-ID: <1456437341-19025-13-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +13,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 ---
- package/systemd/Config.in  | 8 ++++++++
+ package/systemd/Config.in  | 9 +++++++++
  package/systemd/systemd.mk | 6 ++++++
- 2 files changed, 14 insertions(+)
+ 2 files changed, 15 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 31a2eb6..b4b844f 100644
+index b4b844f..c111d46 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -92,6 +92,14 @@ config BR2_PACKAGE_SYSTEMD_BINFMT
+@@ -100,6 +100,15 @@ config BR2_PACKAGE_SYSTEMD_VCONSOLE
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-binfmt.service.html
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
  
-+config BR2_PACKAGE_SYSTEMD_VCONSOLE
-+	bool "enable vconsole tool"
++config BR2_PACKAGE_SYSTEMD_BOOTCHART
++	bool "enable bootchart tool"
 +	help
-+	  systemd-vconsole-setup is an early boot service that configures the virtual
-+	  console font and console keymap.
++	  systemd-bootchart is a tool, usually run at system startup, that collects
++	  the CPU load, disk load, memory usage, as well as per-process information
++	  from a running system. Collected results are output as an SVG graph.
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-bootchart.html
 +
  config BR2_PACKAGE_SYSTEMD_NETWORKD
  	bool "enable network manager"
  	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 095bd74..75e2739 100644
+index 75e2739..6627177 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -133,6 +133,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-binfmt
+@@ -139,6 +139,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-vconsole
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE),y)
-+SYSTEMD_CONF_OPTS += --enable-vconsole
++ifeq ($(BR2_PACKAGE_SYSTEMD_BOOTCHART),y)
++SYSTEMD_CONF_OPTS += --enable-bootchart
 +else
-+SYSTEMD_CONF_OPTS += --disable-vconsole
++SYSTEMD_CONF_OPTS += --disable-bootchart
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
