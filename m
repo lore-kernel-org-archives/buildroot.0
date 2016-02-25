@@ -1,159 +1,145 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2016 15:56:12 +0100
-Subject: [Buildroot] [git commit] pandabord: use genimage to generate sdcard
-	image
-Message-ID: <20160302202758.6B0547FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 22:57:50 +0100
+Subject: [Buildroot] [git commit] dt: new package
+Message-ID: <20160302202758.482AD7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16fc95d5a1409432bde812edb26f0850e66023bd
+commit: https://git.buildroot.net/buildroot/commit/?id=938946a4763846c00765a48973c685a0c04baad0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And drop the manual sdcard generation description from the readme.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+[Thomas: use <pkg>_STRIP_COMPONENTS = 2, which allows to get rid of
+the <pkg>_SUBDIR usage, and make things a bit simpler.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/pandaboard/genimage.cfg  | 26 +++++++++++++++++++++++
- board/pandaboard/post-image.sh | 16 ++++++++++++++
- board/pandaboard/readme.txt    | 48 ++++++++----------------------------------
- configs/pandaboard_defconfig   |  3 +++
- 4 files changed, 54 insertions(+), 39 deletions(-)
+ package/Config.in                       |  1 +
+ package/dt/0001-adjust-os-symlink.patch | 19 ++++++++++++++++
+ package/dt/Config.in                    | 21 ++++++++++++++++++
+ package/dt/dt.hash                      |  5 +++++
+ package/dt/dt.mk                        | 39 +++++++++++++++++++++++++++++++++
+ 5 files changed, 85 insertions(+)
 
-diff --git a/board/pandaboard/genimage.cfg b/board/pandaboard/genimage.cfg
+diff --git a/package/Config.in b/package/Config.in
+index 2b18147..67a2514 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -73,6 +73,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/dmalloc/Config.in"
+ 	source "package/dropwatch/Config.in"
+ 	source "package/dstat/Config.in"
++	source "package/dt/Config.in"
+ 	source "package/duma/Config.in"
+ 	source "package/fio/Config.in"
+ 	source "package/gdb/Config.in"
+diff --git a/package/dt/0001-adjust-os-symlink.patch b/package/dt/0001-adjust-os-symlink.patch
 new file mode 100644
-index 0000000..f30033f
+index 0000000..1af9d64
 --- /dev/null
-+++ b/board/pandaboard/genimage.cfg
-@@ -0,0 +1,26 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"MLO",
-+			"u-boot.img"
-+		}
-+	}
-+	size = 8M
-+}
++++ b/package/dt/0001-adjust-os-symlink.patch
+@@ -0,0 +1,19 @@
++Don't force build-dir-in-build-dir logic, symlink the os-specific SCSI
++support file in place.
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++Status: not suitable for upstream.
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
++Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/pandaboard/post-image.sh b/board/pandaboard/post-image.sh
-new file mode 100755
-index 0000000..9cca1b1
++diff -Nura Makefile.linux Makefile.linux
++--- a/Makefile.linux	2016-01-26 09:10:03.939963780 -0300
+++++ b/Makefile.linux	2016-01-26 09:10:27.140763863 -0300
++@@ -129,7 +129,7 @@
++ 	    echo "Please specify OS={aix,linux,hpux,solaris,windows}"; \
++ 	    exit 1; \
++ 	fi; \
++-	ln -sf ../scsilib-$(OS).c scsilib.c
+++	ln -sf scsilib-$(OS).c scsilib.c
++ 
++ print:;
++ 		@$(PRINTER) $(PRINTFLAGS) $(ALL_CFILES)
+diff --git a/package/dt/Config.in b/package/dt/Config.in
+new file mode 100644
+index 0000000..848e251
 --- /dev/null
-+++ b/board/pandaboard/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
++++ b/package/dt/Config.in
+@@ -0,0 +1,21 @@
++comment "dt needs a (e)glibc or uclibc toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
 +
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++config BR2_PACKAGE_DT
++	bool "dt"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	# Build fails because of several BSDisms
++	depends on !BR2_TOOLCHAIN_USES_MUSL
++	help
++	  dt is a generic data test program used to verify proper
++	  operation of peripherals, file systems, device drivers,
++	  or any data stream supported by the operating system.
++	  In its' simplest mode of operation, dt writes and then
++	  verifys its' default data pattern, then displays
++	  performance statisics and other test parameters
++	  before exiting. Since verification of data is performed,
++	  dt can be thought of as a generic diagnostic tool.
 +
-+rm -rf "${GENIMAGE_TMP}"
++	  http://www.scsifaq.org/RMiller_Tools/dt.html
+diff --git a/package/dt/dt.hash b/package/dt/dt.hash
+new file mode 100644
+index 0000000..7cd8c64
+--- /dev/null
++++ b/package/dt/dt.hash
+@@ -0,0 +1,5 @@
++# From http://pkgs.fedoraproject.org/repo/pkgs/dt/dt-source-v18.32.tar.gz
++# (directory name is md5 hash)
++md5	3054aeaaba047a1dbe90c2132a382ee2	dt-source-v18.32.tar.gz
++# Calculated based on the hash above
++sha256	10d164676e918a4d07f233bcd11e4cb6bfd1052c996182cd1827ccd0c063fcc6	dt-source-v18.32.tar.gz
+diff --git a/package/dt/dt.mk b/package/dt/dt.mk
+new file mode 100644
+index 0000000..8ec7788
+--- /dev/null
++++ b/package/dt/dt.mk
+@@ -0,0 +1,39 @@
++################################################################################
++#
++# dt
++#
++################################################################################
 +
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
++DT_VERSION = v18.32
++DT_SITE = http://pkgs.fedoraproject.org/repo/pkgs/dt/$(DT_SOURCE)/3054aeaaba047a1dbe90c2132a382ee2
++DT_SOURCE = dt-source-$(DT_VERSION).tar.gz
++DT_STRIP_COMPONENTS = 2
++DT_LICENSE = ISC-like
++DT_LICENSE_FILES = LICENSE
 +
-+exit $?
-diff --git a/board/pandaboard/readme.txt b/board/pandaboard/readme.txt
-index e18ae52..1e4820b 100644
---- a/board/pandaboard/readme.txt
-+++ b/board/pandaboard/readme.txt
-@@ -28,49 +28,19 @@ The result of the build with the default settings should be these files:
-   ????????? omap4-panda.dtb
-   ????????? omap4-panda-es.dtb
-   ????????? rootfs.ext4
-+  ????????? sdcard.img
-   ????????? u-boot.img
-   ????????? zImage
- 
--Setting up your SD card
-------------------------
-+How to write the SD card
-+------------------------
- 
--*Important*: pay attention which partition you are modifying so you don't
--accidentally erase the wrong file system, e.g your host computer or your
--external storage!
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
- 
--In the default setup you need to create two partitions on your SD card:
--a boot partition and a rootfs partition.
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
- 
--The ROM code from OMAP processors need the SD card to be formatted with
--a special geometry in the partition table. To do that, you can use the
--shell script below (this script was extracted from
--http://elinux.org/Panda_How_to_MLO_%26_u-boot).
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
- 
--#!/bin/sh
--DRIVE=$1
--if [ -b "$DRIVE" ] ; then
--	dd if=/dev/zero of=$DRIVE bs=1024 count=1024
--	SIZE=`fdisk -l $DRIVE | grep Disk | awk '{print $5}'`
--	echo DISK SIZE - $SIZE bytes
--	CYLINDERS=`echo $SIZE/255/63/512 | bc`
--	echo CYLINDERS - $CYLINDERS
--	{
--	echo ,9,0x0C,*
--	echo ,,,-
--	} | sfdisk -D -H 255 -S 63 -C $CYLINDERS $DRIVE
--	mkfs.vfat -F 32 -n "boot" ${DRIVE}1
--	mke2fs -j -L "rootfs" ${DRIVE}2
--fi
--
--The next step is to mount the sdcard's first partition and copy MLO
--and u-boot.img to it.
--
--  $ sudo mkdir -p /mnt/sdcard
--  $ sudo mount /dev/sdX1 /mnt/sdcard
--  $ sudo cp MLO u-boot.img /mnt/sdcard
--  $ sudo umount /mnt/sdcard
--
--The last step is to copy the rootfs image to the sdcard's second
--partition using 'dd':
--
--  $ sudo dd if=rootfs.ext4 of=/dev/sdX2 bs=1M conv=fsync
-+Where /dev/sdX is the device node of your SD card (may be /dev/mmcblkX
-+instead depending on setup).
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index c217d3b..7ae1a50 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -4,6 +4,7 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pandaboard/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
-@@ -23,3 +24,5 @@ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap4_panda"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
++DT_CFLAGS = \
++	-std=c99 \
++	-DMMAP \
++	-D__linux__ \
++	-D_GNU_SOURCE \
++	-D_FILE_OFFSET_BITS=64 \
++	-DTHREADS \
++	-DSCSI
++
++# uClibc doesn't provide POSIX AIO
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),)
++DT_CFLAGS += -DAIO
++endif
++
++define DT_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) -f Makefile.linux \
++		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) $(DT_CFLAGS)" \
++		OS=linux
++endef
++
++define DT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/dt $(TARGET_DIR)/usr/bin/dt
++endef
++
++$(eval $(generic-package))
