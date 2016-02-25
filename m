@@ -1,34 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 20:56:05 +0100
-Subject: [Buildroot] [git commit] gcc: mark 4.7.x as deprecated
-Message-ID: <20160302202757.0CDD980203@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 22:22:15 +0100
+Subject: [Buildroot] [git commit] acl: cleanup pointless indentation
+Message-ID: <20160302202758.0549F7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04f416df91109f75f393820fa924db4a8f257326
+commit: https://git.buildroot.net/buildroot/commit/?id=2d3621224278bef25cad56ebbe51bc0d18d0d572
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We're already using 4.9.x as default, and have 4.8.x on the lower side
-together with 5.x (5.3.0) on the higher side.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gcc/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/acl/acl.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 560ea52..5cc0dd3 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -41,6 +41,7 @@ choice
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 62e5d15..cbe5e93 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -16,15 +16,15 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ # While the configuration system uses autoconf, the Makefiles are
+ # hand-written and do not use automake. Therefore, we have to hack
+ # around their deficiencies by passing installation paths.
+-ACL_INSTALL_STAGING_OPTS = 			\
+-	prefix=$(STAGING_DIR)/usr 		\
+-	exec_prefix=$(STAGING_DIR)/usr 		\
+-	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib	\
++ACL_INSTALL_STAGING_OPTS = \
++	prefix=$(STAGING_DIR)/usr \
++	exec_prefix=$(STAGING_DIR)/usr \
++	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
+ 	install-dev install-lib
  
- 	config BR2_GCC_VERSION_4_7_X
- 		bool "gcc 4.7.x"
-+		depends on BR2_DEPRECATED_SINCE_2016_05
- 		# Broken or unsupported architectures
- 		depends on !BR2_microblaze && !BR2_aarch64 && !BR2_arc \
- 			&& !BR2_powerpc64le && !BR2_nios2
+-ACL_INSTALL_TARGET_OPTS = 			\
+-	prefix=$(TARGET_DIR)/usr 		\
+-	exec_prefix=$(TARGET_DIR)/usr 		\
++ACL_INSTALL_TARGET_OPTS = \
++	prefix=$(TARGET_DIR)/usr \
++	exec_prefix=$(TARGET_DIR)/usr \
+ 	install install-lib
+ 
+ # The libdir variable in libacl.la is empty, so let's fix it. This is
