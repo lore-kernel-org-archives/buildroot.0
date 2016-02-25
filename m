@@ -1,33 +1,42 @@
 From: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Date: Thu, 25 Feb 2016 11:18:42 +0530
-Subject: [Buildroot] [PATCH 1/3] dnsmasq: separate licenses with 'or' keyword
-Message-ID: <1456379324-7666-1-git-send-email-rahul.bedarkar@imgtec.com>
+Date: Thu, 25 Feb 2016 11:18:43 +0530
+Subject: [Buildroot] [PATCH 2/3] hostapd: correct legal info
+In-Reply-To: <1456379324-7666-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1456379324-7666-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <1456379324-7666-2-git-send-email-rahul.bedarkar@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-dnsmasq is dual licensed so separate licenses with 'or' keyword.
+hostapd is licensed under BSD-3c only and not dual licensed.
 
-Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+Quoting from COPYING file
+ This software was previously distributed under BSD/GPL v2 dual license
+ terms that allowed either of those license alternatives to be
+ selected. As of February 11, 2012, the project has chosen to use only
+ the BSD license option for future distribution. As such, the GPL v2
+ license option is no longer used.
+
+Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
 Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
 ---
- package/dnsmasq/dnsmasq.mk | 2 +-
+ package/hostapd/hostapd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index a0db81b..b3e8c4c 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -11,7 +11,7 @@ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
- DNSMASQ_MAKE_OPTS = COPTS="$(DNSMASQ_COPTS)" PREFIX=/usr CFLAGS="$(TARGET_CFLAGS)"
- DNSMASQ_MAKE_OPTS += DESTDIR=$(TARGET_DIR) LDFLAGS="$(TARGET_LDFLAGS)"
- DNSMASQ_DEPENDENCIES = host-pkgconf
--DNSMASQ_LICENSE = Dual GPLv2/GPLv3
-+DNSMASQ_LICENSE = GPLv2 or GPLv3
- DNSMASQ_LICENSE_FILES = COPYING COPYING-v3
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 88867e6..dca07c1 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -10,7 +10,7 @@ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+ HOSTAPD_DEPENDENCIES = host-pkgconf libnl
+ HOSTAPD_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+-HOSTAPD_LICENSE = GPLv2/BSD-3c
++HOSTAPD_LICENSE = BSD-3c
+ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
  
- ifneq ($(BR2_PACKAGE_DNSMASQ_DHCP),y)
 -- 
 1.9.1
