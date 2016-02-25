@@ -1,59 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 17:14:33 +0100
-Subject: [Buildroot] How to include lsblk from linux-utils?
-In-Reply-To: <05f401d16fdf$4ddcc840$e99658c0$@chordia.co.uk>
-References: <05f401d16fdf$4ddcc840$e99658c0$@chordia.co.uk>
-Message-ID: <20160225171433.7e200dfc@free-electrons.com>
+From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
+Date: Thu, 25 Feb 2016 17:14:51 +0100
+Subject: [Buildroot] Incorrect kernel configuration produced from
+ _defconfig file
+In-Reply-To: <20160225170443.2e6208f4@free-electrons.com>
+References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
+ <20160225170443.2e6208f4@free-electrons.com>
+Message-ID: <20160225161451.GE12073@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jerry,
+Hi,
 
-On Thu, 25 Feb 2016 15:15:04 -0000, jerry at chordia.co.uk wrote:
-> Using BR 2016-02 how do I get lsblk installed? 
+On 25/02/2016 at 17:04:43 +0100, Thomas Petazzoni wrote :
+> I've Cc'ed Yann on this aspect, and also my colleague Alex who already
+> saw this problem in the past IIRC.
 > 
-> The source package is present but the utilities are not being built. I've
-> got System Tools >> install utilities selected but no lsblk is visible.
 
-You need to add a patch like the below to be able to select lsblk in
-your build:
+Yes, that is how I solved it for OE with Yann's advice:
+http://git.openembedded.org/openembedded-core/commit/?id=9b75f6a5786ff7b2e6219d78b38f0032f100c660
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index 3f9a7db..d4f9a3d 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -139,6 +139,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
-        help
-          Set up and control loop devices
- 
-+config BR2_PACKAGE_UTIL_LINUX_LSBLK
-+       bool "lsblk"
-+       help
-+         List block devices.
-+
- config BR2_PACKAGE_UTIL_LINUX_MESG
-        bool "mesg"
-        help
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 7342174..141dffd 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -85,6 +85,7 @@ UTIL_LINUX_CONF_OPTS += \
-        $(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
-        $(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
-        $(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
-+       $(if $(BR2_PACKAGE_UTIL_LINUX_LSBLK),--enable-lsblk,--disable-lsblk) \
-        $(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
-        $(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
-        $(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
+oldnoconfig is now an alias for olddefconfig but appeared earlier so it
+was used to do the right thing with more kernel version.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
+Alexandre Belloni, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
