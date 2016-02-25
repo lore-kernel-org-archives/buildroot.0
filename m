@@ -1,53 +1,58 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 25 Feb 2016 21:15:12 +0100
-Subject: [Buildroot] buildroot with linaro-5.2-2015.11-1 toolchain
-In-Reply-To: <CAF_dkJB=bcGLC7cTKxz=cDGa12D5DqT4JX-qDDyApjFswtraDQ@mail.gmail.com>
-References: <CAF_dkJB=bcGLC7cTKxz=cDGa12D5DqT4JX-qDDyApjFswtraDQ@mail.gmail.com>
-Message-ID: <56CF60D0.6060500@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 25 Feb 2016 21:16:02 +0100
+Subject: [Buildroot] [PATCH v3 2/2] docs/manual: add section about patch
+	licensing
+In-Reply-To: <1456401075-16948-3-git-send-email-luca@lucaceresoli.net>
+References: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
+ <1456401075-16948-3-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160225201602.GC5870@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Luca, All,
 
-Le 25/02/2016 21:02, Patrick Doyle a ?crit :
-> arrgghh...nothing seems to be going smoothly today.  Well, some days
-> are like that..
+On 2016-02-25 12:51 +0100, Luca Ceresoli spake thusly:
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Steve Calfee <stevecalfee@gmail.com>
 > 
-> Is buildroot known to work (or not work) with the linaro-5.2-2015.11-1
-> toolchain (available at
-> https://releases.linaro.org/components/toolchain/binaries/latest-5.2/arm-linux-gnueabihf/)
-> specified as an external preinstalled toolchain?
+> ---
+> 
+> Note: although there are only wording improvements since v2, I did not
+> carry the Acked-by from Thomas and Arnout because the topic is
+> delicate and Yann explicitly nacked the patch.
 
-Don't use 5.2-2015.11-1 it's broken use 5.2-2015.11-2 which is already supported
-by Buildroot 2016.02-rc2.
+IIRC, I NAKed it because, in case of proprietary packages, the patches
+can only be available under the FLOSS license of the package they are
+applied to.
 
-See https://bugs.linaro.org/show_bug.cgi?id=1995
+[--SNIP--]
+> +==== Patches to packages
+> +
+> +Buildroot is bundled with a set of patches that are applied to
+> +packages to fix cross-compilation or other issues. See
+> +xref:patch-policy[] for the technical details.
+> +
+> +These patches are effectively a derived work of the package they are
+> +applied to, and so they are released under the same license as the
+> +software they apply to. They are not distributed under the Buildroot
+> +license.
 
-> 
-> Obviously, I'm asking because it's not working for me.  Things appear
-> to start going south when the following command:
-> 
-> $ arm-linux-gnueabihf-gcc -print-file-name=libc.a
-> 
-> 
-> produces the following output on my system:
-> 
-> libc.a
-> 
-> Did I do something wrong when I installed it?  (I just unpacked it into /opt).
+Why not repeat the same sentence as the one from the previous patch?
 
-Just use latest master or 2016.02-rc archive :p
+Regards,
+Yann E. MORIN.
 
-Best regards,
-Romain
-
-> 
-> --wpd
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
