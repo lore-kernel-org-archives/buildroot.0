@@ -1,42 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:29:14 +0100
-Subject: [Buildroot] [git commit] wpa_supplicant: correct legal info
-Message-ID: <20160225213612.77FBB7F92A@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 22:36:40 +0100
+Subject: [Buildroot] [PATCH 1/3] dnsmasq: separate licenses with 'or'
+ keyword
+In-Reply-To: <1456379324-7666-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1456379324-7666-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160225223640.7a146257@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1bd0c377b2b97823d3ec661680f8b2a6a5bbec8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Rahul Bedarkar,
 
-wpa_supplicant is licensed under BSD-3c only and not dual licensed.
+On Thu, 25 Feb 2016 11:18:42 +0530, Rahul Bedarkar wrote:
+> dnsmasq is dual licensed so separate licenses with 'or' keyword.
+> 
+> Reviewed-by: Marcin Nowakowski <marcin.nowakowski@imgtec.com>
+> Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+> ---
+>  package/dnsmasq/dnsmasq.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Quoting from COPYING file
- This software was previously distributed under BSD/GPL v2 dual license
- terms that allowed either of those license alternatives to be
- selected. As of February 11, 2012, the project has chosen to use only
- the BSD license option for future distribution. As such, the GPL v2
- license option is no longer used.
+All three patches applied to master, thanks!
 
-Reviewed-by: Abhimanyu Vishwakarma <Abhimanyu.Vishwakarma@imgtec.com>
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/wpa_supplicant/wpa_supplicant.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index e3f1434..ba1180d 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -6,7 +6,7 @@
- 
- WPA_SUPPLICANT_VERSION = 2.5
- WPA_SUPPLICANT_SITE = http://hostap.epitest.fi/releases
--WPA_SUPPLICANT_LICENSE = GPLv2/BSD-3c
-+WPA_SUPPLICANT_LICENSE = BSD-3c
- WPA_SUPPLICANT_LICENSE_FILES = README
- WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
- WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
