@@ -1,45 +1,39 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 25 Feb 2016 17:50:32 +0100
-Subject: [Buildroot] Incorrect kernel configuration produced from
- _defconfig file
-In-Reply-To: <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
-References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
- <20160225170443.2e6208f4@free-electrons.com>
- <20160225161451.GE12073@piout.net>
- <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
-Message-ID: <20160225165032.GG12073@piout.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 18:01:58 +0100
+Subject: [Buildroot] wget download: 'scheme missing' results in empty
+	output file
+In-Reply-To: <874mcwwxyx.fsf@dell.be.48ers.dk>
+References: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
+ <20160225170758.1f444549@free-electrons.com>
+ <CAAXf6LXz_WcAAsk+kts3cZ4=v1Pw1rB=nLf9yKr9FotCZRR8sg@mail.gmail.com>
+ <874mcwwxyx.fsf@dell.be.48ers.dk>
+Message-ID: <20160225180158.673b34f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/2016 at 11:24:31 -0500, Patrick Doyle wrote :
-> On Thu, Feb 25, 2016 at 11:14 AM, Alexandre Belloni
-> <alexandre.belloni@free-electrons.com> wrote:
-> > Hi,
-> >
-> > On 25/02/2016 at 17:04:43 +0100, Thomas Petazzoni wrote :
-> >> I've Cc'ed Yann on this aspect, and also my colleague Alex who already
-> >> saw this problem in the past IIRC.
-> >>
-> >
-> > Yes, that is how I solved it for OE with Yann's advice:
-> > http://git.openembedded.org/openembedded-core/commit/?id=9b75f6a5786ff7b2e6219d78b38f0032f100c660
-> >
-> > oldnoconfig is now an alias for olddefconfig but appeared earlier so it
-> > was used to do the right thing with more kernel version.
-> >
-> So this sounds like a change in buildroot is warranted if we want to
-> change this behavior.  I could submit a patch to buildroot that mimics
-> Alexandre's Yocto patch.  Is that the next step here?
+Dear Peter Korsgaard,
+
+On Thu, 25 Feb 2016 17:34:14 +0100, Peter Korsgaard wrote:
+
+>  > Also, for packages where the source is included with buildroot, like
+>  > makedevs, FOO_SITE is empty too.
 > 
+> .. but those also don't define _SOURCE / _VERSION, so wget isn't called
+> ;)
 
-Personally, I'd drop the yes "" | part of it and use only make
-olddefconfig but the rules are also used for busybox et al. so you'd
-have to check that all have a recent enough kconfig
+Yeah, but I was proposing to check for an empty FOO_SITE in the package
+infrastructure itself, so we're not at the point where wget gets called.
 
+But to answer Thomas: for cases like makedevs, we can special case such
+packages (their _SOURCE is empty, or something like this).
+
+Best regards,
+
+Thomas
 -- 
-Alexandre Belloni, Free Electrons
+Thomas Petazzoni, CTO, Free Electrons
 Embedded Linux, Kernel and Android engineering
 http://free-electrons.com
