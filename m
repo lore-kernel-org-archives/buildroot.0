@@ -1,65 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:50:18 +0100
-Subject: [Buildroot] [PATCH v2 1/1] libfcgi:add security patch for
- CVE-2012-6687
-In-Reply-To: <1455000746-26644-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-References: <1455000746-26644-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <20160225225018.7b702f4b@free-electrons.com>
+Date: Thu, 25 Feb 2016 22:51:27 +0100
+Subject: [Buildroot] [git commit] nfs-utils: fix struct file_handle related
+	build failures
+Message-ID: <20160225215139.5E56F81909@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=021afbffa1bf5a53f95d00f1322f6e4f2bd8f210
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this new version. It is almost ready, but your Signed-off-by
-line is still missing, and since it is a legal statement, I cannot add
-it myself when applying.
+This patch fixes
+http://autobuild.buildroot.net/results/948/948f81d7ed2c080a675ee9fec754f6fda1fd905f/
 
-On Tue,  9 Feb 2016 12:22:26 +0530, Niranjan Reddy wrote:
-> From: "Niranjan Reddy" <niranjan.reddy@rockwellcollins.com>
-> 
-> Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
-> via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-> use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
-> The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
-> (https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-> The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
-> officially.
+The patches has been sent upstream:
+http://article.gmane.org/gmane.linux.nfs/76139
 
-We need your Signed-off-by here.
+Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+[Thomas: slightly tweak commit title.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...4-mountd-Add-check-for-struct-file_handle.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-> ---
->  package/libfcgi/0006-fix-CVE-2012-6687.patch | 103 +++++++++++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
-> 
-> diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch b/package/libfcgi/0006-fix-CVE-2012-6687.patch
-> new file mode 100644
-> index 0000000..a8ea847
-> --- /dev/null
-> +++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
-> @@ -0,0 +1,103 @@
-> +libfcgi:add security patch for CVE-2012-6687
-> +CVE-2012-6687 - remote attackers cause a denial of service (crash) via a large number 
-> +of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-> +Fix:use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
-> +This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below link:
-> +(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-> +The next release of libfcgi is 2.4.1 which may have this fix is yet to be released 
-> +officially.
-> +
-> +Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
-
-And here.
-
-Could you address that and send an updated version?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch b/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
+new file mode 100644
+index 0000000..7aca266
+--- /dev/null
++++ b/package/nfs-utils/0004-mountd-Add-check-for-struct-file_handle.patch
+@@ -0,0 +1,46 @@
++From 3c23b3ea7f5069e8fd4d5758704cd968504f1079 Mon Sep 17 00:00:00 2001
++From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++Date: Tue, 2 Feb 2016 10:07:22 +0100
++Subject: [PATCH] mountd: Add check for 'struct file_handle'
++
++The code to check if name_to_handle_at() is implemented generates only a
++warning but with some toolchain it doesn't fail to link (the function must be
++implemented somewhere).
++However the "struct file_handle" type is not available.
++
++So, this patch adds a check for this struct.
++
++Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
++---
++ configure.ac         | 1 +
++ utils/mountd/cache.c | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 25d2ba4..913a86f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -425,6 +425,7 @@ AC_TYPE_PID_T
++ AC_TYPE_SIZE_T
++ AC_HEADER_TIME
++ AC_STRUCT_TM
+++AC_CHECK_TYPES([struct file_handle])
++ 
++ dnl *************************************************************
++ dnl Check for functions
++diff --git a/utils/mountd/cache.c b/utils/mountd/cache.c
++index 7847446..dc64f6d 100644
++--- a/utils/mountd/cache.c
+++++ b/utils/mountd/cache.c
++@@ -424,7 +424,7 @@ static int same_path(char *child, char *parent, int len)
++ 	if (count_slashes(p) != count_slashes(parent))
++ 		return 0;
++ 
++-#if HAVE_NAME_TO_HANDLE_AT
+++#if defined(HAVE_NAME_TO_HANDLE_AT) && defined(HAVE_STRUCT_FILE_HANDLE)
++ 	struct {
++ 		struct file_handle fh;
++ 		unsigned char handle[128];
++-- 
++2.7.0
++
