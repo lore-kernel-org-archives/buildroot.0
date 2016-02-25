@@ -1,49 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 23:02:05 +0100
-Subject: [Buildroot] [git commit] package/avahi: add optional support for
-	libcap
-Message-ID: <20160225220654.BE2388191F@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Thu, 25 Feb 2016 23:08:47 +0100
+Subject: [Buildroot] [PATCH] package/mono: fixing monodoc leaking path
+Message-ID: <1456438127-15919-1-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38d404b8cfa4b6df13225118e400b8c8684bf7e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This patch fixes a leak in host compiler path for monodoc.
+This bug is solved upstream but the fix is not included
+in the latest stable release.
 
-When libcap was compiled before, avahi daemon will use it as optional
-dependency:
-
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/sbin/avahi-daemon | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libavahi-common.so.3]
- 0x0000000000000001 (NEEDED)             Shared library: [libavahi-core.so.7]
- 0x0000000000000001 (NEEDED)             Shared library: [libcap.so.2]
-[...]
-
-The build system offers no option to en-/disable libcap support:
-http://git.0pointer.net/avahi.git/tree/configure.ac#n382
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: make the test unconditionally, even if libcap is only used by
-avahi-daemon for the moment.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/avahi/avahi.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...-monodoc-Fixing-wrong-monodoc-search-path.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index 5d6e6a8..b7ad81d 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -115,6 +115,10 @@ else
- AVAHI_CONF_OPTS += --disable-libdaemon
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCAP),y)
-+AVAHI_DEPENDENCIES += libcap
-+endif
+diff --git a/package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch b/package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch
+new file mode 100644
+index 0000000..58fa323
+--- /dev/null
++++ b/package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch
+@@ -0,0 +1,29 @@
++From 18bba65adf58d54645398de26eac24081d48f793 Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Thu, 25 Feb 2016 22:19:31 +0100
++Subject: [PATCH] mcs/class/monodoc/Makefile: Fixing wrong monodoc search path
 +
- ifeq ($(BR2_PACKAGE_AVAHI_DAEMON),y)
- AVAHI_DEPENDENCIES += expat
- AVAHI_CONF_OPTS += --with-xml=expat
++mono_libdir actually leaks host compiler path, fixing
++by hardcoding correct path for our usecase.
++
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ mcs/class/monodoc/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mcs/class/monodoc/Makefile b/mcs/class/monodoc/Makefile
++index 3ebba80..ddc2098 100644
++--- a/mcs/class/monodoc/Makefile
+++++ b/mcs/class/monodoc/Makefile
++@@ -135,7 +135,7 @@ test-local: setup-doc-sources
++ dist-local: Monodoc.Ecma/EcmaUrlParser.cs
++ 
++ $(the_lib).config: Makefile monodoc.dll.config.in
++-	sed 's, at monodoc_refdir@,$(mono_libdir)/monodoc,g' monodoc.dll.config.in > $@
+++	sed 's, at monodoc_refdir@,/usr/lib/monodoc,g' monodoc.dll.config.in > $@
++ 
++ Monodoc.Ecma/EcmaUrlParser.cs: Monodoc.Ecma/EcmaUrlParser.jay $(topdir)/jay/skeleton.cs jay.sh
++ 	$(topdir)/$(thisdir)/jay.sh $(topdir) $< $@ $(JAY_FLAGS)
++-- 
++1.9.1
++
+-- 
+1.9.1
