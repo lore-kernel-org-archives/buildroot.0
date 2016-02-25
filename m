@@ -1,47 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:22:15 +0100
-Subject: [Buildroot] [git commit branch/next] acl: cleanup pointless
-	indentation
-Message-ID: <20160225212411.7289981789@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 22:24:32 +0100
+Subject: [Buildroot] [git commit branch/next] libcap: enable extended
+	attribute support
+Message-ID: <20160225212457.368D081954@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d3621224278bef25cad56ebbe51bc0d18d0d572
+commit: https://git.buildroot.net/buildroot/commit/?id=0cc9dd31e1d07a30001645b4f8a0f4aff91dbc1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+This is required for capability support in files, via fakeroot.
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/acl/acl.mk | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ package/libcap/libcap.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index 62e5d15..cbe5e93 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -16,15 +16,15 @@ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
- # While the configuration system uses autoconf, the Makefiles are
- # hand-written and do not use automake. Therefore, we have to hack
- # around their deficiencies by passing installation paths.
--ACL_INSTALL_STAGING_OPTS = 			\
--	prefix=$(STAGING_DIR)/usr 		\
--	exec_prefix=$(STAGING_DIR)/usr 		\
--	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib	\
-+ACL_INSTALL_STAGING_OPTS = \
-+	prefix=$(STAGING_DIR)/usr \
-+	exec_prefix=$(STAGING_DIR)/usr \
-+	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
- 	install-dev install-lib
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 54844f8..252c4bb 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -20,8 +20,7 @@ else
+ LIBCAP_HAVE_LIBATTR = no
+ endif
  
--ACL_INSTALL_TARGET_OPTS = 			\
--	prefix=$(TARGET_DIR)/usr 		\
--	exec_prefix=$(TARGET_DIR)/usr 		\
-+ACL_INSTALL_TARGET_OPTS = \
-+	prefix=$(TARGET_DIR)/usr \
-+	exec_prefix=$(TARGET_DIR)/usr \
- 	install install-lib
+-# we don't have host-attr
+-HOST_LIBCAP_DEPENDENCIES =
++HOST_LIBCAP_DEPENDENCIES = host-attr
  
- # The libdir variable in libacl.la is empty, so let's fix it. This is
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBCAP_MAKE_TARGET = libcap.a
+@@ -67,12 +66,13 @@ define LIBCAP_INSTALL_TARGET_CMDS
+ endef
+ 
+ define HOST_LIBCAP_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) LIBATTR=no
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D)\
++		LIBATTR=yes RAISE_SETFCAP=no
+ endef
+ 
+ define HOST_LIBCAP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) LIBATTR=no DESTDIR=$(HOST_DIR) \
+-		prefix=/usr lib=lib install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) \
++		LIBATTR=yes RAISE_SETFCAP=no prefix=/usr lib=lib install
+ endef
+ 
+ $(eval $(generic-package))
