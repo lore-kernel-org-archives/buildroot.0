@@ -1,88 +1,61 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 22:13:54 +0100
-Subject: [Buildroot] [git commit] libnspr: bump to version 4.12
-Message-ID: <20160302202757.57BFF7FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 21:36:29 +0100
+Subject: [Buildroot] [git commit] package/iputils: removed dependency on
+	openssl
+Message-ID: <20160302202757.C76567FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92b5fb868cac99b6915bee2a718e75c0509c24a6
+commit: https://git.buildroot.net/buildroot/commit/?id=eae103ea242af87dbde787837e672f471b10929c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop 0003-enable-internal-getproto-functions-for-musl.patch since it's
-no longer required (tested via a flickcurl build with libnss against
-mips-musl).
+iputils does not have to be built with openssl so remove selecting
+BR2_PACKAGE_OPENSSL and make the dependency optional
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...able-internal-getproto-functions-for-musl.patch | 35 ----------------------
- package/libnspr/libnspr.hash                       |  4 +--
- package/libnspr/libnspr.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 38 deletions(-)
+ package/iputils/Config.in  | 1 -
+ package/iputils/iputils.mk | 8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnspr/0003-enable-internal-getproto-functions-for-musl.patch b/package/libnspr/0003-enable-internal-getproto-functions-for-musl.patch
-deleted file mode 100644
-index 860ca2a..0000000
---- a/package/libnspr/0003-enable-internal-getproto-functions-for-musl.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From c950bcf9cc7bdc68ed9751a1b7d04f4b4c2a9fb0 Mon Sep 17 00:00:00 2001
--From: Sergio Prado <sergio.prado@e-labworks.com>
--Date: Tue, 5 Jan 2016 21:15:34 -0200
--Subject: [PATCH] enable internal getproto functions for musl
--
--Musl toolchains does not have getprotobyname_r and getprotobynumber_r
--functions and need its internal implementation.
--
--Patch backported from Alpine Linux commit
--a162da839db0d3f8be94a5c1ad2e2e54e691c38a.
--
--Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-----
-- nspr/pr/src/misc/prnetdb.c | 5 +----
-- 1 file changed, 1 insertion(+), 4 deletions(-)
--
--diff --git a/nspr/pr/src/misc/prnetdb.c b/nspr/pr/src/misc/prnetdb.c
--index b86248f863f0..dc83a5615f45 100644
----- a/nspr/pr/src/misc/prnetdb.c
--+++ b/nspr/pr/src/misc/prnetdb.c
--@@ -61,10 +61,7 @@ PRLock *_pr_dnsLock = NULL;
-- #define _PR_HAVE_GETPROTO_R_POINTER
-- #endif
-- 
---#if defined(SOLARIS) || (defined(BSDI) && defined(_REENTRANT)) \
---	|| (defined(LINUX) && defined(_REENTRANT) \
---        && !(defined(__GLIBC__) && __GLIBC__ >= 2) \
---        && !defined(ANDROID))
--+#if defined(SOLARIS) || (defined(BSDI) && defined(_REENTRANT))
-- #define _PR_HAVE_GETPROTO_R
-- #define _PR_HAVE_GETPROTO_R_POINTER
-- #endif
---- 
--1.9.1
--
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index 87f6d4f..f513213 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.11/src/SHA256SUMS
--sha256	cb320a9eee7028275ac0fce7adc39dee36f14f02fd8432fce1b7e1aa5e3685c2	nspr-4.11.tar.gz
-+# From https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v4.12/src/SHA256SUMS
-+sha256	e0b10a1e569153668ff8bdea6c7e491b389fab69c2f18285a1ebf7c2ea4269de	nspr-4.12.tar.gz
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 9f49eef..0311f8f 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+index 40580d2..c83e414 100644
+--- a/package/iputils/Config.in
++++ b/package/iputils/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_IPUTILS
+ 	bool "iputils"
+-	select BR2_PACKAGE_OPENSSL
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  This package is set of small useful utilities for Linux networking.
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 6392dec..953f1f5 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -16,7 +16,6 @@ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
+ # Only includes a license file for BSD
+ IPUTILS_LICENSE_FILES = ninfod/COPYING
+-IPUTILS_DEPENDENCIES = openssl
  
--LIBNSPR_VERSION = 4.11
-+LIBNSPR_VERSION = 4.12
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+ # Build after busybox so target ends up with this package's full
+ # versions of the applications instead of busybox applets.
+@@ -34,6 +33,13 @@ else
+ IPUTILS_MAKE_OPTS += USE_CAP=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
++IPUTILS_DEPENDENCIES += openssl
++else
++IPUTILS_MAKE_OPTS += USE_CRYPTO=no
++endif
++
+ define IPUTILS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
+ endef
