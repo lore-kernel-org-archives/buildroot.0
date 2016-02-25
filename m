@@ -1,48 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Feb 2016 20:30:37 +0100
-Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
-	installed programs
-In-Reply-To: <87y4a9vyw1.fsf@dell.be.48ers.dk>
-References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
- <877fhxaf7l.fsf@dell.be.48ers.dk>
- <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
- <56CE1E61.7000008@zacarias.com.ar> <20160224214832.GA3449@free.fr>
- <87r3g1zs67.fsf@dell.be.48ers.dk> <20160224221930.GB3449@free.fr>
- <CAGkQfmPYv0oSwO-wuQWDvzt+kC9i=1wcymz6dV7jjP=i9dN7CA@mail.gmail.com>
- <87y4a9vyw1.fsf@dell.be.48ers.dk>
-Message-ID: <20160225193037.GA5870@free.fr>
+Date: Thu, 25 Feb 2016 20:42:00 +0100
+Subject: [Buildroot] [PATCH v3 1/2] COPYING: add exception about patch
+	licensing
+In-Reply-To: <1456401075-16948-2-git-send-email-luca@lucaceresoli.net>
+References: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
+ <1456401075-16948-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160225194200.GB5870@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, Peter, All,
+Luca, All,
 
-On 2016-02-25 11:59 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Romain" == Romain Izard <romain.izard.pro@gmail.com> writes:
-> >> However, I won't battle over it, as my preference would go with
->  >> hardlinks instead, but that option is not available. Meh... ;-)
->  > The issue is that the single binary mode is much more space-efficient
->  > than the classical mode. For my subset of 52 executables, it takes 704
->  > KiB for the single-binary mode with shebangs, and 1.9 MiB with separate
->  > programs (after stripping). I get a similar ratio if I compress it.
+On 2016-02-25 12:51 +0100, Luca Ceresoli spake thusly:
+> Several people have been asking what is the license of the patches
+> provided by Buildroot. COPYING is the authoritative place to state it.
 > 
->  > The classical mode is in fact worse than taking the coreutils package
->  > without filtering, which takes 1.5 MiB.
-> 
-> Crap, so that's no option then. I'll think some more about it.
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Steve Calfee <stevecalfee@gmail.com>
 
-OK, so we're back to Thomas' initial proposal: provide a single string
-option that the user can set to the list of programs he wants:
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-    config BR2_PKG_COREUTILS_PROGRAMS
-        bool "install programs"
-        help
-          List the programs you want. Leave empty to install all.  
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> Changes v2 -> v3:
+>  - Rewrite it entirely based on comments on the mailing list (Yann,
+>    Arnout, Thomas, Peter, Steve).
+> 
+> Changes v1 -> v2:
+>  - Rewrite it almost entirely (Arnout, Thomas).
+> ---
+>  COPYING | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/COPYING b/COPYING
+> index d511905..0c018b0 100644
+> --- a/COPYING
+> +++ b/COPYING
+> @@ -1,3 +1,19 @@
+> +With the exceptions below, Buildroot is distributed under the terms of
+> +the GNU General Public License, reproduced below; either version 2 of
+> +the License, or (at your option) any later version.
+> +
+> +Some files in Buildroot contain a different license statement. Those
+> +files are licensed under the license contained in the file itself.
+> +
+> +Buildroot also bundles patch files, which are applied to the sources
+> +of the various packages. Those patches are not covered by the license
+> +of Buildroot. Instead, they are covered by the license of the software
+> +to which the patches are applied. When said software is available
+> +under multiple licenses, the Buildroot patches are only provided under
+> +the publicly accessible licenses.
+> +
+> +-----------------------------------------------------------------
+> +
+>  		    GNU GENERAL PUBLIC LICENSE
+>  		       Version 2, June 1991
+>  
+> -- 
+> 1.9.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
