@@ -1,67 +1,62 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 25 Feb 2016 10:14:52 +0000
-Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump version to
-	20160104
-Message-ID: <1456395292-15493-1-git-send-email-martin@barkynet.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 25 Feb 2016 11:32:17 +0100
+Subject: [Buildroot] [PATCH v3 1/1] jsen: new package
+In-Reply-To: <20160223220413.2050528c@free-electrons.com>
+References: <1456233895-31812-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
+ <56CCC4C4.5020402@mind.be> <20160223220413.2050528c@free-electrons.com>
+Message-ID: <1456396337.29027.16.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The following certificate authorities were added (+):
-+ "CA WoSign ECC Root"
-+ "Certification Authority of WoSign G2"
-+ "Certinomis - Root CA"
-+ "OISTE WISeKey Global Root GB CA"
-+ "T?RKTRUST Elektronik Sertifika Hizmet Sa?lay?c?s? H5"
-+ "T?RKTRUST Elektronik Sertifika Hizmet Sa?lay?c?s? H6"
+Arnout, Thomas, Atul,
 
-The following certificate authorities were removed (-):
-- "A-Trust-nQual-03"
-- "Buypass Class 3 CA 1"
-- "ComSign Secured CA"
-- "Digital Signature Trust Co. Global CA 1"
-- "Digital Signature Trust Co. Global CA 3"
-- "SG TRUST SERVICES RACINE"
-- "TC TrustCenter Class 2 CA II"
-- "TC TrustCenter Universal CA I"
-- "TURKTRUST Certificate Services Provider Root 1"
-- "TURKTRUST Certificate Services Provider Root 2"
-- "UTN DATACorp SGC Root CA"
-- "Verisign Class 4 Public Primary Certification Authority - G3"
+On Di, 2016-02-23 at 22:04 +0100, Thomas Petazzoni wrote:
+> Arnout,
+> 
+> On Tue, 23 Feb 2016 21:44:52 +0100, Arnout Vandecappelle wrote:
+> 
+> > 
+> > ?I wonder if this is really the correct place for it. This menu is
+> > for
+> > Javascript libraries that are installed in /var/www, i.e. that are
+> > meant to be
+> > used by web clients. AFAICS, however, jsen is meant to be used with
+> > nodejs
+> > (which is why it's installed in /usr/share, I guess). So I think we
+> > should
+> > create a new menu under the nodejs package:
+> Atul originally placed jsen under the Libraries -> JSON/XML, and I
+> suggested him to put it under the Javascript libraries.
+> 
+> > 
+> > 	source "package/nodejs/Config.in"
+> > if BR2_PACKAGE_NODEJS
+> > menu "NodeJS libraries/modules"
+> > 	source "package/jsen/Config.in"
+> > endmenu
+> > endif
+> If it's indeed a NodeJS package, then comes the question of how we
+> are
+> going to package those zillions of modules. Today, one can request
+> any
+> random NodeJS module to be installed using
+> BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL (which is simple, but obviously
+> circumvents completely the download and legal infrastructures of
+> Buildroot).
+> 
+> Atul, are you using jsen in the context of NodeJS ? If not, in which
+> context are you using it ?
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/ca-certificates/ca-certificates.hash | 4 ++--
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Using BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL should be the only way to
+install Node.js modules. Note that npm, the Node.js package manager
+takes care of all the package dependencies. In my opinion, this is the
+only sane way of installing Node.js modules for now.
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 06120f5..b467316 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,3 +1,3 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   c2d7ae81e28ff1f8a6b9ef7602c4e756ff08503c                         ca-certificates_20150426.tar.xz
--sha256 37dbaa93ed64cc4ae93ac295f9248fbc741bd51376438cfb1257f17efab5494f ca-certificates_20150426.tar.xz
-+sha1   4525a194736c6691dbd59fa87281b722837b4768                         ca-certificates_20160104.tar.xz
-+sha256 09eb770122e23260316120c0cbbddc8a1d33e7147210ce44e146084d5d5abcdd ca-certificates_20160104.tar.xz
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index b64120e..da1b70d 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20150426
-+CA_CERTIFICATES_VERSION = 20160104
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20150528T221654Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20160104T220912Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python
- CA_CERTIFICATES_LICENSE = GPLv2+ (script), MPLv2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
--- 
-2.5.0
+About legal infrastructure: for all installed Node.js packages the
+package.json file could be searched for the license information.
+
+Best regards
+J?rg Krause
