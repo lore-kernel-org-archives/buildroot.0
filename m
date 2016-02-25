@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 22:37:35 +0100
-Subject: [Buildroot] [git commit branch/next] dsp-tools: Move download link
+Date: Thu, 25 Feb 2016 22:37:57 +0100
+Subject: [Buildroot] [git commit branch/next] gst-dsp: Move download link
 	away from Google Code
-Message-ID: <20160225213837.8023E81922@busybox.osuosl.org>
+Message-ID: <20160225213837.9399D7F95B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38bac6c3f87f2b8e70a1735d19fa9dac3b3d6364
+commit: https://git.buildroot.net/buildroot/commit/?id=ac5a2f5e36ba487d184bef8a12d754121023a26a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Google Code is being shut down. The google code site which hosts the
-source .tar.gz references github/felipec, which has a dsp-tools repository
+source .tar.gz references github/felipec, which has a gst-dsp repository
 with the same code as the tar.gz previously referenced.
 
-Change the DSP_TOOLS_SITE to this github repo.
+Change the GST_DSP_SITE to this github repo.
 
 Signed-off-by: Alan Ott <alan@softiron.co.uk>
 Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dsp-tools/dsp-tools.mk | 4 ++--
+ package/gstreamer/gst-dsp/gst-dsp.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dsp-tools/dsp-tools.mk b/package/dsp-tools/dsp-tools.mk
-index 64490b8..c91ed20 100644
---- a/package/dsp-tools/dsp-tools.mk
-+++ b/package/dsp-tools/dsp-tools.mk
+diff --git a/package/gstreamer/gst-dsp/gst-dsp.mk b/package/gstreamer/gst-dsp/gst-dsp.mk
+index d9e202d..dedffb9 100644
+--- a/package/gstreamer/gst-dsp/gst-dsp.mk
++++ b/package/gstreamer/gst-dsp/gst-dsp.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DSP_TOOLS_VERSION = 2.0
--DSP_TOOLS_SITE = http://gst-dsp.googlecode.com/files
-+DSP_TOOLS_VERSION = v2.0
-+DSP_TOOLS_SITE = $(call github,felipec,dsp-tools,$(DSP_TOOLS_VERSION))
- DSP_TOOLS_DEPENDENCIES = tidsp-binaries
- DSP_TOOLS_LICENSE = LGPLv2.1
- DSP_TOOLS_LICENSE_FILES = LICENSE
+-GST_DSP_VERSION = 0.10.2
+-GST_DSP_SITE = http://gst-dsp.googlecode.com/files
++GST_DSP_VERSION = v0.10.2
++GST_DSP_SITE = $(call github,felipec,gst-dsp,$(GST_DSP_VERSION))
+ 
+ define GST_DSP_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
