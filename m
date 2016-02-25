@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:36:49 +0100
+Date: Thu, 25 Feb 2016 21:36:36 +0100
 Subject: [Buildroot] [git commit branch/next] package/iputils: add support
-	for libgcrypt
-Message-ID: <20160225204454.662067FD10@busybox.osuosl.org>
+	for nettle
+Message-ID: <20160225204454.5551C818B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca99ed18025d3ad42575cb23a8c284a8d64abef3
+commit: https://git.buildroot.net/buildroot/commit/?id=73b56118f2a0d7039fda7a62380ff22d64adbfa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Martin Bark <martin@barkynet.com>
@@ -19,20 +19,20 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index efedf1f..92e2bc9 100644
+index 953f1f5..efedf1f 100644
 --- a/package/iputils/iputils.mk
 +++ b/package/iputils/iputils.mk
 @@ -33,6 +33,13 @@ else
  IPUTILS_MAKE_OPTS += USE_CAP=no
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+IPUTILS_MAKE_OPTS += USE_GCRYPT=yes
-+IPUTILS_DEPENDENCIES += libgcrypt
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++IPUTILS_MAKE_OPTS += USE_NETTLE=yes
++IPUTILS_DEPENDENCIES += nettle
 +else
-+IPUTILS_MAKE_OPTS += USE_GCRYPT=no
++IPUTILS_MAKE_OPTS += USE_NETTLE=no
 +endif
 +
- ifeq ($(BR2_PACKAGE_NETTLE),y)
- IPUTILS_MAKE_OPTS += USE_NETTLE=yes
- IPUTILS_DEPENDENCIES += nettle
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
+ IPUTILS_DEPENDENCIES += openssl
