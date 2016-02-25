@@ -1,61 +1,58 @@
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-Date: Thu, 25 Feb 2016 18:29:43 -0300
-Subject: [Buildroot] [PATCH v2 0/4] Add file capability/xattr support
-In-Reply-To: <20160225221004.26bb337b@free-electrons.com>
-References: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
- <20160225215003.5886d69d@free-electrons.com>
- <56CF6B75.10604@free-electrons.com>
- <20160225221004.26bb337b@free-electrons.com>
-Message-ID: <56CF7247.2060500@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Feb 2016 22:33:30 +0100
+Subject: [Buildroot] Incorrect kernel configuration produced from
+	_defconfig file
+In-Reply-To: <20160225180352.1d768c84@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 25 Feb 2016 18:03:52 +0100")
+References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
+ <20160225170443.2e6208f4@free-electrons.com>
+ <20160225161451.GE12073@piout.net>
+ <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
+ <20160225165032.GG12073@piout.net>
+ <20160225180352.1d768c84@free-electrons.com>
+Message-ID: <87si0gv5jp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 25/02/16 18:10, Thomas Petazzoni wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-> Hello,
->
-> On Thu, 25 Feb 2016 18:00:37 -0300, Gustavo Zacarias wrote:
->
->> This is a RFC mostly since it's not complete, although it can be
->> commited as-is it's not usable directly without tweaking the fakeroot
->> script (which isn't exposed functionality at the moment).
->> We can extend makedevs syntax/tool, but i believe it will be terribly
->> messy for scenarios where multiple XATTRs are desired, more so if we
->> eventually add ACL support to this.
->
-> Agreed. On the other hand, it's somewhat annoying to have two separate
-> data files / mechanisms to describe the "properties" of the
-> files/directories installed in the root filesystem.
->
-> Can we imagine an extension to the makedevs syntax where you could give
-> some additional properties for a given file, as following lines, e.g:
->
-> /usr/bin/foo f 755 0 0 - - - - -
-> |XATTR blabla extended attribute
-> |XATTR blabla extended attribute
-> |ACL blabla ACL
->
-> Or something like this?
+ > Dear Alexandre Belloni,
+ > On Thu, 25 Feb 2016 17:50:32 +0100, Alexandre Belloni wrote:
 
-My only concern with extending the format to multi lines is that the 
-data file will likely be incompatible with previous versions of makedevs.
+ >> Personally, I'd drop the yes "" | part of it and use only make
+ >> olddefconfig but the rules are also used for busybox et al. so you'd
+ >> have to check that all have a recent enough kconfig
 
-> Yes, if we make it part of makedevs, then having an option would be a
-> bit weird, but still reasonable since this stuff is pretty advanced, so
-> people who need that quite certainly know what they are doing.
+ > I think the reason we still use the yes "" trick is that we have a
+ > generic kconfig infrastructure, and it should work for all kconfig
+ > based packages. Including old kernel version (when was
+ > olddefconfig introduced?) or Busybox (which has an horribly old copy of
+ > the kconfig code).
 
-I'd go for homogeneous syntax in makedevs if that's the chosen way, just 
-make it skip those ops when it's not enabled.
+oldnoconfig was introduced (renamed) just before 2.6.36
+(ef61ca88c511154d6bead23c08f9a021cfdfeb01) and olddefconfig was
+introduced during the 3.7 cycle (fb16d8912db5268f29706010ecafff74b971c58d).
 
-> Right. This is IMO a good reason to make this optional. makedevs could
-> have an option to accept (or not) the extended properties, and then if
-> we have not enabled xattr/capability in Buildroot, this option is not
-> passed, which guarantees that makedevs will bail out if an extended
-> property is used.
+With the recent discussion about if we would rely on devtmpfs or not
+(which was added in the 2.6.32 cycle), I don't think we can rely on any
+of them without the fallback code.
 
-Might be worth CCing rockwellcollins guys that are working in selinux, 
-they're definitely interested in this since selinux loves xattrs.
-Regards.
+The fact that oldnoconfig == olddefconfig is also kernel specific, but
+from a quick look it doesn't seem to cause any conflicts:
+
+ - busybox doesn't have it
+ - barebox, uClibc and uboot have it with similar behaviour as the kernel
+
+ > So switching to olddefconfig might not be that easy. But maybe this is
+ > something that can be made conditional in the pkg-kconfig
+ > infrastructure. Like use olddefconfig if available, and if not fall
+ > back to the yes "" | make oldconfig trick.
+
+Why not just do it like in OE ? run the yes "" .. thing if make
+oldnoconfig fails?
+
+-- 
+Bye, Peter Korsgaard
