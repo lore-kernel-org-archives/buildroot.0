@@ -1,93 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 23:46:22 +0100
-Subject: [Buildroot] [git commit] package/multicat: Add package
-Message-ID: <20160302202756.3E1EA7FA0E@busybox.osuosl.org>
+Date: Thu, 25 Feb 2016 22:37:57 +0100
+Subject: [Buildroot] [git commit] gst-dsp: Move download link away from
+	Google Code
+Message-ID: <20160302202758.3495F7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddc2285ff2be6841e5144d3a5749d14fa21ea425
+commit: https://git.buildroot.net/buildroot/commit/?id=ac5a2f5e36ba487d184bef8a12d754121023a26a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-multicat is a simple and efficient multicast and transport stream manipulation
-tool.
+Google Code is being shut down. The google code site which hosts the
+source .tar.gz references github/felipec, which has a gst-dsp repository
+with the same code as the tar.gz previously referenced.
 
-Signed-off-by: Julian Scheel <julian@jusst.de>
+Change the GST_DSP_SITE to this github repo.
+
+Signed-off-by: Alan Ott <alan@softiron.co.uk>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in              |  1 +
- package/multicat/Config.in     | 11 +++++++++++
- package/multicat/multicat.hash |  4 ++++
- package/multicat/multicat.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 39 insertions(+)
+ package/gstreamer/gst-dsp/gst-dsp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c69d632..dc68184 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -28,6 +28,7 @@ menu "Audio and video applications"
- 	source "package/mpd-mpc/Config.in"
- 	source "package/mpg123/Config.in"
- 	source "package/mplayer/Config.in"
-+	source "package/multicat/Config.in"
- 	source "package/musepack/Config.in"
- 	source "package/ncmpc/Config.in"
- 	source "package/on2-8170-libs/Config.in"
-diff --git a/package/multicat/Config.in b/package/multicat/Config.in
-new file mode 100644
-index 0000000..8dfb6c1
---- /dev/null
-+++ b/package/multicat/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_MULTICAT
-+	bool "multicat"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_BITSTREAM
-+	help
-+	  Simple and efficient multicast and transport stream manipulation.
-+
-+	  http://www.videolan.org/projects/multicat.html
-+
-+comment 'multicat needs a toolchain w/ threads'
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/multicat/multicat.hash b/package/multicat/multicat.hash
-new file mode 100644
-index 0000000..38cf9d7
---- /dev/null
-+++ b/package/multicat/multicat.hash
-@@ -0,0 +1,4 @@
-+# from https://get.videolan.org/multicat/2.1/multicat-2.1.tar.bz2.md5
-+md5 2e3ecd8dee64f5bd32a61733d4cc2226 multicat-2.1.tar.bz2
-+# locally calculated
-+sha256 5eabe8d9a3dde452b2d348683cc7da213680551a9d4059c356f7319c6aa9b3d1 multicat-2.1.tar.bz2
-diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
-new file mode 100644
-index 0000000..5909bc5
---- /dev/null
-+++ b/package/multicat/multicat.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# multicat
-+#
-+################################################################################
-+
-+MULTICAT_VERSION = 2.1
-+MULTICAT_SOURCE = multicat-$(MULTICAT_VERSION).tar.bz2
-+MULTICAT_SITE = https://get.videolan.org/multicat/$(MULTICAT_VERSION)
-+MULTICAT_LICENSE = GPLv2+
-+MULTICAT_LICENSE_FILES = COPYING
-+
-+MULTICAT_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
-+
-+define MULTICAT_BUILD_CMDS
-+	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define MULTICAT_INSTALL_TARGET_CMDS
-+	$(MULTICAT_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/gstreamer/gst-dsp/gst-dsp.mk b/package/gstreamer/gst-dsp/gst-dsp.mk
+index d9e202d..dedffb9 100644
+--- a/package/gstreamer/gst-dsp/gst-dsp.mk
++++ b/package/gstreamer/gst-dsp/gst-dsp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GST_DSP_VERSION = 0.10.2
+-GST_DSP_SITE = http://gst-dsp.googlecode.com/files
++GST_DSP_VERSION = v0.10.2
++GST_DSP_SITE = $(call github,felipec,gst-dsp,$(GST_DSP_VERSION))
+ 
+ define GST_DSP_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) -e
