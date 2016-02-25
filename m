@@ -1,10 +1,10 @@
 From: Gabe Evans <gabe@hashrabbit.co>
-Date: Thu, 25 Feb 2016 21:55:33 +0000
-Subject: [Buildroot] [PATCH 24/32] package/systemd: add optional support for
-	timedated
+Date: Thu, 25 Feb 2016 21:55:34 +0000
+Subject: [Buildroot] [PATCH 25/32] package/systemd: add optional support for
+	localed
 In-Reply-To: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
-Message-ID: <1456437341-19025-25-git-send-email-gabe@hashrabbit.co>
+Message-ID: <1456437341-19025-26-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,37 +18,37 @@ Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
  2 files changed, 15 insertions(+)
 
 diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index f388936..d7ff2a2 100644
+index d7ff2a2..0069fed 100644
 --- a/package/systemd/Config.in
 +++ b/package/systemd/Config.in
-@@ -205,6 +205,15 @@ config BR2_PACKAGE_SYSTEMD_HOSTNAMED
+@@ -214,6 +214,15 @@ config BR2_PACKAGE_SYSTEMD_TIMEDATED
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-hostnamed.service.html
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
  
-+config BR2_PACKAGE_SYSTEMD_TIMEDATED
-+	bool "enable timedate daemon"
++config BR2_PACKAGE_SYSTEMD_LOCALED
++	bool "enable locale daemon"
 +	help
-+	  systemd-timedated is a system service that may be used as a mechanism to
-+	  change the system clock and timezone, as well as to enable/disable NTP
-+	  time synchronization.
++	  systemd-localed is a system service that may be used as mechanism to change
++	  the system locale settings, as well as the console key mapping and default
++	  X11 key mapping.
 +
-+	  http://www.freedesktop.org/software/systemd/man/systemd-timedated.service.html
++	  http://www.freedesktop.org/software/systemd/man/systemd-localed.service.html
 +
  config BR2_PACKAGE_SYSTEMD_NETWORKD
  	bool "enable network manager"
  	help
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 1492885..f7b1bbb 100644
+index f7b1bbb..b962131 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -211,6 +211,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-hostnamed
+@@ -217,6 +217,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-timedated
  endif
  
-+ifeq ($(BR2_PACKAGE_SYSTEMD_TIMEDATED),y)
-+SYSTEMD_CONF_OPTS += --enable-timedated
++ifeq ($(BR2_PACKAGE_SYSTEMD_LOCALED),y)
++SYSTEMD_CONF_OPTS += --enable-localed
 +else
-+SYSTEMD_CONF_OPTS += --disable-timedated
++SYSTEMD_CONF_OPTS += --disable-localed
 +endif
 +
  ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
