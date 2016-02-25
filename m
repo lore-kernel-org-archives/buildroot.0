@@ -1,45 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2016 11:33:00 +0100
-Subject: [Buildroot] [git commit] docs/manual: slightly clarify patch
-	licensing
-Message-ID: <20160225105037.406D180065@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 25 Feb 2016 07:53:05 -0300
+Subject: [Buildroot] [PATCH 2/2] gcc: remove 4.5.x
+In-Reply-To: <87h9gxxgc7.fsf@dell.be.48ers.dk>
+References: <1456336840-14890-1-git-send-email-gustavo@zacarias.com.ar>
+ <1456336840-14890-2-git-send-email-gustavo@zacarias.com.ar>
+ <87io1d3mhr.fsf@dell.be.48ers.dk>
+ <20160225104848.2f5d892f@free-electrons.com>
+ <87h9gxxgc7.fsf@dell.be.48ers.dk>
+Message-ID: <56CEDD11.7060603@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ab41aed2c30ae7d040551224f579c2d8b3adc3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/02/16 06:57, Peter Korsgaard wrote:
 
-Adding a patch is a modification to Buildroot. Thus this sentence might be
-interpreted as "Patches are released under the Buildroot license".
+>   >> What do we do with our 4.5 based external toolchains and
+>   >> BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 (used by directfb)?
+>
+>   > I think the BR2_TOOLCHAIN_GCC_AT_LEAST_* must be kept for pretty much
+>   > all versions of gcc. This symbol is not related to whether we support
+>   > that gcc version in our internal toolchain backend or not. Possibly any
+>   > gcc version can be used with the external toolchain backend.
+>
+> True, but we might consider removing preconfigured external toolchains
+> using ancient versions if there's sensible newer alternatives available.
 
-Being a legal matter, the last thing we want is to be
-ambiguous. Reword the sentence to avoid any misunderstandings.
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/patch-policy.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index 0b4604e..d50c971 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -90,8 +90,8 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
- 
- === Format and licensing of the package patches
- 
--Patches are released under the same license as the software that is
--modified.
-+Patches are released under the same license as the software they apply
-+to.
- 
- A message explaining what the patch does, and why it is needed, should
- be added in the header commentary of the patch.
+Blackfin is 4.5.x so at least this low we must keep.
+Regards.
