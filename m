@@ -1,62 +1,85 @@
 From: Gabe Evans <gabe@hashrabbit.co>
-Date: Thu, 25 Feb 2016 21:55:09 +0000
-Subject: [Buildroot] [PATCH 00/32] systemd feature selection
-Message-ID: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
+Date: Thu, 25 Feb 2016 21:55:10 +0000
+Subject: [Buildroot] [PATCH 01/32] package/lz4: bump version to r131
+In-Reply-To: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
+References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
+Message-ID: <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+systemd v228 requires lz4 >= 125
 
-I've made improvements to the systemd package to allow more fine-grained
-selection of tools and services. With these additions, it's possible to reduce
-the install footprint by about 60% (~12 MB).
-
-Thanks,
-Gabe
-
-Gabe Evans (32):
-  package/lz4: bump version to r131
-  package/systemd: remove BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
-  package/systemd: add --enable/disable-bzip2
-  package/systemd: add --enable/disable-lz4
-  package/systemd: add --enable/disable-zlib
-  package/systemd: add --enable/disable-libcurl
-  package/systemd: explicitly --enable/disable-microhttpd
-  package/systemd: remove networkd depends from timesyncd
-  package/systemd: add support for specifying NTP servers
-  package/systemd: add optional support for binfmt
-  package/systemd: add optional support for vconsole
-  package/systemd: add optional support for bootchart
-  package/systemd: add optional support for quotacheck
-  package/systemd: add optional support for tmpfiles
-  package/systemd: add optional support for sysusers
-  package/systemd: add optional support for firstboot
-  package/systemd: add optional support for random-seed
-  package/systemd: add optional support for backlight
-  package/systemd: add optional support for rfkill
-  package/systemd: add optional support for logind
-  package/systemd: add optional support for machined
-  package/systemd: add optional support for importd
-  package/systemd: add optional support for hostnamed
-  package/systemd: add optional support for timedated
-  package/systemd: add optional support for localed
-  package/systemd: add optional support for coredump
-  package/systemd: add optional support for polkit
-  package/systemd: add optional support for hwdb
-  package/systemd: add optional support for hibernation
-  package/systemd: use 'menuconfig'
-  package/systemd: only create 'systemd-journal' group
-  package/systemd: remove unnecessary make opts
-
- package/lz4/lz4.hash       |   2 +
- package/lz4/lz4.mk         |  19 ++--
- package/systemd/Config.in  | 210 ++++++++++++++++++++++++++++++++++++++++++---
- package/systemd/systemd.mk | 180 +++++++++++++++++++++++++++++++++++---
- 4 files changed, 379 insertions(+), 32 deletions(-)
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+---
+ package/lz4/lz4.hash |  2 ++
+ package/lz4/lz4.mk   | 19 ++++++++++++-------
+ 2 files changed, 14 insertions(+), 7 deletions(-)
  create mode 100644 package/lz4/lz4.hash
 
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+new file mode 100644
+index 0000000..1281284
+--- /dev/null
++++ b/package/lz4/lz4.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 38e10d8..dbb2221 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,37 +4,42 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = r123
++LZ4_VERSION = r131
+ LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2c
+ LZ4_LICENSE_FILES = LICENSE
+ 
++LZ4_MAKE_OPTS = PREFIX=/usr
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define LZ4_DISABLE_SHARED
+-	$(SED) '/SHARED/d' $(@D)/Makefile
++	$(SED) '/SHARED/d' $(@D)/lib/Makefile
+ endef
+ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
+ 
+ define HOST_LZ4_BUILD_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
++	$(MAKE) $(HOST_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define HOST_LZ4_INSTALL_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
++	$(MAKE) $(HOST_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
++		install -C $(@D)
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) -C $(@D)/lib
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
++		install -C $(@D)
+ endef
+ 
+ define LZ4_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
++		install -C $(@D)/lib
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 1.9.1
