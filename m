@@ -1,9 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 23:00:52 +0100
-Subject: [Buildroot] [PATCH v2] dt: new package
-In-Reply-To: <1453894838-15276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-References: <1453894838-15276-1-git-send-email-gustavo.zacarias@free-electrons.com>
-Message-ID: <20160225230052.4df48d9f@free-electrons.com>
+Date: Thu, 25 Feb 2016 23:06:03 +0100
+Subject: [Buildroot] Incorrect kernel configuration produced from
+	_defconfig file
+In-Reply-To: <87si0gv5jp.fsf@dell.be.48ers.dk>
+References: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
+ <20160225170443.2e6208f4@free-electrons.com>
+ <20160225161451.GE12073@piout.net>
+ <CAF_dkJDcPKAqb5sSoRinfBqo3L7zni8M9NTqEN-zyjpF_98ZGw@mail.gmail.com>
+ <20160225165032.GG12073@piout.net>
+ <20160225180352.1d768c84@free-electrons.com>
+ <87si0gv5jp.fsf@dell.be.48ers.dk>
+Message-ID: <20160225230603.7651ae97@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,40 +19,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 27 Jan 2016 08:40:38 -0300, gustavo.zacarias at free-electrons.com
-wrote:
+On Thu, 25 Feb 2016 22:33:30 +0100, Peter Korsgaard wrote:
 
-> diff --git a/package/dt/dt.mk b/package/dt/dt.mk
-> new file mode 100644
-> index 0000000..290ff91
-> --- /dev/null
-> +++ b/package/dt/dt.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +# dt
-> +#
-> +################################################################################
-> +
-> +DT_VERSION = v18.32
-> +DT_SITE = http://pkgs.fedoraproject.org/repo/pkgs/dt/$(DT_SOURCE)/3054aeaaba047a1dbe90c2132a382ee2
-> +DT_SOURCE = dt-source-$(DT_VERSION).tar.gz
-> +DT_SUBDIR = dt.$(DT_VERSION)
+> oldnoconfig was introduced (renamed) just before 2.6.36
+> (ef61ca88c511154d6bead23c08f9a021cfdfeb01) and olddefconfig was
+> introduced during the 3.7 cycle (fb16d8912db5268f29706010ecafff74b971c58d).
+> 
+> With the recent discussion about if we would rely on devtmpfs or not
+> (which was added in the 2.6.32 cycle), I don't think we can rely on any
+> of them without the fallback code.
+> 
+> The fact that oldnoconfig == olddefconfig is also kernel specific, but
+> from a quick look it doesn't seem to cause any conflicts:
+> 
+>  - busybox doesn't have it
+>  - barebox, uClibc and uboot have it with similar behaviour as the kernel
 
-Since dt.$(DT_VERSION) was the only sub-directory, I thought it was
-easier to do DT_STRIP_COMPONENTS = 2, as it allows to get rid
-completely of all DT_SUBDIR references later, so I've done this change.
+It is somewhat odd that oldnoconfig and olddefconfig are doing the
+same. If they are the same, why do they have two different names?
 
-> +define DT_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/$(DT_SUBDIR) -f Makefile.linux \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	CFLAGS="$(TARGET_CFLAGS) $(DT_CFLAGS)" \
-> +	OS=linux
+I would have expected oldnoconfig to say "no" to all new options, and
+olddefconfig to say "use the default" to all new options.
 
-Indentation was not correct here, the follow-up lines should be
-intended with two tabs. I've fixed this minor nit.
+>  > So switching to olddefconfig might not be that easy. But maybe this is
+>  > something that can be made conditional in the pkg-kconfig
+>  > infrastructure. Like use olddefconfig if available, and if not fall
+>  > back to the yes "" | make oldconfig trick.
+> 
+> Why not just do it like in OE ? run the yes "" .. thing if make
+> oldnoconfig fails?
 
-Applied to next, thanks!
+Yes, sure, this seems a good idea. This way we have a good/sane
+behavior for the packages using a modern kconfig code base, and
+fallback to a working solution for old stuff like busybox.
 
 Thomas
 -- 
