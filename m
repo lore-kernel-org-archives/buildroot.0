@@ -1,37 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:50:32 +0100
-Subject: [Buildroot] [PATCH v2] zmqpp: bmp to version 4.1.2
-In-Reply-To: <1456335528-14127-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1456335528-14127-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160225215032.7fdcd15e@free-electrons.com>
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+Date: Thu, 25 Feb 2016 18:00:37 -0300
+Subject: [Buildroot] [PATCH v2 0/4] Add file capability/xattr support
+In-Reply-To: <20160225215003.5886d69d@free-electrons.com>
+References: <1456323992-27845-1-git-send-email-gustavo.zacarias@free-electrons.com>
+ <20160225215003.5886d69d@free-electrons.com>
+Message-ID: <56CF6B75.10604@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+On 25/02/16 17:50, Thomas Petazzoni wrote:
 
-On Wed, 24 Feb 2016 14:38:48 -0300, Gustavo Zacarias wrote:
-> Drop 0001-add-cstdlib-header-to-ensure-EXIT_FAILURE-presence.patch since
-> it's already upstream.
-> 
-> Rebase shared/static build patches - these look unnecessary if we switch
-> to cmake-package, however it seems to require the zmq package switches
-> to cmake-package as well since static library naming looks different,
-> which might be a problem for users.
-> 
-> Also set the minimum required version of gcc to 4.7.x since the code now
-> requires c++1x.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
-> v2: adjust patch install step for shared=y
+> So, if you think that specifying the capabilities or extended
+> attributes should be done via a separate data file, then it means we
+> will have a new option to specify this data file, and we could
+> therefore only bring the additional host-fakeroot dependencies only
+> when this option is enabled, no?
 
-Applied to next, thanks!
+Hi.
+This is a RFC mostly since it's not complete, although it can be 
+commited as-is it's not usable directly without tweaking the fakeroot 
+script (which isn't exposed functionality at the moment).
+We can extend makedevs syntax/tool, but i believe it will be terribly 
+messy for scenarios where multiple XATTRs are desired, more so if we 
+eventually add ACL support to this.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+>> Also not all target filesystems support extended attributes.
+>
+> And possibly the above option should be made visible only when the
+> underlying filesystem supports extended attributes.
+>
+> What do you think?
+>
+> Thomas
+
+Well, i was hoping for feedback, let's see other opinions.
+Enabling capabilities/xattrs/acls might be an option in target 
+filesystem where people can then add the respective file(s) describing 
+them, hence making it optional. If it were in makedevs it could be an 
+option as well but would pollute things quite a bit.
+Might be worth adding tar acl/xattr support as well, rigth now squashfs 
+and maybe ubifs are the only filesystem targets enabled for this.
+
+Regards.
