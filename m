@@ -1,41 +1,41 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Thu, 25 Feb 2016 14:37:10 +0300
-Subject: [Buildroot] [PATCH 2/2] host-m4: fix build when -std=gnu99 and
-	inline functions are used
-In-Reply-To: <1456400230-4187-1-git-send-email-ltrimas@synopsys.com>
-References: <1456400230-4187-1-git-send-email-ltrimas@synopsys.com>
-Message-ID: <1456400230-4187-3-git-send-email-ltrimas@synopsys.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 25 Feb 2016 12:51:13 +0100
+Subject: [Buildroot] [PATCH v3 0/2] Patch file clarification & Co
+Message-ID: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A lot of the glibc header files use extern inline, which causes
-GCC to emit a symbol for each extern inline functions and it causes
-functions multiple definition error when "-std=gnu99" is used.
-To fix this problem it's necessary to use "-fgnu89-inline" option which
-tells GCC to use the traditional GNU semantics for inline functions when
-in C99 mode.
+Hi,
 
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/m4/m4.mk | 1 +
- 1 file changed, 1 insertion(+)
+several Buildroot users reportedly asked details about how the patches
+bundled with Buildroot are licensed.
 
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 9b5d2d1..2644bb1 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -10,5 +10,6 @@ M4_SITE = $(BR2_GNU_MIRROR)/m4
- M4_LICENSE = GPLv3+
- M4_LICENSE_FILES = COPYING
- HOST_M4_CONF_OPTS = --disable-static
-+HOST_M4_MAKE_OPTS = CFLAGS="-fgnu89-inline"
- 
- $(eval $(host-autotools-package))
+Following the discussion during the latest Buildroot Developer Days,
+this small series is aimed at clarifying patch licensing in the places
+where it makes sense: COPYING, the manual and the legal-info output.
+
+This v3 is a refinement of v2 based on the comments received.
+
+The first two patches of v2 have been applied on master in the
+meanwhile, and are not repeated here.
+
+I also removed the last patch of v2 ("legal-info: explicitly state how
+patches are licensed"): it will only makes sense after Yann's
+improvements to save the patches in legal-info will be applied. When
+this happens, I'll take care to resend it.
+
+
+Luca Ceresoli (2):
+  COPYING: add exception about patch licensing
+  docs/manual: add section about patch licensing
+
+ COPYING                      | 16 ++++++++++++++++
+ docs/manual/legal-notice.txt | 17 +++++++++++++++--
+ docs/manual/patch-policy.txt |  2 +-
+ 3 files changed, 32 insertions(+), 3 deletions(-)
+
 -- 
-2.5.0
+1.9.1
