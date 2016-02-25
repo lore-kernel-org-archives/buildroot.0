@@ -1,67 +1,34 @@
-From: Paulo Zaneti <paulo.zaneti@datacom.ind.br>
-Date: Thu, 25 Feb 2016 09:30:24 -0300
-Subject: [Buildroot] [PATCH 1/1] uboot-tools: add option for dumpimage
-Message-ID: <1456403424-7227-1-git-send-email-paulo.zaneti@datacom.ind.br>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 13:40:59 +0100
+Subject: [Buildroot] [PATCH v3 1/2] COPYING: add exception about patch
+	licensing
+In-Reply-To: <1456401075-16948-2-git-send-email-luca@lucaceresoli.net>
+References: <1456401075-16948-1-git-send-email-luca@lucaceresoli.net>
+ <1456401075-16948-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160225134059.2e35c070@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tool dumpimage extracts data from U-Boot images.
-U-Boot added dumpimage tool on release 2014.01.
-This commit allows installation on target and host.
+Dear Luca Ceresoli,
 
-Signed-off-by: Paulo Zaneti <paulo.zaneti@datacom.ind.br>
----
- package/uboot-tools/Config.in      | 6 ++++++
- package/uboot-tools/uboot-tools.mk | 8 ++++++++
- 2 files changed, 14 insertions(+)
+On Thu, 25 Feb 2016 12:51:14 +0100, Luca Ceresoli wrote:
+> Several people have been asking what is the license of the patches
+> provided by Buildroot. COPYING is the authoritative place to state it.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Steve Calfee <stevecalfee@gmail.com>
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index e2c621c..aca310b 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -53,4 +53,10 @@ config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
- 	  bootloader, which allows access to the U-Boot environment
- 	  from Linux.
- 
-+config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
-+	bool "dumpimage"
-+	help
-+	  The dumpimage tool from Das U-Boot bootloader, which allows
-+	  extraction of data from U-Boot images.
-+
- endif
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index 3150279..48d1307 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -52,10 +52,17 @@ define UBOOT_TOOLS_INSTALL_FWPRINTENV
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE),y)
-+define UBOOT_TOOLS_INSTALL_DUMPIMAGE
-+	$(INSTALL) -m 0755 -D $(@D)/tools/env/dumpimage $(TARGET_DIR)/usr/sbin/dumpimage
-+endef
-+endif
-+
- define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_MKIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
-+	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
- endef
- 
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
-@@ -79,6 +86,7 @@ endef
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/usr/bin/mkimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/usr/bin/mkenvimage
-+	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/usr/bin/dumpimage
- endef
- 
- $(eval $(generic-package))
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Thanks!
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
