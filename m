@@ -1,107 +1,105 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Feb 2016 00:44:42 +0100
-Subject: [Buildroot] [PATCH 01/32] package/lz4: bump version to r131
-In-Reply-To: <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
+Date: Fri, 26 Feb 2016 00:52:07 +0100
+Subject: [Buildroot] [PATCH 02/32] package/systemd: remove
+ BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+In-Reply-To: <1456437341-19025-3-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
-Message-ID: <56CF91EA.6040300@mind.be>
+ <1456437341-19025-3-git-send-email-gabe@hashrabbit.co>
+Message-ID: <56CF93A7.3060806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gabe,
-
- I'm not going to review all of the series yet, just a few of them. The patches
-which are pretty independent (like this one) you can resend individually. Only
-when you resend the later ones you need to send the entire series.
-
 On 02/25/16 22:55, Gabe Evans wrote:
-> systemd v228 requires lz4 >= 125
+> The option was a bit misleading since it only selected additional
+> libraries without --enable/disabling any features. Including all of them
+> here would add a lot of bloat so instead, it is replaced with notes
+> detailing which features each library enables.
 > 
 > Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 > ---
->  package/lz4/lz4.hash |  2 ++
->  package/lz4/lz4.mk   | 19 ++++++++++++-------
->  2 files changed, 14 insertions(+), 7 deletions(-)
->  create mode 100644 package/lz4/lz4.hash
+>  package/systemd/Config.in  | 11 +++--------
+>  package/systemd/systemd.mk | 16 ++++++++++------
+>  2 files changed, 13 insertions(+), 14 deletions(-)
 > 
-> diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
-> new file mode 100644
-> index 0000000..1281284
-> --- /dev/null
-> +++ b/package/lz4/lz4.hash
-> @@ -0,0 +1,2 @@
-> +# sha256 locally computed
-> +sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
-> diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-> index 38e10d8..dbb2221 100644
-> --- a/package/lz4/lz4.mk
-> +++ b/package/lz4/lz4.mk
-> @@ -4,37 +4,42 @@
->  #
->  ################################################################################
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index f7fc3bb..1972b1d 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -56,6 +56,9 @@ config BR2_PACKAGE_SYSTEMD
+>  	  The selection of other packages will enable some features:
 >  
-> -LZ4_VERSION = r123
-> +LZ4_VERSION = r131
->  LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
->  LZ4_INSTALL_STAGING = YES
->  LZ4_LICENSE = BSD-2c
->  LZ4_LICENSE_FILES = LICENSE
+>  	  - acl package will add support for multi-seat.
+> +	  - xz package will add compression support in journal and coredump.
+> +	  - libgcrypt package will add support for journal sealing and resolved
+> +	    DNSSEC verification.
+
+ Line is too long. Also 'resolved' is a bit weird here, so:
+
+	  - libgcrypt package will add support for journal sealing and
+	    DNSSEC verification in resolved
+
 >  
-> +LZ4_MAKE_OPTS = PREFIX=/usr
+>  	  http://freedesktop.org/wiki/Software/systemd
+>  
+> @@ -64,14 +67,6 @@ if BR2_PACKAGE_SYSTEMD
+>  config BR2_PACKAGE_PROVIDES_UDEV
+>  	default "systemd"
+>  
+> -config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
 
- I'd prefer to have
-
-LZ4_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) PREFIX=/usr
-HOST_LZ4_MAKE_OPTS = $(HOST_CONFIGURE_OPTS) PREFIX=/usr
-
- However, is the PREFIX useful during the build? If it's only needed at install
-time, then I would just pass it there, like we do with DESTDIR already.
+ You'll need to move this to Config.in.legacy, keep the two select statements
+below, and add a help text explaining that the option has been removed and that
+xz and libgcrypt have to be selected manually in the future.
 
 
  Regards,
  Arnout
 
-> +
->  ifeq ($(BR2_STATIC_LIBS),y)
->  define LZ4_DISABLE_SHARED
-> -	$(SED) '/SHARED/d' $(@D)/Makefile
-> +	$(SED) '/SHARED/d' $(@D)/lib/Makefile
->  endef
->  LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+
+> -	bool "enable all extras"
+> -	select BR2_PACKAGE_XZ
+> -	select BR2_PACKAGE_LIBGCRYPT
+> -	help
+> -	  Enable extra features for Systemd: journal compression and
+> -	  signing.
+> -
+>  config BR2_PACKAGE_SYSTEMD_KDBUS
+>  	bool "enable kdbus support"
+>  	help
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 05121cf..7a1baf5 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -76,16 +76,20 @@ else
+>  SYSTEMD_CONF_OPTS += --disable-kdbus
 >  endif
 >  
->  define HOST_LZ4_BUILD_CMDS
-> -	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
-> +	$(MAKE) $(HOST_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) -C $(@D)
->  endef
+> -ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
+> -SYSTEMD_DEPENDENCIES += xz libgcrypt
+> +ifeq ($(BR2_PACKAGE_XZ),y)
+> +SYSTEMD_DEPENDENCIES += xz
+> +SYSTEMD_CONF_OPTS += --enable-xz
+> +else
+> +SYSTEMD_CONF_OPTS += --disable-xz
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+> +SYSTEMD_DEPENDENCIES += libgcrypt
+>  SYSTEMD_CONF_OPTS += \
+> -	--enable-xz \
+>  	--enable-gcrypt	\
+>  	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+>  else
+> -SYSTEMD_CONF_OPTS += \
+> -	--disable-xz \
+> -	--disable-gcrypt
+> +SYSTEMD_CONF_OPTS += --disable-gcrypt
+>  endif
 >  
->  define HOST_LZ4_INSTALL_CMDS
-> -	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
-> +	$(MAKE) $(HOST_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(HOST_DIR) \
-> +		install -C $(@D)
->  endef
->  
->  define LZ4_BUILD_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) -C $(@D)/lib
->  endef
->  
->  define LZ4_INSTALL_STAGING_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(STAGING_DIR) \
-> +		install -C $(@D)
->  endef
->  
->  define LZ4_INSTALL_TARGET_CMDS
-> -	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
-> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(LZ4_MAKE_OPTS) DESTDIR=$(TARGET_DIR) \
-> +		install -C $(@D)/lib
->  endef
->  
->  $(eval $(generic-package))
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
 > 
 
 
