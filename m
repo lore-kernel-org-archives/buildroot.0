@@ -1,53 +1,59 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Thu, 25 Feb 2016 08:22:31 -0500
-Subject: [Buildroot] Incorrect kernel configuration produced from _defconfig
-	file
-Message-ID: <CAF_dkJAcuTbdu97oMi_-W7Bd6-4pGx633qE=+UaNHwb6Z_5wCg@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 25 Feb 2016 13:23:32 +0000
+Subject: [Buildroot] [PATCH 1/4] package/iputils: removed dependency on
+	openssl
+Message-ID: <1456406615-7324-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am using the linux-at91 kernel (from
-git://github.com/linux4sam/linux-at91.git) with a custom
-linux_defconfig file that contains, among other things:
+iputils does not have to be built with openssl so remove selecting
+BR2_PACKAGE_OPENSSL and make the dependency optional
 
-CONFIG_MODULES=y
-CONFIG_USB_GADGET=y
-CONFIG_USB_GADGETFS=y
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/iputils/Config.in  | 1 -
+ package/iputils/iputils.mk | 8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-When I build my kernel using buildroot, I get a .config file that has
-CONFIG_USB_GADGETFS=m.
-
-I can reproduce the steps that buildroot executes and see this problem
-manually with:
-
-echo CONFIG_MODULES=y > .config
-echo CONFIG_USB_GADGET=y >> .config
-echo CONFIG_USB_GADGETFS=y >> .config
-yes "" | make -k ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- oldconfig
-grep CONFIG_USB_GADGET .config
-
-Is there a project specific post-kernel-configuration hook I can apply
-to fix my .config file?
-
-Does anybody know why "make oldconfig" does this?  Am I missing
-another configuration item?
-
-I suppose I could just disable modules in my kernel, which, arguably,
-is the right answer for this application, but I spent 1/2 day
-yesterday being confused by this, and it's time for me to reach out
-for some help.
-
-On a slightly related, but totally off-subject topic, is there a more
-modern way to implement a userspace gadget device driver than using
-gadgetfs?  That could be an alternative solution as well.  (We have an
-existing product that communicates with a host that uses libusb.  The
-embedded Linux side uses a gadgetfs user space driver.)
-
-Thanks for all of the tips you keep feeding me.  I really appreciate
-them.  Expect to see (a very minor) new package showing up from me on
-this list shortly (for the Atmel WILC1000 firmware).
-
---wpd
+diff --git a/package/iputils/Config.in b/package/iputils/Config.in
+index 40580d2..c83e414 100644
+--- a/package/iputils/Config.in
++++ b/package/iputils/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_IPUTILS
+ 	bool "iputils"
+-	select BR2_PACKAGE_OPENSSL
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  This package is set of small useful utilities for Linux networking.
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 6392dec..953f1f5 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -16,7 +16,6 @@ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
+ # Only includes a license file for BSD
+ IPUTILS_LICENSE_FILES = ninfod/COPYING
+-IPUTILS_DEPENDENCIES = openssl
+ 
+ # Build after busybox so target ends up with this package's full
+ # versions of the applications instead of busybox applets.
+@@ -34,6 +33,13 @@ else
+ IPUTILS_MAKE_OPTS += USE_CAP=no
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
++IPUTILS_DEPENDENCIES += openssl
++else
++IPUTILS_MAKE_OPTS += USE_CRYPTO=no
++endif
++
+ define IPUTILS_BUILD_CMDS
+ 	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
+ endef
+-- 
+2.5.0
