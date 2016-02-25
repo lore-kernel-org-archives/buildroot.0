@@ -1,73 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 25 Feb 2016 23:13:52 +0100
-Subject: [Buildroot] [PATCH 2/2] host-m4: fix build when -std=gnu99 and
- inline functions are used
-In-Reply-To: <1456414403.4586.63.camel@synopsys.com>
-References: <1456400230-4187-1-git-send-email-ltrimas@synopsys.com>
- <1456400230-4187-3-git-send-email-ltrimas@synopsys.com>
- <20160225135436.18a8385c@free-electrons.com>
- <1456405085.2312.2.camel@synopsys.com>
- <20160225142622.47b2841a@free-electrons.com>
- <1456414403.4586.63.camel@synopsys.com>
-Message-ID: <56CF7CA0.7080801@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 25 Feb 2016 23:14:51 +0100
+Subject: [Buildroot] [git commit] package/util-linux: disable libsmartcols
+	in no-MMU platforms
+Message-ID: <20160225221457.9E969818C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/25/16 16:33, Alexey Brodkin wrote:
-> Hi Thomas,
-> 
-> On Thu, 2016-02-25 at 14:26 +0100, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Thu, 25 Feb 2016 12:58:05 +0000, Lada Trimasova wrote:
->>
->>> I used CentOS 5.7, gcc 4.9.2, glibc 2.5.
-[snip explanation of why this combination of gcc 4.9 with glibc 2.5 is broken]
-> That's why with older host glibc we need to pass "-fgnu89-inline"
-> flag to compiler.
+commit: https://git.buildroot.net/buildroot/commit/?id=3c28619aaf7eaea96920530d7394e2c6130b9169
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- I think you can basically say your host toolchain is broken: it fails to
-compile valid programs, because glibc doesn't satisfy the -std=gnu99 option.
+As reported by Thomas Petazzoni [1], the libsmartcols library can't
+be used on no-MMU platform since fork() is used.
 
-> And now I think we may even consider adding it
-> to the top-level HOST_CFLAGS instead of fixing problem on per-package
-> basis.
+[1] http://lists.busybox.net/pipermail/buildroot/2016-February/153414.html
 
- Since this is an issue with your toolchain, I think you should fix it globally
-(not just for buildroot) by setting CFLAGS_FOR_BUILD=-fgnu89-inline in your
-environment.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/util-linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-
- Note: installing your own glibc (somewhere outside of /usr/lib) is possible,
-but awkward.
-
- Regards,
- Arnout
-
-> 
-> Any thoughts?
-> 
-> And indeed we now have to determine last glibc version that relies on
-> C89 inline semantics.
-> 
-> -Alexey
-> 
-> P.S. Just in case that article was of great help:
-> http://stackoverflow.com/questions/2722276/multiple-definition-of-inline-function
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 3f9a7db..60abd67 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -27,6 +27,7 @@ config BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 
+ config BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
+ 	bool "libsmartcols"
++	depends on BR2_USE_MMU # fork
+ 	help
+ 	  Install libsmartcols.
+ 
