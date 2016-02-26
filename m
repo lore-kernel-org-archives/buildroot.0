@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Feb 2016 00:43:40 +0100
+Date: Sat, 27 Feb 2016 00:47:26 +0100
 Subject: [Buildroot] [v3,
- 3/4] barebox: user selection of build output images
-In-Reply-To: <1453329821-3167-4-git-send-email-pieter@boesman.nl>
+ 4/4] beaglebone: adds barebox bootloader defconfig
+In-Reply-To: <1453329821-3167-5-git-send-email-pieter@boesman.nl>
 References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-4-git-send-email-pieter@boesman.nl>
-Message-ID: <56D0E32C.3050207@mind.be>
+ <1453329821-3167-5-git-send-email-pieter@boesman.nl>
+Message-ID: <56D0E40E.40800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,69 +13,71 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 01/20/16 23:43, Pieter Smith wrote:
-> A non-default image can be selected as the barebox build output in the images/
-> directory. This typically is needed to select the appropriate image generated
-> by multi-platform support defconfigs (E.g. am335x).
+> * Builds barebox MLO and the barebox bootloader.
+> * Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
+>   being generated with the kernel.
 > 
 > Signed-off-by: Pieter Smith <pieter@boesman.nl>
 > ---
->  boot/barebox/Config.in              | 36 ++++++++++++++++++++++++++++++++++++
->  boot/barebox/barebox-1/barebox-1.mk | 13 +++++++++++--
->  boot/barebox/barebox-2/barebox-2.mk |  7 +++++++
->  3 files changed, 54 insertions(+), 2 deletions(-)
+>  configs/beaglebone_barebox_defconfig | 39 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 configs/beaglebone_barebox_defconfig
 > 
-> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-> index f848afe..fe76f8a 100644
-> --- a/boot/barebox/Config.in
-> +++ b/boot/barebox/Config.in
-> @@ -149,6 +149,24 @@ config BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES
->  	  A space-separated list of configuration fragment files,
->  	  that will be merged to the main Barebox configuration file.
->  
-> +choice
-> +	prompt "Barebox image file"
-> +	default BR2_TARGET_BAREBOX_USE_DEFAULT_IMAGE
+> diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
+> new file mode 100644
+> index 0000000..b4fd67b
+> --- /dev/null
+> +++ b/configs/beaglebone_barebox_defconfig
+> @@ -0,0 +1,39 @@
+> +# architecture
+> +BR2_arm=y
+> +BR2_cortex_a8=y
+> +BR2_ARM_EABIHF=y
 > +
-> +config BR2_TARGET_BAREBOX_USE_DEFAULT_IMAGE
-> +	bool "Using the default image file"
+> +# system
+> +BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
+> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
+> +# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
 > +
-> +config BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE
-> +	bool "Using a specific image file"
+> +# filesystem
+> +BR2_PACKAGE_AM33X_CM3=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
 > +
-> +endchoice
+> +# lock down headers to avoid breaking with new defaults
+> +BR2_KERNEL_HEADERS_VERSION=y
+> +BR2_DEFAULT_KERNEL_VERSION="3.12.10"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
 > +
-> +config BR2_TARGET_BAREBOX_IMAGE_FILE
-> +	string "Image file path"
-> +	depends on BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE
-> +	help
-> +	  Name of the built barebox image file in the barebox images directory
+> +# bootloader
+> +BR2_TARGET_BAREBOX_TWO_CONFIGS=y
+> +BR2_TARGET_BAREBOX=y
+> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
+> +BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE=y
+> +BR2_TARGET_BAREBOX_IMAGE_FILE="barebox-am33xx-beaglebone.img"
+> +BR2_TARGET_BAREBOX_2=y
+> +BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
+> +BR2_TARGET_BAREBOX_2_USE_SPECIFIC_IMAGE=y
+> +BR2_TARGET_BAREBOX_2_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
 > +
->  endif
+> +# kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_LATEST_VERSION=y
 
- If we deprecate barebox pre-2012.10, then we can simplify this a lot:
+ Kernel version should be locked down as well.
 
-config BR2_TARGET_BAREBOX_IMAGE_FILE
-	string "Image file path"
-	default "barebox-flash-image"
-	help
-	  Name of the built barebox image file in the barebox images directory
+> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+> +BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+> +BR2_LINUX_KERNEL_ZIMAGE=y
 
-
- Even if we don't want to deprecate barebox pre-2012.10, I'd prefer to keep this
-simple config and do the handling of legacy barebox.bin in the .mk file. For
-pre-2012.10, you'd have to explicitly set it to barebox.bin instead (which
-should be mentioned in the help text then).
-
- We should find a good way to deal with the images/ part of the path, however.
-This could e.g. be done in the .mk file, by checking both the top dir and the
-images dir.
-
+ Perhaps add a comment here that the dtb from barebox will be used.
 
  Regards,
  Arnout
 
-
-[snip]
+> 
 
 
 -- 
