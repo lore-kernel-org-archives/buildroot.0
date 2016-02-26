@@ -1,26 +1,44 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Fri, 26 Feb 2016 10:03:10 -0500
-Subject: [Buildroot] Is it possible to override a package version from
-	BR2_EXTERNAL?
-Message-ID: <CAF_dkJDcBuOOe3Z5zGfS=eA8tJ9k54DqRahGuZeR8vGE1T+FBQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Feb 2016 16:33:21 +0100
+Subject: [Buildroot] [dropbear] fail ssh conection with Passwords
+	encoding SHA-256 or SHA-512
+In-Reply-To: <CALtfCQbqTNvokwneH9uFFESNFK6_HZWKy19oefELL4OgDw-jpw@mail.gmail.com>
+ (=?utf-8?B?IsOTc2NhciBHw7NtZXo=?= Fuente"'s message of "Fri, 26 Feb 2016
+ 09:50:12 +0100")
+References: <CALtfCQbqTNvokwneH9uFFESNFK6_HZWKy19oefELL4OgDw-jpw@mail.gmail.com>
+Message-ID: <87h9gvv64e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am asking because it appears (for the moment) that the 2016.01
-host-uboot-tools mkenvimage utility does not generate an environment
-file compatible with my non-2016.01 u-boot.
+>>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
 
-I will try changing UBOOT_TOOLS_VERSION to 2015.01 in uboot-tools.mk,
-but that is not a long term solution -- I would rather use a pristine
-buildroot source tree with by BR2_EXTERNAL customizations for kernel
-_defconfig files & the like.
+ > Hi,
+ > I'm new in buldroot and I'm building a raspberry 2 platform. I've based on
+ > raspberrypi2_defconfig configuration. But I've changed two things:
 
-Or, it's possible that something else entirely is wrong with my
-environment file and it has nothing to do with mkenvimage.  But I am
-still curious about overriding specific package revisions on a
-case-by-case basis.
+ > 1?.- I've added dropbear to add ssh functionality.
 
---wpd
+ > Everything works fine and I can connect to my raspberry by ssh (System
+ > password encoding md5). The problem is when I've changed the password
+ > encoding from md5 to SHA-256 or SHA-512. When I've tried to make an ssh
+ > conection from a PC to my raspberry pi 2 the access fail:
+
+ > root at 192.168.10.105's password:
+ > Permission denied, please try again.
+
+The problem is that uClibc doesn't have support for the sha256/512
+ciphers by default, so dropbear cannot authenticate you. It happens to
+work when you login through serial as the busybox login program uses
+built in password handling functions (and we have code to enable the
+sha256/512 routines when enabled in buildroot).
+
+I guess we need to do the same for uClibc (or just unconditionally
+enable it). In the mean time you can use glibc instead which does
+support it (make sure you do a clean build whenever you change toolchain
+options).
+
+-- 
+Bye, Peter Korsgaard
