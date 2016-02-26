@@ -1,86 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:46:30 +0100
-Subject: [Buildroot] [git commit] package/kodi: reorder select/depends
-Message-ID: <20160302202800.624B780203@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Feb 2016 19:43:33 +0100
+Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
+	4.4.3
+Message-ID: <20160302202758.8549E7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c913784c986df8b191e3ea862a7b4595775e4cc6
+commit: https://git.buildroot.net/buildroot/commit/?id=addc23ef6b4888a58375eaa77010047d4692e483
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From [1]:
-"Even though the ordering has absolutely no consequences in Kconfig, it
-is not logical (when reading). It is more logical and far easier to
-understand when depends come first, followed by the selects."
+Bump to the latest kernel with DT path adjustment because Linux
+commit ca5b34100c57 ("dts, arm64: Move dts files to vendor subdirs")
+moved the DT file to the vendor sub-directory.
 
-Also, the Config.in example in the manual suggests to use this coding
-style [2].
+This commit was tested with the latest model (FVP v8 Foundation
+Platform 9.5 build 41), so I updated the instruction in readme.txt
+corresponding to it.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2015-October/142955.html
-[2] http://buildroot.uclibc.org/downloads/manual/manual.html#writing-rules-config-in
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/Config.in | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ board/arm/foundation-v8/readme.txt |  4 ++--
+ configs/arm_foundationv8_defconfig | 10 +++++-----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 13be622..abd1dc1 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -33,6 +33,15 @@ comment "kodi requires an OpenGL ES and EGL backend"
+diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
+index 5406ed3..1dedf68 100644
+--- a/board/arm/foundation-v8/readme.txt
++++ b/board/arm/foundation-v8/readme.txt
+@@ -3,14 +3,14 @@ ARM software simulator of the AArch64 architecture.
  
- menuconfig BR2_PACKAGE_KODI
- 	bool "kodi"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
-+	depends on BR2_USE_MMU # python
-+	depends on BR2_USE_WCHAR
-+	depends on !BR2_STATIC_LIBS # python
-+	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	select BR2_NEEDS_HOST_JAVA
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_THREAD
-@@ -90,15 +99,6 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_YAJL
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
--	depends on BR2_USE_MMU # python
--	depends on BR2_USE_WCHAR
--	depends on !BR2_STATIC_LIBS # python
--	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	help
- 	  Kodi is an award-winning free and open source (GPL) software
- 	  media player and entertainment hub for digital media.
-@@ -132,8 +132,8 @@ config BR2_PACKAGE_KODI_DBUS
+ First, one has to download the AArch64 software simulator from:
  
- config BR2_PACKAGE_KODI_LIBBLURAY
- 	bool "blu-ray"
--	select BR2_PACKAGE_LIBBLURAY
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBBLURAY
- 	help
- 	  Enable Blu-ray input support.
- 	  Select this if you want to play back Blu-ray content.
-@@ -228,8 +228,8 @@ config BR2_PACKAGE_KODI_LIBUSB
+-  https://silver.arm.com/download/download.tm?pv=2482590
++  https://silver.arm.com/download/download.tm?pv=2663527
  
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	select BR2_PACKAGE_LIBVA
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBVA
- 	help
- 	  Enable libva support.
+ Then, use the arm_foundationv8_defconfig configuration to build your
+ Buildroot system.
  
+ Finally, boot your system with:
+ 
+- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.1/Foundation_Platform \
++ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.7/Foundation_Platform \
+     --image output/images/linux-system.axf \
+     --block-device output/images/rootfs.ext2 \
+     --network=nat
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index 8968c77..d31f69d 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -1,16 +1,16 @@
+ BR2_aarch64=y
+-# Linux headers same as kernel, a 3.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
++# Linux headers same as kernel, a 4.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(LINUX_DIR)/arch/arm64/configs/defconfig"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="foundation-v8"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_BOOT_WRAPPER_AARCH64=y
+-BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="foundation-v8"
++BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8"
+ BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
