@@ -1,53 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Feb 2016 09:17:08 +0100
-Subject: [Buildroot] [Buildroot PATCH Selinux v10 04/11] linux-pam:
- selinux host dependencies
-In-Reply-To: <CAMshMJa8n2bFW1Jj3ssMBDgkM-Qkq=qe35x__X=f8HD0zCGSnQ@mail.gmail.com>
-References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
- <1455603506-26138-4-git-send-email-niranjan.reddy@rockwellcollins.com>
- <20160223223650.74c20cfa@free-electrons.com>
- <CAMshMJa8n2bFW1Jj3ssMBDgkM-Qkq=qe35x__X=f8HD0zCGSnQ@mail.gmail.com>
-Message-ID: <20160226091708.04d0828a@free-electrons.com>
+Date: Fri, 26 Feb 2016 09:19:21 +0100
+Subject: [Buildroot] [PATCH 2/2] host-m4: fix build when -std=gnu99 and
+ inline functions are used
+In-Reply-To: <1456471224.28645.10.camel@synopsys.com>
+References: <1456400230-4187-1-git-send-email-ltrimas@synopsys.com>
+ <1456400230-4187-3-git-send-email-ltrimas@synopsys.com>
+ <20160225135436.18a8385c@free-electrons.com>
+ <1456405085.2312.2.camel@synopsys.com>
+ <20160225142622.47b2841a@free-electrons.com>
+ <1456414403.4586.63.camel@synopsys.com> <56CF7CA0.7080801@mind.be>
+ <1456471224.28645.10.camel@synopsys.com>
+Message-ID: <20160226091921.6e367255@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Niranjan,
+Hello,
 
-On Fri, 26 Feb 2016 12:28:39 +0530, Niranjan Reddy wrote:
+On Fri, 26 Feb 2016 07:20:24 +0000, Alexey Brodkin wrote:
 
-> > > +     if [ -d $(TARGET_DIR)/etc/pam.d.orig ]; then \
-> > > +             cp -a $(TARGET_DIR)/etc/pam.d/*
-> > $(TARGET_DIR)/etc/pam.d.orig/; \
-> > > +             rm -rf $(TARGET_DIR)/etc/pam.d/; \
-> > > +             mv $(TARGET_DIR)/etc/pam.d.orig/ $(TARGET_DIR)/etc/pam.d/;
-> > \
-> > > +     fi;
-> >
-> > ; not needed
-> >
+> > ?I think you can basically say your host toolchain is broken: it fails to
+> > compile valid programs, because glibc doesn't satisfy the -std=gnu99 option.
 > 
->   Are you sure you want me to remove these ? If I remove  " ; \"  it gives
-> me compilation error.  when I see
->   build-root manual in section 17.15.2 , if condition statements are ended
-> with semicolon. Please let me know.
+> That's very true. But it looks like on RedHat/CentOS 5.x (which are still
+> in use here and there) discussed problem exists.
+> 
+> Given default gcc in RHEL 5 is 4.1 (though 3.4 and 4.4 are available via
+> compat-gcc-34 and gcc44 correspondingly) ad it fails to compile host tar and m4
+> in current Buildroot I would still look for a permanent solution in vanilla
+> Buildroot instead of work-around on per machine basis.
 
-I'm not asking you to remove all ; \, but only to remove the ones that
-separate independent commands, since they are useless. I.e you are
-currently doing:
+With the default gcc 4.1 used in RHEL5, I would assume that glibc 2.5
+works fine and that you can use Buildroot with no problem. Have you
+tried building Buildroot with the default gcc 4.1 ?
 
-1	if [ ... ] ; then \
-2		cp -a ..... ; \
-3	fi ; \
-4	cd $(TARGET_DIR) .... ; \
-5	if [ ... ] ; then \
-6		cp -a .... ; \
-7	fi ; \
-8	$(INSTALL) -D ...
+What Arnout calls a broken toolchain is your combination of gcc 4.9 and
+glibc 2.5.
 
-The \ or ; \ is needed on lines 1, 2, 4 and 5. But not on lines 3 and 7.
+If you want Buildroot to work on platform where there is no working
+native toolchain, the only solution is to bundle Buildroot with a
+chroot environment, and ask users to build inside the chroot. Probably
+not something we want to do.
 
 Best regards,
 
