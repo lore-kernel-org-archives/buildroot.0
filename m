@@ -1,128 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 26 Feb 2016 22:40:54 +0100
-Subject: [Buildroot] [PATCH] lksctp-tools: new package
-In-Reply-To: <1456478677-11687-1-git-send-email-yegorslists@googlemail.com>
-References: <1456478677-11687-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <56D0C666.6090900@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 26 Feb 2016 22:55:57 +0100
+Subject: [Buildroot] [PATCH v3] pifmrds: add patch to correct linking in
+	static build
+In-Reply-To: <1456475491-5098-1-git-send-email-limpens@gmail.com>
+References: <1456475491-5098-1-git-send-email-limpens@gmail.com>
+Message-ID: <1456523757-16847-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/26/16 10:24, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                      |  1 +
->  package/lksctp-tools/Config.in         | 17 +++++++++++++++++
->  package/lksctp-tools/lksctp-tools.hash |  2 ++
->  package/lksctp-tools/lksctp-tools.mk   | 21 +++++++++++++++++++++
->  4 files changed, 41 insertions(+)
->  create mode 100644 package/lksctp-tools/Config.in
->  create mode 100644 package/lksctp-tools/lksctp-tools.hash
->  create mode 100644 package/lksctp-tools/lksctp-tools.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 67a2514..b01d3c9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1401,6 +1401,7 @@ endif
->  	source "package/links/Config.in"
->  	source "package/linphone/Config.in"
->  	source "package/linux-zigbee/Config.in"
-> +	source "package/lksctp-tools/Config.in"
->  	source "package/lldpd/Config.in"
->  	source "package/lrzsz/Config.in"
->  	source "package/macchanger/Config.in"
-> diff --git a/package/lksctp-tools/Config.in b/package/lksctp-tools/Config.in
-> new file mode 100644
-> index 0000000..79c89f7
-> --- /dev/null
-> +++ b/package/lksctp-tools/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_LKSCTP_TOOLS
-> +	bool "lksctp-tools"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_USE_MMU # fork()
-> +	help
-> +	  This is the lksctp-tools package for Linux Kernel SCTP Reference
-> +	  Implementation.
-> +
-> +	  This package is intended to supplement the Linux Kernel SCTP
-> +	  Reference Implementation now available in the Linux kernel source
-> +	  tree in versions  2.5.36 and following.
+From: Eric Limpens <limpens@gmail.com>
 
- This description isn't so great. The part about 2.5.36 isn't very useful. How
-about:
+This patch fixes an autobuild error during a static build:
+http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
 
-	  Libraries and command-line tools for the Linux kernel SCTP
-	  implementation. SCTP (Stream Control Transmission Protocol) is a
-	  message oriented, reliable transport protocol, with congestion
-	  control, support for transparent multi-homing, and multiple ordered
-	  streams of messages. RFC 2960 defines the core protocol.
+Signed-off-by: Eric Limpens <limpens@gmail.com>
+[Arnout: clean up commit message and patch log]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+v3: clean up commit message and patch log [Arnout]
+---
+ .../pifmrds/0003-Makefile-fix-static-link.patch    | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/pifmrds/0003-Makefile-fix-static-link.patch
 
-
-> +
-> +	  https://github.com/sctp/lksctp-tools
-
- Isn't http://lksctp.sourceforge.net/ a more appropriate home page?
-
-> +
-> +comment "lksctp-tools package needs a toolchain w/ threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/lksctp-tools/lksctp-tools.hash b/package/lksctp-tools/lksctp-tools.hash
-> new file mode 100644
-> index 0000000..f0b2852
-> --- /dev/null
-> +++ b/package/lksctp-tools/lksctp-tools.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256 0903dd526b7f30a89d5031aa2c82757612becc38ed7bc6e4f972f8deae351f26  lksctp-tools-1.0.16.tar.gz
-> diff --git a/package/lksctp-tools/lksctp-tools.mk b/package/lksctp-tools/lksctp-tools.mk
-> new file mode 100644
-> index 0000000..115c4d8
-> --- /dev/null
-> +++ b/package/lksctp-tools/lksctp-tools.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# lksctp-tools
-> +#
-> +################################################################################
-> +
-> +LKSCTP_TOOLS_VERSION = 1.0.16
-> +LKSCTP_TOOLS_SITE = http://downloads.sourceforge.net/project/lksctp/lksctp-tools
-> +LKSCTP_TOOLS_LICENSE = GPLv2+ (tools), LGPLv2+ (library)
-
- The source and header files of the library specify LGPLv2.1.
-
- Otherwise looks good.
-
- Regards,
- Arnout
-
-> +LKSCTP_TOOLS_LICENSE_FILES = COPYING COPYING.lib
-> +LKSCTP_TOOLS_INSTALL_STAGING = YES
-> +
-> +# release archive doesn't provide configure script
-> +LKSCTP_TOOLS_AUTORECONF = YES
-> +
-> +define LKSCTP_TOOLS_FIX_AUTORECONF
-> +	mkdir -p $(@D)/m4
-> +endef
-> +LKSCTP_TOOLS_POST_PATCH_HOOKS += LKSCTP_TOOLS_FIX_AUTORECONF
-> +
-> +$(eval $(autotools-package))
-> 
-
-
+diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+new file mode 100644
+index 0000000..ecd7c4f
+--- /dev/null
++++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+@@ -0,0 +1,23 @@
++Makefile: Fix static linking
++
++Since libsndfile uses funtions from libm, the -lm should be specified
++after libsndfile for static linking.
++
++Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
++
++diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
++--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
+++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-26 08:27:11.069148203 +0100
++@@ -1,10 +1,10 @@
++ CC = gcc
++ 
++ app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
++-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
++ 
++ rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
++-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
++ 
++ rds.o: rds.c waveforms.h
++ 	$(CC) $(CFLAGS) rds.c
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0
