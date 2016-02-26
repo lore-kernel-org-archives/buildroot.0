@@ -1,46 +1,77 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri, 26 Feb 2016 11:50:52 +0100
-Subject: [Buildroot] [PATCH 1/1] busybox: Make S01logging source a default
-	file.
-Message-ID: <1456483852-12830-1-git-send-email-nicolas.cavallari@green-communications.fr>
+From: Andreas Ehmanns <universeII@gmx.de>
+Date: Fri, 26 Feb 2016 12:16:13 +0100
+Subject: [Buildroot] [PATCH 1/2] Package nfs-utils: Added check for OK/FAIL
+Message-ID: <1456485374-5356-1-git-send-email-universeII@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The default syslog parameters are to keep only 200-400 KiB of logs,
-which is very few if there is a spammy daemon on the system, or a daemon
-that fails and then spams errors that hides the original problem.
+Removed unconditional 'done' output when starting
+and stopping the daemons. Instead check return value
+of daemon and print out OK or FAIL.
 
-Make S01logging source a /etc/default/logging file where these
-parameters can be overridden.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Andreas Ehmanns <universeII@gmx.de>
 ---
- package/busybox/S01logging | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/nfs-utils/S60nfs | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index a72c69d..af7bdff 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -3,10 +3,14 @@
- # Start logging
- #
+diff --git a/package/nfs-utils/S60nfs b/package/nfs-utils/S60nfs
+index 5639b8f..0b78c9b 100755
+--- a/package/nfs-utils/S60nfs
++++ b/package/nfs-utils/S60nfs
+@@ -25,20 +25,20 @@ start() {
+ 	# Start daemons.
+ 	printf "Starting NFS statd: "
+ 	rpc.statd
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	touch /var/lock/subsys/nfslock
+-	echo "done"
+-
++	
+ 	printf "Starting NFS services: "
+ 	/usr/sbin/exportfs -r
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
  
-+SYSLOGD_ARGS=-n
-+KLOGD_ARGS=-n
-+[ -e /etc/default/logging ] && . /etc/default/logging
-+
- start() {
- 	printf "Starting logging: "
--	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
--	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
-+	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
-+	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
- 	echo "OK"
+ 	printf "Starting NFS daemon: "
+ 	rpc.nfsd ${NR_THREADS}
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 
+ 	printf "Starting NFS mountd: "
+ 	rpc.mountd
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	touch /var/lock/subsys/nfs
+ }
+ 
+@@ -46,21 +46,21 @@ stop() {
+ 	# Stop daemons.
+ 	printf "Shutting down NFS mountd: "
+ 	killall -q rpc.mountd
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 
+ 	printf "Shutting down NFS daemon: "
+ 	kill -9 `pidof nfsd` 2>/dev/null
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 
+ 	printf "Shutting down NFS services: "
+ 	/usr/sbin/exportfs -au
+ 	rm -f /var/lock/subsys/nfs
+ 	killall -q rpc.statd
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 
+ 	printf "Stopping NFS statd: "
+ 	killall -q rpc.statd
+-	echo "done"
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
+ 	rm -f /var/lock/subsys/nfslock
  }
  
 -- 
-2.7.0
+2.1.4
