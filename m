@@ -1,95 +1,82 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 26 Feb 2016 10:24:37 +0100
-Subject: [Buildroot] [PATCH] lksctp-tools: new package
-Message-ID: <1456478677-11687-1-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
+Date: Fri, 26 Feb 2016 10:35:05 +0100
+Subject: [Buildroot] [nano] error compiling nano
+Message-ID: <CALtfCQZsG=u4scz83-6Ke1iVp9pDqpiN79365vnS2mpF05SFRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+I'm trying to compile the test editor: nano, with raspberrypi2_defconf
+configuration and fail. It seems to be that the problem is in the source
+file: char.c.
+
+I attached you the log of the make:
+
 ---
- package/Config.in                      |  1 +
- package/lksctp-tools/Config.in         | 17 +++++++++++++++++
- package/lksctp-tools/lksctp-tools.hash |  2 ++
- package/lksctp-tools/lksctp-tools.mk   | 21 +++++++++++++++++++++
- 4 files changed, 41 insertions(+)
- create mode 100644 package/lksctp-tools/Config.in
- create mode 100644 package/lksctp-tools/lksctp-tools.hash
- create mode 100644 package/lksctp-tools/lksctp-tools.mk
+...
+     IGNORE_CALL_RESULT(mbtowc(NULL, NULL, 0));
+     ^
+chars.c: In function ?wctomb_reset?:
+chars.c:101:5: warning: implicit declaration of function ?wctomb?
+[-Wimplicit-function-declaration]
+     IGNORE_CALL_RESULT(wctomb(NULL, 0));
+     ^
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
+-DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o prompt.o prompt.c
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
+-DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o rcfile.o rcfile.c
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
+-DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o search.o search.c
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
+-DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o text.o text.c
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
+-DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o utils.o utils.c
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+-DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
+-DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o winio.o winio.c
+/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
+ -Wall   -o nano browser.o chars.o color.o cut.o files.o global.o help.o
+move.o nano.o prompt.o rcfile.o search.o text.o utils.o winio.o  -lncurses
+chars.o: In function `mbtowc_reset':
+chars.c:(.text+0x68): undefined reference to `mbtowc'
+chars.o: In function `wctomb_reset':
+chars.c:(.text+0x74): undefined reference to `wctomb'
+collect2: error: ld returned 1 exit status
+make[4]: *** [nano] Error 1
+make[3]: *** [all-recursive] Error 1
+make[2]: *** [all] Error 2
+make[1]: ***
+[/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/build/nano-2.5.1/.stamp_built]
+Error 2
+make: *** [_all] Error 2
 
-diff --git a/package/Config.in b/package/Config.in
-index 67a2514..b01d3c9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1401,6 +1401,7 @@ endif
- 	source "package/links/Config.in"
- 	source "package/linphone/Config.in"
- 	source "package/linux-zigbee/Config.in"
-+	source "package/lksctp-tools/Config.in"
- 	source "package/lldpd/Config.in"
- 	source "package/lrzsz/Config.in"
- 	source "package/macchanger/Config.in"
-diff --git a/package/lksctp-tools/Config.in b/package/lksctp-tools/Config.in
-new file mode 100644
-index 0000000..79c89f7
---- /dev/null
-+++ b/package/lksctp-tools/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LKSCTP_TOOLS
-+	bool "lksctp-tools"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  This is the lksctp-tools package for Linux Kernel SCTP Reference
-+	  Implementation.
-+
-+	  This package is intended to supplement the Linux Kernel SCTP
-+	  Reference Implementation now available in the Linux kernel source
-+	  tree in versions  2.5.36 and following.
-+
-+	  https://github.com/sctp/lksctp-tools
-+
-+comment "lksctp-tools package needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lksctp-tools/lksctp-tools.hash b/package/lksctp-tools/lksctp-tools.hash
-new file mode 100644
-index 0000000..f0b2852
---- /dev/null
-+++ b/package/lksctp-tools/lksctp-tools.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 0903dd526b7f30a89d5031aa2c82757612becc38ed7bc6e4f972f8deae351f26  lksctp-tools-1.0.16.tar.gz
-diff --git a/package/lksctp-tools/lksctp-tools.mk b/package/lksctp-tools/lksctp-tools.mk
-new file mode 100644
-index 0000000..115c4d8
---- /dev/null
-+++ b/package/lksctp-tools/lksctp-tools.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# lksctp-tools
-+#
-+################################################################################
-+
-+LKSCTP_TOOLS_VERSION = 1.0.16
-+LKSCTP_TOOLS_SITE = http://downloads.sourceforge.net/project/lksctp/lksctp-tools
-+LKSCTP_TOOLS_LICENSE = GPLv2+ (tools), LGPLv2+ (library)
-+LKSCTP_TOOLS_LICENSE_FILES = COPYING COPYING.lib
-+LKSCTP_TOOLS_INSTALL_STAGING = YES
-+
-+# release archive doesn't provide configure script
-+LKSCTP_TOOLS_AUTORECONF = YES
-+
-+define LKSCTP_TOOLS_FIX_AUTORECONF
-+	mkdir -p $(@D)/m4
-+endef
-+LKSCTP_TOOLS_POST_PATCH_HOOKS += LKSCTP_TOOLS_FIX_AUTORECONF
-+
-+$(eval $(autotools-package))
--- 
-2.7.0
+----
+
+Best regards.
+
+Oscar Gomez Fuente
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160226/56f9e2c2/attachment.html>
