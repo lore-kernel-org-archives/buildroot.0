@@ -1,30 +1,41 @@
-From: Ignacy =?iso-8859-2?Q?Gaw=EAdzki?= <ignacy.gawedzki@green-communications.fr>
-Date: Fri, 26 Feb 2016 17:48:05 +0100
-Subject: [Buildroot] [PATCH] Makefile: Add help to nobuild_targets.
-Message-ID: <20160226164805.GA6142@zenon.in.qult.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 26 Feb 2016 13:56:53 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,
+	14}.x and 4.4.x series
+Message-ID: <1456505814-23915-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 90018b4..c43c599 100644
---- a/Makefile
-+++ b/Makefile
-@@ -94,7 +94,7 @@ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconf
- # something else than one of the nobuild_targets.
- nobuild_targets := source source-check \
- 	legal-info external-deps _external-deps \
--	clean distclean
-+	clean distclean help
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 30d7e4c..4a3651d 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -210,9 +210,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.77"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.97"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.98"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.54"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.61"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.62"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.27"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+@@ -220,5 +220,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.1.18"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.2"		if BR2_KERNEL_HEADERS_4_4
++	default "4.4.3"		if BR2_KERNEL_HEADERS_4_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-2.5.0
+2.4.10
