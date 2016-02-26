@@ -1,44 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Feb 2016 21:41:03 +0100
-Subject: [Buildroot] [git commit] olimex_a20_olinuxino_micro: bump linux to
-	4.4.2
-Message-ID: <20160302202757.2BB027FA0E@busybox.osuosl.org>
+Date: Fri, 26 Feb 2016 19:49:36 +0100
+Subject: [Buildroot] [git commit] util-linux: add option for lsblk
+Message-ID: <20160302202758.8E4EC7FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=812b25fd0045ec36385a72a782ef57e3102248e2
+commit: https://git.buildroot.net/buildroot/commit/?id=025cb6ba54137fc792106ca05d97a544f1ab2b35
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+This commit adds an option to the util-linux package that allows to
+build the lsblk utility.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/olimex_a20_olinuxino_micro_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/util-linux/Config.in     | 5 +++++
+ package/util-linux/util-linux.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/configs/olimex_a20_olinuxino_micro_defconfig b/configs/olimex_a20_olinuxino_micro_defconfig
-index da2fd8a..a641ad7 100644
---- a/configs/olimex_a20_olinuxino_micro_defconfig
-+++ b/configs/olimex_a20_olinuxino_micro_defconfig
-@@ -4,8 +4,8 @@ BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index df89f99..ea23115 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -134,6 +134,11 @@ config BR2_PACKAGE_UTIL_LINUX_LOSETUP
+ 	help
+ 	  Set up and control loop devices
  
--# Linux headers same as kernel, a 4.0 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0=y
-+# Linux headers same as kernel, a 4.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- 
- # System configuration
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="board/olimex/a20_olinuxino/boot.cmd $(TARGET_DIR)/b
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.2"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_ZIMAGE=y
++config BR2_PACKAGE_UTIL_LINUX_LSBLK
++	bool "lsblk"
++	help
++	  List block devices.
++
+ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 	bool "mesg"
+ 	help
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index f6e5d62..cf9505c 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -84,6 +84,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LINE),--enable-line,--disable-line) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS),--enable-last --enable-login --enable-runuser --enable-su --enable-sulogin,--disable-last --disable-login --disable-runuser --disable-su --disable-sulogin) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_LOSETUP),--enable-losetup,--disable-losetup) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_LSBLK),--enable-lsblk,--disable-lsblk) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MESG),--enable-mesg,--disable-mesg) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MINIX),--enable-minix,--disable-minix) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_MORE),--enable-more,--disable-more) \
