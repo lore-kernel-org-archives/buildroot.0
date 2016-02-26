@@ -1,51 +1,53 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Fri, 26 Feb 2016 09:26:21 +0100
-Subject: [Buildroot] [PATCH v1 1/1] coreutils: allow selection of
- installed programs
-In-Reply-To: <56CF80BB.7070907@mind.be>
-References: <1454498088-20233-1-git-send-email-romain.izard.pro@gmail.com>
- <877fhxaf7l.fsf@dell.be.48ers.dk>
- <CAGkQfmNkVYVb9jP8LgyhfotmQ6rbgR3yNwQN=6Qgb57s6AVA+Q@mail.gmail.com>
- <56CE1E61.7000008@zacarias.com.ar> <20160224214832.GA3449@free.fr>
- <87r3g1zs67.fsf@dell.be.48ers.dk> <20160224221930.GB3449@free.fr>
- <CAGkQfmPYv0oSwO-wuQWDvzt+kC9i=1wcymz6dV7jjP=i9dN7CA@mail.gmail.com>
- <56CF80BB.7070907@mind.be>
-Message-ID: <CAGkQfmOArao2udqzGZDWA+o_UqKgWhb5=O6rf2ij4EHO1s5Eeg@mail.gmail.com>
+From: Eric Limpens <limpens@gmail.com>
+Date: Fri, 26 Feb 2016 09:31:31 +0100
+Subject: [Buildroot] [PATCH 1/1] pifmrds: Fix Makefile to prevent link usage
+	in static build
+Message-ID: <1456475491-5098-1-git-send-email-limpens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-02-25 23:31 GMT+01:00 Arnout Vandecappelle <arnout@mind.be>:
-> On 02/25/16 11:54, Romain Izard wrote:
->>
->> The issue is that the single binary mode is much more space-efficient
->> than the classical mode. For my subset of 52 executables, it takes
->> 704
->
->  You really need half of the coreutils programs because they have some
->  feature that is not supported by busybox? Or are you trying to
->  eliminate busybox entirely?
->
-No busybox, that's the target. This is not necessarily a great idea, but
-it works. I agree that without this constraint, it could be possible to
-build only a few programs in coreutils.
+This patch fixes an autobuild error during a static build:
+http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
 
-That use case works better with my patch, but the string option can also
-work as you do not need to handle very long strings if you take two or
-three executables.
+Signed-off-by: Eric Limpens <limpens@gmail.com>
+---
+ .../pifmrds/0003-Makefile-fix-static-link.patch    | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/pifmrds/0003-Makefile-fix-static-link.patch
 
->  If you know which extra features you need, perhaps you can just port
->  them to busybox? Upstream is really receptive to adding (sensible)
->  features, as long as they are hidden behind a config option.
->
->  Note: unlike the others, and don't have a problem with this huge
->  menu. But since all the other core maintainers have voiced objections
->  against it, I doubt it will go in.
->
-It would be a good surprise for me if it went in.
-
-Best regards,
+diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+new file mode 100644
+index 0000000..322a748
+--- /dev/null
++++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+@@ -0,0 +1,25 @@
++Makefile: Fix static linking
++
++This patch fixes
++http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
++
++
++Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
++
++
++diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
++--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
+++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-26 08:27:11.069148203 +0100
++@@ -1,10 +1,10 @@
++ CC = gcc
++ 
++ app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
++-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
++ 
++ rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
++-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
++ 
++ rds.o: rds.c waveforms.h
++ 	$(CC) $(CFLAGS) rds.c
 -- 
-Romain Izard
+1.9.1
