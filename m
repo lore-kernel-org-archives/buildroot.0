@@ -1,53 +1,43 @@
-From: Eric Limpens <limpens@gmail.com>
-Date: Fri, 26 Feb 2016 09:31:31 +0100
-Subject: [Buildroot] [PATCH 1/1] pifmrds: Fix Makefile to prevent link usage
-	in static build
-Message-ID: <1456475491-5098-1-git-send-email-limpens@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 26 Feb 2016 09:37:20 +0100
+Subject: [Buildroot] [PATCH] gcc: Add GCC 5.2.x option
+In-Reply-To: <1456456548-11898-1-git-send-email-cyrilbur@gmail.com>
+References: <1456456548-11898-1-git-send-email-cyrilbur@gmail.com>
+Message-ID: <20160226093720.7fcd4e10@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes an autobuild error during a static build:
-http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
+Cyril,
 
-Signed-off-by: Eric Limpens <limpens@gmail.com>
----
- .../pifmrds/0003-Makefile-fix-static-link.patch    | 25 ++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/pifmrds/0003-Makefile-fix-static-link.patch
+On Fri, 26 Feb 2016 14:15:48 +1100, Cyril Bur wrote:
+> GCC 5.3.x introduces a regression with PowerPC Altivec/VSX code generation.
+> 
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69969
+> 
+> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+> ---
+> I'm not sure if this patch is worth the trouble. By the looks of it the GCC
+> guys are aiming to have a fix in 5.4 and it is unlikely most users are
+> doing things that would result in them hitting the bug.
 
-diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
-new file mode 100644
-index 0000000..322a748
---- /dev/null
-+++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
-@@ -0,0 +1,25 @@
-+Makefile: Fix static linking
-+
-+This patch fixes
-+http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
-+
-+
-+Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
-+
-+
-+diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
-+--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
-++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-26 08:27:11.069148203 +0100
-+@@ -1,10 +1,10 @@
-+ CC = gcc
-+ 
-+ app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
-+-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
-++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
-+ 
-+ rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
-+-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
-++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
-+ 
-+ rds.o: rds.c waveforms.h
-+ 	$(CC) $(CFLAGS) rds.c
+Like we did for previous gcc versions, we only want to support one
+minor version at a time for a given major branch.
+
+So at the gcc 4 era, it meant we would only package one gcc 4.8, one
+gcc 4.9, etc.
+
+At the gcc >= 5 era, it means we want to package only one 5.x version,
+one 6.x version, etc.
+
+If you want to fix the problem without waiting for gcc 5.4, what I can
+suggest is to backport the fixes for the regression you are
+experiencing.
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
