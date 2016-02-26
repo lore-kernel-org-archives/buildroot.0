@@ -1,41 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 26 Feb 2016 13:56:54 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.4.3
-In-Reply-To: <1456505814-23915-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1456505814-23915-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1456505814-23915-2-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Feb 2016 19:41:52 +0100
+Subject: [Buildroot] [PATCH 1/1] linux-backports: bump to version 4.4.2-1
+In-Reply-To: <1456473379-5948-1-git-send-email-petr.vorel@gmail.com> (Petr
+ Vorel's message of "Fri, 26 Feb 2016 08:56:19 +0100")
+References: <1456473379-5948-1-git-send-email-petr.vorel@gmail.com>
+Message-ID: <8737sfuxe7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e7df42c..4d00905 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -27,7 +27,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.4.2"
-+	bool "4.4.3"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.4.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+
+Committed to next, thanks.
+
 -- 
-2.4.10
+Bye, Peter Korsgaard
