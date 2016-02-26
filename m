@@ -1,40 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2016 16:43:21 +0100
-Subject: [Buildroot] [nano] error compiling nano
-In-Reply-To: <CALtfCQZsG=u4scz83-6Ke1iVp9pDqpiN79365vnS2mpF05SFRw@mail.gmail.com>
- (=?utf-8?B?IsOTc2NhciBHw7NtZXo=?= Fuente"'s message of "Fri, 26 Feb 2016
- 10:35:05 +0100")
-References: <CALtfCQZsG=u4scz83-6Ke1iVp9pDqpiN79365vnS2mpF05SFRw@mail.gmail.com>
-Message-ID: <87a8mnv5nq.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 26 Feb 2016 13:39:58 -0300
+Subject: [Buildroot] [PATCH] nano: bump to version 2.5.3
+Message-ID: <1456504798-23269-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Hi,
- > I'm trying to compile the test editor: nano, with raspberrypi2_defconf
- > configuration and fail. It seems to be that the problem is in the source
- > file: char.c.
-
- > I attached you the log of the make:
-
- > ---
- > ...
- >      IGNORE_CALL_RESULT(mbtowc(NULL, NULL, 0));
- >      ^
- > chars.c: In function ?wctomb_reset?:
- > chars.c:101:5: warning: implicit declaration of function ?wctomb?
- > [-Wimplicit-function-declaration]
- >      IGNORE_CALL_RESULT(wctomb(NULL, 0));
-
-Nano needs wide character support. It sounds like you have built a
-toolchain without it, and then changed the toolchain configuration and
-added nano without doing a clean rebuild.
-
-You need to do a clean rebuild if you change toolchain options.
-
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index b7ddc50..eb6a9fc 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  89bd6ac5120880d2a95431d8bad22bf92c7ccbf10b8f1716d4ea062f3faeeb41  nano-2.5.2.tar.gz
++sha256  b2b060129b9feff2d4870d803a441178c96531de9aed144ec0b83bd63ccb12ee  nano-2.5.3.tar.gz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 4d77ea4..be6ea24 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NANO_VERSION = 2.5.2
++NANO_VERSION = 2.5.3
+ NANO_SITE = $(BR2_GNU_MIRROR)/nano
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.4.10
