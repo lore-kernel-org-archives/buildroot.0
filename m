@@ -1,41 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2016 19:41:48 +0100
-Subject: [Buildroot] [git commit branch/next] nano: bump to version 2.5.3
-Message-ID: <20160226184640.517157FA11@busybox.osuosl.org>
+Date: Fri, 26 Feb 2016 19:41:35 +0100
+Subject: [Buildroot] [git commit branch/next] linux-backports: bump to
+	version 4.4.2-1
+Message-ID: <20160226184640.2F4D5819BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=781121b7de3faa16d3e9926e2bb51be27a84f630
+commit: https://git.buildroot.net/buildroot/commit/?id=50c0e231a785ce3a123f4057e03683e0eb7491ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-backports/linux-backports.hash | 4 ++--
+ package/linux-backports/linux-backports.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index b7ddc50..eb6a9fc 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+diff --git a/package/linux-backports/linux-backports.hash b/package/linux-backports/linux-backports.hash
+index 0d41067..38f39b9 100644
+--- a/package/linux-backports/linux-backports.hash
++++ b/package/linux-backports/linux-backports.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  89bd6ac5120880d2a95431d8bad22bf92c7ccbf10b8f1716d4ea062f3faeeb41  nano-2.5.2.tar.gz
-+sha256  b2b060129b9feff2d4870d803a441178c96531de9aed144ec0b83bd63ccb12ee  nano-2.5.3.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 4d77ea4..be6ea24 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
+-# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.1.1/sha256sums.asc
+-sha256 7fca160665b801796ce50def18f2fd6def1c4452290e93ec5332444fb2021bd6  backports-4.1.1-1.tar.xz
++# From: https://www.kernel.org/pub/linux/kernel/projects/backports/stable/v4.4.2/sha256sums.asc
++sha256 a979e194c2ed9fdfca092a448e626d85c5af0e4de5ad993c0967afd15af01285  backports-4.4.2-1.tar.xz
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 44ac7e7..58cd50f 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION = 2.5.2
-+NANO_VERSION = 2.5.3
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+-LINUX_BACKPORTS_VERSION_MAJOR = 4.1.1
++LINUX_BACKPORTS_VERSION_MAJOR = 4.4.2
+ LINUX_BACKPORTS_VERSION = $(LINUX_BACKPORTS_VERSION_MAJOR)-1
+ LINUX_BACKPORTS_SOURCE = backports-$(LINUX_BACKPORTS_VERSION).tar.xz
+ LINUX_BACKPORTS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/projects/backports/stable/v$(LINUX_BACKPORTS_VERSION_MAJOR)
