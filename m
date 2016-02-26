@@ -1,61 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:36:29 +0100
-Subject: [Buildroot] [git commit] package/iputils: removed dependency on
-	openssl
-Message-ID: <20160302202757.C76567FA0E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Feb 2016 19:41:48 +0100
+Subject: [Buildroot] [git commit] nano: bump to version 2.5.3
+Message-ID: <20160302202758.7CE897FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eae103ea242af87dbde787837e672f471b10929c
+commit: https://git.buildroot.net/buildroot/commit/?id=781121b7de3faa16d3e9926e2bb51be27a84f630
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-iputils does not have to be built with openssl so remove selecting
-BR2_PACKAGE_OPENSSL and make the dependency optional
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iputils/Config.in  | 1 -
- package/iputils/iputils.mk | 8 +++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iputils/Config.in b/package/iputils/Config.in
-index 40580d2..c83e414 100644
---- a/package/iputils/Config.in
-+++ b/package/iputils/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_IPUTILS
- 	bool "iputils"
--	select BR2_PACKAGE_OPENSSL
- 	depends on BR2_USE_MMU # fork()
- 	help
- 	  This package is set of small useful utilities for Linux networking.
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 6392dec..953f1f5 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -16,7 +16,6 @@ IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPLv2+, BSD-3c, BSD-4c
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
--IPUTILS_DEPENDENCIES = openssl
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index b7ddc50..eb6a9fc 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256  89bd6ac5120880d2a95431d8bad22bf92c7ccbf10b8f1716d4ea062f3faeeb41  nano-2.5.2.tar.gz
++sha256  b2b060129b9feff2d4870d803a441178c96531de9aed144ec0b83bd63ccb12ee  nano-2.5.3.tar.gz
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 4d77ea4..be6ea24 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Build after busybox so target ends up with this package's full
- # versions of the applications instead of busybox applets.
-@@ -34,6 +33,13 @@ else
- IPUTILS_MAKE_OPTS += USE_CAP=no
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
-+IPUTILS_DEPENDENCIES += openssl
-+else
-+IPUTILS_MAKE_OPTS += USE_CRYPTO=no
-+endif
-+
- define IPUTILS_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
- endef
+-NANO_VERSION = 2.5.2
++NANO_VERSION = 2.5.3
+ NANO_SITE = $(BR2_GNU_MIRROR)/nano
+ NANO_LICENSE = GPLv3+
+ NANO_LICENSE_FILES = COPYING
