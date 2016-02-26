@@ -1,40 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 26 Feb 2016 09:37:20 +0100
-Subject: [Buildroot] [PATCH] gcc: Add GCC 5.2.x option
-In-Reply-To: <1456456548-11898-1-git-send-email-cyrilbur@gmail.com>
-References: <1456456548-11898-1-git-send-email-cyrilbur@gmail.com>
-Message-ID: <20160226093720.7fcd4e10@free-electrons.com>
+Date: Fri, 26 Feb 2016 09:39:39 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: Allow selection of bnx2x fw
+ version
+In-Reply-To: <1456461093-10202-1-git-send-email-joel@jms.id.au>
+References: <1456461093-10202-1-git-send-email-joel@jms.id.au>
+Message-ID: <20160226093939.26819401@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cyril,
+Dear Joel Stanley,
 
-On Fri, 26 Feb 2016 14:15:48 +1100, Cyril Bur wrote:
-> GCC 5.3.x introduces a regression with PowerPC Altivec/VSX code generation.
+On Fri, 26 Feb 2016 15:01:33 +1030, Joel Stanley wrote:
+> Linux kernel 4.2 moved the driver to a newer firmware version.
 > 
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69969
+> Instead of hard coding for 4.2+'s behaviour, introduce a selection
+> mechanism where the user specifies which version to use based on
+> the kernel they have.
 > 
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+> Signed-off-by: Joel Stanley <joel@jms.id.au>
 > ---
-> I'm not sure if this patch is worth the trouble. By the looks of it the GCC
-> guys are aiming to have a fix in 5.4 and it is unlikely most users are
-> doing things that would result in them hitting the bug.
+>  package/linux-firmware/Config.in         | 22 ++++++++++++++++++++++
+>  package/linux-firmware/linux-firmware.mk | 11 ++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+> index d8389864adaa..b28064b9e45c 100644
+> --- a/package/linux-firmware/Config.in
+> +++ b/package/linux-firmware/Config.in
+> @@ -243,6 +243,28 @@ config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
+>  	help
+>  	  Firmware files for Broadcom NetXtreme 10Gb ethernet cards (bnx2x)
+>  
+> +if BR2_PACKAGE_LINUX_FIRMWARE_BNX2X
+> +
+> +choice
+> +	bool "Broadcom bnx2x revision to use"
+> +	help
+> +	  Use revision 7.12.30.0 for kernel 4.2 onward.
+> +	  Use revision 7.10.51.0 for kernel 3.16 to 4.1.
+> +
+> +config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X_REV_7_12_30_0
+> +	prompt "revision 7.12.30.0"
+> +	help
+> +	  Use revision 7.12.30.0 for kernel 4.2 onwards.
+> +
+> +config BR2_PACKAGE_LINUX_FIRMWARE_BNX2X_REV_7_10_51_0
+> +	prompt "revision 7.10.51.0"
+> +	help
+> +	  Use revision 7.10.51.0 for kernel 3.16 to 4.1.
+> +
+> +endchoice
 
-Like we did for previous gcc versions, we only want to support one
-minor version at a time for a given major branch.
+I think adding new config to chose between different versions of a
+given firmware is going a bit too far. If we were to do that for all
+firmwares in linux-firmware, it would really increase the number of
+Config.in options too much.
 
-So at the gcc 4 era, it meant we would only package one gcc 4.8, one
-gcc 4.9, etc.
+Shall I suggest to install both versions of the firmware? The firmware
+files are not that large, and if filesystem size is really a strong
+issue, it is always possible to clean up the non-required firmware
+files in a post-build script.
 
-At the gcc >= 5 era, it means we want to package only one 5.x version,
-one 6.x version, etc.
+What do you think?
 
-If you want to fix the problem without waiting for gcc 5.4, what I can
-suggest is to backport the fixes for the regression you are
-experiencing.
+Thanks!
 
 Thomas
 -- 
