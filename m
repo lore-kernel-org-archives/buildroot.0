@@ -1,82 +1,57 @@
-From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
-Date: Fri, 26 Feb 2016 10:35:05 +0100
-Subject: [Buildroot] [nano] error compiling nano
-Message-ID: <CALtfCQZsG=u4scz83-6Ke1iVp9pDqpiN79365vnS2mpF05SFRw@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 26 Feb 2016 09:40:51 +0000
+Subject: [Buildroot] [PATCH 2/2] host-m4: fix build when -std=gnu99 and
+ inline functions are used
+In-Reply-To: <20160226091921.6e367255@free-electrons.com>
+References: <1456400230-4187-1-git-send-email-ltrimas@synopsys.com>
+ <1456400230-4187-3-git-send-email-ltrimas@synopsys.com>
+ <20160225135436.18a8385c@free-electrons.com>
+ <1456405085.2312.2.camel@synopsys.com>
+ <20160225142622.47b2841a@free-electrons.com>
+ <1456414403.4586.63.camel@synopsys.com> <56CF7CA0.7080801@mind.be>
+ <1456471224.28645.10.camel@synopsys.com>
+ <20160226091921.6e367255@free-electrons.com>
+Message-ID: <1456479651.28645.18.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-I'm trying to compile the test editor: nano, with raspberrypi2_defconf
-configuration and fail. It seems to be that the problem is in the source
-file: char.c.
+On Fri, 2016-02-26 at 09:19 +0100, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 26 Feb 2016 07:20:24 +0000, Alexey Brodkin wrote:
+> 
+> > > ?I think you can basically say your host toolchain is broken: it fails to
+> > > compile valid programs, because glibc doesn't satisfy the -std=gnu99 option.
+> > 
+> > That's very true. But it looks like on RedHat/CentOS 5.x (which are still
+> > in use here and there) discussed problem exists.
+> > 
+> > Given default gcc in RHEL 5 is 4.1 (though 3.4 and 4.4 are available via
+> > compat-gcc-34 and gcc44 correspondingly) ad it fails to compile host tar and m4
+> > in current Buildroot I would still look for a permanent solution in vanilla
+> > Buildroot instead of work-around on per machine basis.
+> 
+> With the default gcc 4.1 used in RHEL5, I would assume that glibc 2.5
+> works fine and that you can use Buildroot with no problem. Have you
+> tried building Buildroot with the default gcc 4.1 ?
+> 
+> What Arnout calls a broken toolchain is your combination of gcc 4.9 and
+> glibc 2.5.
 
-I attached you the log of the make:
+Ok so finally I made one good experiment - built Buildroot from scratch
+with gcc 4.1 and you know what - it was built perfectly fine.
 
----
-...
-     IGNORE_CALL_RESULT(mbtowc(NULL, NULL, 0));
-     ^
-chars.c: In function ?wctomb_reset?:
-chars.c:101:5: warning: implicit declaration of function ?wctomb?
-[-Wimplicit-function-declaration]
-     IGNORE_CALL_RESULT(wctomb(NULL, 0));
-     ^
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
--DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o prompt.o prompt.c
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
--DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o rcfile.o rcfile.c
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
--DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o search.o search.c
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
--DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o text.o text.c
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
--DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o utils.o utils.c
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
--DHAVE_CONFIG_H -I. -I..  -DLOCALEDIR=\"/usr/share/locale\"
--DSYSCONFDIR=\"/etc\" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os  -Wall -c -o winio.o winio.c
-/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
- -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
- -Wall   -o nano browser.o chars.o color.o cut.o files.o global.o help.o
-move.o nano.o prompt.o rcfile.o search.o text.o utils.o winio.o  -lncurses
-chars.o: In function `mbtowc_reset':
-chars.c:(.text+0x68): undefined reference to `mbtowc'
-chars.o: In function `wctomb_reset':
-chars.c:(.text+0x74): undefined reference to `wctomb'
-collect2: error: ld returned 1 exit status
-make[4]: *** [nano] Error 1
-make[3]: *** [all-recursive] Error 1
-make[2]: *** [all] Error 2
-make[1]: ***
-[/home/oscargomez/buildroot/buildroot-2016.02-rc2/output/build/nano-2.5.1/.stamp_built]
-Error 2
-make: *** [_all] Error 2
+So I think what we first did was a real misuse - I hope lesson will be
+learned - it's risky to use shiny new stuff on ages old machines :)
 
-----
+I.e. both patches could be dropped now and I'll make sure people
+uses correct combo of tools on our farm machines.
 
-Best regards.
+And sorry for that noise!
 
-Oscar Gomez Fuente
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160226/56f9e2c2/attachment.html>
+-Alexey
