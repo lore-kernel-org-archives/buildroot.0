@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2016 19:41:52 +0100
-Subject: [Buildroot] [PATCH 1/1] linux-backports: bump to version 4.4.2-1
-In-Reply-To: <1456473379-5948-1-git-send-email-petr.vorel@gmail.com> (Petr
- Vorel's message of "Fri, 26 Feb 2016 08:56:19 +0100")
-References: <1456473379-5948-1-git-send-email-petr.vorel@gmail.com>
-Message-ID: <8737sfuxe7.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Feb 2016 19:42:03 +0100
+Subject: [Buildroot] [PATCH] nano: bump to version 2.5.3
+In-Reply-To: <1456504798-23269-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 26 Feb 2016 13:39:58 -0300")
+References: <1456504798-23269-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y4a7titg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed to next, thanks.
 
