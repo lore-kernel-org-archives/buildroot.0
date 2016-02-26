@@ -1,41 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2016 19:47:28 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.4.3
-Message-ID: <20160226184804.BCFD47FB43@busybox.osuosl.org>
+Date: Fri, 26 Feb 2016 19:49:43 +0100
+Subject: [Buildroot] [PATCH] util-linux: add option for lsblk
+In-Reply-To: <1456432249-27364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 25 Feb 2016 21:30:49 +0100")
+References: <1456432249-27364-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87egbztigo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c87cac47a9fd9685d39e692dba4b53e1abe8739
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > This commit adds an option to the util-linux package that allows to
+ > build the lsblk utility.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e7df42c..4d00905 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -27,7 +27,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.4.2"
-+	bool "4.4.3"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.4.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.4.3" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
