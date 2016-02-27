@@ -1,148 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Feb 2016 13:44:50 +0100
-Subject: [Buildroot] user question about ubi nand
-In-Reply-To: <CAJJ6jxvynFore7-FZNbtXj_LXUDjH4-Kt--2=BpuytjEefuy0A@mail.gmail.com>
-References: <CAJJ6jxu+5mSnNq6hmnCS1nB5cx8qmyip5qoRONjtw1WHUqox5A@mail.gmail.com>
- <56CE3628.7000903@mind.be>
- <CAJJ6jxvynFore7-FZNbtXj_LXUDjH4-Kt--2=BpuytjEefuy0A@mail.gmail.com>
-Message-ID: <56D19A42.2000809@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sat, 27 Feb 2016 10:05:13 -0300
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.0.2
+Message-ID: <1456578313-31287-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/25/16 22:14, Steve Calfee wrote:
-> Hi Arnout,
-> 
-> On Wed, Feb 24, 2016 at 3:00 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 02/24/16 04:34, Steve Calfee wrote:
->>> Ubi seems very well supported in buildroot and linux. The problem is
->>> figuring out how to use it.
->>>
->>> I have created two nand partitions, one rootfs and one data.
->>
->>  That's already a bad start, because this way you reduce the wear levelling
->> opportunities. The best way to use UBI is to put everything in a single
->> partition, and create several UBI volumes within that partition.
-> 
-> Hmm, part the the reason to partition flash is so failures in one will
-> not mess up other partitions. I agree that r/w parts should be in one
-> ubi partition. I guess everything in one might work, if ubi is very
-> careful with updates.
+Fixes:
+CVE-2016-2521 - DLL hijacking vulnerability.
+CVE-2016-2522 - ASN.1 BER dissector crash.
+CVE-2016-2523 - DNP dissector infinite loop.
+CVE-2016-2524 - X.509AF dissector crash.
+CVE-2016-2525 - HTTP/2 dissector crash.
+CVE-2016-2526 - HiQnet dissector crash.
+CVE-2016-2527 - 3GPP TS 32.423 Trace file parser crash.
+CVE-2016-2528 - LBMC dissector crash.
+CVE-2016-2529 - iSeries file parser crash.
+CVE-2016-2530 - RSL dissector crash.
+CVE-2016-2531 - RSL dissector crash.
+CVE-2016-2532 - LLRP dissector crash.
+wnpa-sec-2016-12 - Ixia IxVeriWave file parser crash.
+wnpa-sec-2016-13 - IEEE 802.11 dissector crash.
+wnpa-sec-2016-14 - GSM A-bis OML dissector crash.
+wnpa-sec-2016-15 - ASN.1 BER dissector crash.
+wnpa-sec-2016-16 - SPICE dissector large loop.
+wnpa-sec-2016-17 - NFS dissector crash.
+wnpa-sec-2016-18 - ASN.1 BER dissector crash.
 
- Well, it depends on where you put your trust, and what lifetime you want from
-your product. If your device is supposed to last for many years, then you are
-guaranteed to get a lot of bad blocks, which are unpredictably spread over the
-partitions. If you have many devices, some of them will have all the bad blocks
-concentrated in a single partition. So each partition has to have enough spare
-space to take all the bad blocks. This is going to be particularly painful for
-the small partitions. I've had projects where the size of the kernel partitions
-had to be doubled to take into account bad blocks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- UBI gets extremely rigorous testing, including power cut testing. So I would
-trust UBI more than the datasheet of an el-cheapo flash device :-)
-
-
-> 
->  The canonical
->> flash layout is:
->>
->> 4   EB SPL (=pre-bootloader)
->> 16  EB bootloader
->> 8   EB bootloader environment (only relevant for U-Boot I guess)
->> the rest UBI
->>   2 volumes kernel
->>   2 volumes DTB
->>   2 volumes rootfs
->>   1 volume  rwdata
->>  (1 volume  per-device ro data is also often needed)
-> 
-> Yes I have seen layouts like that. This is for a personal project, and
-> I don't have enough flash. If I have a problem I can always go back to
-> uboot and nfs boot the system for updates.
-
- Well, in that case the reliability is not an issue either :-)
-
-[snip]
->>> I assume the post scripts can be used, but I cannot find
->>> examples. In post scripts how do I set permissions/user/group fields.
->>
->>  For ownership and permissions, there is BR2_ROOTFS_DEVICE_TABLE. post-build
->> script doesn't help because you have to do that as root, and the post-build
->> script is executed as an ordinary user.
->>
-> 
-> Thanks, I will look into that, These options built into buildroot are
-> really great, but sometimes their existence and how to use them are
-> not clear to me.
-
- If you have ideas of how it could be documented better, that would be great. It
-is documented in chapter 9.5.1 but that's perhaps a bit hidden away.
-
-
-> 
->>> How do I link to a mounted partition.
->>>
->>> http://free-electrons.com/blog/creating-flashing-ubi-ubifs-images/ has
->>> lots of info. But say I want a custom ubi.cfg file, where do I put it
->>> or how do i menuconfig it?
->>
->> BR2_TARGET_ROOTFS_UBI_USE_CUSTOM_CONFIG
->>
-> 
-> Thanks, that config was hidden behind another one, and a little tricky
-> to find, but once I knew what I wanted it worked great.
-
- Ah yes, it makes sense from the perspective of the buildroot logic (buildroot
-primarily builds a filesystem, and for ubifs you can optionally embed that into
-a UBI image, and only in that case there is a config file possible). But from a
-user it is not completel logical.
-
- We should perhaps restructure the filesystem creation a little into a part
-about the actual filesystem and a part about making images out of the
-filesystems. Because we now already have a few different ways of making images
-that are not just filesystems (isohybrid, ubi). And in the defconfigs we use
-genimage instead...
-
-[snip]
->>> What if the nand and rootfs is bigger than ram? How do you update it in uboot?
->>
->>  You don't want to do updates from the bootloader. You want to use swupdate,
->> though I'm not sure if it supports streaming upgrade. You also want to use a
->> recent kernel that support atomic volume rename, then you don't need any
->> involvement of the bootloader to do upgrades.
->>
-> 
-> Good tips, but my production volume will probably be 2 small systems.
-
- Even so it's probably easiest to do nfsboot and flash from there. And even so,
-using swupgrade is probably easier than writing your own flash script.
-
-
-> 
->>  Oh, and you probably want to hire someone like to figure all this out for you :-)
->>
-> That's no fun. I am doing this on a personal project. I have worked on
-> NOR flash systems, so this time I am trying to work with nand and the
-> ubi layer. It's very educational to actually bring up a new system.
-
- It is! But then you should consider it a challenge that it is difficult to find
-information :-P
-
-
- Regards,
- Arnout
-
-> 
-> Thanks for the tips, Steve
-> 
-
-
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index d95eaa9..ed0d2ef 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,2 +1,2 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.0.1.txt
+-sha256	c9bd07dd0d0045d6ca7537390a1afbcdf33716d193ea7d7084ae4f6c30b683ab	wireshark-2.0.1.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.0.2.txt
++sha256	e921fb072085a5654d899949bb561d0687f4819f7b63ba35777bb949a9b6b9c1	wireshark-2.0.2.tar.bz2
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index b624e2b..34a5a85 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 2.0.1
++WIRESHARK_VERSION = 2.0.2
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.10
