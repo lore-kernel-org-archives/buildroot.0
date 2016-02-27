@@ -1,27 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 23:28:13 +0100
-Subject: [Buildroot] [PATCH] package/mraa: disable tests build
-In-Reply-To: <1456599856-11995-1-git-send-email-romain.naour@gmail.com>
- (Romain Naour's message of "Sat, 27 Feb 2016 20:04:16 +0100")
-References: <1456599856-11995-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <877fhprdoi.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Feb 2016 23:21:53 +0100
+Subject: [Buildroot] [git commit] package/pax-utils: needs kernel headers >=
+	3.5
+Message-ID: <20160227222849.C6E537FC51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3fd4dde530498b67a0599b164e55773e07427701
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > mraa build system is looking for a python interpreter >= 2.7 on the host due to
- > a typo in MRAA_CONF_OPTS. We must use -DBUILDTESTS=OFF instead of -DTESTS=OFF.
+pax-utils require a toolchain with kernel headers >= 3.5 to provide
+PR_SET_NO_NEW_PRIVS.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/5f0/5f047c4c28b34f6b1bf2306a2b00bcc6a7481c01
+Fixes:
+http://autobuild.buildroot.net/results/a9e/a9e0287e67c03e5e385bf54578aa6c5c85206ec2
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pax-utils/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pax-utils/Config.in b/package/pax-utils/Config.in
+index 58100e4..e61d9b3 100644
+--- a/package/pax-utils/Config.in
++++ b/package/pax-utils/Config.in
+@@ -1,7 +1,11 @@
+ config BR2_PACKAGE_PAX_UTILS
+ 	bool "pax-utils"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5 # needs PR_SET_NO_NEW_PRIVS
+ 	help
+ 	  ELF related utils for ELF 32/64 binaries that can check files
+ 	  for security relevant properties.
+ 
+ 	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
++
++comment "pax-utils needs a toolchain w/ headers >= 3.5"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
