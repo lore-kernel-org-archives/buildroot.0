@@ -1,42 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 23:21:53 +0100
-Subject: [Buildroot] [git commit] package/pax-utils: needs kernel headers >=
-	3.5
-Message-ID: <20160227222849.C6E537FC51@busybox.osuosl.org>
+Date: Sat, 27 Feb 2016 23:13:55 +0100
+Subject: [Buildroot] [git commit] support/download: really,
+	really make git archives reproducible
+Message-ID: <20160227222849.B8D83800D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fd4dde530498b67a0599b164e55773e07427701
+commit: https://git.buildroot.net/buildroot/commit/?id=87731820926cd6f51879d7b89687bfec2e615b3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-pax-utils require a toolchain with kernel headers >= 3.5 to provide
-PR_SET_NO_NEW_PRIVS.
+The way we use it, gzip will store the current time in the header, which
+leads to unreproducible archives.
 
-Fixes:
-http://autobuild.buildroot.net/results/a9e/a9e0287e67c03e5e385bf54578aa6c5c85206ec2
+Fix that by telling gzip to not store the name and date of the file it
+compresses, with the -n option. Since it compresses its stdin, there was
+already no filename stored; now there's even no date stored.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Note: gzip has had -n since at least 1.2.4, released in 1993, so
+virtually every gzip out there nowadays has it.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pax-utils/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pax-utils/Config.in b/package/pax-utils/Config.in
-index 58100e4..e61d9b3 100644
---- a/package/pax-utils/Config.in
-+++ b/package/pax-utils/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PAX_UTILS
- 	bool "pax-utils"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5 # needs PR_SET_NO_NEW_PRIVS
- 	help
- 	  ELF related utils for ELF 32/64 binaries that can check files
- 	  for security relevant properties.
+diff --git a/support/download/git b/support/download/git
+index e342ed3..314b388 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -55,4 +55,4 @@ fi
+ GIT_DIR="${basename}" \
+ _git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
  
- 	  http://www.gentoo.org/proj/en/hardened/pax-utils.xml
-+
-+comment "pax-utils needs a toolchain w/ headers >= 3.5"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+-gzip <"${output}.tmp" >"${output}"
++gzip -n <"${output}.tmp" >"${output}"
