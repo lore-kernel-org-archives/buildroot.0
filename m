@@ -1,91 +1,88 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Feb 2016 00:48:06 +0100
-Subject: [Buildroot] [v3,
- 4/4] beaglebone: adds barebox bootloader defconfig
-In-Reply-To: <56D0E40E.40800@mind.be>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-5-git-send-email-pieter@boesman.nl> <56D0E40E.40800@mind.be>
-Message-ID: <56D0E436.6020008@mind.be>
+Date: Sat, 27 Feb 2016 01:00:44 +0100
+Subject: [Buildroot] [PATCH v3] qt: add font license information
+In-Reply-To: <1456439689-16676-1-git-send-email-ps.report@gmx.net>
+References: <1456439689-16676-1-git-send-email-ps.report@gmx.net>
+Message-ID: <56D0E72C.8090007@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/27/16 00:47, Arnout Vandecappelle wrote:
-> On 01/20/16 23:43, Pieter Smith wrote:
->> * Builds barebox MLO and the barebox bootloader.
->> * Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
->>   being generated with the kernel.
->>
->> Signed-off-by: Pieter Smith <pieter@boesman.nl>
->> ---
->>  configs/beaglebone_barebox_defconfig | 39 ++++++++++++++++++++++++++++++++++++
->>  1 file changed, 39 insertions(+)
->>  create mode 100644 configs/beaglebone_barebox_defconfig
->>
->> diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
->> new file mode 100644
->> index 0000000..b4fd67b
->> --- /dev/null
->> +++ b/configs/beaglebone_barebox_defconfig
->> @@ -0,0 +1,39 @@
->> +# architecture
->> +BR2_arm=y
->> +BR2_cortex_a8=y
->> +BR2_ARM_EABIHF=y
->> +
->> +# system
->> +BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
->> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
->> +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
->> +# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
->> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beaglebone/post-image.sh"
->> +
->> +# filesystem
->> +BR2_PACKAGE_AM33X_CM3=y
->> +BR2_TARGET_ROOTFS_EXT2=y
->> +# BR2_TARGET_ROOTFS_TAR is not set
->> +
->> +# lock down headers to avoid breaking with new defaults
->> +BR2_KERNEL_HEADERS_VERSION=y
->> +BR2_DEFAULT_KERNEL_VERSION="3.12.10"
->> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12=y
+On 02/25/16 23:34, Peter Seiderer wrote:
+> With this implementation, the different licenses will be separated with
+> <space><comma>. This is not nice, but to avoid it a pretty ugly construct
+> is needed:
+> 
+> QT_LICENSE = $(shell echo $(QT_LICENSE_BITS) | sed 's% , %, %g')
+> 
+> Since the <space><comma> is just a minor nuisance, we're not going to that kind
+> of complexity.
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- Oh, and this should be SAME_AS_KERNEL of course.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
 
->> +
->> +# bootloader
->> +BR2_TARGET_BAREBOX_TWO_CONFIGS=y
->> +BR2_TARGET_BAREBOX=y
->> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
->> +BR2_TARGET_BAREBOX_USE_SPECIFIC_IMAGE=y
->> +BR2_TARGET_BAREBOX_IMAGE_FILE="barebox-am33xx-beaglebone.img"
->> +BR2_TARGET_BAREBOX_2=y
->> +BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
->> +BR2_TARGET_BAREBOX_2_USE_SPECIFIC_IMAGE=y
->> +BR2_TARGET_BAREBOX_2_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
->> +
->> +# kernel
->> +BR2_LINUX_KERNEL=y
->> +BR2_LINUX_KERNEL_LATEST_VERSION=y
+> ---
+> Changes v2 -> v3:
+>   - update fixed font license reference and compacted
+>     public domain license line for micro/fixed
+>     (suggested by Arnout Vandecappelle)
+>   - add extra space rationale to commit log
+>    (as suggested by Arnout Vandecappelle)
 > 
->  Kernel version should be locked down as well.
+> Changes v1 -> v2:
+>   - update most font licenses (thanks to Arnout Vandecappelle)
+>   - add comma-separator between the licenses (no nice solution,
+>     will add ' ,', but without the starting problem at:
 > 
->> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
->> +BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
->> +BR2_LINUX_KERNEL_ZIMAGE=y
+>     QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
+>     ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+>     QT_LICENSE += or Digia Qt Commercial license
+>     endif
+> ---
+>  package/qt/qt.mk | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
->  Perhaps add a comment here that the dtb from barebox will be used.
-> 
->  Regards,
->  Arnout
-> 
->>
-> 
+> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+> index a64d32f..c4fff2d 100644
+> --- a/package/qt/qt.mk
+> +++ b/package/qt/qt.mk
+> @@ -660,13 +660,30 @@ define QT_INSTALL_TARGET_FONTS
+>  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+>  	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
+>  endef
+> +ifneq ($(BR2_PACKAGE_QT_FONT_MICRO)$(BR2_PACKAGE_QT_FONT_FIXED),)
+> +# as stated in the font source src/3rdparty/fonts/micro.bdf
+> +# source src/3rdparty/fonts/5x7.bdf and source src/3rdparty/fonts/6x13.bdf
+> +QT_LICENSE += , Public Domain (Micro/Fixed font)
+>  endif
+> +ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
+> +QT_LICENSE += , Adobe Helvetica license (Helvetica/Japanese fonts)
+> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
+> +endif
+> +ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
+> +QT_LICENSE += , Freeware (Unifont font)
+> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
+> +endif
+> +endif # QT_FONTS
+>  
+>  ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
+>  define QT_INSTALL_TARGET_FONTS_TTF
+>  	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+>  	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+>  endef
+> +QT_LICENSE += , Bitstream license (DejaVu/Vera TrueType fonts)
+> +QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
+> +	src/3rdparty/fonts/README.DejaVu \
+> +	src/3rdparty/fonts/COPYRIGHT.Vera
+>  endif
+>  endif # BR2_PACKAGE_QT_EMBEDDED
+>  
 > 
 
 
