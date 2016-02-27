@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Feb 2016 16:27:18 +0100
-Subject: [Buildroot] [PATCH/next v9 28/28] package/freeswitch: add optional
-	dependency to xz
+Date: Sat, 27 Feb 2016 16:27:17 +0100
+Subject: [Buildroot] [PATCH/next v9 27/28] package/freeswitch: enable
+	mod_memcache, add optional dependency to libmemcached
 In-Reply-To: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456586838-21197-29-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456586838-21197-28-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 92a983b..9765f3f 100644
+index d97fd3f..92a983b 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -284,4 +284,8 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
+@@ -216,6 +216,11 @@ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
  endif
  
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+FREESWITCH_DEPENDENCIES += xz
++ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
++FREESWITCH_DEPENDENCIES += libmemcached
++FREESWITCH_ENABLED_MODULES += applications/mod_memcache
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ FREESWITCH_DEPENDENCIES += libpng
+ FREESWITCH_ENABLED_MODULES += formats/mod_png
 -- 
 2.7.0
