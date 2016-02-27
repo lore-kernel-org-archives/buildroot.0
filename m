@@ -1,60 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 11:58:46 +0100
-Subject: [Buildroot] [git commit] package/mono: fixing monodoc leaking path
-Message-ID: <20160227105930.0ECBE7FB72@busybox.osuosl.org>
+Date: Sat, 27 Feb 2016 11:55:33 +0100
+Subject: [Buildroot] [git commit] qt: add font license information
+Message-ID: <20160227105929.E23548082E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0028ae2e6d1e7359eaa5aecef35863022328add
+commit: https://git.buildroot.net/buildroot/commit/?id=1c50ef102a3418c8a5989e2cfbaef482099a4b3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch fixes a leak in host compiler path for monodoc.
-This bug is solved upstream but the fix is not included
-in the latest stable release.
+With this implementation, the different licenses will be separated with
+<space><comma>. This is not nice, but to avoid it a pretty ugly construct
+is needed:
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+QT_LICENSE = $(shell echo $(QT_LICENSE_BITS) | sed 's% , %, %g')
+
+Since the <space><comma> is just a minor nuisance, we're not going to that kind
+of complexity.
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-monodoc-Fixing-wrong-monodoc-search-path.patch | 29 ++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ package/qt/qt.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch b/package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch
-new file mode 100644
-index 0000000..58fa323
---- /dev/null
-+++ b/package/mono/0008-monodoc-Fixing-wrong-monodoc-search-path.patch
-@@ -0,0 +1,29 @@
-+From 18bba65adf58d54645398de26eac24081d48f793 Mon Sep 17 00:00:00 2001
-+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+Date: Thu, 25 Feb 2016 22:19:31 +0100
-+Subject: [PATCH] mcs/class/monodoc/Makefile: Fixing wrong monodoc search path
-+
-+mono_libdir actually leaks host compiler path, fixing
-+by hardcoding correct path for our usecase.
-+
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ mcs/class/monodoc/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/mcs/class/monodoc/Makefile b/mcs/class/monodoc/Makefile
-+index 3ebba80..ddc2098 100644
-+--- a/mcs/class/monodoc/Makefile
-++++ b/mcs/class/monodoc/Makefile
-+@@ -135,7 +135,7 @@ test-local: setup-doc-sources
-+ dist-local: Monodoc.Ecma/EcmaUrlParser.cs
-+ 
-+ $(the_lib).config: Makefile monodoc.dll.config.in
-+-	sed 's, at monodoc_refdir@,$(mono_libdir)/monodoc,g' monodoc.dll.config.in > $@
-++	sed 's, at monodoc_refdir@,/usr/lib/monodoc,g' monodoc.dll.config.in > $@
-+ 
-+ Monodoc.Ecma/EcmaUrlParser.cs: Monodoc.Ecma/EcmaUrlParser.jay $(topdir)/jay/skeleton.cs jay.sh
-+ 	$(topdir)/$(thisdir)/jay.sh $(topdir) $< $@ $(JAY_FLAGS)
-+-- 
-+1.9.1
-+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index a64d32f..c4fff2d 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -660,13 +660,30 @@ define QT_INSTALL_TARGET_FONTS
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(QT_FONTS) $(TARGET_DIR)/usr/lib/fonts
+ endef
++ifneq ($(BR2_PACKAGE_QT_FONT_MICRO)$(BR2_PACKAGE_QT_FONT_FIXED),)
++# as stated in the font source src/3rdparty/fonts/micro.bdf
++# source src/3rdparty/fonts/5x7.bdf and source src/3rdparty/fonts/6x13.bdf
++QT_LICENSE += , Public Domain (Micro/Fixed font)
+ endif
++ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
++QT_LICENSE += , Adobe Helvetica license (Helvetica/Japanese fonts)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
++endif
++ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
++QT_LICENSE += , Freeware (Unifont font)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
++endif
++endif # QT_FONTS
+ 
+ ifeq ($(BR2_PACKAGE_QT_QTFREETYPE)$(BR2_PACKAGE_QT_SYSTEMFREETYPE),y)
+ define QT_INSTALL_TARGET_FONTS_TTF
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+ endef
++QT_LICENSE += , Bitstream license (DejaVu/Vera TrueType fonts)
++QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
++	src/3rdparty/fonts/README.DejaVu \
++	src/3rdparty/fonts/COPYRIGHT.Vera
+ endif
+ endif # BR2_PACKAGE_QT_EMBEDDED
+ 
