@@ -1,54 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 11:19:07 +0100
-Subject: [Buildroot] Loading modules with device tree after rootfs is
-	mounted
-In-Reply-To: <56AE904B.2030906@mind.be> (Arnout Vandecappelle's message of
- "Sun, 31 Jan 2016 23:52:59 +0100")
-References: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
- <56AE904B.2030906@mind.be>
-Message-ID: <87wppqsbfo.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Feb 2016 11:57:40 +0100
+Subject: [Buildroot] [PATCH v3] qt: add font license information
+In-Reply-To: <1456439689-16676-1-git-send-email-ps.report@gmx.net> (Peter
+ Seiderer's message of "Thu, 25 Feb 2016 23:34:49 +0100")
+References: <1456439689-16676-1-git-send-email-ps.report@gmx.net>
+Message-ID: <87si0es9nf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > On 30-01-16 18:56, Tim Michals wrote:
- >> I've created new buildroot defconfig for Udoo Neo board, u-boot, linux kernel
- >> boots and busybox prompt is active and accepts commands.  The issue is several
- >> drivers (wifi, camera, etc) are built as kernel modules and stored on ext4
- >> rootfs.  How can the kernel load these modules via the device tree from the rootfs? 
+ > With this implementation, the different licenses will be separated with
+ > <space><comma>. This is not nice, but to avoid it a pretty ugly construct
+ > is needed:
 
- >  The kernel doesn't automatically load modules, you need a userspace hotplug
- > helper to handle that. You have the following options:
+ > QT_LICENSE = $(shell echo $(QT_LICENSE_BITS) | sed 's% , %, %g')
 
- > 1. modprobe the required drivers in an init script (no hotplugging).
- > 2. Write a hotplug script that modprobes as required (google it).
- > 3. Use mdev as the /dev handler and add a modprobe handler in mdev.conf (google it).
+ > Since the <space><comma> is just a minor nuisance, we're not going to that kind
+ > of complexity.
 
-We should really fix our mdev setup to do this correctly out of the
-box. I don't usually use mdev, but I've just tried it on the pandaboard
-which has the same problems as the kernel config builds almost
-everything as modules.
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-As far as I can see from looking at the code and googling it, we need
-to:
-
-- Add a line to mdev.conf to support dynamic module loading:
-
-# load modules
-$MODALIAS=.*    0:0 660 @modprobe "$MODALIAS"
-
-- Add a line to the init script for cold plugging modules (E.G. modules
-for which the devices were already present before mdev was added as the
-hotplug handler). mdev -s should arguable handle this, but it doesn't.
-
-find /sys/ -name modalias | xargs sort -u | xargs modprobe -abq
-
-I'll send a patch to add this, but it would be good if somebody who
-is more familiar with mdev could take a look.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
