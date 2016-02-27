@@ -1,44 +1,52 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 27 Feb 2016 22:32:32 +0100
-Subject: [Buildroot] [PATCH] can-festival: disable on musl
-Message-ID: <1456608752-17369-1-git-send-email-arnout@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Feb 2016 22:47:44 +0100
+Subject: [Buildroot] Loading modules with device tree after rootfs is
+	mounted
+In-Reply-To: <56D20B21.70306@mind.be> (Arnout Vandecappelle's message of "Sat, 
+ 27 Feb 2016 21:46:25 +0100")
+References: <CANqk_c9oEnF32aeNnPzki0vr1E4-s-xxGyC5+dHAwAw6rHkLAg@mail.gmail.com>
+ <56AE904B.2030906@mind.be> <87wppqsbfo.fsf@dell.be.48ers.dk>
+ <56D191E9.3050604@mind.be> <87h9gurq7t.fsf@dell.be.48ers.dk>
+ <56D20B21.70306@mind.be>
+Message-ID: <8760x9su4f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previous attempts to fix it failed [1], so disable it instead.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-[1] http://patchwork.ozlabs.org/patch/509731/
+Hi,
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/canfestival/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ >> This was cut'n'paste from:
+ >> 
+ >> http://lists.busybox.net/pipermail/busybox/2014-September/081780.html
+ >> 
+ >> Replacing the 'sort -u' with cat would also work. I'm not sure exactly
+ >> what the pros/cons of using sort -u is.
 
-diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
-index 7c7b370..4e73496 100644
---- a/package/canfestival/Config.in
-+++ b/package/canfestival/Config.in
-@@ -2,13 +2,16 @@ config BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm
- 
--comment "canfestival needs a toolchain w/ threads and dynamic library"
-+comment "canfestival needs a (e)glibc or uClibc toolchain w/ threads and dynamic library"
- 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_USES_MUSL || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_CANFESTIVAL
- 	bool "canfestival"
- 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	help
+ >  It removes duplicates from the list.
+
+Yes, that I get. My question is more about if duplicates can ever occur
+/ how likely it is that duplicates are present / what is the problem
+about duplicates?
+
+I would think that duplicates are sufficiently rare that the
+(potentially) extra modprobe calls vs extra overhead of sort vs cat is
+probably down in the noise, but we can certainly keep the sort (it does
+mean that we depend on another busybox applet though).
+
+ >> As that message states, we also need to make sure that we have a
+ >> modprobe understanding the aliases (so not the MODPROBE_SMALL busybox
+ >> variant).
+
+ >  I think in our system scripts we are allowed to rely on the things that
+ > are enabled in our default busybox config. So that should be OK.
+
+Yes, or we can force the options on, like we do for other things in
+busybox.
+
 -- 
-2.7.0
+Venlig hilsen,
+Peter Korsgaard 
