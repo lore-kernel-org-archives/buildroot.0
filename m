@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Feb 2016 16:26:54 +0100
-Subject: [Buildroot] [PATCH/next v9 04/28] package/freeswitch: add optional
-	dependency to libedit
+Date: Sat, 27 Feb 2016 16:27:00 +0100
+Subject: [Buildroot] [PATCH/next v9 10/28] package/freeswitch: enable
+	mod_lua, add optional dependency to lua
 In-Reply-To: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456586838-21197-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456586838-21197-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b3e0784..477e5d7 100644
+index b4a98f3..7662a94 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -67,7 +67,6 @@ FREESWITCH_CONF_ENV += \
- 	ac_cv_gcc_supports_w_no_unused_result=no
+@@ -182,6 +182,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+ endif
  
- FREESWITCH_CONF_OPTS = \
--	--disable-core-libedit-support \
- 	--disable-core-odbc-support \
- 	--without-erlang \
- 	--enable-fhs \
-@@ -158,6 +157,13 @@ endef
- 
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+FREESWITCH_DEPENDENCIES += libedit
-+FREESWITCH_CONF_OPTS += --enable-core-libedit-support
-+else
-+FREESWITCH_CONF_OPTS += --disable-core-libedit-support
++ifeq ($(BR2_PACKAGE_LUA),y)
++FREESWITCH_DEPENDENCIES += lua
++FREESWITCH_ENABLED_MODULES += languages/mod_lua
 +endif
 +
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
- endif
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.7.0
