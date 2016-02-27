@@ -1,38 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Feb 2016 23:03:15 +0100
-Subject: [Buildroot] [PATCH] support/download: really,
-	really make git archives reproducible
-Message-ID: <1456610595-8715-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 27 Feb 2016 23:04:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi: needs BR2_TOOLCHAIN_HAS_SYNC_8
+Message-ID: <1456610655-7183-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The way we use it, gzip will store the current time in the header, which
-leads to unreproducible archives.
+Fixes a build error on arm detected by autobuilders:
+http://autobuild.buildroot.net/results/439/43939f65e4516adddc4385c6e0a2193abcab0446/
+http://autobuild.buildroot.net/results/322/322e3cd3b444106c9b624675c2265d4fdfefe458/
+http://autobuild.buildroot.net/results/3c1/3c1a0e35325828c554f49ab9dbeb4b9b16f9b1e5/
+http://autobuild.buildroot.net/results/222/222e8f3392a794b693ff0a9617453bdffbce8aef/
+http://autobuild.buildroot.net/results/d91/d91efe30996ddbb4706885b48ff6d5d3fa974df8/
 
-Fiss that by telling gzip to not store the name and date of the file it
-compresses, with the -n option. Since it compresses its stdin, there was
-already no filename stored; now there's even no date stored.
+and this build error on BR2_x86_i486
 
-Note: gzip has had -n since at least 1.2.4, released in 1993, so
-virtually every gzip out there nowadays has it.
+xbmc/filesystem/filesystem.a(FileCache.o): In function `std::__atomic_base<long long>::store(long long, std::memory_order)':
+/home/bernd/buildroot/br6_kodi_next/output/host/usr/i486-buildroot-linux-uclibc/include/c++/4.9.3/bits/atomic_base.h:478: undefined reference to `__atomic_store_8'
+/home/bernd/buildroot/br6_kodi_next/output/host/usr/i486-buildroot-linux-uclibc/include/c++/4.9.3/bits/atomic_base.h:478: undefined reference to `__atomic_store_8'
+xbmc/filesystem/filesystem.a(FileCache.o): In function `std::__atomic_base<long long>::load(std::memory_order) const':
+/home/bernd/buildroot/br6_kodi_next/output/host/usr/i486-buildroot-linux-uclibc/include/c++/4.9.3/bits/atomic_base.h:500: undefined reference to `__atomic_load_8'
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/kodi/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/support/download/git b/support/download/git
-index e342ed3..314b388 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -55,4 +55,4 @@ fi
- GIT_DIR="${basename}" \
- _git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 7d28882..1450b6e 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
++	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
++		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
++		&& BR2_TOOLCHAIN_HAS_SYNC_8
  
--gzip <"${output}.tmp" >"${output}"
-+gzip -n <"${output}.tmp" >"${output}"
+ comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
 -- 
-1.9.1
+2.7.0
