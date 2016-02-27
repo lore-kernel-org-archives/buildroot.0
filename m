@@ -1,46 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 23:27:06 +0100
-Subject: [Buildroot] [git commit] can-festival: disable on musl
-Message-ID: <20160227222849.D84057FC51@busybox.osuosl.org>
+Date: Sat, 27 Feb 2016 23:28:09 +0100
+Subject: [Buildroot] [git commit] package/mraa: disable tests build
+Message-ID: <20160227222849.E4F2B7FC51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d00a4058b9e522f34a00c4c0c1b2a6be6dc13fb
+commit: https://git.buildroot.net/buildroot/commit/?id=6855f7ff2675de9cce69547a4da2bcf92fda9592
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Previous attempts to fix it failed [1], so disable it instead.
+mraa build system is looking for a python interpreter >= 2.7 on the host due to
+a typo in MRAA_CONF_OPTS. We must use -DBUILDTESTS=OFF instead of -DTESTS=OFF.
 
-[1] http://patchwork.ozlabs.org/patch/509731/
+Fixes:
+http://autobuild.buildroot.net/results/5f0/5f047c4c28b34f6b1bf2306a2b00bcc6a7481c01
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/canfestival/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/mraa/mraa.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
-index 7c7b370..4e73496 100644
---- a/package/canfestival/Config.in
-+++ b/package/canfestival/Config.in
-@@ -2,13 +2,16 @@ config BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm
+diff --git a/package/mraa/mraa.mk b/package/mraa/mraa.mk
+index 8c7dbc4..42cc2e3 100644
+--- a/package/mraa/mraa.mk
++++ b/package/mraa/mraa.mk
+@@ -20,6 +20,6 @@ MRAA_CONF_OPTS += \
+ 	-DIPK=OFF \
+ 	-DRPM=OFF \
+ 	-DENABLEEXAMPLES=OFF \
+-	-DTESTS=OFF
++	-DBUILDTESTS=OFF
  
--comment "canfestival needs a toolchain w/ threads and dynamic library"
-+comment "canfestival needs a (e)glibc or uClibc toolchain w/ threads and dynamic library"
- 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_USES_MUSL || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_CANFESTIVAL
- 	bool "canfestival"
- 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	help
+ $(eval $(cmake-package))
