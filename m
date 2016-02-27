@@ -1,59 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Feb 2016 22:55:17 +0100
-Subject: [Buildroot] [PATCH v2 1/1] protobuf: fix detection of
- __atomic_*() built-ins
-In-Reply-To: <1455730981-6316-2-git-send-email-casantos@datacom.ind.br>
-References: <1455204185-7124-1-git-send-email-casantos@datacom.ind.br>
- <1455730981-6316-2-git-send-email-casantos@datacom.ind.br>
-Message-ID: <56D21B45.5070500@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Feb 2016 23:00:46 +0100
+Subject: [Buildroot] [PATCH 1/1] Declare SED Makefile instead of
+	package/Makefile.in so it exists globally.
+In-Reply-To: <56D1A1E6.7020601@mind.be> (Arnout Vandecappelle's message of
+ "Sat, 27 Feb 2016 14:17:26 +0100")
+References: <20160216161010.779981bb@free-electrons.com>
+ <1455635726-22028-1-git-send-email-alvaro.gamez@hazent.com>
+ <20160216213554.60f53246@free-electrons.com>
+ <56C3A41B.7070200@mind.be>
+ <CAM+bi4t1R+Dd_aF_OHV_MeGRHyFi3PZD5kfwmCqcYtWK=bvS3A@mail.gmail.com>
+ <20160217094715.19c767b3@free-electrons.com>
+ <56D1A1E6.7020601@mind.be>
+Message-ID: <87y4a5rey9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/17/16 18:43, Carlos Santos wrote:
-> - Use the recently introduced BR2_TOOLCHAIN_HAS_ATOMIC boolean.
-> 
-> - Import an upstream patch to fix error handling when atomic operations
->   are not detected. Without this patch the build fails due to a syntax
->   error instead of showing the proper message.
-> 
-> - Add a patch to configure.ac to check if libatomic is needed and force
->   linking to it (we will attempt to submit this upstream).
-> 
-> - Disable build for SPARC64 because it fails due to a missing definition
->   of Atomic64.
-> 
-> On PowerPC, the __atomic_*() built-ins for 1-byte, 2-byte and 4-byte
-> types are available built-in. The corresponding built-ins for 8-byte
-> types, however, are implemented via libatomic, so requiring gcc >= 4.8.
-> 
-> In Buildroot, to simplify things, it was decided to require gcc 4.8 as
-> soon as the architectures has at least one __atomic_*() built-in variant
-> that requires libatomic.
-> 
-> Since protobuf most likely only uses the 1, 2 and 4-byte variants, it
-> *could* technically build with gcc 4.7. This is probably not a big deal,
-> and we can live with requiring gcc 4.8 on PowerPC to build protobuf. The
-> same restriction applies to SPARC.
-> 
-> The build for SPARC64 breaks even using the master branch of protobuf
-> due to undefined references to some NoBarrier_Atomic*() functions.
-> 
-> Signed-off-by: Henrique Marks <henrique.marks@datacom.ind.br>
-> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Hi,
 
- The comment in Config.in is perhaps a bit heavy, but it definitely doesn't hurt.
+>> Arnout, what do you think? In addition, I think it would be good t In
+>> addition, I think it would be good to In addition, I think it would
+>> be good to o
 
-[snip]
+ >  I agree we should go for (1).
+
+Yes, I also think this is the sanest / simplest thing to do.
+
+ >  However, this doesn't completely stop the 'make menuconfig savedefconfig': once
+ > a .config file exists, you can still do that. But it could have some funky side
+ > effects (not that I can think of any right away, but it feels a bit iffy). So I
+ > think it would be good to enforce that all the noconfig_targets can only be
+ > called on their own on the command line. This would block completely silly
+ > things like 'make menuconfig defconfig' (it would also block potentially valid
+ > things like 'make foo_defconfig menuconfig', but I think adding an extra '&&
+ > make' in the middle of that is not so painful).
+
+No, that seems ok (as long as it is clear from the error message that
+you need to do so).
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
