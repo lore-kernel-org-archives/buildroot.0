@@ -1,40 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 23:13:55 +0100
-Subject: [Buildroot] [git commit] support/download: really,
-	really make git archives reproducible
-Message-ID: <20160227222849.B8D83800D0@busybox.osuosl.org>
+Date: Sat, 27 Feb 2016 23:27:06 +0100
+Subject: [Buildroot] [git commit] can-festival: disable on musl
+Message-ID: <20160227222849.D84057FC51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87731820926cd6f51879d7b89687bfec2e615b3d
+commit: https://git.buildroot.net/buildroot/commit/?id=4d00a4058b9e522f34a00c4c0c1b2a6be6dc13fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The way we use it, gzip will store the current time in the header, which
-leads to unreproducible archives.
+Previous attempts to fix it failed [1], so disable it instead.
 
-Fix that by telling gzip to not store the name and date of the file it
-compresses, with the -n option. Since it compresses its stdin, there was
-already no filename stored; now there's even no date stored.
+[1] http://patchwork.ozlabs.org/patch/509731/
 
-Note: gzip has had -n since at least 1.2.4, released in 1993, so
-virtually every gzip out there nowadays has it.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/canfestival/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/git b/support/download/git
-index e342ed3..314b388 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -55,4 +55,4 @@ fi
- GIT_DIR="${basename}" \
- _git archive --prefix="'${basename}/'" -o "'${output}.tmp'" --format=tar "'${cset}'"
+diff --git a/package/canfestival/Config.in b/package/canfestival/Config.in
+index 7c7b370..4e73496 100644
+--- a/package/canfestival/Config.in
++++ b/package/canfestival/Config.in
+@@ -2,13 +2,16 @@ config BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_arm
  
--gzip <"${output}.tmp" >"${output}"
-+gzip -n <"${output}.tmp" >"${output}"
+-comment "canfestival needs a toolchain w/ threads and dynamic library"
++comment "canfestival needs a (e)glibc or uClibc toolchain w/ threads and dynamic library"
+ 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_USES_MUSL || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_CANFESTIVAL
+ 	bool "canfestival"
+ 	depends on BR2_PACKAGE_CANFESTIVAL_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
