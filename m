@@ -1,45 +1,39 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Feb 2016 23:05:24 +0100
-Subject: [Buildroot] Analysis of build results for 2016-02-21
-References: <20160222073022.D29851025E8@stock.ovh.net>
- <20160222150539.0301105e@free-electrons.com>
-Message-ID: <46j9qcxf4f.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Feb 2016 23:12:23 +0100
+Subject: [Buildroot] user question about ubi nand
+In-Reply-To: <56D19A42.2000809@mind.be> (Arnout Vandecappelle's message of
+ "Sat, 27 Feb 2016 13:44:50 +0100")
+References: <CAJJ6jxu+5mSnNq6hmnCS1nB5cx8qmyip5qoRONjtw1WHUqox5A@mail.gmail.com>
+ <56CE3628.7000903@mind.be>
+ <CAJJ6jxvynFore7-FZNbtXj_LXUDjH4-Kt--2=BpuytjEefuy0A@mail.gmail.com>
+ <56D19A42.2000809@mind.be>
+Message-ID: <87r3fxreew.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 22 Feb 2016 15:05:39 +0100 schrieb Thomas Petazzoni:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
->>          arm |             kodi-15.2-Isengard | NOK |
->>          http://autobuild.buildroot.net/
-results/43939f65e4516adddc4385c6e0a2193abcab0446/
-> 
-> Usage of 64-bits on ARM with uClibc, doesn't work because gcc uses the
-> __write() internal glibc symbol. We need to isolate the Kodi features
-> that uses this 64 bits atomic operation (if possible) and make it depend
-> on BR2_TOOLCHAIN_ARM_HAS_SYNC_8. See also
-> https://git.busybox.net/buildroot/tree/toolchain/toolchain-
-common.in#n339
-> for a discussion of this problem.
-> 
-> Bernd ?
+Hi,
 
-Hi Thomas,
+ >> Thanks, that config was hidden behind another one, and a little tricky
+ >> to find, but once I knew what I wanted it worked great.
 
-tbh I do not think that I fully understood the atomics stuff[1], but I 
-could reproduce the build error ;) Kodi checks unconditionally for
-	__sync_add_and_fetch
-	__sync_sub_and_fetch
-	__sync_val_compare_and_swap
-in configure.ac, the only file using the resulting defines is xbmc/
-threads/Atomics.cpp which is used in several parts of Kodi, I do not 
-think all of these features are optional.
-The build error also occurs with Kodi 16.0-Jarvis, btw, and should be 
-fixes by this patch: http://patchwork.ozlabs.org/patch/589456/
+ >  Ah yes, it makes sense from the perspective of the buildroot logic (buildroot
+ > primarily builds a filesystem, and for ubifs you can optionally embed that into
+ > a UBI image, and only in that case there is a config file possible). But from a
+ > user it is not completel logical.
 
-Regards, Bernd
+ >  We should perhaps restructure the filesystem creation a little into a part
+ > about the actual filesystem and a part about making images out of the
+ > filesystems. Because we now already have a few different ways of making images
+ > that are not just filesystems (isohybrid, ubi). And in the defconfigs we use
+ > genimage instead...
 
-[1] https://git.busybox.net/buildroot/commit/toolchain/toolchain-
-common.in?id=6856e417da4f3aa77e2a814db2a89429af072f7d
+FYI, I think it makes sense to add a genimage (post-)filesystem option,
+now that we use it is in several defconfigs.
+
+-- 
+Bye, Peter Korsgaard
