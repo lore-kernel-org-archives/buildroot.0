@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Feb 2016 16:27:14 +0100
-Subject: [Buildroot] [PATCH/next v9 24/28] package/freeswitch: enable
-	mod_soundtouch, add optional dependency to libsoundtouch
+Date: Sat, 27 Feb 2016 16:27:12 +0100
+Subject: [Buildroot] [PATCH/next v9 22/28] package/freeswitch: enable
+	mod_sndfile, add optional dependency to libsndfile
 In-Reply-To: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456586838-21197-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456586838-21197-23-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +17,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index ba462eb..4a2cf55 100644
+index a345950..66e8e0d 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -252,6 +252,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
- FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
+@@ -242,6 +242,11 @@ FREESWITCH_DEPENDENCIES += libsilk
+ FREESWITCH_ENABLED_MODULES += codecs/mod_silk
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
-+FREESWITCH_DEPENDENCIES += libsoundtouch
-+FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++FREESWITCH_DEPENDENCIES += libsndfile
++FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
