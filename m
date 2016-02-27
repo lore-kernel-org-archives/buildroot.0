@@ -1,61 +1,71 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sat, 27 Feb 2016 10:05:13 -0300
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.0.2
-Message-ID: <1456578313-31287-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 27 Feb 2016 14:04:59 +0100
+Subject: [Buildroot] [PATCH v2] perf: append endianness argument to ld
+ when building for MIPS
+In-Reply-To: <1456136565-6167-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1456136565-6167-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <56D19EFB.20903@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-2521 - DLL hijacking vulnerability.
-CVE-2016-2522 - ASN.1 BER dissector crash.
-CVE-2016-2523 - DNP dissector infinite loop.
-CVE-2016-2524 - X.509AF dissector crash.
-CVE-2016-2525 - HTTP/2 dissector crash.
-CVE-2016-2526 - HiQnet dissector crash.
-CVE-2016-2527 - 3GPP TS 32.423 Trace file parser crash.
-CVE-2016-2528 - LBMC dissector crash.
-CVE-2016-2529 - iSeries file parser crash.
-CVE-2016-2530 - RSL dissector crash.
-CVE-2016-2531 - RSL dissector crash.
-CVE-2016-2532 - LLRP dissector crash.
-wnpa-sec-2016-12 - Ixia IxVeriWave file parser crash.
-wnpa-sec-2016-13 - IEEE 802.11 dissector crash.
-wnpa-sec-2016-14 - GSM A-bis OML dissector crash.
-wnpa-sec-2016-15 - ASN.1 BER dissector crash.
-wnpa-sec-2016-16 - SPICE dissector large loop.
-wnpa-sec-2016-17 - NFS dissector crash.
-wnpa-sec-2016-18 - ASN.1 BER dissector crash.
+On 02/22/16 11:22, Vicente Olivert Riera wrote:
+> We need to pass an argument to ld for setting the endianness when
+> building it for MIPS architecture, otherwise the default one will always
+> be used (which is big endian) and the compilation for little endian will
+> always fail showing an error like this one:
+> 
+> LD    foo.o
+> mips-linux-gnu-ld: foo.o: compiled for a little endian system and target
+> is big endian
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index d95eaa9..ed0d2ef 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,2 +1,2 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.0.1.txt
--sha256	c9bd07dd0d0045d6ca7537390a1afbcdf33716d193ea7d7084ae4f6c30b683ab	wireshark-2.0.1.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.0.2.txt
-+sha256	e921fb072085a5654d899949bb561d0687f4819f7b63ba35777bb949a9b6b9c1	wireshark-2.0.2.tar.bz2
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index b624e2b..34a5a85 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.0.1
-+WIRESHARK_VERSION = 2.0.2
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = http://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ Regards,
+ Arnout
+
+> ---
+> Changes v1 -> v2:
+> - Simplify the logic of the ifeq block.
+> 
+>  linux/linux-tool-perf.mk | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
+> index 07c3514..1070a1c 100644
+> --- a/linux/linux-tool-perf.mk
+> +++ b/linux/linux-tool-perf.mk
+> @@ -27,6 +27,19 @@ PERF_MAKE_FLAGS = \
+>  	WERROR=0 \
+>  	ASCIIDOC=
+>  
+> +# We need to pass an argument to ld for setting the endianness when
+> +# building it for MIPS architecture, otherwise the default one will
+> +# always be used (which is big endian) and the compilation for little
+> +# endian will always fail showing an error like this one:
+> +#  LD    foo.o
+> +# mips-linux-gnu-ld: foo.o: compiled for a little endian system and
+> +# target is big endian
+> +ifeq ($(BR2_mips)$(BR2_mips64),y)
+> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EB"
+> +else ifeq ($(BR2_mipsel)$(BR2_mips64el),y)
+> +PERF_MAKE_FLAGS += LD="$(TARGET_LD) -EL"
+> +endif
+> +
+>  # The call to backtrace() function fails for ARC, because for some
+>  # reason the unwinder from libgcc returns early. Thus the usage of
+>  # backtrace() should be disabled in perf explicitly: at build time
+> 
+
+
 -- 
-2.4.10
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
