@@ -1,22 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2016 23:27:46 +0100
-Subject: [Buildroot] [PATCH] can-festival: disable on musl
-In-Reply-To: <1456608752-17369-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 27 Feb 2016 22:32:32 +0100")
-References: <1456608752-17369-1-git-send-email-arnout@mind.be>
-Message-ID: <87bn71rdp9.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Feb 2016 23:28:13 +0100
+Subject: [Buildroot] [PATCH] package/mraa: disable tests build
+In-Reply-To: <1456599856-11995-1-git-send-email-romain.naour@gmail.com>
+ (Romain Naour's message of "Sat, 27 Feb 2016 20:04:16 +0100")
+References: <1456599856-11995-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <877fhprdoi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Previous attempts to fix it failed [1], so disable it instead.
- > [1] http://patchwork.ozlabs.org/patch/509731/
+ > mraa build system is looking for a python interpreter >= 2.7 on the host due to
+ > a typo in MRAA_CONF_OPTS. We must use -DBUILDTESTS=OFF instead of -DTESTS=OFF.
 
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/5f0/5f047c4c28b34f6b1bf2306a2b00bcc6a7481c01
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
