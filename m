@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Feb 2016 22:27:03 +0100
-Subject: [Buildroot] [PATCH v2] gcc: remove 4.5.x
-In-Reply-To: <1456345550-16199-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1456345550-16199-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160228222703.49e8e039@free-electrons.com>
+Date: Sun, 28 Feb 2016 22:27:39 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{2, 12}.x series
+Message-ID: <20160228212743.DD32A80AC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: https://git.buildroot.net/buildroot/commit/?id=a1f2a8527767a9839b092ed386e5ec367ee76962
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 24 Feb 2016 17:25:50 -0300, Gustavo Zacarias wrote:
-> It's been deprecated for some time now.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gcc/4.5.4/100-uclibc-conf.patch            |  13 -
->  ...00-powerpc-link-with-math-lib.patch.conditional | 125 --------
->  package/gcc/4.5.4/301-missing-execinfo_h.patch     |  11 -
->  package/gcc/4.5.4/302-c99-snprintf.patch           |  13 -
->  .../gcc/4.5.4/305-libmudflap-susv3-legacy.patch    |  49 ---
->  package/gcc/4.5.4/810-arm-softfloat-libgcc.patch   |  38 ---
->  package/gcc/4.5.4/820-arm-unbreak-armv4t.patch     |  14 -
->  package/gcc/4.5.4/830-arm-pr43440.patch            | 345 ---------------------
->  package/gcc/Config.in.host                         |  27 --
->  9 files changed, 635 deletions(-)
->  delete mode 100644 package/gcc/4.5.4/100-uclibc-conf.patch
->  delete mode 100644 package/gcc/4.5.4/1000-powerpc-link-with-math-lib.patch.conditional
->  delete mode 100644 package/gcc/4.5.4/301-missing-execinfo_h.patch
->  delete mode 100644 package/gcc/4.5.4/302-c99-snprintf.patch
->  delete mode 100644 package/gcc/4.5.4/305-libmudflap-susv3-legacy.patch
->  delete mode 100644 package/gcc/4.5.4/810-arm-softfloat-libgcc.patch
->  delete mode 100644 package/gcc/4.5.4/820-arm-unbreak-armv4t.patch
->  delete mode 100644 package/gcc/4.5.4/830-arm-pr43440.patch
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-As requested by Peter, I've added Config.in.legacy handling, and
-applied to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 224bf12..d6cb238 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -207,10 +207,10 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.77"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.78"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.98"	if BR2_KERNEL_HEADERS_3_10
+-	default "3.12.54"	if BR2_KERNEL_HEADERS_3_12
++	default "3.12.55"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.62"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+ 	default "3.18.27"	if BR2_KERNEL_HEADERS_3_18
