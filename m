@@ -1,49 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 28 Feb 2016 23:00:22 +0100
-Subject: [Buildroot] [PATCH] package/cups: fix static linking with GnuTLS
-In-Reply-To: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160228230022.3d8805d6@free-electrons.com>
+Date: Sun, 28 Feb 2016 23:04:25 +0100
+Subject: [Buildroot] [git commit] pifmrds: add patch to correct linking in
+	static build
+Message-ID: <20160228220430.A090580AC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c434d2afcb58445ab3e151642f770555a4cc252
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 28 Feb 2016 17:07:20 +0100, J?rg Krause wrote:
-> cups forgets to link against the libs found by pkg-config if it is build with
-> GnuTLS support.
+This patch fixes an autobuild error during a static build:
+http://autobuild.buildroot.net/results/f61ae46ba4d4fc3af3784d1f612a8c1cc7de3314/
 
-If this was true, then it would not only fail in static linking
-scenarios, but also in dynamic linking scenarios.
+Signed-off-by: Eric Limpens <limpens@gmail.com>
+[Arnout: clean up commit message and patch log]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../pifmrds/0003-Makefile-fix-static-link.patch    | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-What apparently is happening is that libcups.so is properly linked
-against libgnutls.so, so that when you link a binary against
-libcups.so, everything works fine.
-
-However, when you switch to static linking, this doesn't work, because
-library dependencies are not recursively taken into account.
-
-While your fix probably works (I haven't tested it), it has the
-drawback of linking the cups binaries directly with libgnutls.so even
-in a dynamic linking scenario, while this is not really needed.
-
-This is normally fixed with pkg-config by using the Libs.private field,
-but here we are *inside* a given package, so the pkg-config files have
-not yet been installed by the time we link the cups binaries.
-
-I think this problem is normally handled by libtool, but since cups is
-using only autoconf and not automake/libtool... Maybe we should consult
-with the cups developers?
-
-Arnout, Yann, do you have other advises?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pifmrds/0003-Makefile-fix-static-link.patch b/package/pifmrds/0003-Makefile-fix-static-link.patch
+new file mode 100644
+index 0000000..ecd7c4f
+--- /dev/null
++++ b/package/pifmrds/0003-Makefile-fix-static-link.patch
+@@ -0,0 +1,23 @@
++Makefile: Fix static linking
++
++Since libsndfile uses funtions from libm, the -lm should be specified
++after libsndfile for static linking.
++
++Signed-off-by: "Eric Limpens" <Limpens@gmail.com>
++
++diff -purN pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile
++--- pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2.orig/src/Makefile	2016-02-26 08:06:43.102962592 +0100
+++++ pifmrds-0bf57f9ce0d954365a38d8af8e7be6f28521c3f2/src/Makefile	2016-02-26 08:27:11.069148203 +0100
++@@ -1,10 +1,10 @@
++ CC = gcc
++ 
++ app: rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o
++-	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lm -lsndfile
+++	$(CC) $(LDFLAGS) -o pi_fm_rds rds.o waveforms.o pi_fm_rds.o fm_mpx.o control_pipe.o -lsndfile -lm
++ 
++ rds_wav: rds.o waveforms.o rds_wav.o fm_mpx.o
++-	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lm -lsndfile
+++	$(CC) $(LDFLAGS) -o rds_wav rds_wav.o rds.o waveforms.o fm_mpx.o -lsndfile -lm
++ 
++ rds.o: rds.c waveforms.h
++ 	$(CC) $(CFLAGS) rds.c
