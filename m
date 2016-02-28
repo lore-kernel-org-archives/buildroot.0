@@ -1,124 +1,77 @@
-From: Roland Franke <fli4l@franke-prem.de>
-Date: Sun, 28 Feb 2016 17:04:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfuse: fix internal version
-	number
-In-Reply-To: <56D31823.4090500@mind.be>
-References: <1456668330-14361-1-git-send-email-bernd.kuhls@t-online.de>
- <56D31823.4090500@mind.be>
-Message-ID: <9FB730B69E3C4F439B9AB6E84257FFA0@ROLANDAMD64>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 28 Feb 2016 17:07:20 +0100
+Subject: [Buildroot] [PATCH] package/cups: fix static linking with GnuTLS
+Message-ID: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-yes this patch will fix the version in the file for the installation as by 
-the
-sourch-code from original version 2.9.5 will install in the output with the
-wrong version 2.9.4.
-I also guess that i am have sign the patch regarding the given link.
-And this is the first time that i am trying to do that by my self, so please
-note that i am not complete knowing all the thinks what be need.
+cups forgets to link against the libs found by pkg-config if it is build with
+GnuTLS support.
 
-Best regards,
-Roland Franke
+Otherwise, static build fails with:
+../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
+cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
+[..]
 
------Urspr?ngliche Nachricht----- 
-From: Arnout Vandecappelle
-Sent: Sunday, February 28, 2016 4:54 PM
-To: Bernd Kuhls ; buildroot at buildroot.org
-Cc: Roland Franke
-Subject: Re: [Buildroot] [PATCH 1/1] package/libfuse: fix internal version 
-number
+Fixes:
+http://autobuild.buildroot.net/results/205/20509b7d1edc73dc2a7622f2ae7dbf9f6665a918/
+http://autobuild.buildroot.net/results/b86/b86d685caf8cf812f9505fca2de36fb8c18baee1/
 
-On 02/28/16 15:05, Bernd Kuhls wrote:
-> Upstream forgot to bump the internal version number to 2.9.5 during the
-> last update. Roland Franke sent me an e-mail about it before posting
-> to the buildroot mailinglist, in order to help the integration of this
-> patch into buildroot I am sending this patch formatted by git.
+Patch is sent upstream.
 
-All this explanation should have been below a --- because it doesn't belong 
-in
-the git history.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ .../cups/0004-Fix-static-linking-with-GnuTLS.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/cups/0004-Fix-static-linking-with-GnuTLS.patch
 
-Also, this doesn't explain what the real problem is, something like:
-
-This will generate a library with the wrong library name.
-
-AFAIU this is anyway harmless, so I guess it can go into next.
-
-
-> Signed-off-by: Roland Franke <fli4l@franke-prem.de>
-
-Bernd, you can't just add someone else's Signed-off-by.
-
-Roland, can you confirm that you sign off this patch (see [1])?
-
-[1] http://developercertificate.org/
-
-
-With all that:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Regards,
-Arnout
-
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../libfuse/0002-fix-libfuse-versionsnumber.patch  | 33 
-> ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/libfuse/0002-fix-libfuse-versionsnumber.patch
->
-> diff --git a/package/libfuse/0002-fix-libfuse-versionsnumber.patch 
-> b/package/libfuse/0002-fix-libfuse-versionsnumber.patch
-> new file mode 100644
-> index 0000000..bbcb1e6
-> --- /dev/null
-> +++ b/package/libfuse/0002-fix-libfuse-versionsnumber.patch
-> @@ -0,0 +1,33 @@
-> +Fix version number of build files from libfuse to real version
-> +
-> +Bug was reported upstream: https://github.com/libfuse/libfuse/issues/10
-> +and will be fixed with the next release:
-> +https://github.com/libfuse/libfuse/issues/10#issuecomment-172380172
-> +
-> +Signed-off-by: Roland Franke <fli4l@franke-prem.de>
-> +[original post: 
-> http://lists.busybox.net/pipermail/buildroot/2016-February/154294.html]
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +[added links to upstream bug report]
-> +
-> +--- a/lib/Makefile.am
-> ++++ b/lib/Makefile.am
-> +@@ -37,7 +37,7 @@
-> + $(iconv_source) \
-> + $(mount_source)
-> +
-> +-libfuse_la_LDFLAGS = -pthread @libfuse_libs@ -version-number 2:9:4 \
-> ++libfuse_la_LDFLAGS = -pthread @libfuse_libs@ -version-number 2:9:5 \
-> + -Wl,--version-script,$(srcdir)/fuse_versionscript
-> +
-> + if NETBSD
-> +--- a/lib/Makefile.in
-> ++++ b/lib/Makefile.in
-> +@@ -367,7 +367,7 @@
-> + $(iconv_source) \
-> + $(mount_source)
-> +
-> +-libfuse_la_LDFLAGS = -pthread @libfuse_libs@ -version-number 2:9:4 \
-> ++libfuse_la_LDFLAGS = -pthread @libfuse_libs@ -version-number 2:9:5 \
-> + -Wl,--version-script,$(srcdir)/fuse_versionscript
-> +
-> + @NETBSD_TRUE at libfuse_la_LIBADD = -lperfuse -lpuffs
->
-
-
+diff --git a/package/cups/0004-Fix-static-linking-with-GnuTLS.patch b/package/cups/0004-Fix-static-linking-with-GnuTLS.patch
+new file mode 100644
+index 0000000..67df4dc
+--- /dev/null
++++ b/package/cups/0004-Fix-static-linking-with-GnuTLS.patch
+@@ -0,0 +1,39 @@
++From ceaed5f1efe917c70e5ae9161695ba1c559b912d Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sun, 28 Feb 2016 16:35:56 +0100
++Subject: [PATCH] Fix static linking with GnuTLS
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++cups forgets to link against the libs found by pkg-config if it is build with
++GnuTLS support.
++
++Otherwise, static build fails with:
++../cups/libcups.a(tls.o): In function `http_gnutls_create_credential':
++cups-2.1.2/cups/tls-gnutls.c:762: undefined reference to `gnutls_x509_crt_init'
++[..]
++
++Status upstream: Pending
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ Makedefs.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makedefs.in b/Makedefs.in
++index 5d261c3..1d00c73 100644
++--- a/Makedefs.in
+++++ b/Makedefs.in
++@@ -143,7 +143,7 @@ IPPFIND_MAN	=	@IPPFIND_MAN@
++ LDFLAGS		=	-L../cgi-bin -L../cups -L../filter -L../ppdc \
++ 			-L../scheduler @LDARCHFLAGS@ \
++ 			@LDFLAGS@ @RELROFLAGS@ @PIEFLAGS@ $(OPTIM)
++-LINKCUPS	=	@LINKCUPS@ $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
+++LINKCUPS	=	@LINKCUPS@ $(SSLLIBS) $(LIBGSSAPI) $(DNSSDLIBS) $(LIBZ)
++ LINKCUPSIMAGE	=	@LINKCUPSIMAGE@
++ LIBS		=	$(LINKCUPS) $(COMMONLIBS)
++ ONDEMANDFLAGS	=	@ONDEMANDFLAGS@
++-- 
++2.7.2
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF 
+2.7.2
