@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Feb 2016 01:06:01 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-mediaportal-tvserver: Fix
-	compile error with gcc5
-In-Reply-To: <1456617961-16262-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456617961-16262-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456617961-16262-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 28 Feb 2016 01:06:00 +0100
+Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-argustv: Fix compile error
+	with gcc5
+Message-ID: <1456617961-16262-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +10,36 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes
-http://autobuild.buildroot.net/results/651/651c47c611f0eaa317acb338d609d8851ea7b463/
-http://autobuild.buildroot.net/results/63e/63edc869b780e387a8e94334bbe52ffa1c2a5f85/
+http://autobuild.buildroot.net/results/dac/dacc3bd00ab2346d7655c0a1fb99f6c50b9da08b/
+http://autobuild.buildroot.net/results/a6d/a6d3b510681f54f5625908930b4da73bf9edccf7/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...epresentation-of-char_class_e-in-struct-t.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/kodi-pvr-mediaportal-tvserver/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
+ ...epresentation-of-char_class_e-in-struct-t.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/kodi-pvr-argustv/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
 
-diff --git a/package/kodi-pvr-mediaportal-tvserver/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch b/package/kodi-pvr-mediaportal-tvserver/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
+diff --git a/package/kodi-pvr-argustv/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch b/package/kodi-pvr-argustv/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
 new file mode 100644
-index 0000000..890c151
+index 0000000..596be61
 --- /dev/null
-+++ b/package/kodi-pvr-mediaportal-tvserver/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
-@@ -0,0 +1,42 @@
-+From 7b14e0657a1308e8e133991b778e2fdcb2eb6b9c Mon Sep 17 00:00:00 2001
++++ b/package/kodi-pvr-argustv/0001-Sync-enum-representation-of-char_class_e-in-struct-t.patch
+@@ -0,0 +1,45 @@
++From 2c15b3931410669f281cd7e183c81e550b7e7221 Mon Sep 17 00:00:00 2001
 +From: Balint Reczey <balint@balintreczey.hu>
 +Date: Wed, 23 Dec 2015 12:55:00 +0100
-+Subject: [PATCH] Sync enum representation of char_class_e in struct traits
-+ with definition
++Subject: [PATCH 01/19] Sync enum representation of char_class_e in struct
++ traits with definition
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +[backport of upstream patch from master branch:
-+ https://github.com/kodi-pvr/pvr.mediaportal.tvserver/commit/7b14e0657a1308e8e133991b778e2fdcb2eb6b9c]
++ https://github.com/kodi-pvr/pvr.argustv/commit/2c15b3931410669f281cd7e183c81e550b7e7221]
 +---
 + src/uri.h | 6 +++---
 + 1 file changed, 3 insertions(+), 3 deletions(-)
 +
 +diff --git a/src/uri.h b/src/uri.h
-+index d2cc949..415e917 100644
++index 0b2afcd..c20600f 100644
 +--- a/src/uri.h
 ++++ b/src/uri.h
 +@@ -21,13 +21,13 @@
@@ -53,21 +51,24 @@ index 0000000..890c151
 +   {
 +     CINV = -2, ///< invalid
 +     CEND = -1, ///< end delimitor
-+     CVAL = 0,  ///< valid any position
-+     CVA2 = 1,  ///< valid anywhere but 1st position
++     CVAL = 0, ///< valid any position
++     CVA2 = 1, ///< valid anywhere but 1st position
 +-  };
 ++  } char_class_e_type;
 + 
 +   /// Traits used for parsing and encoding components.
 +   struct traits
 +@@ -35,7 +35,7 @@ namespace uri
-+     const char* begin_cstring;       ///< begin cstring (or 0 if none)
-+     const char begin_char;           ///< begin char (or 0 if none)
-+     const char end_char;             ///< end char (or 0 if none)
-+-    const char char_class[256];      ///< map of char to class
-++    const char_class_e_type char_class[256];      ///< map of char to class
++     char* begin_cstring; ///< begin cstring (or 0 if none)
++     char begin_char; ///< begin char (or 0 if none)
++     char end_char; ///< end char (or 0 if none)
++-    char char_class[256]; ///< map of char to class
+++    char_class_e_type char_class[256]; ///< map of char to class
 +   };
 + 
 +   /**
++-- 
++2.7.0
++
 -- 
 2.7.0
