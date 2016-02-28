@@ -1,49 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Feb 2016 21:18:26 +0100
-Subject: [Buildroot] [PATCH/next 5/7] package/vlc: add optional support for
-	minizip
+Date: Sun, 28 Feb 2016 21:18:27 +0100
+Subject: [Buildroot] [PATCH/next 6/7] package/vlc: add optional support for
+	xcb-util-keysyms
 In-Reply-To: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1456690708-6458-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456690708-6458-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When minizip was compiled before, vlc will use it as optional
+When xcb-util-keysyms was compiled before, vlc will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/vlc/plugins/access/libzip_plugin.so | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
- 0x0000000000000001 (NEEDED)             Shared library: [libminizip.so.1]
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/vlc/plugins/control/libxcb_hotkeys_plugin.so | grep NEEDED | sort
 [...]
-
-The build system offers no option to en-/disable minizip support,
-the same is valid for zlib support:
-https://git.videolan.org/?p=vlc.git;a=blob;f=configure.ac;h=be658816bcda642090e1cff20d93e61b25299250;hb=HEAD#l831
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb-keysyms.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libxcb.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libXdmcp.so.6]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/vlc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4f8bf72..bf1ec45 100644
+index bf1ec45..b67bd35 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -336,6 +336,10 @@ else
- VLC_CONF_OPTS += --disable-lua
+@@ -393,6 +393,13 @@ else
+ VLC_CONF_OPTS += --disable-udev
  endif
  
-+ifeq ($(BR2_PACKAGE_MINIZIP),y)
-+VLC_DEPENDENCIES += minizip
++ifeq ($(BR2_PACKAGE_XCB_UTIL_KEYSYMS),y)
++VLC_CONF_OPTS += --enable-xcb
++VLC_DEPENDENCIES += xcb-util-keysyms
++else
++VLC_CONF_OPTS += --disable-xcb
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- VLC_CONF_OPTS += --enable-qt
- VLC_CONF_ENV += \
+ ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+ VLC_CONF_OPTS += --with-x
+ VLC_DEPENDENCIES += xlib_libX11
 -- 
 2.7.0
