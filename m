@@ -1,7 +1,7 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 29 Feb 2016 00:10:00 +0100
-Subject: [Buildroot] [PATCH] gst1-av: pass --cpu= option to libav configure
-Message-ID: <1456701000-18047-1-git-send-email-arnout@mind.be>
+Date: Mon, 29 Feb 2016 00:16:47 +0100
+Subject: [Buildroot] [PATCH v2] gst1-av: fix cpu detection in libav configure
+Message-ID: <1456701407-18377-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -29,6 +29,8 @@ http://autobuild.buildroot.net/results/ce83513135e7765c171353815947d715eb897d3d
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
+v2: improve commit message
+
 The --isysroot is something we should probably do in the toolchain
 wrapper.
 ---
