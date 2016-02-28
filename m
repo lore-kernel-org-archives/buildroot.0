@@ -1,39 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Feb 2016 20:40:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfuse: fix internal version
-	number
-In-Reply-To: <DE460A1C536D48268A62487407ABE68C@ROLANDAMD64> (Roland Franke's
- message of "Sun, 28 Feb 2016 20:22:03 +0100")
-References: <1456668330-14361-1-git-send-email-bernd.kuhls@t-online.de>
- <87twkspvzx.fsf@dell.be.48ers.dk>
- <DE460A1C536D48268A62487407ABE68C@ROLANDAMD64>
-Message-ID: <87povgpqs3.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 Feb 2016 21:18:23 +0100
+Subject: [Buildroot] [PATCH/next 2/7] package/vlc: add optional support for
+	libcddb
+In-Reply-To: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456690708-6458-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Roland" == Roland Franke <fli4l@franke-prem.de> writes:
+When libcddb was compiled before, vlc will use it as optional
+dependency:
 
-Hi,
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/vlc/plugins/access/libcdda_plugin.so | grep NEEDED | sort
+ 0x0000000000000001 (NEEDED)             Shared library: [libcddb.so.2]
+[...]
 
- >> What is the practical impact of this? Is it purely cosmetical?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- > In the system (fli4l) we have fix filenames inside the system.
- > So how can we differ without correct filenames?
- > How should we know if there is the real version 2.9.4 or the version
- > 2.9.5 will be used?
- > How should be known if changes between version 2.9.4 and 2.9.5
- > realy be installed?
-
- > So the result is more cosmetical for most users. But in situations you
- > have more versions available for download, you should be sure to have
- > an right version-number.
-
-Ok, so in the context of Buildroot itself, it is purely
-cosmetical. Thanks.
-
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 03e1d88..1bb2b93 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -186,6 +186,13 @@ else
+ VLC_CONF_OPTS += --disable-bluray
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBCDDB),y)
++VLC_CONF_OPTS += --enable-libcddb
++VLC_DEPENDENCIES += libcddb
++else
++VLC_CONF_OPTS += --disable-libcddb
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBDVBPSI),y)
+ VLC_CONF_OPTS += --enable-dvbpsi
+ VLC_DEPENDENCIES += libdvbpsi
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.0
