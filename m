@@ -1,89 +1,58 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 29 Feb 2016 00:16:47 +0100
-Subject: [Buildroot] [PATCH v2] gst1-av: fix cpu detection in libav configure
-Message-ID: <1456701407-18377-1-git-send-email-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 29 Feb 2016 00:41:27 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-02-27
+In-Reply-To: <1456674270.13955.11.camel@embedded.rocks>
+References: <20160228073020.78AB7101EC4@stock.ovh.net>
+ <1456651515.13955.2.camel@embedded.rocks> <87y4a5p3w5.fsf@dell.be.48ers.dk>
+ <1456658221.13955.7.camel@embedded.rocks> <56D30D11.3030907@mind.be>
+ <1456674270.13955.11.camel@embedded.rocks>
+Message-ID: <56D385A7.9050804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script tries to guess a lot based on the cpu for which it
-is configured. Without --cpu, it will use a 'generic' cpu and disable
-any other options we pass to it.
+On 02/28/16 16:44, J?rg Krause wrote:
+> On So, 2016-02-28 at 16:06 +0100, Arnout Vandecappelle wrote:
+>> On 02/28/16 12:17, J?rg Krause wrote:
+>>>
+>>> On So, 2016-02-28 at 10:42 +0100, Peter Korsgaard wrote:
+>>>>>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks>
+>>>>>>>>> writes:
+>>>>  > On So, 2016-02-28 at 08:30 +0100, Thomas Petazzoni wrote:
+>>>>  >>  
+>>>>  >>      powerpc |                    czmq-v3.0.2 | NOK |
+>>>>  >> http://autobuild.buildroot.net/results/2061238affb685db998100a56c6571538d089a5b/
+>>>>
+>>>>  > /home/test/autobuild/instance-3/output/host/usr/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libstdc++.a(compatibility-ldbl.o): In function `std::tr1::hash<long double>::operator()(long double) const':
+>>>>  > compatibility-ldbl.cc:(.text._ZNKSt3tr14hashIeEclEe+0x3c): undefined reference to `frexpl'
+>>>>
+>>>>  > I cannot reproduce it on my 64-bit host.
+[snip]
+> That's why I sent a patch with LIBS=-lm.
 
-In addition, we have to pass the --sysroot option like we do in the
-ffmpeg package. This makes sure that regardless of the architecture
-options that ffmpeg passes along, an external multilib toolchain
-doesn't try to use a subdirectory of the sysroot. The libav build
-system will pass a --isysroot argument which overrides the multilib
-subdir.
+ The problem turns out to be more complicated... It's actually a problem with
+libstdc++. Dependeing on the arch, some functions will be in
+compatibility-ldbl.o. If you use any of these functions, that file will be
+linked in. And when that file is linked in, all the _other_ functions, which you
+actually don't use, are also linked in. And one of these functions is the
+template function hash<long double>::operator(), which uses frexpl.
 
-Finally, we have to properly enable/disable the architecture-specific
-optimisations. Autodetection of these things is completely borked in
-the configure script.
+ So, requiring czmq to link with -lm is a bit weird, given that neither itself,
+nor any of its dependencies really need it...
 
-Fixes:
-http://autobuild.buildroot.net/results/ce83513135e7765c171353815947d715eb897d3d
+ So ideally it should be fixed in libstdc++ itself. But I have no idea how to do
+that...
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
-v2: improve commit message
+ Regards,
+ Arnout
 
-The --isysroot is something we should probably do in the toolchain
-wrapper.
----
- package/gstreamer1/gst1-libav/gst1-libav.mk | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 3a987a7..97ff40f 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -10,7 +10,10 @@ GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
- 
- GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
- 
--GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
-+GST1_LIBAV_CONF_EXTRA_OPTS = \
-+	--cross-prefix=$(TARGET_CROSS) \
-+	--target-os=linux \
-+	--sysroot=$(STAGING_DIR)
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- GST1_LIBAV_CONF_EXTRA_OPTS += --enable-zlib
-@@ -26,6 +29,12 @@ else
- GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
- endif
- 
-+ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
-+GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
-+else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
-+GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
-+endif
-+
- ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- GST1_LIBAV_CONF_EXTRA_OPTS += --enable-yasm
- GST1_LIBAV_DEPENDENCIES += host-yasm
-@@ -74,6 +83,18 @@ else
- GST1_LIBAV_CONF_EXTRA_OPTS += --disable-altivec
- endif
- 
-+# Since we don't have architecture options for the DSP ASE, always disable
-+GST1_LIBAV_CONF_EXTRA_OPTS += --disable-mipsdspr1 --disable-mipsdspr2
-+
-+# We don't have mips32r5
-+GST1_LIBAV_CONF_EXTRA_OPTS += --disable-mips32r5
-+
-+ifeq ($(BR2_mips_64r6),y)
-+GST1_LIBAV_CONF_EXTRA_OPTS += --enable-mips64r6
-+else
-+GST1_LIBAV_CONF_EXTRA_OPTS += --disable-mips64r6
-+endif
-+
- GST1_LIBAV_CONF_OPTS = \
- 	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPTS)"
- 
 -- 
-2.7.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
