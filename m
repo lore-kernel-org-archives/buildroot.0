@@ -1,11 +1,11 @@
 From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 28 Feb 2016 11:28:46 +0100
+Date: Sun, 28 Feb 2016 12:17:01 +0100
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
 	2016-02-27
 In-Reply-To: <87y4a5p3w5.fsf@dell.be.48ers.dk>
 References: <20160228073020.78AB7101EC4@stock.ovh.net>
  <1456651515.13955.2.camel@embedded.rocks> <87y4a5p3w5.fsf@dell.be.48ers.dk>
-Message-ID: <1456655326.13955.5.camel@embedded.rocks>
+Message-ID: <1456658221.13955.7.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -43,8 +43,9 @@ On So, 2016-02-28 at 10:42 +0100, Peter Korsgaard wrote:
 > link with -lm.
 > 
 
-I re-run the whole autobuild and now I get the error, too. How can this
-properly be fixed? Just add?LIBS="-lm" to?CZMQ_CONF_ENV?
+Sorry for the noise! I'll send a patch which adds "Libs.private: -lm"
+to?libczmq.pc.in. I guess this is prefered instead of adding LIBS="-lm" 
+to CONF_ENV.
 
 Best regards
 J?rg Krause
