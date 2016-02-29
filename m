@@ -1,30 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 21:46:17 +0100
-Subject: [Buildroot] [PATCH] powerpc-utils: needs dynamic toolchain
-In-Reply-To: <1456751610-4320-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1456751610-4320-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160229214617.6735ccb6@free-electrons.com>
+Date: Mon, 29 Feb 2016 21:46:32 +0100
+Subject: [Buildroot] [git commit branch/next] lirc-tools: also install to
+	staging
+Message-ID: <20160229205038.D64338180E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+commit: https://git.buildroot.net/buildroot/commit/?id=d0071cddc0eb2cd7569b2c25d817cabafcef2993
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 29 Feb 2016 10:13:30 -0300, Gustavo Zacarias wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/a12/a1240ed6facb99518d71153c099dbd7d3d847af6/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/powerpc-utils/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+This commit adds LIRC_TOOLS_INSTALL_STAGING = YES to the lirc-tools
+package to get the library headers into sysroot, which is needed to
+develop lirc based applications.
 
-Applied to master, thanks.
+Signed-off-by: Michael Schenk <michael.schenk@albistechnologies.com>
+[Thomas: rework commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lirc-tools/lirc-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
+index fbd8aaf..d366a83 100644
+--- a/package/lirc-tools/lirc-tools.mk
++++ b/package/lirc-tools/lirc-tools.mk
+@@ -10,6 +10,7 @@ LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOL
+ LIRC_TOOLS_LICENSE = GPLv2+
+ LIRC_TOOLS_LICENSE_FILES = COPYING
+ LIRC_TOOLS_DEPENDENCIES = host-pkgconf
++LIRC_TOOLS_INSTALL_STAGING = YES
+ 
+ LIRC_TOOLS_CONF_OPTS = --without-x
+ 
