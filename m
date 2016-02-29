@@ -1,37 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:36:36 +0100
-Subject: [Buildroot] [git commit] package/iputils: add support for nettle
-Message-ID: <20160302202757.D037B7FA0E@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 21:45:11 +0100
+Subject: [Buildroot] [git commit] cryptsetup: bump to version 1.7.1
+Message-ID: <20160302202758.F2E727FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73b56118f2a0d7039fda7a62380ff22d64adbfa3
+commit: https://git.buildroot.net/buildroot/commit/?id=22f19a1cbf008c78df14eaf717514eb00827f2ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/iputils/iputils.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 953f1f5..efedf1f 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -33,6 +33,13 @@ else
- IPUTILS_MAKE_OPTS += USE_CAP=no
- endif
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 8fbbc7d..0928627 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
++sha256	73dc8a63cc984b56aa6a3c99f355262471bcfe78b3240b8b9d0caa8002911fec	cryptsetup-1.7.1.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 986b131..4d37709 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_NETTLE),y)
-+IPUTILS_MAKE_OPTS += USE_NETTLE=yes
-+IPUTILS_DEPENDENCIES += nettle
-+else
-+IPUTILS_MAKE_OPTS += USE_NETTLE=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
- IPUTILS_DEPENDENCIES += openssl
+ CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
