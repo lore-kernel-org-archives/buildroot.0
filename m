@@ -1,43 +1,41 @@
-From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 29 Feb 2016 08:53:08 -0300
-Subject: [Buildroot] [v3,
-	2/3] util-linux: rework utilities menu for finer control
-In-Reply-To: <1436842628-29469-2-git-send-email-danomimanchego123@gmail.com>
-References: <1436842628-29469-2-git-send-email-danomimanchego123@gmail.com>
-Message-ID: <1456746788-12410-1-git-send-email-casantos@datacom.ind.br>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 29 Feb 2016 08:59:32 -0300
+Subject: [Buildroot] [PATCH] openssh: bump to version 7.2p1
+Message-ID: <1456747172-15523-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> When even a single extra util-linux utility is enabled, the
-> default build and install will install many more programs,
-> including many that overlap with those offered by busybox.
-> 
-> Fix by reworking the install-utilies menu to take advantage
-> of the new --disable-all-programs config option.  This option
-> make it possible to disable the basic set of apps, and then
-> enable only the desired apps.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
-> 
-> Changes v1 -> v2:
->   - Rework to incorporate ideas and suggestions from Thomas Petazzoni
->     and Arnout Vandecappelle.  At least, in spirit.
-> 
-> Changes v2 -> v3:
->   - Change BR2_PACKAGE_UTIL_LINUX_SELECTED_BINARIES to
->     BR2_PACKAGE_UTIL_LINUX_BINARIES, to conserve backwards-
->     compatibility without need for a legacy option.
->   - Enable 'Basic set' by default to match output of previous
->     build when binaries were selected.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Carlos Santos <casantos@datacom.ind.br>
-
-The patch needs to be reworked. It does not apply on top of the master
-branch anymore.
-
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index b93b4a9..36346e0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-7.1p2
+-sha256	dd75f024dcf21e06a0d6421d582690bf987a1f6323e32ad6619392f3bfde6bbd	openssh-7.1p2.tar.gz
++# Also from http://www.openssh.com/txt/release-7.2
++sha256	973cc37b2f3597e4cf599b09e604e79c0fe5d9b6f595a24e91ed0662860b4ac3	openssh-7.2p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4e97849..0e0bcab 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 7.1p2
++OPENSSH_VERSION = 7.2p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
 -- 
-2.5.0
+2.4.10
