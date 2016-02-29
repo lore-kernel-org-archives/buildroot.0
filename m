@@ -1,52 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:47:08 +0100
-Subject: [Buildroot] [git commit branch/next] package/systemd: add
-	--enable/disable-libcurl
-Message-ID: <20160229214740.7B33C8033C@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 22:47:23 +0100
+Subject: [Buildroot] [git commit branch/next] package/systemd: explicitly
+	--enable-microhttpd
+Message-ID: <20160229214740.8AD168033C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1661d6678187e92e4ce13d6de03ba24ae0cbba1d
+commit: https://git.buildroot.net/buildroot/commit/?id=a1a4b2809e8f7668e920152fdf3b26d59cbd1c6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: fix commit title.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/Config.in  | 1 +
- package/systemd/systemd.mk | 7 +++++++
- 2 files changed, 8 insertions(+)
+ package/systemd/systemd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index afa598b..ace385a 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -58,6 +58,7 @@ config BR2_PACKAGE_SYSTEMD
- 	  - acl package will add support for multi-seat.
- 	  - xz and/or l4 packages will add compression support in
- 	    journal and coredump.
-+	  - libcurl package will add support for systemd-journal-upload.
- 	  - libgcrypt package will add support for journal sealing and
- 	    DNSSEC verification in resolved.
- 
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 91da61b..0681561 100644
+index 0681561..87fdbd7 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -108,6 +108,13 @@ else
- SYSTEMD_CONF_OPTS += --disable-zlib
- endif
+@@ -126,6 +126,7 @@ endif
  
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+SYSTEMD_DEPENDENCIES += libcurl
-+SYSTEMD_CONF_OPTS += --enable-libcurl
-+else
-+SYSTEMD_CONF_OPTS += --disable-libcurl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- SYSTEMD_DEPENDENCIES += libgcrypt
- SYSTEMD_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
+ SYSTEMD_DEPENDENCIES += libmicrohttpd
++SYSTEMD_CONF_OPTS += --enable-microhttpd
+ else
+ SYSTEMD_CONF_OPTS += --disable-microhttpd
+ endif
