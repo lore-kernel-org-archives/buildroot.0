@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:48:05 +0100
-Subject: [Buildroot] [PATCH 04/32] package/systemd: add
- --enable/disable-lz4
-In-Reply-To: <1456437341-19025-5-git-send-email-gabe@hashrabbit.co>
+Date: Mon, 29 Feb 2016 22:48:08 +0100
+Subject: [Buildroot] [PATCH 05/32] package/systemd: add
+ --enable/disable-zlib
+In-Reply-To: <1456437341-19025-6-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-5-git-send-email-gabe@hashrabbit.co>
-Message-ID: <20160229224805.15d9c15f@free-electrons.com>
+ <1456437341-19025-6-git-send-email-gabe@hashrabbit.co>
+Message-ID: <20160229224808.7a1ee630@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +14,13 @@ To: buildroot@busybox.net
 
 Dear Gabe Evans,
 
-On Thu, 25 Feb 2016 21:55:13 +0000, Gabe Evans wrote:
+On Thu, 25 Feb 2016 21:55:14 +0000, Gabe Evans wrote:
 > Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 > ---
->  package/systemd/Config.in  | 3 ++-
 >  package/systemd/systemd.mk | 7 +++++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
+>  1 file changed, 7 insertions(+)
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
