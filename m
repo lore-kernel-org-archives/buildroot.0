@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:49:55 +0100
-Subject: [Buildroot] [git commit branch/next] package/systemd: remove
-	networkd depends from timesyncd
-Message-ID: <20160229214959.82A80807E6@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 22:50:05 +0100
+Subject: [Buildroot] [PATCH 08/32] package/systemd: remove networkd
+ depends from timesyncd
+In-Reply-To: <1456437341-19025-9-git-send-email-gabe@hashrabbit.co>
+References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
+ <1456437341-19025-9-git-send-email-gabe@hashrabbit.co>
+Message-ID: <20160229225005.1de3475c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7afdc7043b097f41bcdee3954e9a32267b8256c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dear Gabe Evans,
 
-systemd-timesyncd can function without systemd-networkd.
+On Thu, 25 Feb 2016 21:55:17 +0000, Gabe Evans wrote:
+> systemd-timesyncd can function without systemd-networkd.
+> 
+> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+> ---
+>  package/systemd/Config.in | 1 -
+>  1 file changed, 1 deletion(-)
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/systemd/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+Applied to next, thanks.
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index ace385a..89427cc 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -98,7 +98,6 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
- 
- config BR2_PACKAGE_SYSTEMD_TIMESYNCD
- 	bool "enable SNTP client"
--	depends on BR2_PACKAGE_SYSTEMD_NETWORKD
- 	help
- 	  systemd-timesyncd is a service that may be used to synchronize the
- 	  local system clock with a Network Time Protocol Server.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
