@@ -1,52 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Feb 2016 12:27:33 +0100
-Subject: [Buildroot] [PATCH v2] gst1-av: fix cpu detection in libav
-	configure
-In-Reply-To: <1456701407-18377-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Mon, 29 Feb 2016 00:16:47 +0100")
-References: <1456701407-18377-1-git-send-email-arnout@mind.be>
-Message-ID: <87fuwbpxi2.fsf@dell.be.48ers.dk>
+From: Carlos Santos <casantos@datacom.ind.br>
+Date: Mon, 29 Feb 2016 08:53:08 -0300
+Subject: [Buildroot] [v3,
+	2/3] util-linux: rework utilities menu for finer control
+In-Reply-To: <1436842628-29469-2-git-send-email-danomimanchego123@gmail.com>
+References: <1436842628-29469-2-git-send-email-danomimanchego123@gmail.com>
+Message-ID: <1456746788-12410-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+> When even a single extra util-linux utility is enabled, the
+> default build and install will install many more programs,
+> including many that overlap with those offered by busybox.
+> 
+> Fix by reworking the install-utilies menu to take advantage
+> of the new --disable-all-programs config option.  This option
+> make it possible to disable the basic set of apps, and then
+> enable only the desired apps.
+> 
+> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+> ---
+> 
+> Changes v1 -> v2:
+>   - Rework to incorporate ideas and suggestions from Thomas Petazzoni
+>     and Arnout Vandecappelle.  At least, in spirit.
+> 
+> Changes v2 -> v3:
+>   - Change BR2_PACKAGE_UTIL_LINUX_SELECTED_BINARIES to
+>     BR2_PACKAGE_UTIL_LINUX_BINARIES, to conserve backwards-
+>     compatibility without need for a legacy option.
+>   - Enable 'Basic set' by default to match output of previous
+>     build when binaries were selected.
 
- > The configure script tries to guess a lot based on the cpu for which it
- > is configured. Without --cpu, it will use a 'generic' cpu and disable
- > any other options we pass to it.
+Reviewed-by: Carlos Santos <casantos@datacom.ind.br>
 
- > In addition, we have to pass the --sysroot option like we do in the
- > ffmpeg package. This makes sure that regardless of the architecture
- > options that ffmpeg passes along, an external multilib toolchain
- > doesn't try to use a subdirectory of the sysroot. The libav build
- > system will pass a --isysroot argument which overrides the multilib
- > subdir.
-
- > Finally, we have to properly enable/disable the architecture-specific
- > optimisations. Autodetection of these things is completely borked in
- > the configure script.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/ce83513135e7765c171353815947d715eb897d3d
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > ---
- > v2: improve commit message
-
- > The --isysroot is something we should probably do in the toolchain
- > wrapper.
-
-What is the advantage of --isysroot over --sysroot? I don't seem to find
-a lot about in the gcc documentation, but it seems like:
-
-- isysroot only applied to headers, not headers+libraries like --sysroot
-- Some versions of MacOSX/llvm only support --isysroot, not --sysroot
-
-Neither of these seems of much interest to us?
+The patch needs to be reworked. It does not apply on top of the master
+branch anymore.
 
 -- 
-Bye, Peter Korsgaard
+2.5.0
