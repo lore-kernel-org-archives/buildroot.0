@@ -1,36 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:53:22 +0100
-Subject: [Buildroot] [PATCH/next 11/31] package/kodi: Remove dependency
- for BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 from sub packages
-In-Reply-To: <1456006176-21308-12-git-send-email-bernd.kuhls@t-online.de>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-12-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160229235322.25c80fe0@free-electrons.com>
+Date: Mon, 29 Feb 2016 23:53:38 +0100
+Subject: [Buildroot] [git commit branch/next] package/ffmpeg: Remove patch
+	not needed anymore for Kodi 16.0-Jarvis
+Message-ID: <20160229225342.1BFEF80057@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=5be216b2c959c4a42336a42c1120e93f80dd4b25
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 20 Feb 2016 23:09:16 +0100, Bernd Kuhls wrote:
-> Kodi itself already depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, there is
-> no need to duplicate this as reverse dependencies in sub options which
-> depend on Kodi.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-pvr-argustv/Config.in | 4 ----
->  package/kodi-pvr-filmon/Config.in  | 4 ----
->  package/kodi-pvr-pctv/Config.in    | 4 ----
->  package/kodi-pvr-stalker/Config.in | 4 ----
->  4 files changed, 16 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...add-public-version-of-ff_read_frame_flush.patch | 53 ----------------------
+ 1 file changed, 53 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch b/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
+deleted file mode 100644
+index 58a91e2..0000000
+--- a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 7d7ce18ff0d24b586634fa6e631fa0eec7865aae Mon Sep 17 00:00:00 2001
+-From: elupus <elupus@xbmc.org>
+-Date: Tue, 1 Nov 2011 20:18:35 +0100
+-Subject: [PATCH 13/13] add public version of ff_read_frame_flush
+-
+-We need this since we sometimes seek on the
+-input stream behind ffmpeg's back. After this
+-all data need to be flushed completely.
+-
+-Patch part of the XBMC patch set for ffmpeg, downloaded from
+-https://github.com/xbmc/FFmpeg/.
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libavformat/avformat.h | 5 +++++
+- libavformat/utils.c    | 5 +++++
+- 2 files changed, 10 insertions(+)
+-
+-diff --git a/libavformat/avformat.h b/libavformat/avformat.h
+-index 2e54ed1..3a9f292 100644
+---- a/libavformat/avformat.h
+-+++ b/libavformat/avformat.h
+-@@ -2121,6 +2121,11 @@ int av_find_best_stream(AVFormatContext *ic,
+- int av_read_frame(AVFormatContext *s, AVPacket *pkt);
+- 
+- /**
+-+ * Clear out any buffered data in context
+-+ */
+-+void av_read_frame_flush(AVFormatContext *s);
+-+
+-+/**
+-  * Seek to the keyframe at timestamp.
+-  * 'timestamp' in 'stream_index'.
+-  *
+-diff --git a/libavformat/utils.c b/libavformat/utils.c
+-index f4fb172..10dda18 100644
+---- a/libavformat/utils.c
+-+++ b/libavformat/utils.c
+-@@ -1624,6 +1624,11 @@ void ff_read_frame_flush(AVFormatContext *s)
+-     }
+- }
+- 
+-+void av_read_frame_flush(AVFormatContext *s)
+-+{
+-+  ff_read_frame_flush(s);
+-+}
+-+
+- void ff_update_cur_dts(AVFormatContext *s, AVStream *ref_st, int64_t timestamp)
+- {
+-     int i;
+--- 
+-2.1.0
+-
