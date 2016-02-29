@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 21:43:49 +0100
-Subject: [Buildroot] [git commit] xerces: security bump to version 3.1.3
-Message-ID: <20160229204355.4BCDA803BE@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 21:44:02 +0100
+Subject: [Buildroot] [git commit branch/next] xerces: enable parallel builds
+Message-ID: <20160229204407.1285D80ACD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=327c75b0c42b2bc40269d90733d80a53e4ebaaa3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=05429cb4e0127fd45242a51c6a0ccb278dbce378
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-CVE-2016-0729 - Apache Xerces-C XML Parser Crashes on Malformed Input
+It seems to be in place for historical reasons since it seems to build
+just fine on my test rigs.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/xerces/xerces.hash | 4 ++--
- package/xerces/xerces.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xerces/xerces.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/xerces/xerces.hash b/package/xerces/xerces.hash
-index 6f4c267..639e668 100644
---- a/package/xerces/xerces.hash
-+++ b/package/xerces/xerces.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.1.2.tar.xz.sha256
--sha256 a847529ab6125f36039f54fa61f3d5043791accf7da2f43917cd2b49deb768f1 xerces-c-3.1.2.tar.xz
-+# From http://www.apache.org/dist/xerces/c/3/sources/xerces-c-3.1.3.tar.xz.sha256
-+sha256 d35ae442db333f73c7ef41b2ce2e33bc8aba8dbacf582af765eda26415d25c94 xerces-c-3.1.3.tar.xz
 diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index e57949a..b69f47c 100644
+index cf36183..92b0b70 100644
 --- a/package/xerces/xerces.mk
 +++ b/package/xerces/xerces.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XERCES_VERSION = 3.1.2
-+XERCES_VERSION = 3.1.3
- XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
+@@ -9,7 +9,6 @@ XERCES_SOURCE = xerces-c-$(XERCES_VERSION).tar.xz
  XERCES_SITE = http://archive.apache.org/dist/xerces/c/3/sources
  XERCES_LICENSE = Apache-2.0
+ XERCES_LICENSE_FILES = LICENSE
+-XERCES_MAKE = $(MAKE1)
+ XERCES_INSTALL_STAGING = YES
+ XERCES_CONF_OPTS = \
+ 	--disable-threads \
