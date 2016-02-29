@@ -1,285 +1,224 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 25 Feb 2016 21:47:10 +0100
-Subject: [Buildroot] [git commit] zmqpp: bmp to version 4.1.2
-Message-ID: <20160302202757.EF9F37FA0E@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 23:44:22 +0100
+Subject: [Buildroot] [git commit] package/kodi: bump version to 16.0-Jarvis
+Message-ID: <20160302202800.3E85B7F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bef15922964f6a29ac065bdaa36f11d737d21120
+commit: https://git.buildroot.net/buildroot/commit/?id=6922b41dd8bb5294e9cfcef6ea6678737150a815
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop 0001-add-cstdlib-header-to-ensure-EXIT_FAILURE-presence.patch since
-it's already upstream.
+Add two new hard dependencies:
 
-Rebase shared/static build patches - these look unnecessary if we switch
-to cmake-package, however it seems to require the zmq package switches
-to cmake-package as well since static library naming looks different,
-which might be a problem for users.
+- libdcadec
+https://github.com/xbmc/xbmc/commit/0997117a659a09e7b1c5bcb110f3526ea16698be
 
-Also set the minimum required version of gcc to 4.7.x since the code now
-requires c++1x.
+- libcrossguid
+https://github.com/xbmc/xbmc/commit/6f8171f53992fc2eaabf71f6fa47ebed1da0d43d
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Kodi moved to C++11 so we need gcc >= 4.7:
+https://github.com/xbmc/xbmc/pull/6412
+
+wavpack support was removed in favour of ffmpeg:
+https://github.com/xbmc/xbmc/commit/7916902c9e6f7a523265594f3ad7f921f93f1cd4
+
+Enabled giflib support by default.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...w-building-shared-or-static-library-only.patch} | 56 +++++++++++-----------
- ...ib-header-to-ensure-EXIT_FAILURE-presence.patch | 30 ------------
- ...Install-static-library-for-static-builds.patch} | 17 ++++---
- package/zmqpp/Config.in                            |  8 ++--
- package/zmqpp/zmqpp.hash                           |  3 +-
- package/zmqpp/zmqpp.mk                             |  4 +-
- 6 files changed, 45 insertions(+), 73 deletions(-)
+ Config.in.legacy                                    |  7 +++++++
+ ...g.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch | 21 ++++++++++++---------
+ package/kodi/Config.in                              | 20 ++++++++------------
+ package/kodi/kodi.hash                              |  2 +-
+ package/kodi/kodi.mk                                | 13 +++----------
+ 5 files changed, 31 insertions(+), 32 deletions(-)
 
-diff --git a/package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch b/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
-similarity index 52%
-rename from package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch
-rename to package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
-index 4eabf23..70caee8 100644
---- a/package/zmqpp/0002-Allow-building-shared-or-static-library-only.patch
-+++ b/package/zmqpp/0001-Allow-building-shared-or-static-library-only.patch
-@@ -1,42 +1,43 @@
--From 4c83dd96d1f92627ecdb6b6ed80b8c278aea82f7 Mon Sep 17 00:00:00 2001
-+From 02ad67e60ef698ee47f6ee53b36e5b89c2fd71e7 Mon Sep 17 00:00:00 2001
- From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
--Date: Fri, 20 Nov 2015 19:51:50 +0100
--Subject: [PATCH] Allow building shared or static library only
-+Date: Wed, 24 Feb 2016 10:07:11 -0300
-+Subject: [PATCH 1/2] Allow building shared or static library only
- MIME-Version: 1.0
- Content-Type: text/plain; charset=UTF-8
- Content-Transfer-Encoding: 8bit
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 179cf47..0771967 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,13 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.05"
  
-+[Gustavo: update for 4.1.2]
++config BR2_PACKAGE_KODI_WAVPACK
++	bool "wavpack"
++	select BR2_LEGACY
++	help
++	  wavpack support was removed in favour of ffmpeg:
++	  https://github.com/xbmc/xbmc/commit/7916902c9e6f7a523265594f3ad7f921f93f1cd4
 +
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- ---
-- Makefile | 19 ++++++++++++++++---
-- 1 file changed, 16 insertions(+), 3 deletions(-)
-+ Makefile | 19 +++++++++++++++----
-+ 1 file changed, 15 insertions(+), 4 deletions(-)
- 
- diff --git a/Makefile b/Makefile
--index 7d63077..90c7059 100644
-+index 9df5996..86c8fac 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -57,6 +57,9 @@ LIBRARY_ARCHIVE = lib$(LIBRARY_NAME).a
-- CLIENT_TARGET   = $(LIBRARY_NAME)
-- TESTS_TARGET    = $(LIBRARY_NAME)-tests
-+@@ -79,6 +79,8 @@ ifeq ($(UNAME_S),Darwin)
-+ endif
-+ 
+ config BR2_PACKAGE_KODI_RSXS
+ 	bool "rsxs support in Kodi was moved to an addon"
+ 	select BR2_LEGACY
+diff --git a/package/kodi/0004-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch b/package/kodi/0004-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+index 641525c..2678a78 100644
+--- a/package/kodi/0004-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
++++ b/package/kodi/0004-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+@@ -17,14 +17,17 @@ diff --git a/project/cmake/kodi-config.cmake.in b/project/cmake/kodi-config.cmak
+ index 76626ec..ffb8e1d 100644
+ --- a/project/cmake/kodi-config.cmake.in
+ +++ b/project/cmake/kodi-config.cmake.in
+-@@ -4,12 +4,12 @@ SET(APP_NAME_UC @APP_NAME_UC@)
+- SET(APP_VERSION_MAJOR @APP_VERSION_MAJOR@)
+- SET(APP_VERSION_MINOR @APP_VERSION_MINOR@)
+- SET(@APP_NAME_UC at _PREFIX @APP_PREFIX@)
+--SET(@APP_NAME_UC at _INCLUDE_DIR @APP_INCLUDE_DIR@)
+--SET(@APP_NAME_UC at _LIB_DIR @APP_LIB_DIR@)
+-+SET(@APP_NAME_UC at _INCLUDE_DIR ${CMAKE_FIND_ROOT_PATH}/@APP_INCLUDE_DIR@)
+-+SET(@APP_NAME_UC at _LIB_DIR ${CMAKE_FIND_ROOT_PATH}/@APP_LIB_DIR@)
++@@ -7,15 +7,15 @@
++   SET(@APP_NAME_UC at _PREFIX @APP_PREFIX@)
++ ENDIF()
++ IF(NOT @APP_NAME_UC at _INCLUDE_DIR)
++-  SET(@APP_NAME_UC at _INCLUDE_DIR @APP_INCLUDE_DIR@)
+++  SET(@APP_NAME_UC at _INCLUDE_DIR ${CMAKE_FIND_ROOT_PATH}/@APP_INCLUDE_DIR@)
++ ENDIF()
++ IF(NOT @APP_NAME_UC at _LIB_DIR)
++-  SET(@APP_NAME_UC at _LIB_DIR @APP_LIB_DIR@)
+++  SET(@APP_NAME_UC at _LIB_DIR ${CMAKE_FIND_ROOT_PATH}/@APP_LIB_DIR@)
++ ENDIF()
+  IF(NOT WIN32)
+    SET(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} @CXX11_SWITCH@")
+  ENDIF()
+@@ -32,7 +35,7 @@ index 76626ec..ffb8e1d 100644
+ +LIST(APPEND CMAKE_MODULE_PATH ${CMAKE_FIND_ROOT_PATH}/@APP_LIB_DIR@)
+  ADD_DEFINITIONS(@ARCH_DEFINES@ -DBUILD_KODI_ADDON)
   
--+BUILD_SHARED   ?= yes
- +BUILD_SHARED   ?= yes
- +
-  CONFIG_FLAGS =
-  ifeq ($(CONFIG),debug)
-  	CONFIG_FLAGS = -g -fno-inline -ftemplate-depth-1000
--@@ -71,7 +74,7 @@ ifneq (,$(findstring $(CONFIG),release loadtest))
-+@@ -93,13 +95,22 @@ ifneq (,$(findstring $(CONFIG),release loadtest))
-  	CONFIG_FLAGS = -O3 -funroll-loops -ffast-math -finline-functions -fomit-frame-pointer -DNO_DEBUG_LOG -DNO_TRACE_LOG -DNDEBUG
-  endif
-  
---COMMON_FLAGS = -MMD -std=c++0x -pipe -Wall -fPIC \
--+COMMON_FLAGS = -MMD -std=c++0x -pipe -Wall \
-+-COMMON_FLAGS = -MMD -std=c++11 -pipe -Wall -fPIC \
-++COMMON_FLAGS = -MMD -std=c++11 -pipe -Wall \
-  	-DBUILD_ENV=$(CONFIG) \
-- 	-DBUILD_VERSION='"$(APP_VERSION)"' \
-- 	-DBUILD_VERSION_MAJOR=$(VERSION_MAJOR) \
--@@ -82,6 +85,15 @@ COMMON_FLAGS = -MMD -std=c++0x -pipe -Wall -fPIC \
-+ 	-DBUILD_DATESTAMP='$(APP_DATESTAMP)' \
-+ 	-DBUILD_LIBRARY_NAME='"$(LIBRARY_NAME)"' \
-  	-DBUILD_CLIENT_NAME='"$(CLIENT_TARGET)"' \
-- 	-I$(SRC_PATH)
-+ 	-I$(SRC_PATH) $(CUSTOM_INCLUDE_PATH)
-  
- +ifeq ($(BUILD_SHARED),yes)
- +COMMON_FLAGS += -fPIC
-@@ -49,20 +50,21 @@ index 7d63077..90c7059 100644
- +
-  COMMON_LIBS = -lzmq
-  
-- LIBRARY_LIBS =  
--@@ -125,9 +137,11 @@ check: $(LIBRARY_SHARED) $(LIBRARY_ARCHIVE) test
-- 
-- install:
-+ LIBRARY_LIBS =
-+@@ -147,10 +158,11 @@ install:
-+ 	mkdir -p $(INCLUDEDIR)/$(LIBRARY_DIR)
-+ 	mkdir -p $(LIBDIR)
-  	install -m 644 $(ALL_LIBRARY_INCLUDES) $(INCLUDEDIR)/$(LIBRARY_DIR)
- +ifeq ($(BUILD_SHARED),yes)
-- 	install -m 755 $(BUILD_PATH)/$(LIBRARY_SHARED).$(VERSION_MAJOR) $(LIBDIR)/$(LIBRARY_SHARED).$(APP_VERSION)
-- 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED).$(VERSION_MAJOR)
-- 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED)
-+ 	install -m 755 $(BUILD_PATH)/$(LIBRARY_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_FULL_VERSION_SHARED)
-+-	install -m 755 $(BUILD_PATH)/$(LIBRARY_ARCHIVE) $(LIBDIR)/$(LIBRARY_ARCHIVE)
-+ 	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_VERSION_SHARED)
-+ 	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_SHARED)
- +endif
-  	if [ -f $(BUILD_PATH)/$(CLIENT_TARGET) ]; then install -m 755 $(BUILD_PATH)/$(CLIENT_TARGET) $(BINDIR); fi
-  	$(LDCONFIG)
-  	@echo "use make installcheck to test the install"
--@@ -148,7 +162,7 @@ clean:
-+@@ -172,7 +184,7 @@ clean:
-  
-  client: $(CLIENT_TARGET)
-  
-@@ -71,11 +73,11 @@ index 7d63077..90c7059 100644
-  
-  #
-  # BUILD Targets
--@@ -187,4 +201,3 @@ test: $(TESTS_TARGET)
-+@@ -211,4 +223,3 @@ test: $(TESTS_TARGET)
-  $(OBJECT_PATH)/%.o: $(SRC_PATH)/%.cpp
-  	-mkdir -p $(dir $@)
-  	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(COMMON_FLAGS) $(CONFIG_FLAGS) -c -o $@ $<
- -
+- include(addon-helpers)
++ if(NOT CORE_SYSTEM_NAME)
  -- 
--2.6.2
-+2.4.10
+ 2.5.0
  
-diff --git a/package/zmqpp/0001-add-cstdlib-header-to-ensure-EXIT_FAILURE-presence.patch b/package/zmqpp/0001-add-cstdlib-header-to-ensure-EXIT_FAILURE-presence.patch
-deleted file mode 100644
-index 1458eca..0000000
---- a/package/zmqpp/0001-add-cstdlib-header-to-ensure-EXIT_FAILURE-presence.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 2c9271fa662b98e2a451b859f2506edf5f91c9bf Mon Sep 17 00:00:00 2001
--From: Lionel Orry <lionel.orry@gmail.com>
--Date: Fri, 15 May 2015 11:27:57 +0200
--Subject: [PATCH] add cstdlib header to ensure EXIT_FAILURE presence
--
--Using some cross-compiling toolchains, EXIT_FAILURE is not always
--properly defined without this inclusion.
--
--Add myself to AUTHORS.
--
--Signed-off-by: Lionel Orry <lionel.orry@gmail.com>
-----
-- src/client/main.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/client/main.cpp b/src/client/main.cpp
--index 082c06b..760f01a 100644
----- a/src/client/main.cpp
--+++ b/src/client/main.cpp
--@@ -3,6 +3,7 @@
--  *      Author: @benjamg
--  */
-- 
--+#include <cstdlib>
-- #include <array>
-- #include <iostream>
-- #include <tuple>
---- 
--2.1.0
--
-diff --git a/package/zmqpp/0003-Install-static-library-for-static-builds.patch b/package/zmqpp/0002-Install-static-library-for-static-builds.patch
-similarity index 60%
-rename from package/zmqpp/0003-Install-static-library-for-static-builds.patch
-rename to package/zmqpp/0002-Install-static-library-for-static-builds.patch
-index c4ce2d2..402f85e 100644
---- a/package/zmqpp/0003-Install-static-library-for-static-builds.patch
-+++ b/package/zmqpp/0002-Install-static-library-for-static-builds.patch
-@@ -1,23 +1,26 @@
--From 1637443262cc861a161fd7c734bc0610a340335b Mon Sep 17 00:00:00 2001
-+From 283676e2e8f15bedca20c3d94caeecfdebe11ffd Mon Sep 17 00:00:00 2001
- From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
- Date: Mon, 23 Nov 2015 22:53:09 +0100
--Subject: [PATCH] Install static library for static builds
-+Subject: [PATCH 2/2] Install static library for static builds
- MIME-Version: 1.0
- Content-Type: text/plain; charset=UTF-8
- Content-Transfer-Encoding: 8bit
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index af5e40b..09bd0cd 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -2,10 +2,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
  
-+[Gustavo: update for 4.1.2]
-+
- Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- ---
-  Makefile | 3 +++
-  1 file changed, 3 insertions(+)
+-comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library"
++comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS
++		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_USE_MMU
  
- diff --git a/Makefile b/Makefile
--index 90c7059..abed6fa 100644
-+index 86c8fac..fbaff63 100644
- --- a/Makefile
- +++ b/Makefile
--@@ -142,6 +142,9 @@ ifeq ($(BUILD_SHARED),yes)
-- 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED).$(VERSION_MAJOR)
-- 	ln -sf $(LIBRARY_SHARED).$(APP_VERSION) $(LIBDIR)/$(LIBRARY_SHARED)
-+@@ -163,6 +163,9 @@ ifeq ($(BUILD_SHARED),yes)
-+ 	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_VERSION_SHARED)
-+ 	ln -sf $(LIBRARY_FULL_VERSION_SHARED) $(LIBDIR)/$(LIBRARY_SHARED)
-  endif
- +ifeq ($(BUILD_STATIC),yes)
- +	install -m 755 $(BUILD_PATH)/$(LIBRARY_ARCHIVE) $(LIBDIR)/$(LIBRARY_ARCHIVE)
-@@ -26,5 +29,5 @@ index 90c7059..abed6fa 100644
-  	$(LDCONFIG)
-  	@echo "use make installcheck to test the install"
- -- 
--2.6.2
-+2.4.10
- 
-diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
-index 0379224..602425f 100644
---- a/package/zmqpp/Config.in
-+++ b/package/zmqpp/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_ZMQPP
- 	bool "zmqpp"
--	# c++0x support
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+	# c++1x support
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -42,11 +43,14 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_GIFLIB
+ 	select BR2_PACKAGE_JASPER
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBASS
+ 	select BR2_PACKAGE_LIBCDIO
++	select BR2_PACKAGE_LIBCROSSGUID
+ 	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_LIBDCADEC
+ 	select BR2_PACKAGE_LIBFRIBIDI
+ 	select BR2_PACKAGE_LIBGLEW if BR2_PACKAGE_KODI_GL
+ 	select BR2_PACKAGE_LIBGLU if BR2_PACKAGE_KODI_GL
+@@ -86,6 +90,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
  	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
-@@ -14,9 +14,9 @@ config BR2_PACKAGE_ZMQPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+@@ -138,15 +143,13 @@ config BR2_PACKAGE_KODI_LIBCEC
+ 	bool "hdmi cec"
+ 	depends on !BR2_STATIC_LIBS # libcec
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # libcec
+ 	select BR2_PACKAGE_LIBCEC
+ 	help
+ 	  Enable CEC (Consumer Electronics Control) support.
+ 	  Select this if you want Kodi to support HDMI CEC.
  
- 	  http://github.com/benjamg/zmqpp
+ comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
  
--comment "zmqpp needs a toolchain w/ C++, wchar, threads, gcc >= 4.6"
-+comment "zmqpp needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ config BR2_PACKAGE_KODI_LIRC
+ 	bool "lirc"
+@@ -230,13 +233,6 @@ config BR2_PACKAGE_KODI_LIBVA
+ comment "libva support needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
  
- if BR2_PACKAGE_ZMQPP
+-config BR2_PACKAGE_KODI_WAVPACK
+-	bool "wavpack"
+-	select BR2_PACKAGE_WAVPACK
+-	help
+-	  Enable WAV input support.
+-	  Select this if you want to play back WV files.
+-
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	bool
  
-diff --git a/package/zmqpp/zmqpp.hash b/package/zmqpp/zmqpp.hash
-index 7bca39f..63c6a34 100644
---- a/package/zmqpp/zmqpp.hash
-+++ b/package/zmqpp/zmqpp.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256	92cb5bf7e1df8b99792fe1eb530bf91fced9c2d14159007bec011bb1b8248269  zmqpp-3.2.0.tar.gz
--sha256	0b76169a48a0ba9dd581b63787b4852f3922de0c22b7a325cab688c1bafb3dd7  260a9304f6c74272bd3c396f6cca685657b4aff1.patch
-+sha256	831ad02df64034268d910c30f9fb1b1e631ad810182951af9d7d622650831eb5  zmqpp-4.1.2.tar.gz
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index 0bb6bbe..18da709 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -4,14 +4,12 @@
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 14af9af..229446b 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	dd8aeb942e6de5d1488e243e1346cff3f6597e21b5131a3ba72ff5cc82037110	kodi-15.2-Isengard.tar.gz
++sha256	0421ea1337cdee674f8a36d995f54152b5ddc4100e53410b3aeeb3b3f7d53946	kodi-16.0-Jarvis.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index ef3f174..94a8cd8 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ZMQPP_VERSION = 3.2.0
-+ZMQPP_VERSION = 4.1.2
- ZMQPP_SITE = $(call github,zeromq,zmqpp,$(ZMQPP_VERSION))
- ZMQPP_INSTALL_STAGING = YES
- ZMQPP_DEPENDENCIES = zeromq
- ZMQPP_LICENSE = MIT
- ZMQPP_LICENSE_FILES = LICENSE
--ZMQPP_PATCH = https://github.com/zeromq/zmqpp/commit/260a9304f6c74272bd3c396f6cca685657b4aff1.patch
--
- ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
- ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
+-KODI_VERSION = 15.2-Isengard
++KODI_VERSION = 16.0-Jarvis
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
+ KODI_LICENSE = GPLv2
+ KODI_LICENSE_FILES = LICENSE.GPL
+@@ -12,8 +12,8 @@ KODI_LICENSE_FILES = LICENSE.GPL
+ KODI_INSTALL_STAGING = YES
+ KODI_DEPENDENCIES = host-gawk host-gettext host-gperf host-zip host-giflib \
+ 	host-libjpeg host-lzo host-nasm host-libpng host-swig
+-KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype jasper jpeg \
+-	libass libcdio libcurl libfribidi libgcrypt libmpeg2 \
++KODI_DEPENDENCIES += boost bzip2 expat ffmpeg fontconfig freetype giflib jasper jpeg \
++	libass libcdio libcrossguid libcurl libdcadec libfribidi libgcrypt libmpeg2 \
+ 	libogg libplist libpng libsamplerate libsquish libvorbis libxml2 \
+ 	libxslt lzo ncurses openssl pcre python readline sqlite taglib tiff \
+ 	tinyxml yajl zlib
+@@ -30,12 +30,9 @@ KODI_CONF_ENV = \
  
+ KODI_CONF_OPTS +=  \
+ 	--with-ffmpeg=shared \
+-	--disable-goom \
+ 	--disable-joystick \
+ 	--disable-openmax \
+-	--disable-projectm \
+ 	--disable-pulse \
+-	--disable-rsxs \
+ 	--disable-vdpau \
+ 	--disable-vtbdecoder \
+ 	--enable-optimizations
+@@ -178,10 +175,6 @@ else
+ KODI_CONF_OPTS += --disable-lirc
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_KODI_WAVPACK),y)
+-KODI_DEPENDENCIES += wavpack
+-endif
+-
+ ifeq ($(BR2_PACKAGE_KODI_LIBTHEORA),y)
+ KODI_DEPENDENCIES += libtheora
+ endif
