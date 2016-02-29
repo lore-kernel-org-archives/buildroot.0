@@ -1,60 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:54:16 +0100
-Subject: [Buildroot] [git commit] package/systemd: add optional support for
-	bootchart
-Message-ID: <20160302202759.B0C167F98B@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 23:17:06 +0100
+Subject: [Buildroot] [git commit] package/lz4: only use PREFIX for host
+	installation
+Message-ID: <20160302202759.DEB7F7FB71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41304124f2e0e717ef6bb9e6bf8b0c61c2fba745
+commit: https://git.buildroot.net/buildroot/commit/?id=c8cca4c192e1890b2f1fbe422d8b63e405b46f67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-[Thomas: rewrap Config.in help text.]
+As noted by Peter Korsgaard, using DESTDIR=$(HOST_DIR) and PREFIX=/usr
+for the host installation is useless and actually incorrect (the
+pkg-config file contains incorrect paths). Instead, using
+PREFIX=$(HOST_DIR)/usr is simpler, and actually correct.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/Config.in  | 10 ++++++++++
- package/systemd/systemd.mk |  6 ++++++
- 2 files changed, 16 insertions(+)
+ package/lz4/lz4.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index f1cd465..85dcf07 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -100,6 +100,16 @@ config BR2_PACKAGE_SYSTEMD_VCONSOLE
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 576b2a2..d2b09bb 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -22,8 +22,8 @@ define HOST_LZ4_BUILD_CMDS
+ endef
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
+ define HOST_LZ4_INSTALL_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
+-		PREFIX=/usr install -C $(@D)
++	$(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
++		install -C $(@D)
+ endef
  
-+config BR2_PACKAGE_SYSTEMD_BOOTCHART
-+	bool "enable bootchart tool"
-+	help
-+	  systemd-bootchart is a tool, usually run at system startup,
-+	  that collects the CPU load, disk load, memory usage, as well
-+	  as per-process information from a running system. Collected
-+	  results are output as an SVG graph.
-+
-+	  http://www.freedesktop.org/software/systemd/man/systemd-bootchart.html
-+
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 124119f..6266388 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -143,6 +143,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-vconsole
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_BOOTCHART),y)
-+SYSTEMD_CONF_OPTS += --enable-bootchart
-+else
-+SYSTEMD_CONF_OPTS += --disable-bootchart
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += --enable-networkd
- define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+ define LZ4_BUILD_CMDS
