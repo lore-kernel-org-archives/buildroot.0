@@ -1,92 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:37:41 +0100
-Subject: [Buildroot] [PATCH/next 01/31] package/kodi-visualisation-goom:
- new package
-In-Reply-To: <1456006176-21308-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160229233741.347b5d69@free-electrons.com>
+Date: Mon, 29 Feb 2016 23:41:59 +0100
+Subject: [Buildroot] [git commit branch/next] package/libcec: bump version,
+	add hash
+Message-ID: <20160229224218.0A04880478@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=dedf1fb57454bbcd1fa5b591cf36c8a8e335ade3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-I've applied your patch to the next branch, but still have a few
-comments, see below.
+Also remove patch committed upstream.
 
-On Sat, 20 Feb 2016 23:09:06 +0100, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-generate-an-invalid-env.h-when-not-built.patch | 31 ----------------------
+ package/libcec/libcec.hash                         |  2 ++
+ package/libcec/libcec.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 32 deletions(-)
 
->  config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
-> diff --git a/package/kodi-visualisation-goom/0001-cross-compile.patch b/package/kodi-visualisation-goom/0001-cross-compile.patch
-> new file mode 100644
-> index 0000000..8dd0fe9
-> --- /dev/null
-> +++ b/package/kodi-visualisation-goom/0001-cross-compile.patch
-> @@ -0,0 +1,32 @@
-> +Fix cross-compilation
-> +
-> +Use the cross-compiler and not the host version.
-> +
-> +Patch sent upstream:
-> +https://github.com/notspiff/visualization.goom/pull/4
-
-You received some comments in this pull request. Could you address
-them, so that the patch can move forward and hopefully be applied at
-some point?
-
-> +diff -uNr visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt
-> +--- visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305.org/CMakeLists.txt	2014-10-31 11:34:21.000000000 +0100
-> ++++ visualization.goom-fb5933ba5b2143d055cc7749dc60a82f6002b305/CMakeLists.txt	2015-07-19 19:49:43.340054342 +0200
-> +@@ -13,6 +13,10 @@
-> +                     ${KODI_INCLUDE_DIR}
-> +                     ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/src)
-> + 
-> ++get_filename_component( COMPILER_FILENAME "${CMAKE_C_COMPILER}" NAME )
-> ++string( REGEX REPLACE "-[^-]+$" ""
-> ++        TOOLCHAIN_NAME "${COMPILER_FILENAME}" )
-> ++
-> + include(ExternalProject)
-> + set(update_command "")
-> + if(BOOTSTRAP_IN_TREE OR NOT DEFINED BOOTSTRAP_IN_TREE)
-> +@@ -20,7 +24,7 @@
-> + endif()
-> + externalproject_add(libgoom SOURCE_DIR ${PROJECT_SOURCE_DIR}/lib/goom2k4-0
-> +                     "${update_command}"
-> +-                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR>
-> ++                    CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/lib/goom2k4-0/configure --disable-shared --enable-static --with-pic --prefix=<INSTALL_DIR> --host=${TOOLCHAIN_NAME}
-
-I really hate those CMake packages that internally call an an autotools
-configure script :-/
-
-> diff --git a/package/kodi-visualisation-goom/Config.in b/package/kodi-visualisation-goom/Config.in
-> new file mode 100644
-> index 0000000..c1f1751
-> --- /dev/null
-> +++ b/package/kodi-visualisation-goom/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_KODI_VISUALISATION_GOOM
-> +	bool "kodi-visualisation-goom"
-> +	depends on BR2_PACKAGE_KODI_GL
-> +	help
-> +	  GOOM visualiser for Kodi
-> +
-> +	  https://github.com/notspiff/visualization.goom
-> +
-> +comment "goom needs an OpenGL backend"
-
-This should have been:
-
-comment "kodi-visualisation-goom needs an OpenGL backend"
-
-I've fixed that when applying.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libcec/0001-fixed-don-t-generate-an-invalid-env.h-when-not-built.patch b/package/libcec/0001-fixed-don-t-generate-an-invalid-env.h-when-not-built.patch
+deleted file mode 100644
+index d823a5b..0000000
+--- a/package/libcec/0001-fixed-don-t-generate-an-invalid-env.h-when-not-built.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 369ffb5be23eca520df99732541d0482da271fd3 Mon Sep 17 00:00:00 2001
+-From: Lars Op den Kamp <lars@opdenkamp.eu>
+-Date: Sat, 11 Jul 2015 00:53:17 +0200
+-Subject: [PATCH] fixed: don't generate an invalid env.h when not built with
+- the .git dir present. closes #112
+-
+-Backported from upstream commit 2f32a9debc1f148b5dfcfc463480f1432bb71725.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- support/git-rev.sh | 7 +++++--
+- 1 file changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/support/git-rev.sh b/support/git-rev.sh
+-index 5dce3d0..4aadae6 100755
+---- a/support/git-rev.sh
+-+++ b/support/git-rev.sh
+-@@ -1,5 +1,8 @@
+- #!/bin/sh
+- 
+- ## cmake doesn't read the variable when it doesn't end with a newline, and I haven't figured out how to have it add a newline directly...
+--echo -n "`git --no-pager log --abbrev=7 -n 1 --pretty=format:"%h"`\n"
+--
+-+if [ -d .git ]; then
+-+  echo "`git --no-pager log --abbrev=7 -n 1 --pretty=format:"%h"`"
+-+else
+-+  echo "<unknown>"
+-+fi
+--- 
+-2.5.0
+-
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+new file mode 100644
+index 0000000..377f343
+--- /dev/null
++++ b/package/libcec/libcec.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  0f29d5a2d155b507807ba896bc3b3e50a0ab56bf8f543a2bf5c2798c790292b5  libcec-2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd.tar.gz
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index c5b008f..b762d88 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCEC_VERSION = libcec-3.0.1
++LIBCEC_VERSION = 2c675dac48387c48c7f43c5d2547ef0c4ef5c7dd
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPLv2+
+ LIBCEC_LICENSE_FILES = COPYING
