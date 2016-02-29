@@ -1,71 +1,56 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Mon, 29 Feb 2016 09:01:58 +0100
-Subject: [Buildroot] [v3,
- 2/4] barebox: adds option to build secondary config
-In-Reply-To: <56D0DF3B.1060305@mind.be>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-3-git-send-email-pieter@boesman.nl>
- <56D0DF3B.1060305@mind.be>
-Message-ID: <20160229080158.GB18059@smipidev>
+From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
+Date: Mon, 29 Feb 2016 09:16:53 +0100
+Subject: [Buildroot] [dropbear] fail ssh conection with Passwords
+	encoding SHA-256 or SHA-512
+In-Reply-To: <87h9gvv64e.fsf@dell.be.48ers.dk>
+References: <CALtfCQbqTNvokwneH9uFFESNFK6_HZWKy19oefELL4OgDw-jpw@mail.gmail.com>
+ <87h9gvv64e.fsf@dell.be.48ers.dk>
+Message-ID: <CALtfCQaWrdA5Mr2xH28Q=BctyzZNKpoR_65RMc5Hb5j6H0Lmag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Feb 27, 2016 at 12:26:51AM +0100, Arnout Vandecappelle wrote:
-> On 01/20/16 23:43, Pieter Smith wrote:
-> > Support selection of secondary config, but version, source URL and patches are
-> > shared with barebox bootloader build.
+Your proposal works perfectly.
 
-[snip]
+Thank you very much.
 
->  So, if you remove the choice, then this config should stay and be called
-> something like "build second Barebox configuration", with the help text from
-> BR2_TARGET_BAREBOX_TWO_CONFIGS.
-> 
->  And if the option of keeping barebox and just adding barebox-2 works out, then
-> this can also go into a separate Config.in file in the barebox-2 directory,
-> which is source'd from here.
-> 
->  Also, it should be a menuconfig instead, since there are 5 entries.
+Oscar Gomez Fuente
 
-ACK. Done. I also feel that each bootloader in the bootloader menu should be a
-menuconfig item. Right now I find it hard to see the boundaries between
-different bootloaders when options are used. But I won't try to solve the world
-in a single patch series. ;-)
+On 26 February 2016 at 16:33, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> > +
-> > +if BR2_TARGET_BAREBOX_2
-> > +
-> > +choice
-> > +	prompt "Type of configuration"
-> > +	default BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
-> > +
-> > +config BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
-> > +	bool "Using a defconfig"
-> > +
-> > +config BR2_TARGET_BAREBOX_2_USE_CUSTOM_CONFIG
-> > +	bool "Using a custom config file"
-> > +
-> > +endchoice
-> > +
-> > +config BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG
-> > +	string "Board defconfig"
-> > +	depends on BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
-> > +	help
-> > +	  Name of the board for which Barebox should be built, without
-> > +	  the _defconfig suffix.
-> > +
-> > +
-> 
->  Spurious line here.
-
-Oops. Thanks.
-
->  Regards,
->  Arnout
-
-[snip]
-
-- Pieter
+> >>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
+>
+>  > Hi,
+>  > I'm new in buldroot and I'm building a raspberry 2 platform. I've based
+> on
+>  > raspberrypi2_defconfig configuration. But I've changed two things:
+>
+>  > 1?.- I've added dropbear to add ssh functionality.
+>
+>  > Everything works fine and I can connect to my raspberry by ssh (System
+>  > password encoding md5). The problem is when I've changed the password
+>  > encoding from md5 to SHA-256 or SHA-512. When I've tried to make an ssh
+>  > conection from a PC to my raspberry pi 2 the access fail:
+>
+>  > root at 192.168.10.105's password:
+>  > Permission denied, please try again.
+>
+> The problem is that uClibc doesn't have support for the sha256/512
+> ciphers by default, so dropbear cannot authenticate you. It happens to
+> work when you login through serial as the busybox login program uses
+> built in password handling functions (and we have code to enable the
+> sha256/512 routines when enabled in buildroot).
+>
+> I guess we need to do the same for uClibc (or just unconditionally
+> enable it). In the mean time you can use glibc instead which does
+> support it (make sure you do a clean build whenever you change toolchain
+> options).
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160229/e181f69b/attachment.html>
