@@ -1,58 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:53:50 +0100
-Subject: [Buildroot] [git commit] package/systemd: add optional support for
-	vconsole
-Message-ID: <20160302202759.A65757F98B@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 23:42:57 +0100
+Subject: [Buildroot] [git commit] package/kodi-platform: bump version,
+	add hash
+Message-ID: <20160302202800.3201B80203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f01ad723db77148889c2ae9cfdd7ab6eeb83b036
+commit: https://git.buildroot.net/buildroot/commit/?id=349c9c4a9e6962960fb20bf5ba651040e6316341
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-[Thomas: rewrap Config.in help text.]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/Config.in  | 8 ++++++++
- package/systemd/systemd.mk | 6 ++++++
- 2 files changed, 14 insertions(+)
+ package/kodi-platform/kodi-platform.hash | 2 ++
+ package/kodi-platform/kodi-platform.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 6289252..f1cd465 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -92,6 +92,14 @@ config BR2_PACKAGE_SYSTEMD_BINFMT
+diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
+new file mode 100644
+index 0000000..a248448
+--- /dev/null
++++ b/package/kodi-platform/kodi-platform.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 0a7cc2e..4b642f9 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.freedesktop.org/software/systemd/man/systemd-binfmt.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_VCONSOLE
-+	bool "enable vconsole tool"
-+	help
-+	  systemd-vconsole-setup is an early boot service that
-+	  configures the virtual console font and console keymap.
-+
-+	  http://www.freedesktop.org/software/systemd/man/systemd-vconsole-setup.service.html
-+
- config BR2_PACKAGE_SYSTEMD_NETWORKD
- 	bool "enable network manager"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 5f7941c..124119f 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -137,6 +137,12 @@ else
- SYSTEMD_CONF_OPTS += --disable-binfmt
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_VCONSOLE),y)
-+SYSTEMD_CONF_OPTS += --enable-vconsole
-+else
-+SYSTEMD_CONF_OPTS += --disable-vconsole
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
- SYSTEMD_CONF_OPTS += --enable-networkd
- define SYSTEMD_INSTALL_RESOLVCONF_HOOK
+-KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
++KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
+ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPLv2+
+ KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
