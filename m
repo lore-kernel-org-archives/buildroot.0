@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:48:24 +0100
-Subject: [Buildroot] [PATCH 07/32] package/systemd: explicitly
- --enable/disable-microhttpd
-In-Reply-To: <1456437341-19025-8-git-send-email-gabe@hashrabbit.co>
+Date: Mon, 29 Feb 2016 22:48:13 +0100
+Subject: [Buildroot] [PATCH 06/32] package/systemd: add
+ --enable/disable-libcurl
+In-Reply-To: <1456437341-19025-7-git-send-email-gabe@hashrabbit.co>
 References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-8-git-send-email-gabe@hashrabbit.co>
-Message-ID: <20160229224824.20095383@free-electrons.com>
+ <1456437341-19025-7-git-send-email-gabe@hashrabbit.co>
+Message-ID: <20160229224813.5403a1bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +14,14 @@ To: buildroot@busybox.net
 
 Dear Gabe Evans,
 
-On Thu, 25 Feb 2016 21:55:16 +0000, Gabe Evans wrote:
+On Thu, 25 Feb 2016 21:55:15 +0000, Gabe Evans wrote:
 > Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
 > ---
->  package/systemd/systemd.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/systemd/Config.in  | 1 +
+>  package/systemd/systemd.mk | 7 +++++++
+>  2 files changed, 8 insertions(+)
 
-Applied to next after tweaking the commit title, as noticed by Arnout.
+Applied to next, thanks.
 
 Thomas
 -- 
