@@ -1,79 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:53:38 +0100
-Subject: [Buildroot] [git commit] package/ffmpeg: Remove patch not needed
-	anymore for Kodi 16.0-Jarvis
-Message-ID: <20160302202800.87D8C80203@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 21:45:32 +0100
+Subject: [Buildroot] [git commit] openssh: bump to version 7.2p1
+Message-ID: <20160302202759.1532680203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5be216b2c959c4a42336a42c1120e93f80dd4b25
+commit: https://git.buildroot.net/buildroot/commit/?id=0c62637bdd473236d50ec459c9074ad8a8834129
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...add-public-version-of-ff_read_frame_flush.patch | 53 ----------------------
- 1 file changed, 53 deletions(-)
+ package/openssh/openssh.hash | 4 ++--
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch b/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
-deleted file mode 100644
-index 58a91e2..0000000
---- a/package/ffmpeg/0013-add-public-version-of-ff_read_frame_flush.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From 7d7ce18ff0d24b586634fa6e631fa0eec7865aae Mon Sep 17 00:00:00 2001
--From: elupus <elupus@xbmc.org>
--Date: Tue, 1 Nov 2011 20:18:35 +0100
--Subject: [PATCH 13/13] add public version of ff_read_frame_flush
--
--We need this since we sometimes seek on the
--input stream behind ffmpeg's back. After this
--all data need to be flushed completely.
--
--Patch part of the XBMC patch set for ffmpeg, downloaded from
--https://github.com/xbmc/FFmpeg/.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libavformat/avformat.h | 5 +++++
-- libavformat/utils.c    | 5 +++++
-- 2 files changed, 10 insertions(+)
--
--diff --git a/libavformat/avformat.h b/libavformat/avformat.h
--index 2e54ed1..3a9f292 100644
----- a/libavformat/avformat.h
--+++ b/libavformat/avformat.h
--@@ -2121,6 +2121,11 @@ int av_find_best_stream(AVFormatContext *ic,
-- int av_read_frame(AVFormatContext *s, AVPacket *pkt);
-- 
-- /**
--+ * Clear out any buffered data in context
--+ */
--+void av_read_frame_flush(AVFormatContext *s);
--+
--+/**
--  * Seek to the keyframe at timestamp.
--  * 'timestamp' in 'stream_index'.
--  *
--diff --git a/libavformat/utils.c b/libavformat/utils.c
--index f4fb172..10dda18 100644
----- a/libavformat/utils.c
--+++ b/libavformat/utils.c
--@@ -1624,6 +1624,11 @@ void ff_read_frame_flush(AVFormatContext *s)
--     }
-- }
-- 
--+void av_read_frame_flush(AVFormatContext *s)
--+{
--+  ff_read_frame_flush(s);
--+}
--+
-- void ff_update_cur_dts(AVFormatContext *s, AVStream *ref_st, int64_t timestamp)
-- {
--     int i;
---- 
--2.1.0
--
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index b93b4a9..36346e0 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-# Also from http://www.openssh.com/txt/release-7.1p2
+-sha256	dd75f024dcf21e06a0d6421d582690bf987a1f6323e32ad6619392f3bfde6bbd	openssh-7.1p2.tar.gz
++# Also from http://www.openssh.com/txt/release-7.2
++sha256	973cc37b2f3597e4cf599b09e604e79c0fe5d9b6f595a24e91ed0662860b4ac3	openssh-7.2p1.tar.gz
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4e97849..0e0bcab 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 7.1p2
++OPENSSH_VERSION = 7.2p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
