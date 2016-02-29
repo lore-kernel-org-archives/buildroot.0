@@ -1,11 +1,10 @@
 From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
-Date: Mon, 29 Feb 2016 09:16:53 +0100
-Subject: [Buildroot] [dropbear] fail ssh conection with Passwords
-	encoding SHA-256 or SHA-512
-In-Reply-To: <87h9gvv64e.fsf@dell.be.48ers.dk>
-References: <CALtfCQbqTNvokwneH9uFFESNFK6_HZWKy19oefELL4OgDw-jpw@mail.gmail.com>
- <87h9gvv64e.fsf@dell.be.48ers.dk>
-Message-ID: <CALtfCQaWrdA5Mr2xH28Q=BctyzZNKpoR_65RMc5Hb5j6H0Lmag@mail.gmail.com>
+Date: Mon, 29 Feb 2016 09:17:55 +0100
+Subject: [Buildroot] [nano] error compiling nano
+In-Reply-To: <87a8mnv5nq.fsf@dell.be.48ers.dk>
+References: <CALtfCQZsG=u4scz83-6Ke1iVp9pDqpiN79365vnS2mpF05SFRw@mail.gmail.com>
+ <87a8mnv5nq.fsf@dell.be.48ers.dk>
+Message-ID: <CALtfCQbFpphcc4AS_BEEOpphEemSGMGs8PAfbyF_KPB-4cTitg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,39 +17,35 @@ Thank you very much.
 
 Oscar Gomez Fuente
 
-On 26 February 2016 at 16:33, Peter Korsgaard <peter@korsgaard.com> wrote:
+On 26 February 2016 at 16:43, Peter Korsgaard <peter@korsgaard.com> wrote:
 
 > >>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
 >
 >  > Hi,
->  > I'm new in buldroot and I'm building a raspberry 2 platform. I've based
-> on
->  > raspberrypi2_defconfig configuration. But I've changed two things:
+>  > I'm trying to compile the test editor: nano, with raspberrypi2_defconf
+>  > configuration and fail. It seems to be that the problem is in the source
+>  > file: char.c.
 >
->  > 1?.- I've added dropbear to add ssh functionality.
+>  > I attached you the log of the make:
 >
->  > Everything works fine and I can connect to my raspberry by ssh (System
->  > password encoding md5). The problem is when I've changed the password
->  > encoding from md5 to SHA-256 or SHA-512. When I've tried to make an ssh
->  > conection from a PC to my raspberry pi 2 the access fail:
+>  > ---
+>  > ...
+>  >      IGNORE_CALL_RESULT(mbtowc(NULL, NULL, 0));
+>  >      ^
+>  > chars.c: In function ?wctomb_reset?:
+>  > chars.c:101:5: warning: implicit declaration of function ?wctomb?
+>  > [-Wimplicit-function-declaration]
+>  >      IGNORE_CALL_RESULT(wctomb(NULL, 0));
 >
->  > root at 192.168.10.105's password:
->  > Permission denied, please try again.
+> Nano needs wide character support. It sounds like you have built a
+> toolchain without it, and then changed the toolchain configuration and
+> added nano without doing a clean rebuild.
 >
-> The problem is that uClibc doesn't have support for the sha256/512
-> ciphers by default, so dropbear cannot authenticate you. It happens to
-> work when you login through serial as the busybox login program uses
-> built in password handling functions (and we have code to enable the
-> sha256/512 routines when enabled in buildroot).
->
-> I guess we need to do the same for uClibc (or just unconditionally
-> enable it). In the mean time you can use glibc instead which does
-> support it (make sure you do a clean build whenever you change toolchain
-> options).
+> You need to do a clean rebuild if you change toolchain options.
 >
 > --
 > Bye, Peter Korsgaard
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160229/e181f69b/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160229/5b35e97d/attachment.html>
