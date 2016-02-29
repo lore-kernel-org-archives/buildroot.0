@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 21:45:15 +0100
-Subject: [Buildroot] [git commit] lvm2: bump to version 2.02.144
-Message-ID: <20160302202759.09DDC7FA0E@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 22:45:55 +0100
+Subject: [Buildroot] [git commit] package/systemd: add --enable/disable-lz4
+Message-ID: <20160302202759.4C4B280203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=045fd769bd0be6057ff67cc6b2f6d50b1e149d0b
+commit: https://git.buildroot.net/buildroot/commit/?id=3734336b59f78051194bfda930f64e75b3f576aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/systemd/Config.in  | 3 ++-
+ package/systemd/systemd.mk | 7 +++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 17434ff..8390596 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 d827cbd5dde6079f9fedb6bd64025d33a93a00cd1af6d57873be78df07069c5b9921077d6be98a6445829cfea28ba7a5520db0be58d6e7a7824f1a722d739fb6  LVM2.2.02.138.tgz
-+sha512 7689a7a26af6ba8fa5a46a96f3bf757c149806f813740b2df004692a63f05cfc522321d67984d34a1c34d55eb1dab5513b2a6bc48c46a7daec873607ea3ada39  LVM2.2.02.144.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 0d0dc2c..74e0e4f 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index b7eca3a..afa598b 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -56,7 +56,8 @@ config BR2_PACKAGE_SYSTEMD
+ 	  The selection of other packages will enable some features:
  
--LVM2_VERSION = 2.02.138
-+LVM2_VERSION = 2.02.144
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ 	  - acl package will add support for multi-seat.
+-	  - xz package will add compression support in journal and coredump.
++	  - xz and/or l4 packages will add compression support in
++	    journal and coredump.
+ 	  - libgcrypt package will add support for journal sealing and
+ 	    DNSSEC verification in resolved.
+ 
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 3dffbc9..16c4d52 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -87,6 +87,13 @@ else
+ SYSTEMD_CONF_OPTS += --disable-bzip2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LZ4),y)
++SYSTEMD_DEPENDENCIES += lz4
++SYSTEMD_CONF_OPTS += --enable-lz4
++else
++SYSTEMD_CONF_OPTS += --disable-lz4
++endif
++
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ SYSTEMD_DEPENDENCIES += xz
+ SYSTEMD_CONF_OPTS += --enable-xz
