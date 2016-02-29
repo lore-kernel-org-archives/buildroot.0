@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 29 Feb 2016 08:59:32 -0300
-Subject: [Buildroot] [PATCH] openssh: bump to version 7.2p1
-Message-ID: <1456747172-15523-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 29 Feb 2016 08:59:48 -0300
+Subject: [Buildroot] [PATCH 1/2] cryptsetup: bump to version 1.7.1
+Message-ID: <1456747189-15568-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssh/openssh.hash | 4 ++--
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index b93b4a9..36346e0 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--# Also from http://www.openssh.com/txt/release-7.1p2
--sha256	dd75f024dcf21e06a0d6421d582690bf987a1f6323e32ad6619392f3bfde6bbd	openssh-7.1p2.tar.gz
-+# Also from http://www.openssh.com/txt/release-7.2
-+sha256	973cc37b2f3597e4cf599b09e604e79c0fe5d9b6f595a24e91ed0662860b4ac3	openssh-7.2p1.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 4e97849..0e0bcab 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 8fbbc7d..0928627 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v1.7/sha256sums.asc
+-sha256	075524a7cc0db36d12119fa79116750accb1c6c8825d5faa2534b74b8ce3d148	cryptsetup-1.7.0.tar.xz
++sha256	73dc8a63cc984b56aa6a3c99f355262471bcfe78b3240b8b9d0caa8002911fec	cryptsetup-1.7.1.tar.xz
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 986b131..4d37709 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPENSSH_VERSION = 7.1p2
-+OPENSSH_VERSION = 7.2p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+ CRYPTSETUP_VERSION_MAJOR = 1.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).0
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf \
 -- 
 2.4.10
