@@ -1,96 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:52:21 +0100
+Date: Mon, 29 Feb 2016 23:52:35 +0100
 Subject: [Buildroot] [git commit branch/next] package/kodi: Remove
-	dependency for BR2_STATIC_LIBS from sub packages
-Message-ID: <20160229225225.1645B8073E@busybox.osuosl.org>
+	dependency for BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 from sub packages
+Message-ID: <20160229225239.6275780567@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a95fae661df69cb1f647513072e94e179d436d20
+commit: https://git.buildroot.net/buildroot/commit/?id=b1b1762d18f2f4a915acf614b75f563003b280e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Kodi itself already depends on !BR2_STATIC_LIBS, there is no need to
-duplicate this as reverse dependencies in sub options which depend on
-Kodi.
+Kodi itself already depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7, there is
+no need to duplicate this as reverse dependencies in sub options which
+depend on Kodi.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/Config.in | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ package/kodi-pvr-argustv/Config.in | 4 ----
+ package/kodi-pvr-filmon/Config.in  | 4 ----
+ package/kodi-pvr-pctv/Config.in    | 4 ----
+ package/kodi-pvr-stalker/Config.in | 4 ----
+ 4 files changed, 16 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index abd1dc1..13955e4 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -117,7 +117,6 @@ config BR2_PACKAGE_KODI_ALSA_LIB
- 
- config BR2_PACKAGE_KODI_AVAHI
- 	bool "avahi"
--	depends on !BR2_STATIC_LIBS # avahi
- 	select BR2_PACKAGE_AVAHI
- 	select BR2_PACKAGE_AVAHI_DAEMON
+diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
+index 247d83c..216000a 100644
+--- a/package/kodi-pvr-argustv/Config.in
++++ b/package/kodi-pvr-argustv/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_KODI_PVR_ARGUSTV
+ 	bool "kodi-pvr-argustv"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
  	help
-@@ -132,26 +131,21 @@ config BR2_PACKAGE_KODI_DBUS
+ 	  Kodi's ARGUS TV client addon
  
- config BR2_PACKAGE_KODI_LIBBLURAY
- 	bool "blu-ray"
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBBLURAY
- 	help
- 	  Enable Blu-ray input support.
- 	  Select this if you want to play back Blu-ray content.
- 
--comment "libbluray support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
+ 	  https://github.com/kodi-pvr/pvr.argustv
 -
- config BR2_PACKAGE_KODI_LIBCEC
- 	bool "hdmi cec"
--	depends on !BR2_STATIC_LIBS # libcec
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_LIBCEC
+-comment "kodi-pvr-argustv needs a toolchain w/ gcc >= 4.7"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
+index 3d87ec8..0b662df 100644
+--- a/package/kodi-pvr-filmon/Config.in
++++ b/package/kodi-pvr-filmon/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_KODI_PVR_FILMON
+ 	bool "kodi-pvr-filmon"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Enable CEC (Consumer Electronics Control) support.
- 	  Select this if you want Kodi to support HDMI CEC.
+ 	  Filmon PVR client addon for Kodi
  
--comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
-+comment "hdmi cec support needs udev /dev management"
-+	depends on !BR2_PACKAGE_HAS_UDEV
- 
- config BR2_PACKAGE_KODI_LIRC
- 	bool "lirc"
-@@ -184,15 +178,11 @@ config BR2_PACKAGE_KODI_RTMPDUMP
- 
- config BR2_PACKAGE_KODI_LIBSHAIRPLAY
- 	bool "shairport"
--	depends on !BR2_STATIC_LIBS # libshairplay -> avahi
- 	select BR2_PACKAGE_LIBSHAIRPLAY
- 	help
- 	  Enable Shairport support.
- 	  Select this if you want to stream content from an Apple device.
- 
--comment "shairport support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
+ 	  https://github.com/kodi-pvr/pvr.filmon
 -
- comment "samba support needs a (e)glibc or uClibc toolchain w/ RPC"
- 	depends on (!BR2_TOOLCHAIN_USES_GLIBC && \
- 		!BR2_TOOLCHAIN_USES_UCLIBC) || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
-@@ -228,14 +218,10 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBVA
+-comment "kodi-pvr-filmon needs a toolchain w/ gcc >= 4.7"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
+index 1bef551..255cd4a 100644
+--- a/package/kodi-pvr-pctv/Config.in
++++ b/package/kodi-pvr-pctv/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_KODI_PVR_PCTV
+ 	bool "kodi-pvr-pctv"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Enable libva support.
+ 	  PCTV PVR client addon for Kodi
  
--comment "libva support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
+ 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
 -
- config BR2_PACKAGE_KODI_OPTICALDRIVE
- 	bool
+-comment "kodi-pvr-pctv needs a toolchain w/ gcc >= 4.7"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
+index 26a8c3f..3ec530c 100644
+--- a/package/kodi-pvr-stalker/Config.in
++++ b/package/kodi-pvr-stalker/Config.in
+@@ -1,12 +1,8 @@
+ config BR2_PACKAGE_KODI_PVR_STALKER
+ 	bool "kodi-pvr-stalker"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # jsoncpp
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  A PVR Client that connects Kodi to Stalker Middleware
  
+ 	  https://github.com/kodi-pvr/pvr.stalker
+-
+-comment "kodi-pvr-stalker needs a toolchain w/ gcc >= 4.7"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
