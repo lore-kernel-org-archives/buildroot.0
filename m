@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:45:22 +0100
-Subject: [Buildroot] [PATCH/next 06/31] package/kodi: bump version to
- 16.0-Jarvis
-In-Reply-To: <1456006176-21308-7-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 29 Feb 2016 23:46:34 +0100
+Subject: [Buildroot] [PATCH/next 08/31] package/kodi: not available
+ using a musl-based toolchain
+In-Reply-To: <1456006176-21308-9-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-7-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160229234522.7aa51af3@free-electrons.com>
+ <1456006176-21308-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160229234634.4c8b645e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +14,35 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 20 Feb 2016 23:09:11 +0100, Bernd Kuhls wrote:
-> Add two new hard dependencies:
+On Sat, 20 Feb 2016 23:09:13 +0100, Bernd Kuhls wrote:
+> The build stops with
+> configure: error: unsupported host (i586-buildroot-linux-musl)
+> due to musl not being supported in
+> https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
 > 
-> - libdcadec
-> https://github.com/xbmc/xbmc/commit/0997117a659a09e7b1c5bcb110f3526ea16698be
+> Removing this obstacle will show that musl is really not being
+> supported, the build will fail:
 > 
-> - libcrossguid
-> https://github.com/xbmc/xbmc/commit/6f8171f53992fc2eaabf71f6fa47ebed1da0d43d
+> In file included from emu_msvcrt.cpp:64:0:
+> emu_msvcrt.h:93:3: error: ?__off64_t? does not name a type
+>    __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
+>    ^
+> emu_msvcrt.h:94:3: error: ?__off_t? does not name a type
+>    __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
+>    ^
 > 
-> Kodi moved to C++11 so we need gcc >= 4.7:
-> https://github.com/xbmc/xbmc/pull/6412
+> I know these problems are fixable and the voidlinux projects seems to
+> have done it already for 15.2-Isengard:
+> https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
 > 
-> wavpack support was removed in favour of ffmpeg:
-> https://github.com/xbmc/xbmc/commit/7916902c9e6f7a523265594f3ad7f921f93f1cd4
-> 
-> Enabled giflib support by default.
+> For Jarvis-16.0 these patches have to be rebased at a later stage.
+> For now block the Kodi package with musl-based toolchains to avoid
+> build errors.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  Config.in.legacy                                    |  7 +++++++
->  ...g.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch | 21 ++++++++++++---------
->  package/kodi/Config.in                              | 20 ++++++++------------
->  package/kodi/kodi.hash                              |  2 +-
->  package/kodi/kodi.mk                                | 13 +++----------
->  5 files changed, 31 insertions(+), 32 deletions(-)
+>  package/kodi/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied to next, thanks.
 
