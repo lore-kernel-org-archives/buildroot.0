@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:31:22 +0100
-Subject: [Buildroot] [PATCH/next v9 26/28] package/freeswitch: enable
- mod_imagick, add optional dependencies to imagemagick, libvpx & libyuv
-In-Reply-To: <1456586838-21197-27-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 29 Feb 2016 22:33:07 +0100
+Subject: [Buildroot] [PATCH/next v9 00/28] package/freeswitch: new
+ package
+In-Reply-To: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
- <1456586838-21197-27-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160229223122.500e4b53@free-electrons.com>
+Message-ID: <20160229223307.250b8c8c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,28 +13,29 @@ To: buildroot@busybox.net
 
 Bernd,
 
-On Sat, 27 Feb 2016 16:27:16 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/freeswitch/freeswitch.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+On Sat, 27 Feb 2016 16:26:50 +0100, Bernd Kuhls wrote:
+
+> this patch series splits my previous patch into smaller chunks for easier
+> review as requested by Luca and Thomas. I also removed all options from
+> Config.in.
 > 
+> Instead of enabling or disabling modules in the upstream modules.conf I
+> decided to delete that file in the first patch to provide a minimal
+> build for easier review, please keep in mind that I never did a run-time
+> test with this minimal version. A lot of modules, desired as a default
+> set, are added with the second patch - all of them have no external
+> dependencies. The rest of the patch series consists of modules having
+> some form of dependency, added module by module for easier review.
 
-Small typo in the commit log: "enable mod_imagick" -> "enable
-mod_imagemagick".
+Thanks for this patch series. Besides my build issue and minor comments
+on PATCH 01/28, it looks fine. I've looked at all other patches, and
+despite a really minor nit on PATCH 26/28, I think we'll be able to
+apply this once the PATCH 01/28 problems are fixed.
 
-The commit title is slightly too long. Ideally for such commits, it
-should be:
-
-"""
-package/freeswitch: enable mod_imagemagick
-
-This commit enables mod_imagemagick, which requires imagemagick, libvpx
-and libyux as optional dependencies.
-"""
-
-(There is the same issue in other patches in your series, though this
-is really a minor nit)
+The fact that you did split the package addition in a minimal package
+and then trivial additions of optional dependencies really made the
+whole thing a lot easier to look at and review, so thanks for having
+done that!
 
 Thomas
 -- 
