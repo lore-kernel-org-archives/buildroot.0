@@ -1,63 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 23 Feb 2016 22:18:42 +0100
-Subject: [Buildroot] [git commit] qt53d: enable assimpsceneparser plugin
-Message-ID: <20160302202756.930507FA0E@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 23:40:13 +0100
+Subject: [Buildroot] [git commit] package/libplatform: bump version, add hash
+Message-ID: <20160302202800.1431880203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0a1fc98477f5c81a41ee3e563a8ce71ef4c92a4
+commit: https://git.buildroot.net/buildroot/commit/?id=89a8178ba5d502b4b049adf87935d26770db99ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- add hint to help text
-- add assimp dependency
-- always install the gltf (and any future) sceneparser to target.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: update commit message as suggested by Arnout.]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/qt5/qt53d/Config.in | 2 ++
- package/qt5/qt53d/qt53d.mk  | 5 +++++
- 2 files changed, 7 insertions(+)
+ package/libplatform/libplatform.hash | 2 ++
+ package/libplatform/libplatform.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt53d/Config.in b/package/qt5/qt53d/Config.in
-index b2d2912..ff50204 100644
---- a/package/qt5/qt53d/Config.in
-+++ b/package/qt5/qt53d/Config.in
-@@ -12,6 +12,8 @@ config BR2_PACKAGE_QT53D
+diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
+new file mode 100644
+index 0000000..8975dfd
+--- /dev/null
++++ b/package/libplatform/libplatform.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  3603ead8b16a48cb35b1e6dea330a693f10552b1a6ea036c5db9ec248cd8baf5  libplatform-feafe68e3e0b02c3261aefb3d711863ef6fadd38.tar.gz
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+index 4eb934f..6d54915 100644
+--- a/package/libplatform/libplatform.mk
++++ b/package/libplatform/libplatform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  This package corresponds to the qt53d module.
- 
-+	  Enable the assimp package to gain the assimp sceneparser plugin.
-+
- 	  http://doc.qt.io/qt-5/qt3d-index.html
- 
- comment "qt53d module needs an OpenGL-capable backend"
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 810242b..24c42e6 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -10,6 +10,10 @@ QT53D_SOURCE = qt3d-opensource-src-$(QT5SVG_VERSION).tar.xz
- QT53D_DEPENDENCIES = qt5base qt5declarative
- QT53D_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_ASSIMP),y)
-+QT53D_DEPENDENCIES += assimp
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
- QT53D_LICENSE = GPLv2+ or LGPLv3
- QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
-@@ -34,6 +38,7 @@ endef
- ifeq ($(BR2_STATIC_LIBS),)
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- endef
- endif
+-LIBPLATFORM_VERSION = 1.0.10
++LIBPLATFORM_VERSION = feafe68e3e0b02c3261aefb3d711863ef6fadd38
+ LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+ LIBPLATFORM_LICENSE = GPLv2+, PHP license v3.01
+ LIBPLATFORM_LICENSE_FILES = src/os.h src/util/fstrcmp.c
