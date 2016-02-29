@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:45:55 +0100
-Subject: [Buildroot] [git commit] package/systemd: add --enable/disable-lz4
-Message-ID: <20160302202759.4C4B280203@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 23:45:16 +0100
+Subject: [Buildroot] [git commit] package/kodi: enable samba support with
+	uClibc toolchain
+Message-ID: <20160302202800.49A5A7F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3734336b59f78051194bfda930f64e75b3f576aa
+commit: https://git.buildroot.net/buildroot/commit/?id=89a195e6c701b4e9ec9bfab5aaa352d87cb0e6be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/systemd/Config.in  | 3 ++-
- package/systemd/systemd.mk | 7 +++++++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ package/kodi/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index b7eca3a..afa598b 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -56,7 +56,8 @@ config BR2_PACKAGE_SYSTEMD
- 	  The selection of other packages will enable some features:
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 09bd0cd..23468cc 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -191,12 +191,13 @@ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ comment "shairport support needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
  
- 	  - acl package will add support for multi-seat.
--	  - xz package will add compression support in journal and coredump.
-+	  - xz and/or l4 packages will add compression support in
-+	    journal and coredump.
- 	  - libgcrypt package will add support for journal sealing and
- 	    DNSSEC verification in resolved.
+-comment "samba support needs an (e)glibc toolchain w/ RPC"
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
++comment "samba support needs a (e)glibc or uClibc toolchain w/ RPC"
++	depends on (!BR2_TOOLCHAIN_USES_GLIBC && \
++		!BR2_TOOLCHAIN_USES_UCLIBC) || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
  
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 3dffbc9..16c4d52 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -87,6 +87,13 @@ else
- SYSTEMD_CONF_OPTS += --disable-bzip2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LZ4),y)
-+SYSTEMD_DEPENDENCIES += lz4
-+SYSTEMD_CONF_OPTS += --enable-lz4
-+else
-+SYSTEMD_CONF_OPTS += --disable-lz4
-+endif
-+
- ifeq ($(BR2_PACKAGE_XZ),y)
- SYSTEMD_DEPENDENCIES += xz
- SYSTEMD_CONF_OPTS += --enable-xz
+ config BR2_PACKAGE_KODI_LIBSMBCLIENT
+ 	bool "samba"
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	select BR2_PACKAGE_SAMBA4
