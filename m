@@ -1,32 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 21 Feb 2016 14:28:34 +0100
-Subject: [Buildroot] [git commit] collectd: Fix typo
-Message-ID: <20160302202755.62F187FA0E@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 22:53:22 +0100
+Subject: [Buildroot] [git commit] package/systemd: add optional support for
+	binfmt
+Message-ID: <20160302202759.9DAA77F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2511024c8135b57891f7eb540c5523749d26d647
+commit: https://git.buildroot.net/buildroot/commit/?id=0d8485bc7531b04b05c26878b1e961cd9df62512
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+[Thomas: rewrap Config.in help text.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/collectd/collectd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/systemd/Config.in  | 8 ++++++++
+ package/systemd/systemd.mk | 6 ++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 06c5389..eb66f25 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -16,7 +16,7 @@ COLLECTD_LICENSE_FILES = COPYING
- COLLECTD_PLUGINS_DISABLE = \
- 	amqp apple_sensors aquaero ascent barometer dbi email \
- 	gmond hddtemp ipmi java libvirt lpar lvm madwifi mbmon \
--	mic multimeter netapp  notify_desktop notify_email numa \
-+	mic multimeter netapp notify_desktop notify_email numa \
- 	nut onewire oracle perl pf pinba powerdns python redis routeros \
- 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
- 	tokyotyrant turbostat uuid varnish virt vserver write_kafka \
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index e9a7883..6289252 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -84,6 +84,14 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_BINFMT
++	bool "enable binfmt tool"
++	help
++	  systemd-binfmt is an early boot service that registers
++	  additional binary formats for executables in the kernel.
++
++	  http://www.freedesktop.org/software/systemd/man/systemd-binfmt.service.html
++
+ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	bool "enable network manager"
+ 	help
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 87fdbd7..5f7941c 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -131,6 +131,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-microhttpd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
++SYSTEMD_CONF_OPTS += --enable-binfmt
++else
++SYSTEMD_CONF_OPTS += --disable-binfmt
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_NETWORKD),y)
+ SYSTEMD_CONF_OPTS += --enable-networkd
+ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
