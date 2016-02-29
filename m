@@ -1,33 +1,40 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Sun, 28 Feb 2016 19:47:10 -0500
-Subject: [Buildroot] Is it possible to override a package version from
-	BR2_EXTERNAL?
-In-Reply-To: <56D0B227.2060104@mind.be>
-References: <CAF_dkJDcBuOOe3Z5zGfS=eA8tJ9k54DqRahGuZeR8vGE1T+FBQ@mail.gmail.com>
- <56D0B227.2060104@mind.be>
-Message-ID: <CAF_dkJDxOAh_vz3Ww4HoqgOCRM+n0ZXQYbDQ+z34Nzw1noKHUg@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 29 Feb 2016 12:15:31 +1030
+Subject: [Buildroot] [PATCH] linux-firmware: Allow selection of bnx2x fw
+	version
+In-Reply-To: <20160226093939.26819401@free-electrons.com>
+References: <1456461093-10202-1-git-send-email-joel@jms.id.au>
+ <20160226093939.26819401@free-electrons.com>
+Message-ID: <CACPK8XeYeRYPdw1rjpYKW=XyQuw+X7fAn3Ds-RJC+zifJUjsjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Feb 26, 2016 at 3:14 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 02/26/16 16:03, Patrick Doyle wrote:
->> I am asking because it appears (for the moment) that the 2016.01
->> host-uboot-tools mkenvimage utility does not generate an environment
->> file compatible with my non-2016.01 u-boot.
->
->  That is weird... As far as I know, mkenvimage should stay backward-compatible.
-> Unless, of course, your u-boot has some hacks that make it incompatible with
-> upstream u-boot...
-And, in fact, mkenvimage was fine... I just took careful aim at my
-foot and fired my gun :-)
+On Fri, Feb 26, 2016 at 7:09 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> I think adding new config to chose between different versions of a
+> given firmware is going a bit too far. If we were to do that for all
+> firmwares in linux-firmware, it would really increase the number of
+> Config.in options too much.
 
-But I was still curious about how to override the version installed
-for a single package.  Now I know the answer is "You can't do that
-easily."
+Yeah, I do agree with this concern. It's unfortunate we don't have a
+variable we can test to see what the kernel version is.
 
-OK, thanks.
+> Shall I suggest to install both versions of the firmware? The firmware
+> files are not that large, and if filesystem size is really a strong
+> issue, it is always possible to clean up the non-required firmware
+> files in a post-build script.
 
---wpd
+In our case the extra ~640kB would be worth cleaning up. I like
+buildroot for the clean tiny images it produces; I think that's worth
+preserving.
+
+The driver was broken for the 2015.11 release, so given no one has
+noticed since then, perhaps we should track the correct firmware
+versions for BR2_LINUX_KERNEL_LATEST_VERSION?
+
+Cheers,
+
+Joel
