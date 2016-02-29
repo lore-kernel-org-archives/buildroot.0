@@ -1,12 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 21:08:27 +0100
-Subject: [Buildroot] [PATCH] sox: disable SSP when using MIPS Codescape
-	toolchains
-In-Reply-To: <56D47948.9020505@imgtec.com>
-References: <1456763982-36511-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160229175158.3c01895a@free-electrons.com>
- <56D47948.9020505@imgtec.com>
-Message-ID: <20160229210827.18465518@free-electrons.com>
+Date: Mon, 29 Feb 2016 21:35:20 +0100
+Subject: [Buildroot] [PATCH] pkgconf: Add a symlink to the
+ GNU_TARGET_NAME-pkg-config
+In-Reply-To: <u7ieqcx9kv.ln2@ID-313208.user.individual.net>
+References: <1456770170-6326-1-git-send-email-jer@airfi.aero>
+ <u7ieqcx9kv.ln2@ID-313208.user.individual.net>
+Message-ID: <20160229213520.2b6e6ee7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +14,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 29 Feb 2016 17:00:56 +0000, Vicente Olivert Riera wrote:
+On Mon, 29 Feb 2016 20:19:58 +0100, Bernd Kuhls wrote:
 
-> Uhm..., how would you do that? BR2_TOOLCHAIN_HAS_SSP is selected by
-> BR2_TOOLCHAIN_USES_GLIBC. We would need to do changes in the toolchain
-> infra in order to not define it in that place, and define it
-> individually for every toolchain. Is that what you mean?
+> >  By setting a symlink to the expected target we might even solve some
+> >  real problems.
+> 
+> two years ago I proposed a similar patch, which was rejected:
+> http://patchwork.ozlabs.org/patch/312273/
 
-Yes, this is what I mean. It is indeed more work, but looks cleaner IMO.
+If we were to do this, then I would prefer to completely remove
+$(HOST_DIR)/usr/bin/pkg-config, and only have
+$(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-pkg-config.
+
+What I dislike with the current setup is that if you add
+$(HOST_DIR)/usr/bin to your PATH, then any call to pkg-config returns
+values that are valid only when cross-compiling, which is not
+necessarily what one would expect.
+
+However, doing this change means that any configure script or Makefile
+that calls pkg-config directly would no longer find our pkg-config.
+
+Best regards,
 
 Thomas
 -- 
