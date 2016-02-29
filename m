@@ -1,31 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:56:18 +0100
-Subject: [Buildroot] [PATCH 13/32] package/systemd: add optional support
- for quotacheck
-In-Reply-To: <1456437341-19025-14-git-send-email-gabe@hashrabbit.co>
-References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-14-git-send-email-gabe@hashrabbit.co>
-Message-ID: <20160229225618.2a8088f5@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Feb 2016 22:57:16 +0100
+Subject: [Buildroot] [git commit branch/next] package/lz4: bump version
+	to r131
+In-Reply-To: <20160229213908.F0B11802AC@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Mon, 29 Feb 2016 22:38:31 +0100")
+References: <20160229213908.F0B11802AC@busybox.osuosl.org>
+Message-ID: <87oaaznps3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gabe Evans,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 25 Feb 2016 21:55:22 +0000, Gabe Evans wrote:
-> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-> ---
->  package/systemd/Config.in  | 9 +++++++++
->  package/systemd/systemd.mk | 6 ++++++
->  2 files changed, 15 insertions(+)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=8ad38a4fc2007df4bee9a941aed46c8771b6a84c
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next after rewrapping the Config.in help text, which had
-too long lines. Thanks!
+ > systemd v228 requires lz4 >= 125
 
-Thomas
+ > Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+ > [Thomas: only pass PREFIX=/usr at install time instead of using
+ > LZ4_MAKE_OPTS, and also pass it for the host installation.]
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > ---
+ >  package/lz4/lz4.hash |  2 ++
+ >  package/lz4/lz4.mk   | 15 +++++++++------
+ >  2 files changed, 11 insertions(+), 6 deletions(-)
+
+ > diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+ > new file mode 100644
+ > index 0000000..1281284
+ > --- /dev/null
+ > +++ b/package/lz4/lz4.hash
+ > @@ -0,0 +1,2 @@
+ > +# sha256 locally computed
+ > +sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
+ > diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+ > index 38e10d8..576b2a2 100644
+ > --- a/package/lz4/lz4.mk
+ > +++ b/package/lz4/lz4.mk
+ > @@ -4,7 +4,7 @@
+ >  #
+ >  ################################################################################
+ 
+ > -LZ4_VERSION = r123
+ > +LZ4_VERSION = r131
+ >  LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
+ >  LZ4_INSTALL_STAGING = YES
+ >  LZ4_LICENSE = BSD-2c
+ > @@ -12,7 +12,7 @@ LZ4_LICENSE_FILES = LICENSE
+ 
+ >  ifeq ($(BR2_STATIC_LIBS),y)
+ >  define LZ4_DISABLE_SHARED
+ > -	$(SED) '/SHARED/d' $(@D)/Makefile
+ > +	$(SED) '/SHARED/d' $(@D)/lib/Makefile
+ >  endef
+ >  LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ >  endif
+ > @@ -22,19 +22,22 @@ define HOST_LZ4_BUILD_CMDS
+ >  endef
+ 
+ >  define HOST_LZ4_INSTALL_CMDS
+ > -	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
+ > +	$(MAKE) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
+ > +		PREFIX=/usr install -C $(@D)
+
+Hmm, why are we passing DESTDIR + PREFIX=/usr, instead of
+PREFIX=$(HOST_DIR)/usr for host installation?
+
+cat output/host/usr/lib/pkgconfig/liblz4.pc
+#   LZ4 - Fast LZ compression algorithm
+#   Copyright (C) 2011-2014, Yann Collet.
+#   BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
+
+prefix=/usr
+libdir=/usr/lib
+includedir=/usr/include
+
+Name: lz4
+Description: fast lossless compression algorithm library
+URL: http://code.google.com/p/lz4/
+Version: 131
+Libs: -L/usr/lib -llz4
+Cflags: -I/usr/include
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
