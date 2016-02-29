@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:42:57 +0100
-Subject: [Buildroot] [git commit] package/kodi-platform: bump version,
-	add hash
-Message-ID: <20160302202800.3201B80203@busybox.osuosl.org>
+Date: Mon, 29 Feb 2016 23:11:38 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: fix separator for
+	2016.05 legacy options
+Message-ID: <20160302202759.D4EA37F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=349c9c4a9e6962960fb20bf5ba651040e6316341
+commit: https://git.buildroot.net/buildroot/commit/?id=2661c4f1b715d4ea3df41c4c86373f64bf4a5b6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Since we opened up the next branch, a number of options have been
+added to Config.in.legacy. However, they are located under the "legacy
+options removed in 2016.02", which is not correct. This commit fixes
+that by adding the "legacy options removed in 2016.05" header, and
+restoring the one related to 2016.02 at the right location.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-platform/kodi-platform.hash | 2 ++
- package/kodi-platform/kodi-platform.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ Config.in.legacy | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
-new file mode 100644
-index 0000000..a248448
---- /dev/null
-+++ b/package/kodi-platform/kodi-platform.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-index 0a7cc2e..4b642f9 100644
---- a/package/kodi-platform/kodi-platform.mk
-+++ b/package/kodi-platform/kodi-platform.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 69b3c84..53baa84 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,7 +143,7 @@ comment "----------------------------------------------------"
+ endif
  
--KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
-+KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
- KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
- KODI_PLATFORM_LICENSE = GPLv2+
- KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
+ ###############################################################################
+-comment "Legacy options removed in 2016.02"
++comment "Legacy options removed in 2016.05"
+ 
+ config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+ 	bool "systemd all extras option has been removed"
+@@ -173,6 +173,9 @@ config BR2_PACKAGE_SQLITE_READLINE
+ 	  command-line editing should be enabled, it also also takes
+ 	  libedit into account.
+ 
++###############################################################################
++comment "Legacy options removed in 2016.02"
++
+ config BR2_PACKAGE_OPENPOWERLINK_DEBUG_LEVEL
+ 	bool "openpowerlink debug option has been removed"
+ 	select BR2_LEGACY
