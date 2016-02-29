@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:40:04 +0100
-Subject: [Buildroot] [PATCH/next 02/31] package/kodi-screensaver-rsxs:
- new package
-In-Reply-To: <1456006176-21308-3-git-send-email-bernd.kuhls@t-online.de>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-3-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160229234004.5c433a70@free-electrons.com>
+Date: Mon, 29 Feb 2016 23:42:57 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-platform: bump
+	version, add hash
+Message-ID: <20160229224442.033ED8027D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=349c9c4a9e6962960fb20bf5ba651040e6316341
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 20 Feb 2016 23:09:07 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  Config.in.legacy                                   |  7 ++++
->  .../kodi-screensaver-rsxs/0001-cross-compile.patch | 37 ++++++++++++++++++++++
->  package/kodi-screensaver-rsxs/Config.in            | 10 ++++++
->  .../kodi-screensaver-rsxs.hash                     |  2 ++
->  .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk | 14 ++++++++
->  package/kodi/Config.in                             | 12 +------
->  package/kodi/kodi.mk                               | 20 ++----------
->  7 files changed, 73 insertions(+), 29 deletions(-)
->  create mode 100644 package/kodi-screensaver-rsxs/0001-cross-compile.patch
->  create mode 100644 package/kodi-screensaver-rsxs/Config.in
->  create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
->  create mode 100644 package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/kodi-platform/kodi-platform.hash | 2 ++
+ package/kodi-platform/kodi-platform.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Applied to next, thanks. Same comment as the previous patch: try to make
-progress with upstreaming the patch, and the Config.in comment was not
-properly using the package name.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
+new file mode 100644
+index 0000000..a248448
+--- /dev/null
++++ b/package/kodi-platform/kodi-platform.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  88741358d5d54a0031553ac28aa63bc56c44d994a76f8651bac94a1e244a6595  kodi-platform-45d6ad1984fdb1dc855076ff18484dbec33939d1.tar.gz
+diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
+index 0a7cc2e..4b642f9 100644
+--- a/package/kodi-platform/kodi-platform.mk
++++ b/package/kodi-platform/kodi-platform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PLATFORM_VERSION = 33b6390b5d2abe5b674f9eb04bdee19228543054
++KODI_PLATFORM_VERSION = 45d6ad1984fdb1dc855076ff18484dbec33939d1
+ KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
+ KODI_PLATFORM_LICENSE = GPLv2+
+ KODI_PLATFORM_LICENSE_FILES = src/util/XMLUtils.h
