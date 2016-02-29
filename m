@@ -1,76 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2016 19:43:33 +0100
-Subject: [Buildroot] [git commit] configs/arm_foundationv8: bump to Linux
-	4.4.3
-Message-ID: <20160302202758.8549E7FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Feb 2016 23:52:21 +0100
+Subject: [Buildroot] [git commit] package/kodi: Remove dependency for
+	BR2_STATIC_LIBS from sub packages
+Message-ID: <20160302202800.6CF4980203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=addc23ef6b4888a58375eaa77010047d4692e483
+commit: https://git.buildroot.net/buildroot/commit/?id=a95fae661df69cb1f647513072e94e179d436d20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to the latest kernel with DT path adjustment because Linux
-commit ca5b34100c57 ("dts, arm64: Move dts files to vendor subdirs")
-moved the DT file to the vendor sub-directory.
+Kodi itself already depends on !BR2_STATIC_LIBS, there is no need to
+duplicate this as reverse dependencies in sub options which depend on
+Kodi.
 
-This commit was tested with the latest model (FVP v8 Foundation
-Platform 9.5 build 41), so I updated the instruction in readme.txt
-corresponding to it.
-
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/arm/foundation-v8/readme.txt |  4 ++--
- configs/arm_foundationv8_defconfig | 10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/kodi/Config.in | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/board/arm/foundation-v8/readme.txt b/board/arm/foundation-v8/readme.txt
-index 5406ed3..1dedf68 100644
---- a/board/arm/foundation-v8/readme.txt
-+++ b/board/arm/foundation-v8/readme.txt
-@@ -3,14 +3,14 @@ ARM software simulator of the AArch64 architecture.
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index abd1dc1..13955e4 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -117,7 +117,6 @@ config BR2_PACKAGE_KODI_ALSA_LIB
  
- First, one has to download the AArch64 software simulator from:
+ config BR2_PACKAGE_KODI_AVAHI
+ 	bool "avahi"
+-	depends on !BR2_STATIC_LIBS # avahi
+ 	select BR2_PACKAGE_AVAHI
+ 	select BR2_PACKAGE_AVAHI_DAEMON
+ 	help
+@@ -132,26 +131,21 @@ config BR2_PACKAGE_KODI_DBUS
  
--  https://silver.arm.com/download/download.tm?pv=2482590
-+  https://silver.arm.com/download/download.tm?pv=2663527
+ config BR2_PACKAGE_KODI_LIBBLURAY
+ 	bool "blu-ray"
+-	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBBLURAY
+ 	help
+ 	  Enable Blu-ray input support.
+ 	  Select this if you want to play back Blu-ray content.
  
- Then, use the arm_foundationv8_defconfig configuration to build your
- Buildroot system.
+-comment "libbluray support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_KODI_LIBCEC
+ 	bool "hdmi cec"
+-	depends on !BR2_STATIC_LIBS # libcec
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_LIBCEC
+ 	help
+ 	  Enable CEC (Consumer Electronics Control) support.
+ 	  Select this if you want Kodi to support HDMI CEC.
  
- Finally, boot your system with:
+-comment "hdmi cec support needs udev /dev management and a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_UDEV
++comment "hdmi cec support needs udev /dev management"
++	depends on !BR2_PACKAGE_HAS_UDEV
  
-- ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.1/Foundation_Platform \
-+ ${LOCATION_OF_FOUNDATIONV8_SIMULATOR}/models/Linux64_GCC-4.7/Foundation_Platform \
-     --image output/images/linux-system.axf \
-     --block-device output/images/rootfs.ext2 \
-     --network=nat
-diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
-index 8968c77..d31f69d 100644
---- a/configs/arm_foundationv8_defconfig
-+++ b/configs/arm_foundationv8_defconfig
-@@ -1,16 +1,16 @@
- BR2_aarch64=y
--# Linux headers same as kernel, a 3.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13=y
-+# Linux headers same as kernel, a 4.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.13.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.3"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="$(LINUX_DIR)/arch/arm64/configs/defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="foundation-v8"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/foundation-v8"
- BR2_TARGET_ROOTFS_EXT2=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_BOOT_WRAPPER_AARCH64=y
--BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="foundation-v8"
-+BR2_TARGET_BOOT_WRAPPER_AARCH64_DTS="arm/foundation-v8"
- BR2_TARGET_BOOT_WRAPPER_AARCH64_BOOTARGS="root=/dev/vda consolelog=9 console=ttyAMA0 rw"
+ config BR2_PACKAGE_KODI_LIRC
+ 	bool "lirc"
+@@ -184,15 +178,11 @@ config BR2_PACKAGE_KODI_RTMPDUMP
+ 
+ config BR2_PACKAGE_KODI_LIBSHAIRPLAY
+ 	bool "shairport"
+-	depends on !BR2_STATIC_LIBS # libshairplay -> avahi
+ 	select BR2_PACKAGE_LIBSHAIRPLAY
+ 	help
+ 	  Enable Shairport support.
+ 	  Select this if you want to stream content from an Apple device.
+ 
+-comment "shairport support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ comment "samba support needs a (e)glibc or uClibc toolchain w/ RPC"
+ 	depends on (!BR2_TOOLCHAIN_USES_GLIBC && \
+ 		!BR2_TOOLCHAIN_USES_UCLIBC) || !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -228,14 +218,10 @@ config BR2_PACKAGE_KODI_LIBUSB
+ 
+ config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+-	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBVA
+ 	help
+ 	  Enable libva support.
+ 
+-comment "libva support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
+-
+ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ 	bool
+ 
