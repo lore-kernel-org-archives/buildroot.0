@@ -1,39 +1,112 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:40:45 +0100
-Subject: [Buildroot] [PATCH 01/32] package/lz4: bump version to r131
-In-Reply-To: <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
-References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-2-git-send-email-gabe@hashrabbit.co>
-Message-ID: <20160229224045.602c0487@free-electrons.com>
+Date: Mon, 29 Feb 2016 22:43:19 +0100
+Subject: [Buildroot] [git commit branch/next] package/systemd: remove
+	BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+Message-ID: <20160229214406.6C72D8050F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gabe Evans,
+commit: https://git.buildroot.net/buildroot/commit/?id=e5a073ac021656dda1e734314d4bbea83a1c6e74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 25 Feb 2016 21:55:10 +0000, Gabe Evans wrote:
-> systemd v228 requires lz4 >= 125
-> 
-> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
-> ---
->  package/lz4/lz4.hash |  2 ++
->  package/lz4/lz4.mk   | 19 ++++++++++++-------
->  2 files changed, 14 insertions(+), 7 deletions(-)
->  create mode 100644 package/lz4/lz4.hash
+The option was a bit misleading since it only selected additional
+libraries without --enable/disabling any features. Including all of them
+here would add a lot of bloat so instead, it is replaced with notes
+detailing which features each library enables.
 
-Applied to next with the following change:
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+[Thomas:
+ - slightly tweak Config.in help text, as suggested by Arnout.
+ - add Config.in.legacy handling for BR2_PACKAGE_SYSTEMD_ALL_EXTRAS,
+   as suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Config.in.legacy           | 10 ++++++++++
+ package/systemd/Config.in  | 11 +++--------
+ package/systemd/systemd.mk | 16 ++++++++++------
+ 3 files changed, 23 insertions(+), 14 deletions(-)
 
-    [Thomas: only pass PREFIX=/usr at install time instead of using
-    LZ4_MAKE_OPTS, and also pass it for the host installation.]
-
-As was suggested by Arnout.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 1cd2697..69b3c84 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,16 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2016.02"
+ 
++config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
++	bool "systemd all extras option has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_LIBGCRYPT
++	help
++	  The systemd option to enable "all extras" has been
++	  removed. To get the same features, the libgcrypt and xz
++	  package should now be enabled.
++
+ config BR2_GCC_VERSION_4_5_X
+ 	bool "gcc 4.5.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index f7fc3bb..b7eca3a 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -56,6 +56,9 @@ config BR2_PACKAGE_SYSTEMD
+ 	  The selection of other packages will enable some features:
+ 
+ 	  - acl package will add support for multi-seat.
++	  - xz package will add compression support in journal and coredump.
++	  - libgcrypt package will add support for journal sealing and
++	    DNSSEC verification in resolved.
+ 
+ 	  http://freedesktop.org/wiki/Software/systemd
+ 
+@@ -64,14 +67,6 @@ if BR2_PACKAGE_SYSTEMD
+ config BR2_PACKAGE_PROVIDES_UDEV
+ 	default "systemd"
+ 
+-config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
+-	bool "enable all extras"
+-	select BR2_PACKAGE_XZ
+-	select BR2_PACKAGE_LIBGCRYPT
+-	help
+-	  Enable extra features for Systemd: journal compression and
+-	  signing.
+-
+ config BR2_PACKAGE_SYSTEMD_KDBUS
+ 	bool "enable kdbus support"
+ 	help
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index b2cce11..9f2dc51 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -80,16 +80,20 @@ else
+ SYSTEMD_CONF_OPTS += --disable-kdbus
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD_ALL_EXTRAS),y)
+-SYSTEMD_DEPENDENCIES += xz libgcrypt
++ifeq ($(BR2_PACKAGE_XZ),y)
++SYSTEMD_DEPENDENCIES += xz
++SYSTEMD_CONF_OPTS += --enable-xz
++else
++SYSTEMD_CONF_OPTS += --disable-xz
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++SYSTEMD_DEPENDENCIES += libgcrypt
+ SYSTEMD_CONF_OPTS += \
+-	--enable-xz \
+ 	--enable-gcrypt	\
+ 	--with-libgcrypt-prefix=$(STAGING_DIR)/usr
+ else
+-SYSTEMD_CONF_OPTS += \
+-	--disable-xz \
+-	--disable-gcrypt
++SYSTEMD_CONF_OPTS += --disable-gcrypt
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
