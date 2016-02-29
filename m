@@ -1,51 +1,58 @@
-From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
-Date: Mon, 29 Feb 2016 09:17:55 +0100
-Subject: [Buildroot] [nano] error compiling nano
-In-Reply-To: <87a8mnv5nq.fsf@dell.be.48ers.dk>
-References: <CALtfCQZsG=u4scz83-6Ke1iVp9pDqpiN79365vnS2mpF05SFRw@mail.gmail.com>
- <87a8mnv5nq.fsf@dell.be.48ers.dk>
-Message-ID: <CALtfCQbFpphcc4AS_BEEOpphEemSGMGs8PAfbyF_KPB-4cTitg@mail.gmail.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Mon, 29 Feb 2016 09:38:17 +0100
+Subject: [Buildroot] [v3,
+ 3/4] barebox: user selection of build output images
+In-Reply-To: <56D0E32C.3050207@mind.be>
+References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
+ <1453329821-3167-4-git-send-email-pieter@boesman.nl>
+ <56D0E32C.3050207@mind.be>
+Message-ID: <20160229083817.GC18059@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Your proposal works perfectly.
+On Sat, Feb 27, 2016 at 12:43:40AM +0100, Arnout Vandecappelle wrote:
+> On 01/20/16 23:43, Pieter Smith wrote:
+> > A non-default image can be selected as the barebox build output in the images/
+> > directory. This typically is needed to select the appropriate image generated
+> > by multi-platform support defconfigs (E.g. am335x).
 
-Thank you very much.
+[snip]
 
-Oscar Gomez Fuente
+>  If we deprecate barebox pre-2012.10, then we can simplify this a lot:
+> 
+> config BR2_TARGET_BAREBOX_IMAGE_FILE
+> 	string "Image file path"
+> 	default "barebox-flash-image"
+> 	help
+> 	  Name of the built barebox image file in the barebox images directory
+> 
+> 
+>  Even if we don't want to deprecate barebox pre-2012.10, I'd prefer to keep this
+> simple config and do the handling of legacy barebox.bin in the .mk file. For
+> pre-2012.10, you'd have to explicitly set it to barebox.bin instead (which
+> should be mentioned in the help text then).
 
-On 26 February 2016 at 16:43, Peter Korsgaard <peter@korsgaard.com> wrote:
+ACK. Done. I solved this with the above default and help text pointing the user
+to use 'barebox.bin' for older versions. I'm just waiting for Yegor, and then
+I'll repost.
 
-> >>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
->
->  > Hi,
->  > I'm trying to compile the test editor: nano, with raspberrypi2_defconf
->  > configuration and fail. It seems to be that the problem is in the source
->  > file: char.c.
->
->  > I attached you the log of the make:
->
->  > ---
->  > ...
->  >      IGNORE_CALL_RESULT(mbtowc(NULL, NULL, 0));
->  >      ^
->  > chars.c: In function ?wctomb_reset?:
->  > chars.c:101:5: warning: implicit declaration of function ?wctomb?
->  > [-Wimplicit-function-declaration]
->  >      IGNORE_CALL_RESULT(wctomb(NULL, 0));
->
-> Nano needs wide character support. It sounds like you have built a
-> toolchain without it, and then changed the toolchain configuration and
-> added nano without doing a clean rebuild.
->
-> You need to do a clean rebuild if you change toolchain options.
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160229/5b35e97d/attachment.html>
+Right now a user-friendly warning is generated if an old config is used and
+this config item has not yet been set. I can have the makefile also generate a
+hint for older barebox versions if the image filename isn't found:
+- Do you think the additional complexity is warranted?
+
+>  We should find a good way to deal with the images/ part of the path, however.
+> This could e.g. be done in the .mk file, by checking both the top dir and the
+> images dir.
+
+ACK. Done. In v4 I first try the build ./ directory, and then ./images.
+
+>  Regards,
+>  Arnout
+
+[snip]
+
+- Pieter
