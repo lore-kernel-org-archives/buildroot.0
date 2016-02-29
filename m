@@ -1,68 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Feb 2016 23:05:40 +0100
-Subject: [Buildroot] [git commit] package/kexec: Fix musl build issue
-	related to loff_t
-Message-ID: <20160302202755.450E47FA0E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 29 Feb 2016 23:46:11 +0100
+Subject: [Buildroot] [git commit] package/kodi: not available using a
+	musl-based toolchain
+Message-ID: <20160302202800.56EDB7F98B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae047147e8a08a769ab5491b1aa00db57645e458
+commit: https://git.buildroot.net/buildroot/commit/?id=898de0af5b511c9dfb40f00469fb518810668ec0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/c19/c19a016b7fd50b8cef110e70e6f3af7cd0369368/
+The build stops with
+configure: error: unsupported host (i586-buildroot-linux-musl)
+due to musl not being supported in
+https://github.com/xbmc/xbmc/blob/Isengard/m4/xbmc_arch.m4
 
-[Peter: extend commit message]
+Removing this obstacle will show that musl is really not being
+supported, the build will fail:
+
+In file included from emu_msvcrt.cpp:64:0:
+emu_msvcrt.h:93:3: error: ???__off64_t??? does not name a type
+   __off64_t dll_lseeki64(int fd, __off64_t lPos, int iWhence);
+   ^
+emu_msvcrt.h:94:3: error: ???__off_t??? does not name a type
+   __off_t dll_lseek(int fd, __off_t lPos, int iWhence);
+   ^
+
+I know these problems are fixable and the voidlinux projects seems to
+have done it already for 15.2-Isengard:
+https://github.com/voidlinux/void-packages/tree/99f74705bc6520297d689fae4bcc9606c71ad34f/srcpkgs/kodi/patches
+
+For Jarvis-16.0 these patches have to be rebased at a later stage.
+For now block the Kodi package with musl-based toolchains to avoid
+build errors.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-vmcore-dmesg-Define-_GNU_SOURCE.patch     | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/kodi/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/kexec/0001-vmcore-dmesg-Define-_GNU_SOURCE.patch b/package/kexec/0001-vmcore-dmesg-Define-_GNU_SOURCE.patch
-new file mode 100644
-index 0000000..adaac2f
---- /dev/null
-+++ b/package/kexec/0001-vmcore-dmesg-Define-_GNU_SOURCE.patch
-@@ -0,0 +1,38 @@
-+Fix musl build
-+
-+Downloaded from http://patchwork.openembedded.org/patch/112685/
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+
-+From d811875a41b4628040abaada3da29b7b9592e757 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 9 Jan 2016 17:16:16 -0800
-+Subject: [PATCH] vmcore-dmesg: Define _GNU_SOURCE
-+
-+loff_t is guarded with _GNU_SOURCE on some C library implementations
-+e.g. musl since this type is not defined by POSIX. Define _GNU_SOURCE to
-+include this define, it should help compiling on musl while nothing
-+changes for glibc based systems since there _GNU_SOURCE is already
-+defined
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+---
-+Upstream-Status: Submitted
-+
-+ vmcore-dmesg/vmcore-dmesg.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/vmcore-dmesg/vmcore-dmesg.c b/vmcore-dmesg/vmcore-dmesg.c
-+index 0364636..a8f56df 100644
-+--- a/vmcore-dmesg/vmcore-dmesg.c
-++++ b/vmcore-dmesg/vmcore-dmesg.c
-+@@ -1,4 +1,5 @@
-+ #define _XOPEN_SOURCE 600
-++#define _GNU_SOURCE
-+ #define _LARGEFILE_SOURCE 1
-+ #define _FILE_OFFSET_BITS 64
-+ #include <endian.h>
-+-- 
-+2.7.0
-+
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 23468cc..13be622 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -2,11 +2,12 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+ 	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) && BR2_PACKAGE_BOOST_ARCH_SUPPORTS
+ 
+-comment "kodi needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
++comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_KODI_EGL_GLES
+@@ -92,6 +93,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_PACKAGE_KODI_EGL_GLES || BR2_PACKAGE_KODI_GL
+ 	depends on BR2_USE_MMU # python
+ 	depends on BR2_USE_WCHAR
