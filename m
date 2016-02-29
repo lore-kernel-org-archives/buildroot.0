@@ -1,66 +1,44 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 29 Feb 2016 17:00:56 +0000
-Subject: [Buildroot] [PATCH] sox: disable SSP when using MIPS Codescape
-	toolchains
-In-Reply-To: <20160229175158.3c01895a@free-electrons.com>
-References: <1456763982-36511-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160229175158.3c01895a@free-electrons.com>
-Message-ID: <56D47948.9020505@imgtec.com>
+From: Jeroen Roovers <jer@airfi.aero>
+Date: Mon, 29 Feb 2016 19:22:50 +0100
+Subject: [Buildroot] [PATCH] pkgconf: Add a symlink to the
+	GNU_TARGET_NAME-pkg-config
+Message-ID: <1456770170-6326-1-git-send-email-jer@airfi.aero>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+ Lots of packages start to call pkg-config "properly" and run into
+ failures like this:
 
-On 29/02/16 16:51, Thomas Petazzoni wrote:
-> Vicente,
-> 
-> On Mon, 29 Feb 2016 16:39:42 +0000, Vicente Olivert Riera wrote:
-> 
->> diff --git a/package/sox/sox.mk b/package/sox/sox.mk
->> index f4d1608..61f5220 100644
->> --- a/package/sox/sox.mk
->> +++ b/package/sox/sox.mk
->> @@ -13,6 +13,12 @@ SOX_CONF_OPTS = --with-distro="Buildroot" --without-ffmpeg --disable-gomp \
->>  SOX_LICENSE = GPLv2+ (sox binary), LGPLv2.1+ (libraries)
->>  SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
->>  
->> +# MIPS Codescape toolchains don't support stack-smashing protection
->> +# despite of using glibc.
->> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS)$(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
->> +SOX_CONF_OPTS += --disable-stack-protector
->> +endif
-> 
-> Shouldn't we instead change BR2_TOOLCHAIN_HAS_SSP so that it is defined
-> to false for those toolchains?
+*
+* System Logging Utilities
+*
+syslogd (SYSLOGD) [N/y/?] n
+klogd (KLOGD) [N/y/?] n
+logger (LOGGER) [Y/n/?] y
+make[2]: .../output/host/usr/bin/arm-buildroot-linux-gnueabihf-pkg-config: Command not found
+make[2]: .../output/host/usr/bin/arm-buildroot-linux-gnueabihf-pkg-config: Command not found
+make[1]: Leaving directory '.../output/build/busybox-1.24.1'
 
-Uhm..., how would you do that? BR2_TOOLCHAIN_HAS_SSP is selected by
-BR2_TOOLCHAIN_USES_GLIBC. We would need to do changes in the toolchain
-infra in order to not define it in that place, and define it
-individually for every toolchain. Is that what you mean?
+ By setting a symlink to the expected target we might even solve some
+ real problems.
+---
+ package/pkgconf/pkgconf.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Regards,
-
-Vincent.
-
-> This way:
-> 
->  1/ The existing BR2_TOOLCHAIN_HAS_SSP tests would do the right thing
->     for the Codescape toolchains.
-> 
->  2/ The additional test you are adding would also be useful for other
->     non-SSP capable toolchains.
-> 
-> That being said, we're very close to 2016.02, so I'm not sure this will
-> get into 2016.02. If the folks releasing the Codescape toolchain
-> release soon a version which has a properly working SSP implementation,
-> then we could simply forget about this problem until they make this
-> release. If of course such a new toolchain version is not planned in
-> the near future, we would need to fix the problem.
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index c8b0cba..a183a1c 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
+@@ -22,6 +22,7 @@ define HOST_PKGCONF_INSTALL_WRAPPER
+ 	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
+ 		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
+ 		$(HOST_DIR)/usr/bin/pkg-config
++	ln -sf $(HOST_DIR)/usr/bin/pkg-config $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-pkg-config
+ endef
+ 
+ define HOST_PKGCONF_STATIC
+-- 
+2.4.10
