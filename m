@@ -1,44 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 22:33:07 +0100
-Subject: [Buildroot] [PATCH/next v9 00/28] package/freeswitch: new
- package
-In-Reply-To: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160229223307.250b8c8c@free-electrons.com>
+Date: Mon, 29 Feb 2016 22:38:31 +0100
+Subject: [Buildroot] [git commit branch/next] package/lz4: bump version to
+	r131
+Message-ID: <20160229213908.F0B11802AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=8ad38a4fc2007df4bee9a941aed46c8771b6a84c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 27 Feb 2016 16:26:50 +0100, Bernd Kuhls wrote:
+systemd v228 requires lz4 >= 125
 
-> this patch series splits my previous patch into smaller chunks for easier
-> review as requested by Luca and Thomas. I also removed all options from
-> Config.in.
-> 
-> Instead of enabling or disabling modules in the upstream modules.conf I
-> decided to delete that file in the first patch to provide a minimal
-> build for easier review, please keep in mind that I never did a run-time
-> test with this minimal version. A lot of modules, desired as a default
-> set, are added with the second patch - all of them have no external
-> dependencies. The rest of the patch series consists of modules having
-> some form of dependency, added module by module for easier review.
+Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
+[Thomas: only pass PREFIX=/usr at install time instead of using
+LZ4_MAKE_OPTS, and also pass it for the host installation.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lz4/lz4.hash |  2 ++
+ package/lz4/lz4.mk   | 15 +++++++++------
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-Thanks for this patch series. Besides my build issue and minor comments
-on PATCH 01/28, it looks fine. I've looked at all other patches, and
-despite a really minor nit on PATCH 26/28, I think we'll be able to
-apply this once the PATCH 01/28 problems are fixed.
-
-The fact that you did split the package addition in a minimal package
-and then trivial additions of optional dependencies really made the
-whole thing a lot easier to look at and review, so thanks for having
-done that!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lz4/lz4.hash b/package/lz4/lz4.hash
+new file mode 100644
+index 0000000..1281284
+--- /dev/null
++++ b/package/lz4/lz4.hash
+@@ -0,0 +1,2 @@
++# sha256 locally computed
++sha256 9d4d00614d6b9dec3114b33d1224b6262b99ace24434c53487a0c8fd0b18cfed  lz4-r131.tar.gz
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 38e10d8..576b2a2 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LZ4_VERSION = r123
++LZ4_VERSION = r131
+ LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
+ LZ4_INSTALL_STAGING = YES
+ LZ4_LICENSE = BSD-2c
+@@ -12,7 +12,7 @@ LZ4_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+ define LZ4_DISABLE_SHARED
+-	$(SED) '/SHARED/d' $(@D)/Makefile
++	$(SED) '/SHARED/d' $(@D)/lib/Makefile
+ endef
+ LZ4_POST_PATCH_HOOKS += LZ4_DISABLE_SHARED
+ endif
+@@ -22,19 +22,22 @@ define HOST_LZ4_BUILD_CMDS
+ endef
+ 
+ define HOST_LZ4_INSTALL_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(HOST_DIR)
++	$(MAKE) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
++		PREFIX=/usr install -C $(@D)
+ endef
+ 
+ define LZ4_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) liblz4
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)/lib
+ endef
+ 
+ define LZ4_INSTALL_STAGING_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(STAGING_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(STAGING_DIR) \
++		PREFIX=/usr install -C $(@D)
+ endef
+ 
+ define LZ4_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) install DESTDIR=$(TARGET_DIR)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) DESTDIR=$(TARGET_DIR) \
++		PREFIX=/usr install -C $(@D)/lib
+ endef
+ 
+ $(eval $(generic-package))
