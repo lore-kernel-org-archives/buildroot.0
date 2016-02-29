@@ -1,42 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 29 Feb 2016 23:15:36 +0100
-Subject: [Buildroot] [PATCH 04/32] package/systemd: add
-	--enable/disable-lz4
-In-Reply-To: <87h9grnpjv.fsf@dell.be.48ers.dk>
-References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-5-git-send-email-gabe@hashrabbit.co>
- <20160229224805.15d9c15f@free-electrons.com>
- <87h9grnpjv.fsf@dell.be.48ers.dk>
-Message-ID: <20160229231536.0c95f520@free-electrons.com>
+Date: Mon, 29 Feb 2016 23:17:06 +0100
+Subject: [Buildroot] [git commit branch/next] package/lz4: only use PREFIX
+	for host installation
+Message-ID: <20160229221805.1206F800E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter Korsgaard,
+commit: https://git.buildroot.net/buildroot/commit/?id=c8cca4c192e1890b2f1fbe422d8b63e405b46f67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 29 Feb 2016 23:02:12 +0100, Peter Korsgaard wrote:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
-> 
->  > Dear Gabe Evans,
->  > On Thu, 25 Feb 2016 21:55:13 +0000, Gabe Evans wrote:
->  >> Signed-off-by: Gabe Evans <gabe@hashrabbit.co>
->  >> ---
->  >> package/systemd/Config.in  | 3 ++-
->  >> package/systemd/systemd.mk | 7 +++++++
->  >> 2 files changed, 9 insertions(+), 1 deletion(-)
-> 
->  > Applied to master, thanks.
-> 
-> Seems like you applied it to next instead?
+As noted by Peter Korsgaard, using DESTDIR=$(HOST_DIR) and PREFIX=/usr
+for the host installation is useless and actually incorrect (the
+pkg-config file contains incorrect paths). Instead, using
+PREFIX=$(HOST_DIR)/usr is simpler, and actually correct.
 
-Gaah, yes, indeed. I have keyboard shortcuts to send those "applied to
-<foo>, thanks" e-mails, so it's pretty easy to make a mistake while
-sending out the e-mail. Sorry for that :/
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lz4/lz4.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
+index 576b2a2..d2b09bb 100644
+--- a/package/lz4/lz4.mk
++++ b/package/lz4/lz4.mk
+@@ -22,8 +22,8 @@ define HOST_LZ4_BUILD_CMDS
+ endef
+ 
+ define HOST_LZ4_INSTALL_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) DESTDIR=$(HOST_DIR) \
+-		PREFIX=/usr install -C $(@D)
++	$(MAKE) $(HOST_CONFIGURE_OPTS) PREFIX=$(HOST_DIR)/usr \
++		install -C $(@D)
+ endef
+ 
+ define LZ4_BUILD_CMDS
