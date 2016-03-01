@@ -1,37 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Mar 2016 12:04:06 +0100
-Subject: [Buildroot] [PATCH v4] docs/manual: add section about patch
-	licensing
-In-Reply-To: <1456830064-15398-2-git-send-email-luca@lucaceresoli.net>
-References: <1456830064-15398-1-git-send-email-luca@lucaceresoli.net>
- <1456830064-15398-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160301120406.6792ebba@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Tue, 1 Mar 2016 08:10:20 -0300
+Subject: [Buildroot] [PATCH 1/2] sdl_mixer: add patch to fix
+ SDL_mixer.pc for static linking
+In-Reply-To: <20160301091924.29fe2fe1@free-electrons.com>
+References: <1456810926-9822-1-git-send-email-rprebello@gmail.com>
+ <20160301091924.29fe2fe1@free-electrons.com>
+Message-ID: <CABLs7GWQFXyfaWcqkXTzVwiTuqSTM+BYTxoC2ZgcvqpzeAGfWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca,
+Thomas,
 
-On Tue,  1 Mar 2016 12:01:04 +0100, Luca Ceresoli wrote:
-> Use the same text that is used in COPYING.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Steve Calfee <stevecalfee@gmail.com>
+2016-03-01 5:19 GMT-03:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+[snip]
+>> +# We're patching configure.in, but SDL_mixer is not compatible with our
+>> +# autoreconf mechanism, so we have to do it manually instead of setting
+>> +# SDL_MIXER_AUTORECONF = YES
+>> +define SDL_MIXER_RUN_AUTOGEN
+>> +     cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+>> +endef
+>> +SDL_MIXER_PRE_CONFIGURE_HOOKS += SDL_MIXER_RUN_AUTOGEN
+>> +
+>
+> If you do this, then you need to manually add host-autoconf
+> host-automake and host-libtool to SDL_MIXER_DEPENDENCIES. It is
+> normally done automatically by <pkg>_AUTORECONF = YES, but since you're
+> not using it, you must do it manually.
+>
 
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Right. I'll add the missing dependencies and respin this patch.
 
-This can go in 2016.02 IMO.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Rodrigo
