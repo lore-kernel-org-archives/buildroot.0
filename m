@@ -1,66 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Mar 2016 19:52:49 +0100
-Subject: [Buildroot] [git commit] tn5250: don't reference SSLv2/v3 functions
-	if openssl is built without them
-Message-ID: <20160301185505.C5D9F80429@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  1 Mar 2016 21:09:23 +0200
+Subject: [Buildroot] [PATCH] slang: fix static link with readline
+Message-ID: <dc4fefb45e684d66ad20ead359029860d48ba898.1456859363.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2f6b5d69762edbcf820b74236683ca801b0c158
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+slang forgets ncurses that is a dependency of readline when linking the
+slsh binary. Correct this.
+
+While at it, also make sure to use staging ncurses5-config script and not the
+host one. slang uses ncurses5-config to find terminfo location, and only
+staging ncurses5-config provides the correct run-time location.
 
 Fixes:
-http://autobuild.buildroot.net/results/83e/83e29482cad6adef18a0e97bc8e75df302467dbb/
+http://autobuild.buildroot.net/results/1dc/1dc52048254c32a24070fef1c1039cebb32e7ac1/
+http://autobuild.buildroot.net/results/c17/c176511cbb147c2d8cb0ec0ff3c1612ce8971cb8/
+http://autobuild.buildroot.net/results/78d/78dc2ba07b1d7f888aab94e223f3e0b1a1df3af5/
 
-The recent openssl security bump disabled SSLv2 support, but tn5250 was
-still referencing SSLv2 functions breaking the build.
-
-Include a patch from OpenBSD to only reference the SSLv2 / SSLv3 symbols if
-openssl is built with support for them.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...lding-against-OpenSSL-without-SSLv2_SSLv3.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+v2:
+   * Use ncurses5-config to get ncurses link flags (Peter)
 
-diff --git a/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch b/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
-new file mode 100644
-index 0000000..67f0fa6
---- /dev/null
-+++ b/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
-@@ -0,0 +1,32 @@
-+$OpenBSD: patch-lib5250_sslstream_c,v 1.1 2015/10/07 16:09:04 jca Exp $
-+
-+Allow building against OpenSSL without SSLv2/SSLv3 support.
-+
-+Download from:
-+http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tn5250/patches/patch-lib5250_sslstream_c
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+--- a/lib5250/sslstream.c.orig	Fri Nov 21 09:12:21 2008
-++++ b/lib5250/sslstream.c	Tue Oct  6 21:32:29 2015
-+@@ -368,13 +368,19 @@ int tn5250_ssl_stream_init (Tn5250Stream *This)
-+         methstr[4] = '\0';
-+    }
-+ 
-++#ifndef OPENSSL_NO_SSL2
-+    if (!strcmp(methstr, "ssl2")) {
-+         meth = SSLv2_client_method();         
-+         TN5250_LOG(("SSL Method = SSLv2_client_method()\n"));
-+-   } else if (!strcmp(methstr, "ssl3")) {
-++   } else
-++#endif
-++#ifndef OPENSSL_NO_SSL3
-++   if (!strcmp(methstr, "ssl3")) {
-+         meth = SSLv3_client_method();         
-+         TN5250_LOG(("SSL Method = SSLv3_client_method()\n"));
-+-   } else {
-++   } else
-++#endif
-++   {
-+         meth = SSLv23_client_method();         
-+         TN5250_LOG(("SSL Method = SSLv23_client_method()\n"));
-+    }
+   * Move static build handling into the readline block (Peter)
+
+   * Clarify title and commit log
+---
+ package/slang/slang.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 1a7576afc363..9078bf293c5a 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -40,6 +40,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ SLANG_DEPENDENCIES += ncurses
++SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
+ else
+ SLANG_CONF_OPTS += ac_cv_path_nc5config=no
+ endif
+@@ -47,6 +48,9 @@ endif
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ SLANG_CONF_OPTS += --with-readline=gnu
+ SLANG_DEPENDENCIES += readline
++ifeq ($(BR2_STATIC_LIBS),y)
++SLANG_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/ncurses5-config --libs`"
++endif
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-- 
+2.7.0
