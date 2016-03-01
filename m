@@ -1,72 +1,213 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  1 Mar 2016 15:03:11 +0200
-Subject: [Buildroot] [PATCH] gamin: fix build with musl
-Message-ID: <d03fac44ed52ad7fe05fdd1bb6040a260cfc14b7.1456837391.git.baruch@tkos.co.il>
+From: Antoine Tenart <antoine.tenart@free-electrons.com>
+Date: Tue, 1 Mar 2016 14:10:16 +0100
+Subject: [Buildroot] [PATCH v5] qt5tools: new package
+In-Reply-To: <1456006083-15740-1-git-send-email-ps.report@gmx.net>
+References: <1456006083-15740-1-git-send-email-ps.report@gmx.net>
+Message-ID: <20160301131016.GC3242@kwain>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-musl does not provide the non portable PTHREAD_MUTEX_RECURSIVE_NP. Add a patch
-removing the assumption the PTHREAD_MUTEX_RECURSIVE_NP is available when
-'linux' is defined.
+Hello Peter,
 
-Upstream had no new release since 2008, so there is no much hope of getting
-this fix applied upstream.
+On Sat, Feb 20, 2016 at 11:08:03PM +0100, Peter Seiderer wrote:
+> - host programs: lconvert, lrelease and lupdate
+> - target programs: pixeltool, qtdiag, qtpath and qtplugininfo
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Changes v4 -> v5:
+>   - use install target for linguist staging install, copy
+>     cmake module files too (suggested by Antoine Tenart)
 
-Also, fix the pthread dependency comment. gamin code uses pthread directly.
+I tested this new version, and used the cmake modules provided by
+qt5tools. It worked fine.
 
-Fixes:
-http://autobuild.buildroot.net/results/3a9/3a9328f384fc648ae61316402a84eaffb175881b/
-http://autobuild.buildroot.net/results/69d/69d2a93bc97ab0d70c3acb2f9c9f28612ea95871/
-http://autobuild.buildroot.net/results/092/092ac7380beb8ce403a1a6fd8e4176e9234413a3/
+Thanks!
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch | 20 ++++++++++++++++++++
- package/gamin/Config.in                              |  2 +-
- 2 files changed, 21 insertions(+), 1 deletion(-)
- create mode 100644 package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
+Antoine
 
-diff --git a/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch b/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
-new file mode 100644
-index 000000000000..429127736c00
---- /dev/null
-+++ b/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
-@@ -0,0 +1,20 @@
-+Fix missing PTHREAD_MUTEX_RECURSIVE_NP
-+
-+The musl C library does not provide the non portable
-+PTHREAD_MUTEX_RECURSIVE_NP. Test for PTHREAD_MUTEX_RECURSIVE_NP only.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+
-+diff -Nuar gamin-0.1.10-orig/libgamin/gam_data.c gamin-0.1.10/libgamin/gam_data.c
-+--- gamin-0.1.10-orig/libgamin/gam_data.c	2007-07-04 16:36:48.000000000 +0300
-++++ gamin-0.1.10/libgamin/gam_data.c	2016-03-01 14:50:18.931696959 +0200
-+@@ -470,7 +470,7 @@
-+     }
-+     if (is_threaded > 0) {
-+ 	pthread_mutexattr_init(&attr);
-+-#if defined(linux) || defined(PTHREAD_MUTEX_RECURSIVE_NP)
-++#if defined(PTHREAD_MUTEX_RECURSIVE_NP)
-+ 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
-+ #else
-+ 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-diff --git a/package/gamin/Config.in b/package/gamin/Config.in
-index c191be06f65d..55e037a4a40d 100644
---- a/package/gamin/Config.in
-+++ b/package/gamin/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_GAMIN
- 	bool "gamin"
- 	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBGLIB2
- 	help
+> Changes v3 -> v4:
+>   - fix trailing whitespace
+> 
+> Changes v2 -> v3:
+>   - rebased (update to qt-5.5.1)
+>   - drop unneeded select libpng line (Thomas Petazzoni)
+>   - drop unneeded line break (Thomas Petazzoni)
+>   - pixeltool needs BR2_PACKAGE_QT5BASE_GUI and
+>     BR2_PACKAGE_QT5BASE_WIDGETS too
+>   - use foreach instead of repetitive open coding (Thomas Petazzoni)
+>   - install host tools to host directory instead of staging
+>     directory (Thomas Petazzoni)
+>   - add more comment about linguist tools dependency on
+>     qt5declarative (Thomas Petazzoni)
+> 
+> Changes v1 -> v2:
+>   - add target programs, reword commit message
+> ---
+>  package/qt5/Config.in              |  1 +
+>  package/qt5/qt5tools/Config.in     | 42 ++++++++++++++++++++++++
+>  package/qt5/qt5tools/qt5tools.hash |  2 ++
+>  package/qt5/qt5tools/qt5tools.mk   | 66 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 111 insertions(+)
+>  create mode 100644 package/qt5/qt5tools/Config.in
+>  create mode 100644 package/qt5/qt5tools/qt5tools.hash
+>  create mode 100644 package/qt5/qt5tools/qt5tools.mk
+> 
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index ad6226e..1c42102 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -42,6 +42,7 @@ source "package/qt5/qt5quickcontrols/Config.in"
+>  source "package/qt5/qt5sensors/Config.in"
+>  source "package/qt5/qt5serialport/Config.in"
+>  source "package/qt5/qt5svg/Config.in"
+> +source "package/qt5/qt5tools/Config.in"
+>  source "package/qt5/qt5webchannel/Config.in"
+>  source "package/qt5/qt5websockets/Config.in"
+>  source "package/qt5/qt5x11extras/Config.in"
+> diff --git a/package/qt5/qt5tools/Config.in b/package/qt5/qt5tools/Config.in
+> new file mode 100644
+> index 0000000..9e939f2
+> --- /dev/null
+> +++ b/package/qt5/qt5tools/Config.in
+> @@ -0,0 +1,42 @@
+> +config BR2_PACKAGE_QT5TOOLS
+> +	bool "qt5tools"
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  This package corresponds to the qt5tools module.
+> +
+> +	  http://qt.io
+> +
+> +if BR2_PACKAGE_QT5TOOLS
+> +
+> +config BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
+> +	bool "Linguist host tools (lconvert, lrelease, lupdate)"
+> +	help
+> +	  This option enables the linguist host tools
+> +	  lconvert, lrelease and lupdate.
+> +
+> +config BR2_PACKAGE_QT5TOOLS_PIXELTOOL
+> +	bool "pixeltool"
+> +	select BR2_PACKAGE_QT5BASE_GUI
+> +	select BR2_PACKAGE_QT5BASE_WIDGETS
+> +	select BR2_PACKAGE_QT5BASE_PNG # saving png images
+> +	help
+> +	  Compile and install the pixeltool program.
+> +
+> +config BR2_PACKAGE_QT5TOOLS_QTDIAG
+> +	bool "qtdiag"
+> +	help
+> +	  Compile and install the qtdiag program.
+> +
+> +config BR2_PACKAGE_QT5TOOLS_QTPATHS
+> +	bool "qtpaths"
+> +	help
+> +	  Compile and install the qtpaths program.
+> +
+> +config BR2_PACKAGE_QT5TOOLS_QTPLUGININFO
+> +	bool "qtplugininfo"
+> +	help
+> +	  Compile and install the qtplugininfo program.
+> +
+> +endif
+> diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
+> new file mode 100644
+> index 0000000..f54c94a
+> --- /dev/null
+> +++ b/package/qt5/qt5tools/qt5tools.hash
+> @@ -0,0 +1,2 @@
+> +# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qttools-opensource-src-5.5.1.tar.xz.mirrorlist
+> +sha256 4361f6ce49717058160908297841a18b94645cec593d1b48fb126c9d06c87bfd qttools-opensource-src-5.5.1.tar.xz
+> diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+> new file mode 100644
+> index 0000000..f3d78ce
+> --- /dev/null
+> +++ b/package/qt5/qt5tools/qt5tools.mk
+> @@ -0,0 +1,66 @@
+> +################################################################################
+> +#
+> +# qt5tools
+> +#
+> +################################################################################
+> +
+> +QT5TOOLS_VERSION = $(QT5_VERSION)
+> +QT5TOOLS_SITE = $(QT5_SITE)
+> +QT5TOOLS_SOURCE = qttools-opensource-src-$(QT5BASE_VERSION).tar.xz
+> +
+> +QT5TOOLS_DEPENDENCIES = qt5base
+> +QT5TOOLS_INSTALL_STAGING = YES
+> +
+> +# linguist tools compile conditionally on qtHaveModule(qmldevtools-private),
+> +# but the condition is used only used to decide if lupdate will support
+> +# parsing qml files (via setting QT_NO_QML define), no linking against
+> +# target qt5 will happen
+> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+> +QT5TOOLS_DEPENDENCIES += qt5declarative
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> +QT5TOOLS_LICENSE = LGPLv2.1 with exception or LGPLv3
+> +QT5TOOLS_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+> +else
+> +QT5TOOLS_LICENSE = Commercial license
+> +QT5TOOLS_REDISTRIBUTE = NO
+> +endif
+> +
+> +QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+> +	linguist/lconvert linguist/lrelease linguist/lupdate
+> +ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
+> +# use install target to copy cmake module files
+> +define QT5TOOLS_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/linguist install
+> +endef
+> +endif
+> +
+> +QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
+> +QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
+> +
+> +QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTDIAG) += qtdiag
+> +QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTDIAG) += qtdiag
+> +
+> +QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
+> +QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTPATHS) += qtpaths
+> +
+> +QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO) += qtplugininfo
+> +QT5TOOLS_INSTALL_TARGET_$(BR2_PACKAGE_QT5TOOLS_QTPLUGININFO) += qtplugininfo
+> +
+> +define QT5TOOLS_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+> +endef
+> +
+> +define QT5TOOLS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) sub-src-qmake_all
+> +	$(foreach p,$(QT5TOOLS_BUILD_DIRS_y), \
+> +		$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/src/$(p)$(sep))
+> +endef
+> +
+> +define QT5TOOLS_INSTALL_TARGET_CMDS
+> +	$(foreach p,$(QT5TOOLS_INSTALL_TARGET_y), \
+> +		$(INSTALL) -D -m0755 $(@D)/bin/$(p) $(TARGET_DIR)/usr/bin/$(p)$(sep))
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.1.4
+> 
+
 -- 
-2.7.0
+Antoine T?nart, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: Digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160301/7a865853/attachment.asc>
