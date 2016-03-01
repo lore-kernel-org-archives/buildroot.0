@@ -1,53 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Mar 2016 11:45:09 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-02-29
-In-Reply-To: <20160301104110.GO2399@tarshish>
-References: <20160301073021.01B48101C84@stock.ovh.net>
- <20160301104110.GO2399@tarshish>
-Message-ID: <20160301114509.7f078e7c@free-electrons.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue,  1 Mar 2016 07:58:55 -0300
+Subject: [Buildroot] [PATCH] mongodb: bump to version 3.3.2
+Message-ID: <1456829935-15201-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 1 Mar 2016 12:41:10 +0200, Baruch Siach wrote:
-
-> On Tue, Mar 01, 2016 at 08:30:20AM +0100, Thomas Petazzoni wrote:
-> >     mips64el |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/752eeb388e7d1ab8de28e61b3a0d91953e62c3da/
-> > microblazeel |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/45cb459f030edf4cb519133a4b621bb44d9ce901/
-> >       x86_64 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
-> 
-> The direct trigger of these failures is apparently c7bfa2310724 (package/zsh: 
-> add optional support for pcre, 2016-02-21). But the real cause seems to be 
-> that the pcre-config script of host-pcre overwrites that of target pcre. That 
-> causes all sort of mis-detections in the configure stage. Not sure what is the 
-> right fix here. A pre-package staging directory might fix most occurrences of 
-> this problem.
-
-Normally the rule is that:
-
- 1/ *-config scripts for host libraries are installed in
-    $(HOST_DIR)/usr/bin
-
- 2/ *-config scripts for target libraries are installed in
-    $(STAGING_DIR)/usr/bin
-
- 3/ Target packages are convinced to use the *-config scripts from
-    $(STAGING_DIR) by passing the appropriate configure environment
-    variables.
-
-How is it possible that the pcre-config script of host-pcre overwrite
-the one of target pcre ? They should not be installed in the same
-directories.
-
-Best regards,
-
-Thomas
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index 0bdd66db93f8..e882d23b52a9 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 316496375f41f322839529d36e75e3275fdec468f7656fdbeb53ec8dc1ca5275  mongodb-r3.2.0.tar.gz
++sha256 26fc05802dfc1e7d1f30e4ed418ba2bc7396b6fa5b298c18d6c9945dff2b8d08  mongodb-r3.3.2.tar.gz
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 1027c83fac18..6cc0b9e56b6c 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION_BASE = 3.2.0
++MONGODB_VERSION_BASE = 3.3.2
+ MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+ MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
