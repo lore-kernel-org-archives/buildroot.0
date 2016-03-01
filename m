@@ -1,34 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Mar 2016 23:11:10 +0100
-Subject: [Buildroot] Rework musl fix patches
-In-Reply-To: <3behqcxu66.ln2@ID-313208.user.individual.net>
-References: <20160221235940.0b4d71ec@free-electrons.com>
- <20160301104002.00d32dcb@free-electrons.com>
- <3behqcxu66.ln2@ID-313208.user.individual.net>
-Message-ID: <20160301231110.4d16de1a@free-electrons.com>
+Date: Tue, 1 Mar 2016 23:24:31 +0100
+Subject: [Buildroot] Buildroot 2016.02 released
+In-Reply-To: <CAJJ6jxtaKja3gpcoG+ex8mat5Lw+R=mMeWk3CO2uPCA9jZf+OA@mail.gmail.com>
+References: <87lh61kikr.fsf@dell.be.48ers.dk>
+ <CAJJ6jxtaKja3gpcoG+ex8mat5Lw+R=mMeWk3CO2uPCA9jZf+OA@mail.gmail.com>
+Message-ID: <20160301232431.4be5e1c3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Steve,
 
-On Tue, 01 Mar 2016 22:31:47 +0100, Bernd Kuhls wrote:
+On Tue, 1 Mar 2016 14:06:24 -0800, Steve Calfee wrote:
 
-> the merge of the next branch to master will keep me busy rebasing the 
-> rest of the Kodi series, I also have a lot of libs from x11 to add to 
-> _DEPENDENCIES for quite a few packages. After that I will return to the 
-> musl area, I lowered my priority for it because the number of autobuild 
-> errors dropped ;) If someone wants to improve a patch of mine, regardless 
-> whether musl-related or not, to fix an autobuild error for example, 
-> everybody is free to bring it into a state where you will accept it, I 
-> won't mind ;)
+> I have a suggestion for GSOC.
 
-OK, thanks a lot for your input. Maybe we should start a Wiki page or
-add bug tracker entries to track the remaining musl issues.
+Unfortunately, we just learned yesterday that the Buildroot has again
+not be selected by Google to be part of the upcoming Google Summer of
+Code program.
 
-Best regards,
+> How about give the intern a raspberry pi
+> (or any other dedicated, embedded system) and try to implement locale
+> and utf8 for a busybox system? That will not help buildroot
+> development, but would really help buildroot users.
+
+I am not sure what is missing to achieve what you suggest. We already
+have locale support, and some of these locales use the UTF-8 charset.
+
+Can you describe more precisely what doesn't work for you?
 
 Thomas
 -- 
