@@ -1,56 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 1 Mar 2016 13:37:09 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-02-29
-In-Reply-To: <20160301114509.7f078e7c@free-electrons.com>
-References: <20160301073021.01B48101C84@stock.ovh.net>
- <20160301104110.GO2399@tarshish>
- <20160301114509.7f078e7c@free-electrons.com>
-Message-ID: <20160301113709.GP2399@tarshish>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  1 Mar 2016 08:47:28 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.2.3
+Message-ID: <1456832848-23217-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Tue, Mar 01, 2016 at 11:45:09AM +0100, Thomas Petazzoni wrote:
-> On Tue, 1 Mar 2016 12:41:10 +0200, Baruch Siach wrote:
-> 
-> > On Tue, Mar 01, 2016 at 08:30:20AM +0100, Thomas Petazzoni wrote:
-> > >     mips64el |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/752eeb388e7d1ab8de28e61b3a0d91953e62c3da/
-> > > microblazeel |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/45cb459f030edf4cb519133a4b621bb44d9ce901/
-> > >       x86_64 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
-> > 
-> > The direct trigger of these failures is apparently c7bfa2310724 (package/zsh: 
-> > add optional support for pcre, 2016-02-21). But the real cause seems to be 
-> > that the pcre-config script of host-pcre overwrites that of target pcre. That 
-> > causes all sort of mis-detections in the configure stage. Not sure what is the 
-> > right fix here. A pre-package staging directory might fix most occurrences of 
-> > this problem.
-> 
-> Normally the rule is that:
-> 
->  1/ *-config scripts for host libraries are installed in
->     $(HOST_DIR)/usr/bin
-> 
->  2/ *-config scripts for target libraries are installed in
->     $(STAGING_DIR)/usr/bin
-> 
->  3/ Target packages are convinced to use the *-config scripts from
->     $(STAGING_DIR) by passing the appropriate configure environment
->     variables.
-> 
-> How is it possible that the pcre-config script of host-pcre overwrite
-> the one of target pcre ? They should not be installed in the same
-> directories.
-
-You are right, of course, I mixed it up. I have just posted a patch doing (3).
-
-baruch
-
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index b7330fc..a6d5187 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,2 +1,2 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.0.tar.bz2.sha256
+-sha256	79ff5305153d15931fbdda80c9612783b0283dee44f4c2af71aa37353daaa685	harfbuzz-1.2.0.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.3.tar.bz2.sha256
++sha256	8216d2404aaab7fde87be0365a90d64aa6c55928e104557cfcb37b54a096cb8c	harfbuzz-1.2.3.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 7cdc356..781c48e 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HARFBUZZ_VERSION = 1.2.0
++HARFBUZZ_VERSION = 1.2.3
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+2.4.10
