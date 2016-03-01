@@ -1,67 +1,69 @@
 From: Carlos Santos <casantos@datacom.ind.br>
-Date: Mon, 29 Feb 2016 22:44:02 -0300
-Subject: [Buildroot] [PATCH 1/2] scanpypi: new utility
-In-Reply-To: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
-References: <1438089330-18923-1-git-send-email-denis.thulin@openwide.fr>
-Message-ID: <1456796642-17793-1-git-send-email-casantos@datacom.ind.br>
+Date: Mon, 29 Feb 2016 23:09:01 -0300
+Subject: [Buildroot] [PATCH 1/1] packages/linux-pam: bump version to 1.1.8
+	-> 1.2.1
+In-Reply-To: <1440356578-2205-1-git-send-email-brendanheading@gmail.com>
+References: <1440356578-2205-1-git-send-email-brendanheading@gmail.com>
+Message-ID: <1456798141-25486-1-git-send-email-casantos@datacom.ind.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> An utility for creating python package from the python package index
-> It fetches packages info from http://pypi.python.org and generates
-> corresponding packages files.
+> Move to the latest release of linux-pam. This allows us to remove
+> a number of patches and consolidate the existing ones :
 > 
-> Signed-off-by: Denis THULIN <denis.thulin@openwide.fr>
+> - 0001-configure.patch
+> - 0007-rhosts.patch
+> 
+> these two patches deal with the ruserok function, which is not
+> usable with uclibc. Consolidated into
+> 0002-Conditionally-compile-per-ruserok-availability.patch.
+> 
+> - 0003-group.patch
+> - 0005-succeed.patch
+> - 0006-time.patch
+> 
+> these three patches deal with the innetgr function, which is not
+> usable with uclibc. Consolidated into
+> 0003-Conditionally-compile-per-innetgr-availability.patch.
+> 
+> - 0004-mkdir.patch
+> 
+> Fixed in upstream, no longer required.
+> 
+> - 0002-doc-makefile-am.patch
+> 
+> renamed to 0001-doc-makefile-am.patch.
+> 
+> - 0008-fix-CVE-2014-2583.patch
+> - 0009-fix-CVE-2013-7041.patch
+> 
+> These patches are already included in the new release and so
+> can be safely deleted.
 
 Tested-by: Carlos Santos <casantos@datacom.ind.br>
 
-When I ran the script on my machine I got an error from Python because
-it requires python-setuptools, which I did not have installed.
+Used the following configuration:
 
-$ uname -a Linux p7-1130br 4.2.0-30-generic #36-Ubuntu SMP Fri Feb 26 00:58:07 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux
-$ support/scripts/scanpypi delayqueue
-Traceback (most recent call last):
-  File "support/scripts/scanpypi", line 48, in <module>
-    import setuptools
-ImportError: No module named setuptools
+BR2_x86_64=y
+BR2_x86_corei7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/x86_64-ctng_locales-linux-gnu.tar.xz"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="x86_64-ctng_locales-linux-gnu"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_9=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_LIBFFI=y
+BR2_PACKAGE_LINUX_PAM=y
+BR2_PACKAGE_LIBPAM_RADIUS_AUTH=y
+BR2_PACKAGE_LIBPAM_TACPLUS=y
 
-I don't think it's a big deal for a support script but it would be nice
-to document the requirements in the initial comment block.
+Built linux-pam-1.2.1, libpam-tacplus-1.3.9 and libpam-radius-auth-1.4.0.
 
-Going forward...
-
-$ sudo apt-get install python-setuptools
-[...]
-
-Choose a random python pachage from PyPI and created the Buidroot package.
-
-$ support/scripts/scanpypi delayqueue
-buildroot package name for delayqueue: python-delayqueue
-Package: python-delayqueue
-Fetching package delayqueue
-Downloading package delayqueue from https://pypi.python.org/packages/source/d/delayqueue/delayqueue-0.0.3.tar.gz...
-Checking if package ./package/python-delayqueue already exists...
-Creating ./package/python-delayqueue/python-delayqueue.mk...
-WARNING: No license file found, please specify it manually afterwards
-Creating ./package/python-delayqueue/python-delayqueue.hash...
-Creating ./package/python-delayqueue/Config.in...
-[...]
-
-Edit package/Config.in and add to the "External python modules" menu
-a line containing
-
-        source "package/python-delayqueue/Config.in"                                                                                                  
-[...]
-
-$ make menuconfig
-[ Select the python-delayqueue package ]
-$ make python-delayqueue
-[...]
-Success!
-
-Verdict: your script seems to be a useful tool to create Python packages
-for Buildroot. Of course the package that it creates must be tested before
-submitting it upstream but that's another story.
+Did not perform a run-time test, since it would require a network setup with
+TACACS+ and RADIUS servers.
