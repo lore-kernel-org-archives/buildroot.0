@@ -1,57 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 01 Mar 2016 22:46:41 +0100
-Subject: [Buildroot] [PATCH/next v9 26/28] package/freeswitch: enable
- mod_imagick, add optional dependencies to imagemagick, libvpx & libyuv
-References: <1456586838-21197-1-git-send-email-bernd.kuhls@t-online.de>
- <1456586838-21197-27-git-send-email-bernd.kuhls@t-online.de>
- <20160229223122.500e4b53@free-electrons.com>
-Message-ID: <17fhqcxu66.ln2@ID-313208.user.individual.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 1 Mar 2016 22:47:33 +0100
+Subject: [Buildroot] [PATCH v2 1/2] sdl_mixer: add patch to fix
+ SDL_mixer.pc for static linking
+In-Reply-To: <1456830948-4329-1-git-send-email-rprebello@gmail.com>
+References: <1456830948-4329-1-git-send-email-rprebello@gmail.com>
+Message-ID: <56D60DF5.1060308@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-Am Mon, 29 Feb 2016 22:31:22 +0100 schrieb Thomas Petazzoni:
-
-> Small typo in the commit log: "enable mod_imagick" -> "enable
-> mod_imagemagick".
-
-thanks, updated in v10.
-
-> The commit title is slightly too long. Ideally for such commits, it
-> should be:
+On 03/01/16 12:15, Rodrigo Rebello wrote:
+> A 'Libs.private' field needs to be present and properly defined in the
+> pkg-config file in order for static linking against SDL_mixer to work.
 > 
-> """
-> package/freeswitch: enable mod_imagemagick
+> Besides adding the mentioned field, the included patch also modifies
+> configure.in so that EXTRA_LDFLAGS (which is now also used as the value
+> of 'Libs.private') no longer includes SDL_LIBS. This is done so as to
+> prevent libraries required by SDL from being listed twice when
+> 'pkg-config --libs --static SDL_mixer' is run (they're already shown
+> because of the 'Requires: sdl' line in SDL_mixer.pc). Makefile.in is
+> also adjusted accordingly.
+> 
+> Finally, force 'autogen.sh' to be run before the configure step since
+> we're patching configure.in.
+> 
+> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Add host-autoconf host-automake and host-libtool to
+>     SDL_MIXER_DEPENDENCIES (Thomas Petazzoni)
+> ---
+[snip]
+> diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
+> index a602b6e..f3baef3 100644
+> --- a/package/sdl_mixer/sdl_mixer.mk
+> +++ b/package/sdl_mixer/sdl_mixer.mk
+> @@ -12,6 +12,16 @@ SDL_MIXER_LICENSE_FILES = COPYING
+>  
+>  SDL_MIXER_INSTALL_STAGING = YES
+>  SDL_MIXER_DEPENDENCIES = sdl
+> +
+> +# We're patching configure.in, but SDL_mixer is not compatible with our
+> +# autoreconf mechanism, so we have to do it manually instead of setting
+> +# SDL_MIXER_AUTORECONF = YES
 
-thanks, updated in v10.
+ Try
 
-> This commit enables mod_imagemagick, which requires imagemagick, libvpx
-> and libyux as optional dependencies.
+SDL_MIXER_AUTORECONF_OPTS = -Iacinclude
 
-Let's start nitpicking ;)
 
-I think this last part of text is misleading, mod_imagemagick is not 
-enabled by this patch, only added to the package ;) The module is only 
-enabled if the packages imagemagick, libvpx and libyuv are enabled. These 
-packages itself are optional dependencies for the core functions of 
-freeswitch, but they are required dependencies for mod_imagemagick. To 
-require an optional dependency is an oxymoron ;)
-Shall I explain this as detailed as I have written here or shall I just 
-remove the ", add optional dependency to *" part of the patch subjects 
-without adding further text? I think the code speaks for itself:
-http://patchwork.ozlabs.org/patch/589401/
+ Regards,
+ Arnout
 
-ifeq ($(BR2_PACKAGE_IMAGEMAGICK)$(BR2_PACKAGE_LIBVPX)
-$(BR2_PACKAGE_LIBYUV),yyy)
-FREESWITCH_DEPENDENCIES += imagemagick libvpx libyuv
-FREESWITCH_ENABLED_MODULES += formats/mod_imagick
-endif
+> +define SDL_MIXER_RUN_AUTOGEN
+> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
+> +endef
+> +SDL_MIXER_PRE_CONFIGURE_HOOKS += SDL_MIXER_RUN_AUTOGEN
+> +SDL_MIXER_DEPENDENCIES += host-autoconf host-automake host-libtool
+> +
+>  SDL_MIXER_CONF_OPTS = \
+>  	--without-x \
+>  	--with-sdl-prefix=$(STAGING_DIR)/usr \
+> 
 
-This means: You get mod_imagick only if you have enabled imagemagick, 
-libvpx & libyuv.
 
-Regards, Bernd
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
