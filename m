@@ -1,53 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Mar 2016 15:48:08 +0100
-Subject: [Buildroot] [git commit] openssl: security bump to version 1.0.2g
-Message-ID: <20160301144909.3C3C57FFDF@busybox.osuosl.org>
+Date: Tue, 01 Mar 2016 17:43:19 +0100
+Subject: [Buildroot] [PATCH] slang: fix static link with ncurses
+In-Reply-To: <4aa51349a8c68f15bfc5ba169eeea9c6e9959128.1456834855.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 1 Mar 2016 14:20:55 +0200")
+References: <4aa51349a8c68f15bfc5ba169eeea9c6e9959128.1456834855.git.baruch@tkos.co.il>
+Message-ID: <8760x6kv2w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25b218c144805a4fcd100396a936bc7bdccdedbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Fixes:
-CVE-2016-0800 - Cross-protocol attack on TLS using SSLv2 (DROWN)
-CVE-2016-0705 - Double-free in DSA code
-CVE-2016-0798 - Memory leak in SRP database lookups
-CVE-2016-0797 - BN_hex2bn/BN_dec2bn NULL pointer deref/heap corruption
-CVE-2016-0799 - Fix memory issues in BIO_*printf functions
-CVE-2016-0702 - Side channel attack on modular exponentiation
+ > slang does forgets ncurses that is a dependency of readline when linking the
+ > slsh binary. Correct this.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openssl/openssl.hash | 4 ++--
- package/openssl/openssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > While at it, also make sure to use staging ncurses5-config script and not the
+ > host one.
 
-diff --git a/package/openssl/openssl.hash b/package/openssl/openssl.hash
-index 2cf7516..e3ea2ae 100644
---- a/package/openssl/openssl.hash
-+++ b/package/openssl/openssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.0.2f.tar.gz.sha256
--sha256	932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c	openssl-1.0.2f.tar.gz
-+# From https://www.openssl.org/source/openssl-1.0.2g.tar.gz.sha256
-+sha256	b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33	openssl-1.0.2g.tar.gz
- # Locally computed
- sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
- sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index b7498a7..30dfe31 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > Fixes:
+ > http://autobuild.buildroot.net/results/1dc/1dc52048254c32a24070fef1c1039cebb32e7ac1/
+ > http://autobuild.buildroot.net/results/c17/c176511cbb147c2d8cb0ec0ff3c1612ce8971cb8/
+ > http://autobuild.buildroot.net/results/78d/78dc2ba07b1d7f888aab94e223f3e0b1a1df3af5/
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  package/slang/slang.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+ > index 1a7576afc363..464d92065112 100644
+ > --- a/package/slang/slang.mk
+ > +++ b/package/slang/slang.mk
+ > @@ -40,6 +40,10 @@ endif
  
--OPENSSL_VERSION = 1.0.2f
-+OPENSSL_VERSION = 1.0.2g
- OPENSSL_SITE = http://www.openssl.org/source
- OPENSSL_LICENSE = OpenSSL or SSLeay
- OPENSSL_LICENSE_FILES = LICENSE
+ >  ifeq ($(BR2_PACKAGE_NCURSES),y)
+ >  SLANG_DEPENDENCIES += ncurses
+ > +SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
+ > +ifeq ($(BR2_STATIC_LIBS),y)
+ > +SLANG_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs ncurses`"
+ > +endif
+
+You forgot to add host-pkgconf as a dependency. Why is both needed,
+doesn't ncurses5-config return correct info?
+
+Here they seem to be equivalent with a static build:
+
+./host/usr/bin/pkg-config --libs ncurses
+-lncurses
+./staging/usr/bin/ncurses5-config --libs
+-L/home/peko/source/buildroot/output-test/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lncurses
+
+Your commit message talks about readline, so perhaps the problem is
+really about readline? How does slang figure out how to link with readline?
+
+-- 
+Bye, Peter Korsgaard
