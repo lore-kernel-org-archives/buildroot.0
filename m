@@ -1,77 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Mar 2016 12:46:58 +0100
-Subject: [Buildroot] [git commit] docs/manual: add section about patch
-	licensing
-Message-ID: <20160301115548.1023981819@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  1 Mar 2016 14:20:55 +0200
+Subject: [Buildroot] [PATCH] slang: fix static link with ncurses
+Message-ID: <4aa51349a8c68f15bfc5ba169eeea9c6e9959128.1456834855.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20040036974f3e432017629910fb548ca2f3e925
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+slang does forgets ncurses that is a dependency of readline when linking the
+slsh binary. Correct this.
 
-Use the same text that is used in COPYING.
+While at it, also make sure to use staging ncurses5-config script and not the
+host one.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Steve Calfee <stevecalfee@gmail.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/1dc/1dc52048254c32a24070fef1c1039cebb32e7ac1/
+http://autobuild.buildroot.net/results/c17/c176511cbb147c2d8cb0ec0ff3c1612ce8971cb8/
+http://autobuild.buildroot.net/results/78d/78dc2ba07b1d7f888aab94e223f3e0b1a1df3af5/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- docs/manual/legal-notice.txt | 17 +++++++++++++++--
- docs/manual/patch-policy.txt |  2 +-
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ package/slang/slang.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
-index 0a91c37..0572dae 100644
---- a/docs/manual/legal-notice.txt
-+++ b/docs/manual/legal-notice.txt
-@@ -134,11 +134,13 @@ Buildroot, with the name used in the manifest files:
-   http://apache.org/licenses/LICENSE-2.0.html[
-   Apache License, version 2.0];
+diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+index 1a7576afc363..464d92065112 100644
+--- a/package/slang/slang.mk
++++ b/package/slang/slang.mk
+@@ -40,6 +40,10 @@ endif
  
-+[[legal-info-buildroot]]
- === Complying with the Buildroot license
- 
- Buildroot itself is an open source software, released under the
--http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General Public
--License, version 2] or (at your option) any later version.
-+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html[GNU General
-+Public License, version 2] or (at your option) any later version, with
-+the exception of the package patches detailed below.
- However, being a build system, it is not normally part of the end product:
- if you develop the root filesystem, kernel, bootloader or toolchain for a
- device, the code of Buildroot is only present on the development machine, not
-@@ -159,3 +161,14 @@ material that must be redistributed.
- 
- Keep in mind that this is only the Buildroot developers' opinion, and you
- should consult your legal department or lawyer in case of any doubt.
-+
-+==== Patches to packages
-+
-+Buildroot also bundles patch files, which are applied to the sources
-+of the various packages. Those patches are not covered by the license
-+of Buildroot. Instead, they are covered by the license of the software
-+to which the patches are applied. When said software is available
-+under multiple licenses, the Buildroot patches are only provided under
-+the publicly accessible licenses.
-+
-+See xref:patch-policy[] for the technical details.
-diff --git a/docs/manual/patch-policy.txt b/docs/manual/patch-policy.txt
-index d50c971..5a1fe4f 100644
---- a/docs/manual/patch-policy.txt
-+++ b/docs/manual/patch-policy.txt
-@@ -91,7 +91,7 @@ If something goes wrong in the steps _3_ or _4_, then the build fails.
- === Format and licensing of the package patches
- 
- Patches are released under the same license as the software they apply
--to.
-+to (see xref:legal-info-buildroot[]).
- 
- A message explaining what the patch does, and why it is needed, should
- be added in the header commentary of the patch.
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ SLANG_DEPENDENCIES += ncurses
++SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
++ifeq ($(BR2_STATIC_LIBS),y)
++SLANG_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs ncurses`"
++endif
+ else
+ SLANG_CONF_OPTS += ac_cv_path_nc5config=no
+ endif
+-- 
+2.7.0
