@@ -1,63 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Mar 2016 17:46:52 +0100
-Subject: [Buildroot] [git commit] imx-gpu-viv: fix build dependencies when
-	linking against libGAL.so
-Message-ID: <20160301164821.7101380ABD@busybox.osuosl.org>
+Date: Tue, 1 Mar 2016 18:13:58 +0100
+Subject: [Buildroot] [git commit] python-m2crypto: don't reference SSLv2
+	functions if openssl is built without SSLv2 support
+Message-ID: <20160301171630.DDC947FFEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d916a5d16bc5ecb93639437677d977fb93c5d89
+commit: https://git.buildroot.net/buildroot/commit/?id=aa016cd6537983d3d6adeeac8783568f015fe708
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Packages like QT5 Base with OpenGL and X support link against libGAL.so
-at build time. This results in an error because some X functions used
-in libGAL.so aren't referenced as the libXdamage, libXext and libXfixes
-packages aren't built and installed into sysroot at the time. Fix this
-by adding these three packages as build dependencies of imx-gpu-viv.
+Fixes:
+http://autobuild.buildroot.net/results/018/0183ba8c9fccc87f9e72279c49c2fdc1a9fcb556/
 
-Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+The recent openssl security bump disabled SSLv2 support, but python-m2crypto
+was still referencing SSLv2 functions causing undefined symbols when the
+module was imported.  Backport an upstream patch to only reference these
+symbols if openssl is built with SSLv2 support.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-gpu-viv/Config.in      | 5 +++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 8 ++++++++
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ ...o-build-with-SSLv2-when-it-is-not-availab.patch | 36 ++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index 1c00eaa..c386765 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -33,8 +33,9 @@ choice
- config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
- 	bool "X11"
- 	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXDAMAGE # Runtime dependency
--	select BR2_PACKAGE_XLIB_LIBXEXT # Runtime dependency
-+	select BR2_PACKAGE_XLIB_LIBXDAMAGE
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_XLIB_LIBXFIXES
- 
- comment "X11 backend needs Xorg package"
- 	depends on !BR2_PACKAGE_XORG7
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 133632b..6171080 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -22,6 +22,14 @@ IMX_GPU_VIV_REDISTRIBUTE = NO
- IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
- IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
- 
-+ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
-+# The libGAL.so library provided by imx-gpu-viv uses X functions. Packages
-+# may want to link against libGAL.so (QT5 Base with OpenGL and X support
-+# does so). For this to work we need build dependencies to libXdamage,
-+# libXext and libXfixes so that X functions used in libGAL.so are referenced.
-+IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
-+endif
+diff --git a/package/python-m2crypto/0001-Don-t-try-to-build-with-SSLv2-when-it-is-not-availab.patch b/package/python-m2crypto/0001-Don-t-try-to-build-with-SSLv2-when-it-is-not-availab.patch
+new file mode 100644
+index 0000000..7210fa2
+--- /dev/null
++++ b/package/python-m2crypto/0001-Don-t-try-to-build-with-SSLv2-when-it-is-not-availab.patch
+@@ -0,0 +1,36 @@
++From ac01b38302474920288c1a9eb63fd35fa8d1db5b Mon Sep 17 00:00:00 2001
++From: Bosse Klykken <larkly@gmail.com>
++Date: Tue, 17 Jul 2012 15:55:00 +0200
++Subject: [PATCH] =?UTF-8?q?Don=E2=80=99t=20try=20to=20build=20with=20SSLv2?=
++ =?UTF-8?q?=20when=20it=20is=20not=20available.?=
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- define IMX_GPU_VIV_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_VIV_SOURCE))
- endef
++The patch originally from http://stackoverflow.com/a/11072709/164233
++
++Fixes #30
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ SWIG/_ssl.i | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/SWIG/_ssl.i b/SWIG/_ssl.i
++index 3f6bd61..89b1ad1 100644
++--- a/SWIG/_ssl.i
+++++ b/SWIG/_ssl.i
++@@ -52,8 +52,10 @@ extern const char *SSL_alert_desc_string(int);
++ %rename(ssl_get_alert_desc_v) SSL_alert_desc_string_long;
++ extern const char *SSL_alert_desc_string_long(int);
++ 
+++#ifndef OPENSSL_NO_SSL2
++ %rename(sslv2_method) SSLv2_method;
++ extern SSL_METHOD *SSLv2_method(void);
+++#endif
++ %rename(sslv3_method) SSLv3_method;
++ extern SSL_METHOD *SSLv3_method(void);
++ %rename(sslv23_method) SSLv23_method;
++-- 
++2.7.0
++
