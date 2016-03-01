@@ -1,53 +1,161 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Mar 2016 21:00:50 +0100
-Subject: [Buildroot] [git commit] slang: fix static link with readline
-Message-ID: <20160301200231.AB9A080E57@busybox.osuosl.org>
+Date: Tue, 1 Mar 2016 21:47:30 +0100
+Subject: [Buildroot] [git commit] Update for 2016.02
+Message-ID: <20160301205128.F03C4818A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6aa9606e7a637709a7ef7c454f19d9cb316f4f67
+commit: https://git.buildroot.net/buildroot/commit/?id=aaf6c28a5c49251df31b82c48c971bc18183cf6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-slang forgets to link with ncurses that is a dependency of readline when
-linking the slsh binary. Correct this.
-
-While at it, also make sure to use staging ncurses5-config script and not the
-host one. slang uses ncurses5-config to find terminfo location, and only
-staging ncurses5-config provides the correct run-time location.
-
-Fixes:
-http://autobuild.buildroot.net/results/1dc/1dc52048254c32a24070fef1c1039cebb32e7ac1/
-http://autobuild.buildroot.net/results/c17/c176511cbb147c2d8cb0ec0ff3c1612ce8971cb8/
-http://autobuild.buildroot.net/results/78d/78dc2ba07b1d7f888aab94e223f3e0b1a1df3af5/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slang/slang.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ CHANGES                    | 12 ++++++++++++
+ Makefile                   |  2 +-
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 18 ++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 43 insertions(+), 13 deletions(-)
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 1a7576a..9078bf2 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -40,6 +40,7 @@ endif
+diff --git a/CHANGES b/CHANGES
+index 943047a..c8b6352 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,15 @@
++2016.02, Released March 1st, 2016
++
++	Minor fixes, mostly security related.
++
++	Circular dependency issue with same-as-kernel linux-headers
++	option fixed.
++
++	Updated/fixed packages: bluez5_utils, heirloom-mailx,
++	imx-gpu-viv, kodi-pvr-argustv, kodi-pvr-mediaportal-tvserver,
++	kodi-pvr-nextpvr, libfcgi, openssl, pifmrds, powerpc-utils,
++	python-m2crypto, slang, sox, squid, tn5250, xerces, zsh
++
+ 2016.02-rc3, Released February 27th, 2016
  
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- SLANG_DEPENDENCIES += ncurses
-+SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
- else
- SLANG_CONF_OPTS += ac_cv_path_nc5config=no
- endif
-@@ -47,6 +48,9 @@ endif
- ifeq ($(BR2_PACKAGE_READLINE),y)
- SLANG_CONF_OPTS += --with-readline=gnu
- SLANG_DEPENDENCIES += readline
-+ifeq ($(BR2_STATIC_LIBS),y)
-+SLANG_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/ncurses5-config --libs`"
-+endif
- endif
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 568f5c2..63502d0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,7 +41,7 @@ else # umask
+ all:
  
- ifeq ($(BR2_STATIC_LIBS),y)
+ # Set and export the version string
+-export BR2_VERSION := 2016.02-rc3
++export BR2_VERSION := 2016.02
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index dae9b5b..9e1642b 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2015.11.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2016.02</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2015.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2015.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2015.11.1.tar.gz">buildroot-2015.11.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2015.11.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2016.02.tar.gz">buildroot-2016.02.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2016.02.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2015.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2015.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2016.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2015.11.1.tar.bz2">buildroot-2015.11.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2015.11.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2016.02.tar.bz2">buildroot-2016.02.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2016.02.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest release candidate: <b>2016.02-rc3</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+@@ -75,7 +75,7 @@
+ 	  <p><a href="/downloads/buildroot-2016.02-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f36c259..62f1b5d 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,24 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2016.02 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>1 March 2016</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2016.02 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2016.02">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2016.02.tar.bz2">2016.02 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index c376837..b8f02af 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2015.11.1'
++RELEASE='2016.02'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
