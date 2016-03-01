@@ -1,289 +1,40 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue,  1 Mar 2016 08:15:48 -0300
-Subject: [Buildroot] [PATCH v2 2/2] chocolate-doom: add patch to fix static
-	linking
-In-Reply-To: <1456830948-4329-1-git-send-email-rprebello@gmail.com>
-References: <1456830948-4329-1-git-send-email-rprebello@gmail.com>
-Message-ID: <1456830948-4329-2-git-send-email-rprebello@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  1 Mar 2016 13:34:55 +0200
+Subject: [Buildroot] [PATCH] zsh: use the correct target pcre-config
+Message-ID: <5e05faec7b46f08ff3dc732b002a22de706519d8.1456832095.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a backported upstream patch which modifies the
-configure script so that it uses pkg-config to detect libraries and
-their static linking dependencies.
+zsh configure script mis-detects the location of pcre-config, and may use that
+of host-pcre or that of the host instead of the target. Make configure use the
+correct pcre-config.
 
-It also removes the SDL static linking workaround from chocokate-doom.mk
-as it's no longer necessary.
+Thanks to Thomas Petazzoni for pointing me at the right direction.
 
 Fixes:
+http://autobuild.buildroot.net/results/b12/b12aadf3016dab0941cae780fa9ee7bf9be8fcda/
+http://autobuild.buildroot.net/results/8e8/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
+http://autobuild.buildroot.net/results/473/473197ec8e323ea7ae0e29e6363525dc42f9da2c/
 
-  http://autobuild.buildroot.net/results/d98/d981499ad82121d58fb7584b55d09c484cb6aa49/
-  http://autobuild.buildroot.net/results/e41/e419f29e14edd28cbf48278bef725b696ae8ef70/
-  http://autobuild.buildroot.net/results/d8f/d8fe9b5bdb262e939d4150804ea34777c91d3c04/
-  ...
-
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
-  - Add host-pkgconf to CHOCOLATE_DOOM_DEPENDENCIES (Thomas Petazzoni)
-  - Remove no longer needed SDL static linking workaround
----
- ...004-configure-Switch-to-pkg-config-macros.patch | 217 +++++++++++++++++++++
- package/chocolate-doom/chocolate-doom.mk           |   8 +-
- 2 files changed, 218 insertions(+), 7 deletions(-)
- create mode 100644 package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
+ package/zsh/zsh.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch b/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
-new file mode 100644
-index 0000000..2618396
---- /dev/null
-+++ b/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
-@@ -0,0 +1,217 @@
-+From 3163bf87d7b955d08dedd5ebaccb1b2a86ffdcb9 Mon Sep 17 00:00:00 2001
-+From: Simon Howard <fraggle@soulsphere.org>
-+Date: Thu, 25 Feb 2016 22:55:04 -0500
-+Subject: [PATCH] configure: Switch to pkg-config macros.
-+
-+All dependency libraries install pkg-config .pc files nowadays, which
-+makes the process of looking them up a lot simpler. Get rid of the SDL
-+workaround macro as it's not needed.
-+
-+[Backported from upstream commit 3163bf87d7b955d08dedd5ebaccb1b2a86ffdcb9.
-+Fixes static linking issues with SDL_mixer.]
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ configure.ac                    | 117 ++++++++++++++--------------------------
-+ opl/examples/Makefile.am        |   2 +-
-+ src/Makefile.am                 |   7 ++-
-+ textscreen/Makefile.am          |   2 +-
-+ textscreen/examples/Makefile.am |   2 +-
-+ 5 files changed, 49 insertions(+), 81 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 7b03485..48f83ef 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -33,89 +33,54 @@ then
-+         CFLAGS="-O$OPT_LEVEL -g $WARNINGS $orig_CFLAGS"
-+ fi
-+ 
-+-dnl Search for SDL ...
-+-
-+-AM_PATH_SDL(1.1.3)
-+-
-+-# Add the SDL compiler flags to the default compiler flag variables. 
-+-# It is important to do this now, before checking for headers and
-+-# library functions.  The reason being that on Windows, sdl-config
-+-# sets the -mno-cygwin compiler option in order to generate MinGW 
-+-# executables.  If we don't do this now, we might end up discovering
-+-# header files that are not actually available to us when we come
-+-# to compile.
-+-
-+-CFLAGS="$CFLAGS $SDL_CFLAGS"
-+-LDFLAGS="$LDFLAGS $SDL_LIBS"
-+-
-+-# On some platforms, SDL renames main() to SDL_main() using a #define,
-+-# so that its own main, stored in the SDLmain library, can be run first.
-+-# Unfortunately, this causes problems for autoconf, which builds
-+-# test programs to probe the system.  All library/header/symbol checks
-+-# must be run in this block, that performs a workaround for the problem.
-+-
-+-AC_SDL_MAIN_WORKAROUND([
-+-
-+-    # Check for SDL_mixer.
-+-
-+-    AC_CHECK_LIB(SDL_mixer,Mix_LoadMUS,[
-+-        SDLMIXER_LIBS="$SDLMIXER_LIBS -lSDL_mixer"
-+-    ],[
-+-        echo "*** Could not find SDL_mixer.  Please install it."
-+-        exit -1
-+-    ])
-+-
-+-    # Check for SDL_net.
-+-
-+-    AC_CHECK_LIB(SDL_net,SDLNet_UDP_Send,[
-+-        SDLNET_LIBS="$SDLNET_LIBS -lSDL_net"
-+-    ],[
-+-        echo "*** Could not find SDL_net.  Please install it."
-+-        exit -1
-+-    ])
-+-
-+-    # Check for libsamplerate.
-+-    AC_ARG_WITH([libsamplerate],
-+-    AS_HELP_STRING([--without-libsamplerate],
-+-        [Build without libsamplerate @<:@default=check@:>@]),
-+-    [],
-+-    [
-+-        [with_libsamplerate=check]
-+-    ])
-+-    AS_IF([test "x$with_libsamplerate" != xno], [
-+-        AC_CHECK_LIB(samplerate, src_new, [], [
-+-            AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
-+-                [--with-libsamplerate was given, but test for libsamplerate failed])
-+-            ])
-++PKG_CHECK_MODULES([SDL], [sdl])
-++PKG_CHECK_MODULES([SDLMIXER], [SDL_mixer])
-++PKG_CHECK_MODULES([SDLNET], [SDL_net])
-++
-++# Check for libsamplerate.
-++AC_ARG_WITH([libsamplerate],
-++AS_HELP_STRING([--without-libsamplerate],
-++    [Build without libsamplerate @<:@default=check@:>@]),
-++[],
-++[
-++    [with_libsamplerate=check]
-++])
-++AS_IF([test "x$with_libsamplerate" != xno], [
-++    PKG_CHECK_MODULES([SAMPLERATE], [samplerate >= 0.1.8], [
-++        AC_DEFINE([HAVE_LIBSAMPLERATE], [1], [libsamplerate installed])
-++    ], [
-++        AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
-++            [--with-libsamplerate was given, but test for libsamplerate failed])
-+         ])
-+     ])
-+-    # Check for libpng.
-+-    AC_ARG_WITH([libpng],
-+-    AS_HELP_STRING([--without-libpng],
-+-        [Build without libpng @<:@default=check@:>@]),
-+-    [],
-+-    [
-+-        [with_libpng=check]
-+-    ])
-+-    AS_IF([test "x$with_libpng" != xno], [
-+-        AC_CHECK_LIB(z, zlibVersion)
-+-        AC_CHECK_LIB(png, png_get_io_ptr, [], [
-+-            AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
-+-                [--with-libpng was given, but test for libpng failed])
-+-            ])
-++])
-++# Check for libpng.
-++AC_ARG_WITH([libpng],
-++AS_HELP_STRING([--without-libpng],
-++    [Build without libpng @<:@default=check@:>@]),
-++[],
-++[
-++    [with_libpng=check]
-++])
-++AS_IF([test "x$with_libpng" != xno], [
-++    PKG_CHECK_MODULES([PNG], [libpng >= 1.6.10], [
-++        AC_DEFINE([HAVE_LIBPNG], [1], [libpng installed])
-++    ], [
-++        AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
-++            [--with-libpng was given, but test for libpng failed])
-+         ])
-+     ])
-+-    AC_CHECK_LIB(m, log)
-++])
-++AC_CHECK_LIB(m, log)
-+ 
-+-    AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
-+-    AC_CHECK_FUNCS(mmap ioperm)
-++AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
-++AC_CHECK_FUNCS(mmap ioperm)
-+ 
-+-    # OpenBSD I/O i386 library for I/O port access.
-+-    # (64 bit has the same thing with a different name!)
-++# OpenBSD I/O i386 library for I/O port access.
-++# (64 bit has the same thing with a different name!)
-+ 
-+-    AC_CHECK_LIB(i386, i386_iopl)
-+-    AC_CHECK_LIB(amd64, amd64_iopl)
-+-])
-++AC_CHECK_LIB(i386, i386_iopl)
-++AC_CHECK_LIB(amd64, amd64_iopl)
-+ 
-+ case $host in
-+   *cygwin* | *mingw* )
-+diff --git a/opl/examples/Makefile.am b/opl/examples/Makefile.am
-+index 9afcd51..54c37f8 100644
-+--- a/opl/examples/Makefile.am
-++++ b/opl/examples/Makefile.am
-+@@ -1,5 +1,5 @@
-+ 
-+-AM_CFLAGS = -I$(top_srcdir)/opl
-++AM_CFLAGS = -I$(top_srcdir)/opl @SDL_CFLAGS@
-+ 
-+ noinst_PROGRAMS=droplay
-+ 
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 78ee3ba..9624e01 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -21,7 +21,8 @@ execgames_SCRIPTS = $(SETUP_BINARIES)
-+ AM_CFLAGS = -I$(top_srcdir)/textscreen            \
-+             -I$(top_srcdir)/opl                   \
-+             -I$(top_srcdir)/pcsound               \
-+-            @SDLMIXER_CFLAGS@ @SDLNET_CFLAGS@
-++            @SDLMIXER_CFLAGS@ @SDLNET_CFLAGS@     \
-++            @SAMPLERATE_CFLAGS@ @PNG_CFLAGS@
-+ 
-+ # Common source files used by absolutely everything:
-+ 
-+@@ -150,7 +151,9 @@ EXTRA_LIBS =                                               \
-+                @LDFLAGS@                                   \
-+                @SDL_LIBS@                                  \
-+                @SDLMIXER_LIBS@                             \
-+-               @SDLNET_LIBS@
-++               @SDLNET_LIBS@                               \
-++               @SAMPLERATE_LIBS@                           \
-++               @PNG_LIBS@
-+ 
-+ if HAVE_WINDRES
-+ @PROGRAM_PREFIX at doom_SOURCES=$(SOURCE_FILES_WITH_DEH) resource.rc
-+diff --git a/textscreen/Makefile.am b/textscreen/Makefile.am
-+index 628d4ff..427ed40 100644
-+--- a/textscreen/Makefile.am
-++++ b/textscreen/Makefile.am
-+@@ -1,5 +1,5 @@
-+ 
-+-AM_CFLAGS = -I$(top_srcdir)/src
-++AM_CFLAGS = -I$(top_srcdir)/src @SDL_CFLAGS@
-+ 
-+ CTAGS_ARGS=-I TXT_UNCAST_ARG+
-+ 
-+diff --git a/textscreen/examples/Makefile.am b/textscreen/examples/Makefile.am
-+index 4632d92..b857748 100644
-+--- a/textscreen/examples/Makefile.am
-++++ b/textscreen/examples/Makefile.am
-+@@ -1,5 +1,5 @@
-+ 
-+-AM_CFLAGS =  -I$(top_srcdir)/src -I$(top_srcdir)/textscreen
-++AM_CFLAGS =  -I$(top_srcdir)/src -I$(top_srcdir)/textscreen @SDL_CFLAGS@
-+ 
-+ noinst_PROGRAMS=guitest calculator
-+ 
-+-- 
-+2.1.4
-+
-diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
-index d64ad51..dad7352 100644
---- a/package/chocolate-doom/chocolate-doom.mk
-+++ b/package/chocolate-doom/chocolate-doom.mk
-@@ -8,7 +8,7 @@ CHOCOLATE_DOOM_VERSION = 2.2.1
- CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
- CHOCOLATE_DOOM_LICENSE = GPLv2+
- CHOCOLATE_DOOM_LICENSE_FILES = COPYING
--CHOCOLATE_DOOM_DEPENDENCIES = sdl sdl_mixer sdl_net
-+CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl sdl_mixer sdl_net
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index 8659fc40189d..84dbbde56f92 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -28,6 +28,7 @@ endif
  
- # We're patching configure.ac, so we need to autoreconf
- CHOCOLATE_DOOM_AUTORECONF = YES
-@@ -16,12 +16,6 @@ CHOCOLATE_DOOM_AUTORECONF = YES
- # Avoid installing desktop entries, icons, etc.
- CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--# SDL_mixer uses symbols from SDL, but ends up after it on the link
--# cmdline. Fix it by forcing the SDL libs at the very end.
--CHOCOLATE_DOOM_CONF_ENV = LIBS="`$(STAGING_DIR)/usr/bin/sdl-config --static-libs`"
--endif
--
- CHOCOLATE_DOOM_CONF_OPTS = \
- 	--disable-sdltest \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+ ZSH_CONF_OPTS += --enable-pcre
++ZSH_CONF_ENV += ac_cv_prog_PCRECONF=$(STAGING_DIR)/usr/bin/pcre-config
+ ZSH_DEPENDENCIES += pcre
+ else
+ ZSH_CONF_OPTS += --disable-pcre
 -- 
-2.1.4
+2.7.0
