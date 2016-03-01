@@ -1,55 +1,50 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 1 Mar 2016 10:36:08 +0000
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Mar 2016 11:40:26 +0100
 Subject: [Buildroot] [PATCH] sox: disable SSP when using MIPS Codescape
 	toolchains
-In-Reply-To: <87bn6ymqsv.fsf@dell.be.48ers.dk>
+In-Reply-To: <20160229210827.18465518@free-electrons.com> (Thomas Petazzoni's
+ message of "Mon, 29 Feb 2016 21:08:27 +0100")
 References: <1456763982-36511-1-git-send-email-Vincent.Riera@imgtec.com>
- <87bn6ymqsv.fsf@dell.be.48ers.dk>
-Message-ID: <56D57098.3020307@imgtec.com>
+ <20160229175158.3c01895a@free-electrons.com>
+ <56D47948.9020505@imgtec.com>
+ <20160229210827.18465518@free-electrons.com>
+Message-ID: <877fhmmqg5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 01/03/16 10:32, Peter Korsgaard wrote:
->>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
-> 
->  > MIPS Codescape toolchains don't support stack-smashing protection
->  > despite of using glibc, therefore we see failures like this one:
-> 
->  > mips-img-linux-gnu/bin/ld: cannot find -lssp
-> 
->  > Fixes:
->  >   http://autobuild.buildroot.net/results/957/95721f7b88c46a20202fb02e408817097df965c3/
-> 
->  > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->  > ---
->  >  package/sox/sox.mk | 6 ++++++
->  >  1 file changed, 6 insertions(+)
-> 
->  > diff --git a/package/sox/sox.mk b/package/sox/sox.mk
->  > index f4d1608..61f5220 100644
->  > --- a/package/sox/sox.mk
->  > +++ b/package/sox/sox.mk
->  > @@ -13,6 +13,12 @@ SOX_CONF_OPTS = --with-distro="Buildroot" --without-ffmpeg --disable-gomp \
->  >  SOX_LICENSE = GPLv2+ (sox binary), LGPLv2.1+ (libraries)
->  >  SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
->  
->  > +# MIPS Codescape toolchains don't support stack-smashing protection
->  > +# despite of using glibc.
->  > +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS)$(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
->  > +SOX_CONF_OPTS += --disable-stack-protector
->  > +endif
-> 
-> Committed, thanks (for 2016.02). Please consider generalizing it like
-> Thomas suggested for the 2016.05 cycle.
-> 
+ > Hello,
+ > On Mon, 29 Feb 2016 17:00:56 +0000, Vicente Olivert Riera wrote:
 
-Sure, I will do it.
+ >> Uhm..., how would you do that? BR2_TOOLCHAIN_HAS_SSP is selected by
+ >> BR2_TOOLCHAIN_USES_GLIBC. We would need to do changes in the toolchain
+ >> infra in order to not define it in that place, and define it
+ >> individually for every toolchain. Is that what you mean?
 
-Thanks,
+ > Yes, this is what I mean. It is indeed more work, but looks cleaner IMO.
 
-Vincent.
+Agreed. This kind of toolchains are probably quite rare. If we want to
+keep the number of changes to a minimum we could perhaps handle them
+using a negative symbol:
+
+config BR2_TOOLCHAIN_WITHOUT_SSP
+       bool
+
+..
+
+config BR2_TOOLCHAIN_USES_GLIBC
+       ..
+       select BR2_TOOLCHAIN_HAS_SSP if !BR2_TOOLCHAIN_WITHOUT_SSP
+
+
+And then select BR2_TOOLCHAIN_WITHOUT_SSP from the affected external
+toolchains.
+
+But it's quite ugly.
+
+-- 
+Bye, Peter Korsgaard
