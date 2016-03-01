@@ -1,43 +1,60 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  1 Mar 2016 14:20:55 +0200
-Subject: [Buildroot] [PATCH] slang: fix static link with ncurses
-Message-ID: <4aa51349a8c68f15bfc5ba169eeea9c6e9959128.1456834855.git.baruch@tkos.co.il>
+From: Antoine Tenart <antoine.tenart@free-electrons.com>
+Date: Tue,  1 Mar 2016 13:39:46 +0100
+Subject: [Buildroot] [PATCH] imx-gpu-viv: fix build dependencies when
+	linking against libGAL.so
+Message-ID: <1456835986-16764-1-git-send-email-antoine.tenart@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-slang does forgets ncurses that is a dependency of readline when linking the
-slsh binary. Correct this.
+Packages like QT5 Base with OpenGL and X support link against libGAL.so
+at build time. This results in an error because some X functions used
+in libGAL.so aren't referenced as the libXdamage, libXext and libXfixes
+packages aren't built and installed into sysroot at the time. Fix this
+by adding these three packages as build dependencies of imx-gpu-viv.
 
-While at it, also make sure to use staging ncurses5-config script and not the
-host one.
-
-Fixes:
-http://autobuild.buildroot.net/results/1dc/1dc52048254c32a24070fef1c1039cebb32e7ac1/
-http://autobuild.buildroot.net/results/c17/c176511cbb147c2d8cb0ec0ff3c1612ce8971cb8/
-http://autobuild.buildroot.net/results/78d/78dc2ba07b1d7f888aab94e223f3e0b1a1df3af5/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
 ---
- package/slang/slang.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freescale-imx/imx-gpu-viv/Config.in      | 5 +++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 8 ++++++++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 1a7576afc363..464d92065112 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -40,6 +40,10 @@ endif
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 1c00eaa8c658..c38676539609 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -33,8 +33,9 @@ choice
+ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	bool "X11"
+ 	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE # Runtime dependency
+-	select BR2_PACKAGE_XLIB_LIBXEXT # Runtime dependency
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXFIXES
  
- ifeq ($(BR2_PACKAGE_NCURSES),y)
- SLANG_DEPENDENCIES += ncurses
-+SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
-+ifeq ($(BR2_STATIC_LIBS),y)
-+SLANG_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs ncurses`"
+ comment "X11 backend needs Xorg package"
+ 	depends on !BR2_PACKAGE_XORG7
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 133632b403c7..61710804b791 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -22,6 +22,14 @@ IMX_GPU_VIV_REDISTRIBUTE = NO
+ IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
+ IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
+ 
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
++# The libGAL.so library provided by imx-gpu-viv uses X functions. Packages
++# may want to link against libGAL.so (QT5 Base with OpenGL and X support
++# does so). For this to work we need build dependencies to libXdamage,
++# libXext and libXfixes so that X functions used in libGAL.so are referenced.
++IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
 +endif
- else
- SLANG_CONF_OPTS += ac_cv_path_nc5config=no
- endif
++
+ define IMX_GPU_VIV_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_VIV_SOURCE))
+ endef
 -- 
-2.7.0
+2.7.2
