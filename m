@@ -1,36 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Mar 2016 12:47:39 +0100
-Subject: [Buildroot] [PATCH v4] docs/manual: add section about patch
-	licensing
-In-Reply-To: <1456830064-15398-2-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Tue, 1 Mar 2016 12:01:04 +0100")
-References: <1456830064-15398-1-git-send-email-luca@lucaceresoli.net>
- <1456830064-15398-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87y4a2l8ro.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Mar 2016 12:55:24 +0100
+Subject: [Buildroot] [PATCH] zsh: use the correct target pcre-config
+In-Reply-To: <5e05faec7b46f08ff3dc732b002a22de706519d8.1456832095.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 1 Mar 2016 13:34:55 +0200")
+References: <5e05faec7b46f08ff3dc732b002a22de706519d8.1456832095.git.baruch@tkos.co.il>
+Message-ID: <87twkql8er.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Use the same text that is used in COPYING.
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Cc: Steve Calfee <stevecalfee@gmail.com>
+ > zsh configure script mis-detects the location of pcre-config, and may use that
+ > of host-pcre or that of the host instead of the target. Make configure use the
+ > correct pcre-config.
 
- > ---
+ > Thanks to Thomas Petazzoni for pointing me at the right direction.
 
- > Changes v3 -> v4:
- > - entirely replace with the same text approved for COPYING (Yann),
- >   but keeping the hyperlink to patch-policy.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b12/b12aadf3016dab0941cae780fa9ee7bf9be8fcda/
+ > http://autobuild.buildroot.net/results/8e8/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
+ > http://autobuild.buildroot.net/results/473/473197ec8e323ea7ae0e29e6363525dc42f9da2c/
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
