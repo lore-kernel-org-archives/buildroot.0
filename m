@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 1 Mar 2016 09:19:24 +0100
-Subject: [Buildroot] [PATCH 1/2] sdl_mixer: add patch to fix
- SDL_mixer.pc for static linking
-In-Reply-To: <1456810926-9822-1-git-send-email-rprebello@gmail.com>
+Date: Tue, 1 Mar 2016 09:20:44 +0100
+Subject: [Buildroot] [PATCH 2/2] chocolate-doom: add patch to fix static
+ linking
+In-Reply-To: <1456810926-9822-2-git-send-email-rprebello@gmail.com>
 References: <1456810926-9822-1-git-send-email-rprebello@gmail.com>
-Message-ID: <20160301091924.29fe2fe1@free-electrons.com>
+ <1456810926-9822-2-git-send-email-rprebello@gmail.com>
+Message-ID: <20160301092044.00a9a2bf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +14,23 @@ To: buildroot@busybox.net
 
 Dear Rodrigo Rebello,
 
-On Tue,  1 Mar 2016 02:42:05 -0300, Rodrigo Rebello wrote:
-> A 'Libs.private' field needs to be present and properly defined in the
-> pkg-config file in order for static linking against SDL_mixer to work.
+On Tue,  1 Mar 2016 02:42:06 -0300, Rodrigo Rebello wrote:
+> This commit adds a backported upstream patch which modifies the
+> configure script so that it uses pkg-config to detect libraries and
+> their static linking dependencies.
 > 
-> Besides adding the mentioned field, the included patch also modifies
-> configure.in so that EXTRA_LDFLAGS (which is now also used as the value
-> of 'Libs.private') no longer includes SDL_LIBS. This is done so as to
-> prevent libraries required by SDL from being listed twice when
-> 'pkg-config --libs --static SDL_mixer' is run (they're already shown
-> because of the 'Requires: sdl' line in SDL_mixer.pc). Makefile.in is
-> also adjusted accordingly.
+> Fixes:
 > 
-> Finally, force 'autogen.sh' to be run before the configure step since
-> we're patching configure.in.
+>   http://autobuild.buildroot.net/results/d98/d981499ad82121d58fb7584b55d09c484cb6aa49/
+>   http://autobuild.buildroot.net/results/e41/e419f29e14edd28cbf48278bef725b696ae8ef70/
+>   http://autobuild.buildroot.net/results/d8f/d8fe9b5bdb262e939d4150804ea34777c91d3c04/
+>   ...
 > 
 > Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 
-Thanks for working on this!
-
-
-> +# We're patching configure.in, but SDL_mixer is not compatible with our
-> +# autoreconf mechanism, so we have to do it manually instead of setting
-> +# SDL_MIXER_AUTORECONF = YES
-> +define SDL_MIXER_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +SDL_MIXER_PRE_CONFIGURE_HOOKS += SDL_MIXER_RUN_AUTOGEN
-> +
-
-If you do this, then you need to manually add host-autoconf
-host-automake and host-libtool to SDL_MIXER_DEPENDENCIES. It is
-normally done automatically by <pkg>_AUTORECONF = YES, but since you're
-not using it, you must do it manually.
-
-Of course, it would be even better if SDL_mixer
-configure.ac/Makefile.am would autoreconf properly.
+Thanks! Looks good, but since the patch adds pkg-config usage in the
+configure script, the package should add host-pkgconf in its
+dependencies.
 
 Thomas
 -- 
