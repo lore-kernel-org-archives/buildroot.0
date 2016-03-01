@@ -1,47 +1,60 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 1 Mar 2016 14:46:34 -0800
-Subject: [Buildroot] GSOC idea
-Message-ID: <CAJJ6jxuwU=A6ph4MCnz_hF4kODpf5yFsTeZwzTEgWz06wMjZjQ@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 1 Mar 2016 23:47:44 +0100
+Subject: [Buildroot] [PATCH 1/1] busybox: Make S01logging source a
+ default file.
+In-Reply-To: <1456483852-12830-1-git-send-email-nicolas.cavallari@green-communications.fr>
+References: <1456483852-12830-1-git-send-email-nicolas.cavallari@green-communications.fr>
+Message-ID: <56D61C10.9080409@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry about stealing the release thread. I'll see if a rename will get
-the discussion off of it.
+Hi Nicolas,
 
-On Tue, Mar 1, 2016 at 2:24 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Steve,
->
-> On Tue, 1 Mar 2016 14:06:24 -0800, Steve Calfee wrote:
->
->> I have a suggestion for GSOC.
->
-> Unfortunately, we just learned yesterday that the Buildroot has again
-> not be selected by Google to be part of the upcoming Google Summer of
-> Code program.
->
->> How about give the intern a raspberry pi
->> (or any other dedicated, embedded system) and try to implement locale
->> and utf8 for a busybox system? That will not help buildroot
->> development, but would really help buildroot users.
->
-> I am not sure what is missing to achieve what you suggest. We already
-> have locale support, and some of these locales use the UTF-8 charset.
->
-> Can you describe more precisely what doesn't work for you?
->
-Hi Thomas,
+On 26/02/2016 11:50, Nicolas Cavallari wrote:
+> The default syslog parameters are to keep only 200-400 KiB of logs,
+> which is very few if there is a spammy daemon on the system, or a daemon
+> that fails and then spams errors that hides the original problem.
+> 
+> Make S01logging source a /etc/default/logging file where these
+> parameters can be overridden.
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+> ---
+>  package/busybox/S01logging | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+> index a72c69d..af7bdff 100644
+> --- a/package/busybox/S01logging
+> +++ b/package/busybox/S01logging
+> @@ -3,10 +3,14 @@
+>  # Start logging
+>  #
+>  
+> +SYSLOGD_ARGS=-n
+> +KLOGD_ARGS=-n
+> +[ -e /etc/default/logging ] && . /etc/default/logging
 
-Locale stuff has been on the mailing list a couple of times.
+Instead of '-e', we typically use '-r'.
 
-Like http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/133685
+Other than that, looks good. Could you send v2 with this change?
 
+>  start() {
+>  	printf "Starting logging: "
+> -	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
+> -	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
+> +	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
+> +	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
 
-It seems infrastructure to install locale and utf8 stuff is missing. I
-did enable it in busybox, but the locale files were not copied into
-/usr/.... Or I just could not figure out how to do it.
+Unrelated to your patch, but passing '-n' (Run in foreground) looks
+strange since we are daemonizing those processes anyway. Do you know any
+good reason for this?
 
-Regards, Steve
+-- 
+Luca
+
+-- 
+Luca
