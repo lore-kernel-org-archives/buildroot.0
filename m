@@ -1,28 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Mar 2016 17:48:00 +0100
-Subject: [Buildroot] [PATCH] imx-gpu-viv: fix build dependencies when
+Date: Tue, 1 Mar 2016 17:46:52 +0100
+Subject: [Buildroot] [git commit] imx-gpu-viv: fix build dependencies when
 	linking against libGAL.so
-In-Reply-To: <1456835986-16764-1-git-send-email-antoine.tenart@free-electrons.com>
- (Antoine Tenart's message of "Tue, 1 Mar 2016 13:39:46 +0100")
-References: <1456835986-16764-1-git-send-email-antoine.tenart@free-electrons.com>
-Message-ID: <87y4a2jgan.fsf@dell.be.48ers.dk>
+Message-ID: <20160301164821.7101380ABD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Antoine" == Antoine Tenart <antoine.tenart@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1d916a5d16bc5ecb93639437677d977fb93c5d89
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Packages like QT5 Base with OpenGL and X support link against libGAL.so
- > at build time. This results in an error because some X functions used
- > in libGAL.so aren't referenced as the libXdamage, libXext and libXfixes
- > packages aren't built and installed into sysroot at the time. Fix this
- > by adding these three packages as build dependencies of imx-gpu-viv.
+Packages like QT5 Base with OpenGL and X support link against libGAL.so
+at build time. This results in an error because some X functions used
+in libGAL.so aren't referenced as the libXdamage, libXext and libXfixes
+packages aren't built and installed into sysroot at the time. Fix this
+by adding these three packages as build dependencies of imx-gpu-viv.
 
- > Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/freescale-imx/imx-gpu-viv/Config.in      | 5 +++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 8 ++++++++
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 1c00eaa..c386765 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -33,8 +33,9 @@ choice
+ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	bool "X11"
+ 	depends on BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXDAMAGE # Runtime dependency
+-	select BR2_PACKAGE_XLIB_LIBXEXT # Runtime dependency
++	select BR2_PACKAGE_XLIB_LIBXDAMAGE
++	select BR2_PACKAGE_XLIB_LIBXEXT
++	select BR2_PACKAGE_XLIB_LIBXFIXES
+ 
+ comment "X11 backend needs Xorg package"
+ 	depends on !BR2_PACKAGE_XORG7
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 133632b..6171080 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -22,6 +22,14 @@ IMX_GPU_VIV_REDISTRIBUTE = NO
+ IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
+ IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
+ 
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
++# The libGAL.so library provided by imx-gpu-viv uses X functions. Packages
++# may want to link against libGAL.so (QT5 Base with OpenGL and X support
++# does so). For this to work we need build dependencies to libXdamage,
++# libXext and libXfixes so that X functions used in libGAL.so are referenced.
++IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
++endif
++
+ define IMX_GPU_VIV_EXTRACT_CMDS
+ 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(IMX_GPU_VIV_SOURCE))
+ endef
