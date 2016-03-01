@@ -1,75 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 1 Mar 2016 22:47:33 +0100
-Subject: [Buildroot] [PATCH v2 1/2] sdl_mixer: add patch to fix
- SDL_mixer.pc for static linking
-In-Reply-To: <1456830948-4329-1-git-send-email-rprebello@gmail.com>
-References: <1456830948-4329-1-git-send-email-rprebello@gmail.com>
-Message-ID: <56D60DF5.1060308@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  1 Mar 2016 22:58:30 +0100
+Subject: [Buildroot] [PATCH/next v10 02/28] package/freeswitch: enable
+	optional modules
+In-Reply-To: <1456869536-18324-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456869536-18324-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1456869536-18324-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/01/16 12:15, Rodrigo Rebello wrote:
-> A 'Libs.private' field needs to be present and properly defined in the
-> pkg-config file in order for static linking against SDL_mixer to work.
-> 
-> Besides adding the mentioned field, the included patch also modifies
-> configure.in so that EXTRA_LDFLAGS (which is now also used as the value
-> of 'Libs.private') no longer includes SDL_LIBS. This is done so as to
-> prevent libraries required by SDL from being listed twice when
-> 'pkg-config --libs --static SDL_mixer' is run (they're already shown
-> because of the 'Requires: sdl' line in SDL_mixer.pc). Makefile.in is
-> also adjusted accordingly.
-> 
-> Finally, force 'autogen.sh' to be run before the configure step since
-> we're patching configure.in.
-> 
-> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Add host-autoconf host-automake and host-libtool to
->     SDL_MIXER_DEPENDENCIES (Thomas Petazzoni)
-> ---
-[snip]
-> diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
-> index a602b6e..f3baef3 100644
-> --- a/package/sdl_mixer/sdl_mixer.mk
-> +++ b/package/sdl_mixer/sdl_mixer.mk
-> @@ -12,6 +12,16 @@ SDL_MIXER_LICENSE_FILES = COPYING
->  
->  SDL_MIXER_INSTALL_STAGING = YES
->  SDL_MIXER_DEPENDENCIES = sdl
-> +
-> +# We're patching configure.in, but SDL_mixer is not compatible with our
-> +# autoreconf mechanism, so we have to do it manually instead of setting
-> +# SDL_MIXER_AUTORECONF = YES
+All these modules have no external dependencies.
 
- Try
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/freeswitch/freeswitch.mk | 76 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-SDL_MIXER_AUTORECONF_OPTS = -Iacinclude
-
-
- Regards,
- Arnout
-
-> +define SDL_MIXER_RUN_AUTOGEN
-> +	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-> +endef
-> +SDL_MIXER_PRE_CONFIGURE_HOOKS += SDL_MIXER_RUN_AUTOGEN
-> +SDL_MIXER_DEPENDENCIES += host-autoconf host-automake host-libtool
-> +
->  SDL_MIXER_CONF_OPTS = \
->  	--without-x \
->  	--with-sdl-prefix=$(STAGING_DIR)/usr \
-> 
-
-
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 7ff983b..7ee93af 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -76,4 +76,80 @@ else
+ FREESWITCH_CONF_OPTS += --disable-zrtp
+ endif
+ 
++# Enable more optional modules
++FREESWITCH_ENABLED_MODULES += \
++	applications/mod_avmd \
++	applications/mod_blacklist \
++	applications/mod_callcenter \
++	applications/mod_commands \
++	applications/mod_conference \
++	applications/mod_curl \
++	applications/mod_db \
++	applications/mod_directory \
++	applications/mod_dptools \
++	applications/mod_easyroute \
++	applications/mod_esf \
++	applications/mod_esl \
++	applications/mod_expr \
++	applications/mod_fifo \
++	applications/mod_fsk \
++	applications/mod_hash \
++	applications/mod_httapi \
++	applications/mod_lcr \
++	applications/mod_sms \
++	applications/mod_snom \
++	applications/mod_spandsp \
++	applications/mod_spy \
++	applications/mod_valet_parking \
++	applications/mod_voicemail \
++	codecs/mod_g723_1 \
++	codecs/mod_g729 \
++	dialplans/mod_dialplan_asterisk \
++	dialplans/mod_dialplan_xml \
++	endpoints/mod_loopback \
++	endpoints/mod_rtc \
++	endpoints/mod_rtmp \
++	endpoints/mod_sofia \
++	endpoints/mod_verto \
++	event_handlers/mod_cdr_csv \
++	event_handlers/mod_cdr_sqlite \
++	event_handlers/mod_event_socket \
++	formats/mod_local_stream \
++	formats/mod_native_file \
++	formats/mod_tone_stream \
++	loggers/mod_console \
++	loggers/mod_logfile \
++	loggers/mod_syslog \
++	say/mod_say_de \
++	say/mod_say_en \
++	say/mod_say_es \
++	say/mod_say_es_ar \
++	say/mod_say_fa \
++	say/mod_say_fr \
++	say/mod_say_he \
++	say/mod_say_hr \
++	say/mod_say_hu \
++	say/mod_say_it \
++	say/mod_say_ja \
++	say/mod_say_nl \
++	say/mod_say_pl \
++	say/mod_say_pt \
++	say/mod_say_ru \
++	say/mod_say_sv \
++	say/mod_say_th \
++	say/mod_say_zh \
++	xml_int/mod_xml_cdr \
++	xml_int/mod_xml_scgi
++
++define FREESWITCH_ENABLE_MODULE # (option, file)
++	echo '$(1)' >> $(2)
++endef
++
++define FREESWITCH_ENABLE_MODULES
++	$(foreach mod,$(FREESWITCH_ENABLED_MODULES),\
++		$(call FREESWITCH_ENABLE_MODULE,$(mod),$(@D)/modules.conf)$(sep))
++endef
++
++FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
++
+ $(eval $(autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.0
