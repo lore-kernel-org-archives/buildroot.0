@@ -1,163 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 1 Mar 2016 09:43:37 +0100
-Subject: [Buildroot] [git commit] linux-headers: fix circular dependency
-	when HEADERS_AS_KERNEL is used
-Message-ID: <20160301104142.DBCCB7FC43@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Mar 2016 11:45:09 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-02-29
+In-Reply-To: <20160301104110.GO2399@tarshish>
+References: <20160301073021.01B48101C84@stock.ovh.net>
+ <20160301104110.GO2399@tarshish>
+Message-ID: <20160301114509.7f078e7c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18f3a22dcefe668a4522a936a0af59a2fa55f707
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Baruch,
 
-The linux-headers -> linux dependency causes a circular dependency, breaking
-the source/legal-info/graph-depends/..  targets:
+On Tue, 1 Mar 2016 12:41:10 +0200, Baruch Siach wrote:
 
-make graph-depends
-Getting targets
-Getting dependencies for ['toolchain-buildroot', 'toolchain', 'busybox',
-'glibc', 'initscripts', 'linux-headers', 'skeleton', 'linux',
-'host-fakeroot', 'host-makedevs', 'rootfs-cpio', 'rootfs-initramfs']
-Getting dependencies for ['host-kmod', 'host-gcc-final',
-'host-gcc-initial', 'host-gawk']
-Getting dependencies for ['host-gmp', 'host-binutils', 'host-pkgconf',
-'host-mpfr', 'host-mpc']
-Getting dependencies for ['host-m4']
+> On Tue, Mar 01, 2016 at 08:30:20AM +0100, Thomas Petazzoni wrote:
+> >     mips64el |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/752eeb388e7d1ab8de28e61b3a0d91953e62c3da/
+> > microblazeel |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/45cb459f030edf4cb519133a4b621bb44d9ce901/
+> >       x86_64 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
+> 
+> The direct trigger of these failures is apparently c7bfa2310724 (package/zsh: 
+> add optional support for pcre, 2016-02-21). But the real cause seems to be 
+> that the pcre-config script of host-pcre overwrites that of target pcre. That 
+> causes all sort of mis-detections in the configure stage. Not sure what is the 
+> right fix here. A pre-package staging directory might fix most occurrences of 
+> this problem.
 
-Recursion detected for  : toolchain
-which is a dependency of: linux
-which is a dependency of: linux-headers
-which is a dependency of: glibc
-which is a dependency of: host-gcc-final
-which is a dependency of: toolchain-buildroot
-which is a dependency of: toolchain
-Makefile:721: recipe for target 'graph-depends' failed
-make: *** [graph-depends] Error 1
+Normally the rule is that:
 
-Fix it by instead duplicating in linux-headers the 10-20 lines of linux.mk
-logic that infer the _SOURCE/_SITE/_VERSION from the BR2_LINUX_KERNEL_*
-variables.
+ 1/ *-config scripts for host libraries are installed in
+    $(HOST_DIR)/usr/bin
 
-This does mean that we extract the kernel sources twice though.
+ 2/ *-config scripts for target libraries are installed in
+    $(STAGING_DIR)/usr/bin
 
-[Peter: use same git/hg tarball as linux kernel to not clone twice, minor fixes]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/linux-headers.mk | 75 ++++++++++++++++++++++++++++------
- 1 file changed, 63 insertions(+), 12 deletions(-)
+ 3/ Target packages are convinced to use the *-config scripts from
+    $(STAGING_DIR) by passing the appropriate configure environment
+    variables.
 
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 6339280..0900778 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -9,14 +9,67 @@
- 
- ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
- 
--LINUX_HEADERS_VERSION = none
--LINUX_HEADERS_SOURCE =
-+LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
-+
-+# Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
-+ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
-+LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
-+LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
-+LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_LOCAL),y)
-+LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH))
-+LINUX_HEADERS_SITE_METHOD = local
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
-+LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_HEADERS_SITE_METHOD = git
-+# use same git tarball as linux kernel
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
-+LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_HEADERS_SITE_METHOD = hg
-+# use same hg tarball as linux kernel
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+else
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
-+ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
-+BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
-+endif
-+# In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
-+# to use the $(word) function. We support versions such as 4.0, 3.1,
-+# 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
-+ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-+else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
-+else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
-+LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
-+endif
-+# release candidates are in testing/ subdir
-+ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
-+LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)/testing
-+endif # -rc
-+endif
- 
--LINUX_HEADERS_LICENSE = $(LINUX_LICENSE)
--LINUX_HEADERS_LICENSE_FILES = $(LINUX_LICENSE_FILES)
-+LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-+
-+# We rely on the generic package infrastructure to download and apply
-+# remote patches (downloaded from ftp, http or https). For local
-+# patches, we can't rely on that infrastructure, because there might
-+# be directories in the patch list (unlike for other packages).
-+LINUX_HEADERS_PATCH = $(filter ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES))
-+
-+define LINUX_HEADERS_APPLY_LOCAL_PATCHES
-+	for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
-+		if test -d $$p ; then \
-+			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
-+		else \
-+			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
-+		fi \
-+	done
-+endef
- 
--LINUX_HEADERS_PATCH_DEPENDENCIES = linux
--LINUX_HEADERS_REAL_DIR = $(LINUX_DIR)
-+LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
- 
- else # ! BR2_KERNEL_HEADERS_AS_KERNEL
- 
-@@ -30,13 +83,11 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
- endif
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
- 
-+endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
-+
- LINUX_HEADERS_LICENSE = GPLv2
- LINUX_HEADERS_LICENSE_FILES = COPYING
- 
--LINUX_HEADERS_REAL_DIR = $(@D)
--
--endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
--
- LINUX_HEADERS_INSTALL_STAGING = YES
- 
- # linux-headers is part of the toolchain so disable the toolchain dependency
-@@ -53,7 +104,7 @@ LINUX_HEADERS_ADD_TOOLCHAIN_DEPENDENCY = NO
- # uClibc building. This way uClibc doesn't modify linux headers on installation
- # of "its" headers
- define LINUX_HEADERS_CONFIGURE_CMDS
--	(cd $(LINUX_HEADERS_REAL_DIR); \
-+	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) $(MAKE) \
- 			ARCH=$(KERNEL_ARCH) \
- 			HOSTCC="$(HOSTCC)" \
-@@ -64,7 +115,7 @@ define LINUX_HEADERS_CONFIGURE_CMDS
- endef
- 
- define LINUX_HEADERS_INSTALL_STAGING_CMDS
--	(cd $(LINUX_HEADERS_REAL_DIR); \
-+	(cd $(@D); \
- 		$(TARGET_MAKE_ENV) $(MAKE) \
- 			ARCH=$(KERNEL_ARCH) \
- 			HOSTCC="$(HOSTCC)" \
+How is it possible that the pcre-config script of host-pcre overwrite
+the one of target pcre ? They should not be installed in the same
+directories.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
