@@ -1,33 +1,36 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue,  1 Mar 2016 11:08:07 +0100
-Subject: [Buildroot] [PATCH] CHANGES: fix typo
-Message-ID: <1456826887-12163-1-git-send-email-luca@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 01 Mar 2016 11:19:58 +0100
+Subject: [Buildroot] [PATCH v3] libfcgi:add security patch for
+	CVE-2012-6687
+In-Reply-To: <1456813316-15720-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+ (Niranjan Reddy's message of "Tue, 1 Mar 2016 11:51:56 +0530")
+References: <1456813316-15720-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <87io16mre9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
+>>>>> "Niranjan" == Niranjan Reddy <niranjan.reddy@rockwellcollins.com> writes:
 
----
-Peter, still in time for the release?
----
- CHANGES | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
+ > via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
+ > use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
+ > The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
+ > (https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+ > The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
+ > officially.
 
-diff --git a/CHANGES b/CHANGES
-index a4e22f8..943047a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -67,7 +67,7 @@
- 	A number of defconfigs have been extended to generate complete
- 	system images using genimage.
- 
--	Linux: Authomatically patch timeconst.pl for <3.9 kernels,
-+	Linux: Automatically patch timeconst.pl for <3.9 kernels,
- 	which isn't compatible with modern perl versions, breaking the
- 	build when building on recent (Fedora 23, Debian
- 	Testing/Unstable, ..) distributions.
+ > Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+ > ---
+ > Changes v2 -> v3:
+ >   - Added signed-off-by line:Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+
+ > Changes v1 -> v2:
+ >   - Added signed-off-by line of the author : Anton Kortunov <toshic.toshic@gmail.com>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
