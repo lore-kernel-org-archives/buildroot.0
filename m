@@ -1,11 +1,12 @@
 From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Date: Tue, 1 Mar 2016 11:53:58 +0530
-Subject: [Buildroot] [PATCH v2 1/1] libfcgi:add security patch for
-	CVE-2012-6687
-In-Reply-To: <20160225225018.7b702f4b@free-electrons.com>
-References: <1455000746-26644-1-git-send-email-niranjan.reddy@rockwellcollins.com>
- <20160225225018.7b702f4b@free-electrons.com>
-Message-ID: <CAMshMJaHpe0mhAUFUQqkb1sebzP=T6nO+Trnar=B8VvC4z8jug@mail.gmail.com>
+Date: Tue, 1 Mar 2016 12:13:33 +0530
+Subject: [Buildroot] [Buildroot PATCH Selinux v10 07/11] qemu x86
+ selinux: base br defconfig
+In-Reply-To: <20160223225525.1afdff9d@free-electrons.com>
+References: <1455603506-26138-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+ <1455603506-26138-7-git-send-email-niranjan.reddy@rockwellcollins.com>
+ <20160223225525.1afdff9d@free-electrons.com>
+Message-ID: <CAMshMJZUyV8NhrWdryfbmQrB0eb03Vz15ZT_jfW6Nbh9vxQLAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +15,148 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-Updated the patch with signed-off-by line and sent new version (v3) .
-
-Thanks,
-Niranjan
-
-On Fri, Feb 26, 2016 at 3:20 AM, Thomas Petazzoni <
+On Wed, Feb 24, 2016 at 3:25 AM, Thomas Petazzoni <
 thomas.petazzoni@free-electrons.com> wrote:
 
-> Hello,
+> Dear Niranjan Reddy,
 >
-> Thanks for this new version. It is almost ready, but your Signed-off-by
-> line is still missing, and since it is a legal statement, I cannot add
-> it myself when applying.
->
-> On Tue,  9 Feb 2016 12:22:26 +0530, Niranjan Reddy wrote:
-> > From: "Niranjan Reddy" <niranjan.reddy@rockwellcollins.com>
+> On Tue, 16 Feb 2016 11:48:22 +0530, Niranjan Reddy wrote:
+> > From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 > >
-> > Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
-> > via a large number of connections (
-> http://www.cvedetails.com/cve/CVE-2012-6687/).
-> > use poll in os_unix.c instead of select to avoid problem with > 1024
-> connections.
-> > The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
-> > (https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-> > The next release of libfcgi is 2.4.1 which may have this fix is yet to
-> be released
-> > officially.
->
-> We need your Signed-off-by here.
->
-> > ---
-> >  package/libfcgi/0006-fix-CVE-2012-6687.patch | 103
-> +++++++++++++++++++++++++++
-> >  1 file changed, 103 insertions(+)
-> >  create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
+> > This will build a base SELinux system that boots with SELinux
+> > in permissive mode. Also adding documentation on how to use it.
 > >
-> > diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch
-> b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+> > Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> > Signed-off-by: Niranjan <niranjan.reddy@rockwellcollins.com>
+>
+> I think this defconfig is a very good idea. However, there are some
+> issues with the way things are implemented below.
+>
+> >  board/qemu/x86/linux-4.0-selinux.config | 77
+> +++++++++++++++++++++++++++++++++
+>
+> Rather than a full defconfig, can you use a defconfig fragment, and
+> combine the regular Qemu x86 defconfig with your SELinux defconfig
+> fragment?
+>
+
+OK. So should i combine in this manner and make a single configuration file
+with selinux as optional ??
+
+linux-4.3.config & linux-4.0-selinux.config  ==> linux-selinux.config
+
+qemu_x86_defconfig & qemu_x86_selinux_defconfig  ==>
+qemu_x86_optionalselinux_defconfig
+
+
+
+>
+> > diff --git a/configs/qemu_x86_selinux_defconfig
+> b/configs/qemu_x86_selinux_defconfig
 > > new file mode 100644
-> > index 0000000..a8ea847
+> > index 0000000..feb4534
 > > --- /dev/null
-> > +++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
-> > @@ -0,0 +1,103 @@
-> > +libfcgi:add security patch for CVE-2012-6687
-> > +CVE-2012-6687 - remote attackers cause a denial of service (crash) via
-> a large number
-> > +of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-> > +Fix:use poll in os_unix.c instead of select to avoid problem with >
-> 1024 connections.
-> > +This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below
-> link:
-> > +(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-> > +The next release of libfcgi is 2.4.1 which may have this fix is yet to
-> be released
-> > +officially.
+> > +++ b/configs/qemu_x86_selinux_defconfig
+> > @@ -0,0 +1,67 @@
+> > +# Architecture
+> > +BR2_x86_pentiumpro=y
 > > +
-> > +Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
+> > +# Default to the latest Code Sourcery
+> > +BR2_TOOLCHAIN_EXTERNAL=y
 >
-> And here.
+> We normally default to the internal toolchain backend. If using glibc
+> is required for proper SELinux operation, it is fine to use glibc.
 >
-> Could you address that and send an updated version?
+>
+  Agree. will change to internal toolchain and use glibc.
+
+
+> > +
+> > +# Select SYSV init to provide selinux enabled init
+> > +BR2_INIT_SYSV=y
+> > +
+> > +# Default password to allow PAM login
+> > +BR2_TARGET_GENERIC_ROOT_PASSWD="root"
+> > +
+> > +# Default the shell to bash, sh symlinks to busybox which
+> > +# is not compatible with refpolicy
+> > +BR2_SYSTEM_BIN_SH_BASH=y
+>
+> Even with the one file per binary approach of Busybox? sh is going to
+> be a symlink to ash, which is a real binary, very much like sh is going
+> to be a symlink to bash when bash is enabled.
+>
+> > +
+> > +# Pull in SELinux specific file overlay to allow login
+> > +# in enforcing mode.
+> > +BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt
+> board/common_selinux/skeleton_permissions.txt"
+> > +BR2_ROOTFS_OVERLAY="board/common_selinux/skeleton"
+> > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/common_selinux/post_build.sh"
+>
+> All those files are only added in PATCH 11/11. So basically this patch
+> and PATCH 11/11 should be merged together.
+>
+
+  Agree.
+
+
+>
+> > +
+> > +# Lock to a kernel that's been tested against selinux libs
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.0"
+> > +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> >
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux-4.0-selinux.config"
+> > +
+> > +# Customized busybox config providing a tailored
+> > +# balance of applets vs full apps
+> > +BR2_PACKAGE_BUSYBOX_CONFIG="board/common_selinux/busybox-selinux.config"
+>
+> Ditto, this file is only introduced in PATCH 11/11.
+>
+
+Agree.
+
+>
+> > +
+> > +# Ensure busybox is built as individual binaries for the
+> > +# SELinux refpolicy to work correctly
+> > +BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES=y
+> > +
+> > +# Audit service
+> > +BR2_PACKAGE_AUDIT=y
+> > +
+> > +# Enhanced authentication with selinux hooks
+> > +BR2_PACKAGE_LINUX_PAM=y
+> > +
+> > +# Full version of login with SELinux support
+> > +BR2_PACKAGE_UTIL_LINUX=y
+> > +BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+> > +BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
+> > +
+> > +# SSH daemon for secure login
+> > +BR2_PACKAGE_OPENSSH=y
+> > +
+> > +# Provides tools for fs security context relabeling
+> > +BR2_PACKAGE_POLICYCOREUTILS=y
+> > +
+> > +# SELinux policy config/definition
+> > +BR2_PACKAGE_REFPOLICY=y
+> > +
+> > +# Logging daemon
+> > +BR2_PACKAGE_RSYSLOG=y
+> > +
+> > +#rootfs with spare space for fs relabel activity
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_RESBLKS=5
+> > +# BR2_TARGET_ROOTFS_TAR is not set
+> > +
+> > +# Offline tools for policy analysis/building
+> > +BR2_PACKAGE_HOST_CHECKPOLICY=y
 >
 > Thanks!
 >
@@ -83,7 +165,10 @@ thomas.petazzoni@free-electrons.com> wrote:
 > Thomas Petazzoni, CTO, Free Electrons
 > Embedded Linux, Kernel and Android engineering
 > http://free-electrons.com
->
+
+
+Thanks,
+Niranjan
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160301/0f2268ed/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160301/31caa990/attachment.html>
