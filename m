@@ -1,40 +1,56 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  1 Mar 2016 13:34:55 +0200
-Subject: [Buildroot] [PATCH] zsh: use the correct target pcre-config
-Message-ID: <5e05faec7b46f08ff3dc732b002a22de706519d8.1456832095.git.baruch@tkos.co.il>
+Date: Tue, 1 Mar 2016 13:37:09 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-02-29
+In-Reply-To: <20160301114509.7f078e7c@free-electrons.com>
+References: <20160301073021.01B48101C84@stock.ovh.net>
+ <20160301104110.GO2399@tarshish>
+ <20160301114509.7f078e7c@free-electrons.com>
+Message-ID: <20160301113709.GP2399@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zsh configure script mis-detects the location of pcre-config, and may use that
-of host-pcre or that of the host instead of the target. Make configure use the
-correct pcre-config.
+Hi Thomas,
 
-Thanks to Thomas Petazzoni for pointing me at the right direction.
+On Tue, Mar 01, 2016 at 11:45:09AM +0100, Thomas Petazzoni wrote:
+> On Tue, 1 Mar 2016 12:41:10 +0200, Baruch Siach wrote:
+> 
+> > On Tue, Mar 01, 2016 at 08:30:20AM +0100, Thomas Petazzoni wrote:
+> > >     mips64el |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/752eeb388e7d1ab8de28e61b3a0d91953e62c3da/
+> > > microblazeel |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/45cb459f030edf4cb519133a4b621bb44d9ce901/
+> > >       x86_64 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
+> > 
+> > The direct trigger of these failures is apparently c7bfa2310724 (package/zsh: 
+> > add optional support for pcre, 2016-02-21). But the real cause seems to be 
+> > that the pcre-config script of host-pcre overwrites that of target pcre. That 
+> > causes all sort of mis-detections in the configure stage. Not sure what is the 
+> > right fix here. A pre-package staging directory might fix most occurrences of 
+> > this problem.
+> 
+> Normally the rule is that:
+> 
+>  1/ *-config scripts for host libraries are installed in
+>     $(HOST_DIR)/usr/bin
+> 
+>  2/ *-config scripts for target libraries are installed in
+>     $(STAGING_DIR)/usr/bin
+> 
+>  3/ Target packages are convinced to use the *-config scripts from
+>     $(STAGING_DIR) by passing the appropriate configure environment
+>     variables.
+> 
+> How is it possible that the pcre-config script of host-pcre overwrite
+> the one of target pcre ? They should not be installed in the same
+> directories.
 
-Fixes:
-http://autobuild.buildroot.net/results/b12/b12aadf3016dab0941cae780fa9ee7bf9be8fcda/
-http://autobuild.buildroot.net/results/8e8/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
-http://autobuild.buildroot.net/results/473/473197ec8e323ea7ae0e29e6363525dc42f9da2c/
+You are right, of course, I mixed it up. I have just posted a patch doing (3).
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/zsh/zsh.mk | 1 +
- 1 file changed, 1 insertion(+)
+baruch
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index 8659fc40189d..84dbbde56f92 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -28,6 +28,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_PCRE),y)
- ZSH_CONF_OPTS += --enable-pcre
-+ZSH_CONF_ENV += ac_cv_prog_PCRECONF=$(STAGING_DIR)/usr/bin/pcre-config
- ZSH_DEPENDENCIES += pcre
- else
- ZSH_CONF_OPTS += --disable-pcre
 -- 
-2.7.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
