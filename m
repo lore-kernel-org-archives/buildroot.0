@@ -1,143 +1,89 @@
 From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Date: Tue,  1 Mar 2016 11:51:56 +0530
-Subject: [Buildroot] [PATCH v3] libfcgi:add security patch for CVE-2012-6687
-Message-ID: <1456813316-15720-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Date: Tue, 1 Mar 2016 11:53:58 +0530
+Subject: [Buildroot] [PATCH v2 1/1] libfcgi:add security patch for
+	CVE-2012-6687
+In-Reply-To: <20160225225018.7b702f4b@free-electrons.com>
+References: <1455000746-26644-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+ <20160225225018.7b702f4b@free-electrons.com>
+Message-ID: <CAMshMJaHpe0mhAUFUQqkb1sebzP=T6nO+Trnar=B8VvC4z8jug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
-via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
-The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
-(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
-officially.
+Hello Thomas,
 
-Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
----
-Changes v2 -> v3:
-  - Added signed-off-by line:Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Updated the patch with signed-off-by line and sent new version (v3) .
 
-Changes v1 -> v2:
-  - Added signed-off-by line of the author : Anton Kortunov <toshic.toshic@gmail.com>
+Thanks,
+Niranjan
 
----
- package/libfcgi/0006-fix-CVE-2012-6687.patch | 104 +++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
+On Fri, Feb 26, 2016 at 3:20 AM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
 
-diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch b/package/libfcgi/0006-fix-CVE-2012-6687.patch
-new file mode 100644
-index 0000000..10d33ed
---- /dev/null
-+++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
-@@ -0,0 +1,104 @@
-+libfcgi:add security patch for CVE-2012-6687
-+CVE-2012-6687 - remote attackers cause a denial of service (crash) via a large number 
-+of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
-+Fix:use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
-+This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below link:
-+(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
-+The next release of libfcgi is 2.4.1 which may have this fix is yet to be released 
-+officially.
-+
-+Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
-+Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-+
-+Index: b/libfcgi/os_unix.c
-+===================================================================
-+--- a/libfcgi/os_unix.c
-++++ b/libfcgi/os_unix.c
-+@@ -42,6 +42,7 @@
-+ #include <sys/time.h>
-+ #include <sys/un.h>
-+ #include <signal.h>
-++#include <poll.h>
-+ 
-+ #ifdef HAVE_NETDB_H
-+ #include <netdb.h>
-+@@ -103,6 +104,9 @@
-+ static int shutdownPending = FALSE;
-+ static int shutdownNow = FALSE;
-+ 
-++static int libfcgiOsClosePollTimeout = 2000;
-++static int libfcgiIsAfUnixKeeperPollTimeout = 2000;
-++
-+ void OS_ShutdownPending()
-+ {
-+     shutdownPending = TRUE;
-+@@ -168,6 +172,16 @@
-+     if(libInitialized)
-+         return 0;
-+ 
-++    char *libfcgiOsClosePollTimeoutStr = getenv( "LIBFCGI_OS_CLOSE_POLL_TIMEOUT" );
-++    if(libfcgiOsClosePollTimeoutStr) {
-++        libfcgiOsClosePollTimeout = atoi(libfcgiOsClosePollTimeoutStr);
-++    }
-++
-++    char *libfcgiIsAfUnixKeeperPollTimeoutStr = getenv( "LIBFCGI_IS_AF_UNIX_KEEPER_POLL_TIMEOUT" );
-++    if(libfcgiIsAfUnixKeeperPollTimeoutStr) {
-++        libfcgiIsAfUnixKeeperPollTimeout = atoi(libfcgiIsAfUnixKeeperPollTimeoutStr);
-++    }
-++
-+     asyncIoTable = (AioInfo *)malloc(asyncIoTableSize * sizeof(AioInfo));
-+     if(asyncIoTable == NULL) {
-+         errno = ENOMEM;
-+@@ -755,19 +769,16 @@
-+ 
-+     if (shutdown(fd, 1) == 0)
-+     {
-+-        struct timeval tv;
-+-        fd_set rfds;
-++        struct pollfd pfd;
-+         int rv;
-+         char trash[1024];
-+ 
-+-        FD_ZERO(&rfds);
-++        pfd.fd = fd;
-++        pfd.events = POLLIN;
-+ 
-+         do 
-+         {
-+-            FD_SET(fd, &rfds);
-+-            tv.tv_sec = 2;
-+-            tv.tv_usec = 0;
-+-            rv = select(fd + 1, &rfds, NULL, NULL, &tv);
-++            rv = poll(&pfd, 1, libfcgiOsClosePollTimeout);
-+         }
-+         while (rv > 0 && read(fd, trash, sizeof(trash)) > 0);
-+     }
-+@@ -1116,13 +1127,11 @@
-+  */
-+ static int is_af_unix_keeper(const int fd)
-+ {
-+-    struct timeval tval = { READABLE_UNIX_FD_DROP_DEAD_TIMEVAL };
-+-    fd_set read_fds;
-+-
-+-    FD_ZERO(&read_fds);
-+-    FD_SET(fd, &read_fds);
-++    struct pollfd pfd;
-++    pfd.fd = fd;
-++    pfd.events = POLLIN;
-+ 
-+-    return select(fd + 1, &read_fds, NULL, NULL, &tval) >= 0 && FD_ISSET(fd, &read_fds);
-++    return poll(&pfd, 1, libfcgiIsAfUnixKeeperPollTimeout) >= 0 && (pfd.revents & POLLIN);
-+ }
-+ 
-+ /*
-+
-+Index: b/examples/Makefile.am
-+===================================================================
-+--- a/examples/Makefile.am
-++++ b/examples/Makefile.am
-+@@ -34,5 +34,5 @@ threaded_CFLAGS    = @PTHREAD_CFLAGS@
-+ threaded_LDFLAGS   = @PTHREAD_CFLAGS@ @PTHREAD_LIBS@
-+ 
-+ echo_cpp_SOURCES = $(INCLUDE_FILES) $(INCLUDEDIR)/fcgio.h echo-cpp.cpp
-+-echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la
-++echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la $(LIBDIR)/libfcgi.la
--- 
-2.5.0
+> Hello,
+>
+> Thanks for this new version. It is almost ready, but your Signed-off-by
+> line is still missing, and since it is a legal statement, I cannot add
+> it myself when applying.
+>
+> On Tue,  9 Feb 2016 12:22:26 +0530, Niranjan Reddy wrote:
+> > From: "Niranjan Reddy" <niranjan.reddy@rockwellcollins.com>
+> >
+> > Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
+> > via a large number of connections (
+> http://www.cvedetails.com/cve/CVE-2012-6687/).
+> > use poll in os_unix.c instead of select to avoid problem with > 1024
+> connections.
+> > The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
+> > (https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+> > The next release of libfcgi is 2.4.1 which may have this fix is yet to
+> be released
+> > officially.
+>
+> We need your Signed-off-by here.
+>
+> > ---
+> >  package/libfcgi/0006-fix-CVE-2012-6687.patch | 103
+> +++++++++++++++++++++++++++
+> >  1 file changed, 103 insertions(+)
+> >  create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
+> >
+> > diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch
+> b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+> > new file mode 100644
+> > index 0000000..a8ea847
+> > --- /dev/null
+> > +++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+> > @@ -0,0 +1,103 @@
+> > +libfcgi:add security patch for CVE-2012-6687
+> > +CVE-2012-6687 - remote attackers cause a denial of service (crash) via
+> a large number
+> > +of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
+> > +Fix:use poll in os_unix.c instead of select to avoid problem with >
+> 1024 connections.
+> > +This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below
+> link:
+> > +(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+> > +The next release of libfcgi is 2.4.1 which may have this fix is yet to
+> be released
+> > +officially.
+> > +
+> > +Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
+>
+> And here.
+>
+> Could you address that and send an updated version?
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160301/0f2268ed/attachment.html>
