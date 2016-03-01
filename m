@@ -1,255 +1,143 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Tue,  1 Mar 2016 02:42:06 -0300
-Subject: [Buildroot] [PATCH 2/2] chocolate-doom: add patch to fix static
-	linking
-In-Reply-To: <1456810926-9822-1-git-send-email-rprebello@gmail.com>
-References: <1456810926-9822-1-git-send-email-rprebello@gmail.com>
-Message-ID: <1456810926-9822-2-git-send-email-rprebello@gmail.com>
+From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Date: Tue,  1 Mar 2016 11:51:56 +0530
+Subject: [Buildroot] [PATCH v3] libfcgi:add security patch for CVE-2012-6687
+Message-ID: <1456813316-15720-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a backported upstream patch which modifies the
-configure script so that it uses pkg-config to detect libraries and
-their static linking dependencies.
+Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
+via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
+use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
+The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
+(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
+officially.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/d98/d981499ad82121d58fb7584b55d09c484cb6aa49/
-  http://autobuild.buildroot.net/results/e41/e419f29e14edd28cbf48278bef725b696ae8ef70/
-  http://autobuild.buildroot.net/results/d8f/d8fe9b5bdb262e939d4150804ea34777c91d3c04/
-  ...
-
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 ---
- ...004-configure-Switch-to-pkg-config-macros.patch | 217 +++++++++++++++++++++
- 1 file changed, 217 insertions(+)
- create mode 100644 package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
+Changes v2 -> v3:
+  - Added signed-off-by line:Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 
-diff --git a/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch b/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
+Changes v1 -> v2:
+  - Added signed-off-by line of the author : Anton Kortunov <toshic.toshic@gmail.com>
+
+---
+ package/libfcgi/0006-fix-CVE-2012-6687.patch | 104 +++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 package/libfcgi/0006-fix-CVE-2012-6687.patch
+
+diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch b/package/libfcgi/0006-fix-CVE-2012-6687.patch
 new file mode 100644
-index 0000000..2618396
+index 0000000..10d33ed
 --- /dev/null
-+++ b/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
-@@ -0,0 +1,217 @@
-+From 3163bf87d7b955d08dedd5ebaccb1b2a86ffdcb9 Mon Sep 17 00:00:00 2001
-+From: Simon Howard <fraggle@soulsphere.org>
-+Date: Thu, 25 Feb 2016 22:55:04 -0500
-+Subject: [PATCH] configure: Switch to pkg-config macros.
++++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+@@ -0,0 +1,104 @@
++libfcgi:add security patch for CVE-2012-6687
++CVE-2012-6687 - remote attackers cause a denial of service (crash) via a large number 
++of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
++Fix:use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
++This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below link:
++(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
++The next release of libfcgi is 2.4.1 which may have this fix is yet to be released 
++officially.
 +
-+All dependency libraries install pkg-config .pc files nowadays, which
-+makes the process of looking them up a lot simpler. Get rid of the SDL
-+workaround macro as it's not needed.
++Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
++Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 +
-+[Backported from upstream commit 3163bf87d7b955d08dedd5ebaccb1b2a86ffdcb9.
-+Fixes static linking issues with SDL_mixer.]
-+
-+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
-+---
-+ configure.ac                    | 117 ++++++++++++++--------------------------
-+ opl/examples/Makefile.am        |   2 +-
-+ src/Makefile.am                 |   7 ++-
-+ textscreen/Makefile.am          |   2 +-
-+ textscreen/examples/Makefile.am |   2 +-
-+ 5 files changed, 49 insertions(+), 81 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 7b03485..48f83ef 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -33,89 +33,54 @@ then
-+         CFLAGS="-O$OPT_LEVEL -g $WARNINGS $orig_CFLAGS"
-+ fi
++Index: b/libfcgi/os_unix.c
++===================================================================
++--- a/libfcgi/os_unix.c
+++++ b/libfcgi/os_unix.c
++@@ -42,6 +42,7 @@
++ #include <sys/time.h>
++ #include <sys/un.h>
++ #include <signal.h>
+++#include <poll.h>
 + 
-+-dnl Search for SDL ...
-+-
-+-AM_PATH_SDL(1.1.3)
-+-
-+-# Add the SDL compiler flags to the default compiler flag variables. 
-+-# It is important to do this now, before checking for headers and
-+-# library functions.  The reason being that on Windows, sdl-config
-+-# sets the -mno-cygwin compiler option in order to generate MinGW 
-+-# executables.  If we don't do this now, we might end up discovering
-+-# header files that are not actually available to us when we come
-+-# to compile.
-+-
-+-CFLAGS="$CFLAGS $SDL_CFLAGS"
-+-LDFLAGS="$LDFLAGS $SDL_LIBS"
-+-
-+-# On some platforms, SDL renames main() to SDL_main() using a #define,
-+-# so that its own main, stored in the SDLmain library, can be run first.
-+-# Unfortunately, this causes problems for autoconf, which builds
-+-# test programs to probe the system.  All library/header/symbol checks
-+-# must be run in this block, that performs a workaround for the problem.
-+-
-+-AC_SDL_MAIN_WORKAROUND([
-+-
-+-    # Check for SDL_mixer.
-+-
-+-    AC_CHECK_LIB(SDL_mixer,Mix_LoadMUS,[
-+-        SDLMIXER_LIBS="$SDLMIXER_LIBS -lSDL_mixer"
-+-    ],[
-+-        echo "*** Could not find SDL_mixer.  Please install it."
-+-        exit -1
-+-    ])
-+-
-+-    # Check for SDL_net.
-+-
-+-    AC_CHECK_LIB(SDL_net,SDLNet_UDP_Send,[
-+-        SDLNET_LIBS="$SDLNET_LIBS -lSDL_net"
-+-    ],[
-+-        echo "*** Could not find SDL_net.  Please install it."
-+-        exit -1
-+-    ])
-+-
-+-    # Check for libsamplerate.
-+-    AC_ARG_WITH([libsamplerate],
-+-    AS_HELP_STRING([--without-libsamplerate],
-+-        [Build without libsamplerate @<:@default=check@:>@]),
-+-    [],
-+-    [
-+-        [with_libsamplerate=check]
-+-    ])
-+-    AS_IF([test "x$with_libsamplerate" != xno], [
-+-        AC_CHECK_LIB(samplerate, src_new, [], [
-+-            AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
-+-                [--with-libsamplerate was given, but test for libsamplerate failed])
-+-            ])
-++PKG_CHECK_MODULES([SDL], [sdl])
-++PKG_CHECK_MODULES([SDLMIXER], [SDL_mixer])
-++PKG_CHECK_MODULES([SDLNET], [SDL_net])
++ #ifdef HAVE_NETDB_H
++ #include <netdb.h>
++@@ -103,6 +104,9 @@
++ static int shutdownPending = FALSE;
++ static int shutdownNow = FALSE;
++ 
+++static int libfcgiOsClosePollTimeout = 2000;
+++static int libfcgiIsAfUnixKeeperPollTimeout = 2000;
 ++
-++# Check for libsamplerate.
-++AC_ARG_WITH([libsamplerate],
-++AS_HELP_STRING([--without-libsamplerate],
-++    [Build without libsamplerate @<:@default=check@:>@]),
-++[],
-++[
-++    [with_libsamplerate=check]
-++])
-++AS_IF([test "x$with_libsamplerate" != xno], [
-++    PKG_CHECK_MODULES([SAMPLERATE], [samplerate >= 0.1.8], [
-++        AC_DEFINE([HAVE_LIBSAMPLERATE], [1], [libsamplerate installed])
-++    ], [
-++        AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
-++            [--with-libsamplerate was given, but test for libsamplerate failed])
-+         ])
-+     ])
-+-    # Check for libpng.
-+-    AC_ARG_WITH([libpng],
-+-    AS_HELP_STRING([--without-libpng],
-+-        [Build without libpng @<:@default=check@:>@]),
-+-    [],
-+-    [
-+-        [with_libpng=check]
-+-    ])
-+-    AS_IF([test "x$with_libpng" != xno], [
-+-        AC_CHECK_LIB(z, zlibVersion)
-+-        AC_CHECK_LIB(png, png_get_io_ptr, [], [
-+-            AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
-+-                [--with-libpng was given, but test for libpng failed])
-+-            ])
-++])
-++# Check for libpng.
-++AC_ARG_WITH([libpng],
-++AS_HELP_STRING([--without-libpng],
-++    [Build without libpng @<:@default=check@:>@]),
-++[],
-++[
-++    [with_libpng=check]
-++])
-++AS_IF([test "x$with_libpng" != xno], [
-++    PKG_CHECK_MODULES([PNG], [libpng >= 1.6.10], [
-++        AC_DEFINE([HAVE_LIBPNG], [1], [libpng installed])
-++    ], [
-++        AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
-++            [--with-libpng was given, but test for libpng failed])
-+         ])
-+     ])
-+-    AC_CHECK_LIB(m, log)
-++])
-++AC_CHECK_LIB(m, log)
++ void OS_ShutdownPending()
++ {
++     shutdownPending = TRUE;
++@@ -168,6 +172,16 @@
++     if(libInitialized)
++         return 0;
 + 
-+-    AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
-+-    AC_CHECK_FUNCS(mmap ioperm)
-++AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
-++AC_CHECK_FUNCS(mmap ioperm)
+++    char *libfcgiOsClosePollTimeoutStr = getenv( "LIBFCGI_OS_CLOSE_POLL_TIMEOUT" );
+++    if(libfcgiOsClosePollTimeoutStr) {
+++        libfcgiOsClosePollTimeout = atoi(libfcgiOsClosePollTimeoutStr);
+++    }
+++
+++    char *libfcgiIsAfUnixKeeperPollTimeoutStr = getenv( "LIBFCGI_IS_AF_UNIX_KEEPER_POLL_TIMEOUT" );
+++    if(libfcgiIsAfUnixKeeperPollTimeoutStr) {
+++        libfcgiIsAfUnixKeeperPollTimeout = atoi(libfcgiIsAfUnixKeeperPollTimeoutStr);
+++    }
+++
++     asyncIoTable = (AioInfo *)malloc(asyncIoTableSize * sizeof(AioInfo));
++     if(asyncIoTable == NULL) {
++         errno = ENOMEM;
++@@ -755,19 +769,16 @@
 + 
-+-    # OpenBSD I/O i386 library for I/O port access.
-+-    # (64 bit has the same thing with a different name!)
-++# OpenBSD I/O i386 library for I/O port access.
-++# (64 bit has the same thing with a different name!)
++     if (shutdown(fd, 1) == 0)
++     {
++-        struct timeval tv;
++-        fd_set rfds;
+++        struct pollfd pfd;
++         int rv;
++         char trash[1024];
 + 
-+-    AC_CHECK_LIB(i386, i386_iopl)
-+-    AC_CHECK_LIB(amd64, amd64_iopl)
-+-])
-++AC_CHECK_LIB(i386, i386_iopl)
-++AC_CHECK_LIB(amd64, amd64_iopl)
++-        FD_ZERO(&rfds);
+++        pfd.fd = fd;
+++        pfd.events = POLLIN;
 + 
-+ case $host in
-+   *cygwin* | *mingw* )
-+diff --git a/opl/examples/Makefile.am b/opl/examples/Makefile.am
-+index 9afcd51..54c37f8 100644
-+--- a/opl/examples/Makefile.am
-++++ b/opl/examples/Makefile.am
-+@@ -1,5 +1,5 @@
++         do 
++         {
++-            FD_SET(fd, &rfds);
++-            tv.tv_sec = 2;
++-            tv.tv_usec = 0;
++-            rv = select(fd + 1, &rfds, NULL, NULL, &tv);
+++            rv = poll(&pfd, 1, libfcgiOsClosePollTimeout);
++         }
++         while (rv > 0 && read(fd, trash, sizeof(trash)) > 0);
++     }
++@@ -1116,13 +1127,11 @@
++  */
++ static int is_af_unix_keeper(const int fd)
++ {
++-    struct timeval tval = { READABLE_UNIX_FD_DROP_DEAD_TIMEVAL };
++-    fd_set read_fds;
++-
++-    FD_ZERO(&read_fds);
++-    FD_SET(fd, &read_fds);
+++    struct pollfd pfd;
+++    pfd.fd = fd;
+++    pfd.events = POLLIN;
 + 
-+-AM_CFLAGS = -I$(top_srcdir)/opl
-++AM_CFLAGS = -I$(top_srcdir)/opl @SDL_CFLAGS@
++-    return select(fd + 1, &read_fds, NULL, NULL, &tval) >= 0 && FD_ISSET(fd, &read_fds);
+++    return poll(&pfd, 1, libfcgiIsAfUnixKeeperPollTimeout) >= 0 && (pfd.revents & POLLIN);
++ }
 + 
-+ noinst_PROGRAMS=droplay
-+ 
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 78ee3ba..9624e01 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -21,7 +21,8 @@ execgames_SCRIPTS = $(SETUP_BINARIES)
-+ AM_CFLAGS = -I$(top_srcdir)/textscreen            \
-+             -I$(top_srcdir)/opl                   \
-+             -I$(top_srcdir)/pcsound               \
-+-            @SDLMIXER_CFLAGS@ @SDLNET_CFLAGS@
-++            @SDLMIXER_CFLAGS@ @SDLNET_CFLAGS@     \
-++            @SAMPLERATE_CFLAGS@ @PNG_CFLAGS@
-+ 
-+ # Common source files used by absolutely everything:
-+ 
-+@@ -150,7 +151,9 @@ EXTRA_LIBS =                                               \
-+                @LDFLAGS@                                   \
-+                @SDL_LIBS@                                  \
-+                @SDLMIXER_LIBS@                             \
-+-               @SDLNET_LIBS@
-++               @SDLNET_LIBS@                               \
-++               @SAMPLERATE_LIBS@                           \
-++               @PNG_LIBS@
-+ 
-+ if HAVE_WINDRES
-+ @PROGRAM_PREFIX at doom_SOURCES=$(SOURCE_FILES_WITH_DEH) resource.rc
-+diff --git a/textscreen/Makefile.am b/textscreen/Makefile.am
-+index 628d4ff..427ed40 100644
-+--- a/textscreen/Makefile.am
-++++ b/textscreen/Makefile.am
-+@@ -1,5 +1,5 @@
-+ 
-+-AM_CFLAGS = -I$(top_srcdir)/src
-++AM_CFLAGS = -I$(top_srcdir)/src @SDL_CFLAGS@
-+ 
-+ CTAGS_ARGS=-I TXT_UNCAST_ARG+
-+ 
-+diff --git a/textscreen/examples/Makefile.am b/textscreen/examples/Makefile.am
-+index 4632d92..b857748 100644
-+--- a/textscreen/examples/Makefile.am
-++++ b/textscreen/examples/Makefile.am
-+@@ -1,5 +1,5 @@
-+ 
-+-AM_CFLAGS =  -I$(top_srcdir)/src -I$(top_srcdir)/textscreen
-++AM_CFLAGS =  -I$(top_srcdir)/src -I$(top_srcdir)/textscreen @SDL_CFLAGS@
-+ 
-+ noinst_PROGRAMS=guitest calculator
-+ 
-+-- 
-+2.1.4
++ /*
 +
++Index: b/examples/Makefile.am
++===================================================================
++--- a/examples/Makefile.am
+++++ b/examples/Makefile.am
++@@ -34,5 +34,5 @@ threaded_CFLAGS    = @PTHREAD_CFLAGS@
++ threaded_LDFLAGS   = @PTHREAD_CFLAGS@ @PTHREAD_LIBS@
++ 
++ echo_cpp_SOURCES = $(INCLUDE_FILES) $(INCLUDEDIR)/fcgio.h echo-cpp.cpp
++-echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la
+++echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la $(LIBDIR)/libfcgi.la
 -- 
-2.1.4
+2.5.0
