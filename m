@@ -1,33 +1,138 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 1 Mar 2016 12:41:10 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-02-29
-In-Reply-To: <20160301073021.01B48101C84@stock.ovh.net>
-References: <20160301073021.01B48101C84@stock.ovh.net>
-Message-ID: <20160301104110.GO2399@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Mar 2016 11:18:27 +0100
+Subject: [Buildroot] [git commit] libfcgi:add security patch for
+	CVE-2012-6687
+Message-ID: <20160301104143.46E0E7FCE1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+commit: https://git.buildroot.net/buildroot/commit/?id=2311d54ec4a2320505750655c2c3fb4c525e0872
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Mar 01, 2016 at 08:30:20AM +0100, Thomas Petazzoni wrote:
->     mips64el |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/752eeb388e7d1ab8de28e61b3a0d91953e62c3da/
-> microblazeel |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/45cb459f030edf4cb519133a4b621bb44d9ce901/
->       x86_64 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/8e8b12dbca4ef8cac2e5f33cd3cdcddd8e849840/
+Fix-CVE-2012-6687 - remote attackers cause a denial of service (crash)
+via a large number of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
+use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
+The patch libfcgi_2.4.0-8.3.debian.tar.xz is taken from the below link:
+(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
+The next release of libfcgi is 2.4.1 which may have this fix is yet to be released
+officially.
 
-The direct trigger of these failures is apparently c7bfa2310724 (package/zsh: 
-add optional support for pcre, 2016-02-21). But the real cause seems to be 
-that the pcre-config script of host-pcre overwrites that of target pcre. That 
-causes all sort of mis-detections in the configure stage. Not sure what is the 
-right fix here. A pre-package staging directory might fix most occurrences of 
-this problem.
+Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libfcgi/0006-fix-CVE-2012-6687.patch | 104 +++++++++++++++++++++++++++
+ 1 file changed, 104 insertions(+)
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+diff --git a/package/libfcgi/0006-fix-CVE-2012-6687.patch b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+new file mode 100644
+index 0000000..10d33ed
+--- /dev/null
++++ b/package/libfcgi/0006-fix-CVE-2012-6687.patch
+@@ -0,0 +1,104 @@
++libfcgi:add security patch for CVE-2012-6687
++CVE-2012-6687 - remote attackers cause a denial of service (crash) via a large number 
++of connections (http://www.cvedetails.com/cve/CVE-2012-6687/).
++Fix:use poll in os_unix.c instead of select to avoid problem with > 1024 connections.
++This patch libfcgi_2.4.0-8.3.debian.tar.xz is pulled from the below link:
++(https://launchpad.net/ubuntu/+source/libfcgi/2.4.0-8.3)
++The next release of libfcgi is 2.4.1 which may have this fix is yet to be released 
++officially.
++
++Signed-off-by: Anton Kortunov <toshic.toshic@gmail.com>
++Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
++
++Index: b/libfcgi/os_unix.c
++===================================================================
++--- a/libfcgi/os_unix.c
+++++ b/libfcgi/os_unix.c
++@@ -42,6 +42,7 @@
++ #include <sys/time.h>
++ #include <sys/un.h>
++ #include <signal.h>
+++#include <poll.h>
++ 
++ #ifdef HAVE_NETDB_H
++ #include <netdb.h>
++@@ -103,6 +104,9 @@
++ static int shutdownPending = FALSE;
++ static int shutdownNow = FALSE;
++ 
+++static int libfcgiOsClosePollTimeout = 2000;
+++static int libfcgiIsAfUnixKeeperPollTimeout = 2000;
+++
++ void OS_ShutdownPending()
++ {
++     shutdownPending = TRUE;
++@@ -168,6 +172,16 @@
++     if(libInitialized)
++         return 0;
++ 
+++    char *libfcgiOsClosePollTimeoutStr = getenv( "LIBFCGI_OS_CLOSE_POLL_TIMEOUT" );
+++    if(libfcgiOsClosePollTimeoutStr) {
+++        libfcgiOsClosePollTimeout = atoi(libfcgiOsClosePollTimeoutStr);
+++    }
+++
+++    char *libfcgiIsAfUnixKeeperPollTimeoutStr = getenv( "LIBFCGI_IS_AF_UNIX_KEEPER_POLL_TIMEOUT" );
+++    if(libfcgiIsAfUnixKeeperPollTimeoutStr) {
+++        libfcgiIsAfUnixKeeperPollTimeout = atoi(libfcgiIsAfUnixKeeperPollTimeoutStr);
+++    }
+++
++     asyncIoTable = (AioInfo *)malloc(asyncIoTableSize * sizeof(AioInfo));
++     if(asyncIoTable == NULL) {
++         errno = ENOMEM;
++@@ -755,19 +769,16 @@
++ 
++     if (shutdown(fd, 1) == 0)
++     {
++-        struct timeval tv;
++-        fd_set rfds;
+++        struct pollfd pfd;
++         int rv;
++         char trash[1024];
++ 
++-        FD_ZERO(&rfds);
+++        pfd.fd = fd;
+++        pfd.events = POLLIN;
++ 
++         do 
++         {
++-            FD_SET(fd, &rfds);
++-            tv.tv_sec = 2;
++-            tv.tv_usec = 0;
++-            rv = select(fd + 1, &rfds, NULL, NULL, &tv);
+++            rv = poll(&pfd, 1, libfcgiOsClosePollTimeout);
++         }
++         while (rv > 0 && read(fd, trash, sizeof(trash)) > 0);
++     }
++@@ -1116,13 +1127,11 @@
++  */
++ static int is_af_unix_keeper(const int fd)
++ {
++-    struct timeval tval = { READABLE_UNIX_FD_DROP_DEAD_TIMEVAL };
++-    fd_set read_fds;
++-
++-    FD_ZERO(&read_fds);
++-    FD_SET(fd, &read_fds);
+++    struct pollfd pfd;
+++    pfd.fd = fd;
+++    pfd.events = POLLIN;
++ 
++-    return select(fd + 1, &read_fds, NULL, NULL, &tval) >= 0 && FD_ISSET(fd, &read_fds);
+++    return poll(&pfd, 1, libfcgiIsAfUnixKeeperPollTimeout) >= 0 && (pfd.revents & POLLIN);
++ }
++ 
++ /*
++
++Index: b/examples/Makefile.am
++===================================================================
++--- a/examples/Makefile.am
+++++ b/examples/Makefile.am
++@@ -34,5 +34,5 @@ threaded_CFLAGS    = @PTHREAD_CFLAGS@
++ threaded_LDFLAGS   = @PTHREAD_CFLAGS@ @PTHREAD_LIBS@
++ 
++ echo_cpp_SOURCES = $(INCLUDE_FILES) $(INCLUDEDIR)/fcgio.h echo-cpp.cpp
++-echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la
+++echo_cpp_LDADD   = $(LIBDIR)/libfcgi++.la $(LIBDIR)/libfcgi.la
