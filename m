@@ -1,124 +1,105 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Mar 2016 00:02:20 +0100
-Subject: [Buildroot] [PATCH v2] barebox: add an option to embed
- environment image
-In-Reply-To: <CAGm1_kt_fuJB9=3LPP1C0jnpBY2ijNzpGNLSf8J=kynzHC685Q@mail.gmail.com>
-References: <1455698573-6480-1-git-send-email-yegorslists@googlemail.com>
- <56D209B5.70107@mind.be>
- <CAGm1_kt_fuJB9=3LPP1C0jnpBY2ijNzpGNLSf8J=kynzHC685Q@mail.gmail.com>
-Message-ID: <56D61F7C.8020805@mind.be>
+Date: Wed, 2 Mar 2016 00:08:34 +0100
+Subject: [Buildroot] [v3,
+	1/4] barebox: prepare for secondary config build
+In-Reply-To: <20160229074707.GA17808@smipidev>
+References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
+ <1453329821-3167-2-git-send-email-pieter@boesman.nl>
+ <56D0DCFB.8060601@mind.be> <20160228081204.GB4297@smipidev>
+ <20160229074707.GA17808@smipidev>
+Message-ID: <56D620F2.3090605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/28/16 23:50, Yegor Yefremov wrote:
-> On Sat, Feb 27, 2016 at 9:40 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Note that this patch conflicts with Pieter's dual-config series, so it would be
->> good to combine both in a single series.
-> 
-> I'll rebase my patches on top of dual-config series. This patch was
-> more proof of concept.
-> 
->> On 02/17/16 09:42, yegorslists at googlemail.com wrote:
->>> From: Yegor Yefremov <yegorslists@googlemail.com>
+On 02/29/16 08:47, Pieter Smith wrote:
+> On Sun, Feb 28, 2016 at 09:12:04AM +0100, Pieter Smith wrote:
+>> On Sat, Feb 27, 2016 at 12:17:15AM +0100, Arnout Vandecappelle wrote:
+>>> On 01/20/16 23:43, Pieter Smith wrote:
+>> [snip] 
+>>>  I wonder if it wouldn't be possible to keep barebox.mk unchanged, and just add
+>>> at the end (after the kconfig-package):
 >>>
->>> Barebox provides an option to embed a custom environment image into
->>> barebox.bin. This image will be used, when the environment found in
->>> the environment sector is invalid.
+>>> include boot/barebox/barebox-2/barebox-2.mk
 >>>
->>> This patch sets barebox Kconfig option CONFIG_DEFAULT_ENVIRONMENT_PATH to user
->>> specified path. This way one can use BR's variables like BR2_EXTERNAL, TOPDIR
->>> etc. to provide paths to custom environment folders.
+>>>  That's not entirely similar to gcc, but it's more consistent with what it
+>>> means. You always have the barebox package, and you have an optional extra
+>>> barebox-2 package which is a kind of submodule of barebox. Note however that we
+>>> currently don't have this pattern at all, so it could be controversial. But I
+>>> think it will simplify the patch a lot, and also simplify the logic.
+>>>
+>>>  So in that case, you'd have a first patch that adds the required refactorings
+>>> in barebox.mk so the same variables are useable for barebox-2, and a second
+>>> patch that adds barebox-2 (and patches 3 and 4 stay the same of course).
 >>
->>  I don't understand this comment. I mean, it seems obvious that you'd have a
->> config option for it, and that you can use BR2_EXTERNAL in it, no?
+>> Yes. Thanks. A lot less messy. I started looking into this. It seems doable. It
+>> might be neater to still split a barebox-common.mk to avoid a long list of
+>> variable copies. Give me a day on this.
+>  
+> Thanks for the suggestion. It is shaping up nicely. There is one aspect that I
+> would appreciate input on: To all but completely eliminate duplication in the
+> makefiles for the two packages, I am wrapping all the current functionality in
+> boot/barebox/barebox.mk in a parameterized barebox-package function. E.g.:
 > 
-> What I mean is, that with this BR option one would change Barebox's
-> own option. Because if you specify the path in Barebox Kconfig
-> directly using BR2_EXTERNAL, it won't be expanded, so that Barebox
-> build process would fail. How would you formulate this?
+>   define barebox-package
+>   $(1)_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
+>   ...
+>   $$(eval $$(kconfig-package))
+>   endef
+>   $(eval $(call barebox-package,BAREBOX))
+> 
+> And the whole of boot/barebox/barebox-2/barebox-2.mk becomes:
+> 
+>   $(eval $(call barebox-package,BAREBOX_2))
 
- Hm, now I read your commit log a second time, it was perfectly clear...
+ No, I don't think we want this, because it hides a lot of what barebox-2 is
+doing internally. It's OK and actually better (in my opinion) if barebox-2.mk is
+just a long list like:
 
-> 
->>  Also, commit log should be wrapped at 72 columns.
-> 
-> ACK
-> 
->>>
->>> Cc: Pieter Smith <pieter@boesman.nl>
->>> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->>> ---
->>> Changes:
->>>       v2: - remove qstrip
->>>           - add detailed patch description
->>>           - improve help texts
->>>
->>>  boot/barebox/Config.in  | 19 +++++++++++++++++++
->>>  boot/barebox/barebox.mk |  6 ++++++
->>>  2 files changed, 25 insertions(+)
->>>
->>> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
->>> index 39cb5d2..ae52b2a 100644
->>> --- a/boot/barebox/Config.in
->>> +++ b/boot/barebox/Config.in
->>> @@ -121,4 +121,23 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
->>>         barebox devfs format, stored in the images directory, with
->>>         the same name as the directory name given here.
->>>
->>> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
->>> +     bool "Embed custom environment"
->>> +     help
->>> +       Embed a custom environment image into barebox.bin. In order
->>> +       to use this option you need to enable CONFIG_DEFAULT_ENVIRONMENT
->>> +       and setup desired compression type for embedded images in barebox
->>> +       itself.
->>
->>  I don't know a lot about barebox, but wouldn't it be more appropriate to select
->> those options automatically?
-> 
-> I can add CONFIG_DEFAULT_ENVIRONMENT, but leave compression type
-> selection to Barebox config.
+BAREBOX_2_VERSION = $(BAREBOX_VERSION)
+BAREBOX_2_SITE = $(BAREBOX_SITE)
+...
+BAREBOX_2_BUILD_CMDS = $(BAREBOX_BUILD_CMDS)
+...
+$(eval $(kconfig-package))
 
- Sounds good.
-
-> 
->>> +
->>> +config BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV_PATH
->>> +     string "Embedded environment path"
->>> +     depends on BR2_TARGET_BAREBOX_CUSTOM_EMBEDDED_ENV
->>> +     help
->>> +       Barebox CONFIG_DEFAULT_ENVIRONMENT_PATH
->>> +       will be set to the path containing custom barebox
->>> +       environment. Depending on your setup, it will probably be
->>> +       based on either the content of the defaultenv or
->>> +       defaultenv-2 directories in the barebox source code, plus
->>> +       the additions needed.
->>
->>  How much sense does it make to have an embedded env that is different from the
->> custom environment specified above?
-> 
-> For example you can have an embedded env for production stage, that
-> fetches kernel from tftp, where systems flash is empty and the real
-> env comes during the production stage and will be used the next time
-> the system boots. So I would keep them both separately.
-
- Doesn't sound like a very strong case to me, but OK, why not.
-
-> 
->>  If I understand correctly, barebox always has a built-in default environment.
-> 
-> AFAIK CONFIG_DEFAULT_ENVIRONMENTdecides whether you have a built-in
-> default environment or not.
-
- Ah of course.
 
  Regards,
  Arnout
 
-[snip]
+> 
+> This however cannot avoid Config.in duplication, but the barebox-2 makefile
+> inherits all future barebox makefile improvements. The catch is that existing
+> barebox patches will have merge conflicts.
+> 
+> I already tied up with Yegor on the embedded custom environment patch-set,
+> which he is willing to rebase + solve the merge conflicts. We can then submit
+> the series with Yegor's patch and a barebox defconfig for the Beaglebone Black
+> as per your suggestion.
+> 
+> Do you think this is acceptable?
+> 
+>>>  This is complicated stuff, thanks for working on this, and sorry that it's
+>>> taking so long!
+>>>
+>>>  Regards,
+>>>  Arnout
+>>>
+>>> [snip]
+>>>
+>>> -- 
+>>> Arnout Vandecappelle                          arnout at mind be
+>>> Senior Embedded Software Architect            +32-16-286500
+>>> Essensium/Mind                                http://www.mind.be
+>>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>>
+>> - Pieter
+> - Pieter
+> 
 
 
 -- 
