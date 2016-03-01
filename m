@@ -1,72 +1,66 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  1 Mar 2016 15:46:09 -0300
-Subject: [Buildroot] [PATCH] heirloom-mailx: disable SSLv2 support
-Message-ID: <1456857969-5916-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 1 Mar 2016 19:52:49 +0100
+Subject: [Buildroot] [git commit] tn5250: don't reference SSLv2/v3 functions
+	if openssl is built without them
+Message-ID: <20160301185505.C5D9F80429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that openssl has dropped SSLv2 support from the latest security bump
-we need to patch it out here as well. Fixes:
-http://autobuild.buildroot.net/results/dab/dab1629cfcb5cb33706d0c762dba57baa43299a5/
+commit: https://git.buildroot.net/buildroot/commit/?id=c2f6b5d69762edbcf820b74236683ca801b0c158
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Patch status: debian upstream.
+Fixes:
+http://autobuild.buildroot.net/results/83e/83e29482cad6adef18a0e97bc8e75df302467dbb/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The recent openssl security bump disabled SSLv2 support, but tn5250 was
+still referencing SSLv2 functions breaking the build.
+
+Include a patch from OpenBSD to only reference the SSLv2 / SSLv3 symbols if
+openssl is built with support for them.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-SSL2-support-since-it-is-no-longer-suppo.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/heirloom-mailx/0001-Patched-out-SSL2-support-since-it-is-no-longer-suppo.patch
+ ...lding-against-OpenSSL-without-SSLv2_SSLv3.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/heirloom-mailx/0001-Patched-out-SSL2-support-since-it-is-no-longer-suppo.patch b/package/heirloom-mailx/0001-Patched-out-SSL2-support-since-it-is-no-longer-suppo.patch
+diff --git a/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch b/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
 new file mode 100644
-index 0000000..db5b19e
+index 0000000..67f0fa6
 --- /dev/null
-+++ b/package/heirloom-mailx/0001-Patched-out-SSL2-support-since-it-is-no-longer-suppo.patch
-@@ -0,0 +1,42 @@
-+From: Hilko Bengen <bengen@debian.org>
-+Date: Wed, 27 Apr 2011 00:18:42 +0200
-+Subject: Patched out SSL2 support since it is no longer supported by OpenSSL.
++++ b/package/tn5250/0002-Allow-building-against-OpenSSL-without-SSLv2_SSLv3.patch
+@@ -0,0 +1,32 @@
++$OpenBSD: patch-lib5250_sslstream_c,v 1.1 2015/10/07 16:09:04 jca Exp $
 +
-+Now that openssl has dropped SSLv2 support we need to patch it out.
-+Patch picked up from debian patchseries 5.
++Allow building against OpenSSL without SSLv2/SSLv3 support.
 +
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Download from:
++http://cvsweb.openbsd.org/cgi-bin/cvsweb/ports/net/tn5250/patches/patch-lib5250_sslstream_c
 +
-+---
-+ mailx.1   |    2 +-
-+ openssl.c |    4 +---
-+ 2 files changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/mailx.1 b/mailx.1
-+index 417ea04..a02e430 100644
-+--- a/mailx.1
-++++ b/mailx.1
-+@@ -3575,7 +3575,7 @@ Only applicable if SSL/TLS support is built using OpenSSL.
-+ .TP
-+ .B ssl-method
-+ Selects a SSL/TLS protocol version;
-+-valid values are `ssl2', `ssl3', and `tls1'.
-++valid values are `ssl3', and `tls1'.
-+ If unset, the method is selected automatically,
-+ if possible.
-+ .TP
-+diff --git a/openssl.c b/openssl.c
-+index b4e33fc..44fe4e5 100644
-+--- a/openssl.c
-++++ b/openssl.c
-+@@ -216,9 +216,7 @@ ssl_select_method(const char *uhp)
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++--- a/lib5250/sslstream.c.orig	Fri Nov 21 09:12:21 2008
+++++ b/lib5250/sslstream.c	Tue Oct  6 21:32:29 2015
++@@ -368,13 +368,19 @@ int tn5250_ssl_stream_init (Tn5250Stream *This)
++         methstr[4] = '\0';
++    }
 + 
-+ 	cp = ssl_method_string(uhp);
-+ 	if (cp != NULL) {
-+-		if (equal(cp, "ssl2"))
-+-			method = SSLv2_client_method();
-+-		else if (equal(cp, "ssl3"))
-++		if (equal(cp, "ssl3"))
-+ 			method = SSLv3_client_method();
-+ 		else if (equal(cp, "tls1"))
-+ 			method = TLSv1_client_method();
--- 
-2.4.10
+++#ifndef OPENSSL_NO_SSL2
++    if (!strcmp(methstr, "ssl2")) {
++         meth = SSLv2_client_method();         
++         TN5250_LOG(("SSL Method = SSLv2_client_method()\n"));
++-   } else if (!strcmp(methstr, "ssl3")) {
+++   } else
+++#endif
+++#ifndef OPENSSL_NO_SSL3
+++   if (!strcmp(methstr, "ssl3")) {
++         meth = SSLv3_client_method();         
++         TN5250_LOG(("SSL Method = SSLv3_client_method()\n"));
++-   } else {
+++   } else
+++#endif
+++   {
++         meth = SSLv23_client_method();         
++         TN5250_LOG(("SSL Method = SSLv23_client_method()\n"));
++    }
