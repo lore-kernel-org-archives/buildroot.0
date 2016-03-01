@@ -1,19 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Mar 2016 14:34:38 +0100
-Subject: [Buildroot] [PATCH] mongodb: bump to version 3.3.2
-In-Reply-To: <1456829935-15201-1-git-send-email-sergio.prado@e-labworks.com>
- (Sergio Prado's message of "Tue, 1 Mar 2016 07:58:55 -0300")
-References: <1456829935-15201-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <87lh62l3td.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Mar 2016 14:35:05 +0100
+Subject: [Buildroot] [PATCH] radvd: bump to version 2.12
+In-Reply-To: <1456782410-17758-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 29 Feb 2016 18:46:50 -0300")
+References: <1456782410-17758-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87h9gql3sm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Sergio" == Sergio Prado <sergio.prado@e-labworks.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+ > musl build patch is upstream so it's no longer necessary.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed to next, thanks.
 
