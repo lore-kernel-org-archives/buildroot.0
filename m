@@ -1,55 +1,118 @@
-From: Stanislav Vlasic <svlasic@gmail.com>
-Date: Tue, 1 Mar 2016 10:40:36 +0100
-Subject: [Buildroot] [PATCH/next 03/31] package/libplatform: bump
-	version, add hash
-In-Reply-To: <20160229234138.70393337@free-electrons.com>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-4-git-send-email-bernd.kuhls@t-online.de>
- <20160229234138.70393337@free-electrons.com>
-Message-ID: <56D56394.4070307@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 1 Mar 2016 10:40:02 +0100
+Subject: [Buildroot] Rework musl fix patches
+In-Reply-To: <20160221235940.0b4d71ec@free-electrons.com>
+References: <20160221235940.0b4d71ec@free-electrons.com>
+Message-ID: <20160301104002.00d32dcb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Bernd,
 
-On 02/29/2016 11:41 PM, Thomas Petazzoni wrote:
-> Dear Bernd Kuhls,
->
-> On Sat, 20 Feb 2016 23:09:08 +0100, Bernd Kuhls wrote:
->> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->> ---
->>   package/libplatform/libplatform.hash | 2 ++
->>   package/libplatform/libplatform.mk   | 2 +-
->>   2 files changed, 3 insertions(+), 1 deletion(-)
->>   create mode 100644 package/libplatform/libplatform.hash
->
-> Applied to next, thanks. Instead of using a Git commit ID, it would be
-> good if you could use a tag. I see there has been a new tag called
-> platform-2.0.1 made on January 19. Maybe this would work? If it does,
-> can you send a follow-up patch?
+I am getting back to you about the below e-mail regarding musl fixes.
+Do you think you would have some time to look into this? Or should we
+try to spread the workload of cleaning up those musl fixes between
+other Buildroot contributors?
 
-I would just say that Kodi does have in it's own source code exact info 
-on which binary addon or libplatform version to use.
+Best regards,
 
-E.g. 
-https://github.com/xbmc/xbmc/blob/Jarvis/tools/depends/target/platform/Makefile 
-says Jarvis uses version 1.0.10 which is release tag under 
-https://github.com/Pulse-Eight/platform/releases.
+Thomas
 
-Also, binary addons in https://github.com/xbmc/repo-binary-addons 
-repository are split in branches (Jarvis branch in this case).
-
-Each addon does have its location and branch or commit saved in file.
-E.g. 
-https://github.com/xbmc/repo-binary-addons/blob/Jarvis/pvr.hdhomerun/pvr.hdhomerun.txt
-
-And as far as I can see, all binary addons are using latest commit from 
-particular branch.
-
-> Thanks!
->
+On Sun, 21 Feb 2016 23:59:40 +0100, Thomas Petazzoni wrote:
+> Hello Bernd,
+> 
+> Your effort to fix musl build issues of a large number of packages is
+> very very appreciated. Your latest submissions on the matter have been
+> very good, with detailed descriptions, Git formatted patches and
+> submission of the resulting fixes to the respective upstream projects.
+> 
+> However, a number of your older patches were still pending in
+> patchwork, and do not comply with those requirements. Most of them
+> simply borrow a patch from Alpine Linux, OpenEmbedded or OpenWRT, even
+> when the patch fixes tons of unrelated things and the explanations are
+> poor. Buildroot has higher requirements than Alpine Linux, OE or
+> OpenWRT in terms of patch quality and upstream submission.
+> 
+> Would it be possible to rework those patches, to make sure that:
+> 
+>  - For a given package, each musl issue gets fixed by a separate patch
+>    in package/<pkg>/.
+> 
+>  - Those patches should not be just "fix musl build", but instead a
+>    real explanation of what the patch is doing, and how it is not a
+>    fix that is musl specific, but a general fix (general for standard
+>    conformance, or missing header inclusion, etc.). A detailed
+>    description for each patch is needed.
+> 
+>  - Those patches should be formatted with Git when the upstream
+>    project uses Git.
+> 
+>  - When the upstream project is active, those patches should be
+>    submitted upstream.
+> 
+> Here are a few examples of problematic patches:
+> 
+>  * package/pppd: fix musl build
+> 
+>    A single patch that fixes tons of different issues, with no
+>    explanation, and code being commented out instead of removed.
+> 
+>  * package/monit: Fix musl build
+> 
+>    No explanation why setting GLOB_ONLYDIR to 0 is safe. Yes,
+>    GLOB_ONLYDIR is an optimization, but the monit code doesn't check
+>    if the results are directories. It seems to be safe nonetheless
+>    because the glob being tested is /proc/[0-9]*, which will probably
+>    only return directories. All those assumptions should be
+>    explained. Right now, the reviewers of your patches have to do a
+>    significant investigation work to verify if the patch is correct or
+>    not.
+> 
+> Consequently, I have marked the following musl fixes from you as
+> Changes Requested:
+> 
+>     http://patchwork.ozlabs.org/patch/576240/
+>     http://patchwork.ozlabs.org/patch/573519/
+>     http://patchwork.ozlabs.org/patch/573517/
+>     http://patchwork.ozlabs.org/patch/572316/
+>     http://patchwork.ozlabs.org/patch/572303/
+>     http://patchwork.ozlabs.org/patch/572304/
+>     http://patchwork.ozlabs.org/patch/572245/
+>     http://patchwork.ozlabs.org/patch/572242/
+>     http://patchwork.ozlabs.org/patch/572241/
+>     http://patchwork.ozlabs.org/patch/572240/
+>     http://patchwork.ozlabs.org/patch/572210/
+>     http://patchwork.ozlabs.org/patch/572208/
+>     http://patchwork.ozlabs.org/patch/572204/
+>     http://patchwork.ozlabs.org/patch/572200/
+>     http://patchwork.ozlabs.org/patch/572196/
+>     http://patchwork.ozlabs.org/patch/572195/
+>     http://patchwork.ozlabs.org/patch/572192/
+>     http://patchwork.ozlabs.org/patch/572189/
+>     http://patchwork.ozlabs.org/patch/572183/
+>     http://patchwork.ozlabs.org/patch/572156/
+>     http://patchwork.ozlabs.org/patch/572154/
+>     http://patchwork.ozlabs.org/patch/572127/
+>     http://patchwork.ozlabs.org/patch/572125/
+>     http://patchwork.ozlabs.org/patch/572109/
+>     http://patchwork.ozlabs.org/patch/572102/
+>     http://patchwork.ozlabs.org/patch/572101/
+>     http://patchwork.ozlabs.org/patch/572099/
+>     http://patchwork.ozlabs.org/patch/572096/
+> 
+> If you could find the time to rework them as suggested above and
+> submit them again, it would be great!
+> 
+> Thanks a lot for this effort!
+> 
 > Thomas
->
+
+
+
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
