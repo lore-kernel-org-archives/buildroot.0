@@ -1,59 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Mar 2016 17:43:19 +0100
-Subject: [Buildroot] [PATCH] slang: fix static link with ncurses
-In-Reply-To: <4aa51349a8c68f15bfc5ba169eeea9c6e9959128.1456834855.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 1 Mar 2016 14:20:55 +0200")
-References: <4aa51349a8c68f15bfc5ba169eeea9c6e9959128.1456834855.git.baruch@tkos.co.il>
-Message-ID: <8760x6kv2w.fsf@dell.be.48ers.dk>
+Date: Tue, 01 Mar 2016 17:48:00 +0100
+Subject: [Buildroot] [PATCH] imx-gpu-viv: fix build dependencies when
+	linking against libGAL.so
+In-Reply-To: <1456835986-16764-1-git-send-email-antoine.tenart@free-electrons.com>
+ (Antoine Tenart's message of "Tue, 1 Mar 2016 13:39:46 +0100")
+References: <1456835986-16764-1-git-send-email-antoine.tenart@free-electrons.com>
+Message-ID: <87y4a2jgan.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Antoine" == Antoine Tenart <antoine.tenart@free-electrons.com> writes:
 
- > slang does forgets ncurses that is a dependency of readline when linking the
- > slsh binary. Correct this.
+ > Packages like QT5 Base with OpenGL and X support link against libGAL.so
+ > at build time. This results in an error because some X functions used
+ > in libGAL.so aren't referenced as the libXdamage, libXext and libXfixes
+ > packages aren't built and installed into sysroot at the time. Fix this
+ > by adding these three packages as build dependencies of imx-gpu-viv.
 
- > While at it, also make sure to use staging ncurses5-config script and not the
- > host one.
+ > Signed-off-by: Antoine Tenart <antoine.tenart@free-electrons.com>
 
- > Fixes:
- > http://autobuild.buildroot.net/results/1dc/1dc52048254c32a24070fef1c1039cebb32e7ac1/
- > http://autobuild.buildroot.net/results/c17/c176511cbb147c2d8cb0ec0ff3c1612ce8971cb8/
- > http://autobuild.buildroot.net/results/78d/78dc2ba07b1d7f888aab94e223f3e0b1a1df3af5/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- >  package/slang/slang.mk | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/package/slang/slang.mk b/package/slang/slang.mk
- > index 1a7576afc363..464d92065112 100644
- > --- a/package/slang/slang.mk
- > +++ b/package/slang/slang.mk
- > @@ -40,6 +40,10 @@ endif
- 
- >  ifeq ($(BR2_PACKAGE_NCURSES),y)
- >  SLANG_DEPENDENCIES += ncurses
- > +SLANG_CONF_ENV += ac_cv_path_nc5config=$(STAGING_DIR)/usr/bin/ncurses5-config
- > +ifeq ($(BR2_STATIC_LIBS),y)
- > +SLANG_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs ncurses`"
- > +endif
-
-You forgot to add host-pkgconf as a dependency. Why is both needed,
-doesn't ncurses5-config return correct info?
-
-Here they seem to be equivalent with a static build:
-
-./host/usr/bin/pkg-config --libs ncurses
--lncurses
-./staging/usr/bin/ncurses5-config --libs
--L/home/peko/source/buildroot/output-test/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lncurses
-
-Your commit message talks about readline, so perhaps the problem is
-really about readline? How does slang figure out how to link with readline?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
