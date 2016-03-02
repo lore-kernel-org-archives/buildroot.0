@@ -1,79 +1,156 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Wed, 2 Mar 2016 08:50:49 +0100
-Subject: [Buildroot] [v3,
-	1/4] barebox: prepare for secondary config build
-In-Reply-To: <56D620F2.3090605@mind.be>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-2-git-send-email-pieter@boesman.nl>
- <56D0DCFB.8060601@mind.be> <20160228081204.GB4297@smipidev>
- <20160229074707.GA17808@smipidev> <56D620F2.3090605@mind.be>
-Message-ID: <20160302075049.GA10481@smipidev>
+From: Jonathan Ben Avraham <yba@tkos.co.il>
+Date: Wed, 2 Mar 2016 09:51:58 +0200 (IST)
+Subject: [Buildroot] [PATCH 1/1 v2] sphinxbase: new package
+In-Reply-To: <CAGm1_ktWxhn10OZf2S2x=yRvjfJE2N5Qu+50c-5kWdzXiuX9cw@mail.gmail.com>
+References: <1453134708-17909-1-git-send-email-yba@tkos.co.il>
+ <CAGm1_ktWxhn10OZf2S2x=yRvjfJE2N5Qu+50c-5kWdzXiuX9cw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.11.1603020947360.16067@tanhuma.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 02, 2016 at 12:08:34AM +0100, Arnout Vandecappelle wrote:
-> On 02/29/16 08:47, Pieter Smith wrote:
-[snip]
-> >  
-> > Thanks for the suggestion. It is shaping up nicely. There is one aspect that I
-> > would appreciate input on: To all but completely eliminate duplication in the
-> > makefiles for the two packages, I am wrapping all the current functionality in
-> > boot/barebox/barebox.mk in a parameterized barebox-package function. E.g.:
-> > 
-> >   define barebox-package
-> >   $(1)_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
-> >   ...
-> >   $$(eval $$(kconfig-package))
-> >   endef
-> >   $(eval $(call barebox-package,BAREBOX))
-> > 
-> > And the whole of boot/barebox/barebox-2/barebox-2.mk becomes:
-> > 
-> >   $(eval $(call barebox-package,BAREBOX_2))
+Hi Yegor,
+See inline comments below.
+
+On Mon, 22 Feb 2016, Yegor Yefremov wrote:
+
+> Date: Mon, 22 Feb 2016 16:00:56 +0100
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> To: Jonathan Ben-Avraham <yba@tkos.co.il>
+> Cc: "buildroot at busybox.net" <buildroot@busybox.net>
+> Subject: Re: [Buildroot] [PATCH 1/1 v2] sphinxbase: new package
 > 
->  No, I don't think we want this, because it hides a lot of what barebox-2 is
-> doing internally. It's OK and actually better (in my opinion) if barebox-2.mk is
-> just a long list like:
+> Hi Jonathan,
+>
+> On Mon, Jan 18, 2016 at 5:31 PM, Jonathan Ben-Avraham <yba@tkos.co.il> wrote:
+>> From: Jonathan Ben Avraham <yba@tkos.co.il>
+>>
+>> CMUSphinx toolkit is a speech recognition toolkit with various tools
+>> used to build speech applications. CMU Sphinx toolkit has a number of
+>> packages for different tasks and applications. The toolkit is designed
+>> for use on mobile platforms.
+>>
+>> Signed-off-by: Jonathan Ben Avraham <yba@tkos.co.il>
+>> ---
+>> Changes v1 -> v2:
+>>  1. Applied all review comments by Arnout Vandecappelle:
+>>   a. Removed comments regarding github repo
+>>   b. Added comment regarding missing license file upstream bug report
+>>   c. Added example source file as license file
+>>   d. Removed redundant source specification
+>>
+>>  2. Tested patch application with git apply --check
+>>
+>>  package/Config.in                  |    1 +
+>>  package/sphinxbase/Config.in       |   13 +++++++++++++
+>>  package/sphinxbase/sphinxbase.hash |    2 ++
+>>  package/sphinxbase/sphinxbase.mk   |   18 ++++++++++++++++++
+>>  4 files changed, 34 insertions(+)
+>>  create mode 100644 package/sphinxbase/Config.in
+>>  create mode 100644 package/sphinxbase/sphinxbase.hash
+>>  create mode 100644 package/sphinxbase/sphinxbase.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 89b23db..b555808 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1213,6 +1213,7 @@ endif
+>>         source "package/protobuf-c/Config.in"
+>>         source "package/qhull/Config.in"
+>>         source "package/qlibc/Config.in"
+>> +       source "package/sphinxbase/Config.in"
+>>         source "package/startup-notification/Config.in"
+>>         source "package/tz/Config.in"
+>>         source "package/tzdata/Config.in"
+>> diff --git a/package/sphinxbase/Config.in b/package/sphinxbase/Config.in
+>> new file mode 100644
+>> index 0000000..ee9ca31
+>> --- /dev/null
+>> +++ b/package/sphinxbase/Config.in
+>> @@ -0,0 +1,13 @@
+>> +config BR2_PACKAGE_SPHINXBASE
+>> +       bool "sphinxbase"
+>> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +       help
+>> +         CMUSphinx toolkit is a leading speech recognition toolkit with
+>> +         various tools used to build speech applications. CMU Sphinx
+>> +         toolkit has a number of packages for different tasks and
+>> +         applications.
+>> +
+>> +         http://cmusphinx.sourceforge.net/
+>> +
+>> +comment "sphinxbase needs a toolchain with threads"
+>> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+>> diff --git a/package/sphinxbase/sphinxbase.hash b/package/sphinxbase/sphinxbase.hash
+>> new file mode 100644
+>> index 0000000..483fda3
+>> --- /dev/null
+>> +++ b/package/sphinxbase/sphinxbase.hash
+>> @@ -0,0 +1,2 @@
+>> +# Locally computed
+>> +sha256 b8b19a207d1a285753a93ed67c36aacba0ebdc0892471fd3be6f6ffaba776f88 sphinxbase-5prealpha.tar.gz
+>
+> sha256 seems to be wrong
 
-Pity. This quite elegantly solved my concerns. barebox and barebox-2 differ
-only in menuconfig and barebox environment configuration space. The rest should
-always be identical.
+The upstream developers respun the tarball at least twice in the past 
+month.
 
-> BAREBOX_2_VERSION = $(BAREBOX_VERSION)
-> BAREBOX_2_SITE = $(BAREBOX_SITE)
+>> diff --git a/package/sphinxbase/sphinxbase.mk b/package/sphinxbase/sphinxbase.mk
+>> new file mode 100644
+>> index 0000000..9397997
+>> --- /dev/null
+>> +++ b/package/sphinxbase/sphinxbase.mk
+>> @@ -0,0 +1,17 @@
+>> +################################################################################
+>> +#
+>> +# sphinxbase
+>> +#
+>> +################################################################################
+>> +
+>> +SPHINXBASE_VERSION = 5prealpha
+>> +SPHINXBASE_SITE = http://downloads.sourceforge.net/project/cmusphinx/sphinxbase
+>
+> I could download the file only with this URL:
+>
+> SPHINXBASE_SITE =
+> http://downloads.sourceforge.net/project/cmusphinx/sphinxbase/5prealpha
 
-This shouldn't change much in future, so I can still do the variable copying if
-you prefer.
+Indeed, the URL changed.
 
-> BAREBOX_2_BUILD_CMDS = $(BAREBOX_BUILD_CMDS)
+>> +SPHINXBASE_AUTORECONF = YES
+>
+> Why do you need autoreconf?
 
-This will not work. Both the BAREBOX_BUILD_CMDS and BAREBOX_INSTALL_IMAGES_CMDS
-need parameterization. I can solve this with with:
-1. A scaled down version of the above barebox-package function to generate the
-   boilerplate, or
-2. Parameterizable functions and duplicated boilerplate.
+Oops, left over from the first version of the patch that used the GitHub 
+repo with the autotools infrastructure inside.
 
-IMHO reducing duplication always improves clarity and maintenance, so I would
-go for option 1.
+Thanks for the review. I just now submitted v3.
 
-What has your preference?
+  - yba
 
-> ...
-> $(eval $(kconfig-package))
-> 
-> 
->  Regards,
->  Arnout
 
-[snip]
+> Yegor
+>
+>> +SPHINXBASE_LICENSE = MIT
+>> +# Note http://sourceforge.net/p/cmusphinx/bugs/441/ "LICENSE file missing in"
+>> +# 5prealpha tarballs". The license is contained in the copyright notice at the
+>> +# top of each source file. For example:
+>> +SPHINXBASE_LICENSE_FILES = src/libsphinxbase/util/bio.c
+>> +SPHINXBASE_CONF_OPTS = --without-python
+>> +
+>> +$(eval $(autotools-package))
+>> --
+>> 1.7.9.5
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 
-I would like to:
-1. Ensure that all improvements to barebox propagate to barebox-2 in future.
-2. Avoid having something error-prone to resolve the above. IMHO using a review
-   process to keep two pieces of code in sync is quite error-prone and an
-   unnecessary cognitive burden on developers.
-
-- Pieter
+-- 
+  9590 8E58 D30D 1660 C349  673D B205 4FC4 B8F5 B7F9  ~. .~  Tk Open Systems
+=}-------- Jonathan Ben-Avraham ("yba") ----------ooO--U--Ooo------------{=
+mailto:yba at tkos.co.il tel:+972.52.486.3386 http://tkos.co.il skype:benavrhm
