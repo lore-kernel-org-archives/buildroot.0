@@ -1,42 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Mar 2016 22:57:15 +0100
-Subject: [Buildroot] [git commit] cantarell: bump to version 0.0.24
-Message-ID: <20160302220356.349BB800B1@busybox.osuosl.org>
+From: Geoff Levand <geoff@infradead.org>
+Date: Wed, 02 Mar 2016 13:47:14 -0800
+Subject: [Buildroot] [PATCH 0/4] Add go language support
+In-Reply-To: <20160302214959.419006f6@free-electrons.com>
+References: <cover.1456946494.git.geoff@infradead.org>
+ <20160302214959.419006f6@free-electrons.com>
+Message-ID: <1456955234.13916.34.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97827718df90f4f91c72bc452cc05c769260179f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/cantarell/cantarell.hash | 4 ++--
- package/cantarell/cantarell.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, 2016-03-02 at 21:49 +0100, Thomas Petazzoni wrote:
+> However, we already have some pending Go-related packages in our
+> patch
+> queue. What I would like to see is a single patch series adding Go
+> support, which is approved by the different developers interested in Go
+> support in Buildroot.
 
-diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
-index 2d2bab5..e2cc00e 100644
---- a/package/cantarell/cantarell.hash
-+++ b/package/cantarell/cantarell.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.23.sha256sum
--sha256	d85e165ac5d676d6b21c7870d8243cb612a2dc766d91fda788d56d5f5ad5db4e	cantarell-fonts-0.0.23.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.24.sha256sum
-+sha256	9cad649ae84f7e4ca1be637c27e2fa19e1fbf00d4bf6480171ccfad405b39264	cantarell-fonts-0.0.24.tar.xz
-diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
-index 9943d70..b4133ec 100644
---- a/package/cantarell/cantarell.mk
-+++ b/package/cantarell/cantarell.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CANTARELL_VERSION_MAJOR = 0.0
--CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).23
-+CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).24
- CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
- CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
- CANTARELL_DEPENDENCIES = host-pkgconf
+Thanks for trying to coordinating things.
+
+> The other Go patch series are:
+> 
+>   http://lists.busybox.net/pipermail/buildroot/2016-February/151550.html
+>   (from Ludovic Guegan)
+
+I took a quick look at this.  Patch 1, which builds the go
+complier, has the bootstrap and final compiler built in the
+same package.  I think it better to split the bootstrap out
+into its own package as I have done since then the two packages
+are each then simpler and I think easier to maintain.
+
+Also, this implementation does not build cross compilers
+correctly, nor does it install the go pkg and tools, nor does
+it enable CGO_ENABLED for C language linkage support.
+
+All in all, think my patches seem more complete in adding
+go compiler support.
+
+I think the other patches in Ludovic's series can be considered
+independent of the go compiler.  Patch 4 which adds pkg-golang.mk
+is something needed.  I had planned to look into this.
+
+>  http://patchwork.ozlabs.org/patch/542108//
+>   (from Christian Stewart)
+
+I did see this is now out of date, building go compiler version
+1.4.2.  It also doesn't seem to install the go tools.  To bring
+these up to date would need almost a complete re-write since
+the current compiler now requires a bootstrap compiler.  I
+think my patches superseed this series.
+
+My proposal is to use my patches to provide the basic go compiler
+support.  Ludovic's other patches provide additional language
+support, and seem as though they could be useful, but they are
+additions to the basic compiler support, and I think can be
+considered independently.
+
+Is my proposal acceptable?  Let's work to move forward.
+
+-Geoff
