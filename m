@@ -1,33 +1,37 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Wed, 2 Mar 2016 08:55:33 +0100
-Subject: [Buildroot] [v3,
- 4/4] beaglebone: adds barebox bootloader defconfig
-In-Reply-To: <56D62281.8090502@mind.be>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-5-git-send-email-pieter@boesman.nl>
- <56D0E40E.40800@mind.be> <20160229084432.GA18909@smipidev>
- <56D62281.8090502@mind.be>
-Message-ID: <20160302075533.GC10481@smipidev>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Mar 2016 09:13:49 +0100
+Subject: [Buildroot] [PATCH] package/cups: fix static linking with GnuTLS
+In-Reply-To: <56D61DC3.8090502@mind.be>
+References: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
+ <20160228230022.3d8805d6@free-electrons.com>
+ <56D61DC3.8090502@mind.be>
+Message-ID: <20160302091349.3b195481@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 02, 2016 at 12:15:13AM +0100, Arnout Vandecappelle wrote:
-> On 02/29/16 09:44, Pieter Smith wrote:
+Dear Arnout Vandecappelle,
 
-[snip]
+On Tue, 1 Mar 2016 23:54:59 +0100, Arnout Vandecappelle wrote:
 
-> > A comment in the defconfig file? Not that I am against it, but will anybody
-> > actually read it?
+>  Well, inside a package, it's the responsibility of the package build system to
+> link with all required libraries (in the required order). That can either be
+> handled by a helper like libtool, or the Makefile should handle it manually.
 > 
->  Look at the other defconfig files, most of them have comments in them. That's
-> mostly for people who update the defconfigs, but also for newcomers who take a
-> look at them to make it easier to understand.
+>  In other words: I beliver Joerg's fix is the correct one.
 
-ACK. Will add the comments.
+As I said in my reply: the issue with Joerg fix is that in the dynamic
+linking case, it creates useless additional NEEDED entries in the
+binaries, which are not needed since those binaries are already linked
+with libcups.so, which itself is linked with libgnutls.so.
 
-[snip]
+Now whether it strongly matters can be discussed, but it is for sure
+not very elegant.
 
-- Pieter
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
