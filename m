@@ -1,43 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 2 Mar 2016 21:48:46 +0100
-Subject: [Buildroot] [PATCH] package/sdl_mixer: disable libmad support
- for static build only
-In-Reply-To: <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
-References: <1456073708-19562-1-git-send-email-romain.naour@gmail.com>
- <20160221181830.01215f6e@free-electrons.com>
- <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
-Message-ID: <56D751AE.2060300@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Mar 2016 21:49:59 +0100
+Subject: [Buildroot] [PATCH 0/4] Add go language support
+In-Reply-To: <cover.1456946494.git.geoff@infradead.org>
+References: <cover.1456946494.git.geoff@infradead.org>
+Message-ID: <20160302214959.419006f6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rodrigo, Thomas, All,
+Hello Geoff,
 
-Le 21/02/2016 21:06, Rodrigo Rebello a ?crit :
-> Thomas, Romain,
+On Wed, 02 Mar 2016 19:23:33 +0000, Geoff Levand wrote:
+
+> This series add support for the go programming language.  I tested the build of
+> the included flannel package on i386, powerpc64, arm (32 bit) and arm64.  I did
+> runtime testing of the generated flannel binary on arm64.
 > 
-
-[snip]
-
+> Patch 1 adds a host only bootstrap compiler needed to build the latest go
+> versions.  The host and target support can be build independently, but either
+> of the two need this bootstrap package.
 > 
-> I don't think this workaround is necessary at all. Adding a
-> 'Libs.private' section to SDL_mixer.pc and fixing packages that depend
-> on SDL_mixer so that they use pkg-config doesn't seem too complicated.
-> Currently only chocolate-doom, lbreakout2, ltris and prboom depend on
-> it.
+> Patch 2 adds support for a host cross compiler, libraries and tools.
 > 
-> I'll work on a patch for chocolate-doom now and handle the other 3 later.
-
-I'll will mark this patch rejected in patchwork.
-
-Thanks for working on this.
-
-Best regards,
-Romain
-
+> Patch 3 adds support for a native compiler, libraries and tools for the target.
 > 
-> Regards,
-> Rodrigo
-> 
+> Patch 4 add a go language package flannel that can be used to test the go
+> compiler.
+
+Thanks a lot for this submission!
+
+However, we already have some pending Go-related packages in our patch
+queue. What I would like to see is a single patch series adding Go
+support, which is approved by the different developers interested in Go
+support in Buildroot.
+
+The other Go patch series are:
+
+  http://lists.busybox.net/pipermail/buildroot/2016-February/151550.html
+  (from Ludovic Guegan)
+
+  http://patchwork.ozlabs.org/patch/542108/
+  (from Christian Stewart)
+
+I have Cc'ed Ludovic and Christian. It would be good if you could sync
+with them.
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
