@@ -1,55 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 02 Mar 2016 20:27:52 -0000
-Subject: [Buildroot] [git commit] barebox: bump to version 2016.02.0
-Message-ID: <20160302202752.33FFB80203@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] freetype: bump to version 2.6.3
+Message-ID: <20160302202751.48CE97FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd0220e32fcdae7cf4c42044123fa53ad8921e0a
+commit: https://git.buildroot.net/buildroot/commit/?id=3c3fad5bf54a2e574d624b7a5c9f16660754d6db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 39cb5d2..363ac2b 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index dc238f2..45f91df 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,3 +1,3 @@
+-# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
+-md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
+-sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
++# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.3/
++md5	0037b25a8c090bc8a1218e867b32beb1	freetype-2.6.3.tar.bz2
++sha1	6c98bd5d0be313207c37ca23d25faf983486aee5	freetype-2.6.3.tar.bz2
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index fa11b0c..d95c424 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2016.01.0"
-+	bool "2016.02.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2016.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2016.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index b6e1869..a5d526a 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2015.12.0.tar.bz2.md5
--md5 99f8c1252e3085e4b3a4e365ff36e9bd barebox-2016.01.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2016.02.0.tar.bz2.md5
-+md5 451cf8d025af6acbe7aaa2596541550f barebox-2016.02.0.tar.bz2
- 
- # Locally calculated
--sha256 f0bb34b745b9c8c626186e22b0154f57c15d0eec5de1e3654f740665b2136d91 barebox-2016.01.0.tar.bz2
-+sha256 1b4760e535994f950c10ef407ff59cf5c0ed97ab30476b9054e1f65d3e372eff barebox-2016.02.0.tar.bz2
+-FREETYPE_VERSION = 2.6.2
++FREETYPE_VERSION = 2.6.3
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
+ FREETYPE_INSTALL_STAGING = YES
