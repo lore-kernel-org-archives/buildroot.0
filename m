@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 02 Mar 2016 20:27:53 -0000
-Subject: [Buildroot] [git commit] package/mjpg-streamer: added optional
-	dependency to libv4l
-Message-ID: <20160302202752.038BC80203@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mono: bump to version 4.2.2.30
+Message-ID: <20160302202752.170A880203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4e6a3a186f58bee3566eb1aaa5b8a311fb515c8
+commit: https://git.buildroot.net/buildroot/commit/?id=7eeed78bfa0fc8a771b5c3c42b86cdcfaf6df0f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This patch bumps mono to the latest 4.2.2.30 version.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/mjpg-streamer/mjpg-streamer.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/mono/mono.hash | 2 +-
+ package/mono/mono.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
-index e54c600..a710af6 100644
---- a/package/mjpg-streamer/mjpg-streamer.mk
-+++ b/package/mjpg-streamer/mjpg-streamer.mk
-@@ -14,8 +14,13 @@ MJPG_STREAMER_LICENSE = GPLv2+
- MJPG_STREAMER_LICENSE_FILES = LICENSE
- MJPG_STREAMER_DEPENDENCIES = jpeg
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 001f6be..37e0e8b 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,2 +1,2 @@
+ # sha256 locally computed
+-sha256 b7b461fe04375f621d88166ba8c6f1cb33c439fd3e17136460f7d087a51ed792  mono-4.2.1.102.tar.bz2
++sha256 57858cd033be9915d7abdc5158c1faae8fa05757c3b7117cab3d703aa696c56b  mono-4.2.2.30.tar.bz2
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index 8f99983..e50ef50 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+MJPG_STREAMER_DEPENDENCIES += libv4l
-+MJPG_STREAMER_USE_LIBV4L += USE_LIBV4L2=true
-+endif
-+
- define MJPG_STREAMER_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D) $(MJPG_STREAMER_USE_LIBV4L)
- endef
- 
- define MJPG_STREAMER_INSTALL_TARGET_CMDS
+-MONO_VERSION = 4.2.1.102
++MONO_VERSION = 4.2.2.30
+ MONO_SITE = http://download.mono-project.com/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
+ MONO_LICENSE = GPLv2 or MIT (compiler, tools), LGPLv2 (runtime libs), MIT (class libs) or commercial
