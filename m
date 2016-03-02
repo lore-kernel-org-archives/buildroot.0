@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 23:57:15 +0100
-Subject: [Buildroot] [PATCH/next 13/31] package/kodi-audio??coder-*:
- mass version bump, add hashes
-In-Reply-To: <1456006176-21308-14-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 2 Mar 2016 23:57:18 +0100
+Subject: [Buildroot] [PATCH/next 14/31] package/kodi-pvr-*: mass version
+ bump, add hashes
+In-Reply-To: <1456006176-21308-15-git-send-email-bernd.kuhls@t-online.de>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-14-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160302235715.3b1e5cbd@free-electrons.com>
+ <1456006176-21308-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160302235718.153212a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +14,61 @@ To: buildroot@busybox.net
 
 Dear Bernd Kuhls,
 
-On Sat, 20 Feb 2016 23:09:18 +0100, Bernd Kuhls wrote:
-> This patch bumps all audio-en- and decoder addons.
-> 
+On Sat, 20 Feb 2016 23:09:19 +0100, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash     | 2 ++
->  package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk       | 2 +-
->  package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash   | 2 ++
->  package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk     | 2 +-
->  package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash     | 2 ++
->  package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk       | 2 +-
->  package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash     | 2 ++
->  package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk       | 2 +-
->  package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash     | 2 ++
->  package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk       | 2 +-
->  package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash   | 2 ++
->  package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk     | 2 +-
->  package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash | 2 ++
->  package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk   | 2 +-
->  package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash           | 2 ++
->  package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk             | 2 +-
->  package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash           | 2 ++
->  package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk             | 2 +-
->  package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash       | 2 ++
->  package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk         | 2 +-
->  package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash             | 2 ++
->  package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk               | 2 +-
->  22 files changed, 33 insertions(+), 11 deletions(-)
->  create mode 100644 package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
->  create mode 100644 package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
->  create mode 100644 package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
->  create mode 100644 package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
->  create mode 100644 package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
->  create mode 100644 package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
->  create mode 100644 package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
->  create mode 100644 package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
->  create mode 100644 package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
->  create mode 100644 package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
->  create mode 100644 package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
+>  package/kodi-addon-xvdr/kodi-addon-xvdr.hash                          | 2 ++
+>  package/kodi-addon-xvdr/kodi-addon-xvdr.mk                            | 4 ++--
+>  package/kodi-pvr-argustv/kodi-pvr-argustv.hash                        | 2 ++
+>  package/kodi-pvr-argustv/kodi-pvr-argustv.mk                          | 4 +++-
+>  package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash                        | 2 ++
+>  package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk                          | 4 +++-
+>  package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash                    | 2 ++
+>  package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk                      | 4 +++-
+>  package/kodi-pvr-filmon/kodi-pvr-filmon.hash                          | 2 ++
+>  package/kodi-pvr-filmon/kodi-pvr-filmon.mk                            | 4 +++-
+>  package/kodi-pvr-hts/kodi-pvr-hts.hash                                | 2 ++
+>  package/kodi-pvr-hts/kodi-pvr-hts.mk                                  | 4 +++-
+>  package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash                  | 2 ++
+>  package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk                    | 4 +++-
+>  .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash  | 2 ++
+>  .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk    | 4 +++-
+>  package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash                          | 2 ++
+>  package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk                            | 4 +++-
+>  package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash                        | 2 ++
+>  package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk                          | 4 +++-
+>  package/kodi-pvr-njoy/kodi-pvr-njoy.hash                              | 2 ++
+>  package/kodi-pvr-njoy/kodi-pvr-njoy.mk                                | 4 +++-
+>  package/kodi-pvr-pctv/kodi-pvr-pctv.hash                              | 2 ++
+>  package/kodi-pvr-pctv/kodi-pvr-pctv.mk                                | 4 +++-
+>  package/kodi-pvr-stalker/kodi-pvr-stalker.hash                        | 2 ++
+>  package/kodi-pvr-stalker/kodi-pvr-stalker.mk                          | 4 +++-
+>  package/kodi-pvr-vbox/kodi-pvr-vbox.hash                              | 2 ++
+>  package/kodi-pvr-vbox/kodi-pvr-vbox.mk                                | 4 +++-
+>  package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash                      | 2 ++
+>  package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk                        | 4 +++-
+>  package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash                          | 2 ++
+>  package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk                            | 4 +++-
+>  package/kodi-pvr-wmc/kodi-pvr-wmc.hash                                | 2 ++
+>  package/kodi-pvr-wmc/kodi-pvr-wmc.mk                                  | 4 +++-
+>  34 files changed, 84 insertions(+), 18 deletions(-)
+>  create mode 100644 package/kodi-addon-xvdr/kodi-addon-xvdr.hash
+>  create mode 100644 package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+>  create mode 100644 package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+>  create mode 100644 package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+>  create mode 100644 package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+>  create mode 100644 package/kodi-pvr-hts/kodi-pvr-hts.hash
+>  create mode 100644 package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+>  create mode 100644 package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+>  create mode 100644 package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+>  create mode 100644 package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+>  create mode 100644 package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+>  create mode 100644 package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+>  create mode 100644 package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+>  create mode 100644 package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+>  create mode 100644 package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+>  create mode 100644 package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+>  create mode 100644 package/kodi-pvr-wmc/kodi-pvr-wmc.hash
 
 Applied to master, thanks.
 
