@@ -1,67 +1,140 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Mar 2016 19:18:19 +0100
+Date: Wed, 2 Mar 2016 19:12:57 +0100
 Subject: [Buildroot] [v3,
- 3/4] barebox: user selection of build output images
-In-Reply-To: <20160302075408.GB10481@smipidev>
+	1/4] barebox: prepare for secondary config build
+In-Reply-To: <20160302075049.GA10481@smipidev>
 References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-4-git-send-email-pieter@boesman.nl>
- <56D0E32C.3050207@mind.be> <20160229083817.GC18059@smipidev>
- <56D62247.8000500@mind.be> <20160302075408.GB10481@smipidev>
-Message-ID: <56D72E6B.1090806@mind.be>
+ <1453329821-3167-2-git-send-email-pieter@boesman.nl>
+ <56D0DCFB.8060601@mind.be> <20160228081204.GB4297@smipidev>
+ <20160229074707.GA17808@smipidev> <56D620F2.3090605@mind.be>
+ <20160302075049.GA10481@smipidev>
+Message-ID: <56D72D29.5050600@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/02/16 08:54, Pieter Smith wrote:
-> On Wed, Mar 02, 2016 at 12:14:15AM +0100, Arnout Vandecappelle wrote:
->> On 02/29/16 09:38, Pieter Smith wrote:
-> 
+ [Adding other core devs in CC, see the beginning and the end]
+
+On 03/02/16 08:50, Pieter Smith wrote:
+> On Wed, Mar 02, 2016 at 12:08:34AM +0100, Arnout Vandecappelle wrote:
+>> On 02/29/16 08:47, Pieter Smith wrote:
 > [snip]
-> 
+>>>  
+>>> Thanks for the suggestion. It is shaping up nicely. There is one aspect that I
+>>> would appreciate input on: To all but completely eliminate duplication in the
+>>> makefiles for the two packages, I am wrapping all the current functionality in
+>>> boot/barebox/barebox.mk in a parameterized barebox-package function. E.g.:
 >>>
->>> ACK. Done. I solved this with the above default and help text pointing the user
->>> to use 'barebox.bin' for older versions. I'm just waiting for Yegor, and then
->>> I'll repost.
+>>>   define barebox-package
+>>>   $(1)_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
+>>>   ...
+>>>   $$(eval $$(kconfig-package))
+>>>   endef
+>>>   $(eval $(call barebox-package,BAREBOX))
 >>>
->>> Right now a user-friendly warning is generated if an old config is used and
->>> this config item has not yet been set. 
+>>> And the whole of boot/barebox/barebox-2/barebox-2.mk becomes:
+>>>
+>>>   $(eval $(call barebox-package,BAREBOX_2))
 >>
->>  If you give it a default value, it _will_ be set for old configs.
+>>  No, I don't think we want this, because it hides a lot of what barebox-2 is
+>> doing internally. It's OK and actually better (in my opinion) if barebox-2.mk is
+>> just a long list like:
 > 
-> If the user remembers to run defconfig. If he doesn't, the error is quite vague.
+> Pity. This quite elegantly solved my concerns. barebox and barebox-2 differ
+> only in menuconfig and barebox environment configuration space. The rest should
+> always be identical.
+> 
+>> BAREBOX_2_VERSION = $(BAREBOX_VERSION)
+>> BAREBOX_2_SITE = $(BAREBOX_SITE)
+> 
+> This shouldn't change much in future, so I can still do the variable copying if
+> you prefer.
+> 
+>> BAREBOX_2_BUILD_CMDS = $(BAREBOX_BUILD_CMDS)
+> 
+> This will not work. Both the BAREBOX_BUILD_CMDS and BAREBOX_INSTALL_IMAGES_CMDS
+> need parameterization. I can solve this with with:
+> 1. A scaled down version of the above barebox-package function to generate the
+>    boilerplate, or
+> 2. Parameterizable functions and duplicated boilerplate.
+> 
+> IMHO reducing duplication always improves clarity and maintenance, so I would
+> go for option 1.
+> 
+> What has your preference?
 
- When you update buildroot and run 'make', there should be an implicit run of
-'make oldconfig', which will update all the automatic symbols and ask for any
-new ones. TBH I don't completely understand how it works, but it happens like
-that for me.
+ The BUILD_CMDS can be parameterized without using functions, by using
+$($(PKG)_...) variables instead of $(BAREBOX_2_...). That's what I tried to show
+in my first reply:
 
- Regards,
- Arnout
+define BAREBOX_BUILD_CMDS
+	$($(PKG)_BUILD_BAREBOXENV_CMDS)
+	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
+	$($(PKG)_BUILD_CUSTOM_ENV)
+endef
+BAREBOX_2_BUILD_CMDS = $(BAREBOX_BUILD_CMDS)
+
+BAREBOX_2_BUILD_BAREBOXENV_CMDS and BAREBOX_2_BUILD_CUSTOM_ENV will not be set,
+so those parts are removed. The rest should be identical for barebox-2, but if
+you do need something else you can add something like $($(PKG)_EXTRA_FLAGS).
 
 > 
->>> I can have the makefile also generate a
->>> hint for older barebox versions if the image filename isn't found:
->>> - Do you think the additional complexity is warranted?
+>> ...
+>> $(eval $(kconfig-package))
 >>
->>  Yes, that's worth it.
-> 
-> ACK. Will do.
-> 
+>>
 >>  Regards,
 >>  Arnout
 > 
 > [snip]
 > 
+> I would like to:
+> 1. Ensure that all improvements to barebox propagate to barebox-2 in future.
+> 2. Avoid having something error-prone to resolve the above. IMHO using a review
+>    process to keep two pieces of code in sync is quite error-prone and an
+>    unnecessary cognitive burden on developers.
+
+ There isn't really much to keep in sync between the two, only when you suddenly
+add _INSTALL_STAGING_CMDS for instance you'd have to update barebox-2.mk to copy
+that as well.
+
+
+ There are two reasons why I prefer the copying of variables:
+
+1. I think that functions are a bit more difficult to understand.
+2. I'm considering to add infrastructure that facilitates the pattern of copying
+variables, something like
+
+$(eval $(call inherit-package,barebox))
+
+which would expand to
+
+BAREBOX_2_VERSION ?= BAREBOX_VERSION
+BAREBOX_2_SITE ?= BAREBOX_SITE
+...
+BAREBOX_2_BUILD_CMDS ?= BAREBOX_BUILD_CMDS
+
+so that in the end the barebox-2.mk does indeed become nothing more than a
+single eval line, and that the same approach can easily be used for other packages.
+
+
+ However, this is just my opinion, other developers may see it differently,
+hence the CC.
+
+
+ Regards,
+ Arnout
+
+> 
 > - Pieter
 > 
 
-
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
 LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
 GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
