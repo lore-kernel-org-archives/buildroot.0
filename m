@@ -1,60 +1,165 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 21:38:12 +0100
-Subject: [Buildroot] [RFC PATCH 2/3] Add package cbootimage
-In-Reply-To: <1455203110-16759-3-git-send-email-julian@jusst.de>
-References: <1455203110-16759-1-git-send-email-julian@jusst.de>
- <1455203110-16759-3-git-send-email-julian@jusst.de>
-Message-ID: <20160302213812.36ab0fe9@free-electrons.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Wed, 2 Mar 2016 15:47:02 -0500
+Subject: [Buildroot] [PATCH v3 1/2] erlang: use erlang's native atomic
+	ops
+In-Reply-To: <56D22060.4020108@mind.be>
+References: <1456082246-28181-1-git-send-email-fhunleth@troodon-software.com>
+ <56D22060.4020108@mind.be>
+Message-ID: <CA+-urNTJJ292+XY1gK4-4nwgFvpLmF2AaUtnVWvx=LcO=Yx88A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Julian Scheel,
+Hi Arnout, all,
 
-On Thu, 11 Feb 2016 10:05:09 -0500, Julian Scheel wrote:
+On Sat, Feb 27, 2016 at 5:17 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+> On 02/21/16 20:17, Frank Hunleth wrote:
+>> Now that we're using Erlang 18, the preferred atomic ops implementation
+>> for Erlang is its own built-in implementation, so use it.  It is still
+>> possible to use libatomic_ops if the native implementation does not
+>> work. BR2_PACKAGE_ERLANG_ARCH_SUPPORTS is added now that
+>> BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS is no longer appropriate for
+>> checking whether Erlang can be built for a platform.
+>>
+>> This fixes an autobuilder failure when using libatomic_ops on aarch64.
+>> Erlang's native atomic ops implementation works on this platform.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/0cd/0cd22eb74fa29e5a85bf897762e16ab3daf33962/
+>>
+>> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+>> ---
+> [snip]
+>> +config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+>> +     bool
+>> +     default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sparc_v9 || BR2_arm || BR2_aarch64 # case (1)
+>
+>  This line is too long, please split it.
+>
+>> +     default y if BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # case (4)
+>>
+>>  config BR2_PACKAGE_ERLANG
+>>       bool "erlang"
+>>       depends on BR2_USE_MMU # fork()
+>>       depends on !BR2_STATIC_LIBS
+>> -     depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+>> -     select BR2_PACKAGE_LIBATOMIC_OPS
+>> +     depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+>>       help
+>>         Erlang is a programming language used to build massively scalable
+>>         soft real-time systems with requirements on high availability.
+>> @@ -20,6 +36,14 @@ config BR2_PACKAGE_ERLANG
+>>
+>>  if BR2_PACKAGE_ERLANG
+>>
+>> +config BR2_PACKAGE_ERLANG_LIBATOMIC_OPS
+>> +     bool "libatomic_ops"
+>
+>  Does it make sense to let the user select this? I don't think so...
+>
+>  I think we should have:
+>
+> config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS_DIRECTLY # case (1)
+>         bool
+>         default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || \
+>                 BR2_sparc_v9 || BR2_arm # aarch64 causes build failures
+>
+> config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+>         bool
+>         default y if BR2_PACKAGE_ERLANG_ARCH_SUPPORTS_DIRECTLY
+>         default y if BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # case (4)
+>
+> and nothing more.
 
-> diff --git a/package/cbootimage/Config.in.host b/package/cbootimage/Config.in.host
-> new file mode 100644
-> index 0000000..4cdde38
-> --- /dev/null
-> +++ b/package/cbootimage/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_CBOOTIMAGE
-> +	bool "host cbootimage"
+The more I think about this patch, the more I want to drop all
+references to libatomic_ops. The reason is that the native Erlang
+atomic ops implementation supports almost every platform supported by
+libatomic_ops. In fact, it looks like every _defconfig in Buildroot
+that supports Erlang uses the native atomic ops implementation rather
+than libatomic_ops. (I actually tried building all _defconfigs at one
+point, but I'll double check if there are doubts.)
 
-Same thing: please add a "depends on BR2_arm || BR2_armeb" here.
+Does it make sense to remove libatomic_ops altogether? I think the
+original reason for including it doesn't apply now that we upgraded to
+Erlang 18.
 
-> diff --git a/package/cbootimage/cbootimage.mk b/package/cbootimage/cbootimage.mk
-> new file mode 100644
-> index 0000000..3efef36
-> --- /dev/null
-> +++ b/package/cbootimage/cbootimage.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# cbootimage
-> +#
-> +################################################################################
-> +
-> +# Stick with git snapshot as latest release misses bugfixes for signing
-> +CBOOTIMAGE_VERSION = e7d840c
-> +CBOOTIMAGE_SITE = https://github.com/NVIDIA/cbootimage.git
-> +CBOOTIMAGE_SITE_METHOD = git
+Thanks,
+Frank
 
-Please use the github helper function.
 
-> +CBOOTIMAGE_LICENSE = GPLv2
+>
+>> +     depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
+>> +     depends on !BR2_aarch64 # causes build failures
+>> +     select BR2_PACKAGE_LIBATOMIC_OPS
+>> +     help
+>> +       Use libatomic_ops instead of Erlang's native atomic ops support.
+>> +
+>>  config BR2_PACKAGE_ERLANG_SMP
+>>       bool "enable SMP support"
+>>       help
+>> @@ -38,3 +62,8 @@ config BR2_PACKAGE_ERLANG_MEGACO
+>>         enable it.
+>>
+>>  endif # BR2_PACKAGE_ERLANG
+>> +
+>> +comment "erlang needs a toolchain w/ dynamic library, atomic_ops"
+>> +     depends on BR2_USE_MMU # fork()
+>> +     depends on BR2_STATIC_LIBS || !BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+>
+>  This should depend on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS, so:
+>
+> comment "erlang needs a toolchain w/ dynamic library"
+>         depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
+>         depends on BR2_USE_MMU # fork()
+>         depends on BR2_STATIC_LIBS
+>
+> and that should ideally be a separate patch, or at least mentioned in the commit
+> message.
+>
+>> +
+>> diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+>> index 638d2c2..8257ab4 100644
+>> --- a/package/erlang/erlang.mk
+>> +++ b/package/erlang/erlang.mk
+>> @@ -30,8 +30,12 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
+>>
+>>  ERLANG_CONF_OPTS = --without-javac
+>>
+>> +# Erlang uses its own native atomic ops implementation if support is
+>> +# available. Override this if the user wants libatomic_ops.
+>> +ifeq ($(BR2_PACKAGE_ERLANG_LIBATOMIC_OPS),y)
+>
+>  So here it should be
+>
+> ifeq ($(BR2_PACKAGE_ERLANG_ARCH_SUPPORTS_DIRECTLY),)
+>
+>
+>  Regards,
+>  Arnout
+>
+>>  ERLANG_DEPENDENCIES += libatomic_ops
+>>  ERLANG_CONF_OPTS += --with-libatomic_ops=$(STAGING_DIR)/usr LIBS=-latomic_ops
+>> +endif
+>>
+>>  # erlang uses openssl for all things crypto. Since the host tools (such as
+>>  # rebar) uses crypto, we need to build host-erlang with support for openssl.
+>>
+>
+>
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
-You can add CBOOTIMAGE_LICENSE_FILES = COPYING
 
-Other than that, looks good to me.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Frank Hunleth
+Troodon Software LLC
+Embedded Software Development
+http://troodon-software.com/
