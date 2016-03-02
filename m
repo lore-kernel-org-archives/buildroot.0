@@ -1,41 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 02 Mar 2016 20:27:52 -0000
-Subject: [Buildroot] [git commit] wireless-regdb: bump to version 2016.02.08
-Message-ID: <20160302202751.933F380203@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnfs: bump version to 1.10.0
+Message-ID: <20160302202751.E30F980203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e27632e4cd4fb15252455f9ddfeaf9c394a504e
+commit: https://git.buildroot.net/buildroot/commit/?id=0df58de040bfa33985466114017310282557f2ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Removed m4-hack after upstream adding m4/ to its repo:
+https://github.com/sahlberg/libnfs/commit/8338c7e27f4fa3a120d8ee901611aaa3e390d576
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index cafc631..8685020 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libnfs/libnfs.hash | 2 +-
+ package/libnfs/libnfs.mk   | 8 +-------
+ 2 files changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 14d304f..27a9e5d 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	013e07d988f5cd7d24e4aa7a6cd406615d441ea6b882a02d2a46a78edeb2cfb6	wireless-regdb-2015.12.14.tar.xz
-+sha256	ce957b7f4fe103d8fb4d160d3b39825ad0b0da639b7453d4022d71415b6c9f9f	wireless-regdb-2016.02.08.tar.xz
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 38d1c26..083ab00 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+ # Locally calculated
+-sha256	e95af693e763a504eee72dacf3dc6c1001d83e40b807e7e1d0be2eaf48af779c	libnfs-libnfs-1.9.8.tar.gz
++sha256	7f6c62a05c7e0f0749f2b13f178a4ed7aaf17bd09e65a10bb147bfe9807da272	libnfs-libnfs-1.10.0.tar.gz
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index 40d5ceb..e49656b 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2015.12.14
-+WIRELESS_REGDB_VERSION = 2016.02.08
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-LIBNFS_VERSION = libnfs-1.9.8
++LIBNFS_VERSION = libnfs-1.10.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
+@@ -17,10 +17,4 @@ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ LIBNFS_DEPENDENCIES += libtirpc
+ endif
+ 
+-# Needed for autoreconf
+-define LIBNFS_MAKE_M4_DIR
+-	mkdir $(@D)/m4
+-endef
+-LIBNFS_POST_EXTRACT_HOOKS += LIBNFS_MAKE_M4_DIR
+-
+ $(eval $(autotools-package))
