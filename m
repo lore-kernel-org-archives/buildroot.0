@@ -1,40 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Mar 2016 22:43:15 +0100
-Subject: [Buildroot] [git commit] webkitgtk24: fix gstreamer dependency
-Message-ID: <20160302214740.DB96080ABD@busybox.osuosl.org>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 02 Mar 2016 21:52:09 +0000
+Subject: [Buildroot] [PATCH 0/4] Add go language support
+In-Reply-To: <1456955234.13916.34.camel@infradead.org>
+References: <cover.1456946494.git.geoff@infradead.org>
+ <20160302214959.419006f6@free-electrons.com>
+ <1456955234.13916.34.camel@infradead.org>
+Message-ID: <1456955529541-4c47621a-58540498-011499af@mixmax.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd03a12fc3d81c89e1eb4a9b834e99a498ad2a94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+All,
+On Wed, Mar 2, 2016 at 4:47 PM Geoff Levand <geoff@infradead.org> wrote: >> http://patchwork.ozlabs.org/patch/542108//
+>> (from Christian Stewart)
 
-Fixes:
-http://autobuild.buildroot.net/results/a28/a280f23cc29f77ab440edbda05b4e58d6f4856e7/
-
-The .mk file was checking for gst1-plugins-base but then adding
-gst1-plugins-good to dependencies.
-
-According to Source/autotools/FindDependencies.m4, the video and web audio
-options need the .pc files provided by gst1-plugins-base, so use that.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk24/webkitgtk24.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
-index 0dc4774..d8e41b9 100644
---- a/package/webkitgtk24/webkitgtk24.mk
-+++ b/package/webkitgtk24/webkitgtk24.mk
-@@ -46,7 +46,7 @@ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- WEBKITGTK24_CONF_OPTS += \
- 	--enable-video \
- 	--enable-web-audio
--WEBKITGTK24_DEPENDENCIES += gst1-plugins-good
-+WEBKITGTK24_DEPENDENCIES += gst1-plugins-base
- else
- WEBKITGTK24_CONF_OPTS += \
- 	--disable-video \
+>I did see this is now out of date, building go compiler version
+>1.4.2. It also doesn't seem to install the go tools. To bring
+>these up to date would need almost a complete re-write since
+>the current compiler now requires a bootstrap compiler. I
+>think my patches superseed this series.
+This is correct. I built the original series with Yann as a solution to
+implement Docker under Buildroot, which worked fine for our project. If there is
+some other better series that implements the Go compiler as well as the ?go?
+tools installed into the target, I can adapt the other packages in my series
+(Docker, Aufs-Utils, etc) to support the superseeding packages.
+I'm fine with going ahead with this.
+Best, Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160302/2113e9a3/attachment.html>
