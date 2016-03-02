@@ -1,61 +1,43 @@
-From: Gabe Evans <gabe@hashrabbit.co>
-Date: Wed, 02 Mar 2016 18:10:58 +0000
-Subject: [Buildroot] [PATCH 09/32] package/systemd: add support for
- specifying NTP servers
-In-Reply-To: <20160229225044.5566ab58@free-electrons.com>
-References: <1456437341-19025-1-git-send-email-gabe@hashrabbit.co>
- <1456437341-19025-10-git-send-email-gabe@hashrabbit.co>
- <20160229225044.5566ab58@free-electrons.com>
-Message-ID: <CAHsRNLiavGuf_cXUzTbbfXACDuTe4Ko-p=knO9EROLAn5qgwFg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 2 Mar 2016 21:20:27 +0100
+Subject: [Buildroot] [git commit branch/next] avahi: move libdns_sd compat
+	hook definition inside conditional block
+Message-ID: <20160302202031.6BC7581926@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=2dfabd10d1e484d84c0e6b5a58ab43d131ca3230
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, Feb 29, 2016 at 1:50 PM Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
+As directed in the buildroot manual, "Optional hooks: keep hook
+definition and assignment together in one if block".  And also
+to be consistent with the rest of avahi.mk.
 
-> Dear Gabe Evans,
->
-> On Thu, 25 Feb 2016 21:55:18 +0000, Gabe Evans wrote:
->
-> > +config BR2_PACKAGE_SYSTEMD_NTP_SERVERS
-> > +     string "default NTP servers"
-> > +     default "0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org
-> 3.pool.ntp.org"
->
-> Does this really needs to be a compile time definition? Can't this be
-> specified in some configuration file? If so, then I believe it would be
-> nicer.
->
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/avahi/avahi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I had another look and we should be able to override this in
-/etc/systemd/timesyncd.conf. The configure flag just sets FallbackNTP= in
-the default /usr/lib/systemd/timesyncd.conf. One of the reasons I chose to
-add an option for it is because ntp.org has some restrictions regarding the
-use of their servers and wants you to register as a vendor with them if you
-plan to ship a product/appliance/distro. What does Buildroot currently use
-for other NTP/SNTP packages?
-
-Thanks,
-Gabe
-
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--- 
-Gabe Evans | Co-Founder & CTO
-hashrabbit.co ? angel.co/hashrabbit ? github.com/gevans
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160302/d04c62aa/attachment.html>
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index cad7acd..8cf5f23 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -216,13 +216,13 @@ define AVAHI_INSTALL_INIT_SYSV
+ 	$(AVAHI_INSTALL_DAEMON_INIT_SYSV)
+ endef
+ 
++ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
+ # applications expects to be able to #include <dns_sd.h>
+ define AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
+ 	ln -sf avahi-compat-libdns_sd/dns_sd.h \
+ 		$(STAGING_DIR)/usr/include/dns_sd.h
+ endef
+ 
+-ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
+ AVAHI_POST_INSTALL_STAGING_HOOKS += AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
+ endif
+ 
