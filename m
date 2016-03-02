@@ -1,37 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 22:26:00 +0100
-Subject: [Buildroot] [PATCH] lksctp-tools: new package
-In-Reply-To: <1456952871-14155-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1456952871-14155-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160302222600.618f2a64@free-electrons.com>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Wed, 2 Mar 2016 18:31:58 -0300
+Subject: [Buildroot] [PATCH v3 1/2] sdl_mixer: add patch to fix
+ SDL_mixer.pc for static linking
+In-Reply-To: <56D72F2E.9070903@mind.be>
+References: <1456883894-25867-1-git-send-email-rprebello@gmail.com>
+ <56D72F2E.9070903@mind.be>
+Message-ID: <CABLs7GUte7V30QV=T-aSzMr3ahH5RNFYxx-S=5yF0y5EH8Q6fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+2016-03-02 15:21 GMT-03:00 Arnout Vandecappelle <arnout@mind.be>:
+>
+>  No update from upstream?
+>
+>  Regards,
+>  Arnout
+>
 
-On Wed,  2 Mar 2016 18:07:51 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                      |  1 +
->  package/lksctp-tools/Config.in         | 16 ++++++++++++++++
->  package/lksctp-tools/lksctp-tools.hash |  3 +++
->  package/lksctp-tools/lksctp-tools.mk   | 27 +++++++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/lksctp-tools/Config.in
->  create mode 100644 package/lksctp-tools/lksctp-tools.hash
->  create mode 100644 package/lksctp-tools/lksctp-tools.mk
+Not a word so far.
 
-We already  have a submission for the same package from Yegor
-(initially submitted on Feb 26), which Arnout reviewed, and Yegor
-posted a v2 on Feb 29.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Rodrigo
