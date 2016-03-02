@@ -1,41 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 02 Mar 2016 20:27:53 -0000
-Subject: [Buildroot] [git commit] nano: bump to version 2.5.2
-Message-ID: <20160302202751.C1DA480203@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libqmi: bump to 1.12.8
+Message-ID: <20160302202751.CD12780203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ec39edb96bbaf76799c6bbf3ebb625f94a47bab
+commit: https://git.buildroot.net/buildroot/commit/?id=3a041c6e3747bdf9d64f61300cf0a1d067053fef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nano/nano.hash | 2 +-
- package/nano/nano.mk   | 2 +-
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 8b45847..b7ddc50 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index a2c37d3..df0bb0b 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256  e06fca01bf183f4d531aa65a28dffc0e2d10185239909eb3de797023f3453bde  nano-2.5.1.tar.gz
-+sha256  89bd6ac5120880d2a95431d8bad22bf92c7ccbf10b8f1716d4ea062f3faeeb41  nano-2.5.2.tar.gz
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 0fa9009..4d77ea4 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
+ # Locally computed:
+-sha256  0857bffece4e8ddfa7f721dd9ca63b4c78de345ac9ae2faebf04062cacba3780  libqmi-1.12.6.tar.xz
++sha256  d23a397d9c963f637c99622df74ed08a2ba2276552c21eea1ed1d05eeafc82a7  libqmi-1.12.8.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 1bc6121..0ff20a6 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION = 2.5.1
-+NANO_VERSION = 2.5.2
- NANO_SITE = $(BR2_GNU_MIRROR)/nano
- NANO_LICENSE = GPLv3+
- NANO_LICENSE_FILES = COPYING
+-LIBQMI_VERSION = 1.12.6
++LIBQMI_VERSION = 1.12.8
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
