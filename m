@@ -1,33 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 23:22:52 +0100
-Subject: [Buildroot] [PATCH] lksctp-tools: new package
-In-Reply-To: <1456952871-14155-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1456952871-14155-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160302232252.12ee6781@free-electrons.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Wed, 02 Mar 2016 14:31:37 -0800
+Subject: [Buildroot] [PATCH 0/4] Add go language support
+In-Reply-To: <1456955529541-4c47621a-58540498-011499af@mixmax.com>
+References: <cover.1456946494.git.geoff@infradead.org>
+ <20160302214959.419006f6@free-electrons.com>
+ <1456955234.13916.34.camel@infradead.org>
+ <1456955529541-4c47621a-58540498-011499af@mixmax.com>
+Message-ID: <1456957897.13916.44.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Gustavo Zacarias,
+Hi Christian,
 
-On Wed,  2 Mar 2016 18:07:51 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/Config.in                      |  1 +
->  package/lksctp-tools/Config.in         | 16 ++++++++++++++++
->  package/lksctp-tools/lksctp-tools.hash |  3 +++
->  package/lksctp-tools/lksctp-tools.mk   | 27 +++++++++++++++++++++++++++
->  4 files changed, 47 insertions(+)
->  create mode 100644 package/lksctp-tools/Config.in
->  create mode 100644 package/lksctp-tools/lksctp-tools.hash
->  create mode 100644 package/lksctp-tools/lksctp-tools.mk
+On Wed, 2016-03-02 at 21:52 +0000, Christian Stewart wrote:
+> I can
+> adapt the other packages in my series (Docker, Aufs-Utils, etc) to support the superseeding packages.
+> I'm fine with going ahead with this.
 
-Applied to master, thanks.
+As Thomas requested, could you please review my three
+patches that add the compiler support and either give
+comments or your Acked-by.  Thanks.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Geoff
