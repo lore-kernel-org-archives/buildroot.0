@@ -1,41 +1,69 @@
 From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue,  1 Mar 2016 21:56:07 -0500
-Subject: [Buildroot] [PATCH 1/1] avahi: move libdns_sd compat hook
-	definition inside conditional block
-Message-ID: <1456887367-2543-1-git-send-email-danomimanchego123@gmail.com>
+Date: Tue,  1 Mar 2016 21:54:40 -0500
+Subject: [Buildroot] [PATCH 1/1] qt: get rid of extra spaces in license file
+	list
+Message-ID: <1456887280-2465-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As directed in the buildroot manual, "Optional hooks: keep hook
-definition and assignment together in one if block".  And also
-to be consistent with the rest of avahi.mk.
+Use "QT_LICENSE := $(QT_LICENSE), xxxx" construct to get rid of the
+extra spaces before commas added by the font license clauses.
 
 Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
----
- package/avahi/avahi.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
-index b7ad81d..d014f11 100644
---- a/package/avahi/avahi.mk
-+++ b/package/avahi/avahi.mk
-@@ -220,13 +220,13 @@ define AVAHI_INSTALL_INIT_SYSV
- 	$(AVAHI_INSTALL_DAEMON_INIT_SYSV)
- endef
+---
+
+We discussed this over the mailing list.  Since I had the changes
+anyway for proof of concept, I turned it around into a patch.
+---
+ package/qt/qt.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index c4fff2d..f29a671 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -18,9 +18,9 @@ QT_SITE = http://download.qt-project.org/official_releases/qt/$(QT_VERSION_MAJOR
+ QT_DEPENDENCIES = host-pkgconf
+ QT_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
- # applications expects to be able to #include <dns_sd.h>
- define AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
- 	ln -sf avahi-compat-libdns_sd/dns_sd.h \
- 		$(STAGING_DIR)/usr/include/dns_sd.h
- endef
- 
--ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
- AVAHI_POST_INSTALL_STAGING_HOOKS += AVAHI_STAGING_INSTALL_LIBDNSSD_LINK
+-QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
++QT_LICENSE := LGPLv2.1 with exceptions or GPLv3
+ ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
+-QT_LICENSE += or Digia Qt Commercial license
++QT_LICENSE := $(QT_LICENSE) or Digia Qt Commercial license
  endif
+ QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
  
+@@ -663,14 +663,14 @@ endef
+ ifneq ($(BR2_PACKAGE_QT_FONT_MICRO)$(BR2_PACKAGE_QT_FONT_FIXED),)
+ # as stated in the font source src/3rdparty/fonts/micro.bdf
+ # source src/3rdparty/fonts/5x7.bdf and source src/3rdparty/fonts/6x13.bdf
+-QT_LICENSE += , Public Domain (Micro/Fixed font)
++QT_LICENSE := $(QT_LICENSE), Public Domain (Micro/Fixed font)
+ endif
+ ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
+-QT_LICENSE += , Adobe Helvetica license (Helvetica/Japanese fonts)
++QT_LICENSE := $(QT_LICENSE), Adobe Helvetica license (Helvetica/Japanese fonts)
+ QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
+ endif
+ ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
+-QT_LICENSE += , Freeware (Unifont font)
++QT_LICENSE := $(QT_LICENSE), Freeware (Unifont font)
+ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
+ endif
+ endif # QT_FONTS
+@@ -680,7 +680,7 @@ define QT_INSTALL_TARGET_FONTS_TTF
+ 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
+ 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
+ endef
+-QT_LICENSE += , Bitstream license (DejaVu/Vera TrueType fonts)
++QT_LICENSE := $(QT_LICENSE), Bitstream license (DejaVu/Vera TrueType fonts)
+ QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
+ 	src/3rdparty/fonts/README.DejaVu \
+ 	src/3rdparty/fonts/COPYRIGHT.Vera
 -- 
 1.9.1
