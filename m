@@ -1,66 +1,51 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 2 Mar 2016 19:20:52 +0100
-Subject: [Buildroot] [PATCH 1/1] busybox: Make S01logging source a
- default file.
-In-Reply-To: <56D61C10.9080409@lucaceresoli.net>
-References: <1456483852-12830-1-git-send-email-nicolas.cavallari@green-communications.fr>
- <56D61C10.9080409@lucaceresoli.net>
-Message-ID: <56D72F04.9090909@mind.be>
+Date: Wed, 2 Mar 2016 19:24:02 +0100
+Subject: [Buildroot] [PATCH v3 2/2] chocolate-doom: add patch to fix
+ static linking
+In-Reply-To: <1456883894-25867-2-git-send-email-rprebello@gmail.com>
+References: <1456883894-25867-1-git-send-email-rprebello@gmail.com>
+ <1456883894-25867-2-git-send-email-rprebello@gmail.com>
+Message-ID: <56D72FC2.800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/01/16 23:47, Luca Ceresoli wrote:
-> Hi Nicolas,
+On 03/02/16 02:58, Rodrigo Rebello wrote:
+> This commit adds a backported upstream patch which modifies the
+> configure script so that it uses pkg-config to detect libraries and
+> their static linking dependencies.
 > 
-> On 26/02/2016 11:50, Nicolas Cavallari wrote:
->> The default syslog parameters are to keep only 200-400 KiB of logs,
->> which is very few if there is a spammy daemon on the system, or a daemon
->> that fails and then spams errors that hides the original problem.
->>
->> Make S01logging source a /etc/default/logging file where these
->> parameters can be overridden.
->>
->> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->> ---
->>  package/busybox/S01logging | 8 ++++++--
->>  1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/package/busybox/S01logging b/package/busybox/S01logging
->> index a72c69d..af7bdff 100644
->> --- a/package/busybox/S01logging
->> +++ b/package/busybox/S01logging
->> @@ -3,10 +3,14 @@
->>  # Start logging
->>  #
->>  
->> +SYSLOGD_ARGS=-n
->> +KLOGD_ARGS=-n
->> +[ -e /etc/default/logging ] && . /etc/default/logging
+> It also adds host-pkgconf as a dependency and removes the SDL static
+> linking workaround from chocolate-doom.mk as it's no longer necessary.
 > 
-> Instead of '-e', we typically use '-r'.
+> Fixes:
 > 
-> Other than that, looks good. Could you send v2 with this change?
+>   http://autobuild.buildroot.net/results/d98/d981499ad82121d58fb7584b55d09c484cb6aa49/
+>   http://autobuild.buildroot.net/results/e41/e419f29e14edd28cbf48278bef725b696ae8ef70/
+>   http://autobuild.buildroot.net/results/d8f/d8fe9b5bdb262e939d4150804ea34777c91d3c04/
+>   ...
 > 
->>  start() {
->>  	printf "Starting logging: "
->> -	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
->> -	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
->> +	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
->> +	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
-> 
-> Unrelated to your patch, but passing '-n' (Run in foreground) looks
-> strange since we are daemonizing those processes anyway. Do you know any
-> good reason for this?
+> Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 
- I do: these daemons don't create a PID file, and if they daemonize and
-start-stop-daemon creates the PID file, the PID logged in there will be wrong
-(it will be the PID of the exited parent).
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
+
+> ---
+> Changes v1 -> v2:
+>   - Add host-pkgconf to CHOCOLATE_DOOM_DEPENDENCIES (Thomas Petazzoni)
+>   - Remove no longer needed SDL static linking workaround
+> 
+> Changes v2 -> v3:
+>   - Fix typo in commit message (s/chocokate/chocolate/)
+> ---
+>  ...004-configure-Switch-to-pkg-config-macros.patch | 217 +++++++++++++++++++++
+>  package/chocolate-doom/chocolate-doom.mk           |   8 +-
+>  2 files changed, 218 insertions(+), 7 deletions(-)
+>  create mode 100644 package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
 
 
 -- 
