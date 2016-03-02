@@ -1,57 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Mar 2016 23:00:34 +0100
-Subject: [Buildroot] [git commit] sg3_utils: bump to version 1.42
-Message-ID: <20160302220356.57E6A7FB64@busybox.osuosl.org>
+Date: Wed, 2 Mar 2016 23:01:18 +0100
+Subject: [Buildroot] [git commit] x265: depends on BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20160302220356.66CD27FB64@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d07488975de1f3377bfcf1bf27fd813e46b89d1e
+commit: https://git.buildroot.net/buildroot/commit/?id=db6b5ad9bb7756420950edd0b0fb28ed1cdc0057
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+It uses __sync_fetch_and_add_4() and other 32-bit atomics, fixes:
+http://autobuild.buildroot.net/results/6cf/6cf4cdfdcd00f92176fd8a901884a3fd0c784f24/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sg3_utils/sg3_utils.hash | 2 +-
- package/sg3_utils/sg3_utils.mk   | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
+ package/x265/Config.in                        | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/sg3_utils/sg3_utils.hash b/package/sg3_utils/sg3_utils.hash
-index d3ae1a0..a884063 100644
---- a/package/sg3_utils/sg3_utils.hash
-+++ b/package/sg3_utils/sg3_utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated from download (no sig, hash)
--sha256	901ece577d797a8a3870881fe765f6eac4bb381b99a1f7311551689e9f17130b	sg3_utils-1.40.tar.xz
-+sha256	97aeed65894feb2add896b4adfa4cf343966c8a61c7d206795ed0507640ee7b9	sg3_utils-1.42.tar.xz
-diff --git a/package/sg3_utils/sg3_utils.mk b/package/sg3_utils/sg3_utils.mk
-index dca0f6b..36cb32e 100644
---- a/package/sg3_utils/sg3_utils.mk
-+++ b/package/sg3_utils/sg3_utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SG3_UTILS_VERSION = 1.40
-+SG3_UTILS_VERSION = 1.42
- SG3_UTILS_SOURCE = sg3_utils-$(SG3_UTILS_VERSION).tar.xz
- SG3_UTILS_SITE = http://sg.danny.cz/sg/p
- SG3_UTILS_LICENSE = BSD-3c
-@@ -25,12 +25,12 @@ define SG3_UTILS_REMOVE_PROGS
- 		get_lba_status ident inq logs luns map26 \
- 		map sgm_dd modes opcodes sgp_dd persist prevent \
- 		raw rbuf rdac read readcap read_block_limits \
--		read_buffer read_long reassign referrals \
-+		read_attr read_buffer read_long reassign referrals \
- 		rep_zones requests reset reset_wp rmsn rtpg safte sanitize \
- 		sat_identify sat_phy_event sat_read_gplog sat_set_features \
- 		scan senddiag ses ses_microcode start stpg sync test_rwbuf \
--		turs unmap verify vpd write_buffer write_long \
--		write_same write_verify wr_mode xcopy; do \
-+		timestamp turs unmap verify vpd write_buffer write_long \
-+		write_same write_verify wr_mode xcopy zone; do \
- 		$(RM) $(TARGET_DIR)/usr/bin/sg_$${prog} ; \
- 	done
- 	for prog in \
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 6e7d21d..68fed23 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -671,6 +671,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
+ 	bool "x265"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # x265
+ 	select BR2_PACKAGE_X265
+ 	help
+ 	  x265 encoding plugin
+diff --git a/package/x265/Config.in b/package/x265/Config.in
+index f268e65..1d6eda2 100644
+--- a/package/x265/Config.in
++++ b/package/x265/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_X265
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # dlfcn
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  x265 is an open source free software and library for encoding video
+ 	  using the High Efficiency Video Coding (HEVC/H.265) standard. x265 is
+@@ -24,3 +25,4 @@ endif
+ comment "x265 needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
