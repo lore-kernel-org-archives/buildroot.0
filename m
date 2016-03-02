@@ -1,69 +1,39 @@
-From: Danomi Manchego <danomimanchego123@gmail.com>
-Date: Tue,  1 Mar 2016 21:54:40 -0500
-Subject: [Buildroot] [PATCH 1/1] qt: get rid of extra spaces in license file
-	list
-Message-ID: <1456887280-2465-1-git-send-email-danomimanchego123@gmail.com>
+From: Tobias Andresen <tobiasarp@gmx.de>
+Date: Wed, 2 Mar 2016 07:11:05 +0100
+Subject: [Buildroot] Add different glibc
+In-Reply-To: <20160228222254.62d8af48@free-electrons.com>
+References: <56D357C5.8040000@gmx.de>
+ <20160228222254.62d8af48@free-electrons.com>
+Message-ID: <56D683F9.3060507@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use "QT_LICENSE := $(QT_LICENSE), xxxx" construct to get rid of the
-extra spaces before commas added by the font license clauses.
+Hello Thomas,
 
-Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+i just want to replace the glibc on an old embedded system with glibc 
+2.23 without rebuilding it completely.
+Just wanted to find a simple way to do this for someone who cannot 
+crosscompile glibc without
+a tool like buildroot.
 
----
-
-We discussed this over the mailing list.  Since I had the changes
-anyway for proof of concept, I turned it around into a patch.
----
- package/qt/qt.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index c4fff2d..f29a671 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -18,9 +18,9 @@ QT_SITE = http://download.qt-project.org/official_releases/qt/$(QT_VERSION_MAJOR
- QT_DEPENDENCIES = host-pkgconf
- QT_INSTALL_STAGING = YES
- 
--QT_LICENSE = LGPLv2.1 with exceptions or GPLv3
-+QT_LICENSE := LGPLv2.1 with exceptions or GPLv3
- ifneq ($(BR2_PACKAGE_QT_LICENSE_APPROVED),y)
--QT_LICENSE += or Digia Qt Commercial license
-+QT_LICENSE := $(QT_LICENSE) or Digia Qt Commercial license
- endif
- QT_LICENSE_FILES = LICENSE.LGPL LGPL_EXCEPTION.txt LICENSE.GPL3
- 
-@@ -663,14 +663,14 @@ endef
- ifneq ($(BR2_PACKAGE_QT_FONT_MICRO)$(BR2_PACKAGE_QT_FONT_FIXED),)
- # as stated in the font source src/3rdparty/fonts/micro.bdf
- # source src/3rdparty/fonts/5x7.bdf and source src/3rdparty/fonts/6x13.bdf
--QT_LICENSE += , Public Domain (Micro/Fixed font)
-+QT_LICENSE := $(QT_LICENSE), Public Domain (Micro/Fixed font)
- endif
- ifneq ($(BR2_PACKAGE_QT_FONT_HELVETICA)$(BR2_PACKAGE_QT_FONT_JAPANESE),)
--QT_LICENSE += , Adobe Helvetica license (Helvetica/Japanese fonts)
-+QT_LICENSE := $(QT_LICENSE), Adobe Helvetica license (Helvetica/Japanese fonts)
- QT_LICENSE_FILES += src/3rdparty/fonts/COPYING.Helvetica
- endif
- ifeq ($(BR2_PACKAGE_QT_FONT_UNIFONT),y)
--QT_LICENSE += , Freeware (Unifont font)
-+QT_LICENSE := $(QT_LICENSE), Freeware (Unifont font)
- QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.Unifont
- endif
- endif # QT_FONTS
-@@ -680,7 +680,7 @@ define QT_INSTALL_TARGET_FONTS_TTF
- 	mkdir -p $(TARGET_DIR)/usr/lib/fonts
- 	cp -dpf $(STAGING_DIR)/usr/lib/fonts/*.ttf $(TARGET_DIR)/usr/lib/fonts
- endef
--QT_LICENSE += , Bitstream license (DejaVu/Vera TrueType fonts)
-+QT_LICENSE := $(QT_LICENSE), Bitstream license (DejaVu/Vera TrueType fonts)
- QT_LICENSE_FILES += src/3rdparty/fonts/COPYRIGHT.DejaVu \
- 	src/3rdparty/fonts/README.DejaVu \
- 	src/3rdparty/fonts/COPYRIGHT.Vera
--- 
-1.9.1
+Regards
+Tobias
+Am 28.02.2016 um 22:22 schrieb Thomas Petazzoni:
+> Hello Tobias,
+>
+> On Sun, 28 Feb 2016 21:25:41 +0100, Tobias Andresen wrote:
+>
+>> can someone give me a hint how to add a different glibc as a package
+>> which will be copied into the rootfs instead of the
+>> glibc which is part of the toolchain?
+> Why would you want to do this?
+>
+> In any case, you can customize whatever is in your root filesystem by
+> creating a post-build script.
+>
+> Best regards,
+>
+> Thomas
