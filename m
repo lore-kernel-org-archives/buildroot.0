@@ -1,165 +1,43 @@
-From: Frank Hunleth <fhunleth@troodon-software.com>
-Date: Wed, 2 Mar 2016 15:47:02 -0500
-Subject: [Buildroot] [PATCH v3 1/2] erlang: use erlang's native atomic
-	ops
-In-Reply-To: <56D22060.4020108@mind.be>
-References: <1456082246-28181-1-git-send-email-fhunleth@troodon-software.com>
- <56D22060.4020108@mind.be>
-Message-ID: <CA+-urNTJJ292+XY1gK4-4nwgFvpLmF2AaUtnVWvx=LcO=Yx88A@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 2 Mar 2016 21:48:46 +0100
+Subject: [Buildroot] [PATCH] package/sdl_mixer: disable libmad support
+ for static build only
+In-Reply-To: <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
+References: <1456073708-19562-1-git-send-email-romain.naour@gmail.com>
+ <20160221181830.01215f6e@free-electrons.com>
+ <CABLs7GUZJRTddPMzP99Qz4N2AcKL4OZK5UMJ1vDxS9vh-=_M6Q@mail.gmail.com>
+Message-ID: <56D751AE.2060300@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, all,
+Hi Rodrigo, Thomas, All,
 
-On Sat, Feb 27, 2016 at 5:17 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 02/21/16 20:17, Frank Hunleth wrote:
->> Now that we're using Erlang 18, the preferred atomic ops implementation
->> for Erlang is its own built-in implementation, so use it.  It is still
->> possible to use libatomic_ops if the native implementation does not
->> work. BR2_PACKAGE_ERLANG_ARCH_SUPPORTS is added now that
->> BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS is no longer appropriate for
->> checking whether Erlang can be built for a platform.
->>
->> This fixes an autobuilder failure when using libatomic_ops on aarch64.
->> Erlang's native atomic ops implementation works on this platform.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/0cd/0cd22eb74fa29e5a85bf897762e16ab3daf33962/
->>
->> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
->> ---
-> [snip]
->> +config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
->> +     bool
->> +     default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || BR2_sparc_v9 || BR2_arm || BR2_aarch64 # case (1)
->
->  This line is too long, please split it.
->
->> +     default y if BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # case (4)
->>
->>  config BR2_PACKAGE_ERLANG
->>       bool "erlang"
->>       depends on BR2_USE_MMU # fork()
->>       depends on !BR2_STATIC_LIBS
->> -     depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
->> -     select BR2_PACKAGE_LIBATOMIC_OPS
->> +     depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
->>       help
->>         Erlang is a programming language used to build massively scalable
->>         soft real-time systems with requirements on high availability.
->> @@ -20,6 +36,14 @@ config BR2_PACKAGE_ERLANG
->>
->>  if BR2_PACKAGE_ERLANG
->>
->> +config BR2_PACKAGE_ERLANG_LIBATOMIC_OPS
->> +     bool "libatomic_ops"
->
->  Does it make sense to let the user select this? I don't think so...
->
->  I think we should have:
->
-> config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS_DIRECTLY # case (1)
->         bool
->         default y if BR2_i386 || BR2_x86_64 || BR2_powerpc || \
->                 BR2_sparc_v9 || BR2_arm # aarch64 causes build failures
->
-> config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
->         bool
->         default y if BR2_PACKAGE_ERLANG_ARCH_SUPPORTS_DIRECTLY
->         default y if BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS # case (4)
->
-> and nothing more.
+Le 21/02/2016 21:06, Rodrigo Rebello a ?crit :
+> Thomas, Romain,
+> 
 
-The more I think about this patch, the more I want to drop all
-references to libatomic_ops. The reason is that the native Erlang
-atomic ops implementation supports almost every platform supported by
-libatomic_ops. In fact, it looks like every _defconfig in Buildroot
-that supports Erlang uses the native atomic ops implementation rather
-than libatomic_ops. (I actually tried building all _defconfigs at one
-point, but I'll double check if there are doubts.)
+[snip]
 
-Does it make sense to remove libatomic_ops altogether? I think the
-original reason for including it doesn't apply now that we upgraded to
-Erlang 18.
+> 
+> I don't think this workaround is necessary at all. Adding a
+> 'Libs.private' section to SDL_mixer.pc and fixing packages that depend
+> on SDL_mixer so that they use pkg-config doesn't seem too complicated.
+> Currently only chocolate-doom, lbreakout2, ltris and prboom depend on
+> it.
+> 
+> I'll work on a patch for chocolate-doom now and handle the other 3 later.
 
-Thanks,
-Frank
+I'll will mark this patch rejected in patchwork.
 
+Thanks for working on this.
 
->
->> +     depends on BR2_PACKAGE_LIBATOMIC_OPS_ARCH_SUPPORTS
->> +     depends on !BR2_aarch64 # causes build failures
->> +     select BR2_PACKAGE_LIBATOMIC_OPS
->> +     help
->> +       Use libatomic_ops instead of Erlang's native atomic ops support.
->> +
->>  config BR2_PACKAGE_ERLANG_SMP
->>       bool "enable SMP support"
->>       help
->> @@ -38,3 +62,8 @@ config BR2_PACKAGE_ERLANG_MEGACO
->>         enable it.
->>
->>  endif # BR2_PACKAGE_ERLANG
->> +
->> +comment "erlang needs a toolchain w/ dynamic library, atomic_ops"
->> +     depends on BR2_USE_MMU # fork()
->> +     depends on BR2_STATIC_LIBS || !BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
->
->  This should depend on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS, so:
->
-> comment "erlang needs a toolchain w/ dynamic library"
->         depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
->         depends on BR2_USE_MMU # fork()
->         depends on BR2_STATIC_LIBS
->
-> and that should ideally be a separate patch, or at least mentioned in the commit
-> message.
->
->> +
->> diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
->> index 638d2c2..8257ab4 100644
->> --- a/package/erlang/erlang.mk
->> +++ b/package/erlang/erlang.mk
->> @@ -30,8 +30,12 @@ ERLANG_CONF_ENV += erl_xcomp_sysroot=$(STAGING_DIR)
->>
->>  ERLANG_CONF_OPTS = --without-javac
->>
->> +# Erlang uses its own native atomic ops implementation if support is
->> +# available. Override this if the user wants libatomic_ops.
->> +ifeq ($(BR2_PACKAGE_ERLANG_LIBATOMIC_OPS),y)
->
->  So here it should be
->
-> ifeq ($(BR2_PACKAGE_ERLANG_ARCH_SUPPORTS_DIRECTLY),)
->
->
->  Regards,
->  Arnout
->
->>  ERLANG_DEPENDENCIES += libatomic_ops
->>  ERLANG_CONF_OPTS += --with-libatomic_ops=$(STAGING_DIR)/usr LIBS=-latomic_ops
->> +endif
->>
->>  # erlang uses openssl for all things crypto. Since the host tools (such as
->>  # rebar) uses crypto, we need to build host-erlang with support for openssl.
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Best regards,
+Romain
 
-
-
--- 
-Frank Hunleth
-Troodon Software LLC
-Embedded Software Development
-http://troodon-software.com/
+> 
+> Regards,
+> Rodrigo
+> 
