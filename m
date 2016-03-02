@@ -1,52 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 2 Mar 2016 23:01:18 +0100
-Subject: [Buildroot] [git commit] x265: depends on BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <20160302220356.66CD27FB64@busybox.osuosl.org>
+Date: Wed, 2 Mar 2016 22:57:15 +0100
+Subject: [Buildroot] [git commit] cantarell: bump to version 0.0.24
+Message-ID: <20160302220356.349BB800B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db6b5ad9bb7756420950edd0b0fb28ed1cdc0057
+commit: https://git.buildroot.net/buildroot/commit/?id=97827718df90f4f91c72bc452cc05c769260179f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It uses __sync_fetch_and_add_4() and other 32-bit atomics, fixes:
-http://autobuild.buildroot.net/results/6cf/6cf4cdfdcd00f92176fd8a901884a3fd0c784f24/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in | 1 +
- package/x265/Config.in                        | 2 ++
- 2 files changed, 3 insertions(+)
+ package/cantarell/cantarell.hash | 4 ++--
+ package/cantarell/cantarell.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 6e7d21d..68fed23 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -671,6 +671,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
- 	bool "x265"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # x265
- 	select BR2_PACKAGE_X265
- 	help
- 	  x265 encoding plugin
-diff --git a/package/x265/Config.in b/package/x265/Config.in
-index f268e65..1d6eda2 100644
---- a/package/x265/Config.in
-+++ b/package/x265/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_X265
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # dlfcn
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  x265 is an open source free software and library for encoding video
- 	  using the High Efficiency Video Coding (HEVC/H.265) standard. x265 is
-@@ -24,3 +25,4 @@ endif
- comment "x265 needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/cantarell/cantarell.hash b/package/cantarell/cantarell.hash
+index 2d2bab5..e2cc00e 100644
+--- a/package/cantarell/cantarell.hash
++++ b/package/cantarell/cantarell.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.23.sha256sum
+-sha256	d85e165ac5d676d6b21c7870d8243cb612a2dc766d91fda788d56d5f5ad5db4e	cantarell-fonts-0.0.23.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.24.sha256sum
++sha256	9cad649ae84f7e4ca1be637c27e2fa19e1fbf00d4bf6480171ccfad405b39264	cantarell-fonts-0.0.24.tar.xz
+diff --git a/package/cantarell/cantarell.mk b/package/cantarell/cantarell.mk
+index 9943d70..b4133ec 100644
+--- a/package/cantarell/cantarell.mk
++++ b/package/cantarell/cantarell.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CANTARELL_VERSION_MAJOR = 0.0
+-CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).23
++CANTARELL_VERSION = $(CANTARELL_VERSION_MAJOR).24
+ CANTARELL_SITE = http://ftp.gnome.org/pub/gnome/sources/cantarell-fonts/$(CANTARELL_VERSION_MAJOR)
+ CANTARELL_SOURCE = cantarell-fonts-$(CANTARELL_VERSION).tar.xz
+ CANTARELL_DEPENDENCIES = host-pkgconf
