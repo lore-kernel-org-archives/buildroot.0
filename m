@@ -1,35 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  2 Mar 2016 18:44:42 -0300
-Subject: [Buildroot] [PATCH] lz4: fix legal info
-Message-ID: <1456955082-19910-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 2 Mar 2016 22:43:15 +0100
+Subject: [Buildroot] [git commit] webkitgtk24: fix gstreamer dependency
+Message-ID: <20160302214740.DB96080ABD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It moved, and programs are GPLv2+. Fixes:
-http://autobuild.buildroot.net/results/70a/70a526b265bb16a6be9f25c5044c65070706171c/
+commit: https://git.buildroot.net/buildroot/commit/?id=cd03a12fc3d81c89e1eb4a9b834e99a498ad2a94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/a28/a280f23cc29f77ab440edbda05b4e58d6f4856e7/
+
+The .mk file was checking for gst1-plugins-base but then adding
+gst1-plugins-good to dependencies.
+
+According to Source/autotools/FindDependencies.m4, the video and web audio
+options need the .pc files provided by gst1-plugins-base, so use that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lz4/lz4.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk24/webkitgtk24.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lz4/lz4.mk b/package/lz4/lz4.mk
-index d2b09bb..a5a41d3 100644
---- a/package/lz4/lz4.mk
-+++ b/package/lz4/lz4.mk
-@@ -7,8 +7,8 @@
- LZ4_VERSION = r131
- LZ4_SITE = $(call github,Cyan4973,lz4,$(LZ4_VERSION))
- LZ4_INSTALL_STAGING = YES
--LZ4_LICENSE = BSD-2c
--LZ4_LICENSE_FILES = LICENSE
-+LZ4_LICENSE = BSD-2c (library), GPLv2+ (programs)
-+LZ4_LICENSE_FILES = lib/LICENSE programs/COPYING
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- define LZ4_DISABLE_SHARED
--- 
-2.4.10
+diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
+index 0dc4774..d8e41b9 100644
+--- a/package/webkitgtk24/webkitgtk24.mk
++++ b/package/webkitgtk24/webkitgtk24.mk
+@@ -46,7 +46,7 @@ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ WEBKITGTK24_CONF_OPTS += \
+ 	--enable-video \
+ 	--enable-web-audio
+-WEBKITGTK24_DEPENDENCIES += gst1-plugins-good
++WEBKITGTK24_DEPENDENCIES += gst1-plugins-base
+ else
+ WEBKITGTK24_CONF_OPTS += \
+ 	--disable-video \
