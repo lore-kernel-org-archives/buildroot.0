@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 09:13:49 +0100
-Subject: [Buildroot] [PATCH] package/cups: fix static linking with GnuTLS
-In-Reply-To: <56D61DC3.8090502@mind.be>
-References: <1456675640-22176-1-git-send-email-joerg.krause@embedded.rocks>
- <20160228230022.3d8805d6@free-electrons.com>
- <56D61DC3.8090502@mind.be>
-Message-ID: <20160302091349.3b195481@free-electrons.com>
+Date: Wed, 2 Mar 2016 09:16:01 +0100
+Subject: [Buildroot] [PATCH 1/1] libwebsockets : bump to v1.7.2
+In-Reply-To: <56D63448.4080202@proximus.be>
+References: <1456871425-26152-1-git-send-email-sagaert.johan@proximus.be>
+ <20160301233457.2dae9d21@free-electrons.com>
+ <56D63448.4080202@proximus.be>
+Message-ID: <20160302091601.7076cc01@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle,
+Johan,
 
-On Tue, 1 Mar 2016 23:54:59 +0100, Arnout Vandecappelle wrote:
+(Please keep the mailing list in Cc: when replying, thanks!)
 
->  Well, inside a package, it's the responsibility of the package build system to
-> link with all required libraries (in the required order). That can either be
-> handled by a helper like libtool, or the Makefile should handle it manually.
-> 
->  In other words: I beliver Joerg's fix is the correct one.
+On Wed, 2 Mar 2016 01:31:04 +0100, Johan Sagaert wrote:
 
-As I said in my reply: the issue with Joerg fix is that in the dynamic
-linking case, it creates useless additional NEEDED entries in the
-binaries, which are not needed since those binaries are already linked
-with libcups.so, which itself is linked with libgnutls.so.
+> Just added some comment,
+> Looks like the CMakeLists.txt has been seriously reworked.
+> Did not encounter anything strange while building and using the new 
+> version of the lib.
 
-Now whether it strongly matters can be discussed, but it is for sure
-not very elegant.
+The patch was originally introduced to make sure that libwebsockets
+would build fine in a BR2_STATIC_LIB=y configuration. Could you verify
+that this is still the case with your update?
+
+Thanks!
 
 Thomas
 -- 
