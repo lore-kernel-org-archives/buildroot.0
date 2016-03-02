@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 02 Mar 2016 20:27:52 -0000
-Subject: [Buildroot] [git commit] freetype: bump to version 2.6.3
-Message-ID: <20160302202751.48CE97FA0E@busybox.osuosl.org>
+Date: Wed, 02 Mar 2016 20:27:53 -0000
+Subject: [Buildroot] [git commit] openldap: bump to version 2.4.44
+Message-ID: <20160302202751.58F987FA0E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c3fad5bf54a2e574d624b7a5c9f16660754d6db
+commit: https://git.buildroot.net/buildroot/commit/?id=580c518f89f882a045f1f058593198814c539590
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/openldap/openldap.hash | 8 ++++----
+ package/openldap/openldap.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index dc238f2..45f91df 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.2/
--md5 86109d0c998787d81ac582bad9adf82e  freetype-2.6.2.tar.bz2
--sha1 29c22b85b77cb22cf95c13e7062e21f39fe6b17a  freetype-2.6.2.tar.bz2
-+# From http://sourceforge.net/projects/freetype/files/freetype2/2.6.3/
-+md5	0037b25a8c090bc8a1218e867b32beb1	freetype-2.6.3.tar.bz2
-+sha1	6c98bd5d0be313207c37ca23d25faf983486aee5	freetype-2.6.3.tar.bz2
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index fa11b0c..d95c424 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 83e790f..785c489 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,4 +1,4 @@
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.43.md5
+-md5 49ca65e27891fcf977d78c10f073c705  openldap-2.4.43.tgz
+-# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.43.sha1
+-sha1 3b52924df2f45e81f25ecbe37551bc837d090cfa  openldap-2.4.43.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.md5
++md5	693ac26de86231f8dcae2b4e9d768e51	openldap-2.4.44.tgz
++# From http://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.44.sha1
++sha1	016a738d050a68d388602a74b5e991035cdba149	openldap-2.4.44.tgz
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 17bf991..2f738e5 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.6.2
-+FREETYPE_VERSION = 2.6.3
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://downloads.sourceforge.net/project/freetype/freetype2/$(FREETYPE_VERSION)
- FREETYPE_INSTALL_STAGING = YES
+-OPENLDAP_VERSION = 2.4.43
++OPENLDAP_VERSION = 2.4.44
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = http://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
