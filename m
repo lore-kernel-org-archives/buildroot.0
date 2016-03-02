@@ -1,56 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 02 Mar 2016 20:27:54 -0000
-Subject: [Buildroot] [git commit] linux-firmware: add support for MT7601u
-Message-ID: <20160302202752.2B1E180203@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/monolinte: updating download url
+Message-ID: <20160302202752.2128880203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c8769eeb0aa723e2ce2cae4692d918aee66a784
+commit: https://git.buildroot.net/buildroot/commit/?id=ed1cecb269668a6cd4aa0bb59341f1dc6868df8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-MT7601u is a MediaTek Wifi 802.11n dongle
-(New chipset from the combined ralink/mediaTek company)
+Latest mono revision changed download url for monolite, updating it.
 
-Signed-off-by: Matt Weber <matt@thewebers.ws>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/monolite/monolite.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index d838986..97d64ca 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -189,6 +189,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
- 	help
- 	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
+diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
+index 3c53bff..761e776 100644
+--- a/package/monolite/monolite.mk
++++ b/package/monolite/monolite.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
-+	bool "MediaTek MT7601U"
-+	help
-+	  MediaTek MT7601U
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61
- 	bool "Ralink rt2501/rt61"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 083a381..4667c4c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -165,6 +165,12 @@ LINUX_FIRMWARE_FILES += mrvl/pcie8897_uapsta.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
+ MONOLITE_VERSION = 138
+-MONOLITE_SITE = http://storage.bos.xamarin.com/mono-dist-master/latest
++MONOLITE_SITE = http://download.mono-project.com/monolite/
+ MONOLITE_SOURCE = monolite-$(MONOLITE_VERSION)-latest.tar.gz
+ MONOLITE_LICENSE = LGPLv2 or commercial
  
-+# MT7601
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U),y)
-+LINUX_FIRMWARE_FILES += mt7601u.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ralink_a_mediatek_company_firmware
-+endif
-+
- # wl127x
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X),y)
- # wl1271-nvs.bin is a symlink to wl127x-nvs.bin
