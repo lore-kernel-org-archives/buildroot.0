@@ -1,80 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 23:18:04 +0100
-Subject: [Buildroot] [PATCH 0/4] Add go language support
-In-Reply-To: <1456955234.13916.34.camel@infradead.org>
-References: <cover.1456946494.git.geoff@infradead.org>
- <20160302214959.419006f6@free-electrons.com>
- <1456955234.13916.34.camel@infradead.org>
-Message-ID: <20160302231804.31fe7c87@free-electrons.com>
+Date: Wed, 2 Mar 2016 23:21:03 +0100
+Subject: [Buildroot] [git commit] lksctp-tools: new package
+Message-ID: <20160302222220.6E7AD81908@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Geoff,
+commit: https://git.buildroot.net/buildroot/commit/?id=574a2886ad3af6c14e56914b82cf29ca5828be8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 02 Mar 2016 13:47:14 -0800, Geoff Levand wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                      |  1 +
+ package/lksctp-tools/Config.in         | 16 ++++++++++++++++
+ package/lksctp-tools/lksctp-tools.hash |  3 +++
+ package/lksctp-tools/lksctp-tools.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 47 insertions(+)
 
-> >   http://lists.busybox.net/pipermail/buildroot/2016-February/151550.html
-> >   (from Ludovic Guegan)
-> 
-> I took a quick look at this.  Patch 1, which builds the go
-> complier, has the bootstrap and final compiler built in the
-> same package.  I think it better to split the bootstrap out
-> into its own package as I have done since then the two packages
-> are each then simpler and I think easier to maintain.
-
-I'll have a look at this specific aspect. Having two packages that use
-the same source is not always the best solution, but I'll have a look.
-
-> Also, this implementation does not build cross compilers
-> correctly, nor does it install the go pkg and tools, nor does
-> it enable CGO_ENABLED for C language linkage support.
-> 
-> All in all, think my patches seem more complete in adding
-> go compiler support.
-> 
-> I think the other patches in Ludovic's series can be considered
-> independent of the go compiler.  Patch 4 which adds pkg-golang.mk
-> is something needed.  I had planned to look into this.
-
-OK. As I said, what I would like to see is one single patch series that
-contains the full support, and that is approved by the interested
-parties (you, Ludovic and Christian). The Buildroot maintainers cannot
-be expert in all topics, and diving into the Go topic would require
-quite some time. So I'd like to see a single patch series acknowledged
-by all parties so that we can have some good confidence that it does
-things the right way.
-
-Of course, it can also be two separate patch series: one from you with
-the core Go stuff (acknowledged by Christian and Ludovic), and another
-from Ludovic with the Go package infrastructure (acknowledged by you
-and Christian).
-
-> I did see this is now out of date, building go compiler version
-> 1.4.2.  It also doesn't seem to install the go tools.  To bring
-> these up to date would need almost a complete re-write since
-> the current compiler now requires a bootstrap compiler.  I
-> think my patches superseed this series.
-
-OK. I'll mark Christian's patch as Superseded then.
-
-> My proposal is to use my patches to provide the basic go compiler
-> support.  Ludovic's other patches provide additional language
-> support, and seem as though they could be useful, but they are
-> additions to the basic compiler support, and I think can be
-> considered independently.
-> 
-> Is my proposal acceptable?  Let's work to move forward.
-
-It is acceptable to me, but please work with Ludovic and Christian to
-get to a point where they can give their Acked-by to your patches.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 03876be..3c6e448 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1147,6 +1147,7 @@ menu "Networking"
+ 	source "package/libvncserver/Config.in"
+ 	source "package/libwebsock/Config.in"
+ 	source "package/libwebsockets/Config.in"
++	source "package/lksctp-tools/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/neon/Config.in"
+ 	source "package/nss-mdns/Config.in"
+diff --git a/package/lksctp-tools/Config.in b/package/lksctp-tools/Config.in
+new file mode 100644
+index 0000000..b8a8c7a
+--- /dev/null
++++ b/package/lksctp-tools/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_LKSCTP_TOOLS
++	bool "lksctp-tools"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  The lksctp-tools project provides a Linux user space library
++	  for SCTP (libsctp) including C language header files
++	  (netinet/sctp.h) for accessing SCTP specific application
++	  programming interfaces not provided by the standard sockets,
++	  and also some helper utilities around SCTP.
++
++	  http://lksctp.sourceforge.net/
++
++comment "lksctp-tools needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/lksctp-tools/lksctp-tools.hash b/package/lksctp-tools/lksctp-tools.hash
+new file mode 100644
+index 0000000..ae6b0dc
+--- /dev/null
++++ b/package/lksctp-tools/lksctp-tools.hash
+@@ -0,0 +1,3 @@
++# From https://sourceforge.net/projects/lksctp/files/lksctp-tools/
++md5	708bb0b5a6806ad6e8d13c55b067518e	lksctp-tools-1.0.16.tar.gz
++sha1	8b17f913844851ee6872374cffec0745c804637b	lksctp-tools-1.0.16.tar.gz
+diff --git a/package/lksctp-tools/lksctp-tools.mk b/package/lksctp-tools/lksctp-tools.mk
+new file mode 100644
+index 0000000..91b96a6
+--- /dev/null
++++ b/package/lksctp-tools/lksctp-tools.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# lksctp-tools
++#
++################################################################################
++
++LKSCTP_TOOLS_VERSION = 1.0.16
++LKSCTP_TOOLS_SITE = http://downloads.sourceforge.net/project/lksctp/lksctp-tools
++LKSCTP_TOOLS_INSTALL_STAGING = YES
++# configure not shipped
++LKSCTP_TOOLS_AUTORECONF = YES
++LKSCTP_TOOLS_LICENSE = LGPLv2.1 (library), GPLv2+ (programs)
++LKSCTP_TOOLS_LICENSE_FILES = COPYING.lib COPYING
++
++# Needed by autoreconf
++define LKSCTP_TOOLS_MAKE_M4
++	mkdir -p $(@D)/m4
++endef
++LKSCTP_TOOLS_POST_PATCH_HOOKS += LKSCTP_TOOLS_MAKE_M4
++
++# Cleanup installed target source code
++define LKSCTP_TOOLS_CLEANUP_TARGET
++	rm -rf $(TARGET_DIR)/usr/share/lksctp-tools
++endef
++LKSCTP_TOOLS_POST_INSTALL_TARGET_HOOKS += LKSCTP_TOOLS_CLEANUP_TARGET
++
++$(eval $(autotools-package))
