@@ -1,91 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 21:35:40 +0100
-Subject: [Buildroot] [RFC PATCH 1/3] Add package tegrarcm
-In-Reply-To: <1455203110-16759-2-git-send-email-julian@jusst.de>
+Date: Wed, 2 Mar 2016 21:38:12 +0100
+Subject: [Buildroot] [RFC PATCH 2/3] Add package cbootimage
+In-Reply-To: <1455203110-16759-3-git-send-email-julian@jusst.de>
 References: <1455203110-16759-1-git-send-email-julian@jusst.de>
- <1455203110-16759-2-git-send-email-julian@jusst.de>
-Message-ID: <20160302213540.013e087b@free-electrons.com>
+ <1455203110-16759-3-git-send-email-julian@jusst.de>
+Message-ID: <20160302213812.36ab0fe9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julian,
+Dear Julian Scheel,
 
-Thanks for this contribution!
+On Thu, 11 Feb 2016 10:05:09 -0500, Julian Scheel wrote:
 
-On Thu, 11 Feb 2016 10:05:08 -0500, Julian Scheel wrote:
-
-> diff --git a/package/tegrarcm/Config.in.host b/package/tegrarcm/Config.in.host
+> diff --git a/package/cbootimage/Config.in.host b/package/cbootimage/Config.in.host
 > new file mode 100644
-> index 0000000..fb28d2a
+> index 0000000..4cdde38
 > --- /dev/null
-> +++ b/package/tegrarcm/Config.in.host
+> +++ b/package/cbootimage/Config.in.host
 > @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_TEGRARCM
-> +	bool "host tegrarcm"
+> +config BR2_PACKAGE_HOST_CBOOTIMAGE
+> +	bool "host cbootimage"
 
-I think you can add a "depends on BR2_arm || BR2_armeb" here.
+Same thing: please add a "depends on BR2_arm || BR2_armeb" here.
 
-While tegracrm is a host tool and therefore can be built regardless of
-the selected target architecture, it doesn't make sense to build it if
-the target architecture is something else than ARM.
-
-> +	help
-> +	  This program is used to send code to a Tegra device in recovery
-> +	  mode.
-> +
-> +	  https://github.com/NVIDIA/tegrarcm
-
-> diff --git a/package/tegrarcm/tegrarcm.hash b/package/tegrarcm/tegrarcm.hash
+> diff --git a/package/cbootimage/cbootimage.mk b/package/cbootimage/cbootimage.mk
 > new file mode 100644
-> index 0000000..965c9ac
+> index 0000000..3efef36
 > --- /dev/null
-> +++ b/package/tegrarcm/tegrarcm.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256  538cb0af237ab33e070d3aeb6cc828cd7ef453753ba2ccc21b87ed43faac51bd  v1.7.tar.gz
-> diff --git a/package/tegrarcm/tegrarcm.mk b/package/tegrarcm/tegrarcm.mk
-> new file mode 100644
-> index 0000000..9f8f017
-> --- /dev/null
-> +++ b/package/tegrarcm/tegrarcm.mk
-> @@ -0,0 +1,15 @@
+> +++ b/package/cbootimage/cbootimage.mk
+> @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# tegrarcm
+> +# cbootimage
 > +#
 > +################################################################################
 > +
-> +TEGRARCM_VERSION = 1.7
-> +TEGRARCM_SOURCE = v$(TEGRARCM_VERSION).tar.gz
-> +TEGRARCM_SITE = https://github.com/NVIDIA/tegrarcm/archive
+> +# Stick with git snapshot as latest release misses bugfixes for signing
+> +CBOOTIMAGE_VERSION = e7d840c
+> +CBOOTIMAGE_SITE = https://github.com/NVIDIA/cbootimage.git
+> +CBOOTIMAGE_SITE_METHOD = git
 
 Please use the github helper function.
 
-> +TEGRARCM_LICENSE = NVIDIA Software License
-> +TEGRARCM_LICENSE_FILE = LICENSE
+> +CBOOTIMAGE_LICENSE = GPLv2
 
-The license is actually BSD-3c + NVIDIA Software License it seems.
+You can add CBOOTIMAGE_LICENSE_FILES = COPYING
 
-> +TEGRARCM_AUTORECONF = YES
-> +HOST_TEGRARCM_DEPENDENCIES = host-libusb host-pkgconf
+Other than that, looks good to me.
 
-Are you sure this is sufficient? The configure.ac script checks for the
-cryptopp library. The build might have worked on your system if you had
-the cryptopp library installed system-wide.
-
-Also, src/Makefile.am is doing the following nasty thing:
-
-  AM_CPPFLAGS = -isystem /usr/include/$(CRYPTOLIB)
-
-Such an hardcoded reference to /usr/include/$(CRYPTOLIB) is not going
-to work if the cryptopp library gets built by Buildroot, since the
-library headers will be in $(HOST_DIR)/usr/include and not
-in /usr/include.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
