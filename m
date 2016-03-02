@@ -1,203 +1,274 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 23:55:00 +0100
-Subject: [Buildroot] [git commit] package/kodi-screensaver/visualisation-*:
-	mass version bump, add hashes
-Message-ID: <20160302225546.151DA80089@busybox.osuosl.org>
+Date: Wed, 2 Mar 2016 23:54:54 +0100
+Subject: [Buildroot] [git commit] package/kodi-audio??coder-*: mass version
+	bump, add hashes
+Message-ID: <20160302225545.DDE4381917@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73e5f09c358ba9078cf37d75a0deb8ccbf9efb05
+commit: https://git.buildroot.net/buildroot/commit/?id=5fceea18c109ae08673ee6da841de83b0c273ed8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This patch bumps all audio-en- and decoder addons.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash   | 2 ++
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk     | 2 +-
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash | 2 ++
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk   | 2 +-
- package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash   | 2 ++
- package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk     | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash     | 2 ++
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk       | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash             | 2 ++
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk               | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.hash           | 2 ++
- package/kodi-screensaver-stars/kodi-screensaver-stars.mk             | 2 +-
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash | 2 ++
- package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk   | 2 +-
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash | 2 ++
- package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk   | 2 +-
- 16 files changed, 24 insertions(+), 8 deletions(-)
+ package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash     | 2 ++
+ package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk       | 2 +-
+ package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash   | 2 ++
+ package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk     | 2 +-
+ package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash     | 2 ++
+ package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk       | 2 +-
+ package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash     | 2 ++
+ package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk       | 2 +-
+ package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash     | 2 ++
+ package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk       | 2 +-
+ package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash   | 2 ++
+ package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk     | 2 +-
+ package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash | 2 ++
+ package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk   | 2 +-
+ package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash           | 2 ++
+ package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk             | 2 +-
+ package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash           | 2 ++
+ package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk             | 2 +-
+ package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash       | 2 ++
+ package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk         | 2 +-
+ package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash             | 2 ++
+ package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk               | 2 +-
+ 22 files changed, 33 insertions(+), 11 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
 new file mode 100644
-index 0000000..a70f1b0
+index 0000000..2760b11
 --- /dev/null
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 b76b9ba122cebddc7c201b088d93e86fde8fc76e7e9f167ff3e43c3390088f3f kodi-screensaver-asteroids-c7ae05f1881b9abda6a1ac6beaca8d64a164c4fa.tar.gz
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index dce8fb6..1af1f2e 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++sha256 dd4610ba5fdf3f46dcd0deff785d373d3996c6585cbeb39cb4449baafe5ea3df kodi-audiodecoder-modplug-03b772da7ea44ff3c34b322989254cd1e4732443.tar.gz
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+index 004d89f..581223c 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = d4c2e3b499544ef55be364b34e5569d9c31c9615
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = c7ae05f1881b9abda6a1ac6beaca8d64a164c4fa
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPLv2+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+-KODI_AUDIODECODER_MODPLUG_VERSION = 5ae7349f39a8e5552c86dfdad339fb18c7e52550
++KODI_AUDIODECODER_MODPLUG_VERSION = 03b772da7ea44ff3c34b322989254cd1e4732443
+ KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
+ KODI_AUDIODECODER_MODPLUG_LICENSE = GPLv2+
+ KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
 new file mode 100644
-index 0000000..6fc273d
+index 0000000..b4cd28f
 --- /dev/null
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 25e497c6843a7d933d1e4736e8dcb671bc9881328d5e27349dd0b25cb9be07eb kodi-screensaver-biogenesis-39928eef56ed639085d401dd97bf18f44b1f3e8b.tar.gz
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 728383f..dce6968 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++sha256 da65b21ed6218d65b7d382d7fdd9c848a87f6dc766864925979ea8244320db94 kodi-audiodecoder-nosefart-bfab543bae0d9855538cf03e78ea9cd5e3b9750e.tar.gz
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+index 40786d7..49688a4 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 2eccbd4e46320de03fde6731c560660659fd34d7
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 39928eef56ed639085d401dd97bf18f44b1f3e8b
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPLv2+
- KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+-KODI_AUDIODECODER_NOSEFART_VERSION = 936313f2be5c4936af8a643876363dcea76a8ebe
++KODI_AUDIODECODER_NOSEFART_VERSION = bfab543bae0d9855538cf03e78ea9cd5e3b9750e
+ KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
+ KODI_AUDIODECODER_NOSEFART_LICENSE = GPLv2+
+ KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
 new file mode 100644
-index 0000000..9339453
+index 0000000..f339654
 --- /dev/null
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 fc114434db18a885fda30ac6b82fe82ec1d5ed97e2ff6414b4927487da684871 kodi-screensaver-greynetic-80e850eb3cbc7ee2c937fcab666dc45d2b2ee0bb.tar.gz
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-index 0b16e32..9773bac 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++sha256 11855e7b0311516602eda34c5fa4917d51220a27c3053ea831da149ae4c93757 kodi-audiodecoder-sidplay-d832f050211b4e5f085a8b09bc7d26ce32098169.tar.gz
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+index 82b5c2b..d8cf438 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_GREYNETIC_VERSION = 5f370b0f1a51e57719f605344e94824105316c17
-+KODI_SCREENSAVER_GREYNETIC_VERSION = 80e850eb3cbc7ee2c937fcab666dc45d2b2ee0bb
- KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
- KODI_SCREENSAVER_GREYNETIC_LICENSE = GPLv2+
- KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+-KODI_AUDIODECODER_SIDPLAY_VERSION = 27b2c0582878857bfe03195471fa7ffa4bcc40f0
++KODI_AUDIODECODER_SIDPLAY_VERSION = d832f050211b4e5f085a8b09bc7d26ce32098169
+ KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
+ KODI_AUDIODECODER_SIDPLAY_LICENSE = GPLv2+
+ KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
 new file mode 100644
-index 0000000..79d4dd4
+index 0000000..e3da572
 --- /dev/null
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 59a5cdfa6387760205efabcd91bc64fdc92f103c8f213b650018160f6c1a691c kodi-screensaver-pingpong-5c7cf6fd9f9ff1468f620bb891e66bebd3a5fe17.tar.gz
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index 324fe3a..2adf960 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++sha256 6fd6e5dda0fbcdac280952e0efc0bb255ef99628c892164c26e60ee3f2ab8e4e kodi-audiodecoder-snesapu-db62e88e568994a0496d7026a10e044d70b3aa2b.tar.gz
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+index a696b41..f9f398c 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_PINGPONG_VERSION = 00fd2a7c70d581ada1bc89829c6870530b4c65b9
-+KODI_SCREENSAVER_PINGPONG_VERSION = 5c7cf6fd9f9ff1468f620bb891e66bebd3a5fe17
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPLv2+
- KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+-KODI_AUDIODECODER_SNESAPU_VERSION = 399d1d3f32fe6f62f5657b8ce67c30229629cb51
++KODI_AUDIODECODER_SNESAPU_VERSION = db62e88e568994a0496d7026a10e044d70b3aa2b
+ KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
+ KODI_AUDIODECODER_SNESAPU_LICENSE = GPLv2+
+ KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
 new file mode 100644
-index 0000000..c79e3f5
+index 0000000..164e967
 --- /dev/null
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 951bc3259407b7f21183c34556b1efc4c40bfafec61008cd543f382f67466184 kodi-screensaver-pyro-2476b77d9954980a27e07eb8eb0727e2af226351.tar.gz
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-index e4c2b96..f904052 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
++sha256 2bd89d66c493ba354df5c154f313a4bd801ff019ad5c102aa54741b99dd9c608 kodi-audiodecoder-stsound-759ae7eadb94adfde8533a2a42d949c321718625.tar.gz
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+index 23da01f..7601089 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_PYRO_VERSION = 7551f3f4b6414c40c1c4170c750b9f45dd995261
-+KODI_SCREENSAVER_PYRO_VERSION = 2476b77d9954980a27e07eb8eb0727e2af226351
- KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
- KODI_SCREENSAVER_PYRO_LICENSE = GPLv2+
- KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+-KODI_AUDIODECODER_STSOUND_VERSION = f6fbae94818fedd09e2f55c6cd1cb283bfdab6f4
++KODI_AUDIODECODER_STSOUND_VERSION = 759ae7eadb94adfde8533a2a42d949c321718625
+ KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
+ KODI_AUDIODECODER_STSOUND_LICENSE = GPLv2+
+ KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
 new file mode 100644
-index 0000000..107ada4
+index 0000000..d4af019
 --- /dev/null
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 79633afcdccf5df31c98d2144bd23086d691e7749255b4295b183b535d9b7abf kodi-screensaver-stars-28bf79d4dce040e9fbdc25f51007e13950cab937.tar.gz
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-index f2a1be1..b5b5206 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
++sha256 2e220b7d279fce73ff289536cd9e94b159ae648514fb8b423977dddb99c50e85 kodi-audiodecoder-timidity-a84559da92aa67744069fc9e9dc885732588c8ce.tar.gz
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+index 49ff7bc..fb680d1 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_STARS_VERSION = 91b59f687ceb52488763aca4ba67d50a92f01731
-+KODI_SCREENSAVER_STARS_VERSION = 28bf79d4dce040e9fbdc25f51007e13950cab937
- KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
- KODI_SCREENSAVER_STARS_LICENSE = GPLv2+
- KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+-KODI_AUDIODECODER_TIMIDITY_VERSION = da5eb9ac6557fc1ea0f48cc044cfd16f4f2a1e0b
++KODI_AUDIODECODER_TIMIDITY_VERSION = a84559da92aa67744069fc9e9dc885732588c8ce
+ KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
+ KODI_AUDIODECODER_TIMIDITY_LICENSE = GPLv2+
+ KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
 new file mode 100644
-index 0000000..18e38f5
+index 0000000..5e6dfab
 --- /dev/null
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 aa417d6ad3d3770029e7d8d9f7f0ca8d56a8a4f47821267b5a8604fc26993334 kodi-visualisation-spectrum-9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e.tar.gz
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-index 79f03c8..de197eb 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++sha256 7a376447e8390f01c18f22b57ea553441493625545537a023d5d896272e56369 kodi-audiodecoder-vgmstream-cb2892ac0465b0563ee45f532323198a6f722b62.tar.gz
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+index 999ad46..447d837 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_SPECTRUM_VERSION = aae1960b5bc14e50914205e2dabcb51077690a64
-+KODI_VISUALISATION_SPECTRUM_VERSION = 9dbe53a0db73f00ee22e9ca235c98f8137b7bb9e
- KODI_VISUALISATION_SPECTRUM_SITE = $(call github,notspiff,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
- KODI_VISUALISATION_SPECTRUM_LICENSE = GPLv2+
- KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+-KODI_AUDIODECODER_VGMSTREAM_VERSION = 7723f9130957f4684eac5788ccbc2f45c39590ad
++KODI_AUDIODECODER_VGMSTREAM_VERSION = cb2892ac0465b0563ee45f532323198a6f722b62
+ KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPLv2+
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
 new file mode 100644
-index 0000000..728b857
+index 0000000..f563f56
 --- /dev/null
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 439bd50fcb1c0912532d0d113f7eeadf28f72bd2cb0c234581ee1acc2a70e45b kodi-visualisation-waveform-89aec48e2975f820004df5a1a53801339a5b3064.tar.gz
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index eec0cfc..81e880b 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++sha256 4317a01414577885ef4a0ac4f8d95714b021ad15fc668cbf36eae2fdf400bb33 kodi-audioencoder-flac-v1.0.0.tar.gz
+diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+index 9464577..ca48826 100644
+--- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
++++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_WAVEFORM_VERSION = abbdbffc5fd2dff1d627de8df3cb5a3887d1119c
-+KODI_VISUALISATION_WAVEFORM_VERSION = 89aec48e2975f820004df5a1a53801339a5b3064
- KODI_VISUALISATION_WAVEFORM_SITE = $(call github,notspiff,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPLv2+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
+-KODI_AUDIOENCODER_FLAC_VERSION = 8e6718508bb9169d614c1fd5ee0e3de02af3b548
++KODI_AUDIOENCODER_FLAC_VERSION = v1.0.0
+ KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
+ KODI_AUDIOENCODER_FLAC_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_FLAC_LICENSE_FILES = src/EncoderFlac.cpp
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
+new file mode 100644
+index 0000000..ffd38ba
+--- /dev/null
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 7fbdc6c9111431f49498157204d19dfa94bbf9e5f807b631e84129c6c491225e kodi-audioencoder-lame-v1.0.0.tar.gz
+diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+index ca8c6ae..3e1836f 100644
+--- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
++++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_LAME_VERSION = 0f612d467bdde03c6fac25d534a1a338a4f628ac
++KODI_AUDIOENCODER_LAME_VERSION = v1.0.0
+ KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
+ KODI_AUDIOENCODER_LAME_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_LAME_LICENSE_FILES = src/EncoderLame.cpp
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+new file mode 100644
+index 0000000..47f428c
+--- /dev/null
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 65169e785d82f9081088df2693721f4a7e4b2d24f7e8b1e86b5f443206935303 kodi-audioencoder-vorbis-v1.0.0.tar.gz
+diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+index e895ae3..749ea8e 100644
+--- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
++++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_VORBIS_VERSION = 15d619dae4411ecebadf2ec2996d611600ad0bee
++KODI_AUDIOENCODER_VORBIS_VERSION = v1.0.0
+ KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
+ KODI_AUDIOENCODER_VORBIS_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = src/EncoderVorbis.cpp
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
+new file mode 100644
+index 0000000..86eb13c
+--- /dev/null
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 d4e6de5786b9e2bd3fa5e09314c9a60a8daac32cf96e8aa84ab42cacf60f7094 kodi-audioencoder-wav-v1.0.0.tar.gz
+diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+index 543c051..661ab44 100644
+--- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
++++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIOENCODER_WAV_VERSION = 77e16122b132ca31b27d3602fd2d9ada214ff7f6
++KODI_AUDIOENCODER_WAV_VERSION = v1.0.0
+ KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
+ KODI_AUDIOENCODER_WAV_LICENSE = GPLv2+
+ KODI_AUDIOENCODER_WAV_LICENSE_FILES = src/EncoderWav.cpp
