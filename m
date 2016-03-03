@@ -1,28 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Mar 2016 22:15:00 +0100
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 03 Mar 2016 21:17:57 +0000
 Subject: [Buildroot] [Bug 8736] IPV6 forced on in busybox
-In-Reply-To: <nba94j$m0k$1@ger.gmane.org> (Grant Edwards's message of "Thu, 3
- Mar 2016 21:08:35 +0000 (UTC)")
+In-Reply-To: <bug-8736-163@https.bugs.busybox.net/>
 References: <bug-8736-163@https.bugs.busybox.net/>
- <bug-8736-163-ImR2b9Yvou@https.bugs.busybox.net/>
- <nba94j$m0k$1@ger.gmane.org>
-Message-ID: <87povb6z6z.fsf@dell.be.48ers.dk>
+Message-ID: <bug-8736-163-qx14k4mxeB@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=8736
 
-Hi,
+--- Comment #5 from Kenric Smith <ksmith@aesaustin.com> ---
+I should have added, with the patch enabled, I get this behavior:
 
- > I agree that IPv6 support (if broken) needs to be fixed.  But I think
- > it's also important to restore the ability to disable IPv6 support.
- > I have customers who explicity state that they want no IPv6 support
- > in their products.
+[root ~]# nslookup ntp.vt.edu
+Server:    *******
+Address 1: *******
 
-I btw must say that I find such requirements quite sad in 2016 :/
+Name:      ntp.vt.edu
+Address 1: (null)
+Address 2: 198.82.247.51 ntp-1.vt.edu
+Address 3: 198.82.247.131 ntp-4.vt.edu
+Address 4: 198.82.247.108 ntp-3.vt.edu
+Address 5: 198.82.247.71 ntp-2.vt.edu
+
+[root ~]# ntpd -w -d -p ntp.vt.edu
+ntpd: sending query to 198.82.247.131
+ntpd: reply from 198.82.247.131: offset:+21623.503688 delay:0.048829
+status:0x24 strat:2 refid:0xa4f752c6 rootdelay:0.000381 reach:0x01
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
