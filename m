@@ -1,85 +1,39 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu,  3 Mar 2016 13:01:47 +0100
-Subject: [Buildroot] [PATCH] cannelloni: new package
-Message-ID: <1457006507-26443-1-git-send-email-yegorslists@googlemail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Mar 2016 09:03:03 -0300
+Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.10
+Message-ID: <1457006583-4776-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/Config.in                  |  1 +
- package/cannelloni/Config.in       | 15 +++++++++++++++
- package/cannelloni/cannelloni.hash |  2 ++
- package/cannelloni/cannelloni.mk   | 13 +++++++++++++
- 4 files changed, 31 insertions(+)
- create mode 100644 package/cannelloni/Config.in
- create mode 100644 package/cannelloni/cannelloni.hash
- create mode 100644 package/cannelloni/cannelloni.mk
+ package/gnutls/gnutls.hash | 2 +-
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 3c6e448..cd40175 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1338,6 +1338,7 @@ menu "Networking applications"
- 	source "package/bwm-ng/Config.in"
- 	source "package/c-icap/Config.in"
- 	source "package/c-icap-modules/Config.in"
-+	source "package/cannelloni/Config.in"
- 	source "package/can-utils/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
-diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
-new file mode 100644
-index 0000000..0938159
---- /dev/null
-+++ b/package/cannelloni/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_CANNELLONI
-+	bool "cannelloni"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_MMU # lksctp-tools
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
-+	select BR2_PACKAGE_LKSCTP_TOOLS
-+	help
-+	  A SocketCAN over Ethernet tunnel. The tunnel supports both
-+	  UDP and SCTP protocols.
-+
-+	  https://github.com/mguentner/cannelloni
-+
-+comment "cannelloni needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
-diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
-new file mode 100644
-index 0000000..826af9b
---- /dev/null
-+++ b/package/cannelloni/cannelloni.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  7341b76e2af056ecbcfc9fabc6e67c88234666be60f1eb099390c61bb9925856  cannelloni-v0.5.tar.gz
-diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
-new file mode 100644
-index 0000000..bebff53
---- /dev/null
-+++ b/package/cannelloni/cannelloni.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# cannelloni
-+#
-+################################################################################
-+
-+CANNELLONI_VERSION = v0.5
-+CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
-+CANNELLONI_LICENSE = GPLv2+
-+CANNELLONI_LICENSE_FILES = gpl-2.0.txt
-+CANNELLONI_DEPENDENCIES = lksctp-tools
-+
-+$(eval $(cmake-package))
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 1bccffd..f902e44 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	48594fadba33d450f796ec69526cf2bce6ff9bc3dc90fbd7bf38dc3601f57c3f	gnutls-3.4.9.tar.xz
++sha256	6a32c2b4acbd33ff7eefcbd1357009da04c94c60146ef61320b6c076b1bdf59f	gnutls-3.4.10.tar.xz
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 32f44e6..0f8903f 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.4
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
 -- 
-2.7.0
+2.4.10
