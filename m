@@ -1,88 +1,52 @@
-From: Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Thu,  3 Mar 2016 11:38:52 +0900
-Subject: [Buildroot] [PATCH] configs: rename Zynq defconfig files
-Message-ID: <1456972732-9033-1-git-send-email-yamada.masahiro@socionext.com>
+From: Stewart Smith <stewart@linux.vnet.ibm.com>
+Date: Thu,  3 Mar 2016 16:57:51 +1100
+Subject: [Buildroot] [PATCH] host-fakeroot: re-run autotools to fix build on
+	ppc64le host
+Message-ID: <1456984671-10123-1-git-send-email-stewart@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These three are Zynq boards and the build procedure is almost the
-same.  Having the SoC name prefix "zynq_" would be more consistent.
-Also, this is the way in which the Linux Device Trees and the U-Boot
-configuration files do.
+When building on ppc64le host (notably Ubuntu 14.04, where this was
+reported), the configure/libtool combination in fakeroot would
+incorrectly detect that ld doesn't know how to build shared libraries.
+Instead of checking for ppc64le libs, it was checking if we could build
+*big* endian libraries, which the native Ubuntu toolchain on Ubuntu 14.04
+cannot. The end result would be that you wouldn't get libfakeroot.so,
+causing a build failure later on.
 
-This commit renames as follows:
+However, if we rerun autotools, this works. Additionally, due to
+the strange way that fakeroot builds, we need to mkdir build-aux as
+this directory does not exist in the original source package.
 
-   zedboard_defconfig     -> zynq_zed_defconfig
-   microzed_defconfig     -> zynq_microzed_defconfig
-   xilinx_zc706_defconfig -> zynq_zc706_defconfig
+With this patch, you can now successfully build OpenPower firmware
+(which uses buildroot infrastructure) on an Ubuntu 14.04 ppc64le
+system.
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+Fixes: https://github.com/open-power/op-build/issues/194
+Signed-off-by: Stewart Smith <stewart@linux.vnet.ibm.com>
 ---
+ package/fakeroot/fakeroot.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- board/avnet/microzed/readme.txt                          | 2 +-
- board/avnet/zedboard/readme.txt                          | 2 +-
- board/xilinx/zc706/readme.txt                            | 2 +-
- configs/{microzed_defconfig => zynq_microzed_defconfig}  | 0
- configs/{xilinx_zc706_defconfig => zynq_zc706_defconfig} | 0
- configs/{zedboard_defconfig => zynq_zed_defconfig}       | 0
- 6 files changed, 3 insertions(+), 3 deletions(-)
- rename configs/{microzed_defconfig => zynq_microzed_defconfig} (100%)
- rename configs/{xilinx_zc706_defconfig => zynq_zc706_defconfig} (100%)
- rename configs/{zedboard_defconfig => zynq_zed_defconfig} (100%)
-
-diff --git a/board/avnet/microzed/readme.txt b/board/avnet/microzed/readme.txt
-index ab47069..d0fc5ee 100644
---- a/board/avnet/microzed/readme.txt
-+++ b/board/avnet/microzed/readme.txt
-@@ -7,7 +7,7 @@ available from http://www.zedboard.org .
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 3f1c803..1f485f4 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -9,5 +9,12 @@ FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.bz2
+ FAKEROOT_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/f/fakeroot
+ FAKEROOT_LICENSE = GPLv3+
+ FAKEROOT_LICENSE_FILES = COPYING
++HOST_FAKEROOT_AUTORECONF=YES
++
++define HOST_FAKEROOT_POST_PATCH_FIXUP
++	mkdir $(HOST_FAKEROOT_DIR)/build-aux
++endef
++
++HOST_FAKEROOT_POST_PATCH_HOOKS += HOST_FAKEROOT_POST_PATCH_FIXUP
  
- Steps to create a working system for Microzed:
- 
--1) make microzed_defconfig
-+1) make zynq_microzed_defconfig
- 2) make
- 3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
- 	uImage, zynq-zed.dtb into your SD card
-diff --git a/board/avnet/zedboard/readme.txt b/board/avnet/zedboard/readme.txt
-index 0f72d0d..01ef97c 100644
---- a/board/avnet/zedboard/readme.txt
-+++ b/board/avnet/zedboard/readme.txt
-@@ -7,7 +7,7 @@ available from http://www.zedboard.org .
- 
- Steps to create a working system for Zedboard:
- 
--1) make zedboard_defconfig
-+1) make zynq_zed_defconfig
- 2) make
- 3) copy files BOOT.BIN, u-boot-dtb.img, rootfs.cpio.uboot,
- 	uImage, zynq-zed.dtb into your SD card
-diff --git a/board/xilinx/zc706/readme.txt b/board/xilinx/zc706/readme.txt
-index 273752f..b180dea 100644
---- a/board/xilinx/zc706/readme.txt
-+++ b/board/xilinx/zc706/readme.txt
-@@ -16,7 +16,7 @@ boot.bin file.
- If you already have the Xilinx tools installed, the following sequence
- will unpack, patch and build the rfs, kernel, uboot, and uboot-spl.
- 
--make xilinx_zc706_defconfig
-+make zynq_zc706_defconfig
- make uboot-patch
- cp ${XILINX_SDK_LIB}/hwplatform_templates/ZC706_hw_platform/ps7_init.{c,h} \
-    output/build/uboot-xilinx-v2014.1/board/xilinx/zynq/
-diff --git a/configs/microzed_defconfig b/configs/zynq_microzed_defconfig
-similarity index 100%
-rename from configs/microzed_defconfig
-rename to configs/zynq_microzed_defconfig
-diff --git a/configs/xilinx_zc706_defconfig b/configs/zynq_zc706_defconfig
-similarity index 100%
-rename from configs/xilinx_zc706_defconfig
-rename to configs/zynq_zc706_defconfig
-diff --git a/configs/zedboard_defconfig b/configs/zynq_zed_defconfig
-similarity index 100%
-rename from configs/zedboard_defconfig
-rename to configs/zynq_zed_defconfig
+ $(eval $(host-autotools-package))
 -- 
-1.9.1
+2.5.0
