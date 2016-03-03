@@ -1,30 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Mar 2016 21:05:45 +0000
+From: Grant Edwards <grant.b.edwards@gmail.com>
+Date: Thu, 3 Mar 2016 21:08:35 +0000 (UTC)
 Subject: [Buildroot] [Bug 8736] IPV6 forced on in busybox
-In-Reply-To: <bug-8736-163@https.bugs.busybox.net/>
 References: <bug-8736-163@https.bugs.busybox.net/>
-Message-ID: <bug-8736-163-Yw8am9oihc@https.bugs.busybox.net/>
+ <bug-8736-163-ImR2b9Yvou@https.bugs.busybox.net/>
+Message-ID: <nba94j$m0k$1@ger.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8736
+On 2016-03-03, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
 
---- Comment #2 from Kenric Smith <ksmith@aesaustin.com> ---
-Sorry for the confusion.  Busybox is acting as it should, the issue is that
-Buildroot is telling Busybox to enable IPV6 no matter what.  For Buildroot
-systems where IPV6 is not enabled (in the kernel), Buildroot shouldn't enable
-IPV6 in Busybox.
+[Regarding restoring the ability to configure buildroot with IPv6
+support disabled because some utilities don't work right with IPv6
+enabled.]
 
-Previously it appears that IPV6 was a Buildroot configuration option and that
-option was properly being passed into Busybox.  When that option was removed,
-IPV6 was forced on in Busybox by the Buildroot configuration.
+> That sounds like a bug in busybox that should be fixed instead of
+> worked around then. What exactly goes wrong? Have you reported the
+> bug to the busybox developers?
 
-The patch attached just allows Busybox to be configured or not for IPV6, in the
-menuconfig option of Busybox, instead of forcing it to be enabled in Busybox.
+I agree that IPv6 support (if broken) needs to be fixed.  But I think
+it's also important to restore the ability to disable IPv6 support.  I
+have customers who explicity state that they want no IPv6 support in
+their products.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Grant Edwards               grant.b.edwards        Yow! Here I am in 53
+                                  at               B.C. and all I want is a
+                              gmail.com            dill pickle!!
