@@ -1,32 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 2 Mar 2016 23:57:23 +0100
-Subject: [Buildroot] [PATCH/next 16/31]
- package/kodi-visualisation-shadertoy: bump version, add hash
-In-Reply-To: <1456006176-21308-17-git-send-email-bernd.kuhls@t-online.de>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-17-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160302235723.58876f12@free-electrons.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Wed, 02 Mar 2016 17:09:29 -0800
+Subject: [Buildroot] [PATCH 0/4] Add go language support
+In-Reply-To: <20160302235428.205fa042@free-electrons.com>
+References: <cover.1456946494.git.geoff@infradead.org>
+ <20160302214959.419006f6@free-electrons.com>
+ <1456955234.13916.34.camel@infradead.org>
+ <20160302231804.31fe7c87@free-electrons.com>
+ <1456958592.13916.50.camel@infradead.org>
+ <20160302235428.205fa042@free-electrons.com>
+Message-ID: <1456967369.13916.106.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+On Wed, 2016-03-02 at 23:54 +0100, Thomas Petazzoni wrote:
+> On my side, I reviewed your patches. There are a few comments/issues,
+> but nothing major. Overall it looks fairly simple and
+> straightforward.
 
-On Sat, 20 Feb 2016 23:09:21 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...FindOpenGLES2-also-search-for-egl-with-pkg-config.patch | 14 +++++++-------
->  .../kodi-visualisation-shadertoy.hash                      |  2 ++
->  .../kodi-visualisation-shadertoy.mk                        |  4 ++--
->  3 files changed, 11 insertions(+), 9 deletions(-)
->  create mode 100644 package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+I made the mentioned fixes.  I'll repost the series after testing.
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+-Geoff
