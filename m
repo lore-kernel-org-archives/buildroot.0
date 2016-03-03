@@ -1,42 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 03 Mar 2016 21:09:48 +0000
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 03 Mar 2016 22:12:51 +0100
 Subject: [Buildroot] [Bug 8736] IPV6 forced on in busybox
-In-Reply-To: <bug-8736-163@https.bugs.busybox.net/>
+In-Reply-To: <nba94j$m0k$1@ger.gmane.org> (Grant Edwards's message of "Thu, 3
+ Mar 2016 21:08:35 +0000 (UTC)")
 References: <bug-8736-163@https.bugs.busybox.net/>
-Message-ID: <bug-8736-163-O16j3RTveM@https.bugs.busybox.net/>
+ <bug-8736-163-ImR2b9Yvou@https.bugs.busybox.net/>
+ <nba94j$m0k$1@ger.gmane.org>
+Message-ID: <87twkn6zak.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8736
+>>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
 
---- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
-(In reply to Kenric Smith from comment #0)
+ > On 2016-03-03, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
+ > [Regarding restoring the ability to configure buildroot with IPv6
+ > support disabled because some utilities don't work right with IPv6
+ > enabled.]
 
-Notice: I'm not against us removing the forced IPv6 (and just enable it in the
-default defconfig instead). We should probably also do it for largefile now
-that we always have that enabled, but I would like to understand what the
-problem is you are seeing.
+ >> That sounds like a bug in busybox that should be fixed instead of
+ >> worked around then. What exactly goes wrong? Have you reported the
+ >> bug to the busybox developers?
 
-I did a quick test with qemu_arm_versatile_defconfig and the busybox defconfig
-tweaked to enable the ntpd daemon, and everything seems to work OK here:
+ > I agree that IPv6 support (if broken) needs to be fixed.  But I think
+ > it's also important to restore the ability to disable IPv6 support.  I
+ > have customers who explicity state that they want no IPv6 support in
+ > their products.
 
-# date
-Thu Jan  1 00:00:50 UTC 1970
-# ntpd -d -n -p pool.ntp.org
-ntpd: sending query to 77.243.43.213
-ntpd: reply from 77.243.43.213: offset:+1457039097.162244 delay:0.036664
-status:0x24 strat:2 refid:0xf00726c0 rootdelay:0.003418 reach:0x01
-ntpd: sending query to 77.243.43.213
-ntpd: reply from 77.243.43.213: offset:+1457039097.161038 delay:0.032410
-status:0x24 strat:2 refid:0xf00726c0 rootdelay:0.003418 reach:0x03
-ntpd: setting time to 2016-03-03 21:06:05.090957 (offset +1457039097.161038s)
-ntpd: sending query to 77.243.43.213
-ntpd: reply from 77.243.43.213: offset:+0.001327 delay:0.033226 status:0x24
-strat:2 refid:0xf00726c0 rootdelay:0.003418 reach:0x07
+Yes, I think we should drop the forced ipv6 (and largefile) config
+modifications and just enable them in our default busybox config instead.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
