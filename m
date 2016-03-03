@@ -1,156 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Mar 2016 17:42:14 +0100
-Subject: [Buildroot] [git commit] board/boundarydevices: rename folder and
-	update readme
-Message-ID: <20160303164338.3851F7FCE4@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Thu, 3 Mar 2016 08:58:01 -0800
+Subject: [Buildroot] GSOC idea
+In-Reply-To: <87d1rdjpfn.fsf@dell.be.48ers.dk>
+References: <CAJJ6jxuwU=A6ph4MCnz_hF4kODpf5yFsTeZwzTEgWz06wMjZjQ@mail.gmail.com>
+ <87d1rdjpfn.fsf@dell.be.48ers.dk>
+Message-ID: <CAJJ6jxvHKwtXx9YdMw3Txc7vQeX9VEk4dp5Om5ZvJmQVjBAf2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85721034ae475e72144209f4dbc50be3567f7a32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, Mar 1, 2016 at 11:42 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Steve" == Steve Calfee <stevecalfee@gmail.com> writes:
+>
+> Hi,
+>
+>  > Locale stuff has been on the mailing list a couple of times.
+>
+>  > Like http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/133685
+>
+>  > It seems infrastructure to install locale and utf8 stuff is missing. I
+>  > did enable it in busybox, but the locale files were not copied into
+>  > /usr/.... Or I just could not figure out how to do it.
+>
+> I find it quite confusing that you mention busybox here and in the
+> linked discussion. Presumably you are talking about the locale support
+> of uclibc-ng here?
+>
+> --
+> Venlig hilsen,
+> Peter Korsgaard
 
-It didn't make sense to keep the U-Boot scripts and post build/image
-scripts under the nitrogen6x folder since they apply for all our
-platforms.
+Hi, thanks for trying to help. I mentioned busybox because it has a
+bunch of locale options (which were set when I was trying to get it to
+work).
 
-Also update the readme.txt to make it clearer which defconfig should
-be used depending on the platform targeted.
+# CONFIG_INSTALL_NO_USR is not set
+# CONFIG_LOCALE_SUPPORT is not set
+# CONFIG_UNICODE_SUPPORT is not set
+# CONFIG_UNICODE_USING_LOCALE is not set
+# CONFIG_FEATURE_CHECK_UNICODE_IN_ENV is not set
+CONFIG_SUBST_WCHAR=0
+CONFIG_LAST_SUPPORTED_WCHAR=0
+# CONFIG_UNICODE_COMBINING_WCHARS is not set
+# CONFIG_UNICODE_WIDE_WCHARS is not set
+# CONFIG_UNICODE_BIDI_SUPPORT is not set
+# CONFIG_UNICODE_NEUTRAL_TABLE is not set
+# CONFIG_UNICODE_PRESERVE_BROKEN is not set
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../{nitrogen6x => common}/6x_bootscript.txt       |  0
- .../{nitrogen6x => common}/6x_upgrade.txt          |  0
- .../{nitrogen6x => common}/genimage.cfg            |  0
- .../{nitrogen6x => common}/post-build.sh           |  0
- .../{nitrogen6x => common}/post-image.sh           |  0
- board/boundarydevices/common/readme.txt            | 30 ++++++++++++++++++++++
- board/boundarydevices/nitrogen6x/readme.txt        | 13 ----------
- configs/nitrogen6sx_defconfig                      |  4 +--
- configs/nitrogen6x_defconfig                       |  4 +--
- configs/nitrogen7_defconfig                        |  4 +--
- 10 files changed, 36 insertions(+), 19 deletions(-)
+I am using glibc - here is my config:
+BR2_arm=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_GCC_VERSION_4_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ENABLE_LOCALE_PURGE=y
+BR2_GENERATE_LOCALE="en_US.UTF-8"
+BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY=y
+BR2_TARGET_OPTIMIZATION="-Os -pipe"
+# BR2_TARGET_GENERIC_GETTY is not set
+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
+BR2_PACKAGE_LIBPTHREAD_STUBS=y
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_TARGET_SHEEVAPLUG=y
 
-diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/common/6x_bootscript.txt
-similarity index 100%
-rename from board/boundarydevices/nitrogen6x/6x_bootscript.txt
-rename to board/boundarydevices/common/6x_bootscript.txt
-diff --git a/board/boundarydevices/nitrogen6x/6x_upgrade.txt b/board/boundarydevices/common/6x_upgrade.txt
-similarity index 100%
-rename from board/boundarydevices/nitrogen6x/6x_upgrade.txt
-rename to board/boundarydevices/common/6x_upgrade.txt
-diff --git a/board/boundarydevices/nitrogen6x/genimage.cfg b/board/boundarydevices/common/genimage.cfg
-similarity index 100%
-rename from board/boundarydevices/nitrogen6x/genimage.cfg
-rename to board/boundarydevices/common/genimage.cfg
-diff --git a/board/boundarydevices/nitrogen6x/post-build.sh b/board/boundarydevices/common/post-build.sh
-similarity index 100%
-rename from board/boundarydevices/nitrogen6x/post-build.sh
-rename to board/boundarydevices/common/post-build.sh
-diff --git a/board/boundarydevices/nitrogen6x/post-image.sh b/board/boundarydevices/common/post-image.sh
-similarity index 100%
-rename from board/boundarydevices/nitrogen6x/post-image.sh
-rename to board/boundarydevices/common/post-image.sh
-diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
-new file mode 100644
-index 0000000..0625dee
---- /dev/null
-+++ b/board/boundarydevices/common/readme.txt
-@@ -0,0 +1,30 @@
-+Buildroot for Boundary Devices platforms:
-+
-+https://boundarydevices.com/product-category/popular-sbc-and-som-modules/
-+
-+Here is the list of targeted platforms per defconfig:
-+
-+- nitrogen6x_defconfig
-+  - BD-SL-i.MX6 (SABRE-Lite)
-+  - Nitrogen6X
-+  - Nitrogen6_Lite
-+  - Nitrogen6_MAX
-+  - Nitrogen6_VM
-+  - Nitrogen6_SOM
-+  - Nitrogen6_SOMv2
-+
-+- nitrogen6sx_defconfig
-+  - Nitrogen6_SoloX
-+
-+- nitrogen7_defconfig
-+  - Nitrogen7
-+
-+To install, simply copy the image to a uSD card:
-+
-+$ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Where 'sdX' is the device node of the uSD partition.
-+
-+To upgrade u-boot, cancel autoboot and type:
-+
-+> run upgradeu
-diff --git a/board/boundarydevices/nitrogen6x/readme.txt b/board/boundarydevices/nitrogen6x/readme.txt
-deleted file mode 100644
-index 6c723f1..0000000
---- a/board/boundarydevices/nitrogen6x/readme.txt
-+++ /dev/null
-@@ -1,13 +0,0 @@
--Buildroot for Boundary Devices Nitrogen6X:
--
--http://boundarydevices.com/products/nitrogen6x-board-imx6-arm-cortex-a9-sbc/
--
--To install, simply copy the image to a uSD card:
--
--sudo dd if=output/images/sdcard.img of=/dev/sdX
--
--Where 'sdX' is the device node of the uSD partition.
--
--To upgrade u-boot, cancel autoboot and type:
--
--run upgradeu
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index e69fafc..fcc74c9 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -5,8 +5,8 @@ BR2_cortex_a9=y
- # system
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index d8da188..7b95988 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -5,8 +5,8 @@ BR2_cortex_a9=y
- # system
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- 
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index 91529e8..d8c3975 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -5,8 +5,8 @@ BR2_cortex_a7=y
- # system
- BR2_TARGET_GENERIC_GETTY=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
- 
+So when I did have locale enabled in busybox before, after the build,
+the locale data files were installed but some had odd directory names,
+containing maybe html, if I remember right they contained "en#quot" or
+something. I don't have that computer here right now.
+
+And my buildroot .config contains:
+BR2_GENERATE_LOCALE="en_US"
+
+My goal was simply to be able to access usb flash drives written by
+another Linux system (Ubuntu) that did support utf-8 characters. Linux
+does not care much about names, with a couple exceptions they are just
+bytes ( r"\/\0\n" are problematic in names).
+
+If someone can tell me how I can just cat a file with a utf8 widechar
+in busybox, I think I can continue from there.
+
+Thanks, Steve
