@@ -1,31 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Mar 2016 17:43:18 +0100
-Subject: [Buildroot] [PATCH 0/2] board/boundarydevices: update platforms
-	support
-In-Reply-To: <1457017038-4023-1-git-send-email-gary.bisson@boundarydevices.com>
- (Gary Bisson's message of "Thu, 3 Mar 2016 15:57:16 +0100")
-References: <1457017038-4023-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <877fhj8qc9.fsf@dell.be.48ers.dk>
+Date: Thu, 3 Mar 2016 17:41:16 +0100
+Subject: [Buildroot] [git commit] board/boundarydevices: update u-boot
+	scripts for i.MX7 support
+Message-ID: <20160303164338.2A6C6818F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c753aa226d7dcbd019462a5bacfc41df5cbc721f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi all,
- > Since the Nitrogen7 defconfig came in, someone pointed out that the
- > bootscript hasn't been updated accordingly so the first patch is taking
- > care of that.
+Also remove useless tfp410 enablement since a basic kernel driver has
+been added.
 
- > While doing it, I realized it didn't really make sense to have all our
- > scripts in a 'nitrogen6x' folder whereas they also apply to other configs.
- > So the second patch renames the folder and also updates the readme so it is
- > (hopefully) clearer which config should be used depending on the platform
- > being used.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/boundarydevices/nitrogen6x/6x_bootscript.txt | 33 +++++++++++-----------
+ board/boundarydevices/nitrogen6x/6x_upgrade.txt    |  2 +-
+ 2 files changed, 18 insertions(+), 17 deletions(-)
 
-Committed both, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
+index 4a9be0b..e8a08aa 100644
+--- a/board/boundarydevices/nitrogen6x/6x_bootscript.txt
++++ b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
+@@ -1,8 +1,19 @@
+ setenv bootargs ''
+ 
+-a_script=0x10800000
+-a_zImage=0x10800000
+-a_fdt=0x13000000
++if itest.s x6SX == "x${cpu}" || itest.s x7D == "x${cpu}"; then
++	a_script=0x80800000
++	a_zImage=0x80800000
++	a_fdt=0x83000000
++	m4=''
++	if itest.s "x1" == "x$m4enabled" ; then
++		run m4boot;
++		m4='-m4';
++	fi
++else
++	a_script=0x10800000
++	a_zImage=0x10800000
++	a_fdt=0x13000000
++fi
+ 
+ setenv initrd_high 0xffffffff
+ if itest.s "x" == "x${dtbname}" ; then
+@@ -13,15 +24,9 @@ if itest.s "x" == "x${dtbname}" ; then
+ 	elif itest.s x6QP == "x${cpu}" ; then
+ 		dtbname=imx6qp-${board}.dtb;
+ 	elif itest.s x6SX == "x${cpu}" ; then
+-		if itest.s "x1" != "x$m4enabled" ; then
+-			dtbname=imx6sx-${board}.dtb;
+-		else
+-			run m4boot;
+-			dtbname=imx6sx-${board}-m4.dtb;
+-		fi
+-		a_script=0x80800000
+-		a_zImage=0x80800000
+-		a_fdt=0x83000000
++		dtbname=imx6sx-${board}${m4}.dtb;
++	elif itest.s x7D == "x${cpu}" ; then
++		dtbname=imx7d-${board}${m4}.dtb;
+ 	else
+ 		dtbname=imx6q-${board}.dtb;
+ 	fi
+@@ -47,10 +52,6 @@ else
+ 	exit;
+ fi
+ 
+-# first enable tfp410
+-i2c dev 1
+-i2c mw 38 8.1 bd
+-
+ cmd_xxx_present=
+ fdt resize
+ if itest.s "x" != "x${cmd_custom}" ; then
+diff --git a/board/boundarydevices/nitrogen6x/6x_upgrade.txt b/board/boundarydevices/nitrogen6x/6x_upgrade.txt
+index 9715f16..e012ff9 100644
+--- a/board/boundarydevices/nitrogen6x/6x_upgrade.txt
++++ b/board/boundarydevices/nitrogen6x/6x_upgrade.txt
+@@ -7,7 +7,7 @@ offset=0x400
+ a_uImage1=0x12000000
+ a_uImage2=0x12400000
+ 
+-if itest.s x6SX == "x$cpu" ; then
++if itest.s x6SX == "x${cpu}" || itest.s x7D == "x${cpu}"; then
+ 	a_uImage1=0x82000000
+ 	a_uImage2=0x82400000
+ fi
