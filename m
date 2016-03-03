@@ -1,49 +1,51 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 3 Mar 2016 08:01:24 -0300
-Subject: [Buildroot] usb_modeswitch issues
-In-Reply-To: <CAGm1_ktE6wRSd=g7DAtwN_S5+6kg64px0J62Sh3vPKiHxSngxg@mail.gmail.com>
-References: <CAGm1_ktE6wRSd=g7DAtwN_S5+6kg64px0J62Sh3vPKiHxSngxg@mail.gmail.com>
-Message-ID: <56D81984.6030300@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 3 Mar 2016 12:15:30 +0100
+Subject: [Buildroot] [PATCH] host-fakeroot: re-run autotools to fix
+ build on ppc64le host
+In-Reply-To: <1456984671-10123-1-git-send-email-stewart@linux.vnet.ibm.com>
+References: <1456984671-10123-1-git-send-email-stewart@linux.vnet.ibm.com>
+Message-ID: <20160303121530.5727120f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/03/16 06:49, Yegor Yefremov wrote:
+Dear Stewart Smith,
 
-> Hi Gustavo, all,
->
-> I experience strange Segmentation faults with usb_modeswitch 2.3.0
-> (didn't really used if earlier, so I know nothing about earlier
-> versions):
->
-> http://www.draisberghof.de/usb_modeswitch/bb/viewtopic.php?f=4&t=2489&p=16378#p16378
->
-> Do you understand, what LOM means saying:
->
-> "You have forgotten to build the wrapper (usb_modeswitch.tcl)"
->
-> I've looked at usb_modeswitch Makefile and I cannot see
-> usb_modeswitch.tcl in install target.
->
-> Yegor
+On Thu,  3 Mar 2016 16:57:51 +1100, Stewart Smith wrote:
+> When building on ppc64le host (notably Ubuntu 14.04, where this was
+> reported), the configure/libtool combination in fakeroot would
+> incorrectly detect that ld doesn't know how to build shared libraries.
+> Instead of checking for ppc64le libs, it was checking if we could build
+> *big* endian libraries, which the native Ubuntu toolchain on Ubuntu 14.04
+> cannot. The end result would be that you wouldn't get libfakeroot.so,
+> causing a build failure later on.
+> 
+> However, if we rerun autotools, this works. Additionally, due to
+> the strange way that fakeroot builds, we need to mkdir build-aux as
+> this directory does not exist in the original source package.
+> 
+> With this patch, you can now successfully build OpenPower firmware
+> (which uses buildroot infrastructure) on an Ubuntu 14.04 ppc64le
+> system.
+> 
+> Fixes: https://github.com/open-power/op-build/issues/194
+> Signed-off-by: Stewart Smith <stewart@linux.vnet.ibm.com>
 
-Hi Yegor.
-There are a couple of usage forms for it, namely manual (you call 
-usb_modeswitch with the appropiate parameters) or automatic (via udev 
-provider).
-Assuming you're using the second option, which is where the dispatcher 
-is used, there's a rule installed in /lib/udev/usb_modeswitch that's in 
-charge of calling the dispatcher (/usr/sbin/usb_modeswitch_dispatcher).
-usb_modeswitch_dispatcher is built based on 
-usb_modeswitch_dispatcher.tcl based on two options - if you've got tcl 
-on your target it will be a tcl script with the appropiate shebang, or 
-otherwise it will create a binary based on the bundled jimtcl if not.
-So if you have /usr/sbin/usb_modeswitch_dispatcher (which should be) 
-then things are failing for some other reason.
-If you don't have tcl you can switch to it to see if jimtcl is breaking 
-things.
-I normally use this on armv5 without issues, however i don't have an 
-mbim modem so YMMV.
-Regards.
+I understand the issue, but I don't really like the solution, because
+it means that from now on, host-autoconf, host-automake and
+host-libtool are always going to be built as dependencies of
+host-fakeroot, making a "minimal" build longer.
+
+Unfortunately, I don't have a lot of other proposals to make, except
+maybe seeing if there is a more recent version of fakeroot that has
+an already re-generated configure script that works for you.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
