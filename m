@@ -1,46 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Mar 2016 15:08:04 +0100
-Subject: [Buildroot] [git commit] clamav: bump to version 0.99.1
-Message-ID: <20160303140922.CFD4B7FD93@busybox.osuosl.org>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu,  3 Mar 2016 15:57:16 +0100
+Subject: [Buildroot] [PATCH 0/2] board/boundarydevices: update platforms
+	support
+Message-ID: <1457017038-4023-1-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c8e5dd69f4f281b2b497ae7ec9ec95c47e7c80c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi all,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/clamav/clamav.hash | 8 ++++----
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Since the Nitrogen7 defconfig came in, someone pointed out that the
+bootscript hasn't been updated accordingly so the first patch is taking
+care of that.
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index f1931ad..f80474b 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/clamav/files/clamav/0.99/
--sha1	7834baf3ce4898dd856e652c9d0301a8e14b4615	clamav-0.99.tar.gz
--# Locally computed
--sha256	d2792c8cfadd685fffc40b2199679628815df031fd3149ccf961649fc8787ea9	clamav-0.99.tar.gz
-+# From http://sourceforge.net/projects/clamav/files/clamav/0.99.1/
-+sha1	9b9706b951fbb35cf6743ef497649fdf20f167f9	clamav-0.99.1.tar.gz
-+# Calculated based on the hash above
-+sha256	e144689122d3f91293808c82cbb06b7d3ac9eca7ae29564c5d148ffe7b25d58a	clamav-0.99.1.tar.gz
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 35afd1e..16178cd 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.99
-+CLAMAV_VERSION = 0.99.1
- CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
- CLAMAV_LICENSE = GPLv2
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+While doing it, I realized it didn't really make sense to have all our
+scripts in a 'nitrogen6x' folder whereas they also apply to other configs.
+So the second patch renames the folder and also updates the readme so it is
+(hopefully) clearer which config should be used depending on the platform
+being used.
+
+Regards,
+Gary
+
+Gary Bisson (2):
+  board/boundarydevices: update u-boot scripts for i.MX7 support
+  board/boundarydevices: rename folder and update readme
+
+ .../{nitrogen6x => common}/6x_bootscript.txt       | 33 +++++++++++-----------
+ .../{nitrogen6x => common}/6x_upgrade.txt          |  2 +-
+ .../{nitrogen6x => common}/genimage.cfg            |  0
+ .../{nitrogen6x => common}/post-build.sh           |  0
+ .../{nitrogen6x => common}/post-image.sh           |  0
+ board/boundarydevices/common/readme.txt            | 30 ++++++++++++++++++++
+ board/boundarydevices/nitrogen6x/readme.txt        | 13 ---------
+ configs/nitrogen6sx_defconfig                      |  4 +--
+ configs/nitrogen6x_defconfig                       |  4 +--
+ configs/nitrogen7_defconfig                        |  4 +--
+ 10 files changed, 54 insertions(+), 36 deletions(-)
+ rename board/boundarydevices/{nitrogen6x => common}/6x_bootscript.txt (87%)
+ rename board/boundarydevices/{nitrogen6x => common}/6x_upgrade.txt (95%)
+ rename board/boundarydevices/{nitrogen6x => common}/genimage.cfg (100%)
+ rename board/boundarydevices/{nitrogen6x => common}/post-build.sh (100%)
+ rename board/boundarydevices/{nitrogen6x => common}/post-image.sh (100%)
+ create mode 100644 board/boundarydevices/common/readme.txt
+ delete mode 100644 board/boundarydevices/nitrogen6x/readme.txt
+
+-- 
+2.7.0
