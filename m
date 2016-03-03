@@ -1,56 +1,42 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Thu, 3 Mar 2016 09:13:46 -0800
-Subject: [Buildroot] GSOC idea
-In-Reply-To: <8737s78phs.fsf@dell.be.48ers.dk>
-References: <CAJJ6jxuwU=A6ph4MCnz_hF4kODpf5yFsTeZwzTEgWz06wMjZjQ@mail.gmail.com>
- <87d1rdjpfn.fsf@dell.be.48ers.dk>
- <CAJJ6jxvHKwtXx9YdMw3Txc7vQeX9VEk4dp5Om5ZvJmQVjBAf2w@mail.gmail.com>
- <8737s78phs.fsf@dell.be.48ers.dk>
-Message-ID: <CAJJ6jxtcUMBxo+MxC6tATUFrhSNojgPCOUzExWGps2=OPd6i7w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  3 Mar 2016 16:45:34 -0300
+Subject: [Buildroot] [PATCH] sqlite: bump to version 3.11.1
+Message-ID: <1457034334-30859-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 3, 2016 at 9:01 AM, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Steve" == Steve Calfee <stevecalfee@gmail.com> writes:
->
-> Hi,
->
->  > And my buildroot .config contains:
->  > BR2_GENERATE_LOCALE="en_US"
->
-> The "normal" unicode variant of this is en_US.UTF-8:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ouch, maybe something stupid like this broke my test.
-
->
-> locale
-> LANG=en_US.UTF-8
-> LANGUAGE=en_US:en
-> LC_CTYPE="en_US.UTF-8"
-> LC_NUMERIC="en_US.UTF-8"
-> LC_TIME="en_US.UTF-8"
-> LC_COLLATE="en_US.UTF-8"
-> LC_MONETARY="en_US.UTF-8"
-> LC_MESSAGES="en_US.UTF-8"
-> LC_PAPER="en_US.UTF-8"
-> LC_NAME="en_US.UTF-8"
-> LC_ADDRESS="en_US.UTF-8"
-> LC_TELEPHONE="en_US.UTF-8"
-> LC_MEASUREMENT="en_US.UTF-8"
-> LC_IDENTIFICATION="en_US.UTF-8"
-> LC_ALL=
->
->  > If someone can tell me how I can just cat a file with a utf8 widechar
->  > in busybox, I think I can continue from there.
->
-> Do you mean with a utf8 filename or containing utf8 text?
->
-
-I mainly wish to just have utf8 filenames. The files I am interested
-in right now are binaries. I have not upgraded to the latest 2016.02
-release. I will also do that and try again.
-
-Regards, Steve
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 7a218dc..48e7fbd 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1	e2d300e4b24af5ecd67a1396488893fa44864e36	sqlite-autoconf-3110000.tar.gz
++sha1	c4b4dcd735a4daf5a2e2bb90f374484c8d4dad29	sqlite-autoconf-3110100.tar.gz
+ # Calculated based on the hash above
+-sha256	508d4dcbcf7a7181e95c717a1dc4ae3c0880b3d593be0c4b40abb6c3a0e201fb	sqlite-autoconf-3110000.tar.gz
++sha256	533ff1d0271c2e666f01591271cef01a31648563affa0c95e80ef735077d4377	sqlite-autoconf-3110100.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 870b891..0029fd6 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3110000
++SQLITE_VERSION = 3110100
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
+-- 
+2.4.10
