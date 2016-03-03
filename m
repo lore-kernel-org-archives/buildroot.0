@@ -1,44 +1,31 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Mar 2016 09:58:52 -0300
-Subject: [Buildroot] [PATCH] clamav: bump to version 0.99.1
-Message-ID: <1457009932-5993-1-git-send-email-gustavo@zacarias.com.ar>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 3 Mar 2016 14:23:37 +0100
+Subject: [Buildroot] [PATCH 1/1] busybox: Make S01logging source a
+ default file.
+In-Reply-To: <56D72F04.9090909@mind.be>
+References: <1456483852-12830-1-git-send-email-nicolas.cavallari@green-communications.fr>
+ <56D61C10.9080409@lucaceresoli.net> <56D72F04.9090909@mind.be>
+Message-ID: <56D83AD9.9070004@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/clamav/clamav.hash | 8 ++++----
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Dear Arnout,
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index f1931ad..f80474b 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,4 +1,4 @@
--# From http://sourceforge.net/projects/clamav/files/clamav/0.99/
--sha1	7834baf3ce4898dd856e652c9d0301a8e14b4615	clamav-0.99.tar.gz
--# Locally computed
--sha256	d2792c8cfadd685fffc40b2199679628815df031fd3149ccf961649fc8787ea9	clamav-0.99.tar.gz
-+# From http://sourceforge.net/projects/clamav/files/clamav/0.99.1/
-+sha1	9b9706b951fbb35cf6743ef497649fdf20f167f9	clamav-0.99.1.tar.gz
-+# Calculated based on the hash above
-+sha256	e144689122d3f91293808c82cbb06b7d3ac9eca7ae29564c5d148ffe7b25d58a	clamav-0.99.1.tar.gz
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 35afd1e..16178cd 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.99
-+CLAMAV_VERSION = 0.99.1
- CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
- CLAMAV_LICENSE = GPLv2
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+On 02/03/2016 19:20, Arnout Vandecappelle wrote:
+> On 03/01/16 23:47, Luca Ceresoli wrote:
+[...]
+>> Unrelated to your patch, but passing '-n' (Run in foreground) looks
+>> strange since we are daemonizing those processes anyway. Do you know any
+>> good reason for this?
+> 
+>  I do: these daemons don't create a PID file, and if they daemonize and
+> start-stop-daemon creates the PID file, the PID logged in there will be wrong
+> (it will be the PID of the exited parent).
+
+Good point. Thanks.
+
 -- 
-2.4.10
+Luca
