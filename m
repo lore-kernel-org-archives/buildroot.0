@@ -1,44 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Mar 2016 22:02:38 +0100
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.11.1
-Message-ID: <20160303210305.E313E818EE@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 03 Mar 2016 21:05:45 +0000
+Subject: [Buildroot] [Bug 8736] IPV6 forced on in busybox
+In-Reply-To: <bug-8736-163@https.bugs.busybox.net/>
+References: <bug-8736-163@https.bugs.busybox.net/>
+Message-ID: <bug-8736-163-Yw8am9oihc@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd58dfcf2c599d0c16d46c4863a6547601d471ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8736
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+--- Comment #2 from Kenric Smith <ksmith@aesaustin.com> ---
+Sorry for the confusion.  Busybox is acting as it should, the issue is that
+Buildroot is telling Busybox to enable IPV6 no matter what.  For Buildroot
+systems where IPV6 is not enabled (in the kernel), Buildroot shouldn't enable
+IPV6 in Busybox.
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 7a218dc..48e7fbd 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1	e2d300e4b24af5ecd67a1396488893fa44864e36	sqlite-autoconf-3110000.tar.gz
-+sha1	c4b4dcd735a4daf5a2e2bb90f374484c8d4dad29	sqlite-autoconf-3110100.tar.gz
- # Calculated based on the hash above
--sha256	508d4dcbcf7a7181e95c717a1dc4ae3c0880b3d593be0c4b40abb6c3a0e201fb	sqlite-autoconf-3110000.tar.gz
-+sha256	533ff1d0271c2e666f01591271cef01a31648563affa0c95e80ef735077d4377	sqlite-autoconf-3110100.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 870b891..0029fd6 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3110000
-+SQLITE_VERSION = 3110100
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+Previously it appears that IPV6 was a Buildroot configuration option and that
+option was properly being passed into Busybox.  When that option was removed,
+IPV6 was forced on in Busybox by the Buildroot configuration.
+
+The patch attached just allows Busybox to be configured or not for IPV6, in the
+menuconfig option of Busybox, instead of forcing it to be enabled in Busybox.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
