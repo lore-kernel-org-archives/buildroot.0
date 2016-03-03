@@ -1,94 +1,163 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu,  3 Mar 2016 15:57:17 +0100
-Subject: [Buildroot] [PATCH 1/2] board/boundarydevices: update u-boot
-	scripts for i.MX7 support
+Date: Thu,  3 Mar 2016 15:57:18 +0100
+Subject: [Buildroot] [PATCH 2/2] board/boundarydevices: rename folder and
+	update readme
 In-Reply-To: <1457017038-4023-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1457017038-4023-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1457017038-4023-2-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1457017038-4023-3-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove useless tfp410 enablement since a basic kernel driver has
-been added.
+It didn't make sense to keep the U-Boot scripts and post build/image
+scripts under the nitrogen6x folder since they apply for all our
+platforms.
+
+Also update the readme.txt to make it clearer which defconfig should
+be used depending on the platform targeted.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- board/boundarydevices/nitrogen6x/6x_bootscript.txt | 33 +++++++++++-----------
- board/boundarydevices/nitrogen6x/6x_upgrade.txt    |  2 +-
- 2 files changed, 18 insertions(+), 17 deletions(-)
+ .../{nitrogen6x => common}/6x_bootscript.txt       |  0
+ .../{nitrogen6x => common}/6x_upgrade.txt          |  0
+ .../{nitrogen6x => common}/genimage.cfg            |  0
+ .../{nitrogen6x => common}/post-build.sh           |  0
+ .../{nitrogen6x => common}/post-image.sh           |  0
+ board/boundarydevices/common/readme.txt            | 30 ++++++++++++++++++++++
+ board/boundarydevices/nitrogen6x/readme.txt        | 13 ----------
+ configs/nitrogen6sx_defconfig                      |  4 +--
+ configs/nitrogen6x_defconfig                       |  4 +--
+ configs/nitrogen7_defconfig                        |  4 +--
+ 10 files changed, 36 insertions(+), 19 deletions(-)
+ rename board/boundarydevices/{nitrogen6x => common}/6x_bootscript.txt (100%)
+ rename board/boundarydevices/{nitrogen6x => common}/6x_upgrade.txt (100%)
+ rename board/boundarydevices/{nitrogen6x => common}/genimage.cfg (100%)
+ rename board/boundarydevices/{nitrogen6x => common}/post-build.sh (100%)
+ rename board/boundarydevices/{nitrogen6x => common}/post-image.sh (100%)
+ create mode 100644 board/boundarydevices/common/readme.txt
+ delete mode 100644 board/boundarydevices/nitrogen6x/readme.txt
 
-diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
-index 4a9be0b..e8a08aa 100644
---- a/board/boundarydevices/nitrogen6x/6x_bootscript.txt
-+++ b/board/boundarydevices/nitrogen6x/6x_bootscript.txt
-@@ -1,8 +1,19 @@
- setenv bootargs ''
- 
--a_script=0x10800000
--a_zImage=0x10800000
--a_fdt=0x13000000
-+if itest.s x6SX == "x${cpu}" || itest.s x7D == "x${cpu}"; then
-+	a_script=0x80800000
-+	a_zImage=0x80800000
-+	a_fdt=0x83000000
-+	m4=''
-+	if itest.s "x1" == "x$m4enabled" ; then
-+		run m4boot;
-+		m4='-m4';
-+	fi
-+else
-+	a_script=0x10800000
-+	a_zImage=0x10800000
-+	a_fdt=0x13000000
-+fi
- 
- setenv initrd_high 0xffffffff
- if itest.s "x" == "x${dtbname}" ; then
-@@ -13,15 +24,9 @@ if itest.s "x" == "x${dtbname}" ; then
- 	elif itest.s x6QP == "x${cpu}" ; then
- 		dtbname=imx6qp-${board}.dtb;
- 	elif itest.s x6SX == "x${cpu}" ; then
--		if itest.s "x1" != "x$m4enabled" ; then
--			dtbname=imx6sx-${board}.dtb;
--		else
--			run m4boot;
--			dtbname=imx6sx-${board}-m4.dtb;
--		fi
--		a_script=0x80800000
--		a_zImage=0x80800000
--		a_fdt=0x83000000
-+		dtbname=imx6sx-${board}${m4}.dtb;
-+	elif itest.s x7D == "x${cpu}" ; then
-+		dtbname=imx7d-${board}${m4}.dtb;
- 	else
- 		dtbname=imx6q-${board}.dtb;
- 	fi
-@@ -47,10 +52,6 @@ else
- 	exit;
- fi
- 
--# first enable tfp410
--i2c dev 1
--i2c mw 38 8.1 bd
+diff --git a/board/boundarydevices/nitrogen6x/6x_bootscript.txt b/board/boundarydevices/common/6x_bootscript.txt
+similarity index 100%
+rename from board/boundarydevices/nitrogen6x/6x_bootscript.txt
+rename to board/boundarydevices/common/6x_bootscript.txt
+diff --git a/board/boundarydevices/nitrogen6x/6x_upgrade.txt b/board/boundarydevices/common/6x_upgrade.txt
+similarity index 100%
+rename from board/boundarydevices/nitrogen6x/6x_upgrade.txt
+rename to board/boundarydevices/common/6x_upgrade.txt
+diff --git a/board/boundarydevices/nitrogen6x/genimage.cfg b/board/boundarydevices/common/genimage.cfg
+similarity index 100%
+rename from board/boundarydevices/nitrogen6x/genimage.cfg
+rename to board/boundarydevices/common/genimage.cfg
+diff --git a/board/boundarydevices/nitrogen6x/post-build.sh b/board/boundarydevices/common/post-build.sh
+similarity index 100%
+rename from board/boundarydevices/nitrogen6x/post-build.sh
+rename to board/boundarydevices/common/post-build.sh
+diff --git a/board/boundarydevices/nitrogen6x/post-image.sh b/board/boundarydevices/common/post-image.sh
+similarity index 100%
+rename from board/boundarydevices/nitrogen6x/post-image.sh
+rename to board/boundarydevices/common/post-image.sh
+diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
+new file mode 100644
+index 0000000..0625dee
+--- /dev/null
++++ b/board/boundarydevices/common/readme.txt
+@@ -0,0 +1,30 @@
++Buildroot for Boundary Devices platforms:
++
++https://boundarydevices.com/product-category/popular-sbc-and-som-modules/
++
++Here is the list of targeted platforms per defconfig:
++
++- nitrogen6x_defconfig
++  - BD-SL-i.MX6 (SABRE-Lite)
++  - Nitrogen6X
++  - Nitrogen6_Lite
++  - Nitrogen6_MAX
++  - Nitrogen6_VM
++  - Nitrogen6_SOM
++  - Nitrogen6_SOMv2
++
++- nitrogen6sx_defconfig
++  - Nitrogen6_SoloX
++
++- nitrogen7_defconfig
++  - Nitrogen7
++
++To install, simply copy the image to a uSD card:
++
++$ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the uSD partition.
++
++To upgrade u-boot, cancel autoboot and type:
++
++> run upgradeu
+diff --git a/board/boundarydevices/nitrogen6x/readme.txt b/board/boundarydevices/nitrogen6x/readme.txt
+deleted file mode 100644
+index 6c723f1..0000000
+--- a/board/boundarydevices/nitrogen6x/readme.txt
++++ /dev/null
+@@ -1,13 +0,0 @@
+-Buildroot for Boundary Devices Nitrogen6X:
 -
- cmd_xxx_present=
- fdt resize
- if itest.s "x" != "x${cmd_custom}" ; then
-diff --git a/board/boundarydevices/nitrogen6x/6x_upgrade.txt b/board/boundarydevices/nitrogen6x/6x_upgrade.txt
-index 9715f16..e012ff9 100644
---- a/board/boundarydevices/nitrogen6x/6x_upgrade.txt
-+++ b/board/boundarydevices/nitrogen6x/6x_upgrade.txt
-@@ -7,7 +7,7 @@ offset=0x400
- a_uImage1=0x12000000
- a_uImage2=0x12400000
+-http://boundarydevices.com/products/nitrogen6x-board-imx6-arm-cortex-a9-sbc/
+-
+-To install, simply copy the image to a uSD card:
+-
+-sudo dd if=output/images/sdcard.img of=/dev/sdX
+-
+-Where 'sdX' is the device node of the uSD partition.
+-
+-To upgrade u-boot, cancel autoboot and type:
+-
+-run upgradeu
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index e69fafc..fcc74c9 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -5,8 +5,8 @@ BR2_cortex_a9=y
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
  
--if itest.s x6SX == "x$cpu" ; then
-+if itest.s x6SX == "x${cpu}" || itest.s x7D == "x${cpu}"; then
- 	a_uImage1=0x82000000
- 	a_uImage2=0x82400000
- fi
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index d8da188..7b95988 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -5,8 +5,8 @@ BR2_cortex_a9=y
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ 
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index 91529e8..d8c3975 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -5,8 +5,8 @@ BR2_cortex_a7=y
+ # system
+ BR2_TARGET_GENERIC_GETTY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/nitrogen6x/post-build.sh"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/nitrogen6x/post-image.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ 
 -- 
 2.7.0
