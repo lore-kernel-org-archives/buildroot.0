@@ -1,47 +1,44 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Mar 2016 09:58:19 -0300
-Subject: [Buildroot] [PATCH] exim: security bump to version 4.86.2
-Message-ID: <1457009899-5948-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu,  3 Mar 2016 09:58:52 -0300
+Subject: [Buildroot] [PATCH] clamav: bump to version 0.99.1
+Message-ID: <1457009932-5993-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-1531 - All installations having Exim set-uid root and using
-'perl_startup' are vulnerable to a local privilege escalation. Any user
-who can start an instance of Exim (and this is normally *any* user) can
-gain root privileges. If you do not use 'perl_startup' you *should* be
-safe.
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/clamav/clamav.hash | 8 ++++----
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 0c0d797..8f4338b 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
--# From https://lists.exim.org/lurker/message/20150726.143052.f70a32f0.en.html
--sha256	f1ccf2ce2ea51b7fbbf160e7e0e41d24ca401cf44a185128ad99ea04635fc456	exim-4.86.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256	7756deafd0583776e091f2efcba9b36203e668cf420d8876f314980803636eb3	exim-4.86.2.tar.bz2
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 62267b7..6a6bb7c 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index f1931ad..f80474b 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,4 +1,4 @@
+-# From http://sourceforge.net/projects/clamav/files/clamav/0.99/
+-sha1	7834baf3ce4898dd856e652c9d0301a8e14b4615	clamav-0.99.tar.gz
+-# Locally computed
+-sha256	d2792c8cfadd685fffc40b2199679628815df031fd3149ccf961649fc8787ea9	clamav-0.99.tar.gz
++# From http://sourceforge.net/projects/clamav/files/clamav/0.99.1/
++sha1	9b9706b951fbb35cf6743ef497649fdf20f167f9	clamav-0.99.1.tar.gz
++# Calculated based on the hash above
++sha256	e144689122d3f91293808c82cbb06b7d3ac9eca7ae29564c5d148ffe7b25d58a	clamav-0.99.1.tar.gz
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 35afd1e..16178cd 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.86
-+EXIM_VERSION = 4.86.2
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+-CLAMAV_VERSION = 0.99
++CLAMAV_VERSION = 0.99.1
+ CLAMAV_SITE = http://sourceforge.net/projects/clamav/files/clamav/$(CLAMAV_VERSION)
+ CLAMAV_LICENSE = GPLv2
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
 -- 
 2.4.10
