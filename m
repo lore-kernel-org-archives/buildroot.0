@@ -1,42 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Mar 2016 15:08:18 +0100
-Subject: [Buildroot] [git commit] stunnel: bump to version 5.31
-Message-ID: <20160303140922.D808D7FD93@busybox.osuosl.org>
+Date: Thu, 3 Mar 2016 15:05:41 +0100
+Subject: [Buildroot] [git commit] python-cryptography: bump to version 1.2.3
+Message-ID: <20160303140922.B575D819B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d226fa75bd85589d3339ebab3552ee3cb2ae4e08
+commit: https://git.buildroot.net/buildroot/commit/?id=89ffdd42e2adffe3e1ccdb43a379332b2f8140bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Is now compatible with openssl 1.0.2g+ hence fixes:
+http://autobuild.buildroot.net/results/5fc/5fc28bafa3cd7171ce6343d21f65af090536f443/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 7 ++++---
+ package/python-cryptography/python-cryptography.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 1801e61..3f0d6e5 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,2 +1,2 @@
--# From http://www.stunnel.org/pipermail/stunnel-announce/2016-January/000117.html
--sha256	43909625403ea634fa7cb8399d58faf8e7f11c1b7b29097491469951f56df551	stunnel-5.29.tar.gz
-+# From http://www.stunnel.org/pipermail/stunnel-announce/2016-March/000120.html
-+sha256	a746b71ab3dc6c23eacb0daf7342467870e43ac933430905eb1b1d050bbae0b7	stunnel-5.31.tar.gz
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 8ea71b8..a222a1c 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index b35f801..e48e2e2 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,3 +1,4 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=2b25eebd1d3c6bae52b46f0dcec74dfb, sha256 locally computed
+-md5     2b25eebd1d3c6bae52b46f0dcec74dfb  cryptography-1.2.2.tar.gz
+-sha256  3f219cb9106d9b737ea9c332c4d15d70ac328f91b59fd9d79f78bdea8f826a67  cryptography-1.2.2.tar.gz
++# From https://pypi.python.org/pypi?:action=show_md5&digest=5474d2b3e8c7555a60852e48d2743f85
++md5     5474d2b3e8c7555a60852e48d2743f85  cryptography-1.2.3.tar.gz
++# Calculated based on the hash above
++sha256  8eb11c77dd8e73f48df6b2f7a7e16173fe0fe8fdfe266232832e88477e08454e  cryptography-1.2.3.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index cefd3cb..1f91422 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).29
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).31
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.2.2
++PYTHON_CRYPTOGRAPHY_VERSION = 1.2.3
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+ PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
