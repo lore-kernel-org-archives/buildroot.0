@@ -1,39 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  3 Mar 2016 09:03:03 -0300
-Subject: [Buildroot] [PATCH] gnutls: bump to version 3.4.10
-Message-ID: <1457006583-4776-1-git-send-email-gustavo@zacarias.com.ar>
+From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
+Date: Thu,  3 Mar 2016 09:03:38 -0300
+Subject: [Buildroot] [PATCH] attr: disable gettext for host variant
+Message-ID: <1457006618-4901-1-git-send-email-gustavo.zacarias@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gnutls/gnutls.hash | 2 +-
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 1bccffd..f902e44 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	48594fadba33d450f796ec69526cf2bce6ff9bc3dc90fbd7bf38dc3601f57c3f	gnutls-3.4.9.tar.xz
-+sha256	6a32c2b4acbd33ff7eefcbd1357009da04c94c60146ef61320b6c076b1bdf59f	gnutls-3.4.10.tar.xz
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 32f44e6..0f8903f 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+Otherwise it leads to build failure and we don't need it. Fixes:
+http://autobuild.buildroot.net/results/59e/59e7e1db122523b292d34405df6dca9faa616da2/
+
+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+---
+ package/attr/attr.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index 3db66cb..4d5a07d 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -9,6 +9,7 @@ ATTR_SOURCE = attr-$(ATTR_VERSION).src.tar.gz
+ ATTR_SITE = http://download.savannah.gnu.org/releases/attr
+ ATTR_INSTALL_STAGING = YES
+ ATTR_CONF_OPTS = --enable-gettext=no
++HOST_ATTR_CONF_OPTS = --enable-gettext=no
+ ATTR_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)
+ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
  
- GNUTLS_VERSION_MAJOR = 3.4
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).9
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).10
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = GPLv3+, LGPLv2.1+
 -- 
 2.4.10
