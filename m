@@ -1,71 +1,27 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu,  3 Mar 2016 22:29:28 +0000
-Subject: [Buildroot] [PATCH 2/2] package/nodejs: bump version to 5.7.1
-In-Reply-To: <1457044168-31810-1-git-send-email-martin@barkynet.com>
-References: <1457044168-31810-1-git-send-email-martin@barkynet.com>
-Message-ID: <1457044168-31810-2-git-send-email-martin@barkynet.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 03 Mar 2016 22:33:26 +0000
+Subject: [Buildroot] [Bug 8736] IPV6 forced on in busybox
+In-Reply-To: <bug-8736-163@https.bugs.busybox.net/>
+References: <bug-8736-163@https.bugs.busybox.net/>
+Message-ID: <bug-8736-163-85d99PHsrp@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v5.7.1/
+https://bugs.busybox.net/show_bug.cgi?id=8736
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{5.6.0 => 5.7.1}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/{5.6.0 => 5.7.1}/0003-Fix-va_list-not-declared.patch   | 0
- package/nodejs/{5.6.0 => 5.7.1}/0004-Fix-support-for-uClibc-ng.patch  | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{5.6.0 => 5.7.1}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
- rename package/nodejs/{5.6.0 => 5.7.1}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{5.6.0 => 5.7.1}/0003-Fix-va_list-not-declared.patch (100%)
- rename package/nodejs/{5.6.0 => 5.7.1}/0004-Fix-support-for-uClibc-ng.patch (100%)
+--- Comment #8 from Kenric Smith <ksmith@aesaustin.com> ---
+Confirmed setting ENABLE_FEATURE_PREFER_IPV4_ADDRESS also corrects the
+behavior. 
 
-diff --git a/package/nodejs/5.6.0/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/5.6.0/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/5.6.0/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/5.6.0/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/5.6.0/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch
-similarity index 100%
-rename from package/nodejs/5.6.0/0003-Fix-va_list-not-declared.patch
-rename to package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch
-diff --git a/package/nodejs/5.6.0/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/5.6.0/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 7fe5b6f..1bc7372 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "5.6.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "5.7.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.42"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index e205ac3..3a476a3 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.42/SHASUMS256.txt
- sha256  9b4cc1b5bc397d80dfe217625b04bb6212a3b5a8b1e0eb36000a30d7ae567b8a  node-v0.10.42.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v5.6.0/SHASUMS256.txt
--sha256  588341e466ac72f6b8e9fa500f04edf149f7d4e8141c4175c495d6d1484405e3  node-v5.6.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v5.7.1/SHASUMS256.txt
-+sha256  029ed8aeb997c68d1a901cd837af02d24b6b5e20a4ff93bed090fd289f91a9a1  node-v5.7.1.tar.xz
+I personally still think forcing IPV6 in Busybox isn't great, but I also
+understand if you don't want to change the configuration.
+
+Feel free to close the issue as resolved, if you want to change the forced IPV6
+in Busybox is up to you. (it results in a 20% larger executable for me)
+
 -- 
-2.5.0
+You are receiving this mail because:
+You are on the CC list for the bug.
