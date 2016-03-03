@@ -1,45 +1,67 @@
 From: Geoff Levand <geoff@infradead.org>
-Date: Wed, 02 Mar 2016 17:11:25 -0800
-Subject: [Buildroot] [PATCH 3/4] Add go target support
-In-Reply-To: <20160302235110.7fe169b2@free-electrons.com>
+Date: Wed, 02 Mar 2016 17:11:32 -0800
+Subject: [Buildroot] [PATCH 4/4] Add package flannel
+In-Reply-To: <20160302235302.198db5d7@free-electrons.com>
 References: <cover.1456946494.git.geoff@infradead.org>
- <22da8d19ae88ef56544a26541228319c78ae8dea.1456946494.git.geoff@infradead.org>
- <20160302235110.7fe169b2@free-electrons.com>
-Message-ID: <1456967485.13916.110.camel@infradead.org>
+ <1572d192abce3a19798cdfe75f3aef8f9e3e504c.1456946494.git.geoff@infradead.org>
+ <20160302235302.198db5d7@free-electrons.com>
+Message-ID: <1456967492.13916.111.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-On Wed, 2016-03-02 at 23:51 +0100, Thomas Petazzoni wrote:
+On Wed, 2016-03-02 at 23:53 +0100, Thomas Petazzoni wrote:
+> The commit title should be:
+> 
+> 	flannel: new package
+> 
 > On Wed, 02 Mar 2016 19:23:33 +0000, Geoff Levand wrote:
-> > Add the needed bits to build a go compiler for the target.
-> > 
-> > Signed-off-by: Geoff Levand <geoff@infradead.org>
 > 
-> We don't support or want to support doing development on the target, so
-> I think the target variant of the go compiler is not needed.
+> > diff --git a/package/flannel/flannel.hash
+> > b/package/flannel/flannel.hash
+> > new file mode 100644
+> > index 0000000..7459298
+> > --- /dev/null
+> > +++ b/package/flannel/flannel.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally computed:
+> > +sha256
+> > c09a76e80647282687b8db36f28dd3aede650f8f71dad0cf9f453f2ae3a0635d
+> > flannel-v0.5.5.tar.gz
+> > +
 > 
-> See
-> https://buildroot.org/downloads/manual/manual.html#faq-no-compiler-on-target
-> for more details.
+> Unneeded empty new line.
 
-If I have read the above document correctly the primary reason
-for not having a target side toolchain was concerns
-of complexity and maintanence.  I don't think that is the
-case with this go package.
+OK.
 
-My motovation for having a target go is to include the go
-tools that can be used for debugging go programs, etc.
-Also, for minimal systems it is common to have a Linux
-container with the just the go compiler in it, and then
-only loading that container when installing a go
-program from source.  By having a target go compiler
-such a container can be build from buildroot.
+> 
+> > +FLANNEL_VERSION = v0.5.5
+> > +FLANNEL_SITE = https://github.com/coreos/flannel.git
+> > +FLANNEL_SITE_METHOD = git
+> 
+> Please use the github helper function.
 
-See https://hub.docker.com/_/golang/
+OK.
 
--Geoff
+> 
+> > +
+> > +FLANNEL_LICENSE = Apache-2.0
+> > +FLANNEL_LICENSE_FILES = LICENSE
+> > +
+> > +FLANNEL_DEPENDENCIES = host-go
+> > +
+> > +FLANNEL_MAKE_ENV = \
+> > +	GOBIN="$(@D)/bin" \
+> > +	GOPATH="$(@D)/gopath" \
+> > +	GOARCH=$(GO_GOARCH) \
+> > +	CGO_ENABLED=1
+> > +
+> > +define FLANNEL_CONFIGURE_CMDS
+> > +	mkdir -p $(@D)/gopath/src/github.com/coreos
+> > +	ln -s $(@D) $(@D)/gopath/src/github.com/coreos/flannel
+> 
+> This probably warrants a comment above to explain why this is needed.
+
+OK.
