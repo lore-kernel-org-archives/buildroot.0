@@ -1,36 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Mar 2016 22:12:51 +0100
-Subject: [Buildroot] [Bug 8736] IPV6 forced on in busybox
-In-Reply-To: <nba94j$m0k$1@ger.gmane.org> (Grant Edwards's message of "Thu, 3
- Mar 2016 21:08:35 +0000 (UTC)")
-References: <bug-8736-163@https.bugs.busybox.net/>
- <bug-8736-163-ImR2b9Yvou@https.bugs.busybox.net/>
- <nba94j$m0k$1@ger.gmane.org>
-Message-ID: <87twkn6zak.fsf@dell.be.48ers.dk>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  3 Mar 2016 22:12:44 +0100
+Subject: [Buildroot] [PATCH 1/3] copas: bump to version 2.0.1
+Message-ID: <1457039566-3326-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grant" == Grant Edwards <grant.b.edwards@gmail.com> writes:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/copas/copas.hash | 2 +-
+ package/copas/copas.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > On 2016-03-03, bugzilla at busybox.net <bugzilla@busybox.net> wrote:
- > [Regarding restoring the ability to configure buildroot with IPv6
- > support disabled because some utilities don't work right with IPv6
- > enabled.]
-
- >> That sounds like a bug in busybox that should be fixed instead of
- >> worked around then. What exactly goes wrong? Have you reported the
- >> bug to the busybox developers?
-
- > I agree that IPv6 support (if broken) needs to be fixed.  But I think
- > it's also important to restore the ability to disable IPv6 support.  I
- > have customers who explicity state that they want no IPv6 support in
- > their products.
-
-Yes, I think we should drop the forced ipv6 (and largefile) config
-modifications and just enable them in our default busybox config instead.
-
+diff --git a/package/copas/copas.hash b/package/copas/copas.hash
+index 35dff2f..27e3316 100644
+--- a/package/copas/copas.hash
++++ b/package/copas/copas.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	05be032ac2f3a32eb2eb536d41d2f5af620dded6e158c54d1ab0f73d2957dc68  copas-2.0.0-1.src.rock
++sha256  c94890bdc8899d05163ca963dadf4b74b2ad7a5795ea3923a792b6e928ec142a  copas-2.0.1-1.src.rock
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index b3f97c7..132b5d9 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-COPAS_VERSION = 2.0.0-1
+-COPAS_SUBDIR = copas-2_0_0
++COPAS_VERSION = 2.0.1-1
++COPAS_SUBDIR = copas-2_0_1
+ COPAS_LICENSE = MIT
+ 
+ $(eval $(luarocks-package))
 -- 
-Bye, Peter Korsgaard
+2.5.0
