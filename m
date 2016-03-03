@@ -1,67 +1,45 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Wed, 02 Mar 2016 17:11:32 -0800
-Subject: [Buildroot] [PATCH 4/4] Add package flannel
-In-Reply-To: <20160302235302.198db5d7@free-electrons.com>
-References: <cover.1456946494.git.geoff@infradead.org>
- <1572d192abce3a19798cdfe75f3aef8f9e3e504c.1456946494.git.geoff@infradead.org>
- <20160302235302.198db5d7@free-electrons.com>
-Message-ID: <1456967492.13916.111.camel@infradead.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  2 Mar 2016 22:32:40 -0300
+Subject: [Buildroot] [PATCH] graphite2: bump to version 1.3.6
+Message-ID: <1456968760-1775-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2016-03-02 at 23:53 +0100, Thomas Petazzoni wrote:
-> The commit title should be:
-> 
-> 	flannel: new package
-> 
-> On Wed, 02 Mar 2016 19:23:33 +0000, Geoff Levand wrote:
-> 
-> > diff --git a/package/flannel/flannel.hash
-> > b/package/flannel/flannel.hash
-> > new file mode 100644
-> > index 0000000..7459298
-> > --- /dev/null
-> > +++ b/package/flannel/flannel.hash
-> > @@ -0,0 +1,3 @@
-> > +# Locally computed:
-> > +sha256
-> > c09a76e80647282687b8db36f28dd3aede650f8f71dad0cf9f453f2ae3a0635d
-> > flannel-v0.5.5.tar.gz
-> > +
-> 
-> Unneeded empty new line.
+Also change SOURCE since the tarball got renamed with the bump.
 
-OK.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/graphite2/graphite2.hash | 4 ++--
+ package/graphite2/graphite2.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> 
-> > +FLANNEL_VERSION = v0.5.5
-> > +FLANNEL_SITE = https://github.com/coreos/flannel.git
-> > +FLANNEL_SITE_METHOD = git
-> 
-> Please use the github helper function.
-
-OK.
-
-> 
-> > +
-> > +FLANNEL_LICENSE = Apache-2.0
-> > +FLANNEL_LICENSE_FILES = LICENSE
-> > +
-> > +FLANNEL_DEPENDENCIES = host-go
-> > +
-> > +FLANNEL_MAKE_ENV = \
-> > +	GOBIN="$(@D)/bin" \
-> > +	GOPATH="$(@D)/gopath" \
-> > +	GOARCH=$(GO_GOARCH) \
-> > +	CGO_ENABLED=1
-> > +
-> > +define FLANNEL_CONFIGURE_CMDS
-> > +	mkdir -p $(@D)/gopath/src/github.com/coreos
-> > +	ln -s $(@D) $(@D)/gopath/src/github.com/coreos/flannel
-> 
-> This probably warrants a comment above to explain why this is needed.
-
-OK.
+diff --git a/package/graphite2/graphite2.hash b/package/graphite2/graphite2.hash
+index 07102cf..e4bc302 100644
+--- a/package/graphite2/graphite2.hash
++++ b/package/graphite2/graphite2.hash
+@@ -1,3 +1,3 @@
+ # From http://sourceforge.net/projects/silgraphite/files/graphite2
+-md5	5b8d22a8bbf031838e31432868c0109c	graphite2-1.3.5.tgz
+-sha1	044f65d5b4ade3169f5fcd75a25f047c81f5d33e	graphite2-1.3.5.tgz
++md5	12eb607e0f458febe348ae69b832b300	graphite-1.3.6.tgz
++sha1	052ed2e3653f7a026bf9ff63ca42683ce0bcefb4	graphite-1.3.6.tgz
+diff --git a/package/graphite2/graphite2.mk b/package/graphite2/graphite2.mk
+index 82c4a3b..413b6ea 100644
+--- a/package/graphite2/graphite2.mk
++++ b/package/graphite2/graphite2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GRAPHITE2_VERSION = 1.3.5
+-GRAPHITE2_SOURCE = graphite2-$(GRAPHITE2_VERSION).tgz
++GRAPHITE2_VERSION = 1.3.6
++GRAPHITE2_SOURCE = graphite-$(GRAPHITE2_VERSION).tgz
+ GRAPHITE2_SITE = http://downloads.sourceforge.net/project/silgraphite/graphite2
+ GRAPHITE2_INSTALL_STAGING = YES
+ GRAPHITE2_LICENSE = LGPLv2.1+
+-- 
+2.4.10
