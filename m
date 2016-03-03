@@ -1,51 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 3 Mar 2016 12:15:30 +0100
-Subject: [Buildroot] [PATCH] host-fakeroot: re-run autotools to fix
- build on ppc64le host
-In-Reply-To: <1456984671-10123-1-git-send-email-stewart@linux.vnet.ibm.com>
-References: <1456984671-10123-1-git-send-email-stewart@linux.vnet.ibm.com>
-Message-ID: <20160303121530.5727120f@free-electrons.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Thu,  3 Mar 2016 13:01:47 +0100
+Subject: [Buildroot] [PATCH] cannelloni: new package
+Message-ID: <1457006507-26443-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Stewart Smith,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Thu,  3 Mar 2016 16:57:51 +1100, Stewart Smith wrote:
-> When building on ppc64le host (notably Ubuntu 14.04, where this was
-> reported), the configure/libtool combination in fakeroot would
-> incorrectly detect that ld doesn't know how to build shared libraries.
-> Instead of checking for ppc64le libs, it was checking if we could build
-> *big* endian libraries, which the native Ubuntu toolchain on Ubuntu 14.04
-> cannot. The end result would be that you wouldn't get libfakeroot.so,
-> causing a build failure later on.
-> 
-> However, if we rerun autotools, this works. Additionally, due to
-> the strange way that fakeroot builds, we need to mkdir build-aux as
-> this directory does not exist in the original source package.
-> 
-> With this patch, you can now successfully build OpenPower firmware
-> (which uses buildroot infrastructure) on an Ubuntu 14.04 ppc64le
-> system.
-> 
-> Fixes: https://github.com/open-power/op-build/issues/194
-> Signed-off-by: Stewart Smith <stewart@linux.vnet.ibm.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                  |  1 +
+ package/cannelloni/Config.in       | 15 +++++++++++++++
+ package/cannelloni/cannelloni.hash |  2 ++
+ package/cannelloni/cannelloni.mk   | 13 +++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/cannelloni/Config.in
+ create mode 100644 package/cannelloni/cannelloni.hash
+ create mode 100644 package/cannelloni/cannelloni.mk
 
-I understand the issue, but I don't really like the solution, because
-it means that from now on, host-autoconf, host-automake and
-host-libtool are always going to be built as dependencies of
-host-fakeroot, making a "minimal" build longer.
-
-Unfortunately, I don't have a lot of other proposals to make, except
-maybe seeing if there is a more recent version of fakeroot that has
-an already re-generated configure script that works for you.
-
-Best regards,
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 3c6e448..cd40175 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1338,6 +1338,7 @@ menu "Networking applications"
+ 	source "package/bwm-ng/Config.in"
+ 	source "package/c-icap/Config.in"
+ 	source "package/c-icap-modules/Config.in"
++	source "package/cannelloni/Config.in"
+ 	source "package/can-utils/Config.in"
+ 	source "package/chrony/Config.in"
+ 	source "package/civetweb/Config.in"
+diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
+new file mode 100644
+index 0000000..0938159
+--- /dev/null
++++ b/package/cannelloni/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CANNELLONI
++	bool "cannelloni"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_MMU # lksctp-tools
++	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
++	select BR2_PACKAGE_LKSCTP_TOOLS
++	help
++	  A SocketCAN over Ethernet tunnel. The tunnel supports both
++	  UDP and SCTP protocols.
++
++	  https://github.com/mguentner/cannelloni
++
++comment "cannelloni needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
+new file mode 100644
+index 0000000..826af9b
+--- /dev/null
++++ b/package/cannelloni/cannelloni.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  7341b76e2af056ecbcfc9fabc6e67c88234666be60f1eb099390c61bb9925856  cannelloni-v0.5.tar.gz
+diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
+new file mode 100644
+index 0000000..bebff53
+--- /dev/null
++++ b/package/cannelloni/cannelloni.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# cannelloni
++#
++################################################################################
++
++CANNELLONI_VERSION = v0.5
++CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
++CANNELLONI_LICENSE = GPLv2+
++CANNELLONI_LICENSE_FILES = gpl-2.0.txt
++CANNELLONI_DEPENDENCIES = lksctp-tools
++
++$(eval $(cmake-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
