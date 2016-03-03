@@ -1,28 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 3 Mar 2016 10:56:37 -0300
-Subject: [Buildroot] Analysis of build results for 2016-02-21
-In-Reply-To: <20160222150539.0301105e@free-electrons.com>
-References: <20160222073022.D29851025E8@stock.ovh.net>
- <20160222150539.0301105e@free-electrons.com>
-Message-ID: <56D84295.6050003@zacarias.com.ar>
+Date: Thu,  3 Mar 2016 10:57:26 -0300
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.31
+Message-ID: <1457013446-28001-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 22/02/16 11:05, Thomas Petazzoni wrote:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->>      mips64el |                   stunnel-5.29 | NOK | http://autobuild.buildroot.net/results/64cd09dc957cbeaab9c5c6d331d38e6e22da29ae/
->
-> prototypes.h:625:5: error: conflicting types for 'getnameinfo'
->   int getnameinfo(const struct sockaddr *, socklen_t,
->
-> Interestingly, this problem seems to occur only on MIPS. Vicente,
-> Gustavo, any idea?
-
-Hi.
-I defer to Vicente on this one, seems to be a toolchain issue since all 
-of the failures are mips(32/64)r6 little-endian with external toolchain 
-(codescape), switching to r2 yields good builds.
-Regards.
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 1801e61..3f0d6e5 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,2 +1,2 @@
+-# From http://www.stunnel.org/pipermail/stunnel-announce/2016-January/000117.html
+-sha256	43909625403ea634fa7cb8399d58faf8e7f11c1b7b29097491469951f56df551	stunnel-5.29.tar.gz
++# From http://www.stunnel.org/pipermail/stunnel-announce/2016-March/000120.html
++sha256	a746b71ab3dc6c23eacb0daf7342467870e43ac933430905eb1b1d050bbae0b7	stunnel-5.31.tar.gz
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 8ea71b8..a222a1c 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).29
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).31
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+-- 
+2.4.10
