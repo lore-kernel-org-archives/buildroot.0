@@ -1,80 +1,150 @@
 From: Geoff Levand <geoff@infradead.org>
-Date: Wed, 02 Mar 2016 17:11:07 -0800
-Subject: [Buildroot] [PATCH 1/4] Add package go-bootstrap
-In-Reply-To: <20160302234349.7448884e@free-electrons.com>
+Date: Wed, 02 Mar 2016 17:11:18 -0800
+Subject: [Buildroot] [PATCH 2/4] Add go host support
+In-Reply-To: <20160302235012.419a6ec2@free-electrons.com>
 References: <cover.1456946494.git.geoff@infradead.org>
- <a316e4d5ff70594e8f4cccbb819ebf6d9a32e958.1456946494.git.geoff@infradead.org>
- <20160302234349.7448884e@free-electrons.com>
-Message-ID: <1456967467.13916.108.camel@infradead.org>
+ <518d5cfb3bd5897ea408888e6c105388fccff5c2.1456946494.git.geoff@infradead.org>
+ <20160302235012.419a6ec2@free-electrons.com>
+Message-ID: <1456967478.13916.109.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2016-03-02 at 23:43 +0100, Thomas Petazzoni wrote:
-> The commit title should be:
+On Wed, 2016-03-02 at 23:50 +0100, Thomas Petazzoni wrote:
+> --- /dev/null
+> > +++ b/package/go/Config.in.host
+> > @@ -0,0 +1,14 @@
+> > +config BR2_PACKAGE_GO_ARCH_SUPPORTS
+> > +> > 	> > bool
+> > +> > 	> > default y
+> > +> > 	> > depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc
+> > +> > 	> > depends on !BR2_ARM_CPU_ARMV4
+> > +
+> > +config BR2_PACKAGE_HOST_GO
+> > +> > 	> > bool "host go"
+> > +> > 	> > depends on BR2_PACKAGE_GO_ARCH_SUPPORTS
+> > +> > 	> > select BR2_PACKAGE_HOST_GO_BOOTSTRAP
 > 
-> 	> go-bootstrap: new host package
+> Due to the removal of Config.in.host for the go-bootstrap package, this
+> line has become useless.
 
 OK.
 
-> --- a/package/Config.in.host
-> > +++ b/package/Config.in.host
-> > @@ -13,6 +13,7 @@ menu "Host utilities"
-> >  > > 	> > source "package/genext2fs/Config.in.host"
-> >  > > 	> > source "package/genimage/Config.in.host"
-> >  > > 	> > source "package/genpart/Config.in.host"
-> > +> > 	> > source "package/go-bootstrap/Config.in.host"
 > 
-> There is no need for a Config.in.host file for this package, it is
-> just a build dependency for the go compiler, it doesn't need to be
-> exposed in menuconfig.
+> > +> > 	> > help
+> > +> > 	> >   The Go Programming Language.
+> > +
+> > +> > 	> >   https://golang.org
+> 
+> We normally don't have Config.in for host packages, as they are just
+> build dependencies. In this case, we could also decide to not have any
+> package/go/Config.in.host, and simply have the flannel package use
+> "host-go" in its _DEPENDENCIES variable.
+> 
+> However, we may consider that some users may want to build the host Go
+> compiler even if they don't have a package that uses it, so maybe it's
+> acceptable.
+
+Either way seems fine, but having the option seems more flexible for
+users.
+
+> I'm still a bit bothered by the fact that a Config.in option describing
+> a *host* package depends on BR2_PACKAGE_GO_ARCH_SUPPORTS. But I guess
+> it's fine since the Go compiler is really going to be a cross-compiler.
+
+Yes, my thinking was that if you try to build go for a target arch that
+is not supported the build will blow up.  For the package maintainer
+they can use BR2_PACKAGE_GO_ARCH_SUPPORTS to only build for targets
+that the compiler supports.  
+
+> > +GO_VERSION = 1.5.3
+> > +GO_SITE = https://storage.googleapis.com/golang
+> > +GO_SOURCE = go$(GO_VERSION).src.tar.gz
+> > +
+> > +GO_LICENSE = BSD-3c
+> > +GO_LICENSE_FILES = LICENSE
+> > +
+> > +GO_BOOTSTRAP = $(HOST_DIR)/usr/lib/go-1.4.2
+> 
+> Why don't you use $(GO_BOOTSTRAP_FINAL) instead ?
+
+Yes, should work better.
+
+> 
+> > +
+> > +ifeq ($(BR2_arm),y)
+> > +> > 	> > GO_GOARCH = arm
+> 
+> Please don't indent such variable definitions.
 
 OK.
 
-> > new file mode 100644
-> > index 0000000..464f95e
-> > --- /dev/null
-> > +++ b/package/go-bootstrap/go-bootstrap.mk
-> > @@ -0,0 +1,36 @@
-> > +################################################################################
-> > +#
-> > +# go-bootstrap
-> > +#
-> > +################################################################################
+> 
+> > +else ifeq ($(BR2_aarch64),y)
+> > +> > 	> > GO_GOARCH = arm64
+> > +else ifeq ($(BR2_i386),y)
+> > +> > 	> > GO_GOARCH = 386
+> > +else ifeq ($(BR2_x86_64),y)
+> > +> > 	> > GO_GOARCH = amd64
+> > +else ifeq ($(BR2_powerpc),y)
+> > +> > 	> > GO_GOARCH = ppc64
+> > +else
+> > +> > 	> > GO_GOARCH = unknown
+> > +endif
 > > +
-> > +GO_BOOTSTRAP_VERSION = 1.4.2
-> > +GO_BOOTSTRAP_SITE = https://storage.googleapis.com/golang
-> > +GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).src.tar.gz
+> > +ifeq ($(BR2_arm)$(BR2_ARM_CPU_HAS_VFPV3),yy)
+> > +> > 	> > GO_GOARM = 7
+> > +else ifeq ($(BR2_arm)$(BR2_ARM_CPU_HAS_VFPV2),yy)
+> > +> > 	> > GO_GOARM = 6
+> > +else ifeq ($(BR2_arm),y)
+> > +> > 	> > GO_GOARM = 5
+> > +endif
 > 
-> Will Go 1.4.x always be capable of building newer Go compilers ?
+> You should use BR2_ARM_CPU_ARMV5, BR2_ARM_CPU_ARMV6 and
+> BR2_ARM_CPU_ARMV7 here.
 
-Yes, at least that is the current situation.  FYI, the go bootstrap
-plan is documented here:
+OK.  I re-did the logic here a little. 
 
-  https://docs.google.com/document/d/1OaatvGhEAq7VseQ9kkavxKNAfepWy2yhPUBs96FGV28
+> 
+> > GO_HOST_DEPENDENCIES = host-go-bootstrap
+> 
+> Wrong variable name, it should be HOST_GO_DEPENDENCIES.
+> 
+> > GO_HOST_FINAL = $(HOST_DIR)/usr/lib/go
+> 
+> Ditto: HOST_GO_<...>
+> 
+> > GO_HOST_MAKE_ENV = \
+> 
+> Same.
 
-> > > > +define HOST_GO_BOOTSTRAP_INSTALL_CMDS
-> > +> > 	> > $(INSTALL) -D -m 0755 $(@D)/bin/go $(GO_BOOTSTRAP_FINAL)/bin/go
-> > +> > 	> > $(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(GO_BOOTSTRAP_FINAL)/bin/gofmt
+I think I got them all...
+
+> 
+> > +define HOST_GO_INSTALL_CMDS
+> > +> > 	> > $(INSTALL) -D -m 0755 $(@D)/bin/go $(GO_HOST_FINAL)/bin/go
+> > +> > 	> > $(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(GO_HOST_FINAL)/bin/gofmt
 > > +
-> > +> > 	> > cp -a $(@D)/lib $(GO_BOOTSTRAP_FINAL)/
-> > +> > 	> > cp -a $(@D)/src $(GO_BOOTSTRAP_FINAL)/
+> > +> > 	> > ln -sf ../lib/go/bin/go $(HOST_DIR)/usr/bin/
+> > +> > 	> > ln -sf ../lib/go/bin/gofmt $(HOST_DIR)/usr/bin/
+> > +
+> > +> > 	> > cp -a $(@D)/lib $(GO_HOST_FINAL)/
+> > +> > 	> > cp -a $(@D)/src $(GO_HOST_FINAL)/
 > 
-> Is it normal to copy source code to HOST_DIR ?
+> Same question: why do we install source code ?
 
-There is a known issue which requires the source tree to be installed:
+As before, to work-around a know issue.  I'll add the comment here.
 
-  https://golang.org/issue/2775
-
-I'll add a comment to the .mk file.
-
-> > +> > 	> > cp -a $(@D)/pkg $(GO_BOOTSTRAP_FINAL)/
-> > +> > 	> > chmod -R +x $(GO_BOOTSTRAP_FINAL)/pkg/tool
+> > +
+> > +> > 	> > mkdir -p $(GO_HOST_FINAL)/pkg
+> > +> > 	> > cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(GO_HOST_FINAL)/pkg/
+> > +> > 	> > cp -a $(@D)/pkg/tool $(GO_HOST_FINAL)/pkg/
+> > +> > 	> > chmod -R +x $(GO_HOST_FINAL)/pkg/tool
 > 
-> Why aren't those tools already installed +x by the build process ?
+> Same question :-)
 
-This is not needed I'll remove the line here and in go.mk.
+Removed it.
 
 -Geoff
