@@ -1,49 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Mar 2016 18:01:35 +0100
-Subject: [Buildroot] GSOC idea
-In-Reply-To: <CAJJ6jxvHKwtXx9YdMw3Txc7vQeX9VEk4dp5Om5ZvJmQVjBAf2w@mail.gmail.com>
- (Steve Calfee's message of "Thu, 3 Mar 2016 08:58:01 -0800")
-References: <CAJJ6jxuwU=A6ph4MCnz_hF4kODpf5yFsTeZwzTEgWz06wMjZjQ@mail.gmail.com>
- <87d1rdjpfn.fsf@dell.be.48ers.dk>
- <CAJJ6jxvHKwtXx9YdMw3Txc7vQeX9VEk4dp5Om5ZvJmQVjBAf2w@mail.gmail.com>
-Message-ID: <8737s78phs.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 03 Mar 2016 17:07:18 +0000
+Subject: [Buildroot] [Bug 8736] New: IPV6 forced on in busybox
+Message-ID: <bug-8736-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Steve" == Steve Calfee <stevecalfee@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=8736
 
-Hi,
+            Bug ID: 8736
+           Summary: IPV6 forced on in busybox
+           Product: buildroot
+           Version: 2015.11
+          Hardware: Other
+                OS: Linux
+            Status: NEW
+          Severity: trivial
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ksmith at aesaustin.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
- > And my buildroot .config contains:
- > BR2_GENERATE_LOCALE="en_US"
+Created attachment 6371
+  --> https://bugs.busybox.net/attachment.cgi?id=6371&action=edit
+Patch to package makefile to remove forcing IPV6
 
-The "normal" unicode variant of this is en_US.UTF-8:
+It appears from the commit logs that the IPV6 config option was removed for
+buildroot, but the remnants of the removal are forcing FEATURE_IPV6 in busybox.
+ The attached patch would remove setting that feature in busybox.
 
-locale
-LANG=en_US.UTF-8
-LANGUAGE=en_US:en
-LC_CTYPE="en_US.UTF-8"
-LC_NUMERIC="en_US.UTF-8"
-LC_TIME="en_US.UTF-8"
-LC_COLLATE="en_US.UTF-8"
-LC_MONETARY="en_US.UTF-8"
-LC_MESSAGES="en_US.UTF-8"
-LC_PAPER="en_US.UTF-8"
-LC_NAME="en_US.UTF-8"
-LC_ADDRESS="en_US.UTF-8"
-LC_TELEPHONE="en_US.UTF-8"
-LC_MEASUREMENT="en_US.UTF-8"
-LC_IDENTIFICATION="en_US.UTF-8"
-LC_ALL=
-
- > If someone can tell me how I can just cat a file with a utf8 widechar
- > in busybox, I think I can continue from there.
-
-Do you mean with a utf8 filename or containing utf8 text?
+Without this patch, the ntpd applet in busybox doesn't function properly,
+attempting to contact IPV6 hosts.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+You are receiving this mail because:
+You are on the CC list for the bug.
