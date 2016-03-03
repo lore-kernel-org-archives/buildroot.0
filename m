@@ -1,49 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 3 Mar 2016 15:06:37 +0100
-Subject: [Buildroot] [git commit] exim: security bump to version 4.86.2
-Message-ID: <20160303140922.C74977FD93@busybox.osuosl.org>
+Date: Thu, 3 Mar 2016 15:05:59 +0100
+Subject: [Buildroot] [git commit] cpio: add security patch to fix
+	CVE-2016-2037
+Message-ID: <20160303140922.BE57381983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42a499664d3afa7923c7377008f549cf9458cd58
+commit: https://git.buildroot.net/buildroot/commit/?id=527b7b1153c37ad081d7d31cf5280995b09e0005
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
-CVE-2016-1531 - All installations having Exim set-uid root and using
-'perl_startup' are vulnerable to a local privilege escalation. Any user
-who can start an instance of Exim (and this is normally *any* user) can
-gain root privileges. If you do not use 'perl_startup' you *should* be
-safe.
+CVE-2016-2037 - The cpio_safer_name_suffix function in util.c in cpio
+2.11 allows remote attackers to cause a denial of service (out-of-bounds
+write) via a crafted cpio file.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cpio/0001-fix-CVE-2016-2037.patch | 51 +++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 0c0d797..8f4338b 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
--# From https://lists.exim.org/lurker/message/20150726.143052.f70a32f0.en.html
--sha256	f1ccf2ce2ea51b7fbbf160e7e0e41d24ca401cf44a185128ad99ea04635fc456	exim-4.86.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256	7756deafd0583776e091f2efcba9b36203e668cf420d8876f314980803636eb3	exim-4.86.2.tar.bz2
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 62267b7..6a6bb7c 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.86
-+EXIM_VERSION = 4.86.2
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+diff --git a/package/cpio/0001-fix-CVE-2016-2037.patch b/package/cpio/0001-fix-CVE-2016-2037.patch
+new file mode 100644
+index 0000000..aec2ccb
+--- /dev/null
++++ b/package/cpio/0001-fix-CVE-2016-2037.patch
+@@ -0,0 +1,51 @@
++From: Pavel Raiskup
++Subject: [Bug-cpio] [PATCH] fix 1-byte out-of-bounds write
++Date: Tue, 26 Jan 2016 23:17:54 +0100
++
++Other calls to cpio_safer_name_suffix seem to be safe.
++
++* src/copyin.c (process_copy_in):  Make sure that file_hdr.c_name
++has at least two bytes allocated.
++* src/util.c (cpio_safer_name_suffix): Document that use of this
++function requires to be careful.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: fetched/submitted
++URL: https://lists.gnu.org/archive/html/bug-cpio/2016-01/msg00005.html
++
++ src/copyin.c | 2 ++
++ src/util.c   | 5 ++++-
++ 2 files changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/src/copyin.c b/src/copyin.c
++index cde911e..032d35f 100644
++--- a/src/copyin.c
+++++ b/src/copyin.c
++@@ -1385,6 +1385,8 @@ process_copy_in ()
++          break;
++        }
++
+++      if (file_hdr.c_namesize <= 1)
+++        file_hdr.c_name = xrealloc(file_hdr.c_name, 2);
++       cpio_safer_name_suffix (file_hdr.c_name, false, !no_abs_paths_flag,
++                              false);
++
++diff --git a/src/util.c b/src/util.c
++index 6ff6032..2763ac1 100644
++--- a/src/util.c
+++++ b/src/util.c
++@@ -1411,7 +1411,10 @@ set_file_times (int fd,
++ }
++ 
++ /* Do we have to ignore absolute paths, and if so, does the filename
++-   have an absolute path?  */
+++   have an absolute path?
+++   Before calling this function make sure that the allocated NAME buffer has
+++   capacity@least 2 bytes to allow us to store the "." string inside.  */
+++
++ void
++ cpio_safer_name_suffix (char *name, bool link_target, bool absolute_names,
++                        bool strip_leading_dots)
++--
++2.5.0
