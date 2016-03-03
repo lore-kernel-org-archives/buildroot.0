@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 03 Mar 2016 15:08:10 +0100
-Subject: [Buildroot] [PATCH] clamav: bump to version 0.99.1
-In-Reply-To: <1457009932-5993-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 3 Mar 2016 09:58:52 -0300")
-References: <1457009932-5993-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87fuw78xit.fsf@dell.be.48ers.dk>
+Date: Thu, 03 Mar 2016 15:08:48 +0100
+Subject: [Buildroot] [PATCH] stunnel: bump to version 5.31
+In-Reply-To: <1457013446-28001-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 3 Mar 2016 10:57:26 -0300")
+References: <1457013446-28001-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87bn6v8xhr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
