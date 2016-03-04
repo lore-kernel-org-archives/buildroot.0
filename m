@@ -1,41 +1,42 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  4 Mar 2016 08:16:29 -0300
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.4.4
-In-Reply-To: <1457090189-29234-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1457090189-29234-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1457090189-29234-2-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Mar 2016 12:13:47 +0100
+Subject: [Buildroot] Build failure with Vivante and QT5 w/ eglfs
+In-Reply-To: <CAAMH-ytTYQ1Ruiroc+ocjd3Afn=yG1OJ74PG+=2eN60b-wZ0Dw@mail.gmail.com>
+References: <20160304095534.GA16799@kwain>
+ <CAAMH-ytTYQ1Ruiroc+ocjd3Afn=yG1OJ74PG+=2eN60b-wZ0Dw@mail.gmail.com>
+Message-ID: <20160304121347.5f73916e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Gary,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4d00905..9339102 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -27,7 +27,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.4.3"
-+	bool "4.4.4"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.4.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.4.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+On Fri, 4 Mar 2016 12:02:31 +0100, Gary Bisson wrote:
+
+> > I understand this configuration can't work, but as this leads to a
+> > build issue we might need to think about a solution. We could disallow
+> > such a configuration tuple, or fix the build.
+> >
+> > Any idea?
+> 
+> I'm afraid forcing the imx-gpu-viv package output format depending on
+> qt5 graphical back end would bring many "recursive dependency" issues.
+
+I don't see why it would create recursive dependency issues.
+
+However, it would violate the principle of virtual packages, since Qt5
+is not supposed to have some dependencies that are specific to certain
+OpenGL implementations. It should normally just use dependencies on the
+OpenGL ES / EGL packages, and nothing else.
+
+However, we could probably add some exceptions to this rule. Or rework
+the virtual package logic so that consumers of OpenGL can now whether
+the FB or X11 support is available.
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
