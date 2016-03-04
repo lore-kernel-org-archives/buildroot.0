@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 4 Mar 2016 17:07:59 +0100
-Subject: [Buildroot] [git commit] linux-headers: bump 3.{10,
-	14}.x and 4.4.x series
-Message-ID: <20160304160920.728717FF69@busybox.osuosl.org>
+Date: Fri, 4 Mar 2016 17:07:47 +0100
+Subject: [Buildroot] [git commit] php: bump to version 5.6.19
+Message-ID: <20160304160920.6459A7FF69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46c248c674d0480e0c4af42a73738625da2928e9
+commit: https://git.buildroot.net/buildroot/commit/?id=e6d744e3071af563a270060c13f3cc2ae7ce3c5f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7aaed97..5c9eabe 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -210,9 +210,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.78"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
--	default "3.10.98"	if BR2_KERNEL_HEADERS_3_10
-+	default "3.10.99"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.55"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.62"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.63"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.27"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
-@@ -220,5 +220,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.1.18"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.3"		if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.4"		if BR2_KERNEL_HEADERS_4_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 5cdafc6..9cfbcad 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,2 +1,2 @@
+ # From http://php.net/downloads.php
+-sha256	54dd9106c3469bc7028644d72ac140af00655420bbaaf4a742a64e9ed02ec1b0	php-5.6.18.tar.xz
++sha256	bb32337f93a00b71789f116bddafa8848139120e7fb6f4f98a84f52dbcb8329f	php-5.6.19.tar.xz
+diff --git a/package/php/php.mk b/package/php/php.mk
+index f2c7e28..6d27c30 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 5.6.18
++PHP_VERSION = 5.6.19
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
