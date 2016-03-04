@@ -1,36 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 04 Mar 2016 18:37:37 +0000
-Subject: [Buildroot] [PATCH v2 0/3] Add go language support
-In-Reply-To: <cover.1457115561.git.geoff@infradead.org>
-References: <cover.1457115561.git.geoff@infradead.org>
-Message-ID: <CA+h8R2phbtsNPge-VmpuXqYsv1N3cy3ChAFPfJrn6bxNi+HmvQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 4 Mar 2016 21:22:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kbd: fix not installing to the
+	target
+In-Reply-To: <1457111795-7214-1-git-send-email-martin@barkynet.com>
+References: <1457111795-7214-1-git-send-email-martin@barkynet.com>
+Message-ID: <20160304212223.63aae6a5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Geoff,
+Dear Martin Bark,
 
-On Fri, Mar 4, 2016 at 1:22 PM Geoff Levand <geoff@infradead.org> wrote:
-> Patch 3 adds a go language package flannel that can be used to test the go
-compiler.
+On Fri,  4 Mar 2016 17:16:35 +0000, Martin Bark wrote:
 
-This patch series looks good, nice and clean. Interesting that you chose to
-include Flannel. This indicates to me that you've worked a bit on creating
-a Docker package as well. Is that the case?
+> -KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+> -
+>  $(eval $(autotools-package))
+> +
+> +KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
 
-Here's my previous implementation:
-https://github.com/paralin/buildroot/commit/b3cb1b334c1a23136e77ea7d34aafb24e8a186db
+I know this solution is also used in the util-linux package, but in
+fact I don't really like it. Can you try using
 
-I have around ~20 commits with docker utilities on top of that as well.
+KBD_MAKE_ENV = \
+	MKINSTALLDIRS=...
 
-I'm still working on testing this series, and will send my ack once I know
-everything's working. I probably will make a new branch in my repo and
-rebase everything on top of this series.
+(before the eval of autotools-package) ?
 
-Best,
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160304/6ab367d6/attachment.html>
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
