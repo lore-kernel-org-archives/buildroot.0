@@ -1,47 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:02:37 +0100
-Subject: [Buildroot] [git commit] package/vlc: add optional support for
-	musepack
-Message-ID: <20160305140246.10F127FB32@busybox.osuosl.org>
+Date: Sat, 5 Mar 2016 15:03:53 +0100
+Subject: [Buildroot] [PATCH/next 1/7] package/vlc: bump version to 2.2.2
+In-Reply-To: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160305150353.18b594ce@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59d0d2fcb4387659b4c6f24572b50d049bcd2694
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Bernd Kuhls,
 
-When musepack was compiled before, vlc will use it as optional
-dependency:
+On Sun, 28 Feb 2016 21:18:22 +0100, Bernd Kuhls wrote:
+> Removed two patches applied upstream.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...opencv_wrapper-use-opencv2-style-includes.patch | 36 ----------------------
+>  ...cv_example-add-missing-include-statements.patch | 29 -----------------
+>  package/vlc/vlc.hash                               |  4 +--
+>  package/vlc/vlc.mk                                 |  2 +-
+>  4 files changed, 3 insertions(+), 68 deletions(-)
+>  delete mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
+>  delete mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/vlc/plugins/demux/libmpc_plugin.so | grep NEEDED | sort
- 0x0000000000000001 (NEEDED)             Shared library: [libc.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
- 0x0000000000000001 (NEEDED)             Shared library: [libmpcdec.so.7]
+Entire series applied to master, thanks. It would however be great if
+there was an effort to submit our VLC patches upstream. Maybe are
+perfectly good patches that could be submitted upstream with almost no
+change.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Best regards,
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index b67bd35..46a7cad 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -340,6 +340,13 @@ ifeq ($(BR2_PACKAGE_MINIZIP),y)
- VLC_DEPENDENCIES += minizip
- endif
- 
-+ifeq ($(BR2_PACKAGE_MUSEPACK),y)
-+VLC_CONF_OPTS += --enable-mpc
-+VLC_DEPENDENCIES += musepack
-+else
-+VLC_CONF_OPTS += --disable-mpc
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- VLC_CONF_OPTS += --enable-qt
- VLC_CONF_ENV += \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
