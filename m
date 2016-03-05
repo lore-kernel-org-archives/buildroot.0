@@ -1,35 +1,54 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat,  5 Mar 2016 23:04:09 +0200
-Subject: [Buildroot] [PATCH] omniorb: remove autoreconf
-Message-ID: <4898671233ed0fa441e196c13d8d64239ca7255b.1457211849.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 05 Mar 2016 22:36:19 +0100
+Subject: [Buildroot] [PATCH/next 30/31] package/vsxu: new package
+References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
+ <1456006176-21308-31-git-send-email-bernd.kuhls@t-online.de>
+ <20160305161552.36cc6677@free-electrons.com>
+ <qfirqcxc1s.ln2@ID-313208.user.individual.net>
+ <20160305192635.259a28cd@free-electrons.com>
+Message-ID: <XnsA5C2E5F3FD7EFID.313208.user.indiv@192.168.1.253>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 03ee7f9823af (package/omniorb: bump version to 4.2.1) removed the patch
-to configure.ac, making autoreconf redundant.
+Hi Thomas,
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/omniorb/omniorb.mk | 3 ---
- 1 file changed, 3 deletions(-)
+[posted and mailed]
 
-diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
-index ef4faec6d226..98bae20a71eb 100644
---- a/package/omniorb/omniorb.mk
-+++ b/package/omniorb/omniorb.mk
-@@ -13,9 +13,6 @@ OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
- OMNIORB_DEPENDENCIES = host-omniorb
- HOST_OMNIORB_DEPENDENCIES = host-python
- 
--# 0001-uclinux-is-also-linux.patch touches configure.ac
--OMNIORB_AUTORECONF = YES
--
- # omniorb is not python3 friendly, so force the python interpreter
- OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
- HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
--- 
-2.7.0
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>
+wrote in news:20160305192635.259a28cd at free-electrons.com: 
+
+> Hello,
+> 
+> Please Cc: me on your replies. Please, please! I've asked you already
+> several times. Just use "Reply-all" in your mailer whenever you reply
+> to a mail on the Buildroot mailing list.
+
+easier said than done ;) I am not using a mail software to communicate
+with the buildroot mailinglist. Instead leafnode downloads all
+newsgroups I am interested in, then I am currently using pan to read the
+newsgroups, but it can not send mails: 
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=391649 
+
+Getting knode to work was not possible due to a broken akanodi setup,
+the kde stuff is so closely integrated that at the end knode was unable
+to download a single message from my leafnode server...
+Icedove/claws-mail look horrible, they are no real newsreaders so I
+setup wine instead to run Xnews, my favourite newsreader, which I am
+trying right now. I hope you receive an email as well but beware that it
+will be addressed to a gmane.org address because I am receiving the
+buildroot newsgroup via gmane.org.
+
+> Instead, what I would ideally like to see is a cal3d package that
+> works on its own. cal3d is a separate open-source project, which might
+> be used outside of vsxu. So I'd like to have
+> http://download.gna.org/cal3d/sources/cal3d-0.11.0.tar.gz downloaded,
+> built and installed by a cal3d package. And then vsxu depend on it and
+> link against it.
+
+I will try and report back, but this package has low priority for me.
+
+Regards, Bernd
