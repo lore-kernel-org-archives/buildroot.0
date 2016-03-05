@@ -1,78 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:48:48 +0100
-Subject: [Buildroot] [git commit] package/kodi-visualisation-fishbmc: new
+Date: Sat, 5 Mar 2016 15:46:23 +0100
+Subject: [Buildroot] [git commit] package/kodi-screensaver-cpblobs: new
 	package
-Message-ID: <20160305144959.35E6C7FF2A@busybox.osuosl.org>
+Message-ID: <20160305144959.1E89380E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3318758c56e2d29aae877f99eaf646b04dde68c5
+commit: https://git.buildroot.net/buildroot/commit/?id=0856e3ccc9896c18ea2457922f7951c6adaa76c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: fix license, it's GPLv2, not GPLv2+.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-visualisation-fishbmc/Config.in                | 10 ++++++++++
- .../kodi-visualisation-fishbmc.hash                         |  2 ++
- .../kodi-visualisation-fishbmc.mk                           | 13 +++++++++++++
+ package/kodi-screensaver-cpblobs/Config.in                  | 11 +++++++++++
+ .../kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash  |  2 ++
+ .../kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk    | 13 +++++++++++++
  package/kodi/Config.in                                      |  1 +
- 4 files changed, 26 insertions(+)
+ 4 files changed, 27 insertions(+)
 
-diff --git a/package/kodi-visualisation-fishbmc/Config.in b/package/kodi-visualisation-fishbmc/Config.in
+diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
 new file mode 100644
-index 0000000..9f1a4c5
+index 0000000..184509e
 --- /dev/null
-+++ b/package/kodi-visualisation-fishbmc/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_FISHBMC
-+	bool "kodi-visualisation-fishbmc"
-+	depends on BR2_PACKAGE_KODI_GL
++++ b/package/kodi-screensaver-cpblobs/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
++	bool "kodi-screensaver-cpblobs"
++	depends on BR2_PACKAGE_KODI_GL # libsoil
++	select BR2_PACKAGE_LIBSOIL
 +	help
-+	  Fische visualiser for Kodi
++	  CpBlobs screensaver for Kodi
 +
-+	  https://github.com/notspiff/visualization.fishbmc
++	  https://github.com/notspiff/screensaver.cpblobs
 +
-+comment "fishbmc needs an OpenGL backend"
++comment "cpblobs needs an OpenGL backend"
 +	depends on !BR2_PACKAGE_KODI_GL
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
 new file mode 100644
-index 0000000..6a65a58
+index 0000000..ebf19d9
 --- /dev/null
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 7047d501942bcd5095e0f1424f003caec8eb792b59d16d16ad25f14829844e50 kodi-visualisation-fishbmc-50c38c296a62e096a2216e43b86d864ee265c506.tar.gz
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++sha256 c2d19c33aff73b99cbf51f943b62e58b2b6233dcf1d789ae8f73e92fa96f07bc kodi-screensaver-cpblobs-87a3abfbe6e4fd1089548eab77a84902d0e1af60.tar.gz
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
 new file mode 100644
-index 0000000..1e07774
+index 0000000..bf67ea0
 --- /dev/null
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# kodi-visualisation-fishbmc
++# kodi-screensaver-cpblobs
 +#
 +################################################################################
 +
-+KODI_VISUALISATION_FISHBMC_VERSION = 50c38c296a62e096a2216e43b86d864ee265c506
-+KODI_VISUALISATION_FISHBMC_SITE = $(call github,notspiff,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
-+KODI_VISUALISATION_FISHBMC_LICENSE = GPLv2+
-+KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
-+KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
++KODI_SCREENSAVER_CPBLOBS_VERSION = 87a3abfbe6e4fd1089548eab77a84902d0e1af60
++KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
++KODI_SCREENSAVER_CPBLOBS_LICENSE = GPLv2
++KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
++KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
 +
 +$(eval $(cmake-package))
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 37f962d..f37e78a 100644
+index f305997..f2fee59 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -279,6 +279,7 @@ menu "Screensavers"
- endmenu
- 
- menu "Visualisations"
-+	source "package/kodi-visualisation-fishbmc/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
- 	source "package/kodi-visualisation-spectrum/Config.in"
+@@ -268,6 +268,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-asteroids/Config.in"
+ 	source "package/kodi-screensaver-asterwave/Config.in"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
++	source "package/kodi-screensaver-cpblobs/Config.in"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
