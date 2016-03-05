@@ -1,28 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 21:30:03 +0100
-Subject: [Buildroot] [PATCH 01/16] package/kodi-pvr-argustv: bump version
-In-Reply-To: <1457204337-3582-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457204337-3582-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160305213003.560bde6b@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  5 Mar 2016 21:40:51 +0100
+Subject: [Buildroot] [PATCH] package/multicat: add missing dependency on
+	bitstream
+Message-ID: <1457210451-7436-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Multicat select bitstream package without adding it as build dependencies.
 
-On Sat,  5 Mar 2016 19:58:42 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-pvr-argustv/kodi-pvr-argustv.hash | 2 +-
->  package/kodi-pvr-argustv/kodi-pvr-argustv.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/multicat/multicat.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-All 16 patches applied to master, thanks!
-
-Thomas
+diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
+index 5909bc5..cc6eb78 100644
+--- a/package/multicat/multicat.mk
++++ b/package/multicat/multicat.mk
+@@ -10,6 +10,8 @@ MULTICAT_SITE = https://get.videolan.org/multicat/$(MULTICAT_VERSION)
+ MULTICAT_LICENSE = GPLv2+
+ MULTICAT_LICENSE_FILES = COPYING
+ 
++MULTICAT_DEPENDENCIES = bitstream
++
+ MULTICAT_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
+ 
+ define MULTICAT_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
