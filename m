@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 21:29:45 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-wmc: bump version
-Message-ID: <20160305203005.9F0A8817C8@busybox.osuosl.org>
+Date: Sat, 5 Mar 2016 21:29:34 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-mediaportal-tvserver:
+	bump version
+Message-ID: <20160305203005.3A3688180F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6e35116b369c9cce6c56729f5d67e027f5858a7
+commit: https://git.buildroot.net/buildroot/commit/?id=91ecf981b2ff3f72a9e06b446756361754ee842d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi-pvr-wmc/kodi-pvr-wmc.hash | 2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk   | 2 +-
+ .../kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash    | 2 +-
+ package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk  | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-index ec301da..6cbdede 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index 6d32b2c..74770fd 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 47ab2cc0a3ed5f2dcd759b0d3d0f7cc3320bca44b6cd3569a751639eb5f12cfa kodi-pvr-wmc-829b5d2ec717a78ac3a5c4f92fbc3379feb80154.tar.gz
-+sha256 25963d8acbce397b6ec940d5ee1d7a69481d295ae31876daf57d3d3537b14543 kodi-pvr-wmc-949fcd162206b569af15942180e6c133ad61e336.tar.gz
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-index fced331..194bd1f 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+-sha256 ba680abc2200915fb5815ce93dad8d635da2c1e15c2ff4acce9d0f2399e6b830 kodi-pvr-mediaportal-tvserver-29e84f8c3a91681cc7bca504c0ba54aa060d5f86.tar.gz
++sha256 45590c1b8dc57f2b5921641c864e68671c32db33f55db82ca62411557e9278b9 kodi-pvr-mediaportal-tvserver-a3dd464379a56131bae61b94275c14a3abcf2869.tar.gz
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index 6243d5f..e3a4df4 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
 @@ -6,7 +6,7 @@
  
  # This cset is on the branch 'Jarvis'
  # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_WMC_VERSION = 829b5d2ec717a78ac3a5c4f92fbc3379feb80154
-+KODI_PVR_WMC_VERSION = 949fcd162206b569af15942180e6c133ad61e336
- KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
- KODI_PVR_WMC_LICENSE = GPLv2+
- KODI_PVR_WMC_LICENSE_FILES = src/client.h
+-KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 29e84f8c3a91681cc7bca504c0ba54aa060d5f86
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = a3dd464379a56131bae61b94275c14a3abcf2869
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPLv2+
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/client.h
