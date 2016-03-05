@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:03:53 +0100
-Subject: [Buildroot] [PATCH/next 1/7] package/vlc: bump version to 2.2.2
-In-Reply-To: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1456690708-6458-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160305150353.18b594ce@free-electrons.com>
+Date: Sat, 5 Mar 2016 15:04:10 +0100
+Subject: [Buildroot] [git commit] libmatroska: update version
+Message-ID: <20160305140419.41A7B7FA00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=6fbd0905afd3d17648366828ad55bfb114aef51a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 28 Feb 2016 21:18:22 +0100, Bernd Kuhls wrote:
-> Removed two patches applied upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...opencv_wrapper-use-opencv2-style-includes.patch | 36 ----------------------
->  ...cv_example-add-missing-include-statements.patch | 29 -----------------
->  package/vlc/vlc.hash                               |  4 +--
->  package/vlc/vlc.mk                                 |  2 +-
->  4 files changed, 3 insertions(+), 68 deletions(-)
->  delete mode 100644 package/vlc/0008-opencv_wrapper-use-opencv2-style-includes.patch
->  delete mode 100644 package/vlc/0009-opencv_example-add-missing-include-statements.patch
+Update to latest version.
 
-Entire series applied to master, thanks. It would however be great if
-there was an effort to submit our VLC patches upstream. Maybe are
-perfectly good patches that could be submitted upstream with almost no
-change.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libmatroska/libmatroska.hash | 2 +-
+ package/libmatroska/libmatroska.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
+index 4d9a535..275af63 100644
+--- a/package/libmatroska/libmatroska.hash
++++ b/package/libmatroska/libmatroska.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	bea10320f1f1fd121bbd7db9ffc77b2518e8269f00903549c5425478bbf8393f	libmatroska-1.4.2.tar.bz2
++sha256	d3efaa9f6d3964351a05bea0f848a8d5dc570e4791f179816ce9a93730296bd7	libmatroska-1.4.4.tar.bz2
+diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
+index 5e2d9b1..083cced 100644
+--- a/package/libmatroska/libmatroska.mk
++++ b/package/libmatroska/libmatroska.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMATROSKA_VERSION = 1.4.2
++LIBMATROSKA_VERSION = 1.4.4
+ LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.bz2
+ LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
+ LIBMATROSKA_INSTALL_STAGING = YES
