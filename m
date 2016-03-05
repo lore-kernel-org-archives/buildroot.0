@@ -1,35 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:50:02 +0100
-Subject: [Buildroot] [PATCH/next 23/31]
- package/kodi-visualisation-fishbmc: new package
-In-Reply-To: <1456006176-21308-24-git-send-email-bernd.kuhls@t-online.de>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-24-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160305155002.05c787be@free-electrons.com>
+Date: Sat, 5 Mar 2016 15:33:36 +0100
+Subject: [Buildroot] [git commit] package/kodi-visualisation-waveforhue: add
+	hash
+Message-ID: <20160305144958.E82487FF2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=aee73e64a7ae9295ed9db7d208381b2dfb665032
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Feb 2016 23:09:28 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi-visualisation-fishbmc/Config.in                | 10 ++++++++++
->  .../kodi-visualisation-fishbmc.hash                         |  2 ++
->  .../kodi-visualisation-fishbmc.mk                           | 13 +++++++++++++
->  package/kodi/Config.in                                      |  1 +
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/kodi-visualisation-fishbmc/Config.in
->  create mode 100644 package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
->  create mode 100644 package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash    | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
+new file mode 100644
+index 0000000..5f49daa
+--- /dev/null
++++ b/package/kodi-visualisation-waveforhue/kodi-visualisation-waveforhue.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 2590ce4ee1816ffdf59fe33580a36fba49fbd1f60f4c9022b3315e04debc9c73 kodi-visualisation-waveforhue-e87d5c7d7e7504036b80af8bc89f4cf6489085fe.tar.gz
