@@ -1,41 +1,80 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Mar 2016 11:40:28 +0100
-Subject: [Buildroot] [PATCH 2/4] package/transmission: bump version to 2.90
-In-Reply-To: <1457174430-30849-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457174430-30849-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1457174430-30849-2-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat,  5 Mar 2016 12:31:36 +0100
+Subject: [Buildroot] [PATCH] package/gcc: 4.9.x: backport a fix for
+	libcap-ng issue on nios2
+Message-ID: <1457177496-11919-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/transmission/transmission.hash | 2 +-
- package/transmission/transmission.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The patch is part of gcc 5.3 release.
 
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 4199b37..0dc816d 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a9fc1936b4ee414acc732ada04e84339d6755cd0d097bcbd11ba2cfc540db9eb	transmission-2.84.tar.xz
-+sha256	69ff8caf81684155926f437f46bf7df1b1fb304f52c7809f546257e8923f2fd2	transmission-2.90.tar.xz
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index efc00a1..6aecf60 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TRANSMISSION_VERSION = 2.84
-+TRANSMISSION_VERSION = 2.90
- TRANSMISSION_SITE = http://download.transmissionbt.com/files
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_DEPENDENCIES = \
+Fixes:
+http://autobuild.buildroot.net/results/901/90186d1fe134b804c0101554296b1235dc0ccbb0
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ .../gcc/4.9.3/880-nios2_legitimize_address.patch   | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/gcc/4.9.3/880-nios2_legitimize_address.patch
+
+diff --git a/package/gcc/4.9.3/880-nios2_legitimize_address.patch b/package/gcc/4.9.3/880-nios2_legitimize_address.patch
+new file mode 100644
+index 0000000..4623f29
+--- /dev/null
++++ b/package/gcc/4.9.3/880-nios2_legitimize_address.patch
+@@ -0,0 +1,49 @@
++From b0ea54f3f995754881e0ea6651133aa7b58eeaa2 Mon Sep 17 00:00:00 2001
++From: cltang <cltang@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Tue, 22 Sep 2015 12:23:20 +0000
++Subject: [PATCH] nios2_legitimize_address 2015-09-22  Chung-Lin Tang 
++ <cltang@codesourcery.com>
++
++	Backport from mainline
++	2015-09-22  Chung-Lin Tang  <cltang@codesourcery.com>
++
++	* config/nios2/nios2.c (nios2_legitimize_address): When handling
++	'reg + reloc' cases, allow first operand to be non-REG, and use
++	force_reg() to enforce address pattern.
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 228013 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Fixes:
++http://autobuild.buildroot.net/results/901/90186d1fe134b804c0101554296b1235dc0ccbb0
++
++[backported to 4.9.3]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gcc/config/nios2/nios2.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/nios2/nios2.c b/gcc/config/nios2/nios2.c
++index 047b615..41dd6f9 100644
++--- a/gcc/config/nios2/nios2.c
+++++ b/gcc/config/nios2/nios2.c
++@@ -1786,15 +1786,15 @@ nios2_legitimize_address (rtx x, rtx oldx ATTRIBUTE_UNUSED,
++ 
++      Which will be output as '%tls_le(var+48)(r23)' in assembly.  */
++   if (GET_CODE (x) == PLUS
++-      && GET_CODE (XEXP (x, 0)) == REG
++       && GET_CODE (XEXP (x, 1)) == CONST)
++     {
++-      rtx unspec, offset, reg = XEXP (x, 0);
+++      rtx unspec, offset;
++       split_const (XEXP (x, 1), &unspec, &offset);
++       if (GET_CODE (unspec) == UNSPEC
++ 	  && !nios2_large_offset_p (XINT (unspec, 1))
++ 	  && offset != const0_rtx)
++ 	{
+++	  rtx reg = force_reg (Pmode, XEXP (x, 0));
++ 	  unspec = copy_rtx (unspec);
++ 	  XVECEXP (unspec, 0, 0)
++ 	    = plus_constant (Pmode, XVECEXP (unspec, 0, 0), INTVAL (offset));
++-- 
++2.5.0
++
 -- 
-2.7.0
+2.5.0
