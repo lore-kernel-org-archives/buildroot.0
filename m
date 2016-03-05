@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Mar 2016 19:58:51 +0100
-Subject: [Buildroot] [PATCH 10/16] package/kodi-pvr-nextpvr: bump version
+Date: Sat,  5 Mar 2016 19:58:55 +0100
+Subject: [Buildroot] [PATCH 14/16] package/kodi-pvr-vdr-vnsi: bump version
 In-Reply-To: <1457204337-3582-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1457204337-3582-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1457204337-3582-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1457204337-3582-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 2 +-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index c63162e..64c09cf 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+index a05c10d..ecce639 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 36aac207385810e807321ab4558e888ecae5eea18484af00cf78c3130895ea4c kodi-pvr-nextpvr-288d238a7d59e5957b87fe60775dfaaaed104007.tar.gz
-+sha256 8c4a36c21dc65cc358b34e5c2db849997f0add2501c3f787f99df3ae0ea850c5 kodi-pvr-nextpvr-2055105c93e18e04e73c87578bece3edf7525e14.tar.gz
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index 34cfbd3..a8b8235 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+-sha256 682618e343df7c3dea80317c48fdc3e827b9294476963252d0fbba4b1a38cec1 kodi-pvr-vdr-vnsi-0b90a42df48b953562fab4958134219f96b244c3.tar.gz
++sha256 1d9e70030b73f44786d54e42e46c6bfa7810af3e4c71ba0dca95c2aa1751ef9b kodi-pvr-vdr-vnsi-7e11b853637ec436e30e4ac826de6ee87c303482.tar.gz
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+index 295d5bb..f8e1e92 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
 @@ -6,7 +6,7 @@
  
  # This cset is on the branch 'Jarvis'
  # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_NEXTPVR_VERSION = 288d238a7d59e5957b87fe60775dfaaaed104007
-+KODI_PVR_NEXTPVR_VERSION = 2055105c93e18e04e73c87578bece3edf7525e14
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPLv2+
- KODI_PVR_NEXTPVR_LICENSE_FILES = src/client.h
+-KODI_PVR_VDR_VNSI_VERSION = 0b90a42df48b953562fab4958134219f96b244c3
++KODI_PVR_VDR_VNSI_VERSION = 7e11b853637ec436e30e4ac826de6ee87c303482
+ KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
+ KODI_PVR_VDR_VNSI_LICENSE = GPLv2+
+ KODI_PVR_VDR_VNSI_LICENSE_FILES = src/client.h
 -- 
 2.7.0
