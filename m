@@ -1,196 +1,410 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 5 Mar 2016 10:41:13 +0100
-Subject: [Buildroot] [PATCH] valijson: new package
-In-Reply-To: <1457096612-25468-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-References: <1457096612-25468-1-git-send-email-santosh.multhalli@rockwellcollins.com>
-Message-ID: <CAHXCMMKpcxyBgU7Jj-dzVYUHfCPi-f6fdYsao_eWL7VmbobdzA@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sat, 5 Mar 2016 11:39:54 +0100
+Subject: [Buildroot] [PATCH] ltp-testsuite: update to latest,
+	fix uClibc-ng issues
+Message-ID: <20160305103953.GA13280@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Santosh,
+Update to latest ltp-testsuite release, which resolves sparc64/sparc
+autobuild failures:
+http://autobuild.buildroot.net/results/a6445df26514dfa9cd7e5b9d34b4687d46a8d19b/
 
-On Fri, Mar 4, 2016 at 2:03 PM, santosh.multhalli
-<santosh.multhalli@rockwellcollins.com> wrote:
-> From: "Santosh Multhalli" <santosh.multhalli@rockwellcollins.com>
->
-> Valijson is a header-only JSON Schema Validation library for
-> C++.Add a patch 0001-CMake-Add-option-to-Install-headers-build-examples-a.patch
-> to install valijson headers ,provide optional compilation of unit tests and
-> examples.
->
-> Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-> ---
->  package/Config.in                                  |  1 +
->  ...ption-to-Install-headers-build-examples-a.patch | 50 ++++++++++++++++++++++
->  package/valijson/Config.in                         | 13 ++++++
->  package/valijson/valijson.hash                     |  2 +
->  package/valijson/valijson.mk                       | 15 +++++++
->  5 files changed, 81 insertions(+)
->  create mode 100644 package/valijson/0001-CMake-Add-option-to-Install-headers-build-examples-a.patch
->  create mode 100644 package/valijson/Config.in
->  create mode 100644 package/valijson/valijson.hash
->  create mode 100644 package/valijson/valijson.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d4cc1d7..2367a15 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -808,6 +808,7 @@ menu "JSON/XML"
->         source "package/xerces/Config.in"
->         source "package/yajl/Config.in"
->         source "package/yaml-cpp/Config.in"
-> +       source "package/valijson/Config.in"
->  endmenu
->
->  menu "Logging"
-> diff --git a/package/valijson/0001-CMake-Add-option-to-Install-headers-build-examples-a.patch b/package/valijson/0001-CMake-Add-option-to-Install-headers-build-examples-a.patch
-> new file mode 100644
-> index 0000000..4d103d5
-> --- /dev/null
-> +++ b/package/valijson/0001-CMake-Add-option-to-Install-headers-build-examples-a.patch
-> @@ -0,0 +1,50 @@
-> +From 9ac0e0cb20604a19a6953888f4d32f665725a86b Mon Sep 17 00:00:00 2001
-> +From: Bimal Jacob <Bimal.Jacob@rockwellcollins.com>
-> +Date: Thu, 19 Nov 2015 09:55:53 -0600
-> +Subject: CMake: Add option to Install headers, build examples and
-> + tests
-> +
-> +Added 3 options - INSTALL_HEADERS, BUILD_EXAMPLES and BUILD_TESTS.
-> +INSTALL_HEADERS - Installs all header files, TRUE by default
-> +BUILD_EXAMPLES  - Builds all examples in examples directory, FALSE by
-> +                  default
-> +BUILD_TESTS     - Builds all test cases under tests directory, FALSE
-> +                  by default
-> +
-> +Signed-off-by: Bimal Jacob <bimal.jacob@rockwellcollins.com>
-> +Signed-off-by: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 9cff096..427dca7 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -1,8 +1,13 @@
-> + cmake_minimum_required (VERSION 2.6)
-> + project (valijson)
-> +
-> +-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror")
-> +-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-> ++SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall ")
-> ++option (INSTALL_HEADERS "Install valijson Headers." TRUE)
-> ++option (BUILD_EXAMPLES "Build valijson Examples." FALSE)
-> ++option (BUILD_TESTS "Build valijson Tests." FALSE)
-The patch is doing 2 distinct things:
-- adding these 3 options
-- cleaning/adjusting the CXX flags
+Furthermore it should fix any other uClibc-ng related issues.
+0001-fix-build-on-uClibc-exp10.patch removed, as uClibc-ng 1.0.12
+contains exp10() implementation.
+0001-fix-uClibc-build.patch suggested upstream.
 
-Maybe doing 2 separate patchs would be better.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+The other patches will be suggested upstream after review from
+buildroot community or any autobuilder failure free time for this
+package. I tested for Qemu-MIPS, Qemu-SH, Qemu-SPARC, Qemu-SPARC64.
 
-> ++if (BUILD_TESTS OR BUILD_EXAMPLES)
-> ++
-> ++SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
+---
+ .../0001-fix-build-on-uClibc-exp10.patch           |   22 ----
+ package/ltp-testsuite/0001-fix-uClibc-build.patch  |   51 ++++++++
+ .../0003-disable-profil-on-uClibc.patch            |   27 +++++
+ .../0004-disable-ustat-on-uClibc.patch             |   70 +++++++++++
+ package/ltp-testsuite/0005-rpc-fix-uClibc.patch    |  125 ++++++++++++++++++++
+ package/ltp-testsuite/ltp-testsuite.hash           |    8 +-
+ package/ltp-testsuite/ltp-testsuite.mk             |   13 +-
+ 7 files changed, 289 insertions(+), 27 deletions(-)
+ delete mode 100644 package/ltp-testsuite/0001-fix-build-on-uClibc-exp10.patch
+ create mode 100644 package/ltp-testsuite/0001-fix-uClibc-build.patch
+ create mode 100644 package/ltp-testsuite/0003-disable-profil-on-uClibc.patch
+ create mode 100644 package/ltp-testsuite/0004-disable-ustat-on-uClibc.patch
+ create mode 100644 package/ltp-testsuite/0005-rpc-fix-uClibc.patch
 
--g is part of the default CMAKE_CXX_FLAGS_DEBUG, so appending it is
-not  necessary.
-
-Also, why is it necessary to adjust the debug flags when only building
-tests or examples?
-
-> + if(VALIJSON_CXX11_ADAPTERS STREQUAL "disabled")
-> +     message(STATUS "Building with C++11 support disabled")
-> + else()
-> +@@ -100,8 +105,12 @@ set(TEST_LIBS gtest gtest_main jsoncpp)
-> + if(VALIJSON_CXX11_ADAPTERS_ARE_ENABLED)
-> +     set(TEST_LIBS ${TEST_LIBS} json11)
-> + endif()
-> ++
-> +
-> + target_link_libraries(test_suite ${TEST_LIBS} ${Boost_LIBRARIES})
-> + target_link_libraries(custom_schema ${Boost_LIBRARIES})
-> + target_link_libraries(external_schema ${Boost_LIBRARIES})
-> +-
-> ++endif()
-> ++if (INSTALL_HEADERS )
-> ++install(DIRECTORY include/ DESTINATION include )
-> ++endif()
-> diff --git a/package/valijson/Config.in b/package/valijson/Config.in
-> new file mode 100644
-> index 0000000..83c162d
-> --- /dev/null
-> +++ b/package/valijson/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_VALIJSON
-> +       bool "valijson"
-> +        depends on BR2_PACKAGE_BOOST
-> +        depends on BR2_PACKAGE_BOOST_REGEX
-
-You should use "select" here instead of "depends on"; check [1] as example.
-
-> +       help
-> +         Valijson is a header-only JSON Schema Validation library for
-> +         C++. Valijson provides a simple validation API that allows you
-> +         load JSON Schemas, and validate documents loaded by one of
-> +         several supported parser libraries like boost, jsoncpp,
-> +          rapidjson and picoJSON.
-> +         https://github.com/tristanpenman/valijson
-
-Indent is wrong here, check [2] please.
-You should also add a blank line between the help text and the project url.
-
-> +comment "Valijson  needs a BOOST package with Regex feature enabled"
-
-This comment is not needed if you use "select" ;-)
-
-> +
-> diff --git a/package/valijson/valijson.hash b/package/valijson/valijson.hash
-> new file mode 100644
-> index 0000000..7d8a508
-> --- /dev/null
-> +++ b/package/valijson/valijson.hash
-> @@ -0,0 +1,2 @@
-> +# Locally Computed:
-> +sha256  20ee0ba111461011012a7a5534c8f88e6a6964a2d9c665fd1b4d629ee8b8e90a  valijson-4e941e75d99463eed988a782900e885befce47d9.tar.gz
-> diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
-> new file mode 100644
-> index 0000000..0deacca
-> --- /dev/null
-> +++ b/package/valijson/valijson.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# valijson
-> +#
-> +################################################################################
-> +
-> +VALIJSON_VERSION = ee2d24714a10fc486d160a50f58aecdcfe988e88
-> +VALIJSON_SITE = $(call github,tristanpenman,valijson,$(VALIJSON_VERSION))
-> +VALIJSON_LICENSE = BSD-3c
-> +VALIJSON_LICENSE_FILES = LICENSE
-> +VALIJSON_INSTALL_STAGING = YES
-> +VALIJSON_INSTALL_TARGET = NO
-> +VALIJSON_DEPENDENCIES = boost host-pkgconf
-
-Why host-pkgconf as dependencies?
-AFAICS, it does not apppear in the CMakeLists.txt.
-BTW, host-pkgconf is already a dependency of host-cmake (see [3])
-
-> +
-> +$(eval $(cmake-package))
-> --
-> 2.5.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-[1] https://git.buildroot.org/buildroot/tree/package/libserial/Config.in
-[2] http://nightly.buildroot.org/manual.html#writing-rules-config-in
-[3] https://git.buildroot.org/buildroot/tree/package/cmake/cmake.mk#n13
-
-Regards,
-
+diff --git a/package/ltp-testsuite/0001-fix-build-on-uClibc-exp10.patch b/package/ltp-testsuite/0001-fix-build-on-uClibc-exp10.patch
+deleted file mode 100644
+index 7a02d95..0000000
+--- a/package/ltp-testsuite/0001-fix-build-on-uClibc-exp10.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Inspired by: http://peter.korsgaard.com/patches/alsa-utils/alsamixer-fix-build-on-uClibc-exp10.patch
+-
+-exp10 extension is not part of uClibc, so compute it.
+-
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-
+-diff -purN ltp-testsuite-20101031.orig/testcases/realtime/lib/libstats.c ltp-testsuite-20101031/testcases/realtime/lib/libstats.c
+---- ltp-testsuite-20101031.orig/testcases/realtime/lib/libstats.c	2012-10-22 23:19:02.306646174 +0200
+-+++ ltp-testsuite-20101031/testcases/realtime/lib/libstats.c	2012-10-22 23:25:41.554847766 +0200
+-@@ -46,6 +46,11 @@
+- #include <libstats.h>
+- #include <librttest.h>
+- 
+-+#ifdef __UCLIBC__
+-+/* 10^x = 10^(log e^x) = (e^x)^log10 = e^(x * log 10) */
+-+#define exp10(x) (exp((x) * log(10)))
+-+#endif /* __UCLIBC__ */
+-+
+- int save_stats = 0;
+- 
+- /* static helper functions */
+diff --git a/package/ltp-testsuite/0001-fix-uClibc-build.patch b/package/ltp-testsuite/0001-fix-uClibc-build.patch
+new file mode 100644
+index 0000000..231bc83
+--- /dev/null
++++ b/package/ltp-testsuite/0001-fix-uClibc-build.patch
+@@ -0,0 +1,51 @@
++O_DIRECTORY is only available if _GNU_SOURCE is defined
++
++https://github.com/linux-test-project/ltp/pull/58
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify01.c ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify01.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify01.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify01.c	2016-03-05 00:55:02.977264913 +0100
++@@ -25,6 +25,7 @@
++  * DESCRIPTION
++  *     Check that fanotify work for a file
++  */
+++#define _GNU_SOURCE
++ #include "config.h"
++ 
++ #include <stdio.h>
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify02.c ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify02.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify02.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify02.c	2016-03-05 00:54:44.600558612 +0100
++@@ -25,6 +25,7 @@
++  * DESCRIPTION
++  *     Check that fanotify work for children of a directory
++  */
+++#define _GNU_SOURCE
++ #include "config.h"
++ 
++ #include <stdio.h>
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify03.c ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify03.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify03.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify03.c	2016-03-05 00:55:13.917685403 +0100
++@@ -25,6 +25,7 @@
++  * DESCRIPTION
++  *     Check that fanotify permission events work
++  */
+++#define _GNU_SOURCE
++ #include "config.h"
++ 
++ #include <stdio.h>
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify04.c ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify04.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/fanotify/fanotify04.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/fanotify/fanotify04.c	2016-03-05 00:55:24.530093286 +0100
++@@ -25,6 +25,8 @@
++  * DESCRIPTION
++  *     Check various fanotify special flags
++  */
+++
+++#define _GNU_SOURCE
++ #include "config.h"
++ 
++ #include <stdio.h>
+diff --git a/package/ltp-testsuite/0003-disable-profil-on-uClibc.patch b/package/ltp-testsuite/0003-disable-profil-on-uClibc.patch
+new file mode 100644
+index 0000000..d33b677
+--- /dev/null
++++ b/package/ltp-testsuite/0003-disable-profil-on-uClibc.patch
+@@ -0,0 +1,27 @@
++uClibc-ng has no profil() support
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/profil/profil01.c ltp-full-20160126/testcases/kernel/syscalls/profil/profil01.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/profil/profil01.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/profil/profil01.c	2016-03-05 01:00:07.328962536 +0100
++@@ -37,6 +37,9 @@
++ #define PROFIL_BUFLEN (32*1024)
++ 
++ char *TCID = "profil01";
+++
+++#if !defined(__UCLIBC__)
+++
++ int TST_TOTAL = 1;
++ 
++ static volatile sig_atomic_t profil_done;
++@@ -124,3 +127,9 @@
++ 
++ 	tst_exit();
++ }
+++#else /* systems that dont support profil */
+++int main(void)
+++{
+++        tst_brkm(TCONF, NULL, "system doesn't have profil support");
+++}
+++#endif
+diff --git a/package/ltp-testsuite/0004-disable-ustat-on-uClibc.patch b/package/ltp-testsuite/0004-disable-ustat-on-uClibc.patch
+new file mode 100644
+index 0000000..7a1f017
+--- /dev/null
++++ b/package/ltp-testsuite/0004-disable-ustat-on-uClibc.patch
+@@ -0,0 +1,70 @@
++uClibc-ng need __UCLIBC_SV4_DEPRECATED__ enabled for ustat
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/ustat/ustat01.c ltp-full-20160126/testcases/kernel/syscalls/ustat/ustat01.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/ustat/ustat01.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/ustat/ustat01.c	2016-03-05 01:15:39.492789841 +0100
++@@ -20,7 +20,9 @@
++  */
++ 
++ #include <unistd.h>
+++#if !defined(__UCLIBC__) || defined(__UCLIBC_SV4_DEPRECATED__)
++ #include <ustat.h>
+++#endif
++ #include <errno.h>
++ #include <sys/types.h>
++ #include <sys/stat.h>
++@@ -30,6 +32,9 @@
++ static void setup(void);
++ 
++ char *TCID = "ustat01";
+++
+++#if !defined(__UCLIBC__) || defined(__UCLIBC_SV4_DEPRECATED__)
+++
++ int TST_TOTAL = 1;
++ 
++ static dev_t dev_num;
++@@ -79,3 +84,10 @@
++ 
++ 	dev_num = buf.st_dev;
++ }
+++#else /* systems that dont support ustat */
+++int main(void)
+++{
+++        tst_brkm(TCONF, NULL, "system doesn't have ustat support");
+++}
+++#endif
+++
++diff -Nur ltp-full-20160126.orig/testcases/kernel/syscalls/ustat/ustat02.c ltp-full-20160126/testcases/kernel/syscalls/ustat/ustat02.c
++--- ltp-full-20160126.orig/testcases/kernel/syscalls/ustat/ustat02.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/kernel/syscalls/ustat/ustat02.c	2016-03-05 01:15:55.677411889 +0100
++@@ -21,7 +21,9 @@
++  */
++ 
++ #include <unistd.h>
+++#if !defined(__UCLIBC__) || defined(__UCLIBC_SV4_DEPRECATED__)
++ #include <ustat.h>
+++#endif
++ #include <errno.h>
++ #include <sys/stat.h>
++ #include <sys/types.h>
++@@ -32,6 +34,8 @@
++ 
++ char *TCID = "ustat02";
++ 
+++#if !defined(__UCLIBC__) || defined(__UCLIBC_SV4_DEPRECATED__)
+++
++ static dev_t invalid_dev = -1;
++ static dev_t root_dev;
++ struct ustat ubuf;
++@@ -101,3 +105,9 @@
++ 
++ 	root_dev = buf.st_dev;
++ }
+++#else /* systems that dont support ustat */
+++int main(void)
+++{
+++        tst_brkm(TCONF, NULL, "system doesn't have ustat support");
+++}
+++#endif
+diff --git a/package/ltp-testsuite/0005-rpc-fix-uClibc.patch b/package/ltp-testsuite/0005-rpc-fix-uClibc.patch
+new file mode 100644
+index 0000000..1d9152b
+--- /dev/null
++++ b/package/ltp-testsuite/0005-rpc-fix-uClibc.patch
+@@ -0,0 +1,125 @@
++rusers.h is unused and not available for uClibc-ng / libtirpc
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_auth_destroy/rpc_auth_destroy.c	2016-03-05 02:16:56.274105305 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authnone_create/rpc_authnone_create.c	2016-03-05 02:16:32.641196984 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create/rpc_authunix_create.c	2016-03-05 02:21:09.831850681 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_auth_authunix_create_default/rpc_authunix_create_default.c	2016-03-05 02:18:57.370759601 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create.c	2016-03-05 02:23:32.113319210 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_limits.c	2016-03-05 02:23:39.221592413 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clnttcp_create/rpc_clnttcp_create_stress.c	2016-03-05 02:23:48.565951560 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate.c	2016-03-05 02:23:56.706264429 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_bufcreate/rpc_clntudp_bufcreate_limits.c	2016-03-05 02:24:03.818537786 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create.c	2016-03-05 02:24:10.518795308 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
++diff -Nur ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c
++--- ltp-full-20160126.orig/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c	2016-01-26 13:35:25.000000000 +0100
+++++ ltp-full-20160126/testcases/network/rpc/rpc-tirpc/tests_pack/rpc_suite/rpc/rpc_createdestroy_clntudp_create/rpc_clntudp_create_stress.c	2016-03-05 02:24:20.095163371 +0100
++@@ -30,7 +30,6 @@
++ #include <time.h>
++ #include <rpc/rpc.h>
++ #include <sys/socket.h>
++-#include <rpcsvc/rusers.h>
++ #include <utmp.h>
++ #include <sys/time.h>
++ #include <netdb.h>
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index d60b8a4..f3c1be5 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,4 +1,4 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20150903/ltp-full-20150903.tar.xz.md5
+-md5 4ee849923b69f79b5208e71f3ed20484  ltp-full-20150903.tar.xz
+-# From: https://github.com/linux-test-project/ltp/releases/download/20150903/ltp-full-20150903.tar.xz.sha1
+-sha1 d39bb3a41bfd1fd584703cf066fb2e935af0c00a  ltp-full-20150903.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20160126/ltp-full-20160126.tar.xz.md5
++md5 fc3b7411cdf17b2608e26c05d36fc26a  ltp-full-20160126.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20160126/ltp-full-20160126.tar.xz.sha1
++sha1 a39c9b05edb942cde23a1f7fa08289a5e427fa04  ltp-full-20160126.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index e081cfa..81b1d87 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTP_TESTSUITE_VERSION = 20150903
++LTP_TESTSUITE_VERSION = 20160126
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
+@@ -38,4 +38,15 @@ LTP_TESTSUITE_CONF_ENV += \
+ 	LIBS="$(LTP_TESTSUITE_LIBS)" \
+ 	SYSROOT="$(STAGING_DIR)"
+ 
++# Requires uClibc fts and bessel support, normally not enabled
++ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
++define LTP_TESTSUITE_REMOVE_UNSUPPORTED
++        rm -rf $(@D)/testcases/kernel/controllers/cpuset/
++        rm -rf $(@D)/testcases/misc/math/float/bessel/
++        rm -f $(@D)/testcases/misc/math/float/float_bessel.c
++endef
++LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
++endif
++
++
+ $(eval $(autotools-package))
 -- 
-Samuel
+1.7.10.4
