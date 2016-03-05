@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 19:26:35 +0100
+Date: Sat, 5 Mar 2016 19:28:51 +0100
 Subject: [Buildroot] [PATCH/next 30/31] package/vsxu: new package
-In-Reply-To: <qfirqcxc1s.ln2@ID-313208.user.individual.net>
+In-Reply-To: <lfkrqcxc1s.ln2@ID-313208.user.individual.net>
 References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
  <1456006176-21308-31-git-send-email-bernd.kuhls@t-online.de>
  <20160305161552.36cc6677@free-electrons.com>
- <qfirqcxc1s.ln2@ID-313208.user.individual.net>
-Message-ID: <20160305192635.259a28cd@free-electrons.com>
+ <lfkrqcxc1s.ln2@ID-313208.user.individual.net>
+Message-ID: <20160305192851.4dbeab22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +15,61 @@ To: buildroot@busybox.net
 
 Hello,
 
-Please Cc: me on your replies. Please, please! I've asked you already
-several times. Just use "Reply-all" in your mailer whenever you reply
-to a mail on the Buildroot mailing list.
+On Sat, 05 Mar 2016 19:17:57 +0100, Bernd Kuhls wrote:
 
-On Sat, 05 Mar 2016 18:43:54 +0100, Bernd Kuhls wrote:
-
-> > cal3d is a project of its own, available on its own website
-> > (http://home.gna.org/cal3d/). I would very much prefer to create
-> > package/cal3d/ with the upstream cal3d version rather than using this
-> > submodule solution.
+> > COPYING.LESSER is actually the text of LGPLv3, so are you sure it's
+> > under LGPLv2.1+ ?
 > 
-> the first iteration of my patch series contained a pseudo cal3d package:
-> http://patchwork.ozlabs.org/patch/541356/
+> yes, searching for "version 3 " found only artiste/src/artiste_main.cpp, 
+> the rest of the LGPL-licensed files contain
 > 
-> The current code replacing this pseudo cal3d package which you quoted, 
-> and rejected now, was written by you ;)
-> http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/135191
+> * it under the terms of the GNU Lesser General Public License as
+> * published by the Free Software Foundation; either version 2 of the
+> * License, or
 > 
-> I understand that there is no good solution for projects using git 
-> submodules in buildroot atm but I would like to know which way of 
-> handling them is prefered so I can send a proper patch ;)
+> Quoting https://github.com/vovoid/vsxu/blob/glfw3/COPYING
+> "All code (C and C++) is released under the GNU GPL 3.0 as included in
+> this document unless explicitly released as LGPL 3.0 (check source 
+> files)."
+> 
+> This is indeed misleading because I found only file referencing GPLv3+, 
+> the rest contains
 
-Aaah, very good that you remember this. I had honestly forgotten that
-we already had this discussion. I in fact don't contradict myself
-completely, and I'll try to explain why.
+> 
+> * it under the terms of the GNU General Public License as published by
+> * the Free Software Foundation; either version 2 of the License, or
 
-Your original proposal for a cal3d package is a package that 1/ doesn't
-use the upstream version of cal3d and 2/ doesn't do anything except
-downloading the cal3d sources.
+It is indeed very misleading.
 
-Instead, what I would ideally like to see is a cal3d package that works
-on its own. cal3d is a separate open-source project, which might be
-used outside of vsxu. So I'd like to have
-http://download.gna.org/cal3d/sources/cal3d-0.11.0.tar.gz downloaded,
-built and installed by a cal3d package. And then vsxu depend on it and
-link against it.
+> so I changed to VSXU_LICENSE to
+> 
+> VSXU_LICENSE = GPLv3+ (artiste/src/artiste_main.cpp), GPLv2+, LGPLv2+
+> 
+> and hope its ok.
 
-Now, whether this is doable or not depends on:
+In addition to this, could you:
 
- 1/ Whether vsxu's version of cal3d is heavily patched or not.
+ 1/ Add a comment in the .mk file that indicates that things are a bit
+    misleading (i.e that COPYING/COPYING.LESSER contain the v3 of the
+    license text, but the source code points to the v2, except one
+    file). Basically summarize what you said in this e-mail.
 
- 2/ Whether the changes needed in vsxu's build system to use the
-    external cal3d library are very complicated or not.
+ 2/ Report the problem upstream by filling a Github issue.
 
-But my strong preference is to avoid using bundled versions of the
-libraries when possible.
+> > Also, it would be good if you could specify which parts of the software
+> > are under GPLv3, which parts are under LGPLv3. Of course, it's this is
+> > reasonably possible.
+> 
+> This will be difficult ;)
+> 
+> $ grep -r "(LGPL)" * | wc -l
+> 267
+> $ grep -r "(GPL)" * | wc -l
+> 209
 
-Best regards,
+Yeah, ok, so don't do it :-)
+
+Thanks!
 
 Thomas
 -- 
