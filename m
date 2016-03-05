@@ -1,27 +1,110 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:05:19 +0100
-Subject: [Buildroot] [PATCH] libmatroska: update version
-In-Reply-To: <20160304230558.GA23721@waldemar-brodkorb.de>
-References: <20160304230558.GA23721@waldemar-brodkorb.de>
-Message-ID: <20160305150519.2805df4c@free-electrons.com>
+Date: Sat, 5 Mar 2016 15:06:09 +0100
+Subject: [Buildroot] [git commit] libpjsip: new package
+Message-ID: <20160305141237.8C5F680AEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Waldemar Brodkorb,
+commit: https://git.buildroot.net/buildroot/commit/?id=0f157eeb5efac2a32642aa84838930d14b3541cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 5 Mar 2016 00:05:58 +0100, Waldemar Brodkorb wrote:
-> Update to latest version.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Patrick Keroulas <patrick.keroulas@savoirfairelinux.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in              |  1 +
+ package/libpjsip/Config.in     | 12 ++++++++++++
+ package/libpjsip/libpjsip.hash |  5 +++++
+ package/libpjsip/libpjsip.mk   | 38 ++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 56 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 3c6e448..727bac8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1132,6 +1132,7 @@ menu "Networking"
+ 	source "package/liboping/Config.in"
+ 	source "package/libosip2/Config.in"
+ 	source "package/libpcap/Config.in"
++	source "package/libpjsip/Config.in"
+ 	source "package/librsync/Config.in"
+ 	source "package/libshairplay/Config.in"
+ 	source "package/libshout/Config.in"
+diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
+new file mode 100644
+index 0000000..45387c4
+--- /dev/null
++++ b/package/libpjsip/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_LIBPJSIP
++	bool "libpjsip"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  PJSIP is a free and open source multimedia communication
++	  library written in C language implementing standard based
++	  protocols such as: SIP, SDP, RTP, STUN, TURN, and ICE.
++
++	  http://www.pjsip.org
++
++comment "libpjsip needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+new file mode 100644
+index 0000000..e0d3d14
+--- /dev/null
++++ b/package/libpjsip/libpjsip.hash
+@@ -0,0 +1,5 @@
++# From http://www.pjsip.org/release/2.4.5/MD5SUM.TXT
++md5	f58b3485977b3a700256203a554b3869  pjproject-2.4.5.tar.bz2
++
++# Locally computed
++sha256	086f5e70dcaee312b66ddc24dac6ef85e6f1fec4eed00ff2915cebe0ee3cdd8d	pjproject-2.4.5.tar.bz2
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+new file mode 100644
+index 0000000..ee250f5
+--- /dev/null
++++ b/package/libpjsip/libpjsip.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# libpjsip
++#
++################################################################################
++
++LIBPJSIP_VERSION = 2.4.5
++LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
++LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
++LIBPJSIP_LICENSE = GPLv2+
++LIBPJSIP_LICENSE_FILES = COPYING
++LIBPJSIP_INSTALL_STAGING = YES
++
++LIBPJSIP_CONF_ENV = \
++	LD="$(TARGET_CC)" \
++	CFLAGS="$(TARGET_CFLAGS) -DPJ_HAS_IPV6=1"
++
++LIBPJSIP_CONF_OPTS = \
++	--disable-sound \
++	--disable-gsm \
++	--disable-speex-codec \
++	--disable-speex-aec \
++	--disable-resample \
++	--disable-video \
++	--disable-opencore-amr
++
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBPJSIP_DEPENDENCIES += openssl
++LIBPJSIP_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
++else
++LIBPJSIP_CONF_OPTS += --disable-ssl
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++LIBPJSIP_DEPENDENCIES += util-linux
++endif
++
++$(eval $(autotools-package))
