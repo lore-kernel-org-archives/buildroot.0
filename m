@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 19:05:10 +0100
-Subject: [Buildroot] [PATCH] libcap-ng: bump to version 0.7.7
-In-Reply-To: <1457132440-20407-1-git-send-email-sergio.prado@e-labworks.com>
-References: <1457132440-20407-1-git-send-email-sergio.prado@e-labworks.com>
-Message-ID: <20160305190510.5f65bb67@free-electrons.com>
+Date: Sat, 5 Mar 2016 19:11:38 +0100
+Subject: [Buildroot] [git commit] package/lxc: enable for CodeSourcery nios2
+	2015.11 toolchain
+Message-ID: <20160305181217.33E177FB22@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Sergio Prado,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e3a134e8604c789f9c187e78bc861078c77a25b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri,  4 Mar 2016 20:00:40 -0300, Sergio Prado wrote:
-> Also disable optimization when compiling for nios2 to prevent a compiler
-> bug.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/3afc4c006a74fd7512dace90b5f884bf7be4cc58/
-> http://autobuild.buildroot.net/results/2c53f611a705506ca86fedb0f1129df1d315632c/
-> http://autobuild.buildroot.net/results/c3d9477688b55987591b5b5efed5ee65499aa0e6/
-> http://autobuild.buildroot.net/results/052ff24f3985b652c11ac390f342e9ad3d862431/
-> ...
-> 
-> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-> ---
->  package/libcap-ng/Config.in      | 1 -
->  package/libcap-ng/libcap-ng.hash | 2 +-
->  package/libcap-ng/libcap-ng.mk   | 7 ++++++-
->  3 files changed, 7 insertions(+), 3 deletions(-)
+The CS nios2 2015.11 is based on kernel header 4.2 which must now
+provide the setns syscall for nios2.
 
-I've removed the nios2 related bits (following the feedback from Romain
-Naour), and applied to master.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lxc/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index a5df3e3..3253f14 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -5,8 +5,6 @@ config BR2_PACKAGE_LXC
+ 	depends on BR2_USE_MMU # fork()
+ 	# build system forcefully builds a shared library
+ 	depends on !BR2_STATIC_LIBS
+-	# the toolchain doesn't support setns syscall
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and isolate
+@@ -17,7 +15,6 @@ config BR2_PACKAGE_LXC
+ 
+ comment "lxc needs a toolchain w/ threads, headers >= 3.0, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
+ 		|| BR2_STATIC_LIBS
