@@ -1,74 +1,82 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat,  5 Mar 2016 21:02:24 +0100
-Subject: [Buildroot] [PATCH 2/2] package/czmq: make zmakecert and zgossip
-	optional
-In-Reply-To: <1457208144-6613-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1457208144-6613-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <1457208144-6613-2-git-send-email-joerg.krause@embedded.rocks>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sat, 05 Mar 2016 21:10:07 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-02-27
+In-Reply-To: <56D385A7.9050804@mind.be>
+References: <20160228073020.78AB7101EC4@stock.ovh.net>
+ <1456651515.13955.2.camel@embedded.rocks> <87y4a5p3w5.fsf@dell.be.48ers.dk>
+ <1456658221.13955.7.camel@embedded.rocks> <56D30D11.3030907@mind.be>
+ <1456674270.13955.11.camel@embedded.rocks> <56D385A7.9050804@mind.be>
+Message-ID: <1457208607.1867.7.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-zmakecert and zgossip are optional binaries built by default. Let's make them
-optional to allow building the czmq library only.
+On Mo, 2016-02-29 at 00:41 +0100, Arnout Vandecappelle wrote:
+> On 02/28/16 16:44, J?rg Krause wrote:
+> > 
+> > On So, 2016-02-28 at 16:06 +0100, Arnout Vandecappelle wrote:
+> > > 
+> > > On 02/28/16 12:17, J?rg Krause wrote:
+> > > > 
+> > > > 
+> > > > On So, 2016-02-28 at 10:42 +0100, Peter Korsgaard wrote:
+> > > > > 
+> > > > > > 
+> > > > > > > 
+> > > > > > > > 
+> > > > > > > > > 
+> > > > > > > > > > 
+> > > > > > > > > > "J?rg" == J?rg Krause <joerg.krause@embedded.rocks>
+> > > > > > > > > > writes:
+> > > > > ?> On So, 2016-02-28 at 08:30 +0100, Thomas Petazzoni wrote:
+> > > > > ?>>??
+> > > > > ?>>??????powerpc |????????????????????czmq-v3.0.2 | NOK |
+> > > > > ?>> http://autobuild.buildroot.net/results/2061238affb685db99
+> > > > > 8100a56c6571538d089a5b/
+> > > > > 
+> > > > > ?> /home/test/autobuild/instance-3/output/host/usr/powerpc-
+> > > > > buildroot-linux-
+> > > > > uclibc/sysroot/usr/lib/libstdc++.a(compatibility-ldbl.o): In
+> > > > > function `std::tr1::hash<long double>::operator()(long
+> > > > > double) const':
+> > > > > ?> compatibility-ldbl.cc:(.text._ZNKSt3tr14hashIeEclEe+0x3c): 
+> > > > > undefined reference to `frexpl'
+> > > > > 
+> > > > > ?> I cannot reproduce it on my 64-bit host.
+> [snip]
+> > 
+> > That's why I sent a patch with LIBS=-lm.
+> ?The problem turns out to be more complicated... It's actually a
+> problem with
+> libstdc++. Dependeing on the arch, some functions will be in
+> compatibility-ldbl.o. If you use any of these functions, that file
+> will be
+> linked in. And when that file is linked in, all the _other_
+> functions, which you
+> actually don't use, are also linked in. And one of these functions is
+> the
+> template function hash<long double>::operator(), which uses frexpl.
+> 
+> ?So, requiring czmq to link with -lm is a bit weird, given that
+> neither itself,
+> nor any of its dependencies really need it...
+> 
+> ?So ideally it should be fixed in libstdc++ itself. But I have no
+> idea how to do
+> that...
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/czmq/Config.in | 15 +++++++++++++++
- package/czmq/czmq.mk   | 13 +++++++++++++
- 2 files changed, 28 insertions(+)
+Building czmq with the latest git HEAD does not throw this error
+anymore.
 
-diff --git a/package/czmq/Config.in b/package/czmq/Config.in
-index 6a99336..afad57b 100644
---- a/package/czmq/Config.in
-+++ b/package/czmq/Config.in
-@@ -10,6 +10,21 @@ config BR2_PACKAGE_CZMQ
- 
- 	  http://czmq.zeromq.org/
- 
-+if BR2_PACKAGE_CZMQ
-+
-+config BR2_PACKAGE_CZMQ_ZMAKECERT
-+	bool "zmakecert"
-+	help
-+	  Certificate generator for ZeroMQ CURVE security.
-+
-+config BR2_PACKAGE_CZMQ_ZGOSSIP
-+	bool "zgossip"
-+	help
-+	  Implements a gossip protocol for decentralized configuration
-+	  management.
-+
-+endif
-+
- comment "czmq needs a toolchain w/ C++, wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
-diff --git a/package/czmq/czmq.mk b/package/czmq/czmq.mk
-index 0060c89..3eb2d92 100644
---- a/package/czmq/czmq.mk
-+++ b/package/czmq/czmq.mk
-@@ -18,6 +18,19 @@ CZMQ_LICENSE_FILES = LICENSE
- # host-python, so disable asciidoc entirely.
- CZMQ_CONF_ENV = ac_cv_prog_czmq_have_asciidoc=no
- 
-+ifeq ($(BR2_PACKAGE_CZMQ_ZMAKECERT),y)
-+CZMQ_CONF_OPTS += --with-makecert=yes
-+else
-+CZMQ_CONF_OPTS += --with-makecert=no
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CZMQ_ZGOSSIP),y)
-+CZMQ_CONF_OPTS += --with-test_zgossip=yes
-+else
-+CZMQ_CONF_OPTS += --with-test_zgossip=no
-+endif
-+
-+
- define CZMQ_CREATE_CONFIG_DIR
- 	mkdir -p $(@D)/config
- endef
--- 
-2.7.2
+Although, for the current version 3.0.2 disabling the optional binaries
+zmakecert and zgossip also helps to build libczmq.la cleanly without
+the need to link libmath in. I've sent a patch to disable building both
+binaries by default [1].
+
+[1]?http://patchwork.ozlabs.org/patch/592453/
+
+Best regards
+J?rg Krause
