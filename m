@@ -1,9 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  5 Mar 2016 19:58:57 +0100
-Subject: [Buildroot] [PATCH 16/16] package/kodi-pvr-wmc: bump version
-In-Reply-To: <1457204337-3582-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457204337-3582-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1457204337-3582-16-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  5 Mar 2016 20:01:22 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/kodi-screensaver-matrixtrails:
+	new package
+Message-ID: <1457204482-3977-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +11,65 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-wmc/kodi-pvr-wmc.hash | 2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+v2: removed unneeded patch after upstream fixed libsoil detection:
+    https://github.com/notspiff/screensaver.matrixtrails/commits/master
+    (Thomas)
 
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-index ec301da..6cbdede 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 47ab2cc0a3ed5f2dcd759b0d3d0f7cc3320bca44b6cd3569a751639eb5f12cfa kodi-pvr-wmc-829b5d2ec717a78ac3a5c4f92fbc3379feb80154.tar.gz
-+sha256 25963d8acbce397b6ec940d5ee1d7a69481d295ae31876daf57d3d3537b14543 kodi-pvr-wmc-949fcd162206b569af15942180e6c133ad61e336.tar.gz
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-index fced331..194bd1f 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-@@ -6,7 +6,7 @@
- 
- # This cset is on the branch 'Jarvis'
- # When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_WMC_VERSION = 829b5d2ec717a78ac3a5c4f92fbc3379feb80154
-+KODI_PVR_WMC_VERSION = 949fcd162206b569af15942180e6c133ad61e336
- KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
- KODI_PVR_WMC_LICENSE = GPLv2+
- KODI_PVR_WMC_LICENSE_FILES = src/client.h
+ package/kodi-screensaver-matrixtrails/Config.in            | 11 +++++++++++
+ .../kodi-screensaver-matrixtrails.mk                       | 14 ++++++++++++++
+ package/kodi/Config.in                                     |  1 +
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/kodi-screensaver-matrixtrails/Config.in
+ create mode 100644 package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+new file mode 100644
+index 0000000..72ed958
+--- /dev/null
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
++	bool "kodi-screensaver-matrixtrails"
++	depends on BR2_PACKAGE_KODI_GL # libsoil
++	select BR2_PACKAGE_LIBSOIL
++	help
++	  Matrix trails screensaver for Kodi
++
++	  https://github.com/notspiff/screensaver.matrixtrails
++
++comment "matrixtrails needs an OpenGL backend"
++	depends on !BR2_PACKAGE_KODI_GL
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+new file mode 100644
+index 0000000..5ecacdf
+--- /dev/null
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# kodi-screensaver-matrixtrails
++#
++################################################################################
++
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 16057e7195f930109f0a4aea999296ca315700e5
++KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,notspiff,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
++KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPLv2+
++KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
++
++KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index bd40ac3..9590070 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -278,6 +278,7 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-cpblobs/Config.in"
+ 	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
++	source "package/kodi-screensaver-matrixtrails/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+ 	source "package/kodi-screensaver-planestate/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
 -- 
 2.7.0
