@@ -1,80 +1,80 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  5 Mar 2016 12:31:36 +0100
-Subject: [Buildroot] [PATCH] package/gcc: 4.9.x: backport a fix for
-	libcap-ng issue on nios2
-Message-ID: <1457177496-11919-1-git-send-email-romain.naour@gmail.com>
+Date: Sat, 5 Mar 2016 12:35:43 +0100
+Subject: [Buildroot] [PATCH] libcap-ng: bump to version 0.7.7
+In-Reply-To: <CANu7NGu5qgahQaStQnrjeWouD_+9j9HmVgcLwFBuqAngod2qqQ@mail.gmail.com>
+References: <1457132440-20407-1-git-send-email-sergio.prado@e-labworks.com>
+ <56DA16A5.4010703@gmail.com>
+ <CANu7NGu5qgahQaStQnrjeWouD_+9j9HmVgcLwFBuqAngod2qqQ@mail.gmail.com>
+Message-ID: <56DAC48F.8050409@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The patch is part of gcc 5.3 release.
+Hello Sergio,
 
-Fixes:
-http://autobuild.buildroot.net/results/901/90186d1fe134b804c0101554296b1235dc0ccbb0
+Le 05/03/2016 00:48, Sergio Prado a ?crit :
+> Hi Romain,
+> 
+> Thanks for reviewing the patch.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>
----
- .../gcc/4.9.3/880-nios2_legitimize_address.patch   | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 package/gcc/4.9.3/880-nios2_legitimize_address.patch
+You're welcome !
 
-diff --git a/package/gcc/4.9.3/880-nios2_legitimize_address.patch b/package/gcc/4.9.3/880-nios2_legitimize_address.patch
-new file mode 100644
-index 0000000..4623f29
---- /dev/null
-+++ b/package/gcc/4.9.3/880-nios2_legitimize_address.patch
-@@ -0,0 +1,49 @@
-+From b0ea54f3f995754881e0ea6651133aa7b58eeaa2 Mon Sep 17 00:00:00 2001
-+From: cltang <cltang@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Tue, 22 Sep 2015 12:23:20 +0000
-+Subject: [PATCH] nios2_legitimize_address 2015-09-22  Chung-Lin Tang 
-+ <cltang@codesourcery.com>
-+
-+	Backport from mainline
-+	2015-09-22  Chung-Lin Tang  <cltang@codesourcery.com>
-+
-+	* config/nios2/nios2.c (nios2_legitimize_address): When handling
-+	'reg + reloc' cases, allow first operand to be non-REG, and use
-+	force_reg() to enforce address pattern.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 228013 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+Fixes:
-+http://autobuild.buildroot.net/results/901/90186d1fe134b804c0101554296b1235dc0ccbb0
-+
-+[backported to 4.9.3]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gcc/config/nios2/nios2.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/nios2/nios2.c b/gcc/config/nios2/nios2.c
-+index 047b615..41dd6f9 100644
-+--- a/gcc/config/nios2/nios2.c
-++++ b/gcc/config/nios2/nios2.c
-+@@ -1786,15 +1786,15 @@ nios2_legitimize_address (rtx x, rtx oldx ATTRIBUTE_UNUSED,
-+ 
-+      Which will be output as '%tls_le(var+48)(r23)' in assembly.  */
-+   if (GET_CODE (x) == PLUS
-+-      && GET_CODE (XEXP (x, 0)) == REG
-+       && GET_CODE (XEXP (x, 1)) == CONST)
-+     {
-+-      rtx unspec, offset, reg = XEXP (x, 0);
-++      rtx unspec, offset;
-+       split_const (XEXP (x, 1), &unspec, &offset);
-+       if (GET_CODE (unspec) == UNSPEC
-+ 	  && !nios2_large_offset_p (XINT (unspec, 1))
-+ 	  && offset != const0_rtx)
-+ 	{
-++	  rtx reg = force_reg (Pmode, XEXP (x, 0));
-+ 	  unspec = copy_rtx (unspec);
-+ 	  XVECEXP (unspec, 0, 0)
-+ 	    = plus_constant (Pmode, XVECEXP (unspec, 0, 0), INTVAL (offset));
-+-- 
-+2.5.0
-+
--- 
-2.5.0
+> 
+> 2016-03-04 20:13 GMT-03:00 Romain Naour <romain.naour@gmail.com
+> <mailto:romain.naour@gmail.com>>:
+>>
+>> Hi Sergio,
+>>
+>> Le 05/03/2016 00:00, Sergio Prado a ?crit :
+>> > Also disable optimization when compiling for nios2 to prevent a compiler
+>> > bug.
+>>
+>> The bump and the nios2 fix must be two separate patches.
+> 
+> Right.
+> 
+>> > Fixes:
+>> > http://autobuild.buildroot.net/results/3afc4c006a74fd7512dace90b5f884bf7be4cc58/
+>> > http://autobuild.buildroot.net/results/2c53f611a705506ca86fedb0f1129df1d315632c/
+>> > http://autobuild.buildroot.net/results/c3d9477688b55987591b5b5efed5ee65499aa0e6/
+>> > http://autobuild.buildroot.net/results/052ff24f3985b652c11ac390f342e9ad3d862431/
+>>
+>> Also the compiler bug is due to an issue with gcc <= 5.2. All theses build
+>> issues are trigged by br-nios2-full-2015.11-rc1-71-g90d1299.tar.bz2 toolchain
+>> which is based on gcc 4.9.
+>>
+>> I propose to add an exception in the autobuilder script:
+>> http://patchwork.ozlabs.org/patch/582313/
+>>
+>> Also see:
+>> http://lists.busybox.net/pipermail/buildroot/2015-December/146308.html
+> 
+> Adding an exception in the autobuilder will not fix the problem in production,
+> right? The user that wants to use this package with NIOS2 and GCC <= 5.2 will
+> still catch this problem. Working around the problem disabling GCC optimizations
+> fixes in all cases. What do you think?
+
+I think we need to backport the patch [1] to gcc 4.9.3 but we still need to add
+an exception in the autobuilder until the nios2 toolchain is rebuild.
+
+Can you test this patch please:
+http://patchwork.ozlabs.org/patch/592357/
+
+Since other version of gcc are not available for nios2, we don't need to
+backport this patch.
+
+Thanks for looking at nios2 build failure.
+
+Best regards,
+Romain
+
+[1]
+https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=3e326557585ffde323867375539f04643fcad29a
+
+> 
+>>
+>> Best regards,
+>> Romain
+>>
