@@ -1,38 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:48:39 +0100
-Subject: [Buildroot] [PATCH/next 22/31]
- package/kodi-screensaver-planestate: new package
-In-Reply-To: <1456006176-21308-23-git-send-email-bernd.kuhls@t-online.de>
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-23-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160305154839.47cb0263@free-electrons.com>
+Date: Sat, 5 Mar 2016 15:33:31 +0100
+Subject: [Buildroot] [git commit] package/kodi-screensaver-crystalmorph: add
+	hash
+Message-ID: <20160305144958.CB58B80E3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac159ba1520dc36ea3fddbbc35aef441a2f68b80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 20 Feb 2016 23:09:27 +0100, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash    | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +################################################################################
-> +#
-> +# kodi-screensaver-planestate
-> +#
-> +################################################################################
-> +
-> +KODI_SCREENSAVER_PLANESTATE_VERSION = 95b6d1ec72f37bcd16cf8e5d49806193dba883f0
-> +KODI_SCREENSAVER_PLANESTATE_SITE = $(call github,notspiff,screensaver.planestate,$(KODI_SCREENSAVER_PLANESTATE_VERSION))
-
-Could you report a bug upstream to ask the author to add a license file
-to his package, and submit submit a follow-up patch to use this
-information?
-
-In the mean time, I've applied your patch. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+new file mode 100644
+index 0000000..01183d7
+--- /dev/null
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 680e9354adcb7048b5c2b55b3c49cf37cea0e12e6564018cd694feeb253c90dd kodi-screensaver-crystalmorph-2e7c10e3543f5aaab6fd2f5aa9d05b976a43ba68.tar.gz
