@@ -1,81 +1,81 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Sat, 5 Mar 2016 14:16:03 +0100
-Subject: [Buildroot] [v3,
-	1/4] barebox: prepare for secondary config build
-In-Reply-To: <20160302213256.GA11826@smipidev>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-2-git-send-email-pieter@boesman.nl>
- <56D0DCFB.8060601@mind.be> <20160228081204.GB4297@smipidev>
- <20160229074707.GA17808@smipidev> <56D620F2.3090605@mind.be>
- <20160302075049.GA10481@smipidev> <56D72D29.5050600@mind.be>
- <20160302213256.GA11826@smipidev>
-Message-ID: <20160305131603.GA7616@smipidev>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 5 Mar 2016 14:49:40 +0100
+Subject: [Buildroot] [git commit] package/gcc: 4.9.x: backport a fix for
+	libcap-ng issue on nios2
+Message-ID: <20160305134946.5DF1780AEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 02, 2016 at 10:32:56PM +0100, Pieter Smith wrote:
-> On Wed, Mar 02, 2016 at 07:12:57PM +0100, Arnout Vandecappelle wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4d71397f0af02cee6fb6e09ee45116770cb20e87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[snip]
+The patch is part of gcc 5.3 release.
 
-> >  The BUILD_CMDS can be parameterized without using functions, by using
-> > $($(PKG)_...) variables instead of $(BAREBOX_2_...). That's what I tried to show
-> > in my first reply:
-> 
-> Off course, silly me... I've been making use of this since forever. It works
-> because of the eval in $(eval $(kconfig-package)). I'll do it this way.
->  
-> > define BAREBOX_BUILD_CMDS
-> > 	$($(PKG)_BUILD_BAREBOXENV_CMDS)
-> > 	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
-> > 	$($(PKG)_BUILD_CUSTOM_ENV)
-> > endef
-> > BAREBOX_2_BUILD_CMDS = $(BAREBOX_BUILD_CMDS)
-> > 
-> > BAREBOX_2_BUILD_BAREBOXENV_CMDS and BAREBOX_2_BUILD_CUSTOM_ENV will not be set,
-> > so those parts are removed. The rest should be identical for barebox-2, but if
-> > you do need something else you can add something like $($(PKG)_EXTRA_FLAGS).
-> 
-> I agree with not needing the additional BAREBOX_2_BUILD_BAREBOXENV_CMDS and
-> BAREBOX_2_INSTALL_BAREBOXENV_CMDS (why would you need to install bareboxenv to
-> the rootfs twice), but I would like to keep the BAREBOX_2_BUILD_CUSTOM_ENV and
-> the built-in variant in Yegor's pending patch-set. They allow customization of
-> the barebox environment, and therefore the boot behavior.
+Fixes:
+http://autobuild.buildroot.net/results/901/90186d1fe134b804c0101554296b1235dc0ccbb0
 
-I am having some trouble with this. I am not able to handle ifdef-space
-diversity in this way. Ifdef-space diversity is used to determine how barebox
-should be configured, whether / how the barebox environment should be built,
-and to print user-friendly config errors. The ifdef logic is not all trivial
-(almost half of the makefile logic), so I would like to avoid duplicating it
-between barebox and barebox-2. The only way I know of to avoid this duplication
-is by extracting the logic info a definition and using $(eval), which is
-exactly what you want to avoid.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Sergio Prado <sergio.prado@e-labworks.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../gcc/4.9.3/880-nios2_legitimize_address.patch   | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-Also, for two of the ifdef-space diversity sections, $(PKG) seems to be
-undefined at the time of evaluation. Getting to the bottom of this is proving
-quite taxing. I can get around this by doing an `$(eval $(call ...,BAREBOX))`,
-which looks a lot like my initial suggestion.
-
-I am getting to the point where I am just going to duplicate the ifdef sections
-and leave the consistency burden with future reviewers. I understand your
-concern that some developers do not understanding $(eval) all that well, but
-this is like trying to solve the problem with my shoelaces tied.
-
-[snip]
- 
-> >  However, this is just my opinion, other developers may see it differently,
-> > hence the CC.
-> 
-> Off course. Your opinion is held in rather high regard, so I would like to have
-> at least one of the regular barebox developers on board. ;-)
-
-Is there anyone else we can prod to weigh in on this? Please have a look at the
-templated proposal and confirm your opinion on $(eval):
-https://github.com/smipi1/bbb_buildroot/tree/barebox_2nd_config_build-v4-templated.
-
-[snip]
-
-- Pieter
+diff --git a/package/gcc/4.9.3/880-nios2_legitimize_address.patch b/package/gcc/4.9.3/880-nios2_legitimize_address.patch
+new file mode 100644
+index 0000000..4623f29
+--- /dev/null
++++ b/package/gcc/4.9.3/880-nios2_legitimize_address.patch
+@@ -0,0 +1,49 @@
++From b0ea54f3f995754881e0ea6651133aa7b58eeaa2 Mon Sep 17 00:00:00 2001
++From: cltang <cltang@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Tue, 22 Sep 2015 12:23:20 +0000
++Subject: [PATCH] nios2_legitimize_address 2015-09-22  Chung-Lin Tang 
++ <cltang@codesourcery.com>
++
++	Backport from mainline
++	2015-09-22  Chung-Lin Tang  <cltang@codesourcery.com>
++
++	* config/nios2/nios2.c (nios2_legitimize_address): When handling
++	'reg + reloc' cases, allow first operand to be non-REG, and use
++	force_reg() to enforce address pattern.
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-5-branch at 228013 138bc75d-0d04-0410-961f-82ee72b054a4
++
++Fixes:
++http://autobuild.buildroot.net/results/901/90186d1fe134b804c0101554296b1235dc0ccbb0
++
++[backported to 4.9.3]
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ gcc/config/nios2/nios2.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/gcc/config/nios2/nios2.c b/gcc/config/nios2/nios2.c
++index 047b615..41dd6f9 100644
++--- a/gcc/config/nios2/nios2.c
+++++ b/gcc/config/nios2/nios2.c
++@@ -1786,15 +1786,15 @@ nios2_legitimize_address (rtx x, rtx oldx ATTRIBUTE_UNUSED,
++ 
++      Which will be output as '%tls_le(var+48)(r23)' in assembly.  */
++   if (GET_CODE (x) == PLUS
++-      && GET_CODE (XEXP (x, 0)) == REG
++       && GET_CODE (XEXP (x, 1)) == CONST)
++     {
++-      rtx unspec, offset, reg = XEXP (x, 0);
+++      rtx unspec, offset;
++       split_const (XEXP (x, 1), &unspec, &offset);
++       if (GET_CODE (unspec) == UNSPEC
++ 	  && !nios2_large_offset_p (XINT (unspec, 1))
++ 	  && offset != const0_rtx)
++ 	{
+++	  rtx reg = force_reg (Pmode, XEXP (x, 0));
++ 	  unspec = copy_rtx (unspec);
++ 	  XVECEXP (unspec, 0, 0)
++ 	    = plus_constant (Pmode, XVECEXP (unspec, 0, 0), INTVAL (offset));
++-- 
++2.5.0
++
