@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 15:02:05 +0100
+Date: Sat, 5 Mar 2016 15:01:53 +0100
 Subject: [Buildroot] [git commit] package/vlc: add optional support for
-	libssh2
-Message-ID: <20160305140245.AC79381794@busybox.osuosl.org>
+	libvncserver
+Message-ID: <20160305140245.9453D7FB32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3daf6e19e00a84d27929430e317d67bdfd2a7104
+commit: https://git.buildroot.net/buildroot/commit/?id=0cc322eede944f05c65ca65f8c292c002a807ed9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When libssh2 was compiled before, vlc will use it as optional
+When libvncserver was compiled before, vlc will use it as optional
 dependency:
 
-$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/vlc/plugins/access/libsftp_plugin.so | grep NEEDED
+$ output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/lib/vlc/plugins/access/libvnc_plugin.so | grep NEEDED
  0x0000000000000001 (NEEDED)             Shared library: [libvlccore.so.8]
  0x0000000000000001 (NEEDED)             Shared library: [librt.so.1]
  0x0000000000000001 (NEEDED)             Shared library: [libintl.so.8]
- 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.1]
  0x0000000000000001 (NEEDED)             Shared library: [libdl.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libm.so.1]
- 0x0000000000000001 (NEEDED)             Shared library: [libssh2.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libvncclient.so.0]
 [...]
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -32,20 +30,20 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 4affb87..4f8bf72 100644
+index 1bb2b93..4affb87 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -251,6 +251,13 @@ else
- VLC_CONF_OPTS += --disable-svg --disable-svgdec
+@@ -272,6 +272,13 @@ else
+ VLC_CONF_OPTS += --disable-upnp
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSSH2),y)
-+VLC_CONF_OPTS += --enable-sftp
-+VLC_DEPENDENCIES += libssh2
++ifeq ($(BR2_PACKAGE_LIBVNCSERVER),y)
++VLC_CONF_OPTS += --enable-vnc
++VLC_DEPENDENCIES += libvncserver
 +else
-+VLC_CONF_OPTS += --disable-sftp
++VLC_CONF_OPTS += --disable-vnc
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSIDPLAY2),y)
- VLC_CONF_OPTS += --enable-sid
- VLC_DEPENDENCIES += libsidplay2
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+ VLC_CONF_OPTS += --enable-vorbis
+ VLC_DEPENDENCIES += libvorbis
