@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 19:03:37 +0100
-Subject: [Buildroot] [git commit] libcap-ng: bump to version 0.7.7
-Message-ID: <20160305180432.6EA8E8055C@busybox.osuosl.org>
+Date: Sat, 5 Mar 2016 19:05:10 +0100
+Subject: [Buildroot] [PATCH] libcap-ng: bump to version 0.7.7
+In-Reply-To: <1457132440-20407-1-git-send-email-sergio.prado@e-labworks.com>
+References: <1457132440-20407-1-git-send-email-sergio.prado@e-labworks.com>
+Message-ID: <20160305190510.5f65bb67@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4314c86b0b932c3d381ae59b641366697906868f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Sergio Prado,
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-[Thomas: remove nios2 hacks, no longer needed.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libcap-ng/libcap-ng.hash | 2 +-
- package/libcap-ng/libcap-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri,  4 Mar 2016 20:00:40 -0300, Sergio Prado wrote:
+> Also disable optimization when compiling for nios2 to prevent a compiler
+> bug.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/3afc4c006a74fd7512dace90b5f884bf7be4cc58/
+> http://autobuild.buildroot.net/results/2c53f611a705506ca86fedb0f1129df1d315632c/
+> http://autobuild.buildroot.net/results/c3d9477688b55987591b5b5efed5ee65499aa0e6/
+> http://autobuild.buildroot.net/results/052ff24f3985b652c11ac390f342e9ad3d862431/
+> ...
+> 
+> Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+> ---
+>  package/libcap-ng/Config.in      | 1 -
+>  package/libcap-ng/libcap-ng.hash | 2 +-
+>  package/libcap-ng/libcap-ng.mk   | 7 ++++++-
+>  3 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcap-ng/libcap-ng.hash b/package/libcap-ng/libcap-ng.hash
-index d8dde23..ecea6e8 100644
---- a/package/libcap-ng/libcap-ng.hash
-+++ b/package/libcap-ng/libcap-ng.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	48a2083276f9820cb92dcb05d001b30733bcbf48c14c230303cac3cd08b45b6b	libcap-ng-0.7.4.tar.gz
-+sha256	615549ce39b333f6b78baee0c0b4ef18bc726c6bf1cca123dfd89dd963f6d06b  libcap-ng-0.7.7.tar.gz
-diff --git a/package/libcap-ng/libcap-ng.mk b/package/libcap-ng/libcap-ng.mk
-index c2ae25b..d78f5dc 100644
---- a/package/libcap-ng/libcap-ng.mk
-+++ b/package/libcap-ng/libcap-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCAP_NG_VERSION = 0.7.4
-+LIBCAP_NG_VERSION = 0.7.7
- LIBCAP_NG_SITE = http://people.redhat.com/sgrubb/libcap-ng
- LIBCAP_NG_LICENSE = GPLv2+ LGPLv2.1+
- LIBCAP_NG_LICENSE_FILES = COPYING COPYING.LIB
+I've removed the nios2 related bits (following the feedback from Romain
+Naour), and applied to master.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
