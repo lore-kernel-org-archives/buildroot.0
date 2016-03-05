@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 5 Mar 2016 14:50:46 +0100
-Subject: [Buildroot] [git commit] package/transmission: bump version to 2.90
-Message-ID: <20160305135201.06A627FAC8@busybox.osuosl.org>
+Date: Sat, 5 Mar 2016 14:50:42 +0100
+Subject: [Buildroot] [git commit] package/znc: bump version to 1.6.3
+Message-ID: <20160305135200.CB7B67FF63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4867887e3f4597dc7fe7c0d06d1ef9c8bc0b9490
+commit: https://git.buildroot.net/buildroot/commit/?id=7f45452d25b05f7cd5379c0684a1d953e334b378
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/transmission/transmission.hash | 2 +-
- package/transmission/transmission.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/znc/znc.hash | 4 ++--
+ package/znc/znc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 4199b37..0dc816d 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index a0b27aa..f243d4a 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a9fc1936b4ee414acc732ada04e84339d6755cd0d097bcbd11ba2cfc540db9eb	transmission-2.84.tar.xz
-+sha256	69ff8caf81684155926f437f46bf7df1b1fb304f52c7809f546257e8923f2fd2	transmission-2.90.tar.xz
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index efc00a1..6aecf60 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
+-# Locally calculated after checking pgp signature
+-sha256	eef17727c0c6433fed1affba0ea76ec7fd60198d2f3c234d8529bd5fb26f0593	znc-1.6.2.tar.gz
++# Locally calculated
++sha256	631c46de76fe601a41ef7676bc974958e9a302b72b25fc92b4a603a25d89b827	znc-1.6.3.tar.gz
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 0844b0f..31e1bcf 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRANSMISSION_VERSION = 2.84
-+TRANSMISSION_VERSION = 2.90
- TRANSMISSION_SITE = http://download.transmissionbt.com/files
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_DEPENDENCIES = \
+-ZNC_VERSION = 1.6.2
++ZNC_VERSION = 1.6.3
+ ZNC_SITE = http://znc.in/releases
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
