@@ -1,67 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 13:41:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: disable on mips
-In-Reply-To: <1457255845-20770-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457255845-20770-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160306134141.7fedbb85@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun,  6 Mar 2016 09:46:26 -0300
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <1457268386-13897-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Sun,  6 Mar 2016 10:17:25 +0100, Bernd Kuhls wrote:
-> Due to the addition of the BR2_TOOLCHAIN_HAS_SYNC_8 dependency, then
-> there is no longer a need to have (BR2_mipsel &&
-> BR2_TOOLCHAIN_USES_GLIBC), since MIPS doesn't provide the 8 byte
-> __sync_*() intrinsics, and therefore BR2_TOOLCHAIN_HAS_SYNC_8 is false
-> on MIPS.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/kodi/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-> index bd40ac3..950d5f9 100644
-> --- a/package/kodi/Config.in
-> +++ b/package/kodi/Config.in
-> @@ -1,6 +1,6 @@
->  config BR2_PACKAGE_KODI_ARCH_SUPPORTS
->  	bool
-> -	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
-> +	default y if (BR2_arm || BR2_i386 || BR2_x86_64) \
->  		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
->  		&& BR2_TOOLCHAIN_HAS_SYNC_8
-
-In fact, I think this is still not good. Why would Kodi have explicit
-support for MIPS, if in practice you couldn't build it for MIPS ?
-
-I think the answer lies in the fact that Kodi does not always use the
-__sync*() atomic intrinsics. If you look at xbmc/threads/Atomics.cpp,
-there are some hand-written atomic operations for various architectures.
-
-So in fact, for some architectures/variants, Kodi is using the compiler
-__sync and/or __atomic intrinsics, but for some other
-architectures/variants, it does not use them and use its own
-implementation instead. This is probably what allows to build on MIPS,
-for example. And maybe what allows to build on i586.
-
-Bottom line: this BR2_TOOLCHAIN_HAS_SYNC_8 dependency is wrong, and
-some more investigation is needed to understand the combinations of
-architectures for which Kodi has its own atomic operations vs. the
-combinations for which it relies on __sync/__atomic built-ins.
-
-Could you look into this? This will probably require building Kodi on a
-number of architecture variants, and also an investigation of the
-atomic code to understand what's going on.
-
-Thanks!
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5c9eabe..4ca09b2 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,10 +214,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.12.55"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.63"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
+-	default "3.18.27"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.28"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.18"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.19"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.4"		if BR2_KERNEL_HEADERS_4_4
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
