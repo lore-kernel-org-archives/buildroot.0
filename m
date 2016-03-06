@@ -1,46 +1,35 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 06 Mar 2016 10:09:04 +0100
-Subject: [Buildroot] [PATCH 2/2] package/czmq: make zmakecert and
- zgossip optional
-In-Reply-To: <20160305212707.305f31a0@free-electrons.com>
-References: <1457208144-6613-1-git-send-email-joerg.krause@embedded.rocks>
- <1457208144-6613-2-git-send-email-joerg.krause@embedded.rocks>
- <20160305212707.305f31a0@free-electrons.com>
-Message-ID: <1457255344.2724.4.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Mar 2016 10:17:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi: disable on mips
+Message-ID: <1457255845-20770-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sa, 2016-03-05 at 21:27 +0100, Thomas Petazzoni wrote:
-> Dear J?rg Krause,
-> 
-> On Sat,??5 Mar 2016 21:02:24 +0100, J?rg Krause wrote:
-> 
-> > 
-> > +config BR2_PACKAGE_CZMQ_ZMAKECERT
-> > +	bool "zmakecert"
-> > +	help
-> > +	??Certificate generator for ZeroMQ CURVE security.
-> > +
-> > +config BR2_PACKAGE_CZMQ_ZGOSSIP
-> > +	bool "zgossip"
-> > +	help
-> > +	??Implements a gossip protocol for decentralized
-> > configuration
-> > +	??management.
-> How big are those binaries? Is it worth adding config options for
-> those?
+Due to the addition of the BR2_TOOLCHAIN_HAS_SYNC_8 dependency, then
+there is no longer a need to have (BR2_mipsel &&
+BR2_TOOLCHAIN_USES_GLIBC), since MIPS doesn't provide the 8 byte
+__sync_*() intrinsics, and therefore BR2_TOOLCHAIN_HAS_SYNC_8 is false
+on MIPS.
 
-I forget that size does not always matters. They are only some kB and
-zgossip is not even installed. I did not checked this properly.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-My intentention was to be able to build the static library
-successfully, but as you mentioned, the linking issue with libmath is
-not fixed by this anyway.
-
-So, I'll mark this as rejected in patchwork.
-
-Best regards
-J?rg Krause
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index bd40ac3..950d5f9 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	bool
+-	default y if (BR2_arm || (BR2_mipsel && BR2_TOOLCHAIN_USES_GLIBC) || BR2_i386 || BR2_x86_64) \
++	default y if (BR2_arm || BR2_i386 || BR2_x86_64) \
+ 		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
+ 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+ 
+-- 
+2.7.0
