@@ -1,30 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 14:32:20 +0100
-Subject: [Buildroot] [PATCH v2] package/scrub: new package
-In-Reply-To: <56dbbd78cd5d0_1fa53fb8909759a414311@ultri2.mail>
-References: <56dbbd78cd5d0_1fa53fb8909759a414311@ultri2.mail>
-Message-ID: <20160306143220.4b228b5e@free-electrons.com>
+Date: Sun, 6 Mar 2016 14:34:03 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+In-Reply-To: <1457268386-13897-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457268386-13897-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160306143403.4076a398@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo,
+Dear Gustavo Zacarias,
 
-Thanks for your review of Samuel's patch. Unfortunately, it seems like
-you have a mail client problem: your e-mail does not appear as a reply
-to Samuel's patch, because it does not contain the In-Reply-To: and
-References: fields in the e-mail header.
+On Sun,  6 Mar 2016 09:46:26 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/linux-headers/Config.in.host | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Due to this, your answer was not recorded by patchwork (see
-http://patchwork.ozlabs.org/patch/569675/).
-
-I'm Cc'ing Samuel to make sure he sees you review.
-
-I've marked the patch as Changes Requested in patchwork.
-
-Thanks for your review!
+Applied to master, thanks.
 
 Thomas
 -- 
