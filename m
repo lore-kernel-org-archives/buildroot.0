@@ -1,42 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 21:54:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] docs/manual: document format for
- specifying licenses
-In-Reply-To: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
-References: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
-Message-ID: <20160306215438.4d75baf0@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 6 Mar 2016 22:16:55 +0100
+Subject: [Buildroot] [v3,
+	1/4] barebox: prepare for secondary config build
+In-Reply-To: <20160305131603.GA7616@smipidev>
+References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
+ <1453329821-3167-2-git-send-email-pieter@boesman.nl>
+ <56D0DCFB.8060601@mind.be> <20160228081204.GB4297@smipidev>
+ <20160229074707.GA17808@smipidev> <56D620F2.3090605@mind.be>
+ <20160302075049.GA10481@smipidev> <56D72D29.5050600@mind.be>
+ <20160302213256.GA11826@smipidev> <20160305131603.GA7616@smipidev>
+Message-ID: <56DC9E47.2090207@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Rahul Bedarkar,
+On 03/05/16 14:16, Pieter Smith wrote:
+> On Wed, Mar 02, 2016 at 10:32:56PM +0100, Pieter Smith wrote:
+>> On Wed, Mar 02, 2016 at 07:12:57PM +0100, Arnout Vandecappelle wrote:
+> 
+> [snip]
+> 
+>>>  The BUILD_CMDS can be parameterized without using functions, by using
+>>> $($(PKG)_...) variables instead of $(BAREBOX_2_...). That's what I tried to show
+>>> in my first reply:
+>>
+>> Off course, silly me... I've been making use of this since forever. It works
+>> because of the eval in $(eval $(kconfig-package)). I'll do it this way.
+>>  
+>>> define BAREBOX_BUILD_CMDS
+>>> 	$($(PKG)_BUILD_BAREBOXENV_CMDS)
+>>> 	$(TARGET_MAKE_ENV) $(MAKE) $(BAREBOX_MAKE_FLAGS) -C $(@D)
+>>> 	$($(PKG)_BUILD_CUSTOM_ENV)
+>>> endef
+>>> BAREBOX_2_BUILD_CMDS = $(BAREBOX_BUILD_CMDS)
+>>>
+>>> BAREBOX_2_BUILD_BAREBOXENV_CMDS and BAREBOX_2_BUILD_CUSTOM_ENV will not be set,
+>>> so those parts are removed. The rest should be identical for barebox-2, but if
+>>> you do need something else you can add something like $($(PKG)_EXTRA_FLAGS).
+>>
+>> I agree with not needing the additional BAREBOX_2_BUILD_BAREBOXENV_CMDS and
+>> BAREBOX_2_INSTALL_BAREBOXENV_CMDS (why would you need to install bareboxenv to
+>> the rootfs twice), but I would like to keep the BAREBOX_2_BUILD_CUSTOM_ENV and
+>> the built-in variant in Yegor's pending patch-set. They allow customization of
+>> the barebox environment, and therefore the boot behavior.
+> 
+> I am having some trouble with this. I am not able to handle ifdef-space
+> diversity in this way. Ifdef-space diversity is used to determine how barebox
+> should be configured, whether / how the barebox environment should be built,
+> and to print user-friendly config errors. The ifdef logic is not all trivial
+> (almost half of the makefile logic), so I would like to avoid duplicating it
+> between barebox and barebox-2. The only way I know of to avoid this duplication
+> is by extracting the logic info a definition and using $(eval), which is
+> exactly what you want to avoid.
 
-On Mon, 25 Jan 2016 10:35:40 +0530, Rahul Bedarkar wrote:
-> +  ** If the package is released under multiple licenses, then +comma+ separate
+ Ah yes, I didn't realize that. Indeed, for those things there is no way to
+handle them with $(PKG).
 
-I found the wording "If the package is released under multiple
-licenses" as potentially confusing, as it could be understood as the
-dual licensing case. So I've changed that to:
+ Actually I would like those things to move to kconfig-package, but that would
+be dragging things a bit too far for this series.
 
-+  ** If different parts of the package are released under different
-+  licenses
+ So yes, your idea of $(call barebox-package) looks good. One small remark that
+you can already fix before submitting: in the patch that adds the
+barebox-package function, say explicitly in the commit message if anything has
+changed except for $ -> $$ and BAREBOX -> $(1). That'll make review easier.
 
-Which I believe is clearer.
+ Regards,
+ Arnout
 
-> +  licenses (e.g. +`LIBFOO_LICENSE = GPLv2+, LGPLv2.1+`+). If there is clear
-> +  distinction between which component is licensed under what license, then
-> +  annotate the license with that component
-> +  (e.g. +`LIBFOO_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)`+).
+> 
+> Also, for two of the ifdef-space diversity sections, $(PKG) seems to be
+> undefined at the time of evaluation. Getting to the bottom of this is proving
+> quite taxing. I can get around this by doing an `$(eval $(call ...,BAREBOX))`,
+> which looks a lot like my initial suggestion.
+> 
+> I am getting to the point where I am just going to duplicate the ifdef sections
+> and leave the consistency burden with future reviewers. I understand your
+> concern that some developers do not understanding $(eval) all that well, but
+> this is like trying to solve the problem with my shoelaces tied.
+> 
+> [snip]
+>  
+>>>  However, this is just my opinion, other developers may see it differently,
+>>> hence the CC.
+>>
+>> Off course. Your opinion is held in rather high regard, so I would like to have
+>> at least one of the regular barebox developers on board. ;-)
+> 
+> Is there anyone else we can prod to weigh in on this? Please have a look at the
+> templated proposal and confirm your opinion on $(eval):
+> https://github.com/smipi1/bbb_buildroot/tree/barebox_2nd_config_build-v4-templated.
+> 
+> [snip]
+> 
+> - Pieter
+> 
 
-I've explicited: "annonate the license with that component between
-parenthesis".
 
-And applied to master. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
