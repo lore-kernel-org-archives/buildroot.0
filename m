@@ -1,54 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 05 Mar 2016 22:36:19 +0100
-Subject: [Buildroot] [PATCH/next 30/31] package/vsxu: new package
-References: <1456006176-21308-1-git-send-email-bernd.kuhls@t-online.de>
- <1456006176-21308-31-git-send-email-bernd.kuhls@t-online.de>
- <20160305161552.36cc6677@free-electrons.com>
- <qfirqcxc1s.ln2@ID-313208.user.individual.net>
- <20160305192635.259a28cd@free-electrons.com>
-Message-ID: <XnsA5C2E5F3FD7EFID.313208.user.indiv@192.168.1.253>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 6 Mar 2016 06:41:02 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-03-04
+In-Reply-To: <20160305073022.BEADE101B7B@stock.ovh.net>
+References: <20160305073022.BEADE101B7B@stock.ovh.net>
+Message-ID: <20160306044102.GE2877@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Thomas, all,
 
-[posted and mailed]
+On Sat, Mar 05, 2016 at 08:30:22AM +0100, Thomas Petazzoni wrote:
+>       x86_64 |                   gamin-0.1.10 | NOK | http://autobuild.buildroot.net/results/2aaceac254378d9db7ab7664174007b8c603c77b/
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>
-wrote in news:20160305192635.259a28cd at free-electrons.com: 
+Should be fixed by http://patchwork.ozlabs.org/patch/590524/.
 
-> Hello,
-> 
-> Please Cc: me on your replies. Please, please! I've asked you already
-> several times. Just use "Reply-all" in your mailer whenever you reply
-> to a mail on the Buildroot mailing list.
+>         i686 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/6e4529d1e98f0b9cbb16edcd2f4f10dee37b635c/
+>       xtensa |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/6913a5699d786592a70d1f19a68e6ff1e109e5cd/
+>          sh4 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/be15acbf6c0ab4fab93a9a9663e98e896cbdac8e/
+>          arm |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/5fef265ae3ca275fa8d56c4c05ccb587f4db79ee/
+>       xtensa |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/42794e647506272ef02871a1c1d7170094c446cf/
 
-easier said than done ;) I am not using a mail software to communicate
-with the buildroot mailinglist. Instead leafnode downloads all
-newsgroups I am interested in, then I am currently using pan to read the
-newsgroups, but it can not send mails: 
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=391649 
+Should be fixed by http://patchwork.ozlabs.org/patch/591606/. The configure.ac
+patch is now upstream (commit 77e55b1ea315).
 
-Getting knode to work was not possible due to a broken akanodi setup,
-the kde stuff is so closely integrated that at the end knode was unable
-to download a single message from my leafnode server...
-Icedove/claws-mail look horrible, they are no real newsreaders so I
-setup wine instead to run Xnews, my favourite newsreader, which I am
-trying right now. I hope you receive an email as well but beware that it
-will be addressed to a gmane.org address because I am receiving the
-buildroot newsgroup via gmane.org.
+baruch
 
-> Instead, what I would ideally like to see is a cal3d package that
-> works on its own. cal3d is a separate open-source project, which might
-> be used outside of vsxu. So I'd like to have
-> http://download.gna.org/cal3d/sources/cal3d-0.11.0.tar.gz downloaded,
-> built and installed by a cal3d package. And then vsxu depend on it and
-> link against it.
-
-I will try and report back, but this package has low priority for me.
-
-Regards, Bernd
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
