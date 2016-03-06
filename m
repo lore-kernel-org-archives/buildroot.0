@@ -1,44 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 23:22:48 +0100
-Subject: [Buildroot] [RFC PATCH 1/1] scripts: Add gen-package.py
-In-Reply-To: <1443426394-13595-2-git-send-email-judge.packham@gmail.com>
-References: <1443426394-13595-1-git-send-email-judge.packham@gmail.com>
- <1443426394-13595-2-git-send-email-judge.packham@gmail.com>
-Message-ID: <20160306232248.4d37bcd2@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Sun, 6 Mar 2016 23:52:09 +0100
+Subject: [Buildroot] [PATCH 2/2] legal-info: remove outdated comment
+In-Reply-To: <20160306101914.GB3501@free.fr>
+References: <1457134753-28197-1-git-send-email-luca@lucaceresoli.net>
+ <1457134753-28197-2-git-send-email-luca@lucaceresoli.net>
+ <20160306101914.GB3501@free.fr>
+Message-ID: <56DCB499.1020406@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Chris Packham,
+Dear Yann,
 
-On Mon, 28 Sep 2015 20:46:34 +1300, Chris Packham wrote:
-> gen-package.py can be used to generate the initial skeleton Config.in
-> and <package>.mk for a package based on its download URL.
+On 06/03/2016 11:19, Yann E. MORIN wrote:
+> Luca, All,
 > 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> ---
->  support/scripts/gen-package.py | 266 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 266 insertions(+)
->  create mode 100755 support/scripts/gen-package.py
+> On 2016-03-05 00:39 +0100, Luca Ceresoli spake thusly:
+>> This comment is outdated since the assignment of $(2)_MANIFEST_TARBALL
+>> and $(2)_MANIFEST_SITE have been removed, which happened in
+>> b9f4727ff4d512868352494f5209fff4da147473.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>> ---
+>>  package/pkg-generic.mk | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 9ea2a707baa4..189ccf8c8415 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -754,8 +754,7 @@ $(1)-legal-info: $(1)-patch
+>>  endif
+>>  
+>>  # We only save the sources of packages we want to redistribute, that are
+>> -# non-local, and non-overriden. So only store, in the manifest, the tarball
+>> -# name of those packages.
+>> +# non-local, and non-overriden.
+> 
+> I wondered why you kept 'local' here, but then I remembered that we
+> handle 'local' packages as if they were overriden. I think that's
+> inherently bad that we do that, but this is not the purpose of your
+> patch.
+> 
+> Still, I would prefer something like:
+> 
+>     ... that are non-overriden (local or true override).
+> 
+> otherwise:
+> 
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> BTW, you're not making my life easy: I'll have to rebase my own legal
+> series over that, and I expect quite a bunch of conflicts! ;-)
 
-Sorry for the very very slow feedback. To be honest, my opinion on this
-is that a script that just generates the skeleton of a package is not
-very useful.
+Although I'm trying hard to make your life more difficult, I'm afraid
+I'm not succeding! :-)
 
-What I find useful however are scripts to generate working packages
-like we already have for CPAN Perl modules (scancpan script), and like
-we will probably have for Python (see
-http://patchwork.ozlabs.org/patch/501204/).
+Seriously speaking, your legal series in its v4 cleanly rebases on top
+of the present patch.
 
-Another thing that would be useful is a "checkpackage" script, that
-runs a bunch of verifications on a package (proper indentation, license
-information filled in, etc.). But it is not trivial to do if you want
-to check useful things.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
