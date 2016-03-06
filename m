@@ -1,36 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 23:20:16 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/lzlib: bump to version 0.4.3
-In-Reply-To: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1444270374-11645-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160306232016.7f4889f1@free-electrons.com>
+Date: Sun, 6 Mar 2016 23:22:48 +0100
+Subject: [Buildroot] [RFC PATCH 1/1] scripts: Add gen-package.py
+In-Reply-To: <1443426394-13595-2-git-send-email-judge.packham@gmail.com>
+References: <1443426394-13595-1-git-send-email-judge.packham@gmail.com>
+ <1443426394-13595-2-git-send-email-judge.packham@gmail.com>
+Message-ID: <20160306232248.4d37bcd2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+Dear Chris Packham,
 
-On Thu,  8 Oct 2015 04:12:54 +0200, J?rg Krause wrote:
-> Switch to more recent github repository.
+On Mon, 28 Sep 2015 20:46:34 +1300, Chris Packham wrote:
+> gen-package.py can be used to generate the initial skeleton Config.in
+> and <package>.mk for a package based on its download URL.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
 > ---
-> Changes v1 -> v2:
->   - fix install paths for lib and lua files
-> ---
->  package/lzlib/Config.in  | 2 +-
->  package/lzlib/lzlib.hash | 2 --
->  package/lzlib/lzlib.mk   | 8 +++++---
->  3 files changed, 6 insertions(+), 6 deletions(-)
->  delete mode 100644 package/lzlib/lzlib.hash
+>  support/scripts/gen-package.py | 266 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 266 insertions(+)
+>  create mode 100755 support/scripts/gen-package.py
 
-Since Fran?ois never gave any feedback, I applied your patch to master.
-I've re-added a hash file since we now add hash files for
-Github-sourced packages.
+Sorry for the very very slow feedback. To be honest, my opinion on this
+is that a script that just generates the skeleton of a package is not
+very useful.
 
-Thanks!
+What I find useful however are scripts to generate working packages
+like we already have for CPAN Perl modules (scancpan script), and like
+we will probably have for Python (see
+http://patchwork.ozlabs.org/patch/501204/).
+
+Another thing that would be useful is a "checkpackage" script, that
+runs a bunch of verifications on a package (proper indentation, license
+information filled in, etc.). But it is not trivial to do if you want
+to check useful things.
 
 Thomas
 -- 
