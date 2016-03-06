@@ -1,35 +1,92 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 6 Mar 2016 06:41:02 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-03-04
-In-Reply-To: <20160305073022.BEADE101B7B@stock.ovh.net>
-References: <20160305073022.BEADE101B7B@stock.ovh.net>
-Message-ID: <20160306044102.GE2877@tarshish>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 06 Mar 2016 02:17:44 -0300
+Subject: [Buildroot] [PATCH v2] package/scrub: new package
+Message-ID: <56dbbd78cd5d0_1fa53fb8909759a414311@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, all,
+Samuel,
 
-On Sat, Mar 05, 2016 at 08:30:22AM +0100, Thomas Petazzoni wrote:
->       x86_64 |                   gamin-0.1.10 | NOK | http://autobuild.buildroot.net/results/2aaceac254378d9db7ab7664174007b8c603c77b/
+Below some comments about:
+- your patch was merged upstream!
+- license files
+- website
 
-Should be fixed by http://patchwork.ozlabs.org/patch/590524/.
+On Mon, 18 Jan 2016 22:12:23 +0100, Samuel Martin wrote:
+> Add a patch fixing autoreconf call.
+> Patch already sent upstream.
+> 
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> ---
+[snip]
+> --- /dev/null
+> +++ b/package/scrub/0001-configure.ac-make-sure-m4-macros-are-included-in-the.patch
+> @@ -0,0 +1,49 @@
+> +Fetched from: https://github.com/chaos/scrub/pull/7
 
->         i686 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/6e4529d1e98f0b9cbb16edcd2f4f10dee37b635c/
->       xtensa |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/6913a5699d786592a70d1f19a68e6ff1e109e5cd/
->          sh4 |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/be15acbf6c0ab4fab93a9a9663e98e896cbdac8e/
->          arm |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/5fef265ae3ca275fa8d56c4c05ccb587f4db79ee/
->       xtensa |                        zsh-5.2 | NOK | http://autobuild.buildroot.net/results/42794e647506272ef02871a1c1d7170094c446cf/
+This patch can now be used with _PATCH since it is merged to upstream.
 
-Should be fixed by http://patchwork.ozlabs.org/patch/591606/. The configure.ac
-patch is now upstream (commit 77e55b1ea315).
+[snip]
+> +++ b/package/scrub/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_SCRUB
+> +	bool "scrub"
+> +	help
+> +	  Scrub iteratively writes patterns on files or disk devices to make
+> +	  retrieving the data more difficult.
+> +
+> +	  https://code.google.com/p/diskscrub/
 
-baruch
+Google Code is being shut down. I think it's better to use
+https://github.com/chaos/scrub/
+here. See
+git log -Scode.google
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+[snip]
+> +++ b/package/scrub/scrub.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# scrub
+> +#
+> +################################################################################
+> +
+> +SCRUB_VERSION = 2.6.1
+
+You could now change the version to the upstream master
+or keep this version and add
+SCRUB_PATCH = https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
+and its hash
+
+Based on the output from
+git log -S_PATCH
+I think using _PATCH is ok in this case.
+Some use it after _SITE, others use it after _LICENSE_FILES.
+
+> +SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
+> +SCRUB_LICENSE = GPLv2+
+> +SCRUB_LICENSE_FILES = COPYING
+
+COPYING is the license raw text.
+I think adding also DISCLAIMER would be nice since it brings this text:
+"
+Scrub is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version.
+"
+
+> +
+> +# Fetching from the git repo, no configure/Makefile generated, and patching
+> +# configure.ac
+> +SCRUB_AUTORECONF = YES
+> +
+> +$(eval $(autotools-package))
+> -- 
+> 2.7.0
+
+Regards,
+Ricardo
