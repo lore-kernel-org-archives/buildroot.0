@@ -1,29 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Mar 2016 21:53:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cairo: Do not use -latomic with
-	non-threaded toolchains
-References: <1457254351-9933-1-git-send-email-bernd.kuhls@t-online.de>
- <20160306214842.780b4925@free-electrons.com>
-Message-ID: <XnsA5C3DEACD9E61berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Mar 2016 21:54:38 +0100
+Subject: [Buildroot] [PATCH v2 1/1] docs/manual: document format for
+ specifying licenses
+In-Reply-To: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
+References: <1453698340-13777-1-git-send-email-rahul.bedarkar@imgtec.com>
+Message-ID: <20160306215438.4d75baf0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Dear Rahul Bedarkar,
 
-Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
-@public.gmane.org> wrote in news:20160306214842.780b4925 at free-electrons.com:
+On Mon, 25 Jan 2016 10:35:40 +0530, Rahul Bedarkar wrote:
+> +  ** If the package is released under multiple licenses, then +comma+ separate
 
->   http://patchwork.ozlabs.org/patch/592591/
->   http://patchwork.ozlabs.org/patch/592592/
-> 
-> Let me know what you think.
+I found the wording "If the package is released under multiple
+licenses" as potentially confusing, as it could be understood as the
+dual licensing case. So I've changed that to:
 
-Hi Thomas,
++  ** If different parts of the package are released under different
++  licenses
 
-I did not compile with your patches but they look good and should solve the 
-problem.
+Which I believe is clearer.
 
-Regards, Bernd
+> +  licenses (e.g. +`LIBFOO_LICENSE = GPLv2+, LGPLv2.1+`+). If there is clear
+> +  distinction between which component is licensed under what license, then
+> +  annotate the license with that component
+> +  (e.g. +`LIBFOO_LICENSE = GPLv2+ (programs), LGPLv2.1+ (libraries)`+).
+
+I've explicited: "annonate the license with that component between
+parenthesis".
+
+And applied to master. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
