@@ -1,33 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 15:36:32 +0100
-Subject: [Buildroot] [PATCH 2/2] Add Xen 4.6
-In-Reply-To: <1454719042-6185-3-git-send-email-alistair.francis@xilinx.com>
-References: <1454719042-6185-1-git-send-email-alistair.francis@xilinx.com>
- <1454719042-6185-3-git-send-email-alistair.francis@xilinx.com>
-Message-ID: <20160306153632.2011699f@free-electrons.com>
+Date: Sun, 6 Mar 2016 15:13:39 +0100
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 5.7.1
+Message-ID: <20160306144245.540887FA6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Alistair Francis,
+commit: https://git.buildroot.net/buildroot/commit/?id=f7d8ca19ac3908952158a65923b6b6130e3aedf2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 5 Feb 2016 16:37:22 -0800, Alistair Francis wrote:
-> Add support to compile Xen 4.6 and Xen tools.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+See https://nodejs.org/en/blog/release/v5.7.1/
 
-Since you received some comments from Arnout Vandecappelle in your
-patch, I've marked your patch as "Changes Requested" in our patch
-tracking system. This means that we will no longer see your patch in
-our list of pending patches, until you send an updated version that
-takes into account the comments from Arnout.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
+ .../{5.6.0 => 5.7.1}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
+ package/nodejs/{5.6.0 => 5.7.1}/0003-Fix-va_list-not-declared.patch   | 0
+ package/nodejs/{5.6.0 => 5.7.1}/0004-Fix-support-for-uClibc-ng.patch  | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 6 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/nodejs/5.6.0/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch
+similarity index 100%
+rename from package/nodejs/5.6.0/0001-Remove-dependency-on-Python-bz2-module.patch
+rename to package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch
+diff --git a/package/nodejs/5.6.0/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/5.6.0/0002-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/5.6.0/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch
+similarity index 100%
+rename from package/nodejs/5.6.0/0003-Fix-va_list-not-declared.patch
+rename to package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch
+diff --git a/package/nodejs/5.6.0/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch
+similarity index 100%
+rename from package/nodejs/5.6.0/0004-Fix-support-for-uClibc-ng.patch
+rename to package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index 7fe5b6f..1bc7372 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "5.6.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "5.7.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.42"
+ 
+ menu "Module Selection"
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index e205ac3..3a476a3 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.42/SHASUMS256.txt
+ sha256  9b4cc1b5bc397d80dfe217625b04bb6212a3b5a8b1e0eb36000a30d7ae567b8a  node-v0.10.42.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v5.6.0/SHASUMS256.txt
+-sha256  588341e466ac72f6b8e9fa500f04edf149f7d4e8141c4175c495d6d1484405e3  node-v5.6.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v5.7.1/SHASUMS256.txt
++sha256  029ed8aeb997c68d1a901cd837af02d24b6b5e20a4ff93bed090fd289f91a9a1  node-v5.7.1.tar.xz
