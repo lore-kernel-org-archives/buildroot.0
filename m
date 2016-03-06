@@ -1,46 +1,93 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Sun, 6 Mar 2016 23:52:12 +0100
-Subject: [Buildroot] [PATCH v2 5/5] legal-info: explicitly state how
- patches are licensed
-In-Reply-To: <20160306161444.1f97fdf7@free-electrons.com>
-References: <1454365196-26319-1-git-send-email-luca@lucaceresoli.net>
- <1454365196-26319-6-git-send-email-luca@lucaceresoli.net>
- <20160306161444.1f97fdf7@free-electrons.com>
-Message-ID: <56DCB49C.5020102@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Mar 2016 23:41:30 +0100
+Subject: [Buildroot] [git commit] gmrender-resurrect: new package
+Message-ID: <20160306225525.DDA7E8185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas, Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=f6a7bafd5a519e71c9415ba1a68fd8e863d2f9cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 06/03/2016 16:14, Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
-> 
-> On Mon,  1 Feb 2016 23:19:56 +0100, Luca Ceresoli wrote:
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> ---
->>  support/legal-info/README.header | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> This patch is still in the queue, but no longer applies on master. Can
-> you respin, if it is still needed?
+gmrender-resurrect is UPnP (DLNA) renderer based on gstreamer.
 
-It never applied on master! :) It only applies on top of Yann's legal
-series (it would be useless on master anyway). Thus it is not even
-outdated, it is not _yet_ applicable...
+Signed-off-by: Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>
+[Thomas:
+ - Fix gstreamer related dependency comments to "gstreamer1 ->
+   libglib2", as suggested by Arnout.
+ - select BR2_PACKAGE_GST1_PLUGINS_BASE as a run-time dependency, as
+   suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                                  |  1 +
+ package/gmrender-resurrect/Config.in               | 16 ++++++++++++++++
+ package/gmrender-resurrect/gmrender-resurrect.hash |  2 ++
+ package/gmrender-resurrect/gmrender-resurrect.mk   | 16 ++++++++++++++++
+ 4 files changed, 35 insertions(+)
 
-I explained that in the cover letter, but now I realize I should have
-done it [also] in notes to the patch itself as the cover letter is not
-visible from patchwork. Will think about it next time.
-
-Yann, since this patch is actually a completion to your legal series,
-and since is cleanly applies on top of it, you might want to take it as
-part of your series. Otherwise I'll resend when your legal series will
-be applied.
-
--- 
-Luca
+diff --git a/package/Config.in b/package/Config.in
+index 12cf5d6..c4d98c4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -15,6 +15,7 @@ menu "Audio and video applications"
+ 	source "package/ffmpeg/Config.in"
+ 	source "package/flac/Config.in"
+ 	source "package/flite/Config.in"
++	source "package/gmrender-resurrect/Config.in"
+ 	source "package/gstreamer/Config.in"
+ 	source "package/gstreamer1/Config.in"
+ 	source "package/jack2/Config.in"
+diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+new file mode 100644
+index 0000000..db655ad
+--- /dev/null
++++ b/package/gmrender-resurrect/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_GMRENDER_RESURRECT
++	bool "gmrender-resurrect"
++	depends on BR2_USE_WCHAR # gstreamer1 -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # gstreamer1 -> libglib2, libupnp
++	depends on BR2_USE_MMU # gstreamer1
++	select BR2_PACKAGE_GSTREAMER1
++	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
++	select BR2_PACKAGE_LIBUPNP
++	help
++	  UPnP (DLNA) media renderer based on gstreamer
++
++	  https://github.com/hzeller/gmrender-resurrect
++
++comment "gmrender-resurrect needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
+new file mode 100644
+index 0000000..f41447a
+--- /dev/null
++++ b/package/gmrender-resurrect/gmrender-resurrect.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 502129ecb097bf23ba011f18a8bf1923951ec2dc6da157f3b376383c5f99b623 gmrender-resurrect-aa3d02cf40321cf78a6ea9019e23a7f6cd091dee.tar.gz
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
+new file mode 100644
+index 0000000..18c6e01
+--- /dev/null
++++ b/package/gmrender-resurrect/gmrender-resurrect.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# gmrender-resurrect
++#
++################################################################################
++
++GMRENDER_RESURRECT_VERSION = aa3d02cf40321cf78a6ea9019e23a7f6cd091dee
++GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,$(GMRENDER_RESURRECT_VERSION))
++# Original distribution does not have default configure,
++# so we need to autoreconf:
++GMRENDER_RESURRECT_AUTORECONF = YES
++GMRENDER_RESURRECT_LICENSE = GPLv2+
++GMRENDER_RESURRECT_LICENSE_FILES = COPYING
++GMRENDER_RESURRECT_DEPENDENCIES = gstreamer1 libupnp
++
++$(eval $(autotools-package))
