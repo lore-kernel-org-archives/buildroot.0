@@ -1,51 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  6 Mar 2016 21:24:20 +0100
-Subject: [Buildroot] [PATCH] package/owfs: fix link with FUSE
-Message-ID: <1457295860-30898-1-git-send-email-yann.morin.1998@free.fr>
+From: Alan Yaniger <alan@tkos.co.il>
+Date: Sun,  6 Mar 2016 22:29:11 +0200
+Subject: [Buildroot] [PATCH 2/2] docs: Fixed syntax error in makedev-syntax
+	example.
+In-Reply-To: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
+References: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
+Message-ID: <1457296152-4047-3-git-send-email-alan@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-owfs reinvents its own weird and wicked mechanism to find libfuse. It
-believes that, by default, FUSE is installed in /usr/local, and forcibly
-uses that path to look for headers and libs.
+In the makedev syntax documentation, one of the examples lacks the "mode" value.
+This patch fixes that example.
 
-This is obviously wrong in cross-compilation, and triggers our check for
-unsafe header/library paths.
-
-The best option to fix that would be to use pkg-config to find FUSE, but
-this is a bit involved. Instead, use config options to specify the path
-to the headers and libs.
-
-Fixes:
-    http://autobuild.buildroot.org/results/2c8/2c8baf6910d7ac2e3c92efa62cc3b9d3737e1fb5/
-    http://autobuild.buildroot.org/results/1f9/1f994f53ceca434ebd1d87923f85b5ed71229d94/
-    and a few others...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Alan Yaniger <alan@tkos.co.il>
 ---
- package/owfs/owfs.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ docs/manual/makedev-syntax.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index e8c451c..23167f4 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -17,8 +17,11 @@ OWFS_LICENSE = GPLv2+, LGPLv2 (owtcl)
- OWFS_LICENSE_FILES = COPYING COPYING.LIB
+diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
+index 0bbc16e..e4dffc9 100644
+--- a/docs/manual/makedev-syntax.txt
++++ b/docs/manual/makedev-syntax.txt
+@@ -44,7 +44,7 @@ this syntax, you will need to write:
+ ----
+ /usr/bin/foo f 755 0 0 - - - - -
+ /usr/bin/bar f 755 root root - - - - -
+-/data/buz f buz-user buz-group - - - - -
++/data/buz f 644 buz-user buz-group - - - - -
+ ----
  
- ifeq ($(BR2_PACKAGE_LIBFUSE),y)
--OWFS_CONF_OPTS += --enable-owfs
- OWFS_DEPENDENCIES += libfuse
-+OWFS_CONF_OPTS += \
-+	--enable-owfs \
-+	--with-fuseinclude=$(STAGING_DIR)/usr/include \
-+	--with-fuselib=$(STAGING_DIR)/usr/lib
- else
- OWFS_CONF_OPTS += --disable-owfs
- endif
+ Alternatively, if you want to change owner/permission of a directory
 -- 
 1.9.1
