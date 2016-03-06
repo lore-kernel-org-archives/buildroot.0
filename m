@@ -1,123 +1,286 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 15:59:25 +0100
-Subject: [Buildroot] [git commit] sdl_mixer: add patch to fix SDL_mixer.pc
-	for static linking
-Message-ID: <20160306145933.E5B7E8055C@busybox.osuosl.org>
+Date: Sun, 6 Mar 2016 15:59:29 +0100
+Subject: [Buildroot] [git commit] chocolate-doom: add patch to fix static
+	linking
+Message-ID: <20160306145933.F21A87FAD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=770965edfcf0463e681b0a5fb48757d16dc37751
+commit: https://git.buildroot.net/buildroot/commit/?id=7a960de66f706366cf408b58b957a5e4d89eab18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A 'Libs.private' field needs to be present and properly defined in the
-pkg-config file in order for static linking against SDL_mixer to work.
+This commit adds a backported upstream patch which modifies the
+configure script so that it uses pkg-config to detect libraries and
+their static linking dependencies.
 
-Besides adding the mentioned field, the included patch also modifies
-configure.in so that EXTRA_LDFLAGS (which is now also used as the value
-of 'Libs.private') no longer includes SDL_LIBS. This is done so as to
-prevent libraries required by SDL from being listed twice when
-'pkg-config --libs --static SDL_mixer' is run (they're already shown
-because of the 'Requires: sdl' line in SDL_mixer.pc). Makefile.in is
-adjusted accordingly as well.
+It also adds host-pkgconf as a dependency and removes the SDL static
+linking workaround from chocolate-doom.mk as it's no longer necessary.
 
-Also enable autoreconf for this package since we're patching
-configure.in.
+Fixes:
+
+  http://autobuild.buildroot.net/results/d98/d981499ad82121d58fb7584b55d09c484cb6aa49/
+  http://autobuild.buildroot.net/results/e41/e419f29e14edd28cbf48278bef725b696ae8ef70/
+  http://autobuild.buildroot.net/results/d8f/d8fe9b5bdb262e939d4150804ea34777c91d3c04/
+  ...
 
 Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Reviewed-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...Add-Libs.private-field-to-pkg-config-file.patch | 64 ++++++++++++++++++++++
- package/sdl_mixer/sdl_mixer.mk                     |  5 ++
- 2 files changed, 69 insertions(+)
+ ...004-configure-Switch-to-pkg-config-macros.patch | 217 +++++++++++++++++++++
+ package/chocolate-doom/chocolate-doom.mk           |   8 +-
+ 2 files changed, 218 insertions(+), 7 deletions(-)
 
-diff --git a/package/sdl_mixer/0001-Add-Libs.private-field-to-pkg-config-file.patch b/package/sdl_mixer/0001-Add-Libs.private-field-to-pkg-config-file.patch
+diff --git a/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch b/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
 new file mode 100644
-index 0000000..e0e8571
+index 0000000..2618396
 --- /dev/null
-+++ b/package/sdl_mixer/0001-Add-Libs.private-field-to-pkg-config-file.patch
-@@ -0,0 +1,64 @@
-+From abf3a1b9c9cdacb574c2b9cdbf3f2a5e18c39ab9 Mon Sep 17 00:00:00 2001
-+From: Rodrigo Rebello <rprebello@gmail.com>
-+Date: Mon, 29 Feb 2016 22:53:49 -0300
-+Subject: [PATCH 1/1] Add 'Libs.private' field to pkg-config file
++++ b/package/chocolate-doom/0004-configure-Switch-to-pkg-config-macros.patch
+@@ -0,0 +1,217 @@
++From 3163bf87d7b955d08dedd5ebaccb1b2a86ffdcb9 Mon Sep 17 00:00:00 2001
++From: Simon Howard <fraggle@soulsphere.org>
++Date: Thu, 25 Feb 2016 22:55:04 -0500
++Subject: [PATCH] configure: Switch to pkg-config macros.
 +
-+In order to support static linking, SDL_mixer.pc should include a
-+'Libs.private' field listing all the libraries that SDL_mixer requires.
++All dependency libraries install pkg-config .pc files nowadays, which
++makes the process of looking them up a lot simpler. Get rid of the SDL
++workaround macro as it's not needed.
 +
-+This patch adds such a field and also modifies configure.in so that
-+EXTRA_LDFLAGS (which is now also used as the value of 'Libs.private')
-+no longer includes SDL_LIBS. This is done so as to prevent libraries
-+required by SDL from being listed twice when 'pkg-config --libs --static
-+SDL_mixer' is run (they're already shown because of the 'Requires: sdl'
-+line in SDL_mixer.pc). Makefile.in is also adjusted accordingly.
-+
-+Upstream status: submitted
-+https://bugzilla.libsdl.org/show_bug.cgi?id=3278
++[Backported from upstream commit 3163bf87d7b955d08dedd5ebaccb1b2a86ffdcb9.
++Fixes static linking issues with SDL_mixer.]
 +
 +Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
 +---
-+ Makefile.in     | 2 +-
-+ SDL_mixer.pc.in | 1 +
-+ configure.in    | 1 -
-+ 3 files changed, 2 insertions(+), 2 deletions(-)
++ configure.ac                    | 117 ++++++++++++++--------------------------
++ opl/examples/Makefile.am        |   2 +-
++ src/Makefile.am                 |   7 ++-
++ textscreen/Makefile.am          |   2 +-
++ textscreen/examples/Makefile.am |   2 +-
++ 5 files changed, 49 insertions(+), 81 deletions(-)
 +
-+diff --git a/Makefile.in b/Makefile.in
-+index 3d10565..ce4efd4 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -63,7 +63,7 @@ $(objects):
-+ .PHONY: all install install-hdrs install-lib install-bin uninstall uninstall-hdrs uninstall-lib uninstall-bin clean distclean dist
++diff --git a/configure.ac b/configure.ac
++index 7b03485..48f83ef 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -33,89 +33,54 @@ then
++         CFLAGS="-O$OPT_LEVEL -g $WARNINGS $orig_CFLAGS"
++ fi
 + 
-+ $(objects)/$(TARGET): $(OBJECTS) $(VERSION_OBJECTS)
-+-	$(LIBTOOL) --mode=link $(CC) -o $@ $(OBJECTS) $(VERSION_OBJECTS) $(LDFLAGS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
-++	$(LIBTOOL) --mode=link $(CC) -o $@ $(OBJECTS) $(VERSION_OBJECTS) $(LDFLAGS) $(SDL_LIBS) $(EXTRA_LDFLAGS) $(LT_LDFLAGS)
++-dnl Search for SDL ...
++-
++-AM_PATH_SDL(1.1.3)
++-
++-# Add the SDL compiler flags to the default compiler flag variables. 
++-# It is important to do this now, before checking for headers and
++-# library functions.  The reason being that on Windows, sdl-config
++-# sets the -mno-cygwin compiler option in order to generate MinGW 
++-# executables.  If we don't do this now, we might end up discovering
++-# header files that are not actually available to us when we come
++-# to compile.
++-
++-CFLAGS="$CFLAGS $SDL_CFLAGS"
++-LDFLAGS="$LDFLAGS $SDL_LIBS"
++-
++-# On some platforms, SDL renames main() to SDL_main() using a #define,
++-# so that its own main, stored in the SDLmain library, can be run first.
++-# Unfortunately, this causes problems for autoconf, which builds
++-# test programs to probe the system.  All library/header/symbol checks
++-# must be run in this block, that performs a workaround for the problem.
++-
++-AC_SDL_MAIN_WORKAROUND([
++-
++-    # Check for SDL_mixer.
++-
++-    AC_CHECK_LIB(SDL_mixer,Mix_LoadMUS,[
++-        SDLMIXER_LIBS="$SDLMIXER_LIBS -lSDL_mixer"
++-    ],[
++-        echo "*** Could not find SDL_mixer.  Please install it."
++-        exit -1
++-    ])
++-
++-    # Check for SDL_net.
++-
++-    AC_CHECK_LIB(SDL_net,SDLNet_UDP_Send,[
++-        SDLNET_LIBS="$SDLNET_LIBS -lSDL_net"
++-    ],[
++-        echo "*** Could not find SDL_net.  Please install it."
++-        exit -1
++-    ])
++-
++-    # Check for libsamplerate.
++-    AC_ARG_WITH([libsamplerate],
++-    AS_HELP_STRING([--without-libsamplerate],
++-        [Build without libsamplerate @<:@default=check@:>@]),
++-    [],
++-    [
++-        [with_libsamplerate=check]
++-    ])
++-    AS_IF([test "x$with_libsamplerate" != xno], [
++-        AC_CHECK_LIB(samplerate, src_new, [], [
++-            AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
++-                [--with-libsamplerate was given, but test for libsamplerate failed])
++-            ])
+++PKG_CHECK_MODULES([SDL], [sdl])
+++PKG_CHECK_MODULES([SDLMIXER], [SDL_mixer])
+++PKG_CHECK_MODULES([SDLNET], [SDL_net])
+++
+++# Check for libsamplerate.
+++AC_ARG_WITH([libsamplerate],
+++AS_HELP_STRING([--without-libsamplerate],
+++    [Build without libsamplerate @<:@default=check@:>@]),
+++[],
+++[
+++    [with_libsamplerate=check]
+++])
+++AS_IF([test "x$with_libsamplerate" != xno], [
+++    PKG_CHECK_MODULES([SAMPLERATE], [samplerate >= 0.1.8], [
+++        AC_DEFINE([HAVE_LIBSAMPLERATE], [1], [libsamplerate installed])
+++    ], [
+++        AS_IF([test "x$with_libsamplerate" != xcheck], [AC_MSG_FAILURE(
+++            [--with-libsamplerate was given, but test for libsamplerate failed])
++         ])
++     ])
++-    # Check for libpng.
++-    AC_ARG_WITH([libpng],
++-    AS_HELP_STRING([--without-libpng],
++-        [Build without libpng @<:@default=check@:>@]),
++-    [],
++-    [
++-        [with_libpng=check]
++-    ])
++-    AS_IF([test "x$with_libpng" != xno], [
++-        AC_CHECK_LIB(z, zlibVersion)
++-        AC_CHECK_LIB(png, png_get_io_ptr, [], [
++-            AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
++-                [--with-libpng was given, but test for libpng failed])
++-            ])
+++])
+++# Check for libpng.
+++AC_ARG_WITH([libpng],
+++AS_HELP_STRING([--without-libpng],
+++    [Build without libpng @<:@default=check@:>@]),
+++[],
+++[
+++    [with_libpng=check]
+++])
+++AS_IF([test "x$with_libpng" != xno], [
+++    PKG_CHECK_MODULES([PNG], [libpng >= 1.6.10], [
+++        AC_DEFINE([HAVE_LIBPNG], [1], [libpng installed])
+++    ], [
+++        AS_IF([test "x$with_libpng" != xcheck], [AC_MSG_FAILURE(
+++            [--with-libpng was given, but test for libpng failed])
++         ])
++     ])
++-    AC_CHECK_LIB(m, log)
+++])
+++AC_CHECK_LIB(m, log)
 + 
-+ $(objects)/playwave$(EXE): $(objects)/playwave.lo $(objects)/$(TARGET)
-+ 	$(LIBTOOL) --mode=link $(CC) -o $@ $(objects)/playwave.lo $(SDL_CFLAGS) $(SDL_LIBS) $(objects)/$(TARGET)
-+diff --git a/SDL_mixer.pc.in b/SDL_mixer.pc.in
-+index 1c4965d..d793521 100644
-+--- a/SDL_mixer.pc.in
-++++ b/SDL_mixer.pc.in
-+@@ -8,5 +8,6 @@ Description: mixer library for Simple DirectMedia Layer
-+ Version: @VERSION@
-+ Requires: sdl >= @SDL_VERSION@
-+ Libs: -L${libdir} -lSDL_mixer
-++Libs.private: @EXTRA_LDFLAGS@
-+ Cflags: -I${includedir}/SDL
++-    AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
++-    AC_CHECK_FUNCS(mmap ioperm)
+++AC_CHECK_HEADERS([linux/kd.h dev/isa/spkrio.h dev/speaker/speaker.h])
+++AC_CHECK_FUNCS(mmap ioperm)
 + 
-+diff --git a/configure.in b/configure.in
-+index 2272b29..442eca6 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -202,7 +202,6 @@ AM_PATH_SDL($SDL_VERSION,
-+             AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])
-+ )
-+ EXTRA_CFLAGS="$EXTRA_CFLAGS $SDL_CFLAGS"
-+-EXTRA_LDFLAGS="$EXTRA_LDFLAGS $SDL_LIBS"
++-    # OpenBSD I/O i386 library for I/O port access.
++-    # (64 bit has the same thing with a different name!)
+++# OpenBSD I/O i386 library for I/O port access.
+++# (64 bit has the same thing with a different name!)
 + 
-+ dnl Check for math library
-+ AC_CHECK_LIB(m, pow, [LIBM="-lm"])
++-    AC_CHECK_LIB(i386, i386_iopl)
++-    AC_CHECK_LIB(amd64, amd64_iopl)
++-])
+++AC_CHECK_LIB(i386, i386_iopl)
+++AC_CHECK_LIB(amd64, amd64_iopl)
++ 
++ case $host in
++   *cygwin* | *mingw* )
++diff --git a/opl/examples/Makefile.am b/opl/examples/Makefile.am
++index 9afcd51..54c37f8 100644
++--- a/opl/examples/Makefile.am
+++++ b/opl/examples/Makefile.am
++@@ -1,5 +1,5 @@
++ 
++-AM_CFLAGS = -I$(top_srcdir)/opl
+++AM_CFLAGS = -I$(top_srcdir)/opl @SDL_CFLAGS@
++ 
++ noinst_PROGRAMS=droplay
++ 
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 78ee3ba..9624e01 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -21,7 +21,8 @@ execgames_SCRIPTS = $(SETUP_BINARIES)
++ AM_CFLAGS = -I$(top_srcdir)/textscreen            \
++             -I$(top_srcdir)/opl                   \
++             -I$(top_srcdir)/pcsound               \
++-            @SDLMIXER_CFLAGS@ @SDLNET_CFLAGS@
+++            @SDLMIXER_CFLAGS@ @SDLNET_CFLAGS@     \
+++            @SAMPLERATE_CFLAGS@ @PNG_CFLAGS@
++ 
++ # Common source files used by absolutely everything:
++ 
++@@ -150,7 +151,9 @@ EXTRA_LIBS =                                               \
++                @LDFLAGS@                                   \
++                @SDL_LIBS@                                  \
++                @SDLMIXER_LIBS@                             \
++-               @SDLNET_LIBS@
+++               @SDLNET_LIBS@                               \
+++               @SAMPLERATE_LIBS@                           \
+++               @PNG_LIBS@
++ 
++ if HAVE_WINDRES
++ @PROGRAM_PREFIX at doom_SOURCES=$(SOURCE_FILES_WITH_DEH) resource.rc
++diff --git a/textscreen/Makefile.am b/textscreen/Makefile.am
++index 628d4ff..427ed40 100644
++--- a/textscreen/Makefile.am
+++++ b/textscreen/Makefile.am
++@@ -1,5 +1,5 @@
++ 
++-AM_CFLAGS = -I$(top_srcdir)/src
+++AM_CFLAGS = -I$(top_srcdir)/src @SDL_CFLAGS@
++ 
++ CTAGS_ARGS=-I TXT_UNCAST_ARG+
++ 
++diff --git a/textscreen/examples/Makefile.am b/textscreen/examples/Makefile.am
++index 4632d92..b857748 100644
++--- a/textscreen/examples/Makefile.am
+++++ b/textscreen/examples/Makefile.am
++@@ -1,5 +1,5 @@
++ 
++-AM_CFLAGS =  -I$(top_srcdir)/src -I$(top_srcdir)/textscreen
+++AM_CFLAGS =  -I$(top_srcdir)/src -I$(top_srcdir)/textscreen @SDL_CFLAGS@
++ 
++ noinst_PROGRAMS=guitest calculator
++ 
 +-- 
 +2.1.4
 +
-diff --git a/package/sdl_mixer/sdl_mixer.mk b/package/sdl_mixer/sdl_mixer.mk
-index a602b6e..897b308 100644
---- a/package/sdl_mixer/sdl_mixer.mk
-+++ b/package/sdl_mixer/sdl_mixer.mk
-@@ -12,6 +12,11 @@ SDL_MIXER_LICENSE_FILES = COPYING
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+index d64ad51..dad7352 100644
+--- a/package/chocolate-doom/chocolate-doom.mk
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -8,7 +8,7 @@ CHOCOLATE_DOOM_VERSION = 2.2.1
+ CHOCOLATE_DOOM_SITE = http://www.chocolate-doom.org/downloads/$(CHOCOLATE_DOOM_VERSION)
+ CHOCOLATE_DOOM_LICENSE = GPLv2+
+ CHOCOLATE_DOOM_LICENSE_FILES = COPYING
+-CHOCOLATE_DOOM_DEPENDENCIES = sdl sdl_mixer sdl_net
++CHOCOLATE_DOOM_DEPENDENCIES = host-pkgconf sdl sdl_mixer sdl_net
  
- SDL_MIXER_INSTALL_STAGING = YES
- SDL_MIXER_DEPENDENCIES = sdl
-+
-+# We're patching configure.in, so we need to autoreconf
-+SDL_MIXER_AUTORECONF = YES
-+SDL_MIXER_AUTORECONF_OPTS = -Iacinclude
-+
- SDL_MIXER_CONF_OPTS = \
- 	--without-x \
+ # We're patching configure.ac, so we need to autoreconf
+ CHOCOLATE_DOOM_AUTORECONF = YES
+@@ -16,12 +16,6 @@ CHOCOLATE_DOOM_AUTORECONF = YES
+ # Avoid installing desktop entries, icons, etc.
+ CHOCOLATE_DOOM_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-# SDL_mixer uses symbols from SDL, but ends up after it on the link
+-# cmdline. Fix it by forcing the SDL libs at the very end.
+-CHOCOLATE_DOOM_CONF_ENV = LIBS="`$(STAGING_DIR)/usr/bin/sdl-config --static-libs`"
+-endif
+-
+ CHOCOLATE_DOOM_CONF_OPTS = \
+ 	--disable-sdltest \
  	--with-sdl-prefix=$(STAGING_DIR)/usr \
