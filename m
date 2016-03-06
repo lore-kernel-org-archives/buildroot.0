@@ -1,78 +1,81 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  6 Mar 2016 12:00:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: improve inline asm handling
-	for libpostproc
-Message-ID: <1457262024-2160-1-git-send-email-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 06 Mar 2016 11:08:51 +0000
+Subject: [Buildroot] [Bug 8766] New: Compiling host-gcc-final-4.9.3 broken
+	on i386
+Message-ID: <bug-8766-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We compile ffmpeg with runtime cpu detect enabled, which is also the
-default upstream:
-https://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-September/054876.html
-http://article.gmane.org/gmane.comp.video.ffmpeg.devel/151613
+https://bugs.busybox.net/show_bug.cgi?id=8766
 
-If inline asm is enabled (default value) libpostproc enables code for
-mmx/3dnow/sse2, regardless of the target CPU chosen by buildroot:
-http://git.videolan.org/gitweb.cgi/ffmpeg.git/?p=ffmpeg.git;a=blob;f=libpostproc/postprocess.c;h=1dc719cf93985d5504acb8af20441f5f3d5f9fe8;hb=refs/heads/release/2.8#l536
+            Bug ID: 8766
+           Summary: Compiling host-gcc-final-4.9.3 broken on i386
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: bernd.kuhls at t-online.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-This patch moves the current i586-only workaround, which was based on
-an incomplete understanding of the problem, inside the ifeq-libpostproc
-code block.
-Please note that inline-asm is also used on other archs besides x86,
-therefore we need to check both for BR2_i386 and BR2_X86_CPU_HAS_MMX.
+When compiling buildroot git master (c6e3511) with this defconfig
 
-This patch was compile-tested using these defconfigs:
+BR2_x86_i386=y
 
-BR2_x86_i486=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
+this error occurs:
 
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
+/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/build/./gcc/xgcc
+-B/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/build/./gcc/
+-B/home/bernd/buildroot/br4_i386/output/host/usr/i386-buildroot-linux-uclibc/bin/
+-B/home/bernd/buildroot/br4_i386/output/host/usr/i386-buildroot-linux-uclibc/lib/
+-isystem
+/home/bernd/buildroot/br4_i386/output/host/usr/i386-buildroot-linux-uclibc/include
+-isystem
+/home/bernd/buildroot/br4_i386/output/host/usr/i386-buildroot-linux-uclibc/sys-include
+   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -O2 
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -DIN_GCC
+ -DCROSS_DIRECTORY_STRUCTURE  -W -Wall -Wno-narrowing -Wwrite-strings
+-Wcast-qual -Wstrict-prototypes -Wmissing-prototypes -Wold-style-definition 
+-isystem ./include   -fpic -mlong-double-80 -g -DIN_LIBGCC2 -fbuilding-libgcc
+-fno-stack-protector   -fpic -mlong-double-80 -I. -I. -I../.././gcc
+-I../../../libgcc -I../../../libgcc/. -I../../../libgcc/../gcc
+-I../../../libgcc/../include    -DUSE_TLS -o _gcov_ior_profiler.o -MT
+_gcov_ior_profiler.o -MD -MP -MF _gcov_ior_profiler.dep -DL_gcov_ior_profiler
+-c ../../../libgcc/libgcov-profiler.c
+../../../libgcc/generic-morestack-thread.c:41:21: fatal error: pthread.h: No
+such file or directory
+ #include <pthread.h>
+                     ^
+compilation terminated.
+../../../libgcc/shared-object.mk:14: recipe for target
+'generic-morestack-thread.o' failed
+make[3]: *** [generic-morestack-thread.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+make[3]: Leaving directory
+'/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/build/i386-buildroot-linux-uclibc/libgcc'
+Makefile:10153: recipe for target 'all-target-libgcc' failed
+make[2]: *** [all-target-libgcc] Error 2
+make[2]: Leaving directory
+'/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/build'
+Makefile:840: recipe for target 'all' failed
+make[1]: *** [all] Error 2
+make[1]: Leaving directory
+'/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/build'
+package/pkg-generic.mk:195: recipe for target
+'/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/.stamp_built'
+failed
+make: ***
+[/home/bernd/buildroot/br4_i386/output/build/host-gcc-final-4.9.3/.stamp_built]
+Error 2
 
-BR2_x86_pentium_mmx=y
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
-
-This patch supersedes http://patchwork.ozlabs.org/patch/589461/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ffmpeg/ffmpeg.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ddfac20..9288d0e 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -111,6 +111,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
- FFMPEG_CONF_OPTS += --enable-postproc
-+# disable inline-asm on non-mmx Intel CPUs
-+ifeq ($(BR2_i386)$(BR2_X86_CPU_HAS_MMX),y)
-+FFMPEG_CONF_OPTS += --disable-inline-asm
-+endif
- else
- FFMPEG_CONF_OPTS += --disable-postproc
- endif
-@@ -352,11 +356,6 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
- FFMPEG_CONF_OPTS += --enable-yasm
- FFMPEG_DEPENDENCIES += host-yasm
- else
--ifeq ($(BR2_x86_i586),y)
--# Needed to work around a bug with gcc 5.x:
--# error: 'asm' operand has impossible constraints
--FFMPEG_CONF_OPTS += --disable-inline-asm
--endif
- FFMPEG_CONF_OPTS += --disable-yasm
- FFMPEG_CONF_OPTS += --disable-mmx
- endif
 -- 
-2.7.0
+You are receiving this mail because:
+You are on the CC list for the bug.
