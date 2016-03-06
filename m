@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 15:48:05 +0100
-Subject: [Buildroot] [PATCH 3/3] luaposix: bump to version 33.4.0
-In-Reply-To: <1457039566-3326-3-git-send-email-francois.perrad@gadz.org>
-References: <1457039566-3326-1-git-send-email-francois.perrad@gadz.org>
- <1457039566-3326-3-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20160306154805.21d478f2@free-electrons.com>
+Date: Sun, 6 Mar 2016 15:43:52 +0100
+Subject: [Buildroot] [git commit] copas: bump to version 2.0.1
+Message-ID: <20160306144920.179558184C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Francois Perrad,
+commit: https://git.buildroot.net/buildroot/commit/?id=31ea9b4ef28470edcc8ae530ef0c0a714f6a3ea0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  3 Mar 2016 22:12:46 +0100, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  ...round-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch | 59 ----------------------
->  package/luaposix/Config.in                         | 12 ++---
->  package/luaposix/luaposix.mk                       |  6 +--
->  3 files changed, 7 insertions(+), 70 deletions(-)
->  delete mode 100644 package/luaposix/0001-sched-workaround-glibc-_POSIX_PRIORITY_SCHEDULING-bu.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/copas/copas.hash | 2 +-
+ package/copas/copas.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've applied, but I almost rejected the patch, to be honest. Your patch
-does a *lot* more than bumping the version, but your commit log is
-empty. Your commit log should have explained why the patch is removed,
-and why the ncurses dependency is removed.
-
-I had to go look up for this myself, which is a bit annoying since you
-already did this work.
-
-Fran?ois, this is the 100th time I'm asking you about this: please
-*ALWAYS* write a commit log in your patches. *ALWAYS*.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/copas/copas.hash b/package/copas/copas.hash
+index 35dff2f..27e3316 100644
+--- a/package/copas/copas.hash
++++ b/package/copas/copas.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	05be032ac2f3a32eb2eb536d41d2f5af620dded6e158c54d1ab0f73d2957dc68  copas-2.0.0-1.src.rock
++sha256  c94890bdc8899d05163ca963dadf4b74b2ad7a5795ea3923a792b6e928ec142a  copas-2.0.1-1.src.rock
+diff --git a/package/copas/copas.mk b/package/copas/copas.mk
+index b3f97c7..132b5d9 100644
+--- a/package/copas/copas.mk
++++ b/package/copas/copas.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-COPAS_VERSION = 2.0.0-1
+-COPAS_SUBDIR = copas-2_0_0
++COPAS_VERSION = 2.0.1-1
++COPAS_SUBDIR = copas-2_0_1
+ COPAS_LICENSE = MIT
+ 
+ $(eval $(luarocks-package))
