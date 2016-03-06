@@ -1,83 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 22:46:23 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qwt : fixed dependencies to qt5
-In-Reply-To: <1453799061-7131-2-git-send-email-davepiq@yahoo.fr>
-References: <1453799061-7131-1-git-send-email-davepiq@yahoo.fr>
- <1453799061-7131-2-git-send-email-davepiq@yahoo.fr>
-Message-ID: <20160306224623.16677f45@free-electrons.com>
+Date: Sun, 6 Mar 2016 23:10:56 +0100
+Subject: [Buildroot] [PATCH v6 1/3] yp-tools: new package
+In-Reply-To: <1453832900-25757-2-git-send-email-yba@tkos.co.il>
+References: <1453832900-25757-1-git-send-email-yba@tkos.co.il>
+ <1453832900-25757-2-git-send-email-yba@tkos.co.il>
+Message-ID: <20160306231056.6c8e9c9c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear David Picard,
+Dear Jonathan Ben-Avraham,
 
-On Tue, 26 Jan 2016 10:04:21 +0100, David Picard wrote:
+On Tue, 26 Jan 2016 20:28:18 +0200, Jonathan Ben-Avraham wrote:
+> Adds the yp-tools package that provides various NIS (yp) utilities.
+> 
+> Signed-off-by: Jonathan Ben-Avraham <yba@tkos.co.il>
+> ---
+>  package/Config.in              |  1 +
+>  package/yp-tools/Config.in     | 15 +++++++++
+>  package/yp-tools/mapv4v6addr.h | 69 ++++++++++++++++++++++++++++++++++++++++++
 
-> diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-> index 40b382b..31a79fe 100644
-> --- a/package/qwt/Config.in
-> +++ b/package/qwt/Config.in
-> @@ -1,8 +1,9 @@
->  config BR2_PACKAGE_QWT
->  	bool "qwt"
-> -	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
-> -	depends on BR2_PACKAGE_QT_GUI_MODULE || BR2_PACKAGE_QT5BASE_GUI
-> -	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5BASE
-> +	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
-> +	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-> +	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-> +	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
+This mapv4v6addr.h thing always annoyed me. But luckily, yp-tools 4.1
+has been released, and removes the need for this file completely.
 
-As suggested in my review of patch 1, switching from depends on to
-select should be done in a preparation patch, before adding qt5 support.
+Unfortunately, yp-tools 4.1 doesn't build, I've filled an issue
+upstream:
 
->  config BR2_PACKAGE_QWT_SVG
->  	bool "SVG support"
-> -	depends on BR2_PACKAGE_QT_SVG || BR2_PACKAGE_QT5SVG
-> +	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
-> +	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
+  https://github.com/thkukuk/yp-tools/issues/2
 
-See my review of patch 1.
+Could you follow-up with this and submit an updated patch when yp-tools
+4.1 has been fixed ?
 
->  
->  
->  config BR2_PACKAGE_QWT_MATHML
-> @@ -23,14 +25,8 @@ config BR2_PACKAGE_QWT_OPENGL
->  	bool "OpenGL support"
->  	depends on BR2_PACKAGE_HAS_LIBGLES
->  	depends on BR2_PACKAGE_HAS_LIBEGL
-> -	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
-> -	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE
+> +# The github release tags are one to two releases ahead of the "Download"
+> +# links on http://www.linux-nis.org/nis/yp-tools/
+> +YP_TOOLS_VERSION = yp-tools-3_5
+> +YP_TOOLS_SITE = $(call github,thkukuk,yp-tools,$(YP_TOOLS_VERSION))
+> +YP_TOOLS_LICENSE = GPLv2
+> +YP_TOOLS_LICENSE_FILES = COPYING
+> +YP_TOOLS_AUTORECONF = YES
+> +YP_TOOLS_DEPENDENCIES = host-pkgconf host-gettext
+> +YP_TOOLS_PRE_CONFIGURE_HOOKS += YP_TOOLS_LOCAL_MAPV4V6ADDR_H
 
-Why ? You don't need OpenGL support in Qt ?
+You should also add an optional dependency on libtirpc, since yp-tools
+can optionally use it. And in fact, since you select rpcbind, libtirpc
+will always be part of the build, but you don't have any guarantees on
+whether it will be built before or after yp-tools. So this optional
+dependency should be made explicit.
 
-> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-> index cdb3008..6c99c50 100644
-> --- a/package/qwt/qwt.mk
-> +++ b/package/qwt/qwt.mk
-> @@ -9,10 +9,10 @@ QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
->  QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
->  QWT_INSTALL_STAGING = YES
->  ifeq ($(BR2_PACKAGE_QT),y)
-> -QWT_DEPENDENCIES += qt
-> +QWT_DEPENDENCIES += qt libgles libegl
->  endif
->  ifeq ($(BR2_PACKAGE_QT5BASE),y)
-> -QWT_DEPENDENCIES += qt5base
-> +QWT_DEPENDENCIES += qt5base libgles
-
-Both of these changes look wrong. Are you sure you no longer need
-OpenGL support in Qt ?
-
-Your commit log says "Moved the dependency to OpenGL libraries from
-Config.in to qwt.mk for both qt and qt5, to make things less
-cumbersome.", as if your change had no effect. But it does have the
-effect or removing OpenGL support from Qt, since you no longer select
-BR2_PACKAGE_QT_OPENGL_ES or BR2_PACKAGE_QT5BASE_OPENGL_LIB.
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
