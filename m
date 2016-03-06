@@ -1,30 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 12:11:48 +0100
-Subject: [Buildroot] [PATCH] package/multicat: add missing dependency on
- bitstream
-In-Reply-To: <1457210451-7436-1-git-send-email-romain.naour@gmail.com>
-References: <1457210451-7436-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160306121148.257f25c7@free-electrons.com>
+Date: Sun, 6 Mar 2016 13:19:42 +0100
+Subject: [Buildroot] [git commit] omniorb: remove autoreconf
+Message-ID: <20160306121957.EBCC67FD11@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Romain Naour,
+commit: https://git.buildroot.net/buildroot/commit/?id=f14e66143271a5fe533a706404479aa741f18c26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Mar 2016 21:40:51 +0100, Romain Naour wrote:
-> Multicat select bitstream package without adding it as build dependencies.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/multicat/multicat.mk | 2 ++
->  1 file changed, 2 insertions(+)
+Commit 03ee7f9823af (package/omniorb: bump version to 4.2.1) removed the patch
+to configure.ac, making autoreconf redundant.
 
-Applied to master, thanks.
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/omniorb/omniorb.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+index ef4faec..98bae20 100644
+--- a/package/omniorb/omniorb.mk
++++ b/package/omniorb/omniorb.mk
+@@ -13,9 +13,6 @@ OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
+ OMNIORB_DEPENDENCIES = host-omniorb
+ HOST_OMNIORB_DEPENDENCIES = host-python
+ 
+-# 0001-uclinux-is-also-linux.patch touches configure.ac
+-OMNIORB_AUTORECONF = YES
+-
+ # omniorb is not python3 friendly, so force the python interpreter
+ OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
+ HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
