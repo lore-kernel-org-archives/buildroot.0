@@ -1,26 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 14:59:12 +0100
-Subject: [Buildroot] [PATCH v2 1/1]
- package/kodi-screensaver-matrixtrails: new package
-In-Reply-To: <1457204482-3977-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457204482-3977-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160306145912.30554ce4@free-electrons.com>
+Date: Sun, 6 Mar 2016 15:07:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: improve inline asm
+ handling for libpostproc
+In-Reply-To: <1457262024-2160-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1457262024-2160-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160306150701.6caec643@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Bernd Kuhls,
+Bernd,
 
-On Sat,  5 Mar 2016 20:01:22 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: removed unneeded patch after upstream fixed libsoil detection:
->     https://github.com/notspiff/screensaver.matrixtrails/commits/master
->     (Thomas)
+On Sun,  6 Mar 2016 12:00:24 +0100, Bernd Kuhls wrote:
 
-Applied to master, thanks.
+>  ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+>  FFMPEG_CONF_OPTS += --enable-postproc
+> +# disable inline-asm on non-mmx Intel CPUs
+> +ifeq ($(BR2_i386)$(BR2_X86_CPU_HAS_MMX),y)
+> +FFMPEG_CONF_OPTS += --disable-inline-asm
+
+On x86-64, BR2_i386 is false, but BR2_X86_CPU_HAS_MMX=y, so you will
+disable inline-asm. Is this what you want?
+
+Why isn't the condition simply:
+
+ifeq ($(BR2_X86_CPU_HAS_MMX),)
+FFMPEG_CONF_OPTS += --disable-inline-asm
+endif
+
+Which actually matches your comment: when you have a non-MMX capable
+Intel CPU -> disable inline assembly.
+
+Best regards,
 
 Thomas
 -- 
