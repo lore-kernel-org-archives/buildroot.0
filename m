@@ -1,167 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 23:15:18 +0100
-Subject: [Buildroot] [PATCH v6 3/3] ypbind-mt: new package
-In-Reply-To: <1453832900-25757-4-git-send-email-yba@tkos.co.il>
-References: <1453832900-25757-1-git-send-email-yba@tkos.co.il>
- <1453832900-25757-4-git-send-email-yba@tkos.co.il>
-Message-ID: <20160306231518.63807855@free-electrons.com>
+Date: Sun, 6 Mar 2016 23:18:51 +0100
+Subject: [Buildroot] [git commit] package/lzlib: bump to version 0.4.3
+Message-ID: <20160306221912.864438032C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jonathan Ben-Avraham,
+commit: https://git.buildroot.net/buildroot/commit/?id=0682970b3d69c65291ee872db20ca4264720ed48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Sorry for the slow answer :/
+Switch to more recent github repository.
 
-On Tue, 26 Jan 2016 20:28:20 +0200, Jonathan Ben-Avraham wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+[Thomas: add hash file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lzlib/Config.in  | 2 +-
+ package/lzlib/lzlib.hash | 2 +-
+ package/lzlib/lzlib.mk   | 8 +++++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-> diff --git a/package/ypbind-mt/S70ypbind b/package/ypbind-mt/S70ypbind
-> new file mode 100755
-> index 0000000..e73bec6
-> --- /dev/null
-> +++ b/package/ypbind-mt/S70ypbind
-> @@ -0,0 +1,93 @@
-> +#!/bin/sh
-> +# Based on /etc/init.d/ypbind from SuSe Linux by Thorsten Kukuk
-> +
-> +DAEMON=/usr/sbin/ypbind
-> +pidfile=/var/run/ypbind.pid
-
-Capital letters for the variable.
-
-> +[ -x ${DAEMON} ] || exit 0
-
-Not needed, the daemon is guaranteed to be installed.
-
-> +[ -f /etc/default/ypbind ] && source /etc/default/ypbind
-> +
-> +case "$1" in
-> +	start)
-> +		echo -n "Starting ypbind: "
-
-echo -n => printf
-
-> +		# Check for preset YP domainname
-> +		ypdomainname &> /dev/null
-> +		if [ $? -ne 0 ]; then
-> +			if [ ! -f /etc/defaultdomain ]; then
-> +				# No configured YP domainname
-> +				echo "FAIL"
-> +				exit 1
-> +			fi
-> +			# Assume that /etc/defaultdomain contains
-> +			# a valid domainname and assume ypdomainname
-> +			# succeeds
-> +			XDOMAINNAME=$(cat /etc/defaultdomain)
-> +			ypdomainname "${XDOMAINNAME}"
-> +		fi
-> +
-> +		if [ ! -f /etc/yp.conf -a "${YPBIND_BROADCAST}" != "yes" ]; then
-> +			# We need a local configuration if not in broadcast mode
-> +			echo "FAIL"
-> +			exit 1
-> +		fi
-> +
-> +		OPTIONS=""
-> +		test "${YPBIND_LOCAL_ONLY}" = "yes" && \
-> +			OPTIONS="-local-only ${OPTIONS}"
-> +		test "${YPBIND_BROADCAST}" = "yes" && \
-> +			OPTIONS="-broadcast ${OPTIONS}"
-> +		test "${YPBIND_BROKEN_SERVER}" = "yes" && \
-> +			OPTIONS="-broken-server ${OPTIONS}"
-
-Why are we doing this complicated dance instead of just having
-YPBIND_OPTIONS defined in /etc/default/ypbind ?
-
-> +		start-stop-daemon --start --quiet --pidfile ${pidfile} \
-> +			--exec ${DAEMON} -- ${OPTIONS}
-> +
-> +		if [ $? -ne 0 ]; then
-> +			echo "FAIL"
-> +			exit 1
-> +		fi
-
-You should print OK if start-stop-daemon succeeded. Look at other init
-scripts in Buildroot.
-
-> +
-> +		# Make sure we have a server so that later scripts can know
-> +		notfound=1
-> +		for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
-
-for i in $(seq 1 16)
-
-> +			if ypwhich &>/dev/null; then
-> +				notfound=0
-> +				break
-> +			fi
-> +			echo -n " ."
-> +			sleep 1;
-> +		done
-> +
-> +		if [ ${notfound} -eq 1 ]; then
-> +			# No NIS server found
-> +			echo "FAIL"
-> +			exit 1
-> +		fi
-> +
-> +		echo "OK"
-
-Could you move all of this into a start() function ? It would nicely
-reduce the indentation level.
-
-> +		;;
-> +
-> +	stop)
-> +		echo "Shutting down ypbind "
-
-printf
-
-> +		start-stop-daemon --stop --quiet --pidfile $pidfile
-
-And print OK / FAIL. Look at other init scripts in Buildroot to see
-which options we typically pass when calling start-stop-daemon to stop
-a daemon.
-
-> +	restart)
-> +		${0} stop
-> +		sleep 1
-> +		${0} start
-
-Then you can use the stop() and start() functions.
-
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# ypbind-mt
-> +#
-> +################################################################################
-> +
-> +# The github releases of ypbind-mt are often a release or more ahead of the
-> +# "Download" links on http://www.linux-nis.org/nis/ypbind-mt/
-> +YPBIND_MT_VERSION = ypbind-mt-2_2
-> +YPBIND_MT_SITE = $(call github,thkukuk,ypbind-mt,$(YPBIND_MT_VERSION))
-> +YPBIND_MT_LICENSE = GPLv2
-> +YPBIND_MT_LICENSE_FILES = COPYING
-> +YPBIND_MT_AUTORECONF = YES
-> +YPBIND_MT_DEPENDENCIES = host-pkgconf yp-tools
-> +YPBIND_MT_CONF_ENV = \
-> +	PKG_CONFIG_SYSROOT_DIR="$(TARGET_DIR)" \
-> +	PKG_CONFIG_PATH="$(TARGET_DIR)/usr/lib/pkgconfig"
-
-This is wrong. There is no reason to have .pc files in $(TARGET_DIR),
-and they are in fact removed at the end of the build. Can you explain
-why you override those variables ?
-
-Could you rework the patch to take into account those comments and send
-an updated version?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+index c123019..f7fae15 100644
+--- a/package/lzlib/Config.in
++++ b/package/lzlib/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_LZLIB
+ 	  functions and also to read/write gzip files using an
+ 	  interface similar to the base io package.
+ 
+-	  http://luaforge.net/projects/lzlib/
++	  https://github.com/LuaDist/lzlib
+diff --git a/package/lzlib/lzlib.hash b/package/lzlib/lzlib.hash
+index d823e8b..f983862 100644
+--- a/package/lzlib/lzlib.hash
++++ b/package/lzlib/lzlib.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	c10055bde2c0a0ed14f22c1ee0701910b0b9885245baf7911201ab4dfd3b828c  lzlib-0.4.work3-1.src.rock
++sha256 cbb0cac5825e940b4ea2f31a336d2aaf6db39847d456920afd8e443804420dbb lzlib-0.4.3.tar.gz
+diff --git a/package/lzlib/lzlib.mk b/package/lzlib/lzlib.mk
+index ec37842..91f380a 100644
+--- a/package/lzlib/lzlib.mk
++++ b/package/lzlib/lzlib.mk
+@@ -4,9 +4,11 @@
+ #
+ ################################################################################
+ 
+-LZLIB_VERSION = 0.4.work3-1
+-LZLIB_SUBDIR = lzlib-0.4-work3
++LZLIB_VERSION = 0.4.3
++LZLIB_SITE = $(call github,LuaDist,lzlib,$(LZLIB_VERSION))
+ LZLIB_DEPENDENCIES = zlib
+ LZLIB_LICENSE = MIT
++LZLIB_CONF_OPTS = -DINSTALL_CMOD="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)" \
++	-DINSTALL_LMOD="/usr/share/lua/$(LUAINTERPRETER_ABIVER)"
+ 
+-$(eval $(luarocks-package))
++$(eval $(cmake-package))
