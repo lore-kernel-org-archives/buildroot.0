@@ -1,65 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Mar 2016 10:18:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: needs
-	BR2_TOOLCHAIN_HAS_SYNC_8
-References: <1456610655-7183-1-git-send-email-bernd.kuhls@t-online.de>
- <20160305152736.05cfcb80@free-electrons.com>
-Message-ID: <XnsA5C368EEFC703ID313208userindividu@bernd-kuhls.de>
+Date: Sun, 06 Mar 2016 10:21:43 +0100
+Subject: [Buildroot] [PATCH] omniorb: remove autoreconf
+References: <4898671233ed0fa441e196c13d8d64239ca7255b.1457211849.git.baruch@tkos.co.il>
+Message-ID: <XnsA5C36968E2E6AID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[posted and mailed]
+Baruch Siach <baruch@tkos.co.il> wrote in 
+news:4898671233ed0fa441e196c13d8d64239ca7255b.1457211849.git.baruch at tkos.co.il:
 
-Hi Thomas,
-
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20160305152736.05cfcb80 at free-electrons.com: 
-
-> And according to my tests, i586 is such an architecture. Can you
-> attempt a build on i586 ?
-
-a Kodi build for i586 using unpatched git master (c6e3511) finished
-without errors using this defconfig: 
-
-$ cat defconfig
-BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-# BR2_UCLIBC_INSTALL_UTILS is not set
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_NONE=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_XORG7=y
-$ grep i586 .config
-BR2_ARCH="i586"
-BR2_GCC_TARGET_ARCH="i586"
-BR2_x86_i586=y
-
-> Where is this list of ARM/MIPS/i386/x86-64 coming from? Why isn't the
-> list of support architectures derived just from
-> BR2_PACKAGE_BOOST_ARCH_SUPPORTS ? There is really some architecture
-> specific code in Kodi ?
-
-Yes:
-https://github.com/xbmc/xbmc/blob/Jarvis/m4/xbmc_arch.m4
-https://github.com/xbmc/xbmc/blob/Jarvis/configure.ac#L554
-
->> +          && BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
->> +          && BR2_TOOLCHAIN_HAS_SYNC_8
+> Commit 03ee7f9823af (package/omniorb: bump version to 4.2.1) removed the patch
+> to configure.ac, making autoreconf redundant.
 > 
-> Due to the addition of the BR2_TOOLCHAIN_HAS_SYNC_8 dependency, then
-> there is no longer a need to have (BR2_mipsel &&
-> BR2_TOOLCHAIN_USES_GLIBC), since MIPS doesn't provide the 8 byte
-> __sync_*() intrinsics, and therefore BR2_TOOLCHAIN_HAS_SYNC_8 is false
-> on MIPS. Can you send a follow-up patch to disable MIPS
-> [...]
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/omniorb/omniorb.mk | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/package/omniorb/omniorb.mk b/package/omniorb/omniorb.mk
+> index ef4faec6d226..98bae20a71eb 100644
+> --- a/package/omniorb/omniorb.mk
+> +++ b/package/omniorb/omniorb.mk
+> @@ -13,9 +13,6 @@ OMNIORB_LICENSE_FILES = COPYING COPYING.LIB
+>  OMNIORB_DEPENDENCIES = host-omniorb
+>  HOST_OMNIORB_DEPENDENCIES = host-python
+>  
+> -# 0001-uclinux-is-also-linux.patch touches configure.ac
+> -OMNIORB_AUTORECONF = YES
+> -
+>  # omniorb is not python3 friendly, so force the python interpreter
+>  OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
+>  HOST_OMNIORB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/usr/bin/python2
 
-Done: http://patchwork.ozlabs.org/patch/592530/
-
-Regards, Bernd
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
