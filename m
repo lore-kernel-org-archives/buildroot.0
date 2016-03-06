@@ -1,31 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 21:30:24 +0100
-Subject: [Buildroot] [PATCH] zsh: don't use host pcre-config
-In-Reply-To: <20160306175005.GJ2877@tarshish>
-References: <0f3d133b0082f11b75b9fad170d1b81211352dd6.1457041570.git.baruch@tkos.co.il>
- <20160306132313.17024d72@free-electrons.com>
- <20160306131518.GF2877@tarshish>
- <20160306143029.0f037047@free-electrons.com>
- <20160306175005.GJ2877@tarshish>
-Message-ID: <20160306213024.020cbcad@free-electrons.com>
+Date: Sun, 6 Mar 2016 21:37:13 +0100
+Subject: [Buildroot] [PATCH] package/owfs: fix link with FUSE
+In-Reply-To: <1457295860-30898-1-git-send-email-yann.morin.1998@free.fr>
+References: <1457295860-30898-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160306213713.307f1de7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann E. MORIN,
 
-On Sun, 6 Mar 2016 19:50:05 +0200, Baruch Siach wrote:
-
-> > Notice that there is another place in the configure.ac where
-> > ac_cv_prog_PRECONF is already used.
+On Sun,  6 Mar 2016 21:24:20 +0100, Yann E. MORIN wrote:
+> owfs reinvents its own weird and wicked mechanism to find libfuse. It
+> believes that, by default, FUSE is installed in /usr/local, and forcibly
+> uses that path to look for headers and libs.
 > 
-> Right. Provided that other ac_cv_ variables are used throughout zsh 
-> configure.ac do you think is is worth the trouble to clean up 
-> ac_cv_prog_PCRECONF use?
+> This is obviously wrong in cross-compilation, and triggers our check for
+> unsafe header/library paths.
+> 
+> The best option to fix that would be to use pkg-config to find FUSE, but
+> this is a bit involved. Instead, use config options to specify the path
+> to the headers and libs.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/2c8/2c8baf6910d7ac2e3c92efa62cc3b9d3737e1fb5/
+>     http://autobuild.buildroot.org/results/1f9/1f994f53ceca434ebd1d87923f85b5ed71229d94/
+>     and a few others...
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  package/owfs/owfs.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 
-Probably not. I'll just apply your patch as-is.
+Applied to master, thanks.
 
 Thomas
 -- 
