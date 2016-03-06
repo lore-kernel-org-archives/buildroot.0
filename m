@@ -1,68 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Mar 2016 21:47:17 +0100
-Subject: [Buildroot] [PATCH 2/2] cairo, icu,
-	webkitgtk24: use BR2_TOOLCHAIN_HAS_LIBATOMIC
-In-Reply-To: <1457297237-4064-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1457297237-4064-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1457297237-4064-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Mar 2016 21:48:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cairo: Do not use -latomic with
+ non-threaded toolchains
+In-Reply-To: <1457254351-9933-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1457254351-9933-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160306214842.780b4925@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit modifies the cairo, icu and webkitgtk24 packages to use
-BR2_TOOLCHAIN_HAS_LIBATOMIC when appropriate.
+Dear Bernd Kuhls,
 
-Fixes:
+On Sun,  6 Mar 2016 09:52:31 +0100, Bernd Kuhls wrote:
 
-  http://autobuild.buildroot.net/results/ec4/ec4e48c0e4b8fa72d8bb7ef4ad67a166699c0b62/
+>  # cairo can use C++11 atomics when available, so we need to link with
+>  # libatomic for the architectures who need libatomic.
+> -ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
+> +ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+>  CAIRO_CONF_ENV += LIBS="-latomic"
+>  endif
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cairo/cairo.mk             | 2 +-
- package/icu/icu.mk                 | 2 +-
- package/webkitgtk24/webkitgtk24.mk | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Thanks for this patch! However, I believe a more general solution is
+needed for this problem. I have just submitted two patches that aim at
+fixing this issue. See:
 
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 6b54b28..b6ab54e 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -18,7 +18,7 @@ endif
- 
- # cairo can use C++11 atomics when available, so we need to link with
- # libatomic for the architectures who need libatomic.
--ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- CAIRO_CONF_ENV += LIBS="-latomic"
- endif
- 
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index b4574e5..f245da2 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -21,7 +21,7 @@ ICU_CONF_OPTS = \
- # When available, icu prefers to use C++11 atomics, which rely on the
- # __atomic builtins. On certain architectures, this requires linking
- # with libatomic starting from gcc 4.8.
--ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- ICU_CONF_ENV += LIBS="-latomic"
- endif
- 
-diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
-index d8e41b9..0438ceb 100644
---- a/package/webkitgtk24/webkitgtk24.mk
-+++ b/package/webkitgtk24/webkitgtk24.mk
-@@ -29,7 +29,7 @@ endif
- WEBKITGTK24_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config
- 
- # Some 32-bit architectures need libatomic support for 64-bit ops
--ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_sh),y)
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- WEBKITGTK24_CONF_ENV += LIBS="-latomic"
- endif
- 
+  http://patchwork.ozlabs.org/patch/592591/
+  http://patchwork.ozlabs.org/patch/592592/
+
+Let me know what you think.
+
+Best regards,
+
+Thomas
 -- 
-2.6.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
