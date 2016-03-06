@@ -1,17 +1,15 @@
 From: Alan Yaniger <alan@tkos.co.il>
-Date: Sun,  6 Mar 2016 22:29:10 +0200
+Date: Sun,  6 Mar 2016 22:29:09 +0200
 Subject: [Buildroot] [PATCH 1/2] Set PGROOT dir owner to be "postgres".
-In-Reply-To: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
-References: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
-Message-ID: <1457296152-4047-2-git-send-email-alan@tkos.co.il>
+Message-ID: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Without this
- change, the postgres server fails to start on boot.
+Without setting the owner of /var/lib/pgsql to the user "postgres", 
+the postgres server fails to start on boot.
 
 Signed-off-by: Alan Yaniger <alan@tkos.co.il>
 ---
