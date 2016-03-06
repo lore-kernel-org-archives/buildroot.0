@@ -1,34 +1,37 @@
 From: Alan Yaniger <alan@tkos.co.il>
-Date: Sun,  6 Mar 2016 22:29:12 +0200
-Subject: [Buildroot] [PATCH 2/2] docs: Fixed syntax error in makedev-syntax
-	example. In the makedev syntax documentation,
-	one of the examples lacks the "mode" value.
+Date: Sun,  6 Mar 2016 22:29:10 +0200
+Subject: [Buildroot] [PATCH 1/2] Set PGROOT dir owner to be "postgres".
 In-Reply-To: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
 References: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
-Message-ID: <1457296152-4047-4-git-send-email-alan@tkos.co.il>
+Message-ID: <1457296152-4047-2-git-send-email-alan@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Without this
+ change, the postgres server fails to start on boot.
+
 Signed-off-by: Alan Yaniger <alan@tkos.co.il>
 ---
- docs/manual/makedev-syntax.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/postgresql/postgresql.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-index 0bbc16e..e4dffc9 100644
---- a/docs/manual/makedev-syntax.txt
-+++ b/docs/manual/makedev-syntax.txt
-@@ -44,7 +44,7 @@ this syntax, you will need to write:
- ----
- /usr/bin/foo f 755 0 0 - - - - -
- /usr/bin/bar f 755 root root - - - - -
--/data/buz f buz-user buz-group - - - - -
-+/data/buz f 644 buz-user buz-group - - - - -
- ----
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 444c1b1..5906ce9 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -17,6 +17,10 @@ POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
+ POSTGRESQL_AUTORECONF = YES
+ POSTGRESQL_CONF_OPTS = --disable-rpath
  
- Alternatively, if you want to change owner/permission of a directory
++define POSTGRESQL_PERMISSIONS
++	/var/lib/pgsql d 755 postgres postgres - - - - -
++endef
++
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # PostgreSQL does not build against uClibc with locales
+ # enabled, due to an uClibc bug, see
 -- 
 1.9.1
