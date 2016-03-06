@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 21:49:21 +0100
-Subject: [Buildroot] [PATCH] zsh: don't use host pcre-config
-In-Reply-To: <0f3d133b0082f11b75b9fad170d1b81211352dd6.1457041570.git.baruch@tkos.co.il>
-References: <0f3d133b0082f11b75b9fad170d1b81211352dd6.1457041570.git.baruch@tkos.co.il>
-Message-ID: <20160306214921.50440718@free-electrons.com>
+Date: Sun, 6 Mar 2016 21:52:57 +0100
+Subject: [Buildroot] [git commit] docs/manual: document format for
+	specifying licenses
+Message-ID: <20160306205310.43DD78180E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Baruch Siach,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c02a88337baafadcee571e1990939ccec5eb356
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  3 Mar 2016 23:46:10 +0200, Baruch Siach wrote:
-> Commit 5e05faec7b4 (zsh: use the correct target pcre-config) set
-> ac_cv_prog_PCRECONF to the location of staging pcre-config. Unfortunately zsh
-> configure script does not actually use this variable when running pcre-config.
-> Complete the fix with a patch that makes use of ac_cv_prog_PCRECONF.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  .../0001-configure-use-user-set-pcre-config.patch  | 33 ++++++++++++++++++++++
->  package/zsh/zsh.mk                                 |  2 ++
->  2 files changed, 35 insertions(+)
->  create mode 100644 package/zsh/0001-configure-use-user-set-pcre-config.patch
+Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+[Thomas: minor tweaks for clarity.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ docs/manual/adding-packages-generic.txt | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index b7817e3..8ed7fe8 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -387,7 +387,16 @@ information is (assuming the package name is +libfoo+) :
+   Otherwise, describe the license in a precise and concise way, avoiding
+   ambiguous names such as +BSD+ which actually name a family of licenses.
+   This variable is optional. If it is not defined, +unknown+ will appear in
+-  the +license+ field of the manifest file for this package.
++  the +license+ field of the manifest file for this package. +
++  The expected format for this variable must comply with the following rules:
++  ** If different parts of the package are released under different
++  licenses, then +comma+ separate licenses (e.g. +`LIBFOO_LICENSE =
++  GPLv2+, LGPLv2.1+`+). If there is clear distinction between which
++  component is licensed under what license, then annotate the license
++  with that component, between parenthesis (e.g. +`LIBFOO_LICENSE =
++  GPLv2+ (programs), LGPLv2.1+ (libraries)`+).
++  ** If the package is dual licensed, then separate licenses with the
++  +or+ keyword (e.g. +`LIBFOO_LICENSE = AFLv2.1 or GPLv2+`+).
+ 
+ * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
+   tarball that contain the license(s) under which the package is released.
