@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Mar 2016 11:13:36 +0100
-Subject: [Buildroot] [PATCH 1/2] legal-info: fix detection of "override"
-	packages
-In-Reply-To: <1457134753-28197-1-git-send-email-luca@lucaceresoli.net>
+Date: Sun, 6 Mar 2016 11:19:14 +0100
+Subject: [Buildroot] [PATCH 2/2] legal-info: remove outdated comment
+In-Reply-To: <1457134753-28197-2-git-send-email-luca@lucaceresoli.net>
 References: <1457134753-28197-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160306101336.GA3501@free.fr>
+ <1457134753-28197-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160306101914.GB3501@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +14,51 @@ To: buildroot@busybox.net
 Luca, All,
 
 On 2016-03-05 00:39 +0100, Luca Ceresoli spake thusly:
-> The ifneq ($$($(2)_SITE_METHOD),override) test will always match
-> because SITE_METHOD is never set to "override". The result is that
-> some packages are downloaded and extracted unnecessarily, although
-> they are (correctly) not saved in output/legal-info/.
-> 
-> Fix by simply testing $(2)_OVERRIDE_SRCDIR instead: when empty, it
-> indicates that the packages is neither a "local" site-method package
-> nor a package that has its source directory overridden.
+> This comment is outdated since the assignment of $(2)_MANIFEST_TARBALL
+> and $(2)_MANIFEST_SITE have been removed, which happened in
+> b9f4727ff4d512868352494f5209fff4da147473.
 > 
 > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/pkg-generic.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 9ea2a707baa4..189ccf8c8415 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -754,8 +754,7 @@ $(1)-legal-info: $(1)-patch
+>  endif
+>  
+>  # We only save the sources of packages we want to redistribute, that are
+> -# non-local, and non-overriden. So only store, in the manifest, the tarball
+> -# name of those packages.
+> +# non-local, and non-overriden.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I wondered why you kept 'local' here, but then I remembered that we
+handle 'local' packages as if they were overriden. I think that's
+inherently bad that we do that, but this is not the purpose of your
+patch.
+
+Still, I would prefer something like:
+
+    ... that are non-overriden (local or true override).
+
+otherwise:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+BTW, you're not making my life easy: I'll have to rebase my own legal
+series over that, and I expect quite a bunch of conflicts! ;-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> 
-> Suggested by Thomas on:
->   http://lists.busybox.net/pipermail/buildroot/2015-October/141032.html
-> ---
->  package/pkg-generic.mk | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index e22babbcd0c9..9ea2a707baa4 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -757,13 +757,11 @@ endif
->  # non-local, and non-overriden. So only store, in the manifest, the tarball
->  # name of those packages.
 >  ifeq ($$($(2)_REDISTRIBUTE),YES)
-> -ifneq ($$($(2)_SITE_METHOD),local)
-> -ifneq ($$($(2)_SITE_METHOD),override)
-> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+>  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
 >  # Packages that have a tarball need it downloaded beforehand
->  $(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
->  endif
->  endif
-> -endif
->  
->  # If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
->  # indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
 > -- 
 > 1.9.1
 > 
