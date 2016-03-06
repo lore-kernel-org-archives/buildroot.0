@@ -1,43 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 21:52:57 +0100
-Subject: [Buildroot] [git commit] docs/manual: document format for
-	specifying licenses
-Message-ID: <20160306205310.43DD78180E@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 06 Mar 2016 21:53:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cairo: Do not use -latomic with
+	non-threaded toolchains
+References: <1457254351-9933-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160306214842.780b4925@free-electrons.com>
+Message-ID: <XnsA5C3DEACD9E61berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c02a88337baafadcee571e1990939ccec5eb356
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+[posted and mailed]
 
-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
-[Thomas: minor tweaks for clarity.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- docs/manual/adding-packages-generic.txt | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20160306214842.780b4925 at free-electrons.com:
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index b7817e3..8ed7fe8 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -387,7 +387,16 @@ information is (assuming the package name is +libfoo+) :
-   Otherwise, describe the license in a precise and concise way, avoiding
-   ambiguous names such as +BSD+ which actually name a family of licenses.
-   This variable is optional. If it is not defined, +unknown+ will appear in
--  the +license+ field of the manifest file for this package.
-+  the +license+ field of the manifest file for this package. +
-+  The expected format for this variable must comply with the following rules:
-+  ** If different parts of the package are released under different
-+  licenses, then +comma+ separate licenses (e.g. +`LIBFOO_LICENSE =
-+  GPLv2+, LGPLv2.1+`+). If there is clear distinction between which
-+  component is licensed under what license, then annotate the license
-+  with that component, between parenthesis (e.g. +`LIBFOO_LICENSE =
-+  GPLv2+ (programs), LGPLv2.1+ (libraries)`+).
-+  ** If the package is dual licensed, then separate licenses with the
-+  +or+ keyword (e.g. +`LIBFOO_LICENSE = AFLv2.1 or GPLv2+`+).
- 
- * +LIBFOO_LICENSE_FILES+ is a space-separated list of files in the package
-   tarball that contain the license(s) under which the package is released.
+>   http://patchwork.ozlabs.org/patch/592591/
+>   http://patchwork.ozlabs.org/patch/592592/
+> 
+> Let me know what you think.
+
+Hi Thomas,
+
+I did not compile with your patches but they look good and should solve the 
+problem.
+
+Regards, Bernd
