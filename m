@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Mar 2016 11:19:14 +0100
-Subject: [Buildroot] [PATCH 2/2] legal-info: remove outdated comment
-In-Reply-To: <1457134753-28197-2-git-send-email-luca@lucaceresoli.net>
-References: <1457134753-28197-1-git-send-email-luca@lucaceresoli.net>
- <1457134753-28197-2-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160306101914.GB3501@free.fr>
+Date: Sun, 6 Mar 2016 11:25:53 +0100
+Subject: [Buildroot] [PATCH 11/16 v4] core/legal-info: also save patches
+In-Reply-To: <56DA1E1E.4060501@lucaceresoli.net>
+References: <cover.1454536753.git.yann.morin.1998@free.fr>
+ <f1466d9d2ab2a3e2abc1f4a167e7ad38d12c2d61.1454536753.git.yann.morin.1998@free.fr>
+ <56DA1E1E.4060501@lucaceresoli.net>
+Message-ID: <20160306102553.GC3501@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +14,64 @@ To: buildroot@busybox.net
 
 Luca, All,
 
-On 2016-03-05 00:39 +0100, Luca Ceresoli spake thusly:
-> This comment is outdated since the assignment of $(2)_MANIFEST_TARBALL
-> and $(2)_MANIFEST_SITE have been removed, which happened in
-> b9f4727ff4d512868352494f5209fff4da147473.
+On 2016-03-05 00:45 +0100, Luca Ceresoli spake thusly:
+> I have a late remark, see below.
+
+Eh! ;-)
+
+> On 03/02/2016 23:22, Yann E. MORIN wrote:
+[--SNIP--]
+> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> > index 432a153..055dbdb 100644
+> > --- a/package/pkg-generic.mk
+> > +++ b/package/pkg-generic.mk
+> > @@ -776,12 +776,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+> >  endif
+> >  $(2)_MANIFEST_LICENSE_FILES ?= not saved
+> >  
+> > -# If the package declares _LICENSE_FILES, we need to extract it,
+> > -# for overriden, local or normal remote packages alike, whether
+> > -# we want to redistribute it or not.
+> > -ifneq ($$($(2)_LICENSE_FILES),)
+> > +# We need to extract and patch a package to be able to retrieve its
+> > +# license files (if any) and the list of patches applied to it (if
+> > +# any).
+> >  $(1)-legal-info: $(1)-patch
+> > -endif
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  package/pkg-generic.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9ea2a707baa4..189ccf8c8415 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -754,8 +754,7 @@ $(1)-legal-info: $(1)-patch
+> A few lines below we have a dependency on $(1)-source. Always
+> depending on $(1)-patch makes it useless, so we also should do:
+
+Well, we do need $(1)-patch, because a patch may change the licensing
+info (i.e. add a new license, add a LICENSE file or some such), so
+depending on -source is not enough.
+
+>  ifeq ($$($(2)_REDISTRIBUTE),YES)
+>  ifneq ($$($(2)_SITE_METHOD),local)
+>  ifneq ($$($(2)_SITE_METHOD),override)
+>  # Packages that have a tarball need it downloaded beforehand
+> -$(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+> +$(1)-legal-info: $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
 >  endif
->  
->  # We only save the sources of packages we want to redistribute, that are
-> -# non-local, and non-overriden. So only store, in the manifest, the tarball
-> -# name of those packages.
-> +# non-local, and non-overriden.
+>  endif
 
-I wondered why you kept 'local' here, but then I remembered that we
-handle 'local' packages as if they were overriden. I think that's
-inherently bad that we do that, but this is not the purpose of your
-patch.
+Hmmm... I'm not sure I am following you here... Are yoiu saying that we
+need not depend on -source because we already depend on -patch, above?
 
-Still, I would prefer something like:
+> But beware this might conflict with the patch I just sent to fix the
+> ifeq()s on the same few lines ('legal-info: fix detection of "override"
+> packages'). Simple to fix anyway.
 
-    ... that are non-overriden (local or true override).
-
-otherwise:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-BTW, you're not making my life easy: I'll have to rebase my own legal
-series over that, and I expect quite a bunch of conflicts! ;-)
+Eh! ;-)
 
 Regards,
 Yann E. MORIN.
 
->  ifeq ($$($(2)_REDISTRIBUTE),YES)
->  ifeq ($$($(2)_OVERRIDE_SRCDIR),)
->  # Packages that have a tarball need it downloaded beforehand
-> -- 
-> 1.9.1
+> This does not invalidate your patch, it's just a piece of code that
+> will become redundant with your changes.
 > 
+> -- 
+> Luca
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
