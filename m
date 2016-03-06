@@ -1,28 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 06 Mar 2016 13:27:31 +0000
-Subject: [Buildroot] [Bug 8766] Compiling host-gcc-final-4.9.3 broken on i386
-In-Reply-To: <bug-8766-163@https.bugs.busybox.net/>
-References: <bug-8766-163@https.bugs.busybox.net/>
-Message-ID: <bug-8766-163-Fm8qtlzXbf@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 6 Mar 2016 14:30:29 +0100
+Subject: [Buildroot] [PATCH] zsh: don't use host pcre-config
+In-Reply-To: <20160306131518.GF2877@tarshish>
+References: <0f3d133b0082f11b75b9fad170d1b81211352dd6.1457041570.git.baruch@tkos.co.il>
+ <20160306132313.17024d72@free-electrons.com>
+ <20160306131518.GF2877@tarshish>
+Message-ID: <20160306143029.0f037047@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8766
+Baruch,
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-After some research, it seems to be an x86 specific issue. The file causing
-problems is libgcc/generic-morestack-thread.c, which gets included in the build
-by libgcc/config/t-stack. It is related to the implementation of -fsplit-stack,
-which is only supported on x86 32/64.
+On Sun, 6 Mar 2016 15:15:19 +0200, Baruch Siach wrote:
 
-So on other architectures, a no thread configuration should still build fine.
-However, seeing that on a major arch like x86 the nothread support has been
-broken for a while (-fsplit-stack has been around since gcc 4.6) really makes
-me wonder if we should continue to support the no thread solution.
+> > So to me, this means that the expected "output" of this macro is to set
+> > <variable>, which in your case is PRECONF.
+> 
+> Thanks for the information.
 
+Note that the above was my own interpretation of the autoconf rules,
+and what I generally see in most configure.ac. People knowing autoconf
+better might disagree.
+
+> This patch is now upstream, so I'll send another one upstream changing 
+> $ac_cv_prog_PCRECONF to $PCRECONF. If upstream accepts that I'll send v2 with 
+> a combined patch.
+
+Notice that there is another place in the configure.ac where
+ac_cv_prog_PRECONF is already used.
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
