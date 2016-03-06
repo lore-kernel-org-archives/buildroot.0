@@ -1,91 +1,170 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 6 Mar 2016 22:19:34 +0100
-Subject: [Buildroot] [PATCH 1/1] raptor: new package
-In-Reply-To: <1456200457-47727-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1456200457-47727-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20160306221934.3cb30a79@free-electrons.com>
+Date: Sun, 6 Mar 2016 22:36:06 +0100
+Subject: [Buildroot] [PATCH 1/2] Qwt package : added dependency to Qt5
+ besides Qt.
+In-Reply-To: <1453799061-7131-1-git-send-email-davepiq@yahoo.fr>
+References: <1453799061-7131-1-git-send-email-davepiq@yahoo.fr>
+Message-ID: <20160306223606.28f57abb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matt,
+David,
 
-Thanks for this contribution. However, after review/testing, I have a
-number of comments, see below.
+Thanks for your patch, and sorry for the slow answer. Your patch came
+right before we started closing things for 2016.02. Now that 2016.02 is
+released, I'm looking at some older patches.
 
-On Mon, 22 Feb 2016 22:07:37 -0600, Matt Weber wrote:
+On Tue, 26 Jan 2016 10:04:20 +0100, David Picard wrote:
+> Replaced the original select by depends on, due to recursive dependencies
+> involving qt5base. Qwt optional modules not tested.
+> 
+> Signed-off-by: David Picard <davepiq@yahoo.fr>
+> ---
+>  package/qwt/Config.in | 20 +++++++++++++-------
+>  package/qwt/qwt.mk    | 16 +++++++++++++++-
+>  2 files changed, 28 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+> index 8c7bc56..40b382b 100644
+> --- a/package/qwt/Config.in
+> +++ b/package/qwt/Config.in
+> @@ -1,7 +1,8 @@
+>  config BR2_PACKAGE_QWT
+>  	bool "qwt"
+> -	depends on BR2_PACKAGE_QT
+> -	depends on BR2_PACKAGE_QT_GUI_MODULE
+> +	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
+> +	depends on BR2_PACKAGE_QT_GUI_MODULE || BR2_PACKAGE_QT5BASE_GUI
+> +	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5BASE
 
-> diff --git a/package/raptor/Config.in b/package/raptor/Config.in
-> new file mode 100644
-> index 0000000..61bc49b
-> --- /dev/null
-> +++ b/package/raptor/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_RAPTOR
-> +	bool "raptor"
-> +	select BR2_PACKAGE_LIBXML2
-> +	select BR2_PACKAGE_LIBCURL
+I know this is what you're doing in your second patch, but I would
+prefer to use:
 
-libcurl is not a mandatory dependency.
+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
+	select .... if BR2_PACKAGE_QT
+	select .... if BR2_PACKAGE_QT5
 
-> +	select BR2_PACKAGE_LIBXSLT
-> +	select BR2_PACKAGE_YAJL
+So, could you rework your patch series to have a first patch that does
+*not* introduce qt5 support, but simply switches the qwt package to:
 
-neither is yajl.
+	depends on BR2_PACKAGE_QT
+	select .... if BR2_PACKAGE_QT
 
-> +RAPTOR_VERSION = 2.0.15
-> +RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
-> +RAPTOR_SITE = http://download.librdf.org/source
-> +RAPTOR_DEPENDENCIES = libxml2 libcurl libxslt yajl
+and then a second patch that introduces the qt5 support ?
 
-See above. Only libxml2 and libxslt are mandatory. libcurl and yajl are
-optional. In addition, with your package, the detection of yajl doesn't
-work with the following configuration to due a missing -lm
-flag at link time:
+>  config BR2_PACKAGE_QWT_SVG
+>  	bool "SVG support"
+> -	select BR2_PACKAGE_QT_SVG
+> +	depends on BR2_PACKAGE_QT_SVG || BR2_PACKAGE_QT5SVG
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2015.11-rc1-71-g90d1299.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_3=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_RAPTOR=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Please stay with the select model, as suggested above, so:
 
-Note that the package doesn't fail to build (because yajl is not a
-mandatory dependency), but yajl is not used.
+	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
+	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5BASE
+> +
 
-> +RAPTOR_LICENSE = GPLv2.1 LGPLv2.1 Apache-2.0
+Useless newline added.
 
-This is not correct. First GPLv2.1 doesn't exist. Second, you are
-missing an "or" between those license. And finally, they have used the
-"or later" for all licenses. This is all written in the LICENSE.txt
-file you reference below. So a correct license information would
-probably look like:
+>  
+>  config BR2_PACKAGE_QWT_MATHML
+>  	bool "MathML support"
+> @@ -21,10 +23,14 @@ config BR2_PACKAGE_QWT_OPENGL
+>  	bool "OpenGL support"
+>  	depends on BR2_PACKAGE_HAS_LIBGLES
+>  	depends on BR2_PACKAGE_HAS_LIBEGL
+> -	select BR2_PACKAGE_QT_OPENGL_ES
+> +	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
+> +	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5BASE
 
-RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
+I think this should rather be:
 
-It is also worth nothing that there are some scary things in the
-configure.in script, such as:
+	select BR2_PACKAGE_QT_OPENGL_ES if \
+		BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
+	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if \
+		BR2_PACKAGE_QT5BASE && BR2_PACKAGE_QT5_GL_AVAILABLE
 
-if test -d /usr/include/inn; then
-  CPPFLAGS="$CPPFLAGS -I/usr/include/inn"
-fi
+The differences with your approach are:
 
-So, if /usr/include/inn exists on your build machine, it will conclude
-that libinn is available.
+ * We really replicate the dependency of
+   BR2_PACKAGE_QT5BASE_OPENGL_LIB, which is BR2_PACKAGE_QT5_GL_AVAILABLE
 
-The configure script also detects the availability of icu, so you
-probably want to add an optional dependency on it.
+ * Thanks to using BR2_PACKAGE_QT5_GL_AVAILABLE, we potentially enable
+   support on full OpenGL, and not only OpenGL ES.
 
-Could you rework your patch to take those comments into account?
+> +comment "SVG support depends on Qt or Qt5 SVG module"
+> +	depends on !BR2_PACKAGE_QT_SVG && !BR2_PACKAGE_QT5SVG
+
+Comment was misplaced (should have been next to the SVG option) and is
+no longer needed if you do a select, like suggested above.
+
+> -comment "qwt depends on QT gui module"
+> -	depends on BR2_PACKAGE_QT
+> -	depends on !BR2_PACKAGE_QT_GUI_MODULE
+> +comment "qwt depends on Qt or Qt5 gui module"
+> +	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5BASE
+> +	depends on !BR2_PACKAGE_QT_GUI_MODULE && !BR2_PACKAGE_QT5BASE_GUI
+
+If you do the select above, this comment is no longer needed (so it can
+be removed in the first preparation patch, as suggested above).
+
+> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+> index 8a46c25..cdb3008 100644
+> --- a/package/qwt/qwt.mk
+> +++ b/package/qwt/qwt.mk
+> @@ -8,7 +8,14 @@ QWT_VERSION = 6.1.2
+>  QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
+>  QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
+>  QWT_INSTALL_STAGING = YES
+> -QWT_DEPENDENCIES = qt
+> +ifeq ($(BR2_PACKAGE_QT),y)
+> +QWT_DEPENDENCIES += qt
+> +endif
+> +ifeq ($(BR2_PACKAGE_QT5BASE),y)
+> +QWT_DEPENDENCIES += qt5base
+> +QT5_MAKE = $(HOST_DIR)/usr/bin/qmake -spec $(HOST_DIR)/mkspecs/devices/linux-buildroot-g++
+
+In package FOO, you should only define variables that start with "FOO",
+so defining QT5_MAKE here is wrong. And you're not even using this
+variable!
+
+> +endif
+> +
+>  
+>  QWT_LICENSE = LGPLv2.1 with exceptions
+>  QWT_LICENSE_FILES = COPYING
+> @@ -35,10 +42,17 @@ else
+>  QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_QT),y)
+>  define QWT_CONFIGURE_CMDS
+>  	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+>  	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
+>  endef
+> +else
+> +define QWT_CONFIGURE_CMDS
+> +	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(QT5_QMAKE))
+> +endef
+> +endif
+
+Somewhat sad to duplicate the SED call, and the rest. What about:
+
+ifeq ($(BR2_PACKAGE_QT),y)
+QWT_QMAKE = $(QT_QMAKE)
+else
+QWT_QMAKE = $(QT5_QMAKE)
+endif
+
+define QWT_CONFIGURE_CMDS
+	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+	(cd $(@D); $(TARGET_MAKE_ENV) $(QWT_QMAKE))
+endef
+
+Could you rework this patch to take into account those comments?
 
 Thanks a lot!
 
