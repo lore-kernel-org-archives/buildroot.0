@@ -1,54 +1,73 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 06 Mar 2016 10:47:54 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-02-27
-In-Reply-To: <20160305212635.54da8175@free-electrons.com>
-References: <20160228073020.78AB7101EC4@stock.ovh.net>
- <1456651515.13955.2.camel@embedded.rocks> <87y4a5p3w5.fsf@dell.be.48ers.dk>
- <1456658221.13955.7.camel@embedded.rocks> <56D30D11.3030907@mind.be>
- <1456674270.13955.11.camel@embedded.rocks> <56D385A7.9050804@mind.be>
- <1457208607.1867.7.camel@embedded.rocks>
- <20160305212635.54da8175@free-electrons.com>
-Message-ID: <1457257674.2724.10.camel@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 6 Mar 2016 11:13:36 +0100
+Subject: [Buildroot] [PATCH 1/2] legal-info: fix detection of "override"
+	packages
+In-Reply-To: <1457134753-28197-1-git-send-email-luca@lucaceresoli.net>
+References: <1457134753-28197-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160306101336.GA3501@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sa, 2016-03-05 at 21:26 +0100, Thomas Petazzoni wrote:
-> J?rg,
+Luca, All,
+
+On 2016-03-05 00:39 +0100, Luca Ceresoli spake thusly:
+> The ifneq ($$($(2)_SITE_METHOD),override) test will always match
+> because SITE_METHOD is never set to "override". The result is that
+> some packages are downloaded and extracted unnecessarily, although
+> they are (correctly) not saved in output/legal-info/.
 > 
-> On Sat, 05 Mar 2016 21:10:07 +0100, J?rg Krause wrote:
+> Fix by simply testing $(2)_OVERRIDE_SRCDIR instead: when empty, it
+> indicates that the packages is neither a "local" site-method package
+> nor a package that has its source directory overridden.
 > 
-> > 
-> > Building czmq with the latest git HEAD does not throw this error
-> > anymore.
-> Ah, do you know which commit fixed it?
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Yes, I did a bisect and found
-commit?bcf583633e8b27a9bfbed1e4a717b9373f7446be [1]. I'll send a patch
-including the upstream patch.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> > 
-> > Although, for the current version 3.0.2 disabling the optional
-> > binaries
-> > zmakecert and zgossip also helps to build libczmq.la cleanly
-> > without
-> > the need to link libmath in. I've sent a patch to disable building
-> > both
-> > binaries by default [1].
-> This doesn't fix the problem at all. If you don't build libraries
-> that
-> link with libczmq, then of course you don't see the undefined
-> reference
-> again. It is only when linking a *program* that you will see such
-> undefined references, not when linking a library.
+Regards,
+Yann E. MORIN.
 
-I see! Thanks for clarifying that!
+> ---
+> 
+> Suggested by Thomas on:
+>   http://lists.busybox.net/pipermail/buildroot/2015-October/141032.html
+> ---
+>  package/pkg-generic.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index e22babbcd0c9..9ea2a707baa4 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -757,13 +757,11 @@ endif
+>  # non-local, and non-overriden. So only store, in the manifest, the tarball
+>  # name of those packages.
+>  ifeq ($$($(2)_REDISTRIBUTE),YES)
+> -ifneq ($$($(2)_SITE_METHOD),local)
+> -ifneq ($$($(2)_SITE_METHOD),override)
+> +ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+>  # Packages that have a tarball need it downloaded beforehand
+>  $(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
+>  endif
+>  endif
+> -endif
+>  
+>  # If FOO_ACTUAL_SOURCE_TARBALL is explicitly defined, it means FOO_SOURCE is
+>  # indeed a binary (e.g. external toolchain) and FOO_ACTUAL_SOURCE_TARBALL/_SITE
+> -- 
+> 1.9.1
+> 
 
-[1]?https://github.com/zeromq/czmq/commit/bcf583633e8b27a9bfbed1e4a717b
-9373f7446be
-
-Best regards
-J?rg Krause
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
