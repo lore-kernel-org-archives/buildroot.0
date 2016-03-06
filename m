@@ -1,71 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 7 Mar 2016 00:03:07 +0100
-Subject: [Buildroot] [v3,
- 3/4] barebox: user selection of build output images
-In-Reply-To: <20160302214016.GB11826@smipidev>
-References: <1453329821-3167-1-git-send-email-pieter@boesman.nl>
- <1453329821-3167-4-git-send-email-pieter@boesman.nl>
- <56D0E32C.3050207@mind.be> <20160229083817.GC18059@smipidev>
- <56D62247.8000500@mind.be> <20160302075408.GB10481@smipidev>
- <56D72E6B.1090806@mind.be> <20160302214016.GB11826@smipidev>
-Message-ID: <56DCB72B.4020501@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  7 Mar 2016 00:04:52 +0100
+Subject: [Buildroot] [PATCH 0/3] libcap, pax-utils: fixes,
+	autotools and bump (branch yem/fixes)
+Message-ID: <cover.1457305443.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/02/16 22:40, Pieter Smith wrote:
-> On Wed, Mar 02, 2016 at 07:18:19PM +0100, Arnout Vandecappelle wrote:
->> On 03/02/16 08:54, Pieter Smith wrote:
->>> On Wed, Mar 02, 2016 at 12:14:15AM +0100, Arnout Vandecappelle wrote:
->>>> On 02/29/16 09:38, Pieter Smith wrote:
->>>
->>> [snip]
->>>
->>>>>
->>>>> ACK. Done. I solved this with the above default and help text pointing the user
->>>>> to use 'barebox.bin' for older versions. I'm just waiting for Yegor, and then
->>>>> I'll repost.
->>>>>
->>>>> Right now a user-friendly warning is generated if an old config is used and
->>>>> this config item has not yet been set. 
->>>>
->>>>  If you give it a default value, it _will_ be set for old configs.
->>>
->>> If the user remembers to run defconfig. If he doesn't, the error is quite vague.
->>
->>  When you update buildroot and run 'make', there should be an implicit run of
->> 'make oldconfig', which will update all the automatic symbols and ask for any
->> new ones. TBH I don't completely understand how it works, but it happens like
->> that for me.
-> 
-> I was troubleshooting with `make barebox-2`, which doesn't perform an
-> auto-defconfig. The error was unintelligible because some variables were
-> resolving to empty strings. I therefore added a check which offers a similar
-> prompt to what is currently done at the end of barebox.mk.
-> 
-> If nobody has a serious gripe with this, I would prefer to keep the check.
+Hello All!
 
- OK no problem.
+This small series fixes libcap to install its .pc file even when
+building static-only.
 
- Thanks,
+It also changes pax-utils to use autotools.
 
- Regards,
- Arnout
+Finally, it bumps libcap.
+
+Regards,
+Yann E. MORIN.
 
 
-> 
-> [snip]
-> 
-> - Pieter
-> 
+The following changes since commit b904c090bdf1ec54648d0cef7a0e66024e4816c8:
 
+  zsh: don't use host pcre-config (2016-03-06 21:38:04 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/fixes
+
+for you to fetch changes up to 16d98d1d5774c485cce2d14dcc24ca8f698fc048:
+
+  package/libcap: bump version (2016-03-07 00:00:10 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      package/libcap: install .pc file unconditionally
+      package/pax-utils: switch to autotools
+      package/libcap: bump version
+
+ ...-build-system-fixes-for-cross-compilation.patch | 53 +++++++++++++++++++++
+ package/libcap/0001-build-system.patch             | 54 ----------------------
+ ...t-install-into-install-shared-install-sta.patch | 48 +++++++++++++++++++
+ .../libcap/0002-split-static-shared-install.patch  | 30 ------------
+ ...nge-the-location-we-include-linux-xattr.h.patch | 46 ------------------
+ package/libcap/libcap.hash                         |  2 +-
+ package/libcap/libcap.mk                           |  8 ++--
+ package/pax-utils/pax-utils.mk                     | 35 ++++++--------
+ 8 files changed, 121 insertions(+), 155 deletions(-)
+ create mode 100644 package/libcap/0001-build-system-fixes-for-cross-compilation.patch
+ delete mode 100644 package/libcap/0001-build-system.patch
+ create mode 100644 package/libcap/0002-libcap-split-install-into-install-shared-install-sta.patch
+ delete mode 100644 package/libcap/0002-split-static-shared-install.patch
+ delete mode 100644 package/libcap/0003-Change-the-location-we-include-linux-xattr.h.patch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
