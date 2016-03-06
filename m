@@ -1,76 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun,  6 Mar 2016 21:47:16 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
-	BR2_TOOLCHAIN_HAS_LIBATOMIC
-Message-ID: <1457297237-4064-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sun,  6 Mar 2016 21:47:17 +0100
+Subject: [Buildroot] [PATCH 2/2] cairo, icu,
+	webkitgtk24: use BR2_TOOLCHAIN_HAS_LIBATOMIC
+In-Reply-To: <1457297237-4064-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1457297237-4064-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1457297237-4064-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now, we were assuming that whenever you have gcc 4.8, libatomic
-is available. It turns out that this is not correct, since libatomic
-will not be available if thread support is disabled in the toolchain.
+This commit modifies the cairo, icu and webkitgtk24 packages to use
+BR2_TOOLCHAIN_HAS_LIBATOMIC when appropriate.
 
-Therefore, __atomic_*() intrinsics may not be available even if the
-toolchain uses gcc 4.8.
+Fixes:
 
-To solve this problem, we introduce a BR2_TOOLCHAIN_HAS_LIBATOMIC
-boolean, which indicates whether the toolchain has libatomic. It is
-the case when you are using gcc >= 4.8 *and* thread support is
-enabled. We then use this new BR2_TOOLCHAIN_HAS_LIBATOMIC to define
-BR2_TOOLCHAIN_HAS_ATOMIC.
-
-As explained in the comment, on certain architectures, libatomic is
-technically not needed to provide the __atomic_*() intrinsics since
-they might be all built-in. However, since libatomic is only absent in
-non-thread capable toolchains, it is not worth making things more
-complex for such seldomly used configuration.
-
-Note that we are introducing the intermediate
-BR2_TOOLCHAIN_HAS_LIBATOMIC option because it will be useful on its
-own for certain packages.
+  http://autobuild.buildroot.net/results/ec4/ec4e48c0e4b8fa72d8bb7ef4ad67a166699c0b62/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-common.in | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ package/cairo/cairo.mk             | 2 +-
+ package/icu/icu.mk                 | 2 +-
+ package/webkitgtk24/webkitgtk24.mk | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1b7b416..596d1eb 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -373,15 +373,28 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
- 	default y if BR2_TOOLCHAIN_ARM_HAS_SYNC_8
- 	default y if BR2_TOOLCHAIN_X86_HAS_SYNC_8
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 6b54b28..b6ab54e 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -18,7 +18,7 @@ endif
  
-+# libatomic is available since gcc 4.8, when thread support is
-+# enabled.
-+config BR2_TOOLCHAIN_HAS_LIBATOMIC
-+	bool
-+	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
-+		BR2_TOOLCHAIN_HAS_THREADS
-+
- # __atomic intrinsics are available:
- # - with gcc 4.8, either through built-ins or libatomic, on all
--#   architectures
-+#   architectures. Since we don't want to separate the cases where
-+#   libatomic is needed vs. not needed, we simplify thing and only
-+#   support situations where libatomic is available, even if on some
-+#   architectures libatomic is not strictly needed as all __atomic
-+#   intrinsics might be built-in. But the only case where libatomic is
-+#   not available is when thread support is disabled, which is pretty
-+#   unlikely.
- # - with gcc 4.7, libatomic did not exist, so only built-ins are
- #   available. This means that __atomic can only be used in a subset
- #   of the architectures
- config BR2_TOOLCHAIN_HAS_ATOMIC
- 	bool
--	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	default y if BR2_TOOLCHAIN_HAS_LIBATOMIC
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_arm
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_armeb
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_xtensa
+ # cairo can use C++11 atomics when available, so we need to link with
+ # libatomic for the architectures who need libatomic.
+-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ CAIRO_CONF_ENV += LIBS="-latomic"
+ endif
+ 
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index b4574e5..f245da2 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -21,7 +21,7 @@ ICU_CONF_OPTS = \
+ # When available, icu prefers to use C++11 atomics, which rely on the
+ # __atomic builtins. On certain architectures, this requires linking
+ # with libatomic starting from gcc 4.8.
+-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ ICU_CONF_ENV += LIBS="-latomic"
+ endif
+ 
+diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
+index d8e41b9..0438ceb 100644
+--- a/package/webkitgtk24/webkitgtk24.mk
++++ b/package/webkitgtk24/webkitgtk24.mk
+@@ -29,7 +29,7 @@ endif
+ WEBKITGTK24_CONF_ENV = ac_cv_path_icu_config=$(STAGING_DIR)/usr/bin/icu-config
+ 
+ # Some 32-bit architectures need libatomic support for 64-bit ops
+-ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_sh),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ WEBKITGTK24_CONF_ENV += LIBS="-latomic"
+ endif
+ 
 -- 
 2.6.4
