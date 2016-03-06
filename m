@@ -1,18 +1,16 @@
 From: Alan Yaniger <alan@tkos.co.il>
-Date: Sun,  6 Mar 2016 22:29:11 +0200
+Date: Sun,  6 Mar 2016 22:29:12 +0200
 Subject: [Buildroot] [PATCH 2/2] docs: Fixed syntax error in makedev-syntax
-	example.
+	example. In the makedev syntax documentation,
+	one of the examples lacks the "mode" value.
 In-Reply-To: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
 References: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
-Message-ID: <1457296152-4047-3-git-send-email-alan@tkos.co.il>
+Message-ID: <1457296152-4047-4-git-send-email-alan@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-In the makedev syntax documentation, one of the examples lacks the "mode" value.
-This patch fixes that example.
 
 Signed-off-by: Alan Yaniger <alan@tkos.co.il>
 ---
