@@ -1,82 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 6 Mar 2016 11:25:53 +0100
-Subject: [Buildroot] [PATCH 11/16 v4] core/legal-info: also save patches
-In-Reply-To: <56DA1E1E.4060501@lucaceresoli.net>
-References: <cover.1454536753.git.yann.morin.1998@free.fr>
- <f1466d9d2ab2a3e2abc1f4a167e7ad38d12c2d61.1454536753.git.yann.morin.1998@free.fr>
- <56DA1E1E.4060501@lucaceresoli.net>
-Message-ID: <20160306102553.GC3501@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  6 Mar 2016 12:00:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: improve inline asm handling
+	for libpostproc
+Message-ID: <1457262024-2160-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, All,
+We compile ffmpeg with runtime cpu detect enabled, which is also the
+default upstream:
+https://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-September/054876.html
+http://article.gmane.org/gmane.comp.video.ffmpeg.devel/151613
 
-On 2016-03-05 00:45 +0100, Luca Ceresoli spake thusly:
-> I have a late remark, see below.
+If inline asm is enabled (default value) libpostproc enables code for
+mmx/3dnow/sse2, regardless of the target CPU chosen by buildroot:
+http://git.videolan.org/gitweb.cgi/ffmpeg.git/?p=ffmpeg.git;a=blob;f=libpostproc/postprocess.c;h=1dc719cf93985d5504acb8af20441f5f3d5f9fe8;hb=refs/heads/release/2.8#l536
 
-Eh! ;-)
+This patch moves the current i586-only workaround, which was based on
+an incomplete understanding of the problem, inside the ifeq-libpostproc
+code block.
+Please note that inline-asm is also used on other archs besides x86,
+therefore we need to check both for BR2_i386 and BR2_X86_CPU_HAS_MMX.
 
-> On 03/02/2016 23:22, Yann E. MORIN wrote:
-[--SNIP--]
-> > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> > index 432a153..055dbdb 100644
-> > --- a/package/pkg-generic.mk
-> > +++ b/package/pkg-generic.mk
-> > @@ -776,12 +776,10 @@ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
-> >  endif
-> >  $(2)_MANIFEST_LICENSE_FILES ?= not saved
-> >  
-> > -# If the package declares _LICENSE_FILES, we need to extract it,
-> > -# for overriden, local or normal remote packages alike, whether
-> > -# we want to redistribute it or not.
-> > -ifneq ($$($(2)_LICENSE_FILES),)
-> > +# We need to extract and patch a package to be able to retrieve its
-> > +# license files (if any) and the list of patches applied to it (if
-> > +# any).
-> >  $(1)-legal-info: $(1)-patch
-> > -endif
-> 
-> A few lines below we have a dependency on $(1)-source. Always
-> depending on $(1)-patch makes it useless, so we also should do:
+This patch was compile-tested using these defconfigs:
 
-Well, we do need $(1)-patch, because a patch may change the licensing
-info (i.e. add a new license, add a LICENSE file or some such), so
-depending on -source is not enough.
+BR2_x86_i486=y
+BR2_PACKAGE_FFMPEG=y
+BR2_PACKAGE_FFMPEG_GPL=y
+BR2_PACKAGE_FFMPEG_POSTPROC=y
 
->  ifeq ($$($(2)_REDISTRIBUTE),YES)
->  ifneq ($$($(2)_SITE_METHOD),local)
->  ifneq ($$($(2)_SITE_METHOD),override)
->  # Packages that have a tarball need it downloaded beforehand
-> -$(1)-legal-info: $(1)-source $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
-> +$(1)-legal-info: $$(REDIST_SOURCES_DIR_$$(call UPPERCASE,$(4)))
->  endif
->  endif
+BR2_PACKAGE_FFMPEG=y
+BR2_PACKAGE_FFMPEG_GPL=y
+BR2_PACKAGE_FFMPEG_POSTPROC=y
 
-Hmmm... I'm not sure I am following you here... Are yoiu saying that we
-need not depend on -source because we already depend on -patch, above?
+BR2_x86_pentium_mmx=y
+BR2_PACKAGE_FFMPEG=y
+BR2_PACKAGE_FFMPEG_GPL=y
+BR2_PACKAGE_FFMPEG_POSTPROC=y
 
-> But beware this might conflict with the patch I just sent to fix the
-> ifeq()s on the same few lines ('legal-info: fix detection of "override"
-> packages'). Simple to fix anyway.
+This patch supersedes http://patchwork.ozlabs.org/patch/589461/
 
-Eh! ;-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> This does not invalidate your patch, it's just a piece of code that
-> will become redundant with your changes.
-> 
-> -- 
-> Luca
-
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index ddfac20..9288d0e 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -111,6 +111,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG_POSTPROC),y)
+ FFMPEG_CONF_OPTS += --enable-postproc
++# disable inline-asm on non-mmx Intel CPUs
++ifeq ($(BR2_i386)$(BR2_X86_CPU_HAS_MMX),y)
++FFMPEG_CONF_OPTS += --disable-inline-asm
++endif
+ else
+ FFMPEG_CONF_OPTS += --disable-postproc
+ endif
+@@ -352,11 +356,6 @@ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ FFMPEG_CONF_OPTS += --enable-yasm
+ FFMPEG_DEPENDENCIES += host-yasm
+ else
+-ifeq ($(BR2_x86_i586),y)
+-# Needed to work around a bug with gcc 5.x:
+-# error: 'asm' operand has impossible constraints
+-FFMPEG_CONF_OPTS += --disable-inline-asm
+-endif
+ FFMPEG_CONF_OPTS += --disable-yasm
+ FFMPEG_CONF_OPTS += --disable-mmx
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.0
