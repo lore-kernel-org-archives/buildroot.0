@@ -1,34 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  6 Mar 2016 09:46:26 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <1457268386-13897-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 06 Mar 2016 12:51:15 +0000
+Subject: [Buildroot] [Bug 8766] Compiling host-gcc-final-4.9.3 broken on i386
+In-Reply-To: <bug-8766-163@https.bugs.busybox.net/>
+References: <bug-8766-163@https.bugs.busybox.net/>
+Message-ID: <bug-8766-163-Tc1s7yr72M@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=8766
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5c9eabe..4ca09b2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,10 +214,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.12.55"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.63"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
--	default "3.18.27"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.28"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.18"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.19"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.4"		if BR2_KERNEL_HEADERS_4_4
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks Bernd for the report. This is an issue you already reported in the past,
+I found your previous report and some related discussion at
+https://patchwork.ozlabs.org/patch/484002/.
+
+Basically, as I understand it, the problem is that uClibc-ng only offers the
+NPTL thread implementation for x86. But since i386 does not have the necessary
+instructions to implement NPTL, we only offer the "none" thread implementation,
+which explains why <pthread.h> is missing.
+
+So I think there are really two questions here:
+
+ 1/ Is it correct that uClibc-ng provides no thread implementation at all for
+i386. This is something to discuss with Waldemar.
+
+ 2/ Are we also seeing this <pthread.h> missing problem when building with no
+threads on i486+. If we also have this problem, then I don't see how the "none"
+thread implementation can still be useful.
+
 -- 
-2.4.10
+You are receiving this mail because:
+You are on the CC list for the bug.
