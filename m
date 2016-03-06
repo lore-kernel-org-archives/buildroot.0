@@ -1,9 +1,12 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 06 Mar 2016 17:51:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: disable on mips
-References: <1457255845-20770-1-git-send-email-bernd.kuhls@t-online.de>
- <20160306134141.7fedbb85@free-electrons.com>
-Message-ID: <XnsA5C3B5B74612FID313208userindividu@bernd-kuhls.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 6 Mar 2016 19:50:05 +0200
+Subject: [Buildroot] [PATCH] zsh: don't use host pcre-config
+In-Reply-To: <20160306143029.0f037047@free-electrons.com>
+References: <0f3d133b0082f11b75b9fad170d1b81211352dd6.1457041570.git.baruch@tkos.co.il>
+ <20160306132313.17024d72@free-electrons.com>
+ <20160306131518.GF2877@tarshish>
+ <20160306143029.0f037047@free-electrons.com>
+Message-ID: <20160306175005.GJ2877@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,47 +15,32 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-[posted and mailed]
+On Sun, Mar 06, 2016 at 02:30:29PM +0100, Thomas Petazzoni wrote:
+> On Sun, 6 Mar 2016 15:15:19 +0200, Baruch Siach wrote:
+> 
+> > > So to me, this means that the expected "output" of this macro is to set
+> > > <variable>, which in your case is PRECONF.
+> > 
+> > Thanks for the information.
+> 
+> Note that the above was my own interpretation of the autoconf rules,
+> and what I generally see in most configure.ac. People knowing autoconf
+> better might disagree.
+> 
+> > This patch is now upstream, so I'll send another one upstream changing 
+> > $ac_cv_prog_PCRECONF to $PCRECONF. If upstream accepts that I'll send v2 with 
+> > a combined patch.
+> 
+> Notice that there is another place in the configure.ac where
+> ac_cv_prog_PRECONF is already used.
 
-Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote
-in news:20160306134141.7fedbb85 at free-electrons.com: 
+Right. Provided that other ac_cv_ variables are used throughout zsh 
+configure.ac do you think is is worth the trouble to clean up 
+ac_cv_prog_PCRECONF use?
 
-> In fact, I think this is still not good. Why would Kodi have explicit
-> support for MIPS, if in practice you couldn't build it for MIPS ?
+baruch
 
-good question, in January 2015 I could build Kodi for mips:
-https://github.com/xbmc/xbmc/pull/5570#issuecomment-72334761
-
-In June 2015 they added some atomic code:
-https://github.com/xbmc/xbmc/commit/593f4aa0ba7e572394111a856ec9b54ed7a8351
-b#diff-7e982ad80e27d748c5f7d697506c692f which breaks compilation today
-with Kodi 16.0-Jarvis: 
-
-LD      kodi.bin
-xbmc/filesystem/filesystem.a(FileCache.o): In function
-`std::__atomic_base<long long>::store(long long, std::memory_order)': 
-/home/bernd/buildroot/br2_kodi16/output/host/usr/mipsel-buildroot-linux-gnu
-/include/c++/4.9.3/bits/atomic_base.h:478: undefined reference to
-`__atomic_store_8' 
-/home/bernd/buildroot/br2_kodi16/output/host/usr/mipsel-buildroot-linux-gnu
-/include/c++/4.9.3/bits/atomic_base.h:478: undefined reference to
-`__atomic_store_8' xbmc/filesystem/filesystem.a(FileCache.o): In function
-`std::__atomic_base<long long>::load(std::memory_order) const': 
-/home/bernd/buildroot/br2_kodi16/output/host/usr/mipsel-buildroot-linux-gnu
-/include/c++/4.9.3/bits/atomic_base.h:500: undefined reference to
-`__atomic_load_8' collect2: error: ld returned 1 exit status
-Makefile:437: recipe for target 'kodi.bin' failed
-make[1]: *** [kodi.bin] Error 1
-
-using this defconfig with the BR2_TOOLCHAIN_HAS_SYNC_8 patch reverted: 
-
-BR2_mipsel=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_KODI=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-BR2_PACKAGE_XORG7=y
-
-Regards, Bernd
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
