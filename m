@@ -1,34 +1,58 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 7 Mar 2016 23:06:30 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-03-06
-In-Reply-To: <20160307073022.D1A301013FB@stock.ovh.net>
-References: <20160307073022.D1A301013FB@stock.ovh.net>
-Message-ID: <56DDFB66.4020402@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 07 Mar 2016 23:09:17 +0100
+Subject: [Buildroot] node.js ENOTFOUND error when using uclibc
+In-Reply-To: <CAFGQKxcn_nCR+jGABopOAHMt0-rhAF=g3ZvaxtFaE-CzAQo1Gw@mail.gmail.com>
+ (Martin Bark's message of "Mon, 7 Mar 2016 13:02:48 +0000")
+References: <trinity-42794f72-6f90-430b-8cdf-048645cbdab2-1457338189594@3capp-gmx-bs39>
+ <CAFGQKxcn_nCR+jGABopOAHMt0-rhAF=g3ZvaxtFaE-CzAQo1Gw@mail.gmail.com>
+Message-ID: <87d1r654aa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-On 07/03/2016 08:30, Thomas Petazzoni wrote:
+ > Michael,
+ > I can reproduce your issue using the qemu_x86_64_defconfig.  As you
+ > say this looks like a bug in uclibc or a difference between uclibc and
+ > glibc.
 
->          arc |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/305fdc8442cd2e8f51b90485be0dca83ffa36603/
+ > Can you please raise this in bugzilla
+ > (https://bugs.buildroot.org/buglist.cgi?product=buildroot) and add as
+ > much detail as you can.  If possible can you try to narrow down the
+ > issue, perhaps by testing getaddrinfo with hints.ai_flags sets to
+ > AI_V4MAPPED for uclibc and glibc.
 
-Fails with:
-  libpjmedia.so: undefined reference to `srtp_deinit'
+I had a look, and to me it seems like a glibc-ism in node.js.
 
-Many other failures (not yet mentioned in today e-mail) like this one.
-It's an issue with the detection of libsrtp.
+according to getaddrinfo(3), glibc interpretes a NULL hints as passing a
+hints structure with:
 
->          arm |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/744431e1b47d22222c4d0b48d5d20649dfeed929/
->          arm |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/a10aca9139054502e055cb61f3925637fc515e12/
+ai_family = AF_UNSPEC and ai_hints = AI_V4MAPPED | AI_ADDRCONFIG
 
-Needs threads.
+This combination is quite odd, as posix specifies that AI_V4MAPPED only
+does something if ai_family is set to AF_INET6 OR if AI_ALL is passed.
 
-I sent patches to fix these errors.
+http://pubs.opengroup.org/onlinepubs/9699919799/functions/freeaddrinfo.html
+
+uClibc(-ng) instead follows posix and sets ai_family to AF_UNSPEC and
+ai_hints = 0.
+
+And node.js seems to have copied glibc and passes AF_UNSPEC /
+AI_V4MAPPED | AI_ADDRCONFIG by default.
+
+The real problem is that glibc and uclibc{-ng} handles these flags
+differently. From the looks of it, glibc ignores AI_V4MAPPED unless
+ai_family is explictly set to AF_INET6, whereas uClibc{-ng} looks at the
+*RESULT* ai_family when interpreting AI_V4MAPPED, causing it to return
+no AF_INET results when AI_V4MAPPED is passed unless AI_ALL is also
+passed (which causes it to convert the AF_INET result to AF_INET6).
+
+Waldemar, while the application shouldn't be passing AF_UNSPEC +
+AI_V4MAPPED it would be good if uClibc-ng could be changed to behave
+more similar to glibc for compatibility reasons.
 
 -- 
-Luca
+Bye, Peter Korsgaard
