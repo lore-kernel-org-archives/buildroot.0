@@ -1,48 +1,65 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Mon,  7 Mar 2016 10:48:17 +0100
-Subject: [Buildroot] [PATCH v2 1/1] busybox: Make S01logging source a
-	default file.
-In-Reply-To: <56D61C10.9080409@lucaceresoli.net>
-References: <56D61C10.9080409@lucaceresoli.net>
-Message-ID: <1457344097-20448-1-git-send-email-nicolas.cavallari@green-communications.fr>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 7 Mar 2016 09:51:35 +0000
+Subject: [Buildroot] [PATCH 1/2] package/nodejs: force the use of python2
+In-Reply-To: <20160306154341.30fc8162@free-electrons.com>
+References: <1457044168-31810-1-git-send-email-martin@barkynet.com>
+ <20160306154341.30fc8162@free-electrons.com>
+Message-ID: <CAFGQKxdww_ECTciUYePG5U_oFSM0DJhJz7Mi6tbsizqRAfVFqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The default syslog parameters are to keep only 200-400 KiB of logs,
-which is very few if there is a spammy daemon on the system, or a daemon
-that fails and then spams errors that hides the original problem.
+Thomas,
 
-Make S01logging source a /etc/default/logging file where these
-parameters can be overridden.
+On 6 March 2016 at 14:43, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Martin Bark,
+>
+> On Thu,  3 Mar 2016 22:29:27 +0000, Martin Bark wrote:
+>> Remove the patches to use a python variable and instead force python2
+>> into the PATH.
+>>
+>> Upstream the python variable was recently removed
+>> (see https://github.com/nodejs/node/commit/c3e50ca) and due to dependencies
+>> directly calling python there is a reluctance to change this.  Instead it
+>> is recommended to add python2 into PATH as the nodejs build machines do
+>> (see https://github.com/nodejs/node/issues/418 and
+>> https://github.com/nodejs/node/issues/2735).
+>>
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>> ---
+>>  ...ch => 0003-fix-musl-USE-MISC-build-issue.patch} |   0
+>>  .../nodejs/0.10.42/0003-use-python-variable.patch  |  43 --------
+>>  .../0004-Fix-support-for-uClibc-ng.patch}          |   0
+>>  ...d.patch => 0003-Fix-va_list-not-declared.patch} |   0
+>>  ...hon-variable-instead-of-hardcoding-Python.patch | 112 ---------------------
+>>  .../0004-Fix-support-for-uClibc-ng.patch}          |   0
+>>  package/nodejs/nodejs.mk                           |  18 +++-
+>>  7 files changed, 16 insertions(+), 157 deletions(-)
+>>  rename package/nodejs/0.10.42/{0004-fix-musl-USE-MISC-build-issue.patch => 0003-fix-musl-USE-MISC-build-issue.patch} (100%)
+>>  delete mode 100644 package/nodejs/0.10.42/0003-use-python-variable.patch
+>>  rename package/nodejs/{5.6.0/0005-Fix-support-for-uClibc-ng.patch => 0.10.42/0004-Fix-support-for-uClibc-ng.patch} (100%)
+>>  rename package/nodejs/5.6.0/{0004-Fix-va_list-not-declared.patch => 0003-Fix-va_list-not-declared.patch} (100%)
+>>  delete mode 100644 package/nodejs/5.6.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
+>>  rename package/nodejs/{0.10.42/0005-Fix-support-for-uClibc-ng.patch => 5.6.0/0004-Fix-support-for-uClibc-ng.patch} (100%)
+>
+> Both patches applied. It is a little bit sad that upstream removed the
+> variable to define the path to the Python interpreter. But oh well,
+> this allows us to remove quite a few patches.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- package/busybox/S01logging | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Yes i agree.  At least with this change version bumps should now be simpler.
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index a72c69d..4632a4c 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -3,10 +3,14 @@
- # Start logging
- #
- 
-+SYSLOGD_ARGS=-n
-+KLOGD_ARGS=-n
-+[ -r /etc/default/logging ] && . /etc/default/logging
-+
- start() {
- 	printf "Starting logging: "
--	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
--	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
-+	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
-+	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
- 	echo "OK"
- }
- 
--- 
-2.7.0
+Thanks
+
+Martin
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
