@@ -1,96 +1,46 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon,  7 Mar 2016 22:06:46 +0100
-Subject: [Buildroot] [PATCH v3] package/scrub: new package
-Message-ID: <1457384806-14065-1-git-send-email-s.martin49@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon,  7 Mar 2016 22:56:45 +0100
+Subject: [Buildroot] [PATCH 2/2] libpjsip: fix optional dependency on libsrtp
+In-Reply-To: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
+References: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1457387805-4084-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fetch a patch fixing autoreconf call.
-Patch already sent and merged upstream.
+libpjsip does not correctly detect whether libsrtp is installed in staging.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Symptom:
+  .../libpjmedia.so: undefined reference to `srtp_deinit'
+  collect2: error: ld returned 1 exit status
 
+Fixes:
+  http://autobuild.buildroot.org/results/305/305fdc8442cd2e8f51b90485be0dca83ffa36603/
+  http://autobuild.buildroot.org/results/a2f/a2f407c1361ac5c24af122445e84645e9aee309d/
+  ...and other similar failures.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
-change v2->v3:
-- use _PATCH var. to fetch patch and remove the patch from the package
-  dir. (Ricardo)
-- update project url (Ricardo)
-- add DISCLAIMER to the license files (Ricardo)
+ package/libpjsip/libpjsip.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-change v1->v2:
-- reword comment in *.mk (ThomasP)
-- rework the autoreconf fix (send the patch upstream) (ThomasP)
----
- package/Config.in        |  1 +
- package/scrub/Config.in  |  7 +++++++
- package/scrub/scrub.hash |  3 +++
- package/scrub/scrub.mk   | 17 +++++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/scrub/Config.in
- create mode 100644 package/scrub/scrub.hash
- create mode 100644 package/scrub/scrub.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index c4d98c4..d916154 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1636,6 +1636,7 @@ endif
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	source "package/rsyslog/Config.in"
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index ee250f5b11ef..9316dd7998e6 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -31,6 +31,11 @@ else
+ LIBPJSIP_CONF_OPTS += --disable-ssl
  endif
-+	source "package/scrub/Config.in"
- 	source "package/scrypt/Config.in"
- 	source "package/smack/Config.in"
- if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-diff --git a/package/scrub/Config.in b/package/scrub/Config.in
-new file mode 100644
-index 0000000..5d101d8
---- /dev/null
-+++ b/package/scrub/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SCRUB
-+	bool "scrub"
-+	help
-+	  Scrub iteratively writes patterns on files or disk devices to make
-+	  retrieving the data more difficult.
+ 
++ifeq ($(BR2_PACKAGE_LIBSRTP),y)
++LIBPJSIP_DEPENDENCIES += libsrtp
++LIBPJSIP_CONF_OPTS += --with-external-srtp=$(STAGING_DIR)/usr
++endif
 +
-+	  https://github.com/chaos/scrub/
-diff --git a/package/scrub/scrub.hash b/package/scrub/scrub.hash
-new file mode 100644
-index 0000000..0041fd0
---- /dev/null
-+++ b/package/scrub/scrub.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  838b061b2e1932b342fb9695c5579cdff5d2d72506cb41d6d8032eba18aed969  scrub-2.6.1.tar.gz
-+sha256  6a129b4e0df6ebe02d449fa481db7b75be5eff08ce518aa77edd74c6b17c5ae4  11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
-diff --git a/package/scrub/scrub.mk b/package/scrub/scrub.mk
-new file mode 100644
-index 0000000..b816272
---- /dev/null
-+++ b/package/scrub/scrub.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# scrub
-+#
-+################################################################################
-+
-+SCRUB_VERSION = 2.6.1
-+SCRUB_SITE = $(call github,chaos,scrub,$(SCRUB_VERSION))
-+SCRUB_LICENSE = GPLv2+
-+SCRUB_LICENSE_FILES = COPYING DISCLAIMER
-+SCRUB_PATCH = https://github.com/chaos/scrub/commit/11d30916dd9c11a26c7c8a0f6db9e6ebca301594.patch
-+
-+# Fetching from the git repo, no configure/Makefile generated, and patching
-+# configure.ac
-+SCRUB_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ LIBPJSIP_DEPENDENCIES += util-linux
+ endif
 -- 
-2.7.2
+1.9.1
