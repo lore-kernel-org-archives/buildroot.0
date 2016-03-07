@@ -1,57 +1,105 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 07 Mar 2016 02:40:52 +0000
-Subject: [Buildroot] [Bug 8751] make fail
-In-Reply-To: <bug-8751-163@https.bugs.busybox.net/>
-References: <bug-8751-163@https.bugs.busybox.net/>
-Message-ID: <bug-8751-163-jVre7GrvVe@https.bugs.busybox.net/>
+From: Rodrigo Rebello <rprebello@gmail.com>
+Date: Sun,  6 Mar 2016 23:50:05 -0300
+Subject: [Buildroot] [PATCH 1/1] irssi: bump to version 0.8.18
+Message-ID: <1457319005-20084-1-git-send-email-rprebello@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8751
+Also remove no longer needed patch (merged upstream).
 
-rootkiter <rootkiter@rootkiter.com> changed:
+Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+---
+ .../0001-Fix-quote-around-macro-argument.patch     | 46 ----------------------
+ package/irssi/irssi.hash                           |  2 +-
+ package/irssi/irssi.mk                             |  7 ++--
+ 3 files changed, 4 insertions(+), 51 deletions(-)
+ delete mode 100644 package/irssi/0001-Fix-quote-around-macro-argument.patch
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Target Milestone|---                         |2016.02
-            Version|unspecified                 |2015.11
-           Hardware|All                         |PC
-
---- Comment #3 from rootkiter <rootkiter@rootkiter.com> ---
-Sorry for @Thomas Petazzoni ,from China...
-
-I thouht
-http://autobuild.buildroot.net/results/578/578ae9da10d017ee9e2c15d37014f31a1114ef3a/
- has the bug config...
-so I don't need put it up...
-
-I tested all most buildroot version from 2015 begin,all has this bug...
-
-On the "make menuconfig"... I just chose 
-```
-Target packages -> 
-    Debugging,profiling and benchmark -> 
-       [*]fio
-```
-
-Then,this bug showed up...Cancle it,every thing is good..
-
-My build target is "SuperH : ELF : sh4(SH4 little endian)"
-
-I just want get a "gdb && gdbserver(static) for SuperH",
-And I didn't find other items for gdb..
-I thought I need this Item...
-
-
-PS:This is my first time report a bug to "Open source project"...
-so,I am realy don't know how to upload the .config file,
-and how to descript it...
-Maybe,Someone can give me an URL of "help page" for report the bugs...
-The Community will thank you for bringing a new person there...
-
+diff --git a/package/irssi/0001-Fix-quote-around-macro-argument.patch b/package/irssi/0001-Fix-quote-around-macro-argument.patch
+deleted file mode 100644
+index d0509d5..0000000
+--- a/package/irssi/0001-Fix-quote-around-macro-argument.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From a9d2f9ca6edb7a958ecb606f7db2055caad26a1e Mon Sep 17 00:00:00 2001
+-From: Rodrigo Rebello <rprebello@gmail.com>
+-Date: Wed, 28 Oct 2015 13:38:21 -0200
+-Subject: [PATCH 1/1] Fix quote around macro argument
+-
+-In m4/curses.m4, line 134, the 5th argument passed to AC_NCURSES was
+-surrounded by '"' instead of '[' and ']'. Because of that, the expansion
+-of AC_NCURSES in that case would produce the following line inside the
+-configure script (note the repeated double quotes):
+-
+-  screen_manager=""ncurses on $withval/include""
+-
+-That would cause the following error when configure was executed with
+-the "--with-ncurses=dir" argument:
+-
+-  ./configure: line 13468: on: command not found
+-
+-Although in the case above the error doesn't actually influence the
+-build process ('screen_manager' isn't used anywhere in the script),
+-trying to execute 'on' might be harmful if it corresponded to an
+-existing command in the user's environment.
+-
+-Upstream-status: accepted, not yet released.
+-https://github.com/irssi/irssi/pull/344
+-
+-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+----
+- m4/curses.m4 | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/m4/curses.m4 b/m4/curses.m4
+-index 82b110f..41c0e6c 100644
+---- a/m4/curses.m4
+-+++ b/m4/curses.m4
+-@@ -131,7 +131,7 @@ AC_DEFUN([AC_CHECK_CURSES],[
+- 	  if test x$withval = xno ; then
+- 		search_ncurses=false
+- 	  elif test x$withval != xyes ; then
+--		AC_NCURSES($withval/include, ncurses.h, -L$withval/lib -lncurses, -I$withval/include, "ncurses on $withval/include")
+-+		AC_NCURSES($withval/include, ncurses.h, -L$withval/lib -lncurses, -I$withval/include, [ncurses on $withval/include])
+- 	  fi
+- 	)
+- 
+--- 
+-2.1.4
+-
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 0bfafe6..fa49d85 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	3c9600cad2edf58f1d012febc1a0ba844274df6e331c01a9e935467705166807	irssi-0.8.17.tar.bz2
++sha256	c0a177f749757c2d171ebe49ab0f0dd9cf9374dea81ab01904d0549bcb057840	irssi-0.8.18.tar.xz
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 176dce7..8272e44 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,15 +4,14 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 0.8.17
+-IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.bz2
++IRSSI_VERSION = 0.8.18
++IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
+-IRSSI_SITE = https://github.com/irssi-import/irssi/releases/download/$(IRSSI_VERSION)
++IRSSI_SITE = https://github.com/irssi/irssi/releases/download/$(IRSSI_VERSION)
+ IRSSI_LICENSE = GPLv2+
+ IRSSI_LICENSE_FILES = COPYING
+ IRSSI_DEPENDENCIES = host-pkgconf libglib2 ncurses
+-IRSSI_AUTORECONF = YES
+ 
+ IRSSI_CONF_OPTS = \
+ 	--disable-glibtest \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.1.4
