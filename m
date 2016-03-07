@@ -1,37 +1,48 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon,  7 Mar 2016 10:23:42 +0100
-Subject: [Buildroot] [PATCH] python-rpi-gpio: fix typo
-Message-ID: <1457342622-1928-1-git-send-email-yegorslists@googlemail.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Mon,  7 Mar 2016 10:48:17 +0100
+Subject: [Buildroot] [PATCH v2 1/1] busybox: Make S01logging source a
+	default file.
+In-Reply-To: <56D61C10.9080409@lucaceresoli.net>
+References: <56D61C10.9080409@lucaceresoli.net>
+Message-ID: <1457344097-20448-1-git-send-email-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+The default syslog parameters are to keep only 200-400 KiB of logs,
+which is very few if there is a spammy daemon on the system, or a daemon
+that fails and then spams errors that hides the original problem.
 
-s/LICENSE.txt/LICENCE.txt
+Make S01logging source a /etc/default/logging file where these
+parameters can be overridden.
 
-Fixes:
-http://autobuild.buildroot.net/results/406/4060be5aed299b9fc197f2f8c398ca2800e7ec08/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 ---
- package/python-rpi-gpio/python-rpi-gpio.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/busybox/S01logging | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
-index e71fdea..106b8dd 100755
---- a/package/python-rpi-gpio/python-rpi-gpio.mk
-+++ b/package/python-rpi-gpio/python-rpi-gpio.mk
-@@ -8,7 +8,7 @@ PYTHON_RPI_GPIO_VERSION = 0.6.1
- PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
- PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
- PYTHON_RPI_GPIO_LICENSE = MIT
--PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
-+PYTHON_RPI_GPIO_LICENSE_FILES = LICENCE.txt
- PYTHON_RPI_GPIO_SETUP_TYPE = distutils
+diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+index a72c69d..4632a4c 100644
+--- a/package/busybox/S01logging
++++ b/package/busybox/S01logging
+@@ -3,10 +3,14 @@
+ # Start logging
+ #
  
- $(eval $(python-package))
++SYSLOGD_ARGS=-n
++KLOGD_ARGS=-n
++[ -r /etc/default/logging ] && . /etc/default/logging
++
+ start() {
+ 	printf "Starting logging: "
+-	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- -n
+-	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- -n
++	start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
++	start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
+ 	echo "OK"
+ }
+ 
 -- 
 2.7.0
