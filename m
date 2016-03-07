@@ -1,34 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2016 21:19:14 +0100
-Subject: [Buildroot] Patchwork session, March 8th
-Message-ID: <20160307211914.3d33efe5@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Mar 2016 20:23:01 +0000
+Subject: [Buildroot] [Bug 8771] make savedefconfig modifies sources
+In-Reply-To: <bug-8771-163@https.bugs.busybox.net/>
+References: <bug-8771-163@https.bugs.busybox.net/>
+Message-ID: <bug-8771-163-YmX2Br27g5@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8771
 
-Our next patchwork session is scheduled tomorrow, on March 8th, see:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-  https://framadate.org/WEmxCql13oXFhbMs
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |WORKSFORME
+             Status|NEW                         |RESOLVED
 
-For now just Yegor and me have confirmed their participation, Arnout
-and Samuel said they might be appear.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+This is the expected behavior. I personally don't like it (since it deviates
+from how the Linux kernel handles defconfig, and also because it's look weird),
+but that's the way it's supposed to work in Buildroot.
 
-Could other people join? Peter? Yann? Gustavo? Others?
+Basically, the defconfig is stored to the file pointed by BR2_DEFCONFIG. By
+default, this option is set to $(CONFIG_DIR)/defconfig, which would do what you
+want, i.e save the defconfig next to the .config file.
 
-I've started up a Wiki page at
-http://elinux.org/Buildroot:PatchworkSessions to list ahead of times
-the list of patches/topics we want to discuss/work on. On my side, I'll
-fill it tomorrow with a list of patches I'm not sure what to do with
-and therefore need to be discussed.
+However, when you run "make <foobar>_defconfig", we set BR2_DEFCONFIG to
+"configs/<foobar>_defconfig". The original intent is to make things
+"transparent": if you start from a defconfig, the assumption is that you want
+changes made to this configuration to be saved back to the same defconfig.
 
-Best regards,
+You can override this at any time by changing BR2_DEFCONFIG in
+menuconfig/xconfig/nconfig, or simply on the command line by passing
+BR2_DEFCONFIG="/some/place".
 
-Thomas
+As I said, I personally don't really like this behavior, and I got confused
+several times. The fact that the source tree is modified is indeed another
+drawback of this behavior. However, I didn't find this to be too problematic to
+really argue against the contributors who wanted this feature.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
