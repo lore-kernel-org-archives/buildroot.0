@@ -1,39 +1,57 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun,  6 Mar 2016 22:47:03 -0300
-Subject: [Buildroot] [PATCH] mpfr: bump to version 3.1.4
-Message-ID: <1457315223-5465-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 07 Mar 2016 02:40:52 +0000
+Subject: [Buildroot] [Bug 8751] make fail
+In-Reply-To: <bug-8751-163@https.bugs.busybox.net/>
+References: <bug-8751-163@https.bugs.busybox.net/>
+Message-ID: <bug-8751-163-jVre7GrvVe@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mpfr/mpfr.hash | 2 +-
- package/mpfr/mpfr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=8751
 
-diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
-index 8b6dc86..a8b642b 100644
---- a/package/mpfr/mpfr.hash
-+++ b/package/mpfr/mpfr.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	6835a08bd992c8257641791e9a6a2b35b02336c8de26d0a8577953747e514a16	mpfr-3.1.3.tar.xz
-+sha256	761413b16d749c53e2bfd2b1dfaa3b027b0e793e404b90b5fbaeef60af6517f5	mpfr-3.1.4.tar.xz
-diff --git a/package/mpfr/mpfr.mk b/package/mpfr/mpfr.mk
-index ec16d1c..5c3a6ef 100644
---- a/package/mpfr/mpfr.mk
-+++ b/package/mpfr/mpfr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPFR_VERSION = 3.1.3
-+MPFR_VERSION = 3.1.4
- MPFR_SITE = http://www.mpfr.org/mpfr-$(MPFR_VERSION)
- MPFR_SOURCE = mpfr-$(MPFR_VERSION).tar.xz
- MPFR_LICENSE = LGPLv3+
+rootkiter <rootkiter@rootkiter.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Target Milestone|---                         |2016.02
+            Version|unspecified                 |2015.11
+           Hardware|All                         |PC
+
+--- Comment #3 from rootkiter <rootkiter@rootkiter.com> ---
+Sorry for @Thomas Petazzoni ,from China...
+
+I thouht
+http://autobuild.buildroot.net/results/578/578ae9da10d017ee9e2c15d37014f31a1114ef3a/
+ has the bug config...
+so I don't need put it up...
+
+I tested all most buildroot version from 2015 begin,all has this bug...
+
+On the "make menuconfig"... I just chose 
+```
+Target packages -> 
+    Debugging,profiling and benchmark -> 
+       [*]fio
+```
+
+Then,this bug showed up...Cancle it,every thing is good..
+
+My build target is "SuperH : ELF : sh4(SH4 little endian)"
+
+I just want get a "gdb && gdbserver(static) for SuperH",
+And I didn't find other items for gdb..
+I thought I need this Item...
+
+
+PS:This is my first time report a bug to "Open source project"...
+so,I am realy don't know how to upload the .config file,
+and how to descript it...
+Maybe,Someone can give me an URL of "help page" for report the bugs...
+The Community will thank you for bringing a new person there...
+
 -- 
-2.4.10
+You are receiving this mail because:
+You are on the CC list for the bug.
