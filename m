@@ -1,41 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 7 Mar 2016 00:07:50 +0100
-Subject: [Buildroot] [PATCH 1/3] package/libcap: install .pc file
- unconditionally
-In-Reply-To: <347ad80ae1c4e2168f2ae458999f25bc5f66245f.1457305443.git.yann.morin.1998@free.fr>
-References: <cover.1457305443.git.yann.morin.1998@free.fr>
- <347ad80ae1c4e2168f2ae458999f25bc5f66245f.1457305443.git.yann.morin.1998@free.fr>
-Message-ID: <20160307000750.5fd24d8f@free-electrons.com>
+From: Cyril Bur <cyrilbur@gmail.com>
+Date: Mon,  7 Mar 2016 12:05:09 +1100
+Subject: [Buildroot] [PATCH V2] package/systemd: Respect
+	BR2_TARGET_GENERIC_GETTY_BAUDRATE
+Message-ID: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yann E. MORIN,
+Currently systemd getty services ignore baudrates set in buildroot in
+favour of a hardcoded 115200. This patch SEDs out that hardcoded value with
+what is selected.
 
-On Mon,  7 Mar 2016 00:04:54 +0100, Yann E. MORIN wrote:
-> And re-format patches as git patches.
-> 
-> Fixes:
->     http://autobuild.buildroot.org/results/c13/c13fb87c2e4739106e256f34fff93696b0133bf6/
->     http://autobuild.buildroot.org/results/f82/f822801f9b811e1a0fb4627f6b528116375cacfe/
->     http://autobuild.buildroot.org/results/07c/07c0315a35089a8d3e8eb1a305dcd8bf1fb882ee/
->     and many more...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  ...build-system-fixes-for-cross-compilation.patch} | 47 +++++++++++++---------
->  ...-install-into-install-shared-install-sta.patch} | 26 ++++++++++--
->  package/libcap/libcap.mk                           |  2 +-
->  3 files changed, 52 insertions(+), 23 deletions(-)
->  rename package/libcap/{0001-build-system.patch => 0001-build-system-fixes-for-cross-compilation.patch} (69%)
->  rename package/libcap/{0002-split-static-shared-install.patch => 0002-libcap-split-install-into-install-shared-install-sta.patch} (52%)
+Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+---
+V2: Address comments from Martin Bark and Maxime Hadjinlian
+    - Don't change the symlink
+    - Use qstrip (for consistency) around
+      $(BR2_TARGET_GENERIC_GETTY_BAUDRATE) in shell test statement
 
-Applied to master, thanks.
+---
+ package/systemd/systemd.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 05121cf..0d52481 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -169,6 +169,7 @@ endef
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd needs getty.service for VTs and serial-getty.service for serial ttys
++# also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
+ define SYSTEMD_INSTALL_SERVICE_TTY
+ 	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
+ 	then \
+@@ -177,7 +178,11 @@ define SYSTEMD_INSTALL_SERVICE_TTY
+ 		SERVICE="serial-getty"; \
+ 	fi; \
+ 	ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
+-		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
++		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service; \
++	if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
++	then \
++		$(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service; \
++	fi
+ endef
+ endif
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.2
