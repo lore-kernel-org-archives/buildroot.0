@@ -1,77 +1,76 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 7 Mar 2016 11:07:10 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-03-03
-In-Reply-To: <20160304212419.6529ec0c@free-electrons.com>
-References: <20160304073022.647E6102375@stock.ovh.net>
- <CAAMH-ytHBRRC7A3aOynB6TVyJgr82dge8s1pMemreE4N_aXF5w@mail.gmail.com>
- <20160304212419.6529ec0c@free-electrons.com>
-Message-ID: <CAAMH-yvg94GdZ-cdDi_CyoHod3MMbiZzbgvxDA1BhTyAXzC2=A@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon,  7 Mar 2016 10:19:10 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/connman: fix crash due to
+	iptables 1.6.0 update
+Message-ID: <1457345950-2793-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+iptables was updated to version 1.6.0 in commit
+https://git.busybox.net/buildroot/commit/?id=35dc775 however, connman
+1.31 crashes when iptables 1.6.0 is used.
 
-On Fri, Mar 4, 2016 at 9:24 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
->
-> Gary,
->
-> On Fri, 4 Mar 2016 16:13:29 +0100, Gary Bisson wrote:
->
-> > > Classification of failures by reason
-> > > ====================================
-> > >
-> > >               host-libcap-2.24 | 22
-> > >      python-cryptography-1.2.2 | 22
-> > >            libimxvpuapi-0.10.1 | 5
-> >
-> > I've looked at the libimxvpuapi failures and they are actually imx-vpu failures.
-> >
-> > The latest imx-vpu only builds if the PLATFORM is MX27, MX53 or MX6Q
-> > but our default is MX25. So the imx-vpu package just does nothing and
-> > then libimxvpuapi fails during configuration because libvpu is
-> > missing.
->
-> Thanks for investigating!
+This issues has already been fixed upstream but is not currently available
+in a release.  To fix connman include the upstream patch. See
+http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a
 
-NP, actually I suspect this issue has been there for quite some time.
+Signed-off-by: Martin Bark <martin@barkynet.com>
 
-> > I'm looking into a solution but those FREESCALE_IMX_PLATFORM_* are not
-> > easy to play with.
->
-> What do you find not easy with those options?
+---
 
-The problem with those platform variables is that you can't select
-them nor you can make imx-vpu easily dependent of them.
+Changes v1 -> v2
+ - Added Signed-off-by to patch (suggested by Thomas)
+---
+ ...ion-item-of-xtables-to-match-iptables-1.6.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
 
-It requires to change all the packages that select imx-vpu
-(libimxvpuapi, libfslvpuwrap, gst-fsl-plugins) with redundant
-information like:
-depends on BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS || \
-        BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || \
-        BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
-        BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-
-Although I don't think it's possible, it'd be great to have a macro like:
-depends on FREESCALE_IMX_PLATFORM_HAS_VPU()
-
-And then the macro would be defined in freescale-imx.mk to easily
-update it in the future.
-
-Or we could drop old platforms support as well as gstreamer0.10 fsl
-plugins like Yocto did, keeping only mx51/53/6q which are the only we
-truly support.
-https://github.com/Freescale/meta-fsl-arm/commit/83b240e7
-https://github.com/Freescale/meta-fsl-arm/commit/3b698004
-
-However I plan on adding MX6UL and MX7 platforms definition which
-don't have any VPU.
-
-Let me know your thoughts.
-
-Regards,
-Gary
+diff --git a/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
+new file mode 100644
+index 0000000..75bf373
+--- /dev/null
++++ b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
+@@ -0,0 +1,38 @@
++From acea08a0e4234a4c1a87bedc087c73ff36de0c7b Mon Sep 17 00:00:00 2001
++From: Wu Zheng <wu.zheng@intel.com>
++Date: Thu, 28 Jan 2016 18:04:17 +0800
++Subject: iptables: Add missing function item of xtables to match iptables 1.6
++
++The struct of xtables_globals has been modified in iptables 1.6.
++If connman runs with iptables 1.6, it can crash.
++
++Program received signal SIGSEGV, Segmentation fault.
++0x00000000 in ?? ()
++0xb7dea89c in xtables_find_target () from /usr/lib/libxtables.so.11
++0xb7deac1c in ?? () from /usr/lib/libxtables.so.11
++0xb7dea793 in xtables_find_target () from /usr/lib/libxtables.so.11
++
++The the missing function item of xtables is added to xtables_globals.
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++---
++ src/iptables.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/iptables.c b/src/iptables.c
++index bc0c763..5ef757a 100644
++--- a/src/iptables.c
+++++ b/src/iptables.c
++@@ -1566,6 +1566,9 @@ struct xtables_globals iptables_globals = {
++ 	.option_offset = 0,
++ 	.opts = iptables_opts,
++ 	.orig_opts = iptables_opts,
+++#if XTABLES_VERSION_CODE > 10
+++	.compat_rev = xtables_compatible_revision,
+++#endif
++ };
++ 
++ static struct xtables_target *prepare_target(struct connman_iptables *table,
++-- 
++cgit v0.12
++
+-- 
+2.7.2
