@@ -1,74 +1,34 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 7 Mar 2016 10:20:39 +0000
-Subject: [Buildroot] [PATCH 1/1] package/connman: fix crash due to
- iptables 1.6.0 update
-In-Reply-To: <20160304215218.324b2fbd@free-electrons.com>
-References: <1457112113-7709-1-git-send-email-martin@barkynet.com>
- <20160304215218.324b2fbd@free-electrons.com>
-Message-ID: <CAFGQKxeEboXOgmeu9rhjUByBOdT2u-mFVJSbwh8N=zNaiXoSAg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Mar 2016 11:04:37 +0100
+Subject: [Buildroot] [PATCH] python-rpi-gpio: fix typo
+In-Reply-To: <1457342622-1928-1-git-send-email-yegorslists@googlemail.com>
+References: <1457342622-1928-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160307110437.73a8e01c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear yegorslists at googlemail.com,
+
+On Mon,  7 Mar 2016 10:23:42 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> s/LICENSE.txt/LICENCE.txt
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/406/4060be5aed299b9fc197f2f8c398ca2800e7ec08/
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/python-rpi-gpio/python-rpi-gpio.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Applied to master, thanks.
+
 Thomas
-
-On 4 March 2016 at 20:52, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Martin,
->
-> On Fri,  4 Mar 2016 17:21:53 +0000, Martin Bark wrote:
->> iptables was updated to version 1.6.0 in commit
->> https://git.busybox.net/buildroot/commit/?id=35dc775 however, connman
->> 1.31 crashes when iptables 1.6.0 is used.
->>
->> This issues has already been fixed upstream but is not currently available
->> in a release.  To fix connman include the upstream patch. See
->> http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->
-> Thanks for this patch. One comment below.
->
->> diff --git a/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
->> new file mode 100644
->> index 0000000..30131e6
->> --- /dev/null
->> +++ b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
->> @@ -0,0 +1,36 @@
->> +From acea08a0e4234a4c1a87bedc087c73ff36de0c7b Mon Sep 17 00:00:00 2001
->> +From: Wu Zheng <wu.zheng@intel.com>
->> +Date: Thu, 28 Jan 2016 18:04:17 +0800
->> +Subject: iptables: Add missing function item of xtables to match iptables 1.6
->> +
->> +The struct of xtables_globals has been modified in iptables 1.6.
->> +If connman runs with iptables 1.6, it can crash.
->> +
->> +Program received signal SIGSEGV, Segmentation fault.
->> +0x00000000 in ?? ()
->> +0xb7dea89c in xtables_find_target () from /usr/lib/libxtables.so.11
->> +0xb7deac1c in ?? () from /usr/lib/libxtables.so.11
->> +0xb7dea793 in xtables_find_target () from /usr/lib/libxtables.so.11
->> +
->> +The the missing function item of xtables is added to xtables_globals.
->
-> We normally require people who integrate patches in Buildroot to
-> Signed-off-by on the patches they have integrated. I.e, we would need
-> your Signed-off-by here.
-
-I've added the Signed-off-by and submitted an update. See
-http://patchwork.ozlabs.org/patch/592878/
-
-Thanks
-
-Martin
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
