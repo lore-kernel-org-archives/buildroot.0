@@ -1,54 +1,69 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 7 Mar 2016 20:40:35 +1300
-Subject: [Buildroot] [RFC PATCH 1/1] scripts: Add gen-package.py
-In-Reply-To: <20160306232248.4d37bcd2@free-electrons.com>
-References: <1443426394-13595-1-git-send-email-judge.packham@gmail.com>
- <1443426394-13595-2-git-send-email-judge.packham@gmail.com>
- <20160306232248.4d37bcd2@free-electrons.com>
-Message-ID: <CAFOYHZDX9Ap8XSPuqKg8k-9+KA5qKB+DmhRH1FstXxMfkBG_7g@mail.gmail.com>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Mon, 7 Mar 2016 08:42:24 +0100
+Subject: [Buildroot] [PATCH v3] configs/olimex_imx233_olinuxino: switch
+	to u-boot
+In-Reply-To: <87pov75prw.fsf@dell.be.48ers.dk>
+References: <1456075479-12750-1-git-send-email-phil@zankapfel.net>
+ <1456598432-4783-1-git-send-email-phil@zankapfel.net>
+ <87pov75prw.fsf@dell.be.48ers.dk>
+Message-ID: <CAPiYbRKwwmyTz4vSEVUVdQZvGmd2MVzRKpktwHhOWih42dSCaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 7, 2016 at 11:22 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Chris Packham,
+On 6 March 2016 at 21:12, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
 >
-> On Mon, 28 Sep 2015 20:46:34 +1300, Chris Packham wrote:
->> gen-package.py can be used to generate the initial skeleton Config.in
->> and <package>.mk for a package based on its download URL.
->>
->> Signed-off-by: Chris Packham <judge.packham@gmail.com>
->> ---
->>  support/scripts/gen-package.py | 266 +++++++++++++++++++++++++++++++++++++++++
->>  1 file changed, 266 insertions(+)
->>  create mode 100755 support/scripts/gen-package.py
+>  > mxs-bootlets broke somewhere in between toolchain version bumps.
+>  > Directly boot u-boot, as this is supported now, but it requires updated
+>  > partitioning (see readme.txt)
 >
-> Sorry for the very very slow feedback. To be honest, my opinion on this
-> is that a script that just generates the skeleton of a package is not
-> very useful.
+>  > Drop mxs-bootlets patches, they aren't needed anymore.
 >
-> What I find useful however are scripts to generate working packages
-> like we already have for CPAN Perl modules (scancpan script), and like
-> we will probably have for Python (see
-> http://patchwork.ozlabs.org/patch/501204/).
-
-Yes now that those exist there is certainly no need for the
-python/perl package support. cpan & pypi do a much better job of
-providing the metadata needed than we can by guessing based on a
-random URL.
-
-Some of the gaps in my RFC could be filled in by actually downloading
-the package and guessing the build system and license. Which would
-turn it from a skeleton generator to an actual complete package
-generator.
-
+>  > Kernel is built as an uImage because the u-boot defconfig expects an
+>  > uImage on the second partition.
 >
-> Another thing that would be useful is a "checkpackage" script, that
-> runs a bunch of verifications on a package (proper indentation, license
-> information filled in, etc.). But it is not trivial to do if you want
-> to check useful things.
+>  > Tested on iMX233-OLinuXino-MINI hardware.
+>
+>  > Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+>  > ---
+>  > Changes v3 -> v2:
+>  >  - Explain why an uImage is used
+>  >  - Add tested on which hardware
+>  >  - Set u-boot version to 2006.01
+>  >   (suggested by Thomas Petazzoni)
+>
+> Committed with the changes suggested by Arnout, thanks.
 
-Such a script would have helped me with some of my submissions.
+Thank you! Haven't had time to come up with a v4 yet.
+
+
+>  >  You'll need a spare MicroSD card with Freescale's special partition layout.
+>  > -This is basically two partitions:
+>  > +This is basically three partitions:
+>
+>  > -1) Type 53, the bootstrap + bootloader/kernel partition, should be 16MB.
+>  > -2) Anything you like, for this example an ext2 partition, type 83 (linux).
+>  > +1) Type 53, the u-boot partition, should be 16MB.
+>  > +2) VFAT, place Kernel as uImage there
+>  > +3) Anything you like, for this example an ext2 partition, type 83 (linux).
+>
+>  >  Assuming you see your MicroSD card as /dev/sdc you'd need to do, as root
+>  >  and from the buildroot project top level directory:
+>
+> This seems like a good fit for genimage. Can you verify that you are
+> able to boot from a complete sdcard image generated with genimage and
+> then send a patch to create it in a post-image script?
+>
+> See E.G. board/orangepi/orangepipc for an example, thanks!
+
+I had a look. Some genimage.cfg use a fixed size of 512MB for the
+rootfs, some just use the size of the rootfs.
+I do prefer the later, as I'm able to fit a as small as possible SD
+card. Especially since 512MB + some MB for the Kernel and bootloader
+would at least require a 1GB card. What's the intent behind using a
+512MB rootfs partition in that case?
+
+Regards, Phil
