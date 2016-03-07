@@ -1,146 +1,59 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 7 Mar 2016 17:47:14 +0000
-Subject: [Buildroot] [git commit] package/gdb: add optional support for
-	xz
-In-Reply-To: <20160216221411.4849680439@busybox.osuosl.org>
-References: <20160216221411.4849680439@busybox.osuosl.org>
-Message-ID: <56DDBEA2.1010901@imgtec.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Mon, 7 Mar 2016 19:31:45 +0100
+Subject: [Buildroot] [v3,
+	1/4] barebox: prepare for secondary config build
+In-Reply-To: <56DC9E47.2090207@mind.be>
+References: <1453329821-3167-2-git-send-email-pieter@boesman.nl>
+ <56D0DCFB.8060601@mind.be> <20160228081204.GB4297@smipidev>
+ <20160229074707.GA17808@smipidev> <56D620F2.3090605@mind.be>
+ <20160302075049.GA10481@smipidev> <56D72D29.5050600@mind.be>
+ <20160302213256.GA11826@smipidev> <20160305131603.GA7616@smipidev>
+ <56DC9E47.2090207@mind.be>
+Message-ID: <20160307183145.GA8550@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, Bernd, all,
+On Sun, Mar 06, 2016 at 10:16:55PM +0100, Arnout Vandecappelle wrote:
+> On 03/05/16 14:16, Pieter Smith wrote:
 
-for some reason gdb fails to build with xz and expat support at the same
-time when using an external toolchain.
+[snip]
 
-This is how the problem is shown:
-
-checking for liblzma... no
-configure: error: missing liblzma for --with-lzma
-
-Try this defconfig if you want to reproduce the problem:
-
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XZ=y
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_GDB_DEBUGGER=y
-BR2_PACKAGE_EXPAT=y
-
-Using the above defconfig, the error in the gdb/config.log will look
-like this:
-
-configure:13241: checking whether to use lzma
-configure:13243: result: yes
-configure:13657: checking for liblzma
-configure:13678: /br/output/host/usr/bin/i686-pc-linux-gnu-gcc -o
-conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os
--I/br/output/host/usr/x86_64-buildroot-linux-gnu/sysroot/usr/include
--static-libstdc++ -static-libgcc  conftest.c -ldl -ldl -lncurses -lm
--ldl    /usr/lib/liblzma.so >&5
-/lib64/liblzma.so.5: undefined reference to `clock_gettime at GLIBC_2.17'
-collect2: error: ld returned 1 exit status
-
-You can also use this defconfig to reproduce the problem for MIPS:
-
-BR2_mips=y
-BR2_mips_32r2=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XZ=y
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_GDB_DEBUGGER=y
-BR2_PACKAGE_EXPAT=y
-
-In that case the error will look like this:
-
-configure:13241: checking whether to use lzma
-configure:13243: result: yes
-configure:13657: checking for liblzma
-configure:13678: /br/output/host/usr/bin/mips-linux-gnu-gcc -o conftest
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
- -I/br/output/host/usr/mips-buildroot-linux-gnu/sysroot/usr/include
--static-libstdc++ -static-libgcc  conftest.c -ldl -ldl -lncurses -lm
--ldl    /usr/lib/liblzma.so >&5
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.2.0/../../../../mips-linux-gnu/bin/ld:
-skipping incompatible /lib64/liblzma.so.5 when searching for
-/lib64/liblzma.so.5
-/br/output/host/opt/ext-toolchain/bin/../lib/gcc/mips-linux-gnu/5.2.0/../../../../mips-linux-gnu/bin/ld:
-cannot find /lib64/liblzma.so.5
-collect2: error: ld returned 1 exit status
-
-You can also use this defconfig to reproduce the problem for ARM:
-
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XZ=y
-BR2_PACKAGE_GDB=y
-BR2_PACKAGE_GDB_DEBUGGER=y
-BR2_PACKAGE_EXPAT=y
-
-In that case the error will look like this:
-
-configure:13241: checking whether to use lzma
-configure:13243: result: yes
-configure:13657: checking for liblzma
-configure:13678: /br/output/host/usr/bin/arm-linux-gnueabihf-gcc -o
-conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
--D_FILE_OFFSET_BITS=64  -Os
--I/br/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/include
--static-libstdc++ -static-libgcc  conftest.c -ldl -ldl -lncurses -lm
--ldl    /usr/lib/liblzma.so >&5
-/lib64/liblzma.so.5: file not recognized: File format not recognized
-collect2: error: ld returned 1 exit status
-
-Regards,
-
-Vincent.
-
-On 16/02/16 22:14, Thomas Petazzoni wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=18ce7f11ff3481308d911c362f0c2ef44b9492bc
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> > I am having some trouble with this. I am not able to handle ifdef-space
+> > diversity in this way. Ifdef-space diversity is used to determine how barebox
+> > should be configured, whether / how the barebox environment should be built,
+> > and to print user-friendly config errors. The ifdef logic is not all trivial
+> > (almost half of the makefile logic), so I would like to avoid duplicating it
+> > between barebox and barebox-2. The only way I know of to avoid this duplication
+> > is by extracting the logic info a definition and using $(eval), which is
+> > exactly what you want to avoid.
 > 
-> When xz was compiled before, gdb will use it as optional dependency:
+>  Ah yes, I didn't realize that. Indeed, for those things there is no way to
+> handle them with $(PKG).
 > 
-> $ output/host/usr/bin/i586-buildroot-linux-uclibc-readelf -a output/target/usr/bin/gdb | grep NEEDED
->  0x00000001 (NEEDED)                     Shared library: [libdl.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libncurses.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libz.so.1]
->  0x00000001 (NEEDED)                     Shared library: [libm.so.1]
->  0x00000001 (NEEDED)                     Shared library: [liblzma.so.5]
->  0x00000001 (NEEDED)                     Shared library: [libc.so.1]
+>  Actually I would like those things to move to kconfig-package, but that would
+> be dragging things a bit too far for this series.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  package/gdb/gdb.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-> index 3b0f501..32d52eb 100644
-> --- a/package/gdb/gdb.mk
-> +++ b/package/gdb/gdb.mk
-> @@ -118,6 +118,13 @@ else
->  GDB_CONF_OPTS += --without-expat
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_XZ),y)
-> +GDB_CONF_OPTS += --with-lzma
-> +GDB_DEPENDENCIES += xz
-> +else
-> +GDB_CONF_OPTS += --without-lzma
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  GDB_CONF_OPTS += --with-zlib
->  GDB_DEPENDENCIES += zlib
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>  So yes, your idea of $(call barebox-package) looks good. One small remark that
+> you can already fix before submitting: in the patch that adds the
+> barebox-package function, say explicitly in the commit message if anything has
+> changed except for $ -> $$ and BAREBOX -> $(1). That'll make review easier.
+
+Thanks for having a look. I will break the series up into smaller pieces to
+ease review:
+1 - 2 as before.
+3. Break out barebox-package (Explain the $ -> $$ subst).
+4. Make the variable name-space configurable (Explain BAREBOX -> $(1) subst).
+5. Make the package source name-space configurable (Explain BAREBOX -> $(2)
+   subst).
+6. Introduce boot/barebox-2/barebox-2.mk and Config.in with
+   $(call barebox-package,BAREBOX_2,BAREBOX)
+7. Add a defconfig for the BBB.
+
+[snip]
+
+Thank you for helping to bang this into shape.
+
+- Pieter
