@@ -1,48 +1,34 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 Mar 2016 22:56:44 +0100
-Subject: [Buildroot] [PATCH 1/2] libpjsip: needs threads
-Message-ID: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
+Date: Mon, 7 Mar 2016 23:06:30 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-03-06
+In-Reply-To: <20160307073022.D1A301013FB@stock.ovh.net>
+References: <20160307073022.D1A301013FB@stock.ovh.net>
+Message-ID: <56DDFB66.4020402@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Builds without thread support fail with the following error:
+Hi,
 
-  ../src/pj/os_core_unix.c:45:21: fatal error: pthread.h: No such file or directory
-   #include <pthread.h>
-                       ^
-  compilation terminated.
+On 07/03/2016 08:30, Thomas Petazzoni wrote:
 
-Fixes:
-  http://autobuild.buildroot.org/results/744/744431e1b47d22222c4d0b48d5d20649dfeed929/
-  http://autobuild.buildroot.org/results/a10/a10aca9139054502e055cb61f3925637fc515e12/
+>          arc |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/305fdc8442cd2e8f51b90485be0dca83ffa36603/
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
----
- package/libpjsip/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Fails with:
+  libpjmedia.so: undefined reference to `srtp_deinit'
 
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index 45387c4b39b9..980fada3d5fb 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBPJSIP
- 	bool "libpjsip"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  PJSIP is a free and open source multimedia communication
- 	  library written in C language implementing standard based
-@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBPJSIP
- 
- 	  http://www.pjsip.org
- 
--comment "libpjsip needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libpjsip needs a toolchain w/ C++, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+Many other failures (not yet mentioned in today e-mail) like this one.
+It's an issue with the detection of libsrtp.
+
+>          arm |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/744431e1b47d22222c4d0b48d5d20649dfeed929/
+>          arm |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/a10aca9139054502e055cb61f3925637fc515e12/
+
+Needs threads.
+
+I sent patches to fix these errors.
+
 -- 
-1.9.1
+Luca
