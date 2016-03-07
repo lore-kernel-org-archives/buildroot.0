@@ -1,76 +1,74 @@
 From: Martin Bark <martin@barkynet.com>
-Date: Mon,  7 Mar 2016 10:19:10 +0000
-Subject: [Buildroot] [PATCH v2 1/1] package/connman: fix crash due to
-	iptables 1.6.0 update
-Message-ID: <1457345950-2793-1-git-send-email-martin@barkynet.com>
+Date: Mon, 7 Mar 2016 10:20:39 +0000
+Subject: [Buildroot] [PATCH 1/1] package/connman: fix crash due to
+ iptables 1.6.0 update
+In-Reply-To: <20160304215218.324b2fbd@free-electrons.com>
+References: <1457112113-7709-1-git-send-email-martin@barkynet.com>
+ <20160304215218.324b2fbd@free-electrons.com>
+Message-ID: <CAFGQKxeEboXOgmeu9rhjUByBOdT2u-mFVJSbwh8N=zNaiXoSAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-iptables was updated to version 1.6.0 in commit
-https://git.busybox.net/buildroot/commit/?id=35dc775 however, connman
-1.31 crashes when iptables 1.6.0 is used.
+Thomas
 
-This issues has already been fixed upstream but is not currently available
-in a release.  To fix connman include the upstream patch. See
-http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a
+On 4 March 2016 at 20:52, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Martin,
+>
+> On Fri,  4 Mar 2016 17:21:53 +0000, Martin Bark wrote:
+>> iptables was updated to version 1.6.0 in commit
+>> https://git.busybox.net/buildroot/commit/?id=35dc775 however, connman
+>> 1.31 crashes when iptables 1.6.0 is used.
+>>
+>> This issues has already been fixed upstream but is not currently available
+>> in a release.  To fix connman include the upstream patch. See
+>> http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a
+>>
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>
+> Thanks for this patch. One comment below.
+>
+>> diff --git a/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
+>> new file mode 100644
+>> index 0000000..30131e6
+>> --- /dev/null
+>> +++ b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
+>> @@ -0,0 +1,36 @@
+>> +From acea08a0e4234a4c1a87bedc087c73ff36de0c7b Mon Sep 17 00:00:00 2001
+>> +From: Wu Zheng <wu.zheng@intel.com>
+>> +Date: Thu, 28 Jan 2016 18:04:17 +0800
+>> +Subject: iptables: Add missing function item of xtables to match iptables 1.6
+>> +
+>> +The struct of xtables_globals has been modified in iptables 1.6.
+>> +If connman runs with iptables 1.6, it can crash.
+>> +
+>> +Program received signal SIGSEGV, Segmentation fault.
+>> +0x00000000 in ?? ()
+>> +0xb7dea89c in xtables_find_target () from /usr/lib/libxtables.so.11
+>> +0xb7deac1c in ?? () from /usr/lib/libxtables.so.11
+>> +0xb7dea793 in xtables_find_target () from /usr/lib/libxtables.so.11
+>> +
+>> +The the missing function item of xtables is added to xtables_globals.
+>
+> We normally require people who integrate patches in Buildroot to
+> Signed-off-by on the patches they have integrated. I.e, we would need
+> your Signed-off-by here.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+I've added the Signed-off-by and submitted an update. See
+http://patchwork.ozlabs.org/patch/592878/
 
----
+Thanks
 
-Changes v1 -> v2
- - Added Signed-off-by to patch (suggested by Thomas)
----
- ...ion-item-of-xtables-to-match-iptables-1.6.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
+Martin
 
-diff --git a/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
-new file mode 100644
-index 0000000..75bf373
---- /dev/null
-+++ b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
-@@ -0,0 +1,38 @@
-+From acea08a0e4234a4c1a87bedc087c73ff36de0c7b Mon Sep 17 00:00:00 2001
-+From: Wu Zheng <wu.zheng@intel.com>
-+Date: Thu, 28 Jan 2016 18:04:17 +0800
-+Subject: iptables: Add missing function item of xtables to match iptables 1.6
-+
-+The struct of xtables_globals has been modified in iptables 1.6.
-+If connman runs with iptables 1.6, it can crash.
-+
-+Program received signal SIGSEGV, Segmentation fault.
-+0x00000000 in ?? ()
-+0xb7dea89c in xtables_find_target () from /usr/lib/libxtables.so.11
-+0xb7deac1c in ?? () from /usr/lib/libxtables.so.11
-+0xb7dea793 in xtables_find_target () from /usr/lib/libxtables.so.11
-+
-+The the missing function item of xtables is added to xtables_globals.
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+---
-+ src/iptables.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/src/iptables.c b/src/iptables.c
-+index bc0c763..5ef757a 100644
-+--- a/src/iptables.c
-++++ b/src/iptables.c
-+@@ -1566,6 +1566,9 @@ struct xtables_globals iptables_globals = {
-+ 	.option_offset = 0,
-+ 	.opts = iptables_opts,
-+ 	.orig_opts = iptables_opts,
-++#if XTABLES_VERSION_CODE > 10
-++	.compat_rev = xtables_compatible_revision,
-++#endif
-+ };
-+ 
-+ static struct xtables_target *prepare_target(struct connman_iptables *table,
-+-- 
-+cgit v0.12
-+
--- 
-2.7.2
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
