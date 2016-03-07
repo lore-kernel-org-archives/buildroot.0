@@ -1,44 +1,44 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 7 Mar 2016 04:27:31 +0100
-Subject: [Buildroot] [PATCH] tor: disable unit-tests for aarch64
-Message-ID: <20160307032730.GA7775@waldemar-brodkorb.de>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 7 Mar 2016 06:51:42 +0200
+Subject: [Buildroot] [PATCH 1/2] Set PGROOT dir owner to be "postgres".
+In-Reply-To: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
+References: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
+Message-ID: <20160307045142.GM2877@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes following autobuild failure:
-http://autobuild.buildroot.net/results/13ef47c962afefbaa9ea7a95de083f885f1a8825/
+Hi Alan,
 
-There still might be a bug outside the unit-test.
+On Sun, Mar 06, 2016 at 10:29:09PM +0200, Alan Yaniger wrote:
+> Without setting the owner of /var/lib/pgsql to the user "postgres", 
+> the postgres server fails to start on boot.
+> 
+> Signed-off-by: Alan Yaniger <alan@tkos.co.il>
+> ---
+>  package/postgresql/postgresql.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index 444c1b1..5906ce9 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -17,6 +17,10 @@ POSTGRESQL_CONF_ENV = ac_cv_type_struct_sockaddr_in6=yes \
+>  POSTGRESQL_AUTORECONF = YES
+>  POSTGRESQL_CONF_OPTS = --disable-rpath
+>  
+> +define POSTGRESQL_PERMISSIONS
+> +	/var/lib/pgsql d 755 postgres postgres - - - - -
+> +endef
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+A better place for this IMO would be near POSTGRESQL_USERS below.
 
----
-Bug reported upstream:
-https://trac.torproject.org/projects/tor/ticket/18490
+Thanks,
+baruch
 
----
- package/tor/tor.mk |    6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index f6874a6..efd0d8d 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -32,6 +32,12 @@ else
- TOR_CONF_OPTS += --disable-seccomp
- endif
- 
-+# aarch64 toolchain triggers a code problem, message is misleading
-+# relocation truncated to fit: R_AARCH64_LDST64_ABS_LO12_NC against symbol
-+ifeq ($(BR2_aarch64),y)
-+TOR_CONF_OPTS += --disable-unittests
-+endif
-+
- # uses gnu extensions
- TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
 -- 
-1.7.10.4
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
