@@ -1,65 +1,37 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Mon, 7 Mar 2016 09:51:35 +0000
-Subject: [Buildroot] [PATCH 1/2] package/nodejs: force the use of python2
-In-Reply-To: <20160306154341.30fc8162@free-electrons.com>
-References: <1457044168-31810-1-git-send-email-martin@barkynet.com>
- <20160306154341.30fc8162@free-electrons.com>
-Message-ID: <CAFGQKxdww_ECTciUYePG5U_oFSM0DJhJz7Mi6tbsizqRAfVFqw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 7 Mar 2016 11:04:28 +0100
+Subject: [Buildroot] [git commit] python-rpi-gpio: fix typo
+Message-ID: <20160307100609.AD7148184B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=cdb9306ed2d7fdb1ad57bd39f4275ba0a5528ce9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 6 March 2016 at 14:43, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Dear Martin Bark,
->
-> On Thu,  3 Mar 2016 22:29:27 +0000, Martin Bark wrote:
->> Remove the patches to use a python variable and instead force python2
->> into the PATH.
->>
->> Upstream the python variable was recently removed
->> (see https://github.com/nodejs/node/commit/c3e50ca) and due to dependencies
->> directly calling python there is a reluctance to change this.  Instead it
->> is recommended to add python2 into PATH as the nodejs build machines do
->> (see https://github.com/nodejs/node/issues/418 and
->> https://github.com/nodejs/node/issues/2735).
->>
->> Signed-off-by: Martin Bark <martin@barkynet.com>
->> ---
->>  ...ch => 0003-fix-musl-USE-MISC-build-issue.patch} |   0
->>  .../nodejs/0.10.42/0003-use-python-variable.patch  |  43 --------
->>  .../0004-Fix-support-for-uClibc-ng.patch}          |   0
->>  ...d.patch => 0003-Fix-va_list-not-declared.patch} |   0
->>  ...hon-variable-instead-of-hardcoding-Python.patch | 112 ---------------------
->>  .../0004-Fix-support-for-uClibc-ng.patch}          |   0
->>  package/nodejs/nodejs.mk                           |  18 +++-
->>  7 files changed, 16 insertions(+), 157 deletions(-)
->>  rename package/nodejs/0.10.42/{0004-fix-musl-USE-MISC-build-issue.patch => 0003-fix-musl-USE-MISC-build-issue.patch} (100%)
->>  delete mode 100644 package/nodejs/0.10.42/0003-use-python-variable.patch
->>  rename package/nodejs/{5.6.0/0005-Fix-support-for-uClibc-ng.patch => 0.10.42/0004-Fix-support-for-uClibc-ng.patch} (100%)
->>  rename package/nodejs/5.6.0/{0004-Fix-va_list-not-declared.patch => 0003-Fix-va_list-not-declared.patch} (100%)
->>  delete mode 100644 package/nodejs/5.6.0/0003-Use-a-python-variable-instead-of-hardcoding-Python.patch
->>  rename package/nodejs/{0.10.42/0005-Fix-support-for-uClibc-ng.patch => 5.6.0/0004-Fix-support-for-uClibc-ng.patch} (100%)
->
-> Both patches applied. It is a little bit sad that upstream removed the
-> variable to define the path to the Python interpreter. But oh well,
-> this allows us to remove quite a few patches.
+s/LICENSE.txt/LICENCE.txt
 
-Yes i agree.  At least with this change version bumps should now be simpler.
+Fixes:
+http://autobuild.buildroot.net/results/406/4060be5aed299b9fc197f2f8c398ca2800e7ec08/
 
-Thanks
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-rpi-gpio/python-rpi-gpio.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Martin
-
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+diff --git a/package/python-rpi-gpio/python-rpi-gpio.mk b/package/python-rpi-gpio/python-rpi-gpio.mk
+index e71fdea..106b8dd 100755
+--- a/package/python-rpi-gpio/python-rpi-gpio.mk
++++ b/package/python-rpi-gpio/python-rpi-gpio.mk
+@@ -8,7 +8,7 @@ PYTHON_RPI_GPIO_VERSION = 0.6.1
+ PYTHON_RPI_GPIO_SOURCE = RPi.GPIO-$(PYTHON_RPI_GPIO_VERSION).tar.gz
+ PYTHON_RPI_GPIO_SITE = http://sourceforge.net/projects/raspberry-gpio-python/files
+ PYTHON_RPI_GPIO_LICENSE = MIT
+-PYTHON_RPI_GPIO_LICENSE_FILES = LICENSE.txt
++PYTHON_RPI_GPIO_LICENSE_FILES = LICENCE.txt
+ PYTHON_RPI_GPIO_SETUP_TYPE = distutils
+ 
+ $(eval $(python-package))
