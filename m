@@ -1,46 +1,48 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon,  7 Mar 2016 22:56:45 +0100
-Subject: [Buildroot] [PATCH 2/2] libpjsip: fix optional dependency on libsrtp
-In-Reply-To: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
-References: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <1457387805-4084-2-git-send-email-luca@lucaceresoli.net>
+Date: Mon,  7 Mar 2016 22:56:44 +0100
+Subject: [Buildroot] [PATCH 1/2] libpjsip: needs threads
+Message-ID: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpjsip does not correctly detect whether libsrtp is installed in staging.
+Builds without thread support fail with the following error:
 
-Symptom:
-  .../libpjmedia.so: undefined reference to `srtp_deinit'
-  collect2: error: ld returned 1 exit status
+  ../src/pj/os_core_unix.c:45:21: fatal error: pthread.h: No such file or directory
+   #include <pthread.h>
+                       ^
+  compilation terminated.
 
 Fixes:
-  http://autobuild.buildroot.org/results/305/305fdc8442cd2e8f51b90485be0dca83ffa36603/
-  http://autobuild.buildroot.org/results/a2f/a2f407c1361ac5c24af122445e84645e9aee309d/
-  ...and other similar failures.
+  http://autobuild.buildroot.org/results/744/744431e1b47d22222c4d0b48d5d20649dfeed929/
+  http://autobuild.buildroot.org/results/a10/a10aca9139054502e055cb61f3925637fc515e12/
 
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- package/libpjsip/libpjsip.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libpjsip/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index ee250f5b11ef..9316dd7998e6 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -31,6 +31,11 @@ else
- LIBPJSIP_CONF_OPTS += --disable-ssl
- endif
+diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
+index 45387c4b39b9..980fada3d5fb 100644
+--- a/package/libpjsip/Config.in
++++ b/package/libpjsip/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBPJSIP
+ 	bool "libpjsip"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  PJSIP is a free and open source multimedia communication
+ 	  library written in C language implementing standard based
+@@ -8,5 +9,5 @@ config BR2_PACKAGE_LIBPJSIP
  
-+ifeq ($(BR2_PACKAGE_LIBSRTP),y)
-+LIBPJSIP_DEPENDENCIES += libsrtp
-+LIBPJSIP_CONF_OPTS += --with-external-srtp=$(STAGING_DIR)/usr
-+endif
-+
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- LIBPJSIP_DEPENDENCIES += util-linux
- endif
+ 	  http://www.pjsip.org
+ 
+-comment "libpjsip needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "libpjsip needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 1.9.1
