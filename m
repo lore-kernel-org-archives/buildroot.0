@@ -1,62 +1,62 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Mar 2016 00:19:23 +0100
-Subject: [Buildroot] [PATCH v2 1/2] help: add a way to document targets
- declared in local.mk/external.mk
-In-Reply-To: <20160308221049.GB14289@free.fr>
-References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
- <20160308221049.GB14289@free.fr>
-Message-ID: <56DF5DFB.1050309@mind.be>
+Date: Wed, 9 Mar 2016 00:22:39 +0100
+Subject: [Buildroot] [PATCH] gcc/gcc-final: pass TARGET_CFLAGS flags to
+ configure with --enable-cxx-flags
+In-Reply-To: <20160109220852.GE3444@free.fr>
+References: <1433169427-7527-1-git-send-email-jcmvbkbc@gmail.com>
+ <20160109220852.GE3444@free.fr>
+Message-ID: <56DF5EBF.20409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/08/16 23:10, Yann E. MORIN wrote:
-> J?r?me, All,
+  Hi Max,
+
+On 01/09/16 23:08, Yann E. MORIN wrote:
+> Max, All,
 >
-> On 2016-03-08 22:48 +0100, J?r?me Pouiller spake thusly:
->> It is handy to use local.mk or external.mk to add specific targets
->> for current project. However, until now, it not possible to add help
->> message these targets.
->
-> I have:
->
->      $ make local-help
->      Local blabla help displays here...
->
->> This patch add EXTRA_HELP variable. This variable is aimed to be assigned
->> from any .mk files. Its content is displayed with 'make help'.
+> On 2015-06-01 17:37 +0300, Max Filippov spake thusly:
+>> Currently only TARGET_ABI flags are passed to the final compiler
+>> configure script and only when building for Xtensa. Since libstdc++ is a
+>> normal library it should be built with full TARGET_CFLAGS on all
+>> targets.
 >>
->> For exemple:
->>    EXTRA_HELP += "flash                  - Flash target"
->>    EXTRA_HELP += "chroot                 - Chroot into target/"
->>    EXTRA_HELP += "qemu                   - Run image with qemu"
->>    EXTRA_HELP += "install-nfs            - Extract rootfs in \$$NFSROOT (=$(NFSROOT))"
->>    EXTRA_HELP += "`printf '%-22s%s' '$(var)-feature' ' - Call $(var) feature'`"
->>    EXTRA_HELP += "Please contact support at company.com in case of problem."
+>> Pass TARGET_CFLAGS flags to gcc-final configure script for all targets
+>> in the --enable-cxx-flags parameter.
+>>
+>> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+>> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 >
-> This definitely does not look nice to me... :-(
+> So, I finally had a look at this patch. I've tested it to build a
+> gcc-4.9 + glibc-2.21 + binutils-2.24 toolchain with C++ support, which
+> then was used to suessfully build Qt5base (which is quite a heavy C++
+> user).
+>
+> However, I'd like to understand what this is all about.
+>
+> In gcc.mk, we do:
+>
+>      GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+>      [...]
+>      HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+>
+> So it looks like we were already passing the proper CXXFLAGS to gcc (we
+> only filter-out problematic flags, like -Os on broken gcc-4.5 for PPC).
+>
+> So, what are we supposed to gain/loose with this change?
+>
+> As a side note, we should not have to pass TARGET_ABI either, since it
+> is part of TARGET_CFLAGS and as shown above, it is already part of the
+> CFLAGS_FOR_TARGET that we pass gcc.
+>
+> Any explanations? Something that I missed?
 
-  Why not? Extremely nice and simple.
-
->
-> What we could do, however, would be:
->
->    - in external.mk:
->          BR2_HAS_EXTRA_HELP = YES  # Whatever non empty
->
->    - in the main Makefile:
->
->          help:
->              blabla our current help
->              $(if $(BR2_HAS_EXTRA_HELP),echo "  - local-help  to get local help blabla)
->
-> which would be IMHO much much nicer and much much simpler...
-
-  I don't see the advantage of that, to be honest... The point is to append it 
-to the main help. You expect just a few lines of extra help text.
-
+  I checked in the gcc source and also couldn't find a reason why the 
+CXXFLAGS_FOR_TARGET wouldn't work. Since you haven't replied to this, I've 
+marked your patch as rejected in patchwork. If you do still fel it is warranted, 
+please repost with a satisfactory explanation.
 
   Regards,
   Arnout
@@ -65,29 +65,26 @@ to the main help. You expect just a few lines of extra help text.
 > Regards,
 > Yann E. MORIN.
 >
->> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 >> ---
->> v2:
->>    - Rename LOCAL_HELP to EXTRA_HELP
->>    - Remove introduction lines (so, 'ifneq ($(LOCAL_HELP),)' is no more needed)
+>>   package/gcc/gcc-final/gcc-final.mk | 4 +---
+>>   1 file changed, 1 insertion(+), 3 deletions(-)
 >>
->>   Makefile | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/Makefile b/Makefile
->> index f2822a2..1c9f63c 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -948,6 +948,7 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
->>   	@echo '  barebox-menuconfig     - Run barebox menuconfig'
->>   	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+>> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+>> index 8d7009b..59c8708 100644
+>> --- a/package/gcc/gcc-final/gcc-final.mk
+>> +++ b/package/gcc/gcc-final/gcc-final.mk
+>> @@ -185,8 +185,6 @@ endef
+>>   HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
 >>   endif
->> +	@for i in $(EXTRA_HELP); do echo "  $$i"; done
->>   	@echo
->>   	@echo 'Documentation:'
->>   	@echo '  manual                 - build manual in all formats'
+>>
+>> -ifeq ($(BR2_xtensa),y)
+>> -HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
+>> -endif
+>> +HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_CFLAGS)"
+>>
+>>   $(eval $(host-autotools-package))
 >> --
->> 2.7.0
+>> 1.8.1.4
 >>
 >> _______________________________________________
 >> buildroot mailing list
