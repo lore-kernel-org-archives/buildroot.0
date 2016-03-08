@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Mar 2016 00:00:42 +0100
-Subject: [Buildroot] [PATCH 1/4] font-awesome: indentation cleanup
-In-Reply-To: <1457474286-18685-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-References: <1457474286-18685-1-git-send-email-jerzy.grzegorek@trzebnica.net>
-Message-ID: <20160309000042.2b58475f@free-electrons.com>
+Date: Wed, 9 Mar 2016 00:00:45 +0100
+Subject: [Buildroot] [PATCH] luvi: bump to version 2.6.1
+In-Reply-To: <1457474543-9973-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1457474543-9973-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160309000045.374a35f4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Jerzy Grzegorek,
+Dear J?rg Krause,
 
-On Tue,  8 Mar 2016 22:58:03 +0100, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+On Tue,  8 Mar 2016 23:02:23 +0100, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/font-awesome/font-awesome.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/luvi/luvi.hash | 2 +-
+>  package/luvi/luvi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-All applied to master, thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
