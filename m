@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2016 21:14:32 +0100
-Subject: [Buildroot] [PATCH 1/2] libpjsip: needs threads
-In-Reply-To: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
+Date: Tue, 8 Mar 2016 21:15:26 +0100
+Subject: [Buildroot] [PATCH 2/2] libpjsip: fix optional dependency on
+ libsrtp
+In-Reply-To: <1457387805-4084-2-git-send-email-luca@lucaceresoli.net>
 References: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160308211432.4287eee7@free-electrons.com>
+ <1457387805-4084-2-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20160308211526.6a639ffb@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +14,22 @@ To: buildroot@busybox.net
 
 Dear Luca Ceresoli,
 
-On Mon,  7 Mar 2016 22:56:44 +0100, Luca Ceresoli wrote:
-> Builds without thread support fail with the following error:
-> 
->   ../src/pj/os_core_unix.c:45:21: fatal error: pthread.h: No such file or directory
->    #include <pthread.h>
->                        ^
->   compilation terminated.
-> 
-> Fixes:
->   http://autobuild.buildroot.org/results/744/744431e1b47d22222c4d0b48d5d20649dfeed929/
->   http://autobuild.buildroot.org/results/a10/a10aca9139054502e055cb61f3925637fc515e12/
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  package/libpjsip/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+On Mon,  7 Mar 2016 22:56:45 +0100, Luca Ceresoli wrote:
 
-Applied to master, thanks.
+> +ifeq ($(BR2_PACKAGE_LIBSRTP),y)
+> +LIBPJSIP_DEPENDENCIES += libsrtp
+> +LIBPJSIP_CONF_OPTS += --with-external-srtp=$(STAGING_DIR)/usr
+> +endif
+
+The --with-external-srtp seems to imply that there is also an
+"internal/bundled" srtp.
+
+If pjsip indeed needs srtp unconditionally, then we should always
+depend on it and use the external libsrtp rather than the bundled one.
+
+Can you confirm how libsrtp is used by pjsip?
+
+Thanks,
 
 Thomas
 -- 
