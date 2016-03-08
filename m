@@ -1,65 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  8 Mar 2016 21:02:22 +0100
-Subject: [Buildroot] [PATCH] toolchain: also source the musl package
-Message-ID: <1457467342-28203-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Mar 2016 21:02:31 +0100
+Subject: [Buildroot] [PATCH] toolchain: bump Codescape toolchains to
+ version 2015.10
+In-Reply-To: <1457430369-34915-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1457430369-34915-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160308210231.02ffdf48@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We do source the glibc and uClibc packages in the toolchain menu,
-because they do provide user-visible options. However, we do not so
-far source the musl Config.in file
+Dear Vicente Olivert Riera,
 
-However, in 822be87 (toolchain: include C libraries in legal-info),
-a Config.in file for musl was explicitly created, so that:
-  - legal-info woudl work (needed at the time, probably no longer needed
-    nowadays),
-  - the appropriate packages are enabled, linke netbsd-queue or kernel
-    headers.
+On Tue, 8 Mar 2016 09:46:09 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  toolchain/toolchain-external/Config.in             | 93 +++++++++++++++-------
+>  .../toolchain-external/toolchain-external.hash     |  6 +-
+>  toolchain/toolchain-external/toolchain-external.mk |  8 +-
+>  3 files changed, 73 insertions(+), 34 deletions(-)
 
-Yet, we do not source musl/Config.in, which means we do not get
-netbsd-queue or kernel-headers to be selected:
+Applied to master, thanks.
 
-    $ make distclean; make menuconfig
-        Toolchain  --->
-          C library ---> musl
-      save-and-exit
-    $ grep BR2_PACKAGE_LINUX_HEADERS .config
-        [nothing]
-    $ grep BR2_PACKAGE_NETBSD_QUEUE .config
-        [nothing]
-
-Fix that by sourcing musl/Config.in at the same place we source glibc
-and uClibc.
-
-Normally, we do have a check in place that verifies that a package
-that is not enabled is not a dependency of another package that is
-enabled. However, musl is only a dependency of host-gcc-final, which
-is a host package and has no corresponding BR2_PACKAGE_HOST_GCC_FINAL.
-Thus host-gcc-final is not in the PACKAGES variable, and thus does not
-trigger our check.
-
-Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- toolchain/toolchain-buildroot/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index 37c6624..cb4fc18 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -110,6 +110,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
- 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
- 
- source "package/linux-headers/Config.in"
-+source "package/musl/Config.in"
- source "package/uclibc/Config.in"
- source "package/glibc/Config.in"
- source "package/binutils/Config.in.host"
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
