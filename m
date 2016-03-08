@@ -1,41 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2016 23:59:51 +0100
-Subject: [Buildroot] [git commit] luvi: bump to version 2.6.1
-Message-ID: <20160308225957.A0E45802CB@busybox.osuosl.org>
+Date: Tue, 8 Mar 2016 23:59:31 +0100
+Subject: [Buildroot] [git commit] font-awesome: indentation cleanup
+Message-ID: <20160308225957.57C04802D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65095cea34c2fac01863a36949243b817ff836a4
+commit: https://git.buildroot.net/buildroot/commit/?id=b83ad32d5c0409af181181efd4c3ffb0b07c5cdf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/luvi/luvi.hash | 2 +-
- package/luvi/luvi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/font-awesome/font-awesome.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 325c84f..6f95dac 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  883fca4d50c18dc5b248144a00526b718e7c4c91841123b4a0732fef2b8791f4  luvi-src-v2.5.1.tar.gz
-+sha256  a8b4aecf4c1d781614fe187b6afcb2dc7462fcd6e76a3f38cbfd0a8244c01582  luvi-src-v2.6.1.tar.gz
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index d83933e..305ff4f 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+index 6ebb92c..3d2ccca 100644
+--- a/package/font-awesome/font-awesome.mk
++++ b/package/font-awesome/font-awesome.mk
+@@ -10,9 +10,9 @@ FONT_AWESOME_LICENSE = OFLv1.1 (font), MIT (CSS, LESS and Sass files)
+ FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
  
--LUVI_VERSION = v2.5.1
-+LUVI_VERSION = v2.6.1
- LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
- LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
- LUVI_LICENSE = Apache-2.0
+ define FONT_AWESOME_INSTALL_TARGET_CMDS
+-        mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
+-        $(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
+-                cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
++	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
++	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
++		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
+ endef
+ 
+ $(eval $(generic-package))
