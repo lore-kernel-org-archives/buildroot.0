@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2016 21:18:34 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/connman: fix crash due to
- iptables 1.6.0 update
-In-Reply-To: <1457345950-2793-1-git-send-email-martin@barkynet.com>
-References: <1457345950-2793-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160308211834.5d768caa@free-electrons.com>
+Date: Tue, 8 Mar 2016 21:19:39 +0100
+Subject: [Buildroot] [git commit] package/mplayer: add optional dependencies
+	to libgl, libvpx and opus
+Message-ID: <20160308201951.A3981818B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+commit: https://git.buildroot.net/buildroot/commit/?id=64f2920765bd0771fb8a0956ac11c2d697c70649
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  7 Mar 2016 10:19:10 +0000, Martin Bark wrote:
-> iptables was updated to version 1.6.0 in commit
-> https://git.busybox.net/buildroot/commit/?id=35dc775 however, connman
-> 1.31 crashes when iptables 1.6.0 is used.
-> 
-> This issues has already been fixed upstream but is not currently available
-> in a release.  To fix connman include the upstream patch. See
-> http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
-> 
-> ---
+Mplayer links to these packages when present:
 
-Applied to master, thanks. Since you already contributed this patch to
-connman, could you also submit upstream the patch
-package/connman/0001-configure-check-for-execinfo.h.patch ?
+output/host/usr/bin/x86_64-linux-readelf -a output/target/usr/bin/mplayer | grep NEEDED | grep "opus\|vpx\|GL"
+ 0x0000000000000001 (NEEDED)             Shared library: [libopus.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libvpx.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libGL.so.1]
 
-Thanks!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/mplayer/mplayer.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 3051afa..2082f25 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -231,9 +231,12 @@ MPLAYER_CONF_OPTS += --disable-liblzo
+ endif
+ 
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_BZIP2),bzip2)
++MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_HAS_LIBGL),libgl)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBTHEORA),libtheora)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBPNG),libpng)
++MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBVPX),libvpx)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_JPEG),jpeg)
++MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_OPUS),opus)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXEXT),xlib_libXext)
+ MPLAYER_DEPENDENCIES += $(if $(BR2_PACKAGE_XLIB_LIBXINERAMA),xlib_libXinerama)
