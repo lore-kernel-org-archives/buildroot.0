@@ -1,52 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2016 09:06:51 +0100
-Subject: [Buildroot] [Bug 8771] make savedefconfig modifies sources
-In-Reply-To: <56DE1142.6080201@mind.be>
-References: <bug-8771-163@https.bugs.busybox.net/>
- <bug-8771-163-YmX2Br27g5@https.bugs.busybox.net/>
- <56DE1142.6080201@mind.be>
-Message-ID: <20160308090651.293fd95e@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 08 Mar 2016 09:23:56 +0100
+Subject: [Buildroot] node.js ENOTFOUND error when using uclibc
+In-Reply-To: <87d1r654aa.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Mon, 07 Mar 2016 23:09:17 +0100")
+References: <trinity-42794f72-6f90-430b-8cdf-048645cbdab2-1457338189594@3capp-gmx-bs39>
+ <CAFGQKxcn_nCR+jGABopOAHMt0-rhAF=g3ZvaxtFaE-CzAQo1Gw@mail.gmail.com>
+ <87d1r654aa.fsf@dell.be.48ers.dk>
+Message-ID: <878u1t5qeb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Tue, 8 Mar 2016 00:39:46 +0100, Arnout Vandecappelle wrote:
+Hi,
 
->   I think we do agree that it is weird for the in-tree defconfigs. In the past, 
-> there was no way to distinguish between the upstream in-tree defconfigs, and the 
-> defconfigs that you add to your custom buildroot tree for internal use. But now 
-> we could say that you're supposed to use BR2_EXTERNAL, So we could reset 
-> BR2_DEFCONFIG for in-tree configs.
+ > Waldemar, while the application shouldn't be passing AF_UNSPEC +
+ > AI_V4MAPPED it would be good if uClibc-ng could be changed to behave
+ > more similar to glibc for compatibility reasons.
 
-To be honest, I don't see the difference between in-tree defconfigs,
-and defconfigs in your BR2_EXTERNAL tree. In both cases, if
-BR2_DEFCONFIG points to such defconfigs, when you run "make
-savedefconfig", you will modify version-controlled source code, which
-IMO isn't nice.
+FYI, there's a glibc bug about this:
 
-But again, this is really a matter of taste, and I did understand the
-idea of having make savedefconfig "automagically" save back to the
-defconfig the configuration was started from.
+https://sourceware.org/bugzilla/show_bug.cgi?id=14415
 
-I simply believe that:
+It seems like something like this would fix it for uclibc-ng:
 
- - It deviates from what the kernel does, which is a bit in violation
-   of our principle "our configuration system is like the kernel"
+diff --git a/libc/inet/getaddrinfo.c b/libc/inet/getaddrinfo.c
+index 090d7e9..7ae32be 100644
+--- a/libc/inet/getaddrinfo.c
++++ b/libc/inet/getaddrinfo.c
+@@ -404,8 +404,7 @@ gaih_inet(const char *name, const struct gaih_service *service,
+        struct gaih_servtuple *st;
+        struct gaih_addrtuple *at;
+        int rc;
+-       int v4mapped = (req->ai_family == PF_UNSPEC || req->ai_family == PF_INET6)
+-                       && (req->ai_flags & AI_V4MAPPED);
++       int v4mapped = req->ai_family == PF_INET6 && (req->ai_flags & AI_V4MAPPED);
+        unsigned seen = 0;
+        if (req->ai_flags & AI_ADDRCONFIG) {
+                /* "seen" is only used when AI_ADDRCONFIG is specified.
 
- - It modifies version-controlled source code.
-
->   Of course, at the moment we still point to the in-tree 
-> configs/<boardname>_defconfig in the manual, so that would have to change first...
-
-I'm not sure what you mean by "we still point to". In which place of
-the manual?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
