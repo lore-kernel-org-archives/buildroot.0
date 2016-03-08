@@ -1,12 +1,15 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  8 Mar 2016 18:31:20 -0300
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.3.6
-Message-ID: <1457472680-16241-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 8 Mar 2016 22:33:23 +0100
+Subject: [Buildroot] [git commit] samba4: security bump to version 4.3.6
+Message-ID: <20160308213340.F18AC800FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=52be26e90c08caf78617deb4f1af6746af0f5b95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
 CVE-2015-7560 - Authenticated client could cause Samba to overwrite ACLs
@@ -15,6 +18,7 @@ CVE-2016-0771 - Malicious request can cause the Samba internal DNS
 server to crash or unintentionally return uninitialized memory.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/samba4/samba4.hash | 2 +-
  package/samba4/samba4.mk   | 2 +-
@@ -41,5 +45,3 @@ index 715983e..ee0452e 100644
  SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
  SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
  SAMBA4_INSTALL_STAGING = YES
--- 
-2.4.10
