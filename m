@@ -1,75 +1,128 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 8 Mar 2016 21:56:35 +0100
-Subject: [Buildroot] [PATCH] toolchain: also source the musl package
-In-Reply-To: <1457467342-28203-1-git-send-email-yann.morin.1998@free.fr>
-References: <1457467342-28203-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <56DF3C83.8040603@mind.be>
+Date: Tue, 8 Mar 2016 21:58:00 +0100
+Subject: [Buildroot] [PATCH 2/2] help: relocate help messages specific
+ to one package
+In-Reply-To: <1447857421-9380-2-git-send-email-jezz@sysmic.org>
+References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
+ <1447857421-9380-2-git-send-email-jezz@sysmic.org>
+Message-ID: <56DF3CD8.1080205@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/08/16 21:02, Yann E. MORIN wrote:
-> We do source the glibc and uClibc packages in the toolchain menu,
-> because they do provide user-visible options. However, we do not so
-> far source the musl Config.in file
+On 11/18/15 15:37, J?r?me Pouiller wrote:
+> Use $LOCAL_HELP feature in order to integrate help messages specific
+> to one package (linux-menuconfig, etc...) package they are
+> related.
 >
-> However, in 822be87 (toolchain: include C libraries in legal-info),
-> a Config.in file for musl was explicitly created, so that:
->    - legal-info woudl work (needed at the time, probably no longer needed
->      nowadays),
->    - the appropriate packages are enabled, linke netbsd-queue or kernel
->      headers.
+> It would be possible to do it using kconfig framework, but I was not
+> sure it is necessary to document kconfig targets systematicaly.
 >
-> Yet, we do not source musl/Config.in, which means we do not get
-> netbsd-queue or kernel-headers to be selected:
->
->      $ make distclean; make menuconfig
->          Toolchain  --->
->            C library ---> musl
->        save-and-exit
->      $ grep BR2_PACKAGE_LINUX_HEADERS .config
->          [nothing]
->      $ grep BR2_PACKAGE_NETBSD_QUEUE .config
->          [nothing]
->
-> Fix that by sourcing musl/Config.in at the same place we source glibc
-> and uClibc.
->
-> Normally, we do have a check in place that verifies that a package
-> that is not enabled is not a dependency of another package that is
-> enabled. However, musl is only a dependency of host-gcc-final, which
-> is a host package and has no corresponding BR2_PACKAGE_HOST_GCC_FINAL.
-> Thus host-gcc-final is not in the PACKAGES variable, and thus does not
-> trigger our check.
->
-> Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  With the change LOCAL -> ADDITIONAL:
+
+  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 
   Regards,
   Arnout
 
 > ---
->   toolchain/toolchain-buildroot/Config.in | 1 +
->   1 file changed, 1 insertion(+)
+>   Makefile                   | 16 ----------------
+>   boot/barebox/barebox.mk    |  5 +++++
+>   linux/linux.mk             |  7 +++++++
+>   package/busybox/busybox.mk |  4 ++++
+>   package/uclibc/uclibc.mk   |  4 ++++
+>   5 files changed, 20 insertions(+), 16 deletions(-)
 >
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 37c6624..cb4fc18 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -110,6 +110,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
->   	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
+> diff --git a/Makefile b/Makefile
+> index 4322da9..8c14281 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -885,22 +885,6 @@ help:
+>   	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+>   	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+>   	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+> -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> -	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+> -endif
+> -ifeq ($(BR2_LINUX_KERNEL),y)
+> -	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+> -	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+> -	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
+> -	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+> -endif
+> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> -	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+> -endif
+> -ifeq ($(BR2_TARGET_BAREBOX),y)
+> -	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+> -	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+> -endif
+>   ifneq ($(LOCAL_HELP),)
+>   	@echo
+>   	@echo 'Local targets:'
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index 00e1537..d8dde20 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -116,4 +116,9 @@ $(error No Barebox config file. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or
+>   endif
+>   endif
 >
->   source "package/linux-headers/Config.in"
-> +source "package/musl/Config.in"
->   source "package/uclibc/Config.in"
->   source "package/glibc/Config.in"
->   source "package/binutils/Config.in.host"
+> +ifeq ($(BR2_TARGET_BAREBOX),y)
+> +	LOCAL_HELP += 'barebox-menuconfig     - Run barebox menuconfig'
+> +	LOCAL_HELP += 'barebox-savedefconfig  - Run barebox savedefconfig'
+> +endif
+> +
+>   $(eval $(kconfig-package))
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 9507837..a4d1301 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -390,6 +390,13 @@ endif
+>
+>   endif # BR_BUILDING
+>
+> +ifeq ($(BR2_LINUX_KERNEL),y)
+> +	LOCAL_HELP += 'linux-menuconfig       - Run Linux kernel menuconfig'
+> +	LOCAL_HELP += 'linux-savedefconfig    - Run Linux kernel savedefconfig'
+> +	LOCAL_HELP += 'linux-update-defconfig - Save the Linux configuration to the path specified'
+> +	LOCAL_HELP += '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+> +endif
+> +
+>   $(eval $(kconfig-package))
+>
+>   # Support for rebuilding the kernel after the cpio archive has
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 7f6dbd6..3e6ca78 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -262,4 +262,8 @@ $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_
+>   endif
+>   endif
+>
+> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> +	LOCAL_HELP += 'busybox-menuconfig     - Run BusyBox menuconfig'
+> +endif
+> +
+>   $(eval $(kconfig-package))
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index c62a40f..e8af45e 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -470,4 +470,8 @@ $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG set
+>   endif
+>   endif
+>
+> +ifeq ($(BR2_PACKAGE_UCLIBC),y)
+> +	LOCAL_HELP += 'uclibc-menuconfig      - Run uClibc menuconfig'
+> +endif
+> +
+>   $(eval $(kconfig-package))
 >
 
 
