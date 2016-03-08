@@ -1,57 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 08 Mar 2016 22:00:49 +0100
-Subject: [Buildroot] [PATCH] toolchain: also source the musl package
-In-Reply-To: <1457467342-28203-1-git-send-email-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 8 Mar 2016 21:02:22 +0100")
-References: <1457467342-28203-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <87h9gg4rcu.fsf@dell.be.48ers.dk>
+From: Trent Piepho <tpiepho@kymetacorp.com>
+Date: Tue, 8 Mar 2016 21:02:15 +0000
+Subject: [Buildroot] [PATCH v2] purge-locales: Handle empty locale
+	directories better
+In-Reply-To: <56DC8701.4000008@mind.be>
+References: <1457056294.25961.111.camel@rtred1test09.kymeta.local>
+ <56DC8701.4000008@mind.be>
+Message-ID: <1457470977.25961.147.camel@rtred1test09.kymeta.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+If a locale directory is empty, shell code like "for langdir in
+$$dir/*;" will loop once with langdir set to "path/to/dir/*", rather
+than not looping at all, which would obviously be the desired
+behavior.
 
- > We do source the glibc and uClibc packages in the toolchain menu,
- > because they do provide user-visible options. However, we do not so
- > far source the musl Config.in file
+Then "grep -qx $${langdir##*/}" ungoes two shell expansions (how?)
+that transform the expression from "${langdir##*/}" to "*" to "list of
+all files in buildroot root dir".  Which is most certainly not what
+this command was supposed to do.
 
- > However, in 822be87 (toolchain: include C libraries in legal-info),
- > a Config.in file for musl was explicitly created, so that:
- >   - legal-info woudl work (needed at the time, probably no longer needed
- >     nowadays),
- >   - the appropriate packages are enabled, linke netbsd-queue or kernel
- >     headers.
+If one of those files happens to be an 8GB flash image, grep consumes
+all available memory and crashes trying to search it.
 
- > Yet, we do not source musl/Config.in, which means we do not get
- > netbsd-queue or kernel-headers to be selected:
+Signed-off-by: Trent Piepho <tpiepho@kymetacorp.com>
+---
+ Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- >     $ make distclean; make menuconfig
- >         Toolchain  --->
- >           C library ---> musl
- >       save-and-exit
- >     $ grep BR2_PACKAGE_LINUX_HEADERS .config
- >         [nothing]
- >     $ grep BR2_PACKAGE_NETBSD_QUEUE .config
- >         [nothing]
-
- > Fix that by sourcing musl/Config.in at the same place we source glibc
- > and uClibc.
-
- > Normally, we do have a check in place that verifies that a package
- > that is not enabled is not a dependency of another package that is
- > enabled. However, musl is only a dependency of host-gcc-final, which
- > is a host package and has no corresponding BR2_PACKAGE_HOST_GCC_FINAL.
- > Thus host-gcc-final is not in the PACKAGES variable, and thus does not
- > trigger our check.
-
- > Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
-
+diff --git a/Makefile b/Makefile
+index f2822a2..44ded9d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -581,7 +581,10 @@ define PURGE_LOCALES
+ 	do \
+ 		for langdir in $$dir/*; \
+ 		do \
+-			grep -qx $${langdir##*/} $(LOCALE_WHITELIST) || rm -rf $$langdir; \
++			if [ -e "$${langdir}" ]; \
++			then \
++				grep -qx "$${langdir##*/}" $(LOCALE_WHITELIST) || rm -rf $$langdir; \
++			fi \
+ 		done; \
+ 	done
+ 	if [ -d $(TARGET_DIR)/usr/share/X11/locale ]; \
 -- 
-Bye, Peter Korsgaard
+2.7.0.25.gfc10eb5.dirty
