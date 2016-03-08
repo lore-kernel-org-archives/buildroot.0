@@ -1,159 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Mar 2016 23:59:48 +0100
-Subject: [Buildroot] [PATCH v2 2/2] help: relocate help messages
- specific to one package
-In-Reply-To: <1457473693-25776-2-git-send-email-jezz@sysmic.org>
-References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
- <1457473693-25776-2-git-send-email-jezz@sysmic.org>
-Message-ID: <20160308225948.GD14289@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Mar 2016 23:59:51 +0100
+Subject: [Buildroot] [git commit] luvi: bump to version 2.6.1
+Message-ID: <20160308225957.A0E45802CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=65095cea34c2fac01863a36949243b817ff836a4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-03-08 22:48 +0100, J?r?me Pouiller spake thusly:
-> Use $EXTRA_HELP feature in order to integrate help messages specific
-> to one package (linux-menuconfig, etc...) package they are
-> related.
-> 
-> It would be possible to do it using kconfig framework, but I was not
-> sure it is necessary to document kconfig targets systematicaly.
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
-> v2:
->   - Rename LOCAL_HELP
-> 
->  Makefile                   | 16 ----------------
->  boot/barebox/barebox.mk    |  5 +++++
->  linux/linux.mk             |  7 +++++++
->  package/busybox/busybox.mk |  4 ++++
->  package/uclibc/uclibc.mk   |  4 ++++
->  5 files changed, 20 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 1c9f63c..eb92052 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -932,22 +932,6 @@ help:
->  	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
->  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
->  	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-> -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> -	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
-> -endif
-> -ifeq ($(BR2_LINUX_KERNEL),y)
-> -	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
-> -	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
-> -	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
-> -	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
-> -endif
-> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
-> -	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
-> -endif
-> -ifeq ($(BR2_TARGET_BAREBOX),y)
-> -	@echo '  barebox-menuconfig     - Run barebox menuconfig'
-> -	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
-> -endif
->  	@for i in $(EXTRA_HELP); do echo "  $$i"; done
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/luvi/luvi.hash | 2 +-
+ package/luvi/luvi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Following my reply to the previous mail, here's an alternate proposal
-(it may need a bit of tweaking, though, I jut wrote it in the mail
-without testing):
-
-    for h in $(PACKAGE_HELP_y); do \
-        printf "  %24.24s - %s\n" "$${h%% *}" "$${h#* }"; \
-    done
-
-and see below how it is set...
-
->  	@echo
->  	@echo 'Documentation:'
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 7715daf..24d0162 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -117,4 +117,9 @@ $(error No Barebox config. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_
->  endif
->  endif
->  
-> +ifeq ($(BR2_TARGET_BAREBOX),y)
-> +	EXTRA_HELP += 'barebox-menuconfig     - Run barebox menuconfig'
-> +	EXTRA_HELP += 'barebox-savedefconfig  - Run barebox savedefconfig'
-> +endif
-
-PACKAGE_HELP_$(BR2_TARGET_BAREBOX) += "barebox-menuconfig Run barebox menuconfig"
-PACKAGE_HELP_$(BR2_TARGET_BAREBOX) += "barebox-savedefconfig Run barebox savedefconfig"
-
-and so on...
-
-Which IMHO is much more readable, and allows us to nicely change the
-layout of the help texts.
-
-Regards,
-Yann E. MORIN.
-
-> +
->  $(eval $(kconfig-package))
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 7e20255..6cfc8e7 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -435,6 +435,13 @@ endif
->  
->  endif # BR_BUILDING
->  
-> +ifeq ($(BR2_LINUX_KERNEL),y)
-> +	EXTRA_HELP += 'linux-menuconfig       - Run Linux kernel menuconfig'
-> +	EXTRA_HELP += 'linux-savedefconfig    - Run Linux kernel savedefconfig'
-> +	EXTRA_HELP += 'linux-update-defconfig - Save the Linux configuration to the path specified'
-> +	EXTRA_HELP += '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
-> +endif
-> +
->  $(eval $(kconfig-package))
->  
->  # Support for rebuilding the kernel after the cpio archive has
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 7c904c8..d4ee149 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -250,4 +250,8 @@ $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_
->  endif
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> +	EXTRA_HELP += 'busybox-menuconfig     - Run BusyBox menuconfig'
-> +endif
-> +
->  $(eval $(kconfig-package))
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 200de04..9448364 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -460,4 +460,8 @@ $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG set
->  endif
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_UCLIBC),y)
-> +	EXTRA_HELP += 'uclibc-menuconfig      - Run uClibc menuconfig'
-> +endif
-> +
->  $(eval $(kconfig-package))
-> -- 
-> 2.7.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index 325c84f..6f95dac 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  883fca4d50c18dc5b248144a00526b718e7c4c91841123b4a0732fef2b8791f4  luvi-src-v2.5.1.tar.gz
++sha256  a8b4aecf4c1d781614fe187b6afcb2dc7462fcd6e76a3f38cbfd0a8244c01582  luvi-src-v2.6.1.tar.gz
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index d83933e..305ff4f 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUVI_VERSION = v2.5.1
++LUVI_VERSION = v2.6.1
+ LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+ LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
+ LUVI_LICENSE = Apache-2.0
