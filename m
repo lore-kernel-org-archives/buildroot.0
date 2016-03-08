@@ -1,70 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 8 Mar 2016 16:18:19 +0000
-Subject: [Buildroot] [PATCH] toolchain: improve SSP logic
-In-Reply-To: <20160308171357.309278e1@free-electrons.com>
-References: <1457453323-11947-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160308171357.309278e1@free-electrons.com>
-Message-ID: <56DEFB4B.3000208@imgtec.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Mar 2016 17:22:03 +0100
+Subject: [Buildroot] [PATCHv2 1/1] board/wandboard: fix perl related
+ linux compilation error
+In-Reply-To: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+References: <1442889921-6713-1-git-send-email-imrehg@gmail.com>
+Message-ID: <20160308172203.5a8a72a8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On 08/03/16 16:13, Thomas Petazzoni wrote:
-> Hello Vicente,
+On Tue, 22 Sep 2015 10:45:21 +0800, imrehg at gmail.com wrote:
+> From: Gergely Imreh <imrehg@gmail.com>
 > 
-> On Tue, 8 Mar 2016 16:08:43 +0000, Vicente Olivert Riera wrote:
->> Don't enable SSP support on toolchains just because they use glibc or
->> musl. Instead of that, make the toolchains to declare if they support
->> SSP or not. And also add a check to detect SSP support when using custom
->> external toolchains.
->>
->> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
->> ---
->>  toolchain/Config.in                                |  2 --
->>  toolchain/helpers.mk                               | 17 ++++++++++++++++
->>  toolchain/toolchain-external/Config.in             | 23 ++++++++++++++++++++--
->>  toolchain/toolchain-external/toolchain-external.mk |  1 +
->>  4 files changed, 39 insertions(+), 4 deletions(-)
->>
->> diff --git a/toolchain/Config.in b/toolchain/Config.in
->> index fc30c6e..e0044c1 100644
->> --- a/toolchain/Config.in
->> +++ b/toolchain/Config.in
->> @@ -15,7 +15,6 @@ config BR2_TOOLCHAIN_USES_GLIBC
->>  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->>  	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
->>  	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
->> -	select BR2_TOOLCHAIN_HAS_SSP
->>  
->>  config BR2_TOOLCHAIN_USES_UCLIBC
->>  	bool
->> @@ -27,7 +26,6 @@ config BR2_TOOLCHAIN_USES_MUSL
->>  	select BR2_TOOLCHAIN_HAS_THREADS
->>  	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
->>  	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
->> -	select BR2_TOOLCHAIN_HAS_SSP
->>  
->>  choice
->>  	prompt "Toolchain type"
+> Replace the "timeconst" perl script with a bc script to fix an
+> error due to syntax changes in perl which resulted in linux
+> compilation error for the wandboard's 3.8 kernel. The patch is
+> backported, kernels from 3.9 onward already have this change.
 > 
-> I think this patch is incomplete because you are now saying that all
-> glibc and musl toolchains no longer have SSP support, and only
-> re-enable SSP support for external toolchains on a per-toolchain basis.
-> Sounds good for external toolchains.
-> 
-> But what about internal glibc and musl toolchains ?
+> Signed-off-by: Gergely Imreh <imrehg@gmail.com>
 
-you're right, I forgot about the internal ones! Ooops :P
+We finally fixed this problem in a different way, that is generic to
+all boards/kernel versions.
 
-Regards,
+See the commit at
+https://git.busybox.net/buildroot/commit/linux?id=d6a5d71aba8e21b8aa28d93075a603297d1d3b3c.
 
-Vincent.
+Consequently, I've marked your patch as "Rejected" in our patch
+tracking system. Thanks for having reported the issue in the first
+place!
 
-> Best regards,
-> 
-> Thomas
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
