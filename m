@@ -1,47 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 8 Mar 2016 22:33:23 +0100
-Subject: [Buildroot] [git commit] samba4: security bump to version 4.3.6
-Message-ID: <20160308213340.F18AC800FD@busybox.osuosl.org>
+Date: Tue, 8 Mar 2016 21:59:40 +0100
+Subject: [Buildroot] [git commit] toolchain: also source the musl package
+Message-ID: <20160308213340.E5020818FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52be26e90c08caf78617deb4f1af6746af0f5b95
+commit: https://git.buildroot.net/buildroot/commit/?id=6c294b83db6b46039544e70cf4932a26e92a0ec0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2015-7560 - Authenticated client could cause Samba to overwrite ACLs
-with incorrect owner/group.
-CVE-2016-0771 - Malicious request can cause the Samba internal DNS
-server to crash or unintentionally return uninitialized memory.
+We do source the glibc and uClibc packages in the toolchain menu,
+because they do provide user-visible options. However, we do not so
+far source the musl Config.in file
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+However, in 822be87 (toolchain: include C libraries in legal-info),
+a Config.in file for musl was explicitly created, so that:
+  - legal-info would work (needed at the time, probably no longer needed
+    nowadays),
+  - the appropriate packages are enabled, like netbsd-queue or kernel
+    headers.
+
+Yet, we do not source musl/Config.in, which means we do not get
+netbsd-queue or kernel-headers to be selected:
+
+    $ make distclean; make menuconfig
+        Toolchain  --->
+          C library ---> musl
+      save-and-exit
+    $ grep BR2_PACKAGE_LINUX_HEADERS .config
+        [nothing]
+    $ grep BR2_PACKAGE_NETBSD_QUEUE .config
+        [nothing]
+
+Fix that by sourcing musl/Config.in at the same place we source glibc
+and uClibc.
+
+Normally, we do have a check in place that verifies that a package
+that is not enabled is not a dependency of another package that is
+enabled. However, musl is only a dependency of host-gcc-final, which
+is a host package and has no corresponding BR2_PACKAGE_HOST_GCC_FINAL.
+Thus host-gcc-final is not in the PACKAGES variable, and thus does not
+trigger our check.
+
+Reported-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/toolchain-buildroot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 1b53657..d8458e6 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	583f927a823b272757fd4df0be267bd20a223b06cfc3c662df17e4870f14bf1c	samba-4.3.5.tar.gz
-+sha256	3251eca5b196854e79978f4a92d5fd2b55bd7b0a252a65131a9be02be6754924	samba-4.3.6.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 715983e..ee0452e 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 37c6624..cb4fc18 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -110,6 +110,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LIBC
+ 	default "musl"	 if BR2_TOOLCHAIN_BUILDROOT_MUSL
  
--SAMBA4_VERSION = 4.3.5
-+SAMBA4_VERSION = 4.3.6
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ source "package/linux-headers/Config.in"
++source "package/musl/Config.in"
+ source "package/uclibc/Config.in"
+ source "package/glibc/Config.in"
+ source "package/binutils/Config.in.host"
