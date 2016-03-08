@@ -1,37 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  8 Mar 2016 16:43:53 -0300
-Subject: [Buildroot] [PATCH] zeromq: unbreak pgm support
-Message-ID: <1457466233-14933-1-git-send-email-gustavo@zacarias.com.ar>
+From: Roland Franke <fli4l@franke-prem.de>
+Date: Tue, 8 Mar 2016 20:53:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/owfs: Install owfs in staging
+	directory
+Message-ID: <B68AA701312B47E08D135DD8EDFAA4E6@ROLANDAMD64>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the bump to the 4.1.x series the bundled pgm library was dropped and
-the --with-system-pgm option was made pointless since using unbundled
-became the only option, so it was renamed to --with-pgm, which
-previously meant "use bundled" (but not any longer).
-However this wasn't accounted for and pgm support has been broken since
-then.
+Install package in staging directory, so that this package can be linked 
+together with other packages (By me with collectd and the onewire plugin)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Roland Franke <fli4l@franke-prem.de>
 ---
- package/zeromq/zeromq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+package/owfs/owfs.mk  | 1 +
+1 files changed, 1 insertions(+), 0 deletions(-)
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index ce01e50..b80f8e4 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -30,7 +30,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_ZEROMQ_PGM),y)
- ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
--ZEROMQ_CONF_OPTS += --with-system-pgm
-+ZEROMQ_CONF_OPTS += --with-pgm
- endif
- 
- # ZeroMQ uses libsodium if it's available.
--- 
-2.4.10
+diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+index 23167f4..083939a 100644
+--- a/package/owfs/owfs.mk
++++ b/package/owfs/owfs.mk
+@@ -15,6 +15,7 @@ OWFS_AUTORECONF = YES
+# owtcl license is declared in module/ownet/c/src/include/ow_functions.h
+OWFS_LICENSE = GPLv2+, LGPLv2 (owtcl)
+OWFS_LICENSE_FILES = COPYING COPYING.LIB
++OWFS_INSTALL_STAGING = YES
+
+ifeq ($(BR2_PACKAGE_LIBFUSE),y)
+OWFS_DEPENDENCIES += libfuse
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160308/9ef913e5/attachment.html>
