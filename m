@@ -1,36 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 8 Mar 2016 23:59:31 +0100
-Subject: [Buildroot] [git commit] font-awesome: indentation cleanup
-Message-ID: <20160308225957.57C04802D0@busybox.osuosl.org>
+Date: Tue, 8 Mar 2016 23:59:46 +0100
+Subject: [Buildroot] [git commit] ubus: indentation cleanup
+Message-ID: <20160308225957.91236802CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b83ad32d5c0409af181181efd4c3ffb0b07c5cdf
+commit: https://git.buildroot.net/buildroot/commit/?id=2e710454aad80f2bbbd7361d8b15b098df456abd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/font-awesome/font-awesome.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/ubus/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
-index 6ebb92c..3d2ccca 100644
---- a/package/font-awesome/font-awesome.mk
-+++ b/package/font-awesome/font-awesome.mk
-@@ -10,9 +10,9 @@ FONT_AWESOME_LICENSE = OFLv1.1 (font), MIT (CSS, LESS and Sass files)
- FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
+diff --git a/package/ubus/Config.in b/package/ubus/Config.in
+index 391fc8d..c14f6a8 100644
+--- a/package/ubus/Config.in
++++ b/package/ubus/Config.in
+@@ -1,6 +1,6 @@
+ comment "ubus needs a toolchain w/ dynamic library"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-        depends on BR2_STATIC_LIBS
++	depends on BR2_STATIC_LIBS
  
- define FONT_AWESOME_INSTALL_TARGET_CMDS
--        mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
--        $(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
--                cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
-+	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
-+	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
-+		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
- endef
- 
- $(eval $(generic-package))
+ config BR2_PACKAGE_UBUS
+ 	bool "ubus"
