@@ -1,57 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 8 Mar 2016 21:20:40 +0100
-Subject: [Buildroot] [PATCH 2/2] docs: fix syntax error in
- makedev-syntax example. In the makedev syntax documentation,
- one of the examples lacks the "mode" value.
-In-Reply-To: <1457294608-2129-2-git-send-email-alan@tkos.co.il>
-References: <1457294608-2129-1-git-send-email-alan@tkos.co.il>
- <1457294608-2129-2-git-send-email-alan@tkos.co.il>
-Message-ID: <20160308202039.GB3856@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 8 Mar 2016 21:24:53 +0100
+Subject: [Buildroot] [git commit] libcurl: enable mbedtls support
+Message-ID: <20160308202524.694268042D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0af16e3a9231e1df2b661b7bf0949e79ed28cb18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-03-06 22:03 +0200, Alan Yaniger spake thusly:
-> Signed-off-by: Alan Yaniger <alan@tkos.co.il>
+Now that we've got an mbedtls package in the tree we can enable the
+optional support for it in libcurl.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We also remove the comment about polarssl support needing version
+1.3.x. Indeed, polarssl was renamed to mbedtls when bought by ARM,
+which was circa the 1.3.x polarssl release. Due to this referring to
+polarssl 1.3.x doesn't make a lot of sense, and we'll probably never
+package polarssl 1.3.x in Buildroot now that mbedtls replaces it.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+[Thomas: slightly improve commit log as suggested by Luca, using
+explanations from Gustavo.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libcurl/libcurl.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> ---
->  docs/manual/makedev-syntax.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-> index 0bbc16e..e4dffc9 100644
-> --- a/docs/manual/makedev-syntax.txt
-> +++ b/docs/manual/makedev-syntax.txt
-> @@ -44,7 +44,7 @@ this syntax, you will need to write:
->  ----
->  /usr/bin/foo f 755 0 0 - - - - -
->  /usr/bin/bar f 755 root root - - - - -
-> -/data/buz f buz-user buz-group - - - - -
-> +/data/buz f 644 buz-user buz-group - - - - -
->  ----
->  
->  Alternatively, if you want to change owner/permission of a directory
-> -- 
-> 1.9.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 33a5410..783c9b1 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -40,10 +40,12 @@ else ifeq ($(BR2_PACKAGE_LIBNSS),y)
+ LIBCURL_CONF_OPTS += --with-nss=$(STAGING_DIR)/usr
+ LIBCURL_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) nspr nss --cflags`"
+ LIBCURL_DEPENDENCIES += libnss
++else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
++LIBCURL_CONF_OPTS += --with-mbedtls=$(STAGING_DIR)/usr
++LIBCURL_DEPENDENCIES += mbedtls
+ else
+-# polarssl support needs 1.3.x
+ LIBCURL_CONF_OPTS += --without-ssl --without-gnutls \
+-	--without-polarssl --without-nss
++	--without-polarssl --without-nss --without-mbedtls
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_C_ARES),y)
