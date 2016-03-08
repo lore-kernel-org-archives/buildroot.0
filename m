@@ -1,47 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Mar 2016 00:01:14 +0100
-Subject: [Buildroot] [PATCH] hostapd: fix musl issues
-In-Reply-To: <1457473254-30014-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1457473254-30014-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160309000114.778d95e7@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  9 Mar 2016 00:03:25 +0100
+Subject: [Buildroot] [PATCH] package/busybox: support automatic module
+	loading with mdev
+Message-ID: <1457478205-18515-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear J?rg Krause,
+A recently discussed on the mailing list:
+http://lists.busybox.net/pipermail/buildroot/2016-February/154189.html
 
-On Tue,  8 Mar 2016 22:40:54 +0100, J?rg Krause wrote:
-> Add two patches to fix build issues with the musl libc.
-> 
-> The first patch "0003-vlan-fix-musl-build-error" fixes the undefined __caddr_t
-> build error. __caddr_t is a legacy BSD type and should be avoided in modern
-> implementations.
-> 
-> The second patch "0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header"
-> fixes a typical musl libc header conflict with the Linux kernel header. We avoid
-> including the conflicting Linux header file by defining the needed macros
-> directly in the needing hostapd source file.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c26/c265cfada20621a631e9d118b9633df80b0e4864/
-> http://autobuild.buildroot.net/results/658/658c5e2fe6e3a4ad74ca47c926426e95eac0b9ec/
-> http://autobuild.buildroot.net/results/578/5787805b3e1487c4f85c3a367ed88e8730078b8e/
-> http://autobuild.buildroot.net/results/42d/42d8be008dcb07e9ec26ce10c797deb43ed86568/
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../hostapd/0003-vlan-fix-musl-build-error.patch   | 60 ++++++++++++++++++++++
->  ...sl-libc-conflict-with-Linux-kernel-header.patch | 60 ++++++++++++++++++++++
->  2 files changed, 120 insertions(+)
->  create mode 100644 package/hostapd/0003-vlan-fix-musl-build-error.patch
->  create mode 100644 package/hostapd/0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header.patch
+Our mdev configuration currently doesn't handle module loading. Fix that by:
 
-Applied to master, thanks.
+- Telling mdev to run modprobe on hotplug events providing MODALIAS
 
-Thomas
+- Adjust the init script to handle coldplug modalias events (E.G. modules
+  for which the devices were already present before mdev was added as the
+  hotplug handler). mdev -s should arguable handle this, but it doesn't.
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/S10mdev   | 2 ++
+ package/busybox/mdev.conf | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index d386d42..4cb31de 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -8,6 +8,8 @@ case "$1" in
+ 	echo "Starting mdev..."
+ 	echo /sbin/mdev >/proc/sys/kernel/hotplug
+ 	/sbin/mdev -s
++	# coldplug modules
++	find /sys/ -name modalias | xargs sort -u | xargs modprobe -abq
+ 	;;
+   stop)
+ 	;;
+diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
+index 247c0ed..4fafe63 100644
+--- a/package/busybox/mdev.conf
++++ b/package/busybox/mdev.conf
+@@ -33,3 +33,6 @@ event[0-9]+	root:root 640 =input/
+ mice		root:root 640 =input/
+ mouse[0-9]	root:root 640 =input/
+ ts[0-9]		root:root 600 =input/
++
++# load modules
++$MODALIAS=.*	root:root 660 @modprobe "$MODALIAS"
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.0
