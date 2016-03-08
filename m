@@ -1,80 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue,  8 Mar 2016 22:20:55 +0100
-Subject: [Buildroot] [PATCH] gcc: fix dynamic linker path for mips soft-float
-Message-ID: <1457472055-7083-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 8 Mar 2016 22:21:49 +0100
+Subject: [Buildroot] [PATCH 1/2] help: add a way to document targets
+ declared in local.mk/external.mk
+In-Reply-To: <20160308220221.0a5088d0@free-electrons.com>
+References: <1447857421-9380-1-git-send-email-jezz@sysmic.org>
+ <56DF3C1F.30205@mind.be> <20160308220221.0a5088d0@free-electrons.com>
+Message-ID: <56DF426D.2000800@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit updates the gcc musl patches for gcc 4.7, 4.8 and 4.9 so
-that the path to the dynamic linker encoded as "program interpreter"
-in the generated binaries actually matches the symbolic link installed
-by musl when building for mips soft-float.
+On 03/08/16 22:02, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Tue, 8 Mar 2016 21:54:55 +0100, Arnout Vandecappelle wrote:
+>> On 11/18/15 15:37, J?r?me Pouiller wrote:
+>>> It is handy to use local.mk or external.mk to add specific targets
+>>> for current project. However, until now, it not possible to add help
+>>> message these targets.
+>>> This patch add LOCAL_HELP variable. This variable is aimed to be assigned
+>>> from any .mk files. Its content is displayed with 'make help'.
+>>>
+>>> For exemple:
+>>>     LOCAL_HELP += "flash                  - Flash target"
+>>>     LOCAL_HELP += "chroot                 - Chroot into target/"
+>>>     LOCAL_HELP += "qemu                   - Run image with qemu"
+>>>     LOCAL_HELP += "install-nfs            - Extract rootfs in \$$NFSROOT (=$(NFSROOT))"
+>>>     LOCAL_HELP += "`printf '%-22s%s' '$(var)-feature' ' - Call $(var) feature'`"
+>>>     LOCAL_HELP += "Please contact support at company.com in case of problem."
+>>>
+>>> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+>>
+>>    Looks good to me, except that I don't like the name 'LOCAL'. I'd prefer e.g.
+>> ADDITIONAL.
+>
+> Wouldn't EXTERNAL_HELP be even better, suggesting that its main
+> use-case is for BR2_EXTERNAL ?
 
-Indeed, musl installs a symlink called ld-musl-mipsel-sf.so.1, but gcc
-currently generates binaries that use /lib/ld-musl-mips.so as program
-interpreter.
+  Works for me as well. Additional is a word we're currently not using at all, 
+so perhaps reusing external is better.
 
-The fix is simply the one from
-https://bitbucket.org/GregorR/musl-cross/commits/825219202365, i.e
-adjust MUSL_DYNAMIC_LINKER in our musl gcc patches.
 
-Thanks to these patches:
+  Regards,
+  Arnout
 
-$ ./host/usr/bin/mipsel-linux-readelf -a ./target/bin/busybox
-[...]
-      [Requesting program interpreter: /lib/ld-musl-mipsel-sf.so.1]
-[...]
 
-gcc 5.x doesn't need any fix because the musl patches already use the
-right value.
-
-Fixes bug #7562.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/4.7.4/900-musl-support.patch | 2 +-
- package/gcc/4.8.5/900-musl-support.patch | 2 +-
- package/gcc/4.9.3/900-musl-support.patch | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/gcc/4.7.4/900-musl-support.patch b/package/gcc/4.7.4/900-musl-support.patch
-index 67b8c30..bf8fbc0 100644
---- a/package/gcc/4.7.4/900-musl-support.patch
-+++ b/package/gcc/4.7.4/900-musl-support.patch
-@@ -478,7 +478,7 @@ Index: b/gcc/config/mips/linux.h
- +#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
- +#endif
- +#undef MUSL_DYNAMIC_LINKER
--+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
-++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
- Index: b/gcc/config/rs6000/linux64.h
- ===================================================================
- --- a/gcc/config/rs6000/linux64.h
-diff --git a/package/gcc/4.8.5/900-musl-support.patch b/package/gcc/4.8.5/900-musl-support.patch
-index 6743a88..6840fcc 100644
---- a/package/gcc/4.8.5/900-musl-support.patch
-+++ b/package/gcc/4.8.5/900-musl-support.patch
-@@ -332,7 +332,7 @@ Index: b/gcc/config/mips/linux.h
- +#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
- +#endif
- +#undef MUSL_DYNAMIC_LINKER
--+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
-++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
- Index: b/gcc/config/rs6000/linux64.h
- ===================================================================
- --- a/gcc/config/rs6000/linux64.h
-diff --git a/package/gcc/4.9.3/900-musl-support.patch b/package/gcc/4.9.3/900-musl-support.patch
-index a711b06..90f64de 100644
---- a/package/gcc/4.9.3/900-musl-support.patch
-+++ b/package/gcc/4.9.3/900-musl-support.patch
-@@ -637,4 +637,4 @@ Index: b/gcc/config/mips/linux.h
- +#define MUSL_DYNAMIC_LINKER_E "%{EL:el}"
- +#endif
- +#undef MUSL_DYNAMIC_LINKER
--+#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E ".so.1"
-++#define MUSL_DYNAMIC_LINKER "/lib/ld-musl-mips" MUSL_DYNAMIC_LINKER_E "%{msoft-float:-sf}.so.1"
 -- 
-2.6.4
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
