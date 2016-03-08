@@ -1,119 +1,41 @@
-From: =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
-Date: Tue,  8 Mar 2016 22:48:13 +0100
-Subject: [Buildroot] [PATCH v2 2/2] help: relocate help messages specific to
-	one package
-In-Reply-To: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
-References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
-Message-ID: <1457473693-25776-2-git-send-email-jezz@sysmic.org>
+From: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Date: Tue,  8 Mar 2016 22:58:04 +0100
+Subject: [Buildroot] [PATCH 2/4] collectd: indentation cleanup
+In-Reply-To: <1457474286-18685-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1457474286-18685-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <1457474286-18685-2-git-send-email-jerzy.grzegorek@trzebnica.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use $EXTRA_HELP feature in order to integrate help messages specific
-to one package (linux-menuconfig, etc...) package they are
-related.
-
-It would be possible to do it using kconfig framework, but I was not
-sure it is necessary to document kconfig targets systematicaly.
-
-Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 ---
-v2:
-  - Rename LOCAL_HELP
+ package/collectd/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- Makefile                   | 16 ----------------
- boot/barebox/barebox.mk    |  5 +++++
- linux/linux.mk             |  7 +++++++
- package/busybox/busybox.mk |  4 ++++
- package/uclibc/uclibc.mk   |  4 ++++
- 5 files changed, 20 insertions(+), 16 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 1c9f63c..eb92052 100644
---- a/Makefile
-+++ b/Makefile
-@@ -932,22 +932,6 @@ help:
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
--endif
--ifeq ($(BR2_LINUX_KERNEL),y)
--	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
--	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
--	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
--	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
--endif
--ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
--	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
--endif
--ifeq ($(BR2_TARGET_BAREBOX),y)
--	@echo '  barebox-menuconfig     - Run barebox menuconfig'
--	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
--endif
- 	@for i in $(EXTRA_HELP); do echo "  $$i"; done
- 	@echo
- 	@echo 'Documentation:'
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7715daf..24d0162 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -117,4 +117,9 @@ $(error No Barebox config. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_
- endif
- endif
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index ec7e942..71301ec 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -333,7 +333,7 @@ config BR2_PACKAGE_COLLECTD_OPENLDAP
+ 	  Read monitoring information from OpenLDAP's cn=Monitor subtree.
  
-+ifeq ($(BR2_TARGET_BAREBOX),y)
-+	EXTRA_HELP += 'barebox-menuconfig     - Run barebox menuconfig'
-+	EXTRA_HELP += 'barebox-savedefconfig  - Run barebox savedefconfig'
-+endif
-+
- $(eval $(kconfig-package))
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e20255..6cfc8e7 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -435,6 +435,13 @@ endif
+ comment "openldap support needs a toolchain w/ wchar"
+-        depends on !BR2_USE_WCHAR
++	depends on !BR2_USE_WCHAR
  
- endif # BR_BUILDING
+ config BR2_PACKAGE_COLLECTD_OPENVPN
+ 	bool "openvpn"
+@@ -385,7 +385,7 @@ config BR2_PACKAGE_COLLECTD_SMART
+ 	  and bad sectors.
  
-+ifeq ($(BR2_LINUX_KERNEL),y)
-+	EXTRA_HELP += 'linux-menuconfig       - Run Linux kernel menuconfig'
-+	EXTRA_HELP += 'linux-savedefconfig    - Run Linux kernel savedefconfig'
-+	EXTRA_HELP += 'linux-update-defconfig - Save the Linux configuration to the path specified'
-+	EXTRA_HELP += '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
-+endif
-+
- $(eval $(kconfig-package))
+ comment "SMART requires udev to be enabled"
+-        depends on !BR2_PACKAGE_HAS_UDEV
++	depends on !BR2_PACKAGE_HAS_UDEV
  
- # Support for rebuilding the kernel after the cpio archive has
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7c904c8..d4ee149 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -250,4 +250,8 @@ $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-+	EXTRA_HELP += 'busybox-menuconfig     - Run BusyBox menuconfig'
-+endif
-+
- $(eval $(kconfig-package))
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 200de04..9448364 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -460,4 +460,8 @@ $(error No uClibc configuration file specified, check your BR2_UCLIBC_CONFIG set
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_UCLIBC),y)
-+	EXTRA_HELP += 'uclibc-menuconfig      - Run uClibc menuconfig'
-+endif
-+
- $(eval $(kconfig-package))
+ config BR2_PACKAGE_COLLECTD_STATSD
+ 	bool "StatsD"
 -- 
-2.7.0
+1.9.1
