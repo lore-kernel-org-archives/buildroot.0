@@ -1,69 +1,65 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed,  9 Mar 2016 00:06:41 +0100
-Subject: [Buildroot] [PATCH v2] libpjsip: depend on libsrtp
-Message-ID: <1457478401-24164-1-git-send-email-luca@lucaceresoli.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 9 Mar 2016 00:14:33 +0100
+Subject: [Buildroot] [PATCH] gcc: drop gcc 4.5 specific code
+In-Reply-To: <1457476243-9401-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1457476243-9401-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160308231433.GE14289@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libpjsip needs libsrtp to build, but it bundles a libsrtp version in
-case one is not found during the configure step. The Buildroot policy
-in such cases is to force using the external package, so forcibly
-depend on libsrtp.
+thomas, All,
 
-Adding --with-external-srtp also fixes libpjsip not correctly the
-libsrtp installed in staging, which shows up with the symptom:
+On 2016-03-08 23:30 +0100, Thomas Petazzoni spake thusly:
+> We have removed gcc 4.5 support since a long time, so this commit
+> removes dead code that was only used when building a toolchain based
+> on gcc 4.5.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  .../libpjmedia.so: undefined reference to `srtp_deinit'
-  collect2: error: ld returned 1 exit status
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Fixes:
-  http://autobuild.buildroot.org/results/305/305fdc8442cd2e8f51b90485be0dca83ffa36603/
-  http://autobuild.buildroot.org/results/a2f/a2f407c1361ac5c24af122445e84645e9aee309d/
-  ...and many other similar autobuild failures.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libpjsip/Config.in   | 1 +
- package/libpjsip/libpjsip.mk | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+> ---
+>  package/gcc/gcc.mk | 9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 07883d0..0fb73c9 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -97,15 +97,6 @@ HOST_GCC_COMMON_CONF_ENV = \
+>  GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+>  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+>  
+> -# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+> -# Workaround until it's fixed in 4.5.4 or later
+> -ifeq ($(ARCH),powerpc)
+> -ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+> -GCC_COMMON_TARGET_CFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
+> -GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
+> -endif
+> -endif
+> -
+>  # Xtensa libgcc can't be built with -mauto-litpools
+>  # because of the trick used to generate .init/.fini sections.
+>  ifeq ($(BR2_xtensa),y)
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
-index 980fada3d5fb..727d2ec3d06c 100644
---- a/package/libpjsip/Config.in
-+++ b/package/libpjsip/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBPJSIP
- 	bool "libpjsip"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBSRTP
- 	help
- 	  PJSIP is a free and open source multimedia communication
- 	  library written in C language implementing standard based
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index ee250f5b11ef..49abd744e59d 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -7,6 +7,7 @@
- LIBPJSIP_VERSION = 2.4.5
- LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
- LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
-+LIBPJSIP_DEPENDENCIES = libsrtp
- LIBPJSIP_LICENSE = GPLv2+
- LIBPJSIP_LICENSE_FILES = COPYING
- LIBPJSIP_INSTALL_STAGING = YES
-@@ -22,7 +23,8 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-speex-aec \
- 	--disable-resample \
- 	--disable-video \
--	--disable-opencore-amr
-+	--disable-opencore-amr \
-+	--with-external-srtp=$(STAGING_DIR)/usr
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBPJSIP_DEPENDENCIES += openssl
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
