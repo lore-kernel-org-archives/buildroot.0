@@ -1,39 +1,90 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  8 Mar 2016 23:02:23 +0100
-Subject: [Buildroot] [PATCH] luvi: bump to version 2.6.1
-Message-ID: <1457474543-9973-1-git-send-email-joerg.krause@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 8 Mar 2016 23:10:49 +0100
+Subject: [Buildroot] [PATCH v2 1/2] help: add a way to document targets
+ declared in local.mk/external.mk
+In-Reply-To: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
+References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
+Message-ID: <20160308221049.GB14289@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/luvi/luvi.hash | 2 +-
- package/luvi/luvi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+J?r?me, All,
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 325c84f..6f95dac 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  883fca4d50c18dc5b248144a00526b718e7c4c91841123b4a0732fef2b8791f4  luvi-src-v2.5.1.tar.gz
-+sha256  a8b4aecf4c1d781614fe187b6afcb2dc7462fcd6e76a3f38cbfd0a8244c01582  luvi-src-v2.6.1.tar.gz
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index d83933e..305ff4f 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUVI_VERSION = v2.5.1
-+LUVI_VERSION = v2.6.1
- LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
- LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
- LUVI_LICENSE = Apache-2.0
+On 2016-03-08 22:48 +0100, J?r?me Pouiller spake thusly:
+> It is handy to use local.mk or external.mk to add specific targets
+> for current project. However, until now, it not possible to add help
+> message these targets.
+
+I have:
+
+    $ make local-help
+    Local blabla help displays here...
+
+> This patch add EXTRA_HELP variable. This variable is aimed to be assigned
+> from any .mk files. Its content is displayed with 'make help'.
+> 
+> For exemple:
+>   EXTRA_HELP += "flash                  - Flash target"
+>   EXTRA_HELP += "chroot                 - Chroot into target/"
+>   EXTRA_HELP += "qemu                   - Run image with qemu"
+>   EXTRA_HELP += "install-nfs            - Extract rootfs in \$$NFSROOT (=$(NFSROOT))"
+>   EXTRA_HELP += "`printf '%-22s%s' '$(var)-feature' ' - Call $(var) feature'`"
+>   EXTRA_HELP += "Please contact support at company.com in case of problem."
+
+This definitely does not look nice to me... :-(
+
+What we could do, however, would be:
+
+  - in external.mk:
+        BR2_HAS_EXTRA_HELP = YES  # Whatever non empty
+
+  - in the main Makefile:
+
+        help:
+            blabla our current help
+            $(if $(BR2_HAS_EXTRA_HELP),echo "  - local-help  to get local help blabla)
+
+which would be IMHO much much nicer and much much simpler...
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> ---
+> v2:
+>   - Rename LOCAL_HELP to EXTRA_HELP
+>   - Remove introduction lines (so, 'ifneq ($(LOCAL_HELP),)' is no more needed)
+> 
+>  Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index f2822a2..1c9f63c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -948,6 +948,7 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
+>  	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+>  	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+>  endif
+> +	@for i in $(EXTRA_HELP); do echo "  $$i"; done
+>  	@echo
+>  	@echo 'Documentation:'
+>  	@echo '  manual                 - build manual in all formats'
+> -- 
+> 2.7.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.7.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
