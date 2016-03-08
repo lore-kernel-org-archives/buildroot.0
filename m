@@ -1,39 +1,29 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  8 Mar 2016 20:56:20 -0300
-Subject: [Buildroot] [PATCH] hiawatha: bump to version 10.1
-Message-ID: <1457481380-8395-1-git-send-email-gustavo@zacarias.com.ar>
+From: Johan Sagaert <sagaert.johan@proximus.be>
+Date: Wed, 9 Mar 2016 00:59:17 +0100
+Subject: [Buildroot] patch: **** Only garbage was found in the patch input.
+Message-ID: <56DF6755.3080402@proximus.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/hiawatha/hiawatha.hash | 2 +-
- package/hiawatha/hiawatha.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi
 
-diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
-index af59e9f..5709076 100644
---- a/package/hiawatha/hiawatha.hash
-+++ b/package/hiawatha/hiawatha.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a39d1f771d818025538bd1231f42001bf29a1ebf55ce3d82afb7305cc251dd0e	hiawatha-10.0.tar.gz
-+sha256	3892e0a1836661c8dcc649f9ae965289f701640a618baf2c2287da9b78e36cf1	hiawatha-10.1.tar.gz
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 411853b..d30b1a1 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HIAWATHA_VERSION = 10.0
-+HIAWATHA_VERSION = 10.1
- HIAWATHA_SITE = http://www.hiawatha-webserver.org/files
- HIAWATHA_DEPENDENCIES = zlib
- HIAWATHA_LICENSE = GPLv2
--- 
-2.4.10
+Applying 0001-logo.patch using patch:
+patch: **** Only garbage was found in the patch input.
+Patch failed!  Please fix 0001-logo.patch!
+
+
+I always use  git format patch to create patches  to use them
+as usual in buildroot.
+The modified files where image files, so this yields a binary patch.
+
+It looks like patch does not understand the binary format that git 
+format patch creates.
+
+Is there any workaround this or do i have to revert to the old diff 
+method for making patches
+of non text files ?
+
+Regards Johan
