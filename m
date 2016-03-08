@@ -1,38 +1,47 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 9 Mar 2016 00:01:34 +0100
-Subject: [Buildroot] [PATCH 2/2] libpjsip: fix optional dependency on
- libsrtp
-In-Reply-To: <20160308211526.6a639ffb@free-electrons.com>
-References: <1457387805-4084-1-git-send-email-luca@lucaceresoli.net>
- <1457387805-4084-2-git-send-email-luca@lucaceresoli.net>
- <20160308211526.6a639ffb@free-electrons.com>
-Message-ID: <56DF59CE.7000505@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Mar 2016 00:01:14 +0100
+Subject: [Buildroot] [PATCH] hostapd: fix musl issues
+In-Reply-To: <1457473254-30014-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1457473254-30014-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160309000114.778d95e7@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/03/2016 21:15, Thomas Petazzoni wrote:
-> Dear Luca Ceresoli,
-> 
-> On Mon,  7 Mar 2016 22:56:45 +0100, Luca Ceresoli wrote:
-> 
->> +ifeq ($(BR2_PACKAGE_LIBSRTP),y)
->> +LIBPJSIP_DEPENDENCIES += libsrtp
->> +LIBPJSIP_CONF_OPTS += --with-external-srtp=$(STAGING_DIR)/usr
->> +endif
-> 
-> The --with-external-srtp seems to imply that there is also an
-> "internal/bundled" srtp.
-> 
-> If pjsip indeed needs srtp unconditionally, then we should always
-> depend on it and use the external libsrtp rather than the bundled one.
+Dear J?rg Krause,
 
-Uh, indeed libpjsip always links libsrtp, and ships the internal copy in
-case the no external one is found.
+On Tue,  8 Mar 2016 22:40:54 +0100, J?rg Krause wrote:
+> Add two patches to fix build issues with the musl libc.
+> 
+> The first patch "0003-vlan-fix-musl-build-error" fixes the undefined __caddr_t
+> build error. __caddr_t is a legacy BSD type and should be avoided in modern
+> implementations.
+> 
+> The second patch "0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header"
+> fixes a typical musl libc header conflict with the Linux kernel header. We avoid
+> including the conflicting Linux header file by defining the needed macros
+> directly in the needing hostapd source file.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/c26/c265cfada20621a631e9d118b9633df80b0e4864/
+> http://autobuild.buildroot.net/results/658/658c5e2fe6e3a4ad74ca47c926426e95eac0b9ec/
+> http://autobuild.buildroot.net/results/578/5787805b3e1487c4f85c3a367ed88e8730078b8e/
+> http://autobuild.buildroot.net/results/42d/42d8be008dcb07e9ec26ce10c797deb43ed86568/
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  .../hostapd/0003-vlan-fix-musl-build-error.patch   | 60 ++++++++++++++++++++++
+>  ...sl-libc-conflict-with-Linux-kernel-header.patch | 60 ++++++++++++++++++++++
+>  2 files changed, 120 insertions(+)
+>  create mode 100644 package/hostapd/0003-vlan-fix-musl-build-error.patch
+>  create mode 100644 package/hostapd/0004-vlan-fix-musl-libc-conflict-with-Linux-kernel-header.patch
 
-Updated patch incoming.
+Applied to master, thanks.
 
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
