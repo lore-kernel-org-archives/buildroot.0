@@ -1,62 +1,53 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Mar 2016 00:47:53 +0100
-Subject: [Buildroot] [PATCH 7/8] boot/barebox: use the generic help rules
-In-Reply-To: <a5912926eaca571643ce6959d104322a434c69ce.1457561521.git.yann.morin.1998@free.fr>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <a5912926eaca571643ce6959d104322a434c69ce.1457561521.git.yann.morin.1998@free.fr>
-Message-ID: <56E0B629.90003@mind.be>
+Date: Thu, 10 Mar 2016 00:51:11 +0100
+Subject: [Buildroot] [PATCH v7 02/18] core: use $(CURDIR) to set TOPDIR
+In-Reply-To: <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <56E0B6EF.500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/09/16 23:22, Yann E. MORIN wrote:
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: J?r?me Pouiller <jezz@sysmic.org>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 03/09/16 23:58, Samuel Martin wrote:
+> This changes saves a shell call and uses a variable automatically set
+> by make [1].
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  Wouldn't it be better to just use $(CURDIR) everywhere then?
 
   Regards,
   Arnout
 
+>
+> [1] http://www.gnu.org/software/make/manual/make.html#Quick-Reference
+>
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>
 > ---
->   Makefile                | 4 ----
->   boot/barebox/barebox.mk | 4 ++++
->   2 files changed, 4 insertions(+), 4 deletions(-)
+> changes v6->v7:
+> - none
+>
+> changes v5->v6:
+> - new patch
+> ---
+>   Makefile | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/Makefile b/Makefile
-> index 8973921..a9cfe03 100644
+> index f2822a2..98c8dc7 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -933,10 +933,6 @@ help:
->   	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
->   	@echo '  <pkg>-rebuild          - Restart the build from the build step'
->   	@$(call HELP_RULE,$(PACKAGE_HELP))
-> -ifeq ($(BR2_TARGET_BAREBOX),y)
-> -	@echo '  barebox-menuconfig     - Run barebox menuconfig'
-> -	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
-> -endif
->   	@echo
->   	@echo 'Documentation:'
->   	@echo '  manual                 - build manual in all formats'
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 7715daf..32ecd76 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -6,6 +6,10 @@
+> @@ -69,7 +69,7 @@ endif
+>   .NOTPARALLEL:
 >
->   BAREBOX_VERSION = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
->
-> +BAREBOX_HELP = \
-> +	"barebox-menuconfig : Run barebox menuconfig" \
-> +	"barebox-savedefconfig : Run barebox savedefconfig"
-> +
->   ifeq ($(BAREBOX_VERSION),custom)
->   # Handle custom Barebox tarballs as specified by the configuration
->   BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
+>   # absolute path
+> -TOPDIR := $(shell pwd)
+> +TOPDIR := $(CURDIR)
+>   CONFIG_CONFIG_IN = Config.in
+>   CONFIG = support/kconfig
+>   DATE := $(shell date +%Y%m%d)
 >
 
 
