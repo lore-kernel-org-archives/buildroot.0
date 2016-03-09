@@ -1,54 +1,80 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Wed, 9 Mar 2016 22:47:22 +1100
-Subject: [Buildroot] [PATCH 1/1] overlay: Allow overlay to be a tar
-	archive.
-In-Reply-To: <87ziu728ut.fsf@dell.be.48ers.dk>
-References: <1453763906-22220-1-git-send-email-camh@xdna.net>
- <87pov44scp.fsf@dell.be.48ers.dk>
- <CABa6e=o7BoB-YYSfCs3Q8LnTHk_GUYxxjt50ztnsZM-HuaL+7Q@mail.gmail.com>
- <87ziu728ut.fsf@dell.be.48ers.dk>
-Message-ID: <CABa6e=rOoqaFRm-jXw1KVemyH81wX3a5t3Hji7xd-Gqta_fDQQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Mar 2016 08:51:42 -0300
+Subject: [Buildroot] [PATCH] cifs-utils: bump to version 6.5
+Message-ID: <1457524302-28441-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 9 March 2016 at 22:23, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Cam" == Cam Hutchison <camh@xdna.net> writes:
->
->  > My use case is for using buildroot rootfs tarballs from other phases of
->  > a larger build, both where some developers are responsible for some
->  > parts (kernel/bootloader, common rootfs, specific applications,
->  > integration), and where there are multiple boards to develop for that
->  > have a large amount of commonality for which it is wasteful to rebuild
->  > the same parts over and over.
->
-> Ok, and you use Buildroot as the toplevel (E.G. the thing that
-> integrates everything) buildsystem?
+Patch is upstream so remove it.
 
-These days I do. I originally had a front-end shell script that split the build
-up into phases (boot loader, kernel, base rootfs, custom apps) as that is
-how my client wanted to develop - most of the developers were not familiar
-with buildroot and they didn't want the app developers to have to wait for
-kernel compiles, etc. The final phase of the script was to pull together
-all the rootfs tarballs from each phase into a single rootfs and make an
-image. That was six years ago.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch | 31 ----------------------
+ package/cifs-utils/cifs-utils.hash                 |  2 +-
+ package/cifs-utils/cifs-utils.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
+ delete mode 100644 package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
 
-These days I still have a front-end script that maintains separate configs
-for each phase, but the final phase pulls it together using the overlay
-tarballs from this patch and using genimage in a post-image script. The
-final phase is just a buildroot config, and the front-end script just makes
-it easier to launch the build with different configs.
-
-I still find this phased build useful - right now I'm building a cluster of
-raspberry pi 1, 2 & 3, orange pi pc & plus and pcduino nano lites (just
-for fun). I do the base rootfs as a common build (except pi 1) and
-each board has a custom uboot/kernel phase that pulls in the common
-tarball rootfs.
-
-I have another local patch that generates images without the skeleton
-which is what makes these tarball rootfs's able to overlay properly. I also
-plan to use this to generate single app tarballs that can be turned into
-container images for the cluster, but this all starts to get outside the scope
-of buildroot that I'm not submitting that patch.
+diff --git a/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch b/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
+deleted file mode 100644
+index 8fbec11..0000000
+--- a/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 6603cef0f06c450196a1bca06bb143d8fcda5651 Mon Sep 17 00:00:00 2001
+-From: Felix Janda <felix.janda@posteo.de>
+-Date: Fri, 5 Dec 2014 23:19:29 +0100
+-Subject: [PATCH 1/1] mtab.c: include <paths.h> for _PATH_MOUNTED
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Backported from: 6603cef0f06c450196a1bca06bb143d8fcda5651
+-
+-Signed-off-by: Felix Janda <felix.janda@posteo.de>
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- mtab.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/mtab.c b/mtab.c
+-index 7b365b3..a662a3c 100644
+---- a/mtab.c
+-+++ b/mtab.c
+-@@ -38,6 +38,7 @@
+- #include <mntent.h>
+- #include <stdlib.h>
+- #include <signal.h>
+-+#include <paths.h>
+- #include "mount.h"
+- #include "config.h"
+- 
+--- 
+-2.5.0
+-
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index 9255179..c49ced4 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	38fc63926af435dae4ebcf4406275580a692d9fb9ee3e32170317cf2ba68e6e3	cifs-utils-6.4.tar.bz2
++sha256	e2776578b8267c6dc0862897f5e10f87f10f8337fca9ca6a9118f5eb30cf49f7	cifs-utils-6.5.tar.bz2
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 89358b1..9d4e223 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CIFS_UTILS_VERSION = 6.4
++CIFS_UTILS_VERSION = 6.5
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPLv3+
+-- 
+2.4.10
