@@ -1,66 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Mar 2016 22:59:31 +0100
-Subject: [Buildroot] [git commit] toolchain: switch linaro to https urls
-Message-ID: <20160309220856.685CE81926@busybox.osuosl.org>
+Date: Wed, 9 Mar 2016 23:07:44 +0100
+Subject: [Buildroot] [git commit] package/busybox: support automatic module
+	loading with mdev
+Message-ID: <20160309220856.E41CE7F8D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddd87a7e0b2e53e5f4eed4926c41c89ceae7e78e
+commit: https://git.buildroot.net/buildroot/commit/?id=07f46c2b6daec44a6176039c90be67e66c4c2e42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jason Abele <jason@nextthing.co>
+A recently discussed on the mailing list:
+http://lists.busybox.net/pipermail/buildroot/2016-February/154189.html
+
+Our mdev configuration currently doesn't handle module loading. Fix that by:
+
+- Telling mdev to run modprobe on hotplug events providing MODALIAS
+
+- Adjust the init script to handle coldplug modalias events (E.G. modules
+  for which the devices were already present before mdev was added as the
+  hotplug handler). mdev -s should arguable handle this, but it doesn't.
+
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/busybox/S10mdev   | 2 ++
+ package/busybox/mdev.conf | 3 +++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index e712998..37e1a2e 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -295,22 +295,22 @@ endef
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_FIXUP_CMDS
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM),y)
- ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-+TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
- else
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/arm-linux-gnueabihf
-+TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/arm-linux-gnueabihf
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_arm-linux-gnueabihf.tar.xz
- endif
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB),y)
- ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-+TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
- else
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/armeb-linux-gnueabihf
-+TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/armeb-linux-gnueabihf
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_armeb-linux-gnueabihf.tar.xz
- endif
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_MIPS),y)
-@@ -350,12 +350,12 @@ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 3
- TOOLCHAIN_EXTERNAL_POST_EXTRACT_HOOKS += TOOLCHAIN_EXTERNAL_BLACKFIN_UCLIBC_EXTRA_EXTRACT
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64),y)
- ifeq ($(HOSTARCH),x86)
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/14.09/components/toolchain/binaries
-+TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
- TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
- TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
- else
--TOOLCHAIN_EXTERNAL_SITE = http://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
-+TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
- TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
- endif
- else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64),y)
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index d386d42..4cb31de 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -8,6 +8,8 @@ case "$1" in
+ 	echo "Starting mdev..."
+ 	echo /sbin/mdev >/proc/sys/kernel/hotplug
+ 	/sbin/mdev -s
++	# coldplug modules
++	find /sys/ -name modalias | xargs sort -u | xargs modprobe -abq
+ 	;;
+   stop)
+ 	;;
+diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
+index 247c0ed..4fafe63 100644
+--- a/package/busybox/mdev.conf
++++ b/package/busybox/mdev.conf
+@@ -33,3 +33,6 @@ event[0-9]+	root:root 640 =input/
+ mice		root:root 640 =input/
+ mouse[0-9]	root:root 640 =input/
+ ts[0-9]		root:root 600 =input/
++
++# load modules
++$MODALIAS=.*	root:root 660 @modprobe "$MODALIAS"
