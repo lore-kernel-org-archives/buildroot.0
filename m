@@ -1,53 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Mar 2016 23:22:26 +0100
-Subject: [Buildroot] [PATCH 7/8] boot/barebox: use the generic help rules
-In-Reply-To: <cover.1457561521.git.yann.morin.1998@free.fr>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
-Message-ID: <a5912926eaca571643ce6959d104322a434c69ce.1457561521.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 9 Mar 2016 23:48:25 +0100
+Subject: [Buildroot] [PATCH] owfs: remove include of rpc/netdb.h
+Message-ID: <1457563705-26494-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: J?r?me Pouiller <jezz@sysmic.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- Makefile                | 4 ----
- boot/barebox/barebox.mk | 4 ++++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+owfs carries a copy of netdb.h from an old glibc, which is only used
+to implement getaddrinfo on platforms that miss it (Solaris 7 in
+particular). Since all of our libc implementations have getaddrinfo,
+we don't need it.
 
-diff --git a/Makefile b/Makefile
-index 8973921..a9cfe03 100644
---- a/Makefile
-+++ b/Makefile
-@@ -933,10 +933,6 @@ help:
- 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
- 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
- 	@$(call HELP_RULE,$(PACKAGE_HELP))
--ifeq ($(BR2_TARGET_BAREBOX),y)
--	@echo '  barebox-menuconfig     - Run barebox menuconfig'
--	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
--endif
- 	@echo
- 	@echo 'Documentation:'
- 	@echo '  manual                 - build manual in all formats'
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 7715daf..32ecd76 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -6,6 +6,10 @@
- 
- BAREBOX_VERSION = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
- 
-+BAREBOX_HELP = \
-+	"barebox-menuconfig : Run barebox menuconfig" \
-+	"barebox-savedefconfig : Run barebox savedefconfig"
+To make the patch minimal, just include if !HAVE_GETADDRINFO.
+
+Fixes:
+http://autobuild.buildroot.net/results/d9e918c2791cd5523b2fd6478bbd4ce21e58f4f1
+http://autobuild.buildroot.net/results/3a85144753e4f18491d62dccf6d5843170f8daea
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...t.h-only-include-compat_netdb.h-if-needed.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
+
+diff --git a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
+new file mode 100644
+index 0000000..7ae7932
+--- /dev/null
++++ b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
+@@ -0,0 +1,58 @@
++From d24e63eea4f4d234f313145e40668a5e2f64e49c Mon Sep 17 00:00:00 2001
++From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
++Date: Wed, 9 Mar 2016 23:20:11 +0100
++Subject: [PATCH] compat.h: only include compat_netdb.h if needed
 +
- ifeq ($(BAREBOX_VERSION),custom)
- # Handle custom Barebox tarballs as specified by the configuration
- BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
++compat_netdb.h is added for only one reason: to provide the definitions
++for getaddrinfo, in case it is not provided by the system.
++compat_netdb.h is just a copy from an old glibc version, but that makes
++it incompatible with other standard C libraries. For example, uClibc
++without RPC support doesn't have the rpc/netdb.h header. This leads to
++build errors.
++
++To work around this, only include compat_netdb.h when needed, i.e.
++when getaddrinfo isn't provided natively.
++
++Note that this getaddrinfo compat was introduced in commit bc54c431 to
++support Solaris 7. Starting from Solaris 8, however, getaddrinfo is
++available natively, and it's available on MacOS, Windows and any other
++POSIX-2001 compliant system as well. So it may be worhtwhile to remove
++it altogether.
++
++Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
++---
++ module/owlib/src/include/compat.h   | 2 ++
++ module/ownet/c/src/include/compat.h | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/module/owlib/src/include/compat.h b/module/owlib/src/include/compat.h
++index c55bc96..e95e16f 100644
++--- a/module/owlib/src/include/compat.h
+++++ b/module/owlib/src/include/compat.h
++@@ -57,7 +57,9 @@
++ #include <features.h>
++ #endif
++ 
+++#ifndef HAVE_GETADDRINFO
++ #include "compat_netdb.h"
+++#endif
++ #include "compat_getopt.h"
++ 
++ #ifndef HAVE_STRSEP
++diff --git a/module/ownet/c/src/include/compat.h b/module/ownet/c/src/include/compat.h
++index c45d852..f8ae759 100644
++--- a/module/ownet/c/src/include/compat.h
+++++ b/module/ownet/c/src/include/compat.h
++@@ -58,7 +58,9 @@ $Id$
++ #include <features.h>
++ #endif
++ 
+++#ifndef HAVE_GETADDRINFO
++ #include "compat_netdb.h"
+++#endif
++ #include "compat_getopt.h"
++ 
++ #ifndef HAVE_STRSEP
++-- 
++2.7.0
++
 -- 
-1.9.1
+2.7.0
