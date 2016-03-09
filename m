@@ -1,25 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Mar 2016 10:38:13 +0100
-Subject: [Buildroot] [PATCH] gcc: drop gcc 4.5 specific code
-In-Reply-To: <1457476243-9401-1-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Tue, 8 Mar 2016 23:30:43 +0100")
-References: <1457476243-9401-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <878u1s2dq2.fsf@dell.be.48ers.dk>
+Date: Wed, 9 Mar 2016 10:38:01 +0100
+Subject: [Buildroot] [git commit] gcc: drop gcc 4.5 specific code
+Message-ID: <20160309093825.154FD818DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c6e635735dee76f7103f3e30f68e4f2cbf1d1226
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > We have removed gcc 4.5 support since a long time, so this commit
- > removes dead code that was only used when building a toolchain based
- > on gcc 4.5.
+We have removed gcc 4.5 support since a long time, so this commit
+removes dead code that was only used when building a toolchain based
+on gcc 4.5.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gcc/gcc.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 07883d0..0fb73c9 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -97,15 +97,6 @@ HOST_GCC_COMMON_CONF_ENV = \
+ GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+ GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+-# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
+-# Workaround until it's fixed in 4.5.4 or later
+-ifeq ($(ARCH),powerpc)
+-ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
+-GCC_COMMON_TARGET_CFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
+-GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
+-endif
+-endif
+-
+ # Xtensa libgcc can't be built with -mauto-litpools
+ # because of the trick used to generate .init/.fini sections.
+ ifeq ($(BR2_xtensa),y)
