@@ -1,56 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 9 Mar 2016 15:37:22 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 9 Mar 2016 11:40:22 -0300
 Subject: [Buildroot] [PATCH] pkgconf: make wrapper relocatable
-In-Reply-To: <871t7j205g.fsf@dell.be.48ers.dk>
+In-Reply-To: <56E03522.8060609@mind.be>
 References: <1457529409-24102-1-git-send-email-gustavo@zacarias.com.ar>
  <87egbj228a.fsf@dell.be.48ers.dk> <56E02A78.1050701@zacarias.com.ar>
  <87a8m721lk.fsf@dell.be.48ers.dk> <56E02D83.9020402@zacarias.com.ar>
- <871t7j205g.fsf@dell.be.48ers.dk>
-Message-ID: <56E03522.8060609@mind.be>
+ <871t7j205g.fsf@dell.be.48ers.dk> <56E03522.8060609@mind.be>
+Message-ID: <56E035D6.2090701@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 09/03/16 11:37, Arnout Vandecappelle wrote:
 
-
-On 03/09/16 15:31, Peter Korsgaard wrote:
->>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>> Yes, that's basically what I'm saying +/- the question if you want to
+>> rely on $0 containing the full path to the wrapper or if you use
+>> /proc/self/exe instead.
 >
->   > On 09/03/16 11:00, Peter Korsgaard wrote:
->   >> Well, we cannot really break existing features to add new ones. The
->   >> relative location between the pkg-config wrapper script and the staging
->   >> directory is constant (or rather known at build time), so I guess we can
->   >> do something with /proc/self/exe. We might need to implement the wrapper
->   >> in C instead for that to work as /proc/self/exe for a shell script seems
->   >> to return /bin/dash here.
+>   $0 will always contain the full relative path to the wrapper, no? Even
+> if it was found through PATH, the PATH search is done by libc so the
+> shell will be invoked with the full (absolute or relative) path to the
+> wrapper and use that as $0. Or am I missing something?
 >
->   > That's overly complicated for no value at all.
->   > You know the sysroot is in the host directory as well, so you just
->   > need to filter out /usr/bin from $0 and hardcode the tuple in the
->   > wrapper -
->   > that's guaranteed to not change, otherwise you're in serious trouble.
->
-> Yes, that's basically what I'm saying +/- the question if you want to
-> rely on $0 containing the full path to the wrapper or if you use
-> /proc/self/exe instead.
+>   I think the /proc/self/exe thing was something to deal with symlinks,
+> which isn't the issue here.
 
-  $0 will always contain the full relative path to the wrapper, no? Even if it 
-was found through PATH, the PATH search is done by libc so the shell will be 
-invoked with the full (absolute or relative) path to the wrapper and use that as 
-$0. Or am I missing something?
+Indeed, take the following example:
 
-  I think the /proc/self/exe thing was something to deal with symlinks, which 
-isn't the issue here.
+---
+#!/bin/sh
 
-  Regards,
-  Arnout
+TUPLE=powerpc-buildroot-linux-uclibcspe
+WRAPPER_DIR=$(dirname $0)
+STAGING_DIR=$(readlink -f ${WRAPPER_DIR}/../${TUPLE}/sysroot)
 
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+echo Invocation: $0
+echo Wrapper dir: $WRAPPER_DIR
+echo Staging dir: $STAGING_DIR
+---
+
+Run full pathspec /home/gustavoz/b/router03/output/host/usr/bin/ja:
+
+Invocation: /home/gustavoz/b/router03/output/host/usr/bin/ja
+Wrapper dir: /home/gustavoz/b/router03/output/host/usr/bin
+Staging dir: 
+/home/gustavoz/b/router03/output/host/usr/powerpc-buildroot-linux-uclibcspe/sysroot
+
+Run in-place ./ja:
+
+Invocation: ./ja
+Wrapper dir: .
+Staging dir: 
+/home/gustavoz/b/router03/output/host/usr/powerpc-buildroot-linux-uclibcspe/sysroot
+
+We can add a check to see if ${STAGING_DIR} is defined on and avoid 
+(re)setting it when it is.
+
+if [ -z ${STAGING_DIR} ]; then magic; fi
+
+Regards.
