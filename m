@@ -1,93 +1,132 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 9 Mar 2016 23:48:25 +0100
-Subject: [Buildroot] [PATCH] owfs: remove include of rpc/netdb.h
-Message-ID: <1457563705-26494-1-git-send-email-arnout@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed,  9 Mar 2016 23:58:41 +0100
+Subject: [Buildroot] [PATCH v7 00/18] Relocatable SDK / build machine leaks
+Message-ID: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-owfs carries a copy of netdb.h from an old glibc, which is only used
-to implement getaddrinfo on platforms that miss it (Solaris 7 in
-particular). Since all of our libc implementations have getaddrinfo,
-we don't need it.
+Hi all,
 
-To make the patch minimal, just include if !HAVE_GETADDRINFO.
 
-Fixes:
-http://autobuild.buildroot.net/results/d9e918c2791cd5523b2fd6478bbd4ce21e58f4f1
-http://autobuild.buildroot.net/results/3a85144753e4f18491d62dccf6d5843170f8daea
+Here is yet another round of the series aiming improving the relocatability
+of the SDK built by Buildroot.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...t.h-only-include-compat_netdb.h-if-needed.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
+The new round improves the shell implementation started in the previous
+submission.
 
-diff --git a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
-new file mode 100644
-index 0000000..7ae7932
---- /dev/null
-+++ b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
-@@ -0,0 +1,58 @@
-+From d24e63eea4f4d234f313145e40668a5e2f64e49c Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Wed, 9 Mar 2016 23:20:11 +0100
-+Subject: [PATCH] compat.h: only include compat_netdb.h if needed
-+
-+compat_netdb.h is added for only one reason: to provide the definitions
-+for getaddrinfo, in case it is not provided by the system.
-+compat_netdb.h is just a copy from an old glibc version, but that makes
-+it incompatible with other standard C libraries. For example, uClibc
-+without RPC support doesn't have the rpc/netdb.h header. This leads to
-+build errors.
-+
-+To work around this, only include compat_netdb.h when needed, i.e.
-+when getaddrinfo isn't provided natively.
-+
-+Note that this getaddrinfo compat was introduced in commit bc54c431 to
-+support Solaris 7. Starting from Solaris 8, however, getaddrinfo is
-+available natively, and it's available on MacOS, Windows and any other
-+POSIX-2001 compliant system as well. So it may be worhtwhile to remove
-+it altogether.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ module/owlib/src/include/compat.h   | 2 ++
-+ module/ownet/c/src/include/compat.h | 2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/module/owlib/src/include/compat.h b/module/owlib/src/include/compat.h
-+index c55bc96..e95e16f 100644
-+--- a/module/owlib/src/include/compat.h
-++++ b/module/owlib/src/include/compat.h
-+@@ -57,7 +57,9 @@
-+ #include <features.h>
-+ #endif
-+ 
-++#ifndef HAVE_GETADDRINFO
-+ #include "compat_netdb.h"
-++#endif
-+ #include "compat_getopt.h"
-+ 
-+ #ifndef HAVE_STRSEP
-+diff --git a/module/ownet/c/src/include/compat.h b/module/ownet/c/src/include/compat.h
-+index c45d852..f8ae759 100644
-+--- a/module/ownet/c/src/include/compat.h
-++++ b/module/ownet/c/src/include/compat.h
-+@@ -58,7 +58,9 @@ $Id$
-+ #include <features.h>
-+ #endif
-+ 
-++#ifndef HAVE_GETADDRINFO
-+ #include "compat_netdb.h"
-++#endif
-+ #include "compat_getopt.h"
-+ 
-+ #ifndef HAVE_STRSEP
-+-- 
-+2.7.0
-+
--- 
-2.7.0
+
+In details:
+
+Patches 1 to 3:
+  Clean up and preparatory work for the relocatable SDK series and also helping
+  to track build machine leaks into host, target and staging trees.
+
+Patches 4 to 7:
+  Make some pieces of the Buildroot SDK relocatable (limited to some symlinks
+  and *-config scripts).
+
+Patches 8 to 10:
+  Add the fix-rpath script, then run it on the Buildroot host, target and
+  staging trees.
+
+Patch 11:
+  Clean-up speex package WRT its RPATH hook.
+
+Patch 12:
+  Add a post-install hook to the toolchain package to render it relocatable.
+
+Patch 13 to 15:
+  Update and fix the check-host-rpath to re-use the shell helpers.
+
+Patches 16 and 17:
+  Add means to track build machine leaks into the host, target and staging
+  trees. These patches will allow to identify what remains to be fixed WRT
+  build machine leaks.
+
+Patches 18:
+  Update documentation about how to enable/adjust log level on script using
+  the shell modules introduced in patch 8/18.
+
+
+Worth noting:
+
+* patches 4, 5, 6 and 7 fix scripts or wrappers WRT improving the SDK
+  relocatability;
+
+* patches 8 and 16 add new scripts (which are not executed without the
+  patches 9, 10 and 12).
+
+* patches 9, 10 and 12 add make targets called on all builds, improving the
+  SDK relocatability; patch 17 also add make targets, but they are not in as
+  dependency of any other, so must be invoke explicitly.
+
+* all others patches are fairly trivial fixes or improvements.
+
+
+Future works:
+
+* Handling autotools/libtools relocation
+
+* Analysing and fixing leaks and relocation remaining issues
+
+
+Regards,
+Samuel
+--
+
+Samuel Martin (18):
+  package/linux-headers: cleanup installation
+  core: use $(CURDIR) to set TOPDIR
+  core: re-enter make if $(CURDIR) or $(O) are not absolute canonical
+    path
+  core: staging symlink uses a relative path when possible
+  core: make staging *-config scripts relocatable
+  core: make host *-config scripts relocatable
+  package/pkgconf: make the pkg-config wrapper relocatable
+  support/scripts: add fix-rpath script + a bunch of helpers
+  core: add HOST_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+  core: add {TARGET,STAGING}_SANITIZE_RPATH_HOOK to
+    TARGET_FINALIZE_HOOKS
+  package/speex: remove no longer needed hook
+  toolchain: add post-install hooks making the toolchain relocatable
+  support/scripts: update check-host-rpath to use the shell helpers
+  support/scripts/check-host-rpath: silent find command
+  support/scripts/check-host-rpath: also check HOST_DIR/{bin,sbin}
+  support/scripts: add check-host-leaks script + all needed helpers
+  core: add check-leaks-in-{target,host,staging} targets
+  docs/manual: document how to debug shell script
+
+ Makefile                               |  76 +++++++-
+ docs/manual/debugging-buildroot.txt    |  15 ++
+ package/linux-headers/linux-headers.mk |   1 +
+ package/pkg-generic.mk                 |  14 +-
+ package/pkg-utils.mk                   |   5 +
+ package/pkgconf/pkg-config.in          |   4 +-
+ package/pkgconf/pkgconf.mk             |   8 +-
+ package/speex/speex.mk                 |   5 -
+ support/scripts/check-host-leaks       |  63 +++++++
+ support/scripts/check-host-rpath       |  71 +++----
+ support/scripts/fix-rpath              | 116 ++++++++++++
+ support/scripts/shell/log.sh           |  61 ++++++
+ support/scripts/shell/patchelf.sh      | 178 ++++++++++++++++++
+ support/scripts/shell/readelf.sh       | 328 +++++++++++++++++++++++++++++++++
+ support/scripts/shell/sdk.sh           | 138 ++++++++++++++
+ support/scripts/shell/source.sh        |  77 ++++++++
+ support/scripts/shell/utils.sh         |  76 ++++++++
+ toolchain/toolchain/toolchain.mk       |   5 +
+ 18 files changed, 1183 insertions(+), 58 deletions(-)
+ mode change 100644 => 100755 package/pkgconf/pkg-config.in
+ create mode 100755 support/scripts/check-host-leaks
+ create mode 100755 support/scripts/fix-rpath
+ create mode 100644 support/scripts/shell/log.sh
+ create mode 100644 support/scripts/shell/patchelf.sh
+ create mode 100644 support/scripts/shell/readelf.sh
+ create mode 100644 support/scripts/shell/sdk.sh
+ create mode 100644 support/scripts/shell/source.sh
+ create mode 100644 support/scripts/shell/utils.sh
+
+--
+2.7.2
