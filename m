@@ -1,51 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Mar 2016 23:22:27 +0100
-Subject: [Buildroot] [PATCH 8/8] docs/manual: document the br2-external
-	help-local
+Date: Wed,  9 Mar 2016 23:22:25 +0100
+Subject: [Buildroot] [PATCH 6/8] package/uclibc: use the generic help rules
 In-Reply-To: <cover.1457561521.git.yann.morin.1998@free.fr>
 References: <cover.1457561521.git.yann.morin.1998@free.fr>
-Message-ID: <b94d50a5f7717ad1ea2d9cab129155a0ab203f71.1457561521.git.yann.morin.1998@free.fr>
+Message-ID: <39c7d814fe2e6bc45b786d87529a80b3666ac7b0.1457561521.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Note that the uclibc-menuconfig rule was guarded behind
+BR2_TOOLCHAIN_BUILDROOT, which is wrong ince we can build glibc or musl
+toolchains too...
+
+This is de facto fixed by moving the help text to the uClibc package.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: J?r?me Pouiller <jezz@sysmic.org>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- docs/manual/customize-outside-br.txt | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ Makefile                 | 3 ---
+ package/uclibc/uclibc.mk | 2 ++
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 9ad177d..d89dc6f 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -107,3 +107,23 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
-    output of +make list-defconfigs+ and allow them to be loaded with the
-    normal +make <name>_defconfig+ command. They will be visible under the
-    +User-provided configs+' label in the 'make list-defconfigs' output.
+diff --git a/Makefile b/Makefile
+index cdf2dac..8973921 100644
+--- a/Makefile
++++ b/Makefile
+@@ -933,9 +933,6 @@ help:
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+ 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+ 	@$(call HELP_RULE,$(PACKAGE_HELP))
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+-	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+-endif
+ ifeq ($(BR2_TARGET_BAREBOX),y)
+ 	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+ 	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 200de04..c685828 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -11,6 +11,8 @@ UCLIBC_LICENSE = LGPLv2.1+
+ UCLIBC_LICENSE_FILES = COPYING.LIB
+ UCLIBC_INSTALL_STAGING = YES
+ 
++UCLIBC_HELP = "uclibc-menuconfig : Run uClibc menuconfig"
 +
-+Additionally, an +external.mk+ file may define the +help-local+ make
-+rule, to document custom make targets specific to this +BR2_EXTERNAL+
-+tree. It is possible to use the +HELP_RULE+ macro to pretty-print those
-+additional rules:
-+
-+------
-+BR2_EXTERNAL_HELP = \
-+    "my-rule : some help text for my-rule" \
-+    "my-other-rule : some help text for my-other-rule"
-+
-+help-local:
-+    @echo 'Here goes your local help'
-+    @$(call HELP_RULE,$(BR2_EXTERNAL_HELP))
-+    @echo
-+    @echo 'Please contact support at company.com in case of problem.'
-+------
-+
-+The format for +BR2_EXTERNAL_HELP+ is the same as the +LIBFOO_HELP+
-+package variable, defined in xref:generic-package-tutorial[].
+ # uclibc is part of the toolchain so disable the toolchain dependency
+ UCLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
 -- 
 1.9.1
