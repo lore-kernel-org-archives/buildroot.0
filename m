@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Mar 2016 00:09:21 +0100
-Subject: [Buildroot] [PATCH v7 01/18] package/linux-headers: cleanup
- installation
-In-Reply-To: <1457564339-27294-2-git-send-email-s.martin49@gmail.com>
+Date: Thu, 10 Mar 2016 00:10:20 +0100
+Subject: [Buildroot] [PATCH v7 02/18] core: use $(CURDIR) to set TOPDIR
+In-Reply-To: <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-2-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160309230921.GC5634@free.fr>
+ <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160309231020.GD5634@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +14,42 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2016-03-09 23:58 +0100, Samuel Martin spake thusly:
-> This patch removes unnecessary files generated during installation, that
-> also are causing build machine paths leaking into the Buildroot's SDK.
+> This changes saves a shell call and uses a variable automatically set
+> by make [1].
 > 
-> Note that similar cleanup commands can be found in other distributions
-> (e.g. gentoo [1]); thought this is not a valid reason.
-> 
-> [1] https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/linux-headers/linux-headers-4.4.ebuild#n36
+> [1] http://www.gnu.org/software/make/manual/make.html#Quick-Reference
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v6->v7:
-> - improve commit log
-> 
-> changes v5->v6:
-> - new patch
-> ---
->  package/linux-headers/linux-headers.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 0900778..7633257 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -123,6 +123,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
->  			HOSTCXX="$(HOSTCXX)" \
->  			INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
->  			headers_install)
-> +	find $(STAGING_DIR)/usr \( -name .install -o -name ..install.cmd \) -delete
 
-I would further restrict that to $(STAGING_DIR)/usr/include .
-
-Also, Gentoo also has code to get rid of empty directories:
-    find $(STAGING_DIR)/usr -depth -type d -delete 2>/dev/null
-
-Although we don't really care about empty dirs in staging, TBH...
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  endef
+> 
+> ---
+> changes v6->v7:
+> - none
+> 
+> changes v5->v6:
+> - new patch
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index f2822a2..98c8dc7 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -69,7 +69,7 @@ endif
+>  .NOTPARALLEL:
 >  
->  ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+>  # absolute path
+> -TOPDIR := $(shell pwd)
+> +TOPDIR := $(CURDIR)
+>  CONFIG_CONFIG_IN = Config.in
+>  CONFIG = support/kconfig
+>  DATE := $(shell date +%Y%m%d)
 > -- 
 > 2.7.2
 > 
