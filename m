@@ -1,74 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 06:58:45 -0300
-Subject: [Buildroot] [PATCH v3 7/7] weston: bump to version 1.10.0
-In-Reply-To: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1457517525-7716-8-git-send-email-gustavo@zacarias.com.ar>
+From: Martin Bark <martin@barkynet.com>
+Date: Wed, 9 Mar 2016 10:01:08 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/connman: fix crash due to
+ iptables 1.6.0 update
+In-Reply-To: <20160308211834.5d768caa@free-electrons.com>
+References: <1457345950-2793-1-git-send-email-martin@barkynet.com>
+ <20160308211834.5d768caa@free-electrons.com>
+Message-ID: <CAFGQKxex64N_Eg8v=hXvFsu4hNJpNASCpj7tpvQV1qtB7M_Nsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/weston/Config.in   | 1 +
- package/weston/weston.hash | 4 ++--
- package/weston/weston.mk   | 9 ++++++---
- 3 files changed, 9 insertions(+), 5 deletions(-)
+Thomas,
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 4c820e9..aaf1706 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -6,6 +6,7 @@ comment "weston needs udev and a toolchain w/ locale, threads, dynamic library,
- config BR2_PACKAGE_WESTON
- 	bool "weston"
- 	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index e7bc2bb..ed174e6 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-June/022416.html
--sha256  8963e69f328e815cec42c58046c4af721476c7541bb7d9edc71740fada5ad312  weston-1.8.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027039.html
-+sha256  e0b2004d00d8293ddf7903ca283c1746afa9ccb5919ab50fd04397ff472aa5c1  weston-1.10.0.tar.xz
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 4ad89ce..d818071 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
- 
--WESTON_VERSION = 1.8.0
-+WESTON_VERSION = 1.10.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
--WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
--	jpeg mtdev udev cairo libinput
-+WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
-+	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput
- 
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
-@@ -25,6 +25,9 @@ WESTON_CONF_OPTS = \
- 	--disable-weston-launch \
- 	--disable-colord
- 
-+WESTON_MAKE_OPTS = \
-+	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
--- 
-2.4.10
+On 8 March 2016 at 20:18, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Dear Martin Bark,
+>
+> On Mon,  7 Mar 2016 10:19:10 +0000, Martin Bark wrote:
+>> iptables was updated to version 1.6.0 in commit
+>> https://git.busybox.net/buildroot/commit/?id=35dc775 however, connman
+>> 1.31 crashes when iptables 1.6.0 is used.
+>>
+>> This issues has already been fixed upstream but is not currently available
+>> in a release.  To fix connman include the upstream patch. See
+>> http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a
+>>
+>> Signed-off-by: Martin Bark <martin@barkynet.com>
+>>
+>> ---
+>
+> Applied to master, thanks. Since you already contributed this patch to
+> connman, could you also submit upstream the patch
+> package/connman/0001-configure-check-for-execinfo.h.patch ?
+
+Yes I'm happy to can do that.
+
+Just to be clear, I did not contribute that patch to connman, it was
+contributed by Wu Zheng <wu.zheng@intel.com> here
+http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=acea08a.
+I don't want to take credit for someone else's work.
+
+Thanks
+
+Martin
+
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
