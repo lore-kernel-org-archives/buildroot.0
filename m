@@ -1,58 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Mar 2016 23:07:44 +0100
-Subject: [Buildroot] [git commit] package/busybox: support automatic module
-	loading with mdev
-Message-ID: <20160309220856.E41CE7F8D5@busybox.osuosl.org>
+Date: Wed, 9 Mar 2016 23:01:13 +0100
+Subject: [Buildroot] [git commit] dcron: indentation cleanup
+Message-ID: <20160309220856.C36D87F8D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07f46c2b6daec44a6176039c90be67e66c4c2e42
+commit: https://git.buildroot.net/buildroot/commit/?id=b51efee098b5257b44161dfd88d09c77e83539a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A recently discussed on the mailing list:
-http://lists.busybox.net/pipermail/buildroot/2016-February/154189.html
-
-Our mdev configuration currently doesn't handle module loading. Fix that by:
-
-- Telling mdev to run modprobe on hotplug events providing MODALIAS
-
-- Adjust the init script to handle coldplug modalias events (E.G. modules
-  for which the devices were already present before mdev was added as the
-  hotplug handler). mdev -s should arguable handle this, but it doesn't.
-
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/S10mdev   | 2 ++
- package/busybox/mdev.conf | 3 +++
- 2 files changed, 5 insertions(+)
+ package/dcron/dcron.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
-index d386d42..4cb31de 100644
---- a/package/busybox/S10mdev
-+++ b/package/busybox/S10mdev
-@@ -8,6 +8,8 @@ case "$1" in
- 	echo "Starting mdev..."
- 	echo /sbin/mdev >/proc/sys/kernel/hotplug
- 	/sbin/mdev -s
-+	# coldplug modules
-+	find /sys/ -name modalias | xargs sort -u | xargs modprobe -abq
- 	;;
-   stop)
- 	;;
-diff --git a/package/busybox/mdev.conf b/package/busybox/mdev.conf
-index 247c0ed..4fafe63 100644
---- a/package/busybox/mdev.conf
-+++ b/package/busybox/mdev.conf
-@@ -33,3 +33,6 @@ event[0-9]+	root:root 640 =input/
- mice		root:root 640 =input/
- mouse[0-9]	root:root 640 =input/
- ts[0-9]		root:root 600 =input/
-+
-+# load modules
-+$MODALIAS=.*	root:root 660 @modprobe "$MODALIAS"
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+index 4a6fc47..7e81b63 100644
+--- a/package/dcron/dcron.mk
++++ b/package/dcron/dcron.mk
+@@ -25,8 +25,8 @@ define DCRON_INSTALL_TARGET_CMDS
+ 	# Busybox provides run-parts, so there is no need to use nor install provided run-cron
+ 	$(SED) 's#/usr/sbin/run-cron#/bin/run-parts#g' $(TARGET_DIR)/etc/cron.d/system
+ 	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
+-	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
+-	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
++		$(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
++		$(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
+ endef
+ 
+ define DCRON_INSTALL_INIT_SYSV
