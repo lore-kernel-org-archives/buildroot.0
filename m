@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Mar 2016 00:20:05 +0100
-Subject: [Buildroot] [PATCH v7 04/18] core: staging symlink uses a
- relative path when possible
-In-Reply-To: <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
+Date: Thu, 10 Mar 2016 00:24:38 +0100
+Subject: [Buildroot] [PATCH v7 05/18] core: make staging *-config
+ scripts relocatable
+In-Reply-To: <1457564339-27294-6-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160309232005.GF5634@free.fr>
+ <1457564339-27294-6-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160309232438.GG5634@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,57 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2016-03-09 23:58 +0100, Samuel Martin spake thusly:
-> This change turns the staging/ symlink to a relative one when
-> $(STAGING_DIR) points to some location in the Buildroot's output
-> directory (i.e.: in $(BASE_DIR)/).
+> This change adjusts the _CONFIG_SCRIPTS hook to set add {exec_,}prefix computed
+> relatively to the script location.
 > 
-> In any other case, the symlink target remains the absolute path
-> to the sysroot location.
-> 
-> This slight change is a step forward toward a relocatable SDK.
+> This patch hook only fixes *-config scripts located in the staging area,
+> the target ones are already removed. A follow-up change will fix those
+> from the HOST_DIR location.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > 
 > ---
 > changes v6->v7:
-> - improve commit log (ThomasP)
+> - none
 > 
 > changes v5->v6:
-> - no changes
-> 
-> changes v4->v5:
-> - add support when BR2_HOST_DIR is set somewhere out of BASE_DIR
-> 
-> changes v3->v4:
-> - no change
-> 
-> changes v2->v3:
-> - no change
+> - new patch
 > ---
->  Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index 52a92f6..f1de4ed 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -518,7 +518,11 @@ $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIS
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
->  	@mkdir -p $(STAGING_DIR)
-> +ifeq ($(BASE_DIR)/host/$(STAGING_SUBDIR),$(STAGING_DIR))
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 3904c09..ffa21ee 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -240,7 +240,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
+>  		$(call MESSAGE,"Fixing package configuration files") ;\
+>  			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+>  				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
+> -				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
+> +				-e "s,^\(exec_\)\?prefix=.*,\1prefix=\`dirname \$$0\`/../../usr,g" \
 
-I'm not too fond of this. Here, you duplicate the logic used to set
-STAGING_DIR, with the assumption that it is a sucbset of host/ . This is
-indeed true, but I don;t like duplicating the logic.
+I'd prefer we use the $() form when calling subshells:
 
-What about:
+    -e "s,^\(exec_\)\?prefix=.*,\1prefix=$$(dirname \$$0)/../../usr,g" 
 
-    ifeq ($(patsubst $(BASE_DIR)/%,%,$(STAGING_DIR)),$(STAGING_DIR))
-    # Not a subdir, absolute symlink
-    else
-    # A subdir, relative symlink
-    endif
+I know we switched to using `` in some locations, but that was because
+those locations may be called with various levels of $(eval), and that
+would cause $$() to be evaluated too early in some situations.
+
+However, here we are in a real rule, so there's no such ambiguity.
+
+But I won't block it just for that. I you agree with my proposed change,
+that's OK; if you don't, that's OK too:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> +	@ln -snf host/$(STAGING_SUBDIR) $(BASE_DIR)/staging
-> +else
->  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-> +endif
->  
->  RSYNC_VCS_EXCLUSIONS = \
->  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+>  				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
+>  				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
+>  				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
 > -- 
 > 2.7.2
 > 
