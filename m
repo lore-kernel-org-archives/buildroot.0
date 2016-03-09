@@ -1,34 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Mar 2016 23:01:13 +0100
-Subject: [Buildroot] [git commit] dcron: indentation cleanup
-Message-ID: <20160309220856.C36D87F8D5@busybox.osuosl.org>
+Date: Wed, 9 Mar 2016 23:01:18 +0100
+Subject: [Buildroot] [git commit] uboot: indentation cleanup
+Message-ID: <20160309220856.D03677F8D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b51efee098b5257b44161dfd88d09c77e83539a4
+commit: https://git.buildroot.net/buildroot/commit/?id=24ba69015cc6a2431c9cdb16288dc19ec23a52a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dcron/dcron.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ boot/uboot/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
-index 4a6fc47..7e81b63 100644
---- a/package/dcron/dcron.mk
-+++ b/package/dcron/dcron.mk
-@@ -25,8 +25,8 @@ define DCRON_INSTALL_TARGET_CMDS
- 	# Busybox provides run-parts, so there is no need to use nor install provided run-cron
- 	$(SED) 's#/usr/sbin/run-cron#/bin/run-parts#g' $(TARGET_DIR)/etc/cron.d/system
- 	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
--	        $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
--	        $(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
-+		$(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
-+		$(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
- endef
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index dde4710..4a6dc56 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -332,11 +332,11 @@ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
+ 	depends on BR2_TARGET_UBOOT_SPL
+ 	depends on BR2_TARGET_UBOOT_FORMAT_DTB_IMG
+ 	help
+-	 Generate the BOOT.BIN file from U-Boot's SPL. The image
+-	 boots the Xilinx Zynq chip without any FPGA bitstream.
+-	 A bitstream can be loaded by the U-Boot. The SPL searchs
+-	 for u-boot-dtb.img file so this U-Boot format is required
+-	 to be set.
++	  Generate the BOOT.BIN file from U-Boot's SPL. The image
++	  boots the Xilinx Zynq chip without any FPGA bitstream.
++	  A bitstream can be loaded by the U-Boot. The SPL searchs
++	  for u-boot-dtb.img file so this U-Boot format is required
++	  to be set.
  
- define DCRON_INSTALL_INIT_SYSV
+ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+ 	bool "Environment image"
