@@ -1,28 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 9 Mar 2016 11:04:51 -0300
-Subject: [Buildroot] [PATCH] pkgconf: make wrapper relocatable
-In-Reply-To: <87a8m721lk.fsf@dell.be.48ers.dk>
-References: <1457529409-24102-1-git-send-email-gustavo@zacarias.com.ar>
- <87egbj228a.fsf@dell.be.48ers.dk> <56E02A78.1050701@zacarias.com.ar>
- <87a8m721lk.fsf@dell.be.48ers.dk>
-Message-ID: <56E02D83.9020402@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Mar 2016 15:05:15 +0100
+Subject: [Buildroot] [PATCH] rtptools: disable for MIPS Codescape
+ toolchains
+In-Reply-To: <56E02C73.40105@imgtec.com>
+References: <1457446983-17165-1-git-send-email-Vincent.Riera@imgtec.com>
+ <20160308163256.764be70e@free-electrons.com>
+ <56DEF7EC.20904@imgtec.com>
+ <20160308171149.7dff6ff4@free-electrons.com>
+ <56E02C73.40105@imgtec.com>
+Message-ID: <20160309150515.4cd8b894@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/03/16 11:00, Peter Korsgaard wrote:
+Hello,
 
-> Well, we cannot really break existing features to add new ones. The
-> relative location between the pkg-config wrapper script and the staging
-> directory is constant (or rather known at build time), so I guess we can
-> do something with /proc/self/exe. We might need to implement the wrapper
-> in C instead for that to work as /proc/self/exe for a shell script seems
-> to return /bin/dash here.
+On Wed, 9 Mar 2016 14:00:19 +0000, Vicente Olivert Riera wrote:
 
-That's overly complicated for no value at all.
-You know the sysroot is in the host directory as well, so you just need 
-to filter out /usr/bin from $0 and hardcode the tuple in the wrapper - 
-that's guaranteed to not change, otherwise you're in serious trouble.
-Regards.
+> the thing is that rtptools already includes its own ypclnt.h under the
+> "nt/include/rpcsvc" directory, so we could replace the code you wrote
+> above with something like this:
+> 
+> #ifndef __UCLIBC__
+> #include "nt/include/rpcsvc/ypclnt.h"
+> #endif
+> 
+> CC'ing Peter as he wrote the patch which adds that uClibc stuff to
+> host2ip.c.
+
+I haven't looked at the code, but it's not only about including a
+header, Peter's patch also puts some code between HAVE_YP.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
