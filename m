@@ -1,49 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Mar 2016 16:55:08 +0100
-Subject: [Buildroot] [PATCH] pkgconf: make wrapper relocatable
-In-Reply-To: <CAHXCMMJS=QknbFiVxvNLKHp0QZi2_LtJ+jnRz-XEYgsfAQh6pw@mail.gmail.com>
- (Samuel Martin's message of "Wed, 9 Mar 2016 16:22:34 +0100")
-References: <1457529409-24102-1-git-send-email-gustavo@zacarias.com.ar>
- <87egbj228a.fsf@dell.be.48ers.dk> <56E02A78.1050701@zacarias.com.ar>
- <20160309150359.4ce78c05@free-electrons.com>
- <CAHXCMMJS=QknbFiVxvNLKHp0QZi2_LtJ+jnRz-XEYgsfAQh6pw@mail.gmail.com>
-Message-ID: <87k2lbzlwj.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Mar 2016 13:25:12 -0300
+Subject: [Buildroot] [PATCH] libglib2: improve dev file removal
+Message-ID: <1457540712-19580-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Samuel" == Samuel Martin <s.martin49@gmail.com> writes:
+* Remove /usr/share/glib-2.0 rmdir from DEV_FILES hook, if we are not
+using gdb the GDB_FILES hook will hit and remove it anway, and if we are
+indeed using gdb we need it.
 
-Hi,
+* Remove glib-compile-resources and glib-compile-schemas binaries, these
+aren't used for runtime purposes.
 
- >> What about doing this relatively to the wrapper location?
- >> 
- >> WRAPPER_DIR=$(dirname $0)
- >> STAGING_DIR=$(readlink -f ${WRAPPER_DIR}/../../../staging/)
- >> 
- >> and there you are, it is both relocatable and doesn't rely on
- >> STAGING_DIR being defined in the environment.
+* Remove /usr/share/glib-2.0/codegen and /usr/share/glib-2.0/schemas, as
+with the binaries these aren't used for runtime purposes either.
 
- > Funny that's close to what I've done in my relocatable sdk branch few
- > days ago...
- > https://github.com/tSed/buildroot/commit/cebeb4f43a44eda8e9c1d2fd9629e9f9deea3f28
+Size savings delta +800 KB.
 
-Heh, great minds think alike ;)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libglib2/libglib2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Something else more-or-less related that I think we should
-fix/workaround until the relocatable sdk rpath handling gets integrated
-is the issue about the toolchain linking to gmp/mpc/mpfr, and not
-finding our libraries when the toolchain is moved.
-
-That is currently quite painful, especially when you want to reuse the
-toolchain on different machines/distributions, that may not have
-compatible libraries in /usr/lib.
-
-The easiest workaround is just to build our host-gmp/mpc/mpfr statically
-for now. This has minimal size impact on the toolchain (< 1MB for a
-.tar.gz of output/host).
-
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index ea45f4a..8539505 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -128,9 +128,9 @@ endif
+ 
+ define LIBGLIB2_REMOVE_DEV_FILES
+ 	rm -rf $(TARGET_DIR)/usr/lib/glib-2.0
+-	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gettext
++	rm -rf $(addprefix $(TARGET_DIR)/usr/share/glib-2.0/,codegen gettext schemas)
+ 	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-compile-resources glib-compile-schemas glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
+ endef
+ 
+ LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
 -- 
-Bye, Peter Korsgaard
+2.4.10
