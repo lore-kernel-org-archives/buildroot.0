@@ -1,10 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Mar 2016 07:31:56 +0100
-Subject: [Buildroot] [PATCH v2] libpjsip: depend on libsrtp
-In-Reply-To: <1457478401-24164-1-git-send-email-luca@lucaceresoli.net> (Luca
- Ceresoli's message of "Wed, 9 Mar 2016 00:06:41 +0100")
-References: <1457478401-24164-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <87pov42mcj.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Mar 2016 07:33:20 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-03-07
+In-Reply-To: <56DF62F1.1020302@lucaceresoli.net> (Luca Ceresoli's message of
+ "Wed, 9 Mar 2016 00:40:33 +0100")
+References: <20160308073022.EFA101019EE@stock.ovh.net>
+ <56DF62F1.1020302@lucaceresoli.net>
+Message-ID: <87oaao2ma7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +15,21 @@ To: buildroot@busybox.net
 
 >>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > libpjsip needs libsrtp to build, but it bundles a libsrtp version in
- > case one is not found during the configure step. The Buildroot policy
- > in such cases is to force using the external package, so forcibly
- > depend on libsrtp.
+ > On 08/03/2016 08:30, Thomas Petazzoni wrote:
+ > [...]
 
- > Adding --with-external-srtp also fixes libpjsip not correctly the
- > libsrtp installed in staging, which shows up with the symptom:
+ >> x86_64 | libpjsip-2.4.5 | NOK |
+ >> http://autobuild.buildroot.net/results/5069fdd4c4a09a6bae2dcbf1f631ece561fe2df0/
 
- >   .../libpjmedia.so: undefined reference to `srtp_deinit'
- >   collect2: error: ld returned 1 exit status
+ > Looks like an issue with parallel building. But before forcing MAKE1, I
+ > at least would like to be able to reproduce it... I've tried a few
+ > builds with arbitrary BR2_JLEVEL values but couldn't see it fail here so
+ > far.
 
- > Fixes:
- >   http://autobuild.buildroot.org/results/305/305fdc8442cd2e8f51b90485be0dca83ffa36603/
- >   http://autobuild.buildroot.org/results/a2f/a2f407c1361ac5c24af122445e84645e9aee309d/
- >   ...and many other similar autobuild failures.
-
- > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
- > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Committed, thanks.
+It does look like it indeed. Looking at the other pjsip build errors
+(http://autobuild.buildroot.net/?reason=libpjsip-2.4.5), they seem to be
+about the srtp dependency (which you now fixed). Let's perhaps give it a
+few days and see if it triggers again.
 
 -- 
 Bye, Peter Korsgaard
