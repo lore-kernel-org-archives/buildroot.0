@@ -1,40 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Mar 2016 23:01:18 +0100
-Subject: [Buildroot] [git commit] uboot: indentation cleanup
-Message-ID: <20160309220856.D03677F8D5@busybox.osuosl.org>
+Date: Wed, 9 Mar 2016 23:00:44 +0100
+Subject: [Buildroot] [git commit] firmware-imx: indentation cleanup
+Message-ID: <20160309220856.B638A7F8D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24ba69015cc6a2431c9cdb16288dc19ec23a52a8
+commit: https://git.buildroot.net/buildroot/commit/?id=2d290fb08baff2dd81aec9012f58876a0de9db67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index dde4710..4a6dc56 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -332,11 +332,11 @@ config BR2_TARGET_UBOOT_ZYNQ_IMAGE
- 	depends on BR2_TARGET_UBOOT_SPL
- 	depends on BR2_TARGET_UBOOT_FORMAT_DTB_IMG
- 	help
--	 Generate the BOOT.BIN file from U-Boot's SPL. The image
--	 boots the Xilinx Zynq chip without any FPGA bitstream.
--	 A bitstream can be loaded by the U-Boot. The SPL searchs
--	 for u-boot-dtb.img file so this U-Boot format is required
--	 to be set.
-+	  Generate the BOOT.BIN file from U-Boot's SPL. The image
-+	  boots the Xilinx Zynq chip without any FPGA bitstream.
-+	  A bitstream can be loaded by the U-Boot. The SPL searchs
-+	  for u-boot-dtb.img file so this U-Boot format is required
-+	  to be set.
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 7e6f0e9..35cfb6d 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -26,7 +26,7 @@ define FIRMWARE_IMX_INSTALL_TARGET_CMDS
+ 	done
+ 	cp -r $(@D)/firmware/epdc $(TARGET_DIR)/lib/firmware/imx
+ 	mv $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw.nonrestricted \
+-	   $(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
++		$(TARGET_DIR)/lib/firmware/imx/epdc/epdc_ED060XH2C1.fw
+ endef
  
- menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- 	bool "Environment image"
+ $(eval $(generic-package))
