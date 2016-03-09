@@ -1,61 +1,44 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  9 Mar 2016 23:58:45 +0100
-Subject: [Buildroot] [PATCH v7 04/18] core: staging symlink uses a relative
-	path when possible
+Date: Wed,  9 Mar 2016 23:58:43 +0100
+Subject: [Buildroot] [PATCH v7 02/18] core: use $(CURDIR) to set TOPDIR
 In-Reply-To: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change turns the staging/ symlink to a relative one when
-$(STAGING_DIR) points to some location in the Buildroot's output
-directory (i.e.: in $(BASE_DIR)/).
+This changes saves a shell call and uses a variable automatically set
+by make [1].
 
-In any other case, the symlink target remains the absolute path
-to the sysroot location.
-
-This slight change is a step forward toward a relocatable SDK.
+[1] http://www.gnu.org/software/make/manual/make.html#Quick-Reference
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
 ---
 changes v6->v7:
-- improve commit log (ThomasP)
+- none
 
 changes v5->v6:
-- no changes
-
-changes v4->v5:
-- add support when BR2_HOST_DIR is set somewhere out of BASE_DIR
-
-changes v3->v4:
-- no change
-
-changes v2->v3:
-- no change
+- new patch
 ---
- Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Makefile b/Makefile
-index 52a92f6..f1de4ed 100644
+index f2822a2..98c8dc7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -518,7 +518,11 @@ $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIS
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
-+ifeq ($(BASE_DIR)/host/$(STAGING_SUBDIR),$(STAGING_DIR))
-+	@ln -snf host/$(STAGING_SUBDIR) $(BASE_DIR)/staging
-+else
- 	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
-+endif
+@@ -69,7 +69,7 @@ endif
+ .NOTPARALLEL:
  
- RSYNC_VCS_EXCLUSIONS = \
- 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+ # absolute path
+-TOPDIR := $(shell pwd)
++TOPDIR := $(CURDIR)
+ CONFIG_CONFIG_IN = Config.in
+ CONFIG = support/kconfig
+ DATE := $(shell date +%Y%m%d)
 -- 
 2.7.2
