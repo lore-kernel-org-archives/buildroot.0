@@ -1,50 +1,33 @@
-From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
-Date: Wed, 09 Mar 2016 09:27:54 +0100
-Subject: [Buildroot] [PATCH v2 1/2] help: add a way to document targets
-	declared in local.mk/external.mk
-In-Reply-To: <56DF5DFB.1050309@mind.be>
-References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
- <20160308221049.GB14289@free.fr> <56DF5DFB.1050309@mind.be>
-Message-ID: <3019698.gqGZGCWVhD@sagittea>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Mar 2016 09:32:50 +0100
+Subject: [Buildroot] [PATCH v4] android-tools: add new package
+In-Reply-To: <CAAMH-yu+m5+wY9YGFUGLiWNwTzsxQmmX9yXQWsM0X_UpDtbFwg@mail.gmail.com>
+References: <1448296032-7781-1-git-send-email-gary.bisson@boundarydevices.com>
+ <CAFGQKxcZERH0vMo8S_gE-YFWN_etHCB2xcAaBvzqgALRj5s7wg@mail.gmail.com>
+ <CAAMH-ys65yXKR+T3K304Dk9iyrzeJr6Z7g-ARH9N0zOrNcNE_g@mail.gmail.com>
+ <57351aed-03da-40ff-9c76-a384f847820e@MAIL-SINTERS-01.sinters-int.fr>
+ <CAAMH-yu+m5+wY9YGFUGLiWNwTzsxQmmX9yXQWsM0X_UpDtbFwg@mail.gmail.com>
+Message-ID: <20160309093250.3aecc01e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann, Arnout, All,
+Gary,
 
-On Wednesday 09 March 2016 00:19:23 Arnout Vandecappelle wrote:
-> On 03/08/16 23:10, Yann E. MORIN wrote:
-[...]
-> > What we could do, however, would be:
-> >    - in external.mk:
-> >          BR2_HAS_EXTRA_HELP = YES  # Whatever non empty
-> >    
-> >    - in the main Makefile:
-> >          help:
-> >              blabla our current help
-> >              $(if $(BR2_HAS_EXTRA_HELP),echo "  - local-help  to get
-> >              local help blabla)> 
-> > which would be IMHO much much nicer and much much simpler...
-> 
->   I don't see the advantage of that, to be honest... The point is to
-> append it to the main help. You expect just a few lines of extra help
-> text.
-I agree with Arnout. 
+On Wed, 9 Mar 2016 09:20:15 +0100, Gary Bisson wrote:
 
-I add that EXTRA_HELP is generic enough to implement Yann's idea if 
-necessary. Instead of supporting BR2_HAS_EXTRA_HELP, just add in 
-external.mk:
+> Thomas, rebasing that patch I realized it doesn't apply cleanly on
+> master right now due to packages/Config.in.host. Also, I realized the
+> package Config.in.host is missing "host " in its bool description. Do
+> you want me to send a v5?
 
-    EXTRA_HELP = "- local-help  to get local help blabla"
-    local-help:
-    	@echo "..."
+Nah, not really needed. Don't bother doing a v5 just for those two
+small changes. I can fix those up when applying.
 
-
-
-
+Thomas
 -- 
-J?r?me Pouiller, Sysmic
-Embedded Linux specialist
-http://www.sysmic.fr
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
