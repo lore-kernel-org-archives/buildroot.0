@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Mar 2016 22:11:51 +0100
-Subject: [Buildroot] [git commit] configs/qemu/x86_64: enable USB support
-Message-ID: <20160309211235.0207A81973@busybox.osuosl.org>
+Date: Wed, 9 Mar 2016 22:09:27 +0100
+Subject: [Buildroot] [git commit] nasm: bump to version 2.12
+Message-ID: <20160309211234.D87247FCC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bff48a200e8c4877d5a0d0b6a568a4315bcc7c9
+commit: https://git.buildroot.net/buildroot/commit/?id=f94071d4165e65e177ed4a9afecbbf361809e27f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-We're not trying to be minimal here, and qemu can bridge/emulate certain
-usb devices, so enable the different controllers and at least usb
-storage.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/qemu/x86_64/linux-4.4.config | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/nasm/nasm.hash | 2 +-
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/qemu/x86_64/linux-4.4.config b/board/qemu/x86_64/linux-4.4.config
-index 4dcc995..9cd64f7 100644
---- a/board/qemu/x86_64/linux-4.4.config
-+++ b/board/qemu/x86_64/linux-4.4.config
-@@ -13,12 +13,17 @@ CONFIG_8139CP=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_DRM=y
-+CONFIG_DRM_QXL=y
- CONFIG_SOUND=y
- CONFIG_SND=y
- CONFIG_SND_HDA_INTEL=y
- CONFIG_SND_HDA_GENERIC=y
-+CONFIG_USB=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_UHCI_HCD=y
-+CONFIG_USB_STORAGE=y
- CONFIG_EXT4_FS=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_DRM=y
--CONFIG_DRM_QXL=y
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index c693f52..ec64ae0 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	c99467c7072211c550d147640d8a1a0aa4d636d4d8cf849f3bf4317d900a1f7f	nasm-2.11.08.tar.xz
++sha256	f34cc1e984ed619b8f9e96cea632e3c6fdea5e039069dbcb63397b7bd004f5a8	nasm-2.12.tar.xz
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index c70557f..3331d65 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NASM_VERSION = 2.11.08
++NASM_VERSION = 2.12
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2c
