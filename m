@@ -1,39 +1,45 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 16:55:50 -0300
-Subject: [Buildroot] [PATCH] yasm: style and whitespace cleanup
-Message-ID: <1457553350-12363-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  9 Mar 2016 18:04:58 -0300
+Subject: [Buildroot] [PATCH 1/2] configs/qemu/x86_64: enable USB support
+Message-ID: <1457557499-6532-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use $(SED) instead of sed.
-Kill trailing whitespace in comment, and move it above the define as per
-standard look.
+We're not trying to be minimal here, and qemu can bridge/emulate certain
+usb devices, so enable the different controllers and at least usb
+storage.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/yasm/yasm.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/qemu/x86_64/linux-4.4.config | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
-index bf8a481..6729b6a 100644
---- a/package/yasm/yasm.mk
-+++ b/package/yasm/yasm.mk
-@@ -7,10 +7,10 @@
- YASM_VERSION = 1.3.0
- YASM_SITE = http://www.tortall.net/projects/yasm/releases
- 
-+# This sed prevents it compiling 2 programs (vsyasm and ytasm)
-+# that are only of use on Microsoft Windows.
- define YASM_PRE_CONFIGURE_FIXUP
--# This sed prevents it compiling 2 programs (vsyasm and ytasm) 
--# that are only of use on Microsoft Windows. 
--	sed -i 's#) ytasm.*#)#' $(@D)/Makefile.in
-+	$(SED) 's#) ytasm.*#)#' $(@D)/Makefile.in
- endef
- 
- YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
+diff --git a/board/qemu/x86_64/linux-4.4.config b/board/qemu/x86_64/linux-4.4.config
+index 4dcc995..9cd64f7 100644
+--- a/board/qemu/x86_64/linux-4.4.config
++++ b/board/qemu/x86_64/linux-4.4.config
+@@ -13,12 +13,17 @@ CONFIG_8139CP=y
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_DRM=y
++CONFIG_DRM_QXL=y
+ CONFIG_SOUND=y
+ CONFIG_SND=y
+ CONFIG_SND_HDA_INTEL=y
+ CONFIG_SND_HDA_GENERIC=y
++CONFIG_USB=y
++CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_EHCI_HCD=y
++CONFIG_USB_UHCI_HCD=y
++CONFIG_USB_STORAGE=y
+ CONFIG_EXT4_FS=y
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+-CONFIG_DRM=y
+-CONFIG_DRM_QXL=y
 -- 
 2.4.10
