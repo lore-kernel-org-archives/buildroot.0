@@ -1,35 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Mar 2016 07:33:20 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-03-07
-In-Reply-To: <56DF62F1.1020302@lucaceresoli.net> (Luca Ceresoli's message of
- "Wed, 9 Mar 2016 00:40:33 +0100")
-References: <20160308073022.EFA101019EE@stock.ovh.net>
- <56DF62F1.1020302@lucaceresoli.net>
-Message-ID: <87oaao2ma7.fsf@dell.be.48ers.dk>
+Date: Wed, 9 Mar 2016 07:31:27 +0100
+Subject: [Buildroot] [git commit] libpjsip: depend on libsrtp
+Message-ID: <20160309063333.563CA81983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a0997f4cb7e858afe2e24c5a011439adc7ca7155
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > On 08/03/2016 08:30, Thomas Petazzoni wrote:
- > [...]
+libpjsip needs libsrtp to build, but it bundles a libsrtp version in
+case one is not found during the configure step. The Buildroot policy
+in such cases is to force using the external package, so forcibly
+depend on libsrtp.
 
- >> x86_64 | libpjsip-2.4.5 | NOK |
- >> http://autobuild.buildroot.net/results/5069fdd4c4a09a6bae2dcbf1f631ece561fe2df0/
+Adding --with-external-srtp also fixes libpjsip not correctly the
+libsrtp installed in staging, which shows up with the symptom:
 
- > Looks like an issue with parallel building. But before forcing MAKE1, I
- > at least would like to be able to reproduce it... I've tried a few
- > builds with arbitrary BR2_JLEVEL values but couldn't see it fail here so
- > far.
+  .../libpjmedia.so: undefined reference to `srtp_deinit'
+  collect2: error: ld returned 1 exit status
 
-It does look like it indeed. Looking at the other pjsip build errors
-(http://autobuild.buildroot.net/?reason=libpjsip-2.4.5), they seem to be
-about the srtp dependency (which you now fixed). Let's perhaps give it a
-few days and see if it triggers again.
+Fixes:
+  http://autobuild.buildroot.org/results/305/305fdc8442cd2e8f51b90485be0dca83ffa36603/
+  http://autobuild.buildroot.org/results/a2f/a2f407c1361ac5c24af122445e84645e9aee309d/
+  ...and many other similar autobuild failures.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libpjsip/Config.in   | 1 +
+ package/libpjsip/libpjsip.mk | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/libpjsip/Config.in b/package/libpjsip/Config.in
+index 980fada..727d2ec 100644
+--- a/package/libpjsip/Config.in
++++ b/package/libpjsip/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBPJSIP
+ 	bool "libpjsip"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBSRTP
+ 	help
+ 	  PJSIP is a free and open source multimedia communication
+ 	  library written in C language implementing standard based
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index ee250f5..49abd74 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -7,6 +7,7 @@
+ LIBPJSIP_VERSION = 2.4.5
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.bz2
+ LIBPJSIP_SITE = http://www.pjsip.org/release/$(LIBPJSIP_VERSION)
++LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPLv2+
+ LIBPJSIP_LICENSE_FILES = COPYING
+ LIBPJSIP_INSTALL_STAGING = YES
+@@ -22,7 +23,8 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-speex-aec \
+ 	--disable-resample \
+ 	--disable-video \
+-	--disable-opencore-amr
++	--disable-opencore-amr \
++	--with-external-srtp=$(STAGING_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBPJSIP_DEPENDENCIES += openssl
