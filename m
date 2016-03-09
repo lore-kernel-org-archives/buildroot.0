@@ -1,40 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Mar 2016 15:05:15 +0100
-Subject: [Buildroot] [PATCH] rtptools: disable for MIPS Codescape
- toolchains
-In-Reply-To: <56E02C73.40105@imgtec.com>
-References: <1457446983-17165-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160308163256.764be70e@free-electrons.com>
- <56DEF7EC.20904@imgtec.com>
- <20160308171149.7dff6ff4@free-electrons.com>
- <56E02C73.40105@imgtec.com>
-Message-ID: <20160309150515.4cd8b894@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 9 Mar 2016 11:28:09 -0300
+Subject: [Buildroot] [PATCH] pkgconf: make wrapper relocatable
+In-Reply-To: <20160309150359.4ce78c05@free-electrons.com>
+References: <1457529409-24102-1-git-send-email-gustavo@zacarias.com.ar>
+ <87egbj228a.fsf@dell.be.48ers.dk> <56E02A78.1050701@zacarias.com.ar>
+ <20160309150359.4ce78c05@free-electrons.com>
+Message-ID: <56E032F9.4070605@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 09/03/16 11:03, Thomas Petazzoni wrote:
 
-On Wed, 9 Mar 2016 14:00:19 +0000, Vicente Olivert Riera wrote:
+> What about doing this relatively to the wrapper location?
+>
+> WRAPPER_DIR=$(dirname $0)
+> STAGING_DIR=$(readlink -f ${WRAPPER_DIR}/../../../staging/)
+>
+> and there you are, it is both relocatable and doesn't rely on
+> STAGING_DIR being defined in the environment.
+>
+> Thomas
 
-> the thing is that rtptools already includes its own ypclnt.h under the
-> "nt/include/rpcsvc" directory, so we could replace the code you wrote
-> above with something like this:
-> 
-> #ifndef __UCLIBC__
-> #include "nt/include/rpcsvc/ypclnt.h"
-> #endif
-> 
-> CC'ing Peter as he wrote the patch which adds that uClibc stuff to
-> host2ip.c.
+Hi.
+That won't work, since staging is an absolute symlink, so when moving 
+the SDK around it will be broken and fail.
+You need something like:
 
-I haven't looked at the code, but it's not only about including a
-header, Peter's patch also puts some code between HAVE_YP.
+WRAPPER_DIR=$(dirname $0)
+STAGING_DIR=$(readlink -f ${WRAPPER_DIR}/../@TUPLE@/sysroot)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+And hardcode tuple which isn't likely to change.
+Regards.
