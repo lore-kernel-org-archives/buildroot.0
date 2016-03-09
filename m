@@ -1,44 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 9 Mar 2016 10:38:01 +0100
-Subject: [Buildroot] [git commit] gcc: drop gcc 4.5 specific code
-Message-ID: <20160309093825.154FD818DB@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed,  9 Mar 2016 06:41:53 -0300
+Subject: [Buildroot] [PATCH] zeromq: drop required openpgm library comment
+Message-ID: <1457516513-7501-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6e635735dee76f7103f3e30f68e4f2cbf1d1226
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+It's obvious, buildroot has it and it's selected/depended upon.
 
-We have removed gcc 4.5 support since a long time, so this commit
-removes dead code that was only used when building a toolchain based
-on gcc 4.5.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gcc/gcc.mk | 9 ---------
- 1 file changed, 9 deletions(-)
+ package/zeromq/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 07883d0..0fb73c9 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -97,15 +97,6 @@ HOST_GCC_COMMON_CONF_ENV = \
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index c623064..efb9239 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -45,6 +45,6 @@ config BR2_PACKAGE_ZEROMQ_PGM
+ 	help
+ 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
+ 	  implemented either over raw IP packets or UDP datagrams
+-	  (encapsulated PGM). This requires OpenPGM library.
++	  (encapsulated PGM).
  
--# http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43810
--# Workaround until it's fixed in 4.5.4 or later
--ifeq ($(ARCH),powerpc)
--ifeq ($(findstring x4.5.,x$(GCC_VERSION)),x4.5.)
--GCC_COMMON_TARGET_CFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CFLAGS))
--GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -Os,$(GCC_COMMON_TARGET_CXXFLAGS))
--endif
--endif
--
- # Xtensa libgcc can't be built with -mauto-litpools
- # because of the trick used to generate .init/.fini sections.
- ifeq ($(BR2_xtensa),y)
+ endif
+-- 
+2.4.10
