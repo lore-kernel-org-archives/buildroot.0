@@ -1,74 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Mar 2016 23:22:22 +0100
-Subject: [Buildroot] [PATCH 3/8] core/pkg-generic: add help about
-	package-specific rules
+Date: Wed,  9 Mar 2016 23:22:23 +0100
+Subject: [Buildroot] [PATCH 4/8] package/busybox: use the generic help rules
 In-Reply-To: <cover.1457561521.git.yann.morin.1998@free.fr>
 References: <cover.1457561521.git.yann.morin.1998@free.fr>
-Message-ID: <4eab88cfca5a4ef3139e51c664782f3c41e43cad.1457561521.git.yann.morin.1998@free.fr>
+Message-ID: <4b71c3a47cadeed2b63cf9101062772b57017049.1457561521.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a package-variable to store the package-specific make rules.
-
-Although this variable would be seldom used, we still document it.
-However, we make sure the documentation explicitly states that this
-variable should not be used (if it needs to be, the submitter of a
-package will be told so during reviews).
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: J?r?me Pouiller <jezz@sysmic.org>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile                                | 1 +
- docs/manual/adding-packages-generic.txt | 6 ++++++
- package/pkg-generic.mk                  | 2 ++
- 3 files changed, 9 insertions(+)
+ Makefile                   | 3 ---
+ package/busybox/busybox.mk | 2 ++
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index d24793b..72935b0 100644
+index 72935b0..8134a14 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -932,6 +932,7 @@ help:
- 	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+@@ -933,9 +933,6 @@ help:
  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
  	@echo '  <pkg>-rebuild          - Restart the build from the build step'
-+	@$(call HELP_RULE,$(PACKAGE_HELP))
- ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
- endif
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 8ed7fe8..fb20e2d 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -436,6 +436,12 @@ information is (assuming the package name is +libfoo+) :
-   FLAT binary format is only 4k bytes. If the application consumes more stack,
-   append the required number here.
+ 	@$(call HELP_RULE,$(PACKAGE_HELP))
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+-endif
+ ifeq ($(BR2_LINUX_KERNEL),y)
+ 	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+ 	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 7c904c8..135f2e1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -10,6 +10,8 @@ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPLv2
+ BUSYBOX_LICENSE_FILES = LICENSE
  
-+* +LIBFOO_HELP+ defines the help entries visible when running `make help`.
-+  The expected content for this variable is a list of single- or double-
-+  quoted strings, with each string in the format "action : help for action". 
-+  This is seldom used, as packages rarely have custom rules. Do not use
-+  this variable.
++BUSYBOX_HELP = "busybox-menuconfig : Run BusyBox menuconfig"
 +
- The recommended way to define these variables is to use the following
- syntax:
- 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3904c09..335b811 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -910,6 +910,8 @@ ifeq ($$(patsubst %/,ERROR,$$($(2)_SITE)),ERROR)
- $$(error $(2)_SITE ($$($(2)_SITE)) cannot have a trailing slash)
- endif
- 
-+PACKAGE_HELP += $$($(2)_HELP)
-+
- endif # $(2)_KCONFIG_VAR
- endef # inner-generic-package
+ BUSYBOX_CFLAGS = \
+ 	$(TARGET_CFLAGS)
  
 -- 
 1.9.1
