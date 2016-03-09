@@ -1,38 +1,40 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 13:25:22 -0300
-Subject: [Buildroot] [PATCH] icu: remove dev files
-Message-ID: <1457540722-19623-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 9 Mar 2016 17:35:30 +0100
+Subject: [Buildroot] [PATCH] libglib2: improve dev file removal
+In-Reply-To: <1457540712-19580-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457540712-19580-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160309173530.36363520@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove files that aren't used for runtime purposes.
+Gustavo,
 
-Size savings delta +450 KB.
+On Wed,  9 Mar 2016 13:25:12 -0300, Gustavo Zacarias wrote:
+> * Remove /usr/share/glib-2.0 rmdir from DEV_FILES hook, if we are not
+> using gdb the GDB_FILES hook will hit and remove it anway, and if we are
+> indeed using gdb we need it.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/icu/icu.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Where is this done in your patch?
 
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index b4574e5..68ea1ff 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -44,5 +44,12 @@ endef
- ICU_POST_PATCH_HOOKS += ICU_COPY_CUSTOM_DATA
- endif
- 
-+define ICU_REMOVE_DEV_FILES
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,derb genbrk gencfu gencnval gendict genrb icuinfo makeconv uconv)
-+	rm -f $(addprefix $(TARGET_DIR)/usr/sbin/,genccode gencmn gennorm2 gensprep icupkg)
-+	rm -rf $(TARGET_DIR)/usr/share/icu
-+endef
-+ICU_POST_INSTALL_TARGET_HOOKS += ICU_REMOVE_DEV_FILES
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+> * Remove glib-compile-resources and glib-compile-schemas binaries, these
+> aren't used for runtime purposes.
+> 
+> * Remove /usr/share/glib-2.0/codegen and /usr/share/glib-2.0/schemas, as
+> with the binaries these aren't used for runtime purposes either.
+
+Those two are OK, of course.
+
+> Size savings delta +800 KB.
+
+Nice savings! I would have written -800KB though :)
+
+Thanks!
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
