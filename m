@@ -1,100 +1,84 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 06:58:42 -0300
-Subject: [Buildroot] [PATCH v3 4/7] gtkmm3: bump to version 3.18.0
+Date: Wed,  9 Mar 2016 06:58:43 -0300
+Subject: [Buildroot] [PATCH v3 5/7] wayland: bump to version 1.10.0
 In-Reply-To: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1457517525-7716-5-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1457517525-7716-6-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Required to nicely match the previous libgtk3 major version bump.
+wayland-scanner host/cross support is now native so drop the funky
+trick.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gtkmm3/Config.in   | 18 +++++++++++-------
- package/gtkmm3/gtkmm3.hash |  4 ++--
- package/gtkmm3/gtkmm3.mk   | 13 +------------
- 3 files changed, 14 insertions(+), 21 deletions(-)
+ package/wayland/Config.in    |  3 ++-
+ package/wayland/wayland.hash |  4 ++--
+ package/wayland/wayland.mk   | 18 +++---------------
+ 3 files changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/package/gtkmm3/Config.in b/package/gtkmm3/Config.in
-index 238a8cd..59b1372 100644
---- a/package/gtkmm3/Config.in
-+++ b/package/gtkmm3/Config.in
-@@ -1,3 +1,12 @@
-+comment "gtkmm3 needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "gtkmm3 needs an OpenGL EGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL
-+
- config BR2_PACKAGE_GTKMM3
- 	bool "gtkmm3"
- 	# Broken on existing external/internal nios2 toolchains,
-@@ -11,19 +20,14 @@ config BR2_PACKAGE_GTKMM3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/libgtk3 -> libglib2
- 	depends on BR2_USE_MMU # *mm/libgtk3 -> libglib2
- 	depends on BR2_USE_WCHAR # *mm/libgtk3 -> libglib2
-+	depends on BR2_PACKAGE_HAS_LIBEGL # libgtk3 -> libepoxy
-+	select BR2_PACKAGE_LIBGTK3
- 	select BR2_PACKAGE_ATKMM
- 	select BR2_PACKAGE_CAIROMM
- 	select BR2_PACKAGE_GLIBMM
--	select BR2_PACKAGE_LIBGTK3
- 	select BR2_PACKAGE_LIBSIGC
- 	select BR2_PACKAGE_PANGOMM
+diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+index 857ba73..32718fc 100644
+--- a/package/wayland/Config.in
++++ b/package/wayland/Config.in
+@@ -2,8 +2,9 @@ config BR2_PACKAGE_WAYLAND
+ 	bool "wayland"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBFFI
++	select BR2_PACKAGE_LIBXML2
  	help
- 	  The gtkmm3 package is a set of C++ bindings for GTK 3.
- 
- 	  http://www.gtkmm.org/
--
--comment "gtkmm3 needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
--	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
-index 49e2f76..fcbadab 100644
---- a/package/gtkmm3/gtkmm3.hash
-+++ b/package/gtkmm3/gtkmm3.hash
+ 	  Wayland is a project to define a protocol for a compositor
+ 	  to talk to its clients as well as a library implementation
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 316d6b5..c9d0721 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.14/gtkmm-3.14.0.sha256sum
--sha256	d9f528a62c6ec226fa08287c45c7465b2dce5aae5068e9ac48d30a64a378e48b	gtkmm-3.14.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.18/gtkmm-3.18.0.sha256sum
-+sha256	829fa113daed74398c49c3f2b7672807f58ba85d0fa463f5bc726e1b0138b86b	gtkmm-3.18.0.tar.xz
-diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
-index 034cdf9..a895d85 100644
---- a/package/gtkmm3/gtkmm3.mk
-+++ b/package/gtkmm3/gtkmm3.mk
-@@ -4,7 +4,7 @@
+-# From: http://lists.freedesktop.org/archives/wayland-devel/2015-June/022630.html
+-sha256  f17c938d1c24fd0a10f650a623a2775d329db3168b5732e498b08388ec776fc8 wayland-1.8.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027038.html
++sha256  4bf6e790aa6f50ab3825676282ecd75850ec9c4767af96ecb7127b1f3c3d60dc	wayland-1.10.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 4e44fa0..215e70a 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,28 +4,16 @@
  #
  ################################################################################
  
--GTKMM3_VERSION_MAJOR = 3.14
-+GTKMM3_VERSION_MAJOR = 3.18
- GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
- GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
- GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
-@@ -13,15 +13,4 @@ GTKMM3_LICENSE_FILES = COPYING COPYING.tools
- GTKMM3_INSTALL_STAGING = YES
- GTKMM3_DEPENDENCIES = atkmm cairomm glibmm libgtk3 libsigc pangomm host-pkgconf
- 
--# Explicit use of C++11 to build with newer *mm dependencies that require C++11.
--#
--# The most recent release of *mm-related libraries require C++11. This project's
--# dependencies (ex. libpangomm) are updated and enforce the C++11 standard.
--# Since the gtkmm3 must match the libgtk3 version, the useable version of
--# gtkmm3 does not have this enforcement; however, to build with the most
--# recent version of the dependencies, gtkmm3 requires to be built with
--# `-std=c++11`. The following enforces C++11 standard. When libgtk3 is updated,
--# followed by a gtkmm3 update, this flag modification can be removed.
--GTKMM3_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -std=c++11"
+-WAYLAND_VERSION = 1.8.1
++WAYLAND_VERSION = 1.10.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
+ WAYLAND_LICENSE_FILES = COPYING
 -
- $(eval $(autotools-package))
+ WAYLAND_INSTALL_STAGING = YES
+-WAYLAND_DEPENDENCIES = libffi host-pkgconf host-wayland expat
++WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
+ 
+ # wayland-scanner is only needed for building, not on the target
+-WAYLAND_CONF_OPTS = --disable-scanner
+-
+-# We must provide a specialy-crafted wayland-scanner .pc file
+-# which we vampirise and adapt from the host-wayland copy
+-define WAYLAND_SCANNER_PC
+-	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/lib/pkgconfig/wayland-scanner.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
+-	$(SED) 's:^prefix=.*:prefix=/usr:' \
+-		-e 's:^wayland_scanner=.*:wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner:' \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
+-endef
+-WAYLAND_POST_INSTALL_STAGING_HOOKS += WAYLAND_SCANNER_PC
++WAYLAND_CONF_OPTS = --disable-scanner --with-host-scanner
+ 
+ # Remove the DTD from the target, it's not needed at runtime
+ define WAYLAND_TARGET_CLEANUP
 -- 
 2.4.10
