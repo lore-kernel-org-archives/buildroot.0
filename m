@@ -1,84 +1,88 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 06:58:43 -0300
-Subject: [Buildroot] [PATCH v3 5/7] wayland: bump to version 1.10.0
+Date: Wed,  9 Mar 2016 06:58:44 -0300
+Subject: [Buildroot] [PATCH v3 6/7] wayland-protocols: new package
 In-Reply-To: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1457517525-7716-6-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1457517525-7716-7-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wayland-scanner host/cross support is now native so drop the funky
-trick.
+For wayland 1.10+ they're split from wayland core and required by
+weston.
+Hide it behind the wayland package since it's useless independently even
+though it can be "built" and installed.
+And it makes no sense to install to target since they are DTDs used at
+build-time.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/wayland/Config.in    |  3 ++-
- package/wayland/wayland.hash |  4 ++--
- package/wayland/wayland.mk   | 18 +++---------------
- 3 files changed, 7 insertions(+), 18 deletions(-)
+ package/Config.in                                |  1 +
+ package/wayland-protocols/Config.in              |  9 +++++++++
+ package/wayland-protocols/wayland-protocols.hash |  2 ++
+ package/wayland-protocols/wayland-protocols.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/wayland-protocols/Config.in
+ create mode 100644 package/wayland-protocols/wayland-protocols.hash
+ create mode 100644 package/wayland-protocols/wayland-protocols.mk
 
-diff --git a/package/wayland/Config.in b/package/wayland/Config.in
-index 857ba73..32718fc 100644
---- a/package/wayland/Config.in
-+++ b/package/wayland/Config.in
-@@ -2,8 +2,9 @@ config BR2_PACKAGE_WAYLAND
- 	bool "wayland"
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBFFI
-+	select BR2_PACKAGE_LIBXML2
- 	help
- 	  Wayland is a project to define a protocol for a compositor
- 	  to talk to its clients as well as a library implementation
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 316d6b5..c9d0721 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,2 +1,2 @@
--# From: http://lists.freedesktop.org/archives/wayland-devel/2015-June/022630.html
--sha256  f17c938d1c24fd0a10f650a623a2775d329db3168b5732e498b08388ec776fc8 wayland-1.8.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027038.html
-+sha256  4bf6e790aa6f50ab3825676282ecd75850ec9c4767af96ecb7127b1f3c3d60dc	wayland-1.10.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 4e44fa0..215e70a 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -4,28 +4,16 @@
- #
- ################################################################################
- 
--WAYLAND_VERSION = 1.8.1
-+WAYLAND_VERSION = 1.10.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
- WAYLAND_LICENSE_FILES = COPYING
--
- WAYLAND_INSTALL_STAGING = YES
--WAYLAND_DEPENDENCIES = libffi host-pkgconf host-wayland expat
-+WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
- 
- # wayland-scanner is only needed for building, not on the target
--WAYLAND_CONF_OPTS = --disable-scanner
--
--# We must provide a specialy-crafted wayland-scanner .pc file
--# which we vampirise and adapt from the host-wayland copy
--define WAYLAND_SCANNER_PC
--	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/lib/pkgconfig/wayland-scanner.pc \
--		$(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
--	$(SED) 's:^prefix=.*:prefix=/usr:' \
--		-e 's:^wayland_scanner=.*:wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner:' \
--		$(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
--endef
--WAYLAND_POST_INSTALL_STAGING_HOOKS += WAYLAND_SCANNER_PC
-+WAYLAND_CONF_OPTS = --disable-scanner --with-host-scanner
- 
- # Remove the DTD from the target, it's not needed at runtime
- define WAYLAND_TARGET_CLEANUP
+diff --git a/package/Config.in b/package/Config.in
+index 221852e..b6a15c1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -940,6 +940,7 @@ menu "Graphics"
+ 	source "package/powervr/Config.in"
+ 	source "package/tiff/Config.in"
+ 	source "package/wayland/Config.in"
++	source "package/wayland-protocols/Config.in"
+ 	source "package/webkit/Config.in"
+ 	source "package/webkitgtk24/Config.in"
+ 	source "package/webp/Config.in"
+diff --git a/package/wayland-protocols/Config.in b/package/wayland-protocols/Config.in
+new file mode 100644
+index 0000000..8b4dedf
+--- /dev/null
++++ b/package/wayland-protocols/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_WAYLAND_PROTOCOLS
++	bool "wayland-protocols"
++	# Not really... but useless otherwise
++	depends on BR2_PACKAGE_WAYLAND
++	help
++	  Wayland protocols that adds functionality not available in
++	  the Wayland core protocol.
++
++	  http://wayland.freedesktop.org/
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+new file mode 100644
+index 0000000..f2d5b7f
+--- /dev/null
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -0,0 +1,2 @@
++# From https://lists.freedesktop.org/archives/wayland-devel/2015-November/025759.html
++sha256	a538a8e3f999f2722897eb60aa2e2b53d879381b413b630957d58a9acd226def	wayland-protocols-1.0.tar.xz
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+new file mode 100644
+index 0000000..bb6d52f
+--- /dev/null
++++ b/package/wayland-protocols/wayland-protocols.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# wayland-protocols
++#
++################################################################################
++
++WAYLAND_PROTOCOLS_VERSION = 1.0
++WAYLAND_PROTOCOLS_SITE = http://wayland.freedesktop.org/releases
++WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
++WAYLAND_PROTOCOLS_LICENSE = MIT
++WAYLAND_PROTOCOLS_LICENSE_FILES = COPYING
++WAYLAND_PROTOCOLS_INSTALL_STAGING = YES
++WAYLAND_PROTOCOLS_INSTALL_TARGET = NO
++
++$(eval $(autotools-package))
 -- 
 2.4.10
