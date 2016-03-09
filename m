@@ -1,35 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 9 Mar 2016 13:15:59 +0100
-Subject: [Buildroot] [PATCH 1/2] Set PGROOT dir owner to be "postgres".
-In-Reply-To: <20160309092148.GC14938@tkos.co.il>
-References: <1457296152-4047-1-git-send-email-alan@tkos.co.il>
- <20160307045142.GM2877@tarshish>
- <20160307092908.6334a90b@free-electrons.com>
- <20160309092148.GC14938@tkos.co.il>
-Message-ID: <20160309131559.00ebe068@free-electrons.com>
+Date: Wed, 9 Mar 2016 13:17:39 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/connman: fix crash due to
+ iptables 1.6.0 update
+In-Reply-To: <CAFGQKxd9=Hpzv-DOOiXqpgnwovEv5jvU-8YvoG-SFGEN=pA=AA@mail.gmail.com>
+References: <1457345950-2793-1-git-send-email-martin@barkynet.com>
+ <20160308211834.5d768caa@free-electrons.com>
+ <CAFGQKxex64N_Eg8v=hXvFsu4hNJpNASCpj7tpvQV1qtB7M_Nsw@mail.gmail.com>
+ <CAFGQKxd9=Hpzv-DOOiXqpgnwovEv5jvU-8YvoG-SFGEN=pA=AA@mail.gmail.com>
+Message-ID: <20160309131739.119a483a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alan,
+Martin,
 
-On Wed, 9 Mar 2016 11:21:49 +0200, Alan Yaniger wrote:
+On Wed, 9 Mar 2016 10:23:41 +0000, Martin Bark wrote:
 
-> I see what my error was. I installed the rootfs on my SSD by copying
-> it from a partition on a USB-disk which I had mounted. Then I ran "cp"
-> to copy from the mounted partition to the SSD, and I forgot to use the -p
-> option to preserve attributes. When I installed after the "fix", I used "tar" to
-> install, which preserved the ownership.
+> Actually there is no need, Yann has already had his patch committed to
+> connman, see http://git.kernel.org/cgit/network/connman/connman.git/commit/?id=61b0b13.
+> So the next release of connman should remove both patches.
 
-OK.
-
-> I changed the state of the patch to "Rejected" in Patchwork.
-
-Thanks for following up and changing the state of your patch!
-
-Best regards,
+Excellent, thanks for having checked that!
 
 Thomas
 -- 
