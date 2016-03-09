@@ -1,61 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Mar 2016 14:46:29 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 9 Mar 2016 10:51:52 -0300
 Subject: [Buildroot] [PATCH] pkgconf: make wrapper relocatable
-In-Reply-To: <1457529409-24102-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 9 Mar 2016 10:16:49 -0300")
+In-Reply-To: <87egbj228a.fsf@dell.be.48ers.dk>
 References: <1457529409-24102-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87egbj228a.fsf@dell.be.48ers.dk>
+ <87egbj228a.fsf@dell.be.48ers.dk>
+Message-ID: <56E02A78.1050701@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+On 09/03/16 10:46, Peter Korsgaard wrote:
 
- > Use shell ${STAGING_DIR} to expand at run time instead of build time
- > hence avoiding hardcoding the staging directory in it and making it
- > relocatable.
+>>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>
+>   > Use shell ${STAGING_DIR} to expand at run time instead of build time
+>   > hence avoiding hardcoding the staging directory in it and making it
+>   > relocatable.
+>
+>   > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+>
+> Ehh, doesn't this break using pkg-config outside buildroot?
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Ehh, doesn't this break using pkg-config outside buildroot? 
-
-> ---
- >  package/pkgconf/pkg-config.in | 2 +-
- >  package/pkgconf/pkgconf.mk    | 3 ---
- >  2 files changed, 1 insertion(+), 4 deletions(-)
-
- > diff --git a/package/pkgconf/pkg-config.in b/package/pkgconf/pkg-config.in
- > index 4dec487..51ac8c1 100644
- > --- a/package/pkgconf/pkg-config.in
- > +++ b/package/pkgconf/pkg-config.in
- > @@ -1,2 +1,2 @@
- >  #!/bin/sh
- > -PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:- at PKG_CONFIG_LIBDIR@} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:- at STAGING_DIR@} $(dirname $0)/pkgconf @STATIC@ $@
- > +PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${STAGING_DIR}/usr/lib/pkgconfig:${STAGING_DIR}/usr/share/pkgconfig} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${STAGING_DIR}} $(dirname $0)/pkgconf @STATIC@ $@
- > diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
- > index c8b0cba..3cfcc2a 100644
- > --- a/package/pkgconf/pkgconf.mk
- > +++ b/package/pkgconf/pkgconf.mk
- > @@ -19,9 +19,6 @@ endef
- >  define HOST_PKGCONF_INSTALL_WRAPPER
- >  	$(INSTALL) -m 0755 -D package/pkgconf/pkg-config.in \
- >  		$(HOST_DIR)/usr/bin/pkg-config
- > -	$(SED) 's, at PKG_CONFIG_LIBDIR@,$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig,' \
- > -		-e 's, at STAGING_DIR@,$(STAGING_DIR),' \
- > -		$(HOST_DIR)/usr/bin/pkg-config
- >  endef
- 
- >  define HOST_PKGCONF_STATIC
- > -- 
- > 2.4.10
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
-
--- 
-Bye, Peter Korsgaard
+Hi.
+Indeed it does, but you can't have the cake and eat it at once can you?
+Arnout in the famous vala-wrapper thread pointed that we shouldn't 
+hardcode the staging directory in it and i've adjusted accordingly, so 
+which way is it? (same logic would apply to both cases). Re:
+http://lists.busybox.net/pipermail/buildroot/2016-February/153671.html
+Regards.
