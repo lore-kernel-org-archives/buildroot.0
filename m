@@ -1,49 +1,62 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed,  9 Mar 2016 23:58:52 +0100
-Subject: [Buildroot] [PATCH v7 11/18] package/speex: remove no longer needed
-	hook
+Date: Wed,  9 Mar 2016 23:58:53 +0100
+Subject: [Buildroot] [PATCH v7 12/18] toolchain: add post-install hooks
+	making the toolchain relocatable
 In-Reply-To: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1457564339-27294-12-git-send-email-s.martin49@gmail.com>
+Message-ID: <1457564339-27294-13-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove the LIBTOOL_FIXUP hook since RPATH are now sanitized in
-target-finalize hooks.
+This change adds the required dependency and post-target-install hooks
+to render the toolchain relocatable.
+
+Notes:
+- Although the toolchain package is a virtual package, it does support
+  hooks.
+- This has to be post-target-install hooks be the toolchain package is
+  handled as a "target" package.
+
+Ultimately, this patch allows to generate relocatable toolchains, just
+by doing:
+
+  $ make menuconfig
+  $ make toolchain
+
+Then, this toolchain can be used/shared/deployed on anywhere*.
+
+*: on any Linux system with an ABI-compatible set of system libraries
+   (usually including: glibc, libgcc, zlib, flex and libsigsegv).
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 
 ---
 changes v6->v7:
-- none
-
-changes v5->v6:
-- none
-
-changes v4->v5:
-- new patch (suggested by Baruch)
+- new patch
 ---
- package/speex/speex.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ toolchain/toolchain/toolchain.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index a34bfac..24782ec 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -24,11 +24,6 @@ ifeq ($(BR2_PACKAGE_SPEEX_ARM5E),y)
- SPEEX_CONF_OPTS += --enable-arm5e-asm
- endif
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index c22713b..618aa64 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -12,6 +12,11 @@ endif
  
--define SPEEX_LIBTOOL_FIXUP
--	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
--	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
--endef
--
- SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
  
- define SPEEX_BUILD_CMDS
++# dependency and hooks needed to make the toolchain relocatable
++TOOLCHAIN_DEPENDENCIES += host-patchelf
++TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += HOST_SANITIZE_RPATH_HOOK \
++	STAGING_SANITIZE_RPATH_HOOK
++
+ $(eval $(virtual-package))
+ 
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
 -- 
 2.7.2
