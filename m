@@ -1,25 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 09 Mar 2016 22:59:56 +0100
-Subject: [Buildroot] [PATCH] toolchain: switch linaro to https urls
-In-Reply-To: <1457552439-8185-1-git-send-email-jason.abele@gmail.com> (Jason
- Abele's message of "Wed, 9 Mar 2016 11:40:39 -0800")
-References: <1457552439-8185-1-git-send-email-jason.abele@gmail.com>
-Message-ID: <87r3fjxqg3.fsf@dell.be.48ers.dk>
+Date: Wed, 09 Mar 2016 23:02:33 +0100
+Subject: [Buildroot] [PATCH 1/5] nvidia-driver: indentation cleanup
+In-Reply-To: <1457559032-3384-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+ (Jerzy Grzegorek's message of "Wed, 9 Mar 2016 22:30:28 +0100")
+References: <1457559032-3384-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <87mvq7xqbq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jason" == Jason Abele <jason.abele@gmail.com> writes:
+>>>>> "Jerzy" == Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net> writes:
 
- > From: Jason Abele <jason@nextthing.co>
- > Signed-off-by: Jason Abele <jason@nextthing.co>
- > ---
- > It looks like releases.linaro.org is no longer available without ssl.
- > If this change is permanent, we should probably fix the urls.
+ > Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 
-Committed, thanks.
+Committed all 5, thanks.
 
 -- 
 Bye, Peter Korsgaard
