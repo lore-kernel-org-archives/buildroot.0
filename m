@@ -1,80 +1,47 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 08:51:42 -0300
-Subject: [Buildroot] [PATCH] cifs-utils: bump to version 6.5
-Message-ID: <1457524302-28441-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  9 Mar 2016 12:58:31 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/altera_socdk_defconfig: use http
+	access for u-boot/linux git repos
+Message-ID: <1457524712-2697-1-git-send-email-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch is upstream so remove it.
+Fixes:
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/114650743
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+git:// access to git.rocketboards.org has been failing for a while, and
+git:// is sometimes not allowed through corporate firewalls, so change to
+git-over-http instead.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch | 31 ----------------------
- package/cifs-utils/cifs-utils.hash                 |  2 +-
- package/cifs-utils/cifs-utils.mk                   |  2 +-
- 3 files changed, 2 insertions(+), 33 deletions(-)
- delete mode 100644 package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
+ configs/altera_socdk_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch b/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
-deleted file mode 100644
-index 8fbec11..0000000
---- a/package/cifs-utils/0001-mtab.c-include-paths.h-for-_PATH_MOUNTED.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 6603cef0f06c450196a1bca06bb143d8fcda5651 Mon Sep 17 00:00:00 2001
--From: Felix Janda <felix.janda@posteo.de>
--Date: Fri, 5 Dec 2014 23:19:29 +0100
--Subject: [PATCH 1/1] mtab.c: include <paths.h> for _PATH_MOUNTED
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Backported from: 6603cef0f06c450196a1bca06bb143d8fcda5651
--
--Signed-off-by: Felix Janda <felix.janda@posteo.de>
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-----
-- mtab.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/mtab.c b/mtab.c
--index 7b365b3..a662a3c 100644
----- a/mtab.c
--+++ b/mtab.c
--@@ -38,6 +38,7 @@
-- #include <mntent.h>
-- #include <stdlib.h>
-- #include <signal.h>
--+#include <paths.h>
-- #include "mount.h"
-- #include "config.h"
-- 
---- 
--2.5.0
--
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index 9255179..c49ced4 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	38fc63926af435dae4ebcf4406275580a692d9fb9ee3e32170317cf2ba68e6e3	cifs-utils-6.4.tar.bz2
-+sha256	e2776578b8267c6dc0862897f5e10f87f10f8337fca9ca6a9118f5eb30cf49f7	cifs-utils-6.5.tar.bz2
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 89358b1..9d4e223 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/altera_socdk_defconfig b/configs/altera_socdk_defconfig
+index 6b05a27..a7b78ca 100644
+--- a/configs/altera_socdk_defconfig
++++ b/configs/altera_socdk_defconfig
+@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
  
--CIFS_UTILS_VERSION = 6.4
-+CIFS_UTILS_VERSION = 6.5
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPLv3+
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.rocketboards.org/linux-socfpga.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
+ BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+@@ -27,7 +27,7 @@ BR2_TARGET_ROOTFS_EXT2_3=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_socfpga_v2013.01.01_14.02.02"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
 -- 
-2.4.10
+2.7.0
