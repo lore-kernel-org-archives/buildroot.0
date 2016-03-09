@@ -1,11 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 9 Mar 2016 18:57:24 +0100
-Subject: [Buildroot] [PATCH v2 1/2] help: add a way to document targets
- declared in local.mk/external.mk
-In-Reply-To: <56DF5DFB.1050309@mind.be>
+Date: Wed, 9 Mar 2016 19:01:43 +0100
+Subject: [Buildroot] [PATCH v2 2/2] help: relocate help messages
+ specific to one package
+In-Reply-To: <56DF5D52.6080609@mind.be>
 References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
- <20160308221049.GB14289@free.fr> <56DF5DFB.1050309@mind.be>
-Message-ID: <20160309175724.GA3603@free.fr>
+ <1457473693-25776-2-git-send-email-jezz@sysmic.org>
+ <20160308225948.GD14289@free.fr> <56DF5D52.6080609@mind.be>
+Message-ID: <20160309180143.GB3603@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,88 +15,117 @@ To: buildroot@busybox.net
 
 Arnout, J?r?me, All,
 
-On 2016-03-09 00:19 +0100, Arnout Vandecappelle spake thusly:
-> On 03/08/16 23:10, Yann E. MORIN wrote:
+On 2016-03-09 00:16 +0100, Arnout Vandecappelle spake thusly:
+> On 03/08/16 23:59, Yann E. MORIN wrote:
 > >J?r?me, All,
 > >
 > >On 2016-03-08 22:48 +0100, J?r?me Pouiller spake thusly:
-> >>It is handy to use local.mk or external.mk to add specific targets
-> >>for current project. However, until now, it not possible to add help
-> >>message these targets.
-> >
-> >I have:
-> >
-> >     $ make local-help
-> >     Local blabla help displays here...
-> >
-> >>This patch add EXTRA_HELP variable. This variable is aimed to be assigned
-> >>from any .mk files. Its content is displayed with 'make help'.
+> >>Use $EXTRA_HELP feature in order to integrate help messages specific
+> >>to one package (linux-menuconfig, etc...) package they are
+> >>related.
 > >>
-> >>For exemple:
-> >>   EXTRA_HELP += "flash                  - Flash target"
-> >>   EXTRA_HELP += "chroot                 - Chroot into target/"
-> >>   EXTRA_HELP += "qemu                   - Run image with qemu"
-> >>   EXTRA_HELP += "install-nfs            - Extract rootfs in \$$NFSROOT (=$(NFSROOT))"
-> >>   EXTRA_HELP += "`printf '%-22s%s' '$(var)-feature' ' - Call $(var) feature'`"
-> >>   EXTRA_HELP += "Please contact support at company.com in case of problem."
+> >>It would be possible to do it using kconfig framework, but I was not
+> >>sure it is necessary to document kconfig targets systematicaly.
+> >>
+> >>Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
+> >>---
+> >>v2:
+> >>   - Rename LOCAL_HELP
+> >>
+> >>  Makefile                   | 16 ----------------
+> >>  boot/barebox/barebox.mk    |  5 +++++
+> >>  linux/linux.mk             |  7 +++++++
+> >>  package/busybox/busybox.mk |  4 ++++
+> >>  package/uclibc/uclibc.mk   |  4 ++++
+> >>  5 files changed, 20 insertions(+), 16 deletions(-)
+> >>
+> >>diff --git a/Makefile b/Makefile
+> >>index 1c9f63c..eb92052 100644
+> >>--- a/Makefile
+> >>+++ b/Makefile
+> >>@@ -932,22 +932,6 @@ help:
+> >>  	@echo '  <pkg>-dirclean         - Remove <pkg> build directory'
+> >>  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+> >>  	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+> >>-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> >>-	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
+> >>-endif
+> >>-ifeq ($(BR2_LINUX_KERNEL),y)
+> >>-	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+> >>-	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+> >>-	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
+> >>-	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+> >>-endif
+> >>-ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> >>-	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+> >>-endif
+> >>-ifeq ($(BR2_TARGET_BAREBOX),y)
+> >>-	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+> >>-	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+> >>-endif
+> >>  	@for i in $(EXTRA_HELP); do echo "  $$i"; done
 > >
-> >This definitely does not look nice to me... :-(
+> >Following my reply to the previous mail, here's an alternate proposal
+> >(it may need a bit of tweaking, though, I jut wrote it in the mail
+> >without testing):
+> >
+> >     for h in $(PACKAGE_HELP_y); do \
+> >         printf "  %24.24s - %s\n" "$${h%% *}" "$${h#* }"; \
+> >     done
 > 
->  Why not? Extremely nice and simple.
+>  Nice, but actually largely independent of this patch.
 
-It's not nice because:
+Absolutely not, if you account for my position as explained in answer to
+the first patch in the series.
 
-  - it assumes a certain layout of the help texts. If/when we
-    re-arrange our own help text, this local help text will no
-    longer be properly indented;
-
-  - the print stuff above *is* ugly;
-
-  - the local help is intermixed with our own help text, which I find
-    dubious, as it may lead users to believe those are native buildroot
-    actions when it is not.
-
-As for it being simple, it is not simple to write, as the print example
-clearly demonstrate.
-
-With the proposal I made in the second patch, it is far easier to do, as
-the formatting would be done in a single place.
-
-(the printf example would thus be simply:
-    HELP += "$(var)-feature : Call $(var) feature"
-)
-
-> >What we could do, however, would be:
-> >
-> >   - in external.mk:
-> >         BR2_HAS_EXTRA_HELP = YES  # Whatever non empty
-> >
-> >   - in the main Makefile:
-> >
-> >         help:
-> >             blabla our current help
-> >             $(if $(BR2_HAS_EXTRA_HELP),echo "  - local-help  to get local help blabla)
-> >
-> >which would be IMHO much much nicer and much much simpler...
+> This improvement
+> could be done in a follow-up (third) patch. The patch in the current state
+> is mostly moving things around.
 > 
->  I don't see the advantage of that, to be honest... The point is to append
-> it to the main help. You expect just a few lines of extra help text.
+>  I would tend to prefer splitting on something other than space, though.
+> <space><colon><space> for instance. So $${h%% : *}.
 
-And the fact that it is mixed with our own help is one thing that I
-don't like. I would probably agree to the following (accounting for
-J?r?me's suggestion to reuse the same variable and your own suggestion
-to change the separator):
+Yes, that's fine with me. ;-)
 
+> >and see below how it is set...
+> >
+> >>  	@echo
+> >>  	@echo 'Documentation:'
+> >>diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> >>index 7715daf..24d0162 100644
+> >>--- a/boot/barebox/barebox.mk
+> >>+++ b/boot/barebox/barebox.mk
+> >>@@ -117,4 +117,9 @@ $(error No Barebox config. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_
+> >>  endif
+> >>  endif
+> >>
+> >>+ifeq ($(BR2_TARGET_BAREBOX),y)
+> >>+	EXTRA_HELP += 'barebox-menuconfig     - Run barebox menuconfig'
+> >>+	EXTRA_HELP += 'barebox-savedefconfig  - Run barebox savedefconfig'
+> >>+endif
+> >
+> >PACKAGE_HELP_$(BR2_TARGET_BAREBOX) += "barebox-menuconfig Run barebox menuconfig"
+> >PACKAGE_HELP_$(BR2_TARGET_BAREBOX) += "barebox-savedefconfig Run barebox savedefconfig"
+> 
+>  I'm not particularly fond of the _y trick. We have it in a few places, but
+> IMHO it doesn't make things more readable or maintainable at all. Only when
+> you have a lot of different symbols to check and something relatively short
+> on the right hand side, then it looks OK. Like is often the case in the
+> kernel.
 
-    help:
-        Our complete help goes here
+I'm OK with using the ifneq conditional too, even though I prefer the _y
+"trick" since it is pretty well used in many places (in Buildroot, but
+in the kernel too for example).
 
-    ifneq ($(BR2_EXTRA_HELP),)
-        printf "Local, custom help:\n"
-            for h in $(BR2_EXTRA_HELP); do \
-                printf "  %-22.22s-%s\n" "$${h%%* : *}" "${h#* : }"; \
-            done
-    endif
+>  So I would tend to accept these patches as they are now, and have your
+> proposal as a follow-up.
+
+Sorry, I really do not like the first patch and what it implies.
+
+But code speaks better than words, so I'll hack something now and submit
+so we can compare objectivly, and so the powers-that-be may decide. ;-)
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
