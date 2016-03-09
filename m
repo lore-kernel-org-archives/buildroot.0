@@ -1,50 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 9 Mar 2016 06:22:02 +0200
-Subject: [Buildroot] [PATCH 2/2] docs: fix syntax error in
- makedev-syntax example. In the makedev syntax documentation,
- one of the examples lacks the "mode" value.
-In-Reply-To: <20160308202039.GB3856@free.fr>
-References: <1457294608-2129-1-git-send-email-alan@tkos.co.il>
- <1457294608-2129-2-git-send-email-alan@tkos.co.il>
- <20160308202039.GB3856@free.fr>
-Message-ID: <20160309042202.GA2877@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 09 Mar 2016 07:23:22 +0100
+Subject: [Buildroot] patch: **** Only garbage was found in the patch
+	input.
+In-Reply-To: <56DF6755.3080402@proximus.be> (Johan Sagaert's message of "Wed, 
+ 9 Mar 2016 00:59:17 +0100")
+References: <56DF6755.3080402@proximus.be>
+Message-ID: <871t7k41b9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Johan" == Johan Sagaert <sagaert.johan@proximus.be> writes:
 
-On Tue, Mar 08, 2016 at 09:20:40PM +0100, Yann E. MORIN wrote:
-> On 2016-03-06 22:03 +0200, Alan Yaniger spake thusly:
-> > Signed-off-by: Alan Yaniger <alan@tkos.co.il>
-> 
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Hi
+ > Applying 0001-logo.patch using patch:
+ > patch: **** Only garbage was found in the patch input.
+ > Patch failed!  Please fix 0001-logo.patch!
 
-This patch is marked 'Superseded' in patchwork already. The updated patch is 
-at http://patchwork.ozlabs.org/patch/592587/.
+ > I always use  git format patch to create patches  to use them
+ > as usual in buildroot.
+ > The modified files where image files, so this yields a binary patch.
 
-baruch
+ > It looks like patch does not understand the binary format that git
+ > format patch creates.
 
-> >  docs/manual/makedev-syntax.txt | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/docs/manual/makedev-syntax.txt b/docs/manual/makedev-syntax.txt
-> > index 0bbc16e..e4dffc9 100644
-> > --- a/docs/manual/makedev-syntax.txt
-> > +++ b/docs/manual/makedev-syntax.txt
-> > @@ -44,7 +44,7 @@ this syntax, you will need to write:
-> >  ----
-> >  /usr/bin/foo f 755 0 0 - - - - -
-> >  /usr/bin/bar f 755 root root - - - - -
-> > -/data/buz f buz-user buz-group - - - - -
-> > +/data/buz f 644 buz-user buz-group - - - - -
-> >  ----
-> >  
-> >  Alternatively, if you want to change owner/permission of a directory
+Indeed, gnu patch afaik doesn't support the binary git diff format.
+
+ > Is there any workaround this or do i have to revert to the old diff
+ > method for making patches
+ > of non text files ?
+
+Is this patch really something that is needed to fix a build issue of
+the package? From the file name it more sounds like som project specific
+customization of the rootfs. If that is so, why not just include the
+image in your rootfs overlay?
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Bye, Peter Korsgaard
