@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Mar 2016 00:15:52 +0100
-Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
- or $(O) are not absolute canonical path
-In-Reply-To: <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+Date: Thu, 10 Mar 2016 00:20:05 +0100
+Subject: [Buildroot] [PATCH v7 04/18] core: staging symlink uses a
+ relative path when possible
+In-Reply-To: <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160309231552.GE5634@free.fr>
+ <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160309232005.GF5634@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,90 +15,68 @@ To: buildroot@busybox.net
 Samuel, All,
 
 On 2016-03-09 23:58 +0100, Samuel Martin spake thusly:
-> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
-> they can be resolved differently, depending on each package build-system
-> (whether it uses the given paths or get the absolute canonical ones).
+> This change turns the staging/ symlink to a relative one when
+> $(STAGING_DIR) points to some location in the Buildroot's output
+> directory (i.e.: in $(BASE_DIR)/).
 > 
-> Thus, to make easier tracking down host machine paths leaking into the
-> host, target or staging trees, the CURDIR and O variables are set to
-> their absolute canonical paths.
+> In any other case, the symlink target remains the absolute path
+> to the sysroot location.
 > 
-> Note that this change takes care of the makefile wrapper installed in
-> $(O) to avoid unneeded make recursion.
+> This slight change is a step forward toward a relocatable SDK.
 > 
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 > 
 > ---
 > changes v6->v7:
-> - none
+> - improve commit log (ThomasP)
 > 
 > changes v5->v6:
-> - new patch
+> - no changes
+> 
+> changes v4->v5:
+> - add support when BR2_HOST_DIR is set somewhere out of BASE_DIR
+> 
+> changes v3->v4:
+> - no change
+> 
+> changes v2->v3:
+> - no change
 > ---
->  Makefile | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
+>  Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/Makefile b/Makefile
-> index 98c8dc7..52a92f6 100644
+> index 52a92f6..f1de4ed 100644
 > --- a/Makefile
 > +++ b/Makefile
-> @@ -26,16 +26,30 @@
->  
->  # Trick for always running with a fixed umask
->  UMASK = 0022
-> -ifneq ($(shell umask),$(UMASK))
-> +
-> +# Check if we need to re-enter make for one or several of the following reasons:
-> +# 1- Wrong (too restrictive) umask:
-> +#    This prevents Buildroot and packages from creating files and directories.
-> +# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
-> +#    This makes harder tracking and fixing host machine path leaks.
-> +# 3- Output location (i.e. $(O)) not being the absolute canonical path:
-> +#    This makes harder tracking and fixing host machine path leaks.
-> +#
-> +# Note:
-> +# - remove the trailing '/.' from $(O) as it can be added by the makefile
-> +#   wrapper installed in the $(O).
-> +ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
+> @@ -518,7 +518,11 @@ $(BUILD_DIR) $(TARGET_DIR) $(HOST_DIR) $(BINARIES_DIR) $(LEGAL_INFO_DIR) $(REDIS
+>  # Populating the staging with the base directories is handled by the skeleton package
+>  $(STAGING_DIR):
+>  	@mkdir -p $(STAGING_DIR)
+> +ifeq ($(BASE_DIR)/host/$(STAGING_SUBDIR),$(STAGING_DIR))
 
-This is a bit difficult to parse. What about setting intermediate
-variables, like so:
+I'm not too fond of this. Here, you duplicate the logic used to set
+STAGING_DIR, with the assumption that it is a sucbset of host/ . This is
+indeed true, but I don;t like duplicating the logic.
 
-    CUR_UMASK := $(shell umask)
-    REAL_CURDIR := $(realpath $(CURDIR))
-    O := $(patsubst %/.,%,$(O))
-    REAL_O := $(realpath $(O))
+What about:
 
-    ifneq ($(CUR_UMASK):$(CURDIR):$(O),$(UMASK):$(REAL_CURDIR):$(REAL_O))
-
->  .PHONY: _all $(MAKECMDGOALS)
->  
->  $(MAKECMDGOALS): _all
->  	@:
->  
->  _all:
-> -	@umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
-> +	umask $(UMASK) && \
-
-Please keep the command silent, do not remove the leading @
+    ifeq ($(patsubst $(BASE_DIR)/%,%,$(STAGING_DIR)),$(STAGING_DIR))
+    # Not a subdir, absolute symlink
+    else
+    # A subdir, relative symlink
+    endif
 
 Regards,
 Yann E. MORIN.
 
-> +		$(MAKE) -C $(realpath $(CURDIR)) --no-print-directory \
-> +			$(MAKECMDGOALS) O=$(realpath $(O))
+> +	@ln -snf host/$(STAGING_SUBDIR) $(BASE_DIR)/staging
+> +else
+>  	@ln -snf $(STAGING_DIR) $(BASE_DIR)/staging
+> +endif
 >  
-> -else # umask
-> +else # umask / $(CURDIR) / $(O)
->  
->  # This is our default rule, so must come first
->  all:
-> @@ -1007,4 +1021,4 @@ include docs/manual/manual.mk
->  
->  .PHONY: $(noconfig_targets)
->  
-> -endif #umask
-> +endif #umask / $(CURDIR) / $(O)
+>  RSYNC_VCS_EXCLUSIONS = \
+>  	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
 > -- 
 > 2.7.2
 > 
