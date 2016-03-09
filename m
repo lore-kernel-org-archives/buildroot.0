@@ -1,39 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 16:51:44 -0300
-Subject: [Buildroot] [PATCH] nasm: bump to version 2.12
-Message-ID: <1457553104-5652-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed,  9 Mar 2016 16:55:50 -0300
+Subject: [Buildroot] [PATCH] yasm: style and whitespace cleanup
+Message-ID: <1457553350-12363-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use $(SED) instead of sed.
+Kill trailing whitespace in comment, and move it above the define as per
+standard look.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/nasm/nasm.hash | 2 +-
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/yasm/yasm.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index c693f52..ec64ae0 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	c99467c7072211c550d147640d8a1a0aa4d636d4d8cf849f3bf4317d900a1f7f	nasm-2.11.08.tar.xz
-+sha256	f34cc1e984ed619b8f9e96cea632e3c6fdea5e039069dbcb63397b7bd004f5a8	nasm-2.12.tar.xz
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index c70557f..3331d65 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
+index bf8a481..6729b6a 100644
+--- a/package/yasm/yasm.mk
++++ b/package/yasm/yasm.mk
+@@ -7,10 +7,10 @@
+ YASM_VERSION = 1.3.0
+ YASM_SITE = http://www.tortall.net/projects/yasm/releases
  
--NASM_VERSION = 2.11.08
-+NASM_VERSION = 2.12
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2c
++# This sed prevents it compiling 2 programs (vsyasm and ytasm)
++# that are only of use on Microsoft Windows.
+ define YASM_PRE_CONFIGURE_FIXUP
+-# This sed prevents it compiling 2 programs (vsyasm and ytasm) 
+-# that are only of use on Microsoft Windows. 
+-	sed -i 's#) ytasm.*#)#' $(@D)/Makefile.in
++	$(SED) 's#) ytasm.*#)#' $(@D)/Makefile.in
+ endef
+ 
+ YASM_PRE_CONFIGURE_HOOKS += YASM_PRE_CONFIGURE_FIXUP
 -- 
 2.4.10
