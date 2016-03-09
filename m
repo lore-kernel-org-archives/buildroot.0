@@ -1,68 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  9 Mar 2016 23:22:20 +0100
-Subject: [Buildroot] [PATCH 1/8] core: add the possibility to provide help
-	for local, custom rules
+Date: Wed,  9 Mar 2016 23:22:21 +0100
+Subject: [Buildroot] [PATCH 2/8] core/pkg-utils: add a macro to pretty-print
+	a help entry
 In-Reply-To: <cover.1457561521.git.yann.morin.1998@free.fr>
 References: <cover.1457561521.git.yann.morin.1998@free.fr>
-Message-ID: <bfe81981928f750dacb4df568ff7e7a1fdd88790.1457561521.git.yann.morin.1998@free.fr>
+Message-ID: <3c47341f237bad2ed0c674c2ffe1def03a2bdb64.1457561521.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When using a br2-external tree, it is possible (as stated in our manual)
-to implement whatever arbitrary extra make rules (such as flashing a
-board, or extracting the rootfs in an NFS export...). Some of those
-extra rules might be exposed to the user as new entry points that the
-user can call by itself.
+To ensure that all the help entries we display are all formatted the
+same, we currently indent the help texts manually.
 
-However, there is no way for the br2-external to advertise those new
-rules in the help text.
+Also, when a br2-external tree wants to display local custom help, they
+have to rely on a hard-coded layout (if they want to match our iwn
+output, which is not mandatory).
 
-We add the possibility to do so, by adding a new make rule, called
-help-local, advertised in our own help info.
-
-It is up to the br2-external tree to provide whatever help text is
-deemed necessary.
-
-Note that we need to provide an empty, dummy help-local' rule, since it
-is always advertised. Since this rule is empty, make gently reports that
-there is "Nothing to be done for `help-local'", which is pretty well
-fitting when help-local was not provided (either because there's no
-br2-external tree, or when the br2-external tree does not provide it.
+Add a macro to pretty-print make rules in the help texts.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: J?r?me Pouiller <jezz@sysmic.org>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- Makefile | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/pkg-utils.mk | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index f2822a2..d24793b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -966,6 +966,7 @@ endif
- 	@echo '  source-check           - check selected packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
-+	@echo '  help-local             - print help about local, custom actions (if any)'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
-@@ -974,6 +975,11 @@ endif
- 	@echo 'it on-line at http://buildroot.org/docs.html'
- 	@echo
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index f88313a..873dbec 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -104,6 +104,19 @@ define sep
  
-+# This rule does nothing, it is expected to be overloaded by
-+# a br2-external tree or a local.mk . However, it must exist,
-+# as we reference it in the main help, above.
-+help-local:
+ endef
+ 
++# Pretty-print a make rule in the help text
++#
++# $(1): a list of double- or single-quoted string representing the rule
++#       and their help text, formatted as:  "action : help for action"
++#       'action' should be less than 22 characters, otherwise the help
++#       text will not be correctly indented.
++#
++define HELP_RULE
++	for h in $(1); do \
++		printf "  %-22s - %s\n" "$${h%% : *}" "$${h#* : }"; \
++	done
++endef
 +
- list-defconfigs:
- 	@echo 'Built-in configs:'
- 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
+ # check-deprecated-variable -- throw an error on deprecated variables
+ # example:
+ #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
 -- 
 1.9.1
