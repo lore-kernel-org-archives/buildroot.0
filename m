@@ -1,29 +1,48 @@
-From: Johan Sagaert <sagaert.johan@proximus.be>
-Date: Wed, 9 Mar 2016 00:59:17 +0100
-Subject: [Buildroot] patch: **** Only garbage was found in the patch input.
-Message-ID: <56DF6755.3080402@proximus.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  9 Mar 2016 01:00:20 +0100
+Subject: [Buildroot] [PATCH 3/3] package/binutils: use our missing script to
+	disable the doc
+In-Reply-To: <1457481620-9607-1-git-send-email-romain.naour@gmail.com>
+References: <1457481620-9607-1-git-send-email-romain.naour@gmail.com>
+Message-ID: <1457481620-9607-3-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Like for gdb, use our 'missing' script to workaround a build issue when makeinfo
+is missing on the host.
 
-Applying 0001-logo.patch using patch:
-patch: **** Only garbage was found in the patch input.
-Patch failed!  Please fix 0001-logo.patch!
+This fixes the issue with binutils >= 2.26.
 
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/binutils/binutils.mk | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-I always use  git format patch to create patches  to use them
-as usual in buildroot.
-The modified files where image files, so this yields a binary patch.
-
-It looks like patch does not understand the binary format that git 
-format patch creates.
-
-Is there any workaround this or do i have to revert to the old diff 
-method for making patches
-of non text files ?
-
-Regards Johan
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 0f75c1d..7eb3002 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -52,9 +52,15 @@ BINUTILS_CONF_OPTS = \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+ 
+ # Don't build documentation. It takes up extra space / build time,
+-# and sometimes needs specific makeinfo versions to work
+-BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+-HOST_BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
++# and sometimes needs specific makeinfo versions to work.
++# Since binutils use an updated version of the 'missing' script from
++# automake >= v1.12b, use our customized version.
++BINUTILS_CONF_OPTS += MAKEINFO="$(TOPDIR)/support/scripts/missing makeinfo"
++BINUTILS_MAKE_OPTS += MAKEINFO="$(TOPDIR)/support/scripts/missing makeinfo"
++BINUTILS_INSTALL_OPTS += MAKEINFO="$(TOPDIR)/support/scripts/missing makeinfo"
++HOST_BINUTILS_CONF_OPTS += MAKEINFO="$(TOPDIR)/support/scripts/missing makeinfo"
++HOST_BINUTILS_MAKE_OPTS += MAKEINFO="$(TOPDIR)/support/scripts/missing makeinfo"
++HOST_BINUTILS_INSTALL_OPTS += MAKEINFO="$(TOPDIR)/support/scripts/missing makeinfo"
+ 
+ # Install binutils after busybox to prefer full-blown utilities
+ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-- 
+2.5.0
