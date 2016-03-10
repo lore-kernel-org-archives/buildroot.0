@@ -1,35 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 23:00:42 +0100
-Subject: [Buildroot] [PATCH] busybox: use md5 as default password
-	algorithm
-In-Reply-To: <56E1D309.3030602@zacarias.com.ar> (Gustavo Zacarias's message of
- "Thu, 10 Mar 2016 17:03:21 -0300")
-References: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
- <871t7im7ah.fsf@dell.be.48ers.dk> <56E1D309.3030602@zacarias.com.ar>
-Message-ID: <87pov2j8mt.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 23:08:13 +0100
+Subject: [Buildroot] [PATCH 2/2] binutils: switch to version 2.25 by
+	default
+In-Reply-To: <1457276783-27985-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Sun, 6 Mar 2016 16:06:23 +0100")
+References: <1457276783-27985-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1457276783-27985-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87lh5qj8aa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > On 10/03/16 17:01, Peter Korsgaard wrote:
- >> So this is what is used when you change password through the busybox
- >> passwd applet or create a new user, right?
- >> 
- >> Shouldn't we instead tweak this based on BR2_TARGET_GENERIC_PASSWD_*?
+ > binutils 2.26 has been released, it is time to switch to 2.25 as the
+ > default version.
 
- > Yes.
- > This is the lowest-common which is guaranteed to work on all
- > scenarios, once we decide/switch to sha256 as default we can update it
- > here, but i wouldn't defer this until then.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Ehh, yes - But if you have enabled E.G BR2_TARGET_GENERIC_PASSWD_SHA512
-then that is what the busybox passwd applet should use. Having it do md5
-instead of des is still wrong.
+Committed, thanks.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
