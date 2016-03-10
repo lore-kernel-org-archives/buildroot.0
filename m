@@ -1,40 +1,75 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  9 Mar 2016 22:06:51 -0300
-Subject: [Buildroot] [PATCH] connman: switch to BR2_TOOLCHAIN_HAS_SYNC_4
-Message-ID: <1457572011-2749-1-git-send-email-gustavo@zacarias.com.ar>
+From: Ben Boeckel <mathstuf@gmail.com>
+Date: Wed,  9 Mar 2016 21:38:40 -0500
+Subject: [Buildroot] [PATCH v2 1/1] taskd: new package
+In-Reply-To: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
+References: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
+Message-ID: <1457577520-11211-1-git-send-email-mathstuf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to BR2_TOOLCHAIN_HAS_SYNC_4 from BR2_sparc conditional since it's
-the correct one.
+Taskwarrior is a task management suite of tools. Taskd is the
+synchronization server for it.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
 ---
- package/connman/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in       |  1 +
+ package/taskd/Config.in | 11 +++++++++++
+ package/taskd/taskd.mk  | 14 ++++++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/taskd/Config.in
+ create mode 100644 package/taskd/taskd.mk
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 270938e..f723a31 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_CONNMAN
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus, libglib2
- 	depends on !BR2_STATIC_LIBS # needs dlopen()
--	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  The Connection Manager (ConnMan) project provides a daemon
- 	  for managing internet connections within embedded devices
-@@ -68,5 +68,5 @@ endif # BR2_PACKAGE_CONNMAN
- 
- comment "connman needs a toolchain w/ wchar, threads, resolver, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_sparc
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/Config.in b/package/Config.in
+index d916154..35a24ba 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1489,6 +1489,7 @@ endif
+ 	source "package/sshpass/Config.in"
+ 	source "package/strongswan/Config.in"
+ 	source "package/stunnel/Config.in"
++	source "package/taskd/Config.in"
+ 	source "package/tcpdump/Config.in"
+ 	source "package/tcping/Config.in"
+ 	source "package/tcpreplay/Config.in"
+diff --git a/package/taskd/Config.in b/package/taskd/Config.in
+new file mode 100644
+index 0000000..5b357f5
+--- /dev/null
++++ b/package/taskd/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_TASKD
++	bool "taskd"
++	select BR2_PACKAGE_GNUTLS
++	select BR2_USE_MMU
++	select BR2_USE_WCHAR
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	help
++	  Task management synchronization daemon.
++
++	  http://taskwarrior.org/
+diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
+new file mode 100644
+index 0000000..0bdf81d
+--- /dev/null
++++ b/package/taskd/taskd.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# taskd
++#
++################################################################################
++
++TASKD_VERSION = 1.1.0
++TASKD_SOURCE = taskd-$(TASKD_VERSION).tar.gz
++TASKD_SITE = http://taskwarrior.org/download
++TASKD_LICENSE = MIT
++TASKD_LICENSE_FILES = COPYING LICENSE
++TASKD_DEPENDENCIES = gnutls util-linux
++
++$(eval $(cmake-package))
 -- 
-2.4.10
+2.7.2
