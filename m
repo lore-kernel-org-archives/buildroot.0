@@ -1,31 +1,23 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 10 Mar 2016 13:40:55 +0000
-Subject: [Buildroot] [Bug 8781] Unable to build uboot for imx28evk
-In-Reply-To: <bug-8781-163@https.bugs.busybox.net/>
-References: <bug-8781-163@https.bugs.busybox.net/>
-Message-ID: <bug-8781-163-tiAQKEo10g@https.bugs.busybox.net/>
+Date: Thu, 10 Mar 2016 13:53:30 +0000
+Subject: [Buildroot] [Bug 8751] make fail
+In-Reply-To: <bug-8751-163@https.bugs.busybox.net/>
+References: <bug-8751-163@https.bugs.busybox.net/>
+Message-ID: <bug-8751-163-cUVYF5Oh5i@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8781
+https://bugs.busybox.net/show_bug.cgi?id=8751
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Did you do a "make clean" before doing "make freescale_imx28evk_defconfig" ?
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+If all you need is gdb, why do you enable fio in your configuration, which is
+completely unrelated?
 
-Please make sure you do:
-
- 1/ make clean
- 2/ make freescale_imx28evk_defconfig
- 3/ make
-
-And attach the complete log of those commands.
-
-FWIW, this defconfig was built yesterday by our Travis CI tests, and it built
-fine, see:
-https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/114650772.
+fio indeed doesn't build for SuperH, I think we are simply going to disallow
+the selection of fio on SuperH.
 
 -- 
 You are receiving this mail because:
