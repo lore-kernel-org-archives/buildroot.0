@@ -1,89 +1,96 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Mar 2016 11:52:36 -0300
-Subject: [Buildroot] [PATCH 1/2] libglib2: improve dev file handling
-Message-ID: <1457621557-23336-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 10 Mar 2016 11:52:37 -0300
+Subject: [Buildroot] [PATCH 2/2] connman-gtk: new package
+In-Reply-To: <1457621557-23336-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457621557-23336-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1457621557-23336-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove source schema files from target
-(/usr/share/glib-2.0/schemas/*.dtd and *.xml) at target finalization
-time.
-This is because other packages install schemas as well to avoid
-duplicating file removal efforts all around.
-
-Add a schema compiler run on target finalization as well - we previously
-didn't do this since not many packages use it, however the upcoming
-connman-gtk package does require a valid gschemas.compiled to work
-properly.
-We also do this at target finalization to avoid each package handling
-this on their own.
-
-Purge some extra binaries and files from the target, like the schema
-compiler to save additional space since they're unused at run time.
+It was added to the networking category close to connman for the ability
+to tweak connman features without going around (i.e. add support for
+wifi and so on).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libglib2/libglib2.mk | 37 +++++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 8 deletions(-)
+ package/Config.in                    |  1 +
+ package/connman-gtk/Config.in        | 20 ++++++++++++++++++++
+ package/connman-gtk/connman-gtk.hash |  2 ++
+ package/connman-gtk/connman-gtk.mk   | 15 +++++++++++++++
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/connman-gtk/Config.in
+ create mode 100644 package/connman-gtk/connman-gtk.hash
+ create mode 100644 package/connman-gtk/connman-gtk.mk
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index ea45f4a..09cdd87 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -126,22 +126,43 @@ else
- LIBGLIB2_CONF_OPTS += --with-pcre=internal
- endif
- 
-+# Purge gdb-related files
-+ifneq ($(BR2_PACKAGE_GDB),y)
-+define LIBGLIB2_REMOVE_GDB_FILES
-+	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
-+endef
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index 24be023..251f73b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1346,6 +1346,7 @@ menu "Networking applications"
+ 	source "package/chrony/Config.in"
+ 	source "package/civetweb/Config.in"
+ 	source "package/connman/Config.in"
++	source "package/connman-gtk/Config.in"
+ 	source "package/conntrack-tools/Config.in"
+ 	source "package/crda/Config.in"
+ 	source "package/ctorrent/Config.in"
+diff --git a/package/connman-gtk/Config.in b/package/connman-gtk/Config.in
+new file mode 100644
+index 0000000..c7857d0
+--- /dev/null
++++ b/package/connman-gtk/Config.in
+@@ -0,0 +1,20 @@
++comment "connman-gtk needs libgtk3 and a toolchain w/ wchar, threads, resolver, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS || !BR2_PACKAGE_LIBGTK3
 +
-+# Purge useless binaries from target
- define LIBGLIB2_REMOVE_DEV_FILES
- 	rm -rf $(TARGET_DIR)/usr/lib/glib-2.0
--	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gettext
--	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
--	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
-+	rm -rf $(addprefix $(TARGET_DIR)/usr/share/glib-2.0/,codegen gettext)
-+	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-compile-schemas glib-compile-resources glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
-+	$(LIBGLIB2_REMOVE_GDB_FILES)
- endef
- 
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
- 
--define LIBGLIB2_REMOVE_GDB_FILES
--	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
--	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
-+# Remove schema sources/DTDs, we use staging ones to compile them.
-+# Do so at target finalization since other packages install additional
-+# ones and we want to deal with it in a single place.
-+define LIBGLIB2_REMOVE_TARGET_SCHEMAS
-+	rm -f $(TARGET_DIR)/usr/share/glib-2.0/schemas/*.xml \
-+		$(TARGET_DIR)/usr/share/glib-2.0/schemas/*.dtd
- endef
- 
--ifneq ($(BR2_PACKAGE_GDB),y)
--LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_GDB_FILES
-+# Compile schemas at target finalization since other packages install
-+# them as well, and better do it in a central place.
-+# It's used at run time so it doesn't matter defering it.
-+define LIBGLIB2_COMPILE_SCHEMAS
-+	$(HOST_DIR)/usr/bin/glib-compile-schemas \
-+		$(STAGING_DIR)/usr/share/glib-2.0/schemas \
-+		--targetdir=$(TARGET_DIR)/usr/share/glib-2.0/schemas
-+endef
++config BR2_PACKAGE_CONNMAN_GTK
++	bool "connman-gtk"
++	depends on BR2_USE_WCHAR # libglib2, connman
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, connman
++	depends on BR2_USE_MMU # libglib2
++	depends on !BR2_STATIC_LIBS # connman
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # connman
++	depends on BR2_PACKAGE_LIBGTK3
++	select BR2_PACKAGE_CONNMAN
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  GTK GUI for ConnMan.
 +
-+ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
-+TARGET_FINALIZE_HOOKS += LIBGLIB2_REMOVE_TARGET_SCHEMAS
-+TARGET_FINALIZE_HOOKS += LIBGLIB2_COMPILE_SCHEMAS
- endif
- 
- $(eval $(autotools-package))
++	  https://github.com/jgke/connman-gtk
+diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
+new file mode 100644
+index 0000000..034064e
+--- /dev/null
++++ b/package/connman-gtk/connman-gtk.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	9e9008d40ada97aa20d627b7ad966e9a2ae69afcae3971b1b29a225cf7110e27	connman-gtk-1.1.tar.bz2
+diff --git a/package/connman-gtk/connman-gtk.mk b/package/connman-gtk/connman-gtk.mk
+new file mode 100644
+index 0000000..570c3c8
+--- /dev/null
++++ b/package/connman-gtk/connman-gtk.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# connman-gtk
++#
++################################################################################
++
++CONNMAN_GTK_VERSION = 1.1
++CONNMAN_GTK_SITE = https://github.com/jgke/connman-gtk/releases/download/v$(CONNMAN_GTK_VERSION)
++CONNMAN_GTK_SOURCE = connman-gtk-$(CONNMAN_GTK_VERSION).tar.bz2
++CONNMAN_GTK_INSTALL_STAGING = YES
++CONNMAN_GTK_DEPENDENCIES = host-intltool connman libglib2 libgtk3
++CONNMAN_GTK_LICENSE = GPLv2+
++CONNMAN_GTK_LICENSE_FILES = COPYING
++
++$(eval $(autotools-package))
 -- 
 2.4.10
