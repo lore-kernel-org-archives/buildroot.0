@@ -1,94 +1,81 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Mar 2016 01:07:18 +0100
-Subject: [Buildroot] [PATCH v7 05/18] core: make staging *-config
- scripts relocatable
-In-Reply-To: <20160309232438.GG5634@free.fr>
+Date: Thu, 10 Mar 2016 01:12:33 +0100
+Subject: [Buildroot] [PATCH v7 06/18] core: make host *-config scripts
+ relocatable
+In-Reply-To: <1457564339-27294-7-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-6-git-send-email-s.martin49@gmail.com>
- <20160309232438.GG5634@free.fr>
-Message-ID: <56E0BAB6.1030707@mind.be>
+ <1457564339-27294-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <56E0BBF1.8020604@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/16 00:24, Yann E. MORIN wrote:
-> Samuel, All,
+On 03/09/16 23:58, Samuel Martin wrote:
+> This change adjusts the _CONFIG_SCRIPTS hook to set add {exec_,}prefix computed
+> relatively to the script location.
 >
-> On 2016-03-09 23:58 +0100, Samuel Martin spake thusly:
->> This change adjusts the _CONFIG_SCRIPTS hook to set add {exec_,}prefix computed
->> relatively to the script location.
->>
->> This patch hook only fixes *-config scripts located in the staging area,
->> the target ones are already removed. A follow-up change will fix those
->> from the HOST_DIR location.
->>
->> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->>
->> ---
->> changes v6->v7:
->> - none
->>
->> changes v5->v6:
->> - new patch
->> ---
->>   package/pkg-generic.mk | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 3904c09..ffa21ee 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -240,7 +240,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
->>   		$(call MESSAGE,"Fixing package configuration files") ;\
->>   			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
->>   				-e "s,$(STAGING_DIR), at STAGING_DIR@,g" \
->> -				-e "s,^\(exec_\)\?prefix=.*,\1prefix=@STAGING_DIR@/usr,g" \
->> +				-e "s,^\(exec_\)\?prefix=.*,\1prefix=\`dirname \$$0\`/../../usr,g" \
+> This patch only fixes *-config scripts located in the host area, those
+> from the target and staging area are already handled.
 >
-> I'd prefer we use the $() form when calling subshells:
->
->      -e "s,^\(exec_\)\?prefix=.*,\1prefix=$$(dirname \$$0)/../../usr,g"
-                                             ^ missing \ here
+> This hook is a kind of brute-force sed on all files matching '*-config'
+> in the $(HOST_DIR)/usr/bin directory. This allows correctly handle
+> script whose name may depends on the host system, not the target
+> configuration (e.g. ncurses can be configured for the target to be
+> ncurses6w, so ncurses6w-config ; whereas for the host it will be
+> ncurses5, so ncurses5-config).
+> Since there way less host packages than target ones, it is reasonable to
+> assume that processing all *-config scripts found when a host package
+> (whose target package set the *_CONFIG_SCRIPTS variable) is fairly short
+> and does not add its overhead not even noticeable.
 
->
-> I know we switched to using `` in some locations, but that was because
-> those locations may be called with various levels of $(eval), and that
-> would cause $$() to be evaluated too early in some situations.
-
-  But we like things to be consistent, so I'd stick to `.
-
-  OTOH, this particular bit is not going to be expanded by the shell, but is 
-actually inserted into the script. So perhaps we don't _want_ to be consistent here.
-
-  But like Yann says, it's not so important.
+  I don't agree with this on the principle that we like to handle things 
+explicitly, rather than having some automagic stuff that is hard to pinpoint. So 
+I think we should just set the appropriate HOST_*_CONFIG_SCRIPTS variables. To 
+alleviate the situation, we could add a ?= in generic-package, so only the cases 
+where the host script deviates from the target script (or where there is no 
+target package) have to be handled. Probably just ncurses.
 
   Regards,
   Arnout
 
-
 >
-> However, here we are in a real rule, so there's no such ambiguity.
+> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >
-> But I won't block it just for that. I you agree with my proposed change,
-> that's OK; if you don't, that's OK too:
+> ---
+> changes v6->v7:
+> - none
 >
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> changes v5->v6:
+> - new patch
+> ---
+>   package/pkg-generic.mk | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 >
-> Regards,
-> Yann E. MORIN.
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index ffa21ee..845c8d3 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -207,6 +207,18 @@ $(BUILD_DIR)/%/.stamp_host_installed:
+>   	$(foreach hook,$($(PKG)_PRE_INSTALL_HOOKS),$(call $(hook))$(sep))
+>   	+$($(PKG)_INSTALL_CMDS)
+>   	$(foreach hook,$($(PKG)_POST_INSTALL_HOOKS),$(call $(hook))$(sep))
+> +	$(Q)if test -n "$($(RAWNAME)_CONFIG_SCRIPTS)" ; then \
+> +		$(call MESSAGE,"Fixing package configuration files") ;\
+> +			ls $(HOST_DIR)/usr/bin/*-config 2>/dev/null |\
+> +			xargs --no-run-if-empty \
+> +			$(SED)  "s,$(BASE_DIR), at BASE_DIR@,g" \
+> +				-e "s,$(HOST_DIR), at HOST_DIR@,g" \
+> +				-e "s,^\(exec_\)\?prefix=.*,\1prefix=\`dirname \$$0\`/../../usr,g" \
+> +				-e "s,-I/usr/,-I at HOST_DIR@/usr/,g" \
+> +				-e "s,-L/usr/,-L at HOST_DIR@/usr/,g" \
+> +				-e "s, at HOST_DIR@,$(HOST_DIR),g" \
+> +				-e "s, at BASE_DIR@,$(BASE_DIR),g" ;\
+> +	fi
+>   	@$(call step_end,install-host)
+>   	$(Q)touch $@
 >
->>   				-e "s,-I/usr/,-I at STAGING_DIR@/usr/,g" \
->>   				-e "s,-L/usr/,-L at STAGING_DIR@/usr/,g" \
->>   				-e "s, at STAGING_DIR@,$(STAGING_DIR),g" \
->> --
->> 2.7.2
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
