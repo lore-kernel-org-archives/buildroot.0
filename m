@@ -1,75 +1,295 @@
-From: Ben Boeckel <mathstuf@gmail.com>
-Date: Wed,  9 Mar 2016 21:38:40 -0500
-Subject: [Buildroot] [PATCH v2 1/1] taskd: new package
-In-Reply-To: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
-References: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
-Message-ID: <1457577520-11211-1-git-send-email-mathstuf@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 10 Mar 2016 07:31:50 +0300
+Subject: [Buildroot] [PATCH] gdb: backport xtensa NPTL support to 7.10.1
+Message-ID: <1457584310-20884-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Taskwarrior is a task management suite of tools. Taskd is the
-synchronization server for it.
+These changes allow debugging multithreaded NPTL xtensa applications and
+inspect TLS variables.
 
-Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+Backported from: 40045d91812b25c88c8275b8c08d27c234b68ba8
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/Config.in       |  1 +
- package/taskd/Config.in | 11 +++++++++++
- package/taskd/taskd.mk  | 14 ++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/taskd/Config.in
- create mode 100644 package/taskd/taskd.mk
+ .../0004-xtensa-implement-NPTL-helpers.patch       | 267 +++++++++++++++++++++
+ 1 file changed, 267 insertions(+)
+ create mode 100644 package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index d916154..35a24ba 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1489,6 +1489,7 @@ endif
- 	source "package/sshpass/Config.in"
- 	source "package/strongswan/Config.in"
- 	source "package/stunnel/Config.in"
-+	source "package/taskd/Config.in"
- 	source "package/tcpdump/Config.in"
- 	source "package/tcping/Config.in"
- 	source "package/tcpreplay/Config.in"
-diff --git a/package/taskd/Config.in b/package/taskd/Config.in
+diff --git a/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch b/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
 new file mode 100644
-index 0000000..5b357f5
+index 0000000..e7bc74e
 --- /dev/null
-+++ b/package/taskd/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_TASKD
-+	bool "taskd"
-+	select BR2_PACKAGE_GNUTLS
-+	select BR2_USE_MMU
-+	select BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	help
-+	  Task management synchronization daemon.
++++ b/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
+@@ -0,0 +1,267 @@
++From d4eb69fc4b50f9a0babd70b28d0601b40f31bd0f Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Thu, 2 Jul 2015 15:10:58 +0300
++Subject: [PATCH] xtensa: implement NPTL helpers
 +
-+	  http://taskwarrior.org/
-diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
-new file mode 100644
-index 0000000..0bdf81d
---- /dev/null
-+++ b/package/taskd/taskd.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# taskd
-+#
-+################################################################################
++These changes allow debugging multithreaded NPTL xtensa applications.
 +
-+TASKD_VERSION = 1.1.0
-+TASKD_SOURCE = taskd-$(TASKD_VERSION).tar.gz
-+TASKD_SITE = http://taskwarrior.org/download
-+TASKD_LICENSE = MIT
-+TASKD_LICENSE_FILES = COPYING LICENSE
-+TASKD_DEPENDENCIES = gnutls util-linux
++2015-08-20  Max Filippov  <jcmvbkbc@gmail.com>
++gdb/gdbserver/
++	* configure.srv (xtensa*-*-linux*): Add srv_linux_thread_db=yes.
++	* linux-xtensa-low.c (arch/xtensa.h gdb_proc_service.h): New
++	#includes.
++	(ps_get_thread_area): New function.
 +
-+$(eval $(cmake-package))
++2015-08-20  Max Filippov  <jcmvbkbc@gmail.com>
++gdb/
++	* arch/xtensa.h: New file.
++	* xtensa-linux-nat.c (gdb_proc_service.h): New #include.
++	(ps_get_thread_area): New function.
++	* xtensa-linux-tdep.c (xtensa_linux_init_abi): Add call to
++	set_gdbarch_fetch_tls_load_module_address to enable TLS support.
++	* xtensa-tdep.c (osabi.h): New #include.
++	(xtensa_gdbarch_init): Call gdbarch_init_osabi to register
++	xtensa-specific hooks.
++	* xtensa-tdep.h (struct xtensa_elf_gregset_t): Add threadptr
++	member and move the structure to arch/xtensa.h.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 40045d91812b25c88c8275b8c08d27c234b68ba8
++Changes to ChangeLog files are dropped.
++
++ gdb/arch/xtensa.h                | 46 ++++++++++++++++++++++++++++++++++++++++
++ gdb/gdbserver/configure.srv      |  1 +
++ gdb/gdbserver/linux-xtensa-low.c | 21 ++++++++++++++++++
++ gdb/xtensa-linux-nat.c           | 22 ++++++++++++++++++
++ gdb/xtensa-linux-tdep.c          |  4 ++++
++ gdb/xtensa-tdep.c                |  4 ++++
++ gdb/xtensa-tdep.h                | 24 ++------------------
++ 7 files changed, 100 insertions(+), 22 deletions(-)
++ create mode 100644 gdb/arch/xtensa.h
++
++diff --git a/gdb/arch/xtensa.h b/gdb/arch/xtensa.h
++new file mode 100644
++index 0000000..fe96584
++--- /dev/null
+++++ b/gdb/arch/xtensa.h
++@@ -0,0 +1,46 @@
+++/* Common Target-dependent code for the Xtensa port of GDB, the GNU debugger.
+++
+++   Copyright (C) 2003-2015 Free Software Foundation, Inc.
+++
+++   This file is part of GDB.
+++
+++   This program is free software; you can redistribute it and/or modify
+++   it under the terms of the GNU General Public License as published by
+++   the Free Software Foundation; either version 3 of the License, or
+++   (at your option) any later version.
+++
+++   This program is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++   GNU General Public License for more details.
+++
+++   You should have received a copy of the GNU General Public License
+++   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+++
+++#ifndef XTENSA_H
+++#define XTENSA_H
+++
+++/* Xtensa ELF core file register set representation ('.reg' section).
+++   Copied from target-side ELF header <xtensa/elf.h>.  */
+++
+++typedef uint32_t xtensa_elf_greg_t;
+++
+++typedef struct
+++{
+++  xtensa_elf_greg_t pc;
+++  xtensa_elf_greg_t ps;
+++  xtensa_elf_greg_t lbeg;
+++  xtensa_elf_greg_t lend;
+++  xtensa_elf_greg_t lcount;
+++  xtensa_elf_greg_t sar;
+++  xtensa_elf_greg_t windowstart;
+++  xtensa_elf_greg_t windowbase;
+++  xtensa_elf_greg_t threadptr;
+++  xtensa_elf_greg_t reserved[7+48];
+++  xtensa_elf_greg_t ar[64];
+++} xtensa_elf_gregset_t;
+++
+++#define XTENSA_ELF_NGREG (sizeof (xtensa_elf_gregset_t) \
+++			  / sizeof (xtensa_elf_greg_t))
+++
+++#endif
++diff --git a/gdb/gdbserver/configure.srv b/gdb/gdbserver/configure.srv
++index 0b18d1d..320c26a 100644
++--- a/gdb/gdbserver/configure.srv
+++++ b/gdb/gdbserver/configure.srv
++@@ -352,6 +352,7 @@ case "${target}" in
++   xtensa*-*-linux*)	srv_regobj=reg-xtensa.o
++ 			srv_tgtobj="$srv_linux_obj linux-xtensa-low.o"
++ 			srv_linux_regsets=yes
+++			srv_linux_thread_db=yes
++ 			;;
++   tilegx-*-linux*)	srv_regobj=reg-tilegx.o
++ 			srv_regobj="${srv_regobj} reg-tilegx32.o"
++diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
++index 4daccee..debe467 100644
++--- a/gdb/gdbserver/linux-xtensa-low.c
+++++ b/gdb/gdbserver/linux-xtensa-low.c
++@@ -26,6 +26,8 @@ extern const struct target_desc *tdesc_xtensa;
++ 
++ #include <asm/ptrace.h>
++ #include <xtensa-config.h>
+++#include "arch/xtensa.h"
+++#include "gdb_proc_service.h"
++ 
++ #include "xtensa-xtregs.c"
++ 
++@@ -179,6 +181,25 @@ xtensa_breakpoint_at (CORE_ADDR where)
++ 		  xtensa_breakpoint, xtensa_breakpoint_len) == 0;
++ }
++ 
+++/* Called by libthread_db.  */
+++
+++ps_err_e
+++ps_get_thread_area (const struct ps_prochandle *ph,
+++                    lwpid_t lwpid, int idx, void **base)
+++{
+++  xtensa_elf_gregset_t regs;
+++
+++  if (ptrace (PTRACE_GETREGS, lwpid, NULL, &regs) != 0)
+++    return PS_ERR;
+++
+++  /* IDX is the bias from the thread pointer to the beginning of the
+++     thread descriptor.  It has to be subtracted due to implementation
+++     quirks in libthread_db.  */
+++  *base = (void *) ((char *) regs.threadptr - idx);
+++
+++  return PS_OK;
+++}
+++
++ static struct regsets_info xtensa_regsets_info =
++   {
++     xtensa_regsets, /* regsets */
++diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
++index 77ad3e0..5538d5b 100644
++--- a/gdb/xtensa-linux-nat.c
+++++ b/gdb/xtensa-linux-nat.c
++@@ -37,6 +37,9 @@
++ #include "gregset.h"
++ #include "xtensa-tdep.h"
++ 
+++/* Defines ps_err_e, struct ps_prochandle.  */
+++#include "gdb_proc_service.h"
+++
++ /* Extended register set depends on hardware configs.
++    Keeping these definitions separately allows to introduce
++    hardware-specific overlays.  */
++@@ -280,6 +283,25 @@ xtensa_linux_store_inferior_registers (struct target_ops *ops,
++     store_xtregs (regcache, regnum);
++ }
++ 
+++/* Called by libthread_db.  */
+++
+++ps_err_e
+++ps_get_thread_area (const struct ps_prochandle *ph,
+++                    lwpid_t lwpid, int idx, void **base)
+++{
+++  xtensa_elf_gregset_t regs;
+++
+++  if (ptrace (PTRACE_GETREGS, lwpid, NULL, &regs) != 0)
+++    return PS_ERR;
+++
+++  /* IDX is the bias from the thread pointer to the beginning of the
+++     thread descriptor.  It has to be subtracted due to implementation
+++     quirks in libthread_db.  */
+++  *base = (void *) ((char *) regs.threadptr - idx);
+++
+++  return PS_OK;
+++}
+++
++ void _initialize_xtensa_linux_nat (void);
++ 
++ void
++diff --git a/gdb/xtensa-linux-tdep.c b/gdb/xtensa-linux-tdep.c
++index 61ea9b0..99e0d3e 100644
++--- a/gdb/xtensa-linux-tdep.c
+++++ b/gdb/xtensa-linux-tdep.c
++@@ -106,6 +106,10 @@ xtensa_linux_init_abi (struct gdbarch_info info, struct gdbarch *gdbarch)
++ 				      xtensa_linux_gdb_signal_from_target);
++   set_gdbarch_gdb_signal_to_target (gdbarch,
++ 				    xtensa_linux_gdb_signal_to_target);
+++
+++  /* Enable TLS support.  */
+++  set_gdbarch_fetch_tls_load_module_address (gdbarch,
+++                                             svr4_fetch_objfile_link_map);
++ }
++ 
++ /* Provide a prototype to silence -Wmissing-prototypes.  */
++diff --git a/gdb/xtensa-tdep.c b/gdb/xtensa-tdep.c
++index 55e7d98..4b693ed 100644
++--- a/gdb/xtensa-tdep.c
+++++ b/gdb/xtensa-tdep.c
++@@ -28,6 +28,7 @@
++ #include "value.h"
++ #include "dis-asm.h"
++ #include "inferior.h"
+++#include "osabi.h"
++ #include "floatformat.h"
++ #include "regcache.h"
++ #include "reggroups.h"
++@@ -3273,6 +3274,9 @@ xtensa_gdbarch_init (struct gdbarch_info info, struct gdbarch_list *arches)
++   set_solib_svr4_fetch_link_map_offsets
++     (gdbarch, svr4_ilp32_fetch_link_map_offsets);
++ 
+++  /* Hook in the ABI-specific overrides, if they have been registered.  */
+++  gdbarch_init_osabi (info, gdbarch);
+++
++   return gdbarch;
++ }
++ 
++diff --git a/gdb/xtensa-tdep.h b/gdb/xtensa-tdep.h
++index caa2988..5b28cab 100644
++--- a/gdb/xtensa-tdep.h
+++++ b/gdb/xtensa-tdep.h
++@@ -18,6 +18,8 @@
++    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
++ 
++ 
+++#include "arch/xtensa.h"
+++
++ /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
++    whenever the "tdep" structure changes in an incompatible way.  */
++ 
++@@ -81,28 +83,6 @@ typedef enum
++ } xtensa_target_flags_t;
++ 
++ 
++-/* Xtensa ELF core file register set representation ('.reg' section).
++-   Copied from target-side ELF header <xtensa/elf.h>.  */
++-
++-typedef uint32_t xtensa_elf_greg_t;
++-
++-typedef struct
++-{
++-  xtensa_elf_greg_t pc;
++-  xtensa_elf_greg_t ps;
++-  xtensa_elf_greg_t lbeg;
++-  xtensa_elf_greg_t lend;
++-  xtensa_elf_greg_t lcount;
++-  xtensa_elf_greg_t sar;
++-  xtensa_elf_greg_t windowstart;
++-  xtensa_elf_greg_t windowbase;
++-  xtensa_elf_greg_t reserved[8+48];
++-  xtensa_elf_greg_t ar[64];
++-} xtensa_elf_gregset_t;
++-
++-#define XTENSA_ELF_NGREG (sizeof (xtensa_elf_gregset_t) \
++-			  / sizeof (xtensa_elf_greg_t))
++-
++ /*  Mask.  */
++ 
++ typedef struct 
++-- 
++1.8.1.4
++
 -- 
-2.7.2
+2.1.4
