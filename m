@@ -1,81 +1,110 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Mar 2016 21:20:34 +0100
-Subject: [Buildroot] [PATCH 0/8] core: allow for custom, local help;
- rearrange package-specific help (branch yem/help)
-In-Reply-To: <20160310093115.6ff24ea6@free-electrons.com>
+Date: Thu, 10 Mar 2016 21:22:57 +0100
+Subject: [Buildroot] [PATCH 1/8] core: add the possibility to provide
+ help for local, custom rules
+In-Reply-To: <56E0B355.2070309@mind.be>
 References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <56E0B327.70807@mind.be>
- <20160310093115.6ff24ea6@free-electrons.com>
-Message-ID: <20160310202033.GA3424@free.fr>
+ <bfe81981928f750dacb4df568ff7e7a1fdd88790.1457561521.git.yann.morin.1998@free.fr>
+ <56E0B355.2070309@mind.be>
+Message-ID: <20160310202257.GB3424@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Arnout, All,
 
-On 2016-03-10 09:31 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 10 Mar 2016 00:35:03 +0100, Arnout Vandecappelle wrote:
+On 2016-03-10 00:35 +0100, Arnout Vandecappelle spake thusly:
+> On 03/09/16 23:22, Yann E. MORIN wrote:
+> >When using a br2-external tree, it is possible (as stated in our manual)
+> >to implement whatever arbitrary extra make rules (such as flashing a
+> >board, or extracting the rootfs in an NFS export...). Some of those
+> >extra rules might be exposed to the user as new entry points that the
+> >user can call by itself.
+> >
+> >However, there is no way for the br2-external to advertise those new
+> >rules in the help text.
+> >
+> >We add the possibility to do so, by adding a new make rule, called
+> >help-local, advertised in our own help info.
+> >
+> >It is up to the br2-external tree to provide whatever help text is
+> >deemed necessary.
+> >
+> >Note that we need to provide an empty, dummy help-local' rule, since it
+> >is always advertised. Since this rule is empty, make gently reports that
+> >there is "Nothing to be done for `help-local'", which is pretty well
+> >fitting when help-local was not provided (either because there's no
+> >br2-external tree, or when the br2-external tree does not provide it.
+> >
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Cc: J?r?me Pouiller <jezz@sysmic.org>
+> >Cc: Arnout Vandecappelle <arnout@mind.be>
+> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >---
+> >  Makefile | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> >diff --git a/Makefile b/Makefile
+> >index f2822a2..d24793b 100644
+> >--- a/Makefile
+> >+++ b/Makefile
+> >@@ -966,6 +966,7 @@ endif
+> >  	@echo '  source-check           - check selected packages for valid download URLs'
+> >  	@echo '  external-deps          - list external packages used'
+> >  	@echo '  legal-info             - generate info about license compliance'
+> >+	@echo '  help-local             - print help about local, custom actions (if any)'
+> >  	@echo
+> >  	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+> >  	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+> >@@ -974,6 +975,11 @@ endif
+> >  	@echo 'it on-line at http://buildroot.org/docs.html'
+> >  	@echo
+> >
+> >+# This rule does nothing, it is expected to be overloaded by
+> >+# a br2-external tree or a local.mk . However, it must exist,
+> >+# as we reference it in the main help, above.
+> >+help-local:
 > 
-> > > After the first patch implements this (which is really all that is
-> > > needed to print custom help), we go further with providing a macro that
-> > > pretty-prints the help for rules, so that the layout is all handled in a
-> > > single location. This macro can also be used by the local help, too.
-> > 
-> >   This bit I really like!
+>  It's sufficient and better to do
 > 
-> Doesn't Yann proposal fails short if you want to pretty print something
-> like this:
-> 
-> 	foobar - This is a really really long help message that spans
-> 	         multiple lines, and would definitely be too long on
-> 	         one single line.
+> .PHONY: help-local
 
-Indeed, it was no longer possible with the patchset I posted (which was
-just hacked around quickly), but it's fixed locally.
+I tried (evenm before I submitted!) and it does not work. It still
+prints that there is nothing to do...
 
-> IOW, I believe we should leave more freedom to what is appended to the
-> help text, and simply leave it to the person writing the help text to
-> format it properly.
+Here's my test case:
 
-Well, the first patch in my series is just that: expost a new hel prule
-that the user is *entirely* free to implement on his own. The macro is
-just an added bonus.
+    $ cat Makefile
+    .PHONY: help
+    help:
 
-Basically, if all one wants is to display help for br2-external or other
-such customisations, then the first patch in my series was entirely
-sufficient. It is addressing my concenr about mixing our help with
-custom help.
-
-On the other hand, patches 2 onweard were addressing the second patch in
-J?r?me's series, which was moving packages' specific help into the
-corresponding packages. It has nothing to do with providing custom help,
-althgouh custom help may (anmd it's only a 'may') use that macro, of
-course.
-
-> In my opinion, the very simple proposal from J?r?me has turned into a
-> much more complicated solution, with no real benefit.
-
-Well, I have two concerns about that series:
- 1- the mixing of internal and custom help,
- 2- the way it is implemented looks ugly to me.
-
-And I doubt my own proposal is very complex. Sure, there are two trivial
-shell expansions, that are even POSIX and not bashisms. Compared to
-other dirty tricks we do in a lot of other places, those are hardly
-black magic...
+    $ make help
+    make: Nothing to be done for `help'.
 
 Regards,
 Yann E. MORIN.
 
-> Best regards,
+> (and then there is no need for a comment either).
 > 
-> Thomas
+>  Regards,
+>  Arnout
+> 
+> >+
+> >  list-defconfigs:
+> >  	@echo 'Built-in configs:'
+> >  	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
+> >
+> 
+> 
 > -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
