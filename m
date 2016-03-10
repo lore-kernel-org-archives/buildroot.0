@@ -1,34 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 23:49:08 +0100
-Subject: [Buildroot] [git commit] ltp-testsuite: indentation cleanup
-Message-ID: <20160310224913.38A8E817EA@busybox.osuosl.org>
+Date: Thu, 10 Mar 2016 23:49:46 +0100
+Subject: [Buildroot] [git commit] core: use $(CURDIR) to set TOPDIR
+Message-ID: <20160310225021.2A92781D31@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=73c37f070b1b698dac6e309638c69d9ded162241
+commit: https://git.buildroot.net/buildroot/commit/?id=e049994086e64ad28aeccb524473752118e1fd8e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+This changes saves a shell call and uses a variable automatically set
+by make [1].
+
+[1] http://www.gnu.org/software/make/manual/make.html#Quick-Reference
+
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/ltp-testsuite/ltp-testsuite.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 7d455de..8adfdef 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -10,8 +10,8 @@ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download
- LTP_TESTSUITE_LICENSE = GPLv2, GPLv2+
- LTP_TESTSUITE_LICENSE_FILES = COPYING
- LTP_TESTSUITE_CONF_OPTS += \
--			   --with-power-management-testsuite \
--			   --with-realtime-testsuite
-+	--with-power-management-testsuite \
-+	--with-realtime-testsuite
+diff --git a/Makefile b/Makefile
+index f2822a2..98c8dc7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -69,7 +69,7 @@ endif
+ .NOTPARALLEL:
  
- # Needs libcap with file attrs which needs attr, so both required
- ifeq ($(BR2_PACKAGE_LIBCAP)$(BR2_PACKAGE_ATTR),yy)
+ # absolute path
+-TOPDIR := $(shell pwd)
++TOPDIR := $(CURDIR)
+ CONFIG_CONFIG_IN = Config.in
+ CONFIG = support/kconfig
+ DATE := $(shell date +%Y%m%d)
