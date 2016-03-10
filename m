@@ -1,27 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 22:33:41 +0100
-Subject: [Buildroot] [PATCH 2/2] python-msgpack: remove useless 'depends
-	on' in comment
-In-Reply-To: <1457641016-3054-2-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 10 Mar 2016 21:16:56 +0100")
-References: <1457641016-3054-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1457641016-3054-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <877fhakoga.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 22:34:03 +0100
+Subject: [Buildroot] [PATCH] connman: switch to BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <1457572011-2749-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 9 Mar 2016 22:06:51 -0300")
+References: <1457572011-2749-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87y49qj9v8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > In commit 6709fad224692ae5e0788bbd30145f7d622b52a4, python-msgpack was
- > bumped to a new version that has support for Python 3. The "depends on
- > BR2_PACKAGE_PYTHON' was removed for the main python-msgpack Config.in
- > option, but not from the comment. This commit fixes this
- > inconsistency.
+ > Switch to BR2_TOOLCHAIN_HAS_SYNC_4 from BR2_sparc conditional since it's
+ > the correct one.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
