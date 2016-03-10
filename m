@@ -1,25 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 20:52:31 +0100
-Subject: [Buildroot] [PATCH] openssh: security bump to version 7.2p2
-In-Reply-To: <1457634868-4463-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 10 Mar 2016 15:34:28 -0300")
-References: <1457634868-4463-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87a8m6m7pc.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 20:51:56 +0100
+Subject: [Buildroot] [PATCH] gdb: specify where to find lzma libraries
+In-Reply-To: <1457629826-21020-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Thu, 10 Mar 2016 17:10:26 +0000")
+References: <1457629826-21020-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <87egbim7qb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Fixes:
- > CVE-2016-3115 - sanitise X11 authentication credentials to avoid xauth
- > command injection when X11Forwarding is enabled.
+ > As reported in...
+ >   https://bugs.busybox.net/show_bug.cgi?id=8786
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ..., gdb fails to build with xz and expat support at the same time when
+ > using an external toolchain.
 
-Committed, thanks.
+ > This is how the problem is shown:
+
+ > checking for liblzma... no
+ > configure: error: missing liblzma for --with-lzma
+
+ > And having a deeper look in gdb/config.log we can se a message like this
+ > one:
+
+ > /lib64/liblzma.so.5: undefined reference to `clock_gettime at GLIBC_2.17'
+
+ > As Thomas said in the bug report quoted above, that error is related to
+ > the fact that it find the host's lzma.
+
+ > Adding --with-lzma-prefix=$(HOST_DIR)/usr to GDB_CONF_OPTS fixes the
+ > problem.
+
+ > Credit-to: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > ---
+ >  package/gdb/gdb.mk | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+ > index 32d52eb..58cd7502 100644
+ > --- a/package/gdb/gdb.mk
+ > +++ b/package/gdb/gdb.mk
+ > @@ -120,6 +120,7 @@ endif
+ 
+ >  ifeq ($(BR2_PACKAGE_XZ),y)
+ >  GDB_CONF_OPTS += --with-lzma
+ > +GDB_CONF_OPTS += --with-liblzma-prefix=$(HOST_DIR)/usr
+
+But GDB_CONF_OPTS is for gdb for the target, so HOST_DIR/usr doesn't
+seem right?
 
 -- 
 Bye, Peter Korsgaard
