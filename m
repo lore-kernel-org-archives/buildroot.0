@@ -1,46 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 20:49:57 +0100
-Subject: [Buildroot] [git commit] openssh: security bump to version 7.2p2
-Message-ID: <20160310200229.2070E7FB44@busybox.osuosl.org>
+Date: Thu, 10 Mar 2016 21:01:51 +0100
+Subject: [Buildroot] [git commit] package/uclibc: defconfig: enable
+	sha-256/512 password auth support
+Message-ID: <20160310200229.2D70A7FB44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55a94ec8936571df586d4f53ffc1355c651a63d3
+commit: https://git.buildroot.net/buildroot/commit/?id=bdd8362a88428ed1c04fc6f4bbcbf7692b2a2b39
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2016-3115 - sanitise X11 authentication credentials to avoid xauth
-command injection when X11Forwarding is enabled.
+As recently reported on the mailing list:
+http://lists.busybox.net/pipermail/buildroot/2016-February/154130.html
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Our configuration options to use sha-256 / sha-512 password encoding do not
+work very well with uClibc-ng as our defconfig doesn't enable support for
+these encodings, breaking E.G. password login with dropbear.
+
+Notice that it doesn't break login with the busybox login applet, as we
+currently force the use of the internal busybox password handling routines
+when sha-256/512 encoding is used. This workaround can afaik now be removed.
+
+To fix this, enable support for these password encodings in our defconfig.
+Do it unconditionally and not based on BR2_TARGET_GENERIC_PASSWD_* so it
+also works when a Buildroot toolchain is reused as an external toolchain and
+as the support code is quite small (~8KB):
+
+-rwxr-xr-x 1 peko peko 13360 Mar  7 22:56 output/target/lib/libcrypt-1.0.12.so
+-rwxr-xr-x 1 peko peko 21552 Mar  7 23:47 output-sha/target/lib/libcrypt-1.0.12.so
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 2 +-
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uclibc/uClibc-ng.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 36346e0..46d9f9b 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
- # Also from http://www.openssh.com/txt/release-7.2
--sha256	973cc37b2f3597e4cf599b09e604e79c0fe5d9b6f595a24e91ed0662860b4ac3	openssh-7.2p1.tar.gz
-+sha256	a72781d1a043876a224ff1b0032daa4094d87565a68528759c1c2cab5482548c	openssh-7.2p2.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 0e0bcab..856646c 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 7.2p1
-+OPENSSH_VERSION = 7.2p2
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+index c17603d..66de5a9 100644
+--- a/package/uclibc/uClibc-ng.config
++++ b/package/uclibc/uClibc-ng.config
+@@ -16,6 +16,8 @@ UCLIBC_HAS_PROGRAM_INVOCATION_NAME=y
+ UCLIBC_HAS_GETPT=y
+ UCLIBC_HAS_LIBUTIL=y
+ UCLIBC_HAS_OBSOLETE_BSD_SIGNAL=y
++UCLIBC_HAS_SHA256_CRYPT_IMPL=y
++UCLIBC_HAS_SHA512_CRYPT_IMPL=y
+ UCLIBC_USE_NETLINK=y
+ UCLIBC_SUPPORT_AI_ADDRCONFIG=y
+ UCLIBC_HAS_RESOLVER_SUPPORT=y
