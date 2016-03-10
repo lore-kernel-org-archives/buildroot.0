@@ -1,32 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 22:29:36 +0100
-Subject: [Buildroot] [git commit] boot/grub: add rootwait to default config
-Message-ID: <20160310213529.86A008185E@busybox.osuosl.org>
+Date: Thu, 10 Mar 2016 22:30:33 +0100
+Subject: [Buildroot] [git commit] connman: switch to BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20160310213529.B96448184B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=929d91edee72e1c5d433563caa1e883c3ae3bfbf
+commit: https://git.buildroot.net/buildroot/commit/?id=9900571b1d556bda423a113bfae3d1fb8e2078d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It doesn't hurt, and is useful for removable boot media like a pendrive
-that may depend on usb enumeration and isn't available immediately.
+Switch to BR2_TOOLCHAIN_HAS_SYNC_4 from BR2_sparc conditional since it's
+the correct one.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/grub/menu.lst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/connman/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/grub/menu.lst b/boot/grub/menu.lst
-index a231f7e..9f14da7 100644
---- a/boot/grub/menu.lst
-+++ b/boot/grub/menu.lst
-@@ -13,4 +13,4 @@ background 	cccccc
+diff --git a/package/connman/Config.in b/package/connman/Config.in
+index 270938e..f723a31 100644
+--- a/package/connman/Config.in
++++ b/package/connman/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_CONNMAN
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus, libglib2
+ 	depends on !BR2_STATIC_LIBS # needs dlopen()
+-	depends on !BR2_sparc # needs atomic operation __sync_fetch_and_add
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  The Connection Manager (ConnMan) project provides a daemon
+ 	  for managing internet connections within embedded devices
+@@ -68,5 +68,5 @@ endif # BR2_PACKAGE_CONNMAN
  
- title Buildroot
- 	root (hd0,0)
--	kernel /boot/bzImage rw root=/dev/sda1
-+	kernel /boot/bzImage rw root=/dev/sda1 rootwait
+ comment "connman needs a toolchain w/ wchar, threads, resolver, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_sparc
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
