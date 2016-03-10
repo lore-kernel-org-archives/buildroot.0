@@ -1,18 +1,22 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Mar 2016 10:35:19 -0300
-Subject: [Buildroot] [PATCH] dropbear: security bump to version 2016.72
-Message-ID: <1457616919-8635-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 14:35:55 +0100
+Subject: [Buildroot] [git commit] dropbear: security bump to 2016.72
+Message-ID: <20160310133648.0F47E7FADA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-Validate X11 forwarding input. Could allow bypass of authorized_keys
-command= restrictions.
+commit: https://git.buildroot.net/buildroot/commit/?id=aea2d241137b20187556ee27915a830835b209a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+2016.72 - 9 March 2016
+
+- Validate X11 forwarding input. Could allow bypass of authorized_keys command= restrictions,
+  found by github.com/tintinweb. Thanks to Damien Miller for a patch.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/dropbear/dropbear.hash | 2 +-
  package/dropbear/dropbear.mk   | 2 +-
@@ -39,5 +43,3 @@ index e7633ae..4ba94c3 100644
  DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
  DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
--- 
-2.4.10
