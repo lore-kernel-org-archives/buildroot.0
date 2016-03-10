@@ -1,69 +1,43 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Thu, 10 Mar 2016 13:26:07 +0000
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 5.8.0
-Message-ID: <1457616367-18827-1-git-send-email-martin@barkynet.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Mar 2016 10:35:19 -0300
+Subject: [Buildroot] [PATCH] dropbear: security bump to version 2016.72
+Message-ID: <1457616919-8635-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v5.8.0/
+Fixes:
+Validate X11 forwarding input. Could allow bypass of authorized_keys
+command= restrictions.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{5.7.1 => 5.8.0}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/{5.7.1 => 5.8.0}/0003-Fix-va_list-not-declared.patch   | 0
- package/nodejs/{5.7.1 => 5.8.0}/0004-Fix-support-for-uClibc-ng.patch  | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{5.7.1 => 5.8.0}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
- rename package/nodejs/{5.7.1 => 5.8.0}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{5.7.1 => 5.8.0}/0003-Fix-va_list-not-declared.patch (100%)
- rename package/nodejs/{5.7.1 => 5.8.0}/0004-Fix-support-for-uClibc-ng.patch (100%)
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch
-rename to package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
-diff --git a/package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 02ce219..d200bbb 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 934b26b..8287244 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,2 +1,2 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256	376214169c0e187ee9f48ae1a99b3f835016ad5b98ede4bfd1cf581deba783af  dropbear-2015.71.tar.bz2
++sha256	9323766d3257699fd7d6e7b282c5a65790864ab32fd09ac73ea3d46c9ca2d681  dropbear-2016.72.tar.bz2
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index e7633ae..4ba94c3 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "5.7.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "5.8.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.43"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index b079060..2e8dab8 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.43/SHASUMS256.txt
- sha256  6c5185cbfad3538484c9d97eec0110b5cd5826126f15b776015dfee1f51cd32a  node-v0.10.43.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v5.7.1/SHASUMS256.txt
--sha256  029ed8aeb997c68d1a901cd837af02d24b6b5e20a4ff93bed090fd289f91a9a1  node-v5.7.1.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v5.8.0/SHASUMS256.txt
-+sha256  c1246d473d6650ca02ab168eaf840e9edda82a4190ff08165fc44a7b381a9361  node-v5.8.0.tar.xz
+-DROPBEAR_VERSION = 2015.71
++DROPBEAR_VERSION = 2016.72
+ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
 -- 
-2.5.0
+2.4.10
