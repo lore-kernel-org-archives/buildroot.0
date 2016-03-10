@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Mar 2016 01:16:46 +0100
-Subject: [Buildroot] [PATCH v7 15/18] support/scripts/check-host-rpath:
- also check HOST_DIR/{bin, sbin}
-In-Reply-To: <1457564339-27294-16-git-send-email-s.martin49@gmail.com>
+Date: Thu, 10 Mar 2016 01:21:23 +0100
+Subject: [Buildroot] [PATCH v7 18/18] docs/manual: document how to debug
+ shell script
+In-Reply-To: <1457564339-27294-19-git-send-email-s.martin49@gmail.com>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-16-git-send-email-s.martin49@gmail.com>
-Message-ID: <56E0BCEE.3000501@mind.be>
+ <1457564339-27294-19-git-send-email-s.martin49@gmail.com>
+Message-ID: <56E0BE03.8070705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,61 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 03/09/16 23:58, Samuel Martin wrote:
-> At least syslinux is installing stuff in HOST_DIR/sbin.
+> The method describes here is only true for scripts using the shell
+> modules from support/scripts/shell/*.
 >
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-
-  Hold on with this one, I'll post a series that removes the usr/ part (or at 
-least, makes it a symlink to .), so this won't be needed anymore.
-
-
-  Regards,
-  Arnout
-
 >
 > ---
 > changes v6->v7:
 > - new patch
 > ---
->   support/scripts/check-host-rpath | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   docs/manual/debugging-buildroot.txt | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
 >
-> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> index 2d3ddec..f5f16ff 100755
-> --- a/support/scripts/check-host-rpath
-> +++ b/support/scripts/check-host-rpath
-> @@ -45,7 +45,7 @@ main() {
->                   "${pkg}"
->           fi
->           printf "***   %s\n" "${file}"
-> -    done < <( find "${hostdir}"/usr/{bin,sbin} -type f -print 2>/dev/null |
-> +    done < <( find "${hostdir}"/{,usr/}{bin,sbin} -type f -print 2>/dev/null |
->                     readelf.filter_elf_executable )
->
->       return ${ret}
+> diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
+> index f575fc4..c497284 100644
+> --- a/docs/manual/debugging-buildroot.txt
+> +++ b/docs/manual/debugging-buildroot.txt
+> @@ -41,3 +41,18 @@ The script has access to the following variables:
+>     - +BINARIES_DIR+: the place where all binary files (aka images) are
+>       stored
+>     - +BASE_DIR+: the base output directory
+> +
+> +=== Debugging shell scripts in Buildroot
+
+  If you introduce a subsection, then everything that comes before it should 
+also be moved to a subsection. E.g.
+
+[[debugging-buildroot]]
+
+== Debugging Buildroot
+
+=== Running scripts before and after each build step
+
+It is possible to instrument the steps +Buildroot+ does when building
+
+
+> +
+> +For shell scripts using the _shell modules_ (available in
+> ++support/scripts/shell/+), there is a couple of environment variables
+                                     ^^ are
+
+  but actually, there is only one...
+
+  Regards,
+  Arnout
+
+> +you can set to trace the scripts
+> +
+> +  - +SHELL_DEBUG+ adjustes the debug level, from 0 to 3 (only errors to
+> +    all debug messages)
+> +
+> +To enable these debug outputs:
+> +
+> +----
+> +SHELL_DEBUG=3 make
+> +----
 >
 
 
