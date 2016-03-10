@@ -1,42 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 21:02:05 +0100
-Subject: [Buildroot] [PATCH] package/uclibc: defconfig: enable
-	sha-256/512 password auth support
-In-Reply-To: <1457457777-9017-1-git-send-email-peter@korsgaard.com> (Peter
- Korsgaard's message of "Tue, 8 Mar 2016 18:22:57 +0100")
-References: <1457457777-9017-1-git-send-email-peter@korsgaard.com>
-Message-ID: <87wppaksoy.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 20:49:52 +0100
+Subject: [Buildroot] [git commit] bind: security bump to version 9.10.3-P4
+Message-ID: <20160310200229.1200B7FB44@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=67245dcbe14c2e98f44dcc717cfefedd6b7294d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As recently reported on the mailing list:
- > http://lists.busybox.net/pipermail/buildroot/2016-February/154130.html
+Fixes:
+CVE-2016-1285 - An error parsing input received by the rndc control
+channel can cause an assertion failure in sexpr.c or alist.c
+CVE-2016-1286 - A problem parsing resource record signatures for DNAME
+resource records can lead to an assertion failure in resolver.c or db.c
+CVE-2016-2088 - A response containing multiple DNS cookies causes
+servers with cookie support enabled to exit with an assertion failure.
 
- > Our configuration options to use sha-256 / sha-512 password encoding do not
- > work very well with uClibc-ng as our defconfig doesn't enable support for
- > these encodings, breaking E.G. password login with dropbear.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Notice that it doesn't break login with the busybox login applet, as we
- > currently force the use of the internal busybox password handling routines
- > when sha-256/512 encoding is used. This workaround can afaik now be removed.
-
- > To fix this, enable support for these password encodings in our defconfig.
- > Do it unconditionally and not based on BR2_TARGET_GENERIC_PASSWD_* so it
- > also works when a Buildroot toolchain is reused as an external toolchain and
- > as the support code is quite small (~8KB):
-
- > -rwxr-xr-x 1 peko peko 13360 Mar  7 22:56 output/target/lib/libcrypt-1.0.12.so
- > -rwxr-xr-x 1 peko peko 21552 Mar  7 23:47 output-sha/target/lib/libcrypt-1.0.12.so
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index fea800c..cd76a54 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,2 +1,2 @@
+-# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P3/bind-9.10.3-P3.tar.gz.sha256.asc
+-sha256	690810d1fbb72afa629e74638d19cd44e28d2b2e5eb63f55c705ad85d1a4cb83	bind-9.10.3-P3.tar.gz
++# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P4/bind-9.10.3-P4.tar.gz.sha256.asc
++sha256	2ac044b5fbdf45fb45107af0df961b3b7cb5262a3bf1948ed3fe7a170dd13e3e	bind-9.10.3-P4.tar.gz
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 12dd52e..895217a 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.10.3-P3
++BIND_VERSION = 9.10.3-P4
+ BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
