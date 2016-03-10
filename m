@@ -1,94 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 23:51:08 +0100
-Subject: [Buildroot] [git commit] owfs: remove include of rpc/netdb.h
-Message-ID: <20160310225120.C9E1A81D34@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 22:33:26 +0100
+Subject: [Buildroot] [PATCH v7 07/18] package/pkgconf: make the
+	pkg-config wrapper relocatable
+In-Reply-To: <20160310215315.6555ac80@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 10 Mar 2016 21:53:15 +0100")
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-8-git-send-email-s.martin49@gmail.com>
+ <20160310215315.6555ac80@free-electrons.com>
+Message-ID: <87fuvykogp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13aca2f2e94e5dcce406dc1b57f368624ede2656
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-owfs carries a copy of netdb.h from an old glibc, which is only used
-to implement getaddrinfo on platforms that miss it (Solaris 7 in
-particular). Since all of our libc implementations have getaddrinfo,
-we don't need it.
+ >> +STAGING_DIR="$(readlink -f "$(dirname "$0")/../..")/@STAGING_SUBDIR@"
 
-To make the patch minimal, just include if !HAVE_GETADDRINFO.
+ > I think Peter said on IRC that $0 is not guaranteed to be correct, and
+ > that /proc/self/exe should be used instead.
 
-Fixes:
-http://autobuild.buildroot.net/results/d9e918c2791cd5523b2fd6478bbd4ce21e58f4f1
-http://autobuild.buildroot.net/results/3a85144753e4f18491d62dccf6d5843170f8daea
+Yes (and that is generally true), but as far as I can see it is
+guaranteed for scripts on Linux by the logic in binfmt-script.c
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...t.h-only-include-compat_netdb.h-if-needed.patch | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
 
-diff --git a/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
-new file mode 100644
-index 0000000..7ae7932
---- /dev/null
-+++ b/package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
-@@ -0,0 +1,58 @@
-+From d24e63eea4f4d234f313145e40668a5e2f64e49c Mon Sep 17 00:00:00 2001
-+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
-+Date: Wed, 9 Mar 2016 23:20:11 +0100
-+Subject: [PATCH] compat.h: only include compat_netdb.h if needed
-+
-+compat_netdb.h is added for only one reason: to provide the definitions
-+for getaddrinfo, in case it is not provided by the system.
-+compat_netdb.h is just a copy from an old glibc version, but that makes
-+it incompatible with other standard C libraries. For example, uClibc
-+without RPC support doesn't have the rpc/netdb.h header. This leads to
-+build errors.
-+
-+To work around this, only include compat_netdb.h when needed, i.e.
-+when getaddrinfo isn't provided natively.
-+
-+Note that this getaddrinfo compat was introduced in commit bc54c431 to
-+support Solaris 7. Starting from Solaris 8, however, getaddrinfo is
-+available natively, and it's available on MacOS, Windows and any other
-+POSIX-2001 compliant system as well. So it may be worhtwhile to remove
-+it altogether.
-+
-+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+---
-+ module/owlib/src/include/compat.h   | 2 ++
-+ module/ownet/c/src/include/compat.h | 2 ++
-+ 2 files changed, 4 insertions(+)
-+
-+diff --git a/module/owlib/src/include/compat.h b/module/owlib/src/include/compat.h
-+index c55bc96..e95e16f 100644
-+--- a/module/owlib/src/include/compat.h
-++++ b/module/owlib/src/include/compat.h
-+@@ -57,7 +57,9 @@
-+ #include <features.h>
-+ #endif
-+ 
-++#ifndef HAVE_GETADDRINFO
-+ #include "compat_netdb.h"
-++#endif
-+ #include "compat_getopt.h"
-+ 
-+ #ifndef HAVE_STRSEP
-+diff --git a/module/ownet/c/src/include/compat.h b/module/ownet/c/src/include/compat.h
-+index c45d852..f8ae759 100644
-+--- a/module/ownet/c/src/include/compat.h
-++++ b/module/ownet/c/src/include/compat.h
-+@@ -58,7 +58,9 @@ $Id$
-+ #include <features.h>
-+ #endif
-+ 
-++#ifndef HAVE_GETADDRINFO
-+ #include "compat_netdb.h"
-++#endif
-+ #include "compat_getopt.h"
-+ 
-+ #ifndef HAVE_STRSEP
-+-- 
-+2.7.0
-+
+ >> +TARGET_PKG_CONFIG_LIBDIR="$( echo @PKG_CONFIG_LIBDIR@ | sed -e
+ >> "s@^@${STAGING_DIR}/@ ; s@:@:${STAGING_DIR}/@g" )"
+
+ > I must say I hate those spaces after ( and before ). Especially when
+ > the line just above doesn't have those spaces.
+
+Consistency would be good, yes!
+
+-- 
+Bye, Peter Korsgaard
