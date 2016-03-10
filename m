@@ -1,32 +1,26 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Mar 2016 16:43:10 -0300
-Subject: [Buildroot] [PATCH] busybox: use md5 as default password algorithm
-Message-ID: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 20:50:16 +0100
+Subject: [Buildroot] [PATCH] fio: add upstream patch to fix build on
+	SuperH
+In-Reply-To: <1457623601-31727-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 10 Mar 2016 16:26:41 +0100")
+References: <1457623601-31727-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87mvq6m7t3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-DES is terribly outdated and a security vulnerability.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/busybox/busybox.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Upstream was super reactive, and already committed a patch to fix the
+ > build on SuperH, so we take this upstream patch in Buildroot and
+ > re-enable fio on SuperH.
 
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 2cf989d..693b9d2 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -496,7 +496,7 @@ CONFIG_PASSWD=y
- CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
- # CONFIG_CRYPTPW is not set
- # CONFIG_CHPASSWD is not set
--CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
-+CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="md5"
- CONFIG_SU=y
- CONFIG_FEATURE_SU_SYSLOG=y
- CONFIG_FEATURE_SU_CHECKS_SHELLS=y
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.4.10
+Bye, Peter Korsgaard
