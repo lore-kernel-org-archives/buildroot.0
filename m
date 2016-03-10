@@ -1,24 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 10 Mar 2016 13:53:30 +0000
-Subject: [Buildroot] [Bug 8751] make fail
-In-Reply-To: <bug-8751-163@https.bugs.busybox.net/>
-References: <bug-8751-163@https.bugs.busybox.net/>
-Message-ID: <bug-8751-163-cUVYF5Oh5i@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 15:03:56 +0100
+Subject: [Buildroot] [PATCH] dropbear: security bump to version 2016.72
+In-Reply-To: <1457616919-8635-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 10 Mar 2016 10:35:19 -0300")
+References: <1457616919-8635-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87pov2o2er.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8751
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
---- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-If all you need is gdb, why do you enable fio in your configuration, which is
-completely unrelated?
+ > Fixes:
+ > Validate X11 forwarding input. Could allow bypass of authorized_keys
+ > command= restrictions.
 
-fio indeed doesn't build for SuperH, I think we are simply going to disallow
-the selection of fio on SuperH.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Sorry, I had made the change here locally before seeing your patch.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
