@@ -1,64 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 21:58:22 +0100
-Subject: [Buildroot] [PATCH 5/8] linux: add the generic help rules
-In-Reply-To: <20160310203438.GF3424@free.fr>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <a92e7f048404917f9c9e7ed62c7041af04bf5934.1457561521.git.yann.morin.1998@free.fr>
- <56E0B5F5.9040109@mind.be> <3817786.Ntra8H592Z@sagittea>
- <20160310103934.0aaef6d1@free-electrons.com>
- <20160310203438.GF3424@free.fr>
-Message-ID: <20160310215822.5ac5f1c5@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 23:19:55 +0100
+Subject: [Buildroot] [PATCH] gcc: fix dynamic linker path for mips
+	soft-float
+In-Reply-To: <1457472055-7083-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Tue, 8 Mar 2016 22:20:55 +0100")
+References: <1457472055-7083-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87h9gej7qs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 10 Mar 2016 21:34:38 +0100, Yann E. MORIN wrote:
+ > This commit updates the gcc musl patches for gcc 4.7, 4.8 and 4.9 so
+ > that the path to the dynamic linker encoded as "program interpreter"
+ > in the generated binaries actually matches the symbolic link installed
+ > by musl when building for mips soft-float.
 
-> > +define BUSYBOX_HELP
-> > +       @echo '  busybox-baz            - do stuff'
-> > +endef
-> 
-> There is one thing here that bothers me: duplicating the layout of the
-> help text in that many locations.
-> 
-> Having the macro be used means we can change that layout (e.g. to
-> accomodate for larger rules) in a single place, and
-> magically^Wautomatically see all the help texts all properly indented
-> at once.
+ > Indeed, musl installs a symlink called ld-musl-mipsel-sf.so.1, but gcc
+ > currently generates binaries that use /lib/ld-musl-mips.so as program
+ > interpreter.
 
-How often have we changed this layout over the years? I'd say probably
-never. So why bother?
+ > The fix is simply the one from
+ > https://bitbucket.org/GregorR/musl-cross/commits/825219202365, i.e
+ > adjust MUSL_DYNAMIC_LINKER in our musl gcc patches.
 
-> > +HELP_HOOKS += BUSYBOX_HELP
-> 
-> To be done in pkg-generic, of course. ;-)
+ > Thanks to these patches:
 
-Well, if we are to do this in pkg-generic, then we should also do it
-for TARGET_FINALIZE_HOOKS (but I agree it would be good idea).
+ > $ ./host/usr/bin/mipsel-linux-readelf -a ./target/bin/busybox
+ > [...]
+ >       [Requesting program interpreter: /lib/ld-musl-mipsel-sf.so.1]
+ > [...]
 
-> > This way, it is just a function call, and the package, or external.mk
-> > can do whatever it wants in terms of formatting the help text.
-> > Including iterating on variables, showing the contents of a file, or
-> > whatever.
-> 
-> Well, remember that all this is *only* about documented the
-> package-specific rules, not any arbitrary package help.
-> 
-> Do we want to allow for any arbitrary package help? No; please, no.
+ > gcc 5.x doesn't need any fix because the musl patches already use the
+ > right value.
 
-Of course we want. And just like any other thing in Buildroot, bad
-things will not creep into the main tree because we review stuff.
+ > Fixes bug #7562.
 
-It is *trivial* to realize that a bad help text is being added, much
-more than many other things that we already have to check when
-reviewing patches.
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
