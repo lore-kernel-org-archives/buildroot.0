@@ -1,37 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 22:33:26 +0100
-Subject: [Buildroot] [PATCH v7 07/18] package/pkgconf: make the
-	pkg-config wrapper relocatable
-In-Reply-To: <20160310215315.6555ac80@free-electrons.com> (Thomas Petazzoni's
- message of "Thu, 10 Mar 2016 21:53:15 +0100")
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-8-git-send-email-s.martin49@gmail.com>
- <20160310215315.6555ac80@free-electrons.com>
-Message-ID: <87fuvykogp.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 22:21:35 +0100
+Subject: [Buildroot] [git commit] boot/grub2: add rootwait to default config
+Message-ID: <20160310213529.777A08185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9284b4aa396adb5d0093d9e67fc1033decdd72d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> +STAGING_DIR="$(readlink -f "$(dirname "$0")/../..")/@STAGING_SUBDIR@"
+It doesn't hurt, and is useful for removable boot media like a pendrive
+that may depend on usb enumeration and isn't available immediately.
 
- > I think Peter said on IRC that $0 is not guaranteed to be correct, and
- > that /proc/self/exe should be used instead.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ boot/grub2/grub.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes (and that is generally true), but as far as I can see it is
-guaranteed for scripts on Linux by the logic in binfmt-script.c
-
-
- >> +TARGET_PKG_CONFIG_LIBDIR="$( echo @PKG_CONFIG_LIBDIR@ | sed -e
- >> "s@^@${STAGING_DIR}/@ ; s@:@:${STAGING_DIR}/@g" )"
-
- > I must say I hate those spaces after ( and before ). Especially when
- > the line just above doesn't have those spaces.
-
-Consistency would be good, yes!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/grub2/grub.cfg b/boot/grub2/grub.cfg
+index c8abbd3..bd3e3f0 100644
+--- a/boot/grub2/grub.cfg
++++ b/boot/grub2/grub.cfg
+@@ -2,5 +2,5 @@ set default="0"
+ set timeout="5"
+ 
+ menuentry "Buildroot" {
+-	linux /boot/bzImage root=/dev/sda1 console=tty1
++	linux /boot/bzImage root=/dev/sda1 rootwait console=tty1
+ }
