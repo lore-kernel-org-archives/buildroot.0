@@ -1,30 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Mar 2016 17:46:27 -0300
-Subject: [Buildroot] [PATCH] boot/grub: add rootwait to default config
-Message-ID: <1457642787-28168-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Mar 2016 21:47:23 +0100
+Subject: [Buildroot] [PATCH v7 04/18] core: staging symlink uses a
+ relative path when possible
+In-Reply-To: <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160310214723.0eb96ec9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It doesn't hurt, and is useful for removable boot media like a pendrive
-that may depend on usb enumeration and isn't available immediately.
+Samuel,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- boot/grub/menu.lst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed,  9 Mar 2016 23:58:45 +0100, Samuel Martin wrote:
+> This change turns the staging/ symlink to a relative one when
+> $(STAGING_DIR) points to some location in the Buildroot's output
+> directory (i.e.: in $(BASE_DIR)/).
+> 
+> In any other case, the symlink target remains the absolute path
+> to the sysroot location.
+> 
+> This slight change is a step forward toward a relocatable SDK.
 
-diff --git a/boot/grub/menu.lst b/boot/grub/menu.lst
-index a231f7e..9f14da7 100644
---- a/boot/grub/menu.lst
-+++ b/boot/grub/menu.lst
-@@ -13,4 +13,4 @@ background 	cccccc
- 
- title Buildroot
- 	root (hd0,0)
--	kernel /boot/bzImage rw root=/dev/sda1
-+	kernel /boot/bzImage rw root=/dev/sda1 rootwait
+Why is this important for a relocatable SDK ? The SDK is $(HOST_DIR),
+and the staging symlink is just a convenience symlink which sits
+outside of $(HOST_DIR), and hence outside the SDK.
+
+So why should we care?
+
+Thomas
 -- 
-2.4.10
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
