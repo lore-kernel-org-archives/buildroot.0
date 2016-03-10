@@ -1,46 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 09:31:15 +0100
-Subject: [Buildroot] [PATCH 0/8] core: allow for custom, local help;
- rearrange package-specific help (branch yem/help)
-In-Reply-To: <56E0B327.70807@mind.be>
+From: =?ISO-8859-1?Q?J=E9r=F4me?= Pouiller <jezz@sysmic.org>
+Date: Thu, 10 Mar 2016 10:21:17 +0100
+Subject: [Buildroot] [PATCH 5/8] linux: add the generic help rules
+In-Reply-To: <56E0B5F5.9040109@mind.be>
 References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <56E0B327.70807@mind.be>
-Message-ID: <20160310093115.6ff24ea6@free-electrons.com>
+ <a92e7f048404917f9c9e7ed62c7041af04bf5934.1457561521.git.yann.morin.1998@free.fr>
+ <56E0B5F5.9040109@mind.be>
+Message-ID: <3817786.Ntra8H592Z@sagittea>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Arnout,
 
-On Thu, 10 Mar 2016 00:35:03 +0100, Arnout Vandecappelle wrote:
-
-> > After the first patch implements this (which is really all that is
-> > needed to print custom help), we go further with providing a macro that
-> > pretty-prints the help for rules, so that the layout is all handled in a
-> > single location. This macro can also be used by the local help, too.
+On Thursday 10 March 2016 00:47:01 Arnout Vandecappelle wrote:
+> On 03/09/16 23:22, Yann E. MORIN wrote:
+[...]
+> > +LINUX_HELP = \
+> > +	"linux-menuconfig : Run Linux kernel menuconfig" \
+> > +	"linux-savedefconfig : Run Linux kernel savedefconfig" \
+> > +	"linux-update-defconfig : Save the Linux configuration to the path specified \
+> > +				  by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE"
 > 
->   This bit I really like!
+>   So now this will be printed on a single line, instead of being split
+> like it was before. Well, J?r?me's patch already did that as well I
+> guess.
+In fact, my patch correctly support this case if you use two separate
+strings:
+  
+EXTRA_HELP += \
+   "linux-update-defconfig : Save the Linux configuration to the path specified" \
+   "                           by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE"
 
-Doesn't Yann proposal fails short if you want to pretty print something
-like this:
 
-	foobar - This is a really really long help message that spans
-	         multiple lines, and would definitely be too long on
-	         one single line.
+Regards,
 
-IOW, I believe we should leave more freedom to what is appended to the
-help text, and simply leave it to the person writing the help text to
-format it properly.
-
-In my opinion, the very simple proposal from J?r?me has turned into a
-much more complicated solution, with no real benefit.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+J?r?me Pouiller, Sysmic
+Embedded Linux specialist
+http://www.sysmic.fr
