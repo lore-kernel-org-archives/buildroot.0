@@ -1,24 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 22:30:43 +0100
-Subject: [Buildroot] [PATCH] boot/grub: add rootwait to default config
-In-Reply-To: <1457642787-28168-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 10 Mar 2016 17:46:27 -0300")
-References: <1457642787-28168-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87k2lakol8.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Mar 2016 23:48:59 +0100
+Subject: [Buildroot] [git commit] freerdp: indentation cleanup
+Message-ID: <20160310224913.1C11E805F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=91ebe63dd42f82e76698cc8c2d6eead2037ddce2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > It doesn't hurt, and is useful for removable boot media like a pendrive
- > that may depend on usb enumeration and isn't available immediately.
+Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freerdp/freerdp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index baf83f0..e8e5be4 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -248,9 +248,9 @@ FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_CLEANUP
+ # can start a server.
+ define FREERDP_INSTALL_KEYS
+ 	$(INSTALL) -m 0644 -D $(@D)/server/Sample/server.key \
+-		      $(TARGET_DIR)/etc/freerdp/keys/server.key
++		$(TARGET_DIR)/etc/freerdp/keys/server.key
+ 	$(INSTALL) -m 0644 -D $(@D)/server/Sample/server.crt \
+-		      $(TARGET_DIR)/etc/freerdp/keys/server.crt
++		$(TARGET_DIR)/etc/freerdp/keys/server.crt
+ endef
+ FREERDP_POST_INSTALL_TARGET_HOOKS += FREERDP_INSTALL_KEYS
+ 
