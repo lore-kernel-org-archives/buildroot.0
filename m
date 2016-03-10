@@ -1,84 +1,185 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 15:37:18 +0100
-Subject: [Buildroot] [git commit] fio: bump to version 2.7
-Message-ID: <20160310144157.9A3037FE10@busybox.osuosl.org>
+Date: Thu, 10 Mar 2016 15:11:26 +0100
+Subject: [Buildroot] [git commit] binutils: backport xtensa .init/.fini
+	literals moving fix to 2.26
+Message-ID: <20160310144157.8A3067FE10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e61a5a1f4575410fc0b5fc8a7570ed4b5254da99
+commit: https://git.buildroot.net/buildroot/commit/?id=3721f0f572cf192ec50ac3e016d478697fd21c28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The patch 0001-compile-fix-for-linux-header-changes.patch is removed
-as it was a backport from an upstream patch.
+Despite the documentation and the comment in xtensa_move_literals, in
+the presence of --text-section-literals and --auto-litpools literals are
+moved from the separate literal sections into .init and .fini, because
+the check in the xtensa_move_literals is incorrect.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+This fixes build errors seen with projects that have .init/.fini and use
+text-section-literals.
+
+Backported from: 4111950f363221c4641dc2f33bea61cc94f34906
+Reported-by: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-compile-fix-for-linux-header-changes.patch | 42 ----------------------
- package/fio/fio.mk                                 |  2 +-
- 2 files changed, 1 insertion(+), 43 deletions(-)
+ ...03-xtensa-fix-.init-.fini-literals-moving.patch | 149 +++++++++++++++++++++
+ 1 file changed, 149 insertions(+)
 
-diff --git a/package/fio/0001-compile-fix-for-linux-header-changes.patch b/package/fio/0001-compile-fix-for-linux-header-changes.patch
-deleted file mode 100644
-index 4a37e9d..0000000
---- a/package/fio/0001-compile-fix-for-linux-header-changes.patch
-+++ /dev/null
-@@ -1,42 +0,0 @@
--From d7bb6180f831091c468e5aa749b142efd5eddda4 Mon Sep 17 00:00:00 2001
--From: "Robin H. Johnson" <robbat2@gentoo.org>
--Date: Wed, 3 Feb 2016 08:32:19 -0800
--Subject: [PATCH] libmtd: compile fix for linux header changes.
--
--In the Linux kernel source, mtd/mtd-user.h had a change
--'mtd: mtd-user: remove stdint.h include'
--(137d36af4a53858b8db7ca83c8480247118b8bdf)
--
--This causes the uint8_t/uint64_t types to be undefined in libmtd.h
--now, as they were implicitly coming from it before.
--
--Import stdint.h explicitly into libmtd.h to resolve this.
--
--X-URL: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=137d36af4a53858b8db7ca83c8480247118b8bdf
--Signed-off-by: Robin H. Johnson <robbat2@gentoo.org>
-----
--Patch downloaded from upstream repo:
--http://git.kernel.dk/?p=fio.git;a=patch;h=d7bb6180f831091c468e5aa749b142efd5eddda4
--
--Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-----
-- oslib/libmtd.h | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/oslib/libmtd.h b/oslib/libmtd.h
--index 3625de5..b5fd3f3 100644
----- a/oslib/libmtd.h
--+++ b/oslib/libmtd.h
--@@ -29,6 +29,9 @@
-- extern "C" {
-- #endif
-- 
--+// Needed for uint8_t, uint64_t
--+#include <stdint.h>
--+
-- /* Maximum MTD device name length */
-- #define MTD_NAME_MAX 127
-- /* Maximum MTD device type string length */
---- 
--2.5.0
--
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 08fef5f..acebb6f 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FIO_VERSION = fio-2.6
-+FIO_VERSION = fio-2.7
- FIO_SITE = git://git.kernel.dk/fio.git
- FIO_LICENSE = GPLv2 + special obligations
- FIO_LICENSE_FILES = COPYING
+diff --git a/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch b/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch
+new file mode 100644
+index 0000000..ead3e42
+--- /dev/null
++++ b/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch
+@@ -0,0 +1,149 @@
++From 7db2accc3fdea0aaa0c3a76a413d8e8030e022c3 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Tue, 16 Feb 2016 02:23:28 +0300
++Subject: [PATCH] xtensa: fix .init/.fini literals moving
++
++Despite the documentation and the comment in xtensa_move_literals, in
++the presence of --text-section-literals and --auto-litpools literals are
++moved from the separate literal sections into .init and .fini, because
++the check in the xtensa_move_literals is incorrect.
++
++This moving was broken with introduction of auto litpools: some literals
++now may be lost. This happens because literal frags emitted from .init
++and .fini are not closed when new .literal_position marks new literal
++pool. Then frag_align(2, 0, 0) changes type of the last literal frag to
++rs_align. rs_align frags are skipped in the xtensa_move_literals. As a
++result fixups against such literals are not moved out of .init.literal/
++.fini.literal sections producing the following assembler error:
++
++  test.S: Warning: fixes not all moved from .init.literal
++  test.S: Internal error!
++
++Fix check for .init.literal/.fini.literal in the xtensa_move_literals
++and don't let it move literals from there in the presence of
++--text-section-literals or --auto-litpools.
++
++2016-02-17  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (xtensa_move_literals): Fix check for
++	.init.literal/.fini.literal section name.
++	* testsuite/gas/xtensa/all.exp: Add init-fini-literals to the
++	list of xtensa tests.
++	* testsuite/gas/xtensa/init-fini-literals.d: New file:
++	init-fini-literals test result patterns.
++	* testsuite/gas/xtensa/init-fini-literals.s: New file:
++	init-fini-literals test.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: 4111950f363221c4641dc2f33bea61cc94f34906
++
++ gas/config/tc-xtensa.c                        | 12 ++++++++++--
++ gas/testsuite/gas/xtensa/all.exp              |  1 +
++ gas/testsuite/gas/xtensa/init-fini-literals.d | 24 ++++++++++++++++++++++++
++ gas/testsuite/gas/xtensa/init-fini-literals.s | 19 +++++++++++++++++++
++ 4 files changed, 54 insertions(+), 2 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/init-fini-literals.d
++ create mode 100644 gas/testsuite/gas/xtensa/init-fini-literals.s
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 36a06cc..5773634 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -11061,6 +11061,10 @@ xtensa_move_literals (void)
++   fixS *fix, *next_fix, **fix_splice;
++   sym_list *lit;
++   struct litpool_seg *lps;
+++  const char *init_name = INIT_SECTION_NAME;
+++  const char *fini_name = FINI_SECTION_NAME;
+++  int init_name_len = strlen(init_name);
+++  int fini_name_len = strlen(fini_name);
++ 
++   mark_literal_frags (literal_head->next);
++ 
++@@ -11171,9 +11175,13 @@ xtensa_move_literals (void)
++ 
++   for (segment = literal_head->next; segment; segment = segment->next)
++     {
+++      const char *seg_name = segment_name (segment->seg);
+++
++       /* Keep the literals for .init and .fini in separate sections.  */
++-      if (!strcmp (segment_name (segment->seg), INIT_SECTION_NAME)
++-	  || !strcmp (segment_name (segment->seg), FINI_SECTION_NAME))
+++      if ((!memcmp (seg_name, init_name, init_name_len) &&
+++	   !strcmp (seg_name + init_name_len, ".literal")) ||
+++	  (!memcmp (seg_name, fini_name, fini_name_len) &&
+++	   !strcmp (seg_name + fini_name_len, ".literal")))
++ 	continue;
++ 
++       frchain_from = seg_info (segment->seg)->frchainP;
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 7ff7bd7..6b67320 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -102,6 +102,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "first_frag_align"
++     run_dump_test "auto-litpools"
++     run_dump_test "loc"
+++    run_dump_test "init-fini-literals"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/init-fini-literals.d b/gas/testsuite/gas/xtensa/init-fini-literals.d
++new file mode 100644
++index 0000000..19ed121
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/init-fini-literals.d
++@@ -0,0 +1,24 @@
+++#as: --text-section-literals
+++#objdump: -r
+++#name: check that literals for .init and .fini always go to separate sections
+++
+++.*: +file format .*xtensa.*
+++#...
+++RELOCATION RECORDS FOR \[\.init\.literal\]:
+++#...
+++00000000 R_XTENSA_PLT      init
+++#...
+++RELOCATION RECORDS FOR \[\.fini\.literal\]:
+++#...
+++00000000 R_XTENSA_PLT      fini
+++#...
+++RELOCATION RECORDS FOR \[\.init\]:
+++#...
+++.* R_XTENSA_SLOT0_OP  \.init\.literal
+++.* R_XTENSA_SLOT0_OP  \.init\.literal\+0x00000004
+++#...
+++RELOCATION RECORDS FOR \[\.fini\]:
+++#...
+++.* R_XTENSA_SLOT0_OP  \.fini\.literal
+++.* R_XTENSA_SLOT0_OP  \.fini\.literal\+0x00000004
+++#...
++diff --git a/gas/testsuite/gas/xtensa/init-fini-literals.s b/gas/testsuite/gas/xtensa/init-fini-literals.s
++new file mode 100644
++index 0000000..7c9ec17
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/init-fini-literals.s
++@@ -0,0 +1,19 @@
+++	.section	.init,"ax", at progbits
+++	.literal_position
+++	.literal .LC0, init at PLT
+++	.literal_position
+++	.literal .LC1, 1
+++	.align	4
+++
+++	l32r	a2, .LC0
+++	l32r	a2, .LC1
+++
+++	.section	.fini,"ax", at progbits
+++	.literal_position
+++	.literal .LC2, fini at PLT
+++	.literal_position
+++	.literal .LC3, 1
+++	.align	4
+++
+++	l32r	a2, .LC2
+++	l32r	a2, .LC3
++-- 
++2.1.4
++
