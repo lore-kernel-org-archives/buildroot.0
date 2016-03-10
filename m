@@ -1,112 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 10 Mar 2016 23:31:39 +0100
-Subject: [Buildroot] [PATCH v2 1/1] taskd: new package
-In-Reply-To: <1457577520-11211-1-git-send-email-mathstuf@gmail.com>
-References: <1445204187-8157-1-git-send-email-mathstuf@gmail.com>
- <1457577520-11211-1-git-send-email-mathstuf@gmail.com>
-Message-ID: <56E1F5CB.2010504@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Mar 2016 23:34:42 +0100
+Subject: [Buildroot] [PATCH] uboot: install multiple spl images
+In-Reply-To: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
+References: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
+Message-ID: <20160310233442.42eb90cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/10/16 03:38, Ben Boeckel wrote:
-> Taskwarrior is a task management suite of tools. Taskd is the
-> synchronization server for it.
->
-> Signed-off-by: Ben Boeckel <mathstuf@gmail.com>
+Jason,
+
+On Thu, 10 Mar 2016 14:23:03 -0800, Jason Abele wrote:
+> From: Jason Abele <jason@nextthing.co>
+> 
+> For some platforms, there are multiple generated spl images.  Extend
+> BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
+> after uboot build completes.
+> 
+> Signed-off-by: Jason Abele <jason@nextthing.co>
+
+For some reason, I was expecting this patch to arrive :-)
+
 > ---
->   package/Config.in       |  1 +
->   package/taskd/Config.in | 11 +++++++++++
->   package/taskd/taskd.mk  | 14 ++++++++++++++
->   3 files changed, 26 insertions(+)
->   create mode 100644 package/taskd/Config.in
->   create mode 100644 package/taskd/taskd.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index d916154..35a24ba 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1489,6 +1489,7 @@ endif
->   	source "package/sshpass/Config.in"
->   	source "package/strongswan/Config.in"
->   	source "package/stunnel/Config.in"
-> +	source "package/taskd/Config.in"
+> For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
+> spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
 
-  I don't think networking tools is the appropriate location. Miscellaneous maybe.
+This should be part of the commit log itself as it is a very useful
+example of why this patch was needed.
 
->   	source "package/tcpdump/Config.in"
->   	source "package/tcping/Config.in"
->   	source "package/tcpreplay/Config.in"
-> diff --git a/package/taskd/Config.in b/package/taskd/Config.in
-> new file mode 100644
-> index 0000000..5b357f5
-> --- /dev/null
-> +++ b/package/taskd/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_TASKD
-> +	bool "taskd"
-> +	select BR2_PACKAGE_GNUTLS
-> +	select BR2_USE_MMU
-> +	select BR2_USE_WCHAR
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 4a6dc56..d4f9445 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -322,7 +322,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
+>  	default "spl/u-boot-spl.bin"
+>  	depends on BR2_TARGET_UBOOT_SPL
+>  	help
+> -	  This is the name of the SPL binary, generated during
+> +	  A space-separated list of SPL binaries, generated during
+>  	  u-boot build. For most platform it is spl/u-boot-spl.bin
+>  	  but not always. It is MLO on OMAP for example.
+>  
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index d539b31..aae99f8 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -169,7 +169,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>  	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
+>  		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
+>  	$(if $(BR2_TARGET_UBOOT_SPL),
+> -		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
+> +		for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
+> +			cp -dpf $(@D)/$$p $(BINARIES_DIR)/; \
+> +		done)
 
-  You cannot select MMU and WCHAR, you need to depend on it. See 
-https://buildroot.org/downloads/manual/manual.html#depends-on-vs-select
-The depends lines should come immediately after bool "taskd". There should also 
-be a comment at the end of the file that tells the user that taskd is only 
-available with wchar.
+Ideally, using the make $(foreach ...) function here would be better.
 
-  In addition to these two, it also needs C++11. So definitely 
-BR2_INSTALL_LIBSTDCPP, and probably also some minimal gcc version. Try with the 
-Arago ARMv7 2011.09 if 4.5 works; if it does, add 
-BR2_TOOLCHAIN_GCC_AT_LEAST_4_5, and so on until you find the minimal version.
+>  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
+>  define UBOOT_GENERATE_ZYNQ_IMAGE
+> -	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+> -		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
+> -		-o $(BINARIES_DIR)/BOOT.BIN
+> +	for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
+> +		$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
+> +			-u $(@D)/$$p -o $(BINARIES_DIR)/BOOT.BIN; \
+> +		fi; \
+> +	done
 
+Having a for loop here is really useless, since the output file is
+BOOT.BIN at each iteration of the loop. Since for the specific Zynq
+case it doesn't make sense to have multiple values in
+BR2_TARGET_UBOOT_SPL_NAME, I would suggest to just do:
 
-> +	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-> +	help
-> +	  Task management synchronization daemon.
-> +
-> +	  http://taskwarrior.org/
-> diff --git a/package/taskd/taskd.mk b/package/taskd/taskd.mk
-> new file mode 100644
-> index 0000000..0bdf81d
-> --- /dev/null
-> +++ b/package/taskd/taskd.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# taskd
-> +#
-> +################################################################################
-> +
-> +TASKD_VERSION = 1.1.0
-> +TASKD_SOURCE = taskd-$(TASKD_VERSION).tar.gz
+-	-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
++	-u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)))
 
-  This is the default, not needed.
+Best regards,
 
-> +TASKD_SITE = http://taskwarrior.org/download
-> +TASKD_LICENSE = MIT
-> +TASKD_LICENSE_FILES = COPYING LICENSE
-
-  AFAICS both files are identical, so specifying only one of them (COPYING) is 
-sufficient.
-
-  Regards,
-  Arnout
-
-
-> +TASKD_DEPENDENCIES = gnutls util-linux
-> +
-> +$(eval $(cmake-package))
->
-
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
