@@ -1,44 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 11:12:00 +0100
-Subject: [Buildroot] [PATCH 5/8] linux: add the generic help rules
-In-Reply-To: <56E143C3.4080809@mind.be>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <a92e7f048404917f9c9e7ed62c7041af04bf5934.1457561521.git.yann.morin.1998@free.fr>
- <56E0B5F5.9040109@mind.be> <3817786.Ntra8H592Z@sagittea>
- <20160310103934.0aaef6d1@free-electrons.com>
- <56E143C3.4080809@mind.be>
-Message-ID: <20160310111200.29a9e9a0@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 10 Mar 2016 10:20:25 +0000
+Subject: [Buildroot] [Bug 8781] New: Unable to build uboot for imx28evk
+Message-ID: <bug-8781-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8781
 
-On Thu, 10 Mar 2016 10:52:03 +0100, Arnout Vandecappelle wrote:
+            Bug ID: 8781
+           Summary: Unable to build uboot for imx28evk
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: cycaxo at gmx.net
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
->   This bit could easily be done in generic-package. I definitely don't like 
-> direct manipulation of global variables in a package.mk.
+Created attachment 6386
+  --> https://bugs.busybox.net/attachment.cgi?id=6386&action=edit
+build log
 
-You mean like TARGET_FINALIZE_HOOKS ? :-)
+I am trying to use buildroot-2016.02 for the freescale imx28evk. Unfortunately,
+I am not able to build uboot for this board. I was able to successfully build
+images for another board (i.e. beaglebone), so I can exclude that there is a
+problem with my environment. 
 
-package/google-breakpad/google-breakpad.mk:TARGET_FINALIZE_HOOKS += GOOGLE_BREAKPAD_EXTRACT_SYMBOLS
-package/luarocks/luarocks.mk:TARGET_FINALIZE_HOOKS += LUAROCKS_FINALIZE_TARGET
-package/perl/perl.mk:TARGET_FINALIZE_HOOKS += PERL_FINALIZE_TARGET
-package/python/python.mk:TARGET_FINALIZE_HOOKS += PYTHON_FINALIZE_TARGET
-package/python3/python3.mk:TARGET_FINALIZE_HOOKS += PYTHON3_FINALIZE_TARGET
-...
+My procedure was the following:
+1. make freescale_imx28evk_defconfig
+--> # configuration written to /buildroot-2016.02/.config
+2. make 
+--> make[2]:
+/buildroot-2016.02/output/host/usr/bin/arm-buildroot-linux-uclibcgnueabi-gcc:
+Command not found
 
->   It's incredible how much discussion we have about such a corner feature :-)
-> I guess we just need _something_ to disagree about :-P
+I am using Ubuntu 14.04LTS 64bit with all the required packages for building on
+a x64 system (at least it works for beaglebone).
 
-Yes, I agree it's incredible. But I personally don't like Yann's
-solution, it is too much over-engineered IMO, and is in fact less
-flexible than simpler solutions.
+Please find attached the log file.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
