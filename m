@@ -1,46 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Mar 2016 21:27:11 +0100
-Subject: [Buildroot] [PATCH 2/8] core/pkg-utils: add a macro to
- pretty-print a help entry
-In-Reply-To: <12788059.xfbTEnnL3q@sagittea>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <3c47341f237bad2ed0c674c2ffe1def03a2bdb64.1457561521.git.yann.morin.1998@free.fr>
- <56E0B3AD.2040104@mind.be> <12788059.xfbTEnnL3q@sagittea>
-Message-ID: <20160310202711.GD3424@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 21:22:47 +0100
+Subject: [Buildroot] [git commit] configs/altera_sockit_defconfig: use http
+	access for u-boot/linux git repos
+Message-ID: <20160310202908.BFD007F98D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=078708ba8d24c6a3c4053af194337dad84a3b905
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-03-10 10:31 +0100, J?r?me Pouiller spake thusly:
-> Hello Arnout, Yann,
-> 
-> On Thursday 10 March 2016 00:37:17 Arnout Vandecappelle wrote:
-> > On 03/09/16 23:22, Yann E. MORIN wrote:
-> [...]
-> 
-> > > +	for h in $(1); do \
-> > > +		printf "  %-22s - %s\n" "$${h%% : *}" "$${h#* : }"; \
-> > > +	done
-> Personally, I dislike this automatic splitting of argument. Especially,
-> this macro is not obvious and it may look like black magic.
+Fixes:
+https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/114650744
 
-Hmmm... Standard shell expansions that have been documented in POSIX
-for, like, forever... And really, if you find this to be black magic,
-I'm not sure what to say...
+git:// access to git.rocketboards.org has been failing for a while, and
+git:// is sometimes not allowed through corporate firewalls, so change to
+git-over-http instead.
 
-http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/altera_sockit_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/configs/altera_sockit_defconfig b/configs/altera_sockit_defconfig
+index 6bd3a71..1ababaa 100644
+--- a/configs/altera_sockit_defconfig
++++ b/configs/altera_sockit_defconfig
+@@ -15,7 +15,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
+ 
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.rocketboards.org/linux-socfpga.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
+ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
+ BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_3=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+-BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
+ BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_acds13.0sp1"
+ BR2_TARGET_UBOOT_PATCH="board/altera/sockit"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
