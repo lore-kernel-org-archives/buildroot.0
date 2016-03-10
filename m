@@ -1,51 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 23:00:45 +0100
-Subject: [Buildroot] [PATCH valijson v2] valijson: new package
-In-Reply-To: <CAHXCMMLLWARxc+urGRMRy1KrQEb4rH4MFuc+0fQUc6DsPONGPQ@mail.gmail.com>
-References: <1457613052-3865-1-git-send-email-santosh.multhalli@rockwellcollins.com>
- <CAHXCMMLLWARxc+urGRMRy1KrQEb4rH4MFuc+0fQUc6DsPONGPQ@mail.gmail.com>
-Message-ID: <20160310230045.5f1b0bfe@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 10 Mar 2016 23:00:42 +0100
+Subject: [Buildroot] [PATCH] busybox: use md5 as default password
+	algorithm
+In-Reply-To: <56E1D309.3030602@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Thu, 10 Mar 2016 17:03:21 -0300")
+References: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
+ <871t7im7ah.fsf@dell.be.48ers.dk> <56E1D309.3030602@zacarias.com.ar>
+Message-ID: <87pov2j8mt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On Thu, 10 Mar 2016 21:53:32 +0100, Samuel Martin wrote:
+ > On 10/03/16 17:01, Peter Korsgaard wrote:
+ >> So this is what is used when you change password through the busybox
+ >> passwd applet or create a new user, right?
+ >> 
+ >> Shouldn't we instead tweak this based on BR2_TARGET_GENERIC_PASSWD_*?
 
-> > diff --git a/package/valijson/Config.in b/package/valijson/Config.in
-> > new file mode 100644
-> > index 0000000..4adbe76
-> > --- /dev/null
-> > +++ b/package/valijson/Config.in
-> > @@ -0,0 +1,12 @@
-> > +config BR2_PACKAGE_VALIJSON
-> > +       bool "valijson"
-> > +        select BR2_PACKAGE_BOOST
-> > +        select BR2_PACKAGE_BOOST_REGEX
-> Indentation seems broken on these 2 lines.
+ > Yes.
+ > This is the lowest-common which is guaranteed to work on all
+ > scenarios, once we decide/switch to sha256 as default we can update it
+ > here, but i wouldn't defer this until then.
 
-And also, since boost is selected, the dependencies of boost must be
-replicated here.
+Ehh, yes - But if you have enabled E.G BR2_TARGET_GENERIC_PASSWD_SHA512
+then that is what the busybox passwd applet should use. Having it do md5
+instead of des is still wrong.
 
-> 
-> > +       help
-> > +         Valijson is a header-only JSON Schema Validation library for
-> > +         C++. Valijson provides a simple validation API that allows you
-> > +         load JSON Schemas, and validate documents loaded by one of
-> > +         several supported parser libraries like boost, jsoncpp,
-> > +         rapidjson and picoJSON.
-> > +
-> > +         https://github.com/tristanpenman/valijson
-
-And a comment be added here.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
