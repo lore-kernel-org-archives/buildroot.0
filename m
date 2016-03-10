@@ -1,72 +1,62 @@
-From: Jason Abele <jason.abele@gmail.com>
-Date: Thu, 10 Mar 2016 14:23:03 -0800
-Subject: [Buildroot] [PATCH] uboot: install multiple spl images
-Message-ID: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 10 Mar 2016 22:20:24 +0000
+Subject: [Buildroot] [Bug 7562] musl buildroot-toolchain and
+	BR2_MIPS_SOFT_FLOAT break
+In-Reply-To: <bug-7562-163@https.bugs.busybox.net/>
+References: <bug-7562-163@https.bugs.busybox.net/>
+Message-ID: <bug-7562-163-Q3nj1pNTaO@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jason Abele <jason@nextthing.co>
+https://bugs.busybox.net/show_bug.cgi?id=7562
 
-For some platforms, there are multiple generated spl images.  Extend
-BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
-after uboot build completes.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Jason Abele <jason@nextthing.co>
----
-For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
-spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-This patch allows them to be listed explicitly.
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed in git by:
 
- boot/uboot/Config.in |  2 +-
- boot/uboot/uboot.mk  | 12 ++++++++----
- 2 files changed, 9 insertions(+), 5 deletions(-)
+commit 348d5edd91abec1fc4cc27965220d54e58217dc3
+Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date:   Tue Mar 8 22:20:55 2016 +0100
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 4a6dc56..d4f9445 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -322,7 +322,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
- 	default "spl/u-boot-spl.bin"
- 	depends on BR2_TARGET_UBOOT_SPL
- 	help
--	  This is the name of the SPL binary, generated during
-+	  A space-separated list of SPL binaries, generated during
- 	  u-boot build. For most platform it is spl/u-boot-spl.bin
- 	  but not always. It is MLO on OMAP for example.
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d539b31..aae99f8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -169,7 +169,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
- 	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
- 		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
- 	$(if $(BR2_TARGET_UBOOT_SPL),
--		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
-+		for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
-+			cp -dpf $(@D)/$$p $(BINARIES_DIR)/; \
-+		done)
- 	$(if $(BR2_TARGET_UBOOT_ENVIMAGE),
- 		$(HOST_DIR)/usr/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
-@@ -196,9 +198,11 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
- define UBOOT_GENERATE_ZYNQ_IMAGE
--	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
--		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
--		-o $(BINARIES_DIR)/BOOT.BIN
-+	for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
-+		$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-+			-u $(@D)/$$p -o $(BINARIES_DIR)/BOOT.BIN; \
-+		fi; \
-+	done
- endef
- UBOOT_DEPENDENCIES += host-zynq-boot-bin
- UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_GENERATE_ZYNQ_IMAGE
+    gcc: fix dynamic linker path for mips soft-float
+
+    This commit updates the gcc musl patches for gcc 4.7, 4.8 and 4.9 so
+    that the path to the dynamic linker encoded as "program interpreter"
+    in the generated binaries actually matches the symbolic link installed
+    by musl when building for mips soft-float.
+
+    Indeed, musl installs a symlink called ld-musl-mipsel-sf.so.1, but gcc
+    currently generates binaries that use /lib/ld-musl-mips.so as program
+    interpreter.
+
+    The fix is simply the one from
+    https://bitbucket.org/GregorR/musl-cross/commits/825219202365, i.e
+    adjust MUSL_DYNAMIC_LINKER in our musl gcc patches.
+
+    Thanks to these patches:
+
+    $ ./host/usr/bin/mipsel-linux-readelf -a ./target/bin/busybox
+    [...]
+          [Requesting program interpreter: /lib/ld-musl-mipsel-sf.so.1]
+    [...]
+
+    gcc 5.x doesn't need any fix because the musl patches already use the
+    right value.
+
+    Fixes bug #7562.
+
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
 -- 
-2.1.4
+You are receiving this mail because:
+You are on the CC list for the bug.
