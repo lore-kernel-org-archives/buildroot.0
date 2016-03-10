@@ -1,48 +1,98 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 21:22:44 +0100
-Subject: [Buildroot] [git commit] configs/altera_socdk_defconfig: use http
-	access for u-boot/linux git repos
-Message-ID: <20160310202908.A28748188C@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 10 Mar 2016 21:29:13 +0100
+Subject: [Buildroot] [PATCH 5/8] linux: add the generic help rules
+In-Reply-To: <56E0B5F5.9040109@mind.be>
+References: <cover.1457561521.git.yann.morin.1998@free.fr>
+ <a92e7f048404917f9c9e7ed62c7041af04bf5934.1457561521.git.yann.morin.1998@free.fr>
+ <56E0B5F5.9040109@mind.be>
+Message-ID: <20160310202913.GE3424@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9415c5663525b54d3a6abb9325974ca2f02f9736
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 2016-03-10 00:47 +0100, Arnout Vandecappelle spake thusly:
+> On 03/09/16 23:22, Yann E. MORIN wrote:
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >Cc: J?r?me Pouiller <jezz@sysmic.org>
+> >Cc: Arnout Vandecappelle <arnout@mind.be>
+> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> >---
+> >  Makefile       | 6 ------
+> >  linux/linux.mk | 6 ++++++
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> >
+> >diff --git a/Makefile b/Makefile
+> >index 8134a14..cdf2dac 100644
+> >--- a/Makefile
+> >+++ b/Makefile
+> >@@ -933,12 +933,6 @@ help:
+> >  	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+> >  	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+> >  	@$(call HELP_RULE,$(PACKAGE_HELP))
+> >-ifeq ($(BR2_LINUX_KERNEL),y)
+> >-	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
+> >-	@echo '  linux-savedefconfig    - Run Linux kernel savedefconfig'
+> >-	@echo '  linux-update-defconfig - Save the Linux configuration to the path specified'
+> >-	@echo '                             by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE'
+> >-endif
+> >  ifeq ($(BR2_TOOLCHAIN_BUILDROOT),y)
+> >  	@echo '  uclibc-menuconfig      - Run uClibc menuconfig'
+> >  endif
+> >diff --git a/linux/linux.mk b/linux/linux.mk
+> >index 7e20255..d530d00 100644
+> >--- a/linux/linux.mk
+> >+++ b/linux/linux.mk
+> >@@ -8,6 +8,12 @@ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+> >  LINUX_LICENSE = GPLv2
+> >  LINUX_LICENSE_FILES = COPYING
+> >
+> >+LINUX_HELP = \
+> >+	"linux-menuconfig : Run Linux kernel menuconfig" \
+> >+	"linux-savedefconfig : Run Linux kernel savedefconfig" \
+> >+	"linux-update-defconfig : Save the Linux configuration to the path specified \
+> >+				  by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE"
+> 
+>  So now this will be printed on a single line, instead of being split like
+> it was before. Well, J?r?me's patch already did that as well I guess.
+> 
+>  Fixing that properly would make the HELP_RULE a bit too complicated, but
+> starting the continuation line with " :   by..." doesn't look too shabby.
+> 
+>  I was also thinking that a define would have been better, but that doesn't
+> work unfortunately.
 
-Fixes:
-https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/114650743
+I have fixed it here. It works for any arbitrary number of needed extra
+lines.
 
-git:// access to git.rocketboards.org has been failing for a while, and
-git:// is sometimes not allowed through corporate firewalls, so change to
-git-over-http instead.
+/me expects some flaming for a trivial sed expression... ;-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/altera_socdk_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/configs/altera_socdk_defconfig b/configs/altera_socdk_defconfig
-index 6b05a27..a7b78ca 100644
---- a/configs/altera_socdk_defconfig
-+++ b/configs/altera_socdk_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_LINUX_KERNEL_INTREE_DTS_NAME)"
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
--BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.rocketboards.org/linux-socfpga.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="http://git.rocketboards.org/linux-socfpga.git"
- BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_socfpga-3.13_14.02.02"
- BR2_LINUX_KERNEL_DEFCONFIG="socfpga"
- BR2_LINUX_KERNEL_ZIMAGE=y
-@@ -27,7 +27,7 @@ BR2_TARGET_ROOTFS_EXT2_3=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="socfpga_cyclone5"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
--BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.rocketboards.org/u-boot-socfpga.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.rocketboards.org/u-boot-socfpga.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_socfpga_v2013.01.01_14.02.02"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+>  Regards,
+>  Arnout
+> 
+> >+
+> >  # Compute LINUX_SOURCE and LINUX_SITE from the configuration
+> >  ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+> >  LINUX_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+> >
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
