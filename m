@@ -1,295 +1,184 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 10 Mar 2016 07:31:50 +0300
-Subject: [Buildroot] [PATCH] gdb: backport xtensa NPTL support to 7.10.1
-Message-ID: <1457584310-20884-1-git-send-email-jcmvbkbc@gmail.com>
+Date: Thu, 10 Mar 2016 07:32:44 +0300
+Subject: [Buildroot] [PATCH] binutils: backport xtensa .init/.fini literals
+	moving fix to 2.26
+Message-ID: <1457584364-20968-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These changes allow debugging multithreaded NPTL xtensa applications and
-inspect TLS variables.
+Despite the documentation and the comment in xtensa_move_literals, in
+the presence of --text-section-literals and --auto-litpools literals are
+moved from the separate literal sections into .init and .fini, because
+the check in the xtensa_move_literals is incorrect.
 
-Backported from: 40045d91812b25c88c8275b8c08d27c234b68ba8
+This fixes build errors seen with projects that have .init/.fini and use
+text-section-literals.
+
+Backported from: 4111950f363221c4641dc2f33bea61cc94f34906
+Reported-by: Waldemar Brodkorb <mail@waldemar-brodkorb.de>
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- .../0004-xtensa-implement-NPTL-helpers.patch       | 267 +++++++++++++++++++++
- 1 file changed, 267 insertions(+)
- create mode 100644 package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
+ ...03-xtensa-fix-.init-.fini-literals-moving.patch | 149 +++++++++++++++++++++
+ 1 file changed, 149 insertions(+)
+ create mode 100644 package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch
 
-diff --git a/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch b/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
+diff --git a/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch b/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch
 new file mode 100644
-index 0000000..e7bc74e
+index 0000000..ead3e42
 --- /dev/null
-+++ b/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
-@@ -0,0 +1,267 @@
-+From d4eb69fc4b50f9a0babd70b28d0601b40f31bd0f Mon Sep 17 00:00:00 2001
++++ b/package/binutils/2.26/0903-xtensa-fix-.init-.fini-literals-moving.patch
+@@ -0,0 +1,149 @@
++From 7db2accc3fdea0aaa0c3a76a413d8e8030e022c3 Mon Sep 17 00:00:00 2001
 +From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Thu, 2 Jul 2015 15:10:58 +0300
-+Subject: [PATCH] xtensa: implement NPTL helpers
++Date: Tue, 16 Feb 2016 02:23:28 +0300
++Subject: [PATCH] xtensa: fix .init/.fini literals moving
 +
-+These changes allow debugging multithreaded NPTL xtensa applications.
++Despite the documentation and the comment in xtensa_move_literals, in
++the presence of --text-section-literals and --auto-litpools literals are
++moved from the separate literal sections into .init and .fini, because
++the check in the xtensa_move_literals is incorrect.
 +
-+2015-08-20  Max Filippov  <jcmvbkbc@gmail.com>
-+gdb/gdbserver/
-+	* configure.srv (xtensa*-*-linux*): Add srv_linux_thread_db=yes.
-+	* linux-xtensa-low.c (arch/xtensa.h gdb_proc_service.h): New
-+	#includes.
-+	(ps_get_thread_area): New function.
++This moving was broken with introduction of auto litpools: some literals
++now may be lost. This happens because literal frags emitted from .init
++and .fini are not closed when new .literal_position marks new literal
++pool. Then frag_align(2, 0, 0) changes type of the last literal frag to
++rs_align. rs_align frags are skipped in the xtensa_move_literals. As a
++result fixups against such literals are not moved out of .init.literal/
++.fini.literal sections producing the following assembler error:
 +
-+2015-08-20  Max Filippov  <jcmvbkbc@gmail.com>
-+gdb/
-+	* arch/xtensa.h: New file.
-+	* xtensa-linux-nat.c (gdb_proc_service.h): New #include.
-+	(ps_get_thread_area): New function.
-+	* xtensa-linux-tdep.c (xtensa_linux_init_abi): Add call to
-+	set_gdbarch_fetch_tls_load_module_address to enable TLS support.
-+	* xtensa-tdep.c (osabi.h): New #include.
-+	(xtensa_gdbarch_init): Call gdbarch_init_osabi to register
-+	xtensa-specific hooks.
-+	* xtensa-tdep.h (struct xtensa_elf_gregset_t): Add threadptr
-+	member and move the structure to arch/xtensa.h.
++  test.S: Warning: fixes not all moved from .init.literal
++  test.S: Internal error!
++
++Fix check for .init.literal/.fini.literal in the xtensa_move_literals
++and don't let it move literals from there in the presence of
++--text-section-literals or --auto-litpools.
++
++2016-02-17  Max Filippov  <jcmvbkbc@gmail.com>
++gas/
++	* config/tc-xtensa.c (xtensa_move_literals): Fix check for
++	.init.literal/.fini.literal section name.
++	* testsuite/gas/xtensa/all.exp: Add init-fini-literals to the
++	list of xtensa tests.
++	* testsuite/gas/xtensa/init-fini-literals.d: New file:
++	init-fini-literals test result patterns.
++	* testsuite/gas/xtensa/init-fini-literals.s: New file:
++	init-fini-literals test.
 +
 +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 +---
-+Backported from: 40045d91812b25c88c8275b8c08d27c234b68ba8
-+Changes to ChangeLog files are dropped.
++Backported from: 4111950f363221c4641dc2f33bea61cc94f34906
 +
-+ gdb/arch/xtensa.h                | 46 ++++++++++++++++++++++++++++++++++++++++
-+ gdb/gdbserver/configure.srv      |  1 +
-+ gdb/gdbserver/linux-xtensa-low.c | 21 ++++++++++++++++++
-+ gdb/xtensa-linux-nat.c           | 22 ++++++++++++++++++
-+ gdb/xtensa-linux-tdep.c          |  4 ++++
-+ gdb/xtensa-tdep.c                |  4 ++++
-+ gdb/xtensa-tdep.h                | 24 ++------------------
-+ 7 files changed, 100 insertions(+), 22 deletions(-)
-+ create mode 100644 gdb/arch/xtensa.h
++ gas/config/tc-xtensa.c                        | 12 ++++++++++--
++ gas/testsuite/gas/xtensa/all.exp              |  1 +
++ gas/testsuite/gas/xtensa/init-fini-literals.d | 24 ++++++++++++++++++++++++
++ gas/testsuite/gas/xtensa/init-fini-literals.s | 19 +++++++++++++++++++
++ 4 files changed, 54 insertions(+), 2 deletions(-)
++ create mode 100644 gas/testsuite/gas/xtensa/init-fini-literals.d
++ create mode 100644 gas/testsuite/gas/xtensa/init-fini-literals.s
 +
-+diff --git a/gdb/arch/xtensa.h b/gdb/arch/xtensa.h
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 36a06cc..5773634 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -11061,6 +11061,10 @@ xtensa_move_literals (void)
++   fixS *fix, *next_fix, **fix_splice;
++   sym_list *lit;
++   struct litpool_seg *lps;
+++  const char *init_name = INIT_SECTION_NAME;
+++  const char *fini_name = FINI_SECTION_NAME;
+++  int init_name_len = strlen(init_name);
+++  int fini_name_len = strlen(fini_name);
++ 
++   mark_literal_frags (literal_head->next);
++ 
++@@ -11171,9 +11175,13 @@ xtensa_move_literals (void)
++ 
++   for (segment = literal_head->next; segment; segment = segment->next)
++     {
+++      const char *seg_name = segment_name (segment->seg);
+++
++       /* Keep the literals for .init and .fini in separate sections.  */
++-      if (!strcmp (segment_name (segment->seg), INIT_SECTION_NAME)
++-	  || !strcmp (segment_name (segment->seg), FINI_SECTION_NAME))
+++      if ((!memcmp (seg_name, init_name, init_name_len) &&
+++	   !strcmp (seg_name + init_name_len, ".literal")) ||
+++	  (!memcmp (seg_name, fini_name, fini_name_len) &&
+++	   !strcmp (seg_name + fini_name_len, ".literal")))
++ 	continue;
++ 
++       frchain_from = seg_info (segment->seg)->frchainP;
++diff --git a/gas/testsuite/gas/xtensa/all.exp b/gas/testsuite/gas/xtensa/all.exp
++index 7ff7bd7..6b67320 100644
++--- a/gas/testsuite/gas/xtensa/all.exp
+++++ b/gas/testsuite/gas/xtensa/all.exp
++@@ -102,6 +102,7 @@ if [istarget xtensa*-*-*] then {
++     run_dump_test "first_frag_align"
++     run_dump_test "auto-litpools"
++     run_dump_test "loc"
+++    run_dump_test "init-fini-literals"
++ }
++ 
++ if [info exists errorInfo] then {
++diff --git a/gas/testsuite/gas/xtensa/init-fini-literals.d b/gas/testsuite/gas/xtensa/init-fini-literals.d
 +new file mode 100644
-+index 0000000..fe96584
++index 0000000..19ed121
 +--- /dev/null
-++++ b/gdb/arch/xtensa.h
-+@@ -0,0 +1,46 @@
-++/* Common Target-dependent code for the Xtensa port of GDB, the GNU debugger.
+++++ b/gas/testsuite/gas/xtensa/init-fini-literals.d
++@@ -0,0 +1,24 @@
+++#as: --text-section-literals
+++#objdump: -r
+++#name: check that literals for .init and .fini always go to separate sections
 ++
-++   Copyright (C) 2003-2015 Free Software Foundation, Inc.
+++.*: +file format .*xtensa.*
+++#...
+++RELOCATION RECORDS FOR \[\.init\.literal\]:
+++#...
+++00000000 R_XTENSA_PLT      init
+++#...
+++RELOCATION RECORDS FOR \[\.fini\.literal\]:
+++#...
+++00000000 R_XTENSA_PLT      fini
+++#...
+++RELOCATION RECORDS FOR \[\.init\]:
+++#...
+++.* R_XTENSA_SLOT0_OP  \.init\.literal
+++.* R_XTENSA_SLOT0_OP  \.init\.literal\+0x00000004
+++#...
+++RELOCATION RECORDS FOR \[\.fini\]:
+++#...
+++.* R_XTENSA_SLOT0_OP  \.fini\.literal
+++.* R_XTENSA_SLOT0_OP  \.fini\.literal\+0x00000004
+++#...
++diff --git a/gas/testsuite/gas/xtensa/init-fini-literals.s b/gas/testsuite/gas/xtensa/init-fini-literals.s
++new file mode 100644
++index 0000000..7c9ec17
++--- /dev/null
+++++ b/gas/testsuite/gas/xtensa/init-fini-literals.s
++@@ -0,0 +1,19 @@
+++	.section	.init,"ax", at progbits
+++	.literal_position
+++	.literal .LC0, init at PLT
+++	.literal_position
+++	.literal .LC1, 1
+++	.align	4
 ++
-++   This file is part of GDB.
+++	l32r	a2, .LC0
+++	l32r	a2, .LC1
 ++
-++   This program is free software; you can redistribute it and/or modify
-++   it under the terms of the GNU General Public License as published by
-++   the Free Software Foundation; either version 3 of the License, or
-++   (at your option) any later version.
+++	.section	.fini,"ax", at progbits
+++	.literal_position
+++	.literal .LC2, fini at PLT
+++	.literal_position
+++	.literal .LC3, 1
+++	.align	4
 ++
-++   This program is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++   GNU General Public License for more details.
-++
-++   You should have received a copy of the GNU General Public License
-++   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-++
-++#ifndef XTENSA_H
-++#define XTENSA_H
-++
-++/* Xtensa ELF core file register set representation ('.reg' section).
-++   Copied from target-side ELF header <xtensa/elf.h>.  */
-++
-++typedef uint32_t xtensa_elf_greg_t;
-++
-++typedef struct
-++{
-++  xtensa_elf_greg_t pc;
-++  xtensa_elf_greg_t ps;
-++  xtensa_elf_greg_t lbeg;
-++  xtensa_elf_greg_t lend;
-++  xtensa_elf_greg_t lcount;
-++  xtensa_elf_greg_t sar;
-++  xtensa_elf_greg_t windowstart;
-++  xtensa_elf_greg_t windowbase;
-++  xtensa_elf_greg_t threadptr;
-++  xtensa_elf_greg_t reserved[7+48];
-++  xtensa_elf_greg_t ar[64];
-++} xtensa_elf_gregset_t;
-++
-++#define XTENSA_ELF_NGREG (sizeof (xtensa_elf_gregset_t) \
-++			  / sizeof (xtensa_elf_greg_t))
-++
-++#endif
-+diff --git a/gdb/gdbserver/configure.srv b/gdb/gdbserver/configure.srv
-+index 0b18d1d..320c26a 100644
-+--- a/gdb/gdbserver/configure.srv
-++++ b/gdb/gdbserver/configure.srv
-+@@ -352,6 +352,7 @@ case "${target}" in
-+   xtensa*-*-linux*)	srv_regobj=reg-xtensa.o
-+ 			srv_tgtobj="$srv_linux_obj linux-xtensa-low.o"
-+ 			srv_linux_regsets=yes
-++			srv_linux_thread_db=yes
-+ 			;;
-+   tilegx-*-linux*)	srv_regobj=reg-tilegx.o
-+ 			srv_regobj="${srv_regobj} reg-tilegx32.o"
-+diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
-+index 4daccee..debe467 100644
-+--- a/gdb/gdbserver/linux-xtensa-low.c
-++++ b/gdb/gdbserver/linux-xtensa-low.c
-+@@ -26,6 +26,8 @@ extern const struct target_desc *tdesc_xtensa;
-+ 
-+ #include <asm/ptrace.h>
-+ #include <xtensa-config.h>
-++#include "arch/xtensa.h"
-++#include "gdb_proc_service.h"
-+ 
-+ #include "xtensa-xtregs.c"
-+ 
-+@@ -179,6 +181,25 @@ xtensa_breakpoint_at (CORE_ADDR where)
-+ 		  xtensa_breakpoint, xtensa_breakpoint_len) == 0;
-+ }
-+ 
-++/* Called by libthread_db.  */
-++
-++ps_err_e
-++ps_get_thread_area (const struct ps_prochandle *ph,
-++                    lwpid_t lwpid, int idx, void **base)
-++{
-++  xtensa_elf_gregset_t regs;
-++
-++  if (ptrace (PTRACE_GETREGS, lwpid, NULL, &regs) != 0)
-++    return PS_ERR;
-++
-++  /* IDX is the bias from the thread pointer to the beginning of the
-++     thread descriptor.  It has to be subtracted due to implementation
-++     quirks in libthread_db.  */
-++  *base = (void *) ((char *) regs.threadptr - idx);
-++
-++  return PS_OK;
-++}
-++
-+ static struct regsets_info xtensa_regsets_info =
-+   {
-+     xtensa_regsets, /* regsets */
-+diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
-+index 77ad3e0..5538d5b 100644
-+--- a/gdb/xtensa-linux-nat.c
-++++ b/gdb/xtensa-linux-nat.c
-+@@ -37,6 +37,9 @@
-+ #include "gregset.h"
-+ #include "xtensa-tdep.h"
-+ 
-++/* Defines ps_err_e, struct ps_prochandle.  */
-++#include "gdb_proc_service.h"
-++
-+ /* Extended register set depends on hardware configs.
-+    Keeping these definitions separately allows to introduce
-+    hardware-specific overlays.  */
-+@@ -280,6 +283,25 @@ xtensa_linux_store_inferior_registers (struct target_ops *ops,
-+     store_xtregs (regcache, regnum);
-+ }
-+ 
-++/* Called by libthread_db.  */
-++
-++ps_err_e
-++ps_get_thread_area (const struct ps_prochandle *ph,
-++                    lwpid_t lwpid, int idx, void **base)
-++{
-++  xtensa_elf_gregset_t regs;
-++
-++  if (ptrace (PTRACE_GETREGS, lwpid, NULL, &regs) != 0)
-++    return PS_ERR;
-++
-++  /* IDX is the bias from the thread pointer to the beginning of the
-++     thread descriptor.  It has to be subtracted due to implementation
-++     quirks in libthread_db.  */
-++  *base = (void *) ((char *) regs.threadptr - idx);
-++
-++  return PS_OK;
-++}
-++
-+ void _initialize_xtensa_linux_nat (void);
-+ 
-+ void
-+diff --git a/gdb/xtensa-linux-tdep.c b/gdb/xtensa-linux-tdep.c
-+index 61ea9b0..99e0d3e 100644
-+--- a/gdb/xtensa-linux-tdep.c
-++++ b/gdb/xtensa-linux-tdep.c
-+@@ -106,6 +106,10 @@ xtensa_linux_init_abi (struct gdbarch_info info, struct gdbarch *gdbarch)
-+ 				      xtensa_linux_gdb_signal_from_target);
-+   set_gdbarch_gdb_signal_to_target (gdbarch,
-+ 				    xtensa_linux_gdb_signal_to_target);
-++
-++  /* Enable TLS support.  */
-++  set_gdbarch_fetch_tls_load_module_address (gdbarch,
-++                                             svr4_fetch_objfile_link_map);
-+ }
-+ 
-+ /* Provide a prototype to silence -Wmissing-prototypes.  */
-+diff --git a/gdb/xtensa-tdep.c b/gdb/xtensa-tdep.c
-+index 55e7d98..4b693ed 100644
-+--- a/gdb/xtensa-tdep.c
-++++ b/gdb/xtensa-tdep.c
-+@@ -28,6 +28,7 @@
-+ #include "value.h"
-+ #include "dis-asm.h"
-+ #include "inferior.h"
-++#include "osabi.h"
-+ #include "floatformat.h"
-+ #include "regcache.h"
-+ #include "reggroups.h"
-+@@ -3273,6 +3274,9 @@ xtensa_gdbarch_init (struct gdbarch_info info, struct gdbarch_list *arches)
-+   set_solib_svr4_fetch_link_map_offsets
-+     (gdbarch, svr4_ilp32_fetch_link_map_offsets);
-+ 
-++  /* Hook in the ABI-specific overrides, if they have been registered.  */
-++  gdbarch_init_osabi (info, gdbarch);
-++
-+   return gdbarch;
-+ }
-+ 
-+diff --git a/gdb/xtensa-tdep.h b/gdb/xtensa-tdep.h
-+index caa2988..5b28cab 100644
-+--- a/gdb/xtensa-tdep.h
-++++ b/gdb/xtensa-tdep.h
-+@@ -18,6 +18,8 @@
-+    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-+ 
-+ 
-++#include "arch/xtensa.h"
-++
-+ /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
-+    whenever the "tdep" structure changes in an incompatible way.  */
-+ 
-+@@ -81,28 +83,6 @@ typedef enum
-+ } xtensa_target_flags_t;
-+ 
-+ 
-+-/* Xtensa ELF core file register set representation ('.reg' section).
-+-   Copied from target-side ELF header <xtensa/elf.h>.  */
-+-
-+-typedef uint32_t xtensa_elf_greg_t;
-+-
-+-typedef struct
-+-{
-+-  xtensa_elf_greg_t pc;
-+-  xtensa_elf_greg_t ps;
-+-  xtensa_elf_greg_t lbeg;
-+-  xtensa_elf_greg_t lend;
-+-  xtensa_elf_greg_t lcount;
-+-  xtensa_elf_greg_t sar;
-+-  xtensa_elf_greg_t windowstart;
-+-  xtensa_elf_greg_t windowbase;
-+-  xtensa_elf_greg_t reserved[8+48];
-+-  xtensa_elf_greg_t ar[64];
-+-} xtensa_elf_gregset_t;
-+-
-+-#define XTENSA_ELF_NGREG (sizeof (xtensa_elf_gregset_t) \
-+-			  / sizeof (xtensa_elf_greg_t))
-+-
-+ /*  Mask.  */
-+ 
-+ typedef struct 
+++	l32r	a2, .LC2
+++	l32r	a2, .LC3
 +-- 
-+1.8.1.4
++2.1.4
 +
 -- 
 2.1.4
