@@ -1,86 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 23:34:42 +0100
-Subject: [Buildroot] [PATCH] uboot: install multiple spl images
-In-Reply-To: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
-References: <1457648583-25071-1-git-send-email-jason.abele@gmail.com>
-Message-ID: <20160310233442.42eb90cf@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 10 Mar 2016 22:58:27 +0100
+Subject: [Buildroot] [PATCH] mesa3d: add intel gallium driver support
+References: <1457632891-4354-1-git-send-email-gustavo@zacarias.com.ar>
+ <8760wum7dj.fsf@dell.be.48ers.dk> <56E1D44F.70807@zacarias.com.ar>
+Message-ID: <3979rcxl7o.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jason,
+Am Thu, 10 Mar 2016 17:08:47 -0300 schrieb Gustavo Zacarias:
 
-On Thu, 10 Mar 2016 14:23:03 -0800, Jason Abele wrote:
-> From: Jason Abele <jason@nextthing.co>
+> On 10/03/16 16:59, Peter Korsgaard wrote:
 > 
-> For some platforms, there are multiple generated spl images.  Extend
-> BR2_TARGET_UBOOT_SPL_NAME to allow these multiple images to be installed
-> after uboot build completes.
+>> I don't know much about mesa, but I thought the Intel driver didn't use
+>> galium? Is this some kind of alternative to the dri driver?
 > 
-> Signed-off-by: Jason Abele <jason@nextthing.co>
+> You've got both, from mesa configure:
+> 
+> --with-gallium-drivers[=DIRS...]
+>     comma delimited Gallium drivers list, e.g.
+>     
+"i915,ilo,nouveau,r300,r600,radeonsi,freedreno,svga,swrast,vc4,virgl"
+>     [default=r300,r600,svga,swrast]
+> 
+> Enabling it builds /usr/lib/dri/i915_dri.so besides others you may have
+> selected (in my case kms_swrast_dri.so and swrast_dri.so).
+> Otherwise we can ask Bernd, but i get that additional driver with this
+> option, and it's documented.
+> Regards.
 
-For some reason, I was expecting this patch to arrive :-)
+Hi,
 
-> ---
-> For example, the NextThingCo C.H.I.P. uses two binaries from uboot,
-> spl/sunxi-spl.bin and spl/sunxi-spl-with-ecc.bin.
+I am using the DRI driver for my Kodi system and never tried the Gallium 
+one because my personal Kodi package follows the OpenElec development, 
+and they use DRI, too ;)
+https://github.com/OpenELEC/OpenELEC.tv/blob/master/config/graphic#L26
 
-This should be part of the commit log itself as it is a very useful
-example of why this patch was needed.
+Some quotes I found during a quick research:
+http://www.mesa3d.org/relnotes/8.0.html (February 9, 2012)
+"Removed the dead Gallium i965, cell and failover drivers, which were 
+either broken and with nobody in sight to fix the situation or 
+deprecated."
 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index 4a6dc56..d4f9445 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -322,7 +322,7 @@ config BR2_TARGET_UBOOT_SPL_NAME
->  	default "spl/u-boot-spl.bin"
->  	depends on BR2_TARGET_UBOOT_SPL
->  	help
-> -	  This is the name of the SPL binary, generated during
-> +	  A space-separated list of SPL binaries, generated during
->  	  u-boot build. For most platform it is spl/u-boot-spl.bin
->  	  but not always. It is MLO on OMAP for example.
->  
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index d539b31..aae99f8 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -169,7 +169,9 @@ define UBOOT_INSTALL_IMAGES_CMDS
->  	$(if $(BR2_TARGET_UBOOT_FORMAT_NAND),
->  		cp -dpf $(@D)/$(UBOOT_MAKE_TARGET) $(BINARIES_DIR))
->  	$(if $(BR2_TARGET_UBOOT_SPL),
-> -		cp -dpf $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)) $(BINARIES_DIR)/)
-> +		for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
-> +			cp -dpf $(@D)/$$p $(BINARIES_DIR)/; \
-> +		done)
+https://blogs.igalia.com/itoral/2014/08/08/diving-into-mesa/
+"Although there were some efforts to port the Intel driver to Gallium in 
+the past, development of the Intel Gallium drivers (i915g and i965g) is 
+stalled now as far as I know. Intel is focusing in the classic version of 
+the drivers instead."
 
-Ideally, using the make $(foreach ...) function here would be better.
+These days Intel is busy in coding a Vulkan driver for mesa3d:
+https://cgit.freedesktop.org/mesa/mesa/tree/README.intel-vulkan.txt?
+h=vulkan
 
->  ifeq ($(BR2_TARGET_UBOOT_ZYNQ_IMAGE),y)
->  define UBOOT_GENERATE_ZYNQ_IMAGE
-> -	$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-> -		-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))     \
-> -		-o $(BINARIES_DIR)/BOOT.BIN
-> +	for p in $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)); do \
-> +		$(HOST_DIR)/usr/bin/python2 $(HOST_DIR)/usr/bin/zynq-boot-bin.py \
-> +			-u $(@D)/$$p -o $(BINARIES_DIR)/BOOT.BIN; \
-> +		fi; \
-> +	done
+To sum up: Yes, it is possible to build a i915 gallium driver in mesa3d, 
+but who needs it? That's the reason I never implemented a Config.in 
+option for it, but it will not hurt having one ;)
 
-Having a for loop here is really useless, since the output file is
-BOOT.BIN at each iteration of the loop. Since for the specific Zynq
-case it doesn't make sense to have multiple values in
-BR2_TARGET_UBOOT_SPL_NAME, I would suggest to just do:
-
--	-u $(@D)/$(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME))
-+	-u $(@D)/$(firstword $(call qstrip,$(BR2_TARGET_UBOOT_SPL_NAME)))
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards, Bernd
