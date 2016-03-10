@@ -1,44 +1,32 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 10 Mar 2016 15:34:28 -0300
-Subject: [Buildroot] [PATCH] openssh: security bump to version 7.2p2
-Message-ID: <1457634868-4463-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 10 Mar 2016 16:43:10 -0300
+Subject: [Buildroot] [PATCH] busybox: use md5 as default password algorithm
+Message-ID: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-CVE-2016-3115 - sanitise X11 authentication credentials to avoid xauth
-command injection when X11Forwarding is enabled.
+DES is terribly outdated and a security vulnerability.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/openssh/openssh.hash | 2 +-
- package/openssh/openssh.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 36346e0..46d9f9b 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
- # Also from http://www.openssh.com/txt/release-7.2
--sha256	973cc37b2f3597e4cf599b09e604e79c0fe5d9b6f595a24e91ed0662860b4ac3	openssh-7.2p1.tar.gz
-+sha256	a72781d1a043876a224ff1b0032daa4094d87565a68528759c1c2cab5482548c	openssh-7.2p2.tar.gz
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 0e0bcab..856646c 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENSSH_VERSION = 7.2p1
-+OPENSSH_VERSION = 7.2p2
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3c BSD-2c Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 2cf989d..693b9d2 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -496,7 +496,7 @@ CONFIG_PASSWD=y
+ CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
+ # CONFIG_CRYPTPW is not set
+ # CONFIG_CHPASSWD is not set
+-CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
++CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="md5"
+ CONFIG_SU=y
+ CONFIG_FEATURE_SU_SYSLOG=y
+ CONFIG_FEATURE_SU_CHECKS_SHELLS=y
 -- 
 2.4.10
