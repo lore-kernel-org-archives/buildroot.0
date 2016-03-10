@@ -1,33 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 21:38:30 +0100
-Subject: [Buildroot] [PATCH] lksctp-tools: fix musl build
-In-Reply-To: <1457602091-14399-1-git-send-email-yegorslists@googlemail.com>
-References: <1457602091-14399-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160310213830.322852f1@free-electrons.com>
+Date: Thu, 10 Mar 2016 21:42:22 +0100
+Subject: [Buildroot] [PATCH] connman: switch to BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <1457572011-2749-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457572011-2749-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160310214222.1e7c6929@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Gustavo,
 
-On Thu, 10 Mar 2016 10:28:11 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On Wed,  9 Mar 2016 22:06:51 -0300, Gustavo Zacarias wrote:
+> Switch to BR2_TOOLCHAIN_HAS_SYNC_4 from BR2_sparc conditional since it's
+> the correct one.
 > 
-> Add a patch replacing __BEGIN_DECLS/__END_DECLS with
-> "extern "C" {" definition.
-> 
-> Fixes:
-> 
-> http://autobuild.buildroot.net/results/d7d/d7d1c6a13ad788ef74ac0487bf2bdbdcd7d52d40/
-> http://autobuild.buildroot.net/results/06a/06a76d80701b126789c6c8e867db067e3b927caa/
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/connman/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Please submit upstream, thanks!
 
 Thomas
 -- 
