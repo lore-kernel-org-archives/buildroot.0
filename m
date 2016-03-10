@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 15:03:56 +0100
-Subject: [Buildroot] [PATCH] dropbear: security bump to version 2016.72
-In-Reply-To: <1457616919-8635-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 10 Mar 2016 10:35:19 -0300")
-References: <1457616919-8635-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87pov2o2er.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 15:05:56 +0100
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{10,
+	14}.x and 4.4.x series
+In-Reply-To: <1457570117-15470-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 9 Mar 2016 21:35:16 -0300")
+References: <1457570117-15470-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lh5qo2bf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > Fixes:
- > Validate X11 forwarding input. Could allow bypass of authorized_keys
- > command= restrictions.
-
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Sorry, I had made the change here locally before seeing your patch.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
