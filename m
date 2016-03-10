@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 21:09:26 +0100
-Subject: [Buildroot] [PATCH] gdb: specify where to find lzma libraries
-In-Reply-To: <87egbim7qb.fsf@dell.be.48ers.dk>
-References: <1457629826-21020-1-git-send-email-Vincent.Riera@imgtec.com>
- <87egbim7qb.fsf@dell.be.48ers.dk>
-Message-ID: <20160310210926.23171bf6@free-electrons.com>
+Date: Thu, 10 Mar 2016 21:16:55 +0100
+Subject: [Buildroot] [PATCH 1/2] python-crossbar: propagate missing
+	dependencies
+Message-ID: <1457641016-3054-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+python-crossbar selects python-msgpack which selects msgpack, which
+depends on C++ and 4-byte __sync intrinsics. But python-crossbar does
+not have the dependencies propagated.
 
-On Thu, 10 Mar 2016 20:51:56 +0100, Peter Korsgaard wrote:
+Fixes:
 
->  >  ifeq ($(BR2_PACKAGE_XZ),y)
->  >  GDB_CONF_OPTS += --with-lzma
->  > +GDB_CONF_OPTS += --with-liblzma-prefix=$(HOST_DIR)/usr
-> 
-> But GDB_CONF_OPTS is for gdb for the target, so HOST_DIR/usr doesn't
-> seem right?
+  http://autobuild.buildroot.org/results/80f58b7264139dd82c690cb8aae97349aa412539/
 
-Gaah, yes, indeed. My suggestion in the bug report was done quickly
-while at work. --with-liblzma-prefix=$(HOST_DIR)/usr should indeed be
-passed in HOST_GDB_CONF_OPTS.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/python-crossbar/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index 84c65c1..4e613db 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -29,9 +29,15 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	select BR2_PACKAGE_PYTHON_TWISTED
+ 	select BR2_PACKAGE_PYTHON_UJSON
+ 	select BR2_PACKAGE_PYTHON_WSACCEL
++	depends on BR2_INSTALL_LIBSTDCPP # python-msgpack -> msgpack
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # python-msgpack -> msgpack
+ 	help
+ 	  Crossbar.io is an open-source WAMP application router that
+ 	  allows to build advanced applications from loosely-coupled
+ 	  components that can talk in real-time with each other.
+ 
+ 	  https://pypi.python.org/pypi/crossbar
++
++comment "python-crossbar needs a toolchain w/ C++"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.4
