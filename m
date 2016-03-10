@@ -1,50 +1,178 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 20:49:52 +0100
-Subject: [Buildroot] [git commit] bind: security bump to version 9.10.3-P4
-Message-ID: <20160310200229.1200B7FB44@busybox.osuosl.org>
+Date: Thu, 10 Mar 2016 20:49:36 +0100
+Subject: [Buildroot] [git commit] fio: add upstream patch to fix build on
+	SuperH
+Message-ID: <20160310200228.F10CF8025C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67245dcbe14c2e98f44dcc717cfefedd6b7294d9
+commit: https://git.buildroot.net/buildroot/commit/?id=8ec845693b83a5f7192fbb45b9d30a41344c4d4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-CVE-2016-1285 - An error parsing input received by the rndc control
-channel can cause an assertion failure in sexpr.c or alist.c
-CVE-2016-1286 - A problem parsing resource record signatures for DNAME
-resource records can lead to an assertion failure in resolver.c or db.c
-CVE-2016-2088 - A response containing multiple DNS cookies causes
-servers with cookie support enabled to exit with an assertion failure.
+Upstream was super reactive, and already committed a patch to fix the
+build on SuperH, so we take this upstream patch in Buildroot and
+re-enable fio on SuperH.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-of-test-programs-on-archs-that-use-arch_.patch | 126 +++++++++++++++++++++
+ package/fio/Config.in                              |   5 +-
+ 2 files changed, 127 insertions(+), 4 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index fea800c..cd76a54 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,2 +1,2 @@
--# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P3/bind-9.10.3-P3.tar.gz.sha256.asc
--sha256	690810d1fbb72afa629e74638d19cd44e28d2b2e5eb63f55c705ad85d1a4cb83	bind-9.10.3-P3.tar.gz
-+# Verified from ftp://ftp.isc.org/isc/bind9/9.10.3-P4/bind-9.10.3-P4.tar.gz.sha256.asc
-+sha256	2ac044b5fbdf45fb45107af0df961b3b7cb5262a3bf1948ed3fe7a170dd13e3e	bind-9.10.3-P4.tar.gz
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 12dd52e..895217a 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.10.3-P3
-+BIND_VERSION = 9.10.3-P4
- BIND_SITE = ftp://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+diff --git a/package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch b/package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch
+new file mode 100644
+index 0000000..f9f4826
+--- /dev/null
++++ b/package/fio/0001-Fix-compile-of-test-programs-on-archs-that-use-arch_.patch
+@@ -0,0 +1,126 @@
++From 71471cb1d05f3877c8fb935fbf70a6bae789ac49 Mon Sep 17 00:00:00 2001
++From: Jens Axboe <axboe@fb.com>
++Date: Thu, 10 Mar 2016 08:09:41 -0700
++Subject: [PATCH] Fix compile of test programs on archs that use arch_flags at
++ runtime
++
++SuperH compile currently fails with:
++
++gettime.o: In function fio_gettime':
++/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:163: undefined reference to arch_flags'
++gettime.o: In function utime_since_now':
++/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:164: undefined reference to arch_flags'
++gettime.o: In function mtime_since_now':
++/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:164: undefined reference to arch_flags'
++gettime.o: In function time_since_now':
++/home/thomas/projets/buildroot/output/build/fio-fio-2.7/gettime.c:164: undefined reference to arch_flags'
++mutex.o: In function fio_mutex_up':
++/home/thomas/projets/buildroot/output/build/fio-fio-2.7/mutex.c:189: undefined reference to arch_flags'
++collect2: error: ld returned 1 exit status
++Makefile:375: recipe for target 't/stest' failed
++make[2]: *** [t/stest] Error 1
++make[2]: *** Waiting for unfinished jobs....
++
++Fix that by ensuring we have a stub arch.o with the necessary arch flags
++for the standalone test programs.
++
++Signed-off-by: Jens Axboe <axboe@fb.com>
++---
++ Makefile      | 6 +++---
++ t/arch.c      | 5 +++++
++ t/dedupe.c    | 1 +
++ t/lfsr-test.c | 2 ++
++ t/stest.c     | 2 ++
++ 5 files changed, 13 insertions(+), 3 deletions(-)
++ create mode 100644 t/arch.c
++
++diff --git a/Makefile b/Makefile
++index 6b4c9db..a2502dc 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -191,7 +191,7 @@ endif
++ -include $(OBJS:.o=.d)
++ 
++ T_SMALLOC_OBJS = t/stest.o
++-T_SMALLOC_OBJS += gettime.o mutex.o smalloc.o t/log.o t/debug.o
+++T_SMALLOC_OBJS += gettime.o mutex.o smalloc.o t/log.o t/debug.o t/arch.o
++ T_SMALLOC_PROGS = t/stest
++ 
++ T_IEEE_OBJS = t/ieee754.o
++@@ -208,7 +208,7 @@ T_AXMAP_OBJS += lib/lfsr.o lib/axmap.o
++ T_AXMAP_PROGS = t/axmap
++ 
++ T_LFSR_TEST_OBJS = t/lfsr-test.o
++-T_LFSR_TEST_OBJS += lib/lfsr.o gettime.o t/log.o t/debug.o
+++T_LFSR_TEST_OBJS += lib/lfsr.o gettime.o t/log.o t/debug.o t/arch.o
++ T_LFSR_TEST_PROGS = t/lfsr-test
++ 
++ T_GEN_RAND_OBJS = t/gen-rand.o
++@@ -223,7 +223,7 @@ endif
++ 
++ T_DEDUPE_OBJS = t/dedupe.o
++ T_DEDUPE_OBJS += lib/rbtree.o t/log.o mutex.o smalloc.o gettime.o crc/md5.o \
++-		lib/memalign.o lib/bloom.o t/debug.o crc/xxhash.o \
+++		lib/memalign.o lib/bloom.o t/debug.o crc/xxhash.o t/arch.o \
++ 		crc/murmur3.o crc/crc32c.o crc/crc32c-intel.o crc/fnv.o
++ T_DEDUPE_PROGS = t/fio-dedupe
++ 
++diff --git a/t/arch.c b/t/arch.c
++new file mode 100644
++index 0000000..befb7c7
++--- /dev/null
+++++ b/t/arch.c
++@@ -0,0 +1,5 @@
+++#include "../arch/arch.h"
+++
+++unsigned long arch_flags = 0;
+++int tsc_reliable;
+++int arch_random;
++diff --git a/t/dedupe.c b/t/dedupe.c
++index 3a66820..7856da1 100644
++--- a/t/dedupe.c
+++++ b/t/dedupe.c
++@@ -537,6 +537,7 @@ int main(int argc, char *argv[])
++ 	uint64_t nextents = 0, nchunks = 0;
++ 	int c, ret;
++ 
+++	arch_init(argv);
++ 	debug_init();
++ 
++ 	while ((c = getopt(argc, argv, "b:t:d:o:c:p:B:")) != -1) {
++diff --git a/t/lfsr-test.c b/t/lfsr-test.c
++index 4352b89..bad5097 100644
++--- a/t/lfsr-test.c
+++++ b/t/lfsr-test.c
++@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
++ 	void *v = NULL, *v_start;
++ 	double total, mean;
++ 
+++	arch_init(argv);
+++
++ 	/* Read arguments */
++ 	switch (argc) {
++ 		case 5: if (strncmp(argv[4], "verify", 7) == 0)
++diff --git a/t/stest.c b/t/stest.c
++index fb51989..0e0d8b0 100644
++--- a/t/stest.c
+++++ b/t/stest.c
++@@ -4,6 +4,7 @@
++ 
++ #include "../smalloc.h"
++ #include "../flist.h"
+++#include "../arch/arch.h"
++ #include "debug.h"
++ 
++ #define MAGIC1	0xa9b1c8d2
++@@ -69,6 +70,7 @@ static int do_specific_alloc(unsigned long size)
++ 
++ int main(int argc, char *argv[])
++ {
+++	arch_init(argv);
++ 	sinit();
++ 	debug_init();
++ 
++-- 
++2.6.4
++
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index bdfb8ff..89f54f9 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -13,9 +13,6 @@ config BR2_PACKAGE_FIO
+ 	# fio uses fallocate() which becomes fallocate64() while compiling with
+ 	# largefile support, but fallocate64() is not available on nios2
+ 	depends on !BR2_nios2
+-	# does not build on SuperH, issue reported upstream:
+-	# https://github.com/axboe/fio/issues/154
+-	depends on !BR2_sh
+ 	help
+ 	  fio is an I/O tool meant to be used both for benchmark
+ 	  and stress/hardware verification.
+@@ -25,5 +22,5 @@ config BR2_PACKAGE_FIO
+ comment "fio needs a toolchain w/ dynamic library, threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_nios2 && !BR2_sh
++	depends on !BR2_nios2
+ 	depends on BR2_USE_MMU
