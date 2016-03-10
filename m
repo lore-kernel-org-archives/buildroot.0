@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 20:59:36 +0100
-Subject: [Buildroot] [PATCH] mesa3d: add intel gallium driver support
-In-Reply-To: <1457632891-4354-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Thu, 10 Mar 2016 15:01:31 -0300")
-References: <1457632891-4354-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <8760wum7dj.fsf@dell.be.48ers.dk>
+Date: Thu, 10 Mar 2016 21:01:26 +0100
+Subject: [Buildroot] [PATCH] busybox: use md5 as default password
+	algorithm
+In-Reply-To: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Thu, 10 Mar 2016 16:43:10 -0300")
+References: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <871t7im7ah.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +14,27 @@ To: buildroot@busybox.net
 
 >>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
+ > DES is terribly outdated and a security vulnerability.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  > ---
- >  package/mesa3d/Config.in | 9 +++++++++
- >  package/mesa3d/mesa3d.mk | 1 +
- >  2 files changed, 10 insertions(+)
+ >  package/busybox/busybox.config | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
- > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
- > index 9057746..5badefa 100644
- > --- a/package/mesa3d/Config.in
- > +++ b/package/mesa3d/Config.in
- > @@ -43,6 +43,15 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
- 
- >  comment "Gallium drivers"
- 
- > +config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
- > +	bool "Gallium i915 driver"
- > +	depends on BR2_i386 || BR2_x86_64
- > +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- > +	select BR2_PACKAGE_LIBDRM_INTEL
- > +	select BR2_PACKAGE_MESA3D_NEEDS_XA
- > +	help
- > +	  Driver for Intel integrated graphics.
- > +
+ > diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+ > index 2cf989d..693b9d2 100644
+ > --- a/package/busybox/busybox.config
+ > +++ b/package/busybox/busybox.config
+ > @@ -496,7 +496,7 @@ CONFIG_PASSWD=y
+ >  CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
+ >  # CONFIG_CRYPTPW is not set
+ >  # CONFIG_CHPASSWD is not set
+ > -CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
+ > +CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="md5"
 
-I don't know much about mesa, but I thought the Intel driver didn't use
-galium? Is this some kind of alternative to the dri driver?
+So this is what is used when you change password through the busybox
+passwd applet or create a new user, right?
+
+Shouldn't we instead tweak this based on BR2_TARGET_GENERIC_PASSWD_*?
 
 -- 
 Bye, Peter Korsgaard
