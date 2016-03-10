@@ -1,67 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 10 Mar 2016 15:39:14 +0100
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 5.8.0
-Message-ID: <20160310144157.B8E7B7FE10@busybox.osuosl.org>
+Date: Thu, 10 Mar 2016 15:37:23 +0100
+Subject: [Buildroot] [git commit] fio: disable on SuperH
+Message-ID: <20160310144157.A70357FE10@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3ba69f3eb03aaedb8f08fa7c9c6b467a72a1801
+commit: https://git.buildroot.net/buildroot/commit/?id=b0c04616174737dd0b8ff27e73769fc4ea39320c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://nodejs.org/en/blog/release/v5.8.0/
+fio doesn't build on SuperH due to arch_flags being undefined while
+building the test programs. Since the fix isn't immediate, the bug was
+reported upstream, and this commit disables fio on SuperH until it
+gets fixed upstream.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/578/578ae9da10d017ee9e2c15d37014f31a1114ef3a/build-end.log
+
+Fixes #8751.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{5.7.1 => 5.8.0}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/{5.7.1 => 5.8.0}/0003-Fix-va_list-not-declared.patch   | 0
- package/nodejs/{5.7.1 => 5.8.0}/0004-Fix-support-for-uClibc-ng.patch  | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
+ package/fio/Config.in | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0003-Fix-va_list-not-declared.patch
-rename to package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
-diff --git a/package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/5.7.1/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index 02ce219..d200bbb 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "5.7.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "5.8.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.43"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index b079060..2e8dab8 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.43/SHASUMS256.txt
- sha256  6c5185cbfad3538484c9d97eec0110b5cd5826126f15b776015dfee1f51cd32a  node-v0.10.43.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v5.7.1/SHASUMS256.txt
--sha256  029ed8aeb997c68d1a901cd837af02d24b6b5e20a4ff93bed090fd289f91a9a1  node-v5.7.1.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v5.8.0/SHASUMS256.txt
-+sha256  c1246d473d6650ca02ab168eaf840e9edda82a4190ff08165fc44a7b381a9361  node-v5.8.0.tar.xz
+diff --git a/package/fio/Config.in b/package/fio/Config.in
+index 89f54f9..bdfb8ff 100644
+--- a/package/fio/Config.in
++++ b/package/fio/Config.in
+@@ -13,6 +13,9 @@ config BR2_PACKAGE_FIO
+ 	# fio uses fallocate() which becomes fallocate64() while compiling with
+ 	# largefile support, but fallocate64() is not available on nios2
+ 	depends on !BR2_nios2
++	# does not build on SuperH, issue reported upstream:
++	# https://github.com/axboe/fio/issues/154
++	depends on !BR2_sh
+ 	help
+ 	  fio is an I/O tool meant to be used both for benchmark
+ 	  and stress/hardware verification.
+@@ -22,5 +25,5 @@ config BR2_PACKAGE_FIO
+ comment "fio needs a toolchain w/ dynamic library, threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 && !BR2_sh
+ 	depends on BR2_USE_MMU
