@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 23:51:22 +0100
-Subject: [Buildroot] [PATCH] owfs: remove include of rpc/netdb.h
-In-Reply-To: <1457563705-26494-1-git-send-email-arnout@mind.be>
-References: <1457563705-26494-1-git-send-email-arnout@mind.be>
-Message-ID: <20160310235122.0663734e@free-electrons.com>
+Date: Thu, 10 Mar 2016 23:51:48 +0100
+Subject: [Buildroot] [git commit] lzlib: fix Lua dependency
+Message-ID: <20160310225152.DB0BA80771@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout Vandecappelle (Essensium/Mind),
+commit: https://git.buildroot.net/buildroot/commit/?id=822f17768212c5ab3bc5a003bff826fb88bd2455
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 9 Mar 2016 23:48:25 +0100, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> owfs carries a copy of netdb.h from an old glibc, which is only used
-> to implement getaddrinfo on platforms that miss it (Solaris 7 in
-> particular). Since all of our libc implementations have getaddrinfo,
-> we don't need it.
-> 
-> To make the patch minimal, just include if !HAVE_GETADDRINFO.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/d9e918c2791cd5523b2fd6478bbd4ce21e58f4f1
-> http://autobuild.buildroot.net/results/3a85144753e4f18491d62dccf6d5843170f8daea
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  ...t.h-only-include-compat_netdb.h-if-needed.patch | 58 ++++++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/owfs/0002-compat.h-only-include-compat_netdb.h-if-needed.patch
+lzlib cannot be build with LuaJIT and requires Lua 5.x.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/d71/d71209c3e5235f507afee38b618d5740ef91fdcb/
+http://autobuild.buildroot.net/results/ef8/ef80136ec17ad9b0a5e3121c4b6091b15c3da0d4/
+http://autobuild.buildroot.net/results/5e9/5e9d77e415e8cafb842b84d3d6d91280ae5491e3/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/lzlib/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/lzlib/Config.in b/package/lzlib/Config.in
+index f7fae15..32328c5 100644
+--- a/package/lzlib/Config.in
++++ b/package/lzlib/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LZLIB
+ 	bool "lzlib"
+ 	select BR2_PACKAGE_ZLIB
+-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on BR2_PACKAGE_LUA
+ 	help
+ 	  This package provides a library to access zlib library
+ 	  functions and also to read/write gzip files using an
