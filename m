@@ -1,34 +1,50 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 10 Mar 2016 17:36:27 +0000
-Subject: [Buildroot] [Bug 8746] At startup system stops with 'cannot set
- terminal process group (-1): Inappropriate ioctl for device' error
-In-Reply-To: <bug-8746-163@https.bugs.busybox.net/>
-References: <bug-8746-163@https.bugs.busybox.net/>
-Message-ID: <bug-8746-163-Yv6xXfzxyW@https.bugs.busybox.net/>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 10 Mar 2016 15:01:31 -0300
+Subject: [Buildroot] [PATCH] mesa3d: add intel gallium driver support
+Message-ID: <1457632891-4354-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8746
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mesa3d/Config.in | 9 +++++++++
+ package/mesa3d/mesa3d.mk | 1 +
+ 2 files changed, 10 insertions(+)
 
---- Comment #5 from Ralph Birt <rdbirt@gmail.com> ---
-It seems that /sbin has been removed from 2015.11 and is, instead, made a link
-to /usr/sbin.  So /sbin/init is now /usr/sbin/init.
-
-I have an /sbin directory in my overlay skeleton directory structure so the
-link to /usr/bin disappears and /sbin now contains just the few files I have
-there, and those few files don't include /sbin/init.
-
-The solution is for me to change my overlay directory structure so the files I
-used to put into /sbin will now go into /usr/sbin.
-
-Thanks for looking at this with me.
-
-Regards,
-Ralph
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 9057746..5badefa 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -43,6 +43,15 @@ config BR2_PACKAGE_MESA3D_NEEDS_XA
+ 
+ comment "Gallium drivers"
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
++	bool "Gallium i915 driver"
++	depends on BR2_i386 || BR2_x86_64
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_INTEL
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	help
++	  Driver for Intel integrated graphics.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	bool "Gallium nouveau driver"
+ 	depends on BR2_i386 || BR2_x86_64
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ff2f932..c1f2f45 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -61,6 +61,7 @@ endif
+ # Drivers
+ 
+ #Gallium Drivers
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.4.10
