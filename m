@@ -1,106 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 10 Mar 2016 21:34:38 +0100
-Subject: [Buildroot] [PATCH 5/8] linux: add the generic help rules
-In-Reply-To: <20160310103934.0aaef6d1@free-electrons.com>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <a92e7f048404917f9c9e7ed62c7041af04bf5934.1457561521.git.yann.morin.1998@free.fr>
- <56E0B5F5.9040109@mind.be> <3817786.Ntra8H592Z@sagittea>
- <20160310103934.0aaef6d1@free-electrons.com>
-Message-ID: <20160310203438.GF3424@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 10 Mar 2016 21:38:30 +0100
+Subject: [Buildroot] [PATCH] lksctp-tools: fix musl build
+In-Reply-To: <1457602091-14399-1-git-send-email-yegorslists@googlemail.com>
+References: <1457602091-14399-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160310213830.322852f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2016-03-10 10:39 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 10 Mar 2016 10:21:17 +0100, J?r?me Pouiller wrote:
+On Thu, 10 Mar 2016 10:28:11 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> > >   So now this will be printed on a single line, instead of being split
-> > > like it was before. Well, J?r?me's patch already did that as well I
-> > > guess.
-> > In fact, my patch correctly support this case if you use two separate
-> > strings:
-> >   
-> > EXTRA_HELP += \
-> >    "linux-update-defconfig : Save the Linux configuration to the path specified" \
-> >    "                           by BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE"
+> Add a patch replacing __BEGIN_DECLS/__END_DECLS with
+> "extern "C" {" definition.
 > 
-> This is not super great either IMO.
+> Fixes:
 > 
-> What about doing something more Buildroot-esque and use the concept of
-> hooks that we already use everywhere ?
+> http://autobuild.buildroot.net/results/d7d/d7d1c6a13ad788ef74ac0487bf2bdbdcd7d52d40/
+> http://autobuild.buildroot.net/results/06a/06a76d80701b126789c6c8e867db067e3b927caa/
 > 
-> For example:
-> 
-> diff --git a/Makefile b/Makefile
-> index f2822a2..db9aee0 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -969,6 +969,7 @@ endif
->         @echo
->         @echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
->         @echo '  make O=dir             - Locate all output files in "dir", including .config'
-> +       $(foreach hook,$(HELP_HOOKS),$(call $(hook)$(sep)))
->         @echo
->         @echo 'For further details, see README, generate the Buildroot manual, or consult'
->         @echo 'it on-line at http://buildroot.org/docs.html'
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 7c904c8..1a0b09c 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -250,4 +250,10 @@ $(error No BusyBox configuration file specified, check your BR2_PACKAGE_BUSYBOX_
->  endif
->  endif
->  
-> +define BUSYBOX_HELP
-> +       @echo '  busybox-baz            - do stuff'
-> +endef
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-There is one thing here that bothers me: duplicating the layout of the
-help text in that many locations.
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Having the macro be used means we can change that layout (e.g. to
-accomodate for larger rules) in a single place, and
-magically^Wautomatically see all the help texts all properly indented
-at once.
+Please submit upstream, thanks!
 
-Regards,
-Yann E. MORIN.
-
-> +HELP_HOOKS += BUSYBOX_HELP
-
-To be done in pkg-generic, of course. ;-)
-
->  $(eval $(kconfig-package))
-> 
-> This way, it is just a function call, and the package, or external.mk
-> can do whatever it wants in terms of formatting the help text.
-> Including iterating on variables, showing the contents of a file, or
-> whatever.
-
-Well, remember that all this is *only* about documented the
-package-specific rules, not any arbitrary package help.
-
-Do we want to allow for any arbitrary package help? No; please, no.
-
-Regards,
-Yann E. MORIN.
-
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
