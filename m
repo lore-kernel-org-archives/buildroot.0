@@ -1,31 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 23:50:32 +0100
-Subject: [Buildroot] [PATCH v7 02/18] core: use $(CURDIR) to set TOPDIR
-In-Reply-To: <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-3-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160310235032.27453fa8@free-electrons.com>
+Date: Thu, 10 Mar 2016 23:50:44 +0100
+Subject: [Buildroot] [PATCH 1/3] freerdp: indentation cleanup
+In-Reply-To: <1457646535-976-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+References: <1457646535-976-1-git-send-email-jerzy.grzegorek@trzebnica.net>
+Message-ID: <20160310235044.5d3c7573@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Samuel Martin,
+Dear Jerzy Grzegorek,
 
-On Wed,  9 Mar 2016 23:58:43 +0100, Samuel Martin wrote:
-> This changes saves a shell call and uses a variable automatically set
-> by make [1].
-> 
-> [1] http://www.gnu.org/software/make/manual/make.html#Quick-Reference
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
+On Thu, 10 Mar 2016 22:48:53 +0100, Jerzy Grzegorek wrote:
+> Signed-off-by: Jerzy Grzegorek <jerzy.grzegorek@trzebnica.net>
 > ---
-> changes v6->v7:
-> - none
+>  package/freerdp/freerdp.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+All three patches applied, thanks!
 
 Thomas
 -- 
