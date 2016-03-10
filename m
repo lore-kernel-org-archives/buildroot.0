@@ -1,11 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 10 Mar 2016 22:01:20 +0100
-Subject: [Buildroot] [PATCH 0/8] core: allow for custom, local help;
- rearrange package-specific help (branch yem/help)
-In-Reply-To: <56E0B327.70807@mind.be>
-References: <cover.1457561521.git.yann.morin.1998@free.fr>
- <56E0B327.70807@mind.be>
-Message-ID: <20160310220120.03655e61@free-electrons.com>
+Date: Thu, 10 Mar 2016 23:47:42 +0100
+Subject: [Buildroot] Autobuilder update
+Message-ID: <20160310234742.3df6dff2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +10,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 10 Mar 2016 00:35:03 +0100, Arnout Vandecappelle wrote:
+Some autobuilder updates:
 
->   This is where I have a different opinion. I don't see a problem with "mixing" 
-> (it's actually appending) with the normal buildroot help. For the user, it makes 
-> no difference if it's internal or external. And all the additional documentation 
-> and special handling is really not worth it for such a corner case, IMHO.
+ - All the Buildroot pre-built external toolchains have been rebuilt
+   with Buildroot 2016.02 + a few patches. To see which patches I'm
+   using to build those external toolchains, see the branch at:
 
-I do fully agree with you. We want the simplest possible solution here,
-because we don't want:
+   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=br-ext-toolchain-fixes
 
- 1/ to enforce too much things
+ - The br-sh4-full configuration has been changed to actually use the
+   Buildroot toolchain, and not the pre-built Musl-cross toolchain.
 
- 2/ to have to write tons of documentation in our manual to document
-    such a silly / corner case aspect
+ - I've fixed the Free Electrons build server, which was no longer
+   building anything since quite some time, due to a lack of disk
+   space. This will help re-increase the number of builds done each day.
 
-Please, let's stop over-engineering things. Keep It Simple Stupid.
+Let me know if there are other things that should be improved/changed
+in the autobuilder setup (be it adding more toolchain configurations,
+or other changes).
+
+Thanks!
 
 Thomas
 -- 
