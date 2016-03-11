@@ -1,66 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 18:49:25 +0100
-Subject: [Buildroot] [PATCH 12/16 v5] core/legal-info: also save extra
-	downloads
-In-Reply-To: <cover.1457718289.git.yann.morin.1998@free.fr>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
-Message-ID: <0e4f63ef1f47edce58214cd21d9e5f177731979f.1457718289.git.yann.morin.1998@free.fr>
+Date: Fri, 11 Mar 2016 19:00:30 +0100
+Subject: [Buildroot] [PATCH 0/2 v2] package/jackd: choose mode of operation,
+	comment celt and eigen (branch yem/adopted)
+Message-ID: <cover.1457719085.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages, like perl, download extra files that end up as part of
-the source that Buildroot builds. Up until now, those files were not
-saved in the legal-info output.
+Hello All!
 
-Add those files to the legal-info output.
+This short series adds the possibility to choose what mode to operate
+jackd in (initially provided by Antoine, rebased and updated by me), as
+well as add comments on why we do not have a dependency on celt and
+eigen.
 
-The unfortunate side-effect is that we will also save the secondary
-archive for the external blackfin toolchains; however, we already do
-save the binary release of some external toolchains when they do not
-provide actual source archives.
 
-This is inherently bad, as those are not source archives, but solving
-this is a bigger concern, for another series...
+Changes v1 -> v2:
+  - drop the eigen dependency, comment it  (Thomas)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
----
-Changes v2 -> v3:
-  - typo  (Luca)
-  - incorporate the post-commit log message (the part about the
-    side-effect) into the commit log itself, it makes sense to not
-    forget about that
----
- package/pkg-generic.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index ed139fb..bc39ead 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -822,10 +822,12 @@ else
- # Other packages
- 
- ifeq ($$($(2)_REDISTRIBUTE),YES)
--# Save the source tarball
--	$$(Q)$$(call hardlink-copy,\
--		     $$(DL_DIR)/$$($(2)_ACTUAL_SOURCE_TARBALL),\
--		     $$($(2)_REDIST_SOURCES_DIR))
-+# Save the source tarball and any extra downloads, but not
-+# patches, as they are handled specially afterwards.
-+	$$(foreach e,$$($(2)_ACTUAL_SOURCE_TARBALL) $$(notdir $$($(2)_EXTRA_DOWNLOADS)),\
-+			$$(Q)$$(call hardlink-copy,\
-+				$$(DL_DIR)/$$(e),\
-+				$$($(2)_REDIST_SOURCES_DIR))$$(sep))
- # Save patches and generate the series file
- # Because patches may come from various places (bundled in Buildroot,
- # from one or more global-patch-dir), there might be collisions on the
+
+The following changes since commit 0b7b84310c3781c346eea4c114c8cb4e97bbd8ea:
+
+  olimex_imx233_olinuxino_defconfig: genimage support (2016-03-11 13:14:54 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/adopted
+
+for you to fetch changes up to dc794aba76e931a0c7bb974016708c51b77d3f6b:
+
+  package/jack2: add comment about celt and eigen (2016-03-11 18:11:35 +0100)
+
+----------------------------------------------------------------
+Antoine T?nart (1):
+      jack2: allow to choose the mode to operate jackd
+
+Yann E. MORIN (1):
+      package/jack2: add comment about celt and eigen
+
+ package/jack2/Config.in | 26 ++++++++++++++++++++++++++
+ package/jack2/jack2.mk  | 23 +++++++++++++++++++++++
+ 2 files changed, 49 insertions(+)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
