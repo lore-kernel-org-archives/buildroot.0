@@ -1,65 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 19:11:01 +0100
-Subject: [Buildroot] [PATCH 1/3 v2] package/x11r7: introduce X11-global
-	configure options
+Date: Fri, 11 Mar 2016 19:11:03 +0100
+Subject: [Buildroot] [PATCH 3/3 v2] core/pkg-generic: check proper package
+	installation
 In-Reply-To: <cover.1457719643.git.yann.morin.1998@free.fr>
 References: <cover.1457719643.git.yann.morin.1998@free.fr>
-Message-ID: <caa14cc0c9835ac75e291feb71c420cbe80e2e3a.1457719643.git.yann.morin.1998@free.fr>
+Message-ID: <11e477b207329f6971e2dd87899cde5d16df2ed7.1457719643.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we bumped pkgconf in the Xorg packages end up installing files in
-$(TARGET_DIR)/$(SYROOT_DIR), like so:
+Some packages misbehave, and install files in either $(STAGING_DIR)/$(O)
+or in $(TARGET_DIR)/$(O) .
 
-    /home/ymorin/dev/buildroot/O/target/home/ymorin/dev/buildroot/O/host/usr/arm-buildroot-linux-gnueabi/sysroot/usr/share/fonts/X11/encodings/
+One common reason for that is that pkgconf now prepends the sysroot path
+to all the paths it returns. Other reasons vary, but are mostly due to
+poorly writen generic-packages.
 
-This is because the various ./configure scripts ask pkg-config to get a
-few variables, like the path to what Xorg calls the 'sdkdir', or the
-path to the fonts directory.
-
-It then uses those paths verbatim, to install things as:
-
-    $(DESTDIR)/$(sdkdir)
-
-But since pkg-config prepends the sysroot path to all the variables it
-returns, we end up with such incorrect paths.
-
-Introduce a ./configure option global to all the Xorg packages, that
-overrides the autodetection, and removes the sysroot dir from such
-paths.
+And a new step hooks to check that no file gets installed in either
+location, called after the install-target and install-staging steps.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Cc: Romain Naour <romain.naour@openwide.fr>
 ---
- package/x11r7/x11r7.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ package/pkg-generic.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/package/x11r7/x11r7.mk b/package/x11r7/x11r7.mk
-index 85ecbc5..dce6732 100644
---- a/package/x11r7/x11r7.mk
-+++ b/package/x11r7/x11r7.mk
-@@ -1 +1,17 @@
-+# Get an Xorg-related pkg-config variable, and fixup paths,
-+# so they do not include the build directory.
-+# $(1): pkg-config variable
-+# $(2): pkg-config package
-+X11R7_PKGCONFIG_VARIABLE = \
-+	`$(PKG_CONFIG_HOST_BINARY) --variable=$(1) $(2) \
-+	|sed -r -e 's:^$(STAGING_DIR)::'`
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3904c09..244983a 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -95,6 +95,21 @@ define check_host_rpath
+ endef
+ GLOBAL_INSTRUMENTATION_HOOKS += check_host_rpath
+ 
++define step_check_build_dir_one
++	if [ -d $(2) ]; then \
++		printf "%s: installs files in %s\n" $(1) $(2) >&2; \
++		exit 1; \
++	fi
++endef
 +
-+X11R7_CONF_OPTS = \
-+	--with-xorg-conf-dir=$(call X11R7_PKGCONFIG_VARIABLE,sysconfigdir,xorg-server) \
-+	--with-appdefaultdir=$(call X11R7_PKGCONFIG_VARIABLE,appdefaultdir,xt) \
-+	--with-fontrootdir=$(call X11R7_PKGCONFIG_VARIABLE,fontrootdir,fontutil) \
-+	--with-fc-confdir=$(call X11R7_PKGCONFIG_VARIABLE,confdir,fontconfig) \
-+	--with-cursordir=$(call X11R7_PKGCONFIG_VARIABLE,icondir,xcursor) \
-+	--with-sdkdir=$(call X11R7_PKGCONFIG_VARIABLE,sdkdir,xorg-server)
++define step_check_build_dir
++	$(if $(filter install-staging,$(2)),\
++		$(if $(filter end,$(1)),$(call step_check_build_dir_one,$(3),$(STAGING_DIR)/$(O))))
++	$(if $(filter install-target,$(2)),\
++		$(if $(filter end,$(1)),$(call step_check_build_dir_one,$(3),$(TARGET_DIR)/$(O))))
++endef
++GLOBAL_INSTRUMENTATION_HOOKS += step_check_build_dir
 +
- include $(sort $(wildcard package/x11r7/*/*.mk))
+ # User-supplied script
+ ifneq ($(BR2_INSTRUMENTATION_SCRIPTS),)
+ define step_user
 -- 
 1.9.1
