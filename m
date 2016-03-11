@@ -1,14 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Mar 2016 15:20:47 +0100
+Date: Fri, 11 Mar 2016 15:21:24 +0100
 Subject: [Buildroot] Autobuilder update
-In-Reply-To: <20160311143840.27274777@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 11 Mar 2016 14:38:40 +0100")
+In-Reply-To: <20160311143725.6b8ede6f@free-electrons.com> (Thomas Petazzoni's
+ message of "Fri, 11 Mar 2016 14:37:25 +0100")
 References: <20160310234742.3df6dff2@free-electrons.com>
- <E1aeFbm-0004jE-Q7@fli4l.lan.fli4l>
- <20160311094223.6b433df0@free-electrons.com>
- <87a8m5jn94.fsf@dell.be.48ers.dk>
- <20160311143840.27274777@free-electrons.com>
-Message-ID: <87k2l9hz9c.fsf@dell.be.48ers.dk>
+ <8760wtjmqq.fsf@dell.be.48ers.dk>
+ <20160311143725.6b8ede6f@free-electrons.com>
+Message-ID: <87fuvxhz8b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,26 +15,25 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Peter,
- > On Fri, 11 Mar 2016 11:57:11 +0100, Peter Korsgaard wrote:
+Hi,
 
- >> It depends on how much we're otherwise testing the internal toolchain? I
- >> agree that using an external toolchain is more efficient, but we should
- >> imho do "some" builds with the internal toolchain on various archs as
- >> well.
+ >> I recently also ran into these gmp/mpc/mpfr issues building a
+ >> toolchain at work (for the glibc dns issue) and had to spend some
+ >> time to debug and come up with a similar workaround as you did. I
+ >> really think we should include that patch in buildroot until we get
+ >> the $ORIGIN rpath stuff merged to save peoples time.
 
- > Agreed. We currently have the following internal toolchain
- > configurations tested:
+ > OK. So I'll submit such a patch.
 
- > br-arc-full-internal.config
- > br-arm-internal-full.config
- > br-microblazeel-full-internal.config
- > br-powerpc-internal-full.config
- > br-xtensa-full-internal.config
+Great!
 
- > I can add some more if you have some suggestions.
+ > I would also like to get a resolution for the toolchain wrapper usr/
+ > issue. I proposed the patch in the thread I originally started, but got
+ > no feedback so far (but I understand the issue is not the most pleasant
+ > one to think about).
 
-Perhaps this proposed br-i586-minimal.config?
+Yeah, I haven't had time to look at it yet. I'll try to find time this
+weekend.
 
 -- 
 Venlig hilsen,
