@@ -1,76 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 19:19:54 +0100
-Subject: [Buildroot] [PATCH 1/6] linux/perf: really do not build the
-	documentation
+Date: Fri, 11 Mar 2016 19:19:55 +0100
+Subject: [Buildroot] [PATCH 2/6] linux/perf: honour the number of parallel
+	jobs
 In-Reply-To: <cover.1457720152.git.yann.morin.1998@free.fr>
 References: <cover.1457720152.git.yann.morin.1998@free.fr>
-Message-ID: <19827565229346e7383cfd437c174735cd7f6698.1457720152.git.yann.morin.1998@free.fr>
+Message-ID: <cc2a12fd385458208ccbe41d7517071434388dc0.1457720152.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The perf buildsystem, inside the kernel, is not really amenable to be
-easily used...
+perf does not honour the -j flags we pass to make; it yet again tries to
+reinvent the wheel and by default uses the number of CPUs as the number
+of parallel jobs.
 
-Regarding the documentation, it will forcefully try to detect asciidoc
-and, with the latest versions, xmlto, completely disregarding what the
-user may provide.
-
-We currently pass ASCIIDOC= (the empty string) on the make command line,
-as an attempt to disable building the documentation, but that has no
-effect whatsoever on perf: that variable is not passed down to the
-sub-sub-make (yes, a two-level depth) that is responsible for building
-the documentation.
-
-We really do not want to build any of the documentation (the user can
-refer to the documentation on his own development machine), so we use a
-little dirty trick: we provide a GNUmakefile beside the existing
-Makefile for the documentation; GNUmakefile always takes precedence over
-a Makefile when both are present. We only provide a catch-all-no-recipe
-rule in that GNUmakefile, so it really does nothing useful, except avoid
-building the documentation.
+Fortunately, in their inifinite wisdom, the insane developpers of the
+perf buildsystem were kind enough to provide us with a variable we can
+set to specify the number of parallel jobs.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- linux/linux-tool-perf.mk | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ linux/linux-tool-perf.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
-index 1070a1c..f9b295f 100644
+index f9b295f..a5fbf21 100644
 --- a/linux/linux-tool-perf.mk
 +++ b/linux/linux-tool-perf.mk
-@@ -24,8 +24,7 @@ PERF_MAKE_FLAGS = \
- 	NO_LIBPYTHON=1 \
- 	DESTDIR=$(TARGET_DIR) \
- 	prefix=/usr \
--	WERROR=0 \
--	ASCIIDOC=
-+	WERROR=0
+@@ -16,6 +16,7 @@ endif
  
- # We need to pass an argument to ld for setting the endianness when
- # building it for MIPS architecture, otherwise the default one will
-@@ -68,6 +67,19 @@ else
- PERF_MAKE_FLAGS += NO_LIBELF=1 NO_DWARF=1
- endif
- 
-+# We really do not want to build the perf documentation, because it
-+# has stringent requirement on the documentation generation tools,
-+# like xmlto and asciidoc), which may be lagging behind on some
-+# distributions.
-+# We name it 'GNUmakefile' so that GNU make will use it instead of
-+# the existing 'Makefile'.
-+define PERF_DISABLE_DOCUMENTATION
-+	if [ -f $(@D)/tools/perf/Documentation/Makefile ]; then \
-+		printf "%%:\n\t@:\n" >$(@D)/tools/perf/Documentation/GNUmakefile; \
-+	fi
-+endef
-+LINUX_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
-+
- # O must be redefined here to overwrite the one used by Buildroot for
- # out of tree build. We build perf in $(@D)/tools/perf/ and not just
- # $(@D) so that it isn't built in the root directory of the kernel
+ PERF_MAKE_FLAGS = \
+ 	$(LINUX_MAKE_FLAGS) \
++	JOBS=$(PARALLEL_JOBS) \
+ 	ARCH=$(PERF_ARCH) \
+ 	NO_LIBAUDIT=1 \
+ 	NO_NEWT=1 \
 -- 
 1.9.1
