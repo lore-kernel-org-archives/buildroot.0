@@ -1,12 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Mar 2016 11:57:11 +0100
+Date: Fri, 11 Mar 2016 12:08:13 +0100
 Subject: [Buildroot] Autobuilder update
-In-Reply-To: <20160311094223.6b433df0@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 11 Mar 2016 09:42:23 +0100")
+In-Reply-To: <20160310234742.3df6dff2@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 10 Mar 2016 23:47:42 +0100")
 References: <20160310234742.3df6dff2@free-electrons.com>
- <E1aeFbm-0004jE-Q7@fli4l.lan.fli4l>
- <20160311094223.6b433df0@free-electrons.com>
-Message-ID: <87a8m5jn94.fsf@dell.be.48ers.dk>
+Message-ID: <8760wtjmqq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +13,20 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Hi,
+ > Hello,
+ > Some autobuilder updates:
 
- > By default we use i586, right? So what you suggest is an i586 defconfig?
+ >  - All the Buildroot pre-built external toolchains have been rebuilt
+ >    with Buildroot 2016.02 + a few patches. To see which patches I'm
+ >    using to build those external toolchains, see the branch at:
 
- > Now we have two options:
+ >    http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=br-ext-toolchain-fixes
 
- >  - Use an internal toolchain configuration, which means that the
- >    toolchain is rebuilt everytime, and when we want on our side to
- >    reproduce the build failures, we also have to rebuild the toolchain.
-
- >  - Use a pre-built external toolchain.
-
- > I'm leaning twoards the second option. What do you think?
-
-It depends on how much we're otherwise testing the internal toolchain? I
-agree that using an external toolchain is more efficient, but we should
-imho do "some" builds with the internal toolchain on various archs as
-well.
+I recently also ran into these gmp/mpc/mpfr issues building a toolchain
+at work (for the glibc dns issue) and had to spend some time to debug
+and come up with a similar workaround as you did. I really think we
+should include that patch in buildroot until we get the $ORIGIN rpath
+stuff merged to save peoples time.
 
 -- 
 Bye, Peter Korsgaard
