@@ -1,31 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Mar 2016 11:23:18 -0300
-Subject: [Buildroot] [PATCH] mesa3d: add intel gallium driver support
-In-Reply-To: <87oaalhzao.fsf@dell.be.48ers.dk>
-References: <1457632891-4354-1-git-send-email-gustavo@zacarias.com.ar>
- <8760wum7dj.fsf@dell.be.48ers.dk> <56E1D44F.70807@zacarias.com.ar>
- <3979rcxl7o.ln2@ID-313208.user.individual.net>
- <871t7hjmol.fsf@dell.be.48ers.dk> <56E2A91A.1030509@zacarias.com.ar>
- <87wpp9i6se.fsf@dell.be.48ers.dk> <56E2B03B.9000701@zacarias.com.ar>
- <87oaalhzao.fsf@dell.be.48ers.dk>
-Message-ID: <56E2D4D6.4090008@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 11 Mar 2016 15:31:48 +0100
+Subject: [Buildroot] [rpi-firmware] I can't find the file
+	/usr/sbin/vcdbg after compiling
+In-Reply-To: <CALtfCQbACh2Odc7ACn6BDObdOCaaeLq-AnrE-RQdMNkE-=0zuQ@mail.gmail.com>
+ (=?utf-8?B?IsOTc2NhciBHw7NtZXo=?= Fuente"'s message of "Fri, 11 Mar 2016
+ 13:59:41 +0100")
+References: <CALtfCQbACh2Odc7ACn6BDObdOCaaeLq-AnrE-RQdMNkE-=0zuQ@mail.gmail.com>
+Message-ID: <87bn6lhyqz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 11/03/16 11:19, Peter Korsgaard wrote:
+>>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
 
-> Yes it does, it is just not clear to me that using this gallium driver
-> is the way to do it. Your commit message also didn't explain this, which
-> is why I'm asking.
->
-> Is this gallium driver useful for non-wayland (X11) setups? If not,
-> perhaps it should depend on wayland.
+ > Hi,
+ > I'm using the last release buildroot-2016.02 and I'm trying to test some
+ > dtb files on my raspberry pi 2 (because It seems to be it doesn't work
+ > well) so I'm trying to add the package to debug vcdbg:
 
-I fail to see why, you've got many other gallium drivers and they don't 
-mention wayland either (noveau, r600, svga, swrast, virgl).
-I'm pretty sure these are valid for qt5 as well since it can use an EGL 
-backend too.
-Regards.
+ > Target package ---> Hardware handling  ---> Firmware ---> vcdbg
+
+ > The compilation was successful but the file /usr/sbin/vcdbg doesn't exist
+ > in the $TARGET_DIR
+
+From package/rpi-firmware/rpi-firmware.mk:
+
+ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+        $(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
+                $(TARGET_DIR)/usr/sbin/vcdbg
+endef
+endif # INSTALL_VCDBG
+
+So it should be in usr/sbin. Did you do a clean build (or at least rm
+-rf output/build/rpi-firmware-*) when you enabled the VCDBG option?
+
+-- 
+Bye, Peter Korsgaard
