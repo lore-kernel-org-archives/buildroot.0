@@ -1,67 +1,136 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Mar 2016 13:14:12 +0100
-Subject: [Buildroot] [PATCH 1/1] olimex_imx233_olinuxino_defconfig:
+Date: Fri, 11 Mar 2016 13:14:54 +0100
+Subject: [Buildroot] [git commit] olimex_imx233_olinuxino_defconfig:
 	genimage support
-In-Reply-To: <1457645651-2472-1-git-send-email-phil@zankapfel.net> (Phil
- Eichinger's message of "Thu, 10 Mar 2016 22:34:11 +0100")
-References: <1457645651-2472-1-git-send-email-phil@zankapfel.net>
-Message-ID: <87shzxi54b.fsf@dell.be.48ers.dk>
+Message-ID: <20160311121845.F121280741@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0b7b84310c3781c346eea4c114c8cb4e97bbd8ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > * add a post-image.sh script
- > * update defconfig for genimage
- > * update readme.txt
+* add a post-image.sh script
+* update defconfig for genimage
+* update readme.txt
 
- > Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+[Peter: also add host-dosfstools dependency for vfat partition]
+Signed-off-by: Phil Eichinger <phil@zankapfel.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../imx233_olinuxino/genimage-imx233_olinuxino.cfg | 28 ++++++++++++++++++++++
+ board/olimex/imx233_olinuxino/post-image.sh        | 20 ++++++++++++++++
+ board/olimex/imx233_olinuxino/readme.txt           | 22 +++++++++++++++++
+ configs/olimex_imx233_olinuxino_defconfig          |  7 ++++++
+ 4 files changed, 77 insertions(+)
 
-Thanks!
-
- > +genimage                           \
- > +	--rootpath "${TARGET_DIR}"     \
- > +	--tmppath "${GENIMAGE_TMP}"    \
- > +	--inputpath "${BINARIES_DIR}"  \
- > +	--outputpath "${BINARIES_DIR}" \
- > +	--config "${GENIMAGE_CFG}"
- > +
- > +exit $?
-
-I know other post-image scripts do this as well, but there's really no
-need for this 'exit $?'.
-
- > +=== Manual creation of SD card image =========================================
- > +
- >  You'll need a spare MicroSD card with Freescale's special partition layout.
- >  This is basically three partitions:
-
-I'm not sure there's any reason to still document the manual approach,
-but ok - I've left it for now.
-
- > diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
- > index 9951284..87684fc 100644
- > --- a/configs/olimex_imx233_olinuxino_defconfig
- > +++ b/configs/olimex_imx233_olinuxino_defconfig
- > @@ -39,3 +39,9 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- >  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
- >  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
- >  BR2_TARGET_UBOOT_FORMAT_SD=y
- > + 
- > +# To generate SD Image
- > +BR2_PACKAGE_HOST_GENIMAGE=y
- > +BR2_PACKAGE_HOST_MTOOLS=y
-
-The vfat handling also uses mkdosfs, so we need to add
-BR2_PACKAGE_HOST_DOSFSTOOLS=y as well.
-
-I noticed that we are missing it from some of the other defconfigs as
-well, so I'll fix that.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
+new file mode 100644
+index 0000000..78979dc
+--- /dev/null
++++ b/board/olimex/imx233_olinuxino/genimage-imx233_olinuxino.cfg
+@@ -0,0 +1,28 @@
++image kernel.vfat {
++  vfat {
++    files = {
++      "uImage"
++    }
++  }
++  size = 5M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++  partition boot {
++    	partition-type = 0x53
++    	image = "u-boot.sd"
++	size = 16M
++  }
++
++  partition kernel {
++    partition-type = 0xC
++    image = "kernel.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/olimex/imx233_olinuxino/post-image.sh b/board/olimex/imx233_olinuxino/post-image.sh
+new file mode 100755
+index 0000000..703cbe7
+--- /dev/null
++++ b/board/olimex/imx233_olinuxino/post-image.sh
+@@ -0,0 +1,20 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME="$(basename ${BOARD_DIR})"
++GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++# Create symlink to "rename" kernel image
++ln -sf uImage.imx23-olinuxino ${BINARIES_DIR}/uImage
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/olimex/imx233_olinuxino/readme.txt b/board/olimex/imx233_olinuxino/readme.txt
+index a545f7b..4b24ac2 100644
+--- a/board/olimex/imx233_olinuxino/readme.txt
++++ b/board/olimex/imx233_olinuxino/readme.txt
+@@ -5,6 +5,28 @@ one or more of: hostapd, iw, wireless_tools and/or wpa_supplicant.
+ 
+ It also pulls up the console on the serial port, not on TV output.
+ 
++=== Output files after building ==============================================
++
++output/images
+++-- kernel.vfat (VFAT kernel partition image generated by genimage)
+++-- rootfs.ext2 (Root file system)
+++-- sdcard.img (Complete SD card image generated by genimage)
+++-- u-boot.sd (U-Boot image)
+++-- uImage -> uImage.imx23-olinuxino (To copy kernel as "uImage" to kernel.vfat)
+++-- uImage.imx23-olinuxino (Kernel uImage)
++
++=== Use of generated SD card image ===========================================
++
++Just write sdcard.img directly to the SD card
++
++***** WARNING: Double check that /dev/sdc is your MicroSD card *****
++*****      It might be /dev/sdb or some other device name      *****
++***** Failure to do so may result in you wiping your hard disk *****
++
++   # dd if=output/images/sdcard.img of=/dev/sdc bs=512
++
++=== Manual creation of SD card image =========================================
++
+ You'll need a spare MicroSD card with Freescale's special partition layout.
+ This is basically three partitions:
+ 
+diff --git a/configs/olimex_imx233_olinuxino_defconfig b/configs/olimex_imx233_olinuxino_defconfig
+index 9951284..f74f422 100644
+--- a/configs/olimex_imx233_olinuxino_defconfig
++++ b/configs/olimex_imx233_olinuxino_defconfig
+@@ -39,3 +39,10 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx23_olinuxino"
+ BR2_TARGET_UBOOT_FORMAT_SD=y
++ 
++# To generate SD Image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/olimex/imx233_olinuxino/post-image.sh"
++
