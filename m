@@ -1,51 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 11 Mar 2016 09:42:23 +0100
-Subject: [Buildroot] Autobuilder update
-In-Reply-To: <E1aeFbm-0004jE-Q7@fli4l.lan.fli4l>
-References: <20160310234742.3df6dff2@free-electrons.com>
- <E1aeFbm-0004jE-Q7@fli4l.lan.fli4l>
-Message-ID: <20160311094223.6b433df0@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Fri, 11 Mar 2016 10:16:33 +0000
+Subject: [Buildroot] [PATCH v2] gdb: specify where to find lzma libraries
+Message-ID: <1457691393-48436-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As reported in...
 
-On Fri, 11 Mar 2016 06:27:30 +0100, Bernd Kuhls wrote:
+  https://bugs.busybox.net/show_bug.cgi?id=8786
 
-> do we have a config for a buildroot x86 toolchain which lacks
-> BR2_X86_CPU_HAS_MMX? An empty defconfig file would be enough imho, the one
-> you get when you call "make menuconfig" in a fresh git checkout without
-> selecting anything and save this config, like: 
-> 
-> bernd at buildroot:~/buildroot/buildroot$ make menuconfig
-> (select nothing, just save the config)
-> bernd at buildroot:~/buildroot/buildroot$ make savedefconfig
-> BR2_DEFCONFIG=test cat test
-> bernd at buildroot:~/buildroot/buildroot$ cat test
-> bernd at buildroot:~/buildroot/buildroot$ 
-> 
-> I think such a config would be useful because lots of media packages
-> contain mmx specific code. 
+..., gdb fails to build with xz and expat support at the same time when
+using an external toolchain.
 
-By default we use i586, right? So what you suggest is an i586 defconfig?
+This is how the problem is shown:
 
-Now we have two options:
+checking for liblzma... no
+configure: error: missing liblzma for --with-lzma
 
- - Use an internal toolchain configuration, which means that the
-   toolchain is rebuilt everytime, and when we want on our side to
-   reproduce the build failures, we also have to rebuild the toolchain.
+And having a deeper look in gdb/config.log we can se a message like this
+one:
 
- - Use a pre-built external toolchain.
+/lib64/liblzma.so.5: undefined reference to `clock_gettime at GLIBC_2.17'
 
-I'm leaning twoards the second option. What do you think?
+As Thomas said in the bug report quoted above, that error is related to
+the fact that it find the host's lzma.
 
-Best regards,
+Adding --with-lzma-prefix=$(STAGING_DIR)/usr to GDB_CONF_OPTS fixes the
+problem.
 
-Thomas
+Credit-to: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+Changes v1 -> v2:
+ - Adding --with-lzma-prefix=$(HOST_DIR)/usr to GDB_CONF_OPTS is wrong.
+   Instead, we should add --with-lzma-prefix=$(STAGING_DIR)/usr. Thanks
+   to Peter Korsgaard for highlighting the mistake.
+
+ package/gdb/gdb.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 32d52eb..f7d6339 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -120,6 +120,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ GDB_CONF_OPTS += --with-lzma
++GDB_CONF_OPTS += --with-liblzma-prefix=$(STAGING_DIR)/usr
+ GDB_DEPENDENCIES += xz
+ else
+ GDB_CONF_OPTS += --without-lzma
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.4.10
