@@ -1,92 +1,90 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 19:32:06 +0100
-Subject: [Buildroot] [PATCH 2/3] support/download/git: add support for
-	submodules
-In-Reply-To: <cover.1457721001.git.yann.morin.1998@free.fr>
-References: <cover.1457721001.git.yann.morin.1998@free.fr>
-Message-ID: <81ae608e751d1767c6c536e4b3b2b4cae75adbd0.1457721001.git.yann.morin.1998@free.fr>
+Date: Fri, 11 Mar 2016 19:41:34 +0100
+Subject: [Buildroot] [PATCH 0/9 v2] fs: cleanups and enhancements (branch
+	yem/fs)
+Message-ID: <cover.1457721607.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some git repositories may be split into a master repository and
-submodules. Up until now, we did not have support for submodules,
-because we wer using bare clones, in which it is not possible to
-update the list of submodules.
+Hello All!
 
-Now that we are using plain clones with a working copy, we can retrieve
-the submdoules.
+This series introduces some cleaups and enhancements to the filesystem
+infrastructure.
 
-Add an option to the git downlaod helper to kick the update of
-submodules, so that they are only fetched for those packages that
-require them. Also document the existing -q option at the same time.
+Most notably, it gets rid of the post-target rules, i.e. rules defined
+by filesystems that were to be executed after the image was generated,
+in favour of post-gen hooks.
 
-Submodules have a .git file at their root, which contains the path to
-the real .git directory of the master repository. Since we remove it,
-there is no point in keeping those .git files either.
+The reason for getting rid of post-target rules is that they were not
+really needed, and the way they were used was dubious when dealing with
+top-level parallel builds. Also, the sole user for which those rules
+were documented to be useful was not even using the filesystem infra.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- support/download/git | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+To be noted: patch 8/9 was the beginning of a bigger plan to rework how
+images are generated. However, and quite sadly, that bigger plan is now
+evading my recollection. It's sad to get old... ;-] Nevertheless, the
+patch by itself still makes sense, so I kept it.
 
-diff --git a/support/download/git b/support/download/git
-index 5672217..8df3934 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -6,15 +6,20 @@ set -e
- # Download helper for git, to be called from the download wrapper script
- #
- # Call it as:
--#   .../git [-q] OUT_FILE REPO_URL CSET BASENAME
-+#   .../git [-q] [-r] OUT_FILE REPO_URL CSET BASENAME
-+#
-+#   -q  Be quiet.
-+#   -r  Clone and archive sub-modules.
- #
- # Environment:
- #   GIT      : the git command to call
- 
- verbose=
--while getopts :q OPT; do
-+recurse=0
-+while getopts :qr OPT; do
-     case "${OPT}" in
-     q)  verbose=-q; exec >/dev/null;;
-+    r)  recurse=1;;
-     \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
-     esac
- done
-@@ -61,18 +66,24 @@ pushd "${basename}" >/dev/null
- # below, if there is an issue anyway. Since most of the cset we're gonna
- # have to clone are not such special refs, consign the output to oblivion
- # so as not to alarm unsuspecting users, but still trace it as a warning.
--if ! _git fetch "'${cset}:${cset}'" >/dev/null 2>&1; then
-+if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
- fi
- 
--# Checkout the required changeset.
-+# Checkout the required changeset, so that we can update the required
-+# submodules.
- _git checkout -q "'${cset}'"
- 
- # Get date of commit to generate a reproducible archive.
- date="$( _git show --no-patch --pretty=format:%cD )"
- 
--# We do not need the .git dir to generate the tarball
--rm -rf .git
-+# There might be submodules, so fetch them.
-+if [ ${recurse} -eq 1 ]; then
-+    _git submodule update --init --recursive
-+fi
-+
-+# We do not need the .git dir and files to generate the tarball
-+find . -name .git -exec rm -rf {} +
- 
- popd >/dev/null
- 
+Finally, the series also introduces the concept of a "landing" area for
+the target directory.
+
+This landing area is a copy of the currently-known target/ directory,
+copy in which all the target-finalize step and hooks are run, leaving
+the original target/ directory to contain only what packages have
+installed.
+
+Please read the commit log for the final patch for more on that landing
+area. I also kept it in the series despite Thomas opoosition to it; at
+least it is now properly archived for posterity on the ML archives...
+
+
+Changes v1 -> v2:
+  - rebased on top of master
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 0b7b84310c3781c346eea4c114c8cb4e97bbd8ea:
+
+  olimex_imx233_olinuxino_defconfig: genimage support (2016-03-11 13:14:54 +0100)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/fs
+
+for you to fetch changes up to 8892913385099f562cba138ac3b4f762d8cc4d49:
+
+  [RFC] core: finalise target in its own location (2016-03-11 19:36:40 +0100)
+
+----------------------------------------------------------------
+Yann E. MORIN (9):
+      core: sort packages and eliminate duplicates before building
+      linux: split overly-long dependency line for readability
+      linux: meddle not in the affairs of filesystems, for you are tasty with bacon
+      fs/initramfs: cleanup and enhance comments
+      fs/ext2: use a post-gen hook rather than a post-target rule
+      fs/cpio: use a post-gen hook rather than a post-target rule
+      fs/common: get rid of post-target rules
+      fs/common: move actions common to all filesystems to their own rule
+      [RFC] core: finalise target in its own location
+
+ Makefile                  | 34 +++++++++++++++++++++++-
+ fs/common.mk              | 67 +++++++++++++++++++++++++----------------------
+ fs/cpio/cpio.mk           | 11 ++++----
+ fs/ext2/ext2.mk           | 10 +++----
+ fs/initramfs/initramfs.mk | 22 +++++++++++-----
+ linux/linux.mk            | 13 +++++----
+ 6 files changed, 99 insertions(+), 58 deletions(-)
+
 -- 
-1.9.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
