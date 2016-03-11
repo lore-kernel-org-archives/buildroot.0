@@ -1,40 +1,39 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 11 Mar 2016 04:34:00 +0300
-Subject: [Buildroot] [PATCH] Revert "package/gcc: fix libgcc build for
-	xtensa"
-Message-ID: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 11 Mar 2016 06:27:31 +0100
+Subject: [Buildroot] Autobuilder update
+References: <20160310234742.3df6dff2@free-electrons.com>
+Message-ID: <XnsA5C841B36A49FID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit c44cf2cc97df1729577263d2b0cb5263e8cdc4c1.
-Now that xtensa gas don't move literals into .init and .fini this fix is
-no longer needed.
+[posted and mailed]
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- package/gcc/gcc.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20160310234742.3df6dff2 at free-electrons.com: 
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 0fb73c9..5646b66 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -97,13 +97,6 @@ HOST_GCC_COMMON_CONF_ENV = \
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
--# Xtensa libgcc can't be built with -mauto-litpools
--# because of the trick used to generate .init/.fini sections.
--ifeq ($(BR2_xtensa),y)
--GCC_COMMON_TARGET_CFLAGS = $(filter-out -mauto-litpools,$(TARGET_CFLAGS))
--GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mauto-litpools,$(TARGET_CXXFLAGS))
--endif
--
- # Propagate options used for target software building to GCC target libs
- HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
--- 
-2.1.4
+> Let me know if there are other things that should be improved/changed
+> in the autobuilder setup (be it adding more toolchain configurations,
+> or other changes).
+
+Hi Thomas,
+
+do we have a config for a buildroot x86 toolchain which lacks
+BR2_X86_CPU_HAS_MMX? An empty defconfig file would be enough imho, the one
+you get when you call "make menuconfig" in a fresh git checkout without
+selecting anything and save this config, like: 
+
+bernd at buildroot:~/buildroot/buildroot$ make menuconfig
+(select nothing, just save the config)
+bernd at buildroot:~/buildroot/buildroot$ make savedefconfig
+BR2_DEFCONFIG=test cat test
+bernd at buildroot:~/buildroot/buildroot$ cat test
+bernd at buildroot:~/buildroot/buildroot$ 
+
+I think such a config would be useful because lots of media packages
+contain mmx specific code. 
+
+Regards, Bernd
