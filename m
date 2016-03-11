@@ -1,86 +1,23 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 11 Mar 2016 11:32:24 -0300
-Subject: [Buildroot] [PATCH 7/7] uboot: remove deprecated
-	BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR option
-In-Reply-To: <1457706744-23401-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1457706744-23401-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1457706744-23401-7-git-send-email-gustavo@zacarias.com.ar>
+From: buildroot at busybox.net <buildroot@busybox.net>
+Date: Fri, 11 Mar 2016 19:33:28 +0600
+Subject: [Buildroot] =?utf-8?b?0JrQm9CY0JXQndCi0KHQmtCY0JUg0JHQkNCX0Ksh?=
+	=?utf-8?b?INCi0LXQu1xWaWJlclxXaGF0c2FwcDogKzc5MTMzOTEzODM3IEVtYWls?=
+	=?utf-8?q?=3A_abelozerov39=40gmail=2Ecom_Skype=3A_prodawez389?=
+Message-ID: <20DA89BC77A38C4F9396DF60C41297B5@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's been deprecated for a year now so remove it.
+?????????? ????!
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- Config.in.legacy     |  7 +++++++
- boot/uboot/Config.in | 12 ------------
- boot/uboot/uboot.mk  | 10 ----------
- 3 files changed, 7 insertions(+), 22 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 8a067dd..8cae3b2 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,13 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.05"
- 
-+config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
-+	bool "uboot custom patch dir removed"
-+	select BR2_LEGACY
-+	help
-+	  The uboot custom patch directory option has been removed. Use
-+	  the improved BR2_TARGET_UBOOT_PATCH option instead.
-+
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
- 	bool "xf86-input-void removed"
- 	select BR2_LEGACY
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 4a6dc56..51c289f 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -90,18 +90,6 @@ config BR2_TARGET_UBOOT_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
- 
--config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
--	string "custom patch dir"
--	depends on BR2_DEPRECATED_SINCE_2015_05
--	help
--	  If your board requires custom patches, add the path to the
--	  directory containing the patches here. The patches must be
--	  named uboot-<something>.patch.
--
--	  Most users may leave this empty
--
--	  NOTE: Use BR2_TARGET_UBOOT_PATCH instead.
--
- config BR2_TARGET_UBOOT_PATCH
- 	string "Custom U-Boot patches"
- 	help
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index d539b31..f9a3ff8 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -100,16 +100,6 @@ endef
- UBOOT_POST_EXTRACT_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
- UBOOT_POST_RSYNC_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
- 
--# Prior to Buildroot 2015.05, only patch directories were supported. New
--# configurations use BR2_TARGET_UBOOT_PATCH instead.
--ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR)),)
--define UBOOT_APPLY_CUSTOM_PATCHES
--	$(APPLY_PATCHES) $(@D) $(BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR) \*.patch
--endef
--
--UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_CUSTOM_PATCHES
--endif
--
- # Analogous code exists in linux/linux.mk. Basically, the generic
- # package infrastructure handles downloading and applying remote
- # patches. Local patches are handled depending on whether they are
--- 
-2.4.10
+??????? ??? ??? ?? ???????? ???? ?????? ????????????? ???????? 
+??? ?????? ???????!
+?????! ??????! ????????! 
+??????? ?? ???? ????????? ?? 
+???: +79133913837
+Viber: +79133913837
+Whatsapp: +79133913837
+Skype: prodawez389
+Email: abelozerov39 at gmail.com
