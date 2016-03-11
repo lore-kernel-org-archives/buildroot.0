@@ -1,73 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 19:19:56 +0100
-Subject: [Buildroot] [PATCH 3/6] linux/perf: forcefully disable the features
-	with missing dependencies
+Date: Fri, 11 Mar 2016 19:19:58 +0100
+Subject: [Buildroot] [PATCH 5/6] linux/perf: build in a sub-directory
 In-Reply-To: <cover.1457720152.git.yann.morin.1998@free.fr>
 References: <cover.1457720152.git.yann.morin.1998@free.fr>
-Message-ID: <ee3ec5d2b7e690082b875a552b3be2b14ed8d72b.1457720152.git.yann.morin.1998@free.fr>
+Message-ID: <922afb0aa34f1beba4fd80408db74a8b8c57aada.1457720152.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forcefully disable the features that have optional dependencies that are
-not enabled in Buildroot.
+Currently, we only build perf for the target.
 
-Disable support for bionic since, well, we're not Android.
+However, analysing some of the results gathered by perf (aka trace) may
+require running perf (aka trace) on the host, so we'll have to build
+perf for the host too.
 
-Slightly re-order the variables to have semantically-related variables
-together, with features last.
+To avoid mixing target and host binaries, we need to build them in
+separate directories.
+
+This commit only moves the target build, in preparation of the host
+build to come later.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- linux/linux-tool-perf.mk | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ linux/linux-tool-perf.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
-index a5fbf21..d4b8f0e 100644
+index 8143474..f584955 100644
 --- a/linux/linux-tool-perf.mk
 +++ b/linux/linux-tool-perf.mk
-@@ -18,14 +18,15 @@ PERF_MAKE_FLAGS = \
- 	$(LINUX_MAKE_FLAGS) \
- 	JOBS=$(PARALLEL_JOBS) \
- 	ARCH=$(PERF_ARCH) \
-+	DESTDIR=$(TARGET_DIR) \
-+	prefix=/usr \
-+	WERROR=0 \
- 	NO_LIBAUDIT=1 \
- 	NO_NEWT=1 \
- 	NO_GTK2=1 \
- 	NO_LIBPERL=1 \
- 	NO_LIBPYTHON=1 \
--	DESTDIR=$(TARGET_DIR) \
--	prefix=/usr \
--	WERROR=0
-+	NO_LIBBIONIC=1
+@@ -120,15 +120,16 @@ define PERF_BUILD_CMDS
+ 			fi \
+ 		fi \
+ 	fi
++	$(Q)mkdir -p $(@D)/tools/perf/br-target
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
+-		-C $(@D)/tools/perf O=$(@D)/tools/perf/
++		-C $(@D)/tools/perf O=$(@D)/tools/perf/br-target
+ endef
  
- # We need to pass an argument to ld for setting the endianness when
- # building it for MIPS architecture, otherwise the default one will
-@@ -52,14 +53,20 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SLANG),y)
- PERF_DEPENDENCIES += slang
-+else
-+PERF_MAKE_FLAGS += NO_SLANG=1
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- PERF_DEPENDENCIES += libunwind
-+else
-+PERF_MAKE_FLAGS += NO_LIBUNWIND=1
- endif
- 
- ifeq ($(BR2_PACKAGE_NUMACTL),y)
- PERF_DEPENDENCIES += numactl
-+else
-+PERF_MAKE_FLAGS += NO_LIBNUMA=1
- endif
- 
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ # After installation, we remove the Perl and Python scripts from the
+ # target.
+ define PERF_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE1) $(PERF_MAKE_FLAGS) \
+-		-C $(@D)/tools/perf O=$(@D)/tools/perf/ install
++		-C $(@D)/tools/perf O=$(@D)/tools/perf/br-target install
+ 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/scripts/
+ 	$(RM) -rf $(TARGET_DIR)/usr/libexec/perf-core/tests/
+ endef
 -- 
 1.9.1
