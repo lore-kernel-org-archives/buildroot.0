@@ -1,41 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 11 Mar 2016 15:31:48 +0100
-Subject: [Buildroot] [rpi-firmware] I can't find the file
-	/usr/sbin/vcdbg after compiling
-In-Reply-To: <CALtfCQbACh2Odc7ACn6BDObdOCaaeLq-AnrE-RQdMNkE-=0zuQ@mail.gmail.com>
- (=?utf-8?B?IsOTc2NhciBHw7NtZXo=?= Fuente"'s message of "Fri, 11 Mar 2016
- 13:59:41 +0100")
-References: <CALtfCQbACh2Odc7ACn6BDObdOCaaeLq-AnrE-RQdMNkE-=0zuQ@mail.gmail.com>
-Message-ID: <87bn6lhyqz.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 11 Mar 2016 11:32:18 -0300
+Subject: [Buildroot] [PATCH 1/7] mplayer: switch it to samba4
+Message-ID: <1457706744-23401-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
+samba(3) has been deprecated for quite some time so switch mplayer to
+use samba4 if available.
+It needs a little extra tweak to pick up the proper cflags since the odd
+configure script doesn't do it.
 
- > Hi,
- > I'm using the last release buildroot-2016.02 and I'm trying to test some
- > dtb files on my raspberry pi 2 (because It seems to be it doesn't work
- > well) so I'm trying to add the package to debug vcdbg:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mplayer/mplayer.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- > Target package ---> Hardware handling  ---> Firmware ---> vcdbg
-
- > The compilation was successful but the file /usr/sbin/vcdbg doesn't exist
- > in the $TARGET_DIR
-
-From package/rpi-firmware/rpi-firmware.mk:
-
-ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
-define RPI_FIRMWARE_INSTALL_TARGET_CMDS
-        $(INSTALL) -d -m 0700 $(@D)/$(if BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
-                $(TARGET_DIR)/usr/sbin/vcdbg
-endef
-endif # INSTALL_VCDBG
-
-So it should be in usr/sbin. Did you do a clean build (or at least rm
--rf output/build/rpi-firmware-*) when you enabled the VCDBG option?
-
+diff --git a/package/mplayer/mplayer.mk b/package/mplayer/mplayer.mk
+index 2082f25..cbbd1e7 100644
+--- a/package/mplayer/mplayer.mk
++++ b/package/mplayer/mplayer.mk
+@@ -98,9 +98,11 @@ else
+ MPLAYER_CONF_OPTS += --disable-termcap
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SAMBA_SMBCLIENT),y)
++# mplayer doesn't pick up libsmbclient cflags
++ifeq ($(BR2_PACKAGE_SAMBA4),y)
++MPLAYER_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags smbclient`
+ MPLAYER_CONF_OPTS += --enable-smb
+-MPLAYER_DEPENDENCIES += samba
++MPLAYER_DEPENDENCIES += samba4
+ else
+ MPLAYER_CONF_OPTS += --disable-smb
+ endif
 -- 
-Bye, Peter Korsgaard
+2.4.10
