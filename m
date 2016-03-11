@@ -1,65 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 18:49:28 +0100
-Subject: [Buildroot] [PATCH 15/16 v5] core/pkg-virtual: ignore from
-	legal-info output
+Date: Fri, 11 Mar 2016 18:49:29 +0100
+Subject: [Buildroot] [PATCH 16/16 v5] legal-info: explicitly state how
+	patches are licensed
 In-Reply-To: <cover.1457718289.git.yann.morin.1998@free.fr>
 References: <cover.1457718289.git.yann.morin.1998@free.fr>
-Message-ID: <1ff09064e06f1622d495a97ddb9de520c26a0145.1457718289.git.yann.morin.1998@free.fr>
+Message-ID: <d6c5a79915775eaa9d1a6d1711a4955cafe221cd.1457718289.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Virtual packages really have nothing to save for legal-info, so we just
-ignore them, to avoid spurious "extracting" and "patching" messages
-while running legal-info.
+From: Luca Ceresoli <luca@lucaceresoli.net>
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <jacmet@uclibc.org>
-
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v3 -> v4:
-  - rephrase the .Note  (Luca)
-  - drop now-incorrect blurb from the commit log  (Luca)
+ support/legal-info/README.header | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v1 -> v2:
-  - use the new _LEGAL_IGNORE variable  (Thomas, Luca, Peter)
----
- docs/manual/adding-packages-virtual.txt | 5 +++++
- package/pkg-virtual.mk                  | 2 ++
- 2 files changed, 7 insertions(+)
-
-diff --git a/docs/manual/adding-packages-virtual.txt b/docs/manual/adding-packages-virtual.txt
-index a5f17a2..3857927 100644
---- a/docs/manual/adding-packages-virtual.txt
-+++ b/docs/manual/adding-packages-virtual.txt
-@@ -56,6 +56,11 @@ The +.mk+ for the virtual package should just evaluate the +virtual-package+ mac
- The ability to have target and host packages is also available, with the
- +host-virtual-package+ macro.
- 
-+.Note:
-+The +virtual-package+ infrastructure automatically marks virtual packages to be
-+excluded from the +legal-info+ output (by internally setting +FOO_LEGAL_IGNORE+
-+to 'YES').
-+
- ==== Provider's +Config.in+ file
- 
- When adding a package as a provider, only the +Config.in+ file requires some
-diff --git a/package/pkg-virtual.mk b/package/pkg-virtual.mk
-index 244c1d0..445f09a 100644
---- a/package/pkg-virtual.mk
-+++ b/package/pkg-virtual.mk
-@@ -59,6 +59,8 @@ endif
- # Add dependency against the provider
- $(2)_DEPENDENCIES += $$(call qstrip,$$(BR2_PACKAGE_PROVIDES_$(2)))
- 
-+$(2)_LEGAL_IGNORE = YES
-+
- # Call the generic package infrastructure to generate the necessary
- # make targets
- $(call inner-generic-package,$(1),$(2),$(3),$(4))
+diff --git a/support/legal-info/README.header b/support/legal-info/README.header
+index 418de14..feee104 100644
+--- a/support/legal-info/README.header
++++ b/support/legal-info/README.header
+@@ -18,7 +18,7 @@ This material is composed of the following items.
+    sources/ subdirectory (except for the non-redistributable packages, which
+    have not been saved). Patches that were applied are also saved, along
+    with a file named 'series' that lists the patches in the order they were
+-   applied.
++   applied. Patches are under the same license as the original package.
+  * A manifest file listing the configured packages and related information.
+  * The license text of the packages; they have been saved in the licenses/
+    subdirectory.
 -- 
 1.9.1
