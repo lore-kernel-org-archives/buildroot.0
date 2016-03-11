@@ -1,24 +1,18 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 18:41:11 +0100
-Subject: [Buildroot] [PATCH 3/9 v2] core/pkg-utils: add a macro to
-	pretty-print a help entry
+Date: Fri, 11 Mar 2016 18:41:10 +0100
+Subject: [Buildroot] [PATCH 2/9 v2] core: also display the custom help with
+	our main help
 In-Reply-To: <cover.1457717002.git.yann.morin.1998@free.fr>
 References: <cover.1457717002.git.yann.morin.1998@free.fr>
-Message-ID: <7871ae2104ff0285dcfce8f4670a2c7427271218.1457717002.git.yann.morin.1998@free.fr>
+Message-ID: <a5e9ff4caa9fcab5386298ed5eadbcc4fc095562.1457717002.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To ensure that all the help entries we display are all formatted the
-same, we currently indent the help texts manually.
-
-Also, when a br2-external tree wants to display local custom help, they
-have to rely on a hard-coded layout (if they want to match our iwn
-output, which is not mandatory).
-
-Add a macro to pretty-print make rules in the help texts.
+The patch merges the custom help, introduced in the previous patch, at
+the end of our internal help.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: J?r?me Pouiller <jezz@sysmic.org>
@@ -27,43 +21,33 @@ Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 ---
 Changes v1 -> v2:
-  - properly format multi-line output
+  - new patch, by popular demand... :-/
 ---
- package/pkg-utils.mk | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index f88313a..e9219d8 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -104,6 +104,28 @@ define sep
+diff --git a/Makefile b/Makefile
+index 7bb5f6d..ea8b1e4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -893,7 +893,9 @@ endif
+ 	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
+ 		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE)
  
- endef
- 
-+# Pretty-print a make rule in the help text
-+#
-+# $(1): a list of double- or single-quoted string representing the rule
-+#       and their help text, formatted as:  "action : help for action"
-+#       'action' should be less than 22 characters, otherwise the help
-+#       text will not be correctly indented.
-+#
-+# The output is a line formatted as such (with two leading spaces):
-+#   action-up-to-22-chars-long - help for action up to 52 chars wide
-+#                                with the remaining of the help text
-+#                                that does not fit on the first line
-+#
-+# (The long spaces are 27 chars.)
-+define print-help
-+	for h in $(1); do \
-+		printf "  %-22s - " "$${h%% : *}"; \
-+		printf "%s\n" "$${h#* : }" \
-+		|fmt -w52 -u \
-+		|sed '2,$$s/^/                           /;'; \
-+	done
-+endef
+-help:
++help: help-internal help-custom
 +
- # check-deprecated-variable -- throw an error on deprecated variables
- # example:
- #   $(eval $(call check-deprecated-variable,FOO_MAKE_OPT,FOO_MAKE_OPTS))
++help-internal:
+ 	@echo 'Cleaning:'
+ 	@echo '  clean                  - delete all files created by build'
+ 	@echo '  distclean              - delete all non-source files (including .config)'
+@@ -966,7 +968,6 @@ endif
+ 	@echo '  source-check           - check selected packages for valid download URLs'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
+-	@echo '  help-custom            - print help about custom actions (if any)'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+ 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
 -- 
 1.9.1
