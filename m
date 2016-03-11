@@ -1,30 +1,38 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 11 Mar 2016 03:45:20 +0300
-Subject: [Buildroot] [PATCH 0/2] gcc: preserve CXXFLAGS_FOR_TARGET
-Message-ID: <1457657122-7283-1-git-send-email-jcmvbkbc@gmail.com>
+Date: Fri, 11 Mar 2016 03:45:22 +0300
+Subject: [Buildroot] [PATCH 2/2] Revert "gcc/gcc-final: pass TARGET_ABI
+	flags to configure with --enable-cxx-flags"
+In-Reply-To: <1457657122-7283-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1457657122-7283-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <1457657122-7283-3-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This reverts commit 2dcab526a97d1dbcb73c3cd578e5bf2853853a10.
 
-this series backports gcc fix that preserves CXXFLAGS_FOR_TARGET and
-reverts related xtensa-specific workaround. See discussion at
-  https://patchwork.ozlabs.org/patch/479074/
+Now that gcc correctly propagates CXXFLAGS_FOR_TARGET for libstdc++
+build this is no longer needed.
 
-Max Filippov (2):
-  gcc: preserve CXXFLAGS_FOR_TARGET
-  Revert "gcc/gcc-final: pass TARGET_ABI flags to configure with
-    --enable-cxx-flags"
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ package/gcc/gcc-final/gcc-final.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
- package/gcc/4.8.5/130-pr43538.patch | 25 +++++++++++++++++++++++++
- package/gcc/4.9.3/130-pr43538.patch | 25 +++++++++++++++++++++++++
- package/gcc/gcc-final/gcc-final.mk  |  4 ----
- 3 files changed, 50 insertions(+), 4 deletions(-)
- create mode 100644 package/gcc/4.8.5/130-pr43538.patch
- create mode 100644 package/gcc/4.9.3/130-pr43538.patch
-
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index dbdb615..69fdc0c 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -195,8 +195,4 @@ endef
+ HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
+ endif
+ 
+-ifeq ($(BR2_xtensa),y)
+-HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
+-endif
+-
+ $(eval $(host-autotools-package))
 -- 
 2.1.4
