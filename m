@@ -1,44 +1,51 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Fri, 11 Mar 2016 08:54:21 +0100
-Subject: [Buildroot] [PATCH 1/1] putty: add new package
-In-Reply-To: <20160311070500.GF2057@tarshish>
-References: <1457678759-11688-1-git-send-email-post@lespocky.de>
- <20160311070500.GF2057@tarshish>
-Message-ID: <56E279AD.1050601@lespocky.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 11 Mar 2016 09:42:23 +0100
+Subject: [Buildroot] Autobuilder update
+In-Reply-To: <E1aeFbm-0004jE-Q7@fli4l.lan.fli4l>
+References: <20160310234742.3df6dff2@free-electrons.com>
+ <E1aeFbm-0004jE-Q7@fli4l.lan.fli4l>
+Message-ID: <20160311094223.6b433df0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Hello,
 
-On 11.03.2016 08:05, Baruch Siach wrote:
-> On Fri, Mar 11, 2016 at 07:45:59AM +0100, Alexander Dahl wrote:
->> +	help
->> +	  PuTTY is a free SSH and Telnet client
->> +
->> +	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
+On Fri, 11 Mar 2016 06:27:30 +0100, Bernd Kuhls wrote:
+
+> do we have a config for a buildroot x86 toolchain which lacks
+> BR2_X86_CPU_HAS_MMX? An empty defconfig file would be enough imho, the one
+> you get when you call "make menuconfig" in a fresh git checkout without
+> selecting anything and save this config, like: 
 > 
-> It might be useful to note here that the putty program itself depends on gtk2. 
-> Without gtk2, only command line utilities (pscp, plink, etc.) are built.
+> bernd at buildroot:~/buildroot/buildroot$ make menuconfig
+> (select nothing, just save the config)
+> bernd at buildroot:~/buildroot/buildroot$ make savedefconfig
+> BR2_DEFCONFIG=test cat test
+> bernd at buildroot:~/buildroot/buildroot$ cat test
+> bernd at buildroot:~/buildroot/buildroot$ 
+> 
+> I think such a config would be useful because lots of media packages
+> contain mmx specific code. 
 
-You mean in the help text there? I know this is the case, but it might
-be a good idea to make it a little more explicit, yes.
+By default we use i586, right? So what you suggest is an i586 defconfig?
 
-Greets
-Alex
+Now we have two options:
 
+ - Use an internal toolchain configuration, which means that the
+   toolchain is rebuilt everytime, and when we want on our side to
+   reproduce the build failures, we also have to rebuild the toolchain.
+
+ - Use a pre-built external toolchain.
+
+I'm leaning twoards the second option. What do you think?
+
+Best regards,
+
+Thomas
 -- 
-?With the first link, the chain is forged. The first speech censured,
-the first thought forbidden, the first freedom denied, chains us all
-irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-*** GnuPG-FP: 02C8 A590 7FE5 CA5F 3601  D1D5 8FBA 7744 CC87 10D0 ***
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160311/56b1db34/attachment.asc>
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
