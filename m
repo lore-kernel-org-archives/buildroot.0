@@ -1,65 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 11 Mar 2016 18:41:12 +0100
-Subject: [Buildroot] [PATCH 4/9 v2] docs/manual: print-help can be used in
-	help-custom
+Date: Fri, 11 Mar 2016 18:41:17 +0100
+Subject: [Buildroot] [PATCH 9/9 v2] boot/barebox: use the generic help rules
 In-Reply-To: <cover.1457717002.git.yann.morin.1998@free.fr>
 References: <cover.1457717002.git.yann.morin.1998@free.fr>
-Message-ID: <af8d831974fad544c0f37ca32064d646f4186c8e.1457717002.git.yann.morin.1998@free.fr>
+Message-ID: <b508f49279beea5e3f1b823408aa12ad7d9a35f9.1457717002.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-... but make it explicit that it is not mandatory.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: J?r?me Pouiller <jezz@sysmic.org>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
 ---
-Changes v1 -> v2:
-  - move that patch earlier in the series
-  - make it explicit that print-help is *not* mandatory for the
-    custom help
----
- docs/manual/customize-outside-br.txt | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ Makefile                | 4 ----
+ boot/barebox/barebox.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index be1827e..88fc802 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -110,14 +110,26 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
+diff --git a/Makefile b/Makefile
+index c0f8701..5f46296 100644
+--- a/Makefile
++++ b/Makefile
+@@ -935,10 +935,6 @@ help-internal:
+ 	@echo '  <pkg>-reconfigure      - Restart the build from the configure step'
+ 	@echo '  <pkg>-rebuild          - Restart the build from the build step'
+ 	@$(call print-help,$(PACKAGE_HELP))
+-ifeq ($(BR2_TARGET_BAREBOX),y)
+-	@echo '  barebox-menuconfig     - Run barebox menuconfig'
+-	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
+-endif
+ 	@echo
+ 	@echo 'Documentation:'
+ 	@echo '  manual                 - build manual in all formats'
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 7715daf..32ecd76 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -6,6 +6,10 @@
  
- Additionally, an +external.mk+ file may define the +help-custom+ make
- rule, to document custom make targets specific to this +BR2_EXTERNAL+
--tree. The help is completely free-form.
-+tree. The help is completely free-form. Buildroot however provides the
-++print-help+ macro to pretty-print those additional rules, even though
-+it is absolutely not mandatory to use it:
+ BAREBOX_VERSION = $(call qstrip,$(BR2_TARGET_BAREBOX_VERSION))
  
- ------
-+BR2_EXTERNAL_HELP = \
-+    "my-rule : some help text for my-rule" \
-+    "my-other-rule : some help text for my-other-rule"
++BAREBOX_HELP = \
++	"barebox-menuconfig : Run barebox menuconfig" \
++	"barebox-savedefconfig : Run barebox savedefconfig"
 +
- help-custom:
-     @echo 'Here goes your local help, where you may'
-     @echo 'describe some custom rules:'
--    @echo '  my-rule       - do something'
--    @echo '  my-other-rule - do something else'
-+    @$(call print-help,$(BR2_EXTERNAL_HELP))
-+    @echo
-+    @echo 'Another section with more custom help:'
-+    @echo '  third-rule  - some help text'
-+    @echo '  fourth-rule - even more help text'
-     @echo
-     @echo 'Please contact support at company.com in case of problem.'
- ------
-+
-+The format for +BR2_EXTERNAL_HELP+ is the same as for the +LIBFOO_HELP+
-+package variable, defined in xref:generic-package-tutorial[].
+ ifeq ($(BAREBOX_VERSION),custom)
+ # Handle custom Barebox tarballs as specified by the configuration
+ BAREBOX_TARBALL = $(call qstrip,$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
 -- 
 1.9.1
