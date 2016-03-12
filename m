@@ -1,12 +1,12 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sat, 12 Mar 2016 09:46:31 +0100
-Subject: [Buildroot] [PATCH v7 01/18] package/linux-headers: cleanup
-	installation
-In-Reply-To: <20160309230921.GC5634@free.fr>
+Date: Sat, 12 Mar 2016 09:48:17 +0100
+Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <20160309231552.GE5634@free.fr>
 References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-2-git-send-email-s.martin49@gmail.com>
- <20160309230921.GC5634@free.fr>
-Message-ID: <CAHXCMM+abNmsudePSffwtFcuFo8FQPMuM3+7VkXgQ8DDw+RTbA@mail.gmail.com>
+ <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+ <20160309231552.GE5634@free.fr>
+Message-ID: <CAHXCMM+nZmLjY25yAp-BX+NaG8eTDXXBPVy+1E1p+yJuVi7OhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +15,79 @@ To: buildroot@busybox.net
 
 Yann, all,
 
-On Thu, Mar 10, 2016 at 12:09 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Thu, Mar 10, 2016 at 12:15 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 > Samuel, All,
 >
 > On 2016-03-09 23:58 +0100, Samuel Martin spake thusly:
->> This patch removes unnecessary files generated during installation, that
->> also are causing build machine paths leaking into the Buildroot's SDK.
+>> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
+>> they can be resolved differently, depending on each package build-system
+>> (whether it uses the given paths or get the absolute canonical ones).
 >>
->> Note that similar cleanup commands can be found in other distributions
->> (e.g. gentoo [1]); thought this is not a valid reason.
+>> Thus, to make easier tracking down host machine paths leaking into the
+>> host, target or staging trees, the CURDIR and O variables are set to
+>> their absolute canonical paths.
 >>
->> [1] https://gitweb.gentoo.org/repo/gentoo.git/tree/sys-kernel/linux-headers/linux-headers-4.4.ebuild#n36
+>> Note that this change takes care of the makefile wrapper installed in
+>> $(O) to avoid unneeded make recursion.
 >>
 >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 >>
 >> ---
 >> changes v6->v7:
->> - improve commit log
+>> - none
 >>
 >> changes v5->v6:
 >> - new patch
 >> ---
->>  package/linux-headers/linux-headers.mk | 1 +
->>  1 file changed, 1 insertion(+)
+>>  Makefile | 22 ++++++++++++++++++----
+>>  1 file changed, 18 insertions(+), 4 deletions(-)
 >>
->> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
->> index 0900778..7633257 100644
->> --- a/package/linux-headers/linux-headers.mk
->> +++ b/package/linux-headers/linux-headers.mk
->> @@ -123,6 +123,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
->>                       HOSTCXX="$(HOSTCXX)" \
->>                       INSTALL_HDR_PATH=$(STAGING_DIR)/usr \
->>                       headers_install)
->> +     find $(STAGING_DIR)/usr \( -name .install -o -name ..install.cmd \) -delete
+>> diff --git a/Makefile b/Makefile
+>> index 98c8dc7..52a92f6 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -26,16 +26,30 @@
+>>
+>>  # Trick for always running with a fixed umask
+>>  UMASK = 0022
+>> -ifneq ($(shell umask),$(UMASK))
+>> +
+>> +# Check if we need to re-enter make for one or several of the following reasons:
+>> +# 1- Wrong (too restrictive) umask:
+>> +#    This prevents Buildroot and packages from creating files and directories.
+>> +# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
+>> +#    This makes harder tracking and fixing host machine path leaks.
+>> +# 3- Output location (i.e. $(O)) not being the absolute canonical path:
+>> +#    This makes harder tracking and fixing host machine path leaks.
+>> +#
+>> +# Note:
+>> +# - remove the trailing '/.' from $(O) as it can be added by the makefile
+>> +#   wrapper installed in the $(O).
+>> +ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
 >
-> I would further restrict that to $(STAGING_DIR)/usr/include . not
-Well, I just reuse what is set for INSTALL_HDR_PATH, making any
-assumption on what the package's install rules do.
+> This is a bit difficult to parse. What about setting intermediate
+> variables, like so:
+>
+>     CUR_UMASK := $(shell umask)
+>     REAL_CURDIR := $(realpath $(CURDIR))
+>     O := $(patsubst %/.,%,$(O))
+>     REAL_O := $(realpath $(O))
+>
+>     ifneq ($(CUR_UMASK):$(CURDIR):$(O),$(UMASK):$(REAL_CURDIR):$(REAL_O))
+Fair enough
 
 >
-> Also, Gentoo also has code to get rid of empty directories:
->     find $(STAGING_DIR)/usr -depth -type d -delete 2>/dev/null
-In the Gentoo case, this is run on the package content, whereas in BR,
-this would remove all empty directories in the shared sysroot.
-So, why doing it for this package and not for the others?
-Also, if we want to do this, it would be in the global infra, not here ;-)
-
+>>  .PHONY: _all $(MAKECMDGOALS)
+>>
+>>  $(MAKECMDGOALS): _all
+>>       @:
+>>
+>>  _all:
+>> -     @umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+>> +     umask $(UMASK) && \
 >
-> Although we don't really care about empty dirs in staging, TBH...
-Indeed.
+> Please keep the command silent, do not remove the leading @
+I'll fix it
 
 Regards,
 
