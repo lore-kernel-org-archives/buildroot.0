@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Mar 2016 23:13:45 +0100
+Date: Sat, 12 Mar 2016 23:26:25 +0100
 Subject: [Buildroot] [PATCH v2] Makefile: add --no-builtin-rules flag
 In-Reply-To: <1457740059-9618-1-git-send-email-arnout@mind.be>
 References: <1457740059-9618-1-git-send-email-arnout@mind.be>
-Message-ID: <20160312221345.GC3745@free.fr>
+Message-ID: <20160312222625.GD3745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,18 @@ On 2016-03-12 00:47 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
 > out when calling sub-makes. MFLAGS has to be overridden too, otherwise
 > the sub-make will just use that instead of MAKEFLAGS when MAKEFLAGS is
 > empty.
-> 
+
+Sorry, it breaks at least host-ncurses:
+
+    /usr/bin/make MAKEFLAGS="--no-print-directory" MFLAGS= -j1 -C /home/ymorin/dev/buildroot/O/build/host-ncurses-5.9 sources
+    cd include && /usr/bin/make ---no-print-directory DESTDIR="" sources
+    /usr/bin/make: unrecognized option '---no-print-directory'
+    Usage: make [options] [target] ...
+    [--SNIP--]
+
+Regards,
+Yann E. MORIN.
+
 > Time for 'make help > /dev/null' on my machine (with hot cache):
 >          before      after
 > real    0m4.167s   0m3.375s
@@ -75,12 +86,7 @@ On 2016-03-12 00:47 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
 >  endif
 >  HOSTMAKE := $(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
 > +HOSTMAKE += MAKEFLAGS="$(filter-out --no-builtin-rules,$(MAKEFLAGS))" MFLAGS=
-
-Is the extra added complexity worth the improvement?
-
-Regards,
-Yann E. MORIN.
-
+>  
 >  # If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
 >  # CPUs. An additional job is used in order to keep processors busy
 > -- 
