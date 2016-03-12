@@ -1,38 +1,45 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 12 Mar 2016 11:54:09 +0300
-Subject: [Buildroot] [PATCH] slang: do install-pkgconfig when building
-	static library
-Message-ID: <1457772849-7501-1-git-send-email-jcmvbkbc@gmail.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sat, 12 Mar 2016 10:11:29 +0100
+Subject: [Buildroot] [PATCH v7 04/18] core: staging symlink uses a
+ relative path when possible
+In-Reply-To: <20160310214723.0eb96ec9@free-electrons.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
+ <20160310214723.0eb96ec9@free-electrons.com>
+Message-ID: <CAHXCMMJdrtn5GGRFnESQbT4bUOcjVmHj8r0NAvSKkDPP4CJhCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mc's configure can't find S-Lang because static S-Lang build doesn't
-install pkgconfig file into staging. Adding install-pkgconfig to
-SLANG_INSTALL_STAGING_OPTS fixes that.
+Thomas, all,
 
-Fixes:
-  http://autobuild.buildroot.net/results/085194f18bc7db1e801d98e6620e3a75fd988cc5/
+On Thu, Mar 10, 2016 at 9:47 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Samuel,
+>
+> On Wed,  9 Mar 2016 23:58:45 +0100, Samuel Martin wrote:
+>> This change turns the staging/ symlink to a relative one when
+>> $(STAGING_DIR) points to some location in the Buildroot's output
+>> directory (i.e.: in $(BASE_DIR)/).
+>>
+>> In any other case, the symlink target remains the absolute path
+>> to the sysroot location.
+>>
+>> This slight change is a step forward toward a relocatable SDK.
+>
+> Why is this important for a relocatable SDK ? The SDK is $(HOST_DIR),
+> and the staging symlink is just a convenience symlink which sits
+> outside of $(HOST_DIR), and hence outside the SDK.
+Right, but what about consistency in BR? if we do all the job for
+having a full relocatable SDK, why should we keep this symlink an
+absolute one?
+Also, one of my tests in the relocatable SDK work is moving around the
+whole output directory; so I need this patch in this case. Maybe this
+is not a valid case?
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- package/slang/slang.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
 
-diff --git a/package/slang/slang.mk b/package/slang/slang.mk
-index 9078bf2..0991201 100644
---- a/package/slang/slang.mk
-+++ b/package/slang/slang.mk
-@@ -55,7 +55,7 @@ endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- SLANG_MAKE_OPTS = static
--SLANG_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
-+SLANG_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static install-pkgconfig
- SLANG_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
- endif
- 
 -- 
-2.1.4
+Samuel
