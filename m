@@ -1,53 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Mar 2016 23:57:59 +0100
-Subject: [Buildroot] [PATCH] gptfdisk: indentation cleanup
-In-Reply-To: <1457653095-27369-1-git-send-email-ricardo.martincoski@gmail.com>
-References: <1457653095-27369-1-git-send-email-ricardo.martincoski@gmail.com>
-Message-ID: <20160312225759.GK3745@free.fr>
+Date: Sat, 12 Mar 2016 23:58:38 +0100
+Subject: [Buildroot] Autobuilder update
+In-Reply-To: <20160310234742.3df6dff2@free-electrons.com>
+References: <20160310234742.3df6dff2@free-electrons.com>
+Message-ID: <20160312225838.GL3745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+Thomas, All,
 
-On 2016-03-10 20:38 -0300, Ricardo Martincoski spake thusly:
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+On 2016-03-10 23:47 +0100, Thomas Petazzoni spake thusly:
+> Hello,
+> 
+> Some autobuilder updates:
+> 
+>  - All the Buildroot pre-built external toolchains have been rebuilt
+>    with Buildroot 2016.02 + a few patches. To see which patches I'm
+>    using to build those external toolchains, see the branch at:
+> 
+>    http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=br-ext-toolchain-fixes
+> 
+>  - The br-sh4-full configuration has been changed to actually use the
+>    Buildroot toolchain, and not the pre-built Musl-cross toolchain.
+> 
+>  - I've fixed the Free Electrons build server, which was no longer
+>    building anything since quite some time, due to a lack of disk
+>    space. This will help re-increase the number of builds done each day.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+I updated my instance yesterday evening. Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/gptfdisk/Config.in.host | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
+> Let me know if there are other things that should be improved/changed
+> in the autobuilder setup (be it adding more toolchain configurations,
+> or other changes).
 > 
-> diff --git a/package/gptfdisk/Config.in.host b/package/gptfdisk/Config.in.host
-> index fb7c682..1300d02 100644
-> --- a/package/gptfdisk/Config.in.host
-> +++ b/package/gptfdisk/Config.in.host
-> @@ -2,10 +2,10 @@ config BR2_PACKAGE_HOST_GPTFDISK
->  	bool "host gptfdisk"
->  	select BR2_PACKAGE_HOST_UTIL_LINUX
->  	help
-> -          GPT fdisk (consisting of the gdisk and sgdisk programs) is a
-> -          text-mode partitioning tool that works on Globally Unique
-> -          Identifier (GUID) Partition Table (GPT) disks, rather than
-> -          on the more common (through 2010) Master Boot Record (MBR)
-> -          partition tables.
-> +	  GPT fdisk (consisting of the gdisk and sgdisk programs) is a
-> +	  text-mode partitioning tool that works on Globally Unique
-> +	  Identifier (GUID) Partition Table (GPT) disks, rather than
-> +	  on the more common (through 2010) Master Boot Record (MBR)
-> +	  partition tables.
->  
-> -          http://www.rodsbooks.com/gdisk/
-> +	  http://www.rodsbooks.com/gdisk/
+> Thanks!
+> 
+> Thomas
 > -- 
-> 1.9.1
-> 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
