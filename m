@@ -1,64 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Mar 2016 23:01:46 +0100
-Subject: [Buildroot] [PATCH 1/1] kbd: fix target install
-In-Reply-To: <1457786638-13861-1-git-send-email-niels@tonebarker.dk>
-References: <1457786638-13861-1-git-send-email-niels@tonebarker.dk>
-Message-ID: <20160312220146.GA3745@free.fr>
+Date: Sat, 12 Mar 2016 23:04:58 +0100
+Subject: [Buildroot] [PATCH] slang: do install-pkgconfig when building
+ static library
+In-Reply-To: <1457772849-7501-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1457772849-7501-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160312220458.GB3745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Niel, All,
+MAx, All,
 
-On 2016-03-12 13:43 +0100, Niels Skou Olsen spake thusly:
-> The package makefile fails to append to the KBD_INSTALL_TARGET_OPTS variable in
-> autotools-package. This means that the DESTDIR and install target are lost, and
-> so the package is never installed to target.
+On 2016-03-12 11:54 +0300, Max Filippov spake thusly:
+> mc's configure can't find S-Lang because static S-Lang build doesn't
+> install pkgconfig file into staging. Adding install-pkgconfig to
+> SLANG_INSTALL_STAGING_OPTS fixes that.
 > 
-> To fix it the append must happen after the eval of autotools-package.
-> 
-> Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
-> ---
->  package/kbd/kbd.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-> index 9dabce1..72519ff 100644
-> --- a/package/kbd/kbd.mk
-> +++ b/package/kbd/kbd.mk
-> @@ -17,6 +17,7 @@ KBD_LICENSE = GPLv2+
->  KBD_LICENSE_FILES = COPYING
->  KBD_AUTORECONF = YES
->  
-> -KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
-> -
->  $(eval $(autotools-package))
-> +
-> +# must happen after the autotools-package eval, or else the append becomes an overwrite
-> +KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+> Fixes:
+>   http://autobuild.buildroot.net/results/085194f18bc7db1e801d98e6620e3a75fd988cc5/
 
-We don;t usually do that.
+Could you instead fix the 0002-Enable-a-statically-linked-version-of-slsh
+patch to have install-static also depend on install-pkgconfig, please?
 
-Instead, when the package does not behave properly, we prefer to
-override all of it, like, for example, in  the rpm package:
+In the mean time, I marked your patch as Chanmges Requested on our
+Patchwork.
 
-    KBD_INSTALL_TARGET_OPTS = \
-        DESTDIR=$(TARGET_DIR)/usr \
-        MKINSTALLDIRS=$(@D)/config/mkinstalldirs \
-        install
-
-    $(eval $(autotools-package))
-
-I marked your patch as Changes Requested on outr Patchwork. Care to fix
-and respi, please?
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/slang/slang.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/slang/slang.mk b/package/slang/slang.mk
+> index 9078bf2..0991201 100644
+> --- a/package/slang/slang.mk
+> +++ b/package/slang/slang.mk
+> @@ -55,7 +55,7 @@ endif
+>  
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  SLANG_MAKE_OPTS = static
+> -SLANG_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
+> +SLANG_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static install-pkgconfig
+>  SLANG_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
+>  endif
+>  
 > -- 
-> 2.5.0
+> 2.1.4
 > 
 > _______________________________________________
 > buildroot mailing list
