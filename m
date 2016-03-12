@@ -1,37 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 12 Mar 2016 10:52:58 +0100
-Subject: [Buildroot] [PATCH 1/1] olimex_imx233_olinuxino_defconfig:
-	genimage support
-In-Reply-To: <56E3E205.8090701@mind.be> (Arnout Vandecappelle's message of
- "Sat, 12 Mar 2016 10:31:49 +0100")
-References: <1457645651-2472-1-git-send-email-phil@zankapfel.net>
- <87shzxi54b.fsf@dell.be.48ers.dk> <56E3E205.8090701@mind.be>
-Message-ID: <87vb4sggzp.fsf@dell.be.48ers.dk>
+From: Niels Skou Olsen <niels@tonebarker.dk>
+Date: Sat, 12 Mar 2016 13:43:58 +0100
+Subject: [Buildroot] [PATCH 1/1] kbd: fix target install
+Message-ID: <1457786638-13861-1-git-send-email-niels@tonebarker.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+The package makefile fails to append to the KBD_INSTALL_TARGET_OPTS variable in
+autotools-package. This means that the DESTDIR and install target are lost, and
+so the package is never installed to target.
 
- > On 03/11/16 13:14, Peter Korsgaard wrote:
- >>>>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
- > [snip]
- >> > +# To generate SD Image
- >> > +BR2_PACKAGE_HOST_GENIMAGE=y
- >> > +BR2_PACKAGE_HOST_MTOOLS=y
- >> 
- >> The vfat handling also uses mkdosfs, so we need to add
- >> BR2_PACKAGE_HOST_DOSFSTOOLS=y as well.
- >> 
- >> I noticed that we are missing it from some of the other defconfigs as
- >> well, so I'll fix that.
+To fix it the append must happen after the eval of autotools-package.
 
- >  So, why doesn't Travis detect that?
+Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
+---
+ package/kbd/kbd.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Presumably because the Ubuntu container has mkdosfs installed?
-
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index 9dabce1..72519ff 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -17,6 +17,7 @@ KBD_LICENSE = GPLv2+
+ KBD_LICENSE_FILES = COPYING
+ KBD_AUTORECONF = YES
+ 
+-KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+-
+ $(eval $(autotools-package))
++
++# must happen after the autotools-package eval, or else the append becomes an overwrite
++KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.5.0
