@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Mar 2016 00:05:51 +0100
+Date: Sun, 13 Mar 2016 00:13:36 +0100
 Subject: [Buildroot] [PATCH 1/1] putty: add new package
-In-Reply-To: <56E279AD.1050601@lespocky.de>
+In-Reply-To: <1457678759-11688-1-git-send-email-post@lespocky.de>
 References: <1457678759-11688-1-git-send-email-post@lespocky.de>
- <20160311070500.GF2057@tarshish> <56E279AD.1050601@lespocky.de>
-Message-ID: <20160312230551.GM3745@free.fr>
+Message-ID: <20160312231336.GN3745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +12,67 @@ To: buildroot@busybox.net
 
 Alexander, All,
 
-On 2016-03-11 08:54 +0100, Alexander Dahl spake thusly:
-> Hei hei,
-> 
-> On 11.03.2016 08:05, Baruch Siach wrote:
-> > On Fri, Mar 11, 2016 at 07:45:59AM +0100, Alexander Dahl wrote:
-> >> +	help
-> >> +	  PuTTY is a free SSH and Telnet client
-> >> +
-> >> +	  http://www.chiark.greenend.org.uk/~sgtatham/putty/
-> > 
-> > It might be useful to note here that the putty program itself depends on gtk2. 
-> > Without gtk2, only command line utilities (pscp, plink, etc.) are built.
-> 
-> You mean in the help text there? I know this is the case, but it might
-> be a good idea to make it a little more explicit, yes.
+On 2016-03-11 07:45 +0100, Alexander Dahl spake thusly:
+> Signed-off-by: Alexander Dahl <post@lespocky.de>
+> ---
+[--SNIP--]
+> diff --git a/package/putty/putty.hash b/package/putty/putty.hash
+> new file mode 100644
+> index 0000000..4b02acc
+> --- /dev/null
+> +++ b/package/putty/putty.hash
+> @@ -0,0 +1,5 @@
+> +# Hashes from: http://the.earth.li/~sgtatham/putty/0.67/{md5,sha1,sha256,sha512}sums
+> +md5 8d5d450e8f9a011e2e411e3f30827e9b                                                                                                    putty-0.67.tar.gz
+> +sha1 132ff74266e590a007f86cbb4bea5642db7bdd76                                                                                           putty-0.67.tar.gz
+> +sha256 80192458e8a46229de512afeca5c757dd8fce09606b3c992fbaeeee29b994a47                                                                 putty-0.67.tar.gz
+> +sha512 c2b17da46b8db3fe3837a10cb9cf5dd4b3ef6bfa15cadab83f3b87cf1479ed31fced90b774297ae53bdcbbdf230fc80d5c73d5ff3be6916fb591fd7ce3d35eca putty-0.67.tar.gz
 
-Yes, in the help text. Something like:
+sha256 and sha512 are two strong hashes, so md5 and sha1 are not needed.
 
-    help
-      PuTTY is a free SSH and Telnet client.
+Otherwise, looks good. When you fix the hashes and tweak the help text
+as mentionned in the other mail, you can add my:
 
-      Without GTK2, onlt the command line utilities ar ebuilt; enable
-      GTK2 for the graphical client.
-
-      http://www.chiark.greenend.org.uk/~sgtatham/putty/
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Greets
-> Alex
-> 
+> diff --git a/package/putty/putty.mk b/package/putty/putty.mk
+> new file mode 100644
+> index 0000000..ca86c47
+> --- /dev/null
+> +++ b/package/putty/putty.mk
+> @@ -0,0 +1,22 @@
+> +################################################################################
+> +#
+> +# putty
+> +#
+> +################################################################################
+> +
+> +PUTTY_VERSION = 0.67
+> +PUTTY_SOURCE = putty-$(PUTTY_VERSION).tar.gz
+> +PUTTY_SITE = http://the.earth.li/~sgtatham/putty/$(PUTTY_VERSION)
+> +PUTTY_SUBDIR = unix
+> +PUTTY_LICENSE = MIT
+> +PUTTY_LICENSE_FILES = LICENCE
+> +PUTTY_CONF_OPTS = --disable-gtktest
+> +
+> +ifeq ($(BR2_PACKAGE_LIBGTK2),y)
+> +PUTTY_CONF_OPTS += --with-gtk=2
+> +PUTTY_DEPENDENCIES += libgtk2
+> +else
+> +PUTTY_CONF_OPTS += --without-gtk
+> +endif
+> +
+> +$(eval $(autotools-package))
 > -- 
-> ?With the first link, the chain is forged. The first speech censured,
-> the first thought forbidden, the first freedom denied, chains us all
-> irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-> *** GnuPG-FP: 02C8 A590 7FE5 CA5F 3601  D1D5 8FBA 7744 CC87 10D0 ***
+> 2.1.4
 > 
-
-
-
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
