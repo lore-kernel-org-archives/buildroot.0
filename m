@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Mar 2016 23:55:28 +0100
-Subject: [Buildroot] [git commit] screen: re-eneable parallel builds
-Message-ID: <20160312225532.CBC5D817CA@busybox.osuosl.org>
+Date: Sat, 12 Mar 2016 23:56:00 +0100
+Subject: [Buildroot] [git commit] dnsmasq: re-enable parallel builds
+Message-ID: <20160312225604.13743817CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8278a1f2779ebc109737a47056a016a25b58020
+commit: https://git.buildroot.net/buildroot/commit/?id=8ba69a7322cdc6f63682000c543fef4e3c967110
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 They don't seem to be causing any issues after many bumps and tests.
@@ -18,18 +18,19 @@ Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/screen/screen.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/dnsmasq/dnsmasq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index 45689d3..0316e3d 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
-@@ -11,7 +11,6 @@ SCREEN_LICENSE_FILES = COPYING
- SCREEN_DEPENDENCIES = ncurses
- SCREEN_AUTORECONF = YES
- SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
--SCREEN_MAKE = $(MAKE1)
- SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index b3e8c4c..7fb1200 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -90,7 +90,7 @@ define DNSMASQ_BUILD_CMDS
+ 	$(DNSMASQ_ENABLE_DBUS)
+ 	$(DNSMASQ_ENABLE_LUA)
+ 	$(DNSMASQ_ENABLE_CONNTRACK)
+-	$(DNSMASQ_MAKE_ENV) $(MAKE1) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
++	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+ endef
  
- define SCREEN_INSTALL_SCREENRC
+ ifeq ($(BR2_PACKAGE_DBUS),y)
