@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Mar 2016 23:56:29 +0100
-Subject: [Buildroot] [PATCH 2/2] Revert "gcc/gcc-final: pass TARGET_ABI
- flags to configure with --enable-cxx-flags"
-In-Reply-To: <1457657122-7283-3-git-send-email-jcmvbkbc@gmail.com>
-References: <1457657122-7283-1-git-send-email-jcmvbkbc@gmail.com>
- <1457657122-7283-3-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20160312225629.GI3745@free.fr>
+Date: Sat, 12 Mar 2016 23:57:09 +0100
+Subject: [Buildroot] [PATCH] Revert "package/gcc: fix libgcc build for
+ xtensa"
+In-Reply-To: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160312225709.GJ3745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +13,46 @@ To: buildroot@busybox.net
 
 Max, All,
 
-On 2016-03-11 03:45 +0300, Max Filippov spake thusly:
-> This reverts commit 2dcab526a97d1dbcb73c3cd578e5bf2853853a10.
-> 
-> Now that gcc correctly propagates CXXFLAGS_FOR_TARGET for libstdc++
-> build this is no longer needed.
-> 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+On 2016-03-11 04:34 +0300, Max Filippov spake thusly:
+> This reverts commit c44cf2cc97df1729577263d2b0cb5263e8cdc4c1.
+> Now that xtensa gas don't move literals into .init and .fini this fix is
+> no longer needed.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Do you have an upstream reference with that fix?
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 > ---
->  package/gcc/gcc-final/gcc-final.mk | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/gcc/gcc.mk | 7 -------
+>  1 file changed, 7 deletions(-)
 > 
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index dbdb615..69fdc0c 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -195,8 +195,4 @@ endef
->  HOST_GCC_FINAL_POST_INSTALL_HOOKS += HOST_GCC_FINAL_INSTALL_USR_LIBS
->  endif
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 0fb73c9..5646b66 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -97,13 +97,6 @@ HOST_GCC_COMMON_CONF_ENV = \
+>  GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
+>  GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
 >  
+> -# Xtensa libgcc can't be built with -mauto-litpools
+> -# because of the trick used to generate .init/.fini sections.
 > -ifeq ($(BR2_xtensa),y)
-> -HOST_GCC_FINAL_CONF_OPTS += --enable-cxx-flags="$(TARGET_ABI)"
+> -GCC_COMMON_TARGET_CFLAGS = $(filter-out -mauto-litpools,$(TARGET_CFLAGS))
+> -GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mauto-litpools,$(TARGET_CXXFLAGS))
 > -endif
 > -
->  $(eval $(host-autotools-package))
+>  # Propagate options used for target software building to GCC target libs
+>  HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
+>  HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
 > -- 
 > 2.1.4
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
