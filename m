@@ -1,37 +1,36 @@
-From: Niels Skou Olsen <niels@tonebarker.dk>
-Date: Sat, 12 Mar 2016 13:43:58 +0100
-Subject: [Buildroot] [PATCH 1/1] kbd: fix target install
-Message-ID: <1457786638-13861-1-git-send-email-niels@tonebarker.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Mar 2016 14:11:17 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-03-11
+In-Reply-To: <CAMo8BfK3F+PtfXFi1p9Z0izFX_tMvcKyCUfZDKB7MJ06AsW56g@mail.gmail.com>
+References: <20160312073022.7CB43100EBF@stock.ovh.net>
+ <CAMo8BfK3F+PtfXFi1p9Z0izFX_tMvcKyCUfZDKB7MJ06AsW56g@mail.gmail.com>
+Message-ID: <20160312141117.530b366d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package makefile fails to append to the KBD_INSTALL_TARGET_OPTS variable in
-autotools-package. This means that the DESTDIR and install target are lost, and
-so the package is never installed to target.
+Max,
 
-To fix it the append must happen after the eval of autotools-package.
+On Sat, 12 Mar 2016 11:49:03 +0300, Max Filippov wrote:
+> On Sat, Mar 12, 2016 at 10:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+> > Build statistics for 2016-03-11
+> >       xtensa |                      mc-4.8.15 | NOK | http://autobuild.buildroot.net/results/085194f18bc7db1e801d98e6620e3a75fd988cc5/
+> 
+> mc's configure couldn't find S-Lang because static S-Lang build
+> didn't install pkgconfig file into staging. Adding install-pkgconfig
+> to SLANG_INSTALL_STAGING_OPTS fixes that.
 
-Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
----
- package/kbd/kbd.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Are you going to send a patch for that?
 
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index 9dabce1..72519ff 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -17,6 +17,7 @@ KBD_LICENSE = GPLv2+
- KBD_LICENSE_FILES = COPYING
- KBD_AUTORECONF = YES
- 
--KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
--
- $(eval $(autotools-package))
-+
-+# must happen after the autotools-package eval, or else the append becomes an overwrite
-+KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
+(My apologies if you already did, I handle e-mail in FIFO order, so I
+might have not seen yet in your patch.)
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
