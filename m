@@ -1,96 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Mar 2016 23:26:25 +0100
-Subject: [Buildroot] [PATCH v2] Makefile: add --no-builtin-rules flag
-In-Reply-To: <1457740059-9618-1-git-send-email-arnout@mind.be>
-References: <1457740059-9618-1-git-send-email-arnout@mind.be>
-Message-ID: <20160312222625.GD3745@free.fr>
+Date: Sat, 12 Mar 2016 23:34:04 +0100
+Subject: [Buildroot] [PATCH] bash re-enable parallel builds
+In-Reply-To: <1457720871-10472-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457720871-10472-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160312223404.GE3745@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Gustavo, All,
 
-On 2016-03-12 00:47 +0100, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> When calling 'make', it takes several seconds before anything happens.
-> This is because all the makefiles that have to be parsed and variables
-> and rules that have to be evaluated.
+On 2016-03-11 15:27 -0300, Gustavo Zacarias spake thusly:
+> They don't seem to be causing any issues after bumping to the 4.3.x
+> series and several tests.
 > 
-> One of the rules to be evaluated are the implicit rules that make adds
-> to check out the *.mk files from RCS etc. This obviously makes no
-> sense. Therefore, disable the built-in rules.
-> 
-> To avoid breaking package that depend on them, make sure we filter this
-> out when calling sub-makes. MFLAGS has to be overridden too, otherwise
-> the sub-make will just use that instead of MAKEFLAGS when MAKEFLAGS is
-> empty.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Sorry, it breaks at least host-ncurses:
-
-    /usr/bin/make MAKEFLAGS="--no-print-directory" MFLAGS= -j1 -C /home/ymorin/dev/buildroot/O/build/host-ncurses-5.9 sources
-    cd include && /usr/bin/make ---no-print-directory DESTDIR="" sources
-    /usr/bin/make: unrecognized option '---no-print-directory'
-    Usage: make [options] [target] ...
-    [--SNIP--]
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> Time for 'make help > /dev/null' on my machine (with hot cache):
->          before      after
-> real    0m4.167s   0m3.375s
-> user    0m3.596s   0m2.928s
-> sys     0m0.256s   0m0.180s
-> 
-> and for 'make graph-depends' on a large config:
->          before      after
-> real    0m58.417s  0m53.625s
-> user    0m48.284s  0m43.680s
-> sys     0m4.076s   0m3.536s
-> 
-> A roughly 10% improvement.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > ---
-> v2: override MFLAGS as well.
-> ---
->  Makefile            | 2 ++
->  package/Makefile.in | 2 ++
->  2 files changed, 4 insertions(+)
+>  package/bash/bash.mk | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/Makefile b/Makefile
-> index f2822a2..bbb2017 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -29,6 +29,8 @@ UMASK = 0022
->  ifneq ($(shell umask),$(UMASK))
->  .PHONY: _all $(MAKECMDGOALS)
+> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+> index 97d7182..3cd8d82 100644
+> --- a/package/bash/bash.mk
+> +++ b/package/bash/bash.mk
+> @@ -22,10 +22,6 @@ BASH_CONF_ENV += \
+>  	bash_cv_func_sigsetjmp=present \
+>  	bash_cv_printf_a_format=yes
 >  
-> +%.mk:
-> +
->  $(MAKECMDGOALS): _all
->  	@:
->  
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index fbf5485..730810e 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -1,3 +1,4 @@
-> +MAKEFLAGS += --no-builtin-rules
->  ifndef MAKE
->  MAKE := make
->  endif
-> @@ -5,6 +6,7 @@ ifndef HOSTMAKE
->  HOSTMAKE = $(MAKE)
->  endif
->  HOSTMAKE := $(shell which $(HOSTMAKE) || type -p $(HOSTMAKE) || echo make)
-> +HOSTMAKE += MAKEFLAGS="$(filter-out --no-builtin-rules,$(MAKEFLAGS))" MFLAGS=
->  
->  # If BR2_JLEVEL is 0, scale the maximum concurrency with the number of
->  # CPUs. An additional job is used in order to keep processors busy
+> -# Parallel build sometimes fails because some of the generator tools
+> -# are built twice (i.e. while executing).
+> -BASH_MAKE = $(MAKE1)
+> -
+>  # The static build needs some trickery
+>  ifeq ($(BR2_STATIC_LIBS),y)
+>  BASH_CONF_OPTS += --enable-static-link --without-bash-malloc
 > -- 
-> 2.7.0
+> 2.4.10
 > 
 > _______________________________________________
 > buildroot mailing list
