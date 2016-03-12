@@ -1,43 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 12 Mar 2016 14:12:17 +0100
-Subject: [Buildroot] [PATCH v7 04/18] core: staging symlink uses a
- relative path when possible
-In-Reply-To: <CAHXCMMJdrtn5GGRFnESQbT4bUOcjVmHj8r0NAvSKkDPP4CJhCg@mail.gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-5-git-send-email-s.martin49@gmail.com>
- <20160310214723.0eb96ec9@free-electrons.com>
- <CAHXCMMJdrtn5GGRFnESQbT4bUOcjVmHj8r0NAvSKkDPP4CJhCg@mail.gmail.com>
-Message-ID: <20160312141217.445d8d1f@free-electrons.com>
+From: Phil Eichinger <phil.eichinger@gmail.com>
+Date: Sat, 12 Mar 2016 14:52:42 +0100
+Subject: [Buildroot] [PATCH 1/1] olimex_imx233_olinuxino_defconfig:
+	genimage support
+In-Reply-To: <87vb4sggzp.fsf@dell.be.48ers.dk>
+References: <1457645651-2472-1-git-send-email-phil@zankapfel.net>
+ <87shzxi54b.fsf@dell.be.48ers.dk> <56E3E205.8090701@mind.be>
+ <87vb4sggzp.fsf@dell.be.48ers.dk>
+Message-ID: <CAPiYbRLgfTDF4D6noo0iu5HmzyKUJrkWGywqL_FU8zFZ=hXB7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 12 March 2016 at 10:52, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+>  > On 03/11/16 13:14, Peter Korsgaard wrote:
+>  >>>>>>> "Phil" == Phil Eichinger <phil.eichinger@gmail.com> writes:
+>  > [snip]
+>  >> > +# To generate SD Image
+>  >> > +BR2_PACKAGE_HOST_GENIMAGE=y
+>  >> > +BR2_PACKAGE_HOST_MTOOLS=y
+>  >>
+>  >> The vfat handling also uses mkdosfs, so we need to add
+>  >> BR2_PACKAGE_HOST_DOSFSTOOLS=y as well.
+>  >>
+>  >> I noticed that we are missing it from some of the other defconfigs as
+>  >> well, so I'll fix that.
+>
+>  >  So, why doesn't Travis detect that?
+>
+> Presumably because the Ubuntu container has mkdosfs installed?
 
-On Sat, 12 Mar 2016 10:11:29 +0100, Samuel Martin wrote:
+I looked into it, on my system mkdosfs was installed, that's why I was
+able to generate the image.
+Is a fallback to system mkdosfs considered a feature or should
+genimage only use Buildroot's mkdosfs?
 
-> > Why is this important for a relocatable SDK ? The SDK is $(HOST_DIR),
-> > and the staging symlink is just a convenience symlink which sits
-> > outside of $(HOST_DIR), and hence outside the SDK.
-> Right, but what about consistency in BR? if we do all the job for
-> having a full relocatable SDK, why should we keep this symlink an
-> absolute one?
-
-Because there is no point in adding more complexity in BR if it's
-useless.
-
-> Also, one of my tests in the relocatable SDK work is moving around the
-> whole output directory; so I need this patch in this case. Maybe this
-> is not a valid case?
-
-I don't see the point of moving the entire output/ directory, because
-there are lots and lots and lots of absolute paths all over the place
-in the build directory of packages.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Cheers, Phil
