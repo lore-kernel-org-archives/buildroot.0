@@ -1,60 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 12 Mar 2016 23:58:38 +0100
-Subject: [Buildroot] Autobuilder update
-In-Reply-To: <20160310234742.3df6dff2@free-electrons.com>
-References: <20160310234742.3df6dff2@free-electrons.com>
-Message-ID: <20160312225838.GL3745@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 12 Mar 2016 23:59:09 +0100
+Subject: [Buildroot] [PATCH] dnsmasq: re-enable parallel builds
+In-Reply-To: <1457718040-5459-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457718040-5459-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160312235909.742f7215@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Dear Gustavo Zacarias,
 
-On 2016-03-10 23:47 +0100, Thomas Petazzoni spake thusly:
-> Hello,
+On Fri, 11 Mar 2016 14:40:40 -0300, Gustavo Zacarias wrote:
+> They don't seem to be causing any issues after many bumps and tests.
 > 
-> Some autobuilder updates:
-> 
->  - All the Buildroot pre-built external toolchains have been rebuilt
->    with Buildroot 2016.02 + a few patches. To see which patches I'm
->    using to build those external toolchains, see the branch at:
-> 
->    http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=br-ext-toolchain-fixes
-> 
->  - The br-sh4-full configuration has been changed to actually use the
->    Buildroot toolchain, and not the pre-built Musl-cross toolchain.
-> 
->  - I've fixed the Free Electrons build server, which was no longer
->    building anything since quite some time, due to a lack of disk
->    space. This will help re-increase the number of builds done each day.
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/dnsmasq/dnsmasq.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-I updated my instance yesterday evening. Thanks! :-)
+Applied to master, thanks.
 
-Regards,
-Yann E. MORIN.
-
-> Let me know if there are other things that should be improved/changed
-> in the autobuilder setup (be it adding more toolchain configurations,
-> or other changes).
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
