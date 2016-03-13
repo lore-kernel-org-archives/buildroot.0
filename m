@@ -1,57 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Mar 2016 22:53:42 +0100
-Subject: [Buildroot] changing sources before patching
-In-Reply-To: <56E5BF43.90507@lespocky.de>
-References: <56E5BF43.90507@lespocky.de>
-Message-ID: <56E5E166.7090403@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 13 Mar 2016 22:53:13 +0100
+Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
+ question regarding autobuilders
+Message-ID: <934hrcx7vo.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/13/16 20:28, Alexander Dahl wrote:
-> Hei hei,
->
-> in the fli4l [1] project, we use buildroot as build system, a little
-> custom stuff on top, but basically it's buildroot. Now Carsten wanted to
-> make a package for sfftools [2], especially sfftobmp3. The source is
-> only available from subversion and we need to patch it. The problem we
-> face is: some files we need to patch (e.g. configure.ac) have CRLF aka
-> DOS line endings and patch fails then. So we want to convert the line
-> endings to LF aka unix before patching. Is this possible with buildroot
-> and how? Or does anyone else has a good idea for an elegant solution to
-> this problem?
+Hi,
 
-  As Bernt wrote, you can have a patch containing the correct CRLF.
+before sending a patch which fixes a problem with host gcc < 4.7 I would 
+like to ask whether this patch is needed@all. Are there autobuilders 
+where the host version of gcc is < 4.7?
 
-  Alternatively, you can run a conversion in the _PRE_PATCH_HOOKS.
+While testing Kodi compilation using buildroot master this error occurs:
 
-  Regards,
-  Arnout
+cc1plus: error: unrecognized command line option '-std=c++11'
+make[4]: *** [md5.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+cc1plus: error: unrecognized command line option '-std=c++11'cc1plus: 
+error: unrecognized command line option '-std=c++11'
 
->
-> (please keep Carsten and Christoph in Cc)
->
-> Greets
-> Alex
->
-> [1] http://www.fli4l.de/
-> [2] https://sourceforge.net/projects/sfftools/
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
+make[4]: *** [DecoderManager.o] Error 1
+make[4]: *** [XBTFWriter.o] Error 1
+cc1plus: error: unrecognized command line option '-std=c++11'
+make[4]: *** [TexturePacker.o] Error 1
+cc1plus: error: unrecognized command line option '-std=c++11'
+make[4]: *** [decoder/PNGDecoder.o] Error 1
+make[3]: *** [all] Error 2
+make[2]: *** [native/TexturePacker] Error 2
+make[1]: *** [/home/fli4l/buildroot/output/build/kodi-16.0-
+Jarvis/.stamp_configured] Error 2
 
+while the host version of TexturePacker is compiled during autoreconf on 
+Ubuntu 12.04.5 with "gcc-Version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5)".
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+To fix the problem change "-std=c++11" to "-std=c++0x" in tools/depends/
+native/TexturePacker/src/Makefile.am.
+
+To reproduce the bug use this defconfig:
+
+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
+BR2_PACKAGE_XORG7=y
+
+Regards, Bernd
