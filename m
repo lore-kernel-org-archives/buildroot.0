@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Mar 2016 19:16:18 +0100
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xapp_xrandr: bump version to
-	1.5.0
-In-Reply-To: <1457892978-10165-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457892978-10165-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1457892978-10165-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 13 Mar 2016 19:16:16 +0100
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xserver_xorg-server: bump
+	version to 1.18.2
+Message-ID: <1457892978-10165-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +11,44 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xapp_xrandr/xapp_xrandr.hash | 4 ++--
- package/x11r7/xapp_xrandr/xapp_xrandr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xserver_xorg-server/Config.in                | 4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xrandr/xapp_xrandr.hash b/package/x11r7/xapp_xrandr/xapp_xrandr.hash
-index 009ba5d..b1db30d 100644
---- a/package/x11r7/xapp_xrandr/xapp_xrandr.hash
-+++ b/package/x11r7/xapp_xrandr/xapp_xrandr.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-August/002467.html
--sha256	7154ac3486b86923692f2d6cdb2991a2ee72bc32af2c4379a6f1c068f204be1b	xrandr-1.4.3.tar.bz2
-+# From https://lists.freedesktop.org/archives/xorg-announce/2016-February/002677.html
-+sha256	c1cfd4e1d4d708c031d60801e527abc9b6d34b85f2ffa2cadd21f75ff38151cd	xrandr-1.5.0.tar.bz2
-diff --git a/package/x11r7/xapp_xrandr/xapp_xrandr.mk b/package/x11r7/xapp_xrandr/xapp_xrandr.mk
-index d2e4cf3..583a501 100644
---- a/package/x11r7/xapp_xrandr/xapp_xrandr.mk
-+++ b/package/x11r7/xapp_xrandr/xapp_xrandr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index 007843d..d723102 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -70,7 +70,7 @@ choice
+ 	bool "X Window System server version"
  
--XAPP_XRANDR_VERSION = 1.4.3
-+XAPP_XRANDR_VERSION = 1.5.0
- XAPP_XRANDR_SOURCE = xrandr-$(XAPP_XRANDR_VERSION).tar.bz2
- XAPP_XRANDR_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XRANDR_LICENSE = MIT
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+-	bool "1.18.1"
++	bool "1.18.2"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+@@ -82,7 +82,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.18.1" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
++	default "1.18.2" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+ choice
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 6024395..7e838d7 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,6 +1,5 @@
+ # From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
+ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                xorg-server-1.14.7.tar.bz2
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+-# From https://lists.freedesktop.org/archives/xorg-announce/2016-February/002674.html
+-sha1	968fe85773a41296199f8733c7235c8623d7c460				xorg-server-1.18.1.tar.bz2
+-sha256	85ec56dbeb89a951295cdf4f39bf38e515f900d35e06d4a8081b114d1520789d	xorg-server-1.18.1.tar.bz2
++# From https://lists.freedesktop.org/archives/xorg-announce/2016-March/002681.html
++sha256	022142b07f6477d140dcc915902df326408a53ca3a352426a499f142b25d632d	xorg-server-1.18.2.tar.bz2
 -- 
 2.7.0
