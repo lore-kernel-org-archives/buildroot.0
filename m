@@ -1,50 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 23:18:11 +0100
-Subject: [Buildroot] [PATCH v2] gdb: specify where to find lzma libraries
-In-Reply-To: <1457691393-48436-1-git-send-email-Vincent.Riera@imgtec.com>
- (Vicente Olivert Riera's message of "Fri, 11 Mar 2016 10:16:33 +0000")
-References: <1457691393-48436-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <87twkadnto.fsf@dell.be.48ers.dk>
+Date: Sun, 13 Mar 2016 23:17:08 +0100
+Subject: [Buildroot] [git commit] gdb: specify where to find lzma libraries
+Message-ID: <20160313221830.57F5D81819@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e6a29a4f3c48b13fde2214365067e34fbb92cfd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As reported in...
- >   https://bugs.busybox.net/show_bug.cgi?id=8786
+As reported in...
 
- > ..., gdb fails to build with xz and expat support at the same time when
- > using an external toolchain.
+  https://bugs.busybox.net/show_bug.cgi?id=8786
 
- > This is how the problem is shown:
+..., gdb fails to build with xz and expat support at the same time when
+using an external toolchain.
 
- > checking for liblzma... no
- > configure: error: missing liblzma for --with-lzma
+This is how the problem is shown:
 
- > And having a deeper look in gdb/config.log we can se a message like this
- > one:
+checking for liblzma... no
+configure: error: missing liblzma for --with-lzma
 
- > /lib64/liblzma.so.5: undefined reference to `clock_gettime at GLIBC_2.17'
+And having a deeper look in gdb/config.log we can se a message like this
+one:
 
- > As Thomas said in the bug report quoted above, that error is related to
- > the fact that it find the host's lzma.
+/lib64/liblzma.so.5: undefined reference to `clock_gettime at GLIBC_2.17'
 
- > Adding --with-lzma-prefix=$(STAGING_DIR)/usr to GDB_CONF_OPTS fixes the
- > problem.
+As Thomas said in the bug report quoted above, that error is related to
+the fact that it find the host's lzma.
 
- > Credit-to: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- > ---
- > Changes v1 -> v2:
- >  - Adding --with-lzma-prefix=$(HOST_DIR)/usr to GDB_CONF_OPTS is wrong.
- >    Instead, we should add --with-lzma-prefix=$(STAGING_DIR)/usr. Thanks
- >    to Peter Korsgaard for highlighting the mistake.
+Adding --with-lzma-prefix=$(STAGING_DIR)/usr to GDB_CONF_OPTS fixes the
+problem.
 
-Committed, thanks.
+Credit-to: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gdb/gdb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Venlig hilsen,
-Peter Korsgaard 
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index 32d52eb..f7d6339 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -120,6 +120,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_XZ),y)
+ GDB_CONF_OPTS += --with-lzma
++GDB_CONF_OPTS += --with-liblzma-prefix=$(STAGING_DIR)/usr
+ GDB_DEPENDENCIES += xz
+ else
+ GDB_CONF_OPTS += --without-lzma
