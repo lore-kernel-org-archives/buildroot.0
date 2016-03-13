@@ -1,43 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 21:27:46 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xrandr: bump version to
-	1.5.0
-Message-ID: <20160313204834.D662F81816@busybox.osuosl.org>
+Date: Sun, 13 Mar 2016 21:17:12 +0100
+Subject: [Buildroot] [git commit] kbd: fix install to target
+Message-ID: <20160313204834.89FC58025E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=110123d6da925196a9ea3225b71dd83f3a744758
+commit: https://git.buildroot.net/buildroot/commit/?id=28a55b66897f97e3acad36549a4c9e02e7f5dc22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The package makefile attempted to append to KBD_INSTALL_TARGET_OPTS, but this
+fails when done before evaluating $(autotools-package). This is because
+autotools-package uses ?= to set default values. Instead of appending we now
+override KBD_INSTALL_TARGET_OPTS.
+
+Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xrandr/xapp_xrandr.hash | 4 ++--
- package/x11r7/xapp_xrandr/xapp_xrandr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/kbd/kbd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xapp_xrandr/xapp_xrandr.hash b/package/x11r7/xapp_xrandr/xapp_xrandr.hash
-index 009ba5d..b1db30d 100644
---- a/package/x11r7/xapp_xrandr/xapp_xrandr.hash
-+++ b/package/x11r7/xapp_xrandr/xapp_xrandr.hash
-@@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2014-August/002467.html
--sha256	7154ac3486b86923692f2d6cdb2991a2ee72bc32af2c4379a6f1c068f204be1b	xrandr-1.4.3.tar.bz2
-+# From https://lists.freedesktop.org/archives/xorg-announce/2016-February/002677.html
-+sha256	c1cfd4e1d4d708c031d60801e527abc9b6d34b85f2ffa2cadd21f75ff38151cd	xrandr-1.5.0.tar.bz2
-diff --git a/package/x11r7/xapp_xrandr/xapp_xrandr.mk b/package/x11r7/xapp_xrandr/xapp_xrandr.mk
-index d2e4cf3..583a501 100644
---- a/package/x11r7/xapp_xrandr/xapp_xrandr.mk
-+++ b/package/x11r7/xapp_xrandr/xapp_xrandr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
+index 9dabce1..0243c53 100644
+--- a/package/kbd/kbd.mk
++++ b/package/kbd/kbd.mk
+@@ -17,6 +17,6 @@ KBD_LICENSE = GPLv2+
+ KBD_LICENSE_FILES = COPYING
+ KBD_AUTORECONF = YES
  
--XAPP_XRANDR_VERSION = 1.4.3
-+XAPP_XRANDR_VERSION = 1.5.0
- XAPP_XRANDR_SOURCE = xrandr-$(XAPP_XRANDR_VERSION).tar.bz2
- XAPP_XRANDR_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XRANDR_LICENSE = MIT
+-KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
++KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
+ 
+ $(eval $(autotools-package))
