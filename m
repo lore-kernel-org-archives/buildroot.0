@@ -1,41 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 13 Mar 2016 23:25:49 +0100
-Subject: [Buildroot] [PATCH 1/2] package/rpi-firmware: bump version,
-	add support for rpi-3
-In-Reply-To: <cover.1457907876.git.yann.morin.1998@free.fr>
-References: <cover.1457907876.git.yann.morin.1998@free.fr>
-Message-ID: <b36b2f631aa2d2fe6abd13aaa368894028125524.1457907876.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 14 Mar 2016 00:00:05 +0100
+Subject: [Buildroot] [PATCH 1/4] taskd: move to Miscellaneous menu
+Message-ID: <1457910008-19414-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/rpi-firmware/rpi-firmware.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+It's not really a networking tool (if everything that does something on
+the network would be called a networking tool, we wouldn't have much
+else).
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 4b92a50..2cc7969 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 22d8c910f4c53118f9cf85c038d7d8e307efc110
-+RPI_FIRMWARE_VERSION = 8b4e5482b52e6fb438dddc0d88ba0ba8d44af54b
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-@@ -18,6 +18,7 @@ define RPI_FIRMWARE_INSTALL_DTB
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2708-rpi-b-plus.dtb $(BINARIES_DIR)/rpi-firmware/bcm2708-rpi-b-plus.dtb
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2709-rpi-2-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2709-rpi-2-b.dtb
-+	$(INSTALL) -D -m 0644 $(@D)/boot/bcm2710-rpi-3-b.dtb $(BINARIES_DIR)/rpi-firmware/bcm2710-rpi-3-b.dtb
- endef
- endif
- 
+Since we don't really have an appropriate menu for it, put it in
+Miscellaneous.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/Config.in b/package/Config.in
+index 35a24ba..99ee0c2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1315,6 +1315,7 @@ menu "Miscellaneous"
+ 	source "package/qpdf/Config.in"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/snowball-init/Config.in"
++	source "package/taskd/Config.in"
+ 	source "package/wine/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+ endmenu
+@@ -1489,7 +1490,6 @@ endif
+ 	source "package/sshpass/Config.in"
+ 	source "package/strongswan/Config.in"
+ 	source "package/stunnel/Config.in"
+-	source "package/taskd/Config.in"
+ 	source "package/tcpdump/Config.in"
+ 	source "package/tcping/Config.in"
+ 	source "package/tcpreplay/Config.in"
 -- 
-1.9.1
+2.7.0
