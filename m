@@ -1,71 +1,139 @@
-From: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Date: Sun, 13 Mar 2016 21:28:05 +0100
-Subject: [Buildroot] [PATCH V2] package/systemd: Respect
-	BR2_TARGET_GENERIC_GETTY_BAUDRATE
-In-Reply-To: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
-References: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
-Message-ID: <CAGduivzd_HebHnm54y4wbvZGvTZL6Nhwz_q4ufFT74Uf=HAPwg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Mar 2016 21:38:44 +0100
+Subject: [Buildroot] [PATCH 1/1] Add SVN support for kernel and u-boot
+In-Reply-To: <CAGC_hNkOAuAHUSMy-KdNpYv65kpfKUGPd1ybsocNe=4iJNMnuQ@mail.gmail.com>
+ (Pauli Sundberg's message of "Sun, 13 Mar 2016 20:15:05 +0200")
+References: <CAGC_hNkOAuAHUSMy-KdNpYv65kpfKUGPd1ybsocNe=4iJNMnuQ@mail.gmail.com>
+Message-ID: <87oaaif6zv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Cyril, all,
+>>>>> "Pauli" == Pauli Sundberg <susundberg@gmail.com> writes:
 
-Thanks for your patch.
+ > Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
+ > ---
+ >  boot/uboot/Config.in |  7 +++++--
+ >  boot/uboot/uboot.mk  |  4 +++-
+ >  linux/Config.in      | 11 +++++++++--
+ >  linux/linux.mk       |  3 +++
+ >  4 files changed, 20 insertions(+), 5 deletions(-)
 
-On Mon, Mar 7, 2016 at 2:05 AM, Cyril Bur <cyrilbur@gmail.com> wrote:
-> Currently systemd getty services ignore baudrates set in buildroot in
-> favour of a hardcoded 115200. This patch SEDs out that hardcoded value with
-> what is selected.
->
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
-> V2: Address comments from Martin Bark and Maxime Hadjinlian
->     - Don't change the symlink
->     - Use qstrip (for consistency) around
->       $(BR2_TARGET_GENERIC_GETTY_BAUDRATE) in shell test statement
->
-> ---
->  package/systemd/systemd.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 05121cf..0d52481 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -169,6 +169,7 @@ endef
->
->  ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
->  # systemd needs getty.service for VTs and serial-getty.service for serial ttys
-> +# also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
->  define SYSTEMD_INSTALL_SERVICE_TTY
->         if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
->         then \
-> @@ -177,7 +178,11 @@ define SYSTEMD_INSTALL_SERVICE_TTY
->                 SERVICE="serial-getty"; \
->         fi; \
->         ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
-> -               $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
-> +               $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service; \
-> +       if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
-> +       then \
-> +               $(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service; \
-> +       fi
->  endef
->  endif
->
-> --
-> 2.7.2
->
+Thanks, can you please split this up in two patches - One for u-boot and
+one for the Linux kernel?
 
-I don't think it's a problem for getty, but still worth noting
-somewhere, this will replace '115200' (without the quotes) by say
-"9600" (with the quotes) because the quotes are present in
-system/Config.in (maybe they could be removed ? There's no type for
-that sort of things in Kconfig as far as I know (which is not much) ?
+I cannot apply the patch. It seems like your mailer has converted tabs
+to spaces. Please verify that you mailer doesn't corrupt patches by
+sending them to yourself and checking that they can be applied.
 
-Other than that, it's fine by me.
 
-Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+ > index 4a6dc56..888ee38 100644
+ > --- a/boot/uboot/Config.in
+ > +++ b/boot/uboot/Config.in
+ > @@ -51,6 +51,9 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ >  config BR2_TARGET_UBOOT_CUSTOM_GIT
+ >      bool "Custom Git repository"
+
+ > +config BR2_TARGET_UBOOT_CUSTOM_SVN
+ > +    bool "Custom SVN repository"
+ > +
+ >  config BR2_TARGET_UBOOT_CUSTOM_HG
+ >      bool "Custom Mercurial repository"
+
+Please keep this alphabetically sorted, so _SVN after _HG.
+
+
+ > @@ -64,7 +67,7 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ >      string "URL of custom U-Boot tarball"
+ >      depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
+
+ > -if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ > +if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG ||
+ > BR2_TARGET_UBOOT_CUSTOM_SVN
+
+ >  config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+ >      string "URL of custom repository"
+ > @@ -88,7 +91,7 @@ config BR2_TARGET_UBOOT_VERSION
+ >          if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ >      default "custom"    if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ >      default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
+ > -        if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ > +        if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
+ > || BR2_TARGET_UBOOT_CUSTOM_SVN
+
+Please also update the _CUSTOM_REPO_VERSION help text with svn info.
+
+
+ >  config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
+ >      string "custom patch dir"
+ > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+ > index d539b31..b22db1c 100644
+ > --- a/boot/uboot/uboot.mk
+ > +++ b/boot/uboot/uboot.mk
+ > @@ -3,7 +3,6 @@
+ >  # uboot
+ >  #
+ >  ################################################################################
+ > -
+ >  UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
+
+Please don't add unrelated changes.
+
+
+
+>  UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+
+ > @@ -21,6 +20,9 @@ BR_NO_CHECK_HASH_FOR += $(UBOOT_SOURCE)
+ >  else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_GIT),y)
+ >  UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+ >  UBOOT_SITE_METHOD = git
+ > +else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_SVN),y)
+ > +UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+ > +UBOOT_SITE_METHOD = svn
+ >  else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
+
+Please also keep this in the same order as Config.in, so _SVN after _HG.
+
+
+>  UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+ >  UBOOT_SITE_METHOD = hg
+ > diff --git a/linux/Config.in b/linux/Config.in
+ > index 6dfc9fe..3cd3c70 100644
+ > --- a/linux/Config.in
+ > +++ b/linux/Config.in
+ > @@ -69,8 +69,15 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ >        This option allows Buildroot to get the Linux kernel source
+ >        code from a local directory.
+
+ > +config BR2_LINUX_KERNEL_CUSTOM_SVN
+ > +    bool "Custom SVN repository"
+ > +    help
+ > +      This option allows Buildroot to get the Linux kernel source
+ > +      code from a SVN repository.
+ > +
+
+This should go after the _CUSTOM_HG option.
+
+Please add svn info to the _CUSTOM_REPO_VERSION option.
+
+
+> +++ b/linux/linux.mk
+ > @@ -20,6 +20,9 @@ LINUX_SITE_METHOD = local
+ >  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+ >  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ >  LINUX_SITE_METHOD = git
+ > +else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
+ > +LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ > +LINUX_SITE_METHOD = svn
+ >  else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+ >  LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ >  LINUX_SITE_METHOD = hg
+
+Please put the _SVN logic after _HG.
+
+
+-- 
+Bye, Peter Korsgaard
