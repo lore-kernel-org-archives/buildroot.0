@@ -1,31 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 23:01:36 +0100
-Subject: [Buildroot] [git commit] configs: pandaboard: correct genimage
-	dependencies
-Message-ID: <20160313220628.9B82D7F8D5@busybox.osuosl.org>
+Date: Sun, 13 Mar 2016 23:16:22 +0100
+Subject: [Buildroot] [PATCH] grep: bump to version 2.24
+In-Reply-To: <1457697895-24114-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 11 Mar 2016 09:04:55 -0300")
+References: <1457697895-24114-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8737ruf2h5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9c2006e31911611a077396b63d0da4ac8fd2055
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-The genimage configuration creates a vfat filesystem, so ensure we have
-dosfstools / mtools built for the host.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/pandaboard_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Committed, thanks.
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 7ae1a50..3223d2b 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -26,3 +26,4 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="MLO"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+Bye, Peter Korsgaard
