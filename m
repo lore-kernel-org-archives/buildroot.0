@@ -1,26 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 21:19:11 +0100
-Subject: [Buildroot] [PATCH 1/1] kbd: fix install to target
-In-Reply-To: <1457888388-6429-1-git-send-email-niels@tonebarker.dk> (Niels
- Skou Olsen's message of "Sun, 13 Mar 2016 17:59:48 +0100")
-References: <1457888388-6429-1-git-send-email-niels@tonebarker.dk>
-Message-ID: <87egbegmgw.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 13 Mar 2016 21:20:03 +0100
+Subject: [Buildroot] A 64 bit system which enables 32 bit applications
+In-Reply-To: <CAPFcPT+TVFb3FD4ubuYH=m5SNOOiObS4p1WENMf+kE8XgvXnWA@mail.gmail.com>
+References: <CAPFcPT+TVFb3FD4ubuYH=m5SNOOiObS4p1WENMf+kE8XgvXnWA@mail.gmail.com>
+Message-ID: <20160313212003.564a68aa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Niels" == Niels Skou Olsen <niels@tonebarker.dk> writes:
+Hello,
 
- > The package makefile attempted to append to KBD_INSTALL_TARGET_OPTS, but this
- > fails when done before evaluating $(autotools-package). This is because
- > autotools-package uses ?= to set default values. Instead of appending we now
- > override KBD_INSTALL_TARGET_OPTS.
+On Sun, 13 Mar 2016 20:12:35 +0200, Mau Z wrote:
 
- > Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
+> I need to build a 64 bit system, but I need to run a 32 bit
+> application on to of it.
+> I looked into the buildroot menus/options, and I could not find any
+> clear way to do this.
+> Any advice ?
 
-Committed, thanks.
+We don't support this today. I.e, we can only build a pure 64 bits
+system, or a pure 32 bits system. But we don't support multiarch, with
+one part of the system using 64 bits libraries, and another part of the
+system using 32 bits libraries.
 
+The main problem is that it wouldn't be easy to define in menuconfig
+which package should be built 32 bits vs. which package should be built
+64 bits.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
