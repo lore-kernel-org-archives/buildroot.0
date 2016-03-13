@@ -1,34 +1,40 @@
-From: Niels Skou Olsen <niels@tonebarker.dk>
-Date: Sun, 13 Mar 2016 17:59:48 +0100
-Subject: [Buildroot] [PATCH 1/1] kbd: fix install to target
-Message-ID: <1457888388-6429-1-git-send-email-niels@tonebarker.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 13 Mar 2016 18:26:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libbluray: bump version to 0.9.2
+Message-ID: <1457889997-19646-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package makefile attempted to append to KBD_INSTALL_TARGET_OPTS, but this
-fails when done before evaluating $(autotools-package). This is because
-autotools-package uses ?= to set default values. Instead of appending we now
-override KBD_INSTALL_TARGET_OPTS.
-
-Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kbd/kbd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libbluray/libbluray.hash | 4 ++--
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index 9dabce1..0243c53 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -17,6 +17,6 @@ KBD_LICENSE = GPLv2+
- KBD_LICENSE_FILES = COPYING
- KBD_AUTORECONF = YES
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index 5bb41a1..9acd89d 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
+@@ -1,2 +1,2 @@
+-# From http://get.videolan.org/libbluray/0.8.1/libbluray-0.8.1.tar.bz2.sha512
+-sha512	6618e01a567f0dc5d21302fc771d4155589c81703028b76f6090a2d12ef1c7e9d08d9c79312a7c8b2ca0d6c63ce980195f0866509a4f8f05f64ed6650c7f78dc	libbluray-0.8.1.tar.bz2
++# From http://get.videolan.org/libbluray/0.9.2/libbluray-0.9.2.tar.bz2.sha512
++sha512	f7fda2ef4c0ec70eb9a38aed0e76d21d8784410cb13713e7ee66ecd23a1cc58325977b046d40c526554a4a4e4cf96706a233e15451bf34892aff201b47e25aef	libbluray-0.9.2.tar.bz2
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index 24218e9..048db7a 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
-+KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(autotools-package))
+-LIBBLURAY_VERSION = 0.8.1
++LIBBLURAY_VERSION = 0.9.2
+ LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
 -- 
-2.5.0
+2.7.0
