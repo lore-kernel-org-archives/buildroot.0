@@ -1,73 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 13 Mar 2016 23:19:50 +0100
-Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
- question regarding autobuilders
-In-Reply-To: <934hrcx7vo.ln2@ID-313208.user.individual.net>
-References: <934hrcx7vo.ln2@ID-313208.user.individual.net>
-Message-ID: <56E5E786.1090906@mind.be>
+Date: Sun, 13 Mar 2016 23:23:24 +0100
+Subject: [Buildroot] [PATCH 1/2] gcc: preserve CXXFLAGS_FOR_TARGET
+In-Reply-To: <CAMo8Bf+k+nHJsJKEWpY1=2z1z9HqOKRFLGQtG7c3JfUapaJVew@mail.gmail.com>
+References: <1457657122-7283-1-git-send-email-jcmvbkbc@gmail.com>
+ <1457657122-7283-2-git-send-email-jcmvbkbc@gmail.com>
+ <20160312225608.GH3745@free.fr>
+ <CAMo8Bf+k+nHJsJKEWpY1=2z1z9HqOKRFLGQtG7c3JfUapaJVew@mail.gmail.com>
+Message-ID: <56E5E85C.2080409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/13/16 22:53, Bernd Kuhls wrote:
-> Hi,
+On 03/13/16 04:18, Max Filippov wrote:
+> Hi Yann,
 >
-> before sending a patch which fixes a problem with host gcc < 4.7 I would
-> like to ask whether this patch is needed at all. Are there autobuilders
-> where the host version of gcc is < 4.7?
+> On Sun, Mar 13, 2016 at 1:56 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>> On 2016-03-11 03:45 +0300, Max Filippov spake thusly:
+>>> gcc-4.8.x and gcc-4.9.x don't propagate CXXFLAGS_FOR_TARGET to CXXFLAGS
+>>> for libstdc++ build. As a result libstdc++ is built without
+>>> TARGET_CFLAGS and may fail to link with applications using it, see e.g.
+>>>
+>>>    http://autobuild.buildroot.net/results/81a3bca5cbcf789c7ce1aa221a6a4154dd7c3917/
+>>>
+>>> Instead of passing TARGET_ABI or TARGET_CFLAGS for libstdc++ in
+>>> --enable-cxx-flags parameter backport the patch that fixes propagation
+>>> of CXXFLAGS_FOR_TARGET to CXXFLAGS.
+>>>
+>>> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+>>> ---
+>>>   package/gcc/4.8.5/130-pr43538.patch | 25 +++++++++++++++++++++++++
+>>>   package/gcc/4.9.3/130-pr43538.patch | 25 +++++++++++++++++++++++++
+>>
+>> As already noticed by Arnout, this is not done for gcc-4.7. Is it
+>> because it is not affected by the issue, or because upstream has not
+>> fixed it?
+>
+> It's me not seeing 4.7.x in the menuconfig list. Yes, 4.7.x is affected too.
+> I'll send a new version with backport to 4.7.x.
 
-  Well, RHEL6 has gcc 4.4, and ideally we'd like to support RHEL5 as well (many 
-companies are still based on it).
-
-  But we have a simple solution now: kodi depends on BR2_HOST_GCC_AT_LEAST_4_7. 
-Cfr. nodejs for instance, which faces the same problem.
+  Since 4.7 is deprecated, I don't think there is a need to add a patch for it. 
+So my Reviewed-by stands.
 
   Regards,
   Arnout
 
 >
-> While testing Kodi compilation using buildroot master this error occurs:
->
-> cc1plus: error: unrecognized command line option '-std=c++11'
-> make[4]: *** [md5.o] Error 1
-> make[4]: *** Waiting for unfinished jobs....
-> cc1plus: error: unrecognized command line option '-std=c++11'cc1plus:
-> error: unrecognized command line option '-std=c++11'
->
-> make[4]: *** [DecoderManager.o] Error 1
-> make[4]: *** [XBTFWriter.o] Error 1
-> cc1plus: error: unrecognized command line option '-std=c++11'
-> make[4]: *** [TexturePacker.o] Error 1
-> cc1plus: error: unrecognized command line option '-std=c++11'
-> make[4]: *** [decoder/PNGDecoder.o] Error 1
-> make[3]: *** [all] Error 2
-> make[2]: *** [native/TexturePacker] Error 2
-> make[1]: *** [/home/fli4l/buildroot/output/build/kodi-16.0-
-> Jarvis/.stamp_configured] Error 2
->
-> while the host version of TexturePacker is compiled during autoreconf on
-> Ubuntu 12.04.5 with "gcc-Version 4.6.3 (Ubuntu/Linaro 4.6.3-1ubuntu5)".
->
-> To fix the problem change "-std=c++11" to "-std=c++0x" in tools/depends/
-> native/TexturePacker/src/Makefile.am.
->
-> To reproduce the bug use this defconfig:
->
-> BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> BR2_PACKAGE_KODI=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-> BR2_PACKAGE_XORG7=y
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>> Is the latter case, we'd still have the issue for gcc-4.7, no? Or do we
+>> not care about it any more (I don't, TBH...)?
+>>
+>> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 >
 
 
