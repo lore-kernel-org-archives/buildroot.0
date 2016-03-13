@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 21:19:24 +0100
-Subject: [Buildroot] [git commit] package/libbluray: bump version to 0.9.2
-Message-ID: <20160313204834.A93E68185E@busybox.osuosl.org>
+Date: Sun, 13 Mar 2016 21:27:32 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xproto_videoproto: bump
+	version to 2.3.3
+Message-ID: <20160313204834.B9D5D8025E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d019af4bd9dbefe5992932fd65e1df201eb2c812
+commit: https://git.buildroot.net/buildroot/commit/?id=a959b22c00abcc1fac8c2ad653e5701030961a75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbluray/libbluray.hash | 4 ++--
- package/libbluray/libbluray.mk   | 2 +-
+ package/x11r7/xproto_videoproto/xproto_videoproto.hash | 4 ++--
+ package/x11r7/xproto_videoproto/xproto_videoproto.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
-index 5bb41a1..9acd89d 100644
---- a/package/libbluray/libbluray.hash
-+++ b/package/libbluray/libbluray.hash
+diff --git a/package/x11r7/xproto_videoproto/xproto_videoproto.hash b/package/x11r7/xproto_videoproto/xproto_videoproto.hash
+index 41c98cd..471a0a3 100644
+--- a/package/x11r7/xproto_videoproto/xproto_videoproto.hash
++++ b/package/x11r7/xproto_videoproto/xproto_videoproto.hash
 @@ -1,2 +1,2 @@
--# From http://get.videolan.org/libbluray/0.8.1/libbluray-0.8.1.tar.bz2.sha512
--sha512	6618e01a567f0dc5d21302fc771d4155589c81703028b76f6090a2d12ef1c7e9d08d9c79312a7c8b2ca0d6c63ce980195f0866509a4f8f05f64ed6650c7f78dc	libbluray-0.8.1.tar.bz2
-+# From http://get.videolan.org/libbluray/0.9.2/libbluray-0.9.2.tar.bz2.sha512
-+sha512	f7fda2ef4c0ec70eb9a38aed0e76d21d8784410cb13713e7ee66ecd23a1cc58325977b046d40c526554a4a4e4cf96706a233e15451bf34892aff201b47e25aef	libbluray-0.9.2.tar.bz2
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-index e62ad48..2cc27f1 100644
---- a/package/libbluray/libbluray.mk
-+++ b/package/libbluray/libbluray.mk
+-# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/2005
+-sha256	8dae168cb820fcd32f564879afb3f24d27c176300d9af66819a18265539bd4b6	videoproto-2.3.2.tar.bz2
++# From https://lists.freedesktop.org/archives/xorg-announce/2016-March/002680.html
++sha256	c7803889fd08e6fcaf7b68cc394fb038b2325d1f315e571a6954577e07cca702	videoproto-2.3.3.tar.bz2
+diff --git a/package/x11r7/xproto_videoproto/xproto_videoproto.mk b/package/x11r7/xproto_videoproto/xproto_videoproto.mk
+index 9226c73..896398f 100644
+--- a/package/x11r7/xproto_videoproto/xproto_videoproto.mk
++++ b/package/x11r7/xproto_videoproto/xproto_videoproto.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBLURAY_VERSION = 0.8.1
-+LIBBLURAY_VERSION = 0.9.2
- LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
- LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
- LIBBLURAY_INSTALL_STAGING = YES
+-XPROTO_VIDEOPROTO_VERSION = 2.3.2
++XPROTO_VIDEOPROTO_VERSION = 2.3.3
+ XPROTO_VIDEOPROTO_SOURCE = videoproto-$(XPROTO_VIDEOPROTO_VERSION).tar.bz2
+ XPROTO_VIDEOPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_VIDEOPROTO_LICENSE = MIT
