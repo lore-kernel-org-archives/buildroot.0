@@ -1,36 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 21:17:12 +0100
-Subject: [Buildroot] [git commit] kbd: fix install to target
-Message-ID: <20160313204834.89FC58025E@busybox.osuosl.org>
+Date: Sun, 13 Mar 2016 21:45:18 +0100
+Subject: [Buildroot] [git commit] package/transmission: bump version to 2.92
+Message-ID: <20160313204834.EEFE38025E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28a55b66897f97e3acad36549a4c9e02e7f5dc22
+commit: https://git.buildroot.net/buildroot/commit/?id=4e154caf97ec51551cccfa3c4d4f942a3671d10f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package makefile attempted to append to KBD_INSTALL_TARGET_OPTS, but this
-fails when done before evaluating $(autotools-package). This is because
-autotools-package uses ?= to set default values. Instead of appending we now
-override KBD_INSTALL_TARGET_OPTS.
-
-Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kbd/kbd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/transmission/transmission.hash | 2 +-
+ package/transmission/transmission.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index 9dabce1..0243c53 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -17,6 +17,6 @@ KBD_LICENSE = GPLv2+
- KBD_LICENSE_FILES = COPYING
- KBD_AUTORECONF = YES
+diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
+index 0dc816d..849a722 100644
+--- a/package/transmission/transmission.hash
++++ b/package/transmission/transmission.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	69ff8caf81684155926f437f46bf7df1b1fb304f52c7809f546257e8923f2fd2	transmission-2.90.tar.xz
++sha256	3a8d045c306ad9acb7bf81126939b9594553a388482efa0ec1bfb67b22acd35f	transmission-2.92.tar.xz
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 6aecf60..c8d3773 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
-+KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
- 
- $(eval $(autotools-package))
+-TRANSMISSION_VERSION = 2.90
++TRANSMISSION_VERSION = 2.92
+ TRANSMISSION_SITE = http://download.transmissionbt.com/files
+ TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
+ TRANSMISSION_DEPENDENCIES = \
