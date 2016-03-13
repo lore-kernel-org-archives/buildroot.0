@@ -1,78 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 13 Mar 2016 21:05:06 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tvheadend: bump version
-In-Reply-To: <1457899506-377-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1457899506-377-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1457899506-377-2-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 13 Mar 2016 21:14:51 +0100
+Subject: [Buildroot] [PATCH] slang: make install-static do
+	install-pkgconfig
+In-Reply-To: <1457838391-19605-1-git-send-email-jcmvbkbc@gmail.com> (Max
+ Filippov's message of "Sun, 13 Mar 2016 06:06:31 +0300")
+References: <1457838391-19605-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <87mvq2gmo4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream added a configure option to disable -Werror:
-https://github.com/tvheadend/tvheadend/commit/ddb31c58b88450f7228e620048fb2d691d427fab
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-Remove our patch therefore and use the new configure option instead.
+ > mc's configure can't find S-Lang because static S-Lang build doesn't
+ > install pkgconfig file into staging. Adding install-pkgconfig to
+ > install-static dependencies fixes that.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tvheadend/0002-remove-werror.patch | 16 ----------------
- package/tvheadend/tvheadend.hash           |  2 +-
- package/tvheadend/tvheadend.mk             |  3 ++-
- 3 files changed, 3 insertions(+), 18 deletions(-)
- delete mode 100644 package/tvheadend/0002-remove-werror.patch
+ > Fixes:
+ >   http://autobuild.buildroot.net/results/085194f18bc7db1e801d98e6620e3a75fd988cc5/
 
-diff --git a/package/tvheadend/0002-remove-werror.patch b/package/tvheadend/0002-remove-werror.patch
-deleted file mode 100644
-index d466907..0000000
---- a/package/tvheadend/0002-remove-werror.patch
-+++ /dev/null
-@@ -1,16 +0,0 @@
--tvheadend: remove -Werror from CFLAGS
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--diff -durN tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile
----- tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3.orig/Makefile	2014-03-09 14:50:48.437688482 +0100
--+++ tvheadend-c84bc2b72b462ef2dbed305f3fd0bb3fa5046fc3/Makefile	2014-03-09 14:54:00.411418749 +0100
--@@ -32,7 +32,7 @@
-- ifeq ($(CONFIG_W_UNUSED_RESULT),yes)
-- CFLAGS  += -Wunused-result
-- endif
---CFLAGS  += -Wall -Werror -Wwrite-strings -Wno-deprecated-declarations
--+CFLAGS  += -Wall -Wwrite-strings -Wno-deprecated-declarations
-- CFLAGS  += -Wmissing-prototypes
-- CFLAGS  += -fms-extensions -funsigned-char -fno-strict-aliasing
-- CFLAGS  += -D_FILE_OFFSET_BITS=64
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index de7bc46..5737c2f 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	0caf44de3baaf115d80410b660d99e49a42f50792397254e8f21b6e1c5ca58ef	tvheadend-1aa0073be39119f5d0d79212e6c83c470904a161.tar.gz
-+sha256	5e59b2659badfe921fc324162dbfbfb69da8fe7eac21478651287fd56784ab11	tvheadend-3927788bb71ad0041a00d0daa35fae1cb6355b55.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 11f882a..40d8c6e 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 1aa0073be39119f5d0d79212e6c83c470904a161
-+TVHEADEND_VERSION = 3927788bb71ad0041a00d0daa35fae1cb6355b55
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
-@@ -77,6 +77,7 @@ define TVHEADEND_CONFIGURE_CMDS
- 			--prefix=/usr				\
- 			--arch="$(ARCH)"			\
- 			--cpu="$(BR2_GCC_TARGET_CPU)"		\
-+			--nowerror				\
- 			--python="$(HOST_DIR)/usr/bin/python"	\
- 			--enable-dvbscan			\
- 			--enable-bundle				\
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ > ---
+ >  package/slang/0002-Enable-a-statically-linked-version-of-slsh.patch | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/slang/0002-Enable-a-statically-linked-version-of-slsh.patch b/package/slang/0002-Enable-a-statically-linked-version-of-slsh.patch
+ > index ee306a1..b0f8779 100644
+
+Patch description and signed-off-by missing. Alternatively we can drop
+the patch and just pass install-pkgconfig to the 'make install' step as
+we already need to use a custom make target anyway.
+
+ > --- a/package/slang/0002-Enable-a-statically-linked-version-of-slsh.patch
+ > +++ b/package/slang/0002-Enable-a-statically-linked-version-of-slsh.patch
+ > @@ -39,7 +39,8 @@ diff -rup a/autoconf/Makefile.in b/autoconf/Makefile.in
+ >   	cd slsh; $(MAKE) all
+ >  @@ -73,10 +76,11 @@ clean:
+ >   	cd demo; $(MAKE) clean
+ > - install-static:
+ > +-install-static:
+ > ++install-static: install-pkgconfig
+ >   	cd src; $(MAKE) install-static
+ >  +	cd slsh; $(MAKE) install-static
+ >   install-pkgconfig: slang.pc
+ > -- 
+ > 2.1.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+
 -- 
-2.7.0
+Bye, Peter Korsgaard
