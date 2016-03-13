@@ -1,56 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 13 Mar 2016 21:27:17 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: bump
-	version to 1.18.2
-Message-ID: <20160313204834.9D5E88055C@busybox.osuosl.org>
+Date: Sun, 13 Mar 2016 21:19:24 +0100
+Subject: [Buildroot] [git commit] package/libbluray: bump version to 0.9.2
+Message-ID: <20160313204834.A93E68185E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c95020634f3fb272a28efa69d4a749b610989c30
+commit: https://git.buildroot.net/buildroot/commit/?id=d019af4bd9dbefe5992932fd65e1df201eb2c812
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/Config.in                | 4 ++--
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/libbluray/libbluray.hash | 4 ++--
+ package/libbluray/libbluray.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 007843d..d723102 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -70,7 +70,7 @@ choice
- 	bool "X Window System server version"
+diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
+index 5bb41a1..9acd89d 100644
+--- a/package/libbluray/libbluray.hash
++++ b/package/libbluray/libbluray.hash
+@@ -1,2 +1,2 @@
+-# From http://get.videolan.org/libbluray/0.8.1/libbluray-0.8.1.tar.bz2.sha512
+-sha512	6618e01a567f0dc5d21302fc771d4155589c81703028b76f6090a2d12ef1c7e9d08d9c79312a7c8b2ca0d6c63ce980195f0866509a4f8f05f64ed6650c7f78dc	libbluray-0.8.1.tar.bz2
++# From http://get.videolan.org/libbluray/0.9.2/libbluray-0.9.2.tar.bz2.sha512
++sha512	f7fda2ef4c0ec70eb9a38aed0e76d21d8784410cb13713e7ee66ecd23a1cc58325977b046d40c526554a4a4e4cf96706a233e15451bf34892aff201b47e25aef	libbluray-0.9.2.tar.bz2
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index e62ad48..2cc27f1 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
--	bool "1.18.1"
-+	bool "1.18.2"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
- 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
- 
-@@ -82,7 +82,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.18.1" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
-+	default "1.18.2" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
- choice
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 6024395..7e838d7 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,6 +1,5 @@
- # From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
- sha1   7a95765e56b124758fcd7b609589e65b8870880b                                xorg-server-1.14.7.tar.bz2
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
--# From https://lists.freedesktop.org/archives/xorg-announce/2016-February/002674.html
--sha1	968fe85773a41296199f8733c7235c8623d7c460				xorg-server-1.18.1.tar.bz2
--sha256	85ec56dbeb89a951295cdf4f39bf38e515f900d35e06d4a8081b114d1520789d	xorg-server-1.18.1.tar.bz2
-+# From https://lists.freedesktop.org/archives/xorg-announce/2016-March/002681.html
-+sha256	022142b07f6477d140dcc915902df326408a53ca3a352426a499f142b25d632d	xorg-server-1.18.2.tar.bz2
+-LIBBLURAY_VERSION = 0.8.1
++LIBBLURAY_VERSION = 0.9.2
+ LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
+ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
