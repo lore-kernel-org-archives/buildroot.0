@@ -1,41 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 13:12:46 +0100
-Subject: [Buildroot] [git commit] linux: bump default to version 4.5
-Message-ID: <20160314121342.E2A7D7FA05@busybox.osuosl.org>
+Date: Mon, 14 Mar 2016 13:13:06 +0100
+Subject: [Buildroot] [PATCH] ethtool: bump to version 4.5
+In-Reply-To: <1457952240-8816-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 14 Mar 2016 07:44:00 -0300")
+References: <1457952240-8816-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87d1qxdzql.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85046ae5d27d00077285a497ad34996c7b5052ef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 6dfc9fe..93968cd 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -27,7 +27,7 @@ choice
- 	prompt "Kernel version"
- 
- config BR2_LINUX_KERNEL_LATEST_VERSION
--	bool "4.4.5"
-+	bool "4.5"
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -104,7 +104,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
