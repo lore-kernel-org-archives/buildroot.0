@@ -1,43 +1,110 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 14 Mar 2016 17:52:14 -0300
-Subject: [Buildroot] [PATCH 2/3] webkitgtk24: add https option
+Date: Mon, 14 Mar 2016 17:52:15 -0300
+Subject: [Buildroot] [PATCH 3/3] webkitgtk24: security bump to version 2.4.10
 In-Reply-To: <1457988735-22815-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1457988735-22815-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1457988735-22815-2-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1457988735-22815-3-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a BR2_PACKAGE_WEBKITGTK24_HTTPS to pull in required dependencies for
-HTTPS protocol support.
-This is almost essentially the same as using midori with HTTPS enabled,
-however Midori's HTTPS support is based on glib-networking, and webkit
-via libsoup-ssl (for MiniBrowser, it doesn't affect midori's support).
+Fixes:
+CVE-2015-1120, CVE-2015-1076, CVE-2015-1071, CVE-2015-1081,
+CVE-2015-1122, CVE-2015-1155, CVE-2014-1748, CVE-2015-3752,
+CVE-2015-5809, CVE-2015-5928, CVE-2015-3749, CVE-2015-3659,
+CVE-2015-3748, CVE-2015-3743, CVE-2015-3731, CVE-2015-3745,
+CVE-2015-5822, CVE-2015-3658, CVE-2015-3741, CVE-2015-3727,
+CVE-2015-5801, CVE-2015-5788, CVE-2015-3747, CVE-2015-5794,
+CVE-2015-1127, CVE-2015-1153, CVE-2015-1083.
+
+0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch upstream
+so drop it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/webkitgtk24/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ ...m.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch | 46 ----------------------
+ package/webkitgtk24/webkitgtk24.hash               |  6 ++-
+ package/webkitgtk24/webkitgtk24.mk                 |  2 +-
+ 3 files changed, 5 insertions(+), 49 deletions(-)
+ delete mode 100644 package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
 
-diff --git a/package/webkitgtk24/Config.in b/package/webkitgtk24/Config.in
-index 02d6791..e95a851 100644
---- a/package/webkitgtk24/Config.in
-+++ b/package/webkitgtk24/Config.in
-@@ -51,6 +51,13 @@ config BR2_PACKAGE_WEBKITGTK24
+diff --git a/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch b/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
+deleted file mode 100644
+index d56dc58..0000000
+--- a/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-[WTF] Platform.h: use _ABI64 instead of _MIPS_SIM_ABI64 to determine MIPS N64
+-
+-Patch backported from upstream:
+-
+-http://trac.webkit.org/changeset/185863
+-
+-I tweaked this patch to remove the Changelog part in order to make it
+-apply in Buildroot.
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-From 2c84c8d1c294037141473c10e0374df63a3cdea9 Mon Sep 17 00:00:00 2001
+-From: ossy at webkit.org <ossy@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Tue, 23 Jun 2015 06:33:16 +0000
+-Subject: [PATCH] [WTF] Platform.h: use _ABI64 instead of _MIPS_SIM_ABI64 to determine MIPS N64
+- https://bugs.webkit.org/show_bug.cgi?id=145113
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Patch by YunQiang Su <wzssyqa@gmail.com> on 2015-06-22
+-Reviewed by Csaba Osztrogon?c.
+-
+-* wtf/Platform.h:
+-
+-git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 185863 268f45cc-cd09-0410-ab3c-d52691b4dbfc
+----
+- Source/WTF/wtf/Platform.h |    2 +-
+- 1 files changed, 1 insertions(+), 1 deletions(-)
+-
+-diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
+-index c234f50..b5e9859 100644
+---- a/Source/WTF/wtf/Platform.h
+-+++ b/Source/WTF/wtf/Platform.h
+-@@ -82,7 +82,7 @@
+-
+- /* CPU(MIPS) - MIPS 32-bit and 64-bit */
+- #if (defined(mips) || defined(__mips__) || defined(MIPS) || defined(_MIPS_) || defined(__mips64))
+--#if defined(_MIPS_SIM_ABI64) && (_MIPS_SIM == _MIPS_SIM_ABI64)
+-+#if defined(_ABI64) && (_MIPS_SIM == _ABI64)
+- #define WTF_CPU_MIPS64 1
+- #define WTF_MIPS_ARCH __mips64
+- #else
+---
+-1.7.1
+-
+diff --git a/package/webkitgtk24/webkitgtk24.hash b/package/webkitgtk24/webkitgtk24.hash
+index bd1754e..d3a9cca 100644
+--- a/package/webkitgtk24/webkitgtk24.hash
++++ b/package/webkitgtk24/webkitgtk24.hash
+@@ -1,2 +1,4 @@
+-# From http://www.webkitgtk.org/releases/webkitgtk-2.4.9.tar.xz.sha1
+-sha1	fbe02db8a4f01a70e7cdf0d16f8a18463e18b104	webkitgtk-2.4.9.tar.xz
++# From http://www.webkitgtk.org/releases/webkitgtk-2.4.10.tar.xz.sha1
++sha1	7fe2fe07ed21d00d8a8483d68c13a8c7ff0ff320	webkitgtk-2.4.10.tar.xz
++# Calculated based on the hash above
++sha256	33fda4b20d7fec2d6e9399ba03ef3f6d2a733c628bd77d397880c44e4bf7c614	webkitgtk-2.4.10.tar.xz
+diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
+index 8556f4e..2803d44 100644
+--- a/package/webkitgtk24/webkitgtk24.mk
++++ b/package/webkitgtk24/webkitgtk24.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_WEBKITGTK24
- 
-+config BR2_PACKAGE_WEBKITGTK24_HTTPS
-+	bool "HTTPS support"
-+	select BR2_PACKAGE_CA_CERTIFICATES # runtime
-+	select BR2_PACKAGE_LIBSOUP_SSL
-+	help
-+	  Enable HTTPS protocol support.
-+
- config BR2_PACKAGE_WEBKITGTK24_MULTIMEDIA
- 	bool "multimedia support"
- 	select BR2_PACKAGE_GSTREAMER1
+-WEBKITGTK24_VERSION = 2.4.9
++WEBKITGTK24_VERSION = 2.4.10
+ WEBKITGTK24_SITE = http://www.webkitgtk.org/releases
+ WEBKITGTK24_SOURCE = webkitgtk-$(WEBKITGTK24_VERSION).tar.xz
+ WEBKITGTK24_INSTALL_STAGING = YES
 -- 
 2.4.10
