@@ -1,170 +1,131 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 14 Mar 2016 00:08:06 +0100
-Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to latest release
-Message-ID: <20160313230806.GA3186@waldemar-brodkorb.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 13 Mar 2016 22:46:10 -0300
+Subject: [Buildroot] [PATCH] expat: bump to version 2.1.1
+Message-ID: <1457919970-16225-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patches included upstream.
+Drop 0001-fix-CVE-2015-1283.patch since it's upstream.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...e-netdb.h-Do-not-define-IDN-related-flags.patch | 54 --------------------
- ...02-mips-fix-build-if-threads-are-disabled.patch | 59 ----------------------
- package/uclibc/uclibc.hash                         |  2 +-
- package/uclibc/uclibc.mk                           |  2 +-
- 4 files changed, 2 insertions(+), 115 deletions(-)
- delete mode 100644 package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
- delete mode 100644 package/uclibc/0002-mips-fix-build-if-threads-are-disabled.patch
+ package/expat/0001-fix-CVE-2015-1283.patch | 76 ------------------------------
+ package/expat/expat.hash                   |  7 ++-
+ package/expat/expat.mk                     |  3 +-
+ 3 files changed, 7 insertions(+), 79 deletions(-)
+ delete mode 100644 package/expat/0001-fix-CVE-2015-1283.patch
 
-diff --git a/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch b/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
+diff --git a/package/expat/0001-fix-CVE-2015-1283.patch b/package/expat/0001-fix-CVE-2015-1283.patch
 deleted file mode 100644
-index c1985ef..0000000
---- a/package/uclibc/0001-include-netdb.h-Do-not-define-IDN-related-flags.patch
+index cdebaa0..0000000
+--- a/package/expat/0001-fix-CVE-2015-1283.patch
 +++ /dev/null
-@@ -1,54 +0,0 @@
--From 5e9a78c8a839381add6faa61e196e6dad9143163 Mon Sep 17 00:00:00 2001
--From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
--Date: Tue, 2 Feb 2016 12:13:09 +0100
--Subject: [PATCH] include/netdb.h: Do not define IDN-related flags.
+@@ -1,76 +0,0 @@
 -
--getaddrinfo() does not implement IDN encoding, and always fail when
--provided an IDN flag (e.g., AI_IDN) with EAI_BADFLAGS.  Some packages
--(such as the VLC media player) check for AI_IDN before they use it;
--providing an unimplemented AI_IDN in the libc makes these package
--fail.  As a result they make calls to getaddrinfo() with AI_IDN that
--always fail while they could have made successful calls without AI_IDN
--instead.
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 -
--Thus, do not define IDN flags: it is better not to compile rather than
--to compile a code that always fail.
--
--Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-----
-- include/netdb.h |   11 -----------
-- 1 file changed, 11 deletions(-)
--
--diff --git a/include/netdb.h b/include/netdb.h
--index a636b5f..95abe95 100644
----- a/include/netdb.h
--+++ b/include/netdb.h
--@@ -627,16 +627,6 @@ struct addrinfo
-- # define AI_ALL		0x0010	/* Return IPv4 mapped and IPv6 addresses.  */
-- # define AI_ADDRCONFIG	0x0020	/* Use configuration of this host to choose
-- 				   returned address type..  */
---# ifdef __USE_GNU
---#  define AI_IDN	0x0040	/* IDN encode input (assuming it is encoded
---				   in the current locale's character set)
---				   before looking it up. */
---#  define AI_CANONIDN	0x0080	/* Translate canonical name from IDN format. */
---#  define AI_IDN_ALLOW_UNASSIGNED 0x0100 /* Don't reject unassigned Unicode
---					    code points.  */
---#  define AI_IDN_USE_STD3_ASCII_RULES 0x0200 /* Validate strings according to
---						STD3 rules.  */
---# endif
-- # define AI_NUMERICSERV	0x0400	/* Don't use name resolution.  */
+-diff --git a/lib/xmlparse.c b/lib/xmlparse.c
+---- a/lib/xmlparse.c
+-+++ b/lib/xmlparse.c
+-@@ -1648,29 +1648,40 @@ XML_ParseBuffer(XML_Parser parser, int l
+-   XmlUpdatePosition(encoding, positionPtr, bufferPtr, &position);
+-   positionPtr = bufferPtr;
+-   return result;
+- }
 - 
-- /* Error values for `getaddrinfo' function.  */
--@@ -658,7 +648,6 @@ struct addrinfo
-- #  define EAI_NOTCANCELED -102	/* Request not canceled.  */
-- #  define EAI_ALLDONE	  -103	/* All requests done.  */
-- #  define EAI_INTR	  -104	/* Interrupted by a signal.  */
---#  define EAI_IDN_ENCODE  -105	/* IDN encoding failed.  */
-- # endif
+- void * XMLCALL
+- XML_GetBuffer(XML_Parser parser, int len)
+- {
+-+/* BEGIN MOZILLA CHANGE (sanity check len) */
+-+  if (len < 0) {
+-+    errorCode = XML_ERROR_NO_MEMORY;
+-+    return NULL;
+-+  }
+-+/* END MOZILLA CHANGE */
+-   switch (ps_parsing) {
+-   case XML_SUSPENDED:
+-     errorCode = XML_ERROR_SUSPENDED;
+-     return NULL;
+-   case XML_FINISHED:
+-     errorCode = XML_ERROR_FINISHED;
+-     return NULL;
+-   default: ;
+-   }
 - 
-- # ifdef __USE_MISC
---- 
--1.7.10.4
--
-diff --git a/package/uclibc/0002-mips-fix-build-if-threads-are-disabled.patch b/package/uclibc/0002-mips-fix-build-if-threads-are-disabled.patch
-deleted file mode 100644
-index a74a5f9..0000000
---- a/package/uclibc/0002-mips-fix-build-if-threads-are-disabled.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From b499fe614ac5b492fc0fdc6e1fbbeeb904674159 Mon Sep 17 00:00:00 2001
--From: Waldemar Brodkorb <wbx@uclibc-ng.org>
--Date: Wed, 3 Feb 2016 21:57:04 +0100
--Subject: [PATCH] mips: fix build if threads are disabled
--
--Reported-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Signed-off-by: Waldemar Brodkorb <wbx@uclibc-ng.org>
-----
-- libc/string/mips/memcpy.S |    4 ++--
-- libc/string/mips/memset.S |    4 ++--
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/libc/string/mips/memcpy.S b/libc/string/mips/memcpy.S
--index 3afdb2c..59f9f0a 100644
----- a/libc/string/mips/memcpy.S
--+++ b/libc/string/mips/memcpy.S
--@@ -23,7 +23,7 @@
-- # define PREFETCH_STORE_HINT PREFETCH_HINT_PREPAREFORSTORE
-- #elif _LIBC
-- # include <sysdep.h>
---# include <regdef.h>
--+# include <sys/regdef.h>
-- # include <sys/asm.h>
-- # define PREFETCH_LOAD_HINT PREFETCH_HINT_LOAD_STREAMED
-- # define PREFETCH_STORE_HINT PREFETCH_HINT_PREPAREFORSTORE
--@@ -33,7 +33,7 @@
-- # define PREFETCH_LOAD_HINT PREFETCH_HINT_LOAD_STREAMED
-- # define PREFETCH_STORE_HINT PREFETCH_HINT_PREPAREFORSTORE
-- #else
---# include <regdef.h>
--+# include <sys/regdef.h>
-- # include <sys/asm.h>
-- #endif
+-   if (len > bufferLim - bufferEnd) {
+--    /* FIXME avoid integer overflow */
+-     int neededSize = len + (int)(bufferEnd - bufferPtr);
+-+/* BEGIN MOZILLA CHANGE (sanity check neededSize) */
+-+    if (neededSize < 0) {
+-+      errorCode = XML_ERROR_NO_MEMORY;
+-+      return NULL;
+-+    }
+-+/* END MOZILLA CHANGE */
+- #ifdef XML_CONTEXT_BYTES
+-     int keep = (int)(bufferPtr - buffer);
 - 
--diff --git a/libc/string/mips/memset.S b/libc/string/mips/memset.S
--index ef8ab0b..43034ce 100644
----- a/libc/string/mips/memset.S
--+++ b/libc/string/mips/memset.S
--@@ -21,7 +21,7 @@
-- # define PREFETCH_STORE_HINT PREFETCH_HINT_PREPAREFORSTORE
-- #elif _LIBC
-- # include <sysdep.h>
---# include <regdef.h>
--+# include <sys/regdef.h>
-- # include <sys/asm.h>
-- # define PREFETCH_STORE_HINT PREFETCH_HINT_PREPAREFORSTORE
-- #elif defined _COMPILING_NEWLIB
--@@ -29,7 +29,7 @@
-- # include "machine/regdef.h"
-- # define PREFETCH_STORE_HINT PREFETCH_HINT_PREPAREFORSTORE
-- #else
---# include <regdef.h>
--+# include <sys/regdef.h>
-- # include <sys/asm.h>
-- #endif
-- 
---- 
--1.7.10.4
+-     if (keep > XML_CONTEXT_BYTES)
+-       keep = XML_CONTEXT_BYTES;
+-     neededSize += keep;
+- #endif  /* defined XML_CONTEXT_BYTES */
+-     if (neededSize  <= bufferLim - buffer) {
+-@@ -1689,17 +1700,25 @@ XML_GetBuffer(XML_Parser parser, int len
+-     }
+-     else {
+-       char *newBuf;
+-       int bufferSize = (int)(bufferLim - bufferPtr);
+-       if (bufferSize == 0)
+-         bufferSize = INIT_BUFFER_SIZE;
+-       do {
+-         bufferSize *= 2;
+--      } while (bufferSize < neededSize);
+-+/* BEGIN MOZILLA CHANGE (prevent infinite loop on overflow) */
+-+      } while (bufferSize < neededSize && bufferSize > 0);
+-+/* END MOZILLA CHANGE */
+-+/* BEGIN MOZILLA CHANGE (sanity check bufferSize) */
+-+      if (bufferSize <= 0) {
+-+        errorCode = XML_ERROR_NO_MEMORY;
+-+        return NULL;
+-+      }
+-+/* END MOZILLA CHANGE */
+-       newBuf = (char *)MALLOC(bufferSize);
+-       if (newBuf == 0) {
+-         errorCode = XML_ERROR_NO_MEMORY;
+-         return NULL;
+-       }
+-       bufferLim = newBuf + bufferSize;
+- #ifdef XML_CONTEXT_BYTES
+-       if (bufferPtr) {
 -
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 1290f92..b700406 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,2 +1,2 @@
- # From http://www.uclibc-ng.org/
--sha256  c238b300356b2638432e023076293f29935094108a2714ad1762b76015fae729        uClibc-ng-1.0.12.tar.xz
-+sha256  7baae61e243da3ab85e219fead68406995be5eabf889001c0d41676546b19317        uClibc-ng-1.0.13.tar.xz
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 200de04..88a4a8c 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 30595cd..cfb3a6c 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,2 +1,5 @@
+-# Locally computed:
+-sha256  823705472f816df21c8f6aa026dd162b280806838bb55b3432b0fb1fcca7eb86  expat-2.1.0.tar.gz
++# From https://sourceforge.net/projects/expat/files/expat/2.1.1/
++md5	7380a64a8e3a9d66a9887b01d0d7ea81	expat-2.1.1.tar.bz2
++sha1	ff91419882ac52151050dad0ee8190645fbeee08	expat-2.1.1.tar.bz2
++# Calculated based on the hashes above
++sha256	aff584e5a2f759dcfc6d48671e9529f6afe1e30b0cd6a4cec200cbe3f793de67	expat-2.1.1.tar.bz2
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index cbbba8f..f00cbdc 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--UCLIBC_VERSION = 1.0.12
-+UCLIBC_VERSION = 1.0.13
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPLv2.1+
+-EXPAT_VERSION = 2.1.0
++EXPAT_VERSION = 2.1.1
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
++EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
+ EXPAT_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) installlib
+ EXPAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) installlib
 -- 
-2.1.4
+2.4.10
