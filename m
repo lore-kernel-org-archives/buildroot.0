@@ -1,37 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 08:49:27 +0100
-Subject: [Buildroot] [PATCH v2] slang: make install-static do
-	install-pkgconfig
-In-Reply-To: <1457930833-17879-1-git-send-email-jcmvbkbc@gmail.com> (Max
- Filippov's message of "Mon, 14 Mar 2016 07:47:13 +0300")
-References: <1457930833-17879-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <87pouxeby0.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Mar 2016 08:49:54 +0100
+Subject: [Buildroot] [PATCH] expat: bump to version 2.1.1
+In-Reply-To: <1457919970-16225-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Sun, 13 Mar 2016 22:46:10 -0300")
+References: <1457919970-16225-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lh5lebx9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
- > mc's configure can't find S-Lang because static S-Lang build doesn't
- > install pkgconfig file into staging. Adding install-pkgconfig to
- > install-static dependencies fixes that.
-
- > Fixes:
- >   http://autobuild.buildroot.net/results/085194f18bc7db1e801d98e6620e3a75fd988cc5/
-
- > Upstream status: patch submitted.
-
-Thanks!
-
- > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
- > ---
- > Changes v1->v2:
- > - make it a separate patch, send upstream
+ > Drop 0001-fix-CVE-2015-1283.patch since it's upstream.
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
 Committed, thanks.
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Bye, Peter Korsgaard
