@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 13:13:06 +0100
-Subject: [Buildroot] [PATCH] ethtool: bump to version 4.5
-In-Reply-To: <1457952240-8816-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 14 Mar 2016 07:44:00 -0300")
-References: <1457952240-8816-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d1qxdzql.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Mar 2016 13:13:17 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain: add 4.5.x choice for headers
+In-Reply-To: <1457950452-17459-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 14 Mar 2016 07:14:10 -0300")
+References: <1457950452-17459-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <878u1ldzqa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,7 +15,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Committed, thanks.
+Committed series, thanks.
 
 -- 
 Bye, Peter Korsgaard
