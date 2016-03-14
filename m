@@ -1,48 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 22:26:40 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2016.03
-Message-ID: <1457990800-9474-1-git-send-email-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 14 Mar 2016 23:05:03 +0100
+Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
+ question regarding autobuilders
+In-Reply-To: <4mfjrcxqge.ln2@ID-313208.user.individual.net>
+References: <934hrcx7vo.ln2@ID-313208.user.individual.net>
+ <56E5E786.1090906@mind.be>
+ <4mfjrcxqge.ln2@ID-313208.user.individual.net>
+Message-ID: <20160314230503.0eab7efe@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 4a6dc56..f1d3d2a 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -38,7 +38,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2016.01"
-+	bool "2016.03"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -83,7 +83,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2016.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2016.03"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index 31b0db9..747d133 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  e5792fba9399d9804aa2ef667f14ff771e2cdece72367d340250265bf095a5d5  u-boot-2016.01.tar.bz2
-+sha256  e49337262ecac44dbdeac140f2c6ebd1eba345e0162b0464172e7f05583ed7bb  u-boot-2016.03.tar.bz2
+On Mon, 14 Mar 2016 20:23:16 +0100, Bernd Kuhls wrote:
+
+> with my proposed patch we can lower it to BR2_HOST_GCC_AT_LEAST_4_6 ;)
+> 
+> With gcc 4.4 (testing with Ubuntu 10.04.4) adding -std=c++0xwill not be 
+> enough:
+> 
+> XBTFWriter.cpp: In constructor ?CXBTFWriter::CXBTFWriter(const 
+> std::string&)?:
+> XBTFWriter.cpp:42: error: ?nullptr? was not declared in this scope
+> 
+> Looking around for approaches to solve the problem I found these two 
+> commits:
+> 
+> https://hg.mozilla.org/integration/mozilla-inbound/rev/ae45a2c9d678
+> https://github.com/grpc/grpc/
+> commit/3ff350cf96676f2c32c6913aceeabf84a15f3715
+
+Why do you want to solve the problem? Adding a dependency on
+BR2_HOST_GCC_AT_LEAST_4_6 is perfectly fine, especially for such
+a modern, complex C++ software like Kodi.
+
+Best regards,
+
+Thomas
 -- 
-2.7.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
