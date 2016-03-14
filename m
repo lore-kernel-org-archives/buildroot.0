@@ -1,46 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Mar 2016 23:37:29 +0100
-Subject: [Buildroot] [PATCH 1/1] kbd: fix install to target
-In-Reply-To: <1457888388-6429-1-git-send-email-niels@tonebarker.dk>
-References: <1457888388-6429-1-git-send-email-niels@tonebarker.dk>
-Message-ID: <20160314233729.60a88e3a@free-electrons.com>
+Date: Mon, 14 Mar 2016 23:39:18 +0100
+Subject: [Buildroot] [PATCH v2] package/kbd: fix not installing to the
+ target
+In-Reply-To: <1457347031-12817-1-git-send-email-martin@barkynet.com>
+References: <1457347031-12817-1-git-send-email-martin@barkynet.com>
+Message-ID: <20160314233918.7f6d631e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Niels,
+Dear Martin Bark,
 
-On Sun, 13 Mar 2016 17:59:48 +0100, Niels Skou Olsen wrote:
-> The package makefile attempted to append to KBD_INSTALL_TARGET_OPTS, but this
-> fails when done before evaluating $(autotools-package). This is because
-> autotools-package uses ?= to set default values. Instead of appending we now
-> override KBD_INSTALL_TARGET_OPTS.
+On Mon,  7 Mar 2016 10:37:11 +0000, Martin Bark wrote:
+> Commit https://git.busybox.net/buildroot/commit/?id=9f81bad fixed a build
+> error in kbd but unfortunately it broke the target install rule so that
+> nothing is being installed.
 > 
-> Signed-off-by: Niels Skou Olsen <niels@tonebarker.dk>
-> ---
->  package/kbd/kbd.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Add the missing DESTDIR=$(TARGET_DIR) install to KBD_INSTALL_TARGET_OPTS
+> so that it installs to the target again.
 > 
-> diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-> index 9dabce1..0243c53 100644
-> --- a/package/kbd/kbd.mk
-> +++ b/package/kbd/kbd.mk
-> @@ -17,6 +17,6 @@ KBD_LICENSE = GPLv2+
->  KBD_LICENSE_FILES = COPYING
->  KBD_AUTORECONF = YES
->  
-> -KBD_INSTALL_TARGET_OPTS += MKINSTALLDIRS=$(@D)/config/mkinstalldirs
-> +KBD_INSTALL_TARGET_OPTS = MKINSTALLDIRS=$(@D)/config/mkinstalldirs DESTDIR=$(TARGET_DIR) install
->  
->  $(eval $(autotools-package))
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Martin Bark <martin@barkynet.com>
 
-Could you submit a patch doing the same change in
-package/util-linux/util-linux.mk ? I'm not really happy with how
-MKINSTALLDIRS is passed in util-linux.
+Peter applied a similar patch from a different contributor. See
+https://git.busybox.net/buildroot/commit/?id=28a55b66897f97e3acad36549a4c9e02e7f5dc22.
 
-Thanks a lot!
+Best regards,
 
 Thomas
 -- 
