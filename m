@@ -1,22 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 08:49:54 +0100
-Subject: [Buildroot] [PATCH] expat: bump to version 2.1.1
-In-Reply-To: <1457919970-16225-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Sun, 13 Mar 2016 22:46:10 -0300")
-References: <1457919970-16225-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87lh5lebx9.fsf@dell.be.48ers.dk>
+Date: Mon, 14 Mar 2016 08:52:33 +0100
+Subject: [Buildroot] [PATCH] uclibc: update uClibc-ng to latest release
+In-Reply-To: <20160313230806.GA3186@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Mon, 14 Mar 2016 00:08:06 +0100")
+References: <20160313230806.GA3186@waldemar-brodkorb.de>
+Message-ID: <87h9g9ebsu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
- > Drop 0001-fix-CVE-2015-1283.patch since it's upstream.
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Remove patches included upstream.
 
-Committed, thanks.
+We normally add the version number we bump to in the first line of the
+commit message, so I've tweaked your commit message and committed -
+Thanks!
 
 -- 
 Bye, Peter Korsgaard
