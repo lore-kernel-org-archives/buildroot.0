@@ -1,37 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Mar 2016 23:39:18 +0100
-Subject: [Buildroot] [PATCH v2] package/kbd: fix not installing to the
- target
-In-Reply-To: <1457347031-12817-1-git-send-email-martin@barkynet.com>
-References: <1457347031-12817-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160314233918.7f6d631e@free-electrons.com>
+Date: Mon, 14 Mar 2016 23:43:37 +0100
+Subject: [Buildroot] [git commit] taskd: move to Miscellaneous menu
+Message-ID: <20160314224357.6040E807AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Martin Bark,
+commit: https://git.buildroot.net/buildroot/commit/?id=2342006125739e3dcbbdd84a13f93f93fec34ffa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  7 Mar 2016 10:37:11 +0000, Martin Bark wrote:
-> Commit https://git.busybox.net/buildroot/commit/?id=9f81bad fixed a build
-> error in kbd but unfortunately it broke the target install rule so that
-> nothing is being installed.
-> 
-> Add the missing DESTDIR=$(TARGET_DIR) install to KBD_INSTALL_TARGET_OPTS
-> so that it installs to the target again.
-> 
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+It's not really a networking tool (if everything that does something on
+the network would be called a networking tool, we wouldn't have much
+else).
 
-Peter applied a similar patch from a different contributor. See
-https://git.busybox.net/buildroot/commit/?id=28a55b66897f97e3acad36549a4c9e02e7f5dc22.
+Since we don't really have an appropriate menu for it, put it in
+Miscellaneous.
 
-Best regards,
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 2e00fbb..7128bca 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1315,6 +1315,7 @@ menu "Miscellaneous"
+ 	source "package/qpdf/Config.in"
+ 	source "package/shared-mime-info/Config.in"
+ 	source "package/snowball-init/Config.in"
++	source "package/taskd/Config.in"
+ 	source "package/wine/Config.in"
+ 	source "package/xutil_util-macros/Config.in"
+ endmenu
+@@ -1490,7 +1491,6 @@ endif
+ 	source "package/sshpass/Config.in"
+ 	source "package/strongswan/Config.in"
+ 	source "package/stunnel/Config.in"
+-	source "package/taskd/Config.in"
+ 	source "package/tcpdump/Config.in"
+ 	source "package/tcping/Config.in"
+ 	source "package/tcpreplay/Config.in"
