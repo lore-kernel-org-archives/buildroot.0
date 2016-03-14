@@ -1,131 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Sun, 13 Mar 2016 22:46:10 -0300
-Subject: [Buildroot] [PATCH] expat: bump to version 2.1.1
-Message-ID: <1457919970-16225-1-git-send-email-gustavo@zacarias.com.ar>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 14 Mar 2016 07:47:13 +0300
+Subject: [Buildroot] [PATCH v2] slang: make install-static do
+	install-pkgconfig
+Message-ID: <1457930833-17879-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop 0001-fix-CVE-2015-1283.patch since it's upstream.
+mc's configure can't find S-Lang because static S-Lang build doesn't
+install pkgconfig file into staging. Adding install-pkgconfig to
+install-static dependencies fixes that.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+  http://autobuild.buildroot.net/results/085194f18bc7db1e801d98e6620e3a75fd988cc5/
+
+Upstream status: patch submitted.
+
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/expat/0001-fix-CVE-2015-1283.patch | 76 ------------------------------
- package/expat/expat.hash                   |  7 ++-
- package/expat/expat.mk                     |  3 +-
- 3 files changed, 7 insertions(+), 79 deletions(-)
- delete mode 100644 package/expat/0001-fix-CVE-2015-1283.patch
+Changes v1->v2:
+- make it a separate patch, send upstream
 
-diff --git a/package/expat/0001-fix-CVE-2015-1283.patch b/package/expat/0001-fix-CVE-2015-1283.patch
-deleted file mode 100644
-index cdebaa0..0000000
---- a/package/expat/0001-fix-CVE-2015-1283.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--diff --git a/lib/xmlparse.c b/lib/xmlparse.c
----- a/lib/xmlparse.c
--+++ b/lib/xmlparse.c
--@@ -1648,29 +1648,40 @@ XML_ParseBuffer(XML_Parser parser, int l
--   XmlUpdatePosition(encoding, positionPtr, bufferPtr, &position);
--   positionPtr = bufferPtr;
--   return result;
-- }
-- 
-- void * XMLCALL
-- XML_GetBuffer(XML_Parser parser, int len)
-- {
--+/* BEGIN MOZILLA CHANGE (sanity check len) */
--+  if (len < 0) {
--+    errorCode = XML_ERROR_NO_MEMORY;
--+    return NULL;
--+  }
--+/* END MOZILLA CHANGE */
--   switch (ps_parsing) {
--   case XML_SUSPENDED:
--     errorCode = XML_ERROR_SUSPENDED;
--     return NULL;
--   case XML_FINISHED:
--     errorCode = XML_ERROR_FINISHED;
--     return NULL;
--   default: ;
--   }
-- 
--   if (len > bufferLim - bufferEnd) {
---    /* FIXME avoid integer overflow */
--     int neededSize = len + (int)(bufferEnd - bufferPtr);
--+/* BEGIN MOZILLA CHANGE (sanity check neededSize) */
--+    if (neededSize < 0) {
--+      errorCode = XML_ERROR_NO_MEMORY;
--+      return NULL;
--+    }
--+/* END MOZILLA CHANGE */
-- #ifdef XML_CONTEXT_BYTES
--     int keep = (int)(bufferPtr - buffer);
-- 
--     if (keep > XML_CONTEXT_BYTES)
--       keep = XML_CONTEXT_BYTES;
--     neededSize += keep;
-- #endif  /* defined XML_CONTEXT_BYTES */
--     if (neededSize  <= bufferLim - buffer) {
--@@ -1689,17 +1700,25 @@ XML_GetBuffer(XML_Parser parser, int len
--     }
--     else {
--       char *newBuf;
--       int bufferSize = (int)(bufferLim - bufferPtr);
--       if (bufferSize == 0)
--         bufferSize = INIT_BUFFER_SIZE;
--       do {
--         bufferSize *= 2;
---      } while (bufferSize < neededSize);
--+/* BEGIN MOZILLA CHANGE (prevent infinite loop on overflow) */
--+      } while (bufferSize < neededSize && bufferSize > 0);
--+/* END MOZILLA CHANGE */
--+/* BEGIN MOZILLA CHANGE (sanity check bufferSize) */
--+      if (bufferSize <= 0) {
--+        errorCode = XML_ERROR_NO_MEMORY;
--+        return NULL;
--+      }
--+/* END MOZILLA CHANGE */
--       newBuf = (char *)MALLOC(bufferSize);
--       if (newBuf == 0) {
--         errorCode = XML_ERROR_NO_MEMORY;
--         return NULL;
--       }
--       bufferLim = newBuf + bufferSize;
-- #ifdef XML_CONTEXT_BYTES
--       if (bufferPtr) {
--
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 30595cd..cfb3a6c 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,2 +1,5 @@
--# Locally computed:
--sha256  823705472f816df21c8f6aa026dd162b280806838bb55b3432b0fb1fcca7eb86  expat-2.1.0.tar.gz
-+# From https://sourceforge.net/projects/expat/files/expat/2.1.1/
-+md5	7380a64a8e3a9d66a9887b01d0d7ea81	expat-2.1.1.tar.bz2
-+sha1	ff91419882ac52151050dad0ee8190645fbeee08	expat-2.1.1.tar.bz2
-+# Calculated based on the hashes above
-+sha256	aff584e5a2f759dcfc6d48671e9529f6afe1e30b0cd6a4cec200cbe3f793de67	expat-2.1.1.tar.bz2
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index cbbba8f..f00cbdc 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.1.0
-+EXPAT_VERSION = 2.1.1
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
-+EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
- EXPAT_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) installlib
- EXPAT_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) installlib
+ ...l-static-do-install-pkgconfig-as-install-.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/slang/0005-make-install-static-do-install-pkgconfig-as-install-.patch
+
+diff --git a/package/slang/0005-make-install-static-do-install-pkgconfig-as-install-.patch b/package/slang/0005-make-install-static-do-install-pkgconfig-as-install-.patch
+new file mode 100644
+index 0000000..1572e09
+--- /dev/null
++++ b/package/slang/0005-make-install-static-do-install-pkgconfig-as-install-.patch
+@@ -0,0 +1,31 @@
++From 294bcde1afa0b3866f339f82709e867d827cea6c Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Mon, 14 Mar 2016 07:28:56 +0300
++Subject: [PATCH] make install-static do install-pkgconfig as install-elf does
++
++...so that install-static installs everything needed for linking with
++slang. This fixes e.g. the following mc build:
++
++  http://autobuild.buildroot.net/results/085/085194f18bc7db1e801d98e6620e3a75fd988cc5/build-end.log
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ autoconf/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/autoconf/Makefile.in b/autoconf/Makefile.in
++index a6defa6..ca1ffb2 100644
++--- a/autoconf/Makefile.in
+++++ b/autoconf/Makefile.in
++@@ -74,7 +74,7 @@ clean:
++ 	cd modules; $(MAKE) clean
++ 	cd slsh; $(MAKE) clean
++ 	cd demo; $(MAKE) clean
++-install-static:
+++install-static: install-pkgconfig
++ 	cd src; $(MAKE) install-static
++ 	cd slsh; $(MAKE) install-static
++ install-pkgconfig: slang.pc
++-- 
++2.1.4
++
 -- 
-2.4.10
+2.1.4
