@@ -1,41 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 17:07:07 +0100
-Subject: [Buildroot] [git commit] shared-mime-info: re-enable parallel builds
-Message-ID: <20160314160806.3DE827FFDA@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Mon, 14 Mar 2016 10:45:50 -0700
+Subject: [Buildroot] Another lame user question.
+In-Reply-To: <20160314053654.GF7678@tarshish>
+References: <CAJJ6jxvqALyD4=1wPUdh7JKpv1fKkfoYcj-m4FZLe+1P2wnnFQ@mail.gmail.com>
+ <20160314053654.GF7678@tarshish>
+Message-ID: <CAJJ6jxs-aPoTBv6OMoKkKN64OAscmG41dTCqrqsB6xkVSnAD+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb56011fbe37a6c61c537d7c0d1fbe26996e43a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, Mar 13, 2016 at 10:36 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Steve,
+>
+> On Sun, Mar 13, 2016 at 10:14:57PM -0700, Steve Calfee wrote:
+>> Hi, as the title says, I have another user question. I did explore
+>> google and the buildroot docs.
+>>
+>> I am trying to move the mysql directories to my writeable ubi
+>> partition. Somewhere someone create the mysql user. Where did it get
+>> created? However, there is no mysql group. I cannot get mysql to start
+>> from a ubi partition mounted at /data/mysql. Who and where is the
+>> mysql user created (some files have that as a user)
+>>
+>> The buildroot manual documents the makeusers syntax, but what file do
+>> I create where? Will that work for mysql?
+>
+> Quoting package/mysql/mysql.mk:
+>
+> define MYSQL_USERS
+>         mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
+> endef
+>
+> baruch
+>
+Hi Baruch, thanks.
 
-They don't seem to be causing any issues after many bumps and tests.
+So somewhere in the infra a script goes through all *_USERS variables
+and builds the password file etc for users?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/shared-mime-info/shared-mime-info.mk | 2 --
- 1 file changed, 2 deletions(-)
+What if I want to move /var/mysql? Who uses /var/mysql as the "home"
+directory? And how does that relate to datadir that is defined in
+my.cnf?
 
-diff --git a/package/shared-mime-info/shared-mime-info.mk b/package/shared-mime-info/shared-mime-info.mk
-index aebc66b..b3e4470 100644
---- a/package/shared-mime-info/shared-mime-info.mk
-+++ b/package/shared-mime-info/shared-mime-info.mk
-@@ -11,7 +11,6 @@ SHARED_MIME_INFO_INSTALL_STAGING = YES
- SHARED_MIME_INFO_CONF_ENV = XMLLINT=$(HOST_DIR)/usr/bin/xmllint
- SHARED_MIME_INFO_DEPENDENCIES = host-shared-mime-info libxml2 libglib2
- SHARED_MIME_INFO_CONF_OPTS = --disable-update-mimedb
--SHARED_MIME_INFO_MAKE = $(MAKE1)
- SHARED_MIME_INFO_LICENSE = GPLv2
- SHARED_MIME_INFO_LICENSE_FILES = COPYING
- 
-@@ -19,7 +18,6 @@ HOST_SHARED_MIME_INFO_DEPENDENCIES = \
- 	host-pkgconf host-intltool host-libxml2 host-libglib2
- 
- HOST_SHARED_MIME_INFO_CONF_OPTS = --disable-update-mimedb
--HOST_SHARED_MIME_INFO_MAKE = $(MAKE1)
- 
- define SHARED_MIME_INFO_INSTALL_TARGET_CMDS
- 	$(HOST_MAKE_ENV) $(SHARED_MIME_INFO_HOST_BINARY) $(STAGING_DIR)/usr/share/mime
+Anyway finding out that the user is created in the make file will
+really help me research this problem of setting up mysql and moving
+its datadir to another ubi partition.
+
+Thanks, Steve
