@@ -1,51 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 14 Mar 2016 20:23:16 +0100
-Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
- question regarding autobuilders
-References: <934hrcx7vo.ln2@ID-313208.user.individual.net>
- <56E5E786.1090906@mind.be>
-Message-ID: <4mfjrcxqge.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 14 Mar 2016 21:43:34 +0100
+Subject: [Buildroot] tar failing to build with latest buildroot
+In-Reply-To: <1457982423.1938.1.camel@rovoreed.com> (Mike Davies's message of
+ "Mon, 14 Mar 2016 19:07:03 +0000")
+References: <1457951104.2051.1.camel@rovoreed.com>
+ <874mc9dygn.fsf@dell.be.48ers.dk>
+ <1457982423.1938.1.camel@rovoreed.com>
+Message-ID: <87fuvsdc3t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 13 Mar 2016 23:19:50 +0100 schrieb Arnout Vandecappelle:
-
-> On 03/13/16 22:53, Bernd Kuhls wrote:
->> Hi,
->>
->> before sending a patch which fixes a problem with host gcc < 4.7 I
->> would like to ask whether this patch is needed at all. Are there
->> autobuilders where the host version of gcc is < 4.7?
-> 
->   Well, RHEL6 has gcc 4.4, and ideally we'd like to support RHEL5 as
->   well (many
-> companies are still based on it).
-> 
->   But we have a simple solution now: kodi depends on
->   BR2_HOST_GCC_AT_LEAST_4_7.
+>>>>> "Mike" == Mike Davies <busybox_mail@rovoreed.com> writes:
 
 Hi,
 
-with my proposed patch we can lower it to BR2_HOST_GCC_AT_LEAST_4_6 ;)
+ > Thanks for the reply. I tried a full rebuild with a 'make clean all'
+ > and it fails exactly the same again.
 
-With gcc 4.4 (testing with Ubuntu 10.04.4) adding -std=c++0xwill not be 
-enough:
+ > Here is my defconfig. You'll see I have my own config file for uClibc.
+ > That follows the defconfig, and you'll see that WCHAR is enabled.
 
-XBTFWriter.cpp: In constructor ?CXBTFWriter::CXBTFWriter(const 
-std::string&)?:
-XBTFWriter.cpp:42: error: ?nullptr? was not declared in this scope
+ > BR2_arm=y
+ > BR2_cortex_a7=y
+ > BR2_ARM_FPU_NEON_VFPV4=y
+ > BR2_KERNEL_HEADERS_4_1=y
+ > BR2_UCLIBC_CONFIG="uClibc_armv7.config"
 
-Looking around for approaches to solve the problem I found these two 
-commits:
+Why are you using a custom uClibc configuration? Judging from the
+hostname and packages enabled, it doesn't seem like you need to squeeze
+the last few bytes out of the system.
 
-https://hg.mozilla.org/integration/mozilla-inbound/rev/ae45a2c9d678
-https://github.com/grpc/grpc/
-commit/3ff350cf96676f2c32c6913aceeabf84a15f3715
+ > uClibc_armv7.config ...
 
-Is either one good enough so I can try to solve the problem? I am asking 
-in advance because I am not a c++ programmer.
+Diffing this with our default uclibc config, I see:
 
-Regards, Bernd
+ > # UCLIBC_HAS_OBSTACK is not set
+
+Whereas our config has it enabled. Judging from the error message this
+is most likely the reason it fails for you.
+
+Can you please retry with our default uclibc config?
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
