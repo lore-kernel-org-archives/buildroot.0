@@ -1,41 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 14 Mar 2016 14:40:20 +0100
-Subject: [Buildroot] tar failing to build with latest buildroot
-In-Reply-To: <874mc9dygn.fsf@dell.be.48ers.dk>
-References: <1457951104.2051.1.camel@rovoreed.com>
- <874mc9dygn.fsf@dell.be.48ers.dk>
-Message-ID: <20160314144020.5a0ab6f3@free-electrons.com>
+Date: Mon, 14 Mar 2016 14:42:23 +0100
+Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
+ question regarding autobuilders
+In-Reply-To: <87vb4pchjr.fsf@dell.be.48ers.dk>
+References: <934hrcx7vo.ln2@ID-313208.user.individual.net>
+ <56E5E786.1090906@mind.be> <87vb4pchjr.fsf@dell.be.48ers.dk>
+Message-ID: <20160314144223.3da7b2ec@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike, Peter,
+Hello,
 
-On Mon, 14 Mar 2016 13:40:40 +0100, Peter Korsgaard wrote:
+On Mon, 14 Mar 2016 14:31:20 +0100, Peter Korsgaard wrote:
 
->  > [mike at ceri buildroot-2016.02]$ make
->  >>>> tar 1.28 Building
->  > PATH="/home/mike/work/kodi/buildroot
->  > -2016.02/output/host/bin:/home/mike/work/kodi/buildroot
->  > -2016.02/output/host/sbin:/home/mike/work/kodi/buildroot
->  > -2016.02/output/host/usr/bin:/home/mike/work/kodi/buildroot
->  > -2016.02/output/host/usr/sbin:/usr/lib64/qt
->  > -3.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/home/m
->  > ike/bin:/sbin:/home/mike/.local/bin:/home/mike/bin:/home/mike/bin:/sbin
->  > "  /usr/bin/make -j5  -C /home/mike/work/kodi/buildroot
->  > -2016.02/output/build/tar-1.28/
->  > /usr/bin/make  all-recursive
->  > Making all in doc
->  > make[4]: Nothing to be done for 'all'.
+>  >  But we have a simple solution now: kodi depends on
+>  > BR2_HOST_GCC_AT_LEAST_4_7. Cfr. nodejs for instance, which faces the
+>  > same problem.
 > 
-> Is this with a clean build? E.G. tar needs wchar, so if you didn't have
-> that enabled in the toolchain configuration you will need to rebuild the
-> toolchain.
+> Indeed. And gcc10 uses host-gcc 4.4:
 
-Let me just add a link that further explains this:
-https://buildroot.org/downloads/manual/manual.html#full-rebuild.
+I'm also using gcc 4.4 on Free Electrons build server. Well, I should
+say that our machine is not using such an ancient system (we have a
+reasonably recent Ubuntu 14.04 with gcc 4.8), but I run the Buildroot
+builds in an intentionally old Debian 6.0 chroot, which has this old
+4.4 gcc.
 
 Best regards,
 
