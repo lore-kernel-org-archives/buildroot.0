@@ -1,55 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 14 Mar 2016 13:11:59 +0100
-Subject: [Buildroot] [git commit] toolchain: add 4.5.x choice for headers
-Message-ID: <20160314121342.A289E807F3@busybox.osuosl.org>
+Date: Mon, 14 Mar 2016 13:12:57 +0100
+Subject: [Buildroot] [git commit] ethtool: bump to version 4.5
+Message-ID: <20160314121342.F0EBA807F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ece3faafab407a09ab8bec2d6009e4f700f83f4
+commit: https://git.buildroot.net/buildroot/commit/?id=3c488de72890b87cc0bcc28f41f6bbedaa610950
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-common.in          | 5 +++++
- toolchain/toolchain-external/Config.in | 4 ++++
- 2 files changed, 9 insertions(+)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 1b7b416..46970a6 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -233,10 +233,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 53f31d0..04022a5 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256	8cb854bcf71ef8b484b5d2a0e6bf056ae1fbf12cfb19e4907b74b7b21da91e87	ethtool-4.2.tar.xz
++sha256	bb2834332c5ac7f5bbe1c9f78f4fa851e4a3fe6397b124d58467c9ccee9fca3b	ethtool-4.5.tar.xz
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index c56eeb9..f6f4263 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "4.5"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
- 	default "4.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
- 	default "4.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
- 	default "4.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 0b0a1cb..ff759a0 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -818,6 +818,10 @@ choice
- 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_5
-+	bool "4.5.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
- 	bool "4.4.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+-ETHTOOL_VERSION = 4.2
++ETHTOOL_VERSION = 4.5
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPLv2
