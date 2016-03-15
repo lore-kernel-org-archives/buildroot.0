@@ -1,72 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 23:16:33 +0100
-Subject: [Buildroot] [git commit] scancpan: use recommend & test flags only
-	at first level
-Message-ID: <20160315221657.9A86A817F4@busybox.osuosl.org>
+Date: Tue, 15 Mar 2016 23:18:12 +0100
+Subject: [Buildroot] [PATCH] midori: enable optional gcr support
+In-Reply-To: <1452077866-23181-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1452077866-23181-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <CACXmVibpGnkG1UE932fGT+MGJwxWB_mZzbRaSO77UB5kwakV4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=746a91ab3158c67e7f0ee28064ebf4cd4d873d95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Jan 6, 2016 at 11:57 AM, Gustavo Zacarias
+<gustavo@zacarias.com.ar> wrote:
+> Only used/useful with the gtk3 backend though.
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-Currently, these flags are recursively propagated. This behavior is
-not expected by users, because it can cause dependencies explosively.
+Committed, thanks
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/scancpan | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> ---
+>  package/midori/midori.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+> index 197f51a..7927400 100644
+> --- a/package/midori/midori.mk
+> +++ b/package/midori/midori.mk
+> @@ -40,6 +40,10 @@ endif
+>  ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+>  MIDORI_CONF_OPTS += -DUSE_GTK3=ON -DHALF_BRO_INCOM_WEBKIT2=ON
+>  MIDORI_DEPENDENCIES += libgtk3
+> +# Only useful with gtk3
+> +ifeq ($(BR2_PACKAGE_GCR),y)
+> +MIDORI_DEPENDENCIES += gcr
+> +endif
+>  else
+>  MIDORI_CONF_OPTS += -DUSE_GTK3=OFF
+>  MIDORI_DEPENDENCIES += libgtk2
+> --
+> 2.4.10
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/support/scripts/scancpan b/support/scripts/scancpan
-index 72cca1a..6c70cfb 100755
---- a/support/scripts/scancpan
-+++ b/support/scripts/scancpan
-@@ -552,10 +552,10 @@ sub find_license_files {
- }
- 
- sub fetch {
--    my ($name, $need_target, $need_host) = @_;
-+    my ($name, $need_target, $need_host, $top) = @_;
-     $need_target{$name} = $need_target if $need_target;
-     $need_host{$name} = $need_host if $need_host;
--    unless ($dist{$name}) {
-+    unless ($dist{$name} && !$top) {
-         say qq{fetch ${name}} unless $quiet;
-         my $result = $mcpan->release( distribution => $name );
-         $dist{$name} = $result;
-@@ -570,19 +570,19 @@ sub fetch {
-             next if $modname eq q{perl};
-             next if $modname =~ m|^Alien|;
-             next if $modname =~ m|^Win32|;
--            next if !$test && $modname =~ m|^Test|;
-+            next if !($test && $top) && $modname =~ m|^Test|;
-             next if Module::CoreList::is_core( $modname, undef, $] );
-             # we could use the host Module::CoreList data, because host perl and
-             # target perl have the same major version
-             next if ${$dep}{phase} eq q{develop};
--            next if !$test && ${$dep}{phase} eq q{test};
-+            next if !($test && $top) && ${$dep}{phase} eq q{test};
-             my $distname = $mcpan->module( $modname )->{distribution};
-             if (${$dep}{phase} eq q{runtime}) {
-                 if (${$dep}{relationship} eq q{requires}) {
-                     $runtime{$distname} = 1;
-                 }
-                 else {
--                    $optional{$distname} = 1 if $recommend;
-+                    $optional{$distname} = 1 if $recommend && $top;
-                 }
-             }
-             else { # configure, build
-@@ -608,7 +608,7 @@ sub fetch {
- 
- foreach my $distname (@ARGV) {
-     # Command-line's distributions
--    fetch( $distname, !!$target, !!$host );
-+    fetch( $distname, !!$target, !!$host, 1 );
- }
- say scalar keys %dist, q{ packages fetched.} unless $quiet;
- 
+
+
+-- 
+Bye, Peter Korsgaard
