@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 22:44:53 +0100
-Subject: [Buildroot] [PATCH 2/7] samba: remove deprecated
-In-Reply-To: <1457706744-23401-2-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 11 Mar 2016 11:32:19 -0300")
+Date: Tue, 15 Mar 2016 22:45:50 +0100
+Subject: [Buildroot] [PATCH 3/7] foomatic-filters: remove deprecated
+In-Reply-To: <1457706744-23401-3-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 11 Mar 2016 11:32:20 -0300")
 References: <1457706744-23401-1-git-send-email-gustavo@zacarias.com.ar>
- <1457706744-23401-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <871t7ba016.fsf@dell.be.48ers.dk>
+ <1457706744-23401-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87wpp38lf5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,8 @@ To: buildroot@busybox.net
 
  > It's been deprecated for a year now so remove it.
  > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- >  Config.in.legacy                             |   7 +
- >  package/Config.in                            |   1 -
- >  package/samba/0001-fix-smbd-libs-avahi.patch |  17 --
- >  package/samba/0002-getaddrinfo.patch         |  20 --
- >  package/samba/Config.in                      | 292 ---------------------------
- >  package/samba/S91smb                         |  81 --------
- >  package/samba/samba.hash                     |   2 -
- >  package/samba/samba.mk                       | 189 -----------------
- >  package/samba/simple.conf                    |  25 ---
 
-Samba4 was still depending on !BR2_PACKAGE_SAMBA. Committed with that
-fixed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
