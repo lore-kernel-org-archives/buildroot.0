@@ -1,52 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 20:36:08 +0100
-Subject: [Buildroot] [PATCH] configs: orangepipc: bump u-boot to 2016.03,
-	kernel to 4.5
-Message-ID: <1458070568-27793-1-git-send-email-peter@korsgaard.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Mar 2016 16:50:35 -0300
+Subject: [Buildroot] [PATCH] orc: bump to version 0.4.25
+Message-ID: <1458071435-7966-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- configs/orangepipc_defconfig | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ package/orc/orc.hash | 4 ++--
+ package/orc/orc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-index eb149d9..69db410 100644
---- a/configs/orangepipc_defconfig
-+++ b/configs/orangepipc_defconfig
-@@ -1,18 +1,14 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--# Kernel is a pre-release of 4.5, so we do not yet have a _CUSTOM_4_5
--# option for the headers. Thus, we stick with the 4.4 headers for now.
--BR2_KERNEL_HEADERS_VERSION=y
--BR2_DEFAULT_KERNEL_VERSION="4.4"
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5-rc1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -23,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index 100f194..178d374 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/gstreamer-devel/2015-June/053346.html
+-sha256	338cd493b5247300149821c6312bdf7422a3593ae98691fc75d7e4fe727bd39b  orc-0.4.24.tar.xz
++# From https://lists.freedesktop.org/archives/gstreamer-devel/2016-March/057056.html
++sha256	c1b1d54a58f26d483f0b3881538984789fe5d5460ab8fab74a1cacbd3d1c53d1	orc-0.4.25.tar.xz
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index 5d84bd0..5a49cba 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ORC_VERSION = 0.4.24
++ORC_VERSION = 0.4.25
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2c, BSD-3c
 -- 
-2.7.0
+2.4.10
