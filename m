@@ -1,53 +1,129 @@
-From: Wojciech Zabolotny <wzab01@gmail.com>
-Date: Tue, 15 Mar 2016 09:57:24 +0100
-Subject: [Buildroot] Compilation of Buildroot 2016.2 for Raspberry Pi with
- Musl 1.1.6 fails - no stddef.h header
-Message-ID: <CAMduVEfcO2XM1SZVGuvaUCKhbNrZwfG7-oYw=B757iZDYU3cAg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Mar 2016 10:24:13 +0100
+Subject: [Buildroot] [PATCH v2] linux: Build and install kernel selftests
+In-Reply-To: <1451869172-16621-1-git-send-email-cyrilbur@gmail.com>
+References: <1451869172-16621-1-git-send-email-cyrilbur@gmail.com>
+Message-ID: <20160315092413.GA7196@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To recreate the problem:
+Cyril, All,
 
-$ wget https://buildroot.org/downloads/buildroot-2016.02.tar.bz2
-$ tar -xjf buildroot-2016.02.tar.bz2
-$ cd buildroot-2016.02
-$ make raspberrypi_defconfig
-$ make menuconfig
-In the "Toolchain" section select "Toolchain type" "External toolchain"
-and then in "Toolchain" "Musl 1.1.6 toolchain (experimental)"
-Leave the configuration menu, saving the configuration
-$ make
+On 2016-01-04 11:59 +1100, Cyril Bur spake thusly:
+> This patch simply adds the ability to compile and install the kernel
+> selftests into the target at /usr/lib/kselftests. The rationale behind
+> /usr/lib is that the selftests have subdirectories where they are installed
+> which makes them unsuitable to be placed in /usr/sbin as this would result
+> in /usr/sbin/kselftests/x/y/z. While the selftests aren't libraries either,
+> they don't achieve much as a standalone binary so they can be considered to
+> be a 'library of tests' making /usr/lib sensible.
+> 
+> The selftests require that the kernel headers be installed into the kernel
+> build tree as some of the selftests have a hardcoded CFLAGS to include
+> kernel headers (CFLAGS += -I../../../../usr/include/). This is most easily
+> achieved by using the make ... headers_install inside the kernel build dir.
+> 
+> This is likely to be a rarely used debugging/performance feature for
+> development and unlikely to be used in a production configuration.
 
-After some time you'll get:
+So I finally take some time to review this new iteration; sorry for the
+delay... :-/
 
- CC      drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o
- CC      fs/proc/array.o
-drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.c:42:20:
-fatal error: stddef.h: No such file or directory
- #include <stddef.h>
-                    ^
-compilation terminated.
-scripts/Makefile.build:258: recipe for target
-'drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o' failed
+> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+> ---
+[--SNIP--]
+> diff --git a/linux/linux-tool-selftests.mk b/linux/linux-tool-selftests.mk
+> new file mode 100644
+> index 0000000..b610599
+> --- /dev/null
+> +++ b/linux/linux-tool-selftests.mk
+> @@ -0,0 +1,42 @@
+> +################################################################################
+> +#
+> +# selftests
+> +#
+> +################################################################################
+> +
+> +LINUX_TOOLS += selftests
+> +
+> +ifeq ($(KERNEL_ARCH),x86_64)
 
+For i386, Buildroot sets KERNEL_ARCH=i386, so we may also want to handle
+that case, no?
 
-If I'm forced to build the system quickly (as my students are, due to
-short lab sessions), the only way is to switch off the EABIhf (by
-selection of the EABI in the "Target options", Target ABI) and use the
-"Toolchain (Sourcery CodeBench ARM 2014.05)"
+> +SELFTESTS_ARCH=x86
 
-Of course the optimal solution is to use the "Buildroot toolchain"
-with standard EABIhf, but it takes very long to rebuild after "make
-clean"...
+I know the other linux-tools don't, but I think we should call that
+linux-selftests (so LINUX_SEFLTESTS_ARCH and so on) to avoid name
+clashing with other packages.
+
+> +else
+> +SELFTESTS_ARCH=$(KERNEL_ARCH)
+> +endif
+> +
+> +SELFTESTS_DEPENDENCIES = bash
+
+It can also use libcap-ng, so you probably want to depend on it, too:
+
+    /home/ymorin/dev/buildroot/O/host/usr/bin/i686-pc-linux-gnu-gcc -O2 -g
+      -std=gnu99 -Wall    validate_cap.c  -lcap-ng -lrt -ldl -o validate_cap
+    validate_cap.c:1:20: fatal error: cap-ng.h: No such file or directory
+
+Ditto popt:
+
+    /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/
+    i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld: cannot
+    find -lpopt
+    collect2: error: ld returned 1 exit status
+
+However, as you said in the commit log, those are not fatal errors
+(although reported as such) and the build goes on successfully for the
+rest of the tests:
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[build-tested only, for i386]
 
 Regards,
-Wojtek
+Yann E. MORIN.
+
+> +SELFTESTS_MAKE_FLAGS = \
+> +	$(LINUX_MAKE_FLAGS) \
+> +	ARCH=$(SELFTESTS_ARCH)
+> +
+> +# O must be redefined here to overwrite the one used by Buildroot for
+> +# out of tree build. We build the selftests in $(@D)/tools/selftests and
+> +# not just $(@D) so that it isn't built in the root directory of the kernel
+> +# sources.
+> +#
+> +# The headers_install step here is important as some kernel selftests use a
+> +# hardcoded CFLAGS to find kernel headers e.g:
+> +# CFLAGS += -I../../../../usr/include/
+> +# The headers_install target will install the kernel headers locally inside
+> +# the Linux build dir
+> +define SELFTESTS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(SELFTESTS_MAKE_FLAGS) \
+> +		headers_install
+> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
+> +		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/tools/testing/selftests
+> +endef
+> +
+> +define SELFTESTS_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
+> +		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/tools/testing/selftests \
+> +		INSTALL_PATH=$(TARGET_DIR)/usr/lib/kselftests install
+> +endef
+> -- 
+> 2.6.4
+> 
+
 -- 
-Wojciech M. Zabo?otny
-My GPG/PGP keys:
-standard: 8192R/FE58A848 (0720 9430 85DB 7CCD F4C5  5F1E 5107 91FB FE58 A848)
-confidential: 16384R/C76D2FB0 (C4E7 9597 CF22 7B5D 28BF  4656 FED7
-A63F C76D 2FB0)
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
