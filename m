@@ -1,38 +1,47 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 15 Mar 2016 11:28:29 +0000
-Subject: [Buildroot] [PATCH 1/2] Disable gcc-4.8.x + binutils-2.26 + MIPS
-	combination
-Message-ID: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Tue, 15 Mar 2016 11:28:30 +0000
+Subject: [Buildroot] [PATCH 2/2] valgrind: disable for MIPS soft-float when
+	using binutils >= 2.25
+In-Reply-To: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1458041310-65003-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the same reason as we disabled it for binutils-2.25 before.
+As stated here [1], recent changes on the MIPS binutils sources have
+made it necessary for GCC to pass the -msoft-float to the assembler. Due
+to that, valgrind fails to build for MIPS soft-float when using a
+version of GCC >= 4.9 and binutils >= 2.25 because its using some
+hard-float instructions.
 
-See 2fda0dd7d491e6e926ace1cd09ad2fb241356232 for details.
+The combination of GCC-4.8.x and binutils >= 2.25 is not possible as its
+disabled in package/gcc/Config.in.host.
+
+1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
+
+Fixes:
+  http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/gcc/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/valgrind/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 4845708..513899e 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -42,8 +42,9 @@ choice
- 		depends on !BR2_cortex_a12 && !BR2_cortex_a17
- 		# Broken or unsupported PPC cores
- 		depends on !BR2_powerpc_power8
--		# gcc-4.8.x + binutils-2.25 is broken for MIPS
--		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
-+		# gcc-4.8.x + binutils >= 2.25 is broken for MIPS
-+		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && \
-+			   (BR2_BINUTILS_VERSION_2_25_X || BR2_BINUTILS_VERSION_2_26_X))
- 		# Unsupported for MIPS R6
- 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
- 		select BR2_GCC_NEEDS_MPC
+diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
+index 21b2608..c9c71a6 100644
+--- a/package/valgrind/Config.in
++++ b/package/valgrind/Config.in
+@@ -8,6 +8,8 @@ config BR2_PACKAGE_VALGRIND
+ 		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
+ 		   BR2_x86_64
+ 	depends on !BR2_STATIC_LIBS
++	depends on !(BR2_MIPS_SOFT_FLOAT && (BR2_BINUTILS_VERSION_2_25_X || \
++		   BR2_BINUTILS_VERSION_2_26_X))
+ 	help
+ 	  Tool for debugging and profiling Linux programs.
+ 
 -- 
 2.4.10
