@@ -1,47 +1,41 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 15 Mar 2016 11:28:30 +0000
-Subject: [Buildroot] [PATCH 2/2] valgrind: disable for MIPS soft-float when
-	using binutils >= 2.25
-In-Reply-To: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <1458041310-65003-2-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 15 Mar 2016 08:30:37 -0300
+Subject: [Buildroot] [PATCH] linux-firmware: ath9k_htc - use newer
+ firmware
+In-Reply-To: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com>
+References: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <56E7F25D.503@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated here [1], recent changes on the MIPS binutils sources have
-made it necessary for GCC to pass the -msoft-float to the assembler. Due
-to that, valgrind fails to build for MIPS soft-float when using a
-version of GCC >= 4.9 and binutils >= 2.25 because its using some
-hard-float instructions.
+On 15/03/16 07:47, Alexey Brodkin wrote:
 
-The combination of GCC-4.8.x and binutils >= 2.25 is not possible as its
-disabled in package/gcc/Config.in.host.
+> Existing blobs are of version ath9k-htc 1.3.1, see
+> http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=21a6c3e55df956dd223279627685778268ede70f
+>
+> These are as said in the commit are left for compatibility with older
+> kernels which [older kernels] will look for blobs in the
+> root of "/lib/firmware".
+>
+> But there're newer v1.4 blobs in ath9k_htc folder.
+> And newer kernels (>=4.4) look first in that new location
+> "/lib/firmware/ath9k_htc".
+>
+> Note that even new kernels will fall back to previous location
+> if new one doesn't exist.
+>
+> Tested with TP-LINK TL-WN722N (has Atheros AR9271 inside).
+>
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: John Keeping <john@metanate.com>
+> Cc: Matt Weber <matt@thewebers.ws>
+> Cc: Alex Suykov <alex.suykov@gmail.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
-
-Fixes:
-  http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/valgrind/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-index 21b2608..c9c71a6 100644
---- a/package/valgrind/Config.in
-+++ b/package/valgrind/Config.in
-@@ -8,6 +8,8 @@ config BR2_PACKAGE_VALGRIND
- 		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
- 		   BR2_x86_64
- 	depends on !BR2_STATIC_LIBS
-+	depends on !(BR2_MIPS_SOFT_FLOAT && (BR2_BINUTILS_VERSION_2_25_X || \
-+		   BR2_BINUTILS_VERSION_2_26_X))
- 	help
- 	  Tool for debugging and profiling Linux programs.
- 
--- 
-2.4.10
+Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
