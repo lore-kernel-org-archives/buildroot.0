@@ -1,35 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 15 Mar 2016 16:05:18 +0100
-Subject: [Buildroot] init module i2c-dev automatically
-In-Reply-To: <CALtfCQbnrv0MFhsLXdOd6bKJXoS18WMv=htqefB4f__5vZtmqg@mail.gmail.com>
-References: <CALtfCQbnrv0MFhsLXdOd6bKJXoS18WMv=htqefB4f__5vZtmqg@mail.gmail.com>
-Message-ID: <20160315160518.174008c3@free-electrons.com>
+From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
+Date: Tue, 15 Mar 2016 16:07:28 +0100
+Subject: [Buildroot] [rpi-firmware] I can't find the file
+	/usr/sbin/vcdbg after compiling
+Message-ID: <CALtfCQYaW4JsQiBOC+paK2+gzPVfdOSsKWXr-qBqkv_tXC23sA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yes, I did both, but I've just checked again and It doesn't work.
 
-On Tue, 15 Mar 2016 15:54:54 +0100, ?scar G?mez Fuente wrote:
+../output/target/usr/sbin$ ls
+addgroup  chroot    deluser   ether-wake  i2cdetect  i2cset    loadfont
+setlogcons
+adduser   crond     dnsd      fbset       i2cdump    inetd     rdate
+ vcfiled
+arping    delgroup  dropbear  fdformat    i2cget     killall5  readprofile
 
-> I'm using buildroot with Init System  busybox and /dev management: Dynamic
-> using devtmpfs + eudev.
-> 
-> How can I load the i2c-dev module automatically in the init?
-> 
-> I'm trying to create the file /etc/modules with the line i2c-dev, but it
-> doesn't work.
+Oscar Gomez Fuente.
 
-You need to create an init script that loads your module, or
-alternatively reads /etc/modules and loads the modules listed in this
-file. We don't have a mechanism that automatically loads such modules
-(real device drivers are loaded automatically by udev, but i2c-dev is
-kind of a special case).
+On 11 March 2016 at 15:31, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> >>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
+>
+>  > Hi,
+>  > I'm using the last release buildroot-2016.02 and I'm trying to test some
+>  > dtb files on my raspberry pi 2 (because It seems to be it doesn't work
+>  > well) so I'm trying to add the package to debug vcdbg:
+>
+>  > Target package ---> Hardware handling  ---> Firmware ---> vcdbg
+>
+>  > The compilation was successful but the file /usr/sbin/vcdbg doesn't
+> exist
+>  > in the $TARGET_DIR
+>
+> From package/rpi-firmware/rpi-firmware.mk:
+>
+> ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+> define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+>         $(INSTALL) -d -m 0700 $(@D)/$(if
+> BR2_ARM_EABIHF,hardfp/)opt/vc/bin/vcdbg \
+>                 $(TARGET_DIR)/usr/sbin/vcdbg
+> endef
+> endif # INSTALL_VCDBG
+>
+> So it should be in usr/sbin. Did you do a clean build (or at least rm
+> -rf output/build/rpi-firmware-*) when you enabled the VCDBG option?
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160315/6431a4ff/attachment.html>
