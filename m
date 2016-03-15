@@ -1,40 +1,375 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 15 Mar 2016 10:04:53 +0000
-Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2016b
-Message-ID: <1458036294-21996-1-git-send-email-martin@barkynet.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Mar 2016 11:42:52 +0100
+Subject: [Buildroot] [RFC PATCH 3/3] Add package cbootimage-configs
+In-Reply-To: <1455203110-16759-4-git-send-email-julian@jusst.de>
+References: <1455203110-16759-1-git-send-email-julian@jusst.de>
+ <1455203110-16759-4-git-send-email-julian@jusst.de>
+Message-ID: <20160315104252.GB7196@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/zic/zic.hash | 4 ++--
- package/zic/zic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Julian, All,
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 290cfdb..203544d 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,2 +1,2 @@
--# From: http://mm.icann.org/pipermail/tz-announce/2016-January/000035.html
--sha512  33a1078ba16aef19048aa97ce1816fc5368061bfe40eddc0e7e246ca57c4a535eaf2f03847128e971a6d959f34ea77224bf33fd53dc6a0c006450dde35222223  tzcode2016a.tar.gz
-+# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000036.html
-+sha512  53f7405fd0466f5acc5d1dd590546abb6e3f4240d6a78ce7e965908d9310e8b8686c8fbe887947c513a4de65e3e3fc038d64215a330267397f37e6efce71f0b8  tzcode2016b.tar.gz
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 6f5d160..1667667 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZIC_VERSION = 2016a
-+ZIC_VERSION = 2016b
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = http://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+Here a quick review of the Config.in, mostly about eye-candy by lack of time...
+
+On 2016-02-11 10:05 -0500, Julian Scheel spake thusly:
+> Add package for cbootimage configurations that contains build scripts to
+> generate bct and image files for various tegra based boards using cbootimage
+> file.
+> Additionally the package makefile includes extra hooks to generate
+> self-contained flasher binaries based on u-boot, that are actually able to
+> flash a u-boot instance into mmc memory when loaded to tegra via tegrarcm.
+> 
+> Signed-off-by: Julian Scheel <julian@jusst.de>
+> ---
+>  package/Config.in                                |   1 +
+>  package/cbootimage-configs/Config.in             | 129 +++++++++++++++++++++++
+>  package/cbootimage-configs/cbootimage-configs.mk | 124 ++++++++++++++++++++++
+>  3 files changed, 254 insertions(+)
+>  create mode 100644 package/cbootimage-configs/Config.in
+>  create mode 100644 package/cbootimage-configs/cbootimage-configs.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index bdc3063..9977190 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -150,6 +150,7 @@ endmenu
+>  
+>  menu "Filesystem and flash utilities"
+>  	source "package/btrfs-progs/Config.in"
+> +	source "package/cbootimage-configs/Config.in"
+>  	source "package/cifs-utils/Config.in"
+>  	source "package/cpio/Config.in"
+>  	source "package/cramfs/Config.in"
+> diff --git a/package/cbootimage-configs/Config.in b/package/cbootimage-configs/Config.in
+> new file mode 100644
+> index 0000000..ac1ffeb
+> --- /dev/null
+> +++ b/package/cbootimage-configs/Config.in
+> @@ -0,0 +1,129 @@
+> +config BR2_PACKAGE_CBOOTIMAGE_CONFIGS
+> +	bool "cbootimage-configs"
+> +	select BR2_PACKAGE_HOST_CBOOTIMAGE
+> +	depends on BR2_TARGET_UBOOT
+> +	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-dtb-tegra.bin" || BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="{u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
+> +	help
+> +	  The cbootimage-configs project contains cbootimage configuration
+> +	  files for many Tegra boards, both those designed by NVIDIA, and
+> +	  various third-parties.
+> +
+> +	  https://github.com/NVIDIA/cbootimage-configs
+> +
+> +comment "cbootimage-configs requires u-boot custom name u-boot-dtb-tegra.bin or {u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
+> +	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME!="u-boot-dtb-tegra.bin" || BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME!="{u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
+
+There should be nothing between the config option, above, and the
+following if-block, below, otherwise kconfig will not properly indent
+the sub-options.
+
+But sine there are quite a few options, it would warrant a sub-menu:
+
+    menuconfig BR2_PACKAGE_CBOOTIMAGE_CONFIGS
+        bool "cbootimage-configs"
+        blabla...
+
+    if BR2_PACKAGE_CBOOTIMAGE_CONFIGS
+
+    Put your options here
+
+    endif # BR2_PACKAGE_CBOOTIMAGE_CONFIGS
+
+Furthermore, I am not too happy with this biggish comment. I doubt there
+is even a need for it, just rely on the user knowing what he does.
+
+And I doubt kconfig interprets globs like in the RHS of a comparison...
+
+> +if BR2_PACKAGE_CBOOTIMAGE_CONFIGS
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_BUILD
+> +	string "cbootimage board to build"
+> +	help
+> +	  The full path of a configuration inside cbootimage-configs that is
+> +	  to be built for the board you want to run. File directory structure
+> +	  usually is <soc>/<vendor>/<board>
+> +	  Example for Jetson TK1:
+> +	  tegra124/nvidia/jetson-tk1
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_BCT
+> +	string "cbootimage bct filename"
+> +	help
+> +	  The name of the bct generated by cbootimage for the selected
+> +	  cbootimage configuration. If unsure look it up from the Makefile in
+> +	  the specified board directory.
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_IMG
+> +	string "cbootimage img filename"
+> +	help
+> +	  The name of the image generated by cbootimage for the selected
+> +	  cbootimage configuration. If unsure look it up from the Makefile in
+> +	  the specified board directory.
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_IMG_SIGNED
+> +	bool "sign generated image for secureboot"
+> +	help
+> +	  Sign the image using a provided ssl key. This makes it possible to
+> +	  run the image in secureboot environments with the matching key being
+> +	  burned to the tegra fuses.
+> +	  Be aware that the generated image will have the extension simg
+> +	  instead of img if signing is enabled.
+> +
+> +	  Compatible key files can be generated with openssl:
+> +	  openssl genrsa -out rsa_priv.pem 2048
+> +
+> +if BR2_CBOOTIMAGE_CONFIGS_IMG_SIGNED
+
+You forgot to add "PACKAGE_" in the variable name.
+
+If there is a single option in a if-block, then it is better to have
+that option 'depends on':
+
+    config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_KEY
+        string "pkc file name"
+        depends on BR2_CBOOTIMAGE_CONFIGS_IMG_SIGNED
+
+> +config BR2_CBOOTIMAGE_CONFIGS_IMG_KEY
+> +	string "pkc file name"
+> +	help
+> +	  Key file to use for signing the loader image.
+> +
+> +endif
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_GENERATE_FLASHER
+> +	bool "generate self-contained u-boot flasher"
+> +	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="{u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
+
+You're again using globs here. Are you sure it works at all?
+
+> +	help
+> +	  Generate an image consisting of a u-boot to flash the actual target
+> +	  u-boot. For this a u-boot with a customized environment is generated
+> +	  that contains a bootcmd to copy a target image into mmc. The actual
+> +	  target u-boot, which is specified in BR2_CBOOTIMAGE_CONFIGS_IMG is
+> +	  appended to that image so that one self-contained image is generated
+> +	  that can be flashed with tegrarcm.
+> +
+> +comment "generate self-contained u-boot flasher requires u-boot custom name {u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
+> +	depends on BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME!="{u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
+
+Ditto, remove the comment, remve the dependency, and let the user take
+responsibility. You may add a blurb in the help text, stating what is
+really supported, though.
+
+> +if BR2_CBOOTIMAGE_CONFIGS_GENERATE_FLASHER
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT
+> +	bool "write partition table to mmc 0"
+> +	help
+> +	  Add a flashing step which is writing a custom gpt partition table
+> +	  onto the target devices first mmc storage
+> +
+> +if BR2_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_FLASHER_GPT_SPEC
+> +	string "partition table"
+> +	default "uuid_disk=\\$$\\{disk_uuid\\};name=rootfs,size=-,uuid=\\$$\\{rootfs_uuid\\}"
+
+That quoting is nasty. Can't you make that option point to a file
+instead:
+
+    config BR2_CBOOTIMAGE_CONFIGS_FLASHER_GPT_SPEC_FILE
+        bool "file with partition table spec"
+
+> +	help
+> +	  Paritition table to write to mmc. Use format as specified in
+> +	  u-boot's README.gpt documentation file. Make sure to quote all inner
+> +	  variables.
+> +
+> +	  Example:
+> +	  uuid_disk=\$$\{disk_uuid\};name=rootfs,size=2000MiB,uuid=\$$\{rootfs_uuid\};name=data,size=-,uuid=\$$\{data_uuid\}
+> +
+> +endif
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU
+> +	bool "start dfu mode before reset"
+> +	help
+> +	  Put the device in DFU mode on usb 0 and mmc 0, so that filesystem
+> +	  images can be flashed to the device instantly.
+> +
+> +if BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU
+
+Ditto, use 'depends on' rather than an if-block.
+
+Regards,
+Yann E. MORIN.
+
+> +config BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU_MAP
+> +	string "dfu map"
+> +	default "rootfs part 0 1"
+> +	help
+> +	  Mapping scheme for partitions to DFU unit names according to u-boot
+> +	  documentation README.dfutftp variable dfu_alt_info.
+> +
+> +	  Example:
+> +	  rootfs part 0 1;data part 0 2
+> +
+> +endif
+> +
+> +config BR2_CBOOTIMAGE_CONFIGS_FLASHER_EXTRA_BOOTCMD
+> +	string "u-boot flasher bootcmd extras"
+> +	help
+> +	  Specify extra bootcmds you want the u-boot flasher instance to run
+> +	  before resetting the board. For example this could be writing a
+> +	  partition table and enter DFU flashing mode to write filesystem
+> +	  images.
+> +
+> +endif
+> +
+> +endif
+> diff --git a/package/cbootimage-configs/cbootimage-configs.mk b/package/cbootimage-configs/cbootimage-configs.mk
+> new file mode 100644
+> index 0000000..30271f0
+> --- /dev/null
+> +++ b/package/cbootimage-configs/cbootimage-configs.mk
+> @@ -0,0 +1,124 @@
+> +################################################################################
+> +#
+> +# cbootimage-configs
+> +#
+> +################################################################################
+> +
+> +CBOOTIMAGE_CONFIGS_VERSION = 2a94edd
+> +CBOOTIMAGE_CONFIGS_SITE = https://github.com/avionic-design/cbootimage-configs.git
+> +CBOOTIMAGE_CONFIGS_SITE_METHOD = git
+> +CBOOTIMAGE_CONFIGS_DEPENDENCIES = host-cbootimage
+> +CBOOTIMAGE_CONFIGS_INSTALL_TARGET = NO
+> +CBOOTIMAGE_CONFIGS_INSTALL_IMAGES = YES
+> +
+> +CONFIGS_BUILD = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_BUILD))
+> +BCT_NAME = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_BCT))
+> +IMG_NAME = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_IMG))
+> +EXTRA_BOOTCMD = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_FLASHER_EXTRA_BOOTCMD))
+> +GPT_SPEC = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_FLASHER_GPT_SPEC))
+> +DFU_MAP = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU_MAP))
+> +KEY_FILE = $(call qstrip,$(BR2_CBOOTIMAGE_CONFIGS_IMG_KEY))
+> +
+> +ifeq ($(CONFIGS_BUILD),)
+> +	$(warning BR2_CBOOTIMAGE_CONFIGS_BUILD=$(BR2_CBOOTIMAGE_CONFIGS_BUILD))
+> +	$(warning CONFIGS_BUILD=$(CONFIGS_BUILD))
+> +	$(error No cbootimage-configuration specififed to build. Check your BR2_CBOOTIMAGE_CONFIGS_BUILD setting)
+> +endif
+> +ifeq ($(BCT_NAME),)
+> +	$(error No bct filename specified. Check your BR2_CBOOTIMAGE_CONFIGS_BCT setting)
+> +endif
+> +ifeq ($(IMG_NAME),)
+> +	$(error No img filename specified. Check your BR2_CBOOTIMAGE_CONFIGS_IMG setting)
+> +endif
+> +ifeq ($(BR2_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT),y)
+> +ifeq ($(GPT_SPEC),)
+> +	$(error No gpt partitions specified. Check your BR2_CBOOTIMAGE_CONFIGS_FLASHER_GPT_SPEC setting)
+> +endif
+> +endif
+> +ifeq ($(BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU),y)
+> +ifeq ($(DFU_MAP),)
+> +	$(error No dfu map specified. Check your BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU_MAP setting)
+> +endif
+> +endif
+> +ifeq ($(BR2_CBOOTIMAGE_CONFIGS_IMG_SIGNED),y)
+> +ifeq ($(KEY_FILE),)
+> +	$(error No key file specified. Check your BR2_CBOOTIMAGE_CONFIGS_IMG_KEY setting)
+> +endif
+> +KEY_OPTS = skb=$(KEY_FILE)
+> +else
+> +KEY_OPTS =
+> +endif
+> +
+> +TARGET_SIZE = $(TARGET_CROSS)size
+> +
+> +define CBOOTIMAGE_CONFIGS_BUILD_CMDS
+> +	cp $(BINARIES_DIR)/u-boot-dtb-tegra.bin $(@D)/$(BR2_CBOOTIMAGE_CONFIGS_BUILD)/u-boot.bin
+> +	(cd $(@D)/$(BR2_CBOOTIMAGE_CONFIGS_BUILD) && $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(KEY_OPTS))
+> +endef
+> +
+> +# Generate a self-contained u-boot image, flashing u-boot to mmc
+> +define CBOOTIMAGE_CONFIGS_BUILD_FLASHER_CMD
+> +	# u-boot bss size: ${BSS_SIZE}
+> +	# u-boot-nodtb-tegra.bin size: ${UBOOT_NODTB_TEGRA_SIZE}
+> +	# u-boot.dtb size: ${UBOOT_DTB_SIZE}
+> +	# ${IMG_NAME} size: ${IMG_SIZE}
+> +	# u-boot plus dtb size: ${UBOOT_PLUS_DTB_SIZE}
+> +	# padded size: ${PADDED_SIZE}
+> +	# bootcmd: $(UBOOT_FLASH_ENV)
+> +
+> +	cp $(BINARIES_DIR)/u-boot.dtb ${DTB_FILE}
+> +	# Patch environment into u-boot dtb
+> +	fdtput -p -t x ${DTB_FILE} '/config' 'bootdelay' '0xfffffffe'
+> +	fdtput -p -t s ${DTB_FILE} '/config' 'bootcmd' $(UBOOT_FLASH_ENV)
+> +
+> +	# Assemble u-boot-flasher.bin
+> +	cp $(BINARIES_DIR)/u-boot-nodtb-tegra.bin $(BINARIES_DIR)/u-boot-flasher.bin
+> +	cat ${DTB_FILE} >> $(BINARIES_DIR)/u-boot-flasher.bin
+> +	truncate -s $(PADDED_SIZE) $(BINARIES_DIR)/u-boot-flasher.bin
+> +	cat $(@D)/$(CONFIGS_BUILD)/$(IMG_NAME) >> $(BINARIES_DIR)/u-boot-flasher.bin
+> +endef
+> +
+> +# Computations for assembling u-boot with custom dtb mostly stolen from
+> +# https://github.com/NVIDIA/tegra-uboot-flasher-scripts
+> +# All credits go to Stephen Warren
+> +ifeq ($(BR2_CBOOTIMAGE_CONFIGS_GENERATE_FLASHER),y)
+> +LOADADDR = 0x80108000 # FIXME: this is Tegra124 only
+> +BSS_SIZE = $(shell $(TARGET_SIZE) -A $(BINARIES_DIR)/u-boot | grep ".bss\b" | tr -s ' ' | cut -d ' ' -f 2)
+> +UBOOT_NODTB_TEGRA_SIZE = $(shell stat -c %s $(BINARIES_DIR)/u-boot-nodtb-tegra.bin)
+> +UBOOT_DTB_SIZE = $(shell stat -c %s $(BINARIES_DIR)/u-boot.dtb)
+> +IMG_SIZE = $(shell stat -c %s $(@D)/$(CONFIGS_BUILD)/$(IMG_NAME))
+> +IMG_SIZE_SECTORS = $(shell echo $$(( $(IMG_SIZE) / 512 )) )
+> +IMG_SIZE_SECTORS_HEX = $(shell printf '0x%x' $(IMG_SIZE_SECTORS) )
+> +UBOOT_PLUS_DTB_SIZE = $(shell echo $$(( $(UBOOT_NODTB_TEGRA_SIZE) + $(UBOOT_DTB_SIZE) )) )
+> +# Keep BSS area clear, acquire an extra 4kb for incereased dtb, align to 4k
+> +# boundary
+> +PADDED_SIZE = $(shell echo $$(( $(UBOOT_PLUS_DTB_SIZE) + $(BSS_SIZE) + (2 * 4 * 1024) - 1 & ~((4 * 1024) - 1) )) )
+> +IMAGEADDR = $(shell echo $$(( $(LOADADDR) + $(PADDED_SIZE) )) )
+> +IMAGEADDR_HEX = $(shell printf '0x%x' $(IMAGEADDR) )
+> +
+> +ifeq ($(BR2_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT),y)
+> +GPT_BOOTCMD = echo >>> Write partition table to MMC; gpt write mmc 0 '$(GPT_SPEC)';
+> +else
+> +GPT_BOOTCMD =
+> +endif
+> +
+> +ifeq ($(BR2_CBOOTIMAGE_CONFIGS_FLASHER_DFU),y)
+> +DFU_BOOTCMD = echo >>> Enter DFU mode; setenv dfu_alt_info '$(DFU_MAP)'; dfu 0 mmc 0;
+> +else
+> +DFU_BOOTCMD =
+> +endif
+> +
+> +UBOOT_FLASH_ENV = "echo >>> Write image to MMC; mmc dev 0 1; mmc write ${IMAGEADDR_HEX} 0 ${IMG_SIZE_SECTORS_HEX}; echo >>> Configure environment; env default -f -a; saveenv; $(GPT_BOOTCMD) $(EXTRA_BOOTCMD); $(DFU_BOOTCMD) echo >>> Resetting system; reset"
+> +
+> +DTB_FILE = $(@D)/u-boot-flasher.dtb
+> +
+> +# Add the actual assembly hook
+> +CBOOTIMAGE_CONFIGS_POST_INSTALL_IMAGES_HOOKS += CBOOTIMAGE_CONFIGS_BUILD_FLASHER_CMD
+> +endif
+> +
+> +define CBOOTIMAGE_CONFIGS_INSTALL_IMAGES_CMDS
+> +	cp -dpf $(@D)/$(BR2_CBOOTIMAGE_CONFIGS_BUILD)/$(BR2_CBOOTIMAGE_CONFIGS_BCT) $(BINARIES_DIR)
+> +	cp -dpf $(@D)/$(BR2_CBOOTIMAGE_CONFIGS_BUILD)/$(BR2_CBOOTIMAGE_CONFIGS_IMG) $(BINARIES_DIR)
+> +endef
+> +
+> +$(eval $(generic-package))
+> -- 
+> 2.7.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.5.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
