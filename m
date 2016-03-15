@@ -1,50 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 16:49:43 +0100
-Subject: [Buildroot] [rpi-firmware] I can't find the file
-	/usr/sbin/vcdbg after compiling
-In-Reply-To: <CALtfCQYaW4JsQiBOC+paK2+gzPVfdOSsKWXr-qBqkv_tXC23sA@mail.gmail.com>
- (=?utf-8?B?IsOTc2NhciBHw7NtZXo=?= Fuente"'s message of "Tue, 15 Mar 2016
- 16:07:28 +0100")
-References: <CALtfCQYaW4JsQiBOC+paK2+gzPVfdOSsKWXr-qBqkv_tXC23sA@mail.gmail.com>
-Message-ID: <87d1qvbv1k.fsf@dell.be.48ers.dk>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 15 Mar 2016 18:12:00 +0200
+Subject: [Buildroot] [PATCH] quagga: security bump to version 1.0.20160309
+Message-ID: <46743f76247ed0f41bf1b3a77bbd967736b6765e.1458058320.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
+Fixes CVE-2016-2342 (AKA VU#270232): Quagga bgpd with BGP peers enabled for
+VPNv4 contains a buffer overflow vulnerability.
 
- > Yes, I did both, but I've just checked again and It doesn't work.
- > ../output/target/usr/sbin$ ls
- > addgroup  chroot    deluser   ether-wake  i2cdetect  i2cset    loadfont
- > setlogcons
- > adduser   crond     dnsd      fbset       i2cdump    inetd     rdate
- >  vcfiled
- > arping    delgroup  dropbear  fdformat    i2cget     killall5  readprofile
+Remove the --enable-babeld and --enable-opaque-lsa configure options that were
+removed in this release.
 
-Sorry, I just had a closer look, and the vcdbg handling logic is broken
-:/ I've pushed a fix to current git to correct it:
+See the release announcement at
+https://lists.quagga.net/pipermail/quagga-dev/2016-March/014938.html.
 
-commit 41276ae12aefb8a3e69df365aa2240d29ddca776
-Author: Peter Korsgaard <peter@korsgaard.com>
-Date:   Tue Mar 15 16:43:10 2016 +0100
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/quagga/Config.in   | 9 ---------
+ package/quagga/quagga.hash | 2 +-
+ package/quagga/quagga.mk   | 4 +---
+ 3 files changed, 2 insertions(+), 13 deletions(-)
 
-    rpi-firmware: unbreak _INSTALL_VCDBG logic
-    
-    Commit d16b32a401 (package/rpi-firmware: add option to install vcdbg) added
-    a sub option to install the vcdbg tool, but the commit unfortunately
-    contained two errors:
-    
-    - The package sets _INSTALL_TARGET = NO, so the _TARGET_CMDS are never used
-    - The install command used -d (handle arguments as directories) instead of
-      -D (create needed directories)
-    
-    Fix these issues.
-    
-    Cc: yann.morin.1998 at free.fr
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 89ff6f25df16..56b8cad93c62 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -24,11 +24,6 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	  You'll want this enabled if zebra and the protocol daemon(s) run
+ 	  on different hosts.
+ 
+-config BR2_PACKAGE_QUAGGA_BABELD
+-	bool "BABEL protocol"
+-	help
+-	  Build babeld daemon.
+-
+ config BR2_PACKAGE_QUAGGA_BGPD
+ 	bool "BPGv4+ protocol"
+ 	help
+@@ -48,10 +43,6 @@ config BR2_PACKAGE_QUAGGA_OSPFD
+ 	help
+ 	  Build ospfd daemon.
+ 
+-config BR2_PACKAGE_QUAGGA_OPAQUE_LSA
+-	bool "OSPF Opaque-LSA with OSPFAPI support (RFC2370)"
+-	depends on BR2_PACKAGE_QUAGGA_OSPFD
+-
+ config BR2_PACKAGE_QUAGGA_OSPF6D
+ 	bool "OSPFv3 (IPv6) protocol"
+ 	help
+diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
+index ba293c414d38..fdc7472d7506 100644
+--- a/package/quagga/quagga.hash
++++ b/package/quagga/quagga.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	6fd6baadb136a801c29c1dd72d0fe69da9f19ae498e87bff7057778361e43b14	quagga-0.99.24.1.tar.xz
++sha256	034e21f87164f44f1c4c89d8fafed4acede298fe3fafbf9277f079544178c66b	quagga-1.0.20160309.tar.xz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 4a5559401c05..93c01f9c37f4 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QUAGGA_VERSION = 0.99.24.1
++QUAGGA_VERSION = 1.0.20160309
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+@@ -22,7 +22,6 @@ QUAGGA_CONF_OPTS += --disable-capabilities
+ endif
+ 
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
+-QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BABELD),--enable-babeld,--disable-babeld)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGPD),--enable-bgpd,--disable-bgpd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_RIPD),--enable-ripd,--disable-ripd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_RIPNGD),--enable-ripngd,--disable-ripngd)
+@@ -33,7 +32,6 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_WATCHQUAGGA),--enable-watchquagga,
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-isisd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+-QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--disable-opaque-lsa)
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+2.7.0
