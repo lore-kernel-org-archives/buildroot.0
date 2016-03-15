@@ -1,129 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Mar 2016 10:24:13 +0100
-Subject: [Buildroot] [PATCH v2] linux: Build and install kernel selftests
-In-Reply-To: <1451869172-16621-1-git-send-email-cyrilbur@gmail.com>
-References: <1451869172-16621-1-git-send-email-cyrilbur@gmail.com>
-Message-ID: <20160315092413.GA7196@free.fr>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 15 Mar 2016 10:04:54 +0000
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2016b
+In-Reply-To: <1458036294-21996-1-git-send-email-martin@barkynet.com>
+References: <1458036294-21996-1-git-send-email-martin@barkynet.com>
+Message-ID: <1458036294-21996-2-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cyril, All,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2016-01-04 11:59 +1100, Cyril Bur spake thusly:
-> This patch simply adds the ability to compile and install the kernel
-> selftests into the target at /usr/lib/kselftests. The rationale behind
-> /usr/lib is that the selftests have subdirectories where they are installed
-> which makes them unsuitable to be placed in /usr/sbin as this would result
-> in /usr/sbin/kselftests/x/y/z. While the selftests aren't libraries either,
-> they don't achieve much as a standalone binary so they can be considered to
-> be a 'library of tests' making /usr/lib sensible.
-> 
-> The selftests require that the kernel headers be installed into the kernel
-> build tree as some of the selftests have a hardcoded CFLAGS to include
-> kernel headers (CFLAGS += -I../../../../usr/include/). This is most easily
-> achieved by using the make ... headers_install inside the kernel build dir.
-> 
-> This is likely to be a rarely used debugging/performance feature for
-> development and unlikely to be used in a production configuration.
-
-So I finally take some time to review this new iteration; sorry for the
-delay... :-/
-
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/linux/linux-tool-selftests.mk b/linux/linux-tool-selftests.mk
-> new file mode 100644
-> index 0000000..b610599
-> --- /dev/null
-> +++ b/linux/linux-tool-selftests.mk
-> @@ -0,0 +1,42 @@
-> +################################################################################
-> +#
-> +# selftests
-> +#
-> +################################################################################
-> +
-> +LINUX_TOOLS += selftests
-> +
-> +ifeq ($(KERNEL_ARCH),x86_64)
-
-For i386, Buildroot sets KERNEL_ARCH=i386, so we may also want to handle
-that case, no?
-
-> +SELFTESTS_ARCH=x86
-
-I know the other linux-tools don't, but I think we should call that
-linux-selftests (so LINUX_SEFLTESTS_ARCH and so on) to avoid name
-clashing with other packages.
-
-> +else
-> +SELFTESTS_ARCH=$(KERNEL_ARCH)
-> +endif
-> +
-> +SELFTESTS_DEPENDENCIES = bash
-
-It can also use libcap-ng, so you probably want to depend on it, too:
-
-    /home/ymorin/dev/buildroot/O/host/usr/bin/i686-pc-linux-gnu-gcc -O2 -g
-      -std=gnu99 -Wall    validate_cap.c  -lcap-ng -lrt -ldl -o validate_cap
-    validate_cap.c:1:20: fatal error: cap-ng.h: No such file or directory
-
-Ditto popt:
-
-    /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/
-    i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld: cannot
-    find -lpopt
-    collect2: error: ld returned 1 exit status
-
-However, as you said in the commit log, those are not fatal errors
-(although reported as such) and the build goes on successfully for the
-rest of the tests:
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[build-tested only, for i386]
-
-Regards,
-Yann E. MORIN.
-
-> +SELFTESTS_MAKE_FLAGS = \
-> +	$(LINUX_MAKE_FLAGS) \
-> +	ARCH=$(SELFTESTS_ARCH)
-> +
-> +# O must be redefined here to overwrite the one used by Buildroot for
-> +# out of tree build. We build the selftests in $(@D)/tools/selftests and
-> +# not just $(@D) so that it isn't built in the root directory of the kernel
-> +# sources.
-> +#
-> +# The headers_install step here is important as some kernel selftests use a
-> +# hardcoded CFLAGS to find kernel headers e.g:
-> +# CFLAGS += -I../../../../usr/include/
-> +# The headers_install target will install the kernel headers locally inside
-> +# the Linux build dir
-> +define SELFTESTS_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) $(SELFTESTS_MAKE_FLAGS) \
-> +		headers_install
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
-> +		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/tools/testing/selftests
-> +endef
-> +
-> +define SELFTESTS_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)/tools/testing/selftests \
-> +		$(SELFTESTS_MAKE_FLAGS) O=$(@D)/tools/testing/selftests \
-> +		INSTALL_PATH=$(TARGET_DIR)/usr/lib/kselftests install
-> +endef
-> -- 
-> 2.6.4
-> 
-
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 80c5812..f8e06e8 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,2 @@
+-# From: http://mm.icann.org/pipermail/tz-announce/2016-January/000035.html
+-sha512  9aa5f61a73afa5070dfb1d1982945d268ea8215663d0cd594216500aff14797ea5591ccfd488dc2280902fa1820bf782623624912b669873728431258fe10ec1  tzdata2016a.tar.gz
++# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000036.html
++sha512  6d30215ba3289a5b85a632d635b76a54c3c08d97e426d6bd89f83c4efd252e43959593b21cca9d2b185f3845358908946cc308365accbee94f126ad3057cf838  tzdata2016b.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index bd3cb67..67a7c9c 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2016a
++TZDATA_VERSION = 2016b
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.5.0
