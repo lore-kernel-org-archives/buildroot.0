@@ -1,71 +1,58 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
-Date: Tue, 15 Mar 2016 15:07:57 +0100
-Subject: [Buildroot] [PATCH 2/2] xorriso: Add host variant
-In-Reply-To: <1458050877-24342-1-git-send-email-benoit.allard@greenbone.net>
-References: <1458050877-24342-1-git-send-email-benoit.allard@greenbone.net>
-Message-ID: <1458050877-24342-3-git-send-email-benoit.allard@greenbone.net>
+From: Ricardo Crudo <ricardo.crudo@gmail.com>
+Date: Tue, 15 Mar 2016 15:39:04 +0100
+Subject: [Buildroot] [PATCH 1/1] mxml: add host-autotools-package macro
+In-Reply-To: <20160315143838.2683f35c@free-electrons.com>
+References: <1458041510-19966-1-git-send-email-ricardo.crudo@gmail.com>
+ <20160315143838.2683f35c@free-electrons.com>
+Message-ID: <CAPjqk-+dBjt-XZ7HY6UvuHO51U+JF8P4oEshSiHYsjbMeCVECQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
----
- package/Config.in.host         |  1 +
- package/xorriso/Config.in.host | 14 ++++++++++++++
- package/xorriso/xorriso.mk     |  2 ++
- 3 files changed, 17 insertions(+)
- create mode 100644 package/xorriso/Config.in.host
+> Could you define "some" by giving some examples of package that will
+need that?
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 09c98fb..a91612b 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -32,6 +32,7 @@ menu "Host utilities"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
- 	source "package/vboot-utils/Config.in.host"
-+	source "package/xorriso/Config.in.host"
- 	source "package/zip/Config.in.host"
- 
- endmenu
-diff --git a/package/xorriso/Config.in.host b/package/xorriso/Config.in.host
-new file mode 100644
-index 0000000..2baa043
---- /dev/null
-+++ b/package/xorriso/Config.in.host
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_HOST_XORRISO
-+	bool "host xorriso"
-+	help
-+	  xorriso copies file objects from POSIX compliant
-+	  filesystems into Rock Ridge enhanced ISO 9660 filesystems
-+	  and allows session-wise manipulation of such filesystems.
-+	  It can load the management information of existing ISO
-+	  images and it writes the session results to optical media
-+	  or to filesystem objects.
-+
-+	  Vice versa xorriso is able to copy file objects out of ISO
-+	  9660 filesystems.
-+
-+	  https://www.gnu.org/software/xorriso
-diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-index e8bb5cb..9e9ec8a 100644
---- a/package/xorriso/xorriso.mk
-+++ b/package/xorriso/xorriso.mk
-@@ -8,6 +8,7 @@ XORRISO_VERSION = 1.4.2
- XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
- XORRISO_LICENSE = GPLv3+
- XORRISO_LICENSE_FILES = COPYING COPYRIGHT
-+HOST_XORRISO_DEPENDENCIES =
- 
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- XORRISO_DEPENDENCIES += libiconv
-@@ -64,3 +65,4 @@ XORRISO_CONF_OPTS += --disable-jtethreads
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
--- 
-2.1.4
+None present on buildroot now, only in my user packages. They are LV2
+plugins, one I remind now is ZynAddSubFX (
+http://zynaddsubfx.sourceforge.net/).
+
+> When possible, we try to avoid having "orphan" host packages, i.e host
+packages whose build cannot be triggered at all because no other
+packages depend on them.
+
+Because there is no way to apply patch to global packages (according irc
+response) on buildroot I'm seding the patch as it was recommended on
+buildroot irc channel.
+
+Regards,
+Ricardo.
+
+
+On Tue, Mar 15, 2016 at 2:38 PM, Thomas Petazzoni <
+thomas.petazzoni@free-electrons.com> wrote:
+
+> Dear Ricardo Crudo,
+>
+> On Tue, 15 Mar 2016 12:31:50 +0100, Ricardo Crudo wrote:
+> > Some packages need to process xml at host side
+>
+> Could you define "some" by giving some examples of package that will
+> need that?
+>
+> When possible, we try to avoid having "orphan" host packages, i.e host
+> packages whose build cannot be triggered at all because no other
+> packages depend on them.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160315/7d2810c8/attachment.html>
