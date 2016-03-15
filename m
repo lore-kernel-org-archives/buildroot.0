@@ -1,36 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 23:06:17 +0100
-Subject: [Buildroot] [git commit] configs: pandaboard: configure eth0 at
-	startup
-Message-ID: <20160315220711.B969A80429@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 15 Mar 2016 23:08:11 +0100
+Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
+ question regarding autobuilders
+In-Reply-To: <20160314230503.0eab7efe@free-electrons.com>
+References: <934hrcx7vo.ln2@ID-313208.user.individual.net>
+ <56E5E786.1090906@mind.be>
+ <4mfjrcxqge.ln2@ID-313208.user.individual.net>
+ <20160314230503.0eab7efe@free-electrons.com>
+Message-ID: <20160315220811.GL5053@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3100a90219520a8b1a52642257e038a36f077ad8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, Thomas, All,
 
-Now that we have modules (including usb/net) loaded automatically, we can
-enable dhcp on eth0.
+On 2016-03-14 23:05 +0100, Thomas Petazzoni spake thusly:
+> On Mon, 14 Mar 2016 20:23:16 +0100, Bernd Kuhls wrote:
+> > with my proposed patch we can lower it to BR2_HOST_GCC_AT_LEAST_4_6 ;)
+> > 
+> > With gcc 4.4 (testing with Ubuntu 10.04.4) adding -std=c++0xwill not be 
+> > enough:
+> > 
+> > XBTFWriter.cpp: In constructor ?CXBTFWriter::CXBTFWriter(const 
+> > std::string&)?:
+> > XBTFWriter.cpp:42: error: ?nullptr? was not declared in this scope
+> > 
+> > Looking around for approaches to solve the problem I found these two 
+> > commits:
+> > 
+> > https://hg.mozilla.org/integration/mozilla-inbound/rev/ae45a2c9d678
+> > https://github.com/grpc/grpc/
+> > commit/3ff350cf96676f2c32c6913aceeabf84a15f3715
+> 
+> Why do you want to solve the problem? Adding a dependency on
+> BR2_HOST_GCC_AT_LEAST_4_6 is perfectly fine, especially for such
+> a modern, complex C++ software like Kodi.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/pandaboard_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Totally agreed.
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 3a6e383..3727e3d 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -5,6 +5,7 @@ BR2_ARM_ENABLE_VFP=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
-+BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pandaboard/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
