@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 22:45:50 +0100
-Subject: [Buildroot] [PATCH 3/7] foomatic-filters: remove deprecated
-In-Reply-To: <1457706744-23401-3-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 11 Mar 2016 11:32:20 -0300")
+Date: Tue, 15 Mar 2016 22:46:24 +0100
+Subject: [Buildroot] [PATCH 4/7] gdb: remove deprecated version 7.7
+In-Reply-To: <1457706744-23401-4-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 11 Mar 2016 11:32:21 -0300")
 References: <1457706744-23401-1-git-send-email-gustavo@zacarias.com.ar>
- <1457706744-23401-3-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87wpp38lf5.fsf@dell.be.48ers.dk>
+ <1457706744-23401-4-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87shzr8le7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
