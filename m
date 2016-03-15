@@ -1,52 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Mar 2016 23:08:11 +0100
-Subject: [Buildroot] Bug during Kodi compile with host gcc <4.7,
- question regarding autobuilders
-In-Reply-To: <20160314230503.0eab7efe@free-electrons.com>
-References: <934hrcx7vo.ln2@ID-313208.user.individual.net>
- <56E5E786.1090906@mind.be>
- <4mfjrcxqge.ln2@ID-313208.user.individual.net>
- <20160314230503.0eab7efe@free-electrons.com>
-Message-ID: <20160315220811.GL5053@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 15 Mar 2016 23:09:00 +0100
+Subject: [Buildroot] Another lame user question.
+In-Reply-To: <CAJJ6jxs-aPoTBv6OMoKkKN64OAscmG41dTCqrqsB6xkVSnAD+w@mail.gmail.com>
+References: <CAJJ6jxvqALyD4=1wPUdh7JKpv1fKkfoYcj-m4FZLe+1P2wnnFQ@mail.gmail.com>
+ <20160314053654.GF7678@tarshish>
+ <CAJJ6jxs-aPoTBv6OMoKkKN64OAscmG41dTCqrqsB6xkVSnAD+w@mail.gmail.com>
+Message-ID: <CAHXCMMKHC8ktrqF9aH61Vhck_W6_-Z6Qg1L=oiN-1KuT5Aw1fg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, Thomas, All,
+On Mon, Mar 14, 2016 at 6:45 PM, Steve Calfee <stevecalfee@gmail.com> wrote:
+> On Sun, Mar 13, 2016 at 10:36 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+>> Hi Steve,
+>>
+>> On Sun, Mar 13, 2016 at 10:14:57PM -0700, Steve Calfee wrote:
+>>> Hi, as the title says, I have another user question. I did explore
+>>> google and the buildroot docs.
+>>>
+>>> I am trying to move the mysql directories to my writeable ubi
+>>> partition. Somewhere someone create the mysql user. Where did it get
+>>> created? However, there is no mysql group. I cannot get mysql to start
+>>> from a ubi partition mounted at /data/mysql. Who and where is the
+>>> mysql user created (some files have that as a user)
+>>>
+>>> The buildroot manual documents the makeusers syntax, but what file do
+>>> I create where? Will that work for mysql?
+>>
+>> Quoting package/mysql/mysql.mk:
+>>
+>> define MYSQL_USERS
+>>         mysql -1 nogroup -1 * /var/mysql - - MySQL daemon
+>> endef
+>>
+>> baruch
+>>
+> Hi Baruch, thanks.
+>
+> So somewhere in the infra a script goes through all *_USERS variables
+> and builds the password file etc for users?
+Yes, see [1, 2].
 
-On 2016-03-14 23:05 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 14 Mar 2016 20:23:16 +0100, Bernd Kuhls wrote:
-> > with my proposed patch we can lower it to BR2_HOST_GCC_AT_LEAST_4_6 ;)
-> > 
-> > With gcc 4.4 (testing with Ubuntu 10.04.4) adding -std=c++0xwill not be 
-> > enough:
-> > 
-> > XBTFWriter.cpp: In constructor ?CXBTFWriter::CXBTFWriter(const 
-> > std::string&)?:
-> > XBTFWriter.cpp:42: error: ?nullptr? was not declared in this scope
-> > 
-> > Looking around for approaches to solve the problem I found these two 
-> > commits:
-> > 
-> > https://hg.mozilla.org/integration/mozilla-inbound/rev/ae45a2c9d678
-> > https://github.com/grpc/grpc/
-> > commit/3ff350cf96676f2c32c6913aceeabf84a15f3715
-> 
-> Why do you want to solve the problem? Adding a dependency on
-> BR2_HOST_GCC_AT_LEAST_4_6 is perfectly fine, especially for such
-> a modern, complex C++ software like Kodi.
+>
+> What if I want to move /var/mysql?
+As long as mysql binaries and configuration files are kept in sync, it
+is possible. But the proper way to do this is changing this in the
+configure options (see [3]).
 
-Totally agreed.
+> Who uses /var/mysql as the "home" directory?
+Check the etc/passwd file from your target filesystem, but in grepping
+mainline Buildroot source will tell you that no-one but mysql user is
+using /var/mysql (as Baruch already said)...
+
+> And how does that relate to datadir that is defined in my.cnf?
+You may want to check this [3].
+Don't know much about mysql, but I guess /var/mysql is driven by the
+localstatedir option.
+Take some time to learn what does each option, but tweaking this
+certainly means patching the Buildroot's mysql.mk file.
+
+>
+> Anyway finding out that the user is created in the make file will
+> really help me research this problem of setting up mysql and moving
+> its datadir to another ubi partition.
+>
+> Thanks, Steve
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+[1] https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+[2] https://buildroot.org/downloads/manual/manual.html#makeuser-syntax
+[3] http://dev.mysql.com/doc/refman/5.1/en/source-configuration-options.html
 
 Regards,
-Yann E. MORIN.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Samuel
