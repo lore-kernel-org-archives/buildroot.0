@@ -1,112 +1,95 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Wed, 16 Mar 2016 09:39:53 +1100
-Subject: [Buildroot] [PATCH v2] linux: Build and install kernel selftests
-In-Reply-To: <20160315222151.GM5053@free.fr>
-References: <1451869172-16621-1-git-send-email-cyrilbur@gmail.com>
- <20160315092413.GA7196@free.fr> <20160316090932.1f2681b1@camb691>
- <20160315222151.GM5053@free.fr>
-Message-ID: <20160316093953.6fbfb09f@camb691>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 15 Mar 2016 16:58:39 -0700
+Subject: [Buildroot] Another lame user question.
+In-Reply-To: <CAHXCMMKHC8ktrqF9aH61Vhck_W6_-Z6Qg1L=oiN-1KuT5Aw1fg@mail.gmail.com>
+References: <CAJJ6jxvqALyD4=1wPUdh7JKpv1fKkfoYcj-m4FZLe+1P2wnnFQ@mail.gmail.com>
+ <20160314053654.GF7678@tarshish>
+ <CAJJ6jxs-aPoTBv6OMoKkKN64OAscmG41dTCqrqsB6xkVSnAD+w@mail.gmail.com>
+ <CAHXCMMKHC8ktrqF9aH61Vhck_W6_-Z6Qg1L=oiN-1KuT5Aw1fg@mail.gmail.com>
+Message-ID: <CAJJ6jxv+a42YL5wbzusd2y-4aSL_d15W4JWhrKCvQ5e70YkVRA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Mar 2016 23:21:51 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Thanks for the tips. The user/group thing was a wild goose chase from
+other internet users trying to get mysql to work.
 
-> Cyril, All,
-> 
-> On 2016-03-16 09:09 +1100, Cyril Bur spake thusly:
-> > On Tue, 15 Mar 2016 10:24:13 +0100
-> > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:  
-> > > On 2016-01-04 11:59 +1100, Cyril Bur spake thusly:  
-> > > > This patch simply adds the ability to compile and install the kernel
-> > > > selftests into the target at /usr/lib/kselftests.  
-> [--SNIP--]
-> > > > diff --git a/linux/linux-tool-selftests.mk b/linux/linux-tool-selftests.mk
-> > > > new file mode 100644
-> > > > index 0000000..b610599
-> > > > --- /dev/null
-> > > > +++ b/linux/linux-tool-selftests.mk
-> > > > @@ -0,0 +1,42 @@
-> > > > +################################################################################
-> > > > +#
-> > > > +# selftests
-> > > > +#
-> > > > +################################################################################
-> > > > +
-> > > > +LINUX_TOOLS += selftests
-> > > > +
-> > > > +ifeq ($(KERNEL_ARCH),x86_64)    
-> > > 
-> > > For i386, Buildroot sets KERNEL_ARCH=i386, so we may also want to handle
-> > > that case, no?  
-> > 
-> > I think you're right but not super sure... I'll leave it up to an x86 boffin to
-> > confirm that it's the correct thing to do :)  
-> 
-> Well, I guess you don't need a i386 guru to just add it, as that's what
-> we already do for the kernel (see linux/linux.mk at 157).
-> 
-> [--SNIP--]
-> > > > +SELFTESTS_DEPENDENCIES = bash    
-> > > 
-> > > It can also use libcap-ng, so you probably want to depend on it, too:
-> > > 
-> > >     /home/ymorin/dev/buildroot/O/host/usr/bin/i686-pc-linux-gnu-gcc -O2 -g
-> > >       -std=gnu99 -Wall    validate_cap.c  -lcap-ng -lrt -ldl -o validate_cap
-> > >     validate_cap.c:1:20: fatal error: cap-ng.h: No such file or directory
-> > > 
-> > > Ditto popt:
-> > > 
-> > >     /home/ymorin/dev/buildroot/O/host/opt/ext-toolchain/bin/../lib/gcc/
-> > >     i686-pc-linux-gnu/4.7.2/../../../../i686-pc-linux-gnu/bin/ld: cannot
-> > >     find -lpopt
-> > >     collect2: error: ld returned 1 exit status  
-> > 
-> > I could add those dependencies I suppose, it would be nicer for everyone.  
-> 
-> Yes, please do.
-> 
-> > > However, as you said in the commit log, those are not fatal errors
-> > > (although reported as such) and the build goes on successfully for the
-> > > rest of the tests:
-> > > 
-> > > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > > Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>  
-> > 
-> > Are you happy for me to do a v3 based on your comments and leave both the
-> > Reviewed-by and Tested-by tags?  
-> 
-> If all you do is:
->   - add the i386 case,
->   - add libcap-ng and popt dependencies,
-> then yes, those tags of mine still stand.
-> 
+I got mysql relocated. But still a mystery is how it SHOULD be done.
+There are two files involved in configuring it. The
+/etc/init.d/S97mysql starts/stops the service, but also passes some
+command line args:
 
-Ok, in doing it I had a thought, would it not just be best to add a "select"
-line in the Config.tools.in line for libcap-ng and popt? That way people don't
-HAVE to have it if they don't care about those tests.
+#!/bin/sh
 
-I'm not sure as to the mapping between adding a select in a Config.in and using
-"*_DEPENDENCIES =" in the .mk
+case "$1" in
+    start)
+        if [ ! -d /data/mysql/mysql ] ; then
+            echo "Creating MySQL system tables..."
+            mysql_install_db --user=mysql --ldata=/data/mysql
+        fi
 
-> Don;t rename selftests into linux-selftests, though. It should be a
-> separate patch that renames all the tools. For now, stay consistent with
-> the existing tools, that is: do not prefix.
+        # mysqld runs as user mysql, but /run is only writable by root
+        # so create a subdirectory for mysql.
+        install -d -o mysql -g root -m 0700 /data/mysql
 
-Yeah good point.
+        # We don't use start-stop-daemon because mysqld has
+        # its own wrapper script.
+        printf "Starting mysql..."
+        /usr/bin/mysqld_safe --pid-file=/data/mysql/mysqld.pid &
+        echo "done."
+        ;;
+    stop)
+        printf "Stopping mysql..."
+        if test -f /data/mysql/mysqld.pid ; then
+            kill `cat /data/mysql/mysqld.pid`
+        fi
+        echo "done."
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        ;;
+    *)
+        echo "Usage: /etc/init.d/mysqld {start|stop|restart}"
+        ;;
+esac
 
-> 
-> > Also, for what its worth, I've built and used it a lot for powerpc.  
-> 
-> Great! :-)
-> 
-> > Thanks again,  
-> 
-> My pleasure! :-)
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+
+and the important parts of my.cnf
+
+# The following options will be passed to all MySQL clients
+[client]
+#password    = your_password
+port        = 3306
+socket        = /data/mysql/mysqld.sock
+
+# Here follows entries for some specific programs
+
+# The MySQL server
+[mysqld]
+port        = 3306
+socket        = /data/mysql/mysqld.sock
+skip-locking
+key_buffer_size = 256M
+max_allowed_packet = 1M
+table_open_cache = 256
+sort_buffer_size = 1M
+read_buffer_size = 1M
+read_rnd_buffer_size = 4M
+myisam_sort_buffer_size = 64M
+thread_cache_size = 8
+query_cache_size= 16M
+# Try number of CPU's*2 for thread_concurrency
+thread_concurrency = 2
+#dockstar data directory on r/w ubi partition.
+datadir=/data/mysql
+
+
+When I aligned these two files I could relocate the mysql data and pid
+storage. But I don't know if I need all this redundant info or not.
+When I get over my next unrelated hurdle I will come back and remove
+one thing at a time and see what is needed and what isn't.
+
+Thanks for the tips, Steve
