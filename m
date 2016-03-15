@@ -1,741 +1,392 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 22:45:06 +0100
-Subject: [Buildroot] [git commit] samba: remove deprecated
-Message-ID: <20160315214848.F25AD7FCCE@busybox.osuosl.org>
+Date: Tue, 15 Mar 2016 22:45:46 +0100
+Subject: [Buildroot] [git commit] gdb: remove deprecated version 7.7
+Message-ID: <20160315214849.238367FCCE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bd9dbc13af7e03747f52e9d1fd52fc863696bf6
+commit: https://git.buildroot.net/buildroot/commit/?id=ffc324ea0fff1f6b3b69e220a67eccfc4caf51a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 It's been deprecated for a year now so remove it.
 
-[Peter: drop !samba dependency from samba4]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                             |   7 +
- package/Config.in                            |   1 -
- package/samba/0001-fix-smbd-libs-avahi.patch |  17 --
- package/samba/0002-getaddrinfo.patch         |  20 --
- package/samba/Config.in                      | 292 ---------------------------
- package/samba/S91smb                         |  81 --------
- package/samba/samba.hash                     |   2 -
- package/samba/samba.mk                       | 189 -----------------
- package/samba/simple.conf                    |  25 ---
- package/samba4/Config.in                     |   1 -
- 10 files changed, 7 insertions(+), 628 deletions(-)
+ Config.in.legacy                                   |  7 +++
+ ...lude-asm-ptrace.h-for-linux-aarch64-low.c.patch | 36 -----------
+ ...clude-asm-ptrace.h-in-aarch64-linux-nat.c.patch | 37 -----------
+ .../0003-Add-some-casts-for-building-on-musl.patch | 72 ----------------------
+ ...musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch | 63 -------------------
+ package/gdb/7.7.1/0005-move-__SIGRTMIN.patch       | 58 -----------------
+ package/gdb/Config.in.host                         |  5 --
+ package/gdb/gdb.hash                               |  1 -
+ package/gdb/gdb.mk                                 |  5 --
+ 9 files changed, 7 insertions(+), 277 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index f2b05cb..828d0ac 100644
+index e03e30f..bb7c333 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -145,6 +145,13 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.05"
  
-+config BR2_PACKAGE_SAMBA
-+	bool "samba"
++config BR2_GDB_VERSION_7_7
++	bool "gdb 7.7 has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The samba package was removed in favour of samba4 since the
-+	  3.x series isn't supported by upstream any longer.
++	  The 7.7 version of gdb has been removed. Use a newer version
++	  instead.
 +
- config BR2_PACKAGE_KODI_WAVPACK
- 	bool "wavpack"
+ config BR2_PACKAGE_FOOMATIC_FILTERS
+ 	bool "foomatic-filters"
  	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 7128bca..16e4957 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1475,7 +1475,6 @@ endif
- 	source "package/rsync/Config.in"
- 	source "package/rtorrent/Config.in"
- 	source "package/rtptools/Config.in"
--	source "package/samba/Config.in"
- 	source "package/samba4/Config.in"
- 	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
-diff --git a/package/samba/0001-fix-smbd-libs-avahi.patch b/package/samba/0001-fix-smbd-libs-avahi.patch
+diff --git a/package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch b/package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch
 deleted file mode 100644
-index 6624f57..0000000
---- a/package/samba/0001-fix-smbd-libs-avahi.patch
+index 89e34be..0000000
+--- a/package/gdb/7.7.1/0001-Include-asm-ptrace.h-for-linux-aarch64-low.c.patch
 +++ /dev/null
-@@ -1,17 +0,0 @@
--Expliticly link with -lpthread if smbd is compiled with
--avahi support. Otherwise the binary will fail to run.
+@@ -1,36 +0,0 @@
+-From cbc39812c1721d7edd20285134fdf748d0f26127 Mon Sep 17 00:00:00 2001
+-From: Ramana Radhakrishnan <ramana.radhakrishnan@arm.com>
+-Date: Fri, 23 May 2014 09:01:14 +0100
+-Subject: [PATCH] Include asm/ptrace.h for linux-aarch64-low.c
 -
--Signed-off-by: Sven Neumann <s.neumann@raumfeld.com>
+-A recent change to glibc removed asm/ptrace.h from user.h for AArch64.
+-This meant that cross-native builds of gdbserver using trunk glibc broke
+-because linux-aarch64-low.c because user_hwdebug_state couldn't be found.
 -
--diff -Nura samba-3.6.16.orig/source3/Makefile.in samba-3.6.16/source3/Makefile.in
----- samba-3.6.16.orig/source3/Makefile.in	2013-06-21 08:12:39.995871935 -0300
--+++ samba-3.6.16/source3/Makefile.in	2013-06-21 08:13:17.778103805 -0300
--@@ -1783,7 +1783,7 @@
-- 		$(KRB5LIBS) $(DYNEXP) $(PRINT_LIBS) $(AUTH_LIBS) \
-- 		$(ACL_LIBS) $(PASSDB_LIBS) $(LIBS) $(DNSSD_LIBS) $(AVAHI_LIBS) \
-- 		$(POPT_LIBS) @SMBD_LIBS@ $(LIBTALLOC_LIBS) $(LIBTEVENT_LIBS) $(LIBTDB_LIBS) \
---		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS)
--+		$(LIBWBCLIENT_LIBS) $(ZLIB_LIBS) $(PTHREAD_LDFLAGS)
+-This is like commit #036cd38182bde32d8297b630cd5c861d53b8949e
 -
-- bin/nmbd at EXEEXT@: $(BINARY_PREREQS) $(NMBD_OBJ) @BUILD_POPT@ $(LIBTALLOC) $(LIBTEVENT) $(LIBTDB) $(LIBWBCLIENT)
-- 	@echo Linking $@
-diff --git a/package/samba/0002-getaddrinfo.patch b/package/samba/0002-getaddrinfo.patch
+-2014-05-23  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
+-
+-        * linux-aarch64-low.c (asm/ptrace.h): Include.
+-[Romain:
+-  - rebase on top of 7.7.1]
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- gdb/gdbserver/linux-aarch64-low.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/gdb/gdbserver/linux-aarch64-low.c b/gdb/gdbserver/linux-aarch64-low.c
+-index 1b0da6c..ba66bc8 100644
+---- a/gdb/gdbserver/linux-aarch64-low.c
+-+++ b/gdb/gdbserver/linux-aarch64-low.c
+-@@ -26,6 +26,7 @@
+- #include <signal.h>
+- #include <sys/user.h>
+- #include <sys/ptrace.h>
+-+#include <asm/ptrace.h>
+- #include <sys/uio.h>
+- 
+- #include "gdb_proc_service.h"
+--- 
+-1.9.3
+-
+diff --git a/package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch b/package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch
 deleted file mode 100644
-index df3570c..0000000
---- a/package/samba/0002-getaddrinfo.patch
+index ccca8cb..0000000
+--- a/package/gdb/7.7.1/0002-Include-asm-ptrace.h-in-aarch64-linux-nat.c.patch
 +++ /dev/null
-@@ -1,20 +0,0 @@
--Patch forward-ported from OpenWRT.
--Don't check for buggy getaddrinfo() assume it's safe if it's present.
+@@ -1,37 +0,0 @@
+-From 9c45794265a9dc9aebfbdc520d378dfc8fb7b694 Mon Sep 17 00:00:00 2001
+-From: Ramana Radhakrishnan <ramana.radhakrishnan@arm.com>
+-Date: Thu, 22 May 2014 16:07:20 +0100
+-Subject: [PATCH] Include asm/ptrace.h in aarch64-linux-nat.c
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-A recent change to glibc removed asm/ptrace.h from user.h for
+-AArch64. This meant that cross-native builds of gdb using trunk
+-glibc broke because aarch64-linux-nat.c because user_hwdebug_state
+-couldn't be found.
 -
--diff -Nura samba-3.6.8.orig/source3/configure samba-3.6.8/source3/configure
----- samba-3.6.8.orig/source3/configure	2012-09-14 05:19:52.000000000 -0300
--+++ samba-3.6.8/source3/configure	2012-09-25 20:31:57.861743235 -0300
--@@ -13269,10 +13269,7 @@
-- 	# see bug 5910, use our replacements if we detect
-- 	# a broken system.
-- 	if test "$cross_compiling" = yes; then :
---  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
---$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
---as_fn_error $? "cannot run test program while cross compiling
---See \`config.log' for more details" "$LINENO" 5; }
--+		$as_echo "assuming valid getaddrinfo without bug 5910" >&2
-- else
--   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-diff --git a/package/samba/Config.in b/package/samba/Config.in
+-Fixed by including asm/ptrace.h like other ports.
+-
+-2014-05-22  Ramana Radhakrishnan  <ramana.radhakrishnan@arm.com>
+-
+-       * aarch64-linux-nat.c (asm/ptrace.h): Include.
+-
+-[Romain: rebase on top of 7.7.1]
+-Signed-off-by: Romain Naour <romain.naour@openwide.fr>
+----
+- gdb/aarch64-linux-nat.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/gdb/aarch64-linux-nat.c b/gdb/aarch64-linux-nat.c
+-index 31c26c6..710aa9b 100644
+---- a/gdb/aarch64-linux-nat.c
+-+++ b/gdb/aarch64-linux-nat.c
+-@@ -33,6 +33,7 @@
+- 
+- #include <sys/ptrace.h>
+- #include <sys/utsname.h>
+-+#include <asm/ptrace.h>
+- 
+- #include "gregset.h"
+- 
+--- 
+-1.9.3
+-
+diff --git a/package/gdb/7.7.1/0003-Add-some-casts-for-building-on-musl.patch b/package/gdb/7.7.1/0003-Add-some-casts-for-building-on-musl.patch
 deleted file mode 100644
-index 7ff8428..0000000
---- a/package/samba/Config.in
+index 2065283..0000000
+--- a/package/gdb/7.7.1/0003-Add-some-casts-for-building-on-musl.patch
 +++ /dev/null
-@@ -1,292 +0,0 @@
--config BR2_PACKAGE_SAMBA
--	bool "samba"
--	depends on BR2_DEPRECATED_SINCE_2015_05
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU # fork()
--	depends on !BR2_nios2 # binary too large, relocations don't fit
--	select BR2_PACKAGE_POPT
--	help
--	  Provides secure, stable and fast file and print services
--	  for all clients using the SMB/CIFS protocol, such as all
--	  versions of DOS, Windows, OS/2, Linux and many others.
--
--	  http://www.samba.org/
--
--	  NOTE: A complete Samba install takes over 50MB of space,
--		so choose only the components you need.
--
--comment "samba needs a toolchain w/ threads"
--	depends on BR2_DEPRECATED_SINCE_2015_05
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
--
--if BR2_PACKAGE_SAMBA
--
--config BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL
--	int "Maximum level of compiled-in debug messages"
--	range -1 10000
--	default -1
--	help
--	  Define the level of compiled-in debug messages.
--	  This allows for big space savings, -1 being the lowest (none).
--
--config BR2_PACKAGE_SAMBA_LIBICONV
--	bool "extended encodings (libiconv)"
--	depends on !BR2_ENABLE_LOCALE
--	select BR2_PACKAGE_LIBICONV
--	help
--	  Include libiconv support for extended conversion of filename
--	  enconding. Samba has built-in support for UTF-8, ISO-8859-1
--	  and ASCII, so this is only required if you want to support
--	  other encodings.
--
--menu "Samba tools selection"
--
--config BR2_PACKAGE_SAMBA_EVENTLOGADM
--	bool "eventlogadm"
--	default y
--	help
--	  Write Eventlog records to a tdb or perform other eventlog functions
--
--config BR2_PACKAGE_SAMBA_FINDSMB
--	bool "findsmb"
--	default y
--	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
--	depends on BR2_PACKAGE_SAMBA_NMBLOOKUP
--	depends on BR2_PACKAGE_PERL
--	help
--	  Script to browse network
--
--comment "findsmb       - disabled (requires nmblookup, smbclient and perl)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT || !BR2_PACKAGE_SAMBA_NMBLOOKUP || !BR2_PACKAGE_PERL
--
--config BR2_PACKAGE_SAMBA_NET
--	bool "net"
--	default y
--	help
--	  Distributed SMB/CIFS Server Management Utility
--
--config BR2_PACKAGE_SAMBA_NMBD
--	bool "nmbd"
--	default y
--	help
--	  NetBIOS name server to provide NetBIOS over IP naming services
--	  to clients
--
--config BR2_PACKAGE_SAMBA_NMBLOOKUP
--	bool "nmblookup"
--	default y
--	help
--	  Query NetBIOS names and map them to IP addresses in a network
--	  using NetBIOS over TCP/IP queries
--
--config BR2_PACKAGE_SAMBA_NTLM_AUTH
--	bool "ntlm_auth"
--	default y
--	help
--	  Helper utility that authenticates users using NT/LM authentication
--
--config BR2_PACKAGE_SAMBA_PDBEDIT
--	bool "pdbedit"
--	default y
--	help
--	  Manage the SAM database (Database of Samba Users)
--
--config BR2_PACKAGE_SAMBA_PROFILES
--	bool "profiles"
--	default y
--	help
--	  Utility that reports and changes SIDs in Windows NT registry files
--
--config BR2_PACKAGE_SAMBA_RPCCLIENT
--	bool "rpcclient"
--	select BR2_PACKAGE_READLINE
--	default y
--	help
--	  Tool for executing client side MS-RPC functions using RPC
--	  calls from a UNIX workstation.
--
--config BR2_PACKAGE_SAMBA_SMBCACLS
--	bool "smbcacls"
--	default y
--	help
--	  Set or get ACLs on an NT file or directory names
--
--config BR2_PACKAGE_SAMBA_SMBCLIENT
--	bool "smbclient"
--	select BR2_PACKAGE_READLINE
--	default y
--	help
--	  ftp-like client to access SMB/CIFS resources on servers
--
--config BR2_PACKAGE_SAMBA_SMBCONTROL
--	bool "smbcontrol"
--	default y
--	help
--	  Send messages to smbd, nmbd or winbindd processes
--
--config BR2_PACKAGE_SAMBA_SMBCQUOTAS
--	bool "smbcquotas"
--	default y
--	help
--	  Set or get QUOTAs of NTFS 5 shares
--
--config BR2_PACKAGE_SAMBA_SMBD
--	bool "smbd"
--	default y
--	help
--	  The server daemon that provides filesharing and printing services
--
--config BR2_PACKAGE_SAMBA_SMBGET
--	bool "smbget"
--	default y
--	help
--	  wget-like utility for download files over SMB
--
--config BR2_PACKAGE_SAMBA_SMBLDBTOOLS
--	bool "smbldbtools"
--	default y
--	help
--	  ldbadd ldbdel ldbedit ldbmodify ldbrename ldbsearch tools
--
--config BR2_PACKAGE_SAMBA_SMBPASSWD
--	bool "smbpasswd"
--	default y
--	help
--	  Change a user's SMB passwd
--
--config BR2_PACKAGE_SAMBA_SMBSHARESEC
--	bool "smbsharesec"
--	default y
--	help
--	  Manipulate share permissions on SMB file shares
--
--config BR2_PACKAGE_SAMBA_SMBSPOOL
--	bool "smbspool"
--	default y
--	help
--	  Send a print file to an SMB printer
--
--config BR2_PACKAGE_SAMBA_SMBSTATUS
--	bool "smbstatus"
--	default y
--	help
--	  Report on current Samba connections
--
--config BR2_PACKAGE_SAMBA_SMBTREE
--	bool "smbtree"
--	default y
--	help
--	  A text based smb network browser
--
--config BR2_PACKAGE_SAMBA_SWAT
--	bool "swat"
--	default y
--	help
--	  Samba Web Administration Tool
--
--config BR2_PACKAGE_SAMBA_SMBTA_UTIL
--	bool "smbta-util"
--	default y
--	help
--	  Tool to ease the configuration of the vfs_smb_traffic_analyzer
--	  module regarding data encryption.
--
--config BR2_PACKAGE_SAMBA_SMBTAR
--	bool "smbtar"
--	default y
--	depends on BR2_PACKAGE_SAMBA_SMBCLIENT
--	help
--	  tar-like script that wraps smbclient
--
--comment "smbtar        - disabled (requires smbclient)"
--	depends on !BR2_PACKAGE_SAMBA_SMBCLIENT
--
--config BR2_PACKAGE_SAMBA_TDB
--	bool "tdb"
--	default y
--	help
--	  Tools to operate on the .tdb database files
--
--config BR2_PACKAGE_SAMBA_TESTPARM
--	bool "testparm"
--	default y
--	help
--	  Check an smb.conf configuration file for internal correctness
--
--config BR2_PACKAGE_SAMBA_WINBINDD
--	bool "winbindd"
--	default y
--	help
--	  Name Service Switch daemon for resolving names from NT servers
--
--config BR2_PACKAGE_SAMBA_WBINFO
--	bool "wbinfo"
--	default y
--	depends on BR2_PACKAGE_SAMBA_WINBINDD
--	help
--	  Query information from winbind daemon
--
--endmenu
--
--
--menu "Samba libraries selection"
--
--config BR2_PACKAGE_SAMBA_LIBSMBCLIENT
--	bool "libsmbclient"
--	help
--	  libsmbclient is a library toolset that permits applications
--	  to manipulate CIFS/SMB network resources using many of the
--	  standards POSIX functions available for manipulating local
--	  files.
--
--config BR2_PACKAGE_SAMBA_LIBNSS_WINS
--	bool "libnss_wins"
--	default y
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_SAMBA_WINBINDD
--	help
--	  libnss_wins is a library that permits the Name Service Switch
--	  to resolve NetBIOS names.
--
--config BR2_PACKAGE_SAMBA_LIBNSS_WINBIND
--	bool "libnss_winbind"
--	default y
--	depends on BR2_TOOLCHAIN_USES_GLIBC
--	depends on BR2_PACKAGE_SAMBA_WINBINDD
--	help
--	  libnss_winbind is a library that permits the Name Service
--	  Switch to resolve user and group information from a Windows
--	  NT server.
--
--endmenu
--
--
--menu "Samba support selection"
--
--config BR2_PACKAGE_SAMBA_AVAHI
--	bool "support avahi"
--	default y
--	depends on BR2_PACKAGE_AVAHI_DAEMON
--	depends on BR2_USE_MMU # dbus
--	select BR2_PACKAGE_DBUS
--	help
--	  Include support for avahi
--
--comment "support avahi - disabled (requires avahi-daemon)"
--	depends on BR2_USE_MMU
--	depends on !BR2_PACKAGE_AVAHI_DAEMON
--
--config BR2_PACKAGE_SAMBA_GAMIN
--	bool "support gamin"
--	default y
--	depends on BR2_PACKAGE_GAMIN
--	help
--	  Include support for gamin
--
--comment "support gamin - disabled (requires gamin)"
--	depends on !BR2_PACKAGE_GAMIN
--
--endmenu
--
--endif
-diff --git a/package/samba/S91smb b/package/samba/S91smb
-deleted file mode 100755
-index 64fa689..0000000
---- a/package/samba/S91smb
-+++ /dev/null
-@@ -1,81 +0,0 @@
--#!/bin/sh
--#
--# Stolen from RedHat FC5.
--#
--
--# Check that smb.conf exists.
--[ -f /etc/samba/smb.conf ] || exit 0
--
--# Make directories.
--mkdir -p /var/cache/samba
--mkdir -p /var/log/samba
--mkdir -p /var/lock/subsys
--mkdir -p /var/run/samba
--
--RETVAL=0
--
--start() {
--	printf "Starting SMB services: "
--	smbd -D
--	RETVAL=$?
--	echo "done"
--
--	printf "Starting NMB services: "
--	nmbd -D
--	RETVAL2=$?
--	echo "done"
--
--	[ $RETVAL -eq 0 -a $RETVAL2 -eq 0 ] && touch /var/lock/subsys/smb || \
--	   RETVAL=1
--	return $RETVAL
--}	
--
--stop() {
--	printf "Shutting down SMB services: "
--	kill -9 `pidof smbd`
--	RETVAL=$?
--	rm -f /var/run/samba/smbd.pid
--	echo "done"
--
--	printf "Shutting down NMB services: "
--	kill -9 `pidof nmbd`
--	RETVAL2=$?
--	rm -f /var/run/samba/nmbd.pid
--
--	[ $RETVAL -eq 0 -a $RETVAL2 -eq 0 ] && rm -f /var/lock/subsys/smb
--	echo "done"
--	return $RETVAL
--}	
--
--restart() {
--	stop
--	start
--}	
--
--reload() {
--        printf "Reloading smb.conf file: "
--	kill -HUP `pidof smbd`
--	RETVAL=$?
--	echo "done"
--	return $RETVAL
--}	
--
--case "$1" in
--  start)
--  	start
--	;;
--  stop)
--  	stop
--	;;
--  restart)
--  	restart
--	;;
--  reload)
--  	reload
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart|reload}"
--	exit 1
--esac
--
--exit $?
-diff --git a/package/samba/samba.hash b/package/samba/samba.hash
+@@ -1,72 +0,0 @@
+-From d41401ace01c234f42697e190a2ac95991780626 Mon Sep 17 00:00:00 2001
+-From: Doug Evans <dje@google.com>
+-Date: Mon, 26 Oct 2015 13:20:12 -0700
+-Subject: [PATCH] Add some casts for building on musl.
+-
+-gdb/ChangeLog:
+-
+-	* linux-thread-db.c (find_new_threads_callback): Cast ti.ti_tid to
+-	unsigned long for debug_printf.
+-	(thread_db_pid_to_str): Ditto.
+-
+-gdb/gdbserver/ChangeLog:
+-
+-	* thread-db.c (find_one_thread): Cast ti.ti_tid to unsigned long
+-	for debug_printf.
+-	(attach_thread, find_new_threads_callback): Ditto.
+-
+-[Arnout: removed the parts that don't apply, including ChangeLog]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- gdb/ChangeLog             | 5 +++++
+- gdb/gdbserver/ChangeLog   | 6 ++++++
+- gdb/gdbserver/thread-db.c | 9 +++++----
+- gdb/linux-thread-db.c     | 5 +++--
+- 4 files changed, 19 insertions(+), 6 deletions(-)
+-
+-diff --git a/gdb/gdbserver/thread-db.c b/gdb/gdbserver/thread-db.c
+-index ffe722d..3df10ff 100644
+---- a/gdb/gdbserver/thread-db.c
+-+++ b/gdb/gdbserver/thread-db.c
+-@@ -278,7 +278,7 @@ find_one_thread (ptid_t ptid)
+- 
+-   if (debug_threads)
+-     fprintf (stderr, "Found thread %ld (LWP %d)\n",
+--	     ti.ti_tid, ti.ti_lid);
+-+	     (unsigned long) ti.ti_tid, ti.ti_lid);
+-
+-   if (lwpid != ti.ti_lid)
+-     {
+-@@ -319,11 +319,11 @@ attach_thread (const td_thrhandle_t *th_p, td_thrinfo_t *ti_p)
+- 
+-   if (debug_threads)
+-     fprintf (stderr, "Attaching to thread %ld (LWP %d)\n",
+--	     ti_p->ti_tid, ti_p->ti_lid);
+-+	     (unsigned long) ti_p->ti_tid, ti_p->ti_lid);
+-   linux_attach_lwp (ti_p->ti_lid);
+-   lwp = find_lwp_pid (pid_to_ptid (ti_p->ti_lid));
+-   if (lwp == NULL)
+-     {
+-       warning ("Could not attach to thread %ld (LWP %d)\n",
+--	       ti_p->ti_tid, ti_p->ti_lid);
+-+	       (unsigned long) ti_p->ti_tid, ti_p->ti_lid);
+-       return 0;
+-     }
+- 
+- 
+-diff --git a/gdb/linux-thread-db.c b/gdb/linux-thread-db.c
+-index 66e9595..41db29a 100644
+---- a/gdb/linux-thread-db.c
+-+++ b/gdb/linux-thread-db.c
+-@@ -1816,7 +1817,7 @@ thread_db_pid_to_str (struct target_ops *ops, ptid_t ptid)
+- 
+-       tid = thread_info->priv->tid;
+-       snprintf (buf, sizeof (buf), "Thread 0x%lx (LWP %ld)",
+--		tid, ptid_get_lwp (ptid));
+-+		(unsigned long) tid, ptid_get_lwp (ptid));
+- 
+-       return buf;
+-     }
+--- 
+-1.9.4
+-
+diff --git a/package/gdb/7.7.1/0004-musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch b/package/gdb/7.7.1/0004-musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch
 deleted file mode 100644
-index 3a8581a..0000000
---- a/package/samba/samba.hash
+index 60c357c..0000000
+--- a/package/gdb/7.7.1/0004-musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch
 +++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated after checking pgp signature
--sha256	8f2c8a7f2bd89b0dfd228ed917815852f7c625b2bc0936304ac3ed63aaf83751	samba-3.6.25.tar.gz
-diff --git a/package/samba/samba.mk b/package/samba/samba.mk
+@@ -1,63 +0,0 @@
+-From 963843d4d07aef6caa296dacf191f8adc9518596 Mon Sep 17 00:00:00 2001
+-From: Doug Evans <dje@google.com>
+-Date: Mon, 26 Oct 2015 13:24:01 -0700
+-Subject: [PATCH] musl: Move W_STOPCODE to common/gdb_wait.h.
+-
+-gdb/ChangeLog:
+-
+-	* common/gdb_wait.h (W_STOPCODE): Define, moved here from
+-	gdbserver/linux-low.c.
+-	(WSETSTOP): Simplify.
+-
+-gdb/gdbserver/ChangeLog:
+-
+-	* linux-low.c (W_STOPCODE): Moved to common/gdb_wait.h.
+-
+-[Arnout: removed the parts that don't apply, including ChangeLog]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- gdb/ChangeLog             | 6 ++++++
+- gdb/common/gdb_wait.h     | 8 ++++----
+- gdb/gdbserver/ChangeLog   | 4 ++++
+- gdb/gdbserver/linux-low.c | 4 ----
+- 4 files changed, 14 insertions(+), 8 deletions(-)
+-
+-diff --git a/gdb/common/gdb_wait.h b/gdb/common/gdb_wait.h
+-index 9b250d2..412f813 100644
+---- a/gdb/common/gdb_wait.h
+-+++ b/gdb/common/gdb_wait.h
+-@@ -85,12 +85,12 @@
+- # endif
+- #endif
+- 
+-+#ifndef W_STOPCODE
+-+#define W_STOPCODE(sig) ((sig) << 8 | 0x7f)
+-+#endif
+-+
+- #ifndef	WSETSTOP
+--# ifdef	W_STOPCODE
+- #define	WSETSTOP(w,sig)    ((w) = W_STOPCODE(sig))
+--# else
+--#define WSETSTOP(w,sig)	   ((w) = (0177 | ((sig) << 8)))
+--# endif
+- #endif
+- 
+- /* For native GNU/Linux we may use waitpid and the __WCLONE option.
+-diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
+-index 0c552b8..7ed67c7 100644
+---- a/gdb/gdbserver/linux-low.c
+-+++ b/gdb/gdbserver/linux-low.c
+-@@ -70,10 +70,6 @@
+- #define O_LARGEFILE 0
+- #endif
+- 
+--#ifndef W_STOPCODE
+--#define W_STOPCODE(sig) ((sig) << 8 | 0x7f)
+--#endif
+--
+- /* This is the kernel's hard limit.  Not to be confused with
+-    SIGRTMIN.  */
+- #ifndef __SIGRTMIN
+--- 
+-1.9.4
+-
+diff --git a/package/gdb/7.7.1/0005-move-__SIGRTMIN.patch b/package/gdb/7.7.1/0005-move-__SIGRTMIN.patch
 deleted file mode 100644
-index 68da9d9..0000000
---- a/package/samba/samba.mk
+index 38ba1f0..0000000
+--- a/package/gdb/7.7.1/0005-move-__SIGRTMIN.patch
 +++ /dev/null
-@@ -1,189 +0,0 @@
--################################################################################
--#
--# samba
--#
--################################################################################
+@@ -1,58 +0,0 @@
+-From 682b25469e66ea45b214e95962671373983c118f Mon Sep 17 00:00:00 2001
+-From: Doug Evans <dje@google.com>
+-Date: Mon, 26 Oct 2015 13:30:57 -0700
+-Subject: [PATCH] Move __SIGRTMIN.
 -
--SAMBA_VERSION = 3.6.25
--SAMBA_SITE = http://ftp.samba.org/pub/samba/stable
--SAMBA_SUBDIR = source3
--SAMBA_INSTALL_STAGING = YES
--SAMBA_LICENSE = GPLv3+
--SAMBA_LICENSE_FILES = COPYING
+-gdb/ChangeLog:
 -
--SAMBA_DEPENDENCIES = popt \
--	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),readline) \
--	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),readline) \
--	$(if $(BR2_PACKAGE_SAMBA_AVAHI),avahi) \
--	$(if $(BR2_PACKAGE_SAMBA_GAMIN),gamin)
+-	* nat/linux-nat.h (__SIGRTMIN): Move here from gdbserver/linux-low.c.
 -
--SAMBA_CONF_ENV = \
--	ac_cv_file__proc_sys_kernel_core_pattern=yes \
--	libreplace_cv_HAVE_GETTIMEOFDAY_TZ=yes \
--	samba_cv_USE_SETREUID=yes \
--	samba_cv_HAVE_KERNEL_OPLOCKS_LINUX=yes \
--	libreplace_cv_HAVE_IFACE_GETIFADDRS=yes \
--	libreplace_cv_HAVE_IFACE_IFCONF=yes \
--	libreplace_cv_HAVE_MMAP=yes \
--	samba_cv_HAVE_FCNTL_LOCK=yes \
--	libreplace_cv_HAVE_SECURE_MKSTEMP=yes \
--	samba_cv_CC_NEGATIVE_ENUM_VALUES=yes \
--	samba_cv_fpie=no \
--	libreplace_cv_HAVE_IPV6=yes \
--	$(if $(BR2_PACKAGE_SAMBA_AVAHI),AVAHI_LIBS=-pthread)
+-gdb/gdbserver/ChangeLog:
 -
--SAMBA_CONF_OPTS = \
--	--with-fhs \
--	--with-piddir=/var/run/samba \
--	--with-lockdir=/var/cache/samba \
--	--with-ncalrpcdir=/var/run/ncalrpc \
--	--with-nmbdsocketdir=/var/run/nmbd \
--	\
--	--disable-cups \
--	--enable-shared-libs \
--	--disable-pie \
--	--disable-relro \
--	--disable-dnssd \
--	\
--	$(if $(BR2_PACKAGE_SAMBA_AVAHI),--enable-avahi,--disable-avahi) \
--	$(if $(BR2_PACKAGE_SAMBA_GAMIN),--enable-fam,--disable-fam) \
--	$(if $(BR2_PACKAGE_SAMBA_SWAT),--enable-swat,--disable-swat) \
--	\
--	--without-cluster-support \
--	--without-dnsupdate \
--	--with-sys-quotas \
--	--without-ads \
--	--without-ldap \
--	--with-included-iniparser \
--	\
--	$(if $(BR2_PACKAGE_SAMBA_RPCCLIENT),--with-readline=$(STAGING_DIR)) \
--	$(if $(BR2_PACKAGE_SAMBA_SMBCLIENT),--with-readline=$(STAGING_DIR)) \
--	$(if $(BR2_PACKAGE_SAMBA_WINBINDD),--with-winbind,--without-winbind)
+-	* linux-low.c (__SIGRTMIN): Move to nat/linux-nat.h.
 -
--SAMBA_INSTALL_TARGET_OPTS = \
--	DESTDIR=$(TARGET_DIR) -C $(SAMBA_DIR)/$(SAMBA_SUBDIR) \
--	installlibs installservers installbin installscripts \
--	$(if $(BR2_PACKAGE_SAMBA_SWAT),installswat)
+-[Arnout: removed the parts that don't apply, including ChangeLog]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- gdb/ChangeLog             | 4 ++++
+- gdb/gdbserver/ChangeLog   | 4 ++++
+- gdb/gdbserver/linux-low.c | 6 ------
+- gdb/nat/linux-nat.h       | 5 +++++
+- 4 files changed, 13 insertions(+), 6 deletions(-)
 -
--# binaries to keep
--SAMBA_BINTARGETS_y = \
--	usr/sbin/smbd \
--	usr/lib/libtalloc.so \
--	usr/lib/libtdb.so
+-diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
+-index 7ed67c7..e778c4c 100644
+---- a/gdb/gdbserver/linux-low.c
+-+++ b/gdb/gdbserver/linux-low.c
+-@@ -70,12 +70,6 @@
+- #define O_LARGEFILE 0
+- #endif
+- 
+--/* This is the kernel's hard limit.  Not to be confused with
+--   SIGRTMIN.  */
+--#ifndef __SIGRTMIN
+--#define __SIGRTMIN 32
+--#endif
+--
+- /* Some targets did not define these ptrace constants from the start,
+-    so gdbserver defines them locally here.  In the future, these may
+-    be removed after they are added to asm/ptrace.h.  */
+-diff --git a/gdb/nat/linux-nat.h b/gdb/nat/linux-nat.h
+-index 0633fa9..70e6274 100644
+---- a/gdb/nat/linux-nat.h
+-+++ b/gdb/nat/linux-nat.h
+-@@ -25,6 +25,11 @@
+- struct lwp_info;
+- struct arch_lwp_info;
+- 
+-+/* This is the kernel's hard limit.  Not to be confused with SIGRTMIN.  */
+-+#ifndef __SIGRTMIN
+-+#define __SIGRTMIN 32
+-+#endif
+-+
+- /* Unlike other extended result codes, WSTOPSIG (status) on
+-    PTRACE_O_TRACESYSGOOD syscall events doesn't return SIGTRAP, but
+-    instead SIGTRAP with bit 7 set.  */
+--- 
+-1.9.4
 -
--# binaries to remove
--SAMBA_BINTARGETS_ = \
--	usr/lib/libnetapi.so* \
--	usr/lib/libsmbsharemodes.so*
--
--# binaries to keep or remove
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_EVENTLOGADM) += usr/bin/eventlogadm
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NET) += usr/bin/net
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NMBD) += usr/sbin/nmbd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NMBLOOKUP) += usr/bin/nmblookup
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_NTLM_AUTH) += usr/bin/ntlm_auth
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_PDBEDIT) += usr/bin/pdbedit
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_PROFILES) += usr/bin/profiles
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_RPCCLIENT) += usr/bin/rpcclient
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCACLS) += usr/bin/smbcacls
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCLIENT) += usr/bin/smbclient
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCONTROL) += usr/bin/smbcontrol
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBCQUOTAS) += usr/bin/smbcquotas
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBD) += usr/sbin/smbd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBGET) += usr/bin/smbget
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbadd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbdel
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbedit
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbmodify
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbrename
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBLDBTOOLS) += usr/bin/ldbsearch
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBPASSWD) += usr/bin/smbpasswd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSHARESEC) += usr/bin/sharesec
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSPOOL) += usr/bin/smbspool
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBSTATUS) += usr/bin/smbstatus
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTA_UTIL) += usr/bin/smbta-util
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SMBTREE) += usr/bin/smbtree
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_SWAT) += usr/sbin/swat
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbbackup
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbdump
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TDB) += usr/bin/tdbtool
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_TESTPARM) += usr/bin/testparm
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_WINBINDD) += usr/sbin/winbindd
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_WBINFO) += usr/bin/wbinfo
--
--# libraries to keep or remove
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_WINBINDD) += usr/lib/libwbclient.so*
--SAMBA_BINTARGETS_$(BR2_PACKAGE_SAMBA_LIBSMBCLIENT) += usr/lib/libsmbclient.so*
--
--# non-binaries to remove
--SAMBA_TXTTARGETS_ = \
--	usr/include/libsmbclient.h \
--	usr/include/netapi.h \
--	usr/include/smb_share_modes.h \
--	usr/include/talloc.h \
--	usr/include/tdb.h \
--	usr/include/wbclient.h
--
--# non-binaries to keep or remove
--SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_FINDSMB) += usr/bin/findsmb
--SAMBA_TXTTARGETS_$(BR2_PACKAGE_SAMBA_SMBTAR) += usr/bin/smbtar
--
--define SAMBA_REMOVE_UNNEEDED_BINARIES
--	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_BINTARGETS_))
--	rm -f $(addprefix $(TARGET_DIR)/, $(SAMBA_TXTTARGETS_))
--endef
--
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_UNNEEDED_BINARIES
--
--ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINS),y)
--define SAMBA_INSTALL_LIBNSS_WINS
--	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_wins.so $(TARGET_DIR)/lib/libnss_wins.so.2
--	ln -snf libnss_wins.so.2 $(TARGET_DIR)/lib/libnss_wins.so
--endef
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINS
--endif
--
--ifeq ($(BR2_PACKAGE_SAMBA_LIBNSS_WINBIND),y)
--define SAMBA_INSTALL_LIBNSS_WINBIND
--	$(INSTALL) -m 0755 -D $(@D)/nsswitch/libnss_winbind.so $(TARGET_DIR)/lib/libnss_winbind.so.2
--	ln -snf libnss_winbind.so.2 $(TARGET_DIR)/lib/libnss_winbind.so
--endef
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_LIBNSS_WINBIND
--endif
--
--define SAMBA_REMOVE_SWAT_DOCUMENTATION
--	# Remove the documentation
--	rm -rf $(TARGET_DIR)/usr/swat/help/manpages
--	rm -rf $(TARGET_DIR)/usr/swat/help/Samba3*
--	rm -rf $(TARGET_DIR)/usr/swat/using_samba/
--	# Removing the welcome.html file will make swat default to
--	# welcome-no-samba-doc.html
--	rm -rf $(TARGET_DIR)/usr/swat/help/welcome.html
--endef
--
--# --with-libiconv="" is to avoid detecting host libiconv and build failure
--ifeq ($(BR2_PACKAGE_SAMBA_LIBICONV),y)
--SAMBA_DEPENDENCIES += libiconv
--SAMBA_CONF_OPTS += --with-libiconv=$(STAGING_DIR)
--else
--SAMBA_CONF_OPTS += --with-libiconv=""
--endif
--
--# Compiled debug messages by level
--SAMBA_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DMAX_DEBUG_LEVEL=$(BR2_PACKAGE_SAMBA_MAX_DEBUGLEVEL)"
--
--ifeq ($(BR2_PACKAGE_SAMBA_SWAT),y)
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_REMOVE_SWAT_DOCUMENTATION
--endif
--
--define SAMBA_INSTALL_CONFIG
--	$(INSTALL) -m 0644 -D package/samba/simple.conf $(TARGET_DIR)/etc/samba/smb.conf
--endef
--
--SAMBA_POST_INSTALL_TARGET_HOOKS += SAMBA_INSTALL_CONFIG
--
--define SAMBA_INSTALL_INIT_SYSV
--	$(INSTALL) -m 0755 -D package/samba/S91smb $(TARGET_DIR)/etc/init.d/S91smb
--endef
--
--$(eval $(autotools-package))
-diff --git a/package/samba/simple.conf b/package/samba/simple.conf
-deleted file mode 100644
-index c2c0c8c..0000000
---- a/package/samba/simple.conf
-+++ /dev/null
-@@ -1,25 +0,0 @@
--#======================= Global Settings =====================================
--[global]
--workgroup = MYGROUP
--server string = MYDATA
--max log size = 50
--security = share
--encrypt passwords = yes
--smb passwd file = /etc/samba/smbpasswd
--log file = /var/log/samba/log.smbd
--hosts allow = 127.
--interfaces = eth0 192.168.0.1/255.255.255.0
--socket options = TCP_NODELAY SO_RCVBUF=8192 SO_SNDBUF=8192
--
--#============================ Share Definitions ==============================
--idmap uid = 16777216-33554431
--idmap gid = 16777216-33554431
--template shell = /bin/false
--winbind use default domain = no
--
--[data]
--path = /data
--public = yes
--only guest = yes
--writable = yes
--printable = no
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index 2503785..5ae2c36 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -6,7 +6,6 @@ comment "samba4 needs a toolchain w/ RPC, wchar, dynamic library, threads"
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 6807694..b213901 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -31,10 +31,6 @@ choice
+ 	help
+ 	  Select the version of gdb you wish to use.
  
- config BR2_PACKAGE_SAMBA4
- 	bool "samba4"
--	depends on !BR2_PACKAGE_SAMBA
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR # e2fsprogs
- 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+-	config BR2_GDB_VERSION_7_7
+-		bool "gdb 7.7.x"
+-		depends on BR2_DEPRECATED_SINCE_2015_05
+-
+ 	config BR2_GDB_VERSION_7_8
+ 		bool "gdb 7.8.x"
+ 
+@@ -54,7 +50,6 @@ config BR2_GDB_VERSION
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+ 	default "arc-2015.12-gdb" if BR2_arc
+ 	default "6be65fb56ea6694a9260733a536a023a1e2d4d57" if BR2_microblaze
+-	default "7.7.1"    if BR2_GDB_VERSION_7_7
+ 	default "7.8.2"	   if BR2_GDB_VERSION_7_8
+ 	default "7.9.1"    if BR2_GDB_VERSION_7_9 || !BR2_PACKAGE_HOST_GDB
+ 	default "7.10.1"   if BR2_GDB_VERSION_7_10
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 3abdcd0..caf1ef1 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,5 +1,4 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+-sha512	887b9b726dae8f6e3e5e41574460a67e4f9002b0d47bc985dcf63bdf3518397a90b6a208cb5b19e5ed2341715ad75cfeed4df4fb423f39f74218e36bc87f1cab	gdb-7.7.1.tar.bz2
+ sha512	face5bf1b4ce144fc8604fc84620beed956177a11fd632b4e41906fc7f632910b2b43a50e6cfdfd6cbd876ee527c813bddab8df29dc560a6c36694cdb8edc4e4	gdb-7.8.2.tar.xz
+ sha512	eebdf88b24e52e792b8a4b89ea85790de72b462a7810b44975fdf4232c068f353b15506071f450102a9d4bcecdde8e93dc3748a10699b7f73f3e04fb2d9d8414	gdb-7.9.1.tar.xz
+ sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index f7d6339..0a7af1e 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -18,11 +18,6 @@ GDB_SITE = $(call github,Xilinx,gdb,$(GDB_VERSION))
+ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ endif
+ 
+-# Use .tar.bz2 for 7.7.x since there was no .tar.xz release back then
+-ifneq ($(filter 7.7.%,$(GDB_VERSION)),)
+-GDB_SOURCE = gdb-$(GDB_VERSION).tar.bz2
+-endif
+-
+ GDB_LICENSE = GPLv2+, LGPLv2+, GPLv3+, LGPLv3+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ 
