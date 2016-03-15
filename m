@@ -1,22 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 21:00:16 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2016b
-In-Reply-To: <1458036294-21996-2-git-send-email-martin@barkynet.com> (Martin
- Bark's message of "Tue, 15 Mar 2016 10:04:54 +0000")
-References: <1458036294-21996-1-git-send-email-martin@barkynet.com>
- <1458036294-21996-2-git-send-email-martin@barkynet.com>
-Message-ID: <87egbba4vj.fsf@dell.be.48ers.dk>
+Date: Tue, 15 Mar 2016 20:54:14 +0100
+Subject: [Buildroot] [git commit] quagga: security bump to version
+	1.0.20160309
+Message-ID: <20160315200033.BCD8D800C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=64f68d4f607822a69360729bfc82e8db5869f384
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
+Fixes CVE-2016-2342 (AKA VU#270232): Quagga bgpd with BGP peers enabled for
+VPNv4 contains a buffer overflow vulnerability.
 
-Committed, thanks.
+Remove the --enable-babeld and --enable-opaque-lsa configure options that were
+removed in this release.
 
--- 
-Bye, Peter Korsgaard
+See the release announcement at
+https://lists.quagga.net/pipermail/quagga-dev/2016-March/014938.html.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/quagga/Config.in   | 9 ---------
+ package/quagga/quagga.hash | 2 +-
+ package/quagga/quagga.mk   | 4 +---
+ 3 files changed, 2 insertions(+), 13 deletions(-)
+
+diff --git a/package/quagga/Config.in b/package/quagga/Config.in
+index 89ff6f2..56b8cad 100644
+--- a/package/quagga/Config.in
++++ b/package/quagga/Config.in
+@@ -24,11 +24,6 @@ config BR2_PACKAGE_QUAGGA_TCP_ZEBRA
+ 	  You'll want this enabled if zebra and the protocol daemon(s) run
+ 	  on different hosts.
+ 
+-config BR2_PACKAGE_QUAGGA_BABELD
+-	bool "BABEL protocol"
+-	help
+-	  Build babeld daemon.
+-
+ config BR2_PACKAGE_QUAGGA_BGPD
+ 	bool "BPGv4+ protocol"
+ 	help
+@@ -48,10 +43,6 @@ config BR2_PACKAGE_QUAGGA_OSPFD
+ 	help
+ 	  Build ospfd daemon.
+ 
+-config BR2_PACKAGE_QUAGGA_OPAQUE_LSA
+-	bool "OSPF Opaque-LSA with OSPFAPI support (RFC2370)"
+-	depends on BR2_PACKAGE_QUAGGA_OSPFD
+-
+ config BR2_PACKAGE_QUAGGA_OSPF6D
+ 	bool "OSPFv3 (IPv6) protocol"
+ 	help
+diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
+index ba293c4..fdc7472 100644
+--- a/package/quagga/quagga.hash
++++ b/package/quagga/quagga.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	6fd6baadb136a801c29c1dd72d0fe69da9f19ae498e87bff7057778361e43b14	quagga-0.99.24.1.tar.xz
++sha256	034e21f87164f44f1c4c89d8fafed4acede298fe3fafbf9277f079544178c66b	quagga-1.0.20160309.tar.xz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 4a55594..93c01f9 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QUAGGA_VERSION = 0.99.24.1
++QUAGGA_VERSION = 1.0.20160309
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
+@@ -22,7 +22,6 @@ QUAGGA_CONF_OPTS += --disable-capabilities
+ endif
+ 
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ZEBRA),--enable-zebra,--disable-zebra)
+-QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BABELD),--enable-babeld,--disable-babeld)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGPD),--enable-bgpd,--disable-bgpd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_RIPD),--enable-ripd,--disable-ripd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_RIPNGD),--enable-ripngd,--disable-ripngd)
+@@ -33,7 +32,6 @@ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_WATCHQUAGGA),--enable-watchquagga,
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_ISISD),--enable-isisd,--disable-isisd)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_BGP_ANNOUNCE),--enable-bgp-announce,--disable-bgp-announce)
+ QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_TCP_ZERBRA),--enable-tcp-zebra,--disable-tcp-zebra)
+-QUAGGA_CONF_OPTS += $(if $(BR2_PACKAGE_QUAGGA_OPAQUE_LSA),--enable-opaque-lsa,--disable-opaque-lsa)
+ 
+ ifeq ($(BR2_PACKAGE_QUAGGA_SNMP),y)
+ QUAGGA_CONF_ENV += ac_cv_path_NETSNMP_CONFIG=$(STAGING_DIR)/usr/bin/net-snmp-config
