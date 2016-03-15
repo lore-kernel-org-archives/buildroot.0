@@ -1,28 +1,37 @@
-From: Ricardo Crudo <ricardo.crudo@gmail.com>
-Date: Tue, 15 Mar 2016 12:31:50 +0100
-Subject: [Buildroot] [PATCH 1/1] mxml: add host-autotools-package macro
-Message-ID: <1458041510-19966-1-git-send-email-ricardo.crudo@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Mar 2016 13:15:01 +0100
+Subject: [Buildroot] [PATCH] linux-firmware: ath9k_htc - use newer
+	firmware
+In-Reply-To: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com> (Alexey
+ Brodkin's message of "Tue, 15 Mar 2016 13:47:44 +0300")
+References: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com>
+Message-ID: <87shzsaqey.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages need to process xml at host side
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-Signed-off-by: Ricardo Crudo <ricardo.crudo@gmail.com>
----
- package/mxml/mxml.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Existing blobs are of version ath9k-htc 1.3.1, see
+ > http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=21a6c3e55df956dd223279627685778268ede70f
 
-diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
-index 7e9b4d6..ba70603 100644
---- a/package/mxml/mxml.mk
-+++ b/package/mxml/mxml.mk
-@@ -14,3 +14,4 @@ MXML_INSTALL_STAGING_OPTS = DSTROOT=$(STAGING_DIR) install
- MXML_INSTALL_TARGET_OPTS = DSTROOT=$(TARGET_DIR) install
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+ > These are as said in the commit are left for compatibility with older
+ > kernels which [older kernels] will look for blobs in the
+ > root of "/lib/firmware".
+
+ > But there're newer v1.4 blobs in ath9k_htc folder.
+ > And newer kernels (>=4.4) look first in that new location
+ > "/lib/firmware/ath9k_htc".
+
+ > Note that even new kernels will fall back to previous location
+ > if new one doesn't exist.
+
+ > Tested with TP-LINK TL-WN722N (has Atheros AR9271 inside).
+
+Committed, thanks.
+
 -- 
-2.7.3
+Venlig hilsen,
+Peter Korsgaard 
