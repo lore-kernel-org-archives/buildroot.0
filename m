@@ -1,41 +1,28 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 15 Mar 2016 08:30:37 -0300
-Subject: [Buildroot] [PATCH] linux-firmware: ath9k_htc - use newer
- firmware
-In-Reply-To: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com>
-References: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com>
-Message-ID: <56E7F25D.503@zacarias.com.ar>
+From: Ricardo Crudo <ricardo.crudo@gmail.com>
+Date: Tue, 15 Mar 2016 12:31:50 +0100
+Subject: [Buildroot] [PATCH 1/1] mxml: add host-autotools-package macro
+Message-ID: <1458041510-19966-1-git-send-email-ricardo.crudo@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15/03/16 07:47, Alexey Brodkin wrote:
+Some packages need to process xml at host side
 
-> Existing blobs are of version ath9k-htc 1.3.1, see
-> http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=21a6c3e55df956dd223279627685778268ede70f
->
-> These are as said in the commit are left for compatibility with older
-> kernels which [older kernels] will look for blobs in the
-> root of "/lib/firmware".
->
-> But there're newer v1.4 blobs in ath9k_htc folder.
-> And newer kernels (>=4.4) look first in that new location
-> "/lib/firmware/ath9k_htc".
->
-> Note that even new kernels will fall back to previous location
-> if new one doesn't exist.
->
-> Tested with TP-LINK TL-WN722N (has Atheros AR9271 inside).
->
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: John Keeping <john@metanate.com>
-> Cc: Matt Weber <matt@thewebers.ws>
-> Cc: Alex Suykov <alex.suykov@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Ricardo Crudo <ricardo.crudo@gmail.com>
+---
+ package/mxml/mxml.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Acked-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index 7e9b4d6..ba70603 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -14,3 +14,4 @@ MXML_INSTALL_STAGING_OPTS = DSTROOT=$(STAGING_DIR) install
+ MXML_INSTALL_TARGET_OPTS = DSTROOT=$(TARGET_DIR) install
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.7.3
