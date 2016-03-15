@@ -1,62 +1,38 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 15 Mar 2016 13:47:44 +0300
-Subject: [Buildroot] [PATCH] linux-firmware: ath9k_htc - use newer firmware
-Message-ID: <1458038864-1872-1-git-send-email-abrodkin@synopsys.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 15 Mar 2016 11:28:29 +0000
+Subject: [Buildroot] [PATCH 1/2] Disable gcc-4.8.x + binutils-2.26 + MIPS
+	combination
+Message-ID: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Existing blobs are of version ath9k-htc 1.3.1, see
-http://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/commit/?id=21a6c3e55df956dd223279627685778268ede70f
+For the same reason as we disabled it for binutils-2.25 before.
 
-These are as said in the commit are left for compatibility with older
-kernels which [older kernels] will look for blobs in the
-root of "/lib/firmware".
+See 2fda0dd7d491e6e926ace1cd09ad2fb241356232 for details.
 
-But there're newer v1.4 blobs in ath9k_htc folder.
-And newer kernels (>=4.4) look first in that new location
-"/lib/firmware/ath9k_htc".
-
-Note that even new kernels will fall back to previous location
-if new one doesn't exist.
-
-Tested with TP-LINK TL-WN722N (has Atheros AR9271 inside).
-
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: John Keeping <john@metanate.com>
-Cc: Matt Weber <matt@thewebers.ws>
-Cc: Alex Suykov <alex.suykov@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/linux-firmware/linux-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 4667c4c..28fe66c 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -87,7 +87,7 @@ endif
- 
- # ar7010
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_7010),y)
--LINUX_FIRMWARE_FILES += ar7010.fw ar7010_1_1.fw htc_7010.fw
-+LINUX_FIRMWARE_FILES += ar7010.fw ar7010_1_1.fw htc_7010.fw ath9k_htc/htc_7010-1.4.0.fw
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
- 
-@@ -99,7 +99,7 @@ endif
- 
- # ar9271
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ATHEROS_9271),y)
--LINUX_FIRMWARE_FILES += ar9271.fw htc_9271.fw
-+LINUX_FIRMWARE_FILES += ar9271.fw htc_9271.fw ath9k_htc/htc_9271-1.4.0.fw
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.atheros_firmware
- endif
- 
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 4845708..513899e 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -42,8 +42,9 @@ choice
+ 		depends on !BR2_cortex_a12 && !BR2_cortex_a17
+ 		# Broken or unsupported PPC cores
+ 		depends on !BR2_powerpc_power8
+-		# gcc-4.8.x + binutils-2.25 is broken for MIPS
+-		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && BR2_BINUTILS_VERSION_2_25_X)
++		# gcc-4.8.x + binutils >= 2.25 is broken for MIPS
++		depends on !((BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) && \
++			   (BR2_BINUTILS_VERSION_2_25_X || BR2_BINUTILS_VERSION_2_26_X))
+ 		# Unsupported for MIPS R6
+ 		depends on !BR2_mips_32r6 && !BR2_mips_64r6
+ 		select BR2_GCC_NEEDS_MPC
 -- 
-2.5.0
+2.4.10
