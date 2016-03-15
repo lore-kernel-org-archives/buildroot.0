@@ -1,36 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 23:17:18 +0100
-Subject: [Buildroot] [git commit] midori: enable optional gcr support
-Message-ID: <20160315221837.F2B437FE43@busybox.osuosl.org>
+Date: Tue, 15 Mar 2016 23:19:28 +0100
+Subject: [Buildroot] [PATCH 1/2] norm: new package
+In-Reply-To: <56E8893D.8000505@zacarias.com.ar> (Gustavo Zacarias's message of
+ "Tue, 15 Mar 2016 19:14:21 -0300")
+References: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
+ <8737rr8km2.fsf@dell.be.48ers.dk> <56E8893D.8000505@zacarias.com.ar>
+Message-ID: <87zitz5qq7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dcd577c662214a8eb6c59fef3709c73aa5c4c4e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Only used/useful with the gtk3 backend though.
+Hi,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/midori/midori.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ >> E.G. everything else than samba4 uses host-python2.
 
-diff --git a/package/midori/midori.mk b/package/midori/midori.mk
-index 197f51a..7927400 100644
---- a/package/midori/midori.mk
-+++ b/package/midori/midori.mk
-@@ -40,6 +40,10 @@ endif
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- MIDORI_CONF_OPTS += -DUSE_GTK3=ON -DHALF_BRO_INCOM_WEBKIT2=ON
- MIDORI_DEPENDENCIES += libgtk3
-+# Only useful with gtk3
-+ifeq ($(BR2_PACKAGE_GCR),y)
-+MIDORI_DEPENDENCIES += gcr
-+endif
- else
- MIDORI_CONF_OPTS += -DUSE_GTK3=OFF
- MIDORI_DEPENDENCIES += libgtk2
+ > Hi Peter.
+ > I can't speak for all the rest, but norm uses waf 1.8.11 (I.E. 1.8.x
+ > series) which works fine with python2 or python3, so as long as
+ > there's one host python (at least 2.5) everything should be fine
+ > (covered by the prereqs, and waf is pretty much self-contained).
+
+Ok, and that is the case for samba4 as well?
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
