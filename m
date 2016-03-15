@@ -1,70 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 15 Mar 2016 22:46:20 +0100
-Subject: [Buildroot] [git commit] linux-headers: remove deprecated version
-	3.17.x
-Message-ID: <20160315214849.2D8BF7FCCE@busybox.osuosl.org>
+Date: Tue, 15 Mar 2016 22:45:31 +0100
+Subject: [Buildroot] [git commit] foomatic-filters: remove deprecated
+Message-ID: <20160315214849.12276817C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8de1788c10b61573834f2516e1441eb850a9501
+commit: https://git.buildroot.net/buildroot/commit/?id=75945ddc54b425953b1322bd5fce1762f14f2ea3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove for the upcoming 2016.05 release, it's been deprecated for a year
-now.
+It's been deprecated for a year now so remove it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                     | 10 ++++++++++
- package/linux-headers/Config.in.host |  7 -------
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ Config.in.legacy                             |  6 ++++++
+ package/Config.in                            |  1 -
+ package/foomatic-filters/Config.in           | 23 -----------------------
+ package/foomatic-filters/foomatic-filters.mk | 22 ----------------------
+ 4 files changed, 6 insertions(+), 46 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index bb7c333..807d701 100644
+index 828d0ac..e03e30f 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -145,6 +145,16 @@ endif
+@@ -145,6 +145,12 @@ endif
  ###############################################################################
  comment "Legacy options removed in 2016.05"
  
-+config BR2_KERNEL_HEADERS_3_17
-+	bool "kernel headers version 3.17.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_3_18
++config BR2_PACKAGE_FOOMATIC_FILTERS
++	bool "foomatic-filters"
 +	select BR2_LEGACY
 +	help
-+	  Version 3.17.x of the Linux kernel headers have been deprecated
-+	  for more than four buildroot releases and are now removed.
-+	  As an alternative, version 3.18.x of the headers have been
-+	  automatically selected in your configuration.
++	  The foomatic-filters package was removed.
 +
- config BR2_GDB_VERSION_7_7
- 	bool "gdb 7.7 has been removed"
+ config BR2_PACKAGE_SAMBA
+ 	bool "samba"
  	select BR2_LEGACY
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c5be9f5..0d1a1a9 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -41,12 +41,6 @@ choice
- 		depends on !BR2_nios2
- 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 
--	config BR2_KERNEL_HEADERS_3_17
--		bool "Linux 3.17.x kernel headers"
--		depends on BR2_DEPRECATED_SINCE_2015_05
--		depends on !BR2_nios2
--		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/package/Config.in b/package/Config.in
+index 16e4957..2401867 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1365,7 +1365,6 @@ endif
+ 	source "package/fastd/Config.in"
+ 	source "package/fcgiwrap/Config.in"
+ 	source "package/fmc/Config.in"
+-	source "package/foomatic-filters/Config.in"
+ 	source "package/fping/Config.in"
+ 	source "package/gesftpserver/Config.in"
+ 	source "package/gutenprint/Config.in"
+diff --git a/package/foomatic-filters/Config.in b/package/foomatic-filters/Config.in
+deleted file mode 100644
+index 0571eb9..0000000
+--- a/package/foomatic-filters/Config.in
++++ /dev/null
+@@ -1,23 +0,0 @@
+-comment "foomatic-filters needs a toolchain w/ threads"
+-	# because of cups security issues
+-	depends on BR2_DEPRECATED_SINCE_2015_05
+-	depends on BR2_PACKAGE_CUPS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -
- 	config BR2_KERNEL_HEADERS_3_18
- 		bool "Linux 3.18.x kernel headers"
- 		depends on !BR2_nios2
-@@ -221,7 +215,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.100"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.64"	if BR2_KERNEL_HEADERS_3_14
--	default "3.17.8"	if BR2_KERNEL_HEADERS_3_17
- 	default "3.18.28"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-config BR2_PACKAGE_FOOMATIC_FILTERS
+-	bool "foomatic_filters"
+-	depends on BR2_PACKAGE_CUPS
+-	# because of cups security issues
+-	depends on BR2_DEPRECATED_SINCE_2015_05
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+-	select BR2_PACKAGE_LIBUSB
+-	select BR2_PACKAGE_ENSCRIPT
+-	help
+-	  Foomatic Filters
+-	  Foomatic is a database-driven system for integrating free software
+-	  printer drivers with common spoolers under Unix. It supports CUPS,
+-	  LPRng, LPD, GNUlpr, Solaris LP, PPR, PDQ, CPS, and direct printing
+-	  with every free software printer driver known to us and every
+-	  printer known to work with these drivers.
+-
+-	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/database/foomatic
+diff --git a/package/foomatic-filters/foomatic-filters.mk b/package/foomatic-filters/foomatic-filters.mk
+deleted file mode 100644
+index c7d6298..0000000
+--- a/package/foomatic-filters/foomatic-filters.mk
++++ /dev/null
+@@ -1,22 +0,0 @@
+-################################################################################
+-#
+-# foomatic-filters
+-#
+-################################################################################
+-
+-FOOMATIC_FILTERS_VERSION = 4.0.17
+-FOOMATIC_FILTERS_SITE = http://www.openprinting.org/download/foomatic
+-FOOMATIC_FILTERS_LICENSE = GPLv2+
+-FOOMATIC_FILTERS_LICENSE_FILES = COPYING
+-FOOMATIC_FILTERS_DEPENDENCIES = cups libusb enscript
+-FOOMATIC_FILTERS_CONF_OPTS = --with-file-converter=enscript
+-FOOMATIC_FILTERS_CONF_ENV = ac_cv_path_ENSCRIPT="/usr/bin/enscript"
+-
+-ifeq ($(BR2_PACKAGE_DBUS),y)
+-FOOMATIC_FILTERS_CONF_OPTS += --enable-dbus
+-FOOMATIC_FILTERS_DEPENDENCIES += dbus
+-else
+-FOOMATIC_FILTERS_CONF_OPTS += --disable-dbus
+-endif
+-
+-$(eval $(autotools-package))
