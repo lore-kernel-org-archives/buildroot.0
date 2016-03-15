@@ -1,76 +1,89 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 15 Mar 2016 22:59:14 +0100
-Subject: [Buildroot] [PATCH] configs: orangepipc: bump u-boot to 2016.03,
- kernel to 4.5
-In-Reply-To: <1458070568-27793-1-git-send-email-peter@korsgaard.com>
-References: <1458070568-27793-1-git-send-email-peter@korsgaard.com>
-Message-ID: <20160315215914.GJ5053@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 15 Mar 2016 23:03:17 +0100
+Subject: [Buildroot] [PATCH 1/2] norm: new package
+In-Reply-To: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 9 Mar 2016 06:35:41 -0300")
+References: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <8737rr8km2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-On 2016-03-15 20:36 +0100, Peter Korsgaard spake thusly:
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > ---
+ >  package/Config.in                           |  1 +
+ >  package/norm/0001-fix-bigendian-build.patch | 17 ++++++++++
+ >  package/norm/Config.in                      | 15 +++++++++
+ >  package/norm/norm.hash                      |  2 ++
+ >  package/norm/norm.mk                        | 50 +++++++++++++++++++++++++++++
+ >  5 files changed, 85 insertions(+)
+ >  create mode 100644 package/norm/0001-fix-bigendian-build.patch
+ >  create mode 100644 package/norm/Config.in
+ >  create mode 100644 package/norm/norm.hash
+ >  create mode 100644 package/norm/norm.mk
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 433e9a3..24be023 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1153,6 +1153,7 @@ menu "Networking"
+ >  	source "package/lksctp-tools/Config.in"
+ >  	source "package/mongoose/Config.in"
+ >  	source "package/neon/Config.in"
+ > +	source "package/norm/Config.in"
+ >  	source "package/nss-mdns/Config.in"
+ >  	source "package/nss-pam-ldapd/Config.in"
+ >  	source "package/omniorb/Config.in"
 
-Regards,
-Yann E. MORIN.
+> +################################################################################
+ > +#
+ > +# norm
+ > +#
+ > +################################################################################
+ > +
+ > +NORM_VERSION = 1.5r6
+ > +NORM_SITE = http://downloads.pf.itd.nrl.navy.mil/norm/archive
+ > +NORM_SOURCE = src-norm-$(NORM_VERSION).tgz
+ > +NORM_INSTALL_STAGING = YES
+ > +NORM_LICENSE = NRL License
+ > +NORM_LICENSE_FILES = LICENSE.TXT
+ > +
+ > +ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
+ > +NORM_DEPENDENCIES += libnetfilter_queue
+ > +endif
+ > +
+ > +define NORM_CONFIGURE_CMDS
+ > +	(cd $(@D); \
+ > +		$(TARGET_CONFIGURE_OPTS) \
+ > +		./waf configure --prefix=/usr \
 
-> ---
->  configs/orangepipc_defconfig | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
-> 
-> diff --git a/configs/orangepipc_defconfig b/configs/orangepipc_defconfig
-> index eb149d9..69db410 100644
-> --- a/configs/orangepipc_defconfig
-> +++ b/configs/orangepipc_defconfig
-> @@ -1,18 +1,14 @@
->  BR2_arm=y
->  BR2_cortex_a7=y
->  BR2_ARM_FPU_VFPV4=y
-> -# Kernel is a pre-release of 4.5, so we do not yet have a _CUSTOM_4_5
-> -# option for the headers. Thus, we stick with the 4.4 headers for now.
-> -BR2_KERNEL_HEADERS_VERSION=y
-> -BR2_DEFAULT_KERNEL_VERSION="4.4"
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
->  BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
->  BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/orangepi/orangepipc/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/orangepi/orangepipc/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5-rc1"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
->  BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
->  BR2_LINUX_KERNEL_ZIMAGE=y
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> @@ -23,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
->  BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
->  BR2_TARGET_UBOOT_NEEDS_DTC=y
->  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> -- 
-> 2.7.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+The package looks good - But waf is a python script, right? It got me
+wondering if we should use our host-python or if we can rely on the
+build host having all dependencies?
+
+It seems like we have a mix:
+
+package/glmark2/glmark2.mk:             $(HOST_DIR)/usr/bin/python2 ./waf configure $(GLMARK2_CONF_OPTS) \
+package/glmark2/glmark2.mk:     cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf
+package/glmark2/glmark2.mk:     cd $(@D) && $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/python2 ./waf install --destdir=$(TARGET_DIR)
+package/gstreamer1/gst1-imx/gst1-imx.mk:                $(HOST_DIR)/usr/bin/python2 ./waf configure $(GST1_IMX_CONF_OPTS)
+package/gstreamer1/gst1-imx/gst1-imx.mk:                $(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS)
+package/gstreamer1/gst1-imx/gst1-imx.mk:                $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) \
+package/jack2/jack2.mk:         $(HOST_DIR)/usr/bin/python2 ./waf configure \
+package/jack2/jack2.mk: (cd $(@D); $(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS))
+package/jack2/jack2.mk: (cd $(@D); $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) \
+package/jack2/jack2.mk: (cd $(@D); $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) \
+package/libimxvpuapi/libimxvpuapi.mk:   $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf configure \
+package/libimxvpuapi/libimxvpuapi.mk:   $(HOST_DIR)/usr/bin/python2 ./waf build -j $(PARALLEL_JOBS)
+package/libimxvpuapi/libimxvpuapi.mk:   $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(STAGING_DIR) install
+package/libimxvpuapi/libimxvpuapi.mk:   $(HOST_DIR)/usr/bin/python2 ./waf --destdir=$(TARGET_DIR) install
+package/samba4/samba4.mk:               ./buildtools/bin/waf configure \
+
+E.G. everything else than samba4 uses host-python2.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
