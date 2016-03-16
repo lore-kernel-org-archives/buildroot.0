@@ -1,55 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Mar 2016 16:53:10 +0100
-Subject: [Buildroot] [PATCH] openpgm: depends on sync2/sync4
-In-Reply-To: <1458138013-18031-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1458138013-18031-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160316165310.1b536bc3@free-electrons.com>
+From: David Picard <davepiq@yahoo.fr>
+Date: Wed, 16 Mar 2016 18:37:04 +0100
+Subject: [Buildroot] [PATCH 1/2] package/qwt : prepared package for other
+	versions of Qt.
+Message-ID: <1458149825-23401-1-git-send-email-davepiq@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gustavo,
+Reformatted the package configuration to make it more generic. It will thus be
+easier to handle more than one version of Qt. Indeed, multiple versions of Qt
+are compatible with the current Qwt.
 
-On Wed, 16 Mar 2016 11:20:13 -0300, Gustavo Zacarias wrote:
-> Add dependency on BR2_TOOLCHAIN_HAS_SYNC_2/4 since it uses both
-> __sync_fetch_and_add_2() and __sync_fetch_and_add_4() atomic builtins.
-> Fixes:
-> http://autobuild.buildroot.net/results/8f2/8f2a3571611dc9414c23808e7615f87b677557dd/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/openpgm/Config.in | 4 ++++
->  package/zeromq/Config.in  | 2 ++
->  2 files changed, 6 insertions(+)
-> 
-> diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
-> index 94816d8..632c289 100644
-> --- a/package/openpgm/Config.in
-> +++ b/package/openpgm/Config.in
-> @@ -1,5 +1,7 @@
->  config BR2_PACKAGE_OPENPGM
->  	bool "openpgm"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  	# This toolchain lack required compiler intrinsics
->  	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
+Signed-off-by: David Picard <davepiq@yahoo.fr>
+---
+ package/qwt/Config.in |  9 ++++-----
+ package/qwt/qwt.mk    | 10 ++++++++--
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-Maybe we can remove this dependency then?
-
-Blackfin provides __sync_*() for 4-bytes, but not for 2 bytes.
-
-And indeed, the original commit that added this dependency points to
-http://autobuild.buildroot.org/results/3bd/3bda860a269dd9a4e38533cc9350892c68102618/build-end.log,
-which shows undefined reference for the two bytes variants.
-
-Could you submit an updated patch that removes the Blackfin dependency?
-
-Thanks!
-
-Thomas
+diff --git a/package/qwt/Config.in b/package/qwt/Config.in
+index 8c7bc56..e72db31 100644
+--- a/package/qwt/Config.in
++++ b/package/qwt/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_QWT
+ 	bool "qwt"
+ 	depends on BR2_PACKAGE_QT
+-	depends on BR2_PACKAGE_QT_GUI_MODULE
++	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+ 	help
+ 	  Qwt is a graphics extension to the Qt GUI application
+ 	  framework. It provides a 2D plotting widget and more.
+@@ -12,16 +12,15 @@ if BR2_PACKAGE_QWT
+ 
+ config BR2_PACKAGE_QWT_SVG
+ 	bool "SVG support"
+-	select BR2_PACKAGE_QT_SVG
++	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
+ 
+ config BR2_PACKAGE_QWT_MATHML
+ 	bool "MathML support"
+ 
+ config BR2_PACKAGE_QWT_OPENGL
+ 	bool "OpenGL support"
+-	depends on BR2_PACKAGE_HAS_LIBGLES
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+-	select BR2_PACKAGE_QT_OPENGL_ES
++	select BR2_PACKAGE_QT_OPENGL_ES if \
++	    BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
+ 
+ endif
+ 
+diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+index 8a46c25..afd0ffb 100644
+--- a/package/qwt/qwt.mk
++++ b/package/qwt/qwt.mk
+@@ -8,7 +8,9 @@ QWT_VERSION = 6.1.2
+ QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
+ QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
+ QWT_INSTALL_STAGING = YES
+-QWT_DEPENDENCIES = qt
++ifeq ($(BR2_PACKAGE_QT),y)
++QWT_DEPENDENCIES = qt libgles libegl
++endif
+ 
+ QWT_LICENSE = LGPLv2.1 with exceptions
+ QWT_LICENSE_FILES = COPYING
+@@ -35,9 +37,13 @@ else
+ QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
+ endif
+ 
++ifeq ($(BR2_PACKAGE_QT),y)
++    QWT_QMAKE = $(QT_QMAKE)
++endif
++
+ define QWT_CONFIGURE_CMDS
+ 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
++	(cd $(@D); $(TARGET_MAKE_ENV) $(QWT_QMAKE))
+ endef
+ 
+ define QWT_BUILD_CMDS
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.9.1
