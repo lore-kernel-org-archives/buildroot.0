@@ -1,52 +1,39 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 16 Mar 2016 15:28:13 +0100
-Subject: [Buildroot] [PATCH v3 4/4] libfslparser: add missing configure
-	options
-In-Reply-To: <1458138493-12172-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1458138493-12172-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1458138493-12172-5-git-send-email-gary.bisson@boundarydevices.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 16 Mar 2016 11:34:40 -0300
+Subject: [Buildroot] [PATCH] samba4: add host-python to dependencies
+Message-ID: <1458138880-973-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable hard float support when the proper configuration is setup.
-BR2_ARM_EABIHF=y
+Even though it's inherited by the python dependency it's more clear this
+way for graph-depends, since it's used by the waf buildsystem.
+And even though we have a hard dependency on python for the distro this
+python could ostensibly be 3.x which isn't compatible with the bundled
+waf series (1.5.x) in samba (as of current shipping version and upcoming
+4.4.x series).
 
-See Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-multimedia/libfslparser/libfslparser.inc
-
-Tested with Linaro ARM 2015.11 toolchain.
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
+ package/samba4/samba4.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks to those options:
-- libraries are copied from release/lib/yocto/hw instead
-  of release/lib/yocto/sw.
-
-Regards,
-Gary
-
----
- package/libfslparser/libfslparser.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/libfslparser/libfslparser.mk b/package/libfslparser/libfslparser.mk
-index 62c6053..586a956 100644
---- a/package/libfslparser/libfslparser.mk
-+++ b/package/libfslparser/libfslparser.mk
-@@ -13,6 +13,10 @@ LIBFSLPARSER_LICENSE = Freescale Semiconductor Software License Agreement
- LIBFSLPARSER_LICENSE_FILES = EULA COPYING
- LIBFSLPARSER_REDISTRIBUTE = NO
- 
-+ifeq ($(BR2_ARM_EABIHF),y)
-+LIBFSLPARSER_CONF_OPTS += --enable-fhw
-+endif
-+
- define LIBFSLPARSER_EXTRACT_CMDS
- 	$(call FREESCALE_IMX_EXTRACT_HELPER,$(DL_DIR)/$(LIBFSLPARSER_SOURCE))
- endef
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ee0452e..0fa70a5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -10,7 +10,9 @@ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPLv3+
+ SAMBA4_LICENSE_FILES = COPYING
+-SAMBA4_DEPENDENCIES = host-e2fsprogs host-heimdal e2fsprogs popt python zlib \
++SAMBA4_DEPENDENCIES = \
++	host-e2fsprogs host-heimdal host-python \
++	e2fsprogs popt python zlib \
+ 	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+ 	$(if $(BR2_PACKAGE_READLINE),readline)
 -- 
-2.7.0
+2.4.10
