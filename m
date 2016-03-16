@@ -1,43 +1,65 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 16 Mar 2016 16:43:15 +0100
-Subject: [Buildroot] [PATCH 2/2] modem-manager: bump to version 1.4.14
-In-Reply-To: <1458142995-23540-1-git-send-email-yegorslists@googlemail.com>
-References: <1458142995-23540-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1458142995-23540-2-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
+Date: Wed, 16 Mar 2016 16:50:20 +0100
+Subject: [Buildroot] [PATCH 1/1] syslinux: Allow to build multiple flavors
+	simultaneously
+Message-ID: <1458143420-23193-1-git-send-email-benoit.allard@greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+This becomes handy when building hybrid images that needs to be able to boot
+in MBR and GPT mode.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
 ---
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/syslinux/Config.in   | 3 ---
+ boot/syslinux/syslinux.mk | 4 ++--
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 585f92a..5299c84 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  7ef5035375a953b285a742591df0a65fd442f4641ce4d8f4392a41d6d6bc70b3  ModemManager-1.4.12.tar.xz
-+sha256  abe6cdd515a774bcba3afdcdb1e504569801e79282ccdf26099f33cbb8731ba2  ModemManager-1.4.14.tar.xz
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 451752c..6d91afc 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index f4b9870..ea0fb16 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -13,8 +13,6 @@ if BR2_TARGET_SYSLINUX
+ config BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	bool
  
--MODEM_MANAGER_VERSION = 1.4.12
-+MODEM_MANAGER_VERSION = 1.4.14
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
+-choice
+-	bool "Image to install"
+ 
+ config BR2_TARGET_SYSLINUX_ISOLINUX
+ 	bool "isolinux"
+@@ -44,7 +42,6 @@ config BR2_TARGET_SYSLINUX_EFI
+ 	help
+ 	  Install the 'efi' image, to boot from an EFI environment.
+ 
+-endchoice
+ 
+ if BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 0868896..82890c5 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -16,7 +16,7 @@ SYSLINUX_INSTALL_IMAGES = YES
+ SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
+ 
+ ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
+-SYSLINUX_TARGET = bios
++SYSLINUX_TARGET += bios
+ endif
+ 
+ # The syslinux build system must be forced to use Buildroot's gnu-efi
+@@ -30,7 +30,7 @@ else
+ SYSLINUX_EFI_BITS = efi32
+ endif # 64-bit
+ SYSLINUX_DEPENDENCIES += gnu-efi
+-SYSLINUX_TARGET = $(SYSLINUX_EFI_BITS)
++SYSLINUX_TARGET += $(SYSLINUX_EFI_BITS)
+ SYSLINUX_EFI_ARGS = \
+ 	EFIINC=$(STAGING_DIR)/usr/include/efi \
+ 	LIBDIR=$(STAGING_DIR)/usr/lib \
 -- 
 2.1.4
