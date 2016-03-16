@@ -1,65 +1,55 @@
-From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
-Date: Wed, 16 Mar 2016 16:50:20 +0100
-Subject: [Buildroot] [PATCH 1/1] syslinux: Allow to build multiple flavors
-	simultaneously
-Message-ID: <1458143420-23193-1-git-send-email-benoit.allard@greenbone.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Mar 2016 16:53:10 +0100
+Subject: [Buildroot] [PATCH] openpgm: depends on sync2/sync4
+In-Reply-To: <1458138013-18031-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458138013-18031-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160316165310.1b536bc3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This becomes handy when building hybrid images that needs to be able to boot
-in MBR and GPT mode.
+Gustavo,
 
-Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
----
- boot/syslinux/Config.in   | 3 ---
- boot/syslinux/syslinux.mk | 4 ++--
- 2 files changed, 2 insertions(+), 5 deletions(-)
+On Wed, 16 Mar 2016 11:20:13 -0300, Gustavo Zacarias wrote:
+> Add dependency on BR2_TOOLCHAIN_HAS_SYNC_2/4 since it uses both
+> __sync_fetch_and_add_2() and __sync_fetch_and_add_4() atomic builtins.
+> Fixes:
+> http://autobuild.buildroot.net/results/8f2/8f2a3571611dc9414c23808e7615f87b677557dd/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/openpgm/Config.in | 4 ++++
+>  package/zeromq/Config.in  | 2 ++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
+> index 94816d8..632c289 100644
+> --- a/package/openpgm/Config.in
+> +++ b/package/openpgm/Config.in
+> @@ -1,5 +1,7 @@
+>  config BR2_PACKAGE_OPENPGM
+>  	bool "openpgm"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_2
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	# This toolchain lack required compiler intrinsics
+>  	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index f4b9870..ea0fb16 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -13,8 +13,6 @@ if BR2_TARGET_SYSLINUX
- config BR2_TARGET_SYSLINUX_LEGACY_BIOS
- 	bool
- 
--choice
--	bool "Image to install"
- 
- config BR2_TARGET_SYSLINUX_ISOLINUX
- 	bool "isolinux"
-@@ -44,7 +42,6 @@ config BR2_TARGET_SYSLINUX_EFI
- 	help
- 	  Install the 'efi' image, to boot from an EFI environment.
- 
--endchoice
- 
- if BR2_TARGET_SYSLINUX_LEGACY_BIOS
- 
-diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-index 0868896..82890c5 100644
---- a/boot/syslinux/syslinux.mk
-+++ b/boot/syslinux/syslinux.mk
-@@ -16,7 +16,7 @@ SYSLINUX_INSTALL_IMAGES = YES
- SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
- 
- ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
--SYSLINUX_TARGET = bios
-+SYSLINUX_TARGET += bios
- endif
- 
- # The syslinux build system must be forced to use Buildroot's gnu-efi
-@@ -30,7 +30,7 @@ else
- SYSLINUX_EFI_BITS = efi32
- endif # 64-bit
- SYSLINUX_DEPENDENCIES += gnu-efi
--SYSLINUX_TARGET = $(SYSLINUX_EFI_BITS)
-+SYSLINUX_TARGET += $(SYSLINUX_EFI_BITS)
- SYSLINUX_EFI_ARGS = \
- 	EFIINC=$(STAGING_DIR)/usr/include/efi \
- 	LIBDIR=$(STAGING_DIR)/usr/lib \
+Maybe we can remove this dependency then?
+
+Blackfin provides __sync_*() for 4-bytes, but not for 2 bytes.
+
+And indeed, the original commit that added this dependency points to
+http://autobuild.buildroot.org/results/3bd/3bda860a269dd9a4e38533cc9350892c68102618/build-end.log,
+which shows undefined reference for the two bytes variants.
+
+Could you submit an updated patch that removes the Blackfin dependency?
+
+Thanks!
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
