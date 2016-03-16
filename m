@@ -1,136 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Mar 2016 21:20:10 +0100
-Subject: [Buildroot] [PATCH 3/4] libcap, cdrkit, dvdrw-tools, fastd,
-	squid: remove headers >= 3.0 dependency
+Date: Wed, 16 Mar 2016 21:20:09 +0100
+Subject: [Buildroot] [PATCH 2/4] libcap: add patch to fix build issue with
+	old kernel headers
 In-Reply-To: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458159611-5613-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458159611-5613-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the libcap package has a patch that makes it build with
-kernel headers < 3.0 (which was needed for the host variant of
-libcap), there is no longer a need to have a dependency on headers >=
-3.0 for the target variant of libcap.
+Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
+<linux/capability.h>, but using XATTR_SECURITY_PREFIX and
+XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
+<linux/xattr.h>.
 
-All reverse dependencies of libcap are handled in this commit, except
-lxc, which will be handled in a separate commit since it needs some
-special solution.
+In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
+the XATTR_NAME_CAPS definition was moved to the kernel-only part of
+<linux/xattr.h>. It's only in kernel 3.0 (commit
+1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
+fixed to expose XATTR_NAME_CAPS and the related definitions to
+userspace.
 
-The build of all those packages has been tested with a toolchain that
-uses kernel headers 2.6.32, which is the oldest that our default glibc
-version accepts to use.
+This is the reason why the target variant of libcap has a dependency
+on headers >= 3.0 for the moment.
+
+However, this doesn't solve the problem for the host variant of
+libcap, which doesn't build properly on old systems.
+
+To solve this, we simply add a patch that defines the missing
+definitions. Their values haven't changed over time since they are
+part of the kernel to userspace ABI.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/856b71bccf14c3334a8c0fc66c1d985b09734313/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/cdrkit/Config.in      | 5 -----
- package/dvdrw-tools/Config.in | 4 ----
- package/fastd/Config.in       | 4 +---
- package/libcap/Config.in      | 4 ----
- package/squid/Config.in       | 5 ++---
- 5 files changed, 3 insertions(+), 19 deletions(-)
+ ..._file.c-fix-build-with-old-kernel-headers.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
 
-diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
-index 46c0ba9..af18ba9 100644
---- a/package/cdrkit/Config.in
-+++ b/package/cdrkit/Config.in
-@@ -4,7 +4,6 @@ config BR2_PACKAGE_CDRKIT
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_ZLIB
- 	depends on BR2_USE_MMU # fork
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
- 	bool "cdrkit"
- 	help
- 	  cdrkit is a suite of programs for recording CDs and DVDs,
-@@ -12,7 +11,3 @@ config BR2_PACKAGE_CDRKIT
- 	  extracting audio CD data, and more.
- 
- 	  http://www.cdrkit.org/
--
--comment "cdrkit needs a toolchain w/ headers >= 3.0"
--	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/dvdrw-tools/Config.in b/package/dvdrw-tools/Config.in
-index c9dd3dd..d4d6bd2 100644
---- a/package/dvdrw-tools/Config.in
-+++ b/package/dvdrw-tools/Config.in
-@@ -39,14 +39,10 @@ choice
- 
- config BR2_PACKAGE_DVDRW_TOOLS_CDRKIT_BACKEND
- 	bool "cdrkit"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # cdrkit
- 	select BR2_PACKAGE_CDRKIT
- 	help
- 	  Symlink mkisofs to genisoimage from the cdrkit package.
- 
--comment "cdrkit needs a toolchain w/ headers >= 3.0"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--
- config BR2_PACKAGE_DVDRW_TOOLS_XORRISO_BACKEND
- 	bool "xorriso"
- 	select BR2_PACKAGE_XORRISO
-diff --git a/package/fastd/Config.in b/package/fastd/Config.in
-index 55bdbd6..546d449 100644
---- a/package/fastd/Config.in
-+++ b/package/fastd/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_FASTD
- 	bool "fastd"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
- 	depends on !BR2_STATIC_LIBS # libuecc
- 	select BR2_PACKAGE_LIBUECC
- 	select BR2_PACKAGE_LIBSODIUM
-@@ -24,8 +23,7 @@ config BR2_PACKAGE_FASTD_STATUS_SOCKET
- 
- endif
- 
--comment "fastd needs a toolchain w/ threads, headers >= 3.0, dynamic library"
-+comment "fastd needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 \
- 		|| BR2_STATIC_LIBS
-diff --git a/package/libcap/Config.in b/package/libcap/Config.in
-index 2e3c8d9..5b0c827 100644
---- a/package/libcap/Config.in
-+++ b/package/libcap/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LIBCAP
- 	bool "libcap"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # XATTR_NAME_CAPS
- 	help
- 	  This library implements the user-space interfaces to the
- 	  POSIX 1003.1e capabilities available in Linux kernels. These
-@@ -23,6 +22,3 @@ config BR2_PACKAGE_LIBCAP_TOOLS
- 	  CONFIG_EXT2_FS_XATTR and CONFIG_EXT2_FS_SECURITY for ext2).
- 
- endif
--
--comment "libcap needs a toolchain w/ headers >= 3.0"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-diff --git a/package/squid/Config.in b/package/squid/Config.in
-index 0ab6b37..12bfe19 100644
---- a/package/squid/Config.in
-+++ b/package/squid/Config.in
-@@ -1,13 +1,12 @@
--comment "squid needs a toolchain w/ C++, headers >= 3.0"
-+comment "squid needs a toolchain w/ C++"
- 	depends on BR2_USE_MMU
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on !BR2_INSTALL_LIBSTDCPP
- 
- config BR2_PACKAGE_SQUID
- 	bool "squid"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	# needs fork()
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more.
+diff --git a/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch b/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
+new file mode 100644
+index 0000000..02cc228
+--- /dev/null
++++ b/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
+@@ -0,0 +1,51 @@
++From ace694e9574eb38e07cfe0db235434eb40003f47 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Mon, 14 Mar 2016 22:39:15 +0100
++Subject: [PATCH] libcap/cap_file.c: fix build with old kernel headers
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ libcap/cap_file.c | 27 +++++++++++++++++++++++++++
++ 1 file changed, 27 insertions(+)
++
++diff --git a/libcap/cap_file.c b/libcap/cap_file.c
++index 40756ea..e3d54dd 100644
++--- a/libcap/cap_file.c
+++++ b/libcap/cap_file.c
++@@ -23,6 +23,33 @@ extern int fsetxattr(int, const char *, const void *, size_t, int);
++ extern int removexattr(const char *, const char *);
++ extern int fremovexattr(int, const char *);
++ 
+++
+++/*
+++ * Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
+++ * <linux/capability.h>, but using XATTR_SECURITY_PREFIX and
+++ * XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
+++ * <linux/xattr.h>.
+++ *
+++ * In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
+++ * the XATTR_NAME_CAPS definition was moved to the kernel-only part of
+++ * <linux/xattr.h>. It's only in kernel 3.0 (commit
+++ * 1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
+++ * fixed to expose XATTR_NAME_CAPS and the related definitions to
+++ * userspace.
+++ *
+++ * In order to cope with kernels < 3.0, we define here the appropriate
+++ * values, which we assume haven't changed over history.
+++ */
+++#ifndef XATTR_CAPS_SUFFIX
+++#define XATTR_CAPS_SUFFIX "capability"
+++#endif
+++#ifndef XATTR_SECURITY_PREFIX
+++#define XATTR_SECURITY_PREFIX "security."
+++#endif
+++#ifndef XATTR_NAME_CAPS
+++#define XATTR_NAME_CAPS XATTR_SECURITY_PREFIX XATTR_CAPS_SUFFIX
+++#endif
+++
++ #include "libcap.h"
++ 
++ #ifdef VFS_CAP_U32
++-- 
++2.6.4
++
 -- 
 2.6.4
