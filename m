@@ -1,25 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 16 Mar 2016 21:25:33 +0000
-Subject: [Buildroot] [Bug 8806] Buildroot 2016.2 for Raspberry Pi requires
- that ext4 rootfs is selected. Otherwise the error is reported
-In-Reply-To: <bug-8806-163@https.bugs.busybox.net/>
-References: <bug-8806-163@https.bugs.busybox.net/>
-Message-ID: <bug-8806-163-VMyfSaZao5@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 16 Mar 2016 22:25:57 +0100
+Subject: [Buildroot] [PATCH v2] openpgm: depends on sync2/sync4
+In-Reply-To: <1458155700-7383-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458155700-7383-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160316222557.209e1eb6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8806
+Dear Gustavo Zacarias,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+On Wed, 16 Mar 2016 16:15:00 -0300, Gustavo Zacarias wrote:
+> Add dependency on BR2_TOOLCHAIN_HAS_SYNC_2/4 since it uses both
+> __sync_fetch_and_add_2() and __sync_fetch_and_add_4() atomic builtins.
+> Fixes:
+> http://autobuild.buildroot.net/results/8f2/8f2a3571611dc9414c23808e7615f87b677557dd/
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |INVALID
-
+Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
