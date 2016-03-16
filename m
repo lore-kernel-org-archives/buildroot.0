@@ -1,70 +1,44 @@
-From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
-Date: Wed, 16 Mar 2016 09:00:52 +0100
-Subject: [Buildroot] [PATCH 2/2] xorriso: Add host variant
-In-Reply-To: <20160315213537.GD5053@free.fr>
-References: <1458050877-24342-1-git-send-email-benoit.allard@greenbone.net>
- <1458050877-24342-3-git-send-email-benoit.allard@greenbone.net>
- <20160315213537.GD5053@free.fr>
-Message-ID: <20160316090052.4053f356@armant.core.local.os.greenbone.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Mar 2016 09:18:26 +0100
+Subject: [Buildroot] [git commit] jamvm: needs dynamic library support
+Message-ID: <20160316081910.5B73881871@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 15 Mar 2016 22:35:37 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=cba44b10948a732a1eae841d1761638046c323c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-> > index e8bb5cb..9e9ec8a 100644
-> > --- a/package/xorriso/xorriso.mk
-> > +++ b/package/xorriso/xorriso.mk
-> > @@ -8,6 +8,7 @@ XORRISO_VERSION = 1.4.2
-> >  XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
-> >  XORRISO_LICENSE = GPLv3+
-> >  XORRISO_LICENSE_FILES = COPYING COPYRIGHT
-> > +HOST_XORRISO_DEPENDENCIES =
-> 
-> Well, that part I am not so sure. Yes, it does build correectly, but
-> it is highly dependent on the set of libraries (and their -dev files)
-> being installed on your host distro.
-> 
-> So, either we set the dependency list to empty, but then we explicitly
-> disable all optional features:
-> 
->     HOST_XORRISO_DEPENDENCIES =
->     HOST_XORRISO_CONF_OPTS = \
->         --disable-libcdio \
->         --disable-libreadline \
->         --disable-libacl \
->         and so on...
-> 
-> or we enable all those for which we do have a host package and for
-> which it makes sense (probably just acl, zlib and bzip2):
-> 
->     HOST_XORRISO_DEPENDENCIES = host-acl host-zlib host-bzip2
->     HOST_XORRISO_CONF_OPTS = \
->         --enable-libacl \
->         --enable-zlib \
->         --enable-bzip2 \
->         --disable-libcdio
->         --disable-libreadline \
->         ...
-> 
-> Both are equally easy I guess. However, I think the latter is more
-> interesting.
+Fixes:
+http://autobuild.buildroot.net/results/931/931a005fab39f22bda0fd8c249f3e4d1f5eba4cc/
+http://autobuild.buildroot.net/results/fa3/fa34334acd8d682e76444d9208463f364de96291/
 
-That makes sense of course ! I'll repost that patch with these options
-and extend the CONF_OPTS with all the necessary disables, hopefully,
-the needed features will still be included. I believe it makes sense to
-`select` the correct packages in the Config.in.host as well, right ?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jamvm/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Regards,
-Ben
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160316/b0cb1fae/attachment.asc>
+diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+index 3b5ff3e..2cc97a1 100644
+--- a/package/jamvm/Config.in
++++ b/package/jamvm/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_JAMVM
+ 	bool "jamvm"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc
+ 	select BR2_PACKAGE_ZLIB
+@@ -11,7 +12,7 @@ config BR2_PACKAGE_JAMVM
+ 
+ 	  http://jamvm.sf.net
+ 
+-comment "jamvm needs a toolchain w/ threads"
++comment "jamvm needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
+ 		|| BR2_mips || BR2_mipsel || BR2_powerpc
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
