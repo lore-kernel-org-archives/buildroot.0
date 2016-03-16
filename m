@@ -1,65 +1,81 @@
-From: Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
-Date: Wed, 16 Mar 2016 17:47:12 +0530
-Subject: [Buildroot] [PATCH valijson v2] valijson: new package
-In-Reply-To: <20160310230045.5f1b0bfe@free-electrons.com>
-References: <1457613052-3865-1-git-send-email-santosh.multhalli@rockwellcollins.com>
- <CAHXCMMLLWARxc+urGRMRy1KrQEb4rH4MFuc+0fQUc6DsPONGPQ@mail.gmail.com>
- <20160310230045.5f1b0bfe@free-electrons.com>
-Message-ID: <CAGE8XjpU1w=Q+CBUAcHA0nomyw-KpFB10h9kdi98e1u1Zb96BQ@mail.gmail.com>
+From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
+Date: Wed, 16 Mar 2016 14:55:15 +0100
+Subject: [Buildroot] [PATCH 1/1] xorriso: Add host variant
+Message-ID: <1458136515-6087-1-git-send-email-benoit.allard@greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-updated and submitted the latest patch
+Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+---
+Changes v1 -> v2
+  - Disable all external dependencies (Suggested by Yann)
+---
+ package/Config.in.host         |  1 +
+ package/xorriso/Config.in.host | 14 ++++++++++++++
+ package/xorriso/xorriso.mk     | 11 +++++++++++
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package/xorriso/Config.in.host
 
-Thanks,
-Santosh Multhalli
-
-On Fri, Mar 11, 2016 at 3:30 AM, Thomas Petazzoni <
-thomas.petazzoni@free-electrons.com> wrote:
-
-> Hello,
->
-> On Thu, 10 Mar 2016 21:53:32 +0100, Samuel Martin wrote:
->
-> > > diff --git a/package/valijson/Config.in b/package/valijson/Config.in
-> > > new file mode 100644
-> > > index 0000000..4adbe76
-> > > --- /dev/null
-> > > +++ b/package/valijson/Config.in
-> > > @@ -0,0 +1,12 @@
-> > > +config BR2_PACKAGE_VALIJSON
-> > > +       bool "valijson"
-> > > +        select BR2_PACKAGE_BOOST
-> > > +        select BR2_PACKAGE_BOOST_REGEX
-> > Indentation seems broken on these 2 lines.
->
-> And also, since boost is selected, the dependencies of boost must be
-> replicated here.
->
-> >
-> > > +       help
-> > > +         Valijson is a header-only JSON Schema Validation library for
-> > > +         C++. Valijson provides a simple validation API that allows
-> you
-> > > +         load JSON Schemas, and validate documents loaded by one of
-> > > +         several supported parser libraries like boost, jsoncpp,
-> > > +         rapidjson and picoJSON.
-> > > +
-> > > +         https://github.com/tristanpenman/valijson
->
-> And a comment be added here.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160316/d6b74c84/attachment.html>
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 09c98fb..a91612b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -32,6 +32,7 @@ menu "Host utilities"
+ 	source "package/uboot-tools/Config.in.host"
+ 	source "package/util-linux/Config.in.host"
+ 	source "package/vboot-utils/Config.in.host"
++	source "package/xorriso/Config.in.host"
+ 	source "package/zip/Config.in.host"
+ 
+ endmenu
+diff --git a/package/xorriso/Config.in.host b/package/xorriso/Config.in.host
+new file mode 100644
+index 0000000..2baa043
+--- /dev/null
++++ b/package/xorriso/Config.in.host
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_HOST_XORRISO
++	bool "host xorriso"
++	help
++	  xorriso copies file objects from POSIX compliant
++	  filesystems into Rock Ridge enhanced ISO 9660 filesystems
++	  and allows session-wise manipulation of such filesystems.
++	  It can load the management information of existing ISO
++	  images and it writes the session results to optical media
++	  or to filesystem objects.
++
++	  Vice versa xorriso is able to copy file objects out of ISO
++	  9660 filesystems.
++
++	  https://www.gnu.org/software/xorriso
+diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+index e8bb5cb..57537e8 100644
+--- a/package/xorriso/xorriso.mk
++++ b/package/xorriso/xorriso.mk
+@@ -8,6 +8,16 @@ XORRISO_VERSION = 1.4.2
+ XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
+ XORRISO_LICENSE = GPLv3+
+ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
++HOST_XORRISO_DEPENDENCIES =
++# Disable everything until we actually need those feature, and add the correct
++# host-libraries
++HOST_XORRISO_CONF_OPTS = \
++        --disable-zlib \
++        --disable-bzip2 \
++        --disable-libcdio \
++        --disable-libreadline \
++        --disable-libedit \
++        --disable-libacl
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ XORRISO_DEPENDENCIES += libiconv
+@@ -64,3 +74,4 @@ XORRISO_CONF_OPTS += --disable-jtethreads
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
+-- 
+2.1.4
