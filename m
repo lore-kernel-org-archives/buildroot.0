@@ -1,41 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 22:41:06 +0100
-Subject: [Buildroot] [git commit] modem-manager: bump to version 1.4.14
-Message-ID: <20160316224555.AFEEB7FE1C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Mar 2016 23:49:16 +0100
+Subject: [Buildroot] [PATCH 4/4] lxc: remove dependency on headers >= 3.0
+In-Reply-To: <20160316233611.6c664973@free-electrons.com>
+References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458159611-5613-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87twk66onk.fsf@dell.be.48ers.dk>
+ <20160316233611.6c664973@free-electrons.com>
+Message-ID: <56E9E2EC.9000203@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81b069aa029087199b0e18c907ba3cc59537c38d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/16/16 23:36, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 16 Mar 2016 23:31:11 +0100, Peter Korsgaard wrote:
+>
+>> But can missing setns() really just be ignored and still have a working
+>> lxc? From the code snippets failures look critical.
+>
+> Yes, runtime it definitely won't work. But since the LXC code was
+> already planning on being able to build on systems not providing those
+> syscalls, I was staying in line with this decision.
+>
+>>  From the man page:
+>>
+>> VERSIONS
+>>
+>>          The setns() system call first appeared in Linux in kernel 3.0;
+>>          library support was added to glibc in version 2.14.
+>>
+>> So I think it is safer to just keep the >= 3.0 headers dependency.
+>
+> But I agree with you, it's probably better to keep the >= 3.0 headers
+> dependency. However, the comment that the dependency comes from libcap
+> should be changed.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+  Well, it would work with old kernel headers, as long as the actual kernel is 
+ >= 3.0. But the only use case for that would be when using an old toolchain, 
+e.g. Arago. It's probably safer indeed to avoid runtime trouble by just 
+depending on the headers version.
 
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 585f92a..5299c84 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  7ef5035375a953b285a742591df0a65fd442f4641ce4d8f4392a41d6d6bc70b3  ModemManager-1.4.12.tar.xz
-+sha256  abe6cdd515a774bcba3afdcdb1e504569801e79282ccdf26099f33cbb8731ba2  ModemManager-1.4.14.tar.xz
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 451752c..6d91afc 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.4.12
-+MODEM_MANAGER_VERSION = 1.4.14
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPLv2+ (programs, plugins), LGPLv2+ (libmm-glib)
+
+  Regards,
+  Arnout
+
+>
+> Should I change a patch to fix this?
+>
+> Thanks,
+>
+> Thomas
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
