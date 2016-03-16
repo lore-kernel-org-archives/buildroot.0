@@ -1,47 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 22:15:28 +0100
-Subject: [Buildroot] [git commit] package/tvheadend: bump version
-Message-ID: <20160316224554.5BCBA7F8B3@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 22:19:36 +0100
+Subject: [Buildroot] [git commit] samba4: add host-python to dependencies
+Message-ID: <20160316224555.14E6E7F8B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac00fcdf74ce0d98069a4cd431bf3bb71c78f19e
+commit: https://git.buildroot.net/buildroot/commit/?id=74e0ba60f79e04d7147bd6d2a4a1797c605542ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/4e4/4e403fa4aba6196ddc362cfe9c1e37743fa3cede/
+Even though it's inherited by the python dependency it's more clear this
+way for graph-depends, since it's used by the waf buildsystem.
+And even though we have a hard dependency on python for the distro this
+python could ostensibly be 3.x which isn't compatible with the bundled
+waf series (1.5.x) in samba (as of current shipping version and upcoming
+4.4.x series).
 
-and other atomic-related build errors by this upstream commit:
-https://github.com/tvheadend/tvheadend/commit/f0472eebaa539c61e958432cded2b7cac41f758f
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/samba4/samba4.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 5737c2f..14d0fb0 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	5e59b2659badfe921fc324162dbfbfb69da8fe7eac21478651287fd56784ab11	tvheadend-3927788bb71ad0041a00d0daa35fae1cb6355b55.tar.gz
-+sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 40d8c6e..3398faf 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 3927788bb71ad0041a00d0daa35fae1cb6355b55
-+TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ee0452e..0fa70a5 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -10,7 +10,9 @@ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
+ SAMBA4_LICENSE = GPLv3+
+ SAMBA4_LICENSE_FILES = COPYING
+-SAMBA4_DEPENDENCIES = host-e2fsprogs host-heimdal e2fsprogs popt python zlib \
++SAMBA4_DEPENDENCIES = \
++	host-e2fsprogs host-heimdal host-python \
++	e2fsprogs popt python zlib \
+ 	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
+ 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
+ 	$(if $(BR2_PACKAGE_READLINE),readline)
