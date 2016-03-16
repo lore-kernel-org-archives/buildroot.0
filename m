@@ -1,36 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 23:23:04 +0100
-Subject: [Buildroot] [PATCH 3/4] libcap, cdrkit, dvdrw-tools, fastd,
-	squid: remove headers >= 3.0 dependency
-In-Reply-To: <1458159611-5613-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 16 Mar 2016 21:20:10 +0100")
-References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458159611-5613-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87y49i6p13.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 16 Mar 2016 23:26:04 +0100
+Subject: [Buildroot] Compilation of Buildroot 2016.2 for Raspberry Pi
+ with Musl 1.1.6 fails - no stddef.h header
+In-Reply-To: <CAMduVEfcO2XM1SZVGuvaUCKhbNrZwfG7-oYw=B757iZDYU3cAg@mail.gmail.com>
+References: <CAMduVEfcO2XM1SZVGuvaUCKhbNrZwfG7-oYw=B757iZDYU3cAg@mail.gmail.com>
+Message-ID: <56E9DD7C.2060108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On 03/15/16 09:57, Wojciech Zabolotny wrote:
+> To recreate the problem:
+>
+> $ wget https://buildroot.org/downloads/buildroot-2016.02.tar.bz2
+> $ tar -xjf buildroot-2016.02.tar.bz2
+> $ cd buildroot-2016.02
+> $ make raspberrypi_defconfig
+> $ make menuconfig
+> In the "Toolchain" section select "Toolchain type" "External toolchain"
+> and then in "Toolchain" "Musl 1.1.6 toolchain (experimental)"
+> Leave the configuration menu, saving the configuration
+> $ make
+>
+> After some time you'll get:
+>
+>   CC      drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o
+>   CC      fs/proc/array.o
+> drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.c:42:20:
+> fatal error: stddef.h: No such file or directory
+>   #include <stddef.h>
+>                      ^
+> compilation terminated.
+> scripts/Makefile.build:258: recipe for target
+> 'drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o' failed
 
- > Now that the libcap package has a patch that makes it build with
- > kernel headers < 3.0 (which was needed for the host variant of
- > libcap), there is no longer a need to have a dependency on headers >=
- > 3.0 for the target variant of libcap.
+  That looks like a problem with the RPi kernel. stddef.h doesn't exist within 
+the kernel, it simply shouldn't be used. Well, it's Broadcom code so not really 
+surprising that it's wrong...
 
- > All reverse dependencies of libcap are handled in this commit, except
- > lxc, which will be handled in a separate commit since it needs some
- > special solution.
+  You could try to patch it out, send a pull request, and the update our defconfig.
 
- > The build of all those packages has been tested with a toolchain that
- > uses kernel headers 2.6.32, which is the oldest that our default glibc
- > version accepts to use.
+>
+> If I'm forced to build the system quickly (as my students are, due to
+> short lab sessions), the only way is to switch off the EABIhf (by
+> selection of the EABI in the "Target options", Target ABI) and use the
+> "Toolchain (Sourcery CodeBench ARM 2014.05)"
+>
+> Of course the optimal solution is to use the "Buildroot toolchain"
+> with standard EABIhf, but it takes very long to rebuild after "make
+> clean"...
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+  How about using one of the autobuilder toolchains? E.g. [1].
 
-Committed, thanks.
+  Regards,
+  Arnout
+
+[1] http://autobuild.buildroot.net/toolchains/configs/br-arm-cortex-a9-glibc.config
+
+
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
