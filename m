@@ -1,103 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 23:20:41 +0100
-Subject: [Buildroot] [git commit] libcap: add patch to fix build issue with
-	old kernel headers
-Message-ID: <20160316224555.D06CA7FE1C@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 22:40:42 +0100
+Subject: [Buildroot] [git commit] libmbim: bump to version 1.12.4
+Message-ID: <20160316224555.9DB547F8B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=604095fe9bea925f34ea05a5d80efbc3e9ba16f2
+commit: https://git.buildroot.net/buildroot/commit/?id=c2289d6a9c4f048b744837e1eb2748d02df012d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
-<linux/capability.h>, but using XATTR_SECURITY_PREFIX and
-XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
-<linux/xattr.h>.
-
-In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
-the XATTR_NAME_CAPS definition was moved to the kernel-only part of
-<linux/xattr.h>. It's only in kernel 3.0 (commit
-1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
-fixed to expose XATTR_NAME_CAPS and the related definitions to
-userspace.
-
-This is the reason why the target variant of libcap has a dependency
-on headers >= 3.0 for the moment.
-
-However, this doesn't solve the problem for the host variant of
-libcap, which doesn't build properly on old systems.
-
-To solve this, we simply add a patch that defines the missing
-definitions. Their values haven't changed over time since they are
-part of the kernel to userspace ABI.
-
-Fixes:
-
-  http://autobuild.buildroot.org/results/856b71bccf14c3334a8c0fc66c1d985b09734313/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ..._file.c-fix-build-with-old-kernel-headers.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ package/libmbim/libmbim.hash | 2 +-
+ package/libmbim/libmbim.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch b/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
-new file mode 100644
-index 0000000..02cc228
---- /dev/null
-+++ b/package/libcap/0003-libcap-cap_file.c-fix-build-with-old-kernel-headers.patch
-@@ -0,0 +1,51 @@
-+From ace694e9574eb38e07cfe0db235434eb40003f47 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Mon, 14 Mar 2016 22:39:15 +0100
-+Subject: [PATCH] libcap/cap_file.c: fix build with old kernel headers
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ libcap/cap_file.c | 27 +++++++++++++++++++++++++++
-+ 1 file changed, 27 insertions(+)
-+
-+diff --git a/libcap/cap_file.c b/libcap/cap_file.c
-+index 40756ea..e3d54dd 100644
-+--- a/libcap/cap_file.c
-++++ b/libcap/cap_file.c
-+@@ -23,6 +23,33 @@ extern int fsetxattr(int, const char *, const void *, size_t, int);
-+ extern int removexattr(const char *, const char *);
-+ extern int fremovexattr(int, const char *);
-+ 
-++
-++/*
-++ * Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
-++ * <linux/capability.h>, but using XATTR_SECURITY_PREFIX and
-++ * XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
-++ * <linux/xattr.h>.
-++ *
-++ * In kernel 2.6.36 (commit af4f136056c984b0aa67feed7d3170b958370b2f),
-++ * the XATTR_NAME_CAPS definition was moved to the kernel-only part of
-++ * <linux/xattr.h>. It's only in kernel 3.0 (commit
-++ * 1dbe39424a43e56a6c9aed12661192af51dcdb9f) that <linux/xattr.h> was
-++ * fixed to expose XATTR_NAME_CAPS and the related definitions to
-++ * userspace.
-++ *
-++ * In order to cope with kernels < 3.0, we define here the appropriate
-++ * values, which we assume haven't changed over history.
-++ */
-++#ifndef XATTR_CAPS_SUFFIX
-++#define XATTR_CAPS_SUFFIX "capability"
-++#endif
-++#ifndef XATTR_SECURITY_PREFIX
-++#define XATTR_SECURITY_PREFIX "security."
-++#endif
-++#ifndef XATTR_NAME_CAPS
-++#define XATTR_NAME_CAPS XATTR_SECURITY_PREFIX XATTR_CAPS_SUFFIX
-++#endif
-++
-+ #include "libcap.h"
-+ 
-+ #ifdef VFS_CAP_U32
-+-- 
-+2.6.4
-+
+diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
+index f066e96..2c10b4f 100644
+--- a/package/libmbim/libmbim.hash
++++ b/package/libmbim/libmbim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  949351d3e3d69b81e40a49f1d187944c26149e0647a415f0227ccdc112047b29  libmbim-1.12.2.tar.xz
++sha256  7bd9af154e88ee1cccaf2fedd05e0f5cb82e3359ab6ad2a75cfec98bf57f973a  libmbim-1.12.4.tar.xz
+diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
+index 3cb9235..746596e 100644
+--- a/package/libmbim/libmbim.mk
++++ b/package/libmbim/libmbim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMBIM_VERSION = 1.12.2
++LIBMBIM_VERSION = 1.12.4
+ LIBMBIM_SITE = http://www.freedesktop.org/software/libmbim
+ LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
+ LIBMBIM_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
