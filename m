@@ -1,398 +1,174 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Mar 2016 22:43:22 +0100
-Subject: [Buildroot] [PATCH 16/16] configs/stm32f469_disco: new
-	configuration for STM32F469 Discovery board
+Date: Wed, 16 Mar 2016 22:43:18 +0100
+Subject: [Buildroot] [PATCH 12/16] elf2flt: use new upstream site and add
+	ARM patch
 In-Reply-To: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458164602-16983-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458164602-16983-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Lee Jones <lee.jones@linaro.org>
+The uClinux developers now have a Github with elf2flt code, with an
+upstream that is again active. Let's switch to this upstream, to which
+Waldemar is contributing as well.
 
-Similar to stm32f429_disco, this commit adds a configuration for the
-Cortex-M4 based STM32F469 platform.
+We also add an ARM patch from Waldemar, which was on his elf2flt
+repository and he submitted upstream.
 
-It requires a few kernel patches, which have already been submitted
-upstream, as well as a small OpenOCD patch. Besides that, it re-uses
-most of what has been added for the STM32F429 platform.
-
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-
-[Thomas:
- - squash multiple patches from Lee Jones into one
- - improve the readme.txt file
- - sync the defconfig with the adaptations made to the stm32f429
-   configuration.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/stmicroelectronics/stm32f469-disco/flash.sh  |  20 ++++
- .../linux/0001-kernel-add-top-compatible.patch     |  25 +++++
- .../patches/linux/0002-kernel-new-dts-file.patch   | 114 +++++++++++++++++++++
- .../linux/0003-kernel-config-frag-ram.patch        |  28 +++++
- .../patches/openocd/0001-add-config.patch          |  37 +++++++
- .../patches/openocd/0002-flash-nor.patch           |  37 +++++++
- .../stmicroelectronics/stm32f469-disco/readme.txt  |  19 ++++
- configs/stm32f469_disco_defconfig                  |  19 ++++
- 8 files changed, 299 insertions(+)
- create mode 100755 board/stmicroelectronics/stm32f469-disco/flash.sh
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
- create mode 100644 board/stmicroelectronics/stm32f469-disco/readme.txt
- create mode 100644 configs/stm32f469_disco_defconfig
+ .../0001-allow-to-build-arm-flat-binaries.patch    | 123 +++++++++++++++++++++
+ package/elf2flt/elf2flt.mk                         |   5 +-
+ 2 files changed, 125 insertions(+), 3 deletions(-)
+ create mode 100644 package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
 
-diff --git a/board/stmicroelectronics/stm32f469-disco/flash.sh b/board/stmicroelectronics/stm32f469-disco/flash.sh
-new file mode 100755
-index 0000000..a68bea0
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/flash.sh
-@@ -0,0 +1,20 @@
-+#!/bin/bash
-+
-+OUTPUT_DIR=$1
-+
-+if ! test -d "${OUTPUT_DIR}" ; then
-+    echo "ERROR: no output directory specified."
-+    echo "Usage: $0 OUTPUT_DIR"
-+    exit 1
-+fi
-+
-+${OUTPUT_DIR}/host/usr/bin/openocd -f board/stm32f469discovery.cfg \
-+  -c "init" \
-+  -c "reset init" \
-+  -c "flash probe 0" \
-+  -c "flash info 0" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469i-disco.bin 0x08000000" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469-disco.dtb 0x08004000" \
-+  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08008000" \
-+  -c "reset run" \
-+  -c "shutdown"
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch
+diff --git a/package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch b/package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
 new file mode 100644
-index 0000000..f1c61dd
+index 0000000..a6c63c5
 --- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch
-@@ -0,0 +1,25 @@
-+From 6bd8bae3dd0631f8d23e63617dca289f162e6840 Mon Sep 17 00:00:00 2001
-+From: Lee Jones <lee.jones@linaro.org>
-+Date: Tue, 16 Feb 2016 14:04:17 +0000
-+Subject: [PATCH] ARM: stm32: Identify a new board - STM32F469
++++ b/package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
+@@ -0,0 +1,123 @@
++From 56b082412c6f49d21f5e54831a40d1e7c45b3ee4 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sat, 12 Mar 2016 22:09:30 +0100
++Subject: [PATCH] allow to build arm flat binaries
 +
-+Signed-off-by: Lee Jones <lee.jones@linaro.org>
-+---
-+ arch/arm/mach-stm32/board-dt.c | 1 +
-+ 1 file changed, 1 insertion(+)
++Add patchset from ptxdist which is required to produce working
++ARM flat binaries. Tested with busybox on Kinetis K70.
 +
-+diff --git a/arch/arm/mach-stm32/board-dt.c b/arch/arm/mach-stm32/board-dt.c
-+index f2ad772..ceee477 100644
-+--- a/arch/arm/mach-stm32/board-dt.c
-++++ b/arch/arm/mach-stm32/board-dt.c
-+@@ -10,6 +10,7 @@
-+ 
-+ static const char *const stm32_compat[] __initconst = {
-+ 	"st,stm32f429",
-++	"st,stm32f469",
-+ 	NULL
-+ };
-+ 
-+-- 
-+1.9.1
-+
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch
-new file mode 100644
-index 0000000..954679e
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch
-@@ -0,0 +1,114 @@
-+From a898629f21b86f2560041109f64d01d20087deae Mon Sep 17 00:00:00 2001
-+From: Lee Jones <lee.jones@linaro.org>
-+Date: Tue, 16 Feb 2016 13:53:47 +0000
-+Subject: [PATCH] ARM: stm32: Supply a DTS file for the STM32F469 Discovery
-+ board
-+
-+It's pretty similar to the STM32F429, but there are some
-+subtle changes required to boot successfully.
-+
-+Signed-off-by: Lee Jones <lee.jones@linaro.org>
-+[Thomas: remove rdinit= from /chosen/bootargs.]
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 +---
-+ arch/arm/boot/dts/Makefile            |  1 +
-+ arch/arm/boot/dts/stm32f469-disco.dts | 75 +++++++++++++++++++++++++++++++++++
-+ 2 files changed, 76 insertions(+)
-+ create mode 100644 arch/arm/boot/dts/stm32f469-disco.dts
++ elf2flt.c     | 19 ++++++++++++-------
++ elf2flt.ld.in | 17 ++++++++++++++---
++ 2 files changed, 26 insertions(+), 10 deletions(-)
 +
-+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-+index 30bbc37..c9d8023 100644
-+--- a/arch/arm/boot/dts/Makefile
-++++ b/arch/arm/boot/dts/Makefile
-+@@ -583,6 +583,7 @@ dtb-$(CONFIG_ARCH_STI) += \
-+ 	stih418-b2199.dtb
-+ dtb-$(CONFIG_ARCH_STM32)+= \
-+ 	stm32f429-disco.dtb \
-++	stm32f469-disco.dtb \
-+ 	stm32429i-eval.dtb
-+ dtb-$(CONFIG_MACH_SUN4I) += \
-+ 	sun4i-a10-a1000.dtb \
-+diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
-+new file mode 100644
-+index 0000000..e911af8
-+--- /dev/null
-++++ b/arch/arm/boot/dts/stm32f469-disco.dts
-+@@ -0,1 +1,75 @@
-++/*
-++ * Copyright 2016 - Lee Jones <lee.jones@linaro.org>
-++ *
-++ * This file is dual-licensed: you can use it either under the terms
-++ * of the GPL or the X11 license, at your option. Note that this dual
-++ * licensing only applies to this file, and not this project as a
-++ * whole.
-++ *
-++ *  a) This file is free software; you can redistribute it and/or
-++ *     modify it under the terms of the GNU General Public License as
-++ *     published by the Free Software Foundation; either version 2 of the
-++ *     License, or (at your option) any later version.
-++ *
-++ *     This file is distributed in the hope that it will be useful,
-++ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
-++ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++ *     GNU General Public License for more details.
-++ *
-++ *     You should have received a copy of the GNU General Public
-++ *     License along with this file; if not, write to the Free
-++ *     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-++ *     MA 02110-1301 USA
-++ *
-++ * Or, alternatively,
-++ *
-++ *  b) Permission is hereby granted, free of charge, to any person
-++ *     obtaining a copy of this software and associated documentation
-++ *     files (the "Software"), to deal in the Software without
-++ *     restriction, including without limitation the rights to use,
-++ *     copy, modify, merge, publish, distribute, sublicense, and/or
-++ *     sell copies of the Software, and to permit persons to whom the
-++ *     Software is furnished to do so, subject to the following
-++ *     conditions:
-++ *
-++ *     The above copyright notice and this permission notice shall be
-++ *     included in all copies or substantial portions of the Software.
-++ *
-++ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-++ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-++ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-++ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-++ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-++ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-++ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-++ *     OTHER DEALINGS IN THE SOFTWARE.
-++ */
-++
-++/dts-v1/;
-++#include "stm32f429.dtsi"
-++
-++/ {
-++	model = "STMicroelectronics STM32F469i-DISCO board";
-++	compatible = "st,stm32f469i-disco", "st,stm32f469";
-++
-++	chosen {
-++		bootargs = "root=/dev/ram";
-++		stdout-path = "serial0:115200n8";
-++	};
-++
-++	memory {
-++		reg = <0x00000000 0x800000>;
-++	};
-++
-++	aliases {
-++		serial0 = &usart3;
-++	};
-++};
-++
-++&clk_hse {
-++	clock-frequency = <8000000>;
-++};
-++
-++&usart3 {
-++	status = "okay";
-++};
-+-- 
-+1.9.1
-+
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch
-new file mode 100644
-index 0000000..e431e8b
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch
-@@ -0,0 +1,28 @@
-+From 4cb65563325bee1886329b97ce3e2b0b90106bdd Mon Sep 17 00:00:00 2001
-+From: Lee Jones <lee.jones@linaro.org>
-+Date: Tue, 16 Feb 2016 13:56:13 +0000
-+Subject: [PATCH] ARM: configs: Add new config fragment to change RAM start
-+ point
-+
-+Rather than duplicate a defconfig for each difference
-+between platforms, we can choose to pick a basic defconfig and
-+manipulate it at run-time using config fragments.  Here we're
-+adding a new fragment to over-ride the RAM start point to 0x0.
-+
-+Cc: Arnd Bergmann <arnd@arndb.de>
-+Signed-off-by: Lee Jones <lee.jones@linaro.org>
-+---
-+ arch/arm/configs/dram_0x00000000.config | 1 +
-+ 1 file changed, 1 insertion(+)
-+ create mode 100644 arch/arm/configs/dram_0x00000000.config
-+
-+diff --git a/arch/arm/configs/dram_0x00000000.config b/arch/arm/configs/dram_0x00000000.config
-+new file mode 100644
-+index 0000000..db96dcb
-+--- /dev/null
-++++ b/arch/arm/configs/dram_0x00000000.config
-+@@ -0,0 +1 @@
-++CONFIG_DRAM_BASE=0x00000000
-+-- 
-+1.9.1
-+
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
-new file mode 100644
-index 0000000..036c4f6
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
-@@ -0,0 +1,37 @@
-+From 26045588f462476cee356d15a24944d6c26befb4 Mon Sep 17 00:00:00 2001
-+From: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-+Date: Sat, 24 Oct 2015 00:13:38 +0200
-+Subject: [PATCH] tcl: add STM32F469 discovery board config
-+
-+Change-Id: Iad7ee06330b3259ea0ce0d174dfdade6785913eb
-+Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-+Reviewed-on: http://openocd.zylin.com/3043
-+Tested-by: jenkins
-+Reviewed-by: Antonio Borneo <borneo.antonio@gmail.com>
-+Reviewed-by: Freddie Chopin <freddie.chopin@gmail.com>
-+---
-+ tcl/board/stm32f469discovery.cfg | 12 ++++++++++++
-+ 1 file changed, 12 insertions(+)
-+ create mode 100644 tcl/board/stm32f469discovery.cfg
-+
-+diff --git a/tcl/board/stm32f469discovery.cfg b/tcl/board/stm32f469discovery.cfg
-+new file mode 100644
-+index 0000000..eecfe33
-+--- /dev/null
-++++ b/tcl/board/stm32f469discovery.cfg
-+@@ -0,0 +1,12 @@
-++#
-++# This is an STM32F469 discovery board with a single STM32F469NI chip.
-++# http://www.st.com/web/catalog/tools/FM116/CL1620/SC959/SS1532/LN1848/PF262395
-++#
-++
-++source [find interface/stlink-v2-1.cfg]
-++
-++transport select hla_swd
-++
-++source [find target/stm32f4x.cfg]
-++
-++reset_config srst_only
-+-- 
-+1.9.1
-+
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
-new file mode 100644
-index 0000000..bfec983
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
-@@ -0,0 +1,37 @@
-+From 3e219648c80a27f0519003f3b088cbb846e255d8 Mon Sep 17 00:00:00 2001
-+From: Maxime Coquelin <maxime.coquelin@st.com>
-+Date: Sat, 24 Oct 2015 00:03:54 +0200
-+Subject: [PATCH] flash/nor/stm32f2x: Add STM32F469 part
-+
-+Change-Id: I4e13ceb0ba954dc2fea059ddeef10109be938c9c
-+Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-+Reviewed-on: http://openocd.zylin.com/3042
-+Tested-by: jenkins
-+Reviewed-by: Freddie Chopin <freddie.chopin@gmail.com>
-+---
-+ src/flash/nor/stm32f2x.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/flash/nor/stm32f2x.c b/src/flash/nor/stm32f2x.c
-+index 2130444..89fc75d 100644
-+--- a/src/flash/nor/stm32f2x.c
-++++ b/src/flash/nor/stm32f2x.c
-+@@ -790,6 +790,7 @@ static int stm32x_probe(struct flash_bank *bank)
-+ 		max_flash_size_in_kb = 1024;
-+ 		break;
-+ 	case 0x419:
-++	case 0x434:
-+ 		max_flash_size_in_kb = 2048;
-+ 		break;
-+ 	case 0x423:
-+@@ -952,6 +953,7 @@ static int get_stm32x_info(struct flash_bank *bank, char *buf, int buf_size)
++diff --git a/elf2flt.c b/elf2flt.c
++index fcd797c..c6978e1 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -56,6 +56,8 @@ const char *elf2flt_progname;
 + 
-+ 	case 0x413:
-+ 	case 0x419:
-++	case 0x434:
-+ 		device_str = "STM32F4xx";
++ #if defined(TARGET_h8300)
++ #include <elf/h8.h>      /* TARGET_* ELF support for the BFD library            */
+++#elif defined(TARGET_arm)
+++#include <elf/arm.h>
++ #elif defined(__CYGWIN__) || defined(__MINGW32__) || defined(TARGET_nios) || defined(TARGET_nios2)
++ #include "cygwin-elf.h"	/* Cygwin uses a local copy */
++ #elif defined(TARGET_xtensa)
++@@ -646,16 +648,23 @@ dump_symbols(symbols, number_of_symbols);
++ 				default:
++ 					goto good_32bit_resolved_reloc;
++ #elif defined(TARGET_arm)
+++				case R_ARM_TARGET1:
+++				case R_ARM_TARGET2:
++ 				case R_ARM_ABS32:
++ 					relocation_needed = 1;
++ 					break;
++ 				case R_ARM_REL32:
+++				case R_ARM_JUMP24:
+++				case R_ARM_CALL:
++ 				case R_ARM_THM_PC11:
++ 				case R_ARM_THM_PC22:
+++				case R_ARM_THM_JUMP24:
++ 				case R_ARM_PC24:
++ 				case R_ARM_PLT32:
++ 				case R_ARM_GOTPC:
++ 				case R_ARM_GOT32:
+++				case R_ARM_PREL31:
+++				case R_ARM_NONE:
++ 					relocation_needed = 0;
++ 					break;
++ 				default:
++@@ -871,9 +880,7 @@ dump_symbols(symbols, number_of_symbols);
++ 					relocation_needed = 1;
++ 					if (verbose)
++ 						fprintf(stderr,
++-							"%s vma=0x%x, "
++-							"value=0x%"BFD_VMA_FMT"x, "
++-							"address=0x%"BFD_VMA_FMT"x "
+++							"%s vma=0x%x, value=0x%x, address=0x%x "
++ 							"sym_addr=0x%x rs=0x%x, opcode=0x%x\n",
++ 							"ABS32",
++ 							sym_vma, (*(q->sym_ptr_ptr))->value,
++@@ -890,9 +897,7 @@ dump_symbols(symbols, number_of_symbols);
++ 				case R_ARM_PLT32:
++ 					if (verbose)
++ 						fprintf(stderr,
++-							"%s vma=0x%x, "
++-							"value=0x%"BFD_VMA_FMT"x, "
++-							"address=0x%"BFD_VMA_FMT"x "
+++							"%s vma=0x%x, value=0x%x, address=0x%x "
++ 							"sym_addr=0x%x rs=0x%x, opcode=0x%x\n",
++ 							"PLT32",
++ 							sym_vma, (*(q->sym_ptr_ptr))->value,
++@@ -1446,7 +1451,7 @@ DIS29_RELOCATION:
++ 				}
++ 			}
 + 
-+ 		switch (rev_id) {
++-			sprintf(&addstr[0], "+0x%lx", sym_addr - (*(q->sym_ptr_ptr))->value -
+++			sprintf(&addstr[0], "+0x%x", sym_addr - (*(q->sym_ptr_ptr))->value -
++ 					 bfd_section_vma(abs_bfd, sym_section));
++ 
++ 
++diff --git a/elf2flt.ld.in b/elf2flt.ld.in
++index bfda0ef..ec1fe6f 100644
++--- a/elf2flt.ld.in
+++++ b/elf2flt.ld.in
++@@ -35,6 +35,8 @@ W_RODAT		*(.rodata1)
++ W_RODAT		*(.rodata.*)
++ W_RODAT		*(.gnu.linkonce.r*)
++ 
+++		/* .ARM.extab name sections containing exception unwinding information */
+++		*(.ARM.extab* .gnu.linkonce.armextab.*)
++ 		/* This is special code area at the end of the normal
++ 		   text section.  It contains a small lookup table at
++ 		   the start followed by the code pointed to by entries
++@@ -43,11 +45,20 @@ W_RODAT		*(.gnu.linkonce.r*)
++ 		PROVIDE(@SYMBOL_PREFIX at __ctbp = .);
++ 		*(.call_table_data)
++ 		*(.call_table_text)
++-
++-		. = ALIGN(0x20) ;
++-		@SYMBOL_PREFIX at _etext = . ;
++ 	} > flatmem :text
++ 
+++	/* .ARM.exidx name sections containing index entries for section unwinding */
+++	/* .ARM.exidx is sorted, so has to go in its own output section.  */
+++	@SYMBOL_PREFIX at __exidx_start = .;
+++	.ARM.exidx :
+++	{
+++		*(.ARM.exidx* .gnu.linkonce.armexidx.*)
+++	} > flatmem
+++	@SYMBOL_PREFIX at __exidx_end = .;
+++
+++	. = ALIGN(0x20) ;
+++	@SYMBOL_PREFIX at _etext = . ;
+++
++ 	.data : {
++ 		. = ALIGN(0x4) ;
++ 		@SYMBOL_PREFIX at _sdata = . ;
 +-- 
-+1.9.1
++2.6.4
 +
-diff --git a/board/stmicroelectronics/stm32f469-disco/readme.txt b/board/stmicroelectronics/stm32f469-disco/readme.txt
-new file mode 100644
-index 0000000..3b88496
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f469-disco/readme.txt
-@@ -0,0 +1,19 @@
-+STM32F469 Discovery
-+===================
-+
-+This tutorial describes how to use the predefined Buildroot
-+configuration for the STM32F469 Discovery evaluation platform.
-+
-+Building
-+--------
-+
-+  make stm32f469_disco_defconfig
-+  make
-+
-+Flashing
-+--------
-+
-+  ./board/stmicroelectronics/stm32/stm32f469-disco/flash.sh output/
-+
-+It will flash the minimal bootloader, the Device Tree Blob, and the
-+kernel image which includes the root filesystem as initramfs.
-diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-new file mode 100644
-index 0000000..4d42f96
---- /dev/null
-+++ b/configs/stm32f469_disco_defconfig
-@@ -0,0 +1,19 @@
-+BR2_arm=y
-+BR2_cortex_m4=y
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches/"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.5"
-+BR2_LINUX_KERNEL_DEFCONFIG="stm32"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
-+BR2_PACKAGE_BUSYBOX_CONFIG="board/stmicroelectronics/busybox-minimal.config"
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_AFBOOT_STM32=y
-+BR2_PACKAGE_HOST_OPENOCD=y
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index bec270b..796313b 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-ELF2FLT_VERSION = f859213b18a67fcfc09961267e0a1122d35186f4
+-ELF2FLT_SITE = http://cgit.openadk.org/cgi/cgit/elf2flt.git
+-ELF2FLT_SITE_METHOD = git
++ELF2FLT_VERSION = 177ec2701aba30270ec1260746b8db5442c77ef4
++ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
+ ELF2FLT_LICENSE = GPLv2+
+ ELF2FLT_LICENSE_FILES = LICENSE.TXT
+ 
 -- 
 2.6.4
