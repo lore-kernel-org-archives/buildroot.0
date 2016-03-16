@@ -1,25 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 16 Mar 2016 21:13:04 +0000
-Subject: [Buildroot] [Bug 8806] Buildroot 2016.2 for Raspberry Pi requires
- that ext4 rootfs is selected. Otherwise the error is reported
-In-Reply-To: <bug-8806-163@https.bugs.busybox.net/>
-References: <bug-8806-163@https.bugs.busybox.net/>
-Message-ID: <bug-8806-163-D2GhrIvULN@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Mar 2016 22:16:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+In-Reply-To: <1458161240-10454-1-git-send-email-bernd.kuhls@t-online.de>
+ (Bernd Kuhls's message of "Wed, 16 Mar 2016 21:47:20 +0100")
+References: <1458161240-10454-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <87a8ly9l97.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8806
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-What do you suggest we do? If you change the defconfig (E.G. to use initramfs
-instead of ext4) then it is also your responsibility to ensure it makes sense.
-The raspberrypi post-image script creates as sdcard image with the ext4
-filesystem the defconfig enables, so if you don't want that - Then just remove
-the post-image script from the .config.
+ > Fixes
+ > http://autobuild.buildroot.net/results/4e4/4e403fa4aba6196ddc362cfe9c1e37743fa3cede/
+
+ > and other atomic-related build errors by this upstream commit:
+ > https://github.com/tvheadend/tvheadend/commit/f0472eebaa539c61e958432cded2b7cac41f758f
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
