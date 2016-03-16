@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Mar 2016 00:14:01 +0100
-Subject: [Buildroot] [PATCH 07/16] musl: build broken on Thumb,
- use ARM mode
-In-Reply-To: <1458164602-16983-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Mar 2016 00:18:21 +0100
+Subject: [Buildroot] [PATCH 08/16] toolchain-buildroot: update glibc
+ comment for noMMU
+In-Reply-To: <1458164602-16983-9-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56E9E8B9.3060909@mind.be>
+ <1458164602-16983-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56E9E9BD.2040107@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +13,35 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 03/16/16 22:43, Thomas Petazzoni wrote:
-> Building the musl C library on Thumb (Thumb1, not Thumb2), fails with:
->
->   {standard input}:20: Error: only lo regs allowed with immediate -- `mov fp,#0'
->   {standard input}:21: Error: only lo regs allowed with immediate -- `mov lr,#0'
->   {standard input}:25: Error: unshifted register required -- `and ip,a1,#-16'
->
-> Since there are no cores that we support that are Thumb1 only, use the
-> same solution as the one used by glibc: build the C library in ARM
-> mode.
+> glibc is not available for noMMU platforms, so it doesn't make sense
+> to show the comment about glibc requiring dynamic libraries on noMMU
+> platforms.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
->   package/musl/musl.mk | 5 +++++
->   1 file changed, 5 insertions(+)
+>   toolchain/toolchain-buildroot/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
 >
-> diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-> index 081a700..0e881f9 100644
-> --- a/package/musl/musl.mk
-> +++ b/package/musl/musl.mk
-> @@ -23,6 +23,11 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index cb4fc18..ea290eb 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -83,6 +83,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>   	  http://www.gnu.org/software/libc/
 >
->   MUSL_INSTALL_STAGING = YES
->
-> +# Thumb build is broken, build in ARM mode
+>   comment "(e)glibc only available with shared lib support"
+> +	depends on BR2_USE_MMU
 
-  The comment about all our thumb1 architectures supporting arm mode should be 
-repeated here IMHO.
-
-> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-
-  So this one would also have to be changed if INSTRUCTIONS_THUMB2 is removed. 
-Hm, maybe not such a good idea after all... So instead, just add a depends on 
-!THUMB2 to BR2_ARM_INSTRUCTIONS_THUMB.
-
+  Actually, the rest of the architecture dependencies should also be repeated 
+then. It's a huge blob, so maybe introduce GLIBC_ARCH_DEPENDS? Which could, by 
+the way, also be used to protect comments for packages that depend on glibc.
 
   Regards,
   Arnout
 
-> +MUSL_EXTRA_CFLAGS += -marm
-> +endif
-> +
->   define MUSL_CONFIGURE_CMDS
->   	(cd $(@D); \
->   		$(TARGET_CONFIGURE_OPTS) \
+>   	depends on BR2_STATIC_LIBS
+>
+>   config BR2_TOOLCHAIN_BUILDROOT_MUSL
 >
 
 
