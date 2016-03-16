@@ -1,44 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 09:18:26 +0100
-Subject: [Buildroot] [git commit] jamvm: needs dynamic library support
-Message-ID: <20160316081910.5B73881871@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 09:21:03 +0100
+Subject: [Buildroot] [PATCH] quagga: security bump to version
+	1.0.20160309
+In-Reply-To: <46743f76247ed0f41bf1b3a77bbd967736b6765e.1458058320.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 15 Mar 2016 18:12:00 +0200")
+References: <46743f76247ed0f41bf1b3a77bbd967736b6765e.1458058320.git.baruch@tkos.co.il>
+Message-ID: <87mvpy6dg0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cba44b10948a732a1eae841d1761638046c323c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/931/931a005fab39f22bda0fd8c249f3e4d1f5eba4cc/
-http://autobuild.buildroot.net/results/fa3/fa34334acd8d682e76444d9208463f364de96291/
+ > Fixes CVE-2016-2342 (AKA VU#270232): Quagga bgpd with BGP peers enabled for
+ > VPNv4 contains a buffer overflow vulnerability.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jamvm/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ > Remove the --enable-babeld and --enable-opaque-lsa configure options that were
+ > removed in this release.
 
-diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
-index 3b5ff3e..2cc97a1 100644
---- a/package/jamvm/Config.in
-+++ b/package/jamvm/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_JAMVM
- 	bool "jamvm"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc
- 	select BR2_PACKAGE_ZLIB
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_JAMVM
- 
- 	  http://jamvm.sf.net
- 
--comment "jamvm needs a toolchain w/ threads"
-+comment "jamvm needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_arm || BR2_armeb || BR2_i386 || BR2_x86_64 \
- 		|| BR2_mips || BR2_mipsel || BR2_powerpc
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ > See the release announcement at
+ > https://lists.quagga.net/pipermail/quagga-dev/2016-March/014938.html.
+
+This unfortunately causes some new build errors:
+
+http://autobuild.buildroot.net/?reason=quagga-1.0.20160309
+
+make[3]: *** No rule to make target `../ospfd/libospf.la', needed by `libospfapiclient.la'.  Stop.
+
+Perhaps a parallel build issue? Care to take a look?
+
+-- 
+Bye, Peter Korsgaard
