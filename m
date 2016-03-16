@@ -1,44 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 22:39:09 +0100
-Subject: [Buildroot] [git commit] python-mistune: bump to version 0.7.2
-Message-ID: <20160316224555.6FF5C7F8B3@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 22:38:36 +0100
+Subject: [Buildroot] [git commit] python-cffi: bump to version 1.5.2
+Message-ID: <20160316224555.6654C7FE1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5a2d2df196410066c6a240489cb371b1c5bbf22
+commit: https://git.buildroot.net/buildroot/commit/?id=7e7def166551923f78ecdcb35f5f27053dc8dc90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-mistune/python-mistune.hash | 6 +++---
- package/python-mistune/python-mistune.mk   | 2 +-
+ package/python-cffi/python-cffi.hash | 6 +++---
+ package/python-cffi/python-cffi.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
-index b161e11..8509606 100644
---- a/package/python-mistune/python-mistune.hash
-+++ b/package/python-mistune/python-mistune.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=057bc28bf629d6a1283d680a34ed9d0f, sha256 locally computed.
--md5	057bc28bf629d6a1283d680a34ed9d0f  mistune-0.7.1.tar.gz
--sha256	6076dedf768348927d991f4371e5a799c6a0158b16091df08ee85ee231d929a7  mistune-0.7.1.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ed9ac03c99261bd1803e44ddaa4f87cb, sha256 locally computed.
-+md5	ed9ac03c99261bd1803e44ddaa4f87cb  mistune-0.7.2.tar.gz
-+sha256	626f2516adcde4af608eaf83635ff20ff7e577c1898ad4d0f0fcd8c094399840  mistune-0.7.2.tar.gz
-diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
-index a1e5710..f0301a7 100644
---- a/package/python-mistune/python-mistune.mk
-+++ b/package/python-mistune/python-mistune.mk
+diff --git a/package/python-cffi/python-cffi.hash b/package/python-cffi/python-cffi.hash
+index c689088..52f5198 100644
+--- a/package/python-cffi/python-cffi.hash
++++ b/package/python-cffi/python-cffi.hash
+@@ -1,4 +1,4 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=dec8441e67880494ee881305059af656
+-md5  dec8441e67880494ee881305059af656  cffi-1.5.0.tar.gz
++# From https://pypi.python.org/pypi?:action=show_md5&digest=fa766133f7299464c8bf857e0c966a82
++md5  fa766133f7299464c8bf857e0c966a82  cffi-1.5.2.tar.gz
+ # Calculated based on the hash above
+-sha256	 44f76f6c3fc654860821785192eca29bd66531af57d09b681e6d52584604a7e7  cffi-1.5.0.tar.gz
++sha256	 da9bde99872e46f7bb5cff40a9b1cc08406765efafb583c704de108b6cb821dd  cffi-1.5.2.tar.gz
+diff --git a/package/python-cffi/python-cffi.mk b/package/python-cffi/python-cffi.mk
+index d7e4edf..2b35832 100644
+--- a/package/python-cffi/python-cffi.mk
++++ b/package/python-cffi/python-cffi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MISTUNE_VERSION = 0.7.1
-+PYTHON_MISTUNE_VERSION = 0.7.2
- PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
- PYTHON_MISTUNE_SITE = http://pypi.python.org/packages/source/m/mistune
- PYTHON_MISTUNE_LICENSE = BSD-3c
+-PYTHON_CFFI_VERSION = 1.5.0
++PYTHON_CFFI_VERSION = 1.5.2
+ PYTHON_CFFI_SOURCE = cffi-$(PYTHON_CFFI_VERSION).tar.gz
+ PYTHON_CFFI_SITE = https://pypi.python.org/packages/source/c/cffi
+ PYTHON_CFFI_SETUP_TYPE = setuptools
