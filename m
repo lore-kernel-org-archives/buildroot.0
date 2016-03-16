@@ -1,69 +1,71 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 16 Mar 2016 21:38:28 +0200
-Subject: [Buildroot] [PATCH] linknx: select libcurl to fix autoreconf
-Message-ID: <ad8eed5a1643cc3be56f317dcac61cb1314fc40a.1458157108.git.baruch@tkos.co.il>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 16 Mar 2016 20:23:01 +0000
+Subject: [Buildroot] [Bug 8806] New: Buildroot 2016.2 for Raspberry Pi
+ requires that ext4 rootfs is selected. Otherwise the error is reported
+Message-ID: <bug-8806-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-linknx configure.ac uses the LIBCURL_CHECK_CONFIG macro that is only defined
-in libcurl.m4 that is part of libcurl. Select libcurl for now to fix
-autoreconf.
+https://bugs.busybox.net/show_bug.cgi?id=8806
 
-Fixes:
-http://autobuild.buildroot.net/results/96e/96e9ae0df7ebb7ad3d748a6b518cc59570e0b995/
-http://autobuild.buildroot.net/results/179/17971c9f8925ff8623a7d97aac8eda0c287a76c9/
-http://autobuild.buildroot.net/results/2a8/2a8af93d6439b313b048ccac7b6cfecbb6baff55/
+            Bug ID: 8806
+           Summary: Buildroot 2016.2 for Raspberry Pi requires that ext4
+                    rootfs is selected. Otherwise the error is reported
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: wzab01 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/linknx/Config.in |  1 +
- package/linknx/linknx.mk | 13 ++++---------
- 2 files changed, 5 insertions(+), 9 deletions(-)
+I often use Raspberry Pi in a configuration, where only Initramfs is used.
+It makes my system resistant to random power cuts.
+Unfortunately with Buildroot 2016.2 if I do not create the Ext4 image the
+board/raspberrypi/post-image.sh script crashes and generates an error.
+Probably this error can be ignored, as the essential files in the output/images
+are already created, but the compilation finished with ERROR doesn't look good.
 
-diff --git a/package/linknx/Config.in b/package/linknx/Config.in
-index 36838fed6c0f..ca55c8bfb2f5 100644
---- a/package/linknx/Config.in
-+++ b/package/linknx/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LINKNX
- 	bool "linknx"
- 	select BR2_PACKAGE_LIBPTHSEM
-+	select BR2_PACKAGE_LIBCURL # for autoreconf
- 	select BR2_PACKAGE_ARGP_STANDALONE \
- 	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_INSTALL_LIBSTDCPP
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index 9d1f75e122aa..5dc8bb2d0839 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -15,9 +15,11 @@ LINKNX_CONF_OPTS = \
- 	--without-log4cpp \
- 	--without-pth-test \
- 	--with-pth=$(STAGING_DIR)/usr \
--	--disable-smtp
-+	--disable-smtp \
-+	--with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
- 
--LINKNX_DEPENDENCIES = libpthsem $(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
-+LINKNX_DEPENDENCIES = libpthsem libcurl \
-+	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
- 
- # This is needed to make autoreconf happy
- define LINKNX_CREATE_MISSING_FILES
-@@ -32,11 +34,4 @@ else
- LINKNX_CONF_OPTS += --without-mysql
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
--LINKNX_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
--LINKNX_DEPENDENCIES += libcurl
--else
--LINKNX_CONF_OPTS += --without-libcurl
--endif
--
- $(eval $(autotools-package))
+Steps to duplicate the problem:
+$ wget https://buildroot.org/downloads/buildroot-2016.02.tar.bz2
+$ tar -xjf buildroot-2016.02.tar.bz2
+$ cd buildroot-2016.02
+$ make raspberrypi_defconfig
+$ make menuconfig
+In section "Filesystem images" deselect "ext2/3/4 root filesystem"
+Select "initial RAM filesystem linked into linux kernel"
+Select (optionally) Compression method (gzip)
+Save configuration and exit
+$make
+
+After some time, you'll get:
+>>>   Executing post-image script board/raspberrypi/post-image.sh
+Version: Linux version 4.1.15 (wzab at wzab) (gcc version 4.9.3 (Buildroot
+2016.02) ) #3 PREEMPT Wed Mar 16 20:43:58 CET 2016
+DT: y
+DDT: n
+283x: n
+file(rootfs.ext4): stat(/tmp/mmm/buildroot-2016.02/output/images/rootfs.ext4)
+failed: No such file or directory
+hdimage(sdcard.img): could not setup rootfs.ext4
+Makefile:667: recipe for target 'target-post-image' failed
+make: *** [target-post-image] Error 1
+
+That problem affects also those, who want to create ext2 rootfs or ext3 rootfs:
+Even if you select "[*] ext2/3/4 root filesystem", the error will  occur if you
+select version ext2 or ext3.
+
+Best regards,
+Wojtek
+
 -- 
-2.7.0
+You are receiving this mail because:
+You are on the CC list for the bug.
