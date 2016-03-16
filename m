@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 22:19:36 +0100
-Subject: [Buildroot] [git commit] samba4: add host-python to dependencies
-Message-ID: <20160316224555.14E6E7F8B3@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 22:37:09 +0100
+Subject: [Buildroot] [git commit] mc: bump to version 4.8.16
+Message-ID: <20160316224555.3D39C7FEA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74e0ba60f79e04d7147bd6d2a4a1797c605542ac
+commit: https://git.buildroot.net/buildroot/commit/?id=4376644474dd5c4d231af3b001167a220e014e91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though it's inherited by the python dependency it's more clear this
-way for graph-depends, since it's used by the waf buildsystem.
-And even though we have a hard dependency on python for the distro this
-python could ostensibly be 3.x which isn't compatible with the bundled
-waf series (1.5.x) in samba (as of current shipping version and upcoming
-4.4.x series).
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/mc/mc.hash | 4 ++--
+ package/mc/mc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index ee0452e..0fa70a5 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -10,7 +10,9 @@ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
- SAMBA4_LICENSE = GPLv3+
- SAMBA4_LICENSE_FILES = COPYING
--SAMBA4_DEPENDENCIES = host-e2fsprogs host-heimdal e2fsprogs popt python zlib \
-+SAMBA4_DEPENDENCIES = \
-+	host-e2fsprogs host-heimdal host-python \
-+	e2fsprogs popt python zlib \
- 	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
- 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
- 	$(if $(BR2_PACKAGE_READLINE),readline)
+diff --git a/package/mc/mc.hash b/package/mc/mc.hash
+index 810d144..a93432b 100644
+--- a/package/mc/mc.hash
++++ b/package/mc/mc.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://ftp.midnight-commander.org/mc-4.8.15.sha256:
+-sha256  cf4e8f5dfe419830d56ca7e5f2495898e37ebcd05da1e47ff7041446c87fba16  mc-4.8.15.tar.xz
++# Hash from http://ftp.midnight-commander.org/mc-4.8.16.sha256:
++sha256  bbbcbe3097d3160f865d24aa38ff122f1c59752b5ef153ca4ade5ac0f82b7020  mc-4.8.16.tar.xz
+diff --git a/package/mc/mc.mk b/package/mc/mc.mk
+index eb4b104..05e5243 100644
+--- a/package/mc/mc.mk
++++ b/package/mc/mc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MC_VERSION = 4.8.15
++MC_VERSION = 4.8.16
+ MC_SOURCE = mc-$(MC_VERSION).tar.xz
+ MC_SITE = http://ftp.midnight-commander.org
+ MC_LICENSE = GPLv3+
