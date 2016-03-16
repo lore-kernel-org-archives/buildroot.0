@@ -1,149 +1,184 @@
 From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Date: Wed, 16 Mar 2016 17:15:50 +0530
-Subject: [Buildroot] [ PATCH Selinux v11] linux-pam: add system auth file
-	and host variant
-Message-ID: <1458128750-14967-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Date: Wed, 16 Mar 2016 17:16:10 +0530
+Subject: [Buildroot] [ PATCH Selinux v11] busybox: applets as individual
+	binaries
+Message-ID: <1458128770-15019-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Niranjan <niranjan.reddy@rockwellcollins.com>
+From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 
-This patch creates system-auth.pamd file for pam services
-and adds host-linux-pam variant for creating pam.d files.
+The individual binaries option of busybox allows for the applets
+that would usually be symlinks to be built as individual applications
+that link against a shared library.
 
+This feature is needed for SELinux to allow the applications to run
+under the correct SELinux context.
+
+The patch being added allows the individual applications to be
+installed and will be upstreamed to the busybox developers.
+
+The initial work for this change was done by Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>.
+
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 
 ---
 Changes v10 -> v11:
-  - Added host-linux-pam variant as it is the dependency for creating pam_conv1 files.
-  - Removed semicolon at the end of if condition (after fi).
-  - Merged system auth patch with host selinux dependencies patch
+  - Removed BUSYBOX_MAKEDEV_PERMISSIONS logic and added all 12 applets to
+    BUSYBOX_PERMISSIONS variable.
+  - Changed makedevs.c file to ignore optional files with type=F ( files which does not exist).
 
 Changes v9 -> v10:
-  - Dropped host linux-pam variant,optional selinux and audit dependencies and created seperate
-    Patches (Suggedted by Thomas).
+  - Removed 0002-applets-Add-installation-of-individual-binaries.patch as it was upstreamed.
 
 Changes v8 -> v9:
   - No changes
 
 Changes v7 -> v8:
-  - Removed sub-shell around the config file install block and
-    refactored the block to use absolute paths for the copying
-    (Suggested by Samuel)
-  - Changed the enable-db=no configure option to disable-db to be
-    consistent with the rest of the configure options (Suggested by
+  - Changed individual binaries comment to be !BR2_bfin (Suggested by
     Samuel)
 
 Changes v6 -> v7:
-  - Added missing host-pkgconf dependency and removed unneeded
-    host-autoconf dependency(Clayton S.)
+  - No changes
 
 Changes v5 -> v6:
   - No changes
 
 Changes v4 -> v5:
-  - Dropping unneeded patch (Clayton S.)
+  - Renamed to follow latest patch naming convention (Matt W.)
+  - Updated to use BR2_STATIC_LIBS instead of old PREFERRED (Matt W.)
+  - Added depends to make sure bfin can't build shared lib
+    busybox lib for individual binary use.  Looks like shared
+    lib creation doesn't error out but the objects don't get
+    placed into the elf.  Then the trylink fails on linking
+    the first individual applet. (Matt W.)
+  - Made suid permissions setting dynamic for applets actually being
+    installed (Clayton S.)
 
 Changes v1 -> v4:
   - Did not exist
 ---
- package/linux-pam/linux-pam.mk     | 41 +++++++++++++++++++++++++++++++++++++-
- package/linux-pam/system-auth.pamd | 15 ++++++++++++++
- 2 files changed, 55 insertions(+), 1 deletion(-)
- create mode 100644 package/linux-pam/system-auth.pamd
+ package/busybox/Config.in   |  9 +++++++++
+ package/busybox/busybox.mk  | 40 ++++++++++++++++++++++++++++++++++++++++
+ package/makedevs/makedevs.c |  4 +++-
+ 3 files changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 55a1024..ea650de 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -8,15 +8,18 @@ LINUX_PAM_VERSION = 1.1.8
- LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
- LINUX_PAM_SITE = http://linux-pam.org/library
- LINUX_PAM_INSTALL_STAGING = YES
-+# disable cracklib in linux pam config options
- LINUX_PAM_CONF_OPTS = \
- 	--disable-prelude \
- 	--disable-isadir \
- 	--disable-nis \
- 	--disable-db \
-+	--disable-cracklib \
- 	--disable-regenerate-docu \
- 	--enable-securedir=/lib/security \
- 	--libdir=/lib
--LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf
-+# host-linux-pam is needed for creating pam conf files
-+LINUX_PAM_DEPENDENCIES = flex host-flex host-pkgconf host-linux-pam
- LINUX_PAM_AUTORECONF = YES
- LINUX_PAM_LICENSE = BSD-3c
- LINUX_PAM_LICENSE_FILES = Copyright
-@@ -46,6 +49,42 @@ define LINUX_PAM_INSTALL_CONFIG
- 		$(TARGET_DIR)/etc/pam.d/other
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index a3a328d..920ee0c 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -51,6 +51,15 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
+ 	  crond, then individual binaries have to be enabled for the
+ 	  SELinux type transitions to occur properly.
+ 
++config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
++	bool "Individual binaries"
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_bfin # libbusybox.so link issue
++
++comment "Busybox individual binaries depends on dynamic libraries"
++	depends on BR2_STATIC_LIBS
++	depends on !BR2_bfin
++
+ config BR2_PACKAGE_BUSYBOX_WATCHDOG
+ 	bool "Install the watchdog daemon startup script"
+ 	help
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 7f6dbd6..a08cb5a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -50,9 +50,36 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
+ BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
+ BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++define BUSYBOX_PERMISSIONS
++	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
++# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE.
++# 12 Applets are pulled from applets.h using grep command :
++#  grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" \
++#  $(@D)/include/applets.h 
++#  o/p:  
++#   wall,ping,ping6,crontab,findfs,login,mount,passwd,su,traceroute 
++#   traceroute6 and vlock.
++# These applets are added to the device table and the makedev file
++# ignores the files with type 'F' ( optional files).
++	/usr/bin/wall 			 F 4755 0  0 - - - - -
++	/bin/ping 			 f 4755 0  0 - - - - -
++	/bin/ping6 			 F 4755 0  0 - - - - -
++	/usr/bin/crontab 		 f 4755 0  0 - - - - -
++	/sbin/findfs 			 F 4755 0  0 - - - - -
++	/bin/login 			 F 4755 0  0 - - - - -
++	/bin/mount 			 f 4755 0  0 - - - - -
++	/usr/bin/passwd 		 F 4755 0  0 - - - - -
++	/bin/su 			 F 4755 0  0 - - - - -
++	/usr/bin/traceroute 		 f 4755 0  0 - - - - -
++	/usr/bin/traceroute6 		 F 4755 0  0 - - - - -
++	/usr/bin/vlock 			 F 4755 0  0 - - - - -
++endef
++else
+ define BUSYBOX_PERMISSIONS
+ 	/bin/busybox                     f 4755 0  0 - - - - -
+ endef
++endif
+ 
+ # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
+ ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
+@@ -170,6 +197,17 @@ define BUSYBOX_SET_SELINUX
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
++define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
++endef
++
++define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
++	rm -f $(TARGET_DIR)/bin/busybox
++endef
++endif
++
+ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+@@ -229,6 +267,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
++	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
+ 	$(BUSYBOX_MUSL_TWEAKS)
  endef
  
-+# Use the host-pam pam_conv1 app to create the pam.d files
-+define LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
-+	if [ -d $(TARGET_DIR)/etc/pam.d/ ]; then \
-+		mv $(TARGET_DIR)/etc/pam.d/ $(TARGET_DIR)/etc/pam.d.orig/; \
-+	fi
-+	cd $(TARGET_DIR)/etc/ && cat $(@D)/conf/pam.conf | $(HOST_DIR)/usr/bin/pam_conv1; \
-+	if [ -d $(TARGET_DIR)/etc/pam.d.orig ]; then \
-+		cp -a $(TARGET_DIR)/etc/pam.d/* $(TARGET_DIR)/etc/pam.d.orig/; \
-+		rm -rf $(TARGET_DIR)/etc/pam.d/; \
-+		mv $(TARGET_DIR)/etc/pam.d.orig/ $(TARGET_DIR)/etc/pam.d/; \
-+	fi
-+	$(INSTALL) -D -m 0644 package/linux-pam/system-auth.pamd $(TARGET_DIR)/etc/pam.d/system-auth
-+endef
-+
-+LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_CONFIG_FILE_TARGET_INSTALL
- LINUX_PAM_POST_INSTALL_TARGET_HOOKS += LINUX_PAM_INSTALL_CONFIG
+@@ -252,6 +291,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
+ 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
+ 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
+ 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
++	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
+ endef
  
-+HOST_LINUX_PAM_DEPENDENCIES = host-flex host-pkgconf
-+
-+HOST_LINUX_PAM_CONF_OPTS = \
-+	--disable-rpath \
-+	--enable-read-both-confs \
-+	--disable-regenerate-docu \
-+	--disable-isadir \
-+	--disable-nis \
-+	--enable-securedir=/lib/security \
-+	--disable-prelude \
-+	--disable-cracklib \
-+	--disable-lckpwdf \
-+	--disable-db \
-+	--disable-selinux \
-+	--disable-audit \
-+
-+define HOST_LINUX_PAM_INSTALL_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/conf/pam_conv1/pam_conv1 $(HOST_DIR)/usr/bin/pam_conv1
-+endef
-+
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
-diff --git a/package/linux-pam/system-auth.pamd b/package/linux-pam/system-auth.pamd
-new file mode 100644
-index 0000000..2fa116a
---- /dev/null
-+++ b/package/linux-pam/system-auth.pamd
-@@ -0,0 +1,15 @@
-+#%PAM-1.0
-+auth        required      pam_env.so
-+auth        sufficient    pam_unix.so
-+auth        required      pam_deny.so
-+
-+account     required      pam_unix.so
-+
-+#password    required      pam_cracklib.so try_first_pass retry=3
-+password    sufficient    pam_unix.so md5 shadow try_first_pass
-+password    required      pam_deny.so
-+
-+session     optional      pam_keyinit.so revoke
-+session     required      pam_limits.so
-+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
-+session     required      pam_unix.so
+ # Checks to give errors that the user can understand
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index 53ff6fe..20a2804 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -496,7 +496,9 @@ int main(int argc, char **argv)
+ 				ret = EXIT_FAILURE;
+ 				goto loop;
+ 			}
+-		} else if (type == 'r') {
++		} else if (type == 'F') {
++           continue; /*Ignore optional files*/
++	    } else if (type == 'r') {
+ 			recursive_uid = uid;
+ 			recursive_gid = gid;
+ 			recursive_mode = mode;
 -- 
 2.5.0
