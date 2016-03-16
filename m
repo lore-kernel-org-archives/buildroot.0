@@ -1,38 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Mar 2016 22:43:19 +0100
-Subject: [Buildroot] [PATCH 13/16] elf2flt: disable Werror to avoid build
-	issues
+Date: Wed, 16 Mar 2016 22:43:17 +0100
+Subject: [Buildroot] [PATCH 11/16] package/Makefile.in: adjust LDFLAGS for
+	elf2flt
 In-Reply-To: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458164602-16983-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458164602-16983-12-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some of the debugging printf use incorrect formats, which cause some
-warnings. Due to the use of -Werror by default, the build breaks
-unnecessarily. Therefore, disable -Werror when building elf2flt.
+So far, our LDFLAGS for the BR2_BINFMT_FLAT case were only used on
+Blackfin. However, passing -elf2flt in LDFLAGS is wrong. Indeed,
+LDFLAGS are not linker flags, but flags passed to the compiler when
+linking.
+
+If you pass -elf2flt to the compiler when linking, it is understood as
+"-e lf2flt", i.e "the entry point is named lf2flt", which isn't
+exactly the intention. We in fact need to pass -Wl,-elf2flt in LDFLAGS
+as well, so that the compiler passes -elf2flt down to the linker.
+
+For some reason, this option does not cause an issue with the Blackfin
+toolchain, but it does with either a Buildroot toolchain for Cortex-M
+or an OSELAS toolchain for Cortex-M. We have verified that passing
+-Wl,-elf2flt continues to work with the Blackfin toolchain.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/elf2flt/elf2flt.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 796313b..eb0baad 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -18,7 +18,8 @@ HOST_ELF2FLT_CONF_OPTS = \
- 	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
- 	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
- 	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
--	--target=$(GNU_TARGET_NAME)
-+	--target=$(GNU_TARGET_NAME) \
-+	--disable-werror
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dd595e2..616bdd0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -145,7 +145,7 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
+ 	-Wl$(comma)-elf2flt)
+ TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+ 	-Wl$(comma)-elf2flt)
+-TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
++TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
+ endif
  
- HOST_ELF2FLT_LIBS = -lz
- 
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
 -- 
 2.6.4
