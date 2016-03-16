@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 22:38:10 +0100
-Subject: [Buildroot] [git commit] python-pyroute2: bump to version 0.3.16
-Message-ID: <20160316224555.541127FE1C@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 22:39:09 +0100
+Subject: [Buildroot] [git commit] python-mistune: bump to version 0.7.2
+Message-ID: <20160316224555.6FF5C7F8B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8aafe0be1ece97b71d28bd7840031e54915a348a
+commit: https://git.buildroot.net/buildroot/commit/?id=b5a2d2df196410066c6a240489cb371b1c5bbf22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyroute2/python-pyroute2.hash | 6 +++---
- package/python-pyroute2/python-pyroute2.mk   | 2 +-
+ package/python-mistune/python-mistune.hash | 6 +++---
+ package/python-mistune/python-mistune.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index 9784927..69b87c7 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
+diff --git a/package/python-mistune/python-mistune.hash b/package/python-mistune/python-mistune.hash
+index b161e11..8509606 100644
+--- a/package/python-mistune/python-mistune.hash
++++ b/package/python-mistune/python-mistune.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=09cf70377ddf45ffc27b4ad56bcdf52e, sha256 locally computed
--md5     09cf70377ddf45ffc27b4ad56bcdf52e  pyroute2-0.3.15.tar.gz
--sha256  f5b7116fd97f73f97adc3b9c040a4ddbe61f18bb02f47e1c8399567c8791d270  pyroute2-0.3.15.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=1c780304d18461611fe9ffaf7582bd82, sha256 locally computed
-+md5     1c780304d18461611fe9ffaf7582bd82  pyroute2-0.3.16.tar.gz
-+sha256  670fe054d2f262e0d679b3bb25094e0a508b67a8c5df5d45be9d1482d191b7b5  pyroute2-0.3.16.tar.gz
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index fffd556..7317979 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=057bc28bf629d6a1283d680a34ed9d0f, sha256 locally computed.
+-md5	057bc28bf629d6a1283d680a34ed9d0f  mistune-0.7.1.tar.gz
+-sha256	6076dedf768348927d991f4371e5a799c6a0158b16091df08ee85ee231d929a7  mistune-0.7.1.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=ed9ac03c99261bd1803e44ddaa4f87cb, sha256 locally computed.
++md5	ed9ac03c99261bd1803e44ddaa4f87cb  mistune-0.7.2.tar.gz
++sha256	626f2516adcde4af608eaf83635ff20ff7e577c1898ad4d0f0fcd8c094399840  mistune-0.7.2.tar.gz
+diff --git a/package/python-mistune/python-mistune.mk b/package/python-mistune/python-mistune.mk
+index a1e5710..f0301a7 100644
+--- a/package/python-mistune/python-mistune.mk
++++ b/package/python-mistune/python-mistune.mk
 @@ -4,7 +4,7 @@
  #
- #############################################################
+ ################################################################################
  
--PYTHON_PYROUTE2_VERSION = 0.3.15
-+PYTHON_PYROUTE2_VERSION = 0.3.16
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
- PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/source/p/pyroute2
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
+-PYTHON_MISTUNE_VERSION = 0.7.1
++PYTHON_MISTUNE_VERSION = 0.7.2
+ PYTHON_MISTUNE_SOURCE = mistune-$(PYTHON_MISTUNE_VERSION).tar.gz
+ PYTHON_MISTUNE_SITE = http://pypi.python.org/packages/source/m/mistune
+ PYTHON_MISTUNE_LICENSE = BSD-3c
