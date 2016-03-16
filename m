@@ -1,54 +1,99 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 16 Mar 2016 15:56:50 +0100
-Subject: [Buildroot] [PATCH 10/14] firmware-imx: bump to version 5.3
+Date: Wed, 16 Mar 2016 15:56:51 +0100
+Subject: [Buildroot] [PATCH 11/14] imx-uuc: add new package
 In-Reply-To: <1458140214-22303-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1458140214-22303-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1458140214-22303-11-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1458140214-22303-12-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-- Add basic epdc firmware copy to correct output path
-- Move legacy epdc firmware to this package out of kernel
-- VPU firmware upgrade to v3.1.1_r46070
+This package provides the Universal Adapter user-space utility that is
+used to receive commands from the Manufacturing Tool by the Freescale
+UTP Protocol.
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/0fdf829
+It only works on Freescale/NXP kernels whose configuration contains
+the CONFIG_FSL_UTP option.
 
-This package has been implicitely tested through gstreamer as the
-plugins rely on them for vpu decoding for instance:
- # gst-launch-1.0 filesrc location=/root/tears_of_steel_1080p.webm ! \
-   matroskademux ! imxvpudec ! imxipuvideosink
+In order to use it, the best is to make a ramdisk image whose init
+points to /linuxrc. Otherwise you can simply invoke the tool once
+booted:
+ $ uuc
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/freescale-imx/firmware-imx/firmware-imx.hash | 3 +--
- package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/freescale-imx/Config.in            |  1 +
+ package/freescale-imx/imx-uuc/Config.in    | 11 +++++++++++
+ package/freescale-imx/imx-uuc/imx-uuc.hash |  1 +
+ package/freescale-imx/imx-uuc/imx-uuc.mk   | 20 ++++++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/freescale-imx/imx-uuc/Config.in
+ create mode 100644 package/freescale-imx/imx-uuc/imx-uuc.hash
+ create mode 100644 package/freescale-imx/imx-uuc/imx-uuc.mk
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index 06d5a54..a5bc82c 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-@@ -1,2 +1 @@
--# locally computed
--sha256 8cc2df128c0e2d2f5224d73389fbe6e4d6fa9ede76f8c0a9adaf7ec0986d0f1f  firmware-imx-5.2.bin
-+sha256 fd14c3666eb3c12f4f2665d95caf383bb1d0277bb12e2de28fefc8d1230604f2  firmware-imx-5.3.bin
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 35cfb6d..8f81c57 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index dfb6cc4..bc3ddd6 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -44,6 +44,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
  
--FIRMWARE_IMX_VERSION = 5.2
-+FIRMWARE_IMX_VERSION = 5.3
- FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
- 
+ source "package/freescale-imx/imx-kobs/Config.in"
+ source "package/freescale-imx/imx-lib/Config.in"
++source "package/freescale-imx/imx-uuc/Config.in"
+ source "package/freescale-imx/imx-vpu/Config.in"
+ source "package/freescale-imx/firmware-imx/Config.in"
+ if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
+diff --git a/package/freescale-imx/imx-uuc/Config.in b/package/freescale-imx/imx-uuc/Config.in
+new file mode 100644
+index 0000000..2cd8299
+--- /dev/null
++++ b/package/freescale-imx/imx-uuc/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_IMX_UUC
++	bool "imx-uuc"
++	depends on BR2_arm # Only relevant for i.MX
++	help
++	  This package provides the Universal Adapter user-space utility
++	  that is used to receive commands from the Manufacturing Tool
++	  by the Freescale UTP Protocol.
++
++	  This package is provided by Freescale/NXP as-is and doesn't have
++	  an upstream.
++
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
+new file mode 100644
+index 0000000..aab9ea8
+--- /dev/null
++++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
+@@ -0,0 +1 @@
++sha256 95d7f7b075f58fedc07602fbc0e5bf5212d28deea3d09cdbcbd80992dcd18482  imx-uuc-0.5.1.tar.gz
+diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
+new file mode 100644
+index 0000000..1bd419e
+--- /dev/null
++++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# imx-uuc
++#
++################################################################################
++
++IMX_UUC_VERSION = 0.5.1
++IMX_UUC_SITE = $(FREESCALE_IMX_SITE)
++IMX_UUC_LICENSE = GPLv2+
++IMX_UUC_LICENSE_FILES = COPYING
++
++define IMX_UUC_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC=$(TARGET_CC)
++endef
++
++define IMX_UUC_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
++endef
++
++$(eval $(generic-package))
 -- 
 2.7.0
