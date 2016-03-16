@@ -1,86 +1,85 @@
 From: David Picard <davepiq@yahoo.fr>
-Date: Wed, 16 Mar 2016 18:37:04 +0100
-Subject: [Buildroot] [PATCH 1/2] package/qwt : prepared package for other
-	versions of Qt.
-Message-ID: <1458149825-23401-1-git-send-email-davepiq@yahoo.fr>
+Date: Wed, 16 Mar 2016 18:37:05 +0100
+Subject: [Buildroot] [PATCH 2/2] package/qwt : added support for Qt5.
+In-Reply-To: <1458149825-23401-1-git-send-email-davepiq@yahoo.fr>
+References: <1458149825-23401-1-git-send-email-davepiq@yahoo.fr>
+Message-ID: <1458149825-23401-2-git-send-email-davepiq@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted the package configuration to make it more generic. It will thus be
-easier to handle more than one version of Qt. Indeed, multiple versions of Qt
-are compatible with the current Qwt.
+This version of Qwt is compatible with both Qt and Qt5. This patch adds the
+option to compile it for Qt5.
 
 Signed-off-by: David Picard <davepiq@yahoo.fr>
 ---
- package/qwt/Config.in |  9 ++++-----
- package/qwt/qwt.mk    | 10 ++++++++--
- 2 files changed, 12 insertions(+), 7 deletions(-)
+ package/qwt/Config.in | 14 +++++++++-----
+ package/qwt/qwt.mk    |  5 +++++
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 8c7bc56..e72db31 100644
+index e72db31..9dca8ed 100644
 --- a/package/qwt/Config.in
 +++ b/package/qwt/Config.in
-@@ -1,7 +1,7 @@
+@@ -1,7 +1,9 @@
  config BR2_PACKAGE_QWT
  	bool "qwt"
- 	depends on BR2_PACKAGE_QT
--	depends on BR2_PACKAGE_QT_GUI_MODULE
-+	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+-	depends on BR2_PACKAGE_QT
++	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
  	help
  	  Qwt is a graphics extension to the Qt GUI application
  	  framework. It provides a 2D plotting widget and more.
-@@ -12,16 +12,15 @@ if BR2_PACKAGE_QWT
- 
+@@ -13,6 +15,7 @@ if BR2_PACKAGE_QWT
  config BR2_PACKAGE_QWT_SVG
  	bool "SVG support"
--	select BR2_PACKAGE_QT_SVG
-+	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
+ 	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
++	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
  
  config BR2_PACKAGE_QWT_MATHML
  	bool "MathML support"
- 
+@@ -20,10 +23,11 @@ config BR2_PACKAGE_QWT_MATHML
  config BR2_PACKAGE_QWT_OPENGL
  	bool "OpenGL support"
--	depends on BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_QT_OPENGL_ES
-+	select BR2_PACKAGE_QT_OPENGL_ES if \
-+	    BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_QT_OPENGL_ES if \
+-	    BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
++		BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
++	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if \
++		BR2_PACKAGE_QT5BASE && BR2_PACKAGE_QT5_GL_AVAILABLE
  
  endif
  
+-comment "qwt depends on QT gui module"
+-	depends on BR2_PACKAGE_QT
+-	depends on !BR2_PACKAGE_QT_GUI_MODULE
++comment "qwt needs Qt or Qt5"
++	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
 diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index 8a46c25..afd0ffb 100644
+index afd0ffb..8fbde32 100644
 --- a/package/qwt/qwt.mk
 +++ b/package/qwt/qwt.mk
-@@ -8,7 +8,9 @@ QWT_VERSION = 6.1.2
- QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
--QWT_DEPENDENCIES = qt
-+ifeq ($(BR2_PACKAGE_QT),y)
-+QWT_DEPENDENCIES = qt libgles libegl
+@@ -11,6 +11,9 @@ QWT_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_QT),y)
+ QWT_DEPENDENCIES = qt libgles libegl
+ endif
++ifeq ($(BR2_PACKAGE_QT5BASE),y)
++QWT_DEPENDENCIES += qt5base libgles
 +endif
  
  QWT_LICENSE = LGPLv2.1 with exceptions
  QWT_LICENSE_FILES = COPYING
-@@ -35,9 +37,13 @@ else
- QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
+@@ -39,6 +42,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT),y)
+     QWT_QMAKE = $(QT_QMAKE)
++else
++	QWT_QMAKE = $(QT5_QMAKE)
  endif
  
-+ifeq ($(BR2_PACKAGE_QT),y)
-+    QWT_QMAKE = $(QT_QMAKE)
-+endif
-+
  define QWT_CONFIGURE_CMDS
- 	$(SED) $(QWT_CONFIG) $(@D)/qwtconfig.pri
--	(cd $(@D); $(TARGET_MAKE_ENV) $(QT_QMAKE))
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(QWT_QMAKE))
- endef
- 
- define QWT_BUILD_CMDS
 -- 
 1.9.1
