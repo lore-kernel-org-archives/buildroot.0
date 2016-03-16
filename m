@@ -1,42 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 16 Mar 2016 22:37:09 +0100
-Subject: [Buildroot] [git commit] mc: bump to version 4.8.16
-Message-ID: <20160316224555.3D39C7FEA8@busybox.osuosl.org>
+Date: Wed, 16 Mar 2016 22:38:10 +0100
+Subject: [Buildroot] [git commit] python-pyroute2: bump to version 0.3.16
+Message-ID: <20160316224555.541127FE1C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4376644474dd5c4d231af3b001167a220e014e91
+commit: https://git.buildroot.net/buildroot/commit/?id=8aafe0be1ece97b71d28bd7840031e54915a348a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyroute2/python-pyroute2.hash | 6 +++---
+ package/python-pyroute2/python-pyroute2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 810d144..a93432b 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,2 +1,2 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.15.sha256:
--sha256  cf4e8f5dfe419830d56ca7e5f2495898e37ebcd05da1e47ff7041446c87fba16  mc-4.8.15.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.16.sha256:
-+sha256  bbbcbe3097d3160f865d24aa38ff122f1c59752b5ef153ca4ade5ac0f82b7020  mc-4.8.16.tar.xz
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index eb4b104..05e5243 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
+diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
+index 9784927..69b87c7 100644
+--- a/package/python-pyroute2/python-pyroute2.hash
++++ b/package/python-pyroute2/python-pyroute2.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=09cf70377ddf45ffc27b4ad56bcdf52e, sha256 locally computed
+-md5     09cf70377ddf45ffc27b4ad56bcdf52e  pyroute2-0.3.15.tar.gz
+-sha256  f5b7116fd97f73f97adc3b9c040a4ddbe61f18bb02f47e1c8399567c8791d270  pyroute2-0.3.15.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=1c780304d18461611fe9ffaf7582bd82, sha256 locally computed
++md5     1c780304d18461611fe9ffaf7582bd82  pyroute2-0.3.16.tar.gz
++sha256  670fe054d2f262e0d679b3bb25094e0a508b67a8c5df5d45be9d1482d191b7b5  pyroute2-0.3.16.tar.gz
+diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
+index fffd556..7317979 100644
+--- a/package/python-pyroute2/python-pyroute2.mk
++++ b/package/python-pyroute2/python-pyroute2.mk
 @@ -4,7 +4,7 @@
  #
- ################################################################################
+ #############################################################
  
--MC_VERSION = 4.8.15
-+MC_VERSION = 4.8.16
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPLv3+
+-PYTHON_PYROUTE2_VERSION = 0.3.15
++PYTHON_PYROUTE2_VERSION = 0.3.16
+ PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
+ PYTHON_PYROUTE2_SITE = https://pypi.python.org/packages/source/p/pyroute2
+ PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPLv2+
