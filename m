@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 17 Mar 2016 00:45:19 +0100
-Subject: [Buildroot] [PATCH 10/16] arch/arm: add support for hard-float
- on Cortex-M4
-In-Reply-To: <1458164602-16983-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Mar 2016 00:48:23 +0100
+Subject: [Buildroot] [PATCH 11/16] package/Makefile.in: adjust LDFLAGS
+ for elf2flt
+In-Reply-To: <1458164602-16983-12-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-11-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56E9F00F.9040209@mind.be>
+ <1458164602-16983-12-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56E9F0C7.1060009@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,123 +13,50 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 03/16/16 22:43, Thomas Petazzoni wrote:
-> Cortex-M4 cores can optionally have a FPv4-SP floating point unit
-> (which is different than the VFPv4). This commit adds the necessary
-> Config.in options to allow the user to enable the use of this FPU, and
-> to build an EABIhf toolchain for Cortex-M4.
+> So far, our LDFLAGS for the BR2_BINFMT_FLAT case were only used on
+> Blackfin. However, passing -elf2flt in LDFLAGS is wrong. Indeed,
+> LDFLAGS are not linker flags, but flags passed to the compiler when
+> linking.
 >
-> Note that for now the kernel does not have CONFIG_VFP support for
-> ARMv7-M, so in practice, this VFP support cannot really be used for
-> the moment.
+> If you pass -elf2flt to the compiler when linking, it is understood as
+> "-e lf2flt", i.e "the entry point is named lf2flt", which isn't
+> exactly the intention. We in fact need to pass -Wl,-elf2flt in LDFLAGS
+> as well, so that the compiler passes -elf2flt down to the linker.
+>
+> For some reason, this option does not cause an issue with the Blackfin
+> toolchain,
 
-  As in, when you select this option, then your target will fail dramatically 
-because it's hardfloat so even a simple printf will crash violently if a 
-reschedule happens in the middle?
+  Probably because it isn't tested so much :-)
 
-  If so, I'm not so sure we really want this option...
 
+ > but it does with either a Buildroot toolchain for Cortex-M
+> or an OSELAS toolchain for Cortex-M. We have verified that passing
+> -Wl,-elf2flt continues to work with the Blackfin toolchain.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->   arch/Config.in.arm | 23 +++++++++++++++++++++--
->   1 file changed, 21 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index ee612f5..ad3c725 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -31,6 +31,12 @@ config BR2_ARM_CPU_HAS_VFPV4
->   	bool
->   	select BR2_ARM_CPU_HAS_VFPV3
->
-> +config BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
 
-  Since the gcc option has -d16, shouldn't we have that as well?
-
-> +	bool
-> +
-> +config BR2_ARM_CPU_HAS_FPV4_SP
-> +	bool
-> +
->   config BR2_ARM_CPU_HAS_ARM
->   	bool
->
-> @@ -177,6 +183,7 @@ config BR2_cortex_m3
->   config BR2_cortex_m4
->   	bool "cortex-M4"
->   	select BR2_ARM_CPU_HAS_THUMB2
-> +	select BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
->   	select BR2_ARM_CPU_ARMV7M
->   config BR2_fa526
->   	bool "fa526/626"
-> @@ -218,10 +225,11 @@ config BR2_ARM_ENABLE_NEON
->
->   config BR2_ARM_ENABLE_VFP
->   	bool "Enable VFP extension support"
-
-  As I understand it (but I could be wrong), FPv4 is not again different from 
-VFP, i.e. it's again a different ABI (like softfloat and VFP are different 
-ABIs). At least, you get different flags in the ELF files. So I would tend to 
-really make a separate option for FPv4, to avoid all confusion. That is, 
-assuming that I'm right about it being a different ABI.
-
-  Note that in practice it doesn't make much of a difference becaus you never 
-have both VFP and FPv4 on the same processor. Well, at least for the time being 
-- who knows what kind of ugliness ARM will still invent :-)
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
 
-> -	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2
-> +	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
->   	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
->   	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
->   	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
-> +	select BR2_ARM_CPU_HAS_FPV4_SP if BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
->   	help
->   	  For some CPU cores, the VFP extension is optional. Select
->   	  this option if you are certain your particular
-> @@ -264,7 +272,7 @@ config BR2_ARM_EABI
+> ---
+>   package/Makefile.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
->   config BR2_ARM_EABIHF
->   	bool "EABIhf"
-> -	depends on BR2_ARM_CPU_HAS_VFPV2
-> +	depends on BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_FPV4_SP
->   	help
->   	  The EABIhf is an extension of EABI which supports the 'hard'
->   	  floating point model. This model uses the floating point
-> @@ -285,6 +293,7 @@ endchoice
->   choice
->   	prompt "Floating point strategy"
->   	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
-> +	default BR2_ARM_FPU_FPV4_SP if BR2_ARM_CPU_HAS_FPV4_SP
->   	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
->   	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
->   	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
-> @@ -374,6 +383,15 @@ config BR2_ARM_FPU_VFPV4D16
->   	  cores, including the earlier Cortex-A{8, 9}, you should
->   	  instead select VFPv3-D16.
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index dd595e2..616bdd0 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -145,7 +145,7 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
+>   	-Wl$(comma)-elf2flt)
+>   TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+>   	-Wl$(comma)-elf2flt)
+> -TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+> +TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
+>   endif
 >
-> +config BR2_ARM_FPU_FPV4_SP
-> +	bool "FPv4-SP-D16"
-> +	depends on BR2_ARM_CPU_HAS_FPV4_SP
-> +	help
-> +	  This option allows to use the FPv4-SP floating point unit,
-> +	  as available in some ARMv7-M processors (Cortex-M4). This
-> +	  option requires a FPv4-SP unit that has 16 double-precision
-> +	  registers.
-> +
->   config BR2_ARM_FPU_NEON
->   	bool "NEON"
->   	depends on BR2_ARM_CPU_HAS_NEON
-> @@ -475,6 +493,7 @@ config BR2_GCC_TARGET_FPU
->   	default "vfpv3-d16" 	if BR2_ARM_FPU_VFPV3D16
->   	default "vfpv4" 	if BR2_ARM_FPU_VFPV4
->   	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
-> +	default "fpv4-sp-d16"	if BR2_ARM_FPU_FPV4_SP
->   	default "neon" 		if BR2_ARM_FPU_NEON
->   	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
->
+>   ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
 >
 
 
