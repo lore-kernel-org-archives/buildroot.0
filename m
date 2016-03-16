@@ -1,32 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Mar 2016 16:09:52 -0300
-Subject: [Buildroot] [PATCH] openpgm: depends on sync2/sync4
-In-Reply-To: <20160316165310.1b536bc3@free-electrons.com>
-References: <1458138013-18031-1-git-send-email-gustavo@zacarias.com.ar>
- <20160316165310.1b536bc3@free-electrons.com>
-Message-ID: <56E9AF80.60001@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 16 Mar 2016 19:13:10 +0000
+Subject: [Buildroot] [Bug 8801] New: Compilation of Buildroot 2016.2 for
+ Raspberry Pi with Musl 1.1.6 fails - no stddef.h header
+Message-ID: <bug-8801-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 16/03/16 12:53, Thomas Petazzoni wrote:
+https://bugs.busybox.net/show_bug.cgi?id=8801
 
-> Maybe we can remove this dependency then?
->
-> Blackfin provides __sync_*() for 4-bytes, but not for 2 bytes.
->
-> And indeed, the original commit that added this dependency points to
-> http://autobuild.buildroot.org/results/3bd/3bda860a269dd9a4e38533cc9350892c68102618/build-end.log,
-> which shows undefined reference for the two bytes variants.
->
-> Could you submit an updated patch that removes the Blackfin dependency?
->
-> Thanks!
->
-> Thomas
+            Bug ID: 8801
+           Summary: Compilation of Buildroot 2016.2 for Raspberry Pi with
+                    Musl 1.1.6 fails - no stddef.h header
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: wzab01 at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Indeed, the comment in Config.in wasn't clear which gcc instrinsics it 
-used. I'll spin v2.
-Regards.
+To recreate the problem:
+
+$ wget https://buildroot.org/downloads/buildroot-2016.02.tar.bz2
+$ tar -xjf buildroot-2016.02.tar.bz2
+$ cd buildroot-2016.02
+$ make raspberrypi_defconfig
+$ make menuconfig
+In the "Toolchain" section select "Toolchain type" "External toolchain"
+and then in "Toolchain" "Musl 1.1.6 toolchain (experimental)"
+Leave the configuration menu, saving the configuration
+$ make
+
+After some time you'll get:
+
+ CC      drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o
+ CC      fs/proc/array.o
+drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.c:42:20: fatal error:
+stddef.h: No such file or directory
+ #include <stddef.h>
+                    ^
+compilation terminated.
+scripts/Makefile.build:258: recipe for target
+'drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o' failed
+
+
+If I'm forced to build the system quickly (as my students are, due to short lab
+sessions), the only way is to switch off the EABIhf (by selection of the EABI
+in the "Target options", Target ABI) and use the "Toolchain (Sourcery CodeBench
+ARM 2014.05)"
+
+Of course the optimal solution is to use the "Buildroot toolchain" with
+standard EABIhf, but it takes very long to rebuild after "make clean"...
+
+Regards,
+Wojtek
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
