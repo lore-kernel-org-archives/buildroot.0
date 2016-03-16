@@ -1,76 +1,52 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Mar 2016 23:43:03 +0100
-Subject: [Buildroot] [PATCH 02/16] arch/arm: Cortex-M3 provides only
- Thumb-2
-In-Reply-To: <1458164602-16983-3-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56E9E177.5000606@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Mar 2016 23:44:19 +0100
+Subject: [Buildroot] [PATCH 2/4] libcap: add patch to fix build issue
+	with old kernel headers
+In-Reply-To: <20160316233420.2b5f2d47@free-electrons.com> (Thomas Petazzoni's
+ message of "Wed, 16 Mar 2016 23:34:20 +0100")
+References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458159611-5613-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <8737rq83wg.fsf@dell.be.48ers.dk>
+ <20160316233420.2b5f2d47@free-electrons.com>
+Message-ID: <87pouu6o1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/16/16 22:43, Thomas Petazzoni wrote:
-> The Cortex-M cores only support Thumb-2, not Thumb. In fact, Thumb-2
-> is a superset of Thumb,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-  If thumb2 is a superset of thumb, then CPU_HAS_THUMB2 should select 
-CPU_HAS_THUMB. And according to [1], it really is a superset.
+ > Peter,
+ > On Wed, 16 Mar 2016 23:16:31 +0100, Peter Korsgaard wrote:
 
-> and we could have a single option for both in
-> Buildroot, since -mthumb on ARMv4/v5 means original Thumb, while
-> -mthumb on ARMv7 means Thumb 2.
+ >> > Old kernels (before 2.6.36) were defining XATTR_NAME_CAPS in
+ >> > <linux/capability.h>, but using XATTR_SECURITY_PREFIX and
+ >> > XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
+ >> > <linux/xattr.h>.
+ >> 
+ >> gcc10 (which uses 2.6.32 headers) has XATTR_CAPS_SUFFIX in
+ >> linux/capability.h:
+ >> 
+ >> #define XATTR_CAPS_SUFFIX "capability"
+ >> #define XATTR_NAME_CAPS XATTR_SECURITY_PREFIX XATTR_CAPS_SUFFIX
 
-  Well, I think the main reason to have the CPU_HAS_THUMB2 option is to allow 
-packages to depend on it, e.g. because there is some thumb2 assembly in it.
+ > My commit log is talking about XATTR_SECURITY_PREFIX, not
+ > XATTR_CAPS_SUFFIX.
 
-
-> However, for clarity, it makes sense
-> to have two separate options. But in this case, Cortex-M3 should not
-> advertise that it supports Thumb, as in fact selecting Thumb would
-> generate Thumb-2 code.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->   arch/Config.in.arm | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 33f763a..cd1ec33 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -172,7 +172,6 @@ config BR2_cortex_a17
->   	select BR2_ARCH_HAS_MMU_OPTIONAL
->   config BR2_cortex_m3
->   	bool "cortex-M3"
-> -	select BR2_ARM_CPU_HAS_THUMB
-
-  I do agree about the change itself, but I also think that HAS_THUMB2 should 
-select HAS_THUMB instead. Also, I think the BR2_ARM_INSTRUCTIONS_THUMB2 option 
-should be removed, because in the end it's just compiling in thumb mode. In arm 
-mode, we also don't have separate options for armv5, armv6, armv7.
+Well, you wrote ".. but using XATTR_SECURITY_PREFIX and
+XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
+<linux/xattr.h>"
 
 
-  Regards,
-  Arnout
+ > Do you have XATTR_SECURITY_PREFIX defined ?
 
+No, indeed not.
 
->   	select BR2_ARM_CPU_HAS_THUMB2
->   	select BR2_ARM_CPU_ARMV7M
->   config BR2_fa526
->
+ > I do have XATTR_CAPS_SUFFIX like you, but not XATTR_SECURITY_PREFIX.
 
-[1] 
-http://stackoverflow.com/questions/28669905/arm-thumb-and-thumb-2-instructions-confusion
-
-
+Ok.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Venlig hilsen,
+Peter Korsgaard 
