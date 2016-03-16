@@ -1,39 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Mar 2016 22:42:57 +0100
-Subject: [Buildroot] [PATCH 1/1] syslinux: Allow to build multiple
- flavors simultaneously
-In-Reply-To: <56E9D0A6.6040104@mind.be>
-References: <1458143420-23193-1-git-send-email-benoit.allard@greenbone.net>
- <56E9D0A6.6040104@mind.be>
-Message-ID: <20160316224257.46555e32@free-electrons.com>
+Date: Wed, 16 Mar 2016 22:43:07 +0100
+Subject: [Buildroot] [PATCH 01/16] arch/arm: introduce and use
+	BR2_ARM_CPU_ARMV7M
+In-Reply-To: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458164602-16983-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All ARM cores should select a BR2_ARM_CPU_* option. Currently, the
+cortex-m3 does not, which this commit fixes by introducing a
+BR2_ARM_CPU_ARMV7M option.
 
-On Wed, 16 Mar 2016 22:31:18 +0100, Arnout Vandecappelle wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm | 4 ++++
+ 1 file changed, 4 insertions(+)
 
->   It is now possible that no image is selected at all. I think this will be 
-> pretty bad for the build - probably, everything will be built but nothing 
-> installed. So we either have to force one of the images to be selected, or add a 
-> check in the .mk file that at least one of them is selected. I'm not sure what 
-> the best solution is here.
-
-Ensure in Config.in that one of them is enabled, like in the main
-option:
-
-	select BR2_TARGET_SYSLINUX_ISOLINUX \
-		if !BR2_TARGET_SYSLINUX_PXELINUX && \
-		   !BR2_TARGET_SYSLINUX_MBR && \
-		   !BR2_TARGET_SYSLINUX_EFI
-
-At least, that's my preference.
-
-Thomas
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 04f0369..33f763a 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -52,6 +52,9 @@ config BR2_ARM_CPU_ARMV6
+ config BR2_ARM_CPU_ARMV7A
+ 	bool
+ 
++config BR2_ARM_CPU_ARMV7M
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+ 	depends on BR2_arm || BR2_armeb
+@@ -171,6 +174,7 @@ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_ARMV7M
+ config BR2_fa526
+ 	bool "fa526/626"
+ 	select BR2_ARM_CPU_HAS_ARM
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.6.4
