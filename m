@@ -1,49 +1,35 @@
 From: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-Date: Wed, 16 Mar 2016 17:16:10 +0530
-Subject: [Buildroot] [ PATCH Selinux v11] busybox: applets as individual
-	binaries
-Message-ID: <1458128770-15019-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Date: Wed, 16 Mar 2016 17:16:31 +0530
+Subject: [Buildroot] [ PATCH Selinux v11] util-linux: selinux, audit,
+	and pam support
+Message-ID: <1458128791-15061-1-git-send-email-niranjan.reddy@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-The individual binaries option of busybox allows for the applets
-that would usually be symlinks to be built as individual applications
-that link against a shared library.
+This patch adds optional libselinux ,audit and pam support to linux utilities.
 
-This feature is needed for SELinux to allow the applications to run
-under the correct SELinux context.
-
-The patch being added allows the individual applications to be
-installed and will be upstreamed to the busybox developers.
-
-The initial work for this change was done by Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>.
-
-Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
 Reviewed-by: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
 
 ---
 Changes v10 -> v11:
-  - Removed BUSYBOX_MAKEDEV_PERMISSIONS logic and added all 12 applets to
-    BUSYBOX_PERMISSIONS variable.
-  - Changed makedevs.c file to ignore optional files with type=F ( files which does not exist).
+  - Comment added to explain how the SED expression writes to pam files.
 
 Changes v9 -> v10:
-  - Removed 0002-applets-Add-installation-of-individual-binaries.patch as it was upstreamed.
+  - No changes
 
 Changes v8 -> v9:
   - No changes
 
 Changes v7 -> v8:
-  - Changed individual binaries comment to be !BR2_bfin (Suggested by
-    Samuel)
+  - No changes
 
 Changes v6 -> v7:
   - No changes
@@ -52,133 +38,65 @@ Changes v5 -> v6:
   - No changes
 
 Changes v4 -> v5:
-  - Renamed to follow latest patch naming convention (Matt W.)
-  - Updated to use BR2_STATIC_LIBS instead of old PREFERRED (Matt W.)
-  - Added depends to make sure bfin can't build shared lib
-    busybox lib for individual binary use.  Looks like shared
-    lib creation doesn't error out but the objects don't get
-    placed into the elf.  Then the trylink fails on linking
-    the first individual applet. (Matt W.)
-  - Made suid permissions setting dynamic for applets actually being
-    installed (Clayton S.)
+ - Update the selinux busybox config to the latest version of busybox
+    (Clayton S.)
 
 Changes v1 -> v4:
   - Did not exist
 ---
- package/busybox/Config.in   |  9 +++++++++
- package/busybox/busybox.mk  | 40 ++++++++++++++++++++++++++++++++++++++++
- package/makedevs/makedevs.c |  4 +++-
- 3 files changed, 52 insertions(+), 1 deletion(-)
+ package/util-linux/util-linux.mk | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index a3a328d..920ee0c 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -51,6 +51,15 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
- 	  crond, then individual binaries have to be enabled for the
- 	  SELinux type transitions to occur properly.
- 
-+config BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
-+	bool "Individual binaries"
-+	depends on !BR2_STATIC_LIBS
-+	depends on !BR2_bfin # libbusybox.so link issue
-+
-+comment "Busybox individual binaries depends on dynamic libraries"
-+	depends on BR2_STATIC_LIBS
-+	depends on !BR2_bfin
-+
- config BR2_PACKAGE_BUSYBOX_WATCHDOG
- 	bool "Install the watchdog daemon startup script"
- 	help
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7f6dbd6..a08cb5a 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -50,9 +50,36 @@ BUSYBOX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_PACKAGE_BUSYBOX_CONFIG_FRAG
- BUSYBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig
- BUSYBOX_KCONFIG_OPTS = $(BUSYBOX_MAKE_OPTS)
- 
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_PERMISSIONS
-+	/usr/share/udhcpc/default.script f 755  0  0 - - - - -
-+# Set permissions on all applets with BB_SUID_REQUIRE and BB_SUID_MAYBE.
-+# 12 Applets are pulled from applets.h using grep command :
-+#  grep -r -e "APPLET.*BB_SUID_REQUIRE\|APPLET.*BB_SUID_MAYBE" \
-+#  $(@D)/include/applets.h 
-+#  o/p:  
-+#   wall,ping,ping6,crontab,findfs,login,mount,passwd,su,traceroute 
-+#   traceroute6 and vlock.
-+# These applets are added to the device table and the makedev file
-+# ignores the files with type 'F' ( optional files).
-+	/usr/bin/wall 			 F 4755 0  0 - - - - -
-+	/bin/ping 			 f 4755 0  0 - - - - -
-+	/bin/ping6 			 F 4755 0  0 - - - - -
-+	/usr/bin/crontab 		 f 4755 0  0 - - - - -
-+	/sbin/findfs 			 F 4755 0  0 - - - - -
-+	/bin/login 			 F 4755 0  0 - - - - -
-+	/bin/mount 			 f 4755 0  0 - - - - -
-+	/usr/bin/passwd 		 F 4755 0  0 - - - - -
-+	/bin/su 			 F 4755 0  0 - - - - -
-+	/usr/bin/traceroute 		 f 4755 0  0 - - - - -
-+	/usr/bin/traceroute6 		 F 4755 0  0 - - - - -
-+	/usr/bin/vlock 			 F 4755 0  0 - - - - -
-+endef
-+else
- define BUSYBOX_PERMISSIONS
- 	/bin/busybox                     f 4755 0  0 - - - - -
- endef
-+endif
- 
- # If mdev will be used for device creation enable it and copy S10mdev to /etc/init.d
- ifeq ($(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),y)
-@@ -170,6 +197,17 @@ define BUSYBOX_SET_SELINUX
- endef
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index f6e5d62..a5feea0 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -58,6 +58,20 @@ ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
+ UTIL_LINUX_DEPENDENCIES += libcap-ng
  endif
  
-+ifeq ($(BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES),y)
-+define BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BUILD_LIBBUSYBOX,$(BUSYBOX_BUILD_CONFIG))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_INDIVIDUAL,$(BUSYBOX_BUILD_CONFIG))
-+endef
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++UTIL_LINUX_DEPENDENCIES += libselinux
++UTIL_LINUX_CONF_OPTS += --with-selinux
++else
++UTIL_LINUX_CONF_OPTS += --without-selinux
++endif
 +
-+define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
-+	rm -f $(TARGET_DIR)/bin/busybox
++ifeq ($(BR2_PACKAGE_AUDIT),y)
++UTIL_LINUX_DEPENDENCIES += audit
++UTIL_LINUX_CONF_OPTS += --with-audit
++else
++UTIL_LINUX_CONF_OPTS += --without-audit
++endif
++
+ # Used by cramfs utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ 
+@@ -158,9 +172,25 @@ define UTIL_LINUX_INSTALL_PAMFILES
+ 	$(INSTALL) -m 0644 package/util-linux/su.pam \
+ 		$(TARGET_DIR)/etc/pam.d/su-l
+ endef
++
++# Add the required hooks to the pam files if SELinux is enabled
++# SED expression adds these lines to /etc/pam.d/login,/etc/pam.d/su-l and /etc/pam.d/su files
++#   session		required	pam_selinux.so close
++#   session		required	pam_selinux.so open
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++define UTIL_LINUX_FIXUP_PAMFILES
++	for file in login su su-l ; do \
++		$(SED) '/selinux/d' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		$(SED) '0,/session/s/session/session		required	pam_selinux.so close\nsession/' $(TARGET_DIR)/etc/pam.d/$${file}; \
++		echo "session		required	pam_selinux.so open" >> $(TARGET_DIR)/etc/pam.d/$${file}; \
++	done
 +endef
 +endif
 +
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
- 	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
-@@ -229,6 +267,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
- 	$(BUSYBOX_SET_INIT)
- 	$(BUSYBOX_SET_WATCHDOG)
- 	$(BUSYBOX_SET_SELINUX)
-+	$(BUSYBOX_CONFIGURE_INDIVIDUAL_BINARIES)
- 	$(BUSYBOX_MUSL_TWEAKS)
- endef
+ endif
  
-@@ -252,6 +291,7 @@ define BUSYBOX_INSTALL_INIT_SYSV
- 	$(BUSYBOX_INSTALL_LOGGING_SCRIPT)
- 	$(BUSYBOX_INSTALL_WATCHDOG_SCRIPT)
- 	$(BUSYBOX_INSTALL_TELNET_SCRIPT)
-+	$(BUSYBOX_INSTALL_INDIVIDUAL_BINARIES)
- endef
+ UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_INSTALL_PAMFILES
++UTIL_LINUX_POST_INSTALL_TARGET_HOOKS += UTIL_LINUX_FIXUP_PAMFILES
  
- # Checks to give errors that the user can understand
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index 53ff6fe..20a2804 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -496,7 +496,9 @@ int main(int argc, char **argv)
- 				ret = EXIT_FAILURE;
- 				goto loop;
- 			}
--		} else if (type == 'r') {
-+		} else if (type == 'F') {
-+           continue; /*Ignore optional files*/
-+	    } else if (type == 'r') {
- 			recursive_uid = uid;
- 			recursive_gid = gid;
- 			recursive_mode = mode;
+ # Install agetty->getty symlink to avoid breakage when there's no busybox
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_AGETTY),y)
 -- 
 2.5.0
