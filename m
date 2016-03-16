@@ -1,55 +1,73 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Mar 2016 11:20:13 -0300
-Subject: [Buildroot] [PATCH] openpgm: depends on sync2/sync4
-Message-ID: <1458138013-18031-1-git-send-email-gustavo@zacarias.com.ar>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 16 Mar 2016 15:28:10 +0100
+Subject: [Buildroot] [PATCH v3 1/4] libfslcodec: add install hooks to fix
+	libraries path
+In-Reply-To: <1458138493-12172-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1458138493-12172-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1458138493-12172-2-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add dependency on BR2_TOOLCHAIN_HAS_SYNC_2/4 since it uses both
-__sync_fetch_and_add_2() and __sync_fetch_and_add_4() atomic builtins.
-Fixes:
-http://autobuild.buildroot.net/results/8f2/8f2a3571611dc9414c23808e7615f87b677557dd/
+By default, all the libraries are installed under /usr/lib/imx-mm which
+causes problems at runtime.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The hooks are inspired from the mechanism used in the Yocto recipe:
+https://github.com/Freescale/meta-fsl-arm/blob/fido/recipes-multimedia/libfslcodec/libfslcodec.inc
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/openpgm/Config.in | 4 ++++
- package/zeromq/Config.in  | 2 ++
- 2 files changed, 6 insertions(+)
 
-diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
-index 94816d8..632c289 100644
---- a/package/openpgm/Config.in
-+++ b/package/openpgm/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_OPENPGM
- 	bool "openpgm"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	# This toolchain lack required compiler intrinsics
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -15,4 +17,6 @@ config BR2_PACKAGE_OPENPGM
- 	  https://github.com/steve-o/openpgm/
+Here are the dependencies the pipelines above are testing:
+$ for i in `find target/usr/lib/gstreamer*/*`; do readelf -d $i | grep NEEDED | grep lib_ && echo "($i)"; done
+ 0x00000001 (NEEDED)                     Shared library: [lib_nb_amr_dec_arm9_elinux.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [lib_wb_amr_dec_arm9_elinux.so.2]
+(target/usr/lib/gstreamer-0.10/libmfw_gst_amrdec.so)
+ 0x00000001 (NEEDED)                     Shared library: [lib_peq_arm11_elinux.so.1.fhw]
+(target/usr/lib/gstreamer-0.10/libmfw_gst_audio_pp.so)
+ 0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
+(target/usr/lib/gstreamer-0.10/libmfw_gst_mp3enc.so)
+ 0x00000001 (NEEDED)                     Shared library: [lib_mp3_enc_arm12_elinux.so.2]
+(target/usr/lib/gstreamer-1.0/libgstimxaudio.so)
+
+Note that I added a staging install hook as well because otherwise the
+gst1-imx plugin doesn't find lib_mp3_enc_arm12_elinux.so at build time.
+
+Not to copy the same library twice I decided to go with a symlink. Let
+me know if that's acceptable.
+
+Regards,
+Gary
+
+---
+ package/libfslcodec/libfslcodec.mk | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
+index e151c66..89d058c 100644
+--- a/package/libfslcodec/libfslcodec.mk
++++ b/package/libfslcodec/libfslcodec.mk
+@@ -20,4 +20,19 @@ endef
+ # FIXME The Makefile installs both the arm9 and arm11 versions of the
+ # libraries, but we only need one of them.
  
- comment "openpgm needs a toolchain w/ wchar, threads"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index c780f25..2385606 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -29,6 +29,8 @@ if BR2_PACKAGE_ZEROMQ
- 
- config BR2_PACKAGE_ZEROMQ_PGM
- 	bool "PGM/EPGM support"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX # openpgm
- 	select BR2_PACKAGE_OPENPGM
- 	help
++# Use symlinks in staging dir so every application can link against the libs
++# whether they look at imx-mm or not (gst-fsl-plugins vs. gst1-imx).
++define LIBFSLCODEC_FIXUP_STAGING_PATH
++	cd $(STAGING_DIR)/usr/lib; \
++	find imx-mm -mindepth 2 -maxdepth 2 -not -type d -exec ln -fs {} . \;
++endef
++LIBFSLCODEC_POST_INSTALL_STAGING_HOOKS += LIBFSLCODEC_FIXUP_STAGING_PATH
++
++# Use symlinks in install dir as well to match staging setup.
++define LIBFSLCODEC_FIXUP_TARGET_PATH
++	cd $(TARGET_DIR)/usr/lib; \
++	find imx-mm -mindepth 2 -maxdepth 2 -not -type d -exec ln -fs {} . \;
++endef
++LIBFSLCODEC_POST_INSTALL_TARGET_HOOKS += LIBFSLCODEC_FIXUP_TARGET_PATH
++
+ $(eval $(autotools-package))
 -- 
-2.4.10
+2.7.0
