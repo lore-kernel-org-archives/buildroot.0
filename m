@@ -1,149 +1,78 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 16 Mar 2016 15:56:53 +0100
-Subject: [Buildroot] [PATCH 13/14] configs: freescale_imx6*: bump version to
-	3.14.52-1.1.0_ga
+Date: Wed, 16 Mar 2016 15:56:54 +0100
+Subject: [Buildroot] [PATCH 14/14] configs: nitrogen*: bump kernel version
+	to 3.14.52-1.1.0_ga
 In-Reply-To: <1458140214-22303-1-git-send-email-gary.bisson@boundarydevices.com>
 References: <1458140214-22303-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <1458140214-22303-14-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <1458140214-22303-15-git-send-email-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Consolidated GA support i.MX 6Q/QP/D/S/SL/UL and 7Dual
+Also add device tree of our Nitrogen6_Max QuadPlus version:
+https://boundarydevices.com/product/nitrogen6max/
 
-This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/9f206ec7
-https://github.com/Freescale/meta-fsl-arm/commit/33d1115d
+As well as our latest SOM version:
+https://boundarydevices.com/product/nit6x-som-v2/
+
+Using the latest commit of our 3.14.52 kernel branch:
+https://github.com/boundarydevices/linux-imx6/commits/boundary-imx_3.14.52_1.1.0_ga
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- configs/freescale_imx6dlsabreauto_defconfig | 4 ++--
- configs/freescale_imx6dlsabresd_defconfig   | 4 ++--
- configs/freescale_imx6qsabresd_defconfig    | 4 ++--
- configs/freescale_imx6sololiteevk_defconfig | 4 ++--
- configs/freescale_imx6sxsabresd_defconfig   | 4 ++--
- configs/freescale_imx6ulevk_defconfig       | 4 ++--
- 6 files changed, 12 insertions(+), 12 deletions(-)
+ configs/nitrogen6sx_defconfig | 4 ++--
+ configs/nitrogen6x_defconfig  | 6 +++---
+ configs/nitrogen7_defconfig   | 3 ++-
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index c3abbe3..a11bb75 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
+index fcc74c9..161130e 100644
+--- a/configs/nitrogen6sx_defconfig
++++ b/configs/nitrogen6sx_defconfig
+@@ -28,8 +28,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index f3db089..49e37e6 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 17ad1b5..558ae5a 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
-index 4f7d91d..28d4e46 100644
---- a/configs/freescale_imx6sololiteevk_defconfig
-+++ b/configs/freescale_imx6sololiteevk_defconfig
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -27,4 +27,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 7d8e815..4a97021 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_3.14.28_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
++# Last version of branch boundary-imx_3.14.52_1.1.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/0d92195d/linux-imx6-0d92195d.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
  BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -29,5 +29,5 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
-index 8359206..9d63a75 100644
---- a/configs/freescale_imx6ulevk_defconfig
-+++ b/configs/freescale_imx6ulevk_defconfig
-@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 7b95988..be8877f 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -28,10 +28,10 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="imx_3.14.38_6ul_ga"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-# Last version of branch boundary-imx_3.14.28_1.0.0_ga
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/f4c8395/linux-imx6-f4c8395.tar.gz"
++# Last version of branch boundary-imx_3.14.52_1.1.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/0d92195d/linux-imx6-0d92195d.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
  BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="imx_v2015.04_3.14.38_6ul_ga"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # required tools to create the microSD image
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_max imx6q-sabrelite"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-nit6xlite imx6dl-nitrogen6_vm imx6dl-nitrogen6x imx6q-nitrogen6x imx6q-nitrogen6_som2 imx6q-nitrogen6_max imx6qp-nitrogen6_max imx6q-sabrelite"
+diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
+index d8c3975..3761845 100644
+--- a/configs/nitrogen7_defconfig
++++ b/configs/nitrogen7_defconfig
+@@ -28,7 +28,8 @@ BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="http://github.com/boundarydevices/u-bo
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/20cee23/linux-imx6-20cee23.tar.gz"
++# Last version of branch boundary-imx_3.14.52_1.1.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/tarball/0d92195d/linux-imx6-0d92195d.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="boundary"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 2.7.0
