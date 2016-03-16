@@ -1,60 +1,69 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 16 Mar 2016 16:15:00 -0300
-Subject: [Buildroot] [PATCH v2] openpgm: depends on sync2/sync4
-Message-ID: <1458155700-7383-1-git-send-email-gustavo@zacarias.com.ar>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 16 Mar 2016 21:38:28 +0200
+Subject: [Buildroot] [PATCH] linknx: select libcurl to fix autoreconf
+Message-ID: <ad8eed5a1643cc3be56f317dcac61cb1314fc40a.1458157108.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add dependency on BR2_TOOLCHAIN_HAS_SYNC_2/4 since it uses both
-__sync_fetch_and_add_2() and __sync_fetch_and_add_4() atomic builtins.
+linknx configure.ac uses the LIBCURL_CHECK_CONFIG macro that is only defined
+in libcurl.m4 that is part of libcurl. Select libcurl for now to fix
+autoreconf.
+
 Fixes:
-http://autobuild.buildroot.net/results/8f2/8f2a3571611dc9414c23808e7615f87b677557dd/
+http://autobuild.buildroot.net/results/96e/96e9ae0df7ebb7ad3d748a6b518cc59570e0b995/
+http://autobuild.buildroot.net/results/179/17971c9f8925ff8623a7d97aac8eda0c287a76c9/
+http://autobuild.buildroot.net/results/2a8/2a8af93d6439b313b048ccac7b6cfecbb6baff55/
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v2: get rid of bfin conditional since it's atomics-related
+ package/linknx/Config.in |  1 +
+ package/linknx/linknx.mk | 13 ++++---------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
- package/openpgm/Config.in | 6 ++++--
- package/zeromq/Config.in  | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/openpgm/Config.in b/package/openpgm/Config.in
-index 94816d8..e37edfe 100644
---- a/package/openpgm/Config.in
-+++ b/package/openpgm/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_OPENPGM
- 	bool "openpgm"
--	# This toolchain lack required compiler intrinsics
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -15,4 +15,6 @@ config BR2_PACKAGE_OPENPGM
- 	  https://github.com/steve-o/openpgm/
+diff --git a/package/linknx/Config.in b/package/linknx/Config.in
+index 36838fed6c0f..ca55c8bfb2f5 100644
+--- a/package/linknx/Config.in
++++ b/package/linknx/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LINKNX
+ 	bool "linknx"
+ 	select BR2_PACKAGE_LIBPTHSEM
++	select BR2_PACKAGE_LIBCURL # for autoreconf
+ 	select BR2_PACKAGE_ARGP_STANDALONE \
+ 	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index 9d1f75e122aa..5dc8bb2d0839 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -15,9 +15,11 @@ LINKNX_CONF_OPTS = \
+ 	--without-log4cpp \
+ 	--without-pth-test \
+ 	--with-pth=$(STAGING_DIR)/usr \
+-	--disable-smtp
++	--disable-smtp \
++	--with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
  
- comment "openpgm needs a toolchain w/ wchar, threads"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !(BR2_TOOLCHAIN_HAS_THREADS && BR2_USE_WCHAR)
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index c780f25..aefdf48 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -29,7 +29,8 @@ if BR2_PACKAGE_ZEROMQ
+-LINKNX_DEPENDENCIES = libpthsem $(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
++LINKNX_DEPENDENCIES = libpthsem libcurl \
++	$(if $(BR2_PACKAGE_ARGP_STANDALONE),argp-standalone)
  
- config BR2_PACKAGE_ZEROMQ_PGM
- 	bool "PGM/EPGM support"
--	depends on !BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX # openpgm
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_2
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	select BR2_PACKAGE_OPENPGM
- 	help
- 	  Add support for Pragmatic General Multicast protocol (RFC 3208)
+ # This is needed to make autoreconf happy
+ define LINKNX_CREATE_MISSING_FILES
+@@ -32,11 +34,4 @@ else
+ LINKNX_CONF_OPTS += --without-mysql
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBCURL),y)
+-LINKNX_CONF_OPTS += --with-libcurl=$(STAGING_DIR)/usr/bin/curl-config
+-LINKNX_DEPENDENCIES += libcurl
+-else
+-LINKNX_CONF_OPTS += --without-libcurl
+-endif
+-
+ $(eval $(autotools-package))
 -- 
-2.4.10
+2.7.0
