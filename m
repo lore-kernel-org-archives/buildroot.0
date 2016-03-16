@@ -1,108 +1,398 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 16 Mar 2016 22:43:16 +0100
-Subject: [Buildroot] [PATCH 10/16] arch/arm: add support for hard-float on
-	Cortex-M4
+Date: Wed, 16 Mar 2016 22:43:22 +0100
+Subject: [Buildroot] [PATCH 16/16] configs/stm32f469_disco: new
+	configuration for STM32F469 Discovery board
 In-Reply-To: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458164602-16983-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458164602-16983-17-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cortex-M4 cores can optionally have a FPv4-SP floating point unit
-(which is different than the VFPv4). This commit adds the necessary
-Config.in options to allow the user to enable the use of this FPU, and
-to build an EABIhf toolchain for Cortex-M4.
+From: Lee Jones <lee.jones@linaro.org>
 
-Note that for now the kernel does not have CONFIG_VFP support for
-ARMv7-M, so in practice, this VFP support cannot really be used for
-the moment.
+Similar to stm32f429_disco, this commit adds a configuration for the
+Cortex-M4 based STM32F469 platform.
 
+It requires a few kernel patches, which have already been submitted
+upstream, as well as a small OpenOCD patch. Besides that, it re-uses
+most of what has been added for the STM32F429 platform.
+
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+
+[Thomas:
+ - squash multiple patches from Lee Jones into one
+ - improve the readme.txt file
+ - sync the defconfig with the adaptations made to the stm32f429
+   configuration.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in.arm | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ board/stmicroelectronics/stm32f469-disco/flash.sh  |  20 ++++
+ .../linux/0001-kernel-add-top-compatible.patch     |  25 +++++
+ .../patches/linux/0002-kernel-new-dts-file.patch   | 114 +++++++++++++++++++++
+ .../linux/0003-kernel-config-frag-ram.patch        |  28 +++++
+ .../patches/openocd/0001-add-config.patch          |  37 +++++++
+ .../patches/openocd/0002-flash-nor.patch           |  37 +++++++
+ .../stmicroelectronics/stm32f469-disco/readme.txt  |  19 ++++
+ configs/stm32f469_disco_defconfig                  |  19 ++++
+ 8 files changed, 299 insertions(+)
+ create mode 100755 board/stmicroelectronics/stm32f469-disco/flash.sh
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/readme.txt
+ create mode 100644 configs/stm32f469_disco_defconfig
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index ee612f5..ad3c725 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -31,6 +31,12 @@ config BR2_ARM_CPU_HAS_VFPV4
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV3
- 
-+config BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
-+	bool
+diff --git a/board/stmicroelectronics/stm32f469-disco/flash.sh b/board/stmicroelectronics/stm32f469-disco/flash.sh
+new file mode 100755
+index 0000000..a68bea0
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/flash.sh
+@@ -0,0 +1,20 @@
++#!/bin/bash
 +
-+config BR2_ARM_CPU_HAS_FPV4_SP
-+	bool
++OUTPUT_DIR=$1
 +
- config BR2_ARM_CPU_HAS_ARM
- 	bool
- 
-@@ -177,6 +183,7 @@ config BR2_cortex_m3
- config BR2_cortex_m4
- 	bool "cortex-M4"
- 	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
- 	select BR2_ARM_CPU_ARMV7M
- config BR2_fa526
- 	bool "fa526/626"
-@@ -218,10 +225,11 @@ config BR2_ARM_ENABLE_NEON
- 
- config BR2_ARM_ENABLE_VFP
- 	bool "Enable VFP extension support"
--	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+	depends on BR2_ARM_CPU_MAYBE_HAS_VFPV2 || BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
- 	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
-+	select BR2_ARM_CPU_HAS_FPV4_SP if BR2_ARM_CPU_MAYBE_HAS_FPV4_SP
- 	help
- 	  For some CPU cores, the VFP extension is optional. Select
- 	  this option if you are certain your particular
-@@ -264,7 +272,7 @@ config BR2_ARM_EABI
- 
- config BR2_ARM_EABIHF
- 	bool "EABIhf"
--	depends on BR2_ARM_CPU_HAS_VFPV2
-+	depends on BR2_ARM_CPU_HAS_VFPV2 || BR2_ARM_CPU_HAS_FPV4_SP
- 	help
- 	  The EABIhf is an extension of EABI which supports the 'hard'
- 	  floating point model. This model uses the floating point
-@@ -285,6 +293,7 @@ endchoice
- choice
- 	prompt "Floating point strategy"
- 	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
-+	default BR2_ARM_FPU_FPV4_SP if BR2_ARM_CPU_HAS_FPV4_SP
- 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
- 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
- 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
-@@ -374,6 +383,15 @@ config BR2_ARM_FPU_VFPV4D16
- 	  cores, including the earlier Cortex-A{8, 9}, you should
- 	  instead select VFPv3-D16.
- 
-+config BR2_ARM_FPU_FPV4_SP
-+	bool "FPv4-SP-D16"
-+	depends on BR2_ARM_CPU_HAS_FPV4_SP
-+	help
-+	  This option allows to use the FPv4-SP floating point unit,
-+	  as available in some ARMv7-M processors (Cortex-M4). This
-+	  option requires a FPv4-SP unit that has 16 double-precision
-+	  registers.
++if ! test -d "${OUTPUT_DIR}" ; then
++    echo "ERROR: no output directory specified."
++    echo "Usage: $0 OUTPUT_DIR"
++    exit 1
++fi
 +
- config BR2_ARM_FPU_NEON
- 	bool "NEON"
- 	depends on BR2_ARM_CPU_HAS_NEON
-@@ -475,6 +493,7 @@ config BR2_GCC_TARGET_FPU
- 	default "vfpv3-d16" 	if BR2_ARM_FPU_VFPV3D16
- 	default "vfpv4" 	if BR2_ARM_FPU_VFPV4
- 	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
-+	default "fpv4-sp-d16"	if BR2_ARM_FPU_FPV4_SP
- 	default "neon" 		if BR2_ARM_FPU_NEON
- 	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
- 
++${OUTPUT_DIR}/host/usr/bin/openocd -f board/stm32f469discovery.cfg \
++  -c "init" \
++  -c "reset init" \
++  -c "flash probe 0" \
++  -c "flash info 0" \
++  -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469i-disco.bin 0x08000000" \
++  -c "flash write_image erase ${OUTPUT_DIR}/images/stm32f469-disco.dtb 0x08004000" \
++  -c "flash write_image erase ${OUTPUT_DIR}/images/xipImage 0x08008000" \
++  -c "reset run" \
++  -c "shutdown"
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch
+new file mode 100644
+index 0000000..f1c61dd
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0001-kernel-add-top-compatible.patch
+@@ -0,0 +1,25 @@
++From 6bd8bae3dd0631f8d23e63617dca289f162e6840 Mon Sep 17 00:00:00 2001
++From: Lee Jones <lee.jones@linaro.org>
++Date: Tue, 16 Feb 2016 14:04:17 +0000
++Subject: [PATCH] ARM: stm32: Identify a new board - STM32F469
++
++Signed-off-by: Lee Jones <lee.jones@linaro.org>
++---
++ arch/arm/mach-stm32/board-dt.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/arch/arm/mach-stm32/board-dt.c b/arch/arm/mach-stm32/board-dt.c
++index f2ad772..ceee477 100644
++--- a/arch/arm/mach-stm32/board-dt.c
+++++ b/arch/arm/mach-stm32/board-dt.c
++@@ -10,6 +10,7 @@
++ 
++ static const char *const stm32_compat[] __initconst = {
++ 	"st,stm32f429",
+++	"st,stm32f469",
++ 	NULL
++ };
++ 
++-- 
++1.9.1
++
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch
+new file mode 100644
+index 0000000..954679e
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0002-kernel-new-dts-file.patch
+@@ -0,0 +1,114 @@
++From a898629f21b86f2560041109f64d01d20087deae Mon Sep 17 00:00:00 2001
++From: Lee Jones <lee.jones@linaro.org>
++Date: Tue, 16 Feb 2016 13:53:47 +0000
++Subject: [PATCH] ARM: stm32: Supply a DTS file for the STM32F469 Discovery
++ board
++
++It's pretty similar to the STM32F429, but there are some
++subtle changes required to boot successfully.
++
++Signed-off-by: Lee Jones <lee.jones@linaro.org>
++[Thomas: remove rdinit= from /chosen/bootargs.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ arch/arm/boot/dts/Makefile            |  1 +
++ arch/arm/boot/dts/stm32f469-disco.dts | 75 +++++++++++++++++++++++++++++++++++
++ 2 files changed, 76 insertions(+)
++ create mode 100644 arch/arm/boot/dts/stm32f469-disco.dts
++
++diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
++index 30bbc37..c9d8023 100644
++--- a/arch/arm/boot/dts/Makefile
+++++ b/arch/arm/boot/dts/Makefile
++@@ -583,6 +583,7 @@ dtb-$(CONFIG_ARCH_STI) += \
++ 	stih418-b2199.dtb
++ dtb-$(CONFIG_ARCH_STM32)+= \
++ 	stm32f429-disco.dtb \
+++	stm32f469-disco.dtb \
++ 	stm32429i-eval.dtb
++ dtb-$(CONFIG_MACH_SUN4I) += \
++ 	sun4i-a10-a1000.dtb \
++diff --git a/arch/arm/boot/dts/stm32f469-disco.dts b/arch/arm/boot/dts/stm32f469-disco.dts
++new file mode 100644
++index 0000000..e911af8
++--- /dev/null
+++++ b/arch/arm/boot/dts/stm32f469-disco.dts
++@@ -0,1 +1,75 @@
+++/*
+++ * Copyright 2016 - Lee Jones <lee.jones@linaro.org>
+++ *
+++ * This file is dual-licensed: you can use it either under the terms
+++ * of the GPL or the X11 license, at your option. Note that this dual
+++ * licensing only applies to this file, and not this project as a
+++ * whole.
+++ *
+++ *  a) This file is free software; you can redistribute it and/or
+++ *     modify it under the terms of the GNU General Public License as
+++ *     published by the Free Software Foundation; either version 2 of the
+++ *     License, or (at your option) any later version.
+++ *
+++ *     This file is distributed in the hope that it will be useful,
+++ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+++ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+++ *     GNU General Public License for more details.
+++ *
+++ *     You should have received a copy of the GNU General Public
+++ *     License along with this file; if not, write to the Free
+++ *     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+++ *     MA 02110-1301 USA
+++ *
+++ * Or, alternatively,
+++ *
+++ *  b) Permission is hereby granted, free of charge, to any person
+++ *     obtaining a copy of this software and associated documentation
+++ *     files (the "Software"), to deal in the Software without
+++ *     restriction, including without limitation the rights to use,
+++ *     copy, modify, merge, publish, distribute, sublicense, and/or
+++ *     sell copies of the Software, and to permit persons to whom the
+++ *     Software is furnished to do so, subject to the following
+++ *     conditions:
+++ *
+++ *     The above copyright notice and this permission notice shall be
+++ *     included in all copies or substantial portions of the Software.
+++ *
+++ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+++ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+++ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+++ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+++ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+++ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+++ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+++ *     OTHER DEALINGS IN THE SOFTWARE.
+++ */
+++
+++/dts-v1/;
+++#include "stm32f429.dtsi"
+++
+++/ {
+++	model = "STMicroelectronics STM32F469i-DISCO board";
+++	compatible = "st,stm32f469i-disco", "st,stm32f469";
+++
+++	chosen {
+++		bootargs = "root=/dev/ram";
+++		stdout-path = "serial0:115200n8";
+++	};
+++
+++	memory {
+++		reg = <0x00000000 0x800000>;
+++	};
+++
+++	aliases {
+++		serial0 = &usart3;
+++	};
+++};
+++
+++&clk_hse {
+++	clock-frequency = <8000000>;
+++};
+++
+++&usart3 {
+++	status = "okay";
+++};
++-- 
++1.9.1
++
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch b/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch
+new file mode 100644
+index 0000000..e431e8b
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/0003-kernel-config-frag-ram.patch
+@@ -0,0 +1,28 @@
++From 4cb65563325bee1886329b97ce3e2b0b90106bdd Mon Sep 17 00:00:00 2001
++From: Lee Jones <lee.jones@linaro.org>
++Date: Tue, 16 Feb 2016 13:56:13 +0000
++Subject: [PATCH] ARM: configs: Add new config fragment to change RAM start
++ point
++
++Rather than duplicate a defconfig for each difference
++between platforms, we can choose to pick a basic defconfig and
++manipulate it at run-time using config fragments.  Here we're
++adding a new fragment to over-ride the RAM start point to 0x0.
++
++Cc: Arnd Bergmann <arnd@arndb.de>
++Signed-off-by: Lee Jones <lee.jones@linaro.org>
++---
++ arch/arm/configs/dram_0x00000000.config | 1 +
++ 1 file changed, 1 insertion(+)
++ create mode 100644 arch/arm/configs/dram_0x00000000.config
++
++diff --git a/arch/arm/configs/dram_0x00000000.config b/arch/arm/configs/dram_0x00000000.config
++new file mode 100644
++index 0000000..db96dcb
++--- /dev/null
+++++ b/arch/arm/configs/dram_0x00000000.config
++@@ -0,0 +1 @@
+++CONFIG_DRAM_BASE=0x00000000
++-- 
++1.9.1
++
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
+new file mode 100644
+index 0000000..036c4f6
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
+@@ -0,0 +1,37 @@
++From 26045588f462476cee356d15a24944d6c26befb4 Mon Sep 17 00:00:00 2001
++From: Maxime Coquelin <mcoquelin.stm32@gmail.com>
++Date: Sat, 24 Oct 2015 00:13:38 +0200
++Subject: [PATCH] tcl: add STM32F469 discovery board config
++
++Change-Id: Iad7ee06330b3259ea0ce0d174dfdade6785913eb
++Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
++Reviewed-on: http://openocd.zylin.com/3043
++Tested-by: jenkins
++Reviewed-by: Antonio Borneo <borneo.antonio@gmail.com>
++Reviewed-by: Freddie Chopin <freddie.chopin@gmail.com>
++---
++ tcl/board/stm32f469discovery.cfg | 12 ++++++++++++
++ 1 file changed, 12 insertions(+)
++ create mode 100644 tcl/board/stm32f469discovery.cfg
++
++diff --git a/tcl/board/stm32f469discovery.cfg b/tcl/board/stm32f469discovery.cfg
++new file mode 100644
++index 0000000..eecfe33
++--- /dev/null
+++++ b/tcl/board/stm32f469discovery.cfg
++@@ -0,0 +1,12 @@
+++#
+++# This is an STM32F469 discovery board with a single STM32F469NI chip.
+++# http://www.st.com/web/catalog/tools/FM116/CL1620/SC959/SS1532/LN1848/PF262395
+++#
+++
+++source [find interface/stlink-v2-1.cfg]
+++
+++transport select hla_swd
+++
+++source [find target/stm32f4x.cfg]
+++
+++reset_config srst_only
++-- 
++1.9.1
++
+diff --git a/board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
+new file mode 100644
+index 0000000..bfec983
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
+@@ -0,0 +1,37 @@
++From 3e219648c80a27f0519003f3b088cbb846e255d8 Mon Sep 17 00:00:00 2001
++From: Maxime Coquelin <maxime.coquelin@st.com>
++Date: Sat, 24 Oct 2015 00:03:54 +0200
++Subject: [PATCH] flash/nor/stm32f2x: Add STM32F469 part
++
++Change-Id: I4e13ceb0ba954dc2fea059ddeef10109be938c9c
++Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
++Reviewed-on: http://openocd.zylin.com/3042
++Tested-by: jenkins
++Reviewed-by: Freddie Chopin <freddie.chopin@gmail.com>
++---
++ src/flash/nor/stm32f2x.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/flash/nor/stm32f2x.c b/src/flash/nor/stm32f2x.c
++index 2130444..89fc75d 100644
++--- a/src/flash/nor/stm32f2x.c
+++++ b/src/flash/nor/stm32f2x.c
++@@ -790,6 +790,7 @@ static int stm32x_probe(struct flash_bank *bank)
++ 		max_flash_size_in_kb = 1024;
++ 		break;
++ 	case 0x419:
+++	case 0x434:
++ 		max_flash_size_in_kb = 2048;
++ 		break;
++ 	case 0x423:
++@@ -952,6 +953,7 @@ static int get_stm32x_info(struct flash_bank *bank, char *buf, int buf_size)
++ 
++ 	case 0x413:
++ 	case 0x419:
+++	case 0x434:
++ 		device_str = "STM32F4xx";
++ 
++ 		switch (rev_id) {
++-- 
++1.9.1
++
+diff --git a/board/stmicroelectronics/stm32f469-disco/readme.txt b/board/stmicroelectronics/stm32f469-disco/readme.txt
+new file mode 100644
+index 0000000..3b88496
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f469-disco/readme.txt
+@@ -0,0 +1,19 @@
++STM32F469 Discovery
++===================
++
++This tutorial describes how to use the predefined Buildroot
++configuration for the STM32F469 Discovery evaluation platform.
++
++Building
++--------
++
++  make stm32f469_disco_defconfig
++  make
++
++Flashing
++--------
++
++  ./board/stmicroelectronics/stm32/stm32f469-disco/flash.sh output/
++
++It will flash the minimal bootloader, the Device Tree Blob, and the
++kernel image which includes the root filesystem as initramfs.
+diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
+new file mode 100644
+index 0000000..4d42f96
+--- /dev/null
++++ b/configs/stm32f469_disco_defconfig
+@@ -0,0 +1,19 @@
++BR2_arm=y
++BR2_cortex_m4=y
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches/"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.5"
++BR2_LINUX_KERNEL_DEFCONFIG="stm32"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config"
++BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
++BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="xipImage"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f469-disco"
++BR2_PACKAGE_BUSYBOX_CONFIG="board/stmicroelectronics/busybox-minimal.config"
++BR2_TARGET_ROOTFS_INITRAMFS=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_AFBOOT_STM32=y
++BR2_PACKAGE_HOST_OPENOCD=y
 -- 
 2.6.4
