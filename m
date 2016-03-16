@@ -1,64 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Mar 2016 23:26:04 +0100
-Subject: [Buildroot] Compilation of Buildroot 2016.2 for Raspberry Pi
- with Musl 1.1.6 fails - no stddef.h header
-In-Reply-To: <CAMduVEfcO2XM1SZVGuvaUCKhbNrZwfG7-oYw=B757iZDYU3cAg@mail.gmail.com>
-References: <CAMduVEfcO2XM1SZVGuvaUCKhbNrZwfG7-oYw=B757iZDYU3cAg@mail.gmail.com>
-Message-ID: <56E9DD7C.2060108@mind.be>
+Date: Wed, 16 Mar 2016 23:29:10 +0100
+Subject: [Buildroot] [PATCH 01/16] arch/arm: introduce and use
+ BR2_ARM_CPU_ARMV7M
+In-Reply-To: <1458164602-16983-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458164602-16983-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56E9DE36.5000003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/15/16 09:57, Wojciech Zabolotny wrote:
-> To recreate the problem:
+On 03/16/16 22:43, Thomas Petazzoni wrote:
+> All ARM cores should select a BR2_ARM_CPU_* option. Currently, the
+> cortex-m3 does not, which this commit fixes by introducing a
+> BR2_ARM_CPU_ARMV7M option.
 >
-> $ wget https://buildroot.org/downloads/buildroot-2016.02.tar.bz2
-> $ tar -xjf buildroot-2016.02.tar.bz2
-> $ cd buildroot-2016.02
-> $ make raspberrypi_defconfig
-> $ make menuconfig
-> In the "Toolchain" section select "Toolchain type" "External toolchain"
-> and then in "Toolchain" "Musl 1.1.6 toolchain (experimental)"
-> Leave the configuration menu, saving the configuration
-> $ make
->
-> After some time you'll get:
->
->   CC      drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o
->   CC      fs/proc/array.o
-> drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.c:42:20:
-> fatal error: stddef.h: No such file or directory
->   #include <stddef.h>
->                      ^
-> compilation terminated.
-> scripts/Makefile.build:258: recipe for target
-> 'drivers/misc/vc04_services/interface/vchiq_arm/vchiq_shim.o' failed
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  That looks like a problem with the RPi kernel. stddef.h doesn't exist within 
-the kernel, it simply shouldn't be used. Well, it's Broadcom code so not really 
-surprising that it's wrong...
-
-  You could try to patch it out, send a pull request, and the update our defconfig.
-
->
-> If I'm forced to build the system quickly (as my students are, due to
-> short lab sessions), the only way is to switch off the EABIhf (by
-> selection of the EABI in the "Target options", Target ABI) and use the
-> "Toolchain (Sourcery CodeBench ARM 2014.05)"
->
-> Of course the optimal solution is to use the "Buildroot toolchain"
-> with standard EABIhf, but it takes very long to rebuild after "make
-> clean"...
-
-  How about using one of the autobuilder toolchains? E.g. [1].
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
 
-[1] http://autobuild.buildroot.net/toolchains/configs/br-arm-cortex-a9-glibc.config
-
+> ---
+>   arch/Config.in.arm | 4 ++++
+>   1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 04f0369..33f763a 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -52,6 +52,9 @@ config BR2_ARM_CPU_ARMV6
+>   config BR2_ARM_CPU_ARMV7A
+>   	bool
+>
+> +config BR2_ARM_CPU_ARMV7M
+> +	bool
+> +
+>   choice
+>   	prompt "Target Architecture Variant"
+>   	depends on BR2_arm || BR2_armeb
+> @@ -171,6 +174,7 @@ config BR2_cortex_m3
+>   	bool "cortex-M3"
+>   	select BR2_ARM_CPU_HAS_THUMB
+>   	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7M
+>   config BR2_fa526
+>   	bool "fa526/626"
+>   	select BR2_ARM_CPU_HAS_ARM
+>
 
 
 -- 
