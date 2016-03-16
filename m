@@ -1,62 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 16 Mar 2016 23:29:10 +0100
-Subject: [Buildroot] [PATCH 01/16] arch/arm: introduce and use
- BR2_ARM_CPU_ARMV7M
-In-Reply-To: <1458164602-16983-2-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-2-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56E9DE36.5000003@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 16 Mar 2016 23:31:11 +0100
+Subject: [Buildroot] [PATCH 4/4] lxc: remove dependency on headers >= 3.0
+In-Reply-To: <1458159611-5613-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Wed, 16 Mar 2016 21:20:11 +0100")
+References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458159611-5613-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87twk66onk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/16/16 22:43, Thomas Petazzoni wrote:
-> All ARM cores should select a BR2_ARM_CPU_* option. Currently, the
-> cortex-m3 does not, which this commit fixes by introducing a
-> BR2_ARM_CPU_ARMV7M option.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Now that libcap no longer needs kernel headers >= 3.0, we can remove
+ > this dependency from lxc. However, building with headers 2.6.32
+ > exhibits a build issue caused by the redefinition of the setns()
+ > function.
 
-  Regards,
-  Arnout
+ > Since setns() is not implemented in the C library, lxc provides its
+ > own version. However, for some reason, while the C library doesn't
+ > implement setns(), it provides a prototype for it, which is not
+ > exactly the same as the one in lxc, causing a build failure. We re-use
+ > a solution implemented in gdb to solve the same problem: define in lxc
+ > a function called do_setns(), which calls setns() when available, or
+ > manually does the system call otherwise.
 
-> ---
->   arch/Config.in.arm | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index 04f0369..33f763a 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -52,6 +52,9 @@ config BR2_ARM_CPU_ARMV6
->   config BR2_ARM_CPU_ARMV7A
->   	bool
->
-> +config BR2_ARM_CPU_ARMV7M
-> +	bool
-> +
->   choice
->   	prompt "Target Architecture Variant"
->   	depends on BR2_arm || BR2_armeb
-> @@ -171,6 +174,7 @@ config BR2_cortex_m3
->   	bool "cortex-M3"
->   	select BR2_ARM_CPU_HAS_THUMB
->   	select BR2_ARM_CPU_HAS_THUMB2
-> +	select BR2_ARM_CPU_ARMV7M
->   config BR2_fa526
->   	bool "fa526/626"
->   	select BR2_ARM_CPU_HAS_ARM
->
+ > Of course, with old kernels the system call will not be available, so
+ > things will fail at runtime, but this was anyway already the behavior
+ > of lxc's setns() dummy implementation.
 
+But can missing setns() really just be ignored and still have a working
+lxc? From the code snippets failures look critical.
+
+From the man page:
+
+VERSIONS
+
+        The setns() system call first appeared in Linux in kernel 3.0;
+        library support was added to glibc in version 2.14.
+
+So I think it is safer to just keep the >= 3.0 headers dependency.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
