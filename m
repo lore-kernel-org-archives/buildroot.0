@@ -1,78 +1,39 @@
-From: Pauli Sundberg <susundberg@gmail.com>
-Date: Thu, 17 Mar 2016 19:07:52 +0200
-Subject: [Buildroot] [PATCH v2 2/2] Add SVN repository support for kernel
-In-Reply-To: <1458234472-4741-1-git-send-email-susundberg@gmail.com>
-References: <87oaaif6zv.fsf@dell.be.48ers.dk>
- <1458234472-4741-1-git-send-email-susundberg@gmail.com>
-Message-ID: <1458234472-4741-3-git-send-email-susundberg@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 17 Mar 2016 20:10:22 +0200
+Subject: [Buildroot] [PATCH] quagga: bump to version 1.0.20160315
+Message-ID: <997f497f3491b0fc740708ca85d0e84801d2a563.1458238222.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- linux/Config.in | 12 +++++++++---
- linux/linux.mk  |  3 +++
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ package/quagga/quagga.hash | 2 +-
+ package/quagga/quagga.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 93968cd..9f6fb40 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -69,6 +69,12 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a local directory.
- 
-+config BR2_LINUX_KERNEL_CUSTOM_SVN
-+	bool "Custom SVN repository"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a SVN repository.
-+
- endchoice
- 
- config BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE
-@@ -79,7 +85,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 
--if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
-+if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
- 
- config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
- 	string "URL of custom repository"
-@@ -91,7 +97,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
- 		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
- 	help
--	  Revision to use in the typical format used by Git/Mercurial
-+	  Revision to use in the typical format used by Git/Mercurial/Svn
- 	  E.G. a sha id, a tag, branch, ..
- 
- endif
-@@ -109,7 +115,7 @@ config BR2_LINUX_KERNEL_VERSION
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
--		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
-+		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 
+diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
+index fdc7472d7506..23a0a8245bda 100644
+--- a/package/quagga/quagga.hash
++++ b/package/quagga/quagga.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	034e21f87164f44f1c4c89d8fafed4acede298fe3fafbf9277f079544178c66b	quagga-1.0.20160309.tar.xz
++sha256	d284af5dd875dbba90ab875d40db5d68fdc9ede17a76f2af525f85344be56767	quagga-1.0.20160315.tar.xz
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 5f0d201fa9ef..6b98367bcb84 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -4,7 +4,7 @@
  #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e20255..317587f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -23,6 +23,9 @@ LINUX_SITE_METHOD = git
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = hg
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_SITE_METHOD = svn
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+ ################################################################################
+ 
+-QUAGGA_VERSION = 1.0.20160309
++QUAGGA_VERSION = 1.0.20160315
+ QUAGGA_SOURCE = quagga-$(QUAGGA_VERSION).tar.xz
+ QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
+ QUAGGA_DEPENDENCIES = host-gawk
 -- 
-1.9.1
+2.7.0
