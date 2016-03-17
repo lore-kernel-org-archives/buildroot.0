@@ -1,59 +1,40 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Thu, 17 Mar 2016 16:57:59 +0100
-Subject: [Buildroot] issue with I2C driver : ft6x06
-Message-ID: <56EAD407.1010905@yahoo.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu, 17 Mar 2016 18:06:51 +0100
+Subject: [Buildroot] [PATCH] package/upmpdcli: bump to version 1.1.3
+Message-ID: <1458234411-9468-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I got the following configuration working :
-- Raspberry Pi B+
-- PiTFT 2.8" capacitive touchscreen (FT6x06 I2C chip for touchscreen)
-- Kernel 4.1.5 + ft6x06 patch (ft6x06 introduced in v4.4)
-- NFS rootfs
-
-For some reason, I decided to switch to Raspberry Pi 2. Everything 
-works, but the touchscreen : no entry is created in /dev/input and no 
-output in dmesg. I tried to replace i2c_bcm2708 by i2c_bcm2835, but no luck.
-
-I must be missing something...
-
-David.
-
-
--------------
-/etc/modules
--------------
-# PiTFT display :
-spi_bcm2835
-fb_ili9341
-fbtft_device name=adafruit28 rotate=90 gpios=dc:25
-# PiTFT touch panel :
-evdev
-i2c_bcm2708
-ft6x06_ts
-# RTCC :
-i2c-dev
-rtc-ds1307
-
-----------
-config.txt
-----------
-kernel=zImage
-disable_overscan=1
-gpu_mem_256=100
-gpu_mem_512=100
-gpu_mem_1024=100
-dtparam=spi=on
-dtparam=i2c_arm=on
-
------------
-cmdline.txt
------------
-dwc_otg.lpm_enable=0 rootwait root=/dev/nfs rootfstype=nfs \
-nfsroot=172.16.4.33:/var/local/rootfs_rpi_br console=ttyAMA0,115200 \
-fbcon=map:10 fbcon=font:VGA8x8 ip=172.16.4.100
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index fac3f66..27a75cc 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,2 +1,2 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.2.tar.gz.sha256
+-sha256  4866a4a5c54f8e3355ca7337860b998e1c8c562a7d26c4d8ae72eefdf9279982  upmpdcli-1.1.2.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.3.tar.gz.sha256
++sha256  2df3e6593f18c097b6247fb8da919b94701bf083b219056b006d68e6dcef75b5  upmpdcli-1.1.3.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 3c51880..1a7c790 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.1.2
++UPMPDCLI_VERSION = 1.1.3
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
+-- 
+2.7.3
