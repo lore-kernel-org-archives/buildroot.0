@@ -1,54 +1,142 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Mar 2016 12:21:55 +0100
-Subject: [Buildroot] [PATCH 04/16] uclibc: Enable compile in thumb mode
-	when selected
-In-Reply-To: <1458164602-16983-5-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Wed, 16 Mar 2016 22:43:10 +0100")
-References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87zitx5oz0.fsf@dell.be.48ers.dk>
+From: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
+Date: Thu, 17 Mar 2016 16:59:21 +0530
+Subject: [Buildroot] [PATCH 1/1] raptor: new package
+Message-ID: <1458214161-17159-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
- > From: Paul Enman <paul.enman@gmail.com>
- > Until now, when thumb was selected with threads, we were forcing ARM
- > mode to be used, to workaround some problems building uClibc with
- > threads in Thumb mode. Also, we were never enabling Thumb mode in
- > uClibc when Thumb2 was selected in the configuration.
+Raptor is a free software / Open Source C library that provides a set of parsers
+and serializers that generate Resource Description Framework (RDF) triples
+by parsing syntaxes or serialize the triples into a syntax.
 
- > Therefore, this commit updates the uclibc.mk logic to:
+http://librdf.org/raptor/
 
- >  - Force ARM mode only when gcc 4.7 or 4.8 is selected with Thumb1 and
- >    threads. We also explicitly disable COMPILE_IN_THUMB_MODE when we
- >    fall in this situation. With newer gcc versions, starting 4.9, this
- >    problem is fixed and we can build uClibc in Thumb1 mode.
+Patch added in the package:
+0001-configure.ac-remove-conditional-lib-inclusion.patch
 
- >  - Enable COMPILE_IN_THUMB_MODE when Thumb1 or Thumb2 is selected. We
- >    need to disable context functions since they don't build in Thumb
- >    mode.
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Why do we need to tell uClibc that we are building in thumb1/2 mode?
-From a quick grep this just adds -mthumb to CFLAGS, which shouldn't be
-needed as we've already configured the compiler to do so by default and
-enables USE_BX + USE_LDREXSTREX.
+---
+Changes v1:
+  - Added 0001-configure.ac-remove-conditional-lib-inclusion.patch.
+  - Added optional dependencies libcurl,yajl and icu.
 
-Now, I don't know enough of the finer details about this. I thought BX
-was for thumb1 interworking with classical ARM code and not needed for
-thumb2, so isn't it just adding overhead for thumb2? I also see that
-enabling this option will break thumb compilation on arm920t.
+Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
+---
+ package/Config.in                                  |  1 +
+ ...igure.ac-remove-conditional-lib-inclusion.patch | 20 +++++++++++++++
+ package/raptor/Config.in                           | 11 ++++++++
+ package/raptor/raptor.hash                         |  2 ++
+ package/raptor/raptor.mk                           | 30 ++++++++++++++++++++++
+ 5 files changed, 64 insertions(+)
+ create mode 100644 package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+ create mode 100644 package/raptor/Config.in
+ create mode 100644 package/raptor/raptor.hash
+ create mode 100644 package/raptor/raptor.mk
 
-Luckily Yann is the author of this logic in uClibc, so lets ask him ;)
-
- >  - Disable COMPILE_IN_THUMB_MODE explicitly otherwise.
-
- > This allows to build a Thumb2 toolchain on ARMv7-M for example.
-
-What wasn't working before?
-
+diff --git a/package/Config.in b/package/Config.in
+index c4d98c4..430cef8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1036,6 +1036,7 @@ menu "JSON/XML"
+ 	source "package/mxml/Config.in"
+ 	source "package/rapidjson/Config.in"
+ 	source "package/rapidxml/Config.in"
++	source "package/raptor/Config.in"
+ 	source "package/tinyxml/Config.in"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/xerces/Config.in"
+diff --git a/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+new file mode 100644
+index 0000000..0fd0495
+--- /dev/null
++++ b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+@@ -0,0 +1,20 @@
++Removed condition for header path inclusion from the configure file.
++Upstream: None
++
++Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
++
++diff --git a/configure.ac b/configure.ac
++index 10ff870..27b9957 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1145,9 +1145,7 @@ have_lininn=no
++ have_inn_parsedate=no
++ 
++ oCPPFLAGS="$CPPFLAGS"
++-if test -d /usr/include/inn; then
++-  CPPFLAGS="$CPPFLAGS -I/usr/include/inn"
++-fi
+++
++ AC_CHECK_HEADER(libinn.h)
++ CPPFLAGS="$oCPPFLAGS"
++ 
+diff --git a/package/raptor/Config.in b/package/raptor/Config.in
+new file mode 100644
+index 0000000..65979a2
+--- /dev/null
++++ b/package/raptor/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_RAPTOR
++	bool "raptor"
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
++	help
++	  A C library that provides a set of parsers and
++	  serializers that generate Resource Description
++	  Framework (RDF) triples by parsing syntaxes or
++	  serialize the triples into a syntax.
++
++	  http://librdf.org/raptor/
+diff --git a/package/raptor/raptor.hash b/package/raptor/raptor.hash
+new file mode 100644
+index 0000000..ee7a71b
+--- /dev/null
++++ b/package/raptor/raptor.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed raptor2-2.0.15.tar.gz
+diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+new file mode 100644
+index 0000000..965ef0c
+--- /dev/null
++++ b/package/raptor/raptor.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# raptor
++#
++################################################################################
++
++RAPTOR_VERSION = 2.0.15
++RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
++RAPTOR_SITE = http://download.librdf.org/source
++RAPTOR_DEPENDENCIES = libxml2 libxslt
++RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
++RAPTOR_LICENSE_FILES = LICENSE.txt
++
++RAPTOR_CONF_OPTS = --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
++		--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++RAPTOR_DEPENDENCIES += libcurl
++endif
++
++ifeq ($(BR2_PACKAGE_YAJL),y)
++RAPTOR_DEPENDENCIES += yajl
++RAPTOR_CONF_ENV += LIBS="-lm"
++endif
++
++ifeq ($(BR2_PACKAGE_YAJL),y)
++RAPTOR_DEPENDENCIES += icu
++endif
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.5.0
