@@ -1,14 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Mar 2016 21:34:55 +0100
-Subject: [Buildroot] [PATCH 12/16] elf2flt: use new upstream site and
- add ARM patch
-In-Reply-To: <20160317185342.GA6588@vapier.lan>
+Date: Thu, 17 Mar 2016 21:36:30 +0100
+Subject: [Buildroot] [PATCH 02/16] arch/arm: Cortex-M3 provides only
+ Thumb-2
+In-Reply-To: <56E9E177.5000606@mind.be>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-13-git-send-email-thomas.petazzoni@free-electrons.com>
- <56E9F163.5080304@mind.be>
- <20160317091807.4924cfcc@free-electrons.com>
- <20160317185342.GA6588@vapier.lan>
-Message-ID: <20160317213455.71df378e@free-electrons.com>
+ <1458164602-16983-3-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56E9E177.5000606@mind.be>
+Message-ID: <20160317213630.54f60dd6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,24 +15,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 17 Mar 2016 14:53:42 -0400, Mike Frysinger wrote:
-
-> > No: the Waldemar Git repository did contain the ARM noMMU support. So
-> > when switching to the more "official" upstream (which doesn't yet have
-> > ARM noMMU support), we need to include the patch adding ARM noMMU
-> > support to keep functionality the same.
+On Wed, 16 Mar 2016 23:43:03 +0100, Arnout Vandecappelle wrote:
+> On 03/16/16 22:43, Thomas Petazzoni wrote:
+> > The Cortex-M cores only support Thumb-2, not Thumb. In fact, Thumb-2
+> > is a superset of Thumb,
 > 
-> elf2flt has had nommu arm support pretty much from the beginning (at
-> least since 2002).  i don't know what this patch is for, but it hasn't
-> been sent upstream afaik, so i can't really comment on it.
+>   If thumb2 is a superset of thumb, then CPU_HAS_THUMB2 should select 
+> CPU_HAS_THUMB. And according to [1], it really is a superset.
 
-Well, it was sent to the uclinux-dev mailing list just a few days ago:
+Thinking more about this, I don't see the point.
 
-  http://mailman.uclinux.org/pipermail/uclinux-dev/2016-March/052707.html
+Even if Thumb2 is strictly speaking a superset of Thumb1, there is no
+gcc flag or mechanism that will allow you to generate Thumb1 code on a
+Thumb2-capable core.
 
-I don't know if you call the uclinux-dev mailing list "upstream", but
-it doesn't sound too bad for a project hosted at
-github.com/uclinux-dev :-)
+Therefore, it IMO doesn't bring any benefit to select CPU_HAS_THUMB
+from CPU_HAS_THUMB2.
 
 Thomas
 -- 
