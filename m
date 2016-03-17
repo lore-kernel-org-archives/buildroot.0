@@ -1,53 +1,38 @@
-From: Fabio Porcedda <fabio.porcedda@gmail.com>
-Date: Thu, 17 Mar 2016 13:23:35 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2016.03.0
-Message-ID: <1458217415-2594-1-git-send-email-fabio.porcedda@gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 17 Mar 2016 13:51:12 +0100
+Subject: [Buildroot] [PATCH 2/2] libpjsip: disable all bundled third party
+	libraries
+In-Reply-To: <1458219072-4113-1-git-send-email-luca@lucaceresoli.net>
+References: <1458219072-4113-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1458219072-4113-2-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+libpjsip bundles several third party libraries. In Buildroot we prefer
+either not to build them or to depend on a proper package for each of
+them. The current recipe disables most of them, but not all, so
+disable the remaining ones.
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 363ac2b..bbe6ae2 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ package/libpjsip/libpjsip.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 56d6f2b..730d9fe 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -24,6 +24,8 @@ LIBPJSIP_CONF_OPTS = \
+ 	--disable-resample \
+ 	--disable-video \
+ 	--disable-opencore-amr \
++	--disable-g7221-codec \
++	--disable-ilbc-codec \
+ 	--with-external-srtp=$(STAGING_DIR)/usr
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2016.02.0"
-+	bool "2016.03.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2016.02.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2016.03.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index a5d526a..c2dd7fc 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# http://www.barebox.org/download/barebox-2016.02.0.tar.bz2.md5
--md5 451cf8d025af6acbe7aaa2596541550f barebox-2016.02.0.tar.bz2
-+# http://www.barebox.org/download/barebox-2016.03.0.tar.bz2.md5
-+md5 c3f69640303f3dd17eca85245c889c6f barebox-2016.03.0.tar.bz2
- 
- # Locally calculated
--sha256 1b4760e535994f950c10ef407ff59cf5c0ed97ab30476b9054e1f65d3e372eff barebox-2016.02.0.tar.bz2
-+sha256 8b6197e33db919ce361d7e645f4417023fa5d9cf1ffdc9276ce8a892879e1235 barebox-2016.03.0.tar.bz2
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
 -- 
-2.7.3
+1.9.1
