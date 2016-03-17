@@ -1,9 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Mar 2016 21:32:35 +0100
-Subject: [Buildroot] How to check if a platform supports PCI bus
-In-Reply-To: <900813099.3374314.1458219344699.JavaMail.zimbra@datacom.ind.br>
-References: <900813099.3374314.1458219344699.JavaMail.zimbra@datacom.ind.br>
-Message-ID: <20160317213235.77cd98e9@free-electrons.com>
+Date: Thu, 17 Mar 2016 21:34:55 +0100
+Subject: [Buildroot] [PATCH 12/16] elf2flt: use new upstream site and
+ add ARM patch
+In-Reply-To: <20160317185342.GA6588@vapier.lan>
+References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458164602-16983-13-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56E9F163.5080304@mind.be>
+ <20160317091807.4924cfcc@free-electrons.com>
+ <20160317185342.GA6588@vapier.lan>
+Message-ID: <20160317213455.71df378e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +17,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 17 Mar 2016 09:55:44 -0300 (BRT), DATACOM - Tiago.Brusamarello
-wrote:
+On Thu, 17 Mar 2016 14:53:42 -0400, Mike Frysinger wrote:
 
-> I'm about to submit a new package to the upstream. This package is intended to be used for testing the Linux PCIe driver. On the "Config.in" file I'm using the same check made by the "pciutils" package: 
+> > No: the Waldemar Git repository did contain the ARM noMMU support. So
+> > when switching to the more "official" upstream (which doesn't yet have
+> > ARM noMMU support), we need to include the patch adding ARM noMMU
+> > support to keep functionality the same.
 > 
-> # PCI not supported on Blackfin 
-> depends on !BR2_bfin 
-> 
-> Is this correct to check if a platform supports PCI bus on Buildroot? 
+> elf2flt has had nommu arm support pretty much from the beginning (at
+> least since 2002).  i don't know what this patch is for, but it hasn't
+> been sent upstream afaik, so i can't really comment on it.
 
-No. We don't really try to make sure that the platform has the relevant
-HW for a certain package. You can build i2c-tools even if you don't
-have an I2C bus. You can build X.org even if you don't have a screen,
-etc.
+Well, it was sent to the uclinux-dev mailing list just a few days ago:
 
-So just don't try to do anything special about the PCI dependency. You
-can try to build your package on Blackfin to see if it builds or not.
-If it doesn't, then exclude Blackfin, and that's it. It should build
-fine on other architectures.
+  http://mailman.uclinux.org/pipermail/uclinux-dev/2016-March/052707.html
 
-Best regards,
+I don't know if you call the uclinux-dev mailing list "upstream", but
+it doesn't sound too bad for a project hosted at
+github.com/uclinux-dev :-)
 
 Thomas
 -- 
