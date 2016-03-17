@@ -1,105 +1,124 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Thu, 17 Mar 2016 10:42:24 +0100
-Subject: [Buildroot] [PATCH 0/5] Qt5 bump to 5.6.0 version
-Message-ID: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
+Date: Thu, 17 Mar 2016 10:42:25 +0100
+Subject: [Buildroot] [PATCH 1/5] package/qt5quick1: remove obsolete package
+In-Reply-To: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
+References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1458207749-19507-2-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Qt-5.6.0 have been released yesterday and drop the support of Qt5Webkit
-and Qt5Quick1.
-
-All packages changed in this series have been compiled with:
-  - raspberry_defconfig + rpi_userland (brcm backend)
-  - firefly_rk3288_demo_defconfig + sunxi-mali (mali backend)
-  - own imx6q defconfig + imx-gpu-viv (vivante backend)
-
-More info on the release:
-  - http://blog.qt.io/blog/2016/03/16/qt-5-6-released/
-  - http://blog.qt.io/blog/2015/11/17/embedded-linux-news-in-qt-5-6/
-
-Regards
-
-Julien Corjon (5):
-  package/qt5quick1: remove obsolete package
-  package/qt5webkit: remove obsolete package
-  package/qt5webkit-examples: remove obsolete package
-  qt5: bump version to 5.6.0
-  qt5: add GPLv3 and GFDLv1.3 licensing informations
-
- package/qt5/Config.in                              |   3 -
- package/qt5/qt5.mk                                 |   4 +-
- package/qt5/qt53d/qt53d.hash                       |   4 +-
- package/qt5/qt53d/qt53d.mk                         |   4 +-
- .../qt5/qt5base/0001-Force_egl_visual_ID_33.patch  |  27 -----
- package/qt5/qt5base/0003-xcb-egl-fixes.patch       |  82 ----------------
- .../0005-forkd-disable-eventfd-for-uclibc.patch    |  32 ------
- .../qt5base/0009-fix-eglfs-for-sunxi-mali.patch    | 109 ---------------------
- ...Invert-conditional-for-defining-QT_SOCKLE.patch |  40 --------
- package/qt5/qt5base/qt5base.hash                   |   4 +-
- package/qt5/qt5base/qt5base.mk                     |   8 +-
- package/qt5/qt5connectivity/qt5connectivity.hash   |   4 +-
- package/qt5/qt5connectivity/qt5connectivity.mk     |   4 +-
- package/qt5/qt5declarative/qt5declarative.hash     |   4 +-
- package/qt5/qt5declarative/qt5declarative.mk       |   4 +-
- package/qt5/qt5enginio/qt5enginio.hash             |   4 +-
- package/qt5/qt5enginio/qt5enginio.mk               |   8 +-
- .../qt5graphicaleffects/qt5graphicaleffects.hash   |   4 +-
- .../qt5/qt5graphicaleffects/qt5graphicaleffects.mk |   4 +-
- package/qt5/qt5imageformats/qt5imageformats.hash   |   4 +-
- package/qt5/qt5imageformats/qt5imageformats.mk     |   4 +-
- package/qt5/qt5multimedia/qt5multimedia.hash       |   4 +-
- package/qt5/qt5multimedia/qt5multimedia.mk         |   4 +-
- package/qt5/qt5quick1/Config.in                    |  26 -----
- package/qt5/qt5quick1/qt5quick1.hash               |   2 -
- package/qt5/qt5quick1/qt5quick1.mk                 |  41 --------
- package/qt5/qt5quickcontrols/qt5quickcontrols.hash |   4 +-
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk   |   4 +-
- package/qt5/qt5script/qt5script.hash               |   4 +-
- package/qt5/qt5script/qt5script.mk                 |   4 +-
- package/qt5/qt5sensors/qt5sensors.hash             |   4 +-
- package/qt5/qt5sensors/qt5sensors.mk               |   4 +-
- package/qt5/qt5serialport/qt5serialport.hash       |   4 +-
- package/qt5/qt5serialport/qt5serialport.mk         |   4 +-
- package/qt5/qt5svg/qt5svg.hash                     |   4 +-
- package/qt5/qt5svg/qt5svg.mk                       |   4 +-
- package/qt5/qt5tools/qt5tools.hash                 |   4 +-
- package/qt5/qt5tools/qt5tools.mk                   |   4 +-
- .../0001-Fix-builds-without-qml-module.patch       |  61 ------------
- package/qt5/qt5webchannel/qt5webchannel.hash       |   4 +-
- package/qt5/qt5webchannel/qt5webchannel.mk         |   4 +-
- package/qt5/qt5webkit-examples/0001-build.patch    |  30 ------
- package/qt5/qt5webkit-examples/Config.in           |  14 ---
- .../qt5/qt5webkit-examples/qt5webkit-examples.hash |   2 -
- .../qt5/qt5webkit-examples/qt5webkit-examples.mk   |  50 ----------
- package/qt5/qt5webkit/Config.in                    |  23 -----
- package/qt5/qt5webkit/qt5webkit.hash               |   2 -
- package/qt5/qt5webkit/qt5webkit.mk                 |  58 -----------
- package/qt5/qt5websockets/qt5websockets.hash       |   4 +-
- package/qt5/qt5websockets/qt5websockets.mk         |   4 +-
- package/qt5/qt5x11extras/qt5x11extras.hash         |   4 +-
- package/qt5/qt5x11extras/qt5x11extras.mk           |   4 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |   4 +-
- package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk       |   4 +-
- 54 files changed, 77 insertions(+), 681 deletions(-)
- delete mode 100644 package/qt5/qt5base/0001-Force_egl_visual_ID_33.patch
- delete mode 100644 package/qt5/qt5base/0003-xcb-egl-fixes.patch
- delete mode 100644 package/qt5/qt5base/0005-forkd-disable-eventfd-for-uclibc.patch
- delete mode 100644 package/qt5/qt5base/0009-fix-eglfs-for-sunxi-mali.patch
- delete mode 100644 package/qt5/qt5base/0014-linux-oe-g-Invert-conditional-for-defining-QT_SOCKLE.patch
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+ package/qt5/Config.in                |  1 -
+ package/qt5/qt5quick1/Config.in      | 26 -----------------------
+ package/qt5/qt5quick1/qt5quick1.hash |  2 --
+ package/qt5/qt5quick1/qt5quick1.mk   | 41 ------------------------------------
+ 4 files changed, 70 deletions(-)
  delete mode 100644 package/qt5/qt5quick1/Config.in
  delete mode 100644 package/qt5/qt5quick1/qt5quick1.hash
  delete mode 100644 package/qt5/qt5quick1/qt5quick1.mk
- delete mode 100644 package/qt5/qt5webchannel/0001-Fix-builds-without-qml-module.patch
- delete mode 100644 package/qt5/qt5webkit-examples/0001-build.patch
- delete mode 100644 package/qt5/qt5webkit-examples/Config.in
- delete mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.hash
- delete mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
- delete mode 100644 package/qt5/qt5webkit/Config.in
- delete mode 100644 package/qt5/qt5webkit/qt5webkit.hash
- delete mode 100644 package/qt5/qt5webkit/qt5webkit.mk
 
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index 1c42102..32de7a0 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -48,7 +48,6 @@ source "package/qt5/qt5websockets/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+ comment "legacy compatibility"
+-source "package/qt5/qt5quick1/Config.in"
+ source "package/qt5/qt5script/Config.in"
+ source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5webkit-examples/Config.in"
+diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
+deleted file mode 100644
+index 345ffae..0000000
+--- a/package/qt5/qt5quick1/Config.in
++++ /dev/null
+@@ -1,26 +0,0 @@
+-config BR2_PACKAGE_QT5QUICK1
+-	bool "qt5quick1"
+-	select BR2_PACKAGE_QT5BASE
+-	select BR2_PACKAGE_QT5BASE_GUI
+-	select BR2_PACKAGE_QT5BASE_NETWORK
+-	select BR2_PACKAGE_QT5BASE_WIDGETS
+-	select BR2_PACKAGE_QT5SCRIPT
+-	select BR2_PACKAGE_QT5XMLPATTERNS
+-	# This module does not support static linking
+-	depends on !BR2_STATIC_LIBS
+-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	help
+-	  Qt is a cross-platform application and UI framework for
+-	  developers using C++.
+-
+-	  This package corresponds to the qt5quick1 module.
+-
+-	  This package has been tagged as deprecated since version
+-	  5.5.0 and should be replaced by Qt Quick module in new
+-	  design.
+-
+-	  http://qt.io
+-
+-comment "qt5quick1 needs a toolchain w/ dynamic library"
+-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	depends on BR2_STATIC_LIBS
+diff --git a/package/qt5/qt5quick1/qt5quick1.hash b/package/qt5/qt5quick1/qt5quick1.hash
+deleted file mode 100644
+index 845742c..0000000
+--- a/package/qt5/qt5quick1/qt5quick1.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qtquick1-opensource-src-5.5.1.tar.xz.mirrorlist
+-sha256 c812a7e59a8b9f0a87693181059933e15fef04bc875b6486cd653be1b9b51f2c qtquick1-opensource-src-5.5.1.tar.xz
+diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
+deleted file mode 100644
+index 7ccf644..0000000
+--- a/package/qt5/qt5quick1/qt5quick1.mk
++++ /dev/null
+@@ -1,41 +0,0 @@
+-################################################################################
+-#
+-# qt5quick1
+-#
+-################################################################################
+-
+-QT5QUICK1_VERSION = $(QT5_VERSION)
+-QT5QUICK1_SITE = $(QT5_SITE)
+-QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
+-QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script \
+-	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
+-QT5QUICK1_INSTALL_STAGING = YES
+-
+-ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+-QT5QUICK1_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5QUICK1_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
+-else
+-QT5QUICK1_LICENSE = Commercial license
+-QT5QUICK1_REDISTRIBUTE = NO
+-endif
+-
+-define QT5QUICK1_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+-endef
+-
+-define QT5QUICK1_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+-endef
+-
+-define QT5QUICK1_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+-	$(QT5_LA_PRL_FILES_FIXUP)
+-endef
+-
+-define QT5QUICK1_INSTALL_TARGET_CMDS
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Declarative.so.* $(TARGET_DIR)/usr/lib
+-	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/qml1tooling $(TARGET_DIR)/usr/lib/qt/plugins/
+-	cp -dpfr $(STAGING_DIR)/usr/imports $(TARGET_DIR)/usr
+-endef
+-
+-$(eval $(generic-package))
 -- 
 2.5.0
