@@ -1,49 +1,131 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 17 Mar 2016 14:39:36 +0300
-Subject: [Buildroot] [PATCH 05/16] uclibc: disable DOPIC on ARM noMMU
-In-Reply-To: <20160317120003.0ff6b5be@free-electrons.com>
-References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-6-git-send-email-thomas.petazzoni@free-electrons.com>
- <56E9E791.3090104@mind.be>
- <20160317090648.3900c10a@free-electrons.com>
- <CAMo8BfK66_TVGbJo=4TBmXATSX=7axE1+=Xj9Q1vdTBCdJUG0g@mail.gmail.com>
- <20160317120003.0ff6b5be@free-electrons.com>
-Message-ID: <CAMo8BfKGOY0XmLqaf49iS7q5ruLcf+WxVh1pboWe2xA0X2=6Ew@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 17 Mar 2016 13:58:20 +0200
+Subject: [Buildroot] [PATCH 1/1] raptor: new package
+In-Reply-To: <1458214161-17159-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
+References: <1458214161-17159-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
+Message-ID: <20160317115820.GI5528@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 17, 2016 at 2:00 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Thu, 17 Mar 2016 13:32:46 +0300, Max Filippov wrote:
->
->> > I have no idea if Xtensa noMMU has ever been tested, whether it uses
->> > FLAT or FDPIC, etc. Could we leave this up to people interested in
->> > Xtensa ? Or alternatively, remove noMMU Xtensa support altogether.
->> >
->> > I'm Cc'ing Max to see if he knows what the status of noMMU Xtensa is.
->>
->> I tested noMMU xtensa lightly. It uses FLAT
->> ( https://github.com/uclinux-dev/elf2flt/commit/052ec62c087a3e9dfb62d231ee4aad253bce2f7e
->> ),
->> requires a patch for gcc
->> ( https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=e3c15dbe1c4cd63d906eb67c1c607cc4fab6b329
->> ),
->> and currently it defaults to generating PIC code.
->> It appears to work with both DOPIC enabled and disabled.
->
-> Does it work within Buildroot? I think we should either have support
-> for Xtensa noMMU and make it work, or we should remove it.
->
-> From what you say, if it doesn't work already, it seems like it should
-> be a huge work to get it working, right?
+Hi Nitin,
 
-It should not, yes. Let me post the patches.
+On Thu, Mar 17, 2016 at 04:59:21PM +0530, Nitin Mendiratta wrote:
+> From: Matt Weber <matthew.weber@rockwellcollins.com>
+> 
+> Raptor is a free software / Open Source C library that provides a set of parsers
+> and serializers that generate Resource Description Framework (RDF) triples
+> by parsing syntaxes or serialize the triples into a syntax.
+> 
+> http://librdf.org/raptor/
+> 
+> Patch added in the package:
+> 0001-configure.ac-remove-conditional-lib-inclusion.patch
+> 
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> 
+> ---
+> Changes v1:
+>   - Added 0001-configure.ac-remove-conditional-lib-inclusion.patch.
+>   - Added optional dependencies libcurl,yajl and icu.
+> 
+> Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
+
+Your sign-off should be above the --- separator just below Matt's. Otherwise 
+it won't appear in the commit log when this patch applies using 'git am'.
+
+> ---
+>  package/Config.in                                  |  1 +
+>  ...igure.ac-remove-conditional-lib-inclusion.patch | 20 +++++++++++++++
+>  package/raptor/Config.in                           | 11 ++++++++
+>  package/raptor/raptor.hash                         |  2 ++
+>  package/raptor/raptor.mk                           | 30 ++++++++++++++++++++++
+>  5 files changed, 64 insertions(+)
+>  create mode 100644 package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+>  create mode 100644 package/raptor/Config.in
+>  create mode 100644 package/raptor/raptor.hash
+>  create mode 100644 package/raptor/raptor.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index c4d98c4..430cef8 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1036,6 +1036,7 @@ menu "JSON/XML"
+>  	source "package/mxml/Config.in"
+>  	source "package/rapidjson/Config.in"
+>  	source "package/rapidxml/Config.in"
+> +	source "package/raptor/Config.in"
+>  	source "package/tinyxml/Config.in"
+>  	source "package/tinyxml2/Config.in"
+>  	source "package/xerces/Config.in"
+> diff --git a/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+> new file mode 100644
+> index 0000000..0fd0495
+> --- /dev/null
+> +++ b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+> @@ -0,0 +1,20 @@
+> +Removed condition for header path inclusion from the configure file.
+
+You should mention here that this include path is from the host, which is 
+wrong for cross compilation.
+
+[snip]
+
+> diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+> new file mode 100644
+> index 0000000..965ef0c
+> --- /dev/null
+> +++ b/package/raptor/raptor.mk
+> @@ -0,0 +1,30 @@
+> +################################################################################
+> +#
+> +# raptor
+> +#
+> +################################################################################
+> +
+> +RAPTOR_VERSION = 2.0.15
+> +RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
+> +RAPTOR_SITE = http://download.librdf.org/source
+> +RAPTOR_DEPENDENCIES = libxml2 libxslt
+> +RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
+> +RAPTOR_LICENSE_FILES = LICENSE.txt
+
+Since you patch configure.ac, you need 'RAPTOR_AUTORECONF = YES' here. Also, 
+please add a comment explaining that we need this because we are patching 
+configure.ac.
+
+> +
+> +RAPTOR_CONF_OPTS = --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
+> +		--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
+> +
+> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> +RAPTOR_DEPENDENCIES += libcurl
+> +endif
+
+If the configure scripts uses --with-libcurl/--without-libcurl please add this 
+options to RAPTOR_CONF_OPTS as appropriate. The same goes for the rest of the 
+optional dependencies below.
+
+> +
+> +ifeq ($(BR2_PACKAGE_YAJL),y)
+> +RAPTOR_DEPENDENCIES += yajl
+> +RAPTOR_CONF_ENV += LIBS="-lm"
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_YAJL),y)
+
+Typo.
+
+> +RAPTOR_DEPENDENCIES += icu
+> +endif
+> +
+> +$(eval $(autotools-package))
+
+baruch
 
 -- 
-Thanks.
--- Max
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
