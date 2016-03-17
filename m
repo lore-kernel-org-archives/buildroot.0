@@ -1,61 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Mar 2016 10:14:58 +0100
-Subject: [Buildroot] [git commit] sdl: disable rpath via configure option
-Message-ID: <20160317091707.282F680215@busybox.osuosl.org>
+Date: Thu, 17 Mar 2016 10:14:51 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.{10,
+	14}.x and 4.4.x series
+Message-ID: <20160317091707.186C18078F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f259304b9816e2c40a358041370a14d6928eeee
+commit: https://git.buildroot.net/buildroot/commit/?id=c9d87e73473d8316aa3b4be53fcdf6826a500114
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The -rpath option was being stripped from sdl-config via a post install
-staging hook, but the same wasn't being done for sdl.pc. Because of
-this, packages that detect SDL via pkg-config ended up passing
-'-Wl,-rpath,/usr/lib' to the linker, which caused build failures under
-certain circumstances since libraries were being looked for in the wrong
-directory.
-
-Fix by passing the --disable-rpath option to the SDL configure script,
-which takes care of disabling -rpath everywhere. This also allows the
-SDL_FIXUP_SDL_CONFIG hack to be completely removed.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/624/62499217eeaf3228b46652e3f65776d7ece8fce6/
-  http://autobuild.buildroot.net/results/cc1/cc1f78f6c43e3a7bf3ed80d759d9c4d7363d0e48/
-
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl/sdl.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index cc1ad06..38b4b97 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -80,6 +80,7 @@ SDL_DEPENDENCIES += mesa3d
- endif
- 
- SDL_CONF_OPTS += \
-+	--disable-rpath \
- 	--enable-pulseaudio=no \
- 	--disable-arts \
- 	--disable-esd \
-@@ -96,13 +97,5 @@ HOST_SDL_CONF_OPTS += \
- 
- SDL_CONFIG_SCRIPTS = sdl-config
- 
--# Remove the -Wl,-rpath option.
--define SDL_FIXUP_SDL_CONFIG
--	$(SED) 's%-Wl,-rpath,\$${libdir}%%' \
--		$(STAGING_DIR)/usr/bin/sdl-config
--endef
--
--SDL_POST_INSTALL_STAGING_HOOKS += SDL_FIXUP_SDL_CONFIG
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0d1a1a9..ae44a2f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -212,15 +212,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.78"	if BR2_KERNEL_HEADERS_3_2
+ 	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
+-	default "3.10.100"	if BR2_KERNEL_HEADERS_3_10
++	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.64"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.28"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.19"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.5"		if BR2_KERNEL_HEADERS_4_4
++	default "4.4.6"		if BR2_KERNEL_HEADERS_4_4
+ 	default "4.5"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
