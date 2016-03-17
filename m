@@ -1,107 +1,222 @@
-From: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
-Date: Thu, 17 Mar 2016 15:00:08 +0100
-Subject: [Buildroot] [PATCH 1/1] owncloud: new package
-Message-ID: <1458223208-7133-1-git-send-email-sylvain.raybaud@green-communications.fr>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 17 Mar 2016 15:16:44 +0100
+Subject: [Buildroot] [PATCH 1/1] hackrf-host: new package
+In-Reply-To: <1445485902-1256-1-git-send-email-jrspruitt@gmail.com>
+References: <1445485902-1256-1-git-send-email-jrspruitt@gmail.com>
+Message-ID: <CAGm1_kt-WDzKuKwjbjRy+CLxBZX1A9NzDYxjhc0jq=QJ30T0Wg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package owncloud 9.0.0: http://www.owncloud.org
-Copy static files to /usr/lib/owncloud and dynamic files to
-/var/lib/owncloud.
+Hi Jason,
 
-owncloud needs php, mysql and a webserver. MySQL and the webserver
-can be provided by different packages therefore no specific
-dependency is set.
+On Thu, Oct 22, 2015 at 5:51 AM, Jason Pruitt <jrspruitt@gmail.com> wrote:
+> This patch adds hackrf/host tools and lib for the HackRF SDR.
 
-Signed-off-by: Sylvain Raybaud <sylvain.raybaud@green-communications.fr>
----
- package/Config.in              |  1 +
- package/owncloud/Config.in     |  9 +++++++++
- package/owncloud/owncloud.hash |  3 +++
- package/owncloud/owncloud.mk   | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 47 insertions(+)
- create mode 100644 package/owncloud/Config.in
- create mode 100644 package/owncloud/owncloud.hash
- create mode 100644 package/owncloud/owncloud.mk
+could you rebase the patch on the latest BR master?
 
-diff --git a/package/Config.in b/package/Config.in
-index 2401867..eeaa791 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1453,6 +1453,7 @@ endif
- 	source "package/openssh/Config.in"
- 	source "package/openswan/Config.in"
- 	source "package/openvpn/Config.in"
-+	source "package/owncloud/Config.in"
- 	source "package/p910nd/Config.in"
- 	source "package/phidgetwebservice/Config.in"
- 	source "package/portmap/Config.in"
-diff --git a/package/owncloud/Config.in b/package/owncloud/Config.in
-new file mode 100644
-index 0000000..8fe18de
---- /dev/null
-+++ b/package/owncloud/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_OWNCLOUD
-+	bool "owncloud"
-+	depends on BR2_PACKAGE_PHP	 # runtime
-+	help
-+	  OwnCloud is a web app for accessing and sharing your files,
-+	  calendars, contacts, mail and more.
-+
-+comment "OwnCloud needs PHP"
-+    depends on !BR2_PACKAGE_PHP
-diff --git a/package/owncloud/owncloud.hash b/package/owncloud/owncloud.hash
-new file mode 100644
-index 0000000..c40c87f
---- /dev/null
-+++ b/package/owncloud/owncloud.hash
-@@ -0,0 +1,3 @@
-+# Hashes from: https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2.{md5,sha256}
-+md5	 1f14d7f2faa0ba704901e062301854db					owncloud-9.0.0.tar.bz2
-+sha256	 d16737510a77a81489f7c4d5e19b0756fa2ea1c5081ba174b0fec0f00da3a77c	owncloud-9.0.0.tar.bz2
-diff --git a/package/owncloud/owncloud.mk b/package/owncloud/owncloud.mk
-new file mode 100644
-index 0000000..ff9e105
---- /dev/null
-+++ b/package/owncloud/owncloud.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# owncloud
-+#
-+################################################################################
-+
-+OWNCLOUD_VERSION = 9.0.0
-+OWNCLOUD_SOURCE = owncloud-$(OWNCLOUD_VERSION).tar.bz2
-+OWNCLOUD_SITE = https://download.owncloud.org/community
-+OWNCLOUD_DEPENDENCIES =
-+OWNCLOUD_LICENSE = AGPL
-+OWNCLOUD_LICENSE_FILES = COPYING-AGPL
-+
-+define OWNCLOUD_INSTALL_TARGET_CMDS
-+	#install files /usr/lib
-+	mkdir -p $(TARGET_DIR)/usr/lib
-+	cp -a $(@D) $(TARGET_DIR)/usr/lib/owncloud
-+	#move dynamic files in /var/lib and make symbolic links
-+	mkdir -p $(TARGET_DIR)/var/lib/owncloud
-+	mkdir -p $(TARGET_DIR)/var/lib/owncloud/data
-+	mv $(TARGET_DIR)/usr/lib/owncloud/config $(TARGET_DIR)/var/lib/owncloud/
-+	mv $(TARGET_DIR)/usr/lib/owncloud/apps $(TARGET_DIR)/var/lib/owncloud/
-+	#use relative path so that permissions can be set by OWNCLOUD_PERMISSIONS hook
-+	ln -s ../../../var/lib/owncloud/data $(TARGET_DIR)/usr/lib/owncloud/data
-+	ln -s ../../../var/lib/owncloud/config $(TARGET_DIR)/usr/lib/owncloud/config
-+	ln -s ../../../var/lib/owncloud/apps $(TARGET_DIR)/usr/lib/owncloud/apps
-+endef
-+
-+define OWNCLOUD_PERMISSIONS
-+	/usr/lib/owncloud r -1 root root - - - - -
-+	/var/lib/owncloud r -1 www-data www-data - - - - -
-+endef
-+
-+$(eval $(generic-package))
--- 
-1.9.1
+Have you tried to upstream your patches?
+
+> Signed-off-by: Jason Pruitt <jrspruitt@gmail.com>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../0001-make_hackrf-tools_optional.patch          | 21 ++++++++
+>  .../0002-disabled_shared_library_in_build.patch    | 61 ++++++++++++++++++++++
+>  package/hackrf-host/Config.in                      | 33 ++++++++++++
+>  package/hackrf-host/hackrf-host.mk                 | 27 ++++++++++
+>  5 files changed, 143 insertions(+)
+>  create mode 100644 package/hackrf-host/0001-make_hackrf-tools_optional.patch
+>  create mode 100644 package/hackrf-host/0002-disabled_shared_library_in_build.patch
+>  create mode 100644 package/hackrf-host/Config.in
+>  create mode 100644 package/hackrf-host/hackrf-host.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9994bcd..2e264e4 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -862,6 +862,7 @@ menu "Hardware handling"
+>         source "package/ccid/Config.in"
+>         source "package/dtc/Config.in"
+>         source "package/gnu-efi/Config.in"
+> +       source "package/hackrf-host/Config.in"
+>         source "package/lcdapi/Config.in"
+>         source "package/libaio/Config.in"
+>         source "package/libatasmart/Config.in"
+> diff --git a/package/hackrf-host/0001-make_hackrf-tools_optional.patch b/package/hackrf-host/0001-make_hackrf-tools_optional.patch
+> new file mode 100644
+> index 0000000..85e199f
+> --- /dev/null
+> +++ b/package/hackrf-host/0001-make_hackrf-tools_optional.patch
+> @@ -0,0 +1,21 @@
+> +hackrf-host: Make hackrf-tools optional.
+> +
+> +Enables hackrf-tools to be a compile time option for build.
+> +
+> +signed-off-by Jason Pruitt <jrspruitt@gmail.com>
+> +---
+> +diff --git a/host/CMakeLists.txt b/host/CMakeLists.txt
+> +index 874163f..b14896e 100644
+> +--- a/host/CMakeLists.txt
+> ++++ b/host/CMakeLists.txt
+> +@@ -4,7 +4,10 @@ cmake_minimum_required(VERSION 2.8)
+> + project (hackrf_all)
+> +
+> + add_subdirectory(libhackrf)
+> ++
+> ++if(BR2_PACKAGE_HACKRF_TOOLS)
+> + add_subdirectory(hackrf-tools)
+> ++endif()
+> +
+> + ########################################################################
+> + # Create uninstall target
+> diff --git a/package/hackrf-host/0002-disabled_shared_library_in_build.patch b/package/hackrf-host/0002-disabled_shared_library_in_build.patch
+> new file mode 100644
+> index 0000000..d9e1b38
+> --- /dev/null
+> +++ b/package/hackrf-host/0002-disabled_shared_library_in_build.patch
+> @@ -0,0 +1,61 @@
+> +hackrf-host: disable shared library target in build for libhackrf
+> +
+> +Disable libhackrf shared library target if BUILD_SHARED_LIBS if OFF.
+> +
+> +signed-off-by Jason Pruitt <jrspruitt@gmail.com>
+> +---
+> +diff --git a/host/libhackrf/src/CMakeLists.txt b/host/libhackrf/src/CMakeLists.txt
+> +index 9d54a8c..13d6906 100644
+> +--- a/host/libhackrf/src/CMakeLists.txt
+> ++++ b/host/libhackrf/src/CMakeLists.txt
+> +@@ -27,8 +27,10 @@ set(c_sources ${CMAKE_CURRENT_SOURCE_DIR}/hackrf.c CACHE INTERNAL "List of C sou
+> + set(c_headers ${CMAKE_CURRENT_SOURCE_DIR}/hackrf.h CACHE INTERNAL "List of C headers")
+> +
+> + # Dynamic library
+> +-add_library(hackrf SHARED ${c_sources})
+> +-set_target_properties(hackrf PROPERTIES VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.0 SOVERSION 0)
+> ++if(BUILD_SHARED_LIBS)
+> ++        add_library(hackrf SHARED ${c_sources})
+> ++        set_target_properties(hackrf PROPERTIES VERSION ${MAJOR_VERSION}.${MINOR_VERSION}.0 SOVERSION 0)
+> ++endif()
+> +
+> + # Static library
+> + add_library(hackrf-static STATIC ${c_sources})
+> +@@ -38,12 +40,17 @@ else()
+> +       set_target_properties(hackrf-static PROPERTIES OUTPUT_NAME "hackrf")
+> + endif()
+> +
+> +-set_target_properties(hackrf PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+> ++if(BUILD_SHARED_LIBS)
+> ++        set_target_properties(hackrf PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+> ++endif()
+> + set_target_properties(hackrf-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
+> +
+> ++
+> + # Dependencies
+> +-target_link_libraries(hackrf ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+> +-
+> ++if(BUILD_SHARED_LIBS)
+> ++        target_link_libraries(hackrf ${LIBUSB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+> ++endif()
+> ++
+> + # For cygwin just force UNIX OFF and WIN32 ON
+> + if( ${CYGWIN} )
+> +   SET(UNIX OFF)
+> +@@ -51,10 +58,12 @@ if( ${CYGWIN} )
+> + endif( ${CYGWIN} )
+> +
+> + if( ${UNIX} )
+> +-   install(TARGETS hackrf
+> +-           LIBRARY DESTINATION lib${LIB_SUFFIX}
+> +-           COMPONENT sharedlibs
+> +-           )
+> ++   if(BUILD_SHARED_LIBS)
+> ++           install(TARGETS hackrf
+> ++                   LIBRARY DESTINATION lib${LIB_SUFFIX}
+> ++                   COMPONENT sharedlibs
+> ++                   )
+> ++   endif()
+> +    install(TARGETS hackrf-static
+> +            ARCHIVE DESTINATION lib${LIB_SUFFIX}
+> +            COMPONENT staticlibs
+> diff --git a/package/hackrf-host/Config.in b/package/hackrf-host/Config.in
+> new file mode 100644
+> index 0000000..eabc4b2
+> --- /dev/null
+> +++ b/package/hackrf-host/Config.in
+> @@ -0,0 +1,33 @@
+> +comment "hackrf-host needs a toolchain w/ threads"
+> +       depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> +menuconfig BR2_PACKAGE_HACKRF_HOST
+> +       bool "hackrf-host"
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS
+> +       help
+> +         Library and tools for accessing HackRF SDR boards.
+> +
+> +         https://github.com/mossmann/hackrf/tree/master/host
+> +
+> +if BR2_PACKAGE_HACKRF_HOST
+> +
+> +config BR2_PACKAGE_LIBHACKRF
+> +       bool "libhackrf"
+> +       select BR2_PACKAGE_LIBUSB
+> +       help
+> +         Library for HackRF SDR boards.
+> +
+> +if BR2_PACKAGE_LIBHACKRF
+> +
+> +config BR2_PACKAGE_HACKRF_TOOLS
+> +       bool "hackrf-tools"
+> +       depends on !BR2_STATIC_LIBS && BR2_PACKAGE_HACKRF_HOST
+> +       help
+> +         Tools for accessing and updating HackRF SDR boards.
+> +
+> +comment "hackrf-tools needs a toolchain w/ dynamic libs"
+> +       depends on BR2_STATIC_LIBS
+> +
+> +endif
+> +
+> +endif
+> diff --git a/package/hackrf-host/hackrf-host.mk b/package/hackrf-host/hackrf-host.mk
+> new file mode 100644
+> index 0000000..1eb6424
+> --- /dev/null
+> +++ b/package/hackrf-host/hackrf-host.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# HACKRF_HOST
+> +#
+> +################################################################################
+> +
+> +HACKRF_HOST_VERSION = v2015.07.2
+> +HACKRF_HOST_SITE = $(call github,mossmann,hackrf,$(HACKRF_HOST_VERSION))
+> +HACKRF_HOST_LICENSE = GPLv2 GPLv2+ BSD-3c
+> +HACKRF_HOST_LICENSE_FILES = COPYING
+> +HACKRF_HOST_DEPENDENCIES = libusb
+
+please add host-pkgconf dependency
+
+> +HACKRF_HOST_SUBDIR = host
+> +HACKRF_HOST_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+> +HACKRF_HOST_CONF_OPTS += -DINSTALL_UDEV_RULES=ON
+> +else
+> +HACKRF_HOST_CONF_OPTS += -DINSTALL_UDEV_RULES=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_HACKRF_TOOLS),y)
+> +HACKRF_HOST_CONF_OPTS += -DBUILD_HACKRF_TOOLS=ON
+> +else
+> +HACKRF_HOST_CONF_OPTS += -DBUILD_HACKRF_TOOLS=OFF
+> +endif
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.1.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
