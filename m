@@ -1,86 +1,69 @@
 From: Julian Scheel <julian@jusst.de>
-Date: Thu, 17 Mar 2016 16:03:57 +0100
-Subject: [Buildroot] [PATCHv2 3/4] Add package cbootimage
+Date: Thu, 17 Mar 2016 16:03:55 +0100
+Subject: [Buildroot] [PATCHv2 1/4] Add package cryptopp
 In-Reply-To: <1458227038-16383-1-git-send-email-julian@jusst.de>
 References: <1458227038-16383-1-git-send-email-julian@jusst.de>
-Message-ID: <1458227038-16383-4-git-send-email-julian@jusst.de>
+Message-ID: <1458227038-16383-2-git-send-email-julian@jusst.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package for cbootimage host utility that is able to compile bct files and
-generate flashable images out of a bct and an image for tegra processors.
-
 Signed-off-by: Julian Scheel <julian@jusst.de>
 ---
-Changes in v2:
---------------
-- Depend on ARM platform
-- Use github helper
-- Add license file reference
----
- package/Config.in.host             |  1 +
- package/cbootimage/Config.in.host  |  8 ++++++++
- package/cbootimage/cbootimage.hash |  2 ++
- package/cbootimage/cbootimage.mk   | 13 +++++++++++++
- 4 files changed, 24 insertions(+)
- create mode 100644 package/cbootimage/Config.in.host
- create mode 100644 package/cbootimage/cbootimage.hash
- create mode 100644 package/cbootimage/cbootimage.mk
+ package/cryptopp/cryptopp.hash |  2 ++
+ package/cryptopp/cryptopp.mk   | 33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 package/cryptopp/cryptopp.hash
+ create mode 100644 package/cryptopp/cryptopp.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 05e0644..4eb62d6 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -1,5 +1,6 @@
- menu "Host utilities"
- 
-+	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
- 	source "package/cramfs/Config.in.host"
- 	source "package/dfu-util/Config.in.host"
-diff --git a/package/cbootimage/Config.in.host b/package/cbootimage/Config.in.host
+diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
 new file mode 100644
-index 0000000..5f6a93d
+index 0000000..3af7183
 --- /dev/null
-+++ b/package/cbootimage/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_CBOOTIMAGE
-+	bool "host cbootimage"
-+	depends on BR2_arm || BR2_armeb
-+	help
-+	  This project provides a tool which compiles BCT (Boot Configuration
-+	  Table) images to place into the boot flash of a Tegra-based device.
-+
-+	  https://github.com/NVIDIA/cbootimage
-diff --git a/package/cbootimage/cbootimage.hash b/package/cbootimage/cbootimage.hash
-new file mode 100644
-index 0000000..96cf172
---- /dev/null
-+++ b/package/cbootimage/cbootimage.hash
++++ b/package/cryptopp/cryptopp.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256 373c108d7b6778c62a33e59ad0cd5ea9ebb379319a0c8b4cf469eaa8bec5521b  cbootimage-v1.7.tar.gz
-diff --git a/package/cbootimage/cbootimage.mk b/package/cbootimage/cbootimage.mk
++sha256  9390670a14170dd0f48a6b6b06f74269ef4b056d4718a1a329f6f6069dc957c9  cryptopp563.zip
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
 new file mode 100644
-index 0000000..20b17dd
+index 0000000..cd7c9fa
 --- /dev/null
-+++ b/package/cbootimage/cbootimage.mk
-@@ -0,0 +1,13 @@
++++ b/package/cryptopp/cryptopp.mk
+@@ -0,0 +1,33 @@
 +################################################################################
 +#
-+# cbootimage
++# cryptopp
 +#
 +################################################################################
 +
-+CBOOTIMAGE_VERSION = v1.7
-+CBOOTIMAGE_SITE = $(call github,NVIDIA,cbootimage,$(CBOOTIMAGE_VERSION))
-+CBOOTIMAGE_LICENSE = GPLv2
-+CBOOTIMAGE_LICENSE_FILES = COPYING
-+CBOOTIMAGE_AUTORECONF = YES
++CRYPTOPP_VERSION = 5.6.3
++CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
++CRYPTOPP_SITE = http://cryptopp.com/
++CRYPTOPP_LICENSE = Boost-v1.0
++CRYPTOPP_LICENSE_FILES = License.txt
++CRYPTOPP_INSTALL_STAGING = YES
 +
-+$(eval $(host-autotools-package))
++HOST_CRRYPTOPP_MAKE_OPTS = \
++	$(HOST_CONFIGURE_OPTS) \
++	LDFLAGS="$(HOST_LDFLAGS)"
++
++define HOST_CRYPTOPP_BUILD_CMDS
++	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) -f GNUmakefile
++	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) libcryptopp.so
++endef
++
++define HOST_CRYPTOPP_INSTALL_CMDS
++	$(INSTALL) -d ${HOST_DIR}/usr/include/cryptopp
++	$(INSTALL) -D -m 644 $(@D)/*.h ${HOST_DIR}/usr/include/cryptopp/
++	$(INSTALL) -D -m 0755 $(@D)/libcryptopp.so ${HOST_DIR}/usr/lib/libcryptopp.so
++endef
++
++define HOST_CRYPTOPP_EXTRACT_CMDS
++	$(UNZIP) $(DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.7.3
