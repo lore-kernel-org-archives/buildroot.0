@@ -1,125 +1,333 @@
 From: Julian Scheel <julian@jusst.de>
-Date: Thu, 17 Mar 2016 16:03:56 +0100
-Subject: [Buildroot] [PATCHv2 2/4] Add package tegrarcm
+Date: Thu, 17 Mar 2016 16:03:58 +0100
+Subject: [Buildroot] [PATCHv2 4/4] Add package cbootimage-configs
 In-Reply-To: <1458227038-16383-1-git-send-email-julian@jusst.de>
 References: <1458227038-16383-1-git-send-email-julian@jusst.de>
-Message-ID: <1458227038-16383-3-git-send-email-julian@jusst.de>
+Message-ID: <1458227038-16383-5-git-send-email-julian@jusst.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add package for the tegrarcm host utility that allows loading data to tegra
-processors in recovery mode.
+Add package for cbootimage configurations that contains build scripts to
+generate bct and image files for various tegra based boards using cbootimage
+file.
+Additionally the package makefile includes extra hooks to generate
+self-contained flasher binaries based on u-boot, that are actually able to
+flash a u-boot instance into mmc memory when loaded to tegra via tegrarcm.
 
 Signed-off-by: Julian Scheel <julian@jusst.de>
 ---
 Changes in v2:
 --------------
-- Use github helper
-- Fix license
-- Add cryptopp dependency
-- Add patch to fix cryptopp inclusion for cross build
+- Add proper BR2_PACKAGE prefix to variable names
+- Use menuconfig
+- Read gpt spec from file, to avoid ugly double quotes
+- Read intermediate files from UBOOT_BUILDDIR to avoid glob hack on
+  UBOOT_IMAGE_NAME and keep BINARIES_DIR uncluttered
+- Use github helper function
+- Add hash
 ---
- package/Config.in.host                             |  1 +
- ...-cryptopp-include-crosscompile-compatible.patch | 27 ++++++++++++++++++++++
- package/tegrarcm/Config.in.host                    |  8 +++++++
- package/tegrarcm/tegrarcm.hash                     |  2 ++
- package/tegrarcm/tegrarcm.mk                       | 15 ++++++++++++
- 5 files changed, 53 insertions(+)
- create mode 100644 package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch
- create mode 100644 package/tegrarcm/Config.in.host
- create mode 100644 package/tegrarcm/tegrarcm.hash
- create mode 100644 package/tegrarcm/tegrarcm.mk
+ package/Config.in                                  |   1 +
+ package/cbootimage-configs/Config.in               | 122 ++++++++++++++++++++
+ package/cbootimage-configs/cbootimage-configs.hash |   2 +
+ package/cbootimage-configs/cbootimage-configs.mk   | 128 +++++++++++++++++++++
+ package/cbootimage-configs/gpt-table               |   1 +
+ 5 files changed, 254 insertions(+)
+ create mode 100644 package/cbootimage-configs/Config.in
+ create mode 100644 package/cbootimage-configs/cbootimage-configs.hash
+ create mode 100644 package/cbootimage-configs/cbootimage-configs.mk
+ create mode 100644 package/cbootimage-configs/gpt-table
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index ce1b6bc..05e0644 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -27,6 +27,7 @@ menu "Host utilities"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-+	source "package/tegrarcm/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
- 	source "package/util-linux/Config.in.host"
+diff --git a/package/Config.in b/package/Config.in
+index bdc3063..9977190 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -150,6 +150,7 @@ endmenu
  
-diff --git a/package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch b/package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch
+ menu "Filesystem and flash utilities"
+ 	source "package/btrfs-progs/Config.in"
++	source "package/cbootimage-configs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+ 	source "package/cpio/Config.in"
+ 	source "package/cramfs/Config.in"
+diff --git a/package/cbootimage-configs/Config.in b/package/cbootimage-configs/Config.in
 new file mode 100644
-index 0000000..ed0d1fc
+index 0000000..6268740
 --- /dev/null
-+++ b/package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch
-@@ -0,0 +1,27 @@
-+From 0e60af53fa76aa2f274ade98da7ba543147e82c7 Mon Sep 17 00:00:00 2001
-+From: Julian Scheel <julian@jusst.de>
-+Date: Thu, 17 Mar 2016 12:37:04 +0100
-+Subject: [PATCH] Make cryptopp include crosscompile compatible
-+
-+Allows user to set a SYSROOT variable for building against a specific root
-+filesystem.
-+
-+Signed-off-by: Julian Scheel <julian@jusst.de>
-+---
-+ src/Makefile.am | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 3dad0e6..7678dd4 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -1,5 +1,5 @@
-+ AM_CFLAGS = -Wall -std=c99
-+-AM_CPPFLAGS = -isystem /usr/include/$(CRYPTOLIB) $(LIBUSB_CFLAGS)
-++AM_CPPFLAGS = -isystem $(SYSROOT)/usr/include/$(CRYPTOLIB) $(LIBUSB_CFLAGS)
-+ 
-+ bin_PROGRAMS = tegrarcm
-+ tegrarcm_SOURCES = \
-+-- 
-+2.7.3
-+
-diff --git a/package/tegrarcm/Config.in.host b/package/tegrarcm/Config.in.host
-new file mode 100644
-index 0000000..47590fa
---- /dev/null
-+++ b/package/tegrarcm/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_TEGRARCM
-+	bool "host tegrarcm"
-+	depends on BR2_arm || BR2_armeb
++++ b/package/cbootimage-configs/Config.in
+@@ -0,0 +1,122 @@
++menuconfig BR2_PACKAGE_CBOOTIMAGE_CONFIGS
++	bool "cbootimage-configs"
++	select BR2_PACKAGE_HOST_CBOOTIMAGE
++	depends on BR2_TARGET_UBOOT
 +	help
-+	  This program is used to send code to a Tegra device in recovery
-+	  mode.
++	  The cbootimage-configs project contains cbootimage configuration
++	  files for many Tegra boards, both those designed by NVIDIA, and
++	  various third-parties.
 +
-+	  https://github.com/NVIDIA/tegrarcm
-diff --git a/package/tegrarcm/tegrarcm.hash b/package/tegrarcm/tegrarcm.hash
++	  Needs BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME to be u-boot-dtb-tegra.bin
++	  or {u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}"
++
++	  https://github.com/NVIDIA/cbootimage-configs
++
++
++if BR2_PACKAGE_CBOOTIMAGE_CONFIGS
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD
++	string "cbootimage board to build"
++	help
++	  The full path of a configuration inside cbootimage-configs that is
++	  to be built for the board you want to run. File directory structure
++	  usually is <soc>/<vendor>/<board>
++	  Example for Jetson TK1:
++	  tegra124/nvidia/jetson-tk1
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BCT
++	string "cbootimage bct filename"
++	help
++	  The name of the bct generated by cbootimage for the selected
++	  cbootimage configuration. If unsure look it up from the Makefile in
++	  the specified board directory.
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG
++	string "cbootimage img filename"
++	help
++	  The name of the image generated by cbootimage for the selected
++	  cbootimage configuration. If unsure look it up from the Makefile in
++	  the specified board directory.
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_SIGNED
++	bool "sign generated image for secureboot"
++	help
++	  Sign the image using a provided ssl key. This makes it possible to
++	  run the image in secureboot environments with the matching key being
++	  burned to the tegra fuses.
++	  Be aware that the generated image will have the extension simg
++	  instead of img if signing is enabled.
++
++	  Compatible key files can be generated with openssl:
++	  openssl genrsa -out rsa_priv.pem 2048
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_KEY
++	string "pkc file name"
++	depends on BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_SIGNED
++	help
++	  Key file to use for signing the loader image.
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_GENERATE_FLASHER
++	bool "generate self-contained u-boot flasher"
++	help
++	  Generate an image consisting of a u-boot to flash the actual target
++	  u-boot. For this a u-boot with a customized environment is generated
++	  that contains a bootcmd to copy a target image into mmc. The actual
++	  target u-boot, which is specified in BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG is
++	  appended to that image so that one self-contained image is generated
++	  that can be flashed with tegrarcm.
++
++	  Needs BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME to be
++	  {u-boot,u-boot-dtb-tegra.bin,u-boot-nodtb-tegra.bin,u-boot.dtb}
++
++if BR2_PACKAGE_CBOOTIMAGE_CONFIGS_GENERATE_FLASHER
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT
++	bool "write partition table to mmc 0"
++	help
++	  Add a flashing step which is writing a custom gpt partition table
++	  onto the target devices first mmc storage
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_GPT_FILE
++	string "partition table file"
++	depends on BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT
++	default "package/cbootimage-configs/gpt-table"
++	help
++	  Provide a file that contains the paritition table to write to mmc.
++	  Use format as specified in u-boot's README.gpt documentation file.
++
++	  Make sure to escape variable properly, as u-boot shall not evaluate
++	  the variables when setting the environment variable, but only when
++	  running the gpt command.
++
++	  Example file content:
++	  uuid_disk=\$\{disk_uuid\};name=rootfs,size=2000MiB,uuid=\$\{rootfs_uuid\};name=data,size=-,uuid=\$\{data_uuid\}
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU
++	bool "start dfu mode before reset"
++	help
++	  Put the device in DFU mode on usb 0 and mmc 0, so that filesystem
++	  images can be flashed to the device instantly.
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU_MAP
++	string "dfu map"
++	depends on BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU
++	default "rootfs part 0 1"
++	help
++	  Mapping scheme for partitions to DFU unit names according to u-boot
++	  documentation README.dfutftp variable dfu_alt_info.
++
++	  Example:
++	  rootfs part 0 1;data part 0 2
++
++config BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_EXTRA_BOOTCMD
++	string "u-boot flasher bootcmd extras"
++	help
++	  Specify extra bootcmds you want the u-boot flasher instance to run
++	  before resetting the board. For example this could be writing a
++	  partition table and enter DFU flashing mode to write filesystem
++	  images.
++
++endif
++
++endif
+diff --git a/package/cbootimage-configs/cbootimage-configs.hash b/package/cbootimage-configs/cbootimage-configs.hash
 new file mode 100644
-index 0000000..4194a4c
+index 0000000..a4fd518
 --- /dev/null
-+++ b/package/tegrarcm/tegrarcm.hash
++++ b/package/cbootimage-configs/cbootimage-configs.hash
 @@ -0,0 +1,2 @@
 +# Locally computed
-+sha256  538cb0af237ab33e070d3aeb6cc828cd7ef453753ba2ccc21b87ed43faac51bd  tegrarcm-v1.7.tar.gz
-diff --git a/package/tegrarcm/tegrarcm.mk b/package/tegrarcm/tegrarcm.mk
++sha256  f9eaa2e88fa24ea348d6358f18e4bab58ac21c586b5b6cb5300e21a6e1d9de83  cbootimage-configs-9d45319.tar.gz
+diff --git a/package/cbootimage-configs/cbootimage-configs.mk b/package/cbootimage-configs/cbootimage-configs.mk
 new file mode 100644
-index 0000000..5dbc483
+index 0000000..69d6d29
 --- /dev/null
-+++ b/package/tegrarcm/tegrarcm.mk
-@@ -0,0 +1,15 @@
++++ b/package/cbootimage-configs/cbootimage-configs.mk
+@@ -0,0 +1,128 @@
 +################################################################################
 +#
-+# tegrarcm
++# cbootimage-configs
 +#
 +################################################################################
 +
-+TEGRARCM_VERSION = v1.7
-+TEGRARCM_SITE = $(call github,NVIDIA,tegrarcm,$(TEGRARCM_VERSION))
-+TEGRARCM_LICENSE = BSD-3c / NVIDIA Software License (src/miniloader)
-+TEGRARCM_LICENSE_FILE = LICENSE
-+TEGRARCM_AUTORECONF = YES
-+HOST_TEGRARCM_DEPENDENCIES = host-libusb host-pkgconf host-cryptopp
-+HOST_TEGRARCM_MAKE_OPTS = SYSROOT=$(HOST_DIR)
++CBOOTIMAGE_CONFIGS_VERSION = 9d45319
++CBOOTIMAGE_CONFIGS_SITE = $(call github,avionic-design,cbootimage-configs,$(CBOOTIMAGE_CONFIGS_VERSION))
++CBOOTIMAGE_CONFIGS_DEPENDENCIES = host-cbootimage uboot
++CBOOTIMAGE_CONFIGS_INSTALL_TARGET = NO
++CBOOTIMAGE_CONFIGS_INSTALL_IMAGES = YES
 +
-+$(eval $(host-autotools-package))
++CONFIGS_BUILD = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD))
++BCT_NAME = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BCT))
++IMG_NAME = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG))
++EXTRA_BOOTCMD = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_EXTRA_BOOTCMD))
++GPT_FILE = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_GPT_FILE))
++DFU_MAP = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU_MAP))
++KEY_FILE = $(call qstrip,$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_KEY))
++
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS),y)
++ifeq ($(CONFIGS_BUILD),)
++	$(warning BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD=$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD))
++	$(warning CONFIGS_BUILD=$(CONFIGS_BUILD))
++	$(error No cbootimage-configuration specififed to build. Check your BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD setting)
++endif
++ifeq ($(BCT_NAME),)
++	$(error No bct filename specified. Check your BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BCT setting)
++endif
++ifeq ($(IMG_NAME),)
++	$(error No img filename specified. Check your BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG setting)
++endif
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT),y)
++ifeq ($(GPT_FILE),)
++	$(error No gpt partitions specified. Check your BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_GPT_FILE setting)
++endif
++endif
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU),y)
++ifeq ($(DFU_MAP),)
++	$(error No dfu map specified. Check your BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU_MAP setting)
++endif
++endif
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_SIGNED),y)
++ifeq ($(KEY_FILE),)
++	$(error No key file specified. Check your BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG_KEY setting)
++endif
++KEY_OPTS = skb=$(KEY_FILE)
++else
++KEY_OPTS =
++endif
++
++TARGET_SIZE = $(TARGET_CROSS)size
++endif
++
++define CBOOTIMAGE_CONFIGS_BUILD_CMDS
++	cp $(UBOOT_BUILDDIR)/u-boot-dtb-tegra.bin $(@D)/$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD)/u-boot.bin
++	(cd $(@D)/$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD) && $(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(KEY_OPTS))
++endef
++
++# Generate a self-contained u-boot image, flashing u-boot to mmc
++define CBOOTIMAGE_CONFIGS_BUILD_FLASHER_CMD
++	# u-boot bss size: ${BSS_SIZE}
++	# u-boot-nodtb-tegra.bin size: ${UBOOT_NODTB_TEGRA_SIZE}
++	# u-boot.dtb size: ${UBOOT_DTB_SIZE}
++	# ${IMG_NAME} size: ${IMG_SIZE}
++	# u-boot plus dtb size: ${UBOOT_PLUS_DTB_SIZE}
++	# padded size: ${PADDED_SIZE}
++	# bootcmd: $(UBOOT_FLASH_ENV)
++	# gpt-file: $(PWD)/$(GPT_FILE)
++
++	cp $(UBOOT_BUILDDIR)/u-boot.dtb ${DTB_FILE}
++	# Patch environment into u-boot dtb
++	$(HOST_MAKE_ENV) fdtput -p -t x ${DTB_FILE} '/config' 'bootdelay' '0xfffffffe'
++	$(HOST_MAKE_ENV) fdtput -p -t s ${DTB_FILE} '/config' 'bootcmd' $(UBOOT_FLASH_ENV)
++
++	# Assemble u-boot-flasher.bin
++	cp $(UBOOT_BUILDDIR)/u-boot-nodtb-tegra.bin $(BINARIES_DIR)/u-boot-flasher.bin
++	cat ${DTB_FILE} >> $(BINARIES_DIR)/u-boot-flasher.bin
++	truncate -s $(PADDED_SIZE) $(BINARIES_DIR)/u-boot-flasher.bin
++	cat $(@D)/$(CONFIGS_BUILD)/$(IMG_NAME) >> $(BINARIES_DIR)/u-boot-flasher.bin
++endef
++
++# Computations for assembling u-boot with custom dtb mostly stolen from
++# https://github.com/NVIDIA/tegra-uboot-flasher-scripts
++# All credits go to Stephen Warren
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_GENERATE_FLASHER),y)
++LOADADDR = 0x80108000 # FIXME: this is Tegra124 only
++BSS_SIZE = $(shell $(TARGET_SIZE) -A $(UBOOT_BUILDDIR)/u-boot | grep ".bss\b" | tr -s ' ' | cut -d ' ' -f 2)
++UBOOT_NODTB_TEGRA_SIZE = $(shell stat -c %s $(UBOOT_BUILDDIR)/u-boot-nodtb-tegra.bin)
++UBOOT_DTB_SIZE = $(shell stat -c %s $(UBOOT_BUILDDIR)/u-boot.dtb)
++IMG_SIZE = $(shell stat -c %s $(@D)/$(CONFIGS_BUILD)/$(IMG_NAME))
++IMG_SIZE_SECTORS = $(shell echo $$(( $(IMG_SIZE) / 512 )) )
++IMG_SIZE_SECTORS_HEX = $(shell printf '0x%x' $(IMG_SIZE_SECTORS) )
++UBOOT_PLUS_DTB_SIZE = $(shell echo $$(( $(UBOOT_NODTB_TEGRA_SIZE) + $(UBOOT_DTB_SIZE) )) )
++# Keep BSS area clear, acquire an extra 4kb for incereased dtb, align to 4k
++# boundary
++PADDED_SIZE = $(shell echo $$(( $(UBOOT_PLUS_DTB_SIZE) + $(BSS_SIZE) + (2 * 4 * 1024) - 1 & ~((4 * 1024) - 1) )) )
++IMAGEADDR = $(shell echo $$(( $(LOADADDR) + $(PADDED_SIZE) )) )
++IMAGEADDR_HEX = $(shell printf '0x%x' $(IMAGEADDR) )
++
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_CREATE_GPT),y)
++PWD = $(shell pwd)
++GPT_SPEC = $(shell cat $(GPT_FILE))
++GPT_BOOTCMD = echo >>> Write partition table to MMC; gpt write mmc 0 '$(GPT_SPEC)'; mmc rescan
++else
++GPT_BOOTCMD =
++endif
++
++ifeq ($(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_FLASHER_DFU),y)
++DFU_BOOTCMD = echo >>> Enter DFU mode; setenv dfu_alt_info '$(DFU_MAP)'; dfu 0 mmc 0;
++else
++DFU_BOOTCMD =
++endif
++
++UBOOT_FLASH_ENV = "echo >>> Write image to MMC; mmc dev 0 1; mmc write ${IMAGEADDR_HEX} 0 ${IMG_SIZE_SECTORS_HEX}; echo >>> Configure environment; env default -f -a; saveenv; $(GPT_BOOTCMD) $(EXTRA_BOOTCMD); $(DFU_BOOTCMD) echo >>> Resetting system; reset"
++
++DTB_FILE = $(@D)/u-boot-flasher.dtb
++
++# Add the actual assembly hook
++CBOOTIMAGE_CONFIGS_POST_INSTALL_IMAGES_HOOKS += CBOOTIMAGE_CONFIGS_BUILD_FLASHER_CMD
++endif
++
++define CBOOTIMAGE_CONFIGS_INSTALL_IMAGES_CMDS
++	cp -dpf $(@D)/$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD)/$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BCT) $(BINARIES_DIR)
++	cp -dpf $(@D)/$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_BUILD)/$(BR2_PACKAGE_CBOOTIMAGE_CONFIGS_IMG) $(BINARIES_DIR)
++endef
++
++$(eval $(generic-package))
+diff --git a/package/cbootimage-configs/gpt-table b/package/cbootimage-configs/gpt-table
+new file mode 100644
+index 0000000..9a2dc18
+--- /dev/null
++++ b/package/cbootimage-configs/gpt-table
+@@ -0,0 +1 @@
++uuid_disk=\$\{disk_uuid\};name=rootfs,size=-,uuid=\$\{rootfs_uuid\}
 -- 
 2.7.3
