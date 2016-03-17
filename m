@@ -1,32 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 17 Mar 2016 09:19:20 +0100
-Subject: [Buildroot] [PATCH 13/16] elf2flt: disable Werror to avoid
- build issues
-In-Reply-To: <20160317014051.GN6588@vapier.lan>
-References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-14-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160317014051.GN6588@vapier.lan>
-Message-ID: <20160317091920.6c1453d5@free-electrons.com>
+Date: Thu, 17 Mar 2016 09:20:14 +0100
+Subject: [Buildroot] [PATCH 2/4] libcap: add patch to fix build issue
+ with old kernel headers
+In-Reply-To: <87pouu6o1o.fsf@dell.be.48ers.dk>
+References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458159611-5613-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <8737rq83wg.fsf@dell.be.48ers.dk>
+ <20160316233420.2b5f2d47@free-electrons.com>
+ <87pouu6o1o.fsf@dell.be.48ers.dk>
+Message-ID: <20160317092014.20ca2072@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mike,
+Hello,
 
-On Wed, 16 Mar 2016 21:40:51 -0400, Mike Frysinger wrote:
-> On 16 Mar 2016 22:43, Thomas Petazzoni wrote:
-> > Some of the debugging printf use incorrect formats, which cause some
-> > warnings. Due to the use of -Werror by default, the build breaks
-> > unnecessarily. Therefore, disable -Werror when building elf2flt.
+On Wed, 16 Mar 2016 23:44:19 +0100, Peter Korsgaard wrote:
+
+>  > My commit log is talking about XATTR_SECURITY_PREFIX, not
+>  > XATTR_CAPS_SUFFIX.
 > 
-> you should send a patch and/or open an issue.
-> the build bot is clean for all the targets w/Werror:
-> 	https://travis-ci.org/uclinux-dev/elf2flt
+> Well, you wrote ".. but using XATTR_SECURITY_PREFIX and
+> XATTR_CAPS_SUFFIX which were defined in the kernel-only part of
+> <linux/xattr.h>"
 
-Sure, I'll reproduce and report. It's just some stupid printf specifier
-issue with some of the funky bfd types.
+Gaah, bad commit log :-/ Sorry about that.
 
 Thomas
 -- 
