@@ -1,19 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Mar 2016 14:29:35 +0100
-Subject: [Buildroot] [PATCH] barebox: bump to version 2016.03.0
-In-Reply-To: <1458217415-2594-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Thu, 17 Mar 2016 13:23:35 +0100")
-References: <1458217415-2594-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87mvpx5j28.fsf@dell.be.48ers.dk>
+Date: Thu, 17 Mar 2016 14:29:44 +0100
+Subject: [Buildroot] [PATCH 1/2] libpjsip: really disable gsm
+In-Reply-To: <1458219072-4113-1-git-send-email-luca@lucaceresoli.net> (Luca
+ Ceresoli's message of "Thu, 17 Mar 2016 13:51:11 +0100")
+References: <1458219072-4113-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <87io0l5j1z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Porcedda <fabio.porcedda@gmail.com> writes:
+>>>>> "Luca" == Luca Ceresoli <luca@lucaceresoli.net> writes:
 
- > Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > --disable-gsm does not exist, the option is called --disable-gsm-codec.
+ > Fixes:
+ >   http://autobuild.buildroot.org/results/f8c/f8c41f35ab56fac86f2877b09a60924256f57028/
+
+ > Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
 Committed, thanks.
 
