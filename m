@@ -1,9 +1,10 @@
 From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Thu, 17 Mar 2016 10:42:26 +0100
-Subject: [Buildroot] [PATCH 2/5] package/qt5webkit: remove obsolete package
+Date: Thu, 17 Mar 2016 10:42:27 +0100
+Subject: [Buildroot] [PATCH 3/5] package/qt5webkit-examples: remove obsolete
+	package
 In-Reply-To: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
 References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <1458207749-19507-3-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1458207749-19507-4-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,124 +13,144 @@ To: buildroot@busybox.net
 
 Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
 ---
- package/qt5/Config.in                |  1 -
- package/qt5/qt5webkit/Config.in      | 23 --------------
- package/qt5/qt5webkit/qt5webkit.hash |  2 --
- package/qt5/qt5webkit/qt5webkit.mk   | 58 ------------------------------------
- 4 files changed, 84 deletions(-)
- delete mode 100644 package/qt5/qt5webkit/Config.in
- delete mode 100644 package/qt5/qt5webkit/qt5webkit.hash
- delete mode 100644 package/qt5/qt5webkit/qt5webkit.mk
+ package/qt5/Config.in                              |  1 -
+ package/qt5/qt5webkit-examples/0001-build.patch    | 30 -------------
+ package/qt5/qt5webkit-examples/Config.in           | 14 ------
+ .../qt5/qt5webkit-examples/qt5webkit-examples.hash |  2 -
+ .../qt5/qt5webkit-examples/qt5webkit-examples.mk   | 50 ----------------------
+ 5 files changed, 97 deletions(-)
+ delete mode 100644 package/qt5/qt5webkit-examples/0001-build.patch
+ delete mode 100644 package/qt5/qt5webkit-examples/Config.in
+ delete mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.hash
+ delete mode 100644 package/qt5/qt5webkit-examples/qt5webkit-examples.mk
 
 diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 32de7a0..95d3ab9 100644
+index 95d3ab9..f673daa 100644
 --- a/package/qt5/Config.in
 +++ b/package/qt5/Config.in
-@@ -49,6 +49,5 @@ source "package/qt5/qt5x11extras/Config.in"
+@@ -49,5 +49,4 @@ source "package/qt5/qt5x11extras/Config.in"
  source "package/qt5/qt5xmlpatterns/Config.in"
  comment "legacy compatibility"
  source "package/qt5/qt5script/Config.in"
--source "package/qt5/qt5webkit/Config.in"
- source "package/qt5/qt5webkit-examples/Config.in"
+-source "package/qt5/qt5webkit-examples/Config.in"
  endif
-diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+diff --git a/package/qt5/qt5webkit-examples/0001-build.patch b/package/qt5/qt5webkit-examples/0001-build.patch
 deleted file mode 100644
-index 96d97cc..0000000
---- a/package/qt5/qt5webkit/Config.in
+index 68964f0..0000000
+--- a/package/qt5/qt5webkit-examples/0001-build.patch
 +++ /dev/null
-@@ -1,23 +0,0 @@
--config BR2_PACKAGE_QT5WEBKIT
--	bool "qt5webkit"
--	select BR2_PACKAGE_QT5BASE
--	select BR2_PACKAGE_QT5BASE_ICU
--	select BR2_PACKAGE_QT5BASE_GUI
--	select BR2_PACKAGE_SQLITE
--	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_QT5BASE_XCB
--	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_QT5BASE_XCB
--	# This module does not support static linking
--	depends on !BR2_STATIC_LIBS
--	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on !BR2_BINFMT_FLAT # icu
+@@ -1,30 +0,0 @@
+-This patch improves the qt5webkit examples build for 2 aspects:
+-
+-# Allows to build even if qt5base examples are not enabled
+-# Builds xmlpatterns example only if the qt5xmlpattern package has been built
+-
+-Signed-off-by: Massimo Callegari <massimocallegari@yahoo.it>
+-
+-Index: b/examples/webkitwidgets/webkitwidgets.pro
+-===================================================================
+---- /dev/null
+-+++ b/examples/webkitwidgets/webkitwidgets.pro
+-@@ -8,5 +8,6 @@
+-             framecapture \
+-             browser \
+-             embedded \
+--            scroller \
+--            xmlpatterns
+-+            scroller
+-+
+-+qtHaveModule(xmlpatterns): SUBDIRS += xmlpatterns
+-Index: b/qtwebkit-examples.pro
+-===================================================================
+---- /dev/null
+-+++ b/qtwebkit-examples.pro
+-@@ -3,3 +3,4 @@
+- load(qt_parts)
+- 
+- SUBDIRS += doc
+-+SUBDIRS += examples
+-
+diff --git a/package/qt5/qt5webkit-examples/Config.in b/package/qt5/qt5webkit-examples/Config.in
+deleted file mode 100644
+index 3f9c243..0000000
+--- a/package/qt5/qt5webkit-examples/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
+-	bool "qt5webkit examples"
+-	depends on BR2_PACKAGE_QT5WEBKIT
 -	help
 -	  Qt is a cross-platform application and UI framework for
 -	  developers using C++.
 -
--	  This package corresponds to the qt5webkit module.
+-	  This package contains examples for the qt5webkit module.
 -
 -	  This package has been tagged as deprecated since version
 -	  5.5.0 and should be replaced by Qt WebEngine module in
 -	  new design.
 -
 -	  http://qt.io
-diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash b/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
 deleted file mode 100644
-index 8517223..0000000
---- a/package/qt5/qt5webkit/qt5webkit.hash
+index b28e0da..0000000
+--- a/package/qt5/qt5webkit-examples/qt5webkit-examples.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
--# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qtwebkit-opensource-src-5.5.1.tar.xz.mirrorlist
--sha256 77583f9dbd3e6ad874386df71b165dc3ce88efdabbc6e5d97a959ee2187d6d69 qtwebkit-opensource-src-5.5.1.tar.xz
-diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
+-# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qtwebkit-examples-opensource-src-5.5.1.tar.xz.mirrorlist
+-sha256 098935b42d6d249027d1a635e4e70edc3d2969dd860f825b36aec06fc72e46c6 qtwebkit-examples-opensource-src-5.5.1.tar.xz
+diff --git a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk b/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
 deleted file mode 100644
-index 75ad1bf..0000000
---- a/package/qt5/qt5webkit/qt5webkit.mk
+index b687ac7..0000000
+--- a/package/qt5/qt5webkit-examples/qt5webkit-examples.mk
 +++ /dev/null
-@@ -1,58 +0,0 @@
+@@ -1,50 +0,0 @@
 -################################################################################
 -#
--# qt5webkit
+-# qt5webkit-examples
 -#
 -################################################################################
 -
--QT5WEBKIT_VERSION = $(QT5_VERSION)
--QT5WEBKIT_SITE = $(QT5_SITE)
--QT5WEBKIT_SOURCE = qtwebkit-opensource-src-$(QT5WEBKIT_VERSION).tar.xz
--QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf host-bison host-flex
--QT5WEBKIT_INSTALL_STAGING = YES
--
--QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
+-QT5WEBKIT_EXAMPLES_VERSION = $(QT5_VERSION)
+-QT5WEBKIT_EXAMPLES_SITE = $(QT5_SITE)
+-QT5WEBKIT_EXAMPLES_SOURCE = qtwebkit-examples-opensource-src-$(QT5WEBKIT_EXAMPLES_VERSION).tar.xz
+-QT5WEBKIT_EXAMPLES_DEPENDENCIES = qt5webkit
 -
 -ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
--QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), LGPLv2.1 with exception or LGPLv3 or GPLv2
+-QT5WEBKIT_EXAMPLES_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
 -# Source files contain references to LGPL_EXCEPTION.txt but it is not included
 -# in the archive.
--QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
+-QT5WEBKIT_EXAMPLES_LICENSE_FILES = LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2
 -else
--QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), Commercial license
--QT5WEBKIT_REDISTRIBUTE = NO
+-QT5WEBKIT_EXAMPLES_LICENSE = Commercial license
+-QT5WEBKIT_EXAMPLES_REDISTRIBUTE = NO
 -endif
 -
--ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
--QT5WEBKIT_DEPENDENCIES += xlib_libXext xlib_libXrender
+-ifeq ($(BR2_PACKAGE_QT5XMLPATTERNS),y)
+-QT5WEBKIT_EXAMPLES_DEPENDENCIES += qt5xmlpatterns
 -endif
 -
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
--QT5WEBKIT_DEPENDENCIES += qt5declarative
--endif
--
--define QT5WEBKIT_CONFIGURE_CMDS
+-define QT5WEBKIT_EXAMPLES_CONFIGURE_CMDS
 -	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
 -endef
 -
--define QT5WEBKIT_BUILD_CMDS
+-define QT5WEBKIT_EXAMPLES_BUILD_CMDS
 -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 -endef
 -
--define QT5WEBKIT_INSTALL_STAGING_CMDS
+-define QT5WEBKIT_EXAMPLES_INSTALL_STAGING_CMDS
 -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
--	$(QT5_LA_PRL_FILES_FIXUP)
 -endef
 -
--ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
--define QT5WEBKIT_INSTALL_TARGET_QMLS
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebKit $(TARGET_DIR)/usr/qml/
+-ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+-define QT5WEBKIT_EXAMPLES_INSTALL_QML
+-	cp -dpfr $(@D)/examples/webkitqml $(TARGET_DIR)/usr/lib/qt/examples
 -endef
 -endif
 -
--define QT5WEBKIT_INSTALL_TARGET_CMDS
--	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebKit*.so.* $(TARGET_DIR)/usr/lib
--	cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
--	$(QT5WEBKIT_INSTALL_TARGET_QMLS)
+-define QT5WEBKIT_EXAMPLES_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/usr/lib/qt/examples
+-	cp -dpfr $(@D)/examples/webkitwidgets $(TARGET_DIR)/usr/lib/qt/examples
+-	$(QT5WEBKIT_EXAMPLES_INSTALL_QML)
 -endef
 -
 -$(eval $(generic-package))
