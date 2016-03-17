@@ -1,38 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 17 Mar 2016 14:30:04 +0100
-Subject: [Buildroot] [git commit] libpjsip: disable all bundled third party
-	libraries
-Message-ID: <20160317133014.35034817E3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 17 Mar 2016 14:34:11 +0100
+Subject: [Buildroot] [PATCH] lxc: update comment about the headers >= 3.0
+	dependency
+Message-ID: <1458221651-4573-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9db9a6d2b3c59583366cc259a6602f1f0b053011
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since commit 604095fe9bea925f34ea05a5d80efbc3e9ba16f2 ("libcap: add
+patch to fix build issue with old kernel headers"), libcap builds fine
+with headers < 3.0, so it is no longer the reason why lxc needs
+headers >= 3.0.
 
-libpjsip bundles several third party libraries. In Buildroot we prefer
-either not to build them or to depend on a proper package for each of
-them. The current recipe disables most of them, but not all, so
-disable the remaining ones.
+However, lxc uses setns(), which is only available since kernel 3.0,
+so we simply update the comment next to the dependency so that it is
+accurate.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libpjsip/libpjsip.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lxc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
-index 56d6f2b..730d9fe 100644
---- a/package/libpjsip/libpjsip.mk
-+++ b/package/libpjsip/libpjsip.mk
-@@ -24,6 +24,8 @@ LIBPJSIP_CONF_OPTS = \
- 	--disable-resample \
- 	--disable-video \
- 	--disable-opencore-amr \
-+	--disable-g7221-codec \
-+	--disable-ilbc-codec \
- 	--with-external-srtp=$(STAGING_DIR)/usr
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
+diff --git a/package/lxc/Config.in b/package/lxc/Config.in
+index 3253f14..6a39d2e 100644
+--- a/package/lxc/Config.in
++++ b/package/lxc/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LXC
+ 	depends on BR2_USE_MMU # fork()
+ 	# build system forcefully builds a shared library
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # libcap
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # setns() system call
+ 	help
+ 	  Linux Containers (LXC), provides the ability to group and isolate
+ 	  of a set of processes in a jail by virtualizing and accounting the
+-- 
+2.6.4
