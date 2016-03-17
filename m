@@ -1,59 +1,36 @@
-From: Rodrigo Rebello <rprebello@gmail.com>
-Date: Thu, 17 Mar 2016 03:02:22 -0300
-Subject: [Buildroot] [PATCH 1/1] sdl: disable rpath via configure option
-Message-ID: <1458194542-5765-1-git-send-email-rprebello@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 17 Mar 2016 07:22:03 +0100
+Subject: [Buildroot] [PATCH 4/4] lxc: remove dependency on headers >= 3.0
+In-Reply-To: <56E9E2EC.9000203@mind.be> (Arnout Vandecappelle's message of
+ "Wed, 16 Mar 2016 23:49:16 +0100")
+References: <1458159611-5613-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458159611-5613-4-git-send-email-thomas.petazzoni@free-electrons.com>
+ <87twk66onk.fsf@dell.be.48ers.dk>
+ <20160316233611.6c664973@free-electrons.com>
+ <56E9E2EC.9000203@mind.be>
+Message-ID: <87h9g57hf8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The -rpath option was being stripped from sdl-config via a post install
-staging hook, but the same wasn't being done for sdl.pc. Because of
-this, packages that detect SDL via pkg-config ended up passing
-'-Wl,-rpath,/usr/lib' to the linker, which caused build failures under
-certain circumstances since libraries were being looked for in the wrong
-directory.
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Fix by passing the --disable-rpath option to the SDL configure script,
-which takes care of disabling -rpath everywhere. This also allows the
-SDL_FIXUP_SDL_CONFIG hack to be completely removed.
+Hi,
 
-Fixes:
+ >  Well, it would work with old kernel headers, as long as the actual
+ > kernel is > = 3.0. But the only use case for that would be when using
+ > an old toolchain, e.g. Arago. It's probably safer indeed to avoid
+ > runtime trouble by just depending on the headers version.
 
-  http://autobuild.buildroot.net/results/624/62499217eeaf3228b46652e3f65776d7ece8fce6/
-  http://autobuild.buildroot.net/results/cc1/cc1f78f6c43e3a7bf3ed80d759d9c4d7363d0e48/
+Yes, or if the kernel has the setns syscall backported - But as we
+currently don't differ between build time (E.G. kernel headers) and
+runtime (actual kernel), then that's all we can do.
 
-Signed-off-by: Rodrigo Rebello <rprebello@gmail.com>
----
- package/sdl/sdl.mk | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+And I don't think we should introduce the extra complexity to have
+different symbols for kernel headers and runtime kernel versions.
 
-diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
-index cc1ad06..38b4b97 100644
---- a/package/sdl/sdl.mk
-+++ b/package/sdl/sdl.mk
-@@ -80,6 +80,7 @@ SDL_DEPENDENCIES += mesa3d
- endif
- 
- SDL_CONF_OPTS += \
-+	--disable-rpath \
- 	--enable-pulseaudio=no \
- 	--disable-arts \
- 	--disable-esd \
-@@ -96,13 +97,5 @@ HOST_SDL_CONF_OPTS += \
- 
- SDL_CONFIG_SCRIPTS = sdl-config
- 
--# Remove the -Wl,-rpath option.
--define SDL_FIXUP_SDL_CONFIG
--	$(SED) 's%-Wl,-rpath,\$${libdir}%%' \
--		$(STAGING_DIR)/usr/bin/sdl-config
--endef
--
--SDL_POST_INSTALL_STAGING_HOOKS += SDL_FIXUP_SDL_CONFIG
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
 -- 
-2.1.4
+Venlig hilsen,
+Peter Korsgaard 
