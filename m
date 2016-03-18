@@ -1,42 +1,40 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 18 Mar 2016 12:36:08 +0000
-Subject: [Buildroot] [PATCH] cmake: bump version to 3.5.0
-Message-ID: <1458304568-34596-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 18 Mar 2016 10:15:38 -0300
+Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.2.4
+Message-ID: <1458306938-31469-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 4 ++--
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 5b81416..aa0db20 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index a6d5187..5e256cf 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.4/cmake-3.4.3-SHA-256.txt
--sha256	b73f8c1029611df7ed81796bf5ca8ba0ef41c6761132340c73ffe42704f980fa	cmake-3.4.3.tar.gz
-+# From http://www.cmake.org/files/v3.5/cmake-3.5.0-SHA-256.txt
-+sha256 92c83ad8a4fd6224cf6319a60b399854f55b38ebe9d297c942408b792b1a9efa  cmake-3.5.0.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 1a1ba30..c2a0879 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
+-# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.3.tar.bz2.sha256
+-sha256	8216d2404aaab7fde87be0365a90d64aa6c55928e104557cfcb37b54a096cb8c	harfbuzz-1.2.3.tar.bz2
++# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.4.tar.bz2.sha256
++sha256	449dbdf12a8f94aedbdefaac831d8b1bf45e7decaa9192eaa4f74104ef9de491	harfbuzz-1.2.4.tar.bz2
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 781c48e..3869d6d 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CMAKE_VERSION_MAJOR = 3.4
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
-+CMAKE_VERSION_MAJOR = 3.5
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-HARFBUZZ_VERSION = 1.2.3
++HARFBUZZ_VERSION = 1.2.4
+ HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
-2.7.3
+2.4.10
