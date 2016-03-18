@@ -1,43 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:40:45 +0100
-Subject: [Buildroot] [git commit] xfsprogs: bump version to 4.5.0
-Message-ID: <20160318205619.5826480497@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 21:31:12 +0100
+Subject: [Buildroot] [git commit] a10disp: add a hash file
+Message-ID: <20160318205619.1809B8035E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70303b60f0d8a57b8e9be162f38cd3667ea6ebd8
+commit: https://git.buildroot.net/buildroot/commit/?id=b3f3fe8b4a2f08e50a92898b419e73f20a7b8146
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xfsprogs/xfsprogs.hash | 4 ++--
- package/xfsprogs/xfsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/a10disp/a10disp.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index d0ff1f3..d250283 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature:
--#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.3.0.tar.gz.sig
--sha256 3e570ad51153e4be3792f42b2c805ddbd46b55d166eba3102ec87d5006d4cb5c  xfsprogs-4.3.0.tar.gz
-+#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.5.0.tar.gz.sig
-+sha256 e49beb314984efbd0d758abb5c6137db3bb60a88e59e1e94c00defb536cf89f8  xfsprogs-4.5.0.tar.gz
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 30c4777..fb72054 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFSPROGS_VERSION = 4.3.0
-+XFSPROGS_VERSION = 4.5.0
- XFSPROGS_SITE = ftp://oss.sgi.com/projects/xfs/cmd_tars
- 
- XFSPROGS_DEPENDENCIES = util-linux
+diff --git a/package/a10disp/a10disp.hash b/package/a10disp/a10disp.hash
+new file mode 100644
+index 0000000..a1ec11c
+--- /dev/null
++++ b/package/a10disp/a10disp.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 5077405030e8f97a1edd4b86d469466abbc4d32b4a4609e58459347fcd1ba35b a10disp-v0.6.1.tar.gz
