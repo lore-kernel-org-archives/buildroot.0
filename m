@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:53:18 +0100
-Subject: [Buildroot] [PATCH] nmap: bump to version 7.10
-In-Reply-To: <1458300246-20684-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 18 Mar 2016 08:24:06 -0300")
-References: <1458300246-20684-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87r3f733up.fsf@dell.be.48ers.dk>
+Date: Fri, 18 Mar 2016 21:54:53 +0100
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+In-Reply-To: <1458297461-8447-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 18 Mar 2016 07:37:41 -0300")
+References: <1458297461-8447-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87mvpv33s2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
