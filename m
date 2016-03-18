@@ -1,51 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 22:52:49 +0100
-Subject: [Buildroot] [git commit] libfslcodec: bump to version 4.0.8
-Message-ID: <20160318223205.15F2B81D2A@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 23:15:41 +0100
+Subject: [Buildroot] [git commit] imx-gpu-viv: bump version to 5.0.11 p7.4
+Message-ID: <20160318223205.3309B80800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a972e9e462f7f3988d8cf8a4b910241c3973a0c
+commit: https://git.buildroot.net/buildroot/commit/?id=cd2c13259650ab7c4c2852b3e6b70c5bade3d72b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog since 4.0.7:
-- Version alignment with other Multimedia components.
+This version is released with 3.14.52-1.1.0_ga release.
+
+Includes many of the bug fixes and stability improvements.
+For more information refer to i.MX Linux Release Notes from NXP website:
+L3.14.52_1.1.0_LINUX_DOCS package is under Supporting Information.
 
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/6a1f559a
+https://github.com/Freescale/meta-fsl-arm/commit/f1161869
 
-This package has been implicitely tested through gstreamer as the 0.10
-plugin relies on it:
- # gst-launch-0.10 playbin uri=file:///root/tears_of_steel_1080p.webm
+This package has been tested with both X11 and Framebuffer backends:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # apitrace trace --api egl ./tutorial7
+ # gmem_info
+ ... display memory use per PID ...
+ #??apitrace replay tutorial7.trace
+ #??eglretrace tutorial7.trace
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libfslcodec/libfslcodec.hash | 2 +-
- package/libfslcodec/libfslcodec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 4 ++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libfslcodec/libfslcodec.hash b/package/libfslcodec/libfslcodec.hash
-index d977a66..fd934f7 100644
---- a/package/libfslcodec/libfslcodec.hash
-+++ b/package/libfslcodec/libfslcodec.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index 149afc2..4119388 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
  # locally computed
--sha256	de1251286ebbc1541452f2f70fbd73e42c58f95630d65d1f9aaabf10a6caa38f  libfslcodec-4.0.7.bin
-+sha256	544ffc5989bce18ca50c7a826cc03370b1cf8455335e4291ef0c0779b4c33de0  libfslcodec-4.0.8.bin
-diff --git a/package/libfslcodec/libfslcodec.mk b/package/libfslcodec/libfslcodec.mk
-index e151c66..502390f 100644
---- a/package/libfslcodec/libfslcodec.mk
-+++ b/package/libfslcodec/libfslcodec.mk
+-sha256	43fea6ebbb1222e0f594fff3b48147f4bb6173b85f2caa9fa6bf04a1c85ee93a  imx-gpu-viv-5.0.11.p7.1-sfp.bin
+-sha256	e49ca1d31ca83bb50f6672325db37ae3754eb9073ad98a37790ab1209ea5cba8  imx-gpu-viv-5.0.11.p7.1-hfp.bin
++sha256	3ea201f91ce9b56455e4983ab1055e8175415fbbf2800dc097d47e78ceefba34  imx-gpu-viv-5.0.11.p7.4-sfp.bin
++sha256	b80838104f2f2e3b0baf2f1aacdca263c1c92589ce919b3be40aaad23f686b7f  imx-gpu-viv-5.0.11.p7.4-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 6171080..84ac53f 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBFSLCODEC_VERSION = 4.0.7
-+LIBFSLCODEC_VERSION = 4.0.8
- LIBFSLCODEC_SITE = $(FREESCALE_IMX_SITE)
- LIBFSLCODEC_SOURCE = libfslcodec-$(LIBFSLCODEC_VERSION).bin
- LIBFSLCODEC_INSTALL_STAGING = YES
+-IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.1
++IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.4
+ ifeq ($(BR2_ARM_EABIHF),y)
+ IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
+ else
