@@ -1,181 +1,72 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 18 Mar 2016 18:34:15 -0300
-Subject: [Buildroot] [PATCH v2 14/17] elf2flt: use new upstream site and
- add ARM patch
-In-Reply-To: <1458335299-27409-15-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-15-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAEAJfBDOu=3dQnXjOROxTNMOxq-+0o+4xv9kSRF2+S32EW+fQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 18 Mar 2016 22:42:20 +0100
+Subject: [Buildroot] [PATCH 09/16] toolchain-buildroot: don't show musl
+ on noMMU platforms
+In-Reply-To: <20160318215151.7edc1516@free-electrons.com>
+References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458164602-16983-10-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56E9EBAE.80508@mind.be> <20160318215151.7edc1516@free-electrons.com>
+Message-ID: <56EC763C.4040003@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18 March 2016 at 18:08, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> The uClinux developers now have a Github with elf2flt code, with an
-> upstream that is again active. Let's switch to this upstream, to which
-> Waldemar is contributing as well.
+On 03/18/16 21:51, Thomas Petazzoni wrote:
+> Dear Arnout Vandecappelle,
 >
-> We also add an ARM patch from Waldemar that is needed to make ARM FLAT
-> binaries work properly. Since this commit was on the previously used
-> upstream, we add it together with the change of upstream location to
-> keep the same functionality level.
+> On Thu, 17 Mar 2016 00:26:38 +0100, Arnout Vandecappelle wrote:
+>> On 03/16/16 22:43, Thomas Petazzoni wrote:
+>>> While musl has recently gained noMMU support for the sh2 platform, we
+>>> don't support this yet. So for the time being, let's not show musl as
+>>> an available C library on noMMU platforms. This is for example
+>>> important on ARM noMMU: ARM is supported by musl, but not its noMMU
+>>> variants.
+>>>
+>>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+>>> ---
+>>>    toolchain/toolchain-buildroot/Config.in | 3 +++
+>>>    1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+>>> index ea290eb..1fba06b 100644
+>>> --- a/toolchain/toolchain-buildroot/Config.in
+>>> +++ b/toolchain/toolchain-buildroot/Config.in
+>>> @@ -94,6 +94,9 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+>>>    	depends on !BR2_powerpc_SPE # not supported, build breaks
+>>>    	# Unsupported for MIPS R6
+>>>    	depends on !BR2_mips_32r6 && !BR2_mips_64r6
+>>> +	# sh2 nommu is supported by musl, but we don't have support
+>>> +	# for it yet in Buildroot.
+>>
+>>    We don't have support for sh2 at all, and also we used to have it, so I
+>> wouldn't use 'yet'. Better: we don't have support for sh2 in Buildroot.
 >
-> Since we're now fetching from github, a hash file is added as well.
+> We do have sh2a in the choice of sub-architectures for SuperH:
 >
-> Finally, we disable -Werror to avoid build issues caused by warnings.
+> config BR2_sh2a
+> 	bool "sh2a (SH2A big endian)"
 >
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
->  .../0001-allow-to-build-arm-flat-binaries.patch    | 123 +++++++++++++++++++++
->  package/elf2flt/elf2flt.hash                       |   2 +
->  package/elf2flt/elf2flt.mk                         |   8 +-
->  3 files changed, 129 insertions(+), 4 deletions(-)
->  create mode 100644 package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
->  create mode 100644 package/elf2flt/elf2flt.hash
->
-> diff --git a/package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch b/package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
-> new file mode 100644
-> index 0000000..a6c63c5
-> --- /dev/null
-> +++ b/package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
-> @@ -0,0 +1,123 @@
-> +From 56b082412c6f49d21f5e54831a40d1e7c45b3ee4 Mon Sep 17 00:00:00 2001
-> +From: Waldemar Brodkorb <wbx@openadk.org>
-> +Date: Sat, 12 Mar 2016 22:09:30 +0100
-> +Subject: [PATCH] allow to build arm flat binaries
-> +
-> +Add patchset from ptxdist which is required to produce working
-> +ARM flat binaries. Tested with busybox on Kinetis K70.
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> +---
-> + elf2flt.c     | 19 ++++++++++++-------
-> + elf2flt.ld.in | 17 ++++++++++++++---
-> + 2 files changed, 26 insertions(+), 10 deletions(-)
-> +
-> +diff --git a/elf2flt.c b/elf2flt.c
-> +index fcd797c..c6978e1 100644
-> +--- a/elf2flt.c
-> ++++ b/elf2flt.c
-> +@@ -56,6 +56,8 @@ const char *elf2flt_progname;
-> +
-> + #if defined(TARGET_h8300)
-> + #include <elf/h8.h>      /* TARGET_* ELF support for the BFD library            */
-> ++#elif defined(TARGET_arm)
-> ++#include <elf/arm.h>
-> + #elif defined(__CYGWIN__) || defined(__MINGW32__) || defined(TARGET_nios) || defined(TARGET_nios2)
-> + #include "cygwin-elf.h"       /* Cygwin uses a local copy */
-> + #elif defined(TARGET_xtensa)
-> +@@ -646,16 +648,23 @@ dump_symbols(symbols, number_of_symbols);
-> +                               default:
-> +                                       goto good_32bit_resolved_reloc;
-> + #elif defined(TARGET_arm)
-> ++                              case R_ARM_TARGET1:
-> ++                              case R_ARM_TARGET2:
-> +                               case R_ARM_ABS32:
-> +                                       relocation_needed = 1;
-> +                                       break;
-> +                               case R_ARM_REL32:
-> ++                              case R_ARM_JUMP24:
-> ++                              case R_ARM_CALL:
-> +                               case R_ARM_THM_PC11:
-> +                               case R_ARM_THM_PC22:
-> ++                              case R_ARM_THM_JUMP24:
-> +                               case R_ARM_PC24:
-> +                               case R_ARM_PLT32:
-> +                               case R_ARM_GOTPC:
-> +                               case R_ARM_GOT32:
-> ++                              case R_ARM_PREL31:
-> ++                              case R_ARM_NONE:
-> +                                       relocation_needed = 0;
-> +                                       break;
-> +                               default:
-> +@@ -871,9 +880,7 @@ dump_symbols(symbols, number_of_symbols);
-> +                                       relocation_needed = 1;
-> +                                       if (verbose)
-> +                                               fprintf(stderr,
-> +-                                                      "%s vma=0x%x, "
-> +-                                                      "value=0x%"BFD_VMA_FMT"x, "
-> +-                                                      "address=0x%"BFD_VMA_FMT"x "
-> ++                                                      "%s vma=0x%x, value=0x%x, address=0x%x "
-> +                                                       "sym_addr=0x%x rs=0x%x, opcode=0x%x\n",
-> +                                                       "ABS32",
-> +                                                       sym_vma, (*(q->sym_ptr_ptr))->value,
-> +@@ -890,9 +897,7 @@ dump_symbols(symbols, number_of_symbols);
-> +                               case R_ARM_PLT32:
-> +                                       if (verbose)
-> +                                               fprintf(stderr,
-> +-                                                      "%s vma=0x%x, "
-> +-                                                      "value=0x%"BFD_VMA_FMT"x, "
-> +-                                                      "address=0x%"BFD_VMA_FMT"x "
-> ++                                                      "%s vma=0x%x, value=0x%x, address=0x%x "
-> +                                                       "sym_addr=0x%x rs=0x%x, opcode=0x%x\n",
-> +                                                       "PLT32",
-> +                                                       sym_vma, (*(q->sym_ptr_ptr))->value,
-> +@@ -1446,7 +1451,7 @@ DIS29_RELOCATION:
-> +                               }
-> +                       }
-> +
-> +-                      sprintf(&addstr[0], "+0x%lx", sym_addr - (*(q->sym_ptr_ptr))->value -
-> ++                      sprintf(&addstr[0], "+0x%x", sym_addr - (*(q->sym_ptr_ptr))->value -
-> +                                        bfd_section_vma(abs_bfd, sym_section));
-> +
-> +
-> +diff --git a/elf2flt.ld.in b/elf2flt.ld.in
-> +index bfda0ef..ec1fe6f 100644
-> +--- a/elf2flt.ld.in
-> ++++ b/elf2flt.ld.in
-> +@@ -35,6 +35,8 @@ W_RODAT              *(.rodata1)
-> + W_RODAT               *(.rodata.*)
-> + W_RODAT               *(.gnu.linkonce.r*)
-> +
-> ++              /* .ARM.extab name sections containing exception unwinding information */
-> ++              *(.ARM.extab* .gnu.linkonce.armextab.*)
-> +               /* This is special code area at the end of the normal
-> +                  text section.  It contains a small lookup table at
-> +                  the start followed by the code pointed to by entries
-> +@@ -43,11 +45,20 @@ W_RODAT            *(.gnu.linkonce.r*)
-> +               PROVIDE(@SYMBOL_PREFIX at __ctbp = .);
-> +               *(.call_table_data)
-> +               *(.call_table_text)
-> +-
-> +-              . = ALIGN(0x20) ;
-> +-              @SYMBOL_PREFIX at _etext = . ;
-> +       } > flatmem :text
-> +
-> ++      /* .ARM.exidx name sections containing index entries for section unwinding */
-> ++      /* .ARM.exidx is sorted, so has to go in its own output section.  */
-> ++      @SYMBOL_PREFIX at __exidx_start = .;
-> ++      .ARM.exidx :
-> ++      {
-> ++              *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-> ++      } > flatmem
-> ++      @SYMBOL_PREFIX at __exidx_end = .;
-> ++
-> ++      . = ALIGN(0x20) ;
-> ++      @SYMBOL_PREFIX at _etext = . ;
-> ++
-> +       .data : {
-> +               . = ALIGN(0x4) ;
-> +               @SYMBOL_PREFIX at _sdata = . ;
-> +--
-> +2.6.4
-> +
-> diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-> new file mode 100644
-> index 0000000..c5e71db
-> --- /dev/null
-> +++ b/package/elf2flt/elf2flt.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256sum
+> Whether it works well or not is a different question, but saying that
+> we don't have support for sh2 at all is not quite correct.
 
-s/sha256sum/sha256 ?
+  Sorry, I thought that sh2a was a distinct architecture from sh2. Never mind then.
+
+  My Rev-by is already there.
+
+  Regards,
+  Arnout
+
+>
+> Thomas
+>
+
 
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
