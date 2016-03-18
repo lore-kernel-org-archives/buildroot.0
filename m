@@ -1,47 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Mar 2016 22:08:12 +0100
-Subject: [Buildroot] [PATCH v2 10/17] musl: build broken on Thumb,
-	use ARM mode
+Date: Fri, 18 Mar 2016 22:08:14 +0100
+Subject: [Buildroot] [PATCH v2 12/17] toolchain-buildroot: don't show musl
+	on noMMU platforms
 In-Reply-To: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458335299-27409-11-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458335299-27409-13-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the musl C library on Thumb (Thumb1, not Thumb2), fails with:
-
- {standard input}:20: Error: only lo regs allowed with immediate -- `mov fp,#0'
- {standard input}:21: Error: only lo regs allowed with immediate -- `mov lr,#0'
- {standard input}:25: Error: unshifted register required -- `and ip,a1,#-16'
-
-Since there are no cores that we support that are Thumb1 only, use the
-same solution as the one used by glibc: build the C library in ARM
-mode.
+While musl has recently gained noMMU support for the sh2 platform, we
+don't support this yet. So for the time being, let's not show musl as
+an available C library on noMMU platforms. This is for example
+important on ARM noMMU: ARM is supported by musl, but not its noMMU
+variants.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/musl/musl.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ toolchain/toolchain-buildroot/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 081a700..733f940 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -23,6 +23,12 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- MUSL_INSTALL_STAGING = YES
- 
-+# Thumb build is broken, build in ARM mode, since all architectures
-+# that support Thumb1 also support ARM.
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+MUSL_EXTRA_CFLAGS += -marm
-+endif
-+
- define MUSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index ea290eb..0c40801 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -94,6 +94,9 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
+ 	# Unsupported for MIPS R6
+ 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
++	# sh2 nommu is supported by musl, but we don't have support
++	# for it in Buildroot.
++	depends on BR2_USE_MMU
+ 	select BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  This option selects musl as the C library for the
 -- 
 2.6.4
