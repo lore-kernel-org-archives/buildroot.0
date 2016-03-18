@@ -1,63 +1,79 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Mar 2016 22:42:20 +0100
-Subject: [Buildroot] [PATCH 09/16] toolchain-buildroot: don't show musl
- on noMMU platforms
-In-Reply-To: <20160318215151.7edc1516@free-electrons.com>
+Date: Fri, 18 Mar 2016 22:47:28 +0100
+Subject: [Buildroot] [PATCH 10/16] arch/arm: add support for hard-float
+ on Cortex-M4
+In-Reply-To: <20160317091624.157165ef@free-electrons.com>
 References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-10-git-send-email-thomas.petazzoni@free-electrons.com>
- <56E9EBAE.80508@mind.be> <20160318215151.7edc1516@free-electrons.com>
-Message-ID: <56EC763C.4040003@mind.be>
+ <1458164602-16983-11-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56E9F00F.9040209@mind.be> <20160317091624.157165ef@free-electrons.com>
+Message-ID: <56EC7770.2080508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/18/16 21:51, Thomas Petazzoni wrote:
-> Dear Arnout Vandecappelle,
+On 03/17/16 09:16, Thomas Petazzoni wrote:
+> Hello,
 >
-> On Thu, 17 Mar 2016 00:26:38 +0100, Arnout Vandecappelle wrote:
+> On Thu, 17 Mar 2016 00:45:19 +0100, Arnout Vandecappelle wrote:
 >> On 03/16/16 22:43, Thomas Petazzoni wrote:
->>> While musl has recently gained noMMU support for the sh2 platform, we
->>> don't support this yet. So for the time being, let's not show musl as
->>> an available C library on noMMU platforms. This is for example
->>> important on ARM noMMU: ARM is supported by musl, but not its noMMU
->>> variants.
+>>> Cortex-M4 cores can optionally have a FPv4-SP floating point unit
+>>> (which is different than the VFPv4). This commit adds the necessary
+>>> Config.in options to allow the user to enable the use of this FPU, and
+>>> to build an EABIhf toolchain for Cortex-M4.
 >>>
->>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->>> ---
->>>    toolchain/toolchain-buildroot/Config.in | 3 +++
->>>    1 file changed, 3 insertions(+)
->>>
->>> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
->>> index ea290eb..1fba06b 100644
->>> --- a/toolchain/toolchain-buildroot/Config.in
->>> +++ b/toolchain/toolchain-buildroot/Config.in
->>> @@ -94,6 +94,9 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->>>    	depends on !BR2_powerpc_SPE # not supported, build breaks
->>>    	# Unsupported for MIPS R6
->>>    	depends on !BR2_mips_32r6 && !BR2_mips_64r6
->>> +	# sh2 nommu is supported by musl, but we don't have support
->>> +	# for it yet in Buildroot.
+>>> Note that for now the kernel does not have CONFIG_VFP support for
+>>> ARMv7-M, so in practice, this VFP support cannot really be used for
+>>> the moment.
 >>
->>    We don't have support for sh2 at all, and also we used to have it, so I
->> wouldn't use 'yet'. Better: we don't have support for sh2 in Buildroot.
+>>    As in, when you select this option, then your target will fail dramatically
+>> because it's hardfloat so even a simple printf will crash violently if a
+>> reschedule happens in the middle?
 >
-> We do have sh2a in the choice of sub-architectures for SuperH:
+> My tests show that a VFP-using userspace indeed doesn't start. I've
+> mailed the STM32 kernel maintainer to see what the plans are in terms
+> of FPU support.
 >
-> config BR2_sh2a
-> 	bool "sh2a (SH2A big endian)"
+>>    If so, I'm not so sure we really want this option...
 >
-> Whether it works well or not is a different question, but saying that
-> we don't have support for sh2 at all is not quite correct.
+> Agreed. I saw that the STM32F4 had a FPU, so I wanted to support that,
+> and it's only when I started testing on HW that I realized that the
+> kernel CONFIG_VFP option could not be enabled for this platform.
+>
+> Depending on the answer from the STM32 kernel maintainer, I will either
+> drop or keep (disabled in some form?) this floating point support.
 
-  Sorry, I thought that sh2a was a distinct architecture from sh2. Never mind then.
+  It's also an option to just keep it lingering in patchwork for a while.
 
-  My Rev-by is already there.
+>
+>>>    config BR2_ARM_ENABLE_VFP
+>>>    	bool "Enable VFP extension support"
+>>
+>>    As I understand it (but I could be wrong), FPv4 is not again different from
+>> VFP, i.e. it's again a different ABI (like softfloat and VFP are different
+>> ABIs). At least, you get different flags in the ELF files. So I would tend to
+>> really make a separate option for FPv4, to avoid all confusion. That is,
+>> assuming that I'm right about it being a different ABI.
+>>
+>>    Note that in practice it doesn't make much of a difference becaus you never
+>> have both VFP and FPv4 on the same processor. Well, at least for the time being
+>> - who knows what kind of ugliness ARM will still invent :-)
+>
+> The BR2_ARM_ENABLE_VFP option is *not* about choosing the ABI. The
+> BR2_ARM_ENABLE_VFP option is only here for cores that have an
+> *optional* FPU so that the user can say whether his specific SoC has
+> chosen to include the FPU or not.
+
+  Oops my bad, I was confusing it with the BR2_ARM_FPU_* options.
 
   Regards,
   Arnout
 
+>
+> If you for example have an hypothetical Cortex-M5 core that has a
+> mandatory FPU, then this BR2_ARM_ENABLE_VFP option would not appear, as
+> we know all Cortex-M5 based SoCs have FPU.
 >
 > Thomas
 >
