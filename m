@@ -1,7 +1,7 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 18 Mar 2016 12:04:39 +0000
-Subject: [Buildroot] [PATCH] xfsprogs: bump version to 4.5.0
-Message-ID: <1458302679-4102-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Fri, 18 Mar 2016 12:16:06 +0000
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.146
+Message-ID: <1458303366-28917-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/xfsprogs/xfsprogs.hash | 4 ++--
- package/xfsprogs/xfsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xfsprogs/xfsprogs.hash b/package/xfsprogs/xfsprogs.hash
-index d0ff1f3..d250283 100644
---- a/package/xfsprogs/xfsprogs.hash
-+++ b/package/xfsprogs/xfsprogs.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature:
--#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.3.0.tar.gz.sig
--sha256 3e570ad51153e4be3792f42b2c805ddbd46b55d166eba3102ec87d5006d4cb5c  xfsprogs-4.3.0.tar.gz
-+#   ftp://oss.sgi.com/projects/xfs/cmd_tars/xfsprogs-4.5.0.tar.gz.sig
-+sha256 e49beb314984efbd0d758abb5c6137db3bb60a88e59e1e94c00defb536cf89f8  xfsprogs-4.5.0.tar.gz
-diff --git a/package/xfsprogs/xfsprogs.mk b/package/xfsprogs/xfsprogs.mk
-index 30c4777..fb72054 100644
---- a/package/xfsprogs/xfsprogs.mk
-+++ b/package/xfsprogs/xfsprogs.mk
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 8390596..12a5e3b 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 7689a7a26af6ba8fa5a46a96f3bf757c149806f813740b2df004692a63f05cfc522321d67984d34a1c34d55eb1dab5513b2a6bc48c46a7daec873607ea3ada39  LVM2.2.02.144.tgz
++sha512 d9f4033db8cf010f46615fa6ece739724f50e10a8564d1e8f1766f71c6fd58f2d3bff3415def8c7bed7319a86980120a3a8665885e3ab6acfe4ac3a8011f749c  LVM2.2.02.146.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 74e0e4f..5ea27b3 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFSPROGS_VERSION = 4.3.0
-+XFSPROGS_VERSION = 4.5.0
- XFSPROGS_SITE = ftp://oss.sgi.com/projects/xfs/cmd_tars
- 
- XFSPROGS_DEPENDENCIES = util-linux
+-LVM2_VERSION = 2.02.144
++LVM2_VERSION = 2.02.146
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.7.3
