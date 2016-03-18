@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:40:24 +0100
-Subject: [Buildroot] [PATCH] libsigc: bump to version 2.8.0
-In-Reply-To: <1458307741-25918-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Fri, 18 Mar 2016 10:29:01 -0300")
-References: <1458307741-25918-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87d1qr4j0n.fsf@dell.be.48ers.dk>
+Date: Fri, 18 Mar 2016 21:46:21 +0100
+Subject: [Buildroot] [PATCH] xfsprogs: bump version to 4.5.0
+In-Reply-To: <1458302679-4102-1-git-send-email-Vincent.Riera@imgtec.com>
+ (Vicente Olivert Riera's message of "Fri, 18 Mar 2016 12:04:39 +0000")
+References: <1458302679-4102-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <878u1f4iqq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Vicente" == Vicente Olivert Riera <Vincent.Riera@imgtec.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
 Committed, thanks.
 
