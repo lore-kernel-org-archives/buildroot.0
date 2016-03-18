@@ -1,154 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 22:04:21 +0100
-Subject: [Buildroot] [git commit] package/lirc-tools: Bump to version 0.9.3a
-Message-ID: <20160318210641.A968D8014B@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 22:03:31 +0100
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.1.3
+Message-ID: <20160318210641.97A5B8014B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eab6cc96406f5aa5ba166fe7c94f0e6c26bb9ec5
+commit: https://git.buildroot.net/buildroot/commit/?id=50ac56894b89af9cef1de8cb323e25e272773f49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As part of bumping to version 0.9.3a, two patches are dropped because they
-are already upstream.
-
-Signed-off-by: Joshua Henderson <digitalpeer@digitalpeer.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ools-Make-make_rel_symlink.py-use-python3.patch | 46 --------------------
- ...vel-redefinition-in-static-library-builds.patch | 49 ----------------------
- package/lirc-tools/lirc-tools.hash                 |  4 +-
- package/lirc-tools/lirc-tools.mk                   |  2 +-
- 4 files changed, 3 insertions(+), 98 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch b/package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch
-deleted file mode 100644
-index 3b5db2d..0000000
---- a/package/lirc-tools/0001-tools-Make-make_rel_symlink.py-use-python3.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From ae2e8cc85b6b4d2202e42d704dde8757ffd31da6 Mon Sep 17 00:00:00 2001
--From: Alec Leamas <leamas.alec@gmail.com>
--Date: Thu, 11 Dec 2014 04:44:49 +0100
--Subject: [PATCH] tools: Make make_rel_symlink.py use python3.
--
--Upstream patch:
--http://sourceforge.net/p/lirc/git/ci/ae2e8cc85b6b4d2202e42d704dde8757ffd31da6/
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
-- tools/make_rel_symlink.py | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/tools/make_rel_symlink.py b/tools/make_rel_symlink.py
--index 5c893056f379..896637ff93e0 100755
----- a/tools/make_rel_symlink.py
--+++ b/tools/make_rel_symlink.py
--@@ -1,4 +1,4 @@
---#!/usr/bin/env python
--+#!/usr/bin/env python3
-- 
-- import os
-- import os.path
--@@ -32,16 +32,16 @@ if sys.argv[1] == "-p":
--     sys.argv = sys.argv[ 1:]
-- 
-- if len( sys.argv ) != 3:
---    print USAGE
--+    print(USAGE)
--     sys.exit( 1 )
-- 
-- if  os.path.isdir(  sys.argv[2] ):
---    print "Removing link target dir:" +  sys.argv[2]
--+    print("Removing link target dir:" +  sys.argv[2])
--     shutil.rmtree( sys.argv[2])
-- 
-- link_path = relative_ln_s( sys.argv[1], sys.argv[2] )
-- if just_print:
---    print link_path
--+    print(link_path)
-- else:
--     os.chdir( os.path.dirname( sys.argv[2]))
--     target = os.path.basename( sys.argv[2])
---- 
--2.1.4
--
-diff --git a/package/lirc-tools/0003-Fix-loglevel-redefinition-in-static-library-builds.patch b/package/lirc-tools/0003-Fix-loglevel-redefinition-in-static-library-builds.patch
-deleted file mode 100644
-index 1e8717c..0000000
---- a/package/lirc-tools/0003-Fix-loglevel-redefinition-in-static-library-builds.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 2a789161ef17ac1cedd9a4eb11423f6c1020d8d9 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sun, 17 May 2015 16:08:15 +0200
--Subject: [PATCH] Fix loglevel redefinition in static library builds
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- daemons/lircmd.c | 1 -
-- tools/irrecord.c | 5 ++---
-- 2 files changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/daemons/lircmd.c b/daemons/lircmd.c
--index 023777c..e69078c 100644
----- a/daemons/lircmd.c
--+++ b/daemons/lircmd.c
--@@ -67,7 +67,6 @@ typedef uint64_t __u64;
-- 
-- static int uinputfd = -1;
-- static int useuinput = 0;
---loglevel_t loglevel = 0;
-- 
-- 
-- static const struct option lircmd_options[] = {
--diff --git a/tools/irrecord.c b/tools/irrecord.c
--index f52328c..772b090 100644
----- a/tools/irrecord.c
--+++ b/tools/irrecord.c
--@@ -113,9 +113,6 @@ lirc_t aeps = 100;
-- 
-- #define SAMPLES 80
-- 
---// Actual loglevel as per -D option, see lirc_log.h.
---loglevel_t loglevel = LIRC_WARNING;
---
-- int daemonized = 0;
-- 
-- struct ir_remote *emulation_data;
--@@ -407,6 +404,8 @@ int main(int argc, char **argv)
-- 	char commandline[128];
-- 	char path[128];
-- 	int get_pre = 0, get_post = 0, test = 0, invert = 0, trail = 0;
--+	// Actual loglevel as per -D option, see lirc_log.h.
--+	loglevel_t loglevel = LIRC_WARNING;
-- 
-- 	get_commandline(argc, argv, commandline, sizeof(commandline));
-- 	force = 0;
---- 
--2.1.0
--
-diff --git a/package/lirc-tools/lirc-tools.hash b/package/lirc-tools/lirc-tools.hash
-index 3986767..1acd93d 100644
---- a/package/lirc-tools/lirc-tools.hash
-+++ b/package/lirc-tools/lirc-tools.hash
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index fac3f66..27a75cc 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
 @@ -1,2 +1,2 @@
--#hash from http://sourceforge.net/projects/lirc/files/LIRC/0.9.2/
--sha1 585daed1eaa169b9683a507e26b1331a947a4dcd lirc-0.9.2.tar.bz2
-+#hash from http://sourceforge.net/projects/lirc/files/LIRC/0.9.3a/
-+sha1 a6cadb916e09de068c967055b48c96d79d38f736 lirc-0.9.3a.tar.bz2
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index d366a83..ccdc8d3 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.2.tar.gz.sha256
+-sha256  4866a4a5c54f8e3355ca7337860b998e1c8c562a7d26c4d8ae72eefdf9279982  upmpdcli-1.1.2.tar.gz
++# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.1.3.tar.gz.sha256
++sha256  2df3e6593f18c097b6247fb8da919b94701bf083b219056b006d68e6dcef75b5  upmpdcli-1.1.3.tar.gz
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 3c51880..1a7c790 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIRC_TOOLS_VERSION = 0.9.2
-+LIRC_TOOLS_VERSION = 0.9.3a
- LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
- LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)
- LIRC_TOOLS_LICENSE = GPLv2+
+-UPMPDCLI_VERSION = 1.1.2
++UPMPDCLI_VERSION = 1.1.3
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = GPLv2+
+ UPMPDCLI_LICENSE_FILES = COPYING
