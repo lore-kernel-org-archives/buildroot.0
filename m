@@ -1,54 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Mar 2016 18:25:49 +0100
-Subject: [Buildroot] [PATCH] pkgconf: Add a symlink to the
- GNU_TARGET_NAME-pkg-config
-In-Reply-To: <20160302212553.718456cf@free-electrons.com>
-References: <1456770170-6326-1-git-send-email-jer@airfi.aero>
- <20160302212553.718456cf@free-electrons.com>
-Message-ID: <20160318172549.GB3696@free.fr>
+Date: Fri, 18 Mar 2016 18:43:59 +0100
+Subject: [Buildroot] The best way to add a new group to /etc/group
+In-Reply-To: <CALtfCQY_vSZ3PGxgqhAsEsVpir+5p76TfLhCdQYJZASsNnSDzA@mail.gmail.com>
+References: <CALtfCQY_vSZ3PGxgqhAsEsVpir+5p76TfLhCdQYJZASsNnSDzA@mail.gmail.com>
+Message-ID: <20160318174359.GC3696@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+?scar, All,
 
-On 2016-03-02 21:25 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 29 Feb 2016 19:22:50 +0100, Jeroen Roovers wrote:
-> >  Lots of packages start to call pkg-config "properly" and run into
-> >  failures like this:
-> > 
-> > *
-> > * System Logging Utilities
-> > *
-> > syslogd (SYSLOGD) [N/y/?] n
-> > klogd (KLOGD) [N/y/?] n
-> > logger (LOGGER) [Y/n/?] y
-> > make[2]: .../output/host/usr/bin/arm-buildroot-linux-gnueabihf-pkg-config: Command not found
-> > make[2]: .../output/host/usr/bin/arm-buildroot-linux-gnueabihf-pkg-config: Command not found
-> > make[1]: Leaving directory '.../output/build/busybox-1.24.1'
+On 2016-03-18 10:38 +0100, ?scar G?mez Fuente spake thusly:
+> I'm building a new package in buildroot and I would like to know the best
+> way to add a new group.
 > 
-> I think we should solve this specific problem by passing the PKG_CONFIG
-> in the Busybox environment.
+> I have to add a new group called: test_group. In my system (with
+> INIT_SYSV). I have a user called root and I have to add it to this group
+> too.
+> 
+> I've read the section "17.5.2. generic-package reference" in the buidroot
+> manual and find this variable: NAMEPACKAGE_USERS that it's very interesting
+> because automatically it adds the user you want and the uid and guid can be
+> computed automatically, so is very useful.
+> 
+> Does anyone know if there is something similar to add a group?
 
-Should we not always pass PKG_CONFIG in the target environment, instead
-of per-package?
+Yes, it's simple: specify the username as just a plain dash '-', as
+explained in the manual:
+    https://buildroot.org/downloads/manual/manual.html#makeuser-syntax
+
+    ---8<---
+    username is the desired user name (aka login name) for the user. It
+    can not be root, and must be unique. If set to -, then just a group
+    will be created.
+    ---8<---
 
 Regards,
 Yann E. MORIN.
-
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Free Electrons
-> Embedded Linux, Kernel and Android engineering
-> http://free-electrons.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
