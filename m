@@ -1,53 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Mar 2016 22:08:10 +0100
-Subject: [Buildroot] [PATCH v2 08/17] uclibc: context functions are not
-	Thumb-compatible
+Date: Fri, 18 Mar 2016 22:08:11 +0100
+Subject: [Buildroot] [PATCH v2 09/17] uclibc: NPTL thread implementation
+	only available on MMU platforms
 In-Reply-To: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458335299-27409-9-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458335299-27409-10-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thumb1 platforms and Thumb2 platforms that support the ARM
-instructions set, there is no problem, as the context functions are
-built unconditionally in ARM mode.
-
-However, on Thumb2 platforms that only support the Thumb2 instruction
-set, the context functions cannot build as the assembler code is not
-Thumb-ready. Therefore, those functions must be disabled.
+As indicated by the uClibc-ng source code, the NPTL thread
+implementation is only available on MMU platforms, so we replicate
+this dependency in Buildroot so that the appropriate thread
+implementation is chosen by default on ARM noMMU.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/uclibc/uclibc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/uclibc/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index e3e45f7..4698132 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -88,6 +88,12 @@ define UCLIBC_ARM_BINFMT_FLAT
- endef
- endif
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index e722908..1448037 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -48,6 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ choice
+ 	prompt "Thread library implementation"
+ 	default BR2_PTHREADS_NATIVE
++	default BR2_PTHREADS_OLD if !BR2_USE_MMU
+ 	help
+ 	  Use this option to select the thread library implementation
+ 	  that should be used in your toolchain.
+@@ -69,6 +70,7 @@ choice
+ 		bool "Native POSIX Threading (NPTL)"
+ 		select BR2_TOOLCHAIN_HAS_THREADS
+ 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
++		depends on BR2_USE_MMU
+ 		depends on !BR2_m68k && !BR2_x86_i386
+ endchoice
  
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2):$(BR2_ARM_CPU_HAS_ARM),y:)
-+define UCLIBC_ARM_NO_CONTEXT_FUNCS
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-+endef
-+endif
-+
- endif # arm
- 
- #
-@@ -361,6 +367,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
- 	$(UCLIBC_ARM_BINFMT_FLAT)
-+	$(UCLIBC_ARM_NO_CONTEXT_FUNCS)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
- 	$(UCLIBC_MIPS_ISA_CONFIG)
- 	$(UCLIBC_SH_TYPE_CONFIG)
 -- 
 2.6.4
