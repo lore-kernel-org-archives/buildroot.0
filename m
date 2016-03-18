@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 22:11:45 +0100
-Subject: [Buildroot] [PATCH v2] openpgm: depends on sync2/sync4
-In-Reply-To: <1458155700-7383-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 16 Mar 2016 16:15:00 -0300")
-References: <1458155700-7383-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87y49f1ofi.fsf@dell.be.48ers.dk>
+Date: Fri, 18 Mar 2016 22:11:59 +0100
+Subject: [Buildroot] [PATCH] lxc: update comment about the headers >=
+	3.0 dependency
+In-Reply-To: <1458221651-4573-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 17 Mar 2016 14:34:11 +0100")
+References: <1458221651-4573-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87twk31of4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
- > Add dependency on BR2_TOOLCHAIN_HAS_SYNC_2/4 since it uses both
- > __sync_fetch_and_add_2() and __sync_fetch_and_add_4() atomic builtins.
- > Fixes:
- > http://autobuild.buildroot.net/results/8f2/8f2a3571611dc9414c23808e7615f87b677557dd/
+ > Since commit 604095fe9bea925f34ea05a5d80efbc3e9ba16f2 ("libcap: add
+ > patch to fix build issue with old kernel headers"), libcap builds fine
+ > with headers < 3.0, so it is no longer the reason why lxc needs
+ > headers >= 3.0.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- > ---
- > v2: get rid of bfin conditional since it's atomics-related
+ > However, lxc uses setns(), which is only available since kernel 3.0,
+ > so we simply update the comment next to the dependency so that it is
+ > accurate.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Committed, thanks.
 
