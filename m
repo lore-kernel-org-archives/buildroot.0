@@ -1,43 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 23:30:18 +0100
-Subject: [Buildroot] [PATCH 07/14] xdriver_xf86-video-imx-viv: bump to
-	version 5.0.11 p7.4
-In-Reply-To: <1458140214-22303-8-git-send-email-gary.bisson@boundarydevices.com>
- (Gary Bisson's message of "Wed, 16 Mar 2016 15:56:47 +0100")
-References: <1458140214-22303-1-git-send-email-gary.bisson@boundarydevices.com>
- <1458140214-22303-8-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <87vb4jzaf9.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Mar 2016 23:30:50 +0100
+Subject: [Buildroot] [PATCH v2 01/17] arch/arm: introduce and use
+ BR2_ARM_CPU_ARMV7M
+In-Reply-To: <1458335299-27409-2-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458335299-27409-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160318223050.GB32171@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
+Thomas, All,
 
- > Changelog:
- > - License changed to MIT.
- > - Fix GCC5.2 build.
+On 2016-03-18 22:08 +0100, Thomas Petazzoni spake thusly:
+> All ARM cores should select a BR2_ARM_CPU_* option. Currently, the
+> cortex-m3 does not, which this commit fixes by introducing a
+> BR2_ARM_CPU_ARMV7M option.
 
- > Also add a patch pulled from Yocto for the following reason:
- > The 'swaprep.h' is an internal Xorg header and is not being installed
- > anymore. The swap features are provided by the 'misc.h' header now.
+Tangentially related: those options are not user to sepcify iany of the
+gcc options, but to allow packages that have CPU-specific code todepend
+on it or to enable such support it.
 
- > This patch is based on the Yocto equivalent:
- > https://github.com/Freescale/meta-fsl-arm/commit/19935f57
- > https://github.com/Freescale/meta-fsl-arm/commit/277cef92
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- > The following xorg.conf was used in order to force the use of the
- > vivante module:
- > https://github.com/Freescale/meta-fsl-arm/blob/master/recipes-graphics/xorg-xserver/xserver-xf86-config/mx6/xorg.conf
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- > Note that the X server must be started with the "noreset" option to
- > avoid crashes when closing X apps.
- >  # X -noreset
+Regards,
+Yann E. MORIN.
 
- > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-
-Committed, thanks.
+> ---
+>  arch/Config.in.arm | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+> index 04f0369..33f763a 100644
+> --- a/arch/Config.in.arm
+> +++ b/arch/Config.in.arm
+> @@ -52,6 +52,9 @@ config BR2_ARM_CPU_ARMV6
+>  config BR2_ARM_CPU_ARMV7A
+>  	bool
+>  
+> +config BR2_ARM_CPU_ARMV7M
+> +	bool
+> +
+>  choice
+>  	prompt "Target Architecture Variant"
+>  	depends on BR2_arm || BR2_armeb
+> @@ -171,6 +174,7 @@ config BR2_cortex_m3
+>  	bool "cortex-M3"
+>  	select BR2_ARM_CPU_HAS_THUMB
+>  	select BR2_ARM_CPU_HAS_THUMB2
+> +	select BR2_ARM_CPU_ARMV7M
+>  config BR2_fa526
+>  	bool "fa526/626"
+>  	select BR2_ARM_CPU_HAS_ARM
+> -- 
+> 2.6.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
