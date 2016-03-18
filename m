@@ -1,46 +1,77 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 18 Mar 2016 17:07:41 +0000
-Subject: [Buildroot] [PATCH 1/3] ffmpeg: bump to version 3.0
-In-Reply-To: <XnsA5CFB7247A9CBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-References: <1458309966-16835-1-git-send-email-Vincent.Riera@imgtec.com>
- <n5ktrcx0us.ln2@ID-313208.user.individual.net> <56EC2AED.3090803@imgtec.com>
- <XnsA5CFB7247A9CBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <56EC35DD.60804@imgtec.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Mar 2016 18:24:47 +0100
+Subject: [Buildroot] [PATCH] pkgconf: Add a symlink to the
+ GNU_TARGET_NAME-pkg-config
+In-Reply-To: <56D605CD.1070008@mind.be>
+References: <1456770170-6326-1-git-send-email-jer@airfi.aero>
+ <u7ieqcx9kv.ln2@ID-313208.user.individual.net>
+ <20160229213520.2b6e6ee7@free-electrons.com>
+ <56D605CD.1070008@mind.be>
+Message-ID: <20160318172447.GA3696@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Arnout, All,
 
-On 18/03/16 17:00, Bernd Kuhls wrote:
-> Vicente Olivert Riera <Vincent.Riera@imgtec.com> 
-> wrote in news:56EC2AED.3090803 at imgtec.com:
+On 2016-03-01 22:12 +0100, Arnout Vandecappelle spake thusly:
+> On 02/29/16 21:35, Thomas Petazzoni wrote:
+> [snip]
+> > What I dislike with the current setup is that if you add
+> > $(HOST_DIR)/usr/bin to your PATH, then any call to pkg-config returns
+> > values that are valid only when cross-compiling, which is not
+> > necessarily what one would expect.
 > 
->> Hi Bernd,
->>
->> no, I haven't.
-> 
-> Hi Vincent,
-> 
-> it will fail, you need to patch Kodi:
-> http://forum.kodi.tv/showthread.php?tid=264007&pid=2279546#pid2279546
-> 
-> In the next days I will try to do it locally, until then:
-> 
-> NACK.
+>  For exactly this reason I would like to introduce a config-script directory,
+> e.g. $(HOST_DIR)/usr/cross-bin. In this directory we would put the
+> cross-pkg-config and the fixed up config scripts we now search for in
+> $(STAGING_DIR)/usr/bin.
 
-don't you prefer to backport that Gentoo patch into Buildroot?
+Like this:
+    https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/foo-config-in-PATH
+
+Last I sent this series, Thomas was not fond of it, IIRC...
+
+    http://lists.busybox.net/pipermail/buildroot/2015-December/thread.html#147891
+    http://lists.busybox.net/pipermail/buildroot/2015-December/147927.html
+    and ensuing mails...
+
+BTW, you were in Cc for that series. ;-)
 
 Regards,
+Yann E. MORIN.
 
-Vincent.
-
-> Regards, Bernd
+>  Regards,
+>  Arnout
 > 
+> > 
+> > However, doing this change means that any configure script or Makefile
+> > that calls pkg-config directly would no longer find our pkg-config.
+> > 
+> > Best regards,
+> > 
+> > Thomas
+> > 
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
