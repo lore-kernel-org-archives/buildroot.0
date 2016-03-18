@@ -1,71 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 18 Mar 2016 23:41:52 +0100
-Subject: [Buildroot] [PATCH v2 03/17] arch/arm: add Cortex-M4 entry
-In-Reply-To: <1458335299-27409-4-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Fri, 18 Mar 2016 19:49:31 -0300
+Subject: [Buildroot] [PATCH v2 00/17] ARM Cortex-M support and STM32
+ defconfigs
+In-Reply-To: <20160318221727.64755b08@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-4-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160318224152.GA15159@free.fr>
+ <20160318221727.64755b08@free-electrons.com>
+Message-ID: <20160318224931.GA19174@laptop.cereza>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
-
-On 2016-03-18 22:08 +0100, Thomas Petazzoni spake thusly:
-> This commit adds the option to select the Cortex-M4 ARM core, in the
-> same family as Cortex-M3. This will be useful to enable the internal
-> toolchain backend for this ARM core, and provide some defconfigs for
-> Cortex-M4 platforms.
+On 18 Mar 10:17 PM, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  arch/Config.in.arm | 5 +++++
->  1 file changed, 5 insertions(+)
+> On Fri, 18 Mar 2016 22:08:02 +0100, Thomas Petazzoni wrote:
 > 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index cd1ec33..ee612f5 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -174,6 +174,10 @@ config BR2_cortex_m3
->  	bool "cortex-M3"
->  	select BR2_ARM_CPU_HAS_THUMB2
->  	select BR2_ARM_CPU_ARMV7M
-> +config BR2_cortex_m4
-> +	bool "cortex-M4"
-> +	select BR2_ARM_CPU_HAS_THUMB2
-> +	select BR2_ARM_CPU_ARMV7M
->  config BR2_fa526
->  	bool "fa526/626"
->  	select BR2_ARM_CPU_HAS_ARM
-> @@ -455,6 +459,7 @@ config BR2_GCC_TARGET_CPU
->  	default "cortex-a15"	if BR2_cortex_a15
->  	default "cortex-a17"	if BR2_cortex_a17
->  	default "cortex-m3"	if BR2_cortex_m3
-> +	default "cortex-m4"	if BR2_cortex_m4
->  	default "fa526"		if BR2_fa526
->  	default "marvell-pj4"	if BR2_pj4
->  	default "strongarm"	if BR2_strongarm
-> -- 
-> 2.6.4
+> > Here is the v2 of the patches that add support for ARM Cortex-M and
+> > STM32 defconfigs.
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> This whole series is available at:
+> 
+>   http://git.free-electrons.com/users/thomas-petazzoni/buildroot/log/?h=cortexm-uclibc-thumb
+> 
 
+Thanks for the branch. Tested on LPC4350 Hitex Eval board and it worked
+fine:
+
+Uncompressing Linux... done, booting the kernel.
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 4.5.0-rc2-00312-gd183ca0d53b6 (zeta at laptop) (gcc version 4.9.3 (Buildroot 2016.05-git-00495-ga84162dcafb9-dirty) ) #220 PREEMPT Fri Mar 18 19:43:33 ART 2016
+[etc]
+
+Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ezequiel Garcia, VanguardiaSur
+www.vanguardiasur.com.ar
