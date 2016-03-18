@@ -1,48 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Mar 2016 22:08:05 +0100
-Subject: [Buildroot] [PATCH v2 03/17] arch/arm: add Cortex-M4 entry
+Date: Fri, 18 Mar 2016 22:08:07 +0100
+Subject: [Buildroot] [PATCH v2 05/17] uclibc: remove USE_BX handling
 In-Reply-To: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458335299-27409-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458335299-27409-6-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds the option to select the Cortex-M4 ARM core, in the
-same family as Cortex-M3. This will be useful to enable the internal
-toolchain backend for this ARM core, and provide some defconfigs for
-Cortex-M4 platforms.
+Now that uClibc is capable of figuring out by itself whether 'bx' can
+be used or not, we can simplify the logic in Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- arch/Config.in.arm | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/uclibc/Config.in |  5 -----
+ package/uclibc/uclibc.mk | 11 -----------
+ 2 files changed, 16 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index cd1ec33..ee612f5 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -174,6 +174,10 @@ config BR2_cortex_m3
- 	bool "cortex-M3"
- 	select BR2_ARM_CPU_HAS_THUMB2
- 	select BR2_ARM_CPU_ARMV7M
-+config BR2_cortex_m4
-+	bool "cortex-M4"
-+	select BR2_ARM_CPU_HAS_THUMB2
-+	select BR2_ARM_CPU_ARMV7M
- config BR2_fa526
- 	bool "fa526/626"
- 	select BR2_ARM_CPU_HAS_ARM
-@@ -455,6 +459,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a15"	if BR2_cortex_a15
- 	default "cortex-a17"	if BR2_cortex_a17
- 	default "cortex-m3"	if BR2_cortex_m3
-+	default "cortex-m4"	if BR2_cortex_m4
- 	default "fa526"		if BR2_fa526
- 	default "marvell-pj4"	if BR2_pj4
- 	default "strongarm"	if BR2_strongarm
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 16bf89c..e722908 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -139,11 +139,6 @@ config BR2_UCLIBC_ARC_TYPE
+ 	default "ARC_CPU_700"	if BR2_arc770d
+ 	default "ARC_CPU_HS"	if BR2_archs38
+ 
+-config BR2_UCLIBC_ARM_BX
+-	bool
+-	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
+-	default y if (BR2_ARM_CPU_HAS_THUMB || BR2_ARM_CPU_HAS_THUMB2)
+-
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 88a4a8c..c981d80 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -80,16 +80,6 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+ UCLIBC_EXTRA_CFLAGS += -marm
+ endif
+ 
+-ifeq ($(BR2_UCLIBC_ARM_BX),y)
+-define UCLIBC_ARM_BX_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,USE_BX,$(@D)/.config)
+-endef
+-else
+-define UCLIBC_ARM_BX_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,USE_BX,$(@D)/.config)
+-endef
+-endif
+-
+ endif # arm
+ 
+ #
+@@ -362,7 +352,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
+-	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
+ 	$(UCLIBC_SH_TYPE_CONFIG)
 -- 
 2.6.4
