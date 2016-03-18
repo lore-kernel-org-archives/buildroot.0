@@ -1,60 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 23:15:41 +0100
-Subject: [Buildroot] [git commit] imx-gpu-viv: bump version to 5.0.11 p7.4
-Message-ID: <20160318223205.3309B80800@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 23:15:50 +0100
+Subject: [Buildroot] [git commit] imx-gpu-viv: add apitrace dependency on
+	libpng
+Message-ID: <20160318223205.40FA280800@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd2c13259650ab7c4c2852b3e6b70c5bade3d72b
+commit: https://git.buildroot.net/buildroot/commit/?id=88d244a0ebdf260cdcf3d13e2eb540e3d5a8d557
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version is released with 3.14.52-1.1.0_ga release.
-
-Includes many of the bug fixes and stability improvements.
-For more information refer to i.MX Linux Release Notes from NXP website:
-L3.14.52_1.1.0_LINUX_DOCS package is under Supporting Information.
-
 This patch is based on the Yocto equivalent:
-https://github.com/Freescale/meta-fsl-arm/commit/f1161869
-
-This package has been tested with both X11 and Framebuffer backends:
- # cd /usr/share/examples/viv_samples/vdk/
- # apitrace trace --api egl ./tutorial7
- # gmem_info
- ... display memory use per PID ...
- #??apitrace replay tutorial7.trace
- #??eglretrace tutorial7.trace
+https://github.com/Freescale/meta-fsl-arm/commit/ce73c200
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 4 ++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/freescale-imx/imx-gpu-viv/Config.in      | 1 +
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index 149afc2..4119388 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256	43fea6ebbb1222e0f594fff3b48147f4bb6173b85f2caa9fa6bf04a1c85ee93a  imx-gpu-viv-5.0.11.p7.1-sfp.bin
--sha256	e49ca1d31ca83bb50f6672325db37ae3754eb9073ad98a37790ab1209ea5cba8  imx-gpu-viv-5.0.11.p7.1-hfp.bin
-+sha256	3ea201f91ce9b56455e4983ab1055e8175415fbbf2800dc097d47e78ceefba34  imx-gpu-viv-5.0.11.p7.4-sfp.bin
-+sha256	b80838104f2f2e3b0baf2f1aacdca263c1c92589ce919b3be40aaad23f686b7f  imx-gpu-viv-5.0.11.p7.4-hfp.bin
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index c386765..20759b1 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -62,6 +62,7 @@ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+ config BR2_PACKAGE_IMX_GPU_VIV_APITRACE
+ 	bool "install apitrace tools"
+ 	select BR2_PACKAGE_IMX_GPU_VIV_G2D
++	select BR2_PACKAGE_LIBPNG
+ 	help
+ 	  Copy the apitrace tool to the target. Apitrace consists
+ 	  of a set of tools to trace, replay and/or inspect OpenGL,
 diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 6171080..84ac53f 100644
+index 84ac53f..b51a7af 100644
 --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
 +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -80,6 +80,7 @@ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ endef
  
--IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.1
-+IMX_GPU_VIV_BASE_VERSION = 5.0.11.p7.4
- ifeq ($(BR2_ARM_EABIHF),y)
- IMX_GPU_VIV_VERSION = $(IMX_GPU_VIV_BASE_VERSION)-hfp
- else
+ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_APITRACE),y)
++IMX_GPU_VIV_DEPENDENCIES += libpng
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ define IMX_GPU_VIV_INSTALL_APITRACE
+ 	cp -dpfr $(@D)/apitrace/x11/usr/bin/* $(TARGET_DIR)/usr/bin/
