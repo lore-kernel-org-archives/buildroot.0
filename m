@@ -1,88 +1,107 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 18 Mar 2016 22:47:28 +0100
-Subject: [Buildroot] [PATCH 10/16] arch/arm: add support for hard-float
- on Cortex-M4
-In-Reply-To: <20160317091624.157165ef@free-electrons.com>
-References: <1458164602-16983-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458164602-16983-11-git-send-email-thomas.petazzoni@free-electrons.com>
- <56E9F00F.9040209@mind.be> <20160317091624.157165ef@free-electrons.com>
-Message-ID: <56EC7770.2080508@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 18 Mar 2016 23:22:52 +0100
+Subject: [Buildroot] The best way to add a new group to /etc/group
+In-Reply-To: <56EC70E4.9060007@mind.be>
+References: <CALtfCQY_vSZ3PGxgqhAsEsVpir+5p76TfLhCdQYJZASsNnSDzA@mail.gmail.com>
+ <20160318174359.GC3696@free.fr> <56EC70E4.9060007@mind.be>
+Message-ID: <20160318222252.GA32171@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/17/16 09:16, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu, 17 Mar 2016 00:45:19 +0100, Arnout Vandecappelle wrote:
->> On 03/16/16 22:43, Thomas Petazzoni wrote:
->>> Cortex-M4 cores can optionally have a FPv4-SP floating point unit
->>> (which is different than the VFPv4). This commit adds the necessary
->>> Config.in options to allow the user to enable the use of this FPU, and
->>> to build an EABIhf toolchain for Cortex-M4.
->>>
->>> Note that for now the kernel does not have CONFIG_VFP support for
->>> ARMv7-M, so in practice, this VFP support cannot really be used for
->>> the moment.
->>
->>    As in, when you select this option, then your target will fail dramatically
->> because it's hardfloat so even a simple printf will crash violently if a
->> reschedule happens in the middle?
->
-> My tests show that a VFP-using userspace indeed doesn't start. I've
-> mailed the STM32 kernel maintainer to see what the plans are in terms
-> of FPU support.
->
->>    If so, I'm not so sure we really want this option...
->
-> Agreed. I saw that the STM32F4 had a FPU, so I wanted to support that,
-> and it's only when I started testing on HW that I realized that the
-> kernel CONFIG_VFP option could not be enabled for this platform.
->
-> Depending on the answer from the STM32 kernel maintainer, I will either
-> drop or keep (disabled in some form?) this floating point support.
+Arnout, All,
 
-  It's also an option to just keep it lingering in patchwork for a while.
+On 2016-03-18 22:19 +0100, Arnout Vandecappelle spake thusly:
+> On 03/18/16 18:43, Yann E. MORIN wrote:
+> >On 2016-03-18 10:38 +0100, ?scar G?mez Fuente spake thusly:
+> >>I'm building a new package in buildroot and I would like to know the best
+> >>way to add a new group.
+> >>
+> >>I have to add a new group called: test_group. In my system (with
+> >>INIT_SYSV). I have a user called root and I have to add it to this group
+> >>too.
+> >>
+> >>I've read the section "17.5.2. generic-package reference" in the buidroot
+> >>manual and find this variable: NAMEPACKAGE_USERS that it's very interesting
+> >>because automatically it adds the user you want and the uid and guid can be
+> >>computed automatically, so is very useful.
+> >>
+> >>Does anyone know if there is something similar to add a group?
+> >
+> >Yes, it's simple: specify the username as just a plain dash '-', as
+> >explained in the manual:
+> >     https://buildroot.org/downloads/manual/manual.html#makeuser-syntax
+> >
+> >     ---8<---
+> >     username is the desired user name (aka login name) for the user. It
+> >     can not be root, and must be unique. If set to -, then just a group
+> >     will be created.
+> 
+>  But as far as I know, there is no way to add users to a group, no?
 
->
->>>    config BR2_ARM_ENABLE_VFP
->>>    	bool "Enable VFP extension support"
->>
->>    As I understand it (but I could be wrong), FPv4 is not again different from
->> VFP, i.e. it's again a different ABI (like softfloat and VFP are different
->> ABIs). At least, you get different flags in the ELF files. So I would tend to
->> really make a separate option for FPv4, to avoid all confusion. That is,
->> assuming that I'm right about it being a different ABI.
->>
->>    Note that in practice it doesn't make much of a difference becaus you never
->> have both VFP and FPv4 on the same processor. Well, at least for the time being
->> - who knows what kind of ugliness ARM will still invent :-)
->
-> The BR2_ARM_ENABLE_VFP option is *not* about choosing the ABI. The
-> BR2_ARM_ENABLE_VFP option is only here for cores that have an
-> *optional* FPU so that the user can say whether his specific SoC has
-> chosen to include the FPU or not.
+I'm not sure to understand.
 
-  Oops my bad, I was confusing it with the BR2_ARM_FPU_* options.
+When adding a new user, you have to specify its primary group. There is
+no way in UNIX to create a user that is not part of any group, so the
+primary group is mandatory. So at least the user is part of that group.
+There is nothing that prevents you from adding a user to an existing
+group, or to create a brand new group for that user. In any case, you
+have de facto added the user to its primary group.
 
-  Regards,
-  Arnout
+Furthermore, when adding a user, you can also specify the additional
+groups it will belong to (also explained in the manual).
 
->
-> If you for example have an hypothetical Cortex-M5 core that has a
-> mandatory FPU, then this BR2_ARM_ENABLE_VFP option would not appear, as
-> we know all Cortex-M5 based SoCs have FPU.
->
-> Thomas
->
+Finally, defining the same user twice is in fact allowed. The manual is
+not much clear about it, as it states that the user "must be unique."
+What that means is that, when adding a user with a specific UID, it has
+to be a unique combination. Some examples will better explain that:
 
+Correct:
+    FOO_USERS = foo - [...]
+    BAR_USERS = foo - [...]
+
+Correct:
+    FOO_USERS = foo 1 [...]
+    BAR_USERS = foo 1 [...]
+
+Correct:
+    FOO_USERS = foo - [...]
+    BAR_USERS = foo 1 [...]
+
+Not correct:
+    FOO_USERS = foo 1 [...]
+    BAR_USERS = foo 2 [...]
+
+Similarly, the primary group must match for that user. Similarly, when
+adding a group with a specific GID, it has to also be a unique GID.
+
+What that means is that all definitions of a user must be "compatible",
+and that all definitions of a group must be "compatible".
+
+> So to
+> add the root user to this new group, the only option is to explicitly update
+> the groups file.
+
+Indeed, it is not allowed to define the root user. We could allow that,
+and ensure it gets UID zero, has primary group set to root and has GID
+zero, as well as a few other similar sanity checks, so that it would be
+possible to add the user root to any arbitrary groups.
+
+And I doubt it is even sane to begin with... ;-/
+
+However, root being root, it can become member of any group it pleases,
+either by way of newgrp(1) in the shell, or programtaically with
+setgid(2). So I fail to see what the issue here really is.
+
+Regards,
+Yann E. MORIN.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
