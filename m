@@ -1,78 +1,153 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 18 Mar 2016 10:43:57 +0100
-Subject: [Buildroot] wget download: 'scheme missing' results in empty
-	output file
-In-Reply-To: <20160225203212.GD5870@free.fr>
-References: <CAAXf6LXVweNYNvHNZG9bvYu9KVeAa9L6=qPOwRsmsx8DhVGTJQ@mail.gmail.com>
- <20160225170758.1f444549@free-electrons.com>
- <CAAXf6LXz_WcAAsk+kts3cZ4=v1Pw1rB=nLf9yKr9FotCZRR8sg@mail.gmail.com>
- <874mcwwxyx.fsf@dell.be.48ers.dk> <20160225180158.673b34f5@free-electrons.com>
- <20160225203212.GD5870@free.fr>
-Message-ID: <CAAXf6LVQsa+zGhG01Z4CPpzzfkqYPFhHsNDmvNp+t9af4aNApw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 18 Mar 2016 10:49:54 +0100
+Subject: [Buildroot] [PATCH 1/5] package/qt5quick1: remove obsolete
+ package
+In-Reply-To: <1458207749-19507-2-git-send-email-corjon.j@ecagroup.com>
+References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
+ <1458207749-19507-2-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <20160318104954.72ff531d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Feb 25, 2016 at 9:32 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Thomas?, All,
->
-> On 2016-02-25 18:01 +0100, Thomas Petazzoni spake thusly:
->> Dear Peter Korsgaard,
->>
->> On Thu, 25 Feb 2016 17:34:14 +0100, Peter Korsgaard wrote:
->>
->> >  > Also, for packages where the source is included with buildroot, like
->> >  > makedevs, FOO_SITE is empty too.
->> >
->> > .. but those also don't define _SOURCE / _VERSION, so wget isn't called
->> > ;)
->>
->> Yeah, but I was proposing to check for an empty FOO_SITE in the package
->> infrastructure itself, so we're not at the point where wget gets called.
->
-> What about:
->
->     diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->     index e22babb..64c6fdc 100644
->     --- a/package/pkg-generic.mk
->     +++ b/package/pkg-generic.mk
->     @@ -436,7 +436,7 @@ endif
->      $(2)_ALL_DOWNLOADS = \
->         $$(foreach p,$$($(2)_SOURCE) $$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
->             $$(if $$(findstring ://,$$(p)),$$(p),\
->     -$$($(2)_SIT            E)/$$(p)))
->     +$$(if $$($(2)_SITE),$$($(2)_SITE)/$$(p))))
->
->      ifndef $(2         )_SITE
->       ifdef $(3)_SITE
+Hello Julien,
 
-I tried this, but it does not yield the desired end-result: no file
-will be downloaded, the download step 'succeeds', and the extract step
-fails because it can't find the expected file.
+quick reaction on the Qt release ;-), the only missing part is
+the Config.in.legacy entry, e.g.:
 
-I found another clean and simple solution to my problem:
-
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -442,6 +442,8 @@ endif
- ifndef $(2)_SITE
-  ifdef $(3)_SITE
-   $(2)_SITE = $$($(3)_SITE)
-+ else
-+  $(2)_SITE = undefined
-  endif
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,6 +143,14 @@ comment "----------------------------------------------------"
  endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2016.05"
++
++config BR2_PACKAGE_QT5QUICK1
++       bool qt5quick1 support option has been removed
++       select BR2_LEGACY
++       help
++         Qt qtquick1 submodule removed since Qt 5.6.
++
 
-A similar 'undefined' trick is done to $(2)_VERSION.
-Basically, either site is set, or it defaults to 'undefined'.
-When a download is not attempted (e.g. source in buildroot, ...) there
-is no change, if a download is attempted then it will fail due to
-'undefined'.
+With this your can add my 
 
-What do you think?
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
-Thanks,
-Thomas
+Regards,
+Peter
+
+On Thu, 17 Mar 2016 10:42:25 +0100, Julien Corjon <corjon.j@ecagroup.com> wrote:
+
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  package/qt5/Config.in                |  1 -
+>  package/qt5/qt5quick1/Config.in      | 26 -----------------------
+>  package/qt5/qt5quick1/qt5quick1.hash |  2 --
+>  package/qt5/qt5quick1/qt5quick1.mk   | 41 ------------------------------------
+>  4 files changed, 70 deletions(-)
+>  delete mode 100644 package/qt5/qt5quick1/Config.in
+>  delete mode 100644 package/qt5/qt5quick1/qt5quick1.hash
+>  delete mode 100644 package/qt5/qt5quick1/qt5quick1.mk
+> 
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index 1c42102..32de7a0 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -48,7 +48,6 @@ source "package/qt5/qt5websockets/Config.in"
+>  source "package/qt5/qt5x11extras/Config.in"
+>  source "package/qt5/qt5xmlpatterns/Config.in"
+>  comment "legacy compatibility"
+> -source "package/qt5/qt5quick1/Config.in"
+>  source "package/qt5/qt5script/Config.in"
+>  source "package/qt5/qt5webkit/Config.in"
+>  source "package/qt5/qt5webkit-examples/Config.in"
+> diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
+> deleted file mode 100644
+> index 345ffae..0000000
+> --- a/package/qt5/qt5quick1/Config.in
+> +++ /dev/null
+> @@ -1,26 +0,0 @@
+> -config BR2_PACKAGE_QT5QUICK1
+> -	bool "qt5quick1"
+> -	select BR2_PACKAGE_QT5BASE
+> -	select BR2_PACKAGE_QT5BASE_GUI
+> -	select BR2_PACKAGE_QT5BASE_NETWORK
+> -	select BR2_PACKAGE_QT5BASE_WIDGETS
+> -	select BR2_PACKAGE_QT5SCRIPT
+> -	select BR2_PACKAGE_QT5XMLPATTERNS
+> -	# This module does not support static linking
+> -	depends on !BR2_STATIC_LIBS
+> -	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> -	help
+> -	  Qt is a cross-platform application and UI framework for
+> -	  developers using C++.
+> -
+> -	  This package corresponds to the qt5quick1 module.
+> -
+> -	  This package has been tagged as deprecated since version
+> -	  5.5.0 and should be replaced by Qt Quick module in new
+> -	  design.
+> -
+> -	  http://qt.io
+> -
+> -comment "qt5quick1 needs a toolchain w/ dynamic library"
+> -	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> -	depends on BR2_STATIC_LIBS
+> diff --git a/package/qt5/qt5quick1/qt5quick1.hash b/package/qt5/qt5quick1/qt5quick1.hash
+> deleted file mode 100644
+> index 845742c..0000000
+> --- a/package/qt5/qt5quick1/qt5quick1.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qtquick1-opensource-src-5.5.1.tar.xz.mirrorlist
+> -sha256 c812a7e59a8b9f0a87693181059933e15fef04bc875b6486cd653be1b9b51f2c qtquick1-opensource-src-5.5.1.tar.xz
+> diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
+> deleted file mode 100644
+> index 7ccf644..0000000
+> --- a/package/qt5/qt5quick1/qt5quick1.mk
+> +++ /dev/null
+> @@ -1,41 +0,0 @@
+> -################################################################################
+> -#
+> -# qt5quick1
+> -#
+> -################################################################################
+> -
+> -QT5QUICK1_VERSION = $(QT5_VERSION)
+> -QT5QUICK1_SITE = $(QT5_SITE)
+> -QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
+> -QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script \
+> -	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
+> -QT5QUICK1_INSTALL_STAGING = YES
+> -
+> -ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> -QT5QUICK1_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
+> -QT5QUICK1_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
+> -else
+> -QT5QUICK1_LICENSE = Commercial license
+> -QT5QUICK1_REDISTRIBUTE = NO
+> -endif
+> -
+> -define QT5QUICK1_CONFIGURE_CMDS
+> -	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+> -endef
+> -
+> -define QT5QUICK1_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> -endef
+> -
+> -define QT5QUICK1_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> -	$(QT5_LA_PRL_FILES_FIXUP)
+> -endef
+> -
+> -define QT5QUICK1_INSTALL_TARGET_CMDS
+> -	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Declarative.so.* $(TARGET_DIR)/usr/lib
+> -	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/qml1tooling $(TARGET_DIR)/usr/lib/qt/plugins/
+> -	cp -dpfr $(STAGING_DIR)/usr/imports $(TARGET_DIR)/usr
+> -endef
+> -
+> -$(eval $(generic-package))
