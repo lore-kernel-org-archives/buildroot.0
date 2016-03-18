@@ -1,44 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:46:55 +0100
-Subject: [Buildroot] [git commit] cmake: bump version to 3.5.0
-Message-ID: <20160318205619.6958480497@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 21:53:08 +0100
+Subject: [Buildroot] [git commit] nmap: bump to version 7.10
+Message-ID: <20160318205619.7C22781D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab067a2a4bdd9cd874ffa93831096a270729944d
+commit: https://git.buildroot.net/buildroot/commit/?id=500574d9d89dbe6a847f31cedb0c99ee8811858d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nmap/nmap.hash | 4 ++--
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index 5b81416..aa0db20 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index 3e5a369..ac086ce 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
 @@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.4/cmake-3.4.3-SHA-256.txt
--sha256	b73f8c1029611df7ed81796bf5ca8ba0ef41c6761132340c73ffe42704f980fa	cmake-3.4.3.tar.gz
-+# From http://www.cmake.org/files/v3.5/cmake-3.5.0-SHA-256.txt
-+sha256 92c83ad8a4fd6224cf6319a60b399854f55b38ebe9d297c942408b792b1a9efa  cmake-3.5.0.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index 1a1ba30..c2a0879 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -4,8 +4,8 @@
+-# Locally calculated after checking pgp signature
+-sha256 cf1fcd2643ba2ef52f47acb3c18e52fa12a4ae4b722804da0e54560704627705  nmap-7.01.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.10.tar.bz2.digest.txt
++sha256	58cf8896d09057d1c3533f430c06b22791d0227ebbb93dede2ccb73693ed4b4b	nmap-7.10.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 184555b..9a25fca 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CMAKE_VERSION_MAJOR = 3.4
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
-+CMAKE_VERSION_MAJOR = 3.5
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+-NMAP_VERSION = 7.01
++NMAP_VERSION = 7.10
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
