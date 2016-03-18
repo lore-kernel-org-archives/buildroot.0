@@ -1,353 +1,227 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 18 Mar 2016 08:10:00 +0100
-Subject: [Buildroot] [PATCH 1/2] toolchain-external: add basic fortran
-	support
-In-Reply-To: <1458258022-20613-1-git-send-email-kamath.ben@gmail.com>
-References: <1458258022-20613-1-git-send-email-kamath.ben@gmail.com>
-Message-ID: <CAHXCMMJkuwLZKUujBtBPLrGAB38jyE00DDoyip9c3h12D+uj3w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 18 Mar 2016 08:30:22 +0100 (CET)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2016-03-17
+Message-ID: <20160318073022.D3E00102D67@stock.ovh.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Benjamin,
+Build statistics for 2016-03-17
+===============================
 
-On Fri, Mar 18, 2016 at 12:40 AM, Benjamin Kamath <kamath.ben@gmail.com> wrote:
-> From: Benjamin Kamath <bkamath@spaceflight.com>
->
-> Add the necessary support to allow an external toolchain
-> to supply a fortran compiler. This mostly amounts to a
-> toolchain configuration option that sets BR2_INSTALL_LIBFORTRAN,
-> and then various hooks to pass along flags, as well as
-> run-time libraries.
->
-> Additionally, gfortran needs to be invoked through the
-> toolchain-wrapper, not just symlinked to $(TARGET_FC)gfortran.
+        success : 221
+       failures : 131
+       timeouts : 2  
+          TOTAL : 354
 
-Great works!
+Classification of failures by reason
+====================================
 
-You may be interested in this work as well:
-https://github.com/tSed/buildroot/commits/sma/ext-toolchain-options
+     host-shared-mime-info-1.6 | 13
+           libimxvpuapi-0.10.1 | 8 
+          shared-mime-info-1.6 | 8 
+               linknx-0.0.1.32 | 6 
+                     dt-v18.32 | 6 
+               ipmitool-1.8.15 | 5 
+                blktrace-1.1.0 | 4 
+  getent-buildroot-2016.05-git | 3 
+                sg3_utils-1.42 | 3 
+                  multicat-2.1 | 3 
+               libgtk2-2.24.29 | 3 
+                  connman-1.31 | 3 
+           quagga-1.0.20160309 | 2 
+       host-erlang-rebar-2.6.1 | 2 
+                    cups-2.1.2 | 2 
+        host-gutenprint-5.2.11 | 2 
+                 igmpproxy-0.1 | 2 
+       gadgetfs-test-undefined | 2 
+                  ffmpeg-2.8.6 | 2 
+                   mplayer-1.2 | 2 
+              gnuradio-3.7.9.1 | 2 
+                    mosh-1.2.5 | 2 
+                 setools-3.3.8 | 2 
+                pinentry-0.9.4 | 2 
+                      qt-4.8.7 | 2 
+iputils-3a86a2542c6fe29413c... | 2 
+                  boost-1.60.0 | 2 
+              gst1-libav-1.6.3 | 1 
+                xfsprogs-4.3.0 | 1 
+             stress-ng-0.04.16 | 1 
+                oprofile-1.1.0 | 1 
+                    ruby-2.3.0 | 1 
+tvheadend-3927788bb71ad0041... | 1 
+                  psmisc-22.21 | 1 
+host-gdb-6be65fb56ea6694a92... | 1 
+                   redis-3.0.7 | 1 
+             webkitgtk24-2.4.9 | 1 
+                libpjsip-2.4.5 | 1 
+              spidev_test-v3.0 | 1 
+                  stunnel-5.31 | 1 
+                 rtptools-1.20 | 1 
+                collectd-5.5.1 | 1 
+gmrender-resurrect-aa3d02cf... | 1 
+                    owfs-3.1p1 | 1 
+                  trinity-v1.6 | 1 
+                  squid-3.5.15 | 1 
+                 lvm2-2.02.144 | 1 
+        lttng-babeltrace-1.2.4 | 1 
+                 libdrm-2.4.67 | 1 
+                 erlang-18.2.1 | 1 
+                     fbset-2.1 | 1 
+                   taskd-1.1.0 | 1 
+                    yajl-2.1.0 | 1 
+             ipsec-tools-0.8.2 | 1 
+       openpgm-release-5-2-122 | 1 
+               binutils-2.25.1 | 1 
+                 qt5base-5.5.1 | 1 
+                  cairo-1.14.4 | 1 
+               valgrind-3.11.0 | 1 
+                minidlna-1.1.5 | 1 
+              macchanger-1.6.0 | 1 
+              host-libcap-2.24 | 1 
+          sane-backends-1.0.25 | 1 
+                    pppd-2.4.7 | 1 
+                 mono-4.2.2.30 | 1 
 
-more specifically:
-https://github.com/tSed/buildroot/commit/82b0c580ce934c969839ce5e5029700d9bbdaff6
-https://github.com/tSed/buildroot/commit/3a0ef3799a976fbb8fcaa272cd8c86e0a2eaa4cf
-https://github.com/tSed/buildroot/commit/41a79c37bf7720b5a557a6caf054874817166d65
-https://github.com/tSed/buildroot/commit/322fe0f571b163d23f0f1008703cbf1f3affe8fd
-https://github.com/tSed/buildroot/commit/3dd490a79cba8bffa8f5a05cb5ca44e98426aa46
-https://github.com/tSed/buildroot/commit/708d6849f24b3009e3260713018affad874bea5f
-https://github.com/tSed/buildroot/commit/44243d7aa174a78000fd26342538660de1019c60
-https://github.com/tSed/buildroot/commit/fcfb46274e9e9ec8ad2671ccadbe7b2bb433f2bd
-https://github.com/tSed/buildroot/commit/290a0326ac98298adc4c454c8f75cf9da58efe89
-https://github.com/tSed/buildroot/commit/b575a3fe025de1c8a679a3f6c72fcfa166a9cd07
+Detail of failures
+===================
 
-The above branch is still a WIP, but the fortran support should be
-here and working.
-(The WIP stuff being updating the external toolchain selection.)
+      xtensa |                binutils-2.25.1 | NOK | http://autobuild.buildroot.net/results/76ca1ac636ac75e5033adf29c91fd30ee97283fd/
+     powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/f8db73c806761a0349d5ccd1938d117381794e98/
+     powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/ed13342e00e3cde41fae455aabb9f5bef3cbb972/
+     powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/6d3c98d7b5a39ebc5b02818798965d6debd48b4d/
+     powerpc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/4121ad254bc258e208918c98d7ec13e9f6c4de30/
+       nios2 |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/e7347ec35ee8bb8fa447b0e20698ce1f2b3fa670/
+     powerpc |                   boost-1.60.0 | NOK | http://autobuild.buildroot.net/results/f00be39640fc73aa2a11c5a7d1f90a300d26d936/
+         arm |                   cairo-1.14.4 | NOK | http://autobuild.buildroot.net/results/83c8f4e3645b44f419f04ca417f40b578acb2cb9/
+         arc |                 collectd-5.5.1 | NOK | http://autobuild.buildroot.net/results/4e2561c652263e626025f4933adf5da43c757b2b/
+     powerpc |                   connman-1.31 | NOK | http://autobuild.buildroot.net/results/298797d184ed580b3938a9e94391a4da0e7a5ba6/
+      x86_64 |                   connman-1.31 | NOK | http://autobuild.buildroot.net/results/3f0752cc46014ab4cb835cf9a3c7f0a1a2a23cdf/
+      xtensa |                   connman-1.31 | NOK | http://autobuild.buildroot.net/results/f4f6b91b00f1fa396ade3e4bf00d64a76edb2a30/
+         arm |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/79495af10673ecaecd6e1e0c3c11b83da6102c7a/
+      x86_64 |                     cups-2.1.2 | NOK | http://autobuild.buildroot.net/results/37f07452db9558bd679b3105fc6960c551cac67b/
+        mips |                      dt-v18.32 | NOK | http://autobuild.buildroot.net/results/c40034d4d378b572466bf612a5788752b8c7fce8/
+microblazeel |                      dt-v18.32 | NOK | http://autobuild.buildroot.net/results/86acfcef1a1b4a01107d3708591e9888679cdcd7/
+       sparc |                      dt-v18.32 | NOK | http://autobuild.buildroot.net/results/57cb3892ee2fa656318e9de038585262fa2fb7d7/
+microblazeel |                      dt-v18.32 | NOK | http://autobuild.buildroot.net/results/493afcdf630d05d509dda72ac803dab3f02a3e61/
+       sparc |                      dt-v18.32 | NOK | http://autobuild.buildroot.net/results/2b9adb56128f2e85bd9bc9b48e10bd3b5cd72d7d/
+       nios2 |                      dt-v18.32 | NOK | http://autobuild.buildroot.net/results/a9b5d14a3f47639538bfcc97888ce9e84d1643c6/
+     aarch64 |                  erlang-18.2.1 | NOK | http://autobuild.buildroot.net/results/60916ae5c1baa012d5a8aad774a11f7d6206fb23/
+         arm |                      fbset-2.1 | NOK | http://autobuild.buildroot.net/results/9ec7196f97363bb287fefb158bf94abc5f9ac976/
+    mips64el |                   ffmpeg-2.8.6 | NOK | http://autobuild.buildroot.net/results/f1c2072cd4b6af811d592c0df3be997a735e1cf5/
+    mips64el |                   ffmpeg-2.8.6 | NOK | http://autobuild.buildroot.net/results/0aeff5f1dcce07cf79bd9c80df9e9b6f6f23c05a/
+     powerpc |        gadgetfs-test-undefined | NOK | http://autobuild.buildroot.net/results/cb203bd4876312697fdb1fb2a9776d0f3da3fbdf/
+     powerpc |        gadgetfs-test-undefined | NOK | http://autobuild.buildroot.net/results/5b8e6125f0e6f45c5c1fe036cdecc88bcf175ec3/
+      mipsel |   getent-buildroot-2016.05-git | NOK | http://autobuild.buildroot.net/results/29030ac2774aa638f7b3b0cff268fd67c55b2cfe/
+      mipsel |   getent-buildroot-2016.05-git | NOK | http://autobuild.buildroot.net/results/63dbb5d51366968fd2ca492e332a7215fcf284a9/
+      mipsel |   getent-buildroot-2016.05-git | NOK | http://autobuild.buildroot.net/results/d48beffe8e93d81693471ba23d6c4ca68bedf482/
+      x86_64 | gmrender-resurrect-aa3d02cf... | NOK | http://autobuild.buildroot.net/results/7956399eb026209229a2d410f249d7c19c2b4e12/
+      x86_64 |               gnuradio-3.7.9.1 | NOK | http://autobuild.buildroot.net/results/2309f2268aeb55c927e20064bd9dc435a567a965/
+      x86_64 |               gnuradio-3.7.9.1 | NOK | http://autobuild.buildroot.net/results/6fa3395a20e6b848c2abf8dd5563db907da09bd9/
+    mips64el |               gst1-libav-1.6.3 | NOK | http://autobuild.buildroot.net/results/48b007230602ef7c0389a66de14ae5fa1ae6b8e6/
+     sparc64 |        host-erlang-rebar-2.6.1 | TIM | http://autobuild.buildroot.net/results/dfdd5137b61f8c5b87fd77f75dac7058a1d41fa7/
+        i686 |        host-erlang-rebar-2.6.1 | TIM | http://autobuild.buildroot.net/results/7be85ef28a7d698552da60c9bc0a8e480146b714/
+microblazeel | host-gdb-6be65fb56ea6694a92... | NOK | http://autobuild.buildroot.net/results/26cfff37c27411bb330e135a040c686443513aab/
+     sparc64 |         host-gutenprint-5.2.11 | NOK | http://autobuild.buildroot.net/results/0b9a3acfecd48164118ac55f0cb96da1c87cf822/
+     powerpc |         host-gutenprint-5.2.11 | NOK | http://autobuild.buildroot.net/results/f337725a43431e7160a17ad99403b458258dc4ac/
+        sh4a |               host-libcap-2.24 | NOK | http://autobuild.buildroot.net/results/f809e235737bc9d0e207295855fb92f788f77613/
+    mips64el |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/af11870d041ddd51fed32ef4f985301c8ba07651/
+      xtensa |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/01d272e6ef7a5a0b0c1309ff741c0c8f6d8a0d33/
+         arc |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/adcdcf154214044a7b7ec9bd99c425444e91f6b9/
+      x86_64 |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/f18b39a3cf76bb54841bf08873efef4f359e923a/
+microblazeel |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/a4c14dc6ea0a7fd954e73345bbee3308927bc1c5/
+         arm |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/6fddb574c6d05a58dcd4134d77e3bc7cee1cfb1f/
+         arm |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/d59ab03b9cb42068d10a9f15d6252c4751c0e325/
+         arm |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/3b9d6ff5a48191864a5d53a6697d752113087586/
+       sparc |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/c002399dee6e0de3bf7ec40dd0b2029c1f33f1ff/
+      xtensa |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/b77c79022eb08282141563f619fd9f69dbae2e83/
+         arm |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/3529f0f14d6640a3ea7781aff1a5f732c0728757/
+       nios2 |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/6a2fd6a1aaf87dac37a73299bf5b2cd9bed08b11/
+      x86_64 |      host-shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/0a5e5997638e863e5e548f938a268c3e7cfbb198/
+         arm |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/5c8c0ccc4e105e58dd17dff9a097c8a9aa1825f1/
+      x86_64 |                  igmpproxy-0.1 | NOK | http://autobuild.buildroot.net/results/5a788313c34a89c64306eb9bf8d75d77a4ff4e1d/
+         arm |                ipmitool-1.8.15 | NOK | http://autobuild.buildroot.net/results/6facf98a71c218edc4fa1d7a8ace29d8fc1916f5/
+microblazeel |                ipmitool-1.8.15 | NOK | http://autobuild.buildroot.net/results/d40176eac0b2cb9ab8be81d054be10276f263f65/
+         arm |                ipmitool-1.8.15 | NOK | http://autobuild.buildroot.net/results/11f30f662b0692872300af431d7ebff25100f5b5/
+         arc |                ipmitool-1.8.15 | NOK | http://autobuild.buildroot.net/results/591cdfdee716c0892474466d76be67af8f3a0cf7/
+      x86_64 |                ipmitool-1.8.15 | NOK | http://autobuild.buildroot.net/results/7205696d550615353ef3baa7a005e222e111d682/
+         arm |              ipsec-tools-0.8.2 | NOK | http://autobuild.buildroot.net/results/00a300ac15bb623fd325a27514bd74c3ece0f620/
+         sh4 | iputils-3a86a2542c6fe29413c... | NOK | http://autobuild.buildroot.net/results/e4fedad0b74f8e8557ffd02b045c6248387faafe/
+         arm | iputils-3a86a2542c6fe29413c... | NOK | http://autobuild.buildroot.net/results/8b0a01cebd62d0acd835f795cd75e41d5155d9f6/
+       sparc |                  libdrm-2.4.67 | NOK | http://autobuild.buildroot.net/results/b303f069fcc230ae3116952d5eed435e9ea3694b/
+    mips64el |                libgtk2-2.24.29 | NOK | http://autobuild.buildroot.net/results/50a835b708d206e741708c56a8381a09e295d32c/
+      xtensa |                libgtk2-2.24.29 | NOK | http://autobuild.buildroot.net/results/6460cc9c0d893473404b3ba29f894c2894008e69/
+         arm |                libgtk2-2.24.29 | NOK | http://autobuild.buildroot.net/results/188d1c4d3ea2a08164137302662f5fdd9166f739/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/b7d6a352060e404aefb51f3ebf192888e7001bfb/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/968923f3f06360e0b522f97ff366eacb8ef4c1fc/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/feefefe4a4713d62e487720d046b1d39281cc47c/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/0c787524714cf1fdb93b6a0980ea495332c9b62c/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/3cc400b56096adca43996bec3832191bfbec60e4/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/cb637fe0c6e910beeb63f14e2d6d7f6e64a0581e/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/531a31af3321734d381e41590646df6cced9be99/
+         arm |            libimxvpuapi-0.10.1 | NOK | http://autobuild.buildroot.net/results/0968c7595e5a0b6ab848ce465550be1c8ff369c4/
+     aarch64 |                 libpjsip-2.4.5 | NOK | http://autobuild.buildroot.net/results/210d54c1302bd1805889ce736c5b2b09516ba537/
+      mipsel |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/db169e802b467c6734206913731ce13304493a8f/
+    mips64el |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/e75b7fbd39e44d4314ed3270824234e2687b9eb5/
+     powerpc |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/d1caba9be07a4350c7838a2b27695762779411cd/
+         arm |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/a86cf0c1ad26117aba86ce75d3f76c286babbf11/
+      xtensa |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/f2b5e934e78483f641b7d77ed8adff342723e16a/
+     powerpc |                linknx-0.0.1.32 | NOK | http://autobuild.buildroot.net/results/6f84da758f537e8ad60107153b5cf4f3b368c859/
+         arm |         lttng-babeltrace-1.2.4 | NOK | http://autobuild.buildroot.net/results/e61217311f19dedfeb64f319b95a0fc34f1ebba0/
+         arm |                  lvm2-2.02.144 | NOK | http://autobuild.buildroot.net/results/d290c67ca15f58df5b103cfbf8fa73f91fbba5aa/
+      x86_64 |               macchanger-1.6.0 | NOK | http://autobuild.buildroot.net/results/4c3004a91755b41bfb0453b4cb6b1dc8a2876ecc/
+         arm |                 minidlna-1.1.5 | NOK | http://autobuild.buildroot.net/results/d7370d0f8d1c7c028996feab0ea4f36edbf8a698/
+         arm |                  mono-4.2.2.30 | NOK | http://autobuild.buildroot.net/results/809aa88d162752e1d845ee7c25cfc332867a2f7b/
+      mipsel |                     mosh-1.2.5 | NOK | http://autobuild.buildroot.net/results/ce6d9ef179d705e2def8d29eb86ca40add5908bb/
+      mipsel |                     mosh-1.2.5 | NOK | http://autobuild.buildroot.net/results/f12acf057c4c20137dbe028440dbe53bd50f8acf/
+        i686 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/1c9c09690149f6a00975528f1313ba00e0727926/
+     aarch64 |                    mplayer-1.2 | NOK | http://autobuild.buildroot.net/results/0eec9b0ba6c01caf34c4aec9c085bc424f30b60e/
+        bfin |                   multicat-2.1 | NOK | http://autobuild.buildroot.net/results/9e07a98e87755c992254295c46edb0dace967a21/
+        bfin |                   multicat-2.1 | NOK | http://autobuild.buildroot.net/results/54969eda6dd7fc414ed72f87a38b5e05f4222d18/
+        bfin |                   multicat-2.1 | NOK | http://autobuild.buildroot.net/results/4b07d276d7c09f2fc2d63c8c37c92519cfe36dbc/
+      x86_64 |        openpgm-release-5-2-122 | NOK | http://autobuild.buildroot.net/results/49723ffc7707d1c4e71c1a6c0ef51e13e753140e/
+microblazeel |                 oprofile-1.1.0 | NOK | http://autobuild.buildroot.net/results/76f1807b2e6f37939e1cd8bc2b6f0caa73079c88/
+     powerpc |                     owfs-3.1p1 | NOK | http://autobuild.buildroot.net/results/87189f728200ef6480ea473c8e0480a1d7c48486/
+         arm |                 pinentry-0.9.4 | NOK | http://autobuild.buildroot.net/results/03d04ba9b40f251755b3c1b3c83f6881b4d1529d/
+    mips64el |                 pinentry-0.9.4 | NOK | http://autobuild.buildroot.net/results/39fcd0d474fd721083f8a19b3fb00c49bc9511ea/
+      x86_64 |                     pppd-2.4.7 | NOK | http://autobuild.buildroot.net/results/24c8316e579965deb408caef8b4fc81ca8119a70/
+      mipsel |                   psmisc-22.21 | NOK | http://autobuild.buildroot.net/results/de7f8aba46f90154c03caf5098bf0dcd6efa0993/
+         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a89a861752a9f69de346e254f209db3d43ac5ca2/
+         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/c893dc86bd5f02a4c9125aed33ab8d0671fa4c0a/
+       sparc |                  qt5base-5.5.1 | NOK | http://autobuild.buildroot.net/results/06cb0c5ca36796f75123346765697401ad422997/
+      x86_64 |            quagga-1.0.20160309 | NOK | http://autobuild.buildroot.net/results/bb5b4c0b6c13b6b2c60948ddfb6aff0ce2830695/
+      mipsel |            quagga-1.0.20160309 | NOK | http://autobuild.buildroot.net/results/3613d86632ec47ba5a5fefdb29066297fe4646d8/
+       sparc |                    redis-3.0.7 | NOK | http://autobuild.buildroot.net/results/8c125b1c12128237638e6c487b090d21139168a6/
+    mips64el |                  rtptools-1.20 | NOK | http://autobuild.buildroot.net/results/1a69c48f8835b1df4e779a5523176c4a2a0dbbbf/
+        bfin |                     ruby-2.3.0 | NOK | http://autobuild.buildroot.net/results/8b4b2617dd68f03ea4d6de154f2864f5319520b9/
+      mipsel |           sane-backends-1.0.25 | NOK | http://autobuild.buildroot.net/results/5ad9b8932da0f9a3ba504aa2d3fa5f6654b3e908/
+     sparc64 |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/955adc16a08d6492f5258fc8c9cd4d12f7650a66/
+     sparc64 |                  setools-3.3.8 | NOK | http://autobuild.buildroot.net/results/7396ced289da41d4ab4b4c006c5407361fbc84f6/
+        bfin |                 sg3_utils-1.42 | NOK | http://autobuild.buildroot.net/results/e0e0417441a4651daeb653a4f9ae6a1d4dd7b6d3/
+        bfin |                 sg3_utils-1.42 | NOK | http://autobuild.buildroot.net/results/a60da0713fb063d93cb364b70591e05eeccb211c/
+        bfin |                 sg3_utils-1.42 | NOK | http://autobuild.buildroot.net/results/4823b8d064ad463b5e9ac0fe312659ca27e87690/
+         arm |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/6124dcc8c255d6d13fb80abeb4f4836aac8a0126/
+        i686 |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/3dbfe698729d99bc2f48da230059b125103eef55/
+      xtensa |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/8a2ac00291efbd4ee0fb80af05201eca65e9c154/
+      mipsel |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/452fb22e8c972f87ecc77a8ecce3f6aef4378f20/
+         arm |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/b55a7bf4cae8468255dbefe5566f267788c5f0e9/
+     powerpc |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/d3029992e1a5726e64ad24737c651c0d0929daaf/
+      xtensa |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/6531be13c402dfccf4b94c03321bf434dcafb4f1/
+         arm |           shared-mime-info-1.6 | NOK | http://autobuild.buildroot.net/results/4364de2f586972a4c127582c4e7a7d2d60abd92a/
+         arm |               spidev_test-v3.0 | NOK | http://autobuild.buildroot.net/results/dc3654c498e6b038d5f62e7ea1b8fc1b578ba805/
+         arm |                   squid-3.5.15 | NOK | http://autobuild.buildroot.net/results/7b9387713177e40759f9b50b32badfc1a64ee5a6/
+     sparc64 |              stress-ng-0.04.16 | NOK | http://autobuild.buildroot.net/results/2b7074ad5938f2cb7def2713473d270c07125d72/
+    mips64el |                   stunnel-5.31 | NOK | http://autobuild.buildroot.net/results/0b653ef18f0e8847ed8acf63bfb7ef88d5258c6f/
+     powerpc |                    taskd-1.1.0 | NOK | http://autobuild.buildroot.net/results/20c5135b2ba904301c46966830d4c293bfdea55b/
+     powerpc |                   trinity-v1.6 | NOK | http://autobuild.buildroot.net/results/4f3c7b4395e474beb3a90f50902a887dd51d7692/
+      xtensa | tvheadend-3927788bb71ad0041... | NOK | http://autobuild.buildroot.net/results/416667ba5537ad4e432e30ab0d40538992c3f741/
+        mips |                valgrind-3.11.0 | NOK | http://autobuild.buildroot.net/results/1c9a47f304e12ef0a8b785548d4f3fc5cdcddc36/
+         arm |              webkitgtk24-2.4.9 | NOK | http://autobuild.buildroot.net/results/0516dc32a25a86d5127b9f86f65cb27217951129/
+         arm |                 xfsprogs-4.3.0 | NOK | http://autobuild.buildroot.net/results/d0d5879f3f69264fd6bd6e835324d004ce1ce233/
+        bfin |                     yajl-2.1.0 | NOK | http://autobuild.buildroot.net/results/f0abd48a9051b8d3aed05253d3cfbeb874c1b896/
 
-Compare to your series, from a first and quick glance, it seems you
-better handle fortran flags than I did.
-
-Few comments inlined (this is not a full in-deep review ;-])
-
->
-> Signed-off-by: Benjamin Kamath <bkamath@spaceflight.com>
-> ---
->  package/Makefile.in                                |  9 +++++++++
->  package/gcc/gcc-final/gcc-final.mk                 |  4 ++--
->  package/pkg-cmake.mk                               |  6 ++++++
->  support/misc/toolchainfile.cmake.in                |  2 ++
->  toolchain/helpers.mk                               | 13 +++++++++++++
->  toolchain/toolchain-common.in                      |  3 +++
->  toolchain/toolchain-external/Config.in             | 12 ++++++++++++
->  toolchain/toolchain-external/toolchain-external.mk | 10 +++++++++-
->  8 files changed, 56 insertions(+), 3 deletions(-)
->
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index dd595e2..125406f 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -138,6 +138,7 @@ endif
->  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
->  TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
->  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
-> +TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
->  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
->
->  ifeq ($(BR2_BINFMT_FLAT),y)
-> @@ -145,28 +146,35 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
->         -Wl$(comma)-elf2flt)
->  TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
->         -Wl$(comma)-elf2flt)
-> +TARGET_FCFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-> +       -Wl$(comma)-elf2flt)
->  TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
->  endif
->
->  ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
->  TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
->  TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-> +TARGET_FCFLAGS += -mid-shared-library -mshared-library-id=0
->  TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
->  endif
->  ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
->  TARGET_LDFLAGS += -msep-data
->  TARGET_CFLAGS += -msep-data
-> +TARGET_FCFLAGS += -msep-data
->  TARGET_CXXFLAGS += -msep-data
->  endif
->
->  ifeq ($(BR2_SSP_REGULAR),y)
->  TARGET_CFLAGS += -fstack-protector
-> +TARGET_FCFLAGS += -fstack-protector
->  TARGET_CXXFLAGS += -fstack-protector
->  else ifeq ($(BR2_SSP_STRONG),y)
->  TARGET_CFLAGS += -fstack-protector-strong
-> +TARGET_FCFLAGS += -fstack-protector-strong
->  TARGET_CXXFLAGS += -fstack-protector-strong
->  else ifeq ($(BR2_SSP_ALL),y)
->  TARGET_CFLAGS += -fstack-protector-all
-> +TARGET_FCFLAGS += -fstack-protector-all
->  TARGET_CXXFLAGS += -fstack-protector-all
->  endif
->
-> @@ -378,6 +386,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
->  SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
->  TARGET_CFLAGS += -static
->  TARGET_CXXFLAGS += -static
-> +TARGET_FCFLAGS += -static
->  TARGET_LDFLAGS += -static
->  else ifeq ($(BR2_SHARED_LIBS),y)
->  SHARED_STATIC_LIBS_OPTS = --disable-static --enable-shared
-> diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-> index 69fdc0c..87480c7 100644
-> --- a/package/gcc/gcc-final/gcc-final.mk
-> +++ b/package/gcc/gcc-final/gcc-final.mk
-> @@ -54,7 +54,7 @@ endef
->  # Languages supported by the cross-compiler
->  GCC_FINAL_CROSS_LANGUAGES-y = c
->  GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
-> -GCC_FINAL_CROSS_LANGUAGES-$(BR2_TOOLCHAIN_BUILDROOT_FORTRAN) += fortran
-> +GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBFORTRAN) += fortran
->  GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
->
->  HOST_GCC_FINAL_CONF_OPTS = \
-> @@ -152,7 +152,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->  HOST_GCC_FINAL_USR_LIBS += libstdc++
->  endif
->
-> -ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN),y)
-> +ifeq ($(BR2_INSTALL_LIBFORTRAN),y)
->  HOST_GCC_FINAL_USR_LIBS += libgfortran
->  endif
->
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index 81dcfcc..a93709e 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -31,6 +31,8 @@ CMAKE_HOST_C_COMPILER = $(HOSTCC)
->  CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
->  endif
->
-> +CMAKE_HOST_Fortran_COMPILER ?= $(HOSTFC)
-> +
-
-Is this needed? What for?
-AFAICS, there is no host-package requiring HOSTFC...
-
->  ifneq ($(QUIET),)
->  CMAKE_QUIET = -DCMAKE_RULE_MESSAGES=OFF -DCMAKE_INSTALL_MESSAGE=NEVER
->  endif
-> @@ -119,10 +121,12 @@ define $(2)_CONFIGURE_CMDS
->                 -DCMAKE_INSTALL_PREFIX="$$(HOST_DIR)/usr" \
->                 -DCMAKE_C_FLAGS="$$(HOST_CFLAGS)" \
->                 -DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
-> +               -DCMAKE_FC_FLAGS="$$(HOST_FCFLAGS)" \
-
-Why setting CMAKE_FC_FLAGS instead of CMAKE_Fortran_FLAGS?
-
->                 -DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
->                 -DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
->                 -DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
->                 -DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
-> +               -DCMAKE_Fortran_COMPILER="$$(CMAKE_HOST_Fortran_COMPILER)" \
->                 $(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
->                         -DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
->                         -DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
-> @@ -243,9 +247,11 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
->                 -e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
->                 -e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
->                 -e 's#@@TARGET_CXXFLAGS@@#$(call qstrip,$(TARGET_CXXFLAGS))#' \
-> +               -e 's:@@TARGET_FCFLAGS@@:$(call qstrip,$(TARGET_FCFLAGS)):' \
->                 -e 's#@@TARGET_LDFLAGS@@#$(call qstrip,$(TARGET_LDFLAGS))#' \
->                 -e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
->                 -e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
-> +               -e 's:@@TARGET_FC@@:$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC))):' \
->                 -e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
->                 $(TOPDIR)/support/misc/toolchainfile.cmake.in \
->                 > $@
-> diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-> index 5cf381e..4112604 100644
-> --- a/support/misc/toolchainfile.cmake.in
-> +++ b/support/misc/toolchainfile.cmake.in
-> @@ -15,6 +15,7 @@ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
->
->  set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@ ${CMAKE_C_FLAGS}" CACHE STRING "Buildroot CFLAGS")
->  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@ ${CMAKE_CXX_FLAGS}" CACHE STRING "Buildroot CXXFLAGS")
-> +set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@ ${CMAKE_Fortran_FLAGS}" CACHE STRING "Buildroot FCFLAGS")
->  set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@ ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Buildroot LDFLAGS")
->  set(CMAKE_INSTALL_SO_NO_EXE 0)
->
-> @@ -29,3 +30,4 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
->  # This toolchain file can be used both inside and outside Buildroot.
->  set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
->  set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-> +set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
-
-This will set (force to set) the fortran compile path in all
-configuration, even in those that do not have it... :-/
-
-> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-> index ee878e8..196f295 100644
-> --- a/toolchain/helpers.mk
-> +++ b/toolchain/helpers.mk
-> @@ -382,6 +382,19 @@ check_cplusplus = \
->         fi
->
->  #
-> +# Check that the external toolchain supports Fortran
-> +#
-> +# $1: cross-gfortran path
-> +#
-> +check_fortran = \
-> +       __CROSS_FC=$(strip $1) ; \
-> +       $${__CROSS_FC} -v > /dev/null 2>&1 ; \
-> +       if test $$? -ne 0 ; then \
-> +               echo "Fortran support is selected but is not available in external toolchain" ; \
-> +               exit 1 ; \
-> +       fi
-> +
-> +#
->  # Check that the cross-compiler given in the configuration exists
->  #
->  # $1: cross-gcc path
-> diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-> index 46970a6..1d7afa7 100644
-> --- a/toolchain/toolchain-common.in
-> +++ b/toolchain/toolchain-common.in
-> @@ -17,6 +17,9 @@ config BR2_ENABLE_LOCALE
->  config BR2_INSTALL_LIBSTDCPP
->         bool
->
-> +config BR2_INSTALL_LIBFORTRAN
-> +       bool
-> +
->  config BR2_TOOLCHAIN_HAS_THREADS
->         bool
->
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index ff759a0..64027ff 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -24,6 +24,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->         select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->         select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->         select BR2_INSTALL_LIBSTDCPP
-> +       select BR2_INSTALL_LIBFORTRAN
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
->         select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->         help
-> @@ -46,6 +47,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
->         select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->         select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->         select BR2_INSTALL_LIBSTDCPP
-> +       select BR2_INSTALL_LIBFORTRAN
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
->         select BR2_TOOLCHAIN_GCC_AT_LEAST_5
->         help
-> @@ -68,6 +70,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->         select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->         select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->         select BR2_INSTALL_LIBSTDCPP
-> +       select BR2_INSTALL_LIBFORTRAN
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
->         select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->         help
-> @@ -90,6 +93,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
->         select BR2_TOOLCHAIN_EXTERNAL_GLIBC
->         select BR2_TOOLCHAIN_HAS_NATIVE_RPC
->         select BR2_INSTALL_LIBSTDCPP
-> +       select BR2_INSTALL_LIBFORTRAN
->         select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
->         select BR2_TOOLCHAIN_GCC_AT_LEAST_5
->         help
-> @@ -1047,6 +1051,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
->           support. If you don't know, leave the default value,
->           Buildroot will tell you if it's correct or not.
->
-> +config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
-> +       bool "Toolchain has Fortran support?"
-> +       select BR2_INSTALL_LIBFORTRAN
-> +       help
-> +         Select this option if your external toolchain has Fortran
-> +         support. If you don't know, leave the default value,
-> +         Buildroot will tell you if it's correct or not.
-> +
->  config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
->         string "Extra toolchain libraries to be copied to target"
->         help
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 37e1a2e..070d0cf 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -90,6 +90,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->  USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
->  endif
->
-> +ifeq ($(BR2_INSTALL_LIBFORTRAN),y)
-> +USR_LIB_EXTERNAL_LIBS += libgfortran.so.*
-> +endif
-> +
->  LIB_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
->
->  # Details about sysroot directory selection.
-> @@ -160,6 +164,7 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
->  TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
->  TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
->  TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
-> +TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
->  TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
->
->  ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-> @@ -495,6 +500,9 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
->         if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
->                 $(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
->         fi ; \
-> +       if test "$(BR2_INSTALL_LIBFORTRAN)" = "y" ; then \
-> +               $(call check_fortran,$(TOOLCHAIN_EXTERNAL_FC)) ; \
-> +       fi ; \
->         if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
->                 $(call check_uclibc,$${SYSROOT_DIR}) ; \
->         elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
-> @@ -719,7 +727,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
->                 *-ar|*-ranlib|*-nm) \
->                         ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
->                         ;; \
-> -               *cc|*cc-*|*++|*++-*|*cpp) \
-> +               *cc|*cc-*|*++|*++-*|*cpp|*fortran) \
->                         ln -sf toolchain-wrapper $$base; \
->                         ;; \
->                 *gdb|*gdbtui) \
-> --
-> 2.5.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-Regards,
 
 -- 
-Samuel
+http://autobuild.buildroot.net
