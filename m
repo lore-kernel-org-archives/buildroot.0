@@ -1,251 +1,56 @@
 From: Benjamin Kamath <kamath.ben@gmail.com>
-Date: Fri, 18 Mar 2016 13:21:42 -0700
-Subject: [Buildroot] [PATCH v2 1/3] toolchain-external: add basic fortran
-	support
-Message-ID: <20160318202138.GA23744@spaceflight.com>
+Date: Fri, 18 Mar 2016 13:23:46 -0700
+Subject: [Buildroot] [PATCH v2 2/3] gcc: consolidate fortran options
+Message-ID: <20160318202342.GA23907@spaceflight.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the necessary support to allow an external toolchain
-to supply a fortran compiler. This mostly amounts to a
-toolchain configuration option that sets BR2_INSTALL_LIBFORTRAN,
-and then various hooks to pass along flags, as well as
-run-time libraries.
-
-Additionally, gfortran needs to be invoked through the
-toolchain-wrapper, not just symlinked to $(TARGET_FC)gfortran.
+Have BR2_TOOLCHAIN_BUILDROOT_FORTRAN select BR2_INSTALL_LIBFORTAN,
+allowing packages and other dependencies to generically check
+for fortran support with buildroot and external toolchains.
 
 Signed-off-by: Benjamin Kamath <bkamath@spaceflight.com>
 ---
- package/Makefile.in                                |  9 +++++++++
- package/pkg-cmake.mk                               |  3 +++
- support/misc/toolchainfile.cmake.in                |  6 ++++++
- toolchain/helpers.mk                               | 13 +++++++++++++
- toolchain/toolchain-common.in                      |  3 +++
- toolchain/toolchain-external/Config.in             | 12 ++++++++++++
- toolchain/toolchain-external/toolchain-external.mk | 10 +++++++++-
- 7 files changed, 55 insertions(+), 1 deletion(-)
+ package/gcc/Config.in.host         | 1 +
+ package/gcc/gcc-final/gcc-final.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dd595e2..125406f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -138,6 +138,7 @@ endif
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
- TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
-+TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 4845708..038a0a4 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -111,6 +111,7 @@ config BR2_TOOLCHAIN_BUILDROOT_CXX
  
- ifeq ($(BR2_BINFMT_FLAT),y)
-@@ -145,28 +146,35 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
- 	-Wl$(comma)-elf2flt)
- TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
- 	-Wl$(comma)-elf2flt)
-+TARGET_FCFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
-+	-Wl$(comma)-elf2flt)
- TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
+ config BR2_TOOLCHAIN_BUILDROOT_FORTRAN
+ 	bool "Enable Fortran support"
++	select BR2_INSTALL_LIBFORTRAN
+ 	help
+ 	  Enable this option if you want your toolchain to support the
+ 	  Fortran language and you want Fortran libraries to be
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 69fdc0c..87480c7 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -54,7 +54,7 @@ endef
+ # Languages supported by the cross-compiler
+ GCC_FINAL_CROSS_LANGUAGES-y = c
+ GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBSTDCPP) += c++
+-GCC_FINAL_CROSS_LANGUAGES-$(BR2_TOOLCHAIN_BUILDROOT_FORTRAN) += fortran
++GCC_FINAL_CROSS_LANGUAGES-$(BR2_INSTALL_LIBFORTRAN) += fortran
+ GCC_FINAL_CROSS_LANGUAGES = $(subst $(space),$(comma),$(GCC_FINAL_CROSS_LANGUAGES-y))
+ 
+ HOST_GCC_FINAL_CONF_OPTS = \
+@@ -152,7 +152,7 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ HOST_GCC_FINAL_USR_LIBS += libstdc++
  endif
  
- ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
- TARGET_LDFLAGS += -mid-shared-library -mshared-library-id=0
- TARGET_CFLAGS += -mid-shared-library -mshared-library-id=0
-+TARGET_FCFLAGS += -mid-shared-library -mshared-library-id=0
- TARGET_CXXFLAGS += -mid-shared-library -mshared-library-id=0
- endif
- ifeq ($(BR2_BINFMT_FLAT_SEP_DATA),y)
- TARGET_LDFLAGS += -msep-data
- TARGET_CFLAGS += -msep-data
-+TARGET_FCFLAGS += -msep-data
- TARGET_CXXFLAGS += -msep-data
- endif
- 
- ifeq ($(BR2_SSP_REGULAR),y)
- TARGET_CFLAGS += -fstack-protector
-+TARGET_FCFLAGS += -fstack-protector
- TARGET_CXXFLAGS += -fstack-protector
- else ifeq ($(BR2_SSP_STRONG),y)
- TARGET_CFLAGS += -fstack-protector-strong
-+TARGET_FCFLAGS += -fstack-protector-strong
- TARGET_CXXFLAGS += -fstack-protector-strong
- else ifeq ($(BR2_SSP_ALL),y)
- TARGET_CFLAGS += -fstack-protector-all
-+TARGET_FCFLAGS += -fstack-protector-all
- TARGET_CXXFLAGS += -fstack-protector-all
- endif
- 
-@@ -378,6 +386,7 @@ ifeq ($(BR2_STATIC_LIBS),y)
- SHARED_STATIC_LIBS_OPTS = --enable-static --disable-shared
- TARGET_CFLAGS += -static
- TARGET_CXXFLAGS += -static
-+TARGET_FCFLAGS += -static
- TARGET_LDFLAGS += -static
- else ifeq ($(BR2_SHARED_LIBS),y)
- SHARED_STATIC_LIBS_OPTS = --disable-static --enable-shared
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 81dcfcc..463776e 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -243,9 +243,12 @@ $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake:
- 		-e 's#@@STAGING_SUBDIR@@#$(call qstrip,$(STAGING_SUBDIR))#' \
- 		-e 's#@@TARGET_CFLAGS@@#$(call qstrip,$(TARGET_CFLAGS))#' \
- 		-e 's#@@TARGET_CXXFLAGS@@#$(call qstrip,$(TARGET_CXXFLAGS))#' \
-+		-e 's#@@TARGET_FCFLAGS@@#$(call qstrip,$(TARGET_FCFLAGS))#' \
- 		-e 's#@@TARGET_LDFLAGS@@#$(call qstrip,$(TARGET_LDFLAGS))#' \
- 		-e 's#@@TARGET_CC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CC)))#' \
- 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
-+		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
-+		-e 's#@@TARGET_FORTRAN_SUPPORT@@#$(BR2_INSTALL_LIBFORTRAN)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
- 		> $@
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 5cf381e..04a0c53 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -29,3 +29,9 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- # This toolchain file can be used both inside and outside Buildroot.
- set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
- set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-+
-+# Conditionally set Fortran variables if the fortran compiler exists
-+if (@@TARGET_FORTRAN_SUPPORT@@ MATCHES y)
-+	set(CMAKE_Fortran_FLAGS "@@TARGET_FCFLAGS@@ ${CMAKE_Fortran_FLAGS}" CACHE STRING "Buildroot FCFLAGS")
-+	set(CMAKE_Fortran_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_FC@@")
-+endif(@@TARGET_FORTRAN_SUPPORT@@ MATCHES y)
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index ee878e8..196f295 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -382,6 +382,19 @@ check_cplusplus = \
- 	fi
- 
- #
-+# Check that the external toolchain supports Fortran
-+#
-+# $1: cross-gfortran path
-+#
-+check_fortran = \
-+	__CROSS_FC=$(strip $1) ; \
-+	$${__CROSS_FC} -v > /dev/null 2>&1 ; \
-+	if test $$? -ne 0 ; then \
-+		echo "Fortran support is selected but is not available in external toolchain" ; \
-+		exit 1 ; \
-+	fi
-+
-+#
- # Check that the cross-compiler given in the configuration exists
- #
- # $1: cross-gcc path
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 46970a6..1d7afa7 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -17,6 +17,9 @@ config BR2_ENABLE_LOCALE
- config BR2_INSTALL_LIBSTDCPP
- 	bool
- 
-+config BR2_INSTALL_LIBFORTRAN
-+	bool
-+
- config BR2_TOOLCHAIN_HAS_THREADS
- 	bool
- 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ff759a0..64027ff 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -24,6 +24,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_INSTALL_LIBFORTRAN
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
-@@ -46,6 +47,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_INSTALL_LIBFORTRAN
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	help
-@@ -68,6 +70,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_INSTALL_LIBFORTRAN
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	help
-@@ -90,6 +93,7 @@ config BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
-+	select BR2_INSTALL_LIBFORTRAN
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 	help
-@@ -1047,6 +1051,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
- 	  support. If you don't know, leave the default value,
- 	  Buildroot will tell you if it's correct or not.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
-+	bool "Toolchain has Fortran support?"
-+	select BR2_INSTALL_LIBFORTRAN
-+	help
-+	  Select this option if your external toolchain has Fortran
-+	  support. If you don't know, leave the default value,
-+	  Buildroot will tell you if it's correct or not.
-+
- config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
- 	string "Extra toolchain libraries to be copied to target"
- 	help
-diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-index 37e1a2e..070d0cf 100644
---- a/toolchain/toolchain-external/toolchain-external.mk
-+++ b/toolchain/toolchain-external/toolchain-external.mk
-@@ -90,6 +90,10 @@ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
- USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
- endif
- 
+-ifeq ($(BR2_TOOLCHAIN_BUILDROOT_FORTRAN),y)
 +ifeq ($(BR2_INSTALL_LIBFORTRAN),y)
-+USR_LIB_EXTERNAL_LIBS += libgfortran.so.*
-+endif
-+
- LIB_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
+ HOST_GCC_FINAL_USR_LIBS += libgfortran
+ endif
  
- # Details about sysroot directory selection.
-@@ -160,6 +164,7 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
- TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
-+TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf$(TOOLCHAIN_EXTERNAL_SUFFIX)
- 
- ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
-@@ -495,6 +500,9 @@ define TOOLCHAIN_EXTERNAL_CONFIGURE_CMDS
- 	if test "$(BR2_INSTALL_LIBSTDCPP)" = "y" ; then \
- 		$(call check_cplusplus,$(TOOLCHAIN_EXTERNAL_CXX)) ; \
- 	fi ; \
-+	if test "$(BR2_INSTALL_LIBFORTRAN)" = "y" ; then \
-+		$(call check_fortran,$(TOOLCHAIN_EXTERNAL_FC)) ; \
-+	fi ; \
- 	if test "$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC)" = "y" ; then \
- 		$(call check_uclibc,$${SYSROOT_DIR}) ; \
- 	elif test "$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
-@@ -719,7 +727,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 		*-ar|*-ranlib|*-nm) \
- 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%') .; \
- 			;; \
--		*cc|*cc-*|*++|*++-*|*cpp) \
-+		*cc|*cc-*|*++|*++-*|*cpp|*fortran) \
- 			ln -sf toolchain-wrapper $$base; \
- 			;; \
- 		*gdb|*gdbtui) \
 -- 
 2.5.0
