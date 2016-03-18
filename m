@@ -1,7 +1,7 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Mar 2016 10:15:38 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.2.4
-Message-ID: <1458306938-31469-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 18 Mar 2016 10:15:59 -0300
+Subject: [Buildroot] [PATCH] nasm: bump to version 2.12.01
+Message-ID: <1458306959-31515-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/nasm/nasm.hash | 2 +-
+ package/nasm/nasm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index a6d5187..5e256cf 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index ec64ae0..4ec1853 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
 @@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.3.tar.bz2.sha256
--sha256	8216d2404aaab7fde87be0365a90d64aa6c55928e104557cfcb37b54a096cb8c	harfbuzz-1.2.3.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.4.tar.bz2.sha256
-+sha256	449dbdf12a8f94aedbdefaac831d8b1bf45e7decaa9192eaa4f74104ef9de491	harfbuzz-1.2.4.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 781c48e..3869d6d 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally calculated
+-sha256	f34cc1e984ed619b8f9e96cea632e3c6fdea5e039069dbcb63397b7bd004f5a8	nasm-2.12.tar.xz
++sha256	9dbba1ce620512e435ba57e69e811fe8e07d04359e47e0a0b5e94a5dd8367489	nasm-2.12.01.tar.xz
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index 3331d65..e9343be 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 1.2.3
-+HARFBUZZ_VERSION = 1.2.4
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-NASM_VERSION = 2.12
++NASM_VERSION = 2.12.01
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+ NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2c
 -- 
 2.4.10
