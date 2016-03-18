@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 18 Mar 2016 22:08:15 +0100
-Subject: [Buildroot] [PATCH v2 13/17] package/Makefile.in: adjust LDFLAGS
-	for elf2flt
+Date: Fri, 18 Mar 2016 22:08:09 +0100
+Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
 In-Reply-To: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458335299-27409-14-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So far, our LDFLAGS for the BR2_BINFMT_FLAT case were only used on
-Blackfin. However, passing -elf2flt in LDFLAGS is wrong. Indeed,
-LDFLAGS are not linker flags, but flags passed to the compiler when
-linking.
-
-If you pass -elf2flt to the compiler when linking, it is understood as
-"-e lf2flt", i.e "the entry point is named lf2flt", which isn't
-exactly the intention. We in fact need to pass -Wl,-elf2flt in LDFLAGS
-as well, so that the compiler passes -elf2flt down to the linker.
-
-For some reason, this option does not cause an issue with the Blackfin
-toolchain, but it does with either a Buildroot toolchain for Cortex-M
-or an OSELAS toolchain for Cortex-M. We have verified that passing
--Wl,-elf2flt continues to work with the Blackfin toolchain.
+As explained by Waldemar, enabling DOPIC in uClibc will lead to the
+creation of a Position Independent library. In turn, this will cause
+elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
+ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
+input, so we must disable DOPIC in the uClibc configuration.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/uclibc/uclibc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index dd595e2..616bdd0 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -145,7 +145,7 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
- 	-Wl$(comma)-elf2flt)
- TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
- 	-Wl$(comma)-elf2flt)
--TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
-+TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ad94494..e3e45f7 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -82,6 +82,12 @@ ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_TH
+ UCLIBC_EXTRA_CFLAGS += -marm
  endif
  
- ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
++ifeq ($(BR2_BINFMT_FLAT),y)
++define UCLIBC_ARM_BINFMT_FLAT
++	$(call KCONFIG_DISABLE_OPT,DOPIC,$(@D)/.config)
++endef
++endif
++
+ endif # arm
+ 
+ #
+@@ -354,6 +360,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
++	$(UCLIBC_ARM_BINFMT_FLAT)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
+ 	$(UCLIBC_SH_TYPE_CONFIG)
 -- 
 2.6.4
