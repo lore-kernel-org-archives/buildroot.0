@@ -1,42 +1,34 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 18 Mar 2016 10:29:01 -0300
-Subject: [Buildroot] [PATCH] libsigc: bump to version 2.8.0
-Message-ID: <1458307741-25918-1-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 18 Mar 2016 13:30:38 +0000
+Subject: [Buildroot] [Bug 6830] Qt5: no fonts are installed
+In-Reply-To: <bug-6830-163@https.bugs.busybox.net/>
+References: <bug-6830-163@https.bugs.busybox.net/>
+Message-ID: <bug-6830-163-2dAmwlfk27@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libsigc/libsigc.hash | 4 ++--
- package/libsigc/libsigc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=6830
 
-diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
-index b9c99c5..c452414 100644
---- a/package/libsigc/libsigc.hash
-+++ b/package/libsigc/libsigc.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.6/libsigc++-2.6.2.sha256sum
--sha256	fdace7134c31de792c17570f9049ca0657909b28c4c70ec4882f91a03de54437	libsigc++-2.6.2.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.8/libsigc++-2.8.0.sha256sum
-+sha256	774980d027c52947cb9ee4fac6ffe2ca60cc2f753068a89dfd281c83dbff9651	libsigc++-2.8.0.tar.xz
-diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
-index 0dc5d24..f3ca970 100644
---- a/package/libsigc/libsigc.mk
-+++ b/package/libsigc/libsigc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSIGC_VERSION_MAJOR = 2.6
--LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).2
-+LIBSIGC_VERSION_MAJOR = 2.8
-+LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
- LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
- LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
- LIBSIGC_DEPENDENCIES = host-m4
+Alexey Brodkin <abrodkin@synopsys.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|RESOLVED                    |VERIFIED
+                 CC|                            |abrodkin at synopsys.com
+
+--- Comment #4 from Alexey Brodkin <abrodkin@synopsys.com> ---
+Indeed with BR2_PACKAGE_QT5BASE_FONTCONFIG selected no fonts are installed in
+staging and essentially they won't get on target.
+
+Moreover even if one puts fonts in /usr/lib/fonts on target they won't appear
+in Qt5 apps.
+
+So I had to rebuild entire Qt5 after I disabled BR2_PACKAGE_QT5BASE_FONTCONFIG
+and fonts appeared in Qt apps.
+
 -- 
-2.4.10
+You are receiving this mail because:
+You are on the CC list for the bug.
