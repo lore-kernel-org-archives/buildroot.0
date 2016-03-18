@@ -1,153 +1,140 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 18 Mar 2016 10:49:54 +0100
-Subject: [Buildroot] [PATCH 1/5] package/qt5quick1: remove obsolete
- package
-In-Reply-To: <1458207749-19507-2-git-send-email-corjon.j@ecagroup.com>
-References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
- <1458207749-19507-2-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20160318104954.72ff531d@gmx.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 18 Mar 2016 11:33:56 +0100
+Subject: [Buildroot] [PATCH] tekui: new package
+Message-ID: <1458297236-21640-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in        |  1 +
+ package/tekui/Config.in  | 19 ++++++++++++++
+ package/tekui/tekui.hash |  2 ++
+ package/tekui/tekui.mk   | 66 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 88 insertions(+)
+ create mode 100644 package/tekui/Config.in
+ create mode 100644 package/tekui/tekui.hash
+ create mode 100644 package/tekui/tekui.mk
 
-quick reaction on the Qt release ;-), the only missing part is
-the Config.in.legacy entry, e.g.:
-
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -143,6 +143,14 @@ comment "----------------------------------------------------"
+diff --git a/package/Config.in b/package/Config.in
+index 2401867..73edf1a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -289,6 +289,7 @@ comment "QT libraries and helper libraries"
+ 	source "package/quazip/Config.in"
+ 	source "package/qwt/Config.in"
  endif
++	source "package/tekui/Config.in"
+ 	source "package/weston/Config.in"
+ 	source "package/x11r7/Config.in"
  
- ###############################################################################
-+comment "Legacy options removed in 2016.05"
+diff --git a/package/tekui/Config.in b/package/tekui/Config.in
+new file mode 100644
+index 0000000..b426223
+--- /dev/null
++++ b/package/tekui/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_TEKUI
++	bool "TekUI"
++	select BR2_PACKAGE_FREETYPE
++	select BR2_PACKAGE_LUAFILESYSTEM	# runtime only
++	select BR2_PACKAGE_LUAEXPAT		# runtime only
++	select BR2_PACKAGE_LUASOCKET		# runtime only
++	select BR2_PACKAGE_LUAPOSIX		# runtime only
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  TekUI is a small, freestanding and portable graphical user interface
++	  (GUI) toolkit written in Lua and C. It was initially developed for
++	  the X Window System and has been ported to DirectFB, Windows, Nano-X
++	  and a raw framebuffer since
 +
-+config BR2_PACKAGE_QT5QUICK1
-+       bool qt5quick1 support option has been removed
-+       select BR2_LEGACY
-+       help
-+         Qt qtquick1 submodule removed since Qt 5.6.
++	  http://tekui.neoscientists.org/
 +
-
-With this your can add my 
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
-On Thu, 17 Mar 2016 10:42:25 +0100, Julien Corjon <corjon.j@ecagroup.com> wrote:
-
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  package/qt5/Config.in                |  1 -
->  package/qt5/qt5quick1/Config.in      | 26 -----------------------
->  package/qt5/qt5quick1/qt5quick1.hash |  2 --
->  package/qt5/qt5quick1/qt5quick1.mk   | 41 ------------------------------------
->  4 files changed, 70 deletions(-)
->  delete mode 100644 package/qt5/qt5quick1/Config.in
->  delete mode 100644 package/qt5/qt5quick1/qt5quick1.hash
->  delete mode 100644 package/qt5/qt5quick1/qt5quick1.mk
-> 
-> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index 1c42102..32de7a0 100644
-> --- a/package/qt5/Config.in
-> +++ b/package/qt5/Config.in
-> @@ -48,7 +48,6 @@ source "package/qt5/qt5websockets/Config.in"
->  source "package/qt5/qt5x11extras/Config.in"
->  source "package/qt5/qt5xmlpatterns/Config.in"
->  comment "legacy compatibility"
-> -source "package/qt5/qt5quick1/Config.in"
->  source "package/qt5/qt5script/Config.in"
->  source "package/qt5/qt5webkit/Config.in"
->  source "package/qt5/qt5webkit-examples/Config.in"
-> diff --git a/package/qt5/qt5quick1/Config.in b/package/qt5/qt5quick1/Config.in
-> deleted file mode 100644
-> index 345ffae..0000000
-> --- a/package/qt5/qt5quick1/Config.in
-> +++ /dev/null
-> @@ -1,26 +0,0 @@
-> -config BR2_PACKAGE_QT5QUICK1
-> -	bool "qt5quick1"
-> -	select BR2_PACKAGE_QT5BASE
-> -	select BR2_PACKAGE_QT5BASE_GUI
-> -	select BR2_PACKAGE_QT5BASE_NETWORK
-> -	select BR2_PACKAGE_QT5BASE_WIDGETS
-> -	select BR2_PACKAGE_QT5SCRIPT
-> -	select BR2_PACKAGE_QT5XMLPATTERNS
-> -	# This module does not support static linking
-> -	depends on !BR2_STATIC_LIBS
-> -	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> -	help
-> -	  Qt is a cross-platform application and UI framework for
-> -	  developers using C++.
-> -
-> -	  This package corresponds to the qt5quick1 module.
-> -
-> -	  This package has been tagged as deprecated since version
-> -	  5.5.0 and should be replaced by Qt Quick module in new
-> -	  design.
-> -
-> -	  http://qt.io
-> -
-> -comment "qt5quick1 needs a toolchain w/ dynamic library"
-> -	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> -	depends on BR2_STATIC_LIBS
-> diff --git a/package/qt5/qt5quick1/qt5quick1.hash b/package/qt5/qt5quick1/qt5quick1.hash
-> deleted file mode 100644
-> index 845742c..0000000
-> --- a/package/qt5/qt5quick1/qt5quick1.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Hash from: http://download.qt.io/official_releases/qt/5.5/5.5.1/submodules/qtquick1-opensource-src-5.5.1.tar.xz.mirrorlist
-> -sha256 c812a7e59a8b9f0a87693181059933e15fef04bc875b6486cd653be1b9b51f2c qtquick1-opensource-src-5.5.1.tar.xz
-> diff --git a/package/qt5/qt5quick1/qt5quick1.mk b/package/qt5/qt5quick1/qt5quick1.mk
-> deleted file mode 100644
-> index 7ccf644..0000000
-> --- a/package/qt5/qt5quick1/qt5quick1.mk
-> +++ /dev/null
-> @@ -1,41 +0,0 @@
-> -################################################################################
-> -#
-> -# qt5quick1
-> -#
-> -################################################################################
-> -
-> -QT5QUICK1_VERSION = $(QT5_VERSION)
-> -QT5QUICK1_SITE = $(QT5_SITE)
-> -QT5QUICK1_SOURCE = qtquick1-opensource-src-$(QT5QUICK1_VERSION).tar.xz
-> -QT5QUICK1_DEPENDENCIES = qt5base qt5xmlpatterns qt5script \
-> -	$(if $(BR2_PACKAGE_QT5WEBKIT),qt5webkit)
-> -QT5QUICK1_INSTALL_STAGING = YES
-> -
-> -ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> -QT5QUICK1_LICENSE = LGPLv2.1 with exception or LGPLv3 or GPLv2
-> -QT5QUICK1_LICENSE_FILES = LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.GPLv2
-> -else
-> -QT5QUICK1_LICENSE = Commercial license
-> -QT5QUICK1_REDISTRIBUTE = NO
-> -endif
-> -
-> -define QT5QUICK1_CONFIGURE_CMDS
-> -	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-> -endef
-> -
-> -define QT5QUICK1_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> -endef
-> -
-> -define QT5QUICK1_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-> -	$(QT5_LA_PRL_FILES_FIXUP)
-> -endef
-> -
-> -define QT5QUICK1_INSTALL_TARGET_CMDS
-> -	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Declarative.so.* $(TARGET_DIR)/usr/lib
-> -	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/qml1tooling $(TARGET_DIR)/usr/lib/qt/plugins/
-> -	cp -dpfr $(STAGING_DIR)/usr/imports $(TARGET_DIR)/usr
-> -endef
-> -
-> -$(eval $(generic-package))
++comment "TekUI needs a Lua interpreter and a toolchain with threads"
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/tekui/tekui.hash b/package/tekui/tekui.hash
+new file mode 100644
+index 0000000..07de2ed
+--- /dev/null
++++ b/package/tekui/tekui.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  28abfaacc0f2ddae962afbbca862a7fb619c33a99a497be9edd746091013dd7f  tekui-1.12.tgz
+diff --git a/package/tekui/tekui.mk b/package/tekui/tekui.mk
+new file mode 100644
+index 0000000..60b48e0
+--- /dev/null
++++ b/package/tekui/tekui.mk
+@@ -0,0 +1,66 @@
++################################################################################
++#
++# tekui
++#
++################################################################################
++
++TEKUI_VERSION = 1.12
++TEKUI_SOURCE = tekui-$(TEKUI_VERSION).tgz
++TEKUI_SITE = http://tekui.neoscientists.org/releases
++TEKUI_LICENSE = MIT
++TEKUI_LICENSE_FILES = COPYRIGHT
++TEKUI_DEPENDENCIES = freetype luainterpreter
++
++TEKUI_MAKE_OPTS = \
++	CC="$(TARGET_CC) -fPIC" \
++	AR="$(TARGET_AR) rcu" \
++	INSTALL_S="install" \
++	LUAVER=$(LUAINTERPRETER_ABIVER) \
++	LUA_DEFS=""
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++TEKUI_DEPENDENCIES += libpng
++TEKUI_MAKE_OPTS += TEKUI_DEFS="-DENABLE_GRADIENT -DENABLE_FILENO -DENABLE_PIXMAP_CACHE -DENABLE_PNG"
++TEKUI_MAKE_OPTS += TEKUI_LIBS=-lpng
++else
++TEKUI_MAKE_OPTS += TEKUI_DEFS="-DENABLE_GRADIENT -DENABLE_FILENO -DENABLE_PIXMAP_CACHE"
++endif
++
++ifeq ($(BR2_PACKAGE_DEJAVU),y)
++TEKUI_FONTDIR=/usr/share/fonts/dejavu
++else
++TEKUI_FONTDIR=/usr/share/lua/$(LUAINTERPRETER_ABIVER)/tek/ui/font
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFT)$(BR2_PACKAGE_XLIB_LIBXXF86VM),yy)
++TEKUI_DEPENDENCIES += xlib_libXft xlib_libXxf86vm
++TEKUI_MAKE_OPTS += \
++	X11_LIBS="-lXext -lXxf86vm -lXft -lfreetype -lfontconfig" \
++	X11_DEFS="-D_XOPEN_SOURCE -DENABLE_XFT -DENABLE_XVID -I$(STAGING_DIR)/usr/include/freetype2 -I$(STAGING_DIR)/usr/include/fontconfig" \
++	DISPLAY_DRIVER=x11
++else
++ifeq ($(BR2_PACKAGE_DIRECTFB),y)
++TEKUI_DEPENDENCIES += directfb
++TEKUI_MAKE_OPTS += \
++	DIRECTFB_LIBS="-lfreetype -ldirectfb -lpthread" \
++	DIRECTFB_DEFS="-D_REENTRANT -I$(STAGING_DIR)/usr/include/directfb -I$(STAGING_DIR)/usr/include/freetype2" \
++	DISPLAY_DRIVER=directfb
++else
++TEKUI_MAKE_OPTS += \
++	FREETYPE_LIBS=-lfreetype \
++	FREETYPE_DEFS="-I$(STAGING_DIR)/usr/include/freetype2" \
++	RAWFB_SUB_LIBS="" \
++	RAWFB_SUB_DEFS="-DDEF_FONTDIR=\\\"$(TEKUI_FONTDIR)\\\"" \
++	DISPLAY_DRIVER=rawfb
++endif
++endif
++
++define TEKUI_BUILD_CMDS
++	$(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="/usr" -C $(@D) all
++endef
++
++define TEKUI_INSTALL_TARGET_CMDS
++	$(MAKE) $(TEKUI_MAKE_OPTS) PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
++endef
++
++$(eval $(generic-package))
+-- 
+1.9.1
