@@ -1,42 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:53:08 +0100
-Subject: [Buildroot] [git commit] nmap: bump to version 7.10
-Message-ID: <20160318205619.7C22781D43@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 21:40:03 +0100
+Subject: [Buildroot] [git commit] libsigc: bump to version 2.8.0
+Message-ID: <20160318205619.4906C81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=500574d9d89dbe6a847f31cedb0c99ee8811858d
+commit: https://git.buildroot.net/buildroot/commit/?id=a50ce1781a0f71cadfab6d7fb45f9c5f3ace9d76
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nmap/nmap.hash | 4 ++--
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsigc/libsigc.hash | 4 ++--
+ package/libsigc/libsigc.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index 3e5a369..ac086ce 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
+diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
+index b9c99c5..c452414 100644
+--- a/package/libsigc/libsigc.hash
++++ b/package/libsigc/libsigc.hash
 @@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256 cf1fcd2643ba2ef52f47acb3c18e52fa12a4ae4b722804da0e54560704627705  nmap-7.01.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.10.tar.bz2.digest.txt
-+sha256	58cf8896d09057d1c3533f430c06b22791d0227ebbb93dede2ccb73693ed4b4b	nmap-7.10.tar.bz2
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 184555b..9a25fca 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.6/libsigc++-2.6.2.sha256sum
+-sha256	fdace7134c31de792c17570f9049ca0657909b28c4c70ec4882f91a03de54437	libsigc++-2.6.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.8/libsigc++-2.8.0.sha256sum
++sha256	774980d027c52947cb9ee4fac6ffe2ca60cc2f753068a89dfd281c83dbff9651	libsigc++-2.8.0.tar.xz
+diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+index 0dc5d24..f3ca970 100644
+--- a/package/libsigc/libsigc.mk
++++ b/package/libsigc/libsigc.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NMAP_VERSION = 7.01
-+NMAP_VERSION = 7.10
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+-LIBSIGC_VERSION_MAJOR = 2.6
+-LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).2
++LIBSIGC_VERSION_MAJOR = 2.8
++LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
+ LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
+ LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
+ LIBSIGC_DEPENDENCIES = host-m4
