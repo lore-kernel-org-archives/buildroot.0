@@ -1,41 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:46:31 +0100
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.146
-Message-ID: <20160318205619.60B6B80497@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 21:54:43 +0100
+Subject: [Buildroot] [git commit] linux-headers: bump 3.18.x and 4.1.x series
+Message-ID: <20160318205619.8434A81D43@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0254dbaced273c5be26164f2de35b3044129ed74
+commit: https://git.buildroot.net/buildroot/commit/?id=39c54fe379eabeb37e6841d2c9f04dfa4e357f2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 8390596..12a5e3b 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 7689a7a26af6ba8fa5a46a96f3bf757c149806f813740b2df004692a63f05cfc522321d67984d34a1c34d55eb1dab5513b2a6bc48c46a7daec873607ea3ada39  LVM2.2.02.144.tgz
-+sha512 d9f4033db8cf010f46615fa6ece739724f50e10a8564d1e8f1766f71c6fd58f2d3bff3415def8c7bed7319a86980120a3a8665885e3ab6acfe4ac3a8011f749c  LVM2.2.02.146.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 74e0e4f..5ea27b3 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.144
-+LVM2_VERSION = 2.02.146
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index ae44a2f..2fafbd7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -215,10 +215,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
+ 	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.28"	if BR2_KERNEL_HEADERS_3_18
++	default "3.18.29"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.19"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.20"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.6"		if BR2_KERNEL_HEADERS_4_4
