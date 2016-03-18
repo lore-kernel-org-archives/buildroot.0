@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 18 Mar 2016 21:52:47 +0100
-Subject: [Buildroot] [git commit] git: bump version to 2.7.4
-Message-ID: <20160318205619.735AE81D43@busybox.osuosl.org>
+Date: Fri, 18 Mar 2016 21:46:31 +0100
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.146
+Message-ID: <20160318205619.60B6B80497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d73629bb2e4613abd31aa74c686b0a217aca0c6
+commit: https://git.buildroot.net/buildroot/commit/?id=0254dbaced273c5be26164f2de35b3044129ed74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 802855d..f0b9201 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 8390596..12a5e3b 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 1c0170952163e0b240256bc47388b95c617cf8cf446c93261df83d42cf5dd466  git-2.6.4.tar.xz
-+sha256 dee574defbe05ec7356a0842ddbda51315926f2fa7e39c2539f2c3dcc52e457b  git-2.7.4.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 8d9d3ab..41737de 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 7689a7a26af6ba8fa5a46a96f3bf757c149806f813740b2df004692a63f05cfc522321d67984d34a1c34d55eb1dab5513b2a6bc48c46a7daec873607ea3ada39  LVM2.2.02.144.tgz
++sha512 d9f4033db8cf010f46615fa6ece739724f50e10a8564d1e8f1766f71c6fd58f2d3bff3415def8c7bed7319a86980120a3a8665885e3ab6acfe4ac3a8011f749c  LVM2.2.02.146.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 74e0e4f..5ea27b3 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.6.4
-+GIT_VERSION = 2.7.4
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+-LVM2_VERSION = 2.02.144
++LVM2_VERSION = 2.02.146
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
