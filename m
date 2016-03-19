@@ -1,81 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 21:50:21 +0100
-Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
-In-Reply-To: <CAAEAJfC1to61NBpAK2+S_RAUZr2JK7h4gk_EK+QxG4MaRS6KJg@mail.gmail.com>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAEAJfC1to61NBpAK2+S_RAUZr2JK7h4gk_EK+QxG4MaRS6KJg@mail.gmail.com>
-Message-ID: <20160319215021.11938b4f@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Mar 2016 23:37:46 +0100
+Subject: [Buildroot] [PATCH 09/16 v5] core/apply-patches: store full
+ path of applied patches
+In-Reply-To: <20160319185108.GE3426@free.fr>
+References: <cover.1457718289.git.yann.morin.1998@free.fr>
+ <4752967e7f254170efc08e77530029c90f663d85.1457718289.git.yann.morin.1998@free.fr>
+ <20160319160346.50b52b19@free-electrons.com>
+ <20160319185108.GE3426@free.fr>
+Message-ID: <20160319223746.GG3426@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Sat, 19 Mar 2016 16:27:19 -0300, Ezequiel Garcia wrote:
+On 2016-03-19 19:51 +0100, Yann E. MORIN spake thusly:
+> On 2016-03-19 16:03 +0100, Thomas Petazzoni spake thusly:
+> > On Fri, 11 Mar 2016 18:49:22 +0100, Yann E. MORIN wrote:
+> > 
+> > > diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> > > index 201278d..20a1552 100755
+> > > --- a/support/scripts/apply-patches.sh
+> > > +++ b/support/scripts/apply-patches.sh
+> > > @@ -63,8 +63,12 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
+> > >      xargs -0 -r rm -f
+> > >  
+> > >  function apply_patch {
+> > > -    path=$1
+> > > -    patch=$2
+> > > +    path="${1%%/}"
+> > > +    patch="${2}"
+> > > +    case "${path}" in
+> > > +        /*) ;;
+> > > +        *)  path="$(pwd)/${path}";;
+> > > +    esac
+[--SNIP--]
+> > So here are other proposals:
+> > 
+> >  * The package infra already knows which patches should be applied
+> >    (bundled patches, global patch dir, etc.), so it is technically able
+> >    to get the list of patches. Yes it's a bit annoying because the
+> >    logic to derive the list of patches is already inside the
+> >    apply-patches script. But maybe it's because too much smart stuff is
+> >    done in the apply-patch script without the package infrastructure
+> >    being aware.
 
-> On 18 March 2016 at 18:08, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
-> > As explained by Waldemar, enabling DOPIC in uClibc will lead to the
-> > creation of a Position Independent library. In turn, this will cause
-> > elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
-> > ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
-> > input, so we must disable DOPIC in the uClibc configuration.
-> >
-> 
-> While testing on LPC4350, I found that Lua is built with the Has-PIC-GOT flag:
-> 
-> $ output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-flthdr
-> output/target/usr/bin/lua
-> output/target/usr/bin/lua
->     Magic:        bFLT
->     Rev:          4
->     Build Date:   Sat Mar 19 16:14:03 2016
->     Entry:        0x45
->     Data Start:   0x1f08c
->     Data End:     0x23ed8
->     BSS End:      0x260c0
->     Stack Size:   0x1000
->     Reloc Start:  0x23ed8
->     Reloc Count:  0x214
->     Flags:        0x2 ( Has-PIC-GOT )
-> 
-> The Lua interpreter is not loaded by the binfmt_flat loader, and the
-> kernel says:
-> 
->   BINFMT_FLAT: reloc outside program 0x7fffd3e4 (0 - 0x26080/0x1f04c),
-> killing lua!
-> 
-> When DEBUG is defined in fs/binfmt_flat.c, the kernel says:
-> 
->   BINFMT_FLAT: reference 0xffd3e4 to shared library 127, killing lua!
-> 
-> On the other side, atftp throws the same error:
-> 
->   BINFMT_FLAT: reference 0xa0100 to shared library 161, killing atftp!
-> 
-> Any ideas?
+e-reading this, I don;t see a proposal in there. Did I miss something,
+or did you forget to add something? ;-)
 
-Thanks for this testing. Is lua using threads by any chance? I for sure
-know that the thread support is causing errors similar to the one that
-you are reporting.
+> >  * Alternatively, add an option to apply-patch.sh that will not apply
+> >    the patches, but show the list of patches that would be applied.
+> >    Like "apply-patch -l" for example. Then, when doing the legal-info,
+> >    you simply call "apply-patch -l" to retrieve the list of patches
+> >    that you need to copy.
 
-The ARM noMMU support is preliminary, for now I've only tested Busybox
-and a few other small programs. Once this preliminary support is
-merged, we can start looking at additional problems. For example,
-adding a check at the end of the build that all binaries have the
-appropriate BFLT flags.
+Well, it is in fact a bit more complex than just running apply-patches
+to get the list of patches.
 
-Waldemar: in fact maybe the issue I had with threads is that as soon as
-you link with -lpthread, you have a Has-PIC-GOT flagged BFLT. I'll
-check that when I find some time.
+First, some package do call apply-patches manually; there are 15 such
+packages, some cal.ling apply-patches more than once (gcc, linux, linux
+headers, uboot).
 
-Best regards,
+Second, in that case, some patches are applied conditionally. We do not
+want to duplicate that logic for legal-info.
 
-Thomas
+So, I stand that the best solution is my proposal, to store the list of
+applied patches at the tiem they are applied, and use that later on for
+the legal-info output.
+
+If there is a better proposal, or a simple way to fix yours, I'm all
+ears.
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
