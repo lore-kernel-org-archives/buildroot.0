@@ -1,44 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 15:08:15 +0100
-Subject: [Buildroot] [PATCH v2 01/17] arch/arm: introduce and use
- BR2_ARM_CPU_ARMV7M
-In-Reply-To: <20160319135946.GA3426@free.fr>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-2-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160318223050.GB32171@free.fr>
- <20160319143333.69823e82@free-electrons.com>
- <20160319135946.GA3426@free.fr>
-Message-ID: <20160319150815.27170f54@free-electrons.com>
+Date: Sat, 19 Mar 2016 15:23:07 +0100
+Subject: [Buildroot] [PATCH 02/16 v5] core/pkg-utils: add macro to
+ hardlink-or-copy
+In-Reply-To: <909a98f9ebb10986a85570d767ab030597a73ef5.1457718289.git.yann.morin.1998@free.fr>
+References: <cover.1457718289.git.yann.morin.1998@free.fr>
+ <909a98f9ebb10986a85570d767ab030597a73ef5.1457718289.git.yann.morin.1998@free.fr>
+Message-ID: <20160319152307.765e1bad@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Yann E. MORIN,
 
-On Sat, 19 Mar 2016 14:59:46 +0100, Yann E. MORIN wrote:
+On Fri, 11 Mar 2016 18:49:15 +0100, Yann E. MORIN wrote:
 
-> > Are you suggesting that a change is needed?
-> 
-> No, it's OK (hence ny acked-by). However, I had to do a bit of research
-> in the tree to see ehre such options were used, only to discover that
-> packages did use them, not the toolchain.
-> 
-> Those variables are specific to ARM, and we have no such counterparts in
-> any of the others archs. So maybe we could have a little comment at the
-> top of arch/Config/in.arm that explains what those kconfig variables are
-> for?
+> +################################################################################
+> +# hardlink-copy -- hardlink source and destination if possible, otherwise
+> +# do a simple copy
+> +#
+> +# argument 1 is the source *file*
+> +# argument 2 is the destination *directory*
+> +# argument 3 is the basename of the destination file (optional, defaults to
+> +#            the basename of the source file.
+> +#
+> +# examples:
+> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir)
+> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir,new-name)
+> +#
+> +# Notes:
+> +#  - this is NOT an atomic operation,
+> +#  - this is only a wrapper to a shell script, so that it can be used with
+> +#    shell-level variables, like in a for loop.
+> +################################################################################
+> +define hardlink-copy
+> +	support/scripts/hardlink-copy "$(strip $(1))" "$(strip $(2))" "$(strip $(3))"
+> +endef
 
-IIRC, we originally added them because some packages were doing
-$(BR2_cortex_a8)$(BR2_cortex_a9)$(BR2_cortex_aX)... to find out whether
-we're on ARMv7 or not, and it was starting to be a bit annoying.
+While in certain cases, I agree that a shell wrapper is nice and
+useful, here I really don't see the point of a shell wrapper. You can
+simply do (untested):
 
-Or some others were doing similar things to say "I need ARMv5" at
-least, etc.
+define hardlink-or-copy-inner
+	rm -f $(2)
+	ln -f $(1) $(2) 2>/dev/null || cp -f $(1) $(2)
+endef
 
-But yes, they are only used by packages. For the toolchain build
-process itself, only the BR2_cortex*, BR2_arm* options are useful.
+define hardlink-or-copy
+	$(call hardlink-or-copy-inner,$(1),$(if $(3),$(2)/$(3),$(2)/$(basename $(1))))
+endef
+
+Note that I think the name of the macro should be hardlink-or-copy and
+not hardlink-copy. The name hardlink-copy seems to indicate that you
+are copying a hardlink, which is not what is happening.
+hardlink-or-copy is IMO clearer on the fact that the macro does a hardlink
+or a copy.
+
+Thanks!
 
 Thomas
 -- 
