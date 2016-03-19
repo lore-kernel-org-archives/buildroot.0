@@ -1,42 +1,37 @@
 From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 19 Mar 2016 23:12:30 +0300
-Subject: [Buildroot] [PATCH] lttng-babeltrace: fix build with standalone
-	gettext
-Message-ID: <1458418350-13924-1-git-send-email-jcmvbkbc@gmail.com>
+Date: Sat, 19 Mar 2016 23:14:56 +0300
+Subject: [Buildroot] [PATCH] binutils: disable plugins for static links
+Message-ID: <1458418497-12603-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lttng-babeltrace can't detect that uuid_generate is provided by -luuid
-because the configure test fails with the following message:
-  libuuid.a(libuuid_la-randutils.o): In function `random_get_bytes':
-  randutils.c:(.text+0x204): undefined reference to `libintl_gettext'
-
-Add LIBS=-lintl to configure options in case we're building with
-standalone gettext.
+Plugins want to use dlopen even when configured with --disable-shared.
+Add --disable-plugins when STATIC_LIBS is selected.
 Fixes:
-  http://autobuild.buildroot.net/results/1ab89c6e8d704bc28c9ff8b5ffda3f60e57a25b4/
+  http://autobuild.buildroot.net/results/a59e5858d777dcee3d8f7fb6e82ee4735b520155/
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- package/lttng-babeltrace/lttng-babeltrace.mk | 4 ++++
+ package/binutils/binutils.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/lttng-babeltrace/lttng-babeltrace.mk b/package/lttng-babeltrace/lttng-babeltrace.mk
-index 5de77fb..cf57843 100644
---- a/package/lttng-babeltrace/lttng-babeltrace.mk
-+++ b/package/lttng-babeltrace/lttng-babeltrace.mk
-@@ -12,5 +12,9 @@ LTTNG_BABELTRACE_LICENSE_FILES = mit-license.txt gpl-2.0.txt LICENSE
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 66ee247..ca39f0b 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -51,6 +51,10 @@ BINUTILS_CONF_OPTS = \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
+ 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
  
- LTTNG_BABELTRACE_DEPENDENCIES = popt util-linux libglib2
- 
-+ifeq ($(BR2_NEEDS_GETTEXT),y)
-+LTTNG_BABELTRACE_CONF_OPTS += LIBS=-lintl
++ifeq ($(BR2_STATIC_LIBS),y)
++BINUTILS_CONF_OPTS += --disable-plugins
 +endif
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ # Don't build documentation. It takes up extra space / build time,
+ # and sometimes needs specific makeinfo versions to work
+ BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
 -- 
 2.1.4
