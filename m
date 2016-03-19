@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 14:32:52 +0100
-Subject: [Buildroot] [PATCH v2 00/17] ARM Cortex-M support and STM32
- defconfigs
-In-Reply-To: <20160318224931.GA19174@laptop.cereza>
+Date: Sat, 19 Mar 2016 14:33:33 +0100
+Subject: [Buildroot] [PATCH v2 01/17] arch/arm: introduce and use
+ BR2_ARM_CPU_ARMV7M
+In-Reply-To: <20160318223050.GB32171@free.fr>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160318221727.64755b08@free-electrons.com>
- <20160318224931.GA19174@laptop.cereza>
-Message-ID: <20160319143252.1d2161d5@free-electrons.com>
+ <1458335299-27409-2-git-send-email-thomas.petazzoni@free-electrons.com>
+ <20160318223050.GB32171@free.fr>
+Message-ID: <20160319143333.69823e82@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Ezequiel Garcia,
+Hello,
 
-On Fri, 18 Mar 2016 19:49:31 -0300, Ezequiel Garcia wrote:
-
-> Thanks for the branch. Tested on LPC4350 Hitex Eval board and it worked
-> fine:
+On Fri, 18 Mar 2016 23:30:50 +0100, Yann E. MORIN wrote:
+> Thomas, All,
 > 
-> Uncompressing Linux... done, booting the kernel.
-> [    0.000000] Booting Linux on physical CPU 0x0
-> [    0.000000] Linux version 4.5.0-rc2-00312-gd183ca0d53b6 (zeta at laptop) (gcc version 4.9.3 (Buildroot 2016.05-git-00495-ga84162dcafb9-dirty) ) #220 PREEMPT Fri Mar 18 19:43:33 ART 2016
-> [etc]
+> On 2016-03-18 22:08 +0100, Thomas Petazzoni spake thusly:
+> > All ARM cores should select a BR2_ARM_CPU_* option. Currently, the
+> > cortex-m3 does not, which this commit fixes by introducing a
+> > BR2_ARM_CPU_ARMV7M option.
 > 
-> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> Tangentially related: those options are not user to sepcify iany of the
+> gcc options, but to allow packages that have CPU-specific code todepend
+> on it or to enable such support it.
 
-Thanks! Any chance that you send a defconfig for this board?
+Hum, yes. But I don't understand what I'm supposed to do with your
+comment? Are you suggesting that a change is needed?
+
+> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thanks!
 
 Thomas
 -- 
