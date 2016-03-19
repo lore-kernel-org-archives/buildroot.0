@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 15:00:57 +0100
-Subject: [Buildroot] [PATCH] shared-mime-info: attempt to fix parallel
- build issues
-In-Reply-To: <1457993466-15145-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1457993466-15145-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160319150057.4ff8e519@free-electrons.com>
+Date: Sat, 19 Mar 2016 15:02:34 +0100
+Subject: [Buildroot] [PATCH 1/3] webkitgtk24: add multimedia option
+In-Reply-To: <1457988735-22815-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457988735-22815-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160319150234.4155f7b2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,19 @@ To: buildroot@busybox.net
 
 Dear Gustavo Zacarias,
 
-On Mon, 14 Mar 2016 19:11:06 -0300, Gustavo Zacarias wrote:
-> According to https://bugs.freedesktop.org/show_bug.cgi?id=46093 the
-> problem lies with 'make check' which is enabled by default.
-> But we don't care about running the check target, so disable it.
-> It will hopefully finally fix, for target:
-> http://autobuild.buildroot.net/results/03f/03fcc8aff675eb035e123eb2b01e4ed122c66cbc/
-> For host:
-> http://autobuild.buildroot.net/results/6c1/6c1fd50913ef8a3a5cc108f428f2c195c768324d/
+On Mon, 14 Mar 2016 17:52:13 -0300, Gustavo Zacarias wrote:
+> Add a BR2_PACKAGE_WEBKITGTK24_MULTIMEDIA option that will select/pull in
+> the basic required components in order for a few multimedia websites
+> (HTML5 video) to work.
+> Tested with videojs.com & youtube.com
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/shared-mime-info/shared-mime-info.mk | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  package/webkitgtk24/Config.in      | 24 ++++++++++++++++++++++++
+>  package/webkitgtk24/webkitgtk24.mk |  4 ++--
+>  2 files changed, 26 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+All three patches applied, thanks!
 
 Thomas
 -- 
