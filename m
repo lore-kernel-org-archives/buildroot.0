@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Mar 2016 16:46:04 +0100
-Subject: [Buildroot] [PATCH v2 04/17] uclibc: add patches to simplify
- Thumb handling
-In-Reply-To: <1458335299-27409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Sat, 19 Mar 2016 16:47:17 +0100
+Subject: [Buildroot] [PATCH v2 05/17] uclibc: remove USE_BX handling
+In-Reply-To: <1458335299-27409-6-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-5-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56ED743C.9070500@mind.be>
+ <1458335299-27409-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56ED7485.8080907@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +12,70 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 03/18/16 22:08, Thomas Petazzoni wrote:
-> This commit adds a number of patches to uClibc that radically
-> simplifies the Thumb handling. uClibc currently has three options that
-> you need to toggle on Thumb configurations depending on the specific
-> ARM CPU being targeted.
+> Now that uClibc is capable of figuring out by itself whether 'bx' can
+> be used or not, we can simplify the logic in Buildroot.
 >
-> However, it turns out that none of those options are necessary:
->
->   - USE_BX can simply be guessed by looking at the ARM core being
->     used. The bx instruction is available for all ARM cores >=
->     ARMv4T. This is exactly what glibc is doing.
->
->   - USE_LDREXSTREX can also be guessed by looking at the ARM core being
->     used: whenever you have Thumb2, ldrex/strex is available.
->
->   - COMPILE_IN_THUMB becomes useless, since all it does is passing
->     -mthumb. But just like the uClibc config options to set
->     --march=<foo> have been removed a long time ago, there's no need to
->     -have an option to pass -mthumb.
->
-> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-  Upstream status? Knowing Waldemar's lightning reflexes, we will probably just 
-bump the uClibc version rather than having these patches in Buildroot :-)
+  I verified that the other config symbols removed by the previous patch are not 
+used in Buildroot.
 
   Regards,
   Arnout
 
 > ---
->   .../0001-arm-remove-use-of-USE_BX-option.patch     | 53 ++++++++++++++++++++++
->   package/uclibc/0002-arm-remove-USE_BX-option.patch | 40 ++++++++++++++++
->   .../0003-arm-remove-use-of-USE_LDREXSTREX.patch    | 49 ++++++++++++++++++++
->   .../uclibc/0004-arm-remove-USE_LDREXSTREX.patch    | 34 ++++++++++++++
->   .../uclibc/0005-arm-remove-COMPILE_IN_THUMB.patch  | 43 ++++++++++++++++++
->   5 files changed, 219 insertions(+)
->   create mode 100644 package/uclibc/0001-arm-remove-use-of-USE_BX-option.patch
->   create mode 100644 package/uclibc/0002-arm-remove-USE_BX-option.patch
->   create mode 100644 package/uclibc/0003-arm-remove-use-of-USE_LDREXSTREX.patch
->   create mode 100644 package/uclibc/0004-arm-remove-USE_LDREXSTREX.patch
->   create mode 100644 package/uclibc/0005-arm-remove-COMPILE_IN_THUMB.patch
+>   package/uclibc/Config.in |  5 -----
+>   package/uclibc/uclibc.mk | 11 -----------
+>   2 files changed, 16 deletions(-)
+>
+> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+> index 16bf89c..e722908 100644
+> --- a/package/uclibc/Config.in
+> +++ b/package/uclibc/Config.in
+> @@ -139,11 +139,6 @@ config BR2_UCLIBC_ARC_TYPE
+>   	default "ARC_CPU_700"	if BR2_arc770d
+>   	default "ARC_CPU_HS"	if BR2_archs38
+>
+> -config BR2_UCLIBC_ARM_BX
+> -	bool
+> -	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
+> -	default y if (BR2_ARM_CPU_HAS_THUMB || BR2_ARM_CPU_HAS_THUMB2)
+> -
+>   config BR2_UCLIBC_MIPS_ABI
+>   	string
+>   	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index 88a4a8c..c981d80 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -80,16 +80,6 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+>   UCLIBC_EXTRA_CFLAGS += -marm
+>   endif
+>
+> -ifeq ($(BR2_UCLIBC_ARM_BX),y)
+> -define UCLIBC_ARM_BX_CONFIG
+> -	$(call KCONFIG_ENABLE_OPT,USE_BX,$(@D)/.config)
+> -endef
+> -else
+> -define UCLIBC_ARM_BX_CONFIG
+> -	$(call KCONFIG_DISABLE_OPT,USE_BX,$(@D)/.config)
+> -endef
+> -endif
+> -
+>   endif # arm
+>
+>   #
+> @@ -362,7 +352,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+>   	$(UCLIBC_ARC_TYPE_CONFIG)
+>   	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+>   	$(UCLIBC_ARM_ABI_CONFIG)
+> -	$(UCLIBC_ARM_BX_CONFIG)
+>   	$(UCLIBC_MIPS_ABI_CONFIG)
+>   	$(UCLIBC_MIPS_ISA_CONFIG)
+>   	$(UCLIBC_SH_TYPE_CONFIG)
+>
 
 
 -- 
