@@ -1,110 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 15:02:11 +0100
-Subject: [Buildroot] [git commit] webkitgtk24: security bump to version
-	2.4.10
-Message-ID: <20160319153125.1757C803F8@busybox.osuosl.org>
+Date: Sat, 19 Mar 2016 16:31:34 +0100
+Subject: [Buildroot] [PATCH 01/16 v5] toolchain/external: add hashes for
+ actual sources
+In-Reply-To: <cbb39a5e2943be9229cfc9629d0e878ec6892688.1457718289.git.yann.morin.1998@free.fr>
+References: <cover.1457718289.git.yann.morin.1998@free.fr>
+ <cbb39a5e2943be9229cfc9629d0e878ec6892688.1457718289.git.yann.morin.1998@free.fr>
+Message-ID: <20160319163134.0231c8a1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bfb03c29265e54cd07c93319a4fc58ec7f2a5ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-CVE-2015-1120, CVE-2015-1076, CVE-2015-1071, CVE-2015-1081,
-CVE-2015-1122, CVE-2015-1155, CVE-2014-1748, CVE-2015-3752,
-CVE-2015-5809, CVE-2015-5928, CVE-2015-3749, CVE-2015-3659,
-CVE-2015-3748, CVE-2015-3743, CVE-2015-3731, CVE-2015-3745,
-CVE-2015-5822, CVE-2015-3658, CVE-2015-3741, CVE-2015-3727,
-CVE-2015-5801, CVE-2015-5788, CVE-2015-3747, CVE-2015-5794,
-CVE-2015-1127, CVE-2015-1153, CVE-2015-1083.
+On Fri, 11 Mar 2016 18:49:14 +0100, Yann E. MORIN wrote:
+> As we currently download the actual sources as part of saving the
+> legal-info, we do not check the hashes of those downloads.
+> 
+> That's because, during legal-info, there is not package involved, and
+> thus there's no path to an actual .hash file.
+> 
+> However, this precludes legal-info from working in off-line mode. A
+> subsequent patch will make it possible to do so, and actual sources will
+> be downloaded as another classical package download.
+> 
+> This will have two consequences:
+> 
+>   - first, we will be able to add hashes for actual sources, so we can
+>     ensure their integrity,
+> 
+>   - second, and as a direct consequence of the above, when a .hash file
+>     is present, it would have to list all the hashes for that package,
+>     or that would be treated as an error.
+> 
+> Currently, the only package that falls in this case is the external-
+> toolchain, for which we have means to retrieve the sources for some of
+> the toolchains.
+> 
+> So we just add hashes for those actual external-toolchain sources we may
+> have to download.
+> 
+> Those hashes are not used for now, but they'll come into play a few
+> patches down.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  toolchain/toolchain-external/toolchain-external.hash | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch upstream
-so drop it.
+Applied to master, thanks.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...m.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch | 46 ----------------------
- package/webkitgtk24/webkitgtk24.hash               |  6 ++-
- package/webkitgtk24/webkitgtk24.mk                 |  2 +-
- 3 files changed, 5 insertions(+), 49 deletions(-)
-
-diff --git a/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch b/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
-deleted file mode 100644
-index d56dc58..0000000
---- a/package/webkitgtk24/0002-WTF-Platform.h-use-_ABI64-instead-of-_MIPS_SIM_ABI64.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--[WTF] Platform.h: use _ABI64 instead of _MIPS_SIM_ABI64 to determine MIPS N64
--
--Patch backported from upstream:
--
--http://trac.webkit.org/changeset/185863
--
--I tweaked this patch to remove the Changelog part in order to make it
--apply in Buildroot.
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--From 2c84c8d1c294037141473c10e0374df63a3cdea9 Mon Sep 17 00:00:00 2001
--From: ossy at webkit.org <ossy@webkit.org@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
--Date: Tue, 23 Jun 2015 06:33:16 +0000
--Subject: [PATCH] [WTF] Platform.h: use _ABI64 instead of _MIPS_SIM_ABI64 to determine MIPS N64
-- https://bugs.webkit.org/show_bug.cgi?id=145113
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Patch by YunQiang Su <wzssyqa@gmail.com> on 2015-06-22
--Reviewed by Csaba Osztrogon??c.
--
--* wtf/Platform.h:
--
--git-svn-id: http://svn.webkit.org/repository/webkit/trunk at 185863 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-----
-- Source/WTF/wtf/Platform.h |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
--
--diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
--index c234f50..b5e9859 100644
----- a/Source/WTF/wtf/Platform.h
--+++ b/Source/WTF/wtf/Platform.h
--@@ -82,7 +82,7 @@
--
-- /* CPU(MIPS) - MIPS 32-bit and 64-bit */
-- #if (defined(mips) || defined(__mips__) || defined(MIPS) || defined(_MIPS_) || defined(__mips64))
---#if defined(_MIPS_SIM_ABI64) && (_MIPS_SIM == _MIPS_SIM_ABI64)
--+#if defined(_ABI64) && (_MIPS_SIM == _ABI64)
-- #define WTF_CPU_MIPS64 1
-- #define WTF_MIPS_ARCH __mips64
-- #else
----
--1.7.1
--
-diff --git a/package/webkitgtk24/webkitgtk24.hash b/package/webkitgtk24/webkitgtk24.hash
-index bd1754e..d3a9cca 100644
---- a/package/webkitgtk24/webkitgtk24.hash
-+++ b/package/webkitgtk24/webkitgtk24.hash
-@@ -1,2 +1,4 @@
--# From http://www.webkitgtk.org/releases/webkitgtk-2.4.9.tar.xz.sha1
--sha1	fbe02db8a4f01a70e7cdf0d16f8a18463e18b104	webkitgtk-2.4.9.tar.xz
-+# From http://www.webkitgtk.org/releases/webkitgtk-2.4.10.tar.xz.sha1
-+sha1	7fe2fe07ed21d00d8a8483d68c13a8c7ff0ff320	webkitgtk-2.4.10.tar.xz
-+# Calculated based on the hash above
-+sha256	33fda4b20d7fec2d6e9399ba03ef3f6d2a733c628bd77d397880c44e4bf7c614	webkitgtk-2.4.10.tar.xz
-diff --git a/package/webkitgtk24/webkitgtk24.mk b/package/webkitgtk24/webkitgtk24.mk
-index 8556f4e..2803d44 100644
---- a/package/webkitgtk24/webkitgtk24.mk
-+++ b/package/webkitgtk24/webkitgtk24.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK24_VERSION = 2.4.9
-+WEBKITGTK24_VERSION = 2.4.10
- WEBKITGTK24_SITE = http://www.webkitgtk.org/releases
- WEBKITGTK24_SOURCE = webkitgtk-$(WEBKITGTK24_VERSION).tar.xz
- WEBKITGTK24_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
