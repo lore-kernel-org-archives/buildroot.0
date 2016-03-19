@@ -1,69 +1,59 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 19 Mar 2016 20:14:49 +0100
-Subject: [Buildroot] [PATCH 1/2] m68k: enable internal toolchain
-In-Reply-To: <20160319192753.45ac97e3@free-electrons.com>
-References: <20160319172656.GA19850@waldemar-brodkorb.de>
- <20160319192753.45ac97e3@free-electrons.com>
-Message-ID: <20160319191449.GY21774@waldemar-brodkorb.de>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sat, 19 Mar 2016 16:27:19 -0300
+Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
+In-Reply-To: <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <CAAEAJfC1to61NBpAK2+S_RAUZr2JK7h4gk_EK+QxG4MaRS6KJg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Thomas Petazzoni wrote,
++Waldemar
 
-> Waldemar,
-> 
-> On Sat, 19 Mar 2016 18:26:56 +0100, Waldemar Brodkorb wrote:
-> > This allows to build a m68k toolchain.
-> > 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> 
-> Thanks! One question below, though.
-> 
-> > diff --git a/arch/Config.in b/arch/Config.in
-> > index 401bd28..3f1453f 100644
-> > --- a/arch/Config.in
-> > +++ b/arch/Config.in
-> > @@ -95,7 +95,6 @@ config BR2_i386
-> >  config BR2_m68k
-> >  	bool "m68k"
-> >  	select BR2_ARCH_HAS_MMU_MANDATORY
-> 
-> Are you sure all the m68k have a MMU ?
-> 
-> According to https://en.wikipedia.org/wiki/Motorola_68000_series, it
-> seems like the MMU appeared in 68030, so 68000, 68010 and 68020
-> probably don't have a MMU.
-> 
-> According to http://www.linux-m68k.org/faq/reqs.html:
-> 
->   You need a Motorola 680x0 processor with a programmable memory
->   management unit (PMMU). There is no way to run Linux/m68k without
->   one. This reduces the list of possible processors to 68020+68851,
->   68030, 68040, 68LC040, and 68060. This list of processors excludes
->   the 68000, 68HC000, 68008, 68010, 68EC020, 68EC030, and 68EC040. It
->   also excludes the CPU32 processors (683x0 series) and the ColdFire
->   processor.
-> 
-> However, I believe this is not completely correct, as Linux definitely
-> runs on some Coldfire, as the later variants have gotten a MMU.
+On 18 March 2016 at 18:08, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> As explained by Waldemar, enabling DOPIC in uClibc will lead to the
+> creation of a Position Independent library. In turn, this will cause
+> elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
+> ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
+> input, so we must disable DOPIC in the uClibc configuration.
+>
 
-Yes, the info is incomplete. I have another Qemu board defconfig available for coldfire
-without MMU. But I wait until ARM noMMU stuff is in, as the minimal
-busybox config might be interesting here, too.
-And some of the later coldfire v4 have a MMU.
+While testing on LPC4350, I found that Lua is built with the Has-PIC-GOT flag:
 
-So m68k is really complicated and interesting ;)
- 
-> Maybe to get started you should simply support the 68040 which you have
-> tested, and leave the rest for later, once it is understood which
-> variant has a MMU, which variant does not?
+$ output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-flthdr
+output/target/usr/bin/lua
+output/target/usr/bin/lua
+    Magic:        bFLT
+    Rev:          4
+    Build Date:   Sat Mar 19 16:14:03 2016
+    Entry:        0x45
+    Data Start:   0x1f08c
+    Data End:     0x23ed8
+    BSS End:      0x260c0
+    Stack Size:   0x1000
+    Reloc Start:  0x23ed8
+    Reloc Count:  0x214
+    Flags:        0x2 ( Has-PIC-GOT )
 
-Yes, that is better. I just copied the old variants without thinking
-about it.
+The Lua interpreter is not loaded by the binfmt_flat loader, and the
+kernel says:
 
-best regards
- Waldemar
+  BINFMT_FLAT: reloc outside program 0x7fffd3e4 (0 - 0x26080/0x1f04c),
+killing lua!
+
+When DEBUG is defined in fs/binfmt_flat.c, the kernel says:
+
+  BINFMT_FLAT: reference 0xffd3e4 to shared library 127, killing lua!
+
+On the other side, atftp throws the same error:
+
+  BINFMT_FLAT: reference 0xa0100 to shared library 161, killing atftp!
+
+Any ideas?
+-- 
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
