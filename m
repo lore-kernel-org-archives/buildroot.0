@@ -1,29 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 14:35:56 +0100
-Subject: [Buildroot] [PATCH 3/3] ffmpeg: default to --cpu=generic for
- MIPS architecture
-In-Reply-To: <1458309966-16835-3-git-send-email-Vincent.Riera@imgtec.com>
-References: <1458309966-16835-1-git-send-email-Vincent.Riera@imgtec.com>
- <1458309966-16835-3-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160319143556.34d7b41a@free-electrons.com>
+Date: Sat, 19 Mar 2016 14:37:17 +0100
+Subject: [Buildroot] [git commit] linux/perf: really do not build the
+	documentation
+Message-ID: <20160319134759.AFC8A817F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vicente Olivert Riera,
+commit: https://git.buildroot.net/buildroot/commit/?id=c306e0493a6e271ec5eab403958b2820635b8894
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 18 Mar 2016 14:06:06 +0000, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/ffmpeg/ffmpeg.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+The perf buildsystem, inside the kernel, is not really amenable to be
+easily used...
 
-Why ? Your commit log only says what the patch is doing, but not why.
+Regarding the documentation, it will forcefully try to detect asciidoc
+and, with the latest versions, xmlto, completely disregarding what the
+user may provide.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+We currently pass ASCIIDOC= (the empty string) on the make command line,
+as an attempt to disable building the documentation, but that has no
+effect whatsoever on perf: that variable is not passed down to the
+sub-sub-make (yes, a two-level depth) that is responsible for building
+the documentation.
+
+We really do not want to build any of the documentation (the user can
+refer to the documentation on his own development machine), so we use a
+little dirty trick: we provide a GNUmakefile beside the existing
+Makefile for the documentation; GNUmakefile always takes precedence over
+a Makefile when both are present. We only provide a catch-all-no-recipe
+rule in that GNUmakefile, so it really does nothing useful, except avoid
+building the documentation.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ linux/linux-tool-perf.mk | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/linux/linux-tool-perf.mk b/linux/linux-tool-perf.mk
+index 1070a1c..f9b295f 100644
+--- a/linux/linux-tool-perf.mk
++++ b/linux/linux-tool-perf.mk
+@@ -24,8 +24,7 @@ PERF_MAKE_FLAGS = \
+ 	NO_LIBPYTHON=1 \
+ 	DESTDIR=$(TARGET_DIR) \
+ 	prefix=/usr \
+-	WERROR=0 \
+-	ASCIIDOC=
++	WERROR=0
+ 
+ # We need to pass an argument to ld for setting the endianness when
+ # building it for MIPS architecture, otherwise the default one will
+@@ -68,6 +67,19 @@ else
+ PERF_MAKE_FLAGS += NO_LIBELF=1 NO_DWARF=1
+ endif
+ 
++# We really do not want to build the perf documentation, because it
++# has stringent requirement on the documentation generation tools,
++# like xmlto and asciidoc), which may be lagging behind on some
++# distributions.
++# We name it 'GNUmakefile' so that GNU make will use it instead of
++# the existing 'Makefile'.
++define PERF_DISABLE_DOCUMENTATION
++	if [ -f $(@D)/tools/perf/Documentation/Makefile ]; then \
++		printf "%%:\n\t@:\n" >$(@D)/tools/perf/Documentation/GNUmakefile; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
++
+ # O must be redefined here to overwrite the one used by Buildroot for
+ # out of tree build. We build perf in $(@D)/tools/perf/ and not just
+ # $(@D) so that it isn't built in the root directory of the kernel
