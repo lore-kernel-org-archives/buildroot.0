@@ -1,59 +1,84 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 20 Mar 2016 00:41:44 +0100
-Subject: [Buildroot] [PATCH 1/3] package/multicat: add patch to fix static
+Date: Sun, 20 Mar 2016 00:41:45 +0100
+Subject: [Buildroot] [PATCH 2/3] package/multicat: add patch to fix musl
 	build
-Message-ID: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
+In-Reply-To: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1458430906-8291-2-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building multicat in a static context fails with:
-  aggregartp.c:381: undefined reference to `pthread_self'
-
-Fix this by adding -lpthread to LDLIBS.
+Add a patch to fix two musl build issues:
+  1) `struct udphdr` requires definition of `_GNU_SOURCE`
+  2) `mode_t` requires including <sys/types.h>
 
 Fixes:
-http://autobuild.buildroot.net/results/e69/e699cf6b97bc97f2e8e51aa8b86f0e16af70b5b0/
-http://autobuild.buildroot.net/results/201/2019f11dcc43cb0db13ceb4e3a575c1a91573d4c/
-http://autobuild.buildroot.net/results/fa9/fa98afec377a1e8fce64af5897d1f7af45804069/
-and maybe more.
+http://autobuild.buildroot.net/results/9f1/9f1a3f3aab854f1bd20f1064391e613457312022/
 
 Upstream status: Pending [1]
 
-[1] https://mailman.videolan.org/pipermail/multicat-devel/2016-March/000125.html
+[1] https://mailman.videolan.org/pipermail/multicat-devel/2016-March/000126.html
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/multicat/0001-Fix-missing-pthread.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/multicat/0001-Fix-missing-pthread.patch
+ package/multicat/0002-Fix-musl-build.patch | 46 ++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/multicat/0002-Fix-musl-build.patch
 
-diff --git a/package/multicat/0001-Fix-missing-pthread.patch b/package/multicat/0001-Fix-missing-pthread.patch
+diff --git a/package/multicat/0002-Fix-musl-build.patch b/package/multicat/0002-Fix-musl-build.patch
 new file mode 100644
-index 0000000..f21c7ce
+index 0000000..3a89895
 --- /dev/null
-+++ b/package/multicat/0001-Fix-missing-pthread.patch
-@@ -0,0 +1,19 @@
-+Makefile: link with pthread
++++ b/package/multicat/0002-Fix-musl-build.patch
+@@ -0,0 +1,46 @@
++Fix musl build
 +
-+Otherwise building multicat in a static context fails:
-+  aggregartp.c:381: undefined reference to `pthread_self'
++Defining _GNU_SOURCE is required to get proper member names in `struct udphdr`
++when building against musl. Build error:
++
++  util.c: In function 'RawFillHeaders':
++  util.c:481:9: error: 'struct udphdr' has no member named 'source'
++       udph->source = htons(portsrc);
++           ^
++  util.c:482:9: error: 'struct udphdr' has no member named 'dest'
++       udph->dest   = htons(portdst);
++           ^
++  util.c:483:9: error: 'struct udphdr' has no member named 'len'
++       udph->len    = htons(sizeof(struct udphdr) + len);
++           ^
++  util.c:484:9: error: 'struct udphdr' has no member named 'check'
++       udph->check  = 0;
++
++Including <sys/types.h> in needed for mode_t, otherwise musl build fails:
++  util.h:91:1: error: unknown type name 'mode_t'
 +
 +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 +
-+diff -purN multicat-2.1.orig/Makefile multicat-2.1/Makefile
-+--- multicat-2.1.orig/Makefile	2015-10-05 18:36:29.000000000 +0200
-++++ multicat-2.1/Makefile	2016-03-19 21:47:59.467745127 +0100
-+@@ -4,7 +4,7 @@ VERSION = 2.1
-+ CFLAGS += -Wall -Wformat-security -O3 -fomit-frame-pointer -D_FILE_OFFSET_BITS=64 -D_ISOC99_SOURCE -D_BSD_SOURCE
-+ CFLAGS += -g
-+ # Comment out the following line for Mac OS X build
-+-LDLIBS += -lrt
-++LDLIBS += -lrt -pthread
++diff -purN multicat-2.1.orig/util.c multicat-2.1/util.c
++--- multicat-2.1.orig/util.c	2015-07-17 18:03:17.000000000 +0200
+++++ multicat-2.1/util.c	2016-03-19 22:21:01.110178772 +0100
++@@ -21,6 +21,8 @@
++  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
++  *****************************************************************************/
 + 
-+ OBJ_MULTICAT = multicat.o util.o
-+ OBJ_INGESTS = ingests.o util.o
+++#define _GNU_SOURCE
+++
++ #include <stdlib.h>
++ #include <stdio.h>
++ #include <stdint.h>
++diff -purN multicat-2.1.orig/util.h multicat-2.1/util.h
++--- multicat-2.1.orig/util.h	2015-07-15 22:47:39.000000000 +0200
+++++ multicat-2.1/util.h	2016-03-19 22:21:58.649834990 +0100
++@@ -21,6 +21,7 @@
++  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
++  *****************************************************************************/
++ 
+++#include <sys/types.h>
++ #include <netinet/udp.h>
++ #include <netinet/ip.h>
++ 
 -- 
 2.7.4
