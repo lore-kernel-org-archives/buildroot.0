@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 15:51:13 +0100
-Subject: [Buildroot] [PATCH 07/16 v5] core/legal-info: install source
- archives in their own sub-dir
-In-Reply-To: <a1b71dd4cfb82c9886097d5a86410831186efde9.1457718289.git.yann.morin.1998@free.fr>
+Date: Sat, 19 Mar 2016 16:03:46 +0100
+Subject: [Buildroot] [PATCH 09/16 v5] core/apply-patches: store full
+ path of applied patches
+In-Reply-To: <4752967e7f254170efc08e77530029c90f663d85.1457718289.git.yann.morin.1998@free.fr>
 References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <a1b71dd4cfb82c9886097d5a86410831186efde9.1457718289.git.yann.morin.1998@free.fr>
-Message-ID: <20160319155113.67227cb9@free-electrons.com>
+ <4752967e7f254170efc08e77530029c90f663d85.1457718289.git.yann.morin.1998@free.fr>
+Message-ID: <20160319160346.50b52b19@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,49 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Fri, 11 Mar 2016 18:49:20 +0100, Yann E. MORIN wrote:
-> Currently, we put all source archives side-by-side in the same
-> directory.
-> 
-> Since we're about to also save individual patches that were applied
-> on those sources, we don't want to make that directory a complete
-> mess of unassorted files.
-> 
-> So, we install each source archive in its own sub-directory, where
-> we'll later store the patches too. Store that location in a variable,
-> so it can be re-used later on (to install patches in a future commit).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On Fri, 11 Mar 2016 18:49:22 +0100, Yann E. MORIN wrote:
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
+> index 201278d..20a1552 100755
+> --- a/support/scripts/apply-patches.sh
+> +++ b/support/scripts/apply-patches.sh
+> @@ -63,8 +63,12 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
+>      xargs -0 -r rm -f
+>  
+>  function apply_patch {
+> -    path=$1
+> -    patch=$2
+> +    path="${1%%/}"
+> +    patch="${2}"
+> +    case "${path}" in
+> +        /*) ;;
+> +        *)  path="$(pwd)/${path}";;
+> +    esac
 
-I was about to apply this one, but it depends on the hardlink-copy
-thingy, for which I had comments.
+This seems unrelated to the patch in question, and is not explained
+anywhere.
 
-Thanks!
+However, I have some more global concern about this approach. I really
+dislike the idea that we rely on a helper script filling up a file,
+that we later read from a completely different place in the package
+infrastructure. It really feels like "let's dump my data there and
+fetch it from here".
+
+So here are other proposals:
+
+ * The package infra already knows which patches should be applied
+   (bundled patches, global patch dir, etc.), so it is technically able
+   to get the list of patches. Yes it's a bit annoying because the
+   logic to derive the list of patches is already inside the
+   apply-patches script. But maybe it's because too much smart stuff is
+   done in the apply-patch script without the package infrastructure
+   being aware.
+
+ * Alternatively, add an option to apply-patch.sh that will not apply
+   the patches, but show the list of patches that would be applied.
+   Like "apply-patch -l" for example. Then, when doing the legal-info,
+   you simply call "apply-patch -l" to retrieve the list of patches
+   that you need to copy.
 
 Thomas
 -- 
