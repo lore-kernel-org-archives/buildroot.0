@@ -1,84 +1,64 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 20 Mar 2016 00:41:45 +0100
-Subject: [Buildroot] [PATCH 2/3] package/multicat: add patch to fix musl
-	build
+Date: Sun, 20 Mar 2016 00:41:46 +0100
+Subject: [Buildroot] [PATCH 3/3] package/multicat: fix build with external
+	Blackfin uClibc toolchain
 In-Reply-To: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
 References: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <1458430906-8291-2-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1458430906-8291-3-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to fix two musl build issues:
-  1) `struct udphdr` requires definition of `_GNU_SOURCE`
-  2) `mode_t` requires including <sys/types.h>
+multicat uses clock_nanosleep() conditionally if HAVE_NANOSLEEP is defined. The
+bad is that multicat does not check for clock_nanosleep(), but defines
+HAVE_NANOSLEEP if __APPLE__ is not defined.
+
+uClibc has clock_nanosleep() only if built with UCLIBC_HAS_ADVANCED_REALTIME.
+and the external Blackfin toolchain has no support for clock_nanosleep().
+
+As multicat does not has a configuration setup we add a hook for this toolchain
+and undef the macro HAVE_NANOSLEEP in the sources.
 
 Fixes:
-http://autobuild.buildroot.net/results/9f1/9f1a3f3aab854f1bd20f1064391e613457312022/
+http://autobuild.buildroot.net/results/84f/84f8302ee94e6e6849f6b26cb697c2f9986bafe5/
+http://autobuild.buildroot.net/results/9e0/9e07a98e87755c992254295c46edb0dace967a21/
+http://autobuild.buildroot.net/results/4b0/4b07d276d7c09f2fc2d63c8c37c92519cfe36dbc/
+http://autobuild.buildroot.net/results/84f/84f8302ee94e6e6849f6b26cb697c2f9986bafe5/
+and many more.
 
-Upstream status: Pending [1]
+The issue has been reported upstream [1].
 
-[1] https://mailman.videolan.org/pipermail/multicat-devel/2016-March/000126.html
+[1] https://mailman.videolan.org/pipermail/multicat-devel/2016-March/000127.html
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/multicat/0002-Fix-musl-build.patch | 46 ++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/multicat/0002-Fix-musl-build.patch
+ package/multicat/multicat.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/multicat/0002-Fix-musl-build.patch b/package/multicat/0002-Fix-musl-build.patch
-new file mode 100644
-index 0000000..3a89895
---- /dev/null
-+++ b/package/multicat/0002-Fix-musl-build.patch
-@@ -0,0 +1,46 @@
-+Fix musl build
+diff --git a/package/multicat/multicat.mk b/package/multicat/multicat.mk
+index cc6eb78..944cb4c 100644
+--- a/package/multicat/multicat.mk
++++ b/package/multicat/multicat.mk
+@@ -12,6 +12,18 @@ MULTICAT_LICENSE_FILES = COPYING
+ 
+ MULTICAT_DEPENDENCIES = bitstream
+ 
++# multicat does not test for HAVE_CLOCK_NANOSLEEP, but sets it if __APPLE__ is
++# not defined. The external Blackfin toolchain is uClibc which has
++# clock_nanosleep() only if built with UCLIBC_HAS_ADVANCED_REALTIME.
++# Use a hool to overwrite the definition of HAVE_CLOCK_NANOSLEEP for this
++# toolchain.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
++define MULTICAT_FIXUP_HAVE_CLOCK_NANOSLEEP
++$(SED) 's#define HAVE_CLOCK_NANOSLEEP#undef HAVE_CLOCK_NANOSLEEP#g' $(@D)/util.h
++endef
++MULTICAT_POST_PATCH_HOOKS += MULTICAT_FIXUP_HAVE_CLOCK_NANOSLEEP
++endif
 +
-+Defining _GNU_SOURCE is required to get proper member names in `struct udphdr`
-+when building against musl. Build error:
-+
-+  util.c: In function 'RawFillHeaders':
-+  util.c:481:9: error: 'struct udphdr' has no member named 'source'
-+       udph->source = htons(portsrc);
-+           ^
-+  util.c:482:9: error: 'struct udphdr' has no member named 'dest'
-+       udph->dest   = htons(portdst);
-+           ^
-+  util.c:483:9: error: 'struct udphdr' has no member named 'len'
-+       udph->len    = htons(sizeof(struct udphdr) + len);
-+           ^
-+  util.c:484:9: error: 'struct udphdr' has no member named 'check'
-+       udph->check  = 0;
-+
-+Including <sys/types.h> in needed for mode_t, otherwise musl build fails:
-+  util.h:91:1: error: unknown type name 'mode_t'
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+
-+diff -purN multicat-2.1.orig/util.c multicat-2.1/util.c
-+--- multicat-2.1.orig/util.c	2015-07-17 18:03:17.000000000 +0200
-++++ multicat-2.1/util.c	2016-03-19 22:21:01.110178772 +0100
-+@@ -21,6 +21,8 @@
-+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
-+  *****************************************************************************/
-+ 
-++#define _GNU_SOURCE
-++
-+ #include <stdlib.h>
-+ #include <stdio.h>
-+ #include <stdint.h>
-+diff -purN multicat-2.1.orig/util.h multicat-2.1/util.h
-+--- multicat-2.1.orig/util.h	2015-07-15 22:47:39.000000000 +0200
-++++ multicat-2.1/util.h	2016-03-19 22:21:58.649834990 +0100
-+@@ -21,6 +21,7 @@
-+  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
-+  *****************************************************************************/
-+ 
-++#include <sys/types.h>
-+ #include <netinet/udp.h>
-+ #include <netinet/ip.h>
-+ 
+ MULTICAT_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS)
+ 
+ define MULTICAT_BUILD_CMDS
 -- 
 2.7.4
