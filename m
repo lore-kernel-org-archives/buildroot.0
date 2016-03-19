@@ -1,81 +1,67 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Mar 2016 17:08:07 +0100
-Subject: [Buildroot] [PATCH 02/16 v5] core/pkg-utils: add macro to
- hardlink-or-copy
-In-Reply-To: <20160319152307.765e1bad@free-electrons.com>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <909a98f9ebb10986a85570d767ab030597a73ef5.1457718289.git.yann.morin.1998@free.fr>
- <20160319152307.765e1bad@free-electrons.com>
-Message-ID: <56ED7967.8050200@mind.be>
+Date: Sat, 19 Mar 2016 17:11:58 +0100
+Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
+In-Reply-To: <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56ED7A4E.8020406@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/19/16 15:23, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
->
-> On Fri, 11 Mar 2016 18:49:15 +0100, Yann E. MORIN wrote:
->
->> +################################################################################
->> +# hardlink-copy -- hardlink source and destination if possible, otherwise
->> +# do a simple copy
->> +#
->> +# argument 1 is the source *file*
->> +# argument 2 is the destination *directory*
->> +# argument 3 is the basename of the destination file (optional, defaults to
->> +#            the basename of the source file.
->> +#
->> +# examples:
->> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir)
->> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir,new-name)
->> +#
->> +# Notes:
->> +#  - this is NOT an atomic operation,
->> +#  - this is only a wrapper to a shell script, so that it can be used with
->> +#    shell-level variables, like in a for loop.
->> +################################################################################
->> +define hardlink-copy
->> +	support/scripts/hardlink-copy "$(strip $(1))" "$(strip $(2))" "$(strip $(3))"
->> +endef
->
-> While in certain cases, I agree that a shell wrapper is nice and
-> useful, here I really don't see the point of a shell wrapper. You can
-> simply do (untested):
->
-> define hardlink-or-copy-inner
-> 	rm -f $(2)
-> 	ln -f $(1) $(2) 2>/dev/null || cp -f $(1) $(2)
-> endef
->
-> define hardlink-or-copy
-> 	$(call hardlink-or-copy-inner,$(1),$(if $(3),$(2)/$(3),$(2)/$(basename $(1))))
-> endef
+On 03/18/16 22:08, Thomas Petazzoni wrote:
+> As explained by Waldemar, enabling DOPIC in uClibc will lead to the
+> creation of a Position Independent library. In turn, this will cause
+> elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
+> ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
+                                       ^^^^^^expects
 
-  I disagree. This may be slightly shorter in lines of code, but I think the 
-shell script is much more readable.
-
-  However, I do wonder if it makes sense to have a make function for it if there 
-already is a shell script. We don't do that for apply-patches, so why would we 
-do it for this one?
-
+> input, so we must disable DOPIC in the uClibc configuration.
 >
-> Note that I think the name of the macro should be hardlink-or-copy and
-> not hardlink-copy. The name hardlink-copy seems to indicate that you
-> are copying a hardlink, which is not what is happening.
-> hardlink-or-copy is IMO clearer on the fact that the macro does a hardlink
-> or a copy.
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  I agree with that.
+  Otherwise:
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+
+  Though I wonder: shouldn't uClibc detect this by itself? Similar to the BX 
+handling that you removed. Adding Waldemar in Cc to think about this.
 
   Regards,
   Arnout
 
+
+> ---
+>   package/uclibc/uclibc.mk | 7 +++++++
+>   1 file changed, 7 insertions(+)
 >
-> Thanks!
+> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+> index ad94494..e3e45f7 100644
+> --- a/package/uclibc/uclibc.mk
+> +++ b/package/uclibc/uclibc.mk
+> @@ -82,6 +82,12 @@ ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_TH
+>   UCLIBC_EXTRA_CFLAGS += -marm
+>   endif
 >
-> Thomas
+> +ifeq ($(BR2_BINFMT_FLAT),y)
+> +define UCLIBC_ARM_BINFMT_FLAT
+> +	$(call KCONFIG_DISABLE_OPT,DOPIC,$(@D)/.config)
+> +endef
+> +endif
+> +
+>   endif # arm
+>
+>   #
+> @@ -354,6 +360,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+>   	$(UCLIBC_ARC_TYPE_CONFIG)
+>   	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+>   	$(UCLIBC_ARM_ABI_CONFIG)
+> +	$(UCLIBC_ARM_BINFMT_FLAT)
+>   	$(UCLIBC_MIPS_ABI_CONFIG)
+>   	$(UCLIBC_MIPS_ISA_CONFIG)
+>   	$(UCLIBC_SH_TYPE_CONFIG)
 >
 
 
