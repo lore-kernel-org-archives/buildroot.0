@@ -1,40 +1,83 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Mar 2016 17:03:40 +0100
-Subject: [Buildroot] [PATCH 6/6] linux/perf: build the host perf tool
-In-Reply-To: <20160319145515.32875737@free-electrons.com>
-References: <cover.1457720152.git.yann.morin.1998@free.fr>
- <b5f50fa3c517ddd37dbf339c011f6bf0621f55ac.1457720152.git.yann.morin.1998@free.fr>
- <20160319145515.32875737@free-electrons.com>
-Message-ID: <56ED785C.4050005@mind.be>
+Date: Sat, 19 Mar 2016 17:08:07 +0100
+Subject: [Buildroot] [PATCH 02/16 v5] core/pkg-utils: add macro to
+ hardlink-or-copy
+In-Reply-To: <20160319152307.765e1bad@free-electrons.com>
+References: <cover.1457718289.git.yann.morin.1998@free.fr>
+ <909a98f9ebb10986a85570d767ab030597a73ef5.1457718289.git.yann.morin.1998@free.fr>
+ <20160319152307.765e1bad@free-electrons.com>
+Message-ID: <56ED7967.8050200@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/19/16 14:55, Thomas Petazzoni wrote:
-> On Fri, 11 Mar 2016 19:19:59 +0100, Yann E. MORIN wrote:
->> >Currently, we only build the target variant of the perf tool. However,
->> >perf on the target may generate a bunch of data files that may have to
->> >be analysed on the host.
->> >
->> >There is no host-variant of the linux-tools infrastructure, so we just
->> >build the host perf at the same time we build the target one.
->> >
->> >Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
->> >Cc: Thomas De Schampheleire<patrickdepinguin@gmail.com>
-> First of all, I have to say I hate this target package that builds and
-> installs host stuff. But, since I don't have a better solution to
-> offer, and it's anyway not the only package in this case (qt/qt5 are
-> also target packages, and they install stuff in host), I'm fine with
-> the general approach.
+On 03/19/16 15:23, Thomas Petazzoni wrote:
+> Dear Yann E. MORIN,
+>
+> On Fri, 11 Mar 2016 18:49:15 +0100, Yann E. MORIN wrote:
+>
+>> +################################################################################
+>> +# hardlink-copy -- hardlink source and destination if possible, otherwise
+>> +# do a simple copy
+>> +#
+>> +# argument 1 is the source *file*
+>> +# argument 2 is the destination *directory*
+>> +# argument 3 is the basename of the destination file (optional, defaults to
+>> +#            the basename of the source file.
+>> +#
+>> +# examples:
+>> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir)
+>> +#   $(call hardlink-copy,/path/to/source/file,/path/to/destination/dir,new-name)
+>> +#
+>> +# Notes:
+>> +#  - this is NOT an atomic operation,
+>> +#  - this is only a wrapper to a shell script, so that it can be used with
+>> +#    shell-level variables, like in a for loop.
+>> +################################################################################
+>> +define hardlink-copy
+>> +	support/scripts/hardlink-copy "$(strip $(1))" "$(strip $(2))" "$(strip $(3))"
+>> +endef
+>
+> While in certain cases, I agree that a shell wrapper is nice and
+> useful, here I really don't see the point of a shell wrapper. You can
+> simply do (untested):
+>
+> define hardlink-or-copy-inner
+> 	rm -f $(2)
+> 	ln -f $(1) $(2) 2>/dev/null || cp -f $(1) $(2)
+> endef
+>
+> define hardlink-or-copy
+> 	$(call hardlink-or-copy-inner,$(1),$(if $(3),$(2)/$(3),$(2)/$(basename $(1))))
+> endef
 
-  I think it's OK to build and install host tools that are bound tightly with 
-the target package. E.g. qmake only makes sense when you have qt for the target. 
-perf is in the same boat.
+  I disagree. This may be slightly shorter in lines of code, but I think the 
+shell script is much more readable.
+
+  However, I do wonder if it makes sense to have a make function for it if there 
+already is a shell script. We don't do that for apply-patches, so why would we 
+do it for this one?
+
+>
+> Note that I think the name of the macro should be hardlink-or-copy and
+> not hardlink-copy. The name hardlink-copy seems to indicate that you
+> are copying a hardlink, which is not what is happening.
+> hardlink-or-copy is IMO clearer on the fact that the macro does a hardlink
+> or a copy.
+
+  I agree with that.
 
   Regards,
   Arnout
+
+>
+> Thanks!
+>
+> Thomas
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
