@@ -1,38 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Mar 2016 09:47:39 +0100
-Subject: [Buildroot] [git commit] package/lirc-tools: needs host-libxslt
-Message-ID: <20160319091805.7A9548078F@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 19 Mar 2016 10:20:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: depends on
+	BR2_TOOLCHAIN_HAS_SYNC_1
+Message-ID: <1458379254-21324-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfc68dba9238e6853270a7cc4b75e1c73994cf58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Fixes
-http://autobuild.buildroot.net/results/e5c/e5c4199a77b66a67da1060d1e9b74150c1c12a7e/
+http://autobuild.buildroot.net/results/399/399d76ac70c3933604067e2c6dcb4086b50acfff/
+http://autobuild.buildroot.net/results/70c/70cd299600985d7cf00c5b449f7e75284160551a/
+http://autobuild.buildroot.net/results/b4a/b4ab89c3628dd648683e25f9e3c6238f13871aba/
+http://autobuild.buildroot.net/results/33d/33d6dc8e1f57b5a02b07c50e5cefa272c6d992fc/
+http://autobuild.buildroot.net/results/7f3/7f32a9577ee2e50af38d4f60de50d938792b66a3/
+http://autobuild.buildroot.net/results/c98/c98b74d1d1342ca18fb161d010e94d45462ac6f1/
+and others
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lirc-tools/lirc-tools.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in                           | 2 ++
+ package/x11r7/xdriver_xf86-video-imx-viv/Config.in | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/lirc-tools/lirc-tools.mk b/package/lirc-tools/lirc-tools.mk
-index ccdc8d3..2e437a6 100644
---- a/package/lirc-tools/lirc-tools.mk
-+++ b/package/lirc-tools/lirc-tools.mk
-@@ -9,9 +9,10 @@ LIRC_TOOLS_SOURCE = lirc-$(LIRC_TOOLS_VERSION).tar.bz2
- LIRC_TOOLS_SITE = http://downloads.sourceforge.net/project/lirc/LIRC/$(LIRC_TOOLS_VERSION)
- LIRC_TOOLS_LICENSE = GPLv2+
- LIRC_TOOLS_LICENSE_FILES = COPYING
--LIRC_TOOLS_DEPENDENCIES = host-pkgconf
-+LIRC_TOOLS_DEPENDENCIES = host-libxslt host-pkgconf
- LIRC_TOOLS_INSTALL_STAGING = YES
- 
-+LIRC_TOOLS_CONF_ENV = XSLTPROC=yes
- LIRC_TOOLS_CONF_OPTS = --without-x
- 
- define LIRC_TOOLS_INSTALL_INIT_SYSV
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 9057746..a7aa297 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -2,6 +2,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	bool "mesa3d"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_EXPAT
+@@ -169,3 +170,4 @@ endif # BR2_PACKAGE_MESA3D
+ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+index baf7ca4..fb64d06 100644
+--- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
++++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+ 	bool "xf86-video-imx-viv"
+ 	depends on BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
+ 	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
+ 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_LIBDRM
+@@ -29,3 +30,4 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
+ comment "xf86-video-imx-viv depends on imx-gpu-viv with X11 output"
+ 	depends on BR2_arm
+ 	depends on !BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
++	depends on BR2_TOOLCHAIN_HAS_SYNC_1
+-- 
+2.7.0
