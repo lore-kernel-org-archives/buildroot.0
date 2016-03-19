@@ -1,8 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Mar 2016 21:25:34 +0100
-Subject: [Buildroot] [PATCH 1/3] package/kodi: fix segfault during playback
-	of mpeg2 content using vaapi
-Message-ID: <1458419136-9094-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 19 Mar 2016 21:25:36 +0100
+Subject: [Buildroot] [PATCH 3/3] package/kodi: needs host gcc >= 4.6
+In-Reply-To: <1458419136-9094-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1458419136-9094-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1458419136-9094-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,219 +12,98 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...artly-backport-of-PR-9231-to-fix-segfault.patch | 204 +++++++++++++++++++++
- 1 file changed, 204 insertions(+)
- create mode 100644 package/kodi/0005-Jarvis-partly-backport-of-PR-9231-to-fix-segfault.patch
+ ...exturePacker-fix-compilation-with-gcc-4.6.patch | 57 ++++++++++++++++++++++
+ package/kodi/Config.in                             |  4 +-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
+ create mode 100644 package/kodi/0006-native-TexturePacker-fix-compilation-with-gcc-4.6.patch
 
-diff --git a/package/kodi/0005-Jarvis-partly-backport-of-PR-9231-to-fix-segfault.patch b/package/kodi/0005-Jarvis-partly-backport-of-PR-9231-to-fix-segfault.patch
+diff --git a/package/kodi/0006-native-TexturePacker-fix-compilation-with-gcc-4.6.patch b/package/kodi/0006-native-TexturePacker-fix-compilation-with-gcc-4.6.patch
 new file mode 100644
-index 0000000..9b59b3b
+index 0000000..4aac119
 --- /dev/null
-+++ b/package/kodi/0005-Jarvis-partly-backport-of-PR-9231-to-fix-segfault.patch
-@@ -0,0 +1,204 @@
-+Patch sent upstream: https://github.com/xbmc/xbmc/pull/9388
++++ b/package/kodi/0006-native-TexturePacker-fix-compilation-with-gcc-4.6.patch
+@@ -0,0 +1,57 @@
++Patch sent upstream: https://github.com/xbmc/xbmc/pull/9378
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
 +
-+From 6a9e2bf65a346a43caff06efbf6051318d11aa8e Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <berndkuhls@hotmail.com>
-+Date: Sat, 19 Mar 2016 08:49:43 +0100
-+Subject: [PATCH 1/1] [Jarvis] partly backport of PR 9231 to fix segfault
++From 2b395fb3f07551ae1ce2e484c14ac59f36e192b0 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 17 Mar 2016 21:47:53 +0100
++Subject: [PATCH 1/1] native/TexturePacker: fix compilation with gcc 4.6
 +
-+This patch is a backport of
-+https://github.com/xbmc/xbmc/commit/a81208e3b53b84763fb9f20d8642ffc7bc63c9a7
-+to fix a segfault during playback of vaapi-accelerated mpeg2 content:
++Kodi itself depends on gcc >= 4.7 due to its use of the C++11 standard.
++When cross-compiling the host gcc currently also needs to be >= 4.7 due
++to the texturepacker tool being needed as native binary to compile
++Textures.xbt for the target system.
 +
-+terminate called after throwing an instance of 'std::logic_error'
-+  what():  basic_string::_S_construct null not valid
-+[New LWP 3743]
++Cross-compiling on a system where host gcc is at version 4.6 fails atm
++with this error:
 +
-+Program received signal SIGABRT, Aborted.
-+[Switching to LWP 3743]
-+0xb5664a9b in raise () from /lib/libc.so.0
-+(gdb) bt full
-+#0  0xb5664a9b in raise () from /lib/libc.so.0
-+No symbol table info available.
-+#1  0xb5660520 in abort () from /lib/libc.so.0
-+No symbol table info available.
-+#2  0xb56e6536 in __gnu_cxx::__verbose_terminate_handler() () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#3  0xb56e4a1c in ?? () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#4  0xb56e4a80 in std::terminate() () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#5  0xb56e4cc9 in __cxa_throw () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#6  0xb5719d79 in std::__throw_logic_error(char const*) () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#7  0xb5722c41 in char* std::string::_S_construct<char const*>(char const*, char const*, std::allocator<char> const&, std::forward_iterator_tag) () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#8  0xb5722cc7 in std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string(char const*, std::allocator<char> const&) () from /usr/lib/libstdc++.so.6
-+No symbol table info available.
-+#9  0x0848fea3 in CDVDVideoCodec::IsCodecDisabled (map=0x9130420 <g_vaapi_available>, size=5, id=AV_CODEC_ID_MPEG4)
-+    at DVDVideoCodec.cpp:75
-+        index = <optimized out>
-+#10 0x08499d04 in VAAPI::CDecoder::Open (this=0xd09e5e8, avctx=0xd6a2ec0, mainctx=0xd6a2ec0, fmt=AV_PIX_FMT_VAAPI_VLD,
-+    surfaces=6) at VAAPI.cpp:503
-+        gpuvendor = {static npos = <optimized out>,
-+          _M_dataplus = {<std::allocator<char>> = {<__gnu_cxx::new_allocator<char>> = {<No data fields>}, <No data fields>}, _M_p = 0xceb267c "intel open source technology center"}}
-+        profile = <optimized out>
-+#11 0x08491bda in CDVDVideoCodecFFmpeg::GetFormat (avctx=0xd6a2ec0, fmt=0x986d9c0) at DVDVideoCodecFFmpeg.cpp:143
-+        dec = 0xd09e5e8
-+        ctx = <optimized out>
-+        cur = 0x986d9c0
-+#12 0xb61c8ced in ?? () from /usr/lib/libavcodec.so.56
++cc1plus: error: unrecognized command line option '-std=c++11'
++make[4]: *** [md5.o] Error 1
++make[4]: *** Waiting for unfinished jobs....
++cc1plus: error: unrecognized command line option '-std=c++11'
++cc1plus: error: unrecognized command line option '-std=c++11'
++
++make[4]: *** [DecoderManager.o] Error 1
++make[4]: *** [XBTFWriter.o] Error 1
++cc1plus: error: unrecognized command line option '-std=c++11'
++make[4]: *** [TexturePacker.o] Error 1
++cc1plus: error: unrecognized command line option '-std=c++11'
++make[4]: *** [decoder/PNGDecoder.o] Error 1
++make[3]: *** [all] Error 2
++make[2]: *** [native/TexturePacker] Error 2
++
++Using this patch the problem is fixed and a working TexturePacker host
++binary is created.
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ .../cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.cpp | 18 +++++++-----------
-+ xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h  |  9 ++-------
-+ xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp        | 19 ++++++++-----------
-+ xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp        | 19 ++++++++-----------
-+ 4 files changed, 25 insertions(+), 40 deletions(-)
++ tools/depends/native/TexturePacker/src/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.cpp b/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.cpp
-+index 2428696..43e8844 100644
-+--- a/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.cpp
-++++ b/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.cpp
-+@@ -60,19 +60,15 @@ bool CDVDVideoCodec::IsSettingVisible(const std::string &condition, const std::s
-+   return true;
-+ }
++diff --git a/tools/depends/native/TexturePacker/src/Makefile.am b/tools/depends/native/TexturePacker/src/Makefile.am
++index c1fc8be..d075290 100644
++--- a/tools/depends/native/TexturePacker/src/Makefile.am
+++++ b/tools/depends/native/TexturePacker/src/Makefile.am
++@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 + 
-+-bool CDVDVideoCodec::IsCodecDisabled(DVDCodecAvailableType* map, unsigned int size, AVCodecID id)
-++bool CDVDVideoCodec::IsCodecDisabled(const std::map<AVCodecID, std::string> &map, AVCodecID id)
-+ {
-+-  int index = -1;
-+-  for (unsigned int i = 0; i < size; ++i)
-++  auto codec = map.find(id);
-++  if (codec != map.end())
-+   {
-+-    if(map[i].codec == id)
-+-    {
-+-      index = (int) i;
-+-      break;
-+-    }
-++    return (!CSettings::GetInstance().GetBool(codec->second) ||
-++            !CDVDVideoCodec::IsSettingVisible("unused", "unused",
-++                                              CSettings::GetInstance().GetSetting(codec->second),
-++                                              NULL));
-+   }
-+-  if(index > -1)
-+-    return (!CSettings::GetInstance().GetBool(map[index].setting) || !CDVDVideoCodec::IsSettingVisible("unused", "unused", CSettings::GetInstance().GetSetting(map[index].setting), NULL));
-+-
-+   return false; //don't disable what we don't have
-+ }
-+diff --git a/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h b/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h
-+index c84bb70..68ada7d 100644
-+--- a/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h
-++++ b/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodec.h
-+@@ -24,6 +24,7 @@
++ AM_CFLAGS = -DTARGET_POSIX -DUSE_LZO_PACKING
++ AM_CFLAGS += @EXTRA_DEFINES@
++-AM_CXXFLAGS = $(AM_CFLAGS) -std=c++11
+++AM_CXXFLAGS = $(AM_CFLAGS) -std=c++0x
 + 
-+ #include <vector>
-+ #include <string>
-++#include <map>
-+ #include "cores/VideoRenderers/RenderFormats.h"
-+ 
-+ 
-+@@ -34,12 +35,6 @@ extern "C" {
-+ 
-+ class CSetting;
-+ 
-+-struct DVDCodecAvailableType 
-+-{
-+-  AVCodecID codec;
-+-  const char* setting;
-+-};
-+-
-+ // when modifying these structures, make sure you update all codecs accordingly
-+ #define FRAME_TYPE_UNDEF 0
-+ #define FRAME_TYPE_I 1
-+@@ -290,7 +285,7 @@ public:
-+   /**
-+   * Interact with user settings so that user disabled codecs are disabled
-+   */
-+-  static bool IsCodecDisabled(DVDCodecAvailableType* map, unsigned int size, AVCodecID id);
-++  static bool IsCodecDisabled(const std::map<AVCodecID, std::string> &map, AVCodecID id);
-+ 
-+    /* For calculation of dropping requirements player asks for some information.
-+    *
-+diff --git a/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp b/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp
-+index 540f914..ff53dd5 100644
-+--- a/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp
-++++ b/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp
-+@@ -451,16 +451,6 @@ bool CVideoSurfaces::HasRefs()
-+ // VAAPI
-+ //-----------------------------------------------------------------------------
-+ 
-+-// settings codecs mapping
-+-DVDCodecAvailableType g_vaapi_available[] = {
-+-  { AV_CODEC_ID_H263, CSettings::SETTING_VIDEOPLAYER_USEVAAPIMPEG4.c_str() },
-+-  { AV_CODEC_ID_MPEG4, CSettings::SETTING_VIDEOPLAYER_USEVAAPIMPEG4.c_str() },
-+-  { AV_CODEC_ID_WMV3, CSettings::SETTING_VIDEOPLAYER_USEVAAPIVC1.c_str() },
-+-  { AV_CODEC_ID_VC1, CSettings::SETTING_VIDEOPLAYER_USEVAAPIVC1.c_str() },
-+-  { AV_CODEC_ID_MPEG2VIDEO, CSettings::SETTING_VIDEOPLAYER_USEVAAPIMPEG2.c_str() },
-+-};
-+-const size_t settings_count = sizeof(g_vaapi_available) / sizeof(DVDCodecAvailableType);
-+-
-+ CDecoder::CDecoder() : m_vaapiOutput(&m_inMsgEvent)
-+ {
-+   m_vaapiConfig.videoSurfaces = &m_videoSurfaces;
-+@@ -500,7 +490,14 @@ bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum P
-+   }
-+ 
-+   // check if user wants to decode this format with VAAPI
-+-  if (CDVDVideoCodec::IsCodecDisabled(g_vaapi_available, settings_count, avctx->codec_id))
-++  std::map<AVCodecID, std::string> settings_map = {
-++    { AV_CODEC_ID_H263, CSettings::SETTING_VIDEOPLAYER_USEVAAPIMPEG4 },
-++    { AV_CODEC_ID_MPEG4, CSettings::SETTING_VIDEOPLAYER_USEVAAPIMPEG4 },
-++    { AV_CODEC_ID_WMV3, CSettings::SETTING_VIDEOPLAYER_USEVAAPIVC1 },
-++    { AV_CODEC_ID_VC1, CSettings::SETTING_VIDEOPLAYER_USEVAAPIVC1 },
-++    { AV_CODEC_ID_MPEG2VIDEO, CSettings::SETTING_VIDEOPLAYER_USEVAAPIMPEG2 },
-++  };
-++  if (CDVDVideoCodec::IsCodecDisabled(settings_map, avctx->codec_id))
-+     return false;
-+ 
-+   if (g_advancedSettings.CanLogComponent(LOGVIDEO))
-+diff --git a/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp b/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp
-+index 85d9295..4e995b6 100644
-+--- a/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp
-++++ b/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp
-+@@ -45,16 +45,6 @@ using namespace VDPAU;
-+ 
-+ #define ARSIZE(x) (sizeof(x) / sizeof((x)[0]))
-+ 
-+-// settings codecs mapping
-+-DVDCodecAvailableType g_vdpau_available[] = {
-+-  { AV_CODEC_ID_H263, CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG4.c_str() },
-+-  { AV_CODEC_ID_MPEG4, CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG4.c_str() },
-+-  { AV_CODEC_ID_WMV3, CSettings::SETTING_VIDEOPLAYER_USEVDPAUVC1.c_str() },
-+-  { AV_CODEC_ID_VC1, CSettings::SETTING_VIDEOPLAYER_USEVDPAUVC1.c_str() },
-+-  { AV_CODEC_ID_MPEG2VIDEO, CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG2.c_str() },
-+-};
-+-const size_t settings_count = sizeof(g_vdpau_available) / sizeof(DVDCodecAvailableType);
-+-
-+ CDecoder::Desc decoder_profiles[] = {
-+ {"MPEG1",        VDP_DECODER_PROFILE_MPEG1},
-+ {"MPEG2_SIMPLE", VDP_DECODER_PROFILE_MPEG2_SIMPLE},
-+@@ -494,7 +484,14 @@ bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum P
-+   // nvidia is whitelisted despite for mpeg-4 we need to query user settings
-+   if ((gpuvendor.compare(0, 6, "nvidia") != 0)  || (avctx->codec_id == AV_CODEC_ID_MPEG4) || (avctx->codec_id == AV_CODEC_ID_H263))
-+   {
-+-    if (CDVDVideoCodec::IsCodecDisabled(g_vdpau_available, settings_count, avctx->codec_id))
-++    std::map<AVCodecID, std::string> settings_map = {
-++      { AV_CODEC_ID_H263, CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG4 },
-++      { AV_CODEC_ID_MPEG4, CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG4 },
-++      { AV_CODEC_ID_WMV3, CSettings::SETTING_VIDEOPLAYER_USEVDPAUVC1 },
-++      { AV_CODEC_ID_VC1, CSettings::SETTING_VIDEOPLAYER_USEVDPAUVC1 },
-++      { AV_CODEC_ID_MPEG2VIDEO, CSettings::SETTING_VIDEOPLAYER_USEVDPAUMPEG2 },
-++    };
-++    if (CDVDVideoCodec::IsCodecDisabled(settings_map, avctx->codec_id))
-+       return false;
-+   }
-+ 
++ AM_CPPFLAGS = \
++   -I. \
 +-- 
 +2.7.0
 +
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 9590070..ff2e75c 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -4,10 +4,11 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 		&& BR2_PACKAGE_BOOST_ARCH_SUPPORTS \
+ 		&& BR2_TOOLCHAIN_HAS_SYNC_8
+ 
+-comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7"
++comment "kodi needs a uClibc or (e)glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 4.7, host gcc >= 4.6"
+ 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_HOST_GCC_AT_LEAST_4_6 \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 \
+ 		|| BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_USE_MMU
+@@ -36,6 +37,7 @@ comment "kodi requires an OpenGL ES and EGL backend"
+ menuconfig BR2_PACKAGE_KODI
+ 	bool "kodi"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_HOST_GCC_AT_LEAST_4_6
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
 -- 
 2.7.0
