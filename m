@@ -1,93 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Mar 2016 16:33:03 +0100
-Subject: [Buildroot] [PATCH v2 02/17] arch/arm: Cortex-M3 provides only
- Thumb-2
-In-Reply-To: <20160318223456.GC32171@free.fr>
+Date: Sat, 19 Mar 2016 16:46:04 +0100
+Subject: [Buildroot] [PATCH v2 04/17] uclibc: add patches to simplify
+ Thumb handling
+In-Reply-To: <1458335299-27409-5-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160318223456.GC32171@free.fr>
-Message-ID: <56ED712F.9000000@mind.be>
+ <1458335299-27409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <56ED743C.9070500@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/18/16 23:34, Yann E. MORIN wrote:
-> Thomas, All,
+On 03/18/16 22:08, Thomas Petazzoni wrote:
+> This commit adds a number of patches to uClibc that radically
+> simplifies the Thumb handling. uClibc currently has three options that
+> you need to toggle on Thumb configurations depending on the specific
+> ARM CPU being targeted.
 >
-> On 2016-03-18 22:08 +0100, Thomas Petazzoni spake thusly:
->> The Cortex-M cores only support Thumb-2, not Thumb. In fact, Thumb-2
->> is a superset of Thumb, and we could have a single option for both in
->> Buildroot, since -mthumb on ARMv4/v5 means original Thumb, while
->> -mthumb on ARMv7 means Thumb 2. However, for clarity, it makes sense
->> to have two separate options. But in this case, Cortex-M3 should not
->> advertise that it supports Thumb, as in fact selecting Thumb would
->> generate Thumb-2 code.
+> However, it turns out that none of those options are necessary:
 >
-> So, if a package has some assembly code written in Thumb not Thimb2, it
-> should do sometinh like:
+>   - USE_BX can simply be guessed by looking at the ARM core being
+>     used. The bx instruction is available for all ARM cores >=
+>     ARMv4T. This is exactly what glibc is doing.
 >
->      ifeq ($(BR2_ARM_CPU_HAS_THUMB)$(BR2_ARM_CPU_HAS_THUMB2),y)
->      FOO_OPTS += --enable-thumb
->      endif
+>   - USE_LDREXSTREX can also be guessed by looking at the ARM core being
+>     used: whenever you have Thumb2, ldrex/strex is available.
 >
-> whereas now it would only need to do:
+>   - COMPILE_IN_THUMB becomes useless, since all it does is passing
+>     -mthumb. But just like the uClibc config options to set
+>     --march=<foo> have been removed a long time ago, there's no need to
+>     -have an option to pass -mthumb.
 >
->      ifeq ($(BR2_ARM_CPU_HAS_THUMB)$(BR2_ARM_CPU_HAS_THUMB2),y)
-
-  I guess you meant to say
-
-	ifeq ($(BR2_ARM_CPU_HAS_THUMB),y)
-
->      FOO_OPTS += --enable-thumb
->      endif
->
-> Right?
-
-  Indeed. This was discussed in v1 of the series, and Thomas updated the commit 
-message to clarify that a bit. It turns out that we have no case you need a 
-condition like that, but we do have a few cases where we need 
-thumb-but-not-thumb2 (e.g. the uClibc threads stuff).
-
->
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Thomas Petazzoni<thomas.petazzoni@free-electrons.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Upstream status? Knowing Waldemar's lightning reflexes, we will probably just 
+bump the uClibc version rather than having these patches in Buildroot :-)
 
   Regards,
   Arnout
 
->
-> Regards,
-> Yann E. MORIN.
->
->> ---
->>   arch/Config.in.arm | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
->> index 33f763a..cd1ec33 100644
->> --- a/arch/Config.in.arm
->> +++ b/arch/Config.in.arm
->> @@ -172,7 +172,6 @@ config BR2_cortex_a17
->>   	select BR2_ARCH_HAS_MMU_OPTIONAL
->>   config BR2_cortex_m3
->>   	bool "cortex-M3"
->> -	select BR2_ARM_CPU_HAS_THUMB
->>   	select BR2_ARM_CPU_HAS_THUMB2
->>   	select BR2_ARM_CPU_ARMV7M
->>   config BR2_fa526
->> --
->> 2.6.4
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
+> ---
+>   .../0001-arm-remove-use-of-USE_BX-option.patch     | 53 ++++++++++++++++++++++
+>   package/uclibc/0002-arm-remove-USE_BX-option.patch | 40 ++++++++++++++++
+>   .../0003-arm-remove-use-of-USE_LDREXSTREX.patch    | 49 ++++++++++++++++++++
+>   .../uclibc/0004-arm-remove-USE_LDREXSTREX.patch    | 34 ++++++++++++++
+>   .../uclibc/0005-arm-remove-COMPILE_IN_THUMB.patch  | 43 ++++++++++++++++++
+>   5 files changed, 219 insertions(+)
+>   create mode 100644 package/uclibc/0001-arm-remove-use-of-USE_BX-option.patch
+>   create mode 100644 package/uclibc/0002-arm-remove-USE_BX-option.patch
+>   create mode 100644 package/uclibc/0003-arm-remove-use-of-USE_LDREXSTREX.patch
+>   create mode 100644 package/uclibc/0004-arm-remove-USE_LDREXSTREX.patch
+>   create mode 100644 package/uclibc/0005-arm-remove-COMPILE_IN_THUMB.patch
 
 
 -- 
