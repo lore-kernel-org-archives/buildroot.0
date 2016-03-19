@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 14:32:33 +0100
-Subject: [Buildroot] [PATCH v2 14/17] elf2flt: use new upstream site and
- add ARM patch
-In-Reply-To: <CAAEAJfBDOu=3dQnXjOROxTNMOxq-+0o+4xv9kSRF2+S32EW+fQ@mail.gmail.com>
+Date: Sat, 19 Mar 2016 14:32:52 +0100
+Subject: [Buildroot] [PATCH v2 00/17] ARM Cortex-M support and STM32
+ defconfigs
+In-Reply-To: <20160318224931.GA19174@laptop.cereza>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-15-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAAEAJfBDOu=3dQnXjOROxTNMOxq-+0o+4xv9kSRF2+S32EW+fQ@mail.gmail.com>
-Message-ID: <20160319143233.42594e30@free-electrons.com>
+ <20160318221727.64755b08@free-electrons.com>
+ <20160318224931.GA19174@laptop.cereza>
+Message-ID: <20160319143252.1d2161d5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ezequiel,
+Dear Ezequiel Garcia,
 
-On Fri, 18 Mar 2016 18:34:15 -0300, Ezequiel Garcia wrote:
+On Fri, 18 Mar 2016 19:49:31 -0300, Ezequiel Garcia wrote:
 
-> > diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-> > new file mode 100644
-> > index 0000000..c5e71db
-> > --- /dev/null
-> > +++ b/package/elf2flt/elf2flt.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally calculated
-> > +sha256sum
+> Thanks for the branch. Tested on LPC4350 Hitex Eval board and it worked
+> fine:
 > 
-> s/sha256sum/sha256 ?
+> Uncompressing Linux... done, booting the kernel.
+> [    0.000000] Booting Linux on physical CPU 0x0
+> [    0.000000] Linux version 4.5.0-rc2-00312-gd183ca0d53b6 (zeta at laptop) (gcc version 4.9.3 (Buildroot 2016.05-git-00495-ga84162dcafb9-dirty) ) #220 PREEMPT Fri Mar 18 19:43:33 ART 2016
+> [etc]
+> 
+> Tested-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Gaah, indeed. Last minute changes are really not good.
+Thanks! Any chance that you send a defconfig for this board?
 
 Thomas
 -- 
