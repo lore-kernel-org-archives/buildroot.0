@@ -1,37 +1,42 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sat, 19 Mar 2016 23:14:56 +0300
-Subject: [Buildroot] [PATCH] binutils: disable plugins for static links
-Message-ID: <1458418497-12603-1-git-send-email-jcmvbkbc@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 19 Mar 2016 21:25:35 +0100
+Subject: [Buildroot] [PATCH 2/3] Config.in: add symbols for
+	BR2_HOST_GCC_AT_LEAST_4_6
+In-Reply-To: <1458419136-9094-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1458419136-9094-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1458419136-9094-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Plugins want to use dlopen even when configured with --disable-shared.
-Add --disable-plugins when STATIC_LIBS is selected.
-Fixes:
-  http://autobuild.buildroot.net/results/a59e5858d777dcee3d8f7fb6e82ee4735b520155/
+This option is needed to fix the Kodi build with older host gcc
+versions.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/binutils/binutils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 66ee247..ca39f0b 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -51,6 +51,10 @@ BINUTILS_CONF_OPTS = \
- 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
- 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
+diff --git a/Config.in b/Config.in
+index dfb5721..b5cc892 100644
+--- a/Config.in
++++ b/Config.in
+@@ -23,9 +23,14 @@ config BR2_HOST_GCC_VERSION
+ 	string
+ 	option env="HOST_GCC_VERSION"
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BINUTILS_CONF_OPTS += --disable-plugins
-+endif
++config BR2_HOST_GCC_AT_LEAST_4_6
++	bool
++	default y if BR2_HOST_GCC_VERSION = "4 6"
 +
- # Don't build documentation. It takes up extra space / build time,
- # and sometimes needs specific makeinfo versions to work
- BINUTILS_CONF_ENV += ac_cv_prog_MAKEINFO=missing
+ config BR2_HOST_GCC_AT_LEAST_4_7
+ 	bool
+ 	default y if BR2_HOST_GCC_VERSION = "4 7"
++	select BR2_HOST_GCC_AT_LEAST_4_6
+ 
+ config BR2_HOST_GCC_AT_LEAST_4_8
+ 	bool
 -- 
-2.1.4
+2.7.0
