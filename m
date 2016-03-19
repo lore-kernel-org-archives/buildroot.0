@@ -1,10 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 19 Mar 2016 20:59:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libva-intel-driver: bump version to
-	1.7.0
-In-Reply-To: <1458417543-7474-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1458417543-7474-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1458417543-7474-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 19 Mar 2016 21:00:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.2.22
+Message-ID: <1458417621-7580-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +10,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libva-intel-driver/libva-intel-driver.hash | 4 ++--
- package/libva-intel-driver/libva-intel-driver.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index 1b2d754..9d77aed 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 42a187a..ed41814 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/libva/2015-December/003820.html
--sha1	7ecc2a10d22129407fa5ce011da7066037e13255	libva-intel-driver-1.6.2.tar.bz2
-+# From https://lists.freedesktop.org/archives/libva/2016-March/003886.html
-+sha1	6766ff2e8134e09e9204ec9ccd3b8d550890d5d2	libva-intel-driver-1.7.0.tar.bz2
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index 909d73b..e930ade 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,7 +4,7 @@
- #
+ # Locally computed
+-sha256	7ab7139e59e1f0353bf9c24251f13c893cf1a6ef4bcc47e2d44de437108d0b20	dovecot-2.2.21.tar.gz
++sha256	c7a9db3c4ae9d9b4da920d2c82669700a0d407934501b405f37f89cc0b706ec7	dovecot-2.2.22.tar.gz
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 6b69329..2fa22a1 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBVA_INTEL_DRIVER_VERSION = 1.6.2
-+LIBVA_INTEL_DRIVER_VERSION = 1.7.0
- LIBVA_INTEL_DRIVER_SOURCE = libva-intel-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver
- LIBVA_INTEL_DRIVER_LICENSE = MIT
+ DOVECOT_VERSION_MAJOR = 2.2
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).21
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).22
+ DOVECOT_SITE = http://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPLv2.1
 -- 
 2.7.0
