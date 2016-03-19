@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Mar 2016 19:51:08 +0100
-Subject: [Buildroot] [PATCH 09/16 v5] core/apply-patches: store full
- path of applied patches
-In-Reply-To: <20160319160346.50b52b19@free-electrons.com>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <4752967e7f254170efc08e77530029c90f663d85.1457718289.git.yann.morin.1998@free.fr>
- <20160319160346.50b52b19@free-electrons.com>
-Message-ID: <20160319185108.GE3426@free.fr>
+Date: Sat, 19 Mar 2016 19:56:59 +0100
+Subject: [Buildroot] [PATCH 1/9 v2] core: add the possibility to provide
+ help for custom rules
+In-Reply-To: <20160319190500.088f883a@free-electrons.com>
+References: <cover.1457717002.git.yann.morin.1998@free.fr>
+ <e9f41039f5e4b50300a78a45a136cd04cf2c6cfe.1457717002.git.yann.morin.1998@free.fr>
+ <20160319190500.088f883a@free-electrons.com>
+Message-ID: <20160319185659.GF3426@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,86 +15,59 @@ To: buildroot@busybox.net
 
 Thomas, All,
 
-On 2016-03-19 16:03 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 11 Mar 2016 18:49:22 +0100, Yann E. MORIN wrote:
+On 2016-03-19 19:05 +0100, Thomas Petazzoni spake thusly:
+> On Fri, 11 Mar 2016 18:41:09 +0100, Yann E. MORIN wrote:
 > 
-> > diff --git a/support/scripts/apply-patches.sh b/support/scripts/apply-patches.sh
-> > index 201278d..20a1552 100755
-> > --- a/support/scripts/apply-patches.sh
-> > +++ b/support/scripts/apply-patches.sh
-> > @@ -63,8 +63,12 @@ find ${builddir}/ '(' -name '*.rej' -o -name '.*.rej' ')' -print0 | \
-> >      xargs -0 -r rm -f
+> > diff --git a/Makefile b/Makefile
+> > index 98c8dc7..7bb5f6d 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -966,6 +966,7 @@ endif
+> >  	@echo '  source-check           - check selected packages for valid download URLs'
+> >  	@echo '  external-deps          - list external packages used'
+> >  	@echo '  legal-info             - generate info about license compliance'
+> > +	@echo '  help-custom            - print help about custom actions (if any)'
+> >  	@echo
+> >  	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+> >  	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+> > @@ -974,6 +975,12 @@ endif
+> >  	@echo 'it on-line at http://buildroot.org/docs.html'
+> >  	@echo
 > >  
-> >  function apply_patch {
-> > -    path=$1
-> > -    patch=$2
-> > +    path="${1%%/}"
-> > +    patch="${2}"
-> > +    case "${path}" in
-> > +        /*) ;;
-> > +        *)  path="$(pwd)/${path}";;
-> > +    esac
+> > +# This rule does nothing, it is expected to be overloaded by
+> > +# a br2-external tree or a local.mk . However, it must exist,
+> > +# as we reference it in the main help, above. Making the rule
+> > +# .PHONY does not work.
+> > +help-custom:
+> > +
 > 
-> This seems unrelated to the patch in question, and is not explained
-> anywhere.
-
-Ah, indeed it's not trivial. When we apply our bundled patches, only the
-relative path to those patches are stored. So we make them canonical by
-prepending the current path to that relative path.
-
-Strictly speaking, I am not sure it is needed, but for consistency, all
-paths are stored as full paths.
-
-> However, I have some more global concern about this approach. I really
-> dislike the idea that we rely on a helper script filling up a file,
-> that we later read from a completely different place in the package
-> infrastructure. It really feels like "let's dump my data there and
-> fetch it from here".
-
-I know that feeling, that makes one not comfortable and bothered.
-Yet, I fail to see a problem in there; there are other cases where we
-save stuff in a file, and re-use it later from another place, like the
-graph-size stuff.
-
-BTW, what did we so far save the list of patches for to begin with?
-
-> So here are other proposals:
+> There is a pretty important problem with this implementation (which
+> gets even worse when PATCH 2 is applied), but I am not sure why it
+> happens: the custom help is not taken into account if you don't have a
+> configuration file defined. This is weird, because BR2_EXTERNAL_FILE
+> gets included outside of the BR2_HAVE_DOT_CONFIG condition. But still:
 > 
->  * The package infra already knows which patches should be applied
->    (bundled patches, global patch dir, etc.), so it is technically able
->    to get the list of patches. Yes it's a bit annoying because the
->    logic to derive the list of patches is already inside the
->    apply-patches script. But maybe it's because too much smart stuff is
->    done in the apply-patch script without the package infrastructure
->    being aware.
+> thomas at skate:~/projets/buildroot (master)$ cat /tmp/external/external.mk 
+> help-custom:
+> 	@echo TEST
+> thomas at skate:~/projets/buildroot (master)$ make BR2_EXTERNAL=/tmp/external help-custom
+> make[1]: Nothing to be done for 'help-custom'.
+> 
+> And then, if I create a .config file:
+> 
+> thomas at skate:~/projets/buildroot (master)$ make defconfig
+> [...]
+> thomas at skate:~/projets/buildroot (master)$ make BR2_EXTERNAL=/tmp/external help-custom
+> TEST
+> 
+> This is not expected, since the help text is supposed to be available
+> even when no configuration has been defined.
 
-Hmmm... I consider all our support/scripts/ stuff to *be* part of the
-infra, like the mkusers script. apply-patches *is* part of the infra;
-it's just written in a shel script rather than in make (which would
-undoubtly be unreadable). Also, remember you suggested we offload all
-out complex make code for handling external toolchains, into a (set of)
-well scripts? It is similar to me.
+Indeed, that's bad.
 
->  * Alternatively, add an option to apply-patch.sh that will not apply
->    the patches, but show the list of patches that would be applied.
->    Like "apply-patch -l" for example. Then, when doing the legal-info,
->    you simply call "apply-patch -l" to retrieve the list of patches
->    that you need to copy.
+However, the proposal by J?r?me has exactly the same problem.
 
-What I don't like in this case, is that you decorelate applying the
-patches from listing them. By storing the list of patches at the time
-they are applied, we guarantee the list is consistent with the patches
-that were applied. By postponing the listing later, we can no longer
-offer that guarantee.
-
-Yes, we can't guarantee that the patches we later copy are the ones that
-were actually applied; true. That's why I believe that legal-info should
-be part of the "standard" build.
-
-Anyway, I won't fight that one; all that I care about is that patches
-are actually saved, so I'll go for the -l option to apply-patches.
-
-Thanks!
+I'll look at it. Thanks! :-)
 
 Regards,
 Yann E. MORIN.
