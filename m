@@ -1,59 +1,40 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Sat, 19 Mar 2016 16:27:19 -0300
-Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
-In-Reply-To: <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <CAAEAJfC1to61NBpAK2+S_RAUZr2JK7h4gk_EK+QxG4MaRS6KJg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 19 Mar 2016 20:59:02 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 1.7.0
+Message-ID: <1458417543-7474-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+Waldemar
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libva/libva.hash | 4 ++--
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 18 March 2016 at 18:08, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> As explained by Waldemar, enabling DOPIC in uClibc will lead to the
-> creation of a Position Independent library. In turn, this will cause
-> elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
-> ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
-> input, so we must disable DOPIC in the uClibc configuration.
->
-
-While testing on LPC4350, I found that Lua is built with the Has-PIC-GOT flag:
-
-$ output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-flthdr
-output/target/usr/bin/lua
-output/target/usr/bin/lua
-    Magic:        bFLT
-    Rev:          4
-    Build Date:   Sat Mar 19 16:14:03 2016
-    Entry:        0x45
-    Data Start:   0x1f08c
-    Data End:     0x23ed8
-    BSS End:      0x260c0
-    Stack Size:   0x1000
-    Reloc Start:  0x23ed8
-    Reloc Count:  0x214
-    Flags:        0x2 ( Has-PIC-GOT )
-
-The Lua interpreter is not loaded by the binfmt_flat loader, and the
-kernel says:
-
-  BINFMT_FLAT: reloc outside program 0x7fffd3e4 (0 - 0x26080/0x1f04c),
-killing lua!
-
-When DEBUG is defined in fs/binfmt_flat.c, the kernel says:
-
-  BINFMT_FLAT: reference 0xffd3e4 to shared library 127, killing lua!
-
-On the other side, atftp throws the same error:
-
-  BINFMT_FLAT: reference 0xa0100 to shared library 161, killing atftp!
-
-Any ideas?
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 4d7cdaa..0211365 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,2 +1,2 @@
+-# From http://lists.freedesktop.org/archives/libva/2015-December/003819.html
+-sha1	8a857db50305e9e3ddb8fe4e342ddd2924ae16f6	libva-1.6.2.tar.bz2
++# From https://lists.freedesktop.org/archives/libva/2016-March/003885.html
++sha1	e1e440da60b11986afb54fc130c7707f11827298	libva-1.7.0.tar.bz2
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 4adfd52..e11bed3 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBVA_VERSION = 1.6.2
++LIBVA_VERSION = 1.7.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
+ LIBVA_LICENSE = MIT
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+2.7.0
