@@ -1,60 +1,40 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 19 Mar 2016 16:53:16 +0100
-Subject: [Buildroot] [PATCH v2 06/17] uclibc: gcc >= 4.9 can build a
- thumb/thread uclibc
-In-Reply-To: <1458335299-27409-7-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-7-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56ED75EC.7050409@mind.be>
+Date: Sat, 19 Mar 2016 17:03:40 +0100
+Subject: [Buildroot] [PATCH 6/6] linux/perf: build the host perf tool
+In-Reply-To: <20160319145515.32875737@free-electrons.com>
+References: <cover.1457720152.git.yann.morin.1998@free.fr>
+ <b5f50fa3c517ddd37dbf339c011f6bf0621f55ac.1457720152.git.yann.morin.1998@free.fr>
+ <20160319145515.32875737@free-electrons.com>
+Message-ID: <56ED785C.4050005@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/18/16 22:08, Thomas Petazzoni wrote:
-> Older gcc were not capable of building a uClibc library, with threads
-> enabled, in Thumb1. However, the issues have been fixed since gcc 4.9,
-> so this commit narrows down the condition to just gcc 4.7 and 4.8.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On 03/19/16 14:55, Thomas Petazzoni wrote:
+> On Fri, 11 Mar 2016 19:19:59 +0100, Yann E. MORIN wrote:
+>> >Currently, we only build the target variant of the perf tool. However,
+>> >perf on the target may generate a bunch of data files that may have to
+>> >be analysed on the host.
+>> >
+>> >There is no host-variant of the linux-tools infrastructure, so we just
+>> >build the host perf at the same time we build the target one.
+>> >
+>> >Signed-off-by: "Yann E. MORIN"<yann.morin.1998@free.fr>
+>> >Cc: Thomas De Schampheleire<patrickdepinguin@gmail.com>
+> First of all, I have to say I hate this target package that builds and
+> installs host stuff. But, since I don't have a better solution to
+> offer, and it's anyway not the only package in this case (qt/qt5 are
+> also target packages, and they install stuff in host), I'm fine with
+> the general approach.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->   package/uclibc/uclibc.mk | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index c981d80..ad94494 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -75,8 +75,10 @@ define UCLIBC_ARM_ABI_CONFIG
->   	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
->   endef
->
-> -# Thumb build is broken with threads, build in ARM mode
-> -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-> +# Thumb1 build is broken with threads with old gcc versions (4.7 and
-> +# 4.8). Since all cores supporting Thumb1 also support ARM, we use ARM
-> +# code in this case.
-> +ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),y:yy)
-
-  This line is a bit long so would be nicer to split off into separate 
-variables. This kind of logic is also much easier to do (and certainly easier to 
-understand) in Kconfig than in the make language - like we had for BX before you 
-removed it.
-
-  However, that is something for another patch, so my Rev-by stands.
+  I think it's OK to build and install host tools that are bound tightly with 
+the target package. E.g. qmake only makes sense when you have qt for the target. 
+perf is in the same boat.
 
   Regards,
   Arnout
-
->   UCLIBC_EXTRA_CFLAGS += -marm
->   endif
->
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
