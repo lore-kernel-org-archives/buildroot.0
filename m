@@ -1,126 +1,149 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 19 Mar 2016 14:55:15 +0100
-Subject: [Buildroot] [PATCH 6/6] linux/perf: build the host perf tool
-In-Reply-To: <b5f50fa3c517ddd37dbf339c011f6bf0621f55ac.1457720152.git.yann.morin.1998@free.fr>
-References: <cover.1457720152.git.yann.morin.1998@free.fr>
- <b5f50fa3c517ddd37dbf339c011f6bf0621f55ac.1457720152.git.yann.morin.1998@free.fr>
-Message-ID: <20160319145515.32875737@free-electrons.com>
+Date: Sat, 19 Mar 2016 14:59:02 +0100
+Subject: [Buildroot] [git commit] configs: freescale_imx6*: bump version to
+	3.14.52-1.1.0_ga
+Message-ID: <20160319135921.7EC9F7FB0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=1e5bc05a04d92ca9351a986da5741971838599e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Mar 2016 19:19:59 +0100, Yann E. MORIN wrote:
-> Currently, we only build the target variant of the perf tool. However,
-> perf on the target may generate a bunch of data files that may have to
-> be analysed on the host.
-> 
-> There is no host-variant of the linux-tools infrastructure, so we just
-> build the host perf at the same time we build the target one.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Consolidated GA support i.MX 6Q/QP/D/S/SL/UL and 7Dual
 
-First of all, I have to say I hate this target package that builds and
-installs host stuff. But, since I don't have a better solution to
-offer, and it's anyway not the only package in this case (qt/qt5 are
-also target packages, and they install stuff in host), I'm fine with
-the general approach.
+This patch is based on the Yocto equivalent:
+https://github.com/Freescale/meta-fsl-arm/commit/9f206ec7
+https://github.com/Freescale/meta-fsl-arm/commit/33d1115d
 
-I have some comments about the details, though.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ configs/freescale_imx6dlsabreauto_defconfig | 4 ++--
+ configs/freescale_imx6dlsabresd_defconfig   | 4 ++--
+ configs/freescale_imx6qsabresd_defconfig    | 4 ++--
+ configs/freescale_imx6sololiteevk_defconfig | 4 ++--
+ configs/freescale_imx6sxsabresd_defconfig   | 4 ++--
+ configs/freescale_imx6ulevk_defconfig       | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
 
-> ---
->  linux/Config.tools.in    |  4 ++++
->  linux/linux-tool-perf.mk | 51 ++++++++++++++++++++++++++++++++++++++++++------
->  2 files changed, 49 insertions(+), 6 deletions(-)
-> 
-> diff --git a/linux/Config.tools.in b/linux/Config.tools.in
-> index 24ef8cd..a01b53e 100644
-> --- a/linux/Config.tools.in
-> +++ b/linux/Config.tools.in
-> @@ -26,4 +26,8 @@ config BR2_LINUX_KERNEL_TOOL_PERF
->  
->  	  https://perf.wiki.kernel.org/
->  
-> +config BR2_LINUX_KERNEL_TOOL_HOST_PERF
-> +    bool "host-perf"
-> +    depends on BR2_LINUX_KERNEL_TOOL_PERF
-
-Indentation should just tab.
-
-> +# For the host, we inherit the same flags as for the target,
-> +# overriding just those that are needed.
-
-I don't really understand this, it seems really weird to me, and I
-would find it much more future proof to have separate target and host
-flags. Otherwise, any addition of a flag to the target variant can
-break in subtle way the host variant.
-
-> +HOST_PERF_MAKE_FLAGS = \
-> +	$(PERF_MAKE_FLAGS) \
-> +	CFLAGS="$(HOST_CFLAGS) -I$(HOST_DIR)/usr/include/elfutils" \
-
-We don't have this -I for the target variant. Why do we need it for the
-host variant?
-
-> +	LDFLAGS="$(HOST_LDFLAGS)" \
-> +	LD="$(HOSTLD)" \
-> +	ARCH=$(PERF_ARCH) \
-> +	CROSS_COMPILE= \
-> +	DESTDIR=$(HOST_DIR)
-> +
-> +# No host-packages in Buildroot, but we don't let it depend on the
-> +# libraries provided by the host system (they may be there or not,
-> +# depending on the user's system, but we won't play that game).
-
-This sentence is not really clear IMO. What about:
-
-# For the following optional dependencies of perf, Buildroot doesn't
-# provide any host package, and we don't want to rely on those
-# libraries being provided by the host system.
-
-> +HOST_PERF_MAKE_FLAGS += \
-> +	NO_SLANG=1 \
-> +	NO_LIBUNWIND=1 \
-> +	NO_LIBNUMA=1 \
-> +	NO_LIBELF=1 NO_DWARF=1
-> +
->  # The call to backtrace() function fails for ARC, because for some
->  # reason the unwinder from libgcc returns early. Thus the usage of
->  # backtrace() should be disabled in perf explicitly: at build time
-> @@ -49,6 +69,7 @@ endif
->  # instead of the complete backtrace.
->  ifeq ($(BR2_arc),y)
->  PERF_MAKE_FLAGS += NO_BACKTRACE=1
-> +HOST_PERF_MAKE_FLAGS += NO_BACKTRACE=1
-
-Why ?
-
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SLANG),y)
-> @@ -76,14 +97,14 @@ PERF_MAKE_FLAGS += NO_LIBELF=1 NO_DWARF=1
->  endif
->  
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
-> -PERF_DEPENDENCIES += zlib
-> +PERF_DEPENDENCIES += zlib host-zlib
-
-This is the part I'm really not a big fan of. You enable a target
-package, and it affects the configuration of a host package. Not nice.
-
-Is there an actual connection between zlib/xz support in the target
-perf and the need to have it in host-perf? Like is zlib/xz support used
-to compress the data output by the target perf, which needs to be
-uncompressed by the host perf ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
+index c3abbe3..a11bb75 100644
+--- a/configs/freescale_imx6dlsabreauto_defconfig
++++ b/configs/freescale_imx6dlsabreauto_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
+index f3db089..49e37e6 100644
+--- a/configs/freescale_imx6dlsabresd_defconfig
++++ b/configs/freescale_imx6dlsabresd_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
+index 17ad1b5..558ae5a 100644
+--- a/configs/freescale_imx6qsabresd_defconfig
++++ b/configs/freescale_imx6qsabresd_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x10008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,4 +30,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+diff --git a/configs/freescale_imx6sololiteevk_defconfig b/configs/freescale_imx6sololiteevk_defconfig
+index 4f7d91d..28d4e46 100644
+--- a/configs/freescale_imx6sololiteevk_defconfig
++++ b/configs/freescale_imx6sololiteevk_defconfig
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x80008000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -27,4 +27,4 @@ BR2_TARGET_UBOOT_BOARDNAME="mx6slevk"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.28_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
+index 7d8e815..4a97021 100644
+--- a/configs/freescale_imx6sxsabresd_defconfig
++++ b/configs/freescale_imx6sxsabresd_defconfig
+@@ -15,7 +15,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -29,5 +29,5 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.10.53_1.1.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+diff --git a/configs/freescale_imx6ulevk_defconfig b/configs/freescale_imx6ulevk_defconfig
+index 8359206..9d63a75 100644
+--- a/configs/freescale_imx6ulevk_defconfig
++++ b/configs/freescale_imx6ulevk_defconfig
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://git.freescale.com/imx/linux-2.6-imx.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="imx_3.14.38_6ul_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -23,7 +23,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.freescale.com/imx/uboot-imx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="imx_v2015.04_3.14.38_6ul_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_3.14.52_1.1.0_ga"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # required tools to create the microSD image
