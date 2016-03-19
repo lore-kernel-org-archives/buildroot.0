@@ -1,74 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Mar 2016 00:40:39 +0100
-Subject: [Buildroot] [PATCH 13/16 v5] core/legal-info: generate a hash
- of all saved files
-In-Reply-To: <20160319162159.06219d6c@free-electrons.com>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <eb5c50f958b64f8e74123763dca913bde3894bba.1457718289.git.yann.morin.1998@free.fr>
- <20160319162159.06219d6c@free-electrons.com>
-Message-ID: <20160319234039.GK3426@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sun, 20 Mar 2016 00:41:44 +0100
+Subject: [Buildroot] [PATCH 1/3] package/multicat: add patch to fix static
+	build
+Message-ID: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Building multicat in a static context fails with:
+  aggregartp.c:381: undefined reference to `pthread_self'
 
-On 2016-03-19 16:21 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 11 Mar 2016 18:49:26 +0100, Yann E. MORIN wrote:
-> > Having a hash of the saved files can be interesting for the recipient to
-> > verify the integrity of the files.
-> > 
-> > We remove the warning file earlier, to exclude it from the hash list.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> > Acked-by: Luca Ceresoli <luca@lucaceresoli.net>
-> > Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> It's adding more stuff to the main Makefile (while I'd like to remove
-> stuff from that Makefile), for something that is quite specific. But
-> OK, I can see the usefulness of this hash file, so:
-> 
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> However, I'm really surprised by this LEGAL_WARNINGS file. It's exactly
-> the type of hidden file (like .applied_patches) I don't like. One
-> example where it fails badly is if you interrupt "legal-info" in the
-> middle. Since the legal-warning and legal-warning-pkg macro only
-> concatenate to this file, then at the end of the second,
-> non-interrupted, make invocation, you would got some warnings from the
-> first run.
+Fix this by adding -lpthread to LDLIBS.
 
-Nope, because the very first thing we do for legal-info is to trash the
-existing directory before starting to collect any legal-info.
+Fixes:
+http://autobuild.buildroot.net/results/e69/e699cf6b97bc97f2e8e51aa8b86f0e16af70b5b0/
+http://autobuild.buildroot.net/results/201/2019f11dcc43cb0db13ceb4e3a575c1a91573d4c/
+http://autobuild.buildroot.net/results/fa9/fa98afec377a1e8fce64af5897d1f7af45804069/
+and maybe more.
 
-However, I would contend that we should leave that file in place. It is
-critical that some stuff could not be saved, so that all-caps file is a
-godd indication that something is wrong.
+Upstream status: Pending [1]
 
-> Why aren't we simply displaying the warnings as we go? Probably because
-> they were mixed with some other messages (like the messages about
-> download some stuff). But in this case, we can serialize the steps by
-> having all the download done first, then all the "aggregation" done, so
-> that warnings can be displayed directly without this hidden file.
+[1] https://mailman.videolan.org/pipermail/multicat-devel/2016-March/000125.html
 
-Yes, we could do that, but I'd still keep the file. Delegate to the user
-the responsibility to remove it.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/multicat/0001-Fix-missing-pthread.patch | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 package/multicat/0001-Fix-missing-pthread.patch
 
-> Of course, this is unrelated to your change, and more a comment for
-> Luca.
-
-I can have a look as a follow-up series.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/multicat/0001-Fix-missing-pthread.patch b/package/multicat/0001-Fix-missing-pthread.patch
+new file mode 100644
+index 0000000..f21c7ce
+--- /dev/null
++++ b/package/multicat/0001-Fix-missing-pthread.patch
+@@ -0,0 +1,19 @@
++Makefile: link with pthread
++
++Otherwise building multicat in a static context fails:
++  aggregartp.c:381: undefined reference to `pthread_self'
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++
++diff -purN multicat-2.1.orig/Makefile multicat-2.1/Makefile
++--- multicat-2.1.orig/Makefile	2015-10-05 18:36:29.000000000 +0200
+++++ multicat-2.1/Makefile	2016-03-19 21:47:59.467745127 +0100
++@@ -4,7 +4,7 @@ VERSION = 2.1
++ CFLAGS += -Wall -Wformat-security -O3 -fomit-frame-pointer -D_FILE_OFFSET_BITS=64 -D_ISOC99_SOURCE -D_BSD_SOURCE
++ CFLAGS += -g
++ # Comment out the following line for Mac OS X build
++-LDLIBS += -lrt
+++LDLIBS += -lrt -pthread
++ 
++ OBJ_MULTICAT = multicat.o util.o
++ OBJ_INGESTS = ingests.o util.o
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
