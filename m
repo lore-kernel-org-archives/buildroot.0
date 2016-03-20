@@ -1,62 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 22:09:03 +0100
-Subject: [Buildroot] [PATCH v3] linux: Build and install kernel selftests
-In-Reply-To: <1458098793-28532-1-git-send-email-cyrilbur@gmail.com>
-References: <1458098793-28532-1-git-send-email-cyrilbur@gmail.com>
-Message-ID: <20160320220903.60ba5372@free-electrons.com>
+Date: Sun, 20 Mar 2016 22:09:41 +0100
+Subject: [Buildroot] [git commit] package/pax-utils: switch to autotools
+Message-ID: <20160320210945.8116A817F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ec7eb7e44dd42fe4c6cec5ab3a58776c4e2c32ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 16 Mar 2016 14:26:33 +1100, Cyril Bur wrote:
-> +config BR2_LINUX_KERNEL_TOOL_SELFTESTS
-> +	bool"selftests"
-> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
-> +	depends on BR2_USE_MMU  # bash
-> +	select BR2_PACKAGE_BASH
-> +	select BR2_PACKAGE_POPT
-> +	select BR2_PACKAGE_LIBCAP_NG
-> +	help
-> +	  Build and install (to /usr/lib/kselftests) kernel selftests.
-> +
-> +	  Use of this option implies you know the process using and compiling
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[yann.morin.1998 at free.fr: independently done a patch similar to the one
+ by Thomas]
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/pax-utils/pax-utils.mk | 35 +++++++++++++++--------------------
+ 1 file changed, 15 insertions(+), 20 deletions(-)
 
-There was a typo here, a missing word between "process" and "using".
-
-> +	  the kernel selftests. The Makefile to build and install these is very
-> +	  noisy and may appear to cause your build to fail for strange reasons.
-> +
-> +	  This is very much a use at your risk option and may not work for
-> +	  every setup or every architecture.
-
-Those lines were slightly too long.
-
-> +
-> +comment "selftests needs BR2_PACKAGE_BUSYBOX_SHOW_OTHERS"
-> +	depends on !BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-
-You should have replicated the BR2_USE_MMU dependency here.
-
-> +SELFTESTS_DEPENDENCIES = bash libcap-ng popt
-
-bash is not needed at build time, it's only a runtime dependency, so
-I've removed it from this variable (but kept it as a select in
-Config.in, and added a comment that indicates it's a runtime
-dependency).
-
-It's worth noting that with uClibc, a number of tests fail to build,
-but I guess that's expected, and it doesn't abort the build.
-
-I've applied with the fixes I mentioned above.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/pax-utils/pax-utils.mk b/package/pax-utils/pax-utils.mk
+index fc2e0ca..747c2bb 100644
+--- a/package/pax-utils/pax-utils.mk
++++ b/package/pax-utils/pax-utils.mk
+@@ -10,9 +10,21 @@ PAX_UTILS_SOURCE = pax-utils-$(PAX_UTILS_VERSION).tar.xz
+ PAX_UTILS_LICENSE = GPLv2
+ PAX_UTILS_LICENSE_FILES = COPYING
+ 
++PAX_UTILS_DEPENDENCIES = host-pkgconf
++PAX_UTILS_CONF_OPTS = --without-python
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ PAX_UTILS_DEPENDENCIES += libcap
+-PAX_UTILS_USE_CAP = USE_CAP=yes
++PAX_UTILS_CONF_OPTS += --with-caps
++else
++PAX_UTILS_CONF_OPTS += --without-caps
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++PAX_UTILS_DEPENDENCIES += libseccomp
++PAX_UTILS_CONF_OPTS += --with-seccomp
++else
++PAX_UTILS_CONF_OPTS += --without-seccomp
+ endif
+ 
+ # libcap is only useful for pspax (a running system)
+@@ -26,22 +38,5 @@ endef
+ endif
+ PAX_UTILS_POST_INSTALL_TARGET_HOOKS += PAX_UTILS_REMOVE_BASH_TOOLS
+ 
+-define HOST_PAX_UTILS_BUILD_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D)
+-endef
+-
+-define PAX_UTILS_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) $(PAX_UTILS_USE_CAP) -C $(@D)
+-endef
+-
+-define HOST_PAX_UTILS_INSTALL_CMDS
+-	$(MAKE) $(HOST_CONFIGURE_OPTS) -C $(@D) DESTDIR="$(HOST_DIR)" install
+-endef
+-
+-define PAX_UTILS_INSTALL_TARGET_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+-		DESTDIR="$(TARGET_DIR)" install
+-endef
+-
+-$(eval $(generic-package))
+-$(eval $(host-generic-package))
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
