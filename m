@@ -1,71 +1,99 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 20 Mar 2016 23:35:47 +0100
-Subject: [Buildroot] [PATCH v4 3/7] barebox: support custom barebox output
-	image name
+Date: Sun, 20 Mar 2016 23:35:51 +0100
+Subject: [Buildroot] [PATCH v4 7/7] beaglebone: adds barebox bootloader
+	defconfig
 In-Reply-To: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
 References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
-Message-ID: <1458513351-6556-4-git-send-email-pieter@boesman.nl>
+Message-ID: <1458513351-6556-8-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In preparation for building a 2nd barebox config, a configuration option is
-added to allow customization of the image filename when the built image is
-copied to the output/images directory.
+* Builds the barebox MLO and bootloader.
+* Generates a barebox environment that boots from eMMC by default.
+* Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
+  being generated with the kernel.
 
 Signed-off-by: Pieter Smith <pieter@boesman.nl>
 ---
- boot/barebox/Config.in  | 7 +++++++
- boot/barebox/barebox.mk | 9 +++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ board/beaglebone/barebox.env/boot/sd      |  6 +++++
+ board/beaglebone/barebox.env/config-board |  4 +++
+ configs/beaglebone_barebox_defconfig      | 41 +++++++++++++++++++++++++++++++
+ 3 files changed, 51 insertions(+)
+ create mode 100644 board/beaglebone/barebox.env/boot/sd
+ create mode 100644 board/beaglebone/barebox.env/config-board
+ create mode 100644 configs/beaglebone_barebox_defconfig
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 4f6872c..7769866 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -106,6 +106,13 @@ config BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE
- 
- 	  Set to barebox.bin for barebox versions older than 2012.10.
- 
-+config BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
-+	string "Output image filename"
-+	default "barebox.bin"
-+	help
-+	  Name to use when copying the barebox image to the output/images
-+	  directory.
+diff --git a/board/beaglebone/barebox.env/boot/sd b/board/beaglebone/barebox.env/boot/sd
+new file mode 100644
+index 0000000..7a80e29
+--- /dev/null
++++ b/board/beaglebone/barebox.env/boot/sd
+@@ -0,0 +1,6 @@
++#!/bin/sh
 +
- config BR2_TARGET_BAREBOX_BAREBOXENV
- 	bool "bareboxenv tool in target"
- 	help
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index d0f28cf..4eea470 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -93,9 +93,11 @@ endef
- 
- define BAREBOX_INSTALL_IMAGES_CMDS
- 	if test -e $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
--		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
-+		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) \
-+		      $(BINARIES_DIR)/$(call qstrip,$(BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE)) ; \
- 	elif test -e $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
--		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
-+		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) \
-+		   $(BINARIES_DIR)/$(call qstrip,$(BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE)) ; \
- 	else \
- 		echo "error: Specified built image file not found: $(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE))" >&2 ; \
- 		echo "       in: $(@D)/" >&2 ; \
-@@ -124,6 +126,9 @@ endif
- ifndef BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE
- $(error No barebox built image filename specified. Check your BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE setting)
- endif
-+ifndef BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
-+$(error No barebox output image filename specified. Check your BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE setting)
-+endif
- endif
- 
- $(eval $(kconfig-package))
++global.bootm.image=/boot/zImage
++#global.bootm.oftree=/boot/oftree
++#global.bootm.initrd=<path to initrd>
++global.linux.bootargs.dyn.root="root=/dev/mmcblk0p2 rootfstype=ext2 rootwait"
+diff --git a/board/beaglebone/barebox.env/config-board b/board/beaglebone/barebox.env/config-board
+new file mode 100644
+index 0000000..cd7b26d
+--- /dev/null
++++ b/board/beaglebone/barebox.env/config-board
+@@ -0,0 +1,4 @@
++#!/bin/sh
++
++global.boot.default=sd
++
+diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
+new file mode 100644
+index 0000000..6324dbf
+--- /dev/null
++++ b/configs/beaglebone_barebox_defconfig
+@@ -0,0 +1,41 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a8=y
++BR2_ARM_EABIHF=y
++
++# system
++BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
++# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++# BR2_ROOTFS_POST_IMAGE_SCRIPT is not set
++
++# filesystem
++BR2_PACKAGE_AM33X_CM3=y
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Linux headers same as kernel, a 4.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++
++# bootloader
++BR2_TARGET_BAREBOX=y
++BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
++BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE="barebox-am33xx-beaglebone.img"
++BR2_TARGET_BAREBOX_CUSTOM_ENV=y
++BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH="board/beaglebone/barebox.env"
++BR2_TARGET_BAREBOX_2=y
++BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
++BR2_TARGET_BAREBOX_2_BUILT_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
++BR2_TARGET_BAREBOX_2_OUTPUT_IMAGE_FILE="MLO"
++
++# kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.6"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
++BR2_LINUX_KERNEL_ZIMAGE=y
++
++# Use the barebox built-in dtb
++# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
 -- 
 2.5.0
