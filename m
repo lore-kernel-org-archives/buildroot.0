@@ -1,62 +1,43 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 20 Mar 2016 23:35:44 +0100
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox config
-	(incl. BBB)
-Message-ID: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+Date: Sun, 20 Mar 2016 23:35:46 +0100
+Subject: [Buildroot] [PATCH v4 2/7] barebox: friendly error on missing built
+	image
+In-Reply-To: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+Message-ID: <1458513351-6556-3-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch-set adds support for building barebox with up to 2 configurations.
-It can be used to build the barebox x-loader or MLO (also called Secondary
-Program Loader) in addition to the standard barebox build (Tertiary Program
-Loader). This implements the design proposed in
-http://elinux.org/Buildroot#Todo_list, with minor adjustments:
-1. Have boot/barebox/barebox.mk contain the common stuff.
-2. Add a second package boot/barebox/barebox-2.
-3. There is only one version selection, but each package allows to
-   define the configuration to be used.
-4. Design is a little bit like package/gcc, where we have multiple gcc builds,
-   but share a lot of common definitions between the packages.
+Gives the user a friendly error to help him troubleshoot missing built barebox
+image.
 
-To demonstrate that it works as advertized, the last patch adds a defconfig for
-the beaglebone that makes use of the added functionality.
+Signed-off-by: Pieter Smith <pieter@boesman.nl>
+---
+ boot/barebox/barebox.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Revision history:
-v4: Introduces barebox-package function to reduce duplication and maintenance
-    Simplifies built image selection
-    Ease review with smaller patches
-    Review re-work: Special thanks to Arnout Vandecappelle and Yegor Yefremov
-v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
-v2: Dropped x-loader build specialization in favor of 2 generic barebox builds
-v1: Initial posting
-
-Pieter Smith (7):
-  barebox: support multi-image-build image selection
-  barebox: friendly error on missing built image
-  barebox: support custom barebox output image name
-  barebox: introduce barebox-package function
-  barebox: extract package name argument
-  barebox: support 2nd config build
-  beaglebone: adds barebox bootloader defconfig
-
- board/beaglebone/barebox.env/boot/sd      |   6 +
- board/beaglebone/barebox.env/config-board |   4 +
- boot/barebox/Config.in                    |  18 +++
- boot/barebox/barebox-2/Config.in          |  79 +++++++++++++
- boot/barebox/barebox-2/barebox-2.hash     |   1 +
- boot/barebox/barebox-2/barebox-2.mk       |   9 ++
- boot/barebox/barebox.mk                   | 178 ++++++++++++++++++------------
- configs/beaglebone_barebox_defconfig      |  41 +++++++
- 8 files changed, 266 insertions(+), 70 deletions(-)
- create mode 100644 board/beaglebone/barebox.env/boot/sd
- create mode 100644 board/beaglebone/barebox.env/config-board
- create mode 100644 boot/barebox/barebox-2/Config.in
- create mode 120000 boot/barebox/barebox-2/barebox-2.hash
- create mode 100644 boot/barebox/barebox-2/barebox-2.mk
- create mode 100644 configs/beaglebone_barebox_defconfig
-
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 2a3b724..d0f28cf 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -94,8 +94,14 @@ endef
+ define BAREBOX_INSTALL_IMAGES_CMDS
+ 	if test -e $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
+ 		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
+-	else \
++	elif test -e $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
+ 		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
++	else \
++		echo "error: Specified built image file not found: $(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE))" >&2 ; \
++		echo "       in: $(@D)/" >&2 ; \
++		echo "       or: $(@D)/images/" >&2 ; \
++		echo "       Check your BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE setting." >&2 ; \
++		exit 1 ; \
+ 	fi
+ 	$(BAREBOX_INSTALL_CUSTOM_ENV)
+ endef
 -- 
 2.5.0
