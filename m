@@ -1,81 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Mar 2016 19:28:06 +0100
-Subject: [Buildroot] [PATCH v2 1/2] help: add a way to document targets
- declared in local.mk/external.mk
-In-Reply-To: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
-References: <1457473693-25776-1-git-send-email-jezz@sysmic.org>
-Message-ID: <20160320182806.GA20826@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 20 Mar 2016 19:42:50 +0100
+Subject: [Buildroot] [PATCH 11/14] imx-uuc: add new package
+In-Reply-To: <CAAMH-ysjac4kMCZvcfZNhjx3QMehtfLTrJGJBUB8+muVMKp9kg@mail.gmail.com>
+ (Gary Bisson's message of "Sat, 19 Mar 2016 13:48:27 +0100")
+References: <1458140214-22303-1-git-send-email-gary.bisson@boundarydevices.com>
+ <1458140214-22303-12-git-send-email-gary.bisson@boundarydevices.com>
+ <87egb6zw33.fsf@dell.be.48ers.dk>
+ <CAAMH-ysjac4kMCZvcfZNhjx3QMehtfLTrJGJBUB8+muVMKp9kg@mail.gmail.com>
+Message-ID: <871t75yor9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-J?r?me, All,
+>>>>> "Gary" == Gary Bisson <gary.bisson@boundarydevices.com> writes:
 
-On 2016-03-08 22:48 +0100, J?r?me Pouiller spake thusly:
-> It is handy to use local.mk or external.mk to add specific targets
-> for current project. However, until now, it not possible to add help
-> message these targets.
+Hi,
 
-Another implementation has been applied:
-    https://git.buildroot.org/buildroot/commit/?id=84c825f8e893bfb56847ab4a880c46066a41744f
+ >> I see it also creates a 1MB fat filesystem image using mkfs.vfat. It is
+ >> not clear to me what that is for, but if it is needed then the package
+ >> should select BR2_PACKAGE_HOST_DOSFSTOOLS.
 
-Consequently, I've marked your patches as rejected in patchwork.
+ > It says in their commit log the reason is to avoid Windows popup
+ > format dialog when the board is enumerated.
+ > https://github.com/Freescale/meta-fsl-arm/commit/24be3bf0
 
-Thanks for starting up the discussion! :-)
+Ok. If that is important enough then host-dosfstools should be added to
+the dependencies.
 
-(Note: Thomas applied my implementation by accident, but later decided
-not to revert it. There are still a few issues, which your proposal also
-had, and we're fixing them now.)
+ >> I'm not really sure installing linuxrc makes any sense. Perhaps we
+ >> should just install an init script to run it at startup?
 
-Regards,
-Yann E. MORIN.
+ > I hesitated and decided to leave as linuxrc since the file includes
+ > sys/proc/devtempfs mounting and should really be used as init process.
 
-> This patch add EXTRA_HELP variable. This variable is aimed to be assigned
-> from any .mk files. Its content is displayed with 'make help'.
-> 
-> For exemple:
->   EXTRA_HELP += "flash                  - Flash target"
->   EXTRA_HELP += "chroot                 - Chroot into target/"
->   EXTRA_HELP += "qemu                   - Run image with qemu"
->   EXTRA_HELP += "install-nfs            - Extract rootfs in \$$NFSROOT (=$(NFSROOT))"
->   EXTRA_HELP += "`printf '%-22s%s' '$(var)-feature' ' - Call $(var) feature'`"
->   EXTRA_HELP += "Please contact support at company.com in case of problem."
-> 
-> Signed-off-by: J?r?me Pouiller <jezz@sysmic.org>
-> ---
-> v2:
->   - Rename LOCAL_HELP to EXTRA_HELP
->   - Remove introduction lines (so, 'ifneq ($(LOCAL_HELP),)' is no more needed)
-> 
->  Makefile | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Makefile b/Makefile
-> index f2822a2..1c9f63c 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -948,6 +948,7 @@ ifeq ($(BR2_TARGET_BAREBOX),y)
->  	@echo '  barebox-menuconfig     - Run barebox menuconfig'
->  	@echo '  barebox-savedefconfig  - Run barebox savedefconfig'
->  endif
-> +	@for i in $(EXTRA_HELP); do echo "  $$i"; done
->  	@echo
->  	@echo 'Documentation:'
->  	@echo '  manual                 - build manual in all formats'
-> -- 
-> 2.7.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Yes, but what I meant was that it would be nicer to use the normal
+Buildroot init (which takes care of sys/proc/devtmpfs/..) and then just
+add an init script to run uuc.
+
+ > I'll work on the package again next week, the rest of the series is
+ > not dependent on it anyway.
+
+Great, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Venlig hilsen,
+Peter Korsgaard 
