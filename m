@@ -1,48 +1,145 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Mar 2016 20:39:20 +0100
-Subject: [Buildroot] [PATCH v2 08/17] uclibc: context functions are not
- Thumb-compatible
-In-Reply-To: <20160319190733.7d7c0535@free-electrons.com>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-9-git-send-email-thomas.petazzoni@free-electrons.com>
- <56ED7C39.6010104@mind.be> <20160319190733.7d7c0535@free-electrons.com>
-Message-ID: <56EEFC68.2030908@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 20 Mar 2016 21:28:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
+	1.21
+In-Reply-To: <56885656.8080505@mind.be>
+References: <1451762923-15985-1-git-send-email-joerg.krause@embedded.rocks>
+ <56885656.8080505@mind.be>
+Message-ID: <1458505707.1998.24.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/19/16 19:07, Thomas Petazzoni wrote:
-> Hello,
->
-> On Sat, 19 Mar 2016 17:20:09 +0100, Arnout Vandecappelle wrote:
-[snip]
->> uclibc: context functions are not Thumb-compatible
->>
->> On platforms that do support the ARM instruction set, there is no problem, as
->> the context functions are built unconditionally in ARM mode.
->>
->> However, on platforms that only support the Thumb instruction set, the context
->> functions cannot be built since the assembler code is not Thumb-ready.
->> Therefore, these functions must be disabled. All Thumb1 platforms support ARM
->> instructions, so this is only relevant for Thumb2 platforms (i.e., Cortex-M).
->
-> I would do: "only relevant for Thumb2-only platforms". Cortex-A is a
-> Thumb2 platform, but does not have any problem as it also supports the
-> ARM instruction set.
+Hi Arnout,
 
-  Right!
+I'm really sorry for the long delay. This patch has lost my
+attention...
 
-  Regards,
-  Arnout
+On Sa, 2016-01-02 at 23:59 +0100, Arnout Vandecappelle wrote:
+> On 02-01-16 20:28, J?rg Krause wrote:
+> > 
+> > This patch is based on a patch sent by Vicente Olivert Riera and
+> > commented by
+> > Arnout Vandecappelle [1].
+> > 
+> > - Bump version to 1.21
+> > - Add a hook to fix cross-compilation
+> > - Fix license and license files
+> > - Remove patch applied upstream
+> > - Add a BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS variable
+> > - Propagate the dependencies using that variable:
+> > ????* package/gnupg2
+> > ????* package/libassuan
+> > ????* package/libgcrypt
+> > ????* package/libgpgme
+> > ????* package/libksba
+> > ????* package/netatalk
+> > ????* package/opkg
+> > ????* package/vpnc
+> > ????* package/cppcms
+> > ????* package/crda
+> > ????* package/gcr
+> > ????* package/kodi
+> > ????* package/libmicrohttpd
+> > ????* package/network-manager
+> > ????* package/ntfs-3g
+> > ????* package/php-gnupg
+> > ????* package/rng-tools
+> > ????* package/strongswan
+> > ????* package/systemd
+> > 
+> > [1] http://patchwork.ozlabs.org/patch/416427/
+> > 
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > ?package/cppcms/Config.in???????????????????????????|??1 +
+> > ?package/crda/Config.in?????????????????????????????|??1 +
+> > ?package/gcr/Config.in??????????????????????????????|??1 +
+> > ?package/gnupg2/Config.in???????????????????????????|??1 +
+> > ?package/kodi/Config.in?????????????????????????????|??1 +
+> > ?package/libassuan/Config.in????????????????????????|??1 +
+> > ?package/libgcrypt/Config.in????????????????????????|??1 +
+> > ?.../0001-avoid-breakage-with-gcc-5.patch???????????| 56 ----------
+> > ------------
+> > ?package/libgpg-error/Config.in?????????????????????| 12 +++++
+> > ?package/libgpg-error/libgpg-error.hash?????????????|??2 +-
+> > ?package/libgpg-error/libgpg-error.mk???????????????| 37
+> > +++++++++++---
+> > ?package/libgpgme/Config.in?????????????????????????|??1 +
+> > ?package/libksba/Config.in??????????????????????????|??1 +
+> > ?package/libmicrohttpd/Config.in????????????????????|??1 +
+> > ?package/netatalk/Config.in?????????????????????????|??1 +
+> > ?package/network-manager/Config.in??????????????????|??1 +
+> > ?package/ntfs-3g/Config.in??????????????????????????|??1 +
+> > ?package/opkg/Config.in?????????????????????????????|??1 +
+> > ?package/php-gnupg/Config.in????????????????????????|??1 +
+> > ?package/rng-tools/Config.in????????????????????????|??1 +
+> > ?package/strongswan/Config.in???????????????????????|??1 +
+> > ?package/systemd/Config.in??????????????????????????|??1 +
+> > ?package/vpnc/Config.in?????????????????????????????|??1 +
+> > ?23 files changed, 63 insertions(+), 63 deletions(-)
+> > ?delete mode 100644 package/libgpg-error/0001-avoid-breakage-with-
+> > gcc-5.patch
+> > 
+> > diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
+> > index 85ba118..4d38883 100644
+> > --- a/package/cppcms/Config.in
+> > +++ b/package/cppcms/Config.in
+> > @@ -4,6 +4,7 @@ config BR2_PACKAGE_CPPCMS
+> > ?	select BR2_PACKAGE_PCRE
+> > ?	select BR2_PACKAGE_LIBGCRYPT
+> > ?	depends on BR2_INSTALL_LIBSTDCPP
+> > +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS #
+> > libgcrypt
+> ?libgcrypt? Shouldn't that be libgpg-error?
 
+I meant?libgcrypt ->?libgpg-error
 
+> > 
+> > ?	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> > ?	depends on !BR2_STATIC_LIBS # dlopen()
+> > ?	depends on BR2_USE_WCHAR
+> [snip]
+> > 
+> > diff --git a/package/libgpg-error/Config.in b/package/libgpg-
+> > error/Config.in
+> > index 8287f98..f948c04 100644
+> > --- a/package/libgpg-error/Config.in
+> > +++ b/package/libgpg-error/Config.in
+> > @@ -1,5 +1,17 @@
+> > +config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+> > +	bool
+> > +	# see src/syscfg/
+> > +	default y if BR2_aarch64 || BR2_aarch64_eb || BR2_arm	
+> > || \
+> > +		BR2_armeb	|| BR2_i386	|| BR2_mips	
+> > || \
+> > +		BR2_mipsel	|| BR2_mips64	||
+> > BR2_mips64el	|| \
+> > +		BR2_m68k	|| BR2_powerpc	||
+> > BR2_powerpc64 || \
+> > +		BR2_powerpc64le	|| BR2_sh4	||
+> > BR2_sh4eb	|| \
+> > +		BR2_sh4a	|| BR2_sh4aeb	|| BR2_sparc	
+> > || \
+> > +		BR2_sparc64	|| BR2_x86_64
+> > +
+> > ?config BR2_PACKAGE_LIBGPG_ERROR
+> > ?	bool "libgpg-error"
+> > +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+> > ?	help
+> > ?	??Libgpg-error is a small library with error codes and
+> ?It's mind-boggling that "a small library with error codes" needs
+> architecture-specific handling...
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+It is indeed! I had a closer look and I think the whole magic libgpg-
+error does for retrieving the initialization of a lock object can be
+done without all the target configuration files. I'll contact the
+maintainers about this issue.
+
+Best regards
+J?rg Krause
