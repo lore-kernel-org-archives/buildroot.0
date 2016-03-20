@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 22:10:34 +0100
-Subject: [Buildroot] [git commit] Revert "package/gcc: fix libgcc build for
-	xtensa"
-Message-ID: <20160320211132.4B505817FB@busybox.osuosl.org>
+Date: Sun, 20 Mar 2016 22:12:05 +0100
+Subject: [Buildroot] [PATCH] Revert "package/gcc: fix libgcc build for
+ xtensa"
+In-Reply-To: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160320221205.17eed6c1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65eec9081e95ce8936f855e1a1e2fae03d0a305e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This reverts commit c44cf2cc97df1729577263d2b0cb5263e8cdc4c1.
-Now that xtensa gas don't move literals into .init and .fini this fix is
-no longer needed.
+On Fri, 11 Mar 2016 04:34:00 +0300, Max Filippov wrote:
+> This reverts commit c44cf2cc97df1729577263d2b0cb5263e8cdc4c1.
+> Now that xtensa gas don't move literals into .init and .fini this fix is
+> no longer needed.
+> 
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  package/gcc/gcc.mk | 7 -------
+>  1 file changed, 7 deletions(-)
 
-See upstream commit
-https://sourceware.org/git/?p=binutils-gdb.git;a=commitdiff;h=4111950f363221c4641dc2f33bea61cc94f34906,
-which was backported to all supported binutils version, under the name
-*-xtensa-fix-.init-.fini-literals-moving.patch.
+I've added a few more details in the commit, as suggested by Yann, and
+using the info you provided as a reply to Yann. Then I applied, of
+course.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-[Thomas: add more details in the commit log, as suggested by Yann
-E. Morin, and using information provided by Max.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gcc/gcc.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Thanks!
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 0fb73c9..5646b66 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -97,13 +97,6 @@ HOST_GCC_COMMON_CONF_ENV = \
- GCC_COMMON_TARGET_CFLAGS = $(TARGET_CFLAGS)
- GCC_COMMON_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
--# Xtensa libgcc can't be built with -mauto-litpools
--# because of the trick used to generate .init/.fini sections.
--ifeq ($(BR2_xtensa),y)
--GCC_COMMON_TARGET_CFLAGS = $(filter-out -mauto-litpools,$(TARGET_CFLAGS))
--GCC_COMMON_TARGET_CXXFLAGS = $(filter-out -mauto-litpools,$(TARGET_CXXFLAGS))
--endif
--
- # Propagate options used for target software building to GCC target libs
- HOST_GCC_COMMON_CONF_ENV += CFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CFLAGS)"
- HOST_GCC_COMMON_CONF_ENV += CXXFLAGS_FOR_TARGET="$(GCC_COMMON_TARGET_CXXFLAGS)"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
