@@ -1,129 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 15:28:44 +0100
-Subject: [Buildroot] [git commit] arch/m68k: re-enable the architecture
-Message-ID: <20160320142919.0C83C80509@busybox.osuosl.org>
+Date: Sun, 20 Mar 2016 15:28:55 +0100
+Subject: [Buildroot] [git commit] qemu-m68k: add new board
+Message-ID: <20160320142920.306EB7FADF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ea0f64dc33a31d7a8a70594babd822db8e04188
+commit: https://git.buildroot.net/buildroot/commit/?id=3f6933921137577144276c571b213037fd21e9c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This allows to build a m68k toolchain with uClibc.
+Ethernet is not working, but at least you get a shell and
+can test applications for m68k.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- arch/Config.in                               |  1 -
- arch/Config.in.m68k                          | 20 ++++++++++++++------
- package/gcc/4.8.5/890-fix-m68k-compile.patch | 15 +++++++++++++++
- package/gcc/4.9.3/890-fix-m68k-compile.patch | 15 +++++++++++++++
- package/gcc/5.3.0/890-fix-m68k-compile.patch | 15 +++++++++++++++
- 5 files changed, 59 insertions(+), 7 deletions(-)
+ board/qemu/m68k-q800/linux-4.5.config | 26 ++++++++++++++++++++++++++
+ board/qemu/m68k-q800/readme.txt       |  8 ++++++++
+ configs/qemu_m68k_q800_defconfig      | 25 +++++++++++++++++++++++++
+ 3 files changed, 59 insertions(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 401bd28..3f1453f 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -95,7 +95,6 @@ config BR2_i386
- config BR2_m68k
- 	bool "m68k"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
--	depends on BROKEN # ice in uclibc / inet_ntoa_r
- 	help
- 	  Motorola 68000 family microprocessor
- 	  http://en.wikipedia.org/wiki/M68k
-diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
-index f40f97c..94494c8 100644
---- a/arch/Config.in.m68k
-+++ b/arch/Config.in.m68k
-@@ -4,10 +4,18 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "BIG"
- 
--config BR2_GCC_TARGET_ARCH
--	default "68000"		if BR2_m68k_68000
--	default "68010"		if BR2_m68k_68010
--	default "68020"		if BR2_m68k_68020
--	default "68030"		if BR2_m68k_68030
-+# coldfire variants will be added later
-+choice
-+	prompt "Target CPU"
-+	depends on BR2_m68k
-+	default BR2_m68k_68040
-+	help
-+	  Specific CPU variant to use
-+
-+config BR2_m68k_68040
-+	bool "68040"
-+
-+endchoice
-+
-+config BR2_GCC_TARGET_CPU
- 	default "68040"		if BR2_m68k_68040
--	default "68060"		if BR2_m68k_68060
-diff --git a/package/gcc/4.8.5/890-fix-m68k-compile.patch b/package/gcc/4.8.5/890-fix-m68k-compile.patch
+diff --git a/board/qemu/m68k-q800/linux-4.5.config b/board/qemu/m68k-q800/linux-4.5.config
 new file mode 100644
-index 0000000..124e842
+index 0000000..44eb70e
 --- /dev/null
-+++ b/package/gcc/4.8.5/890-fix-m68k-compile.patch
-@@ -0,0 +1,15 @@
-+remove unused header, which breaks the toolchain building
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gcc-4.8.5.orig/libgcc/config/m68k/linux-atomic.c gcc-4.8.5/libgcc/config/m68k/linux-atomic.c
-+--- gcc-4.8.5.orig/libgcc/config/m68k/linux-atomic.c	2013-02-04 20:06:20.000000000 +0100
-++++ gcc-4.8.5/libgcc/config/m68k/linux-atomic.c	2016-03-19 00:18:12.000000000 +0100
-+@@ -33,7 +33,6 @@
-+    using the kernel helper defined below.  There is no support for
-+    64-bit operations yet.  */
-+ 
-+-#include <asm/unistd.h>
-+ #include <stdbool.h>
-+ 
-+ #ifndef __NR_atomic_cmpxchg_32
-diff --git a/package/gcc/4.9.3/890-fix-m68k-compile.patch b/package/gcc/4.9.3/890-fix-m68k-compile.patch
++++ b/board/qemu/m68k-q800/linux-4.5.config
+@@ -0,0 +1,26 @@
++CONFIG_M68K=y
++CONFIG_M68040=y
++CONFIG_M68KFPU_EMU=y
++CONFIG_MAC=y
++CONFIG_MACINTOSH_DRIVERS=y
++CONFIG_ADB=y
++CONFIG_ADB_MACII=y
++CONFIG_TTY=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_NETDEVICES=y
++CONFIG_MACSONIC=y
++CONFIG_SCSI=y
++CONFIG_SCSI_DMA=y
++CONFIG_SCSI_LOWLEVEL=y
++CONFIG_SCSI_MAC_ESP=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_SERIAL_PMACZILOG=y
++CONFIG_SERIAL_PMACZILOG_TTYS=y
++CONFIG_SERIAL_PMACZILOG_CONSOLE=y
++CONFIG_EXT4_FS=y
++CONFIG_TMPFS=y
+diff --git a/board/qemu/m68k-q800/readme.txt b/board/qemu/m68k-q800/readme.txt
 new file mode 100644
-index 0000000..140977b
+index 0000000..78267a3
 --- /dev/null
-+++ b/package/gcc/4.9.3/890-fix-m68k-compile.patch
-@@ -0,0 +1,15 @@
-+remove unused header, which breaks the toolchain building
++++ b/board/qemu/m68k-q800/readme.txt
+@@ -0,0 +1,8 @@
++Run the emulation with:
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++ qemu-system-m68k -M q800 -kernel output/images/vmlinux -nographic -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/sda console=ttyS0"
 +
-+diff -Nur gcc-4.9.3.orig/libgcc/config/m68k/linux-atomic.c gcc-4.9.3/libgcc/config/m68k/linux-atomic.c
-+--- gcc-4.9.3.orig/libgcc/config/m68k/linux-atomic.c	2014-01-02 23:25:22.000000000 +0100
-++++ gcc-4.9.3/libgcc/config/m68k/linux-atomic.c	2016-03-18 22:24:40.000000000 +0100
-+@@ -33,7 +33,6 @@
-+    using the kernel helper defined below.  There is no support for
-+    64-bit operations yet.  */
-+ 
-+-#include <asm/unistd.h>
-+ #include <stdbool.h>
-+ 
-+ #ifndef __NR_atomic_cmpxchg_32
-diff --git a/package/gcc/5.3.0/890-fix-m68k-compile.patch b/package/gcc/5.3.0/890-fix-m68k-compile.patch
++The login prompt will appear in the terminal that started Qemu.
++
++Tested with QEMU 2.4.0 from https://github.com/vivier/qemu-m68k
++You need following branch: q800-v2.4.0
+diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
 new file mode 100644
-index 0000000..6e63de0
+index 0000000..2dbc3e3
 --- /dev/null
-+++ b/package/gcc/5.3.0/890-fix-m68k-compile.patch
-@@ -0,0 +1,15 @@
-+remove unused header, which breaks the toolchain building
++++ b/configs/qemu_m68k_q800_defconfig
+@@ -0,0 +1,25 @@
++# Architecture
++BR2_m68k=y
++BR2_m68k_68040=y
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++# System
++BR2_SYSTEM_DHCP="eth0"
 +
-+diff -Nur gcc-5.3.0.orig/libgcc/config/m68k/linux-atomic.c gcc-5.3.0/libgcc/config/m68k/linux-atomic.c
-+--- gcc-5.3.0.orig/libgcc/config/m68k/linux-atomic.c	2015-01-05 13:33:28.000000000 +0100
-++++ gcc-5.3.0/libgcc/config/m68k/linux-atomic.c	2016-03-19 09:25:07.000000000 +0100
-+@@ -33,7 +33,6 @@
-+    using the kernel helper defined below.  There is no support for
-+    64-bit operations yet.  */
-+ 
-+-#include <asm/unistd.h>
-+ #include <stdbool.h>
-+ 
-+ #ifndef __NR_atomic_cmpxchg_32
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Linux headers same as kernel, a 4.5 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux-4.5.config"
++BR2_LINUX_KERNEL_VMLINUX=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
