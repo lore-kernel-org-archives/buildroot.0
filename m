@@ -1,142 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 22:56:00 +0100
-Subject: [Buildroot] [git commit] norm: new package
-Message-ID: <20160320215635.4CCEB817D4@busybox.osuosl.org>
+Date: Sun, 20 Mar 2016 23:01:27 +0100
+Subject: [Buildroot] [PATCH 1/2] norm: new package
+In-Reply-To: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160320230127.56798c79@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63807d2e8ab7184b1c32e494dbde783b679386b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-[Thomas:
- - remove useless parenthesis enclosing waf calls
- - move the header copying outside of the 'cd $(@D)'.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in                           |  1 +
- package/norm/0001-fix-bigendian-build.patch | 17 +++++++++++
- package/norm/Config.in                      | 15 ++++++++++
- package/norm/norm.hash                      |  2 ++
- package/norm/norm.mk                        | 46 +++++++++++++++++++++++++++++
- 5 files changed, 81 insertions(+)
+On Wed,  9 Mar 2016 06:35:41 -0300, Gustavo Zacarias wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 323407f..6a8079c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1155,6 +1155,7 @@ menu "Networking"
- 	source "package/lksctp-tools/Config.in"
- 	source "package/mongoose/Config.in"
- 	source "package/neon/Config.in"
-+	source "package/norm/Config.in"
- 	source "package/nss-mdns/Config.in"
- 	source "package/nss-pam-ldapd/Config.in"
- 	source "package/omniorb/Config.in"
-diff --git a/package/norm/0001-fix-bigendian-build.patch b/package/norm/0001-fix-bigendian-build.patch
-new file mode 100644
-index 0000000..cf999c2
---- /dev/null
-+++ b/package/norm/0001-fix-bigendian-build.patch
-@@ -0,0 +1,17 @@
-+Fix big-endian build breakage in protolib.
-+Patch status: submitted to author via email.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura norm-1.5r6.orig/protolib/include/protoSpace.h norm-1.5r6/protolib/include/protoSpace.h
-+--- norm-1.5r6.orig/protolib/include/protoSpace.h	2016-03-08 19:48:21.326357963 -0300
-++++ norm-1.5r6/protolib/include/protoSpace.h	2016-03-08 19:48:46.647234075 -0300
-+@@ -89,7 +89,7 @@
-+                 }
-+ #else               
-+                 ProtoTree::Endian GetEndian() const
-+-                        return ProtoTree::ENDIAN_BIG;
-++                    {return ProtoTree::ENDIAN_BIG;}
-+                 void SetNode(Node* theNode)
-+                     {memcpy(key+sizeof(double), &theNode, sizeof(Node*));}
-+                 Node* GetNode() const
-diff --git a/package/norm/Config.in b/package/norm/Config.in
-new file mode 100644
-index 0000000..4944633
---- /dev/null
-+++ b/package/norm/Config.in
-@@ -0,0 +1,15 @@
-+comment "norm needs a toolchain w/ C++, threads, dynamic library"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_NORM
-+	bool "norm"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  The NORM protocol is designed to provide end-to-end reliable
-+	  transport of bulk data objects or streams over generic IP
-+	  multicast routing and forwarding services.
-+
-+	  http://www.nrl.navy.mil/itd/ncs/products/norm
-diff --git a/package/norm/norm.hash b/package/norm/norm.hash
-new file mode 100644
-index 0000000..4693eed
---- /dev/null
-+++ b/package/norm/norm.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	20ea2e8dd5d5e1ff1ff91dc7dab6db53a77d7b7183d8cf2425c215fd294f22a7	src-norm-1.5r6.tgz
-diff --git a/package/norm/norm.mk b/package/norm/norm.mk
-new file mode 100644
-index 0000000..e1b3a5f
---- /dev/null
-+++ b/package/norm/norm.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# norm
-+#
-+################################################################################
-+
-+NORM_VERSION = 1.5r6
-+NORM_SITE = http://downloads.pf.itd.nrl.navy.mil/norm/archive
-+NORM_SOURCE = src-norm-$(NORM_VERSION).tgz
-+NORM_INSTALL_STAGING = YES
-+NORM_LICENSE = NRL License
-+NORM_LICENSE_FILES = LICENSE.TXT
-+
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
-+NORM_DEPENDENCIES += libnetfilter_queue
-+endif
-+
-+define NORM_CONFIGURE_CMDS
-+	cd $(@D); \
-+		$(TARGET_CONFIGURE_OPTS) \
-+		./waf configure --prefix=/usr
-+endef
-+
-+define NORM_BUILD_CMDS
-+	cd $(@D); \
-+		$(TARGET_MAKE_ENV) \
-+		./waf build
-+endef
-+
-+# install target doesn't install headers unfortunately...
-+define NORM_INSTALL_STAGING_CMDS
-+	cd $(@D); \
-+		$(TARGET_MAKE_ENV) \
-+		DESTDIR=$(STAGING_DIR) \
-+		./waf install
-+	cp -f $(@D)/include/norm* $(STAGING_DIR)/usr/include
-+endef
-+
-+define NORM_INSTALL_TARGET_CMDS
-+	cd $(@D); \
-+		$(TARGET_MAKE_ENV) \
-+		DESTDIR=$(TARGET_DIR) \
-+		./waf install
-+endef
-+
-+$(eval $(generic-package))
+> +define NORM_CONFIGURE_CMDS
+> +	(cd $(@D); \
+> +		$(TARGET_CONFIGURE_OPTS) \
+> +		./waf configure --prefix=/usr \
+> +	)
+
+The parenthesis here (and in the other commands) are not needed.
+
+> +# install target doesn't install headers unfortunately...
+> +define NORM_INSTALL_STAGING_CMDS
+> +	(cd $(@D); \
+> +		$(TARGET_MAKE_ENV) \
+> +		DESTDIR=$(STAGING_DIR) \
+> +		./waf install; \
+> +		cp -f $(@D)/include/norm* $(STAGING_DIR)/usr/include \
+
+And there's no reason for this headers copy to be inside the cd $(@D).
+
+I've fixed those two issues and applied.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
