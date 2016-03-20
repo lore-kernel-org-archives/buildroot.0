@@ -1,57 +1,146 @@
-From: Cyril Bur <cyrilbur@gmail.com>
-Date: Mon, 21 Mar 2016 09:51:50 +1100
-Subject: [Buildroot] [PATCH V2] package/systemd: Respect
- BR2_TARGET_GENERIC_GETTY_BAUDRATE
-In-Reply-To: <20160320233823.06fa0c78@free-electrons.com>
-References: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
- <CAGduivzd_HebHnm54y4wbvZGvTZL6Nhwz_q4ufFT74Uf=HAPwg@mail.gmail.com>
- <20160320233823.06fa0c78@free-electrons.com>
-Message-ID: <20160321095150.05a2de90@camb691>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Mar 2016 23:53:50 +0100
+Subject: [Buildroot] [git commit] cgroupfs-mount: new package
+Message-ID: <20160320225414.4237980789@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Mar 2016 23:38:23 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0e1547a87cfd51e4fedf1cb7837f77e4f66c4052
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hello,
-> 
-> On Sun, 13 Mar 2016 21:28:05 +0100, Maxime Hadjinlian wrote:
-> 
-> > >         ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
-> > > -               $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
-> > > +               $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service; \
-> > > +       if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
-> > > +       then \
-> > > +               $(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service; \
-> > > +       fi
-> > >  endef
-> > >  endif
-> > >
-> > > --
-> > > 2.7.2
-> > >  
-> > 
-> > I don't think it's a problem for getty, but still worth noting
-> > somewhere, this will replace '115200' (without the quotes) by say
-> > "9600" (with the quotes) because the quotes are present in
-> > system/Config.in (maybe they could be removed ? There's no type for
-> > that sort of things in Kconfig as far as I know (which is not much) ?  
-> 
-> I'm not sure to understand what you meant. Did you mean that he should
-> be calling qstrip on the variable?
-> 
+This package consists of scripts that setup cgroups at boot without
+doing any cgroup management or classification of tasks into cgroups
 
-I think Maxime was just pointing out what my patch will 'add' quotes. I could
-have called qstrip but (I think this was mentioned in V1) AFAIK systemd is
-perfectly happy to accept quotes in service files.
+Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+[Thomas:
+ - rename to cgroupfs-mount to match upstream
+ - add proper hash, since hashes should be added for github sourced
+   packages
+ - fix minor typos in the init script
+ - fix the license file information.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                          |  1 +
+ package/cgroupfs-mount/Config.in           | 19 +++++++++++++++++
+ package/cgroupfs-mount/S30cgroupfs         | 34 ++++++++++++++++++++++++++++++
+ package/cgroupfs-mount/cgroupfs-mount.hash |  2 ++
+ package/cgroupfs-mount/cgroupfs-mount.mk   | 23 ++++++++++++++++++++
+ 5 files changed, 79 insertions(+)
 
-If you or someone else would be more comfortable with a qstrip, I can add that.
-
-Cyril
-
-> Thanks,
-> 
-> Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 6a8079c..27db639 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1608,6 +1608,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	source "package/dcron/Config.in"
+ 	source "package/debianutils/Config.in"
+ endif
++	source "package/cgroupfs-mount/Config.in"
+ 	source "package/dsp-tools/Config.in"
+ 	source "package/emlog/Config.in"
+ 	source "package/ftop/Config.in"
+diff --git a/package/cgroupfs-mount/Config.in b/package/cgroupfs-mount/Config.in
+new file mode 100644
+index 0000000..0b2e4ba
+--- /dev/null
++++ b/package/cgroupfs-mount/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_CGROUPFS_MOUNT
++	bool "cgroupfs-mount"
++	depends on !BR2_INIT_SYSTEMD
++	help
++	  cgroupfs mount and umount scripts.
++
++	  requires a Linux kernel >= 3.0 with the following options
++	  enabled:
++
++	  - CONFIG_BLK_CGROUP
++	  - CONFIG_CGROUPS
++	  - CONFIG_CGROUP_CPUACCT
++	  - CONFIG_CGROUP_DEVICE
++	  - CONFIG_CGROUP_FREEZER
++	  - CONFIG_CGROUP_WRITEBACK
++	  - CONFIG_CGROUP_SCHED
++	  - CONFIG_CGROUP_PIDS
++
++	  https://github.com/tianon/cgroupfs-mount
+diff --git a/package/cgroupfs-mount/S30cgroupfs b/package/cgroupfs-mount/S30cgroupfs
+new file mode 100644
+index 0000000..aa0a29b
+--- /dev/null
++++ b/package/cgroupfs-mount/S30cgroupfs
+@@ -0,0 +1,34 @@
++#!/bin/sh
++#
++# Set up cgroupfs mounts.
++#
++
++start() {
++	printf "Mounting cgroupfs hierarchy: "
++	/usr/bin/cgroupfs-mount
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++stop() {
++	printf "Unmounting cgroupfs hierarchy: "
++	/usr/bin/cgroupfs-umount
++	[ $? = 0 ] && echo "OK" || echo "FAIL"
++}
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++  start)
++      start
++	;;
++  stop)
++      stop
++	;;
++  restart|reload)
++      restart
++	;;
++  *)
++	echo "Usage: $0 {start|stop|restart}"
++	exit 1
++esac
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.hash b/package/cgroupfs-mount/cgroupfs-mount.hash
+new file mode 100644
+index 0000000..34f5167
+--- /dev/null
++++ b/package/cgroupfs-mount/cgroupfs-mount.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	  fb32a8d9de491358d28f56ab76a56e1a611b90d5b6326910d3a69395fa539027	cgroupfs-mount-7285bf44402029394808339f69f4f293730fc2c6.tar.gz
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
+new file mode 100644
+index 0000000..b375605
+--- /dev/null
++++ b/package/cgroupfs-mount/cgroupfs-mount.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# cgroupfs-mount
++#
++################################################################################
++
++CGROUPFS_MOUNT_VERSION = 7285bf44402029394808339f69f4f293730fc2c6
++CGROUPFS_MOUNT_SITE = $(call github,tianon,cgroupfs-mount,$(CGROUPFS_MOUNT_VERSION))
++CGROUPFS_MOUNT_LICENSE = GPLv3+
++CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
++
++define CGROUPFS_MOUNT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
++	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
++endef
++
++define CGROUPFS_MOUNT_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D $(CGROUPFS_MOUNT_PKGDIR)/S30cgroupfs \
++		$(TARGET_DIR)/etc/init.d/S30cgroupfs
++
++endef
++
++$(eval $(generic-package))
