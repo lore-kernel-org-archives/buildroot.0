@@ -1,112 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 22:42:34 +0100
-Subject: [Buildroot] [PATCH 2/2] package/efl: enable luajit support
-In-Reply-To: <1457132443-15973-2-git-send-email-romain.naour@gmail.com>
-References: <1457132443-15973-1-git-send-email-romain.naour@gmail.com>
- <1457132443-15973-2-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160320224234.1f6f837c@free-electrons.com>
+Date: Sun, 20 Mar 2016 22:56:00 +0100
+Subject: [Buildroot] [git commit] norm: new package
+Message-ID: <20160320215635.4CCEB817D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=63807d2e8ab7184b1c32e494dbde783b679386b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  5 Mar 2016 00:00:43 +0100, Romain Naour wrote:
-> The lua-old support is currently broken for Lua 5.2+ due to [1] and it's not
-> yet fixed with efl 1.17.
-> 
-> In order to bump to a newer efl version, we need to enable the luajit support
-> and use it by default.
-> 
-> We need to build Elua for the host to enable luajit support for the target.
-> 
-> [1] https://phab.enlightenment.org/T2728
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[Thomas:
+ - remove useless parenthesis enclosing waf calls
+ - move the header copying outside of the 'cd $(@D)'.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/Config.in                           |  1 +
+ package/norm/0001-fix-bigendian-build.patch | 17 +++++++++++
+ package/norm/Config.in                      | 15 ++++++++++
+ package/norm/norm.hash                      |  2 ++
+ package/norm/norm.mk                        | 46 +++++++++++++++++++++++++++++
+ 5 files changed, 81 insertions(+)
 
-I don't really understand the discussion in this bug report, and it
-seems like you got no feedback. Maybe the explanation was not clear
-enough as to which cases work / don't work.
-
-In the below, I wonder if it's worth to support Lua 5.1 at all.
-Supporting Luajit would make the whole thing a lot simpler, no? Do we
-really care enough to offer the possibility of using Lua instead of
-Luajit, when recent versions of Lua are in fact not supported?
-
-> diff --git a/package/efl/Config.in b/package/efl/Config.in
-> index 88e2c36..0851961 100644
-> --- a/package/efl/Config.in
-> +++ b/package/efl/Config.in
-> @@ -2,8 +2,10 @@ config BR2_PACKAGE_EFL
->  	bool "efl"
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_PACKAGE_HAS_UDEV # libudev
-> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # luajit or Lua 5.1
->  	# https://phab.enlightenment.org/T2728
-> -	depends on BR2_PACKAGE_LUA_5_1 # needs lua 5.1, broken with 5.2+
-> +	depends on !BR2_PACKAGE_LUA_5_2 # broken with 5.2+
-> +	depends on !BR2_PACKAGE_LUA_5_3 # broken with 5.2+
-
-I'd prefer:
-
-	depends on BR2_PACKAGE_HAS_LUAINTERPRETER && \
-		!BR2_PACKAGE_LUA_5_2 && !BR2_PACKAGE_LUA_5_3
-
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
->  	depends on BR2_USE_MMU
->  	depends on BR2_USE_WCHAR # use wchar_t
-> @@ -186,6 +188,11 @@ comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library,
->  		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
->  	depends on BR2_USE_MMU
->  
-> -comment "efl needs lua 5.1"
-> -	depends on !BR2_PACKAGE_LUA_5_1
-> +comment "efl needs a lua interpreter (luajit or lua 5.1)"
-> +	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
-> +	depends on BR2_USE_MMU
-> +
-> +comment "efl needs Lua 5.1"
-> +	depends on BR2_PACKAGE_LUA_5_2 # broken with 5.2+
-> +	depends on BR2_PACKAGE_LUA_5_3 # broken with 5.2+
->  	depends on BR2_USE_MMU
-
-I don't think two comments are needed. Only one is enough:
-
-comment "elf needs a lua interpreter (luajit or lua 5.1)"
-	depends on BR2_USE_MMU
-	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || \
-		BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-
-> +# We need to build Elua for the host to enable luajit support for the target.
-> +# --disable-lua-old: build elua for the target.
-> +# --enable-lua-old: disable Elua and remove luajit dependency.
-> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> +EFL_CONF_OPTS += --disable-lua-old
-> +else
-> +EFL_CONF_OPTS += --enable-lua-old
-> +endif
-
-I must say I don't really understand this comment, and why you're
-adding --disable-lua-old/--enable-lua-old to both the target and host
-EFL configure options, in both cases depending on BR2_PACKAGE_LUAJIT.
-
-Here, you are saying "We need to build Elua for the host", but the
-below code is changing the configuration options for the target variant
-of EFL, which looks weird.
-
-> +# If luajit is enabled for the target, we need to build Elua for the host.
-> +# --disable-lua-old: build elua for the host.
-> +# --enable-lua-old: disable Elua and remove luajit dependency.
-> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> +HOST_EFL_CONF_OPTS += --disable-lua-old
-> +else
-> +HOST_EFL_CONF_OPTS += --enable-lua-old
-> +endif
-
-Ditto.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/Config.in b/package/Config.in
+index 323407f..6a8079c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1155,6 +1155,7 @@ menu "Networking"
+ 	source "package/lksctp-tools/Config.in"
+ 	source "package/mongoose/Config.in"
+ 	source "package/neon/Config.in"
++	source "package/norm/Config.in"
+ 	source "package/nss-mdns/Config.in"
+ 	source "package/nss-pam-ldapd/Config.in"
+ 	source "package/omniorb/Config.in"
+diff --git a/package/norm/0001-fix-bigendian-build.patch b/package/norm/0001-fix-bigendian-build.patch
+new file mode 100644
+index 0000000..cf999c2
+--- /dev/null
++++ b/package/norm/0001-fix-bigendian-build.patch
+@@ -0,0 +1,17 @@
++Fix big-endian build breakage in protolib.
++Patch status: submitted to author via email.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura norm-1.5r6.orig/protolib/include/protoSpace.h norm-1.5r6/protolib/include/protoSpace.h
++--- norm-1.5r6.orig/protolib/include/protoSpace.h	2016-03-08 19:48:21.326357963 -0300
+++++ norm-1.5r6/protolib/include/protoSpace.h	2016-03-08 19:48:46.647234075 -0300
++@@ -89,7 +89,7 @@
++                 }
++ #else               
++                 ProtoTree::Endian GetEndian() const
++-                        return ProtoTree::ENDIAN_BIG;
+++                    {return ProtoTree::ENDIAN_BIG;}
++                 void SetNode(Node* theNode)
++                     {memcpy(key+sizeof(double), &theNode, sizeof(Node*));}
++                 Node* GetNode() const
+diff --git a/package/norm/Config.in b/package/norm/Config.in
+new file mode 100644
+index 0000000..4944633
+--- /dev/null
++++ b/package/norm/Config.in
+@@ -0,0 +1,15 @@
++comment "norm needs a toolchain w/ C++, threads, dynamic library"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS
++
++config BR2_PACKAGE_NORM
++	bool "norm"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	help
++	  The NORM protocol is designed to provide end-to-end reliable
++	  transport of bulk data objects or streams over generic IP
++	  multicast routing and forwarding services.
++
++	  http://www.nrl.navy.mil/itd/ncs/products/norm
+diff --git a/package/norm/norm.hash b/package/norm/norm.hash
+new file mode 100644
+index 0000000..4693eed
+--- /dev/null
++++ b/package/norm/norm.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	20ea2e8dd5d5e1ff1ff91dc7dab6db53a77d7b7183d8cf2425c215fd294f22a7	src-norm-1.5r6.tgz
+diff --git a/package/norm/norm.mk b/package/norm/norm.mk
+new file mode 100644
+index 0000000..e1b3a5f
+--- /dev/null
++++ b/package/norm/norm.mk
+@@ -0,0 +1,46 @@
++################################################################################
++#
++# norm
++#
++################################################################################
++
++NORM_VERSION = 1.5r6
++NORM_SITE = http://downloads.pf.itd.nrl.navy.mil/norm/archive
++NORM_SOURCE = src-norm-$(NORM_VERSION).tgz
++NORM_INSTALL_STAGING = YES
++NORM_LICENSE = NRL License
++NORM_LICENSE_FILES = LICENSE.TXT
++
++ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
++NORM_DEPENDENCIES += libnetfilter_queue
++endif
++
++define NORM_CONFIGURE_CMDS
++	cd $(@D); \
++		$(TARGET_CONFIGURE_OPTS) \
++		./waf configure --prefix=/usr
++endef
++
++define NORM_BUILD_CMDS
++	cd $(@D); \
++		$(TARGET_MAKE_ENV) \
++		./waf build
++endef
++
++# install target doesn't install headers unfortunately...
++define NORM_INSTALL_STAGING_CMDS
++	cd $(@D); \
++		$(TARGET_MAKE_ENV) \
++		DESTDIR=$(STAGING_DIR) \
++		./waf install
++	cp -f $(@D)/include/norm* $(STAGING_DIR)/usr/include
++endef
++
++define NORM_INSTALL_TARGET_CMDS
++	cd $(@D); \
++		$(TARGET_MAKE_ENV) \
++		DESTDIR=$(TARGET_DIR) \
++		./waf install
++endef
++
++$(eval $(generic-package))
