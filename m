@@ -1,36 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 22:12:05 +0100
-Subject: [Buildroot] [PATCH] Revert "package/gcc: fix libgcc build for
- xtensa"
-In-Reply-To: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
-References: <1457660040-13917-1-git-send-email-jcmvbkbc@gmail.com>
-Message-ID: <20160320221205.17eed6c1@free-electrons.com>
+Date: Sun, 20 Mar 2016 22:13:35 +0100
+Subject: [Buildroot] [git commit] libglib2: improve dev file handling
+Message-ID: <20160320211442.544CA817FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f1f16e9e5367048faa1cf17237e0c0d422e98d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Mar 2016 04:34:00 +0300, Max Filippov wrote:
-> This reverts commit c44cf2cc97df1729577263d2b0cb5263e8cdc4c1.
-> Now that xtensa gas don't move literals into .init and .fini this fix is
-> no longer needed.
-> 
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  package/gcc/gcc.mk | 7 -------
->  1 file changed, 7 deletions(-)
+Remove source schema files from target
+(/usr/share/glib-2.0/schemas/*.dtd and *.xml) at target finalization
+time.
+This is because other packages install schemas as well to avoid
+duplicating file removal efforts all around.
 
-I've added a few more details in the commit, as suggested by Yann, and
-using the info you provided as a reply to Yann. Then I applied, of
-course.
+Add a schema compiler run on target finalization as well - we previously
+didn't do this since not many packages use it, however the upcoming
+connman-gtk package does require a valid gschemas.compiled to work
+properly.
+We also do this at target finalization to avoid each package handling
+this on their own.
 
-Thanks!
+Purge some extra binaries and files from the target, like the schema
+compiler to save additional space since they're unused at run time.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libglib2/libglib2.mk | 37 +++++++++++++++++++++++++++++--------
+ 1 file changed, 29 insertions(+), 8 deletions(-)
+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index ea45f4a..09cdd87 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -126,22 +126,43 @@ else
+ LIBGLIB2_CONF_OPTS += --with-pcre=internal
+ endif
+ 
++# Purge gdb-related files
++ifneq ($(BR2_PACKAGE_GDB),y)
++define LIBGLIB2_REMOVE_GDB_FILES
++	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
++endef
++endif
++
++# Purge useless binaries from target
+ define LIBGLIB2_REMOVE_DEV_FILES
+ 	rm -rf $(TARGET_DIR)/usr/lib/glib-2.0
+-	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gettext
+-	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
+-	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
++	rm -rf $(addprefix $(TARGET_DIR)/usr/share/glib-2.0/,codegen gettext)
++	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,glib-compile-schemas glib-compile-resources glib-genmarshal glib-gettextize glib-mkenums gobject-query gtester gtester-report)
++	$(LIBGLIB2_REMOVE_GDB_FILES)
+ endef
+ 
+ LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
+ 
+-define LIBGLIB2_REMOVE_GDB_FILES
+-	rm -rf $(TARGET_DIR)/usr/share/glib-2.0/gdb
+-	rmdir --ignore-fail-on-non-empty $(TARGET_DIR)/usr/share/glib-2.0
++# Remove schema sources/DTDs, we use staging ones to compile them.
++# Do so at target finalization since other packages install additional
++# ones and we want to deal with it in a single place.
++define LIBGLIB2_REMOVE_TARGET_SCHEMAS
++	rm -f $(TARGET_DIR)/usr/share/glib-2.0/schemas/*.xml \
++		$(TARGET_DIR)/usr/share/glib-2.0/schemas/*.dtd
+ endef
+ 
+-ifneq ($(BR2_PACKAGE_GDB),y)
+-LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_GDB_FILES
++# Compile schemas at target finalization since other packages install
++# them as well, and better do it in a central place.
++# It's used at run time so it doesn't matter defering it.
++define LIBGLIB2_COMPILE_SCHEMAS
++	$(HOST_DIR)/usr/bin/glib-compile-schemas \
++		$(STAGING_DIR)/usr/share/glib-2.0/schemas \
++		--targetdir=$(TARGET_DIR)/usr/share/glib-2.0/schemas
++endef
++
++ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
++TARGET_FINALIZE_HOOKS += LIBGLIB2_REMOVE_TARGET_SCHEMAS
++TARGET_FINALIZE_HOOKS += LIBGLIB2_COMPILE_SCHEMAS
+ endif
+ 
+ $(eval $(autotools-package))
