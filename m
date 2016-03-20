@@ -1,145 +1,102 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sun, 20 Mar 2016 21:28:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
-	1.21
-In-Reply-To: <56885656.8080505@mind.be>
-References: <1451762923-15985-1-git-send-email-joerg.krause@embedded.rocks>
- <56885656.8080505@mind.be>
-Message-ID: <1458505707.1998.24.camel@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 20 Mar 2016 21:33:29 +0100
+Subject: [Buildroot] [PATCH V3 RESEND 0/5] Add ILP32 support in aarch64
+In-Reply-To: <56EEA12F.3040400@huawei.com>
+References: <1439428605-17453-1-git-send-email-bamvor.zhangjian@linaro.org>
+ <569A60E6.2030108@gmail.com>
+ <CAFy1UST4HUynS9ia2hRGWtE6j+XpYxaovAdVZkj+8yOG7PfSpg@mail.gmail.com>
+ <569FFB7E.2000104@gmail.com>
+ <CAFy1USRK1QDrruMk+icMqELL3MtFZv8KTkDvOHZ9wrAEWNvCJg@mail.gmail.com>
+ <56A4B6F0.8080108@gmail.com> <56B014A7.2070808@huawei.com>
+ <56B07114.9030404@gmail.com> <56B089D6.4070106@huawei.com>
+ <56B09008.8030202@mind.be> <56B26D0A.3000906@gmail.com>
+ <56EEA12F.3040400@huawei.com>
+Message-ID: <56EF0919.1030309@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Bamvor, All,
 
-I'm really sorry for the long delay. This patch has lost my
-attention...
+Le 20/03/2016 14:10, Zhangjian (Bamvor) a ?crit :
+> Hi, Romain, Arnout, all
+> 
+[snip]
+>>>
+>>>> Do you think it will be accepted after patch of ilp32 of kernel and glibc
+>>>> upstream?
+>>>
+>>>   It doesn't necessarily mean that upstream has to have accepted it already. We
+>>> just prefer to have a release tarball.
+>>
+>> See as example the toolchains provided by Imagination Technologies [1] or
+>> Synopsys [2]. All their patches they are using may not upstream yet, but they
+>> provide a working toolchain which is pretty well tested.
+>>
+>> [1] http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.06-05/
+>> [2] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/
+> In recent linaro connect, there is a presentation[1] about the performance of
+> ilp32.
+> And in its homepage[2], there is a script[3] for building the ilp32 compiler.
+> At this pointer, are you intertested in review the patches of ilp32 if I send a new
+> series?
 
-On Sa, 2016-01-02 at 23:59 +0100, Arnout Vandecappelle wrote:
-> On 02-01-16 20:28, J?rg Krause wrote:
-> > 
-> > This patch is based on a patch sent by Vicente Olivert Riera and
-> > commented by
-> > Arnout Vandecappelle [1].
-> > 
-> > - Bump version to 1.21
-> > - Add a hook to fix cross-compilation
-> > - Fix license and license files
-> > - Remove patch applied upstream
-> > - Add a BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS variable
-> > - Propagate the dependencies using that variable:
-> > ????* package/gnupg2
-> > ????* package/libassuan
-> > ????* package/libgcrypt
-> > ????* package/libgpgme
-> > ????* package/libksba
-> > ????* package/netatalk
-> > ????* package/opkg
-> > ????* package/vpnc
-> > ????* package/cppcms
-> > ????* package/crda
-> > ????* package/gcr
-> > ????* package/kodi
-> > ????* package/libmicrohttpd
-> > ????* package/network-manager
-> > ????* package/ntfs-3g
-> > ????* package/php-gnupg
-> > ????* package/rng-tools
-> > ????* package/strongswan
-> > ????* package/systemd
-> > 
-> > [1] http://patchwork.ozlabs.org/patch/416427/
-> > 
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > ?package/cppcms/Config.in???????????????????????????|??1 +
-> > ?package/crda/Config.in?????????????????????????????|??1 +
-> > ?package/gcr/Config.in??????????????????????????????|??1 +
-> > ?package/gnupg2/Config.in???????????????????????????|??1 +
-> > ?package/kodi/Config.in?????????????????????????????|??1 +
-> > ?package/libassuan/Config.in????????????????????????|??1 +
-> > ?package/libgcrypt/Config.in????????????????????????|??1 +
-> > ?.../0001-avoid-breakage-with-gcc-5.patch???????????| 56 ----------
-> > ------------
-> > ?package/libgpg-error/Config.in?????????????????????| 12 +++++
-> > ?package/libgpg-error/libgpg-error.hash?????????????|??2 +-
-> > ?package/libgpg-error/libgpg-error.mk???????????????| 37
-> > +++++++++++---
-> > ?package/libgpgme/Config.in?????????????????????????|??1 +
-> > ?package/libksba/Config.in??????????????????????????|??1 +
-> > ?package/libmicrohttpd/Config.in????????????????????|??1 +
-> > ?package/netatalk/Config.in?????????????????????????|??1 +
-> > ?package/network-manager/Config.in??????????????????|??1 +
-> > ?package/ntfs-3g/Config.in??????????????????????????|??1 +
-> > ?package/opkg/Config.in?????????????????????????????|??1 +
-> > ?package/php-gnupg/Config.in????????????????????????|??1 +
-> > ?package/rng-tools/Config.in????????????????????????|??1 +
-> > ?package/strongswan/Config.in???????????????????????|??1 +
-> > ?package/systemd/Config.in??????????????????????????|??1 +
-> > ?package/vpnc/Config.in?????????????????????????????|??1 +
-> > ?23 files changed, 63 insertions(+), 63 deletions(-)
-> > ?delete mode 100644 package/libgpg-error/0001-avoid-breakage-with-
-> > gcc-5.patch
-> > 
-> > diff --git a/package/cppcms/Config.in b/package/cppcms/Config.in
-> > index 85ba118..4d38883 100644
-> > --- a/package/cppcms/Config.in
-> > +++ b/package/cppcms/Config.in
-> > @@ -4,6 +4,7 @@ config BR2_PACKAGE_CPPCMS
-> > ?	select BR2_PACKAGE_PCRE
-> > ?	select BR2_PACKAGE_LIBGCRYPT
-> > ?	depends on BR2_INSTALL_LIBSTDCPP
-> > +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS #
-> > libgcrypt
-> ?libgcrypt? Shouldn't that be libgpg-error?
+Thanks for the news about ilp32 support in aarch64.
 
-I meant?libgcrypt ->?libgpg-error
+Since your previous patches doesn't apply anymore on the master branch we have
+marked them "Changes requested" in the patchwork. However, I added a new entry
+in our TODO list [1] in order to not forget them.
 
-> > 
-> > ?	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> > ?	depends on !BR2_STATIC_LIBS # dlopen()
-> > ?	depends on BR2_USE_WCHAR
-> [snip]
-> > 
-> > diff --git a/package/libgpg-error/Config.in b/package/libgpg-
-> > error/Config.in
-> > index 8287f98..f948c04 100644
-> > --- a/package/libgpg-error/Config.in
-> > +++ b/package/libgpg-error/Config.in
-> > @@ -1,5 +1,17 @@
-> > +config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-> > +	bool
-> > +	# see src/syscfg/
-> > +	default y if BR2_aarch64 || BR2_aarch64_eb || BR2_arm	
-> > || \
-> > +		BR2_armeb	|| BR2_i386	|| BR2_mips	
-> > || \
-> > +		BR2_mipsel	|| BR2_mips64	||
-> > BR2_mips64el	|| \
-> > +		BR2_m68k	|| BR2_powerpc	||
-> > BR2_powerpc64 || \
-> > +		BR2_powerpc64le	|| BR2_sh4	||
-> > BR2_sh4eb	|| \
-> > +		BR2_sh4a	|| BR2_sh4aeb	|| BR2_sparc	
-> > || \
-> > +		BR2_sparc64	|| BR2_x86_64
-> > +
-> > ?config BR2_PACKAGE_LIBGPG_ERROR
-> > ?	bool "libgpg-error"
-> > +	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-> > ?	help
-> > ?	??Libgpg-error is a small library with error codes and
-> ?It's mind-boggling that "a small library with error codes" needs
-> architecture-specific handling...
+The first problem is: how to build a working ipl32 toolchain ?
 
-It is indeed! I had a closer look and I think the whole magic libgpg-
-error does for retrieving the initialization of a lock object can be
-done without all the target configuration files. I'll contact the
-maintainers about this issue.
+* With the abe script I wasn't able to build one due to some build issue with
+glibc. Also the abe script was from an experimental/unstable branch.
 
-Best regards
-J?rg Krause
+* With build_ilp32_toolchain.sh script we need to build the toolchain as root
+[2] which is not recommended. Also the kernel header is directly imported from
+the host machine (from /usr/include). I guess an ilp32 toolchain needs some
+specific or modified kernel header in order to support ilp32 based system.
+
+* There is no aarch64 ilp32 prebuild toolchain available.
+
+It seems that the number of patches is quite limited [4], so maybe you can use
+the Buildroot internal toolchain infra to build the toolchain, and use a
+specific source version for gcc, binutils and glibc and include all needed patches.
+
+Do you know if each ilp32 patches can be easily applied on binutils and glibc
+official release ? Otherwise you can simply use the hashes provided by
+leapproject wiki [4].
+For gcc it's a bit complicated since the patches are for the Linaro GCC 4.9.3,
+not sure it will apply/work with a vanilla gcc 4.9.3. Also
+gcc-prequisites-aarch64_ilp32-target-autoconf.patch is quite huge and need to be
+split into several patches...
+But this require a lot of work.
+
+So, in the end, it would be easier if you provide a prebuild ilp32 toolchain
+tarball (like Arnout suggest) with your new series.
+To answer your question.
+Yes, I'm interested in reviewing your ilp32 series but I need a toolchain to
+test it :)
+
+Best regards,
+Romain
+
+[1] http://elinux.org/Buildroot#Toolchain
+[2]
+https://github.com/leapproject/ilp32-toolchain/blob/master/build_ilp32_toolchain.sh#L15
+[3]
+https://github.com/leapproject/ilp32-toolchain/blob/master/build_ilp32_toolchain.sh#L112
+[4]
+https://wiki.leapproject.ca/index.php?title=AArch64_ILP32_Toolchain#Sources_and_Patches
+> 
+> Regards
+> 
+> Bamvor
+> 
+> [1] http://connect.linaro.org/resource/bkk16/bkk16-305b/
+> [2] https://wiki.leapproject.ca/index.php?title=AArch64_ILP32_Toolchain
+> [3]
+> https://github.com/leapproject/ilp32-toolchain/blob/master/build_ilp32_toolchain.sh
+> 
