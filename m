@@ -1,98 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 20 Mar 2016 00:48:52 +0100
-Subject: [Buildroot] [PATCH 14/16 v5] core/legal-info: allow ignoring
- packages from the legal-info
-In-Reply-To: <20160319162911.611fa561@free-electrons.com>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <96aee606d5d79d7867fc7d60c5343e0b827ff795.1457718289.git.yann.morin.1998@free.fr>
- <20160319162911.611fa561@free-electrons.com>
-Message-ID: <20160319234852.GL3426@free.fr>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Sat, 19 Mar 2016 22:59:30 -0300
+Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
+In-Reply-To: <20160319215021.11938b4f@free-electrons.com>
+References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAAEAJfC1to61NBpAK2+S_RAUZr2JK7h4gk_EK+QxG4MaRS6KJg@mail.gmail.com>
+ <20160319215021.11938b4f@free-electrons.com>
+Message-ID: <CAAEAJfDukDjm1wwjsjDr8rhp2iy=TX+WimSBFb7yee2_miRFCA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On 19 March 2016 at 17:50, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Sat, 19 Mar 2016 16:27:19 -0300, Ezequiel Garcia wrote:
+>
+>> On 18 March 2016 at 18:08, Thomas Petazzoni
+>> <thomas.petazzoni@free-electrons.com> wrote:
+>> > As explained by Waldemar, enabling DOPIC in uClibc will lead to the
+>> > creation of a Position Independent library. In turn, this will cause
+>> > elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
+>> > ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
+>> > input, so we must disable DOPIC in the uClibc configuration.
+>> >
+>>
+>> While testing on LPC4350, I found that Lua is built with the Has-PIC-GOT flag:
+>>
+>> $ output/host/usr/bin/arm-buildroot-uclinux-uclibcgnueabi-flthdr
+>> output/target/usr/bin/lua
+>> output/target/usr/bin/lua
+>>     Magic:        bFLT
+>>     Rev:          4
+>>     Build Date:   Sat Mar 19 16:14:03 2016
+>>     Entry:        0x45
+>>     Data Start:   0x1f08c
+>>     Data End:     0x23ed8
+>>     BSS End:      0x260c0
+>>     Stack Size:   0x1000
+>>     Reloc Start:  0x23ed8
+>>     Reloc Count:  0x214
+>>     Flags:        0x2 ( Has-PIC-GOT )
+>>
+>> The Lua interpreter is not loaded by the binfmt_flat loader, and the
+>> kernel says:
+>>
+>>   BINFMT_FLAT: reloc outside program 0x7fffd3e4 (0 - 0x26080/0x1f04c),
+>> killing lua!
+>>
+>> When DEBUG is defined in fs/binfmt_flat.c, the kernel says:
+>>
+>>   BINFMT_FLAT: reference 0xffd3e4 to shared library 127, killing lua!
+>>
+>> On the other side, atftp throws the same error:
+>>
+>>   BINFMT_FLAT: reference 0xa0100 to shared library 161, killing atftp!
+>>
+>> Any ideas?
+>
+> Thanks for this testing. Is lua using threads by any chance? I for sure
+> know that the thread support is causing errors similar to the one that
+> you are reporting.
+>
 
-On 2016-03-19 16:29 +0100, Thomas Petazzoni spake thusly:
-> On Fri, 11 Mar 2016 18:49:27 +0100, Yann E. MORIN wrote:
-> > It might be necessary to not even mention a package in the output of
-> > legal-info:
-> > 
-> >   - virtual packages have virtually nothing to save in the legal-info
-> >     output;
-> > 
-> >   - for Buildroot itself, host-gcc-initial and host-gcc-final are
-> >     not real packages, they are just two different steps of the same
-> >     package, gcc;
-> > 
-> >   - for proprietary packages, it might not even be legal to even
-> >     mention them, being under NDA or some other such restrictive
-> >     conditions.
-> 
-> What is the difference with <pkg>_REDISTRIBUTE = NO ? I know
-> REDISTRIBUTE = NO packages are mentioned in legal-info, but their
-> source code is not copied to the legal-info stuff.
+No, Lua doesn't uses threads.
 
-"FOO_LEGAL_IGNORE = YES" mnens that the package will not even be listed
-in the manifest.
+> The ARM noMMU support is preliminary, for now I've only tested Busybox
+> and a few other small programs. Once this preliminary support is
+> merged, we can start looking at additional problems.
 
-Sometimes, there are (proprietary) packages that are under NDA, and even
-the mere hint at the use of that package is forbidden. So we need to be
-able to represent that situation.
+Sure, I'm not at all objecting this patchset. I've tested some
+programs and all of them seem to work fine, with the sole exception of
+lua and atftp.
 
-> But does it make sense to have two separate things? Why do REDISTRIBUTE
-> = NO packages get mentioned in the legal-info if their source code is
-> anyway not saved.
-
-Because the license may require it? For example, the boot codes for the
-RPi are BSD-licensed, so we have to provide the license file, so
-rpi-firmware has to be in the manifest. But we do not have the source
-for those blobs...
-
-[--SNIP--]
-Typoes fixed, thanks.
-
-> > patches and license files are not saved into legal-info/ .
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Peter Korsgaard <jacmet@uclibc.org>
-> > Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> > Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> > 
-> > ---
-> > Changes v1 -> v2:
-> >   - introduce a new variable, instead of making _REDISTRIBUTE a
-> >     tri-state  (Thomas, Peter, Luca)
-> 
-> Ah, we discussed using REDISTRIBUTE, I remember. But do we need a
-> tri-state ? Do we really have REDISTRIBUTE = NO packages that we want
-> to see mentioned in the legal-info output ?
-
-Yes, see above.
-
-> > +* +LIBFOO_LEGAL_IGNORE+ can be set to +YES+ or +NO+ (the default) to indicate
-> 
-> To me, the naming of the variable looks like inverted logic. What about:
-> 
-> LIBFOO_SAVE_LEGAL_INFO = YES (default) / NO
-> 
-> but obviously, <pkg>_SAVE_LEGAL_INFO is a bit confusing with
-> <pkg>_REDISTRIBUTE.
-
-Yes, I am not completely sold on the _LEGAL_IGNORE name, but your
-proposal is not better IMHO...
-
-Regards,
-Yann E. MORIN.
-
+Interestingly, the atftp binary does not have the Has-PIC-GOT flag
+set... so I don't know if it's the real reason for the issue.
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
