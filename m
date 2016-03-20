@@ -1,74 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 18:48:23 +0100
-Subject: [Buildroot] [git commit] weston: bump to version 1.10.0
-Message-ID: <20160320203745.BDB3A8024E@busybox.osuosl.org>
+Date: Sun, 20 Mar 2016 18:47:43 +0100
+Subject: [Buildroot] [git commit] wayland: bump to version 1.10.0
+Message-ID: <20160320203745.8B4608045C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36acf85340669a74c38ac7c923b739860d3defd4
+commit: https://git.buildroot.net/buildroot/commit/?id=3a24c8bd66b278174704d8e6f8e7c99962c9e8e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+wayland-scanner host/cross support is now native so drop the funky
+trick.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/weston/Config.in   | 1 +
- package/weston/weston.hash | 4 ++--
- package/weston/weston.mk   | 9 ++++++---
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ package/wayland/Config.in    |  3 ++-
+ package/wayland/wayland.hash |  4 ++--
+ package/wayland/wayland.mk   | 18 +++---------------
+ 3 files changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index 4c820e9..aaf1706 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -6,6 +6,7 @@ comment "weston needs udev and a toolchain w/ locale, threads, dynamic library,
- config BR2_PACKAGE_WESTON
- 	bool "weston"
- 	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index e7bc2bb..ed174e6 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
+diff --git a/package/wayland/Config.in b/package/wayland/Config.in
+index 857ba73..32718fc 100644
+--- a/package/wayland/Config.in
++++ b/package/wayland/Config.in
+@@ -2,8 +2,9 @@ config BR2_PACKAGE_WAYLAND
+ 	bool "wayland"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBFFI
++	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  Wayland is a project to define a protocol for a compositor
+ 	  to talk to its clients as well as a library implementation
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 316d6b5..c9d0721 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/wayland-devel/2015-June/022416.html
--sha256  8963e69f328e815cec42c58046c4af721476c7541bb7d9edc71740fada5ad312  weston-1.8.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027039.html
-+sha256  e0b2004d00d8293ddf7903ca283c1746afa9ccb5919ab50fd04397ff472aa5c1  weston-1.10.0.tar.xz
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 4ad89ce..d818071 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,14 +4,14 @@
+-# From: http://lists.freedesktop.org/archives/wayland-devel/2015-June/022630.html
+-sha256  f17c938d1c24fd0a10f650a623a2775d329db3168b5732e498b08388ec776fc8 wayland-1.8.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2016-February/027038.html
++sha256  4bf6e790aa6f50ab3825676282ecd75850ec9c4767af96ecb7127b1f3c3d60dc	wayland-1.10.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 4e44fa0..215e70a 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,28 +4,16 @@
  #
  ################################################################################
  
--WESTON_VERSION = 1.8.0
-+WESTON_VERSION = 1.10.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
+-WAYLAND_VERSION = 1.8.1
++WAYLAND_VERSION = 1.10.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
+ WAYLAND_LICENSE_FILES = COPYING
+-
+ WAYLAND_INSTALL_STAGING = YES
+-WAYLAND_DEPENDENCIES = libffi host-pkgconf host-wayland expat
++WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
  
--WESTON_DEPENDENCIES = host-pkgconf wayland libxkbcommon pixman libpng \
--	jpeg mtdev udev cairo libinput
-+WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
-+	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput
+ # wayland-scanner is only needed for building, not on the target
+-WAYLAND_CONF_OPTS = --disable-scanner
+-
+-# We must provide a specialy-crafted wayland-scanner .pc file
+-# which we vampirise and adapt from the host-wayland copy
+-define WAYLAND_SCANNER_PC
+-	$(INSTALL) -m 0644 -D $(HOST_DIR)/usr/lib/pkgconfig/wayland-scanner.pc \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
+-	$(SED) 's:^prefix=.*:prefix=/usr:' \
+-		-e 's:^wayland_scanner=.*:wayland_scanner=$(HOST_DIR)/usr/bin/wayland-scanner:' \
+-		$(STAGING_DIR)/usr/lib/pkgconfig/wayland-scanner.pc
+-endef
+-WAYLAND_POST_INSTALL_STAGING_HOOKS += WAYLAND_SCANNER_PC
++WAYLAND_CONF_OPTS = --disable-scanner --with-host-scanner
  
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
-@@ -25,6 +25,9 @@ WESTON_CONF_OPTS = \
- 	--disable-weston-launch \
- 	--disable-colord
- 
-+WESTON_MAKE_OPTS = \
-+	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
- else
+ # Remove the DTD from the target, it's not needed at runtime
+ define WAYLAND_TARGET_CLEANUP
