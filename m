@@ -1,43 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 23:01:27 +0100
-Subject: [Buildroot] [PATCH 1/2] norm: new package
-In-Reply-To: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1457516142-7421-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160320230127.56798c79@free-electrons.com>
+Date: Sun, 20 Mar 2016 23:05:37 +0100
+Subject: [Buildroot] [git commit] zeromq: add explicit --without-pgm when
+	pgm is disabled
+Message-ID: <20160320220806.0399B8080F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cfdaf95f755a4032e66c7134b441e11a599c5b18
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  9 Mar 2016 06:35:41 -0300, Gustavo Zacarias wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/zeromq/zeromq.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +define NORM_CONFIGURE_CMDS
-> +	(cd $(@D); \
-> +		$(TARGET_CONFIGURE_OPTS) \
-> +		./waf configure --prefix=/usr \
-> +	)
-
-The parenthesis here (and in the other commands) are not needed.
-
-> +# install target doesn't install headers unfortunately...
-> +define NORM_INSTALL_STAGING_CMDS
-> +	(cd $(@D); \
-> +		$(TARGET_MAKE_ENV) \
-> +		DESTDIR=$(STAGING_DIR) \
-> +		./waf install; \
-> +		cp -f $(@D)/include/norm* $(STAGING_DIR)/usr/include \
-
-And there's no reason for this headers copy to be inside the cd $(@D).
-
-I've fixed those two issues and applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index fbc63a7..871f37c 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -38,6 +38,8 @@ endif
+ ifeq ($(BR2_PACKAGE_ZEROMQ_PGM),y)
+ ZEROMQ_DEPENDENCIES += host-pkgconf openpgm
+ ZEROMQ_CONF_OPTS += --with-pgm
++else
++ZEROMQ_CONF_OPTS += --without-pgm
+ endif
+ 
+ # ZeroMQ uses libsodium if it's available.
