@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 15:36:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: unavailable for
- static builds
-In-Reply-To: <1458380622-28765-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1458380622-28765-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160320153638.6be4f246@free-electrons.com>
+Date: Sun, 20 Mar 2016 15:37:24 +0100
+Subject: [Buildroot] [git commit] arch/arm: Cortex-M3 provides only Thumb-2
+Message-ID: <20160320143819.BA239802A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=41bcc440b1a4a85530b45c2b2a30662e6a823b75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Mar 2016 10:43:42 +0100, Bernd Kuhls wrote:
-> minidlna has long standing issues with static-only builds:
-> http://patchwork.ozlabs.org/patch/501844/
-> http://patchwork.ozlabs.org/patch/506310/
-> 
-> This patch fixes
-> http://autobuild.buildroot.net/results/d73/d7370d0f8d1c7c028996feab0ea4f36edbf8a698/
-> http://autobuild.buildroot.net/results/575/5752be7c1820579425ba24178482ab0d6eea7b62/
-> "pack_utils.c:(.text+0x9a8): multiple definition of `free_metadata'"
-> 
-> The multiple definition can be fixed of course but instead of digging
-> deeper and deeper into this mess let's disable static builds.
+The Cortex-M cores only support Thumb-2, not Thumb. In fact, Thumb-2
+is a superset of Thumb, and we could have a single option for both in
+Buildroot, since -mthumb on ARMv4/v5 means original Thumb, while
+-mthumb on ARMv7 means Thumb 2. However, for clarity, it makes sense
+to have two separate options. But in this case, Cortex-M3 should not
+advertise that it supports Thumb, as in fact selecting Thumb would
+generate Thumb-2 code.
 
-Fully agreed. If anyone wants to build minidlna statically, they can
-work with upstream to fix this.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in.arm | 1 -
+ 1 file changed, 1 deletion(-)
 
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/minidlna/Config.in   | 6 ++++--
->  package/minidlna/minidlna.mk | 9 ---------
->  2 files changed, 4 insertions(+), 11 deletions(-)
-
-Applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 33f763a..cd1ec33 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -172,7 +172,6 @@ config BR2_cortex_a17
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+-	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7M
+ config BR2_fa526
