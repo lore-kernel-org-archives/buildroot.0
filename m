@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 14:56:55 +0100
-Subject: [Buildroot] [git commit] package/libva: bump version to 1.7.0
-Message-ID: <20160320135747.39A24817A6@busybox.osuosl.org>
+Date: Sun, 20 Mar 2016 14:57:07 +0100
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+	to 0.4.13
+Message-ID: <20160320135747.79785800E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b55576f96a890df112d97f76717aa1404c854a1
+commit: https://git.buildroot.net/buildroot/commit/?id=f0304a68ccf2e5d18828c0b9ca46532fd0771e80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libva/libva.hash | 4 ++--
- package/libva/libva.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 4d7cdaa..0211365 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 942046b..9646072 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
 @@ -1,2 +1,2 @@
--# From http://lists.freedesktop.org/archives/libva/2015-December/003819.html
--sha1	8a857db50305e9e3ddb8fe4e342ddd2924ae16f6	libva-1.6.2.tar.bz2
-+# From https://lists.freedesktop.org/archives/libva/2016-March/003885.html
-+sha1	e1e440da60b11986afb54fc130c7707f11827298	libva-1.7.0.tar.bz2
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 4adfd52..e11bed3 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
+ # Locally computed
+-sha256	98a2fd79b0d9effd08c0caf04d483b1caa5e4503dae811e6d436948557bfb702	dovecot-2.2-pigeonhole-0.4.12.tar.gz
++sha256	7fd187b8393a5048b302f90ad84adc7bf6e73bf79fd8d22a1c1aaa71f836a910	dovecot-2.2-pigeonhole-0.4.13.tar.gz
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 2b8232d..b85a8f1 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 1.6.2
-+LIBVA_VERSION = 1.7.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = http://www.freedesktop.org/software/vaapi/releases/libva
- LIBVA_LICENSE = MIT
+-DOVECOT_PIGEONHOLE_VERSION = 0.4.12
++DOVECOT_PIGEONHOLE_VERSION = 0.4.13
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.2-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = http://pigeonhole.dovecot.org/releases/2.2
+ DOVECOT_PIGEONHOLE_LICENSE = LGPLv2.1
