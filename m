@@ -1,48 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 23:38:23 +0100
-Subject: [Buildroot] [PATCH V2] package/systemd: Respect
- BR2_TARGET_GENERIC_GETTY_BAUDRATE
-In-Reply-To: <CAGduivzd_HebHnm54y4wbvZGvTZL6Nhwz_q4ufFT74Uf=HAPwg@mail.gmail.com>
-References: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
- <CAGduivzd_HebHnm54y4wbvZGvTZL6Nhwz_q4ufFT74Uf=HAPwg@mail.gmail.com>
-Message-ID: <20160320233823.06fa0c78@free-electrons.com>
+Date: Sun, 20 Mar 2016 23:40:03 +0100
+Subject: [Buildroot] [git commit] toolchain: introduce
+	BR2_TOOLCHAIN_HAS_LIBATOMIC
+Message-ID: <20160320224043.2BF9F805FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=42735cb9b9ca8290ee0566b4e1dce9d5ca2ed036
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 13 Mar 2016 21:28:05 +0100, Maxime Hadjinlian wrote:
+Until now, we were assuming that whenever you have gcc 4.8, libatomic
+is available. It turns out that this is not correct, since libatomic
+will not be available if thread support is disabled in the toolchain.
 
-> >         ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
-> > -               $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
-> > +               $(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service; \
-> > +       if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
-> > +       then \
-> > +               $(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service; \
-> > +       fi
-> >  endef
-> >  endif
-> >
-> > --
-> > 2.7.2
-> >
-> 
-> I don't think it's a problem for getty, but still worth noting
-> somewhere, this will replace '115200' (without the quotes) by say
-> "9600" (with the quotes) because the quotes are present in
-> system/Config.in (maybe they could be removed ? There's no type for
-> that sort of things in Kconfig as far as I know (which is not much) ?
+Therefore, __atomic_*() intrinsics may not be available even if the
+toolchain uses gcc 4.8.
 
-I'm not sure to understand what you meant. Did you mean that he should
-be calling qstrip on the variable?
+To solve this problem, we introduce a BR2_TOOLCHAIN_HAS_LIBATOMIC
+boolean, which indicates whether the toolchain has libatomic. It is
+the case when you are using gcc >= 4.8 *and* thread support is
+enabled. We then use this new BR2_TOOLCHAIN_HAS_LIBATOMIC to define
+BR2_TOOLCHAIN_HAS_ATOMIC.
 
-Thanks,
+As explained in the comment, on certain architectures, libatomic is
+technically not needed to provide the __atomic_*() intrinsics since
+they might be all built-in. However, since libatomic is only absent in
+non-thread capable toolchains, it is not worth making things more
+complex for such seldomly used configuration.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Note that we are introducing the intermediate
+BR2_TOOLCHAIN_HAS_LIBATOMIC option because it will be useful on its
+own for certain packages.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[Thomas: improve Config.in comment using a suggestion from Yann.]
+---
+ toolchain/toolchain-common.in | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 46970a6..0907c5e 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -378,15 +378,30 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
+ 	default y if BR2_TOOLCHAIN_ARM_HAS_SYNC_8
+ 	default y if BR2_TOOLCHAIN_X86_HAS_SYNC_8
+ 
++# libatomic is available since gcc 4.8, when thread support is
++# enabled.
++config BR2_TOOLCHAIN_HAS_LIBATOMIC
++	bool
++	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
++		BR2_TOOLCHAIN_HAS_THREADS
++
+ # __atomic intrinsics are available:
+ # - with gcc 4.8, either through built-ins or libatomic, on all
+-#   architectures
++#   architectures. Since we don't want to separate the cases where
++#   libatomic is needed vs. not needed, we simplify thing and only
++#   support situations where libatomic is available, even if on some
++#   architectures libatomic is not strictly needed as all __atomic
++#   intrinsics might be built-in. The only case where libatomic is
++#   missing entirely is when the toolchain does not have support for
++#   threads. However, a package that does not need threads but still
++#   uses atomics is quite a corner case, which does not warrant the
++#   added complexity.
+ # - with gcc 4.7, libatomic did not exist, so only built-ins are
+ #   available. This means that __atomic can only be used in a subset
+ #   of the architectures
+ config BR2_TOOLCHAIN_HAS_ATOMIC
+ 	bool
+-	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	default y if BR2_TOOLCHAIN_HAS_LIBATOMIC
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_arm
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_armeb
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 && BR2_xtensa
