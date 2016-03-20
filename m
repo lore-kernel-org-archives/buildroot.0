@@ -1,101 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 15:28:55 +0100
-Subject: [Buildroot] [git commit] qemu-m68k: add new board
-Message-ID: <20160320142920.306EB7FADF@busybox.osuosl.org>
+Date: Sun, 20 Mar 2016 15:29:27 +0100
+Subject: [Buildroot] [PATCH v2 1/2] m68k: enable internal toolchain
+In-Reply-To: <20160319190410.GA1018@waldemar-brodkorb.de>
+References: <20160319190410.GA1018@waldemar-brodkorb.de>
+Message-ID: <20160320152927.0630a80a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f6933921137577144276c571b213037fd21e9c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Ethernet is not working, but at least you get a shell and
-can test applications for m68k.
+On Sat, 19 Mar 2016 20:04:10 +0100, Waldemar Brodkorb wrote:
+> This allows to build a m68k toolchain.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1 -> v2:
+>   reduce CPU variants to 68040, suggested by Thomas Petazzoni,
+>   more CPU's will be added later. Qemu Q800 is 68040 only so
+>   this is okay
+> ---
+>  arch/Config.in                               |  1 -
+>  arch/Config.in.m68k                          | 20 ++++++++++++++------
+>  package/gcc/4.8.5/890-fix-m68k-compile.patch | 15 +++++++++++++++
+>  package/gcc/4.9.3/890-fix-m68k-compile.patch | 15 +++++++++++++++
+>  package/gcc/5.3.0/890-fix-m68k-compile.patch | 15 +++++++++++++++
+>  5 files changed, 59 insertions(+), 7 deletions(-)
+>  create mode 100644 package/gcc/4.8.5/890-fix-m68k-compile.patch
+>  create mode 100644 package/gcc/4.9.3/890-fix-m68k-compile.patch
+>  create mode 100644 package/gcc/5.3.0/890-fix-m68k-compile.patch
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/qemu/m68k-q800/linux-4.5.config | 26 ++++++++++++++++++++++++++
- board/qemu/m68k-q800/readme.txt       |  8 ++++++++
- configs/qemu_m68k_q800_defconfig      | 25 +++++++++++++++++++++++++
- 3 files changed, 59 insertions(+)
+I've applied, after slightly tweaking the commit title/log.
 
-diff --git a/board/qemu/m68k-q800/linux-4.5.config b/board/qemu/m68k-q800/linux-4.5.config
-new file mode 100644
-index 0000000..44eb70e
---- /dev/null
-+++ b/board/qemu/m68k-q800/linux-4.5.config
-@@ -0,0 +1,26 @@
-+CONFIG_M68K=y
-+CONFIG_M68040=y
-+CONFIG_M68KFPU_EMU=y
-+CONFIG_MAC=y
-+CONFIG_MACINTOSH_DRIVERS=y
-+CONFIG_ADB=y
-+CONFIG_ADB_MACII=y
-+CONFIG_TTY=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_NETDEVICES=y
-+CONFIG_MACSONIC=y
-+CONFIG_SCSI=y
-+CONFIG_SCSI_DMA=y
-+CONFIG_SCSI_LOWLEVEL=y
-+CONFIG_SCSI_MAC_ESP=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_SERIAL_PMACZILOG=y
-+CONFIG_SERIAL_PMACZILOG_TTYS=y
-+CONFIG_SERIAL_PMACZILOG_CONSOLE=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-diff --git a/board/qemu/m68k-q800/readme.txt b/board/qemu/m68k-q800/readme.txt
-new file mode 100644
-index 0000000..78267a3
---- /dev/null
-+++ b/board/qemu/m68k-q800/readme.txt
-@@ -0,0 +1,8 @@
-+Run the emulation with:
-+
-+ qemu-system-m68k -M q800 -kernel output/images/vmlinux -nographic -drive file=output/images/rootfs.ext2,format=raw -append "root=/dev/sda console=ttyS0"
-+
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 2.4.0 from https://github.com/vivier/qemu-m68k
-+You need following branch: q800-v2.4.0
-diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
-new file mode 100644
-index 0000000..2dbc3e3
---- /dev/null
-+++ b/configs/qemu_m68k_q800_defconfig
-@@ -0,0 +1,25 @@
-+# Architecture
-+BR2_m68k=y
-+BR2_m68k_68040=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Linux headers same as kernel, a 4.5 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux-4.5.config"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
