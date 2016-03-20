@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 23:13:24 +0100
-Subject: [Buildroot] [PATCH 1/2] package/qwt : prepared package for
- other versions of Qt.
-In-Reply-To: <1458149825-23401-1-git-send-email-davepiq@yahoo.fr>
+Date: Sun, 20 Mar 2016 23:17:19 +0100
+Subject: [Buildroot] [PATCH 2/2] package/qwt : added support for Qt5.
+In-Reply-To: <1458149825-23401-2-git-send-email-davepiq@yahoo.fr>
 References: <1458149825-23401-1-git-send-email-davepiq@yahoo.fr>
-Message-ID: <20160320231324.25e83a99@free-electrons.com>
+ <1458149825-23401-2-git-send-email-davepiq@yahoo.fr>
+Message-ID: <20160320231719.0d7b2af2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,96 +13,95 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 16 Mar 2016 18:37:04 +0100, David Picard wrote:
-> Reformatted the package configuration to make it more generic. It will thus be
-> easier to handle more than one version of Qt. Indeed, multiple versions of Qt
-> are compatible with the current Qwt.
-
-Thanks for this new version! Unfortunately, there are still some issues.
+On Wed, 16 Mar 2016 18:37:05 +0100, David Picard wrote:
 
 > diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-> index 8c7bc56..e72db31 100644
+> index e72db31..9dca8ed 100644
 > --- a/package/qwt/Config.in
 > +++ b/package/qwt/Config.in
-> @@ -1,7 +1,7 @@
+> @@ -1,7 +1,9 @@
 >  config BR2_PACKAGE_QWT
 >  	bool "qwt"
->  	depends on BR2_PACKAGE_QT
-> -	depends on BR2_PACKAGE_QT_GUI_MODULE
-> +	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+> -	depends on BR2_PACKAGE_QT
+> +	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+>  	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
+> +	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
+> +	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
 
-This is OK.
+OK.
 
 >  	help
 >  	  Qwt is a graphics extension to the Qt GUI application
 >  	  framework. It provides a 2D plotting widget and more.
-> @@ -12,16 +12,15 @@ if BR2_PACKAGE_QWT
->  
+> @@ -13,6 +15,7 @@ if BR2_PACKAGE_QWT
 >  config BR2_PACKAGE_QWT_SVG
 >  	bool "SVG support"
-> -	select BR2_PACKAGE_QT_SVG
-> +	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
+>  	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
+> +	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
 
 OK.
 
 >  
 >  config BR2_PACKAGE_QWT_MATHML
 >  	bool "MathML support"
->  
+> @@ -20,10 +23,11 @@ config BR2_PACKAGE_QWT_MATHML
 >  config BR2_PACKAGE_QWT_OPENGL
 >  	bool "OpenGL support"
-> -	depends on BR2_PACKAGE_HAS_LIBGLES
-> -	depends on BR2_PACKAGE_HAS_LIBEGL
-> -	select BR2_PACKAGE_QT_OPENGL_ES
-> +	select BR2_PACKAGE_QT_OPENGL_ES if \
-> +	    BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
+>  	select BR2_PACKAGE_QT_OPENGL_ES if \
+> -	    BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
+> +		BR2_PACKAGE_QT && BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL
+> +	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if \
+> +		BR2_PACKAGE_QT5BASE && BR2_PACKAGE_QT5_GL_AVAILABLE
 
-This is not good. Because what you have written means:
+As said for the previous commit, this is also not good. At the end, you
+should have:
 
-	enable the Qt OpenGL support if Qt is enabled, and OpenGLES/EGL
-	is available
-
-This means that it is now possible to enable BR2_PACKAGE_QWT_OPENGL
-without OpenGL support!
-
-What you want to do here is:
-
-	depends on BR2_PACKAGE_HAS_LIBGLES
-	depends on BR2_PACKAGE_HAS_LIBGL
+	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL) || \
+		BR2_PACKAGE_QT5_GL_AVAILABLE
 	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
+	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
 
-> +ifeq ($(BR2_PACKAGE_QT),y)
-> +QWT_DEPENDENCIES = qt libgles libegl
+> -comment "qwt depends on QT gui module"
+> -	depends on BR2_PACKAGE_QT
+> -	depends on !BR2_PACKAGE_QT_GUI_MODULE
+
+This comment should have been removed as part of the previous commit,
+since in the previous commit, you changed the "depends on
+BR2_PACKAGE_QT_GUI_MODULE" into a "select".
+
+> +comment "qwt needs Qt or Qt5"
+> +	depends on !BR2_PACKAGE_QT && !BR2_PACKAGE_QT5
+
+To be honest, I am not sure such a comment is needed. I believe it is
+completely obvious for the user that a library like Qwt needs Qt.
+
+> diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
+> index afd0ffb..8fbde32 100644
+> --- a/package/qwt/qwt.mk
+> +++ b/package/qwt/qwt.mk
+> @@ -11,6 +11,9 @@ QWT_INSTALL_STAGING = YES
+>  ifeq ($(BR2_PACKAGE_QT),y)
+>  QWT_DEPENDENCIES = qt libgles libegl
+>  endif
+> +ifeq ($(BR2_PACKAGE_QT5BASE),y)
+> +QWT_DEPENDENCIES += qt5base libgles
 > +endif
 
-This is not good: you are adding unconditionally libgles and libegl as
-dependencies of qwt. This should probably be:
+In fact, now that I think of it, my suggestion in the previous patch to
+add a dependency on libgles and libegl is wrong. This is not needed,
+since qt/qt5 will already depend on them.
+
+So, you should just have:
 
 ifeq ($(BR2_PACKAGE_QT),y)
 QWT_DEPENDENCIES += qt
-QWT_QMAKE = $(QT_QMAKE)
+QWT_QMAKE = $(QT_MAKE)
+else ifeq ($(BR2_PACKAGE_QT5),y)
+QWT_DEPENDENCIES += qt5
+QWT_QMAKE = $(QT5_QMAKE)
 endif
 
-ifeq ($(BR2_PACKAGE_QWT_OPENGL),y)
-QWT_DEPENDENCIES += libgles libegl
-endif
-
->  
->  QWT_LICENSE = LGPLv2.1 with exceptions
->  QWT_LICENSE_FILES = COPYING
-> @@ -35,9 +37,13 @@ else
->  QWT_CONFIG += -e 's/^.*QWT_CONFIG.*QwtOpenGL.*$$/\# QWT_CONFIG += QwtOpenGL/'
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_QT),y)
-> +    QWT_QMAKE = $(QT_QMAKE)
-
-I've refactored this with the condition above. Also note that we do not
-intend the assignment of variables.
-
-Care to rework this?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
