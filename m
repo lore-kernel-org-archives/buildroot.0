@@ -1,70 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 20 Mar 2016 17:33:42 +0100
-Subject: [Buildroot] [PATCH 12/16 v5] core/legal-info: also save extra
- downloads
-In-Reply-To: <20160319161407.5194685e@free-electrons.com>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <0e4f63ef1f47edce58214cd21d9e5f177731979f.1457718289.git.yann.morin.1998@free.fr>
- <20160319161407.5194685e@free-electrons.com>
-Message-ID: <56EED0E6.10301@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 20 Mar 2016 17:59:49 +0100
+Subject: [Buildroot] [git commit] xdriver_xf86-video-ati: needs dri3proto
+	for glamor
+Message-ID: <20160320165954.5220380746@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/19/16 16:14, Thomas Petazzoni wrote:
-> Dear Yann E. MORIN,
->
-> On Fri, 11 Mar 2016 18:49:25 +0100, Yann E. MORIN wrote:
->> Some packages, like perl, download extra files that end up as part of
->> the source that Buildroot builds. Up until now, those files were not
->> saved in the legal-info output.
->>
->> Add those files to the legal-info output.
->>
->> The unfortunate side-effect is that we will also save the secondary
->> archive for the external blackfin toolchains; however, we already do
->> save the binary release of some external toolchains when they do not
->> provide actual source archives.
->>
->> This is inherently bad, as those are not source archives, but solving
->> this is a bigger concern, for another series...
->
-> I see two possible ways around this:
->
->   - Have two separate variables, like <pkg>_EXTRA_SOURCE (to be used for
->     perl, contains real source code that needs to be saved during
->     legal-info), and <pkg>_EXTRA_DOWNLOADS (to be used for external
->     toolchains).
+commit: https://git.buildroot.net/buildroot/commit/?id=c7110480e02df1c91313028f1b5ae0e8c059b46c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  I don't like this very much, because it adds infra for something that is used 
-only once.
+We need to match xserver here, since we need glamor support there in
+order to enable it here, hence need to match the dependencies.
+For xserver it needs dri3proto+libepoxy, however if only libepoxy is
+present then glamor would be disabled for the server but enabled for the
+driver, leading to build failure.
 
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->   - Just like you don't copy <pkg>_SOURCE to legal-info when
->     <pkg>_ACTUAL_SOURCE is defined, don't copy <pkg>_EXTRA_DOWNLOADS
->     when <pkg>_ACTUAL_SOURCE is defined.
-
-  This sounds like a good idea. However, I'm sure that at some point we'll run 
-into a conflict (i.e. a package that has ACTUAL_SOURCE defined but also wants 
-EXTRA DOWNLOADS of sources). To be solved when that happens, but we need a good 
-commit message or comment that basically summarises this entire discussion so we 
-know the implications when that happens.
-
-  Regards,
-  Arnout
-
->
-> Thomas
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+index 3dd3d07..09af05a 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
++++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+@@ -22,7 +22,7 @@ XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
+ 	xproto_xproto \
+ 	xserver_xorg-server
+ 
+-ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
++ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO)$(BR2_PACKAGE_LIBEPOXY),yy)
+ XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --enable-glamor
+ else
+ XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --disable-glamor
