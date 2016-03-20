@@ -1,99 +1,165 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Sun, 20 Mar 2016 23:35:51 +0100
-Subject: [Buildroot] [PATCH v4 7/7] beaglebone: adds barebox bootloader
-	defconfig
+Date: Sun, 20 Mar 2016 23:35:50 +0100
+Subject: [Buildroot] [PATCH v4 6/7] barebox: support 2nd config build
 In-Reply-To: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
 References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
-Message-ID: <1458513351-6556-8-git-send-email-pieter@boesman.nl>
+Message-ID: <1458513351-6556-7-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Builds the barebox MLO and bootloader.
-* Generates a barebox environment that boots from eMMC by default.
-* Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
-  being generated with the kernel.
+Adds support to build barebox with a 2nd config.
+
+This is useful for building an SPL (Secondary Program Loader) in addition to
+the traditional TPL (Tertiary Program Loader). The Beaglebone Black for example
+has two barebox configurations:
+- am335x_defconfig builds the full barebox bootloader with device tree, and
+- am335x_mlo_defconfig builds the smaller MLO bootloader that loads the full
+  barebox bootloader from the eMMC or SD card.
 
 Signed-off-by: Pieter Smith <pieter@boesman.nl>
 ---
- board/beaglebone/barebox.env/boot/sd      |  6 +++++
- board/beaglebone/barebox.env/config-board |  4 +++
- configs/beaglebone_barebox_defconfig      | 41 +++++++++++++++++++++++++++++++
- 3 files changed, 51 insertions(+)
- create mode 100644 board/beaglebone/barebox.env/boot/sd
- create mode 100644 board/beaglebone/barebox.env/config-board
- create mode 100644 configs/beaglebone_barebox_defconfig
+ boot/barebox/Config.in                |  2 +
+ boot/barebox/barebox-2/Config.in      | 79 +++++++++++++++++++++++++++++++++++
+ boot/barebox/barebox-2/barebox-2.hash |  1 +
+ boot/barebox/barebox-2/barebox-2.mk   |  9 ++++
+ boot/barebox/barebox.mk               |  3 ++
+ 5 files changed, 94 insertions(+)
+ create mode 100644 boot/barebox/barebox-2/Config.in
+ create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+ create mode 100644 boot/barebox/barebox-2/barebox-2.mk
 
-diff --git a/board/beaglebone/barebox.env/boot/sd b/board/beaglebone/barebox.env/boot/sd
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 7769866..e92cdc3 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -137,4 +137,6 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
+ 	  barebox devfs format, stored in the images directory, with
+ 	  the same name as the directory name given here.
+ 
++source boot/barebox/barebox-2/Config.in
++
+ endif
+diff --git a/boot/barebox/barebox-2/Config.in b/boot/barebox/barebox-2/Config.in
 new file mode 100644
-index 0000000..7a80e29
+index 0000000..5bd8347
 --- /dev/null
-+++ b/board/beaglebone/barebox.env/boot/sd
-@@ -0,0 +1,6 @@
-+#!/bin/sh
++++ b/boot/barebox/barebox-2/Config.in
+@@ -0,0 +1,79 @@
++menuconfig BR2_TARGET_BAREBOX_2
++	bool "Build barebox with a 2nd config"
++	help
++	  Build barebox with a 2nd configuration.
 +
-+global.bootm.image=/boot/zImage
-+#global.bootm.oftree=/boot/oftree
-+#global.bootm.initrd=<path to initrd>
-+global.linux.bootargs.dyn.root="root=/dev/mmcblk0p2 rootfstype=ext2 rootwait"
-diff --git a/board/beaglebone/barebox.env/config-board b/board/beaglebone/barebox.env/config-board
++	  Useful for building an SPL (Secondary Program Loader) in addition to
++	  the traditional TPL (Tertiary Program Loader), such as the X-Loader
++	  or MLO for Texas Instruments processors.
++
++if BR2_TARGET_BAREBOX_2
++
++choice
++	prompt "Barebox configuration"
++	default BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
++
++config BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
++	bool "Using a defconfig"
++
++config BR2_TARGET_BAREBOX_2_USE_CUSTOM_CONFIG
++	bool "Using a custom config file"
++
++endchoice
++
++config BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG
++	string "board defconfig"
++	depends on BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
++	help
++	  Name of the board for which Barebox should be built, without
++	  the _defconfig suffix.
++
++
++config BR2_TARGET_BAREBOX_2_CUSTOM_CONFIG_FILE
++	string "Configuration file path"
++	depends on BR2_TARGET_BAREBOX_2_USE_CUSTOM_CONFIG
++	help
++	  Path to the barebox configuration file
++
++config BR2_TARGET_BAREBOX_2_CONFIG_FRAGMENT_FILES
++	string "Additional configuration fragment files"
++	help
++	  A space-separated list of configuration fragment files,
++	  that will be merged to the main Barebox configuration file.
++
++config BR2_TARGET_BAREBOX_2_BUILT_IMAGE_FILE
++	string "Built image filename"
++	default "barebox-flash-image"
++	help
++	  Name of the built barebox image filename in the barebox build or
++	  build images directory.
++
++	  Set to barebox.bin for barebox versions older than 2012.10.
++
++config BR2_TARGET_BAREBOX_2_OUTPUT_IMAGE_FILE
++	string "Output image filename"
++	default "barebox-2.bin"
++	help
++	  Name to use when copying the barebox image to the output/images
++	  directory.
++
++config BR2_TARGET_BAREBOX_2_CUSTOM_ENV
++	bool "Generate an environment image"
++	help
++	  Generate a custom environment image. This environment will
++	  contain the variables and scripts to be used at boot by
++	  barebox.
++
++config BR2_TARGET_BAREBOX_2_CUSTOM_ENV_PATH
++	string "Environment path"
++	depends on BR2_TARGET_BAREBOX_2_CUSTOM_ENV
++	help
++	  Path to the directory containing the custom barebox
++	  environment. Depending on your setup, it will probably be
++	  based on either the content of the defaultenv or
++	  defaultenv-2 directories in the barebox source code, plus
++	  the additions needed. The output will be an image in the
++	  barebox devfs format, stored in the images directory, with
++	  the same name as the directory name given here.
++
++endif
+diff --git a/boot/barebox/barebox-2/barebox-2.hash b/boot/barebox/barebox-2/barebox-2.hash
+new file mode 120000
+index 0000000..b6462b8
+--- /dev/null
++++ b/boot/barebox/barebox-2/barebox-2.hash
+@@ -0,0 +1 @@
++../barebox.hash
+\ No newline at end of file
+diff --git a/boot/barebox/barebox-2/barebox-2.mk b/boot/barebox/barebox-2/barebox-2.mk
 new file mode 100644
-index 0000000..cd7b26d
+index 0000000..7a88f93
 --- /dev/null
-+++ b/board/beaglebone/barebox.env/config-board
-@@ -0,0 +1,4 @@
-+#!/bin/sh
++++ b/boot/barebox/barebox-2/barebox-2.mk
+@@ -0,0 +1,9 @@
++################################################################################
++#
++# barebox-2
++#
++################################################################################
 +
-+global.boot.default=sd
++# Instantiate a 2nd barebox package, built from the same sources as the 1st,
++# but with it's own configuration:
++$(eval $(call barebox-package))
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 8892ab5..71eb33a 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -153,3 +153,6 @@ barebox-package=$(call inner-barebox-package,$(call UPPERCASE,$(pkgname)))
+ 
+ # instantiate this barebox package
+ $(eval $(call barebox-package))
 +
-diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
-new file mode 100644
-index 0000000..6324dbf
---- /dev/null
-+++ b/configs/beaglebone_barebox_defconfig
-@@ -0,0 +1,41 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_EABIHF=y
-+
-+# system
-+BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+# BR2_ROOTFS_POST_IMAGE_SCRIPT is not set
-+
-+# filesystem
-+BR2_PACKAGE_AM33X_CM3=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Linux headers same as kernel, a 4.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+
-+# bootloader
-+BR2_TARGET_BAREBOX=y
-+BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
-+BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE="barebox-am33xx-beaglebone.img"
-+BR2_TARGET_BAREBOX_CUSTOM_ENV=y
-+BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH="board/beaglebone/barebox.env"
-+BR2_TARGET_BAREBOX_2=y
-+BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
-+BR2_TARGET_BAREBOX_2_BUILT_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
-+BR2_TARGET_BAREBOX_2_OUTPUT_IMAGE_FILE="MLO"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.6"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-+BR2_LINUX_KERNEL_ZIMAGE=y
-+
-+# Use the barebox built-in dtb
-+# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
++# add the 2nd barebox package build
++include boot/barebox/barebox-2/barebox-2.mk
 -- 
 2.5.0
