@@ -1,68 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 15:22:12 +0100
-Subject: [Buildroot] [PATCH 3/3] package/multicat: fix build with
- external Blackfin uClibc toolchain
-In-Reply-To: <1458430906-8291-3-git-send-email-joerg.krause@embedded.rocks>
-References: <1458430906-8291-1-git-send-email-joerg.krause@embedded.rocks>
- <1458430906-8291-3-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160320152212.54caaaa6@free-electrons.com>
+Date: Sun, 20 Mar 2016 15:28:44 +0100
+Subject: [Buildroot] [git commit] arch/m68k: re-enable the architecture
+Message-ID: <20160320142919.0C83C80509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7ea0f64dc33a31d7a8a70594babd822db8e04188
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 20 Mar 2016 00:41:46 +0100, J?rg Krause wrote:
-> multicat uses clock_nanosleep() conditionally if HAVE_NANOSLEEP is defined. The
-> bad is that multicat does not check for clock_nanosleep(), but defines
+This allows to build a m68k toolchain with uClibc.
 
-"bad .." ?
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ arch/Config.in                               |  1 -
+ arch/Config.in.m68k                          | 20 ++++++++++++++------
+ package/gcc/4.8.5/890-fix-m68k-compile.patch | 15 +++++++++++++++
+ package/gcc/4.9.3/890-fix-m68k-compile.patch | 15 +++++++++++++++
+ package/gcc/5.3.0/890-fix-m68k-compile.patch | 15 +++++++++++++++
+ 5 files changed, 59 insertions(+), 7 deletions(-)
 
-> HAVE_NANOSLEEP if __APPLE__ is not defined.
-> 
-> uClibc has clock_nanosleep() only if built with UCLIBC_HAS_ADVANCED_REALTIME.
-> and the external Blackfin toolchain has no support for clock_nanosleep().
-
-Are you sure? Here the Blackfin toolchain does have
-UCLIBC_HAS_ADVANCED_REALTIME:
-
-$ grep ADVANCED_REALTIME output/staging/usr/include/bits/uClibc_config.h 
-#define __UCLIBC_HAS_ADVANCED_REALTIME__ 1
-
-But indeed it doesn't have clock_nanosleep().
-
-When I saw your patch, I was hoping to be able to replace it with a
-patch that tests __UCLIBC__ and __UCLIBC_HAS_ADVANCED_REALTIME__ to
-determine whether we have clock_nanosleep() or not. But it seems like
-some other things on Blackfin has the consequence that we don't have
-clock_nanosleep(). I looked at uClibc 0.9.33.2 (which is used in the
-Blackfin toolchain, as far as I can see), and I couldn't see why
-clock_nanosleep() was not provided.
-
-
-> +# multicat does not test for HAVE_CLOCK_NANOSLEEP, but sets it if __APPLE__ is
-> +# not defined. The external Blackfin toolchain is uClibc which has
-> +# clock_nanosleep() only if built with UCLIBC_HAS_ADVANCED_REALTIME.
-> +# Use a hool to overwrite the definition of HAVE_CLOCK_NANOSLEEP for this
-
-hool -> hook
-
-> +# toolchain.
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
-> +define MULTICAT_FIXUP_HAVE_CLOCK_NANOSLEEP
-> +$(SED) 's#define HAVE_CLOCK_NANOSLEEP#undef HAVE_CLOCK_NANOSLEEP#g' $(@D)/util.h
-> +endef
-> +MULTICAT_POST_PATCH_HOOKS += MULTICAT_FIXUP_HAVE_CLOCK_NANOSLEEP
-> +endif
-
-I'll be OK to fix this with a hook, but I'd like to understand why we
-don't have clock_nanosleep() on Blackfin. It might affect a significant
-number of other packages I believe.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/arch/Config.in b/arch/Config.in
+index 401bd28..3f1453f 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -95,7 +95,6 @@ config BR2_i386
+ config BR2_m68k
+ 	bool "m68k"
+ 	select BR2_ARCH_HAS_MMU_MANDATORY
+-	depends on BROKEN # ice in uclibc / inet_ntoa_r
+ 	help
+ 	  Motorola 68000 family microprocessor
+ 	  http://en.wikipedia.org/wiki/M68k
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index f40f97c..94494c8 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -4,10 +4,18 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "BIG"
+ 
+-config BR2_GCC_TARGET_ARCH
+-	default "68000"		if BR2_m68k_68000
+-	default "68010"		if BR2_m68k_68010
+-	default "68020"		if BR2_m68k_68020
+-	default "68030"		if BR2_m68k_68030
++# coldfire variants will be added later
++choice
++	prompt "Target CPU"
++	depends on BR2_m68k
++	default BR2_m68k_68040
++	help
++	  Specific CPU variant to use
++
++config BR2_m68k_68040
++	bool "68040"
++
++endchoice
++
++config BR2_GCC_TARGET_CPU
+ 	default "68040"		if BR2_m68k_68040
+-	default "68060"		if BR2_m68k_68060
+diff --git a/package/gcc/4.8.5/890-fix-m68k-compile.patch b/package/gcc/4.8.5/890-fix-m68k-compile.patch
+new file mode 100644
+index 0000000..124e842
+--- /dev/null
++++ b/package/gcc/4.8.5/890-fix-m68k-compile.patch
+@@ -0,0 +1,15 @@
++remove unused header, which breaks the toolchain building
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-4.8.5.orig/libgcc/config/m68k/linux-atomic.c gcc-4.8.5/libgcc/config/m68k/linux-atomic.c
++--- gcc-4.8.5.orig/libgcc/config/m68k/linux-atomic.c	2013-02-04 20:06:20.000000000 +0100
+++++ gcc-4.8.5/libgcc/config/m68k/linux-atomic.c	2016-03-19 00:18:12.000000000 +0100
++@@ -33,7 +33,6 @@
++    using the kernel helper defined below.  There is no support for
++    64-bit operations yet.  */
++ 
++-#include <asm/unistd.h>
++ #include <stdbool.h>
++ 
++ #ifndef __NR_atomic_cmpxchg_32
+diff --git a/package/gcc/4.9.3/890-fix-m68k-compile.patch b/package/gcc/4.9.3/890-fix-m68k-compile.patch
+new file mode 100644
+index 0000000..140977b
+--- /dev/null
++++ b/package/gcc/4.9.3/890-fix-m68k-compile.patch
+@@ -0,0 +1,15 @@
++remove unused header, which breaks the toolchain building
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-4.9.3.orig/libgcc/config/m68k/linux-atomic.c gcc-4.9.3/libgcc/config/m68k/linux-atomic.c
++--- gcc-4.9.3.orig/libgcc/config/m68k/linux-atomic.c	2014-01-02 23:25:22.000000000 +0100
+++++ gcc-4.9.3/libgcc/config/m68k/linux-atomic.c	2016-03-18 22:24:40.000000000 +0100
++@@ -33,7 +33,6 @@
++    using the kernel helper defined below.  There is no support for
++    64-bit operations yet.  */
++ 
++-#include <asm/unistd.h>
++ #include <stdbool.h>
++ 
++ #ifndef __NR_atomic_cmpxchg_32
+diff --git a/package/gcc/5.3.0/890-fix-m68k-compile.patch b/package/gcc/5.3.0/890-fix-m68k-compile.patch
+new file mode 100644
+index 0000000..6e63de0
+--- /dev/null
++++ b/package/gcc/5.3.0/890-fix-m68k-compile.patch
+@@ -0,0 +1,15 @@
++remove unused header, which breaks the toolchain building
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gcc-5.3.0.orig/libgcc/config/m68k/linux-atomic.c gcc-5.3.0/libgcc/config/m68k/linux-atomic.c
++--- gcc-5.3.0.orig/libgcc/config/m68k/linux-atomic.c	2015-01-05 13:33:28.000000000 +0100
+++++ gcc-5.3.0/libgcc/config/m68k/linux-atomic.c	2016-03-19 09:25:07.000000000 +0100
++@@ -33,7 +33,6 @@
++    using the kernel helper defined below.  There is no support for
++    64-bit operations yet.  */
++ 
++-#include <asm/unistd.h>
++ #include <stdbool.h>
++ 
++ #ifndef __NR_atomic_cmpxchg_32
