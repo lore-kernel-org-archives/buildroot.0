@@ -1,63 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 23:35:13 +0100
-Subject: [Buildroot] [PATCH 5/5] qt5: add GPLv3 and GFDLv1.3 licensing
- informations
-In-Reply-To: <1458207749-19507-6-git-send-email-corjon.j@ecagroup.com>
-References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
- <1458207749-19507-6-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20160320233513.3afdcf59@free-electrons.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Sun, 20 Mar 2016 23:35:44 +0100
+Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox config
+	(incl. BBB)
+Message-ID: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch-set adds support for building barebox with up to 2 configurations.
+It can be used to build the barebox x-loader or MLO (also called Secondary
+Program Loader) in addition to the standard barebox build (Tertiary Program
+Loader). This implements the design proposed in
+http://elinux.org/Buildroot#Todo_list, with minor adjustments:
+1. Have boot/barebox/barebox.mk contain the common stuff.
+2. Add a second package boot/barebox/barebox-2.
+3. There is only one version selection, but each package allows to
+   define the configuration to be used.
+4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+   but share a lot of common definitions between the packages.
 
-On Thu, 17 Mar 2016 10:42:29 +0100, Julien Corjon wrote:
-> All Qt5 packages have gain the GPLv3 license option and all the
+To demonstrate that it works as advertized, the last patch adds a defconfig for
+the beaglebone that makes use of the added functionality.
 
-gain -> gained
+Revision history:
+v4: Introduces barebox-package function to reduce duplication and maintenance
+    Simplifies built image selection
+    Ease review with smaller patches
+    Review re-work: Special thanks to Arnout Vandecappelle and Yegor Yefremov
+v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
+v2: Dropped x-loader build specialization in favor of 2 generic barebox builds
+v1: Initial posting
 
-> documentation is now under GFDLv1.3 license (except qt5websocket)
+Pieter Smith (7):
+  barebox: support multi-image-build image selection
+  barebox: friendly error on missing built image
+  barebox: support custom barebox output image name
+  barebox: introduce barebox-package function
+  barebox: extract package name argument
+  barebox: support 2nd config build
+  beaglebone: adds barebox bootloader defconfig
 
-Are the libraries still available under LGPLv2.1 ? According to
-http://www.qt.io/faq/#faqupcoming:
+ board/beaglebone/barebox.env/boot/sd      |   6 +
+ board/beaglebone/barebox.env/config-board |   4 +
+ boot/barebox/Config.in                    |  18 +++
+ boot/barebox/barebox-2/Config.in          |  79 +++++++++++++
+ boot/barebox/barebox-2/barebox-2.hash     |   1 +
+ boot/barebox/barebox-2/barebox-2.mk       |   9 ++
+ boot/barebox/barebox.mk                   | 178 ++++++++++++++++++------------
+ configs/beaglebone_barebox_defconfig      |  41 +++++++
+ 8 files changed, 266 insertions(+), 70 deletions(-)
+ create mode 100644 board/beaglebone/barebox.env/boot/sd
+ create mode 100644 board/beaglebone/barebox.env/config-board
+ create mode 100644 boot/barebox/barebox-2/Config.in
+ create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+ create mode 100644 boot/barebox/barebox-2/barebox-2.mk
+ create mode 100644 configs/beaglebone_barebox_defconfig
 
-"""
-Qt will be licensed under a commercial license, GPLv2, GPLv3 and
-LGPLv3, but no longer under LGPLv2.1
-"""
-
-But maybe this is only starting with Qt 5.7.
-
-
->  ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> -QT53D_LICENSE = GPLv2+ or LGPLv3
-> -QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.LGPLv3
-> +QT53D_LICENSE = GPLv2+ or GPLv3 or LGPLv3, docs: GFDLv1.3
-
-This is not the proper format to specify which part is covered by which
-license. You should use:
-
-	GPLv2+ or GPLv3 or LGPLv3, GFDLv1.3 (docs)
-
-This should be fixed globally, of course.
-
-It's a bit weird though to mention GPLv3 *and* GPLv2+. Are sure it was
-GPLv2+ ?
-
-> +QT53D_LICENSE_FILES = LICENSE.GPL LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
-
-There is no LICENSE.FDL file in this package, so make legal-info fails.
-
-Please enable all Qt5 packages, and make sure that "make legal-info"
-works properly.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
