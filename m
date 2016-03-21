@@ -1,41 +1,50 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 21 Mar 2016 14:39:15 +0100
-Subject: [Buildroot] [PATCH] libqmi: bump to version 1.14.0
-Message-ID: <1458567555-22688-1-git-send-email-yegorslists@googlemail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 21 Mar 2016 16:56:16 +0100
+Subject: [Buildroot] [PATCH 2/5] package/qt5webkit: remove obsolete
+	package
+In-Reply-To: <1458207749-19507-3-git-send-email-corjon.j@ecagroup.com>
+References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
+ <1458207749-19507-3-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <CAAMH-ysg3UrRUxNTCk40Ki=1eg1OGmGfOzKWyip7rys9PZskrg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Julien, All,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Mar 17, 2016 at 10:42 AM, Julien Corjon <corjon.j@ecagroup.com> wrote:
+>
+> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+>  package/qt5/Config.in                |  1 -
+>  package/qt5/qt5webkit/Config.in      | 23 --------------
+>  package/qt5/qt5webkit/qt5webkit.hash |  2 --
+>  package/qt5/qt5webkit/qt5webkit.mk   | 58 ------------------------------------
+>  4 files changed, 84 deletions(-)
+>  delete mode 100644 package/qt5/qt5webkit/Config.in
+>  delete mode 100644 package/qt5/qt5webkit/qt5webkit.hash
+>  delete mode 100644 package/qt5/qt5webkit/qt5webkit.mk
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index df0bb0b..be7b955 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256  d23a397d9c963f637c99622df74ed08a2ba2276552c21eea1ed1d05eeafc82a7  libqmi-1.12.8.tar.xz
-+sha256  6618fb92ffe6d017d7fd18082b5c13da954c3c9060f7cc4f8807ba7b2bea349d  libqmi-1.14.0.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 0ff20a6..9492787 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.12.8
-+LIBQMI_VERSION = 1.14.0
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
--- 
-2.1.4
+Are we sure we want to remove this package actually? The release says:
+"With Qt 5.6 the following modules are no longer part of the release
+packages, but users can still build them from source:
+- Qt WebKit
+- Qt Declarative (Qt Quick 1)"
+
+But the project has a qt5.6.0 branch just like the other modules:
+https://github.com/qtproject/qtwebkit/commits/5.6.0
+
+Especially since we don't have any replacement I wouldn't merge this
+patch just yet. Plus webkit can run on a platform without GPU whereas
+WebEngine depends on OpenGL, I wouldn't mind keeping it, for i.MX7
+platforms for instance.
+
+The package would need to be modified to use the github project
+instead of the release archives though.
+
+Let me know your thoughts.
+
+Regards,
+Gary
