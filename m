@@ -1,30 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Mar 2016 16:06:29 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.4.x series
-Message-ID: <1458587189-28917-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Mon, 21 Mar 2016 20:17:12 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-03-20
+In-Reply-To: <20160321073023.C428D1023A9@stock.ovh.net>
+References: <20160321073023.C428D1023A9@stock.ovh.net>
+Message-ID: <1458587832.7413.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mo, 2016-03-21 at 08:30 +0100, Thomas Petazzoni wrote:
+> Build statistics for 2016-03-20
+> ===============================
+> 
+> Detail of failures
+> ===================
+> 
+> ????????sh4a |???????????????????prboom-2.5.0 | NOK |
+> http://autobuild.buildroot.net/results/2f14075e22b420cc3fdaaa2231494f
+> 2829f040ec/
+> ????????sh4a |???????????????????prboom-2.5.0 | NOK | http://autobuil
+> d.buildroot.net/results/d3030fea0b3b8693be640754774e50ac064f8c89/
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2fafbd7..31c4d24 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -211,7 +211,7 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.78"	if BR2_KERNEL_HEADERS_3_2
--	default "3.4.110"	if BR2_KERNEL_HEADERS_3_4
-+	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
--- 
-2.7.3
+Internal compiler error:
+
+r_fps.c: In function 'R_StopAllInterpolations':
+r_fps.c:296:1: internal compiler error: Segmentation fault
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <https://support.codesourcery.com/GNUToolchain/> for instructions.
+
+I will send a patch which
+disables?BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH for prboom.
+
+Best regards
+J?rg Krause
