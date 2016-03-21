@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Mar 2016 20:43:44 -0300
-Subject: [Buildroot] [PATCH 1/2] glib-networking: bump to version 2.48.0
-Message-ID: <1458603825-2722-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 21 Mar 2016 20:43:45 -0300
+Subject: [Buildroot] [PATCH 2/2] libsoup: bump to version 2.54.0
+In-Reply-To: <1458603825-2722-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458603825-2722-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1458603825-2722-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,33 +12,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/glib-networking/glib-networking.hash | 4 ++--
- package/glib-networking/glib-networking.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libsoup/libsoup.hash | 4 ++--
+ package/libsoup/libsoup.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
-index 22518ce..7b22592 100644
---- a/package/glib-networking/glib-networking.hash
-+++ b/package/glib-networking/glib-networking.hash
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 7878550..facedc6 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.46/glib-networking-2.46.1.sha256sum
--sha256	d5034214217f705891b6c9e719cc2c583c870bfcfdc454ebbb5e5e8940ac90b1	glib-networking-2.46.1.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.48/glib-networking-2.48.0.sha256sum
-+sha256	7a1f3312e757b97af94e2db8a1f14eb9cc018c983931ecdf3b0c54acece39024	glib-networking-2.48.0.tar.xz
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index b7b92c6..a568321 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -4,8 +4,8 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.2.sha256sum
+-sha256	db55628b5c7d952945bb71b236469057c8dfb8dea0c271513579c6273c2093dc	libsoup-2.52.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.54/libsoup-2.54.0.sha256sum
++sha256	fbf1038efb10d2ffbbb88bb46e7ce32b683fde8e566f36bcf26f7f69a550ec56	libsoup-2.54.0.tar.xz
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index fd51a0e..53138be 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,15 +4,15 @@
  #
  ################################################################################
  
--GLIB_NETWORKING_VERSION_MAJOR = 2.46
--GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).1
-+GLIB_NETWORKING_VERSION_MAJOR = 2.48
-+GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- GLIB_NETWORKING_INSTALL_STAGING = YES
+-LIBSOUP_VERSION_MAJOR = 2.52
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).2
++LIBSOUP_VERSION_MAJOR = 2.54
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPLv2+
+ LIBSOUP_LICENSE_FILES = COPYING
+ LIBSOUP_INSTALL_STAGING = YES
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+-LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no
++LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
+ LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+ 	libglib2 libxml2 sqlite host-intltool
+ 
 -- 
 2.7.3
