@@ -1,39 +1,68 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Mar 2016 08:20:58 -0300
-Subject: [Buildroot] [PATCH] c-ares: bump to version 1.11.0
-Message-ID: <1458559258-18700-1-git-send-email-gustavo@zacarias.com.ar>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 21 Mar 2016 12:38:35 +0100
+Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
+	config (incl. BBB)
+In-Reply-To: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+Message-ID: <CAGm1_kt3uK6rVzFvCjWy0rnANPEqrC4GRVFS5NUJzXjp2ddpGg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/c-ares/c-ares.hash | 2 +-
- package/c-ares/c-ares.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, Mar 20, 2016 at 11:35 PM, Pieter Smith <pieter@boesman.nl> wrote:
+> This patch-set adds support for building barebox with up to 2 configurations.
+> It can be used to build the barebox x-loader or MLO (also called Secondary
+> Program Loader) in addition to the standard barebox build (Tertiary Program
+> Loader). This implements the design proposed in
+> http://elinux.org/Buildroot#Todo_list, with minor adjustments:
+> 1. Have boot/barebox/barebox.mk contain the common stuff.
+> 2. Add a second package boot/barebox/barebox-2.
+> 3. There is only one version selection, but each package allows to
+>    define the configuration to be used.
+> 4. Design is a little bit like package/gcc, where we have multiple gcc builds,
+>    but share a lot of common definitions between the packages.
+>
+> To demonstrate that it works as advertized, the last patch adds a defconfig for
+> the beaglebone that makes use of the added functionality.
+>
+> Revision history:
+> v4: Introduces barebox-package function to reduce duplication and maintenance
+>     Simplifies built image selection
+>     Ease review with smaller patches
+>     Review re-work: Special thanks to Arnout Vandecappelle and Yegor Yefremov
+> v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
+> v2: Dropped x-loader build specialization in favor of 2 generic barebox builds
+> v1: Initial posting
+>
+> Pieter Smith (7):
+>   barebox: support multi-image-build image selection
+>   barebox: friendly error on missing built image
+>   barebox: support custom barebox output image name
+>   barebox: introduce barebox-package function
+>   barebox: extract package name argument
+>   barebox: support 2nd config build
+>   beaglebone: adds barebox bootloader defconfig
+>
+>  board/beaglebone/barebox.env/boot/sd      |   6 +
+>  board/beaglebone/barebox.env/config-board |   4 +
+>  boot/barebox/Config.in                    |  18 +++
+>  boot/barebox/barebox-2/Config.in          |  79 +++++++++++++
+>  boot/barebox/barebox-2/barebox-2.hash     |   1 +
+>  boot/barebox/barebox-2/barebox-2.mk       |   9 ++
+>  boot/barebox/barebox.mk                   | 178 ++++++++++++++++++------------
+>  configs/beaglebone_barebox_defconfig      |  41 +++++++
+>  8 files changed, 266 insertions(+), 70 deletions(-)
+>  create mode 100644 board/beaglebone/barebox.env/boot/sd
+>  create mode 100644 board/beaglebone/barebox.env/config-board
+>  create mode 100644 boot/barebox/barebox-2/Config.in
+>  create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+>  create mode 100644 boot/barebox/barebox-2/barebox-2.mk
+>  create mode 100644 configs/beaglebone_barebox_defconfig
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 40f703b..f24cc36 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 3d701674615d1158e56a59aaede7891f2dde3da0f46a6d3c684e0ae70f52d3db c-ares-1.10.0.tar.gz
-+sha256 b3612e6617d9682928a1d50c1040de4db6519f977f0b25d40cf1b632900b3efd c-ares-1.11.0.tar.gz
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 77ae4b9..298fe41 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--C_ARES_VERSION = 1.10.0
-+C_ARES_VERSION = 1.11.0
- C_ARES_SITE = http://c-ares.haxx.se/download
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
--- 
-2.7.3
+Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+for the whole series.
+
+Yegor
