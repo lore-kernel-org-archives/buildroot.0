@@ -1,33 +1,60 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 21 Mar 2016 20:33:08 +0100
-Subject: [Buildroot] [PATCH 2/2] package/prboom: fix typo in help text
-In-Reply-To: <1458588788-13625-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1458588788-13625-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <1458588788-13625-2-git-send-email-joerg.krause@embedded.rocks>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 21 Mar 2016 22:43:29 +0000
+Subject: [Buildroot] [Bug 8811] New: rp-pppoe - generated scripts commands
+ use HOST pathnames, not necessarily TARGET
+Message-ID: <bug-8811-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rendring -> rendering
+https://bugs.busybox.net/show_bug.cgi?id=8811
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/prboom/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+            Bug ID: 8811
+           Summary: rp-pppoe - generated scripts commands use HOST
+                    pathnames, not necessarily TARGET
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: lonnie at abelbeck.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/prboom/Config.in b/package/prboom/Config.in
-index e9a3d4a..6884f31 100644
---- a/package/prboom/Config.in
-+++ b/package/prboom/Config.in
-@@ -8,6 +8,6 @@ config BR2_PACKAGE_PRBOOM
- 	help
- 	  PrBoom is a Doom client which allows you to play the good old game on
- 	  newer hardware. It even supports higher resolution and better
--	  rendring, while still keeping the old style alive.
-+	  rendering, while still keeping the old style alive.
- 
- 	  http://prboom.sourceforge.net/
+Hi,
+
+When building with CentOS 7 as the host, for files scripts/*.in, the @ID@ gets
+mapped to /bin/id instead of /usr/bin/id since rp-pppoe uses the host paths,
+not necessarily for the target.
+
+Here is our fix...
+
+In package/rp-pppoe/rp-pppoe.mk:
+--
++define RP_PPPOE_SET_TARGET_COMMAND_PATHS
++       find $(@D)/scripts/ -name "*.in" | xargs sed -i \
++               -e 's:@ID@:/usr/bin/id:g' \
++               -e 's:@SETSID@:/usr/bin/setsid:g' \
++               -e 's:@ECHO@:/bin/echo:g' \
++               -e 's:@PPPD@:/usr/sbin/pppd:g'
++endef
++RP_PPPOE_POST_PATCH_HOOKS += RP_PPPOE_SET_TARGET_COMMAND_PATHS
+--
+
+You may ask why not eliminate the fully defined paths, but for @SETSID@ it is
+tested with -x in the script so it needs a full pathname.  The rest may not
+need a full pathname.
+
+I think this fix is the lesser of the evils, and is easily tweaked if needed.
+
+Lonnie
+
 -- 
-2.7.4
+You are receiving this mail because:
+You are on the CC list for the bug.
