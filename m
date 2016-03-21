@@ -1,60 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 21 Mar 2016 22:43:29 +0000
-Subject: [Buildroot] [Bug 8811] New: rp-pppoe - generated scripts commands
- use HOST pathnames, not necessarily TARGET
-Message-ID: <bug-8811-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Mar 2016 23:43:50 +0100
+Subject: [Buildroot] Patchwork session, March 22nd
+Message-ID: <20160321234350.4fd3755a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8811
+Hello all,
 
-            Bug ID: 8811
-           Summary: rp-pppoe - generated scripts commands use HOST
-                    pathnames, not necessarily TARGET
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: lonnie at abelbeck.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Our next patchwork session is planned tomorrow, on March 22nd, see:
 
-Hi,
+  https://framadate.org/WEmxCql13oXFhbMs
 
-When building with CentOS 7 as the host, for files scripts/*.in, the @ID@ gets
-mapped to /bin/id instead of /usr/bin/id since rp-pppoe uses the host paths,
-not necessarily for the target.
+Quite a few people already confirmed their participation: Romain, Yann,
+Vincent and myself, and a few others might join as well: Peter, Yegor,
+Arnout and Samuel. Others are welcome to join.
 
-Here is our fix...
+The page at http://elinux.org/Buildroot:PatchworkSessions is still
+available to list the patches or patch series you want to discuss.
 
-In package/rp-pppoe/rp-pppoe.mk:
---
-+define RP_PPPOE_SET_TARGET_COMMAND_PATHS
-+       find $(@D)/scripts/ -name "*.in" | xargs sed -i \
-+               -e 's:@ID@:/usr/bin/id:g' \
-+               -e 's:@SETSID@:/usr/bin/setsid:g' \
-+               -e 's:@ECHO@:/bin/echo:g' \
-+               -e 's:@PPPD@:/usr/sbin/pppd:g'
-+endef
-+RP_PPPOE_POST_PATCH_HOOKS += RP_PPPOE_SET_TARGET_COMMAND_PATHS
---
+I think we should try to make progress at least on:
 
-You may ask why not eliminate the fully defined paths, but for @SETSID@ it is
-tested with -x in the script so it needs a full pathname.  The rest may not
-need a full pathname.
+ - The barebox 2-stage thing.
+ - The custom help patch series proposed by Yann.
+ - The legal-info series proposed by Yann.
 
-I think this fix is the lesser of the evils, and is easily tweaked if needed.
+Of course, there are lots of other patches sitting in patchwork, and
+help reviewing any of them will be useful. And we can also discuss
+other patches, obviously.
 
-Lonnie
+If you want to join, the meeting takes place on the #buildroot IRC
+channel. We usually start around 9 PM CET, with some people joining
+earlier, some later.
 
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
