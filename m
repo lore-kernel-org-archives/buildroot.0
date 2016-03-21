@@ -1,52 +1,91 @@
-From: gustavo.zacarias at free-electrons.com <gustavo.zacarias@free-electrons.com>
-Date: Mon, 21 Mar 2016 08:56:04 -0300
-Subject: [Buildroot] [PATCH] dt: add patch to fix failures on newer
-	toolchains
-Message-ID: <1458561364-941-1-git-send-email-gustavo.zacarias@free-electrons.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Mon, 21 Mar 2016 11:56:38 +0000
+Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
+	config (incl. BBB)
+In-Reply-To: <CAGm1_kt3uK6rVzFvCjWy0rnANPEqrC4GRVFS5NUJzXjp2ddpGg@mail.gmail.com>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <CAGm1_kt3uK6rVzFvCjWy0rnANPEqrC4GRVFS5NUJzXjp2ddpGg@mail.gmail.com>
+Message-ID: <CAPho-_+DfWt7Pvd97O0Ln8-ecuv0TsYrLEgBtyW3ZtWi4vrDeA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
+On Mon, 21 Mar 2016, 12:39 Yegor Yefremov, <yegorslists@googlemail.com>
+wrote:
 
-On newer toolchains (glibc >= 2.20) _BSD_SOURCE behaviour was deprecated
-in favour if the _DEFAULT_SOURCE macro. See man 7 feature_test_macros.
-Add patch from Fedora to also consider _DEFAULT_SOURCE. Fixes:
-http://autobuild.buildroot.net/results/9e2/9e2126b0e68d0d59d37616a268adb810efd8281a/
+> On Sun, Mar 20, 2016 at 11:35 PM, Pieter Smith <pieter@boesman.nl> wrote:
+> > This patch-set adds support for building barebox with up to 2
+> configurations.
+> > It can be used to build the barebox x-loader or MLO (also called
+> Secondary
+> > Program Loader) in addition to the standard barebox build (Tertiary
+> Program
+> > Loader). This implements the design proposed in
+> > http://elinux.org/Buildroot#Todo_list, with minor adjustments:
+> > 1. Have boot/barebox/barebox.mk contain the common stuff.
+> > 2. Add a second package boot/barebox/barebox-2.
+> > 3. There is only one version selection, but each package allows to
+> >    define the configuration to be used.
+> > 4. Design is a little bit like package/gcc, where we have multiple gcc
+> builds,
+> >    but share a lot of common definitions between the packages.
+> >
+> > To demonstrate that it works as advertized, the last patch adds a
+> defconfig for
+> > the beaglebone that makes use of the added functionality.
+> >
+> > Revision history:
+> > v4: Introduces barebox-package function to reduce duplication and
+> maintenance
+> >     Simplifies built image selection
+> >     Ease review with smaller patches
+> >     Review re-work: Special thanks to Arnout Vandecappelle and Yegor
+> Yefremov
+> > v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
+> > v2: Dropped x-loader build specialization in favor of 2 generic barebox
+> builds
+> > v1: Initial posting
+> >
+> > Pieter Smith (7):
+> >   barebox: support multi-image-build image selection
+> >   barebox: friendly error on missing built image
+> >   barebox: support custom barebox output image name
+> >   barebox: introduce barebox-package function
+> >   barebox: extract package name argument
+> >   barebox: support 2nd config build
+> >   beaglebone: adds barebox bootloader defconfig
+> >
+> >  board/beaglebone/barebox.env/boot/sd      |   6 +
+> >  board/beaglebone/barebox.env/config-board |   4 +
+> >  boot/barebox/Config.in                    |  18 +++
+> >  boot/barebox/barebox-2/Config.in          |  79 +++++++++++++
+> >  boot/barebox/barebox-2/barebox-2.hash     |   1 +
+> >  boot/barebox/barebox-2/barebox-2.mk       |   9 ++
+> >  boot/barebox/barebox.mk                   | 178
+> ++++++++++++++++++------------
+> >  configs/beaglebone_barebox_defconfig      |  41 +++++++
+> >  8 files changed, 266 insertions(+), 70 deletions(-)
+> >  create mode 100644 board/beaglebone/barebox.env/boot/sd
+> >  create mode 100644 board/beaglebone/barebox.env/config-board
+> >  create mode 100644 boot/barebox/barebox-2/Config.in
+> >  create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+> >  create mode 100644 boot/barebox/barebox-2/barebox-2.mk
+> >  create mode 100644 configs/beaglebone_barebox_defconfig
+>
+> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> for the whole series.
+>
+> Yegor
+>
 
-Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
----
- package/dt/0002-dt-default-source-define.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/dt/0002-dt-default-source-define.patch
+Thanks!
 
-diff --git a/package/dt/0002-dt-default-source-define.patch b/package/dt/0002-dt-default-source-define.patch
-new file mode 100644
-index 0000000..d59faaf
---- /dev/null
-+++ b/package/dt/0002-dt-default-source-define.patch
-@@ -0,0 +1,20 @@
-+Patch taken from Fedora:
-+http://pkgs.fedoraproject.org/cgit/rpms/dt.git/commit/dt-default-source-define.patch?id=a3107b34a3efc6af66a5f892514f233bb66eb6b5
-+
-+_BSD_SOURCE was deprecated, hence switch to use _DEFAULT_SOURCE as well
-+to avoid the build from breaking on newer toolchains.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo.zacarias@free-electrons.com>
-+
-+diff -rupN dt.v18.32.old/common.h dt.v18.32/common.h
-+--- dt.v18.32.old/common.h	2013-03-01 23:52:30.000000000 +0100
-++++ dt.v18.32/common.h	2014-09-24 17:41:40.777604710 +0200
-+@@ -127,7 +127,7 @@ typedef volatile slarge_t	v_slarge;
-+ 
-+ #endif /* defined(_WIN64) */
-+ 
-+-#elif defined(__GNUC__) && defined(_BSD_SOURCE) || defined(SCO) || defined(__QNXNTO__) || defined(SOLARIS) || defined(HP_UX) || defined(AIX) || defined(_NT_SOURCE) 
-++#elif defined(__GNUC__) && defined(_BSD_SOURCE) || defined (_DEFAULT_SOURCE) ||  defined(SCO) || defined(__QNXNTO__) || defined(SOLARIS) || defined(HP_UX) || defined(AIX) || defined(_NT_SOURCE) 
-+ 
-+ #define QuadIsLongLong
-+ typedef unsigned long long int	large_t;
--- 
-2.7.3
+- Pieter
+
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160321/f9816862/attachment-0001.html>
