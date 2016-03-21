@@ -1,42 +1,35 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Mon, 21 Mar 2016 06:40:26 -0500
-Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
- or $(O) are not absolute canonical path
-In-Reply-To: <CAHXCMM+vZH6tshQXizYqVag+zeEh-vS17AZTCsdyeY_SsB+E8w@mail.gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
- <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
- <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
- <CAHXCMM+vZH6tshQXizYqVag+zeEh-vS17AZTCsdyeY_SsB+E8w@mail.gmail.com>
-Message-ID: <CAFt09wP4mLSaBGoDCrhXsZKj7+JBfd0D5oHCEm5Bhy0Ko8zO4Q@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Mar 2016 08:43:20 -0300
+Subject: [Buildroot] [PATCH v3 2/7] libgtk3: bump to version 3.18.8
+In-Reply-To: <20160320183749.20bd3132@free-electrons.com>
+References: <1457517525-7716-1-git-send-email-gustavo@zacarias.com.ar>
+ <1457517525-7716-3-git-send-email-gustavo@zacarias.com.ar>
+ <20160320183749.20bd3132@free-electrons.com>
+Message-ID: <56EFDE58.3020309@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,
+On 20/03/16 14:37, Thomas Petazzoni wrote:
 
-On Mon, Mar 21, 2016 at 12:21 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> On Mon, Mar 21, 2016 at 2:45 AM, Matthew Weber <matt@thewebers.ws> wrote:
->> Samuel, All,
+> Hello,
+>
+> On Wed,  9 Mar 2016 06:58:40 -0300, Gustavo Zacarias wrote:
+>> Mark the wayland backend as good again since the bump and consequent
+>> protocol version mtach fixes it.
 >>
->> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
->>> Samuel,
->>>
-
-<snip>
+>> Switch backend selection to choice so that only one can be selected.
 >
-> hmm... :-/
-> I cannot reproduce your issue (running make from inside or outside the
-> Buildroot directory).
-> Did you apply the whole series, or have you narrowed down this issue
-> to this patch?
->
+> Where are you doing this? I don't see the backend selection being
+> changed to a kconfig "choice". Did I miss something?
 
-Shoot, looks like my master is out of sync.  I'm missing commits since
-March9th, so I don't have the 02/18 of your series.  I'll retest later
-today when I get back to this.
-
-Thanks,
-Matt
+Hi.
+I had a change of heart and forgot to update the comment.
+It is indeed possible to have multiple backends at once and switch via 
+the GDK_BACKEND env variable.
+I'll spin a new set together with the 3.18.9 bump (3.20.x is due right 
+now, but is known to have some kinks on the API side so it might be 
+better to get on it a bit later).
+Regards.
