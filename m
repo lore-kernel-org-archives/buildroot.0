@@ -1,11 +1,10 @@
 From: Lee Jones <lee.jones@linaro.org>
-Date: Mon, 21 Mar 2016 09:48:01 +0000
-Subject: [Buildroot] [PATCH v2 16/17] configs/stm32f429_disco: new
- configuration for STM32F429 Discovery board
-In-Reply-To: <1458335299-27409-17-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Mon, 21 Mar 2016 09:49:22 +0000
+Subject: [Buildroot] [PATCH v2 00/17] ARM Cortex-M support and STM32
+	defconfigs
+In-Reply-To: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-17-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <20160321094801.GB3529@x1>
+Message-ID: <20160321094922.GC3529@x1>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,104 +13,141 @@ To: buildroot@busybox.net
 
 On Fri, 18 Mar 2016, Thomas Petazzoni wrote:
 
-> From: Lee Jones <lee.jones@linaro.org>
+> Hello,
 > 
-> This commit adds a defconfig for the STM32F429 platform, which is
-> based on a Cortex-M4 core from ST Microelectronics. It is therefore
-> the first noMMU ARM platform supported in Buildroot.
+> Here is the v2 of the patches that add support for ARM Cortex-M and
+> STM32 defconfigs.
 > 
-> This commit includes some files that will be common to several STM32
-> platforms (hence in board/stmicroelectronics) and some files that are
-> specific to the STM32F429 (hence in
-> board/stmicroelectronics/stm32f429-disco). More specifically, this
-> commit adds:
+> The changes from v1 are:
 > 
->  - A minimal Busybox configuration, which is small enough to boot
->    without causing OOM on such small noMMU platforms. The resulting
->    Busybox, statically linked with uClibc-ng, weights around 220
->    KB. For now, this file is located in board/stmicroelectronics/, but
->    we might consider moving it to package/busybox/ in the future if
->    needed.
+>  - Added Arnout Acked-by on patch "arch/arm: introduce and use
+>    BR2_ARM_CPU_ARMV7M".
 > 
->  - A post-build script that removes the mounting of /dev/pts (not
->    enabled in the kernel and not very useful for a system that has no
->    network and no X), and removes the network related init script and
->    configuration files (no network support).
+>  - Added Arnout Reviewed-by on patch "arch/arm: add Cortex-M4 entry"
 > 
->  - A flash.sh script, to perform the right OpenOCD invocations to
->    reflash the board.
+>  - Replace the complicated COMPILE_IN_THUMB/USE_BX logic in uclibc.mk
+>    by patches against uClibc-ng that allow to completely get rid of
+>    those options. Then simplified uclibc.mk accordingly.
 > 
->  - One small kernel patch to adjust the kernel command line in the
->    Device Tree, since it's the only way to do so.
+>  - Remove hard-float suport for now, since there is no support for it
+>    in the kernel. Suggested by Arnout.
 > 
->  - The usual readme.txt file.
+>  - Use BR2_BINFMT_FLAT instead of BR2_USE_MMU to decide whether to
+>    disable DOPIC in uClibc. Suggested by Arnout.
 > 
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> [Thomas:
->  - squashed multiple patches from Lee Jones together
->  - added the minimal Busybox configuration
->  - added the post-build script
->  - improved the flashing script to not hardcode the location of the
->    output directory
->  - add the small kernel patch
->  - improve the readme.txt file
->  - test on HW the resulting image, after using the internal toolchain.]
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> ---
+>  - Fix typo in DOPIC commit log. Noticed by Arnout.
+> 
+>  - Added Arnout Reviewed-by on patch "uclibc: NPTL thread
+>    implementation only available on MMU platforms".
+> 
+>  - In the patch that ensures musl is built for the ARM instruction set
+>    when Thumb1 is selected, clarify the comment. Suggested by Arnout.
+> 
+>  - Added Arnout Reviewed-by on package/Makefile.in: adjust LDFLAGS for
+>    elf2flt.
+> 
+>  - Add hash file to the elf2flt package. Suggested by Arnout.
+> 
+>  - Improve the elf2flt upstream change commit log, to explain more
+>    clearly why the patch from Waldemar is included in this
+>    commit. Done after a comment made by Arnout.
+> 
+>  - Merge the elf2flt --disable-werror into the elf2flt upstream change
+>    patch, since it's actually related (switching upstream has changed
+>    the source code, which is the reason for the new warnings that
+>    cause the build issues).
+> 
+>  - Switch to kernel 4.5 for the STM32 defconfigs
+> 
+>  - Regenerate Linux patches for STM32F469 since they were not applying
+>    correctly (reported by Maxime Coquelin).
+> 
+> Thanks!
+> 
+> Thomas
+> 
+> Lee Jones (2):
+>   configs/stm32f429_disco: new configuration for STM32F429 Discovery
+>     board
+>   configs/stm32f469_disco: new configuration for STM32F469 Discovery
+>     board
+> 
+> Thomas Petazzoni (15):
+>   arch/arm: introduce and use BR2_ARM_CPU_ARMV7M
+>   arch/arm: Cortex-M3 provides only Thumb-2
+>   arch/arm: add Cortex-M4 entry
+>   uclibc: add patches to simplify Thumb handling
+>   uclibc: remove USE_BX handling
+>   uclibc: gcc >= 4.9 can build a thumb/thread uclibc
+>   uclibc: disable DOPIC on ARM FLAT
+>   uclibc: context functions are not Thumb-compatible
+>   uclibc: NPTL thread implementation only available on MMU platforms
+>   musl: build broken on Thumb, use ARM mode
+>   toolchain-buildroot: update glibc comment for noMMU
+>   toolchain-buildroot: don't show musl on noMMU platforms
+>   package/Makefile.in: adjust LDFLAGS for elf2flt
+>   elf2flt: use new upstream site and add ARM patch
+>   afboot-stm32: use the Buildroot toolchain
+> 
+>  arch/Config.in.arm                                 |   10 +-
 >  board/stmicroelectronics/busybox-minimal.config    | 1057 ++++++++++++++++++++
 >  board/stmicroelectronics/stm32-post-build.sh       |    8 +
 >  board/stmicroelectronics/stm32f429-disco/flash.sh  |   20 +
 >  ...49-disco-don-t-force-init-in-chosen-boota.patch |   32 +
 >  .../stmicroelectronics/stm32f429-disco/readme.txt  |   30 +
+>  board/stmicroelectronics/stm32f469-disco/flash.sh  |   20 +
+>  ...-ARM-stm32-Identify-a-new-board-STM32F469.patch |   25 +
+>  ...upply-a-DTS-file-for-the-STM32F469-Discov.patch |  101 ++
+>  ...-Add-new-config-fragment-to-change-RAM-st.patch |   28 +
+>  .../patches/openocd/0001-add-config.patch          |   37 +
+>  .../patches/openocd/0002-flash-nor.patch           |   37 +
+>  .../stmicroelectronics/stm32f469-disco/readme.txt  |   19 +
+>  .../0001-Use-ld-instead-of-gcc-for-linking.patch   |   61 ++
+>  boot/afboot-stm32/afboot-stm32.mk                  |    2 +-
 >  configs/stm32f429_disco_defconfig                  |   18 +
->  6 files changed, 1165 insertions(+)
+>  configs/stm32f469_disco_defconfig                  |   19 +
+>  package/Makefile.in                                |    2 +-
+>  .../0001-allow-to-build-arm-flat-binaries.patch    |  123 +++
+>  package/elf2flt/elf2flt.hash                       |    2 +
+>  package/elf2flt/elf2flt.mk                         |    8 +-
+>  package/musl/musl.mk                               |    6 +
+>  .../0001-arm-remove-use-of-USE_BX-option.patch     |   53 +
+>  package/uclibc/0002-arm-remove-USE_BX-option.patch |   40 +
+>  .../0003-arm-remove-use-of-USE_LDREXSTREX.patch    |   49 +
+>  .../uclibc/0004-arm-remove-USE_LDREXSTREX.patch    |   34 +
+>  .../uclibc/0005-arm-remove-COMPILE_IN_THUMB.patch  |   43 +
+>  package/uclibc/Config.in                           |    7 +-
+>  package/uclibc/uclibc.mk                           |   23 +-
+>  toolchain/toolchain-buildroot/Config.in            |    4 +
+>  30 files changed, 1897 insertions(+), 21 deletions(-)
 >  create mode 100644 board/stmicroelectronics/busybox-minimal.config
 >  create mode 100755 board/stmicroelectronics/stm32-post-build.sh
 >  create mode 100755 board/stmicroelectronics/stm32f429-disco/flash.sh
 >  create mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
 >  create mode 100644 board/stmicroelectronics/stm32f429-disco/readme.txt
+>  create mode 100755 board/stmicroelectronics/stm32f469-disco/flash.sh
+>  create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32-Identify-a-new-board-STM32F469.patch
+>  create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0002-ARM-stm32-Supply-a-DTS-file-for-the-STM32F469-Discov.patch
+>  create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0003-ARM-configs-Add-new-config-fragment-to-change-RAM-st.patch
+>  create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
+>  create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
+>  create mode 100644 board/stmicroelectronics/stm32f469-disco/readme.txt
+>  create mode 100644 boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch
 >  create mode 100644 configs/stm32f429_disco_defconfig
+>  create mode 100644 configs/stm32f469_disco_defconfig
+>  create mode 100644 package/elf2flt/0001-allow-to-build-arm-flat-binaries.patch
+>  create mode 100644 package/elf2flt/elf2flt.hash
+>  create mode 100644 package/uclibc/0001-arm-remove-use-of-USE_BX-option.patch
+>  create mode 100644 package/uclibc/0002-arm-remove-USE_BX-option.patch
+>  create mode 100644 package/uclibc/0003-arm-remove-use-of-USE_LDREXSTREX.patch
+>  create mode 100644 package/uclibc/0004-arm-remove-USE_LDREXSTREX.patch
+>  create mode 100644 package/uclibc/0005-arm-remove-COMPILE_IN_THUMB.patch
 
-[...]
+Apart from the document change already requested:
 
-> diff --git a/board/stmicroelectronics/stm32f429-disco/readme.txt b/board/stmicroelectronics/stm32f429-disco/readme.txt
-> new file mode 100644
-> index 0000000..afe0f11
-> --- /dev/null
-> +++ b/board/stmicroelectronics/stm32f429-disco/readme.txt
-> @@ -0,0 +1,30 @@
-> +STM32F429 Discovery
-> +===================
-> +
-> +This tutorial describes how to use the predefined Buildroot
-> +configuration for the STM32F429 Discovery evaluation platform.
-> +
-> +Building
-> +--------
-> +
-> +  make stm32f429_disco_defconfig
-> +  make
-> +
-> +Wire the UART
-> +-------------
-> +
-> +Use a USB to TTL adapter, and connect:
-> +
-> + - RX to PA9
-> + - TX to PA10
-> + - GND to one of the GND available on the board
-> +
-> +The UART is configured at 115200.
-> +
-> +Flashing
-> +--------
-> +
-> +  ./board/stmicroelectronics/stm32/stm32f429-disco/flash.sh output/
+  Tested-by: Lee Jones <lee.jones@linaro.org>
 
-Looks like you've removed the stm32 directory, but still reference it
-from readme.txt
-
-[...]
+... on STM32F469-DISCO.
 
 -- 
 Lee Jones
