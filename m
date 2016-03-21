@@ -1,91 +1,63 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Mon, 21 Mar 2016 11:56:38 +0000
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
-	config (incl. BBB)
-In-Reply-To: <CAGm1_kt3uK6rVzFvCjWy0rnANPEqrC4GRVFS5NUJzXjp2ddpGg@mail.gmail.com>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <CAGm1_kt3uK6rVzFvCjWy0rnANPEqrC4GRVFS5NUJzXjp2ddpGg@mail.gmail.com>
-Message-ID: <CAPho-_+DfWt7Pvd97O0Ln8-ecuv0TsYrLEgBtyW3ZtWi4vrDeA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 21 Mar 2016 09:05:46 -0300
+Subject: [Buildroot] [PATCH v4 0/2] gtk3 bump
+Message-ID: <1458561948-13971-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 21 Mar 2016, 12:39 Yegor Yefremov, <yegorslists@googlemail.com>
-wrote:
+Bump libgtk3, companion gtkmm3 and wayland/weston to latest versions.
+Add wayland-protocols which is now split from wayland and required for
+weston to build since the 1.10+ releases.
 
-> On Sun, Mar 20, 2016 at 11:35 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> > This patch-set adds support for building barebox with up to 2
-> configurations.
-> > It can be used to build the barebox x-loader or MLO (also called
-> Secondary
-> > Program Loader) in addition to the standard barebox build (Tertiary
-> Program
-> > Loader). This implements the design proposed in
-> > http://elinux.org/Buildroot#Todo_list, with minor adjustments:
-> > 1. Have boot/barebox/barebox.mk contain the common stuff.
-> > 2. Add a second package boot/barebox/barebox-2.
-> > 3. There is only one version selection, but each package allows to
-> >    define the configuration to be used.
-> > 4. Design is a little bit like package/gcc, where we have multiple gcc
-> builds,
-> >    but share a lot of common definitions between the packages.
-> >
-> > To demonstrate that it works as advertized, the last patch adds a
-> defconfig for
-> > the beaglebone that makes use of the added functionality.
-> >
-> > Revision history:
-> > v4: Introduces barebox-package function to reduce duplication and
-> maintenance
-> >     Simplifies built image selection
-> >     Ease review with smaller patches
-> >     Review re-work: Special thanks to Arnout Vandecappelle and Yegor
-> Yefremov
-> > v3: Updated for master at 544e2c5871f223facd1ab3c2853cd07ad70dd9d1
-> > v2: Dropped x-loader build specialization in favor of 2 generic barebox
-> builds
-> > v1: Initial posting
-> >
-> > Pieter Smith (7):
-> >   barebox: support multi-image-build image selection
-> >   barebox: friendly error on missing built image
-> >   barebox: support custom barebox output image name
-> >   barebox: introduce barebox-package function
-> >   barebox: extract package name argument
-> >   barebox: support 2nd config build
-> >   beaglebone: adds barebox bootloader defconfig
-> >
-> >  board/beaglebone/barebox.env/boot/sd      |   6 +
-> >  board/beaglebone/barebox.env/config-board |   4 +
-> >  boot/barebox/Config.in                    |  18 +++
-> >  boot/barebox/barebox-2/Config.in          |  79 +++++++++++++
-> >  boot/barebox/barebox-2/barebox-2.hash     |   1 +
-> >  boot/barebox/barebox-2/barebox-2.mk       |   9 ++
-> >  boot/barebox/barebox.mk                   | 178
-> ++++++++++++++++++------------
-> >  configs/beaglebone_barebox_defconfig      |  41 +++++++
-> >  8 files changed, 266 insertions(+), 70 deletions(-)
-> >  create mode 100644 board/beaglebone/barebox.env/boot/sd
-> >  create mode 100644 board/beaglebone/barebox.env/config-board
-> >  create mode 100644 boot/barebox/barebox-2/Config.in
-> >  create mode 120000 boot/barebox/barebox-2/barebox-2.hash
-> >  create mode 100644 boot/barebox/barebox-2/barebox-2.mk
-> >  create mode 100644 configs/beaglebone_barebox_defconfig
->
-> Tested-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> for the whole series.
->
-> Yegor
->
+The pangomm downgrade can be applied separately without issues.
 
-Thanks!
+The gtkmm3 bump is tied to the libgtk3 bump.
 
-- Pieter
+libgtk3 now requires an EGL/GLX backend via libepoxy, that's the
+upstream take on the subject. When there's no hardware GL support mesa
+with swrast can be used (hence the reason for the libepoxy patches, to
+support x11-less builds, for example for wayland).
 
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160321/f9816862/attachment-0001.html>
+Re-enable libgtk3 wayland support: xdg protocol is normally
+version-matched among them, so in the future care must be taken when
+bumping one of them to a newer major version. The failure is only
+exhibited at runtime - not at build time.
+
+Changes for v4:
+ + Only libgtk3/gtkmm3 patches remain, the rest applied
+ + Bump to libgtk3 3.18.9
+ + Drop choice comment from libgtk3 commit msg
+
+Changes for v3:
+ + Newer libgtk3
+ + Newer wayland/weston + wayland-protocols (new package)
+ + Enhanced libepoxy package/patchset to build with GLX alone, and use
+   the github efforts at EGL-alone.
+
+Changes for v2:
+ + Bump gtkmm3 as well
+ + Drop target_os/host_os patch to libepoxy since it's dubious and not
+   required.
+ + Roll back pangomm version to stable branch.
+
+Gustavo Zacarias (2):
+  libgtk3: bump to version 3.18.9
+  gtkmm3: bump to version 3.18.0
+
+ package/gtkmm3/Config.in                           | 18 +++--
+ package/gtkmm3/gtkmm3.hash                         |  4 +-
+ package/gtkmm3/gtkmm3.mk                           | 13 +---
+ .../0004-Fix-undefined-reference-to-get_xkb.patch  | 33 --------
+ .../0005-do-not-build-extract-strings.patch        | 47 ------------
+ package/libgtk3/Config.in                          | 88 +++++++++++++---------
+ package/libgtk3/libgtk3.hash                       |  4 +-
+ package/libgtk3/libgtk3.mk                         | 15 +---
+ 8 files changed, 71 insertions(+), 151 deletions(-)
+ delete mode 100644 package/libgtk3/0004-Fix-undefined-reference-to-get_xkb.patch
+ delete mode 100644 package/libgtk3/0005-do-not-build-extract-strings.patch
+
+-- 
+2.7.3
