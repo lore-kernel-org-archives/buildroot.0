@@ -1,49 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 20 Mar 2016 23:55:13 +0100
-Subject: [Buildroot] [Buildroot PATCH v3 1/1] cgroupsfs: new package
-In-Reply-To: <1455547203-24097-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-References: <1455547203-24097-1-git-send-email-niranjan.reddy@rockwellcollins.com>
-Message-ID: <20160320235513.2e9466f7@free-electrons.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Sun, 20 Mar 2016 20:45:30 -0500
+Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+ <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
+Message-ID: <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Samuel, All,
 
-On Mon, 15 Feb 2016 20:10:03 +0530, Niranjan Reddy wrote:
-> This package consists of scripts that setup cgroups at boot
-> without doing any cgroup management or classification of
-> tasks into cgroups
-> 
-> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
-> ---
-> Changes v2 -> v3:
->   - placed start(),stop() and restart() in seperate functions.
->   - Changed LICENSE to GPLv3+ and added $(CGROUPFS_PKGDIR)
->     instead of package/cgroupfs/ .
->   - Added .hash file.
->   - Removed test condition for mount and umount (suggested by Thomas).
+On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
+> Samuel,
+>
+> On Wed, Mar 9, 2016 at 4:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+>> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
+>> they can be resolved differently, depending on each package build-system
+>> (whether it uses the given paths or get the absolute canonical ones).
+>>
+>> Thus, to make easier tracking down host machine paths leaking into the
+>> host, target or staging trees, the CURDIR and O variables are set to
+>> their absolute canonical paths.
+>>
+>> Note that this change takes care of the makefile wrapper installed in
+>> $(O) to avoid unneeded make recursion.
+>>
+>> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>>
+>> ---
+>> changes v6->v7:
+>> - none
+>>
+>> changes v5->v6:
+>> - new patch
+>> ---
+>>  Makefile | 22 ++++++++++++++++++----
+>>  1 file changed, 18 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Makefile b/Makefile
+>> index 98c8dc7..52a92f6 100644
+>> --- a/Makefile
+>> +++ b/Makefile
+>> @@ -26,16 +26,30 @@
+>>
+>>  # Trick for always running with a fixed umask
+>>  UMASK = 0022
+>> -ifneq ($(shell umask),$(UMASK))
+>> +
+>> +# Check if we need to re-enter make for one or several of the following reasons:
+>> +# 1- Wrong (too restrictive) umask:
+>> +#    This prevents Buildroot and packages from creating files and directories.
+>> +# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
+>> +#    This makes harder tracking and fixing host machine path leaks.
+>> +# 3- Output location (i.e. $(O)) not being the absolute canonical path:
+>> +#    This makes harder tracking and fixing host machine path leaks.
+>> +#
+>> +# Note:
+>> +# - remove the trailing '/.' from $(O) as it can be added by the makefile
+>> +#   wrapper installed in the $(O).
+>> +ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
+>>  .PHONY: _all $(MAKECMDGOALS)
+>>
+>>  $(MAKECMDGOALS): _all
+>>         @:
+>>
+>>  _all:
+>> -       @umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+>> +       umask $(UMASK) && \
+>> +               $(MAKE) -C $(realpath $(CURDIR)) --no-print-directory \
+>> +                       $(MAKECMDGOALS) O=$(realpath $(O))
+>
+> I've applied your v7 patches with these changes to the tip of
+> buildroot and currently run into the following error.  I'm still
+> poking around trying to understand why.
+>
+> $ make V=1 qemu_x86_defconfig
+> umask 0022 && \
+>         make -C /opt/buildroot --no-print-directory \
+>                 qemu_x86_defconfig O=
+> mkdir: missing operand
+> Try 'mkdir --help' for more information.
+> Makefile:156: *** output directory "" does not exist.  Stop.
+> Makefile:48: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+> <snip>
+>
+> --
+> Thanks,
+> Matt
 
-I've done a number of changes:
+Sorry, didn't CC.  2nd attempt, see above.
 
-    [Thomas:
-     - rename to cgroupfs-mount to match upstream
-     - add proper hash, since hashes should be added for github sourced
-       packages
-     - fix minor typos in the init script
-     - fix the license file information.]
-
-And then applied. Note that hashes must be added for github sourced
-packages, and that you should verify with make legal-info that the
-license files pointed in the <pkg>_LICENSE_FILES variable actually
-exist (it wasn't the case in your submission).
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Matt
