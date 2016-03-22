@@ -1,146 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 23:05:42 +0100
-Subject: [Buildroot] [git commit] package/libldns: Fix build error with perl
-	5.22
-Message-ID: <20160322220803.67DD8818A0@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 23:08:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libldns: Fix build error with
+ perl 5.22
+In-Reply-To: <1458683149-6200-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1458683149-6200-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160322230806.4f4850f0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=810e74934663dbea5004bde64f9c513d8712df81
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Bug was already reported upstream, as solution upstream refered to this
-commit: https://www.nlnetlabs.nl/bugs-script/show_bug.cgi?id=733#c2
+On Tue, 22 Mar 2016 22:45:49 +0100, Bernd Kuhls wrote:
+> Bug was already reported upstream, as solution upstream refered to this
+> commit: https://www.nlnetlabs.nl/bugs-script/show_bug.cgi?id=733#c2
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/libldns/0003-doxyparse-manpages.patch | 117 ++++++++++++++++++++++++++
+>  1 file changed, 117 insertions(+)
+>  create mode 100644 package/libldns/0003-doxyparse-manpages.patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/libldns/0003-doxyparse-manpages.patch | 117 ++++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/libldns/0003-doxyparse-manpages.patch b/package/libldns/0003-doxyparse-manpages.patch
-new file mode 100644
-index 0000000..7aaa0d1
---- /dev/null
-+++ b/package/libldns/0003-doxyparse-manpages.patch
-@@ -0,0 +1,117 @@
-+From 168ee09a4bf184947798c3ee3ac99b6651470d64 Mon Sep 17 00:00:00 2001
-+From: Willem Toorop <willem@nlnetlabs.nl>
-+Date: Thu, 27 Nov 2014 16:21:54 +0100
-+Subject: let doxyparse output manpage generation issues
-+
-+This patch fixes a build error with perl 5.22.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Patch backported from upstream commit:
-+http://git.nlnetlabs.nl/ldns/commit/?h=develop&id=168ee09a4bf184947798c3ee3ac99b6651470d64
-+---
-+ doc/doxyparse.pl | 45 ++++++++++++++++++++++++++++++++++++++-------
-+ 1 file changed, 38 insertions(+), 7 deletions(-)
-+
-+diff --git a/doc/doxyparse.pl b/doc/doxyparse.pl
-+index 96a1732..a09b2e8 100755
-+--- a/doc/doxyparse.pl
-++++ b/doc/doxyparse.pl
-+@@ -57,10 +57,15 @@ This manpage was automaticly generated from the ldns source code by
-+ use of Doxygen and some perl.
-+ ";
-+ 
-+-getopts("m:",\%options);
-++getopts("em:",\%options);
-+ # if -m manpage file is given process that file
-+ # parse the file which tells us what manpages go together
-+ my $functions, $see_also;
-++my $i = -1;
-++my $report_errors = defined $options{'e'};
-++my $errors = 0;
-++my %unique;
-++
-+ if (defined $options{'m'}) {
-+ 	# process
-+ 	open(MAN, "<$options{'m'}") or die "Cannot open $options{'m'}";
-+@@ -68,18 +73,35 @@ if (defined $options{'m'}) {
-+ 		# func1, func2, .. | see_also1, see_also2, ...
-+ 		while(<MAN>) {
-+ 			chomp;
-++			$i += 1;
-+ 			if (/^#/) { next; }
-+ 			if (/^$/) { next; }
-+-			($functions, $see_also) = split /[\t ]*\|[\t ]*/, $_;
-+-			#print "{$functions}\n";
-+-			#print "{$see_also}\n";
-++			my @parts = split /[\t ]*\|[\t ]*/, $_;
-++			$functions = shift @parts;
-++			$see_also = join ', ', @parts;
-++			print "{$functions}\n";
-++			print "{$see_also}\n";
-+ 			my @funcs = split /[\t ]*,[\t ]*/, $functions;
-+ 			my @also = split /[\t ]*,[\t ]*/, $see_also;
-+ 			$manpages{$funcs[0]} = \@funcs;
-+ 			$see_also{$funcs[0]} = \@also;
-++			foreach (@funcs) {
-++				if ($unique{$_}) {
-++					push $unique{$_}, ($i,);
-++				} else {
-++					$unique{$_} = [$i];
-++				}
-++			}
-+ 			#print "[", $funcs[0], "]\n";
-+ 		}
-+ 	close(MAN);
-++	while (($func, $lines) = each %unique ) {
-++		if (scalar @$lines > 1) {
-++			print STDERR "$func in function_manpages on lines: "
-++			    . join(", ",@$lines) . "\n" if $report_errors;
-++			$errors += 1;
-++		}
-++	}
-+ } else {
-+ 	print "Need -m file to process the .h files\n";
-+ 	exit 1;
-+@@ -95,7 +117,7 @@ mkdir "doc/man";
-+ mkdir "doc/man/man$MAN_SECTION";
-+ 
-+ $state = 0;
-+-my $i;
-++$i = 0;
-+ my @lines = <STDIN>;
-+ my $max = @lines;
-+ 
-+@@ -273,7 +295,7 @@ foreach (keys %manpages) {
-+ 
-+ 	print MAN $MAN_MIDDLE;
-+ 
-+-	if (defined(@$also)) {
-++	if (@$also) {
-+ 		print MAN "\n.SH SEE ALSO\n\\fI";
-+ 		print MAN join "\\fR, \\fI", @$also;
-+ 		print MAN "\\fR.\nAnd ";
-+@@ -290,7 +312,7 @@ foreach (keys %manpages) {
-+ 	# create symlinks
-+ 	chdir("$BASE/man$MAN_SECTION");
-+ 	foreach (@$name) {
-+-		print STDERR $_,"\n";
-++		print STDOUT $_,"\n";
-+ 		my $new_file = $_ . "." . $MAN_SECTION;
-+ 		if ($new_file eq $symlink_file) {
-+ 			next;
-+@@ -301,3 +323,12 @@ foreach (keys %manpages) {
-+ 	chdir("../../.."); # and back, tricky and fragile...
-+ 	close(MAN);
-+ }
-++foreach (keys %api) {
-++	next if (/ / || /^$/);
-++	if (not $unique{$_}) {
-++		print STDERR "no man page for $_\n" if $report_errors;
-++		$errors += 1;
-++	}
-++}
-++
-++exit ($report_errors and $errors != 0);
-+-- 
-+cgit v0.11.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
