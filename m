@@ -1,44 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Mar 2016 00:03:25 +0100
-Subject: [Buildroot] [git commit] json-glib: bump to version 1.2.0
-Message-ID: <20160322230330.5A58881922@busybox.osuosl.org>
+Date: Wed, 23 Mar 2016 00:03:49 +0100
+Subject: [Buildroot] [git commit] gtkmm3: depends on libgtk3
+Message-ID: <20160322230354.3DCF080478@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebde9f4d2c3321f3f8fb6498e24ee18a6f743a8e
+commit: https://git.buildroot.net/buildroot/commit/?id=f34c69da2bfa2a485671dbbcf1ee24ad7409b63b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+packages shouldn't select libgtk3 directly, just depend on it, like for
+libgtk2.
+In the past libgtk3 didn't require any *GL backend and the dead-end
+solution/last resort was the broadway (networked) gdk backend - though
+not very useful it didn't require any funky dependencies.
+But now we do. Fixes:
+http://autobuild.buildroot.net/results/794/794c7ed221432e46a810fc281732ba417cd4cda3/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/json-glib/json-glib.hash | 4 ++--
- package/json-glib/json-glib.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gtkmm3/Config.in | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
-index dd8bf54..18e1aa0 100644
---- a/package/json-glib/json-glib.hash
-+++ b/package/json-glib/json-glib.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/0.14/json-glib-0.14.2.sha256sum
--sha256	b816a5fa3e5664b08679a6972a6e5693d6cc1990ff4a6f94c07554db96be94a7	json-glib-0.14.2.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.0.sha256sum
-+sha256	99d6dfbe49c08fd7529f1fe8dcb1893b810a1bb222f1e7b65f41507658b8a7d3	json-glib-1.2.0.tar.xz
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index cffe958..f7c52c0 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/gtkmm3/Config.in b/package/gtkmm3/Config.in
+index 8859f6e..ef62a1f 100644
+--- a/package/gtkmm3/Config.in
++++ b/package/gtkmm3/Config.in
+@@ -1,11 +1,9 @@
+-comment "gtkmm3 needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
++comment "gtkmm3 needs libgtk3 and a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_USE_WCHAR \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+-
+-comment "gtkmm3 needs an OpenGL EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
  
--JSON_GLIB_VERSION_MAJOR = 0.14
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).2
-+JSON_GLIB_VERSION_MAJOR = 1.2
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).0
- JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPLv2.1+
+ config BR2_PACKAGE_GTKMM3
+ 	bool "gtkmm3"
+@@ -20,11 +18,10 @@ config BR2_PACKAGE_GTKMM3
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/libgtk3 -> libglib2
+ 	depends on BR2_USE_MMU # *mm/libgtk3 -> libglib2
+ 	depends on BR2_USE_WCHAR # *mm/libgtk3 -> libglib2
+-	depends on BR2_PACKAGE_HAS_LIBEGL # libgtk3 -> libepoxy
++	depends on BR2_PACKAGE_LIBGTK3
+ 	select BR2_PACKAGE_ATKMM
+ 	select BR2_PACKAGE_CAIROMM
+ 	select BR2_PACKAGE_GLIBMM
+-	select BR2_PACKAGE_LIBGTK3
+ 	select BR2_PACKAGE_LIBSIGC
+ 	select BR2_PACKAGE_PANGOMM
+ 	help
