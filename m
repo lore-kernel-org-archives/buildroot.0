@@ -1,40 +1,46 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 21 Mar 2016 23:10:43 -0300
-Subject: [Buildroot] [PATCH] libgtk2: bump to version 2.24.30
-Message-ID: <1458612643-12317-1-git-send-email-gustavo@zacarias.com.ar>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Mon, 21 Mar 2016 22:03:43 -0500
+Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <CAFt09wP4mLSaBGoDCrhXsZKj7+JBfd0D5oHCEm5Bhy0Ko8zO4Q@mail.gmail.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+ <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
+ <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
+ <CAHXCMM+vZH6tshQXizYqVag+zeEh-vS17AZTCsdyeY_SsB+E8w@mail.gmail.com>
+ <CAFt09wP4mLSaBGoDCrhXsZKj7+JBfd0D5oHCEm5Bhy0Ko8zO4Q@mail.gmail.com>
+Message-ID: <CAFt09wPZo0QL+-3kAo3dHTLLBfzJXyBHXUVy5-qMaRXC3QAEzQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/libgtk2/libgtk2.hash | 4 ++--
- package/libgtk2/libgtk2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Samuel,
 
-diff --git a/package/libgtk2/libgtk2.hash b/package/libgtk2/libgtk2.hash
-index 1eb795d..175702f 100644
---- a/package/libgtk2/libgtk2.hash
-+++ b/package/libgtk2/libgtk2.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.29.sha256sum
--sha256	0741c59600d3d810a223866453dc2bbb18ce4723828681ba24aa6519c37631b8	gtk+-2.24.29.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/2.24/gtk+-2.24.30.sha256sum
-+sha256	0d15cec3b6d55c60eac205b1f3ba81a1ed4eadd9d0f8e7c508bc7065d0c4ca50	gtk+-2.24.30.tar.xz
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 17cdfcb..971e33c 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGTK2_VERSION_MAJOR = 2.24
--LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).29
-+LIBGTK2_VERSION = $(LIBGTK2_VERSION_MAJOR).30
- LIBGTK2_SOURCE = gtk+-$(LIBGTK2_VERSION).tar.xz
- LIBGTK2_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK2_VERSION_MAJOR)
- LIBGTK2_INSTALL_STAGING = YES
+On Mon, Mar 21, 2016 at 6:40 AM, Matthew Weber <matt@thewebers.ws> wrote:
+> Samuel,
+>
+> On Mon, Mar 21, 2016 at 12:21 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+>> On Mon, Mar 21, 2016 at 2:45 AM, Matthew Weber <matt@thewebers.ws> wrote:
+>>> Samuel, All,
+>>>
+>>> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
+>>>> Samuel,
+>>>>
+>
+> <snip>
+>>
+
+Narrowed it down to removing "O=$(realpath $(O))" on line 50 in the
+Makefile resolves the build error.  If I understand it correctly this
+is declaring O= empty and it causes the logic on 127 to evaluate to
+False and O= ends up as empty.
+
+I applied your 02/18 patch on top of
+0e1547a87cfd51e4fedf1cb7837f77e4f66c4052 when I tested.
+
+
 -- 
-2.7.3
+Thanks,
+Matt
