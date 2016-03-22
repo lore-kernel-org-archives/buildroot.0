@@ -1,61 +1,68 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 22 Mar 2016 21:59:05 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-03-21
-In-Reply-To: <CAB0FRssy+PBGQhpC5ELiRyia7opRXsCq8hL4oiqSUVM11pjDvA@mail.gmail.com>
-References: <20160322073023.CC980102FD4@stock.ovh.net>
- <CAB0FRssy+PBGQhpC5ELiRyia7opRXsCq8hL4oiqSUVM11pjDvA@mail.gmail.com>
-Message-ID: <56F1B219.2020009@gmail.com>
+Date: Tue, 22 Mar 2016 22:09:58 +0100
+Subject: [Buildroot] [PATCH] package/util-linux: fix lsipc segfault
+Message-ID: <1458680998-912-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+lsipc segfault when no option is given.
 
-Le 22/03/2016 18:38, Fran?ois Perrad a ?crit :
-> moarvm and many Lua modules (cgilua, copas, xpcall, dado, ...) are
-> broken by the latest host-luajit commit (see
-> https://git.busybox.net/buildroot/commit/?id=9ba8d1cce4ab00307827083bae234d87b37fb967)
-> 
-> The common message of error is :
-> /home/peko/autobuild/instance-0/output/host/usr/bin/luajit: error
-> while loading shared libraries: libluajit-5.1.so.2: cannot open shared
-> object file: No such file or directory
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...don-t-free-shm-data-if-no-shm-id-is-found.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
 
-It's weird because luajit works here...
-
-./test/luajit/host/usr/bin/luajit
-LuaJIT 2.0.4 -- Copyright (C) 2005-2015 Mike Pall. http://luajit.org/
-JIT: ON CMOV SSE2 SSE3 SSE4.1 fold cse dce fwd dse narrow loop abc sink fuse
->
-
-ls -l test/luajit/host/usr/lib/libluajit-5.1.so*
-lrwxrwxrwx. 1 naourr naourr     22 22 mars  21:42
-test/luajit/host/usr/lib/libluajit-5.1.so -> libluajit-5.1.so.2.0.4
-lrwxrwxrwx. 1 naourr naourr     22 22 mars  21:42
-test/luajit/host/usr/lib/libluajit-5.1.so.2 -> libluajit-5.1.so.2.0.4
--rwxr-xr-x. 1 naourr naourr 458144 22 mars  21:42
-test/luajit/host/usr/lib/libluajit-5.1.so.2.0.4
-
-ldd test/luajit/host/usr/bin/luajit
-	linux-vdso.so.1 (0x00007ffc995d4000)
-	libluajit-5.1.so.2 =>
-/home/naourr/buildroot/test/luajit/host/usr/lib/libluajit-5.1.so.2
-(0x00007fcf37a42000)
-	libm.so.6 => /lib64/libm.so.6 (0x00007fcf3770d000)
-	libdl.so.2 => /lib64/libdl.so.2 (0x00007fcf37509000)
-	libc.so.6 => /lib64/libc.so.6 (0x00007fcf37148000)
-	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007fcf36f30000)
-	/lib64/ld-linux-x86-64.so.2 (0x000055fd5fd2a000)
-
-Maybe an parallel issue with the install target in luajit makefile ?
-I don't know.
-
-Best regards,
-Romain
-
-> 
-> Fran?ois
-> 
+diff --git a/package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch b/package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
+new file mode 100644
+index 0000000..ab1a52c
+--- /dev/null
++++ b/package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
+@@ -0,0 +1,42 @@
++From cb8e8ecc800a1a8536fe5507ae7d09a8c1c442a8 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Tue, 22 Mar 2016 11:25:09 +0100
++Subject: [PATCH] lsipc: don't free shm data if no shm id is found
++
++There is a segfault in do_shm_global() when ipc_shm_get_info() return 0 and
++ipc_shm_free_info() is called.
++
++When no shm id is found, the memory allocated in shmds by ipc_shm_get_info() is
++already free when ipc_shm_free_info() is called.
++
++Move ipc_shm_free_info(shmds) inside the if statement where at least one shm id
++is found.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ sys-utils/lsipc.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/sys-utils/lsipc.c b/sys-utils/lsipc.c
++index 523859c..fa5d99c 100644
++--- a/sys-utils/lsipc.c
+++++ b/sys-utils/lsipc.c
++@@ -1072,14 +1072,13 @@ static void do_shm_global(struct libscols_table *tb)
++ 			++nsegs;
++ 			sum_segsz += shmdsp->shm_segsz;
++ 		}
+++		ipc_shm_free_info(shmds);
++ 	}
++ 
++ 	global_set_data(tb, "SHMMNI", _("Shared memory segments"), nsegs, lim.shmmni, 1);
++ 	global_set_data(tb, "SHMALL", _("Shared memory pages"), sum_segsz / getpagesize(), lim.shmall, 1);
++ 	global_set_data(tb, "SHMMAX", _("Max size of shared memory segment (bytes)"), 0, lim.shmmax, 0);
++ 	global_set_data(tb, "SHMMIN", _("Min size of shared memory segment (bytes)"), 0, lim.shmmin, 0);
++-
++-	ipc_shm_free_info(shmds);
++ }
++ 
++ int main(int argc, char *argv[])
++-- 
++2.1.4
++
+-- 
+2.5.0
