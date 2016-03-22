@@ -1,64 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 22:28:59 +0100
-Subject: [Buildroot] [PATCH 1/3] libdrm: reformat patch 0001 with Git
-In-Reply-To: <1458682141-23630-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1458682141-23630-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1458682141-23630-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Mar 2016 22:31:37 +0100
+Subject: [Buildroot] [PATCH 2/2]
+ package/x11r7/xdriver_xf86-video-nouveau: Fix DRI dependency
+In-Reply-To: <1450544015-17658-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1450544015-17658-1-git-send-email-bernd.kuhls@t-online.de>
+ <1450544015-17658-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160322223137.18eaf2bc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...tch => 0001-Add-ARM-support-into-xf86drm.h.patch} | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
- rename package/libdrm/{0001-update-arm.patch => 0001-Add-ARM-support-into-xf86drm.h.patch} (69%)
+Hello,
 
-diff --git a/package/libdrm/0001-update-arm.patch b/package/libdrm/0001-Add-ARM-support-into-xf86drm.h.patch
-similarity index 69%
-rename from package/libdrm/0001-update-arm.patch
-rename to package/libdrm/0001-Add-ARM-support-into-xf86drm.h.patch
-index 1a95a14..99a02a8 100644
---- a/package/libdrm/0001-update-arm.patch
-+++ b/package/libdrm/0001-Add-ARM-support-into-xf86drm.h.patch
-@@ -1,17 +1,24 @@
--[Adapted from yocto project]
-+From c0950d73c8aa13f057707fb7933c65c147349376 Mon Sep 17 00:00:00 2001
-+From: Lauren Post <lauren.post@freescale.com>
-+Date: Tue, 22 Mar 2016 22:08:25 +0100
-+Subject: [PATCH] Add ARM support into xf86drm.h
- 
--Add ARM support into xf86drm.h.  This provides support for Xorg interface.
--Without this the vivante samples will hang during close requiring a reboot
-+This provides support for Xorg interface.  Without this the vivante
-+samples will hang during close requiring a reboot
- 
-+[Adapted from yocto project]
- Upstream-Status: Pending
--
- Signed-off-by: Lauren Post <lauren.post@freescale.com>
- Signed-off-by: Evan Kotara <evan.kotara@freescale.com>
-+---
-+ xf86drm.h | 17 +++++++++++++++++
-+ 1 file changed, 17 insertions(+)
- 
- diff --git a/xf86drm.h b/xf86drm.h
-+index 481d882..1cc0075 100644
- --- a/xf86drm.h
- +++ b/xf86drm.h
--@@ -461,6 +461,23 @@ do {	register unsigned int __old __asm("
-+@@ -469,6 +469,23 @@ do {	register unsigned int __old __asm("o0");		\
-  		: "cr0", "memory");			\
-  	} while (0)
-  
-@@ -35,3 +42,6 @@ diff --git a/xf86drm.h b/xf86drm.h
-  #endif /* architecture */
-  #endif /* __GNUC__ >= 2 */
-  
-+-- 
-+2.6.4
-+
+On Sat, 19 Dec 2015 17:53:35 +0100, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/x11r7/xdriver_xf86-video-nouveau/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+
+I've just sent a series at
+http://lists.busybox.net/pipermail/buildroot/2016-March/156858.html,
+which I believe is a better fix for this problem. More details are
+available in the cover letter.
+
+Thanks!
+
+Thomas
 -- 
-2.6.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
