@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Mar 2016 00:01:35 +0100
-Subject: [Buildroot] [git commit] busybox: use md5 as default password
-	algorithm
-Message-ID: <20160322230142.901A981831@busybox.osuosl.org>
+Date: Wed, 23 Mar 2016 00:03:15 +0100
+Subject: [Buildroot] [PATCH] busybox: use md5 as default password
+ algorithm
+In-Reply-To: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160323000315.6f732d8f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1de77a59fb0cb6a3c5d25cf4a825fbc0c7acdce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-DES is terribly outdated and a security vulnerability.
+On Thu, 10 Mar 2016 16:43:10 -0300, Gustavo Zacarias wrote:
+> DES is terribly outdated and a security vulnerability.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/busybox/busybox.config | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/busybox/busybox.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
-index 2cf989d..693b9d2 100644
---- a/package/busybox/busybox.config
-+++ b/package/busybox/busybox.config
-@@ -496,7 +496,7 @@ CONFIG_PASSWD=y
- CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
- # CONFIG_CRYPTPW is not set
- # CONFIG_CHPASSWD is not set
--CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
-+CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="md5"
- CONFIG_SU=y
- CONFIG_FEATURE_SU_SYSLOG=y
- CONFIG_FEATURE_SU_CHECKS_SHELLS=y
+I've (obviously) read the discussion with Peter, but I believe the
+issue he is raising is different. We already have our Busybox
+configuration default to "des", which is not consistent with the algo
+choice made by the user in the Buildroot configuration. So switching to
+"md5" is not making things any worse from that perspective.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
