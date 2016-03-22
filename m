@@ -1,35 +1,138 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Mar 2016 00:04:42 +0100
-Subject: [Buildroot] [PATCH] gtkmm3: depends on libgtk3
-In-Reply-To: <1458687397-1678-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1458687397-1678-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160323000442.7bf60277@free-electrons.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Tue, 22 Mar 2016 18:11:22 -0500
+Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <20160322220739.GA3441@free.fr>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+ <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
+ <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
+ <20160322220739.GA3441@free.fr>
+Message-ID: <CAFt09wPkL6Rvo_UUdk1UQ07bNphRTrn-yb=SqeZXLM8A0tNP8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Yann, All
 
-On Tue, 22 Mar 2016 19:56:37 -0300, Gustavo Zacarias wrote:
-> packages shouldn't select libgtk3 directly, just depend on it, like for
-> libgtk2.
-> In the past libgtk3 didn't require any *GL backend and the dead-end
-> solution/last resort was the broadway (networked) gdk backend - though
-> not very useful it didn't require any funky dependencies.
-> But now we do. Fixes:
-> http://autobuild.buildroot.net/results/794/794c7ed221432e46a810fc281732ba417cd4cda3/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gtkmm3/Config.in | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+On Tue, Mar 22, 2016 at 5:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Matthew, All,
+>
+> On 2016-03-20 20:45 -0500, Matthew Weber spake thusly:
+>> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
+>> > On Wed, Mar 9, 2016 at 4:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+>> >> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
+>> >> they can be resolved differently, depending on each package build-system
+>> >> (whether it uses the given paths or get the absolute canonical ones).
+>> >>
+>> >> Thus, to make easier tracking down host machine paths leaking into the
+>> >> host, target or staging trees, the CURDIR and O variables are set to
+>> >> their absolute canonical paths.
+>> >>
+>> >> Note that this change takes care of the makefile wrapper installed in
+>> >> $(O) to avoid unneeded make recursion.
+>> >>
+>> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+>> >>
+>> >> ---
+>> >> changes v6->v7:
+>> >> - none
+>> >>
+>> >> changes v5->v6:
+>> >> - new patch
+>> >> ---
+>> >>  Makefile | 22 ++++++++++++++++++----
+>> >>  1 file changed, 18 insertions(+), 4 deletions(-)
+>> >>
+>> >> diff --git a/Makefile b/Makefile
+>> >> index 98c8dc7..52a92f6 100644
+>> >> --- a/Makefile
+>> >> +++ b/Makefile
+>> >> @@ -26,16 +26,30 @@
+>> >>
+>> >>  # Trick for always running with a fixed umask
+>> >>  UMASK = 0022
+>> >> -ifneq ($(shell umask),$(UMASK))
+>> >> +
+>> >> +# Check if we need to re-enter make for one or several of the following reasons:
+>> >> +# 1- Wrong (too restrictive) umask:
+>> >> +#    This prevents Buildroot and packages from creating files and directories.
+>> >> +# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
+>> >> +#    This makes harder tracking and fixing host machine path leaks.
+>> >> +# 3- Output location (i.e. $(O)) not being the absolute canonical path:
+>> >> +#    This makes harder tracking and fixing host machine path leaks.
+>> >> +#
+>> >> +# Note:
+>> >> +# - remove the trailing '/.' from $(O) as it can be added by the makefile
+>> >> +#   wrapper installed in the $(O).
+>> >> +ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
+>> >>  .PHONY: _all $(MAKECMDGOALS)
+>> >>
+>> >>  $(MAKECMDGOALS): _all
+>> >>         @:
+>> >>
+>> >>  _all:
+>> >> -       @umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
+>> >> +       umask $(UMASK) && \
+>> >> +               $(MAKE) -C $(realpath $(CURDIR)) --no-print-directory \
+>> >> +                       $(MAKECMDGOALS) O=$(realpath $(O))
+>> >
+>> > I've applied your v7 patches with these changes to the tip of
+>> > buildroot and currently run into the following error.  I'm still
+>> > poking around trying to understand why.
+>> >
+>> > $ make V=1 qemu_x86_defconfig
+>> > umask 0022 && \
+>> >         make -C /opt/buildroot --no-print-directory \
+>> >                 qemu_x86_defconfig O=
+>
+> Why are you opassing an empty O= option here?
+>
 
-Applied to master, thanks.
+I'm not passing the O= .
 
-Thomas
+However, if I modify the patch and remove that from the target in the
+Makefile ie. remove the "O=$(realpath $(O))" , things build ok.
+
+> Can you reproduce without it?
+>
+> Regards,
+> Yann E. MORIN.
+>
+>> > mkdir: missing operand
+>> > Try 'mkdir --help' for more information.
+>> > Makefile:156: *** output directory "" does not exist.  Stop.
+>> > Makefile:48: recipe for target '_all' failed
+>> > make: *** [_all] Error 2
+>> >
+>> > <snip>
+>> >
+>> > --
+>> > Thanks,
+>> > Matt
+>>
+>> Sorry, didn't CC.  2nd attempt, see above.
+>>
+>> --
+>> Thanks,
+>> Matt
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks,
+Matt
