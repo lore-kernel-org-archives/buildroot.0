@@ -1,68 +1,26 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 22 Mar 2016 22:09:58 +0100
-Subject: [Buildroot] [PATCH] package/util-linux: fix lsipc segfault
-Message-ID: <1458680998-912-1-git-send-email-romain.naour@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 22 Mar 2016 22:15:14 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-03-21
+In-Reply-To: <20160322073023.CC980102FD4@stock.ovh.net>
+References: <20160322073023.CC980102FD4@stock.ovh.net>
+Message-ID: <1458681314.1990.22.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lsipc segfault when no option is given.
+On Di, 2016-03-22 at 08:30 +0100, Thomas Petazzoni wrote:
+> Build statistics for 2016-03-21
+> ===============================
+> 
+> ?????????arm |??????????????ipsec-tools-0.8.2 | NOK |
+> http://autobuild.buildroot.net/results/9f1a08dbb14f74c3dcb2b8868383a9
+> a7ebb725f4/
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- ...don-t-free-shm-data-if-no-shm-id-is-found.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
+musl build issues. I am working on this to get a solution accepted by
+upstream.
 
-diff --git a/package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch b/package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
-new file mode 100644
-index 0000000..ab1a52c
---- /dev/null
-+++ b/package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
-@@ -0,0 +1,42 @@
-+From cb8e8ecc800a1a8536fe5507ae7d09a8c1c442a8 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Tue, 22 Mar 2016 11:25:09 +0100
-+Subject: [PATCH] lsipc: don't free shm data if no shm id is found
-+
-+There is a segfault in do_shm_global() when ipc_shm_get_info() return 0 and
-+ipc_shm_free_info() is called.
-+
-+When no shm id is found, the memory allocated in shmds by ipc_shm_get_info() is
-+already free when ipc_shm_free_info() is called.
-+
-+Move ipc_shm_free_info(shmds) inside the if statement where at least one shm id
-+is found.
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ sys-utils/lsipc.c | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/sys-utils/lsipc.c b/sys-utils/lsipc.c
-+index 523859c..fa5d99c 100644
-+--- a/sys-utils/lsipc.c
-++++ b/sys-utils/lsipc.c
-+@@ -1072,14 +1072,13 @@ static void do_shm_global(struct libscols_table *tb)
-+ 			++nsegs;
-+ 			sum_segsz += shmdsp->shm_segsz;
-+ 		}
-++		ipc_shm_free_info(shmds);
-+ 	}
-+ 
-+ 	global_set_data(tb, "SHMMNI", _("Shared memory segments"), nsegs, lim.shmmni, 1);
-+ 	global_set_data(tb, "SHMALL", _("Shared memory pages"), sum_segsz / getpagesize(), lim.shmall, 1);
-+ 	global_set_data(tb, "SHMMAX", _("Max size of shared memory segment (bytes)"), 0, lim.shmmax, 0);
-+ 	global_set_data(tb, "SHMMIN", _("Min size of shared memory segment (bytes)"), 0, lim.shmmin, 0);
-+-
-+-	ipc_shm_free_info(shmds);
-+ }
-+ 
-+ int main(int argc, char *argv[])
-+-- 
-+2.1.4
-+
--- 
-2.5.0
+Best regards
+J?rg Krause
