@@ -1,85 +1,93 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 23:30:20 +0100
-Subject: [Buildroot] [git commit] libgee: new package
-Message-ID: <20160322223623.C4C6380F3D@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 22 Mar 2016 23:40:17 +0100
+Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
+In-Reply-To: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
+References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <56F1C9D1.2010104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b7ce072e58d23e110d23fd7c509ba7e62ed85ff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/20/16 22:24, Yann E. MORIN wrote:
+> When there is no .config, we do not source $(BR2_EXTERNAL)/external.mk.
+> So we can not expose the custom help in that situation.
+>
+> It is now known whether sourcing $(BR2_EXTERNAL)/external.mk outside the
+> HAVE_DOT_CONFIG conditional block is entirely safe. Even if it would
+> work today, we would have a hard time not breaking it in the future,
+> because we do not have automatic checks for that and would need to rely
+> on users reporting issues after the fact.
+>
+> Instead, we require the custom help to be defined in its own file in the
+> br2-external tree. This way, we can safely include it unconditionally.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/Config.in          |  1 +
- package/libgee/Config.in   | 15 +++++++++++++++
- package/libgee/libgee.hash |  2 ++
- package/libgee/libgee.mk   | 16 ++++++++++++++++
- 4 files changed, 34 insertions(+)
+  IMHO that custom help was a bad idea. It's adding complexity, an extra file in 
+BR2_EXTERNAL, and really not that useful...
 
-diff --git a/package/Config.in b/package/Config.in
-index 27db639..6e7fffd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1216,6 +1216,7 @@ menu "Other"
- 	source "package/libevdev/Config.in"
- 	source "package/libevent/Config.in"
- 	source "package/libffi/Config.in"
-+	source "package/libgee/Config.in"
- 	source "package/libglib2/Config.in"
- 	source "package/libical/Config.in"
- 	source "package/liblinear/Config.in"
-diff --git a/package/libgee/Config.in b/package/libgee/Config.in
-new file mode 100644
-index 0000000..07c387c
---- /dev/null
-+++ b/package/libgee/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_LIBGEE
-+	bool "libgee"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_LIBGLIB2
-+	help
-+	  Libgee is an utility library providing GObject-based
-+	  interfaces and classes for commonly used data structures.
-+
-+	  https://wiki.gnome.org/Projects/Libgee
-+
-+comment "libgee needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
-new file mode 100644
-index 0000000..4c38c78
---- /dev/null
-+++ b/package/libgee/libgee.hash
-@@ -0,0 +1,2 @@
-+# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.0.sha256sum
-+sha256	4ad99ef937d071b4883c061df40bfe233f7649d50c354cf81235f180b4244399	libgee-0.18.0.tar.xz
-diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
-new file mode 100644
-index 0000000..1df322c
---- /dev/null
-+++ b/package/libgee/libgee.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# libgee
-+#
-+################################################################################
-+
-+LIBGEE_VERSION_MAJOR = 0.18
-+LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).0
-+LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
-+LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
-+LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
-+LIBGEE_INSTALL_STAGING = YES
-+LIBGEE_LICENSE = LGPLv2.1+
-+LIBGEE_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>   Makefile                             | 11 +++++++----
+>   docs/manual/customize-outside-br.txt |  7 ++++---
+>   2 files changed, 11 insertions(+), 7 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index ea8b1e4..03657d5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -976,10 +976,13 @@ endif
+>   	@echo 'it on-line at http://buildroot.org/docs.html'
+>   	@echo
+>
+> -# This rule does nothing, it is expected to be overloaded by
+> -# a br2-external tree or a local.mk . However, it must exist,
+> -# as we reference it in the main help, above. Making the rule
+> -# .PHONY does not work.
+> +ifneq ($(wildcard $(BR2_EXTERNAL)/help.mk),)
+> +include $(BR2_EXTERNAL)/help.mk
+
+  Why not just -include?
+
+  Regards,
+  Arnout
+
+> +endif
+> +
+> +# This rule does nothing, it is expected to be overloaded by a
+> +# br2-external tree. However, it must exist, as we reference it
+> +# as a dependency of the main help, above.
+>   help-custom:
+>
+>   list-defconfigs:
+> diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+> index be1827e..4f1c752 100644
+> --- a/docs/manual/customize-outside-br.txt
+> +++ b/docs/manual/customize-outside-br.txt
+> @@ -108,9 +108,10 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
+>      normal +make <name>_defconfig+ command. They will be visible under the
+>      +User-provided configs+' label in the 'make list-defconfigs' output.
+>
+> -Additionally, an +external.mk+ file may define the +help-custom+ make
+> -rule, to document custom make targets specific to this +BR2_EXTERNAL+
+> -tree. The help is completely free-form.
+> +Additionally, a +BR2_EXTERNAL+ tree may provide a file named +help.mk+
+> +that defines the +help-custom+ make rule, to document custom make
+> +targets specific to this +BR2_EXTERNAL+ tree. The help is completely
+> +free-form. See below for a sample +$(BR2_EXTERNAL)/help.mk+ file:
+>
+>   ------
+>   help-custom:
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
