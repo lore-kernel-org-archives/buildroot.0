@@ -1,65 +1,39 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 22 Mar 2016 06:55:17 +0100
-Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
- or $(O) are not absolute canonical path
-In-Reply-To: <CAFt09wPZo0QL+-3kAo3dHTLLBfzJXyBHXUVy5-qMaRXC3QAEzQ@mail.gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
- <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
- <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
- <CAHXCMM+vZH6tshQXizYqVag+zeEh-vS17AZTCsdyeY_SsB+E8w@mail.gmail.com>
- <CAFt09wP4mLSaBGoDCrhXsZKj7+JBfd0D5oHCEm5Bhy0Ko8zO4Q@mail.gmail.com>
- <CAFt09wPZo0QL+-3kAo3dHTLLBfzJXyBHXUVy5-qMaRXC3QAEzQ@mail.gmail.com>
-Message-ID: <CAHXCMM+P=pQDYUULkW59ggJQpki5PNB5B896PhHmBaQ8c5kjHQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 22 Mar 2016 07:50:12 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+	2016-03-20
+References: <20160321073023.C428D1023A9@stock.ovh.net>
+Message-ID: <4i67scxc49.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Am Mon, 21 Mar 2016 08:30:23 +0100 schrieb Thomas Petazzoni:
 
-On Tue, Mar 22, 2016 at 4:03 AM, Matthew Weber <matt@thewebers.ws> wrote:
-> Samuel,
->
-> On Mon, Mar 21, 2016 at 6:40 AM, Matthew Weber <matt@thewebers.ws> wrote:
->> Samuel,
->>
->> On Mon, Mar 21, 2016 at 12:21 AM, Samuel Martin <s.martin49@gmail.com> wrote:
->>> On Mon, Mar 21, 2016 at 2:45 AM, Matthew Weber <matt@thewebers.ws> wrote:
->>>> Samuel, All,
->>>>
->>>> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
->>>>> Samuel,
->>>>>
->>
->> <snip>
->>>
->
-> Narrowed it down to removing "O=$(realpath $(O))" on line 50 in the
-> Makefile resolves the build error.  If I understand it correctly this
-> is declaring O= empty and it causes the logic on 127 to evaluate to
-> False and O= ends up as empty.
->
-> I applied your 02/18 patch on top of
-> 0e1547a87cfd51e4fedf1cb7837f77e4f66c4052 when I tested.
->
-Thanks for investigating this.
-Unfortunately, I could not reproduce this issue here with make-4.1. :-/
-(I wonder whether this could be related to the make version...)
+> Build statistics for 2016-03-20
+> ===============================
+> 
+>         success : 203
+>        failures : 167
+>        timeouts : 1  
+>           TOTAL : 371
+> 
+> Classification of failures by reason
+> ====================================
+> 
+>               gnuradio-3.7.9.1 | 35
 
-Anyway, following Yann's review, I have reworked this patch [1].
-If you give a try to this patch, care to tell me if it fixes your issue.
+Hi,
 
-[1] https://github.com/tSed/buildroot/commit/c55eeee30fe6106354c0f2cb6ce6ecb46972503a
+the reason for the build failures is the cmake bump to 3.5.0, reverting 
+it solves the problem. A quick analysis showed that for boost being 
+detected as a valid installation BR2_PACKAGE_BOOST_ATOMIC is needed. This 
+fix alone does not fix the compile problem however, it seems 
+BR2_PACKAGE_PYTHON is needed as well and maybe more.
+I was unable to perform an error-free configure stage with cmake 3.5.0 so 
+my conclusions about the cause are incomplete. What is sure however is 
+that with cmake 3.4.3 gnuradio compiles without problems.
 
-Regards,
-
->
-> --
-> Thanks,
-> Matt
-
-
--- 
-Samuel
+Regards, Bernd
