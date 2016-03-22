@@ -1,279 +1,124 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 21:12:32 +0100
-Subject: [Buildroot] [PATCH v3 3/3] dpdk: new package
-In-Reply-To: <1458642986-32365-4-git-send-email-viktorin@rehivetech.com>
-References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
- <1458642986-32365-4-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160322211232.374d47a2@free-electrons.com>
+From: Matt Fornero <Matt.Fornero@mathworks.com>
+Date: Tue, 22 Mar 2016 20:22:06 +0000
+Subject: [Buildroot] [PATCH] toolchain-external: Commonize /lib/<tuple>
+	symlinks
+Message-ID: <a7c3e2bed5654819b3ad564f7d28d233@ex13amer-00-ah.ad.mathworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commonize the creation of symlinks from {/usr}/lib to
+{/usr}/lib/<tuple>.
 
-On Tue, 22 Mar 2016 11:36:26 +0100, Jan Viktorin wrote:
+These were originally defined on a per-toolchain basis for the Linaro
+toolchains, but there is currently no support for creating symlinks
+for custom toolchains that may have been based on Linaro (or older
+versions of the Linaro toolchain).
 
-> diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
-> new file mode 100644
-> index 0000000..a42271e
-> --- /dev/null
-> +++ b/package/dpdk/Config.in
-> @@ -0,0 +1,53 @@
-> +config BR2_PACKAGE_DPDK
-> +       bool "dpdk"
+Add common code for all supported Linaro toolchains and add a new
+config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
+toolchains to enable the symbolic link creation.
 
-Indentation of properties should be done with one tab (ditto in the
-following lines)
+Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+---
+ toolchain/toolchain-external/Config.in             |   15 +++++++++++
+ toolchain/toolchain-external/toolchain-external.mk |   26 ++++++--------------
+ 2 files changed, 23 insertions(+), 18 deletions(-)
 
-> +       depends on (BR2_i386 && !BR2_x86_i386 && !BR2_x86_i486 \
-> +		      && !BR2_x86_i586 && !BR2_x86_x1000) \
-> +                  || BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_aarch64_be
-
-I'm wondering why you have this list of architecture dependencies. Is
-it because there is really some architecture specific code, or is it a
-left-over from the times we didn't had the BR2_TOOLCHAIN_HAS_x
-options ?
-
-If that's really needed, please add a blind option like this:
-
-config BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-	bool
-	default y if ...
-
-That you can re-use as a dependency, both for the comment (see below)
-and the main option.
-
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC
-
-Then you need to have a comment like:
-
-comment "dpdk needs a toolchain w/ glibc"
-	depends on !BR2_TOOLCHAIN_USES_GLIBC
-	depends on BR2_TOOLCHAIN_HAS_SYNC_...
-
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_1
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_2
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_8
-
-Cosmetic nit, but I would prefer to see:
-
-	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && \
-		BR2_TOOLCHAIN_HAS_SYNC_2 && \
-		BR2_TOOLCHAIN_HAS_SYNC_4 && \
-		BR2_TOOLCHAIN_HAS_SYNC_8
-
-	
-
-> +       help
-> +	 DPDK is a set of libraries and drivers for fast packet processing. It
-> +	 was designed to run on any processors, however, Intel x86 has been the
-> +	 first CPU to be supported. Ports for other CPUs like IBM Power 8 and
-> +	 ARM are under progress. It runs mostly in Linux userland. A FreeBSD
-> +	 port is now available for a subset of DPDK features.
-
-Indentation of the help text should be one tab + *two* spaces.
-
-> +
-> +	 Notes:
-> +	 * To build the included Linux Kernel drivers, it is necessary to
-> +	   enable CONFIG_PCI_MSI, CONFIG_UIO.
-> +	 * To build the PCAP PMD properly, you need to enable the libpcap
-> +	   manually.
-> +	 * You may need to install the python2 interpreter if you want to use
-> +	   scripts dpdk_nic_bind.py and cpu_layout.py
-> +
-> +         http://www.dpdk.org/
-> +
-> +if BR2_PACKAGE_DPDK
-> +
-> +config BR2_PACKAGE_DPDK_CONFIG
-> +	string "Configuration"
-> +	default "i686-native-linuxapp-gcc" \
-> +		if BR2_x86_i686
-> +	default "x86_64-native-linuxapp-gcc" \
-> +		if BR2_x86_64
-> +	default "arm-armv7a-linuxapp-gcc" \
-> +		if BR2_ARM_CPU_ARMV7A
-> +	default "arm64-armv8a-linuxapp-gcc" \
-> +		if BR2_aarch64 || BR2_aarch64_be
-
-I don't remember if we discussed this: is there any reason to make this
-configurable? I.e is it necessary to make it a visible Config.in option
-as opposed to a blind one?
-
-> +
-> +config BR2_PACKAGE_DPDK_TEST
-> +	bool "Install tests suite"
-> +	select BR2_PACKAGE_PYTHON_PEXPECT if BR2_PACKAGE_PYTHON
-> +	help
-> +	  Install all DPDK tests. If you want to run the tests by the included
-> +	  autotest.py script you need to enable python manually.
-
-Is the test suite usable without Python ?
-
-> diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-> new file mode 100644
-> index 0000000..02860fd
-> --- /dev/null
-> +++ b/package/dpdk/dpdk.mk
-> @@ -0,0 +1,109 @@
-> +################################################################################
-> +#
-> +# dpdk
-> +#
-> +################################################################################
-> +
-> +DPDK_VERSION = 16.04-rc1
-
-We normally don't package release candidate / beta version. Are you
-confident that the final 16.04 release will be done before Buildroot
-ships its own release at the end of May ?
-
-> +DPDK_SITE = http://dpdk.org/browse/dpdk/snapshot
-> +DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.gz
-
-Not needed, that's the default value.
-
-> +
-> +DPDK_LICENSE = BSD (core), GPLv2+ (Linux drivers)
-
-BSD should be more specific, like BSD-2c, BSD-3c, etc.
-
-> +DPDK_LICENSE_FILES = GNUmakefile LICENSE.GPL
-> +DPDK_INSTALL_STAGING = YES
-> +
-> +DPDK_DEPENDENCIES += linux
-
-If you need the Linux kernel to be built, then you need to also have:
-
-	depends on BR2_LINUX_KERNEL
-
-in your Config.in, as well as a corresponding comment:
-
-comment "dpdk needs the Linux kernel to be built"
-	depends on !BR2_LINUX_KERNEL
-
-> +
-> +ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-> +DPDK_DEPENDENCIES += libpcap
-> +endif
-> +
-> +ifeq ($(BR2_SHARED_LIBS),y)
-> +define DPDK_ENABLE_SHARED_LIBS
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_RTE_BUILD_SHARED_LIB,\
-> +			$(@D)/build/.config)
-> +endef
-> +
-> +DPDK_POST_CONFIGURE_HOOKS += DPDK_ENABLE_SHARED_LIBS
-> +endif
-> +
-> +# We're building a kernel module without using the kernel-module infra,
-> +# so we need to tell we want module support in the kernel
-> +ifeq ($(BR2_PACKAGE_DPDK),y)
-> +LINUX_NEEDS_MODULES = y
-> +endif
-
-This is no longer the "right" way of doing this. Just select
-BR2_LINUX_NEEDS_MODULES in Config.in.
-
-> +
-> +DPDK_CONFIG = $(call qstrip,$(BR2_PACKAGE_DPDK_CONFIG))
-> +
-> +ifeq ($(BR2_PACKAGE_DPDK_EXAMPLES),y)
-> +# Build of DPDK examples is not very straight-forward. It requires to have
-> +# the SDK and runtime installed on same place to reference it by RTE_SDK.
-> +# We place it locally in the build directory.
-> +define DPDK_BUILD_EXAMPLES
-> +	$(MAKE) -C $(@D) DESTDIR=$(@D)/examples-sdk \
-> +		CROSS=$(TARGET_CROSS) install-sdk install-runtime
-> +	$(MAKE) -C $(@D) RTE_KERNELDIR=$(LINUX_DIR) CROSS=$(TARGET_CROSS) \
-> +		RTE_SDK=$(@D)/examples-sdk/usr/local/share/dpdk \
-> +		T=$(DPDK_CONFIG) examples
-> +endef
-> +
-> +DPDK_EXAMPLES_PATH = $(@D)/examples-sdk/usr/local/share/dpdk/examples
-> +
-> +# Installation of examples is not supported in DPDK so we do it explicitly
-> +# here. As the binaries and libraries do not have a single or regular location
-> +# where to find them after build, we search for them by find.
-> +define DPDK_INSTALL_EXAMPLES
-> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/local/bin
-> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/local/lib
-
-In Buildroot, everything is installed in /usr, not /usr/local. Why
-should this package be different? Also, to create directories, we
-typically use mkdir -p.
-
-> +	for f in `find $(DPDK_EXAMPLES_PATH) -executable -type f   \
-> +			-name '[a-z]*.so*' | grep '\/lib\/.*'`; do \
-> +		$(INSTALL) -m 0755 -D $$f                          \
-> +			$(TARGET_DIR)/usr/local/lib/`basename $$f`;\
-> +	done
-> +	for f in `find $(DPDK_EXAMPLES_PATH) -executable -type f   \
-> +			! -name '*.so*' | grep '\/app\/.*'`; do    \
-> +		$(INSTALL) -m 0755 -D $$f                          \
-> +			$(TARGET_DIR)/usr/local/bin/`basename $$f`;\
-> +	done
-
-It's a bit annoying to have this logic. Could it be simplified to use
--path instead of -name and avoid the grep ?
-
-Also, you need to add || exit 1 after the $(INSTALL) to exit the for
-loop in case of failure.
-
-Ideally (but separately from this patch), you could contribute to
-upstream dpdk a way to install examples.
-
-> +endef
-> +
-> +# Build of the power example is broken (at least for 16.04).
-> +define DPDK_DISABLE_POWER
-> +	$(call KCONFIG_DISABLE_OPT,CONFIG_RTE_LIBRTE_POWER,\
-> +			$(@D)/build/.config)
-> +endef
-> +
-> +DPDK_POST_CONFIGURE_HOOKS += DPDK_DISABLE_POWER
-> +endif
-> +
-> +define DPDK_CONFIGURE_CMDS
-> +	$(MAKE) -C $(@D) T=$(DPDK_CONFIG) RTE_KERNELDIR=$(LINUX_DIR) \
-> +			   CROSS=$(TARGET_CROSS) config
-> +endef
-> +
-> +define DPDK_BUILD_CMDS
-> +	$(MAKE) -C $(@D) RTE_KERNELDIR=$(LINUX_DIR) CROSS=$(TARGET_CROSS)
-> +	$(DPDK_BUILD_EXAMPLES)
-> +endef
-> +
-> +define DPDK_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) prefix=/usr \
-> +		 CROSS=$(TARGET_CROSS) install-sdk
-> +endef
-> +
-> +ifeq ($(BR2_PACKAGE_DPDK_TEST),y)
-> +define DPDK_INSTALL_TARGET_TEST
-> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/dpdk
-> +	$(INSTALL) -m 0755 -D $(@D)/build/app/test $(TARGET_DIR)/usr/dpdk
-> +	$(INSTALL) -m 0755 -D $(@D)/app/test/*.py $(TARGET_DIR)/usr/dpdk
-> +endef
-> +endif
-> +
-> +define DPDK_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) prefix=/usr \
-> +		CROSS=$(TARGET_CROSS) install-runtime
-> +	$(DPDK_INSTALL_TARGET_TEST)
-> +	$(DPDK_INSTALL_EXAMPLES)
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Other than that, looks good to me.
-
-Thomas
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index ff759a0..2e2ec03 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -745,6 +745,14 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ 	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+ 					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
++config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
++	bool
++	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM && BR2_HOSTARCH = "x86"
++	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64 && BR2_HOSTARCH = "x86"
++	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB && BR2_HOSTARCH = "x86"
++	default y if BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++	default n
++    
+ config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	bool
+ 	select BR2_TOOLCHAIN_USES_GLIBC
+@@ -1055,6 +1063,13 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+ 	  here, separated by spaces. They will be copied to the
+ 	  target's /lib directory.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++	bool "Symlink /lib/<tuple>?"
++	help
++	  Select this option if your external toolchain needs a symlink
++	  from the /lib directory to the /lib/<tuple> directory. This is
++	  may be required if your toolchain is based on one from Linaro.
++
+ endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 37e1a2e..66cf449 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -244,23 +244,16 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+ TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+ endif
+ 
+-# The Linaro ARMhf toolchain expects the libraries in
+-# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
++# Some toolchains, such as Linaro, expect the libraries in
++# {/usr,}/lib/<tuple>, but Buildroot copies them to
+ # {/usr,}/lib, so we need to create a symbolic link.
+-define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+-	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+-endef
+-
+-define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+-	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+-endef
+-
+-define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+-	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+-	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
++define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
++	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+ endef
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
++endif
+ 
+ # Special handling for Blackfin toolchain, because of the split in two
+ # tarballs, and the organization of tarball contents. The tarballs
+@@ -298,7 +291,6 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/arm-linux-gnueabihf
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_arm-linux-gnueabihf.tar.xz
+@@ -308,7 +300,6 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/armeb-linux-gnueabihf
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_armeb-linux-gnueabihf.tar.xz
+@@ -353,7 +344,6 @@ ifeq ($(HOSTARCH),x86)
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+ TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+-TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ else
+ TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
+ TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+1.7.10.4
