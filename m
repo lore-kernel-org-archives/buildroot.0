@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Mar 2016 00:03:15 +0100
-Subject: [Buildroot] [PATCH] busybox: use md5 as default password
- algorithm
-In-Reply-To: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1457638990-27544-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160323000315.6f732d8f@free-electrons.com>
+Date: Wed, 23 Mar 2016 00:03:25 +0100
+Subject: [Buildroot] [git commit] json-glib: bump to version 1.2.0
+Message-ID: <20160322230330.5A58881922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ebde9f4d2c3321f3f8fb6498e24ee18a6f743a8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 10 Mar 2016 16:43:10 -0300, Gustavo Zacarias wrote:
-> DES is terribly outdated and a security vulnerability.
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/busybox/busybox.config | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/json-glib/json-glib.hash | 4 ++--
+ package/json-glib/json-glib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-I've (obviously) read the discussion with Peter, but I believe the
-issue he is raising is different. We already have our Busybox
-configuration default to "des", which is not consistent with the algo
-choice made by the user in the Buildroot configuration. So switching to
-"md5" is not making things any worse from that perspective.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index dd8bf54..18e1aa0 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/0.14/json-glib-0.14.2.sha256sum
+-sha256	b816a5fa3e5664b08679a6972a6e5693d6cc1990ff4a6f94c07554db96be94a7	json-glib-0.14.2.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.0.sha256sum
++sha256	99d6dfbe49c08fd7529f1fe8dcb1893b810a1bb222f1e7b65f41507658b8a7d3	json-glib-1.2.0.tar.xz
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index cffe958..f7c52c0 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-JSON_GLIB_VERSION_MAJOR = 0.14
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).2
++JSON_GLIB_VERSION_MAJOR = 1.2
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).0
+ JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+ JSON_GLIB_LICENSE = LGPLv2.1+
