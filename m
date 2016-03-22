@@ -1,36 +1,71 @@
-From: Christian Stewart <christian@paral.in>
-Date: Tue, 22 Mar 2016 18:09:58 +0000
-Subject: [Buildroot] [PATCH 0/4] Add go language support
-In-Reply-To: <1458577930.3391.53.camel@infradead.org>
-References: <cover.1456946494.git.geoff@infradead.org>
- <20160302214959.419006f6@free-electrons.com>
- <1456955234.13916.34.camel@infradead.org>
- <1456955529541-4c47621a-58540498-011499af@mixmax.com>
- <1456957897.13916.44.camel@infradead.org>
- <1456958435221-5709b96d-e22bcccc-086b2845@mixmax.com>
- <1458577930.3391.53.camel@infradead.org>
-Message-ID: <1458670199319-4a576ec1-fa6725c1-d6b54aa3@mixmax.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Mar 2016 20:19:19 +0100
+Subject: [Buildroot] [git commit] erlang: bump to version 18.3
+Message-ID: <20160322191927.5A6AB7FBFF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Geoff,
-On Mon, Mar 21, 2016 at 12:32 PM Geoff Levand <geoff@infradead.org> wrote: > And thing to report yet about getting your packages
-> to build with my new go language patches? If I
-> can help in any way, please let me know.
->
-> -Geoff
-I've been out of the country for the past week and haven't had a chance to work
-on the Docker stuff yet. I'm sorry if this has been blocking your work in any
-way.
-Starting around the week of May 18th my primary focus will shift back to the
-Docker under Buildroot work, and I should be far more active with patches /
-improvements / fixes at that time. In the meantime I will attempt to get the
-packages to build on top of your series, but I'm not entirely sure what time
-this week I'll be able to do that.
-Best, Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160322/a174a07d/attachment.html>
+commit: https://git.buildroot.net/buildroot/commit/?id=565e3412b0916a21b7de063f48612489e1fe9c48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Erlang/OTP 18.3 is a service release on the 18 track with mostly bug
+fixes, but is does contain a number of new features and improvements as
+well.
+
+Some highlights of the release are:
+
+  . New statistics info about runnable and active processes & ports.
+    Call erlang:statistics with: total_run_queue_lengths |
+    run_queue_lengths | total_active_tasks | active_tasks.
+
+  . Time warp improvements: dbg:p/2 and erlang:trace/3 with
+    monotonic_timestamp |strict_monotonic_timestamp.
+
+  . Introduced a validation callback for heart.
+
+  . The module overload in sasl has been deprecated.
+
+  . ~90 contributions since 18.2
+
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/erlang/erlang.hash | 4 ++--
+ package/erlang/erlang.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
+index f6519af..c39c26e 100644
+--- a/package/erlang/erlang.hash
++++ b/package/erlang/erlang.hash
+@@ -1,3 +1,3 @@
+ # md5 from http://www.erlang.org/download/MD5, sha256 locally computed
+-md5	ebb226d51f89ec54cc83ce5d417ce55e	otp_src_18.2.1.tar.gz
+-sha256	82d76ebfeeda5db64ea5b0f1a04aa0e9ac63380b278722e0e6052249bd3fe39a  otp_src_18.2.1.tar.gz
++md5	7e4ff32f97c36fb3dab736f8d481830b	otp_src_18.3.tar.gz
++sha256	fdab8129a1cb935db09f1832e3a7d511a4aeb2b9bb3602ca6a7ccb9730d5c9c3	otp_src_18.3.tar.gz
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index 3732d44..ff4452f 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # See note below when updating Erlang
+-ERLANG_VERSION = 18.2.1
++ERLANG_VERSION = 18.3
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
+@@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
+ 
+ # Whenever updating Erlang, this value should be updated as well, to the
+ # value of EI_VSN in the file lib/erl_interface/vsn.mk
+-ERLANG_EI_VSN = 3.8.1
++ERLANG_EI_VSN = 3.8.2
+ 
+ # The configure checks for these functions fail incorrectly
+ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
