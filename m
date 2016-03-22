@@ -1,69 +1,42 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Tue, 22 Mar 2016 06:10:01 -0500
-Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
- or $(O) are not absolute canonical path
-In-Reply-To: <CAHXCMM+P=pQDYUULkW59ggJQpki5PNB5B896PhHmBaQ8c5kjHQ@mail.gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
- <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
- <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
- <CAHXCMM+vZH6tshQXizYqVag+zeEh-vS17AZTCsdyeY_SsB+E8w@mail.gmail.com>
- <CAFt09wP4mLSaBGoDCrhXsZKj7+JBfd0D5oHCEm5Bhy0Ko8zO4Q@mail.gmail.com>
- <CAFt09wPZo0QL+-3kAo3dHTLLBfzJXyBHXUVy5-qMaRXC3QAEzQ@mail.gmail.com>
- <CAHXCMM+P=pQDYUULkW59ggJQpki5PNB5B896PhHmBaQ8c5kjHQ@mail.gmail.com>
-Message-ID: <CAFt09wPqTN0JQwOzEZA6xkj4bP8fmPNVCTsipcRu_vA5M0mj1A@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Mar 2016 08:11:47 -0300
+Subject: [Buildroot] [PATCH] gvfs: bump to version 1.28.0
+Message-ID: <1458645107-584-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Samuel,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Tue, Mar 22, 2016 at 12:55 AM, Samuel Martin <s.martin49@gmail.com> wrote:
-> Hi Matthew,
->
-> On Tue, Mar 22, 2016 at 4:03 AM, Matthew Weber <matt@thewebers.ws> wrote:
->> Samuel,
->>
->> On Mon, Mar 21, 2016 at 6:40 AM, Matthew Weber <matt@thewebers.ws> wrote:
->>> Samuel,
->>>
->>> On Mon, Mar 21, 2016 at 12:21 AM, Samuel Martin <s.martin49@gmail.com> wrote:
->>>> On Mon, Mar 21, 2016 at 2:45 AM, Matthew Weber <matt@thewebers.ws> wrote:
->>>>> Samuel, All,
->>>>>
->>>>> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
->>>>>> Samuel,
->>>>>>
->>>
->>> <snip>
->>>>
->>
->> Narrowed it down to removing "O=$(realpath $(O))" on line 50 in the
->> Makefile resolves the build error.  If I understand it correctly this
->> is declaring O= empty and it causes the logic on 127 to evaluate to
->> False and O= ends up as empty.
->>
->> I applied your 02/18 patch on top of
->> 0e1547a87cfd51e4fedf1cb7837f77e4f66c4052 when I tested.
->>
-> Thanks for investigating this.
-> Unfortunately, I could not reproduce this issue here with make-4.1. :-/
-> (I wonder whether this could be related to the make version...)
->
-> Anyway, following Yann's review, I have reworked this patch [1].
-> If you give a try to this patch, care to tell me if it fixes your issue.
->
-> [1] https://github.com/tSed/buildroot/commit/c55eeee30fe6106354c0f2cb6ce6ecb46972503a
->
-
-Looks like I have Make 4.0.
-
-Thanks for the patch, output looks like same with that version.  I'll
-jump on another buildmachine at work today and see if I can reproduce
-this.
-
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 5cc8857..38afe7b 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.3.sha256sum
+-sha256	a70f75fa60d66f3f478c0c8aec43d0e43455a8cc75a4dfa8029e51c816401b4a	gvfs-1.26.3.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.0.sha256sum
++sha256	cf72fc0adf0ca702ead5b3fab3c1fa46b09678eb7c1290de7e30bb7cbaf5f704	gvfs-1.28.0.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index f566fc7..f63d9dc 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GVFS_VERSION_MAJOR = 1.26
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
++GVFS_VERSION_MAJOR = 1.28
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).0
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
 -- 
-Thanks,
-Matt
+2.7.3
