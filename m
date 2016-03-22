@@ -1,74 +1,154 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Tue, 22 Mar 2016 09:52:26 +0000
-Subject: [Buildroot] [PATCH 2/5] package/qt5webkit: remove obsolete
- package
-In-Reply-To: <CAAMH-ysg3UrRUxNTCk40Ki=1eg1OGmGfOzKWyip7rys9PZskrg@mail.gmail.com>
-References: <1458207749-19507-1-git-send-email-corjon.j@ecagroup.com>
- <1458207749-19507-3-git-send-email-corjon.j@ecagroup.com>
- <CAAMH-ysg3UrRUxNTCk40Ki=1eg1OGmGfOzKWyip7rys9PZskrg@mail.gmail.com>
-Message-ID: <4f32a048-4171-43f8-baac-9c20e310921e@MAIL-SINTERS-01.sinters-int.fr>
+From: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
+Date: Tue, 22 Mar 2016 15:44:01 +0530
+Subject: [Buildroot] [Buildroot PATCH v2 1/1] raptor: new package
+Message-ID: <1458641641-17752-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Le 21/03/2016 16:56, Gary Bisson a ?crit :
-> Julien, All,
->
-> On Thu, Mar 17, 2016 at 10:42 AM, Julien Corjon <corjon.j@ecagroup.com> wrote:
->>
->> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
->> ---
->>   package/qt5/Config.in                |  1 -
->>   package/qt5/qt5webkit/Config.in      | 23 --------------
->>   package/qt5/qt5webkit/qt5webkit.hash |  2 --
->>   package/qt5/qt5webkit/qt5webkit.mk   | 58 ------------------------------------
->>   4 files changed, 84 deletions(-)
->>   delete mode 100644 package/qt5/qt5webkit/Config.in
->>   delete mode 100644 package/qt5/qt5webkit/qt5webkit.hash
->>   delete mode 100644 package/qt5/qt5webkit/qt5webkit.mk
->
-> Are we sure we want to remove this package actually? The release says:
-> "With Qt 5.6 the following modules are no longer part of the release
-> packages, but users can still build them from source:
-> - Qt WebKit
-> - Qt Declarative (Qt Quick 1)"
->
-> But the project has a qt5.6.0 branch just like the other modules:
-> https://github.com/qtproject/qtwebkit/commits/5.6.0
+Raptor is a free software / Open Source C library that provides a set of parsers
+and serializers that generate Resource Description Framework (RDF) triples
+by parsing syntaxes or serialize the triples into a syntax.
 
-You're almost right, the project have a 5.6 branch but 5.6.0 version has 
-not been tagged on deprecated modules. If we want to keep those in 
-buildroot we have now to "randomly" choose a commit.
+http://librdf.org/raptor/
 
->
-> Especially since we don't have any replacement I wouldn't merge this
-> patch just yet. Plus webkit can run on a platform without GPU whereas
-> WebEngine depends on OpenGL, I wouldn't mind keeping it, for i.MX7
-> platforms for instance.
+Patch added in the package:
+0001-configure.ac-remove-conditional-lib-inclusion.patch
 
-I agree that platform without OpenGL support lose web browser ability 
-from Qt and for that we should probably keep webkit in buildroot 
-packages. But I'm not sure we should keep it in official Qt section 
-since there not officially supported by Digia and Qt community.
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
 
->
-> The package would need to be modified to use the github project
-> instead of the release archives though.
+---
+Changes v1 -> v2:
+  - Updated the comment for the patch file.
+  - Included flag RAPTOR_AUTORECONF  and added RAPTOR_CONF_OPTS for optional
+    dependencies in .mk file.
+  - Fixed minor typo error.
 
-If we use Qt repository we should use the official one 
-(http://code.qt.io/cgit/qt/qtwebkit.git/) instead of github.
+Changes v1:
+  - Added 0001-configure.ac-remove-conditional-lib-inclusion.patch.
+  - Added optional dependencies libcurl,yajl and icu.
+---
+ package/Config.in                                  |  1 +
+ ...igure.ac-remove-conditional-lib-inclusion.patch | 21 +++++++++++++
+ package/raptor/Config.in                           | 11 +++++++
+ package/raptor/raptor.hash                         |  2 ++
+ package/raptor/raptor.mk                           | 36 ++++++++++++++++++++++
+ 5 files changed, 71 insertions(+)
+ create mode 100644 package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+ create mode 100644 package/raptor/Config.in
+ create mode 100644 package/raptor/raptor.hash
+ create mode 100644 package/raptor/raptor.mk
 
->
-> Let me know your thoughts.
->
-> Regards,
-> Gary
->
-
-Regards,
-
-Julien
+diff --git a/package/Config.in b/package/Config.in
+index c4d98c4..430cef8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1036,6 +1036,7 @@ menu "JSON/XML"
+ 	source "package/mxml/Config.in"
+ 	source "package/rapidjson/Config.in"
+ 	source "package/rapidxml/Config.in"
++	source "package/raptor/Config.in"
+ 	source "package/tinyxml/Config.in"
+ 	source "package/tinyxml2/Config.in"
+ 	source "package/xerces/Config.in"
+diff --git a/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+new file mode 100644
+index 0000000..7367ad2
+--- /dev/null
++++ b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
+@@ -0,0 +1,21 @@
++Removed header Include path from the configure file as path was
++from the host, which is wrong for the cross compilation.
++Upstream: None
++
++Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
++
++diff --git a/configure.ac b/configure.ac
++index 10ff870..27b9957 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1145,9 +1145,7 @@ have_lininn=no
++ have_inn_parsedate=no
++ 
++ oCPPFLAGS="$CPPFLAGS"
++-if test -d /usr/include/inn; then
++-  CPPFLAGS="$CPPFLAGS -I/usr/include/inn"
++-fi
+++
++ AC_CHECK_HEADER(libinn.h)
++ CPPFLAGS="$oCPPFLAGS"
++ 
+diff --git a/package/raptor/Config.in b/package/raptor/Config.in
+new file mode 100644
+index 0000000..65979a2
+--- /dev/null
++++ b/package/raptor/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_RAPTOR
++	bool "raptor"
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_LIBXSLT
++	help
++	  A C library that provides a set of parsers and
++	  serializers that generate Resource Description
++	  Framework (RDF) triples by parsing syntaxes or
++	  serialize the triples into a syntax.
++
++	  http://librdf.org/raptor/
+diff --git a/package/raptor/raptor.hash b/package/raptor/raptor.hash
+new file mode 100644
+index 0000000..ee7a71b
+--- /dev/null
++++ b/package/raptor/raptor.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed raptor2-2.0.15.tar.gz
+diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+new file mode 100644
+index 0000000..5dac2c0
+--- /dev/null
++++ b/package/raptor/raptor.mk
+@@ -0,0 +1,36 @@
++################################################################################
++#
++# raptor
++#
++################################################################################
++
++RAPTOR_VERSION = 2.0.15
++RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
++RAPTOR_SITE = http://download.librdf.org/source
++RAPTOR_DEPENDENCIES = libxml2 libxslt
++RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
++RAPTOR_LICENSE_FILES = LICENSE.txt
++
++# Flag is added to make sure the patch is applied for the configure.ac of raptor.
++RAPTOR_AUTORECONF = YES
++
++RAPTOR_CONF_OPTS = --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
++		--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++RAPTOR_DEPENDENCIES += libcurl
++RAPTOR_CONF_OPTS += --with-curl-config=$(STAGING_DIR)/usr/bin/curl-config
++endif
++
++ifeq ($(BR2_PACKAGE_YAJL),y)
++RAPTOR_DEPENDENCIES += yajl
++RAPTOR_CONF_ENV += LIBS="-lm"
++RAPTOR_CONF_OPTS += --with-yajl-config=$(STAGING_DIR)/usr/bin/yajl-config
++endif
++
++ifeq ($(BR2_PACKAGE_ICU),y)
++RAPTOR_DEPENDENCIES += icu
++RAPTOR_CONF_OPTS += --with-icu-config=$(STAGING_DIR)/usr/bin/icu-config
++endif
++
++$(eval $(autotools-package))
+-- 
+2.5.0
