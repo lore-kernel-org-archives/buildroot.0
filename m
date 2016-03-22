@@ -1,9 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 21:43:29 +0100
-Subject: [Buildroot] [PATCH 1/2] package/quota: renumber patches
-In-Reply-To: <1453573714-19731-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1453573714-19731-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160322214329.1ae8cddf@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 22 Mar 2016 21:59:05 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2016-03-21
+In-Reply-To: <CAB0FRssy+PBGQhpC5ELiRyia7opRXsCq8hL4oiqSUVM11pjDvA@mail.gmail.com>
+References: <20160322073023.CC980102FD4@stock.ovh.net>
+ <CAB0FRssy+PBGQhpC5ELiRyia7opRXsCq8hL4oiqSUVM11pjDvA@mail.gmail.com>
+Message-ID: <56F1B219.2020009@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +14,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 23 Jan 2016 19:28:33 +0100, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../{01-tools-getrpcbynumber.patch => 0001-tools-getrpcbynumber.patch}    | 0
->  .../quota/{02-fix-static-linking.patch => 0002-fix-static-linking.patch}  | 0
->  2 files changed, 0 insertions(+), 0 deletions(-)
->  rename package/quota/{01-tools-getrpcbynumber.patch => 0001-tools-getrpcbynumber.patch} (100%)
->  rename package/quota/{02-fix-static-linking.patch => 0002-fix-static-linking.patch} (100%)
+Le 22/03/2016 18:38, Fran?ois Perrad a ?crit :
+> moarvm and many Lua modules (cgilua, copas, xpcall, dado, ...) are
+> broken by the latest host-luajit commit (see
+> https://git.busybox.net/buildroot/commit/?id=9ba8d1cce4ab00307827083bae234d87b37fb967)
+> 
+> The common message of error is :
+> /home/peko/autobuild/instance-0/output/host/usr/bin/luajit: error
+> while loading shared libraries: libluajit-5.1.so.2: cannot open shared
+> object file: No such file or directory
 
-Not terribly useful by itself without the following musl patch, but
-I've applied it to master nonetheless since it was pending. For the musl
-patch, could you respin after fixing the global comments that I did on
-all your musl patches?
+It's weird because luajit works here...
 
-Thanks!
+./test/luajit/host/usr/bin/luajit
+LuaJIT 2.0.4 -- Copyright (C) 2005-2015 Mike Pall. http://luajit.org/
+JIT: ON CMOV SSE2 SSE3 SSE4.1 fold cse dce fwd dse narrow loop abc sink fuse
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+ls -l test/luajit/host/usr/lib/libluajit-5.1.so*
+lrwxrwxrwx. 1 naourr naourr     22 22 mars  21:42
+test/luajit/host/usr/lib/libluajit-5.1.so -> libluajit-5.1.so.2.0.4
+lrwxrwxrwx. 1 naourr naourr     22 22 mars  21:42
+test/luajit/host/usr/lib/libluajit-5.1.so.2 -> libluajit-5.1.so.2.0.4
+-rwxr-xr-x. 1 naourr naourr 458144 22 mars  21:42
+test/luajit/host/usr/lib/libluajit-5.1.so.2.0.4
+
+ldd test/luajit/host/usr/bin/luajit
+	linux-vdso.so.1 (0x00007ffc995d4000)
+	libluajit-5.1.so.2 =>
+/home/naourr/buildroot/test/luajit/host/usr/lib/libluajit-5.1.so.2
+(0x00007fcf37a42000)
+	libm.so.6 => /lib64/libm.so.6 (0x00007fcf3770d000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007fcf37509000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007fcf37148000)
+	libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007fcf36f30000)
+	/lib64/ld-linux-x86-64.so.2 (0x000055fd5fd2a000)
+
+Maybe an parallel issue with the install target in luajit makefile ?
+I don't know.
+
+Best regards,
+Romain
+
+> 
+> Fran?ois
+> 
