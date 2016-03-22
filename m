@@ -1,90 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 23:33:47 +0100
-Subject: [Buildroot] [git commit] granite: new package
-Message-ID: <20160322223623.D24847FC98@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 23:30:20 +0100
+Subject: [Buildroot] [git commit] libgee: new package
+Message-ID: <20160322223623.C4C6380F3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ace94165d8f2cd82188e212e45c6f7bd10f597ed
+commit: https://git.buildroot.net/buildroot/commit/?id=7b7ce072e58d23e110d23fd7c509ba7e62ed85ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in            |  1 +
- package/granite/Config.in    | 18 ++++++++++++++++++
- package/granite/granite.hash |  4 ++++
- package/granite/granite.mk   | 16 ++++++++++++++++
- 4 files changed, 39 insertions(+)
+ package/Config.in          |  1 +
+ package/libgee/Config.in   | 15 +++++++++++++++
+ package/libgee/libgee.hash |  2 ++
+ package/libgee/libgee.mk   | 16 ++++++++++++++++
+ 4 files changed, 34 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 6e7fffd..1467f33 100644
+index 27db639..6e7fffd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -887,6 +887,7 @@ menu "Graphics"
- 	source "package/gdk-pixbuf/Config.in"
- 	source "package/giblib/Config.in"
- 	source "package/giflib/Config.in"
-+	source "package/granite/Config.in"
- 	source "package/graphite2/Config.in"
- 	source "package/gtkmm3/Config.in"
- 	source "package/harfbuzz/Config.in"
-diff --git a/package/granite/Config.in b/package/granite/Config.in
+@@ -1216,6 +1216,7 @@ menu "Other"
+ 	source "package/libevdev/Config.in"
+ 	source "package/libevent/Config.in"
+ 	source "package/libffi/Config.in"
++	source "package/libgee/Config.in"
+ 	source "package/libglib2/Config.in"
+ 	source "package/libical/Config.in"
+ 	source "package/liblinear/Config.in"
+diff --git a/package/libgee/Config.in b/package/libgee/Config.in
 new file mode 100644
-index 0000000..fef5e27
+index 0000000..07c387c
 --- /dev/null
-+++ b/package/granite/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_GRANITE
-+	bool "granite"
++++ b/package/libgee/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_LIBGEE
++	bool "libgee"
 +	depends on BR2_USE_WCHAR
 +	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	depends on BR2_USE_MMU # fork()
-+	depends on BR2_PACKAGE_LIBGTK3
-+	select BR2_PACKAGE_LIBGEE
 +	select BR2_PACKAGE_LIBGLIB2
 +	help
-+	  An extension to GTK+ that provides several useful widgets and
-+	  classes to ease application development.
++	  Libgee is an utility library providing GObject-based
++	  interfaces and classes for commonly used data structures.
 +
-+	  https://launchpad.net/granite
++	  https://wiki.gnome.org/Projects/Libgee
 +
-+comment "granite needs libgtk3 and a toolchain w/ wchar, threads"
++comment "libgee needs a toolchain w/ wchar, threads"
 +	depends on BR2_USE_MMU
-+	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_USE_WCHAR \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/granite/granite.hash b/package/granite/granite.hash
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libgee/libgee.hash b/package/libgee/libgee.hash
 new file mode 100644
-index 0000000..5ce95e6
+index 0000000..4c38c78
 --- /dev/null
-+++ b/package/granite/granite.hash
-@@ -0,0 +1,4 @@
-+# From https://launchpad.net/granite/0.3/0.3.1/+download/granite-0.3.1.tar.xz/+md5
-+md5	4297d4fcec8cfe2e08b460a45c779bbe	granite-0.3.1.tar.xz
-+# Calculated based on the hash above
-+sha256	8ec1d61f9aba75f1b3a745e721288b0dfb34cb11d1307be80cef7b0571c2dec6	granite-0.3.1.tar.xz
-diff --git a/package/granite/granite.mk b/package/granite/granite.mk
++++ b/package/libgee/libgee.hash
+@@ -0,0 +1,2 @@
++# From http://ftp.acc.umu.se/pub/gnome/sources/libgee/0.18/libgee-0.18.0.sha256sum
++sha256	4ad99ef937d071b4883c061df40bfe233f7649d50c354cf81235f180b4244399	libgee-0.18.0.tar.xz
+diff --git a/package/libgee/libgee.mk b/package/libgee/libgee.mk
 new file mode 100644
-index 0000000..dd5a09e
+index 0000000..1df322c
 --- /dev/null
-+++ b/package/granite/granite.mk
++++ b/package/libgee/libgee.mk
 @@ -0,0 +1,16 @@
 +################################################################################
 +#
-+# granite
++# libgee
 +#
 +################################################################################
 +
-+GRANITE_VERSION_MAJOR = 0.3
-+GRANITE_VERSION = $(GRANITE_VERSION_MAJOR).1
-+GRANITE_SITE = https://launchpad.net/granite/$(GRANITE_VERSION_MAJOR)/$(GRANITE_VERSION)/+download
-+GRANITE_SOURCE = granite-$(GRANITE_VERSION).tar.xz
-+GRANITE_DEPENDENCIES = host-pkgconf host-vala libgee libglib2 libgtk3
-+GRANITE_INSTALL_STAGING = YES
-+GRANITE_LICENSE = LGPLv3+
-+GRANITE_LICENSE_FILES = COPYING
++LIBGEE_VERSION_MAJOR = 0.18
++LIBGEE_VERSION = $(LIBGEE_VERSION_MAJOR).0
++LIBGEE_SITE = http://ftp.gnome.org/pub/gnome/sources/libgee/$(LIBGEE_VERSION_MAJOR)
++LIBGEE_SOURCE = libgee-$(LIBGEE_VERSION).tar.xz
++LIBGEE_DEPENDENCIES = host-pkgconf host-vala libglib2
++LIBGEE_INSTALL_STAGING = YES
++LIBGEE_LICENSE = LGPLv2.1+
++LIBGEE_LICENSE_FILES = COPYING
 +
-+$(eval $(cmake-package))
++$(eval $(autotools-package))
