@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 22 Mar 2016 12:02:38 +0100
-Subject: [Buildroot] [PATCH v3 1/3] python-ptyprocess: new package
-In-Reply-To: <1458642986-32365-2-git-send-email-viktorin@rehivetech.com>
+Date: Tue, 22 Mar 2016 12:06:02 +0100
+Subject: [Buildroot] [PATCH v3 2/3] python-pexpect: new package
+In-Reply-To: <1458642986-32365-3-git-send-email-viktorin@rehivetech.com>
 References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
- <1458642986-32365-2-git-send-email-viktorin@rehivetech.com>
-Message-ID: <CAGm1_ktY5Ry9SL=XmVj6_q3v+y+Tzr9fNiRF1XKG1uXS7=Vr0g@mail.gmail.com>
+ <1458642986-32365-3-git-send-email-viktorin@rehivetech.com>
+Message-ID: <CAGm1_ksby2azyYQFoZrHo6EKZyxYhV_25sBMOxtGkp__tJwuDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,68 +13,72 @@ To: buildroot@busybox.net
 
 Hi Jan,
 
-the patch looks good to me. Below some comments:
-
 On Tue, Mar 22, 2016 at 11:36 AM, Jan Viktorin <viktorin@rehivetech.com> wrote:
 > Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 > ---
->  package/Config.in                              |  1 +
->  package/python-ptyprocess/Config.in            |  7 +++++++
->  package/python-ptyprocess/python-ptyprocess.mk | 13 +++++++++++++
->  3 files changed, 21 insertions(+)
->  create mode 100644 package/python-ptyprocess/Config.in
->  create mode 100644 package/python-ptyprocess/python-ptyprocess.mk
+>  package/Config.in                        |  1 +
+>  package/python-pexpect/Config.in         | 11 +++++++++++
+>  package/python-pexpect/python-pexpect.mk | 14 ++++++++++++++
+>  3 files changed, 26 insertions(+)
+>  create mode 100644 package/python-pexpect/Config.in
+>  create mode 100644 package/python-pexpect/python-pexpect.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 27db639..df01e55 100644
+> index df01e55..6fc0466 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -689,6 +689,7 @@ menu "External python modules"
+> @@ -686,6 +686,7 @@ menu "External python modules"
+>         source "package/python-paho-mqtt/Config.in"
+>         source "package/python-pam/Config.in"
+>         source "package/python-paramiko/Config.in"
+> +       source "package/python-pexpect/Config.in"
 >         source "package/python-posix-ipc/Config.in"
 >         source "package/python-protobuf/Config.in"
 >         source "package/python-psutil/Config.in"
-> +       source "package/python-ptyprocess/Config.in"
->         source "package/python-pyasn/Config.in"
->         source "package/python-pyasn-modules/Config.in"
->         source "package/python-pycli/Config.in"
-> diff --git a/package/python-ptyprocess/Config.in b/package/python-ptyprocess/Config.in
+> diff --git a/package/python-pexpect/Config.in b/package/python-pexpect/Config.in
 > new file mode 100644
-> index 0000000..4378943
+> index 0000000..4d04c01
 > --- /dev/null
-> +++ b/package/python-ptyprocess/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_PTYPROCESS
-> +       bool "python-ptyprocess"
+> +++ b/package/python-pexpect/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_PYTHON_PEXPECT
+> +       bool "python-pexpect"
+> +       select BR2_PACKAGE_PYTHON_PTYPROCESS
 > +       help
-> +         Launch a subprocess in a pseudo terminal (pty), and interact with
-> +         both the process and its pty.
+> +         Pexpect is a pure Python module for spawning child applications;
+> +         controlling them; and responding to expected patterns in their
+> +         output. Pexpect works like Don Libes? Expect. Pexpect allows your
+> +         script to spawn a child application and control it as if a human
+> +         were typing commands.
 > +
-> +         https://github.com/pexpect/ptyprocess
-> diff --git a/package/python-ptyprocess/python-ptyprocess.mk b/package/python-ptyprocess/python-ptyprocess.mk
+> +         https://pexpect.readthedocs.org
+> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
 > new file mode 100644
-> index 0000000..9e6b762
+> index 0000000..9de7849
 > --- /dev/null
-> +++ b/package/python-ptyprocess/python-ptyprocess.mk
-> @@ -0,0 +1,13 @@
+> +++ b/package/python-pexpect/python-pexpect.mk
+> @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-ptyprocess
+> +# python-pexpect
 > +#
 > +################################################################################
 > +
-> +PYTHON_PTYPROCESS_VERSION = 0.5
+> +PYTHON_PEXPECT_VERSION = 4.0.1
+> +PYTHON_PEXPECT_SITE = $(call github,pexpect,pexpect,$(PYTHON_PEXPECT_VERSION))
 
-There is newer version available 0.5.1
+Please get the package from https://pypi.python.org/pypi/pexpect and
+add a hash file.
 
-> +PYTHON_PTYPROCESS_SITE = $(call github,pexpect,ptyprocess,$(PYTHON_PTYPROCESS_VERSION))
+> +PYTHON_PEXPECT_LICENSE = ISC
+> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+> +PYTHON_PEXPECT_SETUP_TYPE = distutils
+> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
 
-Please get the package from https://pypi.python.org/pypi/ptyprocess
-and add a hash file.
+remove this build-time dependency
 
-> +PYTHON_PTYPROCESS_LICENSE = ISC
-> +PYTHON_PTYPROCESS_LICENSE_FILES = LICENSE
-> +PYTHON_PTYPROCESS_SETUP_TYPE = distutils
 > +
 > +$(eval $(python-package))
-
-Yegor
+> --
+> 2.7.0
+>
