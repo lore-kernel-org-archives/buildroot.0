@@ -1,71 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 20:19:19 +0100
-Subject: [Buildroot] [git commit] erlang: bump to version 18.3
-Message-ID: <20160322191927.5A6AB7FBFF@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 20:19:04 +0100
+Subject: [Buildroot] [git commit] gvfs: bump to version 1.28.0
+Message-ID: <20160322191927.0552881851@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=565e3412b0916a21b7de063f48612489e1fe9c48
+commit: https://git.buildroot.net/buildroot/commit/?id=fdcfc771a44d793110f0dc072ce306b63c3285eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Erlang/OTP 18.3 is a service release on the 18 track with mostly bug
-fixes, but is does contain a number of new features and improvements as
-well.
-
-Some highlights of the release are:
-
-  . New statistics info about runnable and active processes & ports.
-    Call erlang:statistics with: total_run_queue_lengths |
-    run_queue_lengths | total_active_tasks | active_tasks.
-
-  . Time warp improvements: dbg:p/2 and erlang:trace/3 with
-    monotonic_timestamp |strict_monotonic_timestamp.
-
-  . Introduced a validation callback for heart.
-
-  . The module overload in sasl has been deprecated.
-
-  . ~90 contributions since 18.2
-
-Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/erlang/erlang.hash | 4 ++--
- package/erlang/erlang.mk   | 4 ++--
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
-index f6519af..c39c26e 100644
---- a/package/erlang/erlang.hash
-+++ b/package/erlang/erlang.hash
-@@ -1,3 +1,3 @@
- # md5 from http://www.erlang.org/download/MD5, sha256 locally computed
--md5	ebb226d51f89ec54cc83ce5d417ce55e	otp_src_18.2.1.tar.gz
--sha256	82d76ebfeeda5db64ea5b0f1a04aa0e9ac63380b278722e0e6052249bd3fe39a  otp_src_18.2.1.tar.gz
-+md5	7e4ff32f97c36fb3dab736f8d481830b	otp_src_18.3.tar.gz
-+sha256	fdab8129a1cb935db09f1832e3a7d511a4aeb2b9bb3602ca6a7ccb9730d5c9c3	otp_src_18.3.tar.gz
-diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
-index 3732d44..ff4452f 100644
---- a/package/erlang/erlang.mk
-+++ b/package/erlang/erlang.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 5cc8857..38afe7b 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.26/gvfs-1.26.3.sha256sum
+-sha256	a70f75fa60d66f3f478c0c8aec43d0e43455a8cc75a4dfa8029e51c816401b4a	gvfs-1.26.3.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.0.sha256sum
++sha256	cf72fc0adf0ca702ead5b3fab3c1fa46b09678eb7c1290de7e30bb7cbaf5f704	gvfs-1.28.0.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index f566fc7..f63d9dc 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- # See note below when updating Erlang
--ERLANG_VERSION = 18.2.1
-+ERLANG_VERSION = 18.3
- ERLANG_SITE = http://www.erlang.org/download
- ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
- ERLANG_DEPENDENCIES = host-erlang
-@@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
- 
- # Whenever updating Erlang, this value should be updated as well, to the
- # value of EI_VSN in the file lib/erl_interface/vsn.mk
--ERLANG_EI_VSN = 3.8.1
-+ERLANG_EI_VSN = 3.8.2
- 
- # The configure checks for these functions fail incorrectly
- ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
+-GVFS_VERSION_MAJOR = 1.26
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).3
++GVFS_VERSION_MAJOR = 1.28
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).0
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
