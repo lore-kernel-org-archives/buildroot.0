@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 09:59:07 +0100
-Subject: [Buildroot] [git commit] dfu-util: Bump version to 0.9
-Message-ID: <20160322085942.29530807E6@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 09:59:37 +0100
+Subject: [Buildroot] [git commit] libqmi: bump to version 1.14.0
+Message-ID: <20160322085942.377407FB66@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0853862ab8bd6b4bb0e1b402be3a48266b2b257f
+commit: https://git.buildroot.net/buildroot/commit/?id=e5e75d177abf5e574f027279b7bb31d7025f6082
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Julian Scheel <julian@jusst.de>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/dfu-util/dfu-util.hash | 7 +++++--
- package/dfu-util/dfu-util.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/libqmi/libqmi.hash | 2 +-
+ package/libqmi/libqmi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dfu-util/dfu-util.hash b/package/dfu-util/dfu-util.hash
-index 0901717..bf618d1 100644
---- a/package/dfu-util/dfu-util.hash
-+++ b/package/dfu-util/dfu-util.hash
-@@ -1,2 +1,5 @@
--# From http://dfu-util.sourceforge.net/releases/dfu-util-0.8.tar.gz.md5
--md5	fc6daf6b0ee57d7e40ffa3e8111023d1	dfu-util-0.8.tar.gz
-+# From http://dfu-util.sourceforge.net/releases/dfu-util-0.9.tar.gz.md5
-+md5	233bb1e08ef4b405062445d84e28fde6	dfu-util-0.9.tar.gz
-+
-+# Locally computed
-+sha256	36428c6a6cb3088cad5a3592933385253da5f29f2effa61518ee5991ea38f833	dfu-util-0.9.tar.gz
-diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
-index 3e612db..079f875 100644
---- a/package/dfu-util/dfu-util.mk
-+++ b/package/dfu-util/dfu-util.mk
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index df0bb0b..be7b955 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  d23a397d9c963f637c99622df74ed08a2ba2276552c21eea1ed1d05eeafc82a7  libqmi-1.12.8.tar.xz
++sha256  6618fb92ffe6d017d7fd18082b5c13da954c3c9060f7cc4f8807ba7b2bea349d  libqmi-1.14.0.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 0ff20a6..9492787 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DFU_UTIL_VERSION = 0.8
-+DFU_UTIL_VERSION = 0.9
- DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
- DFU_UTIL_LICENSE = GPLv2+
- DFU_UTIL_LICENSE_FILES = COPYING
+-LIBQMI_VERSION = 1.12.8
++LIBQMI_VERSION = 1.14.0
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPLv2+ (library), GPLv2+ (programs)
