@@ -1,122 +1,146 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 22 Mar 2016 23:07:39 +0100
-Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
- or $(O) are not absolute canonical path
-In-Reply-To: <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
- <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
- <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
-Message-ID: <20160322220739.GA3441@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Mar 2016 23:05:42 +0100
+Subject: [Buildroot] [git commit] package/libldns: Fix build error with perl
+	5.22
+Message-ID: <20160322220803.67DD8818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=810e74934663dbea5004bde64f9c513d8712df81
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2016-03-20 20:45 -0500, Matthew Weber spake thusly:
-> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
-> > On Wed, Mar 9, 2016 at 4:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> >> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
-> >> they can be resolved differently, depending on each package build-system
-> >> (whether it uses the given paths or get the absolute canonical ones).
-> >>
-> >> Thus, to make easier tracking down host machine paths leaking into the
-> >> host, target or staging trees, the CURDIR and O variables are set to
-> >> their absolute canonical paths.
-> >>
-> >> Note that this change takes care of the makefile wrapper installed in
-> >> $(O) to avoid unneeded make recursion.
-> >>
-> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> >>
-> >> ---
-> >> changes v6->v7:
-> >> - none
-> >>
-> >> changes v5->v6:
-> >> - new patch
-> >> ---
-> >>  Makefile | 22 ++++++++++++++++++----
-> >>  1 file changed, 18 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/Makefile b/Makefile
-> >> index 98c8dc7..52a92f6 100644
-> >> --- a/Makefile
-> >> +++ b/Makefile
-> >> @@ -26,16 +26,30 @@
-> >>
-> >>  # Trick for always running with a fixed umask
-> >>  UMASK = 0022
-> >> -ifneq ($(shell umask),$(UMASK))
-> >> +
-> >> +# Check if we need to re-enter make for one or several of the following reasons:
-> >> +# 1- Wrong (too restrictive) umask:
-> >> +#    This prevents Buildroot and packages from creating files and directories.
-> >> +# 2- CWD (i.e. $(CURDIR)) not being the absolute canonical path:
-> >> +#    This makes harder tracking and fixing host machine path leaks.
-> >> +# 3- Output location (i.e. $(O)) not being the absolute canonical path:
-> >> +#    This makes harder tracking and fixing host machine path leaks.
-> >> +#
-> >> +# Note:
-> >> +# - remove the trailing '/.' from $(O) as it can be added by the makefile
-> >> +#   wrapper installed in the $(O).
-> >> +ifneq ($(shell umask):$(CURDIR):$(patsubst %/.,%,$(O)),$(UMASK):$(realpath $(CURDIR)):$(realpath $(O)))
-> >>  .PHONY: _all $(MAKECMDGOALS)
-> >>
-> >>  $(MAKECMDGOALS): _all
-> >>         @:
-> >>
-> >>  _all:
-> >> -       @umask $(UMASK) && $(MAKE) --no-print-directory $(MAKECMDGOALS)
-> >> +       umask $(UMASK) && \
-> >> +               $(MAKE) -C $(realpath $(CURDIR)) --no-print-directory \
-> >> +                       $(MAKECMDGOALS) O=$(realpath $(O))
-> >
-> > I've applied your v7 patches with these changes to the tip of
-> > buildroot and currently run into the following error.  I'm still
-> > poking around trying to understand why.
-> >
-> > $ make V=1 qemu_x86_defconfig
-> > umask 0022 && \
-> >         make -C /opt/buildroot --no-print-directory \
-> >                 qemu_x86_defconfig O=
+Bug was already reported upstream, as solution upstream refered to this
+commit: https://www.nlnetlabs.nl/bugs-script/show_bug.cgi?id=733#c2
 
-Why are you opassing an empty O= option here?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libldns/0003-doxyparse-manpages.patch | 117 ++++++++++++++++++++++++++
+ 1 file changed, 117 insertions(+)
 
-Can you reproduce without it?
-
-Regards,
-Yann E. MORIN.
-
-> > mkdir: missing operand
-> > Try 'mkdir --help' for more information.
-> > Makefile:156: *** output directory "" does not exist.  Stop.
-> > Makefile:48: recipe for target '_all' failed
-> > make: *** [_all] Error 2
-> >
-> > <snip>
-> >
-> > --
-> > Thanks,
-> > Matt
-> 
-> Sorry, didn't CC.  2nd attempt, see above.
-> 
-> -- 
-> Thanks,
-> Matt
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libldns/0003-doxyparse-manpages.patch b/package/libldns/0003-doxyparse-manpages.patch
+new file mode 100644
+index 0000000..7aaa0d1
+--- /dev/null
++++ b/package/libldns/0003-doxyparse-manpages.patch
+@@ -0,0 +1,117 @@
++From 168ee09a4bf184947798c3ee3ac99b6651470d64 Mon Sep 17 00:00:00 2001
++From: Willem Toorop <willem@nlnetlabs.nl>
++Date: Thu, 27 Nov 2014 16:21:54 +0100
++Subject: let doxyparse output manpage generation issues
++
++This patch fixes a build error with perl 5.22.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Patch backported from upstream commit:
++http://git.nlnetlabs.nl/ldns/commit/?h=develop&id=168ee09a4bf184947798c3ee3ac99b6651470d64
++---
++ doc/doxyparse.pl | 45 ++++++++++++++++++++++++++++++++++++++-------
++ 1 file changed, 38 insertions(+), 7 deletions(-)
++
++diff --git a/doc/doxyparse.pl b/doc/doxyparse.pl
++index 96a1732..a09b2e8 100755
++--- a/doc/doxyparse.pl
+++++ b/doc/doxyparse.pl
++@@ -57,10 +57,15 @@ This manpage was automaticly generated from the ldns source code by
++ use of Doxygen and some perl.
++ ";
++ 
++-getopts("m:",\%options);
+++getopts("em:",\%options);
++ # if -m manpage file is given process that file
++ # parse the file which tells us what manpages go together
++ my $functions, $see_also;
+++my $i = -1;
+++my $report_errors = defined $options{'e'};
+++my $errors = 0;
+++my %unique;
+++
++ if (defined $options{'m'}) {
++ 	# process
++ 	open(MAN, "<$options{'m'}") or die "Cannot open $options{'m'}";
++@@ -68,18 +73,35 @@ if (defined $options{'m'}) {
++ 		# func1, func2, .. | see_also1, see_also2, ...
++ 		while(<MAN>) {
++ 			chomp;
+++			$i += 1;
++ 			if (/^#/) { next; }
++ 			if (/^$/) { next; }
++-			($functions, $see_also) = split /[\t ]*\|[\t ]*/, $_;
++-			#print "{$functions}\n";
++-			#print "{$see_also}\n";
+++			my @parts = split /[\t ]*\|[\t ]*/, $_;
+++			$functions = shift @parts;
+++			$see_also = join ', ', @parts;
+++			print "{$functions}\n";
+++			print "{$see_also}\n";
++ 			my @funcs = split /[\t ]*,[\t ]*/, $functions;
++ 			my @also = split /[\t ]*,[\t ]*/, $see_also;
++ 			$manpages{$funcs[0]} = \@funcs;
++ 			$see_also{$funcs[0]} = \@also;
+++			foreach (@funcs) {
+++				if ($unique{$_}) {
+++					push $unique{$_}, ($i,);
+++				} else {
+++					$unique{$_} = [$i];
+++				}
+++			}
++ 			#print "[", $funcs[0], "]\n";
++ 		}
++ 	close(MAN);
+++	while (($func, $lines) = each %unique ) {
+++		if (scalar @$lines > 1) {
+++			print STDERR "$func in function_manpages on lines: "
+++			    . join(", ",@$lines) . "\n" if $report_errors;
+++			$errors += 1;
+++		}
+++	}
++ } else {
++ 	print "Need -m file to process the .h files\n";
++ 	exit 1;
++@@ -95,7 +117,7 @@ mkdir "doc/man";
++ mkdir "doc/man/man$MAN_SECTION";
++ 
++ $state = 0;
++-my $i;
+++$i = 0;
++ my @lines = <STDIN>;
++ my $max = @lines;
++ 
++@@ -273,7 +295,7 @@ foreach (keys %manpages) {
++ 
++ 	print MAN $MAN_MIDDLE;
++ 
++-	if (defined(@$also)) {
+++	if (@$also) {
++ 		print MAN "\n.SH SEE ALSO\n\\fI";
++ 		print MAN join "\\fR, \\fI", @$also;
++ 		print MAN "\\fR.\nAnd ";
++@@ -290,7 +312,7 @@ foreach (keys %manpages) {
++ 	# create symlinks
++ 	chdir("$BASE/man$MAN_SECTION");
++ 	foreach (@$name) {
++-		print STDERR $_,"\n";
+++		print STDOUT $_,"\n";
++ 		my $new_file = $_ . "." . $MAN_SECTION;
++ 		if ($new_file eq $symlink_file) {
++ 			next;
++@@ -301,3 +323,12 @@ foreach (keys %manpages) {
++ 	chdir("../../.."); # and back, tricky and fragile...
++ 	close(MAN);
++ }
+++foreach (keys %api) {
+++	next if (/ / || /^$/);
+++	if (not $unique{$_}) {
+++		print STDERR "no man page for $_\n" if $report_errors;
+++		$errors += 1;
+++	}
+++}
+++
+++exit ($report_errors and $errors != 0);
++-- 
++cgit v0.11.2
++
