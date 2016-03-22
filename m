@@ -1,61 +1,279 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 22 Mar 2016 21:07:48 +0100
-Subject: [Buildroot] [PATCH 1/3] ffmpeg: bump to version 3.0
-References: <1458309966-16835-1-git-send-email-Vincent.Riera@imgtec.com>
- <n5ktrcx0us.ln2@ID-313208.user.individual.net> <56EC2AED.3090803@imgtec.com>
- <XnsA5CFB7247A9CBberndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <56EC35DD.60804@imgtec.com>
- <XnsA5CFCC40DEAC4berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
-Message-ID: <XnsA5D3D6F23E7C2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Mar 2016 21:12:32 +0100
+Subject: [Buildroot] [PATCH v3 3/3] dpdk: new package
+In-Reply-To: <1458642986-32365-4-git-send-email-viktorin@rehivetech.com>
+References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
+ <1458642986-32365-4-git-send-email-viktorin@rehivetech.com>
+Message-ID: <20160322211232.374d47a2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote in 
-news:XnsA5CFCC40DEAC4berndkuhlsPkbjNfxxIA at bernd-kuhls.de:
+Hello,
 
-> Vicente Olivert Riera <Vincent.Riera-
-1AXoQHu6uovQT0dZR+AlfA@public.gmane.org> 
-> wrote in news:56EC35DD.60804 at imgtec.com:
-> 
->> don't you prefer to backport that Gentoo patch into Buildroot?
-> 
-> Hi Vicente,
-> 
-> that?s exactly what I am planing to do combined with a runtime test.
+On Tue, 22 Mar 2016 11:36:26 +0100, Jan Viktorin wrote:
 
-Hi Vicente,
+> diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
+> new file mode 100644
+> index 0000000..a42271e
+> --- /dev/null
+> +++ b/package/dpdk/Config.in
+> @@ -0,0 +1,53 @@
+> +config BR2_PACKAGE_DPDK
+> +       bool "dpdk"
 
-one hour ago I started with the runtime test:
+Indentation of properties should be done with one tab (ditto in the
+following lines)
 
-20:11:53 T:3027584768  NOTICE: Starting Kodi (16.1-RC2 
-Git:a7caa16680f09810). Platform: Linux x86 32-bit
-20:11:53 T:3027584768  NOTICE: Using Debug Kodi x32 build
-20:11:53 T:3027584768  NOTICE: Kodi compiled Mar 22 2016 by GCC 4.9.2 for 
-Linux x86 32-bit version 3.14.25 (200217)
-20:11:53 T:3027584768  NOTICE: Running on fli4l 3.10.5-r45046-testing 0.0, 
-kernel: Linux x86 32-bit version 3.18.29-nonfree
-20:11:53 T:3027584768  NOTICE: FFmpeg version: 3.0
-20:11:53 T:3027584768  NOTICE: Host CPU: Intel(R) Core(TM) i3-4330T CPU @ 
-3.00GHz, 4 cores available
+> +       depends on (BR2_i386 && !BR2_x86_i386 && !BR2_x86_i486 \
+> +		      && !BR2_x86_i586 && !BR2_x86_x1000) \
+> +                  || BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_aarch64_be
 
-So far looking good, no crashes, CPU load like before. I will continue to 
-test for a few days, especially because popcornmix, a Team-Kodi member, 
-wrote
+I'm wondering why you have this list of architecture dependencies. Is
+it because there is really some architecture specific code, or is it a
+left-over from the times we didn't had the BR2_TOOLCHAIN_HAS_x
+options ?
 
-http://forum.kodi.tv/showthread.php?tid=264007&pid=2278559#pid2278559
+If that's really needed, please add a blind option like this:
 
-and OpenELEC did not bump yet: 
-https://github.com/OpenELEC/OpenELEC.tv/blob/master/packages/multimedia/ffm
-peg/package.mk
+config BR2_PACKAGE_DPDK_ARCH_SUPPORTS
+	bool
+	default y if ...
 
-The Kodi project itself already prepared the ffmpeg bump:
-https://github.com/xbmc/FFmpeg/commits/release/3.0-xbmc
+That you can re-use as a dependency, both for the comment (see below)
+and the main option.
 
-but did not commit it yet: 
-https://github.com/xbmc/xbmc/blob/master/tools/depends/target/ffmpeg/FFMPEG
--VERSION
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
 
-Regards, Bernd
+Then you need to have a comment like:
+
+comment "dpdk needs a toolchain w/ glibc"
+	depends on !BR2_TOOLCHAIN_USES_GLIBC
+	depends on BR2_TOOLCHAIN_HAS_SYNC_...
+
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_1
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_2
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> +       depends on BR2_TOOLCHAIN_HAS_SYNC_8
+
+Cosmetic nit, but I would prefer to see:
+
+	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && \
+		BR2_TOOLCHAIN_HAS_SYNC_2 && \
+		BR2_TOOLCHAIN_HAS_SYNC_4 && \
+		BR2_TOOLCHAIN_HAS_SYNC_8
+
+	
+
+> +       help
+> +	 DPDK is a set of libraries and drivers for fast packet processing. It
+> +	 was designed to run on any processors, however, Intel x86 has been the
+> +	 first CPU to be supported. Ports for other CPUs like IBM Power 8 and
+> +	 ARM are under progress. It runs mostly in Linux userland. A FreeBSD
+> +	 port is now available for a subset of DPDK features.
+
+Indentation of the help text should be one tab + *two* spaces.
+
+> +
+> +	 Notes:
+> +	 * To build the included Linux Kernel drivers, it is necessary to
+> +	   enable CONFIG_PCI_MSI, CONFIG_UIO.
+> +	 * To build the PCAP PMD properly, you need to enable the libpcap
+> +	   manually.
+> +	 * You may need to install the python2 interpreter if you want to use
+> +	   scripts dpdk_nic_bind.py and cpu_layout.py
+> +
+> +         http://www.dpdk.org/
+> +
+> +if BR2_PACKAGE_DPDK
+> +
+> +config BR2_PACKAGE_DPDK_CONFIG
+> +	string "Configuration"
+> +	default "i686-native-linuxapp-gcc" \
+> +		if BR2_x86_i686
+> +	default "x86_64-native-linuxapp-gcc" \
+> +		if BR2_x86_64
+> +	default "arm-armv7a-linuxapp-gcc" \
+> +		if BR2_ARM_CPU_ARMV7A
+> +	default "arm64-armv8a-linuxapp-gcc" \
+> +		if BR2_aarch64 || BR2_aarch64_be
+
+I don't remember if we discussed this: is there any reason to make this
+configurable? I.e is it necessary to make it a visible Config.in option
+as opposed to a blind one?
+
+> +
+> +config BR2_PACKAGE_DPDK_TEST
+> +	bool "Install tests suite"
+> +	select BR2_PACKAGE_PYTHON_PEXPECT if BR2_PACKAGE_PYTHON
+> +	help
+> +	  Install all DPDK tests. If you want to run the tests by the included
+> +	  autotest.py script you need to enable python manually.
+
+Is the test suite usable without Python ?
+
+> diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
+> new file mode 100644
+> index 0000000..02860fd
+> --- /dev/null
+> +++ b/package/dpdk/dpdk.mk
+> @@ -0,0 +1,109 @@
+> +################################################################################
+> +#
+> +# dpdk
+> +#
+> +################################################################################
+> +
+> +DPDK_VERSION = 16.04-rc1
+
+We normally don't package release candidate / beta version. Are you
+confident that the final 16.04 release will be done before Buildroot
+ships its own release at the end of May ?
+
+> +DPDK_SITE = http://dpdk.org/browse/dpdk/snapshot
+> +DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.gz
+
+Not needed, that's the default value.
+
+> +
+> +DPDK_LICENSE = BSD (core), GPLv2+ (Linux drivers)
+
+BSD should be more specific, like BSD-2c, BSD-3c, etc.
+
+> +DPDK_LICENSE_FILES = GNUmakefile LICENSE.GPL
+> +DPDK_INSTALL_STAGING = YES
+> +
+> +DPDK_DEPENDENCIES += linux
+
+If you need the Linux kernel to be built, then you need to also have:
+
+	depends on BR2_LINUX_KERNEL
+
+in your Config.in, as well as a corresponding comment:
+
+comment "dpdk needs the Linux kernel to be built"
+	depends on !BR2_LINUX_KERNEL
+
+> +
+> +ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+> +DPDK_DEPENDENCIES += libpcap
+> +endif
+> +
+> +ifeq ($(BR2_SHARED_LIBS),y)
+> +define DPDK_ENABLE_SHARED_LIBS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_RTE_BUILD_SHARED_LIB,\
+> +			$(@D)/build/.config)
+> +endef
+> +
+> +DPDK_POST_CONFIGURE_HOOKS += DPDK_ENABLE_SHARED_LIBS
+> +endif
+> +
+> +# We're building a kernel module without using the kernel-module infra,
+> +# so we need to tell we want module support in the kernel
+> +ifeq ($(BR2_PACKAGE_DPDK),y)
+> +LINUX_NEEDS_MODULES = y
+> +endif
+
+This is no longer the "right" way of doing this. Just select
+BR2_LINUX_NEEDS_MODULES in Config.in.
+
+> +
+> +DPDK_CONFIG = $(call qstrip,$(BR2_PACKAGE_DPDK_CONFIG))
+> +
+> +ifeq ($(BR2_PACKAGE_DPDK_EXAMPLES),y)
+> +# Build of DPDK examples is not very straight-forward. It requires to have
+> +# the SDK and runtime installed on same place to reference it by RTE_SDK.
+> +# We place it locally in the build directory.
+> +define DPDK_BUILD_EXAMPLES
+> +	$(MAKE) -C $(@D) DESTDIR=$(@D)/examples-sdk \
+> +		CROSS=$(TARGET_CROSS) install-sdk install-runtime
+> +	$(MAKE) -C $(@D) RTE_KERNELDIR=$(LINUX_DIR) CROSS=$(TARGET_CROSS) \
+> +		RTE_SDK=$(@D)/examples-sdk/usr/local/share/dpdk \
+> +		T=$(DPDK_CONFIG) examples
+> +endef
+> +
+> +DPDK_EXAMPLES_PATH = $(@D)/examples-sdk/usr/local/share/dpdk/examples
+> +
+> +# Installation of examples is not supported in DPDK so we do it explicitly
+> +# here. As the binaries and libraries do not have a single or regular location
+> +# where to find them after build, we search for them by find.
+> +define DPDK_INSTALL_EXAMPLES
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/local/bin
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/local/lib
+
+In Buildroot, everything is installed in /usr, not /usr/local. Why
+should this package be different? Also, to create directories, we
+typically use mkdir -p.
+
+> +	for f in `find $(DPDK_EXAMPLES_PATH) -executable -type f   \
+> +			-name '[a-z]*.so*' | grep '\/lib\/.*'`; do \
+> +		$(INSTALL) -m 0755 -D $$f                          \
+> +			$(TARGET_DIR)/usr/local/lib/`basename $$f`;\
+> +	done
+> +	for f in `find $(DPDK_EXAMPLES_PATH) -executable -type f   \
+> +			! -name '*.so*' | grep '\/app\/.*'`; do    \
+> +		$(INSTALL) -m 0755 -D $$f                          \
+> +			$(TARGET_DIR)/usr/local/bin/`basename $$f`;\
+> +	done
+
+It's a bit annoying to have this logic. Could it be simplified to use
+-path instead of -name and avoid the grep ?
+
+Also, you need to add || exit 1 after the $(INSTALL) to exit the for
+loop in case of failure.
+
+Ideally (but separately from this patch), you could contribute to
+upstream dpdk a way to install examples.
+
+> +endef
+> +
+> +# Build of the power example is broken (at least for 16.04).
+> +define DPDK_DISABLE_POWER
+> +	$(call KCONFIG_DISABLE_OPT,CONFIG_RTE_LIBRTE_POWER,\
+> +			$(@D)/build/.config)
+> +endef
+> +
+> +DPDK_POST_CONFIGURE_HOOKS += DPDK_DISABLE_POWER
+> +endif
+> +
+> +define DPDK_CONFIGURE_CMDS
+> +	$(MAKE) -C $(@D) T=$(DPDK_CONFIG) RTE_KERNELDIR=$(LINUX_DIR) \
+> +			   CROSS=$(TARGET_CROSS) config
+> +endef
+> +
+> +define DPDK_BUILD_CMDS
+> +	$(MAKE) -C $(@D) RTE_KERNELDIR=$(LINUX_DIR) CROSS=$(TARGET_CROSS)
+> +	$(DPDK_BUILD_EXAMPLES)
+> +endef
+> +
+> +define DPDK_INSTALL_STAGING_CMDS
+> +	$(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) prefix=/usr \
+> +		 CROSS=$(TARGET_CROSS) install-sdk
+> +endef
+> +
+> +ifeq ($(BR2_PACKAGE_DPDK_TEST),y)
+> +define DPDK_INSTALL_TARGET_TEST
+> +	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/dpdk
+> +	$(INSTALL) -m 0755 -D $(@D)/build/app/test $(TARGET_DIR)/usr/dpdk
+> +	$(INSTALL) -m 0755 -D $(@D)/app/test/*.py $(TARGET_DIR)/usr/dpdk
+> +endef
+> +endif
+> +
+> +define DPDK_INSTALL_TARGET_CMDS
+> +	$(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) prefix=/usr \
+> +		CROSS=$(TARGET_CROSS) install-runtime
+> +	$(DPDK_INSTALL_TARGET_TEST)
+> +	$(DPDK_INSTALL_EXAMPLES)
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Other than that, looks good to me.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
