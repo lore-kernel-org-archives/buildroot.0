@@ -1,145 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 22 Mar 2016 22:45:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libldns: Fix build error with perl
-	5.22
-Message-ID: <1458683149-6200-1-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 22 Mar 2016 22:48:53 +0100
+Subject: [Buildroot] [PATCH 1/5] toolchain-external: blackfin: install
+ FDPIC libraries also to staging
+In-Reply-To: <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+ <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
+Message-ID: <56F1BDC5.5080707@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bug was already reported upstream, as solution upstream refered to this
-commit: https://www.nlnetlabs.nl/bugs-script/show_bug.cgi?id=733#c2
+Hi Thomas, all,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libldns/0003-doxyparse-manpages.patch | 117 ++++++++++++++++++++++++++
- 1 file changed, 117 insertions(+)
- create mode 100644 package/libldns/0003-doxyparse-manpages.patch
+Le 12/02/2016 20:20, Thomas De Schampheleire a ?crit :
+> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> 
+> For external Blackfin toolchains with BR2_BFIN_INSTALL_FDPIC_SHARED set,
+> the FDPIC shared libraries are currently only copied to the target
+> directory, not to staging.
+> 
+> For debugging purposes, an unstripped copy in staging is necessary.
+> Moreover, this change will simplify a subsequent change that lines up the
+> location of shared libraries between target and staging directories.
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 
-diff --git a/package/libldns/0003-doxyparse-manpages.patch b/package/libldns/0003-doxyparse-manpages.patch
-new file mode 100644
-index 0000000..9c3f1d2
---- /dev/null
-+++ b/package/libldns/0003-doxyparse-manpages.patch
-@@ -0,0 +1,117 @@
-+From 168ee09a4bf184947798c3ee3ac99b6651470d64 Mon Sep 17 00:00:00 2001
-+From: Willem Toorop <willem@nlnetlabs.nl>
-+Date: Thu, 27 Nov 2014 16:21:54 +0100
-+Subject: let doxyparse output manpage generation issues
-+
-+This patch fixes a build error with perl 5.22.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Patch backported from upstream commit:
-+http://git.nlnetlabs.nl/ldns/commit/?h=develop&id=168ee09a4bf184947798c3ee3ac99b6651470d64
-+---
-+ doc/doxyparse.pl | 45 ++++++++++++++++++++++++++++++++++++++-------
-+ 1 file changed, 38 insertions(+), 7 deletions(-)
-+
-+diff --git a/doc/doxyparse.pl b/doc/doxyparse.pl
-+index 96a1732..a09b2e8 100755
-+--- a/doc/doxyparse.pl
-++++ b/doc/doxyparse.pl
-+@@ -57,10 +57,15 @@ This manpage was automaticly generated from the ldns source code by
-+ use of Doxygen and some perl.
-+ ";
-+ 
-+-getopts("m:",\%options);
-++getopts("em:",\%options);
-+ # if -m manpage file is given process that file
-+ # parse the file which tells us what manpages go together
-+ my $functions, $see_also;
-++my $i = -1;
-++my $report_errors = defined $options{'e'};
-++my $errors = 0;
-++my %unique;
-++
-+ if (defined $options{'m'}) {
-+ 	# process
-+ 	open(MAN, "<$options{'m'}") or die "Cannot open $options{'m'}";
-+@@ -68,18 +73,35 @@ if (defined $options{'m'}) {
-+ 		# func1, func2, .. | see_also1, see_also2, ...
-+ 		while(<MAN>) {
-+ 			chomp;
-++			$i += 1;
-+ 			if (/^#/) { next; }
-+ 			if (/^$/) { next; }
-+-			($functions, $see_also) = split /[\t ]*\|[\t ]*/, $_;
-+-			#print "{$functions}\n";
-+-			#print "{$see_also}\n";
-++			my @parts = split /[\t ]*\|[\t ]*/, $_;
-++			$functions = shift @parts;
-++			$see_also = join ', ', @parts;
-++			print "{$functions}\n";
-++			print "{$see_also}\n";
-+ 			my @funcs = split /[\t ]*,[\t ]*/, $functions;
-+ 			my @also = split /[\t ]*,[\t ]*/, $see_also;
-+ 			$manpages{$funcs[0]} = \@funcs;
-+ 			$see_also{$funcs[0]} = \@also;
-++			foreach (@funcs) {
-++				if ($unique{$_}) {
-++					push $unique{$_}, ($i,);
-++				} else {
-++					$unique{$_} = [$i];
-++				}
-++			}
-+ 			#print "[", $funcs[0], "]\n";
-+ 		}
-+ 	close(MAN);
-++	while (($func, $lines) = each %unique ) {
-++		if (scalar @$lines > 1) {
-++			print STDERR "$func in function_manpages on lines: "
-++			    . join(", ",@$lines) . "\n" if $report_errors;
-++			$errors += 1;
-++		}
-++	}
-+ } else {
-+ 	print "Need -m file to process the .h files\n";
-+ 	exit 1;
-+@@ -95,7 +117,7 @@ mkdir "doc/man";
-+ mkdir "doc/man/man$MAN_SECTION";
-+ 
-+ $state = 0;
-+-my $i;
-++$i = 0;
-+ my @lines = <STDIN>;
-+ my $max = @lines;
-+ 
-+@@ -273,7 +295,7 @@ foreach (keys %manpages) {
-+ 
-+ 	print MAN $MAN_MIDDLE;
-+ 
-+-	if (defined(@$also)) {
-++	if (@$also) {
-+ 		print MAN "\n.SH SEE ALSO\n\\fI";
-+ 		print MAN join "\\fR, \\fI", @$also;
-+ 		print MAN "\\fR.\nAnd ";
-+@@ -290,7 +312,7 @@ foreach (keys %manpages) {
-+ 	# create symlinks
-+ 	chdir("$BASE/man$MAN_SECTION");
-+ 	foreach (@$name) {
-+-		print STDERR $_,"\n";
-++		print STDOUT $_,"\n";
-+ 		my $new_file = $_ . "." . $MAN_SECTION;
-+ 		if ($new_file eq $symlink_file) {
-+ 			next;
-+@@ -301,3 +323,12 @@ foreach (keys %manpages) {
-+ 	chdir("../../.."); # and back, tricky and fragile...
-+ 	close(MAN);
-+ }
-++foreach (keys %api) {
-++	next if (/ / || /^$/);
-++	if (not $unique{$_}) {
-++		print STDERR "no man page for $_\n" if $report_errors;
-++		$errors += 1;
-++	}
-++}
-++
-++exit ($report_errors and $errors != 0);
-+-- 
-+cgit v0.11.2
-+
--- 
-2.7.0
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+> ---
+>  toolchain/toolchain-external/toolchain-external.mk | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 6c3022a..ffdee49 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -656,6 +656,20 @@ endef
+>  # nonetheless requested the installation of the FDPIC libraries to the
+>  # target filesystem.
+>  ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
+> +define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
+> +	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...") ; \
+> +	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+> +	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> +	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+> +	FDPIC_SUPPORT_LIB_DIR="" ; \
+> +	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
+> +	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
+> +	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
+> +	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
+> +	        fi ; \
+> +	fi ; \
+> +	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
+> +endef
+>  define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
+>  	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
+>  	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
+> @@ -755,6 +769,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
+>  define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
+>  	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
+>  	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
+> +	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
+>  	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
+>  	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
+>  endef
+> @@ -771,3 +786,4 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+>  endef
+>  
+>  $(eval $(generic-package))
+> +
+> 
