@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Mar 2016 00:01:23 +0100
-Subject: [Buildroot] [PATCH v2 7/7] altera: remove whitespace before
- colon
-In-Reply-To: <1445340745-1000-8-git-send-email-viktorin@rehivetech.com>
-References: <1445340745-1000-1-git-send-email-viktorin@rehivetech.com>
- <1445340745-1000-8-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160323000123.1bb21a7b@free-electrons.com>
+Date: Wed, 23 Mar 2016 00:01:35 +0100
+Subject: [Buildroot] [git commit] busybox: use md5 as default password
+	algorithm
+Message-ID: <20160322230142.901A981831@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d1de77a59fb0cb6a3c5d25cf4a825fbc0c7acdce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 20 Oct 2015 13:32:25 +0200, Jan Viktorin wrote:
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-> ---
->  board/altera/readme.txt | 32 ++++++++++++++++----------------
->  1 file changed, 16 insertions(+), 16 deletions(-)
+DES is terribly outdated and a security vulnerability.
 
-I've applied after fixing the conflicts due to the previous patches not
-being applied.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/busybox/busybox.config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 2cf989d..693b9d2 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -496,7 +496,7 @@ CONFIG_PASSWD=y
+ CONFIG_FEATURE_PASSWD_WEAK_CHECK=y
+ # CONFIG_CRYPTPW is not set
+ # CONFIG_CHPASSWD is not set
+-CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="des"
++CONFIG_FEATURE_DEFAULT_PASSWD_ALGO="md5"
+ CONFIG_SU=y
+ CONFIG_FEATURE_SU_SYSLOG=y
+ CONFIG_FEATURE_SU_CHECKS_SHELLS=y
