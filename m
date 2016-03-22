@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 09:59:47 +0100
-Subject: [Buildroot] [PATCH] libqmi: bump to version 1.14.0
-In-Reply-To: <1458567555-22688-1-git-send-email-yegorslists@googlemail.com>
-References: <1458567555-22688-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160322095947.28d52d6c@free-electrons.com>
+Date: Tue, 22 Mar 2016 10:00:02 +0100
+Subject: [Buildroot] [PATCH] ntfs-3g: bump version to 2016.2.22
+In-Reply-To: <1458580171-16435-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1458580171-16435-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160322100002.7f78ee40@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +12,11 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 Mar 2016 14:39:15 +0100, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On Mon, 21 Mar 2016 17:09:31 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
->  package/libqmi/libqmi.hash | 2 +-
->  package/libqmi/libqmi.mk   | 2 +-
+>  package/ntfs-3g/ntfs-3g.hash | 2 +-
+>  package/ntfs-3g/ntfs-3g.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
