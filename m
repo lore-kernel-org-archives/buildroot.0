@@ -1,44 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 23:47:06 +0100
-Subject: [Buildroot] [git commit] altera: improve readme to cover both
-	supported boards
-Message-ID: <20160322225028.39C5F7FFED@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 23:52:39 +0100
+Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
+In-Reply-To: <56F1C9D1.2010104@mind.be>
+References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
+ <56F1C9D1.2010104@mind.be>
+Message-ID: <20160322235239.7a75f515@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1039811491f81e9b3db160627acab082e2b7b7f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- board/altera/readme.txt | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+On Tue, 22 Mar 2016 23:40:17 +0100, Arnout Vandecappelle wrote:
+> On 03/20/16 22:24, Yann E. MORIN wrote:
+> > When there is no .config, we do not source $(BR2_EXTERNAL)/external.mk.
+> > So we can not expose the custom help in that situation.
+> >
+> > It is now known whether sourcing $(BR2_EXTERNAL)/external.mk outside the
+> > HAVE_DOT_CONFIG conditional block is entirely safe. Even if it would
+> > work today, we would have a hard time not breaking it in the future,
+> > because we do not have automatic checks for that and would need to rely
+> > on users reporting issues after the fact.
+> >
+> > Instead, we require the custom help to be defined in its own file in the
+> > br2-external tree. This way, we can safely include it unconditionally.
+> 
+>   IMHO that custom help was a bad idea. It's adding complexity, an extra file in 
+> BR2_EXTERNAL, and really not that useful...
 
-diff --git a/board/altera/readme.txt b/board/altera/readme.txt
-index 8d5b891..ddd9e03 100644
---- a/board/altera/readme.txt
-+++ b/board/altera/readme.txt
-@@ -1,4 +1,4 @@
--SoCkit
-+SoCkit, SoC Development Kit
- 
- Intro
- =====
-@@ -6,9 +6,12 @@ Intro
- This is the buildroot board support for the Arrow SoCkit Evaluation Board
- and the Altera Cyclone 5 Development Board.
- 
--A good source of information is :
-+A good source of information for Arrow SoCkit:
- http://www.rocketboards.org/foswiki/Documentation/ArrowSoCKitEvaluationBoard
- 
-+More information about SoC DK:
-+https://www.altera.com/products/boards_and_kits/dev-kits/altera/kit-cyclone-v-soc.html
-+
- How it works
- ============
- 
+Agreed. I'm not sure it's worth it. It's still time to revert if we
+don't think it's a good idea. Peter?
+
+Without this custom help thing, it is already possible to define some
+custom make target in external.mk that will display some help. It won't
+be available until a configuration is defined, but oh well, who reads
+help texts anyway?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
