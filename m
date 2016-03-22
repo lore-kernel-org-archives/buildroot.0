@@ -1,44 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 10:05:06 +0100
-Subject: [Buildroot] [git commit] vala: bump to version 0.32.0
-Message-ID: <20160322090550.A18177FD65@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 10:05:21 +0100
+Subject: [Buildroot] [git commit] libsoup: bump to version 2.54.0
+Message-ID: <20160322090550.C3C367FD65@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ba03f4b77febdbbd10d9fa20c456ba9ab56f0c1
+commit: https://git.buildroot.net/buildroot/commit/?id=beda22def9d403feaa3851cd8a618aad098d8ba8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala.hash | 4 ++--
- package/vala/vala.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libsoup/libsoup.hash | 4 ++--
+ package/libsoup/libsoup.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/vala/vala.hash b/package/vala/vala.hash
-index 8b16838..9301964 100644
---- a/package/vala/vala.hash
-+++ b/package/vala/vala.hash
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 7878550..facedc6 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
 @@ -1,2 +1,2 @@
--# From https://download.gnome.org/sources/vala/0.30/vala-0.30.1.sha256sum
--sha256	23add78e5c6a5e6df019d4a885c9c79814c9e0b957519ec8a4f4d826c4e5df2c	vala-0.30.1.tar.xz
-+# From https://download.gnome.org/sources/vala/0.32/vala-0.32.0.sha256sum
-+sha256	07a2aa4ede040789b4b5af817a42249d703bfe8affccb7732ca2b53d00c1fb6e	vala-0.32.0.tar.xz
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 56d4db3..57a6956 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -4,8 +4,8 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.52/libsoup-2.52.2.sha256sum
+-sha256	db55628b5c7d952945bb71b236469057c8dfb8dea0c271513579c6273c2093dc	libsoup-2.52.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.54/libsoup-2.54.0.sha256sum
++sha256	fbf1038efb10d2ffbbb88bb46e7ce32b683fde8e566f36bcf26f7f69a550ec56	libsoup-2.54.0.tar.xz
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index fd51a0e..53138be 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,15 +4,15 @@
  #
  ################################################################################
  
--VALA_VERSION_MAJOR = 0.30
--VALA_VERSION = $(VALA_VERSION_MAJOR).1
-+VALA_VERSION_MAJOR = 0.32
-+VALA_VERSION = $(VALA_VERSION_MAJOR).0
- VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
- VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
- VALA_LICENSE = LGPLv2.1+
+-LIBSOUP_VERSION_MAJOR = 2.52
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).2
++LIBSOUP_VERSION_MAJOR = 2.54
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPLv2+
+ LIBSOUP_LICENSE_FILES = COPYING
+ LIBSOUP_INSTALL_STAGING = YES
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+-LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no
++LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
+ LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+ 	libglib2 libxml2 sqlite host-intltool
+ 
