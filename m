@@ -1,118 +1,56 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 22 Mar 2016 23:58:16 +0100
-Subject: [Buildroot] [PATCH 5/5] toolchain-external: unify
- LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
-In-Reply-To: <1455304826-10557-6-git-send-email-patrickdepinguin@gmail.com>
-References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
- <1455304826-10557-6-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <56F1CE08.4010409@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 22 Mar 2016 23:58:45 +0100
+Subject: [Buildroot] [PATCH v2 6/7] altera: improve fdisk instructions
+In-Reply-To: <1445340745-1000-7-git-send-email-viktorin@rehivetech.com>
+References: <1445340745-1000-1-git-send-email-viktorin@rehivetech.com>
+ <1445340745-1000-7-git-send-email-viktorin@rehivetech.com>
+Message-ID: <20160322235845.7b3b4c11@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Le 12/02/2016 20:20, Thomas De Schampheleire a ?crit :
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On Tue, 20 Oct 2015 13:32:24 +0200, Jan Viktorin wrote:
+> The 't' command expects the number of the target partition
+> when there are at least 2 of them. Also note about the arbitrary
+> value 9000000.
 > 
-> With the alignment of toolchain library location in target and staging,
-> there is no need anymore for the distinction between LIB_EXTERNAL_LIBS and
-> USR_LIB_EXTERNAL_LIBS. Unify them into TOOLCHAIN_EXTERNAL_LIBS.
-> 
-> Related, update the help text of
-> BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS.
-> 
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
 > ---
->  toolchain/toolchain-external/Config.in             |  3 +--
->  toolchain/toolchain-external/toolchain-external.mk | 22 +++++++++++-----------
->  2 files changed, 12 insertions(+), 13 deletions(-)
+>  board/altera/readme.txt | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 7ba3929..9d81a2e 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -1006,8 +1006,7 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
->  	help
->  	  If your external toolchain provides extra libraries that
->  	  need to be copied to the target filesystem, enter them
-> -	  here, separated by spaces. They will be copied to the
-> -	  target's /lib directory.
-> +	  here, separated by spaces.
+> diff --git a/board/altera/readme.txt b/board/altera/readme.txt
+> index 62c3670..a30e5a9 100644
+> --- a/board/altera/readme.txt
+> +++ b/board/altera/readme.txt
+> @@ -111,10 +111,11 @@ let's assume it is /dev/sdc :
+>    $ sudo fdisk /dev/sdc
 >  
->  endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>  Delete all previous partitions with 'd' then create the new partition table,
+> -using these options, pressing enter after each one:
+> +using these options, pressing enter after each one (the value 9000000 depends
+> +on the size of your SD card):
 >  
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index a333c32..bd1a807 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -64,33 +64,33 @@
->  #  of Buildroot is handled identical for the 2 toolchain types.
->  
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_TOOLCHAIN_EXTERNAL_UCLIBC),y)
-> -LIB_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libatomic.so.* libc.so.* libcrypt.so.* libdl.so.* libgcc_s.so.* libm.so.* libnsl.so.* libresolv.so.* librt.so.* libutil.so.*
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC)$(BR2_ARM_EABIHF),yy)
-> -LIB_EXTERNAL_LIBS += ld-linux-armhf.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += ld-linux-armhf.so.*
->  else
-> -LIB_EXTERNAL_LIBS += ld*.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += ld*.so.*
->  endif
->  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> -LIB_EXTERNAL_LIBS += libpthread.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libpthread.so.*
->  ifneq ($(BR2_PACKAGE_GDB)$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),)
-> -LIB_EXTERNAL_LIBS += libthread_db.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libthread_db.so.*
->  endif # gdbserver
->  endif # ! no threads
->  endif
->  
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GLIBC),y)
-> -LIB_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libnss_files.so.* libnss_dns.so.*
->  endif
->  
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-> -LIB_EXTERNAL_LIBS += libc.so libgcc_s.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libc.so libgcc_s.so.*
->  endif
->  
->  ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-> -USR_LIB_EXTERNAL_LIBS += libstdc++.so.*
-> +TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
->  endif
->  
-> -LIB_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS))
-> +TOOLCHAIN_EXTERNAL_LIBS += $(call qstrip,$(BR2_TOOLCHAIN_EXTRA_TOOLCHAIN_EXTERNAL_LIBS))
->  
->  # Details about sysroot directory selection.
->  #
-> @@ -593,7 +593,7 @@ endef
->  define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
->  	$(Q)if test -z "$(BR2_STATIC_LIBS)" ; then \
->  		$(call MESSAGE,"Copying external toolchain libraries to target...") ; \
-> -		for libs in $(LIB_EXTERNAL_LIBS) $(USR_LIB_EXTERNAL_LIBS); do \
-> +		for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
->  			$(call copy_toolchain_lib_root,$$libs); \
->  		done ; \
->  	fi
-> @@ -663,7 +663,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
->  endef
->  define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
->  	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
-> -	for libs in $(LIB_EXTERNAL_LIBS) $(USR_LIB_EXTERNAL_LIBS); do \
-> +	for libs in $(TOOLCHAIN_EXTERNAL_LIBS); do \
->  		$(call copy_toolchain_lib_root,$$libs); \
->  	done
->  endef
-> 
+> -  * n p 1 9000000 +20480K t 1 b
+> -  * n p 2 4096 +4496384K t 83
+> +  * n p 1 9000000 +20480K t b
+> +  * n p 2 4096 +4496384K t 2 83
+>    * n p 3 2048 +1024K t 3 a2
+
+Rather than tweaking this horrible thing, what about using sfdisk
+instead, or even better, switch to genimage to generate the image ? The
+latter would really be the ideal solution (but I would accept a patch
+changing to sfdisk in the mean time, if you don't have the time to look
+into genimage right now).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
