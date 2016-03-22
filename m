@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 23:09:53 +0100
-Subject: [Buildroot] [PATCH] connman-gtk: bump to version 1.1.1
-In-Reply-To: <1458682653-15082-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1458682653-15082-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160322230953.3f7aa023@free-electrons.com>
+Date: Tue, 22 Mar 2016 23:10:19 +0100
+Subject: [Buildroot] [PATCH] acpid: bump to version 2.0.27
+In-Reply-To: <1458684499-1117-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458684499-1117-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160322231019.634b98f8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 Mar 2016 18:37:33 -0300, Gustavo Zacarias wrote:
+On Tue, 22 Mar 2016 19:08:19 -0300, Gustavo Zacarias wrote:
+> Drop 0003-support-for-non-glibc-libcs.patch since it's upstream.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/connman-gtk/connman-gtk.hash | 2 +-
->  package/connman-gtk/connman-gtk.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  .../acpid/0003-support-for-non-glibc-libcs.patch   | 184 ---------------------
+>  package/acpid/acpid.hash                           |   5 +-
+>  package/acpid/acpid.mk                             |   2 +-
+>  3 files changed, 4 insertions(+), 187 deletions(-)
+>  delete mode 100644 package/acpid/0003-support-for-non-glibc-libcs.patch
 
-Applied to master, thanks.
+I like when patches disappear because they have been upstreamed.
+
+Applied, thanks!
 
 Thomas
 -- 
