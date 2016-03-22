@@ -1,58 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 23:29:39 +0100
-Subject: [Buildroot] [git commit] vala: add vala/valac wrapper
-Message-ID: <20160322223623.B65E580F3D@busybox.osuosl.org>
+Date: Tue, 22 Mar 2016 23:33:47 +0100
+Subject: [Buildroot] [git commit] granite: new package
+Message-ID: <20160322223623.D24847FC98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6811cf124775b855c09f37c5c2243a482865f522
+commit: https://git.buildroot.net/buildroot/commit/?id=ace94165d8f2cd82188e212e45c6f7bd10f597ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-vala/valac can use gir and vapi data files installed by other packages,
-but since these are normally installed to staging and host-vala looks
-for them in the host directory (logically) this leads to failure.
-So wrap them to call the real tool and add this information via
-command-line parameters to them.
-
-This is required for vala-in-vala bindings (vapi).
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/vala/vala-wrapper |  2 ++
- package/vala/vala.mk      | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
+ package/Config.in            |  1 +
+ package/granite/Config.in    | 18 ++++++++++++++++++
+ package/granite/granite.hash |  4 ++++
+ package/granite/granite.mk   | 16 ++++++++++++++++
+ 4 files changed, 39 insertions(+)
 
-diff --git a/package/vala/vala-wrapper b/package/vala/vala-wrapper
+diff --git a/package/Config.in b/package/Config.in
+index 6e7fffd..1467f33 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -887,6 +887,7 @@ menu "Graphics"
+ 	source "package/gdk-pixbuf/Config.in"
+ 	source "package/giblib/Config.in"
+ 	source "package/giflib/Config.in"
++	source "package/granite/Config.in"
+ 	source "package/graphite2/Config.in"
+ 	source "package/gtkmm3/Config.in"
+ 	source "package/harfbuzz/Config.in"
+diff --git a/package/granite/Config.in b/package/granite/Config.in
 new file mode 100644
-index 0000000..ae2f7ca
+index 0000000..fef5e27
 --- /dev/null
-+++ b/package/vala/vala-wrapper
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+$0- at VALA_VERSION@ --vapidir=${STAGING_DIR}/usr/share/vala/vapi --girdir=${STAGING_DIR}/usr/share/gir-1.0 $@
-diff --git a/package/vala/vala.mk b/package/vala/vala.mk
-index 57a6956..b236c54 100644
---- a/package/vala/vala.mk
-+++ b/package/vala/vala.mk
-@@ -16,4 +16,17 @@ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
- # available".
- HOST_VALA_CONF_ENV = ac_cv_path_XSLTPROC=:
- 
-+# We wrap vala & valac to point to the proper gir and vapi data dirs
-+# Otherwise we'll get host directory data which isn't enough
-+define HOST_VALA_INSTALL_WRAPPER
-+	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
-+		$(HOST_DIR)/usr/bin/vala
-+	$(INSTALL) -D -m 0755 package/vala/vala-wrapper \
-+		$(HOST_DIR)/usr/bin/valac
-+	$(SED) 's, at VALA_VERSION@,$(VALA_VERSION_MAJOR),' \
-+		$(HOST_DIR)/usr/bin/vala \
-+		$(HOST_DIR)/usr/bin/valac
-+endef
-+HOST_VALA_POST_INSTALL_HOOKS += HOST_VALA_INSTALL_WRAPPER
++++ b/package/granite/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_GRANITE
++	bool "granite"
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_PACKAGE_LIBGTK3
++	select BR2_PACKAGE_LIBGEE
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  An extension to GTK+ that provides several useful widgets and
++	  classes to ease application development.
 +
- $(eval $(host-autotools-package))
++	  https://launchpad.net/granite
++
++comment "granite needs libgtk3 and a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_USE_WCHAR \
++		|| !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/granite/granite.hash b/package/granite/granite.hash
+new file mode 100644
+index 0000000..5ce95e6
+--- /dev/null
++++ b/package/granite/granite.hash
+@@ -0,0 +1,4 @@
++# From https://launchpad.net/granite/0.3/0.3.1/+download/granite-0.3.1.tar.xz/+md5
++md5	4297d4fcec8cfe2e08b460a45c779bbe	granite-0.3.1.tar.xz
++# Calculated based on the hash above
++sha256	8ec1d61f9aba75f1b3a745e721288b0dfb34cb11d1307be80cef7b0571c2dec6	granite-0.3.1.tar.xz
+diff --git a/package/granite/granite.mk b/package/granite/granite.mk
+new file mode 100644
+index 0000000..dd5a09e
+--- /dev/null
++++ b/package/granite/granite.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# granite
++#
++################################################################################
++
++GRANITE_VERSION_MAJOR = 0.3
++GRANITE_VERSION = $(GRANITE_VERSION_MAJOR).1
++GRANITE_SITE = https://launchpad.net/granite/$(GRANITE_VERSION_MAJOR)/$(GRANITE_VERSION)/+download
++GRANITE_SOURCE = granite-$(GRANITE_VERSION).tar.xz
++GRANITE_DEPENDENCIES = host-pkgconf host-vala libgee libglib2 libgtk3
++GRANITE_INSTALL_STAGING = YES
++GRANITE_LICENSE = LGPLv3+
++GRANITE_LICENSE_FILES = COPYING
++
++$(eval $(cmake-package))
