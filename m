@@ -1,84 +1,69 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 22 Mar 2016 12:06:02 +0100
-Subject: [Buildroot] [PATCH v3 2/3] python-pexpect: new package
-In-Reply-To: <1458642986-32365-3-git-send-email-viktorin@rehivetech.com>
-References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
- <1458642986-32365-3-git-send-email-viktorin@rehivetech.com>
-Message-ID: <CAGm1_ksby2azyYQFoZrHo6EKZyxYhV_25sBMOxtGkp__tJwuDA@mail.gmail.com>
+From: Matthew Weber <matt@thewebers.ws>
+Date: Tue, 22 Mar 2016 06:10:01 -0500
+Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <CAHXCMM+P=pQDYUULkW59ggJQpki5PNB5B896PhHmBaQ8c5kjHQ@mail.gmail.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+ <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
+ <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
+ <CAHXCMM+vZH6tshQXizYqVag+zeEh-vS17AZTCsdyeY_SsB+E8w@mail.gmail.com>
+ <CAFt09wP4mLSaBGoDCrhXsZKj7+JBfd0D5oHCEm5Bhy0Ko8zO4Q@mail.gmail.com>
+ <CAFt09wPZo0QL+-3kAo3dHTLLBfzJXyBHXUVy5-qMaRXC3QAEzQ@mail.gmail.com>
+ <CAHXCMM+P=pQDYUULkW59ggJQpki5PNB5B896PhHmBaQ8c5kjHQ@mail.gmail.com>
+Message-ID: <CAFt09wPqTN0JQwOzEZA6xkj4bP8fmPNVCTsipcRu_vA5M0mj1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jan,
+Samuel,
 
-On Tue, Mar 22, 2016 at 11:36 AM, Jan Viktorin <viktorin@rehivetech.com> wrote:
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
-> ---
->  package/Config.in                        |  1 +
->  package/python-pexpect/Config.in         | 11 +++++++++++
->  package/python-pexpect/python-pexpect.mk | 14 ++++++++++++++
->  3 files changed, 26 insertions(+)
->  create mode 100644 package/python-pexpect/Config.in
->  create mode 100644 package/python-pexpect/python-pexpect.mk
+On Tue, Mar 22, 2016 at 12:55 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+> Hi Matthew,
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index df01e55..6fc0466 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -686,6 +686,7 @@ menu "External python modules"
->         source "package/python-paho-mqtt/Config.in"
->         source "package/python-pam/Config.in"
->         source "package/python-paramiko/Config.in"
-> +       source "package/python-pexpect/Config.in"
->         source "package/python-posix-ipc/Config.in"
->         source "package/python-protobuf/Config.in"
->         source "package/python-psutil/Config.in"
-> diff --git a/package/python-pexpect/Config.in b/package/python-pexpect/Config.in
-> new file mode 100644
-> index 0000000..4d04c01
-> --- /dev/null
-> +++ b/package/python-pexpect/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_PEXPECT
-> +       bool "python-pexpect"
-> +       select BR2_PACKAGE_PYTHON_PTYPROCESS
-> +       help
-> +         Pexpect is a pure Python module for spawning child applications;
-> +         controlling them; and responding to expected patterns in their
-> +         output. Pexpect works like Don Libes? Expect. Pexpect allows your
-> +         script to spawn a child application and control it as if a human
-> +         were typing commands.
-> +
-> +         https://pexpect.readthedocs.org
-> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
-> new file mode 100644
-> index 0000000..9de7849
-> --- /dev/null
-> +++ b/package/python-pexpect/python-pexpect.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-pexpect
-> +#
-> +################################################################################
-> +
-> +PYTHON_PEXPECT_VERSION = 4.0.1
-> +PYTHON_PEXPECT_SITE = $(call github,pexpect,pexpect,$(PYTHON_PEXPECT_VERSION))
-
-Please get the package from https://pypi.python.org/pypi/pexpect and
-add a hash file.
-
-> +PYTHON_PEXPECT_LICENSE = ISC
-> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
-> +PYTHON_PEXPECT_SETUP_TYPE = distutils
-> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
-
-remove this build-time dependency
-
-> +
-> +$(eval $(python-package))
-> --
-> 2.7.0
+> On Tue, Mar 22, 2016 at 4:03 AM, Matthew Weber <matt@thewebers.ws> wrote:
+>> Samuel,
+>>
+>> On Mon, Mar 21, 2016 at 6:40 AM, Matthew Weber <matt@thewebers.ws> wrote:
+>>> Samuel,
+>>>
+>>> On Mon, Mar 21, 2016 at 12:21 AM, Samuel Martin <s.martin49@gmail.com> wrote:
+>>>> On Mon, Mar 21, 2016 at 2:45 AM, Matthew Weber <matt@thewebers.ws> wrote:
+>>>>> Samuel, All,
+>>>>>
+>>>>> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
+>>>>>> Samuel,
+>>>>>>
+>>>
+>>> <snip>
+>>>>
+>>
+>> Narrowed it down to removing "O=$(realpath $(O))" on line 50 in the
+>> Makefile resolves the build error.  If I understand it correctly this
+>> is declaring O= empty and it causes the logic on 127 to evaluate to
+>> False and O= ends up as empty.
+>>
+>> I applied your 02/18 patch on top of
+>> 0e1547a87cfd51e4fedf1cb7837f77e4f66c4052 when I tested.
+>>
+> Thanks for investigating this.
+> Unfortunately, I could not reproduce this issue here with make-4.1. :-/
+> (I wonder whether this could be related to the make version...)
 >
+> Anyway, following Yann's review, I have reworked this patch [1].
+> If you give a try to this patch, care to tell me if it fixes your issue.
+>
+> [1] https://github.com/tSed/buildroot/commit/c55eeee30fe6106354c0f2cb6ce6ecb46972503a
+>
+
+Looks like I have Make 4.0.
+
+Thanks for the patch, output looks like same with that version.  I'll
+jump on another buildmachine at work today and see if I can reproduce
+this.
+
+-- 
+Thanks,
+Matt
