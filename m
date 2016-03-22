@@ -1,154 +1,54 @@
-From: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
-Date: Tue, 22 Mar 2016 15:44:01 +0530
-Subject: [Buildroot] [Buildroot PATCH v2 1/1] raptor: new package
-Message-ID: <1458641641-17752-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Tue, 22 Mar 2016 11:36:23 +0100
+Subject: [Buildroot] [PATCH v3 0/3] dpdk: new package
+Message-ID: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Weber <matthew.weber@rockwellcollins.com>
+Hello all,
 
-Raptor is a free software / Open Source C library that provides a set of parsers
-and serializers that generate Resource Description Framework (RDF) triples
-by parsing syntaxes or serialize the triples into a syntax.
+this my thrid approach to upstream support of the DPDK into Buildroot. Briefly:
 
-http://librdf.org/raptor/
+* The DPDK is a library (www.dpdk.org) that allows high-speed (10-100 Gbps)
+  packet sending/receiving at very high packet rates while bypassing the Linux
+  Kernel.
+* I maintain the ARM(v7) part of the DPDK so I am interested in building DPDK
+  by Buildroot.
+* The DPDK tests require pexpect and ptyprocess python packages to run so they
+  are included.
 
-Patch added in the package:
-0001-configure.ac-remove-conditional-lib-inclusion.patch
+Changes for v3:
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
+* Line overfull fixes (all patches).
+* Hopefully solved issues reported by T. Petazzoni.
+* As using a newer DPDK, the patch now utilizes the new installation infra.
+* I've decided to include building of example applications, however, it is not
+  built nor installed in a standardized way, so, it's done by dpdk.mk.
 
----
-Changes v1 -> v2:
-  - Updated the comment for the patch file.
-  - Included flag RAPTOR_AUTORECONF  and added RAPTOR_CONF_OPTS for optional
-    dependencies in .mk file.
-  - Fixed minor typo error.
+Jan Viktorin (3):
+  python-ptyprocess: new package
+  python-pexpect: new package
+  dpdk: new package
 
-Changes v1:
-  - Added 0001-configure.ac-remove-conditional-lib-inclusion.patch.
-  - Added optional dependencies libcurl,yajl and icu.
----
- package/Config.in                                  |  1 +
- ...igure.ac-remove-conditional-lib-inclusion.patch | 21 +++++++++++++
- package/raptor/Config.in                           | 11 +++++++
- package/raptor/raptor.hash                         |  2 ++
- package/raptor/raptor.mk                           | 36 ++++++++++++++++++++++
- 5 files changed, 71 insertions(+)
- create mode 100644 package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
- create mode 100644 package/raptor/Config.in
- create mode 100644 package/raptor/raptor.hash
- create mode 100644 package/raptor/raptor.mk
+ package/Config.in                              |   3 +
+ package/dpdk/Config.in                         |  53 ++++++++++++
+ package/dpdk/dpdk.hash                         |   2 +
+ package/dpdk/dpdk.mk                           | 109 +++++++++++++++++++++++++
+ package/python-pexpect/Config.in               |  11 +++
+ package/python-pexpect/python-pexpect.mk       |  14 ++++
+ package/python-ptyprocess/Config.in            |   7 ++
+ package/python-ptyprocess/python-ptyprocess.mk |  13 +++
+ 8 files changed, 212 insertions(+)
+ create mode 100644 package/dpdk/Config.in
+ create mode 100644 package/dpdk/dpdk.hash
+ create mode 100644 package/dpdk/dpdk.mk
+ create mode 100644 package/python-pexpect/Config.in
+ create mode 100644 package/python-pexpect/python-pexpect.mk
+ create mode 100644 package/python-ptyprocess/Config.in
+ create mode 100644 package/python-ptyprocess/python-ptyprocess.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index c4d98c4..430cef8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1036,6 +1036,7 @@ menu "JSON/XML"
- 	source "package/mxml/Config.in"
- 	source "package/rapidjson/Config.in"
- 	source "package/rapidxml/Config.in"
-+	source "package/raptor/Config.in"
- 	source "package/tinyxml/Config.in"
- 	source "package/tinyxml2/Config.in"
- 	source "package/xerces/Config.in"
-diff --git a/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
-new file mode 100644
-index 0000000..7367ad2
---- /dev/null
-+++ b/package/raptor/0001-configure.ac-remove-conditional-lib-inclusion.patch
-@@ -0,0 +1,21 @@
-+Removed header Include path from the configure file as path was
-+from the host, which is wrong for the cross compilation.
-+Upstream: None
-+
-+Signed-off-by: Nitin Mendiratta <nitin.mendiratta@rockwellcollins.com>
-+
-+diff --git a/configure.ac b/configure.ac
-+index 10ff870..27b9957 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1145,9 +1145,7 @@ have_lininn=no
-+ have_inn_parsedate=no
-+ 
-+ oCPPFLAGS="$CPPFLAGS"
-+-if test -d /usr/include/inn; then
-+-  CPPFLAGS="$CPPFLAGS -I/usr/include/inn"
-+-fi
-++
-+ AC_CHECK_HEADER(libinn.h)
-+ CPPFLAGS="$oCPPFLAGS"
-+ 
-diff --git a/package/raptor/Config.in b/package/raptor/Config.in
-new file mode 100644
-index 0000000..65979a2
---- /dev/null
-+++ b/package/raptor/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_RAPTOR
-+	bool "raptor"
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_LIBXSLT
-+	help
-+	  A C library that provides a set of parsers and
-+	  serializers that generate Resource Description
-+	  Framework (RDF) triples by parsing syntaxes or
-+	  serialize the triples into a syntax.
-+
-+	  http://librdf.org/raptor/
-diff --git a/package/raptor/raptor.hash b/package/raptor/raptor.hash
-new file mode 100644
-index 0000000..ee7a71b
---- /dev/null
-+++ b/package/raptor/raptor.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed raptor2-2.0.15.tar.gz
-diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
-new file mode 100644
-index 0000000..5dac2c0
---- /dev/null
-+++ b/package/raptor/raptor.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# raptor
-+#
-+################################################################################
-+
-+RAPTOR_VERSION = 2.0.15
-+RAPTOR_SOURCE = raptor2-$(RAPTOR_VERSION).tar.gz
-+RAPTOR_SITE = http://download.librdf.org/source
-+RAPTOR_DEPENDENCIES = libxml2 libxslt
-+RAPTOR_LICENSE = GPLv2+ or LGPLv2.1+ or Apache-2.0+
-+RAPTOR_LICENSE_FILES = LICENSE.txt
-+
-+# Flag is added to make sure the patch is applied for the configure.ac of raptor.
-+RAPTOR_AUTORECONF = YES
-+
-+RAPTOR_CONF_OPTS = --with-xml2-config=$(STAGING_DIR)/usr/bin/xml2-config \
-+		--with-xslt-config=$(STAGING_DIR)/usr/bin/xslt-config
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+RAPTOR_DEPENDENCIES += libcurl
-+RAPTOR_CONF_OPTS += --with-curl-config=$(STAGING_DIR)/usr/bin/curl-config
-+endif
-+
-+ifeq ($(BR2_PACKAGE_YAJL),y)
-+RAPTOR_DEPENDENCIES += yajl
-+RAPTOR_CONF_ENV += LIBS="-lm"
-+RAPTOR_CONF_OPTS += --with-yajl-config=$(STAGING_DIR)/usr/bin/yajl-config
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+RAPTOR_DEPENDENCIES += icu
-+RAPTOR_CONF_OPTS += --with-icu-config=$(STAGING_DIR)/usr/bin/icu-config
-+endif
-+
-+$(eval $(autotools-package))
 -- 
-2.5.0
+2.7.0
