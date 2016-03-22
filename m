@@ -1,32 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 22:36:45 +0100
-Subject: [Buildroot] [PATCH] package/util-linux: fix lsipc segfault
-In-Reply-To: <1458680998-912-1-git-send-email-romain.naour@gmail.com>
-References: <1458680998-912-1-git-send-email-romain.naour@gmail.com>
-Message-ID: <20160322223645.6fe2d7af@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 22 Mar 2016 18:37:33 -0300
+Subject: [Buildroot] [PATCH] connman-gtk: bump to version 1.1.1
+Message-ID: <1458682653-15082-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/connman-gtk/connman-gtk.hash | 2 +-
+ package/connman-gtk/connman-gtk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, 22 Mar 2016 22:09:58 +0100, Romain Naour wrote:
-> lsipc segfault when no option is given.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...don-t-free-shm-data-if-no-shm-id-is-found.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
-
-Applied to master, thanks. Please submit upstream, of course.
-
-Thanks,
-
-Thomas
+diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
+index 034064e..d71e77d 100644
+--- a/package/connman-gtk/connman-gtk.hash
++++ b/package/connman-gtk/connman-gtk.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	9e9008d40ada97aa20d627b7ad966e9a2ae69afcae3971b1b29a225cf7110e27	connman-gtk-1.1.tar.bz2
++sha256	49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca	connman-gtk-1.1.1.tar.bz2
+diff --git a/package/connman-gtk/connman-gtk.mk b/package/connman-gtk/connman-gtk.mk
+index 570c3c8..2c9c131 100644
+--- a/package/connman-gtk/connman-gtk.mk
++++ b/package/connman-gtk/connman-gtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_GTK_VERSION = 1.1
++CONNMAN_GTK_VERSION = 1.1.1
+ CONNMAN_GTK_SITE = https://github.com/jgke/connman-gtk/releases/download/v$(CONNMAN_GTK_VERSION)
+ CONNMAN_GTK_SOURCE = connman-gtk-$(CONNMAN_GTK_VERSION).tar.bz2
+ CONNMAN_GTK_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
