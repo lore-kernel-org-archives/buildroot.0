@@ -1,47 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 22 Mar 2016 20:20:01 +0100
-Subject: [Buildroot] [PATCH] erlang: bump to version 18.3
-In-Reply-To: <1458668252-15146-1-git-send-email-fhunleth@troodon-software.com>
-References: <1458668252-15146-1-git-send-email-fhunleth@troodon-software.com>
-Message-ID: <20160322202001.0c45f084@free-electrons.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 22 Mar 2016 21:40:22 +0200
+Subject: [Buildroot] [Buildroot PATCH v2 1/1] raptor: new package
+In-Reply-To: <1458641641-17752-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
+References: <1458641641-17752-1-git-send-email-nitin.mendiratta@rockwellcollins.com>
+Message-ID: <20160322194021.GP2780@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Nitin,
 
-On Tue, 22 Mar 2016 13:37:32 -0400, Frank Hunleth wrote:
-> Erlang/OTP 18.3 is a service release on the 18 track with mostly bug
-> fixes, but is does contain a number of new features and improvements as
-> well.
-> 
-> Some highlights of the release are:
-> 
->   . New statistics info about runnable and active processes & ports.
->     Call erlang:statistics with: total_run_queue_lengths |
->     run_queue_lengths | total_active_tasks | active_tasks.
-> 
->   . Time warp improvements: dbg:p/2 and erlang:trace/3 with
->     monotonic_timestamp |strict_monotonic_timestamp.
-> 
->   . Introduced a validation callback for heart.
-> 
->   . The module overload in sasl has been deprecated.
-> 
->   . ~90 contributions since 18.2
-> 
-> Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
-> ---
->  package/erlang/erlang.hash | 4 ++--
->  package/erlang/erlang.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+On Tue, Mar 22, 2016 at 03:44:01PM +0530, Nitin Mendiratta wrote:
+> +ifeq ($(BR2_PACKAGE_LIBCURL),y)
+> +RAPTOR_DEPENDENCIES += libcurl
+> +RAPTOR_CONF_OPTS += --with-curl-config=$(STAGING_DIR)/usr/bin/curl-config
+> +endif
 
-Applied to master, thanks.
+Please add an 'else' clause that disables libcurl using --with-curl-config=no. 
+The same goes for the two other optional dependencies.
 
-Thomas
+> +ifeq ($(BR2_PACKAGE_YAJL),y)
+> +RAPTOR_DEPENDENCIES += yajl
+> +RAPTOR_CONF_ENV += LIBS="-lm"
+> +RAPTOR_CONF_OPTS += --with-yajl-config=$(STAGING_DIR)/usr/bin/yajl-config
+
+The yajl package does not provide yajl-config, and raptor configure does not 
+support --with-yajl-config. Should be
+
+  RAPTOR_CONF_OPTS += --with-yajl=$(STAGING_DIR)/usr/
+
+instead.
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ICU),y)
+> +RAPTOR_DEPENDENCIES += icu
+> +RAPTOR_CONF_OPTS += --with-icu-config=$(STAGING_DIR)/usr/bin/icu-config
+> +endif
+
+baruch
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
