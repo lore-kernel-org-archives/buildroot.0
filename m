@@ -1,46 +1,36 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 23 Mar 2016 16:59:25 +0100
-Subject: [Buildroot] [PATCH 3/3] python-pyopenssl: bump to version 16.0.0
-In-Reply-To: <1458748765-8005-1-git-send-email-yegorslists@googlemail.com>
-References: <1458748765-8005-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1458748765-8005-3-git-send-email-yegorslists@googlemail.com>
+From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
+Date: Wed, 23 Mar 2016 17:48:40 +0100
+Subject: [Buildroot] [fstab] The best way to modify the /etc/fstab
+Message-ID: <CALtfCQZZJwRff1hWmA1vLf+EbHgFXsBGSvKwsNJ8wxdF+h-KWQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi,
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/python-pyopenssl/python-pyopenssl.hash | 6 +++---
- package/python-pyopenssl/python-pyopenssl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I'm building a system from buildroot and I would like to know the best way
+to add this line:
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index 0c6e25a..27427d2 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f447644afcbd5f0a1f47350fec63a4c6, sha256 locally computed
--md5     f447644afcbd5f0a1f47350fec63a4c6  pyOpenSSL-0.15.1.tar.gz
--sha256  f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672  pyOpenSSL-0.15.1.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9587d813dcf656e9f2760e41a3682dc3, sha256 locally computed
-+md5     9587d813dcf656e9f2760e41a3682dc3  pyOpenSSL-16.0.0.tar.gz
-+sha256  363d10ee43d062285facf4e465f4f5163f9f702f9134f0a5896f134cbb92d17d  pyOpenSSL-16.0.0.tar.gz
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index 239fd98..7606411 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_PYOPENSSL_VERSION = 0.15.1
-+PYTHON_PYOPENSSL_VERSION = 16.0.0
- PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
- PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
--- 
-2.7.0
+/dev/mmcblk0p1  /boot           vfat    defaults        0       2
+
+to the file /etc/fstab.
+
+Up to now ,I've executed a script, after the make is completed, with this
+command:
+
+sudo sh -c "cat << 'EOF' >> "${SD_ROOTFS_PATH}/etc/fstab"
+/dev/mmcblk0p1  /boot           vfat    defaults        0       2
+
+EOF"
+
+But I'm trying to find something more professional. I'm pretty sure that
+buildroot has a mechanism for this purpose.
+
+Best regards.
+
+Oscar Gomez Fuente.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160323/94b0817b/attachment.html>
