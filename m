@@ -1,67 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 23 Mar 2016 18:41:47 +0100
-Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
- or $(O) are not absolute canonical path
-In-Reply-To: <CAFt09wPkL6Rvo_UUdk1UQ07bNphRTrn-yb=SqeZXLM8A0tNP8Q@mail.gmail.com>
-References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
- <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
- <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
- <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
- <20160322220739.GA3441@free.fr>
- <CAFt09wPkL6Rvo_UUdk1UQ07bNphRTrn-yb=SqeZXLM8A0tNP8Q@mail.gmail.com>
-Message-ID: <20160323174147.GA3511@free.fr>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 23 Mar 2016 18:56:44 +0100
+Subject: [Buildroot] [PATCH] moarvm: remove host-luajit dependency
+Message-ID: <1458755804-9455-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, All,
+now, use the minilua which is embedded in the package.
+that fixes the build issue, see http://autobuild.buildroot.net/results/4dc/4dcbcde0046e265317e170a977e699e5c3a06b87/
 
-On 2016-03-22 18:11 -0500, Matthew Weber spake thusly:
-> On Tue, Mar 22, 2016 at 5:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2016-03-20 20:45 -0500, Matthew Weber spake thusly:
-> >> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
-> >> > On Wed, Mar 9, 2016 at 4:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> >> >> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
-> >> >> they can be resolved differently, depending on each package build-system
-> >> >> (whether it uses the given paths or get the absolute canonical ones).
-> >> >>
-> >> >> Thus, to make easier tracking down host machine paths leaking into the
-> >> >> host, target or staging trees, the CURDIR and O variables are set to
-> >> >> their absolute canonical paths.
-> >> >>
-> >> >> Note that this change takes care of the makefile wrapper installed in
-> >> >> $(O) to avoid unneeded make recursion.
-> >> >>
-> >> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-[--SNIP--]
-> >> > I've applied your v7 patches with these changes to the tip of
-> >> > buildroot and currently run into the following error.  I'm still
-> >> > poking around trying to understand why.
-> >> >
-> >> > $ make V=1 qemu_x86_defconfig
-> >> > umask 0022 && \
-> >> >         make -C /opt/buildroot --no-print-directory \
-> >> >                 qemu_x86_defconfig O=
-> >
-> > Why are you opassing an empty O= option here?
-> >
-> 
-> I'm not passing the O= .
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/moarvm/moarvm.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Damned, I see. It's passed by the sub-make. My bad.
-
-Otherwise, I know why it fails: we should not try to canonicalise $(O)
-if it is not set. That's that simple.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 7456902..b89060b 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
+@@ -10,7 +10,7 @@ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
+ MOARVM_LICENSE_FILES = Artistic2.txt
+ MOARVM_INSTALL_STAGING = YES
+-MOARVM_DEPENDENCIES = host-luajit libuv libatomic_ops
++MOARVM_DEPENDENCIES = libuv libatomic_ops
+ 
+ MOARVM_CONF_OPTS = \
+ 	--build=$(GNU_HOST_NAME) \
+@@ -19,7 +19,6 @@ MOARVM_CONF_OPTS = \
+ 	--cc="$(TARGET_CC)" \
+ 	--ld="$(TARGET_CC)" \
+ 	--prefix="/usr" \
+-	--lua=$(HOST_DIR)/usr/bin/luajit \
+ 	--has-libuv \
+ 	--has-libatomic
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.9.1
