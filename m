@@ -1,58 +1,67 @@
-From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
-Date: Wed, 23 Mar 2016 18:35:48 +0100
-Subject: [Buildroot] [INIT SYSTEM] Add init scripts to /etc/init.d
-Message-ID: <CALtfCQaBKTA504tLgOvgffv_EPvgRQ1J=T9gvzC7JB54k8KntA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 23 Mar 2016 18:41:47 +0100
+Subject: [Buildroot] [PATCH v7 03/18] core: re-enter make if $(CURDIR)
+ or $(O) are not absolute canonical path
+In-Reply-To: <CAFt09wPkL6Rvo_UUdk1UQ07bNphRTrn-yb=SqeZXLM8A0tNP8Q@mail.gmail.com>
+References: <1457564339-27294-1-git-send-email-s.martin49@gmail.com>
+ <1457564339-27294-4-git-send-email-s.martin49@gmail.com>
+ <CAFt09wNvtXGcfZ3PFZOgGu+bDvp6mEr44uwxa_ryjeP6DDQKBQ@mail.gmail.com>
+ <CAFt09wOp3C44Y7WY48p2P9xKQr_EO7x_mAC7je--M0RwXc83sg@mail.gmail.com>
+ <20160322220739.GA3441@free.fr>
+ <CAFt09wPkL6Rvo_UUdk1UQ07bNphRTrn-yb=SqeZXLM8A0tNP8Q@mail.gmail.com>
+Message-ID: <20160323174147.GA3511@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Matthew, All,
 
-I'm using buildroot with Init System Busybox and I would like to know the
-best way to add SXXscripts to /etc/init.d.
+On 2016-03-22 18:11 -0500, Matthew Weber spake thusly:
+> On Tue, Mar 22, 2016 at 5:07 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2016-03-20 20:45 -0500, Matthew Weber spake thusly:
+> >> On Sun, Mar 20, 2016 at 8:44 PM, Matthew Weber <matt@thewebers.ws> wrote:
+> >> > On Wed, Mar 9, 2016 at 4:58 PM, Samuel Martin <s.martin49@gmail.com> wrote:
+> >> >> When $(CURDIR) or $(O) contain symlinks (or mount-bind) in their path,
+> >> >> they can be resolved differently, depending on each package build-system
+> >> >> (whether it uses the given paths or get the absolute canonical ones).
+> >> >>
+> >> >> Thus, to make easier tracking down host machine paths leaking into the
+> >> >> host, target or staging trees, the CURDIR and O variables are set to
+> >> >> their absolute canonical paths.
+> >> >>
+> >> >> Note that this change takes care of the makefile wrapper installed in
+> >> >> $(O) to avoid unneeded make recursion.
+> >> >>
+> >> >> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+[--SNIP--]
+> >> > I've applied your v7 patches with these changes to the tip of
+> >> > buildroot and currently run into the following error.  I'm still
+> >> > poking around trying to understand why.
+> >> >
+> >> > $ make V=1 qemu_x86_defconfig
+> >> > umask 0022 && \
+> >> >         make -C /opt/buildroot --no-print-directory \
+> >> >                 qemu_x86_defconfig O=
+> >
+> > Why are you opassing an empty O= option here?
+> >
+> 
+> I'm not passing the O= .
 
-Up to know I was executing this script:
+Damned, I see. It's passed by the sub-make. My bad.
 
-#/* Build S18loadmod file */
-sudo sh -c "cat << 'EOF' > "${SD_ROOTFS_PATH}/etc/init.d/S18loadmod"
-#!/bin/sh
-#
-# load modules
-#
+Otherwise, I know why it fails: we should not try to canonicalise $(O)
+if it is not set. That's that simple.
 
-MODULES_PATH=\"/etc/modules\"
-case \"\$1\" in
-start)
-echo \"Loading modules in ${MODULES_PATH}...\"
-for line in \$(cat \${MODULES_PATH});
-do
-[[ \$line = \#* ]] && continue
-modprobe \$line;
-done
-;;
-stop)
-;;
-restart|reload)
-;;
-*)
-echo \"Usage: \$0 {start|stop|restart}\"
-exit 1
-esac
+Regards,
+Yann E. MORIN.
 
-exit \$?
-
-EOF"
-
-But I'm pretty sure there is a better and secure way to do this task. If
-someone else create the same number script like mine S18**** What happens?
-
-Could anyone help me?
-
-Best regards.
-
-Oscar Gomez Fuente
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160323/1508ae81/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
