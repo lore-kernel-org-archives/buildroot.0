@@ -1,41 +1,40 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Wed, 23 Mar 2016 16:31:13 -0500
-Subject: [Buildroot] [PATCH 1/1] setools: disable arch sparc64
-In-Reply-To: <20160323130907.3c2c28ff@free-electrons.com>
-References: <1458698562-11227-1-git-send-email-matt@thewebers.ws>
- <20160323130907.3c2c28ff@free-electrons.com>
-Message-ID: <CAFt09wP3f3xJWf96Av=gs6yTQ2NCim+OfsvcR8W3ojvrzKLvbw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 23 Mar 2016 18:45:20 -0300
+Subject: [Buildroot] [PATCH] libsoup: bump to version 2.54.0.1
+Message-ID: <1458769520-15512-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libsoup/libsoup.hash | 4 ++--
+ package/libsoup/libsoup.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, Mar 23, 2016 at 7:09 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Tue, 22 Mar 2016 21:02:42 -0500, Matt Weber wrote:
->> Currently the buildroot sparc64 toolchain encounters a series of relocation
->> errors.  i.e.
->> policy_scan.c: relocation truncated to fit: R_SPARC_GOT13 against symbol ....
->>
->> Workaround for numerous autobuilder failures, including:
->> http://autobuild.buildroot.net/results/ba1/ba1e473178bb66ebc43897b20e534606d2577ee3/
->>
->> Signed-off-by: Matt Weber <matt@thewebers.ws>
->> ---
->>  package/setools/Config.in | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> IMO, it can be made to work quite easily on sparc64, it's just a matter
-> of using -fPIE to build, and not -fpie.
->
-
-Good to know.  I'll reject this patch and do some further testing.
-
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index facedc6..299cdd8 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.54/libsoup-2.54.0.sha256sum
+-sha256	fbf1038efb10d2ffbbb88bb46e7ce32b683fde8e566f36bcf26f7f69a550ec56	libsoup-2.54.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.54/libsoup-2.54.0.1.sha256sum
++sha256	ade4920166bd036e8890d04acdc135686d877670953949fa6245797c906e38e0	libsoup-2.54.0.1.tar.xz
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 53138be..5f0057a 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSOUP_VERSION_MAJOR = 2.54
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).0.1
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPLv2+
 -- 
-Thanks,
-Matt
+2.7.3
