@@ -1,59 +1,44 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Wed, 23 Mar 2016 14:10:40 +0100
-Subject: [Buildroot] [PATCH v2 2/7] boot/uboot: compute CRC on SPLs for
- Altera SoC FPGA
-In-Reply-To: <20160323140632.3f9299c2@free-electrons.com>
-References: <1445340745-1000-1-git-send-email-viktorin@rehivetech.com>
- <1445340745-1000-3-git-send-email-viktorin@rehivetech.com>
- <20160322235428.48851315@free-electrons.com>
- <20160323135741.1c133fed@pcviktorin.fit.vutbr.cz>
- <20160323140632.3f9299c2@free-electrons.com>
-Message-ID: <20160323141040.16f89b67@pcviktorin.fit.vutbr.cz>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 23 Mar 2016 16:59:23 +0100
+Subject: [Buildroot] [PATCH 1/3] python-idna: bump to version 2.1
+Message-ID: <1458748765-8005-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Mar 2016 14:06:32 +0100
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-> Hello,
-> 
-> On Wed, 23 Mar 2016 13:57:41 +0100, Jan Viktorin wrote:
-> 
-> > I am surprise a bit by applying those quite old patchs. I've forgotten
-> > about this patch series entirely. I am afraid, they've fixed this in
-> > U-Boot upstream (2016.01?) by generating *.sfp files. I was testing
-> > this some time ago with:
-> > 
-> > BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y                                               
-> > BR2_TARGET_UBOOT_SPL=y                                                          
-> > BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.sfp"
-> > 
-> > and it seems to work. I didn't have time to sync this with Buildroot
-> > upstream, sorry.  
-> 
-> No problem. Before applying, I looked in U-Boot if there was a tool
-> called mkpimage, and there wasn't, so I assumed it was still needed.
-> 
-> In this case, could you send some follow-up patches that revert the
-> changes that are no longer needed, and that update the two Altera
-> defconfigs to use newer U-Boot versions that have this capability?
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-idna/python-idna.hash | 6 +++---
+ package/python-idna/python-idna.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I'll be happy to do it if I find some time for this.
-
-Jan
-
-> 
-> Thanks!
-> 
-> Thomas
-
-
-
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 10e3e9d..4e4c677 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=bd17a9d15e755375f48a62c13b25b801, sha256 locally computed
+-md5     bd17a9d15e755375f48a62c13b25b801  idna-2.0.tar.gz
+-sha256  16199aad938b290f5be1057c0e1efc6546229391c23cea61ca940c115f7d3d3b  idna-2.0.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f6473caa9c5e0cc1ad3fd5d04c3c114b, sha256 locally computed
++md5     f6473caa9c5e0cc1ad3fd5d04c3c114b  idna-2.1.tar.gz
++sha256  ed36f281aebf3cd0797f163bb165d84c31507cedd15928b095b1675e2d04c676  idna-2.1.tar.gz
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index 7dd1253..3f9f109 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_IDNA_VERSION = 2.0
++PYTHON_IDNA_VERSION = 2.1
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+ PYTHON_IDNA_SITE = https://pypi.python.org/packages/source/i/idna
+ PYTHON_IDNA_LICENSE =  BSD-3c
 -- 
-   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
-   System Architect              Web:    www.RehiveTech.com
-   RehiveTech
-   Brno, Czech Republic
+2.7.0
