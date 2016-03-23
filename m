@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 23 Mar 2016 16:59:23 +0100
-Subject: [Buildroot] [PATCH 1/3] python-idna: bump to version 2.1
-Message-ID: <1458748765-8005-1-git-send-email-yegorslists@googlemail.com>
+Date: Wed, 23 Mar 2016 16:59:24 +0100
+Subject: [Buildroot] [PATCH 2/3] python-cryptography: bump to version 1.3.1
+In-Reply-To: <1458748765-8005-1-git-send-email-yegorslists@googlemail.com>
+References: <1458748765-8005-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1458748765-8005-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,33 +14,34 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-idna/python-idna.hash | 6 +++---
- package/python-idna/python-idna.mk   | 2 +-
+ package/python-cryptography/python-cryptography.hash | 6 +++---
+ package/python-cryptography/python-cryptography.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 10e3e9d..4e4c677 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=bd17a9d15e755375f48a62c13b25b801, sha256 locally computed
--md5     bd17a9d15e755375f48a62c13b25b801  idna-2.0.tar.gz
--sha256  16199aad938b290f5be1057c0e1efc6546229391c23cea61ca940c115f7d3d3b  idna-2.0.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f6473caa9c5e0cc1ad3fd5d04c3c114b, sha256 locally computed
-+md5     f6473caa9c5e0cc1ad3fd5d04c3c114b  idna-2.1.tar.gz
-+sha256  ed36f281aebf3cd0797f163bb165d84c31507cedd15928b095b1675e2d04c676  idna-2.1.tar.gz
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index 7dd1253..3f9f109 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index e48e2e2..fa15fa0 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,4 +1,4 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=5474d2b3e8c7555a60852e48d2743f85
+-md5     5474d2b3e8c7555a60852e48d2743f85  cryptography-1.2.3.tar.gz
++# From https://pypi.python.org/pypi?:action=show_md5&digest=bc8148d2ff2d80fef8ef2d2e856b3a7f
++md5     bc8148d2ff2d80fef8ef2d2e856b3a7f  cryptography-1.3.1.tar.gz
+ # Calculated based on the hash above
+-sha256  8eb11c77dd8e73f48df6b2f7a7e16173fe0fe8fdfe266232832e88477e08454e  cryptography-1.2.3.tar.gz
++sha256  b4b36175e0f95ddc88435c26dbe3397edce48e2ff5fe41d504cdb3beddcd53e2  cryptography-1.3.1.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 1f91422..1b5eb9c 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_IDNA_VERSION = 2.0
-+PYTHON_IDNA_VERSION = 2.1
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
- PYTHON_IDNA_SITE = https://pypi.python.org/packages/source/i/idna
- PYTHON_IDNA_LICENSE =  BSD-3c
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.2.3
++PYTHON_CRYPTOGRAPHY_VERSION = 1.3.1
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+ PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
 -- 
 2.7.0
