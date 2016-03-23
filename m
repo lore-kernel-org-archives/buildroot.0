@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 23 Mar 2016 13:09:07 +0100
-Subject: [Buildroot] [PATCH 1/1] setools: disable arch sparc64
-In-Reply-To: <1458698562-11227-1-git-send-email-matt@thewebers.ws>
-References: <1458698562-11227-1-git-send-email-matt@thewebers.ws>
-Message-ID: <20160323130907.3c2c28ff@free-electrons.com>
+Date: Wed, 23 Mar 2016 13:10:34 +0100
+Subject: [Buildroot] [PATCH 1/1] gnuradio: fix boost detection
+In-Reply-To: <1458731688-2975-1-git-send-email-gwenj@trabucayre.com>
+References: <1458731688-2975-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <20160323131034.56637862@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 22 Mar 2016 21:02:42 -0500, Matt Weber wrote:
-> Currently the buildroot sparc64 toolchain encounters a series of relocation
-> errors.  i.e.
-> policy_scan.c: relocation truncated to fit: R_SPARC_GOT13 against symbol ....
+On Wed, 23 Mar 2016 12:14:48 +0100, Gwenhael Goavec-Merou wrote:
+> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 > 
-> Workaround for numerous autobuilder failures, including:
-> http://autobuild.buildroot.net/results/ba1/ba1e473178bb66ebc43897b20e534606d2577ee3/
+> With some configuration, built fails with :
+> -- Configuring gnuradio-runtime support...
+> --   Dependency Boost_FOUND = 0
+> --   Dependency ENABLE_VOLK = ON
+> --   Dependency PYTHONINTERP_FOUND = TRUE
+> CMake Error at cmake/Modules/GrComponent.cmake:75 (message):
+>   user force-enabled gnuradio-runtime but configuration checked failed
+> Call Stack (most recent call first):
+>   gnuradio-runtime/CMakeLists.txt:36 (GR_REGISTER_COMPONENT)
 > 
-> Signed-off-by: Matt Weber <matt@thewebers.ws>
-> ---
->  package/setools/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Boost is not found due to missing "indirect dependencies".
+> According to FindBoost.cmake, provided by cmake, Boost_thread depends on
+> Boost_atomic and Boost_chrono.
 
-IMO, it can be made to work quite easily on sparc64, it's just a matter
-of using -fPIE to build, and not -fpie.
+If that's really the case, then isn't the proper fix to adjust
+package/boost/Config.in to have BR2_PACKAGE_BOOST_THREAD select
+BR2_PACKAGE_BOOST_ATOMIC and BR2_PACKAGE_BOOST_CHRONO ?
 
 Thomas
 -- 
