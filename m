@@ -1,40 +1,35 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 23 Mar 2016 09:08:20 -0300
-Subject: [Buildroot] [PATCH] nmap: bump to version 7.11
-Message-ID: <1458734900-30887-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 23 Mar 2016 13:09:07 +0100
+Subject: [Buildroot] [PATCH 1/1] setools: disable arch sparc64
+In-Reply-To: <1458698562-11227-1-git-send-email-matt@thewebers.ws>
+References: <1458698562-11227-1-git-send-email-matt@thewebers.ws>
+Message-ID: <20160323130907.3c2c28ff@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/nmap/nmap.hash | 4 ++--
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index ac086ce..dde6dab 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,2 +1,2 @@
--# From https://nmap.org/dist/sigs/nmap-7.10.tar.bz2.digest.txt
--sha256	58cf8896d09057d1c3533f430c06b22791d0227ebbb93dede2ccb73693ed4b4b	nmap-7.10.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.11.tar.bz2.digest.txt
-+sha256	13fa971555dec00e495a5b72c1f9efa1363b8e6c7388a2f05117cb0778c0954a	nmap-7.11.tar.bz2
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 9a25fca..1829104 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NMAP_VERSION = 7.10
-+NMAP_VERSION = 7.11
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+On Tue, 22 Mar 2016 21:02:42 -0500, Matt Weber wrote:
+> Currently the buildroot sparc64 toolchain encounters a series of relocation
+> errors.  i.e.
+> policy_scan.c: relocation truncated to fit: R_SPARC_GOT13 against symbol ....
+> 
+> Workaround for numerous autobuilder failures, including:
+> http://autobuild.buildroot.net/results/ba1/ba1e473178bb66ebc43897b20e534606d2577ee3/
+> 
+> Signed-off-by: Matt Weber <matt@thewebers.ws>
+> ---
+>  package/setools/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+
+IMO, it can be made to work quite easily on sparc64, it's just a matter
+of using -fPIE to build, and not -fpie.
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
