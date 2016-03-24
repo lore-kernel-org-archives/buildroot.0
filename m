@@ -1,54 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 09:41:38 +0100
-Subject: [Buildroot] [PATCH 3/4] configs: atmel: add sama5d2 xplained
- support
-In-Reply-To: <1458808152-15778-3-git-send-email-ludovic.desroches@atmel.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 24 Mar 2016 09:43:44 +0100
+Subject: [Buildroot] [PATCH 1/4] configs: atmel: unify and update
+ defconfig for Xplained boards
+In-Reply-To: <20160324094006.172567ac@free-electrons.com>
 References: <1458808152-15778-1-git-send-email-ludovic.desroches@atmel.com>
- <1458808152-15778-3-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <20160324094138.21e745d6@free-electrons.com>
+ <20160324094006.172567ac@free-electrons.com>
+Message-ID: <20160324084344.GD12245@odux.rfo.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Thu, 24 Mar 2016 09:29:11 +0100, Ludovic Desroches wrote:
-> This defconfig allows to build all the components to boot from a sd card on a
-> SAMA5D2 Xplained board. For more details, please read the
-> board/atmel/xplained/readme.txt file.
+On Thu, Mar 24, 2016 at 09:40:06AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
->  configs/atmel_sama5d2_xplained_mmc_defconfig | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 configs/atmel_sama5d2_xplained_mmc_defconfig
+> I'm adding in Cc: Alexandre Belloni, who has worked on Atmel defconfigs
+> in the past.
 > 
-> diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-> new file mode 100644
-> index 0000000..4e15d94
-> --- /dev/null
-> +++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-> @@ -0,0 +1,26 @@
-> +BR2_arm=y
-> +BR2_cortex_a5=y
-> +BR2_ARM_ENABLE_NEON=y
-> +BR2_ARM_ENABLE_VFP=y
-> +BR2_ARM_FPU_VFPV4=y
-> +BR2_ARM_INSTRUCTIONS_THUMB2=y
-> +BR2_KERNEL_HEADERS_4_1=y
 
-Not good, we want to use the "Same as kernel" option for the kernel
-headers.
+He was in Cc.
 
-(And same comment as for the other patches in terms of selecting the
-kernel/u-boot/at91bootstrap3 versions).
+> > - use bootstrap as first stage bootloader
+> 
+> As opposed to? Did you mean at91bootstrap3 rather than "bootstrap"?
+> 
 
-Thanks!
+As opposed to u-boot spl which is less tested than at91bootstrap3.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> On Thu, 24 Mar 2016 09:29:09 +0100, Ludovic Desroches wrote:
+> 
+> > diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+> > index 665a3d7..16e4521 100644
+> > --- a/configs/atmel_sama5d3_xplained_defconfig
+> > +++ b/configs/atmel_sama5d3_xplained_defconfig
+> > @@ -2,26 +2,28 @@ BR2_arm=y
+> >  BR2_cortex_a5=y
+> >  BR2_ARM_ENABLE_VFP=y
+> >  BR2_ARM_INSTRUCTIONS_THUMB2=y
+> > -# Linux headers same as kernel, a 3.18 series
+> > -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+> >  BR2_LINUX_KERNEL=y
+> >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+> > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-4.1-at91"
+> 
+> This is not good. linux-4.1-at91 is a branch name, which means that the
+> actual source behind this branch name will change over time, making
+> this defconfig non-reproducible. You must stick to a tag or a commit id.
+>
+
+In fact it was the plan in order to prevent the need to update these
+defconfig files. If I must stick to a tag then I will use linux4sam
+releases.
+
+> >  BR2_TARGET_AT91BOOTSTRAP3=y
+> > +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> > +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> > +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="at91bootstrap-3.x"
+> 
+> Same comment as for the kernel.
+> 
+> >  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+> >  BR2_TARGET_UBOOT=y
+> > -BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_nandflash"
+> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> >  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> >  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+> > -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+> > -BR2_TARGET_UBOOT_SPL=y
+> > +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="u-boot-2015.01-at91"
+> 
+> Same comment.
+> 
+> (and ditto for the other defconfigs)
+> 
+> Thanks!
+> 
+> Thomas
+
+Regards
+
+Ludovic
