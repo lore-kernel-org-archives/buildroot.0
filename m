@@ -1,42 +1,85 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Thu, 24 Mar 2016 20:25:02 +0000
-Subject: [Buildroot] autotools, pkg_config and mysql_config
-Message-ID: <1458851101.3496.13.camel@intel.com>
+From: David Picard <davepiq@yahoo.fr>
+Date: Thu, 24 Mar 2016 21:44:21 +0100
+Subject: [Buildroot] how to x-compile an in-house shared library ?
+In-Reply-To: <56F40968.8060903@gmail.com>
+References: <56F4078A.6090002@yahoo.fr> <56F40968.8060903@gmail.com>
+Message-ID: <56F451A5.2080509@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks,
+Hi,
 
-So  I have a library (radlib) which can link against a couple of database libraries; sqlite, mysql and postgresql. I have been sorting out it's autotools implementation.
+Well, OK, I didn't think the program had to be built by BR too. Anyway, 
+I read various documents a bit more ; I think I am starting to bite it.
 
-SQLite - worked like a dream, with two lines in my configure.ac
+*** Another question, though :
+As I am building out of tree, is there a way to patch package/Config.in 
+automatically, just like $(BR2_EXTERNAL)/package/*/*.patch are applied 
+automatically ?
 
-PKG_CHECK_MODULES([SQLITE3], [sqlite3], [have_libsqlite3=yes], [have_libsqlite3=no])$
-AM_CONDITIONAL([LIB_SQLITE3],  [test "$have_libsqlite3" = "yes"])$
+I'm using qmake (with Qt Creator) for both the library and the program. 
+I'll take package/qwt as an example.
 
-However mysql, in an effort to be slightly different - doesn't use pkg_config, so you therefore can't use PKG_CHECK_MODULES. Instead it ships its own tool mysql_config.
+David.
 
-So I wrote some autoconf, to handle that ...
-
-AX_WITH_PROG([MYSQL_CONFIG], [mysql_config], [AC_MSG_ERROR(mysql_config is required to build)])$
-if test "x$MYSQL_CONFIG" != "x";then$
-  AC_CHECK_HEADERS([mysql.h mysql/mysql.h])$
-  if test "x$ac_cv_header_mysql_h" != "xno" -o "x$ac_cv_header_mysql_mysql_h" != "xno" ; then$
-    MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`$
-    MYSQL_LIBS=`$MYSQL_CONFIG --libs`$
-    AC_SUBST([MYSQL_CFLAGS])$
-    AC_SUBST([MYSQL_LIBS])$
-  fi$
-fi$
-AM_CONDITIONAL([LIB_MYSQL],  [test "x$mysql_config" != "x"])
-
-My problem is that, it is continually picking myconfig from my host system. So end up with $MYSQL_CONFIG=/usr/bin/mysql_config instead of target/usr/bin/mysql_config. MYSQL_CFLAGS and MYSQL_LIBS therefore also end up pointing at the host.
-
-pkg_config works fine it gets set to target/usr/bin/pkg_config.
-
-Have tried the other similar autotools macros (https://www.gnu.org/software/autoconf/manual/autoconf-2.68/html_node/Generic-Programs.html) - problem remains the same. Any clues for me?
-
-Ray K
+Le 24/03/2016 16:36, Zoltan Gyarmati a ?crit :
+> -----BEGIN PGP SIGNED MESSAGE-----
+> Hash: SHA256
+>
+> Dear David,
+>
+> the usual way for this is to add a custom package to buildroot (see
+> https://buildroot.org/downloads/manual/manual.html#adding-packages),
+> which uses your version control system to get the source of your
+> library and also your application(s) which uses this library should be
+> also built by Buildroot. The exact procedure to set this up depends on
+> the make/build system you use for the library and the applications.
+> Generally speaking it's better if you avoid hand-crafted Makefiles or
+> other build scripts and use a widely used make-generator tool to build
+> your components (autotools, cmake, qmake, etc), so you don't have to
+> manually tinker with the cross-compiling, as the makefile generator
+> (and Buildroot) will take care of that for you.
+>
+> Regards
+>
+> On 2016-03-24 16:28, David Picard wrote:
+>> Hello,
+>>
+>> I developed a shared library some time ago. Now, I am developing a
+>> program for an ARM target with Buildroot, and I need to link
+>> against this library.
+>>
+>> I don't want to share the library with the community, because it's
+>> very specific. I have a very limited experience and knowledge of
+>> Buildroot. I'm eager to learn, but can't spend much time. I am
+>> building out of tree.
+>>
+>> So, in my case, what is the easiest way to integrate (or not
+>> integrate ?) the library to Buildroot ?
+>>
+>> Thanks, David. _______________________________________________
+>> buildroot mailing list buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> - --
+> Zoltan Gyarmati
+> https://zgyarmati.de
+> -----BEGIN PGP SIGNATURE-----
+> Version: GnuPG v2
+>
+> iQEcBAEBCAAGBQJW9AlnAAoJEAGmEeeR8iVh1CQH/R8pgrL/Ruc6E5BpJspvb9ed
+> lE9Uauw9QHAKqu3TLJyClHoIyVzrhh3s9GiOqY2i2aHmur23qoZyuK9ZO33FmXXk
+> sbDMG+f1nFY0j8VkG2mU51bnTEpNhcqpt+vuwwfnWR8HxgmTCbb1jhSi79V7sWrj
+> aD57MKTauqOwF1AQ7u7//nCmZeyuZ5D2Er8iA+4nq35LCZZy8mYtrYuYRkFrF8RJ
+> O2pMu+nphWAHqj3TO0ql4z+Eb8IDRD+YJFApivoVQUwffubnd7HIGO+jG7oQXoTe
+> 9CcRfC+H9FUCaeUF+Rp/X+y4nU2q7XbMkllr9oKwcINzKoTzbUy9ng2BBLBlyNU=
+> =GySX
+> -----END PGP SIGNATURE-----
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
