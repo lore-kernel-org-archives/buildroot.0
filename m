@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:32:48 +0100
-Subject: [Buildroot] [git commit] python-idna: bump to version 2.1
-Message-ID: <20160324213322.572D0819ED@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:33:08 +0100
+Subject: [Buildroot] [git commit] python-pyopenssl: bump to version 16.0.0
+Message-ID: <20160324213322.7F428819ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3caa0d0e31607f7fe94462b8dcfc344f88998d92
+commit: https://git.buildroot.net/buildroot/commit/?id=2a7f8da264f894d1f499a9cf26f0b5b8c1221e57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-idna/python-idna.hash | 6 +++---
- package/python-idna/python-idna.mk   | 2 +-
+ package/python-pyopenssl/python-pyopenssl.hash | 6 +++---
+ package/python-pyopenssl/python-pyopenssl.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 10e3e9d..4e4c677 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
+diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
+index 0c6e25a..27427d2 100644
+--- a/package/python-pyopenssl/python-pyopenssl.hash
++++ b/package/python-pyopenssl/python-pyopenssl.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=bd17a9d15e755375f48a62c13b25b801, sha256 locally computed
--md5     bd17a9d15e755375f48a62c13b25b801  idna-2.0.tar.gz
--sha256  16199aad938b290f5be1057c0e1efc6546229391c23cea61ca940c115f7d3d3b  idna-2.0.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f6473caa9c5e0cc1ad3fd5d04c3c114b, sha256 locally computed
-+md5     f6473caa9c5e0cc1ad3fd5d04c3c114b  idna-2.1.tar.gz
-+sha256  ed36f281aebf3cd0797f163bb165d84c31507cedd15928b095b1675e2d04c676  idna-2.1.tar.gz
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index 7dd1253..3f9f109 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f447644afcbd5f0a1f47350fec63a4c6, sha256 locally computed
+-md5     f447644afcbd5f0a1f47350fec63a4c6  pyOpenSSL-0.15.1.tar.gz
+-sha256  f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672  pyOpenSSL-0.15.1.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9587d813dcf656e9f2760e41a3682dc3, sha256 locally computed
++md5     9587d813dcf656e9f2760e41a3682dc3  pyOpenSSL-16.0.0.tar.gz
++sha256  363d10ee43d062285facf4e465f4f5163f9f702f9134f0a5896f134cbb92d17d  pyOpenSSL-16.0.0.tar.gz
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index 239fd98..7606411 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_IDNA_VERSION = 2.0
-+PYTHON_IDNA_VERSION = 2.1
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
- PYTHON_IDNA_SITE = https://pypi.python.org/packages/source/i/idna
- PYTHON_IDNA_LICENSE =  BSD-3c
+-PYTHON_PYOPENSSL_VERSION = 0.15.1
++PYTHON_PYOPENSSL_VERSION = 16.0.0
+ PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+ PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
