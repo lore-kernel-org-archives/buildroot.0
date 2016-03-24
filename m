@@ -1,77 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:29:54 +0100
-Subject: [Buildroot] [git commit] qt5base: disable c++ standard compiler
-	flags for the host build
-Message-ID: <20160324213051.BB6C4806B5@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:31:11 +0100
+Subject: [Buildroot] [PATCH v2] qt5base: disable c++ standard compiler
+ flags for the host build
+In-Reply-To: <1458827395-24205-1-git-send-email-yegorslists@googlemail.com>
+References: <1458827395-24205-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160324223111.05ea1b00@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac7dab22251c0c00200810dfbff2d464d5898865
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Apply upstream patch, that disables c++ standard compiler flags
-unconditionally for host builds.
+On Thu, 24 Mar 2016 14:49:55 +0100, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Apply upstream patch, that disables c++ standard compiler flags
+> unconditionally for host builds.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/895/8958cfb71efdd3ce32b2145237e865ca8a6a6a7f/
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Reviewed-by: Julien Corjon <corjon.j@ecagroup.com>
+> ---
+> Changes:
+> 	v2: rewrite patch subject text (Julien Corjon)
 
-Fixes:
-http://autobuild.buildroot.net/results/895/8958cfb71efdd3ce32b2145237e865ca8a6a6a7f/
+Applied to master, thanks.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Reviewed-by: Julien Corjon <corjon.j@ecagroup.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- ...tandard-compiler-flags-for-the-host-build.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
-
-diff --git a/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch b/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
-new file mode 100644
-index 0000000..54e4db8
---- /dev/null
-+++ b/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
-@@ -0,0 +1,44 @@
-+From e69e69519661954716d59bfa5bbd0626515cfda9 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 3 Mar 2016 15:17:31 +0100
-+Subject: [PATCH] Disable c++ standard compiler flags for the host build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+There is no test for c++ standard support for the host build
-+(only for the target compiler/build) which leads to trouble
-+in some cross compiling environments (old host compiler, new
-+cross compiler):
-+
-+  g++: error: unrecognized command line option ???-std=c++1z???
-+
-+So disable c++ standard compiler flags unconditionally for host builds.
-+
-+Task-number: QTBUG-51644
-+Change-Id: Ifb3042e125fe199a7e081740d1171d26ccacf0c5
-+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ mkspecs/features/default_post.prf | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/mkspecs/features/default_post.prf b/mkspecs/features/default_post.prf
-+index cd8d885..561c8f4 100644
-+--- a/mkspecs/features/default_post.prf
-++++ b/mkspecs/features/default_post.prf
-+@@ -95,7 +95,10 @@ breakpad {
-+     !isEmpty(QMAKE_STRIP):QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote($$QMAKE_STRIP $$DEBUGFILENAME)
-+ }
-+ 
-+-c++11|c++14|c++1z {
-++# Disable special compiler flags for host builds (needs to be changed for 5.7
-++# to fall back to c++11 because since 5.7 c++11 is required everywhere,
-++# including host builds).
-++if(!host_build|!cross_compile):if(c++11|c++14|c++1z) {
-+     c++1z:       cxxstd = CXX1Z
-+     else: c++14: cxxstd = CXX14
-+     else:        cxxstd = CXX11
-+-- 
-+2.1.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
