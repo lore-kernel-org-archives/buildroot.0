@@ -1,71 +1,98 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Thu, 24 Mar 2016 14:36:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qwt : added support for Qt5.
-In-Reply-To: <1458826610-11108-1-git-send-email-davepiq@yahoo.fr>
-References: <1458826610-11108-1-git-send-email-davepiq@yahoo.fr>
-Message-ID: <1458826610-11108-2-git-send-email-davepiq@yahoo.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Thu, 24 Mar 2016 13:47:54 +0000
+Subject: [Buildroot] [PATCH] qt5base: fix build error
+In-Reply-To: <1458819003-4930-1-git-send-email-yegorslists@googlemail.com>
+References: <1458819003-4930-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <56F3F00A.8080906@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version of Qwt is compatible with both Qt and Qt5. This patch adds the
-option to compile it for Qt5.
+Dear Yegor,
 
-Signed-off-by: David Picard <davepiq@yahoo.fr>
----
- package/qwt/Config.in | 10 +++++++---
- package/qwt/qwt.mk    |  3 +++
- 2 files changed, 10 insertions(+), 3 deletions(-)
+Please have a more precise commit log than just "fix build error"
+(e.g. qt5base: disable c++ standard compiler flags for the host build)
 
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 876d465..05d5253 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_QWT
- 	bool "qwt"
--	depends on BR2_PACKAGE_QT
-+	depends on BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_QT_GUI_MODULE if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_CONCURRENT if BR2_PACKAGE_QT5
- 	help
- 	  Qwt is a graphics extension to the Qt GUI application
- 	  framework. It provides a 2D plotting widget and more.
-@@ -13,14 +15,16 @@ if BR2_PACKAGE_QWT
- config BR2_PACKAGE_QWT_SVG
- 	bool "SVG support"
- 	select BR2_PACKAGE_QT_SVG if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5SVG if BR2_PACKAGE_QT5
- 
- config BR2_PACKAGE_QWT_MATHML
- 	bool "MathML support"
- 
- config BR2_PACKAGE_QWT_OPENGL
- 	bool "OpenGL support"
--	depends on BR2_PACKAGE_HAS_LIBGLES
--	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEG) || \
-+		BR2_PACKAGE_QT5_GL_AVAILABLE
- 	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
-+	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
- 
- endif
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index 6c17ae2..595f231 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -11,6 +11,9 @@ QWT_INSTALL_STAGING = YES
- ifeq ($(BR2_PACKAGE_QT),y)
- QWT_DEPENDENCIES = qt
- QWT_QMAKE = $(QT_QMAKE)
-+else ifeq ($(BR2_PACKAGE_QT5),y)
-+QWT_DEPENDENCIES += qt5
-+QWT_QMAKE = $(QT5_QMAKE)
- endif
- 
- QWT_LICENSE = LGPLv2.1 with exceptions
--- 
-1.9.1
+Le 24/03/2016 12:30, yegorslists at googlemail.com a ?crit :
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> Apply upstream patch, that disables c++ standard compiler flags
+> unconditionally for host builds.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/895/8958cfb71efdd3ce32b2145237e865ca8a6a6a7f/
+
+It also fix :
+http://autobuild.buildroot.net/results/cc8b6f3713bd1140a4e8fef378525df1f1c88130/
+http://autobuild.buildroot.net/results/3e9/3e96a9cf50671d845a664ca711c18f2a883a4737/
+http://autobuild.buildroot.net/results/c16/c16066a111c475667eaa01c080e7207dc9cc4cf2/
+http://autobuild.buildroot.net/results/af9/af95d158f38becc1004f5b59777afee740c0deae/
+http://autobuild.buildroot.net/results/b5e/b5e7ba0c36fb8bff4037fcba89217bdcd840c9a0/
+
+Otherwise you can add my
+Reviewed-by: Julien Corjon <corjon.j@ecagroup.com>
+
+Regards,
+
+Julien
+
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>   ...tandard-compiler-flags-for-the-host-build.patch | 44 ++++++++++++++++++++++
+>   1 file changed, 44 insertions(+)
+>   create mode 100644 package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
+>
+> diff --git a/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch b/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
+> new file mode 100644
+> index 0000000..54e4db8
+> --- /dev/null
+> +++ b/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
+> @@ -0,0 +1,44 @@
+> +From e69e69519661954716d59bfa5bbd0626515cfda9 Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Thu, 3 Mar 2016 15:17:31 +0100
+> +Subject: [PATCH] Disable c++ standard compiler flags for the host build
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +There is no test for c++ standard support for the host build
+> +(only for the target compiler/build) which leads to trouble
+> +in some cross compiling environments (old host compiler, new
+> +cross compiler):
+> +
+> +  g++: error: unrecognized command line option ?-std=c++1z?
+> +
+> +So disable c++ standard compiler flags unconditionally for host builds.
+> +
+> +Task-number: QTBUG-51644
+> +Change-Id: Ifb3042e125fe199a7e081740d1171d26ccacf0c5
+> +Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + mkspecs/features/default_post.prf | 5 ++++-
+> + 1 file changed, 4 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/mkspecs/features/default_post.prf b/mkspecs/features/default_post.prf
+> +index cd8d885..561c8f4 100644
+> +--- a/mkspecs/features/default_post.prf
+> ++++ b/mkspecs/features/default_post.prf
+> +@@ -95,7 +95,10 @@ breakpad {
+> +     !isEmpty(QMAKE_STRIP):QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote($$QMAKE_STRIP $$DEBUGFILENAME)
+> + }
+> +
+> +-c++11|c++14|c++1z {
+> ++# Disable special compiler flags for host builds (needs to be changed for 5.7
+> ++# to fall back to c++11 because since 5.7 c++11 is required everywhere,
+> ++# including host builds).
+> ++if(!host_build|!cross_compile):if(c++11|c++14|c++1z) {
+> +     c++1z:       cxxstd = CXX1Z
+> +     else: c++14: cxxstd = CXX14
+> +     else:        cxxstd = CXX11
+> +--
+> +2.1.4
+> +
+>
