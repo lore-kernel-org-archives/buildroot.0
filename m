@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 09:44:36 +0100
-Subject: [Buildroot] [PATCH 4/4] board/atmel/xplained/readme.txt: update
- documentation
-In-Reply-To: <1458808152-15778-4-git-send-email-ludovic.desroches@atmel.com>
+Date: Thu, 24 Mar 2016 09:46:55 +0100
+Subject: [Buildroot] [PATCH 1/4] configs: atmel: unify and update
+ defconfig for Xplained boards
+In-Reply-To: <20160324084344.GD12245@odux.rfo.atmel.com>
 References: <1458808152-15778-1-git-send-email-ludovic.desroches@atmel.com>
- <1458808152-15778-4-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <20160324094436.128dbd74@free-electrons.com>
+ <20160324094006.172567ac@free-electrons.com>
+ <20160324084344.GD12245@odux.rfo.atmel.com>
+Message-ID: <20160324094655.007db654@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +15,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 24 Mar 2016 09:29:12 +0100, Ludovic Desroches wrote:
-> This documentation is not only dedicated to SAMA5D3 Xplained boards. The
-> procedure is the same for SAMA5D4 and SAMA5D2.
-> sfdisk, -u (--unit) option is obsolete on latest versions.
+On Thu, 24 Mar 2016 09:43:44 +0100, Ludovic Desroches wrote:
+
+> On Thu, Mar 24, 2016 at 09:40:06AM +0100, Thomas Petazzoni wrote:
+> > Hello,
+> > 
+> > I'm adding in Cc: Alexandre Belloni, who has worked on Atmel defconfigs
+> > in the past.
 > 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
->  board/atmel/xplained/readme.txt | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
+> He was in Cc.
 
-There is some duplication of information between board/atmel/readme.txt
-(which also covers SAMA5 Xplained platforms) and
-board/atmel/xplained/readme.txt.
+Gah, my bad. Alex must have chosen in his mailing list preferences to
+remove duplicates or something like that, because on the mailing list,
+your Cc to Alex was clearly not visible. Hence my comment.
 
-Perhaps board/atmel/xplained/readme.txt should be removed entirely, and
-board/atmel/readme.txt contain all the information?
+> > > - use bootstrap as first stage bootloader
+> > 
+> > As opposed to? Did you mean at91bootstrap3 rather than "bootstrap"?
+> 
+> As opposed to u-boot spl which is less tested than at91bootstrap3.
 
-Seems like board/atmel/readme.txt covers how to flash on NAND, while
-board/atmel/xplained/readme.txt covers how to use a SD card based
-booting. Definitely not very clear when looking at the readme.txt
-location.
+OK. I think Alex has a somewhat different opinion on the matter, but I
+guess that if the vendor recommends to use at91bootstrap3, we should
+use this solution in our defconfig.
 
-Another possible (but future, and unrelated) improvement is to use
-genimage to generate a ready-to-use SD card image, which automatically
-contains the VFAT and ext4 partitions.
+> > This is not good. linux-4.1-at91 is a branch name, which means that the
+> > actual source behind this branch name will change over time, making
+> > this defconfig non-reproducible. You must stick to a tag or a commit id.
+> 
+> In fact it was the plan in order to prevent the need to update these
+> defconfig files. If I must stick to a tag then I will use linux4sam
+> releases.
+
+We really want our defconfigs to be reproducible in terms of
+bootloader/kernel versions. Otherwise, what people will build/test is
+not something that the person submitting the defconfig has tested.
 
 Thanks!
 
