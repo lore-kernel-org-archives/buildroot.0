@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:51:26 +0100
-Subject: [Buildroot] [PATCH] samba4: bump to version 4.4.0
-In-Reply-To: <1458761071-27389-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1458761071-27389-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160324225126.400d8a0e@free-electrons.com>
+Date: Thu, 24 Mar 2016 22:51:28 +0100
+Subject: [Buildroot] [PATCH] gdk-pixbuf: create loader cache at build
+ time
+In-Reply-To: <1458767869-14680-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458767869-14680-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160324225128.1c7531df@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 23 Mar 2016 16:24:31 -0300, Gustavo Zacarias wrote:
-> libaio support is now automatic so drop the enable/disable (it will fall
-> back to pthread aio if libaio is not present).
+On Wed, 23 Mar 2016 18:17:49 -0300, Gustavo Zacarias wrote:
+> Create the gdk pixbuf loaders cache file at build time rather than run
+> time, since the root filesytem can be read-only.
+> We also didn't cater for systemd-based systems, so this solves two
+> issues at once.
 > 
-> 0002-build-improve-stack-protector-check.patch is upstream so remove it.
+> The only side-effect is that we must now pull host-gdk-pixbuf into
+> target gdk-pixbuf dependencies, but generally users will have gdk-pixbuf
+> selected if they use libgtk2/3 which already pull in host-gdk-pixbuf.
+> 
+> And remove initscript correspondingly.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  .../0002-build-improve-stack-protector-check.patch | 56 ----------------------
->  package/samba4/samba4.hash                         |  2 +-
->  package/samba4/samba4.mk                           | 10 +---
->  3 files changed, 3 insertions(+), 65 deletions(-)
->  delete mode 100644 package/samba4/0002-build-improve-stack-protector-check.patch
+>  package/gdk-pixbuf/S26gdk-pixbuf | 19 -------------------
+>  package/gdk-pixbuf/gdk-pixbuf.mk | 22 +++++++++++++++-------
+>  2 files changed, 15 insertions(+), 26 deletions(-)
+>  delete mode 100644 package/gdk-pixbuf/S26gdk-pixbuf
 
 Applied to master, thanks.
 
