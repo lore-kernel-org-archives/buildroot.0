@@ -1,88 +1,157 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 15:12:01 +0100
-Subject: [Buildroot] syslinux using host compiler.
-In-Reply-To: <20160324130856.GQ22286@hermes.click-hack.org>
-References: <20160324103941.GM22286@hermes.click-hack.org>
- <20160324135053.0d3b6b49@free-electrons.com>
- <20160324130856.GQ22286@hermes.click-hack.org>
-Message-ID: <20160324151201.7e05fd28@free-electrons.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 24 Mar 2016 15:42:41 +0100
+Subject: [Buildroot] [PATCH v2 1/4] configs: atmel: unify and update
+	defconfig for Xplained boards
+Message-ID: <1458830564-27350-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Unify and update the defconfig files for Atmel Xplained boards:
+- use at91bootstrap as first stage bootloader instead of u-boot spl
+- build all dtb variants
+- bump to linux4sam_5.2
 
-On Thu, 24 Mar 2016 14:08:56 +0100, Gilles Chanteperdrix wrote:
+Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+---
 
-> > For grub2, it is actually using the target compiler, see the comment in
-> > grub2.mk:
-> 
-> Ok, I thought I saw grub selected BR2_HOSTARCH_NEEDS_IA32_COMPILER
-> too, must I have misread.
+Changes:
+- v2:
+  - use tag instead of branch for versions
 
-grub yes, not grub2. But your original comment was about grub2, hence I
-looked at grub2. But you are right, grub is like syslinux, we use the
-host compiler.
+ configs/atmel_sama5d3_xplained_defconfig     | 16 ++++++++------
+ configs/atmel_sama5d3_xplained_mmc_defconfig | 32 ++++++++++++++--------------
+ configs/atmel_sama5d4_xplained_defconfig     | 16 ++++++++------
+ 3 files changed, 34 insertions(+), 30 deletions(-)
 
-> > No, because syslinux selects BR2_HOSTARCH_NEEDS_IA32_COMPILER, which
-> > ensures you have a working x86 32-bits compiler on your host machine. If
-> > you don't, then Buildroot will not even start the build.
-> 
-> I meant you can not build syslinux if your host is arm for instance,
-> and you have an arm/x86 cross-compilation toolchain.
-
-Correct, but the fact that you select BR2_HOSTARCH_NEEDS_IA32_COMPILER
-will test that you have a host compiler capable of producing x86 32
-bits binaries. So if you're building on ARM, it will simply abort at
-the beginning of the build. Of course, it would be nicer if we could be
-on any host architecture, but on the other hand, virtually everyone is
-using x86/x86-64 as build machines, so it wasn't really worth putting
-more efforts to fix this.
-
-> > The reason why we're using the host compiler rather than the target
-> > compiler is because syslinux must be built as 32-bits x86 code, even if
-> > your target system is x86_64.
-> 
-> Yes, but AFAIK, gcc for x86_64 always supports the -m32 switch. To
-> build 32 bits host binaries, you need a multilib installation with a
-> 32 bits glibc, but a bootloader should not use anything in the glibc.
-
-Completely agree with the theory. In practice, I remember seeing some
-problems, like it was anyway trying to build some actual user-space
-applications with -m32. But (1) my analysis at the time might have been
-wrong and (2) syslinux was upgraded several times since then so maybe
-they have changed/fixed things. But that definitely doesn't mean I'm
-not interested in seeing patches improving this stuff.
-
-> > > I am using an x86_64 toolchain generated with ct-ng, did not enable
-> > > multilib, and syslinux seems to have no problem compiling with that
-> > > toolchain, which seems normal, since the boot code should not be
-> > > using the libc anyway.
-> > 
-> > Are you sure you're using this target compiler to build syslinux, and
-> > not your host compiler? Back in 2014, when commit
-> > 09e7b4c89159a3e48f463b0a22e649c4fc12f4b3 was done, it wouldn't build
-> > with a x86-64 only compiler.
-> 
-> Yes, I am sure of it. The only "trick" I had to apply was to force
-> LD="$(TARGET_LD) -m elf_i386". Now buildroot complains later because
-> isohybrid in the host directory is not compiled with the proper
-> rpath, but I guess it means we need host-syslinux.
-
-OK.
-
-> > If that actually works, then patches are welcome. But in this case, we
-> > will indeed probably need separate host-syslinux and syslinux packages,
-> > as you suggested.
-> 
-> Yes. Ok, will work on the patch.
-
-Great!
-
-Thomas
+diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+index 665a3d7..197b5ac 100644
+--- a/configs/atmel_sama5d3_xplained_defconfig
++++ b/configs/atmel_sama5d3_xplained_defconfig
+@@ -2,26 +2,28 @@ BR2_arm=y
+ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
+ BR2_TARGET_ROOTFS_UBIFS=y
+ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+ BR2_TARGET_ROOTFS_UBI=y
+ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
+ BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_nandflash"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+-BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
+ BR2_PACKAGE_HOST_SAM_BA=y
+diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
+index 1a75767..2fb1fa4 100644
+--- a/configs/atmel_sama5d3_xplained_mmc_defconfig
++++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
+@@ -1,24 +1,24 @@
+-# Architecture
+ BR2_arm=y
+ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+-
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+-
+-# Kernel configuration
++BR2_ARM_INSTRUCTIONS_THUMB2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.8"
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
+-
+-# First/second stage bootloader
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_mmc"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
+-BR2_TARGET_UBOOT_FORMAT_IMG=y
+-BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
+diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
+index 0991f86..7efc119 100644
+--- a/configs/atmel_sama5d4_xplained_defconfig
++++ b/configs/atmel_sama5d4_xplained_defconfig
+@@ -3,16 +3,15 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-# Linux headers same as kernel, a 3.18 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_ZIMAGE=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
+ BR2_TARGET_ROOTFS_UBIFS=y
+ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
+ BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
+@@ -21,11 +20,14 @@ BR2_TARGET_ROOTFS_UBI=y
+ BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
+ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
+ BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
+ BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="sama5d4_xplained_nandflash"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+-BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
+ BR2_PACKAGE_HOST_SAM_BA=y
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
