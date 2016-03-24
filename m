@@ -1,131 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:44:14 +0100
-Subject: [Buildroot] [git commit] samba4: bump to version 4.4.0
-Message-ID: <20160324214418.BE3B5807CD@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:44:52 +0100
+Subject: [Buildroot] [git commit] gdk-pixbuf: create loader cache at build
+	time
+Message-ID: <20160324214457.392F981999@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a58a4ec0355ae53be4eb6b46534eb03d012a5f37
+commit: https://git.buildroot.net/buildroot/commit/?id=1696b6d14c646a4cc2c375b33944d42b6580e748
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libaio support is now automatic so drop the enable/disable (it will fall
-back to pthread aio if libaio is not present).
+Create the gdk pixbuf loaders cache file at build time rather than run
+time, since the root filesytem can be read-only.
+We also didn't cater for systemd-based systems, so this solves two
+issues at once.
 
-0002-build-improve-stack-protector-check.patch is upstream so remove it.
+The only side-effect is that we must now pull host-gdk-pixbuf into
+target gdk-pixbuf dependencies, but generally users will have gdk-pixbuf
+selected if they use libgtk2/3 which already pull in host-gdk-pixbuf.
+
+And remove initscript correspondingly.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0002-build-improve-stack-protector-check.patch | 56 ----------------------
- package/samba4/samba4.hash                         |  2 +-
- package/samba4/samba4.mk                           | 10 +---
- 3 files changed, 3 insertions(+), 65 deletions(-)
+ package/gdk-pixbuf/S26gdk-pixbuf | 19 -------------------
+ package/gdk-pixbuf/gdk-pixbuf.mk | 22 +++++++++++++++-------
+ 2 files changed, 15 insertions(+), 26 deletions(-)
 
-diff --git a/package/samba4/0002-build-improve-stack-protector-check.patch b/package/samba4/0002-build-improve-stack-protector-check.patch
+diff --git a/package/gdk-pixbuf/S26gdk-pixbuf b/package/gdk-pixbuf/S26gdk-pixbuf
 deleted file mode 100644
-index 51ffc04..0000000
---- a/package/samba4/0002-build-improve-stack-protector-check.patch
+index 82b7944..0000000
+--- a/package/gdk-pixbuf/S26gdk-pixbuf
 +++ /dev/null
-@@ -1,56 +0,0 @@
--From e4ef92852023f4e2f192d3c47220dc75930a615c Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Fri, 11 Sep 2015 16:41:31 -0300
--Subject: [PATCH] build: improve stack protector check
+@@ -1,19 +0,0 @@
+-#!/bin/sh
+-#
+-# run gdk-pixbuf-query-loaders if needed
 -
--Testing a toolchain for proper -fstack-protector must go beyond ensuring
--the compiler and linker accept the option.
--If the test C program does nothing with the stack then guards aren't
--inserted and/or are optimized away giving the false impression that it
--works when in fact the libc might not support it.
+-FILE=/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
 -
--Update the check to a program that uses the stack, hence making a link
--fail if proper support isn't available, for example in non-ssp enabled
--uclibc toolchains like this:
--
--test.c:(.text.startup+0x64): undefined reference to `__stack_chk_fail'
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
-- buildtools/wafsamba/samba_autoconf.py | 20 +++++++++++++++++---
-- 1 file changed, 17 insertions(+), 3 deletions(-)
--
--diff --git a/buildtools/wafsamba/samba_autoconf.py b/buildtools/wafsamba/samba_autoconf.py
--index c5f132c..ef34b00 100644
----- a/buildtools/wafsamba/samba_autoconf.py
--+++ b/buildtools/wafsamba/samba_autoconf.py
--@@ -657,9 +657,23 @@ def SAMBA_CONFIG_H(conf, path=None):
--     if not IN_LAUNCH_DIR(conf):
--         return
-- 
---    if conf.CHECK_CFLAGS(['-fstack-protector']) and conf.CHECK_LDFLAGS(['-fstack-protector']):
---        conf.ADD_CFLAGS('-fstack-protector')
---        conf.ADD_LDFLAGS('-fstack-protector')
--+    # we need to build real code that can't be optimized away to test
--+    if conf.check(fragment='''
--+        #include <stdio.h>
--+
--+        int main(void)
--+        {
--+            char t[100000];
--+            while (fgets(t, sizeof(t), stdin));
--+            return 0;
--+        }
--+        ''',
--+        execute=0,
--+        ccflags='-fstack-protector',
--+        ldflags='-fstack-protector',
--+        msg='Checking if toolchain accepts -fstack-protector'):
--+            conf.ADD_CFLAGS('-fstack-protector')
--+            conf.ADD_LDFLAGS('-fstack-protector')
-- 
--     if Options.options.debug:
--         conf.ADD_CFLAGS('-g', testflags=True)
---- 
--2.4.6
--
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index d8458e6..95d111d 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	3251eca5b196854e79978f4a92d5fd2b55bd7b0a252a65131a9be02be6754924	samba-4.3.6.tar.gz
-+sha256	c5f6fefb7fd0a4e5f404a253b19b55f74f88faa1c3612cb3329e24aa03470075	samba-4.4.0.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 0fa70a5..9f7b11d 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-case "$1" in
+-    start|"")
+-	if [ ! -f "$FILE" ] ; then
+-	    /usr/bin/gdk-pixbuf-query-loaders --update-cache
+-	fi
+-	;;
+-    stop)
+-	;;
+-    *)
+-	echo "Usage: $0 {start|stop}" >&2
+-	exit 1
+-	;;
+-esac
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index be79e11..02c4aa9 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -11,6 +11,9 @@ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF
+ GDK_PIXBUF_LICENSE = LGPLv2+
+ GDK_PIXBUF_LICENSE_FILES = COPYING
+ GDK_PIXBUF_INSTALL_STAGING = YES
++GDK_PIXBUF_DEPENDENCIES = \
++	host-gdk-pixbuf host-libglib2 host-pkgconf \
++	$(if $(BR2_ENABLE_LOCALE),,libiconv)
  
--SAMBA4_VERSION = 4.3.6
-+SAMBA4_VERSION = 4.4.0
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
-@@ -13,6 +13,7 @@ SAMBA4_LICENSE_FILES = COPYING
- SAMBA4_DEPENDENCIES = \
- 	host-e2fsprogs host-heimdal host-python \
- 	e2fsprogs popt python zlib \
-+	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
- 	$(if $(BR2_PACKAGE_LIBBSD),libbsd) \
- 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
- 	$(if $(BR2_PACKAGE_READLINE),readline)
-@@ -32,13 +33,6 @@ else
- SAMBA4_CONF_OPTS += --disable-cups
+ GDK_PIXBUF_CONF_ENV = \
+ 	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
+@@ -43,14 +46,19 @@ GDK_PIXBUF_CONF_OPTS += --with-x11
+ GDK_PIXBUF_DEPENDENCIES += xlib_libX11
  endif
  
--ifeq ($(BR2_PACKAGE_LIBAIO),y)
--SAMBA4_CONF_OPTS += --with-aio-support
--SAMBA4_DEPENDENCIES += libaio
--else
--SAMBA4_CONF_OPTS += --without-aio-support
--endif
+-GDK_PIXBUF_DEPENDENCIES += \
+-	$(if $(BR2_ENABLE_LOCALE),,libiconv) \
+-	host-pkgconf libglib2
 -
- ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
- SAMBA4_CONF_OPTS += --enable-avahi
- SAMBA4_DEPENDENCIES += avahi
+-define GDK_PIXBUF_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 755 -D package/gdk-pixbuf/S26gdk-pixbuf \
+-		$(TARGET_DIR)/etc/init.d/S26gdk-pixbuf
++# gdk-pixbuf requires the loaders.cache file populated to work properly
++# Rather than doing so at runtime, since the fs can be read-only, do so
++# here after building and installing to target.
++# And since the cache file will contain absolute target directory names
++# we need to sanitize (strip) them.
++define GDK_PIXBUF_UPDATE_CACHE
++	GDK_PIXBUF_MODULEDIR=$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders \
++		$(HOST_DIR)/usr/bin/gdk-pixbuf-query-loaders \
++		> $(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
++	$(SED) "s,$(TARGET_DIR),,g" \
++		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+ endef
++GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
+ 
+ # Tests don't build correctly with uClibc
+ define GDK_PIXBUF_DISABLE_TESTS
