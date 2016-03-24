@@ -1,76 +1,74 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Thu, 24 Mar 2016 12:30:03 +0100
-Subject: [Buildroot] [PATCH] qt5base: fix build error
-Message-ID: <1458819003-4930-1-git-send-email-yegorslists@googlemail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Mar 2016 13:50:53 +0100
+Subject: [Buildroot] syslinux using host compiler.
+In-Reply-To: <20160324103941.GM22286@hermes.click-hack.org>
+References: <20160324103941.GM22286@hermes.click-hack.org>
+Message-ID: <20160324135053.0d3b6b49@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Hello,
 
-Apply upstream patch, that disables c++ standard compiler flags
-unconditionally for host builds.
+On Thu, 24 Mar 2016 11:39:41 +0100, Gilles Chanteperdrix wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/895/8958cfb71efdd3ce32b2145237e865ca8a6a6a7f/
+> I am new to buildroot, and have been working for a couple of weeks
+> with it, and everything seems to be working fine so far.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...tandard-compiler-flags-for-the-host-build.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
+Great :-) Glad to see you on this mailing list!
 
-diff --git a/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch b/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
-new file mode 100644
-index 0000000..54e4db8
---- /dev/null
-+++ b/package/qt5/qt5base/0001-Disable-c-standard-compiler-flags-for-the-host-build.patch
-@@ -0,0 +1,44 @@
-+From e69e69519661954716d59bfa5bbd0626515cfda9 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Thu, 3 Mar 2016 15:17:31 +0100
-+Subject: [PATCH] Disable c++ standard compiler flags for the host build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+There is no test for c++ standard support for the host build
-+(only for the target compiler/build) which leads to trouble
-+in some cross compiling environments (old host compiler, new
-+cross compiler):
-+
-+  g++: error: unrecognized command line option ?-std=c++1z?
-+
-+So disable c++ standard compiler flags unconditionally for host builds.
-+
-+Task-number: QTBUG-51644
-+Change-Id: Ifb3042e125fe199a7e081740d1171d26ccacf0c5
-+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ mkspecs/features/default_post.prf | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/mkspecs/features/default_post.prf b/mkspecs/features/default_post.prf
-+index cd8d885..561c8f4 100644
-+--- a/mkspecs/features/default_post.prf
-++++ b/mkspecs/features/default_post.prf
-+@@ -95,7 +95,10 @@ breakpad {
-+     !isEmpty(QMAKE_STRIP):QMAKE_POST_LINK = $$QMAKE_POST_LINK$$escape_expand(\\n\\t)$$quote($$QMAKE_STRIP $$DEBUGFILENAME)
-+ }
-+ 
-+-c++11|c++14|c++1z {
-++# Disable special compiler flags for host builds (needs to be changed for 5.7
-++# to fall back to c++11 because since 5.7 c++11 is required everywhere,
-++# including host builds).
-++if(!host_build|!cross_compile):if(c++11|c++14|c++1z) {
-+     c++1z:       cxxstd = CXX1Z
-+     else: c++14: cxxstd = CXX14
-+     else:        cxxstd = CXX11
-+-- 
-+2.1.4
-+
+> I have a question however: why is syslinux (and grub2 for that
+> matter, I guess) built with the host toolchain?
+
+For grub2, it is actually using the target compiler, see the comment in
+grub2.mk:
+
+# Grub2 is kind of special: it considers CC, LD and so on to be the
+# tools to build the native tools (i.e to be executed on the build
+# machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS,
+# TARGET_LDFLAGS to build the bootloader itself. However, to add to
+# the confusion, it also uses NM, OBJCOPY and STRIP to build the
+# bootloader itself; none of these are used to build the native
+# tools.
+
+> I can understand that some tools (such as isohybrid) need to be
+> executed on the host, but the final binaries are for the target. So,
+> does not that call for having a separate host-syslinux and syslinux
+> packages like other packages do? 
+
+We used to have a host-syslinux package, but it was removed in commit
+ac7f60d87266c30753cb45b820dc48ec834941c6 as it was no longer needed.
+
+> The current setup only works if the host is x86.
+
+No, because syslinux selects BR2_HOSTARCH_NEEDS_IA32_COMPILER, which
+ensures you have a working x86 32-bits compiler on your host machine. If
+you don't, then Buildroot will not even start the build.
+
+The reason why we're using the host compiler rather than the target
+compiler is because syslinux must be built as 32-bits x86 code, even if
+your target system is x86_64.
+
+> I am using an x86_64 toolchain generated with ct-ng, did not enable
+> multilib, and syslinux seems to have no problem compiling with that
+> toolchain, which seems normal, since the boot code should not be
+> using the libc anyway.
+
+Are you sure you're using this target compiler to build syslinux, and
+not your host compiler? Back in 2014, when commit
+09e7b4c89159a3e48f463b0a22e649c4fc12f4b3 was done, it wouldn't build
+with a x86-64 only compiler.
+
+If that actually works, then patches are welcome. But in this case, we
+will indeed probably need separate host-syslinux and syslinux packages,
+as you suggested.
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
