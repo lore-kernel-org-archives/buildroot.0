@@ -1,7 +1,7 @@
 From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Thu, 24 Mar 2016 11:39:41 +0100
+Date: Thu, 24 Mar 2016 11:30:00 +0100
 Subject: [Buildroot] syslinux using host compiler.
-Message-ID: <20160324103941.GM22286@hermes.click-hack.org>
+Message-ID: <20160324103000.GK22286@hermes.click-hack.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,7 +10,7 @@ To: buildroot@busybox.net
 
 Hi,
 
-I am new to buildroot, and have been working for a couple of weeks
+I am new to buildroot, and have been working for about two weeks
 with it, and everything seems to be working fine so far.
 
 I have a question however: why is syslinux (and grub2 for that
