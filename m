@@ -1,154 +1,219 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:57:54 +0100
-Subject: [Buildroot] [git commit] configs: atmel: unify and update defconfig
-	for Xplained boards
-Message-ID: <20160324220930.78B1D80AC3@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 23:09:04 +0100
+Subject: [Buildroot] [git commit] board/atmel: merge and update documentation
+Message-ID: <20160324220930.9C38D7FC1D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39e541a3ae8b370e9027e4c5a135b220798819f8
+commit: https://git.buildroot.net/buildroot/commit/?id=358013d6999dd1446afb51f3f75ebc5f6009c6f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Unify and update the defconfig files for Atmel Xplained boards:
-- use at91bootstrap as first stage bootloader instead of u-boot spl
-- build all dtb variants
-- bump to linux4sam_5.2
+There were two readme files (one for flashing on NAND and one to create a
+SD card) in different places. Merge them and update the SD card
+generation part since all Xplained boards are supported and the -u
+option of sfdisk is obsolete on latest versions.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+[Thomas: adjust the explanations, move the SD card section after the
+NAND flash section.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- configs/atmel_sama5d3_xplained_defconfig     | 16 ++++++++------
- configs/atmel_sama5d3_xplained_mmc_defconfig | 32 ++++++++++++++--------------
- configs/atmel_sama5d4_xplained_defconfig     | 16 ++++++++------
- 3 files changed, 34 insertions(+), 30 deletions(-)
+ board/atmel/readme.txt          | 84 +++++++++++++++++++++++++++++++++++------
+ board/atmel/xplained/readme.txt | 73 -----------------------------------
+ 2 files changed, 73 insertions(+), 84 deletions(-)
 
-diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-index 665a3d7..197b5ac 100644
---- a/configs/atmel_sama5d3_xplained_defconfig
-+++ b/configs/atmel_sama5d3_xplained_defconfig
-@@ -2,26 +2,28 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
- BR2_TARGET_ROOTFS_UBIFS=y
- BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
- BR2_TARGET_ROOTFS_UBI=y
- BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_nandflash"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
--BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 1a75767..2fb1fa4 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -1,24 +1,24 @@
--# Architecture
- BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index 539ef66..5029e7b 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -1,10 +1,6 @@
+-Flashing the NAND using SAM-BA
+-==============================
 -
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+-This document explains how to flash a basic Buildroot system on various
+-Atmel boards. Additional details can
+-also be found on the Linux4SAM website, in particular here:
+-http://www.at91.com/linux4sam/bin/view/Linux4SAM/GettingStarted
++This document explains how to set up a basic Buildroot system on various
++Atmel boards. Additional details can also be found on the Linux4SAM website:
++http://www.at91.com/linux4sam/bin/view/Linux4SAM/
+ 
+ This guide covers the following configurations:
+  - at91sam9g45m10ek_defconfig
+@@ -14,20 +10,35 @@ This guide covers the following configurations:
+  - atmel_sama5d3xek_defconfig (sama5d31, sama5d33, sama5d34, sama5d35,
+    sama5d36)
+  - atmel_sama5d3_xplained_defconfig
++ - atmel_sama5d3_xplained_mmc_defconfig
+  - atmel_sama5d4ek_defconfig
+  - atmel_sama5d4_xplained_defconfig
++ - atmel_sama5d4_xplained_mmc_defconfig
++ - atmel_sama5d2_xplained_mmc_defconfig
+ 
+ These configurations will use AT91Bootstrap, u-boot and a linux kernel from
+-the git trees maintained by Atmel. They also build u-boot SPL when
+-available, it can replace AT91Bootstrap.
 -
--# Kernel configuration
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.18.8"
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained"
++the git trees maintained by Atmel.
+ 
+ Configuring and building Buildroot
+-----------------------------------
++==================================
++
++For most configurations listed above, the Buildroot configuration
++assumes the system will be flashed on NAND. In this case, after
++building Buildroot, follow the instructions in the "Flashing the NAND
++using SAM-BA" section below.
++
++For the Xplained boards, an alternative Buildroot configuration is
++provided to boot from an SD card. Those configurations are labeled as
++'mmc'. In this case, after building Buildroot, follow the instructions
++in the "Preparting the SD card" sction.
++
++To configure and build Buildroot, run:
+ 
+   make <board>_defconfig
+   make
+ 
++Flashing the NAND using SAM-BA
++==============================
+ 
+ Flashing the board
+ ------------------
+@@ -105,3 +116,54 @@ board/atmel/flasher.sh /tmp/atmel_sama5d3_xplained/ /dev/ttyACM0 sama5d3_xplaine
+ 
+ Reboot, the system should boot up to the buildroot login invite.
+ 
++Preparing the SD card
++=====================
++
++The SD card must be partitioned with at least two partitions: one
++FAT16 partition for the bootloaders, kernel image and Device Tree
++blob, and one ext4 partition for the root filesystem. To partition the
++SD card:
++
++sudo sfdisk /dev/mmcblk0 <<EOF
++,64MiB,6
++;
++EOF
++
++This creates a 64 MB partition for the FAT16 filesystem (type 6) and
++uses the rest for the ext4 filesystem used for the root filesystem.
++
++Then, format both partitions:
++
++sudo mkfs.msdos -n boot /dev/mmcblk0p1
++sudo mkfs.ext4 -L rootfs -O ^huge_file /dev/mmcblk0p2
++
++ Note: the -O ^huge_file option is needed to avoid enabling the huge
++ files features of ext4 (to support files larges than 2 TB), which
++ needs the kernel option CONFIG_LBDAF to be enabled.
++
++Mount both partitions (if not done automatically by your system):
++
++sudo mount /dev/mmcblk0p1 /media/boot
++sudo mount /dev/mmcblk0p2 /media/rootfs
++
++Copy the bootloaders, kernel image and Device Tree blob to the first
++partition:
++
++cp output/images/boot.bin /media/boot/
++cp output/images/u-boot.bin /media/boot/
++cp output/images/zImage /media/boot/
++cp output/images/at91-sama5d2_xplained.dtb /media/boot/
++
++Extract the root filesystem to the second partition:
++
++sudo tar -C /media/rootfs -xf output/images/rootfs.tar
++
++Unmount both partitions:
++
++sudo umount /media/boot
++sudo umount /media/rootfs
++
++Insert your SD card in your Xplained board, and enjoy. The default
++U-Boot environment will properly load the kernel and Device Tree blob
++from the first partition of the SD card, so everything works
++automatically.
+diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
+deleted file mode 100644
+index ba45122..0000000
+--- a/board/atmel/xplained/readme.txt
++++ /dev/null
+@@ -1,73 +0,0 @@
+-Atmel SAMA5D3 Xplained board
+-============================
 -
--# First/second stage bootloader
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_mmc"
--BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2015.01"
--BR2_TARGET_UBOOT_FORMAT_IMG=y
--BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-index 0991f86..7efc119 100644
---- a/configs/atmel_sama5d4_xplained_defconfig
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -3,16 +3,15 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--# Linux headers same as kernel, a 3.18 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
- BR2_TARGET_ROOTFS_UBIFS=y
- BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x3e000
- BR2_TARGET_ROOTFS_UBIFS_MINIOSIZE=0x1000
-@@ -21,11 +20,14 @@ BR2_TARGET_ROOTFS_UBI=y
- BR2_TARGET_ROOTFS_UBI_PEBSIZE=0x40000
- BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
--BR2_TARGET_UBOOT_BOARDNAME="sama5d4_xplained_nandflash"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
--BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
+-This document explains how to set up a basic Buildroot system on the
+-Atmel SAMA5D3 Xplained board, whose main site is
+-http://www.atmel.com/tools/ATSAMA5D3-XPLD.aspx. Additional details can
+-also be found on the http://www.at91.com/linux4sam/bin/view/Linux4SAM/
+-web site.
+-
+-Note that the default Buildroot configuration is prepared to boot from
+-an SD card: the first stage bootloader, second stage bootloader,
+-kernel image and root filesystem are all located on the SD card. Some
+-adjustments in the bootloader configuration will be needed to boot
+-from NAND flash, see board/atmel/readme.txt
+-
+-Configuring and building Buildroot
+-----------------------------------
+-
+-  make atmel_sama5d3_xplained_mmc_defconfig
+-  make
+-
+-Preparing the SD card
+----------------------
+-
+-The SD card must be partitioned with@least two partitions: one
+-FAT16 partition for the bootloaders, kernel image and Device Tree
+-blob, and one ext4 partition for the root filesystem. To partition the
+-SD card:
+-
+-sudo sfdisk -uM /dev/mmcblk0 <<EOF
+-,64,6
+-;
+-EOF
+-
+-This creates a 64 MB partition for the FAT16 filesystem (type 6) and
+-uses the rest for the ext4 filesystem used for the root filesystem.
+-
+-Then, format both partitions:
+-
+-sudo mkfs.msdos -n boot /dev/mmcblk0p1
+-sudo mkfs.ext4 -L rootfs -O ^huge_file /dev/mmcblk0p2
+-
+- Note: the -O ^huge_file option is needed to avoid enabling the huge
+- files features of ext4 (to support files larges than 2 TB), which
+- needs the kernel option CONFIG_LBDAF to be enabled.
+-
+-Mount both partitions (if not done automatically by your system):
+-
+-sudo mount /dev/mmcblk0p1 /media/boot
+-sudo mount /dev/mmcblk0p2 /media/rootfs
+-
+-Copy the bootloaders, kernel image and Device Tree blob to the first
+-partition:
+-
+-cp output/images/u-boot-spl.bin /media/boot/boot.bin
+-cp output/images/u-boot.img /media/boot/u-boot.img
+-cp output/images/zImage /media/boot/zImage
+-cp output/images/at91-sama5d3_xplained.dtb /media/boot/at91-sama5d3_xplained.dtb
+-
+-Extract the root filesystem to the second partition:
+-
+-sudo tar -C /media/rootfs -xf output/images/rootfs.tar
+-
+-Unmount both partitions:
+-
+-sudo umount /media/boot
+-sudo umount /media/rootfs
+-
+-Insert your SD card in your Xplained board, and enjoy. The default
+-U-Boot environment will properly load the kernel and Device Tree blob
+-from the first partition of the SD card, so everything works
+-automatically.
+-
