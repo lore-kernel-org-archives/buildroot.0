@@ -1,44 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:33:08 +0100
-Subject: [Buildroot] [git commit] python-pyopenssl: bump to version 16.0.0
-Message-ID: <20160324213322.7F428819ED@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:32:59 +0100
+Subject: [Buildroot] [git commit] python-cryptography: bump to version 1.3.1
+Message-ID: <20160324213322.64098819ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a7f8da264f894d1f499a9cf26f0b5b8c1221e57
+commit: https://git.buildroot.net/buildroot/commit/?id=fbe3270ac3f0aba50cc31d2f346c21c40a2c3417
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-pyopenssl/python-pyopenssl.hash | 6 +++---
- package/python-pyopenssl/python-pyopenssl.mk   | 2 +-
+ package/python-cryptography/python-cryptography.hash | 6 +++---
+ package/python-cryptography/python-cryptography.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index 0c6e25a..27427d2 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f447644afcbd5f0a1f47350fec63a4c6, sha256 locally computed
--md5     f447644afcbd5f0a1f47350fec63a4c6  pyOpenSSL-0.15.1.tar.gz
--sha256  f0a26070d6db0881de8bcc7846934b7c3c930d8f9c79d45883ee48984bc0d672  pyOpenSSL-0.15.1.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9587d813dcf656e9f2760e41a3682dc3, sha256 locally computed
-+md5     9587d813dcf656e9f2760e41a3682dc3  pyOpenSSL-16.0.0.tar.gz
-+sha256  363d10ee43d062285facf4e465f4f5163f9f702f9134f0a5896f134cbb92d17d  pyOpenSSL-16.0.0.tar.gz
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index 239fd98..7606411 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index e48e2e2..fa15fa0 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,4 +1,4 @@
+-# From https://pypi.python.org/pypi?:action=show_md5&digest=5474d2b3e8c7555a60852e48d2743f85
+-md5     5474d2b3e8c7555a60852e48d2743f85  cryptography-1.2.3.tar.gz
++# From https://pypi.python.org/pypi?:action=show_md5&digest=bc8148d2ff2d80fef8ef2d2e856b3a7f
++md5     bc8148d2ff2d80fef8ef2d2e856b3a7f  cryptography-1.3.1.tar.gz
+ # Calculated based on the hash above
+-sha256  8eb11c77dd8e73f48df6b2f7a7e16173fe0fe8fdfe266232832e88477e08454e  cryptography-1.2.3.tar.gz
++sha256  b4b36175e0f95ddc88435c26dbe3397edce48e2ff5fe41d504cdb3beddcd53e2  cryptography-1.3.1.tar.gz
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 1f91422..1b5eb9c 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYOPENSSL_VERSION = 0.15.1
-+PYTHON_PYOPENSSL_VERSION = 16.0.0
- PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
- PYTHON_PYOPENSSL_SITE = https://pypi.python.org/packages/source/p/pyOpenSSL
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+-PYTHON_CRYPTOGRAPHY_VERSION = 1.2.3
++PYTHON_CRYPTOGRAPHY_VERSION = 1.3.1
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+ PYTHON_CRYPTOGRAPHY_SITE = https://pypi.python.org/packages/source/c/cryptography
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
