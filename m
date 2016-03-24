@@ -1,41 +1,37 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 24 Mar 2016 11:03:29 +0100
-Subject: [Buildroot] [PATCH 4/4] board/atmel/xplained/readme.txt: update
- documentation
-In-Reply-To: <20160324105236.374afb3b@free-electrons.com>
-References: <1458808152-15778-1-git-send-email-ludovic.desroches@atmel.com>
- <1458808152-15778-4-git-send-email-ludovic.desroches@atmel.com>
- <20160324094436.128dbd74@free-electrons.com>
- <20160324094006.GF12245@odux.rfo.atmel.com>
- <20160324105236.374afb3b@free-electrons.com>
-Message-ID: <20160324100329.GG12245@odux.rfo.atmel.com>
+From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
+Date: Thu, 24 Mar 2016 11:39:41 +0100
+Subject: [Buildroot] syslinux using host compiler.
+Message-ID: <20160324103941.GM22286@hermes.click-hack.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 24, 2016 at 10:52:36AM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 24 Mar 2016 10:40:06 +0100, Ludovic Desroches wrote:
-> 
-> > > Another possible (but future, and unrelated) improvement is to use
-> > > genimage to generate a ready-to-use SD card image, which automatically
-> > > contains the VFAT and ext4 partitions.
-> > 
-> > We have some scripts which do this but at the moment I am not sure they
-> > can handle all possible errors. For sure, it will be great if we can
-> > achieve it in the future.
-> 
-> There's no real need for a script, genimage does most of the work. Look
-> at board/acmesystems/arietta-g25/genimage.cfg and
-> board/acmesystems/arietta-g25/post-image.sh, which are doing this for
-> an Atmel based platform.
-> 
+Hi,
 
-Interesting, thank for the tip.
+I am new to buildroot, and have been working for a couple of weeks
+with it, and everything seems to be working fine so far.
 
-Regards
+I have a question however: why is syslinux (and grub2 for that
+matter, I guess) built with the host toolchain? I can understand
+that some tools (such as isohybrid) need to be executed on the host,
+but the final binaries are for the target. So, does not that call
+for having a separate host-syslinux and syslinux packages like other
+packages do? 
 
-Ludovic
+The current setup only works if the host is x86.
+
+I am using an x86_64 toolchain generated with ct-ng, did not enable
+multilib, and syslinux seems to have no problem compiling with that
+toolchain, which seems normal, since the boot code should not be
+using the libc anyway.
+
+So, what am I missing?
+
+Thanks in advance.
+Regards.
+
+-- 
+					    Gilles.
+https://click-hack.org
