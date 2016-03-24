@@ -1,95 +1,148 @@
-From: Gilles Chanteperdrix <gilles.chanteperdrix@xenomai.org>
-Date: Thu, 24 Mar 2016 14:08:56 +0100
-Subject: [Buildroot] syslinux using host compiler.
-In-Reply-To: <20160324135053.0d3b6b49@free-electrons.com>
-References: <20160324103941.GM22286@hermes.click-hack.org>
- <20160324135053.0d3b6b49@free-electrons.com>
-Message-ID: <20160324130856.GQ22286@hermes.click-hack.org>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Thu, 24 Mar 2016 13:13:49 +0000
+Subject: [Buildroot] Fail to build host-gcc-final-4.9.3 with GLIBC / CPP
+	support
+Message-ID: <9cb4c66e-af90-4f58-a832-7a43c7a50248@MAIL-SINTERS-01.sinters-int.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Mar 24, 2016 at 01:50:53PM +0100, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 24 Mar 2016 11:39:41 +0100, Gilles Chanteperdrix wrote:
-> 
-> > I am new to buildroot, and have been working for a couple of weeks
-> > with it, and everything seems to be working fine so far.
-> 
-> Great :-) Glad to see you on this mailing list!
-> 
-> > I have a question however: why is syslinux (and grub2 for that
-> > matter, I guess) built with the host toolchain?
-> 
-> For grub2, it is actually using the target compiler, see the comment in
-> grub2.mk:
+Hello,
 
-Ok, I thought I saw grub selected BR2_HOSTARCH_NEEDS_IA32_COMPILER
-too, must I have misread.
+host-gcc-final fail to build with the following defconfig:
+   BR2_arm=y
+   BR2_cortex_a9=y
+   BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+   BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
-> 
-> # Grub2 is kind of special: it considers CC, LD and so on to be the
-> # tools to build the native tools (i.e to be executed on the build
-> # machine), and uses TARGET_CC, TARGET_CFLAGS, TARGET_CPPFLAGS,
-> # TARGET_LDFLAGS to build the bootloader itself. However, to add to
-> # the confusion, it also uses NM, OBJCOPY and STRIP to build the
-> # bootloader itself; none of these are used to build the native
-> # tools.
-> 
-> > I can understand that some tools (such as isohybrid) need to be
-> > executed on the host, but the final binaries are for the target. So,
-> > does not that call for having a separate host-syslinux and syslinux
-> > packages like other packages do? 
-> 
-> We used to have a host-syslinux package, but it was removed in commit
-> ac7f60d87266c30753cb45b820dc48ec834941c6 as it was no longer needed.
-> 
-> > The current setup only works if the host is x86.
-> 
-> No, because syslinux selects BR2_HOSTARCH_NEEDS_IA32_COMPILER, which
-> ensures you have a working x86 32-bits compiler on your host machine. If
-> you don't, then Buildroot will not even start the build.
+git bisect point the following commit:
+   f67a4f50e2ace3a2c83ac707807ec00a1a4a39b6 is the first bad commit
+   commit f67a4f50e2ace3a2c83ac707807ec00a1a4a39b6
+   Author: Max Filippov <jcmvbkbc@gmail.com>
+   Date:   Sun Mar 13 06:45:16 2016 +0300
 
-I meant you can not build syslinux if your host is arm for instance,
-and you have an arm/x86 cross-compilation toolchain.
+     gcc: preserve CXXFLAGS_FOR_TARGET
 
-> 
-> The reason why we're using the host compiler rather than the target
-> compiler is because syslinux must be built as 32-bits x86 code, even if
-> your target system is x86_64.
+     gcc-4.7.x, gcc-4.8.x and gcc-4.9.x don't propagate 
+CXXFLAGS_FOR_TARGET to
+     CXXFLAGS for libstdc++ build. As a result libstdc++ is built without
+     TARGET_CFLAGS and may fail to link with applications using it, see e.g.
 
-Yes, but AFAIK, gcc for x86_64 always supports the -m32 switch. To
-build 32 bits host binaries, you need a multilib installation with a
-32 bits glibc, but a bootloader should not use anything in the glibc.
+ 
+http://autobuild.buildroot.net/results/81a3bca5cbcf789c7ce1aa221a6a4154dd7c3917/
 
-> 
-> > I am using an x86_64 toolchain generated with ct-ng, did not enable
-> > multilib, and syslinux seems to have no problem compiling with that
-> > toolchain, which seems normal, since the boot code should not be
-> > using the libc anyway.
-> 
-> Are you sure you're using this target compiler to build syslinux, and
-> not your host compiler? Back in 2014, when commit
-> 09e7b4c89159a3e48f463b0a22e649c4fc12f4b3 was done, it wouldn't build
-> with a x86-64 only compiler.
+     Instead of passing TARGET_ABI or TARGET_CFLAGS for libstdc++ in
+     --enable-cxx-flags parameter backport the patch that fixes propagation
+     of CXXFLAGS_FOR_TARGET to CXXFLAGS.
 
-Yes, I am sure of it. The only "trick" I had to apply was to force
-LD="$(TARGET_LD) -m elf_i386". Now buildroot complains later because
-isohybrid in the host directory is not compiled with the proper
-rpath, but I guess it means we need host-syslinux.
+     This issue is fixed in gcc-5.x
 
-> 
-> If that actually works, then patches are welcome. But in this case, we
-> will indeed probably need separate host-syslinux and syslinux packages,
-> as you suggested.
+     Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+     Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+     Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Yes. Ok, will work on the patch.
+build error is:
+...
+libtool: compile: 
+/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/./gcc/xg++ 
+-B/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/./gcc/ 
+-nostdinc++ -nostdinc++ 
+-I/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/arm-buildroot-linux-gnueabi/libstdc++-v3/include/arm-buildroot-linux-gnueabi 
+-I/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/arm-buildroot-linux-gnueabi/libstdc++-v3/include 
+-I/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/libstdc++-v3/libsupc++ 
+-I/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/libstdc++-v3/include/backward 
+-I/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/libstdc++-v3/testsuite/util 
+-L/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/arm-buildroot-linux-gnueabi/libstdc++-v3/src 
+-L/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/arm-buildroot-linux-gnueabi/libstdc++-v3/src/.libs 
+-L/tmp/buildroot-bisect-sanitizer/output/build/host-gcc-final-4.9.3/build/arm-buildroot-linux-gnueabi/libstdc++-v3/libsupc++/.libs 
+-B/tmp/buildroot-bisect-sanitizer/output/host/usr/arm-buildroot-linux-gnueabi/bin/ 
+-B/tmp/buildroot-bisect-sanitizer/output/host/usr/arm-buildroot-linux-gnueabi/lib/ 
+-isystem 
+/tmp/buildroot-bisect-sanitizer/output/host/usr/arm-buildroot-linux-gnueabi/include 
+-isystem 
+/tmp/buildroot-bisect-sanitizer/output/host/usr/arm-buildroot-linux-gnueabi/sys-include 
+-DHAVE_CONFIG_H -I. -I../../../libitm -I../../../libitm/config/linux/arm 
+-I../../../libitm/config/linux -I../../../libitm/config/arm 
+-I../../../libitm/config/posix -I../../../libitm/config/generic 
+-I../../../libitm -ftls-model=initial-exec -Wall -pthread -Werror 
+-std=gnu++0x -funwind-tables -fno-exceptions -fno-rtti -fabi-version=4 
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os 
+-D_GNU_SOURCE -MT futex.lo -MD -MP -MF .deps/futex.Tpo -c 
+../../../libitm/config/linux/futex.cc -o futex.o >/dev/null 2>&1
+In file included from 
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:17:0:
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:257:72: 
+error: size of array ?assertion_failed__837? is negative
+      typedef char IMPL_PASTE(assertion_failed_##_, line)[2*(int)(pred)-1]
+                                                                         ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:251:30: 
+note: in expansion of macro ?IMPL_COMPILER_ASSERT?
+  #define COMPILER_CHECK(pred) IMPL_COMPILER_ASSERT(pred, __LINE__)
+                               ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h:1062:3: 
+note: in expansion of macro ?COMPILER_CHECK?
+    COMPILER_CHECK(sizeof(((__sanitizer_##CLASS *) NULL)->MEMBER) == \
+    ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:837:1: 
+note: in expansion of macro ?CHECK_SIZE_AND_OFFSET?
+  CHECK_SIZE_AND_OFFSET(dirent, d_ino);
+  ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:257:72: 
+error: size of array ?assertion_failed__841? is negative
+      typedef char IMPL_PASTE(assertion_failed_##_, line)[2*(int)(pred)-1]
+                                                                         ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:251:30: 
+note: in expansion of macro ?IMPL_COMPILER_ASSERT?
+  #define COMPILER_CHECK(pred) IMPL_COMPILER_ASSERT(pred, __LINE__)
+                               ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h:1062:3: 
+note: in expansion of macro ?COMPILER_CHECK?
+    COMPILER_CHECK(sizeof(((__sanitizer_##CLASS *) NULL)->MEMBER) == \
+    ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:841:1: 
+note: in expansion of macro ?CHECK_SIZE_AND_OFFSET?
+  CHECK_SIZE_AND_OFFSET(dirent, d_off);
+  ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:257:72: 
+error: size of array ?assertion_failed__841? is negative
+      typedef char IMPL_PASTE(assertion_failed_##_, line)[2*(int)(pred)-1]
+                                                                         ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:251:30: 
+note: in expansion of macro ?IMPL_COMPILER_ASSERT?
+  #define COMPILER_CHECK(pred) IMPL_COMPILER_ASSERT(pred, __LINE__)
+                               ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h:1064:3: 
+note: in expansion of macro ?COMPILER_CHECK?
+    COMPILER_CHECK(offsetof(__sanitizer_##CLASS, MEMBER) ==          \
+    ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:841:1: 
+note: in expansion of macro ?CHECK_SIZE_AND_OFFSET?
+  CHECK_SIZE_AND_OFFSET(dirent, d_off);
+  ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:257:72: 
+error: size of array ?assertion_failed__843? is negative
+      typedef char IMPL_PASTE(assertion_failed_##_, line)[2*(int)(pred)-1]
+                                                                         ^
+../../../../libsanitizer/sanitizer_common/sanitizer_internal_defs.h:251:30: 
+note: in expansion of macro ?IMPL_COMPILER_ASSERT?
+  #define COMPILER_CHECK(pred) IMPL_COMPILER_ASSERT(pred, __LINE__)
+                               ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.h:1064:3: 
+note: in expansion of macro ?COMPILER_CHECK?
+    COMPILER_CHECK(offsetof(__sanitizer_##CLASS, MEMBER) ==          \
+    ^
+../../../../libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:843:1: 
+note: in expansion of macro ?CHECK_SIZE_AND_OFFSET?
+  CHECK_SIZE_AND_OFFSET(dirent, d_reclen);
+  ^
+Makefile:416: recipe for target 'sanitizer_platform_limits_posix.lo' failed
+...
 
-Regards.
+Do you have any hint?
 
--- 
-					    Gilles.
-https://click-hack.org
+Regards,
+
+Julien Corjon
