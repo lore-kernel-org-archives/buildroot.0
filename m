@@ -1,78 +1,73 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Thu, 24 Mar 2016 09:29:12 +0100
-Subject: [Buildroot] [PATCH 4/4] board/atmel/xplained/readme.txt: update
-	documentation
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 24 Mar 2016 09:40:06 +0100
+Subject: [Buildroot] [PATCH 1/4] configs: atmel: unify and update
+ defconfig for Xplained boards
 In-Reply-To: <1458808152-15778-1-git-send-email-ludovic.desroches@atmel.com>
 References: <1458808152-15778-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1458808152-15778-4-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20160324094006.172567ac@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This documentation is not only dedicated to SAMA5D3 Xplained boards. The
-procedure is the same for SAMA5D4 and SAMA5D2.
-sfdisk, -u (--unit) option is obsolete on latest versions.
+Hello,
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- board/atmel/xplained/readme.txt | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+I'm adding in Cc: Alexandre Belloni, who has worked on Atmel defconfigs
+in the past.
 
-diff --git a/board/atmel/xplained/readme.txt b/board/atmel/xplained/readme.txt
-index ba45122..4833e72 100644
---- a/board/atmel/xplained/readme.txt
-+++ b/board/atmel/xplained/readme.txt
-@@ -1,9 +1,8 @@
--Atmel SAMA5D3 Xplained board
--============================
-+Atmel SAMA5Dx Xplained boards
-+=============================
- 
- This document explains how to set up a basic Buildroot system on the
--Atmel SAMA5D3 Xplained board, whose main site is
--http://www.atmel.com/tools/ATSAMA5D3-XPLD.aspx. Additional details can
-+Atmel SAMA5D2/SAMA5D3/SAMA5D4 Xplained boards. Additional details can
- also be found on the http://www.at91.com/linux4sam/bin/view/Linux4SAM/
- web site.
- 
-@@ -16,7 +15,9 @@ from NAND flash, see board/atmel/readme.txt
- Configuring and building Buildroot
- ----------------------------------
- 
--  make atmel_sama5d3_xplained_mmc_defconfig
-+Use the alternative mmc defconfig for you board. For instance:
-+
-+  make atmel_sama5d2_xplained_mmc_defconfig
-   make
- 
- Preparing the SD card
-@@ -27,8 +28,8 @@ FAT16 partition for the bootloaders, kernel image and Device Tree
- blob, and one ext4 partition for the root filesystem. To partition the
- SD card:
- 
--sudo sfdisk -uM /dev/mmcblk0 <<EOF
--,64,6
-+sudo sfdisk /dev/mmcblk0 <<EOF
-+,64MiB,6
- ;
- EOF
- 
-@@ -52,10 +53,10 @@ sudo mount /dev/mmcblk0p2 /media/rootfs
- Copy the bootloaders, kernel image and Device Tree blob to the first
- partition:
- 
--cp output/images/u-boot-spl.bin /media/boot/boot.bin
--cp output/images/u-boot.img /media/boot/u-boot.img
--cp output/images/zImage /media/boot/zImage
--cp output/images/at91-sama5d3_xplained.dtb /media/boot/at91-sama5d3_xplained.dtb
-+cp output/images/boot.bin /media/boot/
-+cp output/images/u-boot.bin /media/boot/
-+cp output/images/zImage /media/boot/
-+cp output/images/at91-sama5d2_xplained.dtb /media/boot/
- 
- Extract the root filesystem to the second partition:
- 
+> - use bootstrap as first stage bootloader
+
+As opposed to? Did you mean at91bootstrap3 rather than "bootstrap"?
+
+On Thu, 24 Mar 2016 09:29:09 +0100, Ludovic Desroches wrote:
+
+> diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
+> index 665a3d7..16e4521 100644
+> --- a/configs/atmel_sama5d3_xplained_defconfig
+> +++ b/configs/atmel_sama5d3_xplained_defconfig
+> @@ -2,26 +2,28 @@ BR2_arm=y
+>  BR2_cortex_a5=y
+>  BR2_ARM_ENABLE_VFP=y
+>  BR2_ARM_INSTRUCTIONS_THUMB2=y
+> -# Linux headers same as kernel, a 3.18 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_GIT=y
+>  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+> -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="03329ca4cf6b94acc5c65b59b2d1f90fdeee0887"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux-4.1-at91"
+
+This is not good. linux-4.1-at91 is a branch name, which means that the
+actual source behind this branch name will change over time, making
+this defconfig non-reproducible. You must stick to a tag or a commit id.
+
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="at91bootstrap-3.x"
+
+Same comment as for the kernel.
+
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
+>  BR2_TARGET_UBOOT=y
+> -BR2_TARGET_UBOOT_BOARDNAME="sama5d3_xplained_nandflash"
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_GIT=y
+>  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+> -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="677f3c2340b72131beebace8e96cac17b9569887"
+> -BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="u-boot-2015.01-at91"
+
+Same comment.
+
+(and ditto for the other defconfigs)
+
+Thanks!
+
+Thomas
 -- 
-2.5.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
