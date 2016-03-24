@@ -1,77 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:54:43 +0100
-Subject: [Buildroot] [git commit] libgtk3: bump to version 3.20.0
-Message-ID: <20160324215447.DA52180489@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:55:57 +0100
+Subject: [Buildroot] [git commit] gcc: fix libsanitizer build with
+	_FILE_OFFSET_BITS=64
+Message-ID: <20160324215601.8EFCE819BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd758336a1d360a159a8245adf46c1a6768755de
+commit: https://git.buildroot.net/buildroot/commit/?id=c917e11f05716cceadec3087295dfe0f6f206488
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+After the commit f67a4f50e2ace3a2 "gcc: preserve CXXFLAGS_FOR_TARGET"
+target CFLAGS are passed to all libraries bundled with gcc. This breaks
+libsanitizer on gcc-4.9.x when building with _FILE_OFFSET_BITS=64:
+
+  error: size of array ???assertion_failed__837??? is negative
+  ...
+  libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc:837:1:
+  note: in expansion of macro ???CHECK_SIZE_AND_OFFSET???
+  CHECK_SIZE_AND_OFFSET(dirent, d_ino);
+
+This issue is fixed in the libsanitizer mainline and in gcc-5.x.
+There's no issue with gcc-4.8.x and earlier.
+
+Reported-by: Julien CORJON <corjon.j@ecagroup.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Backported from: https://llvm.org/svn/llvm-project/compiler-rt/trunk at 220328
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk3/Config.in    |  1 +
- package/libgtk3/libgtk3.hash |  4 ++--
- package/libgtk3/libgtk3.mk   | 10 +++++++---
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ ...tizer-Fix-build-with-_FILE_OFFSET_BITS-64.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index cf35f84..77ea394 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -66,6 +66,7 @@ config BR2_PACKAGE_LIBGTK3_WAYLAND
- 	default y
- 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_LIBXKBCOMMON
- 	help
- 	  This enables the Wayland backend for GDK.
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 69118eb..957f0af 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.18/gtk+-3.18.9.sha256sum
--sha256	783d7f8b00f9b4224cc94d7da885a67598e711c2d6d79c9c873c6b203e83acbd	gtk+-3.18.9.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.0.sha256sum
-+sha256	1c3d3a4a6e959ec8636ccb074bcdb8fa25c81ec56fbc70de6a3f5ef83ba6d803	gtk+-3.20.0.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 8211233..596f236 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGTK3_VERSION_MAJOR = 3.18
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).9
-+LIBGTK3_VERSION_MAJOR = 3.20
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).0
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
-@@ -24,6 +24,10 @@ LIBGTK3_CONF_OPTS = \
- 	--enable-gtk2-dependency \
- 	--disable-introspection
- 
-+# Override pkg-config pkgdatadir variable, it needs the prefix
-+LIBGTK3_MAKE_OPTS = \
-+	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+diff --git a/package/gcc/4.9.3/140-sanitizer-Fix-build-with-_FILE_OFFSET_BITS-64.patch b/package/gcc/4.9.3/140-sanitizer-Fix-build-with-_FILE_OFFSET_BITS-64.patch
+new file mode 100644
+index 0000000..55f3228
+--- /dev/null
++++ b/package/gcc/4.9.3/140-sanitizer-Fix-build-with-_FILE_OFFSET_BITS-64.patch
+@@ -0,0 +1,37 @@
++From 3c536954a67a883630f4a7513a27f02a892c3dcb Mon Sep 17 00:00:00 2001
++From: Evgeniy Stepanov <eugeni.stepanov@gmail.com>
++Date: Tue, 21 Oct 2014 21:08:13 +0000
++Subject: [PATCH] [sanitizer] Fix build with _FILE_OFFSET_BITS=64.
 +
- LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
-@@ -38,7 +42,7 @@ LIBGTK3_CONF_OPTS += --disable-x11-backend
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
--LIBGTK3_DEPENDENCIES += wayland libxkbcommon
-+LIBGTK3_DEPENDENCIES += wayland wayland-protocols libxkbcommon
- LIBGTK3_CONF_OPTS += --enable-wayland-backend
- else
- LIBGTK3_CONF_OPTS += --disable-wayland-backend
++Sanitizer source is not affected by _FILE_OFFSET_BITS in general,
++but this one file must be built with 32-bit off_t. More details in the code.
++
++git-svn-id: https://llvm.org/svn/llvm-project/compiler-rt/trunk at 220328 91177308-0d34-0410-b5e6-96231b3b80d8
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ lib/sanitizer_common/sanitizer_platform_limits_posix.cc | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
++index bbc1108..fc09522 100644
++--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
+++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
++@@ -13,7 +13,15 @@
++ 
++ #include "sanitizer_platform.h"
++ #if SANITIZER_LINUX || SANITIZER_MAC
+++// Tests in this file assume that off_t-dependent data structures match the
+++// libc ABI. For example, struct dirent here is what readdir() function (as
+++// exported from libc) returns, and not the user-facing "dirent", which
+++// depends on _FILE_OFFSET_BITS setting.
+++// To get this "true" dirent definition, we undefine _FILE_OFFSET_BITS below.
+++#ifdef _FILE_OFFSET_BITS
+++#undef _FILE_OFFSET_BITS
+++#endif
++ 
++ #include "sanitizer_internal_defs.h"
++ #include "sanitizer_platform_limits_posix.h"
++ 
++-- 
++2.1.4
++
