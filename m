@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:52:07 +0100
-Subject: [Buildroot] [PATCH] libsoup: bump to version 2.54.0.1
-In-Reply-To: <1458769520-15512-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1458769520-15512-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160324225207.646306aa@free-electrons.com>
+Date: Thu, 24 Mar 2016 22:52:09 +0100
+Subject: [Buildroot] [PATCH] icu: bump to version 57.1
+In-Reply-To: <1458770031-12475-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458770031-12475-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160324225209.49721579@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 23 Mar 2016 18:45:20 -0300, Gustavo Zacarias wrote:
+On Wed, 23 Mar 2016 18:53:51 -0300, Gustavo Zacarias wrote:
+> 0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch is
+> upstream so drop it.
+> 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/libsoup/libsoup.hash | 4 ++--
->  package/libsoup/libsoup.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...llocating-memory-for-pkgDataFlags.-compil.patch | 34 ----------------------
+>  package/icu/icu.hash                               |  6 ++--
+>  package/icu/icu.mk                                 |  2 +-
+>  3 files changed, 4 insertions(+), 38 deletions(-)
+>  delete mode 100644 package/icu/0006-fix-Error-allocating-memory-for-pkgDataFlags.-compil.patch
 
 Applied to master, thanks.
 
