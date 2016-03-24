@@ -1,42 +1,60 @@
-From: Alexandre Belloni <alexandre.belloni@free-electrons.com>
-Date: Thu, 24 Mar 2016 10:01:24 +0100
-Subject: [Buildroot] [PATCH 1/4] configs: atmel: unify and update
- defconfig for Xplained boards
-In-Reply-To: <20160324085406.GE12245@odux.rfo.atmel.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Thu, 24 Mar 2016 10:40:06 +0100
+Subject: [Buildroot] [PATCH 4/4] board/atmel/xplained/readme.txt: update
+ documentation
+In-Reply-To: <20160324094436.128dbd74@free-electrons.com>
 References: <1458808152-15778-1-git-send-email-ludovic.desroches@atmel.com>
- <20160324094006.172567ac@free-electrons.com>
- <20160324084344.GD12245@odux.rfo.atmel.com>
- <20160324094655.007db654@free-electrons.com>
- <20160324085406.GE12245@odux.rfo.atmel.com>
-Message-ID: <20160324090124.GH2570@piout.net>
+ <1458808152-15778-4-git-send-email-ludovic.desroches@atmel.com>
+ <20160324094436.128dbd74@free-electrons.com>
+Message-ID: <20160324094006.GF12245@odux.rfo.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/03/2016 at 09:54:06 +0100, Ludovic Desroches wrote :
-> > > > > - use bootstrap as first stage bootloader
-> > > > 
-> > > > As opposed to? Did you mean at91bootstrap3 rather than "bootstrap"?
-> > > 
-> > > As opposed to u-boot spl which is less tested than at91bootstrap3.
-> > 
-> > OK. I think Alex has a somewhat different opinion on the matter, but I
-> > guess that if the vendor recommends to use at91bootstrap3, we should
-> > use this solution in our defconfig.
-> > 
+Hi,
+
+On Thu, Mar 24, 2016 at 09:44:36AM +0100, Thomas Petazzoni wrote:
+> Hello,
 > 
-> I know he doesn't share the same opinion. At the moment u-boot spl is not
-> working on SAMA5D2. Moreover, latest enhancements for at91bootstrap are
-> probably not ported to u-boot spl.
+> On Thu, 24 Mar 2016 09:29:12 +0100, Ludovic Desroches wrote:
+> > This documentation is not only dedicated to SAMA5D3 Xplained boards. The
+> > procedure is the same for SAMA5D4 and SAMA5D2.
+> > sfdisk, -u (--unit) option is obsolete on latest versions.
+> > 
+> > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> > ---
+> >  board/atmel/xplained/readme.txt | 23 ++++++++++++-----------
+> >  1 file changed, 12 insertions(+), 11 deletions(-)
+> 
+> There is some duplication of information between board/atmel/readme.txt
+> (which also covers SAMA5 Xplained platforms) and
+> board/atmel/xplained/readme.txt.
 > 
 
-Still, the configs I submitted were using at91bootstrap ;) The one using
-u-boot spl was initially from Ryan Barnett.
+I agree.
 
+> Perhaps board/atmel/xplained/readme.txt should be removed entirely, and
+> board/atmel/readme.txt contain all the information?
+> 
+> Seems like board/atmel/readme.txt covers how to flash on NAND, while
+> board/atmel/xplained/readme.txt covers how to use a SD card based
+> booting. Definitely not very clear when looking at the readme.txt
+> location.
+> 
 
--- 
-Alexandre Belloni, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+I will try to do a quick merge.
+
+> Another possible (but future, and unrelated) improvement is to use
+> genimage to generate a ready-to-use SD card image, which automatically
+> contains the VFAT and ext4 partitions.
+> 
+
+We have some scripts which do this but at the moment I am not sure they
+can handle all possible errors. For sure, it will be great if we can
+achieve it in the future.
+
+Regards
+
+Ludovic
