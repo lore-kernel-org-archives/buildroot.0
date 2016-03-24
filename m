@@ -1,44 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:54:07 +0100
-Subject: [Buildroot] [git commit] pango: bump to version 1.40.0
-Message-ID: <20160324215416.D39C680789@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:54:43 +0100
+Subject: [Buildroot] [git commit] libgtk3: bump to version 3.20.0
+Message-ID: <20160324215447.DA52180489@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f3100f80616b71bea5143ed6645a049b921cac9
+commit: https://git.buildroot.net/buildroot/commit/?id=bd758336a1d360a159a8245adf46c1a6768755de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libgtk3/Config.in    |  1 +
+ package/libgtk3/libgtk3.hash |  4 ++--
+ package/libgtk3/libgtk3.mk   | 10 +++++++---
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 792ac05..132e458 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index cf35f84..77ea394 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -66,6 +66,7 @@ config BR2_PACKAGE_LIBGTK3_WAYLAND
+ 	default y
+ 	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+ 	select BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+ 	help
+ 	  This enables the Wayland backend for GDK.
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 69118eb..957f0af 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.38.1.sha256sum
--sha256	1320569f6c6d75d6b66172b2d28e59c56ee864ee9df202b76799c4506a214eb7	pango-1.38.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.0.sha256sum
-+sha256	da17985df314cb07d066ab5424f59c21ce973ece05b7de4df04d798ec8511c8b	pango-1.40.0.tar.xz
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index a6b1a60..a3639dc 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.18/gtk+-3.18.9.sha256sum
+-sha256	783d7f8b00f9b4224cc94d7da885a67598e711c2d6d79c9c873c6b203e83acbd	gtk+-3.18.9.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.0.sha256sum
++sha256	1c3d3a4a6e959ec8636ccb074bcdb8fa25c81ec56fbc70de6a3f5ef83ba6d803	gtk+-3.20.0.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 8211233..596f236 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PANGO_VERSION_MAJOR = 1.38
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
-+PANGO_VERSION_MAJOR = 1.40
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+-LIBGTK3_VERSION_MAJOR = 3.18
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).9
++LIBGTK3_VERSION_MAJOR = 3.20
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).0
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
+@@ -24,6 +24,10 @@ LIBGTK3_CONF_OPTS = \
+ 	--enable-gtk2-dependency \
+ 	--disable-introspection
+ 
++# Override pkg-config pkgdatadir variable, it needs the prefix
++LIBGTK3_MAKE_OPTS = \
++	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
++
+ LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+@@ -38,7 +42,7 @@ LIBGTK3_CONF_OPTS += --disable-x11-backend
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_WAYLAND),y)
+-LIBGTK3_DEPENDENCIES += wayland libxkbcommon
++LIBGTK3_DEPENDENCIES += wayland wayland-protocols libxkbcommon
+ LIBGTK3_CONF_OPTS += --enable-wayland-backend
+ else
+ LIBGTK3_CONF_OPTS += --disable-wayland-backend
