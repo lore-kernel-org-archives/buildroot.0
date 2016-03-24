@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 24 Mar 2016 22:32:31 +0100
-Subject: [Buildroot] [git commit] nmap: bump to version 7.11
-Message-ID: <20160324213322.4A4DC819ED@busybox.osuosl.org>
+Date: Thu, 24 Mar 2016 22:32:48 +0100
+Subject: [Buildroot] [git commit] python-idna: bump to version 2.1
+Message-ID: <20160324213322.572D0819ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3bbd97126bb5aa47f43c80cc723e8cda1e833d4
+commit: https://git.buildroot.net/buildroot/commit/?id=3caa0d0e31607f7fe94462b8dcfc344f88998d92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nmap/nmap.hash | 4 ++--
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-idna/python-idna.hash | 6 +++---
+ package/python-idna/python-idna.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index ac086ce..dde6dab 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
-@@ -1,2 +1,2 @@
--# From https://nmap.org/dist/sigs/nmap-7.10.tar.bz2.digest.txt
--sha256	58cf8896d09057d1c3533f430c06b22791d0227ebbb93dede2ccb73693ed4b4b	nmap-7.10.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.11.tar.bz2.digest.txt
-+sha256	13fa971555dec00e495a5b72c1f9efa1363b8e6c7388a2f05117cb0778c0954a	nmap-7.11.tar.bz2
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 9a25fca..1829104 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 10e3e9d..4e4c677 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=bd17a9d15e755375f48a62c13b25b801, sha256 locally computed
+-md5     bd17a9d15e755375f48a62c13b25b801  idna-2.0.tar.gz
+-sha256  16199aad938b290f5be1057c0e1efc6546229391c23cea61ca940c115f7d3d3b  idna-2.0.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=f6473caa9c5e0cc1ad3fd5d04c3c114b, sha256 locally computed
++md5     f6473caa9c5e0cc1ad3fd5d04c3c114b  idna-2.1.tar.gz
++sha256  ed36f281aebf3cd0797f163bb165d84c31507cedd15928b095b1675e2d04c676  idna-2.1.tar.gz
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index 7dd1253..3f9f109 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NMAP_VERSION = 7.10
-+NMAP_VERSION = 7.11
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+-PYTHON_IDNA_VERSION = 2.0
++PYTHON_IDNA_VERSION = 2.1
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+ PYTHON_IDNA_SITE = https://pypi.python.org/packages/source/i/idna
+ PYTHON_IDNA_LICENSE =  BSD-3c
