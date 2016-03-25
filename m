@@ -1,43 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Mar 2016 23:00:09 +0100
-Subject: [Buildroot] [git commit] mpg123: bump to version 1.23.3
-Message-ID: <20160325220233.CFD0C818DF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 25 Mar 2016 23:05:11 +0100
+Subject: [Buildroot] [PATCH] owfs: add sysv init scripts
+In-Reply-To: <87k2kqffxr.fsf@dell.be.48ers.dk>
+References: <1458936050-10660-1-git-send-email-arnout@mind.be>
+ <87k2kqffxr.fsf@dell.be.48ers.dk>
+Message-ID: <56F5B617.4080605@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61c433b32102de25a88a896ef6ba74b07bb05b6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/25/16 21:41, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>
+>   > owserver is started unconditionally, but it needs the device(s) to
+>   > be specified at startup. Therefore a check for non-empty OWSERVER_ARGS
+>   > is added to the owserver start script.
+>
+>   > owfs is started only if is built. It will connect to the owserver.
+>   > It will try to load the fuse module; if fuse is built-in or already
+>   > loaded, modprobe -q will fail silently.
+>
+>   > Users who want a setup without owserver need to remove the owserver
+>   > init script post-build and need to give appropriate defaults to owfs.
+>
+>   > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> Looks good, except:
+>
+>> diff --git a/package/owfs/S30owfs b/package/owfs/S30owfs
+>   > new file mode 100755
+>   > index 0000000..552eb75
+>   > --- /dev/null
+>   > +++ b/package/owfs/S30owfs
+>   > @@ -0,0 +1,32 @@
+>   > +NAME="owfs"
+>   > +DAEMON="/usr/bin/${NAME}"
+>   > +PID_F="/run/${NAME}.pid"
+>   > +MOUNTPOINT="/dev/1wire"
+>   > +SERVER="localhost:4304"
+>
+> I've never used owfs, but /dev/1wire sounds like an odd mount point to
+> me. I would have expected something under /mnt?
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpg123/mpg123.hash | 5 ++---
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+  /dev/1wire is what is used by the bundled debian init scripts. I didn't use 
+the bundled init scripts because they are slightly more complicated than what we 
+need and I wanted to add some features, like loading the fuse module.
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index ae261d0..a6424d3 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,3 +1,2 @@
--# From http://sourceforge.net/projects/mpg123/files/mpg123/1.22.4/
--md5	2dfafae3bbc532b4c8b04a77c6a6de89	mpg123-1.22.4.tar.bz2
--sha1	6ca59baceeebe361cc508214ba725a56d4fea743	mpg123-1.22.4.tar.bz2
-+# Locally calculated after checking pgp signature
-+sha256	5c431da7e7446fae586c9207772dc0038ce2bfe75f0274a7933d1b4a7d84e6c6	mpg123-1.23.3.tar.bz2
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index f6bb297..00bb971 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MPG123_VERSION = 1.22.4
-+MPG123_VERSION = 1.23.3
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
+  /mnt is annoying, because some scripts will (temporarily) mount something on 
+/mnt (without subdir), thus hiding anything else mounted there. For example, 
+many of our board readme's say to mount /dev/mmcblk0p1 /mnt as part of creating 
+the SD card.
+
+  In addition, owfs exports access to devices, so /dev seems like an appropriate 
+place. /mnt, to me, is for mounting actual storage filesystems.
+
+  I've also considered /sys/fs which already gets a couple of pseudofilesystems 
+mounted on it, and the owfs nodes are a bit similar to sysfs nodes. However, 
+/sys/fs really is for metadata of filesystems, not for adding actual devices.
+
+  The contents of owfs really should be in /sys/devices. However, the 
+organisation of the owfs tree is not really that similar to the sysfs tree, so 
+it's not a great fit either.
+
+  So, taking all of that into account, I chose to stick to the /dev/1wire that 
+is also used by the bundled debian init scripts.
+
+>
+> Googling around, I see the manual page suggests /mnt/1wire:
+>
+> http://owfs.org/index.php?page=owfs
+>
+> You will need to create the mount point during build time though, as
+> /mnt might not be writable.
+
+  Oh yeah, another reason to put it on /dev or /sys.
+
+>
+> The point of sourcing /etc/default/owfs is so the user can override the
+> defaults. How about sticking the MOUNTPOINT / SERVER into a OWFS_ARGS or
+> at least prefixing the variables with OWFS?
+
+  Yes, that's a good idea. I'm on it.
+
+  Regards,
+  Arnout
+
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
