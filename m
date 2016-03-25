@@ -1,42 +1,40 @@
-From: Lada Trimasova <Lada.Trimasova@synopsys.com>
-Date: Fri, 25 Mar 2016 17:08:42 +0300
-Subject: [Buildroot] [PATCH] linknx: add missing libcurl dependency
-Message-ID: <1458914922-9400-1-git-send-email-ltrimas@synopsys.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 25 Mar 2016 11:30:31 -0300
+Subject: [Buildroot] [PATCH] libsecret: bump to version 0.18.5
+Message-ID: <1458916231-32675-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"LIBCURL_CHECK_CONFIG" macros used in "configure.ac" file can be
-resolved only when libcurl is installed.
-Earlier we used generated "configure" file with already resolved
-"LIBCURL_CHECK_CONFIG" macros. And now we need autoreconf.
-(See https://git.busybox.net/buildroot/commit/package/linknx/linknx.mk?id=f35f54585f9e63400bdbd9c9ba2b9fd67be538ea)
-So it's impossible to generate configure file without libcurl installed.
-
-Fixes:
-http://autobuild.buildroot.net/results/9d2/9d23babaa739ecb8e7c2ad09036a5bc0461d3a8c/build-end.log
-
-Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/linknx/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libsecret/libsecret.hash | 4 ++--
+ package/libsecret/libsecret.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linknx/Config.in b/package/linknx/Config.in
-index 36838fe..55c14ab 100644
---- a/package/linknx/Config.in
-+++ b/package/linknx/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LINKNX
- 	select BR2_PACKAGE_ARGP_STANDALONE \
- 	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_PACKAGE_LIBCURL
- 	depends on BR2_USE_MMU # libpthsem
- 	help
- 	  Linknx is an automation platform providing high level functionalities
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index cd405e6..a637cbe 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.4.sha256sum
+-sha256	0f29b51698198e6999c91f4adce3119c8c457f546b133a85baea5ea9010a19ed	libsecret-0.18.4.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.5.sha256sum
++sha256	9ce7bd8dd5831f2786c935d82638ac428fa085057cc6780aba0e39375887ccb3	libsecret-0.18.5.tar.xz
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index 84e9f3b..20a217f 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSECRET_VERSION_MAJOR = 0.18
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).4
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).5
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
 -- 
-2.5.0
+2.7.3
