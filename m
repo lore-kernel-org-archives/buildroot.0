@@ -1,51 +1,162 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Fri, 25 Mar 2016 12:08:16 +0100
-Subject: [Buildroot] [PATCH 2/2] package/qwt : added support for Qt5.
-In-Reply-To: <20160325105155.071f73ae@free-electrons.com>
-References: <1458850791-4205-1-git-send-email-davepiq@yahoo.fr>
- <1458850791-4205-2-git-send-email-davepiq@yahoo.fr>
- <20160325105155.071f73ae@free-electrons.com>
-Message-ID: <56F51C20.4080505@yahoo.fr>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Fri, 25 Mar 2016 13:32:40 +0100
+Subject: [Buildroot] [PATCH v3 3/3] dpdk: new package
+In-Reply-To: <20160322211232.374d47a2@free-electrons.com>
+References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
+ <1458642986-32365-4-git-send-email-viktorin@rehivetech.com>
+ <20160322211232.374d47a2@free-electrons.com>
+Message-ID: <20160325133240.38684e8b@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-OK, thanks for your help and patience. It was very instructive.
+I've got some questions about the Config.in...
 
-Cheers,
-David.
+On Tue, 22 Mar 2016 21:12:32 +0100
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-
-Le 25/03/2016 10:51, Thomas Petazzoni a ?crit :
 > Hello,
->
-> On Thu, 24 Mar 2016 21:19:51 +0100, David Picard wrote:
->
->> +	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEG) || \
->> +		BR2_PACKAGE_QT5_GL_AVAILABLE
->
-> I know I told you to use this, but in fact I think a more correct
-> dependency is:
->
-> 	(BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
-> 	(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
->
-> so that we are sure that if we're using Qt, we have the dependencies
-> that are needed to have OpenGL support in Qt, and if we have Qt5, we
-> have the dependencies that are needed to have OpenGL support in Qt5.
->
-> I've applied after fixing this.
->
-> Also, after applying, I noticed there was a typo: BR2_PACKAGE_HAS_LIBEG
-> in your patch should have been BR2_PACKAGE_HAS_LIBEGL. I've fixed that
-> up with a following commit, as I only noticed while replying to this
-> e-mail.
->
-> Thanks!
->
+> 
+> On Tue, 22 Mar 2016 11:36:26 +0100, Jan Viktorin wrote:
+> 
+> > diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
+> > new file mode 100644
+> > index 0000000..a42271e
+> > --- /dev/null
+> > +++ b/package/dpdk/Config.in
+> > @@ -0,0 +1,53 @@
+> > +config BR2_PACKAGE_DPDK
+> > +       bool "dpdk"  
+> 
+> Indentation of properties should be done with one tab (ditto in the
+> following lines)
+> 
+> > +       depends on (BR2_i386 && !BR2_x86_i386 && !BR2_x86_i486 \
+> > +		      && !BR2_x86_i586 && !BR2_x86_x1000) \
+> > +                  || BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_aarch64_be  
+> 
+> I'm wondering why you have this list of architecture dependencies. Is
+> it because there is really some architecture specific code, or is it a
+> left-over from the times we didn't had the BR2_TOOLCHAIN_HAS_x
+> options ?
+> 
+> If that's really needed, please add a blind option like this:
+> 
+> config BR2_PACKAGE_DPDK_ARCH_SUPPORTS
+> 	bool
+> 	default y if ...
+
+So, should I move here also the HAS_SYNC checks?
+
+> 
+> That you can re-use as a dependency, both for the comment (see below)
+> and the main option.
+> 
+> > +       depends on BR2_TOOLCHAIN_USES_GLIBC  
+> 
+> Then you need to have a comment like:
+> 
+> comment "dpdk needs a toolchain w/ glibc"
+> 	depends on !BR2_TOOLCHAIN_USES_GLIBC
+> 	depends on BR2_TOOLCHAIN_HAS_SYNC_...
+
+The conditiion must be "if all dependencies but BR2_TOOLCHAIN_USES_GLIBC
+are met", is it right? So, should I put here the HAS_SYNC_*,
+ARCH_SUPPORTS, BR2_LINUX_KERNEL and BR2_LINUX_NEEDS_MODULES?
+
+> 
+> > +       depends on BR2_TOOLCHAIN_HAS_SYNC_1
+> > +       depends on BR2_TOOLCHAIN_HAS_SYNC_2
+> > +       depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> > +       depends on BR2_TOOLCHAIN_HAS_SYNC_8  
+> 
+> Cosmetic nit, but I would prefer to see:
+> 
+> 	depends on BR2_TOOLCHAIN_HAS_SYNC_1 && \
+> 		BR2_TOOLCHAIN_HAS_SYNC_2 && \
+> 		BR2_TOOLCHAIN_HAS_SYNC_4 && \
+> 		BR2_TOOLCHAIN_HAS_SYNC_8
+
+[...]
+
+> 	depends on BR2_LINUX_KERNEL
+> 
+> in your Config.in, as well as a corresponding comment:
+> 
+> comment "dpdk needs the Linux kernel to be built"
+> 	depends on !BR2_LINUX_KERNEL
+
+The same situation here. Should I test "all && !BR2_LINUX_KERNEL"?
+
+> 
+> > +
+> > +ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+> > +DPDK_DEPENDENCIES += libpcap
+> > +endif
+> > +
+> > +ifeq ($(BR2_SHARED_LIBS),y)
+> > +define DPDK_ENABLE_SHARED_LIBS
+> > +	$(call KCONFIG_ENABLE_OPT,CONFIG_RTE_BUILD_SHARED_LIB,\
+> > +			$(@D)/build/.config)
+> > +endef
+> > +
+> > +DPDK_POST_CONFIGURE_HOOKS += DPDK_ENABLE_SHARED_LIBS
+> > +endif
+> > +
+> > +# We're building a kernel module without using the kernel-module infra,
+> > +# so we need to tell we want module support in the kernel
+> > +ifeq ($(BR2_PACKAGE_DPDK),y)
+> > +LINUX_NEEDS_MODULES = y
+> > +endif  
+> 
+> This is no longer the "right" way of doing this. Just select
+> BR2_LINUX_NEEDS_MODULES in Config.in.
+> 
+
+[...]
+
+My current state is:
+
+config BR2_PACKAGE_DPDK
+	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS                               
+	depends on BR2_TOOLCHAIN_USES_GLIBC
+	depends on BR2_LINUX_NEEDS_MODULES
+        depends on BR2_TOOLCHAIN_HAS_SYNC_1 &&\
+                 BR2_TOOLCHAIN_HAS_SYNC_2 &&\
+                 BR2_TOOLCHAIN_HAS_SYNC_4 &&\
+                 BR2_TOOLCHAIN_HAS_SYNC_8
+
+config BR2_PACKAGE_DPDK_ARCH_SUPPORTS                                           
+        bool                                                                    
+        default y if (BR2_i386 && !BR2_x86_i386 && !BR2_x86_i486 \              
+                         && !BR2_x86_i586 && !BR2_x86_x1000) \                   
+                || BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_aarch64_be
+
+comment "dpdk needs a toolchain w/ glibc"
+	depends on !BR2_TOOLCHAIN_USES_GLIBC
+	depends on ??
+
+comment "dpdk needs the Linux kernel to be built"
+	depends on !BR2_LINUX_KERNEL
+	depends on ??
+
+
+Jan
+
+> > +$(eval $(generic-package))  
+> 
+> Other than that, looks good to me.
+> 
 > Thomas
->
+
+
+
+-- 
+  Jan Viktorin                E-mail: Viktorin at RehiveTech.com
+  System Architect            Web:    www.RehiveTech.com
+  RehiveTech
+  Brno, Czech Republic
