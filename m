@@ -1,34 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 25 Mar 2016 10:49:23 +0100
-Subject: [Buildroot] [git commit] qwt: fix typo in EGL option name
-Message-ID: <20160325094949.CDFF481861@busybox.osuosl.org>
+Date: Fri, 25 Mar 2016 10:51:55 +0100
+Subject: [Buildroot] [PATCH 2/2] package/qwt : added support for Qt5.
+In-Reply-To: <1458850791-4205-2-git-send-email-davepiq@yahoo.fr>
+References: <1458850791-4205-1-git-send-email-davepiq@yahoo.fr>
+ <1458850791-4205-2-git-send-email-davepiq@yahoo.fr>
+Message-ID: <20160325105155.071f73ae@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b634298e1dc37a896da17cfbec9a568743b113b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This fixes a typo introduced in commit
-a976ee0dc834c56e67e1c832ded00ce23b5ccdb0.
+On Thu, 24 Mar 2016 21:19:51 +0100, David Picard wrote:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/qwt/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEG) || \
+> +		BR2_PACKAGE_QT5_GL_AVAILABLE
 
-diff --git a/package/qwt/Config.in b/package/qwt/Config.in
-index 6b394e3..04b6922 100644
---- a/package/qwt/Config.in
-+++ b/package/qwt/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_QWT_MATHML
- 
- config BR2_PACKAGE_QWT_OPENGL
- 	bool "OpenGL support"
--	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEG && BR2_PACKAGE_QT) || \
-+	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
- 		(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
- 	select BR2_PACKAGE_QT_OPENGL_ES if BR2_PACKAGE_QT
- 	select BR2_PACKAGE_QT5BASE_OPENGL_LIB if BR2_PACKAGE_QT5
+I know I told you to use this, but in fact I think a more correct
+dependency is:
+
+	(BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
+	(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
+
+so that we are sure that if we're using Qt, we have the dependencies
+that are needed to have OpenGL support in Qt, and if we have Qt5, we
+have the dependencies that are needed to have OpenGL support in Qt5.
+
+I've applied after fixing this.
+
+Also, after applying, I noticed there was a typo: BR2_PACKAGE_HAS_LIBEG
+in your patch should have been BR2_PACKAGE_HAS_LIBEGL. I've fixed that
+up with a following commit, as I only noticed while replying to this
+e-mail.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
