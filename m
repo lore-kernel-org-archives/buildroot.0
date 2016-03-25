@@ -1,31 +1,27 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 25 Mar 2016 23:54:37 +0100
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 25 Mar 2016 19:58:07 -0300
 Subject: [Buildroot] [git commit] pulseview: needs boost
-	atomic/date_time as	well
+ atomic/date_time as well
+In-Reply-To: <d6sgscxrmh.ln2@ID-313208.user.individual.net>
 References: <20160325215140.07917800F2@busybox.osuosl.org>
-Message-ID: <d6sgscxrmh.ln2@ID-313208.user.individual.net>
+ <d6sgscxrmh.ln2@ID-313208.user.individual.net>
+Message-ID: <56F5C27F.4020100@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 25 Mar 2016 22:48:16 +0100 schrieb Peter Korsgaard:
+On 25/03/16 19:54, Bernd Kuhls wrote:
 
-> From the cmake log:
-> 
->   Could not find the following Boost libraries:
-> 
->           boost_date_time boost_atomic
-> 
->   Some (but not all) of the required Boost libraries were found.  You
->   may need to install these additional Boost libraries.  Alternatively,
->   set BOOST_LIBRARYDIR to the directory containing Boost libraries or
->   BOOST_ROOT to the location of Boost.
+> Hi Peter,
+>
+> building pulseview with this patch reverted works after the cmake bump to
+> 3.5.1.
 
-Hi Peter,
+Hi Bernd.
+cmake 3.5.1 fixed a FindBoost bug on indirect dependencies:
 
-building pulseview with this patch reverted works after the cmake bump to 
-3.5.1.
+http://public.kitware.com/pipermail/cmake/2016-March/063085.html
 
-Regards, Bernd
+Regards.
