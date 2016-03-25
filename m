@@ -1,41 +1,153 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Mar 2016 20:54:27 +0100
-Subject: [Buildroot] [git commit] libcurl: bump to version 7.48.0
-Message-ID: <20160325200621.C869E803C5@busybox.osuosl.org>
+Date: Fri, 25 Mar 2016 20:53:16 +0100
+Subject: [Buildroot] [git commit] mpd: bump to version 0.19.14
+Message-ID: <20160325200621.BB83F81D5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98e28b564e61c9a7d15d6786e2c0629a6d1f9397
+commit: https://git.buildroot.net/buildroot/commit/?id=a7ddad7e2581a4e524d1bd8e87e441f85ed726ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+0003-thread-Posix-Mutex-Cond-use-constexpr-only-with-glib.patch is
+upstream so remove it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 2 +-
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...onfigure.ac-check-if-libatomic-is-needed.patch} |  0
+ ...x-Mutex-Cond-use-constexpr-only-with-glib.patch | 97 ----------------------
+ package/mpd/mpd.hash                               |  2 +-
+ package/mpd/mpd.mk                                 |  2 +-
+ 4 files changed, 2 insertions(+), 99 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index eef2c13..a8208de 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
+diff --git a/package/mpd/0005-configure.ac-check-if-libatomic-is-needed.patch b/package/mpd/0003-configure.ac-check-if-libatomic-is-needed.patch
+similarity index 100%
+rename from package/mpd/0005-configure.ac-check-if-libatomic-is-needed.patch
+rename to package/mpd/0003-configure.ac-check-if-libatomic-is-needed.patch
+diff --git a/package/mpd/0003-thread-Posix-Mutex-Cond-use-constexpr-only-with-glib.patch b/package/mpd/0003-thread-Posix-Mutex-Cond-use-constexpr-only-with-glib.patch
+deleted file mode 100644
+index 26fd7f6..0000000
+--- a/package/mpd/0003-thread-Posix-Mutex-Cond-use-constexpr-only-with-glib.patch
++++ /dev/null
+@@ -1,97 +0,0 @@
+-From 42a5f0c4435757505bd515b68c2a27e8f7565f34 Mon Sep 17 00:00:00 2001
+-From: Max Kellermann <max@duempel.org>
+-Date: Tue, 25 Aug 2015 12:46:12 +0200
+-Subject: [PATCH] thread/Posix{Mutex,Cond}: use "constexpr" only with glibc
+-
+-Apparently all other C libraries are not compatible with "constexpr".
+-Those which are not will get a performance penalty, but at least they
+-work at all.
+-
+-[Thomas: taken from upstream commit 75dff6445063d9b49cca126fd661c9abbd680977.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- src/thread/PosixCond.hxx  | 16 ++++++++--------
+- src/thread/PosixMutex.hxx | 16 ++++++++--------
+- 2 files changed, 16 insertions(+), 16 deletions(-)
+-
+-diff --git a/src/thread/PosixCond.hxx b/src/thread/PosixCond.hxx
+-index b3fe204..73dbe02 100644
+---- a/src/thread/PosixCond.hxx
+-+++ b/src/thread/PosixCond.hxx
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (C) 2009-2013 Max Kellermann <max@duempel.org>
+-+ * Copyright (C) 2009-2015 Max Kellermann <max@duempel.org>
+-  *
+-  * Redistribution and use in source and binary forms, with or without
+-  * modification, are permitted provided that the following conditions
+-@@ -41,9 +41,13 @@ class PosixCond {
+- 	pthread_cond_t cond;
+- 
+- public:
+--#if defined(__NetBSD__) || defined(__BIONIC__)
+--	/* NetBSD's PTHREAD_COND_INITIALIZER is not compatible with
+--	   "constexpr" */
+-+#ifdef __GLIBC__
+-+	/* optimized constexpr constructor for pthread implementations
+-+	   that support it */
+-+	constexpr PosixCond():cond(PTHREAD_COND_INITIALIZER) {}
+-+#else
+-+	/* slow fallback for pthread implementations that are not
+-+	   compatible with "constexpr" */
+- 	PosixCond() {
+- 		pthread_cond_init(&cond, nullptr);
+- 	}
+-@@ -51,10 +55,6 @@ public:
+- 	~PosixCond() {
+- 		pthread_cond_destroy(&cond);
+- 	}
+--#else
+--	/* optimized constexpr constructor for sane POSIX
+--	   implementations */
+--	constexpr PosixCond():cond(PTHREAD_COND_INITIALIZER) {}
+- #endif
+- 
+- 	PosixCond(const PosixCond &other) = delete;
+-diff --git a/src/thread/PosixMutex.hxx b/src/thread/PosixMutex.hxx
+-index 5805158..e0fd614 100644
+---- a/src/thread/PosixMutex.hxx
+-+++ b/src/thread/PosixMutex.hxx
+-@@ -1,5 +1,5 @@
+- /*
+-- * Copyright (C) 2009-2013 Max Kellermann <max@duempel.org>
+-+ * Copyright (C) 2009-2015 Max Kellermann <max@duempel.org>
+-  *
+-  * Redistribution and use in source and binary forms, with or without
+-  * modification, are permitted provided that the following conditions
+-@@ -41,9 +41,13 @@ class PosixMutex {
+- 	pthread_mutex_t mutex;
+- 
+- public:
+--#if defined(__NetBSD__) || defined(__BIONIC__)
+--	/* NetBSD's PTHREAD_MUTEX_INITIALIZER is not compatible with
+--	   "constexpr" */
+-+#ifdef __GLIBC__
+-+	/* optimized constexpr constructor for pthread implementations
+-+	   that support it */
+-+	constexpr PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
+-+#else
+-+	/* slow fallback for pthread implementations that are not
+-+	   compatible with "constexpr" */
+- 	PosixMutex() {
+- 		pthread_mutex_init(&mutex, nullptr);
+- 	}
+-@@ -51,10 +55,6 @@ public:
+- 	~PosixMutex() {
+- 		pthread_mutex_destroy(&mutex);
+- 	}
+--#else
+--	/* optimized constexpr constructor for sane POSIX
+--	   implementations */
+--	constexpr PosixMutex():mutex(PTHREAD_MUTEX_INITIALIZER) {}
+- #endif
+- 
+- 	PosixMutex(const PosixMutex &other) = delete;
+--- 
+-2.6.4
+-
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index 85c99be..e47cefd 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
 @@ -1,2 +1,2 @@
  # Locally calculated after checking pgp signature
--sha256	ddc643ab9382e24bbe4747d43df189a0a6ce38fcb33df041b9cb0b3cd47ae98f	curl-7.47.1.tar.bz2
-+sha256	864e7819210b586d42c674a1fdd577ce75a78b3dda64c63565abe5aefd72c753	curl-7.48.0.tar.bz2
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 783c9b1..d2c39d5 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
+-sha256	f1014838fa7ab2d5fe2ef7f4c101d58fdec2c4c13cfbd2462ee146c8e4919a55	mpd-0.19.13.tar.xz
++sha256	2fd23805132e5002a4d24930001a7c7d3aaf55e3bd0cd71af5385895160e99e7	mpd-0.19.14.tar.xz
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 170a27f..9a1c957 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCURL_VERSION = 7.47.1
-+LIBCURL_VERSION = 7.48.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.bz2
- LIBCURL_SITE = http://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ MPD_VERSION_MAJOR = 0.19
+-MPD_VERSION = $(MPD_VERSION_MAJOR).13
++MPD_VERSION = $(MPD_VERSION_MAJOR).14
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost libglib2
