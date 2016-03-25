@@ -1,37 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Mar 2016 22:42:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libldns: Fix build error with
-	perl 5.10
-In-Reply-To: <1458924359-27561-1-git-send-email-bernd.kuhls@t-online.de>
- (Bernd Kuhls's message of "Fri, 25 Mar 2016 17:45:59 +0100")
-References: <1458924359-27561-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <8737refd41.fsf@dell.be.48ers.dk>
+Date: Fri, 25 Mar 2016 22:38:41 +0100
+Subject: [Buildroot] [git commit] samba4: drop --with-gettext configure
+	option
+Message-ID: <20160325214308.B09C681D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c5977118cdd07e12c099c9aa6623aaa4860cdd79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add more upstream commits to fix build errors with perl 5.10
- > introduced by the previous patch to fix build errors with perl 5.22.
+The --with-gettext=X configure option was silently dropped from the
+4.4.0 release and it errors out since it's unknown. Fixes:
+http://autobuild.buildroot.net/results/3c0/3c0800fd6cc7a217a866cd9cf63d5f91dcbfd306/
 
- > Fixes
- > http://autobuild.buildroot.net/results/325/32519c6d4084f334b7fed9edfb8a8c68a1f840a8/
- > and many others
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Please note that switching to the upstream branch 'develop' will
- > introduce new build errors when dane support is disabled.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-I'm not sure what went wrong here, but I cannot apply this patch:
-
-checking file package/libldns/0004-doxyparse.patch
-checking file package/libldns/0005-doxyparse.patch
-patch: **** malformed patch at line 377:  32, ldns
-
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 9f7b11d..5bacbc3 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -48,7 +48,6 @@ SAMBA4_CONF_OPTS += --without-fam
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GETTEXT),y)
+-SAMBA4_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
+ SAMBA4_DEPENDENCIES += gettext
+ else
+ SAMBA4_CONF_OPTS += --without-gettext
