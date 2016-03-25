@@ -1,44 +1,51 @@
-From: g4 at novadsp.com <g4@novadsp.com>
-Date: Fri, 25 Mar 2016 10:53:04 -0000
-Subject: [Buildroot] Bootchart: Submit a patch questions ...
-In-Reply-To: <20160324221509.28f24024@free-electrons.com>
-References: <003001d185dd$c7fa6ec0$57ef4c40$@novadsp.com>
- <20160324221509.28f24024@free-electrons.com>
-Message-ID: <033e01d18684$822e9130$868bb390$@novadsp.com>
+From: David Picard <davepiq@yahoo.fr>
+Date: Fri, 25 Mar 2016 12:08:16 +0100
+Subject: [Buildroot] [PATCH 2/2] package/qwt : added support for Qt5.
+In-Reply-To: <20160325105155.071f73ae@free-electrons.com>
+References: <1458850791-4205-1-git-send-email-davepiq@yahoo.fr>
+ <1458850791-4205-2-git-send-email-davepiq@yahoo.fr>
+ <20160325105155.071f73ae@free-electrons.com>
+Message-ID: <56F51C20.4080505@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Hello,
 
-> > 4. Finally locally BR is configured to get its kernel sources and
-> > .config from a local clone of /linux on github. In such a case can BR
-> > actually correctly check the dependencies for bootchart? Presumably it
-> > does test kernel config settings against the local .config stashed in
-build?
-> 
-> I am not sure to fully understand the question, but if I understand
-correctly,
-> you're saying that bootchart requires some specific kernel configuration
-> options. If that's what you mean, then there are two
-> cases:
-> 
->  * If the kernel option is needed for bootchart to actually *build*,
->    then you should modify linux/linux.mk to make sure the relevant
->    kernel configurations are enabled when bootchart is enabled.
-> 
->  * If the kernel option is only needed for bootchart to work at
->    runtime, then we generally just recommend to indicate which kernel
->    options are needed in the help text of bootchart's Config.in file.
+OK, thanks for your help and patience. It was very instructive.
 
-Ideal
+Cheers,
+David.
 
-> Hope this helps,
-> 
+
+Le 25/03/2016 10:51, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> On Thu, 24 Mar 2016 21:19:51 +0100, David Picard wrote:
+>
+>> +	depends on (BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEG) || \
+>> +		BR2_PACKAGE_QT5_GL_AVAILABLE
+>
+> I know I told you to use this, but in fact I think a more correct
+> dependency is:
+>
+> 	(BR2_PACKAGE_HAS_LIBGLES && BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_QT) || \
+> 	(BR2_PACKAGE_QT5_GL_AVAILABLE && BR2_PACKAGE_QT5)
+>
+> so that we are sure that if we're using Qt, we have the dependencies
+> that are needed to have OpenGL support in Qt, and if we have Qt5, we
+> have the dependencies that are needed to have OpenGL support in Qt5.
+>
+> I've applied after fixing this.
+>
+> Also, after applying, I noticed there was a typo: BR2_PACKAGE_HAS_LIBEG
+> in your patch should have been BR2_PACKAGE_HAS_LIBEGL. I've fixed that
+> up with a following commit, as I only noticed while replying to this
+> e-mail.
+>
+> Thanks!
+>
 > Thomas
-
-It most certainly does. Thanks. I'll tidy things up as per recommendations .
-
-Jerry
+>
