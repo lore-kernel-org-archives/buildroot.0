@@ -1,34 +1,44 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Fri, 25 Mar 2016 11:17:29 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: use olddefconfig with defconfig files
-In-Reply-To: <1458901049-3693-1-git-send-email-romain.izard.pro@gmail.com>
-References: <1458901049-3693-1-git-send-email-romain.izard.pro@gmail.com>
-Message-ID: <1458901049-3693-2-git-send-email-romain.izard.pro@gmail.com>
+From: g4 at novadsp.com <g4@novadsp.com>
+Date: Fri, 25 Mar 2016 10:53:04 -0000
+Subject: [Buildroot] Bootchart: Submit a patch questions ...
+In-Reply-To: <20160324221509.28f24024@free-electrons.com>
+References: <003001d185dd$c7fa6ec0$57ef4c40$@novadsp.com>
+ <20160324221509.28f24024@free-electrons.com>
+Message-ID: <033e01d18684$822e9130$868bb390$@novadsp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the new option, as the linux kernel will not respect the
-configuration saved by savedefconfig otherwise.
+Hi Thomas
 
-Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
----
- linux/linux.mk | 1 +
- 1 file changed, 1 insertion(+)
+> > 4. Finally locally BR is configured to get its kernel sources and
+> > .config from a local clone of /linux on github. In such a case can BR
+> > actually correctly check the dependencies for bootchart? Presumably it
+> > does test kernel config settings against the local .config stashed in
+build?
+> 
+> I am not sure to fully understand the question, but if I understand
+correctly,
+> you're saying that bootchart requires some specific kernel configuration
+> options. If that's what you mean, then there are two
+> cases:
+> 
+>  * If the kernel option is needed for bootchart to actually *build*,
+>    then you should modify linux/linux.mk to make sure the relevant
+>    kernel configurations are enabled when bootchart is enabled.
+> 
+>  * If the kernel option is only needed for bootchart to work at
+>    runtime, then we generally just recommend to indicate which kernel
+>    options are needed in the help text of bootchart's Config.in file.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e20255..7e3d5f8 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -202,6 +202,7 @@ endif
- LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
-+LINUX_KCONFIG_OLDDEFCONFIG = y
- 
- # If no package has yet set it, set it from the Kconfig option
- LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
--- 
-2.5.0
+Ideal
+
+> Hope this helps,
+> 
+> Thomas
+
+It most certainly does. Thanks. I'll tidy things up as per recommendations .
+
+Jerry
