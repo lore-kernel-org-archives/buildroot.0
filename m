@@ -1,40 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Mar 2016 11:30:46 -0300
-Subject: [Buildroot] [PATCH] gcr: bump to version 3.20.0
-Message-ID: <1458916246-19707-1-git-send-email-gustavo@zacarias.com.ar>
+From: David Picard <davepiq@yahoo.fr>
+Date: Fri, 25 Mar 2016 15:46:59 +0100
+Subject: [Buildroot] [PATCH 1/2] package/qwt : prepared package for
+ other versions of Qt.
+In-Reply-To: <20160325104839.20bcbe13@free-electrons.com>
+References: <1458850791-4205-1-git-send-email-davepiq@yahoo.fr>
+ <20160325104839.20bcbe13@free-electrons.com>
+Message-ID: <56F54F63.1040001@yahoo.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gcr/gcr.hash | 4 ++--
- package/gcr/gcr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi,
 
-diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
-index 8f1f931..8b8b748 100644
---- a/package/gcr/gcr.hash
-+++ b/package/gcr/gcr.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.18/gcr-3.18.0.sha256sum
--sha256	d4d16da5af55148a694055835ccd07ad34daf0ad03bdad929bf7cad15637ce00	gcr-3.18.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.20/gcr-3.20.0.sha256sum
-+sha256	90572c626d8a708225560c42b4421f7941315247fa1679d4ef569bde7f4bb379	gcr-3.20.0.tar.xz
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-index a89f874..d8cb667 100644
---- a/package/gcr/gcr.mk
-+++ b/package/gcr/gcr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GCR_VERSION_MAJOR = 3.18
-+GCR_VERSION_MAJOR = 3.20
- GCR_VERSION = $(GCR_VERSION_MAJOR).0
- GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
- GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
--- 
-2.7.3
+I get an error like :
+make[1]: *** no rule to make target "qt5", needed by 
+"<BASEDIR>/build/qwt-6.1.2/.stamp_configured". Stopping.
+
+Wouldn't it be because of line 15 in package/qwt/qwt.mk ?
+https://git.buildroot.net/buildroot/tree/package/qwt/qwt.mk?id=a976ee0dc834c56e67e1c832ded00ce23b5ccdb0
+
+I changed it from :
+QWT_DEPENDENCIES += qt5
+to :
+QWT_DEPENDENCIES += qt5base
+and then I could build on. It seems like "qt5" is not a valid target 
+name. By the way, where can you find what are the valid values ?
+
+
+
+
+Le 25/03/2016 10:48, Thomas Petazzoni a ?crit :
+> Hello,
+>
+> On Thu, 24 Mar 2016 21:19:50 +0100, David Picard wrote:
+>> Reformatted the package configuration to make it more generic. It will thus be
+>> easier to handle more than one version of Qt. Indeed, multiple versions of Qt
+>> are compatible with the current Qwt. Dropped comment, considered uninformative.
+>>
+>> Signed-off-by: David Picard <davepiq@yahoo.fr>
+>> ---
+>>   package/qwt/Config.in | 10 +++-------
+>>   package/qwt/qwt.mk    |  5 ++++-
+>>   2 files changed, 7 insertions(+), 8 deletions(-)
+>
+> I've tweaked the commit log to explain a bit more that we are switching
+> to use "select" rather than "depends on" for the Qt sub-options, and
+> applied. Thanks!
+>
+> Thomas
+>
