@@ -1,28 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 25 Mar 2016 23:13:28 +0100
-Subject: [Buildroot] [PATCH 1/1] gnuradio: fix boost detection
-References: <1458731688-2975-1-git-send-email-gwenj@trabucayre.com>
- <20160323131034.56637862@free-electrons.com>
-Message-ID: <8ppgscxrmh.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Mar 2016 23:15:57 +0100
+Subject: [Buildroot] [PATCH v2 1/2] Add SVN repository support for u-boot
+In-Reply-To: <1458234472-4741-2-git-send-email-susundberg@gmail.com> (Pauli
+ Sundberg's message of "Thu, 17 Mar 2016 19:07:51 +0200")
+References: <87oaaif6zv.fsf@dell.be.48ers.dk>
+ <1458234472-4741-1-git-send-email-susundberg@gmail.com>
+ <1458234472-4741-2-git-send-email-susundberg@gmail.com>
+Message-ID: <87mvpmdx0i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 23 Mar 2016 13:10:34 +0100 schrieb Thomas Petazzoni:
+>>>>> "Pauli" == Pauli Sundberg <susundberg@gmail.com> writes:
 
->> Boost is not found due to missing "indirect dependencies".
->> According to FindBoost.cmake, provided by cmake, Boost_thread depends
->> on Boost_atomic and Boost_chrono.
-> 
-> If that's really the case, then isn't the proper fix to adjust
-> package/boost/Config.in to have BR2_PACKAGE_BOOST_THREAD select
-> BR2_PACKAGE_BOOST_ATOMIC and BR2_PACKAGE_BOOST_CHRONO ?
+You forgot to add your signed-off-by (git commit -s), so I cannot apply
+this. Care to add that (and fix the below) and resend?
 
-Hi Thomas,
+ > ---
+ >  boot/uboot/Config.in | 9 ++++++---
+ >  boot/uboot/uboot.mk  | 4 +++-
+ >  2 files changed, 9 insertions(+), 4 deletions(-)
 
-unpatched gnuradio compiles again after bumping cmake to 3.5.1, this 
-patch is not needed anymore imho.
+ > diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+ > index 0e79734..5800060 100644
+ > --- a/boot/uboot/Config.in
+ > +++ b/boot/uboot/Config.in
+ > @@ -51,6 +51,9 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ >  config BR2_TARGET_UBOOT_CUSTOM_GIT
+ >  	bool "Custom Git repository"
+ 
+ > +config BR2_TARGET_UBOOT_CUSTOM_SVN
+ > +	bool "Custom SVN repository"
+ > +
+ >  config BR2_TARGET_UBOOT_CUSTOM_HG
+ >  	bool "Custom Mercurial repository"
 
-Regards, Bernd
+S still comes after H in the alphabet, so please add SVN after
+_HG. While we're at it I think we should spell out Subversion instead of
+SVN.
+
+Thanks.
+
+-- 
+Bye, Peter Korsgaard
