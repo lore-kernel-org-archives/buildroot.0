@@ -1,40 +1,41 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 25 Mar 2016 14:15:10 -0300
-Subject: [Buildroot] [PATCH] cmake: bump to version 3.5.1
-Message-ID: <1458926110-6487-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 25 Mar 2016 14:35:32 -0300
+Subject: [Buildroot] [PATCH 1/3] gdk-pixbuf: don't update cache for
+	static-only
+Message-ID: <1458927334-3890-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There won't be any need/files to scan for. Fixes:
+http://autobuild.buildroot.net/results/5a7/5a7c158c8c2e49d5ca3b11ef3190cf0edd812ec5/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/cmake/cmake.hash | 4 ++--
- package/cmake/cmake.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gdk-pixbuf/gdk-pixbuf.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index aa0db20..2c3f0ae 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
-@@ -1,2 +1,2 @@
--# From http://www.cmake.org/files/v3.5/cmake-3.5.0-SHA-256.txt
--sha256 92c83ad8a4fd6224cf6319a60b399854f55b38ebe9d297c942408b792b1a9efa  cmake-3.5.0.tar.gz
-+# From http://www.cmake.org/files/v3.5/cmake-3.5.1-SHA-256.txt
-+sha256	93d651a754bcf6f0124669646391dd5774c0fc4d407c384e3ae76ef9a60477e8	cmake-3.5.1.tar.gz
-diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
-index c2a0879..a6acf8a 100644
---- a/package/cmake/cmake.mk
-+++ b/package/cmake/cmake.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 02c4aa9..e77fd15 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -51,6 +51,7 @@ endif
+ # here after building and installing to target.
+ # And since the cache file will contain absolute target directory names
+ # we need to sanitize (strip) them.
++ifeq ($(BR2_STATIC_LIBS),)
+ define GDK_PIXBUF_UPDATE_CACHE
+ 	GDK_PIXBUF_MODULEDIR=$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders \
+ 		$(HOST_DIR)/usr/bin/gdk-pixbuf-query-loaders \
+@@ -59,6 +60,7 @@ define GDK_PIXBUF_UPDATE_CACHE
+ 		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+ endef
+ GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
++endif
  
- CMAKE_VERSION_MAJOR = 3.5
--CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).0
-+CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
- CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
- CMAKE_LICENSE = BSD-3c
- CMAKE_LICENSE_FILES = Copyright.txt
+ # Tests don't build correctly with uClibc
+ define GDK_PIXBUF_DISABLE_TESTS
 -- 
 2.7.3
