@@ -1,30 +1,24 @@
-From: David Picard <davepiq@yahoo.fr>
-Date: Fri, 25 Mar 2016 18:58:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qwt : fix wrong makefile target.
-Message-ID: <1458928685-16680-1-git-send-email-davepiq@yahoo.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 Mar 2016 20:54:12 +0100
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.19.14
+In-Reply-To: <1458928230-10295-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Fri, 25 Mar 2016 14:50:30 -0300")
+References: <1458928230-10295-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87a8lmgwpn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David Picard <davepiq@yahoo.fr>
----
- package/qwt/qwt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index 594b141..0bea5f3 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
-@@ -12,7 +12,7 @@ ifeq ($(BR2_PACKAGE_QT),y)
- QWT_DEPENDENCIES = qt
- QWT_QMAKE = $(QT_QMAKE)
- else ifeq ($(BR2_PACKAGE_QT5),y)
--QWT_DEPENDENCIES += qt5
-+QWT_DEPENDENCIES += qt5base
- QWT_QMAKE = $(QT5_QMAKE)
- endif
- 
+ > 0003-thread-Posix-Mutex-Cond-use-constexpr-only-with-glib.patch is
+ > upstream so remove it.
+
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-1.9.1
+Bye, Peter Korsgaard
