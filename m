@@ -1,36 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 Mar 2016 22:38:41 +0100
-Subject: [Buildroot] [git commit] samba4: drop --with-gettext configure
-	option
-Message-ID: <20160325214308.B09C681D71@busybox.osuosl.org>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Fri, 25 Mar 2016 14:45:45 -0700
+Subject: [Buildroot] License type.
+Message-ID: <CAJJ6jxscDa23_nD38b4O=64Fc_jEQcK81SHwrw5R3rAZ9PUuXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5977118cdd07e12c099c9aa6623aaa4860cdd79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-The --with-gettext=X configure option was silently dropped from the
-4.4.0 release and it errors out since it's unknown. Fixes:
-http://autobuild.buildroot.net/results/3c0/3c0800fd6cc7a217a866cd9cf63d5f91dcbfd306/
+I am preparing to submit a package PyMySQL to buildroot.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.mk | 1 -
- 1 file changed, 1 deletion(-)
+I cannot figure out what I should put in the LICENSE field in .mk Can
+you make a suggestion?
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9f7b11d..5bacbc3 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -48,7 +48,6 @@ SAMBA4_CONF_OPTS += --without-fam
- endif
- 
- ifeq ($(BR2_PACKAGE_GETTEXT),y)
--SAMBA4_CONF_OPTS += --with-gettext=$(STAGING_DIR)/usr
- SAMBA4_DEPENDENCIES += gettext
- else
- SAMBA4_CONF_OPTS += --without-gettext
+Here is their license file:
+
+Copyright (c) 2010, 2013 PyMySQL contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
