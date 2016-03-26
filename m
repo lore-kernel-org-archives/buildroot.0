@@ -1,138 +1,141 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 26 Mar 2016 22:28:03 +0100
-Subject: [Buildroot] [PATCH 2/2] package/efl: enable luajit support
-In-Reply-To: <20160320224234.1f6f837c@free-electrons.com>
-References: <1457132443-15973-1-git-send-email-romain.naour@gmail.com>
- <1457132443-15973-2-git-send-email-romain.naour@gmail.com>
- <20160320224234.1f6f837c@free-electrons.com>
-Message-ID: <56F6FEE3.7060204@gmail.com>
+Date: Sat, 26 Mar 2016 23:11:23 +0100
+Subject: [Buildroot] [PATCH] package/efl: switch to luajit support
+Message-ID: <1459030283-31627-1-git-send-email-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+In efl 1.15.x, Lua "old" support is broken with Lua 5.2+ [1].
 
-Le 20/03/2016 22:42, Thomas Petazzoni a ?crit :
-> Hello,
-> 
-> On Sat,  5 Mar 2016 00:00:43 +0100, Romain Naour wrote:
->> The lua-old support is currently broken for Lua 5.2+ due to [1] and it's not
->> yet fixed with efl 1.17.
->>
->> In order to bump to a newer efl version, we need to enable the luajit support
->> and use it by default.
->>
->> We need to build Elua for the host to enable luajit support for the target.
->>
->> [1] https://phab.enlightenment.org/T2728
-> 
-> I don't really understand the discussion in this bug report, and it
-> seems like you got no feedback. Maybe the explanation was not clear
-> enough as to which cases work / don't work.
+With the patch added in efl 1.16 to fixes this issue, libevas fail to link with
+the following error:
 
-Actually, I'm wondering how 6124d0733657e425001ce51f526aea3bb8dc54e7 was tested
-with Lua 5.2 and Lua 5.3 since it doesn't link with any of them. Also it break
-the Lua 5.1 support.
+CCLD bin/ecore_evas/ecore_evas_convert
+host-efl-1.16.1/src/lib/evas/.libs/libevas.so: undefined reference to `luaL_openlib'
+collect2: error: ld returned 1 exit status
+Makefile:19021: recipe for target 'bin/ecore_evas/ecore_evas_convert' failed
 
-> 
-> In the below, I wonder if it's worth to support Lua 5.1 at all.
-> Supporting Luajit would make the whole thing a lot simpler, no? Do we
-> really care enough to offer the possibility of using Lua instead of
-> Luajit, when recent versions of Lua are in fact not supported?
+Since 9ba8d1cce4ab00307827083bae234d87b37fb967, the luajit support can be
+enabled in efl package.
+In order to update the efl stack to 1.17, switch to luajit support and remove
+Lua "old" support since it's not fixed upstream yet. But the drawback is the
+efl stack depends implicitely on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS.
 
-Ok, since I have no proper fixes for Lua "old" support, let switch to luajit
-support only.
+[1] https://phab.enlightenment.org/T2728
 
-> 
->> diff --git a/package/efl/Config.in b/package/efl/Config.in
->> index 88e2c36..0851961 100644
->> --- a/package/efl/Config.in
->> +++ b/package/efl/Config.in
->> @@ -2,8 +2,10 @@ config BR2_PACKAGE_EFL
->>  	bool "efl"
->>  	depends on BR2_INSTALL_LIBSTDCPP
->>  	depends on BR2_PACKAGE_HAS_UDEV # libudev
->> +	depends on BR2_PACKAGE_HAS_LUAINTERPRETER # luajit or Lua 5.1
->>  	# https://phab.enlightenment.org/T2728
->> -	depends on BR2_PACKAGE_LUA_5_1 # needs lua 5.1, broken with 5.2+
->> +	depends on !BR2_PACKAGE_LUA_5_2 # broken with 5.2+
->> +	depends on !BR2_PACKAGE_LUA_5_3 # broken with 5.2+
-> 
-> I'd prefer:
-> 
-> 	depends on BR2_PACKAGE_HAS_LUAINTERPRETER && \
-> 		!BR2_PACKAGE_LUA_5_2 && !BR2_PACKAGE_LUA_5_3
-> 
->>  	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
->>  	depends on BR2_USE_MMU
->>  	depends on BR2_USE_WCHAR # use wchar_t
->> @@ -186,6 +188,11 @@ comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library,
->>  		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
->>  	depends on BR2_USE_MMU
->>  
->> -comment "efl needs lua 5.1"
->> -	depends on !BR2_PACKAGE_LUA_5_1
->> +comment "efl needs a lua interpreter (luajit or lua 5.1)"
->> +	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER
->> +	depends on BR2_USE_MMU
->> +
->> +comment "efl needs Lua 5.1"
->> +	depends on BR2_PACKAGE_LUA_5_2 # broken with 5.2+
->> +	depends on BR2_PACKAGE_LUA_5_3 # broken with 5.2+
->>  	depends on BR2_USE_MMU
-> 
-> I don't think two comments are needed. Only one is enough:
-> 
-> comment "elf needs a lua interpreter (luajit or lua 5.1)"
-> 	depends on BR2_USE_MMU
-> 	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || \
-> 		BR2_PACKAGE_LUA_5_2 || BR2_PACKAGE_LUA_5_3
-> 
->> +# We need to build Elua for the host to enable luajit support for the target.
->> +# --disable-lua-old: build elua for the target.
->> +# --enable-lua-old: disable Elua and remove luajit dependency.
->> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
->> +EFL_CONF_OPTS += --disable-lua-old
->> +else
->> +EFL_CONF_OPTS += --enable-lua-old
->> +endif
-> 
-> I must say I don't really understand this comment, and why you're
-> adding --disable-lua-old/--enable-lua-old to both the target and host
-> EFL configure options, in both cases depending on BR2_PACKAGE_LUAJIT.
-> 
-> Here, you are saying "We need to build Elua for the host", but the
-> below code is changing the configuration options for the target variant
-> of EFL, which looks weird.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/Config.in |  6 +++---
+ package/efl/efl.mk    | 17 +++++++++--------
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
-If we enable luajit support for the target (with --disable-lua-old option), we
-need to build elua tool for the host. We have to specify the path to elua with
---with-elua=$(HOST_DIR)/usr/bin/elua otherwise elua build for the target is used
-while crosscrompiling. That is why we also need to use --disable-lua-old option
-for host-efl to build elua for the host.
-
-If the luajit support is disabled, elua is not build at all. So we can remove
-host-luajit dependency and use --enable-lua-old.
-
-But let use unconditionally luajit support and use --disable-lua-old for
-host-efl and efl.
-
-Best regards,
-Romain
-
-> 
->> +# If luajit is enabled for the target, we need to build Elua for the host.
->> +# --disable-lua-old: build elua for the host.
->> +# --enable-lua-old: disable Elua and remove luajit dependency.
->> +ifeq ($(BR2_PACKAGE_LUAJIT),y)
->> +HOST_EFL_CONF_OPTS += --disable-lua-old
->> +else
->> +HOST_EFL_CONF_OPTS += --enable-lua-old
->> +endif
-> 
-> Ditto.
-> 
-> Thomas
-> 
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index 88e2c36..c8e17d2 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_EFL
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev
+ 	# https://phab.enlightenment.org/T2728
+-	depends on BR2_PACKAGE_LUA_5_1 # needs lua 5.1, broken with 5.2+
++	depends on BR2_PACKAGE_LUAJIT # Lua support broken with 5.2+
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # untested without threads
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_USE_WCHAR # use wchar_t
+@@ -186,6 +186,6 @@ comment "efl needs udev /dev management and a toolchain w/ C++, dynamic library,
+ 		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU
+ 
+-comment "efl needs lua 5.1"
+-	depends on !BR2_PACKAGE_LUA_5_1
++comment "efl needs luajit"
++	depends on !BR2_PACKAGE_LUAJIT
+ 	depends on BR2_USE_MMU
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 2ea2592..916999d 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -19,8 +19,8 @@ EFL_LICENSE_FILES = \
+ 
+ EFL_INSTALL_STAGING = YES
+ 
+-EFL_DEPENDENCIES = host-pkgconf host-efl dbus freetype jpeg lua udev \
+-	util-linux zlib
++EFL_DEPENDENCIES = host-pkgconf host-efl host-luajit dbus freetype \
++	jpeg luajit udev util-linux zlib
+ 
+ # Regenerate the autotools:
+ #  - to fix an issue in eldbus-codegen: https://phab.enlightenment.org/T2718
+@@ -29,19 +29,20 @@ EFL_GETTEXTIZE = YES
+ 
+ # Configure options:
+ # --disable-cxx-bindings: disable C++11 bindings.
++# --disable-lua-old: build elua for the target.
+ # --disable-sdl: disable sdl2 support.
+ # --disable-systemd: disable systemd support.
+ # --disable-xinput22: disable X11 XInput v2.2+ support.
+-# --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-opengl=none: disable opengl support.
+ EFL_CONF_OPTS = \
+ 	--with-edje-cc=$(HOST_DIR)/usr/bin/edje_cc \
++	--with-elua=$(HOST_DIR)/usr/bin/elua \
+ 	--with-eolian-gen=$(HOST_DIR)/usr/bin/eolian_gen \
+ 	--disable-cxx-bindings \
++	--disable-lua-old \
+ 	--disable-sdl \
+ 	--disable-systemd \
+ 	--disable-xinput22 \
+-	--enable-lua-old \
+ 	--with-opengl=none
+ 
+ # Disable untested configuration warning.
+@@ -227,7 +228,7 @@ $(eval $(autotools-package))
+ # * host-freetype: for libevas
+ # * host-libglib2: for libecore
+ # * host-libjpeg, host-libpng: for libevas image loader
+-# * host-lua: disable luajit dependency
++# * host-luajit for Elua tool for the host
+ HOST_EFL_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-dbus \
+@@ -235,7 +236,7 @@ HOST_EFL_DEPENDENCIES = \
+ 	host-libglib2 \
+ 	host-libjpeg \
+ 	host-libpng \
+-	host-lua \
++	host-luajit \
+ 	host-zlib
+ 
+ # Configure options:
+@@ -246,10 +247,10 @@ HOST_EFL_DEPENDENCIES = \
+ # --disable-gstreamer1: remove dependency on gtreamer 1.0.
+ # --disable-libeeze: remove libudev dependency.
+ # --disable-libmount: remove dependency on host-util-linux libmount.
++# --disable-lua-old: build elua for the host.
+ # --disable-physics: remove Bullet dependency.
+ # --enable-image-loader-gif=no: disable Gif dependency.
+ # --enable-image-loader-tiff=no: disable Tiff dependency.
+-# --enable-lua-old: disable Elua and remove luajit dependency.
+ # --with-crypto=none: remove dependencies on openssl or gnutls.
+ # --with-x11=none: remove dependency on X.org.
+ #   Yes I really know what I am doing.
+@@ -261,13 +262,13 @@ HOST_EFL_CONF_OPTS += \
+ 	--disable-gstreamer1 \
+ 	--disable-libeeze \
+ 	--disable-libmount \
++	--disable-lua-old \
+ 	--disable-multisense \
+ 	--disable-physics \
+ 	--enable-image-loader-gif=no \
+ 	--enable-image-loader-jpeg=yes \
+ 	--enable-image-loader-png=yes \
+ 	--enable-image-loader-tiff=no \
+-	--enable-lua-old \
+ 	--with-crypto=none \
+ 	--with-glib=yes \
+ 	--with-opengl=none \
+-- 
+2.5.5
