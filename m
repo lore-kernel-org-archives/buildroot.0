@@ -1,67 +1,143 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Mar 2016 23:43:42 +0100
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 5.9.1
-Message-ID: <20160326235416.88D1C81844@busybox.osuosl.org>
+Date: Sun, 27 Mar 2016 00:53:16 +0100
+Subject: [Buildroot] [git commit] owfs: add sysv init scripts
+Message-ID: <20160326235416.969C07FF9C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6d16d3b2d5ccbb5629850afd7c598feec792ef9
+commit: https://git.buildroot.net/buildroot/commit/?id=ac940e023d58a34c07af0c17df32fc80613ae8fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://nodejs.org/en/blog/release/v5.9.1/
+owserver is started unconditionally, but it needs the device(s) to
+be specified at startup. Therefore a check for non-empty OWSERVER_ARGS
+is added to the owserver start script.
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+owfs is started only if is built. It will connect to the owserver.
+It will try to load the fuse module; if fuse is built-in or already
+loaded, modprobe -q will fail silently. The filesystem will be mounted
+on /dev/1wire, because it represents the 1-wire slave devices; also,
+the bundled Debian init scripts mount it there. We have to create that
+directory in the init script in case of devtmpfs, and we have to create
+it in the rootfs for static /dev; for simplicity, just do both.
+
+Users who want a setup without owserver need to remove the owserver
+init script post-build and need to give appropriate defaults to owfs.
+
+[Peter: fix mountpoint variable typo in S30owfs]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{5.8.0 => 5.9.1}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/{5.8.0 => 5.9.1}/0003-Fix-va_list-not-declared.patch   | 0
- package/nodejs/{5.8.0 => 5.9.1}/0004-Fix-support-for-uClibc-ng.patch  | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
+ package/owfs/S25owserver | 31 +++++++++++++++++++++++++++++++
+ package/owfs/S30owfs     | 33 +++++++++++++++++++++++++++++++++
+ package/owfs/owfs.mk     | 14 ++++++++++++++
+ 3 files changed, 78 insertions(+)
 
-diff --git a/package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.9.1/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/5.9.1/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.9.1/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/5.9.1/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.9.1/0003-Fix-va_list-not-declared.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
-rename to package/nodejs/5.9.1/0003-Fix-va_list-not-declared.patch
-diff --git a/package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.9.1/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/5.9.1/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index d200bbb..dd69a74 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+diff --git a/package/owfs/S25owserver b/package/owfs/S25owserver
+new file mode 100755
+index 0000000..b8da768
+--- /dev/null
++++ b/package/owfs/S25owserver
+@@ -0,0 +1,31 @@
++NAME="owserver"
++DAEMON="/usr/bin/${NAME}"
++PID_F="/run/${NAME}.pid"
++
++OWSERVER_ARGS=
++[ -r /etc/default/${NAME} ] && . /etc/default/${NAME}
++
++case "$1" in
++start)
++	printf "Starting ${NAME}: "
++	if [ -z "${OWSERVER_ARGS}" ]; then
++		echo "OWSERVER_ARGS must be set in defaults file" 1>&2
++		exit 1
++	fi
++	start-stop-daemon -S -x ${DAEMON} -- \
++		--pid_file ${PID_F} ${OWSERVER_ARGS}
++	[ $? -eq 0 ] && echo "OK" || echo "FAIL"
++	;;
++stop)
++	printf "Stopping ${NAME}: "
++	start-stop-daemon -K -p ${PID_F}
++	[ $? -eq 0 ] && echo "OK" || echo "FAIL"
++	;;
++restart|reload)
++	$0 stop
++	$0 start
++	;;
++*)
++	echo "Usage: $0 {start|stop|restart|reload}"
++	exit 1
++esac
+diff --git a/package/owfs/S30owfs b/package/owfs/S30owfs
+new file mode 100755
+index 0000000..feed676
+--- /dev/null
++++ b/package/owfs/S30owfs
+@@ -0,0 +1,33 @@
++NAME="owfs"
++DAEMON="/usr/bin/${NAME}"
++PID_F="/run/${NAME}.pid"
++OWFS_MOUNTPOINT="/dev/1wire"
++OWFS_DEVICES="-s localhost:4304"
++OWFS_ARGS=""
++
++[ -r /etc/default/${NAME} ] && . /etc/default/${NAME}
++
++case "$1" in
++start)
++	printf "Starting ${NAME}: "
++	# Fuse may be in a module, so try to load it
++	modprobe -q fuse && printf "[fuse] "
++	mkdir -p ${OWFS_MOUNTPOINT}
++	start-stop-daemon -S -x ${DAEMON} -- \
++		--pid_file ${PID_F} -m ${OWFS_MOUNTPOINT} ${OWFS_DEVICES} \
++		${OWFS_ARGS}
++	[ $? -eq 0 ] && echo "OK" || echo "FAIL"
++	;;
++stop)
++	printf "Stopping ${NAME}: "
++	start-stop-daemon -K -p ${PID_F}
++	[ $? -eq 0 ] && echo "OK" || echo "FAIL"
++	;;
++restart|reload)
++	$0 stop
++	$0 start
++	;;
++*)
++	echo "Usage: $0 {start|stop|restart|reload}"
++	exit 1
++esac
+diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
+index 083939a..0092603 100644
+--- a/package/owfs/owfs.mk
++++ b/package/owfs/owfs.mk
+@@ -23,6 +23,14 @@ OWFS_CONF_OPTS += \
+ 	--enable-owfs \
+ 	--with-fuseinclude=$(STAGING_DIR)/usr/include \
+ 	--with-fuselib=$(STAGING_DIR)/usr/lib
++define OWFS_INSTALL_FUSE_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S30owfs \
++		$(TARGET_DIR)/etc/init.d/S30owfs
++endef
++define OWFS_CREATE_MOUNTPOINT
++	mkdir -p $(TARGET_DIR)/dev/1wire
++endef
++OWFS_POST_INSTALL_TARGET_HOOKS += OWFS_CREATE_MOUNTPOINT
+ else
+ OWFS_CONF_OPTS += --disable-owfs
+ endif
+@@ -70,4 +78,10 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ OWFS_CONF_OPTS += --disable-zero
+ endif
  
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "5.8.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "5.9.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.43"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 2e8dab8..342e87f 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.43/SHASUMS256.txt
- sha256  6c5185cbfad3538484c9d97eec0110b5cd5826126f15b776015dfee1f51cd32a  node-v0.10.43.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v5.8.0/SHASUMS256.txt
--sha256  c1246d473d6650ca02ab168eaf840e9edda82a4190ff08165fc44a7b381a9361  node-v5.8.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v5.9.1/SHASUMS256.txt
-+sha256  668067077dfceb3d2039d0df693fec6aa20b920d01a42b53dc61d4aa91e0ae55  node-v5.9.1.tar.xz
++define OWFS_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S25owserver \
++		$(TARGET_DIR)/etc/init.d/S25owserver
++	$(OWFS_INSTALL_FUSE_INIT_SYSV)
++endef
++
+ $(eval $(autotools-package))
