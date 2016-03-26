@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Mar 2016 23:21:20 +0100
-Subject: [Buildroot] [PATCH 15/18] package/x265: bump version to 1.9
+Date: Sat, 26 Mar 2016 23:21:21 +0100
+Subject: [Buildroot] [PATCH 16/18] package/dtv-scan-tables: bump version
 In-Reply-To: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459030883-15232-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459030883-15232-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 714ec2a..92b5bea 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 760e6280c688f1ea90c492d19fc6d4084ca1c4b0ea9b2e3c736d32565c30d857 x265_1.8.tar.gz
-+sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 45c86f1..e737c31 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index ab6a36c..d78dd82 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X265_VERSION = 1.8
-+X265_VERSION = 1.9
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPLv2+
+-DTV_SCAN_TABLES_VERSION = 6da0f5e851dd5e51e43b87136228a88705a7ba69
++DTV_SCAN_TABLES_VERSION = 61c8339d686b2d98d5604c26a777cb3c1f3d84a1
+ DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
 -- 
 2.8.0.rc3
