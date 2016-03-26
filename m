@@ -1,214 +1,670 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Mar 2016 23:21:09 +0100
-Subject: [Buildroot] [PATCH 04/18] package/mediastreamer: bump version to
-	2.12.1
-In-Reply-To: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459030883-15232-4-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat, 26 Mar 2016 23:21:06 +0100
+Subject: [Buildroot] [PATCH 01/18] package/kodi: add support for ffmpeg 3.0
+Message-ID: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The version bump is needed to provide support for ffmpeg 3.0.
-
-Removed 0001-misc-fixes.patch which previously provided patches to
-support newer ffmpeg versions. This is not needed anymore after
-this upstream commit:
-https://github.com/BelledonneCommunications/mediastreamer2/commit/5e653bfe4c8ea27d09c80d91794f0178a454851e
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mediastreamer/0001-misc-fixes.patch | 156 ----------------------------
- package/mediastreamer/mediastreamer.hash    |   4 +-
- package/mediastreamer/mediastreamer.mk      |   2 +-
- 3 files changed, 3 insertions(+), 159 deletions(-)
- delete mode 100644 package/mediastreamer/0001-misc-fixes.patch
+ package/kodi/0007-ffmpeg30.patch | 646 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 646 insertions(+)
+ create mode 100644 package/kodi/0007-ffmpeg30.patch
 
-diff --git a/package/mediastreamer/0001-misc-fixes.patch b/package/mediastreamer/0001-misc-fixes.patch
-deleted file mode 100644
-index 84c9948..0000000
---- a/package/mediastreamer/0001-misc-fixes.patch
-+++ /dev/null
-@@ -1,156 +0,0 @@
--Fix linphone compile with newer ffmpeg versions, downloaded from
--https://github.com/dankamongmen/mediastreamer2/commit/4f438eb8e132a3119284be771e0daad143597ebd
--
--Fixes
--http://autobuild.buildroot.net/results/b72/b72b1f6287986af3d686cc3c8b9c1b3fd9419d29/
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--
--From 4f438eb8e132a3119284be771e0daad143597ebd Mon Sep 17 00:00:00 2001
--From: nick black <nick.black@sprezzatech.com>
--Date: Mon, 28 Jan 2013 23:54:17 -0500
--Subject: [PATCH] adapt to new libav API
--
-----
-- src/utils/ffmpeg-priv.h       | 1 +
-- src/videofilters/h264dec.c    | 6 +++---
-- src/videofilters/jpegwriter.c | 6 +++---
-- src/videofilters/nowebcam.c   | 6 +++---
-- src/videofilters/videodec.c   | 8 ++++----
-- src/videofilters/videoenc.c   | 6 +++---
-- 6 files changed, 17 insertions(+), 16 deletions(-)
--
--diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
--index 0eab098..a405c05 100644
----- a/src/utils/ffmpeg-priv.h
--+++ b/src/utils/ffmpeg-priv.h
--@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-- /* new layout */
-- # include <libavcodec/avcodec.h>
-- # include <libavutil/avutil.h>
--+# include <libavutil/mem.h>
-- #else
-- /* old layout */
-- # include <ffmpeg/avcodec.h>
--diff --git a/src/videofilters/h264dec.c b/src/videofilters/h264dec.c
--index 5229b5e..7059634 100644
----- a/src/videofilters/h264dec.c
--+++ b/src/videofilters/h264dec.c
--@@ -58,10 +58,10 @@ static void dec_open(DecData *d){
-- 	int error;
-- 	codec=avcodec_find_decoder(CODEC_ID_H264);
-- 	if (codec==NULL) ms_fatal("Could not find H264 decoder in ffmpeg.");
---	avcodec_get_context_defaults(&d->av_context);
---	error=avcodec_open(&d->av_context,codec);
--+	avcodec_get_context_defaults3(&d->av_context, codec);
--+	error=avcodec_open2(&d->av_context,codec, NULL);
-- 	if (error!=0){
---		ms_fatal("avcodec_open() failed.");
--+		ms_fatal("avcodec_open2() failed.");
-- 	}
-- }
-- 
--diff --git a/src/videofilters/jpegwriter.c b/src/videofilters/jpegwriter.c
--index cca79c5..daf3cdb 100644
----- a/src/videofilters/jpegwriter.c
--+++ b/src/videofilters/jpegwriter.c
--@@ -90,7 +90,7 @@ static void jpg_process(MSFilter *f){
-- 			mblk_t *jpegm;
-- 			struct SwsContext *sws_ctx;
-- 			
---			AVCodecContext *avctx=avcodec_alloc_context();
--+			AVCodecContext *avctx=avcodec_alloc_context3(NULL);
-- 			
-- 			avctx->width=yuvbuf.w;
-- 			avctx->height=yuvbuf.h;
--@@ -98,9 +98,9 @@ static void jpg_process(MSFilter *f){
-- 			avctx->time_base.den =1;
-- 			avctx->pix_fmt=PIX_FMT_YUVJ420P;
-- 
---			error=avcodec_open(avctx,s->codec);
--+			error=avcodec_open2(avctx,s->codec,NULL);
-- 			if (error!=0) {
---				ms_error("avcodec_open() failed: %i",error);
--+				ms_error("avcodec_open2() failed: %i",error);
-- 				cleanup(s,NULL);
-- 				av_free(avctx);
-- 				return;
--diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
--index f1c10de..b45f89f 100644
----- a/src/videofilters/nowebcam.c
--+++ b/src/videofilters/nowebcam.c
--@@ -68,9 +68,9 @@ static mblk_t *jpeg2yuv(uint8_t *jpgbuf, int bufsize, MSVideoSize *reqsize){
-- 		return NULL;
-- 	}
-- 
---	avcodec_get_context_defaults(&av_context);
---	if (avcodec_open(&av_context,codec)<0){
---		ms_error("jpeg2yuv: avcodec_open failed");
--+	avcodec_get_context_defaults3(&av_context,NULL);
--+	if (avcodec_open2(&av_context,codec,NULL)<0){
--+		ms_error("jpeg2yuv: avcodec_open2 failed");
-- 		return NULL;
-- 	}
-- 	av_init_packet(&pkt);
--diff --git a/src/videofilters/videodec.c b/src/videofilters/videodec.c
--index 9807214..2f1b452 100644
----- a/src/videofilters/videodec.c
--+++ b/src/videofilters/videodec.c
--@@ -53,7 +53,7 @@ static void dec_init(MSFilter *f, enum CodecID cid){
-- 	DecState *s=(DecState *)ms_new0(DecState,1);
-- 	ms_ffmpeg_check_init();
-- 	
---	avcodec_get_context_defaults(&s->av_context);
--+	avcodec_get_context_defaults3(&s->av_context,NULL);
-- 	s->av_codec=NULL;
-- 	s->codec=cid;
-- 	s->input=NULL;
--@@ -135,7 +135,7 @@ static void dec_preprocess(MSFilter *f){
-- 	if (s->av_context.codec==NULL){
-- 		/* we must know picture size before initializing snow decoder*/
-- 		if (s->codec!=CODEC_ID_SNOW){
---			error=avcodec_open(&s->av_context, s->av_codec);
--+			error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-- 			if (error!=0) ms_error("avcodec_open() failed: %i",error);
-- 			if (s->codec==CODEC_ID_MPEG4 && s->dci_size>0){
-- 				s->av_context.extradata=s->dci;
--@@ -225,8 +225,8 @@ static mblk_t * parse_snow_header(DecState *s,mblk_t *inm){
-- 			int error;
-- 			s->av_context.width=h>>16;
-- 			s->av_context.height=h&0xffff;
---			error=avcodec_open(&s->av_context, s->av_codec);
---			if (error!=0) ms_error("avcodec_open() failed for snow: %i",error);
--+			error=avcodec_open2(&s->av_context, s->av_codec, NULL);
--+			if (error!=0) ms_error("avcodec_open2() failed for snow: %i",error);
-- 			else {
-- 				s->snow_initialized=TRUE;
-- 				ms_message("Snow decoder initialized,size=%ix%i",
--diff --git a/src/videofilters/videoenc.c b/src/videofilters/videoenc.c
--index da35592..4101772 100644
----- a/src/videofilters/videoenc.c
--+++ b/src/videofilters/videoenc.c
--@@ -242,7 +242,7 @@ static void prepare(EncState *s){
-- 	AVCodecContext *c=&s->av_context;
-- 	const int max_br_vbv=128000;
-- 
---	avcodec_get_context_defaults(c);
--+	avcodec_get_context_defaults3(c,NULL);
-- 	if (s->codec==CODEC_ID_MJPEG)
-- 	{
-- 		ms_message("Codec bitrate set to %i",c->bit_rate);
--@@ -348,9 +348,9 @@ static void enc_preprocess(MSFilter *f){
-- 		ms_error("could not find encoder for codec id %i",s->codec);
-- 		return;
-- 	}
---	error=avcodec_open(&s->av_context, s->av_codec);
--+	error=avcodec_open2(&s->av_context, s->av_codec, NULL);
-- 	if (error!=0) {
---		ms_error("avcodec_open() failed: %i",error);
--+		ms_error("avcodec_open2() failed: %i",error);
-- 		return;
-- 	}
-- 	video_starter_init(&s->starter);
---- 
--2.0.3
--
-diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
-index 44849ac..21964a8 100644
---- a/package/mediastreamer/mediastreamer.hash
-+++ b/package/mediastreamer/mediastreamer.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	c245b9444c2abb4c84433606e01f0b3ce29ce78de0afe1e191f4f3c62656acd5	mediastreamer-2.9.0.tar.gz
-+# Locally calculated
-+sha256	0dbf8d4f721a04db9ec0982e98a4e852ad2d3acbcbd25edd96a66164a980f2e7	mediastreamer-2.12.1.tar.gz
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 81f5b50..a12bfb4 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEDIASTREAMER_VERSION = 2.9.0
-+MEDIASTREAMER_VERSION = 2.12.1
- MEDIASTREAMER_SITE = http://download.savannah.nongnu.org/releases/linphone/mediastreamer
- MEDIASTREAMER_INSTALL_STAGING = YES
- MEDIASTREAMER_DEPENDENCIES = host-intltool host-pkgconf ortp host-gettext
+diff --git a/package/kodi/0007-ffmpeg30.patch b/package/kodi/0007-ffmpeg30.patch
+new file mode 100644
+index 0000000..9164d48
+--- /dev/null
++++ b/package/kodi/0007-ffmpeg30.patch
+@@ -0,0 +1,646 @@
++Add support for ffmpeg 3.0
++
++Changes from original commit are only in file paths & quilt refresh.
++
++commit c31b7d374062f87c7512d9872cbceac920465913
++Author: Philip Langdale <philipl@overt.org>
++Date:   Mon Sep 21 19:49:36 2015 -0700
++
++    ffmpeg: Update AVPixelFormat and AV_PIX_FMT_* to compile with master
++    
++    The deprecated PixelFormat and PIX_FMT_* names have been removed in
++    ffmpeg master.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Downloaded from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-tv/kodi/files/kodi-16-ffmpeg3.patch]
++
++Index: xbmc-16.0-Jarvis/xbmc/cores/FFmpeg.h
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/FFmpeg.h
+++++ xbmc-16.0-Jarvis/xbmc/cores/FFmpeg.h
++@@ -24,7 +24,6 @@
++ #include "utils/CPUInfo.h"
++ 
++ extern "C" {
++-#include "libswscale/swscale.h"
++ #include "libavcodec/avcodec.h"
++ #include "libavformat/avformat.h"
++ #include "libavutil/avutil.h"
++@@ -33,23 +32,6 @@ extern "C" {
++ #include "libpostproc/postprocess.h"
++ }
++ 
++-inline int SwScaleCPUFlags()
++-{
++-  unsigned int cpuFeatures = g_cpuInfo.GetCPUFeatures();
++-  int flags = 0;
++-
++-  if (cpuFeatures & CPU_FEATURE_MMX)
++-    flags |= SWS_CPU_CAPS_MMX;
++-  if (cpuFeatures & CPU_FEATURE_MMX2)
++-    flags |= SWS_CPU_CAPS_MMX2;
++-  if (cpuFeatures & CPU_FEATURE_3DNOW)
++-    flags |= SWS_CPU_CAPS_3DNOW;
++-  if (cpuFeatures & CPU_FEATURE_ALTIVEC)
++-    flags |= SWS_CPU_CAPS_ALTIVEC;
++-
++-  return flags;
++-}
++-
++ inline int PPCPUFlags()
++ {
++   unsigned int cpuFeatures = g_cpuInfo.GetCPUFeatures();
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/DVDCodecUtils.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/DVDCodecUtils.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/DVDCodecUtils.cpp
++@@ -39,7 +39,7 @@ extern "C" {
++ #include "libswscale/swscale.h"
++ }
++ 
++-// allocate a new picture (PIX_FMT_YUV420P)
+++// allocate a new picture (AV_PIX_FMT_YUV420P)
++ DVDVideoPicture* CDVDCodecUtils::AllocatePicture(int iWidth, int iHeight)
++ {
++   DVDVideoPicture* pPicture = new DVDVideoPicture;
++@@ -264,13 +264,13 @@ DVDVideoPicture* CDVDCodecUtils::Convert
++ 
++         int dstformat;
++         if (format == RENDER_FMT_UYVY422)
++-          dstformat = PIX_FMT_UYVY422;
+++          dstformat = AV_PIX_FMT_UYVY422;
++         else
++-          dstformat = PIX_FMT_YUYV422;
+++          dstformat = AV_PIX_FMT_YUYV422;
++ 
++-        struct SwsContext *ctx = sws_getContext(pSrc->iWidth, pSrc->iHeight, PIX_FMT_YUV420P,
+++        struct SwsContext *ctx = sws_getContext(pSrc->iWidth, pSrc->iHeight, AV_PIX_FMT_YUV420P,
++                                                            pPicture->iWidth, pPicture->iHeight, (AVPixelFormat)dstformat,
++-                                                           SWS_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++                                                           SWS_BILINEAR, NULL, NULL, NULL);
++         sws_scale(ctx, src, srcStride, 0, pSrc->iHeight, dst, dstStride);
++         sws_freeContext(ctx);
++       }
++@@ -403,25 +403,25 @@ double CDVDCodecUtils::NormalizeFramedur
++ }
++ 
++ struct EFormatMap {
++-  PixelFormat   pix_fmt;
+++  AVPixelFormat   pix_fmt;
++   ERenderFormat format;
++ };
++ 
++ static const EFormatMap g_format_map[] = {
++-   { PIX_FMT_YUV420P,     RENDER_FMT_YUV420P    }
++-,  { PIX_FMT_YUVJ420P,    RENDER_FMT_YUV420P    }
++-,  { PIX_FMT_YUV420P10,   RENDER_FMT_YUV420P10  }
++-,  { PIX_FMT_YUV420P16,   RENDER_FMT_YUV420P16  }
++-,  { PIX_FMT_UYVY422,     RENDER_FMT_UYVY422    }
++-,  { PIX_FMT_YUYV422,     RENDER_FMT_YUYV422    }
++-,  { PIX_FMT_VAAPI_VLD,   RENDER_FMT_VAAPI      }
++-,  { PIX_FMT_DXVA2_VLD,   RENDER_FMT_DXVA       }
++-,  { PIX_FMT_NONE     ,   RENDER_FMT_NONE       }
+++   { AV_PIX_FMT_YUV420P,     RENDER_FMT_YUV420P    }
+++,  { AV_PIX_FMT_YUVJ420P,    RENDER_FMT_YUV420P    }
+++,  { AV_PIX_FMT_YUV420P10,   RENDER_FMT_YUV420P10  }
+++,  { AV_PIX_FMT_YUV420P16,   RENDER_FMT_YUV420P16  }
+++,  { AV_PIX_FMT_UYVY422,     RENDER_FMT_UYVY422    }
+++,  { AV_PIX_FMT_YUYV422,     RENDER_FMT_YUYV422    }
+++,  { AV_PIX_FMT_VAAPI_VLD,   RENDER_FMT_VAAPI      }
+++,  { AV_PIX_FMT_DXVA2_VLD,   RENDER_FMT_DXVA       }
+++,  { AV_PIX_FMT_NONE     ,   RENDER_FMT_NONE       }
++ };
++ 
++ ERenderFormat CDVDCodecUtils::EFormatFromPixfmt(int fmt)
++ {
++-  for(const EFormatMap *p = g_format_map; p->pix_fmt != PIX_FMT_NONE; ++p)
+++  for(const EFormatMap *p = g_format_map; p->pix_fmt != AV_PIX_FMT_NONE; ++p)
++   {
++     if(p->pix_fmt == fmt)
++       return p->format;
++@@ -431,10 +431,10 @@ ERenderFormat CDVDCodecUtils::EFormatFro
++ 
++ int CDVDCodecUtils::PixfmtFromEFormat(ERenderFormat fmt)
++ {
++-  for(const EFormatMap *p = g_format_map; p->pix_fmt != PIX_FMT_NONE; ++p)
+++  for(const EFormatMap *p = g_format_map; p->pix_fmt != AV_PIX_FMT_NONE; ++p)
++   {
++     if(p->format == fmt)
++       return p->pix_fmt;
++   }
++-  return PIX_FMT_NONE;
+++  return AV_PIX_FMT_NONE;
++ }
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp
++@@ -77,8 +77,8 @@ enum DecoderState
++   STATE_SW_MULTI
++ };
++ 
++-enum PixelFormat CDVDVideoCodecFFmpeg::GetFormat( struct AVCodecContext * avctx
++-                                                , const PixelFormat * fmt )
+++enum AVPixelFormat CDVDVideoCodecFFmpeg::GetFormat( struct AVCodecContext * avctx
+++                                                , const AVPixelFormat * fmt )
++ {
++   CDVDVideoCodecFFmpeg* ctx  = (CDVDVideoCodecFFmpeg*)avctx->opaque;
++ 
++@@ -104,8 +104,8 @@ enum PixelFormat CDVDVideoCodecFFmpeg::G
++     avctx->hwaccel_context = 0;
++   }
++ 
++-  const PixelFormat * cur = fmt;
++-  while(*cur != PIX_FMT_NONE)
+++  const AVPixelFormat * cur = fmt;
+++  while(*cur != AV_PIX_FMT_NONE)
++   {
++ #ifdef HAVE_LIBVDPAU
++     if(VDPAU::CDecoder::IsVDPAUFormat(*cur) && CSettings::GetInstance().GetBool(CSettings::SETTING_VIDEOPLAYER_USEVDPAU))
++@@ -137,7 +137,7 @@ enum PixelFormat CDVDVideoCodecFFmpeg::G
++ #endif
++ #ifdef HAVE_LIBVA
++     // mpeg4 vaapi decoding is disabled
++-    if(*cur == PIX_FMT_VAAPI_VLD && CSettings::GetInstance().GetBool(CSettings::SETTING_VIDEOPLAYER_USEVAAPI))
+++    if(*cur == AV_PIX_FMT_VAAPI_VLD && CSettings::GetInstance().GetBool(CSettings::SETTING_VIDEOPLAYER_USEVAAPI))
++     {
++       VAAPI::CDecoder* dec = new VAAPI::CDecoder();
++       if(dec->Open(avctx, ctx->m_pCodecContext, *cur, ctx->m_uSurfacesCount) == true)
++@@ -214,11 +214,11 @@ bool CDVDVideoCodecFFmpeg::Open(CDVDStre
++ 
++   for(std::vector<ERenderFormat>::iterator it = options.m_formats.begin(); it != options.m_formats.end(); ++it)
++   {
++-    m_formats.push_back((PixelFormat)CDVDCodecUtils::PixfmtFromEFormat(*it));
+++    m_formats.push_back((AVPixelFormat)CDVDCodecUtils::PixfmtFromEFormat(*it));
++     if(*it == RENDER_FMT_YUV420P)
++-      m_formats.push_back(PIX_FMT_YUVJ420P);
+++      m_formats.push_back(AV_PIX_FMT_YUVJ420P);
++   }
++-  m_formats.push_back(PIX_FMT_NONE); /* always add none to get a terminated list in ffmpeg world */
+++  m_formats.push_back(AV_PIX_FMT_NONE); /* always add none to get a terminated list in ffmpeg world */
++ 
++   pCodec = avcodec_find_decoder(hints.codec);
++ 
++@@ -655,7 +655,7 @@ bool CDVDVideoCodecFFmpeg::GetPictureCom
++   pDvdVideoPicture->color_transfer = m_pCodecContext->color_trc;
++   pDvdVideoPicture->color_matrix = m_pCodecContext->colorspace;
++   if(m_pCodecContext->color_range == AVCOL_RANGE_JPEG
++-  || m_pCodecContext->pix_fmt     == PIX_FMT_YUVJ420P)
+++  || m_pCodecContext->pix_fmt     == AV_PIX_FMT_YUVJ420P)
++     pDvdVideoPicture->color_range = 1;
++   else
++     pDvdVideoPicture->color_range = 0;
++@@ -738,8 +738,8 @@ bool CDVDVideoCodecFFmpeg::GetPicture(DV
++   pDvdVideoPicture->iFlags |= pDvdVideoPicture->data[0] ? 0 : DVP_FLAG_DROPPED;
++   pDvdVideoPicture->extended_format = 0;
++ 
++-  PixelFormat pix_fmt;
++-  pix_fmt = (PixelFormat)m_pFrame->format;
+++  AVPixelFormat pix_fmt;
+++  pix_fmt = (AVPixelFormat)m_pFrame->format;
++ 
++   pDvdVideoPicture->format = CDVDCodecUtils::EFormatFromPixfmt(pix_fmt);
++   return true;
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.h
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.h
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.h
++@@ -46,7 +46,7 @@ public:
++     public:
++              IHardwareDecoder() {}
++     virtual ~IHardwareDecoder() {};
++-    virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat, unsigned int surfaces) = 0;
+++    virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces) = 0;
++     virtual int  Decode    (AVCodecContext* avctx, AVFrame* frame) = 0;
++     virtual bool GetPicture(AVCodecContext* avctx, AVFrame* frame, DVDVideoPicture* picture) = 0;
++     virtual int  Check     (AVCodecContext* avctx) = 0;
++@@ -77,7 +77,7 @@ public:
++   void               SetHardware(IHardwareDecoder* hardware);
++ 
++ protected:
++-  static enum PixelFormat GetFormat(struct AVCodecContext * avctx, const PixelFormat * fmt);
+++  static enum AVPixelFormat GetFormat(struct AVCodecContext * avctx, const AVPixelFormat * fmt);
++ 
++   int  FilterOpen(const std::string& filters, bool scale);
++   void FilterClose();
++@@ -119,7 +119,7 @@ protected:
++   int m_iLastKeyframe;
++   double m_dts;
++   bool   m_started;
++-  std::vector<PixelFormat> m_formats;
+++  std::vector<AVPixelFormat> m_formats;
++   double m_decoderPts;
++   int    m_skippedDeint;
++   bool   m_requestSkipDeint;
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecVDA.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecVDA.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DVDVideoCodecVDA.cpp
++@@ -554,11 +554,11 @@ void CDVDVideoCodecVDA::DisplayQueuePop(
++ 
++ void CDVDVideoCodecVDA::UYVY422_to_YUV420P(uint8_t *yuv422_ptr, int yuv422_stride, DVDVideoPicture *picture)
++ {
++-  // convert PIX_FMT_UYVY422 to PIX_FMT_YUV420P.
+++  // convert AV_PIX_FMT_UYVY422 to AV_PIX_FMT_YUV420P.
++   struct SwsContext *swcontext = sws_getContext(
++-    m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_UYVY422, 
++-    m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_YUV420P, 
++-    SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++    m_videobuffer.iWidth, m_videobuffer.iHeight, AV_PIX_FMT_UYVY422,
+++    m_videobuffer.iWidth, m_videobuffer.iHeight, AV_PIX_FMT_YUV420P,
+++    SWS_FAST_BILINEAR, NULL, NULL, NULL);
++   if (swcontext)
++   {
++     uint8_t  *src[] = { yuv422_ptr, 0, 0, 0 };
++@@ -574,11 +574,11 @@ void CDVDVideoCodecVDA::UYVY422_to_YUV42
++ 
++ void CDVDVideoCodecVDA::BGRA_to_YUV420P(uint8_t *bgra_ptr, int bgra_stride, DVDVideoPicture *picture)
++ {
++-  // convert PIX_FMT_BGRA to PIX_FMT_YUV420P.
+++  // convert AV_PIX_FMT_BGRA to AV_PIX_FMT_YUV420P.
++   struct SwsContext *swcontext = sws_getContext(
++-    m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_BGRA, 
++-    m_videobuffer.iWidth, m_videobuffer.iHeight, PIX_FMT_YUV420P, 
++-    SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++    m_videobuffer.iWidth, m_videobuffer.iHeight, AV_PIX_FMT_BGRA,
+++    m_videobuffer.iWidth, m_videobuffer.iHeight, AV_PIX_FMT_YUV420P,
+++    SWS_FAST_BILINEAR, NULL, NULL, NULL);
++   if (swcontext)
++   {
++     uint8_t  *src[] = { bgra_ptr, 0, 0, 0 };
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DXVA.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/DXVA.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DXVA.cpp
++@@ -886,7 +886,7 @@ static bool CheckCompatibility(AVCodecCo
++   return true;
++ }
++ 
++-bool CDecoder::Open(AVCodecContext *avctx, AVCodecContext* mainctx, enum PixelFormat fmt, unsigned int surfaces)
+++bool CDecoder::Open(AVCodecContext *avctx, AVCodecContext* mainctx, enum AVPixelFormat fmt, unsigned int surfaces)
++ {
++   if (!CheckCompatibility(avctx))
++     return false;
++@@ -1135,9 +1135,9 @@ bool CDecoder::OpenDecoder()
++   return true;
++ }
++ 
++-bool CDecoder::Supports(enum PixelFormat fmt)
+++bool CDecoder::Supports(enum AVPixelFormat fmt)
++ {
++-  if(fmt == PIX_FMT_DXVA2_VLD)
+++  if(fmt == AV_PIX_FMT_DXVA2_VLD)
++     return true;
++   return false;
++ }
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DXVA.h
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/DXVA.h
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/DXVA.h
++@@ -141,7 +141,7 @@ class CDecoder
++ public:
++   CDecoder();
++  ~CDecoder();
++-  virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat, unsigned int surfaces);
+++  virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces);
++   virtual int  Decode    (AVCodecContext* avctx, AVFrame* frame);
++   virtual bool GetPicture(AVCodecContext* avctx, AVFrame* frame, DVDVideoPicture* picture);
++   virtual int  Check     (AVCodecContext* avctx);
++@@ -154,7 +154,7 @@ public:
++   int   GetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags);
++   void  RelBuffer(uint8_t *data);
++ 
++-  static bool      Supports(enum PixelFormat fmt);
+++  static bool      Supports(enum AVPixelFormat fmt);
++ 
++   void CloseDXVADecoder();
++ 
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.cpp
++@@ -479,7 +479,7 @@ CDecoder::~CDecoder()
++   Close();
++ }
++ 
++-bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat fmt, unsigned int surfaces)
+++bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat fmt, unsigned int surfaces)
++ {
++   // don't support broken wrappers by default
++   // nvidia cards with a vaapi to vdpau wrapper
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.h
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.h
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VAAPI.h
++@@ -406,7 +406,7 @@ public:
++   CDecoder();
++   virtual ~CDecoder();
++ 
++-  virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat, unsigned int surfaces = 0);
+++  virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces = 0);
++   virtual int  Decode    (AVCodecContext* avctx, AVFrame* frame);
++   virtual bool GetPicture(AVCodecContext* avctx, AVFrame* frame, DVDVideoPicture* picture);
++   virtual void Reset();
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDA.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/VDA.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDA.cpp
++@@ -186,7 +186,7 @@ void CDecoder::Close()
++   m_bitstream = NULL;
++ }
++ 
++-bool CDecoder::Open(AVCodecContext *avctx, AVCodecContext* mainctx, enum PixelFormat fmt, unsigned int surfaces)
+++bool CDecoder::Open(AVCodecContext *avctx, AVCodecContext* mainctx, enum AVPixelFormat fmt, unsigned int surfaces)
++ {
++   Close();
++ 
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDA.h
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/VDA.h
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDA.h
++@@ -35,7 +35,7 @@ class CDecoder
++ public:
++   CDecoder();
++  ~CDecoder();
++-  virtual bool Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat, unsigned int surfaces = 0);
+++  virtual bool Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces = 0);
++   virtual int Decode(AVCodecContext* avctx, AVFrame* frame);
++   virtual bool GetPicture(AVCodecContext* avctx, AVFrame* frame, DVDVideoPicture* picture);
++   virtual int Check(AVCodecContext* avctx);
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.cpp
++@@ -486,7 +486,7 @@ CDecoder::CDecoder() : m_vdpauOutput(&m_
++   m_vdpauConfig.context = 0;
++ }
++ 
++-bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat fmt, unsigned int surfaces)
+++bool CDecoder::Open(AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat fmt, unsigned int surfaces)
++ {
++   // check if user wants to decode this format with VDPAU
++   std::string gpuvendor = g_Windowing.GetRenderVendor();
++@@ -760,7 +760,7 @@ int CDecoder::Check(AVCodecContext* avct
++   return 0;
++ }
++ 
++-bool CDecoder::IsVDPAUFormat(PixelFormat format)
+++bool CDecoder::IsVDPAUFormat(AVPixelFormat format)
++ {
++   if (format == AV_PIX_FMT_VDPAU)
++     return true;
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.h
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.h
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDCodecs/Video/VDPAU.h
++@@ -556,7 +556,7 @@ public:
++   CDecoder();
++   virtual ~CDecoder();
++ 
++-  virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum PixelFormat, unsigned int surfaces = 0);
+++  virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces = 0);
++   virtual int  Decode    (AVCodecContext* avctx, AVFrame* frame);
++   virtual bool GetPicture(AVCodecContext* avctx, AVFrame* frame, DVDVideoPicture* picture);
++   virtual void Reset();
++@@ -571,7 +571,7 @@ public:
++   bool Supports(VdpVideoMixerFeature feature);
++   bool Supports(EINTERLACEMETHOD method);
++   EINTERLACEMETHOD AutoInterlaceMethod();
++-  static bool IsVDPAUFormat(PixelFormat fmt);
+++  static bool IsVDPAUFormat(AVPixelFormat fmt);
++ 
++   static void FFReleaseBuffer(void *opaque, uint8_t *data);
++   static int FFGetBuffer(AVCodecContext *avctx, AVFrame *pic, int flags);
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
++@@ -1638,7 +1638,7 @@ void CDVDDemuxFFmpeg::ParsePacket(AVPack
++ 
++   // for video we need a decoder to get desired information into codec context
++   if (st->codec->codec_type == AVMEDIA_TYPE_VIDEO && st->codec->extradata &&
++-      (!st->codec->width || st->codec->pix_fmt == PIX_FMT_NONE))
+++      (!st->codec->width || st->codec->pix_fmt == AV_PIX_FMT_NONE))
++   {
++     // open a decoder, it will be cleared down by ffmpeg on closing the stream
++     if (!st->codec->codec)
++@@ -1695,7 +1695,7 @@ bool CDVDDemuxFFmpeg::IsVideoReady()
++       st = m_pFormatContext->streams[idx];
++       if (st->codec->codec_type == AVMEDIA_TYPE_VIDEO)
++       {
++-        if (st->codec->width && st->codec->pix_fmt != PIX_FMT_NONE)
+++        if (st->codec->width && st->codec->pix_fmt != AV_PIX_FMT_NONE)
++           return true;
++         hasVideo = true;
++       }
++@@ -1708,7 +1708,7 @@ bool CDVDDemuxFFmpeg::IsVideoReady()
++       st = m_pFormatContext->streams[i];
++       if (st->codec->codec_type == AVMEDIA_TYPE_VIDEO)
++       {
++-        if (st->codec->width && st->codec->pix_fmt != PIX_FMT_NONE)
+++        if (st->codec->width && st->codec->pix_fmt != AV_PIX_FMT_NONE)
++           return true;
++         hasVideo = true;
++       }
++Index: xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDFileInfo.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/dvdplayer/DVDFileInfo.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/dvdplayer/DVDFileInfo.cpp
++@@ -275,7 +275,7 @@ bool CDVDFileInfo::ExtractThumb(const st
++ 
++             uint8_t *pOutBuf = new uint8_t[nWidth * nHeight * 4];
++             struct SwsContext *context = sws_getContext(picture.iWidth, picture.iHeight,
++-                  PIX_FMT_YUV420P, nWidth, nHeight, PIX_FMT_BGRA, SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++                  AV_PIX_FMT_YUV420P, nWidth, nHeight, AV_PIX_FMT_BGRA, SWS_FAST_BILINEAR, NULL, NULL, NULL);
++ 
++             if (context)
++             {
++Index: xbmc-16.0-Jarvis/xbmc/cores/VideoRenderers/LinuxRendererGL.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/VideoRenderers/LinuxRendererGL.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/VideoRenderers/LinuxRendererGL.cpp
++@@ -2932,7 +2932,7 @@ void CLinuxRendererGL::ToRGBFrame(YV12Im
++   }
++   else if (m_format == RENDER_FMT_NV12)
++   {
++-    srcFormat = PIX_FMT_NV12;
+++    srcFormat = AV_PIX_FMT_NV12;
++     for (int i = 0; i < 2; i++)
++     {
++       src[i]       = im->plane[i];
++@@ -2941,13 +2941,13 @@ void CLinuxRendererGL::ToRGBFrame(YV12Im
++   }
++   else if (m_format == RENDER_FMT_YUYV422)
++   {
++-    srcFormat    = PIX_FMT_YUYV422;
+++    srcFormat    = AV_PIX_FMT_YUYV422;
++     src[0]       = im->plane[0];
++     srcStride[0] = im->stride[0];
++   }
++   else if (m_format == RENDER_FMT_UYVY422)
++   {
++-    srcFormat    = PIX_FMT_UYVY422;
+++    srcFormat    = AV_PIX_FMT_UYVY422;
++     src[0]       = im->plane[0];
++     srcStride[0] = im->stride[0];
++   }
++@@ -2965,8 +2965,8 @@ void CLinuxRendererGL::ToRGBFrame(YV12Im
++ 
++   m_context = sws_getCachedContext(m_context,
++                                                  im->width, im->height, (AVPixelFormat)srcFormat,
++-                                                 im->width, im->height, (AVPixelFormat)PIX_FMT_BGRA,
++-                                                 SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++                                                 im->width, im->height, (AVPixelFormat)AV_PIX_FMT_BGRA,
+++                                                 SWS_FAST_BILINEAR, NULL, NULL, NULL);
++ 
++   uint8_t *dst[]       = { m_rgbBuffer, 0, 0, 0 };
++   int      dstStride[] = { (int)m_sourceWidth * 4, 0, 0, 0 };
++@@ -2995,7 +2995,7 @@ void CLinuxRendererGL::ToRGBFields(YV12I
++ 
++   if (m_format == RENDER_FMT_YUV420P)
++   {
++-    srcFormat = PIX_FMT_YUV420P;
+++    srcFormat = AV_PIX_FMT_YUV420P;
++     for (int i = 0; i < 3; i++)
++     {
++       srcTop[i]       = im->plane[i];
++@@ -3006,7 +3006,7 @@ void CLinuxRendererGL::ToRGBFields(YV12I
++   }
++   else if (m_format == RENDER_FMT_NV12)
++   {
++-    srcFormat = PIX_FMT_NV12;
+++    srcFormat = AV_PIX_FMT_NV12;
++     for (int i = 0; i < 2; i++)
++     {
++       srcTop[i]       = im->plane[i];
++@@ -3017,7 +3017,7 @@ void CLinuxRendererGL::ToRGBFields(YV12I
++   }
++   else if (m_format == RENDER_FMT_YUYV422)
++   {
++-    srcFormat       = PIX_FMT_YUYV422;
+++    srcFormat       = AV_PIX_FMT_YUYV422;
++     srcTop[0]       = im->plane[0];
++     srcStrideTop[0] = im->stride[0] * 2;
++     srcBot[0]       = im->plane[0] + im->stride[0];
++@@ -3025,7 +3025,7 @@ void CLinuxRendererGL::ToRGBFields(YV12I
++   }
++   else if (m_format == RENDER_FMT_UYVY422)
++   {
++-    srcFormat       = PIX_FMT_UYVY422;
+++    srcFormat       = AV_PIX_FMT_UYVY422;
++     srcTop[0]       = im->plane[0];
++     srcStrideTop[0] = im->stride[0] * 2;
++     srcBot[0]       = im->plane[0] + im->stride[0];
++@@ -3045,8 +3045,8 @@ void CLinuxRendererGL::ToRGBFields(YV12I
++ 
++   m_context = sws_getCachedContext(m_context,
++                                                  im->width, im->height >> 1, (AVPixelFormat)srcFormat,
++-                                                 im->width, im->height >> 1, (AVPixelFormat)PIX_FMT_BGRA,
++-                                                 SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++                                                 im->width, im->height >> 1, (AVPixelFormat)AV_PIX_FMT_BGRA,
+++                                                 SWS_FAST_BILINEAR, NULL, NULL, NULL);
++   uint8_t *dstTop[]    = { m_rgbBuffer, 0, 0, 0 };
++   uint8_t *dstBot[]    = { m_rgbBuffer + m_sourceWidth * m_sourceHeight * 2, 0, 0, 0 };
++   int      dstStride[] = { (int)m_sourceWidth * 4, 0, 0, 0 };
++Index: xbmc-16.0-Jarvis/xbmc/cores/VideoRenderers/LinuxRendererGLES.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/VideoRenderers/LinuxRendererGLES.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/VideoRenderers/LinuxRendererGLES.cpp
++@@ -2006,8 +2006,8 @@ void CLinuxRendererGLES::UploadYV12Textu
++ #endif
++     {
++       m_sw_context = sws_getCachedContext(m_sw_context,
++-        im->width, im->height, PIX_FMT_YUV420P,
++-        im->width, im->height, PIX_FMT_RGBA,
+++        im->width, im->height, AV_PIX_FMT_YUV420P,
+++        im->width, im->height, AV_PIX_FMT_RGBA,
++         SWS_FAST_BILINEAR, NULL, NULL, NULL);
++ 
++       uint8_t *src[]  = { im->plane[0], im->plane[1], im->plane[2], 0 };
++Index: xbmc-16.0-Jarvis/xbmc/cores/VideoRenderers/WinRenderer.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/cores/VideoRenderers/WinRenderer.cpp
+++++ xbmc-16.0-Jarvis/xbmc/cores/VideoRenderers/WinRenderer.cpp
++@@ -94,16 +94,16 @@ CWinRenderer::~CWinRenderer()
++   UnInit();
++ }
++ 
++-static enum PixelFormat PixelFormatFromFormat(ERenderFormat format)
+++static enum AVPixelFormat PixelFormatFromFormat(ERenderFormat format)
++ {
++-  if (format == RENDER_FMT_DXVA)      return PIX_FMT_NV12;
++-  if (format == RENDER_FMT_YUV420P)   return PIX_FMT_YUV420P;
++-  if (format == RENDER_FMT_YUV420P10) return PIX_FMT_YUV420P10;
++-  if (format == RENDER_FMT_YUV420P16) return PIX_FMT_YUV420P16;
++-  if (format == RENDER_FMT_NV12)      return PIX_FMT_NV12;
++-  if (format == RENDER_FMT_UYVY422)   return PIX_FMT_UYVY422;
++-  if (format == RENDER_FMT_YUYV422)   return PIX_FMT_YUYV422;
++-  return PIX_FMT_NONE;
+++  if (format == RENDER_FMT_DXVA)      return AV_PIX_FMT_NV12;
+++  if (format == RENDER_FMT_YUV420P)   return AV_PIX_FMT_YUV420P;
+++  if (format == RENDER_FMT_YUV420P10) return AV_PIX_FMT_YUV420P10;
+++  if (format == RENDER_FMT_YUV420P16) return AV_PIX_FMT_YUV420P16;
+++  if (format == RENDER_FMT_NV12)      return AV_PIX_FMT_NV12;
+++  if (format == RENDER_FMT_UYVY422)   return AV_PIX_FMT_UYVY422;
+++  if (format == RENDER_FMT_YUYV422)   return AV_PIX_FMT_YUYV422;
+++  return AV_PIX_FMT_NONE;
++ }
++ 
++ void CWinRenderer::ManageTextures()
++@@ -719,13 +719,13 @@ void CWinRenderer::Render(DWORD flags)
++ 
++ void CWinRenderer::RenderSW()
++ {
++-  enum PixelFormat format = PixelFormatFromFormat(m_format);
+++  enum AVPixelFormat format = PixelFormatFromFormat(m_format);
++ 
++   // 1. convert yuv to rgb
++   m_sw_scale_ctx = sws_getCachedContext(m_sw_scale_ctx,
++                                         m_sourceWidth, m_sourceHeight, format,
++-                                        m_sourceWidth, m_sourceHeight, PIX_FMT_BGRA,
++-                                        SWS_FAST_BILINEAR | SwScaleCPUFlags(), NULL, NULL, NULL);
+++                                        m_sourceWidth, m_sourceHeight, AV_PIX_FMT_BGRA,
+++                                        SWS_FAST_BILINEAR, NULL, NULL, NULL);
++ 
++   YUVBuffer* buf = (YUVBuffer*)m_VideoBuffers[m_iYV12RenderBuffer];
++ 
++Index: xbmc-16.0-Jarvis/xbmc/pictures/Picture.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/pictures/Picture.cpp
+++++ xbmc-16.0-Jarvis/xbmc/pictures/Picture.cpp
++@@ -342,9 +342,9 @@ bool CPicture::ScaleImage(uint8_t *in_pi
++                           uint8_t *out_pixels, unsigned int out_width, unsigned int out_height, unsigned int out_pitch,
++                           CPictureScalingAlgorithm::Algorithm scalingAlgorithm /* = CPictureScalingAlgorithm::NoAlgorithm */)
++ {
++-  struct SwsContext *context = sws_getContext(in_width, in_height, PIX_FMT_BGRA,
++-                                                         out_width, out_height, PIX_FMT_BGRA,
++-                                                         CPictureScalingAlgorithm::ToSwscale(scalingAlgorithm) | SwScaleCPUFlags(), NULL, NULL, NULL);
+++  struct SwsContext *context = sws_getContext(in_width, in_height, AV_PIX_FMT_BGRA,
+++                                                         out_width, out_height, AV_PIX_FMT_BGRA,
+++                                                         CPictureScalingAlgorithm::ToSwscale(scalingAlgorithm), NULL, NULL, NULL);
++ 
++   uint8_t *src[] = { in_pixels, 0, 0, 0 };
++   int     srcStride[] = { (int)in_pitch, 0, 0, 0 };
++Index: xbmc-16.0-Jarvis/xbmc/video/FFmpegVideoDecoder.cpp
++===================================================================
++--- xbmc-16.0-Jarvis.orig/xbmc/video/FFmpegVideoDecoder.cpp
+++++ xbmc-16.0-Jarvis/xbmc/video/FFmpegVideoDecoder.cpp
++@@ -252,7 +252,7 @@ bool FFmpegVideoDecoder::nextFrame( CBas
++       return false;
++ 
++     // Due to a bug in swsscale we need to allocate one extra line of data
++-    if ( avpicture_alloc( m_pFrameRGB, PIX_FMT_RGB32, m_frameRGBwidth, m_frameRGBheight + 1 ) < 0 )
+++    if ( avpicture_alloc( m_pFrameRGB, AV_PIX_FMT_RGB32, m_frameRGBwidth, m_frameRGBheight + 1 ) < 0 )
++       return false;
++   }
++ 
++@@ -287,7 +287,7 @@ bool FFmpegVideoDecoder::nextFrame( CBas
++ 
++   // We got the video frame, render it into the picture buffer
++   struct SwsContext * context = sws_getContext( m_pCodecCtx->width, m_pCodecCtx->height, m_pCodecCtx->pix_fmt,
++-                           m_frameRGBwidth, m_frameRGBheight, PIX_FMT_RGB32, SWS_FAST_BILINEAR, NULL, NULL, NULL );
+++                           m_frameRGBwidth, m_frameRGBheight, AV_PIX_FMT_RGB32, SWS_FAST_BILINEAR, NULL, NULL, NULL );
++ 
++   sws_scale( context, m_pFrame->data, m_pFrame->linesize, 0, m_pCodecCtx->height,
++                                                                      m_pFrameRGB->data, m_pFrameRGB->linesize );
 -- 
 2.8.0.rc3
