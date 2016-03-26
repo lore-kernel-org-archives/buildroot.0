@@ -1,69 +1,39 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 26 Mar 2016 20:57:55 +0000
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: bump version to 5.9.1
-Message-ID: <1459025875-9002-1-git-send-email-martin@barkynet.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 26 Mar 2016 21:57:41 +0100
+Subject: [Buildroot] [PATCH 3/3] ffmpeg: default to --cpu=generic for
+ MIPS architecture
+References: <1458309966-16835-1-git-send-email-Vincent.Riera@imgtec.com>
+ <1458309966-16835-3-git-send-email-Vincent.Riera@imgtec.com>
+ <20160319143556.34d7b41a@free-electrons.com>
+Message-ID: <5n9jscxh1d.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://nodejs.org/en/blog/release/v5.9.1/
+Am Sat, 19 Mar 2016 14:35:56 +0100 schrieb Thomas Petazzoni:
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
- .../{5.8.0 => 5.9.1}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
- package/nodejs/{5.8.0 => 5.9.1}/0003-Fix-va_list-not-declared.patch   | 0
- package/nodejs/{5.8.0 => 5.9.1}/0004-Fix-support-for-uClibc-ng.patch  | 0
- package/nodejs/Config.in                                              | 2 +-
- package/nodejs/nodejs.hash                                            | 4 ++--
- 6 files changed, 3 insertions(+), 3 deletions(-)
- rename package/nodejs/{5.8.0 => 5.9.1}/0001-Remove-dependency-on-Python-bz2-module.patch (100%)
- rename package/nodejs/{5.8.0 => 5.9.1}/0002-gyp-force-link-command-to-use-CXX.patch (100%)
- rename package/nodejs/{5.8.0 => 5.9.1}/0003-Fix-va_list-not-declared.patch (100%)
- rename package/nodejs/{5.8.0 => 5.9.1}/0004-Fix-support-for-uClibc-ng.patch (100%)
+> Dear Vicente Olivert Riera,
+> 
+> On Fri, 18 Mar 2016 14:06:06 +0000, Vicente Olivert Riera wrote:
+>> Signed-off-by: Vicente Olivert Riera
+>> <Vincent.Riera@imgtec.com>
+>> ---
+>>  package/ffmpeg/ffmpeg.mk | 5 +++++
+>>  1 file changed, 5 insertions(+)
+> 
+> Why ? Your commit log only says what the patch is doing, but not why.
 
-diff --git a/package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.9.1/0001-Remove-dependency-on-Python-bz2-module.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
-rename to package/nodejs/5.9.1/0001-Remove-dependency-on-Python-bz2-module.patch
-diff --git a/package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.9.1/0002-gyp-force-link-command-to-use-CXX.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
-rename to package/nodejs/5.9.1/0002-gyp-force-link-command-to-use-CXX.patch
-diff --git a/package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.9.1/0003-Fix-va_list-not-declared.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
-rename to package/nodejs/5.9.1/0003-Fix-va_list-not-declared.patch
-diff --git a/package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.9.1/0004-Fix-support-for-uClibc-ng.patch
-similarity index 100%
-rename from package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
-rename to package/nodejs/5.9.1/0004-Fix-support-for-uClibc-ng.patch
-diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
-index d200bbb..dd69a74 100644
---- a/package/nodejs/Config.in
-+++ b/package/nodejs/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NODEJS_VERSION_STRING
- 	string
--	default "5.8.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
-+	default "5.9.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
- 	default "0.10.43"
- 
- menu "Module Selection"
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 2e8dab8..342e87f 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
- # From upstream URL: http://nodejs.org/dist/v0.10.43/SHASUMS256.txt
- sha256  6c5185cbfad3538484c9d97eec0110b5cd5826126f15b776015dfee1f51cd32a  node-v0.10.43.tar.xz
- 
--# From upstream URL: http://nodejs.org/dist/v5.8.0/SHASUMS256.txt
--sha256  c1246d473d6650ca02ab168eaf840e9edda82a4190ff08165fc44a7b381a9361  node-v5.8.0.tar.xz
-+# From upstream URL: http://nodejs.org/dist/v5.9.1/SHASUMS256.txt
-+sha256  668067077dfceb3d2039d0df693fec6aa20b920d01a42b53dc61d4aa91e0ae55  node-v5.9.1.tar.xz
--- 
-2.5.0
+Hi Thomas,
+
+this patch prevents this message from ffmpeg configure:
+
+WARNING: unknown CPU. Disabling all MIPS optimizations.
+
+I will add a description about this in my re-spin of Vicentes patch 
+series. Please note that the ffmpeg 3.0 bump will not only need updates 
+for Kodi but also libdcadec, mediastreamer, opencv, opencv3, squeezelite 
+and freerdp; all of them are currently part of my WIP patch series.
+
+Regards, Bernd
