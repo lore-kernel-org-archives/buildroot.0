@@ -1,35 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Mar 2016 21:35:18 +0100
-Subject: [Buildroot] [git commit] libgtk2: point to the proper cups-config
-Message-ID: <20160326203523.C251E817DC@busybox.osuosl.org>
+Date: Sat, 26 Mar 2016 21:35:44 +0100
+Subject: [Buildroot] [git commit] cairo: enable opengl for cairo-gl
+Message-ID: <20160326203554.82DA47FFD1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d41722e4f4869d3a0b70ec588db391f3e4f3fdce
+commit: https://git.buildroot.net/buildroot/commit/?id=99b115e081167013d51cc0e5b415a1c66175128a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Otherwise it can pick up the distro cups-config if it's present, leading
-to improper library usage/linkage. Fixes:
-http://autobuild.buildroot.net/results/bf4/bf493977817a750427aae82e71a5257187bd7344/
+If OpenGL is enabled then enable cairo-gl.
+However if GLESv2 is also present we must choose which implementation to
+use.
+Since normally OpenGL is more featured, has more dependencies and
+wouldn't be present "by accident" it seems like the logical choice to
+win over it.
+
+This feature is useful for webkitgtk's accelerated 2d canvas.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libgtk2/libgtk2.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/cairo/cairo.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
-index 971e33c..94fa97f 100644
---- a/package/libgtk2/libgtk2.mk
-+++ b/package/libgtk2/libgtk2.mk
-@@ -85,6 +85,7 @@ LIBGTK2_CONF_OPTS += --without-libtiff
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index ab0c2e8..b798995 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -79,11 +79,17 @@ else
+ CAIRO_CONF_OPTS += --disable-gobject
  endif
  
- ifeq ($(BR2_PACKAGE_CUPS),y)
-+LIBGTK2_CONF_OPTS += CUPS_CONFIG="$(STAGING_DIR)/usr/bin/cups-config"
- LIBGTK2_DEPENDENCIES += cups
++# Can use GL or GLESv2 but not both
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++CAIRO_CONF_OPTS += --enable-gl --disable-glesv2
++CAIRO_DEPENDENCIES += libgl
++else
+ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+-CAIRO_CONF_OPTS += --enable-glesv2
++CAIRO_CONF_OPTS += --disable-gl --enable-glesv2
+ CAIRO_DEPENDENCIES += libgles
  else
- LIBGTK2_CONF_OPTS += --disable-cups
+-CAIRO_CONF_OPTS += --disable-glesv2
++CAIRO_CONF_OPTS += --disable-gl --disable-glesv2
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBOPENVG),y)
