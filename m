@@ -1,65 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Mar 2016 00:53:01 +0100
-Subject: [Buildroot] [PATCH v3] owfs: add sysv init scripts
-In-Reply-To: <1458997246-17406-1-git-send-email-arnout@mind.be> (Arnout
- Vandecappelle's message of "Sat, 26 Mar 2016 14:00:46 +0100")
-References: <1458997246-17406-1-git-send-email-arnout@mind.be>
-Message-ID: <87oaa0dcf6.fsf@dell.be.48ers.dk>
+Date: Sat, 26 Mar 2016 23:43:42 +0100
+Subject: [Buildroot] [git commit] package/nodejs: bump version to 5.9.1
+Message-ID: <20160326235416.88D1C81844@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c6d16d3b2d5ccbb5629850afd7c598feec792ef9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > owserver is started unconditionally, but it needs the device(s) to
- > be specified at startup. Therefore a check for non-empty OWSERVER_ARGS
- > is added to the owserver start script.
+See https://nodejs.org/en/blog/release/v5.9.1/
 
- > owfs is started only if is built. It will connect to the owserver.
- > It will try to load the fuse module; if fuse is built-in or already
- > loaded, modprobe -q will fail silently. The filesystem will be mounted
- > on /dev/1wire, because it represents the 1-wire slave devices; also,
- > the bundled Debian init scripts mount it there. We have to create that
- > directory in the init script in case of devtmpfs, and we have to create
- > it in the rootfs for static /dev; for simplicity, just do both.
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-Remove-dependency-on-Python-bz2-module.patch                 | 0
+ .../{5.8.0 => 5.9.1}/0002-gyp-force-link-command-to-use-CXX.patch     | 0
+ package/nodejs/{5.8.0 => 5.9.1}/0003-Fix-va_list-not-declared.patch   | 0
+ package/nodejs/{5.8.0 => 5.9.1}/0004-Fix-support-for-uClibc-ng.patch  | 0
+ package/nodejs/Config.in                                              | 2 +-
+ package/nodejs/nodejs.hash                                            | 4 ++--
+ 6 files changed, 3 insertions(+), 3 deletions(-)
 
- > Users who want a setup without owserver need to remove the owserver
- > init script post-build and need to give appropriate defaults to owfs.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- > ---
- > v3: Create /dev/1wire for static /dev
- > v2: Suggestions from PeterK:
- >  - prefix variables from defaults file with OWFS_;
- >  - allow defaults file to override the server with other devices;
- >  - add empty definition of OWFS_ARGS, to make it clearer that this
- >    variable can also be used in the defaults file.
-
-
- > +++ b/package/owfs/S30owfs
- > @@ -0,0 +1,33 @@
- > +NAME="owfs"
- > +DAEMON="/usr/bin/${NAME}"
- > +PID_F="/run/${NAME}.pid"
- > +OWFS_MOUNTPOINT="/dev/1wire"
- > +OWFS_DEVICES="-s localhost:4304"
- > +OWFS_ARGS=""
- > +
- > +[ -r /etc/default/${NAME} ] && . /etc/default/${NAME}
- > +
- > +case "$1" in
- > +start)
- > +	printf "Starting ${NAME}: "
- > +	# Fuse may be in a module, so try to load it
- > +	modprobe -q fuse && printf "[fuse] "
- > +	mkdir -p ${MOUNTPOINT}
-
-This should be OWFS_MOUNTPOINT.
-
-Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch b/package/nodejs/5.9.1/0001-Remove-dependency-on-Python-bz2-module.patch
+similarity index 100%
+rename from package/nodejs/5.8.0/0001-Remove-dependency-on-Python-bz2-module.patch
+rename to package/nodejs/5.9.1/0001-Remove-dependency-on-Python-bz2-module.patch
+diff --git a/package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch b/package/nodejs/5.9.1/0002-gyp-force-link-command-to-use-CXX.patch
+similarity index 100%
+rename from package/nodejs/5.8.0/0002-gyp-force-link-command-to-use-CXX.patch
+rename to package/nodejs/5.9.1/0002-gyp-force-link-command-to-use-CXX.patch
+diff --git a/package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch b/package/nodejs/5.9.1/0003-Fix-va_list-not-declared.patch
+similarity index 100%
+rename from package/nodejs/5.8.0/0003-Fix-va_list-not-declared.patch
+rename to package/nodejs/5.9.1/0003-Fix-va_list-not-declared.patch
+diff --git a/package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch b/package/nodejs/5.9.1/0004-Fix-support-for-uClibc-ng.patch
+similarity index 100%
+rename from package/nodejs/5.8.0/0004-Fix-support-for-uClibc-ng.patch
+rename to package/nodejs/5.9.1/0004-Fix-support-for-uClibc-ng.patch
+diff --git a/package/nodejs/Config.in b/package/nodejs/Config.in
+index d200bbb..dd69a74 100644
+--- a/package/nodejs/Config.in
++++ b/package/nodejs/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_NODEJS_VERSION_STRING
+ 	string
+-	default "5.8.0"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
++	default "5.9.1"		if BR2_PACKAGE_NODEJS_V8_ARCH_SUPPORTS
+ 	default "0.10.43"
+ 
+ menu "Module Selection"
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 2e8dab8..342e87f 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+ # From upstream URL: http://nodejs.org/dist/v0.10.43/SHASUMS256.txt
+ sha256  6c5185cbfad3538484c9d97eec0110b5cd5826126f15b776015dfee1f51cd32a  node-v0.10.43.tar.xz
+ 
+-# From upstream URL: http://nodejs.org/dist/v5.8.0/SHASUMS256.txt
+-sha256  c1246d473d6650ca02ab168eaf840e9edda82a4190ff08165fc44a7b381a9361  node-v5.8.0.tar.xz
++# From upstream URL: http://nodejs.org/dist/v5.9.1/SHASUMS256.txt
++sha256  668067077dfceb3d2039d0df693fec6aa20b920d01a42b53dc61d4aa91e0ae55  node-v5.9.1.tar.xz
