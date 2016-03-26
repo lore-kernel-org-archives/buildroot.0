@@ -1,39 +1,42 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 26 Mar 2016 20:33:40 +0000
-Subject: [Buildroot] [PATCH 3/3] aufs: new kernel extension
-In-Reply-To: <20160326212549.297f7603@free-electrons.com>
-References: <1458801186-24700-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
- <20160326212549.297f7603@free-electrons.com>
-Message-ID: <1459024420681-0ab9c3bf-3246d574-c1073aff@mixmax.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Mar 2016 21:34:39 +0100
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2016c
+Message-ID: <20160326203451.BAE447FB4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Atul, All,
-I'm CCing Geoff as this patch series was originally designed for this stack:
-Docker Runtime / \ Golang Aufs-util | Aufs-kernel
-These are all dependencies for Docker, which is the primary application right
-now for layering filesystems.
-As such I will soon (tm) pursue getting my Docker patch series to also build on
-top of these new contributions towards the Aufs and Golang package series. This
-is what I will use primarily to see if they are working as expected in a target
-use case.
-Thanks for working to improve my patch series Atul, I have read over and
-completely agree with Thomas's suggestions and look forward to your next
-revisions.
-On Sat, Mar 26, 2016 at 4:25 PM Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote: > One thing that is really annoying here is that you can only use Git
-> branches. And branches can evolve. So when you say ?aufs4.4? today, you
-> have no idea if tomorrow you will download the same source code, since
-> the Git branch might have evolved.
+commit: https://git.buildroot.net/buildroot/commit/?id=a0c3f60dac237dff5b564b9d3464a2c3121b95ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Once a release is made it's quite unlikely that they will add any patches unless
-they are security critical or major bugfixes. You could if you want pin some
-known versions to commit hashes but I think it'd be better to stick with
-branches for now.
-Thanks! Christian Stewart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160326/66c84136/attachment.html>
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index f8e06e8..4d4254d 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,2 @@
+-# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000036.html
+-sha512  6d30215ba3289a5b85a632d635b76a54c3c08d97e426d6bd89f83c4efd252e43959593b21cca9d2b185f3845358908946cc308365accbee94f126ad3057cf838  tzdata2016b.tar.gz
++# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000037.html
++sha512  03eab77c8b3176da1dd17d1d9062b151036b01d224f1e4b60f34a2db6899150431f34f4d9f39652648aae3a55326fd6f85d6deefe3f27b36eaed9ef39ed3f53c  tzdata2016c.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 67a7c9c..1b3efb4 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2016b
++TZDATA_VERSION = 2016c
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
