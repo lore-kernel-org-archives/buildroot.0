@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Mar 2016 21:34:44 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-base: alsa now needs seq
-Message-ID: <20160326203451.C37458183A@busybox.osuosl.org>
+Date: Sat, 26 Mar 2016 21:34:34 +0100
+Subject: [Buildroot] [git commit] package/zic: bump version to 2016c
+Message-ID: <20160326203451.A3EA7817DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b59d9324a1f1d0030331a64ab24af98f0bd84e06
+commit: https://git.buildroot.net/buildroot/commit/?id=0796a665c8974961b3c55ce5cdea5c317dd21c83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A seq (midi) source has been added to gst-plugins-base 1.8.x hence we
-need to account for it, so select BR2_PACKAGE_ALSA_LIB_SEQ. Fixes:
-http://autobuild.buildroot.net/results/474/474e4b9bc3a44224302d0576cf1c0de7ce709f1a/
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-base/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index 22541e1..897c1d1 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -111,6 +111,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
- 	select BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_ALSA_LIB_MIXER
- 	select BR2_PACKAGE_ALSA_LIB_PCM
-+	select BR2_PACKAGE_ALSA_LIB_SEQ
- 	help
- 	  ALSA plugin library
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 203544d..07c631b 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000036.html
+-sha512  53f7405fd0466f5acc5d1dd590546abb6e3f4240d6a78ce7e965908d9310e8b8686c8fbe887947c513a4de65e3e3fc038d64215a330267397f37e6efce71f0b8  tzcode2016b.tar.gz
++# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000037.html
++sha512  813309b46e4214cbe7d22b9951bad15536f5d394d2f651b60ae66c14dd8c232d51991ad80f7f02c324f896e680c7efb0321a9e4799c96735f1a82e258a87dff7  tzcode2016c.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 1667667..b0c3fcf 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-ZIC_VERSION = 2016b
++ZIC_VERSION = 2016c
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
