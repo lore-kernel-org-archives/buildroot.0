@@ -1,45 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Mar 2016 23:21:07 +0100
-Subject: [Buildroot] [PATCH 02/18] package/libdcadec: bump version to v0.2.0
+Date: Sat, 26 Mar 2016 23:21:13 +0100
+Subject: [Buildroot] [PATCH 08/18] package/freerdp: bump version
 In-Reply-To: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459030883-15232-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459030883-15232-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version bump is needed by ffmpeg 3.0:
-http://git.videolan.org/?p=ffmpeg.git;a=blobdiff;f=configure;h=a30d831c97575858c760694f191b4efe71360301;hp=8cbd5e574979e1a9492754aa41fcff233ee8da33;hb=27ce53b52d0d5f2c1d59da13491b74fe73cde964;hpb=26a84e2dae4007628d30cae746822486076767ee
+This version bump is needed to provide support for ffmpeg 3.0, added
+Sep, 17th, 2015: https://github.com/FreeRDP/FreeRDP/pull/2895
 
+Please note the we can not bump to a newer version of freerdp atm
+because the next commit in the master branch
+
+https://github.com/FreeRDP/FreeRDP/commit/8206ae440f905b123cb92c7abf8c861070ea8cd8
+
+bumped the version number to 2.x which will provide freerdp2.pc instead
+of freerdp.pc, this is incompatible with vlc atm:
+
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=bb5d1dde2ef9828b0ba92c62dbd1143f984f45f2;hb=HEAD#l1890
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdcadec/libdcadec.hash | 2 ++
- package/libdcadec/libdcadec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/libdcadec/libdcadec.hash
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libdcadec/libdcadec.hash b/package/libdcadec/libdcadec.hash
-new file mode 100644
-index 0000000..dda58d1
---- /dev/null
-+++ b/package/libdcadec/libdcadec.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ed9d207fde3e8d576f3af8b0d1235b3371e315175757173689104efcaebf0d44	libdcadec-v0.2.0.tar.gz
-diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
-index 2b391fc..48e4a12 100644
---- a/package/libdcadec/libdcadec.mk
-+++ b/package/libdcadec/libdcadec.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index e8e5be4..a795ed3 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBDCADEC_VERSION = 2a9186e34ce557d3af1a20f5b558d1e6687708b9
-+LIBDCADEC_VERSION = v0.2.0
- LIBDCADEC_SITE = $(call github,foo86,dcadec,$(LIBDCADEC_VERSION))
- LIBDCADEC_LICENSE = LGPLv2.1+
- LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
+ # Changeset on the master branch
+-FREERDP_VERSION = 17834af7bb378f85a3b3cc4dcadaa5125a337e16
++FREERDP_VERSION = 2ac195e8eb2c5fbbe8f2abeac92b0c8effef0e34
+ FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 -- 
 2.8.0.rc3
