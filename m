@@ -1,77 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Mar 2016 16:53:03 +0100
-Subject: [Buildroot] [git commit] gst1-plugins-bad: add netsim and
-	videoframe_audiolevel support
-Message-ID: <20160326155828.B4E1680439@busybox.osuosl.org>
+Date: Sat, 26 Mar 2016 16:52:43 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-good: bump to version 1.8.0
+Message-ID: <20160326155828.969FB80439@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cff20228069cf8172a047a0ed6a0d7b19d71da54
+commit: https://git.buildroot.net/buildroot/commit/?id=a7c9ad3c6d5f05fdee820b692475152c7de9f0a3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           |  8 ++++++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 12 ++++++++++++
- 2 files changed, 20 insertions(+)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 68fed23..a9667af 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -350,6 +350,9 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MXF
- 	help
- 	  MXF plugin library
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 3d8f943..6d78189 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,2 +1,2 @@
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.6.3.tar.xz.sha256sum
+-sha256	24b19db70b2a83461ebddfe20033db432dadfdb5d4b54ffb1dfa0d830134a177  gst-plugins-good-1.6.3.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.8.0.tar.xz.sha256sum
++sha256	c20c134d47dbc238d921707a3b66da709c2b4dd89f9d267cec13d1ddf16e9f4d  gst-plugins-good-1.8.0.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 6bf17c0..5221a6e 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NETSIM
-+	bool "netsim"
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NUVDEMUX
- 	bool "nuvdemux"
- 
-@@ -426,6 +429,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFILTERS
- 	help
- 	  Video filters in gst-plugins-bad
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFRAME_AUDIOLEVEL
-+	bool "videoframe_audiolevel"
-+	help
-+	  videoframe_audiolevel
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE
- 	bool "videomeasure"
- 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 55b4d6f..c63a848 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -431,6 +431,12 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-mxf
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_NETSIM),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-netsim
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-netsim
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NUVDEMUX),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-nuvdemux
- else
-@@ -539,6 +545,12 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-videofilters
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFRAME_AUDIOLEVEL),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-videoframe_audiolevel
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-videoframe_audiolevel
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-videomeasure
- else
+-GST1_PLUGINS_GOOD_VERSION = 1.6.3
++GST1_PLUGINS_GOOD_VERSION = 1.8.0
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
