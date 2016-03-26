@@ -1,84 +1,84 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Mar 2016 23:21:15 +0100
-Subject: [Buildroot] [PATCH 10/18] package/ffmpeg: bump to version 3.0
+Date: Sat, 26 Mar 2016 23:21:12 +0100
+Subject: [Buildroot] [PATCH 07/18] package/squeezelite: fix compilation with
+	ffmpeg >= 2.9
 In-Reply-To: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459030883-15232-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459030883-15232-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-- Remove non-existen configure options:
-  - --disable-mips32r2
-  - --disable-libvo-aacenc
-
-- Amend renamed configure options:
-  - --disable-mipsdspr1 has been renamed to --disable-mipsdsp
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.hash |  4 ++--
- package/ffmpeg/ffmpeg.mk   | 13 ++-----------
- 2 files changed, 4 insertions(+), 13 deletions(-)
+ package/squeezelite/0003-ffmpeg_2_9.patch | 57 +++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/squeezelite/0003-ffmpeg_2_9.patch
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 8643bff..3456883 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
-+# Locally calculated (PGP Signature: https://ffmpeg.org/releases/ffmpeg-3.0.tar.xz.asc)
-+sha256 12f32cee41c74435f608c30793fd616bdf53467bb513278e273e135a4c58e470 ffmpeg-3.0.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ddfac20..75c0128 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.8.6
-+FFMPEG_VERSION = 3.0
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -41,7 +41,7 @@ FFMPEG_CONF_OPTS = \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
- 	--disable-memalign-hack \
--	--disable-mipsdspr1 \
-+	--disable-mipsdsp \
- 	--disable-mipsdspr2 \
- 	--disable-msa \
- 	--enable-hwaccels \
-@@ -58,7 +58,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-libnut \
- 	--disable-libopenjpeg \
- 	--disable-libschroedinger \
--	--disable-libvo-aacenc \
- 	--disable-libvo-amrwbenc \
- 	--disable-symver \
- 	--disable-doc
-@@ -437,14 +436,6 @@ FFMPEG_CONF_OPTS += \
- 	--enable-mipsfpu
- endif
- 
--ifeq ($(BR2_mips_32r2),y)
--FFMPEG_CONF_OPTS += \
--	--enable-mips32r2
--else
--FFMPEG_CONF_OPTS += \
--	--disable-mips32r2
--endif
--
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPTS += --enable-altivec
- else
+diff --git a/package/squeezelite/0003-ffmpeg_2_9.patch b/package/squeezelite/0003-ffmpeg_2_9.patch
+new file mode 100644
+index 0000000..f69b829
+--- /dev/null
++++ b/package/squeezelite/0003-ffmpeg_2_9.patch
+@@ -0,0 +1,57 @@
++Fix compilation with ffmpeg >= 2.9
++
++Downloaded from Debian:
++https://sources.debian.net/src/squeezelite/1.8-3/debian/patches/ffmpeg_2.9.patch/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++Description: Replace deprecated FFmpeg API
++Author: Andreas Cadhalpun <Andreas.Cadhalpun@googlemail.com>
++Last-Update: <2015-11-02>
++
++--- squeezelite-1.8.orig/ffmpeg.c
+++++ squeezelite-1.8/ffmpeg.c
++@@ -52,8 +52,8 @@ struct ff_s {
++ 	unsigned (* avcodec_version)(void);
++ 	AVCodec * (* avcodec_find_decoder)(int);
++ 	int attribute_align_arg (* avcodec_open2)(AVCodecContext *, const AVCodec *, AVDictionary **);
++-	AVFrame * (* avcodec_alloc_frame)(void);
++-	void (* avcodec_free_frame)(AVFrame **);
+++	AVFrame * (* av_frame_alloc)(void);
+++	void (* av_frame_free)(AVFrame **);
++ 	int attribute_align_arg (* avcodec_decode_audio4)(AVCodecContext *, AVFrame *, int *, const AVPacket *);
++ 	// ffmpeg symbols to be dynamically loaded from libavformat
++ 	unsigned (* avformat_version)(void);
++@@ -324,7 +324,7 @@ static decode_state ff_decode(void) {
++ 
++ 		AVCODEC(ff, open2, ff->codecC, codec, NULL);
++ 
++-		ff->frame = AVCODEC(ff, alloc_frame);
+++		ff->frame = AV(ff, frame_alloc);
++ 
++ 		ff->avpkt = AV(ff, malloc, sizeof(AVPacket));
++ 		if (ff->avpkt == NULL) {
++@@ -520,9 +520,9 @@ static void _free_ff_data(void) {
++ 	if (ff->frame) {
++ 		// ffmpeg version dependant free function
++ #if !LINKALL
++-		ff->avcodec_free_frame ? AVCODEC(ff, free_frame, &ff->frame) : AV(ff, freep, &ff->frame);
+++		ff->av_frame_free ? AV(ff, frame_free, &ff->frame) : AV(ff, freep, &ff->frame);
++ #elif LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(54,28,0)
++-		AVCODEC(ff, free_frame, &ff->frame);
+++		AV(ff, frame_free, &ff->frame);
++ #else
++ 		AV(ff, freep, &ff->frame);
++ #endif
++@@ -607,8 +607,8 @@ static bool load_ff() {
++ 	ff->avcodec_version = dlsym(handle_codec, "avcodec_version");
++ 	ff->avcodec_find_decoder = dlsym(handle_codec, "avcodec_find_decoder");
++ 	ff->avcodec_open2 = dlsym(handle_codec, "avcodec_open2");
++-	ff->avcodec_alloc_frame = dlsym(handle_codec, "avcodec_alloc_frame");
++-	ff->avcodec_free_frame = dlsym(handle_codec, "avcodec_free_frame");
+++	ff->av_frame_alloc = dlsym(handle_codec, "av_frame_alloc");
+++	ff->av_frame_free = dlsym(handle_codec, "av_frame_free");
++ 	ff->avcodec_decode_audio4 = dlsym(handle_codec, "avcodec_decode_audio4");
++ 	ff->av_init_packet = dlsym(handle_codec, "av_init_packet");
++ 	ff->av_free_packet = dlsym(handle_codec, "av_free_packet");
 -- 
 2.8.0.rc3
