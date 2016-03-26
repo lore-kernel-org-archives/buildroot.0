@@ -1,53 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 26 Mar 2016 23:21:22 +0100
-Subject: [Buildroot] [PATCH 17/18] package/tvheadend: bump version
+Date: Sat, 26 Mar 2016 23:21:23 +0100
+Subject: [Buildroot] [PATCH 18/18] package/live555: bump version to
+	2016.03.16
 In-Reply-To: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459030883-15232-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459030883-15232-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459030883-15232-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated ffmpeg option name after upstream renamed it:
-https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 4 ++--
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 14d0fb0..9406d08 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
-+sha256	50ada2f30387f9526e1ed453f778686b443e599841a73a031cdd543b65e7a502	tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 3398faf..a7a8218 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 813a5b4..16f7077 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,4 +1,4 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5	6275484ab763673ad3144648bf1015cb	live.2016.01.29.tar.gz
++md5	df4ad1d60c2f5ae8155fb077bb011ab3	live.2016.03.16.tar.gz
+ # Locally generated
+-sha256	44243a962adae64703c00264dd2333cfee15d7edbd79de4e5b47fd486df9ecd1	live.2016.01.29.tar.gz
++sha256	6f98a96d4cf6e986c7711f0a2431c02cb807a8107d6715eb491a6ed9d0446cf6	live.2016.03.16.tar.gz
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index d40cbaa..3ccba63 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
-+TVHEADEND_VERSION = cd9f07fb865e5700156546ee326fbaf42ee99cf8
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
-@@ -81,7 +81,7 @@ define TVHEADEND_CONFIGURE_CMDS
- 			--python="$(HOST_DIR)/usr/bin/python"	\
- 			--enable-dvbscan			\
- 			--enable-bundle				\
--			--disable-libffmpeg_static		\
-+			--disable-ffmpeg_static			\
- 			--disable-hdhomerun_static		\
- 			$(TVHEADEND_CONF_OPTS)			\
- 	)
+-LIVE555_VERSION = 2016.01.29
++LIVE555_VERSION = 2016.03.16
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPLv2.1+
 -- 
 2.8.0.rc3
