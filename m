@@ -1,45 +1,55 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 26 Mar 2016 14:27:36 +0100
-Subject: [Buildroot] [PATCH] package/procps-ng: install libprocps.pc in
-	staging/usr/lib/pkgconfig/
-Message-ID: <1458998856-31289-1-git-send-email-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sat, 26 Mar 2016 16:56:45 +0100
+Subject: [Buildroot] [git commit] gst1-plugins-ugly: add mpg123 support
+Message-ID: <20160326155828.D241080439@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since 834893a965a993e8a73e30b448426f626419f3c8, pkg-config --libs libprocps
-doesn't work anymore because libprocps.pc is installed in
-STAGING_DIR/lib/pkgconfig/ instead of STAGING_DIR/usr/lib/pkgconfig/.
+commit: https://git.buildroot.net/buildroot/commit/?id=30cde9a31bd40c1872c3b60c9793b852a50fc2cb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add --libdir=/usr/lib in PROCPS_NG_CONF_OPTS to fixes the issue.
-Note that libprocps.so is now installed in /usr/lib/ instead of /lib/.
-
-Fixes:
-http://autobuild.buildroot.net/results/2e5/2e5100ccf1ed336c26b83930e7149941c97fc4d2/
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/procps-ng/procps-ng.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-ugly/Config.in            | 6 ++++++
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index fb1b236..51a70a5 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -35,7 +35,11 @@ endif
+diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
+index fbcb128..995835e 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/Config.in
++++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
+@@ -61,6 +61,12 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
+ 	help
+ 	  mp3 decoding based on the mad library
  
- # Make sure binaries get installed in /bin, so that they overwrite
- # their busybox counterparts.
--PROCPS_NG_CONF_OPTS += --exec-prefix=/
-+# Make sure libprocps.pc is installed in STAGING_DIR/usr/lib/pkgconfig/
-+# otherwise it's installed in STAGING_DIR/lib/pkgconfig/ breaking
-+# pkg-config --libs libprocps.
-+PROCPS_NG_CONF_OPTS += --exec-prefix=/ \
-+	--libdir=/usr/lib
++config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123
++	bool "mpg123 (*.mp3 audio)"
++	select BR2_PACKAGE_MPG123
++	help
++	  mp3 decoding based on the mpg123 library
++
+ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
+ 	bool "mpeg2dec"
+ 	select BR2_PACKAGE_LIBMPEG2
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index a45e670..16cfef2 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -81,6 +81,13 @@ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mad
+ endif
  
- # Allows unicode characters to show in 'watch'
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
--- 
-2.5.5
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123),y)
++GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpg123
++GST1_PLUGINS_UGLY_DEPENDENCIES += mpg123
++else
++GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mpg123
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
+ GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpeg2dec
+ GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
