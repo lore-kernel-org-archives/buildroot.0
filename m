@@ -1,101 +1,81 @@
 From: Erico Nunes <nunes.erico@gmail.com>
-Date: Sat, 26 Mar 2016 15:25:32 -0300
-Subject: [Buildroot] [PATCH 2/2] efibootmgr: new package
-In-Reply-To: <1459016732-27843-1-git-send-email-nunes.erico@gmail.com>
-References: <1459016732-27843-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <1459016732-27843-2-git-send-email-nunes.erico@gmail.com>
+Date: Sat, 26 Mar 2016 15:26:16 -0300
+Subject: [Buildroot] [PATCH 1/2] acpitool: new package
+Message-ID: <1459016777-27952-1-git-send-email-nunes.erico@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A Linux user-space application to modify the Intel Extensible Firmware
-Interface (EFI) Boot Manager. This application can create and destroy
-boot entries, change the boot order, change the next running boot
-option, and more.
-
-The only issue found was that it was trying to include headers from the
-host, so $(STAGING_DIR) has been prepended to the include path so that
-the package finds the right headers.
-
-efibootmgr depends on the libraries provided by efivar.
+acpitool is a small, convenient command-line ACPI client.
 
 Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 ---
- package/Config.in                  |  1 +
- package/efibootmgr/Config.in       | 10 ++++++++++
- package/efibootmgr/efibootmgr.hash |  2 ++
- package/efibootmgr/efibootmgr.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/efibootmgr/Config.in
- create mode 100644 package/efibootmgr/efibootmgr.hash
- create mode 100644 package/efibootmgr/efibootmgr.mk
+ package/Config.in              |  1 +
+ package/acpitool/Config.in     | 11 +++++++++++
+ package/acpitool/acpitool.hash |  2 ++
+ package/acpitool/acpitool.mk   | 13 +++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/acpitool/Config.in
+ create mode 100644 package/acpitool/acpitool.hash
+ create mode 100644 package/acpitool/acpitool.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index b8d142f..bd30c07 100644
+index 1467f33..cca553c 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1612,6 +1612,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
-+	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
- 	source "package/ftop/Config.in"
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
+@@ -340,6 +340,7 @@ menu "Firmware"
+ endmenu
+ 	source "package/a10disp/Config.in"
+ 	source "package/acpid/Config.in"
++	source "package/acpitool/Config.in"
+ 	source "package/am335x-pru-package/Config.in"
+ 	source "package/avrdude/Config.in"
+ 	source "package/bcache-tools/Config.in"
+diff --git a/package/acpitool/Config.in b/package/acpitool/Config.in
 new file mode 100644
-index 0000000..a784d8c
+index 0000000..7992e0f
 --- /dev/null
-+++ b/package/efibootmgr/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_EFIBOOTMGR
-+	bool "efibootmgr"
-+	depends on BR2_PACKAGE_EFIVAR
++++ b/package/acpitool/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ACPITOOL
++	bool "acpitool"
++	depends on BR2_INSTALL_LIBSTDCPP
 +	help
-+	  A Linux user-space application to modify the Intel Extensible
-+	  Firmware Interface (EFI) Boot Manager. This application can create
-+	  and destroy boot entries, change the boot order, change the next
-+	  running boot option, and more.
++	  A small, convenient command-line ACPI client with a lot of
++	  features for Linux
 +
-+	  https://github.com/rhinstaller/efibootmgr
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
++	  http://acpitool.sourceforge.net
++
++comment "acpitool needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/acpitool/acpitool.hash b/package/acpitool/acpitool.hash
 new file mode 100644
-index 0000000..a789942
+index 0000000..e25dc54
 --- /dev/null
-+++ b/package/efibootmgr/efibootmgr.hash
++++ b/package/acpitool/acpitool.hash
 @@ -0,0 +1,2 @@
 +# locally computed hash
-+sha256 b180d7d6b377d24b0872869f2571e2700b618e4d7ebdc2133134a918efe2623b efibootmgr-efibootmgr-0.12.tar.gz
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
++sha256 004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f acpitool-0.5.1.tar.bz2
+diff --git a/package/acpitool/acpitool.mk b/package/acpitool/acpitool.mk
 new file mode 100644
-index 0000000..9156499
+index 0000000..f663fbb
 --- /dev/null
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -0,0 +1,23 @@
++++ b/package/acpitool/acpitool.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# efibootmgr
++# acpitool
 +#
 +################################################################################
 +
-+EFIBOOTMGR_VERSION = efibootmgr-0.12
-+EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
-+EFIBOOTMGR_LICENSE = GPLv2
-+EFIBOOTMGR_LICENSE_FILES = COPYING
-+EFIBOOTMGR_DEPENDENCIES = efivar
++ACPITOOL_VERSION = 0.5.1
++ACPITOOL_SOURCE = acpitool-$(ACPITOOL_VERSION).tar.bz2
++ACPITOOL_SITE = http://downloads.sourceforge.net/sourceforge/acpitool
++ACPITOOL_LICENSE = GPLv2+
++ACPITOOL_LICENSE_FILES = COPYING
 +
-+define EFIBOOTMGR_BUILD_CMDS
-+	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
-+endef
-+
-+define EFIBOOTMGR_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/efibootmgr/efibootmgr \
-+		$(TARGET_DIR)/usr/bin/efibootmgr
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
 2.7.4
