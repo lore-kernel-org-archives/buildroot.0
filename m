@@ -1,39 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Mar 2016 18:49:41 +0100
-Subject: [Buildroot] [git commit] setools: fix build on SPARC64
-Message-ID: <20160326175039.55B497FD9C@busybox.osuosl.org>
+Date: Sat, 26 Mar 2016 18:52:52 +0100
+Subject: [Buildroot] [PATCH 1/2] core/pkg-kconfig: add an option to use
+ olddefconfig
+In-Reply-To: <20160326174203.GA3589@free.fr>
+References: <1458901049-3693-1-git-send-email-romain.izard.pro@gmail.com>
+ <20160326174203.GA3589@free.fr>
+Message-ID: <20160326185252.22cae0a0@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a2e75633f136f021692354434ac0b2d9a81e38c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-To build shared libraries on SPARC64, -fPIC must be used instead of
-just -fpic. This commit fixes the setools package, which allows to get
-rid of the following autobuilder failure:
+On Sat, 26 Mar 2016 18:42:03 +0100, Yann E. MORIN wrote:
 
-  http://autobuild.buildroot.net/results/ba1e473178bb66ebc43897b20e534606d2577ee3/
+> In fact, we've already discussed this, and we concluded that we would
+> want an automatic behaviour.
+> 
+> I.e. we try to use olddefconfig, and fallback to the yes-trick, like so:
+> 
+>     make olddefconfig || { yes "" |make oldconfig; }
+> 
+> Care to adapt your patch and respin, please? Of course, your second
+> patch will no longer make sense after that.
+> 
+> In the meantime, I marked your patches as "Changes Requested" in
+> patchwork.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/setools/setools.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+And here is the reason why we want this automatic behavior rather than
+the explicit FOO_KCONFIG_OLDDEFCONFIG variable that you proposed
+Romain: the Linux, Barebox and U-Boot packages, which are some of the
+main users of kconfig-package infrastructure, have user-configurable
+versions. Therefore, we don't know if the user will select a recent
+enough version of the kernel, Barebox or U-Boot with olddefconfig
+support.
 
-diff --git a/package/setools/setools.mk b/package/setools/setools.mk
-index deb421f..87a19cf 100644
---- a/package/setools/setools.mk
-+++ b/package/setools/setools.mk
-@@ -31,6 +31,10 @@ SETOOLS_CONF_OPTS = \
- 	--with-sepol-devel="$(STAGING_DIR)/usr" \
- 	--with-selinux-devel="$(STAGING_DIR)/usr"
- 
-+ifeq ($(BR2_sparc64):$(BR2_STATIC_LIBS),y:)
-+SETOOLS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -fPIC"
-+endif
-+
- HOST_SETOOLS_DEPENDENCIES = host-libselinux host-libsepol host-sqlite \
- 	host-libxml2 host-bzip2 host-bison
- 
+For this reason, we cannot state in the Barebox, Linux or U-Boot
+packages whether they support olddefconfig or not, as it depends on the
+version. By having an automatic handling, regardless of the package and
+its version, we will use olddefconfig if available, and fallback to the
+old method if not.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
