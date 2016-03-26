@@ -1,31 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 26 Mar 2016 13:35:39 +0100
-Subject: [Buildroot] [PATCH 1/2] package/qwt : prepared package for
- other versions of Qt.
-In-Reply-To: <56F56464.8050204@yahoo.fr>
-References: <1458850791-4205-1-git-send-email-davepiq@yahoo.fr>
- <20160325104839.20bcbe13@free-electrons.com> <56F54F63.1040001@yahoo.fr>
- <20160325163033.260a4d11@free-electrons.com> <56F56464.8050204@yahoo.fr>
-Message-ID: <56F6821B.70902@mind.be>
+Date: Sat, 26 Mar 2016 13:43:02 +0100
+Subject: [Buildroot] License type.
+In-Reply-To: <CAJJ6jxscDa23_nD38b4O=64Fc_jEQcK81SHwrw5R3rAZ9PUuXg@mail.gmail.com>
+References: <CAJJ6jxscDa23_nD38b4O=64Fc_jEQcK81SHwrw5R3rAZ9PUuXg@mail.gmail.com>
+Message-ID: <56F683D6.6040408@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/25/16 17:16, David Picard wrote:
-> I saw you merged the patches into the master branch. So should I make a new
-> patch based on the current master, or issue a new version of the 2 previous
-> patches ?
+On 03/25/16 22:45, Steve Calfee wrote:
+> Hi,
+>
+> I am preparing to submit a package PyMySQL to buildroot.
+>
+> I cannot figure out what I should put in the LICENSE field in .mk Can
+> you make a suggestion?
+>
+> Here is their license file:
+>
+> Copyright (c) 2010, 2013 PyMySQL contributors
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+> THE SOFTWARE.
 
-  A new patch based on the master.
+  This is a MIT license.
 
-  How else could it be applied? If you create a new version of the previous 
-patches, the ones that are already committed would have to be reverted first, 
-making things unnecessarily complicated.
+  You can easily get this information by uploading a file to fossology[1].
+
 
   Regards,
   Arnout
+
+
+[1] https://fossology.ist.unomaha.edu/?mod=agent_nomos_once
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
