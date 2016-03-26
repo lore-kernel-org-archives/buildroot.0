@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 26 Mar 2016 21:35:10 +0100
-Subject: [Buildroot] [PATCH] gst1-plugins-base: alsa now needs seq
-In-Reply-To: <1459024253-28652-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459024253-28652-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160326213510.125d7d6e@free-electrons.com>
+Date: Sat, 26 Mar 2016 21:35:22 +0100
+Subject: [Buildroot] [PATCH] libgtk2: point to the proper cups-config
+In-Reply-To: <1459019854-13008-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459019854-13008-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160326213522.4705ee0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 26 Mar 2016 17:30:53 -0300, Gustavo Zacarias wrote:
-> A seq (midi) source has been added to gst-plugins-base 1.8.x hence we
-> need to account for it, so select BR2_PACKAGE_ALSA_LIB_SEQ. Fixes:
-> http://autobuild.buildroot.net/results/474/474e4b9bc3a44224302d0576cf1c0de7ce709f1a/
+On Sat, 26 Mar 2016 16:17:34 -0300, Gustavo Zacarias wrote:
+> Otherwise it can pick up the distro cups-config if it's present, leading
+> to improper library usage/linkage. Fixes:
+> http://autobuild.buildroot.net/results/bf4/bf493977817a750427aae82e71a5257187bd7344/
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gstreamer1/gst1-plugins-base/Config.in | 1 +
+>  package/libgtk2/libgtk2.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
