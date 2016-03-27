@@ -1,46 +1,90 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Mar 2016 11:16:47 +0200
-Subject: [Buildroot] [PATCH v2 02/18] package/libdcadec: bump version to
-	v0.2.0
-In-Reply-To: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459070223-5901-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 27 Mar 2016 11:16:45 +0200
+Subject: [Buildroot] [PATCH v2 00/18] Bump ffmpeg to 3.0
+Message-ID: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version bump is needed by ffmpeg 3.0:
-http://git.videolan.org/?p=ffmpeg.git;a=blobdiff;f=configure;h=a30d831c97575858c760694f191b4efe71360301;hp=8cbd5e574979e1a9492754aa41fcff233ee8da33;hb=27ce53b52d0d5f2c1d59da13491b74fe73cde964;hpb=26a84e2dae4007628d30cae746822486076767ee
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libdcadec/libdcadec.hash | 2 ++
- package/libdcadec/libdcadec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+this patch series bumps ffmpeg to version 3.0.
+
+This cover letter collects the changelog of individual patches.
+Packages not mentioned are unchanged.
+
+Regards, Bernd
+
+v2: opencv3: reworked options (Samuel)
+
+
+Bernd Kuhls (15):
+  package/kodi: add support for ffmpeg 3.0
+  package/libdcadec: bump version to v0.2.0
+  package/ortp: bump version to 0.25.0
+  package/mediastreamer: bump version to 2.12.1
+  package/opencv: bump version to 2.4.12.3
+  package/opencv3: bump version to 3.1.0
+  package/squeezelite: fix compilation with ffmpeg >= 2.9
+  package/freerdp: bump version
+  package/vlc: mark as broken due to incompatibility with ffmpeg 3.0
+  package/ffmpeg: Add patch required by Kodi 16.0-Jarvis
+  package/x264: bump version
+  package/x265: bump version to 1.9
+  package/dtv-scan-tables: bump version
+  package/tvheadend: bump version
+  package/live555: bump version to 2016.03.16
+
+Vicente Olivert Riera (3):
+  package/ffmpeg: bump to version 3.0
+  package/ffmpeg: cosmetic change for the mips fpu option
+  package/ffmpeg: default to --cpu=generic for MIPS architecture
+
+ package/dtv-scan-tables/dtv-scan-tables.mk         |   2 +-
+ .../ffmpeg/0013-hevc-support-main10-decoding.patch |  77 +++
+ package/ffmpeg/ffmpeg.hash                         |   4 +-
+ package/ffmpeg/ffmpeg.mk                           |  24 +-
+ package/freerdp/freerdp.mk                         |   2 +-
+ package/kodi/0007-ffmpeg30.patch                   | 646 +++++++++++++++++++++
+ package/libdcadec/libdcadec.hash                   |   2 +
+ package/libdcadec/libdcadec.mk                     |   2 +-
+ package/live555/live555.hash                       |   4 +-
+ package/live555/live555.mk                         |   2 +-
+ package/mediastreamer/0001-misc-fixes.patch        | 156 -----
+ package/mediastreamer/mediastreamer.hash           |   4 +-
+ package/mediastreamer/mediastreamer.mk             |   2 +-
+ .../0001-core-fix-x86-PIC-code-compilation.patch   |  49 --
+ package/opencv/0001-ffmpeg30.patch                 | 638 ++++++++++++++++++++
+ ...ix-return-type-value-VideoFrameSource_GPU.patch |  40 --
+ ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 -----
+ package/opencv/opencv.mk                           |   2 +-
+ ...pthread-based-parallel_for-with-gcc-4.4.3.patch |  62 --
+ ...002-fix-support-for-pthreads-parallel_for.patch | 212 -------
+ package/opencv3/Config.in                          |   1 +
+ package/opencv3/opencv3.mk                         |  13 +-
+ package/ortp/ortp.hash                             |   4 +-
+ package/ortp/ortp.mk                               |   2 +-
+ package/squeezelite/0003-ffmpeg_2_9.patch          |  57 ++
+ package/tvheadend/tvheadend.hash                   |   2 +-
+ package/tvheadend/tvheadend.mk                     |   4 +-
+ package/vlc/Config.in                              |   1 +
+ package/x264/x264.mk                               |   2 +-
+ package/x265/x265.hash                             |   2 +-
+ package/x265/x265.mk                               |   2 +-
+ 31 files changed, 1459 insertions(+), 717 deletions(-)
+ create mode 100644 package/ffmpeg/0013-hevc-support-main10-decoding.patch
+ create mode 100644 package/kodi/0007-ffmpeg30.patch
  create mode 100644 package/libdcadec/libdcadec.hash
+ delete mode 100644 package/mediastreamer/0001-misc-fixes.patch
+ delete mode 100644 package/opencv/0001-core-fix-x86-PIC-code-compilation.patch
+ create mode 100644 package/opencv/0001-ffmpeg30.patch
+ delete mode 100644 package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
+ delete mode 100644 package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+ delete mode 100644 package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
+ delete mode 100644 package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
+ create mode 100644 package/squeezelite/0003-ffmpeg_2_9.patch
 
-diff --git a/package/libdcadec/libdcadec.hash b/package/libdcadec/libdcadec.hash
-new file mode 100644
-index 0000000..dda58d1
---- /dev/null
-+++ b/package/libdcadec/libdcadec.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	ed9d207fde3e8d576f3af8b0d1235b3371e315175757173689104efcaebf0d44	libdcadec-v0.2.0.tar.gz
-diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
-index 2b391fc..48e4a12 100644
---- a/package/libdcadec/libdcadec.mk
-+++ b/package/libdcadec/libdcadec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBDCADEC_VERSION = 2a9186e34ce557d3af1a20f5b558d1e6687708b9
-+LIBDCADEC_VERSION = v0.2.0
- LIBDCADEC_SITE = $(call github,foo86,dcadec,$(LIBDCADEC_VERSION))
- LIBDCADEC_LICENSE = LGPLv2.1+
- LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
 -- 
 2.8.0.rc3
