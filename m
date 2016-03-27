@@ -1,36 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Mar 2016 11:16:54 +0200
-Subject: [Buildroot] [PATCH v2 09/18] package/vlc: mark as broken due to
-	incompatibility with ffmpeg 3.0
+Date: Sun, 27 Mar 2016 11:17:02 +0200
+Subject: [Buildroot] [PATCH v2 17/18] package/tvheadend: bump version
 In-Reply-To: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459070223-5901-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459070223-5901-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upcoming vlc 3.0 will have support for ffmpeg 3.0 again, backporting
-the changes to 2.2.x is not easily possible:
-https://trac.macports.org/ticket/50697#comment:3
+Updated ffmpeg option name after upstream renamed it:
+https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 166e7d2..d25305b 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_VLC
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-+	depends on BROKEN # ffmpeg 3.0
- 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
- 	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
- 	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 14d0fb0..9406d08 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
++sha256	50ada2f30387f9526e1ed453f778686b443e599841a73a031cdd543b65e7a502	tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 3398faf..a7a8218 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
++TVHEADEND_VERSION = cd9f07fb865e5700156546ee326fbaf42ee99cf8
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -81,7 +81,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--python="$(HOST_DIR)/usr/bin/python"	\
+ 			--enable-dvbscan			\
+ 			--enable-bundle				\
+-			--disable-libffmpeg_static		\
++			--disable-ffmpeg_static			\
+ 			--disable-hdhomerun_static		\
+ 			$(TVHEADEND_CONF_OPTS)			\
+ 	)
 -- 
 2.8.0.rc3
