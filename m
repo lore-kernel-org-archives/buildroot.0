@@ -1,79 +1,93 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Mar 2016 18:20:43 +0200
-Subject: [Buildroot] [PATCH 1/5] toolchain-external: blackfin: install
- FDPIC libraries also to staging
-In-Reply-To: <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
+Date: Sun, 27 Mar 2016 18:43:34 +0200
+Subject: [Buildroot] [PATCH 3/5] toolchain-external: extract
+ installation of gdbserver to separate define
+In-Reply-To: <56F1C177.1060007@gmail.com>
 References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
- <1455304826-10557-2-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <56F8085B.6020304@mind.be>
+ <1455304826-10557-4-git-send-email-patrickdepinguin@gmail.com>
+ <56F1C177.1060007@gmail.com>
+Message-ID: <56F80DB6.7030303@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/12/16 20:20, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+On 03/22/16 23:04, Romain Naour wrote:
+> Hi Thomas, all,
 >
-> For external Blackfin toolchains with BR2_BFIN_INSTALL_FDPIC_SHARED set,
-> the FDPIC shared libraries are currently only copied to the target
-> directory, not to staging.
+> Le 12/02/2016 20:20, Thomas De Schampheleire a ?crit :
+>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>>
+>> The installation of the gdbserver binary has no relation to the installation
+>> of the target libraries. Moving it to a separate define improves the
+>> understandability of the code and makes later refactoring easier.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>> ---
+>>   toolchain/toolchain-external/toolchain-external.mk | 8 +++++++-
+>>   1 file changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+>> index 9d88158..d5445e5 100644
+>> --- a/toolchain/toolchain-external/toolchain-external.mk
+>> +++ b/toolchain/toolchain-external/toolchain-external.mk
+>> @@ -604,7 +604,12 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>>   		for libs in $(USR_LIB_EXTERNAL_LIBS); do \
+>>   			$(call copy_toolchain_lib_root,$${ARCH_SYSROOT_DIR},$${SUPPORT_LIB_DIR},$${ARCH_LIB_DIR},$$libs,/usr/lib); \
+>>   		done ; \
+>> -	fi ; \
+>> +	fi
+>> +endef
+>> +
 >
-> For debugging purposes, an unstripped copy in staging is necessary.
-> Moreover, this change will simplify a subsequent change that lines up the
-> location of shared libraries between target and staging directories.
+> It's a good idea but can we instead define TOOLCHAIN_EXTERNAL_INSTALL_GDBSERVER
+> only when BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY is set to y ?
 >
-> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+> ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY),y)
+> define TOOLCHAIN_EXTERNAL_INSTALL_GDBSERVER
+> ...
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  While you do that: I think it would be better to have TARGET in the name, so 
+TOOLCHAIN_EXTERNAL_INSTALL_TARGET_GDBSERVER.
 
-  Quick build-test done.
+
+>
+>> +define TOOLCHAIN_EXTERNAL_INSTALL_GDBSERVER
+>> +	$(Q)ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>> +	ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>>   	if test "$(BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)" = "y"; then \
+>
+> This allow to remove this line ^^^
+>
+> Best regards,
+> Romain
+>
+>>   		$(call MESSAGE,"Copying gdbserver") ; \
+>>   		gdbserver_found=0 ; \
+>> @@ -774,6 +779,7 @@ endef
+>>   define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
+>>   	$(TOOLCHAIN_EXTERNAL_CREATE_TARGET_LIB_SYMLINK)
+>>   	$(TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS)
+>> +	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBSERVER)
+>>   	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC)
+>>   	$(TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FLAT)
+
+  These two should ideally also have TARGET in their name, but that's a separate 
+change of course.
+
 
   Regards,
   Arnout
 
-> ---
->   toolchain/toolchain-external/toolchain-external.mk | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
+
+>>   	$(TOOLCHAIN_EXTERNAL_FIXUP_UCLIBCNG_LDSO)
+>>
 >
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 6c3022a..ffdee49 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -656,6 +656,20 @@ endef
->   # nonetheless requested the installation of the FDPIC libraries to the
->   # target filesystem.
->   ifeq ($(BR2_BFIN_INSTALL_FDPIC_SHARED),y)
-> +define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC
-> +	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to staging...") ; \
-> +	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
-> +	FDPIC_SYSROOT_DIR="$(call toolchain_find_sysroot,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> +	FDPIC_LIB_DIR="$(call toolchain_find_libdir,$${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
-> +	FDPIC_SUPPORT_LIB_DIR="" ; \
-> +	if test `find $${FDPIC_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ; then \
-> +	        FDPIC_LIBSTDCPP_A_LOCATION=$$(LANG=C $${FDPIC_EXTERNAL_CC} $(TOOLCHAIN_EXTERNAL_CFLAGS) -print-file-name=libstdc++.a) ; \
-> +	        if [ -e "$${FDPIC_LIBSTDCPP_A_LOCATION}" ]; then \
-> +	                FDPIC_SUPPORT_LIB_DIR=`readlink -f $${FDPIC_LIBSTDCPP_A_LOCATION} | sed -r -e 's:libstdc\+\+\.a::'` ; \
-> +	        fi ; \
-> +	fi ; \
-> +	$(call copy_toolchain_sysroot,$${FDPIC_SYSROOT_DIR},$${FDPIC_SYSROOT_DIR},,$${FDPIC_LIB_DIR},$${FDPIC_SUPPORT_LIB_DIR})
-> +endef
->   define TOOLCHAIN_EXTERNAL_INSTALL_BFIN_FDPIC
->   	$(Q)$(call MESSAGE,"Install external toolchain FDPIC libraries to target...") ; \
->   	FDPIC_EXTERNAL_CC=$(dir $(TOOLCHAIN_EXTERNAL_CC))/../../bfin-linux-uclibc/bin/bfin-linux-uclibc-gcc ; \
-> @@ -755,6 +769,7 @@ TOOLCHAIN_EXTERNAL_BUILD_CMDS = $(TOOLCHAIN_BUILD_WRAPPER)
->   define TOOLCHAIN_EXTERNAL_INSTALL_STAGING_CMDS
->   	$(TOOLCHAIN_EXTERNAL_CREATE_STAGING_LIB_SYMLINK)
->   	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS)
-> +	$(TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS_BFIN_FDPIC)
->   	$(TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER)
->   	$(TOOLCHAIN_EXTERNAL_INSTALL_GDBINIT)
->   endef
-> @@ -771,3 +786,4 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_CMDS
->   endef
->
->   $(eval $(generic-package))
-> +
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 >
 
 
