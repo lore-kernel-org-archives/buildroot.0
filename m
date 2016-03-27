@@ -1,77 +1,94 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 28 Mar 2016 01:08:32 +0200
-Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
- staging
-In-Reply-To: <56F84813.6080302@gmail.com>
+Date: Mon, 28 Mar 2016 01:10:12 +0200
+Subject: [Buildroot] [PATCH 2/5] toolchain-external: remove unused
+ calculation of ARCH_SUBDIR
+In-Reply-To: <56F843D5.6050003@mind.be>
 References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
- <56F84507.3050209@mind.be> <56F84813.6080302@gmail.com>
-Message-ID: <56F867F0.1060204@mind.be>
+ <1455304826-10557-3-git-send-email-patrickdepinguin@gmail.com>
+ <56F843D5.6050003@mind.be>
+Message-ID: <56F86854.4060606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/27/16 22:52, Romain Naour wrote:
-> Hello Arnout, ThomasDS, All,
+On 03/27/16 22:34, Arnout Vandecappelle wrote:
+>   I'm sorry, I still have comments...
 >
-> Le 27/03/2016 22:39, Arnout Vandecappelle a ?crit :
->> On 02/12/16 20:20, Thomas De Schampheleire wrote:
->>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->>>
->>> As discussed on the Buildroot developer days, Buildroot installs some libraries
->>> in a different location in target than in staging. This is specifically seen for
->>> libstdc++ and libatomic.
->>>
->>> This patch series tackles that problem and performs related cleanup.
->>>
->>>
->>>
->>> Thomas De Schampheleire (5):
->>>     toolchain-external: blackfin: install FDPIC libraries also to staging
->>>     toolchain-external: remove unused calculation of ARCH_SUBDIR
->>>     toolchain-external: extract installation of gdbserver to separate
->>>       define
->>>     toolchain-external: align library locations in target and staging dir
->>>     toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
->>>
->>>    package/glibc/glibc.mk                             |  2 +-
->>>    toolchain/helpers.mk                               | 57 ++---------------
->>>    toolchain/toolchain-external/Config.in             |  3 +-
->>>    toolchain/toolchain-external/toolchain-external.mk | 71 ++++++++++------------
->>>    4 files changed, 40 insertions(+), 93 deletions(-)
->>>
+> On 02/12/16 20:20, Thomas De Schampheleire wrote:
+>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >>
->>   I've also done a review and a test of the entire series. There is a bit of
->> reworking suggested by Romain in patch 3/5, the removal of -follow that I
->> suggest in patch 4/5, and I would like to re-instate the --sysroot check in
->> patch 2/5, but that's it.
+>> In TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS, ARCH_SUBDIR is calculated but not
+>> used, and can thus be removed. Since SYSROOT_DIR is only used for the
+>> calculation of ARCH_SUBDIR, it can be removed too.
+>>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+>> ---
+>>   toolchain/toolchain-external/toolchain-external.mk | 8 +-------
+>>   1 file changed, 1 insertion(+), 7 deletions(-)
+>>
+>> diff --git a/toolchain/toolchain-external/toolchain-external.mk
+>> b/toolchain/toolchain-external/toolchain-external.mk
+>> index ffdee49..9d88158 100644
+>> --- a/toolchain/toolchain-external/toolchain-external.mk
+>> +++ b/toolchain/toolchain-external/toolchain-external.mk
+>> @@ -587,12 +587,7 @@ endef
+>>   #                       to the target filesystem.
+>>
+>>   define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>> -    $(Q)SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC))"
+>> ; \
+>> -    if test -z "$${SYSROOT_DIR}" ; then \
+>> -        @echo "External toolchain doesn't support --sysroot. Cannot use." ; \
 >
-> What do you think about moving the sysroot check to a helper function like I
-> propose in this series ? (Which needs to be rebased after ThomasDS's series as well)
+>   This was the only place where we gave that error message, so it should be kept.
+>
+>   That said, it probably wouldn't have shown anyway, because we would already
+> error out with an incomprehensible error message in the configure step. Bottom
+> line: move it to the configure step first.
 
-  That's a good solution, indeed. Actually, I had already applied those patches 
-and missed that the check was now still done in the configure step but just as 
-part of check_unusable_toolchain.
+  As discussed with Romain, please disregard this comment, the check is indeed 
+still there in the configure step.
+
+>
+>   Otherwise, it looks good however. So, since it anyway didn't work properly
+> before, I'll already give this patch my
+>
+> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  So this clearly still stands.
 
   Regards,
   Arnout
 
 >
-> http://patchwork.ozlabs.org/patch/576578/
-> http://patchwork.ozlabs.org/patch/576580/
+>   Regards,
+>   Arnout
 >
-> Thoughts ?
->
-> Best regards,
-> Romain
->
+>> -        exit 1 ; \
+>> -    fi ; \
+>> -    ARCH_SYSROOT_DIR="$(call toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC)
+>> $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>> +    $(Q)ARCH_SYSROOT_DIR="$(call
+>> toolchain_find_sysroot,$(TOOLCHAIN_EXTERNAL_CC) $(TOOLCHAIN_EXTERNAL_CFLAGS))"
+>> ; \
+>>       ARCH_LIB_DIR="$(call toolchain_find_libdir,$(TOOLCHAIN_EXTERNAL_CC)
+>> $(TOOLCHAIN_EXTERNAL_CFLAGS))" ; \
+>>       SUPPORT_LIB_DIR="" ; \
+>>       if test `find $${ARCH_SYSROOT_DIR} -name 'libstdc++.a' | wc -l` -eq 0 ;
+>> then \
+>> @@ -601,7 +596,6 @@ define TOOLCHAIN_EXTERNAL_INSTALL_TARGET_LIBS
+>>               SUPPORT_LIB_DIR=`readlink -f $${LIBSTDCPP_A_LOCATION} | sed -r
+>> -e 's:libstdc\+\+\.a::'` ; \
+>>           fi ; \
+>>       fi ; \
+>> -    ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e
+>> "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+>>       if test -z "$(BR2_STATIC_LIBS)" ; then \
+>>           $(call MESSAGE,"Copying external toolchain libraries to target...") ; \
+>>           for libs in $(LIB_EXTERNAL_LIBS); do \
 >>
->>   ThomasDS, will you respin or do we apply and make changes afterwards?
->>
->>
->>   Regards,
->>   Arnout
 >
 >
 
