@@ -1,21 +1,22 @@
 From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Sun, 27 Mar 2016 03:50:45 +0200
-Subject: [Buildroot] [PATCH v4 2/3] python-pexpect: new package
-In-Reply-To: <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
+Date: Sun, 27 Mar 2016 03:51:08 +0200
+Subject: [Buildroot] [PATCH v4 1/3] python-ptyprocess: new package
+In-Reply-To: <1459042284-6684-2-git-send-email-viktorin@rehivetech.com>
 References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
- <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160327035045.3c8e6396@jvn>
+ <1459042284-6684-2-git-send-email-viktorin@rehivetech.com>
+Message-ID: <20160327035108.436088b2@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Mar 2016 03:31:23 +0200
+On Sun, 27 Mar 2016 03:31:22 +0200
 Jan Viktorin <viktorin@rehivetech.com> wrote:
 
 > v4
-> * source https://pypi.python.org/pypi/pexpect
+> * bump to 0.5.1
+> * source https://pypi.python.org/pypi/ptyprocess
 > * added hash file
 > 
 > Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
@@ -23,40 +24,41 @@ Jan Viktorin <viktorin@rehivetech.com> wrote:
 
 [...]
 
-> diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+> diff --git a/package/python-ptyprocess/python-ptyprocess.hash b/package/python-ptyprocess/python-ptyprocess.hash
 > new file mode 100644
-> index 0000000..0d1e1fe
+> index 0000000..3973414
 > --- /dev/null
-> +++ b/package/python-pexpect/python-pexpect.hash
+> +++ b/package/python-ptyprocess/python-ptyprocess.hash
 > @@ -0,0 +1,4 @@
 > +# got from https://pypi.python.org
-> +md5sum	056df81e6ca7081f1015b4b147b977b7
-> +# computed manually:
-> +sha256sum 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c  pexpect-4.0.1.tar.gz
+> +md5sum	94e537122914cc9ec9c1eadcd36e73a1 ptyprocess-0.5.1.tar.gz
+> +# computed manually
+> +sha256sum 0530ce63a9295bfae7bd06edc02b6aa935619f486f0f1dc0972f516265ee81a6  ptyprocess-0.5.1.tar.gz
 
 Should be md5 and sha256 (without sum)...
 
-> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+> diff --git a/package/python-ptyprocess/python-ptyprocess.mk b/package/python-ptyprocess/python-ptyprocess.mk
 > new file mode 100644
-> index 0000000..8b2809b
+> index 0000000..74b1217
 > --- /dev/null
-> +++ b/package/python-pexpect/python-pexpect.mk
-> @@ -0,0 +1,15 @@
+> +++ b/package/python-ptyprocess/python-ptyprocess.mk
+> @@ -0,0 +1,14 @@
 > +################################################################################
 > +#
-> +# python-pexpect
+> +# python-ptyprocess
 > +#
 > +################################################################################
 > +
-> +PYTHON_PEXPECT_VERSION = 4.0.1
-> +PYTHON_PEXPECT_SITE = https://pypi.python.org/pypi/pexpect
+> +PYTHON_PTYPROCESS_VERSION = 0.5.1
+> +PYTHON_PTYPROCESS_SITE = https://pypi.python.org/pypi/ptyprocess
 
-The URL should be https://pypi.python.org/packages/source/p/pexpect.
+The URL should be https://pypi.python.org/packages/source/p/ptyprocess.
 
-> +PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
-> +PYTHON_PEXPECT_LICENSE = ISC
-> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
-> +PYTHON_PEXPECT_SETUP_TYPE = distutils
-> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
+It seems I accidently didn't test the very last version, sorry. Now, it seems to work.
+
+> +PYTHON_PTYPROCESS_SOURCE = ptyprocess-$(PYTHON_PTYPROCESS_VERSION).tar.gz
+> +PYTHON_PTYPROCESS_LICENSE = ISC
+> +PYTHON_PTYPROCESS_LICENSE_FILES = LICENSE
+> +PYTHON_PTYPROCESS_SETUP_TYPE = distutils
 > +
 > +$(eval $(python-package))
