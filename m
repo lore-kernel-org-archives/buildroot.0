@@ -1,77 +1,65 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Sun, 27 Mar 2016 22:51:59 +0200
-Subject: [Buildroot] [PATCH v4 2/3] python-pexpect: new package
-In-Reply-To: <20160327035045.3c8e6396@jvn>
-References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
- <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
- <20160327035045.3c8e6396@jvn>
-Message-ID: <CAGm1_kv8McTGNN4dp-J+HD1b=42xzOcTgSg7ESdByN0hBGbyJw@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 27 Mar 2016 22:52:35 +0200
+Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
+ staging
+In-Reply-To: <56F84507.3050209@mind.be>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+ <56F84507.3050209@mind.be>
+Message-ID: <56F84813.6080302@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 27, 2016 at 3:50 AM, Jan Viktorin <viktorin@rehivetech.com> wrote:
-> On Sun, 27 Mar 2016 03:31:23 +0200
-> Jan Viktorin <viktorin@rehivetech.com> wrote:
->
->> v4
->> * source https://pypi.python.org/pypi/pexpect
->> * added hash file
+Hello Arnout, ThomasDS, All,
+
+Le 27/03/2016 22:39, Arnout Vandecappelle a ?crit :
+> On 02/12/16 20:20, Thomas De Schampheleire wrote:
+>> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
 >>
->> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
->> ---
->
-> [...]
->
->> diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
->> new file mode 100644
->> index 0000000..0d1e1fe
->> --- /dev/null
->> +++ b/package/python-pexpect/python-pexpect.hash
->> @@ -0,0 +1,4 @@
->> +# got from https://pypi.python.org
->> +md5sum       056df81e6ca7081f1015b4b147b977b7
->> +# computed manually:
->> +sha256sum 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c  pexpect-4.0.1.tar.gz
->
-> Should be md5 and sha256 (without sum)...
->
->> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
->> new file mode 100644
->> index 0000000..8b2809b
->> --- /dev/null
->> +++ b/package/python-pexpect/python-pexpect.mk
->> @@ -0,0 +1,15 @@
->> +################################################################################
->> +#
->> +# python-pexpect
->> +#
->> +################################################################################
->> +
->> +PYTHON_PEXPECT_VERSION = 4.0.1
->> +PYTHON_PEXPECT_SITE = https://pypi.python.org/pypi/pexpect
->
-> The URL should be https://pypi.python.org/packages/source/p/pexpect.
->
->> +PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
->> +PYTHON_PEXPECT_LICENSE = ISC
->> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
->> +PYTHON_PEXPECT_SETUP_TYPE = distutils
->> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
+>> As discussed on the Buildroot developer days, Buildroot installs some libraries
+>> in a different location in target than in staging. This is specifically seen for
+>> libstdc++ and libatomic.
+>>
+>> This patch series tackles that problem and performs related cleanup.
+>>
+>>
+>>
+>> Thomas De Schampheleire (5):
+>>    toolchain-external: blackfin: install FDPIC libraries also to staging
+>>    toolchain-external: remove unused calculation of ARCH_SUBDIR
+>>    toolchain-external: extract installation of gdbserver to separate
+>>      define
+>>    toolchain-external: align library locations in target and staging dir
+>>    toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
+>>
+>>   package/glibc/glibc.mk                             |  2 +-
+>>   toolchain/helpers.mk                               | 57 ++---------------
+>>   toolchain/toolchain-external/Config.in             |  3 +-
+>>   toolchain/toolchain-external/toolchain-external.mk | 71 ++++++++++------------
+>>   4 files changed, 40 insertions(+), 93 deletions(-)
+>>
+> 
+>  I've also done a review and a test of the entire series. There is a bit of
+> reworking suggested by Romain in patch 3/5, the removal of -follow that I
+> suggest in patch 4/5, and I would like to re-instate the --sysroot check in
+> patch 2/5, but that's it.
 
-drop this build-time dependency
+What do you think about moving the sysroot check to a helper function like I
+propose in this series ? (Which needs to be rebased after ThomasDS's series as well)
 
-Resend v5 with all fixes and add my
+http://patchwork.ozlabs.org/patch/576578/
+http://patchwork.ozlabs.org/patch/576580/
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Thoughts ?
 
-to both python patches.
+Best regards,
+Romain
 
-Thanks.
-
-Yegor
-
->> +
->> +$(eval $(python-package))
+> 
+>  ThomasDS, will you respin or do we apply and make changes afterwards?
+> 
+> 
+>  Regards,
+>  Arnout
