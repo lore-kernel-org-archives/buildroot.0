@@ -1,37 +1,62 @@
 From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Sun, 27 Mar 2016 03:48:37 +0200
-Subject: [Buildroot] [PATCH v4 3/3] dpdk: new package
-In-Reply-To: <1459042284-6684-4-git-send-email-viktorin@rehivetech.com>
+Date: Sun, 27 Mar 2016 03:50:45 +0200
+Subject: [Buildroot] [PATCH v4 2/3] python-pexpect: new package
+In-Reply-To: <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
 References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
- <1459042284-6684-4-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160327034837.216335ce@jvn>
+ <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
+Message-ID: <20160327035045.3c8e6396@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Mar 2016 03:31:24 +0200
+On Sun, 27 Mar 2016 03:31:23 +0200
 Jan Viktorin <viktorin@rehivetech.com> wrote:
 
-> This patch introduces support of the DPDK library (www.dpdk.org) into
-> Buildroot. DPDK is a library for high-speed packet sending/receiving
-> while bypassing the Linux Kernel. It allows to reach a high throughput
-> for 10-100 Gbps networks on the x86 platform.
+> v4
+> * source https://pypi.python.org/pypi/pexpect
+> * added hash file
 > 
+> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+> ---
+
 [...]
+
+> diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+> new file mode 100644
+> index 0000000..0d1e1fe
+> --- /dev/null
+> +++ b/package/python-pexpect/python-pexpect.hash
+> @@ -0,0 +1,4 @@
+> +# got from https://pypi.python.org
+> +md5sum	056df81e6ca7081f1015b4b147b977b7
+> +# computed manually:
+> +sha256sum 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c  pexpect-4.0.1.tar.gz
+
+Should be md5 and sha256 (without sum)...
+
+> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+> new file mode 100644
+> index 0000000..8b2809b
+> --- /dev/null
+> +++ b/package/python-pexpect/python-pexpect.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pexpect
+> +#
+> +################################################################################
 > +
-> +# We're building a kernel module without using the kernel-module infra,
-> +# so we need to tell we want module support in the kernel
-> +ifeq ($(BR2_PACKAGE_DPDK),y)
-> +LINUX_NEEDS_MODULES = y
-> +endif
+> +PYTHON_PEXPECT_VERSION = 4.0.1
+> +PYTHON_PEXPECT_SITE = https://pypi.python.org/pypi/pexpect
 
-Ups, I forgot to delete this LINUX_NEEDS_MODULES (moved to Config.in
-already).
+The URL should be https://pypi.python.org/packages/source/p/pexpect.
 
-Jan
-
+> +PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+> +PYTHON_PEXPECT_LICENSE = ISC
+> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+> +PYTHON_PEXPECT_SETUP_TYPE = distutils
+> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
 > +
-> +DPDK_CONFIG = $(call qstrip,$(BR2_PACKAGE_DPDK_CONFIG))
-[...]
+> +$(eval $(python-package))
