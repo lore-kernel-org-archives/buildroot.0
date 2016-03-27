@@ -1,10 +1,11 @@
 From: Pauli Sundberg <susundberg@gmail.com>
-Date: Sun, 27 Mar 2016 20:30:16 +0300
-Subject: [Buildroot] [PATCH V3 1/2] Add custom Subversion repository support
-	for package uboot
-In-Reply-To: <87mvpmdx0i.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Mar 2016 20:30:17 +0300
+Subject: [Buildroot] [PATCH V3 2/2] Add custom Subversion repository support
+	for package linux
+In-Reply-To: <1459099817-4614-1-git-send-email-susundberg@gmail.com>
 References: <87mvpmdx0i.fsf@dell.be.48ers.dk>
-Message-ID: <1459099817-4614-1-git-send-email-susundberg@gmail.com>
+ <1459099817-4614-1-git-send-email-susundberg@gmail.com>
+Message-ID: <1459099817-4614-2-git-send-email-susundberg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +14,67 @@ To: buildroot@busybox.net
 
 Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
 ---
- boot/uboot/Config.in | 9 ++++++---
- boot/uboot/uboot.mk  | 4 +++-
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ linux/Config.in | 12 +++++++++---
+ linux/linux.mk  |  3 +++
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index a6b9f17..de6f7aa 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -54,6 +54,9 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT
- config BR2_TARGET_UBOOT_CUSTOM_HG
- 	bool "Custom Mercurial repository"
+diff --git a/linux/Config.in b/linux/Config.in
+index 93968cd..dd21661 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -63,6 +63,12 @@ config BR2_LINUX_KERNEL_CUSTOM_HG
+ 	  This option allows Buildroot to get the Linux kernel source
+ 	  code from a Mercurial repository.
  
-+config BR2_TARGET_UBOOT_CUSTOM_SVN
-+        bool "Custom Subversion repository"
-+        
- endchoice
++config BR2_LINUX_KERNEL_CUSTOM_SVN
++	bool "Custom Subversion repository"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a subversion repository.
++
+ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 	bool "Local directory"
+ 	help
+@@ -79,7 +85,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
  
- config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
-@@ -64,7 +67,7 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom U-Boot tarball"
- 	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
+-if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
++if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
  
--if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
-+if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
- 
- config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+ config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
  	string "URL of custom repository"
-@@ -76,7 +79,7 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
- 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+@@ -91,7 +97,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
+ 		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
  	help
 -	  Revision to use in the typical format used by Git/Mercurial
 +	  Revision to use in the typical format used by Git/Mercurial/Subversion
  	  E.G. a sha id, a tag, branch, ..
  
  endif
-@@ -88,7 +91,7 @@ config BR2_TARGET_UBOOT_VERSION
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
- 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
--		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
-+		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+@@ -109,7 +115,7 @@ config BR2_LINUX_KERNEL_VERSION
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
+-		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
++		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
  
- config BR2_TARGET_UBOOT_PATCH
- 	string "Custom U-Boot patches"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 3c96259..ae98c72 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -3,7 +3,6 @@
- # uboot
  #
- ################################################################################
--
- UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
- UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
- 
-@@ -24,6 +23,9 @@ UBOOT_SITE_METHOD = git
- else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
- UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = hg
-+else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_SVN),y)
-+UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
-+UBOOT_SITE_METHOD = svn
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7e20255..317587f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -23,6 +23,9 @@ LINUX_SITE_METHOD = git
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = hg
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
++LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
++LINUX_SITE_METHOD = svn
  else
- # Handle stable official U-Boot versions
- UBOOT_SITE = ftp://ftp.denx.de/pub/u-boot
+ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
 -- 
 1.9.1
