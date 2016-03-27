@@ -1,32 +1,411 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Mar 2016 11:16:59 +0200
-Subject: [Buildroot] [PATCH v2 14/18] package/x264: bump version
+Date: Sun, 27 Mar 2016 11:16:51 +0200
+Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump version to 3.1.0
 In-Reply-To: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459070223-5901-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Removed patches applied upstream. This version bump is needed to
+provide support for ffmpeg 3.0:
+https://github.com/Itseez/opencv/commit/278747ba458c9097aa72bf664c7a8df96d3a56fa
+
+Use BR2_PACKAGE_FFMPEG_AVRESAMPLE by default because OpenCV can use it
+after
+https://github.com/Itseez/opencv/commit/2b2e3ee93c6788b892b084cc04d0ead5ab75c197
+
+Before this patch:
+--     FFMPEG:                      YES
+--       codec:                     YES (ver 57.24.103)
+--       format:                    YES (ver 57.25.100)
+--       util:                      YES (ver 55.17.103)
+--       swscale:                   YES (ver 4.0.100)
+--       resample:                  NO
+
+After this patch:
+--     FFMPEG:                      YES
+--       codec:                     YES (ver 57.24.103)
+--       format:                    YES (ver 57.25.100)
+--       util:                      YES (ver 55.17.103)
+--       swscale:                   YES (ver 4.0.100)
+--       resample:                  YES (ver 3.0.0)
+
+Disabled new options:
+WITH_MATLAB, WITH_VA, WITH_VA_INTEL, DOWNLOAD_EXTERNAL_TEST_DATA
+
+Removed obsolete option BUILD_opencv_hal
+
+Removed options WITH_OPENGL & WITH_OPENMP from the "Disabled features"
+block because they have their own ifeq-block later on.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x264/x264.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: reworked options (Samuel)
 
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 7e7e597..cf5e385 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
+ ...pthread-based-parallel_for-with-gcc-4.4.3.patch |  62 ------
+ ...002-fix-support-for-pthreads-parallel_for.patch | 212 ---------------------
+ package/opencv3/Config.in                          |   1 +
+ package/opencv3/opencv3.mk                         |  13 +-
+ 4 files changed, 8 insertions(+), 280 deletions(-)
+ delete mode 100644 package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
+ delete mode 100644 package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
+
+diff --git a/package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch b/package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
+deleted file mode 100644
+index 2be8f33..0000000
+--- a/package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-Backport from https://github.com/Itseez/opencv/commit/1f983ec39c97298b0c8ce409a1cc229ecf14e55c
+-
+-From 1f983ec39c97298b0c8ce409a1cc229ecf14e55c Mon Sep 17 00:00:00 2001
+-From: Maksim Shabunin <maksim.shabunin@itseez.com>
+-Date: Tue, 9 Jun 2015 13:59:48 +0300
+-Subject: [PATCH] Fixed compilation of pthread-based parallel_for with gcc
+- 4.4.3
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- modules/core/src/parallel.cpp | 12 +++++++-----
+- 1 file changed, 7 insertions(+), 5 deletions(-)
+-
+-diff --git a/modules/core/src/parallel.cpp b/modules/core/src/parallel.cpp
+-index b1e7567..0b593ee 100644
+---- a/modules/core/src/parallel.cpp
+-+++ b/modules/core/src/parallel.cpp
+-@@ -132,8 +132,14 @@
+- namespace cv
+- {
+-     ParallelLoopBody::~ParallelLoopBody() {}
+-+#if defined HAVE_PTHREADS && HAVE_PTHREADS
+-+    void parallel_for_pthreads(const cv::Range& range, const cv::ParallelLoopBody& body, double nstripes);
+-+    size_t parallel_pthreads_get_threads_num();
+-+    void parallel_pthreads_set_threads_num(int num);
+-+#endif
+- }
+- 
+-+
+- namespace
+- {
+- #ifdef CV_PARALLEL_FRAMEWORK
+-@@ -301,7 +307,7 @@ void cv::parallel_for_(const cv::Range& range, const cv::ParallelLoopBody& body,
+-         }
+- 
+- #elif defined HAVE_PTHREADS
+--        void parallel_for_pthreads(const Range& range, const ParallelLoopBody& body, double nstripes);
+-+
+-         parallel_for_pthreads(range, body, nstripes);
+- 
+- #else
+-@@ -361,8 +367,6 @@ int cv::getNumThreads(void)
+- 
+- #elif defined HAVE_PTHREADS
+- 
+--        size_t parallel_pthreads_get_threads_num();
+--
+-         return parallel_pthreads_get_threads_num();
+- 
+- #else
+-@@ -424,8 +428,6 @@ void cv::setNumThreads( int threads )
+- 
+- #elif defined HAVE_PTHREADS
+- 
+--    void parallel_pthreads_set_threads_num(int num);
+--
+-     parallel_pthreads_set_threads_num(threads);
+- 
+- #endif
+--- 
+-2.4.4
+-
+diff --git a/package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch b/package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
+deleted file mode 100644
+index 6eeb270..0000000
+--- a/package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
++++ /dev/null
+@@ -1,212 +0,0 @@
+-Backport from https://github.com/Itseez/opencv/commit/a482dcce464acbd5368fb93c6c3d52ba8401776a
+-
+-From a482dcce464acbd5368fb93c6c3d52ba8401776a Mon Sep 17 00:00:00 2001
+-From: Alexander Alekhin <alexander.alekhin@itseez.com>
+-Date: Thu, 11 Jun 2015 16:53:07 +0300
+-Subject: [PATCH] fix support for pthreads parallel_for
+-
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- CMakeLists.txt                         | 29 ++++++++++++++++++++++-------
+- cmake/OpenCVFindLibsPerf.cmake         | 14 +++++++++-----
+- cmake/templates/cvconfig.h.in          |  6 ++++++
+- modules/core/src/parallel.cpp          | 13 ++++++++-----
+- modules/core/src/parallel_pthreads.cpp |  2 +-
+- modules/core/src/precomp.hpp           |  6 ------
+- 6 files changed, 46 insertions(+), 24 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index d9a17b3..27d8470 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -188,7 +188,7 @@ OCV_OPTION(WITH_QUICKTIME      "Use QuickTime for Video I/O insted of QTKit" OFF
+- OCV_OPTION(WITH_TBB            "Include Intel TBB support"                   OFF  IF (NOT IOS AND NOT WINRT) )
+- OCV_OPTION(WITH_OPENMP         "Include OpenMP support"                      OFF)
+- OCV_OPTION(WITH_CSTRIPES       "Include C= support"                          OFF  IF (WIN32 AND NOT WINRT)  )
+--OCV_OPTION(WITH_PTHREADS_PF    "Use pthreads-based parallel_for"             OFF  IF (NOT WIN32) )
+-+OCV_OPTION(WITH_PTHREADS_PF    "Use pthreads-based parallel_for"             ON   IF (NOT WIN32) )
+- OCV_OPTION(WITH_TIFF           "Include TIFF support"                        ON   IF (NOT IOS) )
+- OCV_OPTION(WITH_UNICAP         "Include Unicap support (GPL)"                OFF  IF (UNIX AND NOT APPLE AND NOT ANDROID) )
+- OCV_OPTION(WITH_V4L            "Include Video 4 Linux support"               ON   IF (UNIX AND NOT ANDROID) )
+-@@ -1026,6 +1026,27 @@ if(DEFINED WITH_GPHOTO2)
+- endif(DEFINED WITH_GPHOTO2)
+- 
+- 
+-+# Order is similar to CV_PARALLEL_FRAMEWORK in core/src/parallel.cpp
+-+ocv_clear_vars(CV_PARALLEL_FRAMEWORK)
+-+if(HAVE_TBB)
+-+  set(CV_PARALLEL_FRAMEWORK "TBB (ver ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} interface ${TBB_INTERFACE_VERSION})")
+-+elseif(HAVE_CSTRIPES)
+-+  set(CV_PARALLEL_FRAMEWORK "C=")
+-+elseif(HAVE_OPENMP)
+-+  set(CV_PARALLEL_FRAMEWORK "OpenMP")
+-+elseif(HAVE_GCD)
+-+  set(CV_PARALLEL_FRAMEWORK "GCD")
+-+elseif(WINRT OR HAVE_CONCURRENCY)
+-+  set(CV_PARALLEL_FRAMEWORK "Concurrency")
+-+elseif(HAVE_PTHREADS_PF)
+-+  set(CV_PARALLEL_FRAMEWORK "pthreads")
+-+else()
+-+  set(CV_PARALLEL_FRAMEWORK "none")
+-+endif()
+-+status("")
+-+status("  Parallel framework:" TRUE THEN "${CV_PARALLEL_FRAMEWORK}" ELSE NO)
+-+
+-+
+- # ========================== Other third-party libraries ==========================
+- status("")
+- status("  Other third-party libraries:")
+-@@ -1045,12 +1066,6 @@ status("    Use IPP Async:"  HAVE_IPP_A       THEN "YES" ELSE NO)
+- endif(DEFINED WITH_IPP_A)
+- 
+- status("    Use Eigen:"      HAVE_EIGEN       THEN "YES (ver ${EIGEN_WORLD_VERSION}.${EIGEN_MAJOR_VERSION}.${EIGEN_MINOR_VERSION})" ELSE NO)
+--status("    Use TBB:"        HAVE_TBB         THEN "YES (ver ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} interface ${TBB_INTERFACE_VERSION})" ELSE NO)
+--status("    Use OpenMP:"     HAVE_OPENMP      THEN YES ELSE NO)
+--status("    Use GCD"         HAVE_GCD         THEN YES ELSE NO)
+--status("    Use Concurrency" HAVE_CONCURRENCY THEN YES ELSE NO)
+--status("    Use C=:"         HAVE_CSTRIPES    THEN YES ELSE NO)
+--status("    Use pthreads for parallel for:"   HAVE_PTHREADS_PF THEN YES ELSE NO)
+- status("    Use Cuda:"       HAVE_CUDA        THEN "YES (ver ${CUDA_VERSION_STRING})" ELSE NO)
+- status("    Use OpenCL:"     HAVE_OPENCL      THEN YES ELSE NO)
+- 
+-diff --git a/cmake/OpenCVFindLibsPerf.cmake b/cmake/OpenCVFindLibsPerf.cmake
+-index bda5d79..d1bc541 100644
+---- a/cmake/OpenCVFindLibsPerf.cmake
+-+++ b/cmake/OpenCVFindLibsPerf.cmake
+-@@ -120,12 +120,16 @@ if(WITH_OPENMP)
+-   set(HAVE_OPENMP "${OPENMP_FOUND}")
+- endif()
+- 
+--if(UNIX OR ANDROID)
+--if(NOT APPLE AND NOT HAVE_TBB AND NOT HAVE_OPENMP)
+--  set(HAVE_PTHREADS_PF 1)
+--else()
+--  set(HAVE_PTHREADS_PF 0)
+-+if(NOT MSVC AND NOT DEFINED HAVE_PTHREADS)
+-+  set(_fname "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/pthread_test.cpp")
+-+  file(WRITE "${_fname}" "#include <pthread.h>\nint main() { (void)pthread_self(); return 0; }\n")
+-+  try_compile(HAVE_PTHREADS "${CMAKE_BINARY_DIR}" "${_fname}")
+-+  file(REMOVE "${_fname}")
+- endif()
+-+
+-+ocv_clear_vars(HAVE_PTHREADS_PF)
+-+if(WITH_PTHREADS_PF)
+-+  set(HAVE_PTHREADS_PF ${HAVE_PTHREADS})
+- else()
+-   set(HAVE_PTHREADS_PF 0)
+- endif()
+-diff --git a/cmake/templates/cvconfig.h.in b/cmake/templates/cvconfig.h.in
+-index 4a1d1c6..3330774 100644
+---- a/cmake/templates/cvconfig.h.in
+-+++ b/cmake/templates/cvconfig.h.in
+-@@ -139,6 +139,12 @@
+- /* PNG codec */
+- #cmakedefine HAVE_PNG
+- 
+-+/* Posix threads (pthreads) */
+-+#cmakedefine HAVE_PTHREADS
+-+
+-+/* parallel_for with pthreads */
+-+#cmakedefine HAVE_PTHREADS_PF
+-+
+- /* Qt support */
+- #cmakedefine HAVE_QT
+- 
+-diff --git a/modules/core/src/parallel.cpp b/modules/core/src/parallel.cpp
+-index 0b593ee..caa8129 100644
+---- a/modules/core/src/parallel.cpp
+-+++ b/modules/core/src/parallel.cpp
+-@@ -80,6 +80,7 @@
+-    4. HAVE_GCD         - system wide, used automatically        (APPLE only)
+-    5. WINRT            - system wide, used automatically        (Windows RT only)
+-    6. HAVE_CONCURRENCY - part of runtime, used automatically    (Windows only - MSVS 10, MSVS 11)
+-+   7. HAVE_PTHREADS_PF - pthreads if available
+- */
+- 
+- #if defined HAVE_TBB
+-@@ -125,14 +126,14 @@
+- #  define CV_PARALLEL_FRAMEWORK "winrt-concurrency"
+- #elif defined HAVE_CONCURRENCY
+- #  define CV_PARALLEL_FRAMEWORK "ms-concurrency"
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- #  define CV_PARALLEL_FRAMEWORK "pthreads"
+- #endif
+- 
+- namespace cv
+- {
+-     ParallelLoopBody::~ParallelLoopBody() {}
+--#if defined HAVE_PTHREADS && HAVE_PTHREADS
+-+#ifdef HAVE_PTHREADS_PF
+-     void parallel_for_pthreads(const cv::Range& range, const cv::ParallelLoopBody& body, double nstripes);
+-     size_t parallel_pthreads_get_threads_num();
+-     void parallel_pthreads_set_threads_num(int num);
+-@@ -306,7 +307,7 @@ void cv::parallel_for_(const cv::Range& range, const cv::ParallelLoopBody& body,
+-             Concurrency::CurrentScheduler::Detach();
+-         }
+- 
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- 
+-         parallel_for_pthreads(range, body, nstripes);
+- 
+-@@ -365,7 +366,7 @@ int cv::getNumThreads(void)
+-         ? Concurrency::CurrentScheduler::Get()->GetNumberOfVirtualProcessors()
+-         : pplScheduler->GetNumberOfVirtualProcessors());
+- 
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- 
+-         return parallel_pthreads_get_threads_num();
+- 
+-@@ -426,7 +427,7 @@ void cv::setNumThreads( int threads )
+-                        Concurrency::MaxConcurrency, threads-1));
+-     }
+- 
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- 
+-     parallel_pthreads_set_threads_num(threads);
+- 
+-@@ -452,6 +453,8 @@ int cv::getThreadNum(void)
+-     return 0;
+- #elif defined HAVE_CONCURRENCY
+-     return std::max(0, (int)Concurrency::Context::VirtualProcessorId()); // zero for master thread, unique number for others but not necessary 1,2,3,...
+-+#elif defined HAVE_PTHREADS_PF
+-+    return (int)(size_t)(void*)pthread_self(); // no zero-based indexing
+- #else
+-     return 0;
+- #endif
+-diff --git a/modules/core/src/parallel_pthreads.cpp b/modules/core/src/parallel_pthreads.cpp
+-index 8c34959..091ea2d 100644
+---- a/modules/core/src/parallel_pthreads.cpp
+-+++ b/modules/core/src/parallel_pthreads.cpp
+-@@ -42,7 +42,7 @@
+- 
+- #include "precomp.hpp"
+- 
+--#if defined HAVE_PTHREADS && HAVE_PTHREADS
+-+#ifdef HAVE_PTHREADS_PF
+- 
+- #include <algorithm>
+- #include <pthread.h>
+-diff --git a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
+-index d463126..88b60e4 100644
+---- a/modules/core/src/precomp.hpp
+-+++ b/modules/core/src/precomp.hpp
+-@@ -292,12 +292,6 @@ TLSData<CoreTLSData>& getCoreTlsData();
+- #define CL_RUNTIME_EXPORT
+- #endif
+- 
+--#ifndef HAVE_PTHREADS
+--#if !(defined WIN32 || defined _WIN32 || defined WINCE || defined HAVE_WINRT)
+--#define HAVE_PTHREADS 1
+--#endif
+--#endif
+--
+- extern bool __termination; // skip some cleanups, because process is terminating
+-                            // (for example, if ExitProcess() was already called)
+- 
+--- 
+-2.4.4
+-
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 3a185d6..31fd98a 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -243,6 +243,7 @@ config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
+ 	bool "ffmpeg support"
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	depends on !BR2_nios2 # ffmpeg
+ 	help
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3ce78b5..db37e7c 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X264_VERSION = e86f3a1993234e8f26050c243aa253651200fa6b
-+X264_VERSION = a01e33913655f983df7a4d64b0a4178abb1eb618
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPLv2+
- X264_DEPENDENCIES = host-pkgconf
+-OPENCV3_VERSION = 3.0.0
++OPENCV3_VERSION = 3.1.0
+ OPENCV3_SITE = $(call github,itseez,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3c
+@@ -15,7 +15,8 @@ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_DOCS=OFF \
+ 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),ON,OFF) \
+ 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_TESTS),ON,OFF) \
+-	-DBUILD_WITH_DEBUG_INFO=OFF
++	-DBUILD_WITH_DEBUG_INFO=OFF \
++	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_BUILD_TESTS)$(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),)
+ OPENCV3_CONF_OPTS += -DINSTALL_TEST=OFF
+@@ -70,7 +71,6 @@ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_opencv_core=ON \
+ 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV3_LIB_FEATURES2D),ON,OFF) \
+ 	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV3_LIB_FLANN),ON,OFF) \
+-	-DBUILD_opencv_hal=ON \
+ 	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI),ON,OFF) \
+ 	-DBUILD_opencv_imgcodecs=$(if $(BR2_PACKAGE_OPENCV3_LIB_IMGCODECS),ON,OFF) \
+ 	-DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),ON,OFF) \
+@@ -142,7 +142,9 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_INTELPERC=OFF \
+ 	-DWITH_IPP=OFF \
+ 	-DWITH_IPP_A=OFF \
+-	-DWITH_TBB=OFF
++	-DWITH_TBB=OFF \
++	-DWITH_VA=OFF \
++	-DWITH_VA_INTEL=OFF
+ 
+ # Smartek stuff
+ OPENCV3_CONF_OPTS += -DWITH_GIGEAPI=OFF
+@@ -201,11 +203,10 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_EIGEN=OFF \
+ 	-DWITH_GDAL=OFF \
+ 	-DWITH_GPHOTO2=OFF \
++	-DWITH_MATLAB=OFF \
+ 	-DWITH_OPENCL=OFF \
+ 	-DWITH_OPENCL_SVM=OFF \
+ 	-DWITH_OPENEXR=OFF \
+-	-DWITH_OPENGL=OFF \
+-	-DWITH_OPENMP=OFF \
+ 	-DWITH_OPENNI2=OFF \
+ 	-DWITH_OPENNI=OFF \
+ 	-DWITH_UNICAP=OFF \
 -- 
 2.8.0.rc3
