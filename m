@@ -1,59 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Mar 2016 22:49:24 +0200
-Subject: [Buildroot] [PATCH 16/16 v5] legal-info: explicitly state how
- patches are licensed
-In-Reply-To: <d6c5a79915775eaa9d1a6d1711a4955cafe221cd.1457718289.git.yann.morin.1998@free.fr>
-References: <cover.1457718289.git.yann.morin.1998@free.fr>
- <d6c5a79915775eaa9d1a6d1711a4955cafe221cd.1457718289.git.yann.morin.1998@free.fr>
-Message-ID: <56F84754.5060500@mind.be>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Sun, 27 Mar 2016 22:51:59 +0200
+Subject: [Buildroot] [PATCH v4 2/3] python-pexpect: new package
+In-Reply-To: <20160327035045.3c8e6396@jvn>
+References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
+ <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
+ <20160327035045.3c8e6396@jvn>
+Message-ID: <CAGm1_kv8McTGNN4dp-J+HD1b=42xzOcTgSg7ESdByN0hBGbyJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/11/16 18:49, Yann E. MORIN wrote:
-> From: Luca Ceresoli <luca@lucaceresoli.net>
+On Sun, Mar 27, 2016 at 3:50 AM, Jan Viktorin <viktorin@rehivetech.com> wrote:
+> On Sun, 27 Mar 2016 03:31:23 +0200
+> Jan Viktorin <viktorin@rehivetech.com> wrote:
 >
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Acked-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->   support/legal-info/README.header | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>> v4
+>> * source https://pypi.python.org/pypi/pexpect
+>> * added hash file
+>>
+>> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+>> ---
 >
-> diff --git a/support/legal-info/README.header b/support/legal-info/README.header
-> index 418de14..feee104 100644
-> --- a/support/legal-info/README.header
-> +++ b/support/legal-info/README.header
-> @@ -18,7 +18,7 @@ This material is composed of the following items.
->      sources/ subdirectory (except for the non-redistributable packages, which
->      have not been saved). Patches that were applied are also saved, along
->      with a file named 'series' that lists the patches in the order they were
-> -   applied.
-> +   applied. Patches are under the same license as the original package.
-
-  When a package has several licenses for several of its components, the patches 
-are actually under the license of the components they touch. So I would 
-summarize this as:
-
-  Patches are under the same license of the files that they modify in the 
-original package.
-
-  Regards,
-  Arnout
-
->    * A manifest file listing the configured packages and related information.
->    * The license text of the packages; they have been saved in the licenses/
->      subdirectory.
+> [...]
 >
+>> diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
+>> new file mode 100644
+>> index 0000000..0d1e1fe
+>> --- /dev/null
+>> +++ b/package/python-pexpect/python-pexpect.hash
+>> @@ -0,0 +1,4 @@
+>> +# got from https://pypi.python.org
+>> +md5sum       056df81e6ca7081f1015b4b147b977b7
+>> +# computed manually:
+>> +sha256sum 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c  pexpect-4.0.1.tar.gz
+>
+> Should be md5 and sha256 (without sum)...
+>
+>> diff --git a/package/python-pexpect/python-pexpect.mk b/package/python-pexpect/python-pexpect.mk
+>> new file mode 100644
+>> index 0000000..8b2809b
+>> --- /dev/null
+>> +++ b/package/python-pexpect/python-pexpect.mk
+>> @@ -0,0 +1,15 @@
+>> +################################################################################
+>> +#
+>> +# python-pexpect
+>> +#
+>> +################################################################################
+>> +
+>> +PYTHON_PEXPECT_VERSION = 4.0.1
+>> +PYTHON_PEXPECT_SITE = https://pypi.python.org/pypi/pexpect
+>
+> The URL should be https://pypi.python.org/packages/source/p/pexpect.
+>
+>> +PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
+>> +PYTHON_PEXPECT_LICENSE = ISC
+>> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
+>> +PYTHON_PEXPECT_SETUP_TYPE = distutils
+>> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
 
+drop this build-time dependency
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Resend v5 with all fixes and add my
+
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+to both python patches.
+
+Thanks.
+
+Yegor
+
+>> +
+>> +$(eval $(python-package))
