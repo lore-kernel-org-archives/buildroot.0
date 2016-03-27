@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Mar 2016 11:17:01 +0200
-Subject: [Buildroot] [PATCH v2 16/18] package/dtv-scan-tables: bump version
+Date: Sun, 27 Mar 2016 11:16:52 +0200
+Subject: [Buildroot] [PATCH v2 07/18] package/squeezelite: fix compilation
+	with ffmpeg >= 2.9
 In-Reply-To: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459070223-5901-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459070223-5901-8-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,72 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/squeezelite/0003-ffmpeg_2_9.patch | 57 +++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 package/squeezelite/0003-ffmpeg_2_9.patch
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index ab6a36c..d78dd82 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTV_SCAN_TABLES_VERSION = 6da0f5e851dd5e51e43b87136228a88705a7ba69
-+DTV_SCAN_TABLES_VERSION = 61c8339d686b2d98d5604c26a777cb3c1f3d84a1
- DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
+diff --git a/package/squeezelite/0003-ffmpeg_2_9.patch b/package/squeezelite/0003-ffmpeg_2_9.patch
+new file mode 100644
+index 0000000..f69b829
+--- /dev/null
++++ b/package/squeezelite/0003-ffmpeg_2_9.patch
+@@ -0,0 +1,57 @@
++Fix compilation with ffmpeg >= 2.9
++
++Downloaded from Debian:
++https://sources.debian.net/src/squeezelite/1.8-3/debian/patches/ffmpeg_2.9.patch/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++
++Description: Replace deprecated FFmpeg API
++Author: Andreas Cadhalpun <Andreas.Cadhalpun@googlemail.com>
++Last-Update: <2015-11-02>
++
++--- squeezelite-1.8.orig/ffmpeg.c
+++++ squeezelite-1.8/ffmpeg.c
++@@ -52,8 +52,8 @@ struct ff_s {
++ 	unsigned (* avcodec_version)(void);
++ 	AVCodec * (* avcodec_find_decoder)(int);
++ 	int attribute_align_arg (* avcodec_open2)(AVCodecContext *, const AVCodec *, AVDictionary **);
++-	AVFrame * (* avcodec_alloc_frame)(void);
++-	void (* avcodec_free_frame)(AVFrame **);
+++	AVFrame * (* av_frame_alloc)(void);
+++	void (* av_frame_free)(AVFrame **);
++ 	int attribute_align_arg (* avcodec_decode_audio4)(AVCodecContext *, AVFrame *, int *, const AVPacket *);
++ 	// ffmpeg symbols to be dynamically loaded from libavformat
++ 	unsigned (* avformat_version)(void);
++@@ -324,7 +324,7 @@ static decode_state ff_decode(void) {
++ 
++ 		AVCODEC(ff, open2, ff->codecC, codec, NULL);
++ 
++-		ff->frame = AVCODEC(ff, alloc_frame);
+++		ff->frame = AV(ff, frame_alloc);
++ 
++ 		ff->avpkt = AV(ff, malloc, sizeof(AVPacket));
++ 		if (ff->avpkt == NULL) {
++@@ -520,9 +520,9 @@ static void _free_ff_data(void) {
++ 	if (ff->frame) {
++ 		// ffmpeg version dependant free function
++ #if !LINKALL
++-		ff->avcodec_free_frame ? AVCODEC(ff, free_frame, &ff->frame) : AV(ff, freep, &ff->frame);
+++		ff->av_frame_free ? AV(ff, frame_free, &ff->frame) : AV(ff, freep, &ff->frame);
++ #elif LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(54,28,0)
++-		AVCODEC(ff, free_frame, &ff->frame);
+++		AV(ff, frame_free, &ff->frame);
++ #else
++ 		AV(ff, freep, &ff->frame);
++ #endif
++@@ -607,8 +607,8 @@ static bool load_ff() {
++ 	ff->avcodec_version = dlsym(handle_codec, "avcodec_version");
++ 	ff->avcodec_find_decoder = dlsym(handle_codec, "avcodec_find_decoder");
++ 	ff->avcodec_open2 = dlsym(handle_codec, "avcodec_open2");
++-	ff->avcodec_alloc_frame = dlsym(handle_codec, "avcodec_alloc_frame");
++-	ff->avcodec_free_frame = dlsym(handle_codec, "avcodec_free_frame");
+++	ff->av_frame_alloc = dlsym(handle_codec, "av_frame_alloc");
+++	ff->av_frame_free = dlsym(handle_codec, "av_frame_free");
++ 	ff->avcodec_decode_audio4 = dlsym(handle_codec, "avcodec_decode_audio4");
++ 	ff->av_init_packet = dlsym(handle_codec, "av_init_packet");
++ 	ff->av_free_packet = dlsym(handle_codec, "av_free_packet");
 -- 
 2.8.0.rc3
