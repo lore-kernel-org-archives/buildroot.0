@@ -1,63 +1,84 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 27 Mar 2016 19:01:12 +0200
-Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump version to
-	3.1.0
-In-Reply-To: <69clscxmj.ln2@ID-313208.user.individual.net>
-References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
- <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
- <CAHXCMMLcd313SJ-JMVRoS4UOhH_FG79g5yv463Y6r4EwgKfrMg@mail.gmail.com>
- <69clscxmj.ln2@ID-313208.user.individual.net>
-Message-ID: <CAHXCMMKvEgV2MbMZFpUJVOad5D+Z_qszNkwKMe6D=RzL5Gp9sQ@mail.gmail.com>
+From: Pauli Sundberg <susundberg@gmail.com>
+Date: Sun, 27 Mar 2016 20:30:16 +0300
+Subject: [Buildroot] [PATCH V3 1/2] Add custom Subversion repository support
+	for package uboot
+In-Reply-To: <87mvpmdx0i.fsf@dell.be.48ers.dk>
+References: <87mvpmdx0i.fsf@dell.be.48ers.dk>
+Message-ID: <1459099817-4614-1-git-send-email-susundberg@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 27, 2016 at 5:53 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Hi Samuel,
->
-> Am Sun, 27 Mar 2016 15:05:42 +0200 schrieb Samuel Martin:
->
->> I would move at least the WITH_VA option somewhere else
->
-> ok.
->
->>> -       -DWITH_OPENGL=OFF \
->>> -       -DWITH_OPENMP=OFF \
->> AFAICS, these 2 options still exist (see [2,3]).
->
-> Yes, and they are used later on in opencv3.mk:
->
-> ifeq ($(BR2_PACKAGE_OPENCV3_WITH_OPENGL),y)
-> OPENCV3_CONF_OPTS += -DWITH_OPENGL=ON
-> OPENCV3_DEPENDENCIES += libgl
-> else
-> OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
-> endif
->
-> OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
->
-> Is there a reason why they are disabled in the first place?
-Yes, there is reason ;-)
+Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
+---
+ boot/uboot/Config.in | 9 ++++++---
+ boot/uboot/uboot.mk  | 4 +++-
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-Opencv3 has been done correctly when upgrading from opencv2 [1] (as a
-replacement), then opencv has been renamed opencv3 [2] and opencv
-reverted back [3]... hence the desync. between these 2 packages...
-And since this, I have not taken the time to sync. opencv and opencv3
-packages... :-/
-
-The opencv package could benefit from the opengl stuff (as well many
-others done for opencv3).
-The thing that I don't like with the current OpenMP support is that
-its support can only be enabled with internal toolchains, not with
-external one (not even with BR toolchain used an external toolchain).
-
-[1] https://git.buildroot.org/buildroot/commit/?id=a9043951b93d206363fd8fda6863fc0259b90858
-[2] https://git.buildroot.org/buildroot/commit/?id=3ba8dc3561090c817cdc123d9182b0f0d5d326c0
-[3] https://git.buildroot.org/buildroot/commit/?id=ac57d05076d7554d5bf43375cc7269fc0e658acc
-
-Regards,
-
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index a6b9f17..de6f7aa 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -54,6 +54,9 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT
+ config BR2_TARGET_UBOOT_CUSTOM_HG
+ 	bool "Custom Mercurial repository"
+ 
++config BR2_TARGET_UBOOT_CUSTOM_SVN
++        bool "Custom Subversion repository"
++        
+ endchoice
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
+@@ -64,7 +67,7 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom U-Boot tarball"
+ 	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 
+-if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+ 	string "URL of custom repository"
+@@ -76,7 +79,7 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
+ 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+ 	help
+-	  Revision to use in the typical format used by Git/Mercurial
++	  Revision to use in the typical format used by Git/Mercurial/Subversion
+ 	  E.G. a sha id, a tag, branch, ..
+ 
+ endif
+@@ -88,7 +91,7 @@ config BR2_TARGET_UBOOT_VERSION
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
+-		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+ 
+ config BR2_TARGET_UBOOT_PATCH
+ 	string "Custom U-Boot patches"
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3c96259..ae98c72 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -3,7 +3,6 @@
+ # uboot
+ #
+ ################################################################################
+-
+ UBOOT_VERSION = $(call qstrip,$(BR2_TARGET_UBOOT_VERSION))
+ UBOOT_BOARD_NAME = $(call qstrip,$(BR2_TARGET_UBOOT_BOARDNAME))
+ 
+@@ -24,6 +23,9 @@ UBOOT_SITE_METHOD = git
+ else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
+ UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+ UBOOT_SITE_METHOD = hg
++else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_SVN),y)
++UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
++UBOOT_SITE_METHOD = svn
+ else
+ # Handle stable official U-Boot versions
+ UBOOT_SITE = ftp://ftp.denx.de/pub/u-boot
 -- 
-Samuel
+1.9.1
