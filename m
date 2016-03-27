@@ -1,56 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 27 Mar 2016 22:39:35 +0200
-Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
- staging
-In-Reply-To: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
-Message-ID: <56F84507.3050209@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 27 Mar 2016 17:46:30 -0300
+Subject: [Buildroot] [PATCH V3 2/2] Add custom Subversion repository
+ support for package linux
+References: <1459099817-4614-2-git-send-email-susundberg@gmail.com>
+Message-ID: <56f846a66edd1_541bc1f82c68250@ultri2.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/12/16 20:20, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
->
-> As discussed on the Buildroot developer days, Buildroot installs some libraries
-> in a different location in target than in staging. This is specifically seen for
-> libstdc++ and libatomic.
->
-> This patch series tackles that problem and performs related cleanup.
->
->
->
-> Thomas De Schampheleire (5):
->    toolchain-external: blackfin: install FDPIC libraries also to staging
->    toolchain-external: remove unused calculation of ARCH_SUBDIR
->    toolchain-external: extract installation of gdbserver to separate
->      define
->    toolchain-external: align library locations in target and staging dir
->    toolchain-external: unify LIB_EXTERNAL_LIBS and USR_LIB_EXTERNAL_LIBS
->
->   package/glibc/glibc.mk                             |  2 +-
->   toolchain/helpers.mk                               | 57 ++---------------
->   toolchain/toolchain-external/Config.in             |  3 +-
->   toolchain/toolchain-external/toolchain-external.mk | 71 ++++++++++------------
->   4 files changed, 40 insertions(+), 93 deletions(-)
->
+Pauli,
 
-  I've also done a review and a test of the entire series. There is a bit of 
-reworking suggested by Romain in patch 3/5, the removal of -follow that I 
-suggest in patch 4/5, and I would like to re-instate the --sysroot check in 
-patch 2/5, but that's it.
+> [PATCH V3 2/2] Add custom Subversion repository support for package linux
+Same comment from the other patch. See
+git log -- linux
 
-  ThomasDS, will you respin or do we apply and make changes afterwards?
+On Sun, Mar 27, 2016 at 02:30 PM, Pauli Sundberg <susundberg@gmail.com> wrote:
 
+> from: Pauli Sundberg <susundberg@gmail.com>
+> date: Sun, Mar 27 08:30 PM +03:00 2016
+> to: buildroot at buildroot.org
+> cc: Pauli Sundberg <susundberg@gmail.com>
+> subject: [Buildroot] [PATCH V3 2/2] Add custom Subversion repository support for package linux
+> 
+> Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
+> ---
+>  linux/Config.in | 12 +++++++++---
+>  linux/linux.mk  |  3 +++
+>  2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 93968cd..dd21661 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -63,6 +63,12 @@ config BR2_LINUX_KERNEL_CUSTOM_HG
+>  	  This option allows Buildroot to get the Linux kernel source
+>  	  code from a Mercurial repository.
+>  
+> +config BR2_LINUX_KERNEL_CUSTOM_SVN
+> +	bool "Custom Subversion repository"
+> +	help
+> +	  This option allows Buildroot to get the Linux kernel source
+> +	  code from a subversion repository.
 
-  Regards,
-  Arnout
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You could use "Subversion" instead of "subversion" for consistence.
+
+> +
+>  config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+>  	bool "Local directory"
+>  	help
+
+[snip]
+
+Regards,
+Ricardo
