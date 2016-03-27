@@ -1,80 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Mar 2016 16:57:00 +0200
-Subject: [Buildroot] [PATCH] package/tvheadend: use wizard mode on first run
-Message-ID: <1459090620-21422-1-git-send-email-yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Mar 2016 17:53:42 +0200
+Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump version
+	to	3.1.0
+References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
+ <CAHXCMMLcd313SJ-JMVRoS4UOhH_FG79g5yv463Y6r4EwgKfrMg@mail.gmail.com>
+Message-ID: <69clscxmj.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The format of the ACL database in tvheandend has changed, and generating
-a default user is a little bit more involved than just dumping a file in
-the correct locations: filenames are now md5sum (of something?) and the
-usernames and passwords now have their own DB.
+Hi Samuel,
 
-However, tvheadend has a wizard mode, where it is possible to configure
-the basic features, of which creating an admin user.
+Am Sun, 27 Mar 2016 15:05:42 +0200 schrieb Samuel Martin:
 
-We remove our canned ACL database, and change the startup script to
-start in wizard mode on first run.
+> I would move at least the WITH_VA option somewhere else
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- package/tvheadend/Config.in    | 4 ++--
- package/tvheadend/S99tvheadend | 5 +++++
- package/tvheadend/tvheadend.mk | 8 --------
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ok.
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 095ec65..67a4b14 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_TVHEADEND
- 	  https://www.lonelycoder.com/redmine/projects/tvheadend/
- 
- 	  Note:
--	    - a default user has been created to log in the web configuration
--	      GUI: admin/admin; you can change it at your discretion at runtime.
-+	    - on first run, tvheadend will start in wizard mode; the webUI
-+	      is available on port 9981.
- 	    - if you want Avahi support, you'll need to enable:
- 	          Avahi, D-Bus, libdaemon
-diff --git a/package/tvheadend/S99tvheadend b/package/tvheadend/S99tvheadend
-index 75b66f3..65669ce 100644
---- a/package/tvheadend/S99tvheadend
-+++ b/package/tvheadend/S99tvheadend
-@@ -21,6 +21,11 @@ ARGS="-f"
- [ -z "${TVH_HTSP_PORT}" ] || ARGS="${ARGS} -e ${TVH_HTSP_PORT}"
- [ "${TVH_DEBUG}" = "1"  ] && ARGS="${ARGS} -s"
- 
-+# If first run, start in wizard mode
-+if [ -z "$(ls -1 /home/tvheadend/.hts/tvheadend/accesscontrol/ 2>/dev/null)" ]; then
-+    ARGS="${ARGS} -C"
-+fi
-+
- case "$1" in
-     start)
-         printf "Starting TVHeadend daemon: "
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 3398faf..5159edc 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -107,15 +107,7 @@ TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_CLEAN_SHARE
- #----------------------------------------------------------------------------
- # To run tvheadend, we need:
- #  - a startup script, and its config file
--#  - a default DB with a tvheadend admin
- #  - a non-root user to run as
--define TVHEADEND_INSTALL_DB
--	$(INSTALL) -D -m 0600 package/tvheadend/accesscontrol.1     \
--		$(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
--	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
--endef
--TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_INSTALL_DB
--
- define TVHEADEND_INSTALL_INIT_SYSV
- 	$(INSTALL) -D package/tvheadend/etc.default.tvheadend $(TARGET_DIR)/etc/default/tvheadend
- 	$(INSTALL) -D package/tvheadend/S99tvheadend          $(TARGET_DIR)/etc/init.d/S99tvheadend
--- 
-1.9.1
+>> -       -DWITH_OPENGL=OFF \
+>> -       -DWITH_OPENMP=OFF \
+> AFAICS, these 2 options still exist (see [2,3]).
+
+Yes, and they are used later on in opencv3.mk:
+
+ifeq ($(BR2_PACKAGE_OPENCV3_WITH_OPENGL),y)
+OPENCV3_CONF_OPTS += -DWITH_OPENGL=ON
+OPENCV3_DEPENDENCIES += libgl
+else
+OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
+endif
+
+OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
+
+Is there a reason why they are disabled in the first place?
+
+Regards, Bernd
