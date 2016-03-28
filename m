@@ -1,64 +1,114 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Mar 2016 22:41:02 +0200
-Subject: [Buildroot] [git commit] redis: use BR2_TOOLCHAIN_HAS_LIBATOMIC
-Message-ID: <20160328210554.6111C81851@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Mar 2016 23:05:52 +0200
+Subject: [Buildroot] [PATCH 3/9 v2] linux: meddle not in the affairs of
+ filesystems, for you are tasty with bacon
+In-Reply-To: <56F96B80.6040706@gmail.com>
+References: <cover.1457721607.git.yann.morin.1998@free.fr>
+ <9cef8c3fc419c6ef806d18184cf9e53c4c7323e6.1457721607.git.yann.morin.1998@free.fr>
+ <56F96B80.6040706@gmail.com>
+Message-ID: <20160328210552.GD3608@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=339048ba661578463f323a60ebe28c6ca4f9ed95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain, All,
 
-It uses __atomic_fetch_add_4 so libatomic must be pulled in if
-necessary. Fixes:
-http://autobuild.buildroot.net/results/dfd/dfdfd77463b0ddd7016202372afcad7fb6fc9ce4/
+On 2016-03-28 19:36 +0200, Romain Naour spake thusly:
+> Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
+> > Currently, the rule to rebuild the Linux kernel with an initramfs
+> > directly depends on the filesystem image filename.
+> > 
+> > This is inherently "bad" from a purity point of view. linux.mk should
+> > not have to delve into the fs internals.
+> > 
+> > Rather, make it directly depend on the "frontal" rule that generates the
+> > cpio image.
+> > 
+> > Drop the comment for linux-rebuild-with-initramfs, it was misleading
+> > (talking about generating "the initramfs list of files", which is not
+> > what was done, since we use a cpio as source of initramfs, not a list of
+> > files).
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > 
+> > ---
+> > Changes v1 -> v2:
+> >   - drop intermediate, unneeded stamp-file
+> >   - drop misleading comment
+> > 
+> > ---
+> > This, too, will be useful for the initramfs patch coming next.
+> > ---
+> >  linux/linux.mk | 16 ++++++----------
+> >  1 file changed, 6 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/linux/linux.mk b/linux/linux.mk
+> > index ea90918..c0d760a 100644
+> > --- a/linux/linux.mk
+> > +++ b/linux/linux.mk
+> > @@ -438,11 +438,12 @@ endif # BR_BUILDING
+> >  $(eval $(kconfig-package))
+> >  
+> >  # Support for rebuilding the kernel after the cpio archive has
+> > -# been generated in $(BINARIES_DIR)/rootfs.cpio.
+> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
+> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
+> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
+> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt:
+> > +# been generated.
+> > +.PHONY: linux-rebuild-with-initramfs
+> > +linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
+> > +linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
+> > +linux-rebuild-with-initramfs: rootfs-cpio
+> > +linux-rebuild-with-initramfs:
+> >  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+> >  	# Build the kernel.
+> >  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+> > @@ -451,8 +452,3 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt:
+> >  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+> >  	# If there is a .ub file copy it to the final destination
+> >  	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
+> > -	$(Q)touch $@
+> 
+> IIUC, the stamp file can be removed since the target is now PHONY, right ?
+> 
+> But latter in the patch 4/9 in the comment there is a reference to this file:
+> # Note: ordering of the dependencies is not guaranteed here, but in
+> # linux/linux.mk, via the .stamp_initramfs_rebuilt stamp file, which depends
+> # on the rootfs-cpio filesystem rule.
 
-[Peter: keep TARGET_CONFIGURE_OPTS]
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/Config.in | 2 ++
- package/redis/redis.mk  | 6 ++++++
- 2 files changed, 8 insertions(+)
+I'll fix patch 4, then. Thanks!
 
-diff --git a/package/redis/Config.in b/package/redis/Config.in
-index 3b7b743..5d7edd8 100644
---- a/package/redis/Config.in
-+++ b/package/redis/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_REDIS
- 	bool "redis"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
- 	  Redis is an open source, advanced key-value store. It is
-@@ -11,4 +12,5 @@ config BR2_PACKAGE_REDIS
- 
- comment "redis needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 6a3dd01..a9df6e7 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -13,10 +13,16 @@ define REDIS_USERS
- 	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
- endef
- 
-+# Uses __atomic_fetch_add_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+REDIS_LIBATOMIC = -latomic
-+endif
-+
- # Redis doesn't support DESTDIR (yet, see
- # https://github.com/antirez/redis/pull/609).  We set PREFIX
- # instead.
- REDIS_BUILDOPTS = $(TARGET_CONFIGURE_OPTS) \
-+	LDFLAGS="$(TARGET_LDFLAGS) $(REDIS_LIBATOMIC)" \
- 	PREFIX=$(TARGET_DIR)/usr MALLOC=libc \
- 
- define REDIS_BUILD_CMDS
+> > -# The initramfs building code must make sure this target gets called
+> > -# after it generated the initramfs list of files.
+> > -linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
+> > 
+> 
+> Something is wrong...
+> With this patch applied, I have the following error when rebuilding the kernel
+> with initramfs:
+> 
+> make[2]: *** No rule to make target 'bzImage'. Arr?t.
+> linux/linux.mk:447: recipe for target 'linux-rebuild-with-initramfs' failed
+
+Yep, that's because there is no longer any directory component in the
+target path, so $(@D) is just '.' (a dot). But as I just explained in my
+previous mail, I had it already fixed, just not on the right machine...
+:-/
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
