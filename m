@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 21:49:42 +0200
-Subject: [Buildroot] [PATCH v4 16/19] package/x265: bump version to 1.9
+Date: Mon, 28 Mar 2016 21:49:41 +0200
+Subject: [Buildroot] [PATCH v4 15/19] package/x264: bump version
 In-Reply-To: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459194585-12593-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459194585-12593-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,30 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x265/x265.hash | 2 +-
- package/x265/x265.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x264/x264.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 714ec2a..92b5bea 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,2 +1,2 @@
- # Locally generated
--sha256 760e6280c688f1ea90c492d19fc6d4084ca1c4b0ea9b2e3c736d32565c30d857 x265_1.8.tar.gz
-+sha256	3e4654133ed957a98708fdb4cb9a154d9e80922b84e26e43fc462a101c5b15c8	x265_1.9.tar.gz
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 45c86f1..e737c31 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 7e7e597..cf5e385 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X265_VERSION = 1.8
-+X265_VERSION = 1.9
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPLv2+
+-X264_VERSION = e86f3a1993234e8f26050c243aa253651200fa6b
++X264_VERSION = a01e33913655f983df7a4d64b0a4178abb1eb618
+ X264_SITE = git://git.videolan.org/x264.git
+ X264_LICENSE = GPLv2+
+ X264_DEPENDENCIES = host-pkgconf
 -- 
 2.8.0.rc3
