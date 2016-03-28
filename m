@@ -1,44 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Mar 2016 22:29:12 +0200
-Subject: [Buildroot] [git commit] glibmm: bump to version 2.48.0
-Message-ID: <20160328203055.6ED9B807A1@busybox.osuosl.org>
+Date: Mon, 28 Mar 2016 22:32:30 +0200
+Subject: [Buildroot] [git commit] gzip: bump to version 1.7
+Message-ID: <20160328203340.CD93D7FC80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c4af0b8a80a054dabefde589c36b8f8ffdf7fcc
+commit: https://git.buildroot.net/buildroot/commit/?id=2c155336a07b1098ed570b046a8ea21db6b56898
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibmm/glibmm.hash | 4 ++--
- package/glibmm/glibmm.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gzip/gzip.hash | 2 +-
+ package/gzip/gzip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
-index c070363..4b4c173 100644
---- a/package/glibmm/glibmm.hash
-+++ b/package/glibmm/glibmm.hash
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+index 56f052f..755c450 100644
+--- a/package/gzip/gzip.hash
++++ b/package/gzip/gzip.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.46/glibmm-2.46.3.sha256sum
--sha256	c78654addeb27a1213bedd7cd21904a45bbb98a5ba2f2f0de2b2f1a5682d86cf	glibmm-2.46.3.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.48/glibmm-2.48.0.sha256sum
-+sha256	b531392b03a34b8d0bd86d8a70510e7812fccfad47bd43eeff9e8a16d8438b85	glibmm-2.48.0.tar.xz
-diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
-index 4b6d68f..8561a69 100644
---- a/package/glibmm/glibmm.mk
-+++ b/package/glibmm/glibmm.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated after checking pgp signature
+-sha256	37dfed1a485d53212c43b3fa2a7c7952f09bf5cd86e37121c222341ee1b27847  gzip-1.6.tar.xz
++sha256	fb31c57e7ce7703596ef57329be7cc5c5fd741b4a0f659fea7ee6a54706b41ab  gzip-1.7.tar.xz
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index 1b2f678..b5dc361 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLIBMM_VERSION_MAJOR = 2.46
--GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).3
-+GLIBMM_VERSION_MAJOR = 2.48
-+GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
- GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
- GLIBMM_LICENSE_FILES = COPYING COPYING.tools
- GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
+-GZIP_VERSION = 1.6
++GZIP_VERSION = 1.7
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
