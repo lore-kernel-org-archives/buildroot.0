@@ -1,114 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Mar 2016 23:05:52 +0200
-Subject: [Buildroot] [PATCH 3/9 v2] linux: meddle not in the affairs of
- filesystems, for you are tasty with bacon
-In-Reply-To: <56F96B80.6040706@gmail.com>
-References: <cover.1457721607.git.yann.morin.1998@free.fr>
- <9cef8c3fc419c6ef806d18184cf9e53c4c7323e6.1457721607.git.yann.morin.1998@free.fr>
- <56F96B80.6040706@gmail.com>
-Message-ID: <20160328210552.GD3608@free.fr>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 28 Mar 2016 23:09:23 +0200
+Subject: [Buildroot] [PATCH] package/libxslt: fix static build
+Message-ID: <1459199363-28640-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Set --with-libxml-libs-prefix so libtool finds the correct dependencies for
+libxml2.
 
-On 2016-03-28 19:36 +0200, Romain Naour spake thusly:
-> Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
-> > Currently, the rule to rebuild the Linux kernel with an initramfs
-> > directly depends on the filesystem image filename.
-> > 
-> > This is inherently "bad" from a purity point of view. linux.mk should
-> > not have to delve into the fs internals.
-> > 
-> > Rather, make it directly depend on the "frontal" rule that generates the
-> > cpio image.
-> > 
-> > Drop the comment for linux-rebuild-with-initramfs, it was misleading
-> > (talking about generating "the initramfs list of files", which is not
-> > what was done, since we use a cpio as source of initramfs, not a list of
-> > files).
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > 
-> > ---
-> > Changes v1 -> v2:
-> >   - drop intermediate, unneeded stamp-file
-> >   - drop misleading comment
-> > 
-> > ---
-> > This, too, will be useful for the initramfs patch coming next.
-> > ---
-> >  linux/linux.mk | 16 ++++++----------
-> >  1 file changed, 6 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index ea90918..c0d760a 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -438,11 +438,12 @@ endif # BR_BUILDING
-> >  $(eval $(kconfig-package))
-> >  
-> >  # Support for rebuilding the kernel after the cpio archive has
-> > -# been generated in $(BINARIES_DIR)/rootfs.cpio.
-> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
-> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
-> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
-> > -$(LINUX_DIR)/.stamp_initramfs_rebuilt:
-> > +# been generated.
-> > +.PHONY: linux-rebuild-with-initramfs
-> > +linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
-> > +linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
-> > +linux-rebuild-with-initramfs: rootfs-cpio
-> > +linux-rebuild-with-initramfs:
-> >  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
-> >  	# Build the kernel.
-> >  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
-> > @@ -451,8 +452,3 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt:
-> >  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
-> >  	# If there is a .ub file copy it to the final destination
-> >  	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
-> > -	$(Q)touch $@
-> 
-> IIUC, the stamp file can be removed since the target is now PHONY, right ?
-> 
-> But latter in the patch 4/9 in the comment there is a reference to this file:
-> # Note: ordering of the dependencies is not guaranteed here, but in
-> # linux/linux.mk, via the .stamp_initramfs_rebuilt stamp file, which depends
-> # on the rootfs-cpio filesystem rule.
+Fixes:
+http://autobuild.buildroot.net/results/3f8/3f8d876ed6cfe6e73a75fa8904ebdd3f6f0fe53c/
 
-I'll fix patch 4, then. Thanks!
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/libxslt/libxslt.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> > -# The initramfs building code must make sure this target gets called
-> > -# after it generated the initramfs list of files.
-> > -linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
-> > 
-> 
-> Something is wrong...
-> With this patch applied, I have the following error when rebuilding the kernel
-> with initramfs:
-> 
-> make[2]: *** No rule to make target 'bzImage'. Arr?t.
-> linux/linux.mk:447: recipe for target 'linux-rebuild-with-initramfs' failed
-
-Yep, that's because there is no longer any directory component in the
-target path, so $(@D) is just '.' (a dot). But as I just explained in my
-previous mail, I had it already fixed, just not on the right machine...
-:-/
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
+index 2e5cc14..0cc4bb9 100644
+--- a/package/libxslt/libxslt.mk
++++ b/package/libxslt/libxslt.mk
+@@ -14,7 +14,8 @@ LIBXSLT_CONF_OPTS = \
+ 	--with-gnu-ld \
+ 	--without-debug \
+ 	--without-python \
+-	--with-libxml-prefix=$(STAGING_DIR)/usr/
++	--with-libxml-prefix=$(STAGING_DIR)/usr/ \
++	--with-libxml-libs-prefix=$(STAGING_DIR)/usr/lib
+ LIBXSLT_CONFIG_SCRIPTS = xslt-config
+ LIBXSLT_DEPENDENCIES = libxml2
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
