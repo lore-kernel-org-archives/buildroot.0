@@ -1,21 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Mar 2016 23:03:54 +0200
-Subject: [Buildroot] [PATCH] gtkmm3: bump to version 3.20.0
-In-Reply-To: <1459197331-5502-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Mon, 28 Mar 2016 17:35:31 -0300")
-References: <1459197331-5502-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87h9fq8gcl.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Mar 2016 18:03:58 -0300
+Subject: [Buildroot] [PATCH] configs/qemu: enable modules for x86 and x86_64
+Message-ID: <1459199038-26889-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+It's useful for demo configs which have more features, like
+automatically loaded (module) drivers.
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ board/qemu/x86/linux-4.5.config    | 2 ++
+ board/qemu/x86_64/linux-4.5.config | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Committed, thanks.
-
+diff --git a/board/qemu/x86/linux-4.5.config b/board/qemu/x86/linux-4.5.config
+index 9cd64f7..c630f02 100644
+--- a/board/qemu/x86/linux-4.5.config
++++ b/board/qemu/x86/linux-4.5.config
+@@ -1,4 +1,6 @@
+ CONFIG_SYSVIPC=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
+ CONFIG_SMP=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+diff --git a/board/qemu/x86_64/linux-4.5.config b/board/qemu/x86_64/linux-4.5.config
+index 9cd64f7..c630f02 100644
+--- a/board/qemu/x86_64/linux-4.5.config
++++ b/board/qemu/x86_64/linux-4.5.config
+@@ -1,4 +1,6 @@
+ CONFIG_SYSVIPC=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
+ CONFIG_SMP=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
 -- 
-Bye, Peter Korsgaard
+2.7.3
