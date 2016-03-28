@@ -1,32 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 16:45:26 +0200
-Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump
-	version	to	3.1.0
-References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
- <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
- <CAHXCMMLcd313SJ-JMVRoS4UOhH_FG79g5yv463Y6r4EwgKfrMg@mail.gmail.com>
- <69clscxmj.ln2@ID-313208.user.individual.net>
- <CAHXCMMKvEgV2MbMZFpUJVOad5D+Z_qszNkwKMe6D=RzL5Gp9sQ@mail.gmail.com>
- <ccsnscxfrm.ln2@ID-313208.user.individual.net>
-Message-ID: <6lsnscxfrm.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Mar 2016 16:49:42 +0200
+Subject: [Buildroot] [PATCH] package/tvheadend: use wizard mode on first
+ run
+In-Reply-To: <20160328151009.01a515f2@free-electrons.com>
+References: <1459090620-21422-1-git-send-email-yann.morin.1998@free.fr>
+ <20160328151009.01a515f2@free-electrons.com>
+Message-ID: <20160328144942.GA3608@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 28 Mar 2016 16:40:44 +0200 schrieb Bernd Kuhls:
+Thomas, All,
 
-> Am Sun, 27 Mar 2016 19:01:12 +0200 schrieb Samuel Martin:
-
->> Yes, there is reason ;-)
->> 
->> Opencv3 has been done correctly when upgrading from opencv2 [1] (as a
->> replacement), then opencv has been renamed opencv3 [2] and opencv
->> reverted back [3]... hence the desync. between these 2 packages... And
->> since this, I have not taken the time to sync. opencv and opencv3
->> packages... :-/
+On 2016-03-28 15:10 +0200, Thomas Petazzoni spake thusly:
+> On Sun, 27 Mar 2016 16:57:00 +0200, Yann E. MORIN wrote:
+> > The format of the ACL database in tvheandend has changed, and generating
+> > a default user is a little bit more involved than just dumping a file in
+> > the correct locations: filenames are now md5sum (of something?) and the
+> > usernames and passwords now have their own DB.
+> > 
+> > However, tvheadend has a wizard mode, where it is possible to configure
+> > the basic features, of which creating an admin user.
+> > 
+> > We remove our canned ACL database, and change the startup script to
+> > start in wizard mode on first run.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > ---
+> >  package/tvheadend/Config.in    | 4 ++--
+> >  package/tvheadend/S99tvheadend | 5 +++++
+> >  package/tvheadend/tvheadend.mk | 8 --------
+> >  3 files changed, 7 insertions(+), 10 deletions(-)
 > 
-> Hi Samuel,
+> I don't see this patch removing the accesscontrol.1 file. Is that
+> expected?
 
-please ignore, I sent this too early...
+Damn, I forgot to git-rm it...
+Will fix and respin.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> Thanks,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
