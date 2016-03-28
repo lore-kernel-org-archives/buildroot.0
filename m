@@ -1,55 +1,44 @@
-From: Mason <slash.tmp@free.fr>
-Date: Mon, 28 Mar 2016 14:49:04 +0200
-Subject: [Buildroot] [PATCH] ltp-testsuite: build kernel modules when
- appropriate
-In-Reply-To: <20160324222555.21f04320@free-electrons.com>
-References: <56F3F393.6020407@free.fr>
- <20160324222555.21f04320@free-electrons.com>
-Message-ID: <56F92840.9090206@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Mar 2016 15:10:09 +0200
+Subject: [Buildroot] [PATCH] package/tvheadend: use wizard mode on first
+ run
+In-Reply-To: <1459090620-21422-1-git-send-email-yann.morin.1998@free.fr>
+References: <1459090620-21422-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160328151009.01a515f2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 24/03/2016 22:25, Thomas Petazzoni wrote:
+Hello,
 
-> On Thu, 24 Mar 2016 15:02:59 +0100, Mason wrote:
->
->> +ifeq ($(BR2_LINUX_KERNEL),y)
->> +LTP_TESTSUITE_DEPENDENCIES += linux
->> +LTP_TESTSUITE_CONF_OPTS += --with-linux-dir=$(LINUX_DIR)
->> +else
->> +LTP_TESTSUITE_CONF_OPTS += --without-modules
->> +endif
+On Sun, 27 Mar 2016 16:57:00 +0200, Yann E. MORIN wrote:
+> The format of the ACL database in tvheandend has changed, and generating
+> a default user is a little bit more involved than just dumping a file in
+> the correct locations: filenames are now md5sum (of something?) and the
+> usernames and passwords now have their own DB.
 > 
-> It looks good in principle, but unfortunately in practice it doesn't
-> work. Try to build the following configuration: [snip]
+> However, tvheadend has a wizard mode, where it is possible to configure
+> the basic features, of which creating an admin user.
 > 
-> And you will see that the LTP kernel modules are not built. And the
-> reason is that it tries to build them without passing the appropriate
-> ARCH= variable, so it falls back to x86, and therefore fails to build
-> them. Here is what I see: [snip]
+> We remove our canned ACL database, and change the startup script to
+> start in wizard mode on first run.
 > 
-> And then lots and lots of errors about arch/x86 related headers. And
-> indeed, my kernel is configured/built for ARM.
-> 
-> So maybe it worked if you tested for a x86 target, but I'm a bit
-> confused since I know you're working on ARM stuff. Maybe you have
-> ARCH=arm defined globally in your environment and therefore it makes
-> things work?
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> ---
+>  package/tvheadend/Config.in    | 4 ++--
+>  package/tvheadend/S99tvheadend | 5 +++++
+>  package/tvheadend/tvheadend.mk | 8 --------
+>  3 files changed, 7 insertions(+), 10 deletions(-)
 
-Yes, you hit the nail on the head. Since I work exclusively with
-ARM platforms, I have ARCH=arm exported in my environment.
+I don't see this patch removing the accesscontrol.1 file. Is that
+expected?
 
-> Could you look into this and send an updated patch?
+Thanks,
 
-I'm not sure what the correct solution is. We discussed the issue
-a few days ago, and you mentioned KERNEL_ARCH.
-
-Should I just export ARCH=$(KERNEL_ARCH) in the environment?
-
-But I'm not sure how to do it globally, or whether that is the
-appropriate solution... Could someone provide some guidance?
-
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
