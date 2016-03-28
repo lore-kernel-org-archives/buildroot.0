@@ -1,42 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Mar 2016 23:03:45 +0200
-Subject: [Buildroot] [git commit] gtkmm3: bump to version 3.20.0
-Message-ID: <20160328210554.6FD3A7FAAF@busybox.osuosl.org>
+Date: Mon, 28 Mar 2016 22:41:02 +0200
+Subject: [Buildroot] [git commit] redis: use BR2_TOOLCHAIN_HAS_LIBATOMIC
+Message-ID: <20160328210554.6111C81851@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf8909ee4c7d9d31b8eb4d3c9264fb87d54f6af2
+commit: https://git.buildroot.net/buildroot/commit/?id=339048ba661578463f323a60ebe28c6ca4f9ed95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+It uses __atomic_fetch_add_4 so libatomic must be pulled in if
+necessary. Fixes:
+http://autobuild.buildroot.net/results/dfd/dfdfd77463b0ddd7016202372afcad7fb6fc9ce4/
+
+[Peter: keep TARGET_CONFIGURE_OPTS]
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gtkmm3/gtkmm3.hash | 4 ++--
- package/gtkmm3/gtkmm3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/redis/Config.in | 2 ++
+ package/redis/redis.mk  | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
-index fcbadab..3ab2513 100644
---- a/package/gtkmm3/gtkmm3.hash
-+++ b/package/gtkmm3/gtkmm3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.18/gtkmm-3.18.0.sha256sum
--sha256	829fa113daed74398c49c3f2b7672807f58ba85d0fa463f5bc726e1b0138b86b	gtkmm-3.18.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.20/gtkmm-3.20.0.sha256sum
-+sha256	f021573f870df8a0b40ba37a7864c37be517c7a88cc957a193dbab28449b028a	gtkmm-3.20.0.tar.xz
-diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
-index a895d85..b62d592 100644
---- a/package/gtkmm3/gtkmm3.mk
-+++ b/package/gtkmm3/gtkmm3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/redis/Config.in b/package/redis/Config.in
+index 3b7b743..5d7edd8 100644
+--- a/package/redis/Config.in
++++ b/package/redis/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_REDIS
+ 	bool "redis"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Redis is an open source, advanced key-value store. It is
+@@ -11,4 +12,5 @@ config BR2_PACKAGE_REDIS
  
--GTKMM3_VERSION_MAJOR = 3.18
-+GTKMM3_VERSION_MAJOR = 3.20
- GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
- GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
- GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
+ comment "redis needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 6a3dd01..a9df6e7 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -13,10 +13,16 @@ define REDIS_USERS
+ 	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
+ endef
+ 
++# Uses __atomic_fetch_add_4
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++REDIS_LIBATOMIC = -latomic
++endif
++
+ # Redis doesn't support DESTDIR (yet, see
+ # https://github.com/antirez/redis/pull/609).  We set PREFIX
+ # instead.
+ REDIS_BUILDOPTS = $(TARGET_CONFIGURE_OPTS) \
++	LDFLAGS="$(TARGET_LDFLAGS) $(REDIS_LIBATOMIC)" \
+ 	PREFIX=$(TARGET_DIR)/usr MALLOC=libc \
+ 
+ define REDIS_BUILD_CMDS
