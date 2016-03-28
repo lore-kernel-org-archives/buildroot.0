@@ -1,97 +1,58 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 21:49:26 +0200
-Subject: [Buildroot] [PATCH v4 00/19] Bump ffmpeg to 3.0
-Message-ID: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 28 Mar 2016 21:49:29 +0200
+Subject: [Buildroot] [PATCH v4 03/19] package/ortp: bump version to 0.25.0
+In-Reply-To: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459194585-12593-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This version bump is needed by mediastreamer 2.12.1, the mediastreamer
+bump is needed to provide support for ffmpeg 3.0.
 
-this patch series bumps ffmpeg to version 3.0 (patches 1-14).
-Patches 15-19 are unrelated bumps, while being at it, you know.
+Removed srtp option after srtp support was removed from ortp:
+https://github.com/BelledonneCommunications/ortp/commit/5e37fa55f1f15f5896d69156e64cdc95a1ff68bf
 
-This cover letter collects the changelog of individual patches.
-Packages not mentioned are unchanged.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v4: removed srtp option
+v3: no changes
+v2: no changes
 
-Regards, Bernd
+ package/ortp/ortp.hash | 4 ++--
+ package/ortp/ortp.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-v4: linphone: added patch
-    ortp: removed srtp option
-v3: opencv3: moved WITH_VA options (Samuel)
-v2: opencv3: reworked options (Samuel)
-
-Bernd Kuhls (16):
-  package/kodi: add support for ffmpeg 3.0
-  package/libdcadec: bump version to v0.2.0
-  package/ortp: bump version to 0.25.0
-  package/mediastreamer: bump version to 2.12.1
-  package/linphone: add support for ffmpeg 3.0
-  package/opencv: bump version to 2.4.12.3
-  package/opencv3: bump version to 3.1.0
-  package/squeezelite: fix compilation with ffmpeg >= 2.9
-  package/freerdp: bump version
-  package/vlc: mark as broken due to incompatibility with ffmpeg 3.0
-  package/ffmpeg: Add patch required by Kodi 16.0-Jarvis
-  package/x264: bump version
-  package/x265: bump version to 1.9
-  package/dtv-scan-tables: bump version
-  package/tvheadend: bump version
-  package/live555: bump version to 2016.03.16
-
-Vicente Olivert Riera (3):
-  package/ffmpeg: bump to version 3.0
-  package/ffmpeg: cosmetic change for the mips fpu option
-  package/ffmpeg: default to --cpu=generic for MIPS architecture
-
- package/dtv-scan-tables/dtv-scan-tables.mk         |   2 +-
- .../ffmpeg/0013-hevc-support-main10-decoding.patch |  77 +++
- package/ffmpeg/ffmpeg.hash                         |   4 +-
- package/ffmpeg/ffmpeg.mk                           |  24 +-
- package/freerdp/freerdp.mk                         |   2 +-
- package/kodi/0007-ffmpeg30.patch                   | 646 +++++++++++++++++++++
- package/libdcadec/libdcadec.hash                   |   2 +
- package/libdcadec/libdcadec.mk                     |   2 +-
- package/linphone/Config.in                         |   6 +-
- package/linphone/linphone.hash                     |   4 +
- package/linphone/linphone.mk                       |  17 +-
- package/live555/live555.hash                       |   4 +-
- package/live555/live555.mk                         |   2 +-
- package/mediastreamer/0001-misc-fixes.patch        | 156 -----
- package/mediastreamer/mediastreamer.hash           |   4 +-
- package/mediastreamer/mediastreamer.mk             |   2 +-
- .../0001-core-fix-x86-PIC-code-compilation.patch   |  49 --
- package/opencv/0001-ffmpeg30.patch                 | 638 ++++++++++++++++++++
- ...ix-return-type-value-VideoFrameSource_GPU.patch |  40 --
- ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 -----
- package/opencv/opencv.mk                           |   2 +-
- ...pthread-based-parallel_for-with-gcc-4.4.3.patch |  62 --
- ...002-fix-support-for-pthreads-parallel_for.patch | 212 -------
- package/opencv3/Config.in                          |   1 +
- package/opencv3/opencv3.mk                         |  11 +-
- package/ortp/ortp.hash                             |   4 +-
- package/ortp/ortp.mk                               |   6 +-
- package/squeezelite/0003-ffmpeg_2_9.patch          |  57 ++
- package/tvheadend/tvheadend.hash                   |   2 +-
- package/tvheadend/tvheadend.mk                     |   4 +-
- package/vlc/Config.in                              |   1 +
- package/x264/x264.mk                               |   2 +-
- package/x265/x265.hash                             |   2 +-
- package/x265/x265.mk                               |   2 +-
- 34 files changed, 1479 insertions(+), 726 deletions(-)
- create mode 100644 package/ffmpeg/0013-hevc-support-main10-decoding.patch
- create mode 100644 package/kodi/0007-ffmpeg30.patch
- create mode 100644 package/libdcadec/libdcadec.hash
- delete mode 100644 package/mediastreamer/0001-misc-fixes.patch
- delete mode 100644 package/opencv/0001-core-fix-x86-PIC-code-compilation.patch
- create mode 100644 package/opencv/0001-ffmpeg30.patch
- delete mode 100644 package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
- delete mode 100644 package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
- delete mode 100644 package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
- delete mode 100644 package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
- create mode 100644 package/squeezelite/0003-ffmpeg_2_9.patch
-
+diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+index 728a0d1..8b099a7 100644
+--- a/package/ortp/ortp.hash
++++ b/package/ortp/ortp.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	6e37e29b3c3559bac1f2ae0c977f6ceb4d4ce8dc713b691dea8bae57bda92d0b	ortp-0.22.0.tar.gz
++# Locally calculated
++sha256	0deb826b79b1fd329f7638821d5439dc343bc55bb122daa6c90d19116cfe8d9a	ortp-0.25.0.tar.gz
+diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+index 89bfc06..ca4a90d 100644
+--- a/package/ortp/ortp.mk
++++ b/package/ortp/ortp.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-ORTP_VERSION = 0.22.0
++ORTP_VERSION = 0.25.0
+ ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
+ 
+-# ortp is not happy with the libsrtp implementation packaged in
+-# Buildroot
+-ORTP_CONF_OPTS = --disable-strict --with-srtp=none
++ORTP_CONF_OPTS = --disable-strict
+ ORTP_INSTALL_STAGING = YES
+ ORTP_LICENSE = LGPLv2.1+
+ ORTP_LICENSE_FILES = COPYING
 -- 
 2.8.0.rc3
