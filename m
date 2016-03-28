@@ -1,123 +1,59 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Mon, 28 Mar 2016 16:01:09 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 28 Mar 2016 16:07:32 +0200
 Subject: [Buildroot] [PATCH v3 1/1] jsen: new package
-In-Reply-To: <20160225172028.5482c36e@free-electrons.com>
+In-Reply-To: <1459173669.2226.8.camel@embedded.rocks>
 References: <1456233895-31812-1-git-send-email-atul.singh.mandla@rockwellcollins.com>
- <56CCC4C4.5020402@mind.be> <20160223220413.2050528c@free-electrons.com>
+ <56CCC4C4.5020402@mind.be>
+ <20160223220413.2050528c@free-electrons.com>
  <1456396337.29027.16.camel@embedded.rocks>
  <20160225135137.09136142@free-electrons.com>
  <1456408864.29027.48.camel@embedded.rocks>
  <20160225172028.5482c36e@free-electrons.com>
-Message-ID: <1459173669.2226.8.camel@embedded.rocks>
+ <1459173669.2226.8.camel@embedded.rocks>
+Message-ID: <20160328160732.31d45101@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hello,
 
-sorry for very late reply!
+On Mon, 28 Mar 2016 16:01:09 +0200, J?rg Krause wrote:
 
-On Do, 2016-02-25 at 17:20 +0100, Thomas Petazzoni wrote:
-> J?rg,
-> 
-> Thanks for your feedback!
-> 
-> On Thu, 25 Feb 2016 15:01:04 +0100, J?rg Krause wrote:
-> 
-> > 
-> > Because npm supports version ranges. Have a look at the example
-> > from
-> > the npm's docs [1]:
-> > 
-> > { "dependencies" :
-> > ? { "foo" : "1.0.0 - 2.9999.9999"
-> > ? , "bar" : ">=1.0.2 <2.1.2"
-> > ? , "baz" : ">1.0.2 <=2.3.4"
-> > ? , "boo" : "2.0.1"
-> > ? , "qux" : "<1.0.0 || >=2.3.1 <2.4.5 || >=2.5.2 <3.0.0"
-> > ? , "asd" : "http://asdf.com/asdf.tar.gz"
-> > ? , "til" : "~1.2"
-> > ? , "elf" : "~1.2.3"
-> > ? , "two" : "2.x"
-> > ? , "thr" : "3.3.x"
-> > ? , "lat" : "latest"
-> > ? , "dyl" : "file:../dyl"
-> > ? }
-> > }
-> > 
-> > Lets take for example the dependency "boo". A package "A" may
-> > depend on
-> > version "2.0.1" whereas another package "B" may depend on version
-> > "2.3.x".
-> Gaah, this is horrible.
-> 
-> > 
-> > In this case npm installs boo at 2.0.1 in the subdirectory
-> > "node_modules"
-> > of package "A" and boo at 2.3.4 (assume 2.3.4 is the most recent
-> > version
-> > for 2.3.x) in the subdirectory "node_modules" of package "B":
-> > 
-> > {prefix}/lib/node_modules?????A
-> > ???? ????node_modules
-> > ?? ? ? ? ??? boo at 2.0.1
-> > ???? B
-> > ? ? ???? node_modules
-> > ? ? ? ? ???? boo at 2.3.4
-> > 
-> > As Buildroot does not support different versions for most of the
-> > packages I think we should only use npm to install Node.js
-> > packages.
-> Well, we can support this by having separate packages, but if they
-> really break "boo" at every release and we need to package ten
-> different versions of it, then it's a mess indeed.
-> 
-> > 
-> > 
-> > > 
-> > > ?- What solution you propose to properly integrate this with the
-> > > ???download and legal infrastructure of Buildroot. Right now,
-> > > having
-> > > ???"npm install" directly download and install stuff means that
-> > > the
-> > > ???download and legal-info infrastructure of Buildroot is
-> > > completely
-> > > ???worked-around. Due to this, "make source" will not download
-> > > all
-> > > the
-> > > ???source, "make legal-info" will not list all the licenses,
-> > > caching
-> > > in
-> > > ???BR2_DL_DIR doesn't work, BR2_PRIMARY_SITE doesn't work, etc.
-> > I am not sure for now howto integrate this into the Buildroot
-> > infrastructure properly. I have never thought about this, but it
-> > will
-> > need some work to be done, I guess.
-> If you don't have Buildroot packages, it will be nearly impossible I
-> believe.
-> 
-> > 
-> > I have never had a look at?scancpan and I am not familiar with Perl
-> > packages, but looking at some META.json files, I guess it could be
-> > done
-> > similiar.
-> We have a similar script being worked on for Python, if you're
-> familiar
-> with Python. See for example http://patchwork.ozlabs.org/patch/501204
-> /.
-> 
+> Unfortunatly, scanpypi does not work with latest Buildroot.
 
-Unfortunatly, scanpypi does not work with latest Buildroot. But I
-tested scancpan and yes, I would say that we need something like this
-for Node.js and npm. However, the problem with dependencies of
-different versions is still there. For example Code-TidyAll depends on
-Moo whatever version. scanspan fetches latest Moo version 2.* and
-creates a fine buildroot package. The perl package Tropo however
-depends on Moo 1.*. Installing this package with scanspac afterwards
-does not change Moo, which is correct I think. However, building Tropo
-will use the package Moo 2.*, which might fail (I've not tested).
+Ah. It would be great if some of our Python contributors could take
+scanpipy, finish it and send it for merging.
 
-Best regards
-J?rg Krause
+> But I
+> tested scancpan and yes, I would say that we need something like this
+> for Node.js and npm. However, the problem with dependencies of
+> different versions is still there. For example Code-TidyAll depends on
+> Moo whatever version. scanspan fetches latest Moo version 2.* and
+> creates a fine buildroot package. The perl package Tropo however
+> depends on Moo 1.*. Installing this package with scanspac afterwards
+> does not change Moo, which is correct I think. However, building Tropo
+> will use the package Moo 2.*, which might fail (I've not tested).
+
+This version-dependency thing is indeed a problem. For the specific
+case you point out, the solution would be to have separate moo1 and
+moo2 packages, very much like we do for python/python3, qt/qt5, etc.
+
+However, this is only realistic if there are only a few "major"
+versions for a few packages. If they break the API at every minor
+release, then it's clearly not doable.
+
+I personally don't really care about npm/node.js. Maybe we should just
+add a big fat legal warning in our legal information when NPM has been
+used to install additional packages, to explicitly say that those
+additions are not listed in the legal info output. This would at least
+warn the user.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
