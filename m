@@ -1,84 +1,32 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 21:49:37 +0200
-Subject: [Buildroot] [PATCH v4 11/19] package/ffmpeg: bump to version 3.0
+Date: Mon, 28 Mar 2016 21:49:43 +0200
+Subject: [Buildroot] [PATCH v4 17/19] package/dtv-scan-tables: bump version
 In-Reply-To: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459194585-12593-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459194585-12593-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-- Remove non-existen configure options:
-  - --disable-mips32r2
-  - --disable-libvo-aacenc
-
-- Amend renamed configure options:
-  - --disable-mipsdspr1 has been renamed to --disable-mipsdsp
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.hash |  4 ++--
- package/ffmpeg/ffmpeg.mk   | 13 ++-----------
- 2 files changed, 4 insertions(+), 13 deletions(-)
+ package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 8643bff..3456883 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
--# Locally calculated
--sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
-+# Locally calculated (PGP Signature: https://ffmpeg.org/releases/ffmpeg-3.0.tar.xz.asc)
-+sha256 12f32cee41c74435f608c30793fd616bdf53467bb513278e273e135a4c58e470 ffmpeg-3.0.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ddfac20..75c0128 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index ab6a36c..d78dd82 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 2.8.6
-+FFMPEG_VERSION = 3.0
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -41,7 +41,7 @@ FFMPEG_CONF_OPTS = \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
- 	--disable-memalign-hack \
--	--disable-mipsdspr1 \
-+	--disable-mipsdsp \
- 	--disable-mipsdspr2 \
- 	--disable-msa \
- 	--enable-hwaccels \
-@@ -58,7 +58,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-libnut \
- 	--disable-libopenjpeg \
- 	--disable-libschroedinger \
--	--disable-libvo-aacenc \
- 	--disable-libvo-amrwbenc \
- 	--disable-symver \
- 	--disable-doc
-@@ -437,14 +436,6 @@ FFMPEG_CONF_OPTS += \
- 	--enable-mipsfpu
- endif
+-DTV_SCAN_TABLES_VERSION = 6da0f5e851dd5e51e43b87136228a88705a7ba69
++DTV_SCAN_TABLES_VERSION = 61c8339d686b2d98d5604c26a777cb3c1f3d84a1
+ DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
  
--ifeq ($(BR2_mips_32r2),y)
--FFMPEG_CONF_OPTS += \
--	--enable-mips32r2
--else
--FFMPEG_CONF_OPTS += \
--	--disable-mips32r2
--endif
--
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPTS += --enable-altivec
- else
 -- 
 2.8.0.rc3
