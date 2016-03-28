@@ -1,41 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 Mar 2016 22:32:30 +0200
-Subject: [Buildroot] [git commit] gzip: bump to version 1.7
-Message-ID: <20160328203340.CD93D7FC80@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 28 Mar 2016 17:35:31 -0300
+Subject: [Buildroot] [PATCH] gtkmm3: bump to version 3.20.0
+Message-ID: <1459197331-5502-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c155336a07b1098ed570b046a8ea21db6b56898
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gzip/gzip.hash | 2 +-
- package/gzip/gzip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gtkmm3/gtkmm3.hash | 4 ++--
+ package/gtkmm3/gtkmm3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 56f052f..755c450 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
+diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
+index fcbadab..3ab2513 100644
+--- a/package/gtkmm3/gtkmm3.hash
++++ b/package/gtkmm3/gtkmm3.hash
 @@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	37dfed1a485d53212c43b3fa2a7c7952f09bf5cd86e37121c222341ee1b27847  gzip-1.6.tar.xz
-+sha256	fb31c57e7ce7703596ef57329be7cc5c5fd741b4a0f659fea7ee6a54706b41ab  gzip-1.7.tar.xz
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index 1b2f678..b5dc361 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
+-# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.18/gtkmm-3.18.0.sha256sum
+-sha256	829fa113daed74398c49c3f2b7672807f58ba85d0fa463f5bc726e1b0138b86b	gtkmm-3.18.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.20/gtkmm-3.20.0.sha256sum
++sha256	f021573f870df8a0b40ba37a7864c37be517c7a88cc957a193dbab28449b028a	gtkmm-3.20.0.tar.xz
+diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
+index a895d85..b62d592 100644
+--- a/package/gtkmm3/gtkmm3.mk
++++ b/package/gtkmm3/gtkmm3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GZIP_VERSION = 1.6
-+GZIP_VERSION = 1.7
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+-GTKMM3_VERSION_MAJOR = 3.18
++GTKMM3_VERSION_MAJOR = 3.20
+ GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
+ GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
+ GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
+-- 
+2.7.3
