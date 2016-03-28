@@ -1,32 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 20:21:11 +0200
-Subject: [Buildroot] [PATCH v3 14/18] package/x264: bump version
-In-Reply-To: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459189275-29068-15-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 28 Mar 2016 20:22:28 +0200
+Subject: [Buildroot] [PATCH 6/9 v2] fs/cpio: use a post-gen hook rather
+ than a post-target rule
+In-Reply-To: <181362cf62b072db7ec5340c0a3c173af82afd1f.1457721607.git.yann.morin.1998@free.fr>
+References: <cover.1457721607.git.yann.morin.1998@free.fr>
+ <181362cf62b072db7ec5340c0a3c173af82afd1f.1457721607.git.yann.morin.1998@free.fr>
+Message-ID: <56F97664.6050101@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x264/x264.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Yann, All,
+Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
+> We already have a mechanism for running stuff after the filesystem is
+> generated, and that's called post-gen hooks.
+> 
+> Use those hooks.
+> 
+> Note: for cpio (and unlike ext2 previously), the dependency chain was
+> correct, in that the post-target rule correctly depended on the image
+> rule. Nonetheless, we still want to fix it for consistency.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  fs/cpio/cpio.mk | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index e82167e..c68e0bf 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -31,12 +31,13 @@ define ROOTFS_CPIO_CMD
+>  	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
+>  endef
+>  
+> -$(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
+> -	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
+> -		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
+> -
+>  ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
+> -ROOTFS_CPIO_POST_TARGETS += $(BINARIES_DIR)/rootfs.cpio.uboot
+> +ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
+> +define ROOTFS_CPIO_UBOOT_MKIMAGE
+> +	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
+> +		-C none -d $@$(ROOTFS_CPIO_COMPRESS_EXT) $@.uboot
+> +endef
+> +ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
+>  endif
 
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 7e7e597..cf5e385 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X264_VERSION = e86f3a1993234e8f26050c243aa253651200fa6b
-+X264_VERSION = a01e33913655f983df7a4d64b0a4178abb1eb618
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPLv2+
- X264_DEPENDENCIES = host-pkgconf
--- 
-2.8.0.rc3
+Verified that rootfs.cpio.uboot is still build.
+
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+>  
+>  $(eval $(call ROOTFS_TARGET,cpio))
+> 
