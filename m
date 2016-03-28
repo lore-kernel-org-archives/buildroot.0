@@ -1,83 +1,75 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 28 Mar 2016 17:31:37 +0200
-Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump version to
-	3.1.0
-In-Reply-To: <cssnscxfrm.ln2@ID-313208.user.individual.net>
-References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
- <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
- <CAHXCMMLcd313SJ-JMVRoS4UOhH_FG79g5yv463Y6r4EwgKfrMg@mail.gmail.com>
- <69clscxmj.ln2@ID-313208.user.individual.net>
- <CAHXCMMKvEgV2MbMZFpUJVOad5D+Z_qszNkwKMe6D=RzL5Gp9sQ@mail.gmail.com>
- <cssnscxfrm.ln2@ID-313208.user.individual.net>
-Message-ID: <CAHXCMM+PLYS5RE=tXHBu6xGB6au4KP=fxKO-Pn9VW2Sc-Q7FaA@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 28 Mar 2016 18:29:11 +0200
+Subject: [Buildroot] [PATCH 1/9 v2] core: sort packages and eliminate
+ duplicates before building
+In-Reply-To: <425428e408e50325883b71897059f7c1a0c15f2d.1457721607.git.yann.morin.1998@free.fr>
+References: <cover.1457721607.git.yann.morin.1998@free.fr>
+ <425428e408e50325883b71897059f7c1a0c15f2d.1457721607.git.yann.morin.1998@free.fr>
+Message-ID: <56F95BD7.5070003@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 28, 2016 at 4:49 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Am Sun, 27 Mar 2016 19:01:12 +0200 schrieb Samuel Martin:
->
->> On Sun, Mar 27, 2016 at 5:53 PM, Bernd Kuhls
->> <bernd.kuhls@t-online.de> wrote:
->>> Hi Samuel,
->>>
->>> Am Sun, 27 Mar 2016 15:05:42 +0200 schrieb Samuel Martin:
->>>
->>>>> -       -DWITH_OPENGL=OFF \
->>>>> -       -DWITH_OPENMP=OFF \
->>>> AFAICS, these 2 options still exist (see [2,3]).
->>>
->>> Yes, and they are used later on in opencv3.mk:
->>>
->>> ifeq ($(BR2_PACKAGE_OPENCV3_WITH_OPENGL),y)
->>> OPENCV3_CONF_OPTS += -DWITH_OPENGL=ON OPENCV3_DEPENDENCIES += libgl
->>> else OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF endif
->>>
->>> OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if
->>> $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
->>>
->>> Is there a reason why they are disabled in the first place?
->> Yes, there is reason ;-)
->
-> Hi Samuel,
->
-> even after your last explanation I do not understand why -DWITH_OPENGL
-> and -DWITH_OPENMP are present twice in opencv3.mk so I am going to repeat
-> my question based on current buildroot git master:
->
-> In line 207 opengl support is disabled:
-> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n207
->>       -DWITH_OPENGL=OFF \
->
-> In line 271 this command is repeated
-> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n271
->>OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
-Well, clearly I should have drunk more coffe the day I did that.
+Hi Yann, All,
 
->
-> The same duplication is present for openmp
-> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n208
->>       -DWITH_OPENMP=OFF \
->
-> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n274
->>OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
-ditto
+Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
+> Currently, enabling more than one filesystem image will make
+> 'show-targets' list a few host packages more than once.
+> 
+> This is because all filesystem images add the same set of
+> host-packages to their dependencies, which are then added as-is
+> to the package list.
+> 
+> Thus, host-fakeroot, host-makedevs and, if needed, host-mkpasswd will
+> appear as many times as there are filesystem images enabled.
+> 
+> Fix that by sorting the package list, thus eliminating duplicates from
+> that list.
+> 
+> Furthermore, and even though we're already sorting packages by scanning
+> the .mk file in alphabetical order (because we $(sort) them), sorting
+> the list itself will further guarantee the build order, thus enhancing
+> reproducibility (and $(sort ...) is not dependent on the locale, it
+> always sorts with the C locale).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <jacmet@uclibc.org>
+> 
+> ---
+> Changes v1 -> v2:
+>   - fix typo in comment
+> ---
+>  Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 98c8dc7..0f16976 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -600,6 +600,12 @@ endif
+>  
+>  $(TARGETS_ROOTFS): target-finalize
+>  
+> +# Filesystems may add the same packages more than once from their
+> +# dependency lists. For example, all filesystems include host-fakeroot,
+> +# host-makedevs and, if required, host-mkpasswd. They would appear
+> +# multiple times in the list returned by show-target.
+> +PACKAGES := $(sort $(PACKAGES))
+> +
 
->
-> I see no reason to keep lines 207-208.
-Indeed, feel free to post a patch removing them ;-)
+Indeed, now the content of PACKAGES is listed alphabetically and duplicate are
+removed.
 
-Note that in cmake, if the same definition is several time on the
-commd line, the last occurence will win, so if one does:
-  cmake . -DFOO=foo -DFOO=bar
-the actual value of the FOO variable will be "bar".
-So, in this case the duplicate options were harmless because the right
-values are set after the wrong ones on the command line, but
-nonetheless this is messy :-/. Sorry about that.
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
 
-Regards,
+Best regards,
+Romain
 
--- 
-Samuel
+>  target-finalize: $(PACKAGES)
+>  	@$(call MESSAGE,"Finalizing target directory")
+>  	$(foreach hook,$(TARGET_FINALIZE_HOOKS),$($(hook))$(sep))
+> 
