@@ -1,68 +1,35 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Mar 2016 18:22:15 -0300
-Subject: [Buildroot] [PATCH 3/4] weston: add DRM compositor support
+Date: Mon, 28 Mar 2016 18:22:16 -0300
+Subject: [Buildroot] [PATCH 4/4] weston: handle optional libva support
 In-Reply-To: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1459200136-30632-3-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1459200136-30632-4-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There's no enable/disable option so it's just the dependency.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/weston/Config.in | 10 ++++++++++
- package/weston/weston.mk |  9 ++++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ package/weston/weston.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index aaf1706..8cefa41 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -37,6 +37,16 @@ if BR2_PACKAGE_WESTON
- config BR2_PACKAGE_WESTON_HAS_COMPOSITOR
- 	bool
- 
-+config BR2_PACKAGE_WESTON_DRM
-+	bool "DRM compositor"
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_WESTON_HAS_COMPOSITOR
-+
-+# Uses libgbm from mesa3d
-+comment "DRM compositor needs an OpenGL EGL backend provided by mesa3d"
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-+
- config BR2_PACKAGE_WESTON_FBDEV
- 	bool "fbdev compositor"
- 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index a031f74..d2cfd6b 100644
+index d2cfd6b..5705b0a 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -18,7 +18,6 @@ WESTON_CONF_OPTS = \
- 	--disable-simple-egl-clients \
- 	--disable-xwayland \
- 	--disable-x11-compositor \
--	--disable-drm-compositor \
- 	--disable-wayland-compositor \
- 	--disable-headless-compositor \
- 	--disable-weston-launch \
-@@ -54,6 +53,14 @@ else
- WESTON_CONF_OPTS += --disable-fbdev-compositor
- endif
+@@ -11,7 +11,8 @@ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_PACKAGE_WESTON_DRM),y)
-+WESTON_CONF_OPTS += \
-+	--enable-drm-compositor \
-+	WESTON_NATIVE_BACKEND=drm-backend.so
-+else
-+WESTON_CONF_OPTS += --disable-drm-compositor
-+endif
-+
- ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
- WESTON_DEPENDENCIES += rpi-userland
- WESTON_CONF_OPTS += --enable-rpi-compositor \
+ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+-	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput
++	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput \
++	$(if $(BR2_PACKAGE_LIBVA),libva)
+ 
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
 -- 
 2.7.3
