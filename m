@@ -1,66 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 28 Mar 2016 20:13:04 +0200
-Subject: [Buildroot] [PATCH 5/9 v2] fs/ext2: use a post-gen hook rather
- than a post-target rule
-In-Reply-To: <f8163e366a4bfd68d3232e83ae6e5d16b8e90761.1457721607.git.yann.morin.1998@free.fr>
-References: <cover.1457721607.git.yann.morin.1998@free.fr>
- <f8163e366a4bfd68d3232e83ae6e5d16b8e90761.1457721607.git.yann.morin.1998@free.fr>
-Message-ID: <56F97430.7060309@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 28 Mar 2016 20:20:59 +0200
+Subject: [Buildroot] [PATCH v3 02/18] package/libdcadec: bump version to
+	v0.2.0
+In-Reply-To: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459189275-29068-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
+This version bump is needed by ffmpeg 3.0:
+http://git.videolan.org/?p=ffmpeg.git;a=blobdiff;f=configure;h=a30d831c97575858c760694f191b4efe71360301;hp=8cbd5e574979e1a9492754aa41fcff233ee8da33;hb=27ce53b52d0d5f2c1d59da13491b74fe73cde964;hpb=26a84e2dae4007628d30cae746822486076767ee
 
-Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
-> post-target rules are probably not resilient to parallel builds, given
-> that they do not depend on the image being generated first.
-> 
-> Beside, we already have a mechanism for running stuff after the
-> filesystem is generated, and that's called post-gen hooks.
-> 
-> Use those hooks.
-> 
-> Note: this basically reverts 75b6303 (rootfs-ext2: make the symlink as a
-> _POST_TARGET) since we've now re-introduced post-gen hooks.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  fs/ext2/ext2.mk | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/ext2/ext2.mk b/fs/ext2/ext2.mk
-> index 7417f81..afe44c7 100644
-> --- a/fs/ext2/ext2.mk
-> +++ b/fs/ext2/ext2.mk
-> @@ -34,13 +34,11 @@ define ROOTFS_EXT2_CMD
->  	PATH=$(BR_PATH) mke2img -d $(TARGET_DIR) $(EXT2_OPTS) -o $@
->  endef
->  
-> -rootfs-ext2-symlink:
-> -	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
-> -
-> -.PHONY: rootfs-ext2-symlink
-> -
->  ifneq ($(BR2_TARGET_ROOTFS_EXT2_GEN),2)
-> -ROOTFS_EXT2_POST_TARGETS += rootfs-ext2-symlink
-> +define ROOTFS_EXT2_SYMLINK
-> +	ln -sf rootfs.ext2$(ROOTFS_EXT2_COMPRESS_EXT) $(BINARIES_DIR)/rootfs.ext$(BR2_TARGET_ROOTFS_EXT2_GEN)$(ROOTFS_EXT2_COMPRESS_EXT)
-> +endef
-> +ROOTFS_EXT2_POST_GEN_HOOKS += ROOTFS_EXT2_SYMLINK
->  endif
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdcadec/libdcadec.hash | 2 ++
+ package/libdcadec/libdcadec.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 package/libdcadec/libdcadec.hash
 
-Verified that the rootfs.ext3 symlink to rootfs.ext2 is still created.
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
->  
->  $(eval $(call ROOTFS_TARGET,ext2))
-> 
+diff --git a/package/libdcadec/libdcadec.hash b/package/libdcadec/libdcadec.hash
+new file mode 100644
+index 0000000..dda58d1
+--- /dev/null
++++ b/package/libdcadec/libdcadec.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	ed9d207fde3e8d576f3af8b0d1235b3371e315175757173689104efcaebf0d44	libdcadec-v0.2.0.tar.gz
+diff --git a/package/libdcadec/libdcadec.mk b/package/libdcadec/libdcadec.mk
+index 2b391fc..48e4a12 100644
+--- a/package/libdcadec/libdcadec.mk
++++ b/package/libdcadec/libdcadec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBDCADEC_VERSION = 2a9186e34ce557d3af1a20f5b558d1e6687708b9
++LIBDCADEC_VERSION = v0.2.0
+ LIBDCADEC_SITE = $(call github,foo86,dcadec,$(LIBDCADEC_VERSION))
+ LIBDCADEC_LICENSE = LGPLv2.1+
+ LIBDCADEC_LICENSE_FILES = COPYING.LGPLv2.1
+-- 
+2.8.0.rc3
