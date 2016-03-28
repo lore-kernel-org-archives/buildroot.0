@@ -1,64 +1,53 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 28 Mar 2016 20:22:28 +0200
-Subject: [Buildroot] [PATCH 6/9 v2] fs/cpio: use a post-gen hook rather
- than a post-target rule
-In-Reply-To: <181362cf62b072db7ec5340c0a3c173af82afd1f.1457721607.git.yann.morin.1998@free.fr>
-References: <cover.1457721607.git.yann.morin.1998@free.fr>
- <181362cf62b072db7ec5340c0a3c173af82afd1f.1457721607.git.yann.morin.1998@free.fr>
-Message-ID: <56F97664.6050101@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 28 Mar 2016 20:21:14 +0200
+Subject: [Buildroot] [PATCH v3 17/18] package/tvheadend: bump version
+In-Reply-To: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459189275-29068-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, All,
-Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
-> We already have a mechanism for running stuff after the filesystem is
-> generated, and that's called post-gen hooks.
-> 
-> Use those hooks.
-> 
-> Note: for cpio (and unlike ext2 previously), the dependency chain was
-> correct, in that the post-target rule correctly depended on the image
-> rule. Nonetheless, we still want to fix it for consistency.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  fs/cpio/cpio.mk | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
-> index e82167e..c68e0bf 100644
-> --- a/fs/cpio/cpio.mk
-> +++ b/fs/cpio/cpio.mk
-> @@ -31,12 +31,13 @@ define ROOTFS_CPIO_CMD
->  	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
->  endef
->  
-> -$(BINARIES_DIR)/rootfs.cpio.uboot: $(BINARIES_DIR)/rootfs.cpio host-uboot-tools
-> -	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
-> -		-C none -d $<$(ROOTFS_CPIO_COMPRESS_EXT) $@
-> -
->  ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
-> -ROOTFS_CPIO_POST_TARGETS += $(BINARIES_DIR)/rootfs.cpio.uboot
-> +ROOTFS_CPIO_DEPENDENCIES += host-uboot-tools
-> +define ROOTFS_CPIO_UBOOT_MKIMAGE
-> +	$(MKIMAGE) -A $(MKIMAGE_ARCH) -T ramdisk \
-> +		-C none -d $@$(ROOTFS_CPIO_COMPRESS_EXT) $@.uboot
-> +endef
-> +ROOTFS_CPIO_POST_GEN_HOOKS += ROOTFS_CPIO_UBOOT_MKIMAGE
->  endif
+Updated ffmpeg option name after upstream renamed it:
+https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
 
-Verified that rootfs.cpio.uboot is still build.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
->  
->  $(eval $(call ROOTFS_TARGET,cpio))
-> 
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 14d0fb0..9406d08 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
++sha256	50ada2f30387f9526e1ed453f778686b443e599841a73a031cdd543b65e7a502	tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 3398faf..a7a8218 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
++TVHEADEND_VERSION = cd9f07fb865e5700156546ee326fbaf42ee99cf8
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -81,7 +81,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--python="$(HOST_DIR)/usr/bin/python"	\
+ 			--enable-dvbscan			\
+ 			--enable-bundle				\
+-			--disable-libffmpeg_static		\
++			--disable-ffmpeg_static			\
+ 			--disable-hdhomerun_static		\
+ 			$(TVHEADEND_CONF_OPTS)			\
+ 	)
+-- 
+2.8.0.rc3
