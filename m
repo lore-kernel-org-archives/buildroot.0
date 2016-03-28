@@ -1,44 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 20:21:05 +0200
-Subject: [Buildroot] [PATCH v3 08/18] package/freerdp: bump version
+Date: Mon, 28 Mar 2016 20:21:08 +0200
+Subject: [Buildroot] [PATCH v3 11/18] package/ffmpeg: cosmetic change for
+	the mips fpu option
 In-Reply-To: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459189275-29068-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459189275-29068-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version bump is needed to provide support for ffmpeg 3.0, added
-Sep, 17th, 2015: https://github.com/FreeRDP/FreeRDP/pull/2895
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Please note the we can not bump to a newer version of freerdp atm
-because the next commit in the master branch
-
-https://github.com/FreeRDP/FreeRDP/commit/8206ae440f905b123cb92c7abf8c861070ea8cd8
-
-bumped the version number to 2.x which will provide freerdp2.pc instead
-of freerdp.pc, this is incompatible with vlc atm:
-
-http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=bb5d1dde2ef9828b0ba92c62dbd1143f984f45f2;hb=HEAD#l1890
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freerdp/freerdp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ffmpeg/ffmpeg.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index e8e5be4..a795ed3 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 75c0128..3115fc7 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -429,11 +429,9 @@ FFMPEG_CONF_OPTS += --enable-neon
+ endif
  
- # Changeset on the master branch
--FREERDP_VERSION = 17834af7bb378f85a3b3cc4dcadaa5125a337e16
-+FREERDP_VERSION = 2ac195e8eb2c5fbbe8f2abeac92b0c8effef0e34
- FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
+ ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
+-FFMPEG_CONF_OPTS += \
+-	--disable-mipsfpu
++FFMPEG_CONF_OPTS += --disable-mipsfpu
+ else
+-FFMPEG_CONF_OPTS += \
+-	--enable-mipsfpu
++FFMPEG_CONF_OPTS += --enable-mipsfpu
+ endif
+ 
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
 -- 
 2.8.0.rc3
