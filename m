@@ -1,12 +1,12 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Mar 2016 23:36:54 +0200
-Subject: [Buildroot] [PATCH 4/9 v2] fs/initramfs: cleanup and enhance
- comments
-In-Reply-To: <56F9727C.2050703@gmail.com>
+Date: Mon, 28 Mar 2016 23:43:42 +0200
+Subject: [Buildroot] [PATCH 8/9 v2] fs/common: move actions common to
+ all filesystems to their own rule
+In-Reply-To: <56F99E23.8010702@gmail.com>
 References: <cover.1457721607.git.yann.morin.1998@free.fr>
- <6ac9c7aa0849c05d2caf0edba9920e7f425ee20e.1457721607.git.yann.morin.1998@free.fr>
- <56F9727C.2050703@gmail.com>
-Message-ID: <20160328213654.GE3608@free.fr>
+ <e7baa279dac14ca71696b310a3ba7814ffb44d54.1457721607.git.yann.morin.1998@free.fr>
+ <56F99E23.8010702@gmail.com>
+Message-ID: <20160328214342.GF3608@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,66 +15,76 @@ To: buildroot@busybox.net
 
 Romain, All,
 
-On 2016-03-28 20:05 +0200, Romain Naour spake thusly:
+On 2016-03-28 23:12 +0200, Romain Naour spake thusly:
 > Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
-> > rootfs-initramfs is not using the generic fs infrastructure, because
-> > there is virtually nothing to do to build the initramfs image: there is
-> > no actual image to be built to begin with.
+> > A lot of actions are common to generating the various images. Currently,
+> > they are all done for each image being generated.
 > > 
-> > The only purpose of rootfs-initramfs is to ensure the rootfs.cpio image
-> > is built and then that the Linux kernel is rebuilt with that rootfs.cpio
-> > as initramfs source.
+> > However, we can do them once and for all.
 > > 
-> > Using variables of the fs infra like if it were used is misleading. It
-> > looked nice as long as there was the possibility that rootfs-initramfs
-> > would one day use the fs infra. But there's no way that will happen any
-> > time soon.
-> > 
-> > Furthermore, the linux' rule linux-rebuild-with-initramfs now already
-> > depends on rootfs-cpio by itself, so we need not duplicate this
-> > dependency in rootfs-initramfs.
-> > LINUX_DIR
-> > Still, we want to advertise that the dependency is on rootfs-cpio, so
-> > we get nice dependency graphs (and not expose the internal
-> > linux-rebuild-with-initramfs rule to the users).
-> > 
-> > So, remove the variables and directly define the rules.
+> > Also add a sha-bang to the fakeroot script, for completeness.
 > > 
 > > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > ---
-> >  fs/initramfs/initramfs.mk | 22 +++++++++++++++-------
-> >  1 file changed, 15 insertions(+), 7 deletions(-)
 > > 
-> > diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-> > index db50812..9aca9c8 100644
-> > --- a/fs/initramfs/initramfs.mk
-> > +++ b/fs/initramfs/initramfs.mk
-> > @@ -5,17 +5,25 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
-> > -
-> > -ROOTFS_INITRAMFS_POST_TARGETS += linux-rebuild-with-initramfs
-> > -
-> > -
-> >  # The generic fs infrastructure isn't very useful here.
-> > +#
-> > +# The initramfs image does not actually build an image; its only purpose is:
-> > +# 1- to ensure rootfs.cpio is generated,
-> > +# 2- to then rebuild the kernel with rootfs.cpio as initramfs
-> > +#
-> > +# Note: ordering of the dependencies is not guaranteed here, but in
-> > +# linux/linux.mk, via the .stamp_initramfs_rebuilt stamp file, which depends
-> > +# on the rootfs-cpio filesystem rule.
+> > ---
+> > Note: when I wrote that patch, it was only a preparatory work for something
+> > bigger and clever about how images are generated. However, I can't recall
+> > what it was... :-(  Yet, I believe that patch to still be valid on its own.
 > 
-> As said previously, there is no more .stamp_initramfs_rebuilt file.
+> Maybe this patch was done to remove some $$ in the code :p
 
-Fixed.
+Hehe! However, who would complain for having too many $ ? ;-]
 
-> Otherwise
+[--SNIP--]
+> > @@ -66,32 +89,16 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+> >  ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+> >  endif
+> >  
+> > -$$(BINARIES_DIR)/rootfs.$(1): target-finalize $$(ROOTFS_$(2)_DEPENDENCIES)
+> > +ROOTFS_$(2)_FAKEROOT_SCRIPT = $$(FS_DIR)/fakeroot.$(1)
+> > +
+> > +$$(BINARIES_DIR)/rootfs.$(1): rootfs-common $$(ROOTFS_$(2)_DEPENDENCIES)
+> >  	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
+> >  	$$(foreach hook,$$(ROOTFS_$(2)_PRE_GEN_HOOKS),$$(call $$(hook))$$(sep))
+> > -	rm -f $$(FAKEROOT_SCRIPT)
+> > +	$$(INSTALL) -D -m 0755 $$(FAKEROOT_SCRIPT) $$(ROOTFS_$(2)_FAKEROOT_SCRIPT)
+> > +	echo "$$(ROOTFS_$(2)_CMD)" >> $$(ROOTFS_$(2)_FAKEROOT_SCRIPT)
+> >  	rm -f $$(TARGET_DIR_WARNING_FILE)
+> > -	rm -f $$(USERS_TABLE)
+> > -	echo "set -e" >> $$(FAKEROOT_SCRIPT)
+> > -	echo "chown -h -R 0:0 $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+> > -ifneq ($$(ROOTFS_USERS_TABLES),)
+> > -	cat $$(ROOTFS_USERS_TABLES) >> $$(USERS_TABLE)
+> > -endif
+> > -	printf '$$(subst $$(sep),\n,$$(PACKAGES_USERS))' >> $$(USERS_TABLE)
+> > -	PATH=$$(BR_PATH) $$(TOPDIR)/support/scripts/mkusers $$(USERS_TABLE) $$(TARGET_DIR) >> $$(FAKEROOT_SCRIPT)
+> > -ifneq ($$(ROOTFS_DEVICE_TABLES),)
+> > -	cat $$(ROOTFS_DEVICE_TABLES) > $$(FULL_DEVICE_TABLE)
+> > -ifeq ($$(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+> > -	printf '$$(subst $$(sep),\n,$$(PACKAGES_DEVICES_TABLE))' >> $$(FULL_DEVICE_TABLE)
+> > -endif
+> > -	printf '$$(subst $$(sep),\n,$$(PACKAGES_PERMISSIONS_TABLE))' >> $$(FULL_DEVICE_TABLE)
+> > -	echo "$$(HOST_DIR)/usr/bin/makedevs -d $$(FULL_DEVICE_TABLE) $$(TARGET_DIR)" >> $$(FAKEROOT_SCRIPT)
+> > -endif
+> > -	echo "$$(ROOTFS_$(2)_CMD)" >> $$(FAKEROOT_SCRIPT)
+> > -	chmod a+x $$(FAKEROOT_SCRIPT)
+> > -	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+> > +	PATH=$$(BR_PATH) $$(HOST_DIR)/usr/bin/fakeroot -- $$(ROOTFS_$(2)_FAKEROOT_SCRIPT)
+> >  	$$(INSTALL) -m 0644 support/misc/target-dir-warning.txt $$(TARGET_DIR_WARNING_FILE)
+> > -	- at rm -f $$(FAKEROOT_SCRIPT) $$(FULL_DEVICE_TABLE)
+> 
+> I think it's a good idea to keep all fakeroot.* script used during rootfs images
+> build.
+> 
 > Reviewed-by: Romain Naour <romain.naour@gmail.com>
+> 
+> It seems that there is no need to add PATH=$(BR_PATH) in ROOTFS_EXT2_CMD since
+> it's already present in fakeroot environment ? (see
+> 89e16118b45c1bb8d112e8829d34e0883a6450be)
+
+Indeed, but that should be done in a separate patch (since it was not
+added in my series). I'll add such a patch to the series.
 
 Thanks! :-)
 
@@ -84,21 +94,9 @@ Yann E. MORIN.
 > Best regards,
 > Romain
 > 
-> > +#
-> > +# Note: the trick here is that we directly depend on rebuilding the Linux
-> > +# kernel image (which itself depends on the rootfs-cpio rule), while we
-> > +# advertise that our dependency is on the rootfs-cpio rule, which is
-> > +# cleaner in the dependency graph.
-> >  
-> > -rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGETS)
-> > +rootfs-initramfs: linux-rebuild-with-initramfs
-> >  
-> >  rootfs-initramfs-show-depends:
-> > -	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
-> > +	@echo rootfs-cpio
-> >  
-> >  .PHONY: rootfs-initramfs rootfs-initramfs-show-depends
-> >  
+> >  ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+> >  	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+> >  endif
 > > 
 > 
 
