@@ -1,35 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Mar 2016 18:03:36 -0300
-Subject: [Buildroot] [PATCH] boot/grub2: enable squashfs support by default
-Message-ID: <1459199016-19064-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 Mar 2016 23:03:54 +0200
+Subject: [Buildroot] [PATCH] gtkmm3: bump to version 3.20.0
+In-Reply-To: <1459197331-5502-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Mon, 28 Mar 2016 17:35:31 -0300")
+References: <1459197331-5502-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87h9fq8gcl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Size growth is minimal and generally a non-issue for x86-based
-platforms.
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- boot/grub2/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index c465a4d..7dc5cae 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -154,8 +154,8 @@ endif # BR2_TARGET_GRUB2_I386_PC
- 
- config BR2_TARGET_GRUB2_BUILTIN_MODULES
- 	string "builtin modules"
--	default "boot linux ext2 fat part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
--	default "boot linux ext2 fat part_msdos part_gpt normal efi_gop" \
-+	default "boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk" if BR2_TARGET_GRUB2_I386_PC
-+	default "boot linux ext2 fat squash4 part_msdos part_gpt normal efi_gop" \
- 		if BR2_TARGET_GRUB2_I386_EFI || BR2_TARGET_GRUB2_X86_64_EFI
- 
- config BR2_TARGET_GRUB2_BUILTIN_CONFIG
+Committed, thanks.
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
