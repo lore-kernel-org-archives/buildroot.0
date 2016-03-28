@@ -1,39 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Mar 2016 11:12:25 -0300
-Subject: [Buildroot] [PATCH] gzip: bump to version 1.7
-Message-ID: <1459174345-18875-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 28 Mar 2016 16:40:44 +0200
+Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump version
+	to	3.1.0
+References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
+ <CAHXCMMLcd313SJ-JMVRoS4UOhH_FG79g5yv463Y6r4EwgKfrMg@mail.gmail.com>
+ <69clscxmj.ln2@ID-313208.user.individual.net>
+ <CAHXCMMKvEgV2MbMZFpUJVOad5D+Z_qszNkwKMe6D=RzL5Gp9sQ@mail.gmail.com>
+Message-ID: <ccsnscxfrm.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/gzip/gzip.hash | 2 +-
- package/gzip/gzip.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Am Sun, 27 Mar 2016 19:01:12 +0200 schrieb Samuel Martin:
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 56f052f..755c450 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	37dfed1a485d53212c43b3fa2a7c7952f09bf5cd86e37121c222341ee1b27847  gzip-1.6.tar.xz
-+sha256	fb31c57e7ce7703596ef57329be7cc5c5fd741b4a0f659fea7ee6a54706b41ab  gzip-1.7.tar.xz
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index 1b2f678..b5dc361 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GZIP_VERSION = 1.6
-+GZIP_VERSION = 1.7
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
--- 
-2.7.3
+> On Sun, Mar 27, 2016 at 5:53 PM, Bernd Kuhls
+> <bernd.kuhls@t-online.de> wrote:
+>> Hi Samuel,
+>>
+>> Am Sun, 27 Mar 2016 15:05:42 +0200 schrieb Samuel Martin:
+>>
+>>>> -       -DWITH_OPENGL=OFF \
+>>>> -       -DWITH_OPENMP=OFF \
+>>> AFAICS, these 2 options still exist (see [2,3]).
+>>
+>> Yes, and they are used later on in opencv3.mk:
+>>
+>> ifeq ($(BR2_PACKAGE_OPENCV3_WITH_OPENGL),y)
+>> OPENCV3_CONF_OPTS += -DWITH_OPENGL=ON OPENCV3_DEPENDENCIES += libgl
+>> else OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF endif
+>>
+>> OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if
+>> $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
+>>
+>> Is there a reason why they are disabled in the first place?
+> Yes, there is reason ;-)
+> 
+> Opencv3 has been done correctly when upgrading from opencv2 [1] (as a
+> replacement), then opencv has been renamed opencv3 [2] and opencv
+> reverted back [3]... hence the desync. between these 2 packages...
+> And since this, I have not taken the time to sync. opencv and opencv3
+> packages... :-/
+
+Hi Samuel,
+
+even after your last explanation I do not understand why -DWITH_OPENGL
+and -DWITH_OPENMP are present twice in opencv3.mk so I am going to repeat 
+my question based on current buildroot git master:
+
+In line 207 opengl support is disabled:
+https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n207
+> 	-DWITH_OPENGL=OFF \
+
+In line 271 this command is repeated
+https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n271
+>OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
