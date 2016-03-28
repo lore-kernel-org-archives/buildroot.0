@@ -1,11 +1,11 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 28 Mar 2016 18:31:24 +0200
-Subject: [Buildroot] [PATCH 2/9 v2] linux: split overly-long dependency
- line for readability
-In-Reply-To: <f410ef211f2fbdb6146e0492172311aa90a3e609.1457721607.git.yann.morin.1998@free.fr>
+Date: Mon, 28 Mar 2016 19:36:00 +0200
+Subject: [Buildroot] [PATCH 3/9 v2] linux: meddle not in the affairs of
+ filesystems, for you are tasty with bacon
+In-Reply-To: <9cef8c3fc419c6ef806d18184cf9e53c4c7323e6.1457721607.git.yann.morin.1998@free.fr>
 References: <cover.1457721607.git.yann.morin.1998@free.fr>
- <f410ef211f2fbdb6146e0492172311aa90a3e609.1457721607.git.yann.morin.1998@free.fr>
-Message-ID: <56F95C5C.3030109@gmail.com>
+ <9cef8c3fc419c6ef806d18184cf9e53c4c7323e6.1457721607.git.yann.morin.1998@free.fr>
+Message-ID: <56F96B80.6040706@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,37 +15,82 @@ To: buildroot@busybox.net
 Hi Yann, All,
 
 Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
+> Currently, the rule to rebuild the Linux kernel with an initramfs
+> directly depends on the filesystem image filename.
+> 
+> This is inherently "bad" from a purity point of view. linux.mk should
+> not have to delve into the fs internals.
+> 
+> Rather, make it directly depend on the "frontal" rule that generates the
+> cpio image.
+> 
+> Drop the comment for linux-rebuild-with-initramfs, it was misleading
+> (talking about generating "the initramfs list of files", which is not
+> what was done, since we use a cpio as source of initramfs, not a list of
+> files).
+> 
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > 
 > ---
-> This is going to be useful to better understand the initramfs patch
-> coming next.
+> Changes v1 -> v2:
+>   - drop intermediate, unneeded stamp-file
+>   - drop misleading comment
+> 
 > ---
->  linux/linux.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> This, too, will be useful for the initramfs patch coming next.
+> ---
+>  linux/linux.mk | 16 ++++++----------
+>  1 file changed, 6 insertions(+), 10 deletions(-)
 > 
 > diff --git a/linux/linux.mk b/linux/linux.mk
-> index 7e20255..ea90918 100644
+> index ea90918..c0d760a 100644
 > --- a/linux/linux.mk
 > +++ b/linux/linux.mk
-> @@ -439,7 +439,10 @@ $(eval $(kconfig-package))
+> @@ -438,11 +438,12 @@ endif # BR_BUILDING
+>  $(eval $(kconfig-package))
 >  
 >  # Support for rebuilding the kernel after the cpio archive has
->  # been generated in $(BINARIES_DIR)/rootfs.cpio.
-> -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed $(LINUX_DIR)/.stamp_images_installed $(BINARIES_DIR)/rootfs.cpio
-> +$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
-> +$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
-> +$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
-> +$(LINUX_DIR)/.stamp_initramfs_rebuilt:
-
-Reviewed-by: Romain Naour <romain.naour@gmail.com>
-
-Best regards,
-Romain
-
+> -# been generated in $(BINARIES_DIR)/rootfs.cpio.
+> -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_target_installed
+> -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(LINUX_DIR)/.stamp_images_installed
+> -$(LINUX_DIR)/.stamp_initramfs_rebuilt: $(BINARIES_DIR)/rootfs.cpio
+> -$(LINUX_DIR)/.stamp_initramfs_rebuilt:
+> +# been generated.
+> +.PHONY: linux-rebuild-with-initramfs
+> +linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
+> +linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
+> +linux-rebuild-with-initramfs: rootfs-cpio
+> +linux-rebuild-with-initramfs:
 >  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
 >  	# Build the kernel.
 >  	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+> @@ -451,8 +452,3 @@ $(LINUX_DIR)/.stamp_initramfs_rebuilt:
+>  	cp $(LINUX_IMAGE_PATH) $(BINARIES_DIR)
+>  	# If there is a .ub file copy it to the final destination
+>  	test ! -f $(LINUX_IMAGE_PATH).ub || cp $(LINUX_IMAGE_PATH).ub $(BINARIES_DIR)
+> -	$(Q)touch $@
+
+IIUC, the stamp file can be removed since the target is now PHONY, right ?
+
+But latter in the patch 4/9 in the comment there is a reference to this file:
+# Note: ordering of the dependencies is not guaranteed here, but in
+# linux/linux.mk, via the .stamp_initramfs_rebuilt stamp file, which depends
+# on the rootfs-cpio filesystem rule.
+
+> -
+> -# The initramfs building code must make sure this target gets called
+> -# after it generated the initramfs list of files.
+> -linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_initramfs_rebuilt
 > 
+
+Something is wrong...
+With this patch applied, I have the following error when rebuilding the kernel
+with initramfs:
+
+make[2]: *** No rule to make target 'bzImage'. Arr?t.
+linux/linux.mk:447: recipe for target 'linux-rebuild-with-initramfs' failed
+
+Best regards,
+Romain
