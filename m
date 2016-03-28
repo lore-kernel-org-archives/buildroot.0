@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 20:21:13 +0200
-Subject: [Buildroot] [PATCH v3 16/18] package/dtv-scan-tables: bump version
+Date: Mon, 28 Mar 2016 20:21:15 +0200
+Subject: [Buildroot] [PATCH v3 18/18] package/live555: bump version to
+	2016.03.16
 In-Reply-To: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459189275-29068-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459189275-29068-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index ab6a36c..d78dd82 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 813a5b4..16f7077 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,4 +1,4 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5	6275484ab763673ad3144648bf1015cb	live.2016.01.29.tar.gz
++md5	df4ad1d60c2f5ae8155fb077bb011ab3	live.2016.03.16.tar.gz
+ # Locally generated
+-sha256	44243a962adae64703c00264dd2333cfee15d7edbd79de4e5b47fd486df9ecd1	live.2016.01.29.tar.gz
++sha256	6f98a96d4cf6e986c7711f0a2431c02cb807a8107d6715eb491a6ed9d0446cf6	live.2016.03.16.tar.gz
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index d40cbaa..3ccba63 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DTV_SCAN_TABLES_VERSION = 6da0f5e851dd5e51e43b87136228a88705a7ba69
-+DTV_SCAN_TABLES_VERSION = 61c8339d686b2d98d5604c26a777cb3c1f3d84a1
- DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
+-LIVE555_VERSION = 2016.01.29
++LIVE555_VERSION = 2016.03.16
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPLv2.1+
 -- 
 2.8.0.rc3
