@@ -1,32 +1,36 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 21:49:41 +0200
-Subject: [Buildroot] [PATCH v4 15/19] package/x264: bump version
+Date: Mon, 28 Mar 2016 21:49:36 +0200
+Subject: [Buildroot] [PATCH v4 10/19] package/vlc: mark as broken due to
+	incompatibility with ffmpeg 3.0
 In-Reply-To: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459194585-12593-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459194585-12593-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Upcoming vlc 3.0 will have support for ffmpeg 3.0 again, backporting
+the changes to 2.2.x is not easily possible:
+https://trac.macports.org/ticket/50697#comment:3
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x264/x264.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vlc/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 7e7e597..cf5e385 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X264_VERSION = e86f3a1993234e8f26050c243aa253651200fa6b
-+X264_VERSION = a01e33913655f983df7a4d64b0a4178abb1eb618
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPLv2+
- X264_DEPENDENCIES = host-pkgconf
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 166e7d2..d25305b 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_VLC
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on BROKEN # ffmpeg 3.0
+ 	select BR2_PACKAGE_LIBVORBIS if BR2_PACKAGE_OPUS
+ 	select BR2_PACKAGE_VLC_OPENCV_BACKEND if BR2_PACKAGE_OPENCV
+ 	select BR2_PACKAGE_VLC_OPENCV3_BACKEND if BR2_PACKAGE_OPENCV3
 -- 
 2.8.0.rc3
