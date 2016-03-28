@@ -1,53 +1,73 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 20:21:14 +0200
-Subject: [Buildroot] [PATCH v3 17/18] package/tvheadend: bump version
-In-Reply-To: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459189275-29068-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459189275-29068-18-git-send-email-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 28 Mar 2016 20:26:34 +0200
+Subject: [Buildroot] [PATCH 7/9 v2] fs/common: get rid of post-target
+ rules
+In-Reply-To: <8b80b3acbc1970ef45892b662e6c2bf1dc407d0b.1457721607.git.yann.morin.1998@free.fr>
+References: <cover.1457721607.git.yann.morin.1998@free.fr>
+ <8b80b3acbc1970ef45892b662e6c2bf1dc407d0b.1457721607.git.yann.morin.1998@free.fr>
+Message-ID: <56F9775A.1050103@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated ffmpeg option name after upstream renamed it:
-https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
+Hi Yann, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
+> The only users of post-target rules were ext2, cpio and initramfs.
+> 
+> Of those, ext2 and cpio were changed to use post-gen hooks, while
+> initramfs was not even using the generic rootfs infra and was fixed
+> to no longer reference post-target rules.
+> 
+> Besides, the comment in the infra was really misleading: it referenced
+> initramfs implying it was the sole user of that feature, even though
+> initramfs was not using the fs infra.
+> 
+> Furthermore, using post-target rules was inherently broken for top-level
+> parallel builds, because filesystems had to ensure the ordering by
+> themselves. Of the two real users of post-target rules (cpio and ext2),
+> one did enforce rules ordering (apparently correctly), while the other
+> forgot to do so.
+> 
+> We can get rid of post-target rules altogether, now.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  fs/common.mk | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 3a424f6..0b8163c 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -19,10 +19,6 @@
+>  #  ROOTFS_$(FSTYPE)_POST_GEN_HOOKS, a list of hooks to call after
+>  #  generating the filesystem image
+>  #
+> -#  ROOTFS_$(FSTYPE)_POST_TARGETS, the list of targets that should be
+> -#  run after running the main filesystem target. This is useful for
+> -#  initramfs, to rebuild the kernel once the initramfs is generated.
+> -#
+>  # In terms of configuration option, this macro assumes that the
+>  # BR2_TARGET_ROOTFS_$(FSTYPE) config option allows to enable/disable
+>  # the generation of a filesystem image of a particular type. If
+> @@ -104,7 +100,7 @@ endif
+>  rootfs-$(1)-show-depends:
+>  	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+>  
+> -rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1) $$(ROOTFS_$(2)_POST_TARGETS)
+> +rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 14d0fb0..9406d08 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
-+sha256	50ada2f30387f9526e1ed453f778686b443e599841a73a031cdd543b65e7a502	tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 3398faf..a7a8218 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
-+TVHEADEND_VERSION = cd9f07fb865e5700156546ee326fbaf42ee99cf8
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
-@@ -81,7 +81,7 @@ define TVHEADEND_CONFIGURE_CMDS
- 			--python="$(HOST_DIR)/usr/bin/python"	\
- 			--enable-dvbscan			\
- 			--enable-bundle				\
--			--disable-libffmpeg_static		\
-+			--disable-ffmpeg_static			\
- 			--disable-hdhomerun_static		\
- 			$(TVHEADEND_CONF_OPTS)			\
- 	)
--- 
-2.8.0.rc3
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+>  
+>  .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
+>  
+> 
