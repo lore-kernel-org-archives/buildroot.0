@@ -1,53 +1,37 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Mar 2016 18:22:13 -0300
-Subject: [Buildroot] [PATCH 1/4] weston: add EGL support
-Message-ID: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 28 Mar 2016 18:22:14 -0300
+Subject: [Buildroot] [PATCH 2/4] weston: set default backend for fbdev
+In-Reply-To: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1459200136-30632-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also drop simple-egl-clients from the rpi compositor since it's a duplicate
-of the global one.
+When it's enabled set the default weston backend to fbdev, otherwise the
+drm backend is the default even though we are not building it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/weston/weston.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/weston/weston.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index d818071..beab7b4 100644
+index beab7b4..a031f74 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -15,7 +15,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+@@ -47,7 +47,9 @@ WESTON_CONF_OPTS += --disable-rdp-compositor
+ endif
  
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
--	--disable-egl \
- 	--disable-simple-egl-clients \
- 	--disable-xwayland \
- 	--disable-x11-compositor \
-@@ -28,6 +27,12 @@ WESTON_CONF_OPTS = \
- WESTON_MAKE_OPTS = \
- 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
- 
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
-+WESTON_DEPENDENCIES += libegl
-+else
-+WESTON_CONF_OPTS += --disable-egl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
+ ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
+-WESTON_CONF_OPTS += --enable-fbdev-compositor
++WESTON_CONF_OPTS += \
++	--enable-fbdev-compositor \
++	WESTON_NATIVE_BACKEND=fbdev-backend.so
  else
-@@ -53,7 +58,6 @@ WESTON_CONF_OPTS += --enable-rpi-compositor \
- 	--disable-resize-optimization \
- 	--disable-setuid-install \
- 	--disable-xwayland-test \
--	--disable-simple-egl-clients \
- 	WESTON_NATIVE_BACKEND=rpi-backend.so
- else
- WESTON_CONF_OPTS += --disable-rpi-compositor
+ WESTON_CONF_OPTS += --disable-fbdev-compositor
+ endif
 -- 
 2.7.3
