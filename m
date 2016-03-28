@@ -1,84 +1,83 @@
-From: Matt Fornero <Matt.Fornero@mathworks.com>
-Date: Mon, 28 Mar 2016 15:24:10 +0000
-Subject: [Buildroot] [PATCH] toolchain-external: Commonize /lib/<tuple>
- symlinks
-In-Reply-To: <56F805B2.40703@mind.be>
-References: <a7c3e2bed5654819b3ad564f7d28d233@ex13amer-00-ah.ad.mathworks.com>
- <56F805B2.40703@mind.be>
-Message-ID: <30e43b78b0e2471a8a825903433106f8@ex13amer-00-ah.ad.mathworks.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Mon, 28 Mar 2016 17:31:37 +0200
+Subject: [Buildroot] [PATCH v2 06/18] package/opencv3: bump version to
+	3.1.0
+In-Reply-To: <cssnscxfrm.ln2@ID-313208.user.individual.net>
+References: <1459070223-5901-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459070223-5901-7-git-send-email-bernd.kuhls@t-online.de>
+ <CAHXCMMLcd313SJ-JMVRoS4UOhH_FG79g5yv463Y6r4EwgKfrMg@mail.gmail.com>
+ <69clscxmj.ln2@ID-313208.user.individual.net>
+ <CAHXCMMKvEgV2MbMZFpUJVOad5D+Z_qszNkwKMe6D=RzL5Gp9sQ@mail.gmail.com>
+ <cssnscxfrm.ln2@ID-313208.user.individual.net>
+Message-ID: <CAHXCMM+PLYS5RE=tXHBu6xGB6au4KP=fxKO-Pn9VW2Sc-Q7FaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: Arnout Vandecappelle [mailto:arnout at mind.be]
-> 
->   Hi Matt,
-> 
->   An external toolchain patch as your first contribution, that's...
-> ambitious...
-> The external toolchain support is pretty fragile, we are careful about
-> touching it, so it could take months before your patch gets applied.
+On Mon, Mar 28, 2016 at 4:49 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Am Sun, 27 Mar 2016 19:01:12 +0200 schrieb Samuel Martin:
+>
+>> On Sun, Mar 27, 2016 at 5:53 PM, Bernd Kuhls
+>> <bernd.kuhls@t-online.de> wrote:
+>>> Hi Samuel,
+>>>
+>>> Am Sun, 27 Mar 2016 15:05:42 +0200 schrieb Samuel Martin:
+>>>
+>>>>> -       -DWITH_OPENGL=OFF \
+>>>>> -       -DWITH_OPENMP=OFF \
+>>>> AFAICS, these 2 options still exist (see [2,3]).
+>>>
+>>> Yes, and they are used later on in opencv3.mk:
+>>>
+>>> ifeq ($(BR2_PACKAGE_OPENCV3_WITH_OPENGL),y)
+>>> OPENCV3_CONF_OPTS += -DWITH_OPENGL=ON OPENCV3_DEPENDENCIES += libgl
+>>> else OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF endif
+>>>
+>>> OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if
+>>> $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
+>>>
+>>> Is there a reason why they are disabled in the first place?
+>> Yes, there is reason ;-)
+>
+> Hi Samuel,
+>
+> even after your last explanation I do not understand why -DWITH_OPENGL
+> and -DWITH_OPENMP are present twice in opencv3.mk so I am going to repeat
+> my question based on current buildroot git master:
+>
+> In line 207 opengl support is disabled:
+> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n207
+>>       -DWITH_OPENGL=OFF \
+>
+> In line 271 this command is repeated
+> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n271
+>>OPENCV3_CONF_OPTS += -DWITH_OPENGL=OFF
+Well, clearly I should have drunk more coffe the day I did that.
 
-Hi Arnout,
+>
+> The same duplication is present for openmp
+> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n208
+>>       -DWITH_OPENMP=OFF \
+>
+> https://git.busybox.net/buildroot/tree/package/opencv3/opencv3.mk#n274
+>>OPENCV3_CONF_OPTS += -DWITH_OPENMP=$(if $(BR2_GCC_ENABLE_OPENMP),ON,OFF)
+ditto
 
-Understood-- there's not a lot of urgency on our side; we generally 
-re-sync to upstream every ~6 months. We're using Buildroot to (among
-other things) generate images for Altera's SoC FPGA parts, and need to
-use the version of the Linaro toolchain they ship. Previously I'd been
-hacking the .mk file to properly describe the GCC version, headers
-version, etc, while still getting the symlinks-- this seemed cleaner. If
-we can get to the point where my co-workers can merge in upstream
-changes without having to touch the toolchain files, I'd be happy!
+>
+> I see no reason to keep lines 207-208.
+Indeed, feel free to post a patch removing them ;-)
 
-...
-> > +config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-> > +	bool
-> > +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM &&
-> BR2_HOSTARCH = "x86"
-> 
->   The HOSTARCH condition is unnecessary.
+Note that in cmake, if the same definition is several time on the
+commd line, the last occurence will win, so if one does:
+  cmake . -DFOO=foo -DFOO=bar
+the actual value of the FOO variable will be "bar".
+So, in this case the duplicate options were harmless because the right
+values are set after the wrong ones on the command line, but
+nonetheless this is messy :-/. Sorry about that.
 
-Ok-- I wasn't sure about this-- from what I can see the lines in the .mk
-file that I'm replacing only install the post-staging hook for x86, was
-there a reason for that?
+Regards,
 
-...
-> > +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64 &&
-> BR2_HOSTARCH = "x86"
-> > +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB &&
-> BR2_HOSTARCH = "x86"
-> > +	default y if BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> > +	default n
-> 
->   default n is not necessary.
-
-I'll remove the line-- wasn't super familiar with this style of Kconfig
-
-> >
-> > +config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> > +	bool "Symlink /lib/<tuple>?"
-> 
->   I would leave out the ? at the end. The HAS options above have it, but
-> that's about the only situation we ever have a question mark.
-> 
-
-I'll drop the "?" 
-
->   I was also thinking if we shouldn't just create the symlink
-> unconditionally.
-> But it's really just the Linaro toolchains that need it, so it doesn't make
-> that much sense.
-
-I also looked at modifying / cloning the toolchain_find_libdir and
-create_lib_symlinks functions, but these seemed much more fragile. The 
-opt-in Kconfig option seemed like the least invasive way to modify the
-code at this point.
-
-> 
->   But basically, it looks good to me.
-
-I'll go ahead and submit a v2 of this with the above changes
-
--Matt
+-- 
+Samuel
