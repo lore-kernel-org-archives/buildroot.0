@@ -1,213 +1,570 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Mon, 28 Mar 2016 11:59:25 -0700
-Subject: [Buildroot] [PATCH V2] Add Xen 4.6
-In-Reply-To: <56F7D7FA.40001@mind.be>
-References: <1457483717-17947-1-git-send-email-alistair.francis@xilinx.com>
- <56F7D7FA.40001@mind.be>
-Message-ID: <CAKmqyKOCUKKQJRg6jK5TdJ33XbyATjsWrj41Gdy2zU7FwHz7mg@mail.gmail.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Mon, 28 Mar 2016 19:40:27 +0000
+Subject: [Buildroot] [PATCH v2] radlib: new package
+Message-ID: <1459194027.3607.13.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Mar 27, 2016 at 5:54 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 03/09/16 01:35, Alistair Francis wrote:
->>
->> Add support to compile Xen 4.6 and Xen tools.
->>
->> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
->> ---
->> V2:
->>   - Lots of fixups pointed out by Arnout Vandecappelle
->>
->>   package/Config.in     |  1 +
->>   package/xen/Config.in | 36 ++++++++++++++++++++++++++++++++++++
->>   package/xen/xen.hash  |  2 ++
->>   package/xen/xen.mk    | 46
->> ++++++++++++++++++++++++++++++++++++++++++++++
->>   4 files changed, 85 insertions(+)
->>   create mode 100644 package/xen/Config.in
->>   create mode 100644 package/xen/xen.hash
->>   create mode 100644 package/xen/xen.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index d916154..37be762 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -1656,6 +1656,7 @@ endif
->>         source "package/tpm-tools/Config.in"
->>         source "package/unscd/Config.in"
->>         source "package/util-linux/Config.in"
->> +       source "package/xen/Config.in"
->>   endmenu
->>
->>   menu "Text editors and viewers"
->> diff --git a/package/xen/Config.in b/package/xen/Config.in
->> new file mode 100644
->> index 0000000..4235f48
->> --- /dev/null
->> +++ b/package/xen/Config.in
->> @@ -0,0 +1,36 @@
->> +config BR2_PACKAGE_XEN
->> +       bool "xen"
->> +       # Xen only supports these architectures
->> +       depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64
->> +       depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
->> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
->> +       depends on BR2_USE_WCHAR # libglib2, util-linux
->> +       select BR2_PACKAGE_LIBAIO
->> +       select BR2_PACKAGE_LIBGLIB2
->> +       select BR2_PACKAGE_NCURSES
->> +       select BR2_PACKAGE_OPENSSL
->> +       select BR2_PACKAGE_PIXMAN
->> +       select BR2_PACKAGE_YAJL
->> +       help
->> +         This builds the Xen hypervisor and toolstack.
->
->
->  There should be an empty line here.
->
->> +         http://www.xenproject.org/
->> +
->> +if BR2_PACKAGE_XEN
->> +
->> +config BR2_PACKAGE_XEN_HYPERVISOR
->> +       bool "Build the Xen hypervisor"
->> +       default y
->> +       help
->> +         The Xen binaries are avaliable in ./usr/lib/xen/
->
->
->  No . in the beginning of the path, it's the absolute path on the target.
->
->> +         See http://wiki.xenproject.org/wiki/Getting_Started for using
->> the Xen hypervisor.
->
->
->  Wrap at 72 columns (where the tab counts for 8).
->
->> +
->> +config BR2_PACKAGE_XEN_TOOLS
->> +       bool "Build the Xen tools"
->> +       depends on !BR2_STATIC_LIBS # dtc (libfdt)
->> +       select BR2_PACKAGE_DTC
->> +       select BR2_PACKAGE_UTIL_LINUX
->> +       select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->
->
->  It also seems to need:
->
->         select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
->
->
->> +       help
->> +         The Xen tools can be accessed by the xl command.
->> +
->> +endif
->> diff --git a/package/xen/xen.hash b/package/xen/xen.hash
->> new file mode 100644
->> index 0000000..c124b3a
->> --- /dev/null
->> +++ b/package/xen/xen.hash
->> @@ -0,0 +1,2 @@
->> +# Locally computed
->> +sha256 6fa1c2431df55aa5950d248e6093b8c8c0f11c357a0adbd348a2186478e80909
->> xen-4.6.0.tar.gz
->> diff --git a/package/xen/xen.mk b/package/xen/xen.mk
->> new file mode 100644
->> index 0000000..2c0a4c9
->> --- /dev/null
->> +++ b/package/xen/xen.mk
->> @@ -0,0 +1,46 @@
->>
->> +################################################################################
->> +#
->> +# Xen
->> +#
->>
->> +################################################################################
->> +
->> +XEN_VERSION = 4.6.0
->> +XEN_SITE = http://bits.xensource.com/oss-xen/release/$(XEN_VERSION)
->> +XEN_LICENSE = GPLv2
->> +XEN_LICENSE_FILES = COPYING
->> +
->> +ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
->> +XEN_INSTALL_IMAGES = YES
->> +endif
->> +
->> +XEN_DEPENDENCIES += libaio libglib2 ncurses openssl pixman yajl
->> +
->> +XEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR)
->> +
->> +XEN_CONF_OPTS += --disable-ocamltools
->
->
->  For some reason, it doesn't seem to be cross-compiling for me, it uses
-> "gcc" to build. I think you need to pass TARGET_CONFIGURE_OPTS in
-> XEN_MAKE_ENV.
+Delta's from v1:-
 
-I see the same problem. I tried using TARGET_CONFIGURE_OPTS in
-XEN_MAKE_ENV but it still uses GCC.
+ * Complete rework of patch for the package's autotools implementation
+  * Removed references to prefix.
+  * Reworked database support to use PKG_CHECK_MODULES and
+AC_PATH_PROG.
+  * Used '--with--somedb' to indicate which database backend to build
+with. (The radlib build ends up with conflicting symbols if more than
+one is enabled at the same time, we prevent this in the package's .mk).
+ * Complete rework of the Kconfig.
+  * Database support is only enabled when BR2_PACKAGE_(mysql, sqlite or
+postgresql) are set.
+  * Database backend is selected by 'choice' when more than one is
+enabled. 
+ * Other tidy up's recommended for the v1 patch. 
+  * Included a comment on radlib.hash.
+  * Added signed off line and description to the patch.
+  * Removed no_sync from mysql.
+  * etc.
 
-The configure scripts detects an AArch64 target correctly, but it
-still uses GCC. Any other ideas?
+radlib is a rapid application development library for unix
+multi-process applications. It uses SYS V IPC facilities and
+FIFOs to provide an RTOS-like, event-driven, distributed
+framework. Processes may be run as daemons or have a controlling
+terminal.
 
-Thanks,
+Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+---
+ package/Config.in                                  |   1 +
+ ...0001-Update-to-autoconf-to-use-pkg-config.patch | 388
++++++++++++++++++++++
+ package/radlib/Config.in                           |  37 ++
+ package/radlib/radlib.hash                         |   2 +
+ package/radlib/radlib.mk                           |  28 ++
+ 5 files changed, 456 insertions(+)
+ create mode 100644 package/radlib/0001-Update-to-autoconf-to-use-pkg
+-config.patch
+ create mode 100644 package/radlib/Config.in
+ create mode 100644 package/radlib/radlib.hash
+ create mode 100644 package/radlib/radlib.mk
 
-Alistair
-
->
->> +
->> +ifeq ($(BR2_PACKAGE_XEN_HYPERVISOR),y)
->> +XEN_MAKE_OPTS += dist-xen
->> +
->> +define XEN_INSTALL_IMAGES_CMDS
->> + cp $(@D)/xen/xen $(BINARIES_DIR)
->
->
->  Commands should be indented with a tab.
->
->> +endef
->> +else
->> +XEN_CONF_OPTS += --disable-xen
->> +endif
->> +
->> +ifeq ($(BR2_PACKAGE_XEN_TOOLS),y)
->> +XEN_DEPENDENCIES += dtc util-linux
->> +XEN_INSTALL_TARGET_OPTS += install-tools
->> +XEN_MAKE_OPTS += dist-tools
->> +
->> +define XEN_INSTALL_INIT_SYSV
->> + mv $(TARGET_DIR)/etc/init.d/xencommons
->> $(TARGET_DIR)/etc/init.d/S50xencommons
->> + mv $(TARGET_DIR)/etc/init.d/xen-watchdog
->> $(TARGET_DIR)/etc/init.d/S50xen-watchdog
->> + mv $(TARGET_DIR)/etc/init.d/xendomains
->> $(TARGET_DIR)/etc/init.d/S60xendomains
->
->
->  Same here.
->
->
->  Regards,
->  Arnout
->
->
->> +endef
->> +else
->> +XEN_CONF_OPTS += --disable-tools
->> +endif
->> +
->> +$(eval $(autotools-package))
->>
->
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/Config.in b/package/Config.in
+index 8208da8..13fb380 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1260,6 +1260,7 @@ endif
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
++	source "package/radlib/Config.in"
+ 	source "package/startup-notification/Config.in"
+ 	source "package/tz/Config.in"
+ 	source "package/tzdata/Config.in"
+diff --git a/package/radlib/0001-Update-to-autoconf-to-use-pkg
+-config.patch b/package/radlib/0001-Update-to-autoconf-to-use-pkg
+-config.patch
+new file mode 100644
+index 0000000..f98b9d5
+--- /dev/null
++++ b/package/radlib/0001-Update-to-autoconf-to-use-pkg-config.patch
+@@ -0,0 +1,388 @@
++From d4c1b74a6624da7cc217c6b1aef59dc60b7d20c0 Mon Sep 17 00:00:00 2001
++From: Ray Kinsella <ray.kinsella@intel.com>
++Date: Sun, 27 Mar 2016 16:38:16 +0100
++Subject: [PATCH] Update to autoconf to use pkg-config
++
++Updates to autoconf as follows;
++
++ * Use pkg-config for postgresql and sqlite
++ * Use mysql-config for mysql
++ * Also removed unecessary conditionals from sub-makefiles
++
++Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
++---
++ configure.ac          | 88
++++++++++++++++++++++++++++++++++++++++++++++++++
++ configure.in          | 91 ------------------------------------------
+---------
++ debug/Makefile.am     | 32 +++---------------
++ msgRouter/Makefile.am | 34 ++++---------------
++ src/Makefile.am       | 36 ++++++++------------
++ 5 files changed, 112 insertions(+), 169 deletions(-)
++ create mode 100644 configure.ac
++ delete mode 100644 configure.in
++
++diff --git a/configure.ac b/configure.ac
++new file mode 100644
++index 0000000..ba493f5
++--- /dev/null
+++++ b/configure.ac
++@@ -0,0 +1,88 @@
+++# Process this file with autoconf to produce a configure script.
+++
+++AC_PREREQ(2.5)
+++AC_INIT([radlib],[2.12.0],[mteel2005 at gmail.com])
+++AC_CONFIG_SRCDIR([h/radmsgLog.h])
+++AM_INIT_AUTOMAKE([subdir-objects])
+++AM_CONFIG_HEADER([config.h])
+++
+++AC_ARG_WITH([postgresql], AS_HELP_STRING([--with-postgresql], [Build
+with postgresql]))
+++if test "x$with_postgresql" = "xyes"; then
+++ PKG_CHECK_MODULES([POSTGRESQL], [libpq], [have_libpq=yes],
+[have_libpq=no])
+++fi
+++AM_CONDITIONAL([HAVE_POSTGRESQL],  [test "$have_libpq" = "yes"])
+++
+++AC_ARG_WITH([mysql], AS_HELP_STRING([--with-mysql], [Build with
+mysql]))
+++if test "x$with_mysql" = "xyes"; then
+++        AC_PATH_PROG([MYSQL_CONFIG], [mysql_config])
+++        if test "x$MYSQL_CONFIG" != "x";then
+++                MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
+++                MYSQL_LIBS=`$MYSQL_CONFIG --libs`
+++                AC_SUBST([MYSQL_CFLAGS])
+++                AC_SUBST([MYSQL_LIBS])
+++        fi
+++fi
+++AM_CONDITIONAL([HAVE_MYSQL],  [test "x$MYSQL_CONFIG" != "x"])
+++
+++AC_ARG_WITH([sqlite], AS_HELP_STRING([--with-sqlite], [Build with
+sqlite]))
+++if test "x$with_sqlite" = "xyes"; then
+++	PKG_CHECK_MODULES([SQLITE3], [sqlite3],
+[have_libsqlite3=yes], [have_libsqlite3=no])
+++fi
+++AM_CONDITIONAL([HAVE_SQLITE3],  [test "$have_libsqlite3" = "yes"])
+++
+++# Check for big endian host:
+++AC_C_BIGENDIAN()
+++
+++# Checks for programs.
+++AC_PROG_CC
+++AC_PROG_INSTALL
+++AC_PROG_LIBTOOL
+++
+++# Set a flag here if we are cross compiling (must be after
+AC_PROG_CC)
+++AM_CONDITIONAL(CROSSCOMPILE, test x$cross_compiling = xyes)
+++
+++# Checks for libraries.
+++AC_CHECK_LIB([c], [strncpy])
+++AC_CHECK_LIB([m], [exp])
+++
+++# Checks for header files.
+++AC_HEADER_STDC
+++AC_HEADER_SYS_WAIT
+++AC_CHECK_HEADERS([fcntl.h \
+++                  stdlib.h \
+++                  string.h \
+++                  sys/time.h \
+++                  syslog.h \
+++                  termios.h \
+++                  unistd.h])
+++
+++# Checks for typedefs, structures, and compiler characteristics.
+++AC_C_CONST
+++AC_TYPE_PID_T
+++AC_HEADER_TIME
+++AC_STRUCT_TM
+++
+++# Checks for library functions.
+++AC_FUNC_FORK
+++AC_FUNC_MALLOC
+++AC_FUNC_SELECT_ARGTYPES
+++AC_TYPE_SIGNAL
+++AC_FUNC_STAT
+++AC_FUNC_VPRINTF
+++AC_CHECK_FUNCS([getcwd \
+++                gethostname \
+++                gettimeofday \
+++                memset \
+++                mkdir \
+++                mkfifo \
+++                select \
+++                strchr \
+++                strerror \
+++                strrchr])
+++
+++AC_CONFIG_FILES([Makefile \
+++                 src/Makefile \
+++                 msgRouter/Makefile \
+++                 debug/Makefile])
+++AC_OUTPUT
+++
++diff --git a/configure.in b/configure.in
++deleted file mode 100644
++index 47e507e..0000000
++--- a/configure.in
+++++ /dev/null
++@@ -1,91 +0,0 @@
++-# Process this file with autoconf to produce a configure script.
++-
++-AC_PREREQ(2.5)
++-AC_INIT([radlib],[2.12.0],[mteel2005 at gmail.com])
++-AC_CONFIG_SRCDIR([h/radmsgLog.h])
++-AM_INIT_AUTOMAKE([radlib],[2.12.0])
++-AM_CONFIG_HEADER([config.h])
++-
++-AC_ARG_ENABLE(mysql,
++-[  --enable-mysql                 include radlib MySQL database
+support],
++-[case "${enableval}" in
++-  yes) mysql=true ;;
++-  no)  mysql=false ;;
++-  *) mysql=false ;;
++-esac],[mysql=false])
++-AM_CONDITIONAL(MYSQL, test x$mysql = xtrue)
++-
++-AC_ARG_ENABLE(pgresql,
++-[  --enable-pgresql               include radlib postgreSQL database
+support],
++-[case "${enableval}" in
++-  yes) pgresql=true ;;
++-  no)  pgresql=false ;;
++-  *) pgresql=false ;;
++-esac],[pgresql=false])
++-AM_CONDITIONAL(PGRESQL, test x$pgresql = xtrue)
++-
++-AC_ARG_ENABLE(sqlite,
++-[  --enable-sqlite                include radlib sqlite database
+support],
++-[case "${enableval}" in
++-  yes) sqlite=true ;;
++-  no)  sqlite=false ;;
++-  *) sqlite=false ;;
++-esac],[sqlite=false])
++-AM_CONDITIONAL(SQLITE, test x$sqlite = xtrue)
++-
++-# Check for big endian host:
++-AC_C_BIGENDIAN()
++-
++-# Checks for programs.
++-AC_PROG_CC
++-AC_PROG_INSTALL
++-AC_PROG_LIBTOOL
++-
++-# Set a flag here if we are cross compiling (must be after
+AC_PROG_CC)
++-AM_CONDITIONAL(CROSSCOMPILE, test x$cross_compiling = xyes)
++-
++-# Checks for libraries.
++-AC_CHECK_LIB([c], [strncpy])
++-AC_CHECK_LIB([m], [exp])
++-
++-# Checks for header files.
++-AC_HEADER_STDC
++-AC_HEADER_SYS_WAIT
++-AC_CHECK_HEADERS([fcntl.h \
++-                  stdlib.h \
++-                  string.h \
++-                  sys/time.h \
++-                  syslog.h \
++-                  termios.h \
++-                  unistd.h])
++-
++-# Checks for typedefs, structures, and compiler characteristics.
++-AC_C_CONST
++-AC_TYPE_PID_T
++-AC_HEADER_TIME
++-AC_STRUCT_TM
++-
++-# Checks for library functions.
++-AC_FUNC_FORK
++-AC_FUNC_MALLOC
++-AC_FUNC_SELECT_ARGTYPES
++-AC_TYPE_SIGNAL
++-AC_FUNC_STAT
++-AC_FUNC_VPRINTF
++-AC_CHECK_FUNCS([getcwd \
++-                gethostname \
++-                gettimeofday \
++-                memset \
++-                mkdir \
++-                mkfifo \
++-                select \
++-                strchr \
++-                strerror \
++-                strrchr])
++-
++-AC_CONFIG_FILES([Makefile \
++-                 src/Makefile \
++-                 msgRouter/Makefile \
++-                 debug/Makefile])
++-AC_OUTPUT
++-
++diff --git a/debug/Makefile.am b/debug/Makefile.am
++index 00f3b13..fde57d5 100644
++--- a/debug/Makefile.am
+++++ b/debug/Makefile.am
++@@ -4,7 +4,7 @@
++ bin_PROGRAMS = raddebug
++ 
++ # define include directories
++-INCLUDES = \
+++AM_CFLAGS = \
++ 		-I$(top_srcdir)/h \
++ 		-D_GNU_SOURCE
++ 
++@@ -15,30 +15,8 @@ raddebug_SOURCES  = \
++ # define libraries
++ raddebug_LDADD   = -lrad -lpthread 
++ 
++-if MYSQL
++-raddebug_LDADD   += -lmysqlclient
++-else
++-if PGRESQL
++-raddebug_LDADD   += -lpq
++-endif
++-endif
++-if SQLITE
++-raddebug_LDADD   += -lsqlite3
++-endif
++-
++ # define library directories
++-raddebug_LDFLAGS = -L../src/.libs -L$(prefix)/lib -L/usr/lib
++-INCLUDES         += -I$(prefix)/include -I/usr/include
++-
++-if MYSQL
++-raddebug_LDFLAGS += -L$(prefix)/lib64/mysql -L$(prefix)/lib/mysql 
+-L/usr/lib64/mysql -L/usr/lib/mysql
++-else
++-if PGRESQL
++-raddebug_LDFLAGS += -L$(prefix)/pgsql/lib
++-INCLUDES         += -I$(prefix)/pgsql/include
++-endif
++-endif
++-
++-if CROSSCOMPILE
++-raddebug_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o
+$(prefix)/lib/crtn.o
++-endif
+++raddebug_LDFLAGS = -L../src/.libs \
+++		$(SQLITE3_LIBS) \
+++		$(MYSQL_LIBS) \
+++		$(POSTGRESQL_LIBS)
++diff --git a/msgRouter/Makefile.am b/msgRouter/Makefile.am
++index 5a20421..6f13a4e 100644
++--- a/msgRouter/Makefile.am
+++++ b/msgRouter/Makefile.am
++@@ -4,7 +4,7 @@
++ bin_PROGRAMS = radmrouted
++ 
++ # define include directories
++-INCLUDES = \
+++AM_CFLAGS = \
++ 		-I$(top_srcdir)/h \
++ 		-D_GNU_SOURCE
++ 
++@@ -13,32 +13,10 @@ radmrouted_SOURCES  = \
++ 		$(top_srcdir)/msgRouter/msgRouter.c
++ 
++ # define libraries
++-radmrouted_LDADD   = -lrad -lpthread
++-
++-if MYSQL
++-radmrouted_LDADD   += -lmysqlclient
++-else
++-if PGRESQL
++-radmrouted_LDADD   += -lpq
++-endif
++-endif
++-if SQLITE
++-radmrouted_LDADD   += -lsqlite3
++-endif
+++radmrouted_LDADD  = -lrad -lpthread
++ 
++ # define library directories
++-radmrouted_LDFLAGS = -L../src/.libs -L$(prefix)/lib -L/usr/lib
++-INCLUDES           += -I$(prefix)/include -I/usr/include
++-
++-if MYSQL
++-radmrouted_LDFLAGS += -L$(prefix)/lib64/mysql -L$(prefix)/lib/mysql 
+-L/usr/lib64/mysql -L/usr/lib/mysql
++-else
++-if PGRESQL
++-radmrouted_LDFLAGS += -L$(prefix)/lib -L$(prefix)/pgsql/lib
++-INCLUDES           += -I$(prefix)/pgsql/include
++-endif
++-endif
++-
++-if CROSSCOMPILE
++-radmrouted_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o
+$(prefix)/lib/crtn.o
++-endif
+++radmrouted_LDFLAGS = -L../src/.libs \
+++			$(SQLITE3_LIBS) \
+++			$(MYSQL_LIBS) \
+++			$(POSTGRESQL_LIBS)
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 38b2ac8..25d16cf 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -12,45 +12,35 @@ SUBDIRS =
++ #define the library to be built
++ lib_LTLIBRARIES = librad.la
++ 
++-if MYSQL
++-MY_INCLUDES 	= \
++-		-I$(prefix)/include/mysql \
++-		-I/usr/include/mysql
++-MY_SOURCES  	= \
+++if HAVE_MYSQL
+++MYSQL_SOURCES  	= \
++ 		$(top_srcdir)/database/mysql/my_database.c \
++ 		$(top_srcdir)/src/raddatabase.c
++ MYSQL_HDRS	= \
++ 		$(top_srcdir)/h/raddatabase.h
++ endif
++-if PGRESQL
++-PG_INCLUDES 	= \
++-		-I$(prefix)/include \
++-		-I/usr/include
++-PG_SOURCES	= \
+++if HAVE_POSTGRESQL
+++PGSQL_SOURCES	= \
++ 		$(top_srcdir)/database/postgresql/pg_database.c \
++ 		$(top_srcdir)/src/raddatabase.c
++ PGSQL_HDRS	= \
++ 		$(top_srcdir)/h/raddatabase.h \
++ 		$(top_srcdir)/database/postgresql/_pg-types.h
++ endif
++-if SQLITE
++-SQ_INCLUDES 	= \
++-		-I$(prefix)/include \
++-		-I/usr/include
++-SQ_SOURCES	= \
+++if HAVE_SQLITE3
+++SQLITE_SOURCES	= \
++ 		$(top_srcdir)/src/radsqlite.c
++ SQLITE_HDRS	= \
++ 		$(top_srcdir)/h/radsqlite.h
++ endif
++ 
++ # define include directories
++-INCLUDES = \
+++AM_CFLAGS = \
++ 		-I$(top_srcdir)/h \
++-		-I$(prefix)/include \
++ 		-D_GNU_SOURCE \
++-		$(MY_INCLUDES) \
++-		$(PG_INCLUDES) \
++-		$(SQ_INCLUDES)
+++		$(MYSQL_CFLAGS) \
+++		$(SQLITE3_CFLAGS) \
+++		$(POSTGRESQL_CFLAGS)
++ 
++ 
++ 
++@@ -86,9 +76,9 @@ librad_la_SOURCES  = \
++ 		$(top_srcdir)/src/radtimers.c \
++ 		$(top_srcdir)/src/radtimeUtils.c \
++ 		$(top_srcdir)/src/radUDPsocket.c \
++-		$(MY_SOURCES) \
++-		$(PG_SOURCES) \
++-		$(SQ_SOURCES)
+++		$(MYSQL_SOURCES) \
+++		$(PGSQL_SOURCES) \
+++		$(SQLITE_SOURCES)
++ 
++ 
++ # define the header files we install for the library
++-- 
++2.4.3
++
+diff --git a/package/radlib/Config.in b/package/radlib/Config.in
+new file mode 100644
+index 0000000..e77e03c
+--- /dev/null
++++ b/package/radlib/Config.in
+@@ -0,0 +1,37 @@
++config BR2_PACKAGE_RADLIB
++	bool "radlib"
++	help
++	  radlib is a rapid application development library for unix
++	  multi-process applications. It uses SYS V IPC facilities and
++	  FIFOs to provide an RTOS-like, event-driven, distributed
+framework.
++	  Processes may be run as daemons or have a controlling
+terminal.
++	  
++	  http://sourceforge.net/projects/radlib/
++
++choice
++	prompt "radlib database backend"
++	depends on BR2_PACKAGE_RADLIB
++	depends on BR2_PACKAGE_SQLITE \
++		|| BR2_PACKAGE_MYSQL \
++		|| BR2_PACKAGE_POSTGRESQL
++	help$
++		Selects the backend database: sqlite, mysql or
+postgresql
++
++config BR2_PACKAGE_RADLIB_SQLITE
++	bool "sqlite"
++	depends on BR2_PACKAGE_SQLITE
++	help
++		Configure radlib to use a sqlite database backend
++
++config BR2_PACKAGE_RADLIB_MYSQL
++	bool "mysql"
++	depends on BR2_PACKAGE_MYSQL
++	help
++		Configure radlib to use a mysql database backend
++
++config BR2_PACKAGE_RADLIB_POSTGRESQL
++	bool "postgresql"
++	depends on BR2_PACKAGE_POSTGRESQL
++	help
++		Configure radlib to use a postgresql database backend
++endchoice
+diff --git a/package/radlib/radlib.hash b/package/radlib/radlib.hash
+new file mode 100644
+index 0000000..2fbfbba
+--- /dev/null
++++ b/package/radlib/radlib.hash
+@@ -0,0 +1,2 @@
++# From http://sourceforge.net/projects/radlib/files/
++sha256 
+ 82b98bb5e08a500dea1e4252843b9c772fa1fb67ac8ab89ed64abdd5e22eca66 
+ radlib-2.12.0.tar.gz
+diff --git a/package/radlib/radlib.mk b/package/radlib/radlib.mk
+new file mode 100644
+index 0000000..5ff55ac
+--- /dev/null
++++ b/package/radlib/radlib.mk
+@@ -0,0 +1,28 @@
++######################################################################
+##########
++#
++# radlib
++#
++######################################################################
+##########
++
++RADLIB_VERSION = 2.12.0
++RADLIB_SITE = http://downloads.sourceforge.net/radlib
++RADLIB_INSTALL_STAGING = YES
++RADLIB_LICENSE = BSD-2c
++RADLIB_LICENSE_FILES = COPYING
++RADLIB_AUTORECONF = YES
++RADLIB_DEPENDENCIES = host-pkgconf
++
++ifeq ($(BR2_PACKAGE_RADLIB_SQLITE),y)
++	RADLIB_CONF_OPTS += --with-sqlite
++endif
++
++ifeq ($(BR2_PACKAGE_RADLIB_MYSQL),y)
++	RADLIB_CONF_ENV=ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bi
+n/mysql_config"
++	RADLIB_CONF_OPTS += --with-mysql
++endif
++
++ifeq ($(BR2_PACKAGE_RADLIB_POSTGRESQL),y)
++	RADLIB_CONF_OPTS += --with-postgresql
++endif
++
++$(eval $(autotools-package))
+-- 
+2.4.3
