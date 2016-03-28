@@ -1,121 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 Mar 2016 17:15:47 +0200
-Subject: [Buildroot] [PATCHv3] package/tvheadend: use wizard mode on first
-	run
-Message-ID: <1459178147-1201-1-git-send-email-yann.morin.1998@free.fr>
+From: Matt Fornero <Matt.Fornero@mathworks.com>
+Date: Mon, 28 Mar 2016 15:24:10 +0000
+Subject: [Buildroot] [PATCH] toolchain-external: Commonize /lib/<tuple>
+ symlinks
+In-Reply-To: <56F805B2.40703@mind.be>
+References: <a7c3e2bed5654819b3ad564f7d28d233@ex13amer-00-ah.ad.mathworks.com>
+ <56F805B2.40703@mind.be>
+Message-ID: <30e43b78b0e2471a8a825903433106f8@ex13amer-00-ah.ad.mathworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The format of the ACL database in tvheadend has changed, and generating
-a default user is a little bit more involved than just dumping a file in
-the correct locations: filenames are now md5sum (of something?) and the
-usernames and passwords now have their own DB.
+> From: Arnout Vandecappelle [mailto:arnout at mind.be]
+> 
+>   Hi Matt,
+> 
+>   An external toolchain patch as your first contribution, that's...
+> ambitious...
+> The external toolchain support is pretty fragile, we are careful about
+> touching it, so it could take months before your patch gets applied.
 
-However, tvheadend has a wizard mode, where it is possible to configure
-the basic features, of which creating an admin user.
+Hi Arnout,
 
-We remove our canned ACL database, and change the startup script to
-start in wizard mode on first run. We also switch to using our infra to
-set the permissions.
+Understood-- there's not a lot of urgency on our side; we generally 
+re-sync to upstream every ~6 months. We're using Buildroot to (among
+other things) generate images for Altera's SoC FPGA parts, and need to
+use the version of the Linaro toolchain they ship. Previously I'd been
+hacking the .mk file to properly describe the GCC version, headers
+version, etc, while still getting the symlinks-- this seemed cleaner. If
+we can get to the point where my co-workers can merge in upstream
+changes without having to touch the toolchain files, I'd be happy!
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+...
+> > +config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+> > +	bool
+> > +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM &&
+> BR2_HOSTARCH = "x86"
+> 
+>   The HOSTARCH condition is unnecessary.
 
----
-Changes v2 -> v3:
-  - use the infra to set permissions
+Ok-- I wasn't sure about this-- from what I can see the lines in the .mk
+file that I'm replacing only install the post-staging hook for x86, was
+there a reason for that?
 
-Changes v1 -> v2:
-  - drop the old accesscontrol file  (Thomas)
-  - create the home directory with appropriate rights
----
- package/tvheadend/Config.in       |  4 ++--
- package/tvheadend/S99tvheadend    |  5 +++++
- package/tvheadend/accesscontrol.1 | 13 -------------
- package/tvheadend/tvheadend.mk    | 13 +++++--------
- 4 files changed, 12 insertions(+), 23 deletions(-)
- delete mode 100644 package/tvheadend/accesscontrol.1
+...
+> > +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64 &&
+> BR2_HOSTARCH = "x86"
+> > +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB &&
+> BR2_HOSTARCH = "x86"
+> > +	default y if BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> > +	default n
+> 
+>   default n is not necessary.
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 095ec65..67a4b14 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_TVHEADEND
- 	  https://www.lonelycoder.com/redmine/projects/tvheadend/
- 
- 	  Note:
--	    - a default user has been created to log in the web configuration
--	      GUI: admin/admin; you can change it at your discretion at runtime.
-+	    - on first run, tvheadend will start in wizard mode; the webUI
-+	      is available on port 9981.
- 	    - if you want Avahi support, you'll need to enable:
- 	          Avahi, D-Bus, libdaemon
-diff --git a/package/tvheadend/S99tvheadend b/package/tvheadend/S99tvheadend
-index 75b66f3..65669ce 100644
---- a/package/tvheadend/S99tvheadend
-+++ b/package/tvheadend/S99tvheadend
-@@ -21,6 +21,11 @@ ARGS="-f"
- [ -z "${TVH_HTSP_PORT}" ] || ARGS="${ARGS} -e ${TVH_HTSP_PORT}"
- [ "${TVH_DEBUG}" = "1"  ] && ARGS="${ARGS} -s"
- 
-+# If first run, start in wizard mode
-+if [ -z "$(ls -1 /home/tvheadend/.hts/tvheadend/accesscontrol/ 2>/dev/null)" ]; then
-+    ARGS="${ARGS} -C"
-+fi
-+
- case "$1" in
-     start)
-         printf "Starting TVHeadend daemon: "
-diff --git a/package/tvheadend/accesscontrol.1 b/package/tvheadend/accesscontrol.1
-deleted file mode 100644
-index b920943..0000000
---- a/package/tvheadend/accesscontrol.1
-+++ /dev/null
-@@ -1,13 +0,0 @@
--{
--        "enabled": 1,
--        "username": "admin",
--        "password": "admin",
--        "comment": "TVHeadend admin user",
--        "prefix": "0.0.0.0/0",
--        "streaming": 1,
--        "dvr": 1,
--        "dvrallcfg": 1,
--        "webui": 1,
--        "admin": 1,
--        "id": "1"
--}
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 3398faf..42202f4 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -107,14 +107,8 @@ TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_CLEAN_SHARE
- #----------------------------------------------------------------------------
- # To run tvheadend, we need:
- #  - a startup script, and its config file
--#  - a default DB with a tvheadend admin
--#  - a non-root user to run as
--define TVHEADEND_INSTALL_DB
--	$(INSTALL) -D -m 0600 package/tvheadend/accesscontrol.1     \
--		$(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
--	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
--endef
--TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_INSTALL_DB
-+#  - a non-root user to run as, and a home for it that is not accessible
-+#    to the other users (because there will be crendentials in there)
- 
- define TVHEADEND_INSTALL_INIT_SYSV
- 	$(INSTALL) -D package/tvheadend/etc.default.tvheadend $(TARGET_DIR)/etc/default/tvheadend
-@@ -124,5 +118,8 @@ endef
- define TVHEADEND_USERS
- 	tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
- endef
-+define TVHEADEND_PERMISSIONS
-+	/home/tvheadend r 0700 tvheadend tvheadend - - - - -
-+endef
- 
- $(eval $(generic-package))
--- 
-1.9.1
+I'll remove the line-- wasn't super familiar with this style of Kconfig
+
+> >
+> > +config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> > +	bool "Symlink /lib/<tuple>?"
+> 
+>   I would leave out the ? at the end. The HAS options above have it, but
+> that's about the only situation we ever have a question mark.
+> 
+
+I'll drop the "?" 
+
+>   I was also thinking if we shouldn't just create the symlink
+> unconditionally.
+> But it's really just the Linaro toolchains that need it, so it doesn't make
+> that much sense.
+
+I also looked at modifying / cloning the toolchain_find_libdir and
+create_lib_symlinks functions, but these seemed much more fragile. The 
+opt-in Kconfig option seemed like the least invasive way to modify the
+code at this point.
+
+> 
+>   But basically, it looks good to me.
+
+I'll go ahead and submit a v2 of this with the above changes
+
+-Matt
