@@ -1,35 +1,111 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 28 Mar 2016 18:22:16 -0300
-Subject: [Buildroot] [PATCH 4/4] weston: handle optional libva support
-In-Reply-To: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459200136-30632-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1459200136-30632-4-git-send-email-gustavo@zacarias.com.ar>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 Mar 2016 23:36:54 +0200
+Subject: [Buildroot] [PATCH 4/9 v2] fs/initramfs: cleanup and enhance
+ comments
+In-Reply-To: <56F9727C.2050703@gmail.com>
+References: <cover.1457721607.git.yann.morin.1998@free.fr>
+ <6ac9c7aa0849c05d2caf0edba9920e7f425ee20e.1457721607.git.yann.morin.1998@free.fr>
+ <56F9727C.2050703@gmail.com>
+Message-ID: <20160328213654.GE3608@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There's no enable/disable option so it's just the dependency.
+Romain, All,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/weston/weston.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 2016-03-28 20:05 +0200, Romain Naour spake thusly:
+> Le 11/03/2016 19:41, Yann E. MORIN a ?crit :
+> > rootfs-initramfs is not using the generic fs infrastructure, because
+> > there is virtually nothing to do to build the initramfs image: there is
+> > no actual image to be built to begin with.
+> > 
+> > The only purpose of rootfs-initramfs is to ensure the rootfs.cpio image
+> > is built and then that the Linux kernel is rebuilt with that rootfs.cpio
+> > as initramfs source.
+> > 
+> > Using variables of the fs infra like if it were used is misleading. It
+> > looked nice as long as there was the possibility that rootfs-initramfs
+> > would one day use the fs infra. But there's no way that will happen any
+> > time soon.
+> > 
+> > Furthermore, the linux' rule linux-rebuild-with-initramfs now already
+> > depends on rootfs-cpio by itself, so we need not duplicate this
+> > dependency in rootfs-initramfs.
+> > LINUX_DIR
+> > Still, we want to advertise that the dependency is on rootfs-cpio, so
+> > we get nice dependency graphs (and not expose the internal
+> > linux-rebuild-with-initramfs rule to the users).
+> > 
+> > So, remove the variables and directly define the rules.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> > ---
+> >  fs/initramfs/initramfs.mk | 22 +++++++++++++++-------
+> >  1 file changed, 15 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+> > index db50812..9aca9c8 100644
+> > --- a/fs/initramfs/initramfs.mk
+> > +++ b/fs/initramfs/initramfs.mk
+> > @@ -5,17 +5,25 @@
+> >  #
+> >  ################################################################################
+> >  
+> > -ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
+> > -
+> > -ROOTFS_INITRAMFS_POST_TARGETS += linux-rebuild-with-initramfs
+> > -
+> > -
+> >  # The generic fs infrastructure isn't very useful here.
+> > +#
+> > +# The initramfs image does not actually build an image; its only purpose is:
+> > +# 1- to ensure rootfs.cpio is generated,
+> > +# 2- to then rebuild the kernel with rootfs.cpio as initramfs
+> > +#
+> > +# Note: ordering of the dependencies is not guaranteed here, but in
+> > +# linux/linux.mk, via the .stamp_initramfs_rebuilt stamp file, which depends
+> > +# on the rootfs-cpio filesystem rule.
+> 
+> As said previously, there is no more .stamp_initramfs_rebuilt file.
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index d2cfd6b..5705b0a 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -11,7 +11,8 @@ WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
--	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput
-+	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput \
-+	$(if $(BR2_PACKAGE_LIBVA),libva)
- 
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+Fixed.
+
+> Otherwise
+> Reviewed-by: Romain Naour <romain.naour@gmail.com>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Best regards,
+> Romain
+> 
+> > +#
+> > +# Note: the trick here is that we directly depend on rebuilding the Linux
+> > +# kernel image (which itself depends on the rootfs-cpio rule), while we
+> > +# advertise that our dependency is on the rootfs-cpio rule, which is
+> > +# cleaner in the dependency graph.
+> >  
+> > -rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) $(ROOTFS_INITRAMFS_POST_TARGETS)
+> > +rootfs-initramfs: linux-rebuild-with-initramfs
+> >  
+> >  rootfs-initramfs-show-depends:
+> > -	@echo $(ROOTFS_INITRAMFS_DEPENDENCIES)
+> > +	@echo rootfs-cpio
+> >  
+> >  .PHONY: rootfs-initramfs rootfs-initramfs-show-depends
+> >  
+> > 
+> 
+
 -- 
-2.7.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
