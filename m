@@ -1,104 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 28 Mar 2016 21:49:40 +0200
-Subject: [Buildroot] [PATCH v4 14/19] package/ffmpeg: Add patch required by
-	Kodi 16.0-Jarvis
+Date: Mon, 28 Mar 2016 21:49:44 +0200
+Subject: [Buildroot] [PATCH v4 18/19] package/tvheadend: bump version
 In-Reply-To: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459194585-12593-15-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459194585-12593-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Updated ffmpeg option name after upstream renamed it:
+https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../ffmpeg/0013-hevc-support-main10-decoding.patch | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
- create mode 100644 package/ffmpeg/0013-hevc-support-main10-decoding.patch
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ffmpeg/0013-hevc-support-main10-decoding.patch b/package/ffmpeg/0013-hevc-support-main10-decoding.patch
-new file mode 100644
-index 0000000..ef42394
---- /dev/null
-+++ b/package/ffmpeg/0013-hevc-support-main10-decoding.patch
-@@ -0,0 +1,77 @@
-+From bbab50b66f61f38415ea1fbc93314712b90901e2 Mon Sep 17 00:00:00 2001
-+From: Hendrik Leppkes <h.leppkes@gmail.com>
-+Date: Sat, 30 Jan 2016 17:10:56 +0100
-+Subject: [PATCH] hevc: support Main10 decoding through dxva2
-+
-+Patch is part of the Kodi patch set for ffmpeg, downloaded from
-+https://github.com/xbmc/FFmpeg/.
-+
-+Patch was backported from upstream commit:
-+http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=ccb94789e2968329947f1c2e00d019f387f9c409
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Changelog            |  4 ++++
-+ libavcodec/hevc.c    | 13 ++++++++++++-
-+ libavcodec/version.h |  2 +-
-+ 3 files changed, 17 insertions(+), 2 deletions(-)
-+
-+diff --git a/Changelog b/Changelog
-+index 2e1cd36..1c60cde 100644
-+--- a/Changelog
-++++ b/Changelog
-+@@ -1,6 +1,10 @@
-+ Entries are sorted chronologically from oldest to youngest within each release,
-+ releases are sorted from youngest to oldest.
-+ 
-++version <next>:
-++- DXVA2-accelerated HEVC Main10 decoding
-++
-++
-+ version 3.0:
-+ - Common Encryption (CENC) MP4 encoding and decoding support
-+ - DXV decoding
-+diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
-+index 203f90a..0d53a33 100644
-+--- a/libavcodec/hevc.c
-++++ b/libavcodec/hevc.c
-+@@ -347,7 +347,9 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fm
-+ 
-+     export_stream_params(s->avctx, &s->ps, sps);
-+ 
-+-    if (sps->pix_fmt == AV_PIX_FMT_YUV420P || sps->pix_fmt == AV_PIX_FMT_YUVJ420P) {
-++    switch (sps->pix_fmt) {
-++    case AV_PIX_FMT_YUV420P:
-++    case AV_PIX_FMT_YUVJ420P:
-+ #if CONFIG_HEVC_DXVA2_HWACCEL
-+         *fmt++ = AV_PIX_FMT_DXVA2_VLD;
-+ #endif
-+@@ -360,6 +362,15 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fm
-+ #if CONFIG_HEVC_VDPAU_HWACCEL
-+         *fmt++ = AV_PIX_FMT_VDPAU;
-+ #endif
-++        break;
-++    case AV_PIX_FMT_YUV420P10:
-++#if CONFIG_HEVC_DXVA2_HWACCEL
-++        *fmt++ = AV_PIX_FMT_DXVA2_VLD;
-++#endif
-++#if CONFIG_HEVC_D3D11VA_HWACCEL
-++        *fmt++ = AV_PIX_FMT_D3D11VA_VLD;
-++#endif
-++        break;
-+     }
-+ 
-+     if (pix_fmt == AV_PIX_FMT_NONE) {
-+diff --git a/libavcodec/version.h b/libavcodec/version.h
-+index 37a35e0..08140b0 100644
-+--- a/libavcodec/version.h
-++++ b/libavcodec/version.h
-+@@ -30,7 +30,7 @@
-+ 
-+ #define LIBAVCODEC_VERSION_MAJOR  57
-+ #define LIBAVCODEC_VERSION_MINOR  24
-+-#define LIBAVCODEC_VERSION_MICRO 102
-++#define LIBAVCODEC_VERSION_MICRO 103
-+ 
-+ #define LIBAVCODEC_VERSION_INT  AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, \
-+                                                LIBAVCODEC_VERSION_MINOR, \
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 14d0fb0..9406d08 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
++sha256	50ada2f30387f9526e1ed453f778686b443e599841a73a031cdd543b65e7a502	tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8.tar.gz
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 3398faf..a7a8218 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
++TVHEADEND_VERSION = cd9f07fb865e5700156546ee326fbaf42ee99cf8
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPLv3+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -81,7 +81,7 @@ define TVHEADEND_CONFIGURE_CMDS
+ 			--python="$(HOST_DIR)/usr/bin/python"	\
+ 			--enable-dvbscan			\
+ 			--enable-bundle				\
+-			--disable-libffmpeg_static		\
++			--disable-ffmpeg_static			\
+ 			--disable-hdhomerun_static		\
+ 			$(TVHEADEND_CONF_OPTS)			\
+ 	)
 -- 
 2.8.0.rc3
