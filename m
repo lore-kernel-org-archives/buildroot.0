@@ -1,42 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:14:38 +0200
-Subject: [Buildroot] [PATCH v2 04/17] uclibc: add patches to simplify
- Thumb handling
-In-Reply-To: <56ED743C.9070500@mind.be>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-5-git-send-email-thomas.petazzoni@free-electrons.com>
- <56ED743C.9070500@mind.be>
-Message-ID: <20160330001438.5b545763@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Mar 2016 00:17:16 +0200
+Subject: [Buildroot] [PATCH 3/6] package/ffmpeg: cosmetic change for the
+	mips fpu option
+In-Reply-To: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459289839-6230-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-On Sat, 19 Mar 2016 16:46:04 +0100, Arnout Vandecappelle wrote:
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.mk | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Thanks!
-
->   Upstream status? Knowing Waldemar's lightning reflexes, we will probably just 
-> bump the uClibc version rather than having these patches in Buildroot :-)
-
-I've submitted upstream 10 days ago. Got a bit of feedback from Rich
-Felker, but I replied to it and I don't think the feedback calls for a
-new iteration. No feedback from Waldemar so far.
-
-Note that the version sent upstream is in one single patch, as that's
-what Waldemar requested on IRC. I'm going to apply my patch to
-Buildroot with the separate patches, and I'll rework that later on
-when/if the patch gets accepted upstream.
-
-Thanks!
-
-Thomas
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 26633e4..49fc0d9 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -429,11 +429,9 @@ FFMPEG_CONF_OPTS += --enable-neon
+ endif
+ 
+ ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
+-FFMPEG_CONF_OPTS += \
+-	--disable-mipsfpu
++FFMPEG_CONF_OPTS += --disable-mipsfpu
+ else
+-FFMPEG_CONF_OPTS += \
+-	--enable-mipsfpu
++FFMPEG_CONF_OPTS += --enable-mipsfpu
+ endif
+ 
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.0.rc3
