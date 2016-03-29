@@ -1,42 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:15:14 +0200
-Subject: [Buildroot] [git commit] uclibc: gcc >= 4.9 can build a
-	thumb/thread uclibc
-Message-ID: <20160329222011.ABE50807EA@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 00:14:55 +0200
+Subject: [Buildroot] [git commit] uclibc: remove USE_BX handling
+Message-ID: <20160329222011.9F6D2807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45d7f014517ef7c71b180f5d726d06517d6658c1
+commit: https://git.buildroot.net/buildroot/commit/?id=0bbe85e6ea9ccf9f22bead7c45eaa3a4684200e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Older gcc were not capable of building a uClibc library, with threads
-enabled, in Thumb1. However, the issues have been fixed since gcc 4.9,
-so this commit narrows down the condition to just gcc 4.7 and 4.8.
+Now that uClibc is capable of figuring out by itself whether 'bx' can
+be used or not, we can simplify the logic in Buildroot.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/uclibc/uclibc.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/uclibc/Config.in |  5 -----
+ package/uclibc/uclibc.mk | 11 -----------
+ 2 files changed, 16 deletions(-)
 
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index 16bf89c..e722908 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -139,11 +139,6 @@ config BR2_UCLIBC_ARC_TYPE
+ 	default "ARC_CPU_700"	if BR2_arc770d
+ 	default "ARC_CPU_HS"	if BR2_archs38
+ 
+-config BR2_UCLIBC_ARM_BX
+-	bool
+-	depends on BR2_UCLIBC_TARGET_ARCH = "arm"
+-	default y if (BR2_ARM_CPU_HAS_THUMB || BR2_ARM_CPU_HAS_THUMB2)
+-
+ config BR2_UCLIBC_MIPS_ABI
+ 	string
+ 	depends on BR2_UCLIBC_TARGET_ARCH = "mips"
 diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index c981d80..ad94494 100644
+index 88a4a8c..c981d80 100644
 --- a/package/uclibc/uclibc.mk
 +++ b/package/uclibc/uclibc.mk
-@@ -75,8 +75,10 @@ define UCLIBC_ARM_ABI_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
- endef
- 
--# Thumb build is broken with threads, build in ARM mode
--ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-+# Thumb1 build is broken with threads with old gcc versions (4.7 and
-+# 4.8). Since all cores supporting Thumb1 also support ARM, we use ARM
-+# code in this case.
-+ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),y:yy)
+@@ -80,16 +80,6 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
  UCLIBC_EXTRA_CFLAGS += -marm
  endif
  
+-ifeq ($(BR2_UCLIBC_ARM_BX),y)
+-define UCLIBC_ARM_BX_CONFIG
+-	$(call KCONFIG_ENABLE_OPT,USE_BX,$(@D)/.config)
+-endef
+-else
+-define UCLIBC_ARM_BX_CONFIG
+-	$(call KCONFIG_DISABLE_OPT,USE_BX,$(@D)/.config)
+-endef
+-endif
+-
+ endif # arm
+ 
+ #
+@@ -362,7 +352,6 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
+-	$(UCLIBC_ARM_BX_CONFIG)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
+ 	$(UCLIBC_SH_TYPE_CONFIG)
