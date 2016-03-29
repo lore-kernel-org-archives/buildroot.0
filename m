@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:05:18 +0200
-Subject: [Buildroot] [PATCH] gamin: fix build with musl
-In-Reply-To: <d03fac44ed52ad7fe05fdd1bb6040a260cfc14b7.1456837391.git.baruch@tkos.co.il>
-References: <d03fac44ed52ad7fe05fdd1bb6040a260cfc14b7.1456837391.git.baruch@tkos.co.il>
-Message-ID: <20160330000518.22043b3d@free-electrons.com>
+Date: Wed, 30 Mar 2016 00:11:29 +0200
+Subject: [Buildroot] [PATCH] linux: Introduce DTB's bootargs fixup
+ feature
+In-Reply-To: <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
+References: <1458558329-19210-1-git-send-email-mcoquelin.stm32@gmail.com>
+ <20160321131206.1d3b29c7@free-electrons.com>
+ <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
+Message-ID: <20160330001129.656b6151@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,34 +15,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  1 Mar 2016 15:03:11 +0200, Baruch Siach wrote:
-> musl does not provide the non portable PTHREAD_MUTEX_RECURSIVE_NP. Add a patch
-> removing the assumption the PTHREAD_MUTEX_RECURSIVE_NP is available when
-> 'linux' is defined.
-> 
-> Upstream had no new release since 2008, so there is no much hope of getting
-> this fix applied upstream.
+On Mon, 21 Mar 2016 13:53:50 +0100, Maxime Coquelin wrote:
 
-Not quite true :) If you check https://git.gnome.org/browse/gamin/log/,
-there has been a commit in early February 2016. Granted, it was the
-first commit since almost two years, but still. It's worth submitting
-upstream :-)
-
-> Also, fix the pthread dependency comment. gamin code uses pthread directly.
+> > However, I am not entirely sure this is something we want to take in
+> > Buildroot. Indeed, your patch only allows to customize
+> > the /chosen/bootargs property, and not any other property of the Device
+> > Tree. If we want to do that via Config.in options, it suddenly becomes
+> > a lot more complicated.
+> Indeed, it will be difficult to extend it further than bootargs.
+> It works well for bootargs for two reasons:
+>  1- It is a generic property
+>  2- It is a string
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/3a9/3a9328f384fc648ae61316402a84eaffb175881b/
-> http://autobuild.buildroot.net/results/69d/69d2a93bc97ab0d70c3acb2f9c9f28612ea95871/
-> http://autobuild.buildroot.net/results/092/092ac7380beb8ce403a1a6fd8e4176e9234413a3/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch | 20 ++++++++++++++++++++
->  package/gamin/Config.in                              |  2 +-
->  2 files changed, 21 insertions(+), 1 deletion(-)
->  create mode 100644 package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
+> There could be other uses for DTB patching, such as MAC address assignment.
+> But I agree than doing this in Config.in makes no sense.
 
-Applied to master, thanks.
+Right.
+
+> > It is IMO even more important to do it this way since as of today, only
+> > one platform/board needs to adjust its bootargs this way. All other
+> > platforms have an ATAGs or DT compatible bootloader, where the bootargs
+> > customization is done via the bootloader, not via patching the DTB.
+> 
+> Ok, For sure it can be done, but I wanted to propose a generic way of
+> doing this.
+> Indeed, this is something other platforms could potentially use, even
+> if not the case today.
+> 
+> > Of course, let's see what others think.
+> 
+> Agree.
+> If it is decided to do this as post-image script, I will be happy to
+> implement it.
+
+Nobody spoke up, so let's say we'll do it in a post-image script for
+now. host-dtc is already visible in menuconfig, so it can be enabled in
+a defconfig, and therefore it's just a matter of enabling it and write
+the appropriate post-image script.
+
+Do you want to write a patch on top of my series adding Cortex-M
+support?
+
+Best regards,
 
 Thomas
 -- 
