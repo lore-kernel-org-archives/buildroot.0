@@ -1,96 +1,39 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 29 Mar 2016 23:56:41 +0200
-Subject: [Buildroot] [PATCH] raspberrypi,
- raspberrypi2: add a serial console
-In-Reply-To: <56FAE674.6080004@mind.be>
-References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
- <56FAE674.6080004@mind.be>
-Message-ID: <56FAFA19.9090406@lucaceresoli.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Mar 2016 23:57:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/linphone: port some stuff from
+ mediastreamer
+In-Reply-To: <1459283426-30883-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459283426-30883-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160329235725.54aecc20@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+Hello,
 
-On 29/03/2016 22:32, Arnout Vandecappelle wrote:
-> On 03/29/16 00:08, Luca Ceresoli wrote:
->> The current Buildroot defconfigs for Raspberry Pi and Raspberry Pi 2
->> instantiate a console on tty1, which appears on HDMI. Add a console on
->> the serial port (ttyAMA0) to be more consistent with other defconfigs
->> and provide a better out-of-the-box experience to users used to have a
->> serial console from Buildroot defconfigs.
->>
->> This requires two changes:
->>   1. have two 'console=' entries in the kernel command line;
->>   2. add a new getty process to the generated inittab.
->>
->> Step 2 requires a post-build script since the Buildroot makefiles can
->> configure only one console. But instead of simply adding a new getty
->> on ttyAMA0 (which would work) this patch actually changes
->> BR2_TARGET_GENERIC_GETTY_PORT from tty1 to ttyAMA0, then adds back
->> tty1 via post-build.sh. This is done only to avoid the
->> "GENERIC_SERIAL" comment where we instantiate an HDMI console, then
->> instantiate a really-serial console on another line.
->>
->> The result is these two inittab lines:
->>
->>    ttyAMA0::respawn:/sbin/getty -L  ttyAMA0 0 vt100 # GENERIC_SERIAL
->>    tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console
->>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> ---
->>
->> Tested on both Raspberry Pi B and Raspberry Pi 2, each on serial and
->> HDMI console.
->> ---
->>   board/raspberrypi/post-build.sh  | 9 +++++++++
->>   configs/raspberrypi2_defconfig   | 3 ++-
->>   configs/raspberrypi_defconfig    | 3 ++-
->>   package/rpi-firmware/cmdline.txt | 2 +-
->>   4 files changed, 14 insertions(+), 3 deletions(-)
->>   create mode 100755 board/raspberrypi/post-build.sh
->>
->> diff --git a/board/raspberrypi/post-build.sh
->> b/board/raspberrypi/post-build.sh
->> new file mode 100755
->> index 000000000000..7eae14a88569
->> --- /dev/null
->> +++ b/board/raspberrypi/post-build.sh
->> @@ -0,0 +1,9 @@
->> +#!/bin/sh
->> +
->> +set -u
->> +set -e
->> +
->> +# Add a console on tty1
->> +grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
->> +sed -i '/GENERIC_SERIAL/a\
->> +tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console'
->> ${TARGET_DIR}/etc/inittab
->> diff --git a/configs/raspberrypi2_defconfig
->> b/configs/raspberrypi2_defconfig
->> index ce41ee31adba..0ffc6cdaf158 100644
->> --- a/configs/raspberrypi2_defconfig
->> +++ b/configs/raspberrypi2_defconfig
->> @@ -5,7 +5,7 @@ BR2_ARM_FPU_NEON_VFPV4=y
->>
->>   BR2_TOOLCHAIN_BUILDROOT_CXX=y
->>
->> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
->> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+On Tue, 29 Mar 2016 22:30:26 +0200, Bernd Kuhls wrote:
+> We need to add some dependencies formerly provided by the mediastreamer
+> package, also add --disable-video to make clear that our linphone
+> package lacks video support as stated in Config.in.
 > 
->  Why not keep the default "console"? That should work, no? Or doesn't
-> that work if there are two consoles?
+> Fixes
+> http://autobuild.buildroot.net/results/45e/45e605de0488e9e961a536f4d232235c5282522b/
+> http://autobuild.buildroot.net/results/ed5/ed508ac3509be8c46670198da8eb0a2ba74835e6/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/linphone/linphone.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-What improvement you expect from using "console" instead of "ttyAMA0"?
+Can I say again how much I hate bundled libraries?
 
-OTOH I think ttyAMA0 or tty1 is explicit about the device to use. And as
-Yann pointed out on IRC, "console is not a controlling tty, so no Ctrl-C
-for example".
+Applied nonetheless, thanks a lot for quickly looking into the problem,
+much appreciated!
 
+Thomas
 -- 
-Luca
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
