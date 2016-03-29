@@ -1,40 +1,97 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 Mar 2016 21:24:15 +0300
-Subject: [Buildroot] [PATCH] tcpreplay: fix static link with libpcap
-Message-ID: <ef3f0f91b2d7e9505acb768f8ba0362ff133a799.1459275855.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Mar 2016 20:23:57 +0200
+Subject: [Buildroot] [git commit] mesa3d: enable DRI drivers for xorg-less
+	configurations
+Message-ID: <20160329182429.E6910817E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tcpreplay configure script does not look for static libpcap.a unless
-dynamic link is disabled.
+commit: https://git.buildroot.net/buildroot/commit/?id=f1894ec95728806e09405d26663e0ea371afaeab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/e7e/e7e7744ac0a22eded05f237e40b0cdaeec4ce005/
-http://autobuild.buildroot.net/results/3e3/3e33a67965eb37471ec3303ee26f6a66a82383a2/
-http://autobuild.buildroot.net/results/fff/fff0d6a814b765699cba803ececbc00d77e5d8fc/
+mesa3d can in fact build the DRI infrastructure/drivers just fine
+without lingering x11 libs around, it just needs libdrm & friends which
+are already accounted for.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+So make the libGL (full OpenGL) providing abilities dependant on x11
+being present.
+
+It serves it's purpose for EGL+GLES hardware acceleration, and can in
+fact be built without them, but it's probably not very useful (still,
+leave the option for people inclined to do so).
+
+Simple test defconfig:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tcpreplay/tcpreplay.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/mesa3d/Config.in | 9 +++------
+ package/mesa3d/mesa3d.mk | 3 +++
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
-index b32810f78de4..0723c02d2836 100644
---- a/package/tcpreplay/tcpreplay.mk
-+++ b/package/tcpreplay/tcpreplay.mk
-@@ -20,6 +20,10 @@ TCPREPLAY_LIBS = $(STAGING_DIR)/usr/bin/pcap-config --static --libs
- TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close="`$(TCPREPLAY_LIBS)`" \
- 	LIBS="`$(TCPREPLAY_LIBS)`"
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a7aa297..8f6ab75 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -28,13 +28,14 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+-	select BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_XPROTO_DRI3PROTO
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO if BR2_PACKAGE_XPROTO_DRI3PROTO
+ 	bool
+ 
+ config BR2_PACKAGE_PROVIDES_LIBGL
+-	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER
++	default "mesa3d" if BR2_PACKAGE_MESA3D_DRI_DRIVER && \
++		BR2_PACKAGE_XORG7
+ 
+ config BR2_PACKAGE_MESA3D_DRIVER
+ 	bool
+@@ -89,8 +90,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+ comment "DRI drivers need X.Org"
+ 	depends on !BR2_PACKAGE_XORG7
+ 
+-if BR2_PACKAGE_XORG7
+-
+ comment "DRI drivers"
+ 
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+@@ -130,8 +129,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+ 	help
+ 	  Legacy Radeon driver for R100 series GPUs.
+ 
+-endif # BR2_PACKAGE_XORG7
+-
+ comment "Off-screen Rendering"
+ 
+ config BR2_PACKAGE_MESA3D_OSMESA
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index ff2f932..b8ccd1f 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -102,7 +102,10 @@ endif
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXXF86VM),y)
+ MESA3D_DEPENDENCIES += xlib_libXxf86vm
+ endif
++# libGL is only provided for a full xorg stack
++ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_PROVIDES += libgl
 +endif
-+
- ifeq ($(BR2_PACKAGE_TCPDUMP),y)
- TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
- else
--- 
-2.8.0.rc3
+ MESA3D_CONF_OPTS += \
+ 	--enable-shared-glapi \
+ 	--enable-driglx-direct \
