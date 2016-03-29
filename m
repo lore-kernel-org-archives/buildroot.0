@@ -1,42 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Mar 2016 21:25:40 +0200
-Subject: [Buildroot] [PATCH V2] Add Xen 4.6
-In-Reply-To: <CAKmqyKOCUKKQJRg6jK5TdJ33XbyATjsWrj41Gdy2zU7FwHz7mg@mail.gmail.com>
-References: <1457483717-17947-1-git-send-email-alistair.francis@xilinx.com>
- <56F7D7FA.40001@mind.be>
- <CAKmqyKOCUKKQJRg6jK5TdJ33XbyATjsWrj41Gdy2zU7FwHz7mg@mail.gmail.com>
-Message-ID: <56FAD6B4.5000706@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 29 Mar 2016 22:29:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libass: bump version to 0.13.2
+Message-ID: <1459283354-30813-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/28/16 20:59, Alistair Francis wrote:
-> On Sun, Mar 27, 2016 at 5:54 AM, Arnout Vandecappelle<arnout@mind.be>  wrote:
-[snip]
->> >  For some reason, it doesn't seem to be cross-compiling for me, it uses
->> >"gcc" to build. I think you need to pass TARGET_CONFIGURE_OPTS in
->> >XEN_MAKE_ENV.
-> I see the same problem. I tried using TARGET_CONFIGURE_OPTS in
-> XEN_MAKE_ENV but it still uses GCC.
->
-> The configure scripts detects an AArch64 target correctly, but it
-> still uses GCC. Any other ideas?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-  Try passing CROSS_COMPILE in XEN_MAKE_ENV.
-
-  You may also need to set XEN_TARGET_ARCH, AFAICS it is not derived automatically.
-
-  Regards,
-  Arnout
-
-[snip]
-
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index 88f15f4..5dddc40 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	4aa36b1876a61cab46fc9284fee84224b9e2840fe7b3e63d96a8d32574343fe7	libass-0.13.1.tar.xz
++sha256	d698d0a6adca7c36c5a86b540d67b05bfd36cebc3c351ab7646497c43fe1face	libass-0.13.2.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index df0c7ae..716bca6 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.13.1
++LIBASS_VERSION = 0.13.2
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.8.0.rc3
