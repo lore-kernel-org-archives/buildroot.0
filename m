@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 23:57:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linphone: port some stuff from
- mediastreamer
-In-Reply-To: <1459283426-30883-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459283426-30883-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160329235725.54aecc20@free-electrons.com>
+Date: Tue, 29 Mar 2016 23:57:59 +0200
+Subject: [Buildroot] [git commit] Revert "package/freerdp: bump version"
+Message-ID: <20160329215800.B1D8E807C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=150e06da111756568ec2a1893a1f3ca98396197f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Mar 2016 22:30:26 +0200, Bernd Kuhls wrote:
-> We need to add some dependencies formerly provided by the mediastreamer
-> package, also add --disable-video to make clear that our linphone
-> package lacks video support as stated in Config.in.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/45e/45e605de0488e9e961a536f4d232235c5282522b/
-> http://autobuild.buildroot.net/results/ed5/ed508ac3509be8c46670198da8eb0a2ba74835e6/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/linphone/linphone.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+This reverts commit dda26dc614b6f5ef9be67d2604bac39235322235.
 
-Can I say again how much I hate bundled libraries?
+Instead of bumping freerdp to a version which breaks gstreamer
+detection we revert the latest bump for now.
 
-Applied nonetheless, thanks a lot for quickly looking into the problem,
-much appreciated!
+Fixes
+http://autobuild.buildroot.net/results/1ab/1abc713a58d21c71678aab9b21ac1cfac23684f5/
+http://autobuild.buildroot.net/results/0ef/0efd39115a631c409eb809b38ab64604d1de99ca/
+http://autobuild.buildroot.net/results/7aa/7aac3f970dd1fbc0d25f268f32844bec7e49f4af/
+http://autobuild.buildroot.net/results/396/396401bd6eb5f95364a32456a274da185e081541/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index a795ed3..e8e5be4 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Changeset on the master branch
+-FREERDP_VERSION = 2ac195e8eb2c5fbbe8f2abeac92b0c8effef0e34
++FREERDP_VERSION = 17834af7bb378f85a3b3cc4dcadaa5125a337e16
+ FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
