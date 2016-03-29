@@ -1,73 +1,46 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 29 Mar 2016 16:12:36 +0200
-Subject: [Buildroot] [PATCH] raspberrypi,
- raspberrypi2: add a serial console
-In-Reply-To: <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
-References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
- <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
-Message-ID: <56FA8D54.2050605@lucaceresoli.net>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 29 Mar 2016 16:16:15 +0200
+Subject: [Buildroot] couple autobuilder questions
+In-Reply-To: <20160329160513.64592050@free-electrons.com>
+References: <CAFt09wMWfXRfi-KYQUXDJL9nnYu=w3cut_XeaoRQiv3_6+uzxw@mail.gmail.com>
+ <20160329160513.64592050@free-electrons.com>
+Message-ID: <CAAXf6LUB_up0_OOLSC+K0dTKZ7B+7TT6g4UvOVOPJw2TxTrgJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei Alexander,
+Hi Thomas,
 
-thanks for your review! See below by replies.
+On Tue, Mar 29, 2016 at 4:05 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+[..]
+>
+> I do remember handling this situation though. I did a bit of research,
+> and here is what happens:
+>
+>  * The detection of the failure reason for the autobuild.buildroot.org
+>    website is done on the Web server side, not by the autobuild-run
+>    script. And the PHP logic was adjusted to take into account the
+>    umask handling. See
+>    https://git.busybox.net/buildroot-test/commit/?id=e82328cf02a1f0aea90c7c243e8a48dbdb6e53ab.
+>
+>  * The failure reason is also detected by the autobuild-run script
+>    itself, but for a completely different purpose: to be able to
+>    provide in build-end.log the complete build of the failing package
+>    rather than just the last 500 lines. Here, the regexp is indeed
+>    wrong, and doesn't account for the make[1] case. The consequence is
+>    that if the autobuilder instance is running with a umask different
+>    than 0022, then you will never get a full build-end.log, but just
+>    the last 500 lines of the build log. I'm Cc'ing Thomas DS on this,
+>    since he wrote this code.
 
-However, when replying to a mail on the mailing list, please reply to
-all. This helps involved people to follow the discussion. Typically an
-e-mail sent directly is seen sooner that one on a mailing list only.
+Yes, at the time I wrote this, there was no such umask handling yet. I
+based myself on the existing logic that was used in the result page.
 
-On 29/03/2016 13:30, Alexander Dahl wrote:
-> Hei hei,
-> 
-> Am 2016-03-29 00:08, schrieb Luca Ceresoli:
->> The current Buildroot defconfigs for Raspberry Pi and Raspberry Pi 2
->> instantiate a console on tty1, which appears on HDMI. Add a console on
->> the serial port (ttyAMA0) to be more consistent with other defconfigs
->> and provide a better out-of-the-box experience to users used to have a
->> serial console from Buildroot defconfigs.
-> 
-> I ran in the very problem last week. So +1 for the idea.
-> 
->> This requires two changes:
->>  1. have two 'console=' entries in the kernel command line;
->>  2. add a new getty process to the generated inittab.
-> 
-> Then why not split up those two changes in two patches? ;-)
+I think there is no issue in updating the regexp in autobuild-run too,
+to line up with the changes done in the mentioned commit. Patches
+welcome! :)
 
-Because change 1 alone is almost useless. It just outputs kernel booting
-and early init messages on UART, but no console. I see adding a UART
-console as a self-contained change, but of course that's only my opinion.
-
-> 
->> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
->> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> 
-> +1
-> 
->> diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
->> index 38aa3782621b..155a54693bff 100644
->> --- a/package/rpi-firmware/cmdline.txt
->> +++ b/package/rpi-firmware/cmdline.txt
->> @@ -1 +1 @@
->> -root=/dev/mmcblk0p2 rootwait
->> +root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
-> 
-> +1
-> 
-> Not sure about the post build script though, maybe someone with more
-> experience in buildroot could comment on that.
-
-That's OK if you don't feel confident enough to give your official
-Acked-by or Reviewed-by tag. Still, you can test the patch on a real
-board and report back the outcome. If it works, you can add your
-Tested-by tag. Otherwise, please report what went wrong. More details on:
-
-http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
-
-Cheers,
--- 
-Luca
+/Thomas
