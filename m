@@ -1,9 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Mar 2016 11:39:06 -0300
-Subject: [Buildroot] [PATCH v3 07/11] weston: handle dbus dependency
+Date: Tue, 29 Mar 2016 11:39:07 -0300
+Subject: [Buildroot] [PATCH v3 08/11] weston: handle lcms dependecy
 In-Reply-To: <1459262350-10974-1-git-send-email-gustavo@zacarias.com.ar>
 References: <1459262350-10974-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1459262350-10974-8-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1459262350-10974-9-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,22 +16,20 @@ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 363a2bf..72190a8 100644
+index 72190a8..e3a8f29 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -26,6 +26,13 @@ WESTON_CONF_OPTS = \
- WESTON_MAKE_OPTS = \
- 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+@@ -101,4 +101,11 @@ else
+ WESTON_CONF_OPTS += --disable-vaapi-recorder
+ endif
  
-+ifeq ($(BR2_PACKAGE_DBUS),y)
-+WESTON_CONF_OPTS += --enable-dbus
-+WESTON_DEPENDENCIES += dbus
++ifeq ($(BR2_PACKAGE_LCMS2),y)
++WESTON_CONF_OPTS += --enable-lcms
++WESTON_DEPENDENCIES += lcms2
 +else
-+WESTON_CONF_OPTS += --disable-dbus
++WESTON_CONF_OPTS += --disable-lcms
 +endif
 +
- # weston-launch must be u+s root in order to work properly
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- define WESTON_PERMISSIONS
+ $(eval $(autotools-package))
 -- 
 2.7.3
