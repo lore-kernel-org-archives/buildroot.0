@@ -1,105 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 16:29:13 +0200
-Subject: [Buildroot] [PATCH] freescale-imx: add
- BR2_PACKAGE_FREESCALE_IMX_HAS_VPU config
-In-Reply-To: <1457535909-12591-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1457535909-12591-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160329162913.276b43a6@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 Mar 2016 16:33:18 +0200
+Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
+ staging
+In-Reply-To: <CAAXf6LUA=n=5u6TkEsEWbMu2NdbVQzBHOPzSXyTgbQGHE_ZWSg@mail.gmail.com>
+References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
+ <56F84507.3050209@mind.be>
+ <CAAXf6LUA=n=5u6TkEsEWbMu2NdbVQzBHOPzSXyTgbQGHE_ZWSg@mail.gmail.com>
+Message-ID: <56FA922E.5090904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed,  9 Mar 2016 16:05:09 +0100, Gary Bisson wrote:
-> Since the imx-vpu package build is skipped if the platform doesn't
-> have a VPU, libraries dependent on the package such as libimxvpuapi
-> can fail although the imx-vpu package build went "fine".
-> 
-> This patch therefore adds a BR2_PACKAGE_FREESCALE_IMX_HAS_VPU config
-> which is used in every package selecting imx-vpu directly or indrectly.
-> 
-> It fixes the following build errors:
-> http://autobuild.buildroot.net/results/892/8924b17f3aa5eba1a8016d84d4478ecb0a96b236/
-> http://autobuild.buildroot.net/results/86f/86fef2a30065d5bc0d7755706e9ca3332426834d/
-> http://autobuild.buildroot.net/results/b47/b47eb03e93e2f1af85caebb707f7b4667f7e3d74/
-> http://autobuild.buildroot.net/results/4c9/4c9b22b33533132fd9f88917cc341ae2c2e171a8/
-> http://autobuild.buildroot.net/results/a8b/a8b33bfd099d9b9cd383cc568ea70846eb13c34d/
-> 
-> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Thanks, I've applied. But I have some questions, see below.
+On 03/29/16 16:21, Thomas De Schampheleire wrote:
+> Hi Arnout,
+>
+> On Sun, Mar 27, 2016 at 10:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+[snip]
+>>   I've also done a review and a test of the entire series. There is a bit of
+>> reworking suggested by Romain in patch 3/5, the removal of -follow that I
+>> suggest in patch 4/5, and I would like to re-instate the --sysroot check in
+>> patch 2/5, but that's it.
+>>
+>>   ThomasDS, will you respin or do we apply and make changes afterwards?
+>
+> I think it makes sense to respin to keep history clean, unless you
+> prefer to apply first and deblock Romain. That is also fine by me. I
+> just need some time to do the respin and retest.
 
-> ---
-> Hi all,
-> 
-> This patch is the follow-up of the autobuilder failures discussion:
-> http://lists.busybox.net/pipermail/buildroot/2016-March/154989.html
-> 
-> Implementing this BR2_PACKAGE_FREESCALE_IMX_HAS_VPU was actually easier
-> and not as intrusive as expected. Let me know your thoughts.
-> 
-> However during the testing of this patch, I realized that old
-> platforms will be a nightmare to maintain, here are a few examples:
-> - if using IMX25_3STACK or IMX51, imx-lib will fail with the following errors:
-> iso7816-3.c:34:37: fatal error: linux/mxc_sim_interface.h: No such file or directory
->  #include <linux/mxc_sim_interface.h>
-> - if using IMX37_3STACK or IMX50 or IMX53 or IMX27ADS, imx-lib will fail too:
-> fsl_shw_rand.c:46:24: fatal error: shw_driver.h: No such file or directory
->  #include "shw_driver.h"
-> 
-> Both issues above require to use the old 2.6.x kernels from Freescale, are
-> they even still building? All the defconfigs I see of old platforms are
-> using mainline kernel which doesn't work with those proprietary Freescale
-> packages anyway as the Yocto community explained:
-> https://github.com/Freescale/meta-fsl-arm/commit/3b698004
-> https://github.com/Freescale/meta-fsl-arm/commit/83b240e7
+  No, better if you do the respin. It's not going to take you months to retest, 
+right?
 
-People who want to use those Freescale specific packages are indeed
-supposed to use Freescale specific kernels. Just like it's the case for
-i.MX6 I believe, no?
 
-However, what I don't really understand here is whether imx-lib in its
-latest version packaged in BR will build/work fine or not for those old
-Freescale platforms (of course, provided you build the Freescale
-specific kernel that is relevant for that old platform).
+> Thanks for the review both you and Romain, I really appreciate it.
 
-If the latest version of imx-lib still supports those old platforms,
-then I don't see where the problem is.
+  You're welcome. It was actually a lot less work than I feared.
 
-However, if imx-lib no longer supports those old platforms, then we
-indeed have a problem.
+  Regards,
+  Arnout
 
-> Anyway, I guess this patch can be merged as-is to fix the build issue and we
-> can later discuss the fate of older platforms once autobuilder will try a
-> config with imx-lib ;)
-
-imx-lib depends on BR2_LINUX_KERNEL, so autobuilders are never testing
-them.
-
-> diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-> index 2ac558a..fa0e093 100644
-> --- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-> +++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
-> @@ -16,7 +16,11 @@ GST_FSL_PLUGINS_INSTALL_STAGING = YES
->  GST_FSL_PLUGINS_AUTORECONF = YES
->  
->  GST_FSL_PLUGINS_DEPENDENCIES += host-pkgconf gstreamer gst-plugins-base \
-> -	libfslvpuwrap imx-lib imx-vpu libfslparser libfslcodec
-> +	imx-lib libfslparser libfslcodec
-> +
-> +ifeq ($(BR2_PACKAGE_FREESCALE_IMX_HAS_VPU),y)
-> +GST_FSL_PLUGINS_DEPENDENCIES += libfslvpuwrap
-> +endif
-
-So the gst-fsl-plugins code autodetects if libfslvpuwrap is available?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
