@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 14:46:11 +0200
-Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.20.1
-In-Reply-To: <1458924831-25952-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1458924831-25952-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160329144611.5a8bb856@free-electrons.com>
+Date: Tue, 29 Mar 2016 14:47:37 +0200
+Subject: [Buildroot] [PATCH v4 09/19] package/freerdp: bump version
+In-Reply-To: <1459194585-12593-10-git-send-email-bernd.kuhls@t-online.de>
+References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459194585-12593-10-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160329144737.7d34894b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +13,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 25 Mar 2016 13:53:51 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+On Mon, 28 Mar 2016 21:49:35 +0200, Bernd Kuhls wrote:
+> This version bump is needed to provide support for ffmpeg 3.0, added
+> Sep, 17th, 2015: https://github.com/FreeRDP/FreeRDP/pull/2895
+> 
+> Please note the we can not bump to a newer version of freerdp atm
+> because the next commit in the master branch
+> 
+> https://github.com/FreeRDP/FreeRDP/commit/8206ae440f905b123cb92c7abf8c861070ea8cd8
+> 
+> bumped the version number to 2.x which will provide freerdp2.pc instead
+> of freerdp.pc, this is incompatible with vlc atm:
+> 
+> http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=bb5d1dde2ef9828b0ba92c62dbd1143f984f45f2;hb=HEAD#l1890
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libgtk3/libgtk3.hash | 4 ++--
->  package/libgtk3/libgtk3.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/freerdp/freerdp.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Looks like the Wayland support needs memfd, which is available only if
-fairly recent kernel versions:
+This commit is apparently causing some build issues:
 
-  http://autobuild.buildroot.org/results/473/473fb2f416311ee8a8a8719e3fb3689d9226f451/build-end.log
+  http://autobuild.buildroot.org/results/1ab/1abc713a58d21c71678aab9b21ac1cfac23684f5/build-end.log
 
-Probably needs some linux headers version dependency. Could you look
-into this?
+(Though I haven't checked if freerdp had those build issues before this
+commit or not). Could you have a look?
 
 Thanks!
 
