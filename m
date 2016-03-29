@@ -1,49 +1,41 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Mar 2016 18:06:53 -0300
-Subject: [Buildroot] [PATCH v2 3/3] webkitgtk24: mark as deprecated
-In-Reply-To: <1459285613-6784-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459285613-6784-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1459285613-6784-4-git-send-email-gustavo@zacarias.com.ar>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 Mar 2016 21:23:34 +0000
+Subject: [Buildroot] [Bug 8831] image generation fails on host ZFS due to
+	"no free space"
+In-Reply-To: <bug-8831-163@https.bugs.busybox.net/>
+References: <bug-8831-163@https.bugs.busybox.net/>
+Message-ID: <bug-8831-163-R2X2dCj914@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's affected by 40+ security bugs, and upstream will only care to fix
-the latest stable branch, which is 2.12.x
-Some effort was made with the 2.4.10 release to address some security
-bugs but it's incomplete.
+https://bugs.busybox.net/show_bug.cgi?id=8831
 
-See:
-https://blogs.gnome.org/mcatanzaro/2016/02/01/on-webkit-security-updates/
-https://blogs.gnome.org/mcatanzaro/2016/02/19/webkitgtk-gets-security-updates/
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Also:
-http://webkitgtk.org/security/WSA-2016-0002.html
-http://webkitgtk.org/security/WSA-2016-0001.html
-http://webkitgtk.org/security/WSA-2015-0002.html
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+                 CC|                            |yann.morin.1998 at free.fr
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/webkitgtk24/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Maybe it's time we switch to use e2fsprogs from their 'next' branch,
+rather than our canned script?
 
-diff --git a/package/webkitgtk24/Config.in b/package/webkitgtk24/Config.in
-index e95a851..bba3a2b 100644
---- a/package/webkitgtk24/Config.in
-+++ b/package/webkitgtk24/Config.in
-@@ -16,9 +16,11 @@ comment "webkitgtk24 needs libgtk2 and a toolchain w/ C++, wchar, NPTL, gcc >=4.
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_USE_MMU
-+	depends on BR2_DEPRECATED_SINCE_2016_05
- 
- config BR2_PACKAGE_WEBKITGTK24
- 	bool "webkitgtk 2.4.x"
-+	depends on BR2_DEPRECATED_SINCE_2016_05
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+The upstream e2fsprogs now has the ability to fill-in the generated
+filesystem from the content of an existing directory (with the new -d
+option).
+
+FWIW, Debian is now using a snapshot of 2016-03-15 in Stretch (testing)
+and they have a single patch on top of that. I'd rather trust Debian.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.7.3
+You are receiving this mail because:
+You are on the CC list for the bug.
