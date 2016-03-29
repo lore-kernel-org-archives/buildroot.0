@@ -1,34 +1,36 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Mar 2016 09:39:11 -0300
-Subject: [Buildroot] [PATCH v2 6/6] weston: drop --disable-xwayland-test
-In-Reply-To: <1459255151-17084-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459255151-17084-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1459255151-17084-7-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Mar 2016 14:43:52 +0200
+Subject: [Buildroot] [PATCH v4 05/19] package/linphone: add support for
+ ffmpeg 3.0
+In-Reply-To: <1459194585-12593-6-git-send-email-bernd.kuhls@t-online.de>
+References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459194585-12593-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160329144352.296deb3f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's in the rpi backend block which makes no sense, and it depends on
-xwayland being enabled which we currently don't support so remove it.
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/weston/weston.mk | 1 -
- 1 file changed, 1 deletion(-)
+On Mon, 28 Mar 2016 21:49:31 +0200, Bernd Kuhls wrote:
+> Linphone 3.6 is incompatible with bumped mediastreamer and ortp
+> packages. Like Debian we use the bundled versions instead and add the
+> Debian patch series to support ffmpeg 3.0
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 77f99d6..6b9b961 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -83,7 +83,6 @@ ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
- WESTON_DEPENDENCIES += rpi-userland
- WESTON_CONF_OPTS += --enable-rpi-compositor \
- 	--disable-resize-optimization \
--	--disable-xwayland-test \
- 	WESTON_NATIVE_BACKEND=rpi-backend.so
- else
- WESTON_CONF_OPTS += --disable-rpi-compositor
+This is causing a number of build failures:
+
+  http://autobuild.buildroot.org/?reason=linphone-3.6.1
+
+Could you have a look?
+
+Thanks!
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
