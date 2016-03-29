@@ -1,39 +1,39 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Mar 2016 13:11:56 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.148
-Message-ID: <1459253516-50939-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
+Date: Tue, 29 Mar 2016 17:41:17 +0530
+Subject: [Buildroot] [PATCH] ipmitool: Bump ipmitool to 1.8.16
+Message-ID: <20160329121115.3939.74013.stgit@hegdevasant.in.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+New release fixes a number of bugs on AMI BMC firmware.
+
+Signed-off-by: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
+ package/ipmitool/ipmitool.hash |    2 +-
+ package/ipmitool/ipmitool.mk   |    2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 9fae427..2a26633 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
+diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
+index 60189c0..9bb852c 100644
+--- a/package/ipmitool/ipmitool.hash
++++ b/package/ipmitool/ipmitool.hash
 @@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 ec590c9e9b1ebbe5a77053ca4ba82d9c2cc04c69ef768cfd361d94cf23f8f83eda7cbe2f7ebf5f6caf63a08bff73b01734a05614ca24838bf35adc2e50e60d7c  LVM2.2.02.147.tgz
-+sha512 549d9d772eae7054c6d9b0d0a7f65e3930f6109b81e8e58ce265f9f3732ea322a0c81acc9e9714ca16c2670ee519ea28a74470b3daf8b0ca05d82decee2443b4  LVM2.2.02.148.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index ec4dc9f..fa35acd 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
+ # Locally computed:
+-sha256  4acd2df5f8740fef5c032cebee0113ec4d3bbef04a6f4dbfaf7fcc7f3eb08c40  ipmitool-1.8.15.tar.bz2
++sha256  3c5da6b067abf475bc24685120ec79f6e4ef6b3ea606aaa267e462023861223e  ipmitool-1.8.16.tar.bz2
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 3ace5a7..348d43e 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LVM2_VERSION = 2.02.147
-+LVM2_VERSION = 2.02.148
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
--- 
-2.7.3
+-IPMITOOL_VERSION = 1.8.15
++IPMITOOL_VERSION = 1.8.16
+ IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
+ IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
+ IPMITOOL_LICENSE = BSD-3c
