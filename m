@@ -1,51 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 Mar 2016 16:33:18 +0200
-Subject: [Buildroot] [PATCH 0/5] Align library locations in target and
- staging
-In-Reply-To: <CAAXf6LUA=n=5u6TkEsEWbMu2NdbVQzBHOPzSXyTgbQGHE_ZWSg@mail.gmail.com>
-References: <1455304826-10557-1-git-send-email-patrickdepinguin@gmail.com>
- <56F84507.3050209@mind.be>
- <CAAXf6LUA=n=5u6TkEsEWbMu2NdbVQzBHOPzSXyTgbQGHE_ZWSg@mail.gmail.com>
-Message-ID: <56FA922E.5090904@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 29 Mar 2016 16:38:22 +0200
+Subject: [Buildroot] [PATCH] tcl: bump version to 8.6.5
+In-Reply-To: <1458313886-11067-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1458313886-11067-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160329163822.17151d60@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Fri, 18 Mar 2016 15:11:26 +0000, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+>  package/tcl/tcl.hash | 2 +-
+>  package/tcl/tcl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 03/29/16 16:21, Thomas De Schampheleire wrote:
-> Hi Arnout,
->
-> On Sun, Mar 27, 2016 at 10:39 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
->>   I've also done a review and a test of the entire series. There is a bit of
->> reworking suggested by Romain in patch 3/5, the removal of -follow that I
->> suggest in patch 4/5, and I would like to re-instate the --sysroot check in
->> patch 2/5, but that's it.
->>
->>   ThomasDS, will you respin or do we apply and make changes afterwards?
->
-> I think it makes sense to respin to keep history clean, unless you
-> prefer to apply first and deblock Romain. That is also fine by me. I
-> just need some time to do the respin and retest.
+This update is causing a huge number of build failures:
 
-  No, better if you do the respin. It's not going to take you months to retest, 
-right?
+  http://autobuild.buildroot.org/?reason=tcl-8.6.5
 
+I tested, and reverting this version bump fixes the problem. It seems
+to be a conflict between the version of sqlite bundled in tcl, and the
+version of sqlite we have in Buildroot.
 
-> Thanks for the review both you and Romain, I really appreciate it.
+Could you look at the problem, or if you don't care much about tcl,
+send a patch reverting the version bump?
 
-  You're welcome. It was actually a lot less work than I feared.
+Thanks,
 
-  Regards,
-  Arnout
-
+Thomas
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
