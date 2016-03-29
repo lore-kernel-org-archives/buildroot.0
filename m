@@ -1,109 +1,36 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Tue, 29 Mar 2016 12:01:46 +0200
-Subject: [Buildroot] [PATCH] qt5serialbus: new package
-Message-ID: <1459245706-17098-1-git-send-email-yegorslists@googlemail.com>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Tue, 29 Mar 2016 12:11:40 +0200
+Subject: [Buildroot] [PATCH v2 0/2] core/pkg-kconfig: Fix .config generation
+Message-ID: <1459246302-21837-1-git-send-email-romain.izard.pro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+To use an existing file as .config for a project, it needs to be
+validated with 'make oldconfig'. If the file does not match all the
+configuration entries of the project, the user will be prompted to
+select the values for the new entries.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/qt5/Config.in                      |  1 +
- package/qt5/qt5serialbus/Config.in         | 10 +++++++
- package/qt5/qt5serialbus/qt5serialbus.hash |  2 ++
- package/qt5/qt5serialbus/qt5serialbus.mk   | 42 ++++++++++++++++++++++++++++++
- 4 files changed, 55 insertions(+)
- create mode 100644 package/qt5/qt5serialbus/Config.in
- create mode 100644 package/qt5/qt5serialbus/qt5serialbus.hash
- create mode 100644 package/qt5/qt5serialbus/qt5serialbus.mk
+Historically, 'yes "" | make oldconfig' was used to silently select the
+default values for new entries. But this does not work well with the
+Linux kernel, as it will not select the correct option when configuring
+tristate choice entries.
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index f673daa..4febee6 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -40,6 +40,7 @@ source "package/qt5/qt5imageformats/Config.in"
- source "package/qt5/qt5multimedia/Config.in"
- source "package/qt5/qt5quickcontrols/Config.in"
- source "package/qt5/qt5sensors/Config.in"
-+source "package/qt5/qt5serialbus/Config.in"
- source "package/qt5/qt5serialport/Config.in"
- source "package/qt5/qt5svg/Config.in"
- source "package/qt5/qt5tools/Config.in"
-diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
-new file mode 100644
-index 0000000..cce02ef
---- /dev/null
-+++ b/package/qt5/qt5serialbus/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_QT5SERIALBUS
-+	bool "qt5serialbus"
-+	select BR2_PACKAGE_QT5BASE
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5serialbus module.
-+
-+	  http://qt.io
-diff --git a/package/qt5/qt5serialbus/qt5serialbus.hash b/package/qt5/qt5serialbus/qt5serialbus.hash
-new file mode 100644
-index 0000000..da46e76
---- /dev/null
-+++ b/package/qt5/qt5serialbus/qt5serialbus.hash
-@@ -0,0 +1,2 @@
-+# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.0/submodules/qtserialbus-opensource-src-5.6.0.tar.xz.mirrorlist
-+sha256 8cca530ee53f19672f57ffee6f2f28866d5c84b8cb3dbbd67c05d27893ac0b8e qtserialbus-opensource-src-5.6.0.tar.xz
-diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
-new file mode 100644
-index 0000000..f81bb83
---- /dev/null
-+++ b/package/qt5/qt5serialbus/qt5serialbus.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# qt5serialbus
-+#
-+################################################################################
-+
-+QT5SERIALBUS_VERSION = $(QT5_VERSION)
-+QT5SERIALBUS_SITE = $(QT5_SITE)
-+QT5SERIALBUS_SOURCE = qtserialbus-opensource-src-$(QT5SERIALBUS_VERSION).tar.xz
-+QT5SERIALBUS_DEPENDENCIES = qt5base
-+QT5SERIALBUS_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5SERIALBUS_LICENSE = GPLv2 or GPLv3 or LGPLv2.1 with exception or LGPLv3, GFDLv1.3 (docs)
-+QT5SERIALBUS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
-+else
-+QT5SERIALBUS_LICENSE = Commercial license
-+QT5SERIALBUS_REDISTRIBUTE = NO
-+endif
-+
-+define QT5SERIALBUS_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5SERIALBUS_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5SERIALBUS_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+ifeq ($(BR2_STATIC_LIBS),)
-+define QT5SERIALBUS_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt5SerialBus.so.* $(TARGET_DIR)/usr/lib
-+	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/canbus/
-+	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/canbus/*.so $(TARGET_DIR)/usr/lib/qt/plugins/canbus/
-+endef
-+endif
-+
-+$(eval $(generic-package))
+The Linux kernel has added a 'oldnoconfig' target, since renamed
+'olddefconfig', that will work correctly, but this target does not exist
+in all projects that rely on the kconfig workflow.
+
+Update buildroot to use 'oldnoconfig' when available, and fallback to
+the default method otherwise.
+
+Romain Izard (2):
+  core/pkg-kconfig: fix .config rule for silent mode
+  core/pkg-kconfig: Use oldnoconfig when possible
+
+ package/pkg-kconfig.mk | 26 ++++++++++++++++++--------
+ 1 file changed, 18 insertions(+), 8 deletions(-)
+
 -- 
-2.1.4
+2.5.0
