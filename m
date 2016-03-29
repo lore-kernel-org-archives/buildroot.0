@@ -1,59 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 14:52:14 +0200
-Subject: [Buildroot] [PATCH] package/libxslt: fix static build
-In-Reply-To: <20160329030113.55474130@free-electrons.com>
-References: <1459199363-28640-1-git-send-email-joerg.krause@embedded.rocks>
- <20160329030113.55474130@free-electrons.com>
-Message-ID: <20160329145214.6a434016@free-electrons.com>
+Date: Tue, 29 Mar 2016 14:54:04 +0200
+Subject: [Buildroot] [git commit] qt5tools: disable qdoc,
+	which needs qtdeclarative
+Message-ID: <20160329125432.89EAD819EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ad72bdf7f0bdc2c4c5541ea2aefa5bb24b94abc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Mar 2016 03:01:13 +0200, Thomas Petazzoni wrote:
+Fixes [1]:
 
-> I've applied because it indeed works, but to be honest, I don't
-> understand why: I don't quite understand how this can fix the build.
-> All what this option does is:
-> 
-> AC_ARG_WITH(libxml-libs-prefix,
->         [  --with-libxml-libs-prefix=[PFX]      Specify location of libxml libs],
->         LIBXML_LIBS="-L$withval"
-> )
-> 
-> I.e, it will add -L$(STAGING_DIR)/usr/lib to the gcc options. But that
-> is completely useless because $(STAGING_DIR)/usr/lib is already the
-> default search path for libraries. So why does it fix the build? I
-> don't know.
+  Project ERROR: Unknown module(s) in QT: qmldevtools-private
+  Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
 
-Baruch has posted another patch that I believe is supposed to fix the
-same problem: http://patchwork.ozlabs.org/patch/602529/.
+[1] http://autobuild.buildroot.net/results/b0a/b0a5641beae14ff79a9d5a628bb41957826eb623
 
-Baruch, J?rg, could you have a closer look at this problem, and see
-which solution, between the one from J?rg and the one from Baruch is
-actually correct ?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ .../0001-Disable-qdoc-needs-qtdeclarative.patch    | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-I must say I remain surprised that the version proposed by J?rg
-actually works, but it does. The version posted by Baruch seems more
-correct to me.
-
-However, one drawback of the solution proposed by Baruch is that even
-when doing dynamic linking, the application linking against libxml2 will
-be directly linking against liblzma, which is not necessary. But that's
-already what happens for libz, libpthread, and the other libraries
-listed in XML_LIBS, so from that point of view, Baruch solution is in
-line with what libxml2 is already doing.
-
-Ideally, xml2-config should have a --static option, or even better,
-drop xml2-config entirely and use pkg-config :-)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch b/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
+new file mode 100644
+index 0000000..61cbdfe
+--- /dev/null
++++ b/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
+@@ -0,0 +1,30 @@
++From acdb24783322bb6e69df61cf04df2b2e47a06ad2 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 29 Mar 2016 13:37:09 +0200
++Subject: [PATCH] Disable qdoc (needs qtdeclarative).
++
++Fixes:
++
++  Project ERROR: Unknown module(s) in QT: qmldevtools-private
++  Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/src.pro | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/src.pro b/src/src.pro
++index 387d54f..494898f 100644
++--- a/src/src.pro
+++++ b/src/src.pro
++@@ -14,7 +14,6 @@ qtHaveModule(widgets) {
++ }
++ 
++ SUBDIRS += linguist \
++-    qdoc \
++     qtplugininfo
++ if(!android|android_app):!ios: SUBDIRS += qtpaths
++ 
++-- 
++2.1.4
++
