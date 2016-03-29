@@ -1,35 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:20:08 +0200
-Subject: [Buildroot] [PATCH v2 07/17] uclibc: disable DOPIC on ARM FLAT
-In-Reply-To: <56ED7A4E.8020406@mind.be>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-8-git-send-email-thomas.petazzoni@free-electrons.com>
- <56ED7A4E.8020406@mind.be>
-Message-ID: <20160330002008.5e05acab@free-electrons.com>
+Date: Wed, 30 Mar 2016 00:15:48 +0200
+Subject: [Buildroot] [git commit] uclibc: disable DOPIC on ARM FLAT
+Message-ID: <20160329222011.B7B14807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8c2170c76a27297868b36868bbcf190862a2e817
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Mar 2016 17:11:58 +0100, Arnout Vandecappelle wrote:
+As explained by Waldemar, enabling DOPIC in uClibc will lead to the
+creation of a Position Independent library. In turn, this will cause
+elf2flt to generate a "Has-PIC-GOT" flat binary, which doesn't work on
+ARM. In fact, elf2flt on ARM really expect to have non-PIC code as
+input, so we must disable DOPIC in the uClibc configuration.
 
->   Though I wonder: shouldn't uClibc detect this by itself? Similar to the BX 
-> handling that you removed. Adding Waldemar in Cc to think about this.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-I don't yet fully understand the different modes of elf2flt, and why
-DOPIC affects what elf2flt is capable of doing/not doing.
-
-However, if as Waldemar told me, a uClibc built with DOPIC=y will not
-work with elf2flt on ARM, then I could indeed send a patch to uClibc to
-disable DOPIC on ARM/noMMU.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index ad94494..e3e45f7 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -82,6 +82,12 @@ ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_TH
+ UCLIBC_EXTRA_CFLAGS += -marm
+ endif
+ 
++ifeq ($(BR2_BINFMT_FLAT),y)
++define UCLIBC_ARM_BINFMT_FLAT
++	$(call KCONFIG_DISABLE_OPT,DOPIC,$(@D)/.config)
++endef
++endif
++
+ endif # arm
+ 
+ #
+@@ -354,6 +360,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_ARC_TYPE_CONFIG)
+ 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
+ 	$(UCLIBC_ARM_ABI_CONFIG)
++	$(UCLIBC_ARM_BINFMT_FLAT)
+ 	$(UCLIBC_MIPS_ABI_CONFIG)
+ 	$(UCLIBC_MIPS_ISA_CONFIG)
+ 	$(UCLIBC_SH_TYPE_CONFIG)
