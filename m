@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 16:05:13 +0200
-Subject: [Buildroot] couple autobuilder questions
-In-Reply-To: <CAFt09wMWfXRfi-KYQUXDJL9nnYu=w3cut_XeaoRQiv3_6+uzxw@mail.gmail.com>
-References: <CAFt09wMWfXRfi-KYQUXDJL9nnYu=w3cut_XeaoRQiv3_6+uzxw@mail.gmail.com>
-Message-ID: <20160329160513.64592050@free-electrons.com>
+Date: Tue, 29 Mar 2016 16:09:10 +0200
+Subject: [Buildroot] [PATCH] package/libxslt: fix static build
+In-Reply-To: <1459259543.5308.10.camel@embedded.rocks>
+References: <1459199363-28640-1-git-send-email-joerg.krause@embedded.rocks>
+ <20160329030113.55474130@free-electrons.com>
+ <20160329145214.6a434016@free-electrons.com>
+ <1459259543.5308.10.camel@embedded.rocks>
+Message-ID: <20160329160910.267a0dc8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,105 +15,53 @@ To: buildroot@busybox.net
 
 Hello,
 
-[Thomas DS: there is some stuff for you below. Read on!]
-
-On Mon, 28 Mar 2016 23:06:58 -0500, Matthew Weber wrote:
-> ## 32bit architectures
-> I'm curious to get your thoughts on adding another variant of the
-> prebuilt "br" toolchains you have on the autobuilder.  Would you
-> welcome the rebuilding of the 32bit arch toolchains on a 32bit system
-> so that the wrappers allow them to execute on 32bit machines?
-
-Why only the 32 bits arch toolchains? All Buildroot external toolchains
-used in the autobuilders today are indeed built for x86_64, so you
-can't use them on a x86 32 bits host. However, this has nothing to do
-with the bitness of the target architecture: you can perfectly well
-have a toolchain targetting ARM64 or x86_64 or PowerPC64 running on a
-x86 32 bits platform.
-
-Also, in your discussion, you're focusing on the wrapper being 64 bits,
-but the wrapper is only the tip of the iceberg: the *entire* toolchain
-(gcc binaries, binutils binaries, gcc companion libraries) are built
-for 64 bits.
-
-> I was on the fence as the value this would bring but I have at least
-> once case where I've ran into a server that's still 32bit and I've
-> been running the autobuilder with occasional failures because of the
-> toolchain wrapper being x86_64.
-
-Right. As said earlier, it's not only the wrapper.
-
-> If toolchains with a 32bit wrapper could be added, I'm assuming some
-> detection smarts would need to be added to the script to detect the
-> host architecture and then altering what is allowed during
-> configuration generation.
-
-This is actually already planned, but not implemented properly. If you
-look at
-http://autobuild.buildroot.org/toolchains/configs/toolchain-configs.csv
-the second field is the host architecture of the toolchain. All of them
-are listed as x86, which is obviously not correct since some of them
-are x86-64 only. So, we should:
-
- 1/ Change those values to be either i386 or x86_64 for each
-    configuration.
-
- 2/ Fix the autobuild-run script to not assimilate i686 and x86_64 to
-    be the x86 architecture. Originally, this feature was introduced
-    because Peter was running some autobuilder instance on a PowerPC
-    machine, so we only cared about x86 or not. But obviously, if you
-    want to run the autobuilder on a x86 32 bits machine, we need to
-    adjust that.
-
-Is this something you are willing to look at, or should I go ahead and
-look at it?
-
-Another thing that is wrong is that for the "internal" toolchain
-configurations listed in the CSV file, the "host architecture" field
-should have no value, or some magic value. Indeed, since it's this case
-the toolchain is built from scratch, it doesn't matter on which
-architecture we are running.
-
-> ## (Possible bug) Latest master of buildroot and autobr regex issue
-> I had to open up the run script's get_failure() regex to wildcard part
-> of the string search for the failing package.
-> Instead of "make:  " , I ended up with "make.* " in both the php
-> import and autobuilder-run scripts.  I was going to push a patch out
-> for these after a bit more testing.
+On Tue, 29 Mar 2016 15:52:23 +0200, J?rg Krause wrote:
+> > Baruch, J?rg, could you have a closer look at this problem, and see
+> > which solution, between the one from J?rg and the one from Baruch is
+> > actually correct ?
 > 
-> Looks like the output changed from:
+> The problem is that xml2-config does not work for cross-compilation:
 > 
-> make: *** [/<instance-path>/output/build/mplayer-1.2/.stamp_built] Error 2
-> to
-> make[1]: *** [/<instance=path>/output/build/mplayer-1.2/.stamp_built] Error 2
+> $ ./output/host/usr/bfin-buildroot-uclinux-clibc/sysroot/usr//bin/xml2-
+> config --libs
+> -lxml2 -lm
 
-This depends on your umask :)
+Why do you say it doesn't work for cross-compilation? This result is
+perfectly good for cross-compilation.
 
-If your umask is wrong, we fix it and run a sub-make, which explains
-why you have make[1] instead of make. See
-bee5745ccc20be6dbba243b1f8af0d5c522923e8 for the original commit
-introducing this.
+> I am not quite sure why it works either. I guess it has something todo
+> with how libtool works, as libtool sets the correct dependency_libs in
+> libxslt.la if '--with-libxml-libs-prefix' is used:
+> 
+> # Libraries that this one depends upon.
+> dependency_libs=' -L/home/joerg/git/buildroot/output/host/usr/bfin-
+> buildroot-uclinux-uclibc/sysroot/usr/lib
+> /home/joerg/git/buildroot/output/host/usr/bfin-buildroot-uclinux-
+> uclibc/sysroot/usr/lib/libxml2.la
+> /home/joerg/git/buildroot/output/host/usr/bfin-buildroot-uclinux-
+> uclibc/sysroot/usr/lib/liblzma.la -lm'
+> 
+> .. whereas, whithout '--with-libxml-libs-prefix:
+> 
+> # Libraries that this one depends upon.
+> dependency_libs=' -lxml2 -lm'
 
-I do remember handling this situation though. I did a bit of research,
-and here is what happens:
+Weird. I guess libtool is parsing this -L<path> option and does some
+magic with it. It is completely stupid, because since we have --sysroot
+$(STAGING_DIR), then automatically $(STAGING_DIR)/usr/lib is in the
+search path for libraries, without the need to add a -L<path> option.
+Except for the silly libtool.
 
- * The detection of the failure reason for the autobuild.buildroot.org
-   website is done on the Web server side, not by the autobuild-run
-   script. And the PHP logic was adjusted to take into account the
-   umask handling. See
-   https://git.busybox.net/buildroot-test/commit/?id=e82328cf02a1f0aea90c7c243e8a48dbdb6e53ab.
+> > Ideally, xml2-config should have a --static option, or even better,
+> > drop xml2-config entirely and use pkg-config :-)
+> 
+> Patching libxlst to use pkg-config is what OE and yocto are doing [1]
+> as libxml2 does have a correct .pc file.
 
- * The failure reason is also detected by the autobuild-run script
-   itself, but for a completely different purpose: to be able to
-   provide in build-end.log the complete build of the failing package
-   rather than just the last 500 lines. Here, the regexp is indeed
-   wrong, and doesn't account for the make[1] case. The consequence is
-   that if the autobuilder instance is running with a umask different
-   than 0022, then you will never get a full build-end.log, but just
-   the last 500 lines of the build log. I'm Cc'ing Thomas DS on this,
-   since he wrote this code.
-
-Best regards,
+And why isn't that upstream? The development of libxslt seems to be
+active upstream: https://git.gnome.org/browse/libxslt/log/. Well,
+except for the fact that they haven't done a release in the last three
+years.
 
 Thomas
 -- 
