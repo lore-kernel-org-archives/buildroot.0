@@ -1,53 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 29 Mar 2016 21:01:34 +0000
-Subject: [Buildroot] [Bug 8831] New: image generation fails on host ZFS due
- to "no free space"
-Message-ID: <bug-8831-163@https.bugs.busybox.net/>
+From: Alexander Dahl <post@lespocky.de>
+Date: Tue, 29 Mar 2016 23:04:47 +0200
+Subject: [Buildroot] [PATCH] raspberrypi,
+ raspberrypi2: add a serial console
+In-Reply-To: <56FA8D54.2050605@lucaceresoli.net>
+References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
+ <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
+ <56FA8D54.2050605@lucaceresoli.net>
+Message-ID: <56FAEDEF.3090304@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8831
+Hei hei,
 
-            Bug ID: 8831
-              Host: raspberrypi2
-             Build: amd64 Debian GNU/Linux jessie with ZFS on Linux
-           Summary: image generation fails on host ZFS due to "no free
-                    space"
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: post at lespocky.de
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On 29.03.2016 16:12, Luca Ceresoli wrote:
+> However, when replying to a mail on the mailing list, please reply to
+> all. This helps involved people to follow the discussion. Typically an
+> e-mail sent directly is seen sooner that one on a mailing list only.
 
-Created attachment 6411
-  --> https://bugs.busybox.net/attachment.cgi?id=6411&action=edit
-last output
+Well, I try to remember it, each community handles this different and I
+find it annoying to receive mails twice personally. Some mailing list
+filter this, others not. ;-)
 
-I tried building master at 4a6602f77cfe429d1dfc4f36964240b7d4410c54 today with
-only http://patchwork.ozlabs.org/patch/602668/ applied on top. The steps I did:
+> That's OK if you don't feel confident enough to give your official
+> Acked-by or Reviewed-by tag. Still, you can test the patch on a real
+> board and report back the outcome. If it works, you can add your
+> Tested-by tag. Otherwise, please report what went wrong. More details on:
 
-`make distclean`
-`make raspberrypi2_defconfig`
-`make menuconfig`
-activate dropbear with default options
-`make`
+Yeah I actually tried to this evening, but there was a showstopper I
+filed a bug for now: https://bugs.busybox.net/show_bug.cgi?id=8831
 
-Build fails with genext2fs not being able to allocate a block. (See pasted
-output in attachement.)
+Maybe I try again later.
 
-The host is a quite usual Debian stable (jessie) on amd64 but with ZFS by
-zfsonlinux as filesystem. The volume has no compression or dedup options set.
+Greets
+Alex
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 819 bytes
+Desc: OpenPGP digital signature
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160329/0caacef1/attachment.asc>
