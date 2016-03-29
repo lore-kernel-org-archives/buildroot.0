@@ -1,80 +1,44 @@
-From: Pauli Sundberg <susundberg@gmail.com>
-Date: Tue, 29 Mar 2016 20:22:58 +0300
-Subject: [Buildroot] [PATCH V4 1/1] linux: Add custom Subversion repository
-	support for the package
-In-Reply-To: <1459272178-2832-1-git-send-email-susundberg@gmail.com>
-References: <56f9c5e03b04a_e97196065823599@ultri2.mail>
- <1459272178-2832-1-git-send-email-susundberg@gmail.com>
-Message-ID: <1459272178-2832-2-git-send-email-susundberg@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 Mar 2016 20:33:14 +0300
+Subject: [Buildroot] [PATCH] linknx: select libcurl to fix autoreconf
+In-Reply-To: <20160329150549.3e9fdb7c@free-electrons.com>
+References: <ad8eed5a1643cc3be56f317dcac61cb1314fc40a.1458157108.git.baruch@tkos.co.il>
+ <20160329150549.3e9fdb7c@free-electrons.com>
+Message-ID: <20160329173313.GR2637@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
----
- linux/Config.in | 12 +++++++++---
- linux/linux.mk  |  3 +++
- 2 files changed, 12 insertions(+), 3 deletions(-)
+Hi Thomas,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 93968cd..187fcad 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -63,6 +63,12 @@ config BR2_LINUX_KERNEL_CUSTOM_HG
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Mercurial repository.
- 
-+config BR2_LINUX_KERNEL_CUSTOM_SVN
-+	bool "Custom Subversion repository"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Subversion repository.
-+
- config BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 	bool "Local directory"
- 	help
-@@ -79,7 +85,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 
--if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
-+if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
- 
- config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
- 	string "URL of custom repository"
-@@ -91,7 +97,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
- 		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
- 	help
--	  Revision to use in the typical format used by Git/Mercurial
-+	  Revision to use in the typical format used by Git/Mercurial/Subversion
- 	  E.G. a sha id, a tag, branch, ..
- 
- endif
-@@ -109,7 +115,7 @@ config BR2_LINUX_KERNEL_VERSION
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
--		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
-+		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e20255..317587f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -23,6 +23,9 @@ LINUX_SITE_METHOD = git
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = hg
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_SITE_METHOD = svn
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+On Tue, Mar 29, 2016 at 03:05:49PM +0200, Thomas Petazzoni wrote:
+> On Wed, 16 Mar 2016 21:38:28 +0200, Baruch Siach wrote:
+> > linknx configure.ac uses the LIBCURL_CHECK_CONFIG macro that is only defined
+> > in libcurl.m4 that is part of libcurl. Select libcurl for now to fix
+> > autoreconf.
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/96e/96e9ae0df7ebb7ad3d748a6b518cc59570e0b995/
+> > http://autobuild.buildroot.net/results/179/17971c9f8925ff8623a7d97aac8eda0c287a76c9/
+> > http://autobuild.buildroot.net/results/2a8/2a8af93d6439b313b048ccac7b6cfecbb6baff55/
+> > 
+> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> 
+> It's not super nice to have to add this mandatory dependency for
+> autoreconf, but we indeed don't really have the choice. We should
+> remember to revert this patch once the linknx patch gets merged
+> upstream, and we bump the version. However, it seems like linknx is not
+> super active upstream, so in fact things might just stay forever as they
+> are today. Oh well.
+
+A possible alternative is to have a local copy of libcurl.m4 for linknx, 
+either in a patch or standalone. Would you prefer that?
+
+baruch
+
 -- 
-1.9.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
