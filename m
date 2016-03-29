@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 20:26:09 +0200
-Subject: [Buildroot] [PATCH] mesa3d: enable DRI drivers for xorg-less
- configurations
-In-Reply-To: <1459201695-30709-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459201695-30709-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160329202609.1610b4cd@free-electrons.com>
+Date: Tue, 29 Mar 2016 20:26:28 +0200
+Subject: [Buildroot] [git commit] tcpreplay: fix static link with libpcap
+Message-ID: <20160329182631.8336281827@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae1e6320e29c88e2ff5bd1198074c01cd40b816a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 28 Mar 2016 18:48:15 -0300, Gustavo Zacarias wrote:
-> mesa3d can in fact build the DRI infrastructure/drivers just fine
-> without lingering x11 libs around, it just needs libdrm & friends which
-> are already accounted for.
-> 
-> So make the libGL (full OpenGL) providing abilities dependant on x11
-> being present.
-> 
-> It serves it's purpose for EGL+GLES hardware acceleration, and can in
-> fact be built without them, but it's probably not very useful (still,
-> leave the option for people inclined to do so).
-> 
-> Simple test defconfig:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_PACKAGE_MESA3D=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU=y
-> BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON=y
-> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-> BR2_PACKAGE_MESA3D_OPENGL_ES=y
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/mesa3d/Config.in | 9 +++------
->  package/mesa3d/mesa3d.mk | 3 +++
->  2 files changed, 6 insertions(+), 6 deletions(-)
+The tcpreplay configure script does not look for static libpcap.a unless
+dynamic link is disabled.
 
-Applied to master, thanks. I'm pretty sure it's going to trigger some
-cases that were not accounted for, but the only way to know is to get
-the autobuilders to play with this.
+Fixes:
+http://autobuild.buildroot.net/results/e7e/e7e7744ac0a22eded05f237e40b0cdaeec4ce005/
+http://autobuild.buildroot.net/results/3e3/3e33a67965eb37471ec3303ee26f6a66a82383a2/
+http://autobuild.buildroot.net/results/fff/fff0d6a814b765699cba803ececbc00d77e5d8fc/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tcpreplay/tcpreplay.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/tcpreplay/tcpreplay.mk b/package/tcpreplay/tcpreplay.mk
+index b32810f..0723c02 100644
+--- a/package/tcpreplay/tcpreplay.mk
++++ b/package/tcpreplay/tcpreplay.mk
+@@ -20,6 +20,10 @@ TCPREPLAY_LIBS = $(STAGING_DIR)/usr/bin/pcap-config --static --libs
+ TCPREPLAY_CONF_ENV += ac_cv_search_pcap_close="`$(TCPREPLAY_LIBS)`" \
+ 	LIBS="`$(TCPREPLAY_LIBS)`"
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++TCPREPLAY_CONF_OPTS += --enable-dynamic-link=no
++endif
++
+ ifeq ($(BR2_PACKAGE_TCPDUMP),y)
+ TCPREPLAY_CONF_ENV += ac_cv_path_tcpdump_path=/usr/sbin/tcpdump
+ else
