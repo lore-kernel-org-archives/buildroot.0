@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 14:55:43 +0200
-Subject: [Buildroot] [PATCH v1] qt5tools: disable qdoc (needs
- qtdeclarative)
-In-Reply-To: <1459251925-31678-1-git-send-email-ps.report@gmx.net>
-References: <1459251925-31678-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160329145543.45f90da8@free-electrons.com>
+Date: Tue, 29 Mar 2016 14:56:54 +0200
+Subject: [Buildroot] [git commit] ipmitool: Bump ipmitool to 1.8.16
+Message-ID: <20160329125657.00F67819E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6142906c9755b2613df0b92f60ead59e41527716
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Mar 2016 13:45:25 +0200, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   Project ERROR: Unknown module(s) in QT: qmldevtools-private
->   Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
-> 
-> [1] http://autobuild.buildroot.net/results/b0a/b0a5641beae14ff79a9d5a628bb41957826eb623
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+New release fixes a number of bugs on AMI BMC firmware.
 
-Thanks, I've applied to fix the build issue, but I would really prefer
-a solution that is acceptable upstream. If I remember correctly, you
-can do some conditionals in .pro files like "if qtdeclarative is
-available, then do this". This way, you could build qdoc if
-qtdeclarative is available, and not build it otherwise.
+Signed-off-by: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/ipmitool/ipmitool.hash | 2 +-
+ package/ipmitool/ipmitool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-What do you think?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
+index 60189c0..9bb852c 100644
+--- a/package/ipmitool/ipmitool.hash
++++ b/package/ipmitool/ipmitool.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  4acd2df5f8740fef5c032cebee0113ec4d3bbef04a6f4dbfaf7fcc7f3eb08c40  ipmitool-1.8.15.tar.bz2
++sha256  3c5da6b067abf475bc24685120ec79f6e4ef6b3ea606aaa267e462023861223e  ipmitool-1.8.16.tar.bz2
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 3ace5a7..348d43e 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPMITOOL_VERSION = 1.8.15
++IPMITOOL_VERSION = 1.8.16
+ IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
+ IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
+ IPMITOOL_LICENSE = BSD-3c
