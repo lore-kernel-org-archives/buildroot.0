@@ -1,950 +1,401 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 03:07:36 +0200
-Subject: [Buildroot] [git commit] package/opencv: bump version to 2.4.12.3
-Message-ID: <20160329011110.22476817F5@busybox.osuosl.org>
+Date: Tue, 29 Mar 2016 03:08:21 +0200
+Subject: [Buildroot] [git commit] package/opencv3: bump version to 3.1.0
+Message-ID: <20160329011110.343BD817F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4aa2831ac67d7411369eb99c3674d221e08d0210
+commit: https://git.buildroot.net/buildroot/commit/?id=ffd0beb788ad57ea94bc3952e7f3960d3231997d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patches applied upstream:
-https://github.com/Itseez/opencv/commit/ea50be0529c248961e1b66293f8a9e4b807294a6
-https://github.com/Itseez/opencv/commit/2e393ab83362743ba1825ad4b31d4a2925c606b4
-https://github.com/Itseez/opencv/commit/eceada586bbf18fc267e437522ec4f1f23ddc656
+Removed patches applied upstream. This version bump is needed to
+provide support for ffmpeg 3.0:
+https://github.com/Itseez/opencv/commit/278747ba458c9097aa72bf664c7a8df96d3a56fa
 
-Added upstream patch to support ffmpeg 3.0.
+Use BR2_PACKAGE_FFMPEG_AVRESAMPLE by default because OpenCV can use it
+after
+https://github.com/Itseez/opencv/commit/2b2e3ee93c6788b892b084cc04d0ead5ab75c197
+
+Before this patch:
+--     FFMPEG:                      YES
+--       codec:                     YES (ver 57.24.103)
+--       format:                    YES (ver 57.25.100)
+--       util:                      YES (ver 55.17.103)
+--       swscale:                   YES (ver 4.0.100)
+--       resample:                  NO
+
+After this patch:
+--     FFMPEG:                      YES
+--       codec:                     YES (ver 57.24.103)
+--       format:                    YES (ver 57.25.100)
+--       util:                      YES (ver 55.17.103)
+--       swscale:                   YES (ver 4.0.100)
+--       resample:                  YES (ver 3.0.0)
+
+Disabled new options:
+WITH_MATLAB, WITH_VA, WITH_VA_INTEL, DOWNLOAD_EXTERNAL_TEST_DATA
+
+Removed obsolete option BUILD_opencv_hal
+
+Removed options WITH_OPENGL & WITH_OPENMP from the "Disabled features"
+block because they have their own ifeq-block later on.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- .../0001-core-fix-x86-PIC-code-compilation.patch   |  49 --
- package/opencv/0001-ffmpeg30.patch                 | 638 +++++++++++++++++++++
- ...ix-return-type-value-VideoFrameSource_GPU.patch |  40 --
- ...VGenPkgconfig.cmake-rework-opencv.pc-gene.patch | 156 -----
- package/opencv/opencv.mk                           |   2 +-
- 5 files changed, 639 insertions(+), 246 deletions(-)
+ ...pthread-based-parallel_for-with-gcc-4.4.3.patch |  62 ------
+ ...002-fix-support-for-pthreads-parallel_for.patch | 212 ---------------------
+ package/opencv3/Config.in                          |   1 +
+ package/opencv3/opencv3.mk                         |  11 +-
+ 4 files changed, 7 insertions(+), 279 deletions(-)
 
-diff --git a/package/opencv/0001-core-fix-x86-PIC-code-compilation.patch b/package/opencv/0001-core-fix-x86-PIC-code-compilation.patch
+diff --git a/package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch b/package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
 deleted file mode 100644
-index 9e8c2e9..0000000
---- a/package/opencv/0001-core-fix-x86-PIC-code-compilation.patch
+index 2be8f33..0000000
+--- a/package/opencv3/0001-Fixed-compilation-of-pthread-based-parallel_for-with-gcc-4.4.3.patch
 +++ /dev/null
-@@ -1,49 +0,0 @@
--From ea50be0529c248961e1b66293f8a9e4b807294a6 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sun, 12 Oct 2014 10:17:23 +0200
--Subject: [PATCH] core: fix x86 PIC code compilation
+@@ -1,62 +0,0 @@
+-Backport from https://github.com/Itseez/opencv/commit/1f983ec39c97298b0c8ce409a1cc229ecf14e55c
 -
--This bug was triggered by Buildroot autobuilders [1,2], causing this
--kind of failures [3,4]:
--
--  [ 14%] Building CXX object modules/core/CMakeFiles/opencv_core.dir/src/system.cpp.o
--  /home/test/autobuild/instance-0/output/build/opencv-2.4.10/modules/core/src/system.cpp: In function '(static initializers for /home/test/autobuild/instance-0/output/build/opencv-2.4.10/modules/core/src/system.cpp)':
--  /home/test/autobuild/instance-0/output/build/opencv-2.4.10/modules/core/src/system.cpp:280:10: error: inconsistent operand constraints in an 'asm'
--  make[3]: *** [modules/core/CMakeFiles/opencv_core.dir/src/system.cpp.o] Error 1
--
--[1] http://buildroot.org/
--[2] http://autobuild.buildroot.org/
--[3] http://autobuild.buildroot.org/?reason=opencv-2.4.10
--[4] http://autobuild.buildroot.org/results/483/4838285b25d6293a5cf0bb9eadd5040a7c75d766/build-end.log
+-From 1f983ec39c97298b0c8ce409a1cc229ecf14e55c Mon Sep 17 00:00:00 2001
+-From: Maksim Shabunin <maksim.shabunin@itseez.com>
+-Date: Tue, 9 Jun 2015 13:59:48 +0300
+-Subject: [PATCH] Fixed compilation of pthread-based parallel_for with gcc
+- 4.4.3
 -
 -Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 ----
-- modules/core/src/system.cpp | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
+- modules/core/src/parallel.cpp | 12 +++++++-----
+- 1 file changed, 7 insertions(+), 5 deletions(-)
 -
--diff --git a/modules/core/src/system.cpp b/modules/core/src/system.cpp
--index 5a970d5..e9ffdc7 100644
----- a/modules/core/src/system.cpp
--+++ b/modules/core/src/system.cpp
--@@ -267,14 +267,17 @@ struct HWFeatures
--          : "cc"
--         );
--         #else
--+        // We need to preserve ebx since we are compiling PIC code.
--+        // This means we cannot use "=b" for the 2nd output register.
--         asm volatile
--         (
--          "pushl %%ebx\n\t"
--          "movl $7,%%eax\n\t"
--          "movl $0,%%ecx\n\t"
--          "cpuid\n\t"
--+         "movl %%ebx,%1\n\t"
--          "popl %%ebx\n\t"
---         : "=a"(cpuid_data[0]), "=b"(cpuid_data[1]), "=c"(cpuid_data[2]), "=d"(cpuid_data[3])
--+         : "=a"(cpuid_data[0]), "=r"(cpuid_data[1]), "=c"(cpuid_data[2]), "=d"(cpuid_data[3])
--          :
--          : "cc"
--         );
---- 
--2.1.2
--
-diff --git a/package/opencv/0001-ffmpeg30.patch b/package/opencv/0001-ffmpeg30.patch
-new file mode 100644
-index 0000000..70b6510
---- /dev/null
-+++ b/package/opencv/0001-ffmpeg30.patch
-@@ -0,0 +1,638 @@
-+From a61b19b524cd2b66a7c43e67edd7cc780bf46cbb Mon Sep 17 00:00:00 2001
-+From: Alexander Alekhin <alexander.alekhin@itseez.com>
-+Date: Wed, 2 Mar 2016 17:54:17 +0300
-+Subject: [PATCH] backport ffmpeg fixes
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Downloaded from upstream commit:
-+https://github.com/Itseez/opencv/commit/a61b19b524cd2b66a7c43e67edd7cc780bf46cbb
-+---
-+ modules/highgui/src/cap_ffmpeg_impl.hpp | 364 +++++++++++++++++++++++++++-----
-+ 1 file changed, 314 insertions(+), 50 deletions(-)
-+
-+diff --git a/modules/highgui/src/cap_ffmpeg_impl.hpp b/modules/highgui/src/cap_ffmpeg_impl.hpp
-+index 1b79870..6df542a 100644
-+--- a/modules/highgui/src/cap_ffmpeg_impl.hpp
-++++ b/modules/highgui/src/cap_ffmpeg_impl.hpp
-+@@ -118,11 +118,6 @@ extern "C" {
-+ #define CV_WARN(message) fprintf(stderr, "warning: %s (%s:%d)\n", message, __FILE__, __LINE__)
-+ #endif
-+ 
-+-/* PIX_FMT_RGBA32 macro changed in newer ffmpeg versions */
-+-#ifndef PIX_FMT_RGBA32
-+-#define PIX_FMT_RGBA32 PIX_FMT_RGB32
-+-#endif
-+-
-+ #define CALC_FFMPEG_VERSION(a,b,c) ( a<<16 | b<<8 | c )
-+ 
-+ #if defined WIN32 || defined _WIN32
-+@@ -132,6 +127,11 @@ extern "C" {
-+     #include <stdio.h>
-+     #include <sys/types.h>
-+     #include <sys/sysctl.h>
-++    #include <sys/time.h>
-++#if defined __APPLE__
-++    #include <mach/clock.h>
-++    #include <mach/mach.h>
-++#endif
-+ #endif
-+ 
-+ #ifndef MIN
-+@@ -156,6 +156,155 @@ extern "C" {
-+ #  define CV_CODEC(name) name
-+ #endif
-+ 
-++#if LIBAVUTIL_BUILD < (LIBAVUTIL_VERSION_MICRO >= 100 \
-++    ? CALC_FFMPEG_VERSION(51, 74, 100) : CALC_FFMPEG_VERSION(51, 42, 0))
-++#define AVPixelFormat PixelFormat
-++#define AV_PIX_FMT_BGR24 PIX_FMT_BGR24
-++#define AV_PIX_FMT_RGB24 PIX_FMT_RGB24
-++#define AV_PIX_FMT_GRAY8 PIX_FMT_GRAY8
-++#define AV_PIX_FMT_YUV422P PIX_FMT_YUV422P
-++#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
-++#define AV_PIX_FMT_YUV444P PIX_FMT_YUV444P
-++#define AV_PIX_FMT_YUVJ420P PIX_FMT_YUVJ420P
-++#define AV_PIX_FMT_GRAY16LE PIX_FMT_GRAY16LE
-++#define AV_PIX_FMT_GRAY16BE PIX_FMT_GRAY16BE
-++#endif
-++
-++#if LIBAVUTIL_BUILD >= (LIBAVUTIL_VERSION_MICRO >= 100 \
-++    ? CALC_FFMPEG_VERSION(52, 38, 100) : CALC_FFMPEG_VERSION(52, 13, 0))
-++#define USE_AV_FRAME_GET_BUFFER 1
-++#else
-++#define USE_AV_FRAME_GET_BUFFER 0
-++#ifndef AV_NUM_DATA_POINTERS // required for 0.7.x/0.8.x ffmpeg releases
-++#define AV_NUM_DATA_POINTERS 4
-++#endif
-++#endif
-++
-++
-++#ifndef USE_AV_INTERRUPT_CALLBACK
-++#if LIBAVFORMAT_BUILD >= CALC_FFMPEG_VERSION(53, 21, 0)
-++#define USE_AV_INTERRUPT_CALLBACK 1
-++#else
-++#define USE_AV_INTERRUPT_CALLBACK 0
-++#endif
-++#endif
-++
-++#if USE_AV_INTERRUPT_CALLBACK
-++#define LIBAVFORMAT_INTERRUPT_TIMEOUT_MS 30000
-++
-++#ifdef WIN32
-++// http://stackoverflow.com/questions/5404277/porting-clock-gettime-to-windows
-++
-++static
-++inline LARGE_INTEGER get_filetime_offset()
-++{
-++    SYSTEMTIME s;
-++    FILETIME f;
-++    LARGE_INTEGER t;
-++
-++    s.wYear = 1970;
-++    s.wMonth = 1;
-++    s.wDay = 1;
-++    s.wHour = 0;
-++    s.wMinute = 0;
-++    s.wSecond = 0;
-++    s.wMilliseconds = 0;
-++    SystemTimeToFileTime(&s, &f);
-++    t.QuadPart = f.dwHighDateTime;
-++    t.QuadPart <<= 32;
-++    t.QuadPart |= f.dwLowDateTime;
-++    return t;
-++}
-++
-++static
-++inline void get_monotonic_time(timespec *tv)
-++{
-++    LARGE_INTEGER           t;
-++    FILETIME				f;
-++    double                  microseconds;
-++    static LARGE_INTEGER    offset;
-++    static double           frequencyToMicroseconds;
-++    static int              initialized = 0;
-++    static BOOL             usePerformanceCounter = 0;
-++
-++    if (!initialized)
-++    {
-++        LARGE_INTEGER performanceFrequency;
-++        initialized = 1;
-++        usePerformanceCounter = QueryPerformanceFrequency(&performanceFrequency);
-++        if (usePerformanceCounter)
-++        {
-++            QueryPerformanceCounter(&offset);
-++            frequencyToMicroseconds = (double)performanceFrequency.QuadPart / 1000000.;
-++        }
-++        else
-++        {
-++            offset = get_filetime_offset();
-++            frequencyToMicroseconds = 10.;
-++        }
-++    }
-++
-++    if (usePerformanceCounter)
-++    {
-++        QueryPerformanceCounter(&t);
-++    } else {
-++        GetSystemTimeAsFileTime(&f);
-++        t.QuadPart = f.dwHighDateTime;
-++        t.QuadPart <<= 32;
-++        t.QuadPart |= f.dwLowDateTime;
-++    }
-++
-++    t.QuadPart -= offset.QuadPart;
-++    microseconds = (double)t.QuadPart / frequencyToMicroseconds;
-++    t.QuadPart = microseconds;
-++    tv->tv_sec = t.QuadPart / 1000000;
-++    tv->tv_nsec = (t.QuadPart % 1000000) * 1000;
-++}
-++#else
-++static
-++inline void get_monotonic_time(timespec *time)
-++{
-++#if defined(__APPLE__) && defined(__MACH__)
-++    clock_serv_t cclock;
-++    mach_timespec_t mts;
-++    host_get_clock_service(mach_host_self(), CALENDAR_CLOCK, &cclock);
-++    clock_get_time(cclock, &mts);
-++    mach_port_deallocate(mach_task_self(), cclock);
-++    time->tv_sec = mts.tv_sec;
-++    time->tv_nsec = mts.tv_nsec;
-++#else
-++    clock_gettime(CLOCK_MONOTONIC, time);
-++#endif
-++}
-++#endif
-++
-++static
-++inline timespec get_monotonic_time_diff(timespec start, timespec end)
-++{
-++    timespec temp;
-++    if (end.tv_nsec - start.tv_nsec < 0)
-++    {
-++        temp.tv_sec = end.tv_sec - start.tv_sec - 1;
-++        temp.tv_nsec = 1000000000 + end.tv_nsec - start.tv_nsec;
-++    }
-++    else
-++    {
-++        temp.tv_sec = end.tv_sec - start.tv_sec;
-++        temp.tv_nsec = end.tv_nsec - start.tv_nsec;
-++    }
-++    return temp;
-++}
-++
-++static
-++inline double get_monotonic_time_diff_ms(timespec time1, timespec time2)
-++{
-++    timespec delta = get_monotonic_time_diff(time1, time2);
-++    double milliseconds = delta.tv_sec * 1000 + (double)delta.tv_nsec / 1000000.0;
-++
-++    return milliseconds;
-++}
-++#endif // USE_AV_INTERRUPT_CALLBACK
-++
-+ static int get_number_of_cpus(void)
-+ {
-+ #if LIBAVFORMAT_BUILD < CALC_FFMPEG_VERSION(52, 111, 0)
-+@@ -205,12 +354,36 @@ struct Image_FFMPEG
-+ };
-+ 
-+ 
-++#if USE_AV_INTERRUPT_CALLBACK
-++struct AVInterruptCallbackMetadata
-++{
-++    timespec value;
-++    unsigned int timeout_after_ms;
-++    int timeout;
-++};
-++
-++static
-+ inline void _opencv_ffmpeg_free(void** ptr)
-+ {
-+     if(*ptr) free(*ptr);
-+     *ptr = 0;
-+ }
-+ 
-++static
-++inline int _opencv_ffmpeg_interrupt_callback(void *ptr)
-++{
-++    AVInterruptCallbackMetadata* metadata = (AVInterruptCallbackMetadata*)ptr;
-++    assert(metadata);
-++
-++    timespec now;
-++    get_monotonic_time(&now);
-++
-++    metadata->timeout = get_monotonic_time_diff_ms(metadata->value, now) > metadata->timeout_after_ms;
-++
-++    return metadata->timeout ? -1 : 0;
-++}
-++#endif
-++
-+ 
-+ struct CvCapture_FFMPEG
-+ {
-+@@ -264,6 +437,10 @@ struct CvCapture_FFMPEG
-+ #if LIBAVFORMAT_BUILD >= CALC_FFMPEG_VERSION(52, 111, 0)
-+     AVDictionary *dict;
-+ #endif
-++
-++#if USE_AV_INTERRUPT_CALLBACK
-++    AVInterruptCallbackMetadata interrupt_metadata;
-++#endif
-+ };
-+ 
-+ void CvCapture_FFMPEG::init()
-+@@ -301,8 +478,10 @@ void CvCapture_FFMPEG::close()
-+ 
-+     if( picture )
-+     {
-+-        // FFmpeg and Libav added avcodec_free_frame in different versions.
-+ #if LIBAVCODEC_BUILD >= (LIBAVCODEC_VERSION_MICRO >= 100 \
-++    ? CALC_FFMPEG_VERSION(55, 45, 101) : CALC_FFMPEG_VERSION(55, 28, 1))
-++        av_frame_free(&picture);
-++#elif LIBAVCODEC_BUILD >= (LIBAVCODEC_VERSION_MICRO >= 100 \
-+     ? CALC_FFMPEG_VERSION(54, 59, 100) : CALC_FFMPEG_VERSION(54, 28, 0))
-+         avcodec_free_frame(&picture);
-+ #else
-+@@ -333,11 +512,15 @@ void CvCapture_FFMPEG::close()
-+         ic = NULL;
-+     }
-+ 
-++#if USE_AV_FRAME_GET_BUFFER
-++    av_frame_unref(&rgb_picture);
-++#else
-+     if( rgb_picture.data[0] )
-+     {
-+         free( rgb_picture.data[0] );
-+         rgb_picture.data[0] = 0;
-+     }
-++#endif
-+ 
-+     // free last packet if exist
-+     if (packet.data) {
-+@@ -556,6 +739,16 @@ bool CvCapture_FFMPEG::open( const char* _filename )
-+ 
-+     close();
-+ 
-++#if USE_AV_INTERRUPT_CALLBACK
-++    /* interrupt callback */
-++    interrupt_metadata.timeout_after_ms = LIBAVFORMAT_INTERRUPT_TIMEOUT_MS;
-++    get_monotonic_time(&interrupt_metadata.value);
-++
-++    ic = avformat_alloc_context();
-++    ic->interrupt_callback.callback = _opencv_ffmpeg_interrupt_callback;
-++    ic->interrupt_callback.opaque = &interrupt_metadata;
-++#endif
-++
-+ #if LIBAVFORMAT_BUILD >= CALC_FFMPEG_VERSION(52, 111, 0)
-+     av_dict_set(&dict, "rtsp_transport", "tcp", 0);
-+     int err = avformat_open_input(&ic, _filename, NULL, &dict);
-+@@ -619,19 +812,18 @@ bool CvCapture_FFMPEG::open( const char* _filename )
-+ 
-+             video_stream = i;
-+             video_st = ic->streams[i];
-++#if LIBAVCODEC_BUILD >= (LIBAVCODEC_VERSION_MICRO >= 100 \
-++    ? CALC_FFMPEG_VERSION(55, 45, 101) : CALC_FFMPEG_VERSION(55, 28, 1))
-++            picture = av_frame_alloc();
-++#else
-+             picture = avcodec_alloc_frame();
-+-
-+-            rgb_picture.data[0] = (uint8_t*)malloc(
-+-                    avpicture_get_size( PIX_FMT_BGR24,
-+-                                        enc->width, enc->height ));
-+-            avpicture_fill( (AVPicture*)&rgb_picture, rgb_picture.data[0],
-+-                            PIX_FMT_BGR24, enc->width, enc->height );
-++#endif
-+ 
-+             frame.width = enc->width;
-+             frame.height = enc->height;
-+             frame.cn = 3;
-+-            frame.step = rgb_picture.linesize[0];
-+-            frame.data = rgb_picture.data[0];
-++            frame.step = 0;
-++            frame.data = NULL;
-+             break;
-+         }
-+     }
-+@@ -668,6 +860,16 @@ bool CvCapture_FFMPEG::grabFrame()
-+     // get the next frame
-+     while (!valid)
-+     {
-++        av_free_packet (&packet);
-++
-++#if USE_AV_INTERRUPT_CALLBACK
-++        if (interrupt_metadata.timeout)
-++        {
-++            valid = false;
-++            break;
-++        }
-++#endif
-++
-+         int ret = av_read_frame(ic, &packet);
-+         if (ret == AVERROR(EAGAIN)) continue;
-+ 
-+@@ -703,6 +905,11 @@ bool CvCapture_FFMPEG::grabFrame()
-+                 picture_pts = packet.pts != AV_NOPTS_VALUE_ && packet.pts != 0 ? packet.pts : packet.dts;
-+             frame_number++;
-+             valid = true;
-++
-++#if USE_AV_INTERRUPT_CALLBACK
-++            // update interrupt value
-++            get_monotonic_time(&interrupt_metadata.value);
-++#endif
-+         }
-+         else
-+         {
-+@@ -727,38 +934,59 @@ bool CvCapture_FFMPEG::retrieveFrame(int, unsigned char** data, int* step, int*
-+     if( !video_st || !picture->data[0] )
-+         return false;
-+ 
-+-    avpicture_fill((AVPicture*)&rgb_picture, rgb_picture.data[0], PIX_FMT_RGB24,
-+-                   video_st->codec->width, video_st->codec->height);
-+-
-+     if( img_convert_ctx == NULL ||
-+         frame.width != video_st->codec->width ||
-+-        frame.height != video_st->codec->height )
-++        frame.height != video_st->codec->height ||
-++        frame.data == NULL )
-+     {
-+-        if( img_convert_ctx )
-+-            sws_freeContext(img_convert_ctx);
-+-
-+-        frame.width = video_st->codec->width;
-+-        frame.height = video_st->codec->height;
-++        // Some sws_scale optimizations have some assumptions about alignment of data/step/width/height
-++        // Also we use coded_width/height to workaround problem with legacy ffmpeg versions (like n0.8)
-++        int buffer_width = video_st->codec->coded_width, buffer_height = video_st->codec->coded_height;
-+ 
-+         img_convert_ctx = sws_getCachedContext(
-+-                NULL,
-+-                video_st->codec->width, video_st->codec->height,
-++                img_convert_ctx,
-++                buffer_width, buffer_height,
-+                 video_st->codec->pix_fmt,
-+-                video_st->codec->width, video_st->codec->height,
-+-                PIX_FMT_BGR24,
-++                buffer_width, buffer_height,
-++                AV_PIX_FMT_BGR24,
-+                 SWS_BICUBIC,
-+                 NULL, NULL, NULL
-+                 );
-+ 
-+         if (img_convert_ctx == NULL)
-+             return false;//CV_Error(0, "Cannot initialize the conversion context!");
-++
-++#if USE_AV_FRAME_GET_BUFFER
-++        av_frame_unref(&rgb_picture);
-++        rgb_picture.format = AV_PIX_FMT_BGR24;
-++        rgb_picture.width = buffer_width;
-++        rgb_picture.height = buffer_height;
-++        if (0 != av_frame_get_buffer(&rgb_picture, 32))
-++        {
-++            CV_WARN("OutOfMemory");
-++            return false;
-++        }
-++#else
-++        int aligns[AV_NUM_DATA_POINTERS];
-++        avcodec_align_dimensions2(video_st->codec, &buffer_width, &buffer_height, aligns);
-++        rgb_picture.data[0] = (uint8_t*)realloc(rgb_picture.data[0],
-++                avpicture_get_size( AV_PIX_FMT_BGR24,
-++                                    buffer_width, buffer_height ));
-++        avpicture_fill( (AVPicture*)&rgb_picture, rgb_picture.data[0],
-++                        AV_PIX_FMT_BGR24, buffer_width, buffer_height );
-++#endif
-++        frame.width = video_st->codec->width;
-++        frame.height = video_st->codec->height;
-++        frame.cn = 3;
-++        frame.data = rgb_picture.data[0];
-++        frame.step = rgb_picture.linesize[0];
-+     }
-+ 
-+     sws_scale(
-+             img_convert_ctx,
-+             picture->data,
-+             picture->linesize,
-+-            0, video_st->codec->height,
-++            0, video_st->codec->coded_height,
-+             rgb_picture.data,
-+             rgb_picture.linesize
-+             );
-+@@ -1099,10 +1327,20 @@ static AVFrame * icv_alloc_picture_FFMPEG(int pix_fmt, int width, int height, bo
-+     uint8_t * picture_buf;
-+     int size;
-+ 
-++#if LIBAVCODEC_BUILD >= (LIBAVCODEC_VERSION_MICRO >= 100 \
-++    ? CALC_FFMPEG_VERSION(55, 45, 101) : CALC_FFMPEG_VERSION(55, 28, 1))
-++    picture = av_frame_alloc();
-++#else
-+     picture = avcodec_alloc_frame();
-++#endif
-+     if (!picture)
-+         return NULL;
-+-    size = avpicture_get_size( (PixelFormat) pix_fmt, width, height);
-++
-++    picture->format = pix_fmt;
-++    picture->width = width;
-++    picture->height = height;
-++
-++    size = avpicture_get_size( (AVPixelFormat) pix_fmt, width, height);
-+     if(alloc){
-+         picture_buf = (uint8_t *) malloc(size);
-+         if (!picture_buf)
-+@@ -1111,7 +1349,7 @@ static AVFrame * icv_alloc_picture_FFMPEG(int pix_fmt, int width, int height, bo
-+             return NULL;
-+         }
-+         avpicture_fill((AVPicture *)picture, picture_buf,
-+-                       (PixelFormat) pix_fmt, width, height);
-++                       (AVPixelFormat) pix_fmt, width, height);
-+     }
-+     else {
-+     }
-+@@ -1211,7 +1449,7 @@ static AVStream *icv_add_video_stream_FFMPEG(AVFormatContext *oc,
-+ #endif
-+ 
-+     c->gop_size = 12; /* emit one intra frame every twelve frames at most */
-+-    c->pix_fmt = (PixelFormat) pixel_format;
-++    c->pix_fmt = (AVPixelFormat) pixel_format;
-+ 
-+     if (c->codec_id == CV_CODEC(CODEC_ID_MPEG2VIDEO)) {
-+         c->max_b_frames = 2;
-+@@ -1372,12 +1610,12 @@ bool CvVideoWriter_FFMPEG::writeFrame( const unsigned char* data, int step, int
-+ #endif
-+ 
-+     // check parameters
-+-    if (input_pix_fmt == PIX_FMT_BGR24) {
-++    if (input_pix_fmt == AV_PIX_FMT_BGR24) {
-+         if (cn != 3) {
-+             return false;
-+         }
-+     }
-+-    else if (input_pix_fmt == PIX_FMT_GRAY8) {
-++    else if (input_pix_fmt == AV_PIX_FMT_GRAY8) {
-+         if (cn != 1) {
-+             return false;
-+         }
-+@@ -1390,13 +1628,13 @@ bool CvVideoWriter_FFMPEG::writeFrame( const unsigned char* data, int step, int
-+         assert( input_picture );
-+         // let input_picture point to the raw data buffer of 'image'
-+         avpicture_fill((AVPicture *)input_picture, (uint8_t *) data,
-+-                       (PixelFormat)input_pix_fmt, width, height);
-++                       (AVPixelFormat)input_pix_fmt, width, height);
-+ 
-+         if( !img_convert_ctx )
-+         {
-+             img_convert_ctx = sws_getContext(width,
-+                                              height,
-+-                                             (PixelFormat)input_pix_fmt,
-++                                             (AVPixelFormat)input_pix_fmt,
-+                                              c->width,
-+                                              c->height,
-+                                              c->pix_fmt,
-+@@ -1414,7 +1652,7 @@ bool CvVideoWriter_FFMPEG::writeFrame( const unsigned char* data, int step, int
-+     }
-+     else{
-+         avpicture_fill((AVPicture *)picture, (uint8_t *) data,
-+-                       (PixelFormat)input_pix_fmt, width, height);
-++                       (AVPixelFormat)input_pix_fmt, width, height);
-+     }
-+ 
-+     picture->pts = frame_idx;
-+@@ -1547,10 +1785,10 @@ bool CvVideoWriter_FFMPEG::open( const char * filename, int fourcc,
-+ 
-+     /* determine optimal pixel format */
-+     if (is_color) {
-+-        input_pix_fmt = PIX_FMT_BGR24;
-++        input_pix_fmt = AV_PIX_FMT_BGR24;
-+     }
-+     else {
-+-        input_pix_fmt = PIX_FMT_GRAY8;
-++        input_pix_fmt = AV_PIX_FMT_GRAY8;
-+     }
-+ 
-+     /* Lookup codec_id for given fourcc */
-+@@ -1587,21 +1825,21 @@ bool CvVideoWriter_FFMPEG::open( const char * filename, int fourcc,
-+         break;
-+ #endif
-+     case CV_CODEC(CODEC_ID_HUFFYUV):
-+-        codec_pix_fmt = PIX_FMT_YUV422P;
-++        codec_pix_fmt = AV_PIX_FMT_YUV422P;
-+         break;
-+     case CV_CODEC(CODEC_ID_MJPEG):
-+     case CV_CODEC(CODEC_ID_LJPEG):
-+-        codec_pix_fmt = PIX_FMT_YUVJ420P;
-++        codec_pix_fmt = AV_PIX_FMT_YUVJ420P;
-+         bitrate_scale = 3;
-+         break;
-+     case CV_CODEC(CODEC_ID_RAWVIDEO):
-+-        codec_pix_fmt = input_pix_fmt == PIX_FMT_GRAY8 ||
-+-                        input_pix_fmt == PIX_FMT_GRAY16LE ||
-+-                        input_pix_fmt == PIX_FMT_GRAY16BE ? input_pix_fmt : PIX_FMT_YUV420P;
-++        codec_pix_fmt = input_pix_fmt == AV_PIX_FMT_GRAY8 ||
-++                        input_pix_fmt == AV_PIX_FMT_GRAY16LE ||
-++                        input_pix_fmt == AV_PIX_FMT_GRAY16BE ? input_pix_fmt : AV_PIX_FMT_YUV420P;
-+         break;
-+     default:
-+         // good for lossy formats, MPEG, etc.
-+-        codec_pix_fmt = PIX_FMT_YUV420P;
-++        codec_pix_fmt = AV_PIX_FMT_YUV420P;
-+         break;
-+     }
-+ 
-+@@ -1826,7 +2064,7 @@ struct OutputMediaStream_FFMPEG
-+     void write(unsigned char* data, int size, int keyFrame);
-+ 
-+     // add a video output stream to the container
-+-    static AVStream* addVideoStream(AVFormatContext *oc, CV_CODEC_ID codec_id, int w, int h, int bitrate, double fps, PixelFormat pixel_format);
-++    static AVStream* addVideoStream(AVFormatContext *oc, CV_CODEC_ID codec_id, int w, int h, int bitrate, double fps, AVPixelFormat pixel_format);
-+ 
-+     AVOutputFormat* fmt_;
-+     AVFormatContext* oc_;
-+@@ -1873,7 +2111,7 @@ void OutputMediaStream_FFMPEG::close()
-+     }
-+ }
-+ 
-+-AVStream* OutputMediaStream_FFMPEG::addVideoStream(AVFormatContext *oc, CV_CODEC_ID codec_id, int w, int h, int bitrate, double fps, PixelFormat pixel_format)
-++AVStream* OutputMediaStream_FFMPEG::addVideoStream(AVFormatContext *oc, CV_CODEC_ID codec_id, int w, int h, int bitrate, double fps, AVPixelFormat pixel_format)
-+ {
-+     #if LIBAVFORMAT_BUILD >= CALC_FFMPEG_VERSION(53, 10, 0)
-+         AVStream* st = avformat_new_stream(oc, 0);
-+@@ -2011,7 +2249,7 @@ bool OutputMediaStream_FFMPEG::open(const char* fileName, int width, int height,
-+     oc_->max_delay = (int)(0.7 * AV_TIME_BASE); // This reduces buffer underrun warnings with MPEG
-+ 
-+     // set a few optimal pixel formats for lossless codecs of interest..
-+-    PixelFormat codec_pix_fmt = PIX_FMT_YUV420P;
-++    AVPixelFormat codec_pix_fmt = AV_PIX_FMT_YUV420P;
-+     int bitrate_scale = 64;
-+ 
-+     // TODO -- safe to ignore output audio stream?
-+@@ -2150,6 +2388,10 @@ struct InputMediaStream_FFMPEG
-+     AVFormatContext* ctx_;
-+     int video_stream_id_;
-+     AVPacket pkt_;
-++
-++#if USE_AV_INTERRUPT_CALLBACK
-++    AVInterruptCallbackMetadata interrupt_metadata;
-++#endif
-+ };
-+ 
-+ bool InputMediaStream_FFMPEG::open(const char* fileName, int* codec, int* chroma_format, int* width, int* height)
-+@@ -2160,6 +2402,16 @@ bool InputMediaStream_FFMPEG::open(const char* fileName, int* codec, int* chroma
-+     video_stream_id_ = -1;
-+     memset(&pkt_, 0, sizeof(AVPacket));
-+ 
-++#if USE_AV_INTERRUPT_CALLBACK
-++    /* interrupt callback */
-++    interrupt_metadata.timeout_after_ms = LIBAVFORMAT_INTERRUPT_TIMEOUT_MS;
-++    get_monotonic_time(&interrupt_metadata.value);
-++
-++    ctx_ = avformat_alloc_context();
-++    ctx_->interrupt_callback.callback = _opencv_ffmpeg_interrupt_callback;
-++    ctx_->interrupt_callback.opaque = &interrupt_metadata;
-++#endif
-++
-+     #if LIBAVFORMAT_BUILD >= CALC_FFMPEG_VERSION(53, 13, 0)
-+         avformat_network_init();
-+     #endif
-+@@ -2220,15 +2472,15 @@ bool InputMediaStream_FFMPEG::open(const char* fileName, int* codec, int* chroma
-+ 
-+             switch (enc->pix_fmt)
-+             {
-+-            case PIX_FMT_YUV420P:
-++            case AV_PIX_FMT_YUV420P:
-+                 *chroma_format = ::VideoChromaFormat_YUV420;
-+                 break;
-+ 
-+-            case PIX_FMT_YUV422P:
-++            case AV_PIX_FMT_YUV422P:
-+                 *chroma_format = ::VideoChromaFormat_YUV422;
-+                 break;
-+ 
-+-            case PIX_FMT_YUV444P:
-++            case AV_PIX_FMT_YUV444P:
-+                 *chroma_format = ::VideoChromaFormat_YUV444;
-+                 break;
-+ 
-+@@ -2276,11 +2528,23 @@ bool InputMediaStream_FFMPEG::read(unsigned char** data, int* size, int* endOfFi
-+     // get the next frame
-+     for (;;)
-+     {
-++#if USE_AV_INTERRUPT_CALLBACK
-++        if(interrupt_metadata.timeout)
-++        {
-++            break;
-++        }
-++#endif
-++
-+         int ret = av_read_frame(ctx_, &pkt_);
-+ 
-+         if (ret == AVERROR(EAGAIN))
-+             continue;
-+ 
-++#if USE_AV_INTERRUPT_CALLBACK
-++        // update interrupt value
-++        get_monotonic_time(&interrupt_metadata.value);
-++#endif
-++
-+         if (ret < 0)
-+         {
-+             if (ret == (int)AVERROR_EOF)
-diff --git a/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch b/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
-deleted file mode 100644
-index d71235d..0000000
---- a/package/opencv/0002-superres-Fix-return-type-value-VideoFrameSource_GPU.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--superres: Fix return value VideoFrameSource_GPU
--
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--From 2e393ab83362743ba1825ad4b31d4a2925c606b4 Mon Sep 17 00:00:00 2001
--From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Date: Mon, 27 Oct 2014 13:39:35 +0000
--Subject: [PATCH] superres: Fix return value VideoFrameSource_GPU
--
--superres module fails to compile with the following error messages:
--
--[100%] Building CXX object modules/superres/CMakeFiles/opencv_superres.dir/src/super_resolution.cpp.o
--/opencv-2.4.10/modules/superres/src/frame_source.cpp: In function 'cv::Ptr<cv::superres::FrameSource> cv::superres::createFrameSource_Video_GPU(const string&)':
--/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: expected type-specifier before 'VideoFrameSource'
--/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: could not convert '(int*)operator new(4ul)' from 'int*' to 'cv::Ptr<cv::superres::FrameSource>'
--/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:16: error: expected ';' before 'VideoFrameSource'
--/opencv-2.4.10/modules/superres/src/frame_source.cpp:263:41: error: 'VideoFrameSource' was not declared in this scope
--/opencv-2.4.10/modules/superres/src/frame_source.cpp:264:1: error: control reaches end of non-void function [-Werror=return-type]
--cc1plus: some warnings being treated as errors
--make[3]: *** [modules/superres/CMakeFiles/opencv_superres.dir/src/frame_source.cpp.o] Error 1
--make[3]: *** Waiting for unfinished jobs....
--
--This is caused because the return value of the createFrameSource_Video_GPU function should be a VideoFrameSource_GPU object.
-----
-- modules/superres/src/frame_source.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/modules/superres/src/frame_source.cpp b/modules/superres/src/frame_source.cpp
--index 5f59a98..c5b2e76 100644
----- a/modules/superres/src/frame_source.cpp
--+++ b/modules/superres/src/frame_source.cpp
--@@ -260,7 +260,7 @@ namespace
-- 
-- Ptr<FrameSource> cv::superres::createFrameSource_Video_GPU(const string& fileName)
+-diff --git a/modules/core/src/parallel.cpp b/modules/core/src/parallel.cpp
+-index b1e7567..0b593ee 100644
+---- a/modules/core/src/parallel.cpp
+-+++ b/modules/core/src/parallel.cpp
+-@@ -132,8 +132,14 @@
+- namespace cv
 - {
---    return new VideoFrameSource(fileName);
--+    return new VideoFrameSource_GPU(fileName);
+-     ParallelLoopBody::~ParallelLoopBody() {}
+-+#if defined HAVE_PTHREADS && HAVE_PTHREADS
+-+    void parallel_for_pthreads(const cv::Range& range, const cv::ParallelLoopBody& body, double nstripes);
+-+    size_t parallel_pthreads_get_threads_num();
+-+    void parallel_pthreads_set_threads_num(int num);
+-+#endif
 - }
 - 
-- #endif // HAVE_OPENCV_GPU
-diff --git a/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch b/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+-+
+- namespace
+- {
+- #ifdef CV_PARALLEL_FRAMEWORK
+-@@ -301,7 +307,7 @@ void cv::parallel_for_(const cv::Range& range, const cv::ParallelLoopBody& body,
+-         }
+- 
+- #elif defined HAVE_PTHREADS
+--        void parallel_for_pthreads(const Range& range, const ParallelLoopBody& body, double nstripes);
+-+
+-         parallel_for_pthreads(range, body, nstripes);
+- 
+- #else
+-@@ -361,8 +367,6 @@ int cv::getNumThreads(void)
+- 
+- #elif defined HAVE_PTHREADS
+- 
+--        size_t parallel_pthreads_get_threads_num();
+--
+-         return parallel_pthreads_get_threads_num();
+- 
+- #else
+-@@ -424,8 +428,6 @@ void cv::setNumThreads( int threads )
+- 
+- #elif defined HAVE_PTHREADS
+- 
+--    void parallel_pthreads_set_threads_num(int num);
+--
+-     parallel_pthreads_set_threads_num(threads);
+- 
+- #endif
+--- 
+-2.4.4
+-
+diff --git a/package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch b/package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
 deleted file mode 100644
-index 768f08d..0000000
---- a/package/opencv/0003-cmake-OpenCVGenPkgconfig.cmake-rework-opencv.pc-gene.patch
+index 6eeb270..0000000
+--- a/package/opencv3/0002-fix-support-for-pthreads-parallel_for.patch
 +++ /dev/null
-@@ -1,156 +0,0 @@
--From eceada586bbf18fc267e437522ec4f1f23ddc656 Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Fri, 3 Oct 2014 00:32:40 +0200
--Subject: [PATCH] cmake/OpenCVGenPkgconfig.cmake: rework opencv.pc generation
+@@ -1,212 +0,0 @@
+-Backport from https://github.com/Itseez/opencv/commit/a482dcce464acbd5368fb93c6c3d52ba8401776a
 -
--Using absolute path to locate the components in the "Libs:" field of the
--*.pc can badly break cross-compilation, especially when building
--statically linked objects.
--
--Indeed, pkg-config automatically replaces the '-I...' and '-L...' paths
--when the PKG_CONFIG_SYSROOT_DIR and PKG_CONFIG_LIBDIR environment
--variables are set [1]. This feature is very helpful and common in
--cross-compilation framework like Buildroot [2,3].
--
--When there are absolute paths in the *.pc files, pkg-config won't be
--able to do the path substitions for these paths when the afromentioned
--environment variables are set.
--In such case, since the prefix is the target one, not the sysroot one,
--these libraries' abolute paths will point to:
--- in the best case: a non-existing file (i.e. these files do not exists
--  on the host system;
--- at worst: the host system's libraries. This will make the linking
--  failed because these host system's libraries will most likely not be
--  build for the target architecture [4].
--
--So, this patch replace the components' absolute paths by the form:
--  -L<libdir> -l<libname>
--
--This way, the linker will be able to resolve each dependency path,
--whatever the kind of objects/build (shared object or static build) it
--is dealing with.
--
--Note that for static link, the library order does matter [5]. The order
--of the opencv components has been carefully chosen to comply with this
--requirement.
--
--Fixes #3931
--
--[1] http://linux.die.net/man/1/pkg-config
--[2] http://buildroot.org/
--[3] http://git.buildroot.net/buildroot/tree/package/pkgconf/pkg-config.in
--[4] http://autobuild.buildroot.net/results/e8a/e8a859276db34aff87ef181b0cce98916b0afc90/build-end.log
--[5] http://stackoverflow.com/questions/45135/linker-order-gcc
+-From a482dcce464acbd5368fb93c6c3d52ba8401776a Mon Sep 17 00:00:00 2001
+-From: Alexander Alekhin <alexander.alekhin@itseez.com>
+-Date: Thu, 11 Jun 2015 16:53:07 +0300
+-Subject: [PATCH] fix support for pthreads parallel_for
 -
 -Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--
 ----
--Note: this patch properly applies on top of the master branch, though it
--      has been written on top of the 2.4 branch.
-----
-- cmake/OpenCVGenPkgconfig.cmake | 64 +++++++++++++++++++++++++++---------------
-- 1 file changed, 42 insertions(+), 22 deletions(-)
+- CMakeLists.txt                         | 29 ++++++++++++++++++++++-------
+- cmake/OpenCVFindLibsPerf.cmake         | 14 +++++++++-----
+- cmake/templates/cvconfig.h.in          |  6 ++++++
+- modules/core/src/parallel.cpp          | 13 ++++++++-----
+- modules/core/src/parallel_pthreads.cpp |  2 +-
+- modules/core/src/precomp.hpp           |  6 ------
+- 6 files changed, 46 insertions(+), 24 deletions(-)
 -
--diff --git a/cmake/OpenCVGenPkgconfig.cmake b/cmake/OpenCVGenPkgconfig.cmake
--index fa57db9..183c56d 100644
----- a/cmake/OpenCVGenPkgconfig.cmake
--+++ b/cmake/OpenCVGenPkgconfig.cmake
--@@ -8,10 +8,6 @@
-- #
-- # ${BIN_DIR}/unix-install/opencv.pc -> For use *with* "make install"
-- # -------------------------------------------------------------------------------------------
---set(prefix      "${CMAKE_INSTALL_PREFIX}")
---set(exec_prefix "\${prefix}")
---set(libdir      "") #TODO: need link paths for OpenCV_EXTRA_COMPONENTS
---set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index d9a17b3..27d8470 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -188,7 +188,7 @@ OCV_OPTION(WITH_QUICKTIME      "Use QuickTime for Video I/O insted of QTKit" OFF
+- OCV_OPTION(WITH_TBB            "Include Intel TBB support"                   OFF  IF (NOT IOS AND NOT WINRT) )
+- OCV_OPTION(WITH_OPENMP         "Include OpenMP support"                      OFF)
+- OCV_OPTION(WITH_CSTRIPES       "Include C= support"                          OFF  IF (WIN32 AND NOT WINRT)  )
+--OCV_OPTION(WITH_PTHREADS_PF    "Use pthreads-based parallel_for"             OFF  IF (NOT WIN32) )
+-+OCV_OPTION(WITH_PTHREADS_PF    "Use pthreads-based parallel_for"             ON   IF (NOT WIN32) )
+- OCV_OPTION(WITH_TIFF           "Include TIFF support"                        ON   IF (NOT IOS) )
+- OCV_OPTION(WITH_UNICAP         "Include Unicap support (GPL)"                OFF  IF (UNIX AND NOT APPLE AND NOT ANDROID) )
+- OCV_OPTION(WITH_V4L            "Include Video 4 Linux support"               ON   IF (UNIX AND NOT ANDROID) )
+-@@ -1026,6 +1026,27 @@ if(DEFINED WITH_GPHOTO2)
+- endif(DEFINED WITH_GPHOTO2)
 - 
-- if(CMAKE_BUILD_TYPE MATCHES "Release")
--   set(ocv_optkind OPT)
--@@ -35,42 +31,66 @@ ocv_list_reverse(OpenCV_LIB_COMPONENTS)
-- ocv_list_reverse(OpenCV_EXTRA_COMPONENTS)
 - 
-- #build the list of components
---set(OpenCV_LIB_COMPONENTS_ "")
---foreach(CVLib ${OpenCV_LIB_COMPONENTS})
---  get_target_property(libpath ${CVLib} LOCATION_${CMAKE_BUILD_TYPE})
---  get_filename_component(libname "${libpath}" NAME)
-- 
---  if(INSTALL_TO_MANGLED_PATHS)
---    set(libname "${libname}.${OPENCV_VERSION}")
---  endif()
--+# Note:
--+#   when linking against static libraries, if libfoo depends on libbar, then
--+#   libfoo must come first in the linker flags.
--+
--+# world is a special target whose library should come first, especially for
--+# static link.
--+if(OpenCV_LIB_COMPONENTS MATCHES "opencv_world")
--+  list(REMOVE_ITEM OpenCV_LIB_COMPONENTS "opencv_world")
--+  list(INSERT OpenCV_LIB_COMPONENTS 0 "opencv_world")
+-+# Order is similar to CV_PARALLEL_FRAMEWORK in core/src/parallel.cpp
+-+ocv_clear_vars(CV_PARALLEL_FRAMEWORK)
+-+if(HAVE_TBB)
+-+  set(CV_PARALLEL_FRAMEWORK "TBB (ver ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} interface ${TBB_INTERFACE_VERSION})")
+-+elseif(HAVE_CSTRIPES)
+-+  set(CV_PARALLEL_FRAMEWORK "C=")
+-+elseif(HAVE_OPENMP)
+-+  set(CV_PARALLEL_FRAMEWORK "OpenMP")
+-+elseif(HAVE_GCD)
+-+  set(CV_PARALLEL_FRAMEWORK "GCD")
+-+elseif(WINRT OR HAVE_CONCURRENCY)
+-+  set(CV_PARALLEL_FRAMEWORK "Concurrency")
+-+elseif(HAVE_PTHREADS_PF)
+-+  set(CV_PARALLEL_FRAMEWORK "pthreads")
+-+else()
+-+  set(CV_PARALLEL_FRAMEWORK "none")
 -+endif()
+-+status("")
+-+status("  Parallel framework:" TRUE THEN "${CV_PARALLEL_FRAMEWORK}" ELSE NO)
 -+
--+set(OpenCV_LIB_COMPONENTS_)
--+foreach(CVLib ${OpenCV_LIB_COMPONENTS})
-- 
---  #need better solution....
---  if(libpath MATCHES "3rdparty")
---    set(installDir "share/OpenCV/3rdparty/${OPENCV_LIB_INSTALL_PATH}")
--+  get_target_property(libloc ${CVLib} LOCATION_${CMAKE_BUILD_TYPE})
--+  if(libloc MATCHES "3rdparty")
--+    set(libpath "\${exec_prefix}/share/OpenCV/3rdparty/${OPENCV_LIB_INSTALL_PATH}")
--   else()
---    set(installDir "${OPENCV_LIB_INSTALL_PATH}")
--+    set(libpath "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
--   endif()
--+  list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libpath}")
 -+
--+  get_filename_component(libname ${CVLib} NAME_WE)
--+  string(REGEX REPLACE "^lib" "" libname "${libname}")
--+  list(APPEND OpenCV_LIB_COMPONENTS_ "-l${libname}")
+- # ========================== Other third-party libraries ==========================
+- status("")
+- status("  Other third-party libraries:")
+-@@ -1045,12 +1066,6 @@ status("    Use IPP Async:"  HAVE_IPP_A       THEN "YES" ELSE NO)
+- endif(DEFINED WITH_IPP_A)
 - 
---  set(OpenCV_LIB_COMPONENTS_ "${OpenCV_LIB_COMPONENTS_} \${exec_prefix}/${installDir}/${libname}")
-- endforeach()
+- status("    Use Eigen:"      HAVE_EIGEN       THEN "YES (ver ${EIGEN_WORLD_VERSION}.${EIGEN_MAJOR_VERSION}.${EIGEN_MINOR_VERSION})" ELSE NO)
+--status("    Use TBB:"        HAVE_TBB         THEN "YES (ver ${TBB_VERSION_MAJOR}.${TBB_VERSION_MINOR} interface ${TBB_INTERFACE_VERSION})" ELSE NO)
+--status("    Use OpenMP:"     HAVE_OPENMP      THEN YES ELSE NO)
+--status("    Use GCD"         HAVE_GCD         THEN YES ELSE NO)
+--status("    Use Concurrency" HAVE_CONCURRENCY THEN YES ELSE NO)
+--status("    Use C=:"         HAVE_CSTRIPES    THEN YES ELSE NO)
+--status("    Use pthreads for parallel for:"   HAVE_PTHREADS_PF THEN YES ELSE NO)
+- status("    Use Cuda:"       HAVE_CUDA        THEN "YES (ver ${CUDA_VERSION_STRING})" ELSE NO)
+- status("    Use OpenCL:"     HAVE_OPENCL      THEN YES ELSE NO)
 - 
-- # add extra dependencies required for OpenCV
---set(OpenCV_LIB_COMPONENTS ${OpenCV_LIB_COMPONENTS_})
-- if(OpenCV_EXTRA_COMPONENTS)
--   foreach(extra_component ${OpenCV_EXTRA_COMPONENTS})
-- 
---    if(extra_component MATCHES "^-[lL]" OR extra_component MATCHES "[\\/]")
---      set(maybe_l_prefix "")
--+    if(extra_component MATCHES "^-[lL]")
--+      set(libprefix "")
--+      set(libname "${extra_component}")
--+    elseif(extra_component MATCHES "[\\/]")
--+      get_filename_component(libdir "${extra_component}" PATH)
--+      list(APPEND OpenCV_LIB_COMPONENTS_ "-L${libdir}")
--+      get_filename_component(libname "${extra_component}" NAME_WE)
--+      string(REGEX REPLACE "^lib" "" libname "${libname}")
--+      set(libprefix "-l")
--     else()
---      set(maybe_l_prefix "-l")
--+      set(libprefix "-l")
--+      set(libname "${extra_component}")
--     endif()
---
---    set(OpenCV_LIB_COMPONENTS "${OpenCV_LIB_COMPONENTS} ${maybe_l_prefix}${extra_component}")
--+    list(APPEND OpenCV_LIB_COMPONENTS_ "${libprefix}${libname}")
-- 
--   endforeach()
+-diff --git a/cmake/OpenCVFindLibsPerf.cmake b/cmake/OpenCVFindLibsPerf.cmake
+-index bda5d79..d1bc541 100644
+---- a/cmake/OpenCVFindLibsPerf.cmake
+-+++ b/cmake/OpenCVFindLibsPerf.cmake
+-@@ -120,12 +120,16 @@ if(WITH_OPENMP)
+-   set(HAVE_OPENMP "${OPENMP_FOUND}")
 - endif()
 - 
--+list(REMOVE_DUPLICATES OpenCV_LIB_COMPONENTS_)
--+string(REPLACE ";" " " OpenCV_LIB_COMPONENTS "${OpenCV_LIB_COMPONENTS_}")
+--if(UNIX OR ANDROID)
+--if(NOT APPLE AND NOT HAVE_TBB AND NOT HAVE_OPENMP)
+--  set(HAVE_PTHREADS_PF 1)
+--else()
+--  set(HAVE_PTHREADS_PF 0)
+-+if(NOT MSVC AND NOT DEFINED HAVE_PTHREADS)
+-+  set(_fname "${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/pthread_test.cpp")
+-+  file(WRITE "${_fname}" "#include <pthread.h>\nint main() { (void)pthread_self(); return 0; }\n")
+-+  try_compile(HAVE_PTHREADS "${CMAKE_BINARY_DIR}" "${_fname}")
+-+  file(REMOVE "${_fname}")
+- endif()
 -+
-- #generate the .pc file
--+set(prefix      "${CMAKE_INSTALL_PREFIX}")
--+set(exec_prefix "\${prefix}")
--+set(libdir      "\${exec_prefix}/${OPENCV_LIB_INSTALL_PATH}")
--+set(includedir  "\${prefix}/${OPENCV_INCLUDE_INSTALL_PATH}")
--+
-- if(INSTALL_TO_MANGLED_PATHS)
--   set(OPENCV_PC_FILE_NAME "opencv-${OPENCV_VERSION}.pc")
+-+ocv_clear_vars(HAVE_PTHREADS_PF)
+-+if(WITH_PTHREADS_PF)
+-+  set(HAVE_PTHREADS_PF ${HAVE_PTHREADS})
 - else()
+-   set(HAVE_PTHREADS_PF 0)
+- endif()
+-diff --git a/cmake/templates/cvconfig.h.in b/cmake/templates/cvconfig.h.in
+-index 4a1d1c6..3330774 100644
+---- a/cmake/templates/cvconfig.h.in
+-+++ b/cmake/templates/cvconfig.h.in
+-@@ -139,6 +139,12 @@
+- /* PNG codec */
+- #cmakedefine HAVE_PNG
+- 
+-+/* Posix threads (pthreads) */
+-+#cmakedefine HAVE_PTHREADS
+-+
+-+/* parallel_for with pthreads */
+-+#cmakedefine HAVE_PTHREADS_PF
+-+
+- /* Qt support */
+- #cmakedefine HAVE_QT
+- 
+-diff --git a/modules/core/src/parallel.cpp b/modules/core/src/parallel.cpp
+-index 0b593ee..caa8129 100644
+---- a/modules/core/src/parallel.cpp
+-+++ b/modules/core/src/parallel.cpp
+-@@ -80,6 +80,7 @@
+-    4. HAVE_GCD         - system wide, used automatically        (APPLE only)
+-    5. WINRT            - system wide, used automatically        (Windows RT only)
+-    6. HAVE_CONCURRENCY - part of runtime, used automatically    (Windows only - MSVS 10, MSVS 11)
+-+   7. HAVE_PTHREADS_PF - pthreads if available
+- */
+- 
+- #if defined HAVE_TBB
+-@@ -125,14 +126,14 @@
+- #  define CV_PARALLEL_FRAMEWORK "winrt-concurrency"
+- #elif defined HAVE_CONCURRENCY
+- #  define CV_PARALLEL_FRAMEWORK "ms-concurrency"
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- #  define CV_PARALLEL_FRAMEWORK "pthreads"
+- #endif
+- 
+- namespace cv
+- {
+-     ParallelLoopBody::~ParallelLoopBody() {}
+--#if defined HAVE_PTHREADS && HAVE_PTHREADS
+-+#ifdef HAVE_PTHREADS_PF
+-     void parallel_for_pthreads(const cv::Range& range, const cv::ParallelLoopBody& body, double nstripes);
+-     size_t parallel_pthreads_get_threads_num();
+-     void parallel_pthreads_set_threads_num(int num);
+-@@ -306,7 +307,7 @@ void cv::parallel_for_(const cv::Range& range, const cv::ParallelLoopBody& body,
+-             Concurrency::CurrentScheduler::Detach();
+-         }
+- 
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- 
+-         parallel_for_pthreads(range, body, nstripes);
+- 
+-@@ -365,7 +366,7 @@ int cv::getNumThreads(void)
+-         ? Concurrency::CurrentScheduler::Get()->GetNumberOfVirtualProcessors()
+-         : pplScheduler->GetNumberOfVirtualProcessors());
+- 
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- 
+-         return parallel_pthreads_get_threads_num();
+- 
+-@@ -426,7 +427,7 @@ void cv::setNumThreads( int threads )
+-                        Concurrency::MaxConcurrency, threads-1));
+-     }
+- 
+--#elif defined HAVE_PTHREADS
+-+#elif defined HAVE_PTHREADS_PF
+- 
+-     parallel_pthreads_set_threads_num(threads);
+- 
+-@@ -452,6 +453,8 @@ int cv::getThreadNum(void)
+-     return 0;
+- #elif defined HAVE_CONCURRENCY
+-     return std::max(0, (int)Concurrency::Context::VirtualProcessorId()); // zero for master thread, unique number for others but not necessary 1,2,3,...
+-+#elif defined HAVE_PTHREADS_PF
+-+    return (int)(size_t)(void*)pthread_self(); // no zero-based indexing
+- #else
+-     return 0;
+- #endif
+-diff --git a/modules/core/src/parallel_pthreads.cpp b/modules/core/src/parallel_pthreads.cpp
+-index 8c34959..091ea2d 100644
+---- a/modules/core/src/parallel_pthreads.cpp
+-+++ b/modules/core/src/parallel_pthreads.cpp
+-@@ -42,7 +42,7 @@
+- 
+- #include "precomp.hpp"
+- 
+--#if defined HAVE_PTHREADS && HAVE_PTHREADS
+-+#ifdef HAVE_PTHREADS_PF
+- 
+- #include <algorithm>
+- #include <pthread.h>
+-diff --git a/modules/core/src/precomp.hpp b/modules/core/src/precomp.hpp
+-index d463126..88b60e4 100644
+---- a/modules/core/src/precomp.hpp
+-+++ b/modules/core/src/precomp.hpp
+-@@ -292,12 +292,6 @@ TLSData<CoreTLSData>& getCoreTlsData();
+- #define CL_RUNTIME_EXPORT
+- #endif
+- 
+--#ifndef HAVE_PTHREADS
+--#if !(defined WIN32 || defined _WIN32 || defined WINCE || defined HAVE_WINRT)
+--#define HAVE_PTHREADS 1
+--#endif
+--#endif
+--
+- extern bool __termination; // skip some cleanups, because process is terminating
+-                            // (for example, if ExitProcess() was already called)
+- 
 --- 
--2.4.1
+-2.4.4
 -
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index 21c0268..2ae95a0 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 3a185d6..31fd98a 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -243,6 +243,7 @@ config BR2_PACKAGE_OPENCV3_WITH_FFMPEG
+ 	bool "ffmpeg support"
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	depends on !BR2_nios2 # ffmpeg
+ 	help
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3ce78b5..91cdfe6 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENCV_VERSION = 2.4.10
-+OPENCV_VERSION = 2.4.12.3
- OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
- OPENCV_INSTALL_STAGING = YES
- OPENCV_LICENSE = BSD-3c
+-OPENCV3_VERSION = 3.0.0
++OPENCV3_VERSION = 3.1.0
+ OPENCV3_SITE = $(call github,itseez,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3c
+@@ -15,7 +15,8 @@ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_DOCS=OFF \
+ 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),ON,OFF) \
+ 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_TESTS),ON,OFF) \
+-	-DBUILD_WITH_DEBUG_INFO=OFF
++	-DBUILD_WITH_DEBUG_INFO=OFF \
++	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV3_BUILD_TESTS)$(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),)
+ OPENCV3_CONF_OPTS += -DINSTALL_TEST=OFF
+@@ -70,7 +71,6 @@ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_opencv_core=ON \
+ 	-DBUILD_opencv_features2d=$(if $(BR2_PACKAGE_OPENCV3_LIB_FEATURES2D),ON,OFF) \
+ 	-DBUILD_opencv_flann=$(if $(BR2_PACKAGE_OPENCV3_LIB_FLANN),ON,OFF) \
+-	-DBUILD_opencv_hal=ON \
+ 	-DBUILD_opencv_highgui=$(if $(BR2_PACKAGE_OPENCV3_LIB_HIGHGUI),ON,OFF) \
+ 	-DBUILD_opencv_imgcodecs=$(if $(BR2_PACKAGE_OPENCV3_LIB_IMGCODECS),ON,OFF) \
+ 	-DBUILD_opencv_imgproc=$(if $(BR2_PACKAGE_OPENCV3_LIB_IMGPROC),ON,OFF) \
+@@ -201,14 +201,15 @@ OPENCV3_CONF_OPTS += \
+ 	-DWITH_EIGEN=OFF \
+ 	-DWITH_GDAL=OFF \
+ 	-DWITH_GPHOTO2=OFF \
++	-DWITH_MATLAB=OFF \
+ 	-DWITH_OPENCL=OFF \
+ 	-DWITH_OPENCL_SVM=OFF \
+ 	-DWITH_OPENEXR=OFF \
+-	-DWITH_OPENGL=OFF \
+-	-DWITH_OPENMP=OFF \
+ 	-DWITH_OPENNI2=OFF \
+ 	-DWITH_OPENNI=OFF \
+ 	-DWITH_UNICAP=OFF \
++	-DWITH_VA=OFF \
++	-DWITH_VA_INTEL=OFF \
+ 	-DWITH_VTK=OFF \
+ 	-DWITH_WEBP=OFF \
+ 	-DWITH_XINE=OFF
