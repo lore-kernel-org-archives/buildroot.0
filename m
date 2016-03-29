@@ -1,44 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:01:59 +0200
-Subject: [Buildroot] [git commit] sqlite: bump to version 3.12.0
-Message-ID: <20160329220203.01F518045A@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 00:02:28 +0200
+Subject: [Buildroot] [git commit] gamin: fix build with musl
+Message-ID: <20160329220230.62F448181E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e45172e2681ea5b7d148633bd2c3a00ae7bd82a1
+commit: https://git.buildroot.net/buildroot/commit/?id=39be6f6bdad6b77a7540f6c9f299e02726b4a469
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+musl does not provide the non portable PTHREAD_MUTEX_RECURSIVE_NP. Add a patch
+removing the assumption the PTHREAD_MUTEX_RECURSIVE_NP is available when
+'linux' is defined.
+
+Upstream had no new release since 2008, so there is no much hope of getting
+this fix applied upstream.
+
+Also, fix the pthread dependency comment. gamin code uses pthread directly.
+
+Fixes:
+http://autobuild.buildroot.net/results/3a9/3a9328f384fc648ae61316402a84eaffb175881b/
+http://autobuild.buildroot.net/results/69d/69d2a93bc97ab0d70c3acb2f9c9f28612ea95871/
+http://autobuild.buildroot.net/results/092/092ac7380beb8ce403a1a6fd8e4176e9234413a3/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch | 20 ++++++++++++++++++++
+ package/gamin/Config.in                              |  2 +-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 48e7fbd..63964e0 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1	c4b4dcd735a4daf5a2e2bb90f374484c8d4dad29	sqlite-autoconf-3110100.tar.gz
-+sha1	e3269662b13ce5cd93b08bd33899bd1cbde3b072	sqlite-autoconf-3120000.tar.gz
- # Calculated based on the hash above
--sha256	533ff1d0271c2e666f01591271cef01a31648563affa0c95e80ef735077d4377	sqlite-autoconf-3110100.tar.gz
-+sha256	53ecdbb5287af673eca3710c5f6c2305e73bb2d034f2a28770bea2be92ed269e	sqlite-autoconf-3120000.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 0029fd6..0058126 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3110100
-+SQLITE_VERSION = 3120000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+diff --git a/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch b/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
+new file mode 100644
+index 0000000..4291277
+--- /dev/null
++++ b/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
+@@ -0,0 +1,20 @@
++Fix missing PTHREAD_MUTEX_RECURSIVE_NP
++
++The musl C library does not provide the non portable
++PTHREAD_MUTEX_RECURSIVE_NP. Test for PTHREAD_MUTEX_RECURSIVE_NP only.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++
++diff -Nuar gamin-0.1.10-orig/libgamin/gam_data.c gamin-0.1.10/libgamin/gam_data.c
++--- gamin-0.1.10-orig/libgamin/gam_data.c	2007-07-04 16:36:48.000000000 +0300
+++++ gamin-0.1.10/libgamin/gam_data.c	2016-03-01 14:50:18.931696959 +0200
++@@ -470,7 +470,7 @@
++     }
++     if (is_threaded > 0) {
++ 	pthread_mutexattr_init(&attr);
++-#if defined(linux) || defined(PTHREAD_MUTEX_RECURSIVE_NP)
+++#if defined(PTHREAD_MUTEX_RECURSIVE_NP)
++ 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
++ #else
++ 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+diff --git a/package/gamin/Config.in b/package/gamin/Config.in
+index c191be0..55e037a 100644
+--- a/package/gamin/Config.in
++++ b/package/gamin/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_GAMIN
+ 	bool "gamin"
+ 	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	help
