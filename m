@@ -1,41 +1,103 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 29 Mar 2016 21:23:34 +0000
-Subject: [Buildroot] [Bug 8831] image generation fails on host ZFS due to
-	"no free space"
-In-Reply-To: <bug-8831-163@https.bugs.busybox.net/>
-References: <bug-8831-163@https.bugs.busybox.net/>
-Message-ID: <bug-8831-163-R2X2dCj914@https.bugs.busybox.net/>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Tue, 29 Mar 2016 21:35:37 +0000
+Subject: [Buildroot] [PATCH v2] radlib: new package
+In-Reply-To: <20160329200702.01fc66d5@free-electrons.com>
+References: <1459194027.3607.13.camel@intel.com>
+ <20160329200702.01fc66d5@free-electrons.com>
+Message-ID: <1459287337.10145.3.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8831
+> Please use git send-email to send your patches. Due to not using git
+> send-email, your e-mail is badly line-wrapped and cannot be applied,
+> and even less reviewed nicely.
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+ok - I will figure out the smtp setup. 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
-                   |.org                        |
-                 CC|                            |yann.morin.1998 at free.fr
+> On Mon, 28 Mar 2016 19:40:27 +0000, Kinsella, Ray wrote:
+> > Delta's from v1:-
+> > 
+> >  * Complete rework of patch for the package's autotools
+> > implementation
+> >   * Removed references to prefix.
+> >   * Reworked database support to use PKG_CHECK_MODULES and
+> > AC_PATH_PROG.
+> >   * Used '--with--somedb' to indicate which database backend to
+> > build
+> > with. (The radlib build ends up with conflicting symbols if more
+> > than
+> > one is enabled at the same time, we prevent this in the package's
+> > .mk).
+> >  * Complete rework of the Kconfig.
+> >   * Database support is only enabled when BR2_PACKAGE_(mysql,
+> > sqlite or
+> > postgresql) are set.
+> >   * Database backend is selected by 'choice' when more than one is
+> > enabled. 
+> >  * Other tidy up's recommended for the v1 patch. 
+> >   * Included a comment on radlib.hash.
+> >   * Added signed off line and description to the patch.
+> >   * Removed no_sync from mysql.
+> >   * etc.
+> 
+> This should go below the "---" sign.
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Maybe it's time we switch to use e2fsprogs from their 'next' branch,
-rather than our canned script?
+ok the 'Delta's from v1:-' should be moved after the Signed-off-by
+line?
 
-The upstream e2fsprogs now has the ability to fill-in the generated
-filesystem from the content of an existing directory (with the new -d
-option).
+> > radlib is a rapid application development library for unix
+> > multi-process applications. It uses SYS V IPC facilities and
+> > FIFOs to provide an RTOS-like, event-driven, distributed
+> > framework. Processes may be run as daemons or have a controlling
+> > terminal.
+> > 
+> > Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> > ---
+> >  package/Config.in                                  |   1 +
+> >  ...0001-Update-to-autoconf-to-use-pkg-config.patch | 388
+> > +++++++++++++++++++++
+> 
+> This is a fairly large patch. Have you submitted it upstream?
 
-FWIW, Debian is now using a snapshot of 2016-03-15 in Stretch (testing)
-and they have a single patch on top of that. I'd rather trust Debian.
+Not yet - will make contact. 
 
-Regards,
-Yann E. MORIN.
+> 
+> > diff --git a/package/radlib/0001-Update-to-autoconf-to-use-pkg
+> > -config.patch b/package/radlib/0001-Update-to-autoconf-to-use-pkg
+> > -config.patch
+> > new file mode 100644
+> > index 0000000..f98b9d5
+> > --- /dev/null
+> > +++ b/package/radlib/0001-Update-to-autoconf-to-use-pkg
+> > -config.patch
+> > @@ -0,0 +1,388 @@
+> > +From d4c1b74a6624da7cc217c6b1aef59dc60b7d20c0 Mon Sep 17 00:00:00
+> > 2001
+> > +From: Ray Kinsella <ray.kinsella@intel.com>
+> > +Date: Sun, 27 Mar 2016 16:38:16 +0100
+> > +Subject: [PATCH] Update to autoconf to use pkg-config
+> > +
+> > +Updates to autoconf as follows;
+> > +
+> > + * Use pkg-config for postgresql and sqlite
+> > + * Use mysql-config for mysql
+> > + * Also removed unecessary conditionals from sub-makefiles
+> 
+> So you're doing three different things. Which calls for three
+> different
+> patches.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Hopefully this won't require me to re-org the patch. 
+> 
+> I'll do a full review once you send it with git send-email, because
+> the
+> line wrapping makes it really hard to follow.
+
+ok - apologies. 
+
+> Thanks!
+> 
+> Thomas
