@@ -1,41 +1,98 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Mar 2016 00:17:16 +0200
-Subject: [Buildroot] [PATCH 3/6] package/ffmpeg: cosmetic change for the
-	mips fpu option
-In-Reply-To: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459289839-6230-3-git-send-email-bernd.kuhls@t-online.de>
+Date: Wed, 30 Mar 2016 00:17:14 +0200
+Subject: [Buildroot] [PATCH 1/6] package/freerdp: add support for ffmpeg 3.0
+Message-ID: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ffmpeg/ffmpeg.mk | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ package/freerdp/0004-ffmpeg30.patch | 74 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 package/freerdp/0004-ffmpeg30.patch
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 26633e4..49fc0d9 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -429,11 +429,9 @@ FFMPEG_CONF_OPTS += --enable-neon
- endif
- 
- ifeq ($(BR2_MIPS_SOFT_FLOAT),y)
--FFMPEG_CONF_OPTS += \
--	--disable-mipsfpu
-+FFMPEG_CONF_OPTS += --disable-mipsfpu
- else
--FFMPEG_CONF_OPTS += \
--	--enable-mipsfpu
-+FFMPEG_CONF_OPTS += --enable-mipsfpu
- endif
- 
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+diff --git a/package/freerdp/0004-ffmpeg30.patch b/package/freerdp/0004-ffmpeg30.patch
+new file mode 100644
+index 0000000..a7998b7
+--- /dev/null
++++ b/package/freerdp/0004-ffmpeg30.patch
+@@ -0,0 +1,74 @@
++From b7b66968f93f6ce75dd06d12638e14029bf3717b Mon Sep 17 00:00:00 2001
++From: Alexis Ballier <aballier@gentoo.org>
++Date: Thu, 17 Sep 2015 10:36:44 +0200
++Subject: [PATCH] channels/tsmf/client/ffmpeg: Fix build with ffmpeg git
++ master.
++
++Replace old, deprecated and now removed, APIs with their new equivalent while retaining backward compatibility with old ffmpeg versions.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Downloaded from upstream commit:
++ https://github.com/FreeRDP/FreeRDP/commit/f8ceb3f6061583c650bd4f6cddc10bc0471f2076]
++---
++ channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c | 17 ++++++++++++++++-
++ 1 file changed, 16 insertions(+), 1 deletion(-)
++
++diff --git a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
++index d0880e7..e1b9f83 100644
++--- a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
+++++ b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
++@@ -61,6 +61,9 @@
++ #define AV_CODEC_ID_AC3 CODEC_ID_AC3
++ #endif
++ 
+++#if LIBAVUTIL_VERSION_MAJOR < 52
+++#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
+++#endif
++ 
++ typedef struct _TSMFFFmpegDecoder
++ {
++@@ -102,7 +105,11 @@ static BOOL tsmf_ffmpeg_init_video_stream(ITSMFDecoder* decoder, const TS_AM_MED
++ 	mdecoder->codec_context->bit_rate = media_type->BitRate;
++ 	mdecoder->codec_context->time_base.den = media_type->SamplesPerSecond.Numerator;
++ 	mdecoder->codec_context->time_base.num = media_type->SamplesPerSecond.Denominator;
+++#if LIBAVCODEC_VERSION_MAJOR < 55
++ 	mdecoder->frame = avcodec_alloc_frame();
+++#else
+++	mdecoder->frame = av_frame_alloc();
+++#endif
++ 	return TRUE;
++ }
++ 
++@@ -328,7 +335,11 @@ static BOOL tsmf_ffmpeg_decode_video(ITSMFDecoder* decoder, const BYTE *data, UI
++ 		if (!mdecoder->decoded_data)
++ 			return FALSE;
++ 
+++#if LIBAVCODEC_VERSION_MAJOR < 55
++ 		frame = avcodec_alloc_frame();
+++#else
+++		frame = av_frame_alloc();
+++#endif
++ 		avpicture_fill((AVPicture*) frame, mdecoder->decoded_data,
++ 					   mdecoder->codec_context->pix_fmt,
++ 					   mdecoder->codec_context->width, mdecoder->codec_context->height);
++@@ -400,7 +411,11 @@ static BOOL tsmf_ffmpeg_decode_audio(ITSMFDecoder* decoder, const BYTE *data, UI
++ 									(int16_t *) dst, &frame_size, src, src_size);
++ #else
++ 		{
+++#if LIBAVCODEC_VERSION_MAJOR < 55
++ 			AVFrame *decoded_frame = avcodec_alloc_frame();
+++#else
+++			AVFrame *decoded_frame = av_frame_alloc();
+++#endif
++ 			int got_frame = 0;
++ 			AVPacket pkt;
++ 			av_init_packet(&pkt);
++@@ -480,7 +495,7 @@ static UINT32 tsmf_ffmpeg_get_decoded_format(ITSMFDecoder* decoder)
++ 
++ 	switch (mdecoder->codec_context->pix_fmt)
++ 	{
++-		case PIX_FMT_YUV420P:
+++		case AV_PIX_FMT_YUV420P:
++ 			return RDP_PIXFMT_I420;
++ 		default:
++ 			WLog_ERR(TAG, "unsupported pixel format %u",
 -- 
 2.8.0.rc3
