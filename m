@@ -1,41 +1,61 @@
-From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
-Date: Tue, 29 Mar 2016 13:29:59 +0200
-Subject: [Buildroot] [initscripts] Default script /etc/init.d/S40network
-In-Reply-To: <87d1qd8s1d.fsf@dell.be.48ers.dk>
-References: <CALtfCQbJOpzar6wAmdaXzp2U7ZGLSxiZKB6yd4s_xyxxWO5fxg@mail.gmail.com>
- <87d1qd8s1d.fsf@dell.be.48ers.dk>
-Message-ID: <CALtfCQZ3Q-AdDwwVZUZO0cUMUpu-Sp8wZPmgosFnh09x5+7RaA@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 29 Mar 2016 13:45:25 +0200
+Subject: [Buildroot] [PATCH v1] qt5tools: disable qdoc (needs qtdeclarative)
+Message-ID: <1459251925-31678-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry, you are right. Thank you
+Fixes [1]:
 
-Oscar Gomez Fuente
+  Project ERROR: Unknown module(s) in QT: qmldevtools-private
+  Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
 
-On 29 March 2016 at 13:03, Peter Korsgaard <peter@korsgaard.com> wrote:
+[1] http://autobuild.buildroot.net/results/b0a/b0a5641beae14ff79a9d5a628bb41957826eb623
 
-> >>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
->
->  > Hi,
->  > I'm building a buildroot platform with raspberry pi Compute Module. I'm
->  > using Init system BusyBox and the package initscrpts is selected
->  > automatically.
->
->  > The problem is this package has the S40network script, but the RPi
-> compute
->  > module doesn't have ethernet, so I think this script has to be deleted
-> for
->  > RPi compute module, doesn't it?
->
-> No, why do you think that? S40network is still needed to configure the
-> loopback interface (127.0.0.1).
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160329/f1c3b79d/attachment.html>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ .../0001-Disable-qdoc-needs-qtdeclarative.patch    | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
+
+diff --git a/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch b/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
+new file mode 100644
+index 0000000..61cbdfe
+--- /dev/null
++++ b/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
+@@ -0,0 +1,30 @@
++From acdb24783322bb6e69df61cf04df2b2e47a06ad2 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Tue, 29 Mar 2016 13:37:09 +0200
++Subject: [PATCH] Disable qdoc (needs qtdeclarative).
++
++Fixes:
++
++  Project ERROR: Unknown module(s) in QT: qmldevtools-private
++  Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ src/src.pro | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/src.pro b/src/src.pro
++index 387d54f..494898f 100644
++--- a/src/src.pro
+++++ b/src/src.pro
++@@ -14,7 +14,6 @@ qtHaveModule(widgets) {
++ }
++ 
++ SUBDIRS += linguist \
++-    qdoc \
++     qtplugininfo
++ if(!android|android_app):!ios: SUBDIRS += qtpaths
++ 
++-- 
++2.1.4
++
+-- 
+2.1.4
