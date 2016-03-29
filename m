@@ -1,100 +1,41 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 29 Mar 2016 22:30:39 +0200
-Subject: [Buildroot] [PATCH 2/2] package/freerdp: add support for ffmpeg 3.0
-In-Reply-To: <1459283439-30933-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1459283439-30933-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459283439-30933-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 29 Mar 2016 22:30:38 +0200
+Subject: [Buildroot] [PATCH 1/2] Revert "package/freerdp: bump version"
+Message-ID: <1459283439-30933-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This reverts commit dda26dc614b6f5ef9be67d2604bac39235322235.
+
+Instead of bumping freerdp to a version which breaks gstreamer
+detection we revert the latest bump for now.
+
+Fixes
+http://autobuild.buildroot.net/results/1ab/1abc713a58d21c71678aab9b21ac1cfac23684f5/
+http://autobuild.buildroot.net/results/0ef/0efd39115a631c409eb809b38ab64604d1de99ca/
+http://autobuild.buildroot.net/results/7aa/7aac3f970dd1fbc0d25f268f32844bec7e49f4af/
+http://autobuild.buildroot.net/results/396/396401bd6eb5f95364a32456a274da185e081541/
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freerdp/0004-ffmpeg30.patch | 74 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/freerdp/0004-ffmpeg30.patch
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freerdp/0004-ffmpeg30.patch b/package/freerdp/0004-ffmpeg30.patch
-new file mode 100644
-index 0000000..a7998b7
---- /dev/null
-+++ b/package/freerdp/0004-ffmpeg30.patch
-@@ -0,0 +1,74 @@
-+From b7b66968f93f6ce75dd06d12638e14029bf3717b Mon Sep 17 00:00:00 2001
-+From: Alexis Ballier <aballier@gentoo.org>
-+Date: Thu, 17 Sep 2015 10:36:44 +0200
-+Subject: [PATCH] channels/tsmf/client/ffmpeg: Fix build with ffmpeg git
-+ master.
-+
-+Replace old, deprecated and now removed, APIs with their new equivalent while retaining backward compatibility with old ffmpeg versions.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Downloaded from upstream commit:
-+ https://github.com/FreeRDP/FreeRDP/commit/f8ceb3f6061583c650bd4f6cddc10bc0471f2076]
-+---
-+ channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c | 17 ++++++++++++++++-
-+ 1 file changed, 16 insertions(+), 1 deletion(-)
-+
-+diff --git a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-+index d0880e7..e1b9f83 100644
-+--- a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-++++ b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-+@@ -61,6 +61,9 @@
-+ #define AV_CODEC_ID_AC3 CODEC_ID_AC3
-+ #endif
-+ 
-++#if LIBAVUTIL_VERSION_MAJOR < 52
-++#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
-++#endif
-+ 
-+ typedef struct _TSMFFFmpegDecoder
-+ {
-+@@ -102,7 +105,11 @@ static BOOL tsmf_ffmpeg_init_video_stream(ITSMFDecoder* decoder, const TS_AM_MED
-+ 	mdecoder->codec_context->bit_rate = media_type->BitRate;
-+ 	mdecoder->codec_context->time_base.den = media_type->SamplesPerSecond.Numerator;
-+ 	mdecoder->codec_context->time_base.num = media_type->SamplesPerSecond.Denominator;
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 	mdecoder->frame = avcodec_alloc_frame();
-++#else
-++	mdecoder->frame = av_frame_alloc();
-++#endif
-+ 	return TRUE;
-+ }
-+ 
-+@@ -328,7 +335,11 @@ static BOOL tsmf_ffmpeg_decode_video(ITSMFDecoder* decoder, const BYTE *data, UI
-+ 		if (!mdecoder->decoded_data)
-+ 			return FALSE;
-+ 
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 		frame = avcodec_alloc_frame();
-++#else
-++		frame = av_frame_alloc();
-++#endif
-+ 		avpicture_fill((AVPicture*) frame, mdecoder->decoded_data,
-+ 					   mdecoder->codec_context->pix_fmt,
-+ 					   mdecoder->codec_context->width, mdecoder->codec_context->height);
-+@@ -400,7 +411,11 @@ static BOOL tsmf_ffmpeg_decode_audio(ITSMFDecoder* decoder, const BYTE *data, UI
-+ 									(int16_t *) dst, &frame_size, src, src_size);
-+ #else
-+ 		{
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 			AVFrame *decoded_frame = avcodec_alloc_frame();
-++#else
-++			AVFrame *decoded_frame = av_frame_alloc();
-++#endif
-+ 			int got_frame = 0;
-+ 			AVPacket pkt;
-+ 			av_init_packet(&pkt);
-+@@ -480,7 +495,7 @@ static UINT32 tsmf_ffmpeg_get_decoded_format(ITSMFDecoder* decoder)
-+ 
-+ 	switch (mdecoder->codec_context->pix_fmt)
-+ 	{
-+-		case PIX_FMT_YUV420P:
-++		case AV_PIX_FMT_YUV420P:
-+ 			return RDP_PIXFMT_I420;
-+ 		default:
-+ 			WLog_ERR(TAG, "unsupported pixel format %u",
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index a795ed3..e8e5be4 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Changeset on the master branch
+-FREERDP_VERSION = 2ac195e8eb2c5fbbe8f2abeac92b0c8effef0e34
++FREERDP_VERSION = 17834af7bb378f85a3b3cc4dcadaa5125a337e16
+ FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
 -- 
 2.8.0.rc3
