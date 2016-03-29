@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:11:29 +0200
-Subject: [Buildroot] [PATCH] linux: Introduce DTB's bootargs fixup
- feature
-In-Reply-To: <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
-References: <1458558329-19210-1-git-send-email-mcoquelin.stm32@gmail.com>
- <20160321131206.1d3b29c7@free-electrons.com>
- <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
-Message-ID: <20160330001129.656b6151@free-electrons.com>
+Date: Wed, 30 Mar 2016 00:14:38 +0200
+Subject: [Buildroot] [PATCH v2 04/17] uclibc: add patches to simplify
+ Thumb handling
+In-Reply-To: <56ED743C.9070500@mind.be>
+References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458335299-27409-5-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56ED743C.9070500@mind.be>
+Message-ID: <20160330001438.5b545763@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 21 Mar 2016 13:53:50 +0100, Maxime Coquelin wrote:
+On Sat, 19 Mar 2016 16:46:04 +0100, Arnout Vandecappelle wrote:
 
-> > However, I am not entirely sure this is something we want to take in
-> > Buildroot. Indeed, your patch only allows to customize
-> > the /chosen/bootargs property, and not any other property of the Device
-> > Tree. If we want to do that via Config.in options, it suddenly becomes
-> > a lot more complicated.
-> Indeed, it will be difficult to extend it further than bootargs.
-> It works well for bootargs for two reasons:
->  1- It is a generic property
->  2- It is a string
-> 
-> There could be other uses for DTB patching, such as MAC address assignment.
-> But I agree than doing this in Config.in makes no sense.
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Right.
+Thanks!
 
-> > It is IMO even more important to do it this way since as of today, only
-> > one platform/board needs to adjust its bootargs this way. All other
-> > platforms have an ATAGs or DT compatible bootloader, where the bootargs
-> > customization is done via the bootloader, not via patching the DTB.
-> 
-> Ok, For sure it can be done, but I wanted to propose a generic way of
-> doing this.
-> Indeed, this is something other platforms could potentially use, even
-> if not the case today.
-> 
-> > Of course, let's see what others think.
-> 
-> Agree.
-> If it is decided to do this as post-image script, I will be happy to
-> implement it.
+>   Upstream status? Knowing Waldemar's lightning reflexes, we will probably just 
+> bump the uClibc version rather than having these patches in Buildroot :-)
 
-Nobody spoke up, so let's say we'll do it in a post-image script for
-now. host-dtc is already visible in menuconfig, so it can be enabled in
-a defconfig, and therefore it's just a matter of enabling it and write
-the appropriate post-image script.
+I've submitted upstream 10 days ago. Got a bit of feedback from Rich
+Felker, but I replied to it and I don't think the feedback calls for a
+new iteration. No feedback from Waldemar so far.
 
-Do you want to write a patch on top of my series adding Cortex-M
-support?
+Note that the version sent upstream is in one single patch, as that's
+what Waldemar requested on IRC. I'm going to apply my patch to
+Buildroot with the separate patches, and I'll rework that later on
+when/if the patch gets accepted upstream.
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
