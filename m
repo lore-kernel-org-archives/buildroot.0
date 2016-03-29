@@ -1,56 +1,41 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Tue, 29 Mar 2016 13:30:18 +0200
-Subject: [Buildroot] [PATCH] raspberrypi,
- raspberrypi2: add a serial console
-In-Reply-To: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
-References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
+From: =?UTF-8?B?w5NzY2FyIEfDs21leiBGdWVudGU=?= <oscargomezf@gmail.com>
+Date: Tue, 29 Mar 2016 13:29:59 +0200
+Subject: [Buildroot] [initscripts] Default script /etc/init.d/S40network
+In-Reply-To: <87d1qd8s1d.fsf@dell.be.48ers.dk>
+References: <CALtfCQbJOpzar6wAmdaXzp2U7ZGLSxiZKB6yd4s_xyxxWO5fxg@mail.gmail.com>
+ <87d1qd8s1d.fsf@dell.be.48ers.dk>
+Message-ID: <CALtfCQZ3Q-AdDwwVZUZO0cUMUpu-Sp8wZPmgosFnh09x5+7RaA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Sorry, you are right. Thank you
 
-Am 2016-03-29 00:08, schrieb Luca Ceresoli:
-> The current Buildroot defconfigs for Raspberry Pi and Raspberry Pi 2
-> instantiate a console on tty1, which appears on HDMI. Add a console on
-> the serial port (ttyAMA0) to be more consistent with other defconfigs
-> and provide a better out-of-the-box experience to users used to have a
-> serial console from Buildroot defconfigs.
+Oscar Gomez Fuente
 
-I ran in the very problem last week. So +1 for the idea.
+On 29 March 2016 at 13:03, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> This requires two changes:
->  1. have two 'console=' entries in the kernel command line;
->  2. add a new getty process to the generated inittab.
-
-Then why not split up those two changes in two patches? ;-)
-
-> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-
-+1
-
-> diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
-> index 38aa3782621b..155a54693bff 100644
-> --- a/package/rpi-firmware/cmdline.txt
-> +++ b/package/rpi-firmware/cmdline.txt
-> @@ -1 +1 @@
-> -root=/dev/mmcblk0p2 rootwait
-> +root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
-
-+1
-
-Not sure about the post build script though, maybe someone with more
-experience in buildroot could comment on that.
-
-Greets
-Alex
-
--- 
-?With the first link, the chain is forged. The first speech censured,
-the first thought forbidden, the first freedom denied, chains us all
-irrevocably.? (Jean-Luc Picard, quoting Judge Aaron Satie)
-*** GnuPG-FP: C28E E6B9 0263 95CF 8FAF  08FA 34AD CD00 7221 5CC6 ***
+> >>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
+>
+>  > Hi,
+>  > I'm building a buildroot platform with raspberry pi Compute Module. I'm
+>  > using Init system BusyBox and the package initscrpts is selected
+>  > automatically.
+>
+>  > The problem is this package has the S40network script, but the RPi
+> compute
+>  > module doesn't have ethernet, so I think this script has to be deleted
+> for
+>  > RPi compute module, doesn't it?
+>
+> No, why do you think that? S40network is still needed to configure the
+> loopback interface (127.0.0.1).
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160329/f1c3b79d/attachment.html>
