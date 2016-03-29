@@ -1,92 +1,136 @@
-From: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
-Date: Tue, 29 Mar 2016 17:41:07 +0530
-Subject: [Buildroot] [PATCH] powerpc-utils: Bump powerpc-utils to v1.3.0
-Message-ID: <20160329121047.3804.35383.stgit@hegdevasant.in.ibm.com>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Tue, 29 Mar 2016 12:30:43 +0000
+Subject: [Buildroot] [PATCH] qt5serialbus: new package
+In-Reply-To: <1459245706-17098-1-git-send-email-yegorslists@googlemail.com>
+References: <1459245706-17098-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <56FA7571.8040908@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes below changes to powerpc-utils package:
-  - Update to latest upstream version (v1.3.0)
-  - Update License (from CPL to GPLv2)
-  - Update source link (from SF to github)
-  - Disable librtas by default
-  - Finally make necessary adjustment to compile the source
-    (run autogen.sh before ./configure as we don't have configure in new tarball).
+Dear Yegor,
 
-Signed-off-by: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
----
-Resending patch after subscribing to mailing list.
+Le 29/03/2016 12:01, yegorslists at googlemail.com a ?crit :
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>   package/qt5/Config.in                      |  1 +
+>   package/qt5/qt5serialbus/Config.in         | 10 +++++++
+>   package/qt5/qt5serialbus/qt5serialbus.hash |  2 ++
+>   package/qt5/qt5serialbus/qt5serialbus.mk   | 42 ++++++++++++++++++++++++++++++
+>   4 files changed, 55 insertions(+)
+>   create mode 100644 package/qt5/qt5serialbus/Config.in
+>   create mode 100644 package/qt5/qt5serialbus/qt5serialbus.hash
+>   create mode 100644 package/qt5/qt5serialbus/qt5serialbus.mk
+>
+> diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+> index f673daa..4febee6 100644
+> --- a/package/qt5/Config.in
+> +++ b/package/qt5/Config.in
+> @@ -40,6 +40,7 @@ source "package/qt5/qt5imageformats/Config.in"
+>   source "package/qt5/qt5multimedia/Config.in"
+>   source "package/qt5/qt5quickcontrols/Config.in"
+>   source "package/qt5/qt5sensors/Config.in"
+> +source "package/qt5/qt5serialbus/Config.in"
+>   source "package/qt5/qt5serialport/Config.in"
+>   source "package/qt5/qt5svg/Config.in"
+>   source "package/qt5/qt5tools/Config.in"
+> diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
+> new file mode 100644
+> index 0000000..cce02ef
+> --- /dev/null
+> +++ b/package/qt5/qt5serialbus/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_QT5SERIALBUS
+> +	bool "qt5serialbus"
+> +	select BR2_PACKAGE_QT5BASE
 
--Vasant
+QtSerialBus depend on QtSerialPort. See 
+http://code.qt.io/cgit/qt/qtserialbus.git/tree/src/serialbus/serialbus.pro?h=v5.6.0
 
- package/powerpc-utils/Config.in          |    4 ++--
- package/powerpc-utils/powerpc-utils.hash |    6 +++---
- package/powerpc-utils/powerpc-utils.mk   |   14 ++++++++++----
- 3 files changed, 15 insertions(+), 9 deletions(-)
+> +	help
+> +	  Qt is a cross-platform application and UI framework for
+> +	  developers using C++.
+> +
+> +	  This package corresponds to the qt5serialbus module.
+> +
+> +	  http://qt.io
+> diff --git a/package/qt5/qt5serialbus/qt5serialbus.hash b/package/qt5/qt5serialbus/qt5serialbus.hash
+> new file mode 100644
+> index 0000000..da46e76
+> --- /dev/null
+> +++ b/package/qt5/qt5serialbus/qt5serialbus.hash
+> @@ -0,0 +1,2 @@
+> +# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.0/submodules/qtserialbus-opensource-src-5.6.0.tar.xz.mirrorlist
+> +sha256 8cca530ee53f19672f57ffee6f2f28866d5c84b8cb3dbbd67c05d27893ac0b8e qtserialbus-opensource-src-5.6.0.tar.xz
+> diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
+> new file mode 100644
+> index 0000000..f81bb83
+> --- /dev/null
+> +++ b/package/qt5/qt5serialbus/qt5serialbus.mk
+> @@ -0,0 +1,42 @@
+> +################################################################################
+> +#
+> +# qt5serialbus
+> +#
+> +################################################################################
+> +
+> +QT5SERIALBUS_VERSION = $(QT5_VERSION)
+> +QT5SERIALBUS_SITE = $(QT5_SITE)
+> +QT5SERIALBUS_SOURCE = qtserialbus-opensource-src-$(QT5SERIALBUS_VERSION).tar.xz
+> +QT5SERIALBUS_DEPENDENCIES = qt5base
 
-diff --git a/package/powerpc-utils/Config.in b/package/powerpc-utils/Config.in
-index e18254c..5fc9ea9 100644
---- a/package/powerpc-utils/Config.in
-+++ b/package/powerpc-utils/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_POWERPC_UTILS
- 	help
- 	  System utilities for PowerPC machines.
- 
--	  http://sourceforge.net/projects/powerpc-utils/
-+	  https://github.com/nfont/powerpc-utils
- 
- if BR2_PACKAGE_POWERPC_UTILS
- 
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_POWERPC_UTILS_RTAS
- 	bool "RTAS support"
- 	select BR2_PACKAGE_LIBRTAS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
--	default y
-+	default n
- 	help
- 	  Enable support for functions that require RTAS.
- 
-diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-index d02f16a..2d9591f 100644
---- a/package/powerpc-utils/powerpc-utils.hash
-+++ b/package/powerpc-utils/powerpc-utils.hash
-@@ -1,3 +1,3 @@
--# From http://sourceforge.net/projects/powerpc-utils/files/powerpc-utils/
--sha1	975c668e8eaedd5222a7870e82ce295d06dfe649	powerpc-utils-1.2.24.tar.gz
--md5	f492a72f2d4522eba5d9b329c84b3ed3	powerpc-utils-1.2.24.tar.gz
-+# From https://github.com/nfont/powerpc-utils/archive/v1.3.0.tar.gz
-+sha1	33d49885588373e9bb9444af41a031c3a651a5ec	v1.3.0.tar.gz
-+md5	ceed76fa882ea02d78e574691e167834		v1.3.0.tar.gz
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index ae4d662..61b0fbe 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -4,15 +4,21 @@
- #
- ################################################################################
- 
--POWERPC_UTILS_VERSION = 1.2.24
--POWERPC_UTILS_SITE = http://downloads.sourceforge.net/project/powerpc-utils/powerpc-utils
-+POWERPC_UTILS_VERSION = 1.3.0
-+POWERPC_UTILS_SITE = https://github.com/nfont/powerpc-utils/archive/
-+POWERPC_UTILS_SOURCE = v$(POWERPC_UTILS_VERSION).tar.gz
- POWERPC_UTILS_DEPENDENCIES = zlib
--POWERPC_UTILS_LICENSE = Common Public License Version 1.0
--POWERPC_UTILS_LICENSE_FILES = COPYRIGHT
-+POWERPC_UTILS_LICENSE = GPLv2
-+POWERPC_UTILS_LICENSE_FILES = COPYING
- 
- POWERPC_UTILS_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector_all=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no)
- 
-+define POWERPC_UTILS_AUTOGEN
-+	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
-+endef
-+POWERPC_UTILS_PRE_CONFIGURE_HOOKS += POWERPC_UTILS_AUTOGEN
-+
- ifeq ($(BR2_PACKAGE_POWERPC_UTILS_RTAS),y)
- POWERPC_UTILS_DEPENDENCIES += librtas
- POWERPC_UTILS_CONF_OPTS = --with-librtas
+You need to add qt5serialport here too.
+
+> +QT5SERIALBUS_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> +QT5SERIALBUS_LICENSE = GPLv2 or GPLv3 or LGPLv2.1 with exception or LGPLv3, GFDLv1.3 (docs)
+> +QT5SERIALBUS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+
+QtSerialBus-5.6.0 does not have "LGPLv2.1 with exception". Please do 
+make legal-info to test licences.
+
+> +else
+> +QT5SERIALBUS_LICENSE = Commercial license
+> +QT5SERIALBUS_REDISTRIBUTE = NO
+> +endif
+> +
+> +define QT5SERIALBUS_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+> +endef
+> +
+> +define QT5SERIALBUS_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define QT5SERIALBUS_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+> +	$(QT5_LA_PRL_FILES_FIXUP)
+> +endef
+> +
+> +ifeq ($(BR2_STATIC_LIBS),)
+> +define QT5SERIALBUS_INSTALL_TARGET_CMDS
+> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5SerialBus.so.* $(TARGET_DIR)/usr/lib
+> +	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/canbus/
+> +	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/canbus/*.so $(TARGET_DIR)/usr/lib/qt/plugins/canbus/
+> +endef
+> +endif
+
+QtSerialBus also have a canbusutil binary in $(STAGING_DIR)/usr/bin
+
+> +
+> +$(eval $(generic-package))
+>
+
+I'm already working on huge bump off all missing Qt5 modules (+obsolete 
+ones for legacy reason) in case you're doing the same job.
+Please send a v2 of your patch and let me know in case you want/can 
+test/review my (not submitted yet) series.
+
+Regards,
+
+Julien Corjon
