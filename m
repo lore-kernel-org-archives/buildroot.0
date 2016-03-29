@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 16:55:37 +0200
-Subject: [Buildroot] [PATCH v2 1/2] core/pkg-kconfig: fix .config rule
- for silent mode
-In-Reply-To: <1459246302-21837-2-git-send-email-romain.izard.pro@gmail.com>
-References: <1459246302-21837-1-git-send-email-romain.izard.pro@gmail.com>
- <1459246302-21837-2-git-send-email-romain.izard.pro@gmail.com>
-Message-ID: <20160329165537.3b2b2f0c@free-electrons.com>
+Date: Tue, 29 Mar 2016 16:55:45 +0200
+Subject: [Buildroot] [PATCH] git: bump version to 2.8.0
+In-Reply-To: <1459261354-25288-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1459261354-25288-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <20160329165545.20eeba0b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 29 Mar 2016 12:11:41 +0200, Romain Izard wrote:
-> Ensure that each command line in the .config rule is prefixed by $$(Q)
-> 
-> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+On Tue, 29 Mar 2016 15:22:34 +0100, Vicente Olivert Riera wrote:
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 > ---
-> Changelog:
-> v2: New patch
+>  package/git/git.hash | 2 +-
+>  package/git/git.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
