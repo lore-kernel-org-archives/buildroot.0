@@ -1,48 +1,100 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 29 Mar 2016 22:30:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linphone: port some stuff from
-	mediastreamer
-Message-ID: <1459283426-30883-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Tue, 29 Mar 2016 22:30:39 +0200
+Subject: [Buildroot] [PATCH 2/2] package/freerdp: add support for ffmpeg 3.0
+In-Reply-To: <1459283439-30933-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459283439-30933-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459283439-30933-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need to add some dependencies formerly provided by the mediastreamer
-package, also add --disable-video to make clear that our linphone
-package lacks video support as stated in Config.in.
-
-Fixes
-http://autobuild.buildroot.net/results/45e/45e605de0488e9e961a536f4d232235c5282522b/
-http://autobuild.buildroot.net/results/ed5/ed508ac3509be8c46670198da8eb0a2ba74835e6/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linphone/linphone.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/freerdp/0004-ffmpeg30.patch | 74 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 package/freerdp/0004-ffmpeg30.patch
 
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index 1728d20..eb676ea 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -8,7 +8,7 @@ LINPHONE_VERSION_MAJOR = 3.6
- LINPHONE_VERSION = $(LINPHONE_VERSION_MAJOR).1
- LINPHONE_SITE = http://download-mirror.savannah.gnu.org/releases/linphone/$(LINPHONE_VERSION_MAJOR).x/sources
- LINPHONE_CONF_OPTS = \
--	--disable-strict
-+	--disable-strict --disable-video
- # configure is out of sync causing deplibs linking issues
- LINPHONE_AUTORECONF = YES
- LINPHONE_INSTALL_STAGING = YES
-@@ -34,6 +34,8 @@ LINPHONE_CONF_OPTS += --disable-gtk_ui
- endif
- 
- # needed for bundled mediastreamer2
-+LINPHONE_DEPENDENCIES += host-intltool host-gettext
+diff --git a/package/freerdp/0004-ffmpeg30.patch b/package/freerdp/0004-ffmpeg30.patch
+new file mode 100644
+index 0000000..a7998b7
+--- /dev/null
++++ b/package/freerdp/0004-ffmpeg30.patch
+@@ -0,0 +1,74 @@
++From b7b66968f93f6ce75dd06d12638e14029bf3717b Mon Sep 17 00:00:00 2001
++From: Alexis Ballier <aballier@gentoo.org>
++Date: Thu, 17 Sep 2015 10:36:44 +0200
++Subject: [PATCH] channels/tsmf/client/ffmpeg: Fix build with ffmpeg git
++ master.
 +
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
- LINPHONE_CONF_OPTS += --enable-libv4l1 --enable-libv4l2
- LINPHONE_DEPENDENCIES += libv4l
++Replace old, deprecated and now removed, APIs with their new equivalent while retaining backward compatibility with old ffmpeg versions.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Downloaded from upstream commit:
++ https://github.com/FreeRDP/FreeRDP/commit/f8ceb3f6061583c650bd4f6cddc10bc0471f2076]
++---
++ channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c | 17 ++++++++++++++++-
++ 1 file changed, 16 insertions(+), 1 deletion(-)
++
++diff --git a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
++index d0880e7..e1b9f83 100644
++--- a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
+++++ b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
++@@ -61,6 +61,9 @@
++ #define AV_CODEC_ID_AC3 CODEC_ID_AC3
++ #endif
++ 
+++#if LIBAVUTIL_VERSION_MAJOR < 52
+++#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
+++#endif
++ 
++ typedef struct _TSMFFFmpegDecoder
++ {
++@@ -102,7 +105,11 @@ static BOOL tsmf_ffmpeg_init_video_stream(ITSMFDecoder* decoder, const TS_AM_MED
++ 	mdecoder->codec_context->bit_rate = media_type->BitRate;
++ 	mdecoder->codec_context->time_base.den = media_type->SamplesPerSecond.Numerator;
++ 	mdecoder->codec_context->time_base.num = media_type->SamplesPerSecond.Denominator;
+++#if LIBAVCODEC_VERSION_MAJOR < 55
++ 	mdecoder->frame = avcodec_alloc_frame();
+++#else
+++	mdecoder->frame = av_frame_alloc();
+++#endif
++ 	return TRUE;
++ }
++ 
++@@ -328,7 +335,11 @@ static BOOL tsmf_ffmpeg_decode_video(ITSMFDecoder* decoder, const BYTE *data, UI
++ 		if (!mdecoder->decoded_data)
++ 			return FALSE;
++ 
+++#if LIBAVCODEC_VERSION_MAJOR < 55
++ 		frame = avcodec_alloc_frame();
+++#else
+++		frame = av_frame_alloc();
+++#endif
++ 		avpicture_fill((AVPicture*) frame, mdecoder->decoded_data,
++ 					   mdecoder->codec_context->pix_fmt,
++ 					   mdecoder->codec_context->width, mdecoder->codec_context->height);
++@@ -400,7 +411,11 @@ static BOOL tsmf_ffmpeg_decode_audio(ITSMFDecoder* decoder, const BYTE *data, UI
++ 									(int16_t *) dst, &frame_size, src, src_size);
++ #else
++ 		{
+++#if LIBAVCODEC_VERSION_MAJOR < 55
++ 			AVFrame *decoded_frame = avcodec_alloc_frame();
+++#else
+++			AVFrame *decoded_frame = av_frame_alloc();
+++#endif
++ 			int got_frame = 0;
++ 			AVPacket pkt;
++ 			av_init_packet(&pkt);
++@@ -480,7 +495,7 @@ static UINT32 tsmf_ffmpeg_get_decoded_format(ITSMFDecoder* decoder)
++ 
++ 	switch (mdecoder->codec_context->pix_fmt)
++ 	{
++-		case PIX_FMT_YUV420P:
+++		case AV_PIX_FMT_YUV420P:
++ 			return RDP_PIXFMT_I420;
++ 		default:
++ 			WLog_ERR(TAG, "unsupported pixel format %u",
 -- 
 2.8.0.rc3
