@@ -1,49 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 23:51:53 +0200
-Subject: [Buildroot] [PATCH v2] radlib: new package
-In-Reply-To: <1459287337.10145.3.camel@intel.com>
-References: <1459194027.3607.13.camel@intel.com>
- <20160329200702.01fc66d5@free-electrons.com>
- <1459287337.10145.3.camel@intel.com>
-Message-ID: <20160329235153.21664d17@free-electrons.com>
+Date: Tue, 29 Mar 2016 23:55:21 +0200
+Subject: [Buildroot] [git commit] package/libass: bump version to 0.13.2
+Message-ID: <20160329215525.4BC65816A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7835a9857f30a31ceba14230d3dfffca51ac151c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Mar 2016 21:35:37 +0000, Kinsella, Ray wrote:
-> > Please use git send-email to send your patches. Due to not using git
-> > send-email, your e-mail is badly line-wrapped and cannot be applied,
-> > and even less reviewed nicely.
-> 
-> ok - I will figure out the smtp setup. 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libass/libass.hash | 2 +-
+ package/libass/libass.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Plenty of @intel.com people contribute to the kernel, and use git
-send-email. So I'm sure you can find the appropriate SMTP setup :)
-
-
-> > This should go below the "---" sign.
-> 
-> ok the 'Delta's from v1:-' should be moved after the Signed-off-by
-> line?
-
-After the --- separator that follows the SoB line.
-
-> > So you're doing three different things. Which calls for three
-> > different
-> > patches.
-> 
-> Hopefully this won't require me to re-org the patch. 
-
-Well, you'll have to split your "big" patch into three smaller patches.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libass/libass.hash b/package/libass/libass.hash
+index 88f15f4..5dddc40 100644
+--- a/package/libass/libass.hash
++++ b/package/libass/libass.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	4aa36b1876a61cab46fc9284fee84224b9e2840fe7b3e63d96a8d32574343fe7	libass-0.13.1.tar.xz
++sha256	d698d0a6adca7c36c5a86b540d67b05bfd36cebc3c351ab7646497c43fe1face	libass-0.13.2.tar.xz
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index df0c7ae..716bca6 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBASS_VERSION = 0.13.1
++LIBASS_VERSION = 0.13.2
+ LIBASS_SOURCE = libass-$(LIBASS_VERSION).tar.xz
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
