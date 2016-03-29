@@ -1,47 +1,50 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Tue, 29 Mar 2016 23:04:47 +0200
-Subject: [Buildroot] [PATCH] raspberrypi,
- raspberrypi2: add a serial console
-In-Reply-To: <56FA8D54.2050605@lucaceresoli.net>
-References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
- <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
- <56FA8D54.2050605@lucaceresoli.net>
-Message-ID: <56FAEDEF.3090304@lespocky.de>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 29 Mar 2016 18:06:50 -0300
+Subject: [Buildroot] [PATCH v2 0/3] Webkitgtk 2.12.x bump
+Message-ID: <1459285613-6784-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+This series bumps webkitgtk from the current 2.4.x series to 2.12.x and
+midori to match as well.
 
-On 29.03.2016 16:12, Luca Ceresoli wrote:
-> However, when replying to a mail on the mailing list, please reply to
-> all. This helps involved people to follow the discussion. Typically an
-> e-mail sent directly is seen sooner that one on a mailing list only.
+It's a major bump that deprecates the 2.4.x series since it isn't 100%
+security supported by upstream.
 
-Well, I try to remember it, each community handles this different and I
-find it annoying to receive mails twice personally. Some mailing list
-filter this, others not. ;-)
+Changes for v2:
+ * webkitgtk: dedup/group x11 dependencies
+ * webkitgtk: spin GLES handling outside wayland
+ * midori: it's available for libgtk3 in general (any backend)
+ * defer demo config until it get more polish
 
-> That's OK if you don't feel confident enough to give your official
-> Acked-by or Reviewed-by tag. Still, you can test the patch on a real
-> board and report back the outcome. If it works, you can add your
-> Tested-by tag. Otherwise, please report what went wrong. More details on:
+Gustavo Zacarias (3):
+  webkitgtk: new package
+  midori: bump to version 0.5.11
+  webkitgtk24: mark as deprecated
 
-Yeah I actually tried to this evening, but there was a showstopper I
-filed a bug for now: https://bugs.busybox.net/show_bug.cgi?id=8831
+ package/Config.in                            |  1 +
+ package/midori/0001-disable-libnotify.patch  | 43 --------------
+ package/midori/0001-fix-bug-1492932.patch    | 44 ++++++++++++++
+ package/midori/0002-gcr-for-x11-only.patch   | 32 ++++++++++
+ package/midori/0002-new-vala.patch           | 26 --------
+ package/midori/Config.in                     | 36 ++++-------
+ package/midori/midori.hash                   |  2 +-
+ package/midori/midori.mk                     | 36 +++--------
+ package/{webkitgtk24 => webkitgtk}/Config.in | 46 +++++++-------
+ package/webkitgtk/webkitgtk.hash             |  4 ++
+ package/webkitgtk/webkitgtk.mk               | 89 ++++++++++++++++++++++++++++
+ package/webkitgtk24/Config.in                |  2 +
+ 12 files changed, 215 insertions(+), 146 deletions(-)
+ delete mode 100644 package/midori/0001-disable-libnotify.patch
+ create mode 100644 package/midori/0001-fix-bug-1492932.patch
+ create mode 100644 package/midori/0002-gcr-for-x11-only.patch
+ delete mode 100644 package/midori/0002-new-vala.patch
+ copy package/{webkitgtk24 => webkitgtk}/Config.in (60%)
+ create mode 100644 package/webkitgtk/webkitgtk.hash
+ create mode 100644 package/webkitgtk/webkitgtk.mk
 
-Maybe I try again later.
-
-Greets
-Alex
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160329/0caacef1/attachment.asc>
+-- 
+2.7.3
