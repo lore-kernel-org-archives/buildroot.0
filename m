@@ -1,70 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 16:09:10 +0200
-Subject: [Buildroot] [PATCH] package/libxslt: fix static build
-In-Reply-To: <1459259543.5308.10.camel@embedded.rocks>
-References: <1459199363-28640-1-git-send-email-joerg.krause@embedded.rocks>
- <20160329030113.55474130@free-electrons.com>
- <20160329145214.6a434016@free-electrons.com>
- <1459259543.5308.10.camel@embedded.rocks>
-Message-ID: <20160329160910.267a0dc8@free-electrons.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 29 Mar 2016 16:12:36 +0200
+Subject: [Buildroot] [PATCH] raspberrypi,
+ raspberrypi2: add a serial console
+In-Reply-To: <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
+References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
+ <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
+Message-ID: <56FA8D54.2050605@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hei hei Alexander,
 
-On Tue, 29 Mar 2016 15:52:23 +0200, J?rg Krause wrote:
-> > Baruch, J?rg, could you have a closer look at this problem, and see
-> > which solution, between the one from J?rg and the one from Baruch is
-> > actually correct ?
+thanks for your review! See below by replies.
+
+However, when replying to a mail on the mailing list, please reply to
+all. This helps involved people to follow the discussion. Typically an
+e-mail sent directly is seen sooner that one on a mailing list only.
+
+On 29/03/2016 13:30, Alexander Dahl wrote:
+> Hei hei,
 > 
-> The problem is that xml2-config does not work for cross-compilation:
+> Am 2016-03-29 00:08, schrieb Luca Ceresoli:
+>> The current Buildroot defconfigs for Raspberry Pi and Raspberry Pi 2
+>> instantiate a console on tty1, which appears on HDMI. Add a console on
+>> the serial port (ttyAMA0) to be more consistent with other defconfigs
+>> and provide a better out-of-the-box experience to users used to have a
+>> serial console from Buildroot defconfigs.
 > 
-> $ ./output/host/usr/bfin-buildroot-uclinux-clibc/sysroot/usr//bin/xml2-
-> config --libs
-> -lxml2 -lm
-
-Why do you say it doesn't work for cross-compilation? This result is
-perfectly good for cross-compilation.
-
-> I am not quite sure why it works either. I guess it has something todo
-> with how libtool works, as libtool sets the correct dependency_libs in
-> libxslt.la if '--with-libxml-libs-prefix' is used:
+> I ran in the very problem last week. So +1 for the idea.
 > 
-> # Libraries that this one depends upon.
-> dependency_libs=' -L/home/joerg/git/buildroot/output/host/usr/bfin-
-> buildroot-uclinux-uclibc/sysroot/usr/lib
-> /home/joerg/git/buildroot/output/host/usr/bfin-buildroot-uclinux-
-> uclibc/sysroot/usr/lib/libxml2.la
-> /home/joerg/git/buildroot/output/host/usr/bfin-buildroot-uclinux-
-> uclibc/sysroot/usr/lib/liblzma.la -lm'
+>> This requires two changes:
+>>  1. have two 'console=' entries in the kernel command line;
+>>  2. add a new getty process to the generated inittab.
 > 
-> .. whereas, whithout '--with-libxml-libs-prefix:
+> Then why not split up those two changes in two patches? ;-)
+
+Because change 1 alone is almost useless. It just outputs kernel booting
+and early init messages on UART, but no console. I see adding a UART
+console as a self-contained change, but of course that's only my opinion.
+
 > 
-> # Libraries that this one depends upon.
-> dependency_libs=' -lxml2 -lm'
-
-Weird. I guess libtool is parsing this -L<path> option and does some
-magic with it. It is completely stupid, because since we have --sysroot
-$(STAGING_DIR), then automatically $(STAGING_DIR)/usr/lib is in the
-search path for libraries, without the need to add a -L<path> option.
-Except for the silly libtool.
-
-> > Ideally, xml2-config should have a --static option, or even better,
-> > drop xml2-config entirely and use pkg-config :-)
+>> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
 > 
-> Patching libxlst to use pkg-config is what OE and yocto are doing [1]
-> as libxml2 does have a correct .pc file.
+> +1
+> 
+>> diff --git a/package/rpi-firmware/cmdline.txt b/package/rpi-firmware/cmdline.txt
+>> index 38aa3782621b..155a54693bff 100644
+>> --- a/package/rpi-firmware/cmdline.txt
+>> +++ b/package/rpi-firmware/cmdline.txt
+>> @@ -1 +1 @@
+>> -root=/dev/mmcblk0p2 rootwait
+>> +root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200
+> 
+> +1
+> 
+> Not sure about the post build script though, maybe someone with more
+> experience in buildroot could comment on that.
 
-And why isn't that upstream? The development of libxslt seems to be
-active upstream: https://git.gnome.org/browse/libxslt/log/. Well,
-except for the fact that they haven't done a release in the last three
-years.
+That's OK if you don't feel confident enough to give your official
+Acked-by or Reviewed-by tag. Still, you can test the patch on a real
+board and report back the outcome. If it works, you can add your
+Tested-by tag. Otherwise, please report what went wrong. More details on:
 
-Thomas
+http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
+
+Cheers,
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Luca
