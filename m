@@ -1,93 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 03:06:55 +0200
-Subject: [Buildroot] [git commit] package/linphone: add support for ffmpeg
-	3.0
-Message-ID: <20160329011110.0FC61817F5@busybox.osuosl.org>
+Date: Tue, 29 Mar 2016 03:04:15 +0200
+Subject: [Buildroot] [git commit] package/ortp: bump version to 0.25.0
+Message-ID: <20160329011109.E58E47FB80@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dec04466549cd40e2696ae7725e90d6559bee640
+commit: https://git.buildroot.net/buildroot/commit/?id=0ebad1fb1e56fa3a48d6ceb40910560ea2a8534a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Linphone 3.6 is incompatible with bumped mediastreamer and ortp
-packages. Like Debian we use the bundled versions instead and add the
-Debian patch series to support ffmpeg 3.0
+This version bump is needed by mediastreamer 2.12.1, the mediastreamer
+bump is needed to provide support for ffmpeg 3.0.
+
+Removed srtp option after srtp support was removed from ortp:
+https://github.com/BelledonneCommunications/ortp/commit/5e37fa55f1f15f5896d69156e64cdc95a1ff68bf
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/linphone/Config.in     |  6 ++----
- package/linphone/linphone.hash |  4 ++++
- package/linphone/linphone.mk   | 17 ++++++++++++++---
- 3 files changed, 20 insertions(+), 7 deletions(-)
+ package/ortp/ortp.hash | 4 ++--
+ package/ortp/ortp.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/linphone/Config.in b/package/linphone/Config.in
-index 6d6ffae..2622aa4 100644
---- a/package/linphone/Config.in
-+++ b/package/linphone/Config.in
-@@ -2,10 +2,8 @@ config BR2_PACKAGE_LINPHONE
- 	bool "linphone"
- 	select BR2_PACKAGE_LIBEXOSIP2
- 	select BR2_PACKAGE_SPEEX
--	select BR2_PACKAGE_ORTP
--	select BR2_PACKAGE_MEDIASTREAMER
--	depends on BR2_INSTALL_LIBSTDCPP # mediastreamer
--	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp
-+	depends on BR2_INSTALL_LIBSTDCPP # mediastreamer (bundled)
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # ortp (bundled)
- 	depends on BR2_USE_MMU # libeXosip2
- 	help
- 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
-diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
-index 9ed9d37..2e202cf 100644
---- a/package/linphone/linphone.hash
-+++ b/package/linphone/linphone.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
- sha256	05ba81223e9378c3bce8d33080213b9925af49bd9623cd9004eb3dd22ca9d2a0	linphone-3.6.1.tar.gz
-+sha256	bc4ef670c0ecc1bb60bcb79374309b555c11d154bacfa363d809a26a58780933	libav9.patch
-+sha256	a50a8ac2caedb389c224f81393901a029fec055ec2ec83aa18d677e1bfe7fc73	libav10.patch
-+sha256	e384775c12ea93d3bc35dccfe4ea875c38b74be8af63fcb82e6b7f06e93d1593	libav11.patch
-+sha256	3367a26f65f49f4101787b1821402127d29cde9b02d3873112a5001a549cc7d9	ffmpeg_2.9.patch
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index e0d4fa3..1728d20 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -8,15 +8,18 @@ LINPHONE_VERSION_MAJOR = 3.6
- LINPHONE_VERSION = $(LINPHONE_VERSION_MAJOR).1
- LINPHONE_SITE = http://download-mirror.savannah.gnu.org/releases/linphone/$(LINPHONE_VERSION_MAJOR).x/sources
- LINPHONE_CONF_OPTS = \
--	--enable-external-ortp \
--	--enable-external-mediastreamer \
- 	--disable-strict
- # configure is out of sync causing deplibs linking issues
- LINPHONE_AUTORECONF = YES
- LINPHONE_INSTALL_STAGING = YES
--LINPHONE_DEPENDENCIES = host-pkgconf ortp mediastreamer libeXosip2 speex
-+LINPHONE_DEPENDENCIES = host-pkgconf libeXosip2 speex
- LINPHONE_LICENSE = GPLv2+
- LINPHONE_LICENSE_FILES = COPYING
-+LINPHONE_PATCH = \
-+	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav9.patch \
-+	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav10.patch \
-+	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/libav11.patch \
-+	https://sources.debian.net/data/main/l/linphone/3.6.1-2.5/debian/patches/ffmpeg_2.9.patch
+diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+index 728a0d1..8b099a7 100644
+--- a/package/ortp/ortp.hash
++++ b/package/ortp/ortp.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated after checking pgp signature
+-sha256	6e37e29b3c3559bac1f2ae0c977f6ceb4d4ce8dc713b691dea8bae57bda92d0b	ortp-0.22.0.tar.gz
++# Locally calculated
++sha256	0deb826b79b1fd329f7638821d5439dc343bc55bb122daa6c90d19116cfe8d9a	ortp-0.25.0.tar.gz
+diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+index 89bfc06..ca4a90d 100644
+--- a/package/ortp/ortp.mk
++++ b/package/ortp/ortp.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_arc),y)
- # toolchain __arc__ define conflicts with libosip2 source
-@@ -30,4 +33,12 @@ else
- LINPHONE_CONF_OPTS += --disable-gtk_ui
- endif
+-ORTP_VERSION = 0.22.0
++ORTP_VERSION = 0.25.0
+ ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
  
-+# needed for bundled mediastreamer2
-+ifeq ($(BR2_PACKAGE_LIBV4L),y)
-+LINPHONE_CONF_OPTS += --enable-libv4l1 --enable-libv4l2
-+LINPHONE_DEPENDENCIES += libv4l
-+else
-+LINPHONE_CONF_OPTS += --disable-libv4l1 --disable-libv4l2
-+endif
-+
- $(eval $(autotools-package))
+-# ortp is not happy with the libsrtp implementation packaged in
+-# Buildroot
+-ORTP_CONF_OPTS = --disable-strict --with-srtp=none
++ORTP_CONF_OPTS = --disable-strict
+ ORTP_INSTALL_STAGING = YES
+ ORTP_LICENSE = LGPLv2.1+
+ ORTP_LICENSE_FILES = COPYING
