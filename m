@@ -1,41 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 16:55:29 +0200
-Subject: [Buildroot] [git commit] git: bump version to 2.8.0
-Message-ID: <20160329145531.566278190C@busybox.osuosl.org>
+Date: Tue, 29 Mar 2016 16:55:37 +0200
+Subject: [Buildroot] [PATCH v2 1/2] core/pkg-kconfig: fix .config rule
+ for silent mode
+In-Reply-To: <1459246302-21837-2-git-send-email-romain.izard.pro@gmail.com>
+References: <1459246302-21837-1-git-send-email-romain.izard.pro@gmail.com>
+ <1459246302-21837-2-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <20160329165537.3b2b2f0c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62b1de3fb4f676d464651a66b9c790f040f89539
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 29 Mar 2016 12:11:41 +0200, Romain Izard wrote:
+> Ensure that each command line in the .config rule is prefixed by $$(Q)
+> 
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+> ---
+> Changelog:
+> v2: New patch
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index f0b9201..7eac6a0 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 dee574defbe05ec7356a0842ddbda51315926f2fa7e39c2539f2c3dcc52e457b  git-2.7.4.tar.xz
-+sha256 9a099a4f1e68c0446800f0c538ce7d5d24bd5b4ee5d559317600cd407a59e74c  git-2.8.0.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 41737de..3c06cbd 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.7.4
-+GIT_VERSION = 2.8.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
