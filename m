@@ -1,29 +1,55 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 29 Mar 2016 09:39:05 -0300
-Subject: [Buildroot] [PATCH v2 0/6] Weston package enhancement
-Message-ID: <1459255151-17084-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 29 Mar 2016 09:39:06 -0300
+Subject: [Buildroot] [PATCH v2 1/6] weston: add EGL support
+In-Reply-To: <1459255151-17084-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459255151-17084-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1459255151-17084-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes for v2:
-* Add libdrm dependency for DRM compositor
-* Add weston-launch support
-* Drop useless --disable-xwayland-test
+Also drop simple-egl-clients from the rpi compositor since it's a duplicate
+of the global one.
 
-Gustavo Zacarias (6):
-  weston: add EGL support
-  weston: set default backend for fbdev
-  weston: add DRM compoitor support
-  weston: handle optional libva support
-  weston: add weston-launch support
-  weston: drop --disable-xwayland-test
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/weston/weston.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- package/weston/Config.in | 10 ++++++++++
- package/weston/weston.mk | 47 ++++++++++++++++++++++++++++++++++++++---------
- 2 files changed, 48 insertions(+), 9 deletions(-)
-
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index d818071..beab7b4 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -15,7 +15,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+-	--disable-egl \
+ 	--disable-simple-egl-clients \
+ 	--disable-xwayland \
+ 	--disable-x11-compositor \
+@@ -28,6 +27,12 @@ WESTON_CONF_OPTS = \
+ WESTON_MAKE_OPTS = \
+ 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+ 
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++WESTON_DEPENDENCIES += libegl
++else
++WESTON_CONF_OPTS += --disable-egl
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ WESTON_DEPENDENCIES += libunwind
+ else
+@@ -53,7 +58,6 @@ WESTON_CONF_OPTS += --enable-rpi-compositor \
+ 	--disable-resize-optimization \
+ 	--disable-setuid-install \
+ 	--disable-xwayland-test \
+-	--disable-simple-egl-clients \
+ 	WESTON_NATIVE_BACKEND=rpi-backend.so
+ else
+ WESTON_CONF_OPTS += --disable-rpi-compositor
 -- 
 2.7.3
