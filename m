@@ -1,59 +1,59 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 00:46:39 +0200
-Subject: [Buildroot] [PATCH] raspberrypi,
- raspberrypi2: add a serial console
-In-Reply-To: <56FAFA19.9090406@lucaceresoli.net>
-References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
- <56FAE674.6080004@mind.be> <56FAFA19.9090406@lucaceresoli.net>
-Message-ID: <56FB05CF.1070808@mind.be>
+Date: Wed, 30 Mar 2016 00:49:15 +0200
+Subject: [Buildroot] [PATCH v2 06/17] uclibc: gcc >= 4.9 can build a
+ thumb/thread uclibc
+In-Reply-To: <20160330001821.482163e7@free-electrons.com>
+References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1458335299-27409-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ <56ED75EC.7050409@mind.be> <20160330001821.482163e7@free-electrons.com>
+Message-ID: <56FB066B.6020409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/29/16 23:56, Luca Ceresoli wrote:
-> Dear Arnout,
+On 03/30/16 00:18, Thomas Petazzoni wrote:
+> Hello,
 >
-> On 29/03/2016 22:32, Arnout Vandecappelle wrote:
->> On 03/29/16 00:08, Luca Ceresoli wrote:
-[snip]
->>> diff --git a/configs/raspberrypi2_defconfig
->>> b/configs/raspberrypi2_defconfig
->>> index ce41ee31adba..0ffc6cdaf158 100644
->>> --- a/configs/raspberrypi2_defconfig
->>> +++ b/configs/raspberrypi2_defconfig
->>> @@ -5,7 +5,7 @@ BR2_ARM_FPU_NEON_VFPV4=y
->>>
->>>    BR2_TOOLCHAIN_BUILDROOT_CXX=y
->>>
->>> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
->>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> On Sat, 19 Mar 2016 16:53:16 +0100, Arnout Vandecappelle wrote:
+>
+>>> -# Thumb build is broken with threads, build in ARM mode
+>>> -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
+>>> +# Thumb1 build is broken with threads with old gcc versions (4.7 and
+>>> +# 4.8). Since all cores supporting Thumb1 also support ARM, we use ARM
+>>> +# code in this case.
+>>> +ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),y:yy)
 >>
->>   Why not keep the default "console"? That should work, no? Or doesn't
->> that work if there are two consoles?
+>>    This line is a bit long so would be nicer to split off into separate
+>> variables. This kind of logic is also much easier to do (and certainly easier to
+>> understand) in Kconfig than in the make language - like we had for BX before you
+>> removed it.
 >
-> What improvement you expect from using "console" instead of "ttyAMA0"?
+> I agree this line is a bit long. But how would be named this Config.in
+> option? BR2_PACKAGE_UCLIBC_FORCE_ARM ?
+
+  Maybe FORCE_NO_THUMB?
+
 >
-> OTOH I think ttyAMA0 or tty1 is explicit about the device to use. And as
-> Yann pointed out on IRC, "console is not a controlling tty, so no Ctrl-C
-> for example".
+> config BR2_PACKAGE_UCLIBC_FORCE_ARM
+> 	bool
+> 	depends on BR2_ARM_INSTRUCTIONS_THUMB
+> 	depends on BR2_TOOLCHAIN_HAS_THREADS
+> 	default y if BR2_GCC_VERSION_4_7_X
+> 	default y if BR2_GCC_VERSION_4_8_X
+>
+> Something like that?
 
-  For the record, as concluded on IRC:
-
-- "console" is still a controlling tty, it is init=/bin/sh that doesn't give a 
-controlling tty;
-
-- GETTY_PORT="console" will launch a getty on the last console= given on the 
-kernel command line
-
-- What I actually meant is that BR2_TARGET_GENERIC_GETTY_PORT can be removed 
-completely from the defconfig (as is the case already in roughly half our 
-defconfigs) because it anyway defaults to "console".
+  Yep, that's it.
 
 
   Regards,
   Arnout
+
+>
+> Thomas
+>
 
 
 -- 
