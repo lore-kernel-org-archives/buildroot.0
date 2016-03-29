@@ -1,84 +1,104 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Mar 2016 00:17:15 +0200
-Subject: [Buildroot] [PATCH 2/6] package/ffmpeg: bump to version 3.0.1
+Date: Wed, 30 Mar 2016 00:17:18 +0200
+Subject: [Buildroot] [PATCH 5/6] package/ffmpeg: Add patch required by Kodi
+	16.0-Jarvis
 In-Reply-To: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459289839-6230-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459289839-6230-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459289839-6230-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-
-- Remove non-existen configure options:
-  - --disable-mips32r2
-  - --disable-libvo-aacenc
-
-- Amend renamed configure options:
-  - --disable-mipsdspr1 has been renamed to --disable-mipsdsp
-
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-(Bernd: bumped to version 3.0.1)
 ---
- package/ffmpeg/ffmpeg.hash |  2 +-
- package/ffmpeg/ffmpeg.mk   | 13 ++-----------
- 2 files changed, 3 insertions(+), 12 deletions(-)
+ .../ffmpeg/0013-hevc-support-main10-decoding.patch | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 package/ffmpeg/0013-hevc-support-main10-decoding.patch
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 8643bff..65fe32b 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
-+sha256	c389ca5e3c29e758dd82ee6981130fe79e73b06e26db1a3aa971daea63598bc1	ffmpeg-3.0.1.tar.xz
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index ddfac20..26633e4 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 2.8.6
-+FFMPEG_VERSION = 3.0.1
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -41,7 +41,7 @@ FFMPEG_CONF_OPTS = \
- 	--enable-runtime-cpudetect \
- 	--disable-hardcoded-tables \
- 	--disable-memalign-hack \
--	--disable-mipsdspr1 \
-+	--disable-mipsdsp \
- 	--disable-mipsdspr2 \
- 	--disable-msa \
- 	--enable-hwaccels \
-@@ -58,7 +58,6 @@ FFMPEG_CONF_OPTS = \
- 	--disable-libnut \
- 	--disable-libopenjpeg \
- 	--disable-libschroedinger \
--	--disable-libvo-aacenc \
- 	--disable-libvo-amrwbenc \
- 	--disable-symver \
- 	--disable-doc
-@@ -437,14 +436,6 @@ FFMPEG_CONF_OPTS += \
- 	--enable-mipsfpu
- endif
- 
--ifeq ($(BR2_mips_32r2),y)
--FFMPEG_CONF_OPTS += \
--	--enable-mips32r2
--else
--FFMPEG_CONF_OPTS += \
--	--disable-mips32r2
--endif
--
- ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
- FFMPEG_CONF_OPTS += --enable-altivec
- else
+diff --git a/package/ffmpeg/0013-hevc-support-main10-decoding.patch b/package/ffmpeg/0013-hevc-support-main10-decoding.patch
+new file mode 100644
+index 0000000..ef42394
+--- /dev/null
++++ b/package/ffmpeg/0013-hevc-support-main10-decoding.patch
+@@ -0,0 +1,77 @@
++From bbab50b66f61f38415ea1fbc93314712b90901e2 Mon Sep 17 00:00:00 2001
++From: Hendrik Leppkes <h.leppkes@gmail.com>
++Date: Sat, 30 Jan 2016 17:10:56 +0100
++Subject: [PATCH] hevc: support Main10 decoding through dxva2
++
++Patch is part of the Kodi patch set for ffmpeg, downloaded from
++https://github.com/xbmc/FFmpeg/.
++
++Patch was backported from upstream commit:
++http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=ccb94789e2968329947f1c2e00d019f387f9c409
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Changelog            |  4 ++++
++ libavcodec/hevc.c    | 13 ++++++++++++-
++ libavcodec/version.h |  2 +-
++ 3 files changed, 17 insertions(+), 2 deletions(-)
++
++diff --git a/Changelog b/Changelog
++index 2e1cd36..1c60cde 100644
++--- a/Changelog
+++++ b/Changelog
++@@ -1,6 +1,10 @@
++ Entries are sorted chronologically from oldest to youngest within each release,
++ releases are sorted from youngest to oldest.
++ 
+++version <next>:
+++- DXVA2-accelerated HEVC Main10 decoding
+++
+++
++ version 3.0:
++ - Common Encryption (CENC) MP4 encoding and decoding support
++ - DXV decoding
++diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
++index 203f90a..0d53a33 100644
++--- a/libavcodec/hevc.c
+++++ b/libavcodec/hevc.c
++@@ -347,7 +347,9 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fm
++ 
++     export_stream_params(s->avctx, &s->ps, sps);
++ 
++-    if (sps->pix_fmt == AV_PIX_FMT_YUV420P || sps->pix_fmt == AV_PIX_FMT_YUVJ420P) {
+++    switch (sps->pix_fmt) {
+++    case AV_PIX_FMT_YUV420P:
+++    case AV_PIX_FMT_YUVJ420P:
++ #if CONFIG_HEVC_DXVA2_HWACCEL
++         *fmt++ = AV_PIX_FMT_DXVA2_VLD;
++ #endif
++@@ -360,6 +362,15 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fm
++ #if CONFIG_HEVC_VDPAU_HWACCEL
++         *fmt++ = AV_PIX_FMT_VDPAU;
++ #endif
+++        break;
+++    case AV_PIX_FMT_YUV420P10:
+++#if CONFIG_HEVC_DXVA2_HWACCEL
+++        *fmt++ = AV_PIX_FMT_DXVA2_VLD;
+++#endif
+++#if CONFIG_HEVC_D3D11VA_HWACCEL
+++        *fmt++ = AV_PIX_FMT_D3D11VA_VLD;
+++#endif
+++        break;
++     }
++ 
++     if (pix_fmt == AV_PIX_FMT_NONE) {
++diff --git a/libavcodec/version.h b/libavcodec/version.h
++index 37a35e0..08140b0 100644
++--- a/libavcodec/version.h
+++++ b/libavcodec/version.h
++@@ -30,7 +30,7 @@
++ 
++ #define LIBAVCODEC_VERSION_MAJOR  57
++ #define LIBAVCODEC_VERSION_MINOR  24
++-#define LIBAVCODEC_VERSION_MICRO 102
+++#define LIBAVCODEC_VERSION_MICRO 103
++ 
++ #define LIBAVCODEC_VERSION_INT  AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, \
++                                                LIBAVCODEC_VERSION_MINOR, \
 -- 
 2.8.0.rc3
