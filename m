@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 00:18:21 +0200
-Subject: [Buildroot] [PATCH v2 06/17] uclibc: gcc >= 4.9 can build a
- thumb/thread uclibc
-In-Reply-To: <56ED75EC.7050409@mind.be>
-References: <1458335299-27409-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1458335299-27409-7-git-send-email-thomas.petazzoni@free-electrons.com>
- <56ED75EC.7050409@mind.be>
-Message-ID: <20160330001821.482163e7@free-electrons.com>
+Date: Wed, 30 Mar 2016 00:15:14 +0200
+Subject: [Buildroot] [git commit] uclibc: gcc >= 4.9 can build a
+	thumb/thread uclibc
+Message-ID: <20160329222011.ABE50807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=45d7f014517ef7c71b180f5d726d06517d6658c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 19 Mar 2016 16:53:16 +0100, Arnout Vandecappelle wrote:
+Older gcc were not capable of building a uClibc library, with threads
+enabled, in Thumb1. However, the issues have been fixed since gcc 4.9,
+so this commit narrows down the condition to just gcc 4.7 and 4.8.
 
-> > -# Thumb build is broken with threads, build in ARM mode
-> > -ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
-> > +# Thumb1 build is broken with threads with old gcc versions (4.7 and
-> > +# 4.8). Since all cores supporting Thumb1 also support ARM, we use ARM
-> > +# code in this case.
-> > +ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),y:yy)
-> 
->   This line is a bit long so would be nicer to split off into separate 
-> variables. This kind of logic is also much easier to do (and certainly easier to 
-> understand) in Kconfig than in the make language - like we had for BX before you 
-> removed it.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/uclibc/uclibc.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I agree this line is a bit long. But how would be named this Config.in
-option? BR2_PACKAGE_UCLIBC_FORCE_ARM ?
-
-config BR2_PACKAGE_UCLIBC_FORCE_ARM
-	bool
-	depends on BR2_ARM_INSTRUCTIONS_THUMB
-	depends on BR2_TOOLCHAIN_HAS_THREADS
-	default y if BR2_GCC_VERSION_4_7_X
-	default y if BR2_GCC_VERSION_4_8_X
-
-Something like that?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index c981d80..ad94494 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -75,8 +75,10 @@ define UCLIBC_ARM_ABI_CONFIG
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_EABI,$(@D)/.config)
+ endef
+ 
+-# Thumb build is broken with threads, build in ARM mode
+-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
++# Thumb1 build is broken with threads with old gcc versions (4.7 and
++# 4.8). Since all cores supporting Thumb1 also support ARM, we use ARM
++# code in this case.
++ifeq ($(BR2_GCC_VERSION_4_7_X)$(BR2_GCC_VERSION_4_8_X):$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_THREADS),y:yy)
+ UCLIBC_EXTRA_CFLAGS += -marm
+ endif
+ 
