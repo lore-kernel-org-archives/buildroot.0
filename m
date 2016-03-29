@@ -1,61 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 29 Mar 2016 13:45:25 +0200
-Subject: [Buildroot] [PATCH v1] qt5tools: disable qdoc (needs qtdeclarative)
-Message-ID: <1459251925-31678-1-git-send-email-ps.report@gmx.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 29 Mar 2016 13:11:56 +0100
+Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.148
+Message-ID: <1459253516-50939-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
-
-  Project ERROR: Unknown module(s) in QT: qmldevtools-private
-  Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
-
-[1] http://autobuild.buildroot.net/results/b0a/b0a5641beae14ff79a9d5a628bb41957826eb623
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- .../0001-Disable-qdoc-needs-qtdeclarative.patch    | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch b/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
-new file mode 100644
-index 0000000..61cbdfe
---- /dev/null
-+++ b/package/qt5/qt5tools/0001-Disable-qdoc-needs-qtdeclarative.patch
-@@ -0,0 +1,30 @@
-+From acdb24783322bb6e69df61cf04df2b2e47a06ad2 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Tue, 29 Mar 2016 13:37:09 +0200
-+Subject: [PATCH] Disable qdoc (needs qtdeclarative).
-+
-+Fixes:
-+
-+  Project ERROR: Unknown module(s) in QT: qmldevtools-private
-+  Makefile:63: recipe for target 'sub-qdoc-qmake_all' failed
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/src.pro | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/src/src.pro b/src/src.pro
-+index 387d54f..494898f 100644
-+--- a/src/src.pro
-++++ b/src/src.pro
-+@@ -14,7 +14,6 @@ qtHaveModule(widgets) {
-+ }
-+ 
-+ SUBDIRS += linguist \
-+-    qdoc \
-+     qtplugininfo
-+ if(!android|android_app):!ios: SUBDIRS += qtpaths
-+ 
-+-- 
-+2.1.4
-+
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 9fae427..2a26633 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 ec590c9e9b1ebbe5a77053ca4ba82d9c2cc04c69ef768cfd361d94cf23f8f83eda7cbe2f7ebf5f6caf63a08bff73b01734a05614ca24838bf35adc2e50e60d7c  LVM2.2.02.147.tgz
++sha512 549d9d772eae7054c6d9b0d0a7f65e3930f6109b81e8e58ce265f9f3732ea322a0c81acc9e9714ca16c2670ee519ea28a74470b3daf8b0ca05d82decee2443b4  LVM2.2.02.148.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index ec4dc9f..fa35acd 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LVM2_VERSION = 2.02.147
++LVM2_VERSION = 2.02.148
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
-2.1.4
+2.7.3
