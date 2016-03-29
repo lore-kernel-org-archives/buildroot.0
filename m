@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 14:45:10 +0200
-Subject: [Buildroot] [PATCH v4 18/19] package/tvheadend: bump version
-In-Reply-To: <1459194585-12593-19-git-send-email-bernd.kuhls@t-online.de>
-References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
- <1459194585-12593-19-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160329144510.0510cbe8@free-electrons.com>
+Date: Tue, 29 Mar 2016 14:46:11 +0200
+Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.20.1
+In-Reply-To: <1458924831-25952-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1458924831-25952-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160329144611.5a8bb856@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 28 Mar 2016 21:49:44 +0200, Bernd Kuhls wrote:
-> Updated ffmpeg option name after upstream renamed it:
-> https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Fri, 25 Mar 2016 13:53:51 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/libgtk3/libgtk3.hash | 4 ++--
+>  package/libgtk3/libgtk3.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-This is causing some build failures:
+Looks like the Wayland support needs memfd, which is available only if
+fairly recent kernel versions:
 
-   http://autobuild.buildroot.org/results/32c/32c6e6eece7e3b4f428524114f92e9a8999568e4/build-end.log
+  http://autobuild.buildroot.org/results/473/473fb2f416311ee8a8a8719e3fb3689d9226f451/build-end.log
 
-It seems like tvheadend is no longer compatible with the current ffmpeg
-version, since we haven't bumped to ffmpeg 3.0.
+Probably needs some linux headers version dependency. Could you look
+into this?
 
-I guess I should revert the tvheadend bump for now?
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
