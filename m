@@ -1,38 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 29 Mar 2016 12:24:45 +0100
-Subject: [Buildroot] [PATCH] toolchain-external: fix getent installation
- with Codescape MIPS toolchains
-In-Reply-To: <1459172255-24556-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1459172255-24556-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <56FA65FD.7040704@imgtec.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 Mar 2016 13:03:42 +0200
+Subject: [Buildroot] [initscripts] Default script /etc/init.d/S40network
+In-Reply-To: <CALtfCQbJOpzar6wAmdaXzp2U7ZGLSxiZKB6yd4s_xyxxWO5fxg@mail.gmail.com>
+ (=?utf-8?B?IsOTc2NhciBHw7NtZXo=?= Fuente"'s message of "Tue, 29 Mar 2016
+ 12:37:56 +0200")
+References: <CALtfCQbJOpzar6wAmdaXzp2U7ZGLSxiZKB6yd4s_xyxxWO5fxg@mail.gmail.com>
+Message-ID: <87d1qd8s1d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas Petazzoni,
+>>>>> "?scar" == ?scar G?mez Fuente <oscargomezf@gmail.com> writes:
 
-On 28/03/16 14:37, Thomas Petazzoni wrote:
-> When a toolchain is glibc based, the getent package assumes that
-> $(STAGING_DIR)/usr/bin contains the getent program. Unfortunately, the
-> Codescape MIPS toolchains do not conform with this:
-> $(STAGING_DIR)/usr/{bin,sbin} are empty, and instead three directories
-> are provided: bin-o32, bin-n32 and bin-n64 (ditto for sbin), one for
-> each supported MIPS ABI.
-> 
-> Since this is a toolchain-specific oddity, we handle it by adding a
-> post-install fixup hook that creates $(STAGING_DIR)/usr/{bin,sbin} as
-> symbolic link to the appropriate directory.
-> 
-> Fixes:
-> 
->    http://autobuild.buildroot.org/results/9c0ee836021553319f166f9de88750535aee0a58/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Hi,
+ > I'm building a buildroot platform with raspberry pi Compute Module. I'm
+ > using Init system BusyBox and the package initscrpts is selected
+ > automatically.
 
-Regards,
+ > The problem is this package has the S40network script, but the RPi compute
+ > module doesn't have ethernet, so I think this script has to be deleted for
+ > RPi compute module, doesn't it?
 
-Vincent.
+No, why do you think that? S40network is still needed to configure the
+loopback interface (127.0.0.1).
+
+-- 
+Bye, Peter Korsgaard
