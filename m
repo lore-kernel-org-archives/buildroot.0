@@ -1,40 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 00:33:05 +0200
+Date: Wed, 30 Mar 2016 00:46:39 +0200
 Subject: [Buildroot] [PATCH] raspberrypi,
  raspberrypi2: add a serial console
-In-Reply-To: <56FAEDEF.3090304@lespocky.de>
+In-Reply-To: <56FAFA19.9090406@lucaceresoli.net>
 References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
- <127322ee36893ff22f57884a111b3434@idefix.lespocky.dyndns.org>
- <56FA8D54.2050605@lucaceresoli.net> <56FAEDEF.3090304@lespocky.de>
-Message-ID: <56FB02A1.4020503@mind.be>
+ <56FAE674.6080004@mind.be> <56FAFA19.9090406@lucaceresoli.net>
+Message-ID: <56FB05CF.1070808@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/29/16 23:04, Alexander Dahl wrote:
-> Hei hei,
+On 03/29/16 23:56, Luca Ceresoli wrote:
+> Dear Arnout,
 >
-> On 29.03.2016 16:12, Luca Ceresoli wrote:
->> However, when replying to a mail on the mailing list, please reply to
->> all. This helps involved people to follow the discussion. Typically an
->> e-mail sent directly is seen sooner that one on a mailing list only.
+> On 29/03/2016 22:32, Arnout Vandecappelle wrote:
+>> On 03/29/16 00:08, Luca Ceresoli wrote:
+[snip]
+>>> diff --git a/configs/raspberrypi2_defconfig
+>>> b/configs/raspberrypi2_defconfig
+>>> index ce41ee31adba..0ffc6cdaf158 100644
+>>> --- a/configs/raspberrypi2_defconfig
+>>> +++ b/configs/raspberrypi2_defconfig
+>>> @@ -5,7 +5,7 @@ BR2_ARM_FPU_NEON_VFPV4=y
+>>>
+>>>    BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>>>
+>>> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+>>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+>>
+>>   Why not keep the default "console"? That should work, no? Or doesn't
+>> that work if there are two consoles?
 >
-> Well, I try to remember it, each community handles this different and I
-> find it annoying to receive mails twice personally. Some mailing list
-> filter this, others not. ;-)
+> What improvement you expect from using "console" instead of "ttyAMA0"?
 >
->> That's OK if you don't feel confident enough to give your official
->> Acked-by or Reviewed-by tag. Still, you can test the patch on a real
->> board and report back the outcome. If it works, you can add your
->> Tested-by tag. Otherwise, please report what went wrong. More details on:
->
-> Yeah I actually tried to this evening, but there was a showstopper I
-> filed a bug for now: https://bugs.busybox.net/show_bug.cgi?id=8831
+> OTOH I think ttyAMA0 or tty1 is explicit about the device to use. And as
+> Yann pointed out on IRC, "console is not a controlling tty, so no Ctrl-C
+> for example".
 
-  But that problem has nothing to do with this patch. I expect that if you 
-revert the patch, your build will still fail.
+  For the record, as concluded on IRC:
+
+- "console" is still a controlling tty, it is init=/bin/sh that doesn't give a 
+controlling tty;
+
+- GETTY_PORT="console" will launch a getty on the last console= given on the 
+kernel command line
+
+- What I actually meant is that BR2_TARGET_GENERIC_GETTY_PORT can be removed 
+completely from the defconfig (as is the case already in roughly half our 
+defconfigs) because it anyway defaults to "console".
+
 
   Regards,
   Arnout
