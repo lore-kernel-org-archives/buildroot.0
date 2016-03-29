@@ -1,53 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 29 Mar 2016 03:10:52 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: bump version
-Message-ID: <20160329011110.962F3817F5@busybox.osuosl.org>
+Date: Tue, 29 Mar 2016 03:09:09 +0200
+Subject: [Buildroot] [git commit] package/freerdp: bump version
+Message-ID: <20160329011110.536E7817F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4889509db2e9b0d76769f85c7b9ebf018da30edb
+commit: https://git.buildroot.net/buildroot/commit/?id=dda26dc614b6f5ef9be67d2604bac39235322235
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated ffmpeg option name after upstream renamed it:
-https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
+This version bump is needed to provide support for ffmpeg 3.0, added
+Sep, 17th, 2015: https://github.com/FreeRDP/FreeRDP/pull/2895
+
+Please note the we can not bump to a newer version of freerdp atm
+because the next commit in the master branch
+
+https://github.com/FreeRDP/FreeRDP/commit/8206ae440f905b123cb92c7abf8c861070ea8cd8
+
+bumped the version number to 2.x which will provide freerdp2.pc instead
+of freerdp.pc, this is incompatible with vlc atm:
+
+http://git.videolan.org/?p=vlc/vlc-2.2.git;a=blob;f=configure.ac;h=bb5d1dde2ef9828b0ba92c62dbd1143f984f45f2;hb=HEAD#l1890
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/freerdp/freerdp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 14d0fb0..9406d08 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256	9f25c79247ba59a6eb9ff8b9843b2e6cbc2702fa339a0ed89d24beb9017066e3	tvheadend-7adea4a102475fbeb0267a9ab160e1e0644f11c2.tar.gz
-+sha256	50ada2f30387f9526e1ed453f778686b443e599841a73a031cdd543b65e7a502	tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8.tar.gz
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 3398faf..a7a8218 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index e8e5be4..a795ed3 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--TVHEADEND_VERSION = 7adea4a102475fbeb0267a9ab160e1e0644f11c2
-+TVHEADEND_VERSION = cd9f07fb865e5700156546ee326fbaf42ee99cf8
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPLv3+
- TVHEADEND_LICENSE_FILES = LICENSE.md
-@@ -81,7 +81,7 @@ define TVHEADEND_CONFIGURE_CMDS
- 			--python="$(HOST_DIR)/usr/bin/python"	\
- 			--enable-dvbscan			\
- 			--enable-bundle				\
--			--disable-libffmpeg_static		\
-+			--disable-ffmpeg_static			\
- 			--disable-hdhomerun_static		\
- 			$(TVHEADEND_CONF_OPTS)			\
- 	)
+ # Changeset on the master branch
+-FREERDP_VERSION = 17834af7bb378f85a3b3cc4dcadaa5125a337e16
++FREERDP_VERSION = 2ac195e8eb2c5fbbe8f2abeac92b0c8effef0e34
+ FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
