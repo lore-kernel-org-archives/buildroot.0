@@ -1,135 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 22:40:28 +0200
-Subject: [Buildroot] [git commit] gst1-libav: switch to unbundled
-Message-ID: <20160330204127.B8D7C819EB@busybox.osuosl.org>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Wed, 30 Mar 2016 22:44:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iptraf-ng: Fix musl build
+In-Reply-To: <1453586622-21700-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453586622-21700-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459370663.1257.3.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dcb8aa0ba46e16b929c7c7fc9cea2d6c26201f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-It avoids the crazy in handling all of the ffmpeg options here as well,
-and potentially avoids target code duplication, hence resulting in a
-size reduction.
+On Sa, 2016-01-23 at 23:03 +0100, Bernd Kuhls wrote:
+> Ported from
+> http://git.alpinelinux.org/cgit/aports/tree/main/iptraf-ng/APKBUILD#n
+> 28
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/72b/72b019ce5bb52b8b87d92cce67
+> 5708f7b9f8a96e/
+> http://autobuild.buildroot.net/results/f67/f67f1c2a627a6d535dd5c00e2e
+> e131b5c5a99a0a/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> ?package/iptraf-ng/iptraf-ng.mk | 1 +
+> ?1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/iptraf-ng/iptraf-ng.mk b/package/iptraf-
+> ng/iptraf-ng.mk
+> index 7313873..404db8b 100644
+> --- a/package/iptraf-ng/iptraf-ng.mk
+> +++ b/package/iptraf-ng/iptraf-ng.mk
+> @@ -11,5 +11,6 @@ IPTRAF_NG_LICENSE_FILES = LICENSE
+> ?IPTRAF_NG_DEPENDENCIES = ncurses
+> ?
+> ?IPTRAF_NG_MAKE_ENV = NCURSES_LDFLAGS="-lpanel -lncurses"
+> +IPTRAF_NG_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+> ?
+> ?$(eval $(autotools-package))
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: extend help text as suggested by Arnout.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gst1-libav/Config.in     |  5 ++
- package/gstreamer1/gst1-libav/gst1-libav.mk | 79 ++---------------------------
- 2 files changed, 10 insertions(+), 74 deletions(-)
+Any reason why this patch is marked as "Changes requested" in patchwork
+[1]? The patch does fix the musl build issue, therefor:
 
-diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
-index 4f9c2b8..b4b7aa7 100644
---- a/package/gstreamer1/gst1-libav/Config.in
-+++ b/package/gstreamer1/gst1-libav/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_GST1_LIBAV
- 	bool "gst1-libav"
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG_SWSCALE
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	help
- 	  GStreamer plugin (formerly gst-ffmpeg).
-@@ -7,4 +9,7 @@ config BR2_PACKAGE_GST1_LIBAV
- 	  This package contains GStreamer plugins based on
- 	  the libav project.
- 
-+	  The codecs, muxers, bitstreams and filters to build can be
-+	  selected in the ffmpeg package.
-+
- 	  http://gstreamer.freedesktop.org/
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 8f892d0..02ac394 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -7,79 +7,10 @@
- GST1_LIBAV_VERSION = 1.8.0
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
--GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
--GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
--
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-zlib
--GST1_LIBAV_DEPENDENCIES += zlib
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-zlib
--endif
--
--ifeq ($(BR2_PACKAGE_BZIP2),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-bzlib
--GST1_LIBAV_DEPENDENCIES += bzip2
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
--endif
--
--# Generic CPU setup for bundled ffmpeg
--ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
--GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
--else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
--GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
--endif
--
--ifeq ($(BR2_X86_CPU_HAS_MMX),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-yasm
--GST1_LIBAV_DEPENDENCIES += host-yasm
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-yasm
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-mmx
--endif
--
--ifeq ($(BR2_X86_CPU_HAS_SSE),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-sse
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-sse
--endif
--
--ifeq ($(BR2_X86_CPU_HAS_SSSE3),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-ssse3
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-ssse3
--endif
--
--# Explicitly disable everything that doesn't match for ARM
--# FFMPEG "autodetects" by compiling an extended instruction via AS
--# This works on compilers that aren't built for generic by default
--ifeq ($(BR2_ARM_CPU_ARMV4),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv5te
--endif
--ifeq ($(BR2_ARM_CPU_ARMV6)$(BR2_ARM_CPU_ARMV7A),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-armv6
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
--endif
--ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-neon
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-neon
--endif
--ifeq ($(BR2_ARM_CPU_HAS_VFPV2),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-vfp
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-vfp
--endif
--
--ifeq ($(BR2_POWERPC_CPU_HASH_ALTIVEC),y)
--GST1_LIBAV_CONF_EXTRA_OPTS += --enable-altivec
--else
--GST1_LIBAV_CONF_EXTRA_OPTS += --disable-altivec
--endif
--
--GST1_LIBAV_CONF_OPTS = \
--	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPTS)"
-+GST1_LIBAV_CONF_OPTS = --with-system-libav
-+GST1_LIBAV_DEPENDENCIES = \
-+	host-pkgconf ffmpeg gstreamer1 gst1-plugins-base \
-+	$(if $(BR2_PACKAGE_BZIP2),bzip2) \
-+	$(if $(BR2_PACKAGE_XZ),xz)
- 
- $(eval $(autotools-package))
+Tested-by: J?rg Krause <joerg.krause@embedded.rocks>
+
+[1]?http://patchwork.ozlabs.org/patch/572189/
