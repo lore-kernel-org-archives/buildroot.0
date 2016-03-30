@@ -1,41 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 16:55:25 +0200
-Subject: [Buildroot] [PATCH 1/1] buildroot-test: enable toolchains based
- on hostarch
-In-Reply-To: <1459302445-1256-1-git-send-email-matt@thewebers.ws>
-References: <1459302445-1256-1-git-send-email-matt@thewebers.ws>
-Message-ID: <20160330165525.4378cef8@free-electrons.com>
+Date: Wed, 30 Mar 2016 16:57:48 +0200
+Subject: [Buildroot] [git commit] weston: add EGL support
+Message-ID: <20160330145750.C2EE48182C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fd946f3e0b3758b813bc4d3319c7410bc87d9510
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Mar 2016 20:47:25 -0500, Matt Weber wrote:
+Also drop simple-egl-clients from the rpi compositor since it's a
+duplicate of the global one.
 
-> +http://autobuild.buildroot.org/toolchains/configs/br-aarch64-glibc.config,x86_64,glibc
-> +http://autobuild.buildroot.org/toolchains/configs/br-arc-full-internal.config,x86_64,uclibc
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/weston/weston.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-This is not correct. The host arch should be empty, or some magic value
-that says "any arch". Ditto for all "internal" toolchain configurations.
-
-Also, I need to think about the deployment: if I deploy the new CSV
-file on the server, but the build slaves have not yet updated their
-autobuild-run script, what will happen.
-
-I believe it *should* be fine: the old version of the autobuild-run
-script will detect the host arch as "x86" so it will only use a subset
-of the toolchains, but it will not fail badly or report errors. Then
-when the script gets updated, it will properly detect the host arch as
-x86_64 for the 64 bits machine, and it will restart using all possible
-toolchains.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index d818071..e7ad97e 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -15,7 +15,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+-	--disable-egl \
+ 	--disable-simple-egl-clients \
+ 	--disable-xwayland \
+ 	--disable-x11-compositor \
+@@ -28,6 +27,14 @@ WESTON_CONF_OPTS = \
+ WESTON_MAKE_OPTS = \
+ 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+ 
++# Needs wayland-egl, which normally only mesa provides
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
++WESTON_CONF_OPTS += --enable-egl
++WESTON_DEPENDENCIES += libegl
++else
++WESTON_CONF_OPTS += --disable-egl
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ WESTON_DEPENDENCIES += libunwind
+ else
+@@ -53,7 +60,6 @@ WESTON_CONF_OPTS += --enable-rpi-compositor \
+ 	--disable-resize-optimization \
+ 	--disable-setuid-install \
+ 	--disable-xwayland-test \
+-	--disable-simple-egl-clients \
+ 	WESTON_NATIVE_BACKEND=rpi-backend.so
+ else
+ WESTON_CONF_OPTS += --disable-rpi-compositor
