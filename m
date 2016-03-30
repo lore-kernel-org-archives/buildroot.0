@@ -1,46 +1,30 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Wed, 30 Mar 2016 16:43:14 +0100
-Subject: [Buildroot] [PATCH] tcl: rework logic for databases support
-In-Reply-To: <20160330174149.5325020f@free-electrons.com>
-References: <1459351282-16091-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160330173503.2e710605@free-electrons.com> <56FBF32C.7070802@imgtec.com>
- <20160330174149.5325020f@free-electrons.com>
-Message-ID: <56FBF412.6020204@imgtec.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 30 Mar 2016 15:44:28 +0000
+Subject: [Buildroot] [Bug 8836] Can't select Vim in menuconfig
+In-Reply-To: <bug-8836-163@https.bugs.busybox.net/>
+References: <bug-8836-163@https.bugs.busybox.net/>
+Message-ID: <bug-8836-163-n7t8bGHTe6@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=8836
 
-On 30/03/16 16:41, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 30 Mar 2016 16:39:24 +0100, Vicente Olivert Riera wrote:
-> 
->> We remove sqlite unconditionally because we don't want to use the
->> bundled version.
-> 
-> Yes, explain this in a comment :)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Sure.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
->> For tdbcodbc I don't have any particular reason to remove it or keep it.
->> What do you prefer?
-> 
-> If it was already removed before your patch, keep it this way.
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+vim is by default hidden behind the option BR2_PACKAGE_BUSYBOX_SHOW_OTHERS,
+because there is already a minimal implementation of vi in Busybox. So you
+should enable BR2_PACKAGE_BUSYBOX_SHOW_OTHERS and then you will be able to
+enable vim.
 
-It was, yes.
-
-Thanks for the quick reply.
-
-Regards,
-
-Vincent.
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
