@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 19:37:24 +0200
-Subject: [Buildroot] [PATCH 1/4] tcl: switch to * instead of [0-9]
-In-Reply-To: <1459354450-37009-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1459354450-37009-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160330193724.4deb0ec3@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Mar 2016 19:39:00 +0200
+Subject: [Buildroot] [PATCH v4 18/19] package/tvheadend: bump version
+References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459194585-12593-19-git-send-email-bernd.kuhls@t-online.de>
+ <20160329144510.0510cbe8@free-electrons.com>
+ <20160330175440.5bb5dc43@free-electrons.com>
+Message-ID: <XnsA5DBC7E422A27ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+[posted and mailed]
 
-On Wed, 30 Mar 2016 17:14:07 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/tcl/tcl.mk | 20 ++++++++------------
->  1 file changed, 8 insertions(+), 12 deletions(-)
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20160330175440.5bb5dc43 at free-electrons.com: 
 
-All four patches applied, thanks! On this first patch, I've added a
-real commit log to explain why we're doing this change.
+>> It seems like tvheadend is no longer compatible with the current ffmpeg
+>> version, since we haven't bumped to ffmpeg 3.0.
+>> 
+>> I guess I should revert the tvheadend bump for now?
+> 
+> Bernd, what do you think?
 
-Thanks!
+Hi Thomas,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+instead of reverting the tvheadend bump my new ffmpeg 3.0 patch series
+could be committed, it includes a uclibc-ng compilable vlc ;)
+
+Regards, Bernd
