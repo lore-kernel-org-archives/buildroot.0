@@ -1,69 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 17:45:55 +0200
-Subject: [Buildroot] [git commit] python-m2crypto: remove
-Message-ID: <20160330154725.AA72481D5D@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 17:45:54 +0200
+Subject: [Buildroot] [git commit] python-pycrypto: bump to version 2.6.1
+Message-ID: <20160330154725.96AEB80767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=484c04878e5e76cdc0cc33c7646f98ab41698a7e
+commit: https://git.buildroot.net/buildroot/commit/?id=b8e76ce573fcaffcf47267e9e4223d978d698830
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It only provided the host variant, which was only used by crda (no
-longer necessary), and wasn't available as a host selection.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/python-m2crypto/python-m2crypto.hash |  3 ---
- package/python-m2crypto/python-m2crypto.mk   | 31 ----------------------------
- 2 files changed, 34 deletions(-)
+ package/python-pycrypto/python-pycrypto.hash | 2 +-
+ package/python-pycrypto/python-pycrypto.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
-deleted file mode 100644
-index 4ac180f..0000000
---- a/package/python-m2crypto/python-m2crypto.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# md5 from https://pypi.python.org/pypi/M2Crypto/, sha256 locally computed
--md5 8e87235942c76d1ba9f999ee33764fdb M2Crypto-0.24.0.tar.gz
--sha256 80a56441a1d2c0cf27e725be7554c92598b938fc8767ee2c71fdbc2fdc055ee8 M2Crypto-0.24.0.tar.gz
-diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
-deleted file mode 100644
-index 3d0e54e..0000000
---- a/package/python-m2crypto/python-m2crypto.mk
-+++ /dev/null
-@@ -1,31 +0,0 @@
--################################################################################
--#
--# python-m2crypto
--#
--################################################################################
--
--PYTHON_M2CRYPTO_VERSION = 0.24.0
--PYTHON_M2CRYPTO_SITE = http://pypi.python.org/packages/source/M/M2Crypto
--PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
--PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
--HOST_PYTHON_M2CRYPTO_DEPENDENCIES = host-openssl host-swig
--
--PYTHON_M2CRYPTO_LICENSE = MIT
--PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
--
--# We need to use python2 because m2crypto is not python3 compliant.
--HOST_PYTHON_M2CRYPTO_NEEDS_HOST_PYTHON = python2
--
--# The --openssl option that allows to specify a custom path to OpenSSL
--# can only be used with the non-default build_ext setup.py command,
--# and calling this command directly fails. To work around this, simply
--# hardcode the path to OpenSSL in setup.py.
--# Bug reported at https://gitlab.com/m2crypto/m2crypto/issues/89
--define HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
--	$(SED) "s%self.openssl = '/usr'%self.openssl = '$(HOST_DIR)/usr'%" \
--		$(@D)/setup.py
--endef
--
--HOST_PYTHON_M2CRYPTO_POST_PATCH_HOOKS += HOST_PYTHON_M2CRYPTO_SET_OPENSSL_PATH
--
--$(eval $(host-python-package))
+diff --git a/package/python-pycrypto/python-pycrypto.hash b/package/python-pycrypto/python-pycrypto.hash
+index e7f809a..4637894 100644
+--- a/package/python-pycrypto/python-pycrypto.hash
++++ b/package/python-pycrypto/python-pycrypto.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	7293c9d7e8af2e44a82f86eb9c3b058880f4bcc884bf3ad6c8a34b64986edde8	pycrypto-2.6.tar.gz
++sha256	f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c	pycrypto-2.6.1.tar.gz
+diff --git a/package/python-pycrypto/python-pycrypto.mk b/package/python-pycrypto/python-pycrypto.mk
+index 20ff4a3..71943fa 100644
+--- a/package/python-pycrypto/python-pycrypto.mk
++++ b/package/python-pycrypto/python-pycrypto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYCRYPTO_VERSION = 2.6
++PYTHON_PYCRYPTO_VERSION = 2.6.1
+ PYTHON_PYCRYPTO_SOURCE = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
+ PYTHON_PYCRYPTO_SITE = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
+ PYTHON_PYCRYPTO_SETUP_TYPE = distutils
