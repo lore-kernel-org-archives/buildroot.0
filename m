@@ -1,159 +1,135 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 22:39:19 +0200
-Subject: [Buildroot] [PATCH v2] toolchain-external: Commonize
- /lib/<tuple> symlinks
-In-Reply-To: <1459186584-4229-1-git-send-email-matt.fornero@mathworks.com>
-References: <1459186584-4229-1-git-send-email-matt.fornero@mathworks.com>
-Message-ID: <56FC3977.3030708@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Mar 2016 22:40:28 +0200
+Subject: [Buildroot] [git commit] gst1-libav: switch to unbundled
+Message-ID: <20160330204127.B8D7C819EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Matthew,
+commit: https://git.buildroot.net/buildroot/commit/?id=5dcb8aa0ba46e16b929c7c7fc9cea2d6c26201f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  It's a bit nitpicking, but I have one more change to request...
+It avoids the crazy in handling all of the ffmpeg options here as well,
+and potentially avoids target code duplication, hence resulting in a
+size reduction.
 
-On 03/28/16 19:36, Matthew Fornero wrote:
-> From: Matthew Fornero <mfornero@mathworks.com>
->
-> Commonize the creation of symlinks from {/usr}/lib to
-> {/usr}/lib/<tuple>.
->
-> These were originally defined on a per-toolchain basis for the Linaro
-> toolchains, but there is currently no support for creating symlinks
-> for custom toolchains that may have been based on Linaro (or older
-> versions of the Linaro toolchain).
->
-> Add common code for all supported Linaro toolchains and add a new
-> config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
-> toolchains to enable the symbolic link creation.
->
-> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
-> ---
-> v2: Cleanup as suggested by Arnout Vandecappelle
-> ---
->   toolchain/toolchain-external/Config.in             |   14 +++++++++++
->   toolchain/toolchain-external/toolchain-external.mk |   26 ++++++--------------
->   2 files changed, 22 insertions(+), 18 deletions(-)
->
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index ff759a0..2badbb7 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -745,6 +745,13 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->   	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
->   					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->
-> +config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-> +	bool
-> +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
-> +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
-> +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
-> +	default y if BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: extend help text as suggested by Arnout.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/gstreamer1/gst1-libav/Config.in     |  5 ++
+ package/gstreamer1/gst1-libav/gst1-libav.mk | 79 ++---------------------------
+ 2 files changed, 10 insertions(+), 74 deletions(-)
 
-  The logic should be reverted here: it's the individual toolchains that "know" 
-that they need a symlink, it shouldn't be the NEEDS_PREFIX_SYMLINK that "knows" 
-which toolchains need it. IOW, remove all the 'default y' here, and add "select 
-BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK" to each of the toolchains.
-
-
-> +
->   config BR2_TOOLCHAIN_EXTERNAL_GLIBC
->   	bool
->   	select BR2_TOOLCHAIN_USES_GLIBC
-> @@ -1055,6 +1062,13 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
->   	  here, separated by spaces. They will be copied to the
->   	  target's /lib directory.
->
-> +config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> +	bool "Symlink /lib/<tuple>"
-
-  So
-	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
-here.
-
-
-
-  Regards,
-  Arnout
-
-> +	help
-> +	  Select this option if your external toolchain needs a symlink
-> +	  from the /lib directory to the /lib/<tuple> directory. This is
-> +	  may be required if your toolchain is based on one from Linaro.
-> +
->   endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
->
->   config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
-> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
-> index 37e1a2e..66cf449 100644
-> --- a/toolchain/toolchain-external/toolchain-external.mk
-> +++ b/toolchain/toolchain-external/toolchain-external.mk
-> @@ -244,23 +244,16 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
->   TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
->   endif
->
-> -# The Linaro ARMhf toolchain expects the libraries in
-> -# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
-> +# Some toolchains, such as Linaro, expect the libraries in
-> +# {/usr,}/lib/<tuple>, but Buildroot copies them to
->   # {/usr,}/lib, so we need to create a symbolic link.
-> -define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
-> -	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
-> -	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
-> -endef
-> -
-> -define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
-> -	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
-> -	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
-> -endef
-> -
-> -define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
-> -	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
-> -	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
-> +define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> +	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
-> +	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
->   endef
-> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
-> +endif
->
->   # Special handling for Blackfin toolchain, because of the split in two
->   # tarballs, and the organization of tarball contents. The tarballs
-> @@ -298,7 +291,6 @@ ifeq ($(HOSTARCH),x86)
->   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->   TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
-> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
->   else
->   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/arm-linux-gnueabihf
->   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_arm-linux-gnueabihf.tar.xz
-> @@ -308,7 +300,6 @@ ifeq ($(HOSTARCH),x86)
->   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
->   TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
-> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
->   else
->   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/armeb-linux-gnueabihf
->   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_armeb-linux-gnueabihf.tar.xz
-> @@ -353,7 +344,6 @@ ifeq ($(HOSTARCH),x86)
->   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
->   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
->   TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
-> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
->   else
->   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
->   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
->
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/gstreamer1/gst1-libav/Config.in b/package/gstreamer1/gst1-libav/Config.in
+index 4f9c2b8..b4b7aa7 100644
+--- a/package/gstreamer1/gst1-libav/Config.in
++++ b/package/gstreamer1/gst1-libav/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_GST1_LIBAV
+ 	bool "gst1-libav"
++	select BR2_PACKAGE_FFMPEG
++	select BR2_PACKAGE_FFMPEG_SWSCALE
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	help
+ 	  GStreamer plugin (formerly gst-ffmpeg).
+@@ -7,4 +9,7 @@ config BR2_PACKAGE_GST1_LIBAV
+ 	  This package contains GStreamer plugins based on
+ 	  the libav project.
+ 
++	  The codecs, muxers, bitstreams and filters to build can be
++	  selected in the ffmpeg package.
++
+ 	  http://gstreamer.freedesktop.org/
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 8f892d0..02ac394 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -7,79 +7,10 @@
+ GST1_LIBAV_VERSION = 1.8.0
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
+-GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
+-GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
+-
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-zlib
+-GST1_LIBAV_DEPENDENCIES += zlib
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-zlib
+-endif
+-
+-ifeq ($(BR2_PACKAGE_BZIP2),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-bzlib
+-GST1_LIBAV_DEPENDENCIES += bzip2
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
+-endif
+-
+-# Generic CPU setup for bundled ffmpeg
+-ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
+-else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+-endif
+-
+-ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-yasm
+-GST1_LIBAV_DEPENDENCIES += host-yasm
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-yasm
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-mmx
+-endif
+-
+-ifeq ($(BR2_X86_CPU_HAS_SSE),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-sse
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-sse
+-endif
+-
+-ifeq ($(BR2_X86_CPU_HAS_SSSE3),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-ssse3
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-ssse3
+-endif
+-
+-# Explicitly disable everything that doesn't match for ARM
+-# FFMPEG "autodetects" by compiling an extended instruction via AS
+-# This works on compilers that aren't built for generic by default
+-ifeq ($(BR2_ARM_CPU_ARMV4),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv5te
+-endif
+-ifeq ($(BR2_ARM_CPU_ARMV6)$(BR2_ARM_CPU_ARMV7A),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-armv6
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-armv6 --disable-armv6t2
+-endif
+-ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-neon
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-neon
+-endif
+-ifeq ($(BR2_ARM_CPU_HAS_VFPV2),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-vfp
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-vfp
+-endif
+-
+-ifeq ($(BR2_POWERPC_CPU_HASH_ALTIVEC),y)
+-GST1_LIBAV_CONF_EXTRA_OPTS += --enable-altivec
+-else
+-GST1_LIBAV_CONF_EXTRA_OPTS += --disable-altivec
+-endif
+-
+-GST1_LIBAV_CONF_OPTS = \
+-	--with-libav-extra-configure="$(GST1_LIBAV_CONF_EXTRA_OPTS)"
++GST1_LIBAV_CONF_OPTS = --with-system-libav
++GST1_LIBAV_DEPENDENCIES = \
++	host-pkgconf ffmpeg gstreamer1 gst1-plugins-base \
++	$(if $(BR2_PACKAGE_BZIP2),bzip2) \
++	$(if $(BR2_PACKAGE_XZ),xz)
+ 
+ $(eval $(autotools-package))
