@@ -1,60 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 21:49:45 +0200
-Subject: [Buildroot] [PATCH] tcl: rework logic for databases support
-In-Reply-To: <20160330210652.4bf25f61@free-electrons.com>
-References: <1459351282-16091-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160330173503.2e710605@free-electrons.com> <56FBF32C.7070802@imgtec.com>
- <56FC22FF.5020900@mind.be> <20160330210652.4bf25f61@free-electrons.com>
-Message-ID: <56FC2DD9.3070609@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Mar 2016 16:51:07 -0300
+Subject: [Buildroot] [PATCH] nss: security bump to version 3.23
+Message-ID: <1459367467-19835-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/30/16 21:06, Thomas Petazzoni wrote:
-> Hello,
->
-> On Wed, 30 Mar 2016 21:03:27 +0200, Arnout Vandecappelle wrote:
->
-> >> That was my first approach and I didn't look nicer to me, so I changed
-> >> it :P Anyway, if you prefer that way, I'll do it that way, no problem.
-> >
-> >    Like you, Vincent, I also prefer TCL_DEPENDENCIES to be repeated.
-> >
-> > - You don't need to move your eyes to see which variable is affected.
-> > - When adding/removing a dependency, you don't have to worry about the 
-> backslashes.
-> >
-> >
-> >    I do prefer in this case that all assignments, including the first one, 
-> have +=
->
-> Matter of taste, I guess. But if I follow your thought, then we should
-> do:
->
-> LIBGTK3_CONF_OPTS += --disable-glibtest
-> LIBGTK3_CONF_OPTS += --enable-explicit-deps=no
-> LIBGTK3_CONF_OPTS += --enable-gtk2-dependency
-> LIBGTK3_CONF_OPTS += --disable-introspection
->
-> I think this is really verbose, but again a matter of taste.
->
+Fixes:
+CVE-2016-1950 - Fixed a heap-based buffer overflow related to the
+parsing of certain ASN.1 structures. An attacker could create a
+specially-crafted certificate which, when parsed by NSS, would cause a
+crash or execution of arbitrary code with the permissions of the user.
 
-  Taste is a funny thing... With just plain options I also prefer it 
-backslashified, but when there are $(if ...) clauses it somehow looks cleaner 
-with the +=.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  Anyway, we have both already and there is no strong reason to choose either.
-
-  Regards,
-  Arnout
-
-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 143e1d8..8e03faf 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,2 +1,2 @@
+-# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_22_2_RTM/src/SHA256SUMS
+-sha256	07d49287c527ac31200f02dcf8494cef19e936d8ed470802749c4dfc782d3650	nss-3.22.2.tar.gz
++# From https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_23_RTM/src/SHA256SUMS
++sha256	94b383e31c9671e9dfcca81084a8a813817e8f05a57f54533509b318d26e11cf	nss-3.23.tar.gz
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 18dc62c..e2bbf1f 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.22.2
++LIBNSS_VERSION = 3.23
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
