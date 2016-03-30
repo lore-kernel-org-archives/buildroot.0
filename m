@@ -1,60 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 22:17:11 +0200
-Subject: [Buildroot] [PATCH 2/2] gst1-libav: add license info
-In-Reply-To: <1459366600-21925-2-git-send-email-gustavo@zacarias.com.ar>
-References: <1459366600-21925-1-git-send-email-gustavo@zacarias.com.ar>
- <1459366600-21925-2-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <56FC3447.7070209@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 30 Mar 2016 22:22:36 +0200
+Subject: [Buildroot] [PATCH 1/3] libwebsockets: add patch to fix musl build
+Message-ID: <1459369358-794-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/30/16 21:36, Gustavo Zacarias wrote:
-> Now that we use unbundled ffmpeg the licensing becomes much easier.
-> Relevant code is under ext/*, which according to COPYING and comments is
-> GPLv2+, except for ext/libswscale/gstffmpegscale.c which is LGPLv2+ -
-> however that's not built/used when using system ffmpeg.
+Add patch from upstream [1] to fix musl build:
+fatal error: sys/cdefs.h: No such file or directory
 
-  AFAICS it's also not built with the bundled ffmpeg.
+Fixes:
+http://autobuild.buildroot.net/results/564/564675be0d4fbfa113a0f2e52874e0dce2d5ba5e/
+http://autobuild.buildroot.net/results/c41/c41d87c0cf22f3b88e5f80ad6bf5e81900603c1d/
 
+Backported from: 9eec5e4470397632af035c429295a41b74bd0585
 
-> The code under gst-libs/ is the bundled ffmpeg itself.
->
-> Tests are under LGPLv2+ as well but we don't build them since we
-> disabled gst-check support in the gstreamer1 package.
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+[1] https://github.com/warmcat/libwebsockets/commit/9eec5e4470397632af035c429295a41b74bd0585
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/libwebsockets/libwebsockets.hash | 1 +
+ package/libwebsockets/libwebsockets.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-  Regards,
-  Arnout
-
-> ---
->   package/gstreamer1/gst1-libav/gst1-libav.mk | 2 ++
->   1 file changed, 2 insertions(+)
->
-> diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-> index 02ac394..d878ec8 100644
-> --- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-> +++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-> @@ -12,5 +12,7 @@ GST1_LIBAV_DEPENDENCIES = \
->   	host-pkgconf ffmpeg gstreamer1 gst1-plugins-base \
->   	$(if $(BR2_PACKAGE_BZIP2),bzip2) \
->   	$(if $(BR2_PACKAGE_XZ),xz)
-> +GST1_LIBAV_LICENSE = GPLv2+
-> +GST1_LIBAV_LICENSE_FILES = COPYING
->
->   $(eval $(autotools-package))
->
-
-
+diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
+index 7727ac5..745bc49 100644
+--- a/package/libwebsockets/libwebsockets.hash
++++ b/package/libwebsockets/libwebsockets.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  c6f3272d7e0234a9ef92b38622f36c4166eede4225e36fe4f78dd2ade03e9c52  libwebsockets-v1.7.3.tar.gz
++sha256  c7627d8e3d9d695b965a6c5fe30f4b4c04666984b384acd9e24c3b59cef13816  9eec5e4470397632af035c429295a41b74bd0585.patch
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 72bb280..395a2ed 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -11,6 +11,7 @@ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+ LIBWEBSOCKETS_DEPENDENCIES = zlib
+ LIBWEBSOCKETS_INSTALL_STAGING = YES
+ LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
++LIBWEBSOCKETS_PATCH = https://github.com/warmcat/libwebsockets/commit/9eec5e4470397632af035c429295a41b74bd0585.patch
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
