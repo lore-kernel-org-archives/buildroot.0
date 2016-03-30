@@ -1,69 +1,61 @@
-From: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Date: Wed, 30 Mar 2016 11:38:04 +0200
-Subject: [Buildroot] [PATCH] linux: Introduce DTB's bootargs fixup
-	feature
-In-Reply-To: <20160330001129.656b6151@free-electrons.com>
-References: <1458558329-19210-1-git-send-email-mcoquelin.stm32@gmail.com>
- <20160321131206.1d3b29c7@free-electrons.com>
- <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
- <20160330001129.656b6151@free-electrons.com>
-Message-ID: <CALszF6AFV3TwSOz9rpGzthmuwE6MyoutZxHPEDMNA06bAoCRKQ@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 30 Mar 2016 14:04:27 +0200
+Subject: [Buildroot] [PATCH] raspberrypi,
+ raspberrypi2: add a serial console
+In-Reply-To: <56FB05CF.1070808@mind.be>
+References: <1459202897-21440-1-git-send-email-luca@lucaceresoli.net>
+ <56FAE674.6080004@mind.be> <56FAFA19.9090406@lucaceresoli.net>
+ <56FB05CF.1070808@mind.be>
+Message-ID: <56FBC0CB.4030607@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Arnout,
 
-2016-03-30 0:11 GMT+02:00 Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com>:
-> Hello,
->
-> On Mon, 21 Mar 2016 13:53:50 +0100, Maxime Coquelin wrote:
->
->> > However, I am not entirely sure this is something we want to take in
->> > Buildroot. Indeed, your patch only allows to customize
->> > the /chosen/bootargs property, and not any other property of the Device
->> > Tree. If we want to do that via Config.in options, it suddenly becomes
->> > a lot more complicated.
->> Indeed, it will be difficult to extend it further than bootargs.
->> It works well for bootargs for two reasons:
->>  1- It is a generic property
->>  2- It is a string
+On 30/03/2016 00:46, Arnout Vandecappelle wrote:
+> On 03/29/16 23:56, Luca Ceresoli wrote:
+>> Dear Arnout,
 >>
->> There could be other uses for DTB patching, such as MAC address assignment.
->> But I agree than doing this in Config.in makes no sense.
->
-> Right.
->
->> > It is IMO even more important to do it this way since as of today, only
->> > one platform/board needs to adjust its bootargs this way. All other
->> > platforms have an ATAGs or DT compatible bootloader, where the bootargs
->> > customization is done via the bootloader, not via patching the DTB.
+>> On 29/03/2016 22:32, Arnout Vandecappelle wrote:
+>>> On 03/29/16 00:08, Luca Ceresoli wrote:
+> [snip]
+>>>> diff --git a/configs/raspberrypi2_defconfig
+>>>> b/configs/raspberrypi2_defconfig
+>>>> index ce41ee31adba..0ffc6cdaf158 100644
+>>>> --- a/configs/raspberrypi2_defconfig
+>>>> +++ b/configs/raspberrypi2_defconfig
+>>>> @@ -5,7 +5,7 @@ BR2_ARM_FPU_NEON_VFPV4=y
+>>>>
+>>>>    BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>>>>
+>>>> -BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+>>>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+>>>
+>>>   Why not keep the default "console"? That should work, no? Or doesn't
+>>> that work if there are two consoles?
 >>
->> Ok, For sure it can be done, but I wanted to propose a generic way of
->> doing this.
->> Indeed, this is something other platforms could potentially use, even
->> if not the case today.
+>> What improvement you expect from using "console" instead of "ttyAMA0"?
 >>
->> > Of course, let's see what others think.
->>
->> Agree.
->> If it is decided to do this as post-image script, I will be happy to
->> implement it.
->
-> Nobody spoke up, so let's say we'll do it in a post-image script for
-> now. host-dtc is already visible in menuconfig, so it can be enabled in
-> a defconfig, and therefore it's just a matter of enabling it and write
-> the appropriate post-image script.
->
-> Do you want to write a patch on top of my series adding Cortex-M
-> support?
+>> OTOH I think ttyAMA0 or tty1 is explicit about the device to use. And as
+>> Yann pointed out on IRC, "console is not a controlling tty, so no Ctrl-C
+>> for example".
+> 
+>  For the record, as concluded on IRC:
+> 
+> - "console" is still a controlling tty, it is init=/bin/sh that doesn't
+> give a controlling tty;
+> 
+> - GETTY_PORT="console" will launch a getty on the last console= given on
+> the kernel command line
+> 
+> - What I actually meant is that BR2_TARGET_GENERIC_GETTY_PORT can be
+> removed completely from the defconfig (as is the case already in roughly
+> half our defconfigs) because it anyway defaults to "console".
 
-Yes.
-Will you apply your Cortex-M series soon on master branch?
-I will propose a patch as soon as your series is available.
+Thanks for the recap. Will do in v2.
 
-Regards,
-Maxime
+-- 
+Luca
