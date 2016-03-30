@@ -1,100 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 18:06:59 +0200
-Subject: [Buildroot] [PATCH 1/2] efivar: new package
-In-Reply-To: <1459016732-27843-1-git-send-email-nunes.erico@gmail.com>
-References: <1459016732-27843-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <20160330180659.6d57ea5e@free-electrons.com>
+Date: Wed, 30 Mar 2016 18:10:16 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix getent
+	installation with Codescape MIPS toolchains
+Message-ID: <20160330161021.11E4B81976@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4f90f55dc4eef8c5c9f91bc30fbdfb5f7d7fb49f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch looks mostly good. There are only a few nits, see below.
+When a toolchain is glibc based, the getent package assumes that
+$(STAGING_DIR)/usr/bin contains the getent program. Unfortunately, the
+Codescape MIPS toolchains do not conform with this:
+$(STAGING_DIR)/usr/{bin,sbin} are empty, and instead three directories
+are provided: bin-o32, bin-n32 and bin-n64 (ditto for sbin), one for
+each supported MIPS ABI.
 
-On Sat, 26 Mar 2016 15:25:31 -0300, Erico Nunes wrote:
-> efivar contains tools and libraries to manipulate EFI variables.
-> 
-> This package has some restrictions to build. First, it needs uchar.h
-> which apparently does not come in uclibc, so it has been disabled for
-> uclibc.
-> It has also been found that in some systems it failed to build due to
-> not generating the .pc files. This has been tracked to the use of make
-> 3.81, so a patch was prepared for it. I have also sent this patch to the
-> upstream development.
+Since this is a toolchain-specific oddity, we handle it by adding a
+post-install fixup hook that creates $(STAGING_DIR)/usr/{bin,sbin} as
+symbolic link to the appropriate directory.
 
-We try to avoid first person sentences in commit log. Can you rephrase
-as: "so a patch was prepared for it, and was submitted upstream".
+Fixes:
 
-> diff --git a/package/efivar/Config.in b/package/efivar/Config.in
-> new file mode 100644
-> index 0000000..baddddd
-> --- /dev/null
-> +++ b/package/efivar/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_EFIVAR
-> +	bool "efivar"
+   http://autobuild.buildroot.org/results/9c0ee836021553319f166f9de88750535aee0a58/
 
-Does it build on all architectures, or is it somehow x86/x86-64
-specific ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Reviewed-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Tested-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ toolchain/toolchain-external/toolchain-external.mk | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-> diff --git a/package/efivar/efivar.mk b/package/efivar/efivar.mk
-> new file mode 100644
-> index 0000000..9775777
-> --- /dev/null
-> +++ b/package/efivar/efivar.mk
-> @@ -0,0 +1,43 @@
-> +################################################################################
-> +#
-> +# efivar
-> +#
-> +################################################################################
-> +
-> +EFIVAR_VERSION = 0.23
-> +EFIVAR_SITE = $(call github,rhinstaller,efivar,$(EFIVAR_VERSION))
-> +EFIVAR_LICENSE = GPLv2.1
-
-GPLv2.1 doesn't exist. It's either GPLv2 or LGPLv2.1. Looking at the
-code, it seems to be LGPLv2.1.
-
-> +EFIVAR_LICENSE_FILES = COPYING
-> +EFIVAR_DEPENDENCIES = popt
-> +EFIVAR_INSTALL_STAGING = YES
-> +
-> +define EFIVAR_BUILD_CMDS
-> +	# makeguids is an internal host tool and must be built separately with
-> +	# $(HOST_CC), otherwise it gets cross-built.
-> +	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) CFLAGS+=-std=c99 \
-> +		$(MAKE1) -C $(@D)/src makeguids
-
-Please use CFLAGS="$(HOST_CFLAGS) -std=c99" instead of CFLAGS+=
-
-> +
-> +	# skip efivar-static build, otherwise we always require static popt
-> +	$(SED) 's/^BINTARGETS=.*/BINTARGETS=efivar/g' \
-> +		$(@D)/src/Makefile
-
-This should be done in a post-patch hook, or maybe even by a patch
-itself? Or maybe you don't need any patch at all, by just passing
-BINTARGETS=efivar when building/installing ?
-
-Since you also need libdir at each step, shall I suggest that you do
-something like:
-
-EFIVAR_MAKE_OPTS = \
-	BINTARGETS=efivar \
-	libdir=/usr/lib
-
-and then use $(EFIVAR_MAKE_OPTS) at build and install time ?
-
-Could you address those issues and send an updated version?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+index 37e1a2e..ff4ae5e 100644
+--- a/toolchain/toolchain-external/toolchain-external.mk
++++ b/toolchain/toolchain-external/toolchain-external.mk
+@@ -262,6 +262,26 @@ define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+ 	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+ endef
+ 
++# Special fixup for Codescape MIPS toolchains, that have bin-<abi> and
++# sbin-<abi> directories. We create symlinks bin -> bin-<abi> and sbin
++# -> sbin-<abi> so that the rest of Buildroot can find the toolchain
++# tools in the appropriate location.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS)$(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
++ifeq ($(BR2_MIPS_OABI32),y)
++TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = o32
++else ifeq ($(BR2_MIPS_NABI32),y)
++TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = n32
++else ifeq ($(BR2_MIPS_NABI64),y)
++TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX = n64
++endif
++
++define TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
++	rmdir $(STAGING_DIR)/usr/bin $(STAGING_DIR)/usr/sbin
++	ln -sf bin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/bin
++	ln -sf sbin-$(TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_BIN_DIR_SUFFIX) $(STAGING_DIR)/usr/sbin
++endef
++endif
++
+ # Special handling for Blackfin toolchain, because of the split in two
+ # tarballs, and the organization of tarball contents. The tarballs
+ # contain ./opt/uClinux/{bfin-uclinux,bfin-linux-uclibc} directories,
+@@ -337,10 +357,12 @@ TOOLCHAIN_EXTERNAL_SOURCE = amd-2015.11-36-x86_64-amd-linux-gnu-i686-pc-linux-gn
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_IMG_MIPS),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04
+ TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.10-04.for.MIPS.IMG.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESCAPE_MTI_MIPS),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://codescape-mips-sdk.imgtec.com/components/toolchain/2015.10-04
+ TOOLCHAIN_EXTERNAL_SOURCE = Codescape.GNU.Tools.Package.2015.10-04.for.MIPS.MTI.Linux.CentOS-5.x86.tar.gz
++TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_CODESCAPE_MIPS_STAGING_FIXUPS
+ TOOLCHAIN_EXTERNAL_STRIP_COMPONENTS = 2
+ else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX),y)
+ TOOLCHAIN_EXTERNAL_SITE = http://downloads.sourceforge.net/project/adi-toolchain/2014R1/2014R1-RC2/i386
