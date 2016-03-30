@@ -1,8 +1,8 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 31 Mar 2016 00:11:10 +0200
-Subject: [Buildroot] [PATCH] boost: fix getchar issue with uClibc and gcc <=
-	4.8.2
-Message-ID: <1459375870-18823-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Thu, 31 Mar 2016 00:19:36 +0200
+Subject: [Buildroot] [PATCH v2] boost: fix getchar issue with uClibc and gcc
+	<= 4.8.2
+Message-ID: <1459376376-18985-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,12 +18,22 @@ gcc versions <= 4.8.2 and building boost/test fails:
 To allow building boost/test with uClibc based toolchains with gcc <= 4.8.2 use
 parenthesis for std::getchar.
 
+Fixes:
+http://autobuild.buildroot.net/results/506/506b3b1b4087318a4247456782ac9e4f128d5db6/
+http://autobuild.buildroot.net/results/5f2/5f2a8fb5cb823160542ee721591867b34bd25de6/
+http://autobuild.buildroot.net/results/e3e/e3e6002ac5b40f7f03d32ba9da99f6497f01b42f/
+.. and more
+
 Upstream status: Pending
 https://github.com/boostorg/test/pull/97
 
 [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58952
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+v2:
+ - add autobuild fixes
+
 ---
  ...fix-getchar-with-uclibc-and-gcc-bug-58952.patch | 45 ++++++++++++++++++++++
  1 file changed, 45 insertions(+)
