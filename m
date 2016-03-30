@@ -1,57 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 16:57:48 +0200
-Subject: [Buildroot] [git commit] weston: add EGL support
-Message-ID: <20160330145750.C2EE48182C@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 16:58:06 +0200
+Subject: [Buildroot] [git commit] weston: set default backend for fbdev
+Message-ID: <20160330145808.27A7A818B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd946f3e0b3758b813bc4d3319c7410bc87d9510
+commit: https://git.buildroot.net/buildroot/commit/?id=da34e3e88b989b8fdd7079a29b799ba6d7b2496b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also drop simple-egl-clients from the rpi compositor since it's a
-duplicate of the global one.
+When it's enabled set the default weston backend to fbdev, otherwise the
+drm backend is the default even though we are not building it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/weston/weston.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/weston/weston.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index d818071..e7ad97e 100644
+index e7ad97e..5af23df 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -15,7 +15,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+@@ -49,7 +49,9 @@ WESTON_CONF_OPTS += --disable-rdp-compositor
+ endif
  
- WESTON_CONF_OPTS = \
- 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
--	--disable-egl \
- 	--disable-simple-egl-clients \
- 	--disable-xwayland \
- 	--disable-x11-compositor \
-@@ -28,6 +27,14 @@ WESTON_CONF_OPTS = \
- WESTON_MAKE_OPTS = \
- 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
- 
-+# Needs wayland-egl, which normally only mesa provides
-+ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
-+WESTON_CONF_OPTS += --enable-egl
-+WESTON_DEPENDENCIES += libegl
-+else
-+WESTON_CONF_OPTS += --disable-egl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- WESTON_DEPENDENCIES += libunwind
+ ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
+-WESTON_CONF_OPTS += --enable-fbdev-compositor
++WESTON_CONF_OPTS += \
++	--enable-fbdev-compositor \
++	WESTON_NATIVE_BACKEND=fbdev-backend.so
  else
-@@ -53,7 +60,6 @@ WESTON_CONF_OPTS += --enable-rpi-compositor \
- 	--disable-resize-optimization \
- 	--disable-setuid-install \
- 	--disable-xwayland-test \
--	--disable-simple-egl-clients \
- 	WESTON_NATIVE_BACKEND=rpi-backend.so
- else
- WESTON_CONF_OPTS += --disable-rpi-compositor
+ WESTON_CONF_OPTS += --disable-fbdev-compositor
+ endif
