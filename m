@@ -1,41 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 19:41:09 +0200
-Subject: [Buildroot] [PATCHv3] package/tvheadend: use wizard mode on
- first run
-In-Reply-To: <1459178147-1201-1-git-send-email-yann.morin.1998@free.fr>
-References: <1459178147-1201-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <20160330194109.67882724@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Mar 2016 14:42:23 -0300
+Subject: [Buildroot] [PATCH] gst1-libav: pass --cpu config option to
+ bundled ffmpeg
+In-Reply-To: <20160330193952.2e872f06@free-electrons.com>
+References: <1459358152-21729-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160330193952.2e872f06@free-electrons.com>
+Message-ID: <56FC0FFF.5000602@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 30/03/16 14:39, Thomas Petazzoni wrote:
 
-On Mon, 28 Mar 2016 17:15:47 +0200, Yann E. MORIN wrote:
-> The format of the ACL database in tvheadend has changed, and generating
-> a default user is a little bit more involved than just dumping a file in
-> the correct locations: filenames are now md5sum (of something?) and the
-> usernames and passwords now have their own DB.
-> 
-> However, tvheadend has a wizard mode, where it is possible to configure
-> the basic features, of which creating an admin user.
-> 
-> We remove our canned ACL database, and change the startup script to
-> start in wizard mode on first run. We also switch to using our infra to
-> set the permissions.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> ---
-> Changes v2 -> v3:
->   - use the infra to set permissions
+> <rant>Can I say, once again, how much I hate bundled libraries?</rant>
+>
+> Applied, thanks!
+>
+> Thomas
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Heh, you're not alone.
+Ideally we can unbundle, we just need to find out all of the options the 
+gst component needs from ffmpeg.
+Right now for gst-libav-1.8.0 it bundles ffmpeg 3.0 so having the bump 
+is kind of a prerequisite, i'll look into it and also adding the (surely 
+complicated) licensing info.
+Unbundling would get rid of all the duplication in ffmpeg conditions, i 
+went for minimal in this case to fix mips, but there are other 
+discrepancies/lack of optimizations.
+Regards.
