@@ -1,37 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 17:01:14 +0200
-Subject: [Buildroot] [git commit] weston: handle libxml2 dependency
-Message-ID: <20160330150133.C3E1C7FEE2@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 17:02:20 +0200
+Subject: [Buildroot] [PATCH v3 00/11] Weston package enhancements
+In-Reply-To: <1459262350-10974-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459262350-10974-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160330170220.478079f1@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8802a5ffca69eb295c408c8b19351ea0d135eb2d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-It's used for JUnit XML output support.
+On Tue, 29 Mar 2016 11:38:59 -0300, Gustavo Zacarias wrote:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/weston/weston.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> Gustavo Zacarias (11):
+>   weston: add EGL support
+>   weston: set default backend for fbdev
+>   weston: add DRM compoitor support
+>   weston: handle optional libva support
+>   weston: add weston-launch support
+>   weston: drop --disable-xwayland-test
+>   weston: handle dbus dependency
+>   weston: handle lcms dependecy
+>   weston: handle webp dependency
+>   weston: handle systemd dependency
+>   weston: handle libxml2 dependency
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 9313fcc..2891fe3 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -116,4 +116,11 @@ else
- WESTON_CONF_OPTS += --disable-systemd-login --disable-systemd-notify
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXML2),y)
-+WESTON_CONF_OPTS += --enable-junit-xml
-+WESTON_DEPENDENCIES += libxml2
-+else
-+WESTON_CONF_OPTS += --disable-junit-xml
-+endif
-+
- $(eval $(autotools-package))
+I've applied all, but I have a few comments on a few of them, which
+I'll do as reply to the patches themselves.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
