@@ -1,24 +1,159 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 30 Mar 2016 22:31:42 +0200
-Subject: [Buildroot] [PATCH 1/2] gst1-libav: switch to unbundled
-References: <1459366600-21925-1-git-send-email-gustavo@zacarias.com.ar>
- <56FC33CA.1010502@mind.be>
-Message-ID: <XnsA5DBE52B0E461berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 Mar 2016 22:39:19 +0200
+Subject: [Buildroot] [PATCH v2] toolchain-external: Commonize
+ /lib/<tuple> symlinks
+In-Reply-To: <1459186584-4229-1-git-send-email-matt.fornero@mathworks.com>
+References: <1459186584-4229-1-git-send-email-matt.fornero@mathworks.com>
+Message-ID: <56FC3977.3030708@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout Vandecappelle <arnout@mind.be> wrote in
-news:56FC33CA.1010502 at mind.be: 
+  Hi Matthew,
 
-> Also, it's a bit unfortunate that if ffmpeg is selected automatically,
-> BR2_PACKAGE_FFMPEG_FFMPEG will be enabled by default. Well, the binary
-> is pretty  small compared to all the codecs so it doesn't matter much.
+  It's a bit nitpicking, but I have one more change to request...
 
-Hi,
+On 03/28/16 19:36, Matthew Fornero wrote:
+> From: Matthew Fornero <mfornero@mathworks.com>
+>
+> Commonize the creation of symlinks from {/usr}/lib to
+> {/usr}/lib/<tuple>.
+>
+> These were originally defined on a per-toolchain basis for the Linaro
+> toolchains, but there is currently no support for creating symlinks
+> for custom toolchains that may have been based on Linaro (or older
+> versions of the Linaro toolchain).
+>
+> Add common code for all supported Linaro toolchains and add a new
+> config option, BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK to enable custom
+> toolchains to enable the symbolic link creation.
+>
+> Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+> ---
+> v2: Cleanup as suggested by Arnout Vandecappelle
+> ---
+>   toolchain/toolchain-external/Config.in             |   14 +++++++++++
+>   toolchain/toolchain-external/toolchain-external.mk |   26 ++++++--------------
+>   2 files changed, 22 insertions(+), 18 deletions(-)
+>
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index ff759a0..2badbb7 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -745,6 +745,13 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+>   	default BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX \
+>   					 if BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>
+> +config BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+> +	bool
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB
+> +	default y if BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
 
-what about not enabling BR2_PACKAGE_FFMPEG_FFMPEG by default?
+  The logic should be reverted here: it's the individual toolchains that "know" 
+that they need a symlink, it shouldn't be the NEEDS_PREFIX_SYMLINK that "knows" 
+which toolchains need it. IOW, remove all the 'default y' here, and add "select 
+BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK" to each of the toolchains.
 
-Regards, Bernd
+
+> +
+>   config BR2_TOOLCHAIN_EXTERNAL_GLIBC
+>   	bool
+>   	select BR2_TOOLCHAIN_USES_GLIBC
+> @@ -1055,6 +1062,13 @@ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+>   	  here, separated by spaces. They will be copied to the
+>   	  target's /lib directory.
+>
+> +config BR2_TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> +	bool "Symlink /lib/<tuple>"
+
+  So
+	select BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK
+here.
+
+
+
+  Regards,
+  Arnout
+
+> +	help
+> +	  Select this option if your external toolchain needs a symlink
+> +	  from the /lib directory to the /lib/<tuple> directory. This is
+> +	  may be required if your toolchain is based on one from Linaro.
+> +
+>   endif # BR2_TOOLCHAIN_EXTERNAL_CUSTOM
+>
+>   config BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+> diff --git a/toolchain/toolchain-external/toolchain-external.mk b/toolchain/toolchain-external/toolchain-external.mk
+> index 37e1a2e..66cf449 100644
+> --- a/toolchain/toolchain-external/toolchain-external.mk
+> +++ b/toolchain/toolchain-external/toolchain-external.mk
+> @@ -244,23 +244,16 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+>   TOOLCHAIN_EXTERNAL_DEPENDENCIES += netbsd-queue
+>   endif
+>
+> -# The Linaro ARMhf toolchain expects the libraries in
+> -# {/usr,}/lib/arm-linux-gnueabihf, but Buildroot copies them to
+> +# Some toolchains, such as Linaro, expect the libraries in
+> +# {/usr,}/lib/<tuple>, but Buildroot copies them to
+>   # {/usr,}/lib, so we need to create a symbolic link.
+> -define TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+> -	ln -snf . $(TARGET_DIR)/lib/arm-linux-gnueabihf
+> -	ln -snf . $(TARGET_DIR)/usr/lib/arm-linux-gnueabihf
+> -endef
+> -
+> -define TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+> -	ln -snf . $(TARGET_DIR)/lib/armeb-linux-gnueabihf
+> -	ln -snf . $(TARGET_DIR)/usr/lib/armeb-linux-gnueabihf
+> -endef
+> -
+> -define TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+> -	ln -snf . $(TARGET_DIR)/lib/aarch64-linux-gnu
+> -	ln -snf . $(TARGET_DIR)/usr/lib/aarch64-linux-gnu
+> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_NEEDS_PREFIX_SYMLINK),y)
+> +define TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> +	ln -snf . $(TARGET_DIR)/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+> +	ln -snf . $(TARGET_DIR)/usr/lib/$(TOOLCHAIN_EXTERNAL_PREFIX)
+>   endef
+> +TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_PREFIX_SYMLINK
+> +endif
+>
+>   # Special handling for Blackfin toolchain, because of the split in two
+>   # tarballs, and the organization of tarball contents. The tarballs
+> @@ -298,7 +291,6 @@ ifeq ($(HOSTARCH),x86)
+>   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+>   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+>   TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMHF_SYMLINK
+>   else
+>   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/arm-linux-gnueabihf
+>   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_arm-linux-gnueabihf.tar.xz
+> @@ -308,7 +300,6 @@ ifeq ($(HOSTARCH),x86)
+>   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+>   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_linux.tar.xz
+>   TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-armeb-linux-gnueabihf-4.9-2014.09_src.tar.bz2
+> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_ARMEBHF_SYMLINK
+>   else
+>   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/armeb-linux-gnueabihf
+>   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_armeb-linux-gnueabihf.tar.xz
+> @@ -353,7 +344,6 @@ ifeq ($(HOSTARCH),x86)
+>   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/14.09/components/toolchain/binaries
+>   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_linux.tar.xz
+>   TOOLCHAIN_EXTERNAL_ACTUAL_SOURCE_TARBALL = gcc-linaro-aarch64-linux-gnu-4.9-2014.09_src.tar.bz2
+> -TOOLCHAIN_EXTERNAL_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_EXTERNAL_LINARO_AARCH64_SYMLINK
+>   else
+>   TOOLCHAIN_EXTERNAL_SITE = https://releases.linaro.org/components/toolchain/binaries/5.2-2015.11-2/aarch64-linux-gnu
+>   TOOLCHAIN_EXTERNAL_SOURCE = gcc-linaro-5.2-2015.11-2-x86_64_aarch64-linux-gnu.tar.xz
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
