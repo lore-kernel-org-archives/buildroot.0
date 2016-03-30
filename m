@@ -1,69 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 09:30:50 +0200
-Subject: [Buildroot] [PATCH V2] Add Xen 4.6
-In-Reply-To: <74004942B5DA03468B2B76399A14BF2E7DB1003D@XSJ-PSEXMBX01.xlnx.xilinx.com>
-References: <1457483717-17947-1-git-send-email-alistair.francis@xilinx.com>
- <56F7D7FA.40001@mind.be>
- <CAKmqyKOCUKKQJRg6jK5TdJ33XbyATjsWrj41Gdy2zU7FwHz7mg@mail.gmail.com>
- <56FAD6B4.5000706@mind.be>
- <74004942B5DA03468B2B76399A14BF2E7DB1003D@XSJ-PSEXMBX01.xlnx.xilinx.com>
-Message-ID: <56FB80AA.1050407@mind.be>
+From: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Date: Wed, 30 Mar 2016 11:38:04 +0200
+Subject: [Buildroot] [PATCH] linux: Introduce DTB's bootargs fixup
+	feature
+In-Reply-To: <20160330001129.656b6151@free-electrons.com>
+References: <1458558329-19210-1-git-send-email-mcoquelin.stm32@gmail.com>
+ <20160321131206.1d3b29c7@free-electrons.com>
+ <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
+ <20160330001129.656b6151@free-electrons.com>
+Message-ID: <CALszF6AFV3TwSOz9rpGzthmuwE6MyoutZxHPEDMNA06bAoCRKQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
-
-On 03/30/16 01:37, Alistair Francis wrote:
->> -----Original Message-----
->> From: Arnout Vandecappelle [mailto:arnout at mind.be]
->> Sent: Tuesday, 29 March 2016 12:26 PM
->> To: Alistair Francis <alistai@xilinx.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>;
->> buildroot at buildroot.org; maxime.ripard at free-electrons.com
->> Subject: Re: [PATCH V2] Add Xen 4.6
->>
->> On 03/28/16 20:59, Alistair Francis wrote:
->>> On Sun, Mar 27, 2016 at 5:54 AM, Arnout Vandecappelle<arnout@mind.be>
->> wrote:
->> [snip]
->>>>>   For some reason, it doesn't seem to be cross-compiling for me, it uses
->>>>> "gcc" to build. I think you need to pass TARGET_CONFIGURE_OPTS in
->>>>> XEN_MAKE_ENV.
->>> I see the same problem. I tried using TARGET_CONFIGURE_OPTS in
->>> XEN_MAKE_ENV but it still uses GCC.
->>>
->>> The configure scripts detects an AArch64 target correctly, but it
->>> still uses GCC. Any other ideas?
->>
->>    Try passing CROSS_COMPILE in XEN_MAKE_ENV.
->>
->>    You may also need to set XEN_TARGET_ARCH, AFAICS it is not derived
->> automatically.
+2016-03-30 0:11 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
 >
-> Sorry for the poorly formatted reply, I am sending this from my work email.
+> On Mon, 21 Mar 2016 13:53:50 +0100, Maxime Coquelin wrote:
 >
-> I managed to get it to use aarch64-buildroot-linux-gnu-gcc using the
-> CROSS_COMPILE=$(TARGET_CROSS) option , but now I see a lot of
-> errors as apparently that version of GCC doesn't understand a lot of the
-> command line options.
+>> > However, I am not entirely sure this is something we want to take in
+>> > Buildroot. Indeed, your patch only allows to customize
+>> > the /chosen/bootargs property, and not any other property of the Device
+>> > Tree. If we want to do that via Config.in options, it suddenly becomes
+>> > a lot more complicated.
+>> Indeed, it will be difficult to extend it further than bootargs.
+>> It works well for bootargs for two reasons:
+>>  1- It is a generic property
+>>  2- It is a string
+>>
+>> There could be other uses for DTB patching, such as MAC address assignment.
+>> But I agree than doing this in Config.in makes no sense.
 >
-> Any idea why that would be? The GCC version is 4.9.3 which should be new enough.
+> Right.
+>
+>> > It is IMO even more important to do it this way since as of today, only
+>> > one platform/board needs to adjust its bootargs this way. All other
+>> > platforms have an ATAGs or DT compatible bootloader, where the bootargs
+>> > customization is done via the bootloader, not via patching the DTB.
+>>
+>> Ok, For sure it can be done, but I wanted to propose a generic way of
+>> doing this.
+>> Indeed, this is something other platforms could potentially use, even
+>> if not the case today.
+>>
+>> > Of course, let's see what others think.
+>>
+>> Agree.
+>> If it is decided to do this as post-image script, I will be happy to
+>> implement it.
+>
+> Nobody spoke up, so let's say we'll do it in a post-image script for
+> now. host-dtc is already visible in menuconfig, so it can be enabled in
+> a defconfig, and therefore it's just a matter of enabling it and write
+> the appropriate post-image script.
+>
+> Do you want to write a patch on top of my series adding Cortex-M
+> support?
 
-  Can you put the build log in a pastebin and post it on the list? It's 
-difficult to say anything just like this...
+Yes.
+Will you apply your Cortex-M series soon on master branch?
+I will propose a patch as soon as your series is available.
 
-  Did you also pass XEN_TARGET_ARCH?
-
-  Regards,
-  Arnout
-
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Regards,
+Maxime
