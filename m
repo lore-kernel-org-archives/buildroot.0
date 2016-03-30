@@ -1,45 +1,82 @@
-From: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
-Date: Wed, 30 Mar 2016 20:39:26 +0530
-Subject: [Buildroot] [PATCH v2] powerpc-utils: Bump powerpc-utils to
- v1.3.1
-In-Reply-To: <20160330164805.740a1e6b@free-electrons.com>
-References: <20160330054905.13012.58031.stgit@hegdevasant.in.ibm.com>
- <20160330164805.740a1e6b@free-electrons.com>
-Message-ID: <56FBEC26.2030807@linux.vnet.ibm.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 30 Mar 2016 16:21:22 +0100
+Subject: [Buildroot] [PATCH] tcl: rework logic for databases support
+Message-ID: <1459351282-16091-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/30/2016 08:18 PM, Thomas Petazzoni wrote:
-> Hello,
->
-> On Wed, 30 Mar 2016 11:20:38 +0530, Vasant Hegde wrote:
->
->> diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
->> deleted file mode 100644
->> index d02f16a..0000000
->> --- a/package/powerpc-utils/powerpc-utils.hash
->> +++ /dev/null
->> @@ -1,3 +0,0 @@
->> -# From http://sourceforge.net/projects/powerpc-utils/files/powerpc-utils/
->> -sha1	975c668e8eaedd5222a7870e82ce295d06dfe649	powerpc-utils-1.2.24.tar.gz
->> -md5	f492a72f2d4522eba5d9b329c84b3ed3	powerpc-utils-1.2.24.tar.gz
->
-> You shouldn't have removed the hash file, so I've re-added one with the
-> correct sha256 hash for the new version.
+- Always remove the bundled sqlite version.
+- Remove the --with-system-sqlite option because it is an option which
+  only exists in the bundled sqlite configure script.
+- Always build the basic TDBC.
+- Build SQLite, MySQL and PostgreSQL TDBC drivers only if these packages
+  have been selected in Buildroot. Add them to TCL_DEPENDENCIES
+  accordingly.
 
-Sorry for that.
+Fixes:
+  http://autobuild.buildroot.net/results/022/02296f8624d3406a63d3a179f53862f245c56dc1/
 
->
->> +POWERPC_UTILS_LICENSE = GPLv2
->
-> This is not correct, the license is GPLv2+.
->
-> I've applied after fixing those two issues, plus tweaking a bit the
-> commit title.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tcl/tcl.mk | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-Changes looks good. Thanks for fixing locally.
-
--Vasant
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 9fd1195..1ec7741 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -14,15 +14,10 @@ TCL_SUBDIR = unix
+ TCL_INSTALL_STAGING = YES
+ TCL_AUTORECONF = YES
+ 
+-# Note that --with-system-sqlite will only make a difference
+-# in the sqlite package (which gets removed if sqlite not
+-# configured).  Don't need to worry about conditionally including
+-# it in the configure options
+ TCL_CONF_OPTS = \
+ 	--disable-symbols \
+ 	--disable-langinfo \
+-	--disable-framework \
+-	--with-system-sqlite
++	--disable-framework
+ 
+ HOST_TCL_CONF_OPTS = \
+ 	--disable-symbols \
+@@ -32,7 +27,7 @@ HOST_TCL_CONF_OPTS = \
+ # I haven't found a good way to force pkgs to not build
+ # or configure without just removing the entire pkg directory.
+ define HOST_TCL_REMOVE_PACKAGES
+-	rm -fr $(@D)/pkgs/sqlite[0-9].[0-9].[0-9] \
++	rm -fr $(@D)/pkgs/sqlite[0-9].[0-9][0-9].[0-9] \
+ 		$(@D)/pkgs/tdbc[0-9].[0-9].[0-9] \
+ 		$(@D)/pkgs/tdbcmysql[0-9].[0-9].[0-9] \
+ 		$(@D)/pkgs/tdbcodbc[0-9].[0-9].[0-9] \
+@@ -41,11 +36,10 @@ define HOST_TCL_REMOVE_PACKAGES
+ endef
+ HOST_TCL_PRE_CONFIGURE_HOOKS += HOST_TCL_REMOVE_PACKAGES
+ define TCL_REMOVE_PACKAGES
+-	rm -fr $(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/sqlite[0-9].[0-9].[0-9]) \
+-		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbc[0-9].[0-9].[0-9]) \
+-		$(@D)/pkgs/tdbcmysql[0-9].[0-9].[0-9] \
++	rm -fr $(@D)/pkgs/sqlite[0-9].[0-9][0-9].[0-9] \
++		$(if $(BR2_PACKAGE_MYSQL),,$(@D)/pkgs/tdbcmysql[0-9].[0-9].[0-9]) \
+ 		$(@D)/pkgs/tdbcodbc[0-9].[0-9].[0-9] \
+-		$(@D)/pkgs/tdbcpostgres[0-9].[0-9].[0-9] \
++		$(if $(BR2_PACKAGE_POSTGRESQL),,$(@D)/pkgs/tdbcpostgres[0-9].[0-9].[0-9]) \
+ 		$(if $(BR2_PACKAGE_SQLITE),,$(@D)/pkgs/tdbcsqlite3-[0-9].[0-9].[0-9])
+ endef
+ TCL_PRE_CONFIGURE_HOOKS += TCL_REMOVE_PACKAGES
+@@ -82,6 +76,8 @@ endef
+ TCL_POST_INSTALL_TARGET_HOOKS += TCL_REMOVE_EXTRA
+ 
+ TCL_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite)
++TCL_DEPENDENCIES += $(if $(BR2_PACKAGE_MYSQL),mysql)
++TCL_DEPENDENCIES += $(if $(BR2_PACKAGE_POSTGRESQL),postgresql)
+ HOST_TCL_DEPENDENCIES =
+ 
+ $(eval $(autotools-package))
+-- 
+2.7.3
