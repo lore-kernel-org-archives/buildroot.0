@@ -1,49 +1,55 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 30 Mar 2016 22:22:36 +0200
-Subject: [Buildroot] [PATCH 1/3] libwebsockets: add patch to fix musl build
-Message-ID: <1459369358-794-1-git-send-email-joerg.krause@embedded.rocks>
+Date: Wed, 30 Mar 2016 22:22:37 +0200
+Subject: [Buildroot] [PATCH 2/3] libwebsockets: fix build with nothread
+	toolchains
+In-Reply-To: <1459369358-794-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1459369358-794-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <1459369358-794-2-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch from upstream [1] to fix musl build:
-fatal error: sys/cdefs.h: No such file or directory
+From upstream changelog:
+> If LWS_MAX_SMP=1, then there is no code related to pthreads compiled in the
+  library. If more than 1, a small amount of pthread mutex code is built into
+  the library.
+
+Set LWS_MAX_SMP=1 for toolchains without thread support, otherwise leave it
+unset so upstreams CMakeLists.txt will take care of it.
 
 Fixes:
-http://autobuild.buildroot.net/results/564/564675be0d4fbfa113a0f2e52874e0dce2d5ba5e/
-http://autobuild.buildroot.net/results/c41/c41d87c0cf22f3b88e5f80ad6bf5e81900603c1d/
-
-Backported from: 9eec5e4470397632af035c429295a41b74bd0585
-
-[1] https://github.com/warmcat/libwebsockets/commit/9eec5e4470397632af035c429295a41b74bd0585
+http://autobuild.buildroot.net/results/dbf/dbf45a52b9aef602fd62ad1ca10957bafe656923/
+http://autobuild.buildroot.net/results/26c/26c2ac28f44f8f1b227caa715af60bcd92a5f740/
+http://autobuild.buildroot.net/results/d65/d65dcbfb96b249e01b034c01a52884b522c778b3/
+http://autobuild.buildroot.net/results/e55/e550ebfdd1e8f459ca7b12f2708a704eaec52474/
+.. and more.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libwebsockets/libwebsockets.hash | 1 +
- package/libwebsockets/libwebsockets.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ package/libwebsockets/libwebsockets.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 7727ac5..745bc49 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  c6f3272d7e0234a9ef92b38622f36c4166eede4225e36fe4f78dd2ade03e9c52  libwebsockets-v1.7.3.tar.gz
-+sha256  c7627d8e3d9d695b965a6c5fe30f4b4c04666984b384acd9e24c3b59cef13816  9eec5e4470397632af035c429295a41b74bd0585.patch
 diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 72bb280..395a2ed 100644
+index 395a2ed..8d3663f 100644
 --- a/package/libwebsockets/libwebsockets.mk
 +++ b/package/libwebsockets/libwebsockets.mk
-@@ -11,6 +11,7 @@ LIBWEBSOCKETS_LICENSE_FILES = LICENSE
- LIBWEBSOCKETS_DEPENDENCIES = zlib
- LIBWEBSOCKETS_INSTALL_STAGING = YES
+@@ -13,6 +13,15 @@ LIBWEBSOCKETS_INSTALL_STAGING = YES
  LIBWEBSOCKETS_CONF_OPTS = -DLWS_WITHOUT_TESTAPPS=ON -DLWS_IPV6=ON
-+LIBWEBSOCKETS_PATCH = https://github.com/warmcat/libwebsockets/commit/9eec5e4470397632af035c429295a41b74bd0585.patch
+ LIBWEBSOCKETS_PATCH = https://github.com/warmcat/libwebsockets/commit/9eec5e4470397632af035c429295a41b74bd0585.patch
  
++# If LWS_MAX_SMP=1, then there is no code related to pthreads compiled
++# in the library. If unset, LWS_MAX_SMP defaults to 32 and a small
++# amount of pthread mutex code is built into the library.
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_MAX_SMP=1
++else
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_MAX_SMP=
++endif
++
  ifeq ($(BR2_PACKAGE_OPENSSL),y)
  LIBWEBSOCKETS_DEPENDENCIES += openssl host-openssl
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SSL=ON
 -- 
 2.7.4
