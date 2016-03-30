@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 17:48:26 +0200
-Subject: [Buildroot] [PATCH] qemu: bump version to 2.5.1
-In-Reply-To: <1459352438-40227-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1459352438-40227-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160330174826.3ae58d98@free-electrons.com>
+Date: Wed, 30 Mar 2016 17:54:40 +0200
+Subject: [Buildroot] [PATCH v4 18/19] package/tvheadend: bump version
+In-Reply-To: <20160329144510.0510cbe8@free-electrons.com>
+References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459194585-12593-19-git-send-email-bernd.kuhls@t-online.de>
+ <20160329144510.0510cbe8@free-electrons.com>
+Message-ID: <20160330175440.5bb5dc43@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +14,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 30 Mar 2016 16:40:38 +0100, Vicente Olivert Riera wrote:
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> ---
->  package/qemu/qemu.hash | 2 +-
->  package/qemu/qemu.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 29 Mar 2016 14:45:10 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 28 Mar 2016 21:49:44 +0200, Bernd Kuhls wrote:
+> > Updated ffmpeg option name after upstream renamed it:
+> > https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dR37
+> > 
+> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> 
+> This is causing some build failures:
+> 
+>    http://autobuild.buildroot.org/results/32c/32c6e6eece7e3b4f428524114f92e9a8999568e4/build-end.log
+> 
+> It seems like tvheadend is no longer compatible with the current ffmpeg
+> version, since we haven't bumped to ffmpeg 3.0.
+> 
+> I guess I should revert the tvheadend bump for now?
 
-Applied to master, thanks.
+Bernd, what do you think?
 
 Thomas
 -- 
