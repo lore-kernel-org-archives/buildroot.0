@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 17:00:40 +0200
-Subject: [Buildroot] [git commit] weston: drop --disable-xwayland-test
-Message-ID: <20160330150133.744627FEE2@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 17:00:51 +0200
+Subject: [Buildroot] [git commit] weston: handle dbus dependency
+Message-ID: <20160330150133.811F17FCDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dee8b591f54d8fced6242de488e2f7118e1aba75
+commit: https://git.buildroot.net/buildroot/commit/?id=4582f907387edca62d7edf26472c8fe79649f4da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-It's in the rpi backend block which makes no sense, and it depends on
-xwayland being enabled which we currently don't support so remove it.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/weston/weston.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/weston/weston.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index e83abe0..363a2bf 100644
+index 363a2bf..72190a8 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -82,7 +82,6 @@ ifeq ($(BR2_PACKAGE_WESTON_RPI),y)
- WESTON_DEPENDENCIES += rpi-userland
- WESTON_CONF_OPTS += --enable-rpi-compositor \
- 	--disable-resize-optimization \
--	--disable-xwayland-test \
- 	WESTON_NATIVE_BACKEND=rpi-backend.so
- else
- WESTON_CONF_OPTS += --disable-rpi-compositor
+@@ -26,6 +26,13 @@ WESTON_CONF_OPTS = \
+ WESTON_MAKE_OPTS = \
+ 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+ 
++ifeq ($(BR2_PACKAGE_DBUS),y)
++WESTON_CONF_OPTS += --enable-dbus
++WESTON_DEPENDENCIES += dbus
++else
++WESTON_CONF_OPTS += --disable-dbus
++endif
++
+ # weston-launch must be u+s root in order to work properly
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ define WESTON_PERMISSIONS
