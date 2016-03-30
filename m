@@ -1,33 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 19:39:52 +0200
-Subject: [Buildroot] [PATCH] gst1-libav: pass --cpu config option to
- bundled ffmpeg
-In-Reply-To: <1459358152-21729-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459358152-21729-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160330193952.2e872f06@free-electrons.com>
+Date: Wed, 30 Mar 2016 19:41:01 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: use wizard mode on
+	first run
+Message-ID: <20160330174102.97D9481767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c70ad5880d304d184e6466d5f60a3438fd4062f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 30 Mar 2016 14:15:52 -0300, Gustavo Zacarias wrote:
-> Like the proper ffmpeg package does, fixes:
-> http://autobuild.buildroot.net/results/a46/a462dae8df2450bc0f72cbed6125e106454bde0f/
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gstreamer1/gst1-libav/gst1-libav.mk | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+The format of the ACL database in tvheadend has changed, and generating
+a default user is a little bit more involved than just dumping a file in
+the correct locations: filenames are now md5sum (of something?) and the
+usernames and passwords now have their own DB.
 
-<rant>Can I say, once again, how much I hate bundled libraries?</rant>
+However, tvheadend has a wizard mode, where it is possible to configure
+the basic features, of which creating an admin user.
 
-Applied, thanks!
+We remove our canned ACL database, and change the startup script to
+start in wizard mode on first run. We also switch to using our infra to
+set the permissions.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/tvheadend/Config.in       |  4 ++--
+ package/tvheadend/S99tvheadend    |  5 +++++
+ package/tvheadend/accesscontrol.1 | 13 -------------
+ package/tvheadend/tvheadend.mk    | 13 +++++--------
+ 4 files changed, 12 insertions(+), 23 deletions(-)
+
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 095ec65..67a4b14 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -22,7 +22,7 @@ config BR2_PACKAGE_TVHEADEND
+ 	  https://www.lonelycoder.com/redmine/projects/tvheadend/
+ 
+ 	  Note:
+-	    - a default user has been created to log in the web configuration
+-	      GUI: admin/admin; you can change it at your discretion at runtime.
++	    - on first run, tvheadend will start in wizard mode; the webUI
++	      is available on port 9981.
+ 	    - if you want Avahi support, you'll need to enable:
+ 	          Avahi, D-Bus, libdaemon
+diff --git a/package/tvheadend/S99tvheadend b/package/tvheadend/S99tvheadend
+index 75b66f3..65669ce 100644
+--- a/package/tvheadend/S99tvheadend
++++ b/package/tvheadend/S99tvheadend
+@@ -21,6 +21,11 @@ ARGS="-f"
+ [ -z "${TVH_HTSP_PORT}" ] || ARGS="${ARGS} -e ${TVH_HTSP_PORT}"
+ [ "${TVH_DEBUG}" = "1"  ] && ARGS="${ARGS} -s"
+ 
++# If first run, start in wizard mode
++if [ -z "$(ls -1 /home/tvheadend/.hts/tvheadend/accesscontrol/ 2>/dev/null)" ]; then
++    ARGS="${ARGS} -C"
++fi
++
+ case "$1" in
+     start)
+         printf "Starting TVHeadend daemon: "
+diff --git a/package/tvheadend/accesscontrol.1 b/package/tvheadend/accesscontrol.1
+deleted file mode 100644
+index b920943..0000000
+--- a/package/tvheadend/accesscontrol.1
++++ /dev/null
+@@ -1,13 +0,0 @@
+-{
+-        "enabled": 1,
+-        "username": "admin",
+-        "password": "admin",
+-        "comment": "TVHeadend admin user",
+-        "prefix": "0.0.0.0/0",
+-        "streaming": 1,
+-        "dvr": 1,
+-        "dvrallcfg": 1,
+-        "webui": 1,
+-        "admin": 1,
+-        "id": "1"
+-}
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index a7a8218..07577d0 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -107,14 +107,8 @@ TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_CLEAN_SHARE
+ #----------------------------------------------------------------------------
+ # To run tvheadend, we need:
+ #  - a startup script, and its config file
+-#  - a default DB with a tvheadend admin
+-#  - a non-root user to run as
+-define TVHEADEND_INSTALL_DB
+-	$(INSTALL) -D -m 0600 package/tvheadend/accesscontrol.1     \
+-		$(TARGET_DIR)/home/tvheadend/.hts/tvheadend/accesscontrol/1
+-	chmod -R go-rwx $(TARGET_DIR)/home/tvheadend
+-endef
+-TVHEADEND_POST_INSTALL_TARGET_HOOKS += TVHEADEND_INSTALL_DB
++#  - a non-root user to run as, and a home for it that is not accessible
++#    to the other users (because there will be crendentials in there)
+ 
+ define TVHEADEND_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D package/tvheadend/etc.default.tvheadend $(TARGET_DIR)/etc/default/tvheadend
+@@ -124,5 +118,8 @@ endef
+ define TVHEADEND_USERS
+ 	tvheadend -1 tvheadend -1 * /home/tvheadend - video TVHeadend daemon
+ endef
++define TVHEADEND_PERMISSIONS
++	/home/tvheadend r 0700 tvheadend tvheadend - - - - -
++endef
+ 
+ $(eval $(generic-package))
