@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 16:48:05 +0200
-Subject: [Buildroot] [PATCH v2] powerpc-utils: Bump powerpc-utils to
- v1.3.1
-In-Reply-To: <20160330054905.13012.58031.stgit@hegdevasant.in.ibm.com>
-References: <20160330054905.13012.58031.stgit@hegdevasant.in.ibm.com>
-Message-ID: <20160330164805.740a1e6b@free-electrons.com>
+Date: Wed, 30 Mar 2016 16:51:09 +0200
+Subject: [Buildroot] [PATCH 1/1] buildroot-test: failure reason regex
+ update
+In-Reply-To: <1459302094-15704-1-git-send-email-matt@thewebers.ws>
+References: <1459302094-15704-1-git-send-email-matt@thewebers.ws>
+Message-ID: <20160330165109.7330df45@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +13,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 30 Mar 2016 11:20:38 +0530, Vasant Hegde wrote:
+On Tue, 29 Mar 2016 20:41:34 -0500, Matt Weber wrote:
+> - Sub-make required one additional line tailed
+> - Both regex to truncate end log and import which sets
+>   the failure reason on the report are updated
+> 
+> Signed-off-by: Matt Weber <matt@thewebers.ws>
+> ---
+>  scripts/autobuild-run | 4 ++--
+>  web/import.inc.php    | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index ca5bdfc..07bb5c5 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -648,10 +648,10 @@ def send_results(result, **kwargs):
+>      def get_failure_reason():
+>          # Output is a tuple (package, version), or None.
+>          lastlines = decode_bytes(subprocess.Popen(
+> -            ["tail", "-n", "3", os.path.join(outputdir, "logfile")],
+> +            ["tail", "-n", "4", os.path.join(outputdir, "logfile")],
+>              stdout=subprocess.PIPE).communicate()[0]).splitlines()
+>  
+> -        regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
+> +        regexp = re.compile("make.* \*\*\* .*/(?:build|toolchain)/([^/]*)/")
+>          for line in lastlines:
+>              m = regexp.search(line)
+>              if m:
+> diff --git a/web/import.inc.php b/web/import.inc.php
+> index 243a1f3..4a781ab 100644
+> --- a/web/import.inc.php
+> +++ b/web/import.inc.php
+> @@ -102,7 +102,7 @@ function import_result($buildid, $filename)
+>        $reason = "none";
+>      else {
+>  	$tmp = Array();
+> -	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
+> +	exec("tail -4 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.* \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
 
-> diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-> deleted file mode 100644
-> index d02f16a..0000000
-> --- a/package/powerpc-utils/powerpc-utils.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# From http://sourceforge.net/projects/powerpc-utils/files/powerpc-utils/
-> -sha1	975c668e8eaedd5222a7870e82ce295d06dfe649	powerpc-utils-1.2.24.tar.gz
-> -md5	f492a72f2d4522eba5d9b329c84b3ed3	powerpc-utils-1.2.24.tar.gz
+I don't see why you are making this change. The ':' is really there:
 
-You shouldn't have removed the hash file, so I've re-added one with the
-correct sha256 hash for the new version.
+	make[1]: ...
 
-> +POWERPC_UTILS_LICENSE = GPLv2
+Do you have a case where it isn't present ?
 
-This is not correct, the license is GPLv2+.
+Also why you are changing 3 lines to 4 lines ?
 
-I've applied after fixing those two issues, plus tweaking a bit the
-commit title.
+In the autobuilder outputs, I see two cases:
 
-Thanks!
+ 1/ When the correct umask is used, we get:
+
+make: *** [/home/peko/autobuild/instance-2/output/build/tvheadend-cd9f07fb865e5700156546ee326fbaf42ee99cf8/.stamp_configured] Error 1
+make: Leaving directory `/home/peko/autobuild/instance-2/buildroot'
+
+ 2/ When the incorrect umask is used, we get:
+
+make[1]: *** [/home/buildroot/autobuild/run/instance-2/output/build/ffmpeg-2.8.6/.stamp_configured] Error 1
+make: *** [_all] Error 2
+make: Leaving directory `/home/buildroot/autobuild/run/instance-2/buildroot'
+
+So 3 lines should be fine. Or do you have other cases ? 
+
+Thanks,
 
 Thomas
 -- 
