@@ -1,70 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 21:43:23 +0200
-Subject: [Buildroot] [PATCH] gst1-libav: pass --cpu config option to
- bundled ffmpeg
-In-Reply-To: <1459358152-21729-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459358152-21729-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <56FC2C5B.4020609@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 30 Mar 2016 21:44:30 +0200
+Subject: [Buildroot] [PATCH v4 18/19] package/tvheadend: bump version
+References: <1459194585-12593-1-git-send-email-bernd.kuhls@t-online.de>
+ <1459194585-12593-19-git-send-email-bernd.kuhls@t-online.de>
+ <20160329144510.0510cbe8@free-electrons.com>
+ <20160330175440.5bb5dc43@free-electrons.com>
+ <E1alK55-0006sQ-Lb@fli4l.lan.fli4l>
+ <20160330194721.32f45091@free-electrons.com>
+Message-ID: <XnsA5DBDD2ABD4D1berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/30/16 19:15, Gustavo Zacarias wrote:
-> Like the proper ffmpeg package does, fixes:
-> http://autobuild.buildroot.net/results/a46/a462dae8df2450bc0f72cbed6125e106454bde0f/
+[posted and mailed]
 
-  So, you didn't need to pass --sysroot for Sourcery toolchains, like I had to 
-in my v2 of this patch [1]? (I've marked [1] as Superseded now. Probably if my 
-commit log would have been a little terser, it would already have been applied :-)
+Thomas Petazzoni <thomas.petazzoni-wi1+55ScJUtKEb57/3fJTNBPR1lH4CV8
+@public.gmane.org> wrote in news:20160330194721.32f45091 at free-electrons.com:
 
-  Regards,
-  Arnout
+> Hello,
+> 
+> On Wed, 30 Mar 2016 19:38:59 +0200, Bernd Kuhls wrote:
+> 
+>> instead of reverting the tvheadend bump my new ffmpeg 3.0 patch series
+>> could be committed, it includes a uclibc-ng compilable vlc ;)
+> 
+> When is VLC 3.0 due to be released?
 
-[1] http://patchwork.ozlabs.org/patch/589657/
+Hi Thomas,
 
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->   package/gstreamer1/gst1-libav/gst1-libav.mk | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-> index 496190e..8f892d0 100644
-> --- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-> +++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-> @@ -7,9 +7,7 @@
->   GST1_LIBAV_VERSION = 1.8.0
->   GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
->   GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
-> -
->   GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
-> -
->   GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
->
->   ifeq ($(BR2_PACKAGE_ZLIB),y)
-> @@ -26,6 +24,13 @@ else
->   GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
->   endif
->
-> +# Generic CPU setup for bundled ffmpeg
-> +ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
-> +else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
-> +GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
-> +endif
-> +
->   ifeq ($(BR2_X86_CPU_HAS_MMX),y)
->   GST1_LIBAV_CONF_EXTRA_OPTS += --enable-yasm
->   GST1_LIBAV_DEPENDENCIES += host-yasm
->
+according to https://trac.videolan.org/vlc/roadmap the release is overdue.
 
+Phoronix does not mention a release date:
+http://www.phoronix.com/scan.php?page=news_item&px=VLC-3.0-Still-Being-
+Developed
+http://www.phoronix.com/scan.php?page=news_item&px=VLC-3.0-2016-Update
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Since 2014-02-25 we carry a "big fat warning" about know issues with vlc:
+https://git.busybox.net/buildroot/commit/package/vlc/Config.in?
+id=e33019aaa0409e35b725dddffe09e3e2a42959d1
+
+Recently I thought about removing it but now I suggest to keep the warning 
+and bump vlc to its git master branch to free the way for ffmpeg 3.0 ;)
+
+Regards, Bernd
