@@ -1,55 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 Mar 2016 21:03:27 +0200
-Subject: [Buildroot] [PATCH] tcl: rework logic for databases support
-In-Reply-To: <56FBF32C.7070802@imgtec.com>
-References: <1459351282-16091-1-git-send-email-Vincent.Riera@imgtec.com>
- <20160330173503.2e710605@free-electrons.com> <56FBF32C.7070802@imgtec.com>
-Message-ID: <56FC22FF.5020900@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Mar 2016 21:04:21 +0200
+Subject: [Buildroot] [git commit] nmap: bump to version 7.12
+Message-ID: <20160330190434.B6DF081D4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/30/16 17:39, Vicente Olivert Riera wrote:
-> Hi Thomas,
->
-> On 30/03/16 16:35, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Wed, 30 Mar 2016 16:21:22 +0100, Vicente Olivert Riera wrote:
-[snip]
->>>   TCL_DEPENDENCIES = $(if $(BR2_PACKAGE_SQLITE),sqlite)
->>> +TCL_DEPENDENCIES += $(if $(BR2_PACKAGE_MYSQL),mysql)
->>> +TCL_DEPENDENCIES += $(if $(BR2_PACKAGE_POSTGRESQL),postgresql)
->>
->> TCL_DEPENDENCIES = \
->> 	$(if ...) \
->> 	$(if ...)
->>
->> Would be nicer.
->
-> That was my first approach and I didn't look nicer to me, so I changed
-> it :P Anyway, if you prefer that way, I'll do it that way, no problem.
+commit: https://git.buildroot.net/buildroot/commit/?id=8f120931b0b4ee769e741942089372cc584e39c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  Like you, Vincent, I also prefer TCL_DEPENDENCIES to be repeated.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/nmap/nmap.hash | 4 ++--
+ package/nmap/nmap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-- You don't need to move your eyes to see which variable is affected.
-- When adding/removing a dependency, you don't have to worry about the backslashes.
-
-
-  I do prefer in this case that all assignments, including the first one, have +=
-
-
-  Regards,
-  Arnout
-
-
-[snip]
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
+index dde6dab..448a19b 100644
+--- a/package/nmap/nmap.hash
++++ b/package/nmap/nmap.hash
+@@ -1,2 +1,2 @@
+-# From https://nmap.org/dist/sigs/nmap-7.11.tar.bz2.digest.txt
+-sha256	13fa971555dec00e495a5b72c1f9efa1363b8e6c7388a2f05117cb0778c0954a	nmap-7.11.tar.bz2
++# From https://nmap.org/dist/sigs/nmap-7.12.tar.bz2.digest.txt
++sha256	63df082a87c95a189865d37304357405160fc6333addcf5b84204c95e0539b04	nmap-7.12.tar.bz2
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1829104..46c6232 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NMAP_VERSION = 7.11
++NMAP_VERSION = 7.12
+ NMAP_SITE = http://nmap.org/dist
+ NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
+ NMAP_DEPENDENCIES = libpcap pcre
