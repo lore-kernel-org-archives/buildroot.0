@@ -1,41 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 15:16:32 +0200
-Subject: [Buildroot] [PATCH] linux: Introduce DTB's bootargs fixup
- feature
-In-Reply-To: <CALszF6AFV3TwSOz9rpGzthmuwE6MyoutZxHPEDMNA06bAoCRKQ@mail.gmail.com>
-References: <1458558329-19210-1-git-send-email-mcoquelin.stm32@gmail.com>
- <20160321131206.1d3b29c7@free-electrons.com>
- <CALszF6CqGMakciwieEsxXnBDPN=bhq_2KsLcQSwv-NwW-2Y0mQ@mail.gmail.com>
- <20160330001129.656b6151@free-electrons.com>
- <CALszF6AFV3TwSOz9rpGzthmuwE6MyoutZxHPEDMNA06bAoCRKQ@mail.gmail.com>
-Message-ID: <20160330151632.11779c3b@free-electrons.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Wed, 30 Mar 2016 14:31:28 +0100
+Subject: [Buildroot] [PATCH] tcl: remove non-existent --with-system-sqlite
+	configure option
+Message-ID: <1459344688-24416-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+For some reason, even if this option is not available anymore, it's
+causing build failures if we use it. When we remove it the build
+succeeds.
 
-On Wed, 30 Mar 2016 11:38:04 +0200, Maxime Coquelin wrote:
+Fixes:
+  http://autobuild.buildroot.net/results/022/02296f8624d3406a63d3a179f53862f245c56dc1/
 
-> > Do you want to write a patch on top of my series adding Cortex-M
-> > support?
-> 
-> Yes.
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/tcl/tcl.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks!
-
-> Will you apply your Cortex-M series soon on master branch?
-> I will propose a patch as soon as your series is available.
-
-I applied a few more patches yesterday. But some other patches had
-comments, which I need to address and resend a new version.
-
-Thanks!
-
-Thomas
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 9fd1195..52be7b8 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -21,8 +21,7 @@ TCL_AUTORECONF = YES
+ TCL_CONF_OPTS = \
+ 	--disable-symbols \
+ 	--disable-langinfo \
+-	--disable-framework \
+-	--with-system-sqlite
++	--disable-framework
+ 
+ HOST_TCL_CONF_OPTS = \
+ 	--disable-symbols \
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
