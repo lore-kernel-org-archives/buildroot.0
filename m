@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 21:04:21 +0200
-Subject: [Buildroot] [git commit] nmap: bump to version 7.12
-Message-ID: <20160330190434.B6DF081D4B@busybox.osuosl.org>
+Date: Wed, 30 Mar 2016 21:04:28 +0200
+Subject: [Buildroot] [git commit] whois: bump to version 5.2.12
+Message-ID: <20160330190434.C80E0800F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f120931b0b4ee769e741942089372cc584e39c2
+commit: https://git.buildroot.net/buildroot/commit/?id=e766f61cc046b522b38d2596783d06349f11d05e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/nmap/nmap.hash | 4 ++--
- package/nmap/nmap.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nmap/nmap.hash b/package/nmap/nmap.hash
-index dde6dab..448a19b 100644
---- a/package/nmap/nmap.hash
-+++ b/package/nmap/nmap.hash
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index a92e0d8..15a12f7 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
 @@ -1,2 +1,2 @@
--# From https://nmap.org/dist/sigs/nmap-7.11.tar.bz2.digest.txt
--sha256	13fa971555dec00e495a5b72c1f9efa1363b8e6c7388a2f05117cb0778c0954a	nmap-7.11.tar.bz2
-+# From https://nmap.org/dist/sigs/nmap-7.12.tar.bz2.digest.txt
-+sha256	63df082a87c95a189865d37304357405160fc6333addcf5b84204c95e0539b04	nmap-7.12.tar.bz2
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 1829104..46c6232 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -4,7 +4,7 @@
+-# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.11.dsc
+-sha256	32f7d6be853aa6a6a8ac6dd672bd60ae4f10bc0bedcaa944363ffbef6e57cef7	whois_5.2.11.tar.xz
++# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.12.dsc
++sha256	b26d4027b8987d9911466aa06ce2c167a50017cd59a622a429bd506222f6cdf1	whois_5.2.12.tar.xz
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index d32642c..423b214 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NMAP_VERSION = 7.11
-+NMAP_VERSION = 7.12
- NMAP_SITE = http://nmap.org/dist
- NMAP_SOURCE = nmap-$(NMAP_VERSION).tar.bz2
- NMAP_DEPENDENCIES = libpcap pcre
+-WHOIS_VERSION = 5.2.11
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20151208T102349Z/pool/main/w/whois
++WHOIS_VERSION = 5.2.12
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20160329T095754Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
