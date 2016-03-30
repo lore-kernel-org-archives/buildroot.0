@@ -1,85 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 30 Mar 2016 18:26:53 +0200
-Subject: [Buildroot] [PATCH 1/1] aer-inject: new package
-In-Reply-To: <1459342912-10816-1-git-send-email-tiago.brusamarello@datacom.ind.br>
-References: <1459342912-10816-1-git-send-email-tiago.brusamarello@datacom.ind.br>
-Message-ID: <20160330182653.6d1791c0@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 30 Mar 2016 14:15:52 -0300
+Subject: [Buildroot] [PATCH] gst1-libav: pass --cpu config option to bundled
+	ffmpeg
+Message-ID: <1459358152-21729-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Like the proper ffmpeg package does, fixes:
+http://autobuild.buildroot.net/results/a46/a462dae8df2450bc0f72cbed6125e106454bde0f/
 
-I've applied your patch, after doing a few tweaks.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/gstreamer1/gst1-libav/gst1-libav.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-First of all, could you fix your SMTP configuration so that your From:
-is Tiago Brusamarello <...> rather than tiago.brusamarello ?
-
-On Wed, 30 Mar 2016 10:01:52 -0300, tiago.brusamarello wrote:
-> aer-inject allows to inject PCIE AER errors on the software level into
-> a running Linux kernel. This is intended for validation of the PCIE
-> driver error recovery handler and PCIE AER core handler.
-> 
-> Change-Id: Id3e701a9eb692627db42320ea7c37afbf4f712b8
-
-This line is not needed.
-
-> Signed-off-by: tiago.brusamarello <tiago.brusamarello@datacom.ind.br>
-
-This should also be Tiago Brusamarello <....>
-
-> diff --git a/package/aer-inject/Config.in b/package/aer-inject/Config.in
-> new file mode 100644
-> index 0000000..8856ff1
-> --- /dev/null
-> +++ b/package/aer-inject/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_AER_INJECT
-> +	bool "aer-inject"
-> +	help
-> +	  aer-inject allows to inject PCIE AER errors on the software level into
-> +	  a running Linux kernel. This is intended for validation of the PCIE
-> +	  driver error recovery handler and PCIE AER core handler.
-> +
-> +	  Requires a new Linux kernel with PCIE AER error injection patches.
-
-Those lines were slightly too long, so I rewrapped them.
-
-> +AER_INJECT_VERSION = 9bd5e2c7886fca72f139cd8402488a2235957d41
-> +AER_INJECT_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/gong.chen/aer-inject.git
-> +AER_INJECT_SITE_METHOD = git
-> +AER_INJECT_LICENSE = GPLv2
-> +AER_INJECT_LICENSE_FILES = README
-> +AER_INJECT_DEPENDENCIES = host-flex host-bison
-> +AER_INJECT_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS)
-
-This variable was not needed, you can just use TARGET_CONFIGURE_OPTS
-directly.
-
-> +
-> +define AER_INJECT_BUILD_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(AER_INJECT_MAKE_OPTS)
-> +endef
-> +
-> +define AER_INJECT_INSTALL_TARGET_CMDS
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(AER_INJECT_MAKE_OPTS) \
-> +	DESTDIR=$(TARGET_DIR) PREFIX=/usr/bin install
-
-The continuation line should be indented.
-
-> +endef
-> +
-> +$(eval $(generic-package))
-> \ No newline at end of file
-
-There should be a newline at the end of file.
-
-I've fixed up those minor issues and applied. Thanks!
-
-Thomas
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 496190e..8f892d0 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+@@ -7,9 +7,7 @@
+ GST1_LIBAV_VERSION = 1.8.0
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = http://gstreamer.freedesktop.org/src/gst-libav
+-
+ GST1_LIBAV_DEPENDENCIES = host-pkgconf gstreamer1 gst1-plugins-base
+-
+ GST1_LIBAV_CONF_EXTRA_OPTS = --cross-prefix=$(TARGET_CROSS) --target-os=linux
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+@@ -26,6 +24,13 @@ else
+ GST1_LIBAV_CONF_EXTRA_OPTS += --disable-bzlib
+ endif
+ 
++# Generic CPU setup for bundled ffmpeg
++ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
++GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
++else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
++GST1_LIBAV_CONF_EXTRA_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
++endif
++
+ ifeq ($(BR2_X86_CPU_HAS_MMX),y)
+ GST1_LIBAV_CONF_EXTRA_OPTS += --enable-yasm
+ GST1_LIBAV_DEPENDENCIES += host-yasm
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
