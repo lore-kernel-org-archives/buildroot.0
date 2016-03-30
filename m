@@ -1,42 +1,89 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 30 Mar 2016 14:57:02 -0300
-Subject: [Buildroot] [PATCH] whois: bump to version 5.2.12
-Message-ID: <1459360622-10979-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 30 Mar 2016 20:47:50 +0200
+Subject: [Buildroot] [PATCH 1/2] libdebian-installer: new package
+In-Reply-To: <1458298843-21326-1-git-send-email-benoit.allard@greenbone.net>
+References: <1458298843-21326-1-git-send-email-benoit.allard@greenbone.net>
+Message-ID: <20160330204750.04c7c1fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index a92e0d8..15a12f7 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.11.dsc
--sha256	32f7d6be853aa6a6a8ac6dd672bd60ae4f10bc0bedcaa944363ffbef6e57cef7	whois_5.2.11.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.2.12.dsc
-+sha256	b26d4027b8987d9911466aa06ce2c167a50017cd59a622a429bd506222f6cdf1	whois_5.2.12.tar.xz
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index d32642c..423b214 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.2.11
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20151208T102349Z/pool/main/w/whois
-+WHOIS_VERSION = 5.2.12
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20160329T095754Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
- WHOIS_DEPENDENCIES = host-gettext $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+On Fri, 18 Mar 2016 12:00:42 +0100, Beno?t Allard wrote:
+
+> diff --git a/package/libdebian-installer/libdebian-installer.mk b/package/libdebian-installer/libdebian-installer.mk
+> new file mode 100644
+> index 0000000..b542659
+> --- /dev/null
+> +++ b/package/libdebian-installer/libdebian-installer.mk
+> @@ -0,0 +1,18 @@
+> +################################################################################
+> +#
+> +# libdebian-installer
+> +#
+> +################################################################################
+> +
+> +
+> +LIBDEBIAN_INSTALLER_VERSION = 0.104
+> +LIBDEBIAN_INSTALLER_SOURCE = libdebian-installer_$(LIBDEBIAN_INSTALLER_VERSION).tar.xz
+> +LIBDEBIAN_INSTALLER_SITE = http://snapshot.debian.org/archive/debian-debug/20160218T034808Z/pool/main/libd/libdebian-installer/
+
+Another possibility could be to fetch from the Git repository at
+https://anonscm.debian.org/cgit/d-i/libdebian-installer.git/, but I'm
+fine with snapshot.debian.org.
+
+> +LIBDEBIAN_INSTALLER_LICENSE = GPLv2
+
+License is GPLv2+.
+
+> +LIBDEBIAN_INSTALLER_LICENSE_FILES = debian/copyright
+> +LIBDEBIAN_INSTALLER_INSTALL_STAGING = YES
+> +# Provided files are too old (missing reference to newly added source files)
+> +LIBDEBIAN_INSTALLER_AUTORECONF = YES
+> +LIBDEBIAN_INSTALLER_DEPENDENCIES = check host-pkgconf
+
+Unfortunately, the following configuration doesn't build here:
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2016.02-3-g762b7c9.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_LIBDEBIAN_INSTALLER=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+I get the following failure:
+
+libtool: link: /home/thomas/projets/buildroot/output/host/usr/bin/arm-linux-gcc -shared  -fPIC -DPIC  .libs/exec.o .libs/hash.o .libs/log.o .libs/mem.o .libs/mem_chunk.o .libs/package.o .libs/package_parser.o .libs/packages.o .libs/packages_parser.o .libs/parser.o .libs/parser_rfc822.o .libs/slist.o .libs/string.o .libs/tree.o .libs/utils.o  -Wl,--whole-archive system/.libs/libsystem.a -Wl,--no-whole-archive   -Os -Wl,--version-script=./libdebian-installer.ver -Wl,--no-undefined-version   -Wl,-soname -Wl,libdebian-installer.so.4 -o .libs/libdebian-installer.so.4.0.7
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: di_system_subarch_analyze_guess: undefined version: LIBDI_4.7
+/home/thomas/projets/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/4.9.3/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: failed to set dynamic section sizes: Bad value
+
+Also, I'm concerned by a few other things:
+
+ * The configure.ac script calls dpkg-architecture. Not only this means
+   that the configure script assumes it will be run on Debian (which is
+   not guaranteed in Buildroot), but it breaks when cross-compiling:
+   the target architecture is not the one of the build machine.
+
+ * In src/system/, you will see that there are a number of architecture
+   specific files, which probably means that libdebian-installer is not
+   going to build properly for all target architectures.
+
+Could you investigate those issues/concerns, and send an updated version?
+
+Thanks!
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
