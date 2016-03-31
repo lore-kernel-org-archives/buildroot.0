@@ -1,149 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 21:39:48 +0200
-Subject: [Buildroot] [PATCH] arch/x86: remove support for i386
-Message-ID: <1459453188-23705-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 31 Mar 2016 16:41:10 -0300
+Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.20.2
+Message-ID: <1459453270-2603-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux kernel doesn't even support i386 anymore, there is no NPTL
-support for i386 and uClibc-ng only supports NPTL on x86, so there is
-essentially no usable thread implementation. Most likely glibc and
-musl also don't support i386 either. So it's time to remove the
-support for this architecture variant.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- .defconfig                             | 1 -
- arch/Config.in.x86                     | 5 -----
- package/openssl/openssl.mk             | 5 -----
- package/uclibc/Config.in               | 3 +--
- toolchain/toolchain-common.in          | 3 ---
- toolchain/toolchain-external/Config.in | 3 +--
- 6 files changed, 2 insertions(+), 18 deletions(-)
+ package/libgtk3/libgtk3.hash | 4 ++--
+ package/libgtk3/libgtk3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/.defconfig b/.defconfig
-index 585be55..037647e 100644
---- a/.defconfig
-+++ b/.defconfig
-@@ -19,7 +19,6 @@ BR2_i386=y
- # BR2_sparc is not set
- # BR2_sparc64 is not set
- # BR2_x86_64 is not set
--# BR2_x86_i386 is not set
- # BR2_x86_i486 is not set
- # BR2_x86_i586 is not set
- BR2_x86_i686=y
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 7be814b..4039db8 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -25,9 +25,6 @@ choice
- 	help
- 	  Specific CPU variant to use
+diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
+index 37e5661..1b9e252 100644
+--- a/package/libgtk3/libgtk3.hash
++++ b/package/libgtk3/libgtk3.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.1.sha256sum
+-sha256	ac86a01a57b4258ea70bc85b9494b333226eda6f5a2b0716ad48cfcded5f5380	gtk+-3.20.1.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.2.sha256sum
++sha256	1ab1d1068ea55e0046f437d69983f164df5e68cb2e9fdfb38787b867f33f69f7	gtk+-3.20.2.tar.xz
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 417bf20..ff8333d 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--config BR2_x86_i386
--	bool "i386"
--	depends on !BR2_x86_64
- config BR2_x86_i486
- 	bool "i486"
- 	depends on !BR2_x86_64
-@@ -210,7 +207,6 @@ config BR2_x86_winchip2
- endchoice
- 
- config BR2_ARCH
--	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
- 	default "i586"		if BR2_x86_i586
- 	default "i586"		if BR2_x86_x1000
-@@ -246,7 +242,6 @@ config BR2_ENDIAN
- 	default "LITTLE"
- 
- config BR2_GCC_TARGET_ARCH
--	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
- 	default "i586"		if BR2_x86_i586
- 	default "i586"		if BR2_x86_x1000
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 30dfe31..3b8e525 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -53,11 +53,6 @@ ifeq ($(ARCH),x86_64)
- OPENSSL_TARGET_ARCH = x86_64
- endif
- 
--# Workaround for bug #3445
--ifeq ($(BR2_x86_i386),y)
--OPENSSL_TARGET_ARCH = generic32 386
--endif
--
- define HOST_OPENSSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(HOST_CONFIGURE_OPTS) \
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index eac5d05..efa84e9 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -71,7 +71,7 @@ choice
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 		depends on BR2_USE_MMU
--		depends on !BR2_m68k && !BR2_x86_i386
-+		depends on !BR2_m68k
- endchoice
- 
- config BR2_PTHREAD_DEBUG
-@@ -176,7 +176,6 @@ config BR2_UCLIBC_POWERPC_TYPE
- config BR2_UCLIBC_X86_TYPE
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "i386"
--	default "386"        if BR2_x86_i386
- 	default "486"        if BR2_x86_i486
- 	default "586"        if BR2_x86_i586
- 	default "586MMX"     if BR2_x86_pentium_mmx
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 0907c5e..7ad1c05 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -316,7 +316,6 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST
- config BR2_TOOLCHAIN_HAS_SYNC_1
- 	bool
- 	default y
--	depends on !BR2_x86_i386
- 	depends on !BR2_bfin
- 	depends on !BR2_microblaze
- 	depends on !BR2_sparc
-@@ -330,7 +329,6 @@ config BR2_TOOLCHAIN_HAS_SYNC_4
- 	bool
- 	default y
- 	depends on !BR2_sparc
--	depends on !BR2_x86_i386
- 	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
- 
- # The availability of __sync for 8-byte types on ARM is somewhat
-@@ -362,7 +360,6 @@ config BR2_TOOLCHAIN_X86_HAS_SYNC_8
- 	bool
- 	default y
- 	depends on BR2_i386
--	depends on !BR2_x86_i386
- 	depends on !BR2_x86_i486
- 	depends on !BR2_x86_c3
- 	depends on !BR2_x86_winchip_c6
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ff759a0..d6f57a1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -615,8 +615,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	bool "Musl 1.1.12 toolchain (experimental)"
- 	depends on (BR2_arm && BR2_ARM_EABI) || \
- 		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
--		(BR2_armeb && BR2_ARM_EABI) || \
--		(BR2_i386 && !BR2_x86_i386) || \
-+		(BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
- 		(BR2_mips && !BR2_SOFT_FLOAT) || \
- 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
- 		BR2_sh4 || BR2_sh4eb || \
+ LIBGTK3_VERSION_MAJOR = 3.20
+-LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).1
++LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).2
+ LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
+ LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
+ LIBGTK3_LICENSE = LGPLv2+
 -- 
-2.6.4
+2.7.3
