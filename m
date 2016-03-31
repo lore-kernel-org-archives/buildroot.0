@@ -1,40 +1,84 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 31 Mar 2016 16:41:10 -0300
-Subject: [Buildroot] [PATCH] libgtk3: bump to version 3.20.2
-Message-ID: <1459453270-2603-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Thu, 31 Mar 2016 17:07:21 -0300
+Subject: [Buildroot] [PATCH 1/2] alsa-lib: bump to version 1.1.1
+Message-ID: <1459454842-5484-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop 0001-add-missing-include.patch since it's upstream.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/alsa-lib/0001-add-missing-include.patch    | 29 ----------------------
+ ...0005-musl-pcm-h.patch => 0001-musl-pcm-h.patch} |  0
+ package/alsa-lib/alsa-lib.hash                     |  2 +-
+ package/alsa-lib/alsa-lib.mk                       |  2 +-
+ 4 files changed, 2 insertions(+), 31 deletions(-)
+ delete mode 100644 package/alsa-lib/0001-add-missing-include.patch
+ rename package/alsa-lib/{0005-musl-pcm-h.patch => 0001-musl-pcm-h.patch} (100%)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 37e5661..1b9e252 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
+diff --git a/package/alsa-lib/0001-add-missing-include.patch b/package/alsa-lib/0001-add-missing-include.patch
+deleted file mode 100644
+index ac7dfa9..0000000
+--- a/package/alsa-lib/0001-add-missing-include.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Subject: [PATCH] topology: Add missing include sys/stat.h
+-
+-Necessary for proper definitions of S_IRUSR & co.  Otherwise it
+-results in compile errors with old glibc:
+-  parser.c: In function 'snd_tplg_build_file':
+-  parser.c:262: error: 'S_IRUSR' undeclared (first use in this function)
+-  parser.c:262: error: (Each undeclared identifier is reported only once
+-  parser.c:262: error: for each function it appears in.)
+-
+-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Status: upstream
+-
+-diff --git a/src/topology/parser.c b/src/topology/parser.c
+-index 80a0ae0..18bb9c7 100644
+---- a/src/topology/parser.c
+-+++ b/src/topology/parser.c
+-@@ -16,6 +16,7 @@
+-            Liam Girdwood <liam.r.girdwood@linux.intel.com>
+- */
+- 
+-+#include <sys/stat.h>
+- #include "list.h"
+- #include "tplg_local.h"
+- 
+--- 
+-1.7.11.7
+-
+diff --git a/package/alsa-lib/0005-musl-pcm-h.patch b/package/alsa-lib/0001-musl-pcm-h.patch
+similarity index 100%
+rename from package/alsa-lib/0005-musl-pcm-h.patch
+rename to package/alsa-lib/0001-musl-pcm-h.patch
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 506416d..49be643 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.1.sha256sum
--sha256	ac86a01a57b4258ea70bc85b9494b333226eda6f5a2b0716ad48cfcded5f5380	gtk+-3.20.1.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.2.sha256sum
-+sha256	1ab1d1068ea55e0046f437d69983f164df5e68cb2e9fdfb38787b867f33f69f7	gtk+-3.20.2.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 417bf20..ff8333d 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256	dfde65d11e82b68f82e562ab6228c1fb7c78854345d3c57e2c68a9dd3dae1f15	alsa-lib-1.1.0.tar.bz2
++sha256	8ac76c3144ed2ed49da7622ab65ac5415205913ccbedde877972383cbc234269	alsa-lib-1.1.1.tar.bz2
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 2075d41..ae0377d 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBGTK3_VERSION_MAJOR = 3.20
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).1
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).2
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+-ALSA_LIB_VERSION = 1.1.0
++ALSA_LIB_VERSION = 1.1.1
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPLv2.1+
 -- 
 2.7.3
