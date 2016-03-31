@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 03:45:57 +0200
-Subject: [Buildroot] [PATCH 1/2] gst1-libav: switch to unbundled
-In-Reply-To: <1459366600-21925-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1459366600-21925-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160331034557.07c02d1a@free-electrons.com>
+Date: Thu, 31 Mar 2016 03:46:09 +0200
+Subject: [Buildroot] [PATCH] nss: security bump to version 3.23
+In-Reply-To: <1459367467-19835-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459367467-19835-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160331034609.3d24fd0d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 30 Mar 2016 16:36:39 -0300, Gustavo Zacarias wrote:
-> It avoids the crazy in handling all of the ffmpeg options here as well,
-> and potentially avoids target code duplication, hence resulting in a
-> size reduction.
+On Wed, 30 Mar 2016 16:51:07 -0300, Gustavo Zacarias wrote:
+> Fixes:
+> CVE-2016-1950 - Fixed a heap-based buffer overflow related to the
+> parsing of certain ASN.1 structures. An attacker could create a
+> specially-crafted certificate which, when parsed by NSS, would cause a
+> crash or execution of arbitrary code with the permissions of the user.
 > 
 > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  package/gstreamer1/gst1-libav/Config.in     |  2 +
->  package/gstreamer1/gst1-libav/gst1-libav.mk | 79 ++---------------------------
->  2 files changed, 7 insertions(+), 74 deletions(-)
+>  package/libnss/libnss.hash | 4 ++--
+>  package/libnss/libnss.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, after tweaking the help text as suggested by Arnout.
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
