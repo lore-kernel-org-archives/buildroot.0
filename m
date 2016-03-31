@@ -1,11 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 31 Mar 2016 08:16:06 +0200
-Subject: [Buildroot] [PATCH v4 5/7] barebox: extract package name
-	argument
-In-Reply-To: <1458513351-6556-6-git-send-email-pieter@boesman.nl>
+Date: Thu, 31 Mar 2016 08:17:47 +0200
+Subject: [Buildroot] [PATCH v4 6/7] barebox: support 2nd config build
+In-Reply-To: <1458513351-6556-7-git-send-email-pieter@boesman.nl>
 References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <1458513351-6556-6-git-send-email-pieter@boesman.nl>
-Message-ID: <CAGm1_kssuqX1mgh=Q4TT6odW0+1ktPBat41X4EMV-nxXx2hgRw@mail.gmail.com>
+ <1458513351-6556-7-git-send-email-pieter@boesman.nl>
+Message-ID: <CAGm1_ksnkxyc7GGM9wLG=Mu_YszjmEv9c9L0MQ1zqO0KUivc4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,244 +12,160 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On Sun, Mar 20, 2016 at 11:35 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> No functional changes: Extracts an argument to the inner-barebox-package
-> function to automatically determine the uppercase package name. This is needed
-> to support a 2nd config build. This results in the following renaming:
->   'BAREBOX' -> '$(1)'
+> Adds support to build barebox with a 2nd config.
 >
-> All barebox packages are meant to be built from the same sources, so related
-> KConfig variables (origin, version and patch directory) are not extracted.
-
-Kconfig
-
+> This is useful for building an SPL (Secondary Program Loader) in addition to
+> the traditional TPL (Tertiary Program Loader). The Beaglebone Black for example
+> has two barebox configurations:
+> - am335x_defconfig builds the full barebox bootloader with device tree, and
+> - am335x_mlo_defconfig builds the smaller MLO bootloader that loads the full
+>   barebox bootloader from the eMMC or SD card.
 >
 > Signed-off-by: Pieter Smith <pieter@boesman.nl>
 
 Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 > ---
->  boot/barebox/barebox.mk | 139 +++++++++++++++++++++++++-----------------------
->  1 file changed, 71 insertions(+), 68 deletions(-)
+>  boot/barebox/Config.in                |  2 +
+>  boot/barebox/barebox-2/Config.in      | 79 +++++++++++++++++++++++++++++++++++
+>  boot/barebox/barebox-2/barebox-2.hash |  1 +
+>  boot/barebox/barebox-2/barebox-2.mk   |  9 ++++
+>  boot/barebox/barebox.mk               |  3 ++
+>  5 files changed, 94 insertions(+)
+>  create mode 100644 boot/barebox/barebox-2/Config.in
+>  create mode 120000 boot/barebox/barebox-2/barebox-2.hash
+>  create mode 100644 boot/barebox/barebox-2/barebox-2.mk
 >
+> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+> index 7769866..e92cdc3 100644
+> --- a/boot/barebox/Config.in
+> +++ b/boot/barebox/Config.in
+> @@ -137,4 +137,6 @@ config BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH
+>           barebox devfs format, stored in the images directory, with
+>           the same name as the directory name given here.
+>
+> +source boot/barebox/barebox-2/Config.in
+> +
+>  endif
+> diff --git a/boot/barebox/barebox-2/Config.in b/boot/barebox/barebox-2/Config.in
+> new file mode 100644
+> index 0000000..5bd8347
+> --- /dev/null
+> +++ b/boot/barebox/barebox-2/Config.in
+> @@ -0,0 +1,79 @@
+> +menuconfig BR2_TARGET_BAREBOX_2
+> +       bool "Build barebox with a 2nd config"
+> +       help
+> +         Build barebox with a 2nd configuration.
+> +
+> +         Useful for building an SPL (Secondary Program Loader) in addition to
+> +         the traditional TPL (Tertiary Program Loader), such as the X-Loader
+> +         or MLO for Texas Instruments processors.
+> +
+> +if BR2_TARGET_BAREBOX_2
+> +
+> +choice
+> +       prompt "Barebox configuration"
+> +       default BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
+> +
+> +config BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
+> +       bool "Using a defconfig"
+> +
+> +config BR2_TARGET_BAREBOX_2_USE_CUSTOM_CONFIG
+> +       bool "Using a custom config file"
+> +
+> +endchoice
+> +
+> +config BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG
+> +       string "board defconfig"
+> +       depends on BR2_TARGET_BAREBOX_2_USE_DEFCONFIG
+> +       help
+> +         Name of the board for which Barebox should be built, without
+> +         the _defconfig suffix.
+> +
+> +
+> +config BR2_TARGET_BAREBOX_2_CUSTOM_CONFIG_FILE
+> +       string "Configuration file path"
+> +       depends on BR2_TARGET_BAREBOX_2_USE_CUSTOM_CONFIG
+> +       help
+> +         Path to the barebox configuration file
+> +
+> +config BR2_TARGET_BAREBOX_2_CONFIG_FRAGMENT_FILES
+> +       string "Additional configuration fragment files"
+> +       help
+> +         A space-separated list of configuration fragment files,
+> +         that will be merged to the main Barebox configuration file.
+> +
+> +config BR2_TARGET_BAREBOX_2_BUILT_IMAGE_FILE
+> +       string "Built image filename"
+> +       default "barebox-flash-image"
+> +       help
+> +         Name of the built barebox image filename in the barebox build or
+> +         build images directory.
+> +
+> +         Set to barebox.bin for barebox versions older than 2012.10.
+> +
+> +config BR2_TARGET_BAREBOX_2_OUTPUT_IMAGE_FILE
+> +       string "Output image filename"
+> +       default "barebox-2.bin"
+> +       help
+> +         Name to use when copying the barebox image to the output/images
+> +         directory.
+> +
+> +config BR2_TARGET_BAREBOX_2_CUSTOM_ENV
+> +       bool "Generate an environment image"
+> +       help
+> +         Generate a custom environment image. This environment will
+> +         contain the variables and scripts to be used at boot by
+> +         barebox.
+> +
+> +config BR2_TARGET_BAREBOX_2_CUSTOM_ENV_PATH
+> +       string "Environment path"
+> +       depends on BR2_TARGET_BAREBOX_2_CUSTOM_ENV
+> +       help
+> +         Path to the directory containing the custom barebox
+> +         environment. Depending on your setup, it will probably be
+> +         based on either the content of the defaultenv or
+> +         defaultenv-2 directories in the barebox source code, plus
+> +         the additions needed. The output will be an image in the
+> +         barebox devfs format, stored in the images directory, with
+> +         the same name as the directory name given here.
+> +
+> +endif
+> diff --git a/boot/barebox/barebox-2/barebox-2.hash b/boot/barebox/barebox-2/barebox-2.hash
+> new file mode 120000
+> index 0000000..b6462b8
+> --- /dev/null
+> +++ b/boot/barebox/barebox-2/barebox-2.hash
+> @@ -0,0 +1 @@
+> +../barebox.hash
+> \ No newline at end of file
+> diff --git a/boot/barebox/barebox-2/barebox-2.mk b/boot/barebox/barebox-2/barebox-2.mk
+> new file mode 100644
+> index 0000000..7a88f93
+> --- /dev/null
+> +++ b/boot/barebox/barebox-2/barebox-2.mk
+> @@ -0,0 +1,9 @@
+> +################################################################################
+> +#
+> +# barebox-2
+> +#
+> +################################################################################
+> +
+> +# Instantiate a 2nd barebox package, built from the same sources as the 1st,
+> +# but with it's own configuration:
+> +$(eval $(call barebox-package))
 > diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index d84c479..8892ab5 100644
+> index 8892ab5..71eb33a 100644
 > --- a/boot/barebox/barebox.mk
 > +++ b/boot/barebox/barebox.mk
-> @@ -7,135 +7,138 @@
->  ################################################################################
->  # inner-barebox-package -- generates the KConfig logic and make targets needed
->  # to support a barebox package. All barebox packages are built from the same
-> -# source (origin, version and patches).
-> +# source (origin, version and patches). The remainder of the package
-> +# configuration is unique to each barebox package.
-> +#
-> +#  argument 1 is the uppercase package name (used for variable name-space)
->  ################################################################################
->
->  define inner-barebox-package
->
-> -BAREBOX_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
-> +$(1)_VERSION = $$(call qstrip,$$(BR2_TARGET_BAREBOX_VERSION))
->
-> -ifeq ($$(BAREBOX_VERSION),custom)
-> +ifeq ($$($(1)_VERSION),custom)
->  # Handle custom Barebox tarballs as specified by the configuration
-> -BAREBOX_TARBALL = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
-> -BAREBOX_SITE = $$(patsubst %/,%,$$(dir $$(BAREBOX_TARBALL)))
-> -BAREBOX_SOURCE = $$(notdir $$(BAREBOX_TARBALL))
-> -BR_NO_CHECK_HASH_FOR += $$(BAREBOX_SOURCE)
-> +$(1)_TARBALL = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_TARBALL_LOCATION))
-> +$(1)_SITE = $$(patsubst %/,%,$$(dir $$($(1)_TARBALL)))
-> +$(1)_SOURCE = $$(notdir $$($(1)_TARBALL))
-> +BR_NO_CHECK_HASH_FOR += $$($(1)_SOURCE)
->  else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
-> -BAREBOX_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
-> -BAREBOX_SITE_METHOD = git
-> +$(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
-> +$(1)_SITE_METHOD = git
->  else
->  # Handle stable official Barebox versions
-> -BAREBOX_SOURCE = barebox-$$(BAREBOX_VERSION).tar.bz2
-> -BAREBOX_SITE = http://www.barebox.org/download
-> +$(1)_SOURCE = barebox-$$($(1)_VERSION).tar.bz2
-> +$(1)_SITE = http://www.barebox.org/download
->  ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_VERSION),y)
-> -BR_NO_CHECK_HASH_FOR += $$(BAREBOX_SOURCE)
-> +BR_NO_CHECK_HASH_FOR += $$($(1)_SOURCE)
->  endif
->  endif
->
-> -BAREBOX_DEPENDENCIES = host-lzop
-> -BAREBOX_LICENSE = GPLv2 with exceptions
-> -BAREBOX_LICENSE_FILES = COPYING
-> +$(1)_DEPENDENCIES = host-lzop
-> +$(1)_LICENSE = GPLv2 with exceptions
-> +$(1)_LICENSE_FILES = COPYING
->
->  ifneq ($$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR)),)
-> -define BAREBOX_APPLY_CUSTOM_PATCHES
-> +define $(1)_APPLY_CUSTOM_PATCHES
->         $$(APPLY_PATCHES) $$(@D) \
->                 $$(BR2_TARGET_BAREBOX_CUSTOM_PATCH_DIR) \*.patch
->  endef
->
-> -BAREBOX_POST_PATCH_HOOKS += BAREBOX_APPLY_CUSTOM_PATCHES
-> +$(1)_POST_PATCH_HOOKS += $(1)_APPLY_CUSTOM_PATCHES
->  endif
->
-> -BAREBOX_INSTALL_IMAGES = YES
-> -ifneq ($$(BR2_TARGET_BAREBOX_BAREBOXENV),y)
-> -BAREBOX_INSTALL_TARGET = NO
-> +$(1)_INSTALL_IMAGES = YES
-> +ifneq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
-> +$(1)_INSTALL_TARGET = NO
->  endif
->
->  ifeq ($$(KERNEL_ARCH),i386)
-> -BAREBOX_ARCH = x86
-> +$(1)_ARCH = x86
->  else ifeq ($$(KERNEL_ARCH),x86_64)
-> -BAREBOX_ARCH = x86
-> +$(1)_ARCH = x86
->  else ifeq ($$(KERNEL_ARCH),powerpc)
-> -BAREBOX_ARCH = ppc
-> +$(1)_ARCH = ppc
->  else
-> -BAREBOX_ARCH = $$(KERNEL_ARCH)
-> +$(1)_ARCH = $$(KERNEL_ARCH)
->  endif
->
-> -BAREBOX_MAKE_FLAGS = ARCH=$$(BAREBOX_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
-> -BAREBOX_MAKE_ENV = $$(TARGET_MAKE_ENV)
-> +$(1)_MAKE_FLAGS = ARCH=$$($(1)_ARCH) CROSS_COMPILE="$$(TARGET_CROSS)"
-> +$(1)_MAKE_ENV = $$(TARGET_MAKE_ENV)
->
-> -ifeq ($$(BR2_TARGET_BAREBOX_USE_DEFCONFIG),y)
-> -BAREBOX_KCONFIG_DEFCONFIG = $$(call qstrip,$$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))_defconfig
-> -else ifeq ($$(BR2_TARGET_BAREBOX_USE_CUSTOM_CONFIG),y)
-> -BAREBOX_KCONFIG_FILE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE))
-> +ifeq ($$(BR2_TARGET_$(1)_USE_DEFCONFIG),y)
-> +$(1)_KCONFIG_DEFCONFIG = $$(call qstrip,$$(BR2_TARGET_$(1)_BOARD_DEFCONFIG))_defconfig
-> +else ifeq ($$(BR2_TARGET_$(1)_USE_CUSTOM_CONFIG),y)
-> +$(1)_KCONFIG_FILE = $$(call qstrip,$$(BR2_TARGET_$(1)_CUSTOM_CONFIG_FILE))
->  endif
->
-> -BAREBOX_KCONFIG_FRAGMENT_FILES = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CONFIG_FRAGMENT_FILES))
-> -BAREBOX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-> -BAREBOX_KCONFIG_OPTS = $$(BAREBOX_MAKE_FLAGS)
-> +$(1)_KCONFIG_FRAGMENT_FILES = $$(call qstrip,$$(BR2_TARGET_$(1)_CONFIG_FRAGMENT_FILES))
-> +$(1)_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
-> +$(1)_KCONFIG_OPTS = $$($(1)_MAKE_FLAGS)
->
-> -ifeq ($$(BR2_TARGET_BAREBOX_BAREBOXENV),y)
-> -define BAREBOX_BUILD_BAREBOXENV_CMDS
-> +ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
-> +define $(1)_BUILD_BAREBOXENV_CMDS
->         $$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
->                 $$(@D)/scripts/bareboxenv.c
->  endef
->  endif
->
-> -ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_ENV),y)
-> -BAREBOX_ENV_NAME = $$(notdir $$(call qstrip,\
-> -       $$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)))
-> -define BAREBOX_BUILD_CUSTOM_ENV
-> +ifeq ($$(BR2_TARGET_$(1)_CUSTOM_ENV),y)
-> +$(1)_ENV_NAME = $$(notdir $$(call qstrip,\
-> +       $$(BR2_TARGET_$(1)_CUSTOM_ENV_PATH)))
-> +define $(1)_BUILD_CUSTOM_ENV
->         $$(@D)/scripts/bareboxenv -s \
-> -               $$(call qstrip, $$(BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH)) \
-> -               $$(@D)/$$(BAREBOX_ENV_NAME)
-> +               $$(call qstrip, $$(BR2_TARGET_$(1)_CUSTOM_ENV_PATH)) \
-> +               $$(@D)/$$($(1)_ENV_NAME)
->  endef
-> -define BAREBOX_INSTALL_CUSTOM_ENV
-> -       cp $$(@D)/$$(BAREBOX_ENV_NAME) $$(BINARIES_DIR)
-> +define $(1)_INSTALL_CUSTOM_ENV
-> +       cp $$(@D)/$$($(1)_ENV_NAME) $$(BINARIES_DIR)
->  endef
->  endif
->
-> -define BAREBOX_BUILD_CMDS
-> -       $$(BAREBOX_BUILD_BAREBOXENV_CMDS)
-> -       $$(TARGET_MAKE_ENV) $$(MAKE) $$(BAREBOX_MAKE_FLAGS) -C $$(@D)
-> -       $$(BAREBOX_BUILD_CUSTOM_ENV)
-> +define $(1)_BUILD_CMDS
-> +       $$($(1)_BUILD_BAREBOXENV_CMDS)
-> +       $$(TARGET_MAKE_ENV) $$(MAKE) $$($(1)_MAKE_FLAGS) -C $$(@D)
-> +       $$($(1)_BUILD_CUSTOM_ENV)
->  endef
->
-> -define BAREBOX_INSTALL_IMAGES_CMDS
-> -       if test -e $$(@D)/$$(call qstrip,$$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
-> -               cp -L $$(@D)/$$(call qstrip,$$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) \
-> -                     $$(BINARIES_DIR)/$$(call qstrip,$$(BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE)) ; \
-> -       elif test -e $$(@D)/images/$$(call qstrip,$$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
-> -               cp $$(@D)/images/$$(call qstrip,$$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) \
-> -                  $$(BINARIES_DIR)/$$(call qstrip,$$(BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE)) ; \
-> +define $(1)_INSTALL_IMAGES_CMDS
-> +       if test -e $$(@D)/$$(call qstrip,$$(BR2_TARGET_$(1)_BUILT_IMAGE_FILE)); then \
-> +               cp -L $$(@D)/$$(call qstrip,$$(BR2_TARGET_$(1)_BUILT_IMAGE_FILE)) \
-> +                     $$(BINARIES_DIR)/$$(call qstrip,$$(BR2_TARGET_$(1)_OUTPUT_IMAGE_FILE)) ; \
-> +       elif test -e $$(@D)/images/$$(call qstrip,$$(BR2_TARGET_$(1)_BUILT_IMAGE_FILE)); then \
-> +               cp $$(@D)/images/$$(call qstrip,$$(BR2_TARGET_$(1)_BUILT_IMAGE_FILE)) \
-> +                  $$(BINARIES_DIR)/$$(call qstrip,$$(BR2_TARGET_$(1)_OUTPUT_IMAGE_FILE)) ; \
->         else \
-> -               echo "error: Specified built image file not found: $$(call qstrip,$$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE))" >&2 ; \
-> +               echo "error: Specified built image file not found: $$(call qstrip,$$(BR2_TARGET_$(1)_BUILT_IMAGE_FILE))" >&2 ; \
->                 echo "       in: $$(@D)/" >&2 ; \
->                 echo "       or: $$(@D)/images/" >&2 ; \
-> -               echo "       Check your BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE setting." >&2 ; \
-> +               echo "       Check your BR2_TARGET_$(1)_BUILT_IMAGE_FILE setting." >&2 ; \
->                 exit 1 ; \
->         fi
-> -       $$(BAREBOX_INSTALL_CUSTOM_ENV)
-> +       $$($(1)_INSTALL_CUSTOM_ENV)
->  endef
->
-> -ifeq ($$(BR2_TARGET_BAREBOX_BAREBOXENV),y)
-> -define BAREBOX_INSTALL_TARGET_CMDS
-> +ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
-> +define $(1)_INSTALL_TARGET_CMDS
->         cp $$(@D)/bareboxenv $$(TARGET_DIR)/usr/bin
->  endef
->  endif
->
->  # Checks to give errors that the user can understand
->  # Must be before we call to kconfig-package
-> -ifeq ($$(BR2_TARGET_BAREBOX)$$(BR_BUILDING),yy)
-> +ifeq ($$(BR2_TARGET_$(1))$$(BR_BUILDING),yy)
->  # We must use the user-supplied kconfig value, because
-> -# BAREBOX_KCONFIG_DEFCONFIG will at least contain the
-> +# $(1)_KCONFIG_DEFCONFIG will at least contain the
->  # trailing _defconfig
-> -ifeq ($$(or $$(BAREBOX_KCONFIG_FILE),$$(call qstrip,$$(BR2_TARGET_BAREBOX_BOARD_DEFCONFIG))),)
-> -$$(error No Barebox config. Check your BR2_TARGET_BAREBOX_BOARD_DEFCONFIG or BR2_TARGET_BAREBOX_CUSTOM_CONFIG_FILE settings)
-> +ifeq ($$(or $$($(1)_KCONFIG_FILE),$$(call qstrip,$$(BR2_TARGET_$(1)_BOARD_DEFCONFIG))),)
-> +$$(error No Barebox config. Check your BR2_TARGET_$(1)_BOARD_DEFCONFIG or BR2_TARGET_$(1)_CUSTOM_CONFIG_FILE settings)
->  endif
-> -ifndef BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE
-> -$$(error No barebox built image filename specified. Check your BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE setting)
-> +ifndef BR2_TARGET_$(1)_BUILT_IMAGE_FILE
-> +$$(error No barebox built image filename specified. Check your BR2_TARGET_$(1)_BUILT_IMAGE_FILE setting)
->  endif
-> -ifndef BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
-> -$$(error No barebox output image filename specified. Check your BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE setting)
-> +ifndef BR2_TARGET_$(1)_OUTPUT_IMAGE_FILE
-> +$$(error No barebox output image filename specified. Check your BR2_TARGET_$(1)_OUTPUT_IMAGE_FILE setting)
->  endif
->  endif
->
-> @@ -146,7 +149,7 @@ endef
->  # barebox-package -- the target generator macro for barebox packages
->  ################################################################################
->
-> -barebox-package=$(call inner-barebox-package)
-> +barebox-package=$(call inner-barebox-package,$(call UPPERCASE,$(pkgname)))
+> @@ -153,3 +153,6 @@ barebox-package=$(call inner-barebox-package,$(call UPPERCASE,$(pkgname)))
 >
 >  # instantiate this barebox package
 >  $(eval $(call barebox-package))
+> +
+> +# add the 2nd barebox package build
+> +include boot/barebox/barebox-2/barebox-2.mk
 > --
 > 2.5.0
 >
