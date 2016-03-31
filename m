@@ -1,47 +1,44 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 31 Mar 2016 21:01:01 +0200
-Subject: [Buildroot] [PATCH] yajl: disable parallel build
-Message-ID: <1459450861-1074-1-git-send-email-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Mar 2016 21:02:35 +0200
+Subject: [Buildroot] [git commit] gnupg2: bump to version 2.0.30
+Message-ID: <20160331190241.2A38E81D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The yajl build system contains a race condition, which gets triggered by
-high BR2_JLEVEL settings - It tries to link the executable gen-extra-close
-against libyajl before it is created:
+commit: https://git.buildroot.net/buildroot/commit/?id=0ab0d80c7cc51b44aaee66dbec1b9d4854d6855f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[ 21%] Linking C executable gen-extra-close
-[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
-/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
-
-Fix it by disabling parallel build.
-
-Fixes:
-http://autobuild.buildroot.net/results/a9b/a9b5209377acb51e69f376e0c008ee71fe00397a/
-http://autobuild.buildroot.net/results/55f/55fe22463d49addb42b635d10be5176522f4a561/
-http://autobuild.buildroot.net/results/808/808acca0cfed93465845c2aa055a7a4fc56a8a17/
-http://autobuild.buildroot.net/results/b92/b92a9c84b71a8a2d022d307245ca6be36a000e6c/
-http://autobuild.buildroot.net/results/55d/55df698ab53f7d94235166e8576eb681ed68668e/
-.. and more.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/yajl/yajl.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/gnupg2/gnupg2.hash | 6 ++++--
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
-index 7770e86..4346e42 100644
---- a/package/yajl/yajl.mk
-+++ b/package/yajl/yajl.mk
-@@ -11,4 +11,7 @@ YAJL_LICENSE = ISC
- YAJL_LICENSE_FILES = COPYING
- YAJL_PATCH = https://github.com/vriera/yajl/commit/6d09f11b8fd358cab0e31b965327e64a599f9ce9.patch
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 1219338..67f7d9d 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,2 +1,4 @@
+-# From https://lists.gnu.org/archive/html/info-gnu/2015-09/msg00001.html
+-sha1 87eb0df18f9953675f979405a1af10ab6c5322b3  gnupg-2.0.29.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2016q1/000385.html
++sha1	a9f024588c356a55e2fd413574bfb55b2e18794a	gnupg-2.0.30.tar.bz2
++# Calculated based on the hash above
++sha256	e329785a4f366ba5d72c2c678a7e388b0892ac8440c2f4e6810042123c235d71	gnupg-2.0.30.tar.bz2
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 8d4f373..763e945 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Parallel build is broken
-+YAJL_MAKE = $(MAKE1)
-+
- $(eval $(cmake-package))
--- 
-2.8.0
+-GNUPG2_VERSION = 2.0.29
++GNUPG2_VERSION = 2.0.30
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = ftp://ftp.gnupg.org/gcrypt/gnupg
+ GNUPG2_LICENSE = GPLv3+
