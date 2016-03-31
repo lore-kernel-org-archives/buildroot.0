@@ -1,42 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 18:30:31 +0200
-Subject: [Buildroot] [PATCH] norm: fix build failure with old headers
-In-Reply-To: <56FD4EE5.9000701@zacarias.com.ar>
-References: <1459431938-28257-1-git-send-email-gustavo@zacarias.com.ar>
- <20160331181848.00984a4f@free-electrons.com>
- <56FD4EE5.9000701@zacarias.com.ar>
-Message-ID: <20160331183031.503a0e22@free-electrons.com>
+Date: Thu, 31 Mar 2016 18:38:37 +0200
+Subject: [Buildroot] [git commit] libdrm: add vc4 (Raspberry Pi) option
+Message-ID: <20160331163901.7F75D81D67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=78efe747c51b0e7068941fc2629b28031a9321f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 31 Mar 2016 13:23:01 -0300, Gustavo Zacarias wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/libdrm/Config.in | 6 ++++++
+ package/libdrm/libdrm.mk | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-> Indeed it's probably not acceptable for old netfilter_queue 
-> compatibility, though i made it the quick way since it was polluting the 
-> autobuilders.
-
-Sure. That's also why I applied.
-
-> It's waf, my famous friend, i'll try to cook up a failproof test for it, 
-> unfortunately netfilter_queue doesn't version the API in a visible way, 
-> so maybe a pkg-config though i need to consult the author/maintainer 
-> since it would be a new dependency to build.
-
-I think version-based checks are broken. You should instead have a
-check that actually tries to build a small piece of code that tests if
-the API is old/new and see if the builds succeeds/fails.
-
-But yeah, waf. Good luck.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/libdrm/Config.in b/package/libdrm/Config.in
+index 445a85b..343a2ed 100644
+--- a/package/libdrm/Config.in
++++ b/package/libdrm/Config.in
+@@ -69,6 +69,12 @@ config BR2_PACKAGE_LIBDRM_TEGRA
+ 	help
+ 	  Install NVIDIA Tegra driver using an experimental API.
+ 
++config BR2_PACKAGE_LIBDRM_VC4
++	bool "vc4"
++	depends on BR2_arm
++	help
++	  Install vc4 (Raspberry Pi) driver.
++
+ endmenu
+ 
+ endif
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 99a78d2..4082a19 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -76,6 +76,12 @@ else
+ LIBDRM_CONF_OPTS += --disable-tegra-experimental-api
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDRM_VC4),y)
++LIBDRM_CONF_OPTS += --enable-vc4
++else
++LIBDRM_CONF_OPTS += --disable-vc4
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ LIBDRM_CONF_OPTS += --enable-udev
+ LIBDRM_DEPENDENCIES += udev
