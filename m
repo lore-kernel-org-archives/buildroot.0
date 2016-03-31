@@ -1,40 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 21:00:10 +0200
-Subject: [Buildroot] [PATCH v3 05/10] toolchain-buildroot: don't show musl
-	on noMMU platforms
+Date: Thu, 31 Mar 2016 21:00:11 +0200
+Subject: [Buildroot] [PATCH v3 06/10] package/Makefile.in: adjust LDFLAGS
+	for elf2flt
 In-Reply-To: <1459450815-6494-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1459450815-6494-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1459450815-6494-6-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1459450815-6494-7-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While musl has recently gained noMMU support for the sh2 platform, we
-don't support this yet. So for the time being, let's not show musl as
-an available C library on noMMU platforms. This is for example
-important on ARM noMMU: ARM is supported by musl, but not its noMMU
-variants.
+So far, our LDFLAGS for the BR2_BINFMT_FLAT case were only used on
+Blackfin. However, passing -elf2flt in LDFLAGS is wrong. Indeed,
+LDFLAGS are not linker flags, but flags passed to the compiler when
+linking.
+
+If you pass -elf2flt to the compiler when linking, it is understood as
+"-e lf2flt", i.e "the entry point is named lf2flt", which isn't
+exactly the intention. We in fact need to pass -Wl,-elf2flt in LDFLAGS
+as well, so that the compiler passes -elf2flt down to the linker.
+
+For some reason, this option does not cause an issue with the Blackfin
+toolchain, but it does with either a Buildroot toolchain for Cortex-M
+or an OSELAS toolchain for Cortex-M. We have verified that passing
+-Wl,-elf2flt continues to work with the Blackfin toolchain.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- toolchain/toolchain-buildroot/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index ea290eb..0c40801 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -94,6 +94,9 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- 	depends on !BR2_powerpc_SPE # not supported, build breaks
- 	# Unsupported for MIPS R6
- 	depends on !BR2_mips_32r6 && !BR2_mips_64r6
-+	# sh2 nommu is supported by musl, but we don't have support
-+	# for it in Buildroot.
-+	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  This option selects musl as the C library for the
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dd595e2..616bdd0 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -145,7 +145,7 @@ TARGET_CFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FL
+ 	-Wl$(comma)-elf2flt)
+ TARGET_CXXFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),\
+ 	-Wl$(comma)-elf2flt)
+-TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-elf2flt)
++TARGET_LDFLAGS += $(if $($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt=-s$($(PKG)_FLAT_STACKSIZE),-Wl$(comma)-elf2flt)
+ endif
+ 
+ ifeq ($(BR2_BINFMT_FLAT_SHARED),y)
 -- 
 2.6.4
