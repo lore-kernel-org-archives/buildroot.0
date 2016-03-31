@@ -1,358 +1,68 @@
-From: Jan Heylen <heyleke@gmail.com>
-Date: Thu, 31 Mar 2016 14:26:50 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: wrap 'ld' so that a ld
- emulation can be specified
-In-Reply-To: <56FC4B5F.1040204@mind.be>
-References: <1455960835-28709-1-git-send-email-heyleke@gmail.com>
- <56FC4B5F.1040204@mind.be>
-Message-ID: <CAGszK3gA60QWjpsyDd29U6T68fr5PvyNCLwpz72GTWBhX5yc9w@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 31 Mar 2016 10:45:38 -0300
+Subject: [Buildroot] [PATCH] norm: fix build failure with old headers
+Message-ID: <1459431938-28257-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 30, 2016 at 11:55 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 02/20/16 10:33, Jan Heylen wrote:
->>
->> On some architectures, such as MIPS, the linker supports several 'ld
->> emulation', and depending on which flavor of the architecture you're
->> building for, one should be passing the proper -m <something> option
->> to ld, otherwise ld defaults to the default emulation, which may not
->> necessarily be compatible with the object files that are being
->> linked.
->>
->>    So, we extend the toolchain wrapper to also wrap the ld linker, and
->>    allow a BR_LD_EMULATION variable to be passed to it.
->
->
->  Why this sudden indentation?
+The version check for the nfq_get_payload prototype is wrong since it's
+done against linux headers when in fact it changed with the 1.0.0
+release of libnetfilter_queue, leading to build failure in toolchains
+that have old headers when libnetfilter_queue is present. Fixes:
+http://autobuild.buildroot.net/results/c0e/c0e897a6db888d4a7e0302cdc1e0cbec7d1e88f3/
 
-probably a typo, don't remember any reason
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ .../0002-protolib-drop-linux-version-check.patch   | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/norm/0002-protolib-drop-linux-version-check.patch
 
->
->  I would split this off into a separate patch, i.e. patch 1 only adds the ld
-> wrapper, patch 2 introduces LD_EMULATION.
->
->>
->> Based upon patch from Thomas Petazzoni:
->> http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/60942
->>
->> Signed-off-by: Jan Heylen <heyleke@gmail.com>
->> ---
->>   arch/Config.in                                     |  3 +
->>   toolchain/toolchain-external/toolchain-external.mk |  6 +-
->
->
->  You only do this for the external toolchain, it should probably be done for
-> the internal toolchain as well. However, that is more tricky...
->
-> 1. Where should it be done? It's currently done as a post-install hook of
-> host-gcc-initial and again for host-gcc-final. For the ld wrapper, it would
-> make sense to do it as part of host-binutils. However, the wrapper itself is
-> currently compiled in host-gcc-initial, which comes after host-binutils...
-
-Without looking into the details: would it be ok to initially not do
-it, (as host-binutils is not affected itself) and only do it after
-host-gcc-initial. Building host-binutils only, and linking a target
-package with LD_EMULATION without host-gcc build yet would be a
-strange use case?
-
-And, making it available for internal toolchains as well, would mean
-moving LD_EMULATION to toolchain-wrapper.mk?
-
->
-> 2. For external toolchains, gcc itself will call the unwrapped ld, because
-> it refers directly to the ld path at installation time. However, for
-> internal toolchains, it refers to the host dir so to the wrapped ld.
->
-> 3. Do the workarounds that we (I) added for
-> internal-toolchain-used-as-external-toolchain still work with the ld
-> wrapper?
-
-I looked up this patch you did, and verified (by reading the code),
-this should be handled generically with BR_CROSS_PATH_SUFFIX which
-gets defined when using a buildroot toolchain externally.
-
->
->  Actually, it turns out that 2. is not valid: gcc will call
-> host/usr/<tuple>/bin/ld, which is not the wrapped one. One less thing to
-> worry about :-)
->
->  Note that you can add the wrapper for the external and the internal
-> toolchain in separate patches as well.
->
->
->>   toolchain/toolchain-wrapper.c                      | 75
->> ++++++++++++++--------
->>   3 files changed, 55 insertions(+), 29 deletions(-)
->>
->> diff --git a/arch/Config.in b/arch/Config.in
->> index 401bd28..50816c6 100644
->> --- a/arch/Config.in
->> +++ b/arch/Config.in
->> @@ -266,6 +266,9 @@ config BR2_GCC_TARGET_CPU
->>   config BR2_GCC_TARGET_CPU_REVISION
->>         string
->>
->> +config BR2_LD_TARGET_EMULATION
->> +       string
->> +
->>   # The value of this option will be passed as --with-fpu=<value> when
->>   # building gcc (internal backend) or -mfpu=<value> in the toolchain
->>   # wrapper (external toolchain)
->> diff --git a/toolchain/toolchain-external/toolchain-external.mk
->> b/toolchain/toolchain-external/toolchain-external.mk
->> index 6c3022a..9396377 100644
->> --- a/toolchain/toolchain-external/toolchain-external.mk
->> +++ b/toolchain/toolchain-external/toolchain-external.mk
->> @@ -182,6 +182,7 @@ CC_TARGET_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_ABI))
->>   CC_TARGET_FPU_ := $(call qstrip,$(BR2_GCC_TARGET_FPU))
->>   CC_TARGET_FLOAT_ABI_ := $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
->>   CC_TARGET_MODE_ := $(call qstrip,$(BR2_GCC_TARGET_MODE))
->> +LD_TARGET_EMULATION_:=$(call qstrip,$(BR2_LD_TARGET_EMULATION))
->
->
->  There should be a space before and after :=
->
->  Also it should be = instead of :=, but since the other assignments don't do
-> that, let's keep it.
->
->
->>
->>   # march/mtune/floating point mode needs to be passed to the external
->> toolchain
->>   # to select the right multilib variant
->> @@ -213,6 +214,9 @@ ifneq ($(CC_TARGET_MODE_),)
->>   TOOLCHAIN_EXTERNAL_CFLAGS += -m$(CC_TARGET_MODE_)
->>   TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS +=
->> -DBR_MODE='"$(CC_TARGET_MODE_)"'
->>   endif
->> +ifneq ($(LD_TARGET_EMULATION_),)
->> +TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS +=
->> -DBR_LD_EMULATION='"$(LD_TARGET_EMULATION_)"'
->> +endif
->>   ifeq ($(BR2_BINFMT_FLAT),y)
->>   TOOLCHAIN_EXTERNAL_CFLAGS += -Wl,-elf2flt
->>   TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_BINFMT_FLAT
->> @@ -711,7 +715,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
->>                 *-ar|*-ranlib|*-nm) \
->>                         ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%../..%')
->> .; \
->>                         ;; \
->> -               *cc|*cc-*|*++|*++-*|*cpp) \
->> +               *cc|*cc-*|*++|*++-*|*cpp|*ld) \
->>                         ln -sf toolchain-wrapper $$base; \
->>                         ;; \
->>                 *gdb|*gdbtui) \
->> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
->> index 887058f..25ce640 100644
->> --- a/toolchain/toolchain-wrapper.c
->> +++ b/toolchain/toolchain-wrapper.c
->> @@ -42,7 +42,7 @@ static char sysroot[PATH_MAX];
->>    */
->>   #define EXCLUSIVE_ARGS        3
->>
->> -static char *predef_args[] = {
->> +static char *gcc_predef_args[] = {
->>   #ifdef BR_CCACHE
->>         ccache_path,
->>   #endif
->> @@ -80,6 +80,13 @@ static char *predef_args[] = {
->>   #endif
->>   };
->>
->> +static char *ld_predef_args[] = {
->> +       path,
->> +#ifdef BR_LD_EMULATION
->> +       "-m", BR_LD_EMULATION,
->> +#endif
->
->
->  In addition to these, you should take over some more options from gcc:
-> BR_BINFMT_FLAT -> -elf2flt
-> BR_MIPS_TARGET_LITTLE_ENDIAN -> -EB
-> BR_MIPS/ARC_TARGET_BIG_ENDIAN -> -EL
->
->  Probably also --sysroot, but I'm not sure what will happen if an external
-> toolchain's binutils wasn't configured with --with-sysroot.
-I see, would be logical to add it, bit strange Thomas Petazzoni didn't
-add it in the original? But the issue
-you describe is also a valid issue:
-man ld
-'--sysroot=directory
-Use directory as the location of the sysroot, overriding the
-configure-time default. This option is only supported by linkers that
-were configured using --with-sysroot.'
-
-Don't know how I should proceed with this case...
-
->
->  Also we want to add BR2_TARGET_LDFLAGS as BR_ADDITIONAL_LDFLAGS, like we do
-> for CFLAGS.
-Would BR_ADDITIONAL_LDFLAGS then remove the -Wl, and pass those to the linker?
-
-And more general, do we still need LD_FLAGS being set, or should we
-pass them too directly via the wrapper? (like was done for the
-OPTIMIZATION flags in 50f44d877e5246198e692ecab3579ec36779da74)
-Although that would probably change the behavior in various makefiles
-of packages, depending how they use LD_FLAGS?
-
-Sorry, more questions than answers...
-
->
->> +};
->> +
->>   static void check_unsafe_path(const char *path, int paranoid)
->>   {
->>         char **c;
->> @@ -108,7 +115,8 @@ int main(int argc, char **argv)
->>         char *env_debug;
->>         char *paranoid_wrapper;
->>         int paranoid;
->> -       int ret, i, count = 0, debug;
->> +       char **predef_args;
->> +       int ret, i, predef_args_sz, count = 0, debug;
->
->
->  Small nit: I consider it bad style to declare multiple variables in a
-> single line (especially when one of them is initialised!), so let's not make
-> that worse :-). I.e., put predef_args_sz on a separate line.
->
->>
->>         /* Calculate the relative paths */
->>         basename = strrchr(progpath, '/');
->> @@ -169,7 +177,15 @@ int main(int argc, char **argv)
->>                 return 3;
->>         }
->>
->> -       cur = args = malloc(sizeof(predef_args) +
->> +       if (!strncmp("-ld", basename + strlen(basename) - 3, 3)) {
->
->
->  Actually, strcmp would be OK here, because it's at the end of the string.
-> But explaining that takes more time than just adding the n :-)
->
->  We will eventually also have gold, so don't match the -. That anyway also
-> corresponds to the pattern you use to create the symlink to the wrapper.
->
->> +               predef_args_sz = sizeof(ld_predef_args);
->> +               predef_args = ld_predef_args;
->> +       } else {
->> +               predef_args_sz = sizeof(gcc_predef_args);
->> +               predef_args = gcc_predef_args;
->> +       }
->> +
->> +       cur = args = malloc(predef_args_sz +
->>                             (sizeof(char *) * (argc + EXCLUSIVE_ARGS)));
->>         if (args == NULL) {
->>                 perror(__FILE__ ": malloc");
->> @@ -177,42 +193,45 @@ int main(int argc, char **argv)
->>         }
->>
->>         /* start with predefined args */
->> -       memcpy(cur, predef_args, sizeof(predef_args));
->> -       cur += sizeof(predef_args) / sizeof(predef_args[0]);
->> +       memcpy(cur, predef_args, predef_args_sz);
->> +       cur += predef_args_sz / sizeof(char *);
->>
->> +       /* following extras should only happen for non-ld wrappers */
->> +       if (predef_args != ld_predef_args) {
->
->
->  Since you have this condition, perhaps it's better to store the result of
-> the strncmp in a bool and use a ?: in the one place where predef_args is
-> used (in the memcpy). I think that would be more readable.
->
->
->>   #ifdef BR_FLOAT_ABI
->> -       /* add float abi if not overridden in args */
->> -       for (i = 1; i < argc; i++) {
->> -               if (!strncmp(argv[i], "-mfloat-abi=",
->> strlen("-mfloat-abi=")) ||
->> -                   !strcmp(argv[i], "-msoft-float") ||
->> -                   !strcmp(argv[i], "-mhard-float"))
->> -                       break;
->> -       }
->> +               /* add float abi if not overridden in args */
->> +               for (i = 1; i < argc; i++) {
->> +                       if (!strncmp(argv[i], "-mfloat-abi=",
->> strlen("-mfloat-abi=")) ||
->> +                                       !strcmp(argv[i], "-msoft-float")
->> ||
->> +                                       !strcmp(argv[i], "-mhard-float"))
->> +                               break;
->> +               }
->>
->> -       if (i == argc)
->> -               *cur++ = "-mfloat-abi=" BR_FLOAT_ABI;
->> +               if (i == argc)
->> +                       *cur++ = "-mfloat-abi=" BR_FLOAT_ABI;
->>   #endif
->>
->>   #if defined(BR_ARCH) || \
->> -    defined(BR_CPU)
->> -       /* Add our -march/cpu flags, but only if none of
->> -        * -march/mtune/mcpu are already specified on the commandline
->> -        */
->> -       for (i = 1; i < argc; i++) {
->> -               if (!strncmp(argv[i], "-march=", strlen("-march=")) ||
->> -                   !strncmp(argv[i], "-mtune=", strlen("-mtune=")) ||
->> -                   !strncmp(argv[i], "-mcpu=",  strlen("-mcpu=" )))
->> -                       break;
->> -       }
->> -       if (i == argc) {
->> +               defined(BR_CPU)
->> +               /* Add our -march/cpu flags, but only if none of
->> +                * -march/mtune/mcpu are already specified on the
->> commandline
->> +                */
->> +               for (i = 1; i < argc; i++) {
->> +                       if (!strncmp(argv[i], "-march=",
->> strlen("-march=")) ||
->> +                                       !strncmp(argv[i], "-mtune=",
->> strlen("-mtune=")) ||
->> +                                       !strncmp(argv[i], "-mcpu=",
->> strlen("-mcpu=" )))
->> +                               break;
->> +               }
->> +               if (i == argc) {
->>   #ifdef BR_ARCH
->> -               *cur++ = "-march=" BR_ARCH;
->> +                       *cur++ = "-march=" BR_ARCH;
->>   #endif
->>   #ifdef BR_CPU
->> -               *cur++ = "-mcpu=" BR_CPU;
->> +                       *cur++ = "-mcpu=" BR_CPU;
->>   #endif
->> -       }
->> +               }
->>   #endif /* ARCH || CPU */
->> +       }
->>
->>         paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
->>         if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
->>
->
->  BR_NO_CCACHE handling should also be skipped for ld, since
-> ld_predef_args[0] is NOT ccache. Otherwise you'll get spectacular results
-> when BR_NO_CCACHE is exported...
->
->  Probably the other things under CCACHE ifdefs should not be done for ld
-> either, though they don't really hurt.
-Ok, I'll rework the patch according to your comments, and think a bit
-more on the open points.
-
-Jan
-
->
->  Regards,
->  Arnout
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/norm/0002-protolib-drop-linux-version-check.patch b/package/norm/0002-protolib-drop-linux-version-check.patch
+new file mode 100644
+index 0000000..7852a30
+--- /dev/null
++++ b/package/norm/0002-protolib-drop-linux-version-check.patch
+@@ -0,0 +1,38 @@
++The char * to unsigned char * change happened for the libnetfilter_queue
++1.0.0 release, not the linux headers.
++So drop the linux headers version check since it causes more harm than
++good by trying the old API when the toolchain uses old linux headers
++with a new-enough libnetfilter_queue.
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++diff -Nura norm-1.5r6.orig/protolib/src/linux/linuxDetour.cpp norm-1.5r6/protolib/src/linux/linuxDetour.cpp
++--- norm-1.5r6.orig/protolib/src/linux/linuxDetour.cpp	2016-03-31 10:17:20.674745597 -0300
+++++ norm-1.5r6/protolib/src/linux/linuxDetour.cpp	2016-03-31 10:36:58.923084395 -0300
++@@ -16,8 +16,6 @@
++ #include <linux/if_ether.h>  // for ETH_P_IP
++ #include <net/if_arp.h>   // for ARPHRD_ETHER
++ 
++-#include <linux/version.h>  // for LINUX_VERSION_CODE
++-
++ /** NOTES: 
++  *
++  * 1) This newer implementation of LinuxDetour uses netfilter_queue
++@@ -591,17 +589,7 @@
++     
++     // Finally record packet length and cache pointer to IP packet data
++     
++-    // A change to the nfq_get_payload() prototype seemed to kick in around Linux header files
++-    // version 3.6?  (This will probably need to be fine tuned for the right version threshold.)
++-
++-#define LINUX_VERSION_MAJOR (LINUX_VERSION_CODE/65536)
++-#define LINUX_VERSION_MINOR ((LINUX_VERSION_CODE - (LINUX_VERSION_MAJOR*65536)) / 256)
++-
++-#if ((LINUX_VERSION_MAJOR > 3) || ((LINUX_VERSION_MAJOR == 3) && (LINUX_VERSION_MINOR > 5)))
++     linuxDetour->nfq_pkt_len = nfq_get_payload(nfqData, (unsigned char**)(&linuxDetour->nfq_pkt_data));
++-#else
++-    linuxDetour->nfq_pkt_len = nfq_get_payload(nfqData, &linuxDetour->nfq_pkt_data);
++-#endif //
++     return 0;
++ }  // end LinuxDetour::NfqCallback()
++ 
+-- 
+2.7.3
