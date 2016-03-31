@@ -1,42 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 21:15:28 +0200
-Subject: [Buildroot] [git commit] glibmm: bump to version 2.48.1
-Message-ID: <20160331191542.F14E481D34@busybox.osuosl.org>
+Date: Thu, 31 Mar 2016 21:16:52 +0200
+Subject: [Buildroot] [PATCH] glibmm: bump to version 2.48.1
+In-Reply-To: <1459451556-26190-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459451556-26190-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160331211652.08be345e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66348de5fbced51f7436c95da5f61e239de9c67e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/glibmm/glibmm.hash | 4 ++--
- package/glibmm/glibmm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, 31 Mar 2016 16:12:36 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/glibmm/glibmm.hash | 4 ++--
+>  package/glibmm/glibmm.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
-index 4b4c173..82775e3 100644
---- a/package/glibmm/glibmm.hash
-+++ b/package/glibmm/glibmm.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.48/glibmm-2.48.0.sha256sum
--sha256	b531392b03a34b8d0bd86d8a70510e7812fccfad47bd43eeff9e8a16d8438b85	glibmm-2.48.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.48/glibmm-2.48.1.sha256sum
-+sha256	dc225f7d2f466479766332483ea78f82dc349d59399d30c00de50e5073157cdf	glibmm-2.48.1.tar.xz
-diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
-index 8561a69..741b45e 100644
---- a/package/glibmm/glibmm.mk
-+++ b/package/glibmm/glibmm.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GLIBMM_VERSION_MAJOR = 2.48
--GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
-+GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).1
- GLIBMM_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
- GLIBMM_LICENSE_FILES = COPYING COPYING.tools
- GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
