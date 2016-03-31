@@ -1,42 +1,562 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 03:49:18 +0200
-Subject: [Buildroot] [git commit] libwebsockets: bump to version 1.7.4
-Message-ID: <20160331015641.B0B5D80789@busybox.osuosl.org>
+Date: Thu, 31 Mar 2016 03:56:28 +0200
+Subject: [Buildroot] [git commit] gcc: add xtensa uClinux support
+Message-ID: <20160331015641.BE14981D86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecaf770360b97f168eaee4d204798c5803ba9485
+commit: https://git.buildroot.net/buildroot/commit/?id=3ebf195e7ec529bfd14fdd03c0c1d66e0b67a4a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Backported from: r228450
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/libwebsockets/libwebsockets.hash | 2 +-
- package/libwebsockets/libwebsockets.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../gcc/4.8.5/874-xtensa-add-uclinux-support.patch | 174 +++++++++++++++++++++
+ .../gcc/4.9.3/874-xtensa-add-uclinux-support.patch | 174 +++++++++++++++++++++
+ .../gcc/5.3.0/874-xtensa-add-uclinux-support.patch | 174 +++++++++++++++++++++
+ 3 files changed, 522 insertions(+)
 
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 745bc49..2559445 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  c6f3272d7e0234a9ef92b38622f36c4166eede4225e36fe4f78dd2ade03e9c52  libwebsockets-v1.7.3.tar.gz
-+sha256  8d99aa369cb972b97520a40270086bde24645fafc2deaf6ccca93753691a7a2f  libwebsockets-v1.7.4.tar.gz
- sha256  c7627d8e3d9d695b965a6c5fe30f4b4c04666984b384acd9e24c3b59cef13816  9eec5e4470397632af035c429295a41b74bd0585.patch
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 8d3663f..95d1309 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBWEBSOCKETS_VERSION = v1.7.3
-+LIBWEBSOCKETS_VERSION = v1.7.4
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = LGPLv2.1 with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+diff --git a/package/gcc/4.8.5/874-xtensa-add-uclinux-support.patch b/package/gcc/4.8.5/874-xtensa-add-uclinux-support.patch
+new file mode 100644
+index 0000000..23db3d8
+--- /dev/null
++++ b/package/gcc/4.8.5/874-xtensa-add-uclinux-support.patch
+@@ -0,0 +1,174 @@
++From 70c2cb98fb129b4766b5da0f945dc41fd568c77a Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sat, 22 Aug 2015 08:44:26 +0300
++Subject: [PATCH] xtensa: add uclinux support
++
++2015-10-03  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config.gcc (xtensa*-*-uclinux*): New configuration.
++	* config/xtensa/uclinux.h: New file.
++	* config/xtensa/uclinux.opt: New file.
++
++libgcc/
++	* config.host (xtensa*-*-uclinux*): New configuration.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r228450
++
++ gcc/config.gcc                |  5 ++++
++ gcc/config/xtensa/uclinux.h   | 69 +++++++++++++++++++++++++++++++++++++++++++
++ gcc/config/xtensa/uclinux.opt | 32 ++++++++++++++++++++
++ libgcc/config.host            |  5 ++++
++ 4 files changed, 111 insertions(+)
++ create mode 100644 gcc/config/xtensa/uclinux.h
++ create mode 100644 gcc/config/xtensa/uclinux.opt
++
++diff --git a/gcc/config.gcc b/gcc/config.gcc
++index c52f5a8..56797bd 100644
++--- a/gcc/config.gcc
+++++ b/gcc/config.gcc
++@@ -2995,6 +2995,11 @@ xtensa*-*-linux*)
++ 	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/linux.h"
++ 	tmake_file="${tmake_file} xtensa/t-xtensa"
++ 	;;
+++xtensa*-*-uclinux*)
+++	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/uclinux.h"
+++	tmake_file="${tmake_file} xtensa/t-xtensa"
+++	extra_options="${extra_options} xtensa/uclinux.opt"
+++	;;
++ am33_2.0-*-linux*)
++ 	tm_file="mn10300/mn10300.h dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h mn10300/linux.h"
++ 	gas=yes gnu_ld=yes
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++new file mode 100644
++index 0000000..4606020
++--- /dev/null
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -0,0 +1,69 @@
+++/* Xtensa uClinux configuration.
+++   Derived from the configuration for GCC for Intel i386 running Linux.
+++   Copyright (C) 2001-2015 Free Software Foundation, Inc.
+++
+++This file is part of GCC.
+++
+++GCC is free software; you can redistribute it and/or modify it under
+++the terms of the GNU General Public License as published by the Free
+++Software Foundation; either version 3, or (at your option) any later
+++version.
+++
+++GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+++WARRANTY; without even the implied warranty of MERCHANTABILITY or
+++FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+++for more details.
+++
+++You should have received a copy of the GNU General Public License
+++along with GCC; see the file COPYING3.  If not see
+++<http://www.gnu.org/licenses/>.  */
+++
+++#undef TARGET_OS_CPP_BUILTINS
+++#define TARGET_OS_CPP_BUILTINS()				\
+++  do								\
+++    {								\
+++      GNU_USER_TARGET_OS_CPP_BUILTINS ();			\
+++      builtin_define ("__uClinux__");				\
+++    }								\
+++  while (0)
+++
+++#undef SUBTARGET_CPP_SPEC
+++#define SUBTARGET_CPP_SPEC "%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT}"
+++
+++#undef SIZE_TYPE
+++#define SIZE_TYPE "unsigned int"
+++
+++#undef PTRDIFF_TYPE
+++#define PTRDIFF_TYPE "int"
+++
+++#undef WCHAR_TYPE
+++#define WCHAR_TYPE "long int"
+++
+++#undef WCHAR_TYPE_SIZE
+++#define WCHAR_TYPE_SIZE 32
+++
+++#undef ASM_SPEC
+++#define ASM_SPEC \
+++ "%{mtext-section-literals:--text-section-literals} \
+++  %{mno-text-section-literals:--no-text-section-literals} \
+++  %{mtarget-align:--target-align} \
+++  %{mno-target-align:--no-target-align} \
+++  %{mlongcalls:--longcalls} \
+++  %{mno-longcalls:--no-longcalls} \
+++  %{mauto-litpools:--auto-litpools} \
+++  %{mno-auto-litpools:--no-auto-litpools}"
+++
+++#undef LINK_SPEC
+++#define LINK_SPEC "%{!no-elf2flt:%{!elf2flt*:-elf2flt}}"
+++
+++#undef LOCAL_LABEL_PREFIX
+++#define LOCAL_LABEL_PREFIX	"."
+++
+++/* Always enable "-fpic" for Xtensa Linux.  */
+++#define XTENSA_ALWAYS_PIC 1
+++
+++#undef TARGET_LIBC_HAS_FUNCTION
+++#define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
+++
+++#undef DBX_REGISTER_NUMBER
+++
++diff --git a/gcc/config/xtensa/uclinux.opt b/gcc/config/xtensa/uclinux.opt
++new file mode 100644
++index 0000000..95ef777
++--- /dev/null
+++++ b/gcc/config/xtensa/uclinux.opt
++@@ -0,0 +1,32 @@
+++; Xtensa uClinux options.
+++
+++; Copyright (C) 2015 Free Software Foundation, Inc.
+++;
+++; This file is part of GCC.
+++;
+++; GCC is free software; you can redistribute it and/or modify it under
+++; the terms of the GNU General Public License as published by the Free
+++; Software Foundation; either version 3, or (at your option) any later
+++; version.
+++;
+++; GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+++; WARRANTY; without even the implied warranty of MERCHANTABILITY or
+++; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+++; for more details.
+++;
+++; You should have received a copy of the GNU General Public License
+++; along with GCC; see the file COPYING3.  If not see
+++; <http://www.gnu.org/licenses/>.
+++
+++; See the GCC internals manual (options.texi) for a description of
+++; this file's format.
+++
+++; Please try to keep this file in ASCII collating order.
+++
+++elf2flt
+++Driver
+++
+++elf2flt=
+++Driver JoinedOrMissing
+++
+++; This comment is to ensure we retain the blank line above.
++diff --git a/libgcc/config.host b/libgcc/config.host
++index 2c64756..2ee92c1 100644
++--- a/libgcc/config.host
+++++ b/libgcc/config.host
++@@ -1295,6 +1295,11 @@ xtensa*-*-linux*)
++ 	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
++ 	md_unwind_header=xtensa/linux-unwind.h
++ 	;;
+++xtensa*-*-uclinux*)
+++	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
+++	md_unwind_header=xtensa/linux-unwind.h
+++	extra_parts="$extra_parts crtbeginS.o crtbeginT.o crtendS.o"
+++	;;
++ am33_2.0-*-linux*)
++ 	# Don't need crtbeginT.o from *-*-linux* default.
++ 	extra_parts="crtbegin.o crtend.o crtbeginS.o crtendS.o"
++-- 
++1.8.1.4
++
+diff --git a/package/gcc/4.9.3/874-xtensa-add-uclinux-support.patch b/package/gcc/4.9.3/874-xtensa-add-uclinux-support.patch
+new file mode 100644
+index 0000000..23db3d8
+--- /dev/null
++++ b/package/gcc/4.9.3/874-xtensa-add-uclinux-support.patch
+@@ -0,0 +1,174 @@
++From 70c2cb98fb129b4766b5da0f945dc41fd568c77a Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sat, 22 Aug 2015 08:44:26 +0300
++Subject: [PATCH] xtensa: add uclinux support
++
++2015-10-03  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config.gcc (xtensa*-*-uclinux*): New configuration.
++	* config/xtensa/uclinux.h: New file.
++	* config/xtensa/uclinux.opt: New file.
++
++libgcc/
++	* config.host (xtensa*-*-uclinux*): New configuration.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r228450
++
++ gcc/config.gcc                |  5 ++++
++ gcc/config/xtensa/uclinux.h   | 69 +++++++++++++++++++++++++++++++++++++++++++
++ gcc/config/xtensa/uclinux.opt | 32 ++++++++++++++++++++
++ libgcc/config.host            |  5 ++++
++ 4 files changed, 111 insertions(+)
++ create mode 100644 gcc/config/xtensa/uclinux.h
++ create mode 100644 gcc/config/xtensa/uclinux.opt
++
++diff --git a/gcc/config.gcc b/gcc/config.gcc
++index c52f5a8..56797bd 100644
++--- a/gcc/config.gcc
+++++ b/gcc/config.gcc
++@@ -2995,6 +2995,11 @@ xtensa*-*-linux*)
++ 	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/linux.h"
++ 	tmake_file="${tmake_file} xtensa/t-xtensa"
++ 	;;
+++xtensa*-*-uclinux*)
+++	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/uclinux.h"
+++	tmake_file="${tmake_file} xtensa/t-xtensa"
+++	extra_options="${extra_options} xtensa/uclinux.opt"
+++	;;
++ am33_2.0-*-linux*)
++ 	tm_file="mn10300/mn10300.h dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h mn10300/linux.h"
++ 	gas=yes gnu_ld=yes
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++new file mode 100644
++index 0000000..4606020
++--- /dev/null
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -0,0 +1,69 @@
+++/* Xtensa uClinux configuration.
+++   Derived from the configuration for GCC for Intel i386 running Linux.
+++   Copyright (C) 2001-2015 Free Software Foundation, Inc.
+++
+++This file is part of GCC.
+++
+++GCC is free software; you can redistribute it and/or modify it under
+++the terms of the GNU General Public License as published by the Free
+++Software Foundation; either version 3, or (at your option) any later
+++version.
+++
+++GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+++WARRANTY; without even the implied warranty of MERCHANTABILITY or
+++FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+++for more details.
+++
+++You should have received a copy of the GNU General Public License
+++along with GCC; see the file COPYING3.  If not see
+++<http://www.gnu.org/licenses/>.  */
+++
+++#undef TARGET_OS_CPP_BUILTINS
+++#define TARGET_OS_CPP_BUILTINS()				\
+++  do								\
+++    {								\
+++      GNU_USER_TARGET_OS_CPP_BUILTINS ();			\
+++      builtin_define ("__uClinux__");				\
+++    }								\
+++  while (0)
+++
+++#undef SUBTARGET_CPP_SPEC
+++#define SUBTARGET_CPP_SPEC "%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT}"
+++
+++#undef SIZE_TYPE
+++#define SIZE_TYPE "unsigned int"
+++
+++#undef PTRDIFF_TYPE
+++#define PTRDIFF_TYPE "int"
+++
+++#undef WCHAR_TYPE
+++#define WCHAR_TYPE "long int"
+++
+++#undef WCHAR_TYPE_SIZE
+++#define WCHAR_TYPE_SIZE 32
+++
+++#undef ASM_SPEC
+++#define ASM_SPEC \
+++ "%{mtext-section-literals:--text-section-literals} \
+++  %{mno-text-section-literals:--no-text-section-literals} \
+++  %{mtarget-align:--target-align} \
+++  %{mno-target-align:--no-target-align} \
+++  %{mlongcalls:--longcalls} \
+++  %{mno-longcalls:--no-longcalls} \
+++  %{mauto-litpools:--auto-litpools} \
+++  %{mno-auto-litpools:--no-auto-litpools}"
+++
+++#undef LINK_SPEC
+++#define LINK_SPEC "%{!no-elf2flt:%{!elf2flt*:-elf2flt}}"
+++
+++#undef LOCAL_LABEL_PREFIX
+++#define LOCAL_LABEL_PREFIX	"."
+++
+++/* Always enable "-fpic" for Xtensa Linux.  */
+++#define XTENSA_ALWAYS_PIC 1
+++
+++#undef TARGET_LIBC_HAS_FUNCTION
+++#define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
+++
+++#undef DBX_REGISTER_NUMBER
+++
++diff --git a/gcc/config/xtensa/uclinux.opt b/gcc/config/xtensa/uclinux.opt
++new file mode 100644
++index 0000000..95ef777
++--- /dev/null
+++++ b/gcc/config/xtensa/uclinux.opt
++@@ -0,0 +1,32 @@
+++; Xtensa uClinux options.
+++
+++; Copyright (C) 2015 Free Software Foundation, Inc.
+++;
+++; This file is part of GCC.
+++;
+++; GCC is free software; you can redistribute it and/or modify it under
+++; the terms of the GNU General Public License as published by the Free
+++; Software Foundation; either version 3, or (at your option) any later
+++; version.
+++;
+++; GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+++; WARRANTY; without even the implied warranty of MERCHANTABILITY or
+++; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+++; for more details.
+++;
+++; You should have received a copy of the GNU General Public License
+++; along with GCC; see the file COPYING3.  If not see
+++; <http://www.gnu.org/licenses/>.
+++
+++; See the GCC internals manual (options.texi) for a description of
+++; this file's format.
+++
+++; Please try to keep this file in ASCII collating order.
+++
+++elf2flt
+++Driver
+++
+++elf2flt=
+++Driver JoinedOrMissing
+++
+++; This comment is to ensure we retain the blank line above.
++diff --git a/libgcc/config.host b/libgcc/config.host
++index 2c64756..2ee92c1 100644
++--- a/libgcc/config.host
+++++ b/libgcc/config.host
++@@ -1295,6 +1295,11 @@ xtensa*-*-linux*)
++ 	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
++ 	md_unwind_header=xtensa/linux-unwind.h
++ 	;;
+++xtensa*-*-uclinux*)
+++	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
+++	md_unwind_header=xtensa/linux-unwind.h
+++	extra_parts="$extra_parts crtbeginS.o crtbeginT.o crtendS.o"
+++	;;
++ am33_2.0-*-linux*)
++ 	# Don't need crtbeginT.o from *-*-linux* default.
++ 	extra_parts="crtbegin.o crtend.o crtbeginS.o crtendS.o"
++-- 
++1.8.1.4
++
+diff --git a/package/gcc/5.3.0/874-xtensa-add-uclinux-support.patch b/package/gcc/5.3.0/874-xtensa-add-uclinux-support.patch
+new file mode 100644
+index 0000000..23db3d8
+--- /dev/null
++++ b/package/gcc/5.3.0/874-xtensa-add-uclinux-support.patch
+@@ -0,0 +1,174 @@
++From 70c2cb98fb129b4766b5da0f945dc41fd568c77a Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sat, 22 Aug 2015 08:44:26 +0300
++Subject: [PATCH] xtensa: add uclinux support
++
++2015-10-03  Max Filippov  <jcmvbkbc@gmail.com>
++gcc/
++	* config.gcc (xtensa*-*-uclinux*): New configuration.
++	* config/xtensa/uclinux.h: New file.
++	* config/xtensa/uclinux.opt: New file.
++
++libgcc/
++	* config.host (xtensa*-*-uclinux*): New configuration.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++Backported from: r228450
++
++ gcc/config.gcc                |  5 ++++
++ gcc/config/xtensa/uclinux.h   | 69 +++++++++++++++++++++++++++++++++++++++++++
++ gcc/config/xtensa/uclinux.opt | 32 ++++++++++++++++++++
++ libgcc/config.host            |  5 ++++
++ 4 files changed, 111 insertions(+)
++ create mode 100644 gcc/config/xtensa/uclinux.h
++ create mode 100644 gcc/config/xtensa/uclinux.opt
++
++diff --git a/gcc/config.gcc b/gcc/config.gcc
++index c52f5a8..56797bd 100644
++--- a/gcc/config.gcc
+++++ b/gcc/config.gcc
++@@ -2995,6 +2995,11 @@ xtensa*-*-linux*)
++ 	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/linux.h"
++ 	tmake_file="${tmake_file} xtensa/t-xtensa"
++ 	;;
+++xtensa*-*-uclinux*)
+++	tm_file="${tm_file} dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h xtensa/uclinux.h"
+++	tmake_file="${tmake_file} xtensa/t-xtensa"
+++	extra_options="${extra_options} xtensa/uclinux.opt"
+++	;;
++ am33_2.0-*-linux*)
++ 	tm_file="mn10300/mn10300.h dbxelf.h elfos.h gnu-user.h linux.h glibc-stdint.h mn10300/linux.h"
++ 	gas=yes gnu_ld=yes
++diff --git a/gcc/config/xtensa/uclinux.h b/gcc/config/xtensa/uclinux.h
++new file mode 100644
++index 0000000..4606020
++--- /dev/null
+++++ b/gcc/config/xtensa/uclinux.h
++@@ -0,0 +1,69 @@
+++/* Xtensa uClinux configuration.
+++   Derived from the configuration for GCC for Intel i386 running Linux.
+++   Copyright (C) 2001-2015 Free Software Foundation, Inc.
+++
+++This file is part of GCC.
+++
+++GCC is free software; you can redistribute it and/or modify it under
+++the terms of the GNU General Public License as published by the Free
+++Software Foundation; either version 3, or (at your option) any later
+++version.
+++
+++GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+++WARRANTY; without even the implied warranty of MERCHANTABILITY or
+++FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+++for more details.
+++
+++You should have received a copy of the GNU General Public License
+++along with GCC; see the file COPYING3.  If not see
+++<http://www.gnu.org/licenses/>.  */
+++
+++#undef TARGET_OS_CPP_BUILTINS
+++#define TARGET_OS_CPP_BUILTINS()				\
+++  do								\
+++    {								\
+++      GNU_USER_TARGET_OS_CPP_BUILTINS ();			\
+++      builtin_define ("__uClinux__");				\
+++    }								\
+++  while (0)
+++
+++#undef SUBTARGET_CPP_SPEC
+++#define SUBTARGET_CPP_SPEC "%{posix:-D_POSIX_SOURCE} %{pthread:-D_REENTRANT}"
+++
+++#undef SIZE_TYPE
+++#define SIZE_TYPE "unsigned int"
+++
+++#undef PTRDIFF_TYPE
+++#define PTRDIFF_TYPE "int"
+++
+++#undef WCHAR_TYPE
+++#define WCHAR_TYPE "long int"
+++
+++#undef WCHAR_TYPE_SIZE
+++#define WCHAR_TYPE_SIZE 32
+++
+++#undef ASM_SPEC
+++#define ASM_SPEC \
+++ "%{mtext-section-literals:--text-section-literals} \
+++  %{mno-text-section-literals:--no-text-section-literals} \
+++  %{mtarget-align:--target-align} \
+++  %{mno-target-align:--no-target-align} \
+++  %{mlongcalls:--longcalls} \
+++  %{mno-longcalls:--no-longcalls} \
+++  %{mauto-litpools:--auto-litpools} \
+++  %{mno-auto-litpools:--no-auto-litpools}"
+++
+++#undef LINK_SPEC
+++#define LINK_SPEC "%{!no-elf2flt:%{!elf2flt*:-elf2flt}}"
+++
+++#undef LOCAL_LABEL_PREFIX
+++#define LOCAL_LABEL_PREFIX	"."
+++
+++/* Always enable "-fpic" for Xtensa Linux.  */
+++#define XTENSA_ALWAYS_PIC 1
+++
+++#undef TARGET_LIBC_HAS_FUNCTION
+++#define TARGET_LIBC_HAS_FUNCTION no_c99_libc_has_function
+++
+++#undef DBX_REGISTER_NUMBER
+++
++diff --git a/gcc/config/xtensa/uclinux.opt b/gcc/config/xtensa/uclinux.opt
++new file mode 100644
++index 0000000..95ef777
++--- /dev/null
+++++ b/gcc/config/xtensa/uclinux.opt
++@@ -0,0 +1,32 @@
+++; Xtensa uClinux options.
+++
+++; Copyright (C) 2015 Free Software Foundation, Inc.
+++;
+++; This file is part of GCC.
+++;
+++; GCC is free software; you can redistribute it and/or modify it under
+++; the terms of the GNU General Public License as published by the Free
+++; Software Foundation; either version 3, or (at your option) any later
+++; version.
+++;
+++; GCC is distributed in the hope that it will be useful, but WITHOUT ANY
+++; WARRANTY; without even the implied warranty of MERCHANTABILITY or
+++; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+++; for more details.
+++;
+++; You should have received a copy of the GNU General Public License
+++; along with GCC; see the file COPYING3.  If not see
+++; <http://www.gnu.org/licenses/>.
+++
+++; See the GCC internals manual (options.texi) for a description of
+++; this file's format.
+++
+++; Please try to keep this file in ASCII collating order.
+++
+++elf2flt
+++Driver
+++
+++elf2flt=
+++Driver JoinedOrMissing
+++
+++; This comment is to ensure we retain the blank line above.
++diff --git a/libgcc/config.host b/libgcc/config.host
++index 2c64756..2ee92c1 100644
++--- a/libgcc/config.host
+++++ b/libgcc/config.host
++@@ -1295,6 +1295,11 @@ xtensa*-*-linux*)
++ 	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
++ 	md_unwind_header=xtensa/linux-unwind.h
++ 	;;
+++xtensa*-*-uclinux*)
+++	tmake_file="$tmake_file xtensa/t-xtensa xtensa/t-linux t-slibgcc-libgcc"
+++	md_unwind_header=xtensa/linux-unwind.h
+++	extra_parts="$extra_parts crtbeginS.o crtbeginT.o crtendS.o"
+++	;;
++ am33_2.0-*-linux*)
++ 	# Don't need crtbeginT.o from *-*-linux* default.
++ 	extra_parts="crtbegin.o crtend.o crtbeginS.o crtendS.o"
++-- 
++1.8.1.4
++
