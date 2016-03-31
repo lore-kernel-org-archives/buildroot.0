@@ -1,34 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 04:15:53 +0200
-Subject: [Buildroot] [PATCH V2] package/systemd: Respect
- BR2_TARGET_GENERIC_GETTY_BAUDRATE
-In-Reply-To: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
-References: <1457312709-6191-1-git-send-email-cyrilbur@gmail.com>
-Message-ID: <20160331041553.54f0f5a0@free-electrons.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 31 Mar 2016 06:20:51 +0300
+Subject: [Buildroot] [PATCH 0/2] xtensa noMMU support
+In-Reply-To: <20160331035749.2a03ba86@free-electrons.com>
+References: <1458228424-10330-1-git-send-email-jcmvbkbc@gmail.com>
+ <20160331035749.2a03ba86@free-electrons.com>
+Message-ID: <CAMo8Bf+D8=R3bhnpqqPGmchKeE-QitgewSr59DDkv7tNJ1WsAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon,  7 Mar 2016 12:05:09 +1100, Cyril Bur wrote:
-> Currently systemd getty services ignore baudrates set in buildroot in
-> favour of a hardcoded 115200. This patch SEDs out that hardcoded value with
-> what is selected.
-> 
-> Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
-> ---
-> V2: Address comments from Martin Bark and Maxime Hadjinlian
->     - Don't change the symlink
->     - Use qstrip (for consistency) around
->       $(BR2_TARGET_GENERIC_GETTY_BAUDRATE) in shell test statement
+On Thu, Mar 31, 2016 at 4:57 AM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> On Thu, 17 Mar 2016 18:27:02 +0300, Max Filippov wrote:
+>> this series enables noMMU support for xtensa.
+>> noMMU xtensa uses FLAT binaries and linuxthreads.
+>> This series assumes elf2flt support for Xtensa.
+>
+> Is this actually the case?
 
-Applied to master, thanks.
+The following patch would switch to elf2flt version that has xtensa support:
+  https://patchwork.ozlabs.org/patch/599708/
+and it was on the list before I sent this series.
 
-Thomas
+But I realize that elf2flt build is not enabled for xtensa, even with the
+above patch. I'll send a fix that enables it.
+
+>> Max Filippov (2):
+>>   gcc: add xtensa uClinux support
+>>   uclibc: enable linuxthreads for xtensa
+>
+> Applied, thanks!
+>
+> Is it possible to boot a noMMU Xtensa system under Qemu ?
+
+It is possible to run noMMU kernel and userspace on MMUv3 cores
+with the mainline QEMU. Real noMMU cores need a fix that wasn't
+accepted to the QEMU mainline:
+  http://qemu.11.n7.nabble.com/PATCH-0-3-target-xtensa-xtfpga-support-cores-without-MMU-td358668.html
+I probably need to get back to it and make suggested changes.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks.
+-- Max
