@@ -1,59 +1,65 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 31 Mar 2016 09:49:56 +0200
-Subject: [Buildroot] [PATCH v2] boost: fix getchar issue with uClibc and
- gcc <= 4.8.2
-In-Reply-To: <20160331034802.4d1d7f1e@free-electrons.com>
-References: <1459376376-18985-1-git-send-email-joerg.krause@embedded.rocks>
- <20160331034802.4d1d7f1e@free-electrons.com>
-Message-ID: <1459410596.2416.1.camel@embedded.rocks>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Thu, 31 Mar 2016 10:57:51 +0200
+Subject: [Buildroot] [PATCH v3 1/3] core/pkg-kconfig: Factorize make commands
+In-Reply-To: <1459414674-30753-1-git-send-email-romain.izard.pro@gmail.com>
+References: <1459414674-30753-1-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <1459414674-30753-2-git-send-email-romain.izard.pro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Do, 2016-03-31 at 03:48 +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 31 Mar 2016 00:19:36 +0200, J?rg Krause wrote:
-> > 
-> > getchar() is defined as a macro in uClibc. This hits gcc bug 58952
-> > [1] for all
-> > gcc versions <= 4.8.2 and building boost/test fails:
-> > 
-> > ./boost/test/impl/unit_test_main.ipp: In function 'int
-> > boost::unit_test::unit_test_main(boost::unit_test::init_unit_test_f
-> > unc, int, char**)':
-> > ./boost/test/impl/unit_test_main.ipp:194:18: error: expected
-> > unqualified-id before '(' token
-> > 
-> > To allow building boost/test with uClibc based toolchains with gcc
-> > <= 4.8.2 use
-> > parenthesis for std::getchar.
-> > 
-> > Fixes:
-> > http://autobuild.buildroot.net/results/506/506b3b1b4087318a42474567
-> > 82ac9e4f128d5db6/
-> > http://autobuild.buildroot.net/results/5f2/5f2a8fb5cb823160542ee721
-> > 591867b34bd25de6/
-> > http://autobuild.buildroot.net/results/e3e/e3e6002ac5b40f7f03d32ba9
-> > da99f6497f01b42f/
-> > .. and more
-> > 
-> > Upstream status: Pending
-> > https://github.com/boostorg/test/pull/97
-> > 
-> > [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58952
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> > ---
-> > v2:
-> > ?- add autobuild fixes
-> Weird, I remember discussing this issue quite a long time ago, and I
-> think we had already fixed it. But it looks like not. So thanks for
-> submitting this patch. Applied!
+Use a variable to factorize the calls to make, as we use the same set
+of options each many times.
 
-Yes, we discussed about the issue, but somehow we missed it to submit a
-patch. You're welcome!
+Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+---
+Changelog:
+v3: new
 
-J?rg
+ package/pkg-kconfig.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 94ec3cc..cb177bb 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -57,6 +57,9 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 		fi; \
+ 	done
+ 
++$(2)_KCONFIG_MAKE = \
++	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
++
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
+@@ -64,13 +67,11 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ # done even when the package does not support defconfigs.
+ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+-		$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-			$$($(2)_KCONFIG_OPTS) $$($(2)_KCONFIG_DEFCONFIG), \
++		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+ 		cp $$($(2)_KCONFIG_FILE) $$(@))
+ 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+ 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+-	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-		$$($(2)_KCONFIG_OPTS) oldconfig
++	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+ 
+ # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+ # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+@@ -81,8 +82,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
+ # The exact rules are specified by the package .mk file.
+ define $(2)_FIXUP_DOT_CONFIG
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+-	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-		$$($(2)_KCONFIG_OPTS) oldconfig
++	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+ 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ endef
+ 
+-- 
+2.5.0
