@@ -1,68 +1,50 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 31 Mar 2016 10:45:38 -0300
-Subject: [Buildroot] [PATCH] norm: fix build failure with old headers
-Message-ID: <1459431938-28257-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 31 Mar 2016 16:36:05 +0200
+Subject: [Buildroot] [PATCH 0/2] xtensa noMMU support
+In-Reply-To: <CAMo8Bf+D8=R3bhnpqqPGmchKeE-QitgewSr59DDkv7tNJ1WsAw@mail.gmail.com>
+References: <1458228424-10330-1-git-send-email-jcmvbkbc@gmail.com>
+ <20160331035749.2a03ba86@free-electrons.com>
+ <CAMo8Bf+D8=R3bhnpqqPGmchKeE-QitgewSr59DDkv7tNJ1WsAw@mail.gmail.com>
+Message-ID: <20160331163605.51afd1dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The version check for the nfq_get_payload prototype is wrong since it's
-done against linux headers when in fact it changed with the 1.0.0
-release of libnetfilter_queue, leading to build failure in toolchains
-that have old headers when libnetfilter_queue is present. Fixes:
-http://autobuild.buildroot.net/results/c0e/c0e897a6db888d4a7e0302cdc1e0cbec7d1e88f3/
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../0002-protolib-drop-linux-version-check.patch   | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/norm/0002-protolib-drop-linux-version-check.patch
+On Thu, 31 Mar 2016 06:20:51 +0300, Max Filippov wrote:
 
-diff --git a/package/norm/0002-protolib-drop-linux-version-check.patch b/package/norm/0002-protolib-drop-linux-version-check.patch
-new file mode 100644
-index 0000000..7852a30
---- /dev/null
-+++ b/package/norm/0002-protolib-drop-linux-version-check.patch
-@@ -0,0 +1,38 @@
-+The char * to unsigned char * change happened for the libnetfilter_queue
-+1.0.0 release, not the linux headers.
-+So drop the linux headers version check since it causes more harm than
-+good by trying the old API when the toolchain uses old linux headers
-+with a new-enough libnetfilter_queue.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+
-+diff -Nura norm-1.5r6.orig/protolib/src/linux/linuxDetour.cpp norm-1.5r6/protolib/src/linux/linuxDetour.cpp
-+--- norm-1.5r6.orig/protolib/src/linux/linuxDetour.cpp	2016-03-31 10:17:20.674745597 -0300
-++++ norm-1.5r6/protolib/src/linux/linuxDetour.cpp	2016-03-31 10:36:58.923084395 -0300
-+@@ -16,8 +16,6 @@
-+ #include <linux/if_ether.h>  // for ETH_P_IP
-+ #include <net/if_arp.h>   // for ARPHRD_ETHER
-+ 
-+-#include <linux/version.h>  // for LINUX_VERSION_CODE
-+-
-+ /** NOTES: 
-+  *
-+  * 1) This newer implementation of LinuxDetour uses netfilter_queue
-+@@ -591,17 +589,7 @@
-+     
-+     // Finally record packet length and cache pointer to IP packet data
-+     
-+-    // A change to the nfq_get_payload() prototype seemed to kick in around Linux header files
-+-    // version 3.6?  (This will probably need to be fine tuned for the right version threshold.)
-+-
-+-#define LINUX_VERSION_MAJOR (LINUX_VERSION_CODE/65536)
-+-#define LINUX_VERSION_MINOR ((LINUX_VERSION_CODE - (LINUX_VERSION_MAJOR*65536)) / 256)
-+-
-+-#if ((LINUX_VERSION_MAJOR > 3) || ((LINUX_VERSION_MAJOR == 3) && (LINUX_VERSION_MINOR > 5)))
-+     linuxDetour->nfq_pkt_len = nfq_get_payload(nfqData, (unsigned char**)(&linuxDetour->nfq_pkt_data));
-+-#else
-+-    linuxDetour->nfq_pkt_len = nfq_get_payload(nfqData, &linuxDetour->nfq_pkt_data);
-+-#endif //
-+     return 0;
-+ }  // end LinuxDetour::NfqCallback()
-+ 
+> > Is this actually the case?
+> 
+> The following patch would switch to elf2flt version that has xtensa support:
+>   https://patchwork.ozlabs.org/patch/599708/
+
+Ah, ok. I need to respin this series then.
+
+> But I realize that elf2flt build is not enabled for xtensa, even with the
+> above patch. I'll send a fix that enables it.
+
+Seen your patch, thanks!
+
+> It is possible to run noMMU kernel and userspace on MMUv3 cores
+> with the mainline QEMU. Real noMMU cores need a fix that wasn't
+> accepted to the QEMU mainline:
+>   http://qemu.11.n7.nabble.com/PATCH-0-3-target-xtensa-xtfpga-support-cores-without-MMU-td358668.html
+> I probably need to get back to it and make suggested changes.
+
+OK.
+
+Do you think you could submit a minimal defconfig that creates a noMMU
+Xtensa system that runs under Qemu? I think it would be quite useful,
+as it would the first noMMU Qemu configuration that we would have in
+Buildroot.
+
+Thanks!
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
