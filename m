@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 04:00:40 +0200
-Subject: [Buildroot] [PATCH] mesa3d: add intel gallium driver support
-In-Reply-To: <56E2A91A.1030509@zacarias.com.ar>
-References: <1457632891-4354-1-git-send-email-gustavo@zacarias.com.ar>
- <8760wum7dj.fsf@dell.be.48ers.dk> <56E1D44F.70807@zacarias.com.ar>
- <3979rcxl7o.ln2@ID-313208.user.individual.net>
- <871t7hjmol.fsf@dell.be.48ers.dk>
- <56E2A91A.1030509@zacarias.com.ar>
-Message-ID: <20160331040040.0083ba81@free-electrons.com>
+Date: Thu, 31 Mar 2016 04:02:49 +0200
+Subject: [Buildroot] [git commit] package/systemd: Respect
+	BR2_TARGET_GENERIC_GETTY_BAUDRATE
+Message-ID: <20160331021536.CA75881D5A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e44b9c565433363dc8962654fb758192e5e069fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 11 Mar 2016 08:16:42 -0300, Gustavo Zacarias wrote:
-> On 11/03/16 08:09, Peter Korsgaard wrote:
-> 
-> > Hi,
-> >
-> >   > To sum up: Yes, it is possible to build a i915 gallium driver in mesa3d,
-> >   > but who needs it? That's the reason I never implemented a Config.in
-> >   > option for it, but it will not hurt having one ;)
-> >
-> > Ok, that was more of less also my understanding. Gustavoz, what do you
-> > need the gallium driver for?
-> 
-> "DRI drivers need X.org" -> wayland, plus libgtk3 with it as backend.
+Currently systemd getty services ignore baudrates set in buildroot in
+favour of a hardcoded 115200. This patch SEDs out that hardcoded value with
+what is selected.
 
-"DRI drivers need X.org" ? This seems wrong, since you precisely sent a
-patch recently to all DRI drivers to be built without X.org.
+Signed-off-by: Cyril Bur <cyrilbur@gmail.com>
+Reviewed-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/systemd/systemd.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-So I guess this specific patch, allowing to build the unmaintained
-Intel Gallium driver is no longer needed?
-
-I've marked it as Rejected on patchwork for now. Let me know if you
-disagree for some reason.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 75ad961..8a6aa44 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -227,6 +227,7 @@ endef
+ 
+ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # systemd needs getty.service for VTs and serial-getty.service for serial ttys
++# also patch the file to use the correct baud-rate, the default baudrate is 115200 so look for that
+ define SYSTEMD_INSTALL_SERVICE_TTY
+ 	if echo $(BR2_TARGET_GENERIC_GETTY_PORT) | egrep -q 'tty[0-9]*$$'; \
+ 	then \
+@@ -235,7 +236,11 @@ define SYSTEMD_INSTALL_SERVICE_TTY
+ 		SERVICE="serial-getty"; \
+ 	fi; \
+ 	ln -fs ../../../../lib/systemd/system/$${SERVICE}@.service \
+-		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service
++		$(TARGET_DIR)/etc/systemd/system/getty.target.wants/$${SERVICE}@$(BR2_TARGET_GENERIC_GETTY_PORT).service; \
++	if [ $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE)) -gt 0 ] ; \
++	then \
++		$(SED) 's,115200,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE),' $(TARGET_DIR)/lib/systemd/system/$${SERVICE}@.service; \
++	fi
+ endef
+ endif
+ 
