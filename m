@@ -1,47 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 31 Mar 2016 21:00:08 +0200
-Subject: [Buildroot] [PATCH v3 03/10] musl: build broken on Thumb,
-	use ARM mode
+Date: Thu, 31 Mar 2016 21:00:09 +0200
+Subject: [Buildroot] [PATCH v3 04/10] toolchain-buildroot: update glibc
+	comment for noMMU
 In-Reply-To: <1459450815-6494-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1459450815-6494-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1459450815-6494-4-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1459450815-6494-5-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Building the musl C library on Thumb (Thumb1, not Thumb2), fails with:
-
- {standard input}:20: Error: only lo regs allowed with immediate -- `mov fp,#0'
- {standard input}:21: Error: only lo regs allowed with immediate -- `mov lr,#0'
- {standard input}:25: Error: unshifted register required -- `and ip,a1,#-16'
-
-Since there are no cores that we support that are Thumb1 only, use the
-same solution as the one used by glibc: build the C library in ARM
-mode.
+glibc is not available for noMMU platforms, so it doesn't make sense
+to show the comment about glibc requiring dynamic libraries on noMMU
+platforms.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/musl/musl.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ toolchain/toolchain-buildroot/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 081a700..733f940 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -23,6 +23,12 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index cb4fc18..ea290eb 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -83,6 +83,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 	  http://www.gnu.org/software/libc/
  
- MUSL_INSTALL_STAGING = YES
+ comment "(e)glibc only available with shared lib support"
++	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS
  
-+# Thumb build is broken, build in ARM mode, since all architectures
-+# that support Thumb1 also support ARM.
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+MUSL_EXTRA_CFLAGS += -marm
-+endif
-+
- define MUSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(TARGET_CONFIGURE_OPTS) \
+ config BR2_TOOLCHAIN_BUILDROOT_MUSL
 -- 
 2.6.4
