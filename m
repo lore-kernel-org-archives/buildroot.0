@@ -1,114 +1,73 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Fri, 1 Apr 2016 10:01:46 +0200
-Subject: [Buildroot] [PATCH 3/3] configs: atmel: add sama5d3 xplained sd
-	card image generation
-In-Reply-To: <1459497706-1663-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1459497706-1663-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1459497706-1663-3-git-send-email-ludovic.desroches@atmel.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri,  1 Apr 2016 10:07:08 +0200
+Subject: [Buildroot] [PATCH 1/3] libtommath: new package
+Message-ID: <1459498030-19700-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use genimage to generate a sd card with a fat partition (at91bootstrap,
-u-boot, kernel, dtbs) and an ext4 partition (rootfs).
-
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/atmel/sama5d3_xplained_mmc/genimage.cfg  | 33 ++++++++++++++++++++++++++
- board/atmel/sama5d3_xplained_mmc/post-image.sh | 16 +++++++++++++
- configs/atmel_sama5d3_xplained_mmc_defconfig   |  4 ++++
- 3 files changed, 53 insertions(+)
- create mode 100644 board/atmel/sama5d3_xplained_mmc/genimage.cfg
- create mode 100755 board/atmel/sama5d3_xplained_mmc/post-image.sh
+ package/Config.in                |  1 +
+ package/libtommath/Config.in     |  7 +++++++
+ package/libtommath/libtommath.mk | 21 +++++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+ create mode 100644 package/libtommath/Config.in
+ create mode 100644 package/libtommath/libtommath.mk
 
-diff --git a/board/atmel/sama5d3_xplained_mmc/genimage.cfg b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
+diff --git a/package/Config.in b/package/Config.in
+index 7b23519..84df812 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1233,6 +1233,7 @@ menu "Other"
+ 	source "package/libsigc/Config.in"
+ 	source "package/libsigsegv/Config.in"
+ 	source "package/libtasn1/Config.in"
++	source "package/libtommath/Config.in"
+ 	source "package/libtpl/Config.in"
+ 	source "package/libubox/Config.in"
+ 	source "package/libuci/Config.in"
+diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
 new file mode 100644
-index 0000000..32df453
+index 0000000..b2ffc72
 --- /dev/null
-+++ b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
-@@ -0,0 +1,33 @@
-+# Image for SD card boot on Atmel SAMA5D3 Xplained boards
++++ b/package/libtommath/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBTOMMATH
++	bool "libtommath"
++	help
++	  LibTomMath is a free open source portable number theoretic
++	  multiple-precision integer library written entirely in C.
++
++	  http://www.libtom.net
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+new file mode 100644
+index 0000000..44f21ff
+--- /dev/null
++++ b/package/libtommath/libtommath.mk
+@@ -0,0 +1,21 @@
++################################################################################
 +#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama5d3_xplained.dtb",
-+			"at91-sama5d3_xplained_pda4.dtb",
-+			"at91-sama5d3_xplained_pda7.dtb",
-+			"at91-sama5d3_xplained_pda7b.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
++# libtommath
++#
++################################################################################
 +
-+image sdcard.img {
-+	hdimage {
-+	}
++LIBTOMMATH_VERSION = v1.0
++LIBTOMMATH_SITE = $(call github,libtom,libtommath,$(LIBTOMMATH_VERSION))
++LIBTOMMATH_LICENSE = WTFPL
++LIBTOMMATH_LICENSE_FILES = LICENSE
++LIBTOMMATH_INSTALL_STAGING = YES
 +
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
++define LIBTOMMATH_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
++endef
 +
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/atmel/sama5d3_xplained_mmc/post-image.sh b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-new file mode 100755
-index 0000000..c82b189
---- /dev/null
-+++ b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-@@ -0,0 +1,16 @@
-+#!/bin/sh
++define LIBTOMMATH_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++endef
 +
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 2fb1fa4..27672a9 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -3,6 +3,7 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-@@ -11,6 +12,8 @@ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-@@ -22,3 +25,4 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
-+BR2_PACKAGE_HOST_GENIMAGE=y
++$(eval $(generic-package))
 -- 
 2.5.0
