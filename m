@@ -1,61 +1,44 @@
-From: Matt Weber <matt@thewebers.ws>
-Date: Thu, 31 Mar 2016 19:02:52 -0500
+From: Matthew Weber <matt@thewebers.ws>
+Date: Thu, 31 Mar 2016 21:37:30 -0500
 Subject: [Buildroot] [PATCH v2 2/2] buildroot-test: failure reason regex
 	update
-In-Reply-To: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
+In-Reply-To: <20160401035503.6f83bb24@free-electrons.com>
 References: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
-Message-ID: <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+ <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+ <20160401035503.6f83bb24@free-electrons.com>
+Message-ID: <CAFt09wNVPNa0aekpxdhZxOOLRgSdKUZQivMVz195FJhfO9exwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Sub-make required one additional line tailed
-- Both autobuild-run  regex to truncate end log
-  and import which sets the failure reason on
-  the report are updated
+Thomas,
+On Mar 31, 2016 8:55 PM, "Thomas Petazzoni" <
+thomas.petazzoni@free-electrons.com> wrote:
+>
+> Hello,
+>
+> On Thu, 31 Mar 2016 19:02:52 -0500, Matt Weber wrote:
+> > - Sub-make required one additional line tailed
+>
+> Really? Did you look at my previous review, where I showed the
+> different examples I could find, and showed that 3 lines were enough?
 
-Signed-off-by: Matt Weber <matt@thewebers.ws>
+I did and I haven't figured out why yet
 
---
-Changes for v2:
-- Added back in : as previous test masked
-  that is was ok to leave in (Suggested by Thomas)
----
- scripts/autobuild-run | 4 ++--
- web/import.inc.php    | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 1fbf482..f9743a8 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -665,10 +665,10 @@ def send_results(result, **kwargs):
-     def get_failure_reason():
-         # Output is a tuple (package, version), or None.
-         lastlines = decode_bytes(subprocess.Popen(
--            ["tail", "-n", "3", os.path.join(outputdir, "logfile")],
-+            ["tail", "-n", "4", os.path.join(outputdir, "logfile")],
-             stdout=subprocess.PIPE).communicate()[0]).splitlines()
- 
--        regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-+        regexp = re.compile(r'make.*: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-         for line in lastlines:
-             m = regexp.search(line)
-             if m:
-diff --git a/web/import.inc.php b/web/import.inc.php
-index 243a1f3..e169f6f 100644
---- a/web/import.inc.php
-+++ b/web/import.inc.php
-@@ -102,7 +102,7 @@ function import_result($buildid, $filename)
-       $reason = "none";
-     else {
- 	$tmp = Array();
--	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
-+	exec("tail -4 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
- 	if (trim($tmp[0]))
- 	  $reason = $tmp[0];
- 	else
--- 
-2.5.0
+>
+> It's not like I care particularly whether we're tailing 3 or 4 lines,
+> it's more that I want to understand why in your scenario you would need
+> 4 lines.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Free Electrons
+> Embedded Linux, Kernel and Android engineering
+> http://free-electrons.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160331/6bbbc407/attachment.html>
