@@ -1,9 +1,10 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 1 Apr 2016 10:19:00 +0200
-Subject: [Buildroot] [PATCH 1/3] libtommath: new package
-In-Reply-To: <1459498030-19700-1-git-send-email-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 1 Apr 2016 11:42:09 +0300
+Subject: [Buildroot] [PATCH 3/3] dropbear: use libtomath & libtomcrypt
+In-Reply-To: <1459498030-19700-3-git-send-email-francois.perrad@gadz.org>
 References: <1459498030-19700-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <CAGm1_kv7sWo3sMJVp9crYFcCafeNpFJoJn_Vrdp9==poDaqCJg@mail.gmail.com>
+ <1459498030-19700-3-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20160401084209.GB2406@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,80 +13,26 @@ To: buildroot@busybox.net
 
 Hi Francois,
 
-On Fri, Apr 1, 2016 at 10:07 AM, Francois Perrad <fperrad@gmail.com> wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/Config.in                |  1 +
->  package/libtommath/Config.in     |  7 +++++++
->  package/libtommath/libtommath.mk | 21 +++++++++++++++++++++
+On Fri, Apr 01, 2016 at 10:07:10AM +0200, Francois Perrad wrote:
+> +ifeq ($(BR2_PACKAGE_LIBTOMMATH)$(BR2_PACKAGE_LIBTOMCRYPT),yy)
+> +DROPBEAR_DEPENDENCIES += libtommath libtomcrypt
 
-hash file is missing
+Does dropbear code use libtommath directly? If not, listing only libtomcrypt 
+should be enough. The check for BR2_PACKAGE_LIBTOMMATH can also be dropped in 
+this case.
 
->  3 files changed, 29 insertions(+)
->  create mode 100644 package/libtommath/Config.in
->  create mode 100644 package/libtommath/libtommath.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 7b23519..84df812 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1233,6 +1233,7 @@ menu "Other"
->         source "package/libsigc/Config.in"
->         source "package/libsigsegv/Config.in"
->         source "package/libtasn1/Config.in"
-> +       source "package/libtommath/Config.in"
->         source "package/libtpl/Config.in"
->         source "package/libubox/Config.in"
->         source "package/libuci/Config.in"
-> diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
-> new file mode 100644
-> index 0000000..b2ffc72
-> --- /dev/null
-> +++ b/package/libtommath/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBTOMMATH
-> +       bool "libtommath"
-> +       help
-> +         LibTomMath is a free open source portable number theoretic
-> +         multiple-precision integer library written entirely in C.
+> +DROPBEAR_CONF_OPTS += --disable-bundled-libtom
+> +else
+> +DROPBEAR_CONF_OPTS += --enable-bundled-libtom
+> +endif
 > +
-> +         http://www.libtom.net
-> diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
-> new file mode 100644
-> index 0000000..44f21ff
-> --- /dev/null
-> +++ b/package/libtommath/libtommath.mk
-> @@ -0,0 +1,21 @@
-> +################################################################################
-> +#
-> +# libtommath
-> +#
-> +################################################################################
-> +
-> +LIBTOMMATH_VERSION = v1.0
-> +LIBTOMMATH_SITE = $(call github,libtom,libtommath,$(LIBTOMMATH_VERSION))
+>  ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+>  # Build dbclient, and create a convenience symlink named ssh
+>  DROPBEAR_PROGRAMS += dbclient
 
-why don't you take official release tarballs? The same for libtomcrypt
+baruch
 
-Yegor
-
-> +LIBTOMMATH_LICENSE = WTFPL
-> +LIBTOMMATH_LICENSE_FILES = LICENSE
-> +LIBTOMMATH_INSTALL_STAGING = YES
-> +
-> +define LIBTOMMATH_BUILD_CMDS
-> +       $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
-> +endef
-> +
-> +define LIBTOMMATH_INSTALL_STAGING_CMDS
-> +       $(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
-> +endef
-> +
-> +$(eval $(generic-package))
-> --
-> 2.5.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
