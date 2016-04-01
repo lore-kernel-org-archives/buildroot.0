@@ -1,85 +1,73 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri,  1 Apr 2016 21:18:12 +0200
-Subject: [Buildroot] [PATCH] yajl: fix static linking in a parallel build
-Message-ID: <1459538292-7023-1-git-send-email-joerg.krause@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  1 Apr 2016 22:25:28 +0200
+Subject: [Buildroot] [PATCH 0/4 v2] core/download: add support for git
+	sub-modules (branch yem/git)
+Message-ID: <cover.1459541702.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The yajl build system contains a race condition, which gets triggered by
-high BR2_JLEVEL settings - It tries to link the executable gen-extra-close
-against libyajl before it is created:
+Hello All!
 
-[ 21%] Linking C executable gen-extra-close
-[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
-/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
+This little series adds support for packages coming from a git clone,
+with git sub-modules.
 
-Fix it by linking against the static library libyajl_s like all other targets of
-the yajl build system do.
+The commit logs are pretty detailed, but roughly, it goes as thus;
 
-Fixes:
-http://autobuild.buildroot.net/results/a9b/a9b5209377acb51e69f376e0c008ee71fe00397a/
-http://autobuild.buildroot.net/results/55f/55fe22463d49addb42b635d10be5176522f4a561/
-http://autobuild.buildroot.net/results/808/808acca0cfed93465845c2aa055a7a4fc56a8a17/
-http://autobuild.buildroot.net/results/b92/b92a9c84b71a8a2d022d307245ca6be36a000e6c/
-http://autobuild.buildroot.net/results/55d/55df698ab53f7d94235166e8576eb681ed68668e/
-.. and more.
+  - we can't get sub-modules in a bare clone, so we no longer use bare
+    clones, but use full clones (with a working copy);
 
-Upstream status: Pending
-https://github.com/lloyd/yajl/pull/187
+  - git-archive does not support submodules, so we generate archives
+    manually;
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...make-Fix-static-linking-in-parallel-build.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/yajl/0003-cmake-Fix-static-linking-in-parallel-build.patch
+  - we check out the working copy to the correct cset, then we retrieve
+    the submodules;
 
-diff --git a/package/yajl/0003-cmake-Fix-static-linking-in-parallel-build.patch b/package/yajl/0003-cmake-Fix-static-linking-in-parallel-build.patch
-new file mode 100644
-index 0000000..793e38f
---- /dev/null
-+++ b/package/yajl/0003-cmake-Fix-static-linking-in-parallel-build.patch
-@@ -0,0 +1,39 @@
-+From 24cbb6b482315d7659c04c9470ec9029e825e8ca Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Fri, 1 Apr 2016 20:45:35 +0200
-+Subject: [PATCH] cmake: Fix static linking in parallel build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Building yajl in a static context fails in a parallel build:
-+
-+[ 21%] Linking C executable gen-extra-close
-+[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
-+/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
-+
-+Fix this by linking against the static library yajl_s as all other targets
-+in yajl does.
-+
-+Upstream status: Pending
-+https://github.com/lloyd/yajl/pull/187
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ test/api/CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/test/api/CMakeLists.txt b/test/api/CMakeLists.txt
-+index e0ce2f6..efc85c5 100644
-+--- a/test/api/CMakeLists.txt
-++++ b/test/api/CMakeLists.txt
-+@@ -21,5 +21,5 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../${YAJL_DIST_NAME}/lib)
-+ FOREACH (test ${TESTS})
-+   GET_FILENAME_COMPONENT(testProg ${test} NAME_WE)
-+   ADD_EXECUTABLE(${testProg} ${test})
-+-  TARGET_LINK_LIBRARIES(${testProg} yajl m)
-++  TARGET_LINK_LIBRARIES(${testProg} yajl_s m)
-+ ENDFOREACH()
-+-- 
-+2.8.0
-+
+  - we expose a new package variable to request sub-modules.
+
+
+Changes v1 -> v2:
+  - properly accept -r in the download wrapper  (Aleksandar)
+  - split the non-bare-git and manual-archive changes in two separate
+    patches, as they are not semantically related
+  - some of my usual typoes fixed...
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 2cd5abf7f9edd3c0a609e9626f12f71e2a6e4e7c:
+
+  alsa-utils: bump to version 1.1.1 (2016-04-01 03:57:54 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/git
+
+for you to fetch changes up to 8373904cdf1fee9724d6834b56efaa706a92fc31:
+
+  core/pkg-infra: download git submodules if the package wants them (2016-04-01 22:12:08 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      support/download/git: do not use bare clones
+      support/download/git: do not use git archive, handle it manually
+      support/download/git: add support for submodules
+      core/pkg-infra: download git submodules if the package wants them
+
+ package/pkg-download.mk     |  1 +
+ package/pkg-generic.mk      |  8 ++++++++
+ support/download/dl-wrapper |  7 ++++---
+ support/download/git        | 46 +++++++++++++++++++++++++++++++++++++++------
+ 4 files changed, 53 insertions(+), 9 deletions(-)
+
 -- 
-2.8.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
