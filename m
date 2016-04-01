@@ -1,109 +1,140 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Feb 2016 00:15:47 +0100
-Subject: [Buildroot] host-python link fails due to missing readline
-In-Reply-To: <CAHb0ztk2fbycwTbct4gESVMVHuM==GaJsCVe1uVQiHVL5U84tA@mail.gmail.com>
-References: <CAHb0ztk2fbycwTbct4gESVMVHuM==GaJsCVe1uVQiHVL5U84tA@mail.gmail.com>
-Message-ID: <56AE95A3.8070701@mind.be>
+From: Matt Weber <matt@thewebers.ws>
+Date: Thu, 31 Mar 2016 19:02:51 -0500
+Subject: [Buildroot] [PATCH v2 1/2] buildroot-test: enable toolchains based
+	on hostarch
+Message-ID: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29-01-16 01:08, Jeff Gray wrote:
-> Host machine : Ubuntu 12.04.2 x86_64
-> Buildroot : 2015.11.1
-> Target : arm920t
-> Build fail : host-python-2.7.10
-> 
-> Build stopped with an error during host-python:
-> Failed to build these modules:
-> readline
-> 
-> I can see that readline-6.3 has been built for target, but not host. In the log
-> file, I see these references to not finding readline as expected in the
-> host-python configuration stage:
-> checking how to link readline libs... none
-> checking for rl_callback_handler_install in -lreadline... no
-> checking for rl_pre_input_hook in -lreadline... no
-> checking for rl_completion_display_matches_hook in -lreadline... no
-> checking for rl_completion_matches in -lreadline... no 
-> 
-> And then later in the build process, because readline is not there:
-> running build_ext
-> /usr/lib/libreadline.so: not an ELF file.
+- updated toolchain csv to include hostarch
+- fixed logic in autobuild-run to correctly select any, x86_64 vs x86
 
- That is just weird... For two reasons:
-- it shouldn't try to link with readline to begin with;
-- since this is host compilation, /usr/lib/readline.so should be OK.
+Signed-off-by: Matt Weber <matt@thewebers.ws>
 
- What is also weird is that configure can't find readline, but the compilation
-doesn't complain about missing header files.
+--
+Changes for v2
+- Updated toolchain csv file to have internal configs
+  listed as any type (Suggested by Thomas)
+- Updated autobuild-run script to account for 'any' hostarch
+  type as well as x86_64 being capable of running x86 toolchains
+  (Sgggested by Thomas)
+---
+ scripts/autobuild-run                        | 25 +++++++++++--
+ web/toolchains/configs/toolchain-configs.csv | 56 ++++++++++++++--------------
+ 2 files changed, 49 insertions(+), 32 deletions(-)
 
- Can you check from which package /usr/lib/readline.so is coming?
-dpkg -S /usr/lib/readline.so
-
- Does your gcc somehow generate 32bit code? Are you running inside some kind of
-container that could affect things?
-
- It may also be useful to look at the config.log of python.
-
-
-> 
-> Then when trying to build the readline Python extension (shortened for readability):
-> building 'readline' extension
-> /usr/bin/gcc ... -c /output/build/host-python-2.7.10/Modules/readline.c ...
-> (some warnings but nothing serious)
-> /usr/bin/gcc -pthread -shared readline.o ... -lreadline -lncurses -lpython2.7 -o
-> readline.so
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../../lib/libreadline.so when searching
-> for -lreadline
-> /usr/bin/ld: skipping incompatible /usr/lib/../lib/libreadline.so when searching
-> for -lreadline
-> /usr/bin/ld: skipping incompatible
-> /usr/lib/gcc/x86_64-linux-gnu/4.6/../../../libreadline.so when searching for
-> -lreadline
-> /usr/bin/ld: skipping incompatible /usr/lib/libreadline.so when searching for
-> -lreadline
-> /usr/bin/ld: cannot find -lreadline
-> collect2: ld returned 1 exit status 
-> 
-> There is no /output/host/usr/lib/gcc/x86_64/ directory. Should there be one?
-
- Why do you mention this directory?
-
-
- Regards,
- Arnout
-
-
-> 
-> I'm experienced with embedded development, but new to buildroot, so forgive me
-> an obvious error. I have searched through the list archives for similar issues,
-> but can't find anything since a similar problem that was reported fixed by a
-> Python update (the patch which is no longer part of buildroot).
-> http://lists.busybox.net/pipermail/buildroot/2014-April/094460.html
-> 
-> I'm not sure what area to look at for this issue. Should readline be built for
-> host before the host-python build? Or is it a config error in host-python
-> looking for something that isn't there?
-> 
-> My .config file is on Google Drive here: https://goo.gl/gLj4rM
-> My full build log file (16MB) is here: https://goo.gl/NLDCOj
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
-
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index ca5bdfc..1fbf482 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -259,17 +259,34 @@ def get_toolchain_configs():
+     configs = []
+ 
+     (_, _, _, _, hostarch) = os.uname()
+-    if hostarch == 'i686' or hostarch == 'x86_64':
++    # ~2015 distros report x86 when on a 32bit install
++    if hostarch == 'i686' or hostarch == 'i386' or hostarch == 'x86':
+         hostarch = 'x86'
+ 
+     for row in csv.reader(l):
+         config = {}
+         config["url"] = row[0]
+         config["hostarch"] = row[1]
+-        # Ignore toolchains that are not built for the appropriate
+-        # host architecture
+-        if hostarch != config["hostarch"]:
++        keep = False
++
++        # Keep all toolchain configs that work regardless of the host
++        # architecture
++        if config['hostarch'] == "any":
++            keep = True
++
++        # Keep all toolchain configs that can work on the current host
++        # architecture
++        if hostarch == config["hostarch"]:
++            keep = True
++
++        # Assume that x86 32 bits toolchains work on x86_64 build
++        # machines
++        if hostarch == 'x86_64' and config["hostarch"] == "x86":
++            keep = True
++
++        if not keep:
+             continue
++
+         config["libc"] = row[2]
+         with urlopen_closing(config["url"]) as r:
+             config["contents"] = decode_byte_list(r.readlines())
+diff --git a/web/toolchains/configs/toolchain-configs.csv b/web/toolchains/configs/toolchain-configs.csv
+index 56fbdf7..6872b69 100644
+--- a/web/toolchains/configs/toolchain-configs.csv
++++ b/web/toolchains/configs/toolchain-configs.csv
+@@ -2,34 +2,34 @@ http://autobuild.buildroot.org/toolchains/configs/armv5-ctng-linux-gnueabi.confi
+ http://autobuild.buildroot.org/toolchains/configs/armv7-ctng-linux-gnueabihf.config,x86,glibc
+ http://autobuild.buildroot.org/toolchains/configs/bfin-linux-uclibc.config,x86,uclibc
+ http://autobuild.buildroot.org/toolchains/configs/bfin-uclinux.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-aarch64-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arc-full-internal.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arcle-hs38.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-musl.config,x86,musl
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-full-static.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-arm-internal-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-i386-pentium4-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-microblazeel-full.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-microblazeel-full-internal.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-mips64-n64-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-mips32r6-el-hf-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-mips64r6-el-hf-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-mipsel-o32-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-nios2-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-powerpc-603e-basic-cpp.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-powerpc-e500mc-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-powerpc-internal-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-sh4-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-sparc-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-sparc64-glibc.config,x86,glibc
+-http://autobuild.buildroot.org/toolchains/configs/br-x86-64-core2-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-x86-64-musl.config,x86,musl
+-http://autobuild.buildroot.org/toolchains/configs/br-xtensa-full.config,x86,uclibc
+-http://autobuild.buildroot.org/toolchains/configs/br-xtensa-full-internal.config,x86,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-aarch64-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-arc-full-internal.config,any,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-arcle-hs38.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-arm-basic.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-arm-cortex-a9-musl.config,x86_64,musl
++http://autobuild.buildroot.org/toolchains/configs/br-arm-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-arm-full-nothread.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-arm-full-static.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-arm-internal-full.config,any,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-i386-pentium4-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-microblazeel-full.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-microblazeel-full-internal.config,any,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-mips64-n64-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-mips32r6-el-hf-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-mips64r6-el-hf-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-mipsel-o32-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-nios2-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-powerpc-603e-basic-cpp.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-powerpc-e500mc-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-powerpc-internal-full.config,any,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-sh4-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-sparc-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-sparc64-glibc.config,x86_64,glibc
++http://autobuild.buildroot.org/toolchains/configs/br-x86-64-core2-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-x86-64-musl.config,x86_64,musl
++http://autobuild.buildroot.org/toolchains/configs/br-xtensa-full.config,x86_64,uclibc
++http://autobuild.buildroot.org/toolchains/configs/br-xtensa-full-internal.config,any,uclibc
+ http://autobuild.buildroot.org/toolchains/configs/i686-ctng-linux-gnu.config,x86,glibc
+ http://autobuild.buildroot.org/toolchains/configs/linaro-aarch64.config,x86,glibc
+ http://autobuild.buildroot.org/toolchains/configs/linaro-arm.config,x86,glibc
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.0
