@@ -1,46 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 01 Mar 2016 00:09:34 +0100
-Subject: [Buildroot] [PATCH] pkgconf: Add a symlink to the
-	GNU_TARGET_NAME-pkg-config
-In-Reply-To: <20160229213520.2b6e6ee7@free-electrons.com> (Thomas Petazzoni's
- message of "Mon, 29 Feb 2016 21:35:20 +0100")
-References: <1456770170-6326-1-git-send-email-jer@airfi.aero>
- <u7ieqcx9kv.ln2@ID-313208.user.individual.net>
- <20160229213520.2b6e6ee7@free-electrons.com>
-Message-ID: <87y4a3m7v5.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 1 Apr 2016 03:55:03 +0200
+Subject: [Buildroot] [PATCH v2 2/2] buildroot-test: failure reason regex
+ update
+In-Reply-To: <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+References: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
+ <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+Message-ID: <20160401035503.6f83bb24@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- > Hello,
- > On Mon, 29 Feb 2016 20:19:58 +0100, Bernd Kuhls wrote:
+On Thu, 31 Mar 2016 19:02:52 -0500, Matt Weber wrote:
+> - Sub-make required one additional line tailed
 
- >> >  By setting a symlink to the expected target we might even solve some
- >> >  real problems.
- >> 
- >> two years ago I proposed a similar patch, which was rejected:
- >> http://patchwork.ozlabs.org/patch/312273/
+Really? Did you look at my previous review, where I showed the
+different examples I could find, and showed that 3 lines were enough?
 
- > If we were to do this, then I would prefer to completely remove
- > $(HOST_DIR)/usr/bin/pkg-config, and only have
- > $(HOST_DIR)/usr/bin/$(GNU_TARGET_NAME)-pkg-config.
+It's not like I care particularly whether we're tailing 3 or 4 lines,
+it's more that I want to understand why in your scenario you would need
+4 lines.
 
- > What I dislike with the current setup is that if you add
- > $(HOST_DIR)/usr/bin to your PATH, then any call to pkg-config returns
- > values that are valid only when cross-compiling, which is not
- > necessarily what one would expect.
+Thanks!
 
-On the other hand, the situations where you add it to the path are often
-where you _DO_ want to cross compile.
-
- > However, doing this change means that any configure script or Makefile
- > that calls pkg-config directly would no longer find our pkg-config.
-
-Indeed, that would afaik require quite some patching to fix.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
