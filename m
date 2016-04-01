@@ -1,106 +1,87 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Fri, 1 Apr 2016 10:58:50 +0100
-Subject: [Buildroot] [PATCH] postgresql: bump version to 9.5.2
-Message-ID: <1459504730-33796-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 1 Apr 2016 12:17:53 +0200
+Subject: [Buildroot] [PATCH 1/3] libtommath: new package
+In-Reply-To: <CAB0FRsuw4F7UE_h15inGxBVpFh-d4ndoM5zf+VjocjroqT+_RA@mail.gmail.com>
+References: <1459498030-19700-1-git-send-email-francois.perrad@gadz.org>
+ <CAGm1_kv7sWo3sMJVp9crYFcCafeNpFJoJn_Vrdp9==poDaqCJg@mail.gmail.com>
+ <CAB0FRsuw4F7UE_h15inGxBVpFh-d4ndoM5zf+VjocjroqT+_RA@mail.gmail.com>
+Message-ID: <CAGm1_ks0zH2d7j9MVY6fpox4NfDHh=vJWAmHAzJuxjz--3J6gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also remove a patch which is no longer necessary.
+On Fri, Apr 1, 2016 at 11:11 AM, Fran?ois Perrad
+<francois.perrad@gadz.org> wrote:
+> 2016-04-01 10:19 GMT+02:00 Yegor Yefremov <yegorslists@googlemail.com>:
+>> Hi Francois,
+>>
+>> On Fri, Apr 1, 2016 at 10:07 AM, Francois Perrad <fperrad@gmail.com> wrote:
+>>> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+>>> ---
+>>>  package/Config.in                |  1 +
+>>>  package/libtommath/Config.in     |  7 +++++++
+>>>  package/libtommath/libtommath.mk | 21 +++++++++++++++++++++
+>>
+>> hash file is missing
+>>
+>>>  3 files changed, 29 insertions(+)
+>>>  create mode 100644 package/libtommath/Config.in
+>>>  create mode 100644 package/libtommath/libtommath.mk
+>>>
+>>> diff --git a/package/Config.in b/package/Config.in
+>>> index 7b23519..84df812 100644
+>>> --- a/package/Config.in
+>>> +++ b/package/Config.in
+>>> @@ -1233,6 +1233,7 @@ menu "Other"
+>>>         source "package/libsigc/Config.in"
+>>>         source "package/libsigsegv/Config.in"
+>>>         source "package/libtasn1/Config.in"
+>>> +       source "package/libtommath/Config.in"
+>>>         source "package/libtpl/Config.in"
+>>>         source "package/libubox/Config.in"
+>>>         source "package/libuci/Config.in"
+>>> diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
+>>> new file mode 100644
+>>> index 0000000..b2ffc72
+>>> --- /dev/null
+>>> +++ b/package/libtommath/Config.in
+>>> @@ -0,0 +1,7 @@
+>>> +config BR2_PACKAGE_LIBTOMMATH
+>>> +       bool "libtommath"
+>>> +       help
+>>> +         LibTomMath is a free open source portable number theoretic
+>>> +         multiple-precision integer library written entirely in C.
+>>> +
+>>> +         http://www.libtom.net
+>>> diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+>>> new file mode 100644
+>>> index 0000000..44f21ff
+>>> --- /dev/null
+>>> +++ b/package/libtommath/libtommath.mk
+>>> @@ -0,0 +1,21 @@
+>>> +################################################################################
+>>> +#
+>>> +# libtommath
+>>> +#
+>>> +################################################################################
+>>> +
+>>> +LIBTOMMATH_VERSION = v1.0
+>>> +LIBTOMMATH_SITE = $(call github,libtom,libtommath,$(LIBTOMMATH_VERSION))
+>>
+>> why don't you take official release tarballs? The same for libtomcrypt
+>>
+>
+> on http://www.libtom.net/, all links are on Github:
+>  - https://github.com/libtom/libtomcrypt/tree/1.17
+>  - https://github.com/libtom/libtomcrypt/releases/download/1.17/crypt-1.17.tar.bz2
+>  - https://github.com/libtom/libtommath/tree/v1.0
+>  - https://github.com/libtom/libtommath/releases/download/v1.0/ltm-1.0.tar.xz
+>
+> and as far I know, the Github helper is not reliable for hash.
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- ...ker-compiler-output-with-their-default-ou.patch | 56 ----------------------
- package/postgresql/postgresql.hash                 |  4 +-
- package/postgresql/postgresql.mk                   |  2 +-
- 3 files changed, 3 insertions(+), 59 deletions(-)
- delete mode 100644 package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
+You don't need the GitHub helper as 1.17 and 1.0 are official "green"
+releases. Just take a look how this is handled for tmux package.
 
-diff --git a/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch b/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
-deleted file mode 100644
-index 3eca82f..0000000
---- a/package/postgresql/0001-Compare-linker-compiler-output-with-their-default-ou.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 58d05b2a57802345f43e628bc0807dbf0116cdcc Mon Sep 17 00:00:00 2001
--From: Max Filippov <jcmvbkbc@gmail.com>
--Date: Fri, 20 Mar 2015 16:37:51 +0300
--Subject: [PATCH] Compare linker/compiler output with their default output
--
--linker and compiler may have noisy output by default, making
--acx_pthread.m4 believe that pthread options that it tries are ignored
--as invalid.
--
--Record default compiler and linker output and see if adding pthread
--option changes that, instead of assuming that linker and compiler are
--silent by default.
--
--Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-----
-- config/acx_pthread.m4 | 18 +++++++++++++++++-
-- 1 file changed, 17 insertions(+), 1 deletion(-)
--
--diff --git a/config/acx_pthread.m4 b/config/acx_pthread.m4
--index 581164b..d254612 100644
----- a/config/acx_pthread.m4
--+++ b/config/acx_pthread.m4
--@@ -80,6 +80,22 @@
-- esac
-- 
-- if test x"$acx_pthread_ok" = xno; then
--+
--+cat >conftest.$ac_ext <<_ACEOF
--+int
--+main (int argc, char **argv)
--+{
--+  (void) argc;
--+  (void) argv;
--+  return 0;
--+}
--+_ACEOF
--+rm -f conftest.$ac_objext conftest$ac_exeext
--+
--+# Record the default linker and compiler output
--+ld_default_output="`(eval $ac_link 2>&1 1>&5)`"
--+cc_default_output="`(eval $ac_compile 2>&1 1>&5)`"
--+
-- for flag in $acx_pthread_flags; do
-- 
--         tryPTHREAD_CFLAGS=""
--@@ -143,7 +159,7 @@
-- _ACEOF
--             rm -f conftest.$ac_objext conftest$ac_exeext
--             # Check both linking and compiling, because they might tolerate different options.
---            if test "`(eval $ac_link 2>&1 1>&5)`" = "" && test "`(eval $ac_compile 2>&1 1>&5)`" = ""; then
--+            if test "`(eval $ac_link 2>&1 1>&5)`" = "$ld_default_output" && test "`(eval $ac_compile 2>&1 1>&5)`" = "$cc_default_output"; then
--                 # we continue with more flags because Linux needs -lpthread
--                 # for libpq builds on PostgreSQL.  The test above only
--                 # tests for building binaries, not shared libraries.
---- 
--1.8.1.4
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 9015e99..4e4adcb 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,2 +1,2 @@
--# From https://ftp.postgresql.org/pub/source/v9.4.6/postgresql-9.4.6.tar.bz2.sha256
--sha256	cbce1f4d01a6142c5d8bebe125623c5198ec04f363da7dd3d3b3a4100b4140a6  postgresql-9.4.6.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v9.5.2/postgresql-9.5.2.tar.bz2.sha256
-+sha256 f8d132e464506b551ef498719f18cfe9d777709c7a1589dc360afc0b20e47c41  postgresql-9.5.2.tar.bz2
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 444c1b1..160bbb1 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 9.4.6
-+POSTGRESQL_VERSION = 9.5.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
--- 
-2.7.3
+Yegor
