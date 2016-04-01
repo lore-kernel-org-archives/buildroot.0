@@ -1,61 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 1 Apr 2016 04:08:00 +0200
-Subject: [Buildroot] [PATCH] package/turbolua: new package
-In-Reply-To: <1458228459-2401-1-git-send-email-m.niestroj@grinn-global.com>
-References: <1458228459-2401-1-git-send-email-m.niestroj@grinn-global.com>
-Message-ID: <20160401040800.759d3e8e@free-electrons.com>
+Date: Fri, 1 Apr 2016 05:58:34 +0200
+Subject: [Buildroot] [PATCH v2 2/2] buildroot-test: failure reason regex
+ update
+In-Reply-To: <CAFt09wNVPNa0aekpxdhZxOOLRgSdKUZQivMVz195FJhfO9exwA@mail.gmail.com>
+References: <1459468972-31420-1-git-send-email-matt@thewebers.ws>
+ <1459468972-31420-2-git-send-email-matt@thewebers.ws>
+ <20160401035503.6f83bb24@free-electrons.com>
+ <CAFt09wNVPNa0aekpxdhZxOOLRgSdKUZQivMVz195FJhfO9exwA@mail.gmail.com>
+Message-ID: <20160401055834.5b7b6226@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin,
+Hello,
 
-This looks really good, I only have a few minor comments/questions. In
-fact, if I didn't had that question about thumb2, I would have
-applied :)
+On Thu, 31 Mar 2016 21:37:30 -0500, Matthew Weber wrote:
 
-On Thu, 17 Mar 2016 16:27:39 +0100, Marcin Niestroj wrote:
+> > Really? Did you look at my previous review, where I showed the
+> > different examples I could find, and showed that 3 lines were enough?
+> 
+> I did and I haven't figured out why yet
 
-> diff --git a/package/turbolua/Config.in b/package/turbolua/Config.in
-> new file mode 100644
-> index 0000000..f42f4ca
-> --- /dev/null
-> +++ b/package/turbolua/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_TURBOLUA
-> +	bool "turbolua"
-> +	depends on BR2_PACKAGE_LUAJIT
-> +	depends on !BR2_ARM_INSTRUCTIONS_THUMB2
-
-It would be good to add a comment above this line to explain why Thumb2
-is excluded.
-
-> +	help
-> +	  Turbo.lua is a framework built for LuaJIT 2 to simplify the task of
-> +	  building fast and scalable network applications. It uses a
-> +	  event-driven, non-blocking, no thread design to deliver excellent
-> +	  performance and minimal footprint to high-load applications while
-> +	  also providing excellent support for embedded uses. The toolkit can
-> +	  be used for HTTP REST API?s, traditional dynamic web pages through
-> +	  templating, open connections like WebSockets, or just as high level
-> +	  building blocks for native speed network applications.
-
-Please add an empty new line here, followed by the URL of the project
-homepage.
-
-> +define TURBOLUA_BUILD_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" \
-
-Can you try to use $(TARGET_CONFIGURE_OPTS) instead of passing CC/LD ?
-TARGET_CONFIGURE_OPTS will not only pass CC/LD, but also CFLAGS,
-LDFLAGS and more.
-
-> +define TURBOLUA_INSTALL_TARGET_CMDS
-> +	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" LDCONFIG=true \
-
-Same here.
+Well, can you show the last 10 lines of your build logs, which require
+4 lines for the script to detect the failure reason?
 
 Thanks!
 
