@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  1 Apr 2016 17:36:11 +0200
-Subject: [Buildroot] [V2 1/3] libtommath: new package
-Message-ID: <1459524973-26730-1-git-send-email-francois.perrad@gadz.org>
+Date: Fri,  1 Apr 2016 17:36:13 +0200
+Subject: [Buildroot] [V2 3/3] dropbear: use libtomath & libtomcrypt
+In-Reply-To: <1459524973-26730-1-git-send-email-francois.perrad@gadz.org>
+References: <1459524973-26730-1-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1459524973-26730-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +12,70 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/Config.in                  |  1 +
- package/libtommath/Config.in       |  7 +++++++
- package/libtommath/libtommath.hash |  2 ++
- package/libtommath/libtommath.mk   | 22 ++++++++++++++++++++++
- 4 files changed, 32 insertions(+)
- create mode 100644 package/libtommath/Config.in
- create mode 100644 package/libtommath/libtommath.hash
- create mode 100644 package/libtommath/libtommath.mk
+ package/dropbear/0001-fix-linking.patch | 36 +++++++++++++++++++++++++++++++++
+ package/dropbear/dropbear.mk            |  7 +++++++
+ 2 files changed, 43 insertions(+)
+ create mode 100644 package/dropbear/0001-fix-linking.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 7b23519..84df812 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1233,6 +1233,7 @@ menu "Other"
- 	source "package/libsigc/Config.in"
- 	source "package/libsigsegv/Config.in"
- 	source "package/libtasn1/Config.in"
-+	source "package/libtommath/Config.in"
- 	source "package/libtpl/Config.in"
- 	source "package/libubox/Config.in"
- 	source "package/libuci/Config.in"
-diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
+diff --git a/package/dropbear/0001-fix-linking.patch b/package/dropbear/0001-fix-linking.patch
 new file mode 100644
-index 0000000..b2ffc72
+index 0000000..93925eb
 --- /dev/null
-+++ b/package/libtommath/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBTOMMATH
-+	bool "libtommath"
-+	help
-+	  LibTomMath is a free open source portable number theoretic
-+	  multiple-precision integer library written entirely in C.
++++ b/package/dropbear/0001-fix-linking.patch
+@@ -0,0 +1,36 @@
++fix linking
 +
-+	  http://www.libtom.net
-diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
-new file mode 100644
-index 0000000..fcf2ddc
---- /dev/null
-+++ b/package/libtommath/libtommath.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  993a7df9ee091fca430cdde3263df57d88ef62af8103903214da49fc51bbb56c  ltm-1.0.tar.xz
-diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
-new file mode 100644
-index 0000000..a377df1
---- /dev/null
-+++ b/package/libtommath/libtommath.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# libtommath
-+#
-+################################################################################
++see https://github.com/mkj/dropbear/pull/28
 +
-+LIBTOMMATH_VERSION = 1.0
-+LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
-+LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
-+LIBTOMMATH_LICENSE = WTFPL
-+LIBTOMMATH_LICENSE_FILES = LICENSE
-+LIBTOMMATH_INSTALL_STAGING = YES
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
-+define LIBTOMMATH_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
-+endef
++diff --git a/Makefile.in b/Makefile.in
++index d9bfdfa..0356b0f 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -16,12 +16,12 @@ endif
++ STATIC_LTC=libtomcrypt/libtomcrypt.a
++ STATIC_LTM=libtommath/libtommath.a
++ 
++-LIBTOM_LIBS=@LIBTOM_LIBS@
+++LIBTOM_LIBS=-ltomcrypt -ltommath
++ 
++ ifeq (@BUNDLED_LIBTOM@, 1)
++ LIBTOM_DEPS=$(STATIC_LTC) $(STATIC_LTM) 
++ CFLAGS+=-I$(srcdir)/libtomcrypt/src/headers/
++-LIBTOM_LIBS=$(STATIC_LTC) $(STATIC_LTM) 
+++LDFLAGS+=-L ./libtomcrypt -L ./libtommath
++ endif
++ 
++ COMMONOBJS=dbutil.o buffer.o dbhelpers.o \
++@@ -84,7 +84,7 @@ INSTALL=@INSTALL@
++ CPPFLAGS=@CPPFLAGS@
++ CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
++ LIBS+=@LIBS@
++-LDFLAGS=@LDFLAGS@
+++LDFLAGS+=@LDFLAGS@
++ 
++ EXEEXT=@EXEEXT@
++ 
++-- 
 +
-+define LIBTOMMATH_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
-+endef
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 32e2167..f664c8d 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -12,6 +12,13 @@ DROPBEAR_LICENSE_FILES = LICENSE
+ DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+ 
++ifeq ($(BR2_PACKAGE_LIBTOMMATH)$(BR2_PACKAGE_LIBTOMCRYPT),yy)
++DROPBEAR_DEPENDENCIES += libtommath libtomcrypt
++DROPBEAR_CONF_OPTS += --disable-bundled-libtom
++else
++DROPBEAR_CONF_OPTS += --enable-bundled-libtom
++endif
 +
-+$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+ # Build dbclient, and create a convenience symlink named ssh
+ DROPBEAR_PROGRAMS += dbclient
 -- 
 2.5.0
