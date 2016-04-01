@@ -1,51 +1,35 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 1 Apr 2016 11:14:53 +0200
-Subject: [Buildroot] [PATCH 3/3] dropbear: use libtomath & libtomcrypt
-In-Reply-To: <20160401084209.GB2406@tarshish>
-References: <1459498030-19700-1-git-send-email-francois.perrad@gadz.org>
- <1459498030-19700-3-git-send-email-francois.perrad@gadz.org>
- <20160401084209.GB2406@tarshish>
-Message-ID: <CAB0FRssTFMSXVvEoj+i6CnqUDp_tBN7RrE3KgsNcXB-8K+OkaQ@mail.gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri,  1 Apr 2016 12:22:02 +0300
+Subject: [Buildroot] [PATCH 0/2] qemu_xtensa_lx60 updates
+Message-ID: <1459502524-23349-1-git-send-email-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2016-04-01 10:42 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> Hi Francois,
->
-> On Fri, Apr 01, 2016 at 10:07:10AM +0200, Francois Perrad wrote:
->> +ifeq ($(BR2_PACKAGE_LIBTOMMATH)$(BR2_PACKAGE_LIBTOMCRYPT),yy)
->> +DROPBEAR_DEPENDENCIES += libtommath libtomcrypt
->
-> Does dropbear code use libtommath directly? If not, listing only libtomcrypt
-> should be enough. The check for BR2_PACKAGE_LIBTOMMATH can also be dropped in
-> this case.
->
+Hello,
 
-The configure script of dropbear checks the presence of both libraries
-: libtommath and libtomcrypt.
-See https://github.com/mkj/dropbear/blob/master/configure.ac#L391
+this series adds new noMMU configuration: qemu_xtensa_lx60_nommu_defconfig
+and switches qemu_xtensa_lx60_defconfig from dc232b to dc233c, so that
+both configurations share the same core.
 
-Fran?ois
+Max Filippov (2):
+  configs/qemu_xtensa_lx60_defconfig: switch to dc233c
+  configs: add qemu_xtensa_lx60_nommu_defconfig
 
->> +DROPBEAR_CONF_OPTS += --disable-bundled-libtom
->> +else
->> +DROPBEAR_CONF_OPTS += --enable-bundled-libtom
->> +endif
->> +
->>  ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
->>  # Build dbclient, and create a convenience symlink named ssh
->>  DROPBEAR_PROGRAMS += dbclient
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ board/qemu/xtensa-lx60/linux-4.4-nommu.config |  37 ++++++++++++++++++++++++++
+ board/qemu/xtensa-lx60/linux-4.4.config       |   4 +--
+ board/qemu/xtensa-lx60/readme.txt             |   4 +--
+ board/qemu/xtensa-lx60/xtensa_dc232b.tar      | Bin 747520 -> 0 bytes
+ board/qemu/xtensa-lx60/xtensa_dc233c.tar      | Bin 0 -> 808960 bytes
+ configs/qemu_xtensa_lx60_defconfig            |   2 +-
+ configs/qemu_xtensa_lx60_nommu_defconfig      |  34 +++++++++++++++++++++++
+ 7 files changed, 76 insertions(+), 5 deletions(-)
+ create mode 100644 board/qemu/xtensa-lx60/linux-4.4-nommu.config
+ delete mode 100644 board/qemu/xtensa-lx60/xtensa_dc232b.tar
+ create mode 100644 board/qemu/xtensa-lx60/xtensa_dc233c.tar
+ create mode 100644 configs/qemu_xtensa_lx60_nommu_defconfig
+
+-- 
+2.1.4
