@@ -1,38 +1,51 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 1 Apr 2016 11:49:37 +0300
-Subject: [Buildroot] [PATCH] gamin: fix build with musl
-In-Reply-To: <20160330000518.22043b3d@free-electrons.com>
-References: <d03fac44ed52ad7fe05fdd1bb6040a260cfc14b7.1456837391.git.baruch@tkos.co.il>
- <20160330000518.22043b3d@free-electrons.com>
-Message-ID: <20160401084937.GC2406@tarshish>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Fri, 1 Apr 2016 11:14:53 +0200
+Subject: [Buildroot] [PATCH 3/3] dropbear: use libtomath & libtomcrypt
+In-Reply-To: <20160401084209.GB2406@tarshish>
+References: <1459498030-19700-1-git-send-email-francois.perrad@gadz.org>
+ <1459498030-19700-3-git-send-email-francois.perrad@gadz.org>
+ <20160401084209.GB2406@tarshish>
+Message-ID: <CAB0FRssTFMSXVvEoj+i6CnqUDp_tBN7RrE3KgsNcXB-8K+OkaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+2016-04-01 10:42 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+> Hi Francois,
+>
+> On Fri, Apr 01, 2016 at 10:07:10AM +0200, Francois Perrad wrote:
+>> +ifeq ($(BR2_PACKAGE_LIBTOMMATH)$(BR2_PACKAGE_LIBTOMCRYPT),yy)
+>> +DROPBEAR_DEPENDENCIES += libtommath libtomcrypt
+>
+> Does dropbear code use libtommath directly? If not, listing only libtomcrypt
+> should be enough. The check for BR2_PACKAGE_LIBTOMMATH can also be dropped in
+> this case.
+>
 
-On Wed, Mar 30, 2016 at 12:05:18AM +0200, Thomas Petazzoni wrote:
-> On Tue,  1 Mar 2016 15:03:11 +0200, Baruch Siach wrote:
-> > musl does not provide the non portable PTHREAD_MUTEX_RECURSIVE_NP. Add a patch
-> > removing the assumption the PTHREAD_MUTEX_RECURSIVE_NP is available when
-> > 'linux' is defined.
-> > 
-> > Upstream had no new release since 2008, so there is no much hope of getting
-> > this fix applied upstream.
-> 
-> Not quite true :) If you check https://git.gnome.org/browse/gamin/log/,
-> there has been a commit in early February 2016. Granted, it was the
-> first commit since almost two years, but still. It's worth submitting
-> upstream :-)
+The configure script of dropbear checks the presence of both libraries
+: libtommath and libtomcrypt.
+See https://github.com/mkj/dropbear/blob/master/configure.ac#L391
 
-Done: https://mail.gnome.org/archives/gamin-list/2016-April/msg00000.html. 
-First message to the gamin list since July 2013.
+Fran?ois
 
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>> +DROPBEAR_CONF_OPTS += --disable-bundled-libtom
+>> +else
+>> +DROPBEAR_CONF_OPTS += --enable-bundled-libtom
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_DROPBEAR_CLIENT),y)
+>>  # Build dbclient, and create a convenience symlink named ssh
+>>  DROPBEAR_PROGRAMS += dbclient
+>
+> baruch
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
