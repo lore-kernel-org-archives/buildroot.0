@@ -1,80 +1,83 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Apr 2016 19:17:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: revert minimum required
-	ffmpeg version numbers
-Message-ID: <1459617449-28718-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sat,  2 Apr 2016 19:34:30 +0200
+Subject: [Buildroot] [PATCH v2 2/6] package/ffmpeg: bump to version 3.0.1
+In-Reply-To: <1459618474-11464-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459618474-11464-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459618474-11464-3-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/e62/e62dd4dbdb4c92bc657936566e73388e76343903/
-and many others
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
+- Remove non-existen configure options:
+  - --disable-mips32r2
+  - --disable-libvo-aacenc
+
+- Amend renamed configure options:
+  - --disable-mipsdspr1 has been renamed to --disable-mipsdsp
+
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...g-revert-minimum-required-version-numbers.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+ package/ffmpeg/ffmpeg.hash |  2 +-
+ package/ffmpeg/ffmpeg.mk   | 13 ++-----------
+ 2 files changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
-new file mode 100644
-index 0000000..74136fe
---- /dev/null
-+++ b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
-@@ -0,0 +1,51 @@
-+From 78a7b7365a67fa2f5394c6b4ca39de01b00416dc Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 2 Apr 2016 19:05:52 +0200
-+Subject: [PATCH 1/1] ffmpeg: revert minimum required version numbers
-+
-+This commit reverts the minimum version numbers required by configure to
-+the values before
-+https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dL486
-+in order to allow compilation with older versions of ffmpeg again.
-+
-+Please note that the previous version numbers of all ffmpeg libs, with
-+the exception of libavfilter, are those of ffmpeg 2.0.7:
-+https://ffmpeg.org/olddownload.html
-+
-+Therefore I synced the minimum version number required for libavfilter to
-+3.79.101 and not to 4.0.0 as previous in tvheadend's configure script.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/838]
-+---
-+ configure | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
-+
-+diff --git a/configure b/configure
-+index be3d2e2..2ffd280 100755
-+--- a/configure
-++++ b/configure
-+@@ -512,13 +512,13 @@ else
-+   if enabled_or_auto libav; then
-+     has_libav=true
-+ 
-+-    check_pkg libavfilter   ">=6.31.100"  || has_libav=false
-+-    check_pkg libswresample ">=2.0.101"   || has_libav=false
-+-    check_pkg libavresample ">=3.0.0"     || has_libav=false
-+-    check_pkg libswscale    ">=4.0.100"   || has_libav=false
-+-    check_pkg libavformat   ">=57.25.100" || has_libav=false
-+-    check_pkg libavcodec    ">=57.24.102" || has_libav=false
-+-    check_pkg libavutil     ">=55.17.103" || has_libav=false
-++    check_pkg libavfilter   ">=3.79.101"  || has_libav=false
-++    check_pkg libswresample ">=0.17.102"   || has_libav=false
-++    check_pkg libavresample ">=1.1.0"     || has_libav=false
-++    check_pkg libswscale    ">=2.3.100"   || has_libav=false
-++    check_pkg libavformat   ">=55.12.100" || has_libav=false
-++    check_pkg libavcodec    ">=55.18.102" || has_libav=false
-++    check_pkg libavutil     ">=52.38.100" || has_libav=false
-+ 
-+     if $has_libav; then
-+       enable libav
-+-- 
-+2.8.0.rc3
-+
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 8643bff..65fe32b 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	25bcedbdafadac3d09c325c1d46a51f53d858b26a260d5aed6b4f17fea6e07fa	ffmpeg-2.8.6.tar.xz
++sha256	c389ca5e3c29e758dd82ee6981130fe79e73b06e26db1a3aa971daea63598bc1	ffmpeg-3.0.1.tar.xz
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index ddfac20..26633e4 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 2.8.6
++FFMPEG_VERSION = 3.0.1
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -41,7 +41,7 @@ FFMPEG_CONF_OPTS = \
+ 	--enable-runtime-cpudetect \
+ 	--disable-hardcoded-tables \
+ 	--disable-memalign-hack \
+-	--disable-mipsdspr1 \
++	--disable-mipsdsp \
+ 	--disable-mipsdspr2 \
+ 	--disable-msa \
+ 	--enable-hwaccels \
+@@ -58,7 +58,6 @@ FFMPEG_CONF_OPTS = \
+ 	--disable-libnut \
+ 	--disable-libopenjpeg \
+ 	--disable-libschroedinger \
+-	--disable-libvo-aacenc \
+ 	--disable-libvo-amrwbenc \
+ 	--disable-symver \
+ 	--disable-doc
+@@ -437,14 +436,6 @@ FFMPEG_CONF_OPTS += \
+ 	--enable-mipsfpu
+ endif
+ 
+-ifeq ($(BR2_mips_32r2),y)
+-FFMPEG_CONF_OPTS += \
+-	--enable-mips32r2
+-else
+-FFMPEG_CONF_OPTS += \
+-	--disable-mips32r2
+-endif
+-
+ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+ FFMPEG_CONF_OPTS += --enable-altivec
+ else
 -- 
 2.8.0.rc3
