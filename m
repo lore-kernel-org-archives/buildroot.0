@@ -1,77 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Apr 2016 17:35:25 +0200
-Subject: [Buildroot] [PATCH 1/3] configs: atmel: add sama5d2 xplained sd
- card image generation
-In-Reply-To: <1459497706-1663-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1459497706-1663-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <20160402173525.08870304@free-electrons.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 2 Apr 2016 17:53:40 +0200
+Subject: [Buildroot] [PATCH v3] Update libaio to 0.3.110
+In-Reply-To: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
+References: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
+Message-ID: <56FFEB04.9090800@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Alistair, Thomas, All,
 
-On Fri, 1 Apr 2016 10:01:44 +0200, Ludovic Desroches wrote:
-> Use genimage to generate a sd card with a fat partition (at91bootstrap,
-> u-boot, kernel, dtbs) and an ext4 partition (rootfs).
+Le 18/02/2016 20:39, Alistair Francis a ?crit :
+> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
 > 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+> ---
+>  package/libaio/0001-arches.patch | 454 ++-------------------------------------
+>  package/libaio/Config.in         |   2 +-
+>  package/libaio/libaio.hash       |   4 +-
+>  package/libaio/libaio.mk         |   2 +-
+>  4 files changed, 20 insertions(+), 442 deletions(-)
+> 
 
-Thanks for working on this!
+Since the libaio bump, the blktrace package is broken on powerpc [1].
 
+/home/peko/autobuild/instance-1/output/host/usr/bin/powerpc-linux-gnu-gcc
+-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -I. -I..
+-I../btt -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -UCOUNT_IOS
+-UDEBUG -DNDEBUG -o btreplay btreplay.o -laio -lrt -lpthread
+[...]ld: btreplay: hidden symbol `_restgpr_29_x' in [..]libgcc.a(crtresxgpr.o)
+is referenced by DSO
+[...]ld: final link failed: Nonrepresentable section on output
 
-> diff --git a/board/atmel/sama5d2_xplained_mmc/post-image.sh b/board/atmel/sama5d2_xplained_mmc/post-image.sh
-> new file mode 100755
-> index 0000000..c82b189
-> --- /dev/null
-> +++ b/board/atmel/sama5d2_xplained_mmc/post-image.sh
-> @@ -0,0 +1,16 @@
-> +#!/bin/sh
-> +
-> +BOARD_DIR="$(dirname $0)"
-> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-> +
-> +rm -rf "${GENIMAGE_TMP}"
-> +
-> +genimage                               \
-> +	--rootpath "${TARGET_DIR}"     \
-> +	--tmppath "${GENIMAGE_TMP}"    \
-> +	--inputpath "${BINARIES_DIR}"  \
-> +	--outputpath "${BINARIES_DIR}" \
-> +	--config "${GENIMAGE_CFG}"
-> +
-> +exit $?
+It's seems that only powerpc is affected by this issue...
+I'm not sure about a proper fixes but adding -shared to the command line fixes
+the build (not runtime tested though).
 
-This last line is not needed.
+Can you take a look ?
 
-We really need at some point to provide a generic mechanism for
-genimage, because this script is duplicated all over the place. But
-that's a separate issue, we can definitely accept your patch without
-doing this refactoring.
+Best regards,
+Romain Naour
 
-
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-
-You need to add:
-
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_MTOOLS=y
-
-Which are used to generate the FAT filesystem. You may not have noticed
-if you have those tools installed on your machine, but they are needed.
-
-Last but not least, could you add a patch at the end of the series that
-updates the documentation in board/atmel/readme.txt to simplify the SD
-card installation details? Indeed we no longer need to tell the user to
-create the partitions, copy the files manually and so on.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+[1] http://autobuild.buildroot.net/?reason=blktrace-1.1.0
