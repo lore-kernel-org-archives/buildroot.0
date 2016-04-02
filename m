@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  2 Apr 2016 19:34:29 +0200
-Subject: [Buildroot] [PATCH v2 1/6] package/freerdp: add support for ffmpeg
-	3.0
+Date: Sat,  2 Apr 2016 19:34:33 +0200
+Subject: [Buildroot] [PATCH v2 5/6] package/ffmpeg: Add patch required by
+	Kodi 16.0-Jarvis
 In-Reply-To: <1459618474-11464-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459618474-11464-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459618474-11464-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459618474-11464-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +13,92 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freerdp/0004-ffmpeg30.patch | 74 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/freerdp/0004-ffmpeg30.patch
+ .../ffmpeg/0013-hevc-support-main10-decoding.patch | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 package/ffmpeg/0013-hevc-support-main10-decoding.patch
 
-diff --git a/package/freerdp/0004-ffmpeg30.patch b/package/freerdp/0004-ffmpeg30.patch
+diff --git a/package/ffmpeg/0013-hevc-support-main10-decoding.patch b/package/ffmpeg/0013-hevc-support-main10-decoding.patch
 new file mode 100644
-index 0000000..a7998b7
+index 0000000..ef42394
 --- /dev/null
-+++ b/package/freerdp/0004-ffmpeg30.patch
-@@ -0,0 +1,74 @@
-+From b7b66968f93f6ce75dd06d12638e14029bf3717b Mon Sep 17 00:00:00 2001
-+From: Alexis Ballier <aballier@gentoo.org>
-+Date: Thu, 17 Sep 2015 10:36:44 +0200
-+Subject: [PATCH] channels/tsmf/client/ffmpeg: Fix build with ffmpeg git
-+ master.
++++ b/package/ffmpeg/0013-hevc-support-main10-decoding.patch
+@@ -0,0 +1,77 @@
++From bbab50b66f61f38415ea1fbc93314712b90901e2 Mon Sep 17 00:00:00 2001
++From: Hendrik Leppkes <h.leppkes@gmail.com>
++Date: Sat, 30 Jan 2016 17:10:56 +0100
++Subject: [PATCH] hevc: support Main10 decoding through dxva2
 +
-+Replace old, deprecated and now removed, APIs with their new equivalent while retaining backward compatibility with old ffmpeg versions.
++Patch is part of the Kodi patch set for ffmpeg, downloaded from
++https://github.com/xbmc/FFmpeg/.
++
++Patch was backported from upstream commit:
++http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=ccb94789e2968329947f1c2e00d019f387f9c409
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Downloaded from upstream commit:
-+ https://github.com/FreeRDP/FreeRDP/commit/f8ceb3f6061583c650bd4f6cddc10bc0471f2076]
 +---
-+ channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c | 17 ++++++++++++++++-
-+ 1 file changed, 16 insertions(+), 1 deletion(-)
++ Changelog            |  4 ++++
++ libavcodec/hevc.c    | 13 ++++++++++++-
++ libavcodec/version.h |  2 +-
++ 3 files changed, 17 insertions(+), 2 deletions(-)
 +
-+diff --git a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-+index d0880e7..e1b9f83 100644
-+--- a/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-++++ b/channels/tsmf/client/ffmpeg/tsmf_ffmpeg.c
-+@@ -61,6 +61,9 @@
-+ #define AV_CODEC_ID_AC3 CODEC_ID_AC3
++diff --git a/Changelog b/Changelog
++index 2e1cd36..1c60cde 100644
++--- a/Changelog
+++++ b/Changelog
++@@ -1,6 +1,10 @@
++ Entries are sorted chronologically from oldest to youngest within each release,
++ releases are sorted from youngest to oldest.
++ 
+++version <next>:
+++- DXVA2-accelerated HEVC Main10 decoding
+++
+++
++ version 3.0:
++ - Common Encryption (CENC) MP4 encoding and decoding support
++ - DXV decoding
++diff --git a/libavcodec/hevc.c b/libavcodec/hevc.c
++index 203f90a..0d53a33 100644
++--- a/libavcodec/hevc.c
+++++ b/libavcodec/hevc.c
++@@ -347,7 +347,9 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fm
++ 
++     export_stream_params(s->avctx, &s->ps, sps);
++ 
++-    if (sps->pix_fmt == AV_PIX_FMT_YUV420P || sps->pix_fmt == AV_PIX_FMT_YUVJ420P) {
+++    switch (sps->pix_fmt) {
+++    case AV_PIX_FMT_YUV420P:
+++    case AV_PIX_FMT_YUVJ420P:
++ #if CONFIG_HEVC_DXVA2_HWACCEL
++         *fmt++ = AV_PIX_FMT_DXVA2_VLD;
 + #endif
-+ 
-++#if LIBAVUTIL_VERSION_MAJOR < 52
-++#define AV_PIX_FMT_YUV420P PIX_FMT_YUV420P
++@@ -360,6 +362,15 @@ static int set_sps(HEVCContext *s, const HEVCSPS *sps, enum AVPixelFormat pix_fm
++ #if CONFIG_HEVC_VDPAU_HWACCEL
++         *fmt++ = AV_PIX_FMT_VDPAU;
++ #endif
+++        break;
+++    case AV_PIX_FMT_YUV420P10:
+++#if CONFIG_HEVC_DXVA2_HWACCEL
+++        *fmt++ = AV_PIX_FMT_DXVA2_VLD;
 ++#endif
-+ 
-+ typedef struct _TSMFFFmpegDecoder
-+ {
-+@@ -102,7 +105,11 @@ static BOOL tsmf_ffmpeg_init_video_stream(ITSMFDecoder* decoder, const TS_AM_MED
-+ 	mdecoder->codec_context->bit_rate = media_type->BitRate;
-+ 	mdecoder->codec_context->time_base.den = media_type->SamplesPerSecond.Numerator;
-+ 	mdecoder->codec_context->time_base.num = media_type->SamplesPerSecond.Denominator;
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 	mdecoder->frame = avcodec_alloc_frame();
-++#else
-++	mdecoder->frame = av_frame_alloc();
+++#if CONFIG_HEVC_D3D11VA_HWACCEL
+++        *fmt++ = AV_PIX_FMT_D3D11VA_VLD;
 ++#endif
-+ 	return TRUE;
-+ }
+++        break;
++     }
 + 
-+@@ -328,7 +335,11 @@ static BOOL tsmf_ffmpeg_decode_video(ITSMFDecoder* decoder, const BYTE *data, UI
-+ 		if (!mdecoder->decoded_data)
-+ 			return FALSE;
++     if (pix_fmt == AV_PIX_FMT_NONE) {
++diff --git a/libavcodec/version.h b/libavcodec/version.h
++index 37a35e0..08140b0 100644
++--- a/libavcodec/version.h
+++++ b/libavcodec/version.h
++@@ -30,7 +30,7 @@
 + 
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 		frame = avcodec_alloc_frame();
-++#else
-++		frame = av_frame_alloc();
-++#endif
-+ 		avpicture_fill((AVPicture*) frame, mdecoder->decoded_data,
-+ 					   mdecoder->codec_context->pix_fmt,
-+ 					   mdecoder->codec_context->width, mdecoder->codec_context->height);
-+@@ -400,7 +411,11 @@ static BOOL tsmf_ffmpeg_decode_audio(ITSMFDecoder* decoder, const BYTE *data, UI
-+ 									(int16_t *) dst, &frame_size, src, src_size);
-+ #else
-+ 		{
-++#if LIBAVCODEC_VERSION_MAJOR < 55
-+ 			AVFrame *decoded_frame = avcodec_alloc_frame();
-++#else
-++			AVFrame *decoded_frame = av_frame_alloc();
-++#endif
-+ 			int got_frame = 0;
-+ 			AVPacket pkt;
-+ 			av_init_packet(&pkt);
-+@@ -480,7 +495,7 @@ static UINT32 tsmf_ffmpeg_get_decoded_format(ITSMFDecoder* decoder)
++ #define LIBAVCODEC_VERSION_MAJOR  57
++ #define LIBAVCODEC_VERSION_MINOR  24
++-#define LIBAVCODEC_VERSION_MICRO 102
+++#define LIBAVCODEC_VERSION_MICRO 103
 + 
-+ 	switch (mdecoder->codec_context->pix_fmt)
-+ 	{
-+-		case PIX_FMT_YUV420P:
-++		case AV_PIX_FMT_YUV420P:
-+ 			return RDP_PIXFMT_I420;
-+ 		default:
-+ 			WLog_ERR(TAG, "unsupported pixel format %u",
++ #define LIBAVCODEC_VERSION_INT  AV_VERSION_INT(LIBAVCODEC_VERSION_MAJOR, \
++                                                LIBAVCODEC_VERSION_MINOR, \
 -- 
 2.8.0.rc3
