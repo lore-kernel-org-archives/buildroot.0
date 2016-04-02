@@ -1,61 +1,80 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Sat, 02 Apr 2016 19:11:20 +0200
-Subject: [Buildroot] [PATCH] yajl: fix static linking in a parallel build
-In-Reply-To: <CAHXCMMLwDB7Y-5LWxw_Gszcz=S6UxmDr8xMM5MUryu3DugzgMQ@mail.gmail.com>
-References: <1459538292-7023-1-git-send-email-joerg.krause@embedded.rocks>
- <20160402171318.653fec21@free-electrons.com>
- <1459614558.18262.3.camel@embedded.rocks>
- <CAHXCMMLwDB7Y-5LWxw_Gszcz=S6UxmDr8xMM5MUryu3DugzgMQ@mail.gmail.com>
-Message-ID: <1459617080.18262.5.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  2 Apr 2016 19:17:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: revert minimum required
+	ffmpeg version numbers
+Message-ID: <1459617449-28718-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sa, 2016-04-02 at 19:05 +0200, Samuel Martin wrote:
-> On Sat, Apr 2, 2016 at 6:29 PM, J?rg Krause <joerg.krause@embedded.ro
-> cks> wrote:
-> > 
-> > On Sa, 2016-04-02 at 17:13 +0200, Thomas Petazzoni wrote:
-> > > 
-> > > Hello,
-> > > 
-> > > On Fri,??1 Apr 2016 21:18:12 +0200, J?rg Krause wrote:
-> > > 
-> > > > 
-> > > > 
-> > > > + FOREACH (test ${TESTS})
-> > > > +???GET_FILENAME_COMPONENT(testProg ${test} NAME_WE)
-> > > > +???ADD_EXECUTABLE(${testProg} ${test})
-> > > > +-??TARGET_LINK_LIBRARIES(${testProg} yajl m)
-> > > > ++??TARGET_LINK_LIBRARIES(${testProg} yajl_s m)
-> > > I am not sure to understand why this would fix the parallel build
-> > > issue. The parallel build problem comes from the fact that the
-> > > library
-> > > and tests sit in different directories, and that they are built
-> > > in
-> > > parallel with each other. Both the yajl and yajl_s libraries are
-> > > built
-> > > in the same directory, separate from the tests directory. So I
-> > > don't
-> > > quite see how changing from using yajl to yajl_s is going to make
-> > > a
-> > > difference here. But maybe I'm missing something.
-> > The issue is that we patch yajl (#0002) to build only the static
-> > library in a static build. So there is no shared library target for
-> > CMake to use as a dependency.
-> hmm... with that explaination, I nack this.
-> IMHO, the correct way to fix this would rather be:
-> 
-> IF(BUILD_SHARED_LIBS)
-> ? TARGET_LINK_LIBRARIES(${testProg} yajl m)
-> ELSE()
-> ? TARGET_LINK_LIBRARIES(${testProg} yajl_s m)
-> ENDIF()
-> 
+Fixes
+http://autobuild.buildroot.net/results/e62/e62dd4dbdb4c92bc657936566e73388e76343903/
+and many others
 
-Yes, this would probably be best. However, the static library is build
-in shared and static builds.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...g-revert-minimum-required-version-numbers.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
 
-J?rg
+diff --git a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+new file mode 100644
+index 0000000..74136fe
+--- /dev/null
++++ b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+@@ -0,0 +1,51 @@
++From 78a7b7365a67fa2f5394c6b4ca39de01b00416dc Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 2 Apr 2016 19:05:52 +0200
++Subject: [PATCH 1/1] ffmpeg: revert minimum required version numbers
++
++This commit reverts the minimum version numbers required by configure to
++the values before
++https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dL486
++in order to allow compilation with older versions of ffmpeg again.
++
++Please note that the previous version numbers of all ffmpeg libs, with
++the exception of libavfilter, are those of ffmpeg 2.0.7:
++https://ffmpeg.org/olddownload.html
++
++Therefore I synced the minimum version number required for libavfilter to
++3.79.101 and not to 4.0.0 as previous in tvheadend's configure script.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/838]
++---
++ configure | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/configure b/configure
++index be3d2e2..2ffd280 100755
++--- a/configure
+++++ b/configure
++@@ -512,13 +512,13 @@ else
++   if enabled_or_auto libav; then
++     has_libav=true
++ 
++-    check_pkg libavfilter   ">=6.31.100"  || has_libav=false
++-    check_pkg libswresample ">=2.0.101"   || has_libav=false
++-    check_pkg libavresample ">=3.0.0"     || has_libav=false
++-    check_pkg libswscale    ">=4.0.100"   || has_libav=false
++-    check_pkg libavformat   ">=57.25.100" || has_libav=false
++-    check_pkg libavcodec    ">=57.24.102" || has_libav=false
++-    check_pkg libavutil     ">=55.17.103" || has_libav=false
+++    check_pkg libavfilter   ">=3.79.101"  || has_libav=false
+++    check_pkg libswresample ">=0.17.102"   || has_libav=false
+++    check_pkg libavresample ">=1.1.0"     || has_libav=false
+++    check_pkg libswscale    ">=2.3.100"   || has_libav=false
+++    check_pkg libavformat   ">=55.12.100" || has_libav=false
+++    check_pkg libavcodec    ">=55.18.102" || has_libav=false
+++    check_pkg libavutil     ">=52.38.100" || has_libav=false
++ 
++     if $has_libav; then
++       enable libav
++-- 
++2.8.0.rc3
++
+-- 
+2.8.0.rc3
