@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Apr 2016 16:57:23 +0200
-Subject: [Buildroot] [V2 1/3] libtommath: new package
-In-Reply-To: <1459524973-26730-1-git-send-email-francois.perrad@gadz.org>
+Date: Sat, 2 Apr 2016 16:58:38 +0200
+Subject: [Buildroot] [V2 2/3] libtomcrypt: new package
+In-Reply-To: <1459524973-26730-2-git-send-email-francois.perrad@gadz.org>
 References: <1459524973-26730-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <20160402165723.18b71db3@free-electrons.com>
+ <1459524973-26730-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <20160402165838.7687760a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +13,48 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  1 Apr 2016 17:36:11 +0200, Francois Perrad wrote:
+On Fri,  1 Apr 2016 17:36:12 +0200, Francois Perrad wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/Config.in                                  |  1 +
+>  .../0001-install-without-USER-and-GROUP.patch      | 61 ++++++++++++++++++++++
 
-> diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+Instead of this patch, can you try passing:
+
+	USER=$(id -u) GROUP=$(id -g)
+
+in the make options ?
+
 > new file mode 100644
-> index 0000000..a377df1
+> index 0000000..073d6e7
 > --- /dev/null
-> +++ b/package/libtommath/libtommath.mk
-> @@ -0,0 +1,22 @@
+> +++ b/package/libtomcrypt/libtomcrypt.mk
+> @@ -0,0 +1,23 @@
 > +################################################################################
 > +#
-> +# libtommath
+> +# libtomcrypt
 > +#
 > +################################################################################
 > +
-> +LIBTOMMATH_VERSION = 1.0
-> +LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
-> +LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
-> +LIBTOMMATH_LICENSE = WTFPL
-> +LIBTOMMATH_LICENSE_FILES = LICENSE
-> +LIBTOMMATH_INSTALL_STAGING = YES
+> +LIBTOMCRYPT_VERSION = 1.17
+> +LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
+> +LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
+> +LIBTOMCRYPT_LICENSE = WTFPL
+> +LIBTOMCRYPT_LICENSE_FILES = LICENSE
+> +LIBTOMCRYPT_INSTALL_STAGING = YES
+> +LIBTOMCRYPT_DEPENDENCIES = libtommath
 > +
-> +define LIBTOMMATH_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
+> +define LIBTOMCRYPT_BUILD_CMDS
+> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC"
 > +endef
 > +
-> +define LIBTOMMATH_INSTALL_STAGING_CMDS
-> +	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
+> +define LIBTOMCRYPT_INSTALL_STAGING_CMDS
+> +	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" NODOCS=1 install
 > +endef
-> +
-> +$(eval $(generic-package))
 
-I guess if there is no INSTALL_TARGET_CMDS, it's because this library
-only installs a static variant, right? If that's the case, then doing
-LIBTOMMATH_INSTALL_TARGET = NO is a good idea, with a comment above it
-that explains why.
+Same comment as libtommath regarding staging/target installation.
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
