@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Apr 2016 17:31:45 +0200
-Subject: [Buildroot] [PATCH v4 1/7] barebox: support multi-image-build
- image selection
-In-Reply-To: <1458513351-6556-2-git-send-email-pieter@boesman.nl>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <1458513351-6556-2-git-send-email-pieter@boesman.nl>
-Message-ID: <20160402173145.656f9814@free-electrons.com>
+Date: Sat, 2 Apr 2016 17:35:25 +0200
+Subject: [Buildroot] [PATCH 1/3] configs: atmel: add sama5d2 xplained sd
+ card image generation
+In-Reply-To: <1459497706-1663-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1459497706-1663-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20160402173525.08870304@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,62 +13,62 @@ To: buildroot@busybox.net
 
 Hello,
 
-First of all, thanks a lot for keeping up the work on this topic!
+On Fri, 1 Apr 2016 10:01:44 +0200, Ludovic Desroches wrote:
+> Use genimage to generate a sd card with a fat partition (at91bootstrap,
+> u-boot, kernel, dtbs) and an ext4 partition (rootfs).
+> 
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 
-On Sun, 20 Mar 2016 23:35:45 +0100, Pieter Smith wrote:
+Thanks for working on this!
 
->  define BAREBOX_INSTALL_IMAGES_CMDS
-> -	if test -h $(@D)/barebox-flash-image ; then \
-> -		cp -L $(@D)/barebox-flash-image $(BINARIES_DIR)/barebox.bin ; \
-> +	if test -e $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
-> +		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
->  	else \
-> -		cp $(@D)/barebox.bin $(BINARIES_DIR);\
-> +		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
->  	fi
->  	$(BAREBOX_INSTALL_CUSTOM_ENV)
 
-I think I don't like two things here:
+> diff --git a/board/atmel/sama5d2_xplained_mmc/post-image.sh b/board/atmel/sama5d2_xplained_mmc/post-image.sh
+> new file mode 100755
+> index 0000000..c82b189
+> --- /dev/null
+> +++ b/board/atmel/sama5d2_xplained_mmc/post-image.sh
+> @@ -0,0 +1,16 @@
+> +#!/bin/sh
+> +
+> +BOARD_DIR="$(dirname $0)"
+> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +rm -rf "${GENIMAGE_TMP}"
+> +
+> +genimage                               \
+> +	--rootpath "${TARGET_DIR}"     \
+> +	--tmppath "${GENIMAGE_TMP}"    \
+> +	--inputpath "${BINARIES_DIR}"  \
+> +	--outputpath "${BINARIES_DIR}" \
+> +	--config "${GENIMAGE_CFG}"
+> +
+> +exit $?
 
- 1/ That it potentially breaks existing configurations, where
-    barebox.bin was used.
+This last line is not needed.
 
- 2/ That is automatically searches in images/, which this could be made
-    explicit rather than implicit.
+We really need at some point to provide a generic mechanism for
+genimage, because this script is duplicated all over the place. But
+that's a separate issue, we can definitely accept your patch without
+doing this refactoring.
 
-So, what about changing this to:
 
- 1/ Have an option that defaults to empty, and if it's empty, preserves
-    the current behavior.
+> +BR2_PACKAGE_HOST_GENIMAGE=y
 
- 2/ Change the code in the .mk file to do:
+You need to add:
 
-BAREBOX_IMAGE_FILE = $(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_MTOOLS=y
 
-ifeq ($(BAREBOX_IMAGE_FILE),)
-define BARBEOX_INSTALL_IMAGE
-	# old code here, using barebox-flash-image, falling back to barebox.bin
-endef
-else
-define BAREBOX_INSTALL_IMAGE
-	# install BAREBOX_IMAGE_FILE
-endef
-endif
+Which are used to generate the FAT filesystem. You may not have noticed
+if you have those tools installed on your machine, but they are needed.
 
-and that's it?
+Last but not least, could you add a patch at the end of the series that
+updates the documentation in board/atmel/readme.txt to simplify the SD
+card installation details? Indeed we no longer need to tell the user to
+create the partitions, copy the files manually and so on.
 
-Alternatively, you could do that with shell conditionals only, testing
-is BAREBOX_IMAGE_FILE is empty or not. This may be even easier to read:
-
-	if test -n $(BAREBOX_IMAGE) ; then
-		install $(BAREBOX_IMAGE)
-	elif test -h $(@D)/barebox-flash-image ; then
-		cp -L $(@D)/barebox-flash-image ...
-	else
-		cp $(@D)/barebox.bin ...
-	fi
-
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
