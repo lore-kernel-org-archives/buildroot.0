@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Apr 2016 16:50:59 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.2.x series
-Message-ID: <20160402145127.0469C807BE@busybox.osuosl.org>
+Date: Sat, 2 Apr 2016 16:51:38 +0200
+Subject: [Buildroot] [PATCH] php: security bump to version 5.6.20
+In-Reply-To: <1459512139-29247-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1459512139-29247-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160402165138.446ba5a6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=136156372ef4fc7582bec0ba68f543961683b008
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri,  1 Apr 2016 09:02:19 -0300, Gustavo Zacarias wrote:
+> Fixes (no CVEs yet):
+> Buffer over-write in finfo_open with malformed magic file.
+> Invalid memory write in phar on filename with \0 in name.
+> Parsing of tar file with duplicate filenames causes memory leak.
+> php_snmp_error() Format String Vulnerability.
+> Integer Overflow in php_raw_url_encode.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>  package/php/php.hash | 2 +-
+>  package/php/php.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 31c4d24..72cd5e1 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -210,7 +210,7 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.78"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.79"	if BR2_KERNEL_HEADERS_3_2
- 	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
