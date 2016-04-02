@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 2 Apr 2016 17:20:58 +0200
-Subject: [Buildroot] [PATCH] wilc1000-firmware: new package
-In-Reply-To: <1459491576-32280-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1459491576-32280-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <20160402172058.77e5cba2@free-electrons.com>
+Date: Sat, 2 Apr 2016 17:31:45 +0200
+Subject: [Buildroot] [PATCH v4 1/7] barebox: support multi-image-build
+ image selection
+In-Reply-To: <1458513351-6556-2-git-send-email-pieter@boesman.nl>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <1458513351-6556-2-git-send-email-pieter@boesman.nl>
+Message-ID: <20160402173145.656f9814@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +14,62 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 1 Apr 2016 08:19:36 +0200, Ludovic Desroches wrote:
-> Firmware for Atmel Wilc1000 wireless device.
-> 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
-> ---
->  package/Config.in                              |  1 +
->  package/wilc1000-firmware/Config.in            |  6 ++++++
->  package/wilc1000-firmware/wilc1000-firmware.mk | 25 +++++++++++++++++++++++++
+First of all, thanks a lot for keeping up the work on this topic!
 
-A hash file was missing.
+On Sun, 20 Mar 2016 23:35:45 +0100, Pieter Smith wrote:
 
-> +WILC1000_FIRMWARE_VERSION = 14.1
-> +WILC1000_FIRMWARE_SITE = https://github.com/linux4sc/wireless-firmware/archive
-> +WILC1000_FIRMWARE_SOURCE = v$(WILC1000_FIRMWARE_VERSION)_Firmware.zip
+>  define BAREBOX_INSTALL_IMAGES_CMDS
+> -	if test -h $(@D)/barebox-flash-image ; then \
+> -		cp -L $(@D)/barebox-flash-image $(BINARIES_DIR)/barebox.bin ; \
+> +	if test -e $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
+> +		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
+>  	else \
+> -		cp $(@D)/barebox.bin $(BINARIES_DIR);\
+> +		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
+>  	fi
+>  	$(BAREBOX_INSTALL_CUSTOM_ENV)
 
-What a crappy file name, which doesn't even contain the name of the
-project :-/
+I think I don't like two things here:
 
-> +WILC1000_FIRMWARE_DRIVER_FILE = wilc1003_firmware.bin
+ 1/ That it potentially breaks existing configurations, where
+    barebox.bin was used.
 
-This variable is not really needed, it's only used once
+ 2/ That is automatically searches in images/, which this could be made
+    explicit rather than implicit.
 
-> +WILC1000_FIRMWARE_LICENSE = PROPRIETARY
-> +
-> +define WILC1000_FIRMWARE_EXTRACT_CMDS
-> +	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(WILC1000_FIRMWARE_SOURCE)
-> +	mv $(BUILD_DIR)/wireless-firmware-$(WILC1000_FIRMWARE_VERSION)_Firmware/* $(@D)
-> +	rmdir $(BUILD_DIR)/wireless-firmware-$(WILC1000_FIRMWARE_VERSION)_Firmware
-> +endef
-> +
-> +define WILC1000_FIRMWARE_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/firmware/atmel/
-> +	cp $(@D)/$(WILC1000_FIRMWARE_DRIVER_FILE) $(TARGET_DIR)/lib/firmware/atmel/
+So, what about changing this to:
 
-I've simplified this to use just one $(INSTALL) -D -m 0644 invocation,
-which is sufficient since 1/ there is only one file to install and 2/
-option -D tells $(INSTALL) to create sub-directories as necessary.
+ 1/ Have an option that defaults to empty, and if it's empty, preserves
+    the current behavior.
 
-Applied with those fixes. Thanks!
+ 2/ Change the code in the .mk file to do:
+
+BAREBOX_IMAGE_FILE = $(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)
+
+ifeq ($(BAREBOX_IMAGE_FILE),)
+define BARBEOX_INSTALL_IMAGE
+	# old code here, using barebox-flash-image, falling back to barebox.bin
+endef
+else
+define BAREBOX_INSTALL_IMAGE
+	# install BAREBOX_IMAGE_FILE
+endef
+endif
+
+and that's it?
+
+Alternatively, you could do that with shell conditionals only, testing
+is BAREBOX_IMAGE_FILE is empty or not. This may be even easier to read:
+
+	if test -n $(BAREBOX_IMAGE) ; then
+		install $(BAREBOX_IMAGE)
+	elif test -h $(@D)/barebox-flash-image ; then
+		cp -L $(@D)/barebox-flash-image ...
+	else
+		cp $(@D)/barebox.bin ...
+	fi
+
+Thanks!
 
 Thomas
 -- 
