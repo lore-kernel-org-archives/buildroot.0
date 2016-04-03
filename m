@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Apr 2016 16:18:20 +0200
-Subject: [Buildroot] [PATCH v11 08/26] package/freeswitch: add optional
-	dependency to freetype
+Date: Sun,  3 Apr 2016 16:18:18 +0200
+Subject: [Buildroot] [PATCH v11 06/26] package/freeswitch: add optional
+	dependency to libpng
 In-Reply-To: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459693118-19072-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459693118-19072-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 00bac94..caeade4 100644
+index d403ded..34fc6d4 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -152,6 +152,10 @@ endef
+@@ -165,6 +165,11 @@ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+FREESWITCH_DEPENDENCIES += freetype
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++FREESWITCH_DEPENDENCIES += libpng
++FREESWITCH_ENABLED_MODULES += formats/mod_png
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- FREESWITCH_DEPENDENCIES += libedit
- FREESWITCH_CONF_OPTS += --enable-core-libedit-support
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ FREESWITCH_DEPENDENCIES += util-linux
+ endif
 -- 
 2.8.0.rc3
