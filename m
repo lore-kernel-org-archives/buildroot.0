@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Apr 2016 16:18:27 +0200
-Subject: [Buildroot] [PATCH v11 15/26] package/freeswitch: enable mod_isac
+Date: Sun,  3 Apr 2016 16:18:15 +0200
+Subject: [Buildroot] [PATCH v11 03/26] package/freeswitch: add optional
+	dependency to libuuid
 In-Reply-To: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459693118-19072-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459693118-19072-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/freeswitch/Config.in     | 4 ++++
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 2 files changed, 8 insertions(+)
 
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index b52d469..a641008 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -10,6 +10,10 @@ config BR2_PACKAGE_FREESWITCH
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_SPEEX
+ 	select BR2_PACKAGE_SQLITE
++	# "libuuid development package highly recommended!"
++	# https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/build/config/uuid.m4#9
++	select BR2_PACKAGE_UTIL_LINUX if BR2_USE_WCHAR
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID if BR2_USE_WCHAR
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  FreeSWITCH is a scalable open source cross-platform telephony
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 438eeaf..dee1bf5 100644
+index 33900d4..3ad1890 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -152,6 +152,12 @@ endef
+@@ -154,4 +154,8 @@ endef
  
  FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
  
-+# mod_isac supports a limited set of archs
-+# src/mod/codecs/mod_isac/typedefs.h
-+ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_64),y)
-+FREESWITCH_ENABLED_MODULES += codecs/mod_isac
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++FREESWITCH_DEPENDENCIES += util-linux
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
- endif
+ $(eval $(autotools-package))
 -- 
 2.8.0.rc3
