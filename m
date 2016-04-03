@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Apr 2016 16:18:19 +0200
-Subject: [Buildroot] [PATCH v11 07/26] package/freeswitch: add optional
-	dependency to unixodbc
+Date: Sun,  3 Apr 2016 16:18:27 +0200
+Subject: [Buildroot] [PATCH v11 15/26] package/freeswitch: enable mod_isac
 In-Reply-To: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459693118-19072-8-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459693118-19072-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +12,25 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/freeswitch/freeswitch.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 34fc6d4..00bac94 100644
+index 438eeaf..dee1bf5 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -61,7 +61,6 @@ FREESWITCH_CONF_ENV += \
- 	ac_cv_gcc_supports_w_no_unused_result=no
+@@ -152,6 +152,12 @@ endef
  
- FREESWITCH_CONF_OPTS = \
--	--disable-core-odbc-support \
- 	--disable-libvpx \
- 	--disable-libyuv \
- 	--without-erlang \
-@@ -170,6 +169,15 @@ FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
- endif
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
  
-+ifeq ($(BR2_PACKAGE_UNIXODBC),y)
-+FREESWITCH_DEPENDENCIES += unixodbc
-+FREESWITCH_CONF_OPTS += \
-+	--enable-core-odbc-support \
-+	--with-odbc=$(STAGING_DIR)/usr
-+else
-+FREESWITCH_CONF_OPTS += --disable-core-odbc-support
++# mod_isac supports a limited set of archs
++# src/mod/codecs/mod_isac/typedefs.h
++ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_64),y)
++FREESWITCH_ENABLED_MODULES += codecs/mod_isac
 +endif
 +
- ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ FREESWITCH_DEPENDENCIES += freetype
  endif
 -- 
 2.8.0.rc3
