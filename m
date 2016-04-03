@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Apr 2016 16:18:15 +0200
-Subject: [Buildroot] [PATCH v11 03/26] package/freeswitch: add optional
-	dependency to libuuid
+Date: Sun,  3 Apr 2016 16:18:25 +0200
+Subject: [Buildroot] [PATCH v11 13/26] package/freeswitch: add optional
+	dependency to libg7221
 In-Reply-To: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1459693118-19072-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459693118-19072-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/Config.in     | 4 ++++
  package/freeswitch/freeswitch.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index b52d469..a641008 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -10,6 +10,10 @@ config BR2_PACKAGE_FREESWITCH
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_SPEEX
- 	select BR2_PACKAGE_SQLITE
-+	# "libuuid development package highly recommended!"
-+	# https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/build/config/uuid.m4#9
-+	select BR2_PACKAGE_UTIL_LINUX if BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID if BR2_USE_WCHAR
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  FreeSWITCH is a scalable open source cross-platform telephony
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 33900d4..3ad1890 100644
+index e42bfd2..cd723e0 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -154,4 +154,8 @@ endef
+@@ -173,6 +173,10 @@ else
+ FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+FREESWITCH_DEPENDENCIES += util-linux
++ifeq ($(BR2_PACKAGE_LIBG7221),y)
++FREESWITCH_DEPENDENCIES += libg7221
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
 -- 
 2.8.0.rc3
