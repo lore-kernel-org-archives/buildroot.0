@@ -1,251 +1,125 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sun, 3 Apr 2016 13:09:14 +0200
-Subject: [Buildroot] [PATCH] opencv: fix sparc64 compile
-Message-ID: <20160403110913.GA19849@waldemar-brodkorb.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  3 Apr 2016 16:18:12 +0200
+Subject: [Buildroot] [PATCH v11 00/26] package/freeswitch: new package
+Message-ID: <1459693118-19072-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch from Debian fixes following autobuild failure:
-http://autobuild.buildroot.net/results/eda5c6c43da40a342e0f545a348d2f865eb5ccf2/
+Hi,
 
-Tested with ARM build without a regression.
+this patch series splits my previous patch into smaller chunks for easier
+review as requested by Luca and Thomas. I also removed all options from
+Config.in.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/opencv/0002-atomic.patch | 222 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 222 insertions(+)
- create mode 100644 package/opencv/0002-atomic.patch
+Instead of enabling or disabling modules in the upstream modules.conf I
+decided to delete that file in the first patch to provide a minimal
+build for easier review, please keep in mind that I never did a run-time
+test with this minimal version. A lot of modules, desired as a default
+set, are added with the second patch - all of them have no external
+dependencies. The rest of the patch series consists of modules having
+some form of dependency, added module by module for easier review.
 
-diff --git a/package/opencv/0002-atomic.patch b/package/opencv/0002-atomic.patch
-new file mode 100644
-index 0000000..607d3fd
---- /dev/null
-+++ b/package/opencv/0002-atomic.patch
-@@ -0,0 +1,222 @@
-+Bug#714923: opencv FTBFS on sparc64
-+https://www.mail-archive.com/debian-bugs-dist at lists.debian.org/msg1393793.html
-+
-+diff -Nur opencv-2.4.12.3.orig/modules/core/include/opencv2/core/core.hpp opencv-2.4.12.3/modules/core/include/opencv2/core/core.hpp
-+--- opencv-2.4.12.3.orig/modules/core/include/opencv2/core/core.hpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/core/include/opencv2/core/core.hpp	2016-04-03 00:10:50.455774144 +0200
-+@@ -1290,7 +1290,7 @@
-+     operator const _Tp*() const;
-+ 
-+     _Tp* obj; //< the object pointer.
-+-    int* refcount; //< the associated reference counter
-++    _Atomic_word* refcount; //< the associated reference counter
-+ };
-+ 
-+ template<typename T>
-+@@ -1490,9 +1490,9 @@
-+ public:
-+     MatAllocator() {}
-+     virtual ~MatAllocator() {}
-+-    virtual void allocate(int dims, const int* sizes, int type, int*& refcount,
-++    virtual void allocate(int dims, const int* sizes, int type, _Atomic_word*& refcount,
-+                           uchar*& datastart, uchar*& data, size_t* step) = 0;
-+-    virtual void deallocate(int* refcount, uchar* datastart, uchar* data) = 0;
-++    virtual void deallocate(_Atomic_word* refcount, uchar* datastart, uchar* data) = 0;
-+ };
-+ 
-+ /*!
-+@@ -1985,7 +1985,7 @@
-+ 
-+     //! pointer to the reference counter;
-+     // when matrix points to user-allocated data, the pointer is NULL
-+-    int* refcount;
-++    _Atomic_word* refcount;
-+ 
-+     //! helper fields used in locateROI and adjustROI
-+     uchar* datastart;
-+@@ -3408,7 +3408,7 @@
-+     {
-+         Hdr(int _dims, const int* _sizes, int _type);
-+         void clear();
-+-        int refcount;
-++        _Atomic_word refcount;
-+         int dims;
-+         int valueOffset;
-+         size_t nodeSize;
-+diff -Nur opencv-2.4.12.3.orig/modules/core/include/opencv2/core/gpumat.hpp opencv-2.4.12.3/modules/core/include/opencv2/core/gpumat.hpp
-+--- opencv-2.4.12.3.orig/modules/core/include/opencv2/core/gpumat.hpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/core/include/opencv2/core/gpumat.hpp	2016-04-02 23:08:58.116874218 +0200
-+@@ -301,7 +301,7 @@
-+ 
-+         //! pointer to the reference counter;
-+         // when GpuMatrix points to user-allocated data, the pointer is NULL
-+-        int* refcount;
-++        _Atomic_word* refcount;
-+ 
-+         //! helper fields used in locateROI and adjustROI
-+         uchar* datastart;
-+diff -Nur opencv-2.4.12.3.orig/modules/core/include/opencv2/core/operations.hpp opencv-2.4.12.3/modules/core/include/opencv2/core/operations.hpp
-+--- opencv-2.4.12.3.orig/modules/core/include/opencv2/core/operations.hpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/core/include/opencv2/core/operations.hpp	2016-04-02 23:12:59.148385306 +0200
-+@@ -2589,7 +2589,7 @@
-+ {
-+     if(obj)
-+     {
-+-        refcount = (int*)fastMalloc(sizeof(*refcount));
-++        refcount = (_Atomic_word*)fastMalloc(sizeof(*refcount));
-+         *refcount = 1;
-+     }
-+     else
-+@@ -2628,7 +2628,7 @@
-+ {
-+     if (this != &_ptr)
-+     {
-+-      int* _refcount = _ptr.refcount;
-++      _Atomic_word* _refcount = _ptr.refcount;
-+       if( _refcount )
-+           CV_XADD(_refcount, 1);
-+       release();
-+diff -Nur opencv-2.4.12.3.orig/modules/core/src/gpumat.cpp opencv-2.4.12.3/modules/core/src/gpumat.cpp
-+--- opencv-2.4.12.3.orig/modules/core/src/gpumat.cpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/core/src/gpumat.cpp	2016-04-02 23:14:38.894804300 +0200
-+@@ -716,7 +716,7 @@
-+         datastart = data = static_cast<uchar*>(devPtr);
-+         dataend = data + nettosize;
-+ 
-+-        refcount = static_cast<int*>(fastMalloc(sizeof(*refcount)));
-++        refcount = static_cast<_Atomic_word*>(fastMalloc(sizeof(*refcount)));
-+         *refcount = 1;
-+     }
-+ }
-+diff -Nur opencv-2.4.12.3.orig/modules/core/src/matrix.cpp opencv-2.4.12.3/modules/core/src/matrix.cpp
-+--- opencv-2.4.12.3.orig/modules/core/src/matrix.cpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/core/src/matrix.cpp	2016-04-02 23:59:53.405491031 +0200
-+@@ -213,7 +213,7 @@
-+         {
-+             size_t totalsize = alignSize(step.p[0]*size.p[0], (int)sizeof(*refcount));
-+             data = datastart = (uchar*)fastMalloc(totalsize + (int)sizeof(*refcount));
-+-            refcount = (int*)(data + totalsize);
-++            refcount = (_Atomic_word*)(data + totalsize);
-+             *refcount = 1;
-+         }
-+         else
-+@@ -228,7 +228,7 @@
-+                 allocator = 0;
-+                 size_t totalSize = alignSize(step.p[0]*size.p[0], (int)sizeof(*refcount));
-+                 data = datastart = (uchar*)fastMalloc(totalSize + (int)sizeof(*refcount));
-+-                refcount = (int*)(data + totalSize);
-++                refcount = (_Atomic_word*)(data + totalSize);
-+                 *refcount = 1;
-+             }
-+ #else
-+diff -Nur opencv-2.4.12.3.orig/modules/core/src/system.cpp opencv-2.4.12.3/modules/core/src/system.cpp
-+--- opencv-2.4.12.3.orig/modules/core/src/system.cpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/core/src/system.cpp	2016-04-02 23:33:19.298905578 +0200
-+@@ -892,7 +892,7 @@
-+     void unlock() { LeaveCriticalSection(&cs); }
-+ 
-+     CRITICAL_SECTION cs;
-+-    int refcount;
-++    _Atomic_word refcount;
-+ };
-+ 
-+ #ifndef __GNUC__
-+@@ -920,7 +920,7 @@
-+     void unlock() { OSSpinLockUnlock(&sl); }
-+ 
-+     OSSpinLock sl;
-+-    int refcount;
-++    _Atomic_word refcount;
-+ };
-+ 
-+ #elif defined __linux__ && !defined ANDROID && !defined __LINUXTHREADS_OLD__
-+@@ -935,7 +935,7 @@
-+     void unlock() { pthread_spin_unlock(&sl); }
-+ 
-+     pthread_spinlock_t sl;
-+-    int refcount;
-++    _Atomic_word refcount;
-+ };
-+ 
-+ #else
-+@@ -950,7 +950,7 @@
-+     void unlock() { pthread_mutex_unlock(&sl); }
-+ 
-+     pthread_mutex_t sl;
-+-    int refcount;
-++    _Atomic_word refcount;
-+ };
-+ 
-+ #endif
-+diff -Nur opencv-2.4.12.3.orig/modules/gpu/include/opencv2/gpu/gpu.hpp opencv-2.4.12.3/modules/gpu/include/opencv2/gpu/gpu.hpp
-+--- opencv-2.4.12.3.orig/modules/gpu/include/opencv2/gpu/gpu.hpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/gpu/include/opencv2/gpu/gpu.hpp	2016-04-02 23:16:19.737293785 +0200
-+@@ -125,7 +125,7 @@
-+     size_t step;
-+ 
-+     uchar* data;
-+-    int* refcount;
-++    _Atomic_word* refcount;
-+ 
-+     uchar* datastart;
-+     uchar* dataend;
-+diff -Nur opencv-2.4.12.3.orig/modules/ocl/include/opencv2/ocl/ocl.hpp opencv-2.4.12.3/modules/ocl/include/opencv2/ocl/ocl.hpp
-+--- opencv-2.4.12.3.orig/modules/ocl/include/opencv2/ocl/ocl.hpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/ocl/include/opencv2/ocl/ocl.hpp	2016-04-02 23:18:55.715331443 +0200
-+@@ -404,7 +404,7 @@
-+ 
-+             //! pointer to the reference counter;
-+             // when oclMatrix points to user-allocated data, the pointer is NULL
-+-            int *refcount;
-++            _Atomic_word *refcount;
-+ 
-+             //! helper fields used in locateROI and adjustROI
-+             //datastart and dataend are not used in current version
-+diff -Nur opencv-2.4.12.3.orig/modules/ocl/src/matrix_operations.cpp opencv-2.4.12.3/modules/ocl/src/matrix_operations.cpp
-+--- opencv-2.4.12.3.orig/modules/ocl/src/matrix_operations.cpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/ocl/src/matrix_operations.cpp	2016-04-02 23:19:23.633128033 +0200
-+@@ -591,7 +591,7 @@
-+         datastart = data = (uchar *)dev_ptr;
-+         dataend = data + nettosize;
-+ 
-+-        refcount = (int *)fastMalloc(sizeof(*refcount));
-++        refcount = (_Atomic_word *)fastMalloc(sizeof(*refcount));
-+         *refcount = 1;
-+     }
-+ }
-+diff -Nur opencv-2.4.12.3.orig/modules/python/src2/cv2.cpp opencv-2.4.12.3/modules/python/src2/cv2.cpp
-+--- opencv-2.4.12.3.orig/modules/python/src2/cv2.cpp	2015-10-26 08:56:34.000000000 +0100
-++++ opencv-2.4.12.3/modules/python/src2/cv2.cpp	2016-04-02 23:18:34.897991791 +0200
-+@@ -157,12 +157,12 @@
-+ static size_t REFCOUNT_OFFSET = (size_t)&(((PyObject*)0)->ob_refcnt) +
-+     (0x12345678 != *(const size_t*)"\x78\x56\x34\x12\0\0\0\0\0")*sizeof(int);
-+ 
-+-static inline PyObject* pyObjectFromRefcount(const int* refcount)
-++static inline PyObject* pyObjectFromRefcount(const _Atomic_word* refcount)
-+ {
-+     return (PyObject*)((size_t)refcount - REFCOUNT_OFFSET);
-+ }
-+ 
-+-static inline int* refcountFromPyObject(const PyObject* obj)
-++static inline _Atomic_word* refcountFromPyObject(const PyObject* obj)
-+ {
-+     return (int*)((size_t)obj + REFCOUNT_OFFSET);
-+ }
-+@@ -173,7 +173,7 @@
-+     NumpyAllocator() {}
-+     ~NumpyAllocator() {}
-+ 
-+-    void allocate(int dims, const int* sizes, int type, int*& refcount,
-++    void allocate(int dims, const int* sizes, int type, _Atomic_word*& refcount,
-+                   uchar*& datastart, uchar*& data, size_t* step)
-+     {
-+         PyEnsureGIL gil;
-+@@ -206,7 +206,7 @@
-+         datastart = data = (uchar*)PyArray_DATA((PyArrayObject*) o);
-+     }
-+ 
-+-    void deallocate(int* refcount, uchar*, uchar*)
-++    void deallocate(_Atomic_word* refcount, uchar*, uchar*)
-+     {
-+         PyEnsureGIL gil;
-+         if( !refcount )
+Regards, Bernd
+
+v11: bumped to 1.6.7
+    - libvpx & libyuv are now part of the freeswitch source code
+    - reworked video support using new option
+      BR2_PACKAGE_FREESWITCH_VIDEO
+    - removed two patches:
+      0001-jpeg.patch is not needed anymore since freeswitch does use
+      system libyuv
+      0003-FS-8736-resolve-Missing-MEMMOVE-macro-in-spandsp-aut.patch
+      was applied upstream
+v10: addressed various comments (Thomas)
+    - fixed _LICENSE
+    - fixed linking error for target fs_cli when libuuid is disabled
+    - shortened subject of enable_mod* patches
+    - fixed subject of patch #0003
+    - added patch to remove modcheck.sh from build/Makefile.am instead
+      of using _PRE_CONFIGURE_HOOKS
+    - re-worded comment for FREESWITCH_BOOTSTRAP
+v9: - added comment about bundled 3rd-party libraries (Romain)
+    - renamed some POST_PATCH_HOOKS into PRE_CONFIGURE_HOOKS (Romain)
+    - replaced autoreconf fix for spandsp (added in v6) with upstream
+      commit, removed dependency to host-autoconf-archive
+v8: - rebased against branch next
+v7: - removed all Kconfig suboptions
+    - squashed zrtp patch into main patch
+    - updated platform support checks for zrtp and mod_isac
+    - renamed zrtp patch to 0002-zrtp.patch and updated it to fix PPC
+    - enabled missing modules:
+      mod_g723_1, mod_g729, mod_loopback and mod_say_*
+v6: - bumped to version 1.6.6
+    - fixed autoreconf bug in libs/spandsp/ introduced by version bump
+    - added hint for dynamic libs to comment in Config.in (Ricardo)
+    - changed dependency from libjpeg to jpeg (Ricardo)
+    - fixed -Werror bug using FREESWITCH_CONF_ENV,
+      removed 0001-cross_git.patch (Ricardo)
+    - re-numbered patches
+v5: - bumped to version 1.6.5
+    - split patch into smaller chunks (Luca, Thomas)
+    - removed most of the options from Config.in
+    - added several new modules
+    - compilation with uClibc-ng is fixed
+v4: - bumped to version 1.6.2
+v3: - bumped to version 1.6.0, added hash
+    - to compile with uClibc-NG this patch is needed:
+      http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=1.0&id=5a167e319ca2bee566d330d1c901d76dc53deea7
+      http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/126450/focus=127191
+    - removed python module, cross compiling to 32bit on 64bit host is
+      broken:
+      http://lists.busybox.net/pipermail/buildroot/2011-August/045039.html
+    - added reverse dependencies from vlc
+    - added comment to 0002-jpeg.patch
+v2: - addressed various comments (Thomas)
+
+
+
+Bernd Kuhls (26):
+  package/freeswitch: new package
+  package/freeswitch: enable optional modules
+  package/freeswitch: add optional dependency to libuuid
+  package/freeswitch: add optional dependency to libedit
+  package/freeswitch: enable mod_enum
+  package/freeswitch: add optional dependency to libpng
+  package/freeswitch: add optional dependency to unixodbc
+  package/freeswitch: add optional dependency to freetype
+  package/freeswitch: enable mod_yaml
+  package/freeswitch: enable mod_lua
+  package/freeswitch: enable mod_bv
+  package/freeswitch: enable mod_codec2
+  package/freeswitch: add optional dependency to libg7221
+  package/freeswitch: enable mod_ilbc
+  package/freeswitch: enable mod_isac
+  package/freeswitch: enable mod_opus
+  package/freeswitch: enable mod_portaudio
+  package/freeswitch: enable mod_silk
+  package/freeswitch: enable mod_sndfile
+  package/freeswitch: enable mod_alsa
+  package/freeswitch: enable mod_soundtouch
+  package/freeswitch: enable mod_xml_rpc
+  package/freeswitch: add optional dependency to xz
+  package/freeswitch: enable mod_memcache
+  package/freeswitch: enable mod_imagick
+  package/freeswitch: enable video support
+
+ package/Config.in                                  |   1 +
+ package/freeswitch/0001-zrtp.patch                 |  33 +++
+ .../0002-Makefile.am-fs_cli-needs-libzrtp.a.patch  |  41 +++
+ ...ile.am-modcheck.sh-is-superfluous-when-cr.patch |  26 ++
+ package/freeswitch/Config.in                       |  42 +++
+ package/freeswitch/freeswitch.hash                 |   2 +
+ package/freeswitch/freeswitch.mk                   | 306 +++++++++++++++++++++
+ 7 files changed, 451 insertions(+)
+ create mode 100644 package/freeswitch/0001-zrtp.patch
+ create mode 100644 package/freeswitch/0002-Makefile.am-fs_cli-needs-libzrtp.a.patch
+ create mode 100644 package/freeswitch/0003-build-Makefile.am-modcheck.sh-is-superfluous-when-cr.patch
+ create mode 100644 package/freeswitch/Config.in
+ create mode 100644 package/freeswitch/freeswitch.hash
+ create mode 100644 package/freeswitch/freeswitch.mk
+
 -- 
-2.1.4
+2.8.0.rc3
