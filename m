@@ -1,144 +1,96 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Apr 2016 01:37:46 +0200
-Subject: [Buildroot] [PATCH v4 7/7] beaglebone: adds barebox bootloader
-	defconfig
-In-Reply-To: <1458513351-6556-8-git-send-email-pieter@boesman.nl>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <1458513351-6556-8-git-send-email-pieter@boesman.nl>
-Message-ID: <5702FACA.6080001@mind.be>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Mon, 4 Apr 2016 16:45:54 -0700
+Subject: [Buildroot] [PATCH V2] Add Xen 4.6
+In-Reply-To: <56FB80AA.1050407@mind.be>
+References: <1457483717-17947-1-git-send-email-alistair.francis@xilinx.com>
+ <56F7D7FA.40001@mind.be>
+ <CAKmqyKOCUKKQJRg6jK5TdJ33XbyATjsWrj41Gdy2zU7FwHz7mg@mail.gmail.com>
+ <56FAD6B4.5000706@mind.be>
+ <74004942B5DA03468B2B76399A14BF2E7DB1003D@XSJ-PSEXMBX01.xlnx.xilinx.com>
+ <56FB80AA.1050407@mind.be>
+Message-ID: <CAKmqyKOSaGayGxLy4dWQOMyD+Z6PRgStVD-TjLB63RZ4q4ih3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 03/20/16 23:35, Pieter Smith wrote:
-> * Builds the barebox MLO and bootloader.
-> * Generates a barebox environment that boots from eMMC by default.
-> * Barebox integrates a perfectly good device-tree for the bbb, so no dtb is
->    being generated with the kernel.
+On Wed, Mar 30, 2016 at 12:30 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> Signed-off-by: Pieter Smith <pieter@boesman.nl>
-> ---
->   board/beaglebone/barebox.env/boot/sd      |  6 +++++
->   board/beaglebone/barebox.env/config-board |  4 +++
->   configs/beaglebone_barebox_defconfig      | 41 +++++++++++++++++++++++++++++++
->   3 files changed, 51 insertions(+)
->   create mode 100644 board/beaglebone/barebox.env/boot/sd
->   create mode 100644 board/beaglebone/barebox.env/config-board
->   create mode 100644 configs/beaglebone_barebox_defconfig
 >
-> diff --git a/board/beaglebone/barebox.env/boot/sd b/board/beaglebone/barebox.env/boot/sd
-> new file mode 100644
-> index 0000000..7a80e29
-> --- /dev/null
-> +++ b/board/beaglebone/barebox.env/boot/sd
-> @@ -0,0 +1,6 @@
-> +#!/bin/sh
+> On 03/30/16 01:37, Alistair Francis wrote:
+>>>
+>>> -----Original Message-----
+>>> From: Arnout Vandecappelle [mailto:arnout at mind.be]
+>>> Sent: Tuesday, 29 March 2016 12:26 PM
+>>> To: Alistair Francis <alistai@xilinx.com>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>;
+>>> buildroot at buildroot.org; maxime.ripard at free-electrons.com
+>>> Subject: Re: [PATCH V2] Add Xen 4.6
+>>>
+>>> On 03/28/16 20:59, Alistair Francis wrote:
+>>>>
+>>>> On Sun, Mar 27, 2016 at 5:54 AM, Arnout Vandecappelle<arnout@mind.be>
+>>>
+>>> wrote:
+>>> [snip]
+>>>>>>
+>>>>>>   For some reason, it doesn't seem to be cross-compiling for me, it
+>>>>>> uses
+>>>>>> "gcc" to build. I think you need to pass TARGET_CONFIGURE_OPTS in
+>>>>>> XEN_MAKE_ENV.
+>>>>
+>>>> I see the same problem. I tried using TARGET_CONFIGURE_OPTS in
+>>>> XEN_MAKE_ENV but it still uses GCC.
+>>>>
+>>>> The configure scripts detects an AArch64 target correctly, but it
+>>>> still uses GCC. Any other ideas?
+>>>
+>>>
+>>>    Try passing CROSS_COMPILE in XEN_MAKE_ENV.
+>>>
+>>>    You may also need to set XEN_TARGET_ARCH, AFAICS it is not derived
+>>> automatically.
+>>
+>>
+>> Sorry for the poorly formatted reply, I am sending this from my work
+>> email.
+>>
+>> I managed to get it to use aarch64-buildroot-linux-gnu-gcc using the
+>> CROSS_COMPILE=$(TARGET_CROSS) option , but now I see a lot of
+>> errors as apparently that version of GCC doesn't understand a lot of the
+>> command line options.
+>>
+>> Any idea why that would be? The GCC version is 4.9.3 which should be new
+>> enough.
+>
+>
+>  Can you put the build log in a pastebin and post it on the list? It's
+> difficult to say anything just like this...
+>
+>  Did you also pass XEN_TARGET_ARCH?
 
-  Is that needed/useful?
+I managed to get it to work for AArch64, but now it's failing for
+ARMv7. I haven't tried the x86 architectures yet.
 
-> +
-> +global.bootm.image=/boot/zImage
-> +#global.bootm.oftree=/boot/oftree
+Here is the error log: http://pastebin.com/znTSCu6s
 
-  Maybe repeat here the comment about using the built-in DT.
+Here is the Xen.mk I'm using: http://pastebin.com/G33WH3Z9
 
-> +#global.bootm.initrd=<path to initrd>
+Thanks,
 
-  I would remove this line, it's not very useful.
+Alistair
 
-> +global.linux.bootargs.dyn.root="root=/dev/mmcblk0p2 rootfstype=ext2 rootwait"
-> diff --git a/board/beaglebone/barebox.env/config-board b/board/beaglebone/barebox.env/config-board
-> new file mode 100644
-> index 0000000..cd7b26d
-> --- /dev/null
-> +++ b/board/beaglebone/barebox.env/config-board
-> @@ -0,0 +1,4 @@
-> +#!/bin/sh
-> +
-> +global.boot.default=sd
-> +
-> diff --git a/configs/beaglebone_barebox_defconfig b/configs/beaglebone_barebox_defconfig
-> new file mode 100644
-> index 0000000..6324dbf
-> --- /dev/null
-> +++ b/configs/beaglebone_barebox_defconfig
-> @@ -0,0 +1,41 @@
-> +# architecture
-> +BR2_arm=y
-> +BR2_cortex_a8=y
-> +BR2_ARM_EABIHF=y
-> +
-> +# system
-> +BR2_TARGET_GENERIC_HOSTNAME="beaglebone"
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_DEVTMPFS=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttyO0"
-
-  Does the default (console) not work well?
-
-> +# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-
-  Why?
-
-> +# BR2_ROOTFS_POST_IMAGE_SCRIPT is not set
-
-  This is the default. However, it would be nice if you could add a genimage 
-script. Pandaboard should be a good basis.
-
-> +
-> +# filesystem
-> +BR2_PACKAGE_AM33X_CM3=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-
-  We tend to prefer ext4 nowadays.
-
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +
-> +# Linux headers same as kernel, a 4.4 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-
-  The version should be really locked down, i.e.:
-
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.6"
-
-> +
-> +# bootloader
-> +BR2_TARGET_BAREBOX=y
-> +BR2_TARGET_BAREBOX_BOARD_DEFCONFIG="am335x"
-> +BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE="barebox-am33xx-beaglebone.img"
-> +BR2_TARGET_BAREBOX_CUSTOM_ENV=y
-> +BR2_TARGET_BAREBOX_CUSTOM_ENV_PATH="board/beaglebone/barebox.env"
-> +BR2_TARGET_BAREBOX_2=y
-> +BR2_TARGET_BAREBOX_2_BOARD_DEFCONFIG="am335x_mlo"
-> +BR2_TARGET_BAREBOX_2_BUILT_IMAGE_FILE="barebox-am33xx-beaglebone-mlo.img"
-> +BR2_TARGET_BAREBOX_2_OUTPUT_IMAGE_FILE="MLO"
-> +
-> +# kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.6"
-
-  Maybe you can switch to 4.5 already?
-
-> +BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-> +BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-> +BR2_LINUX_KERNEL_ZIMAGE=y
-> +
-> +# Use the barebox built-in dtb
-> +# BR2_LINUX_KERNEL_DTS_SUPPORT is not set
-
-  Good to put this here!
-
-  Regards,
-  Arnout
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+>  Regards,
+>  Arnout
+>
+> --
+> Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+> Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+> Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+>
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
