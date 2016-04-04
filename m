@@ -1,16 +1,16 @@
 From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Mon, 4 Apr 2016 14:47:38 +0000
-Subject: [Buildroot] [PATCH v2] qt5serialbus: new package
-In-Reply-To: <1459257824-3098-1-git-send-email-yegorslists@googlemail.com>
-References: <1459257824-3098-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <57027E89.7000000@ecagroup.com>
+Date: Mon, 4 Apr 2016 14:54:44 +0000
+Subject: [Buildroot] [PATCH v2] qt5webkit: restore package
+In-Reply-To: <1459525200-12624-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1459525200-12624-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <57028033.4060200@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor,
+Dear Gary,
 
 Your patch looks fine, so:
 Reviewed-by: Julien Corjon <corjon.j@ecagroup.com>
@@ -19,114 +19,411 @@ Regards,
 
 Julien
 
-Le 29/03/2016 15:23, yegorslists at googlemail.com a ?crit :
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Le 01/04/2016 17:40, Gary Bisson a ?crit :
+> Although this package has been removed from the official release
+> packages since Qt5.6.0, it is still available for users to build
+> it from source. This is useful for platforms without GPU since its
+> successor (QtWebEngine) requires OpenGL support.
 >
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> The package now matches the community-based meta-qt5 Yocto layer,
+> using the exact same revision of the qtwebkit source from github:
+> https://github.com/meta-qt5/meta-qt5/commit/e434995a
+>
+> Here is the project source tree:
+> https://github.com/qtproject/qtwebkit
+>
+> All the patches have been pulled from Yocto as well.
+>
+> Since we are now using the source from the git repository, we need
+> to create an empty .git/ folder to force the headers re-generation.
+> https://github.com/meta-qt5/meta-qt5/blob/jethro/recipes-qt/qt5/qt5.inc#L33
+>
+> Note that GPLv3 license option has been added with this release.
+>
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
-> Changes:
-> 	v2: - add qt5serialport build-time dependency (Julien Corjon)
-> 	    - remove LGPL2.1 license (Julien Corjon)
-> 	    - install canbusutil binary (Julien Corjon)
+> Hi all,
 >
->   package/qt5/Config.in                      |  1 +
->   package/qt5/qt5serialbus/Config.in         | 11 +++++++
->   package/qt5/qt5serialbus/qt5serialbus.hash |  2 ++
->   package/qt5/qt5serialbus/qt5serialbus.mk   | 48 ++++++++++++++++++++++++++++++
->   4 files changed, 62 insertions(+)
->   create mode 100644 package/qt5/qt5serialbus/Config.in
->   create mode 100644 package/qt5/qt5serialbus/qt5serialbus.hash
->   create mode 100644 package/qt5/qt5serialbus/qt5serialbus.mk
+> Changelog v1->v2:
+> - Add comment to explain GitHub choice, suggested by Arnout.
+> - Add comment to explain .git folder creation, suggested by Julien.
+> - Remove || true for .git folder creation, suggested by Julien.
+> - Add SOB to patches, suggested by Julien and Arnout.
+> - Remove x/y number in patches titles, suggested by Arnout.
 >
+> I know the .git folder will still make people wonder, I unfortunately haven't
+> found the exact Makefile where this folder makes a difference. My comment
+> points to the meta-qt5 inc file which does it with the following explanation:
+> # Regenerate header files when they are included in source tarball
+> # Otherwise cmake files don't set PRIVATE_HEADERS correctly
+> do_configure_prepend() {
+>      rm -rf ${S}/include
+>      mkdir -p ${S}/.git || true
+> }
+>
+> Tested on i.MX6Q Nitrogen6x platform.
+>
+> Regards,
+> Gary
+> ---
+>   Config.in.legacy                                   |  7 --
+>   package/qt5/Config.in                              |  1 +
+>   .../0001-qtwebkit-fix-QA-issue-bad-RPATH.patch     | 31 +++++++++
+>   .../qt5webkit/0002-Remove-TEXTREL-tag-in-x86.patch | 80 ++++++++++++++++++++++
+>   ...ude-backtrace-API-for-non-glibc-libraries.patch | 39 +++++++++++
+>   .../0004-Fix-linking-with-libpthread.patch         | 34 +++++++++
+>   package/qt5/qt5webkit/Config.in                    | 24 +++++++
+>   package/qt5/qt5webkit/qt5webkit.hash               |  2 +
+>   package/qt5/qt5webkit/qt5webkit.mk                 | 62 +++++++++++++++++
+>   9 files changed, 273 insertions(+), 7 deletions(-)
+>   create mode 100644 package/qt5/qt5webkit/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
+>   create mode 100644 package/qt5/qt5webkit/0002-Remove-TEXTREL-tag-in-x86.patch
+>   create mode 100644 package/qt5/qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
+>   create mode 100644 package/qt5/qt5webkit/0004-Fix-linking-with-libpthread.patch
+>   create mode 100644 package/qt5/qt5webkit/Config.in
+>   create mode 100644 package/qt5/qt5webkit/qt5webkit.hash
+>   create mode 100644 package/qt5/qt5webkit/qt5webkit.mk
+>
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 60702ce..6691c50 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -152,13 +152,6 @@ config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
+>   	  The qt5webkit-examples package has been removed, since it
+>   	  was removed from upstream starting from Qt 5.6.
+>
+> -config BR2_PACKAGE_QT5WEBKIT
+> -	bool "qt5webkit package removed"
+> -	select BR2_LEGACY
+> -	help
+> -	  The qt5webkit package has been removed, since it was removed
+> -	  from upstream starting from Qt 5.6.
+> -
+>   config BR2_PACKAGE_QT5QUICK1
+>   	bool "qt5quick1 package removed"
+>   	select BR2_LEGACY
 > diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-> index f673daa..4febee6 100644
+> index f673daa..0c0e971 100644
 > --- a/package/qt5/Config.in
 > +++ b/package/qt5/Config.in
-> @@ -40,6 +40,7 @@ source "package/qt5/qt5imageformats/Config.in"
->   source "package/qt5/qt5multimedia/Config.in"
->   source "package/qt5/qt5quickcontrols/Config.in"
->   source "package/qt5/qt5sensors/Config.in"
-> +source "package/qt5/qt5serialbus/Config.in"
->   source "package/qt5/qt5serialport/Config.in"
->   source "package/qt5/qt5svg/Config.in"
->   source "package/qt5/qt5tools/Config.in"
-> diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
+> @@ -49,4 +49,5 @@ source "package/qt5/qt5x11extras/Config.in"
+>   source "package/qt5/qt5xmlpatterns/Config.in"
+>   comment "legacy compatibility"
+>   source "package/qt5/qt5script/Config.in"
+> +source "package/qt5/qt5webkit/Config.in"
+>   endif
+> diff --git a/package/qt5/qt5webkit/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch b/package/qt5/qt5webkit/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
 > new file mode 100644
-> index 0000000..504141c
+> index 0000000..ada98a2
 > --- /dev/null
-> +++ b/package/qt5/qt5serialbus/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_QT5SERIALBUS
-> +	bool "qt5serialbus"
+> +++ b/package/qt5/qt5webkit/0001-qtwebkit-fix-QA-issue-bad-RPATH.patch
+> @@ -0,0 +1,31 @@
+> +From 1735a8484ef9ae336f8d607b56bda64c8af10c79 Mon Sep 17 00:00:00 2001
+> +From: Trevor Woerner <trevor.woerner@linaro.org>
+> +Date: Fri, 7 Feb 2014 04:07:17 +0100
+> +Subject: [PATCH] qtwebkit: fix QA issue (bad RPATH)
+> +
+> +Building qtwebkit causes a QA issue such that QtWebPluginProcess and
+> +QtWebProcess contain bad RPATHs which point into the build location. This fix
+> +adds a patch to not include the rpath.prf which causes this problem.
+> +
+> +Signed-off-by: Trevor Woerner <trevor.woerner@linaro.org>
+> +Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
+> +Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> +---
+> + Tools/qmake/mkspecs/features/unix/default_post.prf | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/Tools/qmake/mkspecs/features/unix/default_post.prf b/Tools/qmake/mkspecs/features/unix/default_post.prf
+> +index fd66af6..ef754c3 100644
+> +--- a/Tools/qmake/mkspecs/features/unix/default_post.prf
+> ++++ b/Tools/qmake/mkspecs/features/unix/default_post.prf
+> +@@ -61,7 +61,6 @@ linux-*g++* {
+> +     }
+> + }
+> +
+> +-contains(TEMPLATE, app): CONFIG += rpath
+> +
+> + CONFIG(debug, debug|release)|force_debug_info {
+> +     # Make ld not cache the symbol tables of input files in memory to avoid memory exhaustion during the linking phase.
+> +--
+> +2.7.0
+> +
+> diff --git a/package/qt5/qt5webkit/0002-Remove-TEXTREL-tag-in-x86.patch b/package/qt5/qt5webkit/0002-Remove-TEXTREL-tag-in-x86.patch
+> new file mode 100644
+> index 0000000..d07a62f
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/0002-Remove-TEXTREL-tag-in-x86.patch
+> @@ -0,0 +1,80 @@
+> +From ae16ce17cc7060274a0b0c165b953fc32540f977 Mon Sep 17 00:00:00 2001
+> +From: Magnus Granberg <zorry@gentoo.org>
+> +Date: Fri, 27 Feb 2015 11:55:09 +0100
+> +Subject: [PATCH] Remove TEXTREL tag in x86
+> +
+> +Fix textrel QA warnings when building qtwebkit for x86:
+> +
+> +  WARNING: QA Issue: ELF binary '/home/andre/rdk/rdk-master/build-vbox32/tmp/work/core2-32-rdk-linux/qtwebkit/5.4.0-r0/packages-split/qtwebkit/usr/lib/libQt5WebKit.so.5.4.0' has relocations in .text [textrel]
+> +
+> +Patch from upstream webkit:
+> +
+> +  https://bugs.webkit.org/show_bug.cgi?id=70610
+> +
+> +Minor refresh required to apply cleanly to the older webkit sources used
+> +by qtwebkit. Specifically, the patch needed to be modified to account
+> +for PLATFORM(MAC) -> OS(DARWIN) renaming in recent webkit which is not
+> +part of qtwebkit yet ( https://bugs.webkit.org/show_bug.cgi?id=99683 ).
+> +
+> +Upstream status [webkit] : backport
+> +Upstream status [qtwebkit] : unclear
+> +
+> +Bug: https://bugs.webkit.org/show_bug.cgi?id=70610
+> +Signed-off-by: Martin Jansa <Martin.Jansa@gmail.com>
+> +Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> +---
+> + Source/JavaScriptCore/jit/ThunkGenerators.cpp | 24 ++++++++++++++++++++++++
+> + Source/WTF/wtf/InlineASM.h                    |  2 ++
+> + 2 files changed, 26 insertions(+)
+> +
+> +diff --git a/Source/JavaScriptCore/jit/ThunkGenerators.cpp b/Source/JavaScriptCore/jit/ThunkGenerators.cpp
+> +index 9684df2..8af82d8 100644
+> +--- a/Source/JavaScriptCore/jit/ThunkGenerators.cpp
+> ++++ b/Source/JavaScriptCore/jit/ThunkGenerators.cpp
+> +@@ -524,6 +524,30 @@ double jsRound(double d)
+> +     } \
+> +     static MathThunk UnaryDoubleOpWrapper(function) = &function##Thunk;
+> +
+> ++#elif CPU(X86) && COMPILER(GCC) && OS(LINUX) && defined(__PIC__)
+> ++#define defineUnaryDoubleOpWrapper(function) \
+> ++    asm( \
+> ++        ".text\n" \
+> ++        ".globl " SYMBOL_STRING(function##Thunk) "\n" \
+> ++        HIDE_SYMBOL(function##Thunk) "\n" \
+> ++        SYMBOL_STRING(function##Thunk) ":" "\n" \
+> ++        "pushl %ebx\n" \
+> ++        "subl $20, %esp\n" \
+> ++        "movsd %xmm0, (%esp) \n" \
+> ++        "call __x86.get_pc_thunk.bx\n" \
+> ++        "addl $_GLOBAL_OFFSET_TABLE_, %ebx\n" \
+> ++        "call " GLOBAL_REFERENCE(function) "\n" \
+> ++        "fstpl (%esp) \n" \
+> ++        "movsd (%esp), %xmm0 \n" \
+> ++        "addl $20, %esp\n" \
+> ++        "popl %ebx\n" \
+> ++        "ret\n" \
+> ++    );\
+> ++    extern "C" { \
+> ++        MathThunkCallingConvention function##Thunk(MathThunkCallingConvention); \
+> ++    } \
+> ++    static MathThunk UnaryDoubleOpWrapper(function) = &function##Thunk;
+> ++
+> + #elif CPU(X86) && COMPILER(GCC) && (PLATFORM(MAC) || OS(LINUX))
+> + #define defineUnaryDoubleOpWrapper(function) \
+> +     asm( \
+> +diff --git a/Source/WTF/wtf/InlineASM.h b/Source/WTF/wtf/InlineASM.h
+> +index 0a2fe78..2dc40ef 100644
+> +--- a/Source/WTF/wtf/InlineASM.h
+> ++++ b/Source/WTF/wtf/InlineASM.h
+> +@@ -46,6 +46,8 @@
+> + #define GLOBAL_REFERENCE(name) #name "@plt"
+> + #elif CPU(X86) && COMPILER(MINGW)
+> + #define GLOBAL_REFERENCE(name) "@" #name "@4"
+> ++#elif OS(LINUX) && CPU(X86) && defined(__PIC__)
+> ++#define GLOBAL_REFERENCE(name) SYMBOL_STRING(name) "@plt"
+> + #else
+> + #define GLOBAL_REFERENCE(name) SYMBOL_STRING(name)
+> + #endif
+> +--
+> +2.7.0
+> +
+> diff --git a/package/qt5/qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch b/package/qt5/qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
+> new file mode 100644
+> index 0000000..9496947
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/0003-Exclude-backtrace-API-for-non-glibc-libraries.patch
+> @@ -0,0 +1,39 @@
+> +From 6c36f0ff8c1f5852c33d2b23714f9f187cc6ff26 Mon Sep 17 00:00:00 2001
+> +From: Khem Raj <raj.khem@gmail.com>
+> +Date: Fri, 5 Jun 2015 19:55:05 -0700
+> +Subject: [PATCH] Exclude backtrace() API for non-glibc libraries
+> +
+> +It was excluding musl with current checks, so lets make it such that it
+> +considers only glibc when using backtrace API
+> +
+> +Signed-off-by: Khem Raj <raj.khem@gmail.com>
+> +Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> +---
+> + Source/WTF/wtf/Assertions.cpp | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/Source/WTF/wtf/Assertions.cpp b/Source/WTF/wtf/Assertions.cpp
+> +index 1b2091f..ba03a28 100644
+> +--- a/Source/WTF/wtf/Assertions.cpp
+> ++++ b/Source/WTF/wtf/Assertions.cpp
+> +@@ -61,7 +61,7 @@
+> + #include <windows.h>
+> + #endif
+> +
+> +-#if (OS(DARWIN) || (OS(LINUX) && !defined(__UCLIBC__))) && !OS(ANDROID)
+> ++#if (OS(DARWIN) || (OS(LINUX) && defined (__GLIBC__) && !defined(__UCLIBC__))) && !OS(ANDROID)
+> + #include <cxxabi.h>
+> + #include <dlfcn.h>
+> + #include <execinfo.h>
+> +@@ -245,7 +245,7 @@ void WTFReportArgumentAssertionFailure(const char* file, int line, const char* f
+> +
+> + void WTFGetBacktrace(void** stack, int* size)
+> + {
+> +-#if (OS(DARWIN) || (OS(LINUX) && !defined(__UCLIBC__))) && !OS(ANDROID)
+> ++#if (OS(DARWIN) || (OS(LINUX) && defined(__GLIBC__) && !defined(__UCLIBC__))) && !OS(ANDROID)
+> +     *size = backtrace(stack, *size);
+> + #elif OS(WINDOWS) && !OS(WINCE)
+> +     // The CaptureStackBackTrace function is available in XP, but it is not defined
+> +--
+> +2.7.0
+> +
+> diff --git a/package/qt5/qt5webkit/0004-Fix-linking-with-libpthread.patch b/package/qt5/qt5webkit/0004-Fix-linking-with-libpthread.patch
+> new file mode 100644
+> index 0000000..b7b6791
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/0004-Fix-linking-with-libpthread.patch
+> @@ -0,0 +1,34 @@
+> +From 5dd4bb67cfce812fd7686e43616e2069f354a7df Mon Sep 17 00:00:00 2001
+> +From: Allan Sandfeld Jensen <allan.jensen@theqtcompany.com>
+> +Date: Mon, 22 Feb 2016 10:57:32 +0100
+> +Subject: [PATCH] Fix linking with libpthread
+> +
+> +WebKit use libpthread directly but is depending on other qt modules
+> +causing it to be linked against, which might break unless -lpthread
+> +is last. Instead just add it explicitly after the static libraries.
+> +
+> +Upstream-Status: Backport from 5.7 branch
+> +
+> +Change-Id: I2b95cff2c96373f8dce6f95052c4fccbe1982b33
+> +Reviewed-by: Simon Hausmann <simon.hausmann@theqtcompany.com>
+> +Signed-off-by: Jonathan Liu <net147@gmail.com>
+> +Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> +---
+> + Tools/qmake/mkspecs/features/default_post.prf | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/Tools/qmake/mkspecs/features/default_post.prf b/Tools/qmake/mkspecs/features/default_post.prf
+> +index 67276b7..39bb3f7 100644
+> +--- a/Tools/qmake/mkspecs/features/default_post.prf
+> ++++ b/Tools/qmake/mkspecs/features/default_post.prf
+> +@@ -201,6 +201,7 @@ needToLink() {
+> +         linkAgainstLibrary($$library, $$eval(WEBKIT.$${library_identifier}.root_source_dir))
+> +         LIBS += $$eval(WEBKIT.$${library_identifier}.dependent_libs)
+> +     }
+> ++    posix:!darwin: LIBS += -lpthread
+> + }
+> +
+> + creating_module {
+> +--
+> +2.7.1
+> +
+> diff --git a/package/qt5/qt5webkit/Config.in b/package/qt5/qt5webkit/Config.in
+> new file mode 100644
+> index 0000000..fb84b1e
+> --- /dev/null
+> +++ b/package/qt5/qt5webkit/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_QT5WEBKIT
+> +	bool "qt5webkit"
 > +	select BR2_PACKAGE_QT5BASE
-> +	select BR2_PACKAGE_QT5SERIALPORT
+> +	select BR2_PACKAGE_QT5BASE_ICU
+> +	select BR2_PACKAGE_QT5BASE_GUI
+> +	select BR2_PACKAGE_SQLITE
+> +	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_QT5BASE_XCB
+> +	select BR2_PACKAGE_XLIB_LIBXRENDER if BR2_PACKAGE_QT5BASE_XCB
+> +	# This module does not support static linking
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> +	depends on !BR2_BINFMT_FLAT # icu
 > +	help
 > +	  Qt is a cross-platform application and UI framework for
 > +	  developers using C++.
 > +
-> +	  This package corresponds to the qt5serialbus module.
+> +	  This package corresponds to the qt5webkit module.
+> +
+> +	  This package has been removed from the official release packages
+> +	  since Qt5.6.0, but it is still available for users to build it
+> +	  from source. This is useful for platforms without GPU since the
+> +	  successor (QtWebEngine) requires OpenGL support.
 > +
 > +	  http://qt.io
-> diff --git a/package/qt5/qt5serialbus/qt5serialbus.hash b/package/qt5/qt5serialbus/qt5serialbus.hash
+> diff --git a/package/qt5/qt5webkit/qt5webkit.hash b/package/qt5/qt5webkit/qt5webkit.hash
 > new file mode 100644
-> index 0000000..da46e76
+> index 0000000..d2ac7bb
 > --- /dev/null
-> +++ b/package/qt5/qt5serialbus/qt5serialbus.hash
+> +++ b/package/qt5/qt5webkit/qt5webkit.hash
 > @@ -0,0 +1,2 @@
-> +# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.0/submodules/qtserialbus-opensource-src-5.6.0.tar.xz.mirrorlist
-> +sha256 8cca530ee53f19672f57ffee6f2f28866d5c84b8cb3dbbd67c05d27893ac0b8e qtserialbus-opensource-src-5.6.0.tar.xz
-> diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
+> +# locally computed
+> +sha256 1c79843ef32313312290d4fe0b87256a9129dc44d62b01789a692981edf4d8ab  qt5webkit-d2ff5a085572b1ee24dcb42ae107063f3142d14e.tar.gz
+> diff --git a/package/qt5/qt5webkit/qt5webkit.mk b/package/qt5/qt5webkit/qt5webkit.mk
 > new file mode 100644
-> index 0000000..63d2820
+> index 0000000..1ac4c25
 > --- /dev/null
-> +++ b/package/qt5/qt5serialbus/qt5serialbus.mk
-> @@ -0,0 +1,48 @@
+> +++ b/package/qt5/qt5webkit/qt5webkit.mk
+> @@ -0,0 +1,62 @@
 > +################################################################################
 > +#
-> +# qt5serialbus
+> +# qt5webkit
 > +#
 > +################################################################################
 > +
-> +QT5SERIALBUS_VERSION = $(QT5_VERSION)
-> +QT5SERIALBUS_SITE = $(QT5_SITE)
-> +QT5SERIALBUS_SOURCE = qtserialbus-opensource-src-$(QT5SERIALBUS_VERSION).tar.xz
-> +QT5SERIALBUS_DEPENDENCIES = qt5base qt5serialport
-> +QT5SERIALBUS_INSTALL_STAGING = YES
+> +QT5WEBKIT_VERSION = d2ff5a085572b1ee24dcb42ae107063f3142d14e
+> +# Using GitHub since it supports downloading tarballs from random commits.
+> +# The http://code.qt.io/cgit/qt/qtwebkit.git/ repo doesn't allow to do so.
+> +QT5WEBKIT_SITE = $(call github,qtproject,qtwebkit,$(QT5WEBKIT_VERSION))
+> +QT5WEBKIT_DEPENDENCIES = qt5base sqlite host-ruby host-gperf host-bison host-flex
+> +QT5WEBKIT_INSTALL_STAGING = YES
+> +
+> +QT5WEBKIT_LICENSE_FILES = Source/WebCore/LICENSE-LGPL-2 Source/WebCore/LICENSE-LGPL-2.1
 > +
 > +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> +QT5SERIALBUS_LICENSE = GPLv2 or GPLv3 or LGPLv3, GFDLv1.3 (docs)
-> +QT5SERIALBUS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
+> +QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), LGPLv2.1 with exception or LGPLv3 or GPLv2 or GPLv3
+> +# Source files contain references to LGPL_EXCEPTION.txt but it is not included
+> +# in the archive.
+> +QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21 LICENSE.LGPLv3 LICENSE.GPLv2 LICENSE.GPLv3
 > +else
-> +QT5SERIALBUS_LICENSE = Commercial license
-> +QT5SERIALBUS_REDISTRIBUTE = NO
+> +QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), Commercial license
+> +QT5WEBKIT_REDISTRIBUTE = NO
 > +endif
 > +
-> +define QT5SERIALBUS_CONFIGURE_CMDS
+> +ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+> +QT5WEBKIT_DEPENDENCIES += xlib_libXext xlib_libXrender
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+> +QT5WEBKIT_DEPENDENCIES += qt5declarative
+> +endif
+> +
+> +# Create an empty .git/ folder to force headers re-generation.
+> +# See http://github.com/meta-qt5/meta-qt5/blob/master/recipes-qt/qt5/qt5.inc
+> +define QT5WEBKIT_CONFIGURE_CMDS
+> +	mkdir -p $(@D)/.git
 > +	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
 > +endef
 > +
-> +define QT5SERIALBUS_BUILD_CMDS
+> +define QT5WEBKIT_BUILD_CMDS
 > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
 > +endef
 > +
-> +define QT5SERIALBUS_INSTALL_STAGING_CMDS
+> +define QT5WEBKIT_INSTALL_STAGING_CMDS
 > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
 > +	$(QT5_LA_PRL_FILES_FIXUP)
 > +endef
 > +
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +define QT5SERIALBUS_INSTALL_TARGET_CMDS
-> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5SerialBus.so.* \
-> +		$(TARGET_DIR)/usr/lib
-> +
-> +	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/canbus
-> +	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/canbus/*.so \
-> +		$(TARGET_DIR)/usr/lib/qt/plugins/canbus
-> +
-> +	$(INSTALL) -m 0755 -D $(@D)/bin/canbusutil \
-> +		$(TARGET_DIR)/usr/bin/canbusutil
+> +ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+> +define QT5WEBKIT_INSTALL_TARGET_QMLS
+> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebKit $(TARGET_DIR)/usr/qml/
 > +endef
 > +endif
+> +
+> +define QT5WEBKIT_INSTALL_TARGET_CMDS
+> +	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebKit*.so.* $(TARGET_DIR)/usr/lib
+> +	cp -dpf $(@D)/bin/* $(TARGET_DIR)/usr/bin/
+> +	$(QT5WEBKIT_INSTALL_TARGET_QMLS)
+> +endef
 > +
 > +$(eval $(generic-package))
 >
