@@ -1,59 +1,39 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 4 Apr 2016 18:30:23 +0200
-Subject: [Buildroot] [PATCH 1/1] network-manager: bump to version 1.0.12
-In-Reply-To: <57029471.8090801@imgtec.com>
-References: <1459786791-4904-1-git-send-email-petr.vorel@gmail.com>
- <57029471.8090801@imgtec.com>
-Message-ID: <20160404163022.GA6476@x230>
+Date: Mon,  4 Apr 2016 18:52:59 +0200
+Subject: [Buildroot] [PATCH 1/1] feh: bump to version 2.14.2
+Message-ID: <1459788779-14686-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vincent,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I'm sorry, I didn't notice it. I'll read mailing list more carefully next time.
-
-Kind regards,
-Petr
-
-> Hello Petr,
-
-> your patch is a duplicate of this one:
-
-> http://patchwork.ozlabs.org/patch/605780/
-
-> Regards,
-
-> Vincent.
-
-> On 04/04/16 17:19, Petr Vorel wrote:
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > ---
-> >  package/network-manager/network-manager.hash | 4 ++--
-> >  package/network-manager/network-manager.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-
-> > diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-> > index c259b5a..e8a2be8 100644
-> > --- a/package/network-manager/network-manager.hash
-> > +++ b/package/network-manager/network-manager.hash
-> > @@ -1,2 +1,2 @@
-> > -# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.10.sha256sum
-> > -sha256  1bcfce8441dfd9f432a100d06b54f3831a2275cccc3b74b1b4c09a011e179fbc  NetworkManager-1.0.10.tar.xz
-> > +# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.12.sha256sum
-> > +sha256  3a470f8c60109b1acb5784ddc2423501706b5fe34c793a6faee87e591eb04a9e  NetworkManager-1.0.12.tar.xz
-> > diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-> > index b49f3b8..12b8f3c 100644
-> > --- a/package/network-manager/network-manager.mk
-> > +++ b/package/network-manager/network-manager.mk
-> > @@ -5,7 +5,7 @@
-
-
-> >  NETWORK_MANAGER_VERSION_MAJOR = 1.0
-> > -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
-> > +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
-> >  NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
-> >  NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
-> >  NETWORK_MANAGER_INSTALL_STAGING = YES
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index 396f33d..76d6248 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  3829cd8995ec7cc08095a2b22a6c98d1e2638bd87c8b4f0e85a059c6f0edbc48  feh-2.14.tar.bz2
++sha256  c80f3d3297b3b6ee4898572d19692f5e19eb3066a9ca078c3099d39004a7e0cf  feh-2.14.2.tar.bz2
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 7381e25..f650938 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FEH_VERSION = 2.14
++FEH_VERSION = 2.14.2
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
+-- 
+2.8.0.rc3
