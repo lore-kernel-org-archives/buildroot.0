@@ -1,64 +1,88 @@
-From: Anatoly Asviyan <aanatoly@gmail.com>
-Date: Tue, 5 Apr 2016 01:28:22 +0300
-Subject: [Buildroot] need help with adding python-mysqldb
-Message-ID: <CAPTQzABFmehM_FhTOvMWO9Jmc63u8BLX1sG1B_zDU=OED57nVA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Apr 2016 00:31:51 +0200
+Subject: [Buildroot] [PATCH v4 3/7] barebox: support custom barebox
+	output image name
+In-Reply-To: <1458513351-6556-4-git-send-email-pieter@boesman.nl>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <1458513351-6556-4-git-send-email-pieter@boesman.nl>
+Message-ID: <5702EB57.7040006@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-I am trying to add python-mysqldb package. I 've patched buildroot (the
-patch is here
-https://gist.githubusercontent.com/aanatoly/997d7ced70aaf9e13d57b5cc85751862/raw/3d71a992e748d9c40ca1961b0dd951fb300184d0/python-mysqldb.patch
-)
+On 03/20/16 23:35, Pieter Smith wrote:
+> In preparation for building a 2nd barebox config, a configuration option is
+> added to allow customization of the image filename when the built image is
+> copied to the output/images directory.
+>
+> Signed-off-by: Pieter Smith <pieter@boesman.nl>
 
-but make fails with this error
-
->>> python-mysqldb 1.2.5 Downloading
---2016-04-05 00:55:28--
-http://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
-Resolving pypi.python.org (pypi.python.org)... 185.31.17.223
-Connecting to pypi.python.org (pypi.python.org)|185.31.17.223|:80... connected.
-HTTP request sent, awaiting response... 301 Moved Permanently
-Location: https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
-[following]
---2016-04-05 00:55:29--
-https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
-Connecting to pypi.python.org (pypi.python.org)|185.31.17.223|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 108935 (106K) [application/octet-stream]
-Saving to: `/home/me/work/buildroot-x86_64/output/build/.MySQL-python-1.2.5.zip.ip6WvS/output'
-
-100%[=====================================================================================================================>]
-108,935     --.-K/s   in 0.1s
-
-2016-04-05 00:55:29 (946 KB/s) -
-`/home/me/work/buildroot-x86_64/output/build/.MySQL-python-1.2.5.zip.ip6WvS/output'
-saved [108935/108935]
-
-WARNING: no hash file for MySQL-python-1.2.5.zip
->>> python-mysqldb 1.2.5 Extracting
-/home/me/work/buildroot-x86_64/dl/MySQL-python-1.2.5.zip | tar
---strip-components=1 -C
-/home/me/work/buildroot-x86_64/output/build/python-mysqldb-1.2.5   -xf
--
-/bin/bash: /home/me/work/buildroot-x86_64/dl/MySQL-python-1.2.5.zip:
-Permission denied
-tar: This does not look like a tar archive
-tar: Exiting with failure status due to previous errors
-make[1]: *** [/home/me/work/buildroot-x86_64/output/build/python-mysqldb-1.2.5/.stamp_extracted]
-Error 2
-make: *** [_all] Error 2
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 
-It looks like it runs "foo.zip | tar ..." instead of "unzip foo.zip | tar
-...". I can't figure why. Other zip'ed packages are built ok, for example
-python-keyring.
+  Regards,
+  Arnout
+
+> ---
+>   boot/barebox/Config.in  | 7 +++++++
+>   boot/barebox/barebox.mk | 9 +++++++--
+>   2 files changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+> index 4f6872c..7769866 100644
+> --- a/boot/barebox/Config.in
+> +++ b/boot/barebox/Config.in
+> @@ -106,6 +106,13 @@ config BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE
+>
+>   	  Set to barebox.bin for barebox versions older than 2012.10.
+>
+> +config BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
+> +	string "Output image filename"
+> +	default "barebox.bin"
+> +	help
+> +	  Name to use when copying the barebox image to the output/images
+> +	  directory.
+> +
+>   config BR2_TARGET_BAREBOX_BAREBOXENV
+>   	bool "bareboxenv tool in target"
+>   	help
+> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+> index d0f28cf..4eea470 100644
+> --- a/boot/barebox/barebox.mk
+> +++ b/boot/barebox/barebox.mk
+> @@ -93,9 +93,11 @@ endef
+>
+>   define BAREBOX_INSTALL_IMAGES_CMDS
+>   	if test -e $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
+> -		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
+> +		cp -L $(@D)/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) \
+> +		      $(BINARIES_DIR)/$(call qstrip,$(BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE)) ; \
+>   	elif test -e $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)); then \
+> -		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) $(BINARIES_DIR)/barebox.bin ; \
+> +		cp $(@D)/images/$(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE)) \
+> +		   $(BINARIES_DIR)/$(call qstrip,$(BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE)) ; \
+>   	else \
+>   		echo "error: Specified built image file not found: $(call qstrip,$(BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE))" >&2 ; \
+>   		echo "       in: $(@D)/" >&2 ; \
+> @@ -124,6 +126,9 @@ endif
+>   ifndef BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE
+>   $(error No barebox built image filename specified. Check your BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE setting)
+>   endif
+> +ifndef BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
+> +$(error No barebox output image filename specified. Check your BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE setting)
+> +endif
+>   endif
+>
+>   $(eval $(kconfig-package))
+>
+
 
 -- 
-Regards, Anatoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160405/611a6e72/attachment.html>
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
