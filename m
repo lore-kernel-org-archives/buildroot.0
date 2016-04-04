@@ -1,45 +1,56 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon,  4 Apr 2016 15:34:01 -0300
-Subject: [Buildroot] [PATCH] weston: egl requires gles as well
-Message-ID: <1459794841-3736-1-git-send-email-gustavo@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 4 Apr 2016 20:44:29 +0200
+Subject: [Buildroot] Project configuration management
+In-Reply-To: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
+References: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
+Message-ID: <20160404204429.472fb279@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From configure.ac lines 83-89:
+Hello Mateusz,
 
-AC_ARG_ENABLE(egl, [  --disable-egl],,
-	enable_egl=yes)
-AM_CONDITIONAL(ENABLE_EGL, test x$enable_egl = xyes)
-if test x$enable_egl = xyes; then
-	AC_DEFINE([ENABLE_EGL], [1], [Build Weston with
-	EGL support])
-	PKG_CHECK_MODULES(EGL, [egl glesv2])
-	PKG_CHECK_MODULES([EGL_TESTS], [egl glesv2 wayland-client
-	wayland-egl])
+On Mon, 4 Apr 2016 15:55:44 +0200, Mateusz S?upny wrote:
 
-It also requires wayland-egl which is only provided by mesa3d for now,
-hence make it conditional on mesa3d egl+gles.
+> We are using buildroot for building a series of projects. What I feel
+> is missing in buildroot is a way to store different configurations in
+> scope of a single project. For example, we would like to prepare
+> three types of builds, let's name them "Release", that is the basic
+> build, "Develop", that is a Release build + dropbear + some other
+> utilities, and "Extra", that contains all configuration options from
+> Develop + some additional tools (gdb, valgrind, etc.). To achieve
+> that, we have to maintain total of (number of projects) x (number of
+> build types) different configuration files that are almost identical.
+> 
+> Can this goal be achieved without using multiple defconfig files that
+> share approx 90% of their contents? What would you advise to avoid
+> that?
+> 
+> First solution that comes to my mind is to allow nesting defconfig
+> files with some include/source statement, but AFAICS that's not
+> supported.
+> 
+> Please note that we are aware of "layered customizations" concept,
+> and we're using it to some degree, but it doesn't solve all the
+> issues, e.g. setting toolchain, selecting packages, and setting
+> multiple paths to layers itself has to be done in defconfig files
+> anyway.
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/weston/weston.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The mechanism we typically advise in such situation is to use defconfig
+fragments, and assemble them as needed to create the configuration you
+feed into Buildroot. A shell script (or other) can help generating the
+configuration fed into Buildroot from the fragments.
 
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 2891fe3..7aa2130 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -49,7 +49,7 @@ WESTON_CONF_OPTS += --disable-weston-launch
- endif
- 
- # Needs wayland-egl, which normally only mesa provides
--ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES)$(BR2_PACKAGE_MESA3D_OPENGL_GLES),yy)
- WESTON_CONF_OPTS += --enable-egl
- WESTON_DEPENDENCIES += libegl
- else
+I'm Cc'ing Gustavo, who has been using this model for quite some time
+for a large project that involves multiple HW platforms, I'm sure he
+can give more insights on how to achieve that.
+
+Best regards,
+
+Thomas
 -- 
-2.7.3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
