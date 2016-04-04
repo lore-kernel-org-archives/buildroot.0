@@ -1,114 +1,110 @@
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Mon, 4 Apr 2016 10:52:44 +0200
-Subject: [Buildroot] [PATCH v2 3/4] configs: atmel: add sama5d3 xplained sd
-	card image generation
+Date: Mon, 4 Apr 2016 10:52:45 +0200
+Subject: [Buildroot] [PATCH v2 4/4] board/atmel: update documentation for SD
+	card generation
 In-Reply-To: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
 References: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1459759965-14073-4-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <1459759965-14073-5-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use genimage to generate a sd card with a fat partition (at91bootstrap,
-u-boot, kernel, dtbs) and an ext4 partition (rootfs).
+Henceforth, a sdcard.img file is automatically generated. It simplifies the
+procedure to generate a bootable SD card for Atmel Xplained boards.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- board/atmel/sama5d3_xplained_mmc/genimage.cfg  | 33 ++++++++++++++++++++++++++
- board/atmel/sama5d3_xplained_mmc/post-image.sh | 14 +++++++++++
- configs/atmel_sama5d3_xplained_mmc_defconfig   |  6 +++++
- 3 files changed, 53 insertions(+)
- create mode 100644 board/atmel/sama5d3_xplained_mmc/genimage.cfg
- create mode 100755 board/atmel/sama5d3_xplained_mmc/post-image.sh
+ board/atmel/readme.txt | 66 +++++++++++++++++++++-----------------------------
+ 1 file changed, 28 insertions(+), 38 deletions(-)
 
-diff --git a/board/atmel/sama5d3_xplained_mmc/genimage.cfg b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
-new file mode 100644
-index 0000000..32df453
---- /dev/null
-+++ b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
-@@ -0,0 +1,33 @@
-+# Image for SD card boot on Atmel SAMA5D3 Xplained boards
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama5d3_xplained.dtb",
-+			"at91-sama5d3_xplained_pda4.dtb",
-+			"at91-sama5d3_xplained_pda7.dtb",
-+			"at91-sama5d3_xplained_pda7b.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/atmel/sama5d3_xplained_mmc/post-image.sh b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-new file mode 100755
-index 0000000..359b4c9
---- /dev/null
-+++ b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 2fb1fa4..c8d92bd 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -3,6 +3,7 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-@@ -11,6 +12,8 @@ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_ZIMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-@@ -22,3 +25,6 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index 1e86a11..f874d44 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -43,54 +43,44 @@ goto to 'Preparing the SD card' section
+ Preparing the SD card
+ =====================
+ 
+-The SD card must be partitioned with at least two partitions: one
+-FAT16 partition for the bootloaders, kernel image and Device Tree
+-blob, and one ext4 partition for the root filesystem. To partition the
+-SD card:
++An image named sdcard.img is automatically generated. With this image, you no
++longer have to care about the creation of the partition and copying files to
++the SD card.
+ 
+-sudo sfdisk /dev/mmcblk0 <<EOF
+-,64MiB,6
+-;
+-EOF
++You need@least a 1GB SD card. All the data on the SD card will be lost. To
++copy the image on the SD card:
+ 
+-This creates a 64 MB partition for the FAT16 filesystem (type 6) and
+-uses the rest for the ext4 filesystem used for the root filesystem.
++/!\ Caution be sure to do it on the right mmcblk device /!\
+ 
+-Then, format both partitions:
++dd if=output/images/sdcard.img of=/dev/mmcblk0
+ 
+-sudo mkfs.msdos -n boot /dev/mmcblk0p1
+-sudo mkfs.ext4 -L rootfs -O ^huge_file /dev/mmcblk0p2
+-
+- Note: the -O ^huge_file option is needed to avoid enabling the huge
+- files features of ext4 (to support files larges than 2 TB), which
+- needs the kernel option CONFIG_LBDAF to be enabled.
+-
+-Mount both partitions (if not done automatically by your system):
+-
+-sudo mount /dev/mmcblk0p1 /media/boot
+-sudo mount /dev/mmcblk0p2 /media/rootfs
+-
+-Copy the bootloaders, kernel image and Device Tree blob to the first
+-partition:
++Insert your SD card in your Xplained board, and enjoy. The default
++U-Boot environment will load properly the kernel and Device Tree blob
++from the first partition of the SD card, so everything works
++automatically.
+ 
+-cp output/images/boot.bin /media/boot/
+-cp output/images/u-boot.bin /media/boot/
+-cp output/images/zImage /media/boot/
+-cp output/images/at91-sama5d2_xplained.dtb /media/boot/
++By default a 16MB FAT partition is created. It contains at91bootstrap, u-boot,
++the kernel image and all dtb variants for your board. The dtb used is the basic
++one:
+ 
+-Extract the root filesystem to the second partition:
++U-Boot> print
++[...]
++bootcmd=fatload mmc 1:1 0x21000000 at91-sama5d2_xplained.dtb; fatload mmc 1:1 0x22000000 zImage; bootz 0x22000000 - 0x21000000
++[...]
+ 
+-sudo tar -C /media/rootfs -xf output/images/rootfs.tar
++If you want to use a variant such as the _pda7 one, you will have to update
++your u-boot environment:
+ 
+-Unmount both partitions:
++U-Boot> setenv bootcmd 'fatload mmc 1:1 0x21000000 at91-sama5d2_xplained_pda7.dtb; fatload mmc 1:1 0x22000000 zImage; bootz 0x22000000 - 0x21000000'
++U-Boot> save
++Saving Environment to FAT...
++writing uboot.env
++done
+ 
+-sudo umount /media/boot
+-sudo umount /media/rootfs
++A 512MB ext4 partition is also created to store the rootfs generated.
+ 
+-Insert your SD card in your Xplained board, and enjoy. The default
+-U-Boot environment will properly load the kernel and Device Tree blob
+-from the first partition of the SD card, so everything works
+-automatically.
++If you want to customize the size of the partitions and their content, take a
++look at the the genimage.cfg file in the board repository.
+ 
+ 
+ Flashing the NAND using SAM-BA
 -- 
 2.5.0
