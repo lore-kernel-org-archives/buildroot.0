@@ -1,70 +1,73 @@
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Mon, 4 Apr 2016 19:09:53 +0000 (UTC)
-Subject: [Buildroot] Project configuration management
-References: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
-Message-ID: <ndue61$oov$1@ger.gmane.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  4 Apr 2016 21:28:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+	mesa3d-headers}: bump version to 11.2.0
+Message-ID: <1459798108-6054-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-04-04, Mateusz S?upny <mateusz.slupny@vestiacom.com> wrote:
+Rebased 0002-Fix-runtime-error-with-uClibc.patch
 
-> We are using buildroot for building a series of projects. What I
-> feel is missing in buildroot is a way to store different
-> configurations in scope of a single project. For example, we would
-> like to prepare three types of builds, let's name them "Release",
-> that is the basic build, "Develop", that is a Release build +
-> dropbear + some other utilities, and "Extra", that contains all
-> configuration options from Develop + some additional tools (gdb,
-> valgrind, etc.). To achieve that, we have to maintain total of
-> (number of projects) x (number of build types) different
-> configuration files that are almost identical.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk                | 2 +-
+ package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch | 4 ++--
+ package/mesa3d/mesa3d.hash                              | 4 ++--
+ package/mesa3d/mesa3d.mk                                | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-To address this issue, I use a single default config file for the
-project, and then a build shell script that makes modifications to the
-.config file for each "build type":
-
-# bash functions used to manipulate linux kernel-style .config
-# files.
-
-function SyncConfig()
-{
-    yes '' | $Make oldconfig >/dev/null
-}
-
-function UnsetValue()
-{
-    dosync=y
-    test "$1" = '-n' && { dosync=n; shift; }
-    Variable="$1"
-    echo "UnsetValue $Variable"
-    sed -i "s/^${Variable}=.*/# ${Variable} is not set/g" .config
-    test $dosync = y && SyncConfig
-    return 0
-}
-
-function SetValue()
-{
-    dosync=y
-    test "$1" = '-n' && { dosync=n; shift; }
-    Variable="$1"
-    # default value is 'y'
-    Value="${2-y}"
-    echo "SetValue $Variable $Value"
-    # if value isn't 'y', then put it in double quotes
-    test "$Value" != y && Value="\"$Value\""
-    # escape any slashes
-    Value=${Value//\//\\\/}
-    sed -i "s/^${Variable}=.*/${Variable}=${Value}/g" .config
-    sed -i "s/^# ${Variable} is not set.*/${Variable}=${Value}/g" .config
-    test $dosync = y && SyncConfig
-    return 0
-}
-
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 5cad42d..8e3156c 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 11.1.2
++MESA3D_HEADERS_VERSION = 11.2.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch b/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
+index c85f88a..59627be 100644
+--- a/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
++++ b/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
+@@ -25,8 +25,8 @@ patch: http://lists.busybox.net/pipermail/buildroot/2015-March/123410.html
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+ diff -uNr mesa-10.5.3.org/src/glsl/nir/nir_constant_expressions.c mesa-10.5.3/src/glsl/nir/nir_constant_expressions.c
+---- mesa-10.5.3.org/src/glsl/nir/nir_constant_expressions.c	2015-04-12 23:31:29.000000000 +0200
+-+++ mesa-10.5.3/src/glsl/nir/nir_constant_expressions.c	2015-04-13 19:59:37.819786541 +0200
++--- mesa-10.5.3.org/src/compiler/nir/nir_constant_expressions.c	2015-04-12 23:31:29.000000000 +0200
+++++ mesa-10.5.3/src/compiler/nir/nir_constant_expressions.c	2015-04-13 19:59:37.819786541 +0200
+ @@ -48,6 +48,18 @@
+  }
+  #endif
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 695c535..281dbf0 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-February/000199.html
+-sha256	8f72aead896b340ba0f7a4a474bfaf71681f5d675592aec1cb7ba698e319148b	mesa-11.1.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-April/000206.html
++sha256	1c1fed2674abf3f16ed2623e9a5694d6752c293194e18462ebc644a19cfaafb2	mesa-11.2.0.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index b8ccd1f..292935e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 11.1.2
++MESA3D_VERSION = 11.2.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Grant Edwards               grant.b.edwards        Yow! It's a lot of fun
-                                  at               being alive ... I wonder if
-                              gmail.com            my bed is made?!?
+2.8.0.rc3
