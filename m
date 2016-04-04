@@ -1,107 +1,144 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Mon, 4 Apr 2016 14:41:38 -0700
-Subject: [Buildroot] [PATCH 1/1] PyMySQL: new package
-In-Reply-To: <5702D9FD.1000908@mind.be>
-References: <1459197439-25518-1-git-send-email-stevecalfee@gmail.com>
- <5702D9FD.1000908@mind.be>
-Message-ID: <CAJJ6jxtm+3x_r3D=QeF9t_9EF0NRHDPPvzJrh9sdGcDRaWnovw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Apr 2016 00:04:23 +0200
+Subject: [Buildroot] [PATCH] ipmitool: fix musl build
+In-Reply-To: <1459620764-7241-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1459620764-7241-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <5702E4E7.1060705@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Arnout, thanks for your time, see below.
+On 04/02/16 20:12, J?rg Krause wrote:
+> Add two patches to fix musl build.
+>
+> The first patch avoids the redefinition aof wchar_t. The second patch adds a
+> missing header include of <linux/params.h>.
+>
+> Both patches send upstream:
+> https://sourceforge.net/p/ipmitool/mailman/message/34987103/
+> https://sourceforge.net/p/ipmitool/mailman/message/34987104/
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/75f/75fd6f1be0271bb15078c62f3effdbb67ac07427/
+> http://autobuild.buildroot.net/results/cac/cacf8179a9c8142eef69562462d3c3b0b20c2879/
+> http://autobuild.buildroot.net/results/c10/c1045882947ff7150c750088ae1981bd99134c54/
+> http://autobuild.buildroot.net/results/6a7/6a770f8a3dddb15ba4d95555e74b198799278dcf/
+> .. and more.
+>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>   .../ipmitool/0001-Avoid-wchar_t-redefinition.patch | 35 +++++++++++++++++++
+>   ...-Add-missing-linux-param.h-header-include.patch | 39 ++++++++++++++++++++++
+>   2 files changed, 74 insertions(+)
+>   create mode 100644 package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
+>   create mode 100644 package/ipmitool/0002-Add-missing-linux-param.h-header-include.patch
+>
+> diff --git a/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch b/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
+> new file mode 100644
+> index 0000000..f404245
+> --- /dev/null
+> +++ b/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
+> @@ -0,0 +1,35 @@
+> +From ea30d9b4290009116f11bb7110d1ac13589d76a4 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> +Date: Sat, 2 Apr 2016 19:45:14 +0200
+> +Subject: [PATCH 1/2] Avoid wchar_t redefinition
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +The musl C library does not define _WCHAR_T. Check also for compiler defined
+> +__WCHAR_TYPE__.
+> +
+> +Upstream status: Pending
+> +https://sourceforge.net/p/ipmitool/mailman/message/34987103/
+> +
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +---
+> + src/plugins/imb/imbapi.h | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/src/plugins/imb/imbapi.h b/src/plugins/imb/imbapi.h
+> +index 74975c6..fa1e9c6 100644
+> +--- a/src/plugins/imb/imbapi.h
+> ++++ b/src/plugins/imb/imbapi.h
+> +@@ -46,7 +46,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> + #endif
+> + #ifndef WIN32
+> + /* WIN32 defines this in stdio.h */
+> +-#ifndef _WCHAR_T
+> ++#if !defined(_WCHAR_T) && !defined(__WCHAR_TYPE__)
 
-On Mon, Apr 4, 2016 at 2:17 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
-> On 03/28/16 22:37, Steve Calfee wrote:
->>
->> add python to mysql connection software, pure python
->>
->> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
->> ---
->>   package/Config.in                          |  1 +
->>   package/python-pymysql/Config.in           |  7 +++++++
->>   package/python-pymysql/python-pymysql.hash |  5 +++++
->>   package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
->>   4 files changed, 27 insertions(+)
->>   create mode 100644 package/python-pymysql/Config.in
->>   create mode 100644 package/python-pymysql/python-pymysql.hash
->>   create mode 100644 package/python-pymysql/python-pymysql.mk
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index 529ad33..2543195 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -683,6 +683,7 @@ menu "External python modules"
->>         source "package/python-pyftpdlib/Config.in"
->>         source "package/python-pygame/Config.in"
->>         source "package/python-pyinotify/Config.in"
->> +       source "package/python-pymysql/Config.in"
->>         source "package/python-pyparsing/Config.in"
->>         source "package/python-pyparted/Config.in"
->>         source "package/python-pypcap/Config.in"
->> diff --git a/package/python-pymysql/Config.in
->> b/package/python-pymysql/Config.in
->> new file mode 100644
->> index 0000000..a6de53d
->> --- /dev/null
->> +++ b/package/python-pymysql/Config.in
->> @@ -0,0 +1,7 @@
->> +config BR2_PACKAGE_PYTHON_PYMYSQL
->> +       bool "python-pymysql"
->> +       depends on BR2_PACKAGE_PYTHON
->
->
->  Why? According to the website it supports python3 >= 3.3.
+  __WCHAR_TYPE_ is also not a standardized macro. For example, does clang define 
+it? The proper solution is to add an autoconf test for wchar and use that 
+define. Take for example m4/wchar_t.m4 from bison.
 
-What should I use, or in other words, what is the depends on for
-either python 2 or python 3? I use and have tested it in python 2.7...
+> + #define _WCHAR_T
+> + typedef long    wchar_t;
+> + #endif
+> +--
+> +2.8.0
+> +
+> diff --git a/package/ipmitool/0002-Add-missing-linux-param.h-header-include.patch b/package/ipmitool/0002-Add-missing-linux-param.h-header-include.patch
+> new file mode 100644
+> index 0000000..7528c7c
+> --- /dev/null
+> +++ b/package/ipmitool/0002-Add-missing-linux-param.h-header-include.patch
+> @@ -0,0 +1,39 @@
+> +From c4ff9cb50e5b7a64104ab264ec656186f78cb327 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> +Date: Sat, 2 Apr 2016 19:47:21 +0200
+> +Subject: [PATCH 2/2] Add missing linux/param.h header include
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Fixes the following build failure under musl:
+> +
+> +imbapi.c: In function 'MapPhysicalMemory':
+> +imbapi.c:109:19: error: 'EXEC_PAGESIZE' undeclared (first use in this function)
+> + # define PAGESIZE EXEC_PAGESIZE
+> +
+> +Upstream status: Pending
+> +https://sourceforge.net/p/ipmitool/mailman/message/34987104/
+> +
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
->
->> +       help
->> +         python-pymysql is a pure Python binding for mySQL.
->> +
->> +         https://pypi.python.org/
->
->
->  I guess you meant https://pypi.python.org/pypi/PyMySQL/
+  This one looks good.
 
-OK, good -- the pypi site I find confusing.
+  Regards,
+  Arnout
 
-
+> +---
+> + src/plugins/imb/imbapi.c | 3 +++
+> + 1 file changed, 3 insertions(+)
+> +
+> +diff --git a/src/plugins/imb/imbapi.c b/src/plugins/imb/imbapi.c
+> +index 899c47a..8a6421d 100644
+> +--- a/src/plugins/imb/imbapi.c
+> ++++ b/src/plugins/imb/imbapi.c
+> +@@ -95,6 +95,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> + #include <stdlib.h>
+> + #include <fcntl.h>
+> + #include <string.h>
+> ++#ifdef __linux__
+> ++#include <linux/param.h>
+> ++#endif
+> + #endif
+> + #include "imbapi.h"
+> + #include <asm/socket.h>
+> +--
+> +2.8.0
+> +
 >
->> diff --git a/package/python-pymysql/python-pymysql.hash
->> b/package/python-pymysql/python-pymysql.hash
->> new file mode 100644
->> index 0000000..37b6299
->> --- /dev/null
->> +++ b/package/python-pymysql/python-pymysql.hash
->> @@ -0,0 +1,5 @@
->> +#https://pypi.python.org/packages/source/P/PyMySQL/PyMySQL-0.7.2.tar.gz
->
->
->  This line is redundant.
-
-OK, will remove
 
 
->
->> +#md5
->> https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
->
->
->  This should either be:
->
-> # md5 from ..., sha256 locally calculated
->
-> (and no comment below), or:
->
-> # From ...
->
-> (and keep the comment below).
->
-
-OK, will do.
-
-Thanks again, Steve
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
