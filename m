@@ -1,64 +1,110 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 4 Apr 2016 17:21:54 +0200
-Subject: [Buildroot] [PATCH 2/2] valgrind: disable for MIPS soft-float
- when using binutils >= 2.25
-In-Reply-To: <20160315144710.GO21774@waldemar-brodkorb.de>
-References: <1458041310-65003-1-git-send-email-Vincent.Riera@imgtec.com>
- <1458041310-65003-2-git-send-email-Vincent.Riera@imgtec.com>
- <20160315144710.GO21774@waldemar-brodkorb.de>
-Message-ID: <20160404152154.GZ5944@waldemar-brodkorb.de>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Mon,  4 Apr 2016 17:37:35 +0200
+Subject: [Buildroot] [PATCH] qt5canvas3d: new package
+Message-ID: <1459784255-19892-1-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-Waldemar Brodkorb wrote,
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+ package/qt5/Config.in                    |  1 +
+ package/qt5/qt5canvas3d/Config.in        | 17 ++++++++++++++
+ package/qt5/qt5canvas3d/qt5canvas3d.hash |  2 ++
+ package/qt5/qt5canvas3d/qt5canvas3d.mk   | 38 ++++++++++++++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+ create mode 100644 package/qt5/qt5canvas3d/Config.in
+ create mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.hash
+ create mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.mk
 
-> Hi,
-> Vicente Olivert Riera wrote,
-> 
-> > As stated here [1], recent changes on the MIPS binutils sources have
-> > made it necessary for GCC to pass the -msoft-float to the assembler. Due
-> > to that, valgrind fails to build for MIPS soft-float when using a
-> > version of GCC >= 4.9 and binutils >= 2.25 because its using some
-> > hard-float instructions.
-> > 
-> > The combination of GCC-4.8.x and binutils >= 2.25 is not possible as its
-> > disabled in package/gcc/Config.in.host.
-> > 
-> > 1: https://gcc.gnu.org/ml/gcc-patches/2014-08/msg00905.html
-> > 
-> > Fixes:
-> >   http://autobuild.buildroot.net/results/5f5/5f576c7f8d56058a19ed0e7ff4b1ec620bcafb65/
-> > 
-> > Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-> > ---
-> >  package/valgrind/Config.in | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/package/valgrind/Config.in b/package/valgrind/Config.in
-> > index 21b2608..c9c71a6 100644
-> > --- a/package/valgrind/Config.in
-> > +++ b/package/valgrind/Config.in
-> > @@ -8,6 +8,8 @@ config BR2_PACKAGE_VALGRIND
-> >  		   BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le || \
-> >  		   BR2_x86_64
-> >  	depends on !BR2_STATIC_LIBS
-> > +	depends on !(BR2_MIPS_SOFT_FLOAT && (BR2_BINUTILS_VERSION_2_25_X || \
-> > +		   BR2_BINUTILS_VERSION_2_26_X))
-> 
-> I would rather like to come up with a fix for valgrind in the next
-> days. Some parts are in svn trunk and need to be backported. 
-> Some parts I will use from OpenWrt and a small patch from me.
-> 
-> I cook up a patch soon.
-
-Okay, I give up for now. I even can't make valgrind work for mips
-hard-float combo. Still investigating, but it might take longer.
-
-mips64 seems broken, too. Better disable for now.
-
-best regards
- Waldemar
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index f673daa..af5b827 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -32,6 +32,7 @@ menuconfig BR2_PACKAGE_QT5
+ if BR2_PACKAGE_QT5
+ source "package/qt5/qt5base/Config.in"
+ source "package/qt5/qt53d/Config.in"
++source "package/qt5/qt5canvas3d/Config.in"
+ source "package/qt5/qt5connectivity/Config.in"
+ source "package/qt5/qt5declarative/Config.in"
+ source "package/qt5/qt5enginio/Config.in"
+diff --git a/package/qt5/qt5canvas3d/Config.in b/package/qt5/qt5canvas3d/Config.in
+new file mode 100644
+index 0000000..3ae5192
+--- /dev/null
++++ b/package/qt5/qt5canvas3d/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_QT5CANVAS3D
++	bool "qt5canvas3d"
++	select BR2_PACKAGE_QT5DECLARATIVE
++	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
++	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt5canvas3d module.
++
++	  http://qt.io
++
++comment "qt5canvas3d needs an OpenGL-capable backend"
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
++	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
+new file mode 100644
+index 0000000..57ae4d7
+--- /dev/null
++++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
+@@ -0,0 +1,2 @@
++# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.0/submodules/qtcanvas3d-opensource-src-5.6.0.tar.xz.mirrorlist
++sha256 66add59e826a0161f4a4dc3ec0b44c17fad1451390b4f7c67af23ee7429d9ecf qtcanvas3d-opensource-src-5.6.0.tar.xz
+diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.mk b/package/qt5/qt5canvas3d/qt5canvas3d.mk
+new file mode 100644
+index 0000000..3f605ab
+--- /dev/null
++++ b/package/qt5/qt5canvas3d/qt5canvas3d.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# qt5canvas3d
++#
++################################################################################
++
++QT5CANVAS3D_VERSION = $(QT5_VERSION)
++QT5CANVAS3D_SITE = $(QT5_SITE)
++QT5CANVAS3D_SOURCE = qtcanvas3d-opensource-src-$(QT5CANVAS3D_VERSION).tar.xz
++QT5CANVAS3D_DEPENDENCIES = qt5base qt5declarative
++QT5CANVAS3D_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
++QT5CANVAS3D_LICENSE = GPLv2 or GPLv3 or LGPLv3
++QT5CANVAS3D_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
++else
++QT5CANVAS3D_LICENSE = Commercial license
++QT5CANVAS3D_REDISTRIBUTE = NO
++endif
++
++define QT5CANVAS3D_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
++endef
++
++define QT5CANVAS3D_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5CANVAS3D_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++	$(QT5_LA_PRL_FILES_FIXUP)
++endef
++
++define QT5CANVAS3D_INSTALL_TARGET_CMDS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtCanvas3D $(TARGET_DIR)/usr/qml/
++endef
++
++$(eval $(generic-package))
+-- 
+2.5.0
