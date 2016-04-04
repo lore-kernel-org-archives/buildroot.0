@@ -1,148 +1,112 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Mon, 04 Apr 2016 19:31:49 +0000
-Subject: [Buildroot] [PATCH v3 2/3] go: new host package
+Subject: [Buildroot] [PATCH v3 3/3] flannel: new package
 In-Reply-To: <cover.1459798147.git.geoff@infradead.org>
 References: <cover.1459798147.git.geoff@infradead.org>
-Message-ID: <dd44a19e178d1ca3e7aef95cd3700ed82d5c3bb1.1459798147.git.geoff@infradead.org>
+Message-ID: <762e3d2b6b696656441d9818512ac7ac10221e7f.1459798147.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a new package 'go' which builds the host cross compiler and libraries for the
-go programming language.
+Flannel is a virtual network that gives a subnet to each host for use
+with container runtimes.
 
+Cc: Brandon Philips <brandon.philips@coreos.com>
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- package/Config.in.host    |  1 +
- package/go/Config.in.host | 13 ++++++++
- package/go/go.hash        |  2 ++
- package/go/go.mk          | 75 +++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 91 insertions(+)
- create mode 100644 package/go/Config.in.host
- create mode 100644 package/go/go.hash
- create mode 100644 package/go/go.mk
+ package/Config.in            |  1 +
+ package/flannel/Config.in    |  9 +++++++++
+ package/flannel/flannel.hash |  2 ++
+ package/flannel/flannel.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 54 insertions(+)
+ create mode 100644 package/flannel/Config.in
+ create mode 100644 package/flannel/flannel.hash
+ create mode 100644 package/flannel/flannel.mk
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index a91612b..e646dfe 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -13,6 +13,7 @@ menu "Host utilities"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
-+	source "package/go/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
- 	source "package/imx-usb-loader/Config.in.host"
- 	source "package/jq/Config.in.host"
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+diff --git a/package/Config.in b/package/Config.in
+index 64822bf..b7d9a17 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1374,6 +1374,7 @@ endif
+ 	source "package/faifa/Config.in"
+ 	source "package/fastd/Config.in"
+ 	source "package/fcgiwrap/Config.in"
++	source "package/flannel/Config.in"
+ 	source "package/fmc/Config.in"
+ 	source "package/fping/Config.in"
+ 	source "package/gesftpserver/Config.in"
+diff --git a/package/flannel/Config.in b/package/flannel/Config.in
 new file mode 100644
-index 0000000..e69259c
+index 0000000..0da356d
 --- /dev/null
-+++ b/package/go/Config.in.host
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_GO_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc
-+	depends on !BR2_ARM_CPU_ARMV4
-+
-+config BR2_PACKAGE_HOST_GO
-+	bool "host go"
++++ b/package/flannel/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_FLANNEL
++	bool "flannel"
 +	depends on BR2_PACKAGE_GO_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_GO
 +	help
-+	  The Go Programming Language.
++	  Flannel is a virtual network that gives a subnet to each host for use
++	  with container runtimes.
 +
-+	  https://golang.org
-diff --git a/package/go/go.hash b/package/go/go.hash
++	  https://github.com/coreos/flannel
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
 new file mode 100644
-index 0000000..e7c72de
+index 0000000..a19329a
 --- /dev/null
-+++ b/package/go/go.hash
++++ b/package/flannel/flannel.hash
 @@ -0,0 +1,2 @@
 +# Locally computed:
-+sha256  754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
-diff --git a/package/go/go.mk b/package/go/go.mk
++sha256 c09a76e80647282687b8db36f28dd3aede650f8f71dad0cf9f453f2ae3a0635d flannel-v0.5.5.tar.gz
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
 new file mode 100644
-index 0000000..8dd51b1
+index 0000000..4c1d27e
 --- /dev/null
-+++ b/package/go/go.mk
-@@ -0,0 +1,75 @@
++++ b/package/flannel/flannel.mk
+@@ -0,0 +1,42 @@
 +################################################################################
 +#
-+# go
++# flannel
 +#
 +################################################################################
 +
-+GO_VERSION = 1.5.3
-+GO_SITE = https://storage.googleapis.com/golang
-+GO_SOURCE = go$(GO_VERSION).src.tar.gz
++FLANNEL_VERSION = v0.5.5
++FLANNEL_SITE = $(call github,coreos,flannel.git,$(FLANNEL_VERSION))
 +
-+GO_LICENSE = BSD-3c
-+GO_LICENSE_FILES = LICENSE
++FLANNEL_LICENSE = Apache-2.0
++FLANNEL_LICENSE_FILES = LICENSE
 +
-+ifeq ($(BR2_arm),y)
-+GO_GOARCH = arm
-+else ifeq ($(BR2_aarch64),y)
-+GO_GOARCH = arm64
-+else ifeq ($(BR2_i386),y)
-+GO_GOARCH = 386
-+else ifeq ($(BR2_x86_64),y)
-+GO_GOARCH = amd64
-+else ifeq ($(BR2_powerpc),y)
-+GO_GOARCH = ppc64
-+else
-+GO_GOARCH = unknown
-+endif
++FLANNEL_DEPENDENCIES = host-go
 +
-+ifeq ($(BR2_arm)$(BR2_ARM_CPU_ARMV5),yy)
-+GO_GOARM = 5
-+else ifeq ($(BR2_arm)$(BR2_ARM_CPU_ARMV6),yy)
-+GO_GOARM = 6
-+else ifeq ($(BR2_arm)$(BR2_ARM_CPU_ARMV7A),yy)
-+GO_GOARM = 7
-+else ifeq ($(BR2_arm),y)
-+GO_GOARM = unknown
-+endif
-+
-+HOST_GO_DEPENDENCIES = host-go-bootstrap
-+HOST_GO_FINAL = $(HOST_DIR)/usr/lib/go
-+
-+HOST_GO_MAKE_ENV = \
-+	GOROOT_BOOTSTRAP=$(GO_BOOTSTRAP_FINAL) \
-+	GOROOT_FINAL=$(HOST_GO_FINAL) \
-+	GOROOT="$(@D)" \
++FLANNEL_MAKE_ENV = \
 +	GOBIN="$(@D)/bin" \
++	GOPATH="$(@D)/gopath" \
 +	GOARCH=$(GO_GOARCH) \
-+	GOARM=$(GO_GOARM) \
-+	GOOS=linux \
-+	CGO_ENABLED=1 \
-+	CC_FOR_TARGET=$(TARGET_CC) \
-+	CXX_FOR_TARGET=$(TARGET_CXX)
++	CGO_ENABLED=1
 +
-+define HOST_GO_BUILD_CMDS
-+	cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
++FLANNEL_GLDFLAGS = \
++	-X github.com/coreos/flannel/version.Version=${FLANNEL_VERSION} \
++	-extldflags '-static'
++
++define FLANNEL_CONFIGURE_CMDS
++	# Put sources at prescribed GOPATH location.
++	mkdir -p $(@D)/gopath/src/github.com/coreos
++	ln -s $(@D) $(@D)/gopath/src/github.com/coreos/flannel
 +endef
 +
-+define HOST_GO_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_FINAL)/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_FINAL)/bin/gofmt
-+
-+	ln -sf ../lib/go/bin/go $(HOST_DIR)/usr/bin/
-+	ln -sf ../lib/go/bin/gofmt $(HOST_DIR)/usr/bin/
-+
-+	cp -a $(@D)/lib $(HOST_GO_FINAL)/
-+
-+	mkdir -p $(HOST_GO_FINAL)/pkg
-+	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_FINAL)/pkg/
-+	cp -a $(@D)/pkg/tool $(HOST_GO_FINAL)/pkg/
-+
-+	# There is a known issue which requires the go sources to be installed
-+	# https://golang.org/issue/2775
-+	cp -a $(@D)/src $(HOST_GO_FINAL)/
++define FLANNEL_BUILD_CMDS
++	cd $(@D) && $(FLANNEL_MAKE_ENV) $(HOST_GO_FINAL)/bin/go \
++		build -v -o $(@D)/bin/flanneld -ldflags "${FLANNEL_GLDFLAGS}" .
 +endef
 +
-+$(eval $(host-generic-package))
++define FLANNEL_INSTALL_TARGET_CMDS
++	# Install flannel to its well known location.
++	$(INSTALL) -D -m 0755 $(@D)/bin/flanneld $(TARGET_DIR)/opt/bin/flanneld
++	$(INSTALL) -D -m 0755 $(@D)/dist/mk-docker-opts.sh $(TARGET_DIR)/opt/bin/mk-docker-opts.sh
++endef
++
++$(eval $(generic-package))
 -- 
 2.5.0
