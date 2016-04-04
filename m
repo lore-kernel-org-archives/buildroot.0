@@ -1,73 +1,77 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  4 Apr 2016 21:28:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
-	mesa3d-headers}: bump version to 11.2.0
-Message-ID: <1459798108-6054-1-git-send-email-bernd.kuhls@t-online.de>
+From: Geoff Levand <geoff@infradead.org>
+Date: Mon, 04 Apr 2016 19:31:49 +0000
+Subject: [Buildroot] [PATCH v3 1/3] go-bootstrap: new host package
+In-Reply-To: <cover.1459798147.git.geoff@infradead.org>
+References: <cover.1459798147.git.geoff@infradead.org>
+Message-ID: <86c84005b36e17359c5d2a72c0544a738df8f456.1459798147.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased 0002-Fix-runtime-error-with-uClibc.patch
+Add a new package go-bootstrap which builds a bootstrap compiler for the
+go programming language.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Geoff Levand <geoff@infradead.org>
 ---
- package/mesa3d-headers/mesa3d-headers.mk                | 2 +-
- package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch | 4 ++--
- package/mesa3d/mesa3d.hash                              | 4 ++--
- package/mesa3d/mesa3d.mk                                | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/go-bootstrap/go-bootstrap.hash |  2 ++
+ package/go-bootstrap/go-bootstrap.mk   | 38 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
+ create mode 100644 package/go-bootstrap/go-bootstrap.hash
+ create mode 100644 package/go-bootstrap/go-bootstrap.mk
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 5cad42d..8e3156c 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 11.1.2
-+MESA3D_HEADERS_VERSION = 11.2.0
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
- MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
-diff --git a/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch b/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
-index c85f88a..59627be 100644
---- a/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
-+++ b/package/mesa3d/0002-Fix-runtime-error-with-uClibc.patch
-@@ -25,8 +25,8 @@ patch: http://lists.busybox.net/pipermail/buildroot/2015-March/123410.html
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
- diff -uNr mesa-10.5.3.org/src/glsl/nir/nir_constant_expressions.c mesa-10.5.3/src/glsl/nir/nir_constant_expressions.c
----- mesa-10.5.3.org/src/glsl/nir/nir_constant_expressions.c	2015-04-12 23:31:29.000000000 +0200
--+++ mesa-10.5.3/src/glsl/nir/nir_constant_expressions.c	2015-04-13 19:59:37.819786541 +0200
-+--- mesa-10.5.3.org/src/compiler/nir/nir_constant_expressions.c	2015-04-12 23:31:29.000000000 +0200
-++++ mesa-10.5.3/src/compiler/nir/nir_constant_expressions.c	2015-04-13 19:59:37.819786541 +0200
- @@ -48,6 +48,18 @@
-  }
-  #endif
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 695c535..281dbf0 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,2 +1,2 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2016-February/000199.html
--sha256	8f72aead896b340ba0f7a4a474bfaf71681f5d675592aec1cb7ba698e319148b	mesa-11.1.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2016-April/000206.html
-+sha256	1c1fed2674abf3f16ed2623e9a5694d6752c293194e18462ebc644a19cfaafb2	mesa-11.2.0.tar.xz
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b8ccd1f..292935e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 11.1.2
-+MESA3D_VERSION = 11.2.0
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
- MESA3D_LICENSE = MIT, SGI, Khronos
+diff --git a/package/go-bootstrap/go-bootstrap.hash b/package/go-bootstrap/go-bootstrap.hash
+new file mode 100644
+index 0000000..1d0566a
+--- /dev/null
++++ b/package/go-bootstrap/go-bootstrap.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b go1.4.2.src.tar.gz
+diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
+new file mode 100644
+index 0000000..ccb932d
+--- /dev/null
++++ b/package/go-bootstrap/go-bootstrap.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# go-bootstrap
++#
++################################################################################
++
++GO_BOOTSTRAP_VERSION = 1.4.2
++GO_BOOTSTRAP_SITE = https://storage.googleapis.com/golang
++GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).src.tar.gz
++
++GO_BOOTSTRAP_LICENSE = BSD-3c
++GO_BOOTSTRAP_LICENSE_FILES = LICENSE
++
++GO_BOOTSTRAP_FINAL = $(HOST_DIR)/usr/lib/go-$(GO_BOOTSTRAP_VERSION)
++
++GO_BOOTSTRAP_MAKE_ENV = \
++	GOOS=linux \
++	GOROOT_FINAL="$(GO_BOOTSTRAP_FINAL)" \
++	GOROOT="$(@D)" \
++	GOBIN="$(@D)/bin"
++
++define HOST_GO_BOOTSTRAP_BUILD_CMDS
++	cd $(@D)/src && $(GO_BOOTSTRAP_MAKE_ENV) ./make.bash
++endef
++
++define HOST_GO_BOOTSTRAP_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/go $(GO_BOOTSTRAP_FINAL)/bin/go
++	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(GO_BOOTSTRAP_FINAL)/bin/gofmt
++
++	cp -a $(@D)/lib $(GO_BOOTSTRAP_FINAL)/
++	cp -a $(@D)/pkg $(GO_BOOTSTRAP_FINAL)/
++
++	# There is a known issue which requires the go sources to be installed
++	# https://golang.org/issue/2775
++	cp -a $(@D)/src $(GO_BOOTSTRAP_FINAL)/
++endef
++
++$(eval $(host-generic-package))
 -- 
-2.8.0.rc3
+2.5.0
