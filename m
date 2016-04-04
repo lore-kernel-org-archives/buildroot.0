@@ -1,70 +1,44 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Apr 2016 22:26:12 +0200
-Subject: [Buildroot] [PATCH 1/2] qt5connectivity: add sdpscanner tool
- for Qt5Bluetooth
-In-Reply-To: <CAGm1_ktt4d7ELbUUuEyPX6qiEvXbBdOGhkiC4+yu_s3K6VP4kw@mail.gmail.com>
-References: <1459763762-31640-1-git-send-email-corjon.j@ecagroup.com>
- <CAGm1_ktt4d7ELbUUuEyPX6qiEvXbBdOGhkiC4+yu_s3K6VP4kw@mail.gmail.com>
-Message-ID: <5702CDE4.1080703@mind.be>
+Date: Mon, 4 Apr 2016 22:40:16 +0200
+Subject: [Buildroot] [PATCH] linux: use zImage by default on ARM
+In-Reply-To: <CAJJ6jxu=KscT+V-fAiqo16E673tnk7Zo2j+=OaVqicQYQ4YVUg@mail.gmail.com>
+References: <1459452866-23060-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <CAJJ6jxu=KscT+V-fAiqo16E673tnk7Zo2j+=OaVqicQYQ4YVUg@mail.gmail.com>
+Message-ID: <5702D130.5090502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/04/16 12:02, Yegor Yefremov wrote:
-> Hi Julien, all,
->
-> On Mon, Apr 4, 2016 at 11:56 AM, Julien Corjon <corjon.j@ecagroup.com> wrote:
->> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+On 04/04/16 19:57, Steve Calfee wrote:
+> On Thu, Mar 31, 2016 at 12:34 PM, Thomas Petazzoni
+> <thomas.petazzoni@free-electrons.com> wrote:
+>> Since quite some time, the kernel and bootloader communities consider
+>> zImage as the default format for kernel images on ARM, replacing
+>> uImage. The load address information in uImage is no longer needed,
+>> since the kernel is position-independent in terms of physical address,
+>> except on a few old platforms. For most people, using zImage is simply
+>> better/simpler, so let's switch to zImage as the default image format
+>> on ARM.
+>>
+>> All defconfigs are updated: 46 defconfigs no longer need to select
+>> explicitly zImage because it's the default, and 16 defconfigs now need
+>> to explicitly select uImage because that's no longer the default.
+>>
+>> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 >> ---
->>   package/qt5/qt5connectivity/qt5connectivity.mk | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
->> index a68f5ec..936bc6f 100644
->> --- a/package/qt5/qt5connectivity/qt5connectivity.mk
->> +++ b/package/qt5/qt5connectivity/qt5connectivity.mk
->> @@ -43,6 +43,7 @@ endif
->>
->>   define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
->>          cp -dpf $(STAGING_DIR)/usr/lib/libQt5Bluetooth.so.* $(TARGET_DIR)/usr/lib
->> +       cp -dpf $(STAGING_DIR)/usr/bin/sdpscanner $(TARGET_DIR)/usr/bin
 >
-> would $(INSTALL) be preferable here? Do we have any rules?
+> Is this a good idea? Doesn't this break external configs that use
+> uImage? Changing a default is a serious change.
 
-  We generally prefer install, but in this case it's nice to keep the same 
-construct as the previous line, so I'm OK with it. So:
+  A defconfig is not very reliable when updating buildroot, because defaults may 
+change. When updating buildroot, you should use a full config. This also tells 
+you which options are new for example.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-
-  That said, I wonder why we are doing all this manual copying for qt5, instead 
-of just running 'make install'. AFAICS the only thing that isn't already cleaned 
-up in the finalize step are the QML files, and these can easily be cleaned up as 
-a finalize hook. Thomas, do you remember why you did it this way?
 
   Regards,
   Arnout
-
->
-> Yegor
->
->>          $(QT5CONNECTIVITY_INSTALL_TARGET_QMLS)
->>   endef
->>
->> --
->> 2.5.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
 
 
 -- 
