@@ -1,41 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Apr 2016 21:56:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libshout: bump version to 2.4.1
-Message-ID: <1459713411-593-1-git-send-email-bernd.kuhls@t-online.de>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Mon, 4 Apr 2016 08:01:05 +0200
+Subject: [Buildroot] [PATCH] wilc1000-firmware: new package
+In-Reply-To: <20160402172058.77e5cba2@free-electrons.com>
+References: <1459491576-32280-1-git-send-email-ludovic.desroches@atmel.com>
+ <20160402172058.77e5cba2@free-electrons.com>
+Message-ID: <20160404060105.GF14018@odux.rfo.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libshout/libshout.hash | 5 +++--
- package/libshout/libshout.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+On Sat, Apr 02, 2016 at 05:20:58PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri, 1 Apr 2016 08:19:36 +0200, Ludovic Desroches wrote:
+> > Firmware for Atmel Wilc1000 wireless device.
+> > 
+> > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> > ---
+> >  package/Config.in                              |  1 +
+> >  package/wilc1000-firmware/Config.in            |  6 ++++++
+> >  package/wilc1000-firmware/wilc1000-firmware.mk | 25 +++++++++++++++++++++++++
+> 
+> A hash file was missing.
+> 
+> > +WILC1000_FIRMWARE_VERSION = 14.1
+> > +WILC1000_FIRMWARE_SITE = https://github.com/linux4sc/wireless-firmware/archive
+> > +WILC1000_FIRMWARE_SOURCE = v$(WILC1000_FIRMWARE_VERSION)_Firmware.zip
+> 
+> What a crappy file name, which doesn't even contain the name of the
+> project :-/
 
-diff --git a/package/libshout/libshout.hash b/package/libshout/libshout.hash
-index 908bd99..5b3ae2d 100644
---- a/package/libshout/libshout.hash
-+++ b/package/libshout/libshout.hash
-@@ -1,2 +1,3 @@
--# From http://downloads.xiph.org/releases/libshout/SHA256SUMS
--sha256	cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e	libshout-2.3.1.tar.gz
-+# From https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/libshout/Manifest
-+# hash from http://downloads.xiph.org/releases/libshout/SHA256SUMS is wrong!
-+sha256	f3acb8dec26f2dbf6df778888e0e429a4ce9378a9d461b02a7ccbf2991bbf24d	libshout-2.4.1.tar.gz
-diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
-index faee3eb..029c134 100644
---- a/package/libshout/libshout.mk
-+++ b/package/libshout/libshout.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSHOUT_VERSION = 2.3.1
-+LIBSHOUT_VERSION = 2.4.1
- LIBSHOUT_SITE = http://downloads.xiph.org/releases/libshout
- LIBSHOUT_LICENSE = LGPLv2+
- LIBSHOUT_LICENSE_FILES = COPYING
--- 
-2.8.0.rc3
+I agree.
+
+> 
+> > +WILC1000_FIRMWARE_DRIVER_FILE = wilc1003_firmware.bin
+> 
+> This variable is not really needed, it's only used once
+> 
+> > +WILC1000_FIRMWARE_LICENSE = PROPRIETARY
+> > +
+> > +define WILC1000_FIRMWARE_EXTRACT_CMDS
+> > +	$(UNZIP) -d $(BUILD_DIR) $(DL_DIR)/$(WILC1000_FIRMWARE_SOURCE)
+> > +	mv $(BUILD_DIR)/wireless-firmware-$(WILC1000_FIRMWARE_VERSION)_Firmware/* $(@D)
+> > +	rmdir $(BUILD_DIR)/wireless-firmware-$(WILC1000_FIRMWARE_VERSION)_Firmware
+> > +endef
+> > +
+> > +define WILC1000_FIRMWARE_INSTALL_TARGET_CMDS
+> > +	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/firmware/atmel/
+> > +	cp $(@D)/$(WILC1000_FIRMWARE_DRIVER_FILE) $(TARGET_DIR)/lib/firmware/atmel/
+> 
+> I've simplified this to use just one $(INSTALL) -D -m 0644 invocation,
+> which is sufficient since 1/ there is only one file to install and 2/
+> option -D tells $(INSTALL) to create sub-directories as necessary.
+> 
+> Applied with those fixes. Thanks!
+
+Great, thanks.
+
+
+Regards
+
+Ludovic
