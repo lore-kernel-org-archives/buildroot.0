@@ -1,110 +1,39 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Mon, 4 Apr 2016 10:52:45 +0200
-Subject: [Buildroot] [PATCH v2 4/4] board/atmel: update documentation for SD
-	card generation
-In-Reply-To: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
-References: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1459759965-14073-5-git-send-email-ludovic.desroches@atmel.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 4 Apr 2016 10:31:03 +0100
+Subject: [Buildroot] [PATCH 1/3] lvm2: bump version to 2.02.149
+Message-ID: <1459762265-5543-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Henceforth, a sdcard.img file is automatically generated. It simplifies the
-procedure to generate a bootable SD card for Atmel Xplained boards.
-
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- board/atmel/readme.txt | 66 +++++++++++++++++++++-----------------------------
- 1 file changed, 28 insertions(+), 38 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
-index 1e86a11..f874d44 100644
---- a/board/atmel/readme.txt
-+++ b/board/atmel/readme.txt
-@@ -43,54 +43,44 @@ goto to 'Preparing the SD card' section
- Preparing the SD card
- =====================
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 2a26633..88998c4 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 549d9d772eae7054c6d9b0d0a7f65e3930f6109b81e8e58ce265f9f3732ea322a0c81acc9e9714ca16c2670ee519ea28a74470b3daf8b0ca05d82decee2443b4  LVM2.2.02.148.tgz
++sha512 f00310fd398d4f84d67677e47b148ab5cc79319e25547ee56160703a425f2f506a4c92ee9958c363a1640ae1fa17b4337242d76e0c5e4a256192edfbf9c4fcdc  LVM2.2.02.149.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index fa35acd..d17a772 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--The SD card must be partitioned with at least two partitions: one
--FAT16 partition for the bootloaders, kernel image and Device Tree
--blob, and one ext4 partition for the root filesystem. To partition the
--SD card:
-+An image named sdcard.img is automatically generated. With this image, you no
-+longer have to care about the creation of the partition and copying files to
-+the SD card.
- 
--sudo sfdisk /dev/mmcblk0 <<EOF
--,64MiB,6
--;
--EOF
-+You need@least a 1GB SD card. All the data on the SD card will be lost. To
-+copy the image on the SD card:
- 
--This creates a 64 MB partition for the FAT16 filesystem (type 6) and
--uses the rest for the ext4 filesystem used for the root filesystem.
-+/!\ Caution be sure to do it on the right mmcblk device /!\
- 
--Then, format both partitions:
-+dd if=output/images/sdcard.img of=/dev/mmcblk0
- 
--sudo mkfs.msdos -n boot /dev/mmcblk0p1
--sudo mkfs.ext4 -L rootfs -O ^huge_file /dev/mmcblk0p2
--
-- Note: the -O ^huge_file option is needed to avoid enabling the huge
-- files features of ext4 (to support files larges than 2 TB), which
-- needs the kernel option CONFIG_LBDAF to be enabled.
--
--Mount both partitions (if not done automatically by your system):
--
--sudo mount /dev/mmcblk0p1 /media/boot
--sudo mount /dev/mmcblk0p2 /media/rootfs
--
--Copy the bootloaders, kernel image and Device Tree blob to the first
--partition:
-+Insert your SD card in your Xplained board, and enjoy. The default
-+U-Boot environment will load properly the kernel and Device Tree blob
-+from the first partition of the SD card, so everything works
-+automatically.
- 
--cp output/images/boot.bin /media/boot/
--cp output/images/u-boot.bin /media/boot/
--cp output/images/zImage /media/boot/
--cp output/images/at91-sama5d2_xplained.dtb /media/boot/
-+By default a 16MB FAT partition is created. It contains at91bootstrap, u-boot,
-+the kernel image and all dtb variants for your board. The dtb used is the basic
-+one:
- 
--Extract the root filesystem to the second partition:
-+U-Boot> print
-+[...]
-+bootcmd=fatload mmc 1:1 0x21000000 at91-sama5d2_xplained.dtb; fatload mmc 1:1 0x22000000 zImage; bootz 0x22000000 - 0x21000000
-+[...]
- 
--sudo tar -C /media/rootfs -xf output/images/rootfs.tar
-+If you want to use a variant such as the _pda7 one, you will have to update
-+your u-boot environment:
- 
--Unmount both partitions:
-+U-Boot> setenv bootcmd 'fatload mmc 1:1 0x21000000 at91-sama5d2_xplained_pda7.dtb; fatload mmc 1:1 0x22000000 zImage; bootz 0x22000000 - 0x21000000'
-+U-Boot> save
-+Saving Environment to FAT...
-+writing uboot.env
-+done
- 
--sudo umount /media/boot
--sudo umount /media/rootfs
-+A 512MB ext4 partition is also created to store the rootfs generated.
- 
--Insert your SD card in your Xplained board, and enjoy. The default
--U-Boot environment will properly load the kernel and Device Tree blob
--from the first partition of the SD card, so everything works
--automatically.
-+If you want to customize the size of the partitions and their content, take a
-+look at the the genimage.cfg file in the board repository.
- 
- 
- Flashing the NAND using SAM-BA
+-LVM2_VERSION = 2.02.148
++LVM2_VERSION = 2.02.149
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
 -- 
-2.5.0
+2.7.3
