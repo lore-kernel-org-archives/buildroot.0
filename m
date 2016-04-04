@@ -1,110 +1,40 @@
-From: Julien Corjon <corjon.j@ecagroup.com>
-Date: Mon,  4 Apr 2016 17:37:35 +0200
-Subject: [Buildroot] [PATCH] qt5canvas3d: new package
-Message-ID: <1459784255-19892-1-git-send-email-corjon.j@ecagroup.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon,  4 Apr 2016 18:19:51 +0200
+Subject: [Buildroot] [PATCH 1/1] network-manager: bump to version 1.0.12
+Message-ID: <1459786791-4904-1-git-send-email-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/qt5/Config.in                    |  1 +
- package/qt5/qt5canvas3d/Config.in        | 17 ++++++++++++++
- package/qt5/qt5canvas3d/qt5canvas3d.hash |  2 ++
- package/qt5/qt5canvas3d/qt5canvas3d.mk   | 38 ++++++++++++++++++++++++++++++++
- 4 files changed, 58 insertions(+)
- create mode 100644 package/qt5/qt5canvas3d/Config.in
- create mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.hash
- create mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.mk
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index f673daa..af5b827 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -32,6 +32,7 @@ menuconfig BR2_PACKAGE_QT5
- if BR2_PACKAGE_QT5
- source "package/qt5/qt5base/Config.in"
- source "package/qt5/qt53d/Config.in"
-+source "package/qt5/qt5canvas3d/Config.in"
- source "package/qt5/qt5connectivity/Config.in"
- source "package/qt5/qt5declarative/Config.in"
- source "package/qt5/qt5enginio/Config.in"
-diff --git a/package/qt5/qt5canvas3d/Config.in b/package/qt5/qt5canvas3d/Config.in
-new file mode 100644
-index 0000000..3ae5192
---- /dev/null
-+++ b/package/qt5/qt5canvas3d/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_QT5CANVAS3D
-+	bool "qt5canvas3d"
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt5canvas3d module.
-+
-+	  http://qt.io
-+
-+comment "qt5canvas3d needs an OpenGL-capable backend"
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-new file mode 100644
-index 0000000..57ae4d7
---- /dev/null
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-@@ -0,0 +1,2 @@
-+# Hash from: http://download.qt.io/official_releases/qt/5.6/5.6.0/submodules/qtcanvas3d-opensource-src-5.6.0.tar.xz.mirrorlist
-+sha256 66add59e826a0161f4a4dc3ec0b44c17fad1451390b4f7c67af23ee7429d9ecf qtcanvas3d-opensource-src-5.6.0.tar.xz
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.mk b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-new file mode 100644
-index 0000000..3f605ab
---- /dev/null
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-@@ -0,0 +1,38 @@
-+################################################################################
-+#
-+# qt5canvas3d
-+#
-+################################################################################
-+
-+QT5CANVAS3D_VERSION = $(QT5_VERSION)
-+QT5CANVAS3D_SITE = $(QT5_SITE)
-+QT5CANVAS3D_SOURCE = qtcanvas3d-opensource-src-$(QT5CANVAS3D_VERSION).tar.xz
-+QT5CANVAS3D_DEPENDENCIES = qt5base qt5declarative
-+QT5CANVAS3D_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-+QT5CANVAS3D_LICENSE = GPLv2 or GPLv3 or LGPLv3
-+QT5CANVAS3D_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
-+else
-+QT5CANVAS3D_LICENSE = Commercial license
-+QT5CANVAS3D_REDISTRIBUTE = NO
-+endif
-+
-+define QT5CANVAS3D_CONFIGURE_CMDS
-+	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
-+endef
-+
-+define QT5CANVAS3D_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define QT5CANVAS3D_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(QT5_LA_PRL_FILES_FIXUP)
-+endef
-+
-+define QT5CANVAS3D_INSTALL_TARGET_CMDS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtCanvas3D $(TARGET_DIR)/usr/qml/
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index c259b5a..e8a2be8 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.10.sha256sum
+-sha256  1bcfce8441dfd9f432a100d06b54f3831a2275cccc3b74b1b4c09a011e179fbc  NetworkManager-1.0.10.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.0/NetworkManager-1.0.12.sha256sum
++sha256  3a470f8c60109b1acb5784ddc2423501706b5fe34c793a6faee87e591eb04a9e  NetworkManager-1.0.12.tar.xz
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index b49f3b8..12b8f3c 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NETWORK_MANAGER_VERSION_MAJOR = 1.0
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 -- 
-2.5.0
+2.8.0.rc3
