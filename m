@@ -1,44 +1,70 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 4 Apr 2016 22:40:16 +0200
-Subject: [Buildroot] [PATCH] linux: use zImage by default on ARM
-In-Reply-To: <CAJJ6jxu=KscT+V-fAiqo16E673tnk7Zo2j+=OaVqicQYQ4YVUg@mail.gmail.com>
-References: <1459452866-23060-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <CAJJ6jxu=KscT+V-fAiqo16E673tnk7Zo2j+=OaVqicQYQ4YVUg@mail.gmail.com>
-Message-ID: <5702D130.5090502@mind.be>
+Date: Mon, 4 Apr 2016 22:45:45 +0200
+Subject: [Buildroot] Project configuration management
+In-Reply-To: <20160404204429.472fb279@free-electrons.com>
+References: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
+ <20160404204429.472fb279@free-electrons.com>
+Message-ID: <5702D279.3050904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/04/16 19:57, Steve Calfee wrote:
-> On Thu, Mar 31, 2016 at 12:34 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Since quite some time, the kernel and bootloader communities consider
->> zImage as the default format for kernel images on ARM, replacing
->> uImage. The load address information in uImage is no longer needed,
->> since the kernel is position-independent in terms of physical address,
->> except on a few old platforms. For most people, using zImage is simply
->> better/simpler, so let's switch to zImage as the default image format
->> on ARM.
->>
->> All defconfigs are updated: 46 defconfigs no longer need to select
->> explicitly zImage because it's the default, and 16 defconfigs now need
->> to explicitly select uImage because that's no longer the default.
->>
->> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
->> ---
+On 04/04/16 20:44, Thomas Petazzoni wrote:
+> Hello Mateusz,
 >
-> Is this a good idea? Doesn't this break external configs that use
-> uImage? Changing a default is a serious change.
+> On Mon, 4 Apr 2016 15:55:44 +0200, Mateusz S?upny wrote:
+>
+>> We are using buildroot for building a series of projects. What I feel
+>> is missing in buildroot is a way to store different configurations in
+>> scope of a single project. For example, we would like to prepare
+>> three types of builds, let's name them "Release", that is the basic
+>> build, "Develop", that is a Release build + dropbear + some other
+>> utilities, and "Extra", that contains all configuration options from
+>> Develop + some additional tools (gdb, valgrind, etc.). To achieve
+>> that, we have to maintain total of (number of projects) x (number of
+>> build types) different configuration files that are almost identical.
+>>
+>> Can this goal be achieved without using multiple defconfig files that
+>> share approx 90% of their contents? What would you advise to avoid
+>> that?
+>>
+>> First solution that comes to my mind is to allow nesting defconfig
+>> files with some include/source statement, but AFAICS that's not
+>> supported.
+>>
+>> Please note that we are aware of "layered customizations" concept,
+>> and we're using it to some degree, but it doesn't solve all the
+>> issues, e.g. setting toolchain, selecting packages, and setting
+>> multiple paths to layers itself has to be done in defconfig files
+>> anyway.
+>
+> The mechanism we typically advise in such situation is to use defconfig
+> fragments, and assemble them as needed to create the configuration you
+> feed into Buildroot. A shell script (or other) can help generating the
+> configuration fed into Buildroot from the fragments.
 
-  A defconfig is not very reliable when updating buildroot, because defaults may 
-change. When updating buildroot, you should use a full config. This also tells 
-you which options are new for example.
+  And that shell script exists already: support/kconfig/merge_config.sh
+
+  The main difficulty with this model is that there is no simple way to split 
+configs. Fortunately, for buildroot this is typically not much of a problem, 
+because your fragments will just add some packages.
 
 
   Regards,
   Arnout
+
+
+>
+> I'm Cc'ing Gustavo, who has been using this model for quite some time
+> for a large project that involves multiple HW platforms, I'm sure he
+> can give more insights on how to achieve that.
+>
+> Best regards,
+>
+> Thomas
+>
 
 
 -- 
