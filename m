@@ -1,34 +1,45 @@
-From: Matthew Weber <matt@thewebers.ws>
-Date: Mon, 4 Apr 2016 06:54:40 -0500
-Subject: [Buildroot] [PATCH 4/4 v2] core/pkg-infra: download git
- submodules if the package wants them
-In-Reply-To: <5702440F.5030707@barix.com>
-References: <cover.1459541702.git.yann.morin.1998@free.fr>
- <8373904cdf1fee9724d6834b56efaa706a92fc31.1459541702.git.yann.morin.1998@free.fr>
- <CAFt09wNKtUSyEcQzL1o+p+f5m_bPwctndV8OKrQOXBqQBmsCpQ@mail.gmail.com>
- <5702440F.5030707@barix.com>
-Message-ID: <CAFt09wMs3C_A5EHuX6ByqRazCibzqjSrPo_tdtzrMRtCAZo0Ew@mail.gmail.com>
+From: Mason <slash.tmp@free.fr>
+Date: Mon, 4 Apr 2016 15:08:36 +0200
+Subject: [Buildroot] [PATCH v2] ltp-testsuite: build kernel modules when
+	appropriate
+In-Reply-To: <56FAD38B.8040201@mind.be>
+References: <56F3F393.6020407@free.fr>
+ <20160324222555.21f04320@free-electrons.com> <56F92840.9090206@free.fr>
+ <56FAD38B.8040201@mind.be>
+Message-ID: <57026754.50205@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alex,
+From: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
 
-On Mon, Apr 4, 2016 at 5:38 AM, Aleksandar Simeonov
-<aleksandar@barix.com> wrote:
-> Hi Yann, Mathew,
->
-> Have you checked that this patch does not affect the download of packages
-> not using GIT? For me it breaks the download of anything using WGET, for
-> example dosfstools:
->
+If we're building a kernel, we can also build LTP's test modules.
 
-Yeah, but to be sure, I just did a clean and explicitly built
-dosfstools along with a complete build.  Would you mind doing a
-savedefconfig and pastebin your defconifg?  Also what hash did you add
-the patchset on top of (I used 2cd5abf)?
+Signed-off-by: Marc Gonzalez <marc_gonzalez@sigmadesigns.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks,
-Matt
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 8adfdef68d69..1c1c2a0d4f6b 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -13,6 +13,14 @@ LTP_TESTSUITE_CONF_OPTS += \
+ 	--with-power-management-testsuite \
+ 	--with-realtime-testsuite
+ 
++ifeq ($(BR2_LINUX_KERNEL),y)
++LTP_TESTSUITE_DEPENDENCIES += linux
++LTP_TESTSUITE_MAKE_ENV = ARCH=$(KERNEL_ARCH)
++LTP_TESTSUITE_CONF_OPTS += --with-linux-dir=$(LINUX_DIR)
++else
++LTP_TESTSUITE_CONF_OPTS += --without-modules
++endif
++
+ # Needs libcap with file attrs which needs attr, so both required
+ ifeq ($(BR2_PACKAGE_LIBCAP)$(BR2_PACKAGE_ATTR),yy)
+ LTP_TESTSUITE_DEPENDENCIES += libcap
+-- 
+2.8.0
