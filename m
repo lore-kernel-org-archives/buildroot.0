@@ -1,7 +1,9 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 4 Apr 2016 10:31:03 +0100
-Subject: [Buildroot] [PATCH 1/3] lvm2: bump version to 2.02.149
-Message-ID: <1459762265-5543-1-git-send-email-Vincent.Riera@imgtec.com>
+Date: Mon, 4 Apr 2016 10:31:04 +0100
+Subject: [Buildroot] [PATCH 2/3] squid: bump version to 3.5.16
+In-Reply-To: <1459762265-5543-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1459762265-5543-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1459762265-5543-2-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 2a26633..88998c4 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 549d9d772eae7054c6d9b0d0a7f65e3930f6109b81e8e58ce265f9f3732ea322a0c81acc9e9714ca16c2670ee519ea28a74470b3daf8b0ca05d82decee2443b4  LVM2.2.02.148.tgz
-+sha512 f00310fd398d4f84d67677e47b148ab5cc79319e25547ee56160703a425f2f506a4c92ee9958c363a1640ae1fa17b4337242d76e0c5e4a256192edfbf9c4fcdc  LVM2.2.02.149.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index fa35acd..d17a772 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 106bde6..37cfaa1 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.15.tar.bz2.asc
+-md5	59d6732a4ebd3f63e2164d9847dc37c0	squid-3.5.15.tar.bz2
+-sha1	72279380ea94aa731f5cf82f3fb50f9250f1692a	squid-3.5.15.tar.bz2
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.16.tar.bz2.asc
++md5 ab9c92f4a579e056cd8afafa0a95f612  squid-3.5.16.tar.bz2
++sha1 f3a2b8a7451b79d24e8fd166306e2c7248ef3be9  squid-3.5.16.tar.bz2
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index b4341ba..b2e0c98 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LVM2_VERSION = 2.02.148
-+LVM2_VERSION = 2.02.149
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).15
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).16
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
 -- 
 2.7.3
