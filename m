@@ -1,75 +1,148 @@
 From: Geoff Levand <geoff@infradead.org>
 Date: Mon, 04 Apr 2016 19:31:49 +0000
-Subject: [Buildroot] [PATCH v3 0/3] Add go language support
-Message-ID: <cover.1459798147.git.geoff@infradead.org>
+Subject: [Buildroot] [PATCH v3 2/3] go: new host package
+In-Reply-To: <cover.1459798147.git.geoff@infradead.org>
+References: <cover.1459798147.git.geoff@infradead.org>
+Message-ID: <dd44a19e178d1ca3e7aef95cd3700ed82d5c3bb1.1459798147.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds support for the go programming language.  I tested the build of
-the included flannel package on i386, powerpc64, arm (32 bit) and arm64.  I did
-runtime testing of the generated flannel binary on arm64.
+Add a new package 'go' which builds the host cross compiler and libraries for the
+go programming language.
 
-Patch 1 adds a host only bootstrap compiler needed to build the latest go
-versions.
-
-Patch 2 adds support for a host cross compiler, libraries and tools.
-
-Patch 3 adds a go language package flannel that can be used to test the go
-compiler.
-
-Changes for v3:
-
-o Rebase to latest (261cef0fe9598eadfe8a8efa80def40640f2e9f8).
-
-Changes for v2:
-
-o Dropped go target support.  We can consider it again if there is a strong use
-  case.
-o General cleanup of package files.  Added comments, fixed variable names,
-  use github helper function.
-
--Geoff
-
-The following changes since commit 261cef0fe9598eadfe8a8efa80def40640f2e9f8:
-
-  wilc1000-firmware: new package (2016-04-02 17:18:32 +0200)
-
-are available in the git repository at:
-
-  git at github.com:glevand/buildroot--buildroot.git go-v3
-
-for you to fetch changes up to 762e3d2b6b696656441d9818512ac7ac10221e7f:
-
-  flannel: new package (2016-04-04 12:12:48 -0700)
-
-----------------------------------------------------------------
-Geoff Levand (3):
-      go-bootstrap: new host package
-      go: new host package
-      flannel: new package
-
- package/Config.in                      |  1 +
- package/Config.in.host                 |  1 +
- package/flannel/Config.in              |  9 ++++
- package/flannel/flannel.hash           |  2 +
- package/flannel/flannel.mk             | 42 +++++++++++++++++++
- package/go-bootstrap/go-bootstrap.hash |  2 +
- package/go-bootstrap/go-bootstrap.mk   | 38 +++++++++++++++++
- package/go/Config.in.host              | 13 ++++++
- package/go/go.hash                     |  2 +
- package/go/go.mk                       | 75 ++++++++++++++++++++++++++++++++++
- 10 files changed, 185 insertions(+)
- create mode 100644 package/flannel/Config.in
- create mode 100644 package/flannel/flannel.hash
- create mode 100644 package/flannel/flannel.mk
- create mode 100644 package/go-bootstrap/go-bootstrap.hash
- create mode 100644 package/go-bootstrap/go-bootstrap.mk
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+---
+ package/Config.in.host    |  1 +
+ package/go/Config.in.host | 13 ++++++++
+ package/go/go.hash        |  2 ++
+ package/go/go.mk          | 75 +++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 91 insertions(+)
  create mode 100644 package/go/Config.in.host
  create mode 100644 package/go/go.hash
  create mode 100644 package/go/go.mk
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index a91612b..e646dfe 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -13,6 +13,7 @@ menu "Host utilities"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
++	source "package/go/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+new file mode 100644
+index 0000000..e69259c
+--- /dev/null
++++ b/package/go/Config.in.host
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_GO_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc
++	depends on !BR2_ARM_CPU_ARMV4
++
++config BR2_PACKAGE_HOST_GO
++	bool "host go"
++	depends on BR2_PACKAGE_GO_ARCH_SUPPORTS
++	help
++	  The Go Programming Language.
++
++	  https://golang.org
+diff --git a/package/go/go.hash b/package/go/go.hash
+new file mode 100644
+index 0000000..e7c72de
+--- /dev/null
++++ b/package/go/go.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
+new file mode 100644
+index 0000000..8dd51b1
+--- /dev/null
++++ b/package/go/go.mk
+@@ -0,0 +1,75 @@
++################################################################################
++#
++# go
++#
++################################################################################
++
++GO_VERSION = 1.5.3
++GO_SITE = https://storage.googleapis.com/golang
++GO_SOURCE = go$(GO_VERSION).src.tar.gz
++
++GO_LICENSE = BSD-3c
++GO_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_arm),y)
++GO_GOARCH = arm
++else ifeq ($(BR2_aarch64),y)
++GO_GOARCH = arm64
++else ifeq ($(BR2_i386),y)
++GO_GOARCH = 386
++else ifeq ($(BR2_x86_64),y)
++GO_GOARCH = amd64
++else ifeq ($(BR2_powerpc),y)
++GO_GOARCH = ppc64
++else
++GO_GOARCH = unknown
++endif
++
++ifeq ($(BR2_arm)$(BR2_ARM_CPU_ARMV5),yy)
++GO_GOARM = 5
++else ifeq ($(BR2_arm)$(BR2_ARM_CPU_ARMV6),yy)
++GO_GOARM = 6
++else ifeq ($(BR2_arm)$(BR2_ARM_CPU_ARMV7A),yy)
++GO_GOARM = 7
++else ifeq ($(BR2_arm),y)
++GO_GOARM = unknown
++endif
++
++HOST_GO_DEPENDENCIES = host-go-bootstrap
++HOST_GO_FINAL = $(HOST_DIR)/usr/lib/go
++
++HOST_GO_MAKE_ENV = \
++	GOROOT_BOOTSTRAP=$(GO_BOOTSTRAP_FINAL) \
++	GOROOT_FINAL=$(HOST_GO_FINAL) \
++	GOROOT="$(@D)" \
++	GOBIN="$(@D)/bin" \
++	GOARCH=$(GO_GOARCH) \
++	GOARM=$(GO_GOARM) \
++	GOOS=linux \
++	CGO_ENABLED=1 \
++	CC_FOR_TARGET=$(TARGET_CC) \
++	CXX_FOR_TARGET=$(TARGET_CXX)
++
++define HOST_GO_BUILD_CMDS
++	cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
++endef
++
++define HOST_GO_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_FINAL)/bin/go
++	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_FINAL)/bin/gofmt
++
++	ln -sf ../lib/go/bin/go $(HOST_DIR)/usr/bin/
++	ln -sf ../lib/go/bin/gofmt $(HOST_DIR)/usr/bin/
++
++	cp -a $(@D)/lib $(HOST_GO_FINAL)/
++
++	mkdir -p $(HOST_GO_FINAL)/pkg
++	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_FINAL)/pkg/
++	cp -a $(@D)/pkg/tool $(HOST_GO_FINAL)/pkg/
++
++	# There is a known issue which requires the go sources to be installed
++	# https://golang.org/issue/2775
++	cp -a $(@D)/src $(HOST_GO_FINAL)/
++endef
++
++$(eval $(host-generic-package))
 -- 
 2.5.0
