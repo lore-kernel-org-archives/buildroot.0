@@ -1,96 +1,81 @@
-From: Alistair Francis <alistair.francis@xilinx.com>
-Date: Mon, 4 Apr 2016 16:45:54 -0700
-Subject: [Buildroot] [PATCH V2] Add Xen 4.6
-In-Reply-To: <56FB80AA.1050407@mind.be>
-References: <1457483717-17947-1-git-send-email-alistair.francis@xilinx.com>
- <56F7D7FA.40001@mind.be>
- <CAKmqyKOCUKKQJRg6jK5TdJ33XbyATjsWrj41Gdy2zU7FwHz7mg@mail.gmail.com>
- <56FAD6B4.5000706@mind.be>
- <74004942B5DA03468B2B76399A14BF2E7DB1003D@XSJ-PSEXMBX01.xlnx.xilinx.com>
- <56FB80AA.1050407@mind.be>
-Message-ID: <CAKmqyKOSaGayGxLy4dWQOMyD+Z6PRgStVD-TjLB63RZ4q4ih3Q@mail.gmail.com>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Mon, 4 Apr 2016 16:59:06 -0700
+Subject: [Buildroot] need help with adding python-mysqldb
+In-Reply-To: <CAPTQzABFmehM_FhTOvMWO9Jmc63u8BLX1sG1B_zDU=OED57nVA@mail.gmail.com>
+References: <CAPTQzABFmehM_FhTOvMWO9Jmc63u8BLX1sG1B_zDU=OED57nVA@mail.gmail.com>
+Message-ID: <CAJJ6jxvP3v5968+NB4Q6ETdGO_4ubmNt6i-Egp9RL5NBMsh_mA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 30, 2016 at 12:30 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+Hi Anatoly,
+
+On Mon, Apr 4, 2016 at 3:28 PM, Anatoly Asviyan <aanatoly@gmail.com> wrote:
+> Hi
+> I am trying to add python-mysqldb package. I 've patched buildroot (the
+> patch is here
+> https://gist.githubusercontent.com/aanatoly/997d7ced70aaf9e13d57b5cc85751862/raw/3d71a992e748d9c40ca1961b0dd951fb300184d0/python-mysqldb.patch)
+>
+> but make fails with this error
+>
+>>>> python-mysqldb 1.2.5 Downloading
+> --2016-04-05 00:55:28--
+> http://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
+> Resolving pypi.python.org (pypi.python.org)... 185.31.17.223
+> Connecting to pypi.python.org (pypi.python.org)|185.31.17.223|:80...
+> connected.
+> HTTP request sent, awaiting response... 301 Moved Permanently
+> Location:
+> https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
+> [following]
+> --2016-04-05 00:55:29--
+> https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
+> Connecting to pypi.python.org (pypi.python.org)|185.31.17.223|:443...
+> connected.
+> HTTP request sent, awaiting response... 200 OK
+> Length: 108935 (106K) [application/octet-stream]
+> Saving to:
+> `/home/me/work/buildroot-x86_64/output/build/.MySQL-python-1.2.5.zip.ip6WvS/output'
+>
+> 100%[=====================================================================================================================>]
+> 108,935     --.-K/s   in 0.1s
+>
+> 2016-04-05 00:55:29 (946 KB/s) -
+> `/home/me/work/buildroot-x86_64/output/build/.MySQL-python-1.2.5.zip.ip6WvS/output'
+> saved [108935/108935]
+>
+> WARNING: no hash file for MySQL-python-1.2.5.zip
+>>>> python-mysqldb 1.2.5 Extracting
+> /home/me/work/buildroot-x86_64/dl/MySQL-python-1.2.5.zip | tar
+> --strip-components=1 -C
+> /home/me/work/buildroot-x86_64/output/build/python-mysqldb-1.2.5   -xf -
+> /bin/bash: /home/me/work/buildroot-x86_64/dl/MySQL-python-1.2.5.zip:
+> Permission denied
+> tar: This does not look like a tar archive
+> tar: Exiting with failure status due to previous errors
+> make[1]: ***
+> [/home/me/work/buildroot-x86_64/output/build/python-mysqldb-1.2.5/.stamp_extracted]
+> Error 2
+> make: *** [_all] Error 2
 >
 >
-> On 03/30/16 01:37, Alistair Francis wrote:
->>>
->>> -----Original Message-----
->>> From: Arnout Vandecappelle [mailto:arnout at mind.be]
->>> Sent: Tuesday, 29 March 2016 12:26 PM
->>> To: Alistair Francis <alistai@xilinx.com>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>;
->>> buildroot at buildroot.org; maxime.ripard at free-electrons.com
->>> Subject: Re: [PATCH V2] Add Xen 4.6
->>>
->>> On 03/28/16 20:59, Alistair Francis wrote:
->>>>
->>>> On Sun, Mar 27, 2016 at 5:54 AM, Arnout Vandecappelle<arnout@mind.be>
->>>
->>> wrote:
->>> [snip]
->>>>>>
->>>>>>   For some reason, it doesn't seem to be cross-compiling for me, it
->>>>>> uses
->>>>>> "gcc" to build. I think you need to pass TARGET_CONFIGURE_OPTS in
->>>>>> XEN_MAKE_ENV.
->>>>
->>>> I see the same problem. I tried using TARGET_CONFIGURE_OPTS in
->>>> XEN_MAKE_ENV but it still uses GCC.
->>>>
->>>> The configure scripts detects an AArch64 target correctly, but it
->>>> still uses GCC. Any other ideas?
->>>
->>>
->>>    Try passing CROSS_COMPILE in XEN_MAKE_ENV.
->>>
->>>    You may also need to set XEN_TARGET_ARCH, AFAICS it is not derived
->>> automatically.
->>
->>
->> Sorry for the poorly formatted reply, I am sending this from my work
->> email.
->>
->> I managed to get it to use aarch64-buildroot-linux-gnu-gcc using the
->> CROSS_COMPILE=$(TARGET_CROSS) option , but now I see a lot of
->> errors as apparently that version of GCC doesn't understand a lot of the
->> command line options.
->>
->> Any idea why that would be? The GCC version is 4.9.3 which should be new
->> enough.
->
->
->  Can you put the build log in a pastebin and post it on the list? It's
-> difficult to say anything just like this...
->
->  Did you also pass XEN_TARGET_ARCH?
-
-I managed to get it to work for AArch64, but now it's failing for
-ARMv7. I haven't tried the x86 architectures yet.
-
-Here is the error log: http://pastebin.com/znTSCu6s
-
-Here is the Xen.mk I'm using: http://pastebin.com/G33WH3Z9
-
-Thanks,
-
-Alistair
-
->
->  Regards,
->  Arnout
+> It looks like it runs "foo.zip | tar ..." instead of "unzip foo.zip | tar
+> ...". I can't figure why. Other zip'ed packages are built ok, for example
+> python-keyring.
 >
 > --
-> Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-> Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-> Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+> Regards, Anatoly
 >
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
+I looked at adding mysqldb - its make system is truly convoluted.
+Since I did not need the absolute maximum speed (some parts are in C),
+I jumped to MySqlDB. I have not seen any speed comparisons between the
+two, but I prefer one that works and is maintained to the alternative.
+MySqlDB works exactly the same way (no changes to the calling python)
+and easily fits into the buildroot make structure.
+
+I am in process of getting the package into buildroot. Check the
+recent mail list archives. You can download the patch and try it.
+
+Regards, Steve
