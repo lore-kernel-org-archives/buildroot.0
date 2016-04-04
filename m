@@ -1,51 +1,45 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Mon, 4 Apr 2016 10:19:55 +0200
-Subject: [Buildroot] [PATCH 2/2] strongswan: disable iptables support
-Message-ID: <20160404081955.GA8572@waldemar-brodkorb.de>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Mon, 4 Apr 2016 10:52:41 +0200
+Subject: [Buildroot] [PATCH v2 0/4] sd card image generation for Xplained
+	boards
+Message-ID: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a new conflict between Linux header (linux/if.h)
-and C library header (net/if.h) introduced by this commit
-to the Linux kernel:
-1ffad83dffd675cd742286ae82dca7d746cb0da8
-Mikko Rapeli is working on a solution, but it requires
-changes to the Linux kernel and C library.
+Use genimage to generate a SD card image
 
-For now I would just disable the iptables feature in Strongswan.
+Changes
+- v2:
+  - add missing host packages to generate the FAT partition
+  - cleanup post-image.sh
+  - update documentation
 
-The changes fixes following autobuild error:
-http://autobuild.buildroot.net/results/e1693a714eb690988c1798b733d0ff143e50b3b9/
+Ludovic Desroches (4):
+  configs: atmel: add sama5d2 xplained sd card image generation
+  configs: atmel: add sama5d4 xplained sd card image generation
+  configs: atmel: add sama5d3 xplained sd card image generation
+  board/atmel: update documentation for SD card generation
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/strongswan/strongswan.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ board/atmel/readme.txt                         | 66 +++++++++++---------------
+ board/atmel/sama5d2_xplained_mmc/genimage.cfg  | 33 +++++++++++++
+ board/atmel/sama5d2_xplained_mmc/post-image.sh | 14 ++++++
+ board/atmel/sama5d3_xplained_mmc/genimage.cfg  | 33 +++++++++++++
+ board/atmel/sama5d3_xplained_mmc/post-image.sh | 14 ++++++
+ board/atmel/sama5d4_xplained_mmc/genimage.cfg  | 34 +++++++++++++
+ board/atmel/sama5d4_xplained_mmc/post-image.sh | 14 ++++++
+ configs/atmel_sama5d2_xplained_mmc_defconfig   |  6 +++
+ configs/atmel_sama5d3_xplained_mmc_defconfig   |  6 +++
+ configs/atmel_sama5d4_xplained_mmc_defconfig   |  7 ++-
+ 10 files changed, 188 insertions(+), 39 deletions(-)
+ create mode 100644 board/atmel/sama5d2_xplained_mmc/genimage.cfg
+ create mode 100755 board/atmel/sama5d2_xplained_mmc/post-image.sh
+ create mode 100644 board/atmel/sama5d3_xplained_mmc/genimage.cfg
+ create mode 100755 board/atmel/sama5d3_xplained_mmc/post-image.sh
+ create mode 100644 board/atmel/sama5d4_xplained_mmc/genimage.cfg
+ create mode 100755 board/atmel/sama5d4_xplained_mmc/post-image.sh
 
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index e27606c..e7606c0 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -71,15 +71,10 @@ STRONGSWAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_MYSQL),mysql)
- endif
- 
--ifeq ($(BR2_PACKAGE_IPTABLES),y)
--STRONGSWAN_DEPENDENCIES += iptables
-+# disable connmark/forecast until net/if.h vs. linux/if.h conflict resolved
-+# problem exist since linux 4.5 header changes
- STRONGSWAN_CONF_OPTS += \
--	--enable-connmark \
--	--enable-forecast
--else
--STRONGSWAN_COF_OPTS += \
- 	--disable-connmark \
- 	--disable-forecast
--endif
- 
- $(eval $(autotools-package))
 -- 
-2.1.4
+2.5.0
