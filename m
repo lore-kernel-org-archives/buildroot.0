@@ -1,81 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Apr 2016 01:23:55 +0200
-Subject: [Buildroot] [PATCH] mosh: fix build with the Codescape IMG
- toolchain
-In-Reply-To: <57044575.7030307@mind.be>
-References: <95907701a43145654f7962319823a0f7fe73551b.1459879412.git.baruch@tkos.co.il>
- <57043281.5050104@mind.be> <57044575.7030307@mind.be>
-Message-ID: <5704490B.3020906@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue,  5 Apr 2016 20:31:23 -0300
+Subject: [Buildroot] [PATCH 1/2] tiff: add host variant
+Message-ID: <1459899084-23473-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/06/16 01:08, Arnout Vandecappelle wrote:
-> On 04/05/16 23:47, Arnout Vandecappelle wrote:
->> On 04/05/16 20:03, Baruch Siach wrote:
->>> The Codescape IMG toolchain does not provide the ssp library even though it's
->>> a glibc toolchain, and thus selects BR2_TOOLCHAIN_HAS_SSP. Add a patch that
->>> changes the compile test for -fstack-protector-all to a build test that
->>> correctly fails when ssp is missing.
->>>
->>> This makes the seeding of ssp related configure variables unnecessary.
->>
->>   So, this fixes the issue for mosh, but not for libpam-tacplus, powerpc-utils,
->> psmisc, ruby, sox, and stunnel...
->>
->>   Wouldn't it be better to fix BR2_TOOLCHAIN_HAS_SSP itself instead? Otherwise
->> there isn't much point in having this symbol... So it shouldn't be selected by
->> glibc/musl itself, but by the individual external toolchains. Cfr. the previous
->> discussion for sox [1].
->
->   And actually, Vicente already provided a patch for that:
-> http://patchwork.ozlabs.org/patch/597701/
+Add host variant to be used by host-gdk-pixbuf to update the loaders
+cache.
 
-  Oh, and there is this one as well:
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/tiff/tiff.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-http://patchwork.ozlabs.org/patch/545315/
-
->
->   It is at place fifty-something of my patches-to-review list :-)
-
-... at place sixty-something :-)
-
-  Regards,
-  Arnout
-
->
->   Regards,
->   Arnout
->
->>
->>   That said, it would of course be a great idea to upstream the patch to mosh so
->> we can remove our workaround at some point.
->>
->>   Regards,
->>   Arnout
->>
->> [1] http://patchwork.ozlabs.org/patch/590047/
->>
->>>
->>> Signed-off-by: Baruch Siach<baruch@tkos.co.il>
->>> ---
->>>   ...ure.ac-link-test-for-fstack-protector-all.patch | 33 ++++++++++++++++++++++
->>>   package/mosh/mosh.mk                               | 11 ++------
->>>   2 files changed, 35 insertions(+), 9 deletions(-)
->>>   create mode 100644
->>> package/mosh/0001-configure.ac-link-test-for-fstack-protector-all.patch
->>
->>
->
->
-
-
+diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
+index 266272a..a53d7bb 100644
+--- a/package/tiff/tiff.mk
++++ b/package/tiff/tiff.mk
+@@ -15,6 +15,14 @@ TIFF_CONF_OPTS = \
+ 
+ TIFF_DEPENDENCIES = host-pkgconf
+ 
++HOST_TIFF_CONF_OPTS = \
++	--disable-cxx \
++	--without-x \
++	--disable-zlib \
++	--disable-lzma \
++	--disable-jpeg
++HOST_TIFF_DEPENDENCIES = host-pkgconf
++
+ ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
+ TIFF_CONF_OPTS += --disable-ccitt
+ endif
+@@ -81,3 +89,4 @@ endif
+ TIFF_MAKE = $(MAKE) SUBDIRS="$(TIFF_SUBDIRS)"
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
