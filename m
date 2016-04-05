@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Apr 2016 21:31:55 +0200
-Subject: [Buildroot] [git commit] librsvg: bump to version 2.40.15
-Message-ID: <20160405194001.A63E28024D@busybox.osuosl.org>
+Date: Tue, 5 Apr 2016 21:36:43 +0200
+Subject: [Buildroot] [git commit] mosh: requires wchar
+Message-ID: <20160405194001.EE872804F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e67b75ed9b900ba4a39196177f868ccfc9d98c82
+commit: https://git.buildroot.net/buildroot/commit/?id=1a8e7d93e0325c18229fc01569255b064e107133
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/dc6/dc60afdf2b6035cd72567cf37b837db087c79bea/
+http://autobuild.buildroot.net/results/624/624a1fcae9633940714ae4e8ad9864e9611e93ec/
+http://autobuild.buildroot.net/results/e95/e95c8cff40c87f167f82e37430ebd1f37c8c242e/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/librsvg/librsvg.hash | 4 ++--
- package/librsvg/librsvg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mosh/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index 5147cda..71d96c8 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.13.sha256sum
--sha256	4d6ea93ec05f5dabe7262d711d246a0a99b2311e215360dd3dcabd6afe3b9804	librsvg-2.40.13.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.40/librsvg-2.40.15.sha256sum
-+sha256	d9cac4a123eec6e553a26e120979bab7425def9ae7ce7c079eba5e4a45db05f4	librsvg-2.40.15.tar.xz
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 80d2cba..dadffe8 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index 26f7233..b4189ee 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -1,6 +1,6 @@
+-comment "mosh needs a toolchain w/ C++, threads, dynamic library"
++comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+-		|| BR2_STATIC_LIBS
++		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
  
- LIBRSVG_VERSION_MAJOR = 2.40
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).13
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).15
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
+ config BR2_PACKAGE_MOSH
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_MOSH
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
++	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_OPENSSL
