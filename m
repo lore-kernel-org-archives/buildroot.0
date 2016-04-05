@@ -1,62 +1,76 @@
-From: Aleksandar Simeonov <aleksandar@barix.com>
-Date: Tue, 5 Apr 2016 09:24:50 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] core/pkg-infra: download git
- submodules if the package wants them
-In-Reply-To: <20160404210441.GA3500@free.fr>
-References: <cover.1459541702.git.yann.morin.1998@free.fr>
- <8373904cdf1fee9724d6834b56efaa706a92fc31.1459541702.git.yann.morin.1998@free.fr>
- <CAFt09wNKtUSyEcQzL1o+p+f5m_bPwctndV8OKrQOXBqQBmsCpQ@mail.gmail.com>
- <5702440F.5030707@barix.com> <20160404210441.GA3500@free.fr>
-Message-ID: <57036842.7060408@barix.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Apr 2016 09:37:55 +0200
+Subject: [Buildroot] [PATCH] opencv: fix sparc64 compile
+In-Reply-To: <20160404194344.GB5944@waldemar-brodkorb.de>
+References: <20160403110913.GA19849@waldemar-brodkorb.de>
+ <5702C33D.80608@mind.be> <20160404194344.GB5944@waldemar-brodkorb.de>
+Message-ID: <57036B53.6080509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
 
-On 4/4/16 11:04 PM, Yann E. MORIN wrote:
-> Aleksandar, All,
+
+On 04/04/16 21:43, Waldemar Brodkorb wrote:
+> Hi Arnout,
+> Arnout Vandecappelle wrote,
 >
-> On 2016-04-04 12:38 +0200, Aleksandar Simeonov spake thusly:
->> Have you checked that this patch does not affect the download of packages
->> not using GIT? For me it breaks the download of anything using WGET, for
->> example dosfstools:
-> Yes, I just retried right now, and I can at least download packages
-> using:
->    - wget (gcc, binutils... and dosfstools)
->    - mercurial (eigen)
->    - git with no submodules (opkg)
->    -git with sub-modules (a local package to test submodules)
+>> On 04/03/16 13:09, Waldemar Brodkorb wrote:
+>>> This patch from Debian fixes following autobuild failure:
+>>> http://autobuild.buildroot.net/results/eda5c6c43da40a342e0f545a348d2f865eb5ccf2/
+>>>
+>>> Tested with ARM build without a regression.
+>>>
+>>> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+>>> ---
+>>>   package/opencv/0002-atomic.patch | 222 +++++++++++++++++++++++++++++++++++++++
+>>>   1 file changed, 222 insertions(+)
+>>>   create mode 100644 package/opencv/0002-atomic.patch
+>>>
+>>> diff --git a/package/opencv/0002-atomic.patch b/package/opencv/0002-atomic.patch
+>>> new file mode 100644
+>>> index 0000000..607d3fd
+>>> --- /dev/null
+>>> +++ b/package/opencv/0002-atomic.patch
+>>> @@ -0,0 +1,222 @@
+>>> +Bug#714923: opencv FTBFS on sparc64
+>>> +https://www.mail-archive.com/debian-bugs-dist at lists.debian.org/msg1393793.html
+>>> +
+>>
+>>   You should sign off the patch. It is also missing a description of what is
+>> wrong and how it is fixed.
 >
-> and they all downloaded fine, especially dosfstools:
+> Thanks for the review.
+> I thought Signed-off-By is only used if I made the patch and not if
+> I copy the patch from some internet site.
+
+ 
+https://buildroot.org/downloads/manual/manual.html#_format_and_licensing_of_the_package_patches
+
+  Third paragraph.
+
+  Regards,
+  Arnout
+
 >
->   
-
-It was failing on all packages-not only on dosfstools. But it was my 
-fault, I was applying your v2 fixes not in the correct way, so it was 
-failing on whatever package comes next to download. I have re-downloaded 
-them from the link you have posted, and applied them on top of 
-2cd5abf7f9edd3c0a609e9626f12f71e2a6e4e7c as Mathew has explained, and 
-now all works fine.
-
+>>   Also please refer to the bug tracker itself rather than the mail archive:
+>>
+>> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=714923
+>>
+>>   The first message there contains a nice description of the problem that you
+>> can reuse in the patch.
 >
->>>>> dosfstools 3.0.28 Downloading
->> BACKEND=wget
-> We have nothing in Buildroot that outputs this "BACKEND" string.
+> Okay,
+>
+> Waldemar
+>
 
-This was a debug message I have added
-> However, what you report is probably due to somthing else. Have you 
-> applied on top of local changes? Can you reproduce the error without 
-> this patchset? Regards, Yann E. MORIN. 
-
-No, without the patchset works perfectly, With it-as well :) Sorry about 
-the noise, I was not a member of the maillist, so my reply did go only 
-to Mathew Weber. Now should be fine.
-
-Great work, thank you all!
-
-Cheers,
-
-Alex
+-- 
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
