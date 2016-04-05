@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  5 Apr 2016 19:18:41 +0200
-Subject: [Buildroot] [V3 2/3] libtomcrypt: new package
+Date: Tue,  5 Apr 2016 19:18:42 +0200
+Subject: [Buildroot] [V3 3/3] dropbear: use libtomath & libtomcrypt
 In-Reply-To: <1459876722-9066-1-git-send-email-francois.perrad@gadz.org>
 References: <1459876722-9066-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1459876722-9066-2-git-send-email-francois.perrad@gadz.org>
+Message-ID: <1459876722-9066-3-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,83 +11,66 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/Config.in                    |  1 +
- package/libtomcrypt/Config.in        | 11 +++++++++++
- package/libtomcrypt/libtomcrypt.hash |  2 ++
- package/libtomcrypt/libtomcrypt.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/libtomcrypt/Config.in
- create mode 100644 package/libtomcrypt/libtomcrypt.hash
- create mode 100644 package/libtomcrypt/libtomcrypt.mk
+ package/dropbear/0001-fix-linking.patch | 36 +++++++++++++++++++++++++++++++++
+ package/dropbear/dropbear.mk            |  2 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/dropbear/0001-fix-linking.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 24dbe09..9c2d56d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -840,6 +840,7 @@ menu "Crypto"
- 	source "package/libsodium/Config.in"
- 	source "package/libssh/Config.in"
- 	source "package/libssh2/Config.in"
-+	source "package/libtomcrypt/Config.in"
- 	source "package/libuecc/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
-diff --git a/package/libtomcrypt/Config.in b/package/libtomcrypt/Config.in
+diff --git a/package/dropbear/0001-fix-linking.patch b/package/dropbear/0001-fix-linking.patch
 new file mode 100644
-index 0000000..6678b30
+index 0000000..93925eb
 --- /dev/null
-+++ b/package/libtomcrypt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBTOMCRYPT
-+	bool "libtomcrypt"
-+	select BR2_PACKAGE_LIBTOMMATH
-+	help
-+	  LibTomCrypt is a fairly comprehensive, modular and portable
-+	  cryptographic toolkit that provides developers with a vast array
-+	  of well known published block ciphers, one-way hash functions,
-+	  chaining modes, pseudo-random number generators, public key
-+	  cryptography and a plethora of other routines.
++++ b/package/dropbear/0001-fix-linking.patch
+@@ -0,0 +1,36 @@
++fix linking
 +
-+	  http://www.libtom.net
-diff --git a/package/libtomcrypt/libtomcrypt.hash b/package/libtomcrypt/libtomcrypt.hash
-new file mode 100644
-index 0000000..562016d
---- /dev/null
-+++ b/package/libtomcrypt/libtomcrypt.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116  crypt-1.17.tar.bz2
-diff --git a/package/libtomcrypt/libtomcrypt.mk b/package/libtomcrypt/libtomcrypt.mk
-new file mode 100644
-index 0000000..9943f00
---- /dev/null
-+++ b/package/libtomcrypt/libtomcrypt.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# libtomcrypt
-+#
-+################################################################################
++see https://github.com/mkj/dropbear/pull/28
 +
-+LIBTOMCRYPT_VERSION = 1.17
-+LIBTOMCRYPT_SITE = https://github.com/libtom/libtomcrypt/releases/download/$(LIBTOMCRYPT_VERSION)
-+LIBTOMCRYPT_SOURCE = crypt-$(LIBTOMCRYPT_VERSION).tar.bz2
-+LIBTOMCRYPT_LICENSE = WTFPL
-+LIBTOMCRYPT_LICENSE_FILES = LICENSE
-+LIBTOMCRYPT_INSTALL_STAGING = YES
-+LIBTOMCRYPT_INSTALL_TARGET = NO # only static library
-+LIBTOMCRYPT_DEPENDENCIES = libtommath
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 +
-+define LIBTOMCRYPT_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./src/headers $(TARGET_CFLAGS) -DLTC_SOURCE -DLTM_DESC"
-+endef
++diff --git a/Makefile.in b/Makefile.in
++index d9bfdfa..0356b0f 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -16,12 +16,12 @@ endif
++ STATIC_LTC=libtomcrypt/libtomcrypt.a
++ STATIC_LTM=libtommath/libtommath.a
++ 
++-LIBTOM_LIBS=@LIBTOM_LIBS@
+++LIBTOM_LIBS=-ltomcrypt -ltommath
++ 
++ ifeq (@BUNDLED_LIBTOM@, 1)
++ LIBTOM_DEPS=$(STATIC_LTC) $(STATIC_LTM) 
++ CFLAGS+=-I$(srcdir)/libtomcrypt/src/headers/
++-LIBTOM_LIBS=$(STATIC_LTC) $(STATIC_LTM) 
+++LDFLAGS+=-L ./libtomcrypt -L ./libtommath
++ endif
++ 
++ COMMONOBJS=dbutil.o buffer.o dbhelpers.o \
++@@ -84,7 +84,7 @@ INSTALL=@INSTALL@
++ CPPFLAGS=@CPPFLAGS@
++ CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
++ LIBS+=@LIBS@
++-LDFLAGS=@LDFLAGS@
+++LDFLAGS+=@LDFLAGS@
++ 
++ EXEEXT=@EXEEXT@
++ 
++-- 
 +
-+define LIBTOMCRYPT_INSTALL_STAGING_CMDS
-+	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" NODOCS=1 INSTALL_USER=$(shell id -u) INSTALL_GROUP=$(shell id -g) install
-+endef
-+
-+$(eval $(generic-package))
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 32e2167..fa3642c 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -9,6 +9,8 @@ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
+ DROPBEAR_LICENSE_FILES = LICENSE
++DROPBEAR_DEPENDENCIES = libtomcrypt
++DROPBEAR_CONF_OPTS = --disable-bundled-libtom
+ DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+ DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+ 
 -- 
 2.5.0
