@@ -1,55 +1,76 @@
 From: Jan Heylen <heyleke@gmail.com>
-Date: Tue,  5 Apr 2016 21:45:20 +0200
-Subject: [Buildroot] [PATCH v2 3/4] toolchain: add TARGET_LDFLAGS to
-	toolchain-wrapper
+Date: Tue,  5 Apr 2016 21:45:19 +0200
+Subject: [Buildroot] [PATCH v2 2/4] toolchain: add option to specify ld
+	emulation
 In-Reply-To: <1459885521-25434-1-git-send-email-heyleke@gmail.com>
 References: <1459885521-25434-1-git-send-email-heyleke@gmail.com>
-Message-ID: <1459885521-25434-3-git-send-email-heyleke@gmail.com>
+Message-ID: <1459885521-25434-2-git-send-email-heyleke@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-only done for ld-wrapper, LDFLAGS is still set as before for gcc
----
- toolchain/toolchain-wrapper.c  | 3 +++
- toolchain/toolchain-wrapper.mk | 8 ++++++--
- 2 files changed, 9 insertions(+), 2 deletions(-)
+On some architectures, such as MIPS, the linker supports several 'ld
+emulation', and depending on which flavor of the architecture you're
+building for, one should be passing the proper -m <something> option
+to ld, otherwise ld defaults to the default emulation, which may not
+necessarily be compatible with the object files that are being
+linked.
 
+Add this new option to the ld toolchain-wrapper.
+
+Based upon patch from Thomas Petazzoni:
+http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/60942
+---
+ arch/Config.in                 | 3 +++
+ toolchain/toolchain-wrapper.c  | 3 +++
+ toolchain/toolchain-wrapper.mk | 5 +++++
+ 3 files changed, 11 insertions(+)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index 3f1453f..3b022fe 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -265,6 +265,9 @@ config BR2_GCC_TARGET_CPU
+ config BR2_GCC_TARGET_CPU_REVISION
+ 	string
+ 
++config BR2_LD_TARGET_EMULATION
++	string
++
+ # The value of this option will be passed as --with-fpu=<value> when
+ # building gcc (internal backend) or -mfpu=<value> in the toolchain
+ # wrapper (external toolchain)
 diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 8d1739c..d6ecf84 100644
+index ec069da..8d1739c 100644
 --- a/toolchain/toolchain-wrapper.c
 +++ b/toolchain/toolchain-wrapper.c
-@@ -94,6 +94,9 @@ static char *ld_predef_args[] = {
- #if defined(BR_MIPS_TARGET_BIG_ENDIAN) || defined(BR_ARC_TARGET_BIG_ENDIAN)
- 	"-EB",
- #endif
-+#ifdef BR_ADDITIONAL_LDFLAGS
-+	BR_ADDITIONAL_LDFLAGS
-+#endif
- };
+@@ -82,6 +82,9 @@ static char *gcc_predef_args[] = {
  
- static void check_unsafe_path(const char *path, int paranoid)
+ static char *ld_predef_args[] = {
+ 	path,
++#ifdef BR_LD_EMULATION
++	"-m", BR_LD_EMULATION,
++#endif
+ #ifdef BR_BINFMT_FLAT
+ 	"-elf2flt",
+ #endif
 diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index f868fad..c7cc38e 100644
+index af39071..f868fad 100644
 --- a/toolchain/toolchain-wrapper.mk
 +++ b/toolchain/toolchain-wrapper.mk
-@@ -14,9 +14,13 @@ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+@@ -30,6 +30,11 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
+ endif
  
- # We create a list like '"-mfoo", "-mbar", "-mbarfoo"' so that each flag is a
- # separate argument when used in execv() by the toolchain wrapper.
--TOOLCHAIN_WRAPPER_OPTS = \
-+TOOLCHAIN_WRAPPER_CFLAGS_OPTS = \
- 	$(foreach f,$(call qstrip,$(BR2_TARGET_OPTIMIZATION)),"$(f)"$(comma))
--TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(TOOLCHAIN_WRAPPER_OPTS)'
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_CFLAGS='$(TOOLCHAIN_WRAPPER_CFLAGS_OPTS)'
++LD_TARGET_EMULATION_ = $(call qstrip,$(BR2_LD_TARGET_EMULATION))
++ifneq ($(LD_TARGET_EMULATION_),)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_LD_EMULATION='"$(LD_TARGET_EMULATION_)"'
++endif
 +
-+TOOLCHAIN_WRAPPER_LDFLAGS_OPTS = \
-+	$(foreach f,$(subst -Wl$(comma),$(empty),$(call qstrip,$(BR2_TARGET_LDFLAGS))),"$(f)"$(comma))
-+TOOLCHAIN_WRAPPER_ARGS += -DBR_ADDITIONAL_LDFLAGS='$(TOOLCHAIN_WRAPPER_LDFLAGS_OPTS)'
- 
- ifeq ($(BR2_CCACHE),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE
+ # For simplicity, build directly into the install location
+ define TOOLCHAIN_BUILD_WRAPPER
+ 	$(Q)mkdir -p $(HOST_DIR)/usr/bin
 -- 
 2.5.0
