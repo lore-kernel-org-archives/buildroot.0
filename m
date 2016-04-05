@@ -1,34 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 5 Apr 2016 16:25:38 +0200
-Subject: [Buildroot] [PATCH 1/2] qt5connectivity: add sdpscanner tool
- for Qt5Bluetooth
-In-Reply-To: <5702CDE4.1080703@mind.be>
-References: <1459763762-31640-1-git-send-email-corjon.j@ecagroup.com>
- <CAGm1_ktt4d7ELbUUuEyPX6qiEvXbBdOGhkiC4+yu_s3K6VP4kw@mail.gmail.com>
- <5702CDE4.1080703@mind.be>
-Message-ID: <20160405162538.4bc4eed1@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  5 Apr 2016 18:52:45 +0200
+Subject: [Buildroot] [PATCH 2/2] package/x11r7/xserver_xorg-server: bump
+	version to 1.18.3
+In-Reply-To: <1459875165-6080-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1459875165-6080-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1459875165-6080-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xserver_xorg-server/Config.in                | 4 ++--
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Mon, 4 Apr 2016 22:26:12 +0200, Arnout Vandecappelle wrote:
-
->   That said, I wonder why we are doing all this manual copying for qt5, instead 
-> of just running 'make install'. AFAICS the only thing that isn't already cleaned 
-> up in the finalize step are the QML files, and these can easily be cleaned up as 
-> a finalize hook. Thomas, do you remember why you did it this way?
-
-No, I don't quite remember. It is worth trying to use "make install"
-and see if there is any problem. I think the reason for qt5base.mk is
-that we want to conditionally install some libraries. But for the other
-qt5* packages, I don't remember.
-
-Thomas
+diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
+index d723102..26b9c8e 100644
+--- a/package/x11r7/xserver_xorg-server/Config.in
++++ b/package/x11r7/xserver_xorg-server/Config.in
+@@ -70,7 +70,7 @@ choice
+ 	bool "X Window System server version"
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+-	bool "1.18.2"
++	bool "1.18.3"
+ 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_20
+ 	select BR2_PACKAGE_XPROTO_PRESENTPROTO
+ 
+@@ -82,7 +82,7 @@ endchoice
+ 
+ config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
+ 	string
+-	default "1.18.2" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
++	default "1.18.3" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_18
+ 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
+ 
+ choice
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+index 7e838d7..2172c89 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
+@@ -1,5 +1,5 @@
+ # From http://lists.x.org/archives/xorg-announce/2014-June/002440.html
+ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                xorg-server-1.14.7.tar.bz2
+ sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
+-# From https://lists.freedesktop.org/archives/xorg-announce/2016-March/002681.html
+-sha256	022142b07f6477d140dcc915902df326408a53ca3a352426a499f142b25d632d	xorg-server-1.18.2.tar.bz2
++# From https://lists.freedesktop.org/archives/xorg-announce/2016-April/002683.html
++sha256	ea739c22517cdbe2b5f7c0a5fd05fe8a10ac0629003e71c0c7862f4bb60142cd	xorg-server-1.18.3.tar.bz2
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.0.rc3
