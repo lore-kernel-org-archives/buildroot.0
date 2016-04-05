@@ -1,44 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Apr 2016 22:20:56 +0200
-Subject: [Buildroot] [git commit] squid: bump version to 3.5.16
-Message-ID: <20160405203417.4E44B81D67@busybox.osuosl.org>
+Date: Tue, 5 Apr 2016 22:27:17 +0200
+Subject: [Buildroot] [git commit] boot/uboot: Add custom Subversion
+	repository support for the package
+Message-ID: <20160405203417.7B99F81D67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c7d37023340488845385d45c6048b95da6368e9
+commit: https://git.buildroot.net/buildroot/commit/?id=1a807b4a893db66862b00c4ea3d9992af02a76e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/uboot/Config.in | 9 ++++++---
+ boot/uboot/uboot.mk  | 3 +++
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 106bde6..37cfaa1 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.15.tar.bz2.asc
--md5	59d6732a4ebd3f63e2164d9847dc37c0	squid-3.5.15.tar.bz2
--sha1	72279380ea94aa731f5cf82f3fb50f9250f1692a	squid-3.5.15.tar.bz2
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.16.tar.bz2.asc
-+md5 ab9c92f4a579e056cd8afafa0a95f612  squid-3.5.16.tar.bz2
-+sha1 f3a2b8a7451b79d24e8fd166306e2c7248ef3be9  squid-3.5.16.tar.bz2
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index b4341ba..b2e0c98 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index a6b9f17..4613dd3 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -54,6 +54,9 @@ config BR2_TARGET_UBOOT_CUSTOM_GIT
+ config BR2_TARGET_UBOOT_CUSTOM_HG
+ 	bool "Custom Mercurial repository"
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).15
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).16
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
++config BR2_TARGET_UBOOT_CUSTOM_SVN
++	bool "Custom Subversion repository"
++
+ endchoice
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE
+@@ -64,7 +67,7 @@ config BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom U-Boot tarball"
+ 	depends on BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 
+-if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+ 
+ config BR2_TARGET_UBOOT_CUSTOM_REPO_URL
+ 	string "URL of custom repository"
+@@ -76,7 +79,7 @@ config BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION
+ 	default BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION \
+ 		if BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION != ""  # legacy
+ 	help
+-	  Revision to use in the typical format used by Git/Mercurial
++	  Revision to use in the typical format used by Git/Mercurial/Subversion
+ 	  E.G. a sha id, a tag, branch, ..
+ 
+ endif
+@@ -88,7 +91,7 @@ config BR2_TARGET_UBOOT_VERSION
+ 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+ 	default BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION \
+-		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG
++		if BR2_TARGET_UBOOT_CUSTOM_GIT || BR2_TARGET_UBOOT_CUSTOM_HG || BR2_TARGET_UBOOT_CUSTOM_SVN
+ 
+ config BR2_TARGET_UBOOT_PATCH
+ 	string "Custom U-Boot patches"
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 3c96259..48f40c3 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -24,6 +24,9 @@ UBOOT_SITE_METHOD = git
+ else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_HG),y)
+ UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
+ UBOOT_SITE_METHOD = hg
++else ifeq ($(BR2_TARGET_UBOOT_CUSTOM_SVN),y)
++UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
++UBOOT_SITE_METHOD = svn
+ else
+ # Handle stable official U-Boot versions
+ UBOOT_SITE = ftp://ftp.denx.de/pub/u-boot
