@@ -1,40 +1,53 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue,  5 Apr 2016 18:36:06 -0300
-Subject: [Buildroot] [PATCH] harfbuzz: bump to version 1.2.5
-Message-ID: <1459892166-14781-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Apr 2016 23:47:45 +0200
+Subject: [Buildroot] [PATCH] mosh: fix build with the Codescape IMG
+ toolchain
+In-Reply-To: <95907701a43145654f7962319823a0f7fe73551b.1459879412.git.baruch@tkos.co.il>
+References: <95907701a43145654f7962319823a0f7fe73551b.1459879412.git.baruch@tkos.co.il>
+Message-ID: <57043281.5050104@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/harfbuzz/harfbuzz.hash | 4 ++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 04/05/16 20:03, Baruch Siach wrote:
+> The Codescape IMG toolchain does not provide the ssp library even though it's
+> a glibc toolchain, and thus selects BR2_TOOLCHAIN_HAS_SSP. Add a patch that
+> changes the compile test for -fstack-protector-all to a build test that
+> correctly fails when ssp is missing.
+>
+> This makes the seeding of ssp related configure variables unnecessary.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 5e256cf..751f138 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,2 +1,2 @@
--# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.4.tar.bz2.sha256
--sha256	449dbdf12a8f94aedbdefaac831d8b1bf45e7decaa9192eaa4f74104ef9de491	harfbuzz-1.2.4.tar.bz2
-+# From http://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.2.5.tar.bz2.sha256
-+sha256	cfca0b6ba42c36a1f7b03fffb926dc4d137be2aa2a2ad8930259072e43a347d5	harfbuzz-1.2.5.tar.bz2
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 3869d6d..fe1d832 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.2.4
-+HARFBUZZ_VERSION = 1.2.5
- HARFBUZZ_SITE = http://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+  So, this fixes the issue for mosh, but not for libpam-tacplus, powerpc-utils, 
+psmisc, ruby, sox, and stunnel...
+
+  Wouldn't it be better to fix BR2_TOOLCHAIN_HAS_SSP itself instead? Otherwise 
+there isn't much point in having this symbol... So it shouldn't be selected by 
+glibc/musl itself, but by the individual external toolchains. Cfr. the previous 
+discussion for sox [1].
+
+  That said, it would of course be a great idea to upstream the patch to mosh so 
+we can remove our workaround at some point.
+
+  Regards,
+  Arnout
+
+[1] http://patchwork.ozlabs.org/patch/590047/
+
+>
+> Signed-off-by: Baruch Siach<baruch@tkos.co.il>
+> ---
+>   ...ure.ac-link-test-for-fstack-protector-all.patch | 33 ++++++++++++++++++++++
+>   package/mosh/mosh.mk                               | 11 ++------
+>   2 files changed, 35 insertions(+), 9 deletions(-)
+>   create mode 100644 package/mosh/0001-configure.ac-link-test-for-fstack-protector-all.patch
+
+
 -- 
-2.7.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
