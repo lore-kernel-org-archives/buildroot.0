@@ -1,45 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Apr 2016 21:36:43 +0200
-Subject: [Buildroot] [git commit] mosh: requires wchar
-Message-ID: <20160405194001.EE872804F9@busybox.osuosl.org>
+Date: Tue, 5 Apr 2016 21:32:32 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xproto_inputproto: bump
+	version to 2.3.2
+Message-ID: <20160405194001.BEC648024D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a8e7d93e0325c18229fc01569255b064e107133
+commit: https://git.buildroot.net/buildroot/commit/?id=3c55cf92de258e6b7e52043e2de8f121285a6f71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/dc6/dc60afdf2b6035cd72567cf37b837db087c79bea/
-http://autobuild.buildroot.net/results/624/624a1fcae9633940714ae4e8ad9864e9611e93ec/
-http://autobuild.buildroot.net/results/e95/e95c8cff40c87f167f82e37430ebd1f37c8c242e/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosh/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/x11r7/xproto_inputproto/xproto_inputproto.hash | 4 ++--
+ package/x11r7/xproto_inputproto/xproto_inputproto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index 26f7233..b4189ee 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -1,6 +1,6 @@
--comment "mosh needs a toolchain w/ C++, threads, dynamic library"
-+comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
--		|| BR2_STATIC_LIBS
-+		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.hash b/package/x11r7/xproto_inputproto/xproto_inputproto.hash
+index 426e66f..4ecdddc 100644
+--- a/package/x11r7/xproto_inputproto/xproto_inputproto.hash
++++ b/package/x11r7/xproto_inputproto/xproto_inputproto.hash
+@@ -1,2 +1,2 @@
+-# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/2167
+-sha256	5a47ee62053a6acef3a83f506312494be1461068d0b9269d818839703b95c1d1	inputproto-2.3.1.tar.bz2
++# From https://lists.freedesktop.org/archives/xorg-announce/2016-April/002682.html
++sha256	893a6af55733262058a27b38eeb1edc733669f01d404e8581b167f03c03ef31d	inputproto-2.3.2.tar.bz2
+diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+index a3a6065..20169b5 100644
+--- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
++++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MOSH
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_MOSH
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
- 	depends on !BR2_STATIC_LIBS # protobuf
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_OPENSSL
+-XPROTO_INPUTPROTO_VERSION = 2.3.1
++XPROTO_INPUTPROTO_VERSION = 2.3.2
+ XPROTO_INPUTPROTO_SOURCE = inputproto-$(XPROTO_INPUTPROTO_VERSION).tar.bz2
+ XPROTO_INPUTPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
+ XPROTO_INPUTPROTO_LICENSE = MIT
