@@ -1,79 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Apr 2016 22:28:09 +0200
-Subject: [Buildroot] [git commit] linux: Add custom Subversion repository
-	support for the package
-Message-ID: <20160405203417.8D45081D67@busybox.osuosl.org>
+Date: Tue, 5 Apr 2016 22:20:56 +0200
+Subject: [Buildroot] [git commit] squid: bump version to 3.5.16
+Message-ID: <20160405203417.4E44B81D67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=986fa441e49cc180f77704699a6d2bb3627bf86a
+commit: https://git.buildroot.net/buildroot/commit/?id=6c7d37023340488845385d45c6048b95da6368e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 12 +++++++++---
- linux/linux.mk  |  3 +++
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 6 +++---
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 49b6994..9f0267d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -63,6 +63,12 @@ config BR2_LINUX_KERNEL_CUSTOM_HG
- 	  This option allows Buildroot to get the Linux kernel source
- 	  code from a Mercurial repository.
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index 106bde6..37cfaa1 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,3 +1,3 @@
+-# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.15.tar.bz2.asc
+-md5	59d6732a4ebd3f63e2164d9847dc37c0	squid-3.5.15.tar.bz2
+-sha1	72279380ea94aa731f5cf82f3fb50f9250f1692a	squid-3.5.15.tar.bz2
++# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.16.tar.bz2.asc
++md5 ab9c92f4a579e056cd8afafa0a95f612  squid-3.5.16.tar.bz2
++sha1 f3a2b8a7451b79d24e8fd166306e2c7248ef3be9  squid-3.5.16.tar.bz2
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index b4341ba..b2e0c98 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_LINUX_KERNEL_CUSTOM_SVN
-+	bool "Custom Subversion repository"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Subversion repository.
-+
- config BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 	bool "Local directory"
- 	help
-@@ -79,7 +85,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
- 	string "URL of custom kernel tarball"
- 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 
--if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
-+if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
- 
- config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
- 	string "URL of custom repository"
-@@ -91,7 +97,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
- 		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
- 	help
--	  Revision to use in the typical format used by Git/Mercurial
-+	  Revision to use in the typical format used by Git/Mercurial/Subversion
- 	  E.G. a sha id, a tag, branch, ..
- 
- endif
-@@ -109,7 +115,7 @@ config BR2_LINUX_KERNEL_VERSION
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
- 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
--		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
-+		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
- 
- #
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7e20255..317587f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -23,6 +23,9 @@ LINUX_SITE_METHOD = git
- else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
- LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
- LINUX_SITE_METHOD = hg
-+else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
-+LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
-+LINUX_SITE_METHOD = svn
- else
- LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
- ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
+ SQUID_VERSION_MAJOR = 3.5
+-SQUID_VERSION = $(SQUID_VERSION_MAJOR).15
++SQUID_VERSION = $(SQUID_VERSION_MAJOR).16
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
+ SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
+ SQUID_LICENSE = GPLv2+
