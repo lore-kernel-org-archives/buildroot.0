@@ -1,41 +1,86 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  5 Apr 2016 18:52:44 +0200
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xproto_inputproto: bump
-	version to 2.3.2
-Message-ID: <1459875165-6080-1-git-send-email-bernd.kuhls@t-online.de>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue,  5 Apr 2016 19:18:40 +0200
+Subject: [Buildroot] [V3 1/3] libtommath: new package
+Message-ID: <1459876722-9066-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/x11r7/xproto_inputproto/xproto_inputproto.hash | 4 ++--
- package/x11r7/xproto_inputproto/xproto_inputproto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in                  |  1 +
+ package/libtommath/Config.in       |  7 +++++++
+ package/libtommath/libtommath.hash |  2 ++
+ package/libtommath/libtommath.mk   | 23 +++++++++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/libtommath/Config.in
+ create mode 100644 package/libtommath/libtommath.hash
+ create mode 100644 package/libtommath/libtommath.mk
 
-diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.hash b/package/x11r7/xproto_inputproto/xproto_inputproto.hash
-index 426e66f..4ecdddc 100644
---- a/package/x11r7/xproto_inputproto/xproto_inputproto.hash
-+++ b/package/x11r7/xproto_inputproto/xproto_inputproto.hash
-@@ -1,2 +1,2 @@
--# From http://article.gmane.org/gmane.comp.freedesktop.xorg.announce/2167
--sha256	5a47ee62053a6acef3a83f506312494be1461068d0b9269d818839703b95c1d1	inputproto-2.3.1.tar.bz2
-+# From https://lists.freedesktop.org/archives/xorg-announce/2016-April/002682.html
-+sha256	893a6af55733262058a27b38eeb1edc733669f01d404e8581b167f03c03ef31d	inputproto-2.3.2.tar.bz2
-diff --git a/package/x11r7/xproto_inputproto/xproto_inputproto.mk b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-index a3a6065..20169b5 100644
---- a/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-+++ b/package/x11r7/xproto_inputproto/xproto_inputproto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XPROTO_INPUTPROTO_VERSION = 2.3.1
-+XPROTO_INPUTPROTO_VERSION = 2.3.2
- XPROTO_INPUTPROTO_SOURCE = inputproto-$(XPROTO_INPUTPROTO_VERSION).tar.bz2
- XPROTO_INPUTPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
- XPROTO_INPUTPROTO_LICENSE = MIT
+diff --git a/package/Config.in b/package/Config.in
+index 64822bf..24dbe09 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1234,6 +1234,7 @@ menu "Other"
+ 	source "package/libsigc/Config.in"
+ 	source "package/libsigsegv/Config.in"
+ 	source "package/libtasn1/Config.in"
++	source "package/libtommath/Config.in"
+ 	source "package/libtpl/Config.in"
+ 	source "package/libubox/Config.in"
+ 	source "package/libuci/Config.in"
+diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
+new file mode 100644
+index 0000000..b2ffc72
+--- /dev/null
++++ b/package/libtommath/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBTOMMATH
++	bool "libtommath"
++	help
++	  LibTomMath is a free open source portable number theoretic
++	  multiple-precision integer library written entirely in C.
++
++	  http://www.libtom.net
+diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
+new file mode 100644
+index 0000000..fcf2ddc
+--- /dev/null
++++ b/package/libtommath/libtommath.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  993a7df9ee091fca430cdde3263df57d88ef62af8103903214da49fc51bbb56c  ltm-1.0.tar.xz
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+new file mode 100644
+index 0000000..463ea7b
+--- /dev/null
++++ b/package/libtommath/libtommath.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# libtommath
++#
++################################################################################
++
++LIBTOMMATH_VERSION = 1.0
++LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
++LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
++LIBTOMMATH_LICENSE = WTFPL
++LIBTOMMATH_LICENSE_FILES = LICENSE
++LIBTOMMATH_INSTALL_STAGING = YES
++LIBTOMMATH_INSTALL_TARGET = NO  # only static library
++
++define LIBTOMMATH_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
++endef
++
++define LIBTOMMATH_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++endef
++
++$(eval $(generic-package))
 -- 
-2.8.0.rc3
+2.5.0
