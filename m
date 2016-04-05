@@ -1,76 +1,86 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  5 Apr 2016 19:18:42 +0200
-Subject: [Buildroot] [V3 3/3] dropbear: use libtomath & libtomcrypt
-In-Reply-To: <1459876722-9066-1-git-send-email-francois.perrad@gadz.org>
-References: <1459876722-9066-1-git-send-email-francois.perrad@gadz.org>
-Message-ID: <1459876722-9066-3-git-send-email-francois.perrad@gadz.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue,  5 Apr 2016 21:03:32 +0300
+Subject: [Buildroot] [PATCH] mosh: fix build with the Codescape IMG toolchain
+Message-ID: <95907701a43145654f7962319823a0f7fe73551b.1459879412.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/dropbear/0001-fix-linking.patch | 36 +++++++++++++++++++++++++++++++++
- package/dropbear/dropbear.mk            |  2 ++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/dropbear/0001-fix-linking.patch
+The Codescape IMG toolchain does not provide the ssp library even though it's
+a glibc toolchain, and thus selects BR2_TOOLCHAIN_HAS_SSP. Add a patch that
+changes the compile test for -fstack-protector-all to a build test that
+correctly fails when ssp is missing.
 
-diff --git a/package/dropbear/0001-fix-linking.patch b/package/dropbear/0001-fix-linking.patch
+This makes the seeding of ssp related configure variables unnecessary.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...ure.ac-link-test-for-fstack-protector-all.patch | 33 ++++++++++++++++++++++
+ package/mosh/mosh.mk                               | 11 ++------
+ 2 files changed, 35 insertions(+), 9 deletions(-)
+ create mode 100644 package/mosh/0001-configure.ac-link-test-for-fstack-protector-all.patch
+
+diff --git a/package/mosh/0001-configure.ac-link-test-for-fstack-protector-all.patch b/package/mosh/0001-configure.ac-link-test-for-fstack-protector-all.patch
 new file mode 100644
-index 0000000..93925eb
+index 000000000000..f8dc63b604fd
 --- /dev/null
-+++ b/package/dropbear/0001-fix-linking.patch
-@@ -0,0 +1,36 @@
-+fix linking
++++ b/package/mosh/0001-configure.ac-link-test-for-fstack-protector-all.patch
+@@ -0,0 +1,33 @@
++From 5b3b697f50ba31842be544d6b54962df92c44958 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 5 Apr 2016 15:24:55 +0300
++Subject: [PATCH] configure.ac: link test for -fstack-protector-all
 +
-+see https://github.com/mkj/dropbear/pull/28
++There are (broken) compilers out there that accept -fstack-protector-*
++parameters, but do not provide the needed ssp library. As a result, build does
++not fail, but link does. Use the local check_link_flag autoconf function to
++correctly test for SSP availability.
 +
-+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/mobile-shell/mosh/pull/733
 +
-+diff --git a/Makefile.in b/Makefile.in
-+index d9bfdfa..0356b0f 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -16,12 +16,12 @@ endif
-+ STATIC_LTC=libtomcrypt/libtomcrypt.a
-+ STATIC_LTM=libtommath/libtommath.a
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 3c9dea03e40a..f5799689f2c1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -93,7 +93,7 @@ AS_IF([test x"$hardening" != x"no"], [
++   # This one will likely succeed, even on platforms where it does nothing.
++   check_cc_cxx_flag([-D_FORTIFY_SOURCE=2], [HARDEN_CFLAGS="$HARDEN_CFLAGS -D_FORTIFY_SOURCE=2"])
 + 
-+-LIBTOM_LIBS=@LIBTOM_LIBS@
-++LIBTOM_LIBS=-ltomcrypt -ltommath
-+ 
-+ ifeq (@BUNDLED_LIBTOM@, 1)
-+ LIBTOM_DEPS=$(STATIC_LTC) $(STATIC_LTM) 
-+ CFLAGS+=-I$(srcdir)/libtomcrypt/src/headers/
-+-LIBTOM_LIBS=$(STATIC_LTC) $(STATIC_LTM) 
-++LDFLAGS+=-L ./libtomcrypt -L ./libtommath
-+ endif
-+ 
-+ COMMONOBJS=dbutil.o buffer.o dbhelpers.o \
-+@@ -84,7 +84,7 @@ INSTALL=@INSTALL@
-+ CPPFLAGS=@CPPFLAGS@
-+ CFLAGS+=-I. -I$(srcdir) $(CPPFLAGS) @CFLAGS@
-+ LIBS+=@LIBS@
-+-LDFLAGS=@LDFLAGS@
-++LDFLAGS+=@LDFLAGS@
-+ 
-+ EXEEXT=@EXEEXT@
-+ 
++-  check_cc_cxx_flag([-fstack-protector-all],
+++  check_link_flag([-fstack-protector-all],
++    [HARDEN_CFLAGS="$HARDEN_CFLAGS -fstack-protector-all"
++     check_cc_cxx_flag([-Wstack-protector], [HARDEN_CFLAGS="$HARDEN_CFLAGS -Wstack-protector"],
++       [], [-fstack-protector-all])
 +-- 
++2.8.0.rc3
 +
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 32e2167..fa3642c 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -9,6 +9,8 @@ DROPBEAR_SITE = http://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2c-like, BSD-2c
- DROPBEAR_LICENSE_FILES = LICENSE
-+DROPBEAR_DEPENDENCIES = libtomcrypt
-+DROPBEAR_CONF_OPTS = --disable-bundled-libtom
- DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
- DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index f8c45e8ccd2a..12691009da77 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -9,14 +9,7 @@ MOSH_SITE = https://mosh.mit.edu
+ MOSH_DEPENDENCIES = zlib ncurses protobuf openssl host-pkgconf
+ MOSH_LICENSE = GPLv3+ with exception
+ MOSH_LICENSE_FILES = COPYING COPYING.iOS
+-
+-# help the detection of the SSP support: mosh configure.ac doesn't do
+-# a link test, so it doesn't detect when the toolchain doesn't have
+-# libssp.
+-ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
+-MOSH_CONF_ENV += \
+-	ax_cv_check_cflags__Werror___fstack_protector_all=no \
+-	ax_cv_check_cxxflags__Werror___fstack_protector_all=no
+-endif
++# Patching configure.ac
++MOSH_AUTORECONF = YES
  
+ $(eval $(autotools-package))
 -- 
-2.5.0
+2.8.0.rc3
