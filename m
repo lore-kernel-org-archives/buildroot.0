@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Apr 2016 21:32:12 +0200
-Subject: [Buildroot] [git commit] git: bump version to 2.8.1
-Message-ID: <20160405194001.B1B598024D@busybox.osuosl.org>
+Date: Tue, 5 Apr 2016 21:31:05 +0200
+Subject: [Buildroot] [git commit] feh: bump to version 2.14.2
+Message-ID: <20160405194001.95FFE8024D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=576e073a360a00d8e9df3839595a4ed7772dc829
+commit: https://git.buildroot.net/buildroot/commit/?id=0533bccd79440062f544c082c474139bb61becb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
+ package/feh/feh.hash | 2 +-
+ package/feh/feh.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 7eac6a0..923f05d 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
+diff --git a/package/feh/feh.hash b/package/feh/feh.hash
+index 396f33d..76d6248 100644
+--- a/package/feh/feh.hash
++++ b/package/feh/feh.hash
 @@ -1,2 +1,2 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 9a099a4f1e68c0446800f0c538ce7d5d24bd5b4ee5d559317600cd407a59e74c  git-2.8.0.tar.xz
-+sha256 e6626b43ba4bc63ad4918df4c275f50bd7f8af2ab54bde60496ad75e91e927fc  git-2.8.1.tar.xz
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 3c06cbd..517f9db 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
+ # Locally computed:
+-sha256  3829cd8995ec7cc08095a2b22a6c98d1e2638bd87c8b4f0e85a059c6f0edbc48  feh-2.14.tar.bz2
++sha256  c80f3d3297b3b6ee4898572d19692f5e19eb3066a9ca078c3099d39004a7e0cf  feh-2.14.2.tar.bz2
+diff --git a/package/feh/feh.mk b/package/feh/feh.mk
+index 7381e25..f650938 100644
+--- a/package/feh/feh.mk
++++ b/package/feh/feh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_VERSION = 2.8.0
-+GIT_VERSION = 2.8.1
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = https://www.kernel.org/pub/software/scm/git
- GIT_LICENSE = GPLv2 LGPLv2.1+
+-FEH_VERSION = 2.14
++FEH_VERSION = 2.14.2
+ FEH_SOURCE = feh-$(FEH_VERSION).tar.bz2
+ FEH_SITE = http://feh.finalrewind.org
+ FEH_DEPENDENCIES = libcurl imlib2 libpng xlib_libXinerama xlib_libXt
