@@ -1,109 +1,63 @@
-From: Anatoly Asviyan <aanatoly@gmail.com>
-Date: Tue, 5 Apr 2016 03:24:03 +0300
-Subject: [Buildroot] need help with adding python-mysqldb
-In-Reply-To: <CAJJ6jxvP3v5968+NB4Q6ETdGO_4ubmNt6i-Egp9RL5NBMsh_mA@mail.gmail.com>
-References: <CAPTQzABFmehM_FhTOvMWO9Jmc63u8BLX1sG1B_zDU=OED57nVA@mail.gmail.com>
- <CAJJ6jxvP3v5968+NB4Q6ETdGO_4ubmNt6i-Egp9RL5NBMsh_mA@mail.gmail.com>
-Message-ID: <CAPTQzADhY8yYeKRSaoJoAdt=cbGKdHMvyqsCpmyivVO-Srn85g@mail.gmail.com>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Mon, 4 Apr 2016 17:41:17 -0700
+Subject: [Buildroot] [PATCH v3] Update libaio to 0.3.110
+In-Reply-To: <56FFEB04.9090800@gmail.com>
+References: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
+ <56FFEB04.9090800@gmail.com>
+Message-ID: <CAKmqyKNS6ONN_-acLxpNEJwmAjM-hJFX1ZB45mmb=XS-TAAr1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you for advice, guys.
-
-After few hours of trying to make it cross-compile I leave mysqldb. If
-pymysql is such an easy replacement, fixing mysqldb build  just does not
-worth an effort
-
-2016-04-05 2:59 GMT+03:00 Steve Calfee <stevecalfee@gmail.com>:
-
-> Hi Anatoly,
+On Sat, Apr 2, 2016 at 8:53 AM, Romain Naour <romain.naour@gmail.com> wrote:
+> Hi Alistair, Thomas, All,
 >
-> On Mon, Apr 4, 2016 at 3:28 PM, Anatoly Asviyan <aanatoly@gmail.com>
-> wrote:
-> > Hi
-> > I am trying to add python-mysqldb package. I 've patched buildroot (the
-> > patch is here
-> >
-> https://gist.githubusercontent.com/aanatoly/997d7ced70aaf9e13d57b5cc85751862/raw/3d71a992e748d9c40ca1961b0dd951fb300184d0/python-mysqldb.patch
-> )
-> >
-> > but make fails with this error
-> >
-> >>>> python-mysqldb 1.2.5 Downloading
-> > --2016-04-05 00:55:28--
-> >
-> http://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
-> > Resolving pypi.python.org (pypi.python.org)... 185.31.17.223
-> > Connecting to pypi.python.org (pypi.python.org)|185.31.17.223|:80...
-> > connected.
-> > HTTP request sent, awaiting response... 301 Moved Permanently
-> > Location:
-> >
-> https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
-> > [following]
-> > --2016-04-05 00:55:29--
-> >
-> https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-1.2.5.zip
-> > Connecting to pypi.python.org (pypi.python.org)|185.31.17.223|:443...
-> > connected.
-> > HTTP request sent, awaiting response... 200 OK
-> > Length: 108935 (106K) [application/octet-stream]
-> > Saving to:
-> >
-> `/home/me/work/buildroot-x86_64/output/build/.MySQL-python-1.2.5.zip.ip6WvS/output'
-> >
-> >
-> 100%[=====================================================================================================================>]
-> > 108,935     --.-K/s   in 0.1s
-> >
-> > 2016-04-05 00:55:29 (946 KB/s) -
-> >
-> `/home/me/work/buildroot-x86_64/output/build/.MySQL-python-1.2.5.zip.ip6WvS/output'
-> > saved [108935/108935]
-> >
-> > WARNING: no hash file for MySQL-python-1.2.5.zip
-> >>>> python-mysqldb 1.2.5 Extracting
-> > /home/me/work/buildroot-x86_64/dl/MySQL-python-1.2.5.zip | tar
-> > --strip-components=1 -C
-> > /home/me/work/buildroot-x86_64/output/build/python-mysqldb-1.2.5   -xf -
-> > /bin/bash: /home/me/work/buildroot-x86_64/dl/MySQL-python-1.2.5.zip:
-> > Permission denied
-> > tar: This does not look like a tar archive
-> > tar: Exiting with failure status due to previous errors
-> > make[1]: ***
-> >
-> [/home/me/work/buildroot-x86_64/output/build/python-mysqldb-1.2.5/.stamp_extracted]
-> > Error 2
-> > make: *** [_all] Error 2
-> >
-> >
-> > It looks like it runs "foo.zip | tar ..." instead of "unzip foo.zip | tar
-> > ...". I can't figure why. Other zip'ed packages are built ok, for example
-> > python-keyring.
-> >
-> > --
-> > Regards, Anatoly
-> >
-> I looked at adding mysqldb - its make system is truly convoluted.
-> Since I did not need the absolute maximum speed (some parts are in C),
-> I jumped to MySqlDB. I have not seen any speed comparisons between the
-> two, but I prefer one that works and is maintained to the alternative.
-> MySqlDB works exactly the same way (no changes to the calling python)
-> and easily fits into the buildroot make structure.
+> Le 18/02/2016 20:39, Alistair Francis a ?crit :
+>> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
+>>
+>> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+>> ---
+>>  package/libaio/0001-arches.patch | 454 ++-------------------------------------
+>>  package/libaio/Config.in         |   2 +-
+>>  package/libaio/libaio.hash       |   4 +-
+>>  package/libaio/libaio.mk         |   2 +-
+>>  4 files changed, 20 insertions(+), 442 deletions(-)
+>>
 >
-> I am in process of getting the package into buildroot. Check the
-> recent mail list archives. You can download the patch and try it.
+> Since the libaio bump, the blktrace package is broken on powerpc [1].
 >
-> Regards, Steve
+> /home/peko/autobuild/instance-1/output/host/usr/bin/powerpc-linux-gnu-gcc
+> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -I. -I..
+> -I../btt -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -UCOUNT_IOS
+> -UDEBUG -DNDEBUG -o btreplay btreplay.o -laio -lrt -lpthread
+> [...]ld: btreplay: hidden symbol `_restgpr_29_x' in [..]libgcc.a(crtresxgpr.o)
+> is referenced by DSO
+> [...]ld: final link failed: Nonrepresentable section on output
 >
+> It's seems that only powerpc is affected by this issue...
+> I'm not sure about a proper fixes but adding -shared to the command line fixes
+> the build (not runtime tested though).
+>
+> Can you take a look ?
 
+Good catch, thanks for pointing this out.
 
+It appears to be a common issue and the workaround is to disable pie
+and fpie support.
 
--- 
-Regards, Anatoly
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160405/98e62e3e/attachment.html>
+See: http://patchwork.openembedded.org/patch/86515/
+
+I can't work out how to remove the -fPIC option though. Any ideas?
+
+Thanks,
+
+Alistair
+
+>
+> Best regards,
+> Romain Naour
+>
+> [1] http://autobuild.buildroot.net/?reason=blktrace-1.1.0
+>
