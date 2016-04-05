@@ -1,85 +1,304 @@
-From: =?utf-8?Q?Mateusz_S=C5=82upny?= <mateusz.slupny@vestiacom.com>
-Date: Tue, 5 Apr 2016 13:14:28 +0200
-Subject: [Buildroot] Project configuration management
-In-Reply-To: <5702D279.3050904@mind.be>
-References: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
- <20160404204429.472fb279@free-electrons.com> <5702D279.3050904@mind.be>
-Message-ID: <09D2147E-A7FE-41DD-A4B4-643CCB54DD16@vestiacom.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Tue, 5 Apr 2016 13:16:17 +0200
+Subject: [Buildroot] [PATCH v2] opencv: fix compile issues
+Message-ID: <20160405111617.GA23318@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We'll go with merge_config.sh script as it's already a part of buildroot and we should be able to integrate it easily.
+The first patch from Debian fixes following autobuild failure:
+http://autobuild.buildroot.net/results/eda5c6c43da40a342e0f545a348d2f865eb5ccf2/
 
-Thank you very much for all the suggestions!
+Tested with ARM build without a regression.
 
-best regards,
+The second patch fixes musl arm autobuild failure:
+http://autobuild.buildroot.net/results/6a397de789c809984b851a304078e26b2ac58974/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1 -> v2:
+  * Add Signed-Off-By and description to Debian patch, suggested by Arnout
+  * added backport fix for ARM musl from git master
+---
+ package/opencv/0002-atomic.patch         | 229 +++++++++++++++++++++++++++++++
+ package/opencv/0003-avoid-sysctl_h.patch |  31 +++++
+ 2 files changed, 260 insertions(+)
+ create mode 100644 package/opencv/0002-atomic.patch
+ create mode 100644 package/opencv/0003-avoid-sysctl_h.patch
+
+diff --git a/package/opencv/0002-atomic.patch b/package/opencv/0002-atomic.patch
+new file mode 100644
+index 0000000..bbe8d43
+--- /dev/null
++++ b/package/opencv/0002-atomic.patch
+@@ -0,0 +1,229 @@
++Bug#714923: opencv FTBFS on sparc64
++https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=714923
++
++opencv uses functions from <ext/atomicity.h>, but it wrongly assumes
++this functions apply to an int type. While it is true for some
++architectures, some architectures are using a long type there. The
++correct type to use is _Atomic_word.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur opencv-2.4.12.3.orig/modules/core/include/opencv2/core/core.hpp opencv-2.4.12.3/modules/core/include/opencv2/core/core.hpp
++--- opencv-2.4.12.3.orig/modules/core/include/opencv2/core/core.hpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/include/opencv2/core/core.hpp	2016-04-03 00:10:50.455774144 +0200
++@@ -1290,7 +1290,7 @@
++     operator const _Tp*() const;
++ 
++     _Tp* obj; //< the object pointer.
++-    int* refcount; //< the associated reference counter
+++    _Atomic_word* refcount; //< the associated reference counter
++ };
++ 
++ template<typename T>
++@@ -1490,9 +1490,9 @@
++ public:
++     MatAllocator() {}
++     virtual ~MatAllocator() {}
++-    virtual void allocate(int dims, const int* sizes, int type, int*& refcount,
+++    virtual void allocate(int dims, const int* sizes, int type, _Atomic_word*& refcount,
++                           uchar*& datastart, uchar*& data, size_t* step) = 0;
++-    virtual void deallocate(int* refcount, uchar* datastart, uchar* data) = 0;
+++    virtual void deallocate(_Atomic_word* refcount, uchar* datastart, uchar* data) = 0;
++ };
++ 
++ /*!
++@@ -1985,7 +1985,7 @@
++ 
++     //! pointer to the reference counter;
++     // when matrix points to user-allocated data, the pointer is NULL
++-    int* refcount;
+++    _Atomic_word* refcount;
++ 
++     //! helper fields used in locateROI and adjustROI
++     uchar* datastart;
++@@ -3408,7 +3408,7 @@
++     {
++         Hdr(int _dims, const int* _sizes, int _type);
++         void clear();
++-        int refcount;
+++        _Atomic_word refcount;
++         int dims;
++         int valueOffset;
++         size_t nodeSize;
++diff -Nur opencv-2.4.12.3.orig/modules/core/include/opencv2/core/gpumat.hpp opencv-2.4.12.3/modules/core/include/opencv2/core/gpumat.hpp
++--- opencv-2.4.12.3.orig/modules/core/include/opencv2/core/gpumat.hpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/include/opencv2/core/gpumat.hpp	2016-04-02 23:08:58.116874218 +0200
++@@ -301,7 +301,7 @@
++ 
++         //! pointer to the reference counter;
++         // when GpuMatrix points to user-allocated data, the pointer is NULL
++-        int* refcount;
+++        _Atomic_word* refcount;
++ 
++         //! helper fields used in locateROI and adjustROI
++         uchar* datastart;
++diff -Nur opencv-2.4.12.3.orig/modules/core/include/opencv2/core/operations.hpp opencv-2.4.12.3/modules/core/include/opencv2/core/operations.hpp
++--- opencv-2.4.12.3.orig/modules/core/include/opencv2/core/operations.hpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/include/opencv2/core/operations.hpp	2016-04-02 23:12:59.148385306 +0200
++@@ -2589,7 +2589,7 @@
++ {
++     if(obj)
++     {
++-        refcount = (int*)fastMalloc(sizeof(*refcount));
+++        refcount = (_Atomic_word*)fastMalloc(sizeof(*refcount));
++         *refcount = 1;
++     }
++     else
++@@ -2628,7 +2628,7 @@
++ {
++     if (this != &_ptr)
++     {
++-      int* _refcount = _ptr.refcount;
+++      _Atomic_word* _refcount = _ptr.refcount;
++       if( _refcount )
++           CV_XADD(_refcount, 1);
++       release();
++diff -Nur opencv-2.4.12.3.orig/modules/core/src/gpumat.cpp opencv-2.4.12.3/modules/core/src/gpumat.cpp
++--- opencv-2.4.12.3.orig/modules/core/src/gpumat.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/src/gpumat.cpp	2016-04-02 23:14:38.894804300 +0200
++@@ -716,7 +716,7 @@
++         datastart = data = static_cast<uchar*>(devPtr);
++         dataend = data + nettosize;
++ 
++-        refcount = static_cast<int*>(fastMalloc(sizeof(*refcount)));
+++        refcount = static_cast<_Atomic_word*>(fastMalloc(sizeof(*refcount)));
++         *refcount = 1;
++     }
++ }
++diff -Nur opencv-2.4.12.3.orig/modules/core/src/matrix.cpp opencv-2.4.12.3/modules/core/src/matrix.cpp
++--- opencv-2.4.12.3.orig/modules/core/src/matrix.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/src/matrix.cpp	2016-04-02 23:59:53.405491031 +0200
++@@ -213,7 +213,7 @@
++         {
++             size_t totalsize = alignSize(step.p[0]*size.p[0], (int)sizeof(*refcount));
++             data = datastart = (uchar*)fastMalloc(totalsize + (int)sizeof(*refcount));
++-            refcount = (int*)(data + totalsize);
+++            refcount = (_Atomic_word*)(data + totalsize);
++             *refcount = 1;
++         }
++         else
++@@ -228,7 +228,7 @@
++                 allocator = 0;
++                 size_t totalSize = alignSize(step.p[0]*size.p[0], (int)sizeof(*refcount));
++                 data = datastart = (uchar*)fastMalloc(totalSize + (int)sizeof(*refcount));
++-                refcount = (int*)(data + totalSize);
+++                refcount = (_Atomic_word*)(data + totalSize);
++                 *refcount = 1;
++             }
++ #else
++diff -Nur opencv-2.4.12.3.orig/modules/core/src/system.cpp opencv-2.4.12.3/modules/core/src/system.cpp
++--- opencv-2.4.12.3.orig/modules/core/src/system.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/src/system.cpp	2016-04-02 23:33:19.298905578 +0200
++@@ -892,7 +892,7 @@
++     void unlock() { LeaveCriticalSection(&cs); }
++ 
++     CRITICAL_SECTION cs;
++-    int refcount;
+++    _Atomic_word refcount;
++ };
++ 
++ #ifndef __GNUC__
++@@ -920,7 +920,7 @@
++     void unlock() { OSSpinLockUnlock(&sl); }
++ 
++     OSSpinLock sl;
++-    int refcount;
+++    _Atomic_word refcount;
++ };
++ 
++ #elif defined __linux__ && !defined ANDROID && !defined __LINUXTHREADS_OLD__
++@@ -935,7 +935,7 @@
++     void unlock() { pthread_spin_unlock(&sl); }
++ 
++     pthread_spinlock_t sl;
++-    int refcount;
+++    _Atomic_word refcount;
++ };
++ 
++ #else
++@@ -950,7 +950,7 @@
++     void unlock() { pthread_mutex_unlock(&sl); }
++ 
++     pthread_mutex_t sl;
++-    int refcount;
+++    _Atomic_word refcount;
++ };
++ 
++ #endif
++diff -Nur opencv-2.4.12.3.orig/modules/gpu/include/opencv2/gpu/gpu.hpp opencv-2.4.12.3/modules/gpu/include/opencv2/gpu/gpu.hpp
++--- opencv-2.4.12.3.orig/modules/gpu/include/opencv2/gpu/gpu.hpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/gpu/include/opencv2/gpu/gpu.hpp	2016-04-02 23:16:19.737293785 +0200
++@@ -125,7 +125,7 @@
++     size_t step;
++ 
++     uchar* data;
++-    int* refcount;
+++    _Atomic_word* refcount;
++ 
++     uchar* datastart;
++     uchar* dataend;
++diff -Nur opencv-2.4.12.3.orig/modules/ocl/include/opencv2/ocl/ocl.hpp opencv-2.4.12.3/modules/ocl/include/opencv2/ocl/ocl.hpp
++--- opencv-2.4.12.3.orig/modules/ocl/include/opencv2/ocl/ocl.hpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/ocl/include/opencv2/ocl/ocl.hpp	2016-04-02 23:18:55.715331443 +0200
++@@ -404,7 +404,7 @@
++ 
++             //! pointer to the reference counter;
++             // when oclMatrix points to user-allocated data, the pointer is NULL
++-            int *refcount;
+++            _Atomic_word *refcount;
++ 
++             //! helper fields used in locateROI and adjustROI
++             //datastart and dataend are not used in current version
++diff -Nur opencv-2.4.12.3.orig/modules/ocl/src/matrix_operations.cpp opencv-2.4.12.3/modules/ocl/src/matrix_operations.cpp
++--- opencv-2.4.12.3.orig/modules/ocl/src/matrix_operations.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/ocl/src/matrix_operations.cpp	2016-04-02 23:19:23.633128033 +0200
++@@ -591,7 +591,7 @@
++         datastart = data = (uchar *)dev_ptr;
++         dataend = data + nettosize;
++ 
++-        refcount = (int *)fastMalloc(sizeof(*refcount));
+++        refcount = (_Atomic_word *)fastMalloc(sizeof(*refcount));
++         *refcount = 1;
++     }
++ }
++diff -Nur opencv-2.4.12.3.orig/modules/python/src2/cv2.cpp opencv-2.4.12.3/modules/python/src2/cv2.cpp
++--- opencv-2.4.12.3.orig/modules/python/src2/cv2.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/python/src2/cv2.cpp	2016-04-02 23:18:34.897991791 +0200
++@@ -157,12 +157,12 @@
++ static size_t REFCOUNT_OFFSET = (size_t)&(((PyObject*)0)->ob_refcnt) +
++     (0x12345678 != *(const size_t*)"\x78\x56\x34\x12\0\0\0\0\0")*sizeof(int);
++ 
++-static inline PyObject* pyObjectFromRefcount(const int* refcount)
+++static inline PyObject* pyObjectFromRefcount(const _Atomic_word* refcount)
++ {
++     return (PyObject*)((size_t)refcount - REFCOUNT_OFFSET);
++ }
++ 
++-static inline int* refcountFromPyObject(const PyObject* obj)
+++static inline _Atomic_word* refcountFromPyObject(const PyObject* obj)
++ {
++     return (int*)((size_t)obj + REFCOUNT_OFFSET);
++ }
++@@ -173,7 +173,7 @@
++     NumpyAllocator() {}
++     ~NumpyAllocator() {}
++ 
++-    void allocate(int dims, const int* sizes, int type, int*& refcount,
+++    void allocate(int dims, const int* sizes, int type, _Atomic_word*& refcount,
++                   uchar*& datastart, uchar*& data, size_t* step)
++     {
++         PyEnsureGIL gil;
++@@ -206,7 +206,7 @@
++         datastart = data = (uchar*)PyArray_DATA((PyArrayObject*) o);
++     }
++ 
++-    void deallocate(int* refcount, uchar*, uchar*)
+++    void deallocate(_Atomic_word* refcount, uchar*, uchar*)
++     {
++         PyEnsureGIL gil;
++         if( !refcount )
+diff --git a/package/opencv/0003-avoid-sysctl_h.patch b/package/opencv/0003-avoid-sysctl_h.patch
+new file mode 100644
+index 0000000..6032205
+--- /dev/null
++++ b/package/opencv/0003-avoid-sysctl_h.patch
+@@ -0,0 +1,31 @@
++From upstream master branch:
++https://github.com/Itseez/opencv/blob/master/modules/core/src/
++
++Do not include sysctl.h targeting Linux systems.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur opencv-2.4.12.3.orig/modules/core/src/parallel.cpp opencv-2.4.12.3/modules/core/src/parallel.cpp
++--- opencv-2.4.12.3.orig/modules/core/src/parallel.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/src/parallel.cpp	2016-04-05 12:59:37.750143762 +0200
++@@ -56,7 +56,7 @@
++     #include <sys/types.h>
++     #if defined ANDROID
++         #include <sys/sysconf.h>
++-    #else
+++    #elif defined __APPLE__
++         #include <sys/sysctl.h>
++     #endif
++ #endif
++diff -Nur opencv-2.4.12.3.orig/modules/core/src/system.cpp opencv-2.4.12.3/modules/core/src/system.cpp
++--- opencv-2.4.12.3.orig/modules/core/src/system.cpp	2015-10-26 08:56:34.000000000 +0100
+++++ opencv-2.4.12.3/modules/core/src/system.cpp	2016-04-05 13:05:22.468323717 +0200
++@@ -163,7 +163,7 @@
++ #include <sys/types.h>
++ #if defined ANDROID
++ #include <sys/sysconf.h>
++-#else
+++#elif defined __APPLE__
++ #include <sys/sysctl.h>
++ #endif
++ #endif
 -- 
-Mateusz Slupny, lead developer, Vestiacom
-E-mail: mateusz.slupny at vestiacom.com
-
-> On 04 Apr 2016, at 22:45, Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
-> On 04/04/16 20:44, Thomas Petazzoni wrote:
->> Hello Mateusz,
->> 
->> On Mon, 4 Apr 2016 15:55:44 +0200, Mateusz S?upny wrote:
->> 
->>> We are using buildroot for building a series of projects. What I feel
->>> is missing in buildroot is a way to store different configurations in
->>> scope of a single project. For example, we would like to prepare
->>> three types of builds, let's name them "Release", that is the basic
->>> build, "Develop", that is a Release build + dropbear + some other
->>> utilities, and "Extra", that contains all configuration options from
->>> Develop + some additional tools (gdb, valgrind, etc.). To achieve
->>> that, we have to maintain total of (number of projects) x (number of
->>> build types) different configuration files that are almost identical.
->>> 
->>> Can this goal be achieved without using multiple defconfig files that
->>> share approx 90% of their contents? What would you advise to avoid
->>> that?
->>> 
->>> First solution that comes to my mind is to allow nesting defconfig
->>> files with some include/source statement, but AFAICS that's not
->>> supported.
->>> 
->>> Please note that we are aware of "layered customizations" concept,
->>> and we're using it to some degree, but it doesn't solve all the
->>> issues, e.g. setting toolchain, selecting packages, and setting
->>> multiple paths to layers itself has to be done in defconfig files
->>> anyway.
->> 
->> The mechanism we typically advise in such situation is to use defconfig
->> fragments, and assemble them as needed to create the configuration you
->> feed into Buildroot. A shell script (or other) can help generating the
->> configuration fed into Buildroot from the fragments.
-> 
-> And that shell script exists already: support/kconfig/merge_config.sh
-> 
-> The main difficulty with this model is that there is no simple way to split configs. Fortunately, for buildroot this is typically not much of a problem, because your fragments will just add some packages.
-> 
-> 
-> Regards,
-> Arnout
-> 
-> 
->> 
->> I'm Cc'ing Gustavo, who has been using this model for quite some time
->> for a large project that involves multiple HW platforms, I'm sure he
->> can give more insights on how to achieve that.
->> 
->> Best regards,
->> 
->> Thomas
->> 
-> 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.1.4
