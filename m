@@ -1,41 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Apr 2016 22:20:48 +0200
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.149
-Message-ID: <20160405203417.368E981D67@busybox.osuosl.org>
+Date: Tue, 5 Apr 2016 22:28:09 +0200
+Subject: [Buildroot] [git commit] linux: Add custom Subversion repository
+	support for the package
+Message-ID: <20160405203417.8D45081D67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58820b45cca313122bb6fe713d38ac51a7bc3f97
+commit: https://git.buildroot.net/buildroot/commit/?id=986fa441e49cc180f77704699a6d2bb3627bf86a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Pauli Sundberg <susundberg@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 12 +++++++++---
+ linux/linux.mk  |  3 +++
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 2a26633..88998c4 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 549d9d772eae7054c6d9b0d0a7f65e3930f6109b81e8e58ce265f9f3732ea322a0c81acc9e9714ca16c2670ee519ea28a74470b3daf8b0ca05d82decee2443b4  LVM2.2.02.148.tgz
-+sha512 f00310fd398d4f84d67677e47b148ab5cc79319e25547ee56160703a425f2f506a4c92ee9958c363a1640ae1fa17b4337242d76e0c5e4a256192edfbf9c4fcdc  LVM2.2.02.149.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index fa35acd..d17a772 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 49b6994..9f0267d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -63,6 +63,12 @@ config BR2_LINUX_KERNEL_CUSTOM_HG
+ 	  This option allows Buildroot to get the Linux kernel source
+ 	  code from a Mercurial repository.
  
--LVM2_VERSION = 2.02.148
-+LVM2_VERSION = 2.02.149
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
++config BR2_LINUX_KERNEL_CUSTOM_SVN
++	bool "Custom Subversion repository"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a Subversion repository.
++
+ config BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 	bool "Local directory"
+ 	help
+@@ -79,7 +85,7 @@ config BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+ 	string "URL of custom kernel tarball"
+ 	depends on BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 
+-if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
++if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_REPO_URL
+ 	string "URL of custom repository"
+@@ -91,7 +97,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION \
+ 		if BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION != ""  # legacy
+ 	help
+-	  Revision to use in the typical format used by Git/Mercurial
++	  Revision to use in the typical format used by Git/Mercurial/Subversion
+ 	  E.G. a sha id, a tag, branch, ..
+ 
+ endif
+@@ -109,7 +115,7 @@ config BR2_LINUX_KERNEL_VERSION
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ 	default BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION \
+-		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG
++		if BR2_LINUX_KERNEL_CUSTOM_GIT || BR2_LINUX_KERNEL_CUSTOM_HG || BR2_LINUX_KERNEL_CUSTOM_SVN
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_LOCAL
+ 
+ #
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7e20255..317587f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -23,6 +23,9 @@ LINUX_SITE_METHOD = git
+ else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+ LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_SITE_METHOD = hg
++else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_SVN),y)
++LINUX_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
++LINUX_SITE_METHOD = svn
+ else
+ LINUX_SOURCE = linux-$(LINUX_VERSION).tar.xz
+ ifeq ($(BR2_LINUX_KERNEL_CUSTOM_VERSION),y)
