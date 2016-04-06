@@ -1,93 +1,76 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 6 Apr 2016 21:15:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/turbolua: new package
-In-Reply-To: <20160404204746.615ebd59@free-electrons.com>
-References: <1459763682-29799-1-git-send-email-m.niestroj@grinn-global.com>
- <1459763682-29799-2-git-send-email-m.niestroj@grinn-global.com>
- <20160404204746.615ebd59@free-electrons.com>
-Message-ID: <5705604E.9090703@grinn-global.com>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Wed, 6 Apr 2016 22:14:10 +0200
+Subject: [Buildroot] [PATCH v4 3/7] barebox: support custom barebox
+	output image name
+In-Reply-To: <5702F6AD.1030402@mind.be>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <1458513351-6556-4-git-send-email-pieter@boesman.nl>
+ <5702F6AD.1030402@mind.be>
+Message-ID: <20160406201410.GA5332@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Arnout / Thomas,
 
-On 04.04.2016 20:47, Thomas Petazzoni wrote:
-> Hello,
->
-> On Mon,  4 Apr 2016 11:54:42 +0200, Marcin Niestroj wrote:
->
->> diff --git a/package/turbolua/Config.in b/package/turbolua/Config.in
->> new file mode 100644
->> index 0000000..a742097
->> --- /dev/null
->> +++ b/package/turbolua/Config.in
->> @@ -0,0 +1,18 @@
->> +config BR2_PACKAGE_TURBOLUA
->> +	bool "turbolua"
->> +	depends on BR2_PACKAGE_LUAJIT
->> +	# Turbolua program within thumb2 system receives "Illegal
->> +	# instruction" and "Segmentation fault" errors.
->> +	depends on !BR2_ARM_INSTRUCTIONS_THUMB2
->
-> Ok, so there is probably no inherent problem, it's just that it happens
-> to not work. What I dislike a bit with such dependency is that you
-> probably don't have tested on the full range of architectures that are
-> supported in Buildroot. So I generally prefer when we add such
-> dependencies when the software can really technically not work on the
-> architecture, not when there is some random bug that prevents it.
->
-> But oh well, I won't oppose to this dependency being added.
->
+On Tue, Apr 05, 2016 at 01:20:13AM +0200, Arnout Vandecappelle wrote:
+> On 03/20/16 23:35, Pieter Smith wrote:
+> >In preparation for building a 2nd barebox config, a configuration option is
+> >added to allow customization of the image filename when the built image is
+> >copied to the output/images directory.
+> >
+> >Signed-off-by: Pieter Smith <pieter@boesman.nl>
+> >---
+> >  boot/barebox/Config.in  | 7 +++++++
+> >  boot/barebox/barebox.mk | 9 +++++++--
+> >  2 files changed, 14 insertions(+), 2 deletions(-)
+> >
+> >diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+> >index 4f6872c..7769866 100644
+> >--- a/boot/barebox/Config.in
+> >+++ b/boot/barebox/Config.in
+> >@@ -106,6 +106,13 @@ config BR2_TARGET_BAREBOX_BUILT_IMAGE_FILE
+> >
+> >  	  Set to barebox.bin for barebox versions older than 2012.10.
+> >
+> >+config BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
+> >+	string "Output image filename"
+> 
+>  With my suggestion of  BR2_TARGET_BAREBOX_IMAGE_NAME, this should be
+> changed to e.g. BR2_TARGET_BAREBOX_OUTPUT_IMAGE_NAME. The prompt looks OK
+> though.
+> 
+> 
+>  However, on second thought I'm wondering if it is really needed. For u-boot
+> or the kernel, we always copy the images with the same name as they were
+> built. If that is not what the ROM boot loader expects, the name can be
+> changed in the image generation script. For example, genimage.cfg could
+> contain:
+> 
+> image boot.vfat {
+>         vfat {
+>                 file MLO {
+> 			"barebox-am33xx-beaglebone-mlo.img"
+> 		}
+> 		file barebox.img {
+> 			"barebox-am33xx-beaglebone.img"
+>                 }
+>         }
+>         size = 8M
+> }
+> 
+> 
+>  What do you think?
 
-I had a look on these issues trying to debug them. It is not clear
-that it is an issue with Turbolua. Now I think that it is rather
-LuaJIT bug, than Turbolua. It also doesn't happen in all
-configurations. For example this is not reproducible when we enable
--fstack-protector-all (with -fstack-protector-strong it is still
-reproducible).
+I agree that this is cleaner from a buildroot perspective. But this would
+require carrying a genimage.cfg patch for barebox as part of
+beaglebone_barebox_defconfig. Is this what you are suggesting?
 
-So I think the best will be to remove this dependency.
+>  Regards,
+>  Arnout
 
->
->> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
->> +SSL = openssl
->> +else
->> +SSL = none
->> +endif
->
-> The namespace of variables is global, so SSL is not a good variable
-> named, it should be TURBOLUA_SSL.
->
->> +define TURBOLUA_BUILD_CMDS
->> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) SSL="$(SSL)" \
->> +		LUAJIT_VERSION="$(LUAJIT_VERSION)" -C $(@D) all
->> +endef
->> +
->> +define TURBOLUA_INSTALL_TARGET_CMDS
->> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) SSL="$(SSL)" LDCONFIG=true \
->> +		LUAJIT_VERSION="$(LUAJIT_VERSION)" \
->> +		PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
->> +endef
->
-> What about defining:
->
-> TURBOLUA_MAKE_OPTS = \
-> 	$(TARGET_CONFIGURE_OPTS) \
-> 	SSL=$(if $(BR2_PACKAGE_OPENSSL),openssl,none) \
-> 	LUAJIT_VERSION="$(LUAJIT_VERSION)"
->
-> and use it in the build and install steps ?
+[snip]
 
-Thanks for hints! I will fix it and repost patch.
-
->
-> Best regards,
->
-> Thomas
->
-
--- 
-Marcin Niestroj
+- Pieter
