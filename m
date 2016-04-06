@@ -1,64 +1,33 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 6 Apr 2016 13:01:45 -0300
-Subject: [Buildroot] Project configuration management
-In-Reply-To: <20160406165217.07547fff@free-electrons.com>
-References: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
- <20160404204429.472fb279@free-electrons.com> <5702D279.3050904@mind.be>
- <20160406165217.07547fff@free-electrons.com>
-Message-ID: <570532E9.6040401@zacarias.com.ar>
+From: Geoff Levand <geoff@infradead.org>
+Date: Wed, 06 Apr 2016 09:23:37 -0700
+Subject: [Buildroot] [PATCH v3 0/3] Add go language support
+In-Reply-To: <CA+h8R2pHQ3YWZXLCM+yoHD6i_KttOJ3wVTuhOo4PLUv0kS=CKg@mail.gmail.com>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <CA+h8R2pHQ3YWZXLCM+yoHD6i_KttOJ3wVTuhOo4PLUv0kS=CKg@mail.gmail.com>
+Message-ID: <1459959817.8377.7.camel@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 06/04/16 11:52, Thomas Petazzoni wrote:
+Hi Thomas,
 
-> That's not exactly the sort of script I was thinking of. I was thinking
-> of a more high-level, project specific script, like maybe:
->
-> 	genconfig -h <hwplatform> -s <softwarestack> -r <releasetype>
->
-> or anything like that, which would internally have the knowledge of
-> which fragments to use for which aspect (HW platform, software stack,
-> etc.). Of course, internally, this script can use merge_config.sh, but
-> having a more high-level script might help users to more easily
-> generate their Buildroot configuration.
->
-> Thomas
+On Wed, 2016-04-06 at 05:05 +0000, Christian Stewart wrote:
+> However, I've read through the patches and everything looks good to
+> me. Also, a test compile resulted in success for my target env.
+> 
+> Acked-by: Christian Stewart <christian@paral.in>
 
-Hi.
-Adding a bit on this since you CCed me, this customer has multiple 
-platforms (boards/architectures), with multiple capabilities (different 
-video in/out frontends) and localized features.
-What i've used is pretty much what Thomas says, a script that takes 
-several parameters as input:
+We haven't heard anything from Ludovic since I started this work. Both
+yourself and Christian have reviewed my patches favorably.  I have
+added in all the changes you recommended in your review.
 
-genconfig -p platform -b build_type -c capabilities -l localization ...
+I think these are now ready to merge.  I pushed out a go-v3.1 branch
+that adds Christian's acked:
 
-Where platform would be different hardware targets, build_type is what 
-kind of rootfs/image/firmware it's building (debug, release, etc), which 
-capabilities (isdb-t, dvb-s2, etc), and which localization (target 
-country, for language, menus, logos, etc).
+[1] https://github.com/glevand/buildroot--buildroot.git #go-v3.1
 
-The script then combines different defconfig fragments according to 
-these parameters and validates the different combinations (for instance 
-some platform X can't have isdb-t or so on), generating a suitable 
-defconfig and setting up an out-of-tree build ready to go.
+Please pull.
 
-Of course the "chunkization" of the defconfig fragments requires some 
-knowledge, but it essentially boils down to:
-
-* Hardware platform
-   + Toolchain setup (varies for debug & release)
-   + Target filesystem setup (might be different for debug & release)
-   + Kernel setup (ditto above)
-
-* Apps
-   + Open-source apps for the target (might vary for debug & release)
-   + Propietary apps (varies according to capabilities and localization)
-
-* Localization
-   + Language packs, certificates, default settings, marketing stuff, etc
-
-Regards.
+-Geoff
