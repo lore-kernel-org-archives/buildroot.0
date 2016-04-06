@@ -1,7 +1,10 @@
 From: ray.kinsella at intel.com <ray.kinsella@intel.com>
-Date: Wed,  6 Apr 2016 13:21:35 +0100
-Subject: [Buildroot] [PATCH v3 1/3] package/radlib: New package
-Message-ID: <1459945297-29773-1-git-send-email-ray.kinsella@intel.com>
+Date: Wed,  6 Apr 2016 13:21:36 +0100
+Subject: [Buildroot] [PATCH v3 2/3] package/radlib: Renamed configure.in to
+	configure.ac
+In-Reply-To: <1459945297-29773-1-git-send-email-ray.kinsella@intel.com>
+References: <1459945297-29773-1-git-send-email-ray.kinsella@intel.com>
+Message-ID: <1459945297-29773-2-git-send-email-ray.kinsella@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,119 +13,233 @@ To: buildroot@busybox.net
 
 From: Ray Kinsella <ray.kinsella@intel.com>
 
-radlib is a rapid application development library for unix
-multi-process applications. It uses SYS V IPC facilities and
-FIFOs to provide an RTOS-like, event-driven, distributed
-framework. Processes may be run as daemons or have a controlling
-terminal.
+configure.ac is now standard for autotools, this supresses a
+warning on autoreconf.
 
 Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
 ---
- package/Config.in          |  1 +
- package/radlib/Config.in   | 37 +++++++++++++++++++++++++++++++++++++
- package/radlib/radlib.hash |  2 ++
- package/radlib/radlib.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 68 insertions(+)
- create mode 100644 package/radlib/Config.in
- create mode 100644 package/radlib/radlib.hash
- create mode 100644 package/radlib/radlib.mk
+ ...dlib-renamed-configure.in-to-configure.ac.patch | 213 +++++++++++++++++++++
+ 1 file changed, 213 insertions(+)
+ create mode 100644 package/radlib/0001-radlib-renamed-configure.in-to-configure.ac.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index 64822bf..6c59556 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1262,6 +1262,7 @@ endif
- 	source "package/protobuf-c/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
-+	source "package/radlib/Config.in"
- 	source "package/startup-notification/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-diff --git a/package/radlib/Config.in b/package/radlib/Config.in
+diff --git a/package/radlib/0001-radlib-renamed-configure.in-to-configure.ac.patch b/package/radlib/0001-radlib-renamed-configure.in-to-configure.ac.patch
 new file mode 100644
-index 0000000..e77e03c
+index 0000000..c808ba7
 --- /dev/null
-+++ b/package/radlib/Config.in
-@@ -0,0 +1,37 @@
-+config BR2_PACKAGE_RADLIB
-+	bool "radlib"
-+	help
-+	  radlib is a rapid application development library for unix
-+	  multi-process applications. It uses SYS V IPC facilities and
-+	  FIFOs to provide an RTOS-like, event-driven, distributed framework.
-+	  Processes may be run as daemons or have a controlling terminal.
-+	  
-+	  http://sourceforge.net/projects/radlib/
++++ b/package/radlib/0001-radlib-renamed-configure.in-to-configure.ac.patch
+@@ -0,0 +1,213 @@
++From d3a51cf6492e062383dd49ee604aa1f77cdd47b0 Mon Sep 17 00:00:00 2001
++From: Ray Kinsella <ray.kinsella@intel.com>
++Date: Wed, 6 Apr 2016 11:23:45 +0100
++Subject: [PATCH 1/2] radlib: renamed configure.in to configure.ac
 +
-+choice
-+	prompt "radlib database backend"
-+	depends on BR2_PACKAGE_RADLIB
-+	depends on BR2_PACKAGE_SQLITE \
-+		|| BR2_PACKAGE_MYSQL \
-+		|| BR2_PACKAGE_POSTGRESQL
-+	help$
-+		Selects the backend database: sqlite, mysql or postgresql
++configure.ac is now standard for autotools, this supresses a warning on
++autoreconf
 +
-+config BR2_PACKAGE_RADLIB_SQLITE
-+	bool "sqlite"
-+	depends on BR2_PACKAGE_SQLITE
-+	help
-+		Configure radlib to use a sqlite database backend
++Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
++---
++ configure.ac | 91 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ configure.in | 91 ------------------------------------------------------------
++ 2 files changed, 91 insertions(+), 91 deletions(-)
++ create mode 100644 configure.ac
++ delete mode 100644 configure.in
 +
-+config BR2_PACKAGE_RADLIB_MYSQL
-+	bool "mysql"
-+	depends on BR2_PACKAGE_MYSQL
-+	help
-+		Configure radlib to use a mysql database backend
++diff --git a/configure.ac b/configure.ac
++new file mode 100644
++index 0000000..47e507e
++--- /dev/null
+++++ b/configure.ac
++@@ -0,0 +1,91 @@
+++# Process this file with autoconf to produce a configure script.
+++
+++AC_PREREQ(2.5)
+++AC_INIT([radlib],[2.12.0],[mteel2005 at gmail.com])
+++AC_CONFIG_SRCDIR([h/radmsgLog.h])
+++AM_INIT_AUTOMAKE([radlib],[2.12.0])
+++AM_CONFIG_HEADER([config.h])
+++
+++AC_ARG_ENABLE(mysql,
+++[  --enable-mysql                 include radlib MySQL database support],
+++[case "${enableval}" in
+++  yes) mysql=true ;;
+++  no)  mysql=false ;;
+++  *) mysql=false ;;
+++esac],[mysql=false])
+++AM_CONDITIONAL(MYSQL, test x$mysql = xtrue)
+++
+++AC_ARG_ENABLE(pgresql,
+++[  --enable-pgresql               include radlib postgreSQL database support],
+++[case "${enableval}" in
+++  yes) pgresql=true ;;
+++  no)  pgresql=false ;;
+++  *) pgresql=false ;;
+++esac],[pgresql=false])
+++AM_CONDITIONAL(PGRESQL, test x$pgresql = xtrue)
+++
+++AC_ARG_ENABLE(sqlite,
+++[  --enable-sqlite                include radlib sqlite database support],
+++[case "${enableval}" in
+++  yes) sqlite=true ;;
+++  no)  sqlite=false ;;
+++  *) sqlite=false ;;
+++esac],[sqlite=false])
+++AM_CONDITIONAL(SQLITE, test x$sqlite = xtrue)
+++
+++# Check for big endian host:
+++AC_C_BIGENDIAN()
+++
+++# Checks for programs.
+++AC_PROG_CC
+++AC_PROG_INSTALL
+++AC_PROG_LIBTOOL
+++
+++# Set a flag here if we are cross compiling (must be after AC_PROG_CC)
+++AM_CONDITIONAL(CROSSCOMPILE, test x$cross_compiling = xyes)
+++
+++# Checks for libraries.
+++AC_CHECK_LIB([c], [strncpy])
+++AC_CHECK_LIB([m], [exp])
+++
+++# Checks for header files.
+++AC_HEADER_STDC
+++AC_HEADER_SYS_WAIT
+++AC_CHECK_HEADERS([fcntl.h \
+++                  stdlib.h \
+++                  string.h \
+++                  sys/time.h \
+++                  syslog.h \
+++                  termios.h \
+++                  unistd.h])
+++
+++# Checks for typedefs, structures, and compiler characteristics.
+++AC_C_CONST
+++AC_TYPE_PID_T
+++AC_HEADER_TIME
+++AC_STRUCT_TM
+++
+++# Checks for library functions.
+++AC_FUNC_FORK
+++AC_FUNC_MALLOC
+++AC_FUNC_SELECT_ARGTYPES
+++AC_TYPE_SIGNAL
+++AC_FUNC_STAT
+++AC_FUNC_VPRINTF
+++AC_CHECK_FUNCS([getcwd \
+++                gethostname \
+++                gettimeofday \
+++                memset \
+++                mkdir \
+++                mkfifo \
+++                select \
+++                strchr \
+++                strerror \
+++                strrchr])
+++
+++AC_CONFIG_FILES([Makefile \
+++                 src/Makefile \
+++                 msgRouter/Makefile \
+++                 debug/Makefile])
+++AC_OUTPUT
+++
++diff --git a/configure.in b/configure.in
++deleted file mode 100644
++index 47e507e..0000000
++--- a/configure.in
+++++ /dev/null
++@@ -1,91 +0,0 @@
++-# Process this file with autoconf to produce a configure script.
++-
++-AC_PREREQ(2.5)
++-AC_INIT([radlib],[2.12.0],[mteel2005 at gmail.com])
++-AC_CONFIG_SRCDIR([h/radmsgLog.h])
++-AM_INIT_AUTOMAKE([radlib],[2.12.0])
++-AM_CONFIG_HEADER([config.h])
++-
++-AC_ARG_ENABLE(mysql,
++-[  --enable-mysql                 include radlib MySQL database support],
++-[case "${enableval}" in
++-  yes) mysql=true ;;
++-  no)  mysql=false ;;
++-  *) mysql=false ;;
++-esac],[mysql=false])
++-AM_CONDITIONAL(MYSQL, test x$mysql = xtrue)
++-
++-AC_ARG_ENABLE(pgresql,
++-[  --enable-pgresql               include radlib postgreSQL database support],
++-[case "${enableval}" in
++-  yes) pgresql=true ;;
++-  no)  pgresql=false ;;
++-  *) pgresql=false ;;
++-esac],[pgresql=false])
++-AM_CONDITIONAL(PGRESQL, test x$pgresql = xtrue)
++-
++-AC_ARG_ENABLE(sqlite,
++-[  --enable-sqlite                include radlib sqlite database support],
++-[case "${enableval}" in
++-  yes) sqlite=true ;;
++-  no)  sqlite=false ;;
++-  *) sqlite=false ;;
++-esac],[sqlite=false])
++-AM_CONDITIONAL(SQLITE, test x$sqlite = xtrue)
++-
++-# Check for big endian host:
++-AC_C_BIGENDIAN()
++-
++-# Checks for programs.
++-AC_PROG_CC
++-AC_PROG_INSTALL
++-AC_PROG_LIBTOOL
++-
++-# Set a flag here if we are cross compiling (must be after AC_PROG_CC)
++-AM_CONDITIONAL(CROSSCOMPILE, test x$cross_compiling = xyes)
++-
++-# Checks for libraries.
++-AC_CHECK_LIB([c], [strncpy])
++-AC_CHECK_LIB([m], [exp])
++-
++-# Checks for header files.
++-AC_HEADER_STDC
++-AC_HEADER_SYS_WAIT
++-AC_CHECK_HEADERS([fcntl.h \
++-                  stdlib.h \
++-                  string.h \
++-                  sys/time.h \
++-                  syslog.h \
++-                  termios.h \
++-                  unistd.h])
++-
++-# Checks for typedefs, structures, and compiler characteristics.
++-AC_C_CONST
++-AC_TYPE_PID_T
++-AC_HEADER_TIME
++-AC_STRUCT_TM
++-
++-# Checks for library functions.
++-AC_FUNC_FORK
++-AC_FUNC_MALLOC
++-AC_FUNC_SELECT_ARGTYPES
++-AC_TYPE_SIGNAL
++-AC_FUNC_STAT
++-AC_FUNC_VPRINTF
++-AC_CHECK_FUNCS([getcwd \
++-                gethostname \
++-                gettimeofday \
++-                memset \
++-                mkdir \
++-                mkfifo \
++-                select \
++-                strchr \
++-                strerror \
++-                strrchr])
++-
++-AC_CONFIG_FILES([Makefile \
++-                 src/Makefile \
++-                 msgRouter/Makefile \
++-                 debug/Makefile])
++-AC_OUTPUT
++-
++-- 
++2.4.3
 +
-+config BR2_PACKAGE_RADLIB_POSTGRESQL
-+	bool "postgresql"
-+	depends on BR2_PACKAGE_POSTGRESQL
-+	help
-+		Configure radlib to use a postgresql database backend
-+endchoice
-diff --git a/package/radlib/radlib.hash b/package/radlib/radlib.hash
-new file mode 100644
-index 0000000..2fbfbba
---- /dev/null
-+++ b/package/radlib/radlib.hash
-@@ -0,0 +1,2 @@
-+# From http://sourceforge.net/projects/radlib/files/
-+sha256  82b98bb5e08a500dea1e4252843b9c772fa1fb67ac8ab89ed64abdd5e22eca66  radlib-2.12.0.tar.gz
-diff --git a/package/radlib/radlib.mk b/package/radlib/radlib.mk
-new file mode 100644
-index 0000000..5ff55ac
---- /dev/null
-+++ b/package/radlib/radlib.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# radlib
-+#
-+################################################################################
-+
-+RADLIB_VERSION = 2.12.0
-+RADLIB_SITE = http://downloads.sourceforge.net/radlib
-+RADLIB_INSTALL_STAGING = YES
-+RADLIB_LICENSE = BSD-2c
-+RADLIB_LICENSE_FILES = COPYING
-+RADLIB_AUTORECONF = YES
-+RADLIB_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_RADLIB_SQLITE),y)
-+	RADLIB_CONF_OPTS += --with-sqlite
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RADLIB_MYSQL),y)
-+	RADLIB_CONF_ENV=ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
-+	RADLIB_CONF_OPTS += --with-mysql
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RADLIB_POSTGRESQL),y)
-+	RADLIB_CONF_OPTS += --with-postgresql
-+endif
-+
-+$(eval $(autotools-package))
 -- 
 2.4.11
