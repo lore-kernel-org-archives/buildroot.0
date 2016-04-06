@@ -1,81 +1,93 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Wed,  6 Apr 2016 10:20:45 -0700
-Subject: [Buildroot] [PATCH v3 1/1] PyMySQL: new package
-Message-ID: <1459963245-6593-1-git-send-email-stevecalfee@gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed, 6 Apr 2016 21:15:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/turbolua: new package
+In-Reply-To: <20160404204746.615ebd59@free-electrons.com>
+References: <1459763682-29799-1-git-send-email-m.niestroj@grinn-global.com>
+ <1459763682-29799-2-git-send-email-m.niestroj@grinn-global.com>
+ <20160404204746.615ebd59@free-electrons.com>
+Message-ID: <5705604E.9090703@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add python to mysql connection software, pure python
+Hi,
 
-fix from review comments
+On 04.04.2016 20:47, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Mon,  4 Apr 2016 11:54:42 +0200, Marcin Niestroj wrote:
+>
+>> diff --git a/package/turbolua/Config.in b/package/turbolua/Config.in
+>> new file mode 100644
+>> index 0000000..a742097
+>> --- /dev/null
+>> +++ b/package/turbolua/Config.in
+>> @@ -0,0 +1,18 @@
+>> +config BR2_PACKAGE_TURBOLUA
+>> +	bool "turbolua"
+>> +	depends on BR2_PACKAGE_LUAJIT
+>> +	# Turbolua program within thumb2 system receives "Illegal
+>> +	# instruction" and "Segmentation fault" errors.
+>> +	depends on !BR2_ARM_INSTRUCTIONS_THUMB2
+>
+> Ok, so there is probably no inherent problem, it's just that it happens
+> to not work. What I dislike a bit with such dependency is that you
+> probably don't have tested on the full range of architectures that are
+> supported in Buildroot. So I generally prefer when we add such
+> dependencies when the software can really technically not work on the
+> architecture, not when there is some random bug that prevents it.
+>
+> But oh well, I won't oppose to this dependency being added.
+>
 
-Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
----
- package/Config.in                          |  1 +
- package/python-pymysql/Config.in           |  6 ++++++
- package/python-pymysql/python-pymysql.hash |  4 ++++
- package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-pymysql/Config.in
- create mode 100644 package/python-pymysql/python-pymysql.hash
- create mode 100644 package/python-pymysql/python-pymysql.mk
+I had a look on these issues trying to debug them. It is not clear
+that it is an issue with Turbolua. Now I think that it is rather
+LuaJIT bug, than Turbolua. It also doesn't happen in all
+configurations. For example this is not reproducible when we enable
+-fstack-protector-all (with -fstack-protector-strong it is still
+reproducible).
 
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..2543195 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -683,6 +683,7 @@ menu "External python modules"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pymysql/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-new file mode 100644
-index 0000000..7b74533
---- /dev/null
-+++ b/package/python-pymysql/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYMYSQL
-+	bool "python-pymysql"
-+	help
-+	  python-pymysql is a pure Python binding for mySQL.
-+
-+	  https://pypi.python.org/pypi/PyMySQL/
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-new file mode 100644
-index 0000000..fc7e5e3
---- /dev/null
-+++ b/package/python-pymysql/python-pymysql.hash
-@@ -0,0 +1,4 @@
-+#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
-+md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
-+# Locally calculated:
-+sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-new file mode 100644
-index 0000000..e58ff7e
---- /dev/null
-+++ b/package/python-pymysql/python-pymysql.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pymysql
-+#
-+################################################################################
-+
-+PYTHON_PYMYSQL_VERSION = 0.7.2
-+PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
-+PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
-+PYTHON_PYMYSQL_LICENSE = MIT
-+PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
-+PYTHON_PYMYSQL_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+So I think the best will be to remove this dependency.
+
+>
+>> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>> +SSL = openssl
+>> +else
+>> +SSL = none
+>> +endif
+>
+> The namespace of variables is global, so SSL is not a good variable
+> named, it should be TURBOLUA_SSL.
+>
+>> +define TURBOLUA_BUILD_CMDS
+>> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) SSL="$(SSL)" \
+>> +		LUAJIT_VERSION="$(LUAJIT_VERSION)" -C $(@D) all
+>> +endef
+>> +
+>> +define TURBOLUA_INSTALL_TARGET_CMDS
+>> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) SSL="$(SSL)" LDCONFIG=true \
+>> +		LUAJIT_VERSION="$(LUAJIT_VERSION)" \
+>> +		PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
+>> +endef
+>
+> What about defining:
+>
+> TURBOLUA_MAKE_OPTS = \
+> 	$(TARGET_CONFIGURE_OPTS) \
+> 	SSL=$(if $(BR2_PACKAGE_OPENSSL),openssl,none) \
+> 	LUAJIT_VERSION="$(LUAJIT_VERSION)"
+>
+> and use it in the build and install steps ?
+
+Thanks for hints! I will fix it and repost patch.
+
+>
+> Best regards,
+>
+> Thomas
+>
+
 -- 
-2.5.0
+Marcin Niestroj
