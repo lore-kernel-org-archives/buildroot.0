@@ -1,35 +1,49 @@
-From: Aleksandar Simeonov <aleksandar@barix.com>
-Date: Wed, 6 Apr 2016 10:44:04 +0200
-Subject: [Buildroot] Using packages overrides
-Message-ID: <5704CC54.5080007@barix.com>
+From: Michel Marti <mma@objectxp.com>
+Date: Wed,  6 Apr 2016 12:41:33 +0200
+Subject: [Buildroot] [PATCH 1/1] tzdata: Reorder zone list to avoid missing
+	links
+Message-ID: <1459939293-4711-1-git-send-email-mma@objectxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+The 'backward' zone references entries from other zones (e.g. Pacific/*)
+that have not yet been compiled, leading to missing links. To fix this,
+take-over the zone list sort order from upstream 'tzdata' and also ensure
+that make fails if zic terminates with a non-zero exit code.
 
-Could someone help me to understand how to use properly the package 
-override in BR? I'm trying to override a BR package by defining the
-BR2_PACKAGE_OVERRIDE_FILE="$(BR2_EXTERNAL)/local.mk"
+Signed-off-by: Michel Marti <mma@objectxp.com>
+---
+ package/tzdata/tzdata.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-and putting in local.mk the right
-
-PKGFOO_OVERRIDE_SRCDIR = $(BR2_EXTERNAL)/package/override/sysvinit
-
-The problem is that whatever package I try to override, the build 
-complains that it has been redefined-once in the original BR2 package 
-folder, and second time in the override folder. Am I misinterpreting the 
-BR user manual chapter 8.12.6 ? Can we use Config.in and pkgfoo.mk files 
-in the override folder, or we have to share those of the original 
-package? That wouldn't make anysense, because the user may also need to 
-customise the .mk file. What I'm missing/doing wrong ?
-
-Thanks in advance,
-
-Alex Simeonov
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160406/8cc1a7ad/attachment.html>
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 1b3efb4..40ddc4b 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -13,8 +13,8 @@ HOST_TZDATA_DEPENDENCIES = host-zic
+ TZDATA_LICENSE = Public domain
+ 
+ TZDATA_DEFAULT_ZONELIST = \
+-	africa antarctica asia australasia backward etcetera \
+-	europe factory northamerica pacificnew southamerica
++	africa antarctica asia australasia europe northamerica \
++	southamerica pacificnew etcetera backward systemv factory
+ 
+ ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
+ TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
+@@ -49,8 +49,8 @@ endef
+ define HOST_TZDATA_BUILD_CMDS
+ 	(cd $(@D); \
+ 		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
+-			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
++			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
++			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
+ 		done; \
+ 	)
+ endef
+-- 
+2.8.1
