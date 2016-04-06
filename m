@@ -1,49 +1,53 @@
-From: Michel Marti <mma@objectxp.com>
-Date: Wed,  6 Apr 2016 12:41:33 +0200
-Subject: [Buildroot] [PATCH 1/1] tzdata: Reorder zone list to avoid missing
-	links
-Message-ID: <1459939293-4711-1-git-send-email-mma@objectxp.com>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Wed, 6 Apr 2016 14:17:52 +0200
+Subject: [Buildroot] [PATCH v2 0/4] sd card image generation for
+	Xplained boards
+In-Reply-To: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1459759965-14073-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20160406121752.GC2765@odux.rfo.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 'backward' zone references entries from other zones (e.g. Pacific/*)
-that have not yet been compiled, leading to missing links. To fix this,
-take-over the zone list sort order from upstream 'tzdata' and also ensure
-that make fails if zic terminates with a non-zero exit code.
+On Mon, Apr 04, 2016 at 10:52:41AM +0200, Ludovic Desroches wrote:
+> Use genimage to generate a SD card image
+> 
+> Changes
+> - v2:
+>   - add missing host packages to generate the FAT partition
+>   - cleanup post-image.sh
+>   - update documentation
+>
 
-Signed-off-by: Michel Marti <mma@objectxp.com>
----
- package/tzdata/tzdata.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 1b3efb4..40ddc4b 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -13,8 +13,8 @@ HOST_TZDATA_DEPENDENCIES = host-zic
- TZDATA_LICENSE = Public domain
+If it is ok, I'll send a v3, I have noticed some conflicts when applying
+my patches.
  
- TZDATA_DEFAULT_ZONELIST = \
--	africa antarctica asia australasia backward etcetera \
--	europe factory northamerica pacificnew southamerica
-+	africa antarctica asia australasia europe northamerica \
-+	southamerica pacificnew etcetera backward systemv factory
- 
- ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
- TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
-@@ -49,8 +49,8 @@ endef
- define HOST_TZDATA_BUILD_CMDS
- 	(cd $(@D); \
- 		for zone in $(TZDATA_ZONELIST); do \
--			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
--			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
-+			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
-+			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
- 		done; \
- 	)
- endef
--- 
-2.8.1
+> Ludovic Desroches (4):
+>   configs: atmel: add sama5d2 xplained sd card image generation
+>   configs: atmel: add sama5d4 xplained sd card image generation
+>   configs: atmel: add sama5d3 xplained sd card image generation
+>   board/atmel: update documentation for SD card generation
+> 
+>  board/atmel/readme.txt                         | 66 +++++++++++---------------
+>  board/atmel/sama5d2_xplained_mmc/genimage.cfg  | 33 +++++++++++++
+>  board/atmel/sama5d2_xplained_mmc/post-image.sh | 14 ++++++
+>  board/atmel/sama5d3_xplained_mmc/genimage.cfg  | 33 +++++++++++++
+>  board/atmel/sama5d3_xplained_mmc/post-image.sh | 14 ++++++
+>  board/atmel/sama5d4_xplained_mmc/genimage.cfg  | 34 +++++++++++++
+>  board/atmel/sama5d4_xplained_mmc/post-image.sh | 14 ++++++
+>  configs/atmel_sama5d2_xplained_mmc_defconfig   |  6 +++
+>  configs/atmel_sama5d3_xplained_mmc_defconfig   |  6 +++
+>  configs/atmel_sama5d4_xplained_mmc_defconfig   |  7 ++-
+>  10 files changed, 188 insertions(+), 39 deletions(-)
+>  create mode 100644 board/atmel/sama5d2_xplained_mmc/genimage.cfg
+>  create mode 100755 board/atmel/sama5d2_xplained_mmc/post-image.sh
+>  create mode 100644 board/atmel/sama5d3_xplained_mmc/genimage.cfg
+>  create mode 100755 board/atmel/sama5d3_xplained_mmc/post-image.sh
+>  create mode 100644 board/atmel/sama5d4_xplained_mmc/genimage.cfg
+>  create mode 100755 board/atmel/sama5d4_xplained_mmc/post-image.sh
+> 
+> -- 
+> 2.5.0
+> 
