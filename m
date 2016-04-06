@@ -1,11 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 6 Apr 2016 16:52:17 +0200
-Subject: [Buildroot] Project configuration management
-In-Reply-To: <5702D279.3050904@mind.be>
-References: <24791852-D548-43A1-8E3D-C39D69F479BB@vestiacom.com>
- <20160404204429.472fb279@free-electrons.com>
- <5702D279.3050904@mind.be>
-Message-ID: <20160406165217.07547fff@free-electrons.com>
+Date: Wed, 6 Apr 2016 16:53:43 +0200
+Subject: [Buildroot] [PATCH v4 3/7] barebox: support custom barebox
+ output image name
+In-Reply-To: <5702F6AD.1030402@mind.be>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <1458513351-6556-4-git-send-email-pieter@boesman.nl>
+ <5702F6AD.1030402@mind.be>
+Message-ID: <20160406165343.52e3d652@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +15,39 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 4 Apr 2016 22:45:45 +0200, Arnout Vandecappelle wrote:
+On Tue, 5 Apr 2016 01:20:13 +0200, Arnout Vandecappelle wrote:
 
-> > The mechanism we typically advise in such situation is to use defconfig
-> > fragments, and assemble them as needed to create the configuration you
-> > feed into Buildroot. A shell script (or other) can help generating the
-> > configuration fed into Buildroot from the fragments.
+> > +config BR2_TARGET_BAREBOX_OUTPUT_IMAGE_FILE
+> > +	string "Output image filename"
 > 
->   And that shell script exists already: support/kconfig/merge_config.sh
+>   With my suggestion of  BR2_TARGET_BAREBOX_IMAGE_NAME, this should be changed 
+> to e.g. BR2_TARGET_BAREBOX_OUTPUT_IMAGE_NAME. The prompt looks OK though.
+> 
+> 
+>   However, on second thought I'm wondering if it is really needed. For u-boot or 
+> the kernel, we always copy the images with the same name as they were built. If 
+> that is not what the ROM boot loader expects, the name can be changed in the 
+> image generation script. For example, genimage.cfg could contain:
+> 
+> image boot.vfat {
+>          vfat {
+>                  file MLO {
+> 			"barebox-am33xx-beaglebone-mlo.img"
+> 		}
+> 		file barebox.img {
+> 			"barebox-am33xx-beaglebone.img"
+>                  }
+>          }
+>          size = 8M
+> }
+> 
+> 
+>   What do you think?
 
-That's not exactly the sort of script I was thinking of. I was thinking
-of a more high-level, project specific script, like maybe:
+I agree, we don't do this for U-Boot/kernel or any other thing, so I
+don't think we should be doing it for Barebox.
 
-	genconfig -h <hwplatform> -s <softwarestack> -r <releasetype>
-
-or anything like that, which would internally have the knowledge of
-which fragments to use for which aspect (HW platform, software stack,
-etc.). Of course, internally, this script can use merge_config.sh, but
-having a more high-level script might help users to more easily
-generate their Buildroot configuration.
+Best regards,
 
 Thomas
 -- 
