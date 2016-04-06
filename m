@@ -1,34 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed,  6 Apr 2016 09:38:42 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
-Message-ID: <1459946322-28247-1-git-send-email-gustavo@zacarias.com.ar>
+From: ray.kinsella at intel.com <ray.kinsella@intel.com>
+Date: Wed,  6 Apr 2016 14:19:27 +0100
+Subject: [Buildroot] [PATCH v4 0/3] package/radlib: new package
+Message-ID: <1459948770-2769-1-git-send-email-ray.kinsella@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+From: Ray Kinsella <ray.kinsella@intel.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 72cd5e1..70d5faa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -215,10 +215,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
- 	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
--	default "3.18.29"	if BR2_KERNEL_HEADERS_3_18
-+	default "3.18.30"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
--	default "4.1.20"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.1.21"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
- 	default "4.4.6"		if BR2_KERNEL_HEADERS_4_4
+radlib is a rapid application development library for unix$
+multi-process applications. It uses SYS V IPC facilities and$
+FIFOs to provide an RTOS-like, event-driven, distributed$
+framework. Processes may be run as daemons or have a controlling$
+terminal.
+
+--------------------------------------------------------------------------------
+Ray Kinsella (3):
+  package/radlib: kconfig and makefile
+  package/radlib: Renamed configure.in to configure.ac
+  package/radlib: reworked autotools with pkg-config
+
+ package/Config.in                                  |   1 +
+ ...dlib-renamed-configure.in-to-configure.ac.patch | 213 +++++++++++++++++
+ ...radlib-reworked-autotools-with-pkg-config.patch | 252 +++++++++++++++++++++
+ package/radlib/Config.in                           |  37 +++
+ package/radlib/radlib.hash                         |   2 +
+ package/radlib/radlib.mk                           |  28 +++
+ 6 files changed, 533 insertions(+)
+ create mode 100644 package/radlib/0001-radlib-renamed-configure.in-to-configure.ac.patch
+ create mode 100644 package/radlib/0002-radlib-reworked-autotools-with-pkg-config.patch
+ create mode 100644 package/radlib/Config.in
+ create mode 100644 package/radlib/radlib.hash
+ create mode 100644 package/radlib/radlib.mk
+
 -- 
-2.7.3
+2.4.11
