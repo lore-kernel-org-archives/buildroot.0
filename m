@@ -1,37 +1,27 @@
 From: Pieter Smith <pieter@boesman.nl>
-Date: Wed, 6 Apr 2016 22:26:01 +0200
-Subject: [Buildroot] [PATCH v4 4/7] barebox: introduce barebox-package
-	function
-In-Reply-To: <5702F778.7030307@mind.be>
+Date: Wed, 6 Apr 2016 22:28:21 +0200
+Subject: [Buildroot] [PATCH v4 1/7] barebox: support multi-image-build
+	image selection
+In-Reply-To: <CAGm1_ktyPnSkoLwFtjMkH2n=15LZFg0MCVY981Tuqo=eBoi2nQ@mail.gmail.com>
 References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <1458513351-6556-5-git-send-email-pieter@boesman.nl>
- <5702F778.7030307@mind.be>
-Message-ID: <20160406202601.GB5332@smipidev>
+ <1458513351-6556-2-git-send-email-pieter@boesman.nl>
+ <CAGm1_ktyPnSkoLwFtjMkH2n=15LZFg0MCVY981Tuqo=eBoi2nQ@mail.gmail.com>
+Message-ID: <20160406202821.GC5332@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 05, 2016 at 01:23:36AM +0200, Arnout Vandecappelle wrote:
->  Oh, one thing I forgot...
+On Thu, Mar 31, 2016 at 07:44:26AM +0200, Yegor Yefremov wrote:
+> On Sun, Mar 20, 2016 at 11:35 PM, Pieter Smith <pieter@boesman.nl> wrote:
+> > Support selection of the built image filename in a multi-image barebox build.
+> > This makes it possible to specify which image to pick in a in a multi-image
 > 
-> On 03/20/16 23:35, Pieter Smith wrote:
-> >+# instantiate this barebox package
-> >+$(eval $(call barebox-package))
-> 
->  The $(call ...) is not needed here. call is only needed if there are arguments.
+> you seem to have double "in a"
 
-ACK. Already fixed for v5.
+ACK. Will be fixed in v5.
 
->  Regards,
->  Arnout
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+[snip]
 
 - Pieter
