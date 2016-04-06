@@ -1,111 +1,30 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 6 Apr 2016 23:43:54 +0200
-Subject: [Buildroot] [PATCH v2 1/1] PyMySQL: new package
-In-Reply-To: <1459906154-27721-1-git-send-email-stevecalfee@gmail.com>
-References: <1459906154-27721-1-git-send-email-stevecalfee@gmail.com>
-Message-ID: <5705831A.9070208@mind.be>
+Date: Wed, 6 Apr 2016 23:47:03 +0200
+Subject: [Buildroot] [PATCH] ilixi: new package
+In-Reply-To: <CAPWb3NQ6nw3r5YOV9pMZnu1X1tUbh9F7TTKXYBC_00KOrQBUjw@mail.gmail.com>
+References: <1459910836-12815-1-git-send-email-j.david.berger@gmail.com>
+ <CAPWb3NQ6nw3r5YOV9pMZnu1X1tUbh9F7TTKXYBC_00KOrQBUjw@mail.gmail.com>
+Message-ID: <570583D7.8090202@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/06/16 03:29, Steve Calfee wrote:
-> add python to mysql connection software, pure python
->
-> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
->
-> fix from review comments
+On 04/06/16 04:55, Justin Berger wrote:
+> I didn't check it explicitly against 4.7, but I looked at the supported C++
+> features in 4.7 vs 4.8 and it looked like it should work. Currently the only GCC
+> options that show up in the menuconfig though are 4.8 and onwards, is the reason
+> to prefer 4.7 vs 4.8 for people to backport?
 
-  This doesn't belong in the commit message. It should be separated with ---, so
+  People may have a custom prebuilt toolchain using gcc 4.7.
 
-Signed-off-by: ...
----
-v2: fix from review comments by Arnout
-
->
-> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
-
-  And the second one isn't needed of course, I guess that was added by git 
-send-mail -s.
-
-> ---
->   package/Config.in                          |  1 +
->   package/python-pymysql/Config.in           |  6 ++++++
->   package/python-pymysql/python-pymysql.hash |  4 ++++
->   package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
->   4 files changed, 25 insertions(+)
->   create mode 100644 package/python-pymysql/Config.in
->   create mode 100644 package/python-pymysql/python-pymysql.hash
->   create mode 100644 package/python-pymysql/python-pymysql.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 529ad33..2543195 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -683,6 +683,7 @@ menu "External python modules"
->   	source "package/python-pyftpdlib/Config.in"
->   	source "package/python-pygame/Config.in"
->   	source "package/python-pyinotify/Config.in"
-> +	source "package/python-pymysql/Config.in"
->   	source "package/python-pyparsing/Config.in"
->   	source "package/python-pyparted/Config.in"
->   	source "package/python-pypcap/Config.in"
-> diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-> new file mode 100644
-> index 0000000..7b74533
-> --- /dev/null
-> +++ b/package/python-pymysql/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PYMYSQL
-> +	bool "python-pymysql"
-> +	help
-> +	  python-pymysql is a pure Python binding for mySQL.
-                                                       MySQL.
-
-  But all of that can be fixed up while committing, so:
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(of course, feel free to send a v3 which fixes these last bits as well).
-
+  You can use Sourcery CodeBench SH 2012.09 or Sourcery CodeBench x86/x86_64 
+2012.09 to test. Build test is probably enough, though the x86 toolchain should 
+be easy to run-time test.
 
   Regards,
   Arnout
-
-> +
-> +	  https://pypi.python.org/pypi/PyMySQL/
-> diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-> new file mode 100644
-> index 0000000..fc7e5e3
-> --- /dev/null
-> +++ b/package/python-pymysql/python-pymysql.hash
-> @@ -0,0 +1,4 @@
-> +#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
-> +md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
-> +# Locally calculated:
-> +sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
-> diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-> new file mode 100644
-> index 0000000..e58ff7e
-> --- /dev/null
-> +++ b/package/python-pymysql/python-pymysql.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-pymysql
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYMYSQL_VERSION = 0.7.2
-> +PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
-> +PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
-> +PYTHON_PYMYSQL_LICENSE = MIT
-> +PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
-> +PYTHON_PYMYSQL_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
->
 
 
 -- 
