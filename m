@@ -1,59 +1,72 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Apr 2016 00:03:41 +0200
-Subject: [Buildroot] Using packages overrides
-In-Reply-To: <5704CC54.5080007@barix.com>
-References: <5704CC54.5080007@barix.com>
-Message-ID: <570587BD.9000907@mind.be>
+Date: Thu, 7 Apr 2016 00:09:52 +0200
+Subject: [Buildroot] [PATCH 1/1] tzdata: Reorder zone list to avoid
+ missing links
+In-Reply-To: <1459939293-4711-1-git-send-email-mma@objectxp.com>
+References: <1459939293-4711-1-git-send-email-mma@objectxp.com>
+Message-ID: <57058930.6020609@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/06/16 10:44, Aleksandar Simeonov wrote:
-> Hi All,
+On 04/06/16 12:41, Michel Marti wrote:
+> The 'backward' zone references entries from other zones (e.g. Pacific/*)
+> that have not yet been compiled, leading to missing links. To fix this,
+> take-over the zone list sort order from upstream 'tzdata' and also ensure
+> that make fails if zic terminates with a non-zero exit code.
 >
-> Could someone help me to understand how to use properly the package override in
-> BR? I'm trying to override a BR package by defining the
-> BR2_PACKAGE_OVERRIDE_FILE="$(BR2_EXTERNAL)/local.mk"
+> Signed-off-by: Michel Marti <mma@objectxp.com>
+> ---
+>   package/tzdata/tzdata.mk | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> and putting in local.mk the right
+> diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+> index 1b3efb4..40ddc4b 100644
+> --- a/package/tzdata/tzdata.mk
+> +++ b/package/tzdata/tzdata.mk
+> @@ -13,8 +13,8 @@ HOST_TZDATA_DEPENDENCIES = host-zic
+>   TZDATA_LICENSE = Public domain
 >
-> PKGFOO_OVERRIDE_SRCDIR = $(BR2_EXTERNAL)/package/override/sysvinit
+>   TZDATA_DEFAULT_ZONELIST = \
+> -	africa antarctica asia australasia backward etcetera \
+> -	europe factory northamerica pacificnew southamerica
+> +	africa antarctica asia australasia europe northamerica \
+> +	southamerica pacificnew etcetera backward systemv factory
+
+  Could you add a comment to clarify that the order is important? Otherwise we 
+risks that someone tries to sort it alphabetically again a few years down the 
+line. Your commit message explains is pretty well.
+
+  With that you can add my
+  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
 >
-> The problem is that whatever package I try to override, the build complains that
-> it has been redefined-once in the original BR2 package folder, and second time
-> in the override folder. Am I misinterpreting the BR user manual chapter 8.12.6 ?
-> Can we use Config.in and pkgfoo.mk files in the override folder, or we have to
-> share those of the original package? That wouldn't make anysense, because the
-> user may also need to customise the .mk file. What I'm missing/doing wrong ?
+>   ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
+>   TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
+> @@ -49,8 +49,8 @@ endef
+>   define HOST_TZDATA_BUILD_CMDS
+>   	(cd $(@D); \
 
-  The OVERRIDE_SRCDIR only overrides the source of the package, so it will skip 
-the download, extract and patch steps. These steps are replaced with just 
-copying the source from the OVERRIDE_SRCDIR to the build directory. The 
-configure, build and install steps are still using the rules from the original 
-package.
-
-  OVERRIDE_SRCDIR is not really meant to make radical changes to a package that 
-would require rewriting the .mk file. It is actually just meant for development 
-to prepare package patches, which would finally be added as actual patches to 
-either the package directory or GLOBAL_PATCH_DIR. That said, I do often (ab)use 
-it myself for customising packages.
-
-
-  If you do need to change the build system, another hack is that you can add 
-pre- or post-configure, -build or -install hooks in $(BR2_EXTERNAL)/external.mk. 
-You can also update some of the package variables there. But not all of them, 
-for example _VERSION or _DEPENDENCIES cannot be overridden.
-
-  It would indeed be nice if a package could be completely overridden in 
-BR2_EXTERNAL, but at the moment that's not possible. It's not trivial to do that 
-in the current architecture of the Buildroot infrastructure. I believe Yann had 
-some ideas of how it could be done.
+  A simpler way to achieve the same is to add
+		set -e; \
+but that's a matter of taste so if you keep it as is that's fine by me.
 
 
   Regards,
   Arnout
+
+>   		for zone in $(TZDATA_ZONELIST); do \
+> -			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
+> -			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
+> +			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
+> +			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
+>   		done; \
+>   	)
+>   endef
+>
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
