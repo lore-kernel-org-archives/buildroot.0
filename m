@@ -1,28 +1,40 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Thu, 7 Apr 2016 11:19:05 +0200
-Subject: [Buildroot] [PATCH 4/4 v2] core/pkg-infra: download git
- submodules if the package wants them
-In-Reply-To: <8373904cdf1fee9724d6834b56efaa706a92fc31.1459541702.git.yann.morin.1998@free.fr>
-References: <cover.1459541702.git.yann.morin.1998@free.fr>
- <8373904cdf1fee9724d6834b56efaa706a92fc31.1459541702.git.yann.morin.1998@free.fr>
-Message-ID: <57062609.60404@green-communications.fr>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Thu, 7 Apr 2016 11:04:02 +0000
+Subject: [Buildroot] [PATCH v4 1/3] package/radlib: kconfig and makefile
+In-Reply-To: <57058BC3.1070105@mind.be>
+References: <1459948770-2769-1-git-send-email-ray.kinsella@intel.com>
+ <1459948770-2769-2-git-send-email-ray.kinsella@intel.com>
+ <57058BC3.1070105@mind.be>
+Message-ID: <1460027041.3176.5.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 01/04/2016 22:25, Yann E. MORIN wrote:
-> Add a new package variable that packages can set to specify that they
-> need git submodules.
-> 
-> Only accept this option if the download method is git, as we can not get
-> submodules via an http download (via wget).
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Aleksandar Simeonov <aleksandar@barix.com>
+Hi Arnout,
 
-Tested-By: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+On Thu, 2016-04-07 at 00:20 +0200, Arnout Vandecappelle wrote:
+>   Very quick feedback, not a detailed review.
+> 
+>   First of all, the three patches should be squashed into one,
+> because all three
+> are needed to have a functional package. Otherwise, the build would
+> be broken
+> between the patches.
+> 
 
-Tested on some local packages.  We already had ugly local patches to
-support submodules.
+Confused, just doing what I was asked in the previous review. 
+Can you offer a little more guidance on how I should structure. 
+
+Agree that you need all the pieces for a functional package. 
+
+On Tue, 2016-03-29 at 20:07 +0200, Thomas Petazzoni wrote:
+> Hello,
+> So you're doing three different things. Which calls for three
+> different
+> patches.
+> 
+> I'll do a full review once you send it with git send-email, because
+> the
+> line wrapping makes it really hard to follow.
