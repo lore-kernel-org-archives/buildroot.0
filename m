@@ -1,51 +1,21 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu,  7 Apr 2016 16:03:39 -0300
-Subject: [Buildroot] [PATCH] mesa: add vc4 driver support
-Message-ID: <1460055819-14893-1-git-send-email-gustavo@zacarias.com.ar>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 07 Apr 2016 21:45:39 +0200
+Subject: [Buildroot] [PATCH] linux-headers: bump 3.18.x and 4.1.x series
+In-Reply-To: <1459946322-28247-1-git-send-email-gustavo@zacarias.com.ar>
+ (Gustavo Zacarias's message of "Wed, 6 Apr 2016 09:38:42 -0300")
+References: <1459946322-28247-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <87lh4pqk2k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/mesa3d/Config.in | 10 ++++++++++
- package/mesa3d/mesa3d.mk |  1 +
- 2 files changed, 11 insertions(+)
+>>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 8f6ab75..a87f53d 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -79,6 +79,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
- 	  This is a software opengl implementation using the Gallium3D
- 	  infrastructure.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-+	bool "Gallium vc4 driver"
-+	depends on BR2_arm
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_LIBDRM_VC4
-+	select BR2_PACKAGE_MESA3D_NEEDS_XA
-+	help
-+	  Driver for Broadcom VC4 (rpi2/3) GPUs.
-+	  It requires a vanilla 4.5+ kernel with drm vc4 (open) support.
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
- 	bool "Gallium virgl driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 292935e..b5677f9 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -65,6 +65,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
- # DRI Drivers
- MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
+ > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+
+Committed, thanks.
+
 -- 
-2.7.3
+Bye, Peter Korsgaard
