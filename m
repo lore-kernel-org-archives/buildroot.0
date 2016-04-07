@@ -1,37 +1,44 @@
-From: steve at weaverpad.com <steve@weaverpad.com>
-Date: Thu, 07 Apr 2016 14:51:42 -0600
-Subject: [Buildroot] System seems to hang at banner
-In-Reply-To: <f5b9e250975c15010f8287abf3ea65f5@weaverpad.com>
-References: <f5b9e250975c15010f8287abf3ea65f5@weaverpad.com>
-Message-ID: <efa6d7c13cdf5459a7e48212842df0d1@weaverpad.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  7 Apr 2016 23:02:19 +0200
+Subject: [Buildroot] [PATCH v1] evemu: bump version to 2.4.0
+Message-ID: <1460062939-18674-1-git-send-email-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2016-04-07 14:02, steve at weaverpad.com wrote:
-> The last kernel message I get is:
-> "[    0.937209] random: dd urandom read with 12 bits of entropy 
-> available"
-> Then there's about an 8sec pause before I get only part of the
-> "Welcome to Buildroot" banner. I get differing amounts; but, usually
-> just "Welcome ". I have tried various values for
-> BR2_TARGET_GENERIC_GETTY_PORT and its associated baudrate. I am not
-> using the output/target directory; I am using the initramfs built into
-> the kernel.
-> My board uses a Freescale Kinetis K70. I have the [v3,##/10] ARM
-> patchset from Thomas Petazzoni applied.
-> 
-> Any ideas how I can go about troubleshooting this issue? Is there more
-> information required?
-> 
-> Thanks.
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-I retract this question. Just like Masahiro Yamada in 
-http://lists.busybox.net/pipermail/buildroot/2015-April/124807.html, I 
-had the interrupts configured wrong.
+See [1] for details.
+
+[1] https://lists.freedesktop.org/archives/input-tools/2016-April/001274.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/evemu/evemu.hash | 4 ++--
+ package/evemu/evemu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/evemu/evemu.hash b/package/evemu/evemu.hash
+index f7a0cc6..1264bed 100644
+--- a/package/evemu/evemu.hash
++++ b/package/evemu/evemu.hash
+@@ -1,2 +1,2 @@
+-# Hash from http://lists.freedesktop.org/archives/input-tools/2015-October/001221.html
+-sha256 5b0197735f9effa25563b0412c560354bee34f8263eaddb00dd996e6ff56eb6a evemu-2.3.1.tar.xz
++# Hash from https://lists.freedesktop.org/archives/input-tools/2016-April/001274.html
++sha256 0706ea5a830203f9cdb30c0e10c8c41d2427128ba9041543a5ae157fa3b4a30e evemu-2.4.0.tar.xz
+diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
+index 2fce723..992a1f7 100644
+--- a/package/evemu/evemu.mk
++++ b/package/evemu/evemu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EVEMU_VERSION = 2.3.1
++EVEMU_VERSION = 2.4.0
+ EVEMU_SITE = http://www.freedesktop.org/software/evemu
+ EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
+ EVEMU_LICENSE = LGPLv3 (library), GPLv3 (tools)
+-- 
+2.1.4
