@@ -1,131 +1,80 @@
 From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Thu, 7 Apr 2016 12:03:46 +0000
-Subject: [Buildroot] [PATCH v4 3/3] package/radlib: reworked autotools
- with pkg-config
-In-Reply-To: <57058F7C.7000708@mind.be>
+Date: Thu, 7 Apr 2016 12:04:19 +0000
+Subject: [Buildroot] [PATCH v4 2/3] package/radlib: Renamed configure.in
+ to configure.ac
+In-Reply-To: <57058C3E.4070201@mind.be>
 References: <1459948770-2769-1-git-send-email-ray.kinsella@intel.com>
- <1459948770-2769-4-git-send-email-ray.kinsella@intel.com>
- <57058F7C.7000708@mind.be>
-Message-ID: <1460030625.3176.22.camel@intel.com>
+ <1459948770-2769-3-git-send-email-ray.kinsella@intel.com>
+ <57058C3E.4070201@mind.be>
+Message-ID: <1460030658.3176.23.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2016-04-07 at 00:36 +0200, Arnout Vandecappelle wrote:
-> Do this in three separate patches: one that sets subdir-objects, one
-> that adds 
-> pkg-config, and one that adds mysql-config.
 
-Ok then, use a hook for the rename. 
+ok, I will check.
 
-Might make more sense to do one patch for pkg-config with subdir
--objects, because these are linked - which subdir objects you get
-depends on pkg-config?
-
-And then another patch for mysql-config. So two patches?
-
+On Thu, 2016-04-07 at 00:22 +0200, Arnout Vandecappelle wrote:
+> On 04/06/16 15:19, ray.kinsella at intel.com wrote:
+> > From: Ray Kinsella <ray.kinsella@intel.com>
+> > 
+> > configure.ac is now standard for autotools, this supresses a
+> > warning on autoreconf.
 > 
-> > +-AC_ARG_ENABLE(mysql,
-> > +-[  --enable-mysql                 include radlib MySQL database
-> > support],
+>   If it is just a warning, then this patch isn't needed.
 > 
->   Why would you remove this? An enable option is as good as a with
-> option.
-
-The original feedback I got was that the autotools implementation for
-radlib was hopelessly screwed up. I was trying to strike a balance
-between limiting changes but improving the overall flows. 
-
-I used with 'with' instead of 'enable' because of the semantics ...
-
-If a package _must_ be available on the platform for it available to
-choose then 'with' makes more sense than 'enable'. Radlib supports more
-than one back end so selecting a backend by indicating 'with' made more
-sense to me. 'enable' is typically for features whereas 'with', is
-typically used to indicate building 'with' a given package. 
-
-That said I am agnoistic, I am happy to revert to AC_ARG_ENABLE to
-reduce the patch. 
-
+>   If it really is needed, it's better to do it as a hook:
 > 
-> > +-[case "${enableval}" in
-> > +-  yes) mysql=true ;;
-> > +-  no)  mysql=false ;;
-> > +-  *) mysql=false ;;
-> > +-esac],[mysql=false])
+> define RADLIB_RENAME_CONFIGURE_IN
+> 	mv $(@D)/configure.in $(@D)/configure.ac
+> endef
 > 
->   So you keep the above, and here just add
+> RADLIB_POST_PATCH_HOOKS += RADLIB_RENAME_CONFIGURE_IN
 > 
-> if test x"$mysql" = xtrue; then
->    AC_PATH_PROG(...)
->    if test "x$MYSQL_CONFIG" != "x"; then
->      ...
->    else
->      mysql=false
->    fi
-> fi
-> 
-> (indentation in this file seems to be with two spaces instead of
-> tabs).
-
-np, will fix. 
-
-> 
->   And of course the same story for pg.
-
-ok.
-
-> > +-AM_CONDITIONAL(MYSQL, test x$mysql = xtrue)
-> 
->   Keep this, there is no reason to replace it by HAVE_MYSQL.
-
-Ok - I am pretty sure I got feedback to change these conditionals to
-HAVE_, but no problem I can fix. 
-
-
-> > + # define include directories
-> > +-INCLUDES = \
-> > ++AM_CFLAGS = \
-> 
->   Why does this need to be changed?
-
-I will investigate ...
-The original INCLUDES was pulling in host directories. 
-Not sure why the switch to AM_CFLAGS
-
-> 
-> > + 		-I$(top_srcdir)/h \
-> > + 		-D_GNU_SOURCE
-> > +
-> 
->   Did you forget to add $(SQLITE3_CFLAGS) etc?
-
-nope, no special include is needed for SQLITE.
-
-
->   Removing the CROSSCOMPILE part should be a separate patch.
-
-ok
-
-> 
-> > ++raddebug_LDFLAGS = -L../src/.libs \
-> > ++		$(SQLITE3_LIBS) \
-> > ++		$(MYSQL_LIBS) \
-> > ++		$(POSTGRESQL_LIBS)
-> > +diff --git a/msgRouter/Makefile.am b/msgRouter/Makefile.am
-> [snip]
-> 
->   Same here.
-> 
-> > +diff --git a/src/Makefile.am b/src/Makefile.am
-> [snip]
-> 
->   Same here.
-> 
-> 
+>   That said, it's still a good idea to upstream this patch.
 > 
 >   Regards,
 >   Arnout
+> 
+> > 
+> > Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> > ---
+> >   ...dlib-renamed-configure.in-to-configure.ac.patch | 213
+> > +++++++++++++++++++++
+> >   1 file changed, 213 insertions(+)
+> >   create mode 100644 package/radlib/0001-radlib-renamed
+> > -configure.in-to-configure.ac.patch
+> > 
+> > diff --git a/package/radlib/0001-radlib-renamed-configure.in-to
+> > -configure.ac.patch b/package/radlib/0001-radlib-renamed
+> > -configure.in-to-configure.ac.patch
+> > new file mode 100644
+> > index 0000000..c808ba7
+> > --- /dev/null
+> > +++ b/package/radlib/0001-radlib-renamed-configure.in-to
+> > -configure.ac.patch
+> > @@ -0,0 +1,213 @@
+> > +From d3a51cf6492e062383dd49ee604aa1f77cdd47b0 Mon Sep 17 00:00:00
+> > 2001
+> > +From: Ray Kinsella <ray.kinsella@intel.com>
+> > +Date: Wed, 6 Apr 2016 11:23:45 +0100
+> > +Subject: [PATCH 1/2] radlib: renamed configure.in to configure.ac
+> > +
+> > +configure.ac is now standard for autotools, this supresses a
+> > warning on
+> > +autoreconf
+> > +
+> > +Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> > +---
+> > + configure.ac | 91
+> > ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> > + configure.in | 91 -----------------------------------------------
+> > -------------
+> > + 2 files changed, 91 insertions(+), 91 deletions(-)
+> > + create mode 100644 configure.ac
+> > + delete mode 100644 configure.in
+> [snip]
+> 
 > 
