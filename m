@@ -1,40 +1,19 @@
-From: Kinsella, Ray <ray.kinsella@intel.com>
-Date: Thu, 7 Apr 2016 11:04:02 +0000
-Subject: [Buildroot] [PATCH v4 1/3] package/radlib: kconfig and makefile
-In-Reply-To: <57058BC3.1070105@mind.be>
-References: <1459948770-2769-1-git-send-email-ray.kinsella@intel.com>
- <1459948770-2769-2-git-send-email-ray.kinsella@intel.com>
- <57058BC3.1070105@mind.be>
-Message-ID: <1460027041.3176.5.camel@intel.com>
+From: buildroot at busybox.net <buildroot@busybox.net>
+Date: Thu, 7 Apr 2016 13:16:31 +0600
+Subject: [Buildroot] =?utf-8?b?0JrQm9CY0JXQndCi0KHQmtCY0JUg0JHQkNCX0Ksg?=
+	=?utf-8?b?0YLQtdC7LiArNzkxMzM5MTM4MzcgU2t5cGU6IHByb2Rhd2V6Mzg5IEVt?=
+	=?utf-8?b?YWlsOiBwcm9kMzgzN0BxaXAucnUg0KPQt9C90LDQudGC0LUg0L/QvtC0?=
+	=?utf-8?b?0YDQvtCx0L3QvtGB0YLQuCE=?=
+Message-ID: <E9134075BE6A45865A5F16A90D0531C8@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+?????????? ???? ???. +79133913837 Skype: prodawez389 Email: prod3837 at qip.ru ??????? ???????????!
 
-On Thu, 2016-04-07 at 00:20 +0200, Arnout Vandecappelle wrote:
->   Very quick feedback, not a detailed review.
-> 
->   First of all, the three patches should be squashed into one,
-> because all three
-> are needed to have a functional package. Otherwise, the build would
-> be broken
-> between the patches.
-> 
-
-Confused, just doing what I was asked in the previous review. 
-Can you offer a little more guidance on how I should structure. 
-
-Agree that you need all the pieces for a functional package. 
-
-On Tue, 2016-03-29 at 20:07 +0200, Thomas Petazzoni wrote:
-> Hello,
-> So you're doing three different things. Which calls for three
-> different
-> patches.
-> 
-> I'll do a full review once you send it with git send-email, because
-> the
-> line wrapping makes it really hard to follow.
+?????????? ?? ?????
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160407/49665812/attachment.html>
