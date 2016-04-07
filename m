@@ -1,61 +1,114 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Apr 2016 01:06:49 +0200
-Subject: [Buildroot] [PATCH v4 3/7] barebox: support custom barebox
-	output image name
-In-Reply-To: <20160406201410.GA5332@smipidev>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <1458513351-6556-4-git-send-email-pieter@boesman.nl>
- <5702F6AD.1030402@mind.be> <20160406201410.GA5332@smipidev>
-Message-ID: <57059689.8070200@mind.be>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 07 Apr 2016 06:49:15 +0200
+Subject: [Buildroot] [PATCH] ipmitool: fix musl build
+In-Reply-To: <5702E4E7.1060705@mind.be>
+References: <1459620764-7241-1-git-send-email-joerg.krause@embedded.rocks>
+ <5702E4E7.1060705@mind.be>
+Message-ID: <1460004555.2035.14.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/06/16 22:14, Pieter Smith wrote:
-> Hi Arnout / Thomas,
->
-> On Tue, Apr 05, 2016 at 01:20:13AM +0200, Arnout Vandecappelle wrote:
-[snip]
->>   However, on second thought I'm wondering if it is really needed. For u-boot
->> or the kernel, we always copy the images with the same name as they were
->> built. If that is not what the ROM boot loader expects, the name can be
->> changed in the image generation script. For example, genimage.cfg could
->> contain:
->>
->> image boot.vfat {
->>          vfat {
->>                  file MLO {
->> 			"barebox-am33xx-beaglebone-mlo.img"
->> 		}
->> 		file barebox.img {
->> 			"barebox-am33xx-beaglebone.img"
->>                  }
->>          }
->>          size = 8M
->> }
->>
->>
->>   What do you think?
->
-> I agree that this is cleaner from a buildroot perspective. But this would
-> require carrying a genimage.cfg patch for barebox as part of
-> beaglebone_barebox_defconfig. Is this what you are suggesting?
+Hi Arnout,
 
-  I don't really understand what you mean. As I suggested in that patch, it 
-would be nice to add a genimage config as well. When you do that, you can use a 
-fragment like above to make sure the files will have the correct name in the 
-filesystem. (Like above, except I screwed up the indentation :-)
+many thanks for the review!
 
-  Regards,
-  Arnout
+On Di, 2016-04-05 at 00:04 +0200, Arnout Vandecappelle wrote:
+> On 04/02/16 20:12, J?rg Krause wrote:
+> > 
+> > Add two patches to fix musl build.
+> > 
+> > The first patch avoids the redefinition aof wchar_t. The second
+> > patch adds a
+> > missing header include of <linux/params.h>.
+> > 
+> > Both patches send upstream:
+> > https://sourceforge.net/p/ipmitool/mailman/message/34987103/
+> > https://sourceforge.net/p/ipmitool/mailman/message/34987104/
+> > 
+> > Fixes:
+> > http://autobuild.buildroot.net/results/75f/75fd6f1be0271bb15078c62f
+> > 3effdbb67ac07427/
+> > http://autobuild.buildroot.net/results/cac/cacf8179a9c8142eef695624
+> > 62d3c3b0b20c2879/
+> > http://autobuild.buildroot.net/results/c10/c1045882947ff7150c750088
+> > ae1981bd99134c54/
+> > http://autobuild.buildroot.net/results/6a7/6a770f8a3dddb15ba4d95555
+> > e74b198799278dcf/
+> > .. and more.
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > ---
+> > ? .../ipmitool/0001-Avoid-wchar_t-redefinition.patch | 35
+> > +++++++++++++++++++
+> > ? ...-Add-missing-linux-param.h-header-include.patch | 39
+> > ++++++++++++++++++++++
+> > ? 2 files changed, 74 insertions(+)
+> > ? create mode 100644 package/ipmitool/0001-Avoid-wchar_t-
+> > redefinition.patch
+> > ? create mode 100644 package/ipmitool/0002-Add-missing-linux-
+> > param.h-header-include.patch
+> > 
+> > diff --git a/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch 
+> > b/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
+> > new file mode 100644
+> > index 0000000..f404245
+> > --- /dev/null
+> > +++ b/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
+> > @@ -0,0 +1,35 @@
+> > +From ea30d9b4290009116f11bb7110d1ac13589d76a4 Mon Sep 17 00:00:00
+> > 2001
+> > +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> > +Date: Sat, 2 Apr 2016 19:45:14 +0200
+> > +Subject: [PATCH 1/2] Avoid wchar_t redefinition
+> > +MIME-Version: 1.0
+> > +Content-Type: text/plain; charset=UTF-8
+> > +Content-Transfer-Encoding: 8bit
+> > +
+> > +The musl C library does not define _WCHAR_T. Check also for
+> > compiler defined
+> > +__WCHAR_TYPE__.
+> > +
+> > +Upstream status: Pending
+> > +https://sourceforge.net/p/ipmitool/mailman/message/34987103/
+> > +
+> > +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> > +---
+> > + src/plugins/imb/imbapi.h | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/src/plugins/imb/imbapi.h b/src/plugins/imb/imbapi.h
+> > +index 74975c6..fa1e9c6 100644
+> > +--- a/src/plugins/imb/imbapi.h
+> > ++++ b/src/plugins/imb/imbapi.h
+> > +@@ -46,7 +46,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+> > SUCH DAMAGE.
+> > + #endif
+> > + #ifndef WIN32
+> > + /* WIN32 defines this in stdio.h */
+> > +-#ifndef _WCHAR_T
+> > ++#if !defined(_WCHAR_T) && !defined(__WCHAR_TYPE__)
+> ? __WCHAR_TYPE_ is also not a standardized macro.
 
+Yes, it's not standardized. It's a common predefined macro and so a GNU
+C extension.
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> For example, does clang define?
+> it?
+
+Yes, Clang defines it [1].
+
+> The proper solution is to add an autoconf test for wchar and use
+> that?
+> define. Take for example m4/wchar_t.m4 from bison.
+
+I did not find m4/wchar_t in the bison git tree, but for some other
+projects. I'm not very experienced in autotools, but
+wouldn't?AC_CHECK_TYPES(wchar_t) be sufficient?
+
+[1]?http://clang.llvm.org/doxygen/stddef_8h.html
+
+Best regards
+J?rg Krause
