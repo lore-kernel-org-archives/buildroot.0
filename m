@@ -1,74 +1,51 @@
-From: Justin Berger <j.david.berger@gmail.com>
-Date: Thu, 7 Apr 2016 11:37:03 -0600
-Subject: [Buildroot] [PATCH] ilixi: new package
-In-Reply-To: <20160406043324.GZ3088@tarshish>
-References: <1459910836-12815-1-git-send-email-j.david.berger@gmail.com>
- <20160406043324.GZ3088@tarshish>
-Message-ID: <CAPWb3NQ10VRpkjG6CO7PG9EKqVdfvE0f_NSp3UA_6z_pBLeHWQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu,  7 Apr 2016 16:03:39 -0300
+Subject: [Buildroot] [PATCH] mesa: add vc4 driver support
+Message-ID: <1460055819-14893-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-What is the reason for CXXFLAGS over CPPFLAGS? I'm not sure why exactly but
-this package in particular doesn't seem to look at CXXFLAGS if CPPFLAGS is
-present (which it is due to the autotools-package internals it seems), and
-so doesn't catch the C++11 flag and won't compile after that.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mesa3d/Config.in | 10 ++++++++++
+ package/mesa3d/mesa3d.mk |  1 +
+ 2 files changed, 11 insertions(+)
 
-I was a little unsure on best practice for setting that flag, so I
-basically just copied what directfb.mk does on line 132; where it uses
-CPPFLAGS. Although searching through I see sort of an even spread of CXX vs
-CPP among autotools packages. But if there is a way to go with CXXFLAGS and
-have it work, I have no preference one way or the other.
-
-Have a good one,
-Justin
-
-On Tue, Apr 5, 2016 at 10:33 PM, Baruch Siach <baruch@tkos.co.il> wrote:
-
-> Hi Justin,
->
-> On Tue, Apr 05, 2016 at 08:47:16PM -0600, Justin Berger wrote:
-> >
-> +################################################################################
-> > +#
-> > +# ilixi
-> > +#
-> >
-> +################################################################################
-> > +
-> > +ILIXI_VERSION = 1.0.0
-> > +ILIXI_SITE = http://ilixi.org/releases
-> > +ILIXI_LICENSE = LGPLv3+, GPLV3+ (osk utf8-decoder)
-> > +ILIXI_LICENSE_FILES = COPYING.LESSER COPYING
-> > +ILIXI_INSTALL_STAGING = YES
-> > +
-> > +ILIXI_DEPENDENCIES =         \
-> > +     libsigc         \
-> > +     libxml2         \
-> > +     directfb        \
-> > +     fontconfig      \
-> > +
-> > +ifeq ($(BR2_PACKAGE_SAWMAN),y)
-> > +     ILIXI_CONF_OPTS += --enable-sawman
-> > +     ILIXI_DEPENDENCIES += sawman
-> > +else
-> > +     ILIXI_CONF_OPTS += --disable-sawman
-> > +endif
-> > +
-> > +ILIXI_CONF_ENV = CPPFLAGS="$(TARGET_CPPFLAGS) -std=c++11"
->
-> Should be CXXFLAGS and TARGET_CXXFLAGS.
->
-> baruch
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open
-> Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160407/7ea62e98/attachment.html>
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 8f6ab75..a87f53d 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -79,6 +79,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
++	bool "Gallium vc4 driver"
++	depends on BR2_arm
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_LIBDRM_VC4
++	select BR2_PACKAGE_MESA3D_NEEDS_XA
++	help
++	  Driver for Broadcom VC4 (rpi2/3) GPUs.
++	  It requires a vanilla 4.5+ kernel with drm vc4 (open) support.
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
+ 	bool "Gallium virgl driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 292935e..b5677f9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -65,6 +65,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # DRI Drivers
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
+-- 
+2.7.3
