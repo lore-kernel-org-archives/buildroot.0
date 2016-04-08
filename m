@@ -1,66 +1,59 @@
-From: =?UTF-8?B?QmVub8OudA==?= Allard <benoit.allard@greenbone.net>
-Date: Fri, 8 Apr 2016 09:49:54 +0200
-Subject: [Buildroot] [PATCH 1/1] syslinux: Allow to build multiple
- flavors simultaneously
-In-Reply-To: <CAFt09wNZv_6WJKDJKWmBDMrYPTE8an+QgppPc-FwTgvZzA+JzA@mail.gmail.com>
-References: <1458202156-25097-1-git-send-email-benoit.allard@greenbone.net>
- <CAFt09wOfQmzxS9Y=hP+BtsVH-3C6J6Nnj05z5ujV892WCcaYeQ@mail.gmail.com>
- <CAFt09wNZv_6WJKDJKWmBDMrYPTE8an+QgppPc-FwTgvZzA+JzA@mail.gmail.com>
-Message-ID: <20160408094954.5a397b2b@armant.core.local.os.greenbone.net>
+From: Pieter Smith <pieter@boesman.nl>
+Date: Fri, 8 Apr 2016 09:51:15 +0200
+Subject: [Buildroot] [PATCH v4 3/7] barebox: support custom barebox
+	output image name
+In-Reply-To: <57059689.8070200@mind.be>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <1458513351-6556-4-git-send-email-pieter@boesman.nl>
+ <5702F6AD.1030402@mind.be> <20160406201410.GA5332@smipidev>
+ <57059689.8070200@mind.be>
+Message-ID: <20160408075115.GA20544@smipidev>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All, 
-
-On Sat, 2 Apr 2016 08:05:21 -0500
-Matthew Weber <matt@thewebers.ws> wrote:
-
-> Benoit,
-> 
-> On Fri, Apr 1, 2016 at 11:59 PM, Matthew Weber <matt@thewebers.ws>
-> wrote:
-> > Benoit,
+On Thu, Apr 07, 2016 at 01:06:49AM +0200, Arnout Vandecappelle wrote:
+> On 04/06/16 22:14, Pieter Smith wrote:
+> >Hi Arnout / Thomas,
 > >
-> > On Thu, Mar 17, 2016 at 3:09 AM, Beno?t Allard
-> > <benoit.allard@greenbone.net> wrote:
-> >> This becomes handy when building hybrid images that needs to be
-> >> able to boot in MBR and GPT mode.
+> >On Tue, Apr 05, 2016 at 01:20:13AM +0200, Arnout Vandecappelle wrote:
+> [snip]
+> >>  However, on second thought I'm wondering if it is really needed. For u-boot
+> >>or the kernel, we always copy the images with the same name as they were
+> >>built. If that is not what the ROM boot loader expects, the name can be
+> >>changed in the image generation script. For example, genimage.cfg could
+> >>contain:
 > >>
-> >> Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+> >>image boot.vfat {
+> >>         vfat {
+> >>                 file MLO {
+> >>			"barebox-am33xx-beaglebone-mlo.img"
+> >>		}
+> >>		file barebox.img {
+> >>			"barebox-am33xx-beaglebone.img"
+> >>                 }
+> >>         }
+> >>         size = 8M
+> >>}
+> >>
+> >>
+> >>  What do you think?
 > >
-> > I built a qemu x86 target and verified that after selecting both iso
-> > and mbr they were installed.  This update will come in handy on at
-> > least one of my projects where we build two types of media sets from
-> > the output and need iso/mbr options without creating separate builds
-> > or a post image script that extracts the other bin file from the
-> > build/syslinux folder.
-> >
-> > Tested-by Matt Weber <matt@thewebers.ws>
-> > Reviewed-by Matt Weber <matt@thewebers.ws>
-> >
-> > --
-> > Thanks,
-> > Matt
+> >I agree that this is cleaner from a buildroot perspective. But this would
+> >require carrying a genimage.cfg patch for barebox as part of
+> >beaglebone_barebox_defconfig. Is this what you are suggesting?
 > 
-> Doesn't look like patchworks is tracking this revision of the patch.
-> Maybe send as a version 2?
-> (end of section 21.5.4)
-> https://buildroot.org/downloads/manual/manual.html#submitting-patches
-> 
+>  I don't really understand what you mean. As I suggested in that patch, it
+> would be nice to add a genimage config as well. When you do that, you can
+> use a fragment like above to make sure the files will have the correct name
+> in the filesystem. (Like above, except I screwed up the indentation :-)
 
-At this point, I'm not sure what action is needed from me to make
-progress on that. Are we just all set, and waiting for more review /
-integration, or is some kind of patchwork-magic expected from me there ?
+The vfat file attribute also expects an "image=" key, not just the image name.
 
-Regards,
-Ben
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 473 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160408/52d65452/attachment.asc>
+Thanks! This will be in v5 of the patch-set.
+
+[snip]
+
+- Pieter Smith
