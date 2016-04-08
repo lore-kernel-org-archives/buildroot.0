@@ -1,45 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  8 Apr 2016 01:09:37 +0300
-Subject: [Buildroot] [PATCH] libsrtp: security bump to version 1.5.4
-Message-ID: <e7defdf081d86eb2f052a4fc77fc329c813a0a75.1460066977.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 8 Apr 2016 04:31:43 +0200
+Subject: [Buildroot] migrating manual makefile to autotools-based
+ packages
+In-Reply-To: <loom.20160406T191601-706@post.gmane.org>
+References: <loom.20160406T145801-819@post.gmane.org>
+ <loom.20160406T191601-706@post.gmane.org>
+Message-ID: <20160408043143.3da6fc7e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2015-6360: Prevent potential DoS attack due to lack of bounds
-checking on RTP header CSRC count and extension header length.
+Hello,
 
-Also, add a hash file.
+On Wed, 6 Apr 2016 17:18:05 +0000 (UTC), aurelien coulaud wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libsrtp/libsrtp.hash | 2 ++
- package/libsrtp/libsrtp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 package/libsrtp/libsrtp.hash
+> hello I found the solution into this slides (page 272):
+> http://free-electrons.com/doc/training/buildroot/buildroot-slides.pdf
+> 
+> "Note: as of Buildroot 2015.05,
+> TARGETS
+> has been renamed to
+> PACKAGES"
+> 
+> So now my old Package with manual makefile compiles.
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-new file mode 100644
-index 000000000000..cb060d27b9a1
---- /dev/null
-+++ b/package/libsrtp/libsrtp.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 56a7b521c25134f48faff26b0b1e3d4378a14986a2d3d7bc6fefb48987304ff0 libsrtp-v1.5.4.tar.gz
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index bcf344fa55bf..40b85e69f3cf 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSRTP_VERSION = v1.5.2
-+LIBSRTP_VERSION = v1.5.4
- LIBSRTP_SITE = $(call github,cisco,libsrtp,$(LIBSRTP_VERSION))
- LIBSRTP_INSTALL_STAGING = YES
- LIBSRTP_LICENSE = BSD-3c
+Using hand-written Makefiles is bad, as you lose many features of the
+package infrastructure: legal-info, source, source-check, etc. Please
+don't use hand-written Makefiles, use one of the available package
+infrastructures. Doing the conversion is generally very easy. If you
+don't know how to do it, please post your current .mk file and we'll
+give you some hints.
+
+Best regards,
+
+Thomas
 -- 
-2.8.0.rc3
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
