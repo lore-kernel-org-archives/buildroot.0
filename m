@@ -1,38 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Apr 2016 22:11:32 +0200
-Subject: [Buildroot] [git commit] weston: check for both EGL and GLES
-Message-ID: <20160408201246.F096E81E01@busybox.osuosl.org>
+Date: Fri, 8 Apr 2016 22:12:24 +0200
+Subject: [Buildroot] [git commit] weston: don't forcibly disable simple EGL
+	clients
+Message-ID: <20160408201247.06EF881D87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e14605ba859532d65bc598f9c66561528c6fd84
+commit: https://git.buildroot.net/buildroot/commit/?id=8adc5224089ebb34bd83f3a43347835931fee77f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The conditional is wrong, it was check for BR2_PACKAGE_MESA3D_OPENGL_ES
-(correct, means GLESv2 support) and BR2_PACKAGE_MESA3D_OPENGL_GLES
-(incorrect, there's no such symbol).
-So now check for BR2_PACKAGE_MESA3D_OPENGL_EGL (EGL support) plus
-BR2_PACKAGE_MESA3D_OPENGL_ES (GLESv2 support), both are required.
+Only do so when there's no EGL.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/weston/weston.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/weston/weston.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 7aa2130..e3088ff 100644
+index e3088ff..1f31097 100644
 --- a/package/weston/weston.mk
 +++ b/package/weston/weston.mk
-@@ -49,7 +49,7 @@ WESTON_CONF_OPTS += --disable-weston-launch
- endif
+@@ -16,7 +16,6 @@ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
  
- # Needs wayland-egl, which normally only mesa provides
--ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES)$(BR2_PACKAGE_MESA3D_OPENGL_GLES),yy)
-+ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)$(BR2_PACKAGE_MESA3D_OPENGL_ES),yy)
+ WESTON_CONF_OPTS = \
+ 	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
+-	--disable-simple-egl-clients \
+ 	--disable-xwayland \
+ 	--disable-x11-compositor \
+ 	--disable-wayland-compositor \
+@@ -53,7 +52,9 @@ ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)$(BR2_PACKAGE_MESA3D_OPENGL_ES),yy)
  WESTON_CONF_OPTS += --enable-egl
  WESTON_DEPENDENCIES += libegl
  else
+-WESTON_CONF_OPTS += --disable-egl
++WESTON_CONF_OPTS += \
++	--disable-egl \
++	--disable-simple-egl-clients
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
