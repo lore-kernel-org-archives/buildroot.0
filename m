@@ -1,51 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Apr 2016 22:09:49 +0200
-Subject: [Buildroot] [git commit] xorriso: Unify help description
-Message-ID: <20160408201246.E6BD67FD6A@busybox.osuosl.org>
+Date: Fri, 8 Apr 2016 22:11:32 +0200
+Subject: [Buildroot] [git commit] weston: check for both EGL and GLES
+Message-ID: <20160408201246.F096E81E01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45db3f4294f6bc2faf8f009300a84b105c29e59f
+commit: https://git.buildroot.net/buildroot/commit/?id=1e14605ba859532d65bc598f9c66561528c6fd84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Beno??t Allard <benoit.allard@greenbone.net>
+The conditional is wrong, it was check for BR2_PACKAGE_MESA3D_OPENGL_ES
+(correct, means GLESv2 support) and BR2_PACKAGE_MESA3D_OPENGL_GLES
+(incorrect, there's no such symbol).
+So now check for BR2_PACKAGE_MESA3D_OPENGL_EGL (EGL support) plus
+BR2_PACKAGE_MESA3D_OPENGL_ES (GLESv2 support), both are required.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xorriso/Config.in | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ package/weston/weston.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xorriso/Config.in b/package/xorriso/Config.in
-index 2ac2d83..f9bb10a 100644
---- a/package/xorriso/Config.in
-+++ b/package/xorriso/Config.in
-@@ -5,18 +5,17 @@ config BR2_PACKAGE_XORRISO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	help
--	  xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
-+	  xorriso copies file objects from POSIX compliant
-+	  filesystems into Rock Ridge enhanced ISO 9660 filesystems
-+	  and allows session-wise manipulation of such filesystems.
-+	  It can load the management information of existing ISO
-+	  images and it writes the session results to optical media
-+	  or to filesystem objects.
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 7aa2130..e3088ff 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -49,7 +49,7 @@ WESTON_CONF_OPTS += --disable-weston-launch
+ endif
  
--	  libburnia is a project for reading, mastering and writing
--	  optical discs. Currently it is comprised of libraries named
--	  libisofs, libburn, libisoburn, a cdrecord emulator named
--	  cdrskin, and an integrated multi-session tool named xorriso.
--	  The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
--	  It is base of the GNU xorriso package and is actively
--	  maintained.
-+	  Vice versa xorriso is able to copy file objects out of ISO
-+	  9660 filesystems.
- 
--	  http://libburnia-project.org/
--	  http://www.gnu.org/software/xorriso
-+	  https://www.gnu.org/software/xorriso
- 
- comment "xorriso needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
+ # Needs wayland-egl, which normally only mesa provides
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES)$(BR2_PACKAGE_MESA3D_OPENGL_GLES),yy)
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_EGL)$(BR2_PACKAGE_MESA3D_OPENGL_ES),yy)
+ WESTON_CONF_OPTS += --enable-egl
+ WESTON_DEPENDENCIES += libegl
+ else
