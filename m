@@ -1,88 +1,49 @@
-From: aurelien coulaud <aurelien.coulaud@thalesgroup.com>
-Date: Fri, 8 Apr 2016 08:49:27 +0000 (UTC)
-Subject: [Buildroot] migrating manual makefile to autotools-based
-	packages
-References: <loom.20160406T145801-819@post.gmane.org>
- <loom.20160406T191601-706@post.gmane.org>
- <20160408043143.3da6fc7e@free-electrons.com>
-Message-ID: <loom.20160408T102819-442@post.gmane.org>
+From: =?UTF-8?q?Beno=C3=AEt=20Allard?= <benoit.allard@greenbone.net>
+Date: Fri,  8 Apr 2016 10:58:49 +0200
+Subject: [Buildroot] [PATCH 1/1] xorriso: Unify help description
+Message-ID: <1460105929-10723-1-git-send-email-benoit.allard@greenbone.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> 
-> Using hand-written Makefiles is bad, as you lose many features of the
-> package infrastructure: legal-info, source, source-check, etc. Please
-> don't use hand-written Makefiles, use one of the available package
-> infrastructures. Doing the conversion is generally very easy. If you
-> don't know how to do it, please post your current .mk file and we'll
-> give you some hints.
-> 
-> Best regards,
-> 
-> Thomas
+Signed-off-by: Beno?t Allard <benoit.allard@greenbone.net>
+---
+ package/xorriso/Config.in | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-Hello Thomas, thank in advance.
-
-Here is my file: codebase.mk
-
-#############################################################
-#
-# codebase
-#
-#############################################################
-
-CODEBASE_SOURCE=codebase__20061027.tgz
-CODEBASE_DIR:=$(BUILD_DIR)/codebase
-
-
-$(CODEBASE_DIR)/.source: $(DL_DIR)/$(CODEBASE_SOURCE)
-	$(ZCAT) $(DL_DIR)/$(CODEBASE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
-	toolchain/patch-kernel.sh $(CODEBASE_DIR) package/codebase/ patch*
-	touch $(CODEBASE_DIR)/.source
-
-$(CODEBASE_DIR)/.configured: $(CODEBASE_DIR)/.source
-	(cd $(CODEBASE_DIR); \
-	export PATH="/usr/local/bin:$(PATH)" ; \
-	./bootstrap ; \
-        $(TARGET_CONFIGURE_OPTS) \
-	CPPFLAGS=-DS4NO_FCVT \
-        CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
-        LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
-	./configure \
-	--target=$(GNU_TARGET_NAME) \
-	--host=$(GNU_TARGET_NAME) \
-	--build=$(GNU_HOST_NAME) \
-	--prefix=/usr );
-	touch $(CODEBASE_DIR)/.configured
-	
-$(CODEBASE_DIR)/.compiled: $(CODEBASE_DIR)/.configured
-	        $(MAKE) -C $(CODEBASE_DIR)
-	        touch $(CODEBASE_DIR)/.compiled
-
-$(STAGING_DIR)/usr/lib/libcb.so: $(CODEBASE_DIR)/.compiled
-	$(MAKE) -C $(CODEBASE_DIR) install prefix=$(STAGING_DIR)/usr
-exec_prefix=$(STAGING_DIR)/usr
-	touch -c $(STAGING_DIR)/usr/lib/libcb.so
-
-$(TARGET_DIR)/usr/lib/libcb.so: $(STAGING_DIR)/usr/lib/libcb.so
-	cp -dpf $(STAGING_DIR)/usr/lib/libcb* $(STAGING_DIR)/usr/lib/libcbx*
-$(TARGET_DIR)/usr/lib/
-	-$(STRIP) --strip-unneeded \
-		$(TARGET_DIR)/usr/lib/libcb.so \
-		$(TARGET_DIR)/usr/lib/libcbx.so \
-	
-
-codebase: $(TARGET_DIR)/usr/lib/libcb.so
-
-
-#############################################################
-#
-# Toplevel Makefile options
-#
-#############################################################
-ifeq ($(strip $(BR2_PACKAGE_CODEBASE)),y)
-TARGETS+=codebase
-endif
+diff --git a/package/xorriso/Config.in b/package/xorriso/Config.in
+index 2ac2d83..f9bb10a 100644
+--- a/package/xorriso/Config.in
++++ b/package/xorriso/Config.in
+@@ -5,18 +5,17 @@ config BR2_PACKAGE_XORRISO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
++	  xorriso copies file objects from POSIX compliant
++	  filesystems into Rock Ridge enhanced ISO 9660 filesystems
++	  and allows session-wise manipulation of such filesystems.
++	  It can load the management information of existing ISO
++	  images and it writes the session results to optical media
++	  or to filesystem objects.
+ 
+-	  libburnia is a project for reading, mastering and writing
+-	  optical discs. Currently it is comprised of libraries named
+-	  libisofs, libburn, libisoburn, a cdrecord emulator named
+-	  cdrskin, and an integrated multi-session tool named xorriso.
+-	  The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
+-	  It is base of the GNU xorriso package and is actively
+-	  maintained.
++	  Vice versa xorriso is able to copy file objects out of ISO
++	  9660 filesystems.
+ 
+-	  http://libburnia-project.org/
+-	  http://www.gnu.org/software/xorriso
++	  https://www.gnu.org/software/xorriso
+ 
+ comment "xorriso needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
+-- 
+2.1.4
