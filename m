@@ -1,40 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  8 Apr 2016 14:18:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: bump version to 4.87
-Message-ID: <1460117903-28107-1-git-send-email-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Apr 2016 14:28:59 +0200
+Subject: [Buildroot] [PATCH v3 06/10] package/Makefile.in: adjust
+	LDFLAGS for elf2flt
+In-Reply-To: <1459450815-6494-7-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Thu, 31 Mar 2016 21:00:11 +0200")
+References: <1459450815-6494-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ <1459450815-6494-7-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <87egagp9mc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 8f4338b..83be731 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	7756deafd0583776e091f2efcba9b36203e668cf420d8876f314980803636eb3	exim-4.86.2.tar.bz2
-+# Locally calculated
-+sha256	74691e0dff4d1b5d387e9c33c86f96a8f6d2adbc781c0dec9d2061a847b07dc9	exim-4.87.tar.bz2
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 73044c2..c967fef 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.86.2
-+EXIM_VERSION = 4.87
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+ > So far, our LDFLAGS for the BR2_BINFMT_FLAT case were only used on
+ > Blackfin. However, passing -elf2flt in LDFLAGS is wrong. Indeed,
+ > LDFLAGS are not linker flags, but flags passed to the compiler when
+ > linking.
+
+ > If you pass -elf2flt to the compiler when linking, it is understood as
+ > "-e lf2flt", i.e "the entry point is named lf2flt", which isn't
+ > exactly the intention. We in fact need to pass -Wl,-elf2flt in LDFLAGS
+ > as well, so that the compiler passes -elf2flt down to the linker.
+
+ > For some reason, this option does not cause an issue with the Blackfin
+ > toolchain, but it does with either a Buildroot toolchain for Cortex-M
+ > or an OSELAS toolchain for Cortex-M. We have verified that passing
+ > -Wl,-elf2flt continues to work with the Blackfin toolchain.
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+Committed, thanks.
+
 -- 
-2.8.0.rc3
+Bye, Peter Korsgaard
