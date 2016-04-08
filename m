@@ -1,42 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Apr 2016 22:09:03 +0200
-Subject: [Buildroot] [git commit] package/exim: bump version to 4.87
-Message-ID: <20160408201246.DD0BB7FD6A@busybox.osuosl.org>
+Date: Fri, 8 Apr 2016 22:09:49 +0200
+Subject: [Buildroot] [git commit] xorriso: Unify help description
+Message-ID: <20160408201246.E6BD67FD6A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb5e6738ef4c396b21fa43299fb8d94ef4a42f3f
+commit: https://git.buildroot.net/buildroot/commit/?id=45db3f4294f6bc2faf8f009300a84b105c29e59f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Beno??t Allard <benoit.allard@greenbone.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xorriso/Config.in | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 8f4338b..83be731 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,2 @@
--# Locally calculated after checking pgp signature
--sha256	7756deafd0583776e091f2efcba9b36203e668cf420d8876f314980803636eb3	exim-4.86.2.tar.bz2
-+# Locally calculated
-+sha256	74691e0dff4d1b5d387e9c33c86f96a8f6d2adbc781c0dec9d2061a847b07dc9	exim-4.87.tar.bz2
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 6a6bb7c..2cc706c 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/xorriso/Config.in b/package/xorriso/Config.in
+index 2ac2d83..f9bb10a 100644
+--- a/package/xorriso/Config.in
++++ b/package/xorriso/Config.in
+@@ -5,18 +5,17 @@ config BR2_PACKAGE_XORRISO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+-	  xorriso cd/dvd/bd iso 9660 manipulation and disc burner.
++	  xorriso copies file objects from POSIX compliant
++	  filesystems into Rock Ridge enhanced ISO 9660 filesystems
++	  and allows session-wise manipulation of such filesystems.
++	  It can load the management information of existing ISO
++	  images and it writes the session results to optical media
++	  or to filesystem objects.
  
--EXIM_VERSION = 4.86.2
-+EXIM_VERSION = 4.87
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.bz2
- EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPLv2+
+-	  libburnia is a project for reading, mastering and writing
+-	  optical discs. Currently it is comprised of libraries named
+-	  libisofs, libburn, libisoburn, a cdrecord emulator named
+-	  cdrskin, and an integrated multi-session tool named xorriso.
+-	  The software runs on GNU/Linux, FreeBSD, Solaris, NetBSD.
+-	  It is base of the GNU xorriso package and is actively
+-	  maintained.
++	  Vice versa xorriso is able to copy file objects out of ISO
++	  9660 filesystems.
+ 
+-	  http://libburnia-project.org/
+-	  http://www.gnu.org/software/xorriso
++	  https://www.gnu.org/software/xorriso
+ 
+ comment "xorriso needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
