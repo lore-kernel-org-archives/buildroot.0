@@ -1,10 +1,10 @@
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Fri, 8 Apr 2016 16:39:14 +0200
-Subject: [Buildroot] [PATCH 1/5] configs: atmel: add sd card development
-	image for sama5d2 xplained
+Date: Fri, 8 Apr 2016 16:39:15 +0200
+Subject: [Buildroot] [PATCH 2/5] configs: atmel: add sd card development
+	image for sama5d4 xplained
 In-Reply-To: <1460126358-7917-1-git-send-email-ludovic.desroches@atmel.com>
 References: <1460126358-7917-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1460126358-7917-2-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <1460126358-7917-3-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,15 +17,15 @@ atmel-xplained-demo-image.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 103 +++++++++++++++++++++++
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 103 +++++++++++++++++++++++
  1 file changed, 103 insertions(+)
- create mode 100644 configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+ create mode 100644 configs/atmel_sama5d4_xplained_mmc_dev_defconfig
 
-diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
 new file mode 100644
-index 0000000..e001b27
+index 0000000..dff61c1
 --- /dev/null
-+++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
 @@ -0,0 +1,103 @@
 +# Architecture
 +BR2_arm=y
@@ -47,7 +47,7 @@ index 0000000..e001b27
 +# Needed for usb-utils
 +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
 +# Creation of the SD card image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d2_xplained_mmc/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
 +
 +# Kernel
 +BR2_LINUX_KERNEL=y
@@ -55,7 +55,7 @@ index 0000000..e001b27
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/linux4sam/linux-at91/archive/linux4sam_5.2.tar.gz"
 +BR2_LINUX_KERNEL_DEFCONFIG="sama5"
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained at91-sama5d2_xplained_pda4 at91-sama5d2_xplained_pda7 at91-sama5d2_xplained_pda7b"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
 +
 +# Packages
 +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
@@ -118,12 +118,12 @@ index 0000000..e001b27
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
 +BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
 +BR2_TARGET_UBOOT=y
 +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/linux4sam/u-boot-at91/archive/linux4sam_5.2.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
 +
 +# Host packages
 +# Needed to generate the SD card image
