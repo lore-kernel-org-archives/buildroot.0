@@ -1,36 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Apr 2016 10:24:08 +0200
-Subject: [Buildroot] [PATCH v3 02/10] uclibc: context functions are not
-	Thumb-compatible
-In-Reply-To: <1459450815-6494-3-git-send-email-thomas.petazzoni@free-electrons.com>
- (Thomas Petazzoni's message of "Thu, 31 Mar 2016 21:00:07 +0200")
-References: <1459450815-6494-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1459450815-6494-3-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <87vb3spkyf.fsf@dell.be.48ers.dk>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri,  8 Apr 2016 10:24:42 +0200
+Subject: [Buildroot] [PATCH v3] package/turbolua: new package
+Message-ID: <1460103883-7608-1-git-send-email-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hi,
 
- > On platforms that do support the ARM instruction set, there is no
- > problem, as the context functions are built unconditionally in ARM
- > mode.
+This is the third attempt for adding turbolua. Changes include mostly
+Thomas and Arnout suggestions.
 
- > However, on platforms that only support the Thumb instruction set, the
- > context functions cannot be built since the assembler code is not
- > Thumb-ready. Therefore, these functions must be disabled on such
- > platforms. All Thumb1 platforms support ARM instructions, so this is
- > only relevant for Thumb2-only platforms (i.e., Cortex-M).
+Changes v2 -> v3:
+ * Do not use SSL variable, set TURBOLUA_MAKE_OPTS instead
+ * Remove dependency on !BR2_ARM_INSTRUCTIONS_THUMB2, as it is
+   not clear what is the reason of crashes on Thumb2 target
+ * Bump to upstream HEAD version to correctly pass LDFLAGS
 
- > Note that some packages require the context functions, so these will
- > fail to build on these platforms. It is worth mentioning that musl
- > also doesn't provide the context functions, and those are rarely
- > used. Affected packages will be handled in later patches.
+Changes v1 -> v2:
+ * Use TARGET_CONFIGURE_OPTS instead of CC and LD only
+ * Bump to upstream HEAD version to handle TARGET_CONFIGURE_OPTS
+   correctly
+ * Add comment for dependency on disabled Thumb2
+ * Reduce help block column size in Config.in
+ * Add URL of the project homepage
+ * Disable SSL support when OpenSSL is not selected
 
-Reworded the commit message slightly and committed, thanks.
+Marcin Niestroj (1):
+  package/turbolua: new package
+
+ package/Config.in              |  1 +
+ package/turbolua/Config.in     | 15 +++++++++++++++
+ package/turbolua/turbolua.hash |  2 ++
+ package/turbolua/turbolua.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100644 package/turbolua/Config.in
+ create mode 100644 package/turbolua/turbolua.hash
+ create mode 100644 package/turbolua/turbolua.mk
 
 -- 
-Bye, Peter Korsgaard
+2.8.0
