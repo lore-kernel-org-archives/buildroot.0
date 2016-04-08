@@ -1,99 +1,88 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri,  8 Apr 2016 10:24:43 +0200
-Subject: [Buildroot] [PATCH v3] package/turbolua: new package
-In-Reply-To: <1460103883-7608-1-git-send-email-m.niestroj@grinn-global.com>
-References: <1460103883-7608-1-git-send-email-m.niestroj@grinn-global.com>
-Message-ID: <1460103883-7608-2-git-send-email-m.niestroj@grinn-global.com>
+From: aurelien coulaud <aurelien.coulaud@thalesgroup.com>
+Date: Fri, 8 Apr 2016 08:49:27 +0000 (UTC)
+Subject: [Buildroot] migrating manual makefile to autotools-based
+	packages
+References: <loom.20160406T145801-819@post.gmane.org>
+ <loom.20160406T191601-706@post.gmane.org>
+ <20160408043143.3da6fc7e@free-electrons.com>
+Message-ID: <loom.20160408T102819-442@post.gmane.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/Config.in              |  1 +
- package/turbolua/Config.in     | 15 +++++++++++++++
- package/turbolua/turbolua.hash |  2 ++
- package/turbolua/turbolua.mk   | 27 +++++++++++++++++++++++++++
- 4 files changed, 45 insertions(+)
- create mode 100644 package/turbolua/Config.in
- create mode 100644 package/turbolua/turbolua.hash
- create mode 100644 package/turbolua/turbolua.mk
+> 
+> Using hand-written Makefiles is bad, as you lose many features of the
+> package infrastructure: legal-info, source, source-check, etc. Please
+> don't use hand-written Makefiles, use one of the available package
+> infrastructures. Doing the conversion is generally very easy. If you
+> don't know how to do it, please post your current .mk file and we'll
+> give you some hints.
+> 
+> Best regards,
+> 
+> Thomas
 
-diff --git a/package/Config.in b/package/Config.in
-index 64822bf..3d6eaf1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -542,6 +542,7 @@ menu "Lua libraries/modules"
- 	source "package/lzlib/Config.in"
- 	source "package/orbit/Config.in"
- 	source "package/rings/Config.in"
-+	source "package/turbolua/Config.in"
- 	source "package/wsapi/Config.in"
- 	source "package/xavante/Config.in"
- endmenu
-diff --git a/package/turbolua/Config.in b/package/turbolua/Config.in
-new file mode 100644
-index 0000000..8753dbd
---- /dev/null
-+++ b/package/turbolua/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_TURBOLUA
-+	bool "turbolua"
-+	depends on BR2_PACKAGE_LUAJIT
-+	help
-+	  Turbo.lua is a framework built for LuaJIT 2 to simplify the
-+	  task of building fast and scalable network applications. It
-+	  uses a event-driven, non-blocking, no thread design to deliver
-+	  excellent performance and minimal footprint to high-load
-+	  applications while also providing excellent support for
-+	  embedded uses. The toolkit can be used for HTTP REST API?s,
-+	  traditional dynamic web pages through templating, open
-+	  connections like WebSockets, or just as high level building
-+	  blocks for native speed network applications.
-+
-+	  http://www.turbolua.org
-diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
-new file mode 100644
-index 0000000..ea7898c
---- /dev/null
-+++ b/package/turbolua/turbolua.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 4f7e3121fcc25a5867a264a6f09acf641c904668f5822b1533881f40a3b863ea turbolua-91db237a6690f4a659cbdee2ebbbbc9741d8ea4c.tar.gz
-diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
-new file mode 100644
-index 0000000..cf66e70
---- /dev/null
-+++ b/package/turbolua/turbolua.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# turbolua
-+#
-+################################################################################
-+
-+TURBOLUA_VERSION = 91db237a6690f4a659cbdee2ebbbbc9741d8ea4c
-+TURBOLUA_SITE = $(call github,kernelsauce,turbo,$(TURBOLUA_VERSION))
-+TURBOLUA_DEPENDENCIES = luajit
-+TURBOLUA_LICENSE = Apache-2.0
-+TURBOLUA_LICENSE_FILES = LICENSE
-+
-+TURBOLUA_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	SSL=$(if $(BR2_PACKAGE_OPENSSL),openssl,none) \
-+	LUAJIT_VERSION="$(LUAJIT_VERSION)"
-+
-+define TURBOLUA_BUILD_CMDS
-+	$(MAKE) $(TURBOLUA_MAKE_OPTS) -C $(@D) all
-+endef
-+
-+define TURBOLUA_INSTALL_TARGET_CMDS
-+	$(MAKE) $(TURBOLUA_MAKE_OPTS) LDCONFIG=true \
-+		PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.8.0
+Hello Thomas, thank in advance.
+
+Here is my file: codebase.mk
+
+#############################################################
+#
+# codebase
+#
+#############################################################
+
+CODEBASE_SOURCE=codebase__20061027.tgz
+CODEBASE_DIR:=$(BUILD_DIR)/codebase
+
+
+$(CODEBASE_DIR)/.source: $(DL_DIR)/$(CODEBASE_SOURCE)
+	$(ZCAT) $(DL_DIR)/$(CODEBASE_SOURCE) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+	toolchain/patch-kernel.sh $(CODEBASE_DIR) package/codebase/ patch*
+	touch $(CODEBASE_DIR)/.source
+
+$(CODEBASE_DIR)/.configured: $(CODEBASE_DIR)/.source
+	(cd $(CODEBASE_DIR); \
+	export PATH="/usr/local/bin:$(PATH)" ; \
+	./bootstrap ; \
+        $(TARGET_CONFIGURE_OPTS) \
+	CPPFLAGS=-DS4NO_FCVT \
+        CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
+        LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
+	./configure \
+	--target=$(GNU_TARGET_NAME) \
+	--host=$(GNU_TARGET_NAME) \
+	--build=$(GNU_HOST_NAME) \
+	--prefix=/usr );
+	touch $(CODEBASE_DIR)/.configured
+	
+$(CODEBASE_DIR)/.compiled: $(CODEBASE_DIR)/.configured
+	        $(MAKE) -C $(CODEBASE_DIR)
+	        touch $(CODEBASE_DIR)/.compiled
+
+$(STAGING_DIR)/usr/lib/libcb.so: $(CODEBASE_DIR)/.compiled
+	$(MAKE) -C $(CODEBASE_DIR) install prefix=$(STAGING_DIR)/usr
+exec_prefix=$(STAGING_DIR)/usr
+	touch -c $(STAGING_DIR)/usr/lib/libcb.so
+
+$(TARGET_DIR)/usr/lib/libcb.so: $(STAGING_DIR)/usr/lib/libcb.so
+	cp -dpf $(STAGING_DIR)/usr/lib/libcb* $(STAGING_DIR)/usr/lib/libcbx*
+$(TARGET_DIR)/usr/lib/
+	-$(STRIP) --strip-unneeded \
+		$(TARGET_DIR)/usr/lib/libcb.so \
+		$(TARGET_DIR)/usr/lib/libcbx.so \
+	
+
+codebase: $(TARGET_DIR)/usr/lib/libcb.so
+
+
+#############################################################
+#
+# Toplevel Makefile options
+#
+#############################################################
+ifeq ($(strip $(BR2_PACKAGE_CODEBASE)),y)
+TARGETS+=codebase
+endif
