@@ -1,65 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Apr 2016 10:20:37 +0200
-Subject: [Buildroot] [git commit] uclibc: context functions are not
-	Thumb-compatible
-Message-ID: <20160408123252.438FB7FC21@busybox.osuosl.org>
+Date: Fri, 8 Apr 2016 12:08:33 +0200
+Subject: [Buildroot] [git commit] musl: build broken on Thumb, use ARM mode
+Message-ID: <20160408123252.53A6D7FC21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=696db774843ec02c10c756a39e4aee6c29de7f78
+commit: https://git.buildroot.net/buildroot/commit/?id=97fd876f62c3106cbcafa79e5f05b0a8f14c3d9e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The context functions in uClibc unconditionally use the classic ARM
-instruction set.
+Building the musl C library on Thumb (Thumb1, not Thumb2), fails with:
 
-On platforms that do support the ARM instruction set, there is no problem -
-However, on platforms that only support the Thumb instruction set, the
-context functions cannot be built since the assembler code is not
-Thumb-ready. Therefore, these functions must be disabled on such
-platforms. All Thumb1 platforms support ARM instructions, so this is
-only relevant for Thumb2-only platforms (i.e., Cortex-M).
+ {standard input}:20: Error: only lo regs allowed with immediate -- `mov fp,#0'
+ {standard input}:21: Error: only lo regs allowed with immediate -- `mov lr,#0'
+ {standard input}:25: Error: unshifted register required -- `and ip,a1,#-16'
 
-Note that some packages require the context functions, so these will
-fail to build on these platforms. It is worth mentioning that musl
-also doesn't provide the context functions, and those are rarely
-used. Affected packages will be handled in later patches.
+Since there are no cores that we support that are Thumb1 only, use the
+same solution as the one used by glibc: build the C library in ARM
+mode.
 
-[Peter: slightly reworded]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/uclibc.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ package/musl/musl.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index e3e45f7..1ccdfbb 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -88,6 +88,16 @@ define UCLIBC_ARM_BINFMT_FLAT
- endef
- endif
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 081a700..733f940 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -23,6 +23,12 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
  
-+# context functions are written with ARM instructions. Therefore, if
-+# we are using a Thumb2-only platform (i.e, Cortex-M), they must be
-+# disabled. Thumb1 platforms are not a problem, since they all also
-+# support the ARM instructions.
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB2):$(BR2_ARM_CPU_HAS_ARM),y:)
-+define UCLIBC_ARM_NO_CONTEXT_FUNCS
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_CONTEXT_FUNCS,$(@D)/.config)
-+endef
+ MUSL_INSTALL_STAGING = YES
+ 
++# Thumb build is broken, build in ARM mode, since all architectures
++# that support Thumb1 also support ARM.
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++MUSL_EXTRA_CFLAGS += -marm
 +endif
 +
- endif # arm
- 
- #
-@@ -361,6 +371,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_ARC_PAGE_SIZE_CONFIG)
- 	$(UCLIBC_ARM_ABI_CONFIG)
- 	$(UCLIBC_ARM_BINFMT_FLAT)
-+	$(UCLIBC_ARM_NO_CONTEXT_FUNCS)
- 	$(UCLIBC_MIPS_ABI_CONFIG)
- 	$(UCLIBC_MIPS_ISA_CONFIG)
- 	$(UCLIBC_SH_TYPE_CONFIG)
+ define MUSL_CONFIGURE_CMDS
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) \
