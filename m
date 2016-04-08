@@ -1,35 +1,34 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri,  8 Apr 2016 09:35:00 -0300
-Subject: [Buildroot] [PATCH] mesa3d: needs host-bison and host-flex
-Message-ID: <1460118900-22206-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri,  8 Apr 2016 10:35:20 -0300
+Subject: [Buildroot] [PATCH 1/2] weston: fix typo in EGL/GLES support
+	conditional
+Message-ID: <1460122521-19079-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes (host-bison):
-http://autobuild.buildroot.net/results/e91/e919dbe6660a6c8c087969a6646e97dd058ce2c7/
-Fixes (host-flex):
-http://autobuild.buildroot.net/results/66d/66d45e34a38f15e391500ea7f7036606bbaf2655/
+It's BR2_PACKAGE_MESA3D_OPENGL_ES and not
+BR2_PACKAGE_MESA3D_OPENGL_GLES, ouch.
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/mesa3d/mesa3d.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/weston/weston.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b5677f9..27a670e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -17,6 +17,8 @@ MESA3D_INSTALL_STAGING = YES
- MESA3D_PROVIDES =
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 7aa2130..a0e2358 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -49,7 +49,7 @@ WESTON_CONF_OPTS += --disable-weston-launch
+ endif
  
- MESA3D_DEPENDENCIES = \
-+	host-bison \
-+	host-flex \
- 	expat \
- 	libdrm
- 
+ # Needs wayland-egl, which normally only mesa provides
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES)$(BR2_PACKAGE_MESA3D_OPENGL_GLES),yy)
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_ES)$(BR2_PACKAGE_MESA3D_OPENGL_ES),yy)
+ WESTON_CONF_OPTS += --enable-egl
+ WESTON_DEPENDENCIES += libegl
+ else
 -- 
 2.7.3
