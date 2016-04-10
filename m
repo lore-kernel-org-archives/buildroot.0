@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 11:41:11 +0200
-Subject: [Buildroot] [PATCH v12 03/31] package/freeswitch: add optional
-	dependency to libuuid
+Date: Sun, 10 Apr 2016 11:41:14 +0200
+Subject: [Buildroot] [PATCH v12 06/31] package/freeswitch: add optional
+	dependency to libpng
 In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460281299-2385-4-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-7-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/Config.in     | 4 ++++
- package/freeswitch/freeswitch.mk | 4 ++++
- 2 files changed, 8 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index e8281cb..c521647 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -10,6 +10,10 @@ config BR2_PACKAGE_FREESWITCH
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_SPEEX
- 	select BR2_PACKAGE_SQLITE
-+	# "libuuid development package highly recommended!"
-+	# https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/build/config/uuid.m4#9
-+	select BR2_PACKAGE_UTIL_LINUX if BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID if BR2_USE_WCHAR
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  FreeSWITCH is a scalable open source cross-platform telephony
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index f1903c1..786ef39 100644
+index 457e69a..582a9f2 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -147,4 +147,8 @@ endef
+@@ -158,6 +158,11 @@ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+FREESWITCH_DEPENDENCIES += util-linux
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++FREESWITCH_DEPENDENCIES += libpng
++FREESWITCH_ENABLED_MODULES += formats/mod_png
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ FREESWITCH_DEPENDENCIES += util-linux
+ endif
 -- 
 2.8.0.rc3
