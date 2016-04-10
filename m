@@ -1,108 +1,102 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 19:14:59 +0200
-Subject: [Buildroot] [PATCH 3/6] package/x11r7/xdriver_xf86-video-amdgpu:
-	new package
-In-Reply-To: <1460308502-14157-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1460308502-14157-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460308502-14157-3-git-send-email-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 10 Apr 2016 20:39:43 +0200
+Subject: [Buildroot] [PATCH v2] yajl: fix static linking in a parallel
+ build
+In-Reply-To: <1460240125-2981-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1460240125-2981-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <570A9DEF.4030707@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/Config.in                            |  1 +
- package/x11r7/xdriver_xf86-video-amdgpu/Config.in  | 22 +++++++++++++++++
- .../xdriver_xf86-video-amdgpu.hash                 |  2 ++
- .../xdriver_xf86-video-amdgpu.mk                   | 28 ++++++++++++++++++++++
- 4 files changed, 53 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-amdgpu/Config.in
- create mode 100644 package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
- create mode 100644 package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
+On 04/10/16 00:15, J?rg Krause wrote:
+> The yajl build system contains a race condition, which gets triggered by
+> high BR2_JLEVEL settings - It tries to link the executable gen-extra-close
+> against the shared libyajl before it is created:
+>
+> [ 21%] Linking C executable gen-extra-close
+> [ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
+> /home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
+>
+> Fix this issue by linking gen-extra-close against the shared library in a shared
+> build and the static library otherwise.
+> Apply this to all other build targets from yail who are linking against the
+                                              ^^^^yajl
+> library, too.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/a9b/a9b5209377acb51e69f376e0c008ee71fe00397a/
+> http://autobuild.buildroot.net/results/55f/55fe22463d49addb42b635d10be5176522f4a561/
+> http://autobuild.buildroot.net/results/808/808acca0cfed93465845c2aa055a7a4fc56a8a17/
+> http://autobuild.buildroot.net/results/b92/b92a9c84b71a8a2d022d307245ca6be36a000e6c/
+> http://autobuild.buildroot.net/results/55d/55df698ab53f7d94235166e8576eb681ed68668e/
+> .. and more.
+>
+> Upstream status: Pending
+> https://github.com/lloyd/yajl/pull/187
+>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index fb6195d..40aa80c 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -154,6 +154,7 @@ if BR2_PACKAGE_XORG7
- 		source package/x11r7/xdriver_xf86-input-synaptics/Config.in
- 		source package/x11r7/xdriver_xf86-input-tslib/Config.in
- 		source package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-+		source package/x11r7/xdriver_xf86-video-amdgpu/Config.in
- 		source package/x11r7/xdriver_xf86-video-ark/Config.in
- 		source package/x11r7/xdriver_xf86-video-ast/Config.in
- 		source package/x11r7/xdriver_xf86-video-ati/Config.in
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-new file mode 100644
-index 0000000..968c5e7
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
-+	bool "xf86-video-amdgpu"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # gbm
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBDRM_AMDGPU
-+	select BR2_PACKAGE_LIBEPOXY
-+	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
-+	select BR2_PACKAGE_XPROTO_DRI3PROTO
-+	select BR2_PACKAGE_XPROTO_FONTSPROTO
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+	select BR2_PACKAGE_XPROTO_RANDRPROTO
-+	select BR2_PACKAGE_XPROTO_VIDEOPROTO
-+	select BR2_PACKAGE_XPROTO_XEXTPROTO
-+	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XPROTO_XPROTO
-+	help
-+	  AMD GPU video driver
-+
-+comment "xf86-video-amdgpu needs egl/opengl support from mesa3d"
-+	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
-+		!BR2_PACKAGE_MESA3D_DRI_DRIVER
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-new file mode 100644
-index 0000000..6754fb5
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.hash
-@@ -0,0 +1,2 @@
-+# From https://lists.x.org/archives/xorg-announce/2016-April/002686.html
-+sha256	69f5d0ded9f4d5ce529099b6b581268e8f4dcff5608f1441d4ebc110ebc57931	xf86-video-amdgpu-1.1.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-new file mode 100644
-index 0000000..45177b2
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# xdriver_xf86-video-amdgpu
-+#
-+################################################################################
-+
-+XDRIVER_XF86_VIDEO_AMDGPU_VERSION = 1.1.0
-+XDRIVER_XF86_VIDEO_AMDGPU_SOURCE = xf86-video-amdgpu-$(XDRIVER_XF86_VIDEO_AMDGPU_VERSION).tar.bz2
-+XDRIVER_XF86_VIDEO_AMDGPU_SITE = http://xorg.freedesktop.org/releases/individual/driver
-+XDRIVER_XF86_VIDEO_AMDGPU_LICENSE = MIT
-+XDRIVER_XF86_VIDEO_AMDGPU_LICENSE_FILES = COPYING
-+XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
-+	libdrm \
-+	xlib_libXcomposite \
-+	xproto_dri3proto \
-+	xproto_fontsproto \
-+	xproto_glproto \
-+	xproto_randrproto \
-+	xproto_videoproto \
-+	xproto_xextproto \
-+	xproto_xf86driproto \
-+	xproto_xproto \
-+	xserver_xorg-server
-+
-+# xdriver_xf86-video-amdgpu requires O_CLOEXEC
-+XDRIVER_XF86_VIDEO_AMDGPU_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+
-+$(eval $(autotools-package))
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+  Regards,
+  Arnout
+
+> ---
+> Changes v1 -> v2:
+>   - conditionally link gen-extra-close against the shared libyajl in a shared
+>     build and against the static libyajl otherwise (Samuel Martin)
+>   - apply this to all other build targets linking against yajl
+>
+> ---
+>   ...ink-with-shared-libyajl-in-a-shared-build.patch | 125 +++++++++++++++++++++
+>   1 file changed, 125 insertions(+)
+>   create mode 100644 package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
+>
+> diff --git a/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch b/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
+> new file mode 100644
+> index 0000000..6a6e5e3
+> --- /dev/null
+> +++ b/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
+> @@ -0,0 +1,125 @@
+> +From 3e4c0ce8c2b4c9dad6b7ce11f017f3f639fdab27 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+> +Date: Sat, 9 Apr 2016 23:24:27 +0200
+> +Subject: [PATCH] Link with shared libyajl in a shared build
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Building yajl in a static context fails in a parallel build:
+> +
+> +[ 21%] Linking C executable gen-extra-close
+> +[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
+> +/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
+> +
+> +Fix this issue by linking against the shared libyail in a shared build. Apply
+> +this fix also to all other build targets who are linking against the library.
+> +
+> +Upstream status: Pending
+> +https://github.com/lloyd/yajl/pull/187
+> +
+> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +---
+> + example/CMakeLists.txt      | 7 ++++++-
+> + perf/CMakeLists.txt         | 6 +++++-
+> + reformatter/CMakeLists.txt  | 6 +++++-
+> + test/api/CMakeLists.txt     | 6 +++++-
+> + test/parsing/CMakeLists.txt | 6 +++++-
+> + verify/CMakeLists.txt       | 6 +++++-
+> + 6 files changed, 31 insertions(+), 6 deletions(-)
+[snip]
+
+
 -- 
-2.8.0.rc3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
