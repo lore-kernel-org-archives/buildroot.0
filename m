@@ -1,115 +1,92 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Apr 2016 21:38:30 +0200
-Subject: [Buildroot] [PATCH v3] package/turbolua: new package
-In-Reply-To: <1460103883-7608-2-git-send-email-m.niestroj@grinn-global.com>
-References: <1460103883-7608-1-git-send-email-m.niestroj@grinn-global.com>
- <1460103883-7608-2-git-send-email-m.niestroj@grinn-global.com>
-Message-ID: <570AABB6.3060900@mind.be>
+Date: Sun, 10 Apr 2016 21:58:46 +0200
+Subject: [Buildroot] [PATCH v2] package/wpa_supplicant: Fix systemd
+ service stop
+In-Reply-To: <1460123993-18653-2-git-send-email-m.niestroj@grinn-global.com>
+References: <1460123993-18653-1-git-send-email-m.niestroj@grinn-global.com>
+ <1460123993-18653-2-git-send-email-m.niestroj@grinn-global.com>
+Message-ID: <570AB076.5010402@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/08/16 10:24, Marcin Niestroj wrote:
+  Subject line is not entirely accurate, as far as I understand, it's not really 
+started so I think it should just be "Fix systemd service for new DBus bus name".
+
+On 04/08/16 15:59, Marcin Niestroj wrote:
+> Fix systemd service stop when using only new DBus bus name.
+
+  This repetition of the subject line is not needed.
+
+>
+> By default systemd service description comes with old DBus bus name for
+> wpa_supplicant. If only new bus name is used, then systemd stops
+> wpa_supplicant.service, because it has not started old bus name with
+> specified time. In order to suppress stopping wpa_supplicant.service in
+> such case, we just rename BusName property to the new one, so systemd
+> sees that the service has started properly.
+
+  I don't think this is very clear, let me try to rephrase it.
+
+By default, the systemd service supplied with the wpa_supplicant package comes 
+with the old DBus bus name. However, when the new bus name is used by 
+wpa_supplicant, systemd will not be able to detect its appearance on the bus. 
+Therefore it will terminate the service again after some timeout, because 
+systemd assumes it is malfunctioning.
+
+To fix this, make sure that the correct BusName property is used.
+
+
+  Otherwise looks good to me. However, I'd prefer to have an upstreamable patch 
+instead that uses the CONFIG_CTRL_IFACE_DBUS_NEW config knob to set it correctly 
+in wpa_supplicant/Makefile.
+
+>
 > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->   package/Config.in              |  1 +
->   package/turbolua/Config.in     | 15 +++++++++++++++
->   package/turbolua/turbolua.hash |  2 ++
->   package/turbolua/turbolua.mk   | 27 +++++++++++++++++++++++++++
->   4 files changed, 45 insertions(+)
->   create mode 100644 package/turbolua/Config.in
->   create mode 100644 package/turbolua/turbolua.hash
->   create mode 100644 package/turbolua/turbolua.mk
+>   package/wpa_supplicant/wpa_supplicant.mk | 14 ++++++++++++++
+>   1 file changed, 14 insertions(+)
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 64822bf..3d6eaf1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -542,6 +542,7 @@ menu "Lua libraries/modules"
->   	source "package/lzlib/Config.in"
->   	source "package/orbit/Config.in"
->   	source "package/rings/Config.in"
-> +	source "package/turbolua/Config.in"
->   	source "package/wsapi/Config.in"
->   	source "package/xavante/Config.in"
->   endmenu
-> diff --git a/package/turbolua/Config.in b/package/turbolua/Config.in
-> new file mode 100644
-> index 0000000..8753dbd
-> --- /dev/null
-> +++ b/package/turbolua/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_TURBOLUA
-> +	bool "turbolua"
-> +	depends on BR2_PACKAGE_LUAJIT
-> +	help
-> +	  Turbo.lua is a framework built for LuaJIT 2 to simplify the
-> +	  task of building fast and scalable network applications. It
-> +	  uses a event-driven, non-blocking, no thread design to deliver
-> +	  excellent performance and minimal footprint to high-load
-> +	  applications while also providing excellent support for
-> +	  embedded uses. The toolkit can be used for HTTP REST API?s,
-> +	  traditional dynamic web pages through templating, open
-> +	  connections like WebSockets, or just as high level building
-> +	  blocks for native speed network applications.
-> +
-> +	  http://www.turbolua.org
+> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+> index ba1180d..7d4ab42 100644
+> --- a/package/wpa_supplicant/wpa_supplicant.mk
+> +++ b/package/wpa_supplicant/wpa_supplicant.mk
+> @@ -193,6 +193,19 @@ define WPA_SUPPLICANT_INSTALL_TARGET_CMDS
+>   	$(WPA_SUPPLICANT_INSTALL_WPA_CLIENT_SO)
+>   endef
+>
+> +# By default systemd service description comes with old DBus bus name for
+> +# wpa_supplicant. If only new bus name is used, then systemd stops
+> +# wpa_supplicant.service, because it has not started old bus name with
+> +# specified time.
+> +# To suppress stopping wpa_supplicant.service in such case, just rename
+> +# BusName property to the new one.
 
-  This is missing:
-
-comment "turbolua needs LuaJIT"
-	depends on !BR2_PACKAGE_LUAJIT
-
-  With that:
-  Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  The comment should be clarified as well.
 
   Regards,
   Arnout
 
-
-> diff --git a/package/turbolua/turbolua.hash b/package/turbolua/turbolua.hash
-> new file mode 100644
-> index 0000000..ea7898c
-> --- /dev/null
-> +++ b/package/turbolua/turbolua.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 4f7e3121fcc25a5867a264a6f09acf641c904668f5822b1533881f40a3b863ea turbolua-91db237a6690f4a659cbdee2ebbbbc9741d8ea4c.tar.gz
-> diff --git a/package/turbolua/turbolua.mk b/package/turbolua/turbolua.mk
-> new file mode 100644
-> index 0000000..cf66e70
-> --- /dev/null
-> +++ b/package/turbolua/turbolua.mk
-> @@ -0,0 +1,27 @@
-> +################################################################################
-> +#
-> +# turbolua
-> +#
-> +################################################################################
-> +
-> +TURBOLUA_VERSION = 91db237a6690f4a659cbdee2ebbbbc9741d8ea4c
-> +TURBOLUA_SITE = $(call github,kernelsauce,turbo,$(TURBOLUA_VERSION))
-> +TURBOLUA_DEPENDENCIES = luajit
-> +TURBOLUA_LICENSE = Apache-2.0
-> +TURBOLUA_LICENSE_FILES = LICENSE
-> +
-> +TURBOLUA_MAKE_OPTS = \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	SSL=$(if $(BR2_PACKAGE_OPENSSL),openssl,none) \
-> +	LUAJIT_VERSION="$(LUAJIT_VERSION)"
-> +
-> +define TURBOLUA_BUILD_CMDS
-> +	$(MAKE) $(TURBOLUA_MAKE_OPTS) -C $(@D) all
+> +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_OLD),)
+> +define WPA_SUPPLICANT_UPDATE_DBUS_NAME
+> +	sed -i -e 's/$(WPA_SUPPLICANT_DBUS_OLD_SERVICE)/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE)/g' \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
 > +endef
+> +endif
 > +
-> +define TURBOLUA_INSTALL_TARGET_CMDS
-> +	$(MAKE) $(TURBOLUA_MAKE_OPTS) LDCONFIG=true \
-> +		PREFIX="$(TARGET_DIR)/usr" -C $(@D) install
-> +endef
-> +
-> +$(eval $(generic-package))
+>   define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+>   	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant.service \
+>   		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant.service
+> @@ -202,6 +215,7 @@ define WPA_SUPPLICANT_INSTALL_INIT_SYSTEMD
+>   		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-nl80211 at .service
+>   	$(INSTALL) -m 0644 -D $(@D)/$(WPA_SUPPLICANT_SUBDIR)/systemd/wpa_supplicant-wired at .service \
+>   		$(TARGET_DIR)/usr/lib/systemd/system/wpa_supplicant-wired at .service
+> +	$(WPA_SUPPLICANT_UPDATE_DBUS_NAME)
+>   endef
+>
+>   $(eval $(generic-package))
 >
 
 
