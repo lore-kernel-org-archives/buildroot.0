@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 11:41:32 +0200
-Subject: [Buildroot] [PATCH v12 24/31] package/freeswitch: enable
-	mod_memcache
+Date: Sun, 10 Apr 2016 11:41:29 +0200
+Subject: [Buildroot] [PATCH v12 21/31] package/freeswitch: enable
+	mod_soundtouch
 In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460281299-2385-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-22-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index c89998f..8723827 100644
+index 69e728a..ce66c1e 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -195,6 +195,11 @@ FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+@@ -226,6 +226,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
+ FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
-+FREESWITCH_DEPENDENCIES += libmemcached
-+FREESWITCH_ENABLED_MODULES += applications/mod_memcache
++ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
++FREESWITCH_DEPENDENCIES += libsoundtouch
++FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
