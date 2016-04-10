@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 11:41:27 +0200
-Subject: [Buildroot] [PATCH v12 19/31] package/freeswitch: enable mod_sndfile
+Date: Sun, 10 Apr 2016 11:41:12 +0200
+Subject: [Buildroot] [PATCH v12 04/31] package/freeswitch: add optional
+	dependency to libedit
 In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460281299-2385-20-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b29812a..baa8e2d 100644
+index 786ef39..e92d6c5 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -216,6 +216,11 @@ FREESWITCH_DEPENDENCIES += libsilk
- FREESWITCH_ENABLED_MODULES += codecs/mod_silk
- endif
+@@ -54,7 +54,6 @@ FREESWITCH_CONF_ENV += \
+ 	ac_cv_gcc_supports_w_no_unused_result=no
  
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+FREESWITCH_DEPENDENCIES += libsndfile
-+FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
+ FREESWITCH_CONF_OPTS = \
+-	--disable-core-libedit-support \
+ 	--disable-core-odbc-support \
+ 	--disable-libvpx \
+ 	--disable-libyuv \
+@@ -147,6 +146,13 @@ endef
+ 
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_LIBEDIT),y)
++FREESWITCH_DEPENDENCIES += libedit
++FREESWITCH_CONF_OPTS += --enable-core-libedit-support
++else
++FREESWITCH_CONF_OPTS += --disable-core-libedit-support
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
+ FREESWITCH_DEPENDENCIES += util-linux
+ endif
 -- 
 2.8.0.rc3
