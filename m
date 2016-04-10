@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 11:41:23 +0200
-Subject: [Buildroot] [PATCH v12 15/31] package/freeswitch: enable mod_isac
+Date: Sun, 10 Apr 2016 11:41:18 +0200
+Subject: [Buildroot] [PATCH v12 10/31] package/freeswitch: enable mod_lua
 In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460281299-2385-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 95db94e..189bee7 100644
+index fea0398..f478eb9 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -145,6 +145,12 @@ endef
+@@ -171,6 +171,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
+ endif
  
- FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
- 
-+# mod_isac supports a limited set of archs
-+# src/mod/codecs/mod_isac/typedefs.h
-+ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_64),y)
-+FREESWITCH_ENABLED_MODULES += codecs/mod_isac
++ifeq ($(BR2_PACKAGE_LUA),y)
++FREESWITCH_DEPENDENCIES += lua
++FREESWITCH_ENABLED_MODULES += languages/mod_lua
 +endif
 +
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
- endif
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
