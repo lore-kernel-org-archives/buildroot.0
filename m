@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 11:41:31 +0200
-Subject: [Buildroot] [PATCH v12 23/31] package/freeswitch: add optional
-	dependency to xz
+Date: Sun, 10 Apr 2016 11:41:26 +0200
+Subject: [Buildroot] [PATCH v12 18/31] package/freeswitch: enable mod_silk
 In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460281299-2385-24-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 64866e4..c89998f 100644
+index db6fced..b29812a 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -248,4 +248,8 @@ ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
- FREESWITCH_DEPENDENCIES += util-linux
+@@ -211,6 +211,11 @@ FREESWITCH_DEPENDENCIES += portaudio
+ FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
  endif
  
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+FREESWITCH_DEPENDENCIES += xz
++ifeq ($(BR2_PACKAGE_LIBSILK),y)
++FREESWITCH_DEPENDENCIES += libsilk
++FREESWITCH_ENABLED_MODULES += codecs/mod_silk
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
