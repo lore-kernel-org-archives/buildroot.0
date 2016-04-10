@@ -1,32 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 10 Apr 2016 10:32:11 +0200
-Subject: [Buildroot] [PATCH v2 1/1] ipmitool: fix musl build
-In-Reply-To: <1460236490-16747-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1460236490-16747-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160410103211.0bdc4d05@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 10 Apr 2016 11:41:11 +0200
+Subject: [Buildroot] [PATCH v12 03/31] package/freeswitch: add optional
+	dependency to libuuid
+In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-4-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/freeswitch/Config.in     | 4 ++++
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-On Sat,  9 Apr 2016 23:14:50 +0200, J?rg Krause wrote:
-
-> +# This is needed to make autoreconf happy
-> +define IPMITOOL_CREATE_MISSING_FILES
-> +	touch $(@D)/NEWS $(@D)/AUTHORS $(@D)/ChangeLog $(@D)/COPYING
-> +endef
-> +IPMITOOL_POST_EXTRACT_HOOKS += IPMITOOL_CREATE_MISSING_FILES
-
-Instead of this, just pass "foreign" in the arguments of
-AM_INIT_AUTOMAKE in configure.ac.
-
-Best regards,
-
-Thomas
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index e8281cb..c521647 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -10,6 +10,10 @@ config BR2_PACKAGE_FREESWITCH
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_SPEEX
+ 	select BR2_PACKAGE_SQLITE
++	# "libuuid development package highly recommended!"
++	# https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/build/config/uuid.m4#9
++	select BR2_PACKAGE_UTIL_LINUX if BR2_USE_WCHAR
++	select BR2_PACKAGE_UTIL_LINUX_LIBUUID if BR2_USE_WCHAR
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  FreeSWITCH is a scalable open source cross-platform telephony
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index f1903c1..786ef39 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -147,4 +147,8 @@ endef
+ 
+ FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
+ 
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++FREESWITCH_DEPENDENCIES += util-linux
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.0.rc3
