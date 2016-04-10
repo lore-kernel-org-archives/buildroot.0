@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 11:41:29 +0200
-Subject: [Buildroot] [PATCH v12 21/31] package/freeswitch: enable
-	mod_soundtouch
+Date: Sun, 10 Apr 2016 11:41:34 +0200
+Subject: [Buildroot] [PATCH v12 26/31] package/freeswitch: enable mod_cv
 In-Reply-To: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460281299-2385-22-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460281299-2385-27-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,16 +16,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 69e728a..ce66c1e 100644
+index f0d299a..4b73f74 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -226,6 +226,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
- FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
+@@ -245,6 +245,11 @@ FREESWITCH_DEPENDENCIES += libsoundtouch
+ FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
-+FREESWITCH_DEPENDENCIES += libsoundtouch
-+FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++FREESWITCH_DEPENDENCIES += opencv
++FREESWITCH_ENABLED_MODULES += applications/mod_cv
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
