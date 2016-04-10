@@ -1,96 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Apr 2016 20:39:43 +0200
-Subject: [Buildroot] [PATCH v2] yajl: fix static linking in a parallel
- build
-In-Reply-To: <1460240125-2981-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1460240125-2981-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <570A9DEF.4030707@mind.be>
+Date: Sun, 10 Apr 2016 21:19:27 +0200
+Subject: [Buildroot] [PATCH v3] package/turbolua: new package
+In-Reply-To: <1460103883-7608-1-git-send-email-m.niestroj@grinn-global.com>
+References: <1460103883-7608-1-git-send-email-m.niestroj@grinn-global.com>
+Message-ID: <570AA73F.5060802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/10/16 00:15, J?rg Krause wrote:
-> The yajl build system contains a race condition, which gets triggered by
-> high BR2_JLEVEL settings - It tries to link the executable gen-extra-close
-> against the shared libyajl before it is created:
->
-> [ 21%] Linking C executable gen-extra-close
-> [ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
-> /home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
->
-> Fix this issue by linking gen-extra-close against the shared library in a shared
-> build and the static library otherwise.
-> Apply this to all other build targets from yail who are linking against the
-                                              ^^^^yajl
-> library, too.
->
-> Fixes:
-> http://autobuild.buildroot.net/results/a9b/a9b5209377acb51e69f376e0c008ee71fe00397a/
-> http://autobuild.buildroot.net/results/55f/55fe22463d49addb42b635d10be5176522f4a561/
-> http://autobuild.buildroot.net/results/808/808acca0cfed93465845c2aa055a7a4fc56a8a17/
-> http://autobuild.buildroot.net/results/b92/b92a9c84b71a8a2d022d307245ca6be36a000e6c/
-> http://autobuild.buildroot.net/results/55d/55df698ab53f7d94235166e8576eb681ed68668e/
-> .. and more.
->
-> Upstream status: Pending
-> https://github.com/lloyd/yajl/pull/187
->
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+  Hi Marcin,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 04/08/16 10:24, Marcin Niestroj wrote:
+> Hi,
+>
+> This is the third attempt for adding turbolua. Changes include mostly
+> Thomas and Arnout suggestions.
+>
+> Changes v2 -> v3:
+
+  We normally put the changelog in the patch itself (after the signed-off-by, 
+below a --- line). Then you don't need to compose a cover letter if it's only a 
+single patch.
 
   Regards,
   Arnout
 
-> ---
+>   * Do not use SSL variable, set TURBOLUA_MAKE_OPTS instead
+>   * Remove dependency on !BR2_ARM_INSTRUCTIONS_THUMB2, as it is
+>     not clear what is the reason of crashes on Thumb2 target
+>   * Bump to upstream HEAD version to correctly pass LDFLAGS
+>
 > Changes v1 -> v2:
->   - conditionally link gen-extra-close against the shared libyajl in a shared
->     build and against the static libyajl otherwise (Samuel Martin)
->   - apply this to all other build targets linking against yajl
+>   * Use TARGET_CONFIGURE_OPTS instead of CC and LD only
+>   * Bump to upstream HEAD version to handle TARGET_CONFIGURE_OPTS
+>     correctly
+>   * Add comment for dependency on disabled Thumb2
+>   * Reduce help block column size in Config.in
+>   * Add URL of the project homepage
+>   * Disable SSL support when OpenSSL is not selected
 >
-> ---
->   ...ink-with-shared-libyajl-in-a-shared-build.patch | 125 +++++++++++++++++++++
->   1 file changed, 125 insertions(+)
->   create mode 100644 package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
+> Marcin Niestroj (1):
+>    package/turbolua: new package
 >
-> diff --git a/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch b/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
-> new file mode 100644
-> index 0000000..6a6e5e3
-> --- /dev/null
-> +++ b/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
-> @@ -0,0 +1,125 @@
-> +From 3e4c0ce8c2b4c9dad6b7ce11f017f3f639fdab27 Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-> +Date: Sat, 9 Apr 2016 23:24:27 +0200
-> +Subject: [PATCH] Link with shared libyajl in a shared build
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Building yajl in a static context fails in a parallel build:
-> +
-> +[ 21%] Linking C executable gen-extra-close
-> +[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
-> +/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
-> +
-> +Fix this issue by linking against the shared libyail in a shared build. Apply
-> +this fix also to all other build targets who are linking against the library.
-> +
-> +Upstream status: Pending
-> +https://github.com/lloyd/yajl/pull/187
-> +
-> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> +---
-> + example/CMakeLists.txt      | 7 ++++++-
-> + perf/CMakeLists.txt         | 6 +++++-
-> + reformatter/CMakeLists.txt  | 6 +++++-
-> + test/api/CMakeLists.txt     | 6 +++++-
-> + test/parsing/CMakeLists.txt | 6 +++++-
-> + verify/CMakeLists.txt       | 6 +++++-
-> + 6 files changed, 31 insertions(+), 6 deletions(-)
-[snip]
+>   package/Config.in              |  1 +
+>   package/turbolua/Config.in     | 15 +++++++++++++++
+>   package/turbolua/turbolua.hash |  2 ++
+>   package/turbolua/turbolua.mk   | 27 +++++++++++++++++++++++++++
+>   4 files changed, 45 insertions(+)
+>   create mode 100644 package/turbolua/Config.in
+>   create mode 100644 package/turbolua/turbolua.hash
+>   create mode 100644 package/turbolua/turbolua.mk
+>
 
 
 -- 
