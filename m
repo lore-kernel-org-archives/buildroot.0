@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 19:14:57 +0200
-Subject: [Buildroot] [PATCH 1/6] package/x11r7/xdriver_xf86-video-mach64:
-	disable DRI support when not available
-Message-ID: <1460308502-14157-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Sun, 10 Apr 2016 19:15:01 +0200
+Subject: [Buildroot] [PATCH 5/6] package/x11r7/xdriver_xf86-video-ast: bump
+	version to 1.1.5
+In-Reply-To: <1460308502-14157-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1460308502-14157-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460308502-14157-5-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,41 +13,30 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-video-mach64/Config.in                    | 5 -----
- package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk | 4 ++++
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash | 2 +-
+ package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/Config.in b/package/x11r7/xdriver_xf86-video-mach64/Config.in
-index 42535e4..82de826 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-mach64/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_MACH64
- 	bool "xf86-video-mach64"
--	depends on BR2_PACKAGE_MESA3D
--	select BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_XPROTO_FONTSPROTO
- 	select BR2_PACKAGE_XPROTO_RANDRPROTO
- 	select BR2_PACKAGE_XPROTO_RENDERPROTO
-@@ -9,6 +7,3 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_MACH64
- 	select BR2_PACKAGE_XPROTO_XPROTO
- 	help
- 	  mach64 video driver
--
--comment "xf86-video-mach64 needs mesa3d"
--	depends on !BR2_PACKAGE_MESA3D
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-index 9b438cb..5990360 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-+++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_MACH64_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_MACH64_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_MACH64_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
+diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
+index a4e3439..cf877d5 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
++++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	e778f1824f5eed7e3197f00f39418de1525e310fd78e0335f6178c26b9b0495b	xf86-video-ast-1.0.1.tar.bz2
++sha256	1edbbc55d47d3fd71dec99b15c2483e22738c642623a0fb86ef4a81a9067a2de	xf86-video-ast-1.1.5.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+index d040ccd..3c9eb91 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
++++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-+XDRIVER_XF86_VIDEO_MACH64_CONF_OPTS = --disable-dri
-+endif
-+
- $(eval $(autotools-package))
+-XDRIVER_XF86_VIDEO_AST_VERSION = 1.0.1
++XDRIVER_XF86_VIDEO_AST_VERSION = 1.1.5
+ XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AST_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AST_LICENSE = MIT
 -- 
 2.8.0.rc3
