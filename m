@@ -1,32 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Apr 2016 16:40:10 +0200
-Subject: [Buildroot] [PATCH 1/1] new package: alsacap
-In-Reply-To: <57060DDC.1000702@spox.org>
-References: <1459926063-11265-1-git-send-email-niziak@spox.org>
- <570590D7.30005@mind.be> <57060DDC.1000702@spox.org>
-Message-ID: <570A65CA.4080904@mind.be>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 10 Apr 2016 16:55:24 +0200
+Subject: [Buildroot] [V4 1/3] libtommath: new package
+Message-ID: <1460300126-11046-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/07/16 09:35, Wojciech Nizinski wrote:
-> Is any tool available to check format of BR files (something like vera++) ?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/Config.in                  |  1 +
+ package/libtommath/Config.in       |  7 +++++++
+ package/libtommath/libtommath.hash |  2 ++
+ package/libtommath/libtommath.mk   | 23 +++++++++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/libtommath/Config.in
+ create mode 100644 package/libtommath/libtommath.hash
+ create mode 100644 package/libtommath/libtommath.mk
 
-  Unfortunately, not at the moment. I started on something [1] but never 
-finished it to a level that it actually did something useful.
-
-  Regards,
-  Arnout
-
-[snip]
-
-[1] git fetch https://github.com/arnout/buildroot.git checkpackage
+diff --git a/package/Config.in b/package/Config.in
+index 64822bf..24dbe09 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1234,6 +1234,7 @@ menu "Other"
+ 	source "package/libsigc/Config.in"
+ 	source "package/libsigsegv/Config.in"
+ 	source "package/libtasn1/Config.in"
++	source "package/libtommath/Config.in"
+ 	source "package/libtpl/Config.in"
+ 	source "package/libubox/Config.in"
+ 	source "package/libuci/Config.in"
+diff --git a/package/libtommath/Config.in b/package/libtommath/Config.in
+new file mode 100644
+index 0000000..b2ffc72
+--- /dev/null
++++ b/package/libtommath/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBTOMMATH
++	bool "libtommath"
++	help
++	  LibTomMath is a free open source portable number theoretic
++	  multiple-precision integer library written entirely in C.
++
++	  http://www.libtom.net
+diff --git a/package/libtommath/libtommath.hash b/package/libtommath/libtommath.hash
+new file mode 100644
+index 0000000..fcf2ddc
+--- /dev/null
++++ b/package/libtommath/libtommath.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  993a7df9ee091fca430cdde3263df57d88ef62af8103903214da49fc51bbb56c  ltm-1.0.tar.xz
+diff --git a/package/libtommath/libtommath.mk b/package/libtommath/libtommath.mk
+new file mode 100644
+index 0000000..463ea7b
+--- /dev/null
++++ b/package/libtommath/libtommath.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# libtommath
++#
++################################################################################
++
++LIBTOMMATH_VERSION = 1.0
++LIBTOMMATH_SITE = https://github.com/libtom/libtommath/releases/download/v$(LIBTOMMATH_VERSION)
++LIBTOMMATH_SOURCE = ltm-$(LIBTOMMATH_VERSION).tar.xz
++LIBTOMMATH_LICENSE = WTFPL
++LIBTOMMATH_LICENSE_FILES = LICENSE
++LIBTOMMATH_INSTALL_STAGING = YES
++LIBTOMMATH_INSTALL_TARGET = NO  # only static library
++
++define LIBTOMMATH_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) CFLAGS="-I./ $(TARGET_CFLAGS)"
++endef
++
++define LIBTOMMATH_INSTALL_STAGING_CMDS
++	$(MAKE) -C $(@D) DESTDIR="$(STAGING_DIR)" install
++endef
++
++$(eval $(generic-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.5.0
