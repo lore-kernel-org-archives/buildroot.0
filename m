@@ -1,23 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Apr 2016 12:59:48 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
-	2016-03-31
-References: <20160401063024.010B61028F1@stock.ovh.net>
-Message-ID: <4aoptcxqj4.ln2@ID-313208.user.individual.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 10 Apr 2016 16:40:10 +0200
+Subject: [Buildroot] [PATCH 1/1] new package: alsacap
+In-Reply-To: <57060DDC.1000702@spox.org>
+References: <1459926063-11265-1-git-send-email-niziak@spox.org>
+ <570590D7.30005@mind.be> <57060DDC.1000702@spox.org>
+Message-ID: <570A65CA.4080904@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 01 Apr 2016 08:30:23 +0200 schrieb Thomas Petazzoni:
+On 04/07/16 09:35, Wojciech Nizinski wrote:
+> Is any tool available to check format of BR files (something like vera++) ?
 
->          arc |   xdriver_xf86-video-mga-1.6.4 | NOK |
->          http://autobuild.buildroot.net/
-results/8aec759b0e485b2c90e2a26d60c7776c2684c44a/
+  Unfortunately, not at the moment. I started on something [1] but never 
+finished it to a level that it actually did something useful.
 
-Hi,
+  Regards,
+  Arnout
 
-fixed by http://patchwork.ozlabs.org/patch/541470/
+[snip]
 
-Regards, Bernd
+[1] git fetch https://github.com/arnout/buildroot.git checkpackage
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
