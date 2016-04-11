@@ -1,39 +1,59 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Apr 2016 15:29:41 -0300
-Subject: [Buildroot] [PATCH] sysstat: bump to version 11.2.3
-Message-ID: <1460399381-2634-1-git-send-email-gustavo@zacarias.com.ar>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 11 Apr 2016 21:03:58 +0200
+Subject: [Buildroot] Adding support for the Rust programming language
+In-Reply-To: <570A77F9.50506@mind.be>
+References: <20160408224541.79e1ba4d@itchy>
+	<570A77F9.50506@mind.be>
+Message-ID: <20160411210358.7e7a8b4c@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Sun, 10 Apr 2016 17:57:45 +0200,
+Arnout Vandecappelle <arnout@mind.be> wrote :
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 3714258..655cafe 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
-@@ -1,2 +1,2 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	01dd5212efff6eff6f9018711de3de471516060e	sysstat-11.2.1.1.tar.xz
-+sha1	7e9422e985b65728d007bd38d4a8d090aa795826	sysstat-11.2.3.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 449c30a..a16054f 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSSTAT_VERSION = 11.2.1.1
-+SYSSTAT_VERSION = 11.2.3
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
--- 
-2.7.3
+> > 1. Would it be acceptable to provide a script to generate these
+> > files from the Buildroot configuration file?  
+> 
+>   Obviously yes, we already do that kind of thing for some packages
+> (e.g. cmake).
+
+So, assuming the script is to be named `rust-target-gen`, it should be
+stored in support/scripts, right?
+
+> > 2. Would Python be a suitable language for this script? It is better
+> > suited for playing with complex structures and JSON than pure
+> > shell.  
+> 
+>   We try to avoid requiring python for a normal build, and use it
+> only for specific scripts at the moment (like graph-depends). So I
+> think the answer is no here. Anyway, as far as I can see from [3],
+> you don't really need a full json generator, it should be enough to
+> do some sed magic on a template file.
+
+Correct. The target specification file is not a complex JSON file.
+So I'll go for a Bash shell script (compatible with Bash 3.2, i.e. no
+use of associative arrays).
+
+Anyway, there will be a need for building host-python, in order to
+build Cargo, the official Rust package manager, as stated in [1].
+
+>   When you submit patches, it's probably a good idea to start with a
+> minimal patch that e.g. gives rust a hard dependency on little-endian
+> ARM v6, and add more features in subsequent patches. I expect it will
+> be something difficult to review.
+
+This looks sensible. I intend to provide the following patches:
+
+- one to add the package "host-rust" (compiler)
+- one to add the package "host-cargo" (package manager)
+- one to add "package/pkg-cargo.mk" (Rust package infrastructure)
+
+Thanks for your suggestions.
+
+[1] http://www.elebihan.com/posts/using-cargo-with-buildroot-full-build.html
+
+--
+ELB
