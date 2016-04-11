@@ -1,9 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 11 Apr 2016 12:27:29 +0200
-Subject: [Buildroot] [PATCH 4/5] python-pysmb: bump to version 1.1.18
+Date: Mon, 11 Apr 2016 12:27:30 +0200
+Subject: [Buildroot] [PATCH 5/5] python-urllib3: bump to version 1.15
 In-Reply-To: <1460370450-22120-1-git-send-email-yegorslists@googlemail.com>
 References: <1460370450-22120-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <1460370450-22120-4-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1460370450-22120-5-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +14,33 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/python-pysmb/python-pysmb.hash | 6 +++---
- package/python-pysmb/python-pysmb.mk   | 2 +-
+ package/python-urllib3/python-urllib3.hash | 6 +++---
+ package/python-urllib3/python-urllib3.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pysmb/python-pysmb.hash b/package/python-pysmb/python-pysmb.hash
-index b3c91fe..4c41068 100644
---- a/package/python-pysmb/python-pysmb.hash
-+++ b/package/python-pysmb/python-pysmb.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 266b8e9..d7775fe 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=256b94bdeb63e6cc63f4b6a380b5918b, sha256 locally computed
--md5     256b94bdeb63e6cc63f4b6a380b5918b  pysmb-1.1.17.tar.gz
--sha256  267def5aef2f0f41be4ba141b29dce9c23214667e84bddefd285b56fd481d813  pysmb-1.1.17.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=9fe70cbc812b2e789915bedea7e45b1a, sha256 locally computed
-+md5     9fe70cbc812b2e789915bedea7e45b1a  pysmb-1.1.18.tar.gz
-+sha256  580f7dcf8048656d2924c2f78731feaeaf6f9fa8ef5c251fc6964d39bfd3a6b9  pysmb-1.1.18.tar.gz
-diff --git a/package/python-pysmb/python-pysmb.mk b/package/python-pysmb/python-pysmb.mk
-index 1a00a4d..51df91d 100644
---- a/package/python-pysmb/python-pysmb.mk
-+++ b/package/python-pysmb/python-pysmb.mk
+-# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5e1407428ac33b521c71a7ac273b3847, sha256 locally computed
+-md5     5e1407428ac33b521c71a7ac273b3847  urllib3-1.14.tar.gz
+-sha256  dd4fb13a4ce50b18338c7e4d665b21fd38632c5d4b1d9f1a1379276bd3c08d37  urllib3-1.14.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=19c136027dfae028f664b9e45ee55a92, sha256 locally computed
++md5     19c136027dfae028f664b9e45ee55a92  urllib3-1.15.tar.gz
++sha256  607c22f1b593e0e95c2eecb01138c58de9c574ec4c7a0e560c1e15031f941b3d  urllib3-1.15.tar.gz
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 0101053..17a15ba 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYSMB_VERSION = 1.1.17
-+PYTHON_PYSMB_VERSION = 1.1.18
- PYTHON_PYSMB_SOURCE = pysmb-$(PYTHON_PYSMB_VERSION).tar.gz
- PYTHON_PYSMB_SITE = https://pypi.python.org/packages/source/p/pysmb
- PYTHON_PYSMB_LICENSE = libpng license
+-PYTHON_URLLIB3_VERSION = 1.14
++PYTHON_URLLIB3_VERSION = 1.15
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+ PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/source/u/urllib3
+ PYTHON_URLLIB3_LICENSE = MIT
 -- 
 2.1.4
