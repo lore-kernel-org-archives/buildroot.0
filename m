@@ -1,96 +1,40 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 11 Apr 2016 17:58:18 +0200
-Subject: [Buildroot] [PATCH] mtd-utils: ubinize: fix return code on error
-Message-ID: <1460390298-25739-1-git-send-email-luca@lucaceresoli.net>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 11 Apr 2016 15:12:28 -0300
+Subject: [Buildroot] [PATCH] gvfs: bump to version 1.28.1
+Message-ID: <1460398348-31810-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ubinize 1.5.2 (currently packaged in Buildroot) returns 0 in case of
-some errors. This can lead to unnoticed errors in the middle of a
-build.
-
-Fix by adding a patch from upstream, which is not yet present in any
-released verison.
-
-Fetch from: http://git.infradead.org/mtd-utils.git/commit/5f50207231414bfdbac8f0f974a2824f24177d6e
-
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- ...binize-Always-return-error-code-at-least-.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
+ package/gvfs/gvfs.hash | 4 ++--
+ package/gvfs/gvfs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
-new file mode 100644
-index 0000000..772ab78
---- /dev/null
-+++ b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
-@@ -0,0 +1,63 @@
-+From 5f50207231414bfdbac8f0f974a2824f24177d6e Mon Sep 17 00:00:00 2001
-+From: Enrico Jorns <ejo@pengutronix.de>
-+Date: Fri, 11 Sep 2015 15:28:13 +0200
-+Subject: [PATCH] mtd-utils: ubinize: Always return error code (at least -1) in
-+ case of an error
-+
-+ubinize should not fail silenty, this can be very annoying when using
-+it from other tools that rely on the exit code for determining the
-+success of their operation.
-+
-+Signed-off-by: Enrico Jorns <ejo@pengutronix.de>
-+Signed-off-by: Brian Norris <computersforpeace@gmail.com>
-+---
-+ ubi-utils/ubinize.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/ubi-utils/ubinize.c b/ubi-utils/ubinize.c
-+index 34f465a..60bbd9a 100644
-+--- a/ubi-utils/ubinize.c
-++++ b/ubi-utils/ubinize.c
-+@@ -519,6 +519,7 @@ int main(int argc, char * const argv[])
-+ 	 */
-+ 	seek = ui.peb_size * 2;
-+ 	if (lseek(args.out_fd, seek, SEEK_SET) != seek) {
-++		err = -1;
-+ 		sys_errmsg("cannot seek file \"%s\"", args.f_out);
-+ 		goto out_free;
-+ 	}
-+@@ -530,6 +531,7 @@ int main(int argc, char * const argv[])
-+ 		int fd, j;
-+ 
-+ 		if (!sname) {
-++			err = -1;
-+ 			errmsg("ini-file parsing error (iniparser_getsecname)");
-+ 			goto out_free;
-+ 		}
-+@@ -550,6 +552,7 @@ int main(int argc, char * const argv[])
-+ 		 */
-+ 		for (j = 0; j < i; j++) {
-+ 			if (vi[i].id == vi[j].id) {
-++				err = -1;
-+ 				errmsg("volume IDs must be unique, but ID %d "
-+ 				       "in section \"%s\" is not",
-+ 				       vi[i].id, sname);
-+@@ -557,6 +560,7 @@ int main(int argc, char * const argv[])
-+ 			}
-+ 
-+ 			if (!strcmp(vi[i].name, vi[j].name)) {
-++				err = -1;
-+ 				errmsg("volume name must be unique, but name "
-+ 				       "\"%s\" in section \"%s\" is not",
-+ 				       vi[i].name, sname);
-+@@ -580,6 +584,7 @@ int main(int argc, char * const argv[])
-+ 		if (img) {
-+ 			fd = open(img, O_RDONLY);
-+ 			if (fd == -1) {
-++				err = fd;
-+ 				sys_errmsg("cannot open \"%s\"", img);
-+ 				goto out_free;
-+ 			}
-+-- 
-+1.9.1
-+
+diff --git a/package/gvfs/gvfs.hash b/package/gvfs/gvfs.hash
+index 38afe7b..66411c1 100644
+--- a/package/gvfs/gvfs.hash
++++ b/package/gvfs/gvfs.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.0.sha256sum
+-sha256	cf72fc0adf0ca702ead5b3fab3c1fa46b09678eb7c1290de7e30bb7cbaf5f704	gvfs-1.28.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/gvfs/1.28/gvfs-1.28.1.sha256sum
++sha256	4ecfe5ac35c1b3e61d6abddc98902b6c7faf243308c60b165f01990783f17999	gvfs-1.28.1.tar.xz
+diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
+index f63d9dc..5bf35fc 100644
+--- a/package/gvfs/gvfs.mk
++++ b/package/gvfs/gvfs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GVFS_VERSION_MAJOR = 1.28
+-GVFS_VERSION = $(GVFS_VERSION_MAJOR).0
++GVFS_VERSION = $(GVFS_VERSION_MAJOR).1
+ GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
+ GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
+ GVFS_INSTALL_STAGING = YES
 -- 
-1.9.1
+2.7.3
