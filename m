@@ -1,39 +1,54 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 11 Apr 2016 10:05:13 +0100
-Subject: [Buildroot] [PATCH] lvm2: bump version to 2.02.150
-Message-ID: <1460365513-33014-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 11 Apr 2016 11:12:07 +0200
+Subject: [Buildroot] Adding support for the Rust programming language
+In-Reply-To: <20160411103211.3d9a1581@free-electrons.com>
+References: <20160408224541.79e1ba4d@itchy> <570A77F9.50506@mind.be>
+ <20160411103211.3d9a1581@free-electrons.com>
+Message-ID: <570B6A67.1000806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 88998c4..959be39 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 f00310fd398d4f84d67677e47b148ab5cc79319e25547ee56160703a425f2f506a4c92ee9958c363a1640ae1fa17b4337242d76e0c5e4a256192edfbf9c4fcdc  LVM2.2.02.149.tgz
-+sha512 66d1a247170f685c72d91d5fc52a2394ba5d5a477686101b9a472a8ac163813f9c80c0d75e4f29939b16000456263e9191cd294520ab5b320915f23f0797f22e  LVM2.2.02.150.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index d17a772..d78f621 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LVM2_VERSION = 2.02.149
-+LVM2_VERSION = 2.02.150
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
+
+On 04/11/16 10:32, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Sun, 10 Apr 2016 17:57:45 +0200, Arnout Vandecappelle wrote:
+>
+>>    We try to avoid requiring python for a normal build, and use it only for
+>> specific scripts at the moment (like graph-depends).
+>
+> Right, but on the other hand, support/dependencies/dependencies.sh
+> verifies unconditionally that there is a python interpreter available
+> on the build machine. So there is not really anything that prevents
+> from using python stuff during the build. Unless of course this Python
+> logic starts to use modules not in the Python standard library, of
+> course.
+
+  Well, for the fix-rpath stuff we asked Samuel to do in in shell instead of 
+python, with the argument that we want to avoid python to be in the critical 
+path of a normal build. That said, this would only be for a rust build, not for 
+all builds, so it's less critical.
+
+  BTW note that e.g. for waf-based packages, we always use host-python, not 
+system python. But that's probably because waf is not python3 compatible.
+
+  So, if python is used, please make sure it runs on any python (with full 
+standard library) from python2.4 (RHEL5) to python3.5. That means that using the 
+json standard library module is not an option, since it was introduced only in 
+python 2.6.
+
+
+  Regards,
+  Arnout
+
 -- 
-2.7.3
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
