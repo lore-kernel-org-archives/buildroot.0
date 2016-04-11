@@ -1,40 +1,39 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Apr 2016 16:13:49 -0300
-Subject: [Buildroot] [PATCH] pango: bump to version 1.40.1
-Message-ID: <1460402029-7527-1-git-send-email-gustavo@zacarias.com.ar>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 11 Apr 2016 21:28:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mutt: bump version to 1.6.0
+Message-ID: <1460402898-2383-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pango/pango.hash | 4 ++--
- package/pango/pango.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 132e458..67b67f0 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index befed13..324c04b 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
 @@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.0.sha256sum
--sha256	da17985df314cb07d066ab5424f59c21ce973ece05b7de4df04d798ec8511c8b	pango-1.40.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.1.sha256sum
-+sha256	e27af54172c72b3ac6be53c9a4c67053e16c905e02addcf3a603ceb2005c1a40	pango-1.40.1.tar.xz
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index a3639dc..bdad8c6 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256  a292ca765ed7b19db4ac495938a3ef808a16193b7d623d65562bb8feb2b42200  mutt-1.5.24.tar.gz
++sha256	29afb6238ab7a540c0e3a78ce25c970f975ab6c0f0bc9f919993aab772136c19	mutt-1.6.0.tar.gz
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 14c5be9..3ab64d5 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- PANGO_VERSION_MAJOR = 1.40
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_AUTORECONF = YES
+-MUTT_VERSION = 1.5.24
++MUTT_VERSION = 1.6.0
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPLv2+
+ MUTT_LICENSE_FILES = GPL
 -- 
-2.7.3
+2.8.0.rc3
