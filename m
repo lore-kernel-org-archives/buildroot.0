@@ -1,40 +1,43 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 11 Apr 2016 16:47:20 -0300
-Subject: [Buildroot] [PATCH] apache: bump to version 2.4.20
-Message-ID: <1460404040-19150-1-git-send-email-gustavo@zacarias.com.ar>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 11 Apr 2016 21:49:52 +0200
+Subject: [Buildroot] [PATCH] vnstat: needs host-pkgconf
+Message-ID: <1460404192-28861-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/apache/apache.hash | 4 ++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+vnstat uses the PKG_CHECK_MODULES macro and therefor requires pkg-config.
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index d4a8a9f..062a549 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,2 +1,2 @@
--# From http://www.apache.org/dist/httpd/httpd-2.4.18.tar.bz2.sha1
--sha1	271a129f2f04e3aa694e5c2091df9b707bf8ef80	httpd-2.4.18.tar.bz2
-+# From http://www.apache.org/dist/httpd/httpd-2.4.20.tar.bz2.sha1
-+sha1	cefe8ea4a3f81c7a08e36c80ebbd792c67ab361b	httpd-2.4.20.tar.bz2
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index e752fcc..6d9a324 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Note that for adding the dependency gd to VNSTAT_DEPENDENCIES the assignment
+was changed from '=' to '+='.
+
+Fixes:
+http://autobuild.buildroot.net/results/4dd/4ddb0d7d7fe2509ff9c4753d918e0bebd7725c13/
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/vnstat/vnstat.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/vnstat/vnstat.mk b/package/vnstat/vnstat.mk
+index ba2610a..576f240 100644
+--- a/package/vnstat/vnstat.mk
++++ b/package/vnstat/vnstat.mk
+@@ -8,11 +8,12 @@ VNSTAT_VERSION = 1.15
+ VNSTAT_SITE = http://humdi.net/vnstat
+ VNSTAT_LICENSE = GPLv2
+ VNSTAT_LICENSE_FILES = COPYING
++VNSTAT_DEPENDENCIES = host-pkgconf
+ # We're patching configure.ac, so we need to autoreconf
+ VNSTAT_AUTORECONF = YES
  
--APACHE_VERSION = 2.4.18
-+APACHE_VERSION = 2.4.20
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+ ifeq ($(BR2_PACKAGE_GD)$(BR2_PACKAGE_LIBPNG),yy)
+-VNSTAT_DEPENDENCIES = gd
++VNSTAT_DEPENDENCIES += gd
+ VNSTAT_CONF_OPTS = --enable-image-output
+ else
+ VNSTAT_CONF_OPTS = --disable-image-output
 -- 
-2.7.3
+2.8.0
