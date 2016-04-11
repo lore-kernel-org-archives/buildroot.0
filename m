@@ -1,28 +1,96 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Mon, 11 Apr 2016 17:02:08 +0200
-Subject: [Buildroot] buildroot for pine64
-Message-ID: <20160411170208.7880b2be@pcviktorin.fit.vutbr.cz>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 11 Apr 2016 17:58:18 +0200
+Subject: [Buildroot] [PATCH] mtd-utils: ubinize: fix return code on error
+Message-ID: <1460390298-25739-1-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ubinize 1.5.2 (currently packaged in Buildroot) returns 0 in case of
+some errors. This can lead to unnoticed errors in the middle of a
+build.
 
-I've just received my new Pine64 board and tried to integrate it into
-the Buildroot. Howver, there is a catch. The system boots in 32-bit
-mode so it requires to build the U-Boot by a 32-bit toolchain.
+Fix by adding a patch from upstream, which is not yet present in any
+released verison.
 
-How to accomplish this with Buildroot? I am afraid, this is not
-possible at the moment with a single BR defconfig file. Are
-there more such boards? Is it a known issue?
+Fetch from: http://git.infradead.org/mtd-utils.git/commit/5f50207231414bfdbac8f0f974a2824f24177d6e
 
-Regards
-Jan
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+ ...binize-Always-return-error-code-at-least-.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
 
+diff --git a/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
+new file mode 100644
+index 0000000..772ab78
+--- /dev/null
++++ b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
+@@ -0,0 +1,63 @@
++From 5f50207231414bfdbac8f0f974a2824f24177d6e Mon Sep 17 00:00:00 2001
++From: Enrico Jorns <ejo@pengutronix.de>
++Date: Fri, 11 Sep 2015 15:28:13 +0200
++Subject: [PATCH] mtd-utils: ubinize: Always return error code (at least -1) in
++ case of an error
++
++ubinize should not fail silenty, this can be very annoying when using
++it from other tools that rely on the exit code for determining the
++success of their operation.
++
++Signed-off-by: Enrico Jorns <ejo@pengutronix.de>
++Signed-off-by: Brian Norris <computersforpeace@gmail.com>
++---
++ ubi-utils/ubinize.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/ubi-utils/ubinize.c b/ubi-utils/ubinize.c
++index 34f465a..60bbd9a 100644
++--- a/ubi-utils/ubinize.c
+++++ b/ubi-utils/ubinize.c
++@@ -519,6 +519,7 @@ int main(int argc, char * const argv[])
++ 	 */
++ 	seek = ui.peb_size * 2;
++ 	if (lseek(args.out_fd, seek, SEEK_SET) != seek) {
+++		err = -1;
++ 		sys_errmsg("cannot seek file \"%s\"", args.f_out);
++ 		goto out_free;
++ 	}
++@@ -530,6 +531,7 @@ int main(int argc, char * const argv[])
++ 		int fd, j;
++ 
++ 		if (!sname) {
+++			err = -1;
++ 			errmsg("ini-file parsing error (iniparser_getsecname)");
++ 			goto out_free;
++ 		}
++@@ -550,6 +552,7 @@ int main(int argc, char * const argv[])
++ 		 */
++ 		for (j = 0; j < i; j++) {
++ 			if (vi[i].id == vi[j].id) {
+++				err = -1;
++ 				errmsg("volume IDs must be unique, but ID %d "
++ 				       "in section \"%s\" is not",
++ 				       vi[i].id, sname);
++@@ -557,6 +560,7 @@ int main(int argc, char * const argv[])
++ 			}
++ 
++ 			if (!strcmp(vi[i].name, vi[j].name)) {
+++				err = -1;
++ 				errmsg("volume name must be unique, but name "
++ 				       "\"%s\" in section \"%s\" is not",
++ 				       vi[i].name, sname);
++@@ -580,6 +584,7 @@ int main(int argc, char * const argv[])
++ 		if (img) {
++ 			fd = open(img, O_RDONLY);
++ 			if (fd == -1) {
+++				err = fd;
++ 				sys_errmsg("cannot open \"%s\"", img);
++ 				goto out_free;
++ 			}
++-- 
++1.9.1
++
 -- 
-   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
-   System Architect              Web:    www.RehiveTech.com
-   RehiveTech
-   Brno, Czech Republic
+1.9.1
