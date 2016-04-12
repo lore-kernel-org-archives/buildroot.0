@@ -1,47 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Apr 2016 23:22:36 +0200
-Subject: [Buildroot] [git commit] lksctp-tools: requires dynamic library
-	support
-Message-ID: <20160412220141.4AAD37FA20@busybox.osuosl.org>
+Date: Tue, 12 Apr 2016 23:30:49 +0200
+Subject: [Buildroot] [git commit] package/racehound: fix comment
+Message-ID: <20160412220141.57253802CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bcc4f3e6ddb2fad7cf5a0ecd75536a2f3e26bf2
+commit: https://git.buildroot.net/buildroot/commit/?id=64870d18282a17849eb806f85ac116ad140187c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/259/25910726158f4b2cbd9ceb60c170f4b2d0b546ef/
-http://autobuild.buildroot.net/results/94a/94ab8ba783a67529a62d4994ab8c62c8656a05e6/
-http://autobuild.buildroot.net/results/1e5/1e59f273e0f31646065a1323a2e231c17babfe59/
+racehound requires a kernel >= 3.14 to be built and to run.
 
-Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+However, the current conditions on the corresponding comments are wrong:
+  - the comment about the kernel has a dependency on the requested
+    headers
+  - the comment on the toolchain features does not have this condition.
+
+Thus, the comments are not shown/hidden under the appropriate
+conditions, like in this situation:
+  - toolchain with headers < 3.14 (e.g. Sourcery CodeBench x86/x86_64
+    2012.09 with headers 3.5)
+  - kernel 4.5 enabled
+
+this comment is shown:
+    racehound needs an Linux kernel >= 3.14 to be built
+
+So, this is incorrect, because:
+ 1- a kernel >= 3.14 is indeed to be built
+ 2- the headers version mismatch is not reported
+
+Fix that by moving the dependency on the kernel headers to the
+appropriate comment and enhance it.
+
+Since there is no way we can know the kernel version to be built, we can
+not add such a condition; still, we leave the kernel message as-is.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lksctp-tools/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/racehound/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/lksctp-tools/Config.in b/package/lksctp-tools/Config.in
-index b8a8c7a..9c95ef5 100644
---- a/package/lksctp-tools/Config.in
-+++ b/package/lksctp-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LKSCTP_TOOLS
- 	bool "lksctp-tools"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	help
- 	  The lksctp-tools project provides a Linux user space library
- 	  for SCTP (libsctp) including C language header files
-@@ -11,6 +12,6 @@ config BR2_PACKAGE_LKSCTP_TOOLS
+diff --git a/package/racehound/Config.in b/package/racehound/Config.in
+index 9f1011b..53e39a8 100644
+--- a/package/racehound/Config.in
++++ b/package/racehound/Config.in
+@@ -27,10 +27,11 @@ config BR2_PACKAGE_RACEHOUND
+ 	  https://github.com/winnukem/racehound
  
- 	  http://lksctp.sourceforge.net/
+ comment "racehound needs an Linux kernel >= 3.14 to be built"
+-	depends on !BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++	depends on !BR2_LINUX_KERNEL
+ 	depends on BR2_i386 || BR2_x86_64
  
--comment "lksctp-tools needs a toolchain w/ threads"
-+comment "lksctp-tools needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library"
++comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library, headers >= 3.14"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+-		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
++		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
