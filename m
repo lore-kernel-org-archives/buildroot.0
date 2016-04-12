@@ -1,38 +1,74 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Apr 2016 21:46:00 +0300
-Subject: [Buildroot] [PATCH] mbedtls: fix companion programs static build
-Message-ID: <f6eae4fae3adae10a41a1723da17fe484299ba95.1460486760.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Apr 2016 22:05:43 +0200
+Subject: [Buildroot] [PATCH] host-gcc: apply patches stored in global
+ patches directories
+In-Reply-To: <1460343675-19551-1-git-send-email-hchunhui@mail.ustc.edu.cn>
+References: <1460343675-19551-1-git-send-email-hchunhui@mail.ustc.edu.cn>
+Message-ID: <570D5517.9000304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set LINK_WITH_PTHREAD to explicitly add pthread to the list of libraries.
+On 04/11/16 05:01, He Chunhui wrote:
+> When building host gcc, patches stored in global patches directories are skipped.
+> This patch fixes the unexpected behavior.
 
-Fixes:
-http://autobuild.buildroot.net/results/e08/e087dfa2a6057b18209cd6adff2760026a9ca1db/
-http://autobuild.buildroot.net/results/615/61565f1a88b7d6eea03a355ccf8dd3fe6585c4ab/
-http://autobuild.buildroot.net/results/6b2/6b267b9cba37655e7d8e6d78821f96d9a8dd7d2e/
+  That's because they should be in subdirectories gcc-initial and gcc-final. But 
+I agree that it's unexpected behaviour...
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/mbedtls/mbedtls.mk | 3 +++
- 1 file changed, 3 insertions(+)
+>
+> Signed-off-by: He Chunhui <hchunhui@mail.ustc.edu.cn>
+> ---
+>   package/gcc/gcc.mk | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 5646b66..de9a65c 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -42,9 +42,15 @@ endif
+>   endif
+>
+>   define HOST_GCC_APPLY_PATCHES
+> -	if test -d package/gcc/$(GCC_VERSION); then \
+> -	  $(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
+> -	fi;
+> +	for D in \
+> +	    package/gcc/$(GCC_VERSION) \
+> +	    $(addsuffix /gcc,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))/$(GCC_VERSION) \
+> +	    $(addsuffix /gcc,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
 
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index fe166e21f4db..994a3f40a808 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -23,6 +23,9 @@ define MBEDTLS_ENABLE_THREADING
- 		$(@D)/include/mbedtls/config.h
- endef
- MBEDTLS_POST_PATCH_HOOKS += MBEDTLS_ENABLE_THREADING
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MBEDTLS_CONF_OPTS += -DLINK_WITH_PTHREAD=ON
-+endif
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),y)
+  You ahould also add this to HOST_GCC_COMMON_CCACHE_HASH_FILES, below, to make 
+sure that the ccache hash is updated appropriately. Make sure you update the 
+comment there as well.
+
+> +	    ; do \
+> +	  if test -d $${D}; then \
+
+  This should be indented with two tabs.
+
+> +	    $(APPLY_PATCHES) $(@D) $${D} \*.patch || exit 1; \
+
+  And three tabs here.
+
+
+  Regards,
+  Arnout
+
+> +	  fi; \
+> +	done;
+>   	$(HOST_GCC_APPLY_POWERPC_PATCH)
+>   endef
+>
+>
+
+
 -- 
-2.8.0.rc3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
