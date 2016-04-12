@@ -1,8 +1,8 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Tue, 12 Apr 2016 17:21:50 +0200
-Subject: [Buildroot] [PATCH v2] package/wpa_supplicant: Fix systemd service
+Date: Tue, 12 Apr 2016 17:35:06 +0200
+Subject: [Buildroot] [PATCH v3] package/wpa_supplicant: Fix systemd service
 	for new DBus bus name
-Message-ID: <1460474510-29120-1-git-send-email-m.niestroj@grinn-global.com>
+Message-ID: <1460475306-29701-1-git-send-email-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,11 +21,19 @@ according to configured DBus interface version.
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
-Changes v1 -> v2:
+Hi,
+
+Sorry for posting this patch as v2 moment ago. I'm just resending it
+with proper version (v3) and updated changelog.
+
+Changes v2 -> v3:
  * Update subject line and commit description to make the problem more
    clear (suggested by Arnout)
  * Use upstreamable patch instead of change in buildroot package
    makefile (suggested by Arnout)
+
+Changes v1 -> v2:
+ * Added missing signed-off tag
 
  ...ate-service-files-according-to-dbus-inter.patch | 77 ++++++++++++++++++++++
  1 file changed, 77 insertions(+)
