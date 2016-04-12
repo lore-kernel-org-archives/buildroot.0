@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Apr 2016 01:21:14 +0200
-Subject: [Buildroot] [PATCH 1/4] board/minnowboard-max: Rework to
- generate SD card image
-In-Reply-To: <1460438965-28065-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+Date: Wed, 13 Apr 2016 01:24:31 +0200
+Subject: [Buildroot] [PATCH 2/4] board/minnowboard: Rework to generate
+ SD card image
+In-Reply-To: <1460438965-28065-3-git-send-email-ezequiel@vanguardiasur.com.ar>
 References: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460438965-28065-2-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <570D82EA.9010609@mind.be>
+ <1460438965-28065-3-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <570D83AF.5030108@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,26 +18,24 @@ On 04/12/16 07:29, Ezequiel Garcia wrote:
 >
 > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->   board/minnowboard-max/genimage.cfg  | 34 ++++++++++++++++++++++++++++++++
->   board/minnowboard-max/post-image.sh | 13 +++++++++++++
-
-  If you feel up to it: I think it would be nice to add an fs/genimage infra 
-that runs genimage at the end of the build with a user-specified config file. 
-All the post-image scripts we have for the defconfigs are identical.
-
+  Instead of this patch, wouldn't it be nicer to unify the minnowboard and 
+minnowboard-max directories? Or at least, make the genimage.cfg, post-image.sh 
+and readme.txt a symlink to the -max equivalent (grub.cfg and linux.config are 
+different).
 
   Regards,
   Arnout
 
->   board/minnowboard-max/readme.txt    | 39 ++++++++++++-------------------------
->   configs/minnowboard_max_defconfig   |  8 ++++++++
+> ---
+>   board/minnowboard/genimage.cfg  | 34 ++++++++++++++++++++++++++++++++++
+>   board/minnowboard/post-image.sh | 13 +++++++++++++
+>   board/minnowboard/readme.txt    | 39 ++++++++++++---------------------------
+>   configs/minnowboard_defconfig   |  8 ++++++++
 >   4 files changed, 67 insertions(+), 27 deletions(-)
->   create mode 100644 board/minnowboard-max/genimage.cfg
->   create mode 100755 board/minnowboard-max/post-image.sh
+>   create mode 100644 board/minnowboard/genimage.cfg
+>   create mode 100755 board/minnowboard/post-image.sh
 [snip]
+
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
