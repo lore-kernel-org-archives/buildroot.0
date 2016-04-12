@@ -1,82 +1,40 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 12 Apr 2016 09:35:36 -0700
-Subject: [Buildroot] [PATCH v4 1/1] PyMySQL: new package
-Message-ID: <1460478936-27315-1-git-send-email-stevecalfee@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 Apr 2016 19:55:36 +0300
+Subject: [Buildroot] [PATCH] links: fix static link with directfb
+Message-ID: <535156e43ad4326bc4f9eff213ad4903229c01b5.1460480136.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add python to mysql connection software, pure python
+The AC_HAVE_FUNCS autoconf macro uses gcc to check for function existence.
+This breaks when the library depends on libstdc++, like directfb. Add this
+dependency externally.
 
+Fixes:
+http://autobuild.buildroot.net/results/548/548019b71c7db649f20d2c479bb8fb3612162d4a/
+http://autobuild.buildroot.net/results/c94/c9495f54db388bde9d64325bb57fc4e58741f7a7/
+http://autobuild.buildroot.net/results/9b8/9b883d42bff3633f16447d76d2eb4ddf68013788/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-v4 fix git commit per review
+ package/links/links.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
----
- package/Config.in                          |  1 +
- package/python-pymysql/Config.in           |  6 ++++++
- package/python-pymysql/python-pymysql.hash |  4 ++++
- package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-pymysql/Config.in
- create mode 100644 package/python-pymysql/python-pymysql.hash
- create mode 100644 package/python-pymysql/python-pymysql.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..2543195 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -683,6 +683,7 @@ menu "External python modules"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pymysql/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-new file mode 100644
-index 0000000..7b74533
---- /dev/null
-+++ b/package/python-pymysql/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PYMYSQL
-+	bool "python-pymysql"
-+	help
-+	  python-pymysql is a pure Python binding for mySQL.
-+
-+	  https://pypi.python.org/pypi/PyMySQL/
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-new file mode 100644
-index 0000000..fc7e5e3
---- /dev/null
-+++ b/package/python-pymysql/python-pymysql.hash
-@@ -0,0 +1,4 @@
-+#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
-+md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
-+# Locally calculated:
-+sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-new file mode 100644
-index 0000000..e58ff7e
---- /dev/null
-+++ b/package/python-pymysql/python-pymysql.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pymysql
-+#
-+################################################################################
-+
-+PYTHON_PYMYSQL_VERSION = 0.7.2
-+PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
-+PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
-+PYTHON_PYMYSQL_LICENSE = MIT
-+PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
-+PYTHON_PYMYSQL_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 62f91a32e39e..ab2b58359965 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -22,6 +22,9 @@ LINKS_CONF_OPTS += --without-x
+ endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+ LINKS_CONF_ENV = ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
++ifeq ($(BR2_STATIC_LIBS),y)
++LINKS_CONF_ENV += LIBS=-lstdc++
++endif
+ LINKS_CONF_OPTS += --with-directfb
+ LINKS_DEPENDENCIES += directfb
+ else
 -- 
-2.5.0
+2.8.0.rc3
