@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Apr 2016 23:21:11 +0200
-Subject: [Buildroot] [git commit] wine: Bump to version 1.8.2
-Message-ID: <20160412220141.22E1381DD5@busybox.osuosl.org>
+Date: Tue, 12 Apr 2016 23:20:37 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 3.14.x and 4.{4,
+	5}.x series
+Message-ID: <20160412220141.0C8777FA20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4c4529dd943442104d167efa4be1d2596ba9883
+commit: https://git.buildroot.net/buildroot/commit/?id=ddf46857fdd9d060d107f8ea4f75ad09c41b9fde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bumping to stable version 1.8.2
-
-Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wine/wine.hash | 2 +-
- package/wine/wine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wine/wine.hash b/package/wine/wine.hash
-index 31db6c0..b4eec49 100644
---- a/package/wine/wine.hash
-+++ b/package/wine/wine.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 149ad3daaf8593b36c5c061285df0ec2a25e20ea48c61323be91088c4d22ca97 wine-1.8.1.tar.bz2
-+sha256 51624fadf0145e87f0c01e7ce8524ea1e8d9d360c3e8a86e78cd26a52ce55a6f wine-1.8.2.tar.bz2
-diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-index fc04027..7587cb0 100644
---- a/package/wine/wine.mk
-+++ b/package/wine/wine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WINE_VERSION = 1.8.1
-+WINE_VERSION = 1.8.2
- WINE_SOURCE = wine-$(WINE_VERSION).tar.bz2
- WINE_SITE = https://dl.winehq.org/wine/source/1.8
- WINE_LICENSE = LGPLv2.1+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 70d5faa..f78e5c7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.66"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.30"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.21"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.6"		if BR2_KERNEL_HEADERS_4_4
+-	default "4.5"		if BR2_KERNEL_HEADERS_4_5
++	default "4.4.7"		if BR2_KERNEL_HEADERS_4_4
++	default "4.5.1"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
