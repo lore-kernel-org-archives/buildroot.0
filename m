@@ -1,30 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Apr 2016 23:22:19 +0200
-Subject: [Buildroot] [PATCH] links: fix static link with directfb
-In-Reply-To: <535156e43ad4326bc4f9eff213ad4903229c01b5.1460480136.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Apr 2016 19:55:36 +0300")
-References: <535156e43ad4326bc4f9eff213ad4903229c01b5.1460480136.git.baruch@tkos.co.il>
-Message-ID: <87mvoyldys.fsf@dell.be.48ers.dk>
+From: Steve Calfee <stevecalfee@gmail.com>
+Date: Tue, 12 Apr 2016 14:22:27 -0700
+Subject: [Buildroot] [PATCH v5 1/1] PyMySQL: new package
+Message-ID: <1460496147-28957-1-git-send-email-stevecalfee@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+add python to MySQL connection software, written in pure python
 
- > The AC_HAVE_FUNCS autoconf macro uses gcc to check for function existence.
- > This breaks when the library depends on libstdc++, like directfb. Add this
- > dependency externally.
+---
+v4 fix git commit per review
 
- > Fixes:
- > http://autobuild.buildroot.net/results/548/548019b71c7db649f20d2c479bb8fb3612162d4a/
- > http://autobuild.buildroot.net/results/c94/c9495f54db388bde9d64325bb57fc4e58741f7a7/
- > http://autobuild.buildroot.net/results/9b8/9b883d42bff3633f16447d76d2eb4ddf68013788/
+---
+v5 fixup missed review request for Capitalization of MySQL
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
+---
+ package/Config.in                          |  1 +
+ package/python-pymysql/Config.in           |  7 +++++++
+ package/python-pymysql/python-pymysql.hash |  4 ++++
+ package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-pymysql/Config.in
+ create mode 100644 package/python-pymysql/python-pymysql.hash
+ create mode 100644 package/python-pymysql/python-pymysql.mk
 
-Committed, thanks.
-
+diff --git a/package/Config.in b/package/Config.in
+index 529ad33..2543195 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -683,6 +683,7 @@ menu "External python modules"
+ 	source "package/python-pyftpdlib/Config.in"
+ 	source "package/python-pygame/Config.in"
+ 	source "package/python-pyinotify/Config.in"
++	source "package/python-pymysql/Config.in"
+ 	source "package/python-pyparsing/Config.in"
+ 	source "package/python-pyparted/Config.in"
+ 	source "package/python-pypcap/Config.in"
+diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
+new file mode 100644
+index 0000000..d0db376
+--- /dev/null
++++ b/package/python-pymysql/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PYMYSQL
++	bool "python-pymysql"
++	help
++	  PyMySQL is a pure-Python MySQL client library. 
++	  It follows the DB-API 2.0.
++
++	  https://pypi.python.org/pypi/PyMySQL/
+diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
+new file mode 100644
+index 0000000..fc7e5e3
+--- /dev/null
++++ b/package/python-pymysql/python-pymysql.hash
+@@ -0,0 +1,4 @@
++#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
++md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
++# Locally calculated:
++sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
+diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
+new file mode 100644
+index 0000000..e58ff7e
+--- /dev/null
++++ b/package/python-pymysql/python-pymysql.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pymysql
++#
++################################################################################
++
++PYTHON_PYMYSQL_VERSION = 0.7.2
++PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
++PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
++PYTHON_PYMYSQL_LICENSE = MIT
++PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
++PYTHON_PYMYSQL_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
-Bye, Peter Korsgaard
+2.5.0
