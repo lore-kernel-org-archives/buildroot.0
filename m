@@ -1,111 +1,84 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Apr 2016 22:16:32 +0200
-Subject: [Buildroot] [PATCH] mtd-utils: ubinize: fix return code on error
-In-Reply-To: <1460390298-25739-1-git-send-email-luca@lucaceresoli.net>
-References: <1460390298-25739-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <570D57A0.4090304@mind.be>
+Date: Tue, 12 Apr 2016 22:22:14 +0200
+Subject: [Buildroot] Adding support for the Rust programming language
+In-Reply-To: <20160411210358.7e7a8b4c@itchy>
+References: <20160408224541.79e1ba4d@itchy> <570A77F9.50506@mind.be>
+ <20160411210358.7e7a8b4c@itchy>
+Message-ID: <570D58F6.3040909@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-  Hi Luca,
-
-On 04/11/16 17:58, Luca Ceresoli wrote:
-> ubinize 1.5.2 (currently packaged in Buildroot) returns 0 in case of
-> some errors. This can lead to unnoticed errors in the middle of a
-> build.
+On 04/11/16 21:03, Eric Le Bihan wrote:
+> On Sun, 10 Apr 2016 17:57:45 +0200,
+> Arnout Vandecappelle <arnout@mind.be> wrote :
 >
-> Fix by adding a patch from upstream, which is not yet present in any
-> released verison.
+>>> 1. Would it be acceptable to provide a script to generate these
+>>> files from the Buildroot configuration file?
+>>
+>>    Obviously yes, we already do that kind of thing for some packages
+>> (e.g. cmake).
 >
-> Fetch from: http://git.infradead.org/mtd-utils.git/commit/5f50207231414bfdbac8f0f974a2824f24177d6e
->
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->   ...binize-Always-return-error-code-at-least-.patch | 63 ++++++++++++++++++++++
->   1 file changed, 63 insertions(+)
->   create mode 100644 package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
->
-> diff --git a/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
-> new file mode 100644
-> index 0000000..772ab78
-> --- /dev/null
-> +++ b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
-> @@ -0,0 +1,63 @@
-> +From 5f50207231414bfdbac8f0f974a2824f24177d6e Mon Sep 17 00:00:00 2001
-> +From: Enrico Jorns <ejo@pengutronix.de>
-> +Date: Fri, 11 Sep 2015 15:28:13 +0200
-> +Subject: [PATCH] mtd-utils: ubinize: Always return error code (at least -1) in
-> + case of an error
-> +
-> +ubinize should not fail silenty, this can be very annoying when using
-> +it from other tools that rely on the exit code for determining the
-> +success of their operation.
-> +
-> +Signed-off-by: Enrico Jorns <ejo@pengutronix.de>
-> +Signed-off-by: Brian Norris <computersforpeace@gmail.com>
+> So, assuming the script is to be named `rust-target-gen`, it should be
+> stored in support/scripts, right?
 
-  You forgot to add you SoB.
+  It's only going to be used by the rust package itself, right? Not by any other 
+package that happens to be written in rust? In that case, I'd put the script in 
+the package/rust directory.
 
-  Otherwise looks good to me.
+>
+>>> 2. Would Python be a suitable language for this script? It is better
+>>> suited for playing with complex structures and JSON than pure
+>>> shell.
+>>
+>>    We try to avoid requiring python for a normal build, and use it
+>> only for specific scripts at the moment (like graph-depends). So I
+>> think the answer is no here. Anyway, as far as I can see from [3],
+>> you don't really need a full json generator, it should be enough to
+>> do some sed magic on a template file.
+>
+> Correct. The target specification file is not a complex JSON file.
+> So I'll go for a Bash shell script (compatible with Bash 3.2, i.e. no
+> use of associative arrays).
+>
+> Anyway, there will be a need for building host-python, in order to
+> build Cargo, the official Rust package manager, as stated in [1].
+
+  In that case, by all means use a python script that relies on host-python. 
+Just make sure it runs on python3 as well.
+
+>
+>>    When you submit patches, it's probably a good idea to start with a
+>> minimal patch that e.g. gives rust a hard dependency on little-endian
+>> ARM v6, and add more features in subsequent patches. I expect it will
+>> be something difficult to review.
+>
+> This looks sensible. I intend to provide the following patches:
+>
+> - one to add the package "host-rust" (compiler)
+> - one to add the package "host-cargo" (package manager)
+> - one to add "package/pkg-cargo.mk" (Rust package infrastructure)
+
+  Don't add the package infrastructure unless you have at least one package that 
+uses it, so we understand how it works.
+
+  Also, I repeat: if supporting all possible arches/endianness/fp/... 
+combinations makes it complicated, start out with a limited set of supported 
+arch/... combinations and add others in later patches.
 
   Regards,
   Arnout
 
-> +---
-> + ubi-utils/ubinize.c | 5 +++++
-> + 1 file changed, 5 insertions(+)
-> +
-> +diff --git a/ubi-utils/ubinize.c b/ubi-utils/ubinize.c
-> +index 34f465a..60bbd9a 100644
-> +--- a/ubi-utils/ubinize.c
-> ++++ b/ubi-utils/ubinize.c
-> +@@ -519,6 +519,7 @@ int main(int argc, char * const argv[])
-> + 	 */
-> + 	seek = ui.peb_size * 2;
-> + 	if (lseek(args.out_fd, seek, SEEK_SET) != seek) {
-> ++		err = -1;
-> + 		sys_errmsg("cannot seek file \"%s\"", args.f_out);
-> + 		goto out_free;
-> + 	}
-> +@@ -530,6 +531,7 @@ int main(int argc, char * const argv[])
-> + 		int fd, j;
-> +
-> + 		if (!sname) {
-> ++			err = -1;
-> + 			errmsg("ini-file parsing error (iniparser_getsecname)");
-> + 			goto out_free;
-> + 		}
-> +@@ -550,6 +552,7 @@ int main(int argc, char * const argv[])
-> + 		 */
-> + 		for (j = 0; j < i; j++) {
-> + 			if (vi[i].id == vi[j].id) {
-> ++				err = -1;
-> + 				errmsg("volume IDs must be unique, but ID %d "
-> + 				       "in section \"%s\" is not",
-> + 				       vi[i].id, sname);
-> +@@ -557,6 +560,7 @@ int main(int argc, char * const argv[])
-> + 			}
-> +
-> + 			if (!strcmp(vi[i].name, vi[j].name)) {
-> ++				err = -1;
-> + 				errmsg("volume name must be unique, but name "
-> + 				       "\"%s\" in section \"%s\" is not",
-> + 				       vi[i].name, sname);
-> +@@ -580,6 +584,7 @@ int main(int argc, char * const argv[])
-> + 		if (img) {
-> + 			fd = open(img, O_RDONLY);
-> + 			if (fd == -1) {
-> ++				err = fd;
-> + 				sys_errmsg("cannot open \"%s\"", img);
-> + 				goto out_free;
-> + 			}
-> +--
-> +1.9.1
-> +
+>
+> Thanks for your suggestions.
+>
+> [1] http://www.elebihan.com/posts/using-cargo-with-buildroot-full-build.html
+>
+> --
+> ELB
+>
 >
 
 
