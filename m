@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Apr 2016 23:20:37 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 3.14.x and 4.{4,
-	5}.x series
-Message-ID: <20160412220141.0C8777FA20@busybox.osuosl.org>
+Date: Tue, 12 Apr 2016 23:22:13 +0200
+Subject: [Buildroot] [git commit] links: fix static link with directfb
+Message-ID: <20160412220141.401AB7FA20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddf46857fdd9d060d107f8ea4f75ad09c41b9fde
+commit: https://git.buildroot.net/buildroot/commit/?id=88a807296da62a42937ee6a8f4d6c6fcd0db729f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+The AC_HAVE_FUNCS autoconf macro uses gcc to check for function existence.
+This breaks when the library depends on libstdc++, like directfb. Add this
+dependency externally.
+
+Fixes:
+http://autobuild.buildroot.net/results/548/548019b71c7db649f20d2c479bb8fb3612162d4a/
+http://autobuild.buildroot.net/results/c94/c9495f54db388bde9d64325bb57fc4e58741f7a7/
+http://autobuild.buildroot.net/results/9b8/9b883d42bff3633f16447d76d2eb4ddf68013788/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/links/links.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 70d5faa..f78e5c7 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
- 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
- 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
--	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
-+	default "3.14.66"	if BR2_KERNEL_HEADERS_3_14
- 	default "3.18.30"	if BR2_KERNEL_HEADERS_3_18
- 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
- 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
- 	default "4.1.21"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
- 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
--	default "4.4.6"		if BR2_KERNEL_HEADERS_4_4
--	default "4.5"		if BR2_KERNEL_HEADERS_4_5
-+	default "4.4.7"		if BR2_KERNEL_HEADERS_4_4
-+	default "4.5.1"		if BR2_KERNEL_HEADERS_4_5
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/links/links.mk b/package/links/links.mk
+index 62f91a3..ab2b583 100644
+--- a/package/links/links.mk
++++ b/package/links/links.mk
+@@ -22,6 +22,9 @@ LINKS_CONF_OPTS += --without-x
+ endif
+ ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+ LINKS_CONF_ENV = ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
++ifeq ($(BR2_STATIC_LIBS),y)
++LINKS_CONF_ENV += LIBS=-lstdc++
++endif
+ LINKS_CONF_OPTS += --with-directfb
+ LINKS_DEPENDENCIES += directfb
+ else
