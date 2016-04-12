@@ -1,62 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 12 Apr 2016 19:20:50 +0200
-Subject: [Buildroot] [PATCH] package/racehound: fix comment
-Message-ID: <1460481650-19136-1-git-send-email-yann.morin.1998@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 12 Apr 2016 14:32:23 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.14.x and 4.{4,
+	5}.x series
+Message-ID: <1460482344-13038-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-racehound requires a kernel >= 3.14 to be built and to run.
-
-However, the current conditions on the corresponding comments are wrong:
-  - the comment about the kernel has a dependency on the requested
-    headers
-  - the comment on the toolchain features does not have this condition.
-
-Thus, the comments are not shown/hidden under the appropriate
-conditions, like in this situation:
-  - toolchain with headers < 3.14 (e.g. Sourcery CodeBench x86/x86_64
-    2012.09 with headers 3.5)
-  - kernel 4.5 enabled
-
-this comment is shown:
-    racehound needs an Linux kernel >= 3.14 to be built
-
-So, this is incorrect, because:
- 1- a kernel >= 3.14 is indeed to be built
- 2- the headers version mismatch is not reported
-
-Fix that by moving the dependency on the kernel headers to the
-appropriate comment and enhance it.
-
-Since there is no way we can know the kernel version to be built, we can
-not add such a condition; still, we leave the kernel message as-is.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/racehound/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/racehound/Config.in b/package/racehound/Config.in
-index 9f1011b..53e39a8 100644
---- a/package/racehound/Config.in
-+++ b/package/racehound/Config.in
-@@ -27,10 +27,11 @@ config BR2_PACKAGE_RACEHOUND
- 	  https://github.com/winnukem/racehound
- 
- comment "racehound needs an Linux kernel >= 3.14 to be built"
--	depends on !BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+	depends on !BR2_LINUX_KERNEL
- 	depends on BR2_i386 || BR2_x86_64
- 
--comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library"
-+comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library, headers >= 3.14"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 70d5faa..f78e5c7 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.56"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.65"	if BR2_KERNEL_HEADERS_3_14
++	default "3.14.66"	if BR2_KERNEL_HEADERS_3_14
+ 	default "3.18.30"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+ 	default "4.1.21"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.6"		if BR2_KERNEL_HEADERS_4_4
+-	default "4.5"		if BR2_KERNEL_HEADERS_4_5
++	default "4.4.7"		if BR2_KERNEL_HEADERS_4_4
++	default "4.5.1"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-1.9.1
+2.7.3
