@@ -1,108 +1,170 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 12 Apr 2016 02:33:44 -0300
-Subject: [Buildroot] [PATCH] supertuxkart: new package
-Message-ID: <1460439224-29314-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Date: Tue, 12 Apr 2016 02:29:23 -0300
+Subject: [Buildroot] [PATCH 2/4] board/minnowboard: Rework to generate SD
+	card image
+In-Reply-To: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1460438965-28065-3-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Let's rework the board and config files to use genimage
+to generate the SD card image directly.
+
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- package/Config.in                      |  1 +
- package/supertuxkart/Config.in         | 29 +++++++++++++++++++++++++++++
- package/supertuxkart/supertuxkart.hash |  2 ++
- package/supertuxkart/supertuxkart.mk   | 24 ++++++++++++++++++++++++
- 4 files changed, 56 insertions(+)
- create mode 100644 package/supertuxkart/Config.in
- create mode 100644 package/supertuxkart/supertuxkart.hash
- create mode 100644 package/supertuxkart/supertuxkart.mk
+ board/minnowboard/genimage.cfg  | 34 ++++++++++++++++++++++++++++++++++
+ board/minnowboard/post-image.sh | 13 +++++++++++++
+ board/minnowboard/readme.txt    | 39 ++++++++++++---------------------------
+ configs/minnowboard_defconfig   |  8 ++++++++
+ 4 files changed, 67 insertions(+), 27 deletions(-)
+ create mode 100644 board/minnowboard/genimage.cfg
+ create mode 100755 board/minnowboard/post-image.sh
 
-diff --git a/package/Config.in b/package/Config.in
-index 64822bf5f6fa..8438bca33195 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -232,6 +232,7 @@ menu "Games"
- 	source "package/prboom/Config.in"
- 	source "package/rubix/Config.in"
- 	source "package/sl/Config.in"
-+	source "package/supertuxkart/Config.in"
- endmenu
+diff --git a/board/minnowboard/genimage.cfg b/board/minnowboard/genimage.cfg
+new file mode 100644
+index 000000000000..6cf787430752
+--- /dev/null
++++ b/board/minnowboard/genimage.cfg
+@@ -0,0 +1,34 @@
++# Create an image of the efi partition
++image efi-part.vfat {
++	vfat {
++		file startup.nsh {
++			image = "efi-part/startup.nsh"
++		}
++		file EFI {
++			image = "efi-part/EFI"
++		}
++		file bzImage {
++			image = "bzImage"
++		}
++	}
++	size=10M
++}
++
++# Create the sdcard image, pulling in
++#  * the image created by buildroot
++#  * the efi-partition created above
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xEF
++		image = "efi-part.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/minnowboard/post-image.sh b/board/minnowboard/post-image.sh
+new file mode 100755
+index 000000000000..428baa5e5599
+--- /dev/null
++++ b/board/minnowboard/post-image.sh
+@@ -0,0 +1,13 @@
++#!/bin/sh -e
++
++GENIMAGE_CFG="board/minnowboard/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++    --rootpath "${TARGET_DIR}" \
++    --tmppath "${GENIMAGE_TMP}" \
++    --inputpath "${BINARIES_DIR}" \
++    --outputpath "${BINARIES_DIR}" \
++    --config "${GENIMAGE_CFG}"
+diff --git a/board/minnowboard/readme.txt b/board/minnowboard/readme.txt
+index 62ffa92e0b83..3a24fdc162b8 100644
+--- a/board/minnowboard/readme.txt
++++ b/board/minnowboard/readme.txt
+@@ -1,40 +1,25 @@
+-Prepare the SD card for the Minnow Board
++How to get started with the MinnowBoard
+ ========================================
  
- menu "Graphic libraries and applications (graphic/text)"
-diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
-new file mode 100644
-index 000000000000..4e9f5bb09ac6
---- /dev/null
-+++ b/package/supertuxkart/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_SUPERTUXKART
-+	bool "supertuxkart"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_BLUEZ5_UTILS
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBFRIBIDI
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_LIBVORBIS
-+	select BR2_PACKAGE_OPENAL
-+	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
-+	  racer with multiple karts, tracks and modes you can play.
-+	  Beat the evil Nolok by any means necessary, and make the
-+	  mascot kingdom safe once again!
+- 1. Partition the SD card with a GPT partition table
++1. Build
+ 
+-    sudo cgdisk /dev/mmcblk0
++  Apply the defconfig:
+ 
+-    Create two partitions:
++  $ make minnowboard_defconfig
+ 
+-     a) First partition of a few dozens of megabytes, which will be
+-        used to store the bootloader and the kernel image. Type must
+-        be EF00 (EFI partition).
++  Add any additional packages required and build:
+ 
+-     b) Second partition of any size, which will be used to store the
+-        root filesystem. Type must be 8300 (Linux filesystem)
++  $ make
+ 
+- 2. Prepare the boot partition
++2. Write the SD card
+ 
+-    We will format it, mount it, copy the EFI data generated by
+-    Buildroot, and the kernel image.
++  The build process will create a SD card image in output/images.
++  Write the image to an mSD card, insert into the MinnowBoard
++  and power the board on.
+ 
+-    sudo mkfs.vfat -F 32 -n boot /dev/mmcblk0p1
+-    sudo mount /dev/mmcblk0p1 /mnt
+-    sudo cp -a output/images/efi-part/* /mnt/
+-    sudo cp output/images/bzImage /mnt/
+-    sudo umount /mnt
++  $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
+ 
+- 3. Prepare the root partition
+-
+-    We will format it, mount it, and extract the root filesystem.
+-
+-    sudo mkfs.ext3 -L root /dev/mmcblk0p2
+-    sudo mount /dev/mmcblk0p2 /mnt
+-    sudo tar -C /mnt -xf output/images/rootfs.tar
+-    sudo umount /mnt
+-
+- 4. Enjoy
++3. Enjoy
+ 
+ Additional information about this board can be found at
+ http://www.minnowboard.org/.
+diff --git a/configs/minnowboard_defconfig b/configs/minnowboard_defconfig
+index 3091957f35dc..3a5e18ea0ceb 100644
+--- a/configs/minnowboard_defconfig
++++ b/configs/minnowboard_defconfig
+@@ -5,9 +5,12 @@ BR2_x86_atom=y
+ # Misc
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPCH0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+ 
+ # Linux headers same as kernel, a 3.8 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+@@ -20,3 +23,8 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-3.8.config"
+ # Bootloader
+ BR2_TARGET_GRUB2=y
+ BR2_TARGET_GRUB2_I386_EFI=y
 +
-+	  http://supertuxkart.sourceforge.net/Main_Page
-+
-+comment "supertuxkart needs a toolchain w/ threads, C++"
-+	depends on !(BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_HAS_THREADS)
-+
-+comment "supertuxkart needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/supertuxkart/supertuxkart.hash b/package/supertuxkart/supertuxkart.hash
-new file mode 100644
-index 000000000000..d8e7ac30f6d1
---- /dev/null
-+++ b/package/supertuxkart/supertuxkart.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256	c50f00a71df165fb613d20e86bea2d9d5e51ed3e27e1d436fbac3b07cf2ea149	supertuxkart-0.9.1-src.tar.xz
-diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
-new file mode 100644
-index 000000000000..e1c67b4e14f4
---- /dev/null
-+++ b/package/supertuxkart/supertuxkart.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# supertuxkart
-+#
-+################################################################################
-+
-+SUPERTUXKART_VERSION = 0.9.1
-+SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
-+SUPERTUXKART_SITE = http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
-+SUPERTUXKART_LICENSE = GPLv3
-+SUPERTUXKART_LICENSE_FILES = COPYING
-+
-+SUPERTUXKART_DEPENDENCIES += bluez5_utils jpeg libcurl libfribidi libgl libglu libpng \
-+			     libogg libvorbis openal xlib_libXrandr zlib
-+
-+# Since supertuxkart is not installing libstkirrlicht.so,
-+# and given we don't really need that library to be shared
-+# we turn off shared libs here.
-+SUPERTUXKART_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
-+
-+# Disable Wiimote support
-+SUPERTUXKART_CONF_OPTS += -DUSE_WIIUSE=OFF
-+
-+$(eval $(cmake-package))
++# Filesystem image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.7.0
