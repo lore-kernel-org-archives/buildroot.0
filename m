@@ -1,75 +1,55 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 12 Apr 2016 17:34:50 -0300
-Subject: [Buildroot] [PATCH] samba4: security bump to version 4.4.2
-Message-ID: <1460493290-20164-1-git-send-email-gustavo@zacarias.com.ar>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 12 Apr 2016 22:36:32 +0200
+Subject: [Buildroot] [PATCH] gcc: fix ccache hash of patches in
+	BR2_GLOBAL_PATCH_DIR
+Message-ID: <1460493392-21104-1-git-send-email-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+In commit f4682cf933, a hash of the patches applied to gcc was created
+to make sure that ccache can properly detect when the toolchain has
+changed. The patches applied to gcc consist of the buildroot patches in
+package/gcc, but also potentially patches in BR2_GLOBAL_PATCH_DIR.
+However, the path to the patches in BR2_GLOBAL_PATCH_DIR was corrected
+incorrectly, because it misses a /. So instead of:
 
-CVE-2016-2118 - A man in the middle can intercept any DCERPC traffic
-between a client and a server in order toimpersonate the client and get
-the same privileges as the authenticated user account.
+$(BR2_GLOBAL_PATCH_DIR)/gcc-initial/*.patch
 
-CVE-2016-2115 - The protection of DCERPC communication over ncacn_np
-(which is the default for most the file server related protocols) is
-inherited from the underlying SMB connection. Samba doesn't enforce SMB
-signing for this kind of SMB connections by default, which makes man in
-the middle attacks possible.
+it would look for
 
-CVE-2016-2114 - Due to a bug Samba doesn't enforce required smb signing,
-even if explicitly configured.
+$(BR2_GLOBAL_PATCH_DIR)gcc-initial/*.patch
 
-CVE-2016-2113 - Man in the middle attacks are possible for client
-triggered LDAP connections (with ldaps://) and ncacn_http connections
-(with https://).
+In other words, if BR2_GLOBAL_PATCH_DIR doesn't end with /, the patches
+in BR2_GLOBAL_PATCH_DIR are not taken into account in the ccache hash.
 
-CVE-2016-2112 - A man in the middle is able to downgrade LDAP
-connections to no integrity protection. It's possible to attack client
-and server with this.
+To fix, add the missing /
 
-CVE-2016-2111 - When Samba is configured as Domain Controller it allows
-remote attackers to spoof the computer name of a secure channel's
-endpoints, and obtain sensitive session information, by running a
-crafted application and leveraging the ability to sniff network traffic.
-
-CVE-2016-2110 - The feature negotiation of NTLMSSP is not downgrade
-protected. A man in the middle is able to clear even required flags,
-especially NTLMSSP_NEGOTIATE_SIGN and NTLMSSP_NEGOTIATE_SEAL.
-
-CVE-2015-5370 - Errors in Samba DCE-RPC code can lead to denial of
-service (crashes and high cpu consumption) and man in the middle
-attacks.
-
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: He Chunhui <hchunhui@mail.ustc.edu.cn>
 ---
- package/samba4/samba4.hash | 2 +-
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+He, when you make a v3 of your patch which also updates the hash
+calculation, please make it a series which includes this patch as well.
+---
+ package/gcc/gcc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 95d111d..d762452 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	c5f6fefb7fd0a4e5f404a253b19b55f74f88faa1c3612cb3329e24aa03470075	samba-4.4.0.tar.gz
-+sha256	eaecd41a85ebb9507b8db9856ada2a949376e9d53cf75664b5493658f6e5926a	samba-4.4.2.tar.gz
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 5bacbc3..0d73662 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.4.0
-+SAMBA4_VERSION = 4.4.2
- SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5646b66..46f05ff 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -238,8 +238,8 @@ HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+ HOST_GCC_COMMON_CCACHE_HASH_FILES += \
+ 	$(sort $(wildcard \
+ 		package/gcc/$(GCC_VERSION)/*.patch \
+-		$(addsuffix $((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+-		$(addsuffix $((PKG)_RAWNAME)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))))
++		$(addsuffix /$((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
++		$(addsuffix /$((PKG)_RAWNAME)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))))
+ ifeq ($(BR2_xtensa),y)
+ HOST_GCC_COMMON_CCACHE_HASH_FILES += $(HOST_GCC_XTENSA_OVERLAY_TAR)
+ endif
 -- 
-2.7.3
+2.8.0.rc3
