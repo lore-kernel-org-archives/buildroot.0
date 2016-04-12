@@ -1,42 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Apr 2016 00:01:21 +0200
-Subject: [Buildroot] [git commit] libgtk3: bump to version 3.20.3
-Message-ID: <20160412220141.64291802CC@busybox.osuosl.org>
+Date: Tue, 12 Apr 2016 23:22:36 +0200
+Subject: [Buildroot] [git commit] lksctp-tools: requires dynamic library
+	support
+Message-ID: <20160412220141.4AAD37FA20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5e266042a624d765cc5667f9f623ca46f624db9
+commit: https://git.buildroot.net/buildroot/commit/?id=4bcc4f3e6ddb2fad7cf5a0ecd75536a2f3e26bf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fixes:
+http://autobuild.buildroot.net/results/259/25910726158f4b2cbd9ceb60c170f4b2d0b546ef/
+http://autobuild.buildroot.net/results/94a/94ab8ba783a67529a62d4994ab8c62c8656a05e6/
+http://autobuild.buildroot.net/results/1e5/1e59f273e0f31646065a1323a2e231c17babfe59/
+
+Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgtk3/libgtk3.hash | 4 ++--
- package/libgtk3/libgtk3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/lksctp-tools/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk3/libgtk3.hash b/package/libgtk3/libgtk3.hash
-index 1b9e252..72ef366 100644
---- a/package/libgtk3/libgtk3.hash
-+++ b/package/libgtk3/libgtk3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.2.sha256sum
--sha256	1ab1d1068ea55e0046f437d69983f164df5e68cb2e9fdfb38787b867f33f69f7	gtk+-3.20.2.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gtk+/3.20/gtk+-3.20.3.sha256sum
-+sha256	3834f3bf23b260b3e5ebfea41102e2026a8af29e36c3620edf4a5cf05e82f694	gtk+-3.20.3.tar.xz
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index ff8333d..aec4c44 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/lksctp-tools/Config.in b/package/lksctp-tools/Config.in
+index b8a8c7a..9c95ef5 100644
+--- a/package/lksctp-tools/Config.in
++++ b/package/lksctp-tools/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LKSCTP_TOOLS
+ 	bool "lksctp-tools"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS # dlopen()
+ 	help
+ 	  The lksctp-tools project provides a Linux user space library
+ 	  for SCTP (libsctp) including C language header files
+@@ -11,6 +12,6 @@ config BR2_PACKAGE_LKSCTP_TOOLS
  
- LIBGTK3_VERSION_MAJOR = 3.20
--LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).2
-+LIBGTK3_VERSION = $(LIBGTK3_VERSION_MAJOR).3
- LIBGTK3_SOURCE = gtk+-$(LIBGTK3_VERSION).tar.xz
- LIBGTK3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtk+/$(LIBGTK3_VERSION_MAJOR)
- LIBGTK3_LICENSE = LGPLv2+
+ 	  http://lksctp.sourceforge.net/
+ 
+-comment "lksctp-tools needs a toolchain w/ threads"
++comment "lksctp-tools needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
