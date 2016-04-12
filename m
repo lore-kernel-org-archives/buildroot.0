@@ -1,64 +1,97 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Apr 2016 22:39:16 +0200
-Subject: [Buildroot] [PATCH v2] host-gcc: apply patches stored in global
- patches directories
-In-Reply-To: <1460429140-27357-1-git-send-email-hchunhui@mail.ustc.edu.cn>
-References: <1460429140-27357-1-git-send-email-hchunhui@mail.ustc.edu.cn>
-Message-ID: <570D5CF4.5070701@mind.be>
+Date: Tue, 12 Apr 2016 22:53:26 +0200
+Subject: [Buildroot] [PATCH v4 1/1] PyMySQL: new package
+In-Reply-To: <1460478936-27315-1-git-send-email-stevecalfee@gmail.com>
+References: <1460478936-27315-1-git-send-email-stevecalfee@gmail.com>
+Message-ID: <570D6046.2020403@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/12/16 04:45, He Chunhui wrote:
-> When building host gcc, patches stored in global patches directories are skipped.
-
-  I didn't notice this one earlier: commit log should be wrapped at 72 columns.
-
-> This patch fixes the unexpected behavior.
+On 04/12/16 18:35, Steve Calfee wrote:
+> add python to mysql connection software, pure python
 >
-> Signed-off-by: He Chunhui <hchunhui@mail.ustc.edu.cn>
 > ---
+> v4 fix git commit per review
+>
+> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
+> ---
+>   package/Config.in                          |  1 +
+>   package/python-pymysql/Config.in           |  6 ++++++
+>   package/python-pymysql/python-pymysql.hash |  4 ++++
+>   package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
+>   4 files changed, 25 insertions(+)
+>   create mode 100644 package/python-pymysql/Config.in
+>   create mode 100644 package/python-pymysql/python-pymysql.hash
+>   create mode 100644 package/python-pymysql/python-pymysql.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 529ad33..2543195 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -683,6 +683,7 @@ menu "External python modules"
+>   	source "package/python-pyftpdlib/Config.in"
+>   	source "package/python-pygame/Config.in"
+>   	source "package/python-pyinotify/Config.in"
+> +	source "package/python-pymysql/Config.in"
+>   	source "package/python-pyparsing/Config.in"
+>   	source "package/python-pyparted/Config.in"
+>   	source "package/python-pypcap/Config.in"
+> diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
+> new file mode 100644
+> index 0000000..7b74533
+> --- /dev/null
+> +++ b/package/python-pymysql/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_PYMYSQL
+> +	bool "python-pymysql"
+> +	help
+> +	  python-pymysql is a pure Python binding for mySQL.
 
-  Please include a patch changelog when you send a v2, i.e.:
+  I gave it my rev-by on condition that this was corrected: mySQL -> MySQL.
 
-Signed-off-by: ...
----
-v2: move the $(GCC_VERSION) part of the suffix to the correct place.
+  If you send a v5, you can also improve it a little more still:
 
-
+	  PyMySQL is a pure-Python MySQL client library. It follows the DB-API
+	  2.0.
 
   Regards,
   Arnout
 
-
->   package/gcc/gcc.mk | 12 +++++++++---
->   1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-> index 5646b66..c7862a5 100644
-> --- a/package/gcc/gcc.mk
-> +++ b/package/gcc/gcc.mk
-> @@ -42,9 +42,15 @@ endif
->   endif
->
->   define HOST_GCC_APPLY_PATCHES
-> -	if test -d package/gcc/$(GCC_VERSION); then \
-> -	  $(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
-> -	fi;
-> +	for D in \
-> +	    package/gcc/$(GCC_VERSION) \
-> +	    $(addsuffix /gcc/$(GCC_VERSION),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
-> +	    $(addsuffix /gcc,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
-> +	    ; do \
-> +	  if test -d $${D}; then \
-> +	    $(APPLY_PATCHES) $(@D) $${D} \*.patch || exit 1; \
-> +	  fi; \
-> +	done;
->   	$(HOST_GCC_APPLY_POWERPC_PATCH)
->   endef
->
+> +
+> +	  https://pypi.python.org/pypi/PyMySQL/
+> diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
+> new file mode 100644
+> index 0000000..fc7e5e3
+> --- /dev/null
+> +++ b/package/python-pymysql/python-pymysql.hash
+> @@ -0,0 +1,4 @@
+> +#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
+> +md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
+> +# Locally calculated:
+> +sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
+> diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
+> new file mode 100644
+> index 0000000..e58ff7e
+> --- /dev/null
+> +++ b/package/python-pymysql/python-pymysql.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-pymysql
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYMYSQL_VERSION = 0.7.2
+> +PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
+> +PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
+> +PYTHON_PYMYSQL_LICENSE = MIT
+> +PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
+> +PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
 >
 
 
