@@ -1,287 +1,118 @@
-From: Aleksandar Simeonov <aleksandar@barix.com>
-Date: Tue, 12 Apr 2016 15:36:32 +0200
-Subject: [Buildroot] Adding custom config files to a package
-Message-ID: <570CF9E0.3000609@barix.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue, 12 Apr 2016 17:21:50 +0200
+Subject: [Buildroot] [PATCH v2] package/wpa_supplicant: Fix systemd service
+	for new DBus bus name
+Message-ID: <1460474510-29120-1-git-send-email-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gustavo,
+systemd service files were supplied with old DBus bus name. After
+service activation systemd was waiting for appearance of specified bus
+name to consider it started successfully. However, if wpa_supplicant was
+compiled only with new dbus interface name, then systemd didn't notice
+configured (old) DBus bus name appearance. In the end service was
+considered malfunctioning and it was deactivated.
 
-Sorry to disturb you again, but back to our discussion sometime ago on 
-#buildroot IRC channel:
+Add upstream patch, which updates systemd service BusName property
+according to configured DBus interface version.
 
-Now I'm trying to implement your idea to use <pkg>_config files to copy 
-some custom configuration target once the main package is built.
-The idea works great, however it has certain drawbacks - It is executed 
-only the first time you build the main package, and then gets added to 
-the rootfs.jffs image. As soon as I have the image built, any make runs 
-after that do not rut through it, as if it is not detected as a 
-dependency. This is bit of a problem because when rebuilding the image 
-(for this I clean the target folder before that), the make does not copy 
-the <pkg> relevant files to the output/target folder, and thus not 
-propagating them to the image :( Is there anything I can do about it?
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+Changes v1 -> v2:
+ * Update subject line and commit description to make the problem more
+   clear (suggested by Arnout)
+ * Use upstreamable patch instead of change in buildroot package
+   makefile (suggested by Arnout)
 
-I have tried adding a Config.in file, and source it in the main 
-Config.in file in my BR2_EXTERNAL folder, but then the make tries to 
-"compile" it, and fails with "No scheme" message. I assume that do not 
-need to run $(eval $(whatever-package)) at the end because it is not a 
-real package, so commenting it solves the compilation error, but still 
-is not run
+ ...ate-service-files-according-to-dbus-inter.patch | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch
 
-Attached I'm sending an example for configuring dropbear package. In my 
-main Config.in file I source this one, and the path to the makefile is 
-included in my external.mk
-
-Could you advise something in this case?
-
-Thank you very much in advance
-
-Alex
-
-
--------------- next part --------------
-#############################################################
-#
-# UCI
-#
-#############################################################
-UCI_VERSION = 825be5d0cd699919fbad15901c63044f0efffe82
-UCI_SITE = git://nbd.name/uci.git
-UCI_DEPENDENCIES = rsync
-ifeq ($(BR2_PACKAGE_LUA),y)
-UCI_CONF_OPTS = -DBUILD_LUA=ON
-UCI_DEPENDENCIES += lua
-else
-UCI_CONF_OPTS = -DBUILD_LUA=OFF
-endif
-
-UCI_INSTALL_STAGING = YES
-#UCI_INSTALL_TARGET = YES
-
-UCI_UCI_DEFAULTS_FILES = package/uci/defaults/*
-
-define UCI_INSTALL_INIT_SYSV
-	if [ ! -f $(TARGET_DIR)/etc/init.d/mount_config ]; then \
-		$(INSTALL) -m 0755 -D package/uci/rc/mount_config $(TARGET_DIR)/etc/init.d/mount_config; \
-	fi
-	if [ ! -h $(TARGET_DIR)/etc/rcS.d/S10mount_config ]; then \
-		ln -s ../init.d/mount_config $(TARGET_DIR)/etc/rcS.d/S10mount_config ; \
-	fi
-
-	if [ ! -h $(TARGET_DIR)/etc/rc0.d/K80umount_config ]; then \
-		ln -s ../init.d/mount_config $(TARGET_DIR)/etc/rc0.d/K80umount_config ; \
-	fi
-	if [ ! -h $(TARGET_DIR)/etc/rc6.d/K80umount_config ]; then \
-		ln -s ../init.d/mount_config $(TARGET_DIR)/etc/rc6.d/K80umount_config ; \
-	fi
-endef
-
-define UCI_INSTALL_TARGET_CMDS
-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/lib/config
-	$(INSTALL) -D -m 0755 package/uci/bin/functions.sh $(TARGET_DIR)/lib/config/functions.sh
-
-	$(INSTALL) -D -m 0755 $(@D)/uci $(TARGET_DIR)/sbin
-	$(INSTALL) -D -m 0755 $(@D)/uci-static $(TARGET_DIR)/sbin
-	$(INSTALL) -D -m 0755 $(@D)/libuci.so $(TARGET_DIR)/lib
-	#$(INSTALL) -D -m 0755 $(@D)/libuci.a $(TARGET_DIR)/lib
-endef
-
-define UCI_UNINSTALL_TARGET_CMDS
-	$(RM) $(TARGET_DIR)/lib/config/functions.sh
-	$(RM) $(TARGET_DIR)/sbin/uci
-	$(RM) $(TARGET_DIR)/sbin/uci-static
-	$(RM) $(TARGET_DIR)/lib/libuci.so
-	#$(RM) -f $(TARGET_DIR)/lib/libuci.a
-endef
-
-$(eval $(cmake-package))
--------------- next part --------------
-menu "Barix System configuration (applications and kernel modules)"
-	menu "Base system"
-		source "$BR2_EXTERNAL/package/barix/syswatchdog/Config.in"
-		source "$BR2_EXTERNAL/package/barix/web_ui/Config.in"
-		source "$BR2_EXTERNAL/package/barix/sys_id/Config.in"
-		source "$BR2_EXTERNAL/package/barix/updater/Config.in"
-		source "$BR2_EXTERNAL/package/override/uci/Config.in"
-		
-		config BR2_PACKAGE_BARIX_CONFIG_SUBSYSTEM
-			bool "Configuration subsystem"
-			select BR2_PACKAGE_UCI
-			config BR2_UCI_TEMPLATE_DIR
-				string "Directory path to store UCI templates"
-				default "/barix/config/templates"
-			config BR2_UCI_DEFAULTS_DIR
-				string "Directory path to store UCI defaults"
-				default "/barix/config/defaults"
-			help
-			  UCI based configuration subsystem that provides
-			  dynamic configuration via Web UI, automatic service
-			  restarting, database of parameters, import/export,
-			  default parameters, etc.
-
-			  http://www.barix.com/
-
-		### source "package/barix/hardware/Config.in"
-		source "$BR2_EXTERNAL/package/barix/factory_info_mng/Config.in"
-		source "$BR2_EXTERNAL/package/barix/reset_reader/Config.in"
-		source "$BR2_EXTERNAL/package/barix/logs/Config.in"
-		source "$BR2_EXTERNAL/package/barix/ntp2hwclocksync/Config.in"
-		source "$BR2_EXTERNAL/package/barix/rtc_ctl/Config.in"
-		source "$BR2_EXTERNAL/package/barix/cron/Config.in"
-
-		config BR2_PACKAGE_BARIX_SYSTEM_SERVICES
-			bool "Autoselect system services"
-			select BR2_PACKAGE_IFPLUGD
-			select BR2_PACKAGE_NTP
-			select BR2_PACKAGE_NTP_NTPD
-			select BR2_PACKAGE_NTP_NTPDATE
-			select BR2_PACKAGE_NTP_NTPQ
-			help
-			  Automatically selects following system services:
-			  link monitoring (ifplugd), NTP
-		source "$BR2_EXTERNAL/package/barix/watchdog/Config.in"
-
-		source "$BR2_EXTERNAL/package/barix/locale_timezone/Config.in"
-		source "$BR2_EXTERNAL/package/barix/audio_level_adjust/Config.in"
-		source "$BR2_EXTERNAL/package/barix/alsa_4channel_adjust/Config.in"
-		source "$BR2_EXTERNAL/package/barix/hello_world/Config.in"
-	endmenu
-	menu "Features"
-		source "$BR2_EXTERNAL/package/barix/binary_discovery/Config.in"
-		source "$BR2_EXTERNAL/package/barix/sonic_ip/Config.in"
-		source "$BR2_EXTERNAL/package/barix/leds/Config.in"
-		source "$BR2_EXTERNAL/package/barix/display_ctl/Config.in"
-	endmenu
-	choice 
-		prompt "Main application"
-		default BR2_PACKAGE_NO_APPLICATION
-		config BR2_PACKAGE_NO_APPLICATION
-		bool "no application"
-		help
-		  No default application
-
-		source "$BR2_EXTERNAL/package/barix/ferdinand/Config.in"
-		source "$BR2_EXTERNAL/package/barix/hubertus/Config.in"
-		source "$BR2_EXTERNAL/package/barix/hubrec/Config.in"
-		source "$BR2_EXTERNAL/package/barix/soundscape/Config.in"
-		source "$BR2_EXTERNAL/package/barix/remote_spot/Config.in"
-	endchoice
-
-	menu "Debug"
-		source "$BR2_EXTERNAL/package/barix/cpp_unit/Config.in"
-	endmenu
-	menu "Production"
-		source "$BR2_EXTERNAL/package/barix/production_test/Config.in"
-	endmenu
-
-	menu "Version management"
-	
-	# copied from packages/barix/sys_id/Config.in
-	if BR2_PACKAGE_SYS_ID
-		comment "Firmware Global"
-		config BR2_PACKAGE_SYS_ID_OBJID
-			string "System/Product ID"
-
-		config BR2_PACKAGE_SYS_ID_FW_VERSION
-			string "Firmware version"
-	endif
-
-	comment "Kernel"
-
-	# copied from linux/Config.in
-	if BR2_LINUX_KERNEL_CUSTOM_GIT
-		config BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION
-		string "Kernel GIT tag/version"
-		default "HEAD"
-	endif
-
-	comment "Bootloader"
-	# copied from uboot/Config.in
-	if BR2_TARGET_UBOOT_CUSTOM_GIT
-		config BR2_TARGET_UBOOT_CUSTOM_GIT_VERSION
-		string "U-Boot GIT tag/version"
-	endif
-
-	
-	comment "Applications"
-	
-	if BR2_PACKAGE_FERDINAND
-		config BR2_FERDINAND_GIT_VERSION
-		string "Store & Play Git tag/version"
-		default "develop"
-	endif
-
-	if BR2_PACKAGE_SOUNDSCAPE
-		config BR2_SOUNDSCAPE_GIT_VERSION
-		string "Soundscape GIT tag/version"
-		default "develop"
-	endif
-
-	if BR2_PACKAGE_DISPLAY_CTL
-		config BR2_DISPLAY_CTL_GIT_VERSION
-		string "Display controller GIT tag/version"
-		default "develop"
-	endif
-
-	comment "Libraries"
-	if BR2_PACKAGE_CPP_UNIT
-		config BR2_CPP_UNIT_GIT_VERSION
-		string "CPP Unit lib GIT tag/version"
-		default "master"
-	endif
-
-	comment "System components"
-	if BR2_PACKAGE_BINARY_DISCOVERY
-		config BR2_BINARY_DISCOVERY_GIT_VERSION
-		string "Binary discovery GIT tag/version"
-		default "master"
-	endif
-
-	if BR2_PACKAGE_FACTORY_INFO_MNG
-		config BR2_FACTORY_INFO_MNG_GIT_VERSION
-		string "Factory info manager GIT tag/version"
-		default "master"
-	endif
-
-	if BR2_PACKAGE_LEDS
-		config BR2_LEDS_GIT_VERSION
-		string "LED manager GIT tag/version"
-		default "master"
-	endif
-
-	if BR2_PACKAGE_RESET_READER
-		config BR2_RESET_READER_GIT_VERSION
-		string "Reset Reader GIT tag/version"
-		default "master"
-	endif
-
-	if BR2_PACKAGE_UPDATER
-		config BR2_UPDATER_GIT_VERSION
-		string "Barix Updater GIT tag/version"
-		default "master"
-	endif
-
-	if BR2_PACKAGE_WATCHDOG
-		config BR2_WATCHDOG_GIT_VERSION
-		string "Application SW watchdog GIT tag/version"
-		default "master"
-	endif
-
-	if BR2_PACKAGE_WEB_UI
-		config BR2_WEB_UI_GIT_VERSION
-		string "System Web UI GIT tag/version"
-		default "master"
-	endif
-
-	endmenu
-	
-	menu "Configuration packages"
-	
-	if BR2_PACKAGE_DROPBEAR
-		source "$BR2_EXTERNAL/package/config/dropbear_config/Config.in"
-	endif
-	endmenu
-endmenu
+diff --git a/package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch b/package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch
+new file mode 100644
+index 0000000..59c5450
+--- /dev/null
++++ b/package/wpa_supplicant/0007-systemd-Update-service-files-according-to-dbus-inter.patch
+@@ -0,0 +1,77 @@
++From b6cea24d6191d9ccdcd1ac38a5322e3da73218db Mon Sep 17 00:00:00 2001
++From: Marcin Niestroj <m.niestroj@grinn-global.com>
++Date: Mon, 11 Apr 2016 13:23:54 +0200
++Subject: [PATCH] systemd: Update service files according to dbus interface
++ version used
++
++systemd service files were supplied with old DBus bus name. After
++service activation systemd was waiting for appearance of specified bus
++name to consider it started successfully. However, if wpa_supplicant was
++compiled only with new dbus interface name, then systemd didn't notice
++configured (old) DBus bus name appearance. In the end service was
++considered malfunctioning and it was deactivated.
++
++Update systemd service BusName property according to supported DBus
++interface version.
++
++Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
++---
++ wpa_supplicant/Makefile                          | 8 ++++++--
++ wpa_supplicant/systemd/wpa_supplicant.service.in | 4 ++--
++ 2 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
++index ad9ead9..fbd1b25 100644
++--- a/wpa_supplicant/Makefile
+++++ b/wpa_supplicant/Makefile
++@@ -1374,6 +1374,7 @@ ifndef DBUS_INCLUDE
++ DBUS_INCLUDE := $(shell $(PKG_CONFIG) --cflags dbus-1)
++ endif
++ DBUS_CFLAGS += $(DBUS_INCLUDE)
+++DBUS_INTERFACE=fi.epitest.hostap.WPASupplicant
++ endif
++ 
++ ifdef CONFIG_CTRL_IFACE_DBUS_NEW
++@@ -1399,6 +1400,7 @@ DBUS_OBJS += dbus/dbus_new_introspect.o
++ DBUS_CFLAGS += -DCONFIG_CTRL_IFACE_DBUS_INTRO
++ endif
++ DBUS_CFLAGS += $(DBUS_INCLUDE)
+++DBUS_INTERFACE=fi.w1.wpa_supplicant1
++ endif
++ 
++ ifdef DBUS
++@@ -1760,11 +1762,13 @@ else
++ endif
++ 
++ %.service: %.service.in
++-	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' $< >$@
+++	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' \
+++		-e 's|\@DBUS_INTERFACE\@|$(DBUS_INTERFACE)|g' $< >$@
++ 	@$(E) "  sed" $<
++ 
++ %@.service: %.service.arg.in
++-	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' $< >$@
+++	$(Q)sed -e 's|\@BINDIR\@|$(BINDIR)|g' \
+++		-e 's|\@DBUS_INTERFACE\@|$(DBUS_INTERFACE)|g' $< >$@
++ 	@$(E) "  sed" $<
++ 
++ wpa_supplicant.exe: wpa_supplicant
++diff --git a/wpa_supplicant/systemd/wpa_supplicant.service.in b/wpa_supplicant/systemd/wpa_supplicant.service.in
++index ea964ce..bc5d49a 100644
++--- a/wpa_supplicant/systemd/wpa_supplicant.service.in
+++++ b/wpa_supplicant/systemd/wpa_supplicant.service.in
++@@ -5,9 +5,9 @@ Wants=network.target
++ 
++ [Service]
++ Type=dbus
++-BusName=fi.epitest.hostap.WPASupplicant
+++BusName=@DBUS_INTERFACE@
++ ExecStart=@BINDIR@/wpa_supplicant -u
++ 
++ [Install]
++ WantedBy=multi-user.target
++-Alias=dbus-fi.epitest.hostap.WPASupplicant.service
+++Alias=dbus-@DBUS_INTERFACE@.service
++-- 
++2.8.0
++
+-- 
+2.8.0
