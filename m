@@ -1,86 +1,39 @@
-From: Leonardo Giordano <lgiordano@controlnet.com.ar>
-Date: Tue, 12 Apr 2016 08:45:52 -0300
-Subject: [Buildroot] Setting RGB
-In-Reply-To: <20160211215209.2f381cc0@gmx.net>
-References: <CAKvcKqdfjtx96fk=cjMze7sOeY59OfWy1NZ2c_LY8TsuZ29DMA@mail.gmail.com>
- <20160204205505.5a842de4@gmx.net> <1455126039107-125494.post@n4.nabble.com>
- <CAAEAJfBS36gKR3P_-MZ888yMi4y=piVN=x77F07z0-+=Bpxv0Q@mail.gmail.com>
- <1455203390156-125571.post@n4.nabble.com> <20160211215209.2f381cc0@gmx.net>
-Message-ID: <CAFMv-czPriV5jOfVm=GeuXpW-f-t7YkiWRqZPLSYWGD9G__7=w@mail.gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 12 Apr 2016 09:39:05 -0300
+Subject: [Buildroot] [PATCH] mongodb: bump to version 3.3.4
+Message-ID: <1460464745-11380-1-git-send-email-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sorry for delay on replying, we were using as a workaround swapping red and
-blue info on the pictures we use.
-Yesterday I fixed it based on Peter's reply and this patch:
-https://bugreports.qt.io/browse/QTBUG-40527
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for your support!
-Regards,
-Leonardo
-
-2016-02-11 17:52 GMT-03:00 Peter Seiderer <ps.report@gmx.net>:
-
-> Hello Gabriel Andr?s Castillo,
->
-> On Thu, 11 Feb 2016 07:09:50 -0800 (PST), GabrielCastillo <
-> gcastillo at controlnet.com.ar> wrote:
->
-> > Definitely the problem is with QT5. I read some places that could be
-> > littleendian problem. To run my app, i do:
-> >
-> > > ./App -platform linuxfb
-> >
-> > There are any form to tell that it has to be execute in littleendian or
-> > bigendian?
-> >
->
-> No, no such option for qt5 (see [1] for linuxfb options).
->
-> Mind to run 'fbset -s' (or 'fbset -i') on your platform ?
->
-> Output gives the pixel defintion of the framebuffer, e.g.
->
-> rgba 5/11,6/5,5/0,0/16
->
-> for my adafruit display (and try to test if the given
-> pixel defintion is correct by writing color patterns
-> to the framebuffer (direct or with some framebuffer
-> test program)...
->
-> Or mind to try the following atmel qt5 patch ([2]) from
-> the OpenEmbedded/Yocto layer?
->
-> This patch gives you a hint for the place where to fix/adjust the
-> qt5 drawing to the framebuffer...
->
-> Regards,
-> Peter
->
->
-> [1] http://doc.qt.io/qt-5/embedded-linux.html
-> [2]
-> https://github.com/linux4sam/meta-atmel/blob/master/qt5-layer/recipes-qt/qt5/files/atmel-color-format-force.patch
->
-> >
-> >
-> > --
-> > View this message in context:
-> http://buildroot-busybox.2317881.n4.nabble.com/Setting-RGB-tp124903p125571.html
-> > Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160412/c01945e8/attachment.html>
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index e882d23b52a9..b01ad53ab57e 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256 26fc05802dfc1e7d1f30e4ed418ba2bc7396b6fa5b298c18d6c9945dff2b8d08  mongodb-r3.3.2.tar.gz
++sha256 4764945631bca4ac5c2b239e04e91db00e39716915204349170c37cb7897c564  mongodb-r3.3.4.tar.gz
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 6cc0b9e56b6c..f5b2c01db370 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION_BASE = 3.3.2
++MONGODB_VERSION_BASE = 3.3.4
+ MONGODB_VERSION = r$(MONGODB_VERSION_BASE)
+ MONGODB_SITE = $(call github,mongodb,mongo,$(MONGODB_VERSION))
+ 
+-- 
+1.9.1
