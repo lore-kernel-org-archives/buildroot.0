@@ -1,103 +1,171 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Wed, 13 Apr 2016 01:07:40 +0200
-Subject: [Buildroot] [PATCH v2] mtd-utils: ubinize: fix return code on error
-Message-ID: <1460502460-13713-1-git-send-email-luca@lucaceresoli.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Apr 2016 01:12:02 +0200
+Subject: [Buildroot] [PATCH] supertuxkart: new package
+In-Reply-To: <1460439224-29314-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1460439224-29314-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <570D80C2.70508@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ubinize 1.5.2 (currently packaged in Buildroot) returns 0 in case of
-some errors. This can lead to unnoticed errors in the middle of a
-build.
+On 04/12/16 07:33, Ezequiel Garcia wrote:
+> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+> ---
+>   package/Config.in                      |  1 +
+>   package/supertuxkart/Config.in         | 29 +++++++++++++++++++++++++++++
+>   package/supertuxkart/supertuxkart.hash |  2 ++
+>   package/supertuxkart/supertuxkart.mk   | 24 ++++++++++++++++++++++++
+>   4 files changed, 56 insertions(+)
+>   create mode 100644 package/supertuxkart/Config.in
+>   create mode 100644 package/supertuxkart/supertuxkart.hash
+>   create mode 100644 package/supertuxkart/supertuxkart.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 64822bf5f6fa..8438bca33195 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -232,6 +232,7 @@ menu "Games"
+>   	source "package/prboom/Config.in"
+>   	source "package/rubix/Config.in"
+>   	source "package/sl/Config.in"
+> +	source "package/supertuxkart/Config.in"
+>   endmenu
+>
+>   menu "Graphic libraries and applications (graphic/text)"
+> diff --git a/package/supertuxkart/Config.in b/package/supertuxkart/Config.in
+> new file mode 100644
+> index 000000000000..4e9f5bb09ac6
+> --- /dev/null
+> +++ b/package/supertuxkart/Config.in
+> @@ -0,0 +1,29 @@
+> +config BR2_PACKAGE_SUPERTUXKART
+> +	bool "supertuxkart"
+> +	depends on BR2_USE_MMU # fork()
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+> +	depends on BR2_PACKAGE_XORG7
+> +	select BR2_PACKAGE_BLUEZ5_UTILS
 
-Fix by adding a patch from upstream, which is not yet present in any
-released version.
+  Needs:
 
-Fetch from: http://git.infradead.org/mtd-utils.git/commit/5f50207231414bfdbac8f0f974a2824f24177d6e
+         depends on BR2_USE_WCHAR # libglib2
+         depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+         depends on !BR2_STATIC_LIBS # uses dlfcn
+         depends on !BR2_PACKAGE_BLUEZ_UTILS # conflicts with 4.x version
+         depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+         # wordexp support not in our uClibc configuration
+         depends on !BR2_TOOLCHAIN_USES_UCLIBC
+         depends on BR2_TOOLCHAIN_HAS_SYNC_4
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+  (though wchar and threads are already covered by Xorg)
 
----
+  Unless of course it can also work with bluez4. In that case the dependencies 
+get pretty complicated...
 
-Changes v1 -> v2:
- - Add SoB to patch (Arnout)
- - Fix typo
----
- ...binize-Always-return-error-code-at-least-.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
+> +	select BR2_PACKAGE_JPEG
+> +	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_LIBFRIBIDI
+> +	select BR2_PACKAGE_LIBGLU
+> +	select BR2_PACKAGE_LIBOGG
+> +	select BR2_PACKAGE_LIBPNG
+> +	select BR2_PACKAGE_LIBVORBIS
+> +	select BR2_PACKAGE_OPENAL
 
-diff --git a/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
-new file mode 100644
-index 000000000000..077ca0c6a93a
---- /dev/null
-+++ b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
-@@ -0,0 +1,64 @@
-+From 5f50207231414bfdbac8f0f974a2824f24177d6e Mon Sep 17 00:00:00 2001
-+From: Enrico Jorns <ejo@pengutronix.de>
-+Date: Fri, 11 Sep 2015 15:28:13 +0200
-+Subject: [PATCH] mtd-utils: ubinize: Always return error code (at least -1) in
-+ case of an error
-+
-+ubinize should not fail silenty, this can be very annoying when using
-+it from other tools that rely on the exit code for determining the
-+success of their operation.
-+
-+Signed-off-by: Enrico Jorns <ejo@pengutronix.de>
-+Signed-off-by: Brian Norris <computersforpeace@gmail.com>
-+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-+---
-+ ubi-utils/ubinize.c | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/ubi-utils/ubinize.c b/ubi-utils/ubinize.c
-+index 34f465a..60bbd9a 100644
-+--- a/ubi-utils/ubinize.c
-++++ b/ubi-utils/ubinize.c
-+@@ -519,6 +519,7 @@ int main(int argc, char * const argv[])
-+ 	 */
-+ 	seek = ui.peb_size * 2;
-+ 	if (lseek(args.out_fd, seek, SEEK_SET) != seek) {
-++		err = -1;
-+ 		sys_errmsg("cannot seek file \"%s\"", args.f_out);
-+ 		goto out_free;
-+ 	}
-+@@ -530,6 +531,7 @@ int main(int argc, char * const argv[])
-+ 		int fd, j;
-+ 
-+ 		if (!sname) {
-++			err = -1;
-+ 			errmsg("ini-file parsing error (iniparser_getsecname)");
-+ 			goto out_free;
-+ 		}
-+@@ -550,6 +552,7 @@ int main(int argc, char * const argv[])
-+ 		 */
-+ 		for (j = 0; j < i; j++) {
-+ 			if (vi[i].id == vi[j].id) {
-++				err = -1;
-+ 				errmsg("volume IDs must be unique, but ID %d "
-+ 				       "in section \"%s\" is not",
-+ 				       vi[i].id, sname);
-+@@ -557,6 +560,7 @@ int main(int argc, char * const argv[])
-+ 			}
-+ 
-+ 			if (!strcmp(vi[i].name, vi[j].name)) {
-++				err = -1;
-+ 				errmsg("volume name must be unique, but name "
-+ 				       "\"%s\" in section \"%s\" is not",
-+ 				       vi[i].name, sname);
-+@@ -580,6 +584,7 @@ int main(int argc, char * const argv[])
-+ 		if (img) {
-+ 			fd = open(img, O_RDONLY);
-+ 			if (fd == -1) {
-++				err = fd;
-+ 				sys_errmsg("cannot open \"%s\"", img);
-+ 				goto out_free;
-+ 			}
-+-- 
-+1.9.1
-+
+  Needs:
+
+         depends on BR2_INSTALL_LIBSTDCPP
+         depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+         depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+
+> +	select BR2_PACKAGE_XLIB_LIBXRANDR
+> +	select BR2_PACKAGE_ZLIB
+> +	help
+> +	  Karts. Nitro. Action! SuperTuxKart is a free 3D arcade kart
+> +	  racer with multiple karts, tracks and modes you can play.
+> +	  Beat the evil Nolok by any means necessary, and make the
+> +	  mascot kingdom safe once again!
+> +
+> +	  http://supertuxkart.sourceforge.net/Main_Page
+> +
+> +comment "supertuxkart needs a toolchain w/ threads, C++"
+> +	depends on !(BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_HAS_THREADS)
+
+  This needs to be updated with all the dependencies above.
+
+> +
+> +comment "supertuxkart needs an OpenGL backend"
+> +	depends on !BR2_PACKAGE_HAS_LIBGL
+> diff --git a/package/supertuxkart/supertuxkart.hash b/package/supertuxkart/supertuxkart.hash
+> new file mode 100644
+> index 000000000000..d8e7ac30f6d1
+> --- /dev/null
+> +++ b/package/supertuxkart/supertuxkart.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256	c50f00a71df165fb613d20e86bea2d9d5e51ed3e27e1d436fbac3b07cf2ea149	supertuxkart-0.9.1-src.tar.xz
+> diff --git a/package/supertuxkart/supertuxkart.mk b/package/supertuxkart/supertuxkart.mk
+> new file mode 100644
+> index 000000000000..e1c67b4e14f4
+> --- /dev/null
+> +++ b/package/supertuxkart/supertuxkart.mk
+> @@ -0,0 +1,24 @@
+> +################################################################################
+> +#
+> +# supertuxkart
+> +#
+> +################################################################################
+> +
+> +SUPERTUXKART_VERSION = 0.9.1
+> +SUPERTUXKART_SOURCE = supertuxkart-$(SUPERTUXKART_VERSION)-src.tar.xz
+> +SUPERTUXKART_SITE = http://downloads.sourceforge.net/project/supertuxkart/SuperTuxKart/$(SUPERTUXKART_VERSION)
+> +SUPERTUXKART_LICENSE = GPLv3
+> +SUPERTUXKART_LICENSE_FILES = COPYING
+> +
+> +SUPERTUXKART_DEPENDENCIES += bluez5_utils jpeg libcurl libfribidi libgl libglu libpng \
+> +			     libogg libvorbis openal xlib_libXrandr zlib
+
+  From the CMakeLists, it looks like fribidi and Xrandr are optional (controlled 
+by USE_FRIBIDI and USE_XRANDR).
+
+  I don't see why libglu is needed.
+
+  I also see a dependency on freetype.
+
+
+> +
+> +# Since supertuxkart is not installing libstkirrlicht.so,
+> +# and given we don't really need that library to be shared
+> +# we turn off shared libs here.
+> +SUPERTUXKART_CONF_OPTS = -DBUILD_SHARED_LIBS=OFF
+> +
+> +# Disable Wiimote support
+
+  Why?
+
+  Actually, it looks like bluez is only needed for wiimote support, so you could 
+probably enable this conditionally depending on BR2_PACKAGE_BLUEZ5_UTILS and 
+avoid the complicated dependencies in Config.in.
+
+
+> +SUPERTUXKART_CONF_OPTS += -DUSE_WIIUSE=OFF
+> +
+> +$(eval $(cmake-package))
+>
+
+  It looks like irrlicht adds -I/usr/X11R6/include - this will have to be 
+patched away.
+
+  It would also be nice if CMakeLists could be updated to use the system glew 
+instead of the bundled one.
+
+  Regards,
+  Arnout
+
 -- 
-1.9.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
