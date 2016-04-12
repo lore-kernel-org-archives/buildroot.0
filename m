@@ -1,47 +1,86 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 12 Apr 2016 12:16:47 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2016-04-11
-In-Reply-To: <20160412063023.99284102755@stock.ovh.net>
-References: <20160412063023.99284102755@stock.ovh.net>
-Message-ID: <570CD91F.5010504@imgtec.com>
+From: Leonardo Giordano <lgiordano@controlnet.com.ar>
+Date: Tue, 12 Apr 2016 08:45:52 -0300
+Subject: [Buildroot] Setting RGB
+In-Reply-To: <20160211215209.2f381cc0@gmx.net>
+References: <CAKvcKqdfjtx96fk=cjMze7sOeY59OfWy1NZ2c_LY8TsuZ29DMA@mail.gmail.com>
+ <20160204205505.5a842de4@gmx.net> <1455126039107-125494.post@n4.nabble.com>
+ <CAAEAJfBS36gKR3P_-MZ888yMi4y=piVN=x77F07z0-+=Bpxv0Q@mail.gmail.com>
+ <1455203390156-125571.post@n4.nabble.com> <20160211215209.2f381cc0@gmx.net>
+Message-ID: <CAFMv-czPriV5jOfVm=GeuXpW-f-t7YkiWRqZPLSYWGD9G__7=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+Sorry for delay on replying, we were using as a workaround swapping red and
+blue info on the pictures we use.
+Yesterday I fixed it based on Peter's reply and this patch:
+https://bugreports.qt.io/browse/QTBUG-40527
 
-On 12/04/16 07:30, Thomas Petazzoni wrote:
-> Build statistics for 2016-04-11
-
->     mips64el |                   stunnel-5.31 | NOK | http://autobuild.buildroot.net/results/b5d7902ac070c66bb39fa17579628f814d95c11d/
-
-the error looks like this:
-
-prototypes.h:628:5: error: conflicting types for 'getnameinfo'
-
-This is because getnameinfo() is redefined. It's already provided by the
-toolchain, and stunnel tries to provide it as well.
-
-The configure script checks if the toolchain already provides
-getnameinfo() in order to not redefine it. So, why that check doesn't work?
-
-It doesn't work because when the compiler is called in order to perform
-the check, some unsupported flags are passed to it. The offending flags
-are the ones related to stack smashing protection, which is unsupported
-in the IMG Codescape toolchain used in that build. Then the check fails
-due to that reason, and stunnel thinks that the toolchain doesn't
-provide getnameinfo() therefore it defines its own.
-
-So, the real problem is that stunnel thinks the toolchain has SSP
-support when it actually doesn't have it.
-
-The following patch fixes the problem:
-
-http://patchwork.ozlabs.org/patch/597701/
-
+Thanks for your support!
 Regards,
+Leonardo
 
-Vincent.
+2016-02-11 17:52 GMT-03:00 Peter Seiderer <ps.report@gmx.net>:
+
+> Hello Gabriel Andr?s Castillo,
+>
+> On Thu, 11 Feb 2016 07:09:50 -0800 (PST), GabrielCastillo <
+> gcastillo at controlnet.com.ar> wrote:
+>
+> > Definitely the problem is with QT5. I read some places that could be
+> > littleendian problem. To run my app, i do:
+> >
+> > > ./App -platform linuxfb
+> >
+> > There are any form to tell that it has to be execute in littleendian or
+> > bigendian?
+> >
+>
+> No, no such option for qt5 (see [1] for linuxfb options).
+>
+> Mind to run 'fbset -s' (or 'fbset -i') on your platform ?
+>
+> Output gives the pixel defintion of the framebuffer, e.g.
+>
+> rgba 5/11,6/5,5/0,0/16
+>
+> for my adafruit display (and try to test if the given
+> pixel defintion is correct by writing color patterns
+> to the framebuffer (direct or with some framebuffer
+> test program)...
+>
+> Or mind to try the following atmel qt5 patch ([2]) from
+> the OpenEmbedded/Yocto layer?
+>
+> This patch gives you a hint for the place where to fix/adjust the
+> qt5 drawing to the framebuffer...
+>
+> Regards,
+> Peter
+>
+>
+> [1] http://doc.qt.io/qt-5/embedded-linux.html
+> [2]
+> https://github.com/linux4sam/meta-atmel/blob/master/qt5-layer/recipes-qt/qt5/files/atmel-color-format-force.patch
+>
+> >
+> >
+> > --
+> > View this message in context:
+> http://buildroot-busybox.2317881.n4.nabble.com/Setting-RGB-tp124903p125571.html
+> > Sent from the Buildroot (busybox) mailing list archive at Nabble.com.
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160412/c01945e8/attachment.html>
