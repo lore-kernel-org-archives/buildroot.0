@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Apr 2016 23:22:13 +0200
-Subject: [Buildroot] [git commit] links: fix static link with directfb
-Message-ID: <20160412220141.401AB7FA20@busybox.osuosl.org>
+Date: Tue, 12 Apr 2016 23:20:47 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.5.1
+Message-ID: <20160412220141.1830A817FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88a807296da62a42937ee6a8f4d6c6fcd0db729f
+commit: https://git.buildroot.net/buildroot/commit/?id=f4e70978c35d40bad8e1ea84e97d3a32cde829d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The AC_HAVE_FUNCS autoconf macro uses gcc to check for function existence.
-This breaks when the library depends on libstdc++, like directfb. Add this
-dependency externally.
-
-Fixes:
-http://autobuild.buildroot.net/results/548/548019b71c7db649f20d2c479bb8fb3612162d4a/
-http://autobuild.buildroot.net/results/c94/c9495f54db388bde9d64325bb57fc4e58741f7a7/
-http://autobuild.buildroot.net/results/9b8/9b883d42bff3633f16447d76d2eb4ddf68013788/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/links/links.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 62f91a3..ab2b583 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
-@@ -22,6 +22,9 @@ LINKS_CONF_OPTS += --without-x
- endif
- ifeq ($(BR2_PACKAGE_DIRECTFB),y)
- LINKS_CONF_ENV = ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LINKS_CONF_ENV += LIBS=-lstdc++
-+endif
- LINKS_CONF_OPTS += --with-directfb
- LINKS_DEPENDENCIES += directfb
- else
+diff --git a/linux/Config.in b/linux/Config.in
+index 9f0267d..043b147 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -27,7 +27,7 @@ choice
+ 	prompt "Kernel version"
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "4.5"
++	bool "4.5.1"
+ 
+ config BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -110,7 +110,7 @@ config BR2_LINUX_KERNEL_CUSTOM_LOCAL_PATH
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.5.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
