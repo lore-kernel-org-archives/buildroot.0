@@ -1,83 +1,170 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Tue, 12 Apr 2016 02:29:24 -0300
-Subject: [Buildroot] [PATCH 3/4] board/minnowboard-max: Add more peripherals
-	and features to the kernel
+Date: Tue, 12 Apr 2016 02:29:22 -0300
+Subject: [Buildroot] [PATCH 1/4] board/minnowboard-max: Rework to generate
+	SD card image
 In-Reply-To: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 References: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1460438965-28065-4-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1460438965-28065-2-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit enables support for:
-  * HDMI audio
-  * Support for user-provided EDID firmware
-    (useful to workaround broken monitors)
-  * Evdev interface
-  * System V IPC (required by ALSA)
-  * POSIX message queue
-  * fhandle syscall
-  * cgroups
-
-The options are quite common and make the system more useful.
+Let's rework the board and config files to use genimage
+to generate the SD card image directly.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- board/minnowboard-max/linux.config | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ board/minnowboard-max/genimage.cfg  | 34 ++++++++++++++++++++++++++++++++
+ board/minnowboard-max/post-image.sh | 13 +++++++++++++
+ board/minnowboard-max/readme.txt    | 39 ++++++++++++-------------------------
+ configs/minnowboard_max_defconfig   |  8 ++++++++
+ 4 files changed, 67 insertions(+), 27 deletions(-)
+ create mode 100644 board/minnowboard-max/genimage.cfg
+ create mode 100755 board/minnowboard-max/post-image.sh
 
-diff --git a/board/minnowboard-max/linux.config b/board/minnowboard-max/linux.config
-index abb7fdce9861..f80170b9b81d 100644
---- a/board/minnowboard-max/linux.config
-+++ b/board/minnowboard-max/linux.config
-@@ -1,4 +1,8 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_FHANDLE=y
- CONFIG_NO_HZ=y
-+CONFIG_CGROUPS=y
- CONFIG_SMP=y
- CONFIG_X86_INTEL_LPSS=y
- CONFIG_MATOM=y
-@@ -13,12 +17,15 @@ CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
- CONFIG_INET=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
- CONFIG_CHR_DEV_SG=y
- CONFIG_ATA=y
- CONFIG_SATA_AHCI=y
- CONFIG_ATA_PIIX=y
- CONFIG_NETDEVICES=y
- CONFIG_R8169=y
-+CONFIG_INPUT_EVDEV=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_8250_DW=y
-@@ -33,7 +40,15 @@ CONFIG_GPIOLIB=y
- CONFIG_GPIO_SYSFS=y
- CONFIG_AGP=y
- CONFIG_DRM=y
-+CONFIG_DRM_LOAD_EDID_FIRMWARE=y
- CONFIG_DRM_I915=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+# CONFIG_SND_DRIVERS is not set
-+CONFIG_SND_HDA_INTEL=y
-+CONFIG_SND_HDA_CODEC_HDMI=y
-+# CONFIG_SND_SPI is not set
-+# CONFIG_SND_USB is not set
- CONFIG_USB=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_NOP_USB_XCEIV=y
-@@ -44,3 +59,5 @@ CONFIG_MMC_SDHCI_ACPI=y
- CONFIG_PWM=y
- CONFIG_PWM_LPSS=y
- CONFIG_EXT4_FS=y
-+CONFIG_AUTOFS4_FS=y
-+CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/board/minnowboard-max/genimage.cfg b/board/minnowboard-max/genimage.cfg
+new file mode 100644
+index 000000000000..6cf787430752
+--- /dev/null
++++ b/board/minnowboard-max/genimage.cfg
+@@ -0,0 +1,34 @@
++# Create an image of the efi partition
++image efi-part.vfat {
++	vfat {
++		file startup.nsh {
++			image = "efi-part/startup.nsh"
++		}
++		file EFI {
++			image = "efi-part/EFI"
++		}
++		file bzImage {
++			image = "bzImage"
++		}
++	}
++	size=10M
++}
++
++# Create the sdcard image, pulling in
++#  * the image created by buildroot
++#  * the efi-partition created above
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xEF
++		image = "efi-part.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/minnowboard-max/post-image.sh b/board/minnowboard-max/post-image.sh
+new file mode 100755
+index 000000000000..e90dd6b8cf10
+--- /dev/null
++++ b/board/minnowboard-max/post-image.sh
+@@ -0,0 +1,13 @@
++#!/bin/sh -e
++
++GENIMAGE_CFG="board/minnowboard-max/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++    --rootpath "${TARGET_DIR}" \
++    --tmppath "${GENIMAGE_TMP}" \
++    --inputpath "${BINARIES_DIR}" \
++    --outputpath "${BINARIES_DIR}" \
++    --config "${GENIMAGE_CFG}"
+diff --git a/board/minnowboard-max/readme.txt b/board/minnowboard-max/readme.txt
+index 5f52369b97d6..dfad2aba2123 100644
+--- a/board/minnowboard-max/readme.txt
++++ b/board/minnowboard-max/readme.txt
+@@ -1,40 +1,25 @@
+-Prepare the SD card for the Minnow Board MAX
++How to get started with the Minnow Board MAX
+ ============================================
+ 
+- 1. Partition the SD card with a GPT partition table
++1. Build
+ 
+-    sudo cgdisk /dev/mmcblk0
++  Apply the defconfig:
+ 
+-    Create two partitions:
++  $ make minnowboard_max_defconfig
+ 
+-     a) First partition of a few dozens of megabytes, which will be
+-        used to store the bootloader and the kernel image. Type must
+-        be EF00 (EFI partition).
++  Add any additional packages required and build:
+ 
+-     b) Second partition of any size, which will be used to store the
+-        root filesystem. Type must be 8300 (Linux filesystem)
++  $ make
+ 
+- 2. Prepare the boot partition
++2. Write the SD card
+ 
+-    We will format it, mount it, copy the EFI data generated by
+-    Buildroot, and the kernel image.
++  The build process will create a SD card image in output/images.
++  Write the image to an mSD card, insert into the Minnowboard MAX
++  and power the board on.
+ 
+-    sudo mkfs.vfat -F 32 -n boot /dev/mmcblk0p1
+-    sudo mount /dev/mmcblk0p1 /mnt
+-    sudo cp -a output/images/efi-part/* /mnt/
+-    sudo cp output/images/bzImage /mnt/
+-    sudo umount /mnt
++  $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
+ 
+- 3. Prepare the root partition
+-
+-    We will format it, mount it, and extract the root filesystem.
+-
+-    sudo mkfs.ext4 -L root /dev/mmcblk0p2
+-    sudo mount /dev/mmcblk0p2 /mnt
+-    sudo tar -C /mnt -xf output/images/rootfs.tar
+-    sudo umount /mnt
+-
+- 4. Enjoy
++3. Enjoy
+ 
+ Additional information about this board can be found at
+ http://www.minnowboard.org/ or http://wiki.minnowboard.org/MinnowBoard_MAX
+diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+index 98996db958ff..47f7d4e96a55 100644
+--- a/configs/minnowboard_max_defconfig
++++ b/configs/minnowboard_max_defconfig
+@@ -5,9 +5,12 @@ BR2_x86_atom=y
+ # Misc
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard-max/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard-max/post-image.sh"
+ 
+ # Linux headers same as kernel, a 4.4 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
+ 
+ # Needed for ethernet
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+@@ -23,3 +26,8 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard-max/linux.config"
+ # Bootloader
+ BR2_TARGET_GRUB2=y
+ BR2_TARGET_GRUB2_X86_64_EFI=y
++
++# Filesystem image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.7.0
