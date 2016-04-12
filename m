@@ -1,84 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Apr 2016 00:03:51 +0200
-Subject: [Buildroot] Adding custom config files to a package
-In-Reply-To: <570CF9E0.3000609@barix.com>
-References: <570CF9E0.3000609@barix.com>
-Message-ID: <570D70C7.6040805@mind.be>
+Date: Wed, 13 Apr 2016 00:04:38 +0200
+Subject: [Buildroot] [PATCH] package/racehound: fix comment
+In-Reply-To: <87a8kylc6n.fsf@dell.be.48ers.dk>
+References: <1460481650-19136-1-git-send-email-yann.morin.1998@free.fr>
+ <87a8kylc6n.fsf@dell.be.48ers.dk>
+Message-ID: <570D70F6.3000404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/12/16 15:36, Aleksandar Simeonov wrote:
-> Hi Gustavo,
+On 04/13/16 00:00, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 >
-> Sorry to disturb you again, but back to our discussion sometime ago on
-> #buildroot IRC channel:
+>   > racehound requires a kernel >= 3.14 to be built and to run.
+>   > However, the current conditions on the corresponding comments are wrong:
+>   >   - the comment about the kernel has a dependency on the requested
+>   >     headers
+>   >   - the comment on the toolchain features does not have this condition.
 >
-> Now I'm trying to implement your idea to use <pkg>_config files to copy some
-> custom configuration target once the main package is built.
-> The idea works great, however it has certain drawbacks - It is executed only the
-> first time you build the main package, and then gets added to the rootfs.jffs
-> image. As soon as I have the image built, any make runs after that do not rut
-> through it, as if it is not detected as a dependency.
-
-  Indeed, buildroot doesn't really support rebuilding. You can explicitly 
-rebuild a single package with 'make foo-rebuild', but that doesn't force other 
-packages that depend on it to be rebuilt.
-
-  This is intentional, because the result of rebuilding individual packages is 
-anyway somewhat unpredictable.
-
-
- > This is bit of a problem
-> because when rebuilding the image (for this I clean the target folder before
-> that), the make does not copy the <pkg> relevant files to the output/target
-> folder, and thus not propagating them to the image :( Is there anything I can do
-> about it?
-
-  make clean; make
-
+>   > Thus, the comments are not shown/hidden under the appropriate
+>   > conditions, like in this situation:
+>   >   - toolchain with headers < 3.14 (e.g. Sourcery CodeBench x86/x86_64
+>   >     2012.09 with headers 3.5)
+>   >   - kernel 4.5 enabled
 >
-> I have tried adding a Config.in file, and source it in the main Config.in file
-> in my BR2_EXTERNAL folder, but then the make tries to "compile" it, and fails
-> with "No scheme" message.
-
-  Sound like you specified a _SITE with a URL that doesn't start with http://
-
-
-> I assume that do not need to run $(eval
-> $(whatever-package)) at the end because it is not a real package, so commenting
-> it solves the compilation error, but still is not run
-
-  If you don't have a $(whatever-package) in your .mk file, nothing is done with it.
-
+>   > this comment is shown:
+>   >     racehound needs an Linux kernel >= 3.14 to be built
 >
-> Attached I'm sending an example for configuring dropbear package. In my main
-> Config.in file I source this one, and the path to the makefile is included in my
-> external.mk
+>   > So, this is incorrect, because:
+>   >  1- a kernel >= 3.14 is indeed to be built
+>   >  2- the headers version mismatch is not reported
+>
+>   > Fix that by moving the dependency on the kernel headers to the
+>   > appropriate comment and enhance it.
+>
+>   > Since there is no way we can know the kernel version to be built, we can
+>   > not add such a condition; still, we leave the kernel message as-is.
+>
+>   > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Committed, thanks.
 
-  I think you attached the wrong files, the dropbear_config.mk is missing.
-
+  So, you don't agree with my analysis? :-)
 
   Regards,
   Arnout
-
->
-> Could you advise something in this case?
->
-> Thank you very much in advance
->
-> Alex
->
->
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
 
 
 -- 
