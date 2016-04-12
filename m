@@ -1,196 +1,75 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Apr 2016 22:24:22 +0200
-Subject: [Buildroot] [PATCH v3 1/1] ipmitool: fix musl build
-In-Reply-To: <1460401961.2407.7.camel@embedded.rocks>
-References: <1460282611-13740-1-git-send-email-joerg.krause@embedded.rocks>
- <570A7914.9050609@mind.be> <1460401961.2407.7.camel@embedded.rocks>
-Message-ID: <570D5976.60701@mind.be>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Tue, 12 Apr 2016 17:34:50 -0300
+Subject: [Buildroot] [PATCH] samba4: security bump to version 4.4.2
+Message-ID: <1460493290-20164-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/11/16 21:12, J?rg Krause wrote:
-> On So, 2016-04-10 at 18:02 +0200, Arnout Vandecappelle wrote:
->> On 04/10/16 12:03, J?rg Krause wrote:
->>>
->>> Add two patches to fix musl build and one patch to make the package
->>> autoreconfigurable.
->>>
->>> The first patch avoids the redefinition of wchar_t by using
->>> autoconf to check
->>> for the type wchar_t. Patching configure.ac requires to set
->>> AUTORECONF = YES
->>> and add a post extract hook to create some missing files needed by
->>> autorefonf.
->>>
->>> The second patch adds missing header include of <linux/params.h>
->>> needed for the
->>> macro EXEC_PAGESIZE defined in the Linux Kernel headers.
->>>
->>> The third patch adds 'foreign' to 'AUTOMAKE_OPTIONS' to make the
->>> package
->>> autoreconfigurable.
->>>
->>> All patches send upstream:
->>> https://sourceforge.net/p/ipmitool/mailman/message/35004226/
->>> https://sourceforge.net/p/ipmitool/mailman/message/35004225/
->>> https://sourceforge.net/p/ipmitool/mailman/message/35004711/
->>>
->>> Fixes:
->>> http://autobuild.buildroot.net/results/75f/75fd6f1be0271bb15078c62f
->>> 3effdbb67ac07427/
->>> http://autobuild.buildroot.net/results/cac/cacf8179a9c8142eef695624
->>> 62d3c3b0b20c2879/
->>> http://autobuild.buildroot.net/results/c10/c1045882947ff7150c750088
->>> ae1981bd99134c54/
->>> http://autobuild.buildroot.net/results/6a7/6a770f8a3dddb15ba4d95555
->>> e74b198799278dcf/
->>> .. and more.
->>>
->>> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
->>> ---
->>> Changes v2 -> v3:
->>>    - use the Automake foreign strictness instead of using a hook to
->>> add files
->>>      needed to make the package autoreconfigurable (Thomas
->>> Petazzoni)
->>>
->>> Changes v1 -> v2:
->>>    - use autoconf to check for wchar_t instead of using non-
->>> standardized GNU C
->>>      extension macro __WCHAR_TYPE__ (Arnout Vandecappelle)
->>>    - improve commit messages
->>>
->>> ---
->>>    .../ipmitool/0001-Avoid-wchar_t-redefinition.patch | 60
->>> ++++++++++++++++++++++
->>>    ...-Add-missing-linux-param.h-header-include.patch | 39
->>> ++++++++++++++
->>>    .../0003-Make-the-package-autoreconfigurable.patch | 38
->>> ++++++++++++++
->>>    package/ipmitool/ipmitool.mk                       |  3 ++
->>>    4 files changed, 140 insertions(+)
->>>    create mode 100644 package/ipmitool/0001-Avoid-wchar_t-
->>> redefinition.patch
->>>    create mode 100644 package/ipmitool/0002-Add-missing-linux-
->>> param.h-header-include.patch
->>>    create mode 100644 package/ipmitool/0003-Make-the-package-
->>> autoreconfigurable.patch
->>>
->>> diff --git a/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
->>> b/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
->>> new file mode 100644
->>> index 0000000..b782318
->>> --- /dev/null
->>> +++ b/package/ipmitool/0001-Avoid-wchar_t-redefinition.patch
->>> @@ -0,0 +1,60 @@
->>> +From c6fe3990713fe3d2be7a285982a0690af93cc8a7 Mon Sep 17 00:00:00
->>> 2001
->>> +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
->>> +Date: Sat, 2 Apr 2016 19:45:14 +0200
->>> +Subject: [PATCH 1/2] Avoid wchar_t redefinition
->>> +MIME-Version: 1.0
->>> +Content-Type: text/plain; charset=UTF-8
->>> +Content-Transfer-Encoding: 8bit
->>> +
->>> +The musl C library does not define _WCHAR_T. Use autoconf to check
->>> for wchar_t.
->>> +
->>> +Upstream status: Pending
->>> +https://sourceforge.net/p/ipmitool/mailman/message/35004226/
->>> +
->>> +Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
->>> +---
->>> + configure.ac             | 2 ++
->>> + src/plugins/imb/imbapi.h | 7 ++++++-
->>> + 2 files changed, 8 insertions(+), 1 deletion(-)
->>> +
->>> +diff --git a/configure.ac b/configure.ac
->>> +index b92c8a4..71cb4d4 100644
->>> +--- a/configure.ac
->>> ++++ b/configure.ac
->>> +@@ -22,6 +22,8 @@ AC_CHECK_HEADERS([stdlib.h string.h sys/ioctl.h
->>> sys/stat.h unistd.h paths.h])
->>> + AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h
->>> sys/socket.h])
->>> + AC_CHECK_HEADERS([sys/byteorder.h byteswap.h])
->>> +
->>> ++AC_CHECK_TYPES([wchar_t])
->>> ++
->>> + AC_C_CONST
->>> + AC_C_INLINE
->>> + AC_C_BIGENDIAN
->>> +diff --git a/src/plugins/imb/imbapi.h b/src/plugins/imb/imbapi.h
->>> +index 74975c6..b862445 100644
->>> +--- a/src/plugins/imb/imbapi.h
->>> ++++ b/src/plugins/imb/imbapi.h
->>> +@@ -35,6 +35,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
->>> SUCH DAMAGE.
->>> +  *---------------------------------------------------------------
->>> -------*/
->>> + #ifndef	_WINDEFS_H
->>> + #define	_WINDEFS_H
->>> ++
->>> ++#if HAVE_CONFIG_H
->>> ++# include <config.h>
->>> ++#endif
->>> ++
->>> + #ifndef FALSE
->>> + #define FALSE   0
->>> + #endif
->>> +@@ -46,7 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
->>> SUCH DAMAGE.
->>> + #endif
->>> + #ifndef WIN32
->>> + /* WIN32 defines this in stdio.h */
->>> +-#ifndef _WCHAR_T
->>> ++#if !defined(_WCHAR_T) && !defined(HAVE_WCHAR_T)
->>    The check for _WCHAR_T is redundant and potentially wrong (if
->> autoconf didn't
->> detect wchar_t and _WCHAR_T is still defined, something is amiss.
->> It's probably
->> better to terminate with a compiler error then).
->>
->>    That said, if upstream has accepted the patch as is, it's better to
->> keep it
->> this way.
->
-> Until now there is no feedback on upstream about this issue. I guess
-> this piece of code is just a copy & paste from the stdlib.h. You're
-> probably right about the redundancy. Shall I make a v4 which only
-> checks for HAVE_WCHAR_T?
+Fixes:
 
-  Yeah, I think that's better. And of course propose your new version upstream 
-as well.
+CVE-2016-2118 - A man in the middle can intercept any DCERPC traffic
+between a client and a server in order toimpersonate the client and get
+the same privileges as the authenticated user account.
 
+CVE-2016-2115 - The protection of DCERPC communication over ncacn_np
+(which is the default for most the file server related protocols) is
+inherited from the underlying SMB connection. Samba doesn't enforce SMB
+signing for this kind of SMB connections by default, which makes man in
+the middle attacks possible.
 
->
->>>
->>> + #define _WCHAR_T
->>    Why is this needed? I can't see how this could ever lead to
->> something good...
->> But I guess that's upstream's problem.
->
-> It's not needed. I agree, it's upstreams problem :-)
+CVE-2016-2114 - Due to a bug Samba doesn't enforce required smb signing,
+even if explicitly configured.
 
-  Perhaps propose an additional patch upstream that removes that define. But for 
-buildroot we don't need that.
+CVE-2016-2113 - Man in the middle attacks are possible for client
+triggered LDAP connections (with ldaps://) and ncacn_http connections
+(with https://).
 
-  Regards,
-  Arnout
+CVE-2016-2112 - A man in the middle is able to downgrade LDAP
+connections to no integrity protection. It's possible to attack client
+and server with this.
 
->
-> Best regards
-> J?rg Krause
->
+CVE-2016-2111 - When Samba is configured as Domain Controller it allows
+remote attackers to spoof the computer name of a secure channel's
+endpoints, and obtain sensitive session information, by running a
+crafted application and leveraging the ability to sniff network traffic.
 
+CVE-2016-2110 - The feature negotiation of NTLMSSP is not downgrade
+protected. A man in the middle is able to clear even required flags,
+especially NTLMSSP_NEGOTIATE_SIGN and NTLMSSP_NEGOTIATE_SEAL.
 
+CVE-2015-5370 - Errors in Samba DCE-RPC code can lead to denial of
+service (crashes and high cpu consumption) and man in the middle
+attacks.
+
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/samba4/samba4.hash | 2 +-
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 95d111d..d762452 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	c5f6fefb7fd0a4e5f404a253b19b55f74f88faa1c3612cb3329e24aa03470075	samba-4.4.0.tar.gz
++sha256	eaecd41a85ebb9507b8db9856ada2a949376e9d53cf75664b5493658f6e5926a	samba-4.4.2.tar.gz
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 5bacbc3..0d73662 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.4.0
++SAMBA4_VERSION = 4.4.2
+ SAMBA4_SITE = http://ftp.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.3
