@@ -1,93 +1,118 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 12 Apr 2016 13:09:44 -0700
-Subject: [Buildroot] [PATCH v4 1/1] PyMySQL: new package
-In-Reply-To: <1460478936-27315-1-git-send-email-stevecalfee@gmail.com>
-References: <1460478936-27315-1-git-send-email-stevecalfee@gmail.com>
-Message-ID: <CAJJ6jxsEmnWvy0vQSYMvTdvrcx_mWA5UWyjVzv5EYVLnjfuFLQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Apr 2016 22:16:32 +0200
+Subject: [Buildroot] [PATCH] mtd-utils: ubinize: fix return code on error
+In-Reply-To: <1460390298-25739-1-git-send-email-luca@lucaceresoli.net>
+References: <1460390298-25739-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <570D57A0.4090304@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout reviewed this patch and gave his:
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Let me know if I need to do anything more.
+  Hi Luca,
 
-Regards, Steve
-
-On Tue, Apr 12, 2016 at 9:35 AM, Steve Calfee <stevecalfee@gmail.com> wrote:
-> add python to mysql connection software, pure python
+On 04/11/16 17:58, Luca Ceresoli wrote:
+> ubinize 1.5.2 (currently packaged in Buildroot) returns 0 in case of
+> some errors. This can lead to unnoticed errors in the middle of a
+> build.
 >
+> Fix by adding a patch from upstream, which is not yet present in any
+> released verison.
+>
+> Fetch from: http://git.infradead.org/mtd-utils.git/commit/5f50207231414bfdbac8f0f974a2824f24177d6e
+>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 > ---
-> v4 fix git commit per review
+>   ...binize-Always-return-error-code-at-least-.patch | 63 ++++++++++++++++++++++
+>   1 file changed, 63 insertions(+)
+>   create mode 100644 package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
 >
-> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
-> ---
->  package/Config.in                          |  1 +
->  package/python-pymysql/Config.in           |  6 ++++++
->  package/python-pymysql/python-pymysql.hash |  4 ++++
->  package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
->  4 files changed, 25 insertions(+)
->  create mode 100644 package/python-pymysql/Config.in
->  create mode 100644 package/python-pymysql/python-pymysql.hash
->  create mode 100644 package/python-pymysql/python-pymysql.mk
+> diff --git a/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
+> new file mode 100644
+> index 0000000..772ab78
+> --- /dev/null
+> +++ b/package/mtd/0001-mtd-utils-ubinize-Always-return-error-code-at-least-.patch
+> @@ -0,0 +1,63 @@
+> +From 5f50207231414bfdbac8f0f974a2824f24177d6e Mon Sep 17 00:00:00 2001
+> +From: Enrico Jorns <ejo@pengutronix.de>
+> +Date: Fri, 11 Sep 2015 15:28:13 +0200
+> +Subject: [PATCH] mtd-utils: ubinize: Always return error code (at least -1) in
+> + case of an error
+> +
+> +ubinize should not fail silenty, this can be very annoying when using
+> +it from other tools that rely on the exit code for determining the
+> +success of their operation.
+> +
+> +Signed-off-by: Enrico Jorns <ejo@pengutronix.de>
+> +Signed-off-by: Brian Norris <computersforpeace@gmail.com>
+
+  You forgot to add you SoB.
+
+  Otherwise looks good to me.
+
+  Regards,
+  Arnout
+
+> +---
+> + ubi-utils/ubinize.c | 5 +++++
+> + 1 file changed, 5 insertions(+)
+> +
+> +diff --git a/ubi-utils/ubinize.c b/ubi-utils/ubinize.c
+> +index 34f465a..60bbd9a 100644
+> +--- a/ubi-utils/ubinize.c
+> ++++ b/ubi-utils/ubinize.c
+> +@@ -519,6 +519,7 @@ int main(int argc, char * const argv[])
+> + 	 */
+> + 	seek = ui.peb_size * 2;
+> + 	if (lseek(args.out_fd, seek, SEEK_SET) != seek) {
+> ++		err = -1;
+> + 		sys_errmsg("cannot seek file \"%s\"", args.f_out);
+> + 		goto out_free;
+> + 	}
+> +@@ -530,6 +531,7 @@ int main(int argc, char * const argv[])
+> + 		int fd, j;
+> +
+> + 		if (!sname) {
+> ++			err = -1;
+> + 			errmsg("ini-file parsing error (iniparser_getsecname)");
+> + 			goto out_free;
+> + 		}
+> +@@ -550,6 +552,7 @@ int main(int argc, char * const argv[])
+> + 		 */
+> + 		for (j = 0; j < i; j++) {
+> + 			if (vi[i].id == vi[j].id) {
+> ++				err = -1;
+> + 				errmsg("volume IDs must be unique, but ID %d "
+> + 				       "in section \"%s\" is not",
+> + 				       vi[i].id, sname);
+> +@@ -557,6 +560,7 @@ int main(int argc, char * const argv[])
+> + 			}
+> +
+> + 			if (!strcmp(vi[i].name, vi[j].name)) {
+> ++				err = -1;
+> + 				errmsg("volume name must be unique, but name "
+> + 				       "\"%s\" in section \"%s\" is not",
+> + 				       vi[i].name, sname);
+> +@@ -580,6 +584,7 @@ int main(int argc, char * const argv[])
+> + 		if (img) {
+> + 			fd = open(img, O_RDONLY);
+> + 			if (fd == -1) {
+> ++				err = fd;
+> + 				sys_errmsg("cannot open \"%s\"", img);
+> + 				goto out_free;
+> + 			}
+> +--
+> +1.9.1
+> +
 >
-> diff --git a/package/Config.in b/package/Config.in
-> index 529ad33..2543195 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -683,6 +683,7 @@ menu "External python modules"
->         source "package/python-pyftpdlib/Config.in"
->         source "package/python-pygame/Config.in"
->         source "package/python-pyinotify/Config.in"
-> +       source "package/python-pymysql/Config.in"
->         source "package/python-pyparsing/Config.in"
->         source "package/python-pyparted/Config.in"
->         source "package/python-pypcap/Config.in"
-> diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-> new file mode 100644
-> index 0000000..7b74533
-> --- /dev/null
-> +++ b/package/python-pymysql/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PYMYSQL
-> +       bool "python-pymysql"
-> +       help
-> +         python-pymysql is a pure Python binding for mySQL.
-> +
-> +         https://pypi.python.org/pypi/PyMySQL/
-> diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-> new file mode 100644
-> index 0000000..fc7e5e3
-> --- /dev/null
-> +++ b/package/python-pymysql/python-pymysql.hash
-> @@ -0,0 +1,4 @@
-> +#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
-> +md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
-> +# Locally calculated:
-> +sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
-> diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-> new file mode 100644
-> index 0000000..e58ff7e
-> --- /dev/null
-> +++ b/package/python-pymysql/python-pymysql.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-pymysql
-> +#
-> +################################################################################
-> +
-> +PYTHON_PYMYSQL_VERSION = 0.7.2
-> +PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
-> +PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
-> +PYTHON_PYMYSQL_LICENSE = MIT
-> +PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
-> +PYTHON_PYMYSQL_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
-> --
-> 2.5.0
->
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
