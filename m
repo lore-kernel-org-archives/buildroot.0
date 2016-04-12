@@ -1,63 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Apr 2016 23:30:22 +0200
-Subject: [Buildroot] [PATCH] gutenprint: fix host installation
-In-Reply-To: <a465019a350db47bb0f8527a628f5df0ef74eecd.1460480190.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Apr 2016 19:56:30 +0300")
-References: <a465019a350db47bb0f8527a628f5df0ef74eecd.1460480190.git.baruch@tkos.co.il>
-Message-ID: <87egaaldld.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Apr 2016 23:31:21 +0200
+Subject: [Buildroot] [PATCH v5 1/1] PyMySQL: new package
+In-Reply-To: <1460496147-28957-1-git-send-email-stevecalfee@gmail.com>
+References: <1460496147-28957-1-git-send-email-stevecalfee@gmail.com>
+Message-ID: <570D6929.40405@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On 04/12/16 23:22, Steve Calfee wrote:
+> add python to MySQL connection software, written in pure python
+>
+> ---
+> v4 fix git commit per review
+>
+> ---
+> v5 fixup missed review request for Capitalization of MySQL
+>
+> Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
 
- > Set DESTDIR to avoid installation attempt into build host directories.
- > Fixes:
- > http://autobuild.buildroot.net/results/bca/bca299631949c7699682af41e3f1373dd10866ed/
- > http://autobuild.buildroot.net/results/294/294dfc02ee95caaac4be9fd632c399bb2c7d3f83/
- > http://autobuild.buildroot.net/results/8ce/8ce0c14d92f34245a87758db60c618916be48586/
+  Your sob is not correctly places again, it should be above the ---
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  But anyway, now for real:
 
-Hmm, this sounds fishy. DESTDIR is normally only needed when the
-installation directory is different from where the files will be used at
-runtime (E.G. like for our target installation). Host-gutenprint should
-be configured to install and run in HOST_DIR, so if you pass
-DESTDIR=$(HOST_DIR) the files ends up in $(HOST_DIR)/$(HOST_DIR)/usr/..
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-The error sounds more like it misdetects the location of (host-)cups. We
-do pass --without-cups to the configure script though, so I wonder why
-it still wants to install cups files.
-
-Care to take a 2nd look?
+  Regards,
+  Arnout
 
 > ---
- >  package/gutenprint/gutenprint.mk | 2 ++
- >  1 file changed, 2 insertions(+)
-
- > diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
- > index 7e3024d400af..2ee411f66cc3 100644
- > --- a/package/gutenprint/gutenprint.mk
- > +++ b/package/gutenprint/gutenprint.mk
- > @@ -69,6 +69,8 @@ HOST_GUTENPRINT_CONF_OPTS = \
- >  	--disable-testpattern \
- >  	--without-cups
- 
- > +HOST_GUTENPRINT_INSTALL_OPTS = DESTDIR=$(HOST_DIR) install
- > +
- >  # Needed by autoreconf
- >  define GUTENPRINT_CREATE_M4_DIR
- >  	mkdir -p $(@D)/m4local
- > -- 
- > 2.8.0.rc3
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+>   package/Config.in                          |  1 +
+>   package/python-pymysql/Config.in           |  7 +++++++
+>   package/python-pymysql/python-pymysql.hash |  4 ++++
+>   package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
+>   4 files changed, 26 insertions(+)
+>   create mode 100644 package/python-pymysql/Config.in
+>   create mode 100644 package/python-pymysql/python-pymysql.hash
+>   create mode 100644 package/python-pymysql/python-pymysql.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 529ad33..2543195 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -683,6 +683,7 @@ menu "External python modules"
+>   	source "package/python-pyftpdlib/Config.in"
+>   	source "package/python-pygame/Config.in"
+>   	source "package/python-pyinotify/Config.in"
+> +	source "package/python-pymysql/Config.in"
+>   	source "package/python-pyparsing/Config.in"
+>   	source "package/python-pyparted/Config.in"
+>   	source "package/python-pypcap/Config.in"
+> diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
+> new file mode 100644
+> index 0000000..d0db376
+> --- /dev/null
+> +++ b/package/python-pymysql/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_PYMYSQL
+> +	bool "python-pymysql"
+> +	help
+> +	  PyMySQL is a pure-Python MySQL client library.
+> +	  It follows the DB-API 2.0.
+> +
+> +	  https://pypi.python.org/pypi/PyMySQL/
+> diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
+> new file mode 100644
+> index 0000000..fc7e5e3
+> --- /dev/null
+> +++ b/package/python-pymysql/python-pymysql.hash
+> @@ -0,0 +1,4 @@
+> +#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
+> +md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
+> +# Locally calculated:
+> +sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
+> diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
+> new file mode 100644
+> index 0000000..e58ff7e
+> --- /dev/null
+> +++ b/package/python-pymysql/python-pymysql.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-pymysql
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYMYSQL_VERSION = 0.7.2
+> +PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
+> +PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
+> +PYTHON_PYMYSQL_LICENSE = MIT
+> +PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
+> +PYTHON_PYMYSQL_SETUP_TYPE = setuptools
+> +
+> +$(eval $(python-package))
+>
 
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
