@@ -1,86 +1,28 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Tue, 12 Apr 2016 14:22:27 -0700
-Subject: [Buildroot] [PATCH v5 1/1] PyMySQL: new package
-Message-ID: <1460496147-28957-1-git-send-email-stevecalfee@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Apr 2016 23:23:07 +0200
+Subject: [Buildroot] [PATCH] lksctp-tools: requires dynamic library
+	support
+In-Reply-To: <39be3340acb2a5c8c5be1c1b0f28b51b38793305.1460480175.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 12 Apr 2016 19:56:15 +0300")
+References: <39be3340acb2a5c8c5be1c1b0f28b51b38793305.1460480175.git.baruch@tkos.co.il>
+Message-ID: <87inzmldxg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-add python to MySQL connection software, written in pure python
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
----
-v4 fix git commit per review
+ > Fixes:
+ > http://autobuild.buildroot.net/results/259/25910726158f4b2cbd9ceb60c170f4b2d0b546ef/
+ > http://autobuild.buildroot.net/results/94a/94ab8ba783a67529a62d4994ab8c62c8656a05e6/
+ > http://autobuild.buildroot.net/results/1e5/1e59f273e0f31646065a1323a2e231c17babfe59/
 
----
-v5 fixup missed review request for Capitalization of MySQL
+ > Cc: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Signed-off-by: Steve Calfee <stevecalfee@gmail.com>
----
- package/Config.in                          |  1 +
- package/python-pymysql/Config.in           |  7 +++++++
- package/python-pymysql/python-pymysql.hash |  4 ++++
- package/python-pymysql/python-pymysql.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-pymysql/Config.in
- create mode 100644 package/python-pymysql/python-pymysql.hash
- create mode 100644 package/python-pymysql/python-pymysql.mk
+Committed, thanks.
 
-diff --git a/package/Config.in b/package/Config.in
-index 529ad33..2543195 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -683,6 +683,7 @@ menu "External python modules"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pyinotify/Config.in"
-+	source "package/python-pymysql/Config.in"
- 	source "package/python-pyparsing/Config.in"
- 	source "package/python-pyparted/Config.in"
- 	source "package/python-pypcap/Config.in"
-diff --git a/package/python-pymysql/Config.in b/package/python-pymysql/Config.in
-new file mode 100644
-index 0000000..d0db376
---- /dev/null
-+++ b/package/python-pymysql/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_PYMYSQL
-+	bool "python-pymysql"
-+	help
-+	  PyMySQL is a pure-Python MySQL client library. 
-+	  It follows the DB-API 2.0.
-+
-+	  https://pypi.python.org/pypi/PyMySQL/
-diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
-new file mode 100644
-index 0000000..fc7e5e3
---- /dev/null
-+++ b/package/python-pymysql/python-pymysql.hash
-@@ -0,0 +1,4 @@
-+#md5 from https://pypi.python.org/pypi?:action=show_md5&digest=6d757cda8bfbd312714207f7c0bef5c7
-+md5     6d757cda8bfbd312714207f7c0bef5c7 PyMySQL-0.7.2.tar.gz
-+# Locally calculated:
-+sha256 bd7acb4990dbf097fae3417641f93e25c690e01ed25c3ed32ea638d6c3ac04ba  PyMySQL-0.7.2.tar.gz
-diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
-new file mode 100644
-index 0000000..e58ff7e
---- /dev/null
-+++ b/package/python-pymysql/python-pymysql.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pymysql
-+#
-+################################################################################
-+
-+PYTHON_PYMYSQL_VERSION = 0.7.2
-+PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
-+PYTHON_PYMYSQL_SITE = https://pypi.python.org/packages/source/P/PyMySQL
-+PYTHON_PYMYSQL_LICENSE = MIT
-+PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
-+PYTHON_PYMYSQL_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
 -- 
-2.5.0
+Bye, Peter Korsgaard
