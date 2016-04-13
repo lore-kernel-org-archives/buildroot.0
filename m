@@ -1,61 +1,137 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 22:14:02 +0200
-Subject: [Buildroot] [PATCH v2] xdriver_x86-input-joystick: Install
- server config
-In-Reply-To: <1460501496-2305-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1460439467-29560-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460501496-2305-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20160413221402.45da5ffd@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Apr 2016 22:18:35 +0200
+Subject: [Buildroot] [PATCH] package/racehound: fix comment
+In-Reply-To: <570D6840.8080800@mind.be>
+References: <1460481650-19136-1-git-send-email-yann.morin.1998@free.fr>
+ <570D6840.8080800@mind.be>
+Message-ID: <20160413201835.GA24782@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, All,
 
-First of all, your patch, as taken from patchwork, had a mismatch
-between the From: and the Signed-off-by. Indeed, the From uses ? in
-your last name, while the Signed-off-by uses the regular i.
+On 2016-04-12 23:27 +0200, Arnout Vandecappelle spake thusly:
+> On 04/12/16 19:20, Yann E. MORIN wrote:
+> >racehound requires a kernel >= 3.14 to be built and to run.
+> 
+>  If I understand correctly, it actually doesn't need kernel headers >= 3.14,
+> but only a kernel >= 3.14...
 
-The problem is that patchwork has recorded that in the past you were
-sending your e-mails with Garc?a, so even if nowadays you sent them
-with Garcia, it keeps using Garc?a when doing "git pwam", leading to
-this inconsistency. I wouldn't have noticed if there wasn't this silly
-git hook checking for such things, which complained:
+Indeed, the dependency on headerrs >= 3.14 is wrong.
 
-remote: Refusing to update refs/heads/master:
-remote:     4470abb693967f6bcf0828f50f9a32562adb85af..65933ad61df36ac32b7a9405aa7f674cd76a4ac2
-remote: 
-remote: Missing Author's Signed-off-by tag
-remote: 
+I'll send an updated patch to fix that.
 
-Another comment is: when you send a v2, please include a changelog from
-the previous version. Some more comments below.
+> >However, the current conditions on the corresponding comments are wrong:
+> >   - the comment about the kernel has a dependency on the requested
+> >     headers
+> >   - the comment on the toolchain features does not have this condition.
+> >
+> >Thus, the comments are not shown/hidden under the appropriate
+> >conditions, like in this situation:
+> >   - toolchain with headers < 3.14 (e.g. Sourcery CodeBench x86/x86_64
+> >     2012.09 with headers 3.5)
+> >   - kernel 4.5 enabled
+> 
+>  So in this configuration, it should actually be possible to build racehound.
+>  If this is true, I would remove the dependency on kernel headers.
 
-On Tue, 12 Apr 2016 19:51:36 -0300, Ezequiel Garcia wrote:
+I just checked those configurations:
+  - headers 3.14, kernel 4.5 => OK
+  - headers 3.5, kernel 4.5  => OK
 
-> +define XDRIVER_XF86_INPUT_JOYSTICK_CONF
-> +	$(INSTALL) -m 0644 -D \
-> +		package/x11r7/xdriver_xf86-input-joystick/50-joystick.conf \
+> >this comment is shown:
+> >     racehound needs an Linux kernel >= 3.14 to be built
+> 
+>  But I would keep this comment if !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14, to
+> make sure the user realizes that he needs a >= 3.14 kernel. He can still
+> select the package if the headers ar < 3.14, so if he knows what he's doing
+> it will be fine.
 
-You should have used $(XDRIVER_XF86_INPUT_JOYSTICK_PKGDIR) instead.
+I respectfully disagree. There is no corelation between the headers and
+the running kernel (except running kernel mnust be more recent than
+headers).
 
-> +		$(TARGET_DIR)/usr/share/X11/xorg.conf.d/50-joystick.conf
-> +
+Besides, this would be misleading in the other way: if headers are 3.14+
+but kernel is 3.13-, the comment wouild not be shown.
 
-This empty line was useless.
+>  Even better would be
+> 	depends on !BR2_LINUX_KERNEL || \
+> 		(BR2_PACKAGE_RACEHOUND && !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14)
+> i.e. only show the >= 3.14 warning in case you actually selected racehound.
 
-> +endef
-> +XDRIVER_XF86_INPUT_JOYSTICK_POST_INSTALL_TARGET_HOOKS += XDRIVER_XF86_INPUT_JOYSTICK_CONF
+Again, headers_atl_least_X_Y does not represent the running kernel, so I
+find it a bit misleading that we use that option to show/hide the
+comment.
 
-I've fixed up those minor issues and applied. Please test what I've
-committed to make sure I didn't introduce a typo.
+> >So, this is incorrect, because:
+> >  1- a kernel >= 3.14 is indeed to be built
+> >  2- the headers version mismatch is not reported
+> >
+> >Fix that by moving the dependency on the kernel headers to the
+> >appropriate comment and enhance it.
+> >
+> >Since there is no way we can know the kernel version to be built, we can
+> >not add such a condition; still, we leave the kernel message as-is.
+> 
+>  It can be tested in a pre-configure hook. But the cmake rules already check
+> for that, so there's no need to do it again in buildroot.
 
-Thanks a lot!
+No, it does not check for it since we pass it -DKERNEL_VERSION_OK=YES
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> >---
+> >  package/racehound/Config.in | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> >diff --git a/package/racehound/Config.in b/package/racehound/Config.in
+> >index 9f1011b..53e39a8 100644
+> >--- a/package/racehound/Config.in
+> >+++ b/package/racehound/Config.in
+> >@@ -27,10 +27,11 @@ config BR2_PACKAGE_RACEHOUND
+> >  	  https://github.com/winnukem/racehound
+> >
+> >  comment "racehound needs an Linux kernel >= 3.14 to be built"
+> >-	depends on !BR2_LINUX_KERNEL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+> >+	depends on !BR2_LINUX_KERNEL
+> >  	depends on BR2_i386 || BR2_x86_64
+> >
+> >-comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library"
+> >+comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library, headers >= 3.14"
+> >  	depends on BR2_i386 || BR2_x86_64
+> >  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+> >-		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+> >+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
+> >+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+> 
+>  Just to be clear: I think this comment shouldn't be changed at all.
+> 
+>  Assuming, of course, that my assumption is correct that it has no
+> particular dependency on kernel headers.
+> 
+>  Regards,
+>  Arnout
+> 
+> >
+> 
+> 
+> -- 
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
