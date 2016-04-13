@@ -1,103 +1,96 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 13 Apr 2016 17:03:25 -0300
-Subject: [Buildroot] [PATCH 00/15] Introduce a genimage infra
-Message-ID: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Date: Wed, 13 Apr 2016 17:03:26 -0300
+Subject: [Buildroot] [PATCH 01/15] fs: add genimage infra
+In-Reply-To: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1460577820-32164-2-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Arnout here's a series introducing
-a genimage infra to remove all the duplicated genimage
-incantation (they are all identical!).
+Currently, all the boards using genimage are using the same
+command incantation. Therefore, let's introduce a new filesystem
+infra to factorize them and allow easier genimage setup.
 
-BTW, it seems this topic was brought on the 2014 Developer
-day at FOSDEM:
+This commit adds a new genimage infra, by calling genimage
+with a user-provided config file. The user is still responsible
+of enabling the apropriate rootfs filesystem images.
 
-http://elinux.org/Buildroot:DeveloperDaysFOSDEM2014#Genimages
-
-In addition to the infra stuff, I took the liberty of fixing all
-the boards currently using genimage, but I've tested just a couple:
-Minnowboard Max and Olimex A20 Olinuxino Micro.
-
-Comments? Feedback?
-
-Ezequiel Garcia (15):
-  fs: add genimage infra
-  board/minnowboard-max: Leverage the new genimage infra
-  board/olimex_a20_olinuxino: Leverage the new genimage infra
-  board/wandboard: Leverage the new genimage infra
-  board/firefly: Leverage the new genimage infra
-  board/cubieboard2: Leverage the new genimage infra
-  board/arietta-g25: Leverage the new genimage infra
-  board/imx6ulevk: Leverage the new genimage infra
-  board/galileo: Leverage the new genimage infra
-  board/pandaboard: Leverage the new genimage infra
-  board/boundarydevices: Leverage the new genimage infra
-  board/imx233_olinuxino: Leverage the new genimage infra
-  board/orangepipc: Leverage the new genimage infra
-  board/raspberry*: Leverage the new genimage infra
-  board/via_imx6_vab820: Leverage the new genimage infra
-
- board/acmesystems/arietta-g25/post-image.sh      | 16 ----------
- board/boundarydevices/common/post-image.sh       | 16 ----------
- board/cubietech/cubieboard2/post-image.sh        | 16 ----------
- board/firefly/firefly-rk3288/post-build.sh       |  4 +++
- board/firefly/firefly-rk3288/post-image.sh       | 20 ------------
- board/freescale/imx6ulevk/post-image.sh          | 15 ---------
- board/intel/galileo/post-image.sh                | 13 --------
- board/minnowboard-max/genimage.cfg               | 34 +++++++++++++++++++++
- board/minnowboard-max/readme.txt                 | 39 ++++++++----------------
- board/olimex/a20_olinuxino/post-image.sh         | 16 ----------
- board/olimex/imx233_olinuxino/post-image.sh      | 14 ---------
- board/orangepi/orangepipc/post-build.sh          |  5 +++
- board/orangepi/orangepipc/post-image.sh          | 22 -------------
- board/pandaboard/post-image.sh                   | 16 ----------
- board/raspberrypi/post-build.sh                  |  8 +++++
- board/raspberrypi/post-image.sh                  | 22 -------------
- board/wandboard/post-image.sh                    | 16 ----------
- configs/acmesystems_arietta_g25_128mb_defconfig  |  4 +--
- configs/acmesystems_arietta_g25_256mb_defconfig  |  4 +--
- configs/cubieboard2_defconfig                    |  5 +--
- configs/firefly_rk3288_defconfig                 |  4 +--
- configs/firefly_rk3288_demo_defconfig            |  4 +--
- configs/freescale_imx6ulevk_defconfig            |  4 +--
- configs/galileo_defconfig                        |  4 +--
- configs/minnowboard_max_defconfig                |  8 +++++
- configs/nitrogen6sx_defconfig                    |  4 +--
- configs/nitrogen6x_defconfig                     |  4 +--
- configs/nitrogen7_defconfig                      |  4 +--
- configs/olimex_a20_olinuxino_lime2_defconfig     |  2 --
- configs/olimex_a20_olinuxino_lime_defconfig      |  4 +--
- configs/olimex_a20_olinuxino_lime_mali_defconfig |  4 +--
- configs/olimex_a20_olinuxino_micro_defconfig     |  4 +--
- configs/olimex_imx233_olinuxino_defconfig        |  3 +-
- configs/orangepipc_defconfig                     |  4 +--
- configs/pandaboard_defconfig                     |  4 +--
- configs/raspberrypi2_defconfig                   |  5 +--
- configs/raspberrypi_defconfig                    |  5 +--
- configs/via_imx6_vab820_defconfig                |  4 +--
- configs/wandboard_defconfig                      |  5 +--
- fs/Config.in                                     |  1 +
- fs/genimage/Config.in                            | 20 ++++++++++++
- fs/genimage/genimage.mk                          | 21 +++++++++++++
- 42 files changed, 157 insertions(+), 270 deletions(-)
- delete mode 100755 board/acmesystems/arietta-g25/post-image.sh
- delete mode 100755 board/boundarydevices/common/post-image.sh
- delete mode 100755 board/cubietech/cubieboard2/post-image.sh
- delete mode 100755 board/firefly/firefly-rk3288/post-image.sh
- delete mode 100755 board/freescale/imx6ulevk/post-image.sh
- delete mode 100755 board/intel/galileo/post-image.sh
- create mode 100644 board/minnowboard-max/genimage.cfg
- delete mode 100755 board/olimex/a20_olinuxino/post-image.sh
- delete mode 100755 board/orangepi/orangepipc/post-image.sh
- delete mode 100755 board/pandaboard/post-image.sh
- create mode 100755 board/raspberrypi/post-build.sh
- delete mode 100755 board/raspberrypi/post-image.sh
- delete mode 100755 board/wandboard/post-image.sh
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+---
+ fs/Config.in            |  1 +
+ fs/genimage/Config.in   | 20 ++++++++++++++++++++
+ fs/genimage/genimage.mk | 21 +++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
  create mode 100644 fs/genimage/Config.in
  create mode 100644 fs/genimage/genimage.mk
 
+diff --git a/fs/Config.in b/fs/Config.in
+index 51ccf28169ef..94fe1446047f 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -5,6 +5,7 @@ source "fs/cloop/Config.in"
+ source "fs/cpio/Config.in"
+ source "fs/cramfs/Config.in"
+ source "fs/ext2/Config.in"
++source "fs/genimage/Config.in"
+ source "fs/initramfs/Config.in"
+ source "fs/iso9660/Config.in"
+ source "fs/jffs2/Config.in"
+diff --git a/fs/genimage/Config.in b/fs/genimage/Config.in
+new file mode 100644
+index 000000000000..749494652464
+--- /dev/null
++++ b/fs/genimage/Config.in
+@@ -0,0 +1,20 @@
++config BR2_TARGET_ROOTFS_GENIMAGE
++	bool "full system image using genimage"
++	help
++	  Generate a full system image using the genimage tool
++	  and a user-provided configuration file. The image generated
++	  will contain a partition table and will be ready to be copied
++	  onto storage media, such as MMC, NAND or NOR devices.
++
++	  Keep in mind that you probably require to enable a rootfs
++	  filesystem image, according to the genimage config file that you
++	  provide.
++
++if BR2_TARGET_ROOTFS_GENIMAGE
++
++config BR2_TARGET_ROOTFS_GENIMAGE_CFG
++	string "genimage config file"
++	help
++	  Genimage user configuration file.
++
++endif # BR2_TARGET_ROOTFS_GENIMAGE
+diff --git a/fs/genimage/genimage.mk b/fs/genimage/genimage.mk
+new file mode 100644
+index 000000000000..17c146b6b519
+--- /dev/null
++++ b/fs/genimage/genimage.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# Generate a system image using genimage
++#
++################################################################################
++
++ROOTFS_GENIMAGE_DEPENDENCIES = host-genimage
++
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++define ROOTFS_GENIMAGE_CMD
++	$(RM) -rf ${GENIMAGE_TMP} &&		\
++	$(HOST_DIR)/usr/bin/genimage		\
++		--rootpath ${TARGET_DIR}	\
++		--tmppath ${GENIMAGE_TMP}	\
++		--inputpath ${BINARIES_DIR}	\
++		--outputpath ${BINARIES_DIR}	\
++		--config ${BR2_TARGET_ROOTFS_GENIMAGE_CFG}
++endef
++
++$(eval $(call ROOTFS_TARGET,genimage))
 -- 
 2.7.0
