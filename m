@@ -1,43 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Wed, 13 Apr 2016 23:12:52 +0200
-Subject: [Buildroot] [git commit] package/kodi: optimise for RPi2
-Message-ID: <20160413211303.108CB81908@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cannelloni: needs dynamic library
+Message-ID: <20160413211303.1BFAE7FD8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef37472b20894c99cad758397f3cd6b90f933df1
+commit: https://git.buildroot.net/buildroot/commit/?id=64281e5a91e39c67479b8cdbde535e258b968c16
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Kodi has specific optimisation and configuration flags for RPi vs. RPi2.
-Only configure for the RPi2 when we're sure (i.e. it is a cortex A7),
-and fallback to con figuring for the RPi otherwise.
+cannelloni selects lksctp which depends on !BR2_STATIC_LIBS, but this
+dependency was not propagated to cannelloni. Due to this, when
+cannelloni was selected, lksctp-tools could be built even in a
+BR2_STATIC_LIBS=y configuration.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We fix this by propagating the dependency. While we're at it, we
+adjust the indentation of the cannelloni comment dependencies.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/b589af984499c532951217eb500ff31e6655c63f/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/kodi/kodi.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/cannelloni/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 94a8cd8..ca1cae2 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -47,7 +47,14 @@ endif
+diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
+index cb51709..8f3e888 100644
+--- a/package/cannelloni/Config.in
++++ b/package/cannelloni/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_CANNELLONI
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_MMU # lksctp-tools
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
++	depends on !BR2_STATIC_LIBS # lksctp-tools
+ 	select BR2_PACKAGE_LKSCTP_TOOLS
+ 	help
+ 	  A SocketCAN over Ethernet tunnel. The tunnel supports both
+@@ -11,7 +12,7 @@ config BR2_PACKAGE_CANNELLONI
  
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
- KODI_DEPENDENCIES += rpi-userland
--KODI_CONF_OPTS += --with-platform=raspberry-pi --enable-player=omxplayer
-+# Kodi has specific configuration flags for RPi/RPi2. Configure for a
-+# RPi2 when we're sure, fallback to RPi otherwise.
-+ifeq ($(BR2_cortex_a7),y)
-+KODI_CONF_OPTS += --with-platform=raspberry-pi2
-+else
-+KODI_CONF_OPTS += --with-platform=raspberry-pi
-+endif
-+KODI_CONF_OPTS += --enable-player=omxplayer
- KODI_CONF_ENV += INCLUDES="-I$(STAGING_DIR)/usr/include/interface/vcos/pthreads \
- 	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux" \
- 	LIBS="-lvcos -lvchostif"
+ 	  https://github.com/mguentner/cannelloni
+ 
+-comment "cannelloni needs a toolchain w/ C++, threads, gcc >= 4.8"
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-	!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
++comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
