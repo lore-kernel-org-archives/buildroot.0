@@ -1,50 +1,50 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 13 Apr 2016 17:05:34 -0300
-Subject: [Buildroot] [PATCH 1/4] board/minnowboard-max: Rework to
-	generate SD card image
-In-Reply-To: <87bn5djn55.fsf@dell.be.48ers.dk>
-References: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460438965-28065-2-git-send-email-ezequiel@vanguardiasur.com.ar>
- <570D82EA.9010609@mind.be> <87bn5djn55.fsf@dell.be.48ers.dk>
-Message-ID: <CAAEAJfB=q_axzabaGmX7NGOfB1Nnt96dWCEXnv7NkQXN=sxo4Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Apr 2016 22:06:46 +0200
+Subject: [Buildroot] [PATCH v4] qt5webkit: restore package
+In-Reply-To: <1460554835-5242-1-git-send-email-gary.bisson@boundarydevices.com>
+References: <1460554835-5242-1-git-send-email-gary.bisson@boundarydevices.com>
+Message-ID: <20160413220646.102e7cd5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13 April 2016 at 16:59, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->
->  > On 04/12/16 07:29, Ezequiel Garcia wrote:
->  >> Let's rework the board and config files to use genimage
->  >> to generate the SD card image directly.
->  >>
->  >> Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->
->  > Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->  >> ---
->  >> board/minnowboard-max/genimage.cfg  | 34 ++++++++++++++++++++++++++++++++
->  >> board/minnowboard-max/post-image.sh | 13 +++++++++++++
->
->  >  If you feel up to it: I think it would be nice to add an fs/genimage
->  > infra that runs genimage at the end of the build with a user-specified
->  > config file. All the post-image scripts we have for the defconfigs are
->  > identical.
->
-> Yes, I also think the time has come to add support for this.
+Hello,
 
-I've just sent a patchset :-)
+Thanks. Looks mostly good, but I have a few questions.
 
-> Perhaps we
-> should also add explicit sub options to pull in the needed dependencies
-> (E.G. host-dosfstools/mtools for vfat, host-mtd for jffs2/ubifs,
-> .. which isn't directly obvious).
->
+On Wed, 13 Apr 2016 15:40:35 +0200, Gary Bisson wrote:
 
-Yeah, I thought about this, but went for the KISS (lazy?) option: just keep the
-stuff as it is, and add the infra to make only the genimage call.
+> Since we are now using the source from the git repository, we need
+> to create an empty .git/ folder to force the headers re-generation.
+> https://github.com/meta-qt5/meta-qt5/blob/jethro/recipes-qt/qt5/qt5.inc#L33
+> 
+> Note that GPLv3 license option has been added with this release.
+
+Yes, but I don't see any reference to GPLv3 in your license information
+below.
+
+
+> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> +QT5WEBKIT_LICENSE = LGPLv2+, BSD-3c, BSD-2c
+> +# Source files contain references to LGPL_EXCEPTION.txt but it is not included
+> +# in the archive.
+> +QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21
+> +else
+> +QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), Commercial license
+> +QT5WEBKIT_REDISTRIBUTE = NO
+> +endif
+
+No reference to GPLv3 whatsoever.
+
+Also, LGPLv2+ is not correct I believe, it should be LGPLv2.1+, as the
+name of the license file suggests.
+
+Thanks!
+
+Thomas
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
