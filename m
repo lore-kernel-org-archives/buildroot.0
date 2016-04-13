@@ -1,19 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Apr 2016 21:06:20 +0200
-Subject: [Buildroot] [PATCH] linux-headers: bump 3.12.x series
-In-Reply-To: <1460572209-24585-1-git-send-email-gustavo@zacarias.com.ar>
- (Gustavo Zacarias's message of "Wed, 13 Apr 2016 15:30:09 -0300")
-References: <1460572209-24585-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <87shypjplf.fsf@dell.be.48ers.dk>
+Date: Wed, 13 Apr 2016 21:06:57 +0200
+Subject: [Buildroot] [PATCH 1/1] netsniff-ng: bump to version 0.6.1
+In-Reply-To: <1460550476-10770-1-git-send-email-joris.lijssens@gmail.com>
+ (Joris Lijssens's message of "Wed, 13 Apr 2016 14:27:56 +0200")
+References: <1460550476-10770-1-git-send-email-joris.lijssens@gmail.com>
+Message-ID: <87oa9djpke.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gustavo" == Gustavo Zacarias <gustavo@zacarias.com.ar> writes:
+>>>>> "Joris" == Joris Lijssens <joris.lijssens@gmail.com> writes:
 
- > Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ > Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
 
 Committed, thanks.
 
