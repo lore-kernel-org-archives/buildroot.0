@@ -1,59 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 22:37:30 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ati: bump
-	version to 7.7.0
-Message-ID: <20160413203800.D690281E22@busybox.osuosl.org>
+Date: Wed, 13 Apr 2016 22:37:37 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-ast: bump
+	version to 1.1.5
+Message-ID: <20160413203800.E638B81E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c3a872411a7ddf5be62fe989e145bd739b7b781
+commit: https://git.buildroot.net/buildroot/commit/?id=b0b28b776f4e8b74c43a60e86e279941ce84c4da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also remove BR2_TOOLCHAIN_HAS_THREADS condition, it is already present
-in package/x11r7/Config.in.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/x11r7/xdriver_xf86-video-ati/Config.in                   | 1 -
- package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash | 4 ++--
- package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk   | 2 +-
- 3 files changed, 3 insertions(+), 4 deletions(-)
+ package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash | 2 +-
+ package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 55be603..00d91bd 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
- 	depends on BR2_PACKAGE_MESA3D
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm -> libpthread-stubs
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_RADEON
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-index 57ebfe8..6eb3508 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.hash
+diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
+index a4e3439..cf877d5 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
++++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.hash
 @@ -1,2 +1,2 @@
--# From http://lists.x.org/archives/xorg-announce/2015-November/002658.html
--sha256 2516d9eeb8da8bcd3a01365ed1314919777910fa904ab268af342b5693e1d34c        xf86-video-ati-7.6.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2016-April/002684.html
-+sha256	844d1c577b145c90dc8ef027678f0c27f554363f782cd696a3aea26415b2c1c3	xf86-video-ati-7.7.0.tar.bz2
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index 09af05a..29a0d2f 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
+ # Locally computed
+-sha256	e778f1824f5eed7e3197f00f39418de1525e310fd78e0335f6178c26b9b0495b	xf86-video-ast-1.0.1.tar.bz2
++sha256	1edbbc55d47d3fd71dec99b15c2483e22738c642623a0fb86ef4a81a9067a2de	xf86-video-ast-1.1.5.tar.bz2
+diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
+index d040ccd..3c9eb91 100644
+--- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
++++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_ATI_VERSION = 7.6.1
-+XDRIVER_XF86_VIDEO_ATI_VERSION = 7.7.0
- XDRIVER_XF86_VIDEO_ATI_SOURCE = xf86-video-ati-$(XDRIVER_XF86_VIDEO_ATI_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_ATI_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ATI_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_AST_VERSION = 1.0.1
++XDRIVER_XF86_VIDEO_AST_VERSION = 1.1.5
+ XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_AST_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_AST_LICENSE = MIT
