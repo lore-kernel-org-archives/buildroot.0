@@ -1,49 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Apr 2016 12:21:38 +0000
-Subject: [Buildroot] [Bug 8846] New: Orphaned/missing toolchain borks
-	eclipse plugin
-Message-ID: <bug-8846-163@https.bugs.busybox.net/>
+From: Joris Lijssens <joris.lijssens@gmail.com>
+Date: Wed, 13 Apr 2016 14:27:56 +0200
+Subject: [Buildroot] [PATCH 1/1] netsniff-ng: bump to version 0.6.1
+Message-ID: <1460550476-10770-1-git-send-email-joris.lijssens@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8846
+Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
+---
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-            Bug ID: 8846
-           Summary: Orphaned/missing toolchain borks eclipse plugin
-           Product: buildroot
-           Version: unspecified
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: subwooferbone at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-Using latest Buildroot Eclipse plugin.
-
-Importing CDT project from another user, all build targets are gone. Eclipse
-complains "An error has occurred. See error log for more details.
-java.lang.NullPointerException".
-
-C/C++ Build and C/C++ General pages of project properties are borked, null
-pointers galore. 
-
-Same behaviour with both Mars and Luna. Uninstalling the plugin makes the C/C++
-options pages work again, but it is impossible to select another toolchain for
-the projects defined with buildroot toolchains. Then complains about orphaned
-toolchain.
-
-Message sent to stderr: "Managed Build system manifest file error: Option
-org.buildroot.home.bob.software_PI1509.platform.buildroot.output..toolchain.base.option.path.1204713667
-uses a null category that is invalid in its context. The option was ignored."
-
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index b4b0500..5212497 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 a76911f5a8ef0b92c42da568ceebc9e6559c02760f498785e22c8426b623d43f netsniff-ng-v0.6.0.tar.gz
++sha256 902661bcdbc129c6a6c1f69a72f921fffc9e765d005568dc153f09ca0097c180 netsniff-ng-v0.6.1.tar.gz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index eecceea..ad97a88 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETSNIFF_NG_VERSION = v0.6.0
++NETSNIFF_NG_VERSION = v0.6.1
+ NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
+ NETSNIFF_NG_LICENSE = GPLv2
+ NETSNIFF_NG_LICENSE_FILES = README COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+1.8.3.1
