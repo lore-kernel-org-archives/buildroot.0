@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 21:39:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mutt: bump version to 1.6.0
-In-Reply-To: <1460402898-2383-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1460402898-2383-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160413213925.0e72b3ad@free-electrons.com>
+Date: Wed, 13 Apr 2016 21:39:34 +0200
+Subject: [Buildroot] [PATCH] libuv: bump to version 1.9.0
+In-Reply-To: <1460404971-29952-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1460404971-29952-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160413213934.0e32717c@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 11 Apr 2016 21:28:18 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Mon, 11 Apr 2016 22:02:51 +0200, J?rg Krause wrote:
+> Remove uClibc-ng patch applied upstream [1].
+> 
+> [1] https://github.com/libuv/libuv/commit/c8619721404c2a9f97adc34a8c3b5336317311bc
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/mutt/mutt.hash | 2 +-
->  package/mutt/mutt.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  .../0001-unix-fix-support-for-uClibc-ng.patch      | 30 ----------------------
+>  package/libuv/libuv.hash                           |  2 +-
+>  package/libuv/libuv.mk                             |  2 +-
+>  3 files changed, 2 insertions(+), 32 deletions(-)
+>  delete mode 100644 package/libuv/0001-unix-fix-support-for-uClibc-ng.patch
 
 Applied to master, thanks.
 
