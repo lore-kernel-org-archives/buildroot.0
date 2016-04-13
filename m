@@ -1,60 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 23:53:17 +0200
-Subject: [Buildroot] [PATCH 2/2] qt5connectivity: add QtNfc submodule
-In-Reply-To: <1459763762-31640-2-git-send-email-corjon.j@ecagroup.com>
-References: <1459763762-31640-1-git-send-email-corjon.j@ecagroup.com>
- <1459763762-31640-2-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20160413235317.604bbd46@free-electrons.com>
+Date: Wed, 13 Apr 2016 23:54:06 +0200
+Subject: [Buildroot] [git commit] qt5connectivity: add sdpscanner tool for
+	Qt5Bluetooth
+Message-ID: <20160413215417.AB5408046B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ee7cb3ba995a867e0e5ba03afb03e6054ae375e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Apr 2016 11:56:02 +0200, Julien Corjon wrote:
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  package/qt5/qt5connectivity/Config.in          | 10 ++++++----
->  package/qt5/qt5connectivity/qt5connectivity.mk |  4 +++-
->  2 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
-> index d529ea7..611ef14 100644
-> --- a/package/qt5/qt5connectivity/Config.in
-> +++ b/package/qt5/qt5connectivity/Config.in
-> @@ -1,13 +1,15 @@
->  config BR2_PACKAGE_QT5CONNECTIVITY
->  	bool "qt5connectivity"
->  	select BR2_PACKAGE_BLUEZ_UTILS
-> +	select BR2_PACKAGE_NEARD
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/qt5/qt5connectivity/qt5connectivity.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-So until now, neard was not necessary, and without any version bump or
-anything, it should become a mandatory dependency? This seems weird,
-and does not quite follow the policy of Buildroot that we should have
-as much as possible the smallest set of mandatory dependencies.
-
-Is it possible to have qt5connectivity with just Bluetooth support?
-Just NFC support? No support for any of them at all?
-
-I'm wondering if we shouldn't be doing:
-
-ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
-QT5CONNECTIVITY_DEPENDENCIES += bluez_utils
-endif
-
-ifeq ($(BR2_PACKAGE_NEARD),y)
-QT5CONNECTIVITY_DEPENDENCIES += neard
-endif
-
-in the .mk file, instead of forcefully selecting both bluez_utils and
-neard.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+index a68f5ec..936bc6f 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.mk
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -43,6 +43,7 @@ endif
+ 
+ define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Bluetooth.so.* $(TARGET_DIR)/usr/lib
++	cp -dpf $(STAGING_DIR)/usr/bin/sdpscanner $(TARGET_DIR)/usr/bin
+ 	$(QT5CONNECTIVITY_INSTALL_TARGET_QMLS)
+ endef
+ 
