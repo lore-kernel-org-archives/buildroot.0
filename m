@@ -1,13 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Apr 2016 09:38:28 +0200
-Subject: [Buildroot] [PATCH 4/4] board/minnowboard-max: Add a X-based
- graphical defconfig
-In-Reply-To: <CAAEAJfACmsVV4vM3Rx_EaJrWvZV-KmmjhY+t6SmtE3JwDpYkcA@mail.gmail.com>
-References: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460438965-28065-5-git-send-email-ezequiel@vanguardiasur.com.ar>
- <570D87A6.3030907@mind.be>
- <CAAEAJfACmsVV4vM3Rx_EaJrWvZV-KmmjhY+t6SmtE3JwDpYkcA@mail.gmail.com>
-Message-ID: <570DF774.8060105@mind.be>
+Date: Wed, 13 Apr 2016 09:42:14 +0200
+Subject: [Buildroot] [PATCH v3 2/2] gcc: apply patches stored in global
+ patches directories
+In-Reply-To: <1460521232-28778-3-git-send-email-hchunhui@mail.ustc.edu.cn>
+References: <1460521232-28778-1-git-send-email-hchunhui@mail.ustc.edu.cn>
+ <1460521232-28778-3-git-send-email-hchunhui@mail.ustc.edu.cn>
+Message-ID: <570DF856.6090502@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,93 +14,59 @@ To: buildroot@busybox.net
 
 
 
-On 04/13/16 02:02, Ezequiel Garcia wrote:
-> On 12 April 2016 at 20:41, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 04/12/16 07:29, Ezequiel Garcia wrote:
-[snip]
->>> +
->>> +# Setup xinitrc
->>> +echo "exec /usr/bin/openbox-session" > ${TARGET_DIR}/root/.xinitrc
->>
->>
->>   Put this in the fs-overlay.
->>
->>> +
->>> +# Fixup startx so it doesn't start X on the controlling
->>> +# virtual console. Apparently, this is a bug and we are
->>> +# affected for our lack of a Display Manager.
->>> +# See https://bugs.freedesktop.org/show_bug.cgi?id=87762
->>> +#
->>> +# I haven't found a way to do this without hacking startx
->>> +# itself, so...
->>
->>
->>   This comment should be in the startx script itself.
->>
->>> +cp board/minnowboard-max/startx ${TARGET_DIR}/usr/bin/startx
->>> +
->>> +# Customize ALSA: the HDMI PCM is at card=0, device=3 (i.e. hw:0,3)
->>
->>
->>   Same here.
->>
+On 04/13/16 06:20, Chunhui He wrote:
+> When building host gcc, patches stored in global patches directories
+> are skipped.
+> This patch fixes the unexpected behavior.
 >
-> OK, I'll add a fs-graphical-overlay dir, and use it in this defconfig.
+> Signed-off-by: Chunhui He <hchunhui@mail.ustc.edu.cn>
 
-  Call it fs-overlay-graphical.
-
-[snip]
->>> +BR2_PACKAGE_GREP=y
->>
->>
->>   Not sure why we would want this. Doesn't it require BUSYBOX_SHOW_OTHERS?
->>
->
-> I think some X or openbox script was using a feature from GNU grep,
-> and I wanted to remove some minor error/warning.
-
-  In that case, the package involved should probably select GNU grep (and 
-SHOW_OTHERS).
-
-[snip]
->>> +BR2_PACKAGE_COREUTILS=y
->>
->>   Why?
->>
->>> +BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS=y
->>
->>   Why?
->>
->>> +BR2_PACKAGE_UTIL_LINUX_MORE=y
->>
->>   Why?
->>
->>> +BR2_PACKAGE_LESS=y
->>
->>
->>
->>   I'd like to reorder the packages to put all the X stuff together with a
->> comment above and, and then all the dev stuff (like bash and less) with a
->> comment.
->>
->
-> Sure.
->
-> Regarding the less, more, coreutils, etc... I routinely replace these
-> because I found them more useful than busybox's.
-
-  I agree for less (and bash and vi BTW), but I never found any use for more 
-(but I actually never use more, less is better) and coreutils.
-
->
-> I'll remove them, as they don't add anything of value if the goal is
-> to provide a "minimal with audio, and 3D graphics" config.
-
-  Than bash should probably be removed as well, except if there is some script 
-that depends on bash.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
+
+> ---
+>   package/gcc/gcc.mk | 15 ++++++++++++---
+>   1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 46f05ff..4cadca7 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -42,9 +42,15 @@ endif
+>   endif
+>
+>   define HOST_GCC_APPLY_PATCHES
+> -	if test -d package/gcc/$(GCC_VERSION); then \
+> -	  $(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
+> -	fi;
+> +	for D in \
+> +	    package/gcc/$(GCC_VERSION) \
+> +	    $(addsuffix /gcc/$(GCC_VERSION),$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+> +	    $(addsuffix /gcc,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+> +	    ; do \
+> +		if test -d $${D}; then \
+> +			$(APPLY_PATCHES) $(@D) $${D} \*.patch || exit 1; \
+> +		fi; \
+> +	done;
+>   	$(HOST_GCC_APPLY_POWERPC_PATCH)
+>   endef
+>
+> @@ -235,9 +241,12 @@ ifeq ($(BR2_CCACHE),y)
+>   HOST_GCC_COMMON_CCACHE_HASH_FILES += $(DL_DIR)/$(GCC_SOURCE)
+>   # Cfr. PATCH_BASE_DIRS in .stamp_patched, but we catch both versioned and
+>   # unversioned patches unconditionally
+> +# Also catch patches in $(BR2_GLOBAL_PATCH_DIR)/gcc.
+>   HOST_GCC_COMMON_CCACHE_HASH_FILES += \
+>   	$(sort $(wildcard \
+>   		package/gcc/$(GCC_VERSION)/*.patch \
+> +		$(addsuffix /gcc/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+> +		$(addsuffix /gcc/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+>   		$(addsuffix /$((PKG)_RAWNAME)/$(GCC_VERSION)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))) \
+>   		$(addsuffix /$((PKG)_RAWNAME)/*.patch,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR)))))
+>   ifeq ($(BR2_xtensa),y)
+>
 
 -- 
 Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
