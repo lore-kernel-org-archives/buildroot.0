@@ -1,68 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 22:34:40 +0200
-Subject: [Buildroot] [git commit] package/racehound: bump and fix
-	dependencies
-Message-ID: <20160413203449.8047681DD1@busybox.osuosl.org>
+Date: Wed, 13 Apr 2016 22:34:58 +0200
+Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.150
+Message-ID: <20160413203501.8917F81838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08f232508456290f3bc97a4d08fa0ff918ccd237
+commit: https://git.buildroot.net/buildroot/commit/?id=5ac2c983b2b17130b3459b5c228a0530cc78ad0d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As pointed out by Arnout, racehound does not require kernel headers
-3.14-or-later. So, drop this depenency.
-
-It stills require a kernel >= 3.14 to build and run, but we really
-have no way to express that dependency as Kconfig options.
-
-Besides, racehound does not build with kernel 4.5 because the struct
-modules has been updated. Bump racehound to fix that build failure.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/racehound/Config.in    | 6 ++----
- package/racehound/racehound.mk | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/lvm2/lvm2.hash | 2 +-
+ package/lvm2/lvm2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/racehound/Config.in b/package/racehound/Config.in
-index 53e39a8..6f62f81 100644
---- a/package/racehound/Config.in
-+++ b/package/racehound/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_RACEHOUND
- 	bool "racehound"
- 	depends on BR2_LINUX_KERNEL
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
-@@ -30,8 +29,7 @@ comment "racehound needs an Linux kernel >= 3.14 to be built"
- 	depends on !BR2_LINUX_KERNEL
- 	depends on BR2_i386 || BR2_x86_64
- 
--comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library, headers >= 3.14"
-+comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
-index 7d8d1e3..8e282c1 100644
---- a/package/racehound/racehound.mk
-+++ b/package/racehound/racehound.mk
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 88998c4..959be39 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,2 +1,2 @@
+ # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
+-sha512 f00310fd398d4f84d67677e47b148ab5cc79319e25547ee56160703a425f2f506a4c92ee9958c363a1640ae1fa17b4337242d76e0c5e4a256192edfbf9c4fcdc  LVM2.2.02.149.tgz
++sha512 66d1a247170f685c72d91d5fc52a2394ba5d5a477686101b9a472a8ac163813f9c80c0d75e4f29939b16000456263e9191cd294520ab5b320915f23f0797f22e  LVM2.2.02.150.tgz
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index d17a772..d78f621 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RACEHOUND_VERSION = f3375911019607a0cb6a15bf68fa62dadd6b790b
-+RACEHOUND_VERSION = f09f06fcc3c77c8c5541be3ba5be80aa8148ce0c
- RACEHOUND_SITE = $(call github,winnukem,racehound,$(RACEHOUND_VERSION))
- RACEHOUND_LICENSE = GPLv2
- RACEHOUND_LICENSE_FILES = LICENSE
+-LVM2_VERSION = 2.02.149
++LVM2_VERSION = 2.02.150
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
+ LVM2_INSTALL_STAGING = YES
