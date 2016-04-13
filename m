@@ -1,52 +1,82 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 13 Apr 2016 19:02:26 -0300
-Subject: [Buildroot] [PATCH 3/4] board/minnowboard-max: Add more
- peripherals and features to the kernel
-In-Reply-To: <8737qpjk8i.fsf@dell.be.48ers.dk>
-References: <1460438965-28065-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460438965-28065-4-git-send-email-ezequiel@vanguardiasur.com.ar>
- <570D84BC.40808@mind.be>
- <CAAEAJfDu8vgHZ21s+5EvF99t0tJwf8ix603B1iF=0mcwS9pxMg@mail.gmail.com>
- <8737qpjk8i.fsf@dell.be.48ers.dk>
-Message-ID: <CAAEAJfA97EzBDfu1TXVOMd4OvTnDeayHhrREET+DJvCZK4Ud8Q@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 14 Apr 2016 00:16:29 +0200
+Subject: [Buildroot] [PATCH v12 29/31] package/flite: bump version to
+ 2.0.0
+In-Reply-To: <1460281299-2385-30-git-send-email-bernd.kuhls@t-online.de>
+References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
+ <1460281299-2385-30-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <570EC53D.5020606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 13 April 2016 at 18:02, Peter Korsgaard <peter@korsgaard.com> wrote:
->>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
->
->  > On 12 April 2016 at 20:29, Arnout Vandecappelle <arnout@mind.be> wrote:
->  >> On 04/12/16 07:29, Ezequiel Garcia wrote:
->  >>>
->  >>> This commit enables support for:
->  >>> * HDMI audio
->  >>> * Support for user-provided EDID firmware
->  >>> (useful to workaround broken monitors)
->  >>> * Evdev interface
->  >>> * System V IPC (required by ALSA)
->  >>> * POSIX message queue
->  >>> * fhandle syscall
->  >>> * cgroups
->  >>
->  >>
->  >> Why cgroups?
->  >>
->
->  > Well, in fact... the commit log is not correct. My initial intention
->  > was to add IPC (required by ALSA), HDMI audio and evdev.
->
->  > As you can imagine, the goal was to play supertuxkart.
->
->  > The rest of the configs got added by Buildroot, because
->  > of the systemd presence:
->
-> Ok, will you send a new version with only the needed changes?
->
+On 04/10/16 11:41, Bernd Kuhls wrote:
+> Freeswitch contains mod_flite which needs flite >= 2.0.0 detected by
+> pkgconf, its support was added by the freeswitch project so we switch
+> to the freeswitch support deps repo:
+> https://freeswitch.org/stash/projects/SD
 
-Yup.
+  So, we would be switching to a fork? I don't like that very much... I tend to 
+prefer sticking with the upstream flite-2.0.0 release, and add patches if 
+needed. However, a quick look shows that the differences are pretty large, so 
+it's probably not an option. But then, switching to a fork is even less 
+attractive... But then again, the real upstream is not very active, while the 
+freeswitch fork is really active.
+
+  Either way, it's ugly :-(
+
+  If it's really just about the pkg-config support, can't we just add a .pc file 
+ourselves? After bumping to the upstream flite-2.0.0 of course.
+
+>
+> Removed 0001-now-honor-DESTDIR-env.-var.patch, not needed anymore.
+> Rebased and renumbered the remaining patches.
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>   ...lsa-static.patch => 0001-fix-alsa-static.patch} |  4 +--
+>   .../flite/0001-now-honor-DESTDIR-env.-var.patch    | 30 ----------------------
+>   ...eck.patch => 0002-fix-alsa-version-check.patch} |  4 +--
+>   package/flite/flite.hash                           |  2 --
+>   package/flite/flite.mk                             | 24 +++--------------
+>   5 files changed, 8 insertions(+), 56 deletions(-)
+>   rename package/flite/{0002-fix-alsa-static.patch => 0001-fix-alsa-static.patch} (77%)
+>   delete mode 100644 package/flite/0001-now-honor-DESTDIR-env.-var.patch
+>   rename package/flite/{0003-fix-alsa-version-check.patch => 0002-fix-alsa-version-check.patch} (90%)
+>   delete mode 100644 package/flite/flite.hash
+>
+> diff --git a/package/flite/0002-fix-alsa-static.patch b/package/flite/0001-fix-alsa-static.patch
+> similarity index 77%
+> rename from package/flite/0002-fix-alsa-static.patch
+> rename to package/flite/0001-fix-alsa-static.patch
+> index 12adb9e..de088ad 100644
+> --- a/package/flite/0002-fix-alsa-static.patch
+> +++ b/package/flite/0001-fix-alsa-static.patch
+> @@ -3,8 +3,8 @@ Use pkg-config to determine alsa link flags. This fixes static linking.
+>   Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>
+>   diff -Nuar flite-1.4-release.orig/configure.in flite-1.4-release/configure.in
+> ---- flite-1.4-release.orig/flite-1.4-release/configure.in	2009-08-14 23:46:38.000000000 +0300
+> -+++ flite-1.4-release/flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
+> +--- flite-1.4-release/configure.in	2009-08-14 23:46:38.000000000 +0300
+> ++++ flite-1.4-release/configure.in	2014-04-30 18:52:33.253297236 +0300
+
+  It's a bit weird to still have flite-1.4 when the version is actually 2.0... 
+Perhaps convert to git patches?
+
+>   @@ -275,7 +275,10 @@
+>                    #endif],
+>                  [AUDIODRIVER="alsa"
+
+[snip]
+
+
 -- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
