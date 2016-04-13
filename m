@@ -1,10 +1,10 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Wed, 13 Apr 2016 17:03:34 -0300
-Subject: [Buildroot] [PATCH 09/15] board/galileo: Leverage the new genimage
-	infra
+Date: Wed, 13 Apr 2016 17:03:35 -0300
+Subject: [Buildroot] [PATCH 10/15] board/pandaboard: Leverage the new
+	genimage infra
 In-Reply-To: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 References: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1460577820-32164-10-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1460577820-32164-11-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,50 +17,57 @@ SD card image directly.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- board/intel/galileo/post-image.sh | 13 -------------
- configs/galileo_defconfig         |  4 ++--
- 2 files changed, 2 insertions(+), 15 deletions(-)
- delete mode 100755 board/intel/galileo/post-image.sh
+ board/pandaboard/post-image.sh | 16 ----------------
+ configs/pandaboard_defconfig   |  4 ++--
+ 2 files changed, 2 insertions(+), 18 deletions(-)
+ delete mode 100755 board/pandaboard/post-image.sh
 
-diff --git a/board/intel/galileo/post-image.sh b/board/intel/galileo/post-image.sh
+diff --git a/board/pandaboard/post-image.sh b/board/pandaboard/post-image.sh
 deleted file mode 100755
-index f9aef0b1ba6c..000000000000
---- a/board/intel/galileo/post-image.sh
+index 9cca1b1789ec..000000000000
+--- a/board/pandaboard/post-image.sh
 +++ /dev/null
-@@ -1,13 +0,0 @@
--#!/bin/sh -e
+@@ -1,16 +0,0 @@
+-#!/bin/sh
 -
--GENIMAGE_CFG="board/intel/galileo/genimage.cfg"
+-BOARD_DIR="$(dirname $0)"
+-GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
 -GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 -
 -rm -rf "${GENIMAGE_TMP}"
 -
--genimage \
--    --rootpath "${TARGET_DIR}" \
--    --tmppath "${GENIMAGE_TMP}" \
--    --inputpath "${BINARIES_DIR}" \
--    --outputpath "${BINARIES_DIR}" \
--    --config "${GENIMAGE_CFG}"
-diff --git a/configs/galileo_defconfig b/configs/galileo_defconfig
-index 9334266b1e96..dde324cccd80 100644
---- a/configs/galileo_defconfig
-+++ b/configs/galileo_defconfig
-@@ -8,7 +8,6 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS1"
- BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
- BR2_ROOTFS_OVERLAY="board/intel/galileo/rootfs_overlay"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/intel/galileo/post-build.sh"
--BR2_ROOTFS_POST_IMAGE_SCRIPT="board/intel/galileo/post-image.sh"
+-genimage                           \
+-	--rootpath "${TARGET_DIR}"     \
+-	--tmppath "${GENIMAGE_TMP}"    \
+-	--inputpath "${BINARIES_DIR}"  \
+-	--outputpath "${BINARIES_DIR}" \
+-	--config "${GENIMAGE_CFG}"
+-
+-exit $?
+diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
+index 49747e070f71..50496d7da320 100644
+--- a/configs/pandaboard_defconfig
++++ b/configs/pandaboard_defconfig
+@@ -6,7 +6,6 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
+ BR2_SYSTEM_DHCP="eth0"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pandaboard/post-image.sh"
  BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/mdr78/Linux-x1000.git"
-@@ -18,8 +17,9 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/intel/galileo/linux-3.8.config"
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
+@@ -16,6 +15,8 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
  BR2_LINUX_KERNEL_INSTALL_TARGET=y
  BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_TARGET_ROOTFS_GENIMAGE=y
-+BR2_TARGET_ROOTFS_GENIMAGE_CFG="board/intel/galileo/genimage.cfg"
- BR2_TARGET_GRUB2=y
- BR2_TARGET_GRUB2_I386_EFI=y
++BR2_TARGET_ROOTFS_GENIMAGE_CFG="board/pandaboard/genimage.cfg"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+@@ -26,5 +27,4 @@ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="MLO"
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -BR2_PACKAGE_HOST_GENIMAGE=y
  BR2_PACKAGE_HOST_MTOOLS=y
