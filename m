@@ -1,41 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Apr 2016 21:06:34 +0200
-Subject: [Buildroot] [git commit] netsniff-ng: bump to version 0.6.1
-Message-ID: <20160413190937.66B4480162@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Apr 2016 21:36:43 +0200
+Subject: [Buildroot] [git commit] apache: bump to version 2.4.20
+Message-ID: <20160413193651.D973D807EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25f29997807ef88aabb66f7eca45cf3146ce3267
+commit: https://git.buildroot.net/buildroot/commit/?id=07e4772115a82e7b7c3287f78886e8675a74fd28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/netsniff-ng/netsniff-ng.hash | 2 +-
- package/netsniff-ng/netsniff-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/apache/apache.hash | 4 ++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
-index b4b0500..5212497 100644
---- a/package/netsniff-ng/netsniff-ng.hash
-+++ b/package/netsniff-ng/netsniff-ng.hash
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index d4a8a9f..062a549 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 a76911f5a8ef0b92c42da568ceebc9e6559c02760f498785e22c8426b623d43f netsniff-ng-v0.6.0.tar.gz
-+sha256 902661bcdbc129c6a6c1f69a72f921fffc9e765d005568dc153f09ca0097c180 netsniff-ng-v0.6.1.tar.gz
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index eecceea..ad97a88 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
+-# From http://www.apache.org/dist/httpd/httpd-2.4.18.tar.bz2.sha1
+-sha1	271a129f2f04e3aa694e5c2091df9b707bf8ef80	httpd-2.4.18.tar.bz2
++# From http://www.apache.org/dist/httpd/httpd-2.4.20.tar.bz2.sha1
++sha1	cefe8ea4a3f81c7a08e36c80ebbd792c67ab361b	httpd-2.4.20.tar.bz2
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index e752fcc..6d9a324 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETSNIFF_NG_VERSION = v0.6.0
-+NETSNIFF_NG_VERSION = v0.6.1
- NETSNIFF_NG_SITE = $(call github,netsniff-ng,netsniff-ng,$(NETSNIFF_NG_VERSION))
- NETSNIFF_NG_LICENSE = GPLv2
- NETSNIFF_NG_LICENSE_FILES = README COPYING
+-APACHE_VERSION = 2.4.18
++APACHE_VERSION = 2.4.20
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
