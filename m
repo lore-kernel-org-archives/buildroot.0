@@ -1,112 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 23:47:44 +0200
-Subject: [Buildroot] [git commit] configs: atmel: add sama5d3 xplained sd
-	card image generation
-Message-ID: <20160413214758.54C008057D@busybox.osuosl.org>
+Date: Wed, 13 Apr 2016 23:49:01 +0200
+Subject: [Buildroot] [git commit] poco: add patch to fix musl build
+Message-ID: <20160413214905.93D4480408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89155c849208b35a69780119c5eea6f0073b93c5
+commit: https://git.buildroot.net/buildroot/commit/?id=a1cf3b79420c9e8c2fdbb8932d49f5389b36d8a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use genimage to generate a sd card with a fat partition (at91bootstrap,
-u-boot, kernel, dtbs) and an ext4 partition (rootfs).
+Add patch from upstream commit 30159aea4b3f6421da9d74a8bf22aad6d3bf26b4 to fix
+musl build issue:
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+src/Error.cpp: In static member function 'static std::string Poco::Error::getMessage(int)':
+src/Error.cpp:71:55: error: invalid conversion from 'int' to 'const char*' [-fpermissive]
+   return std::string(strerror_r(errorCode, errmsg, 256));
+
+There are 2 flavors of `strerror_r`, a GNU which returns a string and a POSIX
+version which returns an int.
+
+When the POSIX and GNU API collides musl always provides the POSIX API. That
+being the case for `strerror_r` musl does only support the POSIX version,
+despite of `_GNU_SOURCE`.
+
+Only use the GNU version for glibc or uClibc.
+
+Fixes:
+http://autobuild.buildroot.net/results/cc3/cc392a6e294b9eed697b205329f8146a28e423e2/
+http://autobuild.buildroot.net/results/693/693ef640a95702b20eb4e811936510e0a58cdfdd/
+http://autobuild.buildroot.net/results/7f0/7f0966ee57aea574fda2157562e9c3202bd3819d/
+http://autobuild.buildroot.net/results/7c0/7c02072a885a874e8b640905ef21929e6e143aae/
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/atmel/sama5d3_xplained_mmc/genimage.cfg  | 33 ++++++++++++++++++++++++++
- board/atmel/sama5d3_xplained_mmc/post-image.sh | 14 +++++++++++
- configs/atmel_sama5d3_xplained_mmc_defconfig   |  6 +++++
- 3 files changed, 53 insertions(+)
+ package/poco/poco.hash | 1 +
+ package/poco/poco.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/board/atmel/sama5d3_xplained_mmc/genimage.cfg b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
-new file mode 100644
-index 0000000..32df453
---- /dev/null
-+++ b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
-@@ -0,0 +1,33 @@
-+# Image for SD card boot on Atmel SAMA5D3 Xplained boards
-+#
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"at91-sama5d3_xplained.dtb",
-+			"at91-sama5d3_xplained_pda4.dtb",
-+			"at91-sama5d3_xplained_pda7.dtb",
-+			"at91-sama5d3_xplained_pda7b.dtb",
-+			"boot.bin",
-+			"u-boot.bin"
-+		}
-+	}
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xC
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/atmel/sama5d3_xplained_mmc/post-image.sh b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-new file mode 100755
-index 0000000..359b4c9
---- /dev/null
-+++ b/board/atmel/sama5d3_xplained_mmc/post-image.sh
-@@ -0,0 +1,14 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                               \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index 6d99038..fc2f5d9 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -3,6 +3,7 @@ BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-@@ -10,6 +11,8 @@ BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-@@ -21,3 +24,6 @@ BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
- BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/poco/poco.hash b/package/poco/poco.hash
+index c3b490e..1730f1c 100644
+--- a/package/poco/poco.hash
++++ b/package/poco/poco.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256  cfd311ecbc9e58accf1c4ea70170af88f92f88e73dd14944e528e7f6229e6cab  poco-poco-1.7.2-release.tar.gz
++sha256  32182791e7eac00ba367d2f22dd1dd5bfce0b6d6f76fd52f853364f98402dda3  30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
+diff --git a/package/poco/poco.mk b/package/poco/poco.mk
+index 7b99b04..79452c0 100644
+--- a/package/poco/poco.mk
++++ b/package/poco/poco.mk
+@@ -9,6 +9,7 @@ POCO_SITE = $(call github,pocoproject,poco,$(POCO_VERSION))
+ POCO_LICENSE = Boost-v1.0
+ POCO_LICENSE_FILES = LICENSE
+ POCO_INSTALL_STAGING = YES
++POCO_PATCH = https://github.com/pocoproject/poco/commit/30159aea4b3f6421da9d74a8bf22aad6d3bf26b4.patch
+ 
+ POCO_DEPENDENCIES = zlib pcre					\
+ 	$(if $(BR2_PACKAGE_POCO_XML),expat)			\
