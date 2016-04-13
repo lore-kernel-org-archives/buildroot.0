@@ -1,65 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Apr 2016 22:24:37 +0200
-Subject: [Buildroot] [PATCH] package/racehound: bump and fix dependencies
-Message-ID: <1460579077-1219-1-git-send-email-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 13 Apr 2016 22:24:54 +0200
+Subject: [Buildroot] [PATCH 01/15] fs: add genimage infra
+In-Reply-To: <1460577820-32164-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1460577820-32164-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20160413222454.0730add8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As pointed out by Arnout, racehound does not require kernel headers
-3.14-or-later. So, drop this depenency.
+Hello,
 
-It stills require a kernel >= 3.14 to build and run, but we really hae
-no way to express that dependency as Kconfig options.
+On Wed, 13 Apr 2016 17:03:26 -0300, Ezequiel Garcia wrote:
 
-Besides, racehound oes not build with kernel 4.5 because the struct
-modules has been updated. Bump racehound to fix that build failure.
+> diff --git a/fs/genimage/genimage.mk b/fs/genimage/genimage.mk
+> new file mode 100644
+> index 000000000000..17c146b6b519
+> --- /dev/null
+> +++ b/fs/genimage/genimage.mk
+> @@ -0,0 +1,21 @@
+> +################################################################################
+> +#
+> +# Generate a system image using genimage
+> +#
+> +################################################################################
+> +
+> +ROOTFS_GENIMAGE_DEPENDENCIES = host-genimage
+> +
+> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+> +
+> +define ROOTFS_GENIMAGE_CMD
+> +	$(RM) -rf ${GENIMAGE_TMP} &&		\
+> +	$(HOST_DIR)/usr/bin/genimage		\
+> +		--rootpath ${TARGET_DIR}	\
+> +		--tmppath ${GENIMAGE_TMP}	\
+> +		--inputpath ${BINARIES_DIR}	\
+> +		--outputpath ${BINARIES_DIR}	\
+> +		--config ${BR2_TARGET_ROOTFS_GENIMAGE_CFG}
+> +endef
+> +
+> +$(eval $(call ROOTFS_TARGET,genimage))
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/racehound/Config.in    | 6 ++----
- package/racehound/racehound.mk | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+A genimage.cfg file typically references some filesystem images like
+ext2/3/4 images. But I don't see anything in your implementation that
+ensures that the filesystem images that are used by the genimage.cfg
+file are produced *before* the genimage image is created. Am I missing
+something ?
 
-diff --git a/package/racehound/Config.in b/package/racehound/Config.in
-index 53e39a8..6f62f81 100644
---- a/package/racehound/Config.in
-+++ b/package/racehound/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_RACEHOUND
- 	bool "racehound"
- 	depends on BR2_LINUX_KERNEL
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
-@@ -30,8 +29,7 @@ comment "racehound needs an Linux kernel >= 3.14 to be built"
- 	depends on !BR2_LINUX_KERNEL
- 	depends on BR2_i386 || BR2_x86_64
- 
--comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library, headers >= 3.14"
-+comment "racehound needs a uClibc or (e)glibc toolchain w/ C++, wchar, dynamic library"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || BR2_STATIC_LIBS \
--		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC) \
--		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-diff --git a/package/racehound/racehound.mk b/package/racehound/racehound.mk
-index 7d8d1e3..8e282c1 100644
---- a/package/racehound/racehound.mk
-+++ b/package/racehound/racehound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RACEHOUND_VERSION = f3375911019607a0cb6a15bf68fa62dadd6b790b
-+RACEHOUND_VERSION = f09f06fcc3c77c8c5541be3ba5be80aa8148ce0c
- RACEHOUND_SITE = $(call github,winnukem,racehound,$(RACEHOUND_VERSION))
- RACEHOUND_LICENSE = GPLv2
- RACEHOUND_LICENSE_FILES = LICENSE
+Also, I think the infra should probably handle the dosfstools/mtools
+dependency that we need for many platforms to build a small FAT
+filesystem. So maybe a sub-option like
+BR2_TARGET_ROOTFS_GENIMAGE_BUILDS_FATFS or something like that, that
+would just select the appropriate packages.
+
+Best regards,
+
+Thomas
 -- 
-1.9.1
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
