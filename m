@@ -1,44 +1,49 @@
-From: Joris Lijssens <joris.lijssens@gmail.com>
-Date: Wed, 13 Apr 2016 13:49:25 +0200
-Subject: [Buildroot] [PATCH 1/1] rabbitmq-c: bump to version 0.8.0
-Message-ID: <1460548165-32602-1-git-send-email-joris.lijssens@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 13 Apr 2016 12:21:38 +0000
+Subject: [Buildroot] [Bug 8846] New: Orphaned/missing toolchain borks
+	eclipse plugin
+Message-ID: <bug-8846-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Made use of github helper because no official tarball
-is released.
+https://bugs.busybox.net/show_bug.cgi?id=8846
 
-Signed-off-by: Joris Lijssens <joris.lijssens@gmail.com>
----
- package/rabbitmq-c/rabbitmq-c.hash | 2 +-
- package/rabbitmq-c/rabbitmq-c.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+            Bug ID: 8846
+           Summary: Orphaned/missing toolchain borks eclipse plugin
+           Product: buildroot
+           Version: unspecified
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: blocker
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: subwooferbone at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
-index e767872..45e8cbd 100644
---- a/package/rabbitmq-c/rabbitmq-c.hash
-+++ b/package/rabbitmq-c/rabbitmq-c.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 23df349a7d157543e756acc67e47b217843ecbdafaefe3e4974073bb99d8a26d rabbitmq-c-0.7.1.tar.gz
-+sha256 d8ed9dcb49903d83d79d7b227da35ef68c60e5e0b08d0fc1fb4e4dc577b8802b rabbitmq-c-v0.8.0.tar.gz
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index 42e2548..1ca35ad 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--RABBITMQ_C_VERSION = 0.7.1
--RABBITMQ_C_SITE = https://github.com/alanxz/rabbitmq-c/releases/download/v$(RABBITMQ_C_VERSION)
-+RABBITMQ_C_VERSION = v0.8.0
-+RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,$(RABBITMQ_C_VERSION))
- RABBITMQ_C_LICENSE = MIT
- RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
- RABBITMQ_C_INSTALL_STAGING = YES
+Using latest Buildroot Eclipse plugin.
+
+Importing CDT project from another user, all build targets are gone. Eclipse
+complains "An error has occurred. See error log for more details.
+java.lang.NullPointerException".
+
+C/C++ Build and C/C++ General pages of project properties are borked, null
+pointers galore. 
+
+Same behaviour with both Mars and Luna. Uninstalling the plugin makes the C/C++
+options pages work again, but it is impossible to select another toolchain for
+the projects defined with buildroot toolchains. Then complains about orphaned
+toolchain.
+
+Message sent to stderr: "Managed Build system manifest file error: Option
+org.buildroot.home.bob.software_PI1509.platform.buildroot.output..toolchain.base.option.path.1204713667
+uses a null category that is invalid in its context. The option was ignored."
+
 -- 
-1.8.3.1
+You are receiving this mail because:
+You are on the CC list for the bug.
