@@ -1,51 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Apr 2016 10:17:44 +0200
-Subject: [Buildroot] [git commit] lirc-tools: needs a C++ toolchain
-Message-ID: <20160413081843.2254881D60@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Apr 2016 11:13:05 +0200
+Subject: [Buildroot] [PATCH v3] package/wpa_supplicant: Fix systemd
+ service for new DBus bus name
+In-Reply-To: <570DFCD4.2090305@grinn-global.com>
+References: <1460475306-29701-1-git-send-email-m.niestroj@grinn-global.com>
+ <570D6D0F.8040303@mind.be> <570DFCD4.2090305@grinn-global.com>
+Message-ID: <570E0DA1.7010201@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4875c36d07f8d90ec599391a7755c033c508371b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NEWS file record for version 0.9.3:
 
-  * The compiler has been switched to c++, and filenames are
-	updated to *.cpp (#79)
+On 04/13/16 10:01, Marcin Niestroj wrote:
+> Hi,
+>
+> On 12.04.2016 23:47, Arnout Vandecappelle wrote:
+[snip]
+>>   Otherwise, the patch looks good to me. Since the spaces are just a
+>> triviality:
+>>
+>> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+> As I am newbie in mailing list workflow: does this tag mean, that I
+> have permission to add it to v4 patch directly (if I fix all pointed issues)? Or
+> it's just for other reviewers, so they know what has been
+> already reviewed in previous version of patch?
 
-Fixes:
-http://autobuild.buildroot.net/results/63b/63b1e427df1d6f264517a028655ac80d8d289254/
-http://autobuild.buildroot.net/results/340/3409a4af78c83ea354d861052521f634347cd69a/
-http://autobuild.buildroot.net/results/88a/88a117c229286ed739bd0ef832fa01a99825286a/
+  It means that you can add my Reviewed-by tag to your next iteration, on 
+condition that you don't change anything except the things I mentioned.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lirc-tools/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+  Regards,
+  Arnout
 
-diff --git a/package/lirc-tools/Config.in b/package/lirc-tools/Config.in
-index 3bee094..3dd202f 100644
---- a/package/lirc-tools/Config.in
-+++ b/package/lirc-tools/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIRC_TOOLS
- 	bool "lirc-tools"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
- 	# dlopen()
- 	depends on !BR2_STATIC_LIBS
-@@ -18,7 +19,7 @@ config BR2_PACKAGE_LIRC_TOOLS
- 
- 	  http://www.lirc.org/
- 
--comment "lirc-tools needs a uClibc or (e)glibc toolchain w/ threads, dynamic library"
-+comment "lirc-tools needs a uClibc or (e)glibc toolchain w/ threads, dynamic library, C++"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
--		|| BR2_TOOLCHAIN_USES_MUSL
-+		|| !BR2_INSTALL_LIBSTDCPP || BR2_TOOLCHAIN_USES_MUSL
+-- 
+Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
+Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
+Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
