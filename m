@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 23:45:30 +0200
-Subject: [Buildroot] [PATCH 01/15] fs: add genimage infra
-In-Reply-To: <570EBAE6.1080000@mind.be>
-References: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460577820-32164-2-git-send-email-ezequiel@vanguardiasur.com.ar>
- <570EBAE6.1080000@mind.be>
-Message-ID: <20160413234530.502a4244@free-electrons.com>
+Date: Wed, 13 Apr 2016 23:45:55 +0200
+Subject: [Buildroot] [PATCH v3 0/4] sd card image generation for
+ Xplained boards
+In-Reply-To: <1460125841-7648-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1460125841-7648-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20160413234555.0ef1cfcf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +13,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Apr 2016 23:32:22 +0200, Arnout Vandecappelle wrote:
+On Fri, 8 Apr 2016 16:30:36 +0200, Ludovic Desroches wrote:
 
->   Therefore, at least as a first step, I guess it's better to just move the 
-> script to a common place, e.g. to package/genimage/post-image.sh. Let it take a 
-> single argument for the genimage.cfg file, and add some documentation to the manual.
+> Ludovic Desroches (4):
+>   configs: atmel: add sama5d2 xplained sd card image generation
+>   configs: atmel: add sama5d4 xplained sd card image generation
+>   configs: atmel: add sama5d3 xplained sd card image generation
+>   board/atmel: update documentation for SD card generation
 
-As an after-thought, this seems like a good idea. This is really a very
-simple and minimal change, and is easy to do.
+All four patches applied, thanks!
 
 Thomas
 -- 
