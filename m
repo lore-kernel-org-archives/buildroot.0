@@ -1,41 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 22:34:58 +0200
-Subject: [Buildroot] [git commit] lvm2: bump version to 2.02.150
-Message-ID: <20160413203501.8917F81838@busybox.osuosl.org>
+Date: Wed, 13 Apr 2016 22:35:48 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-r128:
+	disable DRI support when not available
+Message-ID: <20160413203800.B854481E1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ac2c983b2b17130b3459b5c228a0530cc78ad0d
+commit: https://git.buildroot.net/buildroot/commit/?id=082b65319c90ea5c9a89ff4ffed12af3a3e952b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Fixes
+http://autobuild.buildroot.net/results/2e5/2e58f95dcdfe7f139d39712ac3026be76a9f3296/
+http://autobuild.buildroot.net/results/2bf/2bfe7775a9e011b8ad8e196b635492240ca4c494/
+http://autobuild.buildroot.net/results/1ad/1ada5fe37fc0d04d2b3ed9a01827d1974c32cf6c/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/lvm2/lvm2.hash | 2 +-
- package/lvm2/lvm2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xdriver_xf86-video-r128/Config.in                  | 4 ----
+ package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 88998c4..959be39 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,2 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 f00310fd398d4f84d67677e47b148ab5cc79319e25547ee56160703a425f2f506a4c92ee9958c363a1640ae1fa17b4337242d76e0c5e4a256192edfbf9c4fcdc  LVM2.2.02.149.tgz
-+sha512 66d1a247170f685c72d91d5fc52a2394ba5d5a477686101b9a472a8ac163813f9c80c0d75e4f29939b16000456263e9191cd294520ab5b320915f23f0797f22e  LVM2.2.02.150.tgz
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index d17a772..d78f621 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xdriver_xf86-video-r128/Config.in b/package/x11r7/xdriver_xf86-video-r128/Config.in
+index 647156f..22ba493 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/Config.in
++++ b/package/x11r7/xdriver_xf86-video-r128/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_R128
+ 	bool "xf86-video-r128"
+-	depends on BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_XPROTO_FONTSPROTO
+ 	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XPROTO_RENDERPROTO
+@@ -8,6 +7,3 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_R128
+ 	select BR2_PACKAGE_XPROTO_XPROTO
+ 	help
+ 	  R128 video driver
+-
+-comment "xf86-video-r128 needs mesa3d"
+-	depends on !BR2_PACKAGE_MESA3D
+diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+index f9fcfdb..4e88d87 100644
+--- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
++++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
+@@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
+ XDRIVER_XF86_VIDEO_R128_AUTORECONF = YES
+ XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
  
--LVM2_VERSION = 2.02.149
-+LVM2_VERSION = 2.02.150
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
- LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
- LVM2_INSTALL_STAGING = YES
++ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
++XDRIVER_XF86_VIDEO_R128_CONF_OPTS = --disable-dri
++endif
++
+ $(eval $(autotools-package))
