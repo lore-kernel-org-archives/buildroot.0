@@ -1,46 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Apr 2016 18:07:18 +0200
-Subject: [Buildroot] Cannot build Custom Kernel Module
-In-Reply-To: <CAN34fozx7-myS-6xvHiwkZdovdfCO_vkjDJU8V427yEk5-ckAA@mail.gmail.com>
-References: <CAN34foz3HvhgeBsPKEc6vjsrzUWK-gsHoAVsvPSR7Def1gMKyA@mail.gmail.com>
- <570D638B.2040500@mind.be>
- <CAN34foxCgoP_i21MRzXiF2DWuT+R9XL9LvKR+NpDYjh1Mga7xw@mail.gmail.com>
- <570E67C7.5020209@mind.be>
- <CAN34fozx7-myS-6xvHiwkZdovdfCO_vkjDJU8V427yEk5-ckAA@mail.gmail.com>
-Message-ID: <570E6EB6.8020003@mind.be>
+From: ray.kinsella at intel.com <ray.kinsella@intel.com>
+Date: Wed, 13 Apr 2016 17:06:42 +0100
+Subject: [Buildroot] [PATCH v5] package/radlib: new package
+Message-ID: <1460563603-3748-1-git-send-email-ray.kinsella@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Ray Kinsella <ray.kinsella@intel.com>
 
+Changes v4 -> v5:
+  * reorganize autotools changes into 3 seperate patches
+    * adding pkg-config support for sqlite and postgresql 
+    * adding mysql-config support for mysql
+    * removing ugly CROSS_COMPILE and paths relative to $(prefix)
+  * number of small tidy ups for package/radlib
 
-On 04/13/16 18:00, Stephen Beckwith wrote:
-[snip]
->   -  The build root version I have is 2015.08.01 - this supports a 4.1.4
-> kernel.  Since 4.1.x is an LTS kernel, is there a way to tell/configure
-> Buildroot to fetch a patch for the latest . release (currently 4.1.21)???
-> Meaning, a patch from 4.1.4 -> 4.1.21?   I've done something like this in the
-> past, wasn't easy.
+Ray Kinsella (1):
+  package/radlib: new package
 
-  Just set BR2_LINUX_KERNEL_CUSTOM_VERSION and fill in the version.
+ package/Config.in                                  |   1 +
+ ...oduce-pkg-config-for-sqlite-and-postgresq.patch | 102 +++++++++++++++++++++
+ .../0002-radlib-introduce-mysql-config.patch       |  78 ++++++++++++++++
+ ...adlib-fix-the-paths-in-the-subdir-objects.patch |  93 +++++++++++++++++++
+ package/radlib/Config.in                           |  38 ++++++++
+ package/radlib/radlib.hash                         |   2 +
+ package/radlib/radlib.mk                           |  28 ++++++
+ 7 files changed, 342 insertions(+)
+ create mode 100644 package/radlib/0001-radlib-introduce-pkg-config-for-sqlite-and-postgresq.patch
+ create mode 100644 package/radlib/0002-radlib-introduce-mysql-config.patch
+ create mode 100644 package/radlib/0003-radlib-fix-the-paths-in-the-subdir-objects.patch
+ create mode 100644 package/radlib/Config.in
+ create mode 100644 package/radlib/radlib.hash
+ create mode 100644 package/radlib/radlib.mk
 
-  Or, if you're using BR2_LINUX_KERNEL_SAME_AS_HEADERS, choose 
-BR2_KERNEL_HEADERS_VERSION and fill in the version.
-
-
-  This even works for versions > 4.1 if you want. Just claim that it's a 4.1 
-version.
-
-  Regards,
-  Arnout
-
-[snip]
 -- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.4.11
