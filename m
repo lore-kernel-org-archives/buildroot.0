@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 21:41:09 +0200
-Subject: [Buildroot] [git commit] sysstat: bump to version 11.2.3
-Message-ID: <20160413194140.B18EB81D8B@busybox.osuosl.org>
+Date: Wed, 13 Apr 2016 21:41:16 +0200
+Subject: [Buildroot] [git commit] pango: bump to version 1.40.1
+Message-ID: <20160413194140.BE1E981D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4df5e6ae87dd8c5fab3aad27123904052b3d7777
+commit: https://git.buildroot.net/buildroot/commit/?id=f8b69d984322655627fb6a2ebe331825f2d5423b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/sysstat/sysstat.hash | 2 +-
- package/sysstat/sysstat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
-index 3714258..655cafe 100644
---- a/package/sysstat/sysstat.hash
-+++ b/package/sysstat/sysstat.hash
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 132e458..67b67f0 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
 @@ -1,2 +1,2 @@
- # From: http://sebastien.godard.pagesperso-orange.fr/download.html
--sha1	01dd5212efff6eff6f9018711de3de471516060e	sysstat-11.2.1.1.tar.xz
-+sha1	7e9422e985b65728d007bd38d4a8d090aa795826	sysstat-11.2.3.tar.xz
-diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
-index 449c30a..a16054f 100644
---- a/package/sysstat/sysstat.mk
-+++ b/package/sysstat/sysstat.mk
-@@ -4,7 +4,7 @@
- #
+-# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.0.sha256sum
+-sha256	da17985df314cb07d066ab5424f59c21ce973ece05b7de4df04d798ec8511c8b	pango-1.40.0.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/pango/1.36/pango-1.40.1.sha256sum
++sha256	e27af54172c72b3ac6be53c9a4c67053e16c905e02addcf3a603ceb2005c1a40	pango-1.40.1.tar.xz
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index a3639dc..bdad8c6 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SYSSTAT_VERSION = 11.2.1.1
-+SYSSTAT_VERSION = 11.2.3
- SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
- SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
- SYSSTAT_CONF_OPTS = --disable-man-group --disable-sensors
+ PANGO_VERSION_MAJOR = 1.40
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).1
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_AUTORECONF = YES
