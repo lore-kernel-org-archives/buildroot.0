@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 22:31:03 +0200
-Subject: [Buildroot] [PATCH v2] mtd-utils: ubinize: fix return code on
- error
-In-Reply-To: <1460502460-13713-1-git-send-email-luca@lucaceresoli.net>
-References: <1460502460-13713-1-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20160413223103.56feb9f5@free-electrons.com>
+Date: Wed, 13 Apr 2016 22:32:31 +0200
+Subject: [Buildroot] [PATCH] package/racehound: bump and fix dependencies
+In-Reply-To: <1460579077-1219-1-git-send-email-yann.morin.1998@free.fr>
+References: <1460579077-1219-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <20160413223231.781d281f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +12,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Apr 2016 01:07:40 +0200, Luca Ceresoli wrote:
-> ubinize 1.5.2 (currently packaged in Buildroot) returns 0 in case of
-> some errors. This can lead to unnoticed errors in the middle of a
-> build.
+On Wed, 13 Apr 2016 22:24:37 +0200, Yann E. MORIN wrote:
+> As pointed out by Arnout, racehound does not require kernel headers
+> 3.14-or-later. So, drop this depenency.
 > 
-> Fix by adding a patch from upstream, which is not yet present in any
-> released version.
-> 
-> Fetch from: http://git.infradead.org/mtd-utils.git/commit/5f50207231414bfdbac8f0f974a2824f24177d6e
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> 
-> ---
+> It stills require a kernel >= 3.14 to build and run, but we really hae
 
-Applied to master, thanks.
+hae -> have
+
+> no way to express that dependency as Kconfig options.
+> 
+> Besides, racehound oes not build with kernel 4.5 because the struct
+
+oes -> does
+
+> modules has been updated. Bump racehound to fix that build failure.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/racehound/Config.in    | 6 ++----
+>  package/racehound/racehound.mk | 2 +-
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+
+Applied to master after fixing the typos, thanks.
+
+Also, I see that racehound is fetched from github and does not have a
+hash file. This definitely calls for a follow-up patch :-)
+
+Thanks!
 
 Thomas
 -- 
