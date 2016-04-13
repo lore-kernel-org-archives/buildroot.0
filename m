@@ -1,50 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 13 Apr 2016 22:06:46 +0200
-Subject: [Buildroot] [PATCH v4] qt5webkit: restore package
-In-Reply-To: <1460554835-5242-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1460554835-5242-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160413220646.102e7cd5@free-electrons.com>
+Date: Wed, 13 Apr 2016 22:09:49 +0200
+Subject: [Buildroot] [git commit] xdriver_x86-input-joystick: Install server
+	config
+Message-ID: <20160413201001.B92EB80273@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f30ee8c0e8dcd709731f0a79fe525e0188d4a19e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks. Looks mostly good, but I have a few questions.
+In order for joysticks to be detected and used with this
+driver, we need an xorg-server configuration file. This commit
+installs such conf file to the default X11 xorg.conf.d path,
+so we can at least provide a working template.
 
-On Wed, 13 Apr 2016 15:40:35 +0200, Gary Bisson wrote:
+Users with specific needs can of course override it.
 
-> Since we are now using the source from the git repository, we need
-> to create an empty .git/ folder to force the headers re-generation.
-> https://github.com/meta-qt5/meta-qt5/blob/jethro/recipes-qt/qt5/qt5.inc#L33
-> 
-> Note that GPLv3 license option has been added with this release.
+Signed-off-by: Ezequiel Garc??a <ezequiel@vanguardiasur.com.ar>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas:
+ - use XDRIVER_XF86_INPUT_JOYSTICK_PKGDIR
+ - remove useless empty line.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/x11r7/xdriver_xf86-input-joystick/50-joystick.conf         | 6 ++++++
+ .../xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk     | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-Yes, but I don't see any reference to GPLv3 in your license information
-below.
-
-
-> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
-> +QT5WEBKIT_LICENSE = LGPLv2+, BSD-3c, BSD-2c
-> +# Source files contain references to LGPL_EXCEPTION.txt but it is not included
-> +# in the archive.
-> +QT5WEBKIT_LICENSE_FILES += LICENSE.LGPLv21
-> +else
-> +QT5WEBKIT_LICENSE = LGPLv2+ (WebCore), Commercial license
-> +QT5WEBKIT_REDISTRIBUTE = NO
-> +endif
-
-No reference to GPLv3 whatsoever.
-
-Also, LGPLv2+ is not correct I believe, it should be LGPLv2.1+, as the
-name of the license file suggests.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/50-joystick.conf b/package/x11r7/xdriver_xf86-input-joystick/50-joystick.conf
+new file mode 100644
+index 0000000..95a295a
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-input-joystick/50-joystick.conf
+@@ -0,0 +1,6 @@
++Section "InputClass"
++	Identifier "joystick catchall"
++	MatchIsJoystick "on"
++	MatchDevicePath "/dev/input/event*"
++	Driver "joystick"
++EndSection
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+index c63312d..2696e2b 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+@@ -11,4 +11,11 @@ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
+ 
++define XDRIVER_XF86_INPUT_JOYSTICK_CONF
++	$(INSTALL) -m 0644 -D \
++		$(XDRIVER_XF86_INPUT_JOYSTICK_PKGDIR)/50-joystick.conf \
++		$(TARGET_DIR)/usr/share/X11/xorg.conf.d/50-joystick.conf
++endef
++XDRIVER_XF86_INPUT_JOYSTICK_POST_INSTALL_TARGET_HOOKS += XDRIVER_XF86_INPUT_JOYSTICK_CONF
++
+ $(eval $(autotools-package))
