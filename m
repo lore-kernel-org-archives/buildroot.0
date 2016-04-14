@@ -1,59 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Apr 2016 22:54:57 +0200
-Subject: [Buildroot] [PATCH] Reset LD and AR environment variables
-In-Reply-To: <1460645912-8568-1-git-send-email-nicolas.dichtel@6wind.com>
-References: <1460645912-8568-1-git-send-email-nicolas.dichtel@6wind.com>
-Message-ID: <571003A1.3020801@mind.be>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Thu, 14 Apr 2016 22:56:54 +0200
+Subject: [Buildroot] [PATCH v13 24/26] package/freeswitch: enable mod_cv
+In-Reply-To: <1460662320-1437-25-git-send-email-bernd.kuhls@t-online.de>
+References: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
+ <1460662320-1437-25-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAHXCMMLMkZwaLGbgP7wpR4KXWW_p=kPtna=AZA6FSCN=4kdnAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/14/16 16:58, Nicolas Dichtel wrote:
-> The goal is to fix the compilation of perf (from linux) when LD or AR
-> variables are inherited from the environment.
-> After the linux upstream commits 5ef7bbb09f7b ("perf tools: Allow to
-> specify custom linker command") and 3c71ba3f80bb ("perf tools: Really allow
-> to specify custom CC, AR or LD") CC, AR, and LD variables are not overridden
-> if they are inherited.
->
-> In case of a cross compilation, it results in an inconsistent state: CC is
-> overridden but not LD and AR.
->
-> Linux-patch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=5ef7bbb09f7b
-> Linux-patch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=3c71ba3f80bb
-> Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Bernd,
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-  Regards,
-  Arnout
-
+On Thu, Apr 14, 2016 at 9:31 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->   Makefile | 2 ++
->   1 file changed, 2 insertions(+)
+>  package/freeswitch/freeswitch.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> diff --git a/Makefile b/Makefile
-> index ea8b1e4e51c8..55735ea735ae 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -343,6 +343,8 @@ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
->   unexport CROSS_COMPILE
->   unexport ARCH
->   unexport CC
-> +unexport LD
-> +unexport AR
->   unexport CXX
->   unexport CPP
->   unexport RANLIB
+> diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+> index 2f3be17..8cd9b67 100644
+> --- a/package/freeswitch/freeswitch.mk
+> +++ b/package/freeswitch/freeswitch.mk
+> @@ -246,6 +246,11 @@ FREESWITCH_DEPENDENCIES += libsoundtouch
+>  FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
+>  endif
 >
+> +ifeq ($(BR2_PACKAGE_OPENCV),y)
+> +FREESWITCH_DEPENDENCIES += opencv
+Just wondering: is freeswitch only compatible with opencv2?
 
+> +FREESWITCH_ENABLED_MODULES += applications/mod_cv
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+>  FREESWITCH_DEPENDENCIES += unixodbc
+>  FREESWITCH_CONF_OPTS += \
+> --
+> 2.8.0.rc3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Regards,
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Samuel
