@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Apr 2016 21:31:49 +0200
-Subject: [Buildroot] [PATCH v13 15/26] package/freeswitch: enable mod_opus
+Date: Thu, 14 Apr 2016 21:31:42 +0200
+Subject: [Buildroot] [PATCH v13 08/26] package/freeswitch: enable mod_yaml
 In-Reply-To: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460662320-1437-16-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460662320-1437-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +16,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index f901420..d4b165c 100644
+index d0565f8..827ae26 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -206,6 +206,11 @@ FREESWITCH_DEPENDENCIES += lua
- FREESWITCH_ENABLED_MODULES += languages/mod_lua
+@@ -171,6 +171,11 @@ FREESWITCH_DEPENDENCIES += libpng
+ FREESWITCH_ENABLED_MODULES += formats/mod_png
  endif
  
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+FREESWITCH_DEPENDENCIES += opus
-+FREESWITCH_ENABLED_MODULES += codecs/mod_opus
++ifeq ($(BR2_PACKAGE_LIBYAML),y)
++FREESWITCH_DEPENDENCIES += libyaml
++FREESWITCH_ENABLED_MODULES += languages/mod_yaml
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
