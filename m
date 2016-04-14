@@ -1,42 +1,28 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Thu, 14 Apr 2016 04:45:06 +0200
-Subject: [Buildroot] [PATCH] gutenprint: fix host installation
-In-Reply-To: <87egaaldld.fsf@dell.be.48ers.dk>
-References: <a465019a350db47bb0f8527a628f5df0ef74eecd.1460480190.git.baruch@tkos.co.il>
- <87egaaldld.fsf@dell.be.48ers.dk>
-Message-ID: <20160414024506.GJ7454@waldemar-brodkorb.de>
+Date: Thu, 14 Apr 2016 04:50:18 +0200
+Subject: [Buildroot] [PATCH] arch/x86: remove support for i386
+In-Reply-To: <1459453188-23705-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1459453188-23705-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <20160414025018.GK7454@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter Korsgaard wrote,
+Hi,
+Thomas Petazzoni wrote,
 
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> The Linux kernel doesn't even support i386 anymore, there is no NPTL
+> support for i386 and uClibc-ng only supports NPTL on x86, so there is
+> essentially no usable thread implementation. Most likely glibc and
+> musl also don't support i386 either. So it's time to remove the
+> support for this architecture variant.
 > 
->  > Set DESTDIR to avoid installation attempt into build host directories.
->  > Fixes:
->  > http://autobuild.buildroot.net/results/bca/bca299631949c7699682af41e3f1373dd10866ed/
->  > http://autobuild.buildroot.net/results/294/294dfc02ee95caaac4be9fd632c399bb2c7d3f83/
->  > http://autobuild.buildroot.net/results/8ce/8ce0c14d92f34245a87758db60c618916be48586/
-> 
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Hmm, this sounds fishy. DESTDIR is normally only needed when the
-> installation directory is different from where the files will be used at
-> runtime (E.G. like for our target installation). Host-gutenprint should
-> be configured to install and run in HOST_DIR, so if you pass
-> DESTDIR=$(HOST_DIR) the files ends up in $(HOST_DIR)/$(HOST_DIR)/usr/..
-> 
-> The error sounds more like it misdetects the location of (host-)cups. We
-> do pass --without-cups to the configure script though, so I wonder why
-> it still wants to install cups files.
-> 
-> Care to take a 2nd look?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-Have you seen this try to fix it?
-https://patchwork.ozlabs.org/patch/605452/
+Looks good to me,
+Reviewed-by: Waldemar Brodkorb <wbx@openadk.org>
 
 best regards
  Waldemar
