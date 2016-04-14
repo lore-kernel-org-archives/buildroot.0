@@ -1,45 +1,86 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Apr 2016 23:42:09 +0200
-Subject: [Buildroot] [PATCH 01/15] fs: add genimage infra
-In-Reply-To: <87wpnzhnwq.fsf@dell.be.48ers.dk>
-References: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460577820-32164-2-git-send-email-ezequiel@vanguardiasur.com.ar>
- <570EBAE6.1080000@mind.be>
- <20160413234135.6bf26795@free-electrons.com>
- <87a8kwio80.fsf@dell.be.48ers.dk> <57100C4A.90903@mind.be>
- <87wpnzhnwq.fsf@dell.be.48ers.dk>
-Message-ID: <20160414214209.GC3556@free.fr>
+From: Alistair Francis <alistair.francis@xilinx.com>
+Date: Thu, 14 Apr 2016 14:45:02 -0700
+Subject: [Buildroot] [PATCH v3] Update libaio to 0.3.110
+In-Reply-To: <CAKmqyKNP2XuUkFyNNyW38UQnLBTt=+WTX-bfVU-BfRnzAh-MVA@mail.gmail.com>
+References: <1455824391-23524-1-git-send-email-alistair.francis@xilinx.com>
+ <56FFEB04.9090800@gmail.com>
+ <CAKmqyKNS6ONN_-acLxpNEJwmAjM-hJFX1ZB45mmb=XS-TAAr1Q@mail.gmail.com>
+ <CAKmqyKNP2XuUkFyNNyW38UQnLBTt=+WTX-bfVU-BfRnzAh-MVA@mail.gmail.com>
+Message-ID: <CAKmqyKOnO=SBiHxPnvJY96+wuHees+Eif5gWskZLvE8DWfb66g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+On Mon, Apr 4, 2016 at 5:46 PM, Alistair Francis
+<alistair.francis@xilinx.com> wrote:
+> On Mon, Apr 4, 2016 at 5:41 PM, Alistair Francis
+> <alistair.francis@xilinx.com> wrote:
+>> On Sat, Apr 2, 2016 at 8:53 AM, Romain Naour <romain.naour@gmail.com> wrote:
+>>> Hi Alistair, Thomas, All,
+>>>
+>>> Le 18/02/2016 20:39, Alistair Francis a ?crit :
+>>>> Update libaio from 0.3.108 to 0.3.110. This adds AArch64 support.
+>>>>
+>>>> Signed-off-by: Alistair Francis <alistair.francis@xilinx.com>
+>>>> ---
+>>>>  package/libaio/0001-arches.patch | 454 ++-------------------------------------
+>>>>  package/libaio/Config.in         |   2 +-
+>>>>  package/libaio/libaio.hash       |   4 +-
+>>>>  package/libaio/libaio.mk         |   2 +-
+>>>>  4 files changed, 20 insertions(+), 442 deletions(-)
+>>>>
+>>>
+>>> Since the libaio bump, the blktrace package is broken on powerpc [1].
+>>>
+>>> /home/peko/autobuild/instance-1/output/host/usr/bin/powerpc-linux-gnu-gcc
+>>> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -I. -I..
+>>> -I../btt -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -UCOUNT_IOS
+>>> -UDEBUG -DNDEBUG -o btreplay btreplay.o -laio -lrt -lpthread
+>>> [...]ld: btreplay: hidden symbol `_restgpr_29_x' in [..]libgcc.a(crtresxgpr.o)
+>>> is referenced by DSO
+>>> [...]ld: final link failed: Nonrepresentable section on output
+>>>
+>>> It's seems that only powerpc is affected by this issue...
+>>> I'm not sure about a proper fixes but adding -shared to the command line fixes
+>>> the build (not runtime tested though).
+>>>
+>>> Can you take a look ?
+>>
+>> Good catch, thanks for pointing this out.
+>>
+>> It appears to be a common issue and the workaround is to disable pie
+>> and fpie support.
+>>
+>> See: http://patchwork.openembedded.org/patch/86515/
+>>
+>> I can't work out how to remove the -fPIC option though. Any ideas?
+>
+> Spoke too soon. It's forced in the libaio Makefile.
+>
+> Is everyone happy with me adding a patch that removes that?
 
-On 2016-04-14 23:37 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->  > On 04/14/16 10:33, Peter Korsgaard wrote:
->  >> Supporting multiple genimage.cfg files (like we do for device_tables /
->  >> post-build / post-image, ..) IMHO makes sense and looks simple to do.
-> 
->  >  Well, compared to the really simple solution that Ezequiel has now, I
->  > think the code will look quite a bit more complicated when there are
->  > multiple genimage.cfg files.
-> 
-> Wouldn't it basically just sticking the logic in a loop over the words
-> in BR2_TARGET_ROOTFS_GENIMAGE_CFG?
+Ping?
 
-It is already possible and perfectly legit to declare more than one
-image in a genimage config file, as far as I can see.
+Thanks,
 
-Regards,
-Yann E. MORIN.
+Alistair
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> It seems to be the way others are doing it.
+>
+> Thanks,
+>
+> Alistair
+>
+>>
+>> Thanks,
+>>
+>> Alistair
+>>
+>>>
+>>> Best regards,
+>>> Romain Naour
+>>>
+>>> [1] http://autobuild.buildroot.net/?reason=blktrace-1.1.0
+>>>
