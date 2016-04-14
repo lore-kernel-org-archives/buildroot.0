@@ -1,106 +1,167 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Apr 2016 19:09:53 +0200
-Subject: [Buildroot] [PATCH] package/racehound: fix comment
-In-Reply-To: <570EAF22.3010800@mind.be>
-References: <1460481650-19136-1-git-send-email-yann.morin.1998@free.fr>
- <570D6840.8080800@mind.be> <20160413201835.GA24782@free.fr>
- <570EAF22.3010800@mind.be>
-Message-ID: <20160414170953.GA3556@free.fr>
+From: Matthew Fornero <mfornero@mathworks.com>
+Date: Thu, 14 Apr 2016 13:30:35 -0400
+Subject: [Buildroot] [PATCH] libiio: Bump version to 0.6
+Message-ID: <1460655035-24870-1-git-send-email-mfornero@mathworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+v0.6 API offers some major additions, including:
+* iio_device_set_kernel_buffers_counts
+* iio_buffer_get_poll_fd
+* iio_bufer_set_blocking_mode
+* iio_buffer_push_partial
 
-On 2016-04-13 22:42 +0200, Arnout Vandecappelle spake thusly:
-> On 04/13/16 22:18, Yann E. MORIN wrote:
-> >Arnout, All,
-> >
-> >On 2016-04-12 23:27 +0200, Arnout Vandecappelle spake thusly:
-> >>On 04/12/16 19:20, Yann E. MORIN wrote:
-> [snip]
-> >>>this comment is shown:
-> >>>     racehound needs an Linux kernel >= 3.14 to be built
-> >>
-> >>  But I would keep this comment if !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14, to
-> >>make sure the user realizes that he needs a >= 3.14 kernel. He can still
-> >>select the package if the headers ar < 3.14, so if he knows what he's doing
-> >>it will be fine.
-> >
-> >I respectfully disagree. There is no corelation between the headers and
-> >the running kernel (except running kernel mnust be more recent than
-> >headers).
-> 
->  Exactly: the running kernel must be more recent than the headers.
+Signed-off-by: Matthew Fornero <mfornero@mathworks.com>
+---
+ ...l2-detection-try-first-the-CMake-module-f.patch |   57 ++++++++++----------
+ ...ake-fix-build-on-unix-systems-without-cpp.patch |   36 -------------
+ package/libiio/libiio.hash                         |    4 +-
+ package/libiio/libiio.mk                           |    2 +-
+ 4 files changed, 32 insertions(+), 67 deletions(-)
+ delete mode 100644 package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
 
-In fact, that's not true (I was wrong). The glibc code will by default
-enable workaround for kernels older than the headers, and detect the
-version of the kernel it is running on to decide whther to use those
-wrokarounds or not.
-
-By default, glibc is *very* conservative, and adds support for kernel
-*much* older than the headers (dating back to at least 3.20-or-so IIRC.
-
-This means that, even with headers >= 3.14, a glibc might be able to run
-on kernels < 3.14.
-
-In Buildroot, we do configure glibc to not enable those workarounds [0],
-utb non-Buildroot toolchains may not do so, like crosstool-Ng which
-alows to set an arbitrary value to the oldest supported kernel [1] [2].
-
-So, in fine, we can *not* assume that a toolchain with the appropriate
-headers is sufficient to guarantee that the running kernel will be
-recent enough.
-
-Note that there were patches (at least a request) floating on the list
-that proposed to add such a feature to Buildroot, to be able to specify
-the oldest kernel glibc would be able to run under [3].
-
-[0] https://git.buildroot.org/buildroot/tree/package/glibc/glibc.mk#n99
-[1] http://crosstool-ng.org/git/crosstool-ng/tree/config/libc/glibc.in.2#n174
-[2] http://crosstool-ng.org/git/crosstool-ng/tree/scripts/build/libc/glibc.sh#n501
-[3] http://lists.busybox.net/pipermail/buildroot/2016-January/150676.html
-and http://lists.busybox.net/pipermail/buildroot/2016-February/thread.html#151640
-
-> So if the
-> headers are too old, there is a chance that the kernel is too old. So I
-> think it's useful in that case to present a warning to the user, when he
-> selects the package, that he must make sure his kernel is sufficiently
-> recent. That's what the dependency I proposed would do.
-
-And I don't think that:
- 1- it is even correct to begin with, see above;
- 2- we should even use the headers_at_least_XXX for that.
-
-> >Besides, this would be misleading in the other way: if headers are 3.14+
-> >but kernel is 3.13-, the comment wouild not be shown.
-> 
->  Er, what did you just say about running kernel must be more recent than headers?
-
-E.g. the user has a toolchain with 3.14+ headers, but selects a 3.13-
-kernel. TRhere is nothing that prevents that in our Kconfig. Not that we
-should do it, as it is perfectly possible to run such a kernel, as
-explained above (but not with a Buildroot toolchain, however).
-
-> >>>Since there is no way we can know the kernel version to be built, we can
-> >>>not add such a condition; still, we leave the kernel message as-is.
-> >>  It can be tested in a pre-configure hook. But the cmake rules already check
-> >>for that, so there's no need to do it again in buildroot.
-> >No, it does not check for it since we pass it -DKERNEL_VERSION_OK=YES
->  Why do we do that?
-
-I guess because otherwise the CMakefile does a test on the host kernel?
-It uses ${CMAKE_SYSTEM_VERSION} which is set by CMake to `uname -r`.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+index 9f44169..17fbdab 100644
+--- a/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
++++ b/package/libiio/0001-cmake-libxml2-detection-try-first-the-CMake-module-f.patch
+@@ -1,42 +1,43 @@
+-From 4f849e1d2287206cfb7ff0fdeca96c22383b0d53 Mon Sep 17 00:00:00 2001
++From b613e0fe7999cfff9efb646eb388ea1e58952e30 Mon Sep 17 00:00:00 2001
+ From: Samuel Martin <s.martin49@gmail.com>
+-Date: Mon, 29 Dec 2014 19:05:13 +0100
+-Subject: [PATCH] cmake: libxml2 detection: try first the CMake module from
+- libxml2
++Date: Thu, 14 Apr 2016 12:59:27 -0400
++Subject: [PATCH] cmake: libxml2 detection: try CMake module from libxml2
+ 
+ Libxml2 >=2.9.2 provides its own CMake module, so check for it before
+ falling back on the CMake's module FindLibXml2.cmake.
+ 
++Updated for v0.6 by: Matt Fornero <matt.fornero@mathworks.com>
++
+ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
++Signed-off-by: Matt Fornero <matt.fornero@mathworks.com>
+ ---
+- CMakeLists.txt | 14 +++++++++++++-
+- 1 file changed, 13 insertions(+), 1 deletion(-)
++ CMakeLists.txt |   13 ++++++++++++-
++ 1 file changed, 12 insertions(+), 1 deletion(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 393fee3..b4f1d26 100644
++index 70f61f0..4a4209b 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+-@@ -38,7 +38,19 @@ endif()
+- find_library(AVAHI_CLIENT_LIBRARIES avahi-client)
+- find_library(AVAHI_COMMON_LIBRARIES avahi-common)
+- find_library(PTHREAD_LIBRARIES pthread)
+--include(FindLibXml2)
+-+
+-+# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+-+# variables correctly set.
+-+# So, try first to find the CMake module provided by libxml2 package, then fallback
+-+# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+-+# in static build case).
+-+find_package(LibXml2 QUIET NO_MODULE)
+-+if(DEFINED LIBXML2_VERSION_STRING)
+-+  set(LIBXML2_FOUND ON)
+-+  set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+-+else()
+-+  include(FindLibXml2)
+-+endif()
++@@ -143,7 +143,18 @@ if(WITH_NETWORK_BACKEND)
++ endif()
++ 
++ if (NEED_LIBXML2)
++-	include(FindLibXml2)
+++	# Since libxml2-2.9.2, libxml2 provides its own LibXml2-config.cmake, with all
+++	# variables correctly set.
+++	# So, try first to find the CMake module provided by libxml2 package, then fallback
+++	# on the CMake's FindLibXml2.cmake module (which can lack some definition, especially
+++	# in static build case).
+++	find_package(LibXml2 QUIET NO_MODULE)
+++	if(DEFINED LIBXML2_VERSION_STRING)
+++		set(LIBXML2_FOUND ON)
+++		set(LIBXML2_INCLUDE_DIR ${LIBXML2_INCLUDE_DIRS})
+++	else()
+++		include(FindLibXml2)
+++	endif()
+  
+- set(LIBIIO_CFILES channel.c device.c context.c buffer.c utilities.c)
+- set(LIBIIO_HEADERS iio.h)
++ 	if (NOT LIBXML2_FOUND)
++ 		message(SEND_ERROR "The selected backends require libxml2 to be installed")
+ -- 
+-2.2.1
++1.7.10.4
+ 
+diff --git a/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch b/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
+deleted file mode 100644
+index 4839a39..0000000
+--- a/package/libiio/0002-cmake-fix-build-on-unix-systems-without-cpp.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 2e6fa357ffbe755bfecaecad4fc82e3307fe2831 Mon Sep 17 00:00:00 2001
+-From: Paul Cercueil <paul.cercueil@analog.com>
+-Date: Wed, 22 Jul 2015 10:25:01 +0200
+-Subject: [PATCH] CMake: Fix build on UNIX systems without a C++ compiler
+-
+-Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
+----
+- bindings/csharp/CMakeLists.txt | 2 +-
+- bindings/python/CMakeLists.txt | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/bindings/csharp/CMakeLists.txt b/bindings/csharp/CMakeLists.txt
+-index 8aafb8f..fceab88 100644
+---- a/bindings/csharp/CMakeLists.txt
+-+++ b/bindings/csharp/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8.7)
+--project(libiio-sharp)
+-+project(libiio-sharp LANGUAGES NONE)
+- 
+- find_program(MCS_EXECUTABLE
+- 	NAMES mcs csc
+-diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+-index 22ffdb4..76ceae8 100644
+---- a/bindings/python/CMakeLists.txt
+-+++ b/bindings/python/CMakeLists.txt
+-@@ -1,5 +1,5 @@
+- cmake_minimum_required(VERSION 2.8.7)
+--project(libiio-py)
+-+project(libiio-py LANGUAGES NONE)
+- 
+- include(FindPythonInterp)
+- 
+--- 
+-2.1.4
+-
+diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
+index 28b9c63..da42c21 100644
+--- a/package/libiio/libiio.hash
++++ b/package/libiio/libiio.hash
+@@ -1,2 +1,2 @@
+-# From https://github.com/analogdevicesinc/libiio/archive/v0.5/
+-sha256	c41cdcfeae8717e72f1100b4dac9d7cc9d86f4e0731da3354149cb7e051666f3	libiio-0.5.tar.gz
++# From https://github.com/analogdevicesinc/libiio/archive/v0.6/
++sha256  efd3b4ebdba01dd2bfbdce8e222356b4fec2b96daab14f99691b5c1c9089e466    libiio-0.6.tar.gz
+diff --git a/package/libiio/libiio.mk b/package/libiio/libiio.mk
+index 0e92b73..e5edb5c 100644
+--- a/package/libiio/libiio.mk
++++ b/package/libiio/libiio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIIO_VERSION = 0.5
++LIBIIO_VERSION = 0.6
+ LIBIIO_SITE = $(call github,analogdevicesinc,libiio,v$(LIBIIO_VERSION))
+ LIBIIO_INSTALL_STAGING = YES
+ LIBIIO_LICENSE = LGPLv2.1+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+1.7.10.4
