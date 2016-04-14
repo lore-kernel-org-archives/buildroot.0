@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 14 Apr 2016 14:38:13 +0200
-Subject: [Buildroot] [PATCH v2] postgresql: bump version to 9.5.2
-In-Reply-To: <1460624038-17785-1-git-send-email-Vincent.Riera@imgtec.com>
-References: <1460624038-17785-1-git-send-email-Vincent.Riera@imgtec.com>
-Message-ID: <20160414143813.442e0024@free-electrons.com>
+Date: Thu, 14 Apr 2016 14:38:19 +0200
+Subject: [Buildroot] [PATCH] luv: bump to version 1.9.0-1
+In-Reply-To: <1460629768-24341-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1460629768-24341-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160414143819.342de28e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 14 Apr 2016 09:53:58 +0100, Vicente Olivert Riera wrote:
-> Also remove a patch which is no longer necessary and do not autoreconf.
-> 
-> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+On Thu, 14 Apr 2016 12:29:28 +0200, J?rg Krause wrote:
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
-> Changes v1 -> v2:
->  - autoreconf is no longer needed since we removed the 0001 patch.
->    (Highlighted by Thomas Petazzoni)
+>  package/luv/luv.hash | 2 +-
+>  package/luv/luv.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
