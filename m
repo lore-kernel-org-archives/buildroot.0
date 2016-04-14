@@ -1,103 +1,93 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Apr 2016 22:46:56 +0200
-Subject: [Buildroot] bsdiff with buildroot
-In-Reply-To: <CADKZYY+U0DdQn061_F+s7An1fubGbpDijxMGHgunWvNoEROx4w@mail.gmail.com>
-References: <CADKZYY+U0DdQn061_F+s7An1fubGbpDijxMGHgunWvNoEROx4w@mail.gmail.com>
-Message-ID: <571001C0.2030305@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 14 Apr 2016 22:48:36 +0200
+Subject: [Buildroot] [PATCH v5] valijson: new package
+In-Reply-To: <1460626076-28824-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+References: <1460626076-28824-1-git-send-email-santosh.multhalli@rockwellcollins.com>
+Message-ID: <20160414224836.7a44d118@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-  Hi Santhosh,
+Hello,
 
-On 04/14/16 07:30, Santhosh Ramani wrote:
-> Hello,
->
-> I'm trying to install bsdiff package and using buildroot to create my rootfs for
-> AM335x device. I've selected the option of custom toolchain and using the
-> toolchain provided by TI as part of their SDK 7.0.
->
-> I'm having some trouble with bzip2, it's a pre-requisite for bsdiff. When
-> installing bzip2, cp seemed to fail. I had to replace the cp statement.
+I've applied the patch, but there are still quite a few things that were
+not good.
 
-  Since the problem is with bzip2, it would have been more appropriate to put 
-that in the subject.
+On Thu, 14 Apr 2016 14:57:56 +0530, santosh.multhalli wrote:
+> Valijson is a header-only JSON Schema Validation library for
+> C++.Add a patch 0001-CMake-Add-option-to-Install-headers-build-examples-a.patch
+> to install valijson headers ,provide optional compilation of unit tests and
+> examples.
 
->
->
-> Original statement
-> =================
-> *cp -f bzip2
-> /home/sramani/buildroot/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/bunzip2
-> *
->
->
-> Updated statement
-> =================
-> *cp --remove-destination -f ~/buildroot/buildroot/output/build/bzip2-1.0.6/bzip2
-> /home/sramani/buildroot/buildroot/output/host/usr/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/bunzip2*
->
-> I had to do the same thing for *bunzip2*, and *bzcat*.
+As Matt pointed out, this part of the commit log was no longer relevant.
 
-  I guess this was during the install-staging step? Because in install-target, 
-we already explicitly rm all binaries in bzip2.mk.
+> 
+> Signed-off-by: santosh.multhalli <santosh.multhalli@rockwellcollins.com>
 
+Your name here should match the From: of your e-mail, so it should have
+been:
 
-  This is really a problem in the bzip2 upstream package itself. It's actually 
-weird that it installs the executable three times, instead of symlinking or 
-hardlinking...
+	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
 
-  The underlying issue, I guess, is that you are using a pre-installed custom 
-external toolchain, which has bzip2 installed in its sysroot as absolute 
-symlinks. When buildroot copies this to the staging directory, the symlink is 
-kept, but it points to a file which is not writable by you. So when bzip2 tries 
-to overwrite it, it goes through the symlink, and fails to overwrite the file in 
-your pre-installed toolchain directory.
+> diff --git a/package/Config.in b/package/Config.in
+> index 64822bf..1404653 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1044,6 +1044,7 @@ menu "JSON/XML"
+>  	source "package/raptor/Config.in"
+>  	source "package/tinyxml/Config.in"
+>  	source "package/tinyxml2/Config.in"
+> + 	source "package/valijson/Config.in"
 
+This line was not good, it starts with a space followed by a tab, it
+should just be a tab. You can spot these very easily by reviewing your
+patch using "git log -p".
 
-  There are a couple of solutions possible:
+>  	source "package/yaml-cpp/Config.in"
+> diff --git a/package/valijson/Config.in b/package/valijson/Config.in
+> new file mode 100644
+> index 0000000..a5e24c2
+> --- /dev/null
+> +++ b/package/valijson/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_VALIJSON
+> +	bool "valijson"
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-1. In bzip2.mk, remove any existing bzip2 etc. like we do for target install.
+You forgot to replicate the BR2_PACKAGE_BOOST_ARCH_SUPPORTS dependency
+here. Basically when you "select BR2_PACKAGE_<foo>", you *must*
+replicate all "depends on" that BR2_PACKAGE_<foo>" has to your package.
 
-2. In bzip2.mk, use custom staging install commands like we do for host-bzip2 - 
-we anyway only need the libraries.
+> +	select BR2_PACKAGE_BOOST
+> +	select BR2_PACKAGE_BOOST_REGEX
+> +
 
-3. Add a patch to the package that fixes the Makefile to use 
---remove-destination, or to use install. This could be combined with using a 
-hardlink instead. Probably the 20-legacy patch from debian already solves it, 
-because I expect that you only have a problem with bunzip2 and bzcat, not with 
-bzip2.
+This blank line is unneeded.
 
+> +	help
+> +	 Valijson is a header-only JSON Schema Validation library for
+> +	 C++. Valijson provides a simple validation API that allows you
+> +	 load JSON Schemas, and validate documents loaded by one of
+> +	 several supported parser libraries like boost, jsoncpp,
+> +	 rapidjson and picoJSON.It depends on BOOST Libraries
 
+Missing space after dot, missing final dot in this sentence. But since
+this last sentence was useless, I simply removed it.
 
-  Regards,
-  Arnout
+> +VALIJSON_VERSION = 424b706f990a9eb96dfc19cc8e54f2cd6ce5e186
+> +VALIJSON_SITE = $(call github,tristanpenman,valijson,$(VALIJSON_VERSION))
+> +VALIJSON_LICENSE = BSD-3c
 
+License is BSD-2c, not BSD-3c.
 
+As I said, I fixed up those issues and applied. Thanks!
 
->
-> Can someone please help me out? Thank you for your help.
-> Regards
->
-> Santhosh
->
-> -- 
-> Greater the Difficulty....Sweeter is the Victory
->
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
-
-
+Thomas
 -- 
-Arnout Vandecappelle arnout at mind be
-Senior Embedded Software Architect +32-16-286500
-Essensium/Mind http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint: 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
