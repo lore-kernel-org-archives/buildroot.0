@@ -1,115 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Apr 2016 23:59:16 +0200
-Subject: [Buildroot] [PATCH v13 01/26] package/freeswitch: new package
-In-Reply-To: <1460662320-1437-2-git-send-email-bernd.kuhls@t-online.de>
-References: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
- <1460662320-1437-2-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <571012B4.6010803@mind.be>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 15 Apr 2016 01:11:01 +0200
+Subject: [Buildroot] [PATCH v2] qt: Fix musl build
+In-Reply-To: <1453554406-14574-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1453554406-14574-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460675461-24046-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/14/16 21:31, Bernd Kuhls wrote:
-> This commit adds freeswitch without any configured modules and with a
-> minimal set of non-optional dependencies. All other dependencies and
-> modules will be added by further patches in this series.
->
-> PLease note that freeswitch source repo bundles some libraries which are
-> also available as buildroot packages. The freeswitch build system does
-> not allow to use system libraries in these cases:
->
-> apr, apr-util, libsrtp, libvpx, libyuv, sofia-sip, tiff
->
-> The reason are patches to these packages by the freeswitch project which
-> are not yet upstream. There is an open JIRA report for this situation:
-> https://freeswitch.org/jira/si/jira.issueviews:issue-html/FS-353/FS-353.html
->
-> More historic infos can be found here:
-> http://article.gmane.org/gmane.comp.telephony.freeswitch.devel/2715
-> https://freeswitch.org/the-missing-link/
->
-> In the 1.6.7 version bump libvpx & libyuv were also moved in-tree:
-> https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/febe0f8dacea2d2a31902b3dc469be757f8c3c4d
-> https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/44da905b4f6b3b35e94b4948fb70dec7b5071ded
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This patch is adapted from Qt5 [1].
 
-Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-  Build-test on sh4aeb (i.e. exotic arch) with Sourcery toolchain.
+This helps to make sure that QT_SOCKLEN_T is defined to be 'int' only when its
+glibc < 2 and not also for the libraries which may define it as per standards
+but are not glibc, e.g. musl.
 
-  However...
+Fixes the following build error:
+In file included from ../../include/QtNetwork/private/qnet_unix_p.h:1:0,
+                 from kernel/qnetworkinterface_unix.cpp:46:
+../../include/QtNetwork/private/../../../src/network/socket/qnet_unix_p.h: In function 'int qt_safe_accept(int, sockaddr*, int*, int)':
+../../include/QtNetwork/private/../../../src/network/socket/qnet_unix_p.h:121:76: error: invalid conversion from 'int*' to 'socklen_t* {aka unsigned int*}' [-fpermissive]
 
-[snip]
-> diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-> new file mode 100644
-> index 0000000..e5f1ea5
-> --- /dev/null
-> +++ b/package/freeswitch/freeswitch.mk
-> @@ -0,0 +1,81 @@
-> +################################################################################
-> +#
-> +# freeswitch
-> +#
-> +################################################################################
-> +
-> +FREESWITCH_VERSION = 1.6.7
-> +FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
-> +FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
-> +FREESWITCH_LICENSE = MPLv1.1
-> +FREESWITCH_LICENSE_FILES = COPYING
+Fixes:
+http://autobuild.buildroot.net/results/709/709d547699596d09b4601a7940677d2010adeedf/
+http://autobuild.buildroot.net/results/f05/f0589e1d06404a7bd57f5734228afe45164e553d/
 
-  It's a shame that it takes until v13 to come to this, but the bundled 
-libraries of course have different licenses... So for instance this would become
+[1]
+https://github.com/qtproject/qtbase/commit/813f468a14fb84af43c1f8fc0a1430277358eba2
 
-FREESWITCH_LICENSE = MPLv1.1, LGPLv2+ (sofia-sip)
-FREESWITCH_LICENSE_FILES = \
-	COPYING \
-	libs/sofia-sip/COPYING \
-	libs/sofia-sip/COPYRIGHTS
-etc.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+v2:
+ - replace patch taken from Qt5
+---
+ ...tform-socklen_t-on-other-C-libraries-than.patch | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
 
-  I've uploaded the package to fossology [1] for easy analysis. But the existing 
-buildroot packages can already be a good guideline.
-
-> +
-> +# required dependencies
-> +FREESWITCH_DEPENDENCIES = \
-> +	host-pkgconf \
-> +	jpeg \
-> +	libcurl \
-> +	openssl \
-> +	pcre \
-> +	speex \
-> +	sqlite \
-> +	util-linux \
-> +	zlib
-> +
-> +# freeswitch comes with pre-enabled modules, since we want to control
-> +# the modules ourselves reset the upstream configuration
-> +define FREESWITCH_RESET_MODULES
-> +	> $(@D)/modules.conf
-> +endef
-> +FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_RESET_MODULES
-
-  Note that with patch 2, this bit is no longer needed. I.e., it should be 
-removed in patch 2.
-
-
-  Regards,
-  Arnout
-
-[1] 
-https://fossology.ist.unomaha.edu/?mod=browse&folder=1&show=quick&upload=9&item=19341
-
-[snip]
-
-
+diff --git a/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch b/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+new file mode 100644
+index 0000000..a2fff60
+--- /dev/null
++++ b/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+@@ -0,0 +1,43 @@
++From 0bf90de93b9fe21df32319e27b2507154fa8a21d Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Fri, 15 Apr 2016 00:37:26 +0200
++Subject: [PATCH] Fix for platform socklen_t on other C libraries than glibc
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
++only when its glibc < 2 and not also for the libraries which may define
++it as per standards but are not glibc, e.g. musl.
++
++This patch is adapted from Qt5 [1].
++
++[1]
++https://github.com/qtproject/qtbase/commit/813f468a14fb84af43c1f8fc0a1430277358eba2
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ mkspecs/linux-g++/qplatformdefs.h | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/mkspecs/linux-g++/qplatformdefs.h b/mkspecs/linux-g++/qplatformdefs.h
++index de751dd..d4146ed 100644
++--- a/mkspecs/linux-g++/qplatformdefs.h
+++++ b/mkspecs/linux-g++/qplatformdefs.h
++@@ -86,10 +86,10 @@
++ 
++ #undef QT_SOCKLEN_T
++ 
++-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
++-#define QT_SOCKLEN_T            socklen_t
++-#else
+++#if defined(__GLIBC__) && (__GLIBC__ < 2)
++ #define QT_SOCKLEN_T            int
+++#else
+++#define QT_SOCKLEN_T            socklen_t
++ #endif
++ 
++ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
++-- 
++2.8.0
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.8.0
