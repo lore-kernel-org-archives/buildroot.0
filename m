@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Apr 2016 21:31:51 +0200
-Subject: [Buildroot] [PATCH v13 17/26] package/freeswitch: enable mod_silk
+Date: Thu, 14 Apr 2016 21:31:52 +0200
+Subject: [Buildroot] [PATCH v13 18/26] package/freeswitch: enable mod_sndfile
 In-Reply-To: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460662320-1437-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460662320-1437-19-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +16,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 7043e1b..f81a941 100644
+index f81a941..23cab1d 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -216,6 +216,11 @@ FREESWITCH_DEPENDENCIES += portaudio
- FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
+@@ -221,6 +221,11 @@ FREESWITCH_DEPENDENCIES += libsilk
+ FREESWITCH_ENABLED_MODULES += codecs/mod_silk
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSILK),y)
-+FREESWITCH_DEPENDENCIES += libsilk
-+FREESWITCH_ENABLED_MODULES += codecs/mod_silk
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++FREESWITCH_DEPENDENCIES += libsndfile
++FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
