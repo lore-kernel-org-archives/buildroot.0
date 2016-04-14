@@ -1,56 +1,46 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Thu, 14 Apr 2016 15:39:57 +0200
-Subject: [Buildroot] [PATCH] configs: add Armadeus Systems APF6 SOM basic
-	support
-Message-ID: <1460641197-12610-1-git-send-email-julien.boibessot@free.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 14 Apr 2016 11:12:36 -0300
+Subject: [Buildroot] [PATCH] php: bump version to 7.0.5
+In-Reply-To: <1460629691-56260-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1460629691-56260-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <570FA554.1090503@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+On 14/04/16 07:28, Vicente Olivert Riera wrote:
 
-APF6 is an i.MX6 based SOM with an optional Cyclone 5 GX FPGA.
+> - php-geoip: switched to HEAD of master on GitHub.
+>    - Bug: https://bugs.php.net/bug.php?id=71083
+>
+> - php-gnupg: switched to HEAD of master on GitHub.
+>    - Bug: https://bugs.php.net/bug.php?id=71138
+>
+> - php-imagick: bump version to 3.4.1.
+>    - Necessary to work with php-7.
+>
+> - php-memcached: switched to HEAD of master on GitHub.
+>    - Bug: https://bugs.php.net/bug.php?id=70751
+>
+> - php-ssh2: switched to HEAD of master on GitHub.
+>    - Bug: https://bugs.php.net/bug.php?id=71376
+>
+> - php-yaml: bump version to 2.0.0RC7.
+>    - Necessary to work with php-7.
+>
+> - php-zmq: bump version to 1.1.3.
+>    - Necessary to work with php-7.
+>
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
----
- configs/armadeus_apf6_defconfig | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 configs/armadeus_apf6_defconfig
-
-diff --git a/configs/armadeus_apf6_defconfig b/configs/armadeus_apf6_defconfig
-new file mode 100644
-index 0000000..a51dd5f
---- /dev/null
-+++ b/configs/armadeus_apf6_defconfig
-@@ -0,0 +1,27 @@
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# Linux headers same as kernel, a 3.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="apf6"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.8"
-+BR2_LINUX_KERNEL_PATCH="http://sourceforge.net/projects/armadeus/files/armadeus/armadeus-6.0/patches/linux-3.19-armadeus.patch.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apf6dev imx6dl-apf6dev"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
--- 
-2.1.4
+Hi Vicente.
+I believe splitting the pecl package bumps in a first batch of patches 
+with the php bump at the end would be better suited, as long as those 
+packages can built against the current php (normally they should).
+This would result in better bisectability, and no "all these bumps fix 
+the build failures" scenario leading the php bump.
+Some people might argue about having both php versions side by side but 
+i'm not one of them if we can avoid it.
+Regards.
