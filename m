@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Apr 2016 21:31:46 +0200
-Subject: [Buildroot] [PATCH v13 12/26] package/freeswitch: add optional
-	dependency to libg7221
+Date: Thu, 14 Apr 2016 21:31:58 +0200
+Subject: [Buildroot] [PATCH v13 24/26] package/freeswitch: enable mod_cv
 In-Reply-To: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460662320-1437-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460662320-1437-25-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index fe97705..2950955 100644
+index 2f3be17..8cd9b67 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -171,6 +171,10 @@ else
- FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+@@ -246,6 +246,11 @@ FREESWITCH_DEPENDENCIES += libsoundtouch
+ FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBG7221),y)
-+FREESWITCH_DEPENDENCIES += libg7221
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++FREESWITCH_DEPENDENCIES += opencv
++FREESWITCH_ENABLED_MODULES += applications/mod_cv
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBLDNS),y)
- FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
