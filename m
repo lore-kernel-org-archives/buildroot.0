@@ -1,51 +1,59 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Thu, 14 Apr 2016 22:56:54 +0200
-Subject: [Buildroot] [PATCH v13 24/26] package/freeswitch: enable mod_cv
-In-Reply-To: <1460662320-1437-25-git-send-email-bernd.kuhls@t-online.de>
-References: <1460662320-1437-1-git-send-email-bernd.kuhls@t-online.de>
- <1460662320-1437-25-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAHXCMMLMkZwaLGbgP7wpR4KXWW_p=kPtna=AZA6FSCN=4kdnAg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 14 Apr 2016 23:00:57 +0200
+Subject: [Buildroot] [PATCH] [RFC] U-Boot: don't check hashes for U-Boot
+ external patches
+In-Reply-To: <1460644321-13849-1-git-send-email-julien.boibessot@free.fr>
+References: <1460644321-13849-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <57100509.8040804@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd,
-
-On Thu, Apr 14, 2016 at 9:31 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On 04/14/16 16:32, julien.boibessot at free.fr wrote:
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+>
+> BR2_TARGET_UBOOT_PATCH allows user to give URL of patches on the Web, but in
+> that case BR dl infra tries to compare hashes of the downloaded patches with the
+> infos from boot/uboot/uboot.hash.
+> So, for that case (user specified patches), tell BR not to check hashes.
+>
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 > ---
->  package/freeswitch/freeswitch.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+>   boot/uboot/uboot.mk | 2 ++
+>   1 file changed, 2 insertions(+)
 >
-> diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-> index 2f3be17..8cd9b67 100644
-> --- a/package/freeswitch/freeswitch.mk
-> +++ b/package/freeswitch/freeswitch.mk
-> @@ -246,6 +246,11 @@ FREESWITCH_DEPENDENCIES += libsoundtouch
->  FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
->  endif
->
-> +ifeq ($(BR2_PACKAGE_OPENCV),y)
-> +FREESWITCH_DEPENDENCIES += opencv
-Just wondering: is freeswitch only compatible with opencv2?
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 48f40c3..9e24b48 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -109,6 +109,8 @@ UBOOT_POST_RSYNC_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
+>   # directories or files.
+>   UBOOT_PATCHES = $(call qstrip,$(BR2_TARGET_UBOOT_PATCH))
+>   UBOOT_PATCH = $(filter ftp://% http://% https://%,$(UBOOT_PATCHES))
+> +UBOOT_PATCHES_NAME = $(notdir $(UBOOT_PATCHES))
 
-> +FREESWITCH_ENABLED_MODULES += applications/mod_cv
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
->  FREESWITCH_DEPENDENCIES += unixodbc
->  FREESWITCH_CONF_OPTS += \
-> --
-> 2.8.0.rc3
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  Since only the non-local patches will be downloaded, perhaps it's better to 
+use UBOOT_PATCH instead of UBOOT_PATCHES.
 
-Regards,
+  Also, there is no need to use an additional variable for this, it's used only 
+once.
+
+  Regards,
+  Arnout
+
+> +BR_NO_CHECK_HASH_FOR += $(UBOOT_PATCHES_NAME)
+>
+>   define UBOOT_APPLY_LOCAL_PATCHES
+>   	for p in $(filter-out ftp://% http://% https://%,$(UBOOT_PATCHES)) ; do \
+>
+
 
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
