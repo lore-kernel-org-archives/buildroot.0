@@ -1,49 +1,26 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Apr 2016 21:04:42 +0200
-Subject: [Buildroot] [PATCH v12 01/31] package/freeswitch: new package
-References: <1460281299-2385-1-git-send-email-bernd.kuhls@t-online.de>
- <1460281299-2385-2-git-send-email-bernd.kuhls@t-online.de>
- <20160413230219.73e299ea@free-electrons.com>
-Message-ID: <XnsA5EAD66C23949ID313208userindividu@bernd-kuhls.de>
+From: Mason <slash.tmp@free.fr>
+Date: Thu, 14 Apr 2016 21:29:34 +0200
+Subject: [Buildroot] [PATCH v3] ltp-testsuite: build kernel modules when
+	appropriate
+In-Reply-To: <57039CF4.5060902@free.fr>
+References: <56F3F393.6020407@free.fr>
+ <20160324222555.21f04320@free-electrons.com> <56F92840.9090206@free.fr>
+ <56FAD38B.8040201@mind.be> <57026754.50205@free.fr> <57038409.20600@mind.be>
+ <57039CF4.5060902@free.fr>
+Message-ID: <570FEF9E.6000400@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+On 05/04/2016 13:09, Mason wrote:
 
-[posted and mailed]
+> If we're building a kernel, we can also build LTP's test modules.
+> ---
+>  package/ltp-testsuite/ltp-testsuite.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote 
-in news:20160413230219.73e299ea at free-electrons.com:
+Are there remaining issues with this patch?
 
-> I'm sorry, but this still doesn't build, with the exact same error I
-> had in my previous test of the freeswitch package:
-
-no need for excuses, I also want to make the autobuilders happy ;)
-
->   CCLD   fs_cli
-> libs/libzrtp/third_party/bnlib/libbn.a(lbnmem.o): In function `lbnMemWipe':
-> /home/thomas/projets/buildroot/output/build/freeswitch-1.6.7/libs/libzrtp/third_party/bnlib/lbnmem.c:69: 
-undefined reference to `zrtp_memset'
-> libs/libzrtp/third_party/bnlib/libbn.a(lbnmem.o): In function `lbnMemAlloc':
-> /home/thomas/projets/buildroot/output/build/freeswitch-1.6.7/libs/libzrtp/third_party/bnlib/lbnmem.c:78: 
-undefined reference to `zrtp_sys_alloc'
-> libs/libzrtp/third_party/bnlib/libbn.a(lbnmem.o): In function `lbnMemFree':
-> /home/thomas/projets/buildroot/output/build/freeswitch-1.6.7/libs/libzrtp/third_party/bnlib/lbnmem.c:87: 
-undefined reference to `zrtp_sys_free'
-
-I had a fix for this problem in freeswitch 1.6.6:
-http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/141985
-
-With freeswitch 1.6.7 this fix will not work anymore because after the
-necessary autoreconf libtool will add STAGING_DIR as rpath when my
-patch is applied which breaks compilation with
-BR2_COMPILER_PARANOID_UNSAFE_PATH=y
-
-Therefore v13 of my patch series will move the libuuid patch into the
-initial package patch and make libuuid and wchar toolchain support
-mandatory.
-
-Regards, Bernd
+Regards.
