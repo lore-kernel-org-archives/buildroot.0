@@ -1,53 +1,47 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 14 Apr 2016 23:25:15 +0200
-Subject: [Buildroot] [PATCH] [RFC] U-Boot: don't check hashes for U-Boot
- external patches
-In-Reply-To: <57100509.8040804@mind.be>
-References: <1460644321-13849-1-git-send-email-julien.boibessot@free.fr>
- <57100509.8040804@mind.be>
-Message-ID: <57100ABB.8090206@mind.be>
+Date: Thu, 14 Apr 2016 23:28:41 +0200
+Subject: [Buildroot] [PATCH 01/15] fs: add genimage infra
+In-Reply-To: <871t67j3g6.fsf@dell.be.48ers.dk>
+References: <1460577820-32164-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1460577820-32164-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <570EBAE6.1080000@mind.be> <20160413234530.502a4244@free-electrons.com>
+ <871t67j3g6.fsf@dell.be.48ers.dk>
+Message-ID: <57100B89.2080106@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/14/16 23:00, Arnout Vandecappelle wrote:
-> On 04/14/16 16:32, julien.boibessot at free.fr wrote:
->> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>
->> BR2_TARGET_UBOOT_PATCH allows user to give URL of patches on the Web, but in
->> that case BR dl infra tries to compare hashes of the downloaded patches with the
->> infos from boot/uboot/uboot.hash.
->> So, for that case (user specified patches), tell BR not to check hashes.
->>
->> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->> ---
->>   boot/uboot/uboot.mk | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->> index 48f40c3..9e24b48 100644
->> --- a/boot/uboot/uboot.mk
->> +++ b/boot/uboot/uboot.mk
->> @@ -109,6 +109,8 @@ UBOOT_POST_RSYNC_HOOKS += UBOOT_COPY_OLD_LICENSE_FILE
->>   # directories or files.
->>   UBOOT_PATCHES = $(call qstrip,$(BR2_TARGET_UBOOT_PATCH))
->>   UBOOT_PATCH = $(filter ftp://% http://% https://%,$(UBOOT_PATCHES))
->> +UBOOT_PATCHES_NAME = $(notdir $(UBOOT_PATCHES))
+On 04/14/16 23:16, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 >
->   Since only the non-local patches will be downloaded, perhaps it's better to
-> use UBOOT_PATCH instead of UBOOT_PATCHES.
+>   > Hello,
+>   > On Wed, 13 Apr 2016 23:32:22 +0200, Arnout Vandecappelle wrote:
 >
->   Also, there is no need to use an additional variable for this, it's used only
-> once.
+>   >> Therefore, at least as a first step, I guess it's better to just move the
+>   >> script to a common place, e.g. to package/genimage/post-image.sh. Let it take a
+>   >> single argument for the genimage.cfg file, and add some documentation to the manual.
+>
+>   > As an after-thought, this seems like a good idea. This is really a very
+>   > simple and minimal change, and is easy to do.
+>
+> The only complication is that you cannot directly pass arguments to
+> post-image scripts, you have to use BR2_ROOTFS_POST_SCRIPT_ARGS (and it
+> gets used for all scripts).
 
-  Oh, and something similar should be done for LINUX_PATCH as well.
+  I really don't think that this is a limitation. Especially if you don't pass 
+the file, but the directory as the argument; that would be potentially useful 
+for other post-image scripts as well.
+
+  So I tend to prefer the simple common-script-in-package/genimage solution.
+
+
+  That said, if Ezequiel posts a patch that takes into account all my concerns, 
+I'll be happy to Ack it.
 
   Regards,
   Arnout
-
-
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
