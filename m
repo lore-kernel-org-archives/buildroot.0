@@ -1,35 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 20:59:09 +0200
-Subject: [Buildroot] [git commit] configs/minnowboard_max: configure
-	eth0 through dhcp
-In-Reply-To: <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
- (Ezequiel Garcia's message of "Fri, 15 Apr 2016 13:18:05 -0300")
-References: <20160415081911.5BA4A80338@busybox.osuosl.org>
- <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
-Message-ID: <8737qmhf5u.fsf@dell.be.48ers.dk>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 15 Apr 2016 16:15:20 -0300
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: bump to version
+ 1.21
+In-Reply-To: <1458505707.1998.24.camel@embedded.rocks>
+References: <1451762923-15985-1-git-send-email-joerg.krause@embedded.rocks>
+ <56885656.8080505@mind.be> <1458505707.1998.24.camel@embedded.rocks>
+Message-ID: <57113DC8.7090509@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
+On 20/03/16 17:28, J?rg Krause wrote:
 
- > On 15 April 2016 at 05:17, Peter Korsgaard <peter@korsgaard.com> wrote:
- >> commit: https://git.buildroot.net/buildroot/commit/?id=ba40ce77ea7babb36a74adeb4772b54142f86975
- >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> The minnowboard max board has an ethernet port, so configure it at startup.
- >> 
+> Hi Arnout,
+>
+> I'm really sorry for the long delay. This patch has lost my
+> attention...
+>
+>>   It's mind-boggling that "a small library with error codes" needs
+>> architecture-specific handling...
+>
+> It is indeed! I had a closer look and I think the whole magic libgpg-
+> error does for retrieving the initialization of a lock object can be
+> done without all the target configuration files. I'll contact the
+> maintainers about this issue.
+>
+> Best regards
+> J?rg Krause
 
- > Any reason why you are only doing this change for the Minnowboard MAX,
- > and not also the Minnowboard?
-
-Only the fact that I have a max, but not one of the original
-minnowboards, so I couldn't test it.
-
-Do you have one of the old ones? If not, I believe Thomas does.
-
--- 
-Venlig hilsen,
-Peter Korsgaard 
+Hi all.
+A small attention note: this is now required for the recently released 
+libgcrypt 1.7.0 since it depends on gpg-error >= 1.13 (which uses the 
+new mutex code IIRC which causes this headache).
+It's not a high-priority since it's just new feature, no security bug 
+fixes... yet ;)
+Regards.
