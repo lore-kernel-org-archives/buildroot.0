@@ -1,52 +1,49 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Fri, 15 Apr 2016 09:13:27 +0200
-Subject: [Buildroot] [PATCH] luvi: bump to version 2.7.0
-Message-ID: <1460704407-6230-1-git-send-email-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Apr 2016 09:30:43 +0200
+Subject: [Buildroot] [git commit] imlib2: security bump to version 1.4.8
+In-Reply-To: <20160414205138.B32E38050E@busybox.osuosl.org>
+References: <20160414205138.B32E38050E@busybox.osuosl.org>
+Message-ID: <20160415093043.42bf368d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch from upstream [1] to fix CMake build error when building with option
-"WithSharedLibluv=ON".
+Hello,
 
-[1]
-https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241
+On Thu, 14 Apr 2016 22:51:10 +0200, Thomas Petazzoni wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=779676f62d56774c6290dabe4a1e3727f1cb834d
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
+> Fixes:
+> CVE-2016-3994 - out of bound read in GIF loader
+> CVE-2011-5326 - divide by zero on 2x1 ellipse
+> 
+> Switch to sourceforge hashes.
+> And drop all previous patches, they're upstream, yay.
+> 
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+>  .../0001-GIF-loader-Fix-for-libgif-version-5.patch |  43 -----
+>  package/imlib2/0001-fix-CVE-2016-3994.patch        |  71 +++++++++
+>  .../0002-GIF-loader-Simplify-error-handling.patch  | 175 ---------------------
+>  package/imlib2/0002-fix-CVE-2011-5326.patch        | 104 ++++++++++++
+>  ...b2-config-delete-old-reference-to-my_libs.patch |  28 ----
+>  ...AY_MISSING-redefined-warnings-when-X-is-d.patch |  75 ---------
+>  ...o-not-link-with-X-libs-when-X-is-disabled.patch |  29 ----
+>  ...006-GIF-loader-Fix-for-libgif-version-5.1.patch |  44 ------
+>  .../0007-fix-compilation-issues-with-musl.patch    |  31 ----
+>  package/imlib2/imlib2.hash                         |   5 +-
+>  package/imlib2/imlib2.mk                           |   2 +-
+>  11 files changed, 179 insertions(+), 428 deletions(-)
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/luvi/luvi.hash | 3 ++-
- package/luvi/luvi.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Applied to master, thanks. I like when so many patches can be
+removed :-)
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 6f95dac..7aa099f 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  a8b4aecf4c1d781614fe187b6afcb2dc7462fcd6e76a3f38cbfd0a8244c01582  luvi-src-v2.6.1.tar.gz
-+sha256  1177fcc69b1bd74696d7f106e1632462b7331ef7816bbcada91a530ef19235ea  luvi-src-v2.7.0.tar.gz
-+sha256  0269504ebd6fe73948bd2314199e686701c6de882fab84a48b8317c0671e84c5  35c3961d10d3f9e3752102ea8e8bb8c187b32241.patch
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index 305ff4f..c5cfed6 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
- 
--LUVI_VERSION = v2.6.1
-+LUVI_VERSION = v2.7.0
- LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
- LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
- LUVI_LICENSE = Apache-2.0
- LUVI_LICENSE_FILES = LICENSE.txt
- LUVI_DEPENDENCIES = libuv luajit luv host-luajit
-+LUVI_PATCH = https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241.patch
- 
- # Dispatch all architectures of LuaJIT
- ifeq ($(BR2_i386),y)
+Thomas
 -- 
-2.8.0
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
