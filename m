@@ -1,80 +1,103 @@
 From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Fri, 15 Apr 2016 20:02:12 +0200
-Subject: [Buildroot] [PATCH v2] gutenprint: fix host build
-Message-ID: <20160415180212.GA11682@waldemar-brodkorb.de>
+Date: Fri, 15 Apr 2016 20:11:13 +0200
+Subject: [Buildroot] [PATCH] gcc: disable split-stack for non-thread
+ builds
+In-Reply-To: <20160307141028.GA31754@waldemar-brodkorb.de>
+References: <20160307141028.GA31754@waldemar-brodkorb.de>
+Message-ID: <20160415181113.GR7454@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow to disable USB support, otherwise host build breaks.
-Fixes following autobuild error:
-http://autobuild.buildroot.net/results/081b3be918ac1eaa8cfbc5919e00bc1ea267c1df/
+Hi,
 
-Patch suggested upstream:
-https://sourceforge.net/p/gimp-print/patches/19/
+ping?
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
-v1 -> v2:
-  * extended comment why we need autoreconf suggested by Baruch
-  * patch suggested upstream as requested by Baruch
----
- .../0004-build-usb-backends-conditional.patch      | 23 ++++++++++++++++++++++
- package/gutenprint/gutenprint.mk                   |  3 ++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
- create mode 100644 package/gutenprint/0004-build-usb-backends-conditional.patch
+@Thomas: remember our deal, your thumb simplication patch is
+included into uClibc-ng ;)
 
-diff --git a/package/gutenprint/0004-build-usb-backends-conditional.patch b/package/gutenprint/0004-build-usb-backends-conditional.patch
-new file mode 100644
-index 0000000..db44a12
---- /dev/null
-+++ b/package/gutenprint/0004-build-usb-backends-conditional.patch
-@@ -0,0 +1,23 @@
-+Allow to disable USB backend
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+
-+diff -Nur gutenprint-5.2.11.orig/configure.ac gutenprint-5.2.11/configure.ac
-+--- gutenprint-5.2.11.orig/configure.ac	2016-01-14 04:02:49.000000000 +0100
-++++ gutenprint-5.2.11/configure.ac	2016-04-02 20:07:54.649589473 +0200
-+@@ -442,12 +442,15 @@
-+ dnl   [EXTRA_LIBREADLINE_DEPS]=""
-+ dnl fi
-+ 
-++AC_ARG_WITH([libusb], AS_HELP_STRING([--with-libusb], [Build with USB backend support]))
-+ # libusb-1.0 (For CUPS backends)
-++AS_IF([test "x$with_libusb" = "xyes"], [
-+ PKG_CHECK_MODULES([LIBUSB], [libusb-1.0],
-+                   [HAVE_LIBUSB=yes
-+                    BUILD_LIBUSB_BACKENDS=yes],
-+                   [HAVE_LIBUSB=no
-+ 	           BUILD_LIBUSB_BACKENDS=no])
-++])
-+ 
-+ AC_PATH_PROGS([GIMPTOOL2_CHECK], [gimptool-2.0 gimptool])
-+ if test -z "${GIMPTOOL2_CHECK}" ; then
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 7e3024d..8cf4caf 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -11,7 +11,7 @@ GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
- GUTENPRINT_LICENSE = GPLv2+
- GUTENPRINT_LICENSE_FILES = COPYING
- 
--# Needed, as we touch Makefile.am
-+# Needed, as we touch Makefile.am and configure.ac
- GUTENPRINT_AUTORECONF = YES
- 
- GUTENPRINT_DEPENDENCIES = \
-@@ -67,6 +67,7 @@ HOST_GUTENPRINT_CONF_OPTS = \
- 	--disable-escputil \
- 	--disable-test \
- 	--disable-testpattern \
-+	--without-libusb \
- 	--without-cups
- 
- # Needed by autoreconf
--- 
-2.1.4
+Waldemar Brodkorb wrote,
+
+> This fixes bug 8766:
+> https://bugs.busybox.net/show_bug.cgi?id=8766
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  .../4.8.5/930-libgcc-disable-split-stack-nothreads.patch |   14 ++++++++++++++
+>  .../4.9.3/930-libgcc-disable-split-stack-nothreads.patch |   14 ++++++++++++++
+>  .../5.3.0/930-libgcc-disable-split-stack-nothreads.patch |   14 ++++++++++++++
+>  3 files changed, 42 insertions(+)
+>  create mode 100644 package/gcc/4.8.5/930-libgcc-disable-split-stack-nothreads.patch
+>  create mode 100644 package/gcc/4.9.3/930-libgcc-disable-split-stack-nothreads.patch
+>  create mode 100644 package/gcc/5.3.0/930-libgcc-disable-split-stack-nothreads.patch
+> 
+> diff --git a/package/gcc/4.8.5/930-libgcc-disable-split-stack-nothreads.patch b/package/gcc/4.8.5/930-libgcc-disable-split-stack-nothreads.patch
+> new file mode 100644
+> index 0000000..7799c12
+> --- /dev/null
+> +++ b/package/gcc/4.8.5/930-libgcc-disable-split-stack-nothreads.patch
+> @@ -0,0 +1,14 @@
+> +disable split-stack for non-thread builds
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> +
+> +diff -Nur gcc-4.8.5.orig/libgcc/config/t-stack gcc-4.8.5/libgcc/config/t-stack
+> +--- gcc-4.8.5.orig/libgcc/config/t-stack	2010-10-01 21:31:49.000000000 +0200
+> ++++ gcc-4.8.5/libgcc/config/t-stack	2016-03-07 05:28:12.000000000 +0100
+> +@@ -1,4 +1,6 @@
+> + # Makefile fragment to provide generic support for -fsplit-stack.
+> + # This should be used in config.host for any host which supports
+> + # -fsplit-stack.
+> ++ifeq ($(enable_threads),yes)
+> + LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+> ++endif
+> diff --git a/package/gcc/4.9.3/930-libgcc-disable-split-stack-nothreads.patch b/package/gcc/4.9.3/930-libgcc-disable-split-stack-nothreads.patch
+> new file mode 100644
+> index 0000000..670cf8d
+> --- /dev/null
+> +++ b/package/gcc/4.9.3/930-libgcc-disable-split-stack-nothreads.patch
+> @@ -0,0 +1,14 @@
+> +disable split-stack for non-thread builds
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> +
+> +diff -Nur gcc-4.9.3.orig/libgcc/config/t-stack gcc-4.9.3/libgcc/config/t-stack
+> +--- gcc-4.9.3.orig/libgcc/config/t-stack	2010-10-01 21:31:49.000000000 +0200
+> ++++ gcc-4.9.3/libgcc/config/t-stack	2016-03-07 01:34:32.000000000 +0100
+> +@@ -1,4 +1,6 @@
+> + # Makefile fragment to provide generic support for -fsplit-stack.
+> + # This should be used in config.host for any host which supports
+> + # -fsplit-stack.
+> ++ifeq ($(enable_threads),yes)
+> + LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+> ++endif
+> diff --git a/package/gcc/5.3.0/930-libgcc-disable-split-stack-nothreads.patch b/package/gcc/5.3.0/930-libgcc-disable-split-stack-nothreads.patch
+> new file mode 100644
+> index 0000000..07f9a73
+> --- /dev/null
+> +++ b/package/gcc/5.3.0/930-libgcc-disable-split-stack-nothreads.patch
+> @@ -0,0 +1,14 @@
+> +disable split-stack for non-thread builds
+> +
+> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> +
+> +diff -Nur gcc-5.3.0.orig/libgcc/config/t-stack gcc-5.3.0/libgcc/config/t-stack
+> +--- gcc-5.3.0.orig/libgcc/config/t-stack	2010-10-01 21:31:49.000000000 +0200
+> ++++ gcc-5.3.0/libgcc/config/t-stack	2016-03-07 03:25:32.000000000 +0100
+> +@@ -1,4 +1,6 @@
+> + # Makefile fragment to provide generic support for -fsplit-stack.
+> + # This should be used in config.host for any host which supports
+> + # -fsplit-stack.
+> ++ifeq ($(enable_threads),yes)
+> + LIB2ADD_ST += $(srcdir)/generic-morestack.c $(srcdir)/generic-morestack-thread.c
+> ++endif
+> -- 
+> 1.7.10.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
