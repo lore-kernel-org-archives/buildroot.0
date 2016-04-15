@@ -1,33 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 09:43:29 +0200
-Subject: [Buildroot] [PATCH] cannelloni: bump to version 20160414
-In-Reply-To: <1460705706-30224-1-git-send-email-yegorslists@googlemail.com>
-References: <1460705706-30224-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160415094329.6241bda4@free-electrons.com>
+Date: Fri, 15 Apr 2016 09:48:56 +0200
+Subject: [Buildroot] [git commit] Makefile: reset LD and AR environment
+	variables
+Message-ID: <20160415074906.E1B3281DF8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=376737d99dfe7ff0347dcc278e16001573314aa5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Apr 2016 09:35:06 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/5e9/5e9b44435522a26ad080b7810536686cc1e47c0f/
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/cannelloni/cannelloni.hash | 2 +-
->  package/cannelloni/cannelloni.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The goal is to fix the compilation of perf (from linux) when LD or AR
+variables are inherited from the environment.
+After the linux upstream commits 5ef7bbb09f7b ("perf tools: Allow to
+specify custom linker command") and 3c71ba3f80bb ("perf tools: Really allow
+to specify custom CC, AR or LD") CC, AR, and LD variables are not overridden
+if they are inherited.
 
-Applied to master, thanks.
+In case of a cross compilation, it results in an inconsistent state: CC is
+overridden but not LD and AR.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Linux-patch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=5ef7bbb09f7b
+Linux-patch: http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=3c71ba3f80bb
+
+Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index ea8b1e4..55735ea 100644
+--- a/Makefile
++++ b/Makefile
+@@ -343,6 +343,8 @@ ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ unexport CROSS_COMPILE
+ unexport ARCH
+ unexport CC
++unexport LD
++unexport AR
+ unexport CXX
+ unexport CPP
+ unexport RANLIB
