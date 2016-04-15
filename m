@@ -1,406 +1,52 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 15 Apr 2016 12:56:07 -0300
-Subject: [Buildroot] [PATCH v2 4/4] board/minnowboard-max: Add a X-based
-	graphical defconfig
-In-Reply-To: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <1460735767-2577-5-git-send-email-ezequiel@vanguardiasur.com.ar>
+From: Patrick Williams <patrick@stwcx.xyz>
+Date: Fri, 15 Apr 2016 10:40:34 -0500
+Subject: [Buildroot] [PATCH] Adding in support for custom configurations
+Message-ID: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a new defconfig to build a X-based
-graphical system for the Minnowboard MAX board.
+From: Elizabeth Liner <eliner@us.ibm.com>
 
-  * The 'openbox' windows manager is chosen because it's simple
-    and lightweigth.
+This change will add in the custom _defconfig's to the buildroot
+makefile so that when a _defconfig is in the custom directory it is
+recognized correctly, and is able to be used.
 
-  * Basic X apps are enabled (such as xrandr, xterm), so we
-    can at least get a console and change video mode.
-
-  * ALSA default configuration is provided, so HDMI audio
-    works out-of-the-box.
-
-  * OpenGL is supported.
-
-Tested on Minnoboard Turot (which is Minnowboard Max compatible).
-
-Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
---
-Changes from v1:
-
-  * Use an overlay instead of post-build.sh to customize the rootfs.
-
-  * Remove systemd usage, so we provide a minimum "audio and graphics"
-    setup.
+Signed-off-by: Elizabeth Liner <eliner@us.ibm.com>
+Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
 ---
- .../fs-overlay-graphical/etc/asound.conf           |   4 +
- .../minnowboard/fs-overlay-graphical/root/.xinitrc |   1 +
- .../fs-overlay-graphical/usr/bin/startx            | 248 +++++++++++++++++++++
- configs/minnowboard_max-graphical_defconfig        |  79 +++++++
- 4 files changed, 332 insertions(+)
- create mode 100644 board/minnowboard/fs-overlay-graphical/etc/asound.conf
- create mode 100644 board/minnowboard/fs-overlay-graphical/root/.xinitrc
- create mode 100755 board/minnowboard/fs-overlay-graphical/usr/bin/startx
- create mode 100644 configs/minnowboard_max-graphical_defconfig
+ Makefile | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/board/minnowboard/fs-overlay-graphical/etc/asound.conf b/board/minnowboard/fs-overlay-graphical/etc/asound.conf
-new file mode 100644
-index 000000000000..b75b2383647b
---- /dev/null
-+++ b/board/minnowboard/fs-overlay-graphical/etc/asound.conf
-@@ -0,0 +1,4 @@
-+# Customize ALSA:
-+# the HDMI PCM is at card=0, device=3 (i.e. hw:0,3)
-+defaults.pcm.card 0
-+defaults.pcm.device 3
-diff --git a/board/minnowboard/fs-overlay-graphical/root/.xinitrc b/board/minnowboard/fs-overlay-graphical/root/.xinitrc
-new file mode 100644
-index 000000000000..4274b24df1bc
---- /dev/null
-+++ b/board/minnowboard/fs-overlay-graphical/root/.xinitrc
-@@ -0,0 +1 @@
-+exec /usr/bin/openbox-session
-diff --git a/board/minnowboard/fs-overlay-graphical/usr/bin/startx b/board/minnowboard/fs-overlay-graphical/usr/bin/startx
-new file mode 100755
-index 000000000000..a600348e317f
---- /dev/null
-+++ b/board/minnowboard/fs-overlay-graphical/usr/bin/startx
-@@ -0,0 +1,248 @@
-+#!/bin/sh
+diff --git a/Makefile b/Makefile
+index 63502d0..15ef194 100644
+--- a/Makefile
++++ b/Makefile
+@@ -845,6 +845,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
+ 		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
+ 
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/custom/configs/%_defconfig outputmakefile
++	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/custom/configs/$@ \
++		$< --defconfig=$(BR2_EXTERNAL)/custom/configs/$@ $(CONFIG_CONFIG_IN)
 +
-+# Fixup startx so it doesn't start X on the controlling
-+# virtual console. Apparently, this is a bug and we are
-+# affected for our lack of a Display Manager.
-+# See https://bugs.freedesktop.org/show_bug.cgi?id=87762
-+#
-+# I haven't found a way to do this without hacking startx
-+# itself. The only change we are doing here is setting
-+# serverargs to "vt1", see below.
-+
-+#
-+# This is just a sample implementation of a slightly less primitive
-+# interface than xinit. It looks for user .xinitrc and .xserverrc
-+# files, then system xinitrc and xserverrc files, else lets xinit choose
-+# its default. The system xinitrc should probably do things like check
-+# for .Xresources files and merge them in, start up a window manager,
-+# and pop a clock and several xterms.
-+#
-+# Site administrators are STRONGLY urged to write nicer versions.
-+#
-+
-+unset DBUS_SESSION_BUS_ADDRESS
-+unset SESSION_MANAGER
-+userclientrc=$HOME/.xinitrc
-+sysclientrc=/etc/X11/xinit/xinitrc
-+
-+userserverrc=$HOME/.xserverrc
-+sysserverrc=/etc/X11/xinit/xserverrc
-+defaultclient=xterm
-+defaultserver=/usr/bin/X
-+defaultclientargs=""
-+defaultserverargs=""
-+defaultdisplay=":0"
-+clientargs=""
-+serverargs="vt1"
-+vtarg=""
-+enable_xauth=1
-+
-+
-+# Automatically determine an unused $DISPLAY
-+d=0
-+while true ; do
-+    [ -e /tmp/.X$d-lock ] || break
-+    d=$(($d + 1))
-+done
-+defaultdisplay=":$d"
-+unset d
-+
-+whoseargs="client"
-+while [ x"$1" != x ]; do
-+    case "$1" in
-+    # '' required to prevent cpp from treating "/*" as a C comment.
-+    /''*|\./''*)
-+ if [ "$whoseargs" = "client" ]; then
-+     if [ x"$client" = x ] && [ x"$clientargs" = x ]; then
-+  client="$1"
-+     else
-+  clientargs="$clientargs $1"
-+     fi
-+ else
-+     if [ x"$server" = x ] && [ x"$serverargs" = x ]; then
-+  server="$1"
-+     else
-+  serverargs="$serverargs $1"
-+     fi
-+ fi
-+ ;;
-+    --)
-+ whoseargs="server"
-+ ;;
-+    *)
-+ if [ "$whoseargs" = "client" ]; then
-+     clientargs="$clientargs $1"
-+ else
-+     # display must be the FIRST server argument
-+     if [ x"$serverargs" = x ] && \
-+   expr "$1" : ':[0-9][0-9]*$' > /dev/null 2>&1; then
-+  display="$1"
-+     else
-+  serverargs="$serverargs $1"
-+     fi
-+ fi
-+ ;;
-+    esac
-+    shift
-+done
-+
-+# process client arguments
-+if [ x"$client" = x ]; then
-+    client=$defaultclient
-+
-+    # For compatibility reasons, only use startxrc if there were no client command line arguments
-+    if [ x"$clientargs" = x ]; then
-+        if [ -f "$userclientrc" ]; then
-+            client=$userclientrc
-+        elif [ -f "$sysclientrc" ]; then
-+            client=$sysclientrc
-+        fi
-+    fi
-+fi
-+
-+# if no client arguments, use defaults
-+if [ x"$clientargs" = x ]; then
-+    clientargs=$defaultclientargs
-+fi
-+
-+# process server arguments
-+if [ x"$server" = x ]; then
-+    server=$defaultserver
-+
-+
-+    # When starting the defaultserver start X on the current tty to avoid
-+    # the startx session being seen as inactive:
-+    # "https://bugzilla.redhat.com/show_bug.cgi?id=806491"
-+    tty=$(tty)
-+    if expr match "$tty" '^/dev/tty[0-9]\+$' > /dev/null; then
-+        tty_num=$(echo "$tty" | grep -oE '[0-9]+$')
-+        vtarg="vt$tty_num"
-+    fi
-+
-+
-+    # For compatibility reasons, only use xserverrc if there were no server command line arguments
-+    if [ x"$serverargs" = x -a x"$display" = x ]; then
-+ if [ -f "$userserverrc" ]; then
-+     server=$userserverrc
-+ elif [ -f "$sysserverrc" ]; then
-+     server=$sysserverrc
-+ fi
-+    fi
-+fi
-+
-+# if no server arguments, use defaults
-+if [ x"$serverargs" = x ]; then
-+    serverargs=$defaultserverargs
-+fi
-+
-+# if no vt is specified add vtarg (which may be empty)
-+have_vtarg="no"
-+for i in $serverargs; do
-+    if expr match "$i" '^vt[0-9]\+$' > /dev/null; then
-+        have_vtarg="yes"
-+    fi
-+done
-+if [ "$have_vtarg" = "no" ]; then
-+    serverargs="$serverargs $vtarg"
-+fi
-+
-+# if no display, use default
-+if [ x"$display" = x ]; then
-+    display=$defaultdisplay
-+fi
-+
-+if [ x"$enable_xauth" = x1 ] ; then
-+    if [ x"$XAUTHORITY" = x ]; then
-+        XAUTHORITY=$HOME/.Xauthority
-+        export XAUTHORITY
-+    fi
-+
-+    removelist=
-+
-+    # set up default Xauth info for this machine
-+    case `uname` in
-+    Linux*)
-+        if [ -z "`hostname --version 2>&1 | grep GNU`" ]; then
-+            hostname=`hostname -f`
-+        else
-+            hostname=`hostname`
-+        fi
-+        ;;
-+    *)
-+        hostname=`hostname`
-+        ;;
-+    esac
-+
-+    authdisplay=${display:-:0}
-+
-+    mcookie=`/usr/bin/mcookie`
-+
-+
-+
-+
-+
-+
-+
-+    if test x"$mcookie" = x; then
-+        echo "Couldn't create cookie"
-+        exit 1
-+    fi
-+    dummy=0
-+
-+    # create a file with auth information for the server. ':0' is a dummy.
-+    xserverauthfile=$HOME/.serverauth.$$
-+    trap "rm -f '$xserverauthfile'" HUP INT QUIT ILL TRAP KILL BUS TERM
-+    xauth -q -f "$xserverauthfile" << EOF
-+add :$dummy . $mcookie
-+EOF
-+
-+
-+
-+
-+    serverargs=${serverargs}" -auth "${xserverauthfile}
-+
-+
-+    # now add the same credentials to the client authority file
-+    # if '$displayname' already exists do not overwrite it as another
-+    # server man need it. Add them to the '$xserverauthfile' instead.
-+    for displayname in $authdisplay $hostname$authdisplay; do
-+        authcookie=`xauth list "$displayname" \
-+        | sed -n "s/.*$displayname[[:space:]*].*[[:space:]*]//p"` 2>/dev/null;
-+        if [ "z${authcookie}" = "z" ] ; then
-+            xauth -q << EOF
-+add $displayname . $mcookie
-+EOF
-+        removelist="$displayname $removelist"
-+        else
-+            dummy=$(($dummy+1));
-+            xauth -q -f "$xserverauthfile" << EOF
-+add :$dummy . $authcookie
-+EOF
-+        fi
-+    done
-+fi
-+
-+
-+
-+
-+xinit "$client" $clientargs -- "$server" $display $serverargs
-+
-+retval=$?
-+
-+if [ x"$enable_xauth" = x1 ] ; then
-+    if [ x"$removelist" != x ]; then
-+        xauth remove $removelist
-+    fi
-+    if [ x"$xserverauthfile" != x ]; then
-+        rm -f "$xserverauthfile"
-+    fi
-+fi
-+
-+
-+
-+
-+
-+if command -v deallocvt > /dev/null 2>&1; then
-+    deallocvt
-+fi
-+exit $retval
-diff --git a/configs/minnowboard_max-graphical_defconfig b/configs/minnowboard_max-graphical_defconfig
-new file mode 100644
-index 000000000000..5397720d7c91
---- /dev/null
-+++ b/configs/minnowboard_max-graphical_defconfig
-@@ -0,0 +1,79 @@
-+# Architecture
-+BR2_x86_64=y
-+BR2_x86_atom=y
-+
-+# Toolchain
-+BR2_OPTIMIZE_2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-+BR2_GLIBC_VERSION_2_23=y
-+BR2_BINUTILS_VERSION_2_26_X=y
-+BR2_GCC_VERSION_5_X=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System configuration
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="tty0"
-+BR2_ROOTFS_OVERLAY="board/minnowboard/fs-overlay-graphical"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="minnowboard-max"
-+
-+# Host packages
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Linux
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-4.4.config"
-+
-+# Bootloader
-+BR2_TARGET_GRUB2=y
-+BR2_TARGET_GRUB2_X86_64_EFI=y
-+
-+# ALSA
-+BR2_PACKAGE_ALSA_UTILS=y
-+BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+
-+# OpenGL
-+BR2_PACKAGE_GLMARK2=y
-+BR2_PACKAGE_MESA3D_DEMOS=y
-+BR2_PACKAGE_MESA3D=y
-+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-+BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-+
-+# Framebuffer (just for testing purposes)
-+BR2_PACKAGE_FB_TEST_APP=y
-+
-+# X
-+BR2_PACKAGE_XORG7=y
-+BR2_PACKAGE_XSERVER_XORG_SERVER=y
-+BR2_PACKAGE_XSERVER_XORG_SERVER_AIGLX=y
-+BR2_PACKAGE_XAPP_XINIT=y
-+BR2_PACKAGE_XAPP_XRANDR=y
-+BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-+BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
-+BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
-+BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL=y
-+BR2_PACKAGE_XTERM=y
-+BR2_PACKAGE_OPENBOX=y
-+
-+# Firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-+
-+# Libraries
-+BR2_PACKAGE_IMLIB2=y
-+BR2_PACKAGE_IMLIB2_JPEG=y
-+BR2_PACKAGE_IMLIB2_PNG=y
-+BR2_PACKAGE_STARTUP_NOTIFICATION=y
-+
-+# Filesystem image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
+ savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+@@ -984,6 +988,12 @@ ifneq ($(wildcard $(BR2_EXTERNAL)/configs/*_defconfig),)
+ 	@$(foreach b, $(sort $(notdir $(wildcard $(BR2_EXTERNAL)/configs/*_defconfig))), \
+ 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
+ endif
++ifneq ($(wildcard $(BR2_EXTERNAL)/custom/configs/*_defconfig),)
++	@echo
++	@echo 'User-provided custom configs:'
++	@$(foreach b, $(sort $(notdir $(wildcard $(BR2_EXTERNAL)/custom/configs/*_defconfig))), \
++	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
++endif
+ 	@echo
+ 
+ release: OUT = buildroot-$(BR2_VERSION)
 -- 
-2.7.0
+2.6.3
