@@ -1,99 +1,176 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 20:24:09 +0200
-Subject: [Buildroot] [git commit] gdk-pixbuf: use host loaders to update the
-	cache
-Message-ID: <20160415183007.EEE407F8A5@busybox.osuosl.org>
+Date: Fri, 15 Apr 2016 20:26:51 +0200
+Subject: [Buildroot] [git commit] yajl: fix static linking in a parallel
+	build
+Message-ID: <20160415183008.267F77F8A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b1128589345d7ff9bda3861bf98e26da820a14d
+commit: https://git.buildroot.net/buildroot/commit/?id=3cfd8bf15cd8b80215bb70db28e065ff0b80437b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Unfortunately gdk-pixbuf-query-loaders doesn't understand cross loaders
-to update the cache, hence we can't use the host variant against target
-loaders since it will output an effectively empty cache, causing runtime
-failure of libgtk when finding icons.
-So make host-gdk-pixbuf functionally equivalent to the target gdk-pixbuf
-so we can run gdk-pixbuf-query-loaders against the host plugins and just
-strip the host directory to make it runtime-compatible (like was done
-before for the target directory).
+The yajl build system contains a race condition, which gets triggered by
+high BR2_JLEVEL settings - It tries to link the executable gen-extra-close
+against the shared libyajl before it is created:
 
-This is still better than trying to update at runtime, since that would
-require a writable loaders.cache file in tmpfs or rw filesystem, not to
-mention the associated additional startup time.
+[ 21%] Linking C executable gen-extra-close
+[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
+/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Fix this issue by linking gen-extra-close against the shared library in a shared
+build and the static library otherwise.
+Apply this to all other build targets from yail who are linking against the
+library, too.
+
+Fixes:
+http://autobuild.buildroot.net/results/a9b/a9b5209377acb51e69f376e0c008ee71fe00397a/
+http://autobuild.buildroot.net/results/55f/55fe22463d49addb42b635d10be5176522f4a561/
+http://autobuild.buildroot.net/results/808/808acca0cfed93465845c2aa055a7a4fc56a8a17/
+http://autobuild.buildroot.net/results/b92/b92a9c84b71a8a2d022d307245ca6be36a000e6c/
+http://autobuild.buildroot.net/results/55d/55df698ab53f7d94235166e8576eb681ed68668e/
+.. and more.
+
+Upstream status: Pending
+https://github.com/lloyd/yajl/pull/187
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ ...ink-with-shared-libyajl-in-a-shared-build.patch | 125 +++++++++++++++++++++
+ 1 file changed, 125 insertions(+)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 03594d8..36eed60 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -14,6 +14,7 @@ GDK_PIXBUF_INSTALL_STAGING = YES
- GDK_PIXBUF_DEPENDENCIES = \
- 	host-gdk-pixbuf host-libglib2 host-pkgconf \
- 	libglib2 $(if $(BR2_ENABLE_LOCALE),,libiconv)
-+HOST_GDK_PIXBUF_DEPENDENCIES = host-libpng host-pkgconf host-libglib2
- 
- GDK_PIXBUF_CONF_ENV = \
- 	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
-@@ -28,17 +29,21 @@ GDK_PIXBUF_DEPENDENCIES += libpng
- endif
- 
- ifneq ($(BR2_PACKAGE_JPEG),y)
-+HOST_GDK_PIXBUF_CONF_OPTS += --without-libjpeg
- GDK_PIXBUF_CONF_OPTS += --without-libjpeg
- else
- GDK_PIXBUF_DEPENDENCIES += jpeg
-+HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
- endif
- 
- ifneq ($(BR2_PACKAGE_TIFF),y)
- GDK_PIXBUF_CONF_OPTS += --without-libtiff
-+HOST_GDK_PIXBUF_CONF_OPTS += --without-libtiff
- else
--GDK_PIXBUF_DEPENDENCIES += tiff host-pkgconf
-+GDK_PIXBUF_DEPENDENCIES += tiff
- GDK_PIXBUF_CONF_ENV += \
- 	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
-+HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
- endif
- 
- ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
-@@ -49,14 +54,14 @@ endif
- # gdk-pixbuf requires the loaders.cache file populated to work properly
- # Rather than doing so at runtime, since the fs can be read-only, do so
- # here after building and installing to target.
--# And since the cache file will contain absolute target directory names
--# we need to sanitize (strip) them.
-+# And since the cache file will contain absolute host directory names we
-+# need to sanitize (strip) them.
- ifeq ($(BR2_STATIC_LIBS),)
- define GDK_PIXBUF_UPDATE_CACHE
--	GDK_PIXBUF_MODULEDIR=$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders \
-+	GDK_PIXBUF_MODULEDIR=$(HOST_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders \
- 		$(HOST_DIR)/usr/bin/gdk-pixbuf-query-loaders \
- 		> $(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
--	$(SED) "s,$(TARGET_DIR),,g" \
-+	$(SED) "s,$(HOST_DIR),,g" \
- 		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
- endef
- GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
-@@ -69,11 +74,4 @@ endef
- GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_DISABLE_TESTS
- 
- $(eval $(autotools-package))
--
--HOST_GDK_PIXBUF_CONF_OPTS = \
--	--without-libjpeg \
--	--without-libtiff
--
--HOST_GDK_PIXBUF_DEPENDENCIES = host-libpng host-pkgconf host-libglib2
--
- $(eval $(host-autotools-package))
+diff --git a/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch b/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
+new file mode 100644
+index 0000000..6a6e5e3
+--- /dev/null
++++ b/package/yajl/0003-Link-with-shared-libyajl-in-a-shared-build.patch
+@@ -0,0 +1,125 @@
++From 3e4c0ce8c2b4c9dad6b7ce11f017f3f639fdab27 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Sat, 9 Apr 2016 23:24:27 +0200
++Subject: [PATCH] Link with shared libyajl in a shared build
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Building yajl in a static context fails in a parallel build:
++
++[ 21%] Linking C executable gen-extra-close
++[ 26%] Building C object src/CMakeFiles/yajl_s.dir/yajl_buf.c.o
++/home/test/autobuild/instance-3/output/host/opt/ext-toolchain/bfin-uclinux/bfin-uclinux/bin/ld.real: cannot find -lyajl
++
++Fix this issue by linking against the shared libyail in a shared build. Apply
++this fix also to all other build targets who are linking against the library.
++
++Upstream status: Pending
++https://github.com/lloyd/yajl/pull/187
++
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
++---
++ example/CMakeLists.txt      | 7 ++++++-
++ perf/CMakeLists.txt         | 6 +++++-
++ reformatter/CMakeLists.txt  | 6 +++++-
++ test/api/CMakeLists.txt     | 6 +++++-
++ test/parsing/CMakeLists.txt | 6 +++++-
++ verify/CMakeLists.txt       | 6 +++++-
++ 6 files changed, 31 insertions(+), 6 deletions(-)
++
++diff --git a/example/CMakeLists.txt b/example/CMakeLists.txt
++index 0a7f622..8cfcef8 100644
++--- a/example/CMakeLists.txt
+++++ b/example/CMakeLists.txt
++@@ -20,4 +20,9 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
++ 
++ ADD_EXECUTABLE(parse_config ${SRCS})
++ 
++-TARGET_LINK_LIBRARIES(parse_config yajl_s)
+++IF(BUILD_SHARED_LIBS)
+++  TARGET_LINK_LIBRARIES(parse_config yajl)
+++ELSE()
+++  TARGET_LINK_LIBRARIES(parse_config yajl_s)
+++ENDIF()
+++
++diff --git a/perf/CMakeLists.txt b/perf/CMakeLists.txt
++index b438d7a..40ba363 100644
++--- a/perf/CMakeLists.txt
+++++ b/perf/CMakeLists.txt
++@@ -20,4 +20,8 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
++ 
++ ADD_EXECUTABLE(perftest ${SRCS})
++ 
++-TARGET_LINK_LIBRARIES(perftest yajl_s)
+++IF(BUILD_SHARED_LIBS)
+++  TARGET_LINK_LIBRARIES(perftest yajl)
+++ELSE()
+++  TARGET_LINK_LIBRARIES(perftest yajl_s)
+++ENDIF()
++diff --git a/reformatter/CMakeLists.txt b/reformatter/CMakeLists.txt
++index 52a9bee..7629094 100644
++--- a/reformatter/CMakeLists.txt
+++++ b/reformatter/CMakeLists.txt
++@@ -26,7 +26,11 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
++ 
++ ADD_EXECUTABLE(json_reformat ${SRCS})
++ 
++-TARGET_LINK_LIBRARIES(json_reformat yajl_s)
+++IF(BUILD_SHARED_LIBS)
+++  TARGET_LINK_LIBRARIES(json_reformat yajl)
+++ELSE()
+++  TARGET_LINK_LIBRARIES(json_reformat yajl_s)
+++ENDIF()
++ 
++ # In some environments, we must explicitly link libm (like qnx,
++ # thanks @shahbag)
++diff --git a/test/api/CMakeLists.txt b/test/api/CMakeLists.txt
++index e0ce2f6..9adebdc 100644
++--- a/test/api/CMakeLists.txt
+++++ b/test/api/CMakeLists.txt
++@@ -21,5 +21,9 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../${YAJL_DIST_NAME}/lib)
++ FOREACH (test ${TESTS})
++   GET_FILENAME_COMPONENT(testProg ${test} NAME_WE)
++   ADD_EXECUTABLE(${testProg} ${test})
++-  TARGET_LINK_LIBRARIES(${testProg} yajl m)
+++  IF(BUILD_SHARED_LIBS)
+++    TARGET_LINK_LIBRARIES(${testProg} yajl m)
+++  ELSE()
+++    TARGET_LINK_LIBRARIES(${testProg} yajl_s m)
+++  ENDIF()
++ ENDFOREACH()
++diff --git a/test/parsing/CMakeLists.txt b/test/parsing/CMakeLists.txt
++index c22a388..285f048 100644
++--- a/test/parsing/CMakeLists.txt
+++++ b/test/parsing/CMakeLists.txt
++@@ -20,4 +20,8 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../../${YAJL_DIST_NAME}/lib)
++ 
++ ADD_EXECUTABLE(yajl_test ${SRCS})
++ 
++-TARGET_LINK_LIBRARIES(yajl_test yajl_s)
+++IF(BUILD_SHARED_LIBS)
+++  TARGET_LINK_LIBRARIES(yajl_test yajl)
+++ELSE()
+++  TARGET_LINK_LIBRARIES(yajl_test yajl_s)
+++ENDIF()
++diff --git a/verify/CMakeLists.txt b/verify/CMakeLists.txt
++index 967fca1..06cb2dc 100644
++--- a/verify/CMakeLists.txt
+++++ b/verify/CMakeLists.txt
++@@ -26,7 +26,11 @@ LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
++ 
++ ADD_EXECUTABLE(json_verify ${SRCS})
++ 
++-TARGET_LINK_LIBRARIES(json_verify yajl_s)
+++IF(BUILD_SHARED_LIBS)
+++  TARGET_LINK_LIBRARIES(json_verify yajl)
+++ELSE()
+++  TARGET_LINK_LIBRARIES(json_verify yajl_s)
+++ENDIF()
++ 
++ # copy in the binary
++ GET_TARGET_PROPERTY(binPath json_verify LOCATION)
++-- 
++2.8.0
++
