@@ -1,31 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Apr 2016 07:34:41 +0000
-Subject: [Buildroot] [Bug 8856] python tornado runtime wasn't met on
-	buildroot 2016.02
-In-Reply-To: <bug-8856-163@https.bugs.busybox.net/>
-References: <bug-8856-163@https.bugs.busybox.net/>
-Message-ID: <bug-8856-163-dLf1HC5BFc@https.bugs.busybox.net/>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Fri, 15 Apr 2016 09:35:06 +0200
+Subject: [Buildroot] [PATCH] cannelloni: bump to version 20160414
+Message-ID: <1460705706-30224-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8856
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Looks good overall. Could you submit this as proper patches to the mailing
-list?
+Fixes:
+http://autobuild.buildroot.net/results/5e9/5e9b44435522a26ad080b7810536686cc1e47c0f/
 
-It should be two patches:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/cannelloni/cannelloni.hash | 2 +-
+ package/cannelloni/cannelloni.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- 1/ One adding the python-backports-ssl-match-hostname package
-
- 2/ One fixing the python-tornado package to select
-python-backports-ssl-match-hostname
-
-Thanks!
-
+diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
+index 826af9b..c14dceb 100644
+--- a/package/cannelloni/cannelloni.hash
++++ b/package/cannelloni/cannelloni.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  7341b76e2af056ecbcfc9fabc6e67c88234666be60f1eb099390c61bb9925856  cannelloni-v0.5.tar.gz
++sha256  fe5abb1c9e523049c48dd906603bc762cc55ccd20c16dbec7dc64163b9eefccf  cannelloni-20160414.tar.gz
+diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
+index efbe43d..680e09a 100644
+--- a/package/cannelloni/cannelloni.mk
++++ b/package/cannelloni/cannelloni.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CANNELLONI_VERSION = v0.5
++CANNELLONI_VERSION = 20160414
+ CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
+ CANNELLONI_LICENSE = GPLv2
+ CANNELLONI_LICENSE_FILES = gpl-2.0.txt
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.8.0.rc3
