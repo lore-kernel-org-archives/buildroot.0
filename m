@@ -1,111 +1,84 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Fri, 15 Apr 2016 14:59:57 +0200
-Subject: [Buildroot] [PATCH] board: add a readme for Armadeus boards.
-Message-ID: <1460725197-29678-1-git-send-email-julien.boibessot@free.fr>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Fri, 15 Apr 2016 16:32:05 +0200
+Subject: [Buildroot] [PATCH] configs: add Armadeus Systems APF6 SOM
+ basic support
+In-Reply-To: <20160415095435.7ac98177@free-electrons.com>
+References: <1460641197-12610-1-git-send-email-julien.boibessot@free.fr>
+ <20160415095435.7ac98177@free-electrons.com>
+Message-ID: <5710FB65.6080403@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Hello Thomas,
 
-Common readme.txt for all supported Armadeus boards.
+thanks for the review !
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
----
- board/armadeus/readme.txt | 83 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 board/armadeus/readme.txt
+On 15/04/2016 09:54, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 14 Apr 2016 15:39:57 +0200, julien.boibessot at free.fr wrote:
+>> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+>>
+>> APF6 is an i.MX6 based SOM with an optional Cyclone 5 GX FPGA.
+>>
+>> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+>> ---
+>>  configs/armadeus_apf6_defconfig | 27 +++++++++++++++++++++++++++
+>>  1 file changed, 27 insertions(+)
+>>  create mode 100644 configs/armadeus_apf6_defconfig
+>>
+>> diff --git a/configs/armadeus_apf6_defconfig b/configs/armadeus_apf6_defconfig
+>> new file mode 100644
+>> index 0000000..a51dd5f
+>> --- /dev/null
+>> +++ b/configs/armadeus_apf6_defconfig
+>> @@ -0,0 +1,27 @@
+>> +BR2_arm=y
+>> +BR2_cortex_a9=y
+>> +BR2_ARM_ENABLE_NEON=y
+>> +BR2_ARM_ENABLE_VFP=y
+>> +BR2_ARM_FPU_VFPV3=y
+>> +
+>> +# Linux headers same as kernel, a 3.19 series
+>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
+>> +
+>> +# System
+>> +BR2_TARGET_GENERIC_HOSTNAME="apf6"
+>> +BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+>> +
+>> +# Kernel
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.8"
+>> +BR2_LINUX_KERNEL_PATCH="http://sourceforge.net/projects/armadeus/files/armadeus/armadeus-6.0/patches/linux-3.19-armadeus.patch.tar.gz"
+>> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+>> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apf6dev imx6dl-apf6dev"
+>> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> Is it expected that you're not building any bootloader here?
 
-diff --git a/board/armadeus/readme.txt b/board/armadeus/readme.txt
-new file mode 100644
-index 0000000..57b6998
---- /dev/null
-+++ b/board/armadeus/readme.txt
-@@ -0,0 +1,83 @@
-+Intro
-+=====
-+
-+Armadeus APFxx are Systems On Module (SOM) based on Freescale/NXP i.MX
-+processors associated with an FPGA (except on APF28). Non volatile data are
-+stored in on-module NOR or NAND Flash, depending on the model.
-+These SOM can be used on Armadeus development boards or with custom docking
-+boards.
-+
-+Supported platforms
-+===================
-+
-+Buildroot currently supports the following Armadeus platforms with the
-+associated defconfigs:
-+ * APF9328 SOM + devt boards -> armadeus_apf9328_defconfig
-+ * APF27 SOM + devt board    -> armadeus_apf27_defconfig
-+ * APF51 SOM + devt board    -> armadeus_apf51_defconfig
-+ * APF28 SOM + devt board    -> armadeus_apf28_defconfig
-+
-+Vanilla Linux versions are preferred to Freescale's one in these
-+configurations.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+Let's say you own an APFxx SOM with it's corresponding development board, all
-+you have to do is:
-+
-+  $ make armadeus_apfxx_defconfig
-+where "apfxx" is the version of your SOM.
-+
-+Launch build
-+------------
-+
-+  $ make
-+
-+Result of the build
-+-------------------
-+
-+When build is finished you will endup with:
-+    output/images/
-+    ??? imx**-apfxxdev.dtb	[1]
-+    ??? rootfs.jffs2		[2]
-+    ??? rootfs.tar
-+    ??? rootfs.ubi		[2]
-+    ??? rootfs.ubifs		[2]
-+    ??? uImage
-+
-+[1] Only if kernel version of SOM is supporting device tree.
-+[2] .ubi/.ubifs images are not available on APF9328 and replaced by a .jffs2
-+    one in this case.
-+
-+U-Boot building is currently not supported in these configurations.
-+
-+Installation
-+============
-+
-+You will require a serial connection to the board and a TFTP server on your
-+Host PC. Supposing your server is configured for exporting /tftpboot/
-+directory, you will have to copy generated images to it:
-+
-+  $ cp output/images/uImage /tftpboot/apfxx-linux.bin
-+  $ cp output/images/*.dtb /tftpboot/
-+  $ cp output/images/rootfs.ubi /tftpboot/apfxx-rootfs.ubi
-+  $ cp output/images/rootfs.jffs2 /tftpboot/apfxx-rootfs.jffs2
-+where "apfxx" is the version of your SOM, as used with _defconfigs.
-+
-+Then on your serial terminal, all you have to do is:
-+* interrupt the boot process and access U-Boot console by pressing any key
-+  when booting,
-+* configure board and server IP addresses with "ipaddr" and "serverip" envt
-+  variables,
-+* if you want to update kernel:
-+  BIOS > run update_kernel
-+* if you want to update device tree:
-+  BIOS > run update_dtb
-+* if you want to update rootfs:
-+  BIOS > run update_rootfs
-+
-+That's it !
--- 
-2.1.4
+yes. it doesn't work for the moment with latest BR.
+
+>
+> Also, this needs a readme.txt to explain how to use this defconfig. If
+> you're putting off SD card, then please use genimage to generate a
+> complete SD card image. If you're booting out of NAND, please include
+> instructions on how to flash the resulting system.
+
+Yes you're right I was a little short on comments.
+APF6 has an onboard eMMC, so no need for genimage to build basic rootfs.
+
+>
+> But does it make sense to have a defconfig for a SOM ? A SOM as-is
+> generally can't be booted, it needs to be put on some base-board,
+> right ?
+
+Nop, of course support includes development boards and it will be more
+explicit in my next patch.
+
+Best regards,
+Julien
