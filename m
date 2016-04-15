@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 09:43:05 +0200
-Subject: [Buildroot] [PATCH] luvi: bump to version 2.7.0
-In-Reply-To: <1460704407-6230-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1460704407-6230-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160415094305.030e2214@free-electrons.com>
+Date: Fri, 15 Apr 2016 09:43:29 +0200
+Subject: [Buildroot] [PATCH] cannelloni: bump to version 20160414
+In-Reply-To: <1460705706-30224-1-git-send-email-yegorslists@googlemail.com>
+References: <1460705706-30224-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <20160415094329.6241bda4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 15 Apr 2016 09:13:27 +0200, J?rg Krause wrote:
-> Add a patch from upstream [1] to fix CMake build error when building with option
-> "WithSharedLibluv=ON".
+On Fri, 15 Apr 2016 09:35:06 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> [1]
-> https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241
+> Fixes:
+> http://autobuild.buildroot.net/results/5e9/5e9b44435522a26ad080b7810536686cc1e47c0f/
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/luvi/luvi.hash | 3 ++-
->  package/luvi/luvi.mk   | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>  package/cannelloni/cannelloni.hash | 2 +-
+>  package/cannelloni/cannelloni.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
