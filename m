@@ -1,85 +1,158 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 09:38:57 +0200
-Subject: [Buildroot] [git commit] qt: Fix musl build
-Message-ID: <20160415073906.2102A81DDB@busybox.osuosl.org>
+Date: Fri, 15 Apr 2016 09:42:16 +0200
+Subject: [Buildroot] [git commit] qt: fix static linking
+Message-ID: <20160415074220.EA56581E71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=036a1aaaa69f95853c58df6287519edbc9e82c80
+commit: https://git.buildroot.net/buildroot/commit/?id=92180f7fe14e293bb9edad61024691e76c7aff97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This helps to make sure that QT_SOCKLEN_T is defined to be 'int' only for legacy
-glibc < 2 and not also for other libraries which may define it as per standards
-but are not glibc, e.g. musl.
+`-ldl` option is used unconditionally in `QMAKE_LIBS_DYNLOAD` while libdl is
+not supported when libc is static. As the value of `QMAKE_LIBS_DYNLOAD` goes
+into 'Libs.private' field of the pkgconfig files created by qmake, static
+linking with qt will fail with:
+  /usr/bin/ld: cannot find -ldl
 
-Fixes the following build error:
-In file included from ../../include/QtNetwork/private/qnet_unix_p.h:1:0,
-                 from kernel/qnetworkinterface_unix.cpp:46:
-../../include/QtNetwork/private/../../../src/network/socket/qnet_unix_p.h: In function 'int qt_safe_accept(int, sockaddr*, int*, int)':
-../../include/QtNetwork/private/../../../src/network/socket/qnet_unix_p.h:121:76: error: invalid conversion from 'int*' to 'socklen_t* {aka unsigned int*}' [-fpermissive]
+Fix this issue by adding a build test to configure to check if libdl is
+supported. `QMAKE_LIBS_DYNLOAD` in "src/corelib/plugin/plugin.pri" is now used
+only if libdl is available.
 
 Fixes:
-http://autobuild.buildroot.net/results/709/709d547699596d09b4601a7940677d2010adeedf/
-http://autobuild.buildroot.net/results/f05/f0589e1d06404a7bd57f5734228afe45164e553d/
+http://autobuild.buildroot.net/results/459/4596b9c69cbc387f1071c730aaac76723afaa853/
+http://autobuild.buildroot.net/results/459/4596b9c69cbc387f1071c730aaac76723afaa853/
 
 Backported from Qt5:
-https://github.com/qtproject/qtbase/commit/813f468a14fb84af43c1f8fc0a1430277358eba2
+https://github.com/qtproject/qtbase/commit/f669ea0d54302de31456d57286aa0e4ca1443e98
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- ...tform-socklen_t-on-other-C-libraries-than.patch | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ ...with-ldl-option-only-when-it-is-supported.patch | 116 +++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
 
-diff --git a/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch b/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
+diff --git a/package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch b/package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch
 new file mode 100644
-index 0000000..9b16553
+index 0000000..f3d47f7
 --- /dev/null
-+++ b/package/qt/0010-Fix-for-platform-socklen_t-on-other-C-libraries-than.patch
-@@ -0,0 +1,43 @@
-+From 0bf90de93b9fe21df32319e27b2507154fa8a21d Mon Sep 17 00:00:00 2001
++++ b/package/qt/0011-Link-with-ldl-option-only-when-it-is-supported.patch
+@@ -0,0 +1,116 @@
++From 438f088ad520ac91ae47dba9a515ab0d1088c89c Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Fri, 15 Apr 2016 00:37:26 +0200
-+Subject: [PATCH] Fix for platform socklen_t on other C libraries than glibc
++Date: Fri, 15 Apr 2016 03:32:02 +0200
++Subject: [PATCH] Link with -ldl option only when it is supported
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+This helps to make sure that QT_SOCKLEN_T is defined to be 'int'
-+only when its glibc < 2 and not also for the libraries which may define
-+it as per standards but are not glibc, e.g. musl.
++`-ldl` option is used unconditionally in `QMAKE_LIBS_DYNLOAD` while libdl is
++not supported when libc is static. As the value of `QMAKE_LIBS_DYNLOAD` goes
++into 'Libs.private' field of the pkgconfig files created by qmake, static
++linking with qt will fail with:
++  /usr/bin/ld: cannot find -ldl
 +
-+This patch is adapted from Qt5 [1].
++Fix this issue by adding a build test to configure to check if libdl is
++supported. `QMAKE_LIBS_DYNLOAD` in "src/corelib/plugin/plugin.pri" is now used
++only if libdl is available.
 +
-+[1]
-+https://github.com/qtproject/qtbase/commit/813f468a14fb84af43c1f8fc0a1430277358eba2
++Backported from Qt5:
++https://github.com/qtproject/qtbase/commit/f669ea0d54302de31456d57286aa0e4ca1443e98
 +
 +Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +---
-+ mkspecs/linux-g++/qplatformdefs.h | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++ config.tests/unix/libdl/libdl.cpp | 39 +++++++++++++++++++++++++++++++++++++++
++ config.tests/unix/libdl/libdl.pro |  3 +++
++ configure                         |  6 ++++++
++ src/corelib/plugin/plugin.pri     |  2 +-
++ 4 files changed, 49 insertions(+), 1 deletion(-)
++ create mode 100644 config.tests/unix/libdl/libdl.cpp
++ create mode 100644 config.tests/unix/libdl/libdl.pro
 +
-+diff --git a/mkspecs/linux-g++/qplatformdefs.h b/mkspecs/linux-g++/qplatformdefs.h
-+index de751dd..d4146ed 100644
-+--- a/mkspecs/linux-g++/qplatformdefs.h
-++++ b/mkspecs/linux-g++/qplatformdefs.h
-+@@ -86,10 +86,10 @@
++diff --git a/config.tests/unix/libdl/libdl.cpp b/config.tests/unix/libdl/libdl.cpp
++new file mode 100644
++index 0000000..28a8233
++--- /dev/null
+++++ b/config.tests/unix/libdl/libdl.cpp
++@@ -0,0 +1,39 @@
+++/****************************************************************************
+++**
+++** Copyright (C) 2015 The Qt Company Ltd.
+++** Contact: http://www.qt.io/licensing/
+++**
+++** This file is part of the config.tests of the Qt Toolkit.
+++**
+++** $QT_BEGIN_LICENSE:LGPL21$
+++** Commercial License Usage
+++** Licensees holding valid commercial Qt licenses may use this file in
+++** accordance with the commercial license agreement provided with the
+++** Software or, alternatively, in accordance with the terms contained in
+++** a written agreement between you and The Qt Company. For licensing terms
+++** and conditions see http://www.qt.io/terms-conditions. For further
+++** information use the contact form at http://www.qt.io/contact-us.
+++**
+++** GNU Lesser General Public License Usage
+++** Alternatively, this file may be used under the terms of the GNU Lesser
+++** General Public License version 2.1 or version 3 as published by the Free
+++** Software Foundation and appearing in the file LICENSE.LGPLv21 and
+++** LICENSE.LGPLv3 included in the packaging of this file. Please review the
+++** following information to ensure the GNU Lesser General Public License
+++** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
+++** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+++**
+++** As a special exception, The Qt Company gives you certain additional
+++** rights. These rights are described in The Qt Company LGPL Exception
+++** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+++**
+++** $QT_END_LICENSE$
+++**
+++****************************************************************************/
+++
+++#include <dlfcn.h>
+++
+++int main(int, char **)
+++{
+++    dlopen(0, 0);
+++}
++diff --git a/config.tests/unix/libdl/libdl.pro b/config.tests/unix/libdl/libdl.pro
++new file mode 100644
++index 0000000..a643934
++--- /dev/null
+++++ b/config.tests/unix/libdl/libdl.pro
++@@ -0,0 +1,3 @@
+++SOURCES = libdl.cpp
+++CONFIG -= qt dylib
+++LIBS += -ldl
++\ No newline at end of file
++diff --git a/configure b/configure
++index 10ad7ca..1c70691 100755
++--- a/configure
+++++ b/configure
++@@ -5506,6 +5506,12 @@ if [ "$CFG_LIBPNG" = "auto" ]; then
++     fi
++ fi
 + 
-+ #undef QT_SOCKLEN_T
+++# detect dl
+++if ! compileTest unix/libdl "libdl"; then
+++    QMakeVar add DEFINES QT_NO_DYNAMIC_LIBRARY
+++    QMAKE_CONFIG="$QMAKE_CONFIG no-libdl"
+++fi
+++
++ # detect accessibility
++ if [ "$CFG_ACCESSIBILITY" = "auto" ]; then
++     if [ "$XPLATFORM_SYMBIAN" = "yes" ]; then
++diff --git a/src/corelib/plugin/plugin.pri b/src/corelib/plugin/plugin.pri
++index eb7a7f7..c342f2e 100644
++--- a/src/corelib/plugin/plugin.pri
+++++ b/src/corelib/plugin/plugin.pri
++@@ -32,4 +32,4 @@ integrity {
++ 	SOURCES += plugin/qlibrary_unix.cpp
++ }
 + 
-+-#if defined(__GLIBC__) && (__GLIBC__ >= 2)
-+-#define QT_SOCKLEN_T            socklen_t
-+-#else
-++#if defined(__GLIBC__) && (__GLIBC__ < 2)
-+ #define QT_SOCKLEN_T            int
-++#else
-++#define QT_SOCKLEN_T            socklen_t
-+ #endif
-+ 
-+ #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE >= 500)
++-LIBS_PRIVATE += $$QMAKE_LIBS_DYNLOAD
+++!no-libdl: LIBS_PRIVATE += $$QMAKE_LIBS_DYNLOAD
 +-- 
 +2.8.0
 +
