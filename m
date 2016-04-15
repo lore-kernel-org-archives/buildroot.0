@@ -1,26 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 11:31:45 +0200
-Subject: [Buildroot] [PATCH] gutenprint: fix host build when libusb found
-In-Reply-To: <20160402184733.GA8155@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Sat, 2 Apr 2016 20:47:33 +0200")
-References: <20160402184733.GA8155@waldemar-brodkorb.de>
-Message-ID: <87oa9bgqv2.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Apr 2016 11:48:43 +0200
+Subject: [Buildroot] [git commit] s6lx9_microboard_defconfig: lock kernel
+	version
+Message-ID: <20160415095135.4598B8011C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7760b947c67e260f54c171bf14329d7e0bcd8d02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Allow to disable USB support, otherwise host build breaks when
- > libusb is found as installation tries to install to /usr.
- > Fixes following autobuild error:
- > http://autobuild.buildroot.net/results/081b3be918ac1eaa8cfbc5919e00bc1ea267c1df/
+Fixes https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/123187960
 
-Hmm, but why does that end up with /usr and not $(HOST_DIR)/usr? Is it
-picking up a libusb.pc from your host or is our host-libusb .pc file
-wrong?
+The defconfig broke after we moved the default kernel version to 4.5.x. Fix
+it by locking the kernel version in the defconfig.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/s6lx9_microboard_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
+index 06a3ed3..f77c80b 100644
+--- a/configs/s6lx9_microboard_defconfig
++++ b/configs/s6lx9_microboard_defconfig
+@@ -6,6 +6,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+ BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.7"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
+ BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
