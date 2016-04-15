@@ -1,70 +1,68 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 15 Apr 2016 17:45:37 +0200
-Subject: [Buildroot] [PATCH] configs: add Armadeus Systems APF6 SOM
- basic support
-In-Reply-To: <20160415171741.0f2f29cc@free-electrons.com>
-References: <1460641197-12610-1-git-send-email-julien.boibessot@free.fr>	<20160415095435.7ac98177@free-electrons.com>	<5710FB65.6080403@free.fr>
- <20160415171741.0f2f29cc@free-electrons.com>
-Message-ID: <57110CA1.3050101@free.fr>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Fri, 15 Apr 2016 12:56:03 -0300
+Subject: [Buildroot] [PATCH v2 0/4] Minnowboard: The grand unification
+Message-ID: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Following Arnout comments, here's a patchset that first unifies
+the Minnowboard board support, and then adds a "graphics &
+audio, yet minimum" defconfig.
 
-On 15/04/2016 17:17, Thomas Petazzoni wrote:
-> Hello,
->
-> On Fri, 15 Apr 2016 16:32:05 +0200, Julien Boibessot wrote:
->
->>> Is it expected that you're not building any bootloader here?
->> yes. it doesn't work for the moment with latest BR.
-> It works with an older Buildroot? What is the problem you encounter?
+The idea with this graphical_defconfig is to provide an X-based
+system, with ALSA audio and OpenGL enabled, at its minimum
+expression.
 
-cf my previous RFC/PATCH commented by Arnout yesterday evening
-(https://patchwork.ozlabs.org/patch/610481/):
-we need to download patches to build U-Boot and BR dl infra complains
-about missing hash.
+Regarding the Minnowboard board support unification, it's worth
+mentioning that it's possible to use the same kernel on both.
+However, a couple reasons made me retain the current choices:
 
->
->>> Also, this needs a readme.txt to explain how to use this defconfig. If
->>> you're putting off SD card, then please use genimage to generate a
->>> complete SD card image. If you're booting out of NAND, please include
->>> instructions on how to flash the resulting system.
->> Yes you're right I was a little short on comments.
->> APF6 has an onboard eMMC, so no need for genimage to build basic rootfs.
-> Hm, isn't genimage capable of building a complete image for an eMMC ?
+  * It is desirable to use upstream, when possible. Hence,
+    we use upstream v4.4 for the Minnowboard MAX.
 
-Well for me no. eMMC are physically partionned and I don't think you can
-flash a big file with everything inside.
-I don't remember with who I had this discussion during BRDD on February :-)
-Internally we use genimage to build a kernel+rootfs image for "user
-dat"a partition of our eMMC but it's only for factory purpose and I'm
-not sure I have to complicate the defconfig for something no one uses.
-Should I ?
-(http://www.armadeus.com/wiki/index.php?title=EMMC)
+  * The original Minnowboard has some GPIO keys that are
+    not supported upstream. Using out-of-tree patches sucks
+    because we need to carry them over when bumping, so I
+    decided to just stick with the v3.8 yocto kernel.
 
->
-> In any case, you should include a readme.txt that documents how to
-> flash the resulting system on the board.
+There's a changelog on each patch, with some more detailed changes.
 
-yeap that's the goal of the patch I sent this afternoon:
-https://patchwork.ozlabs.org/patch/610964/
-Once accepted, I will update it in next version on my APF6 patch.
+Ezequiel Garcia (4):
+  board/minnowboard: Rework to generate SD card image
+  board/minnowboard: Unify Minnowboard and Minnowboard MAX boards
+  board/minnowboard-max: Add more peripherals and features to the kernel
+  board/minnowboard-max: Add a X-based graphical defconfig
 
-Thanks !
+ board/minnowboard-max/post-build.sh                |   2 -
+ board/minnowboard-max/readme.txt                   |  25 ---
+ .../fs-overlay-graphical/etc/asound.conf           |   4 +
+ .../minnowboard/fs-overlay-graphical/root/.xinitrc |   1 +
+ .../fs-overlay-graphical/usr/bin/startx            | 248 +++++++++++++++++++++
+ .../{minnowboard-max => minnowboard}/genimage.cfg  |   0
+ .../grub-minnowboard-max.cfg}                      |   0
+ .../minnowboard/{grub.cfg => grub-minnowboard.cfg} |   0
+ .../linux.config => minnowboard/linux-4.4.config}  |  10 +
+ board/minnowboard/post-build.sh                    |   5 +-
+ .../{minnowboard-max => minnowboard}/post-image.sh |   2 +-
+ board/minnowboard/readme.txt                       |  39 ++--
+ configs/minnowboard_defconfig                      |  10 +
+ configs/minnowboard_max-graphical_defconfig        |  79 +++++++
+ configs/minnowboard_max_defconfig                  |   7 +-
+ 15 files changed, 375 insertions(+), 57 deletions(-)
+ delete mode 100755 board/minnowboard-max/post-build.sh
+ delete mode 100644 board/minnowboard-max/readme.txt
+ create mode 100644 board/minnowboard/fs-overlay-graphical/etc/asound.conf
+ create mode 100644 board/minnowboard/fs-overlay-graphical/root/.xinitrc
+ create mode 100755 board/minnowboard/fs-overlay-graphical/usr/bin/startx
+ rename board/{minnowboard-max => minnowboard}/genimage.cfg (100%)
+ rename board/{minnowboard-max/grub.cfg => minnowboard/grub-minnowboard-max.cfg} (100%)
+ rename board/minnowboard/{grub.cfg => grub-minnowboard.cfg} (100%)
+ rename board/{minnowboard-max/linux.config => minnowboard/linux-4.4.config} (79%)
+ rename board/{minnowboard-max => minnowboard}/post-image.sh (84%)
+ create mode 100644 configs/minnowboard_max-graphical_defconfig
 
-Regards,
-Julien
-
->
->>> But does it make sense to have a defconfig for a SOM ? A SOM as-is
->>> generally can't be booted, it needs to be put on some base-board,
->>> right ?
->> Nop, of course support includes development boards and it will be more
->> explicit in my next patch.
-> Thanks.
->
-> Thomas
+-- 
+2.7.0
