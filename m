@@ -1,44 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 09:43:14 +0200
-Subject: [Buildroot] [git commit] cannelloni: bump to version 20160414
-Message-ID: <20160415074319.393B3807BE@busybox.osuosl.org>
+Date: Fri, 15 Apr 2016 09:43:05 +0200
+Subject: [Buildroot] [PATCH] luvi: bump to version 2.7.0
+In-Reply-To: <1460704407-6230-1-git-send-email-joerg.krause@embedded.rocks>
+References: <1460704407-6230-1-git-send-email-joerg.krause@embedded.rocks>
+Message-ID: <20160415094305.030e2214@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6c40619006e78db7bd6ac10660f17803b2f1352
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/5e9/5e9b44435522a26ad080b7810536686cc1e47c0f/
+On Fri, 15 Apr 2016 09:13:27 +0200, J?rg Krause wrote:
+> Add a patch from upstream [1] to fix CMake build error when building with option
+> "WithSharedLibluv=ON".
+> 
+> [1]
+> https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> ---
+>  package/luvi/luvi.hash | 3 ++-
+>  package/luvi/luvi.mk   | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/cannelloni/cannelloni.hash | 2 +-
- package/cannelloni/cannelloni.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/cannelloni/cannelloni.hash b/package/cannelloni/cannelloni.hash
-index 826af9b..c14dceb 100644
---- a/package/cannelloni/cannelloni.hash
-+++ b/package/cannelloni/cannelloni.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  7341b76e2af056ecbcfc9fabc6e67c88234666be60f1eb099390c61bb9925856  cannelloni-v0.5.tar.gz
-+sha256  fe5abb1c9e523049c48dd906603bc762cc55ccd20c16dbec7dc64163b9eefccf  cannelloni-20160414.tar.gz
-diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
-index efbe43d..680e09a 100644
---- a/package/cannelloni/cannelloni.mk
-+++ b/package/cannelloni/cannelloni.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CANNELLONI_VERSION = v0.5
-+CANNELLONI_VERSION = 20160414
- CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
- CANNELLONI_LICENSE = GPLv2
- CANNELLONI_LICENSE_FILES = gpl-2.0.txt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
