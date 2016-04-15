@@ -1,39 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 21:46:12 +0200
-Subject: [Buildroot] [git commit] configs/minnowboard_max: configure
-	eth0 through dhcp
-In-Reply-To: <CAAEAJfDQOgb1rGQQw5rXdPqrGW1ZYdAr__zG1O8DicDvJwQjuQ@mail.gmail.com>
- (Ezequiel Garcia's message of "Fri, 15 Apr 2016 16:23:23 -0300")
-References: <20160415081911.5BA4A80338@busybox.osuosl.org>
- <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
- <8737qmhf5u.fsf@dell.be.48ers.dk>
- <CAAEAJfDQOgb1rGQQw5rXdPqrGW1ZYdAr__zG1O8DicDvJwQjuQ@mail.gmail.com>
-Message-ID: <87y48efyez.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Apr 2016 22:01:07 +0200
+Subject: [Buildroot] [PATCH v2 4/4] board/minnowboard-max: Add a X-based
+ graphical defconfig
+In-Reply-To: <1460735767-2577-5-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1460735767-2577-5-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <20160415220107.585d1fb2@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
+Hello,
 
- >> > Any reason why you are only doing this change for the Minnowboard MAX,
- >> > and not also the Minnowboard?
- >> 
- >> Only the fact that I have a max, but not one of the original
- >> minnowboards, so I couldn't test it.
- >> 
- >> Do you have one of the old ones? If not, I believe Thomas does.
- >> 
+On Fri, 15 Apr 2016 12:56:07 -0300, Ezequiel Garcia wrote:
 
- > Hm, no I don't. But I'm pretty sure it has eth0 :-)
+>  .../fs-overlay-graphical/usr/bin/startx            | 248 +++++++++++++++++++++
 
-I guess so too, but E.G. the realtek on the max needs firmware to be
-loaded so I didn't want to make any changes without being able to test
-it.
+This script looks really long and complicated. Where does it come from?
+Is it really specific to the Minnowboard?
 
-Thomas, do you still have your board?
+Another open question is whether we should add some details in
+readme.txt about this configuration, like which demos are provided,
+example commands to run to test the whole thing, etc.
 
+Thanks!
+
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
