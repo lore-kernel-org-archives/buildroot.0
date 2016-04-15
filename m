@@ -1,50 +1,523 @@
-From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 15 Apr 2016 13:18:05 -0300
-Subject: [Buildroot] [git commit] configs/minnowboard_max: configure
- eth0 through dhcp
-In-Reply-To: <20160415081911.5BA4A80338@busybox.osuosl.org>
-References: <20160415081911.5BA4A80338@busybox.osuosl.org>
-Message-ID: <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
+From: Kinsella, Ray <ray.kinsella@intel.com>
+Date: Fri, 15 Apr 2016 17:38:55 +0000
+Subject: [Buildroot] [PATCH] package/wview: New Package
+In-Reply-To: <20160306163440.63daf3fe@free-electrons.com>
+References: <1453220588.3109.36.camel@intel.com>
+ <20160306163440.63daf3fe@free-electrons.com>
+Message-ID: <1460741934.3046.22.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 15 April 2016 at 05:17, Peter Korsgaard <peter@korsgaard.com> wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=ba40ce77ea7babb36a74adeb4772b54142f86975
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> The minnowboard max board has an ethernet port, so configure it at startup.
->
+Hi Thomas, 
 
-Any reason why you are only doing this change for the Minnowboard MAX,
-and not also the Minnowboard?
+Sorry I only saw your response to this email now.  Clearly I messed up
+badly when building this before sending this patch, apologies.  
+ 
+Much of the feedback below is already done, the rest I will sort out
+before sending a v2. 
 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  configs/minnowboard_max_defconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
-> index 05df987..dfa1b6c 100644
-> --- a/configs/minnowboard_max_defconfig
-> +++ b/configs/minnowboard_max_defconfig
-> @@ -4,6 +4,7 @@ BR2_x86_atom=y
->
->  # Misc
->  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-> +BR2_SYSTEM_DHCP="eth0"
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard-max/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard-max/post-image.sh"
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+( BTW I was trying to reuse a system daemon script from WVIEW - clearly
+a bad idea, I will write one from scratch ). 
+
+Ray K
+
+On Sun, 2016-03-06 at 16:34 +0100, Thomas Petazzoni wrote:
+> Ray,
+> 
+> I'm sorry, but this patch is far, far from being ready. To be honest,
+> I am not even sure you even tested it considering the numerous issues 
+> I found. See below.
+> 
+> > diff --git a/package/Config.in b/package/Config.in
+> > index b971494..be2b0ba 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -1279,6 +1279,7 @@ menu "Miscellaneous"
+> >         source "package/snowball-init/Config.in"
+> >         source "package/wine/Config.in"
+> >         source "package/xutil_util-macros/Config.in"
+> > +        source "package/wview/Config.in"
+> 
+> Wrong indentation, alphabetic ordering not sepected.
+
+Will fix. 
+
+> 
+> >  endmenu
+> > 
+> >  menu "Networking applications"
+> > diff --git a/package/wview/0001-fix-absolute-path.patch
+> > b/package/wview/0001-fix-absolute-path.patch
+> > new file mode 100644
+> > index 0000000..d0ccced
+> > --- /dev/null
+> > +++ b/package/wview/0001-fix-absolute-path.patch
+> 
+> Patch lacks description + SoB.
+
+Fixed + Fixed.
+
+> 
+> > @@ -0,0 +1,220 @@
+> > +diff -Naur a/alarms/Makefile.am b/alarms/Makefile.am
+> > +--- a/alarms/Makefile.am       2014-05-28 01:22:49.000000000 +0100
+> > ++++ b/alarms/Makefile.am       2016-01-18 15:40:26.229746967 +0000
+> > +@@ -39,6 +39,5 @@
+> > + wvalarmd_LDFLAGS = -L$(prefix)/lib -L/usr/lib
+> 
+> The -L/usr/lib is quite certainly the thing to remove. So should
+> -L$(prefix)/lib, as prefix=/usr, so it would become -L/usr/lib as
+> well.
+> Please fix this globally.
+
+Fixed across the board. 
+
+> 
+> > diff --git a/package/wview/Config.in b/package/wview/Config.in
+> > new file mode 100644
+> > index 0000000..a0f0bc9
+> > --- /dev/null
+> > +++ b/package/wview/Config.in
+> > @@ -0,0 +1,23 @@
+> > +comment "wview needs a toolchain w/ C++, wchar and udev /dev
+> > management"
+> > +       depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR &&
+> > BR2_PACKAGE_HAS_UDEV)
+> 
+> We normally write such conditions as:
+> 
+> 	depends on !<foo> || !<bar> || !<baz>
+
+Fixed
+
+> > +
+> > +config BR2_PACKAGE_WVIEW
+> > +       bool "wview"
+> > +       depends on BR2_INSTALL_LIBSTDCPP
+> > +       depends on BR2_USE_WCHAR
+> > +       depends on BR2_PACKAGE_HAS_UDEV
+> > +       depends on BR2_PACKAGE_APACHE
+> 
+> Why ?
+
+The daemon have a dependency on a webserver.
+It uses apache + php to generate rolling graphs. 
+AUTOTOOLs checks for them as I remember.  
+
+> 
+> > +       depends on BR2_PACKAGE_PHP
+> 
+> Why ?
+
+as above ... 
+
+> 
+> > +       select BR2_PACKAGE_RADLIB
+> 
+> There is no such package in Buildroot.
+
+radklib v5 is on the mailing list. 
+
+> 
+> > +       select BR2_PACKAGE_LIBCURL
+> > +       select BR2_PACKAGE_GD
+> > +       select BR2_PACKAGE_LIBPNG
+> > +       select BR2_PACKAGE_LIBUSB
+> > +       select BR2_PACKAGE_OPENSSL
+> 
+> The package also needs sqlite, as can be seen in its configure
+> script:
+> 
+> AC_CHECK_LIB([sqlite3], [sqlite3_open], [], [echo "libsqlite3 is
+> missing!";exit -1])
+
+Let me look into that one, it may not be accurate. 
+
+> 
+> Thread support is also needed, as can be seen in the configure
+> script:
+> 
+> AC_CHECK_LIB([pthread], [pthread_create], [], [echo "libpthread is
+> missing!";exit -1])
+
+Will look into this.
+
+> 
+> > +       help
+> > +            wview is a collection of unix daemons which interface
+> > with a
+> > +            supported weather station to retrieve archive records
+> > +            (if generated by the station) and current conditions.
+> > +
+> > +            http://sourceforge.net/projects/radlib/
+> 
+> Is this the right URL ?
+
+Have fixed
+
+> > diff --git a/package/wview/S61wview b/package/wview/S61wview
+> > new file mode 100644
+> > index 0000000..c64a014
+> > --- /dev/null
+> > +++ b/package/wview/S61wview
+> > @@ -0,0 +1,205 @@
+> > +#!/bin/sh
+> > +
+> > +# add to the shared library search path
+> > +export LD_LIBRARY_PATH=/lib:/usr/lib
+> 
+> Not needed.
+
+ok 
+
+> 
+> > +CONF_DIRECTORY=/etc/wview
+> > +RUN_DIRECTORY=/var/wview
+> > +WVIEW_INSTALL_DIR=/usr/bin
+> > +# chkconfig: - 89 11
+> 
+> Not needed.
+
+ok
+
+> 
+> > +# description: wview is a unix weather program
+> > +#
+> > +# wview          Start/Stop the wview daemons
+> > +#
+> > +# processnames: wviewd htmlgend wviewftpd wvalarmd wvcwopd
+> > wviewsshd wvhttpd
+> > +# config: $prefix/etc/wview
+> > +# pidfiles: $prefix/var/wview/*.pid
+> > +
+> > +# Source function library:
+> > +#. /etc/init.d/functions
+> 
+> Not needed.
+
+ok
+
+> > +
+> > +WVIEWD_FILE=`cat $CONF_DIRECTORY/wview-binary`
+> > +WVIEWD_BIN=$WVIEW_INSTALL_DIR/$WVIEWD_FILE
+> > +test -x $WVIEWD_BIN || exit 5
+> > +
+> > +HTMLD_BIN=$WVIEW_INSTALL_DIR/htmlgend
+> > +test -x $HTMLD_BIN || exit 6
+> > +
+> > +FTPD_BIN=$WVIEW_INSTALL_DIR/wviewftpd
+> > +test -x $FTPD_BIN || exit 7
+> > +
+> > +SSHD_BIN=$WVIEW_INSTALL_DIR/wviewsshd
+> > +test -x $SSHD_BIN || exit 7
+> > +
+> > +ALARMD_BIN=$WVIEW_INSTALL_DIR/wvalarmd
+> > +test -x $ALARMD_BIN || exit 8
+> > +
+> > +CWOPD_BIN=$WVIEW_INSTALL_DIR/wvcwopd
+> > +test -x $CWOPD_BIN || exit 9
+> 
+> All those checks are useless, we now Buildroot will have installed
+> those binaries.
+
+ok
+
+> 
+> > +HTTP_BIN=$WVIEW_INSTALL_DIR/wvhttpd
+> > +
+> > +SQLD_BIN=$WVIEW_INSTALL_DIR/wviewsqld
+> > +
+> > +RADROUTER_BIN=$WVIEW_INSTALL_DIR/radmrouted
+> > +
+> > +PMOND_BIN=$WVIEW_INSTALL_DIR/wvpmond
+> > +test -x $PMOND_BIN || exit 10
+> > +
+> > +WVIEWD_PID=$RUN_DIRECTORY/wviewd.pid
+> > +HTMLD_PID=$RUN_DIRECTORY/htmlgend.pid
+> > +FTPD_PID=$RUN_DIRECTORY/wviewftpd.pid
+> > +SSHD_PID=$RUN_DIRECTORY/wviewsshd.pid
+> > +ALARMD_PID=$RUN_DIRECTORY/wvalarmd.pid
+> > +CWOPD_PID=$RUN_DIRECTORY/wvcwopd.pid
+> > +HTTP_PID=$RUN_DIRECTORY/wvhttpd.pid
+> > +SQLD_PID=$RUN_DIRECTORY/wviewsqld.pid
+> > +RADROUTER_PID=$RUN_DIRECTORY/radmrouted.pid
+> > +PMOND_PID=$RUN_DIRECTORY/wvpmond.pid
+> > +
+> > +wait_for_time_set() {
+> > +    THOUSAND=1000
+> > +    CURRVAL=`date +%s`
+> > +    while [ "$CURRVAL" -lt "$THOUSAND" ]; do
+> > +        sleep 1
+> > +        CURRVAL=`date +%s`
+> > +    done
+> > +}
+> 
+> Why is this needed ?
+
+I will investigate. 
+
+> > +
+> > +kill_running_processes() {
+> > +       if [ -f $RADROUTER_PID ]; then
+> > +               echo "radlib router pid file $RADROUTER_PID exists 
+> > - killing existing process"
+> > +               kill -15 `cat $RADROUTER_PID`
+> > +               rm -f $RADROUTER_PID
+> > +       fi
+> > +       if [ -f $WVIEWD_PID ]; then
+> > +               echo "wviewd pid file $WVIEWD_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $WVIEWD_PID`
+> > +               rm -f $WVIEWD_PID
+> > +       fi
+> > +       if [ -f $HTMLD_PID ]; then
+> > +               echo "htmlgend pid file $HTMLD_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $HTMLD_PID`
+> > +               rm -f $HTMLD_PID
+> > +       fi
+> > +       if [ -f $FTPD_PID ]; then
+> > +               echo "wviewftpd pid file $FTPD_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $FTPD_PID`
+> > +               rm -f $FTPD_PID
+> > +       fi
+> > +       if [ -f $SSHD_PID ]; then
+> > +               echo "wviewsshd pid file $SSHD_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $SSHD_PID`
+> > +               rm -f $SSHD_PID
+> > +       fi
+> > +       if [ -f $ALARMD_PID ]; then
+> > +               echo "wvalarmd pid file $ALARMD_PID exists -
+> > killing existing process"
+> > +               kill -15 `cat $ALARMD_PID`
+> > +               rm -f $ALARMD_PID
+> > +       fi
+> > +       if [ -f $CWOPD_PID ]; then
+> > +               echo "wvcwopd pid file $CWOPD_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $CWOPD_PID`
+> > +               rm -f $CWOPD_PID
+> > +       fi
+> > +       if [ -f $HTTP_PID ]; then
+> > +               echo "wvhttpd pid file $HTTP_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $HTTP_PID`
+> > +               rm -f $HTTP_PID
+> > +       fi
+> > +       if [ -f $PMOND_PID ]; then
+> > +               echo "wvpmond pid file $PMOND_PID exists - killing
+> > existing process"
+> > +               kill -15 `cat $PMOND_PID`
+> > +               rm -f $PMOND_PID
+> > +       fi
+> 
+> Please use start-stop-daemon instead of this code.
+
+ok
+
+> > +}
+> > +
+> > +case "$1" in
+> > +  start)
+> > +       kill_running_processes
+> > +
+> > +       wait_for_time_set
+> > +
+> > +       echo "Starting wview daemons:"
+> > +
+> > +       if [ -x $RADROUTER_BIN ]; then
+> > +           $RADROUTER_BIN 1 $RUN_DIRECTORY
+> > +       else
+> > +           echo "Cannot find $RADROUTER_BIN - exiting!"
+> > +           exit 10
+> > +       fi
+> > +       sleep 1
+> > +       $WVIEWD_BIN
+> > +       sleep 1
+> > +       $HTMLD_BIN
+> > +       $ALARMD_BIN
+> > +       $CWOPD_BIN
+> > +       $HTTP_BIN
+> > +       $FTPD_BIN
+> > +       $SSHD_BIN
+> > +    $PMOND_BIN
+> 
+> Use start-stop-daemon.
+
+ok
+
+> +    ;;
+> > +  start-trace)
+> > +       kill_running_processes
+> > +
+> > +       echo "Starting wview daemons (tracing to $RUN_DIRECTORY):"
+> > +       echo "Warning: traced processes run very slowly and may
+> > effect performance."
+> > +
+> > +       if [ -x $RADROUTER_BIN ]; then
+> > +           $RADROUTER_BIN 1 $RUN_DIRECTORY
+> > +       else
+> > +           echo "Cannot find $RADROUTER_BIN - exiting!"
+> > +           exit 10
+> > +       fi
+> > +       sleep 1
+> > +       strace -o $RUN_DIRECTORY/$WVIEWD_FILE.trace $WVIEWD_BIN -f
+> > &> /dev/null &
+> > +       sleep 1
+> > +       strace -o $RUN_DIRECTORY/htmlgend.trace $HTMLD_BIN -f &>
+> > /dev/null &
+> > +       strace -o $RUN_DIRECTORY/wvalarmd.trace $ALARMD_BIN -f &>
+> > /dev/null &
+> > +       strace -o $RUN_DIRECTORY/wvcwopd.trace $CWOPD_BIN -f &>
+> > /dev/null &
+> > +       strace -o $RUN_DIRECTORY/wvhttpd.trace $HTTP_BIN -f &>
+> > /dev/null &
+> > +       strace -o $RUN_DIRECTORY/wviewftpd.trace $FTPD_BIN -f &>
+> > /dev/null &
+> > +       strace -o $RUN_DIRECTORY/wviewsshd.trace $SSHD_BIN -f &>
+> > /dev/null &
+> > +       strace -o $RUN_DIRECTORY/wvpmond.trace $PMOND_BIN -f &>
+> > /dev/null &
+> > +       ;;
+> 
+> Remove all of this.
+
+ok 
+
+> 
+> > +  stop)
+> > +       echo "Shutting down wview daemons..."
+> > +       if [ -f $PMOND_PID ]; then
+> > +           kill -15 `cat $PMOND_PID`
+> > +       fi
+> > +       if [ -f $HTTP_PID ]; then
+> > +           kill -15 `cat $HTTP_PID`
+> > +       fi
+> > +       if [ -f $CWOPD_PID ]; then
+> > +           kill -15 `cat $CWOPD_PID`
+> > +       fi
+> > +       if [ -f $ALARMD_PID ]; then
+> > +           kill -15 `cat $ALARMD_PID`
+> > +       fi
+> > +       if [ -f $SSHD_PID ]; then
+> > +           kill -15 `cat $SSHD_PID`
+> > +       fi
+> > +       if [ -f $FTPD_PID ]; then
+> > +           kill -15 `cat $FTPD_PID`
+> > +       fi
+> > +       if [ -f $HTMLD_PID ]; then
+> > +           kill -15 `cat $HTMLD_PID`
+> > +       fi
+> > +       if [ -f $WVIEWD_PID ]; then
+> > +           kill -15 `cat $WVIEWD_PID`
+> > +       fi
+> > +       sleep 1
+> > +       if [ -f $RADROUTER_PID ]; then
+> > +           kill -15 `cat $RADROUTER_PID`
+> > +       fi
+> 
+> Use start-stop-daemon, and remove kill_running_processes.
 
 
 
--- 
-Ezequiel Garc?a, VanguardiaSur
-www.vanguardiasur.com.ar
+> > index 0000000..701bf9f
+> > --- /dev/null
+> > +++ b/package/wview/wview.hash
+> > @@ -0,0 +1 @@
+> > +sha256 
+> >  460b34fcdf36f4905edf65e150ec83118e1e631c5532901feefcdc0266a27453 
+> >  wview-5.21.7.tar.gz
+> > diff --git a/package/wview/wview.mk b/package/wview/wview.mk
+> > new file mode 100644
+> > index 0000000..5f53ed0
+> > --- /dev/null
+> > +++ b/package/wview/wview.mk
+> > @@ -0,0 +1,23 @@
+> > +##################################################################
+> > ##############
+> > +#
+> > +#  wview
+> > +#
+> > +##################################################################
+> > ##############
+> > +
+> > +WVIEW_VERSION = 5.21.7
+> > +WVIEW_SOURCE = wview-$(WVIEW_VERSION).tar.gz
+> > +WVIEW_SITE = http://downloads.sourceforge.net/wview
+> > +WVIEW_INSTALL_STAGING = YES
+> > +WVIEW_LICENSE = GPL v2
+> 
+> Should be "GPLv2"
+ok 
+
+> > +WVIEW_LICENSE_FILES = COPYING
+> > +VIEW_DEPENDENCIES = radlib libcurl gd libpng udev libusb openssl
+> > mysql
+> 
+> VIEW_DEPENDENCIES is never taken into account since the variable
+> prefix
+> is not correct. This very mistake is a good indication that you have
+> never built this package. 
+
+Ok - my mistake.
+
+> Whenever you submit a new package in
+> Buildroot, please at least make sure that it builds fine in a
+> configuration that has *only* this package selected in menuconfig,
+> and
+> that a build from scratch of this configuration works fine.
+
+Apologies I thought I had, I clearly messed up - I usually do a 'rm -rf
+output'.
+
+> radlib doesn't exist in Buildroot.
+
+radlib patch is in v5 on the BL mailing list.
+
+> 
+> You have "mysql" in this variable, but it is not selected in the
+> Config.in file. Plus, I don't see any mysql use in the source code
+> itself.
+
+I will look into this, I am pretty sure it is required. I will confirm.
+
+> 
+> You need to add sqlite in there.
+
+I will look into this.
+
+> > +WVIEW_AUTORECONF = YES
+> > +
+> > +WVIEW_CONF_OPTS += --enable-mysql --prefix=$(STAGING_DIR)/usr
+> 
+> There is no --enable-mysql configuration option.
+> 
+
+I will look into this.
+
+> Passing --prefix=$(STAGING_DIR)/usr is completely wrong. Leave -
+> -prefix
+> to its default value. If the program doesn't build with -
+> -prefix=/usr,
+> then something else is broken in the package Makefiles, and passing a
+> different --prefix is 1/ papering over the problem and 2/ potentially
+> harmful.
+
+Yes - this is the same mess that there was radlib, have had to make
+similar changes there. 
+
+> 
+> Hint: the problem is at least the -L$(prefix)/lib in the Makefile.am,
+> as pointed above.
+> 
+> I've marked the patch as Changes Requested. Please resubmit a new
+> version addressing the above issues. Thanks!
+
+Thanks Thomas - apologies for the mess. 
+
+> Thomas
