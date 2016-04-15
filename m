@@ -1,32 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 09:31:45 +0200
-Subject: [Buildroot] [PATCH] glibc: remove version 2.21 stray patches
-In-Reply-To: <1460680268-24000-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1460680268-24000-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160415093145.1434eb24@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 15 Apr 2016 07:32:51 +0000
+Subject: [Buildroot] [Bug 8851] Make sure fio can compile with libaio
+ support if it the package is installed
+In-Reply-To: <bug-8851-163@https.bugs.busybox.net/>
+References: <bug-8851-163@https.bugs.busybox.net/>
+Message-ID: <bug-8851-163-DHxujZXslZ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=8851
 
-On Thu, 14 Apr 2016 21:31:08 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/glibc/2.21/0001-fix-CVE-2015-7547.patch | 236 ------------------------
->  package/glibc/2.21/0002-fix-CVE-2015-1781.patch |  32 ----
->  package/glibc/2.21/0003-fix-CVE-2014-8121.patch | 176 ------------------
->  3 files changed, 444 deletions(-)
->  delete mode 100644 package/glibc/2.21/0001-fix-CVE-2015-7547.patch
->  delete mode 100644 package/glibc/2.21/0002-fix-CVE-2015-1781.patch
->  delete mode 100644 package/glibc/2.21/0003-fix-CVE-2014-8121.patch
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks, looks good. Could you submit this as a proper patch on our mailing
+list, so that we can merge it through the usual process? Thanks!
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+You are receiving this mail because:
+You are on the CC list for the bug.
