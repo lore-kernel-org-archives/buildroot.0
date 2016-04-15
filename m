@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 22:27:24 +0200
-Subject: [Buildroot] [PATCH] python-pysocks: new package
-In-Reply-To: <1451927362-4384-1-git-send-email-yegorslists@googlemail.com>
-References: <1451927362-4384-1-git-send-email-yegorslists@googlemail.com>
-Message-ID: <20160415222724.5829bd03@free-electrons.com>
+Date: Fri, 15 Apr 2016 22:28:53 +0200
+Subject: [Buildroot] [PATCH v2 1/1] core: add option to force compiling
+ C++ as C++11
+In-Reply-To: <1448893176-21456-1-git-send-email-agalakhov@gmail.com>
+References: <1448893176-21456-1-git-send-email-agalakhov@gmail.com>
+Message-ID: <20160415222853.47551832@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jan 2016 18:09:22 +0100, Yegor Yefremov wrote:
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/Config.in                          |  1 +
->  package/python-pysocks/Config.in           |  6 ++++++
->  package/python-pysocks/python-pysocks.hash |  3 +++
->  package/python-pysocks/python-pysocks.mk   | 14 ++++++++++++++
->  4 files changed, 24 insertions(+)
->  create mode 100644 package/python-pysocks/Config.in
->  create mode 100644 package/python-pysocks/python-pysocks.hash
->  create mode 100644 package/python-pysocks/python-pysocks.mk
+On Mon, 30 Nov 2015 15:19:36 +0100, Alexey Galakhov wrote:
+> Many C++ libraries like boost and log4cplus use defines to be compatible with
+> both C++03 and C++11 standards. This causes ABI incompatibilities between
+> a library built with C++03 and an application built with C++11. To avoid this,
+> one has to built libraries as C++11 as well.
+> 
+> This patch introduces the BR2_ENABLE_CPP11 configuration option that forces
+> passing --std=c++11 to the compiler while building C++ target libraries.
+> 
+> Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
 
-Applied to master, thanks.
+Following the feedback from Arnout, I've marked this patch as Rejected
+in our patch tracking system. The issue should be solved on a
+per-package basis.
+
+Thanks!
 
 Thomas
 -- 
