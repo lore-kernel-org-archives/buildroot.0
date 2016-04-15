@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 22:01:07 +0200
-Subject: [Buildroot] [PATCH v2 4/4] board/minnowboard-max: Add a X-based
- graphical defconfig
-In-Reply-To: <1460735767-2577-5-git-send-email-ezequiel@vanguardiasur.com.ar>
-References: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460735767-2577-5-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <20160415220107.585d1fb2@free-electrons.com>
+Date: Fri, 15 Apr 2016 22:09:46 +0200
+Subject: [Buildroot] [git commit] configs/minnowboard_max: configure
+ eth0 through dhcp
+In-Reply-To: <87y48efyez.fsf@dell.be.48ers.dk>
+References: <20160415081911.5BA4A80338@busybox.osuosl.org>
+ <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
+ <8737qmhf5u.fsf@dell.be.48ers.dk>
+ <CAAEAJfDQOgb1rGQQw5rXdPqrGW1ZYdAr__zG1O8DicDvJwQjuQ@mail.gmail.com>
+ <87y48efyez.fsf@dell.be.48ers.dk>
+Message-ID: <20160415220946.70a2d45a@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +17,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 15 Apr 2016 12:56:07 -0300, Ezequiel Garcia wrote:
+On Fri, 15 Apr 2016 21:46:12 +0200, Peter Korsgaard wrote:
 
->  .../fs-overlay-graphical/usr/bin/startx            | 248 +++++++++++++++++++++
+> I guess so too, but E.G. the realtek on the max needs firmware to be
+> loaded so I didn't want to make any changes without being able to test
+> it.
+> 
+> Thomas, do you still have your board?
 
-This script looks really long and complicated. Where does it come from?
-Is it really specific to the Minnowboard?
-
-Another open question is whether we should add some details in
-readme.txt about this configuration, like which demos are provided,
-example commands to run to test the whole thing, etc.
-
-Thanks!
+Yes, I still have an original Minnowboard somewhere IIRC. I'll have to
+dig into my stack of boards to see if it's still there.
 
 Thomas
 -- 
