@@ -1,46 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 20:24:05 +0200
-Subject: [Buildroot] [git commit] tiff: add host variant
-Message-ID: <20160415183007.E3AF381E7F@busybox.osuosl.org>
+Date: Fri, 15 Apr 2016 20:59:09 +0200
+Subject: [Buildroot] [git commit] configs/minnowboard_max: configure
+	eth0 through dhcp
+In-Reply-To: <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
+ (Ezequiel Garcia's message of "Fri, 15 Apr 2016 13:18:05 -0300")
+References: <20160415081911.5BA4A80338@busybox.osuosl.org>
+ <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
+Message-ID: <8737qmhf5u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91b16fbbf9dbd997263d2e157e5503732418760b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-Add host variant to be used by host-gdk-pixbuf to update the loaders
-cache.
+ > On 15 April 2016 at 05:17, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> commit: https://git.buildroot.net/buildroot/commit/?id=ba40ce77ea7babb36a74adeb4772b54142f86975
+ >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ >> 
+ >> The minnowboard max board has an ethernet port, so configure it at startup.
+ >> 
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tiff/tiff.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ > Any reason why you are only doing this change for the Minnowboard MAX,
+ > and not also the Minnowboard?
 
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index 266272a..a53d7bb 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -15,6 +15,14 @@ TIFF_CONF_OPTS = \
- 
- TIFF_DEPENDENCIES = host-pkgconf
- 
-+HOST_TIFF_CONF_OPTS = \
-+	--disable-cxx \
-+	--without-x \
-+	--disable-zlib \
-+	--disable-lzma \
-+	--disable-jpeg
-+HOST_TIFF_DEPENDENCIES = host-pkgconf
-+
- ifneq ($(BR2_PACKAGE_TIFF_CCITT),y)
- TIFF_CONF_OPTS += --disable-ccitt
- endif
-@@ -81,3 +89,4 @@ endif
- TIFF_MAKE = $(MAKE) SUBDIRS="$(TIFF_SUBDIRS)"
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+Only the fact that I have a max, but not one of the original
+minnowboards, so I couldn't test it.
+
+Do you have one of the old ones? If not, I believe Thomas does.
+
+-- 
+Venlig hilsen,
+Peter Korsgaard 
