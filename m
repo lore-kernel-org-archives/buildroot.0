@@ -1,19 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 15 Apr 2016 01:56:37 +0000
-Subject: [Buildroot] [Bug 8851] New: Make sure fio can compile with libaio
- support if it the package is installed
-Message-ID: <bug-8851-163@https.bugs.busybox.net/>
+Date: Fri, 15 Apr 2016 02:00:16 +0000
+Subject: [Buildroot] [Bug 8856] New: python tornado runtime wasn't met on
+ buildroot 2016.02
+Message-ID: <bug-8856-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8851
+https://bugs.busybox.net/show_bug.cgi?id=8856
 
-            Bug ID: 8851
-           Summary: Make sure fio can compile with libaio support if it
-                    the package is installed
+            Bug ID: 8856
+           Summary: python tornado runtime wasn't met on buildroot 2016.02
            Product: buildroot
            Version: unspecified
           Hardware: All
@@ -27,25 +26,91 @@ https://bugs.busybox.net/show_bug.cgi?id=8851
                 CC: buildroot at uclibc.org
   Target Milestone: ---
 
-if libaio is being used, then make fio depend on it so that it gets compiled
-with aio support.
+in build root 2016.02 it looks like python-tornado doesn't work when installed
+on the current version... we did this to get it to work.
 
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 08fef5f..384be2e 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -9,6 +9,10 @@ FIO_SITE = git://git.kernel.dk/fio.git
- FIO_LICENSE = GPLv2 + special obligations
- FIO_LICENSE_FILES = COPYING
-
-+ifeq ($(BR2_PACKAGE_LIBAIO),y)
-+FIO_DEPENDENCIES += libaio
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index 8f39f49..843cea9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -619,6 +619,7 @@ if BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+        source "package/python-alsaaudio/Config.in"
+        source "package/python-backports-abc/Config.in"
++       source "package/python-backports-ssl-match-hostname/Config.in"
+        source "package/python-beautifulsoup4/Config.in"
+        source "package/python-bottle/Config.in"
+        source "package/python-can/Config.in"
+diff --git a/package/python-backports-ssl-match-hostname/Config.in
+b/package/python-backports-ssl-match-hostname/Config.in
+new file mode 100644
+index 0000000..b2bb471
+--- /dev/null
++++ b/package/python-backports-ssl-match-hostname/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
++       bool "python-backports-ssl-match-hostname"
++       help
++         The ssl.match_hostname() function from Python 3.5
 +
- define FIO_CONFIGURE_CMDS
-        (cd $(@D); ./configure --cc="$(TARGET_CC)"
---extra-cflags="$(TARGET_CFLAGS)")
- endef
++         https://pypi.python.org/pypi/backports.ssl_match_hostname
+diff --git
+a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
+b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
+new file mode 100644
+index 0000000..4c15d21
+--- /dev/null
++++
+b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
+@@ -0,0 +1,3 @@
++# md5 from
+https://pypi.python.org/pypi?:action=show_md5&digest=c03fc5e2c7b3da46b81acf5cbacfe1e6,
+sha256 locally computed
++md5     c03fc5e2c7b3da46b81acf5cbacfe1e6 
+backports.ssl_match_hostname-3.5.0.1.tar.gz
++sha256  502ad98707319f4a51fa2ca1c677bd659008d27ded9f6380c79e8932e38dcdf2 
+backports.ssl_match_hostname-3.5.0.1.tar.gz
+diff --git
+a/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
+b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
+new file mode 100644
+index 0000000..b2d9133
+--- /dev/null
++++
+b/package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-backports-ssl-match-hostname
++#
++################################################################################
++
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION = 3.5.0.1
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SOURCE =
+backports.ssl_match_hostname-$(PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_VERSION).tar.gz
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SITE =
+https://pypi.python.org/packages/source/b/backports.ssl_match_hostname
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_LICENSE = Python Software Foundation
+License
++PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME_SETUP_TYPE = distutils
++
++$(eval $(python-package))
+diff --git a/package/python-tornado/Config.in
+b/package/python-tornado/Config.in
+index ac86682..8009a58 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_PYTHON_TORNADO
+        select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
+        select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON #
+runtime
+        select BR2_PACKAGE_PYTHON_BACKPORTS_ABC # runtime
++       select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME if
+BR2_PACKAGE_PYTHON # runtime
++       select BR2_PACKAGE_PYTHON_CERTIFI # runtime
+        help
+          Tornado is a Python web framework and asynchronous networking
+          library, originally developed at FriendFeed.
 
 -- 
 You are receiving this mail because:
