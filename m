@@ -1,81 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 15 Apr 2016 22:53:21 +0200
-Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
-In-Reply-To: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
-References: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
-Message-ID: <20160415225321.0da4943f@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Apr 2016 23:02:17 +0200
+Subject: [Buildroot] [PATCH v4 1/4] elf2flt: use new upstream site and bump
+	version
+In-Reply-To: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <1460754140-24255-2-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin Niestroj,
+The uClinux developers now have a Github with elf2flt code, with an
+upstream that is again active. Let's switch to this upstream, which
+has built-in support for ARM noMMU, contributed by Waldemar.
 
-On Fri, 15 Apr 2016 12:46:30 +0200, Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
+Since we're now fetching from github, a hash file is added as well.
 
-> By default hwdb files are installed in /usr/lib/udev/hwdb.d
-> Currently they take about ~5MB. After first boot, systemd-hwdb tool
-> parses them and creates a binary in /etc/udev/hwdb.bin, which takes
-> another ~6.5MB.
-> 
-> In case of initramfs images, hwdb parsing is done every boot. This adds
-> about 2-3 seconds to boot time in case of rootfs on SDHC class 10
-> card (benchmarked with am335x board). NAND boot takes even longer.
-> 
+Finally, we disable -Werror to avoid build issues caused by warnings.
 
-Perfect for this case would be 'systemd-hwdb update' run at built time to
-create the hwdb files once, but maybe stuff for a follow up patch...
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elf2flt/elf2flt.hash | 2 ++
+ package/elf2flt/elf2flt.mk   | 8 ++++----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+ create mode 100644 package/elf2flt/elf2flt.hash
 
-Regards,
-Peter
-
-
-> Add config option to disable hwdb in systemd, for smaller images and
-> better boot performance.
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/systemd/Config.in  | 11 +++++++++++
->  package/systemd/systemd.mk |  6 ++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 97d48c4..324e884 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -84,6 +84,17 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
->  
->  	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
->  
-> +config BR2_PACKAGE_SYSTEMD_HWDB
-> +	bool "enable hwdb installation"
-> +	default y
-> +	help
-> +	  Enables hardware database installation to /usr/lib/udev/hwdb.d
-> +
-> +	  Disabling this option improves first boot time (or every boot
-> +	  time in case of initramfs images) and saves several MB space.
-> +
-> +	  https://www.freedesktop.org/software/systemd/man/hwdb.html
-> +
->  config BR2_PACKAGE_SYSTEMD_BINFMT
->  	bool "enable binfmt tool"
->  	help
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 79e657e..29b62c0 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -127,6 +127,12 @@ else
->  SYSTEMD_CONF_OPTS += --disable-microhttpd
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
-> +SYSTEMD_CONF_OPTS += --enable-hwdb
-> +else
-> +SYSTEMD_CONF_OPTS += --disable-hwdb
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
->  SYSTEMD_CONF_OPTS += --enable-binfmt
->  else
+diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
+new file mode 100644
+index 0000000..be7c776
+--- /dev/null
++++ b/package/elf2flt/elf2flt.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 64ede6936aa88028378e08192039c29791b9e32714cc861762214b8e106e7145 elf2flt-8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7.tar.gz
+diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+index bec270b..6c16c30 100644
+--- a/package/elf2flt/elf2flt.mk
++++ b/package/elf2flt/elf2flt.mk
+@@ -4,9 +4,8 @@
+ #
+ ################################################################################
+ 
+-ELF2FLT_VERSION = f859213b18a67fcfc09961267e0a1122d35186f4
+-ELF2FLT_SITE = http://cgit.openadk.org/cgi/cgit/elf2flt.git
+-ELF2FLT_SITE_METHOD = git
++ELF2FLT_VERSION = 8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7
++ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
+ ELF2FLT_LICENSE = GPLv2+
+ ELF2FLT_LICENSE_FILES = LICENSE.TXT
+ 
+@@ -19,7 +18,8 @@ HOST_ELF2FLT_CONF_OPTS = \
+ 	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
+ 	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
+ 	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
+-	--target=$(GNU_TARGET_NAME)
++	--target=$(GNU_TARGET_NAME) \
++	--disable-werror
+ 
+ HOST_ELF2FLT_LIBS = -lz
+ 
+-- 
+2.6.4
