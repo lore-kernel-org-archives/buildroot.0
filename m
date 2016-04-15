@@ -1,111 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 23:02:18 +0200
-Subject: [Buildroot] [PATCH v4 2/4] afboot-stm32: use the Buildroot toolchain
-In-Reply-To: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
-References: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <1460754140-24255-3-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 15 Apr 2016 23:02:16 +0200
+Subject: [Buildroot] [PATCH v4 0/4] ARM Cortex-M support and STM32 defconfigs
+Message-ID: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, the afboot-stm32 Makefile uses "CROSS_COMPILE =
-arm-none-eabi-". Since I had such a toolchain installed on my system
-when testing afboot-stm32, I didn't realize it wasn't using the
-Buildroot toolchain.
+Hello,
 
-However, using the Buildroot toolchain doesn't immediately works for
-FLAT toolchains, as gcc automatically wants to create a FLAT
-binary. So we need to adjust the afboot-stm32 Makefile to use directly
-'ld' and not 'gcc' when linking.
+Yet another version of the ARM Cortex-M support and STM32 defconfigs.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- .../0001-Use-ld-instead-of-gcc-for-linking.patch   | 61 ++++++++++++++++++++++
- boot/afboot-stm32/afboot-stm32.mk                  |  2 +-
- 2 files changed, 62 insertions(+), 1 deletion(-)
+Changes since v3:
+
+ - Rebased on top of master, dropping all patches that have been
+   merged. We're down to four patches, yeah!
+
+ - Changed the elf2flt package to use the latest upstream version,
+   which allows to remove the patch that was needed until now to
+   support ARM noMMU (it has been merged upstream).
+
+This new version has been runtime tested on STM32F429 Discovery.
+
+Thanks!
+
+Thomas
+
+Lee Jones (2):
+  configs/stm32f429_disco: new configuration for STM32F429 Discovery
+    board
+  configs/stm32f469_disco: new configuration for STM32F469 Discovery
+    board
+
+Thomas Petazzoni (2):
+  elf2flt: use new upstream site and bump version
+  afboot-stm32: use the Buildroot toolchain
+
+ board/stmicroelectronics/busybox-minimal.config    | 1057 ++++++++++++++++++++
+ board/stmicroelectronics/stm32-post-build.sh       |    8 +
+ board/stmicroelectronics/stm32f429-disco/flash.sh  |   20 +
+ ...49-disco-don-t-force-init-in-chosen-boota.patch |   32 +
+ .../stmicroelectronics/stm32f429-disco/readme.txt  |   30 +
+ board/stmicroelectronics/stm32f469-disco/flash.sh  |   20 +
+ ...-ARM-stm32-Identify-a-new-board-STM32F469.patch |   25 +
+ ...upply-a-DTS-file-for-the-STM32F469-Discov.patch |  101 ++
+ ...-Add-new-config-fragment-to-change-RAM-st.patch |   28 +
+ .../patches/openocd/0001-add-config.patch          |   37 +
+ .../patches/openocd/0002-flash-nor.patch           |   37 +
+ .../stmicroelectronics/stm32f469-disco/readme.txt  |   19 +
+ .../0001-Use-ld-instead-of-gcc-for-linking.patch   |   61 ++
+ boot/afboot-stm32/afboot-stm32.mk                  |    2 +-
+ configs/stm32f429_disco_defconfig                  |   18 +
+ configs/stm32f469_disco_defconfig                  |   19 +
+ package/elf2flt/elf2flt.hash                       |    2 +
+ package/elf2flt/elf2flt.mk                         |    8 +-
+ 18 files changed, 1519 insertions(+), 5 deletions(-)
+ create mode 100644 board/stmicroelectronics/busybox-minimal.config
+ create mode 100755 board/stmicroelectronics/stm32-post-build.sh
+ create mode 100755 board/stmicroelectronics/stm32f429-disco/flash.sh
+ create mode 100644 board/stmicroelectronics/stm32f429-disco/patches/linux/0001-ARM-stm32f249-disco-don-t-force-init-in-chosen-boota.patch
+ create mode 100644 board/stmicroelectronics/stm32f429-disco/readme.txt
+ create mode 100755 board/stmicroelectronics/stm32f469-disco/flash.sh
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0001-ARM-stm32-Identify-a-new-board-STM32F469.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0002-ARM-stm32-Supply-a-DTS-file-for-the-STM32F469-Discov.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/linux/0003-ARM-configs-Add-new-config-fragment-to-change-RAM-st.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0001-add-config.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/patches/openocd/0002-flash-nor.patch
+ create mode 100644 board/stmicroelectronics/stm32f469-disco/readme.txt
  create mode 100644 boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch
+ create mode 100644 configs/stm32f429_disco_defconfig
+ create mode 100644 configs/stm32f469_disco_defconfig
+ create mode 100644 package/elf2flt/elf2flt.hash
 
-diff --git a/boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch b/boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch
-new file mode 100644
-index 0000000..3f359dc
---- /dev/null
-+++ b/boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch
-@@ -0,0 +1,61 @@
-+From 0d581abe6620ac69adec321b94390e009802f36a Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Date: Sun, 13 Mar 2016 14:32:33 +0100
-+Subject: [PATCH] Use ld instead of gcc for linking
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+---
-+ Makefile | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index ce40314..271bb4f 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,6 +1,7 @@
-+ CROSS_COMPILE ?= arm-none-eabi-
-+ 
-+ CC = $(CROSS_COMPILE)gcc
-++LD = $(CROSS_COMPILE)ld
-+ OBJCOPY = $(CROSS_COMPILE)objcopy
-+ OBJDUMP = $(CROSS_COMPILE)objdump
-+ SIZE = $(CROSS_COMPILE)size
-+@@ -10,7 +11,7 @@ OPENOCD = openocd
-+ CFLAGS := -mthumb -mcpu=cortex-m4
-+ CFLAGS += -ffunction-sections -fdata-sections
-+ CFLAGS += -Os -std=gnu99 -Wall
-+-LDFLAGS := -nostartfiles -Wl,--gc-sections
-++LINKERFLAGS := -nostartfiles --gc-sections
-+ 
-+ obj-y += gpio.o mpu.o
-+ obj-f4 += $(obj-y) usart-f4.o
-+@@ -22,22 +23,22 @@ all: stm32f429i-disco stm32429i-eval stm32f469i-disco stm32746g-eval
-+ 	$(CC) -c $(CFLAGS) $< -o $@
-+ 
-+ stm32f429i-disco: stm32f429i-disco.o $(obj-f4)
-+-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32f429i-disco.elf stm32f429i-disco.o $(obj-f4)
-++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32f429i-disco.elf stm32f429i-disco.o $(obj-f4)
-+ 	$(OBJCOPY) -Obinary stm32f429i-disco.elf stm32f429i-disco.bin
-+ 	$(SIZE) stm32f429i-disco.elf
-+ 
-+ stm32429i-eval: stm32429i-eval.o $(obj-f4)
-+-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32429i-eval.elf stm32429i-eval.o $(obj-f4)
-++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32429i-eval.elf stm32429i-eval.o $(obj-f4)
-+ 	$(OBJCOPY) -Obinary stm32429i-eval.elf stm32429i-eval.bin
-+ 	$(SIZE) stm32429i-eval.elf
-+ 
-+ stm32f469i-disco: stm32f469i-disco.o $(obj-f4)
-+-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32f469i-disco.elf stm32f469i-disco.o $(obj-f4)
-++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32f469i-disco.elf stm32f469i-disco.o $(obj-f4)
-+ 	$(OBJCOPY) -Obinary stm32f469i-disco.elf stm32f469i-disco.bin
-+ 	$(SIZE) stm32f469i-disco.elf
-+ 
-+ stm32746g-eval: stm32746g-eval.o $(obj-f7)
-+-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32746g-eval.elf stm32746g-eval.o $(obj-f7)
-++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32746g-eval.elf stm32746g-eval.o $(obj-f7)
-+ 	$(OBJCOPY) -Obinary stm32746g-eval.elf stm32746g-eval.bin
-+ 	$(SIZE) stm32746g-eval.elf
-+ 
-+-- 
-+2.6.4
-+
-diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
-index ac85d58..042b21f 100644
---- a/boot/afboot-stm32/afboot-stm32.mk
-+++ b/boot/afboot-stm32/afboot-stm32.mk
-@@ -8,7 +8,7 @@ AFBOOT_STM32_VERSION = v0.1
- AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
- 
- define AFBOOT_STM32_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) all
- endef
- 
- define AFBOOT_STM32_INSTALL_TARGET_CMDS
 -- 
 2.6.4
