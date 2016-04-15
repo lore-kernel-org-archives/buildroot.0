@@ -1,84 +1,81 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 22:49:12 +0200
-Subject: [Buildroot] [PATCH v4 2/3] python-pexpect: new package
-In-Reply-To: <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
-References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
- <1459042284-6684-3-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160415224912.3886b9f2@free-electrons.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 15 Apr 2016 22:53:21 +0200
+Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
+In-Reply-To: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
+References: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
+Message-ID: <20160415225321.0da4943f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marcin Niestroj,
 
-On Sun, 27 Mar 2016 03:31:23 +0200, Jan Viktorin wrote:
-> v4
-> * source https://pypi.python.org/pypi/pexpect
-> * added hash file
+On Fri, 15 Apr 2016 12:46:30 +0200, Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
 
-The changelog should not be part of the commit, but should be ...
-
+> By default hwdb files are installed in /usr/lib/udev/hwdb.d
+> Currently they take about ~5MB. After first boot, systemd-hwdb tool
+> parses them and creates a binary in /etc/udev/hwdb.bin, which takes
+> another ~6.5MB.
 > 
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+> In case of initramfs images, hwdb parsing is done every boot. This adds
+> about 2-3 seconds to boot time in case of rootfs on SDHC class 10
+> card (benchmarked with am335x board). NAND boot takes even longer.
+> 
+
+Perfect for this case would be 'systemd-hwdb update' run at built time to
+create the hwdb files once, but maybe stuff for a follow up patch...
+
+Regards,
+Peter
+
+
+> Add config option to disable hwdb in systemd, for smaller images and
+> better boot performance.
+> 
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
-
-... here.
-
-
-> diff --git a/package/python-pexpect/Config.in b/package/python-pexpect/Config.in
-> new file mode 100644
-> index 0000000..4d04c01
-> --- /dev/null
-> +++ b/package/python-pexpect/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PYTHON_PEXPECT
-> +	bool "python-pexpect"
-> +	select BR2_PACKAGE_PYTHON_PTYPROCESS
+>  package/systemd/Config.in  | 11 +++++++++++
+>  package/systemd/systemd.mk |  6 ++++++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 97d48c4..324e884 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -84,6 +84,17 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+>  
+>  	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+>  
+> +config BR2_PACKAGE_SYSTEMD_HWDB
+> +	bool "enable hwdb installation"
+> +	default y
 > +	help
-> +	  Pexpect is a pure Python module for spawning child applications;
-> +	  controlling them; and responding to expected patterns in their
-> +	  output. Pexpect works like Don Libes? Expect. Pexpect allows your
-> +	  script to spawn a child application and control it as if a human
-> +	  were typing commands.
-
-Same thing: lines slightly too long.
-
-> diff --git a/package/python-pexpect/python-pexpect.hash b/package/python-pexpect/python-pexpect.hash
-> new file mode 100644
-> index 0000000..0d1e1fe
-> --- /dev/null
-> +++ b/package/python-pexpect/python-pexpect.hash
-> @@ -0,0 +1,4 @@
-> +# got from https://pypi.python.org
-> +md5sum	056df81e6ca7081f1015b4b147b977b7
-
-Not even a file name here.
-
-> +# computed manually:
-> +sha256sum 232795ebcaaf2e120396dbbaa3a129eda51757eeaae1911558f4ef8ee414fc6c  pexpect-4.0.1.tar.gz
-
-I've fixed up the hash file.
-
-> +PYTHON_PEXPECT_VERSION = 4.0.1
-> +PYTHON_PEXPECT_SITE = https://pypi.python.org/pypi/pexpect
-
-And the _SITE variable.
-
-> +PYTHON_PEXPECT_SOURCE = pexpect-$(PYTHON_PEXPECT_VERSION).tar.gz
-> +PYTHON_PEXPECT_LICENSE = ISC
-> +PYTHON_PEXPECT_LICENSE_FILES = LICENSE
-> +PYTHON_PEXPECT_SETUP_TYPE = distutils
-> +PYTHON_PEXPECT_DEPENDENCIES = python-ptyprocess
-
-And removed this dependency: it's only a run-time dependency, so it
-only needs to be in the Config.in file.
-
-Applied with those issues fixed, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+> +	  Enables hardware database installation to /usr/lib/udev/hwdb.d
+> +
+> +	  Disabling this option improves first boot time (or every boot
+> +	  time in case of initramfs images) and saves several MB space.
+> +
+> +	  https://www.freedesktop.org/software/systemd/man/hwdb.html
+> +
+>  config BR2_PACKAGE_SYSTEMD_BINFMT
+>  	bool "enable binfmt tool"
+>  	help
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 79e657e..29b62c0 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -127,6 +127,12 @@ else
+>  SYSTEMD_CONF_OPTS += --disable-microhttpd
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
+> +SYSTEMD_CONF_OPTS += --enable-hwdb
+> +else
+> +SYSTEMD_CONF_OPTS += --disable-hwdb
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
+>  SYSTEMD_CONF_OPTS += --enable-binfmt
+>  else
