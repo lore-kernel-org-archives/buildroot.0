@@ -1,74 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Fri, 15 Apr 2016 09:54:35 +0200
-Subject: [Buildroot] [PATCH] configs: add Armadeus Systems APF6 SOM
- basic support
-In-Reply-To: <1460641197-12610-1-git-send-email-julien.boibessot@free.fr>
-References: <1460641197-12610-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20160415095435.7ac98177@free-electrons.com>
+Date: Fri, 15 Apr 2016 09:55:16 +0200
+Subject: [Buildroot] [git commit] connman: add patch to fix build with
+	headers >= 4.5
+Message-ID: <20160415075521.EDB3B7FB79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0dece9857860f48cce75720d441d7c5fcff8c6a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 14 Apr 2016 15:39:57 +0200, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> APF6 is an i.MX6 based SOM with an optional Cyclone 5 GX FPGA.
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> ---
->  configs/armadeus_apf6_defconfig | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 configs/armadeus_apf6_defconfig
-> 
-> diff --git a/configs/armadeus_apf6_defconfig b/configs/armadeus_apf6_defconfig
-> new file mode 100644
-> index 0000000..a51dd5f
-> --- /dev/null
-> +++ b/configs/armadeus_apf6_defconfig
-> @@ -0,0 +1,27 @@
-> +BR2_arm=y
-> +BR2_cortex_a9=y
-> +BR2_ARM_ENABLE_NEON=y
-> +BR2_ARM_ENABLE_VFP=y
-> +BR2_ARM_FPU_VFPV3=y
-> +
-> +# Linux headers same as kernel, a 3.19 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19=y
-> +
-> +# System
-> +BR2_TARGET_GENERIC_HOSTNAME="apf6"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Armadeus development platform !"
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="3.19.8"
-> +BR2_LINUX_KERNEL_PATCH="http://sourceforge.net/projects/armadeus/files/armadeus/armadeus-6.0/patches/linux-3.19-armadeus.patch.tar.gz"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-apf6dev imx6dl-apf6dev"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+Add a patch from Gentoo that fixes the build on linux headers >= 4.5
+The probem arises from an incompatibility in newer headers when both
+net/if.h and linux/if.h are included in the same source.
+See https://bugs.gentoo.org/show_bug.cgi?id=577584
 
-Is it expected that you're not building any bootloader here?
+Fixes:
+http://autobuild.buildroot.net/results/48e/48e6f34a7940f52d987db47784c0d9e82f39de7c/
 
-Also, this needs a readme.txt to explain how to use this defconfig. If
-you're putting off SD card, then please use genimage to generate a
-complete SD card image. If you're booting out of NAND, please include
-instructions on how to flash the resulting system.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/connman/0003-xtables.patch | 61 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-But does it make sense to have a defconfig for a SOM ? A SOM as-is
-generally can't be booted, it needs to be put on some base-board,
-right ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/connman/0003-xtables.patch b/package/connman/0003-xtables.patch
+new file mode 100644
+index 0000000..277fce6
+--- /dev/null
++++ b/package/connman/0003-xtables.patch
+@@ -0,0 +1,61 @@
++Use some preprocessor tricks to route around incompatibilies seen
++between newer Linux kernels and glibc when both net/if.h and linux/if.h
++are included in the same source.
++
++Patch from gentoo, see https://bugs.gentoo.org/show_bug.cgi?id=577584
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++
++--- connman-1.31/src/iptables.c.old	2016-03-22 20:12:47.829460752 -0700
+++++ connman-1.31/src/iptables.c	2016-03-22 21:33:36.835384724 -0700
++@@ -28,11 +28,11 @@
++ #include <stdio.h>
++ #include <string.h>
++ #include <unistd.h>
++ #include <sys/errno.h>
++ #include <sys/socket.h>
++-#include <xtables.h>
+++#include "connman_xtables.h"
++ #include <inttypes.h>
++ 
++ #include <linux/netfilter_ipv4/ip_tables.h>
++ 
++ #include "connman.h"
++--- connman-1.31/src/firewall.c.old	2016-03-22 21:29:01.959472262 -0700
+++++ connman-1.31/src/firewall.c	2016-03-22 21:33:53.048144181 -0700
++@@ -23,11 +23,11 @@
++ #include <config.h>
++ #endif
++ 
++ #include <errno.h>
++ 
++-#include <xtables.h>
+++#include "connman_xtables.h"
++ #include <linux/netfilter_ipv4/ip_tables.h>
++ 
++ #include "connman.h"
++ 
++ #define CHAIN_PREFIX "connman-"
++--- /dev/null	2016-03-18 06:21:16.372989086 -0700
+++++ connman-1.31/include/connman_xtables.h	2016-03-22 21:32:21.349504786 -0700
++@@ -0,0 +1,20 @@
+++#ifndef CONNMAN_XTABLES_H
+++#define CONNMAN_XTABLES_H
+++
+++#include <linux/version.h>
+++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0)
+++#include <xtables.h>
+++#else
+++#ifdef __USE_MISC
+++#define GENTOO_USE_MISC __USE_MISC
+++#undef __USE_MISC
+++#endif
+++
+++#include <xtables.h>
+++
+++#ifdef GENTOO_USE_MISC
+++#define __USE_MISC GENTOO_USE_MISC
+++#undef GENTOO_USE_MISC
+++#endif
+++#endif
+++#endif
