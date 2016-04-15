@@ -1,68 +1,175 @@
 From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date: Fri, 15 Apr 2016 12:56:03 -0300
-Subject: [Buildroot] [PATCH v2 0/4] Minnowboard: The grand unification
-Message-ID: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Date: Fri, 15 Apr 2016 12:56:04 -0300
+Subject: [Buildroot] [PATCH v2 1/4] board/minnowboard: Rework to generate SD
+	card image
+In-Reply-To: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+References: <1460735767-2577-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <1460735767-2577-2-git-send-email-ezequiel@vanguardiasur.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following Arnout comments, here's a patchset that first unifies
-the Minnowboard board support, and then adds a "graphics &
-audio, yet minimum" defconfig.
+Let's rework the board and config files to use genimage
+to generate the SD card image directly.
 
-The idea with this graphical_defconfig is to provide an X-based
-system, with ALSA audio and OpenGL enabled, at its minimum
-expression.
+Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+--
+Changes from v1:
 
-Regarding the Minnowboard board support unification, it's worth
-mentioning that it's possible to use the same kernel on both.
-However, a couple reasons made me retain the current choices:
+  * host-mtools is needed too, as noted by Peter.
+---
+ board/minnowboard/genimage.cfg  | 34 ++++++++++++++++++++++++++++++++++
+ board/minnowboard/post-image.sh | 13 +++++++++++++
+ board/minnowboard/readme.txt    | 39 ++++++++++++---------------------------
+ configs/minnowboard_defconfig   |  9 +++++++++
+ 4 files changed, 68 insertions(+), 27 deletions(-)
+ create mode 100644 board/minnowboard/genimage.cfg
+ create mode 100755 board/minnowboard/post-image.sh
 
-  * It is desirable to use upstream, when possible. Hence,
-    we use upstream v4.4 for the Minnowboard MAX.
-
-  * The original Minnowboard has some GPIO keys that are
-    not supported upstream. Using out-of-tree patches sucks
-    because we need to carry them over when bumping, so I
-    decided to just stick with the v3.8 yocto kernel.
-
-There's a changelog on each patch, with some more detailed changes.
-
-Ezequiel Garcia (4):
-  board/minnowboard: Rework to generate SD card image
-  board/minnowboard: Unify Minnowboard and Minnowboard MAX boards
-  board/minnowboard-max: Add more peripherals and features to the kernel
-  board/minnowboard-max: Add a X-based graphical defconfig
-
- board/minnowboard-max/post-build.sh                |   2 -
- board/minnowboard-max/readme.txt                   |  25 ---
- .../fs-overlay-graphical/etc/asound.conf           |   4 +
- .../minnowboard/fs-overlay-graphical/root/.xinitrc |   1 +
- .../fs-overlay-graphical/usr/bin/startx            | 248 +++++++++++++++++++++
- .../{minnowboard-max => minnowboard}/genimage.cfg  |   0
- .../grub-minnowboard-max.cfg}                      |   0
- .../minnowboard/{grub.cfg => grub-minnowboard.cfg} |   0
- .../linux.config => minnowboard/linux-4.4.config}  |  10 +
- board/minnowboard/post-build.sh                    |   5 +-
- .../{minnowboard-max => minnowboard}/post-image.sh |   2 +-
- board/minnowboard/readme.txt                       |  39 ++--
- configs/minnowboard_defconfig                      |  10 +
- configs/minnowboard_max-graphical_defconfig        |  79 +++++++
- configs/minnowboard_max_defconfig                  |   7 +-
- 15 files changed, 375 insertions(+), 57 deletions(-)
- delete mode 100755 board/minnowboard-max/post-build.sh
- delete mode 100644 board/minnowboard-max/readme.txt
- create mode 100644 board/minnowboard/fs-overlay-graphical/etc/asound.conf
- create mode 100644 board/minnowboard/fs-overlay-graphical/root/.xinitrc
- create mode 100755 board/minnowboard/fs-overlay-graphical/usr/bin/startx
- rename board/{minnowboard-max => minnowboard}/genimage.cfg (100%)
- rename board/{minnowboard-max/grub.cfg => minnowboard/grub-minnowboard-max.cfg} (100%)
- rename board/minnowboard/{grub.cfg => grub-minnowboard.cfg} (100%)
- rename board/{minnowboard-max/linux.config => minnowboard/linux-4.4.config} (79%)
- rename board/{minnowboard-max => minnowboard}/post-image.sh (84%)
- create mode 100644 configs/minnowboard_max-graphical_defconfig
-
+diff --git a/board/minnowboard/genimage.cfg b/board/minnowboard/genimage.cfg
+new file mode 100644
+index 000000000000..6cf787430752
+--- /dev/null
++++ b/board/minnowboard/genimage.cfg
+@@ -0,0 +1,34 @@
++# Create an image of the efi partition
++image efi-part.vfat {
++	vfat {
++		file startup.nsh {
++			image = "efi-part/startup.nsh"
++		}
++		file EFI {
++			image = "efi-part/EFI"
++		}
++		file bzImage {
++			image = "bzImage"
++		}
++	}
++	size=10M
++}
++
++# Create the sdcard image, pulling in
++#  * the image created by buildroot
++#  * the efi-partition created above
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xEF
++		image = "efi-part.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/minnowboard/post-image.sh b/board/minnowboard/post-image.sh
+new file mode 100755
+index 000000000000..428baa5e5599
+--- /dev/null
++++ b/board/minnowboard/post-image.sh
+@@ -0,0 +1,13 @@
++#!/bin/sh -e
++
++GENIMAGE_CFG="board/minnowboard/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage \
++    --rootpath "${TARGET_DIR}" \
++    --tmppath "${GENIMAGE_TMP}" \
++    --inputpath "${BINARIES_DIR}" \
++    --outputpath "${BINARIES_DIR}" \
++    --config "${GENIMAGE_CFG}"
+diff --git a/board/minnowboard/readme.txt b/board/minnowboard/readme.txt
+index 62ffa92e0b83..3a24fdc162b8 100644
+--- a/board/minnowboard/readme.txt
++++ b/board/minnowboard/readme.txt
+@@ -1,40 +1,25 @@
+-Prepare the SD card for the Minnow Board
++How to get started with the MinnowBoard
+ ========================================
+ 
+- 1. Partition the SD card with a GPT partition table
++1. Build
+ 
+-    sudo cgdisk /dev/mmcblk0
++  Apply the defconfig:
+ 
+-    Create two partitions:
++  $ make minnowboard_defconfig
+ 
+-     a) First partition of a few dozens of megabytes, which will be
+-        used to store the bootloader and the kernel image. Type must
+-        be EF00 (EFI partition).
++  Add any additional packages required and build:
+ 
+-     b) Second partition of any size, which will be used to store the
+-        root filesystem. Type must be 8300 (Linux filesystem)
++  $ make
+ 
+- 2. Prepare the boot partition
++2. Write the SD card
+ 
+-    We will format it, mount it, copy the EFI data generated by
+-    Buildroot, and the kernel image.
++  The build process will create a SD card image in output/images.
++  Write the image to an mSD card, insert into the MinnowBoard
++  and power the board on.
+ 
+-    sudo mkfs.vfat -F 32 -n boot /dev/mmcblk0p1
+-    sudo mount /dev/mmcblk0p1 /mnt
+-    sudo cp -a output/images/efi-part/* /mnt/
+-    sudo cp output/images/bzImage /mnt/
+-    sudo umount /mnt
++  $ dd if=output/images/sdcard.img of=/dev/mmcblk0; sync
+ 
+- 3. Prepare the root partition
+-
+-    We will format it, mount it, and extract the root filesystem.
+-
+-    sudo mkfs.ext3 -L root /dev/mmcblk0p2
+-    sudo mount /dev/mmcblk0p2 /mnt
+-    sudo tar -C /mnt -xf output/images/rootfs.tar
+-    sudo umount /mnt
+-
+- 4. Enjoy
++3. Enjoy
+ 
+ Additional information about this board can be found at
+ http://www.minnowboard.org/.
+diff --git a/configs/minnowboard_defconfig b/configs/minnowboard_defconfig
+index 3091957f35dc..25c63ccbeead 100644
+--- a/configs/minnowboard_defconfig
++++ b/configs/minnowboard_defconfig
+@@ -5,9 +5,13 @@ BR2_x86_atom=y
+ # Misc
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyPCH0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard/post-image.sh"
+ 
+ # Linux headers same as kernel, a 3.8 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+ 
+ # Linux kernel
+ BR2_LINUX_KERNEL=y
+@@ -20,3 +24,8 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/minnowboard/linux-3.8.config"
+ # Bootloader
+ BR2_TARGET_GRUB2=y
+ BR2_TARGET_GRUB2_I386_EFI=y
++
++# Filesystem image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.7.0
