@@ -1,40 +1,31 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 13:43:26 +0200
-Subject: [Buildroot] [git commit] freescale_imx6sxsabresd_defconfig: fix
-	kernel headers version
-Message-ID: <20160415114521.12D28803DE@busybox.osuosl.org>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 15 Apr 2016 09:39:03 -0300
+Subject: [Buildroot] [PATCH] connman: add patch to fix build with
+ headers >= 4.5
+In-Reply-To: <20160415095606.189893ce@free-electrons.com>
+References: <1460643843-26057-1-git-send-email-gustavo@zacarias.com.ar>
+ <20160415095606.189893ce@free-electrons.com>
+Message-ID: <5710E0E7.5050700@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08f7d13570aa2a693ca16f1e41fc3760ecd6b21b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/04/16 04:56, Thomas Petazzoni wrote:
 
-Fixes https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/123187910
+> Applied, thanks! I guess it's the same problem as the one affecting
+> strongswan, which was recently resolved by disabling iptables support.
+> Correct? If you have a better fix for strongswan, feel free to submit
+> it.
+>
+> Thanks!
+>
+> Thomas
 
-Commit 1e5bc05a04d (configs: freescale_imx6*: bump version to
-3.14.52-1.1.0_ga) updated the kernel but forgot to change the kernel headers
-version to match.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/freescale_imx6sxsabresd_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 06ab10a..943528b 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -5,8 +5,8 @@ BR2_cortex_a9=y
- # patches
- BR2_GLOBAL_PATCH_DIR="board/freescale/imx6sabre/patches"
- 
--# Linux headers same as kernel, a 3.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10=y
-+# Linux headers same as kernel, a 3.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+Hi.
+Yes, it's very similar in nature, however from strongswan it's not a 
+huge show-stopper, whereas for connman you can't build without it.
+I'll take a look a strongswan shortly, the solution is probably just 
+adapting this patch.
+Regards.
