@@ -1,40 +1,38 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Fri, 15 Apr 2016 08:01:04 -0300
-Subject: [Buildroot] [PATCH] gtkmm3: bump to version 3.20.1
-Message-ID: <1460718064-28787-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Fri, 15 Apr 2016 08:30:46 -0300
+Subject: [Buildroot] [PATCH] glmark2: narrow down libgl requirements
+Message-ID: <1460719846-1046-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Mesa3d DRI drivers can be enabled without support for libgl (for
+example without x11). So make glmark2 gl (x11) support depend on
+BR2_PACKAGE_HAS_LIBGL being present as well.
+It doesn't exactly mean mesa3d providing libgl, but since we can't have
+more than one libgl provider at the same time it's equivalent.
+This is fallout from f1894ec95728806e09405d26663e0ea371afaeab which
+enabled DRI drivers for non-xorg builds. Fixes:
+http://autobuild.buildroot.net/results/174/1743ee5a340e5f4b1f8519e0b11eb196caa4f30e/
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gtkmm3/gtkmm3.hash | 4 ++--
- package/gtkmm3/gtkmm3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/glmark2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gtkmm3/gtkmm3.hash b/package/gtkmm3/gtkmm3.hash
-index 3ab2513..f2fc960 100644
---- a/package/gtkmm3/gtkmm3.hash
-+++ b/package/gtkmm3/gtkmm3.hash
-@@ -1,2 +1,2 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.20/gtkmm-3.20.0.sha256sum
--sha256	f021573f870df8a0b40ba37a7864c37be517c7a88cc957a193dbab28449b028a	gtkmm-3.20.0.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/gtkmm/3.20/gtkmm-3.20.1.sha256sum
-+sha256	051de1b8756ca6ec61f26264338cfc3060af936fd70bf4558bfe1e115418c612	gtkmm-3.20.1.tar.xz
-diff --git a/package/gtkmm3/gtkmm3.mk b/package/gtkmm3/gtkmm3.mk
-index b62d592..8c3e079 100644
---- a/package/gtkmm3/gtkmm3.mk
-+++ b/package/gtkmm3/gtkmm3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/glmark2/Config.in b/package/glmark2/Config.in
+index 052e820..433da0a 100644
+--- a/package/glmark2/Config.in
++++ b/package/glmark2/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_GLMARK2_EGL_GLES
+ config BR2_PACKAGE_GLMARK2_GL
+ 	bool
+ 	default y
++	depends on BR2_PACKAGE_HAS_LIBGL
+ 	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER
  
- GTKMM3_VERSION_MAJOR = 3.20
--GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).0
-+GTKMM3_VERSION = $(GTKMM3_VERSION_MAJOR).1
- GTKMM3_SOURCE = gtkmm-$(GTKMM3_VERSION).tar.xz
- GTKMM3_SITE = http://ftp.gnome.org/pub/gnome/sources/gtkmm/$(GTKMM3_VERSION_MAJOR)
- GTKMM3_LICENSE = LGPLv2.1+ (library), GPLv2+ (tools)
+ comment "glmark2 needs an OpenGL or an openGL ES and EGL backend provided by mesa3d"
 -- 
 2.7.3
