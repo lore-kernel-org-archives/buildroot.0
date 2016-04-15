@@ -1,37 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Apr 2016 11:48:43 +0200
-Subject: [Buildroot] [git commit] s6lx9_microboard_defconfig: lock kernel
-	version
-Message-ID: <20160415095135.4598B8011C@busybox.osuosl.org>
+From: buildroot at busybox.net <buildroot@busybox.net>
+Date: Fri, 15 Apr 2016 15:42:36 +0600
+Subject: [Buildroot] =?utf-8?b?0JrQu9C40LXQvdGC0YHQutC40LUg0LHQsNC30Ysg?=
+	=?utf-8?b?RW1haWw6IGFtbWFuYWt1dy03NzQzQHlvcG1haWwuY29tINGC0LXQuyAr?=
+	=?utf-8?q?79133913837_=28whatsapp=2Cviber=2Ctelegram=29__Skype=3A_?=
+	=?utf-8?q?prodawez389?=
+Message-ID: <966C3F0AC1153AF9252069D67200CB71@busybox.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7760b947c67e260f54c171bf14329d7e0bcd8d02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+??????? ??? ??? ?? ???????? ???? ???????????????????? ???????? ??? ?????? ???????.
 
-Fixes https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/123187960
+?? ???? ????? ???????, ??????, ????? ????? ??email,?
 
-The defconfig broke after we moved the default kernel version to 4.5.x. Fix
-it by locking the kernel version in the defconfig.
+????? ????? ?????? ???????? ??????? ????? ??????? ? ?????
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/s6lx9_microboard_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+??????? ????????? ??
 
-diff --git a/configs/s6lx9_microboard_defconfig b/configs/s6lx9_microboard_defconfig
-index 06a3ed3..f77c80b 100644
---- a/configs/s6lx9_microboard_defconfig
-+++ b/configs/s6lx9_microboard_defconfig
-@@ -6,6 +6,8 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyUL0"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ROOTFS_INITRAMFS=y
- BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/avnet/s6lx9_microboard/lx9_mmu_defconfig"
- BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+????+79133913837 (whatsapp,viber,telegram)
+
+Skype: prodawez389
+
+Email: ammanakuw-7743 at yopmail.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160415/5433b145/attachment.html>
