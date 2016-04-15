@@ -1,30 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 15 Apr 2016 10:17:18 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi_defconfig: configure
+Subject: [Buildroot] [git commit] configs/raspberrypi2_defconfig: configure
 	eth0 through dhcp
-Message-ID: <20160415081914.3CAD180295@busybox.osuosl.org>
+Message-ID: <20160415081915.EE7CB81E78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcbcf8d4f0c315b5b7814dd866260530feb7cc3e
+commit: https://git.buildroot.net/buildroot/commit/?id=20c59c8e795eb68948299b3555ec46c00c71d537
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rpi board has an ethernet port, so configure it at startup.
+The rpi2 board has an ethernet port, so configure it at startup.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/raspberrypi_defconfig | 1 +
+ configs/raspberrypi2_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 615c052..1795b2c 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -3,6 +3,7 @@ BR2_arm1176jzf_s=y
- BR2_ARM_EABIHF=y
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 1d82f60..506330c 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -6,6 +6,7 @@ BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
  
  BR2_TARGET_GENERIC_GETTY_PORT="tty1"
 +BR2_SYSTEM_DHCP="eth0"
