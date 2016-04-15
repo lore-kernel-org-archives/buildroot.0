@@ -1,52 +1,50 @@
-From: Patrick Williams <patrick@stwcx.xyz>
-Date: Fri, 15 Apr 2016 10:40:34 -0500
-Subject: [Buildroot] [PATCH] Adding in support for custom configurations
-Message-ID: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
+From: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date: Fri, 15 Apr 2016 13:18:05 -0300
+Subject: [Buildroot] [git commit] configs/minnowboard_max: configure
+ eth0 through dhcp
+In-Reply-To: <20160415081911.5BA4A80338@busybox.osuosl.org>
+References: <20160415081911.5BA4A80338@busybox.osuosl.org>
+Message-ID: <CAAEAJfDqYwZ5e4Tq8-BaUqT5fWb=R3aQ5Vf2nNTJ4s63ukwsPQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Elizabeth Liner <eliner@us.ibm.com>
+On 15 April 2016 at 05:17, Peter Korsgaard <peter@korsgaard.com> wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=ba40ce77ea7babb36a74adeb4772b54142f86975
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> The minnowboard max board has an ethernet port, so configure it at startup.
+>
 
-This change will add in the custom _defconfig's to the buildroot
-makefile so that when a _defconfig is in the custom directory it is
-recognized correctly, and is able to be used.
+Any reason why you are only doing this change for the Minnowboard MAX,
+and not also the Minnowboard?
 
-Signed-off-by: Elizabeth Liner <eliner@us.ibm.com>
-Signed-off-by: Patrick Williams <patrick@stwcx.xyz>
----
- Makefile | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  configs/minnowboard_max_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/configs/minnowboard_max_defconfig b/configs/minnowboard_max_defconfig
+> index 05df987..dfa1b6c 100644
+> --- a/configs/minnowboard_max_defconfig
+> +++ b/configs/minnowboard_max_defconfig
+> @@ -4,6 +4,7 @@ BR2_x86_atom=y
+>
+>  # Misc
+>  BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +BR2_SYSTEM_DHCP="eth0"
+>  BR2_ROOTFS_POST_BUILD_SCRIPT="board/minnowboard-max/post-build.sh"
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/minnowboard-max/post-image.sh"
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/Makefile b/Makefile
-index 63502d0..15ef194 100644
---- a/Makefile
-+++ b/Makefile
-@@ -845,6 +845,10 @@ defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/configs/$@ \
- 		$< --defconfig=$(BR2_EXTERNAL)/configs/$@ $(CONFIG_CONFIG_IN)
- 
-+%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(BR2_EXTERNAL)/custom/configs/%_defconfig outputmakefile
-+	@$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(BR2_EXTERNAL)/custom/configs/$@ \
-+		$< --defconfig=$(BR2_EXTERNAL)/custom/configs/$@ $(CONFIG_CONFIG_IN)
-+
- savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
- 	@$(COMMON_CONFIG_ENV) $< \
- 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
-@@ -984,6 +988,12 @@ ifneq ($(wildcard $(BR2_EXTERNAL)/configs/*_defconfig),)
- 	@$(foreach b, $(sort $(notdir $(wildcard $(BR2_EXTERNAL)/configs/*_defconfig))), \
- 	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
- endif
-+ifneq ($(wildcard $(BR2_EXTERNAL)/custom/configs/*_defconfig),)
-+	@echo
-+	@echo 'User-provided custom configs:'
-+	@$(foreach b, $(sort $(notdir $(wildcard $(BR2_EXTERNAL)/custom/configs/*_defconfig))), \
-+	  printf "  %-35s - Build for %s\\n" $(b) $(b:_defconfig=);)
-+endif
- 	@echo
- 
- release: OUT = buildroot-$(BR2_VERSION)
+
+
 -- 
-2.6.3
+Ezequiel Garc?a, VanguardiaSur
+www.vanguardiasur.com.ar
