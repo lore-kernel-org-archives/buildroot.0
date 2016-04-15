@@ -1,29 +1,69 @@
-From: buildroot at busybox.net <buildroot@busybox.net>
-Date: Fri, 15 Apr 2016 15:42:36 +0600
-Subject: [Buildroot] =?utf-8?b?0JrQu9C40LXQvdGC0YHQutC40LUg0LHQsNC30Ysg?=
-	=?utf-8?b?RW1haWw6IGFtbWFuYWt1dy03NzQzQHlvcG1haWwuY29tINGC0LXQuyAr?=
-	=?utf-8?q?79133913837_=28whatsapp=2Cviber=2Ctelegram=29__Skype=3A_?=
-	=?utf-8?q?prodawez389?=
-Message-ID: <966C3F0AC1153AF9252069D67200CB71@busybox.net>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 15 Apr 2016 12:46:30 +0200
+Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
+Message-ID: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-??????? ??? ??? ?? ???????? ???? ???????????????????? ???????? ??? ?????? ???????.
+By default hwdb files are installed in /usr/lib/udev/hwdb.d
+Currently they take about ~5MB. After first boot, systemd-hwdb tool
+parses them and creates a binary in /etc/udev/hwdb.bin, which takes
+another ~6.5MB.
 
-?? ???? ????? ???????, ??????, ????? ????? ??email,?
+In case of initramfs images, hwdb parsing is done every boot. This adds
+about 2-3 seconds to boot time in case of rootfs on SDHC class 10
+card (benchmarked with am335x board). NAND boot takes even longer.
 
-????? ????? ?????? ???????? ??????? ????? ??????? ? ?????
+Add config option to disable hwdb in systemd, for smaller images and
+better boot performance.
 
-??????? ????????? ??
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ package/systemd/Config.in  | 11 +++++++++++
+ package/systemd/systemd.mk |  6 ++++++
+ 2 files changed, 17 insertions(+)
 
-????+79133913837 (whatsapp,viber,telegram)
-
-Skype: prodawez389
-
-Email: ammanakuw-7743 at yopmail.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160415/5433b145/attachment.html>
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 97d48c4..324e884 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -84,6 +84,17 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ 
+ 	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+ 
++config BR2_PACKAGE_SYSTEMD_HWDB
++	bool "enable hwdb installation"
++	default y
++	help
++	  Enables hardware database installation to /usr/lib/udev/hwdb.d
++
++	  Disabling this option improves first boot time (or every boot
++	  time in case of initramfs images) and saves several MB space.
++
++	  https://www.freedesktop.org/software/systemd/man/hwdb.html
++
+ config BR2_PACKAGE_SYSTEMD_BINFMT
+ 	bool "enable binfmt tool"
+ 	help
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 79e657e..29b62c0 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -127,6 +127,12 @@ else
+ SYSTEMD_CONF_OPTS += --disable-microhttpd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_HWDB),y)
++SYSTEMD_CONF_OPTS += --enable-hwdb
++else
++SYSTEMD_CONF_OPTS += --disable-hwdb
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_BINFMT),y)
+ SYSTEMD_CONF_OPTS += --enable-binfmt
+ else
+-- 
+2.8.0
