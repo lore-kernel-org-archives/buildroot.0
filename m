@@ -1,29 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Apr 2016 13:22:03 +0200
-Subject: [Buildroot] [PATCH v4 0/4] ARM Cortex-M support and STM32
-	defconfigs
-In-Reply-To: <878u0dg7ed.fsf@dell.be.48ers.dk>
-References: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <878u0dg7ed.fsf@dell.be.48ers.dk>
-Message-ID: <20160416132203.6763b83a@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 16 Apr 2016 16:48:11 +0200
+Subject: [Buildroot] [PATCH] memcached: fix musl build
+In-Reply-To: <1163900c34d6fa034bcb8defc1b0f6578a293b28.1460697551.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 15 Apr 2016 08:19:11 +0300")
+References: <1163900c34d6fa034bcb8defc1b0f6578a293b28.1460697551.git.baruch@tkos.co.il>
+Message-ID: <871t65fw44.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On Sat, 16 Apr 2016 12:44:26 +0200, Peter Korsgaard wrote:
+ > Add a patch fixing pre-processor warnings that breaks the build. The patch is
+ > pending upstream.
 
->  > This new version has been runtime tested on STM32F429 Discovery.
-> 
-> Committed series, thanks!
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  .../memcached/0001-fix-build-with-musl-libc.patch  | 78 ++++++++++++++++++++++
+ >  1 file changed, 78 insertions(+)
+ >  create mode 100644 package/memcached/0001-fix-build-with-musl-libc.patch
 
-\o/ Thanks!
+ > diff --git a/package/memcached/0001-fix-build-with-musl-libc.patch
+ > b/package/memcached/0001-fix-build-with-musl-libc.patch
+ > new file mode 100644
+ > index 000000000000..068382051cde
+ > --- /dev/null
+ > +++ b/package/memcached/0001-fix-build-with-musl-libc.patch
+ > @@ -0,0 +1,78 @@
+ > +From 2137a608c77c467200d73469f723ba97ff6b3511 Mon Sep 17 00:00:00 2001
+ > +From: Natanael Copa <ncopa@alpinelinux.org>
+ > +Date: Mon, 18 Jan 2016 12:11:48 +0100
+ > +Subject: [PATCH] fix build with musl libc
+ > +
+ > +musl libc will warn if you include sys/signal.h instead of signal.h as
+ > +specified by posix. Build will fail due to -Werror explicitly beeing
+ > +set.
 
-Thomas
+Is there any way to disable -Werror? -Werror should imho not be used for
+any released SW as it tends to break the build time and again.
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Bye, Peter Korsgaard
