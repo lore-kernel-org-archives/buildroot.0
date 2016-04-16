@@ -1,39 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 Apr 2016 00:16:06 +0200
-Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
-In-Reply-To: <20160322235239.7a75f515@free-electrons.com> (Thomas Petazzoni's
- message of "Tue, 22 Mar 2016 23:52:39 +0100")
-References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
- <56F1C9D1.2010104@mind.be>
- <20160322235239.7a75f515@free-electrons.com>
-Message-ID: <87h9f2frh5.fsf@dell.be.48ers.dk>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Sat, 16 Apr 2016 02:07:08 +0200
+Subject: [Buildroot] [PATCH v4 3/3] dpdk: new package
+In-Reply-To: <20160415235203.3f9ed61e@free-electrons.com>
+References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
+ <1459042284-6684-4-git-send-email-viktorin@rehivetech.com>
+ <20160415235203.3f9ed61e@free-electrons.com>
+Message-ID: <20160416020708.03ce1bf3@jvn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Fri, 15 Apr 2016 23:52:03 +0200
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
 
-Hi,
+> Hello,
 
- >> > Instead, we require the custom help to be defined in its own file in the
- >> > br2-external tree. This way, we can safely include it unconditionally.
- >> 
- >> IMHO that custom help was a bad idea. It's adding complexity, an extra file in 
- >> BR2_EXTERNAL, and really not that useful...
+Dear Thomas,
 
- > Agreed. I'm not sure it's worth it. It's still time to revert if we
- > don't think it's a good idea. Peter?
+thanks a lot for your help! I've fixed those...
 
- > Without this custom help thing, it is already possible to define some
- > custom make target in external.mk that will display some help. It won't
- > be available until a configuration is defined, but oh well, who reads
- > help texts anyway?
+> > 
+> > * it may require to enable PCI, MSIX, UIO in the Linux Kernel
+> >   (some defconfigs does not include as default and it is platform
+> >   dependent as ARMv7 almost does not use PCI)  
+> 
+> I have enabled PCI_MSI=y and UIO=y in my kernel configuration, and
+> still, I don't have any .ko file installed in my target. Is this
+> expected?
 
-Yeah, I also think this adds too much complexity just for a pointer to
-help text. I think we should drop it.
+Of course, you are right. They are built but not installed. Fixed.
+
+> 
+[...]
+> > +
+> > +define DPDK_BUILD_CMDS
+> > +	$(MAKE) -C $(@D) RTE_KERNELDIR=$(LINUX_DIR) CROSS=$(TARGET_CROSS)  
+> 
+> When the architecture is ARMv7, please pass:
+> 
+> 	CPU_FLAGS=
+> 
+> Otherwise, the dpdk build system passes -mfloat-abi=softfp, which makes
+> the build fail when the selected ABI is EABIhf. And please report the
+> bug upstream: the dpdk build system should not make assumptions on the
+> selected ARM ABI.
+
+Well, this leads to some hardcoded check of architecture into the
+dpdk.mk. I don't like such approach. Would you instead accept the
+following (temporary) patch into Buildroot as a solution for this?
+
+http://dpdk.org/ml/archives/dev/2016-April/037577.html
+
+I will remove it with the next DPDK release (when it's in the
+mainline). I've tested and it builds successfully for both ABI and
+EABIhf.
+
+> 
+[...]
+> 
+> Can you fix those issues and resend?
+
+Sure, I will resend after I solve the ARM ABI issue.
+
+> 
+> Thanks!
+> 
+> Thomas
+
+Regards
+Jan
 
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+  Jan Viktorin                E-mail: Viktorin at RehiveTech.com
+  System Architect            Web:    www.RehiveTech.com
+  RehiveTech
+  Brno, Czech Republic
