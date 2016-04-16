@@ -1,55 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 16 Apr 2016 22:30:20 +0300
-Subject: [Buildroot] [PATCH] memcached: fix musl build
-In-Reply-To: <871t65fw44.fsf@dell.be.48ers.dk>
-References: <1163900c34d6fa034bcb8defc1b0f6578a293b28.1460697551.git.baruch@tkos.co.il>
- <871t65fw44.fsf@dell.be.48ers.dk>
-Message-ID: <20160416193020.GA2476@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Apr 2016 23:07:55 +0200
+Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
+In-Reply-To: <20160416092808.18012cf9@free-electrons.com>
+References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
+ <56F1C9D1.2010104@mind.be>
+ <20160322235239.7a75f515@free-electrons.com>
+ <87h9f2frh5.fsf@dell.be.48ers.dk>
+ <20160416092808.18012cf9@free-electrons.com>
+Message-ID: <20160416210755.GB3417@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Thomas, Peter, All,
 
-On Sat, Apr 16, 2016 at 04:48:11PM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+On 2016-04-16 09:28 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 16 Apr 2016 00:16:06 +0200, Peter Korsgaard wrote:
+> >  > Without this custom help thing, it is already possible to define some
+> >  > custom make target in external.mk that will display some help. It won't
+> >  > be available until a configuration is defined, but oh well, who reads
+> >  > help texts anyway?
+> > 
+> > Yeah, I also think this adds too much complexity just for a pointer to
+> > help text. I think we should drop it.
 > 
->  > Add a patch fixing pre-processor warnings that breaks the build. The patch is
->  > pending upstream.
-> 
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->  > ---
->  >  .../memcached/0001-fix-build-with-musl-libc.patch  | 78 ++++++++++++++++++++++
->  >  1 file changed, 78 insertions(+)
->  >  create mode 100644 package/memcached/0001-fix-build-with-musl-libc.patch
-> 
->  > diff --git a/package/memcached/0001-fix-build-with-musl-libc.patch
->  > b/package/memcached/0001-fix-build-with-musl-libc.patch
->  > new file mode 100644
->  > index 000000000000..068382051cde
->  > --- /dev/null
->  > +++ b/package/memcached/0001-fix-build-with-musl-libc.patch
->  > @@ -0,0 +1,78 @@
->  > +From 2137a608c77c467200d73469f723ba97ff6b3511 Mon Sep 17 00:00:00 2001
->  > +From: Natanael Copa <ncopa@alpinelinux.org>
->  > +Date: Mon, 18 Jan 2016 12:11:48 +0100
->  > +Subject: [PATCH] fix build with musl libc
->  > +
->  > +musl libc will warn if you include sys/signal.h instead of signal.h as
->  > +specified by posix. Build will fail due to -Werror explicitly beeing
->  > +set.
-> 
-> Is there any way to disable -Werror? -Werror should imho not be used for
-> any released SW as it tends to break the build time and again.
+> So will you revert it?
 
-Removing -Werror requires patching configure.ac. It's not required at this 
-point with this patch applied. We can always do it later if it's needed.
+I'll send the patches to revert it.
 
-baruch
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
