@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sat, 16 Apr 2016 09:28:08 +0200
-Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
-In-Reply-To: <87h9f2frh5.fsf@dell.be.48ers.dk>
-References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
- <56F1C9D1.2010104@mind.be>
- <20160322235239.7a75f515@free-electrons.com>
- <87h9f2frh5.fsf@dell.be.48ers.dk>
-Message-ID: <20160416092808.18012cf9@free-electrons.com>
+Date: Sat, 16 Apr 2016 09:31:33 +0200
+Subject: [Buildroot] [PATCH v4 3/3] dpdk: new package
+In-Reply-To: <20160416020708.03ce1bf3@jvn>
+References: <1459042284-6684-1-git-send-email-viktorin@rehivetech.com>
+ <1459042284-6684-4-git-send-email-viktorin@rehivetech.com>
+ <20160415235203.3f9ed61e@free-electrons.com>
+ <20160416020708.03ce1bf3@jvn>
+Message-ID: <20160416093133.1be7c7b8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,43 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 16 Apr 2016 00:16:06 +0200, Peter Korsgaard wrote:
+On Sat, 16 Apr 2016 02:07:08 +0200, Jan Viktorin wrote:
 
->  > Without this custom help thing, it is already possible to define some
->  > custom make target in external.mk that will display some help. It won't
->  > be available until a configuration is defined, but oh well, who reads
->  > help texts anyway?
+> > I have enabled PCI_MSI=y and UIO=y in my kernel configuration, and
+> > still, I don't have any .ko file installed in my target. Is this
+> > expected?
 > 
-> Yeah, I also think this adds too much complexity just for a pointer to
-> help text. I think we should drop it.
+> Of course, you are right. They are built but not installed. Fixed.
 
-So will you revert it?
+Good, thanks!
+
+> > When the architecture is ARMv7, please pass:
+> > 
+> > 	CPU_FLAGS=
+> > 
+> > Otherwise, the dpdk build system passes -mfloat-abi=softfp, which makes
+> > the build fail when the selected ABI is EABIhf. And please report the
+> > bug upstream: the dpdk build system should not make assumptions on the
+> > selected ARM ABI.
+> 
+> Well, this leads to some hardcoded check of architecture into the
+> dpdk.mk. I don't like such approach.
+
+Well, I don't see what's the problem with that really, but...
+
+> Would you instead accept the
+> following (temporary) patch into Buildroot as a solution for this?
+> 
+> http://dpdk.org/ml/archives/dev/2016-April/037577.html
+
+... if such a patch gets accepted upstream, then I'm fine with carrying
+the patch in Buildroot in the mean time.
+
+> > Can you fix those issues and resend?
+> 
+> Sure, I will resend after I solve the ARM ABI issue.
+
+Well, you solved it it seems, right? :-)
 
 Thomas
 -- 
