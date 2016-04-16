@@ -1,63 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 16 Apr 2016 12:42:46 +0200
-Subject: [Buildroot] [git commit] elf2flt: use new upstream site and bump
-	version
-Message-ID: <20160416104442.C4CC0802FB@busybox.osuosl.org>
+Date: Sat, 16 Apr 2016 12:43:16 +0200
+Subject: [Buildroot] [git commit] afboot-stm32: use the Buildroot toolchain
+Message-ID: <20160416104442.D59E5802FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97354fd229aa62a4174b0a93f28951edde6cc0f4
+commit: https://git.buildroot.net/buildroot/commit/?id=a354e3828dbb5f2c43885a4b4b9e4db6edc0ac33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The uClinux developers now have a Github with elf2flt code, with an
-upstream that is again active. Let's switch to this upstream, which
-has built-in support for ARM noMMU, contributed by Waldemar.
+By default, the afboot-stm32 Makefile uses "CROSS_COMPILE =
+arm-none-eabi-". Since I had such a toolchain installed on my system
+when testing afboot-stm32, I didn't realize it wasn't using the
+Buildroot toolchain.
 
-Since we're now fetching from github, a hash file is added as well.
-
-Finally, we disable -Werror to avoid build issues caused by warnings.
+However, using the Buildroot toolchain doesn't immediately works for
+FLAT toolchains, as gcc automatically wants to create a FLAT
+binary. So we need to adjust the afboot-stm32 Makefile to use directly
+'ld' and not 'gcc' when linking.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/elf2flt/elf2flt.hash | 2 ++
- package/elf2flt/elf2flt.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ .../0001-Use-ld-instead-of-gcc-for-linking.patch   | 61 ++++++++++++++++++++++
+ boot/afboot-stm32/afboot-stm32.mk                  |  2 +-
+ 2 files changed, 62 insertions(+), 1 deletion(-)
 
-diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
+diff --git a/boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch b/boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch
 new file mode 100644
-index 0000000..be7c776
+index 0000000..3f359dc
 --- /dev/null
-+++ b/package/elf2flt/elf2flt.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 64ede6936aa88028378e08192039c29791b9e32714cc861762214b8e106e7145 elf2flt-8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7.tar.gz
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index bec270b..6c16c30 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
++++ b/boot/afboot-stm32/0001-Use-ld-instead-of-gcc-for-linking.patch
+@@ -0,0 +1,61 @@
++From 0d581abe6620ac69adec321b94390e009802f36a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++Date: Sun, 13 Mar 2016 14:32:33 +0100
++Subject: [PATCH] Use ld instead of gcc for linking
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++---
++ Makefile | 11 ++++++-----
++ 1 file changed, 6 insertions(+), 5 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index ce40314..271bb4f 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1,6 +1,7 @@
++ CROSS_COMPILE ?= arm-none-eabi-
++ 
++ CC = $(CROSS_COMPILE)gcc
+++LD = $(CROSS_COMPILE)ld
++ OBJCOPY = $(CROSS_COMPILE)objcopy
++ OBJDUMP = $(CROSS_COMPILE)objdump
++ SIZE = $(CROSS_COMPILE)size
++@@ -10,7 +11,7 @@ OPENOCD = openocd
++ CFLAGS := -mthumb -mcpu=cortex-m4
++ CFLAGS += -ffunction-sections -fdata-sections
++ CFLAGS += -Os -std=gnu99 -Wall
++-LDFLAGS := -nostartfiles -Wl,--gc-sections
+++LINKERFLAGS := -nostartfiles --gc-sections
++ 
++ obj-y += gpio.o mpu.o
++ obj-f4 += $(obj-y) usart-f4.o
++@@ -22,22 +23,22 @@ all: stm32f429i-disco stm32429i-eval stm32f469i-disco stm32746g-eval
++ 	$(CC) -c $(CFLAGS) $< -o $@
++ 
++ stm32f429i-disco: stm32f429i-disco.o $(obj-f4)
++-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32f429i-disco.elf stm32f429i-disco.o $(obj-f4)
+++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32f429i-disco.elf stm32f429i-disco.o $(obj-f4)
++ 	$(OBJCOPY) -Obinary stm32f429i-disco.elf stm32f429i-disco.bin
++ 	$(SIZE) stm32f429i-disco.elf
++ 
++ stm32429i-eval: stm32429i-eval.o $(obj-f4)
++-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32429i-eval.elf stm32429i-eval.o $(obj-f4)
+++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32429i-eval.elf stm32429i-eval.o $(obj-f4)
++ 	$(OBJCOPY) -Obinary stm32429i-eval.elf stm32429i-eval.bin
++ 	$(SIZE) stm32429i-eval.elf
++ 
++ stm32f469i-disco: stm32f469i-disco.o $(obj-f4)
++-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32f469i-disco.elf stm32f469i-disco.o $(obj-f4)
+++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32f469i-disco.elf stm32f469i-disco.o $(obj-f4)
++ 	$(OBJCOPY) -Obinary stm32f469i-disco.elf stm32f469i-disco.bin
++ 	$(SIZE) stm32f469i-disco.elf
++ 
++ stm32746g-eval: stm32746g-eval.o $(obj-f7)
++-	$(CC) -T stm32f429.lds $(LDFLAGS) -o stm32746g-eval.elf stm32746g-eval.o $(obj-f7)
+++	$(LD) -T stm32f429.lds $(LINKERFLAGS) -o stm32746g-eval.elf stm32746g-eval.o $(obj-f7)
++ 	$(OBJCOPY) -Obinary stm32746g-eval.elf stm32746g-eval.bin
++ 	$(SIZE) stm32746g-eval.elf
++ 
++-- 
++2.6.4
++
+diff --git a/boot/afboot-stm32/afboot-stm32.mk b/boot/afboot-stm32/afboot-stm32.mk
+index ac85d58..042b21f 100644
+--- a/boot/afboot-stm32/afboot-stm32.mk
++++ b/boot/afboot-stm32/afboot-stm32.mk
+@@ -8,7 +8,7 @@ AFBOOT_STM32_VERSION = v0.1
+ AFBOOT_STM32_SITE = $(call github,mcoquelin-stm32,afboot-stm32,$(AFBOOT_STM32_VERSION))
  
--ELF2FLT_VERSION = f859213b18a67fcfc09961267e0a1122d35186f4
--ELF2FLT_SITE = http://cgit.openadk.org/cgi/cgit/elf2flt.git
--ELF2FLT_SITE_METHOD = git
-+ELF2FLT_VERSION = 8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7
-+ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
- ELF2FLT_LICENSE = GPLv2+
- ELF2FLT_LICENSE_FILES = LICENSE.TXT
+ define AFBOOT_STM32_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) all
+ endef
  
-@@ -19,7 +18,8 @@ HOST_ELF2FLT_CONF_OPTS = \
- 	--with-binutils-include-dir=$(HOST_BINUTILS_DIR)/include/ \
- 	--with-libbfd=$(HOST_BINUTILS_DIR)/bfd/libbfd.a \
- 	--with-libiberty=$(HOST_BINUTILS_DIR)/libiberty/libiberty.a \
--	--target=$(GNU_TARGET_NAME)
-+	--target=$(GNU_TARGET_NAME) \
-+	--disable-werror
- 
- HOST_ELF2FLT_LIBS = -lz
- 
+ define AFBOOT_STM32_INSTALL_TARGET_CMDS
