@@ -1,117 +1,33 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Apr 2016 12:54:53 +0200
-Subject: [Buildroot] [PATCH v14 02/27] package/freeswitch: enable optional
-	modules
+Date: Sat, 16 Apr 2016 12:54:56 +0200
+Subject: [Buildroot] [PATCH v14 05/27] package/freeswitch: add optional
+	dependency to libpng
 In-Reply-To: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460804118-4900-3-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460804118-4900-6-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All these modules have no external dependencies.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 80 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 73 insertions(+), 7 deletions(-)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index a6d5de3..95a992b 100644
+index 9c6b874..b129628 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -36,13 +36,6 @@ FREESWITCH_DEPENDENCIES = \
- 	util-linux \
- 	zlib
- 
--# freeswitch comes with pre-enabled modules, since we want to control
--# the modules ourselves reset the upstream configuration
--define FREESWITCH_RESET_MODULES
--	> $(@D)/modules.conf
--endef
--FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_RESET_MODULES
--
- # we neither need host-perl nor host-php
- FREESWITCH_CONF_ENV += \
- 	ac_cv_prog_PERL=false \
-@@ -94,4 +87,77 @@ FREESWITCH_LICENSE_FILES += libs/libzrtp/src/zrtp_legal.c
- FREESWITCH_CONF_OPTS += --disable-zrtp
+@@ -171,4 +171,9 @@ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
  endif
  
-+# Enable optional modules
-+FREESWITCH_ENABLED_MODULES += \
-+	applications/mod_avmd \
-+	applications/mod_blacklist \
-+	applications/mod_callcenter \
-+	applications/mod_commands \
-+	applications/mod_conference \
-+	applications/mod_curl \
-+	applications/mod_db \
-+	applications/mod_directory \
-+	applications/mod_dptools \
-+	applications/mod_easyroute \
-+	applications/mod_esf \
-+	applications/mod_esl \
-+	applications/mod_expr \
-+	applications/mod_fifo \
-+	applications/mod_fsk \
-+	applications/mod_hash \
-+	applications/mod_httapi \
-+	applications/mod_lcr \
-+	applications/mod_sms \
-+	applications/mod_snom \
-+	applications/mod_spandsp \
-+	applications/mod_spy \
-+	applications/mod_valet_parking \
-+	applications/mod_voicemail \
-+	codecs/mod_g723_1 \
-+	codecs/mod_g729 \
-+	dialplans/mod_dialplan_asterisk \
-+	dialplans/mod_dialplan_xml \
-+	endpoints/mod_loopback \
-+	endpoints/mod_rtc \
-+	endpoints/mod_rtmp \
-+	endpoints/mod_sofia \
-+	endpoints/mod_verto \
-+	event_handlers/mod_cdr_csv \
-+	event_handlers/mod_cdr_sqlite \
-+	event_handlers/mod_event_socket \
-+	formats/mod_local_stream \
-+	formats/mod_native_file \
-+	formats/mod_tone_stream \
-+	loggers/mod_console \
-+	loggers/mod_logfile \
-+	loggers/mod_syslog \
-+	say/mod_say_de \
-+	say/mod_say_en \
-+	say/mod_say_es \
-+	say/mod_say_es_ar \
-+	say/mod_say_fa \
-+	say/mod_say_fr \
-+	say/mod_say_he \
-+	say/mod_say_hr \
-+	say/mod_say_hu \
-+	say/mod_say_it \
-+	say/mod_say_ja \
-+	say/mod_say_nl \
-+	say/mod_say_pl \
-+	say/mod_say_pt \
-+	say/mod_say_ru \
-+	say/mod_say_sv \
-+	say/mod_say_th \
-+	say/mod_say_zh \
-+	xml_int/mod_xml_cdr \
-+	xml_int/mod_xml_rpc \
-+	xml_int/mod_xml_scgi
-+
-+define FREESWITCH_ENABLE_MODULES
-+	$(Q)echo $(FREESWITCH_ENABLED_MODULES) \
-+		| tr ' ' '\n' \
-+		> $(@D)/modules.conf
-+endef
-+FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++FREESWITCH_DEPENDENCIES += libpng
++FREESWITCH_ENABLED_MODULES += formats/mod_png
++endif
 +
  $(eval $(autotools-package))
 -- 
