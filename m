@@ -1,51 +1,34 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sat, 16 Apr 2016 09:50:20 +0200
-Subject: [Buildroot] [PATCH] luvi: bump to version 2.7.0
-Message-ID: <1460793020-9852-1-git-send-email-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 16 Apr 2016 12:44:26 +0200
+Subject: [Buildroot] [PATCH v4 0/4] ARM Cortex-M support and STM32
+	defconfigs
+In-Reply-To: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
+ (Thomas Petazzoni's message of "Fri, 15 Apr 2016 23:02:16 +0200")
+References: <1460754140-24255-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <878u0dg7ed.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fetch a patch from upstream [1] to fix CMake build error when building with
-option "WithSharedLibluv=ON".
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-[1] https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241
+ > Hello,
+ > Yet another version of the ARM Cortex-M support and STM32 defconfigs.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/luvi/luvi.hash | 3 ++-
- package/luvi/luvi.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ > Changes since v3:
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index 6f95dac..7aa099f 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  a8b4aecf4c1d781614fe187b6afcb2dc7462fcd6e76a3f38cbfd0a8244c01582  luvi-src-v2.6.1.tar.gz
-+sha256  1177fcc69b1bd74696d7f106e1632462b7331ef7816bbcada91a530ef19235ea  luvi-src-v2.7.0.tar.gz
-+sha256  0269504ebd6fe73948bd2314199e686701c6de882fab84a48b8317c0671e84c5  35c3961d10d3f9e3752102ea8e8bb8c187b32241.patch
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index 305ff4f..c5cfed6 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
- 
--LUVI_VERSION = v2.6.1
-+LUVI_VERSION = v2.7.0
- LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
- LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
- LUVI_LICENSE = Apache-2.0
- LUVI_LICENSE_FILES = LICENSE.txt
- LUVI_DEPENDENCIES = libuv luajit luv host-luajit
-+LUVI_PATCH = https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241.patch
- 
- # Dispatch all architectures of LuaJIT
- ifeq ($(BR2_i386),y)
+ >  - Rebased on top of master, dropping all patches that have been
+ >    merged. We're down to four patches, yeah!
+
+ >  - Changed the elf2flt package to use the latest upstream version,
+ >    which allows to remove the patch that was needed until now to
+ >    support ARM noMMU (it has been merged upstream).
+
+ > This new version has been runtime tested on STM32F429 Discovery.
+
+Committed series, thanks!
+
 -- 
-2.8.0
+Bye, Peter Korsgaard
