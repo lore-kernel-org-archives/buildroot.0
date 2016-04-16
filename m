@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Apr 2016 12:54:56 +0200
-Subject: [Buildroot] [PATCH v14 05/27] package/freeswitch: add optional
-	dependency to libpng
+Date: Sat, 16 Apr 2016 12:55:00 +0200
+Subject: [Buildroot] [PATCH v14 09/27] package/freeswitch: enable mod_lua
 In-Reply-To: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460804118-4900-6-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460804118-4900-10-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,18 +16,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 9c6b874..b129628 100644
+index 31c0bda..f6eb137 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -171,4 +171,9 @@ FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+@@ -184,6 +184,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+FREESWITCH_DEPENDENCIES += libpng
-+FREESWITCH_ENABLED_MODULES += formats/mod_png
++ifeq ($(BR2_PACKAGE_LUA),y)
++FREESWITCH_DEPENDENCIES += lua
++FREESWITCH_ENABLED_MODULES += languages/mod_lua
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
