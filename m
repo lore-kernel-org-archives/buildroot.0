@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Apr 2016 12:55:13 +0200
-Subject: [Buildroot] [PATCH v14 22/27] package/freeswitch: enable
-	mod_memcache
+Date: Sat, 16 Apr 2016 12:55:16 +0200
+Subject: [Buildroot] [PATCH v14 25/27] package/freeswitch: enable mod_shout
 In-Reply-To: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460804118-4900-23-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460804118-4900-26-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +16,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 4228f41..73ea144 100644
+index ce242a4..b2df598 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -206,6 +206,11 @@ FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+@@ -241,6 +241,11 @@ FREESWITCH_DEPENDENCIES += portaudio
+ FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBMEMCACHED),y)
-+FREESWITCH_DEPENDENCIES += libmemcached
-+FREESWITCH_ENABLED_MODULES += applications/mod_memcache
++ifeq ($(BR2_PACKAGE_LAME)$(BR2_PACKAGE_LIBSHOUT)$(BR2_PACKAGE_MPG123),yyy)
++FREESWITCH_DEPENDENCIES += lame libshout mpg123
++FREESWITCH_ENABLED_MODULES += formats/mod_shout
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
+ ifeq ($(BR2_PACKAGE_LIBSILK),y)
+ FREESWITCH_DEPENDENCIES += libsilk
+ FREESWITCH_ENABLED_MODULES += codecs/mod_silk
 -- 
 2.8.0.rc3
