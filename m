@@ -1,82 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Apr 2016 23:20:18 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "core: add the possibility to
-	provide help for custom rules"
-In-Reply-To: <cover.1460841291.git.yann.morin.1998@free.fr>
-References: <cover.1460841291.git.yann.morin.1998@free.fr>
-Message-ID: <433663cc842dbcbfbbde08d84d199682ca0b9518.1460841291.git.yann.morin.1998@free.fr>
+From: Fabio Porcedda <fabio.porcedda@gmail.com>
+Date: Sun, 17 Apr 2016 00:55:50 +0200
+Subject: [Buildroot] [PATCH 1/3] pcsc-lite: add hash file
+In-Reply-To: <20160413214854.40918ecd@free-electrons.com>
+References: <1460307570-10914-1-git-send-email-fabio.porcedda@gmail.com>
+ <20160413214854.40918ecd@free-electrons.com>
+Message-ID: <CAHkwnC9v3=LQ5ZwS6zR=Vksu5DX7nKpVPFaU8btr=GA-1U_BEg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 84c825f8e893bfb56847ab4a880c46066a41744f.
+2016-04-13 21:48 GMT+02:00 Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com>:
+> Hello,
+>
+> On Sun, 10 Apr 2016 18:59:28 +0200, Fabio Porcedda wrote:
+>> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+>> ---
+>>  package/pcsc-lite/pcsc-lite.hash | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>  create mode 100644 package/pcsc-lite/pcsc-lite.hash
+>
+> All three patches applied. However, I've noticed that for the
+> googlefontdirectory package, the tarball is no longer available from
+> the original location, so it falls back to sources.buildroot.net:
+>
+>>>> googlefontdirectory undefined Downloading
+> --2016-04-13 21:43:02--  https://s3.amazonaws.com/joemaller_google_webfonts/googlewebfonts.tgz
+> Resolving s3.amazonaws.com (s3.amazonaws.com)... 54.231.9.136
+> Connecting to s3.amazonaws.com (s3.amazonaws.com)|54.231.9.136|:443... connected.
+> HTTP request sent, awaiting response... 404 Not Found
+> 2016-04-13 21:43:02 ERROR 404: Not Found.
+>
+> --2016-04-13 21:43:02--  http://sources.buildroot.net/googlewebfonts.tgz
+> Resolving sources.buildroot.net (sources.buildroot.net)... 176.9.16.109
+> Connecting to sources.buildroot.net (sources.buildroot.net)|176.9.16.109|:80... connected.
+> HTTP request sent, awaiting response... 200 OK
+> Length: 67082411 (64M) [application/x-gzip]
+> Saving to: ?/home/thomas/projets/buildroot/output/build/.googlewebfonts.tgz.OGDHJa/output?
+>
+> Can you see if there is a new appropriate location to download this
+> package?
 
-Turns out that the custom help is not available when the $(O) directory
-has not been configure yet (i.e. when there is no .config already
-filled).
+I've found the same contents in this repository:
+https://github.com/doublejosh/google-web-fonts  inside the file:
+https://github.com/doublejosh/google-web-fonts/blob/master/google-web-fonts-files-only.tar.gz?raw=yes
 
-Rather than trying to work around this limitation with dirty hacks, just
-revert this feature. After all, this will not prevent an external.mk
-from providing custom help anyway; it's just not gonna be advertised nor
-displayed with the main help.
+If i understard correctly they are fonts available in
+https://www.google.com/fonts/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: J?r?me Pouiller <jezz@sysmic.org>
----
- Makefile                             |  7 -------
- docs/manual/customize-outside-br.txt | 14 --------------
- 2 files changed, 21 deletions(-)
+Do you think is fine if i use file the following url to download it
+within buildroot?
+https://github.com/doublejosh/google-web-fonts/raw/979f3dd9d43a2c1627da8dc55cb4e9f041515714/google-web-fonts-files-only.tar.gz
 
-diff --git a/Makefile b/Makefile
-index d205ac9..0e4beb2 100644
---- a/Makefile
-+++ b/Makefile
-@@ -968,7 +968,6 @@ endif
- 	@echo '  source-check           - check selected packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
--	@echo '  help-custom            - print help about custom actions (if any)'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
-@@ -977,12 +976,6 @@ endif
- 	@echo 'it on-line at http://buildroot.org/docs.html'
- 	@echo
- 
--# This rule does nothing, it is expected to be overloaded by
--# a br2-external tree or a local.mk . However, it must exist,
--# as we reference it in the main help, above. Making the rule
--# .PHONY does not work.
--help-custom:
--
- list-defconfigs:
- 	@echo 'Built-in configs:'
- 	@$(foreach b, $(sort $(notdir $(wildcard $(TOPDIR)/configs/*_defconfig))), \
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index be1827e..9ad177d 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -107,17 +107,3 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
-    output of +make list-defconfigs+ and allow them to be loaded with the
-    normal +make <name>_defconfig+ command. They will be visible under the
-    +User-provided configs+' label in the 'make list-defconfigs' output.
--
--Additionally, an +external.mk+ file may define the +help-custom+ make
--rule, to document custom make targets specific to this +BR2_EXTERNAL+
--tree. The help is completely free-form.
--
--------
--help-custom:
--    @echo 'Here goes your local help, where you may'
--    @echo 'describe some custom rules:'
--    @echo '  my-rule       - do something'
--    @echo '  my-other-rule - do something else'
--    @echo
--    @echo 'Please contact support at company.com in case of problem.'
--------
+Best regards
 -- 
-1.9.1
+Fabio Porcedda
