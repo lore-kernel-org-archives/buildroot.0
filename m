@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Apr 2016 12:55:03 +0200
-Subject: [Buildroot] [PATCH v14 12/27] package/freeswitch: add optional
-	dependency to libg7221
+Date: Sat, 16 Apr 2016 12:55:08 +0200
+Subject: [Buildroot] [PATCH v14 17/27] package/freeswitch: enable mod_silk
 In-Reply-To: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460804118-4900-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460804118-4900-18-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 85a6209..dfc994a 100644
+index d06ee89..8ce454c 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -179,6 +179,10 @@ else
- FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+@@ -226,6 +226,11 @@ FREESWITCH_DEPENDENCIES += portaudio
+ FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBG7221),y)
-+FREESWITCH_DEPENDENCIES += libg7221
++ifeq ($(BR2_PACKAGE_LIBSILK),y)
++FREESWITCH_DEPENDENCIES += libsilk
++FREESWITCH_ENABLED_MODULES += codecs/mod_silk
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBLDNS),y)
- FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
