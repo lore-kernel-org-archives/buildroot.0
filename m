@@ -1,58 +1,66 @@
-From: Daniel Franzini <daniel.franzini@gmail.com>
-Date: Sat, 16 Apr 2016 18:11:54 -0300
-Subject: [Buildroot] host=win32
-Message-ID: <CAFjNrKLdChKO10W3LLYWKxhW85CyNRXRN7M=qigxf6h=mDAPbw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Apr 2016 23:20:15 +0200
+Subject: [Buildroot] [pull request] Pull request for branch
+	yem/no-custom-help
+Message-ID: <cover.1460841291.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all.
+Hello All!
 
-I'm new to buildroot but a reasonably seasoned software developer. Now I'm
-having some issues with old toolchains (uclibc-targetted) for custom boards
-developed by a partner of mine.
+This small series reverts the recently introduced custom help feature,
+because it can not be correctly implemented without dirty hacks.
 
-Using buildroot, in a almost out-of-the-box setup (arm-linux-uclibc) I can
-actually create a shiny new toolchain for these board and that is pretty
-much fine.
+The issue is that the external.mk makefile is only sourced when the $(O)
+directory is already configured (i.e. when there is a .config file).
 
-The thing is that most of our developers use Windows based workstations. So
-I have done some research on tools that could be used to generate a Windows
-hostable toolchain and here I am. From what I could understand from the
-manuals, it is possible to use a external toolchain to build the desired
-toolchain in buildroot. So here are the questions:
+So, in an unconfigutred $(O) directory, the custom help would not be
+displayed. Fixing that would require that we either:
+  - move the custom help to its own .mk file (eek!), or
+  - be able to source external.mk unconditionally.
 
-1.) Can this external toolchain be mingw-baed? There are pre-packaged mingw
-tool for several mainstream linux distros (Debian, Ubuntu) and I tought
-they could be with buildroot. There are also some software that is
-cross-compiled from Linux to Win32 (FileZila).
+While the first solution is definitely trivial to implement (and was
+implemented with patches posted to the list), it is definitely not nice.
+It xcomplexifies the br2-external tree needlessly.
 
-2.) Is there any serious limitation with the mingw tools that prevent them
-from building gcc inside Linux? I mean, if they can build some software,
-they can build gcc also. What is, if any, the problem with mingw tools?
+Assessing the implacts of the second solution is however a very complex
+topic, and definitely not trivial.
 
-3.) I'm willing to give this a try but I still have to figure out things in
-buildroot. Does anyone has a good starting point?
+In the end, since there is not much gained by advertising and including
+the custom help in the main help, just remove that.
+
+Regards,
+Yann E. MORIN.
 
 
-Thanks in advance.
+The following changes since commit 04d0a5793fd802b1bcd091cfdd84a464d438579e:
+
+  configs/stm32f469_disco: new configuration for STM32F469 Discovery board (2016-04-16 12:44:07 +0200)
+
+are available in the git repository at:
+
+  git://git.busybox.net/~ymorin/git/buildroot yem/no-custom-help
+
+for you to fetch changes up to 433663cc842dbcbfbbde08d84d199682ca0b9518:
+
+  Revert "core: add the possibility to provide help for custom rules" (2016-04-16 23:14:10 +0200)
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      Revert "core: also display the custom help with our main help"
+      Revert "core: add the possibility to provide help for custom rules"
+
+ Makefile                             | 10 +---------
+ docs/manual/customize-outside-br.txt | 14 --------------
+ 2 files changed, 1 insertion(+), 23 deletions(-)
 
 -- 
-Daniel
-
-"Let us change our traditional attitude to the construction of programs.
-Instead of imagining that our main task is to instruct a computer what to
-do, let us concentrate rather on explaining to human beings what we want a
-computer to do." (Donald Knuth)
-
-"Yes, technogeeks can be funny, even if only to each other." (
-http://www.boogieonline.com/revolution/science/humor/)"
-
-"Man is driven to create; I know I really love to create things. And while
-I'm not good at painting, drawing, or music, I can write software."
-(Yukihiro Matsumoto, a.k.a. ``Matz'')
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160416/6c1afb48/attachment.html>
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
