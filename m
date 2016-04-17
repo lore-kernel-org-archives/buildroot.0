@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:30 +0200
-Subject: [Buildroot] [PATCH v15 08/27] package/freeswitch: enable mod_yaml
+Date: Sun, 17 Apr 2016 17:24:42 +0200
+Subject: [Buildroot] [PATCH v15 20/27] package/freeswitch: enable
+	mod_soundtouch
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-9-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-21-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +17,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index f067c20..8c3c081 100644
+index 9779996..51a41b1 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -179,6 +179,11 @@ FREESWITCH_DEPENDENCIES += libpng
- FREESWITCH_ENABLED_MODULES += formats/mod_png
+@@ -241,6 +241,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
+ FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBYAML),y)
-+FREESWITCH_DEPENDENCIES += libyaml
-+FREESWITCH_ENABLED_MODULES += languages/mod_yaml
++ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
++FREESWITCH_DEPENDENCIES += libsoundtouch
++FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
