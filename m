@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: add optional
-	dependency to libedit
-Message-ID: <20160417201716.730BA81983@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: enable mod_isac
+Message-ID: <20160417201716.F3ED37FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcf1123b24a46cf2ff0b18808b06db63b11284dc
+commit: https://git.buildroot.net/buildroot/commit/?id=4d5e67ecc76592259b0e0fc6c9aac6f33cda2d47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/freeswitch.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/freeswitch/freeswitch.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 7703763..643a48a 100644
+index a7ed597..bb8cfb2 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -69,7 +69,6 @@ FREESWITCH_CONF_ENV += \
- 	ac_cv_gcc_supports_w_no_unused_result=no
- 
- FREESWITCH_CONF_OPTS = \
--	--disable-core-libedit-support \
- 	--disable-core-odbc-support \
- 	--disable-libvpx \
- 	--disable-libyuv \
-@@ -160,4 +159,11 @@ define FREESWITCH_ENABLE_MODULES
+@@ -158,6 +158,14 @@ define FREESWITCH_ENABLE_MODULES
  endef
  FREESWITCH_PRE_CONFIGURE_HOOKS += FREESWITCH_ENABLE_MODULES
  
-+ifeq ($(BR2_PACKAGE_LIBEDIT),y)
-+FREESWITCH_DEPENDENCIES += libedit
-+FREESWITCH_CONF_OPTS += --enable-core-libedit-support
-+else
-+FREESWITCH_CONF_OPTS += --disable-core-libedit-support
++# mod_isac supports a limited set of archs
++# src/mod/codecs/mod_isac/typedefs.h
++ifeq ($(BR2_i386)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_x86_64),y)
++FREESWITCH_LICENSE += BSD-3c (mod_isac)
++FREESWITCH_LICENSE_FILES += src/mod/codecs/mod_isac/LICENSE
++FREESWITCH_ENABLED_MODULES += codecs/mod_isac
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ FREESWITCH_DEPENDENCIES += freetype
+ endif
