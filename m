@@ -1,75 +1,82 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 18 Apr 2016 00:41:38 +0200
-Subject: [Buildroot] [PATCH RFC] core/pkg-download: ignore hashes from
- mirror for VCS downloads
-In-Reply-To: <1460931432-13459-1-git-send-email-yann.morin.1998@free.fr>
-References: <1460931432-13459-1-git-send-email-yann.morin.1998@free.fr>
-Message-ID: <57141122.7050805@mind.be>
+Date: Mon, 18 Apr 2016 00:51:39 +0200
+Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
+In-Reply-To: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
+References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <5714137B.8040809@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/18/16 00:17, Yann E. MORIN wrote:
-> When a download via a VCS method fails, Buildroot attempts the download
-> from the backup mirror (if any is set). Such a download is done with the
-> wget helper.
+On 03/20/16 22:24, Yann E. MORIN wrote:
+> When there is no .config, we do not source $(BR2_EXTERNAL)/external.mk.
+> So we can not expose the custom help in that situation.
 >
-> Given a package that has a .hash file for relase tarballs, which also
-> allows the user to use a random revision from a VCS, the normal download
-> wrapper will not check for hashes, on the assumption that maybe they are
-> not reproducible [*].
+> It is now known whether sourcing $(BR2_EXTERNAL)/external.mk outside the
+> HAVE_DOT_CONFIG conditional block is entirely safe. Even if it would
+> work today, we would have a hard time not breaking it in the future,
+> because we do not have automatic checks for that and would need to rely
+> on users reporting issues after the fact.
 >
-> However, when the download fails (for any reason: network error,
-> upstream removed the revision, old machine with incomplete set of CA
-> certificates...), the backup download now proceeds over with http (or
-> https) with the wget wrapper. The wget wrapper *always* checks for
-> hashes, and when a .hash file is present but no hash is found for the
-> download, this is considered an error.
->
-> However, when we download from the backup mirror for a main download
-> that should have been done with git, we in this situation have no hash
-> for the download. Thus, we should not fail on a missing hash for that
-> download.
->
-> Add a test for the site-method in the backup mirror download; if it was
-> either one of the VCS method, pass a one-off BR_NO_CHECK_HASH_FOR
-> variable set to contain the tarball to download.
+> Instead, we require the custom help to be defined in its own file in the
+> br2-external tree. This way, we can safely include it unconditionally.
 
-  Even though this looks like a bit of a hack, I see no better way of handling 
-the situation.
-
-  However, the same should also be done for PRIMARY_SITE IMHO.
+  Custom help has been reverted now, so I marked this patch as rejected.
 
   Regards,
   Arnout
 
 >
-> Fixes issues like those reported by the Travis build bots:
->      https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/123624879
->
-> Reported-by: Peter Korsgaard <peter@korsgaard.com>
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->
+> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 > ---
-> Note: untested.
-> ---
->   package/pkg-download.mk | 1 +
->   1 file changed, 1 insertion(+)
+>   Makefile                             | 11 +++++++----
+>   docs/manual/customize-outside-br.txt |  7 ++++---
+>   2 files changed, 11 insertions(+), 7 deletions(-)
 >
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 1332e66..d68b7bc 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -235,6 +235,7 @@ define DOWNLOAD_INNER
->   		esac ; \
->   	fi ; \
->   	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
-> +		$(if $(filter bzr cvs git hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(2)) \
->   		$(call $(3)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
->   	fi ; \
->   	exit 1
+> diff --git a/Makefile b/Makefile
+> index ea8b1e4..03657d5 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -976,10 +976,13 @@ endif
+>   	@echo 'it on-line at http://buildroot.org/docs.html'
+>   	@echo
+>
+> -# This rule does nothing, it is expected to be overloaded by
+> -# a br2-external tree or a local.mk . However, it must exist,
+> -# as we reference it in the main help, above. Making the rule
+> -# .PHONY does not work.
+> +ifneq ($(wildcard $(BR2_EXTERNAL)/help.mk),)
+> +include $(BR2_EXTERNAL)/help.mk
+> +endif
+> +
+> +# This rule does nothing, it is expected to be overloaded by a
+> +# br2-external tree. However, it must exist, as we reference it
+> +# as a dependency of the main help, above.
+>   help-custom:
+>
+>   list-defconfigs:
+> diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
+> index be1827e..4f1c752 100644
+> --- a/docs/manual/customize-outside-br.txt
+> +++ b/docs/manual/customize-outside-br.txt
+> @@ -108,9 +108,10 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
+>      normal +make <name>_defconfig+ command. They will be visible under the
+>      +User-provided configs+' label in the 'make list-defconfigs' output.
+>
+> -Additionally, an +external.mk+ file may define the +help-custom+ make
+> -rule, to document custom make targets specific to this +BR2_EXTERNAL+
+> -tree. The help is completely free-form.
+> +Additionally, a +BR2_EXTERNAL+ tree may provide a file named +help.mk+
+> +that defines the +help-custom+ make rule, to document custom make
+> +targets specific to this +BR2_EXTERNAL+ tree. The help is completely
+> +free-form. See below for a sample +$(BR2_EXTERNAL)/help.mk+ file:
+>
+>   ------
+>   help-custom:
 >
 
 
