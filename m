@@ -1,96 +1,83 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 22:50:45 +0200
-Subject: [Buildroot] [PATCH v2] imx-uuc: add new package
-In-Reply-To: <1460544052-31608-1-git-send-email-gary.bisson@boundarydevices.com>
-References: <1460544052-31608-1-git-send-email-gary.bisson@boundarydevices.com>
-Message-ID: <20160417225045.26b26138@free-electrons.com>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Sun, 17 Apr 2016 22:56:07 +0200
+Subject: [Buildroot] [PATCH v5] dpdk: new package
+In-Reply-To: <20160417213544.2960f7cf@free-electrons.com>
+References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
+ <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
+ <20160417163814.03b67f53@free-electrons.com>
+ <20160417155607.5861459.38806.3255@rehivetech.com>
+ <20160417213544.2960f7cf@free-electrons.com>
+Message-ID: <20160417205607.5861459.29884.3259@rehivetech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Well, your config is for ARMv7 so no kmods are built because all current drivers require PCI which is hardly to see on this platform (I know just about Armada).
+
+Ok. I don't know what would be the use case for dropping dependency on the kernel. Building just the rootfs without the kernel?
+
+That means to check whether the kernel is enabled. And if it is then to enable building of the DPDK kernel modules. Right?
+
+This can be done but I am afraid I have to disable certain modules by name from the current configuration. This is not very generic (consider adding a new out-of-tree kernel module or removing an obsolete one from the DPDK, custom DPDK tree with third party modules) but there are only few of them so it might be a working solution. I will check if there is a more generic way but I don't think so.
+?
+Jan?Viktorin
+RehiveTech?
+Sent?from?a?mobile?device
+? P?vodn? zpr?va ?
+Od: Thomas Petazzoni
+Odesl?no: ned?le, 17. dubna 2016 21:35
+Komu: Jan Viktorin
+Kopie: buildroot at buildroot.org
+P?edm?t: Re: [Buildroot] [PATCH v5] dpdk: new package
+
 Hello,
 
-The commit title should have been:
+On Sun, 17 Apr 2016 17:56:07 +0200, Jan Viktorin wrote:
 
-	imx-uuc: new package
+> what configuration do you use?
 
-(yes that's nitpicking)
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
+BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_DPDK=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-On Wed, 13 Apr 2016 12:40:52 +0200, Gary Bisson wrote:
-> diff --git a/package/freescale-imx/imx-uuc/Config.in b/package/freescale-imx/imx-uuc/Config.in
-> new file mode 100644
-> index 0000000..75e4c87
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-uuc/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_IMX_UUC
-> +	bool "imx-uuc"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	depends on BR2_arm # Only relevant for i.MX
-> +	select BR2_PACKAGE_HOST_DOSFSTOOLS
-> +	help
-> +	  This package provides the Universal Adapter user-space utility
-> +	  that is used to receive commands from the Manufacturing Tool
-> +	  using the Freescale UTP Protocol.
-> +
-> +	  It requires a Freescale/NXP kernel whose configuration contains
-> +	  the CONFIG_FSL_UTP option.
-> +
-> +	  This package is provided by Freescale/NXP as-is and doesn't have
-> +	  an upstream.
+Before starting the build, I do "make linux-menuconfig", and enable
+CONFIG_UIO in the kernel configuration.
 
-Some of those lines were slightly too long, so I rewrapped.
+> In general, I cannot say? we are always fine with the in-kernel
+> modules. There are configurations of DPDK that build certain drivers.
+> Of course, DPDK community would like to have no out-of-tree drivers.
+> Some devices require a certain driver.
+> 
+> The x86 configuration builds drivers. The armv7 one doesn't (there
+> are no useful drivers for this purpose).
 
-> +
-> +comment "imx-uuc needs a toolchain w/ threads"
-> +	depends on BR2_ARM
+Then IMO the dependency on the Linux kernel should be optional.
 
-BR2_arm, not BR2_ARM.
+> A user may serve its own configuration of DPDK where a kernel driver
+> is selected and thus, the user would expect it to be built and
+> installed.
 
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/freescale-imx/imx-uuc/S80imx-uuc b/package/freescale-imx/imx-uuc/S80imx-uuc
-> new file mode 100644
-> index 0000000..8d6d8c1
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-uuc/S80imx-uuc
-> @@ -0,0 +1,28 @@
-> +#!/bin/sh
-> +
-> +NAME=uuc
-> +DAEMON=/usr/bin/$NAME
-> +
-> +case "$1" in
-> +  start)
-> +    printf "Starting $NAME: "
-> +    start-stop-daemon -S -q -b -p /var/run/${NAME}.pid -x $DAEMON
-> +    echo "OK"
-
-I've added missing error checking here.
-
-> +    ;;
-> +  stop)
-> +    printf "Stopping $NAME: "
-> +    start-stop-daemon -K -q -p /var/run/${NAME}.pid
-> +    echo "OK"
-
-And here. I've also re-indented the init script to match the
-indentation used in S50dropbear (which I believe is more or less our
-reference).
-
-> diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-> new file mode 100644
-> index 0000000..aab9ea8
-> --- /dev/null
-> +++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-> @@ -0,0 +1 @@
-> +sha256 95d7f7b075f58fedc07602fbc0e5bf5212d28deea3d09cdbcbd80992dcd18482  imx-uuc-0.5.1.tar.gz
-
-Missing source for the hash, so I've assumed it had been locally
-calculated, and added the usual comment.
-
-Applied with those changes, thanks!
+Right. But if the default configuration doesn't require the kernel to
+be built, we probably shouldn't require it as well.
 
 Thomas
 -- 
