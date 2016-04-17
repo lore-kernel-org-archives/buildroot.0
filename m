@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: enable mod_imagick
-Message-ID: <20160417201717.5B1387FBEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: enable mod_portaudio
+Message-ID: <20160417201717.153CC81983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10336c4399fd17b2f293c6680320ec4c893bd89f
+commit: https://git.buildroot.net/buildroot/commit/?id=1608786465e707d529ebf7e6ec205a9d48a18a26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -18,18 +18,18 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 53f529b..a338279 100644
+index de0a7ee..a75541d 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -175,6 +175,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
- FREESWITCH_DEPENDENCIES += freetype
+@@ -221,6 +221,11 @@ FREESWITCH_DEPENDENCIES += opus
+ FREESWITCH_ENABLED_MODULES += codecs/mod_opus
  endif
  
-+ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
-+FREESWITCH_DEPENDENCIES += imagemagick
-+FREESWITCH_ENABLED_MODULES += formats/mod_imagick
++ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
++FREESWITCH_DEPENDENCIES += portaudio
++FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
- FREESWITCH_DEPENDENCIES += libbroadvoice
- FREESWITCH_ENABLED_MODULES += codecs/mod_bv
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
