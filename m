@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:34 +0200
-Subject: [Buildroot] [PATCH v15 12/27] package/freeswitch: add optional
-	dependency to libg7221
+Date: Sun, 17 Apr 2016 17:24:33 +0200
+Subject: [Buildroot] [PATCH v15 11/27] package/freeswitch: enable mod_codec2
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-13-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-12-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +12,24 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index ed57c23..2de284b 100644
+index 9e97b66..ed57c23 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -179,6 +179,10 @@ else
- FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+@@ -167,6 +167,11 @@ FREESWITCH_DEPENDENCIES += libbroadvoice
+ FREESWITCH_ENABLED_MODULES += codecs/mod_bv
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBG7221),y)
-+FREESWITCH_DEPENDENCIES += libg7221
++ifeq ($(BR2_PACKAGE_LIBCODEC2),y)
++FREESWITCH_DEPENDENCIES += libcodec2
++FREESWITCH_ENABLED_MODULES += codecs/mod_codec2
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBLDNS),y)
- FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ FREESWITCH_DEPENDENCIES += libedit
+ FREESWITCH_CONF_OPTS += --enable-core-libedit-support
 -- 
 2.8.0.rc3
