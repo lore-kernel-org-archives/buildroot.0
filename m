@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: enable mod_sndfile
-Message-ID: <20160417201717.2678D81983@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: enable mod_ilbc
+Message-ID: <20160417201716.EAE377FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba1ba2a5f4a6b9bb4697fc640b244b8a3f49dec5
+commit: https://git.buildroot.net/buildroot/commit/?id=1231737d32ee1d28a995a311c9a7ded5b380764c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -18,18 +18,18 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 51a6cfb..514bb50 100644
+index 3a3fb32..a7ed597 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -231,6 +231,11 @@ FREESWITCH_DEPENDENCIES += libsilk
- FREESWITCH_ENABLED_MODULES += codecs/mod_silk
+@@ -183,6 +183,11 @@ ifeq ($(BR2_PACKAGE_LIBG7221),y)
+ FREESWITCH_DEPENDENCIES += libg7221
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
-+FREESWITCH_DEPENDENCIES += libsndfile
-+FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
++ifeq ($(BR2_PACKAGE_LIBILBC),y)
++FREESWITCH_DEPENDENCIES += libilbc
++FREESWITCH_ENABLED_MODULES += codecs/mod_ilbc
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
