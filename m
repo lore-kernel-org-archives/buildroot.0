@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: enable mod_shout
-Message-ID: <20160417201717.6E7E481983@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: enable mod_lua
+Message-ID: <20160417201716.C0A797FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cd9a72bdedc6b2c23ebcbc43ab5c9eea58905bd
+commit: https://git.buildroot.net/buildroot/commit/?id=05c5b3ec4e02ef1d284900e086d3800f98c0d006
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -18,18 +18,18 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 04c112d..0544e9e 100644
+index 072a956..f92cbff 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -241,6 +241,11 @@ FREESWITCH_DEPENDENCIES += portaudio
- FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
+@@ -184,6 +184,11 @@ FREESWITCH_DEPENDENCIES += libyaml
+ FREESWITCH_ENABLED_MODULES += languages/mod_yaml
  endif
  
-+ifeq ($(BR2_PACKAGE_LAME)$(BR2_PACKAGE_LIBSHOUT)$(BR2_PACKAGE_MPG123),yyy)
-+FREESWITCH_DEPENDENCIES += lame libshout mpg123
-+FREESWITCH_ENABLED_MODULES += formats/mod_shout
++ifeq ($(BR2_PACKAGE_LUA),y)
++FREESWITCH_DEPENDENCIES += lua
++FREESWITCH_ENABLED_MODULES += languages/mod_lua
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSILK),y)
- FREESWITCH_DEPENDENCIES += libsilk
- FREESWITCH_ENABLED_MODULES += codecs/mod_silk
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
