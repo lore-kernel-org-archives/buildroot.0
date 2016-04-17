@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: enable mod_soundtouch
-Message-ID: <20160417201717.3A0AB81983@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: add optional
+	dependency to libg7221
+Message-ID: <20160417201716.E15217FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b263e95039a8bcf3ee381d5075f0767044f29fe
+commit: https://git.buildroot.net/buildroot/commit/?id=689e66c6411505ea9c1da26f21aab6e418f39b8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freeswitch/freeswitch.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index b5861a4..f221957 100644
+index dc2fd0b..3a3fb32 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -241,6 +241,11 @@ FREESWITCH_DEPENDENCIES += libsndfile
- FREESWITCH_ENABLED_MODULES += formats/mod_sndfile
+@@ -179,6 +179,10 @@ else
+ FREESWITCH_CONF_OPTS += --disable-core-libedit-support
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSOUNDTOUCH),y)
-+FREESWITCH_DEPENDENCIES += libsoundtouch
-+FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
++ifeq ($(BR2_PACKAGE_LIBG7221),y)
++FREESWITCH_DEPENDENCIES += libg7221
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
