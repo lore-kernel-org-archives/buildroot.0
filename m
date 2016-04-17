@@ -1,59 +1,147 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 17 Apr 2016 17:15:04 +0200
-Subject: [Buildroot] [PATCH v14 01/27] package/freeswitch: new package
-In-Reply-To: <5713A777.2010503@mind.be>
-References: <1460804118-4900-1-git-send-email-bernd.kuhls@t-online.de>
- <1460804118-4900-2-git-send-email-bernd.kuhls@t-online.de>
- <5713A5DB.2040309@mind.be> <5713A777.2010503@mind.be>
-Message-ID: <5713A878.5060102@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Apr 2016 17:24:22 +0200
+Subject: [Buildroot] [PATCH v15 00/27] package/freeswitch: new package
+Message-ID: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/17/16 17:10, Arnout Vandecappelle wrote:
-> On 04/17/16 17:03, Arnout Vandecappelle wrote:
->> On 04/16/16 12:54, Bernd Kuhls wrote:
->>> This commit adds freeswitch without any configured modules and with a
->>> minimal set of non-optional dependencies. All other dependencies and
->>> modules will be added by further patches in this series.
-> [snip]
->> Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->   Oops, no...
->
-> [snip]
->
->>> +# zrtp supports a limited set of archs, sparc support is also broken due
->>> +# to a broken ld call by gcc, see libs/libzrtp/include/zrtp_config.h
->>> +ifeq
->>> ($(BR2_i386)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_aarch64_be)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpcle)$(BR2_x86_64),y)
->>>
->>>
->>> +FREESWITCH_CONF_OPTS += --enable-zrtp
->>> +else
->>> +FREESWITCH_LICENSE += AGPLv3 (libzrtp)
->>> +FREESWITCH_LICENSE_FILES += libs/libzrtp/src/zrtp_legal.c
->
->   This doesn't sound right, I guess that that bit should have gone to the other
-> side of the condition?
->
->   So this makes the whole AGPLv3 for most architectures... I guess that anyone
-> who has a problem with that can just edit the .mk file to remove zrtp support.
+Hi,
 
-  And now that I've actually _read_ zrtp_legal.c: there is an exception for when 
-you distribute it bundled with freeswitch; in that case, it's licensed MPLv1.1. 
-So, the AGPLv3 bit can be removed. I _would_ keep the zrtp_legal.c as a license 
-file, though.
+this patch series splits my previous patch into smaller chunks for easier
+review as requested by Luca and Thomas.
 
-  Regards,
-  Arnout
+Instead of enabling or disabling modules in the upstream modules.conf I
+decided to delete that file in the first patch to provide a minimal
+build for easier review, please keep in mind that I never did a run-time
+test with this minimal version. A lot of modules, desired as a default
+set, are added with the second patch - all of them have no external
+dependencies. The rest of the patch series consists of modules having
+some form of dependency, added module by module for easier review.
+
+Regards, Bernd
+
+v15: - added GPLv3 license (Arnout)
+     - fixed license for libzrtp (Arnout)
+v14: - added licenses from bundled libraries (Arnout)
+     - removed deletion of modules.conf in patch 0002 (Arnout)
+     - re-added patch for video support, it has no dependency on flite
+v13: - libuuid is now a dependency of freeswitch to avoid a build error
+       on arm (Thomas):
+       http://article.gmane.org/gmane.comp.lib.uclibc.buildroot/146009
+     - reworked dependencies (Arnout)
+       - removed host-[autoconf|automake|libtool]
+       - one dependency per line
+     - optimized FREESWITCH_ENABLE_MODULES (Arnout)
+     - removed video support patches, need to rework patch for flite
+       bump (Arnout)
+     - removed extra patch for xml_int/mod_xml_rpc, this module needs
+       wchar support and was moved to patch 0002 because freeswitch
+       now depends on wchar itself
+v12: - removed patches 0002 & 0003
+     - 0002 "fixed" a weird linking error when libuuid was missing,
+       autoreconf was necessary for this but with freeswitch 1.6.7
+       this breaks build with BR2_COMPILER_PARANOID_UNSAFE_PATH=y
+       Furthermore the linking error did not occur with 1.6.7, so
+       autoreconf was removed as well
+     - 0003 "fixed" only a cosmetic problem and also needed autoreconf
+     - added support for mod_cv, mod_shout, openldap and mod_flite
+     - mod_flite needs a version bump of the flite package, this is
+       included in the patch series
+v11: - bumped to 1.6.7
+     - libvpx & libyuv are now part of the freeswitch source code
+     - reworked video support using new option
+       BR2_PACKAGE_FREESWITCH_VIDEO
+     - removed two patches:
+       0001-jpeg.patch is not needed anymore since freeswitch does use
+       system libyuv
+       0003-FS-8736-resolve-Missing-MEMMOVE-macro-in-spandsp-aut.patch
+       was applied upstream
+v10: - addressed various comments (Thomas)
+     - fixed _LICENSE
+     - fixed linking error for target fs_cli when libuuid is disabled
+     - shortened subject of enable_mod* patches
+     - fixed subject of patch #0003
+     - added patch to remove modcheck.sh from build/Makefile.am instead
+       of using _PRE_CONFIGURE_HOOKS
+     - re-worded comment for FREESWITCH_BOOTSTRAP
+v9: - added comment about bundled 3rd-party libraries (Romain)
+    - renamed some POST_PATCH_HOOKS into PRE_CONFIGURE_HOOKS (Romain)
+    - replaced autoreconf fix for spandsp (added in v6) with upstream
+      commit, removed dependency to host-autoconf-archive
+v8: - rebased against branch next
+v7: - removed all Kconfig suboptions
+    - squashed zrtp patch into main patch
+    - updated platform support checks for zrtp and mod_isac
+    - renamed zrtp patch to 0002-zrtp.patch and updated it to fix PPC
+    - enabled missing modules:
+      mod_g723_1, mod_g729, mod_loopback and mod_say_*
+v6: - bumped to version 1.6.6
+    - fixed autoreconf bug in libs/spandsp/ introduced by version bump
+    - added hint for dynamic libs to comment in Config.in (Ricardo)
+    - changed dependency from libjpeg to jpeg (Ricardo)
+    - fixed -Werror bug using FREESWITCH_CONF_ENV,
+      removed 0001-cross_git.patch (Ricardo)
+    - re-numbered patches
+v5: - bumped to version 1.6.5
+    - split patch into smaller chunks (Luca, Thomas)
+    - removed most of the options from Config.in
+    - added several new modules
+    - compilation with uClibc-ng is fixed
+v4: - bumped to version 1.6.2
+v3: - bumped to version 1.6.0, added hash
+    - to compile with uClibc-NG this patch is needed:
+      http://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?h=1.0&id=5a167e319ca2bee566d330d1c901d76dc53deea7
+      http://thread.gmane.org/gmane.comp.lib.uclibc.buildroot/126450/focus=127191
+    - removed python module, cross compiling to 32bit on 64bit host is
+      broken:
+      http://lists.busybox.net/pipermail/buildroot/2011-August/045039.html
+    - added reverse dependencies from vlc
+    - added comment to 0002-jpeg.patch
+v2: - addressed various comments (Thomas)
+
+
+Bernd Kuhls (27):
+  package/freeswitch: new package
+  package/freeswitch: enable optional modules
+  package/freeswitch: add optional dependency to libedit
+  package/freeswitch: enable mod_enum
+  package/freeswitch: add optional dependency to libpng
+  package/freeswitch: add optional dependency to unixodbc
+  package/freeswitch: add optional dependency to freetype
+  package/freeswitch: enable mod_yaml
+  package/freeswitch: enable mod_lua
+  package/freeswitch: enable mod_bv
+  package/freeswitch: enable mod_codec2
+  package/freeswitch: add optional dependency to libg7221
+  package/freeswitch: enable mod_ilbc
+  package/freeswitch: enable mod_isac
+  package/freeswitch: enable mod_opus
+  package/freeswitch: enable mod_portaudio
+  package/freeswitch: enable mod_silk
+  package/freeswitch: enable mod_sndfile
+  package/freeswitch: enable mod_alsa
+  package/freeswitch: enable mod_soundtouch
+  package/freeswitch: add optional dependency to xz
+  package/freeswitch: enable mod_memcache
+  package/freeswitch: enable mod_imagick
+  package/freeswitch: enable mod_cv
+  package/freeswitch: enable mod_shout
+  package/freeswitch: add optional dependency to openldap
+  package/freeswitch: enable video support
+
+ package/Config.in                  |   1 +
+ package/freeswitch/0001-zrtp.patch |  33 ++++
+ package/freeswitch/Config.in       |  41 +++++
+ package/freeswitch/freeswitch.hash |   2 +
+ package/freeswitch/freeswitch.mk   | 323 +++++++++++++++++++++++++++++++++++++
+ 5 files changed, 400 insertions(+)
+ create mode 100644 package/freeswitch/0001-zrtp.patch
+ create mode 100644 package/freeswitch/Config.in
+ create mode 100644 package/freeswitch/freeswitch.hash
+ create mode 100644 package/freeswitch/freeswitch.mk
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.8.0.rc3
