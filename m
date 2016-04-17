@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:35 +0200
-Subject: [Buildroot] [PATCH v15 13/27] package/freeswitch: enable mod_ilbc
+Date: Sun, 17 Apr 2016 17:24:37 +0200
+Subject: [Buildroot] [PATCH v15 15/27] package/freeswitch: enable mod_opus
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-14-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-16-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,20 +16,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 2de284b..795a302 100644
+index a1d4dbe..082b6c5 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -183,6 +183,11 @@ ifeq ($(BR2_PACKAGE_LIBG7221),y)
- FREESWITCH_DEPENDENCIES += libg7221
+@@ -216,6 +216,11 @@ FREESWITCH_DEPENDENCIES += lua
+ FREESWITCH_ENABLED_MODULES += languages/mod_lua
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBILBC),y)
-+FREESWITCH_DEPENDENCIES += libilbc
-+FREESWITCH_ENABLED_MODULES += codecs/mod_ilbc
++ifeq ($(BR2_PACKAGE_OPUS),y)
++FREESWITCH_DEPENDENCIES += opus
++FREESWITCH_ENABLED_MODULES += codecs/mod_opus
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBLDNS),y)
- FREESWITCH_DEPENDENCIES += libldns
- FREESWITCH_ENABLED_MODULES += applications/mod_enum
+ ifeq ($(BR2_PACKAGE_UNIXODBC),y)
+ FREESWITCH_DEPENDENCIES += unixodbc
+ FREESWITCH_CONF_OPTS += \
 -- 
 2.8.0.rc3
