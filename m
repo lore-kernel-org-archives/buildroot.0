@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 22:21:26 +0200
-Subject: [Buildroot] [PATCH v15 27/27] package/freeswitch: enable video
- support
-In-Reply-To: <1460906689-29900-28-git-send-email-bernd.kuhls@t-online.de>
-References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
- <1460906689-29900-28-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160417222126.5dee1159@free-electrons.com>
+Date: Sun, 17 Apr 2016 22:30:47 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-firmware: drop revision handling
+ for iwlwifi
+In-Reply-To: <1460743888-19967-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1460743888-19967-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160417223047.5b2b76fa@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,82 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Apr 2016 17:24:49 +0200, Bernd Kuhls wrote:
+On Fri, 15 Apr 2016 15:11:27 -0300, Gustavo Zacarias wrote:
+> It's problematic since newer kernel versions for different chipsets
+> (3168, 7260, 7265) aren't version tied. See:
+> http://lxr.free-electrons.com/source/drivers/net/wireless/intel/iwlwifi/iwl-7000.c?v=4.5#L69
+> 
+> For 3168 the abs minimum is v20, normal minimum v20, and maximum v20.
+> For 7260 the abs minimum is v13, normal minimum v13, and maximum v17.
+> For 7265 the abs minimum is v13, normal minimum v13, and maximum v17.
+> 
+> And for the upcoming 7265D abs min v13, normal min v13 and max v20, with
+> minimum available version being v10 for previous (<4.5) kernels.
+> 
+> This gives an impossible to satisfy logical combination with one
+> revision knob for all 3 chipsets, and adding more knobs will add a lot
+> of complexity.
 
-> -config BR2_PACKAGE_FREESWITCH
-> +menuconfig BR2_PACKAGE_FREESWITCH
+I don't really see where the impossible combination is, but I agree
+that this involves creating many many config knobs, so I'm fine with
+the general idea.
 
-Why? This seems unrelated to the change.
+>  ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_3160),y)
+> -LINUX_FIRMWARE_FILES += iwlwifi-3160-$(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_REV).ucode
+> +LINUX_FIRMWARE_FILES += \
+> +	$(foreach version,7 8 9 10 12 13 16,iwlwifi-3160-$(version).ucode)
 
-> +if BR2_PACKAGE_FREESWITCH
-> +
-> +config BR2_PACKAGE_FREESWITCH_MODULE_VIDEO
-> +	bool "Video support"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libyuv (in-tree)
-> +	select BR2_PACKAGE_FFMPEG
-> +	select BR2_PACKAGE_FFMPEG_AVRESAMPLE
-> +	select BR2_PACKAGE_FFMPEG_SWSCALE
-> +
-> +comment "Video support needs a toolchain w/ gcc >= 4.8"
-> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +
-> +endif
+It would be nicer if we could find a way of using wildcards here, as it
+would make it more future proof (i.e it would automatically handle new
+firmware revisions).
 
-Why are you adding this option, while all other options are enabled
-automatically?
-
-What about just:
-
-	select BR2_PACKAGE_FFMPEG_AVRESAMPLE if BR2_PACKAGE_FFMPEG
-	select BR2_PACKAGE_FFMPEG_SWSCALE if BR2_PACKAGE_FFMPEG
-
-And then, in the .mk file:
-
-ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_8)$(BR2_PACKAGE_FFMPEG),yy)
-...
-endif
-
-> +ifeq ($(BR2_PACKAGE_FREESWITCH_MODULE_VIDEO),y)
-> +FREESWITCH_LICENSE += BSD-3c (libvpx, libyuv)
-
-I didn't notice until now, but we'll have issue with comma separation
-when appending things this way. You should have a look at
-package/qt/qt.mk to see how it was solved.
-
-> +FREESWITCH_LICENSE_FILES += libs/libvpx/LICENSE libs/libyuv/LICENSE
-> +FREESWITCH_CONF_OPTS += --enable-libvpx --enable-libyuv
-> +FREESWITCH_DEPENDENCIES += host-yasm ffmpeg
-> +FREESWITCH_ENABLED_MODULES += applications/mod_av
-> +FREESWITCH_ENABLED_MODULES += applications/mod_fsv
-> +
-> +# freeswitch uses its own copy of libvpx since 1.6.7
-> +# the implementation of libvpx into the freeswitch build system is not
-> +# cross-compile friendly so we compile libvpx ourselves by copying
-> +# most of packages/libvpx/libvpx.mk here, added by some --disable-
-> +# options from freeswitch-1.6.7/Makefile.am, line 536
-> +define FREESWITCH_CROSS_COMPILE_LIBVPX
-> +	(cd $(@D)/libs/libvpx && \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	$(TARGET_CONFIGURE_ARGS) \
-> +	LD="$(TARGET_CC)" \
-> +	CROSS=$(GNU_TARGET_NAME) \
-> +	./configure \
-> +		--target=generic-gnu \
-> +		--enable-pic \
-> +		--prefix=/usr \
-> +		--disable-docs \
-> +		--disable-examples \
-> +		--disable-install-bins \
-> +		--disable-install-srcs \
-> +		--disable-unit-tests \
-> +		--extra-cflags="-fvisibility=hidden" \
-> +	)
-> +	$(TARGET_MAKE_ENV) $(LIBVPX_MAKE_ENV) $(MAKE) -C $(@D)/libs/libvpx
-> +endef
-
-This is really horrible. Could you instead fix the libvpx integration
-to make it work? Report the problem upstream so that it get fixed? Use
-the external version of libvpx?
+Could you have a look and see if it's doable?
 
 Thanks!
 
