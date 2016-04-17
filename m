@@ -1,73 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 16:38:14 +0200
-Subject: [Buildroot] [PATCH v5] dpdk: new package
-In-Reply-To: <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
-References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
- <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
-Message-ID: <20160417163814.03b67f53@free-electrons.com>
+Date: Sun, 17 Apr 2016 16:43:29 +0200
+Subject: [Buildroot] [git commit] gutenprint: fix host build
+Message-ID: <20160417144345.03341803EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b6a80dff87e0b73e78a4d0dd1d0e70a491453a36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 16 Apr 2016 19:08:10 +0200, Jan Viktorin wrote:
-> This patch introduces support of the DPDK library (www.dpdk.org) into
-> Buildroot. DPDK is a library for high-speed packet sending/receiving
-> while bypassing the Linux Kernel. It allows to reach a high throughput
-> for 10-100 Gbps networks on the x86 platform.
-> 
-> The package compiles and installs DPDK libraries on the target and
-> staging and allows to compile other applications depending on the DPDK
-> library. It can also install some basic tools the DPDK provides
-> (testpmd, python scripts, test suite).
-> 
-> The patch assumes DPDK 16.04. This version contains support for the ARM
-> architecture. The ARM ports can be tested by
-> 
->  qemu_aarch64_virt_defconfig
->  qemu_arm_vexpress_defconfig
-> 
-> The included hash was calculated locally by downloading the tar.gz archives by
-> hand.
-> 
-> There are unfortunately some pitfalls:
-> 
-> * it may require to enable PCI, MSIX, UIO in the Linux Kernel
->   (some defconfigs does not include as default and it is platform
->   dependent as ARMv7 almost does not use PCI)
-> 
-> * when building PCAP PMD driver, the libpcap is required (partially
->   fixed as suggested by Arnout)
-> 
-> * some tools the DPDK provides depend on Python(2) so the user has
->   to enable it to install those
-> 
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+Disable USB support when CUPS disabled, otherwise host build breaks.
+Fixes following autobuild error:
+http://autobuild.buildroot.net/results/081b3be918ac1eaa8cfbc5919e00bc1ea267c1df/
 
-Thanks for this new iteration. Unfortunately, it still doesn't install
-any kernel module to my system. At install time, your addition of the
-install-kmod target simply does:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Thomas:
+ - use Git formatted patch, cherry-picked from upstream
+ - remove --without-libusb, not needed.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...-allow-USB-backends-to-be-built-if-CUPS-i.patch | 41 ++++++++++++++++++++++
+ package/gutenprint/gutenprint.mk                   |  2 +-
+ 2 files changed, 42 insertions(+), 1 deletion(-)
 
-make[3]: Nothing to be done for 'install-kmod'.
-
-Moreover, are you sure having a Linux kernel already built is always
-necessary? My understanding is that while DPDK has its own kernel
-modules, it can also rely on the kernel generic uio_pci_generic module.
-In this case, DPDK only needs to build userspace components, and no
-kernel component, which would make the dependency on Linux optional.
-
-From the DPDK documentation: "To run any DPDK application, a suitable
-uio module can be loaded into the running kernel. In many cases, the
-standard uio_pci_generic module included in the Linux kernel can
-provide the uio capability.".
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/gutenprint/0004-build-Don-t-allow-USB-backends-to-be-built-if-CUPS-i.patch b/package/gutenprint/0004-build-Don-t-allow-USB-backends-to-be-built-if-CUPS-i.patch
+new file mode 100644
+index 0000000..1ecc89e
+--- /dev/null
++++ b/package/gutenprint/0004-build-Don-t-allow-USB-backends-to-be-built-if-CUPS-i.patch
+@@ -0,0 +1,41 @@
++From b5e8dc446572c1198a24eff105a394d0f307951e Mon Sep 17 00:00:00 2001
++From: Solomon Peachy <pizza@shaftnet.org>
++Date: Fri, 15 Apr 2016 23:05:43 -0400
++Subject: [PATCH] build:  Don't allow USB backends to be built if CUPS is not
++ enabled.
++
++[Waldemar: backport from upstream commit
++fc1713589fed645f2c8002c3f66dfb69af314716.]
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ configure.ac | 14 ++++++++------
++ 1 file changed, 8 insertions(+), 6 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 800794b..ba30019 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -442,12 +442,14 @@ dnl if test -z "${[EXTRA_LIBREADLINE_DEPS]}" ; then
++ dnl   [EXTRA_LIBREADLINE_DEPS]=""
++ dnl fi
++ 
++-# libusb-1.0 (For CUPS backends)
++-PKG_CHECK_MODULES([LIBUSB], [libusb-1.0],
++-                  [HAVE_LIBUSB=yes
++-                   BUILD_LIBUSB_BACKENDS=yes],
++-                  [HAVE_LIBUSB=no
++-	           BUILD_LIBUSB_BACKENDS=no])
+++# libusb-1.0 (For CUPS backends, but only bother if CUPS is enabled)
+++if test "x$BUILD_CUPS" = "xyes" ; then
+++ PKG_CHECK_MODULES([LIBUSB], [libusb-1.0],
+++                   [HAVE_LIBUSB=yes
+++                    BUILD_LIBUSB_BACKENDS=yes],
+++                   [HAVE_LIBUSB=no
+++	            BUILD_LIBUSB_BACKENDS=no])
+++fi
++ 
++ AC_PATH_PROGS([GIMPTOOL2_CHECK], [gimptool-2.0 gimptool])
++ if test -z "${GIMPTOOL2_CHECK}" ; then
++-- 
++2.6.4
++
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 7e3024d..aebafe2 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -11,7 +11,7 @@ GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
+ GUTENPRINT_LICENSE = GPLv2+
+ GUTENPRINT_LICENSE_FILES = COPYING
+ 
+-# Needed, as we touch Makefile.am
++# Needed, as we touch Makefile.am and configure.ac
+ GUTENPRINT_AUTORECONF = YES
+ 
+ GUTENPRINT_DEPENDENCIES = \
