@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 16:44:46 +0200
-Subject: [Buildroot] [PATCH v3] gutenprint: fix host build
-In-Reply-To: <20160417095237.GA4469@waldemar-brodkorb.de>
-References: <20160417095237.GA4469@waldemar-brodkorb.de>
-Message-ID: <20160417164446.168e07c0@free-electrons.com>
+Date: Sun, 17 Apr 2016 16:45:05 +0200
+Subject: [Buildroot] [git commit] package/cmake: bump version to 3.5.2
+Message-ID: <20160417144509.E3C7E80337@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4472bacef2c6ef38d99b9f181d647d64195ae760
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Apr 2016 11:52:37 +0200, Waldemar Brodkorb wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> diff --git a/package/gutenprint/0004-build-usb-backends-conditional.patch b/package/gutenprint/0004-build-usb-backends-conditional.patch
-> new file mode 100644
-> index 0000000..7c744be
-> --- /dev/null
-> +++ b/package/gutenprint/0004-build-usb-backends-conditional.patch
-> @@ -0,0 +1,29 @@
-> +Backport from Upstream:
-> +https://sourceforge.net/p/gimp-print/source/ci/fc1713589fed645f2c8002c3f66dfb69af314716/
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-
-As suggested by Arnout, I've changed this to use a Git formatted patch
-cherry-picked from the upstream Git repository.
-
->  GUTENPRINT_DEPENDENCIES = \
-> @@ -67,6 +67,7 @@ HOST_GUTENPRINT_CONF_OPTS = \
->  	--disable-escputil \
->  	--disable-test \
->  	--disable-testpattern \
-> +	--without-libusb \
-
-This was not needed, so I removed it. It was needed in previous
-iterations of your patch, but not with the latest version of the
-backported patch.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 2c3f0ae..e40d4ea 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,2 @@
+-# From http://www.cmake.org/files/v3.5/cmake-3.5.1-SHA-256.txt
+-sha256	93d651a754bcf6f0124669646391dd5774c0fc4d407c384e3ae76ef9a60477e8	cmake-3.5.1.tar.gz
++# From http://www.cmake.org/files/v3.5/cmake-3.5.2-SHA-256.txt
++sha256	92d8410d3d981bb881dfff2aed466da55a58d34c7390d50449aa59b32bb5e62a	cmake-3.5.2.tar.gz
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index a6acf8a..a776b14 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CMAKE_VERSION_MAJOR = 3.5
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).1
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).2
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3c
+ CMAKE_LICENSE_FILES = Copyright.txt
