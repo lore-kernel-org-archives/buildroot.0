@@ -1,36 +1,24 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 17 Apr 2016 23:38:21 +0200
-Subject: [Buildroot] [PATCH v8 04/14] core: add HOST_SANITIZE_RPATH_HOOK to
-	TARGET_FINALIZE_HOOKS
+Date: Sun, 17 Apr 2016 23:38:22 +0200
+Subject: [Buildroot] [PATCH v8 05/14] core: add {TARGET,
+	STAGING}_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
 In-Reply-To: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
 References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1460929111-15615-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <1460929111-15615-6-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds host-patchelf as a target-finalize dependency, and
-introduces the HOST_SANITIZE_RPATH_HOOK hook to fix the ELF files'
-RPATH from the HOST_DIR location (excluding the sysroot).
+This patch introduces the TARGET_SANITIZE_RPATH_HOOK and
+STAGING_SANITIZE_RPATH_HOOK hooks fixing the ELF files' RPATH of
+binaries from, respectively, the TARGET_DIR and the STAGING_DIR
+locations.
 
-After running this hook, the RPATH from any host ELF files is relative to
-the binary location itself.
-
-Notes:
-- we avoid to fix RPATH in the sysroot.
-- we do not try to fix RPATH in the external toolchain installation
-  location as they may have been built in a way, this is already correct;
-  furthermore, fixing RPATH in those programs may result in breaking them.
-- the whole host directory is processed because a number of
-  host-package install programs that could be useful in places
-  different from $(HOST_DIR)/{bin,sbin,usr/bin,usr/sbin}.
-- the shared libraries are also processed in case they have a 'main'
-  function.
-
-As a step toward a fully relocatable SDK, this change allows to get the
-toolchain relocatable, but not yet the whole SDK.
+After running this hook, the RPATH from any target ELF files from both
+the target and the staging locations won't contain any occurence of the
+sysroot or some build locations.
 
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
@@ -39,49 +27,52 @@ changes v7->v8:
 - none
 
 changes v6->v7:
-- remove the DEBUG env. var. specific handling in Makefile, now just
-  place the variable in the Buildroot environment, to enable debug logs.
-  This is documented in a follow-up patch of this series.
+- remove the DEBUG env. var. specific handling in Makefile
 
 changes v5->v6:
 - update for the new script version
 - add debug mode support
 
 changes v4->v5:
+- target hook now sanitizes the rpath (Baruch)
 - add verbose support
+- update comment
 
 changes v3->v4:
-- add host-patchelf to PACKAGES instead of target-finalize (Baruch)
+- rebase
 - add comment
 
 changes v2->v3:
 - move hook in Makefile (Baruch)
 ---
- Makefile | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ Makefile | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/Makefile b/Makefile
-index a05b9e1..e3574cf 100644
+index e3574cf..38d1076 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -638,6 +638,21 @@ endef
- TARGET_FINALIZE_HOOKS += PURGE_LOCALES
- endif
+@@ -653,6 +653,24 @@ endef
  
-+# RPATH fixing
-+# - The host hook sets RPATH in host ELF binaries, using relative paths to the
-+#   library locations.
-+# - The target hook sanitizes RPATH in target ELF binaries, removing paths
-+#   pointing to package's build directories or the sysroot's libdirs.
-+PACKAGES += host-patchelf
-+
-+define HOST_SANITIZE_RPATH_HOOK
+ TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
+ 
++# Function sanitizing target/staging ELF files' RPATH.
++# i.e. it removes paths pointing to the staging or build location from the ELF
++# files' RPATH.
++define TARGET_SANITIZE_RPATH_HOOK
 +	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
-+	READELF=readelf \
-+		$(TOPDIR)/support/scripts/fix-rpath host $(HOST_DIR)
++	READELF=$(TARGET_READELF) \
++		$(TOPDIR)/support/scripts/fix-rpath target $(TARGET_DIR)
 +endef
 +
-+TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
++define STAGING_SANITIZE_RPATH_HOOK
++	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
++	READELF=$(TARGET_READELF) \
++		$(TOPDIR)/support/scripts/fix-rpath staging $(STAGING_DIR)
++endef
++
++TARGET_FINALIZE_HOOKS += TARGET_SANITIZE_RPATH_HOOK \
++       STAGING_SANITIZE_RPATH_HOOK
 +
  $(TARGETS_ROOTFS): target-finalize
  
