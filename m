@@ -1,71 +1,75 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 18 Apr 2016 00:32:23 +0200
-Subject: [Buildroot] [PATCH] support/scripts: fix graph-depends when run
- with python3
-In-Reply-To: <1460929308-16094-1-git-send-email-s.martin49@gmail.com>
-References: <1460929308-16094-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <57140EF7.6020808@mind.be>
+Date: Mon, 18 Apr 2016 00:41:38 +0200
+Subject: [Buildroot] [PATCH RFC] core/pkg-download: ignore hashes from
+ mirror for VCS downloads
+In-Reply-To: <1460931432-13459-1-git-send-email-yann.morin.1998@free.fr>
+References: <1460931432-13459-1-git-send-email-yann.morin.1998@free.fr>
+Message-ID: <57141122.7050805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/17/16 23:41, Samuel Martin wrote:
-> Make graph-depends script opening the output file in text mode since
-> only ascii characters will be written.
+On 04/18/16 00:17, Yann E. MORIN wrote:
+> When a download via a VCS method fails, Buildroot attempts the download
+> from the backup mirror (if any is set). Such a download is done with the
+> wget helper.
 >
-> This change fixes the following error occuring when the default host
-> python interpreter is python3:
+> Given a package that has a .hash file for relase tarballs, which also
+> allows the user to use a random revision from a VCS, the normal download
+> wrapper will not check for hashes, on the assumption that maybe they are
+> not reproducible [*].
 >
->    make: Entering directory '/opt/buildroot'
->    Getting targets
->    Getting dependencies for ['toolchain-external', 'toolchain', 'busybox', ...]
->    Getting dependencies for ['host-python3', 'host-pkgconf', 'host-gettext', ...]
->    Getting dependencies for ['host-libxml2', 'host-swig', 'host-m4', ...]
->    Getting version for ['toolchain-external', 'toolchain', 'busybox', ...]
->    Traceback (most recent call last):
->      File "/opt/buildroot/support/scripts/graph-depends", line 425, in <module>
->        outfile.write("digraph G {\n")
->    TypeError: a bytes-like object is required, not 'str'
->    Makefile:807: recipe for target 'graph-depends' failed
->    make[1]: *** [graph-depends] Error 1
->    Makefile:84: recipe for target '_all' failed
->    make: *** [_all] Error 2
->    make: Leaving directory '/opt/buildroot'
+> However, when the download fails (for any reason: network error,
+> upstream removed the revision, old machine with incomplete set of CA
+> certificates...), the backup download now proceeds over with http (or
+> https) with the wget wrapper. The wget wrapper *always* checks for
+> hashes, and when a .hash file is present but no hash is found for the
+> download, this is considered an error.
 >
-> While with python2, adding 'b' to the openning mode has no effect on
-> Linux (c.f. [2]), the above error is expected with python3 (c.f. [1]).
+> However, when we download from the backup mirror for a main download
+> that should have been done with git, we in this situation have no hash
+> for the download. Thus, we should not fail on a missing hash for that
+> download.
 >
-> Therefore, just open the outfile in default (i.e. text) mode.
->
-> [1] https://docs.python.org/3/library/functions.html#open
-> [2] https://docs.python.org/2/library/functions.html#open
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+> Add a test for the site-method in the backup mirror download; if it was
+> either one of the VCS method, pass a one-off BR_NO_CHECK_HASH_FOR
+> variable set to contain the tarball to download.
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+  Even though this looks like a bit of a hack, I see no better way of handling 
+the situation.
+
+  However, the same should also be done for PRIMARY_SITE IMHO.
 
   Regards,
   Arnout
 
+>
+> Fixes issues like those reported by the Travis build bots:
+>      https://travis-ci.org/buildroot/buildroot-defconfig-testing/jobs/123624879
+>
+> Reported-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
 > ---
->   support/scripts/graph-depends | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Note: untested.
+> ---
+>   package/pkg-download.mk | 1 +
+>   1 file changed, 1 insertion(+)
 >
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index a00eb9d..cb00383 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -73,7 +73,7 @@ else:
->       if check_only:
->           sys.stderr.write("don't specify outfile and check-only at the same time\n")
->           sys.exit(1)
-> -    outfile = open(args.outfile, "wb")
-> +    outfile = open(args.outfile, "w")
->
->   if args.package is None:
->       mode = MODE_FULL
+> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+> index 1332e66..d68b7bc 100644
+> --- a/package/pkg-download.mk
+> +++ b/package/pkg-download.mk
+> @@ -235,6 +235,7 @@ define DOWNLOAD_INNER
+>   		esac ; \
+>   	fi ; \
+>   	if test -n "$(call qstrip,$(BR2_BACKUP_SITE))" ; then \
+> +		$(if $(filter bzr cvs git hg svn,$($(PKG)_SITE_METHOD)),BR_NO_CHECK_HASH_FOR=$(2)) \
+>   		$(call $(3)_WGET,$(BR2_BACKUP_SITE)/$(2),$(2)) && exit ; \
+>   	fi ; \
+>   	exit 1
 >
 
 
