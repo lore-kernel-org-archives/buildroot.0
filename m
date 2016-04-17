@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: enable mod_opus
-Message-ID: <20160417201717.0B60781983@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: enable mod_cv
+Message-ID: <20160417201717.6404481983@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3017c984362727b81723e8bef3dc59715f3ece14
+commit: https://git.buildroot.net/buildroot/commit/?id=37fe9e2a946b3d575f3dd2b6489d8101489285b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -18,16 +18,16 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index bb8cfb2..de0a7ee 100644
+index a338279..04c112d 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -216,6 +216,11 @@ FREESWITCH_DEPENDENCIES += lua
- FREESWITCH_ENABLED_MODULES += languages/mod_lua
+@@ -256,6 +256,11 @@ FREESWITCH_DEPENDENCIES += libsoundtouch
+ FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
  endif
  
-+ifeq ($(BR2_PACKAGE_OPUS),y)
-+FREESWITCH_DEPENDENCIES += opus
-+FREESWITCH_ENABLED_MODULES += codecs/mod_opus
++ifeq ($(BR2_PACKAGE_OPENCV),y)
++FREESWITCH_DEPENDENCIES += opencv
++FREESWITCH_ENABLED_MODULES += applications/mod_cv
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
