@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:39 +0200
-Subject: [Buildroot] [PATCH v15 17/27] package/freeswitch: enable mod_silk
+Date: Sun, 17 Apr 2016 17:24:30 +0200
+Subject: [Buildroot] [PATCH v15 08/27] package/freeswitch: enable mod_yaml
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-18-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-9-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +16,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 0cded77..b57d2d7 100644
+index f067c20..8c3c081 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -226,6 +226,11 @@ FREESWITCH_DEPENDENCIES += portaudio
- FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
+@@ -179,6 +179,11 @@ FREESWITCH_DEPENDENCIES += libpng
+ FREESWITCH_ENABLED_MODULES += formats/mod_png
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSILK),y)
-+FREESWITCH_DEPENDENCIES += libsilk
-+FREESWITCH_ENABLED_MODULES += codecs/mod_silk
++ifeq ($(BR2_PACKAGE_LIBYAML),y)
++FREESWITCH_DEPENDENCIES += libyaml
++FREESWITCH_ENABLED_MODULES += languages/mod_yaml
 +endif
 +
  ifeq ($(BR2_PACKAGE_UNIXODBC),y)
