@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 16:17:02 +0200
-Subject: [Buildroot] [git commit] gstreamer1: fix help text typos
-Message-ID: <20160417141708.50DAA81840@busybox.osuosl.org>
+Date: Sun, 17 Apr 2016 16:17:40 +0200
+Subject: [Buildroot] [PATCH] gstreamer1: fix help text typos
+In-Reply-To: <5fcaa83b3fff75fea73f21c0c52932547b73b4f6.1460884564.git.baruch@tkos.co.il>
+References: <5fcaa83b3fff75fea73f21c0c52932547b73b4f6.1460884564.git.baruch@tkos.co.il>
+Message-ID: <20160417161740.7efd172e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c656c3a69692a57e8742432dc178a0a2d88f8135
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/gstreamer1/gstreamer1/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, 17 Apr 2016 12:16:04 +0300, Baruch Siach wrote:
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/gstreamer1/gstreamer1/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
-index c13f041..274171b 100644
---- a/package/gstreamer1/gstreamer1/Config.in
-+++ b/package/gstreamer1/gstreamer1/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_GSTREAMER1_PARSE
- 	bool "enable command-line parser"
- 	default y
- 	help
--	  Enable command line parser for gstreamer. This may incrase the CPu
-+	  Enable command line parser for gstreamer. This may increase the CPU
- 	  overhead by a small amount.
- 
- config BR2_PACKAGE_GSTREAMER1_TRACE
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
