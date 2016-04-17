@@ -1,57 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Apr 2016 10:55:23 +0200
-Subject: [Buildroot] [git commit] Revert "core: also display the custom help
-	with our main help"
-Message-ID: <20160417085733.4BFCD818DD@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 17 Apr 2016 12:16:04 +0300
+Subject: [Buildroot] [PATCH] gstreamer1: fix help text typos
+Message-ID: <5fcaa83b3fff75fea73f21c0c52932547b73b4f6.1460884564.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a49b81ed69e3da1f7854efcab8133081ee367556
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This reverts commit 0a767deba004c920e7824543380cffbb298507f8.
-
-Turns out that the custom help is not available when the $(O) directory
-has not been configure yet (i.e. when there is no .config already
-filled).
-
-Rather than trying to work around this limitation with dirty hacks, just
-revert this feature. After all, this will not prevent an external.mk
-from providing custom help anyway; it's just not gonna be advertised nor
-displayed with the main help.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: J??r??me Pouiller <jezz@sysmic.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- Makefile | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/gstreamer1/gstreamer1/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 55735ea..d205ac9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -895,9 +895,7 @@ endif
- 	rm -rf $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
- 		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE)
+diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
+index c13f04191344..274171b63921 100644
+--- a/package/gstreamer1/gstreamer1/Config.in
++++ b/package/gstreamer1/gstreamer1/Config.in
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_GSTREAMER1_PARSE
+ 	bool "enable command-line parser"
+ 	default y
+ 	help
+-	  Enable command line parser for gstreamer. This may incrase the CPu
++	  Enable command line parser for gstreamer. This may increase the CPU
+ 	  overhead by a small amount.
  
--help: help-internal help-custom
--
--help-internal:
-+help:
- 	@echo 'Cleaning:'
- 	@echo '  clean                  - delete all files created by build'
- 	@echo '  distclean              - delete all non-source files (including .config)'
-@@ -970,6 +968,7 @@ endif
- 	@echo '  source-check           - check selected packages for valid download URLs'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
-+	@echo '  help-custom            - print help about custom actions (if any)'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
- 	@echo '  make O=dir             - Locate all output files in "dir", including .config'
+ config BR2_PACKAGE_GSTREAMER1_TRACE
+-- 
+2.8.0.rc3
