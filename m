@@ -1,36 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Apr 2016 21:35:38 +0200
-Subject: [Buildroot] [git commit] gutenprint: add optional libusb support
-Message-ID: <20160417193802.2C29E81D4D@busybox.osuosl.org>
+Date: Sun, 17 Apr 2016 21:37:21 +0200
+Subject: [Buildroot] [git commit] file: bump to version 5.26
+Message-ID: <20160417193802.373CE7FB7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a99de14d1f216d81b17bbc31daa0a1e2854ed683
+commit: https://git.buildroot.net/buildroot/commit/?id=da400ee5e1e71f1e7389c1d397ccfd875116123b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As the recent build issues have shown, gutenprint has optional libusb
-support so ensure it is built after libusb if enabled for consistent
-builds.
-
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gutenprint/gutenprint.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/file/file.hash | 2 +-
+ package/file/file.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index aebafe2..8ee2406 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -16,7 +16,8 @@ GUTENPRINT_AUTORECONF = YES
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 2eac7a5..2c53af1 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 3735381563f69fb4239470b8c51b876a80425348b8285a7cded8b61d6b890eca  file-5.25.tar.gz
++sha256	2ef32b4ec936b0ff7b59a021dce56086a716663b6df1138c7ea597d396bf50cf	file-5.26.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 4d13547..282b2da 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
  
- GUTENPRINT_DEPENDENCIES = \
- 	cups host-pkgconf \
--	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(if $(BR2_PACKAGE_LIBUSB),libusb)
- 
- # host-gutenprint is needed to generate XML as part of compilation
- # the program that generates the xml also links against libgutenprint
+-FILE_VERSION = 5.25
++FILE_VERSION = 5.26
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
++FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2c, one file BSD-4c, one file BSD-3c
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
