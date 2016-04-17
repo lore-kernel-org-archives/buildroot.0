@@ -1,184 +1,102 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 23:31:34 +0200
-Subject: [Buildroot] [PATCH v2] arch/x86: remove support for i386
-Message-ID: <1460928694-22593-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Sun, 17 Apr 2016 23:38:17 +0200
+Subject: [Buildroot] [PATCH v8 00/14] Relocatable SDK/Build machine leaks:
+	RPATH fixing
+Message-ID: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Linux kernel doesn't even support i386 anymore, there is no NPTL
-support for i386 and uClibc-ng only supports NPTL on x86, so there is
-essentially no usable thread implementation. Most likely glibc and
-musl also don't support i386 either. So it's time to remove the
-support for this architecture variant.
+Hi all,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
-Changes since v1:
- - Add Config.in.legacy entry, as suggested by Arnout.
- - Remove i386 reference in qemu.mk, as noticed by Arnout.
----
- .defconfig                             | 1 -
- Config.in.legacy                       | 6 ++++++
- arch/Config.in.x86                     | 5 -----
- package/openssl/openssl.mk             | 5 -----
- package/qemu/qemu.mk                   | 1 -
- package/uclibc/Config.in               | 3 +--
- toolchain/toolchain-common.in          | 3 ---
- toolchain/toolchain-external/Config.in | 3 +--
- 8 files changed, 8 insertions(+), 19 deletions(-)
 
-diff --git a/.defconfig b/.defconfig
-index 585be55..037647e 100644
---- a/.defconfig
-+++ b/.defconfig
-@@ -19,7 +19,6 @@ BR2_i386=y
- # BR2_sparc is not set
- # BR2_sparc64 is not set
- # BR2_x86_64 is not set
--# BR2_x86_i386 is not set
- # BR2_x86_i486 is not set
- # BR2_x86_i586 is not set
- BR2_x86_i686=y
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 60702ce..b2bd034 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2016.05"
- 
-+config BR2_x86_i386
-+	bool "x86 i386 support removed"
-+	help
-+	  The support for the i386 processors of the x86 architecture
-+	  has been removed.
-+
- config BR2_PACKAGE_QT5WEBKIT_EXAMPLES
- 	bool "qt5webkit-examples package removed"
- 	select BR2_LEGACY
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 7be814b..4039db8 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -25,9 +25,6 @@ choice
- 	help
- 	  Specific CPU variant to use
- 
--config BR2_x86_i386
--	bool "i386"
--	depends on !BR2_x86_64
- config BR2_x86_i486
- 	bool "i486"
- 	depends on !BR2_x86_64
-@@ -210,7 +207,6 @@ config BR2_x86_winchip2
- endchoice
- 
- config BR2_ARCH
--	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
- 	default "i586"		if BR2_x86_i586
- 	default "i586"		if BR2_x86_x1000
-@@ -246,7 +242,6 @@ config BR2_ENDIAN
- 	default "LITTLE"
- 
- config BR2_GCC_TARGET_ARCH
--	default "i386"		if BR2_x86_i386
- 	default "i486"		if BR2_x86_i486
- 	default "i586"		if BR2_x86_i586
- 	default "i586"		if BR2_x86_x1000
-diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
-index 30dfe31..3b8e525 100644
---- a/package/openssl/openssl.mk
-+++ b/package/openssl/openssl.mk
-@@ -53,11 +53,6 @@ ifeq ($(ARCH),x86_64)
- OPENSSL_TARGET_ARCH = x86_64
- endif
- 
--# Workaround for bug #3445
--ifeq ($(BR2_x86_i386),y)
--OPENSSL_TARGET_ARCH = generic32 386
--endif
--
- define HOST_OPENSSL_CONFIGURE_CMDS
- 	(cd $(@D); \
- 		$(HOST_CONFIGURE_OPTS) \
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 4397367..522910e 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -23,7 +23,6 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-p
- #       arm             arm
- #       armeb           armeb
- #       bfin            not supported
--#       i386            i386
- #       i486            i386
- #       i586            i386
- #       i686            i386
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index eac5d05..efa84e9 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -71,7 +71,7 @@ choice
- 		select BR2_TOOLCHAIN_HAS_THREADS
- 		select BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 		depends on BR2_USE_MMU
--		depends on !BR2_m68k && !BR2_x86_i386
-+		depends on !BR2_m68k
- endchoice
- 
- config BR2_PTHREAD_DEBUG
-@@ -176,7 +176,6 @@ config BR2_UCLIBC_POWERPC_TYPE
- config BR2_UCLIBC_X86_TYPE
- 	string
- 	depends on BR2_UCLIBC_TARGET_ARCH = "i386"
--	default "386"        if BR2_x86_i386
- 	default "486"        if BR2_x86_i486
- 	default "586"        if BR2_x86_i586
- 	default "586MMX"     if BR2_x86_pentium_mmx
-diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 0907c5e..7ad1c05 100644
---- a/toolchain/toolchain-common.in
-+++ b/toolchain/toolchain-common.in
-@@ -316,7 +316,6 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST
- config BR2_TOOLCHAIN_HAS_SYNC_1
- 	bool
- 	default y
--	depends on !BR2_x86_i386
- 	depends on !BR2_bfin
- 	depends on !BR2_microblaze
- 	depends on !BR2_sparc
-@@ -330,7 +329,6 @@ config BR2_TOOLCHAIN_HAS_SYNC_4
- 	bool
- 	default y
- 	depends on !BR2_sparc
--	depends on !BR2_x86_i386
- 	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
- 
- # The availability of __sync for 8-byte types on ARM is somewhat
-@@ -362,7 +360,6 @@ config BR2_TOOLCHAIN_X86_HAS_SYNC_8
- 	bool
- 	default y
- 	depends on BR2_i386
--	depends on !BR2_x86_i386
- 	depends on !BR2_x86_i486
- 	depends on !BR2_x86_c3
- 	depends on !BR2_x86_winchip_c6
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ff759a0..d6f57a1 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -615,8 +615,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
- 	bool "Musl 1.1.12 toolchain (experimental)"
- 	depends on (BR2_arm && BR2_ARM_EABI) || \
- 		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
--		(BR2_armeb && BR2_ARM_EABI) || \
--		(BR2_i386 && !BR2_x86_i386) || \
-+		(BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
- 		(BR2_mips && !BR2_SOFT_FLOAT) || \
- 		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
- 		BR2_sh4 || BR2_sh4eb || \
--- 
-2.6.4
+Here is yet another round of the series aiming improving the relocatability
+of the SDK built by Buildroot.
+
+This time, I reduce the series to those related to RPATH (hope a shorter
+series will be easier to review...). Besides, the noticeable changes are:
+- the refactoring of the O definition, as it needs to point to the
+  absolute canonical path for the whole build, so that fix-rpath can do
+  its job, without missing anything;
+- and the refactoring of the check-host-leaks script.
+
+For further details, check the per-commit changelog in each commit log.
+
+
+Patches 1 and 2:
+  Fix the O variable definition.
+
+Patches 3 to 5:
+  Add the fix-rpath script, then run it on the Buildroot host, target and
+  staging trees.
+
+Patch 6:
+  Clean-up speex package WRT its RPATH hook.
+
+Patch 7:
+  Add a post-install hook to the toolchain package to render it relocatable.
+
+Patch 8 to 10:
+  Update and fix the check-host-rpath to re-use the shell helpers.
+
+Patches 11 to 13:
+  Add means to track build machine leaks into the host, target and staging
+  trees. These patches will allow to identify what remains to be fixed WRT
+  build machine leaks.
+
+Patches 14:
+  Update documentation about how to enable/adjust log level on script using
+  the shell modules introduced in patch 8/18.
+
+
+Regards,
+Samuel
+
+
+Samuel Martin (14):
+  core: split variables definition related to in/out-of-tree build from
+    O itself
+  core: re-enter make if $(CURDIR) or $(O) are not absolute canonical
+    path
+  support/scripts: add fix-rpath script + a bunch of helpers
+  core: add HOST_SANITIZE_RPATH_HOOK to TARGET_FINALIZE_HOOKS
+  core: add {TARGET,STAGING}_SANITIZE_RPATH_HOOK to
+    TARGET_FINALIZE_HOOKS
+  package/speex: remove no longer needed hook
+  toolchain: add post-install hooks making the toolchain relocatable
+  support/scripts: update check-host-rpath to use the shell helpers
+  support/scripts/check-host-rpath: silent find command
+  support/scripts/check-host-rpath: also check HOST_DIR/{bin,sbin}
+  support/scripts: add check-host-leaks script + all needed helpers
+  core: add check-leaks-in-{target,host,staging} targets
+  support/scripts/check-host-leaks: add option to classify leaks
+  docs/manual: document how to debug shell script
+
+ Makefile                            | 128 ++++++++++++---
+ docs/manual/debugging-buildroot.txt |  17 ++
+ package/pkg-utils.mk                |   5 +
+ package/speex/speex.mk              |   5 -
+ support/scripts/check-host-leaks    | 181 +++++++++++++++++++++
+ support/scripts/check-host-rpath    |  73 ++++-----
+ support/scripts/fix-rpath           | 116 ++++++++++++++
+ support/scripts/shell/log.sh        |  61 +++++++
+ support/scripts/shell/patchelf.sh   | 178 +++++++++++++++++++++
+ support/scripts/shell/readelf.sh    | 306 ++++++++++++++++++++++++++++++++++++
+ support/scripts/shell/sdk.sh        |  75 +++++++++
+ support/scripts/shell/source.sh     |  77 +++++++++
+ support/scripts/shell/utils.sh      |  74 +++++++++
+ toolchain/toolchain/toolchain.mk    |   5 +
+ 14 files changed, 1230 insertions(+), 71 deletions(-)
+ create mode 100755 support/scripts/check-host-leaks
+ create mode 100755 support/scripts/fix-rpath
+ create mode 100644 support/scripts/shell/log.sh
+ create mode 100644 support/scripts/shell/patchelf.sh
+ create mode 100644 support/scripts/shell/readelf.sh
+ create mode 100644 support/scripts/shell/sdk.sh
+ create mode 100644 support/scripts/shell/source.sh
+ create mode 100644 support/scripts/shell/utils.sh
+
+--
+2.8.0
