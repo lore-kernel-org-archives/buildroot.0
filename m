@@ -1,83 +1,62 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Sun, 17 Apr 2016 22:56:07 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Apr 2016 23:06:07 +0200
 Subject: [Buildroot] [PATCH v5] dpdk: new package
-In-Reply-To: <20160417213544.2960f7cf@free-electrons.com>
+In-Reply-To: <20160417205607.5861459.29884.3259@rehivetech.com>
 References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
  <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
  <20160417163814.03b67f53@free-electrons.com>
  <20160417155607.5861459.38806.3255@rehivetech.com>
  <20160417213544.2960f7cf@free-electrons.com>
-Message-ID: <20160417205607.5861459.29884.3259@rehivetech.com>
+ <20160417205607.5861459.29884.3259@rehivetech.com>
+Message-ID: <20160417230607.75d32331@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Well, your config is for ARMv7 so no kmods are built because all current drivers require PCI which is hardly to see on this platform (I know just about Armada).
-
-Ok. I don't know what would be the use case for dropping dependency on the kernel. Building just the rootfs without the kernel?
-
-That means to check whether the kernel is enabled. And if it is then to enable building of the DPDK kernel modules. Right?
-
-This can be done but I am afraid I have to disable certain modules by name from the current configuration. This is not very generic (consider adding a new out-of-tree kernel module or removing an obsolete one from the DPDK, custom DPDK tree with third party modules) but there are only few of them so it might be a working solution. I will check if there is a more generic way but I don't think so.
-?
-Jan?Viktorin
-RehiveTech?
-Sent?from?a?mobile?device
-? P?vodn? zpr?va ?
-Od: Thomas Petazzoni
-Odesl?no: ned?le, 17. dubna 2016 21:35
-Komu: Jan Viktorin
-Kopie: buildroot at buildroot.org
-P?edm?t: Re: [Buildroot] [PATCH v5] dpdk: new package
-
 Hello,
 
-On Sun, 17 Apr 2016 17:56:07 +0200, Jan Viktorin wrote:
+On Sun, 17 Apr 2016 22:56:07 +0200, Jan Viktorin wrote:
 
-> what configuration do you use?
+> Well, your config is for ARMv7 so no kmods are built because all
+> current drivers require PCI which is hardly to see on this platform
+> (I know just about Armada).
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
-BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_DPDK=y
-# BR2_TARGET_ROOTFS_TAR is not set
+Indeed mvebu_v7 is for Marvell Armada. Is DPDK only for PCI NICs? Can't
+it be used for the internal NICs of certain ARM SoCs ?
 
-Before starting the build, I do "make linux-menuconfig", and enable
-CONFIG_UIO in the kernel configuration.
+> Ok. I don't know what would be the use case for dropping dependency
+> on the kernel. Building just the rootfs without the kernel?
 
-> In general, I cannot say? we are always fine with the in-kernel
-> modules. There are configurations of DPDK that build certain drivers.
-> Of course, DPDK community would like to have no out-of-tree drivers.
-> Some devices require a certain driver.
-> 
-> The x86 configuration builds drivers. The armv7 one doesn't (there
-> are no useful drivers for this purpose).
+For example, yes. Another benefit of not having the mandatory kernel
+dependency is that the autobuilders would be able to test the DPDK
+package.
 
-Then IMO the dependency on the Linux kernel should be optional.
+> That means to check whether the kernel is enabled. And if it is then
+> to enable building of the DPDK kernel modules. Right?
 
-> A user may serve its own configuration of DPDK where a kernel driver
-> is selected and thus, the user would expect it to be built and
-> installed.
+Correct.
 
-Right. But if the default configuration doesn't require the kernel to
-be built, we probably shouldn't require it as well.
+> This can be done but I am afraid I have to disable certain modules by
+> name from the current configuration. This is not very generic
+> (consider adding a new out-of-tree kernel module or removing an
+> obsolete one from the DPDK, custom DPDK tree with third party
+> modules) but there are only few of them so it might be a working
+> solution. I will check if there is a more generic way but I don't
+> think so.
+
+I'm not sure what you mean here. If the default configuration on a
+given architecture builds kernel modules, then on this architecture,
+DPDK should depend on the kernel to be built. If the default
+configuration on another architecture does not build kernel modules,
+then there is no need to depend on the kernel.
+
+That being said, if only ARM does not build any kernel module, maybe we
+can simply do as you do right now, and depend on the kernel
+unconditionally, to keep things simple.
+
+Thanks!
 
 Thomas
 -- 
