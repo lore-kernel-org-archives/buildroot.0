@@ -1,93 +1,64 @@
-From: Jan Viktorin <viktorin@rehivetech.com>
-Date: Sun, 17 Apr 2016 17:56:07 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Apr 2016 21:35:44 +0200
 Subject: [Buildroot] [PATCH v5] dpdk: new package
-In-Reply-To: <20160417163814.03b67f53@free-electrons.com>
+In-Reply-To: <20160417155607.5861459.38806.3255@rehivetech.com>
 References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
  <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
  <20160417163814.03b67f53@free-electrons.com>
-Message-ID: <20160417155607.5861459.38806.3255@rehivetech.com>
+ <20160417155607.5861459.38806.3255@rehivetech.com>
+Message-ID: <20160417213544.2960f7cf@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-what configuration do you use?
-
-In general, I cannot say? we are always fine with the in-kernel modules. There are configurations of DPDK that build certain drivers. Of course, DPDK community would like to have no out-of-tree drivers. Some devices require a certain driver.
-
-The x86 configuration builds drivers. The armv7 one doesn't (there are no useful drivers for this purpose).
-
-A user may serve its own configuration of DPDK where a kernel driver is selected and thus, the user would expect it to be built and installed.
-
-It seems that in the future the in-kernel vfio is the way to? go.
-
-Jan?Viktorin
-RehiveTech
-Sent?from?a?mobile?device
-? P?vodn? zpr?va ?
-Od: Thomas Petazzoni
-Odesl?no: ned?le, 17. dubna 2016 16:38
-Komu: Jan Viktorin
-Kopie: buildroot at buildroot.org
-P?edm?t: Re: [Buildroot] [PATCH v5] dpdk: new package
-
 Hello,
 
-On Sat, 16 Apr 2016 19:08:10 +0200, Jan Viktorin wrote:
-> This patch introduces support of the DPDK library (www.dpdk.org) into
-> Buildroot. DPDK is a library for high-speed packet sending/receiving
-> while bypassing the Linux Kernel. It allows to reach a high throughput
-> for 10-100 Gbps networks on the x86 platform.
-> 
-> The package compiles and installs DPDK libraries on the target and
-> staging and allows to compile other applications depending on the DPDK
-> library. It can also install some basic tools the DPDK provides
-> (testpmd, python scripts, test suite).
-> 
-> The patch assumes DPDK 16.04. This version contains support for the ARM
-> architecture. The ARM ports can be tested by
-> 
-> qemu_aarch64_virt_defconfig
-> qemu_arm_vexpress_defconfig
-> 
-> The included hash was calculated locally by downloading the tar.gz archives by
-> hand.
-> 
-> There are unfortunately some pitfalls:
-> 
-> * it may require to enable PCI, MSIX, UIO in the Linux Kernel
-> (some defconfigs does not include as default and it is platform
-> dependent as ARMv7 almost does not use PCI)
-> 
-> * when building PCAP PMD driver, the libpcap is required (partially
-> fixed as suggested by Arnout)
-> 
-> * some tools the DPDK provides depend on Python(2) so the user has
-> to enable it to install those
-> 
-> Signed-off-by: Jan Viktorin <viktorin@rehivetech.com>
+On Sun, 17 Apr 2016 17:56:07 +0200, Jan Viktorin wrote:
 
-Thanks for this new iteration. Unfortunately, it still doesn't install
-any kernel module to my system. At install time, your addition of the
-install-kmod target simply does:
+> what configuration do you use?
 
-make[3]: Nothing to be done for 'install-kmod'.
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2016.02-3-g762b7c9.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_INET_RPC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
+BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_DPDK=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-Moreover, are you sure having a Linux kernel already built is always
-necessary? My understanding is that while DPDK has its own kernel
-modules, it can also rely on the kernel generic uio_pci_generic module.
-In this case, DPDK only needs to build userspace components, and no
-kernel component, which would make the dependency on Linux optional.
+Before starting the build, I do "make linux-menuconfig", and enable
+CONFIG_UIO in the kernel configuration.
 
-From the DPDK documentation: "To run any DPDK application, a suitable
-uio module can be loaded into the running kernel. In many cases, the
-standard uio_pci_generic module included in the Linux kernel can
-provide the uio capability.".
+> In general, I cannot say? we are always fine with the in-kernel
+> modules. There are configurations of DPDK that build certain drivers.
+> Of course, DPDK community would like to have no out-of-tree drivers.
+> Some devices require a certain driver.
+> 
+> The x86 configuration builds drivers. The armv7 one doesn't (there
+> are no useful drivers for this purpose).
 
-Best regards,
+Then IMO the dependency on the Linux kernel should be optional.
+
+> A user may serve its own configuration of DPDK where a kernel driver
+> is selected and thus, the user would expect it to be built and
+> installed.
+
+Right. But if the default configuration doesn't require the kernel to
+be built, we probably shouldn't require it as well.
 
 Thomas
 -- 
