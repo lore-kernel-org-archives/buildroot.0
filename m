@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:26 +0200
-Subject: [Buildroot] [PATCH v15 04/27] package/freeswitch: enable mod_enum
+Date: Sun, 17 Apr 2016 17:24:35 +0200
+Subject: [Buildroot] [PATCH v15 13/27] package/freeswitch: enable mod_ilbc
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-5-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-14-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,18 +16,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 6c2bbab..453b806 100644
+index 2de284b..795a302 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -166,4 +166,9 @@ else
- FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+@@ -183,6 +183,11 @@ ifeq ($(BR2_PACKAGE_LIBG7221),y)
+ FREESWITCH_DEPENDENCIES += libg7221
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBLDNS),y)
-+FREESWITCH_DEPENDENCIES += libldns
-+FREESWITCH_ENABLED_MODULES += applications/mod_enum
++ifeq ($(BR2_PACKAGE_LIBILBC),y)
++FREESWITCH_DEPENDENCIES += libilbc
++FREESWITCH_ENABLED_MODULES += codecs/mod_ilbc
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBLDNS),y)
+ FREESWITCH_DEPENDENCIES += libldns
+ FREESWITCH_ENABLED_MODULES += applications/mod_enum
 -- 
 2.8.0.rc3
