@@ -1,44 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Apr 2016 21:37:21 +0200
-Subject: [Buildroot] [git commit] file: bump to version 5.26
-Message-ID: <20160417193802.373CE7FB7E@busybox.osuosl.org>
+Date: Sun, 17 Apr 2016 21:43:31 +0200
+Subject: [Buildroot] [PATCH v3 1/4] board/minnowboard: Rework to
+	generate SD card image
+In-Reply-To: <1460820203-6080-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+ (Ezequiel Garcia's message of "Sat, 16 Apr 2016 12:23:20 -0300")
+References: <1460820203-6080-1-git-send-email-ezequiel@vanguardiasur.com.ar>
+ <1460820203-6080-2-git-send-email-ezequiel@vanguardiasur.com.ar>
+Message-ID: <87bn58dnrw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da400ee5e1e71f1e7389c1d397ccfd875116123b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/file/file.hash | 2 +-
- package/file/file.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ > Let's rework the board and config files to use genimage
+ > to generate the SD card image directly.
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 2eac7a5..2c53af1 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 3735381563f69fb4239470b8c51b876a80425348b8285a7cded8b61d6b890eca  file-5.25.tar.gz
-+sha256	2ef32b4ec936b0ff7b59a021dce56086a716663b6df1138c7ea597d396bf50cf	file-5.26.tar.gz
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 4d13547..282b2da 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.25
-+FILE_VERSION = 5.26
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
-+FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- FILE_INSTALL_STAGING = YES
- FILE_LICENSE = BSD-2c, one file BSD-4c, one file BSD-3c
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+ > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+ > --
+ > Changes from v1:
+
+ >   * host-mtools is needed too, as noted by Peter.
+
+I see you are changing it to use ext4 instead of ext3, but I don't think
+there's any real reason we were using ext3 in the first place - So
+committed, thanks.
+
+
+-- 
+Bye, Peter Korsgaard
