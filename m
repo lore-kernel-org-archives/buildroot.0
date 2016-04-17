@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 22:17:11 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: enable mod_cv
-Message-ID: <20160417201717.6404481983@busybox.osuosl.org>
+Date: Sun, 17 Apr 2016 22:18:17 +0200
+Subject: [Buildroot] [PATCH v15 01/27] package/freeswitch: new package
+In-Reply-To: <1460906689-29900-2-git-send-email-bernd.kuhls@t-online.de>
+References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
+ <1460906689-29900-2-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <20160417221817.4cb4eae3@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37fe9e2a946b3d575f3dd2b6489d8101489285b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/freeswitch/freeswitch.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+On Sun, 17 Apr 2016 17:24:23 +0200, Bernd Kuhls wrote:
+> +FREESWITCH_VERSION = 1.6.7
+> +FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+> +FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+> +FREESWITCH_LICENSE = MPLv1.1, \
+> +	GPLv3+ with font exception (fonts), \
+> +	Apache-2.0 (apr, apr-util) \
 
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index a338279..04c112d 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -256,6 +256,11 @@ FREESWITCH_DEPENDENCIES += libsoundtouch
- FREESWITCH_ENABLED_MODULES += applications/mod_soundtouch
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENCV),y)
-+FREESWITCH_DEPENDENCIES += opencv
-+FREESWITCH_ENABLED_MODULES += applications/mod_cv
-+endif
-+
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+There was a missing comma at the end of this line.
+
+I fixed this before applying.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
