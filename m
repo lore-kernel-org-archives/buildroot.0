@@ -1,37 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Apr 2016 22:06:15 +0200
-Subject: [Buildroot] [PATCH v3 3/4] board/minnowboard-max: Add more
-	peripherals and features to the kernel
-In-Reply-To: <1460820203-6080-4-git-send-email-ezequiel@vanguardiasur.com.ar>
- (Ezequiel Garcia's message of "Sat, 16 Apr 2016 12:23:22 -0300")
-References: <1460820203-6080-1-git-send-email-ezequiel@vanguardiasur.com.ar>
- <1460820203-6080-4-git-send-email-ezequiel@vanguardiasur.com.ar>
-Message-ID: <8760vgf1ag.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Sun, 17 Apr 2016 22:17:11 +0200
+Subject: [Buildroot] [git commit] package/freeswitch: enable mod_enum
+Message-ID: <20160417201716.841437FBEA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ezequiel" == Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=db6f22059e6ac959a3f534c7492e596271734cbc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This commit enables support for:
- >   * HDMI audio
- >   * Support for user-provided EDID firmware
- >     (useful to workaround broken monitors)
- >   * Evdev interface
- >   * System V IPC (required by ALSA)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/freeswitch/freeswitch.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- > The options make the system more useful.
-
- > Signed-off-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
- > --
- > Changes from v1:
-
- >   * Since we dropped systemd usage, got rid of related
- >     options.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 643a48a..75adc5a 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -166,4 +166,9 @@ else
+ FREESWITCH_CONF_OPTS += --disable-core-libedit-support
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBLDNS),y)
++FREESWITCH_DEPENDENCIES += libldns
++FREESWITCH_ENABLED_MODULES += applications/mod_enum
++endif
++
+ $(eval $(autotools-package))
