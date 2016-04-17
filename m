@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Apr 2016 10:57:02 +0200
-Subject: [Buildroot] [PATCH 1/2] libeXosip2: add a hash file
-In-Reply-To: <1460852433-29840-1-git-send-email-fabio.porcedda@gmail.com>
- (Fabio Porcedda's message of "Sun, 17 Apr 2016 02:20:32 +0200")
+Date: Sun, 17 Apr 2016 10:57:06 +0200
+Subject: [Buildroot] [PATCH 2/2] gadgetfs-test: add a hash file
+In-Reply-To: <1460852433-29840-2-git-send-email-fabio.porcedda@gmail.com>
+ (Fabio Porcedda's message of "Sun, 17 Apr 2016 02:20:33 +0200")
 References: <1460852433-29840-1-git-send-email-fabio.porcedda@gmail.com>
-Message-ID: <87oa98ehpd.fsf@dell.be.48ers.dk>
+ <1460852433-29840-2-git-send-email-fabio.porcedda@gmail.com>
+Message-ID: <87k2jwehp9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
