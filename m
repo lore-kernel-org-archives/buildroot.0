@@ -1,228 +1,65 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Sun, 17 Apr 2016 23:38:25 +0200
-Subject: [Buildroot] [PATCH v8 08/14] support/scripts: update
-	check-host-rpath to use the shell helpers
+Date: Sun, 17 Apr 2016 23:38:24 +0200
+Subject: [Buildroot] [PATCH v8 07/14] toolchain: add post-install hooks
+	making the toolchain relocatable
 In-Reply-To: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
 References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1460929111-15615-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <1460929111-15615-8-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This change adds the required dependency and post-target-install hooks
+to render the toolchain relocatable.
+
+Notes:
+- Although the toolchain package is a virtual package, it does support
+  hooks.
+- This has to be post-target-install hooks because the toolchain package
+  is handled as a "target" package.
+
+Ultimately, this patch allows to generate relocatable toolchains, just
+by doing:
+
+  $ make menuconfig
+  $ make toolchain
+
+Then, this toolchain can be used/shared/deployed anywhere*.
+
+*: on any Linux system with an ABI-compatible set of system libraries
+   (usually including: glibc, libgcc, zlib, flex and libsigsegv).
+
 Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 
 ---
 changes v7->v8:
 - none
 
 changes v6->v7:
-- minor updates after shell modules shell changes
-
-changes v5->v6:
 - new patch
 ---
- support/scripts/check-host-rpath | 73 +++++++++++++++-------------------------
- support/scripts/shell/readelf.sh | 69 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 97 insertions(+), 45 deletions(-)
+ toolchain/toolchain/toolchain.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-index 48d69da..45bece8 100755
---- a/support/scripts/check-host-rpath
-+++ b/support/scripts/check-host-rpath
-@@ -1,12 +1,29 @@
- #!/usr/bin/env bash
+diff --git a/toolchain/toolchain/toolchain.mk b/toolchain/toolchain/toolchain.mk
+index c22713b..618aa64 100644
+--- a/toolchain/toolchain/toolchain.mk
++++ b/toolchain/toolchain/toolchain.mk
+@@ -12,6 +12,11 @@ endif
  
-+# Copyright (C) 2015 Yann E. MORIN <yann.morin.1998@free.fr>
-+# Copyright (C) 2016 Samuel Martin <s.martin49@gmail.com>
-+#
-+# This program is free software; you can redistribute it and/or modify
-+# it under the terms of the GNU General Public License as published by
-+# the Free Software Foundation; either version 2 of the License, or
-+# (at your option) any later version.
-+#
-+# This program is distributed in the hope that it will be useful,
-+# but WITHOUT ANY WARRANTY; without even the implied warranty of
-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-+# General Public License for more details.
-+#
-+# You should have received a copy of the GNU General Public License
-+# along with this program; if not, write to the Free Software
-+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-+
- # This script scans $(HOST_DIR)/{bin,sbin} for all ELF files, and checks
- # they have an RPATH to $(HOST_DIR)/usr/lib if they need libraries from
- # there.
+ TOOLCHAIN_ADD_TOOLCHAIN_DEPENDENCY = NO
  
--# Override the user's locale so we are sure we can parse the output of
--# readelf(1) and file(1)
--export LC_ALL=C
-+source "${0%/*}/shell/source.sh"
++# dependency and hooks needed to make the toolchain relocatable
++TOOLCHAIN_DEPENDENCIES += host-patchelf
++TOOLCHAIN_POST_INSTALL_TARGET_HOOKS += HOST_SANITIZE_RPATH_HOOK \
++	STAGING_SANITIZE_RPATH_HOOK
 +
-+source.load_module readelf
+ $(eval $(virtual-package))
  
- main() {
-     local pkg="${1}"
-@@ -14,58 +31,24 @@ main() {
-     local file ret
- 
-     # Remove duplicate and trailing '/' for proper match
--    hostdir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}" )"
-+    hostdir="$(sed -r -e 's:/+:/:g; s:/$::;' <<<"${hostdir}")"
- 
-     ret=0
-     while read file; do
--        elf_needs_rpath "${file}" "${hostdir}" || continue
--        check_elf_has_rpath "${file}" "${hostdir}" && continue
-+        READELF=readelf readelf.needs_rpath "${file}" "${hostdir}" || continue
-+        READELF=readelf readelf.has_rpath "${file}" "${hostdir}" && continue
-         if [ ${ret} -eq 0 ]; then
-             ret=1
-             printf "***\n"
--            printf "*** ERROR: package %s installs executables without proper RPATH:\n" "${pkg}"
-+            printf \
-+                "*** ERROR: package %s installs executables without proper RPATH:\n" \
-+                "${pkg}"
-         fi
-         printf "***   %s\n" "${file}"
--    done < <( find "${hostdir}"/usr/{bin,sbin} -type f -exec file {} + 2>/dev/null \
--              |sed -r -e '/^([^:]+):.*\<ELF\>.*\<executable\>.*/!d'                \
--                      -e 's//\1/'                                                  \
--            )
-+    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print |
-+                  readelf.filter_elf_executable)
- 
-     return ${ret}
- }
- 
--elf_needs_rpath() {
--    local file="${1}"
--    local hostdir="${2}"
--    local lib
--
--    while read lib; do
--        [ -e "${hostdir}/usr/lib/${lib}" ] && return 0
--    done < <( readelf -d "${file}"                                         \
--              |sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d;' \
--                     -e 's//\1/;'                                          \
--            )
--
--    return 1
--}
--
--check_elf_has_rpath() {
--    local file="${1}"
--    local hostdir="${2}"
--    local rpath dir
--
--    while read rpath; do
--        for dir in ${rpath//:/ }; do
--            # Remove duplicate and trailing '/' for proper match
--            dir="$( sed -r -e 's:/+:/:g; s:/$::;' <<<"${dir}" )"
--            [ "${dir}" = "${hostdir}/usr/lib" ] && return 0
--        done
--    done < <( readelf -d "${file}"                                              \
--              |sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d' \
--                      -e 's//\3/;'                                              \
--            )
--
--    return 1
--}
--
- main "${@}"
-diff --git a/support/scripts/shell/readelf.sh b/support/scripts/shell/readelf.sh
-index c8ad38b..0b7e8d2 100644
---- a/support/scripts/shell/readelf.sh
-+++ b/support/scripts/shell/readelf.sh
-@@ -24,11 +24,15 @@
- #   readelf.is_elf_executable
- #   readelf.is_elf_shared_object
- #   readelf.get_rpath
-+#   readelf.get_neededs
-+#   readelf.needs_rpath
-+#   readelf.has_rpath
- #   readelf.list_sections
- #   readelf.has_section
- #
- # This module is sensitive to the following environment variables:
- #   READELF
-+
- source.declare_module readelf
- 
- # When calling readelf(1) program, the user's locale will be overriden with the
-@@ -143,6 +147,71 @@ readelf.get_rpath() {
-         sed -r -e '/.* \(R(UN)?PATH\) +Library r(un)?path: \[(.+)\]$/!d ; s//\3/'
- }
- 
-+# readelf.get_neededs file
-+#
-+# Return the list of the NEEDED libraries of $file.
-+#
-+# file : ELF file path
-+#
-+# environment:
-+#   READELF: readelf program path
-+readelf.get_neededs() {
-+    local file="${1}"
-+    LC_ALL=C "${READELF}" --dynamic "${file}" |
-+        sed -r -e '/^.* \(NEEDED\) .*Shared library: \[(.+)\]$/!d ; s//\1/'
-+}
-+
-+# readelf.needs_rpath file basedir
-+#
-+# Return 0 if $file needs to have RPATH set, 1 otherwise.
-+#
-+# file    : path of file to be tested
-+# basedir : path of the tree in which $basedir/lib and $basedir/usr/lib are
-+#           checked for belonging to RPATH
-+#
-+# environment:
-+#   READELF: readelf program path
-+readelf.needs_rpath() {
-+    local file="${1}"
-+    local basedir="${2}"
-+    local lib
-+
-+    while read lib; do
-+        [ -e "${basedir}/lib/${lib}" ] && return 0
-+        [ -e "${basedir}/usr/lib/${lib}" ] && return 0
-+    done < <(readelf.get_neededs "${file}")
-+    return 1
-+}
-+
-+# readelf.has_rpath file basedir
-+#
-+# Return 0 if $file has RPATH already set to $basedir/lib or $basedir/usr/lib,
-+# 1 otherwise.
-+#
-+# file    : path of file to be tested
-+# basedir : path of the tree in which $basedir/lib and $basedir/usr/lib are
-+#           checked for belonging to RPATH
-+#
-+# environment:
-+#   READELF: readelf program path
-+readelf.has_rpath() {
-+    local file="${1}"
-+    local basedir="${2}"
-+    local rpath dir
-+
-+    while read rpath; do
-+        for dir in ${rpath//:/ }; do
-+            # Remove duplicate and trailing '/' for proper match
-+            dir="$(sed -r -e "s:/+:/:g; s:/$::" <<<"${dir}")"
-+            [ "${dir}" = "${basedir}/lib" ] && return 0
-+            [ "${dir}" = "${basedir}/usr/lib" ] && return 0
-+            grep -q '^\$ORIGIN/' <<<"${dir}" && return 0
-+        done
-+    done < <(readelf.get_rpath "${file}")
-+
-+    return 1
-+}
-+
- # readelf.list_sections file
- #
- # Returns the list of ELF sections in $file.
+ toolchain: $(HOST_DIR)/usr/share/buildroot/toolchainfile.cmake
 -- 
 2.8.0
