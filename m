@@ -1,30 +1,85 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 17 Apr 2016 12:16:04 +0300
-Subject: [Buildroot] [PATCH] gstreamer1: fix help text typos
-Message-ID: <5fcaa83b3fff75fea73f21c0c52932547b73b4f6.1460884564.git.baruch@tkos.co.il>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Sun, 17 Apr 2016 11:52:37 +0200
+Subject: [Buildroot] [PATCH v3] gutenprint: fix host build
+Message-ID: <20160417095237.GA4469@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/gstreamer1/gstreamer1/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Disable USB support when CUPS disabled, otherwise host build breaks.
+Fixes following autobuild error:
+http://autobuild.buildroot.net/results/081b3be918ac1eaa8cfbc5919e00bc1ea267c1df/
 
-diff --git a/package/gstreamer1/gstreamer1/Config.in b/package/gstreamer1/gstreamer1/Config.in
-index c13f04191344..274171b63921 100644
---- a/package/gstreamer1/gstreamer1/Config.in
-+++ b/package/gstreamer1/gstreamer1/Config.in
-@@ -20,7 +20,7 @@ config BR2_PACKAGE_GSTREAMER1_PARSE
- 	bool "enable command-line parser"
- 	default y
- 	help
--	  Enable command line parser for gstreamer. This may incrase the CPu
-+	  Enable command line parser for gstreamer. This may increase the CPU
- 	  overhead by a small amount.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v2 -> v3:
+ * add patch from upstream
+v1 -> v2:                                                                                                                                                
+ * extended comment why we need autoreconf suggested by Baruch                                                                                          
+ * patch suggested upstream as requested by Baruch       
+---
+ .../0004-build-usb-backends-conditional.patch      | 29 ++++++++++++++++++++++
+ package/gutenprint/gutenprint.mk                   |  3 ++-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
+ create mode 100644 package/gutenprint/0004-build-usb-backends-conditional.patch
+
+diff --git a/package/gutenprint/0004-build-usb-backends-conditional.patch b/package/gutenprint/0004-build-usb-backends-conditional.patch
+new file mode 100644
+index 0000000..7c744be
+--- /dev/null
++++ b/package/gutenprint/0004-build-usb-backends-conditional.patch
+@@ -0,0 +1,29 @@
++Backport from Upstream:
++https://sourceforge.net/p/gimp-print/source/ci/fc1713589fed645f2c8002c3f66dfb69af314716/
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++
++diff -Nur gutenprint-5.2.11.orig/configure.ac gutenprint-5.2.11/configure.ac
++--- gutenprint-5.2.11.orig/configure.ac	2016-01-14 04:02:49.000000000 +0100
+++++ gutenprint-5.2.11/configure.ac	2016-04-16 17:16:17.017485358 +0200
++@@ -442,12 +442,14 @@
++ dnl   [EXTRA_LIBREADLINE_DEPS]=""
++ dnl fi
++ 
++-# libusb-1.0 (For CUPS backends)
++-PKG_CHECK_MODULES([LIBUSB], [libusb-1.0],
++-                  [HAVE_LIBUSB=yes
++-                   BUILD_LIBUSB_BACKENDS=yes],
++-                  [HAVE_LIBUSB=no
++-	           BUILD_LIBUSB_BACKENDS=no])
+++# libusb-1.0 (For CUPS backends, but only bother if CUPS is enabled)
+++if test "x$BUILD_CUPS" = "xyes" ; then
+++ PKG_CHECK_MODULES([LIBUSB], [libusb-1.0],
+++                   [HAVE_LIBUSB=yes
+++                    BUILD_LIBUSB_BACKENDS=yes],
+++                   [HAVE_LIBUSB=no
+++	            BUILD_LIBUSB_BACKENDS=no])
+++fi
++ 
++ AC_PATH_PROGS([GIMPTOOL2_CHECK], [gimptool-2.0 gimptool])
++ if test -z "${GIMPTOOL2_CHECK}" ; then
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 7e3024d..8cf4caf 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -11,7 +11,7 @@ GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
+ GUTENPRINT_LICENSE = GPLv2+
+ GUTENPRINT_LICENSE_FILES = COPYING
  
- config BR2_PACKAGE_GSTREAMER1_TRACE
+-# Needed, as we touch Makefile.am
++# Needed, as we touch Makefile.am and configure.ac
+ GUTENPRINT_AUTORECONF = YES
+ 
+ GUTENPRINT_DEPENDENCIES = \
+@@ -67,6 +67,7 @@ HOST_GUTENPRINT_CONF_OPTS = \
+ 	--disable-escputil \
+ 	--disable-test \
+ 	--disable-testpattern \
++	--without-libusb \
+ 	--without-cups
+ 
+ # Needed by autoreconf
 -- 
-2.8.0.rc3
+2.1.4
