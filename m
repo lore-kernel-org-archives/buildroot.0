@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:38 +0200
-Subject: [Buildroot] [PATCH v15 16/27] package/freeswitch: enable
-	mod_portaudio
+Date: Sun, 17 Apr 2016 17:24:48 +0200
+Subject: [Buildroot] [PATCH v15 26/27] package/freeswitch: add optional
+	dependency to openldap
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-17-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-27-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,20 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 082b6c5..0cded77 100644
+index 5603b1f..9c4abe0 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -221,6 +221,11 @@ FREESWITCH_DEPENDENCIES += opus
- FREESWITCH_ENABLED_MODULES += codecs/mod_opus
+@@ -231,6 +231,11 @@ FREESWITCH_DEPENDENCIES += lua
+ FREESWITCH_ENABLED_MODULES += languages/mod_lua
  endif
  
-+ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+FREESWITCH_DEPENDENCIES += portaudio
-+FREESWITCH_ENABLED_MODULES += endpoints/mod_portaudio
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++FREESWITCH_DEPENDENCIES += openldap
++FREESWITCH_ENABLED_MODULES += directories/mod_ldap xml_int/mod_xml_ldap
 +endif
 +
- ifeq ($(BR2_PACKAGE_UNIXODBC),y)
- FREESWITCH_DEPENDENCIES += unixodbc
- FREESWITCH_CONF_OPTS += \
+ ifeq ($(BR2_PACKAGE_OPUS),y)
+ FREESWITCH_DEPENDENCIES += opus
+ FREESWITCH_ENABLED_MODULES += codecs/mod_opus
 -- 
 2.8.0.rc3
