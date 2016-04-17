@@ -1,33 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Sun, 17 Apr 2016 16:45:55 +0200
-Subject: [Buildroot] [PATCH] luvi: bump to version 2.7.0
-In-Reply-To: <1460793020-9852-1-git-send-email-joerg.krause@embedded.rocks>
-References: <1460793020-9852-1-git-send-email-joerg.krause@embedded.rocks>
-Message-ID: <20160417164555.32619a09@free-electrons.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Sun, 17 Apr 2016 11:51:14 -0300
+Subject: [Buildroot] [PATCH] file: bump to version 5.26
+Message-ID: <1460904674-6064-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/file/file.hash | 2 +-
+ package/file/file.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-On Sat, 16 Apr 2016 09:50:20 +0200, J?rg Krause wrote:
-> Fetch a patch from upstream [1] to fix CMake build error when building with
-> option "WithSharedLibluv=ON".
-> 
-> [1] https://github.com/luvit/luvi/commit/35c3961d10d3f9e3752102ea8e8bb8c187b32241
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/luvi/luvi.hash | 3 ++-
->  package/luvi/luvi.mk   | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/file/file.hash b/package/file/file.hash
+index 2eac7a5..2c53af1 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 3735381563f69fb4239470b8c51b876a80425348b8285a7cded8b61d6b890eca  file-5.25.tar.gz
++sha256	2ef32b4ec936b0ff7b59a021dce56086a716663b6df1138c7ea597d396bf50cf	file-5.26.tar.gz
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 4d13547..282b2da 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-FILE_VERSION = 5.25
++FILE_VERSION = 5.26
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
++FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2c, one file BSD-4c, one file BSD-3c
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.7.3
