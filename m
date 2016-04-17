@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Apr 2016 17:24:33 +0200
-Subject: [Buildroot] [PATCH v15 11/27] package/freeswitch: enable mod_codec2
+Date: Sun, 17 Apr 2016 17:24:32 +0200
+Subject: [Buildroot] [PATCH v15 10/27] package/freeswitch: enable mod_bv
 In-Reply-To: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
 References: <1460906689-29900-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460906689-29900-12-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1460906689-29900-11-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,16 +16,16 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 9e97b66..ed57c23 100644
+index 69edf19..9e97b66 100644
 --- a/package/freeswitch/freeswitch.mk
 +++ b/package/freeswitch/freeswitch.mk
-@@ -167,6 +167,11 @@ FREESWITCH_DEPENDENCIES += libbroadvoice
- FREESWITCH_ENABLED_MODULES += codecs/mod_bv
+@@ -162,6 +162,11 @@ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ FREESWITCH_DEPENDENCIES += freetype
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBCODEC2),y)
-+FREESWITCH_DEPENDENCIES += libcodec2
-+FREESWITCH_ENABLED_MODULES += codecs/mod_codec2
++ifeq ($(BR2_PACKAGE_LIBBROADVOICE),y)
++FREESWITCH_DEPENDENCIES += libbroadvoice
++FREESWITCH_ENABLED_MODULES += codecs/mod_bv
 +endif
 +
  ifeq ($(BR2_PACKAGE_LIBEDIT),y)
