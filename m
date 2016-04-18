@@ -1,63 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 23:12:09 +0200
-Subject: [Buildroot] [git commit] core/pkg-kconfig: Factorize make commands
-Message-ID: <20160418211717.4693C81D84@busybox.osuosl.org>
+Date: Mon, 18 Apr 2016 23:17:43 +0200
+Subject: [Buildroot] [PATCH v4 1/3] core/pkg-kconfig: Factorize make
+ commands
+In-Reply-To: <1460971383-10595-2-git-send-email-romain.izard.pro@gmail.com>
+References: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
+ <1460971383-10595-2-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <20160418231743.4d82a834@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce83c3d515912b0a83ef461f071b88126b0f07d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Use a variable to factorize the calls to make, as we use the same set
-of options multiple times.
+On Mon, 18 Apr 2016 11:23:01 +0200, Romain Izard wrote:
+> Use a variable to factorize the calls to make, as we use the same set
+> of options multiple times.
+> 
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+> ---
+> Changelog:
+> v3: new
+> v4: fix commit message
 
-Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/pkg-kconfig.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 94ec3cc..cb177bb 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -57,6 +57,9 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- 		fi; \
- 	done
- 
-+$(2)_KCONFIG_MAKE = \
-+	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
-+
- # The specified source configuration file and any additional configuration file
- # fragments are merged together to .config, after the package has been patched.
- # Since the file could be a defconfig file it needs to be expanded to a
-@@ -64,13 +67,11 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- # done even when the package does not support defconfigs.
- $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
- 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
--		$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
--			$$($(2)_KCONFIG_OPTS) $$($(2)_KCONFIG_DEFCONFIG), \
-+		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
- 		cp $$($(2)_KCONFIG_FILE) $$(@))
- 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
- 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
--		$$($(2)_KCONFIG_OPTS) oldconfig
-+	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
- 
- # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
- # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-@@ -81,8 +82,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
- # The exact rules are specified by the package .mk file.
- define $(2)_FIXUP_DOT_CONFIG
- 	$$($(2)_KCONFIG_FIXUP_CMDS)
--	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
--		$$($(2)_KCONFIG_OPTS) oldconfig
-+	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
