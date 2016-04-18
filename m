@@ -1,33 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:58:20 +0200
-Subject: [Buildroot] [PATCH] qt5canvas3d: new package
-In-Reply-To: <1459784255-19892-1-git-send-email-corjon.j@ecagroup.com>
-References: <1459784255-19892-1-git-send-email-corjon.j@ecagroup.com>
-Message-ID: <20160418215820.6ec81ff4@free-electrons.com>
+From: Mason <slash.tmp@free.fr>
+Date: Mon, 18 Apr 2016 22:03:26 +0200
+Subject: [Buildroot] [PATCH v3] ltp-testsuite: build kernel modules when
+ appropriate
+In-Reply-To: <20160418214206.3698cd79@free-electrons.com>
+References: <56F3F393.6020407@free.fr>
+ <20160324222555.21f04320@free-electrons.com> <56F92840.9090206@free.fr>
+ <56FAD38B.8040201@mind.be> <57026754.50205@free.fr> <57038409.20600@mind.be>
+ <57039CF4.5060902@free.fr> <20160418214206.3698cd79@free-electrons.com>
+Message-ID: <57153D8E.9030702@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 18/04/2016 21:42, Thomas Petazzoni wrote:
 
-On Mon,  4 Apr 2016 17:37:35 +0200, Julien Corjon wrote:
-> Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
-> ---
->  package/qt5/Config.in                    |  1 +
->  package/qt5/qt5canvas3d/Config.in        | 17 ++++++++++++++
->  package/qt5/qt5canvas3d/qt5canvas3d.hash |  2 ++
->  package/qt5/qt5canvas3d/qt5canvas3d.mk   | 38 ++++++++++++++++++++++++++++++++
->  4 files changed, 58 insertions(+)
->  create mode 100644 package/qt5/qt5canvas3d/Config.in
->  create mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.hash
->  create mode 100644 package/qt5/qt5canvas3d/qt5canvas3d.mk
+> Hello,
+> 
+> On Tue, 5 Apr 2016 13:09:40 +0200, Mason wrote:
+> 
+>> +ifeq ($(BR2_LINUX_KERNEL),y)
+>> +LTP_TESTSUITE_DEPENDENCIES += linux
+>> +LTP_TESTSUITE_MAKE_ENV = $(LINUX_MAKE_FLAGS)
+> 
+> This should use += instead of = since we're in a conditional block.
+> While this is not needed right now, it is a bit more logical and future
+> proof.
+> 
+> Applied with this fixed!
+> 
+> Thomas
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Thanks!
