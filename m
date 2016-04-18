@@ -1,73 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 18 Apr 2016 22:17:54 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/opencv: add inter-module
-	dependencies
-Message-ID: <1461010675-8274-1-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 18 Apr 2016 22:17:55 +0200
+Subject: [Buildroot] [PATCH v3 2/2] package/freeswitch: select OpenCV
+	modules for needed mod_cv
+In-Reply-To: <1461010675-8274-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461010675-8274-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <1461010675-8274-2-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated by Samuel the opencv2 package lacks inter-module dependencies:
-http://lists.busybox.net/pipermail/buildroot/2016-April/158902.html
-
-This patch adds the necessary code for freeswitch's mod_cv to compile.
+Fixes
+http://autobuild.buildroot.net/results/ffd/ffd572d7bb68d8ed46ce76b2af824503c587449f/
+http://autobuild.buildroot.net/results/e53/e53e356451aa4541a76e26722fd71051896e774b/
+http://autobuild.buildroot.net/results/564/5649ff1b50a1eaafbd0e1a329bff87a65ce18da0/
+http://autobuild.buildroot.net/results/c60/c60f97c6aafb1a94cb4ce344953598eae8b4a912/
+http://autobuild.buildroot.net/results/c1a/c1ac61f9a77635962babdb6bfb31dbecb7f4d439/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: add more dependencies
-v2: initial release (Samuel)
+v3: add more suboptions
+v2: select the required suboption instead of checking for its existance
+    in freeswitch.mk (Thomas)
 
- package/opencv/Config.in | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ package/freeswitch/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 8bc6c34..b563312 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -23,6 +23,13 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- config BR2_PACKAGE_OPENCV_LIB_CONTRIB
- 	bool "contrib"
- 	default y
-+	# modules/contrib/CMakeLists.txt
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_contrib module into the OpenCV build.
- 
-@@ -46,6 +53,8 @@ config BR2_PACKAGE_OPENCV_LIB_GPU
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
- 	default y
-+	# modules/highgui/CMakeLists.txt
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_highgui module into the OpenCV build.
- 
-@@ -58,6 +67,10 @@ config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- config BR2_PACKAGE_OPENCV_LIB_LEGACY
- 	bool "legacy"
- 	default y
-+	# modules/legacy/CMakeLists.txt
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_ML
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_legacy module into the OpenCV build.
- 
-@@ -75,6 +88,8 @@ config BR2_PACKAGE_OPENCV_LIB_NONFREE
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
- 	default y
-+	# modules/objdetect/CMakeLists.txt
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_objdetect module into the OpenCV build.
- 
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index 1350b2b..9b3f0fc 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -7,6 +7,11 @@ menuconfig BR2_PACKAGE_FREESWITCH
+ 	depends on BR2_USE_WCHAR # libuuid
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_JPEG
++	# src/mod/applications/mod_cv/mod_cv.cpp includes cv.h
++	select BR2_PACKAGE_OPENCV_LIB_CONTRIB if BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_OPENCV_LIB_FLANN if BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI if BR2_PACKAGE_OPENCV
++	select BR2_PACKAGE_OPENCV_LIB_LEGACY if BR2_PACKAGE_OPENCV
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_SPEEX
 -- 
 2.8.0.rc3
