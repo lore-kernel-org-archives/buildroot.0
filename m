@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 22:33:16 +0200
+Date: Mon, 18 Apr 2016 22:34:06 +0200
 Subject: [Buildroot] [PATCH v2] qt5quickcontrols2: new package
-In-Reply-To: <1460151190-21021-1-git-send-email-ps.report@gmx.net>
+In-Reply-To: <570AB8F9.5060408@mind.be>
 References: <1460151190-21021-1-git-send-email-ps.report@gmx.net>
-Message-ID: <20160418223316.30792108@free-electrons.com>
+ <570AB8F9.5060408@mind.be>
+Message-ID: <20160418223406.6446b0f5@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  8 Apr 2016 23:33:10 +0200, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - move menu entry to 'technology preview' section
->   - add QT5_GL_AVAILABLE/QT5_JSCORE_AVAILABLE dependency comment
->   - install the right qt5quickcontrols2 files to target
->     (all suggested by Julien Corjon)
-> ---
->  package/qt5/Config.in                              |  2 ++
->  package/qt5/qt5quickcontrols2/Config.in            | 17 +++++++++
->  .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  2 ++
->  package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk | 40 ++++++++++++++++++++++
->  4 files changed, 61 insertions(+)
->  create mode 100644 package/qt5/qt5quickcontrols2/Config.in
->  create mode 100644 package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
->  create mode 100644 package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+On Sun, 10 Apr 2016 22:35:05 +0200, Arnout Vandecappelle wrote:
 
-Applied to master, thanks.
+> > +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+> > +QT5QUICKCONTROLS2_LICENSE = GPLv3 or LGPLv3, GFDLv1.3 (docs)
+> 
+>   The source files specify GPLv2+ or LGPLv3
+
+Right, but as Julien said, the new modules are supposedly licensed
+under GPLv3 or LGPLv3, which is more or less confirmed by the presence
+of those two license files in the root directory of the source tree.
+Seems like the comment headers were not updated accordingly.
+
+Best regards,
 
 Thomas
 -- 
