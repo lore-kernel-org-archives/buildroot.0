@@ -1,35 +1,26 @@
-From: Mason <slash.tmp@free.fr>
-Date: Mon, 18 Apr 2016 22:03:26 +0200
-Subject: [Buildroot] [PATCH v3] ltp-testsuite: build kernel modules when
- appropriate
-In-Reply-To: <20160418214206.3698cd79@free-electrons.com>
-References: <56F3F393.6020407@free.fr>
- <20160324222555.21f04320@free-electrons.com> <56F92840.9090206@free.fr>
- <56FAD38B.8040201@mind.be> <57026754.50205@free.fr> <57038409.20600@mind.be>
- <57039CF4.5060902@free.fr> <20160418214206.3698cd79@free-electrons.com>
-Message-ID: <57153D8E.9030702@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Apr 2016 22:07:40 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/opencv: module objdetect
+ depends on imgproc
+References: <1460992275-383-1-git-send-email-bernd.kuhls@t-online.de>
+ <1460992275-383-2-git-send-email-bernd.kuhls@t-online.de>
+ <20160418212003.393f594c@free-electrons.com>
+ <CAHXCMM+gkMR16KjCW=-2o0vw_0tXDmB931ZbVk1t=WwEOPj7+A@mail.gmail.com>
+Message-ID: <cdrfucxcv4.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 18/04/2016 21:42, Thomas Petazzoni wrote:
+Am Mon, 18 Apr 2016 21:57:49 +0200 schrieb Samuel Martin:
 
-> Hello,
-> 
-> On Tue, 5 Apr 2016 13:09:40 +0200, Mason wrote:
-> 
->> +ifeq ($(BR2_LINUX_KERNEL),y)
->> +LTP_TESTSUITE_DEPENDENCIES += linux
->> +LTP_TESTSUITE_MAKE_ENV = $(LINUX_MAKE_FLAGS)
-> 
-> This should use += instead of = since we're in a conditional block.
-> While this is not needed right now, it is a bit more logical and future
-> proof.
-> 
-> Applied with this fixed!
-> 
-> Thomas
+> I'll check if I can quickly dig up something about this on the
+> opencv(2) package.
 
-Thanks!
+Hi,
+
+currently I am preparing such a patch with the necessary changes needed 
+by freeswitch.
+
+Regards, Bernd
