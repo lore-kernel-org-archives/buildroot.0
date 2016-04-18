@@ -1,72 +1,55 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 18 Apr 2016 13:05:19 +0300
-Subject: [Buildroot] [PATCH] gst1-imx: make kernel dependency optional
-Message-ID: <97bf649b600a5548cfd3c53575747a057f24e07e.1460973919.git.baruch@tkos.co.il>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 18 Apr 2016 12:06:58 +0200
+Subject: [Buildroot] [PATCH v2] cannelloni: make SCTP support optional
+Message-ID: <1460974018-29267-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The i.MX specific kernel headers are not a hard dependency. Quoting README.md:
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-  Without [--kernel-headers], the [ipu.h] header is not found, and elements
-  using the IPU will not be built.
+Since version 20160414 SCTP support is optional. Introduce an automatic
+optional dependency for this protocol.
 
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/gstreamer1/gst1-imx/Config.in   | 10 +++-------
- package/gstreamer1/gst1-imx/gst1-imx.mk |  9 ++++++---
- 2 files changed, 9 insertions(+), 10 deletions(-)
+Changes:
+	v2: change selectable option to automatic optional dependency (Thomas Petazzoni)
 
-diff --git a/package/gstreamer1/gst1-imx/Config.in b/package/gstreamer1/gst1-imx/Config.in
-index 0084483d1ec6..df0fcf3072d3 100644
---- a/package/gstreamer1/gst1-imx/Config.in
-+++ b/package/gstreamer1/gst1-imx/Config.in
-@@ -1,19 +1,15 @@
--comment "gst1-imx needs an imx-specific Linux kernel to be built"
--	depends on BR2_arm && !BR2_LINUX_KERNEL
--
- config BR2_PACKAGE_GST1_IMX
- 	bool "gst1-imx"
--	depends on BR2_LINUX_KERNEL
- 	depends on BR2_arm # Only relevant for i.MX
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ package/cannelloni/Config.in     | 1 -
+ package/cannelloni/cannelloni.mk | 6 ++++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
+index 8f3e888..e137e60 100644
+--- a/package/cannelloni/Config.in
++++ b/package/cannelloni/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_CANNELLONI
+ 	depends on BR2_USE_MMU # lksctp-tools
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
+ 	depends on !BR2_STATIC_LIBS # lksctp-tools
+-	select BR2_PACKAGE_LKSCTP_TOOLS
  	help
- 	  This is a set of GStreamer 1.0 plugins for plugins for Freescale's
- 	  i.MX platforms, which make use of the i.MX multimedia capabilities.
- 
--	  This software supports only the i.MX6 SoC family and requires a
--	  kernel that includes the i.MX6 specific headers to be built.
-+	  This software supports only the i.MX6 SoC family.
- 
--	  The IPU and PXP plugins are always built.
-+	  The IPU and PXP plugins are built when an imx-specific kernel is
-+	  enabled.
- 	  The V4L2 plugin is built when BR2_PACKAGE_GST1_PLUGINS_BAD is enabled.
- 	  The VPU plugin is built when BR2_PACKAGE_LIBIMXVPUAPI is enabled.
- 	  The EGL plugin is built when BR2_PACKAGE_IMX_GPU_VIV is enabled.
-diff --git a/package/gstreamer1/gst1-imx/gst1-imx.mk b/package/gstreamer1/gst1-imx/gst1-imx.mk
-index 650e097592a0..86922eddb657 100644
---- a/package/gstreamer1/gst1-imx/gst1-imx.mk
-+++ b/package/gstreamer1/gst1-imx/gst1-imx.mk
-@@ -18,10 +18,13 @@ GST1_IMX_DEPENDENCIES += \
- 	gstreamer1 \
- 	gst1-plugins-base
- 
--# needs access to imx-specific kernel headers
-+GST1_IMX_CONF_OPTS = --prefix="/usr"
+ 	  A SocketCAN over Ethernet tunnel. The tunnel supports both
+ 	  UDP and SCTP protocols.
+diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
+index 680e09a..7265945 100644
+--- a/package/cannelloni/cannelloni.mk
++++ b/package/cannelloni/cannelloni.mk
+@@ -8,6 +8,12 @@ CANNELLONI_VERSION = 20160414
+ CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
+ CANNELLONI_LICENSE = GPLv2
+ CANNELLONI_LICENSE_FILES = gpl-2.0.txt
 +
-+ifeq ($(BR2_LINUX_KERNEL),y)
-+# IPU and PXP need access to imx-specific kernel headers
- GST1_IMX_DEPENDENCIES += linux
--GST1_IMX_CONF_OPTS += --prefix="/usr" \
--	--kernel-headers="$(LINUX_DIR)/include"
-+GST1_IMX_CONF_OPTS += --kernel-headers="$(LINUX_DIR)/include"
++ifeq ($(BR2_PACKAGE_LKSCTP_TOOLS),y)
++CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=ON
+ CANNELLONI_DEPENDENCIES = lksctp-tools
++else
++CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=OFF
 +endif
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD),y)
- GST1_IMX_DEPENDENCIES += gst1-plugins-bad
+ $(eval $(cmake-package))
 -- 
 2.8.0.rc3
