@@ -1,55 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:37:19 +0200
-Subject: [Buildroot] [PATCH v8 10/14] support/scripts/check-host-rpath:
- also check HOST_DIR/{bin, sbin}
-In-Reply-To: <1460929111-15615-11-git-send-email-s.martin49@gmail.com>
-References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
- <1460929111-15615-11-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160418213719.7139ead4@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Mon, 18 Apr 2016 21:39:12 +0200
+Subject: [Buildroot] [PATCH] ipmitool: add patch to fix missing stddef
+	include
+Message-ID: <1461008352-22581-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Needed for wchar_t. Fixes build error:
 
-On Sun, 17 Apr 2016 23:38:27 +0200, Samuel Martin wrote:
-> At least syslinux is installing stuff in HOST_DIR/sbin.
-> 
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> 
-> ---
-> changes v7->v8:
-> - none
-> 
-> changes v6->v7:
-> - new patch
-> ---
->  support/scripts/check-host-rpath | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
-> index 3df70bd..022f01b 100755
-> --- a/support/scripts/check-host-rpath
-> +++ b/support/scripts/check-host-rpath
-> @@ -45,7 +45,7 @@ main() {
->                  "${pkg}"
->          fi
->          printf "***   %s\n" "${file}"
-> -    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print 2>/dev/null |
-> +    done < <(find "${hostdir}"/{,usr/}{bin,sbin} -type f -print 2>/dev/null |
->                    readelf.filter_elf_executable)
+imbapi.h:140:9: error: unknown type name 'wchar_t'
+ typedef wchar_t      WCHAR;
 
-Please put this patch as PATCH 01 in your series, so that we can apply
-it right now as a preparation fix. This way, you reduce the size of
-your patch series, and things move forward.
+Fixes:
+http://autobuild.buildroot.net/results/9e9/9e99aa8aebf68667b8c054b64e49de6dd73dd53d/
+http://autobuild.buildroot.net/results/496/49637fcab9cd8e6278257158574fd7574f97bc30/
+http://autobuild.buildroot.net/results/6a3/6a37f69ac40d60a1735afe5974cabec3ca5de41f/
 
-Thanks!
+Upstream status: Pending
+https://sourceforge.net/p/ipmitool/mailman/message/35022779/
 
-Thomas
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ .../0004-Fix-missing-stddef.h-include.patch        | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/ipmitool/0004-Fix-missing-stddef.h-include.patch
+
+diff --git a/package/ipmitool/0004-Fix-missing-stddef.h-include.patch b/package/ipmitool/0004-Fix-missing-stddef.h-include.patch
+new file mode 100644
+index 0000000..e58c8b0
+--- /dev/null
++++ b/package/ipmitool/0004-Fix-missing-stddef.h-include.patch
+@@ -0,0 +1,37 @@
++From 2b149f7723fbd6153e6605ea8efb2c9f2940c8e5 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
++Date: Mon, 18 Apr 2016 21:17:26 +0200
++Subject: [PATCH] Fix missing stddef.h include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Needed for wchar_t. Fixes build error:
++
++imbapi.h:140:9: error: unknown type name 'wchar_t'
++ typedef wchar_t      WCHAR;
++
++Upstream status: Pending
++https://sourceforge.net/p/ipmitool/mailman/message/35022779/
++
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ src/plugins/imb/imbapi.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/plugins/imb/imbapi.h b/src/plugins/imb/imbapi.h
++index ead8956..8d0c7ae 100644
++--- a/src/plugins/imb/imbapi.h
+++++ b/src/plugins/imb/imbapi.h
++@@ -40,6 +40,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ # include <config.h>
++ #endif
++ 
+++#include <stddef.h>
+++
++ #ifndef FALSE
++ #define FALSE   0
++ #endif
++-- 
++2.8.0
++
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.0
