@@ -1,65 +1,54 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 18 Apr 2016 14:18:01 +0200
-Subject: [Buildroot] [PATCH v8 04/14] core: add HOST_SANITIZE_RPATH_HOOK
- to TARGET_FINALIZE_HOOKS
-In-Reply-To: <20160418133325.4892c80b@free-electrons.com>
-References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
- <1460929111-15615-5-git-send-email-s.martin49@gmail.com>
- <20160418133325.4892c80b@free-electrons.com>
-Message-ID: <CAHXCMMJOkroJnqewgx7j31WxN0O_cyagzKJUkdNZX15HpF2UJQ@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Mon, 18 Apr 2016 10:46:30 -0300
+Subject: [Buildroot] [PATCH] mesa3d/mesa3d-headers: bump version to 11.2.1
+Message-ID: <1460987190-10063-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 18, 2016 at 1:33 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Sun, 17 Apr 2016 23:38:21 +0200, Samuel Martin wrote:
->
->> +# RPATH fixing
->> +# - The host hook sets RPATH in host ELF binaries, using relative paths to the
->> +#   library locations.
->> +# - The target hook sanitizes RPATH in target ELF binaries, removing paths
->> +#   pointing to package's build directories or the sysroot's libdirs.
->
-> There is nothing in this patch that adds a target hook.
-Oops, my bad! :-s
-This is for the next patch in the series.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 4 ++--
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
->
->> +PACKAGES += host-patchelf
->> +
->> +define HOST_SANITIZE_RPATH_HOOK
->> +     PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
->> +     READELF=readelf \
->> +             $(TOPDIR)/support/scripts/fix-rpath host $(HOST_DIR)
->> +endef
->> +
->> +TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
->
-> I find it somewhat odd that this gets done as a "target finalize" hook
-> since it really has nothing to do with finalizing the target. It really
-> just needs to be done "at the end of the build".
->
-> We could add that as a new target, but it would complexify the
-> dependency chain, so maybe adding to TARGET_FINALIZE_HOOKS is the
-> easiest solution after all.
->
-> One tricky aspect though is that not all host packages are guaranteed
-> to be built by the time TARGET_FINALIZE_HOOKS is called. Indeed,
-> TARGET_FINALIZE_HOOKS is guaranteed to be called after all *target*
-> packages have been built. But if a host package is needed just to
-> build a filesystem image for example, it is not guaranteed that it will
-> be built before TARGET_FINALIZE_HOOKS is called.
-
-Good point!
-I'll check and see if I can come up with something.
-
-Regards,
-
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 8e3156c..551cb2e 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 11.2.0
++MESA3D_HEADERS_VERSION = 11.2.1
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_HEADERS_VERSION)
+ MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 281dbf0..1914b79 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,2 +1,2 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2016-April/000206.html
+-sha256	1c1fed2674abf3f16ed2623e9a5694d6752c293194e18462ebc644a19cfaafb2	mesa-11.2.0.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2016-April/000209.html
++sha256	a65207e9ae5c5f1c29f863c6a2cc98a7ab99762a24b82a248337f0ea9cfce01b	mesa-11.2.1.tar.xz
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 27a670e..ab3c9be 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 11.2.0
++MESA3D_VERSION = 11.2.1
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = ftp://ftp.freedesktop.org/pub/mesa/$(MESA3D_VERSION)
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-Samuel
+2.7.3
