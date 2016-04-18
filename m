@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 09:07:41 +0200
-Subject: [Buildroot] [PATCH 1/1] flatcc: new package
-In-Reply-To: <57140E40.9040700@mind.be>
-References: <1460769824-19461-1-git-send-email-steve.derosier@lairdtech.com>
- <57140E40.9040700@mind.be>
-Message-ID: <20160418090741.75aa988a@free-electrons.com>
+Date: Mon, 18 Apr 2016 09:27:36 +0200
+Subject: [Buildroot] [PATCH 1/1] nvme: Allow libudev support
+In-Reply-To: <1460955386-21322-1-git-send-email-sam@mendozajonas.com>
+References: <1460955386-21322-1-git-send-email-sam@mendozajonas.com>
+Message-ID: <20160418092736.373a7c07@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,75 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Apr 2016 00:29:20 +0200, Arnout Vandecappelle wrote:
+Thanks for your contribution!
 
-> > +define HOST_FLATCC_INSTALL_CMDS
-> > +	$(INSTALL) -D -m 0755 $(@D)/bin/flatcc $(HOST_DIR)/usr/bin/flatcc
+On Mon, 18 Apr 2016 14:56:26 +1000, Samuel Mendoza-Jonas wrote:
+> Commands like 'nvme list' require libudev but support for libudev is
+> decided at compile time, and in buildroot this is hard disabled.
+> Add a config option which allows libudev support to be enabled for the
+> nvme package.
 > 
->   I was going to say: this shouldn't be needed - but in fact it is, it looks 
-> like they have a weird CMakeLists.txt that doesn't even have an 'install' 
-> target... Se yes, this is needed.
+> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> ---
+>  package/nvme/Config.in |  9 +++++++++
+>  package/nvme/nvme.mk   | 10 ++++++++++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+> index dd8655f..4590fdc 100644
+> --- a/package/nvme/Config.in
+> +++ b/package/nvme/Config.in
+> @@ -5,3 +5,12 @@ config BR2_PACKAGE_NVME
+>  	  Express (optimized PCI Express SSD interface) devices.
+>  
+>  	  https://github.com/linux-nvme/nvme-cli
+> +
+> +if BR2_PACKAGE_NVME
+> +
+> +config BR2_PACKAGE_NVME_LIBUDEV
+> +	bool "nvme-udev"
+> +	help
+> +	  libudev support for the NVME utility
+> +
+> +endif
 
-Then this definitely calls for a comment that explains why this is
-needed.
+We don't need a new sub-option, just enable udev support if udev is
+available.
 
-Thanks!
+> +ifeq ($(BR2_PACKAGE_NVME_LIBUDEV), y)
+
+Remove the space before 'y', and make this:
+
+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+
+> +NVME_DEPENDENCIES = udev
+
+Use += here
+
+And then also define:
+
+NVME_MAKE_OPTS += LIBUDEV=0
+else
+NVME_MAKE_OPTS += LIBUDEV=1
+
+> +endif
+>  
+>  # LIBUDEV=1 means that libudev is _disabled_
+> +ifeq ($(BR2_PACKAGE_NVME_LIBUDEV), y)
+> +define NVME_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+> +		LIBUDEV=0 -C $(@D)
+> +endef
+> +else
+>  define NVME_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+>  		LIBUDEV=1 -C $(@D)
+>  endef
+
+Don't duplicate the NVME_BUILD_CMDS variable, simply use
+$(NVME_MAKE_OPTS) as defined above.
+
+Could you rework your patch and send an updated version? Thanks a lot!
 
 Thomas
 -- 
