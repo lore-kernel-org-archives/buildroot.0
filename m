@@ -1,87 +1,58 @@
-From: Julien CORJON <corjon.j@ecagroup.com>
-Date: Mon, 18 Apr 2016 11:21:19 +0000
-Subject: [Buildroot] [PATCH v2] qt5quickcontrols2: new package
-In-Reply-To: <570AB8F9.5060408@mind.be>
-References: <1460151190-21021-1-git-send-email-ps.report@gmx.net>
- <570AB8F9.5060408@mind.be>
-Message-ID: <5714C32E.4080907@ecagroup.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Apr 2016 13:33:25 +0200
+Subject: [Buildroot] [PATCH v8 04/14] core: add HOST_SANITIZE_RPATH_HOOK
+ to TARGET_FINALIZE_HOOKS
+In-Reply-To: <1460929111-15615-5-git-send-email-s.martin49@gmail.com>
+References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
+ <1460929111-15615-5-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160418133325.4892c80b@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, all,
+Hello,
 
-Le 10/04/2016 22:35, Arnout Vandecappelle a ?crit :
-> On 04/08/16 23:33, Peter Seiderer wrote:
->> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->
->   However...
->
->> ---
->> Changes v1 -> v2:
->>    - move menu entry to 'technology preview' section
->>    - add QT5_GL_AVAILABLE/QT5_JSCORE_AVAILABLE dependency comment
->>    - install the right qt5quickcontrols2 files to target
->>      (all suggested by Julien Corjon)
+On Sun, 17 Apr 2016 23:38:21 +0200, Samuel Martin wrote:
 
-... snip ...
+> +# RPATH fixing
+> +# - The host hook sets RPATH in host ELF binaries, using relative paths to the
+> +#   library locations.
+> +# - The target hook sanitizes RPATH in target ELF binaries, removing paths
+> +#   pointing to package's build directories or the sysroot's libdirs.
 
->> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
->> +QT5QUICKCONTROLS2_LICENSE = GPLv3 or LGPLv3, GFDLv1.3 (docs)
->
->   The source files specify GPLv2+ or LGPLv3
+There is nothing in this patch that adds a target hook.
 
-QtQuickControls2 is a tech-preview package and follow the upcoming Qt 
-license convention[1]. That's why this module only have GPLv3 or LGPLv3 
-license possibility (but i did not go with fossology to check).
+> +PACKAGES += host-patchelf
+> +
+> +define HOST_SANITIZE_RPATH_HOOK
+> +	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
+> +	READELF=readelf \
+> +		$(TOPDIR)/support/scripts/fix-rpath host $(HOST_DIR)
+> +endef
+> +
+> +TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
 
-Regards,
+I find it somewhat odd that this gets done as a "target finalize" hook
+since it really has nothing to do with finalizing the target. It really
+just needs to be done "at the end of the build".
 
-Julien
+We could add that as a new target, but it would complexify the
+dependency chain, so maybe adding to TARGET_FINALIZE_HOOKS is the
+easiest solution after all.
 
-[1] http://blog.qt.io/blog/2016/03/16/qt-5-6-released/
+One tricky aspect though is that not all host packages are guaranteed
+to be built by the time TARGET_FINALIZE_HOOKS is called. Indeed,
+TARGET_FINALIZE_HOOKS is guaranteed to be called after all *target*
+packages have been built. But if a host package is needed just to
+build a filesystem image for example, it is not guaranteed that it will
+be built before TARGET_FINALIZE_HOOKS is called.
 
->
->
->   Regards,
->   Arnout
->
->
->> +QT5QUICKCONTROLS2_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv3
->> LICENSE.FDL
->> +else
->> +QT5QUICKCONTROLS2_LICENSE = Commercial license
->> +QT5QUICKCONTROLS2_REDISTRIBUTE = NO
->> +endif
->> +
->> +define QT5QUICKCONTROLS2_CONFIGURE_CMDS
->> +    (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
->> +endef
->> +
->> +define QT5QUICKCONTROLS2_BUILD_CMDS
->> +    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
->> +endef
->> +
->> +define QT5QUICKCONTROLS2_INSTALL_STAGING_CMDS
->> +    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->> +endef
->> +
->> +define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
->> +    cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.*
->> $(TARGET_DIR)/usr/lib
->> +    cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls
->> $(TARGET_DIR)/usr/qml/Qt/labs
->> +    cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar
->> $(TARGET_DIR)/usr/qml/Qt/labs
->> +    cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates
->> $(TARGET_DIR)/usr/qml/Qt/labs
->> +endef
->> +
->> +$(eval $(generic-package))
->>
->
->
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
