@@ -1,111 +1,108 @@
-From: Patrick Williams <patrick@stwcx.xyz>
-Date: Mon, 18 Apr 2016 16:44:42 -0500
-Subject: [Buildroot] [PATCH] Adding in support for custom configurations
-In-Reply-To: <20160418211558.12db7fdf@free-electrons.com>
-References: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
- <20160417223143.0b54cce6@free-electrons.com>
- <20160418162528.GA5827@asimov.austin.ibm.com>
- <20160418211558.12db7fdf@free-electrons.com>
-Message-ID: <20160418214442.GB19968@asimov.austin.ibm.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Apr 2016 23:41:37 +0200
+Subject: [Buildroot] [git commit] syslinux: Allow to build multiple flavors
+	simultaneously
+Message-ID: <20160418214751.013AD80741@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 18, 2016 at 09:15:58PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 18 Apr 2016 11:25:28 -0500, Patrick Williams wrote:
-> 
-> > 1. Have support for a defconfig location other than
-> > $(BR2_EXTERNAL)/configs/.
-> > 
-> >     We have the proposed patchset, which is too specific due to the use
-> >     of 'custom', and we have a local hack where we put the same recipe
-> >     into $(BR2_EXTERNAL)/docs/custom/custom.mk.  Other than docs/*/*.mk,
-> >     there is no include in buildroot/Makefile into the BR2_EXTERNAL tree
-> >     when invoked without an existing .config.
-> > 
-> >     Would there be opposition to a new -include in buildroot/Makefile
-> >     outside of the large $(if BR2_HAVE_DOT_CONFIG... block into the
-> >     BR2_EXTERNAL tree?  This would give us a hook point to add the
-> >     %_defconfig recipe found in this patchset.
-> > 
-> >     Alternatively, or additionally, we could create a
-> >     BR2_EXTERNAL_CONFIGS variable as a set of additional directories to
-> >     search as defconfig locations.
-> > 
-> > 2. (Bonus) Enhance list-defconfigs to also display the defconfigs found
-> > at this extra location.
-> > 
-> >     Would there be opposition to something like a
-> >     $(BR2_LIST_DEFCONFIGS_CMDS) variable to extend the list-defconfigs
-> >     in the custom tree?
-> 
-> I think the only reasonable solution to this is to really allow
-> multiple BR2_EXTERNAL directories. A patch series doing this was
-> proposed by Yann E. Morin a while ago, but due to the fairly
-> significant additional complexity, it hasn't been merged so far.
+commit: https://git.buildroot.net/buildroot/commit/?id=3177e74c8fb62c73717cece440902c1cb0b1243f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Has there been any previous discussion about allowing sub-directories
-under 'configs'?  The Linux kernel tree allows both
-$(ARCH)/configs/*_defconfig and $(ARCH)/configs/*/*_defconfig .  Coupled
-with Steve's proposal for us to use symlinks, we could create
-$(BR2_EXTERNAL)/configs/custom as a symlink to
-$(BR2_EXTERNAL)/custom/configs and have a solution as well.
+This becomes handy when building hybrid images that needs to be able
+to boot in MBR and GPT mode.
 
-> One question that immediately comes to mind is: why do you maintain a
-> BR2_EXTERNAL tree on your side? If all you do is related to publicly
-> available machines/packages, why don't you upstream all what you have
-> in Buildroot, and let only your downstream users that need to create
-> private/confidential things use the BR2_EXTERNAL feature?
+Signed-off-by: Beno??t Allard <benoit.allard@greenbone.net>
+Tested-by: Matt Weber <matt@thewebers.ws>
+Reviewed-by: Matt Weber <matt@thewebers.ws>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ boot/syslinux/Config.in   | 17 +++++++++--------
+ boot/syslinux/syslinux.mk |  4 ++--
+ 2 files changed, 11 insertions(+), 10 deletions(-)
 
-We have been upstreaming packages that seemed globally applicable, but
-many of the packages have a very limited set of users.  The burden vs
-benefit on the Buildroot team to maintain the recipes for these packages
-did not seem justifiable to us.  If we are wrong in that decision we are
-certainly open to larger contributions upstream.
-
-For those unfamiliar with the Power architecture, this BR2_EXTERNAL repository
-(http://github.com/open-power/op-build) is roughly the equivalent of a BIOS +
-grub for Power.  There packages here fall into the following categories:
-
-    1. Early system initialization firmware (CPU, Memory, SMP
-    interconnect):
-        - Hostboot
-    2. Late system initialization firmware (PCIe) and "OPAL" runtime
-    abstraction:
-        - Skiboot
-    3. Board specific data files for #1:
-        - <board>-xml
-    4. Power bootloader:
-        - Petitboot
-    5. On-chip power management microcode:
-        - OCC
-    6. Processor specific binary microcode blobs.
-
-The only one of these that is even remotely useful outside of building
-the firmware for a Power8 system is Petitboot because it was also used
-in PS3.
-
-The main benefit we get from keeping these in a BR2_EXTERNAL tree is
-that we de-couple from Buildroot's patch integration.  Due to product
-release cycles it is sometimes useful to keep on a "stable" Buildroot
-but add fixes to the Power specific packages.  This could obviously be
-done as a separately maintained tree / branch instead.  We have also had
-a few cases where the package teams were "slow" at getting in fixes for
-a compiler version bump and I suspect if these were directly upstream in
-Buildroot there would be an expectation of faster focus on those types
-of issues.
-
-CC'ing a few others involved in the project.
--- 
-Patrick Williams
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 819 bytes
-Desc: Digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160418/74806c07/attachment.asc>
+diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
+index f4b9870..6067e9c 100644
+--- a/boot/syslinux/Config.in
++++ b/boot/syslinux/Config.in
+@@ -2,6 +2,11 @@ config BR2_TARGET_SYSLINUX
+ 	bool "syslinux"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	select BR2_HOSTARCH_NEEDS_IA32_COMPILER
++	# Make sure at least one of the flavors is installed
++	select BR2_TARGET_SYSLINUX_ISOLINUX \
++		if !BR2_TARGET_SYSLINUX_PXELINUX && \
++		   !BR2_TARGET_SYSLINUX_MBR && \
++		   !BR2_TARGET_SYSLINUX_EFI
+ 	help
+ 	  The syslinux bootloader for x86 systems.
+ 	  This includes: syslinux, pxelinux, extlinux.
+@@ -13,25 +18,22 @@ if BR2_TARGET_SYSLINUX
+ config BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	bool
+ 
+-choice
+-	bool "Image to install"
+-
+ config BR2_TARGET_SYSLINUX_ISOLINUX
+-	bool "isolinux"
++	bool "install isolinux"
+ 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	help
+ 	  Install the legacy-BIOS 'isolinux' image, to boot off
+ 	  optical media (CDROM, DVD.)
+ 
+ config BR2_TARGET_SYSLINUX_PXELINUX
+-	bool "pxelinux"
++	bool "install pxelinux"
+ 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	help
+ 	  Install the legacy-BIOS 'pxelinux' image, to boot off
+ 	  the network using PXE.
+ 
+ config BR2_TARGET_SYSLINUX_MBR
+-	bool "mbr"
++	bool "install mbr"
+ 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 	help
+ 	  Install the legacy-BIOS 'mbr' image, to boot off a
+@@ -39,12 +41,11 @@ config BR2_TARGET_SYSLINUX_MBR
+ 	  or 'syslinux').
+ 
+ config BR2_TARGET_SYSLINUX_EFI
+-	bool "efi"
++	bool "install efi"
+ 	select BR2_PACKAGE_GNU_EFI
+ 	help
+ 	  Install the 'efi' image, to boot from an EFI environment.
+ 
+-endchoice
+ 
+ if BR2_TARGET_SYSLINUX_LEGACY_BIOS
+ 
+diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
+index 0868896..82890c5 100644
+--- a/boot/syslinux/syslinux.mk
++++ b/boot/syslinux/syslinux.mk
+@@ -16,7 +16,7 @@ SYSLINUX_INSTALL_IMAGES = YES
+ SYSLINUX_DEPENDENCIES = host-nasm host-util-linux host-upx
+ 
+ ifeq ($(BR2_TARGET_SYSLINUX_LEGACY_BIOS),y)
+-SYSLINUX_TARGET = bios
++SYSLINUX_TARGET += bios
+ endif
+ 
+ # The syslinux build system must be forced to use Buildroot's gnu-efi
+@@ -30,7 +30,7 @@ else
+ SYSLINUX_EFI_BITS = efi32
+ endif # 64-bit
+ SYSLINUX_DEPENDENCIES += gnu-efi
+-SYSLINUX_TARGET = $(SYSLINUX_EFI_BITS)
++SYSLINUX_TARGET += $(SYSLINUX_EFI_BITS)
+ SYSLINUX_EFI_ARGS = \
+ 	EFIINC=$(STAGING_DIR)/usr/include/efi \
+ 	LIBDIR=$(STAGING_DIR)/usr/lib \
