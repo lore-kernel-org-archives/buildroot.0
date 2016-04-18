@@ -1,39 +1,40 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Mon, 18 Apr 2016 11:48:12 -0300
-Subject: [Buildroot] [PATCH 1/2] rp-pppoe: bump to version 3.12
-Message-ID: <1460990893-10820-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Mon, 18 Apr 2016 11:48:13 -0300
+Subject: [Buildroot] [PATCH 2/2] rp-pppoe: select pppd
+In-Reply-To: <1460990893-10820-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1460990893-10820-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1460990893-10820-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+There's no benefit on it being an autodep since it makes it harder to
+find, and pppd can be selected directly.
+
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/rp-pppoe/rp-pppoe.hash | 2 +-
- package/rp-pppoe/rp-pppoe.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rp-pppoe/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/rp-pppoe/rp-pppoe.hash b/package/rp-pppoe/rp-pppoe.hash
-index ab162ee..0cf85a0 100644
---- a/package/rp-pppoe/rp-pppoe.hash
-+++ b/package/rp-pppoe/rp-pppoe.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	86a1a4d92fcea74fa6dd45516c5975933fa978b36fafe71f76ea70b4b4747720	rp-pppoe-3.11.tar.gz
-+sha256	00794e04031546b0e9b8cf286f2a6d1ccfc4a621b2a3abb2d7ef2a7ab7cc86c2	rp-pppoe-3.12.tar.gz
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index 5cb4960..4306254 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RP_PPPOE_VERSION = 3.11
-+RP_PPPOE_VERSION = 3.12
- RP_PPPOE_SITE = http://www.roaringpenguin.com/files/download
- RP_PPPOE_LICENSE = GPLv2
- RP_PPPOE_LICENSE_FILES = doc/LICENSE
+diff --git a/package/rp-pppoe/Config.in b/package/rp-pppoe/Config.in
+index d37203c..7f6afe2 100644
+--- a/package/rp-pppoe/Config.in
++++ b/package/rp-pppoe/Config.in
+@@ -1,6 +1,12 @@
++comment "rp-pppoe needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++
+ config BR2_PACKAGE_RP_PPPOE
+ 	bool "rp-pppoe"
+-	depends on BR2_PACKAGE_PPPD
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_PPPD
+ 	help
+ 	  An implementation of the Point-to-point protocol over Ethernet.
+ 	  Has userspace client and server deamons. You likely only need
 -- 
 2.7.3
