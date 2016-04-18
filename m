@@ -1,91 +1,99 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Apr 2016 12:54:44 +0100
-Subject: [Buildroot] [PATCH v2 5/8] php-gnupg: re add package,
+Date: Mon, 18 Apr 2016 12:55:00 +0100
+Subject: [Buildroot] [PATCH v2 6/8] php-memcached: re add package,
 	now compatible with PHP 7
-Message-ID: <1460980484-709-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1460980500-853-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Related: https://bugs.php.net/bug.php?id=71138
+Related: https://bugs.php.net/bug.php?id=70751
 
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
- package/Config.in                |  1 +
- package/php-gnupg/Config.in      |  9 +++++++++
- package/php-gnupg/php-gnupg.hash |  2 ++
- package/php-gnupg/php-gnupg.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/php-gnupg/Config.in
- create mode 100644 package/php-gnupg/php-gnupg.hash
- create mode 100644 package/php-gnupg/php-gnupg.mk
+ package/Config.in                        |  1 +
+ package/php-memcached/Config.in          | 15 +++++++++++++++
+ package/php-memcached/php-memcached.hash |  2 ++
+ package/php-memcached/php-memcached.mk   | 27 +++++++++++++++++++++++++++
+ 4 files changed, 45 insertions(+)
+ create mode 100644 package/php-memcached/Config.in
+ create mode 100644 package/php-memcached/php-memcached.hash
+ create mode 100644 package/php-memcached/php-memcached.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 303531d..51e7de2 100644
+index 51e7de2..172a570 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -611,6 +611,7 @@ if BR2_PACKAGE_PHP
- if !BR2_STATIC_LIBS
- menu "External php extensions"
+@@ -613,6 +613,7 @@ menu "External php extensions"
  	source "package/php-geoip/Config.in"
-+	source "package/php-gnupg/Config.in"
+ 	source "package/php-gnupg/Config.in"
  	source "package/php-imagick/Config.in"
++	source "package/php-memcached/Config.in"
  	source "package/php-zmq/Config.in"
  endmenu
-diff --git a/package/php-gnupg/Config.in b/package/php-gnupg/Config.in
+ endif
+diff --git a/package/php-memcached/Config.in b/package/php-memcached/Config.in
 new file mode 100644
-index 0000000..49fb43b
+index 0000000..cd97c15
 --- /dev/null
-+++ b/package/php-gnupg/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PHP_GNUPG
-+	bool "php-gnupg"
-+	depends on BR2_PACKAGE_PHP
-+	depends on BR2_USE_MMU # libassuan
-+	select BR2_PACKAGE_LIBGPGME
++++ b/package/php-memcached/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PHP_MEMCACHED
++	bool "php-memcached"
++	depends on BR2_INSTALL_LIBSTDCPP # libmemcached
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libmemcached
++	select BR2_PACKAGE_PHP_EXT_SESSION
++	select BR2_PACKAGE_LIBMEMCACHED
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  PHP wrapper around the gpgme library.
++	  PHP extension for interfacing with memcached via
++	  libmemcached library.
 +
-+	  http://pecl.php.net/package/gnupg
-diff --git a/package/php-gnupg/php-gnupg.hash b/package/php-gnupg/php-gnupg.hash
++	  http://pecl.php.net/package/memcached
++
++comment "php-memcached needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/php-memcached/php-memcached.hash b/package/php-memcached/php-memcached.hash
 new file mode 100644
-index 0000000..632a3fa
+index 0000000..f2a096f
 --- /dev/null
-+++ b/package/php-gnupg/php-gnupg.hash
++++ b/package/php-memcached/php-memcached.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 7d92c9695a74bc1f371260104301e4646af9f1bf562c41122f61ed92d4975ec4  php-gnupg-f7d42c6bc3f7cf3404ed56ef4f7ec3235a507970.tar.gz
-diff --git a/package/php-gnupg/php-gnupg.mk b/package/php-gnupg/php-gnupg.mk
++sha256 73266212e791a4817da06be1daddf9ff7dd5b5b0b650b3fbd0f5fc6ccc18491b  php-memcached-6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce.tar.gz
+diff --git a/package/php-memcached/php-memcached.mk b/package/php-memcached/php-memcached.mk
 new file mode 100644
-index 0000000..6963ece
+index 0000000..ea241b2
 --- /dev/null
-+++ b/package/php-gnupg/php-gnupg.mk
-@@ -0,0 +1,25 @@
++++ b/package/php-memcached/php-memcached.mk
+@@ -0,0 +1,27 @@
 +################################################################################
 +#
-+# php-gnupg
++# php-memcached
 +#
 +################################################################################
 +
-+PHP_GNUPG_VERSION = f7d42c6bc3f7cf3404ed56ef4f7ec3235a507970
-+PHP_GNUPG_SITE = $(call github,Sean-Der,pecl-encryption-gnupg,$(PHP_GNUPG_VERSION))
++PHP_MEMCACHED_VERSION = 6ee96cad7be5caa1f13a1f3e5a4d5f900b9c04ce
++PHP_MEMCACHED_SITE = $(call github,php-memcached-dev,php-memcached,$(PHP_MEMCACHED_VERSION))
++PHP_MEMCACHED_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--disable-memcached-sasl \
++	--with-libmemcached-dir=$(STAGING_DIR)/usr \
++	--with-zlib-dir=$(STAGING_DIR)/usr
 +# phpize does the autoconf magic
-+PHP_GNUPG_DEPENDENCIES = php libgpgme host-autoconf host-pkgconf
-+PHP_GNUPG_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-gnupg=$(STAGING_DIR)/usr/include --with-gpg=/usr/bin/gpg
-+PHP_GNUPG_LICENSE = BSD-2c
-+PHP_GNUPG_LICENSE_FILES = LICENSE
++PHP_MEMCACHED_DEPENDENCIES = libmemcached php zlib host-autoconf host-pkgconf
++PHP_MEMCACHED_LICENSE = MIT
++PHP_MEMCACHED_LICENSE_FILES = LICENSE
 +
-+define PHP_GNUPG_PHPIZE
++define PHP_MEMCACHED_PHPIZE
 +	(cd $(@D); \
 +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
 +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
 +		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_GNUPG_PRE_CONFIGURE_HOOKS += PHP_GNUPG_PHPIZE
++PHP_MEMCACHED_PRE_CONFIGURE_HOOKS += PHP_MEMCACHED_PHPIZE
 +
 +$(eval $(autotools-package))
 -- 
