@@ -1,64 +1,87 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Mon, 18 Apr 2016 12:28:18 +0200
-Subject: [Buildroot] [PATCH] [RFC] U-Boot: don't check hashes for U-Boot
- external patches
-In-Reply-To: <57100ABB.8090206@mind.be>
-References: <1460644321-13849-1-git-send-email-julien.boibessot@free.fr>
- <57100509.8040804@mind.be> <57100ABB.8090206@mind.be>
-Message-ID: <5714B6C2.6020204@free.fr>
+From: Julien CORJON <corjon.j@ecagroup.com>
+Date: Mon, 18 Apr 2016 11:21:19 +0000
+Subject: [Buildroot] [PATCH v2] qt5quickcontrols2: new package
+In-Reply-To: <570AB8F9.5060408@mind.be>
+References: <1460151190-21021-1-git-send-email-ps.report@gmx.net>
+ <570AB8F9.5060408@mind.be>
+Message-ID: <5714C32E.4080907@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, all,
 
-Arnout,
-
-thanks for the comments.
-
-On 14/04/2016 23:25, Arnout Vandecappelle wrote:
-> On 04/14/16 23:00, Arnout Vandecappelle wrote:
->> On 04/14/16 16:32, julien.boibessot at free.fr wrote:
->>> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>>
->>> BR2_TARGET_UBOOT_PATCH allows user to give URL of patches on the
->>> Web, but in
->>> that case BR dl infra tries to compare hashes of the downloaded
->>> patches with the
->>> infos from boot/uboot/uboot.hash.
->>> So, for that case (user specified patches), tell BR not to check
->>> hashes.
->>>
->>> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>> ---
->>>   boot/uboot/uboot.mk | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->>> index 48f40c3..9e24b48 100644
->>> --- a/boot/uboot/uboot.mk
->>> +++ b/boot/uboot/uboot.mk
->>> @@ -109,6 +109,8 @@ UBOOT_POST_RSYNC_HOOKS +=
->>> UBOOT_COPY_OLD_LICENSE_FILE
->>>   # directories or files.
->>>   UBOOT_PATCHES = $(call qstrip,$(BR2_TARGET_UBOOT_PATCH))
->>>   UBOOT_PATCH = $(filter ftp://% http://% https://%,$(UBOOT_PATCHES))
->>> +UBOOT_PATCHES_NAME = $(notdir $(UBOOT_PATCHES))
->>
->>   Since only the non-local patches will be downloaded, perhaps it's
->> better to
->> use UBOOT_PATCH instead of UBOOT_PATCHES.
->>
->>   Also, there is no need to use an additional variable for this, it's
->> used only
->> once.
+Le 10/04/2016 22:35, Arnout Vandecappelle a ?crit :
+> On 04/08/16 23:33, Peter Seiderer wrote:
+>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 >
->  Oh, and something similar should be done for LINUX_PATCH as well.
+> Tested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+>
+>   However...
+>
+>> ---
+>> Changes v1 -> v2:
+>>    - move menu entry to 'technology preview' section
+>>    - add QT5_GL_AVAILABLE/QT5_JSCORE_AVAILABLE dependency comment
+>>    - install the right qt5quickcontrols2 files to target
+>>      (all suggested by Julien Corjon)
 
-LINUX_PATCH is already working well with external patches that have to
-be downloaded.
+... snip ...
+
+>> +ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+>> +QT5QUICKCONTROLS2_LICENSE = GPLv3 or LGPLv3, GFDLv1.3 (docs)
+>
+>   The source files specify GPLv2+ or LGPLv3
+
+QtQuickControls2 is a tech-preview package and follow the upcoming Qt 
+license convention[1]. That's why this module only have GPLv3 or LGPLv3 
+license possibility (but i did not go with fossology to check).
 
 Regards,
+
 Julien
+
+[1] http://blog.qt.io/blog/2016/03/16/qt-5-6-released/
+
+>
+>
+>   Regards,
+>   Arnout
+>
+>
+>> +QT5QUICKCONTROLS2_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv3
+>> LICENSE.FDL
+>> +else
+>> +QT5QUICKCONTROLS2_LICENSE = Commercial license
+>> +QT5QUICKCONTROLS2_REDISTRIBUTE = NO
+>> +endif
+>> +
+>> +define QT5QUICKCONTROLS2_CONFIGURE_CMDS
+>> +    (cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+>> +endef
+>> +
+>> +define QT5QUICKCONTROLS2_BUILD_CMDS
+>> +    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>> +endef
+>> +
+>> +define QT5QUICKCONTROLS2_INSTALL_STAGING_CMDS
+>> +    $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+>> +endef
+>> +
+>> +define QT5QUICKCONTROLS2_INSTALL_TARGET_CMDS
+>> +    cp -dpf $(STAGING_DIR)/usr/lib/libQt5LabsTemplates.so.*
+>> $(TARGET_DIR)/usr/lib
+>> +    cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/controls
+>> $(TARGET_DIR)/usr/qml/Qt/labs
+>> +    cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/calendar
+>> $(TARGET_DIR)/usr/qml/Qt/labs
+>> +    cp -dpfr $(STAGING_DIR)/usr/qml/Qt/labs/templates
+>> $(TARGET_DIR)/usr/qml/Qt/labs
+>> +endef
+>> +
+>> +$(eval $(generic-package))
+>>
+>
+>
