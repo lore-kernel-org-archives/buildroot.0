@@ -1,5 +1,5 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 18 Apr 2016 23:24:27 +0200
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Apr 2016 23:28:28 +0200
 Subject: [Buildroot] [PATCH v2 2/2] package/opencv: module objdetect
  depends on imgproc
 In-Reply-To: <CAHXCMM+X7SAvaiw2p9oPrC7TVZM9V=V6ttoWZ-arOEKbXz8G7Q@mail.gmail.com>
@@ -9,69 +9,62 @@ References: <1460992275-383-1-git-send-email-bernd.kuhls@t-online.de>
  <CAHXCMM+gkMR16KjCW=-2o0vw_0tXDmB931ZbVk1t=WwEOPj7+A@mail.gmail.com>
  <20160418222159.166e2790@free-electrons.com>
  <CAHXCMM+X7SAvaiw2p9oPrC7TVZM9V=V6ttoWZ-arOEKbXz8G7Q@mail.gmail.com>
-Message-ID: <CAHXCMMJdP4rh1kMeNBQUdkH0KVVm4Qr=0NUm5iPrXjYW7qvPVA@mail.gmail.com>
+Message-ID: <20160418232828.5c7f3e52@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 18, 2016 at 11:18 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> On Mon, Apr 18, 2016 at 10:21 PM, Thomas Petazzoni
-> <thomas.petazzoni@free-electrons.com> wrote:
->> Hello,
->>
->> On Mon, 18 Apr 2016 21:57:49 +0200, Samuel Martin wrote:
->>
->>> > Can you comment on this one? I thought we had no expression of the
->>> > interdependencies between OpenCV modules. Are those interdependencies
->>> > build-time dependencies or run-time dependencies?
->>> In opencv(2) we don't, in opencv3 we do.
->>>
->>> I did the work on opencv3 when bumping the package, but did not take
->>> the time to do it on opencv(2) after we reverted it.
->>>
->>> These interdependencies are build-time deps., they are already
->>> expressed in the cmake code.
->>> One just needs to extract the info and report it in the Config.in.
->>> I'll check if I can quickly dig up something about this on the
->>> opencv(2) package.
-After reviving [2] and updated it, I got these inter-module dependency
-relations on opencv-2.4.12.3: [3]
+Hello,
 
-[2] http://patchwork.ozlabs.org/patch/481711/
-[3] http://code.bulix.org/wcn76o-96974?raw
+On Mon, 18 Apr 2016 23:18:26 +0200, Samuel Martin wrote:
 
-Regards,
-
->>
->> If they are already expressed in the CMake code, the build will not
->> fail,
 > Err... it may fail because:
 > - when an option is enabled in the .config, it will be force to ON in opencv.mk;
 > - when an option is disabled in the .config, it will be force to OFF
 > in opencv.mk;
+
+And this takes precedence over what the CMake logic thinks the
+dependencies should be?
+
+If that is the case, then we should have tons of OpenCV build failures
+in the autobuilders due to random configurations that end up making a
+selection of BR2_PACKAGE_OPENCV_* options that don't match the build
+time requirements of OpenCV, no?
+
 > In the end, options set to OFF will take precedence, so some modules
 > enabled in the .config won't be built.
+
+Ah, okay that's how it works. If you force set something to OFF, and
+that thing is needed for another thing that is set to ON, this last
+thing will not be build.
+
+I.e if featureA depends on featureB at build-time in the CMake logic,
+but Buildroot does featureA=ON featureB=OFF, then featureA will in fact
+not be built.
+
+If that's the case, then indeed we need to replicate the inter-module
+dependencies in Buildroot at the Config.in level.
+
 > The main problem with this is when another package depends on several
 > opencv modules, these modules can be enabled in  the .config, but not
 > built, so the package build will fail.
-> I already fixed such failures in the past (don't remember what
-> packages were involved, maybe gst-opencv-plugin).
->
->> so why did you object to the previous iteration of Bernd's patch?
+
+Right, understood.
+
+> > so why did you object to the previous iteration of Bernd's patch?
 > You mean this one [1]?
 > Because I think it was not the right way to fix this.
->
->
-> [1] http://patchwork.ozlabs.org/patch/611563/
->
-> Regards,
->
-> --
-> Samuel
 
+Yes, as per your explanation, I understand.
 
+What about http://patchwork.ozlabs.org/patch/611881/ ?
 
+Thanks!
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
