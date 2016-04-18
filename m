@@ -1,70 +1,196 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Mon, 18 Apr 2016 10:37:27 -0700
-Subject: [Buildroot] [PATCH] Adding in support for custom configurations
-In-Reply-To: <20160418171435.GB5827@asimov.austin.ibm.com>
-References: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
- <20160417223143.0b54cce6@free-electrons.com>
- <20160418162528.GA5827@asimov.austin.ibm.com>
- <CAJJ6jxuPyLjaZOWNJTeEebrEsyUqT81gwgoZcUDTH9A6yPX++w@mail.gmail.com>
- <20160418171435.GB5827@asimov.austin.ibm.com>
-Message-ID: <CAJJ6jxsBQoWmECAGtsAr2-v91a61nOXB2a4A9BJVGS_eN3dW6Q@mail.gmail.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 18 Apr 2016 21:03:02 +0200
+Subject: [Buildroot] [PATCH] uclibc: update to uClibc-ng 1.0.14
+Message-ID: <20160418190302.GA19237@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 18, 2016 at 10:14 AM, Patrick Williams <patrick@stwcx.xyz> wrote:
-> On Mon, Apr 18, 2016 at 10:07:58AM -0700, Steve Calfee wrote:
->> Hi Patrick,
->>
->>
->> Couldn't you get everything you want by allowing a custom user "fred"
->> to create a symlink in your ...configs/ directory to his own custom
->> config like:
->>
->> ln -s ../custom/configs/freds_defconfig
->>
->> Then all the buildroot infrastructure will work as designed, you can
->> have your standard BR2_EXTERNAL tree and "fred" can have his own
->> custom tree. Since you won't check in the symlink and only fred's
->> development will use it, no git conflicts....?
->>
->> Regards, Steve
->
-> Steve,
->
-> That is a good idea.  I failed to mention one aspect that would prevent
-> that from working very well.
->
-> A few of the companies we work with keep a custom tree in their own
-> repository (one of them SVN) and then as part of their build process
-> they copy it on top of the custom tree.  They don't have a mechanism to
-> maintain the symlinks because they don't actually make commits to our
-> repository.
->
+Remove patch, which was applied upstream.
 
-Hi Patrick,
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ ...implify-handling-of-Thumb-related-options.patch | 147 ---------------------
+ package/uclibc/uclibc.hash                         |   2 +-
+ package/uclibc/uclibc.mk                           |   2 +-
+ 3 files changed, 2 insertions(+), 149 deletions(-)
+ delete mode 100644 package/uclibc/0001-arm-simplify-handling-of-Thumb-related-options.patch
 
-I don't understand the problem, symlinks don't care if their targets
-are deleted and recreated.
-
-I was already assuming users were not putting stuff into your git tree
-and stuff in yourtree/custom was someone else's repo. Having the
-symlink is nice if a custom repo is actually checked out into "custom"
-inside your tree.
-
-If they must have an external repo and splat their repo on top of
-custom no problem -- the only thing that won't work as planned is
-save_defconfig (etc). The newly saved  configs will be properly
-updated in the custom filesystem/tree, but if it is a copy, the
-changes will have to be manually updated into the original (SVN) repo.
-
-Similarly, a user could put a copy of his configs in your configs
-directory and just not check them into your tree. Again a manual
-update to an actual repo will be needed if it changes. But how would
-having the originally proposed second "custom" external help this
-problem? - if it isn't their actual repo config changes would have to
-be manually updated anyway.
-
-Regards, Steve
+diff --git a/package/uclibc/0001-arm-simplify-handling-of-Thumb-related-options.patch b/package/uclibc/0001-arm-simplify-handling-of-Thumb-related-options.patch
+deleted file mode 100644
+index 1b89bbe..0000000
+--- a/package/uclibc/0001-arm-simplify-handling-of-Thumb-related-options.patch
++++ /dev/null
+@@ -1,147 +0,0 @@
+-From feb9f08cfe8ddd1fd4fb62265e17ee35147ab268 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Sun, 20 Mar 2016 17:58:35 +0100
+-Subject: [PATCH] arm: simplify handling of Thumb related options
+-
+-Currently, the Thumb support on ARM has three related Config.in
+-options, which are not trivial for users to understand, and are in
+-fact not needed:
+-
+- - The USE_BX option is not needed: knowing whether BX is available or
+-   not is easy. If you have an ARM > v4 or ARMv4T, then BX is
+-   available, otherwise it's not. This is the logic used in glibc.
+-
+- - The USE_LDREXSTREX option is not needed: whenever Thumb2 is
+-   available, ldrex/strex are available, so we can simply rely on
+-   __thumb2__ to determine whether ldrex/strex should be used, without
+-   requiring a Config.in option.
+-
+- - Once USE_BX and USE_LDREXSTREX are removed, the only thing left
+-   that COMPILE_IN_THUMB does is to set -mthumb. This makes the option
+-   unnecessary, as on ARM at least, the user is already supposed to
+-   pass -march=<foo> or other compiler options tuning the library for
+-   a specific ARM variant. There is no reason to do otherwise for
+-   Thumb, which allows to get rid of the COMPILE_IN_THUMB option.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Backport from upstream feb9f08cfe8ddd1fd4fb62265e17ee35147ab268.]
+----
+- Rules.mak                                          |  1 -
+- extra/Configs/Config.arm                           | 22 ----------------------
+- libc/sysdeps/linux/arm/bits/arm_bx.h               | 10 ++++------
+- libc/sysdeps/linux/arm/clone.S                     |  2 +-
+- .../linuxthreads.old/sysdeps/arm/pt-machine.h      |  7 +++----
+- 5 files changed, 8 insertions(+), 34 deletions(-)
+-
+-diff --git a/Rules.mak b/Rules.mak
+-index fc53ad1..dc1a02e 100644
+---- a/Rules.mak
+-+++ b/Rules.mak
+-@@ -392,7 +392,6 @@ endif
+- ifeq ($(TARGET_ARCH),arm)
+- 	CPU_CFLAGS-$(ARCH_LITTLE_ENDIAN)+=-mlittle-endian
+- 	CPU_CFLAGS-$(ARCH_BIG_ENDIAN)+=-mbig-endian
+--	CPU_CFLAGS-$(COMPILE_IN_THUMB_MODE)+=-mthumb
+- endif
+- 
+- ifeq ($(TARGET_ARCH),metag)
+-diff --git a/extra/Configs/Config.arm b/extra/Configs/Config.arm
+-index 00cf982..0d02e3f 100644
+---- a/extra/Configs/Config.arm
+-+++ b/extra/Configs/Config.arm
+-@@ -24,25 +24,3 @@ config CONFIG_ARM_EABI
+- 
+- 	  If you say 'n' here, then the library will be built for the
+- 	  old Linux ABI.
+--
+--config COMPILE_IN_THUMB_MODE
+--	bool "Build using Thumb mode"
+--	select USE_BX
+--	select USE_LDREXSTREX
+--	help
+--	  Say 'y' here to force building uClibc in thumb mode.
+--	  Say 'n' to use your compiler's default mode.
+--
+--config USE_BX
+--	bool "Use BX in function return"
+--	help
+--	  Say 'y' to use BX to return from functions on your thumb-aware
+--	  processor. Say 'y' if you need to use interworking. Say 'n' if not.
+--	  It is safe to say 'y' even if you're not doing interworking.
+--
+--config USE_LDREXSTREX
+--	bool "Use load-store exclusive ASM ops (not supported in SmartFusion)"
+--	depends on COMPILE_IN_THUMB_MODE
+--	default n
+--	help
+--	  Say 'y' to use LDREX/STREX ASM ops.
+-diff --git a/libc/sysdeps/linux/arm/bits/arm_bx.h b/libc/sysdeps/linux/arm/bits/arm_bx.h
+-index 2c29089..1c775b6 100644
+---- a/libc/sysdeps/linux/arm/bits/arm_bx.h
+-+++ b/libc/sysdeps/linux/arm/bits/arm_bx.h
+-@@ -23,13 +23,11 @@
+- #error Please include features.h first
+- #endif /* features.h not yet included */
+- 
+--#if defined(__USE_BX__)
+--# if (__ARM_ARCH <= 4 && !defined __ARM_ARCH_4T__)
+--#  error Use of BX was requested, but is not available on the target processor.
+--# endif /* ARCH level */
+--#endif /* __USE_BX__ */
+-+#if __ARM_ARCH > 4 || defined (__ARM_ARCH_4T__)
+-+# define ARCH_HAS_BX
+-+#endif
+- 
+--#if defined(__USE_BX__) && (__ARM_ARCH > 4 || (__ARM_ARCH == 4 && defined __ARM_ARCH_4T__))
+-+#if defined(ARCH_HAS_BX)
+- # define BX(reg)	bx reg
+- # define BXC(cond, reg)	bx##cond reg
+- #else
+-diff --git a/libc/sysdeps/linux/arm/clone.S b/libc/sysdeps/linux/arm/clone.S
+-index b4c7d8a..fd7590d 100644
+---- a/libc/sysdeps/linux/arm/clone.S
+-+++ b/libc/sysdeps/linux/arm/clone.S
+-@@ -69,7 +69,7 @@ __clone:
+- 
+- 	@ pick the function arg and call address off the stack and execute
+- 	ldr	r0, [sp, #4]
+--#if defined(__USE_BX__)
+-+#if defined(ARCH_HAS_BX)
+- 	ldr	r1, [sp]
+- 	bl	2f	@ blx r1
+- #else
+-diff --git a/libpthread/linuxthreads.old/sysdeps/arm/pt-machine.h b/libpthread/linuxthreads.old/sysdeps/arm/pt-machine.h
+-index 2b877f9..fc17e9b 100644
+---- a/libpthread/linuxthreads.old/sysdeps/arm/pt-machine.h
+-+++ b/libpthread/linuxthreads.old/sysdeps/arm/pt-machine.h
+-@@ -28,8 +28,7 @@
+- # define PT_EI __extern_always_inline
+- #endif
+- 
+--#if defined(__thumb__)
+--#if defined(__USE_LDREXSTREX__)
+-+#if defined(__thumb2__)
+- PT_EI long int ldrex(int *spinlock)
+- {
+- 	long int ret;
+-@@ -63,7 +62,7 @@ testandset (int *spinlock)
+-   return ret;
+- }
+- 
+--#else /* __USE_LDREXSTREX__ */
+-+#elif defined(__thumb__)
+- 
+- /* This will not work on ARM1 or ARM2 because SWP is lacking on those
+-    machines.  Unfortunately we have no way to detect this at compile
+-@@ -88,7 +87,7 @@ PT_EI long int testandset (int *spinlock)
+- 	: "0"(1), "r"(spinlock));
+-   return ret;
+- }
+--#endif
+-+
+- #else /* __thumb__ */
+- 
+- PT_EI long int testandset (int *spinlock);
+--- 
+-2.6.4
+-
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index b700406..eccce34 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,2 +1,2 @@
+ # From http://www.uclibc-ng.org/
+-sha256  7baae61e243da3ab85e219fead68406995be5eabf889001c0d41676546b19317        uClibc-ng-1.0.13.tar.xz
++sha256  3c63d9f8c8b98b65fa5c4040d1c8ab1b36e99a16e1093810cedad51ac15c9a9e        uClibc-ng-1.0.14.tar.xz
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 1ccdfbb..0dfb454 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.13
++UCLIBC_VERSION = 1.0.14
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = http://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPLv2.1+
+-- 
+2.1.4
