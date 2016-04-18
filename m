@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:33:13 +0200
-Subject: [Buildroot] [PATCH v8 07/14] toolchain: add post-install hooks
- making the toolchain relocatable
-In-Reply-To: <1460929111-15615-8-git-send-email-s.martin49@gmail.com>
+Date: Mon, 18 Apr 2016 21:33:53 +0200
+Subject: [Buildroot] [PATCH v8 06/14] package/speex: remove no longer
+ needed hook
+In-Reply-To: <1460929111-15615-7-git-send-email-s.martin49@gmail.com>
 References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
- <1460929111-15615-8-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160418213313.6c5a3d21@free-electrons.com>
+ <1460929111-15615-7-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160418213353.599efe93@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +14,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Apr 2016 23:38:24 +0200, Samuel Martin wrote:
-> This change adds the required dependency and post-target-install hooks
-> to render the toolchain relocatable.
-> 
-> Notes:
-> - Although the toolchain package is a virtual package, it does support
->   hooks.
-> - This has to be post-target-install hooks because the toolchain package
->   is handled as a "target" package.
-> 
-> Ultimately, this patch allows to generate relocatable toolchains, just
-> by doing:
-> 
->   $ make menuconfig
->   $ make toolchain
-> 
-> Then, this toolchain can be used/shared/deployed anywhere*.
-> 
-> *: on any Linux system with an ABI-compatible set of system libraries
->    (usually including: glibc, libgcc, zlib, flex and libsigsegv).
-> 
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
+On Sun, 17 Apr 2016 23:38:23 +0200, Samuel Martin wrote:
 
-Why is this needed? You already do such steps in the
-TARGET_FINALIZE_HOOKS ?
+> -define SPEEX_LIBTOOL_FIXUP
+> -	$(SED) 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $(@D)/libtool
+> -	$(SED) 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $(@D)/libtool
+> -endef
+> -
+>  SPEEX_POST_CONFIGURE_HOOKS += SPEEX_LIBTOOL_FIXUP
 
-Yes, it means after just a "make toolchain", you don't have a
-relocatable toolchain. But Buildroot never guaranteed that a partial
-build will yield fully  usable results.
-
-So I would prefer to not have this patch, at least in the initial
-version of the series.
-
-Again, this stuff is complicated. Please keep things as minimal as
-possible in a first step.
-
-Thanks!
+So presumably this line is also not useful anymore?
 
 Thomas
 -- 
