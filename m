@@ -1,37 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:23:43 +0200
-Subject: [Buildroot] [PATCH] gst1-imx: make kernel dependency optional
-In-Reply-To: <CAAMH-ysFMBA9bDK4h2KQv-HBmjMYmqzdZX1YhBwKzr-7VXz8zw@mail.gmail.com>
-References: <97bf649b600a5548cfd3c53575747a057f24e07e.1460973919.git.baruch@tkos.co.il>
- <CAAMH-ysFMBA9bDK4h2KQv-HBmjMYmqzdZX1YhBwKzr-7VXz8zw@mail.gmail.com>
-Message-ID: <20160418212343.3b7ff726@free-electrons.com>
+Date: Mon, 18 Apr 2016 21:24:04 +0200
+Subject: [Buildroot] [git commit] elf2flt: enable for xtensa
+Message-ID: <20160418192408.CAC50817D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=86e8062ecdf9153a15ea7145efd37ebee647ee85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Apr 2016 12:18:28 +0200, Gary Bisson wrote:
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/elf2flt/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> That is true, it isn't a hard dependency, the reason I left it like
-> that is because if the headers aren't found and none of the other
-> configurations (plugins-bad, imx-gpu-viv or libimxvpuapi) are set, no
-> actual plugin will be built which could be confusing.
-> 
-> Although this patch is correct and legit, I'd rather go ahead and
-> rework the entire package since Carlos worked on being able to
-> select/disable each and individual plugin since version 0.12.1:
-> https://github.com/Freescale/meta-fsl-arm/commit/cec4c47e
-
-But isn't Baruch patch as-is already a step in the right direction?
-I.e, should we merge it as-is, or wait for the entire rework to be done?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
+index eb86b11..b93795b 100644
+--- a/package/elf2flt/Config.in.host
++++ b/package/elf2flt/Config.in.host
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_HOST_ELF2FLT
+ 	bool "Enable elf2flt support?"
+-	depends on BR2_arm || BR2_sh || BR2_sparc
++	depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa
+ 	depends on !BR2_USE_MMU
+ 	help
+ 	  uCLinux uses a Binary Flat format commonly known as BFLT. It
