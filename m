@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:21:28 +0200
-Subject: [Buildroot] [PATCH] uclibc: update to uClibc-ng 1.0.14
-In-Reply-To: <20160418190302.GA19237@waldemar-brodkorb.de>
-References: <20160418190302.GA19237@waldemar-brodkorb.de>
-Message-ID: <20160418212128.09113c4a@free-electrons.com>
+Date: Mon, 18 Apr 2016 21:22:32 +0200
+Subject: [Buildroot] [PATCH 1/2] rp-pppoe: bump to version 3.12
+In-Reply-To: <1460990893-10820-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1460990893-10820-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <20160418212232.6d44c172@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Apr 2016 21:03:02 +0200, Waldemar Brodkorb wrote:
-> Remove patch, which was applied upstream.
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+On Mon, 18 Apr 2016 11:48:12 -0300, Gustavo Zacarias wrote:
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 > ---
->  ...implify-handling-of-Thumb-related-options.patch | 147 ---------------------
->  package/uclibc/uclibc.hash                         |   2 +-
->  package/uclibc/uclibc.mk                           |   2 +-
->  3 files changed, 2 insertions(+), 149 deletions(-)
->  delete mode 100644 package/uclibc/0001-arm-simplify-handling-of-Thumb-related-options.patch
+>  package/rp-pppoe/rp-pppoe.hash | 2 +-
+>  package/rp-pppoe/rp-pppoe.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied to master, thanks.
 
 Thomas
 -- 
