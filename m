@@ -1,50 +1,134 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 23:06:22 +0200
-Subject: [Buildroot] [PATCH v3 1/2] gcc: fix ccache hash of patches in
- BR2_GLOBAL_PATCH_DIR
-In-Reply-To: <1460521232-28778-2-git-send-email-hchunhui@mail.ustc.edu.cn>
-References: <1460521232-28778-1-git-send-email-hchunhui@mail.ustc.edu.cn>
- <1460521232-28778-2-git-send-email-hchunhui@mail.ustc.edu.cn>
-Message-ID: <20160418230622.1e0a377d@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 18 Apr 2016 23:08:02 +0200
+Subject: [Buildroot] [PATCH v4 3/3] core/pkg-kconfig: Use oldnoconfig
+	when possible
+In-Reply-To: <1460971383-10595-4-git-send-email-romain.izard.pro@gmail.com>
+References: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
+ <1460971383-10595-4-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <20160418210802.GE3495@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain, All,
 
-On Wed, 13 Apr 2016 04:20:31 +0000, Chunhui He wrote:
-> From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+On 2016-04-18 11:23 +0200, Romain Izard spake thusly:
+> Using 'yes "" | make oldconfig' to regenerate a .config file from an
+> existing defconfig does not work reliably in all cases. Specifically, it
+> does not work well with tristate choice entries.
 > 
-> In commit f4682cf933, a hash of the patches applied to gcc was created
-> to make sure that ccache can properly detect when the toolchain has
-> changed. The patches applied to gcc consist of the buildroot patches in
-> package/gcc, but also potentially patches in BR2_GLOBAL_PATCH_DIR.
-> However, the path to the patches in BR2_GLOBAL_PATCH_DIR was corrected
-> incorrectly, because it misses a /. So instead of:
+> The correct way to do it is to use 'make olddefconfig', but this target
+> is not supported in projects that use an old version of kconfig. As
+> most projects do not use tristate entries, there is no need for them to
+> upgrade.
 > 
-> $(BR2_GLOBAL_PATCH_DIR)/gcc-initial/*.patch
+> 'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
+> name for this target between Linux versions 2.6.36 and 3.6.
 > 
-> it would look for
+> Try to use 'oldnoconfig' by default, using 'oldconfig' as a fallback
 > 
-> $(BR2_GLOBAL_PATCH_DIR)gcc-initial/*.patch
-> 
-> In other words, if BR2_GLOBAL_PATCH_DIR doesn't end with /, the patches
-> in BR2_GLOBAL_PATCH_DIR are not taken into account in the ccache hash.
-> 
-> To fix, add the missing /
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: He Chunhui <hchunhui@mail.ustc.edu.cn>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+
+Usually, reviewd-by tags are staged after the signed-off-by tag, as in a
+temporal mark: first signed-off-by, then reviewed.
+
 > ---
->  package/gcc/gcc.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Changelog:
+> v1: New patch
+> v2: Use oldnoconfig instead of olddefconfig
+>     Fix silent mode
+>     Change the pattern in both places where it is used
+>     Use a macro to avoid redundancy
+> v3: Do not use $(call ...)
+>     Use the $(2)_KCONFIG_MAKE variable
+> v4: No change
+> 
+>  package/pkg-kconfig.mk | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 4033915..e04cfd5 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -60,18 +60,28 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+>  $(2)_KCONFIG_MAKE = \
+>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
+>  
+> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
+> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> +# In older versions, and in some other projects that use kconfig, the target is
+> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
+> +# only, as this can fail in complex cases.
+> +define $(2)_REGEN_DOT_CONFIG
+> +	$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig || \
+> +		(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)
 
-Applied to master, thanks.
+What I don't much like here, is that we conflate two things:
+  - a non-zero return code because of a missing oldnoconfig,
+  - a non-zero return code because of an error found by olnoconfig.
 
-Thomas
+What I would have loved however, would be a way to detect whether
+oldnoconfig (better, olddefconfig) was supported before calling it.
+Maybe something along the lines of:
+
+    if [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT 2>/dev/null |grep -E '^olddefconfig'`" ]; then \
+        $$($(2)_KCONFIG_MAKE) olddefconfig || exit 1; \
+    elif [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT |grep -E '^oldnoconfig'`" ]; then \
+        $$($(2)_KCONFIG_MAKE) oldnoconfig || exit 1; \
+    else
+        (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig) || exit 1; \
+    fi
+        
+Yes, this is more code, less compact, but it is more systematic. At the
+very least, it would not fallback to the yes|oldconfig trick in case
+old{def,no}config do exist but fail, which we do want to catch.
+
+BTW, the make trick above is highly (as in: almost identical) from the
+bash-autocompletion package.
+
+Regards,
+Yann E. MORIN.
+
+> +endef
+> +
+>  # The specified source configuration file and any additional configuration file
+>  # fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+> -# full .config first. We use 'make oldconfig' because this can be safely
+> -# done even when the package does not support defconfigs.
+> +# full .config first.
+>  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+>  		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+>  		cp $$($(2)_KCONFIG_FILE) $$(@))
+>  	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+>  		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+> +	$$($(2)_REGEN_DOT_CONFIG)
+>  
+>  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+>  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+> @@ -82,7 +92,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
+>  # The exact rules are specified by the package .mk file.
+>  define $(2)_FIXUP_DOT_CONFIG
+>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+> +	$$($(2)_REGEN_DOT_CONFIG)
+>  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  endef
+>  
+> -- 
+> 2.5.0
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
