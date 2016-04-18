@@ -1,31 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:24:04 +0200
-Subject: [Buildroot] [git commit] elf2flt: enable for xtensa
-Message-ID: <20160418192408.CAC50817D5@busybox.osuosl.org>
+Date: Mon, 18 Apr 2016 21:24:23 +0200
+Subject: [Buildroot] [PATCH] elf2flt: enable for xtensa
+In-Reply-To: <1459398220-19244-1-git-send-email-jcmvbkbc@gmail.com>
+References: <1459398220-19244-1-git-send-email-jcmvbkbc@gmail.com>
+Message-ID: <20160418212423.2b0027ea@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86e8062ecdf9153a15ea7145efd37ebee647ee85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/elf2flt/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, 31 Mar 2016 07:23:40 +0300, Max Filippov wrote:
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+> This patch depends on https://patchwork.ozlabs.org/patch/599708/ or
+> equivalent update of the elf2flt upstream and can be folded into such
+> patch.
 
-diff --git a/package/elf2flt/Config.in.host b/package/elf2flt/Config.in.host
-index eb86b11..b93795b 100644
---- a/package/elf2flt/Config.in.host
-+++ b/package/elf2flt/Config.in.host
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_HOST_ELF2FLT
- 	bool "Enable elf2flt support?"
--	depends on BR2_arm || BR2_sh || BR2_sparc
-+	depends on BR2_arm || BR2_sh || BR2_sparc || BR2_xtensa
- 	depends on !BR2_USE_MMU
- 	help
- 	  uCLinux uses a Binary Flat format commonly known as BFLT. It
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
