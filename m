@@ -1,225 +1,67 @@
-From: Brian Kim <brian.kim@hardkernel.com>
-Date: Mon, 18 Apr 2016 13:30:08 +0900
-Subject: [Buildroot] [PATCH] board: add support for Hardkernel ODROID-C2
-	Board
-Message-ID: <1460953808-24428-1-git-send-email-brian.kim@hardkernel.com>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Mon, 18 Apr 2016 14:56:26 +1000
+Subject: [Buildroot] [PATCH 1/1] nvme: Allow libudev support
+Message-ID: <1460955386-21322-1-git-send-email-sam@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The ODROID-C2 is a 64-bit quad-core single board computer(SBC) that is
-one of the most cost-effective 64bit development boards available in the
-ARM world.
+Commands like 'nvme list' require libudev but support for libudev is
+decided at compile time, and in buildroot this is hard disabled.
+Add a config option which allows libudev support to be enabled for the
+nvme package.
 
-http://www.hardkernel.com/main/products/prdt_info.php?g_code=G145457216438
-
-Signed-off-by: Brian Kim <brian.kim@hardkernel.com>
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 ---
- board/hardkernel/odroidc2/boot.ini      | 22 ++++++++++++++
- board/hardkernel/odroidc2/genimage.cfg  | 27 +++++++++++++++++
- board/hardkernel/odroidc2/post-image.sh | 21 +++++++++++++
- board/hardkernel/odroidc2/readme.txt    | 54 +++++++++++++++++++++++++++++++++
- configs/odroidc2_defconfig              | 38 +++++++++++++++++++++++
- 5 files changed, 162 insertions(+)
- create mode 100644 board/hardkernel/odroidc2/boot.ini
- create mode 100644 board/hardkernel/odroidc2/genimage.cfg
- create mode 100755 board/hardkernel/odroidc2/post-image.sh
- create mode 100644 board/hardkernel/odroidc2/readme.txt
- create mode 100644 configs/odroidc2_defconfig
+ package/nvme/Config.in |  9 +++++++++
+ package/nvme/nvme.mk   | 10 ++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
-new file mode 100644
-index 0000000..8b67b5e
---- /dev/null
-+++ b/board/hardkernel/odroidc2/boot.ini
-@@ -0,0 +1,22 @@
-+ODROIDC2-UBOOT-CONFIG
+diff --git a/package/nvme/Config.in b/package/nvme/Config.in
+index dd8655f..4590fdc 100644
+--- a/package/nvme/Config.in
++++ b/package/nvme/Config.in
+@@ -5,3 +5,12 @@ config BR2_PACKAGE_NVME
+ 	  Express (optimized PCI Express SSD interface) devices.
+ 
+ 	  https://github.com/linux-nvme/nvme-cli
 +
-+# HDMI mode
-+setenv m "720p60hz" # Progressive 60Hz
++if BR2_PACKAGE_NVME
 +
-+# HDMI BPP Mode
-+setenv m_bpp "32"
++config BR2_PACKAGE_NVME_LIBUDEV
++	bool "nvme-udev"
++	help
++	  libudev support for the NVME utility
 +
-+# Default Console Device Setting
-+setenv condev "console=ttyS0,115200n8"	# Serial Console
-+
-+# Boot Arguments
-+setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
-+
-+# Load Images
-+setenv loadaddr "0x11000000"
-+setenv dtb_loadaddr "0x10000000"
-+fatload mmc 0:1 ${loadaddr} Image
-+fatload mmc 0:1 ${dtb_loadaddr} meson64_odroidc2.dtb
-+
-+# Booting
-+booti ${loadaddr} - ${dtb_loadaddr}
-diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
-new file mode 100644
-index 0000000..15f97d4
---- /dev/null
-+++ b/board/hardkernel/odroidc2/genimage.cfg
-@@ -0,0 +1,27 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"boot.ini",
-+			"Image",
-+			"meson64_odroidc2.dtb"
-+		}
-+	}
-+	size = 32M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition vfat {
-+		partition-type = 0xC
-+		image = "boot.vfat"
-+		offset = 1048576
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
-new file mode 100755
-index 0000000..b2a351f
---- /dev/null
-+++ b/board/hardkernel/odroidc2/post-image.sh
-@@ -0,0 +1,21 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
-+dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
-+
-+exit $?
-diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
-new file mode 100644
-index 0000000..bcaf21d
---- /dev/null
-+++ b/board/hardkernel/odroidc2/readme.txt
-@@ -0,0 +1,54 @@
-+ODROID-C2
-+
-+Intro
-+=====
-+To be able to use ODROID-C2 board with the images generated by
-+Buildroot, you have to prepare the SDCard or eMMC.
-+
-+How to build it
-+===============
-+
-+  $ make odroidc2_defconfig
-+
-+Then you can edit the build options using
-+
-+  $ make menuconfig
-+
-+Compile all and build rootfs image:
-+
-+  $ make
-+
-+Note: you will need to have access to the network, since Buildroot will
-+download the packages' sources.
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- Image
-+    +-- boot.ini                   [1]
-+    +-- boot.vfat
-+    +-- meson64_odroidc2.dtb
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4
-+    +-- rootfs.tar
-+    +-- rootfs.tar.gz
-+    +-- sdcard.img
-+    `-- u-boot.bin
-+
-+[1] This is the ODROID-C2 configuration file used in u-boot.
-+
-+How to write the SD card or eMMC
-+================================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card od eMMC with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Insert the SDcard into your ODROID-C2, and power it up. Your new system
-+should come up now.
-diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
-new file mode 100644
-index 0000000..01e48c9
---- /dev/null
-+++ b/configs/odroidc2_defconfig
-@@ -0,0 +1,38 @@
-+# Architecture
-+BR2_aarch64=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_FPU_NEON=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System
-+BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/post-image.sh"
-+
-+# Kernel
-+BR2_KERNEL_HEADERS_VERSION=y
-+BR2_DEFAULT_KERNEL_VERSION="3.14.29"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="odroidc2-3.14.y"
-+BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
-+BR2_LINUX_KERNEL_USE_INTREE_DTS=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="meson64_odroidc2"
-+BR2_LINUX_KERNEL_IMAGE=y
-+
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="odroidc2-v2015.01"
-+BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++endif
+diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+index 7c4bd8e..72500c5 100755
+--- a/package/nvme/nvme.mk
++++ b/package/nvme/nvme.mk
+@@ -8,12 +8,22 @@ NVME_VERSION = v0.3
+ NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
+ NVME_LICENSE = GPLv2+
+ NVME_LICENSE_FILES = LICENSE
++ifeq ($(BR2_PACKAGE_NVME_LIBUDEV), y)
++NVME_DEPENDENCIES = udev
++endif
+ 
+ # LIBUDEV=1 means that libudev is _disabled_
++ifeq ($(BR2_PACKAGE_NVME_LIBUDEV), y)
++define NVME_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		LIBUDEV=0 -C $(@D)
++endef
++else
+ define NVME_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+ 		LIBUDEV=1 -C $(@D)
+ endef
++endif
+ 
+ define NVME_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
 -- 
-2.5.0
+2.8.0
