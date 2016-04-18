@@ -1,68 +1,44 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 18 Apr 2016 11:22:03 +0200
-Subject: [Buildroot] [PATCH] cannelloni: make SCTP support optional
-Message-ID: <1460971323-520-1-git-send-email-yegorslists@googlemail.com>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Mon, 18 Apr 2016 11:23:00 +0200
+Subject: [Buildroot] [PATCH v4 0/3] core/pkg-kconfig: Fix .config generation
+Message-ID: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+To use an existing file as .config for a project, it needs to be
+validated with 'make oldconfig'. If the file does not match all the
+configuration entries of the project, the user will be prompted to
+select the values for the new entries.
 
-Since version 20160414 SCTP support is optional. Introduce an option to
-select this protocol.
+Historically, 'yes "" | make oldconfig' was used to silently select the
+default values for new entries. But this does not work well with the
+Linux kernel, as it will not select the correct option when configuring
+tristate choice entries.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- package/cannelloni/Config.in     | 11 ++++++++++-
- package/cannelloni/cannelloni.mk |  6 ++++++
- 2 files changed, 16 insertions(+), 1 deletion(-)
+The Linux kernel has added a 'oldnoconfig' target, since renamed
+'olddefconfig', that will work correctly, but this target does not exist
+in all projects that rely on the kconfig workflow.
 
-diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
-index 8f3e888..5613e50 100644
---- a/package/cannelloni/Config.in
-+++ b/package/cannelloni/Config.in
-@@ -5,13 +5,22 @@ config BR2_PACKAGE_CANNELLONI
- 	depends on BR2_USE_MMU # lksctp-tools
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
- 	depends on !BR2_STATIC_LIBS # lksctp-tools
--	select BR2_PACKAGE_LKSCTP_TOOLS
- 	help
- 	  A SocketCAN over Ethernet tunnel. The tunnel supports both
- 	  UDP and SCTP protocols.
- 
- 	  https://github.com/mguentner/cannelloni
- 
-+if BR2_PACKAGE_CANNELLONI
-+
-+config BR2_PACKAGE_CANNELLONI_SCTP
-+	bool "SCTP support"
-+	select BR2_PACKAGE_LKSCTP_TOOLS
-+	help
-+	  This option enables support for Stream Control Transmission
-+	  Protocol (SCTP)
-+endif
-+
- comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
-index 680e09a..28dc41e 100644
---- a/package/cannelloni/cannelloni.mk
-+++ b/package/cannelloni/cannelloni.mk
-@@ -8,6 +8,12 @@ CANNELLONI_VERSION = 20160414
- CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
- CANNELLONI_LICENSE = GPLv2
- CANNELLONI_LICENSE_FILES = gpl-2.0.txt
-+
-+ifeq ($(BR2_PACKAGE_CANNELLONI_SCTP),y)
-+CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=ON
- CANNELLONI_DEPENDENCIES = lksctp-tools
-+else
-+CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=OFF
-+endif
- 
- $(eval $(cmake-package))
+Update buildroot to use 'oldnoconfig' when available, and fallback to
+the default method otherwise.
+
+Changelog:
+v1: creation as a package option
+v2: try 'make oldnoconfig' before 'yes "" | make oldconfig' and remove
+    the option
+v3: Remove useless $(call ...), and factorize the make command
+v4: Fix typo in the commit message
+
+Romain Izard (3):
+  core/pkg-kconfig: Factorize make commands
+  core/pkg-kconfig: Do not use $(call ...) without parameters
+  core/pkg-kconfig: Use oldnoconfig when possible
+
+ package/pkg-kconfig.mk | 30 ++++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
+
 -- 
-2.8.0.rc3
+2.5.0
