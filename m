@@ -1,54 +1,41 @@
-From: Ran Shalit <ranshalit@gmail.com>
-Date: Mon, 18 Apr 2016 22:34:53 +0300
-Subject: [Buildroot] Run qemu with /dev/sda ?
-In-Reply-To: <20160418211854.004ba053@free-electrons.com>
-References: <CAJ2oMhJibkfHEy4P54dm4HZ_frWv4rCXUNdxMezU38edF9v7vg@mail.gmail.com>
- <20160418211854.004ba053@free-electrons.com>
-Message-ID: <CAJ2oMh+yvK5BXB4rdog6Pe0fCCmpjxcvGX2i4qFAWM0QchGxOg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Mon, 18 Apr 2016 21:36:00 +0200
+Subject: [Buildroot] [PATCH v8 09/14] support/scripts/check-host-rpath:
+ silent find command
+In-Reply-To: <1460929111-15615-10-git-send-email-s.martin49@gmail.com>
+References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
+ <1460929111-15615-10-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160418213600.540c90dc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 18, 2016 at 10:18 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 18 Apr 2016 18:32:22 +0300, Ran Shalit wrote:
->
->> I probably have some misunderstanding with running qemu with buildroot output.
->> I see in the following link:
->> http://www.osadl.org/Use-BuildRoot-to-create-a-Linux-image-fo.buildroot-qemu.0.html
->> that qemu should be run as following:
->
-> Please read board/qemu/*/readme.txt to learn how to start Qemu to use
-> the Qemu Buildroot defconfigs.
->
->> qemu-system-i386 -kernel $LOCATION/$KERNEL \
->> -hda $LOCATION/$DISK \
->> -boot c \
->> -m 128 \
->> -append "root=/dev/sda rw" \
->> -localtime \
->> -no-reboot \
->> -name rtlinux \
->> -net nic -net user \
->> -redir tcp:2222::22 \
->> -redir tcp:3333::3333
->>
->> But how can it be that qemu use the same disk as the host ?
->
-> It doesn't use the same disk as the host. The /dev/sda disk that the
-> system running inside Qemu sees is emulated. The contents of the
-> emulated /dev/sda are the ones of the file passed as argument to the
-> -hda option.
->
-> Best regards,
->
-> Thomas
-> --
+Hello,
 
-I now understand.
+On Sun, 17 Apr 2016 23:38:26 +0200, Samuel Martin wrote:
+
+> -    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print |
+> +    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print 2>/dev/null |
+>                    readelf.filter_elf_executable)
+
+This patch is useless. Your patch 08/14 is doing:
+
+-    done < <( find "${hostdir}"/usr/{bin,sbin} -type f -exec file {} + 2>/dev/null \
+-              |sed -r -e '/^([^:]+):.*\<ELF\>.*\<executable\>.*/!d'                \
+-                      -e 's//\1/'                                                  \
+-            )
++    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print |
++                  readelf.filter_elf_executable)
+
+So essentially the 2>/dev/null was already here, and you remove it. And
+then you add it again in your patch 09/14. Simply squash both patches.
+
 Thanks!
-Ran
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
