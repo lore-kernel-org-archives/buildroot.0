@@ -1,107 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:25:38 +0200
-Subject: [Buildroot] [git commit] configs: add
-	qemu_xtensa_lx60_nommu_defconfig
-Message-ID: <20160418192629.71BFC7FBD1@busybox.osuosl.org>
+Date: Mon, 18 Apr 2016 21:25:16 +0200
+Subject: [Buildroot] [git commit] configs/qemu_xtensa_lx60_defconfig: switch
+	to dc233c
+Message-ID: <20160418192629.6602981851@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20e738bc3f938bf3c71752b4f78ccc28c274d531
+commit: https://git.buildroot.net/buildroot/commit/?id=8f82d0185b6b961a3650c9f1323977fb6eb4f38c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add noMMU configuration running on dc233c MMUv3 core with identity
-memory map.
+dc232b is MMUv2 core, dc233c is very similar MMUv3 core. MMUv3 is the
+latest full MMU for xtensa, which allows running both MMU and noMMU
+linux variants.
+Update configuration overlay and linux config file.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Tested-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- board/qemu/xtensa-lx60/linux-4.4-nommu.config | 37 +++++++++++++++++++++++++++
- configs/qemu_xtensa_lx60_nommu_defconfig      | 34 ++++++++++++++++++++++++
- 2 files changed, 71 insertions(+)
+ board/qemu/xtensa-lx60/linux-4.4.config            |   4 ++--
+ board/qemu/xtensa-lx60/readme.txt                  |   4 ++--
+ .../{xtensa_dc232b.tar => xtensa_dc233c.tar}       | Bin 747520 -> 808960 bytes
+ configs/qemu_xtensa_lx60_defconfig                 |   2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/qemu/xtensa-lx60/linux-4.4-nommu.config b/board/qemu/xtensa-lx60/linux-4.4-nommu.config
-new file mode 100644
-index 0000000..29f6fa4
---- /dev/null
-+++ b/board/qemu/xtensa-lx60/linux-4.4-nommu.config
-@@ -0,0 +1,37 @@
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_XTENSA_VARIANT_CUSTOM=y
-+CONFIG_XTENSA_VARIANT_CUSTOM_NAME="dc233c"
-+# CONFIG_XTENSA_VARIANT_MMU is not set
-+CONFIG_XTENSA_UNALIGNED_USER=y
-+CONFIG_PREEMPT=y
-+# CONFIG_PCI is not set
-+CONFIG_XTENSA_PLATFORM_XTFPGA=y
-+CONFIG_CMDLINE_BOOL=y
-+CONFIG_CMDLINE="earlycon=uart8250,mmio32,0xfd050020,115200n8 console=ttyS0,115200n8"
-+CONFIG_DEFAULT_MEM_START=0x00000000
-+CONFIG_BINFMT_FLAT=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+# CONFIG_IPV6 is not set
-+CONFIG_NETFILTER=y
-+CONFIG_DNS_RESOLVER=y
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_NETDEVICES=y
-+CONFIG_MARVELL_PHY=y
-+# CONFIG_WLAN is not set
-+CONFIG_SERIAL_8250=y
-+# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
-+CONFIG_SERIAL_8250_CONSOLE=y
-+# CONFIG_HWMON is not set
-+# CONFIG_VGA_CONSOLE is not set
-+CONFIG_TMPFS=y
-+CONFIG_FANOTIFY=y
-+CONFIG_PRINTK_TIME=y
-+# CONFIG_S32C1I_SELFTEST is not set
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-new file mode 100644
-index 0000000..4af346a
---- /dev/null
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -0,0 +1,34 @@
-+# Architecture
-+BR2_xtensa=y
-+BR2_XTENSA_CUSTOM=y
+diff --git a/board/qemu/xtensa-lx60/linux-4.4.config b/board/qemu/xtensa-lx60/linux-4.4.config
+index 51701b2..2d8e58d 100644
+--- a/board/qemu/xtensa-lx60/linux-4.4.config
++++ b/board/qemu/xtensa-lx60/linux-4.4.config
+@@ -1,8 +1,8 @@
+ # CONFIG_SWAP is not set
+ # CONFIG_CROSS_MEMORY_ATTACH is not set
+ CONFIG_BLK_DEV_INITRD=y
+-CONFIG_XTENSA_VARIANT_DC232B=y
+-# CONFIG_INITIALIZE_XTENSA_MMU_INSIDE_VMLINUX is not set
++CONFIG_XTENSA_VARIANT_DC233C=y
++CONFIG_INITIALIZE_XTENSA_MMU_INSIDE_VMLINUX=y
+ CONFIG_XTENSA_PLATFORM_XTFPGA=y
+ CONFIG_CMDLINE_BOOL=y
+ CONFIG_CMDLINE="console=ttyS0,38400"
+diff --git a/board/qemu/xtensa-lx60/readme.txt b/board/qemu/xtensa-lx60/readme.txt
+index 04393ea..22f5e5a 100644
+--- a/board/qemu/xtensa-lx60/readme.txt
++++ b/board/qemu/xtensa-lx60/readme.txt
+@@ -1,7 +1,7 @@
+ Run the emulation with:
+ 
+- qemu-system-xtensa -M lx60 -cpu dc232b -monitor null -nographic -kernel output/images/Image.elf
++ qemu-system-xtensa -M lx60 -cpu dc233c -monitor null -nographic -kernel output/images/Image.elf
+ 
+ The login prompt will appear in the terminal that started Qemu.
+ 
+-Tested with QEMU 2.3.0
++Tested with QEMU 2.5.0
+diff --git a/board/qemu/xtensa-lx60/xtensa_dc232b.tar b/board/qemu/xtensa-lx60/xtensa_dc233c.tar
+similarity index 65%
+rename from board/qemu/xtensa-lx60/xtensa_dc232b.tar
+rename to board/qemu/xtensa-lx60/xtensa_dc233c.tar
+index 77080e0..1a97d7a 100644
+Binary files a/board/qemu/xtensa-lx60/xtensa_dc232b.tar and b/board/qemu/xtensa-lx60/xtensa_dc233c.tar differ
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index 4170bba..e464c72 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -1,7 +1,7 @@
+ # Architecture
+ BR2_xtensa=y
+ BR2_XTENSA_CUSTOM=y
+-BR2_XTENSA_CUSTOM_NAME="dc232b"
 +BR2_XTENSA_CUSTOM_NAME="dc233c"
-+BR2_XTENSA_CORE_NAME="lx60"
-+BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
-+
-+# Toolchain
-+BR2_PACKAGE_HOST_ELF2FLT=y
-+# BR2_USE_MMU is not set
-+
-+# Patches
-+BR2_GLOBAL_PATCH_DIR="board/qemu/xtensa-lx60"
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# Filesystem
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# Linux headers same as kernel, a 4.4 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.4.5"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-4.4-nommu.config"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
+ BR2_XTENSA_CORE_NAME="lx60"
+ BR2_XTENSA_OVERLAY_DIR="board/qemu/xtensa-lx60"
+ 
