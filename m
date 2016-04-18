@@ -1,66 +1,57 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 18 Apr 2016 13:51:41 +0200
-Subject: [Buildroot] [PATCH v2] raspberrypi,
- raspberrypi2: add a serial console
-In-Reply-To: <20160418133701.58f46491@free-electrons.com>
-References: <1460929546-11966-1-git-send-email-luca@lucaceresoli.net>
- <20160418133701.58f46491@free-electrons.com>
-Message-ID: <5714CA4D.1080502@lucaceresoli.net>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Mon, 18 Apr 2016 12:53:03 +0100
+Subject: [Buildroot] [PATCH v2 0/8] php: bump version to 7.0.5
+Message-ID: <1460980391-65336-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+This series bumps PHP to version 7.0.5.
 
-On 18/04/2016 13:37, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 17 Apr 2016 23:45:46 +0200, Luca Ceresoli wrote:
->> The current Buildroot defconfigs for Raspberry Pi and Raspberry Pi 2
->> instantiate a console on tty1, which appears on HDMI. Add a console on
->> the serial port (ttyAMA0) to be more consistent with other defconfigs
->> and provide a better out-of-the-box experience to users used to have a
->> serial console from Buildroot defconfigs.
->>
->> This requires three changes:
->>  1. have two 'console=' entries in the kernel command line: tty1,
->>     then ttyAMA0;
->>  2. change BR2_TARGET_GENERIC_GETTY_PORT to "console", so it starts
->>     a getty on the last console= passed to the kernel, ttyAMA0;
->>  3. add a new getty on tty1 to the generated inittab.
->>
->> Step 2 is actually obtained by removing BR2_TARGET_GENERIC_GETTY_PORT
->> entirely from the defconfigs, since "console" is the default value.
->>
->> Step 3 requires a post-build script since the Buildroot makefiles can
->> configure only one console.
->>
->> Note: instead of simply adding a new getty on ttyAMA0 (which would
->> work) this patch actually changes BR2_TARGET_GENERIC_GETTY_PORT to
->> instantiate a console on UART, then adds back tty1 via
->> post-build.sh. This is done only to avoid the "GENERIC_SERIAL" comment
->> where we instantiate an HDMI console, then instantiate a really-serial
->> console on another line.
->>
->> The result is these two inittab lines:
->>
->>   console::respawn:/sbin/getty -L  console 0 vt100 # GENERIC_SERIAL
->>   tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console
->>
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> Cc: Arnout Vandecappelle <arnout@mind.be>
->> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
->>
->> ---
-> 
-> Applied to master, thanks. Maybe this calls for an update of the
-> RaspberryPi readme.txt file, to explicitly indicate that a getty will
-> be running on both the HDMI/composite output *and* the serial port?
+It starts by bumping some external modules which can be built for both
+PHP 5 and PHP 7.
 
-Indeed a good suggestion! I'll have a look.
+Then it deletes the external modules which are not compatible with PHP 7
+and their new versions are not compatible with PHP 5 either (so they
+cannot be bumped like the other ones).
 
-Thanks,
+After that, it performs the PHP version bump to 7.0.5.
+
+Finally the deleted modules are re added at a version compatible with
+PHP 7.
+
+Changes v1 -> v2:
+ - Split the patch in multiple patches for the sake of bisectability.
+
+Vicente Olivert Riera (8):
+  php-geoip: bump version to HEAD of master on GitHub
+  php-imagick: bump version to 3.4.1
+  php-zmq: bump version to 1.1.3
+  php: bump version to 7.0.5
+  php-gnupg: re add package, now compatible with PHP 7
+  php-memcached: re add package, now compatible with PHP 7
+  php-ssh2: re add package, now compatible with PHP 7
+  php-yaml: re add package, now compatible with PHP 7
+
+ package/php-geoip/php-geoip.hash         | 2 +-
+ package/php-geoip/php-geoip.mk           | 6 ++----
+ package/php-gnupg/php-gnupg.hash         | 2 +-
+ package/php-gnupg/php-gnupg.mk           | 5 ++---
+ package/php-imagick/php-imagick.hash     | 2 +-
+ package/php-imagick/php-imagick.mk       | 5 ++---
+ package/php-memcached/php-memcached.hash | 2 +-
+ package/php-memcached/php-memcached.mk   | 6 ++----
+ package/php-ssh2/php-ssh2.hash           | 2 +-
+ package/php-ssh2/php-ssh2.mk             | 6 ++----
+ package/php-yaml/php-yaml.hash           | 2 +-
+ package/php-yaml/php-yaml.mk             | 5 ++---
+ package/php-zmq/php-zmq.hash             | 2 +-
+ package/php-zmq/php-zmq.mk               | 5 ++---
+ package/php/php.hash                     | 2 +-
+ package/php/php.mk                       | 2 +-
+ 16 files changed, 23 insertions(+), 33 deletions(-)
+
 -- 
-Luca
+2.7.3
