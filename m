@@ -1,101 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 18 Apr 2016 22:27:18 +0200
-Subject: [Buildroot] [PATCH] core/help: fix custom help without a .config
-In-Reply-To: <5714137B.8040809@mind.be>
-References: <1458509069-11960-1-git-send-email-yann.morin.1998@free.fr>
- <5714137B.8040809@mind.be>
-Message-ID: <20160418202718.GB3495@free.fr>
+Date: Mon, 18 Apr 2016 22:32:36 +0200
+Subject: [Buildroot] [PATCH v4 1/3] core/pkg-kconfig: Factorize make
+	commands
+In-Reply-To: <1460971383-10595-2-git-send-email-romain.izard.pro@gmail.com>
+References: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
+ <1460971383-10595-2-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <20160418203236.GC3495@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Romain, All,
 
-On 2016-04-18 00:51 +0200, Arnout Vandecappelle spake thusly:
-> On 03/20/16 22:24, Yann E. MORIN wrote:
-> >When there is no .config, we do not source $(BR2_EXTERNAL)/external.mk.
-> >So we can not expose the custom help in that situation.
-> >
-> >It is now known whether sourcing $(BR2_EXTERNAL)/external.mk outside the
-> >HAVE_DOT_CONFIG conditional block is entirely safe. Even if it would
-> >work today, we would have a hard time not breaking it in the future,
-> >because we do not have automatic checks for that and would need to rely
-> >on users reporting issues after the fact.
-> >
-> >Instead, we require the custom help to be defined in its own file in the
-> >br2-external tree. This way, we can safely include it unconditionally.
+On 2016-04-18 11:23 +0200, Romain Izard spake thusly:
+> Use a variable to factorize the calls to make, as we use the same set
+> of options multiple times.
 > 
->  Custom help has been reverted now, so I marked this patch as rejected.
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
 
-Yes, thanks! :-)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
->  Regards,
->  Arnout
+> ---
+> Changelog:
+> v3: new
+> v4: fix commit message
 > 
-> >
-> >Reported-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> >Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> >---
-> >  Makefile                             | 11 +++++++----
-> >  docs/manual/customize-outside-br.txt |  7 ++++---
-> >  2 files changed, 11 insertions(+), 7 deletions(-)
-> >
-> >diff --git a/Makefile b/Makefile
-> >index ea8b1e4..03657d5 100644
-> >--- a/Makefile
-> >+++ b/Makefile
-> >@@ -976,10 +976,13 @@ endif
-> >  	@echo 'it on-line at http://buildroot.org/docs.html'
-> >  	@echo
-> >
-> >-# This rule does nothing, it is expected to be overloaded by
-> >-# a br2-external tree or a local.mk . However, it must exist,
-> >-# as we reference it in the main help, above. Making the rule
-> >-# .PHONY does not work.
-> >+ifneq ($(wildcard $(BR2_EXTERNAL)/help.mk),)
-> >+include $(BR2_EXTERNAL)/help.mk
-> >+endif
-> >+
-> >+# This rule does nothing, it is expected to be overloaded by a
-> >+# br2-external tree. However, it must exist, as we reference it
-> >+# as a dependency of the main help, above.
-> >  help-custom:
-> >
-> >  list-defconfigs:
-> >diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-> >index be1827e..4f1c752 100644
-> >--- a/docs/manual/customize-outside-br.txt
-> >+++ b/docs/manual/customize-outside-br.txt
-> >@@ -108,9 +108,10 @@ And then in +$(BR2_EXTERNAL)/package/package1+ and
-> >     normal +make <name>_defconfig+ command. They will be visible under the
-> >     +User-provided configs+' label in the 'make list-defconfigs' output.
-> >
-> >-Additionally, an +external.mk+ file may define the +help-custom+ make
-> >-rule, to document custom make targets specific to this +BR2_EXTERNAL+
-> >-tree. The help is completely free-form.
-> >+Additionally, a +BR2_EXTERNAL+ tree may provide a file named +help.mk+
-> >+that defines the +help-custom+ make rule, to document custom make
-> >+targets specific to this +BR2_EXTERNAL+ tree. The help is completely
-> >+free-form. See below for a sample +$(BR2_EXTERNAL)/help.mk+ file:
-> >
-> >  ------
-> >  help-custom:
-> >
+>  package/pkg-kconfig.mk | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
 > 
-> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 94ec3cc..cb177bb 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -57,6 +57,9 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+>  		fi; \
+>  	done
+>  
+> +$(2)_KCONFIG_MAKE = \
+> +	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
+> +
+>  # The specified source configuration file and any additional configuration file
+>  # fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+> @@ -64,13 +67,11 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+>  # done even when the package does not support defconfigs.
+>  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+> -		$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> -			$$($(2)_KCONFIG_OPTS) $$($(2)_KCONFIG_DEFCONFIG), \
+> +		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+>  		cp $$($(2)_KCONFIG_FILE) $$(@))
+>  	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+>  		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> -	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> -		$$($(2)_KCONFIG_OPTS) oldconfig
+> +	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+>  
+>  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+>  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+> @@ -81,8 +82,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
+>  # The exact rules are specified by the package .mk file.
+>  define $(2)_FIXUP_DOT_CONFIG
+>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+> -	$$(Q)yes "" | $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> -		$$($(2)_KCONFIG_OPTS) oldconfig
+> +	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+>  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  endef
+>  
 > -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 2.5.0
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
