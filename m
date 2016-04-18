@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 23:35:27 +0200
+Date: Mon, 18 Apr 2016 23:36:34 +0200
 Subject: [Buildroot] [PATCH v2] arch/x86: remove support for i386
-In-Reply-To: <57155148.9030702@mind.be>
+In-Reply-To: <1460928694-22593-1-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1460928694-22593-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <57155148.9030702@mind.be>
-Message-ID: <20160418233527.3b10c900@free-electrons.com>
+Message-ID: <20160418233634.0abb1d22@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +12,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Apr 2016 23:27:36 +0200, Arnout Vandecappelle wrote:
-
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+On Sun, 17 Apr 2016 23:31:34 +0200, Thomas Petazzoni wrote:
+> The Linux kernel doesn't even support i386 anymore, there is no NPTL
+> support for i386 and uClibc-ng only supports NPTL on x86, so there is
+> essentially no usable thread implementation. Most likely glibc and
+> musl also don't support i386 either. So it's time to remove the
+> support for this architecture variant.
 > 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> ---
+> Changes since v1:
+>  - Add Config.in.legacy entry, as suggested by Arnout.
+>  - Remove i386 reference in qemu.mk, as noticed by Arnout.
+> ---
+>  .defconfig                             | 1 -
+>  Config.in.legacy                       | 6 ++++++
+>  arch/Config.in.x86                     | 5 -----
+>  package/openssl/openssl.mk             | 5 -----
+>  package/qemu/qemu.mk                   | 1 -
+>  package/uclibc/Config.in               | 3 +--
+>  toolchain/toolchain-common.in          | 3 ---
+>  toolchain/toolchain-external/Config.in | 3 +--
+>  8 files changed, 8 insertions(+), 19 deletions(-)
 
-Thanks!
-
-> > diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> > index ff759a0..d6f57a1 100644
-> > --- a/toolchain/toolchain-external/Config.in
-> > +++ b/toolchain/toolchain-external/Config.in
-> > @@ -615,8 +615,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
-> >   	bool "Musl 1.1.12 toolchain (experimental)"
-> >   	depends on (BR2_arm && BR2_ARM_EABI) || \
-> >   		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
-> 
->   With this patch I notice this... Huh? AFAIK ARMv4 cannot have VFPv2, so it 
-> can't be EABIhf, right? I guess, Thomas, that you just blindly set this because 
-> the EABIhf version of the toolchain is ARMv5, without realizing that it's ARMv5 
-> because EABIhf doesn't exist for v4?
-
-You're right!
-
-So I guess something like this could be applied, right:
-
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index ff759a0..65a0655 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -613,9 +613,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64
- 
- config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
-        bool "Musl 1.1.12 toolchain (experimental)"
--       depends on (BR2_arm && BR2_ARM_EABI) || \
--               (BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
--               (BR2_armeb && BR2_ARM_EABI) || \
-+       depends on BR2_arm || (BR2_armeb && BR2_ARM_EABI) || \
-                (BR2_i386 && !BR2_x86_i386) || \
-                (BR2_mips && !BR2_SOFT_FLOAT) || \
-                BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
-
-Thanks for spotting this!
+Applied to master.
 
 Thomas
 -- 
