@@ -1,45 +1,68 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 18 Apr 2016 10:25:46 +0200
-Subject: [Buildroot] [PATCH] package/systemd: Optionally disable hwdb
-In-Reply-To: <20160415225321.0da4943f@gmx.net>
-References: <1460717190-29291-1-git-send-email-m.niestroj@grinn-global.com>
- <20160415225321.0da4943f@gmx.net>
-Message-ID: <57149A0A.6050401@grinn-global.com>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Mon, 18 Apr 2016 11:22:03 +0200
+Subject: [Buildroot] [PATCH] cannelloni: make SCTP support optional
+Message-ID: <1460971323-520-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On 15.04.2016 22:53, Peter Seiderer wrote:
-> Hello Marcin Niestroj,
->
-> On Fri, 15 Apr 2016 12:46:30 +0200, Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
->
->> By default hwdb files are installed in /usr/lib/udev/hwdb.d
->> Currently they take about ~5MB. After first boot, systemd-hwdb tool
->> parses them and creates a binary in /etc/udev/hwdb.bin, which takes
->> another ~6.5MB.
->>
->> In case of initramfs images, hwdb parsing is done every boot. This adds
->> about 2-3 seconds to boot time in case of rootfs on SDHC class 10
->> card (benchmarked with am335x board). NAND boot takes even longer.
->>
->
-> Perfect for this case would be 'systemd-hwdb update' run at built time to
-> create the hwdb files once, but maybe stuff for a follow up patch...
+Since version 20160414 SCTP support is optional. Introduce an option to
+select this protocol.
 
-I thought about it. This would propably require compiling part of 
-systemd for the host PC, so the build time would be significally 
-increased. This can be implemented if someone finds use case for it. For 
-now it is ok for me that we totally disable hwdb and save additional 
-space of the binary hwdb file.
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/cannelloni/Config.in     | 11 ++++++++++-
+ package/cannelloni/cannelloni.mk |  6 ++++++
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-For OpenEmbedded I saw a patch that was running QEMU to just generate 
-the binary hwdb file at build time. I don't think this is an option for us.
-
+diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
+index 8f3e888..5613e50 100644
+--- a/package/cannelloni/Config.in
++++ b/package/cannelloni/Config.in
+@@ -5,13 +5,22 @@ config BR2_PACKAGE_CANNELLONI
+ 	depends on BR2_USE_MMU # lksctp-tools
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
+ 	depends on !BR2_STATIC_LIBS # lksctp-tools
+-	select BR2_PACKAGE_LKSCTP_TOOLS
+ 	help
+ 	  A SocketCAN over Ethernet tunnel. The tunnel supports both
+ 	  UDP and SCTP protocols.
+ 
+ 	  https://github.com/mguentner/cannelloni
+ 
++if BR2_PACKAGE_CANNELLONI
++
++config BR2_PACKAGE_CANNELLONI_SCTP
++	bool "SCTP support"
++	select BR2_PACKAGE_LKSCTP_TOOLS
++	help
++	  This option enables support for Stream Control Transmission
++	  Protocol (SCTP)
++endif
++
+ comment "cannelloni needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
+index 680e09a..28dc41e 100644
+--- a/package/cannelloni/cannelloni.mk
++++ b/package/cannelloni/cannelloni.mk
+@@ -8,6 +8,12 @@ CANNELLONI_VERSION = 20160414
+ CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
+ CANNELLONI_LICENSE = GPLv2
+ CANNELLONI_LICENSE_FILES = gpl-2.0.txt
++
++ifeq ($(BR2_PACKAGE_CANNELLONI_SCTP),y)
++CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=ON
+ CANNELLONI_DEPENDENCIES = lksctp-tools
++else
++CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=OFF
++endif
+ 
+ $(eval $(cmake-package))
 -- 
-Regards,
-Marcin
+2.8.0.rc3
