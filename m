@@ -1,90 +1,89 @@
 From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Mon, 18 Apr 2016 12:55:14 +0100
-Subject: [Buildroot] [PATCH v2 7/8] php-ssh2: re add package,
+Date: Mon, 18 Apr 2016 12:55:28 +0100
+Subject: [Buildroot] [PATCH v2 8/8] php-yaml: re add package,
 	now compatible with PHP 7
-Message-ID: <1460980514-964-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1460980528-1091-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Related: https://bugs.php.net/bug.php?id=71376
-
 Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ---
  package/Config.in              |  1 +
- package/php-ssh2/Config.in     |  8 ++++++++
- package/php-ssh2/php-ssh2.hash |  2 ++
- package/php-ssh2/php-ssh2.mk   | 25 +++++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/php-ssh2/Config.in
- create mode 100644 package/php-ssh2/php-ssh2.hash
- create mode 100644 package/php-ssh2/php-ssh2.mk
+ package/php-yaml/Config.in     |  8 ++++++++
+ package/php-yaml/php-yaml.hash |  2 ++
+ package/php-yaml/php-yaml.mk   | 26 ++++++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/php-yaml/Config.in
+ create mode 100644 package/php-yaml/php-yaml.hash
+ create mode 100644 package/php-yaml/php-yaml.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 172a570..c04fbf6 100644
+index c04fbf6..ecaf164 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -614,6 +614,7 @@ menu "External php extensions"
- 	source "package/php-gnupg/Config.in"
+@@ -615,6 +615,7 @@ menu "External php extensions"
  	source "package/php-imagick/Config.in"
  	source "package/php-memcached/Config.in"
-+	source "package/php-ssh2/Config.in"
+ 	source "package/php-ssh2/Config.in"
++	source "package/php-yaml/Config.in"
  	source "package/php-zmq/Config.in"
  endmenu
  endif
-diff --git a/package/php-ssh2/Config.in b/package/php-ssh2/Config.in
+diff --git a/package/php-yaml/Config.in b/package/php-yaml/Config.in
 new file mode 100644
-index 0000000..b457900
+index 0000000..8d09ce2
 --- /dev/null
-+++ b/package/php-ssh2/Config.in
++++ b/package/php-yaml/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PHP_SSH2
-+	bool "php-ssh2"
++config BR2_PACKAGE_PHP_YAML
++	bool "php-yaml"
 +	depends on BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_LIBSSH2
++	select BR2_PACKAGE_LIBYAML
 +	help
-+	  PHP bindings for the libssh2 library.
++	  PHP YAML-1.1 parser and emitter.
 +
-+	  http://pecl.php.net/package/ssh2
-diff --git a/package/php-ssh2/php-ssh2.hash b/package/php-ssh2/php-ssh2.hash
++	  http://pecl.php.net/package/yaml
+diff --git a/package/php-yaml/php-yaml.hash b/package/php-yaml/php-yaml.hash
 new file mode 100644
-index 0000000..1e046df
+index 0000000..a40677e
 --- /dev/null
-+++ b/package/php-ssh2/php-ssh2.hash
++++ b/package/php-yaml/php-yaml.hash
 @@ -0,0 +1,2 @@
 +# Locally calculated
-+sha256 877f2fa9a709aa2dd9567848fae7b45ecac359904296a0aedbf718e99d8568f5  php-ssh2-aa1739ac26c2177d33ab8d064021032bdc2c3a40.tar.gz
-diff --git a/package/php-ssh2/php-ssh2.mk b/package/php-ssh2/php-ssh2.mk
++sha256 d49acf2b7843258957a16df0d7ced56c0e1fc3eaa54f54289e4012edc002814c  yaml-2.0.0RC7.tgz
+diff --git a/package/php-yaml/php-yaml.mk b/package/php-yaml/php-yaml.mk
 new file mode 100644
-index 0000000..cfe6070
+index 0000000..2711890
 --- /dev/null
-+++ b/package/php-ssh2/php-ssh2.mk
-@@ -0,0 +1,25 @@
++++ b/package/php-yaml/php-yaml.mk
+@@ -0,0 +1,26 @@
 +################################################################################
 +#
-+# php-ssh2
++# php-yaml
 +#
 +################################################################################
 +
-+PHP_SSH2_VERSION = aa1739ac26c2177d33ab8d064021032bdc2c3a40
-+PHP_SSH2_SITE = $(call github,php,pecl-networking-ssh2,$(PHP_SSH2_VERSION))
-+PHP_SSH2_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
-+	--with-ssh2=$(STAGING_DIR)/usr
++PHP_YAML_VERSION = 2.0.0RC7
++PHP_YAML_SOURCE = yaml-$(PHP_YAML_VERSION).tgz
++PHP_YAML_SITE = https://pecl.php.net/get
++PHP_YAML_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
++	--with-yaml=$(STAGING_DIR)/usr
 +# phpize does the autoconf magic
-+PHP_SSH2_DEPENDENCIES = libssh2 php host-autoconf
-+PHP_SSH2_LICENSE = PHP
-+PHP_SSH2_LICENSE_FILES = LICENSE
++PHP_YAML_DEPENDENCIES = libyaml php host-autoconf
++PHP_YAML_LICENSE = MIT
++PHP_YAML_LICENSE_FILES = LICENSE
 +
-+define PHP_SSH2_PHPIZE
++define PHP_YAML_PHPIZE
 +	(cd $(@D); \
 +		PHP_AUTOCONF=$(HOST_DIR)/usr/bin/autoconf \
 +		PHP_AUTOHEADER=$(HOST_DIR)/usr/bin/autoheader \
 +		$(STAGING_DIR)/usr/bin/phpize)
 +endef
 +
-+PHP_SSH2_PRE_CONFIGURE_HOOKS += PHP_SSH2_PHPIZE
++PHP_YAML_PRE_CONFIGURE_HOOKS += PHP_YAML_PHPIZE
 +
 +$(eval $(autotools-package))
 -- 
