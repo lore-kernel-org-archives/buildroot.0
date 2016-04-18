@@ -1,46 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:22:44 +0200
-Subject: [Buildroot] [PATCH] util-linux: bump to version 2.28
-In-Reply-To: <1460987988-1255-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1460987988-1255-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160418212244.3e87ba7c@free-electrons.com>
+Date: Mon, 18 Apr 2016 21:21:42 +0200
+Subject: [Buildroot] [git commit] rp-pppoe: bump to version 3.12
+Message-ID: <20160418192251.D2BBA8082A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0dbb9d978839b9dca062e272cbc5f3b049e8ea4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Apr 2016 10:59:48 -0300, Gustavo Zacarias wrote:
-> Drop upstream patches (0004-0008).
-> Convert 0001-sscanf-no-ms-as.patch to git format.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/rp-pppoe/rp-pppoe.hash | 2 +-
+ package/rp-pppoe/rp-pppoe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Cool, any chance to submit this one upstream?
-
-> 
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  ... => 0001-Fix-libmount-build-under-uClibc.patch} | 48 +++++++++++--------
->  ...004-vipw-Remove-pre-ANSI-compiler-support.patch | 35 --------------
->  .../0005-build-sys-use-REALTIME_LIBS.patch         | 41 ----------------
->  ...sys-fix-static-configuration-and-building.patch | 54 ----------------------
->  package/util-linux/0007-build-sys-fix-typo.patch   | 34 --------------
->  ...don-t-free-shm-data-if-no-shm-id-is-found.patch | 42 -----------------
->  package/util-linux/util-linux.hash                 |  4 +-
->  package/util-linux/util-linux.mk                   |  7 ++-
->  8 files changed, 35 insertions(+), 230 deletions(-)
->  rename package/util-linux/{0001-sscanf-no-ms-as.patch => 0001-Fix-libmount-build-under-uClibc.patch} (66%)
->  delete mode 100644 package/util-linux/0004-vipw-Remove-pre-ANSI-compiler-support.patch
->  delete mode 100644 package/util-linux/0005-build-sys-use-REALTIME_LIBS.patch
->  delete mode 100644 package/util-linux/0006-buildsys-fix-static-configuration-and-building.patch
->  delete mode 100644 package/util-linux/0007-build-sys-fix-typo.patch
->  delete mode 100644 package/util-linux/0008-lsipc-don-t-free-shm-data-if-no-shm-id-is-found.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/rp-pppoe/rp-pppoe.hash b/package/rp-pppoe/rp-pppoe.hash
+index ab162ee..0cf85a0 100644
+--- a/package/rp-pppoe/rp-pppoe.hash
++++ b/package/rp-pppoe/rp-pppoe.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	86a1a4d92fcea74fa6dd45516c5975933fa978b36fafe71f76ea70b4b4747720	rp-pppoe-3.11.tar.gz
++sha256	00794e04031546b0e9b8cf286f2a6d1ccfc4a621b2a3abb2d7ef2a7ab7cc86c2	rp-pppoe-3.12.tar.gz
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index 5cb4960..4306254 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RP_PPPOE_VERSION = 3.11
++RP_PPPOE_VERSION = 3.12
+ RP_PPPOE_SITE = http://www.roaringpenguin.com/files/download
+ RP_PPPOE_LICENSE = GPLv2
+ RP_PPPOE_LICENSE_FILES = doc/LICENSE
