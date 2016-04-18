@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:36:00 +0200
-Subject: [Buildroot] [PATCH v8 09/14] support/scripts/check-host-rpath:
- silent find command
-In-Reply-To: <1460929111-15615-10-git-send-email-s.martin49@gmail.com>
+Date: Mon, 18 Apr 2016 21:36:43 +0200
+Subject: [Buildroot] [PATCH v8 08/14] support/scripts: update
+ check-host-rpath to use the shell helpers
+In-Reply-To: <1460929111-15615-9-git-send-email-s.martin49@gmail.com>
 References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
- <1460929111-15615-10-git-send-email-s.martin49@gmail.com>
-Message-ID: <20160418213600.540c90dc@free-electrons.com>
+ <1460929111-15615-9-git-send-email-s.martin49@gmail.com>
+Message-ID: <20160418213643.57e1a8e8@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 17 Apr 2016 23:38:26 +0200, Samuel Martin wrote:
+So the commit title says that you update check-host-rpath to use the
+shell helpers...
 
-> -    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print |
-> +    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print 2>/dev/null |
->                    readelf.filter_elf_executable)
+On Sun, 17 Apr 2016 23:38:25 +0200, Samuel Martin wrote:
 
-This patch is useless. Your patch 08/14 is doing:
+>  support/scripts/check-host-rpath | 73 +++++++++++++++-------------------------
+>  support/scripts/shell/readelf.sh | 69 +++++++++++++++++++++++++++++++++++++
 
--    done < <( find "${hostdir}"/usr/{bin,sbin} -type f -exec file {} + 2>/dev/null \
--              |sed -r -e '/^([^:]+):.*\<ELF\>.*\<executable\>.*/!d'                \
--                      -e 's//\1/'                                                  \
--            )
-+    done < <(find "${hostdir}"/usr/{bin,sbin} -type f -print |
-+                  readelf.filter_elf_executable)
+but in practice, you also add a lot of new functions to the shell
+helpers.
 
-So essentially the 2>/dev/null was already here, and you remove it. And
-then you add it again in your patch 09/14. Simply squash both patches.
-
-Thanks!
+Either this is intended and it should be mentioned in the commit log,
+or it is not intended.
 
 Thomas
 -- 
