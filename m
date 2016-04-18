@@ -1,36 +1,81 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Mon, 18 Apr 2016 21:42:06 +0200
-Subject: [Buildroot] [PATCH v3] ltp-testsuite: build kernel modules when
- appropriate
-In-Reply-To: <57039CF4.5060902@free.fr>
-References: <56F3F393.6020407@free.fr>
- <20160324222555.21f04320@free-electrons.com>
- <56F92840.9090206@free.fr> <56FAD38B.8040201@mind.be>
- <57026754.50205@free.fr> <57038409.20600@mind.be>
- <57039CF4.5060902@free.fr>
-Message-ID: <20160418214206.3698cd79@free-electrons.com>
+Date: Mon, 18 Apr 2016 21:44:12 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: revert minimum required
+	ffmpeg version numbers
+Message-ID: <20160418194416.2C123819A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fafe65a4ddc86756de3e2483ff2809cefd3103d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 5 Apr 2016 13:09:40 +0200, Mason wrote:
+Fixes
+http://autobuild.buildroot.net/results/e62/e62dd4dbdb4c92bc657936566e73388e76343903/
+and many others
 
-> +ifeq ($(BR2_LINUX_KERNEL),y)
-> +LTP_TESTSUITE_DEPENDENCIES += linux
-> +LTP_TESTSUITE_MAKE_ENV = $(LINUX_MAKE_FLAGS)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ ...g-revert-minimum-required-version-numbers.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-This should use += instead of = since we're in a conditional block.
-While this is not needed right now, it is a bit more logical and future
-proof.
-
-Applied with this fixed!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+new file mode 100644
+index 0000000..74136fe
+--- /dev/null
++++ b/package/tvheadend/0002-ffmpeg-revert-minimum-required-version-numbers.patch
+@@ -0,0 +1,51 @@
++From 78a7b7365a67fa2f5394c6b4ca39de01b00416dc Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 2 Apr 2016 19:05:52 +0200
++Subject: [PATCH 1/1] ffmpeg: revert minimum required version numbers
++
++This commit reverts the minimum version numbers required by configure to
++the values before
++https://github.com/tvheadend/tvheadend/commit/1359effe28a0381b8c9cbd362d6e144fb87b00fc#diff-e2d5a00791bce9a01f99bc6fd613a39dL486
++in order to allow compilation with older versions of ffmpeg again.
++
++Please note that the previous version numbers of all ffmpeg libs, with
++the exception of libavfilter, are those of ffmpeg 2.0.7:
++https://ffmpeg.org/olddownload.html
++
++Therefore I synced the minimum version number required for libavfilter to
++3.79.101 and not to 4.0.0 as previous in tvheadend's configure script.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/838]
++---
++ configure | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/configure b/configure
++index be3d2e2..2ffd280 100755
++--- a/configure
+++++ b/configure
++@@ -512,13 +512,13 @@ else
++   if enabled_or_auto libav; then
++     has_libav=true
++ 
++-    check_pkg libavfilter   ">=6.31.100"  || has_libav=false
++-    check_pkg libswresample ">=2.0.101"   || has_libav=false
++-    check_pkg libavresample ">=3.0.0"     || has_libav=false
++-    check_pkg libswscale    ">=4.0.100"   || has_libav=false
++-    check_pkg libavformat   ">=57.25.100" || has_libav=false
++-    check_pkg libavcodec    ">=57.24.102" || has_libav=false
++-    check_pkg libavutil     ">=55.17.103" || has_libav=false
+++    check_pkg libavfilter   ">=3.79.101"  || has_libav=false
+++    check_pkg libswresample ">=0.17.102"   || has_libav=false
+++    check_pkg libavresample ">=1.1.0"     || has_libav=false
+++    check_pkg libswscale    ">=2.3.100"   || has_libav=false
+++    check_pkg libavformat   ">=55.12.100" || has_libav=false
+++    check_pkg libavcodec    ">=55.18.102" || has_libav=false
+++    check_pkg libavutil     ">=52.38.100" || has_libav=false
++ 
++     if $has_libav; then
++       enable libav
++-- 
++2.8.0.rc3
++
