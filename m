@@ -1,68 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Apr 2016 01:38:19 +0200
-Subject: [Buildroot] [PATCH v8 04/14] core: add HOST_SANITIZE_RPATH_HOOK
- to TARGET_FINALIZE_HOOKS
-In-Reply-To: <20160418133325.4892c80b@free-electrons.com>
-References: <1460929111-15615-1-git-send-email-s.martin49@gmail.com>
- <1460929111-15615-5-git-send-email-s.martin49@gmail.com>
- <20160418133325.4892c80b@free-electrons.com>
-Message-ID: <57156FEB.6030203@mind.be>
+Date: Tue, 19 Apr 2016 01:57:12 +0200
+Subject: [Buildroot] [PATCH] Adding in support for custom configurations
+In-Reply-To: <20160418214442.GB19968@asimov.austin.ibm.com>
+References: <1460734834-32123-1-git-send-email-patrick@stwcx.xyz>
+ <20160417223143.0b54cce6@free-electrons.com>
+ <20160418162528.GA5827@asimov.austin.ibm.com>
+ <20160418211558.12db7fdf@free-electrons.com>
+ <20160418214442.GB19968@asimov.austin.ibm.com>
+Message-ID: <57157458.7080802@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/18/16 13:33, Thomas Petazzoni wrote:
-> Hello,
+On 04/18/16 23:44, Patrick Williams wrote:
+> On Mon, Apr 18, 2016 at 09:15:58PM +0200, Thomas Petazzoni wrote:
+>> >Hello,
+>> >
+>> >On Mon, 18 Apr 2016 11:25:28 -0500, Patrick Williams wrote:
+>> >
+>>> > >1. Have support for a defconfig location other than
+>>> > >$(BR2_EXTERNAL)/configs/.
+>>> > >
+>>> > >     We have the proposed patchset, which is too specific due to the use
+>>> > >     of 'custom', and we have a local hack where we put the same recipe
+>>> > >     into $(BR2_EXTERNAL)/docs/custom/custom.mk. Other than docs/*/*.mk,
+>>> > >     there is no include in buildroot/Makefile into the BR2_EXTERNAL tree
+>>> > >     when invoked without an existing .config.
+>>> > >
+>>> > >     Would there be opposition to a new -include in buildroot/Makefile
+>>> > >     outside of the large $(if BR2_HAVE_DOT_CONFIG... block into the
+>>> > >     BR2_EXTERNAL tree?  This would give us a hook point to add the
+>>> > >     %_defconfig recipe found in this patchset.
+>>> > >
+>>> > >     Alternatively, or additionally, we could create a
+>>> > >     BR2_EXTERNAL_CONFIGS variable as a set of additional directories to
+>>> > >     search as defconfig locations.
+>>> > >
+>>> > >2. (Bonus) Enhance list-defconfigs to also display the defconfigs found
+>>> > >at this extra location.
+>>> > >
+>>> > >     Would there be opposition to something like a
+>>> > >     $(BR2_LIST_DEFCONFIGS_CMDS) variable to extend the list-defconfigs
+>>> > >     in the custom tree?
+>> >
+>> >I think the only reasonable solution to this is to really allow
+>> >multiple BR2_EXTERNAL directories. A patch series doing this was
+>> >proposed by Yann E. Morin a while ago, but due to the fairly
+>> >significant additional complexity, it hasn't been merged so far.
+> Has there been any previous discussion about allowing sub-directories
+> under 'configs'?  The Linux kernel tree allows both
+> $(ARCH)/configs/*_defconfig and $(ARCH)/configs/*/*_defconfig .  Coupled
+> with Steve's proposal for us to use symlinks, we could create
+> $(BR2_EXTERNAL)/configs/custom as a symlink to
+> $(BR2_EXTERNAL)/custom/configs and have a solution as well.
 >
-> On Sun, 17 Apr 2016 23:38:21 +0200, Samuel Martin wrote:
->
->> +# RPATH fixing
->> +# - The host hook sets RPATH in host ELF binaries, using relative paths to the
->> +#   library locations.
->> +# - The target hook sanitizes RPATH in target ELF binaries, removing paths
->> +#   pointing to package's build directories or the sysroot's libdirs.
->
-> There is nothing in this patch that adds a target hook.
->
->> +PACKAGES += host-patchelf
->> +
->> +define HOST_SANITIZE_RPATH_HOOK
->> +	PATCHELF=$(HOST_DIR)/usr/bin/patchelf \
->> +	READELF=readelf \
->> +		$(TOPDIR)/support/scripts/fix-rpath host $(HOST_DIR)
->> +endef
->> +
->> +TARGET_FINALIZE_HOOKS += HOST_SANITIZE_RPATH_HOOK
->
-> I find it somewhat odd that this gets done as a "target finalize" hook
-> since it really has nothing to do with finalizing the target. It really
-> just needs to be done "at the end of the build".
->
-> We could add that as a new target, but it would complexify the
-> dependency chain, so maybe adding to TARGET_FINALIZE_HOOKS is the
-> easiest solution after all.
->
-> One tricky aspect though is that not all host packages are guaranteed
-> to be built by the time TARGET_FINALIZE_HOOKS is called. Indeed,
-> TARGET_FINALIZE_HOOKS is guaranteed to be called after all *target*
-> packages have been built. But if a host package is needed just to
-> build a filesystem image for example, it is not guaranteed that it will
-> be built before TARGET_FINALIZE_HOOKS is called.
 
-  Actually, it is run after all explicitly selected packages have been built. So 
-this is yet another reason to also add Kconfig options for host packages.
+  If that doesn't add too much complexity (and I can't imagine it does), it 
+could definitely be a good solution. Especially if that allows us to kill the 
+idea of a multi-layered-without-calling-it-layers BR2_EXTERNAL :-)
 
   Regards,
   Arnout
-
->
-> Best regards,
->
-> Thomas
->
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
