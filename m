@@ -1,55 +1,34 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 18 Apr 2016 12:06:58 +0200
-Subject: [Buildroot] [PATCH v2] cannelloni: make SCTP support optional
-Message-ID: <1460974018-29267-1-git-send-email-yegorslists@googlemail.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 18 Apr 2016 12:18:28 +0200
+Subject: [Buildroot] [PATCH] gst1-imx: make kernel dependency optional
+In-Reply-To: <97bf649b600a5548cfd3c53575747a057f24e07e.1460973919.git.baruch@tkos.co.il>
+References: <97bf649b600a5548cfd3c53575747a057f24e07e.1460973919.git.baruch@tkos.co.il>
+Message-ID: <CAAMH-ysFMBA9bDK4h2KQv-HBmjMYmqzdZX1YhBwKzr-7VXz8zw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Baruch, All,
 
-Since version 20160414 SCTP support is optional. Introduce an automatic
-optional dependency for this protocol.
+On Mon, Apr 18, 2016 at 12:05 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> The i.MX specific kernel headers are not a hard dependency. Quoting README.md:
+>
+>   Without [--kernel-headers], the [ipu.h] header is not found, and elements
+>   using the IPU will not be built.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes:
-	v2: change selectable option to automatic optional dependency (Thomas Petazzoni)
+That is true, it isn't a hard dependency, the reason I left it like
+that is because if the headers aren't found and none of the other
+configurations (plugins-bad, imx-gpu-viv or libimxvpuapi) are set, no
+actual plugin will be built which could be confusing.
 
- package/cannelloni/Config.in     | 1 -
- package/cannelloni/cannelloni.mk | 6 ++++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+Although this patch is correct and legit, I'd rather go ahead and
+rework the entire package since Carlos worked on being able to
+select/disable each and individual plugin since version 0.12.1:
+https://github.com/Freescale/meta-fsl-arm/commit/cec4c47e
 
-diff --git a/package/cannelloni/Config.in b/package/cannelloni/Config.in
-index 8f3e888..e137e60 100644
---- a/package/cannelloni/Config.in
-+++ b/package/cannelloni/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_CANNELLONI
- 	depends on BR2_USE_MMU # lksctp-tools
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # lksctp-tools
- 	depends on !BR2_STATIC_LIBS # lksctp-tools
--	select BR2_PACKAGE_LKSCTP_TOOLS
- 	help
- 	  A SocketCAN over Ethernet tunnel. The tunnel supports both
- 	  UDP and SCTP protocols.
-diff --git a/package/cannelloni/cannelloni.mk b/package/cannelloni/cannelloni.mk
-index 680e09a..7265945 100644
---- a/package/cannelloni/cannelloni.mk
-+++ b/package/cannelloni/cannelloni.mk
-@@ -8,6 +8,12 @@ CANNELLONI_VERSION = 20160414
- CANNELLONI_SITE = $(call github,mguentner,cannelloni,$(CANNELLONI_VERSION))
- CANNELLONI_LICENSE = GPLv2
- CANNELLONI_LICENSE_FILES = gpl-2.0.txt
-+
-+ifeq ($(BR2_PACKAGE_LKSCTP_TOOLS),y)
-+CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=ON
- CANNELLONI_DEPENDENCIES = lksctp-tools
-+else
-+CANNELLONI_CONF_OPTS += -DSCTP_SUPPORT=OFF
-+endif
- 
- $(eval $(cmake-package))
--- 
-2.8.0.rc3
+Let me know your thoughts.
+
+Regards,
+Gary
