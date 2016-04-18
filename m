@@ -1,84 +1,57 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Mon, 18 Apr 2016 23:28:47 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/opencv: add inter-module
-	dependencies
-In-Reply-To: <1461010675-8274-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1461010675-8274-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <CAHXCMMKE14AdDGfh6jXOwZBHSgKJ+YbbP2jd97uPgVN1fanCUA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 18 Apr 2016 23:27:36 +0200
+Subject: [Buildroot] [PATCH v2] arch/x86: remove support for i386
+In-Reply-To: <1460928694-22593-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1460928694-22593-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <57155148.9030702@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, all,
+On 04/17/16 23:31, Thomas Petazzoni wrote:
+> The Linux kernel doesn't even support i386 anymore, there is no NPTL
+> support for i386 and uClibc-ng only supports NPTL on x86, so there is
+> essentially no usable thread implementation. Most likely glibc and
+> musl also don't support i386 either. So it's time to remove the
+> support for this architecture variant.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-On Mon, Apr 18, 2016 at 10:17 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> As stated by Samuel the opencv2 package lacks inter-module dependencies:
-> http://lists.busybox.net/pipermail/buildroot/2016-April/158902.html
->
-> This patch adds the necessary code for freeswitch's mod_cv to compile.
->
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: add more dependencies
-> v2: initial release (Samuel)
->
->  package/opencv/Config.in | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-> index 8bc6c34..b563312 100644
-> --- a/package/opencv/Config.in
-> +++ b/package/opencv/Config.in
-> @@ -23,6 +23,13 @@ config BR2_PACKAGE_OPENCV_LIB_CALIB3D
->  config BR2_PACKAGE_OPENCV_LIB_CONTRIB
->         bool "contrib"
->         default y
-> +       # modules/contrib/CMakeLists.txt
-> +       select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-> +       select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-> +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-> +       select BR2_PACKAGE_OPENCV_LIB_ML
-> +       select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-> +       select BR2_PACKAGE_OPENCV_LIB_VIDEO
->         help
->           Include opencv_contrib module into the OpenCV build.
->
-> @@ -46,6 +53,8 @@ config BR2_PACKAGE_OPENCV_LIB_GPU
->  config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
->         bool "highgui"
->         default y
-> +       # modules/highgui/CMakeLists.txt
-> +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->         help
->           Include opencv_highgui module into the OpenCV build.
->
-> @@ -58,6 +67,10 @@ config BR2_PACKAGE_OPENCV_LIB_IMGPROC
->  config BR2_PACKAGE_OPENCV_LIB_LEGACY
->         bool "legacy"
->         default y
-> +       # modules/legacy/CMakeLists.txt
-> +       select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-> +       select BR2_PACKAGE_OPENCV_LIB_ML
-> +       select BR2_PACKAGE_OPENCV_LIB_VIDEO
->         help
->           Include opencv_legacy module into the OpenCV build.
->
-> @@ -75,6 +88,8 @@ config BR2_PACKAGE_OPENCV_LIB_NONFREE
->  config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
->         bool "objdetect"
->         default y
-> +       # modules/objdetect/CMakeLists.txt
-> +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC
->         help
->           Include opencv_objdetect module into the OpenCV build.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+[snip]
+> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+> index ff759a0..d6f57a1 100644
+> --- a/toolchain/toolchain-external/Config.in
+> +++ b/toolchain/toolchain-external/Config.in
+> @@ -615,8 +615,7 @@ config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
+>   	bool "Musl 1.1.12 toolchain (experimental)"
+>   	depends on (BR2_arm && BR2_ARM_EABI) || \
+>   		(BR2_arm && BR2_ARM_EABIHF && !BR2_ARM_CPU_ARMV4) || \
+
+  With this patch I notice this... Huh? AFAIK ARMv4 cannot have VFPv2, so it 
+can't be EABIhf, right? I guess, Thomas, that you just blindly set this because 
+the EABIhf version of the toolchain is ARMv5, without realizing that it's ARMv5 
+because EABIhf doesn't exist for v4?
+
+  Regards,
+  Arnout
+
+> -		(BR2_armeb && BR2_ARM_EABI) || \
+> -		(BR2_i386 && !BR2_x86_i386) || \
+> +		(BR2_armeb && BR2_ARM_EABI) || BR2_i386 || \
+>   		(BR2_mips && !BR2_SOFT_FLOAT) || \
+>   		BR2_mipsel || (BR2_powerpc && BR2_powerpc_CLASSIC) || \
+>   		BR2_sh4 || BR2_sh4eb || \
 >
 
-Though this patch only fixes what is needed to meet the freeswitch's
-deps, these deps. are correct.
-
-Regards,
 
 -- 
-Samuel
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
