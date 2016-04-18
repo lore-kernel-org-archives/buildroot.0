@@ -1,43 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 18 Apr 2016 17:11:15 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/opencv: module objdetect depends
-	on imgproc
-In-Reply-To: <1460992275-383-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1460992275-383-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <1460992275-383-2-git-send-email-bernd.kuhls@t-online.de>
+Date: Mon, 18 Apr 2016 17:11:14 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/freeswitch: mod_cv needs
+	BR2_PACKAGE_OPENCV_LIB_OBJDETECT
+Message-ID: <1460992275-383-1-git-send-email-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mod_cv module of Freeswitch depends on the objdetect module from
-opencv, as noted by Samuel:
-http://lists.busybox.net/pipermail/buildroot/2016-April/158902.html
-
-Checking for opencv support in Freeswitch should only include the
-direct dependency, objdetect in this case, and not inter-module
-dependencies.
-This patch reflects the dependency of objdetect on imgproc.
+Fixes
+http://autobuild.buildroot.net/results/ffd/ffd572d7bb68d8ed46ce76b2af824503c587449f/
+http://autobuild.buildroot.net/results/e53/e53e356451aa4541a76e26722fd71051896e774b/
+http://autobuild.buildroot.net/results/564/5649ff1b50a1eaafbd0e1a329bff87a65ce18da0/
+http://autobuild.buildroot.net/results/c60/c60f97c6aafb1a94cb4ce344953598eae8b4a912/
+http://autobuild.buildroot.net/results/c1a/c1ac61f9a77635962babdb6bfb31dbecb7f4d439/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: initial release (Samuel)
+v2: select the required suboption instead of checking for its existance
+    in freeswitch.mk (Thomas)
 
- package/opencv/Config.in | 1 +
+ package/freeswitch/Config.in | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index 8bc6c34..d87ca00 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -75,6 +75,7 @@ config BR2_PACKAGE_OPENCV_LIB_NONFREE
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_objdetect module into the OpenCV build.
- 
+diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+index 1350b2b..6912a1e 100644
+--- a/package/freeswitch/Config.in
++++ b/package/freeswitch/Config.in
+@@ -7,6 +7,7 @@ menuconfig BR2_PACKAGE_FREESWITCH
+ 	depends on BR2_USE_WCHAR # libuuid
+ 	select BR2_PACKAGE_LIBCURL
+ 	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_SPEEX
 -- 
 2.8.0.rc3
