@@ -1,69 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Apr 2016 23:47:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-mga:
- disable DRI support when not available
-In-Reply-To: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
-References: <1447004673-18164-1-git-send-email-bernd.kuhls@t-online.de>
-Message-ID: <20160419214702.GH3505@free.fr>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Tue, 19 Apr 2016 23:49:00 +0200
+Subject: [Buildroot] [PATCH v9] support/scripts/check-host-rpath: also check
+	HOST_DIR/{bin, sbin}
+Message-ID: <1461102541-5987-1-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+At least syslinux is installing stuff in HOST_DIR/sbin.
 
-On 2015-11-08 18:44 +0100, Bernd Kuhls spake thusly:
-> configure.ac is not cross-compile aware, a patch fixing DRI detection
-> was added in 2009
-> http://git.buildroot.net/buildroot/commit/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga-1.4.9.patch?id=59b0aa7a7ee327688a77dd5d01d0b2032f6535a2
-> 
-> assuming DRI support being present if DRI support was not disabled.
-> 
-> By default configure.ac assumes "auto" which leads to DRI support being
-> enabled even if DRI support is disabled in buildroot config. This patch
-> adds --disable-dri to really disable DRI support, fixes:
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-Is this patch still applicable?
+---
+changes v8->v9:
+- none
+- move out of the RPATH series
 
-Regards,
-Yann E. MORIN.
+changes v7->v8:
+- none
 
-> http://autobuild.buildroot.net/results/5e5/5e5dbc30e1f30f7d2d614f4a9edb7fe439f73d61/
-> http://autobuild.buildroot.net/results/a8f/a8fab920599e7dc77038f3d2a9a699d6823cf3ef/
-> http://autobuild.buildroot.net/results/81d/81dbad489412cd28345de364624180cb082b3bb6/
-> http://autobuild.buildroot.net/results/53f/53fc0031da2b65890223f3183c77eb66cf0b5273/
-> http://autobuild.buildroot.net/results/544/54481a0f8d690e3878f4616ae1f331705e3c34be/
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-> index dcf751c..771ec18 100644
-> --- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-> +++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-> @@ -12,4 +12,8 @@ XDRIVER_XF86_VIDEO_MGA_LICENSE_FILES = COPYING
->  XDRIVER_XF86_VIDEO_MGA_AUTORECONF = YES
->  XDRIVER_XF86_VIDEO_MGA_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
->  
-> +ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-> +XDRIVER_XF86_VIDEO_MGA_CONF_OPTS = --disable-dri
-> +endif
-> +
->  $(eval $(autotools-package))
-> -- 
-> 2.6.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+changes v6->v7:
+- new patch
+---
+ support/scripts/check-host-rpath | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/support/scripts/check-host-rpath b/support/scripts/check-host-rpath
+index 48d69da..6ce547c 100755
+--- a/support/scripts/check-host-rpath
++++ b/support/scripts/check-host-rpath
+@@ -26,7 +26,7 @@ main() {
+             printf "*** ERROR: package %s installs executables without proper RPATH:\n" "${pkg}"
+         fi
+         printf "***   %s\n" "${file}"
+-    done < <( find "${hostdir}"/usr/{bin,sbin} -type f -exec file {} + 2>/dev/null \
++    done < <( find "${hostdir}"/{,usr/}{bin,sbin} -type f -exec file {} + 2>/dev/null \
+               |sed -r -e '/^([^:]+):.*\<ELF\>.*\<executable\>.*/!d'                \
+                       -e 's//\1/'                                                  \
+             )
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.8.0
