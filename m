@@ -1,65 +1,42 @@
-From: Romain Izard <romain.izard.pro@gmail.com>
-Date: Tue, 19 Apr 2016 11:11:46 +0200
-Subject: [Buildroot] [PATCH v4 3/3] core/pkg-kconfig: Use oldnoconfig
-	when possible
-In-Reply-To: <20160418210802.GE3495@free.fr>
-References: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
- <1460971383-10595-4-git-send-email-romain.izard.pro@gmail.com>
- <20160418210802.GE3495@free.fr>
-Message-ID: <CAGkQfmNbbsv4e0iCyOC1-ti2wJ677RL9j3HXqh_Z7e4BmciCfg@mail.gmail.com>
+From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date: Tue, 19 Apr 2016 10:39:22 +0100
+Subject: [Buildroot] [PATCH] sqlite: bump version to 3120200
+Message-ID: <1461058762-46560-1-git-send-email-Vincent.Riera@imgtec.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-2016-04-18 23:08 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
-> Romain, All,
->
-> On 2016-04-18 11:23 +0200, Romain Izard spake thusly:
->
->> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
->> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
->> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
->> +# In older versions, and in some other projects that use kconfig, the target is
->> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
->> +# only, as this can fail in complex cases.
->> +define $(2)_REGEN_DOT_CONFIG
->> +     $$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig || \
->> +             (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)
->
-> What I don't much like here, is that we conflate two things:
->   - a non-zero return code because of a missing oldnoconfig,
->   - a non-zero return code because of an error found by olnoconfig.
->
-> What I would have loved however, would be a way to detect whether
-> oldnoconfig (better, olddefconfig) was supported before calling it.
-> Maybe something along the lines of:
->
->     if [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT 2>/dev/null |grep -E '^olddefconfig'`" ]; then \
->         $$($(2)_KCONFIG_MAKE) olddefconfig || exit 1; \
->     elif [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT |grep -E '^oldnoconfig'`" ]; then \
->         $$($(2)_KCONFIG_MAKE) oldnoconfig || exit 1; \
->     else
->         (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig) || exit 1; \
->     fi
->
-> Yes, this is more code, less compact, but it is more systematic. At
-> the very least, it would not fallback to the yes|oldconfig trick in
-> case old{def,no}config do exist but fail, which we do want to catch.
->
-> BTW, the make trick above is highly (as in: almost identical) from the
-> bash-autocompletion package.
-
-I see the idea, but the specific implementation is not working: the
-kernel's Makefile targets are dynamic, and the targets we want to check
-are only present when the target we try to build matches %config.
-
-I will try to find a syntax that works for all projects that use the
-kconfig-package infrastructure.
-
-Best regards,
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index df0d59b..a005cb1 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,4 +1,4 @@
+ # From http://www.sqlite.org/download.html
+-sha1	fa1f3dbf6e2e8c6d14125b2eceda5b2e16a19f1f	sqlite-autoconf-3120100.tar.gz
++sha1 b43c2e7238e54c50b95fbbd85c48792f4f39af8c  sqlite-autoconf-3120200.tar.gz
+ # Calculated based on the hash above
+-sha256	1c038519862b3983b0475f3ed3143ce4bbfcd21bfbd0741192f415838c831a7c	sqlite-autoconf-3120100.tar.gz
++sha256 fd00770c9afd39db555c78400e52f55e8bd6568c78be23561abb472a22d09abb  sqlite-autoconf-3120200.tar.gz
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 18abfe1..2f9b6ce 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3120100
++SQLITE_VERSION = 3120200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = http://www.sqlite.org/2016
+ SQLITE_LICENSE = Public domain
 -- 
-Romain Izard
+2.7.3
