@@ -1,54 +1,49 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Tue, 19 Apr 2016 14:15:10 -0400
-Subject: [Buildroot] Lightweight method for handling external power-down
-	request
-Message-ID: <CAF_dkJCO5r0Se08Pr6pAv=u-esPSFMR68V01=DHLSeHn0q2oTw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 19 Apr 2016 21:15:45 +0300
+Subject: [Buildroot] [PATCH 2/3] c-icap: bump to version 0.4.2
+In-Reply-To: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
+References: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
+Message-ID: <3280a03616963d1b2a5bfa3120390bcd59bee470.1461089746.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
-I found this discussion:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/c-icap/c-icap.hash | 2 +-
+ package/c-icap/c-icap.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-http://lists.infradead.org/pipermail/linux-arm-kernel/2015-April/339919.html
-
-on the Linux Arm Kernel mailing list archive.  It is from April of
-2015.  Sannon Zhao started a discussion regarding how to implement
-external power down for ARM.  The consensus seemed to be to use ACPI.
-I am wondering if there is a lighter weight (smaller code and
-mindshare footprint) method for handling this.
-
-I would like to initiate an orderly shutdown of my buildroot based
-system when a GPIO signal is toggled high.  I think could add
-something like the following to my device tree:
-
-    gpio-keys {
-        compatible = "gpio-keys";
-        pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_gpio_poweroff>;
-        power {
-                label = "Power-Key";
-            gpios = <&pioA 103 GPIO_ACTIVE_HIGH>;
-            linux,code = <KEY_POWER>;
-            debounce-interval = <10>;
-        };
-    };
-
-and I believe that would result in a KEY_POWER event(?)/input key(?)
-getting delivered to user-land.  But I am not sure how to handle that
-in user-land.  So it seems that I could install acpid to handle that
-somehow, but I feel this is getting more complicated than it should
-be.
-
-Alternatively, I could code up a shell script that polls my GPIO pin
-and shuts down the processor when that signal goes high, but I hate
-the idea of polling; I'm not thrilled about the lack of debounce
-support; and I would much rather respond to the event immediately,
-than have to wait the 500 to 1000ms I might have to wait for my
-polling process to notice the signal.
-
-So, how do ARM folks in Buildroot-land handle this?
-
---wpd
+diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
+index 89c70f423e00..2b083ef659ab 100644
+--- a/package/c-icap/c-icap.hash
++++ b/package/c-icap/c-icap.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 46b97fab73dbb9e8def8e34c3f94048c92f50a5341bb85bec4f6f6349aec529a c_icap-0.3.5.tar.gz
++sha256 b138c7d7d9828d54c3307bcfe7b4917911266593832ffc26a60df9a0dfd2511e c_icap-0.4.2.tar.gz
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 40926ea8e5d8..a70993fa4490 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ICAP_VERSION = 0.3.5
++C_ICAP_VERSION = 0.4.2
+ C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
+ C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_LICENSE = LGPLv2.1+
+@@ -17,6 +17,7 @@ C_ICAP_CONF_OPTS = \
+ 	--without-perl \
+ 	--enable-large-files \
+ 	--enable-ipv6
++C_ICAP_CONF_ENV = ac_cv_10031b_ipc_sem=yes ac_cv_fcntl=yes
+ C_ICAP_MAKE_OPTS = exec_prefix=$(STAGING_DIR)/usr
+ 
+ ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+-- 
+2.8.0.rc3
