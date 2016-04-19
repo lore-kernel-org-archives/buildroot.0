@@ -1,63 +1,86 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 19 Apr 2016 19:36:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jack2: Fix build on nios2
-Message-ID: <1461087406-25244-1-git-send-email-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 19 Apr 2016 19:40:50 +0200
+Subject: [Buildroot] [PATCH v4 3/3] core/pkg-kconfig: Use oldnoconfig
+	when possible
+In-Reply-To: <CAGkQfmNbbsv4e0iCyOC1-ti2wJ677RL9j3HXqh_Z7e4BmciCfg@mail.gmail.com>
+References: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
+ <1460971383-10595-4-git-send-email-romain.izard.pro@gmail.com>
+ <20160418210802.GE3495@free.fr>
+ <CAGkQfmNbbsv4e0iCyOC1-ti2wJ677RL9j3HXqh_Z7e4BmciCfg@mail.gmail.com>
+Message-ID: <20160419174050.GA3505@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/8f3/8f3d2139de7f85f729e0555f8513fdbd177cbadd/
-http://autobuild.buildroot.net/results/5d2/5d2f049ab9fa6a1a4e3fa9884983ab66b2fccb56/
-http://autobuild.buildroot.net/results/85a/85a4a7ee4cf5c0b65e4543a524909d9c0422eea4/
+Romain, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/jack2/0001-Add-support-for-nios2.patch | 34 ++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/jack2/0001-Add-support-for-nios2.patch
+On 2016-04-19 11:11 +0200, Romain Izard spake thusly:
+> 2016-04-18 23:08 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> > Romain, All,
+> >
+> > On 2016-04-18 11:23 +0200, Romain Izard spake thusly:
+> >
+> >> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
+> >> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+> >> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> >> +# In older versions, and in some other projects that use kconfig, the target is
+> >> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
+> >> +# only, as this can fail in complex cases.
+> >> +define $(2)_REGEN_DOT_CONFIG
+> >> +     $$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig || \
+> >> +             (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)
+> >
+> > What I don't much like here, is that we conflate two things:
+> >   - a non-zero return code because of a missing oldnoconfig,
+> >   - a non-zero return code because of an error found by olnoconfig.
+> >
+> > What I would have loved however, would be a way to detect whether
+> > oldnoconfig (better, olddefconfig) was supported before calling it.
+> > Maybe something along the lines of:
+> >
+> >     if [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT 2>/dev/null |grep -E '^olddefconfig'`" ]; then \
+> >         $$($(2)_KCONFIG_MAKE) olddefconfig || exit 1; \
+> >     elif [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT |grep -E '^oldnoconfig'`" ]; then \
+> >         $$($(2)_KCONFIG_MAKE) oldnoconfig || exit 1; \
+> >     else
+> >         (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig) || exit 1; \
+> >     fi
+> >
+> > Yes, this is more code, less compact, but it is more systematic. At
+> > the very least, it would not fallback to the yes|oldconfig trick in
+> > case old{def,no}config do exist but fail, which we do want to catch.
+> >
+> > BTW, the make trick above is highly (as in: almost identical) from the
+> > bash-autocompletion package.
+> 
+> I see the idea, but the specific implementation is not working: the
+> kernel's Makefile targets are dynamic, and the targets we want to check
+> are only present when the target we try to build matches %config.
 
-diff --git a/package/jack2/0001-Add-support-for-nios2.patch b/package/jack2/0001-Add-support-for-nios2.patch
-new file mode 100644
-index 0000000..f6d60af
---- /dev/null
-+++ b/package/jack2/0001-Add-support-for-nios2.patch
-@@ -0,0 +1,34 @@
-+From 3651f95d0433c84d2b67e30e68dd6140585535b0 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Tue, 19 Apr 2016 19:32:35 +0200
-+Subject: [PATCH 1/1] Add support for nios2
-+
-+When compiling jack on nios2, compilation fails because NGREGS is not
-+defined. Since this is only for debug output on segmentation faults, stub
-+the debug print out like it's been done for other platforms before.
-+
-+Inspired by
-+https://github.com/jackaudio/jack2/commit/d11bb095291d8880508c87adfe625bf2bcab1456
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Patch sent upstream: https://github.com/jackaudio/jack2/pull/199]
-+---
-+ dbus/sigsegv.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/dbus/sigsegv.c b/dbus/sigsegv.c
-+index 64c3986..ee12f91 100644
-+--- a/dbus/sigsegv.c
-++++ b/dbus/sigsegv.c
-+@@ -104,7 +104,7 @@ static void signal_segv(int signum, siginfo_t* info, void*ptr) {
-+     jack_error("info.si_errno = %d", info->si_errno);
-+     jack_error("info.si_code  = %d (%s)", info->si_code, si_code_str);
-+     jack_error("info.si_addr  = %p", info->si_addr);
-+-#if !defined(__alpha__) && !defined(__ia64__) && !defined(__FreeBSD_kernel__) && !defined(__arm__) && !defined(__hppa__) && !defined(__sh__) && !defined(__aarch64__)
-++#if !defined(__alpha__) && !defined(__ia64__) && !defined(__FreeBSD_kernel__) && !defined(__arm__) && !defined(__hppa__) && !defined(__sh__) && !defined(__aarch64__) && !defined(nios2)
-+     for(i = 0; i < NGREG; i++)
-+         jack_error("reg[%02d]       = 0x" REGFORMAT, i, 
-+ #if defined(__powerpc64__)
-+-- 
-+2.8.0.rc3
-+
+I just checked, and it works on the current master on the kernel tree:
+
+    $ make -pqn .DEFAULT 2>/dev/null |grep -E '^olddefconfig:'
+    olddefconfig: scripts/kconfig/conf
+
+    $ make -pqn .DEFAULT 2>/dev/null |grep -E '^oldnoconfig:'
+    oldnoconfig: olddefconfig
+
+Regards,
+Yann E. MORIN.
+
+> I will try to find a syntax that works for all projects that use the
+> kconfig-package infrastructure.
+> 
+> Best regards,
+> -- 
+> Romain Izard
+
 -- 
-2.8.0.rc3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
