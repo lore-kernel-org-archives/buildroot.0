@@ -1,54 +1,58 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 Apr 2016 11:44:08 -0300
-Subject: [Buildroot] [PATCH v2 7/7] linux-firmware: add support for intel
-	iwlwifi 6000g2b
-In-Reply-To: <1461077048-16189-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461077048-16189-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1461077048-16189-8-git-send-email-gustavo@zacarias.com.ar>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Tue, 19 Apr 2016 16:53:05 +0200
+Subject: [Buildroot] [PATCH v2 0/6] Add development rootfs
+Message-ID: <1461077591-24238-1-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- package/linux-firmware/Config.in         | 6 ++++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 11 insertions(+)
+Hi,
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index f7bd526..ded0bcd 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -92,6 +92,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2A
- 	  Firmware files for the Intel Wifi 6000G2A devices supported by
- 	  the iwlwifi kernel driver.
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B
-+	bool "Intel iwlwifi 6000G2B"
-+	help
-+	  Firmware files for the Intel Wifi 6000G2B devices supported by
-+	  the iwlwifi kernel driver.
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260
- 	bool "Intel iwlwifi 7260"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 94cdcfa..1401848 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -252,6 +252,11 @@ LINUX_FIRMWARE_FILES += iwlwifi-6000g2a-6.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_6000G2B),y)
-+LINUX_FIRMWARE_FILES += iwlwifi-6000g2b-6.ucode
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IWLWIFI_7260),y)
- LINUX_FIRMWARE_FILES += iwlwifi-7260-*.ucode
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.iwlwifi_firmware
+These patches add package to provide an "out of the box" rootfs with tools to
+test the features of the SoC.
+
+Even if it is not a real demo, this kind of rootfs is useful for us because
+the customer will have tools to test audio, display, i2c, etc. It can also
+be used for training.
+
+Until now, we had this rootfs in the atmel buildroot repository but since we
+have decided to remove it to rely only on the mainline, it will be great these
+defconfigs included.
+
+Changes:
+- v2:
+  - Bump to linux4sam_5.3
+  - Explain the purpose of these defconfigs in the readme file
+  - Revert the archive download from github instead of cloning the repository.
+    The same tag is used for u-boot and linux so we have the same filename
+    linux4sam_5.3.tar.gz.
+- v1:
+  - Add other dev_defconfig
+  - Add comments in defconfigs
+  - Use the archive instead of cloning git repository
+
+Ludovic Desroches (6):
+  configs: atmel: add sd card development image for sama5d2 xplained
+  configs: atmel: add sd card development image for sama5d4 xplained
+  configs: atmel: add development rootfs for sama5d4 xplained
+  configs: atmel: add sd card development image for sama5d3 xplained
+  configs: atmel: add development rootfs for sama5d3 xplained
+  board/atmel: update documentation with development defconfigs
+
+ board/atmel/readme.txt                           |  15 ++++
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 105 +++++++++++++++++++++++
+ configs/atmel_sama5d3_xplained_dev_defconfig     | 101 ++++++++++++++++++++++
+ configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 104 ++++++++++++++++++++++
+ configs/atmel_sama5d4_xplained_dev_defconfig     | 105 +++++++++++++++++++++++
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 105 +++++++++++++++++++++++
+ 6 files changed, 535 insertions(+)
+ create mode 100644 configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+ create mode 100644 configs/atmel_sama5d3_xplained_dev_defconfig
+ create mode 100644 configs/atmel_sama5d3_xplained_mmc_dev_defconfig
+ create mode 100644 configs/atmel_sama5d4_xplained_dev_defconfig
+ create mode 100644 configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+
 -- 
-2.7.3
+2.5.0
