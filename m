@@ -1,42 +1,34 @@
-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date: Tue, 19 Apr 2016 10:39:22 +0100
-Subject: [Buildroot] [PATCH] sqlite: bump version to 3120200
-Message-ID: <1461058762-46560-1-git-send-email-Vincent.Riera@imgtec.com>
+From: Matthew Shyu <matthew.shyu.amlogic@gmail.com>
+Date: Tue, 19 Apr 2016 18:26:46 +0800
+Subject: [Buildroot] [PATCH 1/1] openssl: enable aarch64 optimization
+Message-ID: <1461061606-3323-1-git-send-email-matthew.shyu.amlogic@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+From: Matthew Shyu <matthew.shyu@amlogic.com>
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index df0d59b..a005cb1 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,4 +1,4 @@
- # From http://www.sqlite.org/download.html
--sha1	fa1f3dbf6e2e8c6d14125b2eceda5b2e16a19f1f	sqlite-autoconf-3120100.tar.gz
-+sha1 b43c2e7238e54c50b95fbbd85c48792f4f39af8c  sqlite-autoconf-3120200.tar.gz
- # Calculated based on the hash above
--sha256	1c038519862b3983b0475f3ed3143ce4bbfcd21bfbd0741192f415838c831a7c	sqlite-autoconf-3120100.tar.gz
-+sha256 fd00770c9afd39db555c78400e52f55e8bd6568c78be23561abb472a22d09abb  sqlite-autoconf-3120200.tar.gz
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 18abfe1..2f9b6ce 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3120100
-+SQLITE_VERSION = 3120200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2016
- SQLITE_LICENSE = Public domain
+
+Signed-off-by: Matthew Shyu <matthew.shyu@amlogic.com>
+---
+ package/openssl/openssl.mk |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/openssl/openssl.mk b/package/openssl/openssl.mk
+index 3b8e525..2f50dfb 100644
+--- a/package/openssl/openssl.mk
++++ b/package/openssl/openssl.mk
+@@ -37,6 +37,9 @@ endif
+ ifeq ($(ARCH),arm)
+ OPENSSL_TARGET_ARCH = armv4
+ endif
++ifeq ($(ARCH),aarch64)
++OPENSSL_TARGET_ARCH = aarch64
++endif
+ ifeq ($(ARCH),powerpc)
+ # 4xx cores seem to have trouble with openssl's ASM optimizations
+ ifeq ($(BR2_powerpc_401)$(BR2_powerpc_403)$(BR2_powerpc_405)$(BR2_powerpc_405fp)$(BR2_powerpc_440)$(BR2_powerpc_440fp),)
 -- 
-2.7.3
+1.7.9.5
