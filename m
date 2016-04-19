@@ -1,168 +1,65 @@
-From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Tue, 19 Apr 2016 10:53:11 +0200
-Subject: [Buildroot] [PATCH] configs: atmel: xplained boards: bump to
-	linux4sam_5.3
-Message-ID: <1461055991-24856-1-git-send-email-ludovic.desroches@atmel.com>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Tue, 19 Apr 2016 11:11:46 +0200
+Subject: [Buildroot] [PATCH v4 3/3] core/pkg-kconfig: Use oldnoconfig
+	when possible
+In-Reply-To: <20160418210802.GE3495@free.fr>
+References: <1460971383-10595-1-git-send-email-romain.izard.pro@gmail.com>
+ <1460971383-10595-4-git-send-email-romain.izard.pro@gmail.com>
+ <20160418210802.GE3495@free.fr>
+Message-ID: <CAGkQfmNbbsv4e0iCyOC1-ti2wJ677RL9j3HXqh_Z7e4BmciCfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump defconfigs relative to Xplained boards to linux4sam_5.3 release. It
-involves to use at91bootstrap v3.8.5.
+Hi Yann,
 
-Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
----
- configs/atmel_sama5d2_xplained_mmc_defconfig | 6 +++---
- configs/atmel_sama5d3_xplained_defconfig     | 6 +++---
- configs/atmel_sama5d3_xplained_mmc_defconfig | 6 +++---
- configs/atmel_sama5d4_xplained_defconfig     | 6 +++---
- configs/atmel_sama5d4_xplained_mmc_defconfig | 6 +++---
- 5 files changed, 15 insertions(+), 15 deletions(-)
+2016-04-18 23:08 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> Romain, All,
+>
+> On 2016-04-18 11:23 +0200, Romain Izard spake thusly:
+>
+>> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
+>> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+>> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+>> +# In older versions, and in some other projects that use kconfig, the target is
+>> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
+>> +# only, as this can fail in complex cases.
+>> +define $(2)_REGEN_DOT_CONFIG
+>> +     $$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig || \
+>> +             (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)
+>
+> What I don't much like here, is that we conflate two things:
+>   - a non-zero return code because of a missing oldnoconfig,
+>   - a non-zero return code because of an error found by olnoconfig.
+>
+> What I would have loved however, would be a way to detect whether
+> oldnoconfig (better, olddefconfig) was supported before calling it.
+> Maybe something along the lines of:
+>
+>     if [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT 2>/dev/null |grep -E '^olddefconfig'`" ]; then \
+>         $$($(2)_KCONFIG_MAKE) olddefconfig || exit 1; \
+>     elif [ -n "`$$($(2)_KCONFIG_MAKE) -pqn .DEFAULT |grep -E '^oldnoconfig'`" ]; then \
+>         $$($(2)_KCONFIG_MAKE) oldnoconfig || exit 1; \
+>     else
+>         (yes "" | $$($(2)_KCONFIG_MAKE) oldconfig) || exit 1; \
+>     fi
+>
+> Yes, this is more code, less compact, but it is more systematic. At
+> the very least, it would not fallback to the yes|oldconfig trick in
+> case old{def,no}config do exist but fail, which we do want to catch.
+>
+> BTW, the make trick above is highly (as in: almost identical) from the
+> bash-autocompletion package.
 
-diff --git a/configs/atmel_sama5d2_xplained_mmc_defconfig b/configs/atmel_sama5d2_xplained_mmc_defconfig
-index 7f1797d..c02702b 100644
---- a/configs/atmel_sama5d2_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d2_xplained_mmc_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d2_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d2_xplained at91-sama5d2_xplained_pda4 at91-sama5d2_xplained_pda7 at91-sama5d2_xplained_pda7b"
-@@ -18,13 +18,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d2_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d2_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/atmel_sama5d3_xplained_defconfig b/configs/atmel_sama5d3_xplained_defconfig
-index 0ab5799..4eb5304 100644
---- a/configs/atmel_sama5d3_xplained_defconfig
-+++ b/configs/atmel_sama5d3_xplained_defconfig
-@@ -6,7 +6,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-@@ -17,12 +17,12 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d3_xplained_mmc_defconfig b/configs/atmel_sama5d3_xplained_mmc_defconfig
-index fc2f5d9..14ca3f5 100644
---- a/configs/atmel_sama5d3_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_defconfig
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d3_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-@@ -16,13 +16,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainedsd_uboot"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/atmel_sama5d4_xplained_defconfig b/configs/atmel_sama5d4_xplained_defconfig
-index 48ef699..ad4bff1 100644
---- a/configs/atmel_sama5d4_xplained_defconfig
-+++ b/configs/atmel_sama5d4_xplained_defconfig
-@@ -7,7 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-@@ -21,12 +21,12 @@ BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainednf_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_nandflash"
- BR2_PACKAGE_HOST_SAM_BA=y
-diff --git a/configs/atmel_sama5d4_xplained_mmc_defconfig b/configs/atmel_sama5d4_xplained_mmc_defconfig
-index 1db660d..5f0b748 100644
---- a/configs/atmel_sama5d4_xplained_mmc_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/atmel/sama5d4_xplained_mmc/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d4_xplained at91-sama5d4_xplained_hdmi at91-sama5d4_xplained_pda4 at91-sama5d4_xplained_pda7 at91-sama5d4_xplained_pda7b"
-@@ -17,13 +17,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_AT91BOOTSTRAP3=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
- BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
--BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.4"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
- BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d4_xplainedsd_uboot_secure"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.2"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d4_xplained_mmc"
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+I see the idea, but the specific implementation is not working: the
+kernel's Makefile targets are dynamic, and the targets we want to check
+are only present when the target we try to build matches %config.
+
+I will try to find a syntax that works for all projects that use the
+kconfig-package infrastructure.
+
+Best regards,
 -- 
-2.5.0
+Romain Izard
