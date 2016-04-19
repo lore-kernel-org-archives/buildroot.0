@@ -1,114 +1,55 @@
-From: Maxime Ripard <maxime.ripard@free-electrons.com>
-Date: Tue, 19 Apr 2016 23:09:49 +0200
-Subject: [Buildroot] [PATCH] kmsxx: new package
-Message-ID: <1461100189-19627-1-git-send-email-maxime.ripard@free-electrons.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Tue, 19 Apr 2016 23:11:49 +0200
+Subject: [Buildroot] [git commit] tzdata: reorder zone list to avoid missing
+	links
+Message-ID: <20160419211212.A3905818D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-KMS++ is a suite of library and test tools to interact with KMS drivers in
-the linux kernel.
+commit: https://git.buildroot.net/buildroot/commit/?id=db22eb686a8e45ccefbaf87ae18ac4588abea4f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+The 'backward' zone references entries from other zones (e.g. Pacific/*)
+that have not yet been compiled, leading to missing links. To fix this,
+take-over the zone list sort order from upstream 'tzdata' and also ensure
+that make fails if zic terminates with a non-zero exit code.
+
+Signed-off-by: Michel Marti <mma@objectxp.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/Config.in       |  1 +
- package/kmsxx/Config.in | 24 ++++++++++++++++++++++++
- package/kmsxx/kmsxx.mk  | 42 ++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 67 insertions(+)
- create mode 100644 package/kmsxx/Config.in
- create mode 100644 package/kmsxx/kmsxx.mk
+ package/tzdata/tzdata.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 529ad3364994..4bb60ead530b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -867,6 +867,7 @@ menu "Graphics"
- 	source "package/imlib2/Config.in"
- 	source "package/jasper/Config.in"
- 	source "package/jpeg/Config.in"
-+	source "package/kmsxx/Config.in"
- 	source "package/lcms2/Config.in"
- 	source "package/lesstif/Config.in"
- 	source "package/libart/Config.in"
-diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
-new file mode 100644
-index 000000000000..4b70c276d4e3
---- /dev/null
-+++ b/package/kmsxx/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_KMSXX
-+	bool "kmsxx"
-+	select BR2_PACKAGE_LIBDRM
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
-+	help
-+	  libkms++ is a C++11 library for kernel mode setting.
-+
-+	  Also included are simple test tools for KMS and python wrapper for
-+	  libkms++.
-+
-+	  https://github.com/tomba/kmsxx
-+
-+if BR2_PACKAGE_KMSXX
-+
-+config BR2_PACKAGE_KMSXX_INSTALL_TESTS
-+	bool "Install test programs"
-+	help
-+	  This option allows to install the kmsxx test programs.
-+
-+endif
-+
-+comment "kmsxx needs a toolchain w/ threads"
-+        depends on !BR2_TOOLCHAIN_HAS_THREADS
-+
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-new file mode 100644
-index 000000000000..b3a2e178bc22
---- /dev/null
-+++ b/package/kmsxx/kmsxx.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# kmsxx
-+#
-+################################################################################
-+
-+KMSXX_VERSION = bef0109aa93971dd6cc6040661dc6494533e6bee
-+KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
-+KMSXX_LICENSE = MPLv2.0
-+KMSXX_LICENSE_FILES = LICENSE
-+
-+KMSXX_DEPENDENCIES += libdrm
-+
-+KMSXX_CONF_OPTS += -DLIBKMS_ENABLE_PYTHON=OFF
-+
-+ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
-+define KMSXX_INSTALL_TARGET_TESTS
-+	$(INSTALL) -D -m 0755 $(@D)/libkmstest/libkmstest.so \
-+		$(TARGET_DIR)/usr/lib/libkmstest.so
-+	$(INSTALL) -D -m 0755 $(@D)/tests/db \
-+		$(TARGET_DIR)/usr/bin/db
-+	$(INSTALL) -D -m 0755 $(@D)/tests/fbtestpat \
-+		$(TARGET_DIR)/usr/bin/fbtestpat
-+	$(INSTALL) -D -m 0755 $(@D)/tests/kmscapture \
-+		$(TARGET_DIR)/usr/bin/kmscapture
-+	$(INSTALL) -D -m 0755 $(@D)/tests/kmsprint \
-+		$(TARGET_DIR)/usr/bin/kmsprint
-+	$(INSTALL) -D -m 0755 $(@D)/tests/kmsview \
-+		$(TARGET_DIR)/usr/bin/kmsview
-+	$(INSTALL) -D -m 0755 $(@D)/tests/testpat \
-+		$(TARGET_DIR)/usr/bin/testpat
-+endef
-+endif
-+
-+define KMSXX_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/libkms++/libkms++.so \
-+		$(TARGET_DIR)/usr/lib/libkms++.so
-+
-+	$(KMSXX_INSTALL_TARGET_TESTS)
-+endef
-+
-+$(eval $(cmake-package))
--- 
-2.8.1
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 69bae03..f50a83c 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -12,9 +12,11 @@ TZDATA_DEPENDENCIES = host-tzdata
+ HOST_TZDATA_DEPENDENCIES = host-zic
+ TZDATA_LICENSE = Public domain
+ 
++# Take care when re-ordering this list since this might break zone
++# dependencies
+ TZDATA_DEFAULT_ZONELIST = \
+-	africa antarctica asia australasia backward etcetera \
+-	europe factory northamerica pacificnew southamerica
++	africa antarctica asia australasia europe northamerica \
++	southamerica pacificnew etcetera backward systemv factory
+ 
+ ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
+ TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
+@@ -49,8 +51,8 @@ endef
+ define HOST_TZDATA_BUILD_CMDS
+ 	(cd $(@D); \
+ 		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
+-			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
++			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
++			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
+ 		done; \
+ 	)
+ endef
