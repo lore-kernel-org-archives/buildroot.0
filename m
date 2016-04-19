@@ -1,109 +1,219 @@
 From: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-Date: Tue, 19 Apr 2016 16:52:34 -0400
-Subject: [Buildroot] [PATCH 3/4] linux-headers: rename _AS_KERNEL to
-	_FROM_KERNEL
+Date: Tue, 19 Apr 2016 16:52:33 -0400
+Subject: [Buildroot] [PATCH 2/4] linux-headers: indent custom choices
 In-Reply-To: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
 References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <1461099155-30702-3-git-send-email-vivien.didelot@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BR2_KERNEL_HEADERS_AS_KERNEL is confusing when making the choice between
-downloading the headers from an independent kernel source, and using the
-headers found in the kernel built by Buildroot.
-
-Rename it to BR2_KERNEL_HEADERS_FROM_KERNEL.
-
-In the meantime, document this distinction between the two choices.
+Fix the indentation of config entries in the "Custom kernel headers
+series" choice menu.
 
 Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 ---
- package/linux-headers/Config.in.host   | 19 ++++++++++++-------
- package/linux-headers/linux-headers.mk |  8 ++++----
- 2 files changed, 16 insertions(+), 11 deletions(-)
+ package/linux-headers/Config.in.host | 160 +++++++++++++++++------------------
+ 1 file changed, 80 insertions(+), 80 deletions(-)
 
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6d86113..baadb2e 100644
+index 9f80224..6d86113 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -5,15 +5,20 @@ comment "Kernel Header Options"
+@@ -99,112 +99,112 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
  
- choice
- 	prompt "Kernel Headers"
--	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
-+	default BR2_KERNEL_HEADERS_FROM_KERNEL if BR2_LINUX_KERNEL
- 	default BR2_KERNEL_HEADERS_4_5
- 	help
--	  Select the version of kernel header files you wish to use.
--	  You must select the correct set of header files to match
--	  the kernel you intend to use on your target system.
-+	  Select the source of kernel header files which matches the kernel
-+	  version you intend to use on your target system.
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
+-	bool "4.5.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
++		bool "4.5.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
  
--	config BR2_KERNEL_HEADERS_AS_KERNEL
--		bool "Same as kernel"
-+	  Select BR2_KERNEL_HEADERS_FROM_KERNEL to use the header files from
-+	  the kernel source you are building for your target.
-+
-+	  Select any other choices to download and use an independent kernel
-+	  version for its headers. Useful when you are not building the kernel.
-+
-+	config BR2_KERNEL_HEADERS_FROM_KERNEL
-+		bool "From the kernel source"
- 		depends on BR2_LINUX_KERNEL
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4
+-	bool "4.4.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4
++		bool "4.4.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
  
- 	config BR2_KERNEL_HEADERS_3_2
-@@ -91,7 +96,7 @@ config BR2_DEFAULT_KERNEL_VERSION
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3
+-	bool "4.3.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_3
++		bool "4.3.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
  
- choice
- 	bool "Custom kernel headers series"
--	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_FROM_KERNEL
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
- 	help
- 	  Set to the kernel headers series you manually set above.
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 0900778..9afe5dc 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -7,7 +7,7 @@
- # This package is used to provide Linux kernel headers for the
- # internal toolchain backend.
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2
+-	bool "4.2.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_2
++		bool "4.2.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
  
--ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-+ifeq ($(BR2_KERNEL_HEADERS_FROM_KERNEL),y)
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1
+-	bool "4.1.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1
++		bool "4.1.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
  
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0
+-	bool "4.0.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_0
++		bool "4.0.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0
  
-@@ -71,7 +71,7 @@ endef
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19
+-	bool "3.19.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_19
++		bool "3.19.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
  
- LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18
+-	bool "3.18.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_18
++		bool "3.18.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
  
--else # ! BR2_KERNEL_HEADERS_AS_KERNEL
-+else # ! BR2_KERNEL_HEADERS_FROM_KERNEL
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17
+-	bool "3.17.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_17
++		bool "3.17.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
  
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
-@@ -83,7 +83,7 @@ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
- endif
- LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16
+-	bool "3.16.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_16
++		bool "3.16.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_16
  
--endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
-+endif # ! BR2_KERNEL_HEADERS_FROM_KERNEL
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
+-	bool "3.15.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_15
++		bool "3.15.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
  
- LINUX_HEADERS_LICENSE = GPLv2
- LINUX_HEADERS_LICENSE_FILES = COPYING
-@@ -125,7 +125,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
- 			headers_install)
- endef
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14
+-	bool "3.14.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14
++		bool "3.14.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
  
--ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-+ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_FROM_KERNEL),y)
- define LINUX_HEADERS_CHECK_VERSION
- 	$(call check_kernel_headers_version,\
- 		$(STAGING_DIR),\
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13
+-	bool "3.13.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_13
++		bool "3.13.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_13
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12
+-	bool "3.12.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_12
++		bool "3.12.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_11
+-	bool "3.11.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_11
++		bool "3.11.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10
+-	bool "3.10.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_10
++		bool "3.10.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9
+-	bool "3.9.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_9
++		bool "3.9.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8
+-	bool "3.8.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_8
++		bool "3.8.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_7
+-	bool "3.7.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_7
++		bool "3.7.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_6
+-	bool "3.6.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_6
++		bool "3.6.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_5
+-	bool "3.5.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_5
++		bool "3.5.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_5
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4
+-	bool "3.4.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_4
++		bool "3.4.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_3
+-	bool "3.3.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_3
++		bool "3.3.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_2
+-	bool "3.2.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_2
++		bool "3.2.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1
+-	bool "3.1.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_1
++		bool "3.1.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_1
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0
+-	bool "3.0.x"
+-	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_0
++		bool "3.0.x"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 
+-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
+-	bool "2.6.x"
++	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
++		bool "2.6.x"
+ 
+ endchoice
+ 
 -- 
 2.8.0
