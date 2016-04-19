@@ -1,89 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 13:26:03 +0200
-Subject: [Buildroot] [PATCH 1/2] qt5connectivity: add sdpscanner tool
- for Qt5Bluetooth
-In-Reply-To: <91eced6b-28ba-4cc4-aec7-ef30d7875fed@MAIL-SINTERS-01.sinters-int.fr>
-References: <1459763762-31640-1-git-send-email-corjon.j@ecagroup.com>
- <CAGm1_ktt4d7ELbUUuEyPX6qiEvXbBdOGhkiC4+yu_s3K6VP4kw@mail.gmail.com>
- <5702CDE4.1080703@mind.be>
- <20160419001020.4db2ac0a@free-electrons.com>
- <91eced6b-28ba-4cc4-aec7-ef30d7875fed@MAIL-SINTERS-01.sinters-int.fr>
-Message-ID: <20160419132603.3d96829c@free-electrons.com>
+From: Julien Corjon <corjon.j@ecagroup.com>
+Date: Tue, 19 Apr 2016 13:43:53 +0200
+Subject: [Buildroot] [PATCH v2 1/2] qt5connectivity: add QtNfc submodule
+In-Reply-To: <1459763762-31640-2-git-send-email-corjon.j@ecagroup.com>
+References: <1459763762-31640-2-git-send-email-corjon.j@ecagroup.com>
+Message-ID: <1461066234-21504-1-git-send-email-corjon.j@ecagroup.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+Signed-off-by: Julien Corjon <corjon.j@ecagroup.com>
+---
+ package/qt5/qt5connectivity/Config.in          | 15 +++++++----
+ package/qt5/qt5connectivity/qt5connectivity.mk | 36 +++++++++++++++++++++-----
+ 2 files changed, 40 insertions(+), 11 deletions(-)
 
-Thanks for looking into this!
-
-On Tue, 19 Apr 2016 10:53:50 +0000, Julien CORJON wrote:
-
-> > -$(INSTALL_PROGRAM) ../../lib/$(TARGET) $(INSTALL_ROOT)/home/test/buildroot/output/host/usr/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/$(TARGET)
-> 
-> Just made a bit of digging into qt5base source. This behaviour is from 
-> qtbase/qmake/generators/unix/unixmake.cpp : 
-> UnixMakefileGenerator::defaultInstall . Even if I understand how it 
-> append the full path after the $(INSTALL_ROOT) I cannot understand the 
-> why...
-
-My guess is that since were passing -sysroot $(STAGING_DIR) to qt5's
-configure script, this sysroot pass get prefixed everywhere.
-
-> We can (and probably should) fix this misfunction but we will have to 
-> force DESTDIR to staging and target in all qmake-based packages.
-
-That's not a big deal, we're doing this for autotools packages already,
-and it should be the normal thing to do.
-
-Ideally, the installation for staging should be:
-
-	$(MAKE) -C $(@D) INSTALL_ROOT=$(STAGING_DIR) install
-
-and for the target:
-
-	$(MAKE) -C $(@D) INSTALL_ROOT=$(TARGET_DIR) install
-
-> Fixing only defaultInstall should keep qmake "automagically". Also It
-> will be difficult to push such modification in Qt mainline.
-
-Well, we need to understand why Qt behaves this way, and fix it
-properly.
-
-> > so in essence, they fixup the generated Makefile after the fact so
-> > that they don't contain the hardcoded sysroot path. If we can't
-> > find a clean solution with qmake, maybe that's a possible solution
-> > to simplify the target installation of all those qt5 packages.
-> 
-> How can we handle this kind of fixup with make *-install-staging / * 
-> -install-target?
-
-We could have a generic "fixup" macro, which we register in all qt5
-packages as a post-configure hook or something like that.
-
-> > One thing I wonder is how packages like qwt or quazip get properly
-> > installed to the target/staging, since they do use INSTALL_ROOT. I
-> > had a quick look at quazip, and its Makefiles are correct, they
-> > contain:
-> >
-> > -$(INSTALL_FILE) /home/test/buildroot/output/build/quazip-0.7.2/quazip/crypt.h
-> > $(INSTALL_ROOT)/usr/include/quazip/
-> >
-> > I'm puzzled. Some Qt5 person to chime in and look into this problem?
-> 
-> I'm puzzled too on that one...
-
-I think I might an idea for this one: we're passing
--headerdir /usr/include/qt5 to qt5's configure script, so the sysroot
-path doesn't get prepended for header files installation.
-
-Argh, no, not possible: this would mean that the other Qt5 packages
-would install their headers in /usr/include, which is not the case.
-
-Thomas
+diff --git a/package/qt5/qt5connectivity/Config.in b/package/qt5/qt5connectivity/Config.in
+index d529ea7..83df06a 100644
+--- a/package/qt5/qt5connectivity/Config.in
++++ b/package/qt5/qt5connectivity/Config.in
+@@ -1,13 +1,10 @@
+ config BR2_PACKAGE_QT5CONNECTIVITY
+ 	bool "qt5connectivity"
+-	select BR2_PACKAGE_BLUEZ_UTILS
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_CONCURRENT
+ 	select BR2_PACKAGE_QT5BASE_DBUS
+-	depends on !BR2_STATIC_LIBS # bluez_utils
+-	depends on BR2_USE_WCHAR # bluez_utils
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils
+-	depends on BR2_USE_MMU # bluez_utils
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_PACKAGE_NEARD || BR2_PACKAGE_BLUEZ_UTILS
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -19,3 +16,11 @@ config BR2_PACKAGE_QT5CONNECTIVITY
+ comment "qt5connectivity needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
++comment "qt5connectivity need neard and/or bluez_utils"
++	depends on BR2_USE_MMU
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_PACKAGE_NEARD
++	depends on !BR2_PACKAGE_BLUEZ_UTILS
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+index 936bc6f..6a446e9 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.mk
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -7,7 +7,7 @@
+ QT5CONNECTIVITY_VERSION = $(QT5_VERSION)
+ QT5CONNECTIVITY_SITE = $(QT5_SITE)
+ QT5CONNECTIVITY_SOURCE = qtconnectivity-opensource-src-$(QT5CONNECTIVITY_VERSION).tar.xz
+-QT5CONNECTIVITY_DEPENDENCIES = bluez_utils qt5base
++QT5CONNECTIVITY_DEPENDENCIES = qt5base
+ QT5CONNECTIVITY_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_LICENSE_APPROVED),y)
+@@ -18,9 +18,9 @@ QT5CONNECTIVITY_LICENSE = Commercial license
+ QT5CONNECTIVITY_REDISTRIBUTE = NO
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+-QT5CONNECTIVITY_DEPENDENCIES += qt5declarative
+-endif
++QT5CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5DECLARATIVE),qt5declarative)
++QT5CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_BLUEZ_UTILS),bluez_utils)
++QT5CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_NEARD),neard)
+ 
+ define QT5CONNECTIVITY_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/usr/bin/qmake)
+@@ -36,14 +36,38 @@ define QT5CONNECTIVITY_INSTALL_STAGING_CMDS
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
+-define QT5CONNECTIVITY_INSTALL_TARGET_QMLS
++ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH_QMLS
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtBluetooth $(TARGET_DIR)/usr/qml/
+ endef
+ endif
++ifeq ($(BR2_PACKAGE_NEARD),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_NFC_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtNfc $(TARGET_DIR)/usr/qml/
++endef
++endif
++define QT5CONNECTIVITY_INSTALL_TARGET_QMLS
++	$(QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH_QMLS)
++	$(QT5CONNECTIVITY_INSTALL_TARGET_NFC_QMLS)
++endef
++endif
+ 
+-define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
++ifeq ($(BR2_PACKAGE_BLUEZ_UTILS),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Bluetooth.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/bin/sdpscanner $(TARGET_DIR)/usr/bin
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_NEARD),y)
++define QT5CONNECTIVITY_INSTALL_TARGET_NFC
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Nfc.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++define QT5CONNECTIVITY_INSTALL_TARGET_CMDS
++	$(QT5CONNECTIVITY_INSTALL_TARGET_BLUETOOTH)
++	$(QT5CONNECTIVITY_INSTALL_TARGET_NFC)
+ 	$(QT5CONNECTIVITY_INSTALL_TARGET_QMLS)
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.5.0
