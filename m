@@ -1,57 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 10:01:50 +0200
-Subject: [Buildroot] [PATCH V2 1/1] nvme: Allow libudev support
-In-Reply-To: <1461030864-11359-1-git-send-email-sam@mendozajonas.com>
-References: <1461030864-11359-1-git-send-email-sam@mendozajonas.com>
-Message-ID: <20160419100150.158d763f@free-electrons.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 19 Apr 2016 10:12:51 +0200
+Subject: [Buildroot] [PATCH] gst1-imx: make kernel dependency optional
+In-Reply-To: <20160418212343.3b7ff726@free-electrons.com>
+References: <97bf649b600a5548cfd3c53575747a057f24e07e.1460973919.git.baruch@tkos.co.il>
+ <CAAMH-ysFMBA9bDK4h2KQv-HBmjMYmqzdZX1YhBwKzr-7VXz8zw@mail.gmail.com>
+ <20160418212343.3b7ff726@free-electrons.com>
+Message-ID: <CAAMH-ytcam=_YTJjn+suKuQABxJWJwPMDUMeTH5LQy7RKHokyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Tue, 19 Apr 2016 11:54:24 +1000, Samuel Mendoza-Jonas wrote:
-> Commands like 'nvme list' require libudev but support for libudev is
-> decided at compile time, and in buildroot this is hard disabled.
-> Add a check for udev and if it is available build nvme with udev
-> support.
-> 
-> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+On Mon, Apr 18, 2016 at 9:23 PM, Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote:
+> Hello,
+>
+> On Mon, 18 Apr 2016 12:18:28 +0200, Gary Bisson wrote:
+>
+>> That is true, it isn't a hard dependency, the reason I left it like
+>> that is because if the headers aren't found and none of the other
+>> configurations (plugins-bad, imx-gpu-viv or libimxvpuapi) are set, no
+>> actual plugin will be built which could be confusing.
+>>
+>> Although this patch is correct and legit, I'd rather go ahead and
+>> rework the entire package since Carlos worked on being able to
+>> select/disable each and individual plugin since version 0.12.1:
+>> https://github.com/Freescale/meta-fsl-arm/commit/cec4c47e
+>
+> But isn't Baruch patch as-is already a step in the right direction?
+> I.e, should we merge it as-is, or wait for the entire rework to be done?
 
-I've applied, after doing a few changes (since below).
+Yes it is going in the right direction. Thinking about it now, yes it
+might make sense to merge it as-is since we don't know when the full
+rework will be done.
 
-> diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
-> index 7c4bd8e..3571494 100755
-> --- a/package/nvme/nvme.mk
-> +++ b/package/nvme/nvme.mk
-> @@ -8,11 +8,17 @@ NVME_VERSION = v0.3
->  NVME_SITE = $(call github,linux-nvme,nvme-cli,$(NVME_VERSION))
->  NVME_LICENSE = GPLv2+
->  NVME_LICENSE_FILES = LICENSE
-
-I've added a comment here that insists on the fact that yes, LIBUDEV=0
-enables udev support, while LIBUDEV=1 disables udev support, which is a
-bit counter-intuitive.
-
-> +ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> +NVME_DEPENDENCIES += udev
-> +NVME_MAKE_OPTS = LIBUDEV=0
-
-I've changed to use += here
-
-> +else
-> +NVME_MAKE_OPTS = LIBUDEV=1
-
-and here, since it's a bit more future proof. It will avoid mistakes if
-someone adds NVME_MAKE_OPTS = <something> outside of the conditional
-block.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Regards,
+Gary
