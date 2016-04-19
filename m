@@ -1,38 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 23:38:41 +0200
-Subject: [Buildroot] [git commit] fio: add optional dependency on libaio
-Message-ID: <20160419213948.125AF8182E@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Apr 2016 21:40:01 +0000
+Subject: [Buildroot] [Bug 8851] Make sure fio can compile with libaio
+ support if it the package is installed
+In-Reply-To: <bug-8851-163@https.bugs.busybox.net/>
+References: <bug-8851-163@https.bugs.busybox.net/>
+Message-ID: <bug-8851-163-gJYWy0M7uJ@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71122f537d2ff93f206818c8d91e06f55fe2b5e2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=8851
 
-fio can automatically detect and use libaio when available, so this
-commit makes this optional dependency explicit.
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Suggested by Charles <ckhardin@exablox.com> in bug #8851.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/fio/fio.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.net/buildroot/commit/?id=71122f537d2ff93f206818c8d91e06f55fe2b5e2,
+thanks for your suggestion!
 
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index acebb6f..6c4ad6c 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -9,6 +9,10 @@ FIO_SITE = git://git.kernel.dk/fio.git
- FIO_LICENSE = GPLv2 + special obligations
- FIO_LICENSE_FILES = COPYING
- 
-+ifeq ($(BR2_PACKAGE_LIBAIO),y)
-+FIO_DEPENDENCIES += libaio
-+endif
-+
- define FIO_CONFIGURE_CMDS
- 	(cd $(@D); ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
- endef
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
