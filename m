@@ -1,39 +1,136 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 22:47:21 +0200
-Subject: [Buildroot] [PATCH v5] dpdk: new package
-In-Reply-To: <57168742.7090806@mind.be>
-References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
- <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
- <20160417163814.03b67f53@free-electrons.com>
- <20160417155607.5861459.38806.3255@rehivetech.com>
- <20160417213544.2960f7cf@free-electrons.com>
- <20160417205607.5861459.29884.3259@rehivetech.com>
- <20160417230607.75d32331@free-electrons.com>
- <20160418102315.169c22ad@jvn> <571564B3.3030906@mind.be>
- <20160419142744.5b2651db@pcviktorin.fit.vutbr.cz>
- <57168742.7090806@mind.be>
-Message-ID: <20160419224721.2978305a@free-electrons.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 19 Apr 2016 22:57:25 +0200
+Subject: [Buildroot] [PATCH v5] core/pkg-kconfig: Use olddefconfig when
+	available
+In-Reply-To: <1461078434-29991-1-git-send-email-romain.izard.pro@gmail.com>
+References: <1461078434-29991-1-git-send-email-romain.izard.pro@gmail.com>
+Message-ID: <20160419205725.GE3505@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Romain, All,
 
-On Tue, 19 Apr 2016 21:30:10 +0200, Arnout Vandecappelle wrote:
+On 2016-04-19 17:07 +0200, Romain Izard spake thusly:
+> Using 'yes "" | make oldconfig' to regenerate a .config file from an
+> existing defconfig does not work reliably in all cases. Specifically, it
+> does not work well with tristate choice entries.
+> 
+> The correct way to do it is to use 'make olddefconfig', but this target
+> is not supported in projects that use an old version of kconfig. As
+> most projects do not use tristate entries, there is no need for them to
+> upgrade.
+> 
+> 'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
+> name for this target between Linux versions 2.6.36 and 3.6.
+> 
+> Check which targets are supported by the current project, and use the
+> appropriate method to regenerate the .config file.
+> 
+> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
->   We can also still revert to depending on linux unconditionally like you have 
-> now. How likely is it that dpdk will be used in practice with no kernel modules? 
-> Or is this going to be more likely in the future, with heavier use of UIO and 
-> device tree?
+As Thomas said: this was given on a previous iteration of the patch, and
+this one is fundamentaly different; the review by arnout no longer
+stand on this new version.
 
-My proposal would indeed to revert back to depend on Linux
-unconditionally, and see what happens later, like if we have users who
-use DPDK and complain that it depends on the Linux kernel package.
+However, after some discussion with Thomas on IRC, here is a more
+thourough review from me...
 
-Thomas
+> ---
+> Changelog:
+> v1: New patch
+> v2: Use oldnoconfig instead of olddefconfig
+>     Fix silent mode
+>     Change the pattern in both places where it is used
+>     Use a macro to avoid redundancy
+> v3: Do not use $(call ...)
+>     Use the $(2)_KCONFIG_MAKE variable
+> v4: No change
+> v5: Detect available methods and use the most recent one
+> 
+>  package/pkg-kconfig.mk | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> index 4033915..e14b33f 100644
+> --- a/package/pkg-kconfig.mk
+> +++ b/package/pkg-kconfig.mk
+> @@ -60,18 +60,35 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+>  $(2)_KCONFIG_MAKE = \
+>  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
+>  
+> +$(2)_KCONFIG_RULES = \
+> +	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
+> +		sed 's/^\([_0-9a-zA-Z]*config:\).*/\1/ p; d')
+
+Move the colon ':' outside the ()-expression, and then...
+
+> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
+> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> +# In older versions, and in some other projects that use kconfig, the target is
+> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
+> +# only, as this can fail in complex cases.
+> +define $(2)_REGEN_DOT_CONFIG
+> +	$$(if $$(filter olddefconfig:,$$($(2)_KCONFIG_RULES)),
+
+... drop the colon here...
+
+> +		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
+> +		$$(if $$(filter oldnoconfig:,$$($(2)_KCONFIG_RULES)),
+
+... and here.
+
+When you fix that, then you can add my:
+
+    Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
+> +			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
+> +			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
+> +endef
+> +
+>  # The specified source configuration file and any additional configuration file
+>  # fragments are merged together to .config, after the package has been patched.
+>  # Since the file could be a defconfig file it needs to be expanded to a
+> -# full .config first. We use 'make oldconfig' because this can be safely
+> -# done even when the package does not support defconfigs.
+> +# full .config first.
+>  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+>  	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+>  		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+>  		cp $$($(2)_KCONFIG_FILE) $$(@))
+>  	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+>  		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+> +	$$($(2)_REGEN_DOT_CONFIG)
+>  
+>  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+>  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+> @@ -82,7 +99,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
+>  # The exact rules are specified by the package .mk file.
+>  define $(2)_FIXUP_DOT_CONFIG
+>  	$$($(2)_KCONFIG_FIXUP_CMDS)
+> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
+> +	$$($(2)_REGEN_DOT_CONFIG)
+>  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+>  endef
+>  
+> -- 
+> 2.5.0
+> 
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
