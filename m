@@ -1,42 +1,225 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 19 Apr 2016 09:20:53 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2016d
-In-Reply-To: <1461054053-31107-1-git-send-email-martin@barkynet.com>
-References: <1461054053-31107-1-git-send-email-martin@barkynet.com>
-Message-ID: <1461054053-31107-2-git-send-email-martin@barkynet.com>
+From: Brian Kim <brian.kim@hardkernel.com>
+Date: Tue, 19 Apr 2016 17:35:35 +0900
+Subject: [Buildroot] [PATCH v2] board: add support for Hardkernel ODROID-C2
+	Board
+Message-ID: <1461054935-10822-1-git-send-email-brian.kim@hardkernel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
----
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The ODROID-C2 is a 64-bit quad-core single board computer(SBC) that is
+one of the most cost-effective 64bit development boards available in the
+ARM world.
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 4d4254d..1529fd4 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000037.html
--sha512  03eab77c8b3176da1dd17d1d9062b151036b01d224f1e4b60f34a2db6899150431f34f4d9f39652648aae3a55326fd6f85d6deefe3f27b36eaed9ef39ed3f53c  tzdata2016c.tar.gz
-+# From: http://mm.icann.org/pipermail/tz-announce/2016-April/000038.html
-+sha512  f1beb1793c4c7d18f2dadaf4a928b1476f66b400bda0c87b06155c0dd1c4b4a26bb2f37dc17a3676a2bbe9c1e71a5d8b27a171c797a86464b0bc0d13abfb2f99  tzdata2016d.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 1b3efb4..69bae03 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDATA_VERSION = 2016c
-+TZDATA_VERSION = 2016d
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
+http://www.hardkernel.com/main/products/prdt_info.php?g_code=G145457216438
+
+Signed-off-by: Brian Kim <brian.kim@hardkernel.com>
+---
+ board/hardkernel/odroidc2/boot.ini      | 22 ++++++++++++++
+ board/hardkernel/odroidc2/genimage.cfg  | 27 +++++++++++++++++
+ board/hardkernel/odroidc2/post-image.sh | 21 +++++++++++++
+ board/hardkernel/odroidc2/readme.txt    | 53 +++++++++++++++++++++++++++++++++
+ configs/odroidc2_defconfig              | 39 ++++++++++++++++++++++++
+ 5 files changed, 162 insertions(+)
+ create mode 100644 board/hardkernel/odroidc2/boot.ini
+ create mode 100644 board/hardkernel/odroidc2/genimage.cfg
+ create mode 100755 board/hardkernel/odroidc2/post-image.sh
+ create mode 100644 board/hardkernel/odroidc2/readme.txt
+ create mode 100644 configs/odroidc2_defconfig
+
+diff --git a/board/hardkernel/odroidc2/boot.ini b/board/hardkernel/odroidc2/boot.ini
+new file mode 100644
+index 0000000..8b67b5e
+--- /dev/null
++++ b/board/hardkernel/odroidc2/boot.ini
+@@ -0,0 +1,22 @@
++ODROIDC2-UBOOT-CONFIG
++
++# HDMI mode
++setenv m "720p60hz" # Progressive 60Hz
++
++# HDMI BPP Mode
++setenv m_bpp "32"
++
++# Default Console Device Setting
++setenv condev "console=ttyS0,115200n8"	# Serial Console
++
++# Boot Arguments
++setenv bootargs "root=/dev/mmcblk0p2 rootwait ro ${condev} no_console_suspend hdmimode=${m} m_bpp=${m_bpp} vout=${vout} fsck.repair=yes net.ifnames=0 elevator=noop"
++
++# Load Images
++setenv loadaddr "0x11000000"
++setenv dtb_loadaddr "0x10000000"
++fatload mmc 0:1 ${loadaddr} Image
++fatload mmc 0:1 ${dtb_loadaddr} meson64_odroidc2.dtb
++
++# Booting
++booti ${loadaddr} - ${dtb_loadaddr}
+diff --git a/board/hardkernel/odroidc2/genimage.cfg b/board/hardkernel/odroidc2/genimage.cfg
+new file mode 100644
+index 0000000..15f97d4
+--- /dev/null
++++ b/board/hardkernel/odroidc2/genimage.cfg
+@@ -0,0 +1,27 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"boot.ini",
++			"Image",
++			"meson64_odroidc2.dtb"
++		}
++	}
++	size = 32M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition vfat {
++		partition-type = 0xC
++		image = "boot.vfat"
++		offset = 1048576
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/hardkernel/odroidc2/post-image.sh b/board/hardkernel/odroidc2/post-image.sh
+new file mode 100755
+index 0000000..b2a351f
+--- /dev/null
++++ b/board/hardkernel/odroidc2/post-image.sh
+@@ -0,0 +1,21 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname $0)"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++cp ${BOARD_DIR}/boot.ini ${BINARIES_DIR}/
++
++rm -rf "${GENIMAGE_TMP}"
++
++genimage                           \
++	--rootpath "${TARGET_DIR}"     \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=1 count=442 conv=sync,notrunc
++dd if=${BINARIES_DIR}/u-boot.bin of=${BINARIES_DIR}/sdcard.img bs=512 skip=1 seek=1 conv=fsync,notrunc
++
++exit $?
+diff --git a/board/hardkernel/odroidc2/readme.txt b/board/hardkernel/odroidc2/readme.txt
+new file mode 100644
+index 0000000..bce7ea7
+--- /dev/null
++++ b/board/hardkernel/odroidc2/readme.txt
+@@ -0,0 +1,53 @@
++ODROID-C2
++
++Intro
++=====
++To be able to use ODROID-C2 board with the images generated by
++Buildroot, you have to prepare the SDCard or eMMC.
++
++How to build it
++===============
++
++  $ make odroidc2_defconfig
++
++Then you can edit the build options using
++
++  $ make menuconfig
++
++Compile all and build rootfs image:
++
++  $ make
++
++Note: you will need to have access to the network, since Buildroot will
++download the packages' sources.
++
++Result of the build
++-------------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    +-- Image
++    +-- boot.ini                   [1]
++    +-- boot.vfat
++    +-- meson64_odroidc2.dtb
++    +-- rootfs.ext2
++    +-- rootfs.ext4
++    +-- rootfs.tar
++    +-- sdcard.img
++    `-- u-boot.bin
++
++[1] This is the ODROID-C2 configuration file used in u-boot.
++
++How to write the SD card or eMMC
++================================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card od eMMC with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Insert the SDcard into your ODROID-C2, and power it up. Your new system
++should come up now.
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+new file mode 100644
+index 0000000..4fe6bcd
+--- /dev/null
++++ b/configs/odroidc2_defconfig
+@@ -0,0 +1,39 @@
++# Architecture
++BR2_aarch64=y
++BR2_ARM_ENABLE_NEON=y
++BR2_ARM_FPU_NEON=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/hardkernel/odroidc2/post-image.sh"
++
++# Kernel
++BR2_KERNEL_HEADERS_VERSION=y
++BR2_DEFAULT_KERNEL_VERSION="3.14.29"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_3_14=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/hardkernel/linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="odroidc2-3.14.y"
++BR2_LINUX_KERNEL_DEFCONFIG="odroidc2"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_BUILD_DEFAULT_DTS=y
++BR2_LINUX_KERNEL_USE_INTREE_DTS=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="meson64_odroidc2"
++BR2_LINUX_KERNEL_IMAGE=y
++
++# U-Boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/hardkernel/u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="odroidc2-v2015.01"
++BR2_TARGET_UBOOT_BOARDNAME="odroidc2"
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.5.0
