@@ -1,41 +1,40 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 19 Apr 2016 10:12:51 +0200
-Subject: [Buildroot] [PATCH] gst1-imx: make kernel dependency optional
-In-Reply-To: <20160418212343.3b7ff726@free-electrons.com>
-References: <97bf649b600a5548cfd3c53575747a057f24e07e.1460973919.git.baruch@tkos.co.il>
- <CAAMH-ysFMBA9bDK4h2KQv-HBmjMYmqzdZX1YhBwKzr-7VXz8zw@mail.gmail.com>
- <20160418212343.3b7ff726@free-electrons.com>
-Message-ID: <CAAMH-ytcam=_YTJjn+suKuQABxJWJwPMDUMeTH5LQy7RKHokyw@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 19 Apr 2016 09:20:52 +0100
+Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2016d
+Message-ID: <1461054053-31107-1-git-send-email-martin@barkynet.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Martin Bark <martin@barkynet.com>
+---
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Mon, Apr 18, 2016 at 9:23 PM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Mon, 18 Apr 2016 12:18:28 +0200, Gary Bisson wrote:
->
->> That is true, it isn't a hard dependency, the reason I left it like
->> that is because if the headers aren't found and none of the other
->> configurations (plugins-bad, imx-gpu-viv or libimxvpuapi) are set, no
->> actual plugin will be built which could be confusing.
->>
->> Although this patch is correct and legit, I'd rather go ahead and
->> rework the entire package since Carlos worked on being able to
->> select/disable each and individual plugin since version 0.12.1:
->> https://github.com/Freescale/meta-fsl-arm/commit/cec4c47e
->
-> But isn't Baruch patch as-is already a step in the right direction?
-> I.e, should we merge it as-is, or wait for the entire rework to be done?
-
-Yes it is going in the right direction. Thinking about it now, yes it
-might make sense to merge it as-is since we don't know when the full
-rework will be done.
-
-Regards,
-Gary
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 07c631b..be790d7 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From: http://mm.icann.org/pipermail/tz-announce/2016-March/000037.html
+-sha512  813309b46e4214cbe7d22b9951bad15536f5d394d2f651b60ae66c14dd8c232d51991ad80f7f02c324f896e680c7efb0321a9e4799c96735f1a82e258a87dff7  tzcode2016c.tar.gz
++# From: http://mm.icann.org/pipermail/tz-announce/2016-April/000038.html
++sha512  c6f6259a78fadaab293be0a4123c226d1a327588639cfa8dadb5a74bd58552892a0c87cfd3a33888f886f51aff34465c89505f0892e6bcbe24247a9160e7328c  tzcode2016d.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index b0c3fcf..d9cdb4d 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2016c
++ZIC_VERSION = 2016d
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
+-- 
+2.5.0
