@@ -1,49 +1,39 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 Apr 2016 10:12:09 -0300
-Subject: [Buildroot] [PATCH v3 3/3] webkitgtk24: mark as deprecated
-In-Reply-To: <1461071529-19370-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461071529-19370-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <1461071529-19370-4-git-send-email-gustavo@zacarias.com.ar>
+Date: Tue, 19 Apr 2016 10:19:18 -0300
+Subject: [Buildroot] [PATCH] rrdtool: bump to version 1.5.6
+Message-ID: <1461071958-2398-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's affected by 40+ security bugs, and upstream will only care to fix
-the latest stable branch, which is 2.12.x
-Some effort was made with the 2.4.10 release to address some security
-bugs but it's incomplete.
-
-See:
-https://blogs.gnome.org/mcatanzaro/2016/02/01/on-webkit-security-updates/
-https://blogs.gnome.org/mcatanzaro/2016/02/19/webkitgtk-gets-security-updates/
-
-Also:
-http://webkitgtk.org/security/WSA-2016-0002.html
-http://webkitgtk.org/security/WSA-2016-0001.html
-http://webkitgtk.org/security/WSA-2015-0002.html
-
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/webkitgtk24/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/rrdtool/rrdtool.hash | 2 +-
+ package/rrdtool/rrdtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk24/Config.in b/package/webkitgtk24/Config.in
-index e95a851..bba3a2b 100644
---- a/package/webkitgtk24/Config.in
-+++ b/package/webkitgtk24/Config.in
-@@ -16,9 +16,11 @@ comment "webkitgtk24 needs libgtk2 and a toolchain w/ C++, wchar, NPTL, gcc >=4.
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_USE_MMU
-+	depends on BR2_DEPRECATED_SINCE_2016_05
+diff --git a/package/rrdtool/rrdtool.hash b/package/rrdtool/rrdtool.hash
+index 36ac50c..97741c9 100644
+--- a/package/rrdtool/rrdtool.hash
++++ b/package/rrdtool/rrdtool.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	3a286d449c05d657e3fc3adcaa5cb4f0cfac8f465324b14f364a45d4ff8ca6f6	rrdtool-1.5.5.tar.gz
++sha256	9832775479684b8f94767201ee0440a1cacdbbbb7dd6736eb96b9a0750644ce8	rrdtool-1.5.6.tar.gz
+diff --git a/package/rrdtool/rrdtool.mk b/package/rrdtool/rrdtool.mk
+index 0bc7c38..6d6ab0c 100644
+--- a/package/rrdtool/rrdtool.mk
++++ b/package/rrdtool/rrdtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_WEBKITGTK24
- 	bool "webkitgtk 2.4.x"
-+	depends on BR2_DEPRECATED_SINCE_2016_05
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-RRDTOOL_VERSION = 1.5.5
++RRDTOOL_VERSION = 1.5.6
+ RRDTOOL_SITE = http://oss.oetiker.ch/rrdtool/pub
+ RRDTOOL_LICENSE = GPLv2+ with FLOSS license exceptions as explained in COPYRIGHT
+ RRDTOOL_LICENSE_FILES = COPYRIGHT LICENSE
 -- 
 2.7.3
