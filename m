@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 21:20:23 +0200
-Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2016d
-In-Reply-To: <1461054053-31107-1-git-send-email-martin@barkynet.com>
-References: <1461054053-31107-1-git-send-email-martin@barkynet.com>
-Message-ID: <20160419212023.388e461d@free-electrons.com>
+Date: Tue, 19 Apr 2016 21:21:54 +0200
+Subject: [Buildroot] [PATCH] configs: atmel: sama5d2 has vfpv4-d16
+In-Reply-To: <1461079449-24605-1-git-send-email-ludovic.desroches@atmel.com>
+References: <1461079449-24605-1-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <20160419212154.70337db4@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 19 Apr 2016 09:20:52 +0100, Martin Bark wrote:
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+On Tue, 19 Apr 2016 17:24:09 +0200, Ludovic Desroches wrote:
+> The datasheet indicates vfpv4 but it stands for vfpv4-d16 not vfpv4-32.
+> 
+> Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 > ---
->  package/zic/zic.hash | 4 ++--
->  package/zic/zic.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  configs/atmel_sama5d2_xplained_mmc_defconfig | 1 -
+>  1 file changed, 1 deletion(-)
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
