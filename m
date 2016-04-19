@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 23:16:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] tzdata: Reorder zone list to avoid
- missing links
-In-Reply-To: <1460103807-8770-1-git-send-email-mma@objectxp.com>
-References: <1459939293-4711-1-git-send-email-mma@objectxp.com>
- <1460103807-8770-1-git-send-email-mma@objectxp.com>
-Message-ID: <20160419231627.026d3ccc@free-electrons.com>
+Date: Tue, 19 Apr 2016 23:20:48 +0200
+Subject: [Buildroot] [ PATCH Selinux v11] linux-pam: add optional
+ libselinux and audit dependencies
+In-Reply-To: <1458128735-14925-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+References: <1458128735-14925-1-git-send-email-niranjan.reddy@rockwellcollins.com>
+Message-ID: <20160419232048.58f4359e@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  8 Apr 2016 10:23:27 +0200, Michel Marti wrote:
-> The 'backward' zone references entries from other zones (e.g. Pacific/*)
-> that have not yet been compiled, leading to missing links. To fix this,
-> take-over the zone list sort order from upstream 'tzdata' and also ensure
-> that make fails if zic terminates with a non-zero exit code.
+On Wed, 16 Mar 2016 17:15:35 +0530, Niranjan Reddy wrote:
+> From: Niranjan <niranjan.reddy@rockwellcollins.com>
 > 
-> Signed-off-by: Michel Marti <mma@objectxp.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> This patch adds optional libselinux and audit packages
+> to linux-pam package.
+> 
+> Signed-off-by: Niranjan Reddy <niranjan.reddy@rockwellcollins.com>
+> 
 > ---
->  package/tzdata/tzdata.mk | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+> Changes v10 -> v11:
+>   - Removed host-linux-pam related config options as it is not related to this patch.
 
 Applied to master, thanks.
 
