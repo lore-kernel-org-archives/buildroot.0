@@ -1,37 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 21:24:41 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
- config (incl. BBB)
-In-Reply-To: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
-Message-ID: <20160419212441.6a0454e9@free-electrons.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 19 Apr 2016 22:08:24 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/freeswitch: select OpenCV
+	modules needed for mod_cv
+References: <1461085245-30787-1-git-send-email-bernd.kuhls@t-online.de>
+ <20160419210522.1df89766@free-electrons.com>
+Message-ID: <XnsA5EFE138D3F14ID313208userindividu@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+[posted and mailed]
 
-On Sun, 20 Mar 2016 23:35:44 +0100, Pieter Smith wrote:
+Hi Thomas,
 
-> Pieter Smith (7):
->   barebox: support multi-image-build image selection
->   barebox: friendly error on missing built image
->   barebox: support custom barebox output image name
->   barebox: introduce barebox-package function
->   barebox: extract package name argument
->   barebox: support 2nd config build
->   beaglebone: adds barebox bootloader defconfig
+Thomas Petazzoni
+<thomas.petazzoni@free-electrons.com> wrote
+in news:20160419210522.1df89766 at free-electrons.com: 
 
-Since there were some comments on this v4, I marked it as Changes
-Requested in our patch tracking system. When you find some time, can
-you send an updated v5 of this patch series?
+> Now that inter-module dependencies are properly handled in opencv.mk,
+> why do we have to do all of this?
 
-Thanks a lot!
+Hi Thomas,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+because I interpreted Samuels mail[1] in a way that he wants to see all
+opencv modules mentioned in freeswitch's Config.in.
+
+My patch enables all opencv modules included in
+freeswitch/src/mod/applications/mod_cv/mod_cv.cpp, regardless of the code
+in opencv/Config.in.
+
+If you prefer a minimal solution you can commit v3:
+http://patchwork.ozlabs.org/patch/611882/
+
+Regards, Bernd
+
+[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159041.html
