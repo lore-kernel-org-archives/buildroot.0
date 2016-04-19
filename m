@@ -1,130 +1,57 @@
 From: Ludovic Desroches <ludovic.desroches@atmel.com>
-Date: Tue, 19 Apr 2016 16:53:10 +0200
-Subject: [Buildroot] [PATCH v2 5/6] configs: atmel: add development rootfs
-	for sama5d3 xplained
+Date: Tue, 19 Apr 2016 16:53:11 +0200
+Subject: [Buildroot] [PATCH v2 6/6] board/atmel: update documentation with
+	development defconfigs
 In-Reply-To: <1461077591-24238-1-git-send-email-ludovic.desroches@atmel.com>
 References: <1461077591-24238-1-git-send-email-ludovic.desroches@atmel.com>
-Message-ID: <1461077591-24238-6-git-send-email-ludovic.desroches@atmel.com>
+Message-ID: <1461077591-24238-7-git-send-email-ludovic.desroches@atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This development defconfig provides tools to test features of the SoC.
+Add a description of the development defconfig files.
 
 Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
 ---
- configs/atmel_sama5d3_xplained_dev_defconfig | 101 +++++++++++++++++++++++++++
- 1 file changed, 101 insertions(+)
- create mode 100644 configs/atmel_sama5d3_xplained_dev_defconfig
+ board/atmel/readme.txt | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/configs/atmel_sama5d3_xplained_dev_defconfig b/configs/atmel_sama5d3_xplained_dev_defconfig
-new file mode 100644
-index 0000000..d51a141
---- /dev/null
-+++ b/configs/atmel_sama5d3_xplained_dev_defconfig
-@@ -0,0 +1,101 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a5=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_INSTRUCTIONS_THUMB2=y
+diff --git a/board/atmel/readme.txt b/board/atmel/readme.txt
+index ea83d17..3a79e57 100644
+--- a/board/atmel/readme.txt
++++ b/board/atmel/readme.txt
+@@ -10,15 +10,30 @@ This guide covers the following configurations:
+  - atmel_sama5d3xek_defconfig (sama5d31, sama5d33, sama5d34, sama5d35,
+    sama5d36)
+  - atmel_sama5d3_xplained_defconfig
++ - atmel_sama5d3_xplained_dev_defconfig
+  - atmel_sama5d3_xplained_mmc_defconfig
++ - atmel_sama5d3_xplained_mmc_dev_defconfig
+  - atmel_sama5d4ek_defconfig
+  - atmel_sama5d4_xplained_defconfig
++ - atmel_sama5d4_xplained_dev_defconfig
+  - atmel_sama5d4_xplained_mmc_defconfig
++ - atmel_sama5d4_xplained_mmc_dev_defconfig
+  - atmel_sama5d2_xplained_mmc_defconfig
++ - atmel_sama5d2_xplained_mmc_dev_defconfig
+ 
+ These configurations will use AT91Bootstrap, u-boot and a linux kernel from
+ the git trees maintained by Atmel.
+ 
++The configurations labeled as 'dev' provide a development rootfs with tools to
++tests the features of the SoC:
++- ALSA tools to test audio
++- FFMPEG to record video from the ISI/ISC
++- I2C, SPI, CAN, etc. tools
++- modetest for LCD screens, HDMI
++- Wilc1000 firmware for the Atmel Wireless sdio module
++- SSH for convenience
++- GDB/GDB server for debug
 +
-+# Toolchain
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-+# Needed for gdb
-+BR2_PTHREAD_DEBUG=y
-+# Needed for some packages
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+# System Configuration
-+# Needed for usb-utils
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_LINUX_KERNEL_DEFCONFIG="sama5"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d3_xplained at91-sama5d3_xplained_pda4 at91-sama5d3_xplained_pda7 at91-sama5d3_xplained_pda7b"
-+
-+# Packages
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_ALSA_UTILS=y
-+BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
-+BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+BR2_PACKAGE_FFMPEG=y
-+BR2_PACKAGE_FFMPEG_GPL=y
-+BR2_PACKAGE_FFMPEG_SWSCALE=y
-+BR2_PACKAGE_MPG123=y
-+BR2_PACKAGE_BZIP2=y
-+BR2_PACKAGE_GZIP=y
-+BR2_PACKAGE_UNZIP=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_ZIP=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_LMBENCH=y
-+BR2_PACKAGE_DOSFSTOOLS=y
-+BR2_PACKAGE_DOSFSTOOLS_FATLABEL=y
-+BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT=y
-+BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT=y
-+BR2_PACKAGE_MMC_UTILS=y
-+BR2_PACKAGE_MTD=y
-+BR2_PACKAGE_WILC1000_FIRMWARE=y
-+BR2_PACKAGE_DEVMEM2=y
-+BR2_PACKAGE_EVTEST=y
-+BR2_PACKAGE_I2C_TOOLS=y
-+BR2_PACKAGE_SETSERIAL=y
-+BR2_PACKAGE_SPI_TOOLS=y
-+BR2_PACKAGE_USBUTILS=y
-+BR2_PACKAGE_LIBDRM=y
-+BR2_PACKAGE_LIBDRM_INSTALL_TESTS=y
-+BR2_PACKAGE_DTC=y
-+BR2_PACKAGE_DTC_PROGRAMS=y
-+BR2_PACKAGE_BLUEZ_UTILS=y
-+BR2_PACKAGE_BRIDGE_UTILS=y
-+BR2_PACKAGE_CAN_UTILS=y
-+BR2_PACKAGE_DROPBEAR=y
-+BR2_PACKAGE_ETHTOOL=y
-+BR2_PACKAGE_IPERF=y
-+BR2_PACKAGE_IPROUTE2=y
-+BR2_PACKAGE_IPTABLES=y
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_LRZSZ=y
-+BR2_PACKAGE_MII_DIAG=y
-+BR2_PACKAGE_OPENSSH=y
-+BR2_PACKAGE_WGET=y
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_BASH=y
-+BR2_PACKAGE_HTOP=y
-+BR2_PACKAGE_VIM=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_UBIFS=y
-+BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-+BR2_TARGET_ROOTFS_UBI=y
-+BR2_TARGET_ROOTFS_UBI_SUBSIZE=2048
-+
-+# Bootloaders
-+BR2_TARGET_AT91BOOTSTRAP3=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-+BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.5"
-+BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d3_xplainednf_uboot"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.3"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d3_xplained_nandflash"
-+
-+# Host packages
-+BR2_PACKAGE_HOST_SAM_BA=y
+ Configuring and building Buildroot
+ ==================================
+ 
 -- 
 2.5.0
