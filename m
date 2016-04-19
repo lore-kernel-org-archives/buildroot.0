@@ -1,197 +1,73 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Tue, 19 Apr 2016 23:49:01 +0200
-Subject: [Buildroot] [PATCH] package/opencv: define modules
-	inter-dependencies
-In-Reply-To: <1461102541-5987-1-git-send-email-s.martin49@gmail.com>
-References: <1461102541-5987-1-git-send-email-s.martin49@gmail.com>
-Message-ID: <1461102541-5987-2-git-send-email-s.martin49@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Apr 2016 23:53:00 +0200
+Subject: [Buildroot] [PATCH 1/3] c-icap: avoid host library search path
+In-Reply-To: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
+References: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
+Message-ID: <5716A8BC.1060805@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenCV allows to enable/disable the selection of modules (a.k.a.
-opencv libraries). These modules depend one on the others; these
-dependencies are already handled by the build-system (CMake).
+On 04/19/16 20:15, Baruch Siach wrote:
+> c-icap adds link time -rpath ${exec_prefix}/lib which defaults to /usr/lib.
+> This adds host libraries to the search path
 
-However, the way we handled them in Buildroot was not really clean.
-For each opencv module, there is a kconfig option, but we forced the
-corresponding CMake config option without checking for the modules'
-dependencies.
-For further details about the issues this situation was causing, refer
-to this discussion [1].
+  I think this is actually uncovering a bigger problem.
 
-This patch replicates the modules' dependency relations in the
-Config.in, so that the selection of the user will actually be built.
-This changes completes this work [2].
+  -rpath doesn't add the specified library to the compile-time search path. So 
+it should be OK in this case.
 
-[1] http://lists.busybox.net/pipermail/buildroot/2016-April/159017.html
-[2] https://git.buildroot.org/buildroot/commit/?id=3bd5025038a9ecfb2c19a2450a68ae3b0888b440
+  However, -rpath _is_ used when ld links against that .so file and finds a 
+NEEDED entry there that it doesn't have yet.
 
-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+  For /usr/lib it's no problem, it can be safely removed. The problem is for 
+rpath entries that _are_ necessary: they should still stay, and of course they 
+shouldn't refer to the build directory. For example, libdw.so has an RPATH of 
+/usr/lib/elfutils, which is used at runtime to dlopen() libebl. Now the problem 
+is: if /usr/lib/elfutils exists on the host, we may try to link a target library 
+or executable agains a host library that is there. For elfutils there isn't much 
+risk, but there may be others that are more problematic.
 
----
-This patch is an updated revival of http://patchwork.ozlabs.org/patch/488533/
----
- package/opencv/Config.in | 42 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 37 insertions(+), 5 deletions(-)
+  But of course, all that bears no relation to this patch :-)
 
-diff --git a/package/opencv/Config.in b/package/opencv/Config.in
-index b563312..21c3c84 100644
---- a/package/opencv/Config.in
-+++ b/package/opencv/Config.in
-@@ -17,13 +17,14 @@ comment "OpenCV modules"
- config BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	bool "calib3d"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_calib3d module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_CONTRIB
- 	bool "contrib"
- 	default y
--	# modules/contrib/CMakeLists.txt
- 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-@@ -36,24 +37,32 @@ config BR2_PACKAGE_OPENCV_LIB_CONTRIB
- config BR2_PACKAGE_OPENCV_LIB_FEATURES2D
- 	bool "features2d"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_FLANN
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_features2d module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_FLANN
- 	bool "flann"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_flann module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_GPU
- 	bool "gpu"
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_LEGACY
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_gpu module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	bool "highgui"
- 	default y
--	# modules/highgui/CMakeLists.txt
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_highgui module into the OpenCV build.
-@@ -61,13 +70,13 @@ config BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- config BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	bool "imgproc"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_imgproc module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_LEGACY
- 	bool "legacy"
- 	default y
--	# modules/legacy/CMakeLists.txt
- 	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV_LIB_ML
- 	select BR2_PACKAGE_OPENCV_LIB_VIDEO
-@@ -77,18 +86,22 @@ config BR2_PACKAGE_OPENCV_LIB_LEGACY
- config BR2_PACKAGE_OPENCV_LIB_ML
- 	bool "ml (machine learning)"
- 	default y
-+	# opencv_core dependency is already enabled
- 	help
- 	  Include opencv_ml module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_NONFREE
- 	bool "nonfree"
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_nonfree module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	bool "objdetect"
- 	default y
--	# modules/objdetect/CMakeLists.txt
-+	# opencv_core dependency is already enabled
- 	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_objdetect module into the OpenCV build.
-@@ -96,6 +109,7 @@ config BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- config BR2_PACKAGE_OPENCV_LIB_PHOTO
- 	bool "photo"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_photo module into the OpenCV build.
- 
-@@ -104,32 +118,50 @@ comment "opencv_python module requires numpy which is not yet available."
- config BR2_PACKAGE_OPENCV_LIB_STITCHING
- 	bool "stitching"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
- 	help
- 	  Include opencv_stitching module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_SUPERRES
- 	bool "superres"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_superres "super resolution" - module into the OpenCV
- 	  build.
- 
- config BR2_PACKAGE_OPENCV_LIB_TS
- 	bool "ts (touchscreen)"
--	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
- 	default y
-+	# opencv_core dependency is already enabled
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_ts module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	bool "video"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
- 	help
- 	  Include opencv_video module into the OpenCV build.
- 
- config BR2_PACKAGE_OPENCV_LIB_VIDEOSTAB
- 	bool "videostab"
- 	default y
-+	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
-+	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
-+	select BR2_PACKAGE_OPENCV_LIB_HIGHGUI
-+	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
-+	select BR2_PACKAGE_OPENCV_LIB_PHOTO
-+	select BR2_PACKAGE_OPENCV_LIB_VIDEO
- 	help
- 	  Include opencv_videostab module into the OpenCV build.
- 
+  Regards,
+  Arnout
+
+
+ > which is bad for cross
+> compilation. Direct make exec_prefix variable to staging instead.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/077/077374329b2782dbb4b4a9ee7af264cdda311ccc/
+> http://autobuild.buildroot.net/results/057/057a88179150a4f02990d7b9b0d8f2de3c9da1a3/
+> http://autobuild.buildroot.net/results/da6/da62b80989df6b8f1b5557b4987d7a6999d30bb8/
+>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>   package/c-icap/c-icap.mk | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+> index b4defb87379a..40926ea8e5d8 100644
+> --- a/package/c-icap/c-icap.mk
+> +++ b/package/c-icap/c-icap.mk
+> @@ -17,6 +17,7 @@ C_ICAP_CONF_OPTS = \
+>   	--without-perl \
+>   	--enable-large-files \
+>   	--enable-ipv6
+> +C_ICAP_MAKE_OPTS = exec_prefix=$(STAGING_DIR)/usr
+>
+>   ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+>   C_ICAP_CONF_OPTS += --with-berkeleydb
+>
+
+
 -- 
-2.8.0
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
