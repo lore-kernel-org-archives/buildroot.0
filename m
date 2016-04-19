@@ -1,88 +1,129 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Apr 2016 22:45:28 +0200
-Subject: [Buildroot] [PATCH 1/1] Raspberry PI 3 kernel,
-	firmware and dtb update
-In-Reply-To: <1459421492-18815-1-git-send-email-ubaldo@eja.it> (Ubaldo
- Porcheddu's message of "Thu, 31 Mar 2016 10:51:32 +0000")
-References: <1459421492-18815-1-git-send-email-ubaldo@eja.it>
-Message-ID: <87a8kpe39z.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Apr 2016 21:30:10 +0200
+Subject: [Buildroot] [PATCH v5] dpdk: new package
+In-Reply-To: <20160419142744.5b2651db@pcviktorin.fit.vutbr.cz>
+References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
+ <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
+ <20160417163814.03b67f53@free-electrons.com>
+ <20160417155607.5861459.38806.3255@rehivetech.com>
+ <20160417213544.2960f7cf@free-electrons.com>
+ <20160417205607.5861459.29884.3259@rehivetech.com>
+ <20160417230607.75d32331@free-electrons.com> <20160418102315.169c22ad@jvn>
+ <571564B3.3030906@mind.be> <20160419142744.5b2651db@pcviktorin.fit.vutbr.cz>
+Message-ID: <57168742.7090806@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ubaldo" == Ubaldo Porcheddu <ubaldo@eja.it> writes:
+On 04/19/16 14:27, Jan Viktorin wrote:
+> Hello Arnout,
+>
+> thanks for your comments...
+>
+> On Tue, 19 Apr 2016 00:50:27 +0200
+> Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>> On 04/18/16 10:23, Jan Viktorin wrote:
+>>> On Sun, 17 Apr 2016 23:06:07 +0200
+>>> Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+>>>
+>>>> Hello,
+>>>>
+>>>> On Sun, 17 Apr 2016 22:56:07 +0200, Jan Viktorin wrote:
+>>>>
+>> [snip]
+>>>>> Ok. I don't know what would be the use case for dropping dependency
+>>>>> on the kernel. Building just the rootfs without the kernel?
+>>>>
+>>>> For example, yes. Another benefit of not having the mandatory kernel
+>>>> dependency is that the autobuilders would be able to test the DPDK
+>>>> package.
+>>>
+>>> I have no clue about this. Does kernel dependency prevent some
+>>> auto-testing?
+>>
+>>    The base configs used in the autobuilders don't include a kernel (or
+>> bootloader or rootfs). Therefore, any package depending on the kernel is never
+>> built.
+>>
+>>    We _could_ actually add a couple of base configs that do include a kernel. But
+>> someone has to do it :-)
+>
+> I have no idea how to access the autobuilder nor what kind of complexity
+> is connected with this...
 
- > Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
- > ---
- >  board/raspberrypi/genimage-raspberrypi2.cfg | 1 +
- >  configs/raspberrypi2_defconfig              | 4 ++--
- >  package/rpi-firmware/rpi-firmware.mk        | 2 +-
- >  3 files changed, 4 insertions(+), 3 deletions(-)
+  git://git.buildroot.net/buildroot-test/
 
-Thanks for the patch, but can you instead split it up 2 seperate
-patches (with sensible descriptions) - One bumping the rpi-firmware
-version and one updating the rpi2 config to also support rpi3.
 
-The rpi3 afaik uses a different serial port than rpi2. How will that
-work if we use the same defconfig for both boards? Perhaps it makes more
-sense to have a seperate raspberrypi3_defconfig?
+>>> I would implement this in Buildroot by a list of configuration keys
+>>> naming certain drivers. If the kernel is disabled, I'd disable all of
+>>> them during configure phase. Otherwise, I'd leave them untouched (to
+>>> have the current configuration as is). So, I'd put in dpdk.mk
+>>> something like:
+>>>
+>>> ifeq ($(BR2_LINUX_KERNEL),y)
+>>> DPDK_DEPENDENCIES += linux
+>>> else
+>>> DPDK_KMODS = EAL_IGB_UIO KNI_KMOD LIBRTE_XEN_DOM0
+>>>
+>>> define DPDK_DISABLE_KMODS
+>>> $(foreach m,$(DPDK_KMODS),\
+>>
+>>    Small nit: indent with tab here.
+>
+> OK, it was just an ad hoc example. I'd rather know whether I can implement it this way.
 
-- 
- > diff --git a/board/raspberrypi/genimage-raspberrypi2.cfg b/board/raspberrypi/genimage-raspberrypi2.cfg
- > index 443c821..453fb00 100644
- > --- a/board/raspberrypi/genimage-raspberrypi2.cfg
- > +++ b/board/raspberrypi/genimage-raspberrypi2.cfg
- > @@ -2,6 +2,7 @@ image boot.vfat {
- >    vfat {
- >      files = {
- >        "bcm2709-rpi-2-b.dtb",
- > +      "bcm2710-rpi-3-b.dtb",
- >        "rpi-firmware/bootcode.bin",
- >        "rpi-firmware/cmdline.txt",
- >        "rpi-firmware/config.txt",
- > diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
- > index ce41ee3..b77db14 100644
- > --- a/configs/raspberrypi2_defconfig
- > +++ b/configs/raspberrypi2_defconfig
- > @@ -13,13 +13,13 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
- >  BR2_LINUX_KERNEL=y
- >  BR2_LINUX_KERNEL_CUSTOM_GIT=y
- >  BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
- > -BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="d33d0293e245badc4ca6ede3984d8bb8ea63cb1a"
- > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="20fe468af4bb40fec0f81753da4b20a8bfc259c9"
- >  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- >  BR2_LINUX_KERNEL_ZIMAGE=y
- 
- >  # Build the DTB from the kernel sources
- >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
- > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b bcm2710-rpi-3-b"
- 
- >  BR2_PACKAGE_RPI_FIRMWARE=y
- >  # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
- > diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
- > index 291da3a..8476678 100644
- > --- a/package/rpi-firmware/rpi-firmware.mk
- > +++ b/package/rpi-firmware/rpi-firmware.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
- 
- > -RPI_FIRMWARE_VERSION = 8b4e5482b52e6fb438dddc0d88ba0ba8d44af54b
- > +RPI_FIRMWARE_VERSION = 951799bbcd795ddf27769d14acf4813fdcbe53dc
- >  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- >  RPI_FIRMWARE_LICENSE = BSD-3c
- >  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
- > -- 
- > 1.9.1
+  Yes it can.
 
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+  If you don't disable these options, what will the dpdk build system do? Error 
+out? Or try to use the build system's kernel? Ideally there would be a way to 
+globally tell it not to build modules. Manually maintaining a list of config 
+options to disable is a bit cumbersome.
 
+
+>
+>>
+>>> 	$(call KCONFIG_DISABLE_OPT,CONFIG_RTE_$(m),$(@D)/build/.config))
+>>> endef
+>>>
+>>> DPDK_POST_CONFIGURE_HOOKS += DPDK_DISABLE_KMODS
+>>
+>>    Is dpdk using Kconfig? In that case, please use the kconfig-package infra. It
+>> gives you simple primitives for disabling and enabling options. Consult the manual.
+>
+> Unfortunately, there is no kconfig. It just looks this way. The buildsystem is custom.
+
+  So you have to manually create a config file with lines like
+# CONFIG_FOO is not set
+? How uncomfortable...
+
+>
+>>
+>>> endif
+>>>
+>>> Probably, I can improve it by testing whether a module is present
+>>> in the DPDK config and then setting the dependency on linux.
+>>
+>>    That's not possible: DEPENDENCIES must be declared when the makefiles are
+>> parsed, but the tarball containing .config is only extracted afterwards.
+>
+> OK, it was just an idea.
+
+  We can also still revert to depending on linux unconditionally like you have 
+now. How likely is it that dpdk will be used in practice with no kernel modules? 
+Or is this going to be more likely in the future, with heavier use of UIO and 
+device tree?
+
+
+  Regards,
+  Arnout
 
 -- 
-Bye, Peter Korsgaard
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
