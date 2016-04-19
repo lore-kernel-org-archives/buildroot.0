@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 22:23:03 +0200
-Subject: [Buildroot] [PATCHv2 1/4] Add package cryptopp
-In-Reply-To: <1458227038-16383-2-git-send-email-julian@jusst.de>
+Date: Tue, 19 Apr 2016 22:24:43 +0200
+Subject: [Buildroot] [PATCHv2 2/4] Add package tegrarcm
+In-Reply-To: <1458227038-16383-3-git-send-email-julian@jusst.de>
 References: <1458227038-16383-1-git-send-email-julian@jusst.de>
- <1458227038-16383-2-git-send-email-julian@jusst.de>
-Message-ID: <20160419222303.56ef0520@free-electrons.com>
+ <1458227038-16383-3-git-send-email-julian@jusst.de>
+Message-ID: <20160419222443.72658e5d@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +13,74 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 17 Mar 2016 16:03:55 +0100, Julian Scheel wrote:
+The commit title should have been:
 
-> +CRYPTOPP_VERSION = 5.6.3
-> +CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
-> +CRYPTOPP_SITE = http://cryptopp.com/
-> +CRYPTOPP_LICENSE = Boost-v1.0
-> +CRYPTOPP_LICENSE_FILES = License.txt
-> +CRYPTOPP_INSTALL_STAGING = YES
+	tegrarcm: new package
+
+On Thu, 17 Mar 2016 16:03:56 +0100, Julian Scheel wrote:
+
+> diff --git a/package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch b/package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch
+> new file mode 100644
+> index 0000000..ed0d1fc
+> --- /dev/null
+> +++ b/package/tegrarcm/0001-Make-cryptopp-include-crosscompile-compatible.patch
+> @@ -0,0 +1,27 @@
+> +From 0e60af53fa76aa2f274ade98da7ba543147e82c7 Mon Sep 17 00:00:00 2001
+> +From: Julian Scheel <julian@jusst.de>
+> +Date: Thu, 17 Mar 2016 12:37:04 +0100
+> +Subject: [PATCH] Make cryptopp include crosscompile compatible
 > +
-> +HOST_CRRYPTOPP_MAKE_OPTS = \
-
-Typo in the variable name, which means it wasn't used at all. If it had
-been used, you would have spotted some build issues.
-
-> +	$(HOST_CONFIGURE_OPTS) \
-> +	LDFLAGS="$(HOST_LDFLAGS)"
-
-This line is not needed, since HOST_CONFIGURE_OPTS already contains
-LDFLAGS="$(HOST_LDFLAGS)". However, I had to pass
-CXXFLAGS="$(HOST_CXXFLAGS) -fPIC" to make the thing build.
-
+> +Allows user to set a SYSROOT variable for building against a specific root
+> +filesystem.
 > +
-> +define HOST_CRYPTOPP_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) -f GNUmakefile
-> +	$(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) libcryptopp.so
-
-Having two lines is not needed, building the "shared" target is
-sufficient.
-
-> +endef
+> +Signed-off-by: Julian Scheel <julian@jusst.de>
+> +---
+> + src/Makefile.am | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
 > +
-> +define HOST_CRYPTOPP_INSTALL_CMDS
-> +	$(INSTALL) -d ${HOST_DIR}/usr/include/cryptopp
-> +	$(INSTALL) -D -m 644 $(@D)/*.h ${HOST_DIR}/usr/include/cryptopp/
-> +	$(INSTALL) -D -m 0755 $(@D)/libcryptopp.so ${HOST_DIR}/usr/lib/libcryptopp.so
+> +diff --git a/src/Makefile.am b/src/Makefile.am
+> +index 3dad0e6..7678dd4 100644
+> +--- a/src/Makefile.am
+> ++++ b/src/Makefile.am
+> +@@ -1,5 +1,5 @@
+> + AM_CFLAGS = -Wall -std=c99
+> +-AM_CPPFLAGS = -isystem /usr/include/$(CRYPTOLIB) $(LIBUSB_CFLAGS)
+> ++AM_CPPFLAGS = -isystem $(SYSROOT)/usr/include/$(CRYPTOLIB) $(LIBUSB_CFLAGS)
 
-Using the "install" target is sufficient, so I've used that instead.
+This is not really the recommended autoconf/automake solution. I've
+done a larger patch, but that I believe is more correct, as it relies
+on the normal compiler include path logic, and simply makes the source
+code include <cryptopp/foobar.h>, where of course cryptopp can also be
+crypto++ depending on the library being used.
 
-> +endef
+I've also submitted my patch upstream:
+
+  https://github.com/NVIDIA/tegrarcm/pull/2
+
+> diff --git a/package/tegrarcm/tegrarcm.mk b/package/tegrarcm/tegrarcm.mk
+> new file mode 100644
+> index 0000000..5dbc483
+> --- /dev/null
+> +++ b/package/tegrarcm/tegrarcm.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# tegrarcm
+> +#
+> +################################################################################
 > +
-> +define HOST_CRYPTOPP_EXTRACT_CMDS
-> +	$(UNZIP) $(DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
-> +endef
+> +TEGRARCM_VERSION = v1.7
+> +TEGRARCM_SITE = $(call github,NVIDIA,tegrarcm,$(TEGRARCM_VERSION))
+> +TEGRARCM_LICENSE = BSD-3c / NVIDIA Software License (src/miniloader)
+> +TEGRARCM_LICENSE_FILE = LICENSE
+> +TEGRARCM_AUTORECONF = YES
+> +HOST_TEGRARCM_DEPENDENCIES = host-libusb host-pkgconf host-cryptopp
+> +HOST_TEGRARCM_MAKE_OPTS = SYSROOT=$(HOST_DIR)
 
-Since extract is the first step, we usually put this before the
-build/install commands.
+Due to the patch being changed, I've removed this last line, and
+applied.
 
-I've fixed up those issues and applied. Thanks!
+Thanks!
 
 Thomas
 -- 
