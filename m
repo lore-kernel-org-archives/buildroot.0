@@ -1,30 +1,49 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Apr 2016 00:36:42 +0200
-Subject: [Buildroot] [PATCHv2 4/4] Add package cbootimage-configs
-In-Reply-To: <20160419230836.202d4cbb@free-electrons.com>
-References: <1458227038-16383-1-git-send-email-julian@jusst.de>
- <1458227038-16383-5-git-send-email-julian@jusst.de>
- <20160419230836.202d4cbb@free-electrons.com>
-Message-ID: <5716B2FA.6090500@mind.be>
+Date: Wed, 20 Apr 2016 00:54:42 +0200
+Subject: [Buildroot] [PATCH 1/4] linux: explicit latest kernel version
+In-Reply-To: <1461099155-30702-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1461099155-30702-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <5716B732.2090305@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/19/16 23:08, Thomas Petazzoni wrote:
-> Hello,
+On 04/19/16 22:52, Vivien Didelot wrote:
+> When setting BR2_LINUX_KERNEL_LATEST_VERSION, it is hard for the user to
+> know that this version is subject to change in the future.
 >
-> On Thu, 17 Mar 2016 16:03:58 +0100, Julian Scheel wrote:
-[snip]
->> >+TARGET_SIZE = $(TARGET_CROSS)size
-> To be moved to package/Makefile.in I believe, in a separate patch.
+> Explicit this in the Kconfig entry text.
+>
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
-  Why do you need a cross-size anyway? size, like readelf, should be universal, no?
-
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
   Regards,
   Arnout
+
+> ---
+>   linux/Config.in | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 043b147..8600ea1 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -27,7 +27,7 @@ choice
+>   	prompt "Kernel version"
+>
+>   config BR2_LINUX_KERNEL_LATEST_VERSION
+> -	bool "4.5.1"
+> +	bool "Latest version (4.5.1)"
+>
+>   config BR2_LINUX_KERNEL_CUSTOM_VERSION
+>   	bool "Custom version"
+>
+
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
