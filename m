@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Apr 2016 00:54:42 +0200
-Subject: [Buildroot] [PATCH 1/4] linux: explicit latest kernel version
-In-Reply-To: <1461099155-30702-2-git-send-email-vivien.didelot@savoirfairelinux.com>
+Date: Wed, 20 Apr 2016 00:58:48 +0200
+Subject: [Buildroot] [PATCH 2/4] linux-headers: indent custom choices
+In-Reply-To: <1461099155-30702-3-git-send-email-vivien.didelot@savoirfairelinux.com>
 References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1461099155-30702-2-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <5716B732.2090305@mind.be>
+ <1461099155-30702-3-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <5716B828.2070008@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,37 +12,38 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/19/16 22:52, Vivien Didelot wrote:
-> When setting BR2_LINUX_KERNEL_LATEST_VERSION, it is hard for the user to
-> know that this version is subject to change in the future.
->
-> Explicit this in the Kconfig entry text.
+> Fix the indentation of config entries in the "Custom kernel headers
+> series" choice menu.
+
+  We currently have 5 choice statements where the contents is indented, and 54 
+where it's not. So I wouldn't say that we usually indent it...
+
+  That said, I'm not strictly against indenting choice contents: it's not going 
+to be nested any deeper, and the lines are normally not that long. The only 
+question is what to do with the help texts, because they would suddenly have to 
+be wrapped at 82 characters...
+
 >
 > Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-  Regards,
-  Arnout
-
 > ---
->   linux/Config.in | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/linux-headers/Config.in.host | 160 +++++++++++++++++------------------
+>   1 file changed, 80 insertions(+), 80 deletions(-)
 >
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 043b147..8600ea1 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -27,7 +27,7 @@ choice
->   	prompt "Kernel version"
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index 9f80224..6d86113 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -99,112 +99,112 @@ choice
+>   	  This is used to hide/show some packages that have strict
+>   	  requirements on the version of kernel headers.
 >
->   config BR2_LINUX_KERNEL_LATEST_VERSION
-> -	bool "4.5.1"
-> +	bool "Latest version (4.5.1)"
->
->   config BR2_LINUX_KERNEL_CUSTOM_VERSION
->   	bool "Custom version"
->
-
+> -config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
+> -	bool "4.5.x"
+> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+> +	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
+> +		bool "4.5.x"
+> +		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+[snip]
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
