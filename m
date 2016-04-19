@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 23:13:58 +0200
-Subject: [Buildroot] [PATCH 3/4] linux-headers: rename _AS_KERNEL to
-	_FROM_KERNEL
-In-Reply-To: <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <20160419231358.61e8f0c6@free-electrons.com>
+Date: Tue, 19 Apr 2016 23:16:27 +0200
+Subject: [Buildroot] [PATCH v2 1/1] tzdata: Reorder zone list to avoid
+ missing links
+In-Reply-To: <1460103807-8770-1-git-send-email-mma@objectxp.com>
+References: <1459939293-4711-1-git-send-email-mma@objectxp.com>
+ <1460103807-8770-1-git-send-email-mma@objectxp.com>
+Message-ID: <20160419231627.026d3ccc@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 19 Apr 2016 16:52:34 -0400, Vivien Didelot wrote:
-> BR2_KERNEL_HEADERS_AS_KERNEL is confusing when making the choice between
-> downloading the headers from an independent kernel source, and using the
-> headers found in the kernel built by Buildroot.
+On Fri,  8 Apr 2016 10:23:27 +0200, Michel Marti wrote:
+> The 'backward' zone references entries from other zones (e.g. Pacific/*)
+> that have not yet been compiled, leading to missing links. To fix this,
+> take-over the zone list sort order from upstream 'tzdata' and also ensure
+> that make fails if zic terminates with a non-zero exit code.
 > 
-> Rename it to BR2_KERNEL_HEADERS_FROM_KERNEL.
-> 
-> In the meantime, document this distinction between the two choices.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
+> Signed-off-by: Michel Marti <mma@objectxp.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> ---
+>  package/tzdata/tzdata.mk | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 
-I tend to disagree here. The headers are not "from" the kernel, since
-in practice, we download the kernel source code twice and extract it
-twice. So the "as kernel" really seem better. It could be "like kernel"
-as well, but "from kernel" seems wrong.
-
-However, I'm all for improving the help texts to make this clearer.
+Applied to master, thanks.
 
 Thomas
 -- 
