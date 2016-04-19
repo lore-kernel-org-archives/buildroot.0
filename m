@@ -1,55 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Tue, 19 Apr 2016 23:11:49 +0200
-Subject: [Buildroot] [git commit] tzdata: reorder zone list to avoid missing
-	links
-Message-ID: <20160419211212.A3905818D9@busybox.osuosl.org>
+Date: Tue, 19 Apr 2016 23:13:58 +0200
+Subject: [Buildroot] [PATCH 3/4] linux-headers: rename _AS_KERNEL to
+	_FROM_KERNEL
+In-Reply-To: <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
+References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
+ <1461099155-30702-4-git-send-email-vivien.didelot@savoirfairelinux.com>
+Message-ID: <20160419231358.61e8f0c6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db22eb686a8e45ccefbaf87ae18ac4588abea4f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The 'backward' zone references entries from other zones (e.g. Pacific/*)
-that have not yet been compiled, leading to missing links. To fix this,
-take-over the zone list sort order from upstream 'tzdata' and also ensure
-that make fails if zic terminates with a non-zero exit code.
+On Tue, 19 Apr 2016 16:52:34 -0400, Vivien Didelot wrote:
+> BR2_KERNEL_HEADERS_AS_KERNEL is confusing when making the choice between
+> downloading the headers from an independent kernel source, and using the
+> headers found in the kernel built by Buildroot.
+> 
+> Rename it to BR2_KERNEL_HEADERS_FROM_KERNEL.
+> 
+> In the meantime, document this distinction between the two choices.
+> 
+> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
 
-Signed-off-by: Michel Marti <mma@objectxp.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/tzdata/tzdata.mk | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+I tend to disagree here. The headers are not "from" the kernel, since
+in practice, we download the kernel source code twice and extract it
+twice. So the "as kernel" really seem better. It could be "like kernel"
+as well, but "from kernel" seems wrong.
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 69bae03..f50a83c 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -12,9 +12,11 @@ TZDATA_DEPENDENCIES = host-tzdata
- HOST_TZDATA_DEPENDENCIES = host-zic
- TZDATA_LICENSE = Public domain
- 
-+# Take care when re-ordering this list since this might break zone
-+# dependencies
- TZDATA_DEFAULT_ZONELIST = \
--	africa antarctica asia australasia backward etcetera \
--	europe factory northamerica pacificnew southamerica
-+	africa antarctica asia australasia europe northamerica \
-+	southamerica pacificnew etcetera backward systemv factory
- 
- ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
- TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
-@@ -49,8 +51,8 @@ endef
- define HOST_TZDATA_BUILD_CMDS
- 	(cd $(@D); \
- 		for zone in $(TZDATA_ZONELIST); do \
--			$(ZIC) -d _output/posix -y yearistype.sh $$zone; \
--			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone; \
-+			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
-+			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
- 		done; \
- 	)
- endef
+However, I'm all for improving the help texts to make this clearer.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
