@@ -1,204 +1,157 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Tue, 19 Apr 2016 08:45:18 -0300
-Subject: [Buildroot] [PATCH] connman: bump to version 1.32
-Message-ID: <1461066318-27154-1-git-send-email-gustavo@zacarias.com.ar>
+From: Jan Viktorin <viktorin@rehivetech.com>
+Date: Tue, 19 Apr 2016 14:27:44 +0200
+Subject: [Buildroot] [PATCH v5] dpdk: new package
+In-Reply-To: <571564B3.3030906@mind.be>
+References: <1458642986-32365-1-git-send-email-viktorin@rehivetech.com>
+ <1460826490-15614-1-git-send-email-viktorin@rehivetech.com>
+ <20160417163814.03b67f53@free-electrons.com>
+ <20160417155607.5861459.38806.3255@rehivetech.com>
+ <20160417213544.2960f7cf@free-electrons.com>
+ <20160417205607.5861459.29884.3259@rehivetech.com>
+ <20160417230607.75d32331@free-electrons.com>
+ <20160418102315.169c22ad@jvn> <571564B3.3030906@mind.be>
+Message-ID: <20160419142744.5b2651db@pcviktorin.fit.vutbr.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop upstream patches and add a new build fix (submitted upstream).
+Hello Arnout,
 
-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
----
- .../0001-configure-check-for-execinfo.h.patch      | 65 ----------------------
- .../{0003-xtables.patch => 0001-xtables.patch}     |  0
- ...ion-item-of-xtables-to-match-iptables-1.6.patch | 38 -------------
- package/connman/0002-nat-build-failure.patch       | 30 ++++++++++
- package/connman/connman.hash                       |  2 +-
- package/connman/connman.mk                         |  2 +-
- 6 files changed, 32 insertions(+), 105 deletions(-)
- delete mode 100644 package/connman/0001-configure-check-for-execinfo.h.patch
- rename package/connman/{0003-xtables.patch => 0001-xtables.patch} (100%)
- delete mode 100644 package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
- create mode 100644 package/connman/0002-nat-build-failure.patch
+thanks for your comments...
 
-diff --git a/package/connman/0001-configure-check-for-execinfo.h.patch b/package/connman/0001-configure-check-for-execinfo.h.patch
-deleted file mode 100644
-index 384f41b..0000000
---- a/package/connman/0001-configure-check-for-execinfo.h.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From 30642d5b1a3f479987c4d50a237311d84d5f0581 Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Thu, 24 Dec 2015 12:04:57 +0100
--Subject: [PATCH] configure: check for execinfo.h
--
--Not all toolchains have execinfo.h. For example, support for it is
--optional in uClibc, while it is entirely missing from musl.
--
--Add a check in configure to look for it.
--
--Since execinfo.h is /only/ used to dump a backtrace in case of failure,
--just do nothing when execinfo.h is missing.
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- configure.ac | 2 ++
-- src/log.c    | 4 ++++
-- 2 files changed, 6 insertions(+)
--
--diff --git a/configure.ac b/configure.ac
--index b51d6b3..28e657b 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -182,6 +182,8 @@ AC_CHECK_LIB(resolv, ns_initparse, dummy=yes, [
-- 		AC_MSG_ERROR(resolver library support is required))
-- ])
-- 
--+AC_CHECK_HEADERS([execinfo.h])
--+
-- AC_CHECK_FUNC(signalfd, dummy=yes,
-- 			AC_MSG_ERROR(signalfd support is required))
-- 
--diff --git a/src/log.c b/src/log.c
--index a693bd0..76e10e7 100644
----- a/src/log.c
--+++ b/src/log.c
--@@ -30,7 +30,9 @@
-- #include <stdlib.h>
-- #include <string.h>
-- #include <syslog.h>
--+#if defined(HAVE_EXECINFO_H)
-- #include <execinfo.h>
--+#endif
-- #include <dlfcn.h>
-- 
-- #include "connman.h"
--@@ -112,6 +114,7 @@ void connman_debug(const char *format, ...)
-- 
-- static void print_backtrace(unsigned int offset)
-- {
--+#if defined(HAVE_EXECINFO_H)
-- 	void *frames[99];
-- 	size_t n_ptrs;
-- 	unsigned int i;
--@@ -210,6 +213,7 @@ static void print_backtrace(unsigned int offset)
-- 
-- 	close(outfd[1]);
-- 	close(infd[0]);
--+#endif /* HAVE_EXECINFO_H */
-- }
-- 
-- static void signal_handler(int signo)
---- 
--1.9.1
--
-diff --git a/package/connman/0003-xtables.patch b/package/connman/0001-xtables.patch
-similarity index 100%
-rename from package/connman/0003-xtables.patch
-rename to package/connman/0001-xtables.patch
-diff --git a/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch b/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
-deleted file mode 100644
-index 75bf373..0000000
---- a/package/connman/0002-iptables-Add-missing-function-item-of-xtables-to-match-iptables-1.6.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From acea08a0e4234a4c1a87bedc087c73ff36de0c7b Mon Sep 17 00:00:00 2001
--From: Wu Zheng <wu.zheng@intel.com>
--Date: Thu, 28 Jan 2016 18:04:17 +0800
--Subject: iptables: Add missing function item of xtables to match iptables 1.6
--
--The struct of xtables_globals has been modified in iptables 1.6.
--If connman runs with iptables 1.6, it can crash.
--
--Program received signal SIGSEGV, Segmentation fault.
--0x00000000 in ?? ()
--0xb7dea89c in xtables_find_target () from /usr/lib/libxtables.so.11
--0xb7deac1c in ?? () from /usr/lib/libxtables.so.11
--0xb7dea793 in xtables_find_target () from /usr/lib/libxtables.so.11
--
--The the missing function item of xtables is added to xtables_globals.
--
--Signed-off-by: Martin Bark <martin@barkynet.com>
-----
-- src/iptables.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/src/iptables.c b/src/iptables.c
--index bc0c763..5ef757a 100644
----- a/src/iptables.c
--+++ b/src/iptables.c
--@@ -1566,6 +1566,9 @@ struct xtables_globals iptables_globals = {
-- 	.option_offset = 0,
-- 	.opts = iptables_opts,
-- 	.orig_opts = iptables_opts,
--+#if XTABLES_VERSION_CODE > 10
--+	.compat_rev = xtables_compatible_revision,
--+#endif
-- };
-- 
-- static struct xtables_target *prepare_target(struct connman_iptables *table,
---- 
--cgit v0.12
--
-diff --git a/package/connman/0002-nat-build-failure.patch b/package/connman/0002-nat-build-failure.patch
-new file mode 100644
-index 0000000..0ab5850
---- /dev/null
-+++ b/package/connman/0002-nat-build-failure.patch
-@@ -0,0 +1,30 @@
-+From 68f4b4f5b220f256b17ad2f084d61fe89f3632ae Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Tue, 19 Apr 2016 08:38:38 -0300
-+Subject: [PATCH] nat: fix build failure
-+
-+_GNU_SOURCE needs to be defined so that O_CLOEXEC symbols can be found in
-+system header files.
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+---
-+Status: submitted upstream
-+
-+ src/nat.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/nat.c b/src/nat.c
-+index 33ae6df..62e21d4 100644
-+--- a/src/nat.c
-++++ b/src/nat.c
-+@@ -24,6 +24,7 @@
-+ #include <config.h>
-+ #endif
-+ 
-++#define _GNU_SOURCE
-+ #include <errno.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+-- 
-+2.7.3
-+
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index 4810f81..e0bb483 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256	88fcf0b6df334796b90e2fd2e434d6f5b36cd6f13b886a119b8c90276b72b8e2  connman-1.31.tar.xz
-+sha256	3185864c73206a6033d12e9f583689dcd03f714a40a58333709d3f74a4e0934c	connman-1.32.tar.xz
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 1fe103c..d21284b 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.31
-+CONNMAN_VERSION = 1.32
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+On Tue, 19 Apr 2016 00:50:27 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
+
+> On 04/18/16 10:23, Jan Viktorin wrote:
+> > On Sun, 17 Apr 2016 23:06:07 +0200
+> > Thomas Petazzoni <thomas.petazzoni@free-electrons.com> wrote:
+> >  
+> >> Hello,
+> >>
+> >> On Sun, 17 Apr 2016 22:56:07 +0200, Jan Viktorin wrote:
+> >>  
+> [snip]
+> >>> Ok. I don't know what would be the use case for dropping dependency
+> >>> on the kernel. Building just the rootfs without the kernel?  
+> >>
+> >> For example, yes. Another benefit of not having the mandatory kernel
+> >> dependency is that the autobuilders would be able to test the DPDK
+> >> package.  
+> >
+> > I have no clue about this. Does kernel dependency prevent some
+> > auto-testing?  
+> 
+>   The base configs used in the autobuilders don't include a kernel (or 
+> bootloader or rootfs). Therefore, any package depending on the kernel is never 
+> built.
+> 
+>   We _could_ actually add a couple of base configs that do include a kernel. But 
+> someone has to do it :-)
+
+I have no idea how to access the autobuilder nor what kind of complexity
+is connected with this...
+
+> 
+> >  
+> >>  
+> >>> That means to check whether the kernel is enabled. And if it is then
+> >>> to enable building of the DPDK kernel modules. Right?  
+> >>
+> >> Correct.  
+> >
+> > I would implement this in Buildroot by a list of configuration keys
+> > naming certain drivers. If the kernel is disabled, I'd disable all of
+> > them during configure phase. Otherwise, I'd leave them untouched (to
+> > have the current configuration as is). So, I'd put in dpdk.mk
+> > something like:
+> >
+> > ifeq ($(BR2_LINUX_KERNEL),y)
+> > DPDK_DEPENDENCIES += linux
+> > else
+> > DPDK_KMODS = EAL_IGB_UIO KNI_KMOD LIBRTE_XEN_DOM0
+> >
+> > define DPDK_DISABLE_KMODS
+> > $(foreach m,$(DPDK_KMODS),\  
+> 
+>   Small nit: indent with tab here.
+
+OK, it was just an ad hoc example. I'd rather know whether I can implement it this way.
+
+> 
+> > 	$(call KCONFIG_DISABLE_OPT,CONFIG_RTE_$(m),$(@D)/build/.config))
+> > endef
+> >
+> > DPDK_POST_CONFIGURE_HOOKS += DPDK_DISABLE_KMODS  
+> 
+>   Is dpdk using Kconfig? In that case, please use the kconfig-package infra. It 
+> gives you simple primitives for disabling and enabling options. Consult the manual.
+
+Unfortunately, there is no kconfig. It just looks this way. The buildsystem is custom.
+
+> 
+> > endif
+> >
+> > Probably, I can improve it by testing whether a module is present
+> > in the DPDK config and then setting the dependency on linux.  
+> 
+>   That's not possible: DEPENDENCIES must be declared when the makefiles are 
+> parsed, but the tarball containing .config is only extracted afterwards.
+
+OK, it was just an idea.
+
+Regards
+Jan
+
+> 
+> 
+>   Regards,
+>   Arnout
+> 
+> >
+> > Anyway, it seems to be quite complex...
+> >  
+> >>  
+> >>> This can be done but I am afraid I have to disable certain modules by
+> >>> name from the current configuration. This is not very generic
+> >>> (consider adding a new out-of-tree kernel module or removing an
+> >>> obsolete one from the DPDK, custom DPDK tree with third party
+> >>> modules) but there are only few of them so it might be a working
+> >>> solution. I will check if there is a more generic way but I don't
+> >>> think so.  
+> >>
+> >> I'm not sure what you mean here. If the default configuration on a
+> >> given architecture builds kernel modules, then on this architecture,
+> >> DPDK should depend on the kernel to be built. If the default
+> >> configuration on another architecture does not build kernel modules,
+> >> then there is no need to depend on the kernel.
+> >>
+> >> That being said, if only ARM does not build any kernel module, maybe we
+> >> can simply do as you do right now, and depend on the kernel
+> >> unconditionally, to keep things simple.  
+> >
+> > Yes, this would work for the existing defconfigs. What about a custom
+> > one? E.g. I want some DPDK kernel modules for the Armada with a
+> > PCI-E NIC. So, I need a custom DPDK configuration at the moment.
+> > Fortunately, this is a rare case.
+> >
+> > There is also a Xen module in DPDK that is not built by default so you
+> > have to create a custom configuration (or alter an existing one) to
+> > enable it.
+> >
+> > I understand that you'd like to keep it as simple as possible. I'd like
+> > to keep it simple too but also providing enough flexibility for easy
+> > customizations. That's why I don't consider the ARMv7 configuration to
+> > be "without kernel modules" as it is possible to enable some if needed.  
+> 
+> 
+> 
+
+
+
 -- 
-2.7.3
+   Jan Viktorin                  E-mail: Viktorin at RehiveTech.com
+   System Architect              Web:    www.RehiveTech.com
+   RehiveTech
+   Brno, Czech Republic
