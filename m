@@ -1,64 +1,41 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 20 Apr 2016 11:58:07 +0200
-Subject: [Buildroot] [PATCH] python-backports-ssl-match-hostname: new
-	package
-In-Reply-To: <20160420112839.43c4d35d@free-electrons.com>
-References: <1461144174-7711-1-git-send-email-yegorslists@googlemail.com>
- <20160420112839.43c4d35d@free-electrons.com>
-Message-ID: <CAGm1_ktt7NWNMxWagm_KZqupximn6mmUft-e+JdTo5L8FKNfAw@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Apr 2016 07:01:55 -0300
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 3.{14, 18}.x and 4.{1, 4,
+	5}.x series
+Message-ID: <1461146516-14614-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 20, 2016 at 11:28 AM, Thomas Petazzoni
-<thomas.petazzoni@free-electrons.com> wrote:
-> Hello,
->
-> On Wed, 20 Apr 2016 11:22:54 +0200, yegorslists at googlemail.com wrote:
->> From: Yegor Yefremov <yegorslists@googlemail.com>
->>
->> Fixes #8856
->
-> Are you sure this is sufficient to fix the bug? Doesn't python-tornado
-> also needs to select this new package when Python 2 is used?
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Both Python 2 and 3 implement ssl.match_hostname(cert, hostname) [1]
-
-backports.ssl_match_hostname 3.5.0.1 introduces some enhancements made
-in 3.5. See its history:
-
-History
--------
-
-* This function was introduced in python-3.2
-* It was updated for python-3.4a1 for a CVE
-(backports-ssl_match_hostname-3.4.0.1)
-* It was updated from RFC2818 to RFC 6125 compliance in order to fix another
-security flaw for python-3.3.3 and python-3.4a5
-(backports-ssl_match_hostname-3.4.0.2)
-* It was updated in python-3.5 to handle IPAddresses in ServerAltName fields
-(something that backports.ssl_match_hostname will do if you also install the
-ipaddress library from pypi).
-
-Tornado has following logic to decide, when to import
-backports.ssl_match_hostname
-
-if hasattr(ssl, 'match_hostname') and hasattr(ssl,
-'CertificateError'):  # python 3.2+
-    ssl_match_hostname = ssl.match_hostname
-    SSLCertificateError = ssl.CertificateError
-elif ssl is None:
-    ssl_match_hostname = SSLCertificateError = None
-else:
-    import backports.ssl_match_hostname
-    ssl_match_hostname = backports.ssl_match_hostname.match_hostname
-    SSLCertificateError = backports.ssl_match_hostname.CertificateError
-
-So if the user wants to use ssl.match_hostname, he must select
-Python's SSL support.
-
-Turns out, that this package can be used only, if the user imports it directly.
-
-[1] https://docs.python.org/2.7/library/ssl.html
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9f80224..7acbf61 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -214,13 +214,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.4.111"	if BR2_KERNEL_HEADERS_3_4
+ 	default "3.10.101"	if BR2_KERNEL_HEADERS_3_10
+ 	default "3.12.57"	if BR2_KERNEL_HEADERS_3_12
+-	default "3.14.66"	if BR2_KERNEL_HEADERS_3_14
+-	default "3.18.30"	if BR2_KERNEL_HEADERS_3_18
++	default "3.14.67"	if BR2_KERNEL_HEADERS_3_14
++	default "3.18.31"	if BR2_KERNEL_HEADERS_3_18
+ 	default "3.19.8"	if BR2_KERNEL_HEADERS_3_19
+ 	default "4.0.9"		if BR2_KERNEL_HEADERS_4_0
+-	default "4.1.21"	if BR2_KERNEL_HEADERS_4_1
++	default "4.1.22"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+-	default "4.4.7"		if BR2_KERNEL_HEADERS_4_4
+-	default "4.5.1"		if BR2_KERNEL_HEADERS_4_5
++	default "4.4.8"		if BR2_KERNEL_HEADERS_4_4
++	default "4.5.2"		if BR2_KERNEL_HEADERS_4_5
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.7.3
