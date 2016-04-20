@@ -1,41 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2016 09:01:03 +0200
-Subject: [Buildroot] [PATCH 2/4] linux-headers: indent custom choices
-In-Reply-To: <5716B828.2070008@mind.be>
-References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1461099155-30702-3-git-send-email-vivien.didelot@savoirfairelinux.com>
- <5716B828.2070008@mind.be>
-Message-ID: <20160420090103.6bb2c824@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Apr 2016 09:08:49 +0200
+Subject: [Buildroot] [PATCH 1/1] Raspberry PI 3 kernel,
+	firmware and dtb update
+In-Reply-To: <20160419213321.GG3505@free.fr> (Yann E. MORIN's message of "Tue, 
+ 19 Apr 2016 23:33:21 +0200")
+References: <1459421492-18815-1-git-send-email-ubaldo@eja.it>
+ <87a8kpe39z.fsf@dell.be.48ers.dk> <20160419213321.GG3505@free.fr>
+Message-ID: <87wpnsdaf2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Wed, 20 Apr 2016 00:58:48 +0200, Arnout Vandecappelle wrote:
+ >> The rpi3 afaik uses a different serial port than rpi2. How will that
+ >> work if we use the same defconfig for both boards? Perhaps it makes more
+ >> sense to have a seperate raspberrypi3_defconfig?
 
->   We currently have 5 choice statements where the contents is indented, and 54 
-> where it's not. So I wouldn't say that we usually indent it...
+ > Yes, expecially since the CPU is not the same, andthat we may^Wwill one
+ > day have it run in 64-bit mode (one can dream, no?).
 
-I agreed.
+Yeah. I don't know about the rpi foundation, but there seems to be quite
+some aarch64 activity around it in mainline U-Boot/Linux.
 
->   That said, I'm not strictly against indenting choice contents: it's not going 
-> to be nested any deeper, and the lines are normally not that long. The only 
-> question is what to do with the help texts, because they would suddenly have to 
-> be wrapped at 82 characters...
+With the recent vc4 work it might make sense to add rpi defconfigs using
+mainline as well?
 
-I prefer to keep things non-indented. Otherwise, to be consistent, we
-would also have to indent the config options within a if...endif block,
-or within a menuconfig...endmenu. And then suddenly you can have a
-choice nested in an if, nested in a menuconfig, and your indentation
-goes crazy.
-
-So, I'd say no.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
