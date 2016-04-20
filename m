@@ -1,136 +1,58 @@
-From: Samuel Martin <s.martin49@gmail.com>
-Date: Wed, 20 Apr 2016 21:51:32 +0200
-Subject: [Buildroot] [PATCH] kmsxx: new package
-In-Reply-To: <1461100189-19627-1-git-send-email-maxime.ripard@free-electrons.com>
-References: <1461100189-19627-1-git-send-email-maxime.ripard@free-electrons.com>
-Message-ID: <CAHXCMML35SVu6B2F5dVnKmQJXYcfqwb-ivRDProvGEjfwTTknQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Wed, 20 Apr 2016 22:02:28 +0200
+Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
+In-Reply-To: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
+References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
+Message-ID: <20160420220228.59d5e54f@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime, all,
+Hello,
 
-On Tue, Apr 19, 2016 at 11:09 PM, Maxime Ripard
-<maxime.ripard@free-electrons.com> wrote:
-> KMS++ is a suite of library and test tools to interact with KMS drivers in
-> the linux kernel.
->
-> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
-> ---
->  package/Config.in       |  1 +
->  package/kmsxx/Config.in | 24 ++++++++++++++++++++++++
->  package/kmsxx/kmsxx.mk  | 42 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 67 insertions(+)
->  create mode 100644 package/kmsxx/Config.in
->  create mode 100644 package/kmsxx/kmsxx.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 529ad3364994..4bb60ead530b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -867,6 +867,7 @@ menu "Graphics"
->         source "package/imlib2/Config.in"
->         source "package/jasper/Config.in"
->         source "package/jpeg/Config.in"
-> +       source "package/kmsxx/Config.in"
->         source "package/lcms2/Config.in"
->         source "package/lesstif/Config.in"
->         source "package/libart/Config.in"
-> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
-> new file mode 100644
-> index 000000000000..4b70c276d4e3
-> --- /dev/null
-> +++ b/package/kmsxx/Config.in
-> @@ -0,0 +1,24 @@
-> +config BR2_PACKAGE_KMSXX
-> +       bool "kmsxx"
-> +       select BR2_PACKAGE_LIBDRM
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
-> +       help
-> +         libkms++ is a C++11 library for kernel mode setting.
-Does this mean there is some restriction on the toolchain properties?
-(maybe a minimal compiler version?)
-If so, a "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_..." would be needed.
+On Wed, 20 Apr 2016 18:47:04 +0100, Joao Pinto wrote:
+> This patch has the goal to add to the juno board defconfig the u-boot build 
+> configurations. The juno board readme file was also updated with the
+> necessary steps to build the ARM Trusted Firmware (with u-boot in it) and
+> how to deploy it.
 
-> +
-> +         Also included are simple test tools for KMS and python wrapper for
-> +         libkms++.
-> +
-> +         https://github.com/tomba/kmsxx
-> +
-> +if BR2_PACKAGE_KMSXX
-> +
-> +config BR2_PACKAGE_KMSXX_INSTALL_TESTS
-> +       bool "Install test programs"
-> +       help
-> +         This option allows to install the kmsxx test programs.
-> +
-> +endif
-> +
-> +comment "kmsxx needs a toolchain w/ threads"
-> +        depends on !BR2_TOOLCHAIN_HAS_THREADS
-> +
-> diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-> new file mode 100644
-> index 000000000000..b3a2e178bc22
-> --- /dev/null
-> +++ b/package/kmsxx/kmsxx.mk
-> @@ -0,0 +1,42 @@
-> +################################################################################
-> +#
-> +# kmsxx
-> +#
-> +################################################################################
-> +
-> +KMSXX_VERSION = bef0109aa93971dd6cc6040661dc6494533e6bee
-> +KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
-> +KMSXX_LICENSE = MPLv2.0
-> +KMSXX_LICENSE_FILES = LICENSE
-> +
-> +KMSXX_DEPENDENCIES += libdrm
-> +
-> +KMSXX_CONF_OPTS += -DLIBKMS_ENABLE_PYTHON=OFF
-> +
-> +ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
-> +define KMSXX_INSTALL_TARGET_TESTS
-> +       $(INSTALL) -D -m 0755 $(@D)/libkmstest/libkmstest.so \
-> +               $(TARGET_DIR)/usr/lib/libkmstest.so
-> +       $(INSTALL) -D -m 0755 $(@D)/tests/db \
-> +               $(TARGET_DIR)/usr/bin/db
-> +       $(INSTALL) -D -m 0755 $(@D)/tests/fbtestpat \
-> +               $(TARGET_DIR)/usr/bin/fbtestpat
-> +       $(INSTALL) -D -m 0755 $(@D)/tests/kmscapture \
-> +               $(TARGET_DIR)/usr/bin/kmscapture
-> +       $(INSTALL) -D -m 0755 $(@D)/tests/kmsprint \
-> +               $(TARGET_DIR)/usr/bin/kmsprint
-> +       $(INSTALL) -D -m 0755 $(@D)/tests/kmsview \
-> +               $(TARGET_DIR)/usr/bin/kmsview
-> +       $(INSTALL) -D -m 0755 $(@D)/tests/testpat \
-> +               $(TARGET_DIR)/usr/bin/testpat
-> +endef
-> +endif
-> +
-> +define KMSXX_INSTALL_TARGET_CMDS
-> +       $(INSTALL) -D -m 0755 $(@D)/libkms++/libkms++.so \
-> +               $(TARGET_DIR)/usr/lib/libkms++.so
-> +
-I don't think this blank line is necessary.
+Thanks!
 
-> +       $(KMSXX_INSTALL_TARGET_TESTS)
-> +endef
+> +Building bootloader files bl1.bin and fip.bin
+> +=============================================
+> +First clone ARM Trusted Firmware repository
 > +
-> +$(eval $(cmake-package))
-> --
-> 2.8.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +   $ git clone https://github.com/ARM-software/arm-trusted-firmware.git
+> +
+> +After clonning, please configure the following environment variables:
+> +
+> +  CROSS_COMPILE=<buidlroot_path>/output/host/usr/bin/aarch64-buildroot-linux-gnu-
+> +  BL33=<buidlroot_path>/output/images/u-boot.bin
+> +  SCP_BL2=<path_to_scp_firmware>
+> +
+> +Finaly execute:
+> +  make PLAT=juno all fip
 
-Regards,
+The whole point of Buildroot is to automate the build process, so this
+should be done by a Buildroot package, rather than manually by the
+user. So a package for ATF should probably be created.
 
+I also work on an ARM64 platform that uses ATF+U-Boot, so I'll be able
+to compare and tell you whether what you're proposing is only
+applicable to Juno, or can be used for other platforms as well.
+
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
+
+Using the legacy build system with a modern U-Boot such as 2016.03
+doesn't make much sense. Please use the kconfig based build system,
+unless there is a real reason not to.
+
+Thanks!
+
+Thomas
 -- 
-Samuel
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
