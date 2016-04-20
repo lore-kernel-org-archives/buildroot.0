@@ -1,124 +1,162 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Wed, 20 Apr 2016 18:47:04 +0100
-Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
-Message-ID: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 20 Apr 2016 19:55:58 +0200
+Subject: [Buildroot] [PATCH] 4th: new package
+Message-ID: <1461174958-14789-1-git-send-email-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch has the goal to add to the juno board defconfig the u-boot build 
-configurations. The juno board readme file was also updated with the
-necessary steps to build the ARM Trusted Firmware (with u-boot in it) and
-how to deploy it.
-
-Signed-off-by: Joao Pinto <jpinto@synopsys.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/arm/juno/readme.txt  | 48 +++++++++++++++++++++++++++++++++++++++++-----
- configs/arm_juno_defconfig |  6 ++++++
- 2 files changed, 49 insertions(+), 5 deletions(-)
+ package/4th/0001-fix-Makefile.patch | 27 ++++++++++++++++
+ package/4th/4th.hash                |  2 ++
+ package/4th/4th.mk                  | 64 +++++++++++++++++++++++++++++++++++++
+ package/4th/Config.in               |  8 +++++
+ package/Config.in                   |  1 +
+ 5 files changed, 102 insertions(+)
+ create mode 100644 package/4th/0001-fix-Makefile.patch
+ create mode 100644 package/4th/4th.hash
+ create mode 100644 package/4th/4th.mk
+ create mode 100644 package/4th/Config.in
 
-diff --git a/board/arm/juno/readme.txt b/board/arm/juno/readme.txt
-index 52fabf9..e9c0bfe 100644
---- a/board/arm/juno/readme.txt
-+++ b/board/arm/juno/readme.txt
-@@ -7,8 +7,8 @@ These instructions apply to all models of the ARM Juno:
-   - Juno r0 (does not support PCIe)
-   - Juno r1 (supports PCIe)
+diff --git a/package/4th/0001-fix-Makefile.patch b/package/4th/0001-fix-Makefile.patch
+new file mode 100644
+index 0000000..4acc6d3
+--- /dev/null
++++ b/package/4th/0001-fix-Makefile.patch
+@@ -0,0 +1,27 @@
++fix Makefile
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++
++diff --git a/sources/Makefile b/sources/Makefile
++index e1b97a5..3a50d0f 100644
++--- a/sources/Makefile
+++++ b/sources/Makefile
++@@ -32,7 +32,6 @@ OBJ4TH = errs_4th.o save_4th.o load_4th.o free_4th.o comp_4th.o \
++ 	name_4th.o dump_4th.o exec_4th.o open_4th.o cgen_4th.o \
++ 	str2cell.o
++ 
++-.INTERMEDIATE: stage stage.c
++ 
++ all: 4th 4tsh pp4th lib4th
++ 
++@@ -120,7 +119,7 @@ ifdef SHARED
++ 	ln -sf $(SHARED_LIB) $(LIBRARIES)/lib4th.so
++ endif
++ 
++-mostlyinstall: libinstall all
+++mostlyinstall: libinstall
++ 	cp 4th 4tsh pp4th $(BINARIES)
++ 
++ install: mostlyinstall
++-- 
++
+diff --git a/package/4th/4th.hash b/package/4th/4th.hash
+new file mode 100644
+index 0000000..97083da
+--- /dev/null
++++ b/package/4th/4th.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  1c7adbb1a56dad4c4c781e6e023d77ac862842560c05246b691d07e9a4460ab2  4th-3.62.4-unix.tar.gz
+diff --git a/package/4th/4th.mk b/package/4th/4th.mk
+new file mode 100644
+index 0000000..9d02b55
+--- /dev/null
++++ b/package/4th/4th.mk
+@@ -0,0 +1,64 @@
++################################################################################
++#
++# 4th
++#
++################################################################################
++
++4TH_VERSION = 3.62.4
++4TH_SOURCE = 4th-$(4TH_VERSION)-unix.tar.gz
++4TH_SITE = http://downloads.sourceforge.net/project/forth-4th/4th-$(4TH_VERSION)
++4TH_LICENSE = LGPLv3
++4TH_LICENSE_FILES = COPYING
++4TH_DEPENDENCIES = host-4th
++4TH_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++4TH_MAKE_ENV = STATIC=1
++else
++4TH_MAKE_ENV = SHARED=1
++endif
++
++define 4TH_BUILD_CMDS
++	$(4TH_MAKE_ENV) \
++	$(MAKE) -C $(@D)/sources all \
++		CROSS=$(TARGET_CROSS) \
++		CFLAGS="$(TARGET_CFLAGS) -DUNIX -fsigned-char" \
++		FOURTH=$(HOST_DIR)/usr/bin/4th
++endef
++
++define 4TH_INSTALL_STAGING_CMDS
++	$(4TH_MAKE_ENV) \
++	$(MAKE) -C $(@D)/sources libinstall \
++		LIBRARIES=$(STAGING_DIR)/usr/lib
++	$(INSTALL) -D -m 0644 $(@D)/sources/4th.h \
++		$(STAGING_DIR)/usr/include/4th.h
++endef
++
++define 4TH_INSTALL_TARGET_CMDS
++	$(4TH_MAKE_ENV) \
++	$(MAKE) -C $(@D)/sources mostlyinstall \
++		BINARIES=$(TARGET_DIR)/usr/bin \
++		LIBRARIES=$(TARGET_DIR)/usr/lib
++	mkdir -p $(TARGET_DIR)/usr/share/4th/lib
++	cp -dpf $(@D)/4th/*.4th $(TARGET_DIR)/usr/share/4th
++	cp -dpf $(@D)/4th/lib/*.4th $(TARGET_DIR)/usr/share/4th/lib
++	mkdir -p $(TARGET_DIR)/usr/share/4th/demo
++	cp -dpf $(@D)/4th/demo/*.4th $(TARGET_DIR)/usr/share/4th/demo
++	mkdir -p $(TARGET_DIR)/usr/share/4th/4pp/lib
++	cp -dpf $(@D)/4th/4pp/*.4pp $(TARGET_DIR)/usr/share/4th/4pp
++	cp -dpf $(@D)/4th/4pp/lib/*.4pp $(TARGET_DIR)/usr/share/4th/4pp/lib
++endef
++
++define HOST_4TH_BUILD_CMDS
++	$(MAKE) -C $(@D)/sources all \
++		CFLAGS="$(HOST_CFLAGS) -DUNIX -fsigned-char"
++endef
++
++define HOST_4TH_INSTALL_CMDS
++	$(MAKE) -C $(@D)/sources mostlyinstall \
++		BINARIES=$(HOST_DIR)/usr/bin \
++		LIBRARIES=$(HOST_DIR)/usr/lib
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
+diff --git a/package/4th/Config.in b/package/4th/Config.in
+new file mode 100644
+index 0000000..51f85de
+--- /dev/null
++++ b/package/4th/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_4TH
++	bool "4th"
++	help
++	  4tH is a Forth compiler that can create bytecode, C-embeddable
++	  bytecode, standalone executables, but also works fine as a scripting
++	  language
++
++	  http://thebeez.home.xs4all.nl/4tH/
+diff --git a/package/Config.in b/package/Config.in
+index 64822bf..bd6b4b5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -474,6 +474,7 @@ endif
+ endmenu
  
--Buildroot will generate the kernel image, device tree blob and a
--minimal root filesystem.
-+Buildroot will generate the kernel image, device tree blob, a minimal
-+root filesystem and a u-boot binary.
- 
- How to build it
- ===============
-@@ -42,6 +42,7 @@ After building, you should obtain this tree:
-     +-- juno.dtb (if Juno r0 is used)
-     +-- juno-r1.dtb (if Juno r1 is used)
-     +-- Image
-+    +-- u-boot.bin
- 
- Preparing your rootfs
- ======================
-@@ -63,6 +64,42 @@ When completed make sure to unmount the device:
- 
- Insert the pen drive in one of the ARM Juno' USB type A connectors.
- 
-+Building bootloader files bl1.bin and fip.bin
-+=============================================
-+First clone ARM Trusted Firmware repository
-+
-+   $ git clone https://github.com/ARM-software/arm-trusted-firmware.git
-+
-+After clonning, please configure the following environment variables:
-+
-+  CROSS_COMPILE=<buidlroot_path>/output/host/usr/bin/aarch64-buildroot-linux-gnu-
-+  BL33=<buidlroot_path>/output/images/u-boot.bin
-+  SCP_BL2=<path_to_scp_firmware>
-+
-+Finaly execute:
-+  make PLAT=juno all fip
-+
-+After building, you should obtain this tree:
-+
-+    build/juno/release/
-+    +-- bl1.bin
-+    +-- bl2/
-+    +-- bl2.bin
-+    +-- bl2u/
-+    +-- bl2u.bin
-+    +-- bl31/
-+    +-- bl31.bin
-+    +-- fip.bin
-+
-+Useful tip:
-+The SCP firmware (typically named scp-fw.bin) can be obtained by unpacking
-+the original fip.bin:
-+
-+    $ fip_create ???unpack fip.bin
-+
-+The fip_create application is available in the ARM Trusted Firmware Package in
-+tools/fip_create/.
-+
- Configure *.dtb in the boot configuration for Juno r0
- =====================================================
- 
-@@ -89,8 +126,8 @@ NOR3LOAD: 00000000               ;Image Load Address
- NOR3ENTRY: 00000000              ;Image Entry Point
- ......
- 
--Installing kernel image and DTB
--===============================
-+Installing kernel image, DTB and bootloader
-+===========================================
- 
- 1. Connect to the ARM Juno UART0 and execute USB_ON in the terminal
- 2. Connect a USB cable between your PC and ARM Juno USB type B connector
-@@ -98,7 +135,8 @@ Installing kernel image and DTB
- 3. Open the software/ folder
- 4. Copy the 'Image' file to software/
- 5. Copy the 'juno-r1.dtb' (r1) or the 'juno.dtb' (r0) file to software/
--6. Press the red button in the front pannel of ARM Juno
-+6. Copy the 'bl1.bin' and 'fip.bin' files to software/
-+7. Press the red button in the front pannel of ARM Juno
- 
- At this time, the board will erase the Flash entry for each new item and
- replace it with the lastest ones.
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 87b6374..9ed4258 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -12,3 +12,9 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
-+BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.03"
+ menu "Interpreter languages and scripting"
++	source "package/4th/Config.in"
+ 	source "package/enscript/Config.in"
+ 	source "package/erlang/Config.in"
+ if BR2_PACKAGE_ERLANG
 -- 
-1.8.1.5
+2.5.0
