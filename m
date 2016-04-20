@@ -1,67 +1,136 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 20 Apr 2016 22:37:35 +0300
-Subject: [Buildroot] [PATCH 1/3] c-icap: avoid host library search path
-In-Reply-To: <20160420212000.4ce134db@free-electrons.com>
-References: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
- <20160419211457.11d9bf2a@free-electrons.com>
- <20160420180433.GK2476@tarshish>
- <20160420212000.4ce134db@free-electrons.com>
-Message-ID: <20160420193735.GL2476@tarshish>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 20 Apr 2016 21:51:32 +0200
+Subject: [Buildroot] [PATCH] kmsxx: new package
+In-Reply-To: <1461100189-19627-1-git-send-email-maxime.ripard@free-electrons.com>
+References: <1461100189-19627-1-git-send-email-maxime.ripard@free-electrons.com>
+Message-ID: <CAHXCMML35SVu6B2F5dVnKmQJXYcfqwb-ivRDProvGEjfwTTknQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Maxime, all,
 
-On Wed, Apr 20, 2016 at 09:20:00PM +0200, Thomas Petazzoni wrote:
-> On Wed, 20 Apr 2016 21:04:33 +0300, Baruch Siach wrote:
-> > On Tue, Apr 19, 2016 at 09:14:57PM +0200, Thomas Petazzoni wrote:
-> > > On Tue, 19 Apr 2016 21:15:44 +0300, Baruch Siach wrote:
-> > > > +C_ICAP_MAKE_OPTS = exec_prefix=$(STAGING_DIR)/usr
-> > > 
-> > > This is not correct. Setting exec_prefix to $(STAGING_DIR)/usr is
-> > > wrong. Instead, can you try to remove:
-> > > 
-> > >    -rpath @libdir@
-> > > 
-> > > from the various Makefile.am ?
-> > 
-> > It turns out that forcing AUTORECONF is enough to fix the problem. I'm not 
-> > sure why. I have only noticed that after AUTORECONF, -lz appears explicitly in 
-> > the link command line, whereas before libz was linked in implicitly via 
-> > libicapapi.so NEEDED tag. Manually running the failed link command with -lz 
-> > added, fixes the link as well. I guess that -lz makes the linker search in 
-> > sysroot before rpath, but I could not find an explanation to this behaviour in 
-> > the ld documentation.
-> 
-> Are you talking about linking of programs against libicapapi.so, or the
-> linking of libicapapi.so itself?
+On Tue, Apr 19, 2016 at 11:09 PM, Maxime Ripard
+<maxime.ripard@free-electrons.com> wrote:
+> KMS++ is a suite of library and test tools to interact with KMS drivers in
+> the linux kernel.
+>
+> Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+> ---
+>  package/Config.in       |  1 +
+>  package/kmsxx/Config.in | 24 ++++++++++++++++++++++++
+>  package/kmsxx/kmsxx.mk  | 42 ++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 67 insertions(+)
+>  create mode 100644 package/kmsxx/Config.in
+>  create mode 100644 package/kmsxx/kmsxx.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 529ad3364994..4bb60ead530b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -867,6 +867,7 @@ menu "Graphics"
+>         source "package/imlib2/Config.in"
+>         source "package/jasper/Config.in"
+>         source "package/jpeg/Config.in"
+> +       source "package/kmsxx/Config.in"
+>         source "package/lcms2/Config.in"
+>         source "package/lesstif/Config.in"
+>         source "package/libart/Config.in"
+> diff --git a/package/kmsxx/Config.in b/package/kmsxx/Config.in
+> new file mode 100644
+> index 000000000000..4b70c276d4e3
+> --- /dev/null
+> +++ b/package/kmsxx/Config.in
+> @@ -0,0 +1,24 @@
+> +config BR2_PACKAGE_KMSXX
+> +       bool "kmsxx"
+> +       select BR2_PACKAGE_LIBDRM
+> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
+> +       help
+> +         libkms++ is a C++11 library for kernel mode setting.
+Does this mean there is some restriction on the toolchain properties?
+(maybe a minimal compiler version?)
+If so, a "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_..." would be needed.
 
-I meant the former. The failure is when linking the c-icap executable.
+> +
+> +         Also included are simple test tools for KMS and python wrapper for
+> +         libkms++.
+> +
+> +         https://github.com/tomba/kmsxx
+> +
+> +if BR2_PACKAGE_KMSXX
+> +
+> +config BR2_PACKAGE_KMSXX_INSTALL_TESTS
+> +       bool "Install test programs"
+> +       help
+> +         This option allows to install the kmsxx test programs.
+> +
+> +endif
+> +
+> +comment "kmsxx needs a toolchain w/ threads"
+> +        depends on !BR2_TOOLCHAIN_HAS_THREADS
+> +
+> diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+> new file mode 100644
+> index 000000000000..b3a2e178bc22
+> --- /dev/null
+> +++ b/package/kmsxx/kmsxx.mk
+> @@ -0,0 +1,42 @@
+> +################################################################################
+> +#
+> +# kmsxx
+> +#
+> +################################################################################
+> +
+> +KMSXX_VERSION = bef0109aa93971dd6cc6040661dc6494533e6bee
+> +KMSXX_SITE = $(call github,tomba,kmsxx,$(KMSXX_VERSION))
+> +KMSXX_LICENSE = MPLv2.0
+> +KMSXX_LICENSE_FILES = LICENSE
+> +
+> +KMSXX_DEPENDENCIES += libdrm
+> +
+> +KMSXX_CONF_OPTS += -DLIBKMS_ENABLE_PYTHON=OFF
+> +
+> +ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
+> +define KMSXX_INSTALL_TARGET_TESTS
+> +       $(INSTALL) -D -m 0755 $(@D)/libkmstest/libkmstest.so \
+> +               $(TARGET_DIR)/usr/lib/libkmstest.so
+> +       $(INSTALL) -D -m 0755 $(@D)/tests/db \
+> +               $(TARGET_DIR)/usr/bin/db
+> +       $(INSTALL) -D -m 0755 $(@D)/tests/fbtestpat \
+> +               $(TARGET_DIR)/usr/bin/fbtestpat
+> +       $(INSTALL) -D -m 0755 $(@D)/tests/kmscapture \
+> +               $(TARGET_DIR)/usr/bin/kmscapture
+> +       $(INSTALL) -D -m 0755 $(@D)/tests/kmsprint \
+> +               $(TARGET_DIR)/usr/bin/kmsprint
+> +       $(INSTALL) -D -m 0755 $(@D)/tests/kmsview \
+> +               $(TARGET_DIR)/usr/bin/kmsview
+> +       $(INSTALL) -D -m 0755 $(@D)/tests/testpat \
+> +               $(TARGET_DIR)/usr/bin/testpat
+> +endef
+> +endif
+> +
+> +define KMSXX_INSTALL_TARGET_CMDS
+> +       $(INSTALL) -D -m 0755 $(@D)/libkms++/libkms++.so \
+> +               $(TARGET_DIR)/usr/lib/libkms++.so
+> +
+I don't think this blank line is necessary.
 
-> If you're talking about linking the programs against libicapapi.so,
-> then adding -lz should not be needed, unless the programs use zlib
-> function calls directly. But if only libicapapi.so is the zlib user,
-> then there should normally be no need to link the programs with -lz
-> (except in static linking scenarios, of course).
+> +       $(KMSXX_INSTALL_TARGET_TESTS)
+> +endef
+> +
+> +$(eval $(cmake-package))
+> --
+> 2.8.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-But that's exactly what happens after AUTORECONF.
-
-> Did you verify that the paranoid path checking was not complaining?
-
-BR2_COMPILER_PARANOID_UNSAFE_PATH is enabled but there was no complain. That's 
-apparently because libtool breaks '-rpath /usr/lib' into '-Wl,-rpath 
--Wl,/usr/lib'.
-
-> > Any suggestion for the comment text to explain the AUTORECONF?
-> 
-> Just explains that it fixes stuff and which stuff :)
-
-baruch
+Regards,
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Samuel
