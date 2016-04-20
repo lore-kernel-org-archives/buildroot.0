@@ -1,7 +1,9 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Apr 2016 20:48:03 -0300
-Subject: [Buildroot] [PATCH 1/7] gstreamer1: bump to version 1.8.1
-Message-ID: <1461196089-19847-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 20 Apr 2016 20:48:04 -0300
+Subject: [Buildroot] [PATCH 2/7] gst1-plugins-base: bump to version 1.8.1
+In-Reply-To: <1461196089-19847-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1461196089-19847-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <1461196089-19847-2-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index 0830fc6..49a609d 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+index a3737fc..c3db9b0 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
 @@ -1,2 +1,2 @@
--# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.0.tar.xz.sha256sum
--sha256	947a314a212b5d94985d89b43440dbe66b696e12bbdf9a2f78967b98d74abedc  gstreamer-1.8.0.tar.xz
-+# From http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.8.1.tar.xz.sha256sum
-+sha256	5a3722fb9302dd977c17ced4240293dc777cb716dc98c8cca63d75c27e5e3107  gstreamer-1.8.1.tar.xz
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 9f81674..3a6dd0b 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+-# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.8.0.tar.xz.sha256sum
+-sha256	abc0acc1d15b4b9c97c65cd9689bd6400081853b9980ea428d3c8572dd791522  gst-plugins-base-1.8.0.tar.xz
++# From http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.8.1.tar.xz.sha256sum
++sha256	15a9de985cd265c344e359f5b19347df4021b7611ed2c2d91917cb900f2fad6f  gst-plugins-base-1.8.1.tar.xz
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index d7feb7c..62e8b22 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.8.0
-+GSTREAMER1_VERSION = 1.8.1
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = http://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_PLUGINS_BASE_VERSION = 1.8.0
++GST1_PLUGINS_BASE_VERSION = 1.8.1
+ GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
+ GST1_PLUGINS_BASE_SITE = http://gstreamer.freedesktop.org/src/gst-plugins-base
+ GST1_PLUGINS_BASE_INSTALL_STAGING = YES
 -- 
 2.7.3
