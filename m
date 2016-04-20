@@ -1,53 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2016 23:03:36 +0200
-Subject: [Buildroot] [PATCH v3 3/3] flannel: new package
-In-Reply-To: <762e3d2b6b696656441d9818512ac7ac10221e7f.1459798147.git.geoff@infradead.org>
-References: <cover.1459798147.git.geoff@infradead.org>
- <762e3d2b6b696656441d9818512ac7ac10221e7f.1459798147.git.geoff@infradead.org>
-Message-ID: <20160420230336.35b76075@free-electrons.com>
+Date: Wed, 20 Apr 2016 22:28:43 +0200
+Subject: [Buildroot] [git commit] go-bootstrap: new host package
+Message-ID: <20160420210351.685F581E59@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c7bc687e7d2b8ef7afd74d4d35c45e2a16f28513
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 04 Apr 2016 19:31:49 +0000, Geoff Levand wrote:
-> Flannel is a virtual network that gives a subnet to each host for use
-> with container runtimes.
-> 
-> Cc: Brandon Philips <brandon.philips@coreos.com>
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-> ---
->  package/Config.in            |  1 +
->  package/flannel/Config.in    |  9 +++++++++
->  package/flannel/flannel.hash |  2 ++
->  package/flannel/flannel.mk   | 42 ++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 54 insertions(+)
->  create mode 100644 package/flannel/Config.in
->  create mode 100644 package/flannel/flannel.hash
->  create mode 100644 package/flannel/flannel.mk
+Add a new package go-bootstrap which builds a bootstrap compiler for the
+go programming language.
 
-Applied to master after doing the following changes:
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+[Thomas:
+ - Rename GO_BOOTSTRAP_FINAL to HOST_GO_BOOTSTRAP_ROOT. Use the HOST_
+   prefix because this variable is specific to the host variant. And
+   it's not "final" at all, but rather the "root" of the Go Bootstrap
+   installation.
+ - Rename GO_BOOTSTRAP_MAKE_ENV to HOST_GO_BOOTSTRAP_MAKE_ENV, also to
+   have the HOST_ prefix because it's a host package.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/go-bootstrap/go-bootstrap.hash |  2 ++
+ package/go-bootstrap/go-bootstrap.mk   | 38 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+)
 
-    [Thomas:
-      - Don't select BR2_PACKAGE_HOST_GO since this option was removed.
-      - Take into account the rename of BR2_PACKAGE_GO_ARCH_SUPPORTS to
-        BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS.
-      - Rewrap Config.in help text, it was slightly too large.
-      - Don't use the github function (the link was anyway incorrect), but
-        instead a direct link to the tarball, since the tarballs are
-        uploaded by the maintainers.
-      - Update the hash accordingly.
-      - Use $() to reference make variables and not ${}.
-      - Call the go compiler from $(HOST_DIR)/usr/bin, rather than from
-        HOST_GO_ROOT.]
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/go-bootstrap/go-bootstrap.hash b/package/go-bootstrap/go-bootstrap.hash
+new file mode 100644
+index 0000000..1d0566a
+--- /dev/null
++++ b/package/go-bootstrap/go-bootstrap.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b go1.4.2.src.tar.gz
+diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
+new file mode 100644
+index 0000000..e404cb6
+--- /dev/null
++++ b/package/go-bootstrap/go-bootstrap.mk
+@@ -0,0 +1,38 @@
++################################################################################
++#
++# go-bootstrap
++#
++################################################################################
++
++GO_BOOTSTRAP_VERSION = 1.4.2
++GO_BOOTSTRAP_SITE = https://storage.googleapis.com/golang
++GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).src.tar.gz
++
++GO_BOOTSTRAP_LICENSE = BSD-3c
++GO_BOOTSTRAP_LICENSE_FILES = LICENSE
++
++HOST_GO_BOOTSTRAP_ROOT = $(HOST_DIR)/usr/lib/go-$(GO_BOOTSTRAP_VERSION)
++
++HOST_GO_BOOTSTRAP_MAKE_ENV = \
++	GOOS=linux \
++	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
++	GOROOT="$(@D)" \
++	GOBIN="$(@D)/bin"
++
++define HOST_GO_BOOTSTRAP_BUILD_CMDS
++	cd $(@D)/src && $(HOST_GO_BOOTSTRAP_MAKE_ENV) ./make.bash
++endef
++
++define HOST_GO_BOOTSTRAP_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_BOOTSTRAP_ROOT)/bin/go
++	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_BOOTSTRAP_ROOT)/bin/gofmt
++
++	cp -a $(@D)/lib $(HOST_GO_BOOTSTRAP_ROOT)/
++	cp -a $(@D)/pkg $(HOST_GO_BOOTSTRAP_ROOT)/
++
++	# There is a known issue which requires the go sources to be installed
++	# https://golang.org/issue/2775
++	cp -a $(@D)/src $(HOST_GO_BOOTSTRAP_ROOT)/
++endef
++
++$(eval $(host-generic-package))
