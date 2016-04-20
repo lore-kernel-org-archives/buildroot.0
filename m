@@ -1,35 +1,95 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2016 23:12:35 +0200
-Subject: [Buildroot] [PATCH 2/4] vpnc: simplify patch 0001
-In-Reply-To: <20160419220534.GJ3505@free.fr>
-References: <1455145392-2355-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <1455145392-2355-3-git-send-email-thomas.petazzoni@free-electrons.com>
- <20160419220534.GJ3505@free.fr>
-Message-ID: <20160420231235.1c60b623@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Apr 2016 23:12:56 +0200
+Subject: [Buildroot] [PATCH v2] elf2flt: add patch "Fix buffer overflow
+ in output_relocs()"
+In-Reply-To: <1461146201-7352-1-git-send-email-mcoquelin.stm32@gmail.com>
+References: <1461146201-7352-1-git-send-email-mcoquelin.stm32@gmail.com>
+Message-ID: <5717F0D8.5000103@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 04/20/16 11:56, Maxime Coquelin wrote:
+> This patches fixes the following crash:
+> make[1]: Entering directory `<...>/build/uclibc-1.0.14'
+>    CC utils/getconf
+> *** buffer overflow detected ***: <...>/bin/elf2flt terminated
+> ======= Backtrace: =========
+> /lib/x86_64-linux-gnu/libc.so.6(+0x7338f)[0x2ad3be5f738f]
+> /lib/x86_64-linux-gnu/libc.so.6(__fortify_fail+0x5c)[0x2ad3be68ec9c]
+> /lib/x86_64-linux-gnu/libc.so.6(+0x109b60)[0x2ad3be68db60]
+> /lib/x86_64-linux-gnu/libc.so.6(+0x109069)[0x2ad3be68d069]
+> /lib/x86_64-linux-gnu/libc.so.6(_IO_default_xsputn+0xbc)[0x2ad3be5ff70c]
+> /lib/x86_64-linux-gnu/libc.so.6(_IO_vfprintf+0xaef)[0x2ad3be5ce7df]
+> /lib/x86_64-linux-gnu/libc.so.6(__vsprintf_chk+0x84)[0x2ad3be68d0f4]
+> /lib/x86_64-linux-gnu/libc.so.6(__sprintf_chk+0x7d)[0x2ad3be68d04d]
+>   <...>/bin/elf2flt[0x403cda]
+>   <...>/bin/elf2flt[0x4030a4]
+> /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf5)[0x2ad3be5a5ec5]
+>   <...>/bin/elf2flt[0x403642]
+>
+> A pull-request has been sent for this patch to elf2flt developers, so we can
+> remove it as soon as the patch is accepted upstream.
+>
+> Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+> ---
+>   package/elf2flt/elf2flt.hash | 1 +
+>   package/elf2flt/elf2flt.mk   | 1 +
+>   2 files changed, 2 insertions(+)
+>
+> diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
+> index be7c77605be7..89d22222733e 100644
+> --- a/package/elf2flt/elf2flt.hash
+> +++ b/package/elf2flt/elf2flt.hash
+> @@ -1,2 +1,3 @@
+>   # Locally calculated
+>   sha256 64ede6936aa88028378e08192039c29791b9e32714cc861762214b8e106e7145 elf2flt-8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7.tar.gz
+> +sha256 2659d8a7fca078dfe7ce9a3754d94a0cad3dc1fc7b8b0db5cf08f14bb34e4865 4595382ea76f85dced017b1b17b37ef9513458b6.patch
+> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
+> index 6c16c3000d89..d138a4c1cdf7 100644
+> --- a/package/elf2flt/elf2flt.mk
+> +++ b/package/elf2flt/elf2flt.mk
+> @@ -8,6 +8,7 @@ ELF2FLT_VERSION = 8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7
+>   ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
+>   ELF2FLT_LICENSE = GPLv2+
+>   ELF2FLT_LICENSE_FILES = LICENSE.TXT
+> +ELF2FLT_PATCH = https://github.com/mcoquelin-stm32/elf2flt/commit/4595382ea76f85dced017b1b17b37ef9513458b6.patch
 
-On Wed, 20 Apr 2016 00:05:34 +0200, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2016-02-11 00:03 +0100, Thomas Petazzoni spake thusly:
-> > Patch 0001 that adjusts the Makefile to solve cross-compilation issues
-> > does a lot of whitespace changes that are unnecessary. We remove all
-> > those noisy changes to keep only the really interesting ones.
-> > 
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  I generally suggest to download patches rather than putting them in buildroot. 
+However, I meant this for patches that are upstream (for some definition of 
+upstream, e.g. could be debian or gentoo). So that we have some chance of them 
+being maintained over time. I'm not so fond of downloading patches from a random 
+github fork; in that case, I think it's better to have the patch in buildroot 
+itself.
 
-Thanks, I've applied the patch!
 
-Thomas
+  In your commit message, you write:
+
+> Indeed, the maximum theorical size is 20 bytes (16 bytes for the value + 3
+> bytes for "+0x" + the end of string marker).
+>
+> The reason the value overflows 32bits is yet to be understood, as the ARMV7-M
+> is 32bits architecture, but this patch first ensure the sprintf call is robust
+> enough.
+
+  Isn't that because we're subtracting a long from an int, so if it becomes 
+negative, it will be 0xffffffffnnnnnnnn?
+
+  Regards,
+  Arnout
+
+>
+>   HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
+>
+>
+
+
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
