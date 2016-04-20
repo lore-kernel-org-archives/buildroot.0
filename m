@@ -1,51 +1,146 @@
 From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Wed, 20 Apr 2016 15:38:10 -0300
-Subject: [Buildroot] [PATCH] squid: security bump to version 3.5.17
-Message-ID: <1461177490-20156-1-git-send-email-gustavo@zacarias.com.ar>
+Date: Wed, 20 Apr 2016 15:38:58 -0300
+Subject: [Buildroot] [PATCH] weston: add build fix for clock_gettime() in
+	librt
+Message-ID: <1461177538-21402-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-SQUID-2016:5 (CVE-2016-4051) - Buffer overflow in cachemgr.cgi
-SQUID-2016:6 (CVE-2016-4052) - Multiple issues in ESI processing.
-CVE-2016-4053 & CVE-2016-4054 which are part of SQUID-2016:6.
-
-Switch to xz-compressed tarball as well.
+Over time weston has been manually adding -lrt LDADDs to the Makefile
+for clock_gettime() using sources. However this isn't 100% correct since
+"modern" glibc versions don't require it so switch all over to a
+configure test for that purpose. Fixes:
+http://autobuild.buildroot.net/results/7fb/7fb9968b13f144c4576b28ecd01c82b74e4ed9d5/
 
 Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
 ---
- package/squid/squid.hash | 6 +++---
- package/squid/squid.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...uild-add-check-for-clock_gettime-in-librt.patch | 101 +++++++++++++++++++++
+ package/weston/weston.mk                           |   2 +
+ 2 files changed, 103 insertions(+)
+ create mode 100644 package/weston/0002-build-add-check-for-clock_gettime-in-librt.patch
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 37cfaa1..4f0090e 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,3 +1,3 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.16.tar.bz2.asc
--md5 ab9c92f4a579e056cd8afafa0a95f612  squid-3.5.16.tar.bz2
--sha1 f3a2b8a7451b79d24e8fd166306e2c7248ef3be9  squid-3.5.16.tar.bz2
-+# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.17.tar.xz.asc
-+md5	2dc73cc01e77b1bd16d9070780ae79b1	squid-3.5.17.tar.xz
-+sha1	8ef6fe7d778df9538a4aa29d7e8ace52246e7a23	squid-3.5.17.tar.xz
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index b2e0c98..1d601b5 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+diff --git a/package/weston/0002-build-add-check-for-clock_gettime-in-librt.patch b/package/weston/0002-build-add-check-for-clock_gettime-in-librt.patch
+new file mode 100644
+index 0000000..2c8f54e
+--- /dev/null
++++ b/package/weston/0002-build-add-check-for-clock_gettime-in-librt.patch
+@@ -0,0 +1,101 @@
++From 4c0a6ed01fb1aab578dc6ac29f11524a3883e14f Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 20 Apr 2016 13:16:58 -0300
++Subject: [PATCH] build: add check for clock_gettime() in librt
++
++In older versions of glibc (< 2.17) clock_gettime() is in librt, hence
++linking against librt is required when using it.
++Add a configure check for this and replace all instances of -lrt in
++Makefile.am with $(CLOCK_GETTIME_LIBS).
++
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Status: submitted upstream
++
++ Makefile.am  | 15 ++++++++-------
++ configure.ac |  5 +++++
++ 2 files changed, 13 insertions(+), 7 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index d3c3f71..c042c68 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -65,7 +65,7 @@ weston_LDFLAGS = -export-dynamic
++ weston_CPPFLAGS = $(AM_CPPFLAGS) -DIN_WESTON
++ weston_CFLAGS = $(AM_CFLAGS) $(COMPOSITOR_CFLAGS) $(LIBUNWIND_CFLAGS)
++ weston_LDADD = $(COMPOSITOR_LIBS) $(LIBUNWIND_LIBS) \
++-	$(DLOPEN_LIBS) -lm -lrt libshared.la
+++	$(DLOPEN_LIBS) -lm $(CLOCK_GETTIME_LIBS) libshared.la
++ 
++ weston_SOURCES =					\
++ 	src/git-version.h				\
++@@ -270,7 +270,8 @@ drm_backend_la_LIBADD =				\
++ 	$(COMPOSITOR_LIBS)			\
++ 	$(DRM_COMPOSITOR_LIBS)			\
++ 	$(INPUT_BACKEND_LIBS)			\
++-	libshared.la -lrt			\
+++	libshared.la				\
+++	$(CLOCK_GETTIME_LIBS)			\
++ 	libsession-helper.la
++ drm_backend_la_CFLAGS =				\
++ 	$(COMPOSITOR_CFLAGS)			\
++@@ -508,11 +509,11 @@ nodist_weston_presentation_shm_SOURCES =		\
++ 	protocol/presentation-time-protocol.c		\
++ 	protocol/presentation-time-client-protocol.h
++ weston_presentation_shm_CFLAGS = $(AM_CFLAGS) $(SIMPLE_CLIENT_CFLAGS)
++-weston_presentation_shm_LDADD = $(SIMPLE_CLIENT_LIBS) libshared.la -lm -lrt
+++weston_presentation_shm_LDADD = $(SIMPLE_CLIENT_LIBS) libshared.la -lm $(CLOCK_GETTIME_LIBS)
++ 
++ weston_multi_resource_SOURCES = clients/multi-resource.c
++ weston_multi_resource_CFLAGS = $(AM_CFLAGS) $(SIMPLE_CLIENT_CFLAGS)
++-weston_multi_resource_LDADD = $(SIMPLE_CLIENT_LIBS) libshared.la -lrt -lm
+++weston_multi_resource_LDADD = $(SIMPLE_CLIENT_LIBS) libshared.la $(CLOCK_GETTIME_LIBS) -lm
++ endif
++ 
++ if BUILD_SIMPLE_EGL_CLIENTS
++@@ -580,7 +581,7 @@ BUILT_SOURCES += $(nodist_libtoytoolkit_la_SOURCES)
++ libtoytoolkit_la_LIBADD =			\
++ 	$(CLIENT_LIBS)				\
++ 	$(CAIRO_EGL_LIBS)			\
++-	libshared-cairo.la -lrt -lm
+++	libshared-cairo.la $(CLOCK_GETTIME_LIBS) -lm
++ libtoytoolkit_la_CFLAGS = $(AM_CFLAGS) $(CLIENT_CFLAGS) $(CAIRO_EGL_CFLAGS)
++ 
++ weston_flower_SOURCES = clients/flower.c
++@@ -1181,7 +1182,7 @@ vertex_clip_test_SOURCES =			\
++ 	shared/helpers.h			\
++ 	src/vertex-clipping.c			\
++ 	src/vertex-clipping.h
++-vertex_clip_test_LDADD = libtest-runner.la -lm -lrt
+++vertex_clip_test_LDADD = libtest-runner.la -lm $(CLOCK_GETTIME_LIBS)
++ 
++ libtest_client_la_SOURCES =			\
++ 	tests/weston-test-client-helper.c	\
++@@ -1269,7 +1270,7 @@ matrix_test_SOURCES =				\
++ 	shared/matrix.c				\
++ 	shared/matrix.h
++ matrix_test_CPPFLAGS = -DUNIT_TEST
++-matrix_test_LDADD = -lm -lrt
+++matrix_test_LDADD = -lm $(CLOCK_GETTIME_LIBS)
++ 
++ if ENABLE_IVI_SHELL
++ module_tests += 				\
++diff --git a/configure.ac b/configure.ac
++index 447cf6b..670200c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -46,6 +46,11 @@ AC_CHECK_FUNC([dlopen], [],
++               AC_CHECK_LIB([dl], [dlopen], DLOPEN_LIBS="-ldl"))
++ AC_SUBST(DLOPEN_LIBS)
++ 
+++# In old glibc versions (< 2.17) clock_gettime() is in librt
+++AC_SEARCH_LIBS([clock_gettime], [rt],
+++             [CLOCK_GETTIME_LIBS="-lrt"])
+++AC_SUBST([CLOCK_GETTIME_LIBS])
+++
++ AC_CHECK_DECL(SFD_CLOEXEC,[],
++ 	      [AC_MSG_ERROR("SFD_CLOEXEC is needed to compile weston")],
++ 	      [[#include <sys/signalfd.h>]])
++-- 
++2.7.3
++
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 052784e..63c43a3 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -9,6 +9,8 @@ WESTON_SITE = http://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ WESTON_LICENSE = MIT
+ WESTON_LICENSE_FILES = COPYING
++# For 0002-build-add-check-for-clock_gettime-in-librt.patch
++WESTON_AUTORECONF = YES
  
- SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).16
--SQUID_SOURCE = squid-$(SQUID_VERSION).tar.bz2
-+SQUID_VERSION = $(SQUID_VERSION_MAJOR).17
-+SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
- SQUID_LICENSE = GPLv2+
- SQUID_LICENSE_FILES = COPYING
+ WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
+ 	libxkbcommon pixman libpng jpeg mtdev udev cairo libinput \
 -- 
 2.7.3
