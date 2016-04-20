@@ -1,54 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Apr 2016 00:58:48 +0200
-Subject: [Buildroot] [PATCH 2/4] linux-headers: indent custom choices
-In-Reply-To: <1461099155-30702-3-git-send-email-vivien.didelot@savoirfairelinux.com>
-References: <1461099155-30702-1-git-send-email-vivien.didelot@savoirfairelinux.com>
- <1461099155-30702-3-git-send-email-vivien.didelot@savoirfairelinux.com>
-Message-ID: <5716B828.2070008@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 20 Apr 2016 07:28:34 +0300
+Subject: [Buildroot] [PATCH 2/3] c-icap: bump to version 0.4.2
+In-Reply-To: <20160419211602.7bca70f5@free-electrons.com>
+References: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
+ <3280a03616963d1b2a5bfa3120390bcd59bee470.1461089746.git.baruch@tkos.co.il>
+ <20160419211602.7bca70f5@free-electrons.com>
+Message-ID: <20160420042834.GG2476@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/19/16 22:52, Vivien Didelot wrote:
-> Fix the indentation of config entries in the "Custom kernel headers
-> series" choice menu.
+Hi Thomas,
 
-  We currently have 5 choice statements where the contents is indented, and 54 
-where it's not. So I wouldn't say that we usually indent it...
+On Tue, Apr 19, 2016 at 09:16:02PM +0200, Thomas Petazzoni wrote:
+> On Tue, 19 Apr 2016 21:15:45 +0300, Baruch Siach wrote:
+> 
+> > +C_ICAP_CONF_ENV = ac_cv_10031b_ipc_sem=yes ac_cv_fcntl=yes
+> 
+> These look a bit special/weird, especially ac_cv_fcntl=yes. Normally
+> for functions, the cache variable is named ac_cv_func_<function>, and
+> the checks don't need to pre-seed cache variable values.
 
-  That said, I'm not strictly against indenting choice contents: it's not going 
-to be nested any deeper, and the lines are normally not that long. The only 
-question is what to do with the help texts, because they would suddenly have to 
-be wrapped at 82 characters...
+configure.ac uses AC_TRY_RUN (inside AC_CACHE_CHECK) to test for 
+sem_init/sem_post and fcntl. The fourth AC_TRY_RUN parameter 
+(ACTION-IF-CROSS-COMPILING) of these tests gives this advice:
 
->
-> Signed-off-by: Vivien Didelot <vivien.didelot@savoirfairelinux.com>
-> ---
->   package/linux-headers/Config.in.host | 160 +++++++++++++++++------------------
->   1 file changed, 80 insertions(+), 80 deletions(-)
->
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index 9f80224..6d86113 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -99,112 +99,112 @@ choice
->   	  This is used to hide/show some packages that have strict
->   	  requirements on the version of kernel headers.
->
-> -config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
-> -	bool "4.5.x"
-> -	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-> +	config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5
-> +		bool "4.5.x"
-> +		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
-[snip]
+   [AC_MSG_ERROR([cross-compiling,
+        presetting ac_cv_10031b_ipc_sem=(yes|no) will help])]
+        )
+   ]
+
+   [AC_MSG_ERROR([cross-compiling,
+        presetting ac_cv_fcntl=(yes|no) will help])]
+        )
+   ]
+
+> Can you add a comment on top of this line that explains why those two
+> values need to be passed? Or at least, it should be explained in the
+> commit log (but a comment in the code is better IMO).
+
+I'll add a comment.
+
+baruch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
