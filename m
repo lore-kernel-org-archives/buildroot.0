@@ -1,58 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2016 22:02:28 +0200
-Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
-In-Reply-To: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
-References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
-Message-ID: <20160420220228.59d5e54f@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 20 Apr 2016 22:18:02 +0200
+Subject: [Buildroot] [PATCH] [RFC] U-Boot: don't check hashes for U-Boot
+ external patches
+In-Reply-To: <57174233.9040302@free.fr>
+References: <1460644321-13849-1-git-send-email-julien.boibessot@free.fr>
+ <57100509.8040804@mind.be> <57100ABB.8090206@mind.be>
+ <5714B6C2.6020204@free.fr> <57156B4C.9090203@mind.be>
+ <57174233.9040302@free.fr>
+Message-ID: <5717E3FA.4010601@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 04/20/16 10:47, Julien Boibessot wrote:
+> On 19/04/2016 01:18, Arnout Vandecappelle wrote:
+>> On 04/18/16 12:28, Julien Boibessot wrote:
+>>> Hello,
+>>>
+>>> Arnout,
+>>>
+>>> thanks for the comments.
+>>>
+>>> On 14/04/2016 23:25, Arnout Vandecappelle wrote:
+>> [snip]
+>>>>
+>>>>    Oh, and something similar should be done for LINUX_PATCH as well.
+>>>
+>>> LINUX_PATCH is already working well with external patches that have to
+>>> be downloaded.
+>>
+>>   Of course, because we don't have a linux.hash and probably never will
+>> have one.
+>
+> ah ok, got it now ! :-)
+> So why can't we just get rid of uboot.hash too ?
 
-On Wed, 20 Apr 2016 18:47:04 +0100, Joao Pinto wrote:
-> This patch has the goal to add to the juno board defconfig the u-boot build 
-> configurations. The juno board readme file was also updated with the
-> necessary steps to build the ARM Trusted Firmware (with u-boot in it) and
-> how to deploy it.
+  I don't think so.
 
-Thanks!
+  For the kernel, it is very unlikely that you just use the latest version, most 
+projects will want a specific version and usually even a patched version. With 
+device trees this becomes somewhat less true, but even so, most people just 
+don't use the latest-and-greatest kernel. Therefore, having hashes is quite useless.
 
-> +Building bootloader files bl1.bin and fip.bin
-> +=============================================
-> +First clone ARM Trusted Firmware repository
-> +
-> +   $ git clone https://github.com/ARM-software/arm-trusted-firmware.git
-> +
-> +After clonning, please configure the following environment variables:
-> +
-> +  CROSS_COMPILE=<buidlroot_path>/output/host/usr/bin/aarch64-buildroot-linux-gnu-
-> +  BL33=<buidlroot_path>/output/images/u-boot.bin
-> +  SCP_BL2=<path_to_scp_firmware>
-> +
-> +Finaly execute:
-> +  make PLAT=juno all fip
+  For u-boot (and barebox for that matter), this also used to be the case, but 
+nowadays you can very often get away with just using the upstream version. In 
+this case, the hash is indeed valuable.
 
-The whole point of Buildroot is to automate the build process, so this
-should be done by a Buildroot package, rather than manually by the
-user. So a package for ATF should probably be created.
+  Cc-ing Yann, our hash expert :-)
 
-I also work on an ARM64 platform that uses ATF+U-Boot, so I'll be able
-to compare and tell you whether what you're proposing is only
-applicable to Juno, or can be used for other platforms as well.
+  Regards,
+  Arnout
 
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
 
-Using the legacy build system with a modern U-Boot such as 2016.03
-doesn't make much sense. Please use the kconfig based build system,
-unless there is a real reason not to.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
