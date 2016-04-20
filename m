@@ -1,31 +1,45 @@
-From: Ubaldo Porcheddu <ubaldo@eja.it>
-Date: Wed, 20 Apr 2016 08:39:51 +0000
-Subject: [Buildroot] [PATCH 1/1] Raspberry PI 3 firmware update to latest
-	release
-Message-ID: <1461141591-21643-1-git-send-email-ubaldo@eja.it>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 20 Apr 2016 10:41:56 +0200
+Subject: [Buildroot] [PATCH] python-certifi: bump to version 2016.2.28
+Message-ID: <1461141716-13114-1-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
----
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 291da3a..8476678 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
+Use upstream MD5 checksum.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/python-certifi/python-certifi.hash | 5 +++--
+ package/python-certifi/python-certifi.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index 9277f51..ade4db3 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
+@@ -1,2 +1,3 @@
+-sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
+-sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
++# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5d672aa766e1f773c75cfeccd02d3650, sha256 locally computed
++md5   5d672aa766e1f773c75cfeccd02d3650  certifi-2016.2.28.tar.gz
++sha256  5e8eccf95924658c97b990b50552addb64f55e1e3dfe4880456ac1f287dc79d0  certifi-2016.2.28.tar.gz
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index f142041..84db8ff 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 8b4e5482b52e6fb438dddc0d88ba0ba8d44af54b
-+RPI_FIRMWARE_VERSION = 951799bbcd795ddf27769d14acf4813fdcbe53dc
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+-PYTHON_CERTIFI_VERSION = 14.05.14
++PYTHON_CERTIFI_VERSION = 2016.2.28
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+ PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
 -- 
-1.9.1
+2.1.4
