@@ -1,60 +1,38 @@
-From: Pieter Smith <pieter@boesman.nl>
-Date: Wed, 20 Apr 2016 18:42:16 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
- config (incl. BBB)
-In-Reply-To: <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <20160419212441.6a0454e9@free-electrons.com>
- <20160419201733.GA19934@smipidev>
- <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
-Message-ID: <20160420164216.GA26814@smipidev>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Wed, 20 Apr 2016 13:54:43 -0300
+Subject: [Buildroot] [PATCH] weston: disable v4l simple dmabuf for headers <
+	3.8
+Message-ID: <1461171283-14226-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+It uses VIDIOC_EXPBUF which only came to light with kernel 3.8, so
+disable it if headers are older. Fixes:
+http://autobuild.buildroot.net/results/7fb/7fb9968b13f144c4576b28ecd01c82b74e4ed9d5/
 
-On Wed, Apr 20, 2016 at 04:42:20PM +0200, Yegor Yefremov wrote:
-> On Tue, Apr 19, 2016 at 10:17 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> > Hi Thomas,
-> >
-> > On Tue, Apr 19, 2016 at 09:24:41PM +0200, Thomas Petazzoni wrote:
-> >> Hello,
-> >>
-> >> On Sun, 20 Mar 2016 23:35:44 +0100, Pieter Smith wrote:
-> >>
-> >> > Pieter Smith (7):
-> >> >   barebox: support multi-image-build image selection
-> >> >   barebox: friendly error on missing built image
-> >> >   barebox: support custom barebox output image name
-> >> >   barebox: introduce barebox-package function
-> >> >   barebox: extract package name argument
-> >> >   barebox: support 2nd config build
-> >> >   beaglebone: adds barebox bootloader defconfig
-> >>
-> >> Since there were some comments on this v4, I marked it as Changes
-> >> Requested in our patch tracking system. When you find some time, can
-> >> you send an updated v5 of this patch series?
-> >
-> > I have been a little short on time as of late. The patch is complete, but I
-> > am having probably unrelated problems with my BBB set-up that I am trying to
-> > troubleshoot. Nevertheless, I would like to make sure that everything works
-> > before reposting. Maybe Yegor can help to test that everything works?
-> >
-> > @Yegor: Do you have time to test the branch on your setup?
-> >   URL:    https://github.com/smipi1/bbb_buildroot.git
-> >   branch: barebox_2nd_config_build-v5
-> 
-> Have made basic tests, i.e. changing configuration for barebox and
-> barebox-2 and running make to see, if proper barebox was compiled.
-> Everything is working the way it was in v4 from this point of view.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ package/weston/weston.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks! Did you flash a bare SD card or the internal eMMC with boot.vfat and
-rootfs.ext4 as part of the tests?
-
-> 
-> Yegor
-
-- Pieter
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 1f31097..052784e 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -26,6 +26,11 @@ WESTON_CONF_OPTS = \
+ WESTON_MAKE_OPTS = \
+ 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+ 
++# Uses VIDIOC_EXPBUF, only available from 3.8+
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
++WESTON_CONF_OPTS += --disable-simple-dmabuf-v4l-client
++endif
++
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ WESTON_CONF_OPTS += --enable-dbus
+ WESTON_DEPENDENCIES += dbus
+-- 
+2.7.3
