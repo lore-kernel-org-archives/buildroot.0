@@ -1,73 +1,98 @@
-From: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Date: Wed, 20 Apr 2016 11:52:15 +0200
-Subject: [Buildroot] [PATCH] elf2flt: add patch "Fix buffer overflow in
- output_relocs()"
-In-Reply-To: <1461145853-6733-1-git-send-email-mcoquelin.stm32@gmail.com>
-References: <1461145853-6733-1-git-send-email-mcoquelin.stm32@gmail.com>
-Message-ID: <5717514F.8070902@gmail.com>
+From: Romain Izard <romain.izard.pro@gmail.com>
+Date: Wed, 20 Apr 2016 11:54:12 +0200
+Subject: [Buildroot] [PATCH v6] core/pkg-kconfig: Use olddefconfig when
+	available
+Message-ID: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Using 'yes "" | make oldconfig' to regenerate a .config file from an
+existing defconfig does not work reliably in all cases. Specifically, it
+does not work well with tristate choice entries.
 
+The correct way to do it is to use 'make olddefconfig', but this target
+is not supported in projects that use an old version of kconfig. As
+most projects do not use tristate entries, there is no need for them to
+upgrade.
 
-On 04/20/2016 11:50 AM, Maxime Coquelin wrote:
-> This patches fixes the following crash:
-> make[1]: Entering directory `<...>/build/uclibc-1.0.14'
->    CC utils/getconf
-> *** buffer overflow detected ***: <...>/bin/elf2flt terminated
-> ======= Backtrace: =========
-> /lib/x86_64-linux-gnu/libc.so.6(+0x7338f)[0x2ad3be5f738f]
-> /lib/x86_64-linux-gnu/libc.so.6(__fortify_fail+0x5c)[0x2ad3be68ec9c]
-> /lib/x86_64-linux-gnu/libc.so.6(+0x109b60)[0x2ad3be68db60]
-> /lib/x86_64-linux-gnu/libc.so.6(+0x109069)[0x2ad3be68d069]
-> /lib/x86_64-linux-gnu/libc.so.6(_IO_default_xsputn+0xbc)[0x2ad3be5ff70c]
-> /lib/x86_64-linux-gnu/libc.so.6(_IO_vfprintf+0xaef)[0x2ad3be5ce7df]
-> /lib/x86_64-linux-gnu/libc.so.6(__vsprintf_chk+0x84)[0x2ad3be68d0f4]
-> /lib/x86_64-linux-gnu/libc.so.6(__sprintf_chk+0x7d)[0x2ad3be68d04d]
->   <...>/bin/elf2flt[0x403cda]
->   <...>/bin/elf2flt[0x4030a4]
-> /lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0xf5)[0x2ad3be5a5ec5]
->   <...>/bin/elf2flt[0x403642]
->
-> A pull-request has been sent for this patch to elf2flt developers, so we can
-> remove it as soon as the patch is accepted upstream.
->
-> Signed-off-by: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> ---
->   package/elf2flt/elf2flt.hash | 1 +
->   package/elf2flt/elf2flt.mk   | 3 +++
->   2 files changed, 4 insertions(+)
->
-> diff --git a/package/elf2flt/elf2flt.hash b/package/elf2flt/elf2flt.hash
-> index be7c77605be7..89d22222733e 100644
-> --- a/package/elf2flt/elf2flt.hash
-> +++ b/package/elf2flt/elf2flt.hash
-> @@ -1,2 +1,3 @@
->   # Locally calculated
->   sha256 64ede6936aa88028378e08192039c29791b9e32714cc861762214b8e106e7145 elf2flt-8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7.tar.gz
-> +sha256 2659d8a7fca078dfe7ce9a3754d94a0cad3dc1fc7b8b0db5cf08f14bb34e4865 4595382ea76f85dced017b1b17b37ef9513458b6.patch
-> diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-> index 6c16c3000d89..1ddfbe3bef14 100644
-> --- a/package/elf2flt/elf2flt.mk
-> +++ b/package/elf2flt/elf2flt.mk
-> @@ -8,6 +8,7 @@ ELF2FLT_VERSION = 8a3e74446fe7d866f0517ee089a37f4bdf4bc9f7
->   ELF2FLT_SITE = $(call github,uclinux-dev,elf2flt,$(ELF2FLT_VERSION))
->   ELF2FLT_LICENSE = GPLv2+
->   ELF2FLT_LICENSE_FILES = LICENSE.TXT
-> +ELF2FLT_PATCH = https://github.com/mcoquelin-stm32/elf2flt/commit/4595382ea76f85dced017b1b17b37ef9513458b6.patch
->
->   HOST_ELF2FLT_DEPENDENCIES = host-binutils host-zlib
->
-> @@ -23,6 +24,8 @@ HOST_ELF2FLT_CONF_OPTS = \
->
->   HOST_ELF2FLT_LIBS = -lz
->
-> +HOST_ELF2FLT_CFLAGS += "-g "
+'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
+name for this target between Linux versions 2.6.36 and 3.6.
 
-Sorry, I'll resend a v2 removing this...
+Check which targets are supported by the current project, and use the
+appropriate method to regenerate the .config file.
 
-Regards,
-Maxime
+Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+Changelog:
+v1: New patch
+v2: Use oldnoconfig instead of olddefconfig
+    Fix silent mode
+    Change the pattern in both places where it is used
+    Use a macro to avoid redundancy
+v3: Do not use $(call ...)
+    Use the $(2)_KCONFIG_MAKE variable
+v4: No change
+v5: Detect available methods and use the most recent one
+v6: Remove colon from matched rule names
+
+ package/pkg-kconfig.mk | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 4033915..478f5bb 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -60,18 +60,35 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ $(2)_KCONFIG_MAKE = \
+ 	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
+ 
++$(2)_KCONFIG_RULES = \
++	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
++		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
++
++# The correct way to regenerate a .config file is to use 'make olddefconfig'.
++# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
++# versions 2.6.36 and 3.6, and remains as an alias in later versions.
++# In older versions, and in some other projects that use kconfig, the target is
++# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
++# only, as this can fail in complex cases.
++define $(2)_REGEN_DOT_CONFIG
++	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
++		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
++		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
++			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
++			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
++endef
++
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
+-# full .config first. We use 'make oldconfig' because this can be safely
+-# done even when the package does not support defconfigs.
++# full .config first.
+ $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+ 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+ 		cp $$($(2)_KCONFIG_FILE) $$(@))
+ 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+ 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+-	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
++	$$($(2)_REGEN_DOT_CONFIG)
+ 
+ # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+ # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+@@ -82,7 +99,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
+ # The exact rules are specified by the package .mk file.
+ define $(2)_FIXUP_DOT_CONFIG
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+-	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
++	$$($(2)_REGEN_DOT_CONFIG)
+ 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ endef
+ 
+-- 
+2.5.0
