@@ -1,82 +1,142 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2016 22:28:43 +0200
-Subject: [Buildroot] [git commit] go-bootstrap: new host package
-Message-ID: <20160420210351.685F581E59@busybox.osuosl.org>
+Date: Wed, 20 Apr 2016 22:29:34 +0200
+Subject: [Buildroot] [git commit] go: new host package
+Message-ID: <20160420210351.7295A80E58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7bc687e7d2b8ef7afd74d4d35c45e2a16f28513
+commit: https://git.buildroot.net/buildroot/commit/?id=ec50eb3e4226e69d11dffff8e509a981586dd81f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a new package go-bootstrap which builds a bootstrap compiler for the
-go programming language.
+Add a new package 'go' which builds the host cross compiler and
+libraries for the go programming language.
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 [Thomas:
- - Rename GO_BOOTSTRAP_FINAL to HOST_GO_BOOTSTRAP_ROOT. Use the HOST_
-   prefix because this variable is specific to the host variant. And
-   it's not "final" at all, but rather the "root" of the Go Bootstrap
-   installation.
- - Rename GO_BOOTSTRAP_MAKE_ENV to HOST_GO_BOOTSTRAP_MAKE_ENV, also to
-   have the HOST_ prefix because it's a host package.]
+ - Put the computation of GO_GOARM inside the ifeq ($(BR2_arm),y)
+   condition rather than duplicating this condition.
+ - Remove the GO_GOARCH=unknown case, since there is no way to fall in
+   this case as only supported architectures can use host-go.
+ - Remove the GO_GOARM=unknown case, since we are sure that only
+   ARMv5/6/7 will use host-go.
+ - Rename HOST_GO_FINAL to HOST_GO_ROOT, since it's really the "root"
+   of the Go installation.
+ - Remove visible Config.in.host option.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ---
- package/go-bootstrap/go-bootstrap.hash |  2 ++
- package/go-bootstrap/go-bootstrap.mk   | 38 ++++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+ package/Config.in.host    |  1 +
+ package/go/Config.in.host |  5 ++++
+ package/go/go.hash        |  2 ++
+ package/go/go.mk          | 70 +++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 78 insertions(+)
 
-diff --git a/package/go-bootstrap/go-bootstrap.hash b/package/go-bootstrap/go-bootstrap.hash
+diff --git a/package/Config.in.host b/package/Config.in.host
+index c1d40f4..d27242f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -14,6 +14,7 @@ menu "Host utilities"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+ 	source "package/genpart/Config.in.host"
++	source "package/go/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
 new file mode 100644
-index 0000000..1d0566a
+index 0000000..094e402
 --- /dev/null
-+++ b/package/go-bootstrap/go-bootstrap.hash
++++ b/package/go/Config.in.host
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64 || BR2_powerpc
++	depends on !BR2_ARM_CPU_ARMV4
+diff --git a/package/go/go.hash b/package/go/go.hash
+new file mode 100644
+index 0000000..e7c72de
+--- /dev/null
++++ b/package/go/go.hash
 @@ -0,0 +1,2 @@
 +# Locally computed:
-+sha256 299a6fd8f8adfdce15bc06bde926e7b252ae8e24dd5b16b7d8791ed79e7b5e9b go1.4.2.src.tar.gz
-diff --git a/package/go-bootstrap/go-bootstrap.mk b/package/go-bootstrap/go-bootstrap.mk
++sha256  754e06dab1c31ab168fc9db9e32596734015ea9e24bc44cae7f237f417ce4efe  go1.5.3.src.tar.gz
+diff --git a/package/go/go.mk b/package/go/go.mk
 new file mode 100644
-index 0000000..e404cb6
+index 0000000..5454fd5
 --- /dev/null
-+++ b/package/go-bootstrap/go-bootstrap.mk
-@@ -0,0 +1,38 @@
++++ b/package/go/go.mk
+@@ -0,0 +1,70 @@
 +################################################################################
 +#
-+# go-bootstrap
++# go
 +#
 +################################################################################
 +
-+GO_BOOTSTRAP_VERSION = 1.4.2
-+GO_BOOTSTRAP_SITE = https://storage.googleapis.com/golang
-+GO_BOOTSTRAP_SOURCE = go$(GO_BOOTSTRAP_VERSION).src.tar.gz
++GO_VERSION = 1.5.3
++GO_SITE = https://storage.googleapis.com/golang
++GO_SOURCE = go$(GO_VERSION).src.tar.gz
 +
-+GO_BOOTSTRAP_LICENSE = BSD-3c
-+GO_BOOTSTRAP_LICENSE_FILES = LICENSE
++GO_LICENSE = BSD-3c
++GO_LICENSE_FILES = LICENSE
 +
-+HOST_GO_BOOTSTRAP_ROOT = $(HOST_DIR)/usr/lib/go-$(GO_BOOTSTRAP_VERSION)
++ifeq ($(BR2_arm),y)
++GO_GOARCH = arm
++ifeq ($(BR2_ARM_CPU_ARMV5),y)
++GO_GOARM = 5
++else ifeq ($(BR2_ARM_CPU_ARMV6),y)
++GO_GOARM = 6
++else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++GO_GOARM = 7
++endif
++else ifeq ($(BR2_aarch64),y)
++GO_GOARCH = arm64
++else ifeq ($(BR2_i386),y)
++GO_GOARCH = 386
++else ifeq ($(BR2_x86_64),y)
++GO_GOARCH = amd64
++else ifeq ($(BR2_powerpc),y)
++GO_GOARCH = ppc64
++endif
 +
-+HOST_GO_BOOTSTRAP_MAKE_ENV = \
-+	GOOS=linux \
-+	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_ROOT)" \
++HOST_GO_DEPENDENCIES = host-go-bootstrap
++HOST_GO_ROOT = $(HOST_DIR)/usr/lib/go
++
++HOST_GO_MAKE_ENV = \
++	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_ROOT) \
++	GOROOT_FINAL=$(HOST_GO_ROOT) \
 +	GOROOT="$(@D)" \
-+	GOBIN="$(@D)/bin"
++	GOBIN="$(@D)/bin" \
++	GOARCH=$(GO_GOARCH) \
++	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
++	GOOS=linux \
++	CGO_ENABLED=1 \
++	CC_FOR_TARGET=$(TARGET_CC) \
++	CXX_FOR_TARGET=$(TARGET_CXX)
 +
-+define HOST_GO_BOOTSTRAP_BUILD_CMDS
-+	cd $(@D)/src && $(HOST_GO_BOOTSTRAP_MAKE_ENV) ./make.bash
++define HOST_GO_BUILD_CMDS
++	cd $(@D)/src && $(HOST_GO_MAKE_ENV) ./make.bash
 +endef
 +
-+define HOST_GO_BOOTSTRAP_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_BOOTSTRAP_ROOT)/bin/go
-+	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_BOOTSTRAP_ROOT)/bin/gofmt
++define HOST_GO_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_ROOT)/bin/go
++	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_ROOT)/bin/gofmt
 +
-+	cp -a $(@D)/lib $(HOST_GO_BOOTSTRAP_ROOT)/
-+	cp -a $(@D)/pkg $(HOST_GO_BOOTSTRAP_ROOT)/
++	ln -sf ../lib/go/bin/go $(HOST_DIR)/usr/bin/
++	ln -sf ../lib/go/bin/gofmt $(HOST_DIR)/usr/bin/
++
++	cp -a $(@D)/lib $(HOST_GO_ROOT)/
++
++	mkdir -p $(HOST_GO_ROOT)/pkg
++	cp -a $(@D)/pkg/include $(@D)/pkg/linux_* $(HOST_GO_ROOT)/pkg/
++	cp -a $(@D)/pkg/tool $(HOST_GO_ROOT)/pkg/
 +
 +	# There is a known issue which requires the go sources to be installed
 +	# https://golang.org/issue/2775
-+	cp -a $(@D)/src $(HOST_GO_BOOTSTRAP_ROOT)/
++	cp -a $(@D)/src $(HOST_GO_ROOT)/
 +endef
 +
 +$(eval $(host-generic-package))
