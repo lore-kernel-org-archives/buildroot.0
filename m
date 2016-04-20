@@ -1,45 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Apr 2016 13:40:02 +0200
-Subject: [Buildroot] [git commit] python-certifi: bump to version 2016.2.28
-Message-ID: <20160420114712.1859181E16@busybox.osuosl.org>
+Date: Wed, 20 Apr 2016 13:41:47 +0200
+Subject: [Buildroot] [git commit] iperf3: bump to version 3.1.2
+Message-ID: <20160420114712.21AD981E16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfb53d30bf824f5bac36082c118f1af83639b3e2
+commit: https://git.buildroot.net/buildroot/commit/?id=6c63174316ff925491cd82bb456ab78a83b9fc32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use upstream MD5 checksum.
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-certifi/python-certifi.hash | 5 +++--
- package/python-certifi/python-certifi.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/iperf3/iperf3.hash | 2 +-
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index 9277f51..ade4db3 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,2 +1,3 @@
--sha1   f53dc8f57aaf6d69c183ebadcec52ece0a55cc3f                         certifi-14.05.14.tar.gz
--sha256 1e1bcbacd6357c151ae37cf0290dcc809721d32ce21fd6b7339568f3ddef1b69 certifi-14.05.14.tar.gz
-+# md5 from https://pypi.python.org/pypi?:action=show_md5&digest=5d672aa766e1f773c75cfeccd02d3650, sha256 locally computed
-+md5   5d672aa766e1f773c75cfeccd02d3650  certifi-2016.2.28.tar.gz
-+sha256  5e8eccf95924658c97b990b50552addb64f55e1e3dfe4880456ac1f287dc79d0  certifi-2016.2.28.tar.gz
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index f142041..84db8ff 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 4b9332d..48a2b2a 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	86f292e554d42d1bddbd5f587e594005f4ca202c284e4da45ed8cfbe935a5be8	iperf3-3.1.1.tar.gz
++sha256  48b5c783bb4a9c44f2bdcfe52c5d45b77ab1e1c82de3d0131f692457950811f9  iperf3-3.1.2.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 74d6cce..2438955 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 14.05.14
-+PYTHON_CERTIFI_VERSION = 2016.2.28
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
- PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/source/c/certifi
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
+-IPERF3_VERSION = 3.1.1
++IPERF3_VERSION = 3.1.2
+ IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+ IPERF3_LICENSE_FILES = LICENSE
