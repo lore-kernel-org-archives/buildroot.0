@@ -1,55 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Wed, 20 Apr 2016 10:06:00 +0200
-Subject: [Buildroot] [PATCH 2/3] c-icap: bump to version 0.4.2
-In-Reply-To: <20160420042834.GG2476@tarshish>
-References: <f4a2d607557dd8a5b7fdc322f0ae8ef083890076.1461089746.git.baruch@tkos.co.il>
- <3280a03616963d1b2a5bfa3120390bcd59bee470.1461089746.git.baruch@tkos.co.il>
- <20160419211602.7bca70f5@free-electrons.com>
- <20160420042834.GG2476@tarshish>
-Message-ID: <20160420100600.7addc3de@free-electrons.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 20 Apr 2016 10:35:43 +0200
+Subject: [Buildroot] [PATCH] iperf3: bump to version 3.1.2
+Message-ID: <1461141343-5489-1-git-send-email-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/iperf3/iperf3.hash | 2 +-
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 20 Apr 2016 07:28:34 +0300, Baruch Siach wrote:
-
-> configure.ac uses AC_TRY_RUN (inside AC_CACHE_CHECK) to test for 
-> sem_init/sem_post and fcntl. The fourth AC_TRY_RUN parameter 
-> (ACTION-IF-CROSS-COMPILING) of these tests gives this advice:
-> 
->    [AC_MSG_ERROR([cross-compiling,
->         presetting ac_cv_10031b_ipc_sem=(yes|no) will help])]
->         )
->    ]
-> 
->    [AC_MSG_ERROR([cross-compiling,
->         presetting ac_cv_fcntl=(yes|no) will help])]
->         )
->    ]
-
-OK. I don't know why those tests are using AC_TRY_RUN(), but assuming
-they really need to, then yes, pre-seeding the cache variables in the
-only way.
-
-> > Can you add a comment on top of this line that explains why those two
-> > values need to be passed? Or at least, it should be explained in the
-> > commit log (but a comment in the code is better IMO).
-> 
-> I'll add a comment.
-
-Yes, just something like:
-
-# Pre-seed cache variables for tests done with AC_TRY_RUN that are not
-# cross-compile friendly
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 4b9332d..48a2b2a 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	86f292e554d42d1bddbd5f587e594005f4ca202c284e4da45ed8cfbe935a5be8	iperf3-3.1.1.tar.gz
++sha256  48b5c783bb4a9c44f2bdcfe52c5d45b77ab1e1c82de3d0131f692457950811f9  iperf3-3.1.2.tar.gz
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 74d6cce..2438955 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPERF3_VERSION = 3.1.1
++IPERF3_VERSION = 3.1.2
+ IPERF3_SITE = $(call github,esnet,iperf,$(IPERF3_VERSION))
+ IPERF3_LICENSE = BSD-3c, BSD-2c, MIT
+ IPERF3_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+2.8.0
