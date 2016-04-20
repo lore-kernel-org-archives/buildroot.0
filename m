@@ -1,217 +1,82 @@
-From: Ubaldo Porcheddu <ubaldo@eja.it>
-Date: Wed, 20 Apr 2016 11:04:00 +0000
-Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3.
-Message-ID: <1461150240-23107-1-git-send-email-ubaldo@eja.it>
+From: Samuel Martin <s.martin49@gmail.com>
+Date: Wed, 20 Apr 2016 13:12:36 +0200
+Subject: [Buildroot] [PATCH v4 1/1] package/freeswitch: select OpenCV
+ modules needed for mod_cv
+In-Reply-To: <1461085245-30787-1-git-send-email-bernd.kuhls@t-online.de>
+References: <1461085245-30787-1-git-send-email-bernd.kuhls@t-online.de>
+Message-ID: <CAHXCMMKs=EfxFNBid=gR82-Z9643pNjpwKfXRVtAUPcCvXTD0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
----
- board/raspberrypi3/genimage-raspberrypi3.cfg | 30 +++++++++++++
- board/raspberrypi3/post-build.sh             |  9 ++++
- board/raspberrypi3/post-image.sh             | 22 ++++++++++
- board/raspberrypi3/readme.txt                | 64 ++++++++++++++++++++++++++++
- configs/raspberrypi3_defconfig               | 36 ++++++++++++++++
- 5 files changed, 161 insertions(+)
- create mode 100644 board/raspberrypi3/genimage-raspberrypi3.cfg
- create mode 100755 board/raspberrypi3/post-build.sh
- create mode 100755 board/raspberrypi3/post-image.sh
- create mode 100644 board/raspberrypi3/readme.txt
- create mode 100644 configs/raspberrypi3_defconfig
+Bernd, all,
 
-diff --git a/board/raspberrypi3/genimage-raspberrypi3.cfg b/board/raspberrypi3/genimage-raspberrypi3.cfg
-new file mode 100644
-index 0000000..7ba89c5
---- /dev/null
-+++ b/board/raspberrypi3/genimage-raspberrypi3.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "bcm2710-rpi-3-b.dtb",
-+      "rpi-firmware/bootcode.bin",
-+      "rpi-firmware/cmdline.txt",
-+      "rpi-firmware/config.txt",
-+      "rpi-firmware/fixup.dat",
-+      "rpi-firmware/start.elf",
-+      "kernel-marked/zImage"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
-+}
-diff --git a/board/raspberrypi3/post-build.sh b/board/raspberrypi3/post-build.sh
-new file mode 100755
-index 0000000..7eae14a
---- /dev/null
-+++ b/board/raspberrypi3/post-build.sh
-@@ -0,0 +1,9 @@
-+#!/bin/sh
-+
-+set -u
-+set -e
-+
-+# Add a console on tty1
-+grep -qE '^tty1::' ${TARGET_DIR}/etc/inittab || \
-+sed -i '/GENERIC_SERIAL/a\
-+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console' ${TARGET_DIR}/etc/inittab
-diff --git a/board/raspberrypi3/post-image.sh b/board/raspberrypi3/post-image.sh
-new file mode 100755
-index 0000000..73ffd65
---- /dev/null
-+++ b/board/raspberrypi3/post-image.sh
-@@ -0,0 +1,22 @@
-+#!/bin/sh
-+
-+BOARD_DIR="$(dirname $0)"
-+BOARD_NAME="$(basename ${BOARD_DIR})"
-+GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
-+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
-+
-+# Mark the kernel as DT-enabled
-+mkdir -p "${BINARIES_DIR}/kernel-marked"
-+${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
-+	"${BINARIES_DIR}/kernel-marked/zImage"
-+
-+rm -rf "${GENIMAGE_TMP}"
-+
-+genimage                           \
-+	--rootpath "${TARGET_DIR}"     \
-+	--tmppath "${GENIMAGE_TMP}"    \
-+	--inputpath "${BINARIES_DIR}"  \
-+	--outputpath "${BINARIES_DIR}" \
-+	--config "${GENIMAGE_CFG}"
-+
-+exit $?
-diff --git a/board/raspberrypi3/readme.txt b/board/raspberrypi3/readme.txt
-new file mode 100644
-index 0000000..dcbcffd
---- /dev/null
-+++ b/board/raspberrypi3/readme.txt
-@@ -0,0 +1,64 @@
-+Raspberry Pi
-+
-+Intro
-+=====
-+
-+These instructions apply to Raspberry Pi 3 version B.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot
-+-------------------
-+
-+
-+  $ make raspberrypi3_defconfig
-+
-+
-+Build the rootfs
-+----------------
-+
-+Note: you will need to have access to the network, since Buildroot will
-+download the packages' sources.
-+
-+You may now build your rootfs with:
-+
-+  $ make
-+
-+(This may take a while, consider getting yourself a coffee ;-) )
-+
-+Result of the build
-+-------------------
-+
-+After building, you should obtain this tree:
-+
-+    output/images/
-+    +-- bcm2710-rpi-3-b.dtb
-+    +-- boot.vfat
-+    +-- kernel-marked/zImage        [1]
-+    +-- rootfs.ext4
-+    +-- rpi-firmware/
-+    |   +-- bootcode.bin
-+    |   +-- cmdline.txt
-+    |   +-- config.txt
-+    |   +-- fixup.dat
-+    |   `-- start.elf
-+    +-- sdcard.img
-+    `-- zImage
-+
-+[1] This is the mkknlimg DT-marked kernel.
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Insert the SDcard into your Raspberry Pi, and power it up. Your new system
-+should come up now and start two consoles: one on the serial port on
-+the P1 header, one on the HDMI output where you can login using a USB
-+keyboard.
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-new file mode 100644
-index 0000000..80ce908
---- /dev/null
-+++ b/configs/raspberrypi3_defconfig
-@@ -0,0 +1,36 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_EABIHF=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Linux headers same as kernel, a 4.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_1=y
-+
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/raspberrypi/linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="20fe468af4bb40fec0f81753da4b20a8bfc259c9"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-+
-+# Build the DTB from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b"
-+
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+On Tue, Apr 19, 2016 at 7:00 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/ffd/ffd572d7bb68d8ed46ce76b2af824503c587449f/
+> http://autobuild.buildroot.net/results/e53/e53e356451aa4541a76e26722fd71051896e774b/
+> http://autobuild.buildroot.net/results/564/5649ff1b50a1eaafbd0e1a329bff87a65ce18da0/
+> http://autobuild.buildroot.net/results/c60/c60f97c6aafb1a94cb4ce344953598eae8b4a912/
+> http://autobuild.buildroot.net/results/c1a/c1ac61f9a77635962babdb6bfb31dbecb7f4d439/
+>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v4: add more suboptions (Samuel)
+> v3: add more suboptions
+> v2: select the required suboption instead of checking for its existance
+>     in freeswitch.mk (Thomas)
+>
+>  package/freeswitch/Config.in | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
+> index 1350b2b..cef3fd4 100644
+> --- a/package/freeswitch/Config.in
+> +++ b/package/freeswitch/Config.in
+> @@ -7,6 +7,17 @@ menuconfig BR2_PACKAGE_FREESWITCH
+>         depends on BR2_USE_WCHAR # libuuid
+>         select BR2_PACKAGE_LIBCURL
+>         select BR2_PACKAGE_JPEG
+> +       # src/mod/applications/mod_cv/mod_cv.cpp includes cv.h
+and cvaux.h and cxmisc.h.
+cvaux.h also pulls the photo module, which does not get selected
+(either directly here or after via another opencv module in the
+current state of the master).
+
+Side note: freeswitch mixes deprecated legacy[1] and opencv2-style[2]
+header include statement. Maybe just removing the legacy headers is
+enough to not pull a (almost) full opencv, and reduce this select
+list? but that's another question for freswitch upstream ;)
+
+> +       select BR2_PACKAGE_OPENCV_LIB_CALIB3D if BR2_PACKAGE_OPENCV
+> +       select BR2_PACKAGE_OPENCV_LIB_CONTRIB if BR2_PACKAGE_OPENCV
+hum... where does the contrib module come from?
+
+> +       select BR2_PACKAGE_OPENCV_LIB_FEATURES2D if BR2_PACKAGE_OPENCV
+> +       select BR2_PACKAGE_OPENCV_LIB_FLANN if BR2_PACKAGE_OPENCV
+> +       select BR2_PACKAGE_OPENCV_LIB_IMGPROC if BR2_PACKAGE_OPENCV
+> +       select BR2_PACKAGE_OPENCV_LIB_LEGACY if BR2_PACKAGE_OPENCV
+> +       select BR2_PACKAGE_OPENCV_LIB_OBJDETECT if BR2_PACKAGE_OPENCV
+> +       select BR2_PACKAGE_OPENCV_LIB_VIDEO if BR2_PACKAGE_OPENCV
+> +       # src/mod/applications/mod_cv/mod_cv.cpp includes highgui.h
+> +       select BR2_PACKAGE_OPENCV_LIB_HIGHGUI if BR2_PACKAGE_OPENCV
+>         select BR2_PACKAGE_OPENSSL
+>         select BR2_PACKAGE_PCRE
+>         select BR2_PACKAGE_SPEEX
+> --
+> 2.8.0.rc3
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+[1] https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/src/mod/applications/mod_cv/mod_cv.cpp#43
+[2] https://freeswitch.org/stash/projects/FS/repos/freeswitch/browse/src/mod/applications/mod_cv/mod_cv.cpp#34
+
+Regards,
+
 -- 
-1.9.1
+Samuel
