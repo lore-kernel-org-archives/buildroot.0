@@ -1,11 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Apr 2016 13:26:39 +0200
-Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
-In-Reply-To: <5718AC9A.4060801@synopsys.com>
-References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
- <20160420220228.59d5e54f@free-electrons.com>
- <5718AC9A.4060801@synopsys.com>
-Message-ID: <20160421132639.16cd8714@free-electrons.com>
+Date: Thu, 21 Apr 2016 13:29:05 +0200
+Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
+ config (incl. BBB)
+In-Reply-To: <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <20160419212441.6a0454e9@free-electrons.com>
+ <20160419201733.GA19934@smipidev>
+ <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
+ <20160420164216.GA26814@smipidev>
+ <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
+Message-ID: <20160421132905.7c271814@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +18,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 21 Apr 2016 11:34:02 +0100, Joao Pinto wrote:
+On Thu, 21 Apr 2016 12:55:12 +0200, Yegor Yefremov wrote:
 
-> > The whole point of Buildroot is to automate the build process, so this
-> > should be done by a Buildroot package, rather than manually by the
-> > user. So a package for ATF should probably be created.
-> > 
-> > I also work on an ARM64 platform that uses ATF+U-Boot, so I'll be able
-> > to compare and tell you whether what you're proposing is only
-> > applicable to Juno, or can be used for other platforms as well.
+> >> Have made basic tests, i.e. changing configuration for barebox and
+> >> barebox-2 and running make to see, if proper barebox was compiled.
+> >> Everything is working the way it was in v4 from this point of view.
+> >
+> > Thanks! Did you flash a bare SD card or the internal eMMC with boot.vfat and
+> > rootfs.ext4 as part of the tests?
 > 
-> It would great to do it 100% automatic. I'll be waiting for your feedback
-> regarding your ARM64 platform. If it is the same we could do it together.
+> If I copy your images (MLO, barebox.bin) directly to the FAT
+> partition, everything starts as expected. But I dd boot.vfat, the
+> system doesn't boot and shows only CCCCC, though I have no problems
+> mounting the first partition in Linux.
+> 
+> sudo dd if=/tmp/boot.vfat of=/dev/sdd1 bs=1M
 
-Well, the build process is quite similar. I build ATF with:
+So this means that the Barebox build is OK, and only the genimage part
+is causing problems. But this doesn't prevent from merging the barebox
+aspects of the series (patches 1 to 6), which are really the important
+part. The last patch is really more a defconfig proving that it works,
+I am not even sure that in practice we want to merge a defconfig for
+BeagleBone that is just different from beaglebone_defconfig in the fact
+that it uses Barebox instead of U-Boot. Peter?
 
-  make CROSS_COMPILE=aarch64-linux-gnu- BL33=/path/to/uboot USE_COHERENT_MEM=0 PLAT=<platform> DEBUG=1 LOG_LEVEL=20 all fip
-
-I think DEBUG=1 and LOG_LEVEL=20 are not important, but I think the
-PLAT= and USE_COHERENT_MEM= variables are important in my case.
-
-So I guess you do do something like:
-
-  make CROSS_COMPILE=$(TARGET_CROSS) \
-	BL33=$(call qstrip,$(BR2_BOOT_ATF_PAYLOAD_PATH) \
-	$(BR2_BOOT_ATF_ADDITIONAL_VARIABLES) \
-	all fip
-
-and that's it. Of course, the location from where you download ATF
-should be configurable, because I'm not using the ATF from ARM
-directly, but a vendor-specific fork.
-
-Thanks!
+Peter, I think you looked at using genimage on AM335x, what were your
+conclusion? On OMAP3, there were some very strict geometry restrictions
+in the romcode, but I don't remember if your conclusion is that they
+also apply to AM335x or not.
 
 Thomas
 -- 
