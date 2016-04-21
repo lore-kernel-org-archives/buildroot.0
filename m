@@ -1,53 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Apr 2016 22:14:23 +0200
-Subject: [Buildroot] [PATCH 1/2] uclibc/defconfig: enable XSI math
-In-Reply-To: <1461246857-5634-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461246857-5634-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <5719349F.9080404@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Apr 2016 22:16:39 +0200
+Subject: [Buildroot] [PATCH] kmsxx: new package
+In-Reply-To: <CAHXCMML35SVu6B2F5dVnKmQJXYcfqwb-ivRDProvGEjfwTTknQ@mail.gmail.com>
+References: <1461100189-19627-1-git-send-email-maxime.ripard@free-electrons.com>
+ <CAHXCMML35SVu6B2F5dVnKmQJXYcfqwb-ivRDProvGEjfwTTknQ@mail.gmail.com>
+Message-ID: <20160421221639.78c8c2ef@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/21/16 15:54, Gustavo Zacarias wrote:
-> ARM926 size delta +12 KB.
-> It's required for the upcoming mpv package.
+Hello,
 
-  Unfortunately the autobuilder toolchains don't have this enabled yet, so we'll 
-get failures...
+On Wed, 20 Apr 2016 21:51:32 +0200, Samuel Martin wrote:
 
-  The Blackfin toolchain does have this enabled, but the 2015.12 ARC toolchain 
-doesn't.
+> > +config BR2_PACKAGE_KMSXX
+> > +       bool "kmsxx"
+> > +       select BR2_PACKAGE_LIBDRM
+> > +       depends on BR2_TOOLCHAIN_HAS_THREADS # libpthread-stubs
+> > +       help
+> > +         libkms++ is a C++11 library for kernel mode setting.
+> Does this mean there is some restriction on the toolchain properties?
+> (maybe a minimal compiler version?)
+> If so, a "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_..." would be needed.
 
-  Anyway, it's probably a good idea to have this enabled by default.
+Well, for sure if it's written in C++, a dependency on
+BR2_INSTALL_LIBSTDCPP is needed.
 
-  Regards,
-  Arnout
+And since it's C++11, a dependency on gcc 4.7 or 4.8 is most likely
+needed.
 
->
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->   package/uclibc/uClibc-ng.config | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
-> index 66de5a9..2671e06 100644
-> --- a/package/uclibc/uClibc-ng.config
-> +++ b/package/uclibc/uClibc-ng.config
-> @@ -1,4 +1,5 @@
->   DO_C99_MATH=y
-> +DO_XSI_MATH=y
->   KERNEL_HEADERS="/usr/src/linux/include"
->   # LDSO_CACHE_SUPPORT is not set
->   # UCLIBC_STATIC_LDCONFIG is not set
->
+Thanks,
 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
