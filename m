@@ -1,69 +1,65 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Thu, 21 Apr 2016 11:34:02 +0100
-Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
-In-Reply-To: <20160420220228.59d5e54f@free-electrons.com>
-References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
- <20160420220228.59d5e54f@free-electrons.com>
-Message-ID: <5718AC9A.4060801@synopsys.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 21 Apr 2016 12:55:12 +0200
+Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
+ config (incl. BBB)
+In-Reply-To: <20160420164216.GA26814@smipidev>
+References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
+ <20160419212441.6a0454e9@free-electrons.com> <20160419201733.GA19934@smipidev>
+ <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
+ <20160420164216.GA26814@smipidev>
+Message-ID: <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Apr 20, 2016 at 6:42 PM, Pieter Smith <pieter@boesman.nl> wrote:
+> Hi Yegor,
+>
+> On Wed, Apr 20, 2016 at 04:42:20PM +0200, Yegor Yefremov wrote:
+>> On Tue, Apr 19, 2016 at 10:17 PM, Pieter Smith <pieter@boesman.nl> wrote:
+>> > Hi Thomas,
+>> >
+>> > On Tue, Apr 19, 2016 at 09:24:41PM +0200, Thomas Petazzoni wrote:
+>> >> Hello,
+>> >>
+>> >> On Sun, 20 Mar 2016 23:35:44 +0100, Pieter Smith wrote:
+>> >>
+>> >> > Pieter Smith (7):
+>> >> >   barebox: support multi-image-build image selection
+>> >> >   barebox: friendly error on missing built image
+>> >> >   barebox: support custom barebox output image name
+>> >> >   barebox: introduce barebox-package function
+>> >> >   barebox: extract package name argument
+>> >> >   barebox: support 2nd config build
+>> >> >   beaglebone: adds barebox bootloader defconfig
+>> >>
+>> >> Since there were some comments on this v4, I marked it as Changes
+>> >> Requested in our patch tracking system. When you find some time, can
+>> >> you send an updated v5 of this patch series?
+>> >
+>> > I have been a little short on time as of late. The patch is complete, but I
+>> > am having probably unrelated problems with my BBB set-up that I am trying to
+>> > troubleshoot. Nevertheless, I would like to make sure that everything works
+>> > before reposting. Maybe Yegor can help to test that everything works?
+>> >
+>> > @Yegor: Do you have time to test the branch on your setup?
+>> >   URL:    https://github.com/smipi1/bbb_buildroot.git
+>> >   branch: barebox_2nd_config_build-v5
+>>
+>> Have made basic tests, i.e. changing configuration for barebox and
+>> barebox-2 and running make to see, if proper barebox was compiled.
+>> Everything is working the way it was in v4 from this point of view.
+>
+> Thanks! Did you flash a bare SD card or the internal eMMC with boot.vfat and
+> rootfs.ext4 as part of the tests?
 
-On 4/20/2016 9:02 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 20 Apr 2016 18:47:04 +0100, Joao Pinto wrote:
->> This patch has the goal to add to the juno board defconfig the u-boot build 
->> configurations. The juno board readme file was also updated with the
->> necessary steps to build the ARM Trusted Firmware (with u-boot in it) and
->> how to deploy it.
-> 
-> Thanks!
-> 
->> +Building bootloader files bl1.bin and fip.bin
->> +=============================================
->> +First clone ARM Trusted Firmware repository
->> +
->> +   $ git clone https://github.com/ARM-software/arm-trusted-firmware.git
->> +
->> +After clonning, please configure the following environment variables:
->> +
->> +  CROSS_COMPILE=<buidlroot_path>/output/host/usr/bin/aarch64-buildroot-linux-gnu-
->> +  BL33=<buidlroot_path>/output/images/u-boot.bin
->> +  SCP_BL2=<path_to_scp_firmware>
->> +
->> +Finaly execute:
->> +  make PLAT=juno all fip
-> 
-> The whole point of Buildroot is to automate the build process, so this
-> should be done by a Buildroot package, rather than manually by the
-> user. So a package for ATF should probably be created.
-> 
-> I also work on an ARM64 platform that uses ATF+U-Boot, so I'll be able
-> to compare and tell you whether what you're proposing is only
-> applicable to Juno, or can be used for other platforms as well.
+If I copy your images (MLO, barebox.bin) directly to the FAT
+partition, everything starts as expected. But I dd boot.vfat, the
+system doesn't boot and shows only CCCCC, though I have no problems
+mounting the first partition in Linux.
 
-It would great to do it 100% automatic. I'll be waiting for your feedback
-regarding your ARM64 platform. If it is the same we could do it together.
+sudo dd if=/tmp/boot.vfat of=/dev/sdd1 bs=1M
 
-> 
->> +BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
-> 
-> Using the legacy build system with a modern U-Boot such as 2016.03
-> doesn't make much sense. Please use the kconfig based build system,
-> unless there is a real reason not to.
-
-Yes, you are right, made a mistake!
-
-> 
-> Thanks!
-> 
-> Thomas
-> 
-
-Thanks,
-Joao
+Yegor
