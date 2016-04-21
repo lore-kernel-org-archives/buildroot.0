@@ -1,105 +1,91 @@
-From: Erico Nunes <nunes.erico@gmail.com>
-Date: Wed, 20 Apr 2016 22:23:56 -0300
-Subject: [Buildroot] [PATCH v2 2/2] efibootmgr: new package
-In-Reply-To: <1461201836-6558-1-git-send-email-nunes.erico@gmail.com>
-References: <1461201836-6558-1-git-send-email-nunes.erico@gmail.com>
-Message-ID: <1461201836-6558-2-git-send-email-nunes.erico@gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 21 Apr 2016 08:15:35 +0200
+Subject: [Buildroot] [PATCH] yajl: fix build with uClibc
+In-Reply-To: <1461145087-63679-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1461145087-63679-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <1461219335.6388.20.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A Linux user-space application to modify the Intel Extensible Firmware
-Interface (EFI) Boot Manager. This application can create and destroy
-boot entries, change the boot order, change the next running boot
-option, and more.
+Hi Vicente,
 
-The only issue found was that it was trying to include headers from the
-host, so $(STAGING_DIR) has been prepended to the include path so that
-the package finds the right headers.
+On Mi, 2016-04-20 at 10:38 +0100, Vicente Olivert Riera wrote:
+> The failure looks like this:
+> 
+> ../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isinf'
+> ../yajl-2.1.0/lib/libyajl.so.2.1.0: undefined reference to `__isnan'
+> 
+> We already have a patch (0001) which should fix this problem,
+> however,
+> as stated here [1], it doesn't work when cross compiling.
+> 
+> To fix the problem we add -lm to CFLAGS when building with uClibc.
+> 
+> Fixes:
+> 
+> ? http://autobuild.buildroot.net/results/308/30892ffb298acc2334f8c694
+> 038c420120fe43b9/
+> 
+> 1: https://github.com/lloyd/yajl/issues/58#issuecomment-15683796
+> 
+> Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+> ---
+> ?package/yajl/yajl.mk | 4 ++++
+> ?1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/yajl/yajl.mk b/package/yajl/yajl.mk
+> index 7770e86..145bf2c 100644
+> --- a/package/yajl/yajl.mk
+> +++ b/package/yajl/yajl.mk
+> @@ -11,4 +11,8 @@ YAJL_LICENSE = ISC
+> ?YAJL_LICENSE_FILES = COPYING
+> ?YAJL_PATCH = https://github.com/vriera/yajl/commit/6d09f11b8fd358cab
+> 0e31b965327e64a599f9ce9.patch
+> ?
+> +ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+> +YAJL_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -lm"
+> +endif
+> +
+> ?$(eval $(cmake-package))
 
-efibootmgr depends on the libraries provided by efivar.
+For the record, Bernd Kuhls proposed a patch [1] to fix this issue,
+too.
 
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
+The patch [2] in commit?3cfd8bf15cd8b80215bb70db28e065ff0b80437b fixed
+an issue, where the executables build in yajl, like 'parse_config', are
+linked against the static yajl library, even in a shared context.
 
----
-Changes v1 -> v2:
- - Only rebase to v2 submission of the efivar patch.
----
- package/Config.in                  |  1 +
- package/efibootmgr/Config.in       | 10 ++++++++++
- package/efibootmgr/efibootmgr.hash |  2 ++
- package/efibootmgr/efibootmgr.mk   | 23 +++++++++++++++++++++++
- 4 files changed, 36 insertions(+)
- create mode 100644 package/efibootmgr/Config.in
- create mode 100644 package/efibootmgr/efibootmgr.hash
- create mode 100644 package/efibootmgr/efibootmgr.mk
+Unfortunatly, the submitter (me) of this patch did not test with the
+uClibc based toolchain, but only for musl.
 
-diff --git a/package/Config.in b/package/Config.in
-index 1d68822..56dc31d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1625,6 +1625,7 @@ if BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- endif
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/dsp-tools/Config.in"
-+	source "package/efibootmgr/Config.in"
- 	source "package/efivar/Config.in"
- 	source "package/emlog/Config.in"
- 	source "package/ftop/Config.in"
-diff --git a/package/efibootmgr/Config.in b/package/efibootmgr/Config.in
-new file mode 100644
-index 0000000..a784d8c
---- /dev/null
-+++ b/package/efibootmgr/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_EFIBOOTMGR
-+	bool "efibootmgr"
-+	depends on BR2_PACKAGE_EFIVAR
-+	help
-+	  A Linux user-space application to modify the Intel Extensible
-+	  Firmware Interface (EFI) Boot Manager. This application can create
-+	  and destroy boot entries, change the boot order, change the next
-+	  running boot option, and more.
-+
-+	  https://github.com/rhinstaller/efibootmgr
-diff --git a/package/efibootmgr/efibootmgr.hash b/package/efibootmgr/efibootmgr.hash
-new file mode 100644
-index 0000000..a789942
---- /dev/null
-+++ b/package/efibootmgr/efibootmgr.hash
-@@ -0,0 +1,2 @@
-+# locally computed hash
-+sha256 b180d7d6b377d24b0872869f2571e2700b618e4d7ebdc2133134a918efe2623b efibootmgr-efibootmgr-0.12.tar.gz
-diff --git a/package/efibootmgr/efibootmgr.mk b/package/efibootmgr/efibootmgr.mk
-new file mode 100644
-index 0000000..9156499
---- /dev/null
-+++ b/package/efibootmgr/efibootmgr.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# efibootmgr
-+#
-+################################################################################
-+
-+EFIBOOTMGR_VERSION = efibootmgr-0.12
-+EFIBOOTMGR_SITE = $(call github,rhinstaller,efibootmgr,$(EFIBOOTMGR_VERSION))
-+EFIBOOTMGR_LICENSE = GPLv2
-+EFIBOOTMGR_LICENSE_FILES = COPYING
-+EFIBOOTMGR_DEPENDENCIES = efivar
-+
-+define EFIBOOTMGR_BUILD_CMDS
-+	$(SED) 's,-I/,-I$(STAGING_DIR)/,' $(@D)/Makefile
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
-+endef
-+
-+define EFIBOOTMGR_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/efibootmgr/efibootmgr \
-+		$(TARGET_DIR)/usr/bin/efibootmgr
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.8.0
+We have already the patch "0001-cmake-uClibc-Fix-missing-libm-for-
+tests.patch" for yajl which fixes the missing libm for uClibc for the
+executable 'gen-extra-close', which should be removed by your patch.
+
+I'm not sure if it's worth, but I would prefer to fix the CMake build
+files of yajl by checking if libm is needed for isnan and it to the
+list of LIBS and let all executables link against LIBS. Thomas
+Petazzoni did this for an autotools package [3]. For CMake it would be
+something like this:
+
+    # check if isnan needs libm
+    try_compile(ISNAN_NEEDS_LIBM, ...)
+    if (ISNAN_NEEDS_LIBM)
+    ? set(LIBS ${LIBS} m)
+    endif ()
+
+    [..]
+
+    TARGET_LINK_LIBRARIES(${testProg} yajl ${LIBS})
+
+Furthermore, the .pc file should be fixed.
+
+[1]?http://patchwork.ozlabs.org/patch/612226/
+[2]?http://patchwork.ozlabs.org/patch/608412/
+[3]?http://lists.busybox.net/pipermail/buildroot/2015-May/127381.html
+
+Best regards
+J?rg Krause
