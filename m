@@ -1,36 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Apr 2016 22:07:00 +0200
-Subject: [Buildroot] [git commit] rpi-firmware: bump version
-Message-ID: <20160421201205.4109D81E91@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Apr 2016 22:14:23 +0200
+Subject: [Buildroot] [PATCH 1/2] uclibc/defconfig: enable XSI math
+In-Reply-To: <1461246857-5634-1-git-send-email-gustavo@zacarias.com.ar>
+References: <1461246857-5634-1-git-send-email-gustavo@zacarias.com.ar>
+Message-ID: <5719349F.9080404@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1438d52eb529cc0e782c05271b64ec3002223373
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 04/21/16 15:54, Gustavo Zacarias wrote:
+> ARM926 size delta +12 KB.
+> It's required for the upcoming mpv package.
 
-This commit bumps the rpi-firmware to a more recent version that
-includes support for the Raspberry Pi 3.
+  Unfortunately the autobuilder toolchains don't have this enabled yet, so we'll 
+get failures...
 
-Signed-off-by: Ubaldo Porcheddu <ubaldo@eja.it>
-[Thomas: tweak commit log.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- package/rpi-firmware/rpi-firmware.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  The Blackfin toolchain does have this enabled, but the 2015.12 ARC toolchain 
+doesn't.
 
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 291da3a..8476678 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_FIRMWARE_VERSION = 8b4e5482b52e6fb438dddc0d88ba0ba8d44af54b
-+RPI_FIRMWARE_VERSION = 951799bbcd795ddf27769d14acf4813fdcbe53dc
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3c
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+  Anyway, it's probably a good idea to have this enabled by default.
+
+  Regards,
+  Arnout
+
+>
+> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+> ---
+>   package/uclibc/uClibc-ng.config | 1 +
+>   1 file changed, 1 insertion(+)
+>
+> diff --git a/package/uclibc/uClibc-ng.config b/package/uclibc/uClibc-ng.config
+> index 66de5a9..2671e06 100644
+> --- a/package/uclibc/uClibc-ng.config
+> +++ b/package/uclibc/uClibc-ng.config
+> @@ -1,4 +1,5 @@
+>   DO_C99_MATH=y
+> +DO_XSI_MATH=y
+>   KERNEL_HEADERS="/usr/src/linux/include"
+>   # LDSO_CACHE_SUPPORT is not set
+>   # UCLIBC_STATIC_LDCONFIG is not set
+>
+
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
