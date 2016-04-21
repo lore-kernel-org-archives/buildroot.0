@@ -1,21 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 Apr 2016 19:53:25 +0000
-Subject: [Buildroot] [Bug 8861] With buildroot 2016.02 trying to build for
- corei7-avx fails while trying to build host-binutils.
-In-Reply-To: <bug-8861-163@https.bugs.busybox.net/>
-References: <bug-8861-163@https.bugs.busybox.net/>
-Message-ID: <bug-8861-163-Yuf0X3cCwE@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Apr 2016 22:01:37 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] xorg: fix installation paths (branch
+ yem/xorg)
+In-Reply-To: <cover.1457719643.git.yann.morin.1998@free.fr>
+References: <cover.1457719643.git.yann.morin.1998@free.fr>
+Message-ID: <20160421220137.4a88ed00@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8861
+Hello,
 
---- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I've submitted a patch at http://patchwork.ozlabs.org/patch/613293/.
+On Fri, 11 Mar 2016 19:10:58 +0100, Yann E. MORIN wrote:
 
+> This series is an attempt to fix the installation paths of many
+> Xorg-related packages.
+> 
+> The new pkconf bumped in d7f6d320 introduced a change in behaviour: all
+> path variables returned by pkgconf are now prefixed with the sysroot
+> directory.
+> 
+> This has an impact on a lot of Xorg packages (and maybe others as well),
+> since they use such paths verbatim to install files in either of:
+>     $(STAGING_DIR)/$(SYSROOT_DIR)/some/path
+>     $(TARGET_DIR)/$(SYSROOT_DIR)/some/path
+
+One important thing that this cover letter doesn't explain is why we
+don't fix pkg-config instead?
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
