@@ -1,35 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Apr 2016 23:02:28 +0200
-Subject: [Buildroot] [PATCH] i386: properly define BR2_ARCH for all x86
- subarchitectures
-In-Reply-To: <57193EB1.5060509@mind.be>
-References: <1461268365-13922-1-git-send-email-thomas.petazzoni@free-electrons.com>
- <57193EB1.5060509@mind.be>
-Message-ID: <20160421230228.0e8c6663@free-electrons.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 21 Apr 2016 23:04:14 +0200
+Subject: [Buildroot] Autobuilder script update
+In-Reply-To: <20160421225408.2699f85a@free-electrons.com> (Thomas Petazzoni's
+ message of "Thu, 21 Apr 2016 22:54:08 +0200")
+References: <20160421225408.2699f85a@free-electrons.com>
+Message-ID: <87twiubrn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On Thu, 21 Apr 2016 22:57:21 +0200, Arnout Vandecappelle wrote:
+ > Hello all,
+ > The format of the toolchain-configs.csv file has slightly changed, in
+ > order to properly announce whether the pre-built toolchain are built
+ > for x86 or x86_64. In order for this to work, please update your
+ > autobuilder scripts.
 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Thanks, gcc10/gcc20 updated and restarted.
 
-Thanks!
-
->   It would be nice if we would have a way to check something like that...
-
-ifeq ($(call qstrip,$(BR2_ARCH)),)
-$(error Blurp!)
-endif
-
- ?
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Venlig hilsen,
+Peter Korsgaard 
