@@ -1,28 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Apr 2016 22:03:22 +0200
-Subject: [Buildroot] [PATCH 1/7] gstreamer1: bump to version 1.8.1
-In-Reply-To: <1461196089-19847-1-git-send-email-gustavo@zacarias.com.ar>
-References: <1461196089-19847-1-git-send-email-gustavo@zacarias.com.ar>
-Message-ID: <20160421220322.224cc1c3@free-electrons.com>
+Date: Thu, 21 Apr 2016 22:03:32 +0200
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 2.8.2
+Message-ID: <20160421200339.F2DCF7FEF0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=98e7741cc9ab8aba408694cee07b660dacab9346
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 20 Apr 2016 20:48:03 -0300, Gustavo Zacarias wrote:
-> Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> ---
->  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
->  package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-All applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 1cf7d55..5667d2c 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9e137da3c96c233f55a35ac50cb2fc9f96d4bee76c4907b75a3dd6af7be1745a  shairport-sync-2.8.1.tar.gz
++sha256  de7d9002b87ce2f62e70cb625c9a1d312056144e01812e708f5c6d2bd376fdba  shairport-sync-2.8.2.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 42c2e60..bd95941 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 2.8.1
++SHAIRPORT_SYNC_VERSION = 2.8.2
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3c
