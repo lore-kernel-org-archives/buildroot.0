@@ -1,39 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Apr 2016 21:52:45 +0200
-Subject: [Buildroot] [PATCH] i386: properly define BR2_ARCH for all x86
-	subarchitectures
-Message-ID: <1461268365-13922-1-git-send-email-thomas.petazzoni@free-electrons.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 21 Apr 2016 19:53:25 +0000
+Subject: [Buildroot] [Bug 8861] With buildroot 2016.02 trying to build for
+ corei7-avx fails while trying to build host-binutils.
+In-Reply-To: <bug-8861-163@https.bugs.busybox.net/>
+References: <bug-8861-163@https.bugs.busybox.net/>
+Message-ID: <bug-8861-163-Yuf0X3cCwE@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We were not defining BR2_ARCH for two of the x86 subarchitecture,
-which means the architecture part of the GNU_TARGET_NAME tuple was
-empty, leading to weird build failures.
+https://bugs.busybox.net/show_bug.cgi?id=8861
 
-This commit fixes that by defining the appropriate values.
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+I've submitted a patch at http://patchwork.ozlabs.org/patch/613293/.
 
-Fixes bug #8861.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
----
- arch/Config.in.x86 | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 4039db8..efa9567 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -226,6 +226,8 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_nocona && BR2_i386
- 	default "i686"		if BR2_x86_core2 && BR2_i386
- 	default "i686"		if BR2_x86_corei7 && BR2_i386
-+	default "i686"		if BR2_x86_corei7_avx && BR2_i386
-+	default "i686"		if BR2_x86_corei7_avx2 && BR2_i386
- 	default "i686"		if BR2_x86_atom && BR2_i386
- 	default "i686"		if BR2_x86_opteron && BR2_i386
- 	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
 -- 
-2.6.4
+You are receiving this mail because:
+You are on the CC list for the bug.
