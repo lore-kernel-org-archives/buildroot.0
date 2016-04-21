@@ -1,44 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-Date: Thu, 21 Apr 2016 21:28:01 +0200
-Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
-In-Reply-To: <5719016A.1020303@synopsys.com>
-References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
- <20160420220228.59d5e54f@free-electrons.com>
- <5718AC9A.4060801@synopsys.com>
- <20160421132639.16cd8714@free-electrons.com>
- <5719016A.1020303@synopsys.com>
-Message-ID: <20160421212801.1401f107@free-electrons.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 21 Apr 2016 21:36:49 +0200
+Subject: [Buildroot] [PATCH] python-backports-ssl-match-hostname: new
+ package
+In-Reply-To: <1461144174-7711-1-git-send-email-yegorslists@googlemail.com>
+References: <1461144174-7711-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <57192BD1.8090409@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 04/20/16 11:22, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov<yegorslists@googlemail.com>
+>
+> Fixes #8856
+>
+> Signed-off-by: Yegor Yefremov<yegorslists@googlemail.com>
+> ---
+>   package/Config.in                                          |  1 +
+>   package/python-backports-ssl-match-hostname/Config.in      |  6 ++++++
+>   .../python-backports-ssl-match-hostname.hash               |  4 ++++
+>   .../python-backports-ssl-match-hostname.mk                 | 14 ++++++++++++++
+>   4 files changed, 25 insertions(+)
+>   create mode 100644 package/python-backports-ssl-match-hostname/Config.in
+>   create mode 100644 package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
+>   create mode 100644 package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index ecaf164..3b5e66e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -630,6 +630,7 @@ menu "External python modules"
+>   	source "package/python-alsaaudio/Config.in"
+>   	source "package/python-autobahn/Config.in"
+>   	source "package/python-backports-abc/Config.in"
+> +	source "package/python-backports-ssl-match-hostname/Config.in"
+>   	source "package/python-beautifulsoup4/Config.in"
+>   	source "package/python-bottle/Config.in"
+>   	source "package/python-can/Config.in"
+> diff --git a/package/python-backports-ssl-match-hostname/Config.in b/package/python-backports-ssl-match-hostname/Config.in
+> new file mode 100644
+> index 0000000..36399bb
+> --- /dev/null
+> +++ b/package/python-backports-ssl-match-hostname/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
+> +	bool "python-backports-ssl-match-hostname"
 
-On Thu, 21 Apr 2016 17:35:54 +0100, Joao Pinto wrote:
+  Smell likes this should
+	depends on BR2_PACKAGE_PYTHON
+no? Doesn't make much sense to backport this function to Python 3.6 :-)
 
-> I developed the atfirmware config and I am having problems in the Makefile.
-> How does the buildroot structure git clones / untar / etc.? I suppose there is a
-> common spot to do these stuff right?
+  Regards,
+  Arnout
 
-Look at how the barebox build is done, boot/barebox/barebox.mk.
+> +	help
+> +	  The ssl.match_hostname() function from Python 3.5.
+> +
+> +	http://bitbucket.org/brandon/backports.ssl_match_hostname
+[snip]
 
-> 
-> Send in attchment tarball of the new package.
-
-Well, your .mk file has no chance to work, you're not even calling any
-Buildroot package infrastructure, your build commands are not inside a
-variable, etc.
-
-> I am thinking of adding it to Bootloaders. What do you think?
-
-Yes, it should obviously go in the Bootloaders menu.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Free Electrons
-Embedded Linux, Kernel and Android engineering
-http://free-electrons.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
