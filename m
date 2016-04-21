@@ -1,69 +1,43 @@
-From: Oscar Gomez Fuente <oscargomezf@gmail.com>
-Date: Thu, 21 Apr 2016 18:19:49 +0200
-Subject: [Buildroot] [RPi3] Trying to test WiFi On Raspberr Pi 3
-Message-ID: <CALtfCQYZXSFWSv8m5y+BkwKx-iOPrgYpZypvmtk_i2MLZebeiw@mail.gmail.com>
+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
+Date: Thu, 21 Apr 2016 12:21:11 -0400
+Subject: [Buildroot] [PATCH 0/2] add support for TS-4800
+Message-ID: <1461255673-11443-1-git-send-email-damien.riegel@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi everyone,
+This patchset brings the support for the TS-4800 manufactured by Technologic
+Systems. While we're at it, rename the ts directory to technologic to be
+consistent with Linux and U-Boot.
 
-I'm trying to check the broadcom WiFi module BCM43438 of the RPi3B. By
-default the package:
+Damien Riegel (2):
+  board: rename ts to technologic
+  configs: add defconfig for TS-4800
 
-Target Package --> Hardware handling  ---> Firmware  ---> linux-firmware
----> Ethernet firmware  ---> Broadcom BRCM bcm43xxx
+ board/technologic/ts4800/genimage.cfg              |  37 ++++++++++++++
+ board/technologic/ts4800/linux.fragment            |   3 ++
+ board/technologic/ts4800/mbrboot.bin               | Bin 0 -> 446 bytes
+ ...800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch |  36 ++++++++++++++
+ .../uboot/ts4800-patch-env-to-boot-dts.patch       |  55 +++++++++++++++++++++
+ board/technologic/ts4800/post-image.sh             |  25 ++++++++++
+ .../ts5x00/fs-overlay/boot/syslinux/syslinux.cfg   |   0
+ board/{ts => technologic}/ts5x00/linux-3.17.config |   0
+ board/{ts => technologic}/ts5x00/readme.txt        |   0
+ configs/ts4800_defconfig                           |  27 ++++++++++
+ configs/ts5x00_defconfig                           |   4 +-
+ 11 files changed, 185 insertions(+), 2 deletions(-)
+ create mode 100644 board/technologic/ts4800/genimage.cfg
+ create mode 100644 board/technologic/ts4800/linux.fragment
+ create mode 100644 board/technologic/ts4800/mbrboot.bin
+ create mode 100644 board/technologic/ts4800/patches/uboot/ts4800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch
+ create mode 100644 board/technologic/ts4800/patches/uboot/ts4800-patch-env-to-boot-dts.patch
+ create mode 100755 board/technologic/ts4800/post-image.sh
+ rename board/{ts => technologic}/ts5x00/fs-overlay/boot/syslinux/syslinux.cfg (100%)
+ rename board/{ts => technologic}/ts5x00/linux-3.17.config (100%)
+ rename board/{ts => technologic}/ts5x00/readme.txt (100%)
+ create mode 100644 configs/ts4800_defconfig
 
-It's not selected. But when I select this package, I've got this error:
-
-# dmesg | grep brcm
-[    7.127904] brcmfmac: brcmf_sdio_drivestrengthinit: No SDIO Drive
-strength init done for chip 43430 rev 1 pmurev 24
-[    7.145814] usbcore: registered new interface driver brcmfmac
-[    7.162030] brcmfmac_sdio mmc1:0001:1: Direct firmware load for
-brcm/brcmfmac43430-sdio.bin failed with error -2
-[    8.186873] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-clkctl 0x50
-[    9.215286] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-clkctl 0x50
-
-So I noticed that the binary brcmfmac43430-sdio.bin and
-brcmfmac43430-sdio.txt it isn't copy by the linux-firmware package to
-/lib/firmware/brcm folder, so I've tried to copy the files
-brcmfmac43430-sdio.* manually  to /lib/firmware/brcm (I should be a great
-idea to add this files to the linux-firmaware package) and now I didn't get
-any error:
-
-[    7.101997] brcmfmac: brcmf_sdio_drivestrengthinit: No SDIO Drive
-strength init done for chip 43430 rev 1 pmurev 24
-[    7.120006] usbcore: registered new interface driver brcmfmac
-[    8.165326] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-clkctl 0x50
-[    9.195054] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-clkctl 0x50
-[   10.217086] brcmfmac: brcmf_sdio_htclk: HT Avail timeout (1000000):
-clkctl 0x50
-
-But I can see the wlan0 device. I list the folder :
-
-# ls  /sys/class/net/
-eth0  lo
-
-And the wlan0 doesn't appear.
-
-I've tried this command:
-
-# iw dev wlan0 set
-command failed: No such device (-19)
-
-Does anyone know how can I solve this problem?
-
-
-Best regards.
-
-Oscar Gomez Fuente
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160421/77bb7dac/attachment.html>
+-- 
+2.5.0
