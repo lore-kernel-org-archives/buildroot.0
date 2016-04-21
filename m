@@ -1,119 +1,37 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 21 Apr 2016 11:19:08 +0200
-Subject: [Buildroot] [PATCH] python-backports-ssl-match-hostname: new
-	package
-In-Reply-To: <E903BFAF-AF49-4676-AC7E-A058F93B0CB9@exablox.com>
-References: <1461144174-7711-1-git-send-email-yegorslists@googlemail.com>
- <20160420112839.43c4d35d@free-electrons.com>
- <CAGm1_ktt7NWNMxWagm_KZqupximn6mmUft-e+JdTo5L8FKNfAw@mail.gmail.com>
- <5460F213-7D25-4931-AFEA-9D13D3546075@exablox.com>
- <CAGm1_ksog_2Q=zSaYSPrTJOxj04e8Qm+ui3FcUi8S0WYX4CuWg@mail.gmail.com>
- <E903BFAF-AF49-4676-AC7E-A058F93B0CB9@exablox.com>
-Message-ID: <CAGm1_kth+_PX1QUuW4mC_PMAkKPkDvNQvHt9x8_bzMDr4_7DRw@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 21 Apr 2016 10:01:00 +0000
+Subject: [Buildroot] [Bug 8861] With buildroot 2016.02 trying to build for
+ corei7-avx fails while trying to build host-binutils.
+In-Reply-To: <bug-8861-163@https.bugs.busybox.net/>
+References: <bug-8861-163@https.bugs.busybox.net/>
+Message-ID: <bug-8861-163-IzgU7CO16w@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Charles,
+https://bugs.busybox.net/show_bug.cgi?id=8861
 
-On Wed, Apr 20, 2016 at 11:38 PM, Charles Hardin <ckhardin@exablox.com> wrote:
-> Btw - it is circus that uses tornado
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Hum, indeed. Thanks for the bug report! Can you try the below patch:
 
-Could you send a patch adding circus to Buildroot? See [1] for
-submitting patches instructions.
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 4039db8..efa9567 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -226,6 +226,8 @@ config BR2_ARCH
+        default "i686"          if BR2_x86_nocona && BR2_i386
+        default "i686"          if BR2_x86_core2 && BR2_i386
+        default "i686"          if BR2_x86_corei7 && BR2_i386
++       default "i686"          if BR2_x86_corei7_avx && BR2_i386
++       default "i686"          if BR2_x86_corei7_avx2 && BR2_i386
+        default "i686"          if BR2_x86_atom && BR2_i386
+        default "i686"          if BR2_x86_opteron && BR2_i386
+        default "i686"          if BR2_x86_opteron_sse3 && BR2_i386
 
-circus runs a deamon, but also provides an API, so I would add this as
-an ordinary Python package.
+And then do your configuration from scratch again, and attempt to do the build.
 
-[1] http://nightly.buildroot.org/manual.html#submitting-patches
-
-Yegor
-
-> Sent from my iPad
->
->> On Apr 20, 2016, at 1:27 PM, Yegor Yefremov <yegorslists@googlemail.com> wrote:
->>
->> Hi Charles,
->>
->>> On Wed, Apr 20, 2016 at 6:44 PM, Charles Hardin <ckhardin@exablox.com> wrote:
->>> Yes - I think I just selected it out of laziness because we don?t run
->>> different
->>> python versions and only use python 2.7
->>
->> Could you perform following test?
->>
->> 1. disable backports.ssl_match_hostname
->> 2. enable SSL support in Python, python-tornado and python-cerifi
->> 3. make clean && make
->>
->> Is your application functioning without backports.ssl_match_hostname?
->>
->> Thanks.
->>
->> Yegor
->>
->>> On Apr 20, 2016, at 2:58 AM, Yegor Yefremov <yegorslists@googlemail.com>
->>> wrote:
->>>
->>> On Wed, Apr 20, 2016 at 11:28 AM, Thomas Petazzoni
->>> <thomas.petazzoni@free-electrons.com> wrote:
->>>
->>> Hello,
->>>
->>> On Wed, 20 Apr 2016 11:22:54 +0200, yegorslists at googlemail.com wrote:
->>>
->>> From: Yegor Yefremov <yegorslists@googlemail.com>
->>>
->>> Fixes #8856
->>>
->>>
->>> Are you sure this is sufficient to fix the bug? Doesn't python-tornado
->>> also needs to select this new package when Python 2 is used?
->>>
->>>
->>> Both Python 2 and 3 implement ssl.match_hostname(cert, hostname) [1]
->>>
->>> backports.ssl_match_hostname 3.5.0.1 introduces some enhancements made
->>> in 3.5. See its history:
->>>
->>> History
->>> -------
->>>
->>> * This function was introduced in python-3.2
->>> * It was updated for python-3.4a1 for a CVE
->>> (backports-ssl_match_hostname-3.4.0.1)
->>> * It was updated from RFC2818 to RFC 6125 compliance in order to fix another
->>> security flaw for python-3.3.3 and python-3.4a5
->>> (backports-ssl_match_hostname-3.4.0.2)
->>> * It was updated in python-3.5 to handle IPAddresses in ServerAltName fields
->>> (something that backports.ssl_match_hostname will do if you also install the
->>> ipaddress library from pypi).
->>>
->>> Tornado has following logic to decide, when to import
->>> backports.ssl_match_hostname
->>>
->>> if hasattr(ssl, 'match_hostname') and hasattr(ssl,
->>> 'CertificateError'):  # python 3.2+
->>>   ssl_match_hostname = ssl.match_hostname
->>>   SSLCertificateError = ssl.CertificateError
->>> elif ssl is None:
->>>   ssl_match_hostname = SSLCertificateError = None
->>> else:
->>>   import backports.ssl_match_hostname
->>>   ssl_match_hostname = backports.ssl_match_hostname.match_hostname
->>>   SSLCertificateError = backports.ssl_match_hostname.CertificateError
->>>
->>> So if the user wants to use ssl.match_hostname, he must select
->>> Python's SSL support.
->>>
->>> Turns out, that this package can be used only, if the user imports it
->>> directly.
->>>
->>> [1] https://docs.python.org/2.7/library/ssl.html
->>>
->>>
->>> --
->>> Bits go in, bytes go out.
->>>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
