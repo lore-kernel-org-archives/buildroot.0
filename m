@@ -1,33 +1,37 @@
-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-Date: Thu, 21 Apr 2016 17:32:38 -0300
-Subject: [Buildroot] [PATCH 1/2] uclibc/defconfig: enable XSI math
-In-Reply-To: <5719349F.9080404@mind.be>
-References: <1461246857-5634-1-git-send-email-gustavo@zacarias.com.ar>
- <5719349F.9080404@mind.be>
-Message-ID: <571938E6.3020109@zacarias.com.ar>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Thu, 21 Apr 2016 22:40:00 +0200
+Subject: [Buildroot] [PATCHv2 1/4] Add package cryptopp
+In-Reply-To: <1458227038-16383-2-git-send-email-julian@jusst.de>
+References: <1458227038-16383-1-git-send-email-julian@jusst.de>
+ <1458227038-16383-2-git-send-email-julian@jusst.de>
+Message-ID: <20160421224000.031987c9@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21/04/16 17:14, Arnout Vandecappelle wrote:
+Hello,
 
->   Unfortunately the autobuilder toolchains don't have this enabled yet,
-> so we'll get failures...
+On Thu, 17 Mar 2016 16:03:55 +0100, Julian Scheel wrote:
+> Signed-off-by: Julian Scheel <julian@jusst.de>
+> ---
+>  package/cryptopp/cryptopp.hash |  2 ++
+>  package/cryptopp/cryptopp.mk   | 33 +++++++++++++++++++++++++++++++++
+>  2 files changed, 35 insertions(+)
+>  create mode 100644 package/cryptopp/cryptopp.hash
+>  create mode 100644 package/cryptopp/cryptopp.mk
 
-Indeed, but at some point they'll need to update, the alternative would 
-be artificially excluding mpv building with uclibc.
+This package causes some build failures:
 
->   The Blackfin toolchain does have this enabled, but the 2015.12 ARC
-> toolchain doesn't.
+  http://autobuild.buildroot.org/?reason=host-cryptopp-5.6.3
 
-We can exclude ARC i think, at least until/if the toolchain is updated, 
-but maybe it doesn't make much sense for it.
+Could you have a look at them?
 
->   Anyway, it's probably a good idea to have this enabled by default.
+Thanks!
 
-Well, mpv is a nice replacement for mplayer which is actually maintained 
-and has ton of new features, i've tested wayland/drm/x11/opengl outputs 
-and it works just fine.
-Regards.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
