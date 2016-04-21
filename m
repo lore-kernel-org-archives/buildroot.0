@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 22 Apr 2016 00:10:19 +0200
-Subject: [Buildroot] [PATCH v2 1/2] binutils: remove 2.22 hash
-In-Reply-To: <1461186614-2391-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Apr 2016 00:13:24 +0200
+Subject: [Buildroot] [PATCH v2 2/2] binutils: remove support for version
+ 2.23
+In-Reply-To: <1461186614-2391-2-git-send-email-thomas.petazzoni@free-electrons.com>
 References: <1461186614-2391-1-git-send-email-thomas.petazzoni@free-electrons.com>
-Message-ID: <57194FCB.4070306@mind.be>
+ <1461186614-2391-2-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <57195084.7040504@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +13,46 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 On 04/20/16 23:10, Thomas Petazzoni wrote:
-> In commit 2f8459539401938a4ec4fe5f4a207c5d81f2cf74 ("binutils: remove
-> version 2.22"), binutils 2.22 was removed, but forgot to remove the
-> corresponding hash from the hash file.
+> Now that we have added support for the lastest binutils version 2.26,
+> it is time to remove the oldest version we currently support, 2.23, in
+> order to keep only 3 versions: 2.24, 2.25 and 2.26.
 >
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 > ---
 > Changes since v1:
->   - New patch.
+>    - Remove hash from the hash file, as noticed by Romain Naour.
+>    - Add Config.in.legacy entry, as noticed by Romain Naour.
 > ---
->   package/binutils/binutils.hash | 1 -
->   1 file changed, 1 deletion(-)
+[snip]
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index ba3d94c..f52d5f8 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -145,6 +145,13 @@ endif
+>   ###############################################################################
+>   comment "Legacy options removed in 2016.05"
 >
-> diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-> index 387714d..916b68c 100644
-> --- a/package/binutils/binutils.hash
-> +++ b/package/binutils/binutils.hash
-> @@ -1,5 +1,4 @@
->   # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
-> -sha512  ffe8ef263ef99183e8cc823fe8487ff7d0f7bf9a8efd2853b5f4636aca0023850d13de4eac7d77a5f69413d8a50e6f95bb14569be53df86c0bce38034525ab74  binutils-2.22.tar.bz2
->   sha512  dec753bbba008f1526b89cf1bd85feba78f362f5333ffdf93953fd131eb755976dec82a0a4ba38c43d2434da007137780cfe674de5414be5cf7ce7fbc6af6d16  binutils-2.23.2.tar.bz2
->   sha512  5ec95ad47d49b12c4558a8db0ca2109d3ee1955e3776057f3330c4506f8f4d1cf5e505fbf8a16b98403a0fcdeaaf986fe0a22be6456247dbdace63ce1f776b12  binutils-2.24.tar.bz2
->   sha512  0b36dda0e6d32cd25613c0e64b56b28312515c54d6a159efd3db9a86717f114ab0a0a1f69d08975084d55713ebaeab64e4085c9b3d1c3fa86712869f80eb954d  binutils-2.25.1.tar.bz2
->
+> +config BR2_BINUTILS_VERSION_2_23_X
+> +	bool "binutils 2.23 removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  Binutils 2.23 has been removed, using a newer version is
+> +	  recommended.
+
+  I don't know if it very important, but it's a bit weird that another legacy 
+option (BR2_BINUTILS_VERSION_2_23_1) still selects this one. So ideally that 
+select should be removed, and its help text updated to be the same as this one.
+
+
+  Regards,
+  Arnout
+
+> +
+>   config BR2_x86_i386
+>   	bool "x86 i386 support removed"
+>   	help
+
+[snip]
 
 
 -- 
