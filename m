@@ -1,142 +1,363 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 22 Apr 2016 00:47:19 +0200
-Subject: [Buildroot] [PATCH v6] core/pkg-kconfig: Use olddefconfig when
-	available
-In-Reply-To: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
-References: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
-Message-ID: <20160421224719.GA3426@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 22 Apr 2016 01:02:49 +0200
+Subject: [Buildroot] [PATCH v5] package/radlib: new package
+In-Reply-To: <1460563603-3748-2-git-send-email-ray.kinsella@intel.com>
+References: <1460563603-3748-1-git-send-email-ray.kinsella@intel.com>
+ <1460563603-3748-2-git-send-email-ray.kinsella@intel.com>
+Message-ID: <57195C19.3070307@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
-
-On 2016-04-20 11:54 +0200, Romain Izard spake thusly:
-> Using 'yes "" | make oldconfig' to regenerate a .config file from an
-> existing defconfig does not work reliably in all cases. Specifically, it
-> does not work well with tristate choice entries.
-> 
-> The correct way to do it is to use 'make olddefconfig', but this target
-> is not supported in projects that use an old version of kconfig. As
-> most projects do not use tristate entries, there is no need for them to
-> upgrade.
-> 
-> 'oldnoconfig' is an alias for 'olddefconfig', but it also is the only
-> name for this target between Linux versions 2.6.36 and 3.6.
-> 
-> Check which targets are supported by the current project, and use the
-> appropriate method to regenerate the .config file.
-> 
-> Signed-off-by: Romain Izard <romain.izard.pro@gmail.com>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On 04/13/16 18:06, ray.kinsella at intel.com wrote:
+> From: Ray Kinsella <ray.kinsella@intel.com>
+>
+> radlib is a rapid application development library for unix
+> multi-process applications. It uses SYS V IPC facilities and
+> FIFOs to provide an RTOS-like, event-driven, distributed
+> framework. Processes may be run as daemons or have a controlling
+> terminal.
+>
+> Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
 > ---
-> Changelog:
-> v1: New patch
-> v2: Use oldnoconfig instead of olddefconfig
->     Fix silent mode
->     Change the pattern in both places where it is used
->     Use a macro to avoid redundancy
-> v3: Do not use $(call ...)
->     Use the $(2)_KCONFIG_MAKE variable
-> v4: No change
-> v5: Detect available methods and use the most recent one
-> v6: Remove colon from matched rule names
-> 
->  package/pkg-kconfig.mk | 25 +++++++++++++++++++++----
->  1 file changed, 21 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 4033915..478f5bb 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -60,18 +60,35 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
->  $(2)_KCONFIG_MAKE = \
->  	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) $$($(2)_KCONFIG_OPTS)
->  
-> +$(2)_KCONFIG_RULES = \
-> +	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
-> +		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
+[snip]
+> diff --git a/package/radlib/0001-radlib-introduce-pkg-config-for-sqlite-and-postgresq.patch b/package/radlib/0001-radlib-introduce-pkg-config-for-sqlite-and-postgresq.patch
+> new file mode 100644
+> index 0000000..63a4315
+> --- /dev/null
+> +++ b/package/radlib/0001-radlib-introduce-pkg-config-for-sqlite-and-postgresq.patch
+> @@ -0,0 +1,102 @@
+> +From 3c7aad41e2c32b63267fa8cd6bf3fbb9ea0aaae3 Mon Sep 17 00:00:00 2001
+> +From: Ray Kinsella <ray.kinsella@intel.com>
+> +Date: Wed, 13 Apr 2016 16:21:02 +0100
+> +Subject: [PATCH 1/3] radlib: introduce pkg-config for sqlite and postgresql
 
-Ok, so... Well... Err...
+  Please generate patches with the -N option; the 1/3 becomes invalid when a 4th 
+patch is added, or when some of the patches are accepted upstream. Given 
+upstream's lack of updates the latter isn't very likely :-) Did you try to 
+submit the patches upstream?
 
-Could you respin v4 of the patch, the one that used something like:
-
-    make oldnoconfig || (yes "" |make oldconfig)
-
-please? ;-)
-
-OK, what's wrong with my proposal? It works in an unconfigured tree.
-But as soon as the tree is configured, it breaks, notably with older
-kernels, like 3.0.
-
-    $ cd linux-3.0
-    $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
-    [nothing]
-    $ touch .config
-    $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
-    olddefconfig: scripts_basic outputmakefile FORCE
-
-But 3.0 does not have olddefconfig. It's jsut the %config generic rule
-kicking in. So we'd believe there would be support for olddefconfig (or
-oldnoconfig) when there isn't.
-
-So, I have to apologise for the delusion. Your v4 is the best we can do.
-
-Thank you! :-)
-
-Regards,
-Yann E. MORIN.
-
-> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
-> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
-> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
-> +# In older versions, and in some other projects that use kconfig, the target is
-> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
-> +# only, as this can fail in complex cases.
-> +define $(2)_REGEN_DOT_CONFIG
-> +	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
-> +		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
-> +		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
-> +			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
-> +			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
-> +endef
 > +
->  # The specified source configuration file and any additional configuration file
->  # fragments are merged together to .config, after the package has been patched.
->  # Since the file could be a defconfig file it needs to be expanded to a
-> -# full .config first. We use 'make oldconfig' because this can be safely
-> -# done even when the package does not support defconfigs.
-> +# full .config first.
->  $$($(2)_DIR)/.config: $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
->  	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
->  		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
->  		cp $$($(2)_KCONFIG_FILE) $$(@))
->  	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
->  		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
-> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
-> +	$$($(2)_REGEN_DOT_CONFIG)
->  
->  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
->  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-> @@ -82,7 +99,7 @@ $$($(2)_DIR)/.config: | $(1)-patch
->  # The exact rules are specified by the package .mk file.
->  define $(2)_FIXUP_DOT_CONFIG
->  	$$($(2)_KCONFIG_FIXUP_CMDS)
-> -	$$(Q)yes "" | $$($(2)_KCONFIG_MAKE) oldconfig
-> +	$$($(2)_REGEN_DOT_CONFIG)
->  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  endef
->  
-> -- 
-> 2.5.0
-> 
+> +Retrieve cflags and linker options for sqlite and postgresql using pkg-config.
+> +
+> +Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> +---
+> + configure.in          | 6 ++++++
+> + debug/Makefile.am     | 4 ++--
+> + msgRouter/Makefile.am | 4 ++--
+> + src/Makefile.am       | 6 ++----
+> + 4 files changed, 12 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/configure.in b/configure.in
+> +index 47e507e..83f572c 100644
+> +--- a/configure.in
+> ++++ b/configure.in
+> +@@ -23,6 +23,9 @@ AC_ARG_ENABLE(pgresql,
+> +   *) pgresql=false ;;
+> + esac],[pgresql=false])
+> + AM_CONDITIONAL(PGRESQL, test x$pgresql = xtrue)
+> ++if test x$pgresql = xtrue; then
+
+  Since the AM_CONDITIONAL is defined just above, it's better to use AM_COND_IF:
+
+AM_COND_IF([PGRESQL],
+   PKG_CHECK_MODULES([POSTGRESQL], [libpq])
+)
+
+(untested, of course).
+
+> ++  PKG_CHECK_MODULES([POSTGRESQL], [libpq])
+> ++fi
+> +
+> + AC_ARG_ENABLE(sqlite,
+> + [  --enable-sqlite                include radlib sqlite database support],
+> +@@ -32,6 +35,9 @@ AC_ARG_ENABLE(sqlite,
+> +   *) sqlite=false ;;
+> + esac],[sqlite=false])
+> + AM_CONDITIONAL(SQLITE, test x$sqlite = xtrue)
+> ++if test x$sqlite = xtrue; then
+
+  Same here.
+
+> ++  PKG_CHECK_MODULES([SQLITE3], [sqlite3])
+> ++fi
+> +
+> + # Check for big endian host:
+> + AC_C_BIGENDIAN()
+[snip]
+> diff --git a/package/radlib/0002-radlib-introduce-mysql-config.patch b/package/radlib/0002-radlib-introduce-mysql-config.patch
+> new file mode 100644
+> index 0000000..d778d42
+> --- /dev/null
+> +++ b/package/radlib/0002-radlib-introduce-mysql-config.patch
+> @@ -0,0 +1,78 @@
+> +From c70ccfd485b87f9ffe065b82588aa158743620a0 Mon Sep 17 00:00:00 2001
+> +From: Ray Kinsella <ray.kinsella@intel.com>
+> +Date: Wed, 13 Apr 2016 16:23:11 +0100
+> +Subject: [PATCH 2/3] radlib: introduce mysql-config
+> +
+> +Retrieve cflags and linker options for mysql using mysql-config.$
+> +
+> +Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> +---
+> + configure.in          | 9 +++++++++
+> + debug/Makefile.am     | 2 +-
+> + msgRouter/Makefile.am | 2 +-
+> + src/Makefile.am       | 3 +--
+> + 4 files changed, 12 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/configure.in b/configure.in
+> +index 83f572c..3fb8f49 100644
+> +--- a/configure.in
+> ++++ b/configure.in
+> +@@ -14,6 +14,15 @@ AC_ARG_ENABLE(mysql,
+> +   *) mysql=false ;;
+> + esac],[mysql=false])
+> + AM_CONDITIONAL(MYSQL, test x$mysql = xtrue)
+> ++if test x$mysql = xtrue; then
+
+  Same, use AM_COND_IF
+
+> ++  AC_PATH_PROG([MYSQL_CONFIG], [mysql_config])
+> ++  if test "x$MYSQL_CONFIG" != "x";then
+> ++    MYSQL_CFLAGS=`$MYSQL_CONFIG --cflags`
+> ++    MYSQL_LIBS=`$MYSQL_CONFIG --libs`
+> ++    AC_SUBST([MYSQL_CFLAGS])
+> ++    AC_SUBST([MYSQL_LIBS])
+
+  I guess there should be an error in the else branch?
+
+> ++  fi
+> ++fi
+> +
+> + AC_ARG_ENABLE(pgresql,
+> + [  --enable-pgresql               include radlib postgreSQL database support],
+[snip]
+> diff --git a/package/radlib/0003-radlib-fix-the-paths-in-the-subdir-objects.patch b/package/radlib/0003-radlib-fix-the-paths-in-the-subdir-objects.patch
+> new file mode 100644
+> index 0000000..b375eaf
+> --- /dev/null
+> +++ b/package/radlib/0003-radlib-fix-the-paths-in-the-subdir-objects.patch
+> @@ -0,0 +1,93 @@
+> +From ddcebb69533c795c1c0371eeefe856924e11ff23 Mon Sep 17 00:00:00 2001
+> +From: Ray Kinsella <ray.kinsella@intel.com>
+> +Date: Wed, 13 Apr 2016 16:24:34 +0100
+> +Subject: [PATCH 3/3] radlib: fix the paths in the subdir-objects
+> +
+> +Remove paths relative to $(prefix) and CROSS_COMPILE options from
+> +subdir-objects.
+
+  I think this should be the first patch; our autoreconf will not be happy 
+without subdir-objects.
+
+> +
+> +Signed-off-by: Ray Kinsella <ray.kinsella@intel.com>
+> +---
+> + configure.in          |  1 +
+> + debug/Makefile.am     | 16 ++--------------
+> + msgRouter/Makefile.am | 16 ++--------------
+> + src/Makefile.am       |  1 -
+> + 4 files changed, 5 insertions(+), 29 deletions(-)
+> +
+> +diff --git a/configure.in b/configure.in
+> +index 3fb8f49..ffc0204 100644
+> +--- a/configure.in
+> ++++ b/configure.in
+> +@@ -4,6 +4,7 @@ AC_PREREQ(2.5)
+> + AC_INIT([radlib],[2.12.0],[mteel2005 at gmail.com])
+> + AC_CONFIG_SRCDIR([h/radmsgLog.h])
+> + AM_INIT_AUTOMAKE([radlib],[2.12.0])
+
+  Shouldn't this one be removed?
+
+> ++AM_INIT_AUTOMAKE([subdir-objects])
+> + AM_CONFIG_HEADER([config.h])
+> +
+> + AC_ARG_ENABLE(mysql,
+> +diff --git a/debug/Makefile.am b/debug/Makefile.am
+> +index 7c558ed..e732a06 100644
+> +--- a/debug/Makefile.am
+> ++++ b/debug/Makefile.am
+> +@@ -27,18 +27,6 @@ raddebug_LDADD   += $(SQLITE3_LIBS)
+> + endif
+> +
+> + # define library directories
+> +-raddebug_LDFLAGS = -L../src/.libs -L$(prefix)/lib -L/usr/lib
+> +-INCLUDES         += -I$(prefix)/include -I/usr/include
+> ++raddebug_LDADD += -L../src/.libs
+> +
+> +-if MYSQL
+> +-raddebug_LDFLAGS += -L$(prefix)/lib64/mysql -L$(prefix)/lib/mysql -L/usr/lib64/mysql -L/usr/lib/mysql
+> +-else
+> +-if PGRESQL
+> +-raddebug_LDFLAGS += -L$(prefix)/pgsql/lib
+> +-INCLUDES         += -I$(prefix)/pgsql/include
+> +-endif
+> +-endif
+> +-
+> +-if CROSSCOMPILE
+> +-raddebug_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
+> +-endif
+> ++# removed paths relative to $(prefix)
+> +diff --git a/msgRouter/Makefile.am b/msgRouter/Makefile.am
+> +index 14733b7..2cf9d17 100644
+> +--- a/msgRouter/Makefile.am
+> ++++ b/msgRouter/Makefile.am
+> +@@ -27,18 +27,6 @@ radmrouted_LDADD   += $(SQLITE3_LIBS)
+> + endif
+> +
+> + # define library directories
+> +-radmrouted_LDFLAGS = -L../src/.libs -L$(prefix)/lib -L/usr/lib
+> +-INCLUDES           += -I$(prefix)/include -I/usr/include
+> ++radmrouted_LDADD += -L../src/.libs
+> +
+> +-if MYSQL
+> +-radmrouted_LDFLAGS += -L$(prefix)/lib64/mysql -L$(prefix)/lib/mysql -L/usr/lib64/mysql -L/usr/lib/mysql
+> +-else
+> +-if PGRESQL
+> +-radmrouted_LDFLAGS += -L$(prefix)/lib -L$(prefix)/pgsql/lib
+> +-INCLUDES           += -I$(prefix)/pgsql/include
+> +-endif
+> +-endif
+> +-
+> +-if CROSSCOMPILE
+> +-radmrouted_LDFLAGS += $(prefix)/lib/crt1.o $(prefix)/lib/crti.o $(prefix)/lib/crtn.o
+> +-endif
+> ++# removed paths relative to $(prefix)
+> +diff --git a/src/Makefile.am b/src/Makefile.am
+> +index ea1b73d..f08976b 100644
+> +--- a/src/Makefile.am
+> ++++ b/src/Makefile.am
+> +@@ -43,7 +43,6 @@ endif
+> + # define include directories
+> + INCLUDES = \
+> + 		-I$(top_srcdir)/h \
+> +-		-I$(prefix)/include \
+> + 		-D_GNU_SOURCE \
+> + 		$(MY_INCLUDES) \
+> + 		$(PG_INCLUDES) \
+> +--
+> +2.4.11
+> +
+> diff --git a/package/radlib/Config.in b/package/radlib/Config.in
+> new file mode 100644
+> index 0000000..a4a89c9
+> --- /dev/null
+> +++ b/package/radlib/Config.in
+> @@ -0,0 +1,38 @@
+> +config BR2_PACKAGE_RADLIB
+> +	bool "radlib"
+> +	help
+> +	  radlib is a rapid application development library for unix
+> +	  multi-process applications. It uses SYS V IPC facilities and
+> +	  FIFOs to provide an RTOS-like, event-driven, distributed framework.
+> +	  Processes may be run as daemons or have a controlling terminal.
+
+  Lines in help text should be wrapped at 72 columns, where tab counts for 8.
+
+> +	
+> +	  http://sourceforge.net/projects/radlib/
+> +
+> +choice
+> +	prompt "radlib database backend"
+> +	depends on BR2_PACKAGE_RADLIB
+> +	depends on BR2_PACKAGE_SQLITE \
+> +		|| BR2_PACKAGE_MYSQL \
+> +		|| BR2_PACKAGE_POSTGRESQL
+> +	help
+> +	  Selects the backend database: sqlite, mysql or postgresql
+
+  I'm not really happy with this choice, I'd prefer an automatic selection. But 
+it's true, if both mysql and postgresql are selected it's hard to decide which 
+one should be used...
+
+> +
+> +config BR2_PACKAGE_RADLIB_SQLITE
+> +	bool "sqlite"
+> +	depends on BR2_PACKAGE_SQLITE
+> +	help
+> +	  Configure radlib to use a sqlite database backend
+> +
+> +config BR2_PACKAGE_RADLIB_MYSQL
+> +	bool "mysql"
+> +	depends on BR2_PACKAGE_MYSQL
+> +	help
+> +	  Configure radlib to use a mysql database backend
+> +
+> +config BR2_PACKAGE_RADLIB_POSTGRESQL
+> +	bool "postgresql"
+> +	depends on BR2_PACKAGE_POSTGRESQL
+> +	help
+> +	  Configure radlib to use a postgresql database backend
+> +
+> +endchoice
+> diff --git a/package/radlib/radlib.hash b/package/radlib/radlib.hash
+> new file mode 100644
+> index 0000000..2fbfbba
+> --- /dev/null
+> +++ b/package/radlib/radlib.hash
+> @@ -0,0 +1,2 @@
+> +# From http://sourceforge.net/projects/radlib/files/
+
+  Err, I see sha1 and md5 there, but not sha256. So you should take the md5 and 
+sha1 from sourceforge and add the locally-calculated sha256.
+
+> +sha256  82b98bb5e08a500dea1e4252843b9c772fa1fb67ac8ab89ed64abdd5e22eca66  radlib-2.12.0.tar.gz
+> diff --git a/package/radlib/radlib.mk b/package/radlib/radlib.mk
+> new file mode 100644
+> index 0000000..8b8d61e
+> --- /dev/null
+> +++ b/package/radlib/radlib.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# radlib
+> +#
+> +################################################################################
+> +
+> +RADLIB_VERSION = 2.12.0
+> +RADLIB_SITE = http://downloads.sourceforge.net/radlib
+> +RADLIB_INSTALL_STAGING = YES
+> +RADLIB_LICENSE = BSD-2c
+> +RADLIB_LICENSE_FILES = COPYING
+> +RADLIB_AUTORECONF = YES
+> +RADLIB_DEPENDENCIES = host-pkgconf
+> +
+> +ifeq ($(BR2_PACKAGE_RADLIB_SQLITE),y)
+> +RADLIB_CONF_OPTS += --enable-sqlite
+RADLIB_DEPENDENCIES += sqlite
+else
+RADLIB_CONF_OPTS += --disable-sqlite
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RADLIB_MYSQL),y)
+> +RADLIB_CONF_ENV=ac_cv_path_MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
+> +RADLIB_CONF_OPTS += --enable-mysql
+
+  Same here
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RADLIB_POSTGRESQL),y)
+> +RADLIB_CONF_OPTS += --enable-pgresql
+
+  Same here
+
+  Regards,
+  Arnout
+
+> +endif
+> +
+> +$(eval $(autotools-package))
+>
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
