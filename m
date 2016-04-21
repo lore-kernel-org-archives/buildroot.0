@@ -1,37 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 Apr 2016 10:01:00 +0000
-Subject: [Buildroot] [Bug 8861] With buildroot 2016.02 trying to build for
- corei7-avx fails while trying to build host-binutils.
-In-Reply-To: <bug-8861-163@https.bugs.busybox.net/>
-References: <bug-8861-163@https.bugs.busybox.net/>
-Message-ID: <bug-8861-163-IzgU7CO16w@https.bugs.busybox.net/>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Thu, 21 Apr 2016 11:34:02 +0100
+Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
+In-Reply-To: <20160420220228.59d5e54f@free-electrons.com>
+References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
+ <20160420220228.59d5e54f@free-electrons.com>
+Message-ID: <5718AC9A.4060801@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8861
+Hello,
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Hum, indeed. Thanks for the bug report! Can you try the below patch:
+On 4/20/2016 9:02 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 20 Apr 2016 18:47:04 +0100, Joao Pinto wrote:
+>> This patch has the goal to add to the juno board defconfig the u-boot build 
+>> configurations. The juno board readme file was also updated with the
+>> necessary steps to build the ARM Trusted Firmware (with u-boot in it) and
+>> how to deploy it.
+> 
+> Thanks!
+> 
+>> +Building bootloader files bl1.bin and fip.bin
+>> +=============================================
+>> +First clone ARM Trusted Firmware repository
+>> +
+>> +   $ git clone https://github.com/ARM-software/arm-trusted-firmware.git
+>> +
+>> +After clonning, please configure the following environment variables:
+>> +
+>> +  CROSS_COMPILE=<buidlroot_path>/output/host/usr/bin/aarch64-buildroot-linux-gnu-
+>> +  BL33=<buidlroot_path>/output/images/u-boot.bin
+>> +  SCP_BL2=<path_to_scp_firmware>
+>> +
+>> +Finaly execute:
+>> +  make PLAT=juno all fip
+> 
+> The whole point of Buildroot is to automate the build process, so this
+> should be done by a Buildroot package, rather than manually by the
+> user. So a package for ATF should probably be created.
+> 
+> I also work on an ARM64 platform that uses ATF+U-Boot, so I'll be able
+> to compare and tell you whether what you're proposing is only
+> applicable to Juno, or can be used for other platforms as well.
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 4039db8..efa9567 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -226,6 +226,8 @@ config BR2_ARCH
-        default "i686"          if BR2_x86_nocona && BR2_i386
-        default "i686"          if BR2_x86_core2 && BR2_i386
-        default "i686"          if BR2_x86_corei7 && BR2_i386
-+       default "i686"          if BR2_x86_corei7_avx && BR2_i386
-+       default "i686"          if BR2_x86_corei7_avx2 && BR2_i386
-        default "i686"          if BR2_x86_atom && BR2_i386
-        default "i686"          if BR2_x86_opteron && BR2_i386
-        default "i686"          if BR2_x86_opteron_sse3 && BR2_i386
+It would great to do it 100% automatic. I'll be waiting for your feedback
+regarding your ARM64 platform. If it is the same we could do it together.
 
-And then do your configuration from scratch again, and attempt to do the build.
+> 
+>> +BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
+> 
+> Using the legacy build system with a modern U-Boot such as 2016.03
+> doesn't make much sense. Please use the kconfig based build system,
+> unless there is a real reason not to.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Yes, you are right, made a mistake!
+
+> 
+> Thanks!
+> 
+> Thomas
+> 
+
+Thanks,
+Joao
