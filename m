@@ -1,41 +1,55 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Thu, 21 Apr 2016 10:24:09 -0400
-Subject: [Buildroot] rootfs overlay best practices
-Message-ID: <CAF_dkJDPv-Z6AW8u-AsTukovBhMNLR0q-1326qOxi7RfFtBL7A@mail.gmail.com>
+From: Oscar Gomez Fuente <oscargomezf@gmail.com>
+Date: Thu, 21 Apr 2016 16:58:08 +0200
+Subject: [Buildroot] [RPi 3B] ttyAMA0 serial port device doesn't exist
+	on raspberry pi 3B
+In-Reply-To: <87ega1e3g5.fsf@dell.be.48ers.dk>
+References: <CALtfCQatSKG7Afgd=Z5bbp69h3UfTDKd+3GX6_zcVfcYqFaEhA@mail.gmail.com>
+ <87ega1e3g5.fsf@dell.be.48ers.dk>
+Message-ID: <CALtfCQbWTred7-+vv=mozXqws5Z5vLtu0MpC9kW1RYfCecT2nA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rather than invent my own, I thought I would query the list first.
+Thank you Peter,
 
-NOTE: This post does not refer to the root file system overlay one can
-use to customize the build process.  I am looking for information
-regarding non-volatile storage of configuration data.
+Only you have to add this line in the config.txt file:
 
-So here is the situation.  I have compiled my (very tiny!) rootfs into
-my kernel and boot with that as my rootfs.  But I would like to allow
-myself the luxury of making changes to the rootfs by overlaying
-non-volatile storage over the rootfs, or, perhaps over selected
-portions of the rootfs.
+device_tree=bcm2710-rpi-3-b.dtb
++dtoverlay=pi3-disable-bt
 
-How do folks typically manage this?
+And copy the file pi3-disable-bt-overlay.dtb to /boot/overlays folder.
 
-I could mount my overlay nonvolatile storage right at / (I think... I
-haven't actually tried this yet!) and I think that means that any
-change I make to the running system will be preserved.  But there are
-probably some weird issues with mount points and such.
+This disabled the Bluetooth module.
 
-Or, I could mount my overlay storage someplace like /config, create
-symlinks from selected (or all?) files in /etc to /config/etc, and
-thus be able to modify e.g. /config/etc/hostname to change the name of
-my device.  It seems like it would be pretty straightforward to write
-a post-build script that duplicates /etc into /config/etc and replaces
-the files in /etc with symlinks.
+Best regards.
 
-Or I could overthink this too much and perhaps I should just stop here
-and seek the wisdom of the community.  This is the option I have
-selected :-)
+Oscar Gomez Fuente
 
---wpd
+On 19 April 2016 at 22:41, Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Oscar" == Oscar Gomez Fuente <oscargomezf@gmail.com> writes:
+>
+>  > Hi everyone,
+>  > I'm using buildroot-2016.02 and I'm trying to make a rootfs for the
+>  > raspberry pi 3B. I've just used the raspberrypi2_defconfig. And
+> everything
+>  > works fine except the serial port /dev/ttyAMA0.... I can see characters
+> on
+>  > the serial port but they are garbage characters...
+>
+>  > This is my config.txt, I'm using the bcm2710-rpi-3-b.dtb file:
+>
+> I believe ttyAMA0 is connected to the bluetooth module on rpi3 and you
+> instead
+> need to use ttyS0:
+>
+> https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=138120
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160421/ea887439/attachment.html>
