@@ -1,48 +1,52 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Apr 2016 22:55:03 +0200
-Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
-In-Reply-To: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
-References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
-Message-ID: <57193E27.2070801@mind.be>
+Date: Thu, 21 Apr 2016 22:57:21 +0200
+Subject: [Buildroot] [PATCH] i386: properly define BR2_ARCH for all x86
+ subarchitectures
+In-Reply-To: <1461268365-13922-1-git-send-email-thomas.petazzoni@free-electrons.com>
+References: <1461268365-13922-1-git-send-email-thomas.petazzoni@free-electrons.com>
+Message-ID: <57193EB1.5060509@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 04/20/16 19:47, Joao Pinto wrote:
-> This patch has the goal to add to the juno board defconfig the u-boot build
-> configurations. The juno board readme file was also updated with the
-> necessary steps to build the ARM Trusted Firmware (with u-boot in it) and
-> how to deploy it.
+On 04/21/16 21:52, Thomas Petazzoni wrote:
+> We were not defining BR2_ARCH for two of the x86 subarchitecture,
+> which means the architecture part of the GNU_TARGET_NAME tuple was
+> empty, leading to weird build failures.
 >
-> Signed-off-by: Joao Pinto <jpinto@synopsys.com>
-> ---
-[snip]
-> diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-> index 87b6374..9ed4258 100644
-> --- a/configs/arm_juno_defconfig
-> +++ b/configs/arm_juno_defconfig
-> @@ -12,3 +12,9 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arm/juno/linux-juno-defconfig"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY=y
-> +BR2_TARGET_UBOOT_BOARDNAME="vexpress_aemv8a_juno"
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="http://git.denx.de/u-boot.git"
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="v2016.03"
+> This commit fixes that by defining the appropriate values.
+>
+> Fixes bug #8861.
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
-  Is there any reason to use a git clone rather than just downloading the 
-tarball? I.e., doesn't this work:
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.03"
+  It would be nice if we would have a way to check something like that...
 
   Regards,
   Arnout
 
+> ---
+>   arch/Config.in.x86 | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+> index 4039db8..efa9567 100644
+> --- a/arch/Config.in.x86
+> +++ b/arch/Config.in.x86
+> @@ -226,6 +226,8 @@ config BR2_ARCH
+>   	default "i686"		if BR2_x86_nocona && BR2_i386
+>   	default "i686"		if BR2_x86_core2 && BR2_i386
+>   	default "i686"		if BR2_x86_corei7 && BR2_i386
+> +	default "i686"		if BR2_x86_corei7_avx && BR2_i386
+> +	default "i686"		if BR2_x86_corei7_avx2 && BR2_i386
+>   	default "i686"		if BR2_x86_atom && BR2_i386
+>   	default "i686"		if BR2_x86_opteron && BR2_i386
+>   	default "i686"		if BR2_x86_opteron_sse3 && BR2_i386
+>
 
 
 -- 
