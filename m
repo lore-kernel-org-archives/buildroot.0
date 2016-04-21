@@ -1,19 +1,19 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 21 Apr 2016 08:58:21 +0000
-Subject: [Buildroot] [Bug 8861] New: With buildroot 2016.02 trying to build
- for corei7-avx fails while trying to build host-binutils.
-Message-ID: <bug-8861-163@https.bugs.busybox.net/>
+Date: Thu, 21 Apr 2016 09:04:23 +0000
+Subject: [Buildroot] [Bug 8866] New: Making an USB flash bootable with
+ extlinux build with buildroot does not work.
+Message-ID: <bug-8866-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=8861
+https://bugs.busybox.net/show_bug.cgi?id=8866
 
-            Bug ID: 8861
-           Summary: With buildroot 2016.02 trying to build for corei7-avx
-                    fails while trying to build host-binutils.
+            Bug ID: 8866
+           Summary: Making an USB flash bootable with extlinux build with
+                    buildroot does not work.
            Product: buildroot
            Version: unspecified
           Hardware: PC
@@ -27,53 +27,86 @@ https://bugs.busybox.net/show_bug.cgi?id=8861
                 CC: buildroot at uclibc.org
   Target Milestone: ---
 
-Created attachment 6426
-  --> https://bugs.busybox.net/attachment.cgi?id=6426&action=edit
-Output of the call to make
-
 My environment:
 - Fedora release 22 (Twenty Two)
 - x86_64
 - with a "dnf update" on 10. March 2016
+- buildroot cloned on 9. March 2016
 
-The target is i386, narrowed down to corei7-avx.
+The target is i386, narrowed down to corei7.
 
 
 Steps to duplicate the problem:
---> wget https://buildroot.org/downloads/buildroot-2016.02.tar.bz2
---> tar xjvf buildroot-2016.02.tar.bz2
---> cd buildroot-2016.02
---> env HOSTCXX=/bin/g++ HOSTCC=/bin/gcc make menuconfig
-In Target options select i386, ELF, corei7-avx
-
---> env HOSTCXX=/bin/g++ HOSTCC=/bin/gcc make
-...
->>> host-binutils 2.24 Configuring
-... --target=-buildroot-linux-uclibc ...
-configure: loading site script /dev/null
-checking build system type... x86_64-unknown-linux-gnu
-checking host system type... x86_64-unknown-linux-gnu
-checking target system type... configure: error: /bin/sh ./config.sub
--buildroot
--linux-uclibc failed
-configure: WARNING: cache variable ac_cv_target contains a newline
-package/pkg-generic.mk:185: recipe for target
-'/home/buschman/wk/buildroot-2016.
-02/output/build/host-binutils-2.24/.stamp_configured' failed
-
---> env HOSTCXX=/bin/g++ HOSTCC=/bin/gcc make savedefconfig
---> cat defconfig 
-BR2_x86_corei7_avx=y
-
-
-The same problem happens when using the up to date version of buildroot
-as it was on 09. March 2016 instead.
 --> git clone https://git.buildroot.net/buildroot
+--> cd buildroot
+--> mkdir /var/tmp/try-r210b
+--> env BR2_DL_DIR=/data/buildroot/downloads HOSTCXX=/bin/g++ HOSTCC=/bin/gcc \
+    make O=/var/tmp/try-r210b menuconfig
+--> env BR2_DL_DIR=/data/buildroot/downloads HOSTCXX=/bin/g++ HOSTCC=/bin/gcc \
+    make O=/var/tmp/try-r210b linux-menuconfig
+--> env BR2_DL_DIR=/data/buildroot/downloads HOSTCXX=/bin/g++ HOSTCC=/bin/gcc \
+    make O=/var/tmp/try-r210b savedefconfig
+--> cat /var/tmp/try-r210b/defconfig
+BR2_x86_corei7=y
+BR2_KERNEL_HEADERS_4_4=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TARGET_GENERIC_HOSTNAME="r210node"
+BR2_TARGET_GENERIC_ROOT_PASSWD="XXX"
+BR2_TARGET_TZ_INFO=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/dell/r210/linux-4.4.config"
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_ETHTOOL=y
+BR2_PACKAGE_IPROUTE2=y
+BR2_PACKAGE_IPUTILS=y
+BR2_PACKAGE_OPENSSH=y
+BR2_PACKAGE_SCREEN=y
+BR2_PACKAGE_ED=y
+BR2_TARGET_ROOTFS_CPIO=y
+BR2_TARGET_ROOTFS_CPIO_BZIP2=y
+BR2_TARGET_SYSLINUX=y
+BR2_TARGET_SYSLINUX_MBR=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+--> env BR2_DL_DIR=/data/buildroot/downloads HOSTCXX=/bin/g++ HOSTCC=/bin/gcc \
+    make O=/var/tmp/try-r210b
 
-https://gist.github.com/abuschmann/e2e00e5cb23bb06f94bb
+This all works as expected.
 
-I have send this bug report as a message to the buildroot list on 21. March
-2016
+The problem is when generating a bootable USB stick with the extlinux
+tools from buildroot, the generated USB flash doesn't boot.
+
+--> cat /var/tmp/try-r210b/images/syslinux/mbr.bin >/dev/sdd
+partition and format the USB stick and copy the filesystem and the linux
+kernel onto it.
+--> /var/tmp/try-r210b/host/sbin/extlinux --zip --stupid --install /mnt/boot
+--> cat /mnt/boot/extlinux.conf
+SERIAL 1 115200
+DEFAULT linux
+LABEL linux
+SAY Now booting the kernel from SYSLINUX...
+KERNEL /bzImage
+APPEND rw root=/dev/sdc2 rootdelay=10 console=ttyS1,115200n8
+
+The target system (a Dell R210) boots until:
+SYSLINUX 6.03 EDD  Copyright (C) 1994-2014 H.Peter Anvin et al
+Boot error
+
+Note that I copied the error message manually, so the spacing might be
+different.
+
+
+
+If I use the installed Fedora tools from the Fedora 22 distribution, the
+USB stick is suddenly bootable:
+
+--> cat /usr/share/syslinux/mbr.bin >/dev/sdd
+--> mount -t f2fs /dev/sdd2 /mnt
+--> mkfs.ext2 -L boot -m 0 -M /boot /dev/sdd1
+--> mount -t ext2 /dev/sdd1 /mnt/boot
+--> Add /mnt/boot/extlinux.conf as above.
+--> /sbin/extlinux --stupid --zip --install /mnt/boot
+--> cp -p /var/tmp/try-r210b/images/bzImage /mnt/boot
 
 -- 
 You are receiving this mail because:
