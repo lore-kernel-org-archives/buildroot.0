@@ -1,283 +1,73 @@
-From: Damien Riegel <damien.riegel@savoirfairelinux.com>
-Date: Thu, 21 Apr 2016 12:21:13 -0400
-Subject: [Buildroot] [PATCH 2/2] configs: add defconfig for TS-4800
-In-Reply-To: <1461255673-11443-1-git-send-email-damien.riegel@savoirfairelinux.com>
-References: <1461255673-11443-1-git-send-email-damien.riegel@savoirfairelinux.com>
-Message-ID: <1461255673-11443-3-git-send-email-damien.riegel@savoirfairelinux.com>
+From: Joao Pinto <Joao.Pinto@synopsys.com>
+Date: Thu, 21 Apr 2016 17:35:54 +0100
+Subject: [Buildroot] [PATCH] uboot build and deploy added to juno board
+In-Reply-To: <20160421132639.16cd8714@free-electrons.com>
+References: <fce2649dcd6d9c232e557bfb06de3ff222fe9fa6.1461174061.git.jpinto@synopsys.com>
+ <20160420220228.59d5e54f@free-electrons.com> <5718AC9A.4060801@synopsys.com>
+ <20160421132639.16cd8714@free-electrons.com>
+Message-ID: <5719016A.1020303@synopsys.com>
 List-Id: <buildroot.busybox.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for the TS-4800 SoM manufactured by Technologic
-Systems based on the Freescale i.MX515 SoC.
+Hi Thomas,
 
-The TS-4800 is supported by mainline Linux as of 4.5. There are two
-patches for U-Boot. The first one modifies the default environment to
-more sane values. The second defines an errata that seems to affect the
-board. These patches will be sent upstream and hopefully they will be
-removed from Buildroot at some point.
+I developed the atfirmware config and I am having problems in the Makefile.
+How does the buildroot structure git clones / untar / etc.? I suppose there is a
+common spot to do these stuff right?
 
-mbrboot.bin is a MBR routine which was extracted from the image provided
-by Technologic Systems. Basically, it scans every partition with the
-0xda type and copies the first file to a given offset, and then jump
-where the first file was copied to start its execution. In our case, we
-use it to load u-boot. This routine is loaded by the companion FPGA and
-the board won't be able to boot if this is missing.
+Send in attchment tarball of the new package. I am thinking of adding it to
+Bootloaders. What do you think?
 
-A post-image script is provided to generate an image that can be "dd"
-directly to an SD card.
+Thanks.
+Joao
 
-More details on the board here:
-  http://wiki.embeddedarm.com/wiki/TS-4800
 
-Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
----
- board/technologic/ts4800/genimage.cfg              |  37 ++++++++++++++
- board/technologic/ts4800/linux.fragment            |   3 ++
- board/technologic/ts4800/mbrboot.bin               | Bin 0 -> 446 bytes
- ...800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch |  36 ++++++++++++++
- .../uboot/ts4800-patch-env-to-boot-dts.patch       |  55 +++++++++++++++++++++
- board/technologic/ts4800/post-image.sh             |  25 ++++++++++
- configs/ts4800_defconfig                           |  27 ++++++++++
- 7 files changed, 183 insertions(+)
- create mode 100644 board/technologic/ts4800/genimage.cfg
- create mode 100644 board/technologic/ts4800/linux.fragment
- create mode 100644 board/technologic/ts4800/mbrboot.bin
- create mode 100644 board/technologic/ts4800/patches/uboot/ts4800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch
- create mode 100644 board/technologic/ts4800/patches/uboot/ts4800-patch-env-to-boot-dts.patch
- create mode 100755 board/technologic/ts4800/post-image.sh
- create mode 100644 configs/ts4800_defconfig
+On 4/21/2016 12:26 PM, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 21 Apr 2016 11:34:02 +0100, Joao Pinto wrote:
+> 
+>>> The whole point of Buildroot is to automate the build process, so this
+>>> should be done by a Buildroot package, rather than manually by the
+>>> user. So a package for ATF should probably be created.
+>>>
+>>> I also work on an ARM64 platform that uses ATF+U-Boot, so I'll be able
+>>> to compare and tell you whether what you're proposing is only
+>>> applicable to Juno, or can be used for other platforms as well.
+>>
+>> It would great to do it 100% automatic. I'll be waiting for your feedback
+>> regarding your ARM64 platform. If it is the same we could do it together.
+> 
+> Well, the build process is quite similar. I build ATF with:
+> 
+>   make CROSS_COMPILE=aarch64-linux-gnu- BL33=/path/to/uboot USE_COHERENT_MEM=0 PLAT=<platform> DEBUG=1 LOG_LEVEL=20 all fip
+> 
+> I think DEBUG=1 and LOG_LEVEL=20 are not important, but I think the
+> PLAT= and USE_COHERENT_MEM= variables are important in my case.
+> 
+> So I guess you do do something like:
+> 
+>   make CROSS_COMPILE=$(TARGET_CROSS) \
+> 	BL33=$(call qstrip,$(BR2_BOOT_ATF_PAYLOAD_PATH) \
+> 	$(BR2_BOOT_ATF_ADDITIONAL_VARIABLES) \
+> 	all fip
+> 
+> and that's it. Of course, the location from where you download ATF
+> should be configurable, because I'm not using the ATF from ARM
+> directly, but a vendor-specific fork.
+> 
+> Thanks!
+> 
+> Thomas
+> 
 
-diff --git a/board/technologic/ts4800/genimage.cfg b/board/technologic/ts4800/genimage.cfg
-new file mode 100644
-index 0000000..33564c3
---- /dev/null
-+++ b/board/technologic/ts4800/genimage.cfg
-@@ -0,0 +1,37 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"imx51-ts4800.dtb"
-+		}
-+	}
-+	size = 8M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition mbrboot {
-+		in-partition-table = "no"
-+		image = "mbrboot.bin"
-+		offset = 0
-+	}
-+
-+	partition uboot {
-+		partition-type = 0xda
-+		image = "u-boot.bin"
-+		size = 8M
-+	}
-+
-+	partition kernel {
-+		partition-type = 0xC
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 256M
-+	}
-+}
-diff --git a/board/technologic/ts4800/linux.fragment b/board/technologic/ts4800/linux.fragment
-new file mode 100644
-index 0000000..0451c86
---- /dev/null
-+++ b/board/technologic/ts4800/linux.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_TOUCHSCREEN_TS4800=y
-+CONFIG_TS4800_WATCHDOG=y
-+CONFIG_TS4800_IRQ=y
-diff --git a/board/technologic/ts4800/mbrboot.bin b/board/technologic/ts4800/mbrboot.bin
-new file mode 100644
-index 0000000000000000000000000000000000000000..4defb935e2a037517911a11e23c5916c6081e9c8
-GIT binary patch
-literal 446
-zcmd^%F$%&!6htRRVUY;hibzTe(G;R$l?w;~J%C5>02U!?8PLW`$#!1ALL`VsNU at cb
-zf5Sr1I~Z55;WUq7n76-0iX~%d%s7E_syLhqJ|`3V3?5H?H&P~+*#eQm{Gj at Im#V<C
-z=m>SkB(;G0#Sz5pP+o6>O10o|h9JXR%h(oVGM`wrrmR*#BmM1Z&(GnmWZU_=r}WD6
-o`cQ8GPmc|xusIEMXGtiVnkQg)HL!~{-<t5T0kG{<${PQi51aE=0ssI2
-
-literal 0
-HcmV?d00001
-
-diff --git a/board/technologic/ts4800/patches/uboot/ts4800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch b/board/technologic/ts4800/patches/uboot/ts4800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch
-new file mode 100644
-index 0000000..5d4fc04
---- /dev/null
-+++ b/board/technologic/ts4800/patches/uboot/ts4800-add-CONFIG_SYS_FSL_ERRATUM_ESDHC_A001.patch
-@@ -0,0 +1,36 @@
-+From dd52f1df6da0c03c8a8367385a375d6abdf67b0b Mon Sep 17 00:00:00 2001
-+From: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-+Date: Thu, 21 Apr 2016 11:49:31 -0400
-+Subject: [PATCH] ts4800: add CONFIG_SYS_FSL_ERRATUM_ESDHC_A001
-+
-+This commit fixes the MMC data transactions timeout problem on the
-+TS4800.
-+
-+The changes introduced in the commit e978a31 on the timeout calculation
-+for the MMC data transactions has revealed there is something wrong with
-+the timeout setting of the eSDHC controller used in the IMX51.
-+
-+The IMX51 seems to be concerned by this erratum and without this change
-+the MMC driver is unable to do any transactions.
-+
-+Signed-off-by: Sebastien Bourdelin <sebastien.bourdelin@savoirfairelinux.com>
-+---
-+ include/configs/ts4800.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/include/configs/ts4800.h b/include/configs/ts4800.h
-+index fcc9d80..5e5e4d3 100644
-+--- a/include/configs/ts4800.h
-++++ b/include/configs/ts4800.h
-+@@ -63,6 +63,8 @@
-+ #define CONFIG_FSL_ESDHC
-+ #define CONFIG_SYS_FSL_ESDHC_ADDR	MMC_SDHC1_BASE_ADDR
-+ 
-++#define CONFIG_SYS_FSL_ERRATUM_ESDHC_A001
-++
-+ #define CONFIG_MMC
-+ 
-+ #define CONFIG_CMD_MMC
-+-- 
-+2.5.0
-+
-diff --git a/board/technologic/ts4800/patches/uboot/ts4800-patch-env-to-boot-dts.patch b/board/technologic/ts4800/patches/uboot/ts4800-patch-env-to-boot-dts.patch
-new file mode 100644
-index 0000000..2671025
---- /dev/null
-+++ b/board/technologic/ts4800/patches/uboot/ts4800-patch-env-to-boot-dts.patch
-@@ -0,0 +1,55 @@
-+From 45fac2358dc3439a47ba7e859ee2db6c187b1f80 Mon Sep 17 00:00:00 2001
-+From: Damien Riegel <damien.riegel@savoirfairelinux.com>
-+Date: Mon, 2 Nov 2015 09:43:21 -0500
-+Subject: [PATCH] ts4800: patch env settings to boot dts
-+
-+Signed-off-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
-+---
-+ include/configs/ts4800.h | 19 ++++++++++++++-----
-+ 1 file changed, 14 insertions(+), 5 deletions(-)
-+
-+diff --git a/include/configs/ts4800.h b/include/configs/ts4800.h
-+index 21f1555..05929ea 100644
-+--- a/include/configs/ts4800.h
-++++ b/include/configs/ts4800.h
-+@@ -105,23 +105,32 @@
-+ 
-+ #define CONFIG_BOOTDELAY	1
-+ 
-+-#define CONFIG_LOADADDR		0x91000000	/* loadaddr env var */
-++#define CONFIG_LOADADDR		0x90008000	/* loadaddr env var */
-+ 
-+ #define CONFIG_EXTRA_ENV_SETTINGS \
-+ 	"script=boot.scr\0" \
-+-	"image=uImage\0" \
-++	"image=zImage\0" \
-++	"fdt_file=imx51-ts4800.dtb\0" \
-++	"fdt_addr=0x91000000\0" \
-+ 	"mmcdev=0\0" \
-+-	"mmcpart=1\0" \
-+-	"mmcargs=setenv bootargs root=/dev/mmcblk0p2 rootwait rw\0" \
-++	"mmcpart=2\0" \
-++	"mmcroot=/dev/mmcblk0p3 rootwait rw\0" \
-++	"mmcargs=setenv bootargs root=${mmcroot}\0" \
-+ 	"addtty=setenv bootargs ${bootargs} console=ttymxc0,${baudrate}\0" \
-+ 	"loadbootscript=" \
-+ 		"fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
-+ 	"bootscript=echo Running bootscript from mmc ...; " \
-+ 		"source\0" \
-+ 	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image};\0" \
-++	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} ${fdt_file}\0" \
-+ 	"mmcboot=echo Booting from mmc ...; " \
-+ 		"run mmcargs addtty; " \
-+-                "bootm; "
-++		"if run loadfdt; then " \
-++			"bootz ${loadaddr} - ${fdt_addr}; " \
-++		"else " \
-++			"echo ERR: cannot load FDT; " \
-++		"fi; "
-++
-+ 
-+ #define CONFIG_BOOTCOMMAND \
-+ 	"mmc dev ${mmcdev}; if mmc rescan; then " \
-+-- 
-+2.5.0
-+
-diff --git a/board/technologic/ts4800/post-image.sh b/board/technologic/ts4800/post-image.sh
-new file mode 100755
-index 0000000..5ac345a
---- /dev/null
-+++ b/board/technologic/ts4800/post-image.sh
-@@ -0,0 +1,25 @@
-+#!/bin/bash
-+#
-+# Copyright (C) 2015 Savoir-faire Linux
-+# Post image generation script.
-+
-+IDIR="$1"
-+
-+BOARD_DIR="board/technologic/ts4800"
-+GENIMAGE_CFG_DEFAULT="${BOARD_DIR}/genimage.cfg"
-+GENIMAGE_CFG=${2:-$GENIMAGE_CFG_DEFAULT}
-+GENIMAGE_TMP=${BUILD_DIR}/.genimage_tmp
-+
-+cp -f ${BOARD_DIR}/mbrboot.bin ${IDIR}/
-+
-+${HOST_DIR}/usr/bin/genimage \
-+        --config ${GENIMAGE_CFG} \
-+        --rootpath ${TARGET_DIR} \
-+        --tmppath ${GENIMAGE_TMP} \
-+        --inputpath $IDIR \
-+        --outputpath $IDIR
-+
-+ret=${?}
-+rm -rf ${GENIMAGE_TMP}
-+exit ${ret}
-+
-diff --git a/configs/ts4800_defconfig b/configs/ts4800_defconfig
-new file mode 100644
-index 0000000..401d7b3
---- /dev/null
-+++ b/configs/ts4800_defconfig
-@@ -0,0 +1,27 @@
-+BR2_arm=y
-+BR2_cortex_a8=y
-+BR2_ARM_FPU_NEON=y
-+BR2_GLOBAL_PATCH_DIR="$(TOPDIR)/board/technologic/ts4800/patches/"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-+BR2_BINUTILS_VERSION_2_24_X=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
-+# BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/technologic/ts4800/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(TOPDIR)/board/technologic/ts4800/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-ts4800"
-+BR2_PACKAGE_BUSYBOX_WATCHDOG=y
-+BR2_PACKAGE_FBTERM=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="ts4800"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_SQUASHFS=y
--- 
-2.5.0
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: atfirmware.tar
+Type: application/octet-stream
+Size: 10240 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20160421/805748f2/attachment.obj>
