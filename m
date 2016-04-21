@@ -1,65 +1,176 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Thu, 21 Apr 2016 12:55:12 +0200
-Subject: [Buildroot] [PATCH v4 0/7] Support building a second Barebox
- config (incl. BBB)
-In-Reply-To: <20160420164216.GA26814@smipidev>
-References: <1458513351-6556-1-git-send-email-pieter@boesman.nl>
- <20160419212441.6a0454e9@free-electrons.com> <20160419201733.GA19934@smipidev>
- <CAGm1_kv4ipig0JpHxiBDV7b0roUrY_7sr0To=iNJuNYR_YhtcA@mail.gmail.com>
- <20160420164216.GA26814@smipidev>
-Message-ID: <CAGm1_kughQAzmdbaQo4bBb4+-a1rL9-1aZunOCuLtFH4pgSUhA@mail.gmail.com>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Thu, 21 Apr 2016 08:00:42 -0300
+Subject: [Buildroot] [PATCH 1/2] libgtk3: build gtk-encode-symbolic-svg for
+	host variant
+Message-ID: <1461236443-16177-1-git-send-email-gustavo@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 20, 2016 at 6:42 PM, Pieter Smith <pieter@boesman.nl> wrote:
-> Hi Yegor,
->
-> On Wed, Apr 20, 2016 at 04:42:20PM +0200, Yegor Yefremov wrote:
->> On Tue, Apr 19, 2016 at 10:17 PM, Pieter Smith <pieter@boesman.nl> wrote:
->> > Hi Thomas,
->> >
->> > On Tue, Apr 19, 2016 at 09:24:41PM +0200, Thomas Petazzoni wrote:
->> >> Hello,
->> >>
->> >> On Sun, 20 Mar 2016 23:35:44 +0100, Pieter Smith wrote:
->> >>
->> >> > Pieter Smith (7):
->> >> >   barebox: support multi-image-build image selection
->> >> >   barebox: friendly error on missing built image
->> >> >   barebox: support custom barebox output image name
->> >> >   barebox: introduce barebox-package function
->> >> >   barebox: extract package name argument
->> >> >   barebox: support 2nd config build
->> >> >   beaglebone: adds barebox bootloader defconfig
->> >>
->> >> Since there were some comments on this v4, I marked it as Changes
->> >> Requested in our patch tracking system. When you find some time, can
->> >> you send an updated v5 of this patch series?
->> >
->> > I have been a little short on time as of late. The patch is complete, but I
->> > am having probably unrelated problems with my BBB set-up that I am trying to
->> > troubleshoot. Nevertheless, I would like to make sure that everything works
->> > before reposting. Maybe Yegor can help to test that everything works?
->> >
->> > @Yegor: Do you have time to test the branch on your setup?
->> >   URL:    https://github.com/smipi1/bbb_buildroot.git
->> >   branch: barebox_2nd_config_build-v5
->>
->> Have made basic tests, i.e. changing configuration for barebox and
->> barebox-2 and running make to see, if proper barebox was compiled.
->> Everything is working the way it was in v4 from this point of view.
->
-> Thanks! Did you flash a bare SD card or the internal eMMC with boot.vfat and
-> rootfs.ext4 as part of the tests?
+It's required to create the symbolic icons (RGBA/transparent) which some
+apps like to use, like connman-gtk.
+The added patch avoids the need for a full host-libgtk3 build which would
+require host-libepoxy, host-mesa3d and a ton other deps.
+And pull in host-librsvg so that we have the rsvg gdk-pixbuf loader
+(plugin), otherwise scalable (svg) icons will error when trying to be
+processed, like those provided by adwaita-icon-theme.
 
-If I copy your images (MLO, barebox.bin) directly to the FAT
-partition, everything starts as expected. But I dd boot.vfat, the
-system doesn't boot and shows only CCCCC, though I have no problems
-mounting the first partition in Linux.
+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+---
+ ...k-dependency-from-gtk-encode-symbolic-svg.patch | 105 +++++++++++++++++++++
+ package/libgtk3/libgtk3.mk                         |  12 ++-
+ 2 files changed, 115 insertions(+), 2 deletions(-)
+ create mode 100644 package/libgtk3/0004-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch
 
-sudo dd if=/tmp/boot.vfat of=/dev/sdd1 bs=1M
-
-Yegor
+diff --git a/package/libgtk3/0004-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch b/package/libgtk3/0004-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch
+new file mode 100644
+index 0000000..cea4259
+--- /dev/null
++++ b/package/libgtk3/0004-Remove-Gdk-dependency-from-gtk-encode-symbolic-svg.patch
+@@ -0,0 +1,105 @@
++From 4d09ff324419fe4e671233044e424378da53969b Mon Sep 17 00:00:00 2001
++From: Jussi Kukkonen <jussi.kukkonen@intel.com>
++Date: Tue, 9 Jun 2015 14:20:30 +0300
++Subject: [PATCH] Remove Gdk-dependency from gtk-encode-symbolic-svg
++
++Building gtk-encode-symbolic-svg without building Gdk is useful
++as only the icon tools are needed on the native build: this makes
++native build much faster and requires much less dependencies.
++
++Upstream-Status: Pending
++
++Signed-off-by: Jussi Kukkonen <jussi.kukkonen@intel.com>
++Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
++---
++Patch status: taken from yocto, upstream pending
++
++ gtk/encodesymbolic.c | 36 ++++++++++--------------------------
++ 1 file changed, 10 insertions(+), 26 deletions(-)
++
++diff --git a/gtk/encodesymbolic.c b/gtk/encodesymbolic.c
++index 9f7d015..1f07563 100644
++--- a/gtk/encodesymbolic.c
+++++ b/gtk/encodesymbolic.c
++@@ -19,7 +19,6 @@
++ 
++ #include <glib.h>
++ #include <gdk-pixbuf/gdk-pixdata.h>
++-#include <gdk/gdk.h>
++ #include <glib/gi18n.h>
++ 
++ #ifdef HAVE_UNISTD_H
++@@ -43,30 +42,18 @@ static GdkPixbuf *
++ load_symbolic_svg (char *file_data, gsize file_len,
++                    int width,
++                    int height,
++-                   const GdkRGBA  *fg,
++-                   const GdkRGBA  *success_color,
++-                   const GdkRGBA  *warning_color,
++-                   const GdkRGBA  *error_color,
+++                   const char *css_fg,
+++                   const char *css_success,
+++                   const char *css_warning,
+++                   const char *css_error,
++                    GError        **error)
++ {
++   GInputStream *stream;
++   GdkPixbuf *pixbuf;
++-  gchar *css_fg;
++-  gchar *css_success;
++-  gchar *css_warning;
++-  gchar *css_error;
++   gchar *data;
++   gchar *svg_width, *svg_height;
++   gchar *escaped_file_data;
++ 
++-  css_fg = gdk_rgba_to_string (fg);
++-
++-  css_success = css_warning = css_error = NULL;
++-
++-  css_warning = gdk_rgba_to_string (warning_color);
++-  css_error = gdk_rgba_to_string (error_color);
++-  css_success = gdk_rgba_to_string (success_color);
++-
++   /* Fetch size from the original icon */
++   stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
++   pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
++@@ -105,10 +92,6 @@ load_symbolic_svg (char *file_data, gsize file_len,
++                       "</svg>",
++                       NULL);
++   g_free (escaped_file_data);
++-  g_free (css_fg);
++-  g_free (css_warning);
++-  g_free (css_error);
++-  g_free (css_success);
++   g_free (svg_width);
++   g_free (svg_height);
++ 
++@@ -167,7 +150,8 @@ make_symbolic_pixbuf (char *file,
++                       GError        **error)
++ 
++ {
++-  GdkRGBA r = { 1,0,0,1}, g = {0,1,0,1};
+++  const char r[] = "rgba(255,0,0,1)";
+++  const char g[] = "rgba(0,255,0,1)";
++   GdkPixbuf *loaded;
++   GdkPixbuf *pixbuf;
++   int plane;
++@@ -196,10 +180,10 @@ make_symbolic_pixbuf (char *file,
++        * the "rest", as all color fractions should add up to 1.
++        */
++       loaded = load_symbolic_svg (file_data, file_len, width, height,
++-                                  &g,
++-                                  plane == 0 ? &r : &g,
++-                                  plane == 1 ? &r : &g,
++-                                  plane == 2 ? &r : &g,
+++                                  g,
+++                                  plane == 0 ? r : g,
+++                                  plane == 1 ? r : g,
+++                                  plane == 2 ? r : g,
++                                   error);
++       if (loaded == NULL)
++         return NULL;
++-- 
++2.1.4
++
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index aec4c44..7bd92ca 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -149,10 +149,12 @@ HOST_LIBGTK3_DEPENDENCIES = \
+ 	host-libglib2 \
+ 	host-libpng \
+ 	host-gdk-pixbuf \
+-	host-pkgconf
++	host-pkgconf \
++	host-librsvg
+ 
+ HOST_LIBGTK3_CFLAGS = \
+-	`$(HOST_DIR)/usr/bin/pkgconf --cflags --libs gdk-pixbuf-2.0`
++	`$(HOST_DIR)/usr/bin/pkgconf --cflags --libs gdk-pixbuf-2.0` \
++	`$(HOST_DIR)/usr/bin/pkgconf --cflags --libs gio-2.0`
+ 
+ define HOST_LIBGTK3_CONFIGURE_CMDS
+ 	echo "#define GETTEXT_PACKAGE \"gtk30\"" >> $(@D)/gtk/config.h
+@@ -165,11 +167,17 @@ define HOST_LIBGTK3_BUILD_CMDS
+ 		$(@D)/gtk/updateiconcache.c \
+ 		$(HOST_LIBGTK3_CFLAGS) \
+ 		-o $(@D)/gtk/gtk-update-icon-cache
++	$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS) \
++		$(@D)/gtk/encodesymbolic.c \
++		$(HOST_LIBGTK3_CFLAGS) \
++		-o $(@D)/gtk/gtk-encode-symbolic-svg
+ endef
+ 
+ define HOST_LIBGTK3_INSTALL_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/gtk/gtk-update-icon-cache \
+ 		$(HOST_DIR)/usr/bin/gtk-update-icon-cache
++	$(INSTALL) -D -m 0755 $(@D)/gtk/gtk-encode-symbolic-svg \
++		$(HOST_DIR)/usr/bin/gtk-encode-symbolic-svg
+ endef
+ 
+ $(eval $(autotools-package))
+-- 
+2.7.3
