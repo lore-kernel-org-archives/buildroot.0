@@ -1,68 +1,42 @@
-From: =?UTF-8?Q?Beno=c3=aet_Mauduit?= <bmauduit@beneth.fr>
-Date: Fri, 22 Apr 2016 15:58:26 +0200
-Subject: [Buildroot] [PATCH] yajl: fix build with uClibc
-In-Reply-To: <1461219335.6388.20.camel@embedded.rocks>
-References: <1461145087-63679-1-git-send-email-Vincent.Riera@imgtec.com>
- <1461219335.6388.20.camel@embedded.rocks>
-Message-ID: <571A2E02.8010904@beneth.fr>
+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Date: Fri, 22 Apr 2016 11:04:44 -0300
+Subject: [Buildroot] [PATCH] network-manager: bump version to 1.2.0
+In-Reply-To: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
+References: <1461236721-60129-1-git-send-email-Vincent.Riera@imgtec.com>
+Message-ID: <571A2F7C.2000707@zacarias.com.ar>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vicente, J?rg,
+On 21/04/16 08:05, Vicente Olivert Riera wrote:
 
-On 04/21/2016 08:15 AM, J?rg Krause wrote:
-> (...)
-> 
-> I'm not sure if it's worth, but I would prefer to fix the CMake build
-> files of yajl by checking if libm is needed for isnan and it to the
-> list of LIBS and let all executables link against LIBS. Thomas
-> Petazzoni did this for an autotools package [3]. For CMake it would be
-> something like this:
-> 
->     # check if isnan needs libm
->     try_compile(ISNAN_NEEDS_LIBM, ...)
->     if (ISNAN_NEEDS_LIBM)
->       set(LIBS ${LIBS} m)
->     endif ()
-> 
->     [..]
-> 
->     TARGET_LINK_LIBRARIES(${testProg} yajl ${LIBS})
-> 
+> -NETWORK_MANAGER_VERSION_MAJOR = 1.0
+> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).12
+> +NETWORK_MANAGER_VERSION_MAJOR = 1.2
+> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+>   NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+> -NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+> +NETWORK_MANAGER_SITE = http://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+>   NETWORK_MANAGER_INSTALL_STAGING = YES
+>   NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
 
-I just encountered this build issue.
-I end up with a patch like that, in yasl Top-level CMakeList.txt :
+Hi Vicente.
+There are some dependency differences with the new series.
+For example dbus-glib is no longer mandatory, it's optional for the 
+libnm-glib legacy library.
+WiFi support can now be disabled (default=y, probably not that 
+interesting as an option, though it gets rids of the wireless-tools 
+dependency).
+Qt support was remove so --disable-qt can be removed.
+There's improved systemd support that requires systemd libraries being 
+present at build time as well (journal support).
+Missing functionality that could also be accounted for (irrespective of 
+the bump since it was present in 1.0.x as well) is connection checking 
+via libsoup.
+nm-cli and readline are also optional now.
 
-  # uclibc does not provide isnan() & isinf().
-  # Symbol are in libm instead.
-  INCLUDE(CheckLibraryExists)
-  CHECK_LIBRARY_EXISTS(c isnan "" HAVE_LIBC_ISNAN)
+I'm sure there are more to look at ;)
 
-  IF (NOT HAVE_LIBC_ISNAN)
-    SET(CMAKE_SHARED_LINKER_FLAGS "-lm ${CMAKE_SHARED_LINKER_FLAGS}")
-  ENDIF (NOT HAVE_LIBC_ISNAN)
-
-
-It works with uClibc based toolchain.
-
-But I am not sure about this patch for compatibility with other C
-library. I have just test on my host (glibc) with a dummy CMakeList.txt,
-and :
-
-CHECK_LIBRARY_EXISTS(c isnan "" HAVE_LIBC_ISNAN)
->>
--- Looking for isnan in c
--- Looking for isnan in c - found
-
-Anyway, looking at the man page for isnan & isinf, we are supposed to
-link against libmath... (Link with -lm)
-
-Regards,
-
--- 
-Beno?t Mauduit
-Mail : <bmauduit@beneth.fr>
-XMPP : <bmauduit@im.beneth.fr>
+Regards.
