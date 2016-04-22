@@ -1,79 +1,151 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 22 Apr 2016 23:25:59 +0200
-Subject: [Buildroot] [PATCH v9 11/11] docs/manual: document how to debug
- shell script
-In-Reply-To: <1461358223-18312-12-git-send-email-s.martin49@gmail.com>
-References: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
- <1461358223-18312-12-git-send-email-s.martin49@gmail.com>
-Message-ID: <CAGm1_ku8N-2RvLN8RthPVJBokGW832LLRtkcfhGAsepjF9DCvA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Apr 2016 23:30:54 +0200
+Subject: [Buildroot] [PATCH v1 3/4] openDHT: new package
+In-Reply-To: <1461358628-9352-4-git-send-email-patrick.keroulas@savoirfairelinux.com>
+References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1461358628-9352-4-git-send-email-patrick.keroulas@savoirfairelinux.com>
+Message-ID: <20160422233054.4f05c1a6@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Apr 22, 2016 at 10:50 PM, Samuel Martin <s.martin49@gmail.com> wrote:
-> The method describes here is only true for scripts using the shell
+Hello,
 
-s/describes/described ?
+Thanks for this contribution.
 
-> modules from support/scripts/shell/*.
->
-> Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+On Fri, 22 Apr 2016 16:57:07 -0400, Patrick Keroulas wrote:
+> A lightweight C++11 Distributed Hash Table implementation originally
+> based on https://github.com/jech/dht by Juliusz Chroboczek.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Please add your Signed-off-by here.
 
->
-> ---
-> changes v8->v9:
-> - none
->
-> changes v7->v8:
-> - put instrumentation in a subsection (Arnout)
-> - minor rewording
->
-> changes v6->v7:
-> - new patch
-> ---
->  docs/manual/debugging-buildroot.txt | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->
-> diff --git a/docs/manual/debugging-buildroot.txt b/docs/manual/debugging-buildroot.txt
-> index f575fc4..b809c2d 100644
-> --- a/docs/manual/debugging-buildroot.txt
-> +++ b/docs/manual/debugging-buildroot.txt
-> @@ -5,6 +5,8 @@
->
->  == Debugging Buildroot
->
-> +=== Running scripts before and after each build step
+Also, the commit title should be in lower-case, to match the package
+name:
+
+	opendht: new package
+
+> diff --git a/package/opendht/Config.in b/package/opendht/Config.in
+> new file mode 100644
+> index 0000000..10bfd23
+> --- /dev/null
+> +++ b/package/opendht/Config.in
+> @@ -0,0 +1,21 @@
+> +config BR2_PACKAGE_OPENDHT
+> +	bool "opendht"
+> +	depends on BR2_USE_WCHAR #gnutls
+
+Space after #
+
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 #msgpack
+
+Ditto.
+
+> +	select BR2_PACKAGE_GNUTLS
+> +	select BR2_PACKAGE_READLINE
+> +	select BR2_PACKAGE_MSGPACK
+> +	help
+> +		OpenDHT is lightweight C++11 Distributed Hash Table implementation.
 > +
->  It is possible to instrument the steps +Buildroot+ does when building
->  packages. Define the variable +BR2_INSTRUMENTATION_SCRIPTS+ to contain
->  the path of one or more scripts (or other executables), in a
-> @@ -41,3 +43,18 @@ The script has access to the following variables:
->    - +BINARIES_DIR+: the place where all binary files (aka images) are
->      stored
->    - +BASE_DIR+: the base output directory
+> +		https://github.com/savoirfairelinux/opendht
+
+Indentation for the help text is one tab + 2 spaces.
+
+> +comment "opendht needs a toolchain w/ C++, thread, dynamic library"
+> +	depends on !BR2_INSTALL_LIBSTDCPP         \
+> +				|| !BR2_USE_WCHAR             \
+> +				|| !BR2_TOOLCHAIN_HAS_THREADS \
+> +				|| !BR2_TOOLCHAIN_HAS_SYNC_4  \
+> +				|| BR2_STATIC_LIBS
+
+Please indent the follow-up lines with just one tab, and separate the \
+with just one space. Also, the BR2_TOOLCHAIN_HAS_SYNC_4 is an
+architecture dependency, so it needs to be handled differently.
+Finally, you forgot the wchar dependency in the comment.
+
+You want to have something like:
+
+comment "opendht needs a toolchain w/ C++, thread, dynamic library, wchar"
+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+
+> diff --git a/package/opendht/opendht.hash b/package/opendht/opendht.hash
+> new file mode 100644
+> index 0000000..683957c
+> --- /dev/null
+> +++ b/package/opendht/opendht.hash
+> @@ -0,0 +1,2 @@
+> +# from local calculation
+
+We normally write:
+
+# Locally calculated
+
+> +sha256 74ce5a5fc449509cf85912120d4243f93a006465e43ff3100c9c4fbd3001dc41 opendht-468331093345e718b5d269a71b3c52a2eea4797e.tar.gz
+> diff --git a/package/opendht/opendht.mk b/package/opendht/opendht.mk
+> new file mode 100644
+> index 0000000..5bab245
+> --- /dev/null
+> +++ b/package/opendht/opendht.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# opendht
+> +#
+> +################################################################################
 > +
-> +=== Debugging shell scripts in Buildroot
+> +OPENDHT_VERSION = 468331093345e718b5d269a71b3c52a2eea4797e
+> +OPENDHT_SITE_METHOD = git
+> +#OPENDHT_SITE = $(call github,savoirfairelinux,opendht,$(OPENDHT_VERSION))
+> +OPENDHT_SITE = https://github.com/savoirfairelinux/opendht.git
+
+Please use the github function call that you commented out, and remove
+the _SITE_METHOD variable.
+
+> +OPENDHT_LICENSE = GPLv3, X11
+
+Which license applies to what part?
+
+> +OPENDHT_LICENSE_FILES = COPYING
+> +OPENDHT_AUTORECONF = YES
+> +OPENDHT_INSTALL_STAGING = YES
+> +OPENDHT_INSTALL_TARGET = YES
+
+This last line is not needed, as it is the default.
+
+> +OPENDHT_CONF_OPTS = --disable-static
+
+Don't do this, let Buildroot pass --{enable,disable}-{static,shared}
+depending on the configuration.
+
+> +OPENDHT_CONF_ENV = \
+> +	GNUTLS_CFLAGS="-I$(STAGING_DIR)/usr/include" \
+> +	GNUTLS_LIBS="-I$(STAGING_DIR)/usr/lib -lgnutls -lnettle -lhogweed"
+
+Why is this needed? The configure.ac is using pkg-config to find the
+details about gnutls and other libraries, so there should really be no
+need for such environment variables.
+
+> +OPENDHT_DEPENDENCIES = \
+> +	host-pkgconf       \
+> +	gnutls             \
+> +	readline           \
+> +	msgpack
 > +
-> +For shell scripts using the _shell modules_ (available in
-> ++support/scripts/shell/+), an environment variable is available to trace
-> +the scripts:
-> +
-> +  - +SHELL_DEBUG+ adjustes the debug level, from 0 to 3 (only errors to
-> +    all debug messages)
-> +
-> +To enable these debug outputs:
-> +
-> +----
-> +SHELL_DEBUG=3 make
-> +----
-> --
-> 2.8.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +$(eval $(autotools-package))
+
+Could you rework your patch to take into account those comments, and
+send an updated version?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
