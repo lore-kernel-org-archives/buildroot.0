@@ -1,44 +1,56 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Fri, 22 Apr 2016 11:09:50 +1000
-Subject: [Buildroot] [PATCH v3 1/3] go-bootstrap: new host package
-In-Reply-To: <20160420230245.2e5629d4@free-electrons.com>
-References: <cover.1459798147.git.geoff@infradead.org>
- <86c84005b36e17359c5d2a72c0544a738df8f456.1459798147.git.geoff@infradead.org>
- <20160420230245.2e5629d4@free-electrons.com>
-Message-ID: <20160422010950.GA28839@xdna.net>
+From: Ludovic Desroches <ludovic.desroches@atmel.com>
+Date: Fri, 22 Apr 2016 07:56:26 +0200
+Subject: [Buildroot] [PATCH] configs: atmel: xplained boards: bump to
+ linux4sam_5.3
+In-Reply-To: <20160421222113.6311afb5@free-electrons.com>
+References: <1461055991-24856-1-git-send-email-ludovic.desroches@atmel.com>
+ <20160421222113.6311afb5@free-electrons.com>
+Message-ID: <20160422055626.GB3532@odux.rfo.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+On Thu, Apr 21, 2016 at 10:21:13PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 19 Apr 2016 10:53:11 +0200, Ludovic Desroches wrote:
+> > Bump defconfigs relative to Xplained boards to linux4sam_5.3 release. It
+> > involves to use at91bootstrap v3.8.5.
+> > 
+> > Signed-off-by: Ludovic Desroches <ludovic.desroches@atmel.com>
+> > ---
+> >  configs/atmel_sama5d2_xplained_mmc_defconfig | 6 +++---
+> >  configs/atmel_sama5d3_xplained_defconfig     | 6 +++---
+> >  configs/atmel_sama5d3_xplained_mmc_defconfig | 6 +++---
+> >  configs/atmel_sama5d4_xplained_defconfig     | 6 +++---
+> >  configs/atmel_sama5d4_xplained_mmc_defconfig | 6 +++---
+> >  5 files changed, 15 insertions(+), 15 deletions(-)
+> 
+> Applied to master, thanks. Any reason for not updating the other atmel
+> defconfigs that uses the linux4sam Git repositories?
 
->On Mon, 04 Apr 2016 19:31:49 +0000, Geoff Levand wrote:
->> Add a new package go-bootstrap which builds a bootstrap compiler for the
->> go programming language.
->> 
+Latest linux4sam releases are focused on Xplained boards. Most of the
+updates concerns them. Tests have been done only for these boards.
 
->I've applied to master after doing the following changes:
+> 
+> at91sam9g45m10ek_defconfig:BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+> at91sam9g45m10ek_defconfig:BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+> at91sam9rlek_defconfig:BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+> at91sam9rlek_defconfig:BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+> at91sam9x5ek_defconfig:BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+> at91sam9x5ek_defconfig:BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+> atmel_sama5d4ek_defconfig:BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/linux4sam/linux-at91.git"
+> atmel_sama5d4ek_defconfig:BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/linux4sam/u-boot-at91.git"
+> 
+> Perhaps all of them should be using linux4sam 5.3 as well?
 
->    [Thomas:
->     - Rename GO_BOOTSTRAP_FINAL to HOST_GO_BOOTSTRAP_ROOT. Use the HOST_
->       prefix because this variable is specific to the host variant. And
->       it's not "final" at all, but rather the "root" of the Go Bootstrap
->       installation.
->     - Rename GO_BOOTSTRAP_MAKE_ENV to HOST_GO_BOOTSTRAP_MAKE_ENV, also to
->       have the HOST_ prefix because it's a host package.]
+Yes. We have to take time and check if there is any issue with
+linux4sam_5.3 components and older boards.
 
-I just started playing with these patches a few days ago and made a local
-change to this patch that made sense to me - I removed the
-HOST_GO_BOOTSTRAP_INSTALL_CMDS because I did not see that it was useful
-to have the bootstrap compiler installed in the HOST_DIR. This mattered
-for me as I build the toolchain and install it system-wide to use for
-other builds, which refer to that toolchain as an external one.
+Regards
 
-I then changed the second patch to use HOST_GO_BOOTSTRAP_BUILDDIR
-instead of GO_BOOTSTRAP_FINAL.
-
-Does this make sense to have in buildroot?
+Ludovic
