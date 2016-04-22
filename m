@@ -1,7 +1,9 @@
 From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Fri, 22 Apr 2016 15:36:28 +0200
-Subject: [Buildroot] [PATCH 1/3] python-iowait: new package
-Message-ID: <1461332190-18340-1-git-send-email-yegorslists@googlemail.com>
+Date: Fri, 22 Apr 2016 15:36:29 +0200
+Subject: [Buildroot] [PATCH 2/3] python-circus: new package
+In-Reply-To: <1461332190-18340-1-git-send-email-yegorslists@googlemail.com>
+References: <1461332190-18340-1-git-send-email-yegorslists@googlemail.com>
+Message-ID: <1461332190-18340-2-git-send-email-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,66 +15,80 @@ From: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
  package/Config.in                        |  1 +
- package/python-iowait/Config.in          |  6 ++++++
- package/python-iowait/python-iowait.hash |  4 ++++
- package/python-iowait/python-iowait.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-iowait/Config.in
- create mode 100644 package/python-iowait/python-iowait.hash
- create mode 100644 package/python-iowait/python-iowait.mk
+ package/python-circus/Config.in          | 20 ++++++++++++++++++++
+ package/python-circus/python-circus.hash |  4 ++++
+ package/python-circus/python-circus.mk   | 14 ++++++++++++++
+ 4 files changed, 39 insertions(+)
+ create mode 100644 package/python-circus/Config.in
+ create mode 100644 package/python-circus/python-circus.hash
+ create mode 100644 package/python-circus/python-circus.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a07c1bc..2f45582 100644
+index 2f45582..e635b7d 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -664,6 +664,7 @@ menu "External python modules"
- 	source "package/python-id3/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-iniparse/Config.in"
-+	source "package/python-iowait/Config.in"
- 	source "package/python-ipaddr/Config.in"
- 	source "package/python-ipaddress/Config.in"
- 	source "package/python-ipy/Config.in"
-diff --git a/package/python-iowait/Config.in b/package/python-iowait/Config.in
+@@ -640,6 +640,7 @@ menu "External python modules"
+ 	source "package/python-characteristic/Config.in"
+ 	source "package/python-cheetah/Config.in"
+ 	source "package/python-cherrypy/Config.in"
++	source "package/python-circus/Config.in"
+ 	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
+ 	source "package/python-configobj/Config.in"
+diff --git a/package/python-circus/Config.in b/package/python-circus/Config.in
 new file mode 100644
-index 0000000..ebe96db
+index 0000000..ba4da5c
 --- /dev/null
-+++ b/package/python-iowait/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_IOWAIT
-+	bool "python-iowait"
++++ b/package/python-circus/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_PYTHON_CIRCUS
++	bool "python-circus"
++	depends on BR2_USE_WCHAR # zeromq
++	depends on BR2_INSTALL_LIBSTDCPP # zeromq
++	depends on BR2_TOOLCHAIN_HAS_THREADS # zeromq
++	select BR2_PACKAGE_PYTHON_IOWAIT # runtime
++	select BR2_PACKAGE_PYTHON_PSUTIL # runtime
++	select BR2_PACKAGE_PYTHON_PYZMQ # runtime
++	select BR2_PACKAGE_PYTHON_TORNADO # runtime
++	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
 +	help
-+	  Platform-independent module for I/O completion events.
++	  Circus is a program that will let you run and watch multiple
++	  processes and sockets.
 +
-+	  https://launchpad.net/python-iowait
-diff --git a/package/python-iowait/python-iowait.hash b/package/python-iowait/python-iowait.hash
++	  https://circus.readthedocs.org/en/latest/
++
++comment "python-circus needs a toolchain w/ C++, wchar, threads"
++	depends on BR2_PACKAGE_PYTHON
++	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
++		BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/python-circus/python-circus.hash b/package/python-circus/python-circus.hash
 new file mode 100644
-index 0000000..67dac15
+index 0000000..01994f4
 --- /dev/null
-+++ b/package/python-iowait/python-iowait.hash
++++ b/package/python-circus/python-circus.hash
 @@ -0,0 +1,4 @@
-+# md5 from https://pypi.python.org/pypi/iowait/json
-+md5	f49ca7766fe4a67e03a731e575614f87  iowait-0.2.tar.gz
++# md5 from https://pypi.python.org/pypi/circus/json
++md5	cddd4a8844907d8b6b402ca9c713d176  circus-0.13.0.tar.gz
 +# sha256 calculated by scanpypi
-+sha256	ab1bc2eb84c22ccf61f17a0024f9fb6df781b39f1852764a66a7769d5adfb299  iowait-0.2.tar.gz
-diff --git a/package/python-iowait/python-iowait.mk b/package/python-iowait/python-iowait.mk
++sha256	6201800a5fb05144b5e6c5ac9eb901b914305e8beaeb01f8edf54ab6ab1a295a  circus-0.13.0.tar.gz
+diff --git a/package/python-circus/python-circus.mk b/package/python-circus/python-circus.mk
 new file mode 100644
-index 0000000..99c2922
+index 0000000..9e5391e
 --- /dev/null
-+++ b/package/python-iowait/python-iowait.mk
++++ b/package/python-circus/python-circus.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-iowait
++# python-circus
 +#
 +################################################################################
 +
-+PYTHON_IOWAIT_VERSION = 0.2
-+PYTHON_IOWAIT_SOURCE = iowait-$(PYTHON_IOWAIT_VERSION).tar.gz
-+PYTHON_IOWAIT_SITE = https://pypi.python.org/packages/65/30/e953673fe9619938e9c74408401cf865f37716da89f61f6e5d9328c0f71e
-+PYTHON_IOWAIT_SETUP_TYPE = distutils
-+PYTHON_IOWAIT_LICENSE = LGPLv3+
-+PYTHON_IOWAIT_LICENSE_FILES = COPYING.LESSER
++PYTHON_CIRCUS_VERSION = 0.13.0
++PYTHON_CIRCUS_SOURCE = circus-$(PYTHON_CIRCUS_VERSION).tar.gz
++PYTHON_CIRCUS_SITE = https://pypi.python.org/packages/source/c/circus
++PYTHON_CIRCUS_SETUP_TYPE = setuptools
++PYTHON_CIRCUS_LICENSE = Apache-2.0
++PYTHON_CIRCUS_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
