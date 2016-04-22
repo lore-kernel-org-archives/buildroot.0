@@ -1,45 +1,75 @@
-From: Steve Calfee <stevecalfee@gmail.com>
-Date: Fri, 22 Apr 2016 09:43:31 -0700
-Subject: [Buildroot] rootfs overlay best practices
-In-Reply-To: <CAF_dkJAfQO7gxXCb-svzqt+e0UMOSemvbuG9L19XwPdw5pu2WQ@mail.gmail.com>
-References: <CAF_dkJDPv-Z6AW8u-AsTukovBhMNLR0q-1326qOxi7RfFtBL7A@mail.gmail.com>
- <57194FA7.3020803@mind.be>
- <CAF_dkJAfQO7gxXCb-svzqt+e0UMOSemvbuG9L19XwPdw5pu2WQ@mail.gmail.com>
-Message-ID: <CAJJ6jxsd5Bp9KQYMVPkR3knQRMFKzwr5M7TD4_qihPa3uabPSQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 22 Apr 2016 19:27:44 +0200
+Subject: [Buildroot] [PATCH v6] core/pkg-kconfig: Use olddefconfig when
+	available
+In-Reply-To: <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
+References: <1461146052-13261-1-git-send-email-romain.izard.pro@gmail.com>
+ <20160421224719.GA3426@free.fr>
+ <CAGkQfmN+a=ZOxM94uOdK_EK-LM1B0W9Crji8oA4Fjq2mEZUPEg@mail.gmail.com>
+Message-ID: <20160422172744.GA3416@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Patrick,
+Romain, All,
 
-I like these user questions on the mail list. See below
+On 2016-04-22 15:51 +0200, Romain Izard spake thusly:
+> 2016-04-22 0:47 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+> >
+> > Ok, so... Well... Err...
+> >
+> > Could you respin v4 of the patch, the one that used something like:
+> >
+> >     make oldnoconfig || (yes "" |make oldconfig)
+> >
+> > please? ;-)
+> >
+> > OK, what's wrong with my proposal? It works in an unconfigured tree.
+> > But as soon as the tree is configured, it breaks, notably with older
+> > kernels, like 3.0.
+> >
+> >     $ cd linux-3.0
+> >     $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
+> >     [nothing]
+> >     $ touch .config
+> >     $ make -qpn oldefconfig 2>/dev/null |grep olddefconfig
+> >     olddefconfig: scripts_basic outputmakefile FORCE
+> >
+> > But 3.0 does not have olddefconfig. It's jsut the %config generic rule
+> > kicking in. So we'd believe there would be support for olddefconfig
+> > (or oldnoconfig) when there isn't.
+> >
+> > So, I have to apologise for the delusion. Your v4 is the best we can
+> > do.
+> 
+> After some more testing, I believe it should work. I've tested the
+> following command on the latest commit for all stable branches since
+> 2.6.11, and I can reliably detect which targets are supported. Moreover,
+> I have the same output whether I touched .config or not.
+> 
+> make -pn O=dir config 2>/dev/null | grep -oE '^old(no|def)config:'
+> 
+> I believe the problem with your tests is that you try to use both '-q'
+> and '-n', while GNU Make's manual states (Chapter 9.3, Instead of
+> executing recipes) that:
+> 
+> "It is an error to use more than one of these three flags [-t -q -n] in
+> the same invocation of 'make'."
 
-On Fri, Apr 22, 2016 at 6:35 AM, Patrick Doyle <wpdster@gmail.com> wrote:
-> Yes -- that was the intent of my email -- how do folks handle this
-> situation in the real word?  Which approach do you use?  Which works
-> the best for you? (And by "you", I mean "buildroot community", not
-> specifically "Arnout")
->
-Personally, I like to keep things simple. Makes it easier to maintain,
-update in the field etc. It does require a little more time when
-setting up a new embedded service like say MySQL or something.
+Weird, my make manpage does not state anything about that...
 
-I like to run most of the system directly from a read only filesystem.
-Stuff that needs persistent data should be on another read/write
-filesystem. Overlay or unionfs hide what is changeable and what has
-been changed. It easy to have hacks done on a dev system not get
-propaged to a production system causing failures.
+Anyway, I'll do some more testing following your input. Thanks for your
+patience! ;-)
 
-So I have most of the rootfs in one flash partition and have another
-partition just for writeable data. So mysql will run out of rootfs
-flash and access its db and writeable files from the other partition.
-Lots of fuss setting up the initial layout- editing configs etc, but
-nice when running.
+Regards,
+Yann E. MORIN.
 
-Also, you can re-virginize a system by clearing the writable
-partitiion. If done correctly a reboot will then reestablish the
-needed files in the rw partition.
-
-Regards, Steve
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
