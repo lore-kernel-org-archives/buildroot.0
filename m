@@ -1,92 +1,73 @@
 From: Samuel Martin <s.martin49@gmail.com>
-Date: Fri, 22 Apr 2016 22:50:12 +0200
-Subject: [Buildroot] [PATCH v9 00/11] Relocatable SDK/Build machine leaks:
-	RPATH fixing
-Message-ID: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
+Date: Fri, 22 Apr 2016 22:50:13 +0200
+Subject: [Buildroot] [PATCH v9 01/11] core: split variables definition
+	related to in/out-of-tree build from O itself
+In-Reply-To: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
+References: <1461358223-18312-1-git-send-email-s.martin49@gmail.com>
+Message-ID: <1461358223-18312-2-git-send-email-s.martin49@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This change uncorrolates the CONFIG_DIR and NEED_WRAPPER definition from
+the presence of the O variable in the command line.
 
+Now, the condition used to set these variables is the value of O itself.
 
-Here is yet another round of the series aiming improving the relocatability
-of the SDK built by Buildroot.
+This change is a preparatory work since the O definition will need to
+be moved around when we will make Buildroot run with absolute canonical
+paths for both its root directory and the output location.
+This will be addressed in a follow-up patch.
 
-Still slowly reducing the number of patch in the series, as they got merged...
-For this round, just fixes from comments, nothing really noticeable, except
-maybe the move of the HOST_DIR RPATH sanitation.
+Signed-off-by: Samuel Martin <s.martin49@gmail.com>
 
-For further details, check the per-commit changelog in each commit log.
+---
+changes v8->v9:
+- none
 
+changes v7->v8:
+- new patch
+---
+ Makefile | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-Patches 1 and 2:
-  Fix the O variable definition.
-
-Patches 3 to 5:
-  Add the fix-rpath script, then run it on the Buildroot host, target and
-  staging trees.
-
-Patch 6:
-  Clean-up speex package WRT its RPATH hook.
-
-Patch 7:
-  Update and fix the check-host-rpath to re-use the shell helpers.
-
-Patches 8 to 10:
-  Add means to track build machine leaks into the host, target and staging
-  trees. These patches will allow to identify what remains to be fixed WRT
-  build machine leaks.
-
-Patches 11:
-  Update documentation about how to enable/adjust log level on script using
-  the shell modules introduced in patch 3/11.
-
-
-Regards,
-Samuel
-
-
-Samuel Martin (11):
-  core: split variables definition related to in/out-of-tree build from
-    O itself
-  core: re-enter make if $(CURDIR) or $(O) are not absolute canonical
-    path
-  support/scripts: add fix-rpath script + a bunch of helpers
-  core: sanitize HOST_DIR at the very end of the build
-  core: add {TARGET,STAGING}_SANITIZE_RPATH_HOOK to
-    TARGET_FINALIZE_HOOKS
-  package/speex: remove no longer needed hook
-  support/scripts: update check-host-rpath to use the shell helpers
-  support/scripts: add check-host-leaks script + all needed helpers
-  core: add check-leaks-in-{target,host,staging} targets
-  support/scripts/check-host-leaks: add option to classify leaks
-  docs/manual: document how to debug shell script
-
- Makefile                            | 126 ++++++++++++---
- docs/manual/debugging-buildroot.txt |  17 ++
- package/pkg-utils.mk                |   5 +
- package/speex/speex.mk              |   7 -
- support/scripts/check-host-leaks    | 181 +++++++++++++++++++++
- support/scripts/check-host-rpath    |  73 ++++-----
- support/scripts/fix-rpath           | 116 ++++++++++++++
- support/scripts/shell/log.sh        |  61 +++++++
- support/scripts/shell/patchelf.sh   | 178 +++++++++++++++++++++
- support/scripts/shell/readelf.sh    | 306 ++++++++++++++++++++++++++++++++++++
- support/scripts/shell/sdk.sh        |  75 +++++++++
- support/scripts/shell/source.sh     |  77 +++++++++
- support/scripts/shell/utils.sh      |  74 +++++++++
- 13 files changed, 1223 insertions(+), 73 deletions(-)
- create mode 100755 support/scripts/check-host-leaks
- create mode 100755 support/scripts/fix-rpath
- create mode 100644 support/scripts/shell/log.sh
- create mode 100644 support/scripts/shell/patchelf.sh
- create mode 100644 support/scripts/shell/readelf.sh
- create mode 100644 support/scripts/shell/sdk.sh
- create mode 100644 support/scripts/shell/source.sh
- create mode 100644 support/scripts/shell/utils.sh
-
---
+diff --git a/Makefile b/Makefile
+index 0e4beb2..3d86c9b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -110,10 +110,11 @@ comma := ,
+ empty :=
+ space := $(empty) $(empty)
+ 
++# Set O variable if not already done on the command line;
++# or avoid confusing packages that can use the O=<dir> syntax for out-of-tree
++# build by preventing it from being forwarded to sub-make calls.
+ ifneq ("$(origin O)", "command line")
+ O := output
+-CONFIG_DIR := $(TOPDIR)
+-NEED_WRAPPER =
+ else
+ # other packages might also support Linux-style out of tree builds
+ # with the O=<dir> syntax (E.G. BusyBox does). As make automatically
+@@ -126,9 +127,16 @@ MAKEOVERRIDES =
+ # Unfortunately some packages don't look at origin (E.G. uClibc 0.9.31+)
+ # To really make O go away, we have to override it.
+ override O := $(O)
+-CONFIG_DIR := $(O)
+ # we need to pass O= everywhere we call back into the toplevel makefile
+ EXTRAMAKEARGS = O=$(O)
++endif
++
++# Set variables related to in-tree or out-of-tree build.
++ifeq ($(O),output)
++CONFIG_DIR := $(TOPDIR)
++NEED_WRAPPER =
++else
++CONFIG_DIR := $(O)
+ NEED_WRAPPER = y
+ endif
+ 
+-- 
 2.8.0
