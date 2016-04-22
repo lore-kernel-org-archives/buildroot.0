@@ -1,88 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 22 Apr 2016 01:06:34 +0200
-Subject: [Buildroot] [PATCH] python-backports-ssl-match-hostname: new
- package
-In-Reply-To: <CAGm1_kuBn=tsBbb-BAczkdctQ=ecsZROyRJgJgBPHcWxJkfqJA@mail.gmail.com>
-References: <1461144174-7711-1-git-send-email-yegorslists@googlemail.com>
- <57192BD1.8090409@mind.be>
- <CAGm1_kuBn=tsBbb-BAczkdctQ=ecsZROyRJgJgBPHcWxJkfqJA@mail.gmail.com>
-Message-ID: <57195CFA.8060005@mind.be>
+From: Cam Hutchison <camh@xdna.net>
+Date: Fri, 22 Apr 2016 11:09:50 +1000
+Subject: [Buildroot] [PATCH v3 1/3] go-bootstrap: new host package
+In-Reply-To: <20160420230245.2e5629d4@free-electrons.com>
+References: <cover.1459798147.git.geoff@infradead.org>
+ <86c84005b36e17359c5d2a72c0544a738df8f456.1459798147.git.geoff@infradead.org>
+ <20160420230245.2e5629d4@free-electrons.com>
+Message-ID: <20160422010950.GA28839@xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
 
-On 04/21/16 23:18, Yegor Yefremov wrote:
-> On Thu, Apr 21, 2016 at 9:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 04/20/16 11:22, yegorslists at googlemail.com wrote:
->>>
->>> From: Yegor Yefremov<yegorslists@googlemail.com>
->>>
->>> Fixes #8856
->>>
->>> Signed-off-by: Yegor Yefremov<yegorslists@googlemail.com>
->>> ---
->>>    package/Config.in                                          |  1 +
->>>    package/python-backports-ssl-match-hostname/Config.in      |  6 ++++++
->>>    .../python-backports-ssl-match-hostname.hash               |  4 ++++
->>>    .../python-backports-ssl-match-hostname.mk                 | 14
->>> ++++++++++++++
->>>    4 files changed, 25 insertions(+)
->>>    create mode 100644 package/python-backports-ssl-match-hostname/Config.in
->>>    create mode 100644
->>> package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.hash
->>>    create mode 100644
->>> package/python-backports-ssl-match-hostname/python-backports-ssl-match-hostname.mk
->>>
->>> diff --git a/package/Config.in b/package/Config.in
->>> index ecaf164..3b5e66e 100644
->>> --- a/package/Config.in
->>> +++ b/package/Config.in
->>> @@ -630,6 +630,7 @@ menu "External python modules"
->>>          source "package/python-alsaaudio/Config.in"
->>>          source "package/python-autobahn/Config.in"
->>>          source "package/python-backports-abc/Config.in"
->>> +       source "package/python-backports-ssl-match-hostname/Config.in"
->>>          source "package/python-beautifulsoup4/Config.in"
->>>          source "package/python-bottle/Config.in"
->>>          source "package/python-can/Config.in"
->>> diff --git a/package/python-backports-ssl-match-hostname/Config.in
->>> b/package/python-backports-ssl-match-hostname/Config.in
->>> new file mode 100644
->>> index 0000000..36399bb
->>> --- /dev/null
->>> +++ b/package/python-backports-ssl-match-hostname/Config.in
->>> @@ -0,0 +1,6 @@
->>> +config BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME
->>> +       bool "python-backports-ssl-match-hostname"
->>
->>
->>   Smell likes this should
->>          depends on BR2_PACKAGE_PYTHON
->> no? Doesn't make much sense to backport this function to Python 3.6 :-)
->
-> No. We still have Python 3.4.x
+>On Mon, 04 Apr 2016 19:31:49 +0000, Geoff Levand wrote:
+>> Add a new package go-bootstrap which builds a bootstrap compiler for the
+>> go programming language.
+>> 
 
-  Oh, I thought Thomas bumped it... Looks like that patch hasn't been applied yet.
+>I've applied to master after doing the following changes:
 
-  Regards,
-  Arnout
+>    [Thomas:
+>     - Rename GO_BOOTSTRAP_FINAL to HOST_GO_BOOTSTRAP_ROOT. Use the HOST_
+>       prefix because this variable is specific to the host variant. And
+>       it's not "final" at all, but rather the "root" of the Go Bootstrap
+>       installation.
+>     - Rename GO_BOOTSTRAP_MAKE_ENV to HOST_GO_BOOTSTRAP_MAKE_ENV, also to
+>       have the HOST_ prefix because it's a host package.]
 
->
-> The most interesting goody about about 3.5 ssl-match-hostname is
-> support for IP addresses or something like this, that uses "import
-> ipaddress", so it would make sense to select this package for Python
-> 2.7.
+I just started playing with these patches a few days ago and made a local
+change to this patch that made sense to me - I removed the
+HOST_GO_BOOTSTRAP_INSTALL_CMDS because I did not see that it was useful
+to have the bootstrap compiler installed in the HOST_DIR. This mattered
+for me as I build the toolchain and install it system-wide to use for
+other builds, which refer to that toolchain as an external one.
 
-[snip]
+I then changed the second patch to use HOST_GO_BOOTSTRAP_BUILDDIR
+instead of GO_BOOTSTRAP_FINAL.
 
--- 
-Arnout Vandecappelle      arnout dot vandecappelle at essensium dot com
-Senior Embedded Software Architect . . . . . . +32-478-010353 (mobile)
-Essensium, Mind division . . . . . . . . . . . . . . http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium . . . . . BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Does this make sense to have in buildroot?
