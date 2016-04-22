@@ -1,34 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Apr 2016 23:22:53 +0200
-Subject: [Buildroot] [PATCH 1/1] Preliminary support for Raspberry Pi 3.
-In-Reply-To: <20160422224135.03ff1a8f@free-electrons.com> (Thomas Petazzoni's
- message of "Fri, 22 Apr 2016 22:41:35 +0200")
-References: <1461150240-23107-1-git-send-email-ubaldo@eja.it>
- <8737qdtn10.fsf@dell.be.48ers.dk>
- <20160422222551.700fdf70@free-electrons.com>
- <87twits7ju.fsf@dell.be.48ers.dk>
- <20160422224135.03ff1a8f@free-electrons.com>
-Message-ID: <87poths5hu.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Date: Fri, 22 Apr 2016 23:23:15 +0200
+Subject: [Buildroot] [PATCH v1 2/4] msgpack: bump to version 1.4.0
+In-Reply-To: <1461358628-9352-3-git-send-email-patrick.keroulas@savoirfairelinux.com>
+References: <1461358628-9352-1-git-send-email-patrick.keroulas@savoirfairelinux.com>
+ <1461358628-9352-3-git-send-email-patrick.keroulas@savoirfairelinux.com>
+Message-ID: <20160422232315.4ff76b30@free-electrons.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@free-electrons.com> writes:
+Hello,
 
- >> According to git blame this comes from 8dd797a0549869 that you applied
- >> ;)
+On Fri, 22 Apr 2016 16:57:06 -0400, Patrick Keroulas wrote:
 
- > Hum, since like my memory starts failing :-/
+> -MSGPACK_VERSION = 0.5.4
+> -MSGPACK_SITE = http://downloads.sourceforge.net/project/msgpack/msgpack/cpp
+> -MSGPACK_LICENSE = Apache-2.0
+> -MSGPACK_LICENSE_FILES = COPYING
+> +MSGPACK_VERSION = 1.4.0
+> +MSGPACK_SOURCE = msgpack-$(MSGPACK_VERSION).tar.gz
+> +MSGPACK_SITE = https://github.com/msgpack/msgpack-c/releases/download/cpp-$(MSGPACK_VERSION)
+> +MSGPACK_LICENSE = Boost-1.0
+> +MSGPACK_LICENSE_FILES = LICENSE_1_0.txt
+> +MSGPACK_INSTALL_STAGING = YES
 
-It's called having kids :P
+This seems like a major update. Did you check that the python-msgpack
+package, which depends on msgpack, was still building/working fine
+after this update?
 
- > Thanks for reminding me. Seems a bit tricky, but OK, that's probably
- > the easiest solution.
+Thanks!
 
-Yeah, I don't think it's too bad.
-
+Thomas
 -- 
-Venlig hilsen,
-Peter Korsgaard 
+Thomas Petazzoni, CTO, Free Electrons
+Embedded Linux, Kernel and Android engineering
+http://free-electrons.com
